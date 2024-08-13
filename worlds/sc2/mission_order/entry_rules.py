@@ -227,7 +227,7 @@ class SubRuleEntryRule(EntryRule):
         sub_lambdas = [rule.to_lambda(player) for rule in self.rules_to_check]
         return lambda state, sub_lambdas=sub_lambdas: self.target_amount <= sum(sub_lambda(state) for sub_lambda in sub_lambdas)
     
-    def to_slot_data(self) -> RuleData:
+    def to_slot_data(self) -> SubRuleRuleData:
         sub_rules = [rule.to_slot_data() for rule in self.rules_to_check]
         return SubRuleRuleData(
             self.rule_id,
