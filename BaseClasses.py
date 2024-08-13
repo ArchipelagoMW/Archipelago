@@ -879,12 +879,13 @@ class CollectionState():
         return True
 
     def remove(self, item: Item):
-        changed = self.multiworld.worlds[item.player].remove(self, item)
-        if changed:
-            # invalidate caches, nothing can be trusted anymore now
-            self.reachable_regions[item.player] = set()
-            self.blocked_connections[item.player] = set()
-            self.stale[item.player] = True
+        if not item.advancement:
+            return
+
+        # invalidate caches, nothing can be trusted anymore now
+        self.reachable_regions[item.player] = set()
+        self.blocked_connections[item.player] = set()
+        self.stale[item.player] = True
 
 
 class Entrance:
