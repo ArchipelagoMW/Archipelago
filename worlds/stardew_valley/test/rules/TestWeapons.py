@@ -10,16 +10,16 @@ class TestWeaponsLogic(SVTestBase):
     }
 
     def test_mine(self):
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), event=True)
-        self.multiworld.state.collect(self.create_item("Progressive House"), event=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive House"), prevent_sweep=True)
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Mining Level")] * 10)
         self.collect([self.create_item("Progressive Mine Elevator")] * 24)
-        self.multiworld.state.collect(self.create_item("Bus Repair"), event=True)
-        self.multiworld.state.collect(self.create_item("Skull Key"), event=True)
+        self.multiworld.state.collect(self.create_item("Bus Repair"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Skull Key"), prevent_sweep=True)
 
         self.GiveItemAndCheckReachableMine("Progressive Sword", 1)
         self.GiveItemAndCheckReachableMine("Progressive Dagger", 1)
@@ -43,7 +43,7 @@ class TestWeaponsLogic(SVTestBase):
 
     def GiveItemAndCheckReachableMine(self, item_name: str, reachable_level: int):
         item = self.multiworld.create_item(item_name, self.player)
-        self.multiworld.state.collect(item, event=True)
+        self.multiworld.state.collect(item, prevent_sweep=True)
         rule = self.world.logic.mine.can_mine_in_the_mines_floor_1_40()
         if reachable_level > 0:
             self.assert_rule_true(rule, self.multiworld.state)

@@ -23,7 +23,7 @@ class TestBase(unittest.TestCase):
         state = CollectionState(self.multiworld)
         for item in items:
             item.classification = ItemClassification.progression
-            state.collect(item, event=True)
+            state.collect(item, prevent_sweep=True)
         state.sweep_for_events()
         state.update_reachable_regions(1)
         self._state_cache[self.multiworld, tuple(items)] = state
