@@ -475,11 +475,10 @@ class World(metaclass=AutoWorldRegister):
 
         return group
 
-    # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> str:
         """
         Collect an item name into state.
-        Collect None to skip item.
+        Decent place to implement progressive items, i.e. convert "Progressive Sword" into "Fighter's Sword"
         :param state: CollectionState to collect into
         :param item: Item to decide on if it should be collected into state
         :param remove: indicate if this is meant to remove from state instead of adding.
