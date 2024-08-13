@@ -425,7 +425,7 @@ class MultiWorld():
         ret = CollectionState(self)
 
         for item in self.itempool:
-            self.worlds[item.player].collect(ret, item)
+            ret.collect(item, prevent_sweep=True)
         for player in self.player_ids:
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
