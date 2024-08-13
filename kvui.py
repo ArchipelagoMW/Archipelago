@@ -789,7 +789,7 @@ class ImageLoaderPkgutil(ImageLoaderBase):
         data = pkgutil.get_data(module, path)
         return self._bytes_to_data(data)
 
-    def _bytes_to_data(self, data: Union[bytes, bytearray]) -> List[ImageData]:
+    def _bytes_to_data(self, data: typing.Union[bytes, bytearray]) -> typing.List[ImageData]:
         loader = next(loader for loader in ImageLoader.loaders if loader.can_load_memory())
         return loader.load(loader, io.BytesIO(data))
 
