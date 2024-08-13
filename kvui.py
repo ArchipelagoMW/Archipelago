@@ -789,11 +789,9 @@ class ImageLoaderPkgutil(ImageLoaderBase):
         data = pkgutil.get_data(module, path)
         return self._bytes_to_data(data)
 
-    def _bytes_to_data(self, data: typing.Union[bytes, bytearray]) -> typing.List[ImageData]:
-        from PIL import Image as PImage
-        p_im = PImage.open(io.BytesIO(data)).convert("RGBA")
-        im_d = ImageData(p_im.size[0], p_im.size[1], p_im.mode.lower(), p_im.tobytes())
-        return [im_d]
+    def _bytes_to_data(self, data: Union[bytes, bytearray]) -> List[ImageData]:
+        loader = next(loader for loader in ImageLoader.loaders if loader.can_load_memory())
+        return loader.load(loader, io.BytesIO(data))
 
 
 # grab the default loader method so we can override it but use it as a fallback
