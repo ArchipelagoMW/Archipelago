@@ -495,8 +495,7 @@ class World(metaclass=AutoWorldRegister):
 
     # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
-        if not item.advancement:
-            raise Exception("Collect should no longer be called with non advancements.")
+        assert item.advancement, "Collect should no longer be called with non-advancements."
 
         """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
