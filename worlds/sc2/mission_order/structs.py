@@ -503,6 +503,7 @@ class SC2MOGenCampaign(MissionOrderNode):
         return CampaignSlotData(
             self.get_visual_name(),
             asdict(self.entry_rule.to_slot_data()),
+            [slot.mission.id for slot in self.exits],
             [asdict(layout.get_slot_data()) for layout in self.layouts]
         )
 
@@ -747,6 +748,7 @@ class SC2MOGenLayout(MissionOrderNode):
         return LayoutSlotData(
             self.get_visual_name(),
             asdict(self.entry_rule.to_slot_data()),
+            [slot.mission.id for slot in self.exits],
             mission_slots
         )
 
@@ -858,12 +860,14 @@ class SC2MOGenMission(MissionOrderNode):
 class CampaignSlotData:
     name: str
     entry_rule: SubRuleRuleData
+    exits: List[int]
     layouts: List[LayoutSlotData]
 
 @dataclass
 class LayoutSlotData:
     name: str
     entry_rule: SubRuleRuleData
+    exits: List[int]
     missions: List[List[MissionSlotData]]
 
 @dataclass

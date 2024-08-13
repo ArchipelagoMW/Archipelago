@@ -31,6 +31,8 @@ class HoverableButton(HoverBehavior, Button):
 
 class MissionButton(HoverableButton):
     tooltip_text = StringProperty("Test")
+    is_exit = BooleanProperty(False)
+    is_goal = BooleanProperty(False)
 
     def __init__(self, *args, **kwargs):
         super(HoverableButton, self).__init__(*args, **kwargs)
@@ -269,13 +271,23 @@ class SC2Manager(GameManager):
                             continue
 
                         mission_obj = lookup_id_to_mission[mission_id]
+                        is_layout_exit = mission_id in layout.exits
+                        is_campaign_exit = mission_id in campaign.exits
 
                         text, tooltip = self.mission_text(
-                            self.ctx, mission_id, mission_obj, layout_idx, campaign_idx,
+                            self.ctx, mission_id, mission_obj,
+                            layout_idx, is_layout_exit, layout.name,
+                            campaign_idx, is_campaign_exit, campaign.name,
                             available_missions, available_layouts, available_campaigns, unfinished_missions
                         )
 
                         mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
+
+                        if mission_id in self.ctx.final_mission_ids:
+                            mission_button.is_goal = True
+                        if is_layout_exit or is_campaign_exit:
+                            mission_button.is_exit = True
+
                         mission_race = mission_obj.race
                         if mission_race == SC2Race.ANY:
                             mission_race = mission_obj.campaign.race
@@ -301,7 +313,8 @@ class SC2Manager(GameManager):
         self.campaign_panel.height = multi_campaign_layout_height
 
     def mission_text(
-        self, ctx: SC2Context, mission_id: int, mission_obj: SC2Mission, layout_id: int, campaign_id: int,
+        self, ctx: SC2Context, mission_id: int, mission_obj: SC2Mission,
+        layout_id: int, is_layout_exit: bool, layout_name: str, campaign_id: int, is_campaign_exit: bool, campaign_name: str,
         available_missions: List[int], available_layouts: Dict[int, List[int]], available_campaigns: List[int],
         unfinished_missions: List[int]
     ) -> Tuple[str, str]:
@@ -346,6 +359,19 @@ class SC2Manager(GameManager):
                 rule_tooltip = mission_rule.tooltip(0, lookup_id_to_mission)
             tooltip += rule_tooltip.replace(rule_tooltip[0], rule_tooltip[0].lower(), 1)
 
+        # Mark exit missions
+        exit_for: str = ""
+        if is_layout_exit:
+            exit_for += layout_name if layout_name else "this region"
+        if is_campaign_exit:
+            if exit_for:
+                exit_for += " and "
+            exit_for += campaign_name if campaign_name else "this campaign"
+        if exit_for:
+            if tooltip:
+                tooltip += "\n\n"
+            tooltip += f"Required to beat {exit_for}"
+
         # Mark goal missions
         if mission_id in self.ctx.final_mission_ids:
             if mission_id in available_missions:
@@ -354,8 +380,10 @@ class SC2Manager(GameManager):
                 text = f"[color={COLOR_FINAL_PARENT_LOCKED}]{mission_obj.mission_name}[/color]"
             else:
                 text = f"[color={COLOR_MISSION_FINAL_LOCKED}]{mission_obj.mission_name}[/color]"
-            if tooltip:
+            if tooltip and not exit_for:
                 tooltip += "\n\n"
+            elif exit_for:
+                tooltip += "\n"
             tooltip += f"[color={COLOR_FINAL_MISSION_REMINDER}]Required to beat the world[/color]"
 
         # Populate remaining location list
