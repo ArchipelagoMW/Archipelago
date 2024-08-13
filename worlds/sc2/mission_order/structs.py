@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union, TYPE_CHECKING
+from typing import Dict, Set, Callable, Tuple, List, Any, Type, Optional, Union, TYPE_CHECKING, NamedTuple
 from weakref import ref, ReferenceType
 from dataclasses import dataclass, asdict
 from abc import ABC, abstractmethod
@@ -852,7 +852,7 @@ class SC2MOGenMission(MissionOrderNode):
     def get_slot_data(self) -> MissionSlotData:
         return MissionSlotData(
             self.mission.id,
-            {mission.mission.id for mission in self.prev},
+            [mission.mission.id for mission in self.prev],
             self.entry_rule.to_slot_data()
         )
 
@@ -863,12 +863,20 @@ class CampaignSlotData:
     exits: List[int]
     layouts: List[LayoutSlotData]
 
+    @staticmethod
+    def legacy(name: str, layouts: List[LayoutSlotData]) -> CampaignSlotData:
+        return CampaignSlotData(name, SubRuleRuleData.empty(), [], layouts)
+
 @dataclass
 class LayoutSlotData:
     name: str
     entry_rule: SubRuleRuleData
     exits: List[int]
     missions: List[List[MissionSlotData]]
+
+    @staticmethod
+    def legacy(name: str, missions: List[List[MissionSlotData]]) -> LayoutSlotData:
+        return LayoutSlotData(name, SubRuleRuleData.empty(), [], missions)
 
 @dataclass
 class MissionSlotData:
@@ -879,7 +887,16 @@ class MissionSlotData:
     @staticmethod
     def empty() -> MissionSlotData:
         return MissionSlotData(-1, [], SubRuleRuleData.empty())
-    
+
+    @staticmethod
+    def legacy(mission_id: int, prev_mission_ids: List[int], entry_rule: SubRuleRuleData) -> MissionSlotData:
+        return MissionSlotData(mission_id, prev_mission_ids, entry_rule)
+
+class MissionEntryRules(NamedTuple):
+    mission_rule: SubRuleRuleData
+    layout_rule: SubRuleRuleData
+    campaign_rule: SubRuleRuleData
+
 def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)

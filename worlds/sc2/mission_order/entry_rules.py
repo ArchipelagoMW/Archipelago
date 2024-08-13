@@ -7,7 +7,7 @@ from ..mission_tables import SC2Mission
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    from .structs import SC2MOGenMission
+    from .structs import SC2MOGenMission, MissionEntryRules
 
 class EntryRule(ABC):
     buffer_fulfilled: bool
@@ -63,7 +63,7 @@ class RuleData(ABC):
 
     @abstractmethod
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         return False
@@ -110,7 +110,7 @@ class BeatMissionsRuleData(RuleData):
         return tooltip
     
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         # Beat rules are accessible if all their missions are beaten and accessible
@@ -175,7 +175,7 @@ class CountMissionsRuleData(RuleData):
                 return f"Beat {req_str}"
             return f"Beat {amount} missions from {req_str}"
         if self.amount == 1:
-            tooltip = f"Beat {amount} mission from:\n{indent}- "
+            tooltip = f"Beat any mission from:\n{indent}- "
         else:
             tooltip = f"Beat {amount} missions from:\n{indent}- "
         reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
@@ -183,7 +183,7 @@ class CountMissionsRuleData(RuleData):
         return tooltip
     
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         # Count rules are accessible if enough of their missions are beaten and accessible
@@ -274,6 +274,8 @@ class SubRuleRuleData(RuleData):
             if self.amount == 1:
                 return self.sub_rules[0].tooltip(indents, missions)
             amount = "all"
+        elif self.amount == 1:
+            amount = "any"
         else:
             amount = str(self.amount)
         tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
@@ -281,7 +283,7 @@ class SubRuleRuleData(RuleData):
         return tooltip
 
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]],
+        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         # Early exit check for top-level entry rules

@@ -146,8 +146,8 @@ class Grid(LayoutType):
     
     def is_valid_coordinates(self, x: int, y: int) -> bool:
         return (
-            x >= 0 and x < self.width and
-            y >= 0 and y < self.height
+            0 <= x < self.width and
+            0 <= y < self.height
         )
     
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:

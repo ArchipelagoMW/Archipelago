@@ -681,7 +681,7 @@ def get_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mis
     # Pick an arbitrary lowest-difficulty starer mission
     missions = mission_order.get_starting_missions()
     missions = [(mission_order.mission_pools.get_modified_mission_difficulty(mission), mission) for mission in missions]
-    missions.sort()
+    missions.sort(key = lambda difficulty_mission_tuple: difficulty_mission_tuple[0])
     (lowest_difficulty, _) = missions[0]
     missions = [mission for (difficulty, mission) in missions if difficulty == lowest_difficulty]
     return world.random.choice(missions)

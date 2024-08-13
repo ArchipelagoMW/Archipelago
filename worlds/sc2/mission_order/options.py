@@ -150,41 +150,41 @@ class CustomMissionOrder(OptionDict):
         }
     })
     
-    def __init__(self, value: Dict[str, Dict[str, Any]]):
+    def __init__(self, yaml_value: Dict[str, Dict[str, Any]]):
         self.value: Dict[str, Dict[str, Any]] = {}
-        if value == self.default: # If this option is default, it shouldn't mess with its own values
-            value = copy.deepcopy(self.default)
+        if yaml_value == self.default: # If this option is default, it shouldn't mess with its own values
+            yaml_value = copy.deepcopy(self.default)
 
-        for campaign in value:
+        for campaign in yaml_value:
             self.value[campaign] = {}
 
             # Check if this campaign has a layout type, making it a campaign-level layout
-            single_layout_campaign = "type" in value[campaign]
+            single_layout_campaign = "type" in yaml_value[campaign]
             if single_layout_campaign:
                 # Single-layout campaigns are not allowed to declare more layouts
-                single_layout = {key: val for (key, val) in value[campaign].items() if type(val) != dict}
-                value[campaign] = {campaign: single_layout}
+                single_layout = {key: val for (key, val) in yaml_value[campaign].items() if type(val) != dict}
+                yaml_value[campaign] = {campaign: single_layout}
                 # Campaign should inherit layout goal status
                 if not "goal" in single_layout or not single_layout["goal"]:
-                    value[campaign]["goal"] = False
+                    yaml_value[campaign]["goal"] = False
                 # Hide campaign name for single-layout campaigns
-                value[campaign]["display_name"] = ""
-            value[campaign]["single_layout_campaign"] = single_layout_campaign
+                yaml_value[campaign]["display_name"] = ""
+            yaml_value[campaign]["single_layout_campaign"] = single_layout_campaign
 
             # Check if this campaign has a global layout
             global_dict = {}
-            for name in value[campaign]:
+            for name in yaml_value[campaign]:
                 if name.lower() == GLOBAL_ENTRY:
-                    global_dict = value[campaign].pop(name)
+                    global_dict = yaml_value[campaign].pop(name)
                     break
 
             # Strip layouts and unknown options from the campaign
             # The latter are assumed to be preset options
-            preset_key: str = value[campaign].pop("preset", "none")
-            layout_keys = [key for (key, val) in value[campaign].items() if type(val) == dict]
-            layouts = {key: value[campaign].pop(key) for key in layout_keys}
-            preset_option_keys = [key for key in value[campaign] if key not in self.default["Default Campaign"]]
-            preset_options = {key: value[campaign].pop(key) for key in preset_option_keys}
+            preset_key: str = yaml_value[campaign].pop("preset", "none")
+            layout_keys = [key for (key, val) in yaml_value[campaign].items() if type(val) == dict]
+            layouts = {key: yaml_value[campaign].pop(key) for key in layout_keys}
+            preset_option_keys = [key for key in yaml_value[campaign] if key not in self.default["Default Campaign"]]
+            preset_options = {key: yaml_value[campaign].pop(key) for key in preset_option_keys}
 
             # Resolve preset
             preset: Dict[str, Any] = _resolve_string_option_single("preset", preset_key)(preset_options)
@@ -213,7 +213,7 @@ class CustomMissionOrder(OptionDict):
             # Campaign values = default options (except for default layouts) + preset options (except for layouts) +  campaign options
             self.value[campaign] = {key: value for (key, value) in self.default["Default Campaign"].items() if type(value) != dict}
             self.value[campaign].update(preset)
-            self.value[campaign].update(value[campaign])
+            self.value[campaign].update(yaml_value[campaign])
             _resolve_special_options(self.value[campaign])
 
             for layout in ordered_layouts:

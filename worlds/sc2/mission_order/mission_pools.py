@@ -25,15 +25,15 @@ DEFAULT_DIFFICULTY_THRESHOLDS = {
     Difficulty.VERY_HARD + 1: 100
 }
 
-def modified_difficulty_thresholds(min: Difficulty, max: Difficulty) -> Dict[int, Difficulty]:
-    if min == Difficulty.RELATIVE:
-        min = Difficulty.STARTER
-    if max == Difficulty.RELATIVE:
-        max = Difficulty.VERY_HARD
+def modified_difficulty_thresholds(min_difficulty: Difficulty, max_difficulty: Difficulty) -> Dict[int, Difficulty]:
+    if min_difficulty == Difficulty.RELATIVE:
+        min_difficulty = Difficulty.STARTER
+    if max_difficulty == Difficulty.RELATIVE:
+        max_difficulty = Difficulty.VERY_HARD
     thresholds: Dict[int, Difficulty] = {}
-    min_thresh = DEFAULT_DIFFICULTY_THRESHOLDS[min]
-    total_thresh = DEFAULT_DIFFICULTY_THRESHOLDS[max + 1] - min_thresh
-    for difficulty in range(min, max + 1):
+    min_thresh = DEFAULT_DIFFICULTY_THRESHOLDS[min_difficulty]
+    total_thresh = DEFAULT_DIFFICULTY_THRESHOLDS[max_difficulty + 1] - min_thresh
+    for difficulty in range(min_difficulty, max_difficulty + 1):
         threshold = DEFAULT_DIFFICULTY_THRESHOLDS[difficulty] - min_thresh
         threshold *= 100 / total_thresh
         thresholds[int(threshold)] = Difficulty(difficulty)

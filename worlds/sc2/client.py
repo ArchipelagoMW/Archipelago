@@ -35,7 +35,7 @@ from .options import (
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild,
 )
-from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData
+from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionEntryRules
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
 from .mission_tables import MissionFlag
 from . import SC2World
@@ -529,7 +529,7 @@ class SC2Context(CommonContext):
         self.kerrigan_primal_status = 0
         self.enable_morphling = EnableMorphling.default
         self.custom_mission_order: typing.List[CampaignSlotData] = []
-        self.mission_id_to_entry_rules: typing.Dict[int, typing.Tuple[SubRuleRuleData, SubRuleRuleData, SubRuleRuleData]]
+        self.mission_id_to_entry_rules: typing.Dict[int, MissionEntryRules]
         self.final_mission_ids: typing.List[int] = [29]
         self.final_locations: typing.List[int] = []
         self.announcements: queue.Queue = queue.Queue()
@@ -635,7 +635,7 @@ class SC2Context(CommonContext):
                     ) for campaign_data in args["slot_data"]["custom_mission_order"]
                 ]
             self.mission_id_to_entry_rules = {
-                mission.mission_id: (mission.entry_rule, layout.entry_rule, campaign.entry_rule)
+                mission.mission_id: MissionEntryRules(mission.entry_rule, layout.entry_rule, campaign.entry_rule)
                 for campaign in self.custom_mission_order for layout in campaign.layouts
                 for column in layout.missions for mission in column
             }
@@ -746,12 +746,12 @@ class SC2Context(CommonContext):
                 sub_rules: typing.List[CountMissionsRuleData] = []
                 if mission.number:
                     amount = mission.number
-                    missions = {
+                    missions = [
                         mission.mission.id
                         for mission in mission_req_table[campaign].values()
-                    }
+                    ]
                     sub_rules.append(CountMissionsRuleData(missions, amount, [campaign_name]))
-                prev_missions: typing.Set[int] = set()
+                prev_missions: typing.List[int] = []
                 if len(mission.required_world) > 0:
                     missions: typing.List[int] = []
                     for connection in mission.required_world:
@@ -768,24 +768,24 @@ class SC2Context(CommonContext):
                         required_mission = list(required_campaign.values())[required_mission_id - 1]
                         missions.append(required_mission.mission.id)
                         if required_mission.category == mission.category:
-                            prev_missions.add(required_mission.mission.id)
+                            prev_missions.append(required_mission.mission.id)
                     if mission.or_requirements:
                         amount = 1
                     else:
                         amount = len(missions)
-                    sub_rules.append(CountMissionsRuleData(set(missions), amount, missions))
+                    sub_rules.append(CountMissionsRuleData(missions, amount, missions))
                 entry_rule = SubRuleRuleData(rolling_rule_id, sub_rules, len(sub_rules))
                 rolling_rule_id += 1
-                categories[mission.category].append(MissionSlotData(mission_id, prev_missions, entry_rule))
+                categories[mission.category].append(MissionSlotData.legacy(mission_id, prev_missions, entry_rule))
 
             layouts: typing.List[LayoutSlotData] = []
-            for (layout, missions) in categories.items():
+            for (layout, mission_slots) in categories.items():
                 if layout.startswith("_"):
                     layout_name = ""
                 else:
                     layout_name = layout
-                layouts.append(LayoutSlotData(layout_name, SubRuleRuleData.empty(), [missions]))
-            campaigns.append((campaign.id, CampaignSlotData(campaign_name, SubRuleRuleData.empty(), layouts)))
+                layouts.append(LayoutSlotData.legacy(layout_name, [mission_slots]))
+            campaigns.append((campaign.id, CampaignSlotData.legacy(campaign_name, layouts)))
         return [data for (_, data) in sorted(campaigns)]
 
 
