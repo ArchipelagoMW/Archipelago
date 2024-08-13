@@ -817,13 +817,35 @@ class SC2Logic:
             item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER
         }, self.player)
 
-    def templars_return_requirement(self, state: CollectionState) -> bool:
+    def templars_return_phase_2_requirement(self, state: CollectionState) -> bool:
         return (
             self.story_tech_granted
-            or (
-                state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART}, self.player)
-                and state.has_any({item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR}, self.player)
-                and state.has_any({item_names.SENTRY, item_names.HIGH_TEMPLAR}, self.player)
+            or (state.has_any({
+                    item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART, item_names.VANGUARD,
+                    item_names.COLOSSUS, item_names.WRATHWALKER, item_names.REAVER,
+                    item_names.DARK_TEMPLAR, item_names.HIGH_TEMPLAR,
+                    item_names.ENERGIZER, item_names.SENTRY,
+                }, self.player)
+            )
+        )
+
+    def templars_return_phase_3_reach_colossus_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.templars_return_phase_2_requirement(state)
+            and (self.story_tech_granted
+                or (state.has_any({item_names.ZEALOT_WHIRLWIND, item_names.VANGUARD_RAPIDFIRE_CANNON}, self.player))
+            )
+        )
+
+    def templars_return_phase_3_reach_dts_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.templars_return_phase_3_reach_colossus_requirement(state)
+            and (self.story_tech_granted
+                or state.has(item_names.COLOSSUS_FIRE_LANCE, self.player)
+                or state.has_all({
+                    item_names.COLOSSUS_PACIFICATION_PROTOCOL,
+                    item_names.ENERGIZER_MOBILE_CHRONO_BEAM,
+                }, self.player)
             )
         )
 
