@@ -421,7 +421,7 @@ There are three available instructions:
 - Subtraction: `~<Group Name>` or `~ <Group Name>`
   - This removes the missions of the specified group from the pool
   - Note that the operator is `~` and not `-`, because the latter is a reserved symbol in YAML.
-- Intersection: `and <Group Name>`
+- Intersection: `^<Group Name>` or `^ <Group Name>`
   - This removes all the missions from the pool that are not in the specified group.
 
 As a reminder, `<Group Name>` can also be the name of a specific mission.
@@ -440,7 +440,7 @@ The first instruction in a pool must always be an addition.
       Layout A-1:
         mission_pool:
           - zerg missions
-          - and kerrigan missions
+          - ^ kerrigan missions
           - + Lab Rat
       Layout A-2:
         missions:
@@ -453,7 +453,7 @@ The following pools are constructed in this example:
 - `Campaign` defines a pool that contains Terran missions, and then removes all No-Build missions from it.
 - `Layout A-1` overrides this pool with Zerg missions, then keeps only the ones with Kerrigan in them, and then adds Lab Rat back to it.
   - Lab Rat does not contain Kerrigan, but because the instruction to add it is placed after the instruction to remove non-Kerrigan missions, it is added regardless.
-- The pool for the first mission of `Layout A-2` is contains For Aiur! and Liberation Day. The remaining missions of `Layout A-2` use the Terran pool set by the `global` layout.
+- The pool for the first mission of `Layout A-2` contains For Aiur! and Liberation Day. The remaining missions of `Layout A-2` use the Terran pool set by the `global` layout.
 
 ## Campaign Options
 

@@ -4,7 +4,7 @@ Unit tests for yaml usecases we want to support
 
 from .test_base import Sc2SetupTestBase
 from .. import get_all_missions, item_groups, item_names, items, mission_tables, options
-from ..mission_tables import SC2Race
+from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -279,6 +279,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
-        self.assertEqual(len(world_regions), 25) # Number of missions in WoL without Prophecy
+        NUM_WOL_MISSIONS = len([mission for mission in SC2Mission if mission.campaign == SC2Campaign.WOL and MissionFlag.RaceSwap not in mission.flags])
+        self.assertEqual(len(world_regions), NUM_WOL_MISSIONS)
         races = set(mission_tables.lookup_name_to_mission[mission].race for mission in world_regions)
         self.assertTrue(SC2Race.ZERG in races or SC2Race.PROTOSS in races)

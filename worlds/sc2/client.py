@@ -108,15 +108,15 @@ class ConfigurableOptionInfo(typing.NamedTuple):
 
 
 class ColouredMessage:
-    def __init__(self, text: str = '') -> None:
+    def __init__(self, text: str = '', *, keep_markup: bool = False) -> None:
         self.parts: typing.List[dict] = []
         if text:
-            self(text)
-    def __call__(self, text: str) -> 'ColouredMessage':
-        add_json_text(self.parts, text)
+            self(text, keep_markup=keep_markup)
+    def __call__(self, text: str, *, keep_markup: bool = False) -> 'ColouredMessage':
+        add_json_text(self.parts, text, keep_markup=keep_markup)
         return self
-    def coloured(self, text: str, colour: str) -> 'ColouredMessage':
-        add_json_text(self.parts, text, type="color", color=colour)
+    def coloured(self, text: str, colour: str, *, keep_markup: bool = False) -> 'ColouredMessage':
+        add_json_text(self.parts, text, type="color", color=colour, keep_markup=keep_markup)
         return self
     def location(self, location_id: int, player_id: int) -> 'ColouredMessage':
         add_json_location(self.parts, location_id, player_id)
@@ -715,7 +715,7 @@ class SC2Context(CommonContext):
                 ).send(self)
                 self.data_out_of_date = True
             
-            ColouredMessage("[b]Check the Launcher tab to start playing.[/b]").send(self)
+            ColouredMessage("[b]Check the Launcher tab to start playing.[/b]", keep_markup=True).send(self)
 
     @staticmethod
     def parse_mission_info(mission_info: dict[str, typing.Any]) -> MissionInfo:
@@ -755,20 +755,20 @@ class SC2Context(CommonContext):
                 if len(mission.required_world) > 0:
                     missions: typing.List[int] = []
                     for connection in mission.required_world:
-                        if type(connection) == dict:
-                            con_campaign = {}
+                        if isinstance(connection, dict):
+                            required_campaign = {}
                             for camp, camp_data in mission_req_table.items():
                                 if camp.id == connection["campaign"]:
-                                    con_campaign = camp_data
+                                    required_campaign = camp_data
                                     break
-                            con_id = connection["connect_to"]
+                            required_mission_id = connection["connect_to"]
                         else:
-                            con_campaign = mission_req_table[connection.campaign]
-                            con_id = connection.connect_to
-                        con_mission = list(con_campaign.values())[con_id - 1]
-                        missions.append(con_mission.mission.id)
-                        if con_mission.category == mission.category:
-                            prev_missions.add(con_mission.mission.id)
+                            required_campaign = mission_req_table[connection.campaign]
+                            required_mission_id = connection.connect_to
+                        required_mission = list(required_campaign.values())[required_mission_id - 1]
+                        missions.append(required_mission.mission.id)
+                        if required_mission.category == mission.category:
+                            prev_missions.add(required_mission.mission.id)
                     if mission.or_requirements:
                         amount = 1
                     else:

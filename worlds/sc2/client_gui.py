@@ -236,12 +236,14 @@ class SC2Manager(GameManager):
 
         multi_campaign_layout_height = 0
 
+        MISSION_BUTTON_HEIGHT = 50
+        MISSION_BUTTON_PADDING = 6
         for campaign_idx, campaign in enumerate(self.ctx.custom_mission_order):
             longest_column = max(len(col) for layout in campaign.layouts for col in layout.missions)
             if longest_column == 1:
                 campaign_layout_height = 115
             else:
-                campaign_layout_height = (longest_column + 2) * 56
+                campaign_layout_height = (longest_column + 2) * (MISSION_BUTTON_HEIGHT + MISSION_BUTTON_PADDING)
             multi_campaign_layout_height += campaign_layout_height
             campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
             campaign_layout.add_widget(
@@ -255,10 +257,9 @@ class SC2Manager(GameManager):
                 column_panel = ColumnLayout()
 
                 for column in layout.missions:
-                    category_panel = MissionCategory(padding=[3,6,3,6])
+                    category_panel = MissionCategory(padding=[3,MISSION_BUTTON_PADDING,3,MISSION_BUTTON_PADDING])
                     
                     for mission in column:
-                        MISSION_BUTTON_HEIGHT = 50
                         mission_id = mission.mission_id
 
                         # Empty mission slots

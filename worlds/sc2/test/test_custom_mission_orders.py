@@ -16,7 +16,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
                   'type': 'column',
                   'mission_pool': [
                      'terran missions',
-                     'and wol missions'
+                     '^ wol missions'
                   ]
                },
                'Mar Sara': {
@@ -57,7 +57,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
                      }],
                   'mission_pool': [
                      'protoss missions',
-                     'and prophecy missions'
+                     '^ prophecy missions'
                   ]
                },
                'Covert': {

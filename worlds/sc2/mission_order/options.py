@@ -187,7 +187,7 @@ class CustomMissionOrder(OptionDict):
             preset_options = {key: value[campaign].pop(key) for key in preset_option_keys}
 
             # Resolve preset
-            preset: Dict[str, Any] = _resovle_string_option_single("preset", preset_key)(preset_options)
+            preset: Dict[str, Any] = _resolve_string_option_single("preset", preset_key)(preset_options)
             # Preset global is resolved internally to avoid conflict with user global
             preset_global_dict = {}
             for name in preset:
@@ -283,14 +283,14 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
     # Option values can be ranges
     return _resolve_potential_range(option_value)
 
-def _resovle_string_option_single(option: str, option_value: str) -> Any:
+def _resolve_string_option_single(option: str, option_value: str) -> Any:
     return STR_OPTION_VALUES[option][option_value.lower().replace("_", " ")]
 
 def _resolve_string_option(option: str, option_value: Union[List[str], str]) -> Any:
     if type(option_value) == list:
-        return [_resovle_string_option_single(option, val) for val in option_value]
+        return [_resolve_string_option_single(option, val) for val in option_value]
     else:
-        return _resovle_string_option_single(option, option_value)
+        return _resolve_string_option_single(option, option_value)
 
 def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
     resolved: Dict[str, Any] = {}
@@ -333,7 +333,7 @@ def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[str]:
                 term = line[1:].strip()
                 missions = _get_target_missions(term)
                 pool.difference_update(missions)
-            elif line.startswith("and "): # TODO figure out a real symbol
+            elif line.startswith("^"):
                 if len(pool) == 0:
                     raise ValueError(f"Mission Pool term {line} tried to remove missions from an empty pool.")
                 term = line[4:].strip()
