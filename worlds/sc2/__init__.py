@@ -29,7 +29,7 @@ from .pool_filter import filter_items
 from .mission_tables import (
     SC2Campaign, SC2Mission, SC2Race, MissionFlag
 )
-from .mission_order.regions import create_mission_order
+from .regions import create_mission_order
 from .mission_order.structs import SC2MissionOrder
 
 logger = logging.getLogger("Starcraft 2")

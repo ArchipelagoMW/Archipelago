@@ -10,7 +10,7 @@ import copy
 from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
 from .structs import Difficulty, LayoutType
-from .types import Column, Grid, Hopscotch, Gauntlet, Blitz
+from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz
 from .presets_static import (
     static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy,
     preset_mini_lotv_prologue, preset_mini_lotv, preset_mini_lotv_epilogue, preset_mini_nco,

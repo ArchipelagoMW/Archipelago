@@ -7,7 +7,7 @@ import logging
 
 from BaseClasses import Region, Location, CollectionState, Entrance
 from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
-from .types import LayoutType
+from .layout_types import LayoutType
 from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData
 from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
 from worlds.AutoWorld import World

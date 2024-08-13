@@ -2,7 +2,7 @@ import unittest
 from .test_base import Sc2TestBase
 from .. import mission_tables
 from .. import options
-from ..mission_order.types import Grid
+from ..mission_order.layout_types import Grid
 
 class TestGridsizes(unittest.TestCase):
     def test_grid_sizes_meet_specs(self):

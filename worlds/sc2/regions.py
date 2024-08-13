@@ -1,18 +1,18 @@
 from typing import TYPE_CHECKING, List, Dict, Any, Tuple, Optional
 
-from ..locations import LocationData, Location
-from ..mission_tables import SC2Mission, SC2Campaign, get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations
-from ..options import (
+from .locations import LocationData, Location
+from .mission_tables import SC2Mission, SC2Campaign, get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations
+from .options import (
     get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns, static_mission_orders,
     GridTwoStartPositions
 )
-from .options import CustomMissionOrder
-from .structs import SC2MissionOrder, Difficulty
-from .mission_pools import SC2MOGenMissionPools
+from .mission_order.options import CustomMissionOrder
+from .mission_order.structs import SC2MissionOrder, Difficulty
+from .mission_order.mission_pools import SC2MOGenMissionPools
 
 if TYPE_CHECKING:
-    from .. import SC2World
+    from . import SC2World
 
 
 def create_mission_order(
