@@ -720,7 +720,7 @@ SENTRY_DOUBLE_SHIELD_RECHARGE                           = "Double Shield Recharg
 ENERGIZER_MOBILE_CHRONO_BEAM                            = "Mobile Chrono Beam (Energizer)"
 HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc)"
 HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Templar)"
-# Signifier
+SIGNIFIER_FEEDBACK                                      = "Feedback (Signifier)"
 ASCENDANT_ABILITY_EFFICIENCY                            = "Ability Efficiency (Ascendant)"
 DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
 IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
