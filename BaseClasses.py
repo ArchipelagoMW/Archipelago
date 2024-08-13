@@ -1427,7 +1427,7 @@ class Spoiler:
                 # Maybe move the big bomb over to the Event system instead?
                 if any(exit_path == 'Pyramid Fairy' for path in self.paths.values()
                        for (_, exit_path) in path):
-                    if multiworld.mode[player] != 'inverted':
+                    if multiworld.worlds[player].options.mode != 'inverted':
                         self.paths[str(multiworld.get_region('Big Bomb Shop', player))] = \
                             get_path(state, multiworld.get_region('Big Bomb Shop', player))
                     else:
