@@ -863,20 +863,18 @@ class CollectionState():
         )
 
     # Item related
-    def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None) -> bool:
+    def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None):
         if location:
             self.locations_checked.add(location)
 
         if not item.advancement:
-            return False
+            return
 
         self.multiworld.worlds[item.player].collect(self, item)
         self.stale[item.player] = True
 
         if not prevent_sweep:
             self.sweep_for_events()
-
-        return True
 
     def remove(self, item: Item):
         if not item.advancement:
