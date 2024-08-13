@@ -867,14 +867,16 @@ class CollectionState():
         if location:
             self.locations_checked.add(location)
 
-        changed = self.multiworld.worlds[item.player].collect(self, item)
+        if not item.advancement:
+            return False
 
+        self.multiworld.worlds[item.player].collect(self, item)
         self.stale[item.player] = True
 
-        if changed and not prevent_sweep:
+        if not prevent_sweep:
             self.sweep_for_events()
 
-        return changed
+        return True
 
     def remove(self, item: Item):
         changed = self.multiworld.worlds[item.player].remove(self, item)
