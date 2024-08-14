@@ -91,7 +91,7 @@ class SameLateUpgradeRequirements(Toggle):
 
 # class AdditionalLocations(Choice):
 #    """Achievements: Include up to 44 achievements (depending on other options) as additional locations.
-#    Shapesanity: Include up to 2144 shapes as additional locations."""
+#    Shapesanity: Include up to 5664 shapes as additional locations."""
 #    display_name = "Additional locations"
 #    option_achievements = 0
 #    option_shapesanity = 1
@@ -121,7 +121,7 @@ class ShapesanityAmount(Range):
     """Amount of one-layer-shapes that will be included as locations."""
     display_name = "Shapesanity amount"
     range_start = 0
-    range_end = 2144
+    range_end = 5664
     default = 100
 
 
