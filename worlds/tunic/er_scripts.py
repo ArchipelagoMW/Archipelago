@@ -153,7 +153,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
-    player_name = world.multiworld.get_player_name(world.player)
+    player_name = world.player_name
     portal_map = portal_mapping.copy()
     laurels_zips = world.options.laurels_zips.value
     ice_grappling = world.options.ice_grappling.value

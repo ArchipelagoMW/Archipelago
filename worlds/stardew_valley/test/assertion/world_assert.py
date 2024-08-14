@@ -33,14 +33,14 @@ class WorldAssertMixin(RuleAssertMixin, TestCase):
         self.assert_can_reach_victory(multiworld)
         multiworld.state.remove(item)
         self.assert_cannot_reach_victory(multiworld)
-        multiworld.state.collect(item, event=False)
+        multiworld.state.collect(item, prevent_sweep=False)
         self.assert_can_reach_victory(multiworld)
 
     def assert_item_was_not_necessary_for_victory(self, item: StardewItem, multiworld: MultiWorld):
         self.assert_can_reach_victory(multiworld)
         multiworld.state.remove(item)
         self.assert_can_reach_victory(multiworld)
-        multiworld.state.collect(item, event=False)
+        multiworld.state.collect(item, prevent_sweep=False)
         self.assert_can_reach_victory(multiworld)
 
     def assert_can_win(self, multiworld: MultiWorld):

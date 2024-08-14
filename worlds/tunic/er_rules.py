@@ -106,7 +106,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Belltower"],
-        rule=lambda state: state.has(laurels, player) 
+        rule=lambda state: state.has(laurels, player)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld"])
@@ -114,7 +114,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # ice grapple rudeling across rubble, drop bridge, ice grapple rudeling down
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld to West Garden Upper"],
-        rule=lambda state: has_ladder("Ladders to West Bell", state, world) 
+        rule=lambda state: has_ladder("Ladders to West Bell", state, world)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Overworld to West Garden Upper"].connect(
         connecting_region=regions["Overworld Belltower"],
@@ -360,12 +360,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
-    
+
     # don't need the ice grapple rule since you can go from ow -> beach -> tunnel
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: state.has(laurels, player))
-    
+
     # regions["Overworld Tunnel Turret"].connect(
     #     connecting_region=regions["Overworld"],
     #     rule=lambda state: state.has_any({grapple, laurels}, player))
@@ -621,7 +621,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ability(prayer, state, world)
         and (has_ladder("Ladders in South Atoll", state, world)
              # shoot fuse and have the shot hit you mid-LS
-             or (can_ladder_storage(state, world) and state.has(fire_wand, player) 
+             or (can_ladder_storage(state, world) and state.has(fire_wand, player)
                  and options.ladder_storage >= LadderStorage.option_hard)))
     regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
@@ -742,7 +742,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Exterior from Overworld"].connect(
         connecting_region=regions["Fortress Exterior near cave"],
         rule=lambda state: state.has(laurels, player) or has_ability(prayer, state, world))
-  
+
     # shoot far fire pot, enemy gets aggro'd
     regions["Fortress Exterior near cave"].connect(
         connecting_region=regions["Fortress Courtyard"],
@@ -954,7 +954,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"],
         rule=lambda state: (state.has(laurels, player)
                             or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
-        and has_ability(prayer, state, world) 
+        and has_ability(prayer, state, world)
         and has_sword(state, player))
 
     regions["Rooted Ziggurat Lower Back"].connect(
@@ -1062,7 +1062,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Cathedral Main"])
     regions["Cathedral Main"].connect(
         connecting_region=regions["Cathedral to Gauntlet"])
-  
+
     regions["Cathedral Gauntlet Checkpoint"].connect(
         connecting_region=regions["Cathedral Gauntlet"])
 
@@ -1120,7 +1120,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                             (state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)
                              and state.has_group_unique("Hero Relics", player, 6)
                              and has_sword(state, player))))
-    
+
     if options.ladder_storage:
         # connect ls elevation regions to their destinations
         def ls_connect(origin_name: str, portal_sdt: str) -> None:
@@ -1329,7 +1329,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: has_combat_reqs("Quarry", state, player))
 
         set_rule(zig_upper_front_back,
-                 lambda state: state.has(laurels, player) 
+                 lambda state: state.has(laurels, player)
                  or has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(zig_low_entry_to_front,
                  lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
@@ -1425,6 +1425,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
+    options = world.options
 
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 
@@ -1740,11 +1741,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # with wand, you can get this chest. Non-ER, you need laurels to continue down. ER, you can just torch
         set_rule(world.get_location("Rooted Ziggurat Upper - Near Bridge Switch"),
-                 lambda state: (state.has(fire_wand, player) 
+                 lambda state: (state.has(fire_wand, player)
                                 and (state.has(laurels, player) or world.options.entrance_rando))
                  or has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(world.get_location("Rooted Ziggurat Lower - After Guarded Fuse"),
-                 lambda state: has_ability(prayer, state, world) 
+                 lambda state: has_ability(prayer, state, world)
                  and has_combat_reqs("Rooted Ziggurat", state, player))
 
         # replace the sword rule with this one
