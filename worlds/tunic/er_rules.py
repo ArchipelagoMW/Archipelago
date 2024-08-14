@@ -337,7 +337,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Cube Cave Entrance Region"],
-        rule=lambda state: state.has(gun, player) or has_sword(state, player))
+        rule=lambda state: state.has(gun, player) or can_shop(state, world))
     regions["Cube Cave Entrance Region"].connect(
         connecting_region=regions["Overworld"])
 
