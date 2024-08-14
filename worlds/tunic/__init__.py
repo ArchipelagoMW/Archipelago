@@ -338,10 +338,8 @@ class TunicWorld(World):
                     name, connection = paths[location.parent_region]
                 except KeyError:
                     # logic bug, proceed with warning since it takes a long time to update AP
-                    warning(f"{location.name} is not logically accessible for "
-                            f"{self.multiworld.get_file_safe_player_name(self.player)}. "
-                            "Creating entrance hint Inaccessible. "
-                            "Please report this to the TUNIC rando devs.")
+                    warning(f"{location.name} is not logically accessible for {self.player_name}. "
+                            "Creating entrance hint Inaccessible. Please report this to the TUNIC rando devs.")
                     hint_text = "Inaccessible"
                 else:
                     while connection != ("Menu", None):
