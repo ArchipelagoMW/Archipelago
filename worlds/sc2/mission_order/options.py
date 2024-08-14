@@ -1,7 +1,7 @@
 from __future__ import annotations
 import random
 
-from Options import OptionDict
+from Options import OptionDict, Visibility
 from schema import Schema, Optional, And, Or
 import typing
 from typing import Any, Union, Dict, Set, List
@@ -80,6 +80,7 @@ class CustomMissionOrder(OptionDict):
     Used to generate a custom mission order. Please see documentation to understand usage.
     """
     display_name = "Custom Mission Order"
+    visibility = Visibility.template
     value: Dict[str, Dict[str, Any]]
     default = {
         "Default Campaign": {

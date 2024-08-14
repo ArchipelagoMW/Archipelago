@@ -851,18 +851,18 @@ class SC2Context(CommonContext):
         self.mission_id_to_location_ids = {mission_id: sorted(objectives) for mission_id, objectives in
                                            mission_id_to_location_ids.items()}
 
-    def locations_for_mission(self, mission: SC2Mission):
+    def locations_for_mission(self, mission: SC2Mission) -> typing.Iterable[int]:
         mission_id: int = mission.id
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
             yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
     
-    def locations_for_mission_id(self, mission_id: int):
+    def locations_for_mission_id(self, mission_id: int) -> typing.Iterable[int]:
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
             yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
 
-    def uncollected_locations_in_mission(self, mission: SC2Mission):
+    def uncollected_locations_in_mission(self, mission: SC2Mission) -> typing.Iterable[int]:
         for location_id in self.locations_for_mission(mission):
             if location_id in self.missing_locations:
                 yield location_id
