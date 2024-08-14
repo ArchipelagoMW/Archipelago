@@ -266,7 +266,7 @@ def run_gui():
             if file and component:
                 run_component(component, file)
             else:
-                logging.warning(f"unable to identify component for {filename}")
+                logging.warning(f"unable to identify component for {file}")
 
         def _stop(self, *largs):
             # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
