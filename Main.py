@@ -11,7 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
-from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, distribute_planned, \
+    flood_items
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
@@ -346,7 +347,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
                 if not multiworld.can_beat_game():
-                    raise Exception("Game appears as unbeatable. Aborting.")
+                    raise FillError("Game appears as unbeatable. Aborting.", multiworld=multiworld)
                 else:
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
