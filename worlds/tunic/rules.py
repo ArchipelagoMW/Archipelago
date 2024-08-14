@@ -116,7 +116,7 @@ def set_region_rules(world: "TunicWorld") -> None:
         lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
     world.get_entrance("Overworld -> Quarry").access_rule = \
         lambda state: (has_sword(state, player) or state.has(fire_wand, player)) \
-        and (state.has_any({grapple, laurels}, player) or can_ladder_storage(state, world))
+        and (state.has_any({grapple, laurels, gun}, player) or can_ladder_storage(state, world))
     world.get_entrance("Quarry Back -> Quarry").access_rule = \
         lambda state: has_sword(state, player) or state.has(fire_wand, player)
     world.get_entrance("Quarry -> Lower Quarry").access_rule = \
