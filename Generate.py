@@ -200,9 +200,11 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                             except Exception as e:
                                 raise Exception(f"Error setting {k} to {v} for player {player}") from e
 
+                    if not getattr(erargs, "name", None):
+                        setattr(erargs, "name", {})  # if the first slot does not define a name we won't have a name obj to look up
                     if path == args.weights_file_path:  # if name came from the weights file, just use base player name
                         erargs.name[player] = f"Player{player}"
-                    elif not erargs.name[player]:  # if name was not specified, generate it from filename
+                    elif player not in erargs.name:  # if name was not specified, generate it from filename
                         erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
                     erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
