@@ -34,8 +34,6 @@ def has_ladder(ladder: str, state: CollectionState, world: "TunicWorld") -> bool
 
 
 def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
-    if not world.options.entrance_rando or world.options.fixed_shop:
-        return has_sword(state, world.player)
     return has_sword(state, world.player) and state.can_reach_region("Shop", world.player)
 
 
