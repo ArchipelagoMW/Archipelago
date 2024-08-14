@@ -2,7 +2,10 @@
 
 ## What is this game?
 
-See the german game page lol just kidding I'm tired
+shapez is an automation game about cutting, rotating, stacking, and painting shapes, that you extract from randomly
+generated patches on an infinite canvas, and sending them to the hub to complete levels. The "tutorial", where you
+unlock a new building or game mechanic (almost) every level, goes until level 26, where you unlock freeplay with 
+infinitely more levels, that require a new, randomly generated shape.
 
 ## Where is the options page?
 

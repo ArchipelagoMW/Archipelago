@@ -2,7 +2,7 @@
 
 ## Was ist das für ein Spiel?
 
-Shapez ist ein Spiel über automatisierung und ich muss eine bessere Beschreibung heraussuchen lol
+shapez ist ein Spiel über automatisierung und ich muss eine bessere Beschreibung heraussuchen lol
 
 ## Wo ist die Seite für die Einstellungen?
 

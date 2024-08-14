@@ -98,7 +98,7 @@ def color_to_needed_building(color1: str, color2: str = "Uncolored") -> str:
 shapesanity_simple: dict[str, str] = {}
 shapesanity_complex: dict[str, str] = {}
 
-for shape in ["Circle", "Square", "Windmill", "Star"]:
+for shape in ["Circle", "Square", "Star"]:
     for color in ["Red", "Blue", "Green", "Yellow", "Purple", "Cyan", "White", "Uncolored"]:
         shapesanity_simple[f"Shapesanity {color} {shape}"] = f"Shapesanity Unprocessed {color_to_needed_building(color)}"
         shapesanity_simple[f"Shapesanity Half {color} {shape}"] = f"Shapesanity Cut {color_to_needed_building(color)}"
@@ -107,6 +107,14 @@ for shape in ["Circle", "Square", "Windmill", "Star"]:
             = f"Shapesanity Stitched {color_to_needed_building(color)}"
         shapesanity_simple[f"Shapesanity Cornered {color} {shape}"] \
             = f"Shapesanity Stitched {color_to_needed_building(color)}"
+for color in ["Red", "Blue", "Green", "Yellow", "Purple", "Cyan", "White", "Uncolored"]:
+    shapesanity_simple[f"Shapesanity {color} Windmill"] = f"Shapesanity Stitched {color_to_needed_building(color)}"
+    shapesanity_simple[f"Shapesanity Half {color} Windmill"] = f"Shapesanity Cut {color_to_needed_building(color)}"
+    shapesanity_simple[f"Shapesanity {color} Windmill Piece"] = f"Shapesanity Cut Rotated {color_to_needed_building(color)}"
+    shapesanity_simple[f"Shapesanity Cut Out {color} Windmill"] \
+        = f"Shapesanity Stitched {color_to_needed_building(color)}"
+    shapesanity_simple[f"Shapesanity Cornered {color} Windmill"] \
+        = f"Shapesanity Stitched {color_to_needed_building(color)}"
 for first_shape in ["C", "R", "W", "S"]:
     for second_shape in ["C", "R", "W", "S"]:
         for first_color in ["r", "g", "b", "y", "p", "c", "w", "u"]:
@@ -120,8 +128,12 @@ for first_shape in ["C", "R", "W", "S"]:
                         ordered_combo = f"{second_combo} {first_combo}"
                     shapesanity_complex[f"Shapesanity 3-1 {first_combo} {second_combo}"] \
                         = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
-                    shapesanity_complex[f"Shapesanity Half-Half {ordered_combo}"] \
-                        = f"Shapesanity Half-Half {color_to_needed_building(first_color, second_color)}"
+                    if first_shape == "W" and second_shape == "W":
+                        shapesanity_complex[f"Shapesanity Half-Half {ordered_combo}"] \
+                            = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
+                    else:
+                        shapesanity_complex[f"Shapesanity Half-Half {ordered_combo}"] \
+                            = f"Shapesanity Half-Half {color_to_needed_building(first_color, second_color)}"
                     shapesanity_complex[f"Shapesanity Checkered {ordered_combo}"] \
                         = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
 
@@ -144,6 +156,7 @@ all_locations: list[str] = (["Level 1 Additional", "Level 20 Additional"]
                             # + achievement_locations
                             + list(shapesanity_simple)
                             + list(shapesanity_complex))
+all_locations.sort()
 
 
 def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationProgressType]]:
@@ -392,10 +405,14 @@ def addshapesanity(amount: int, random: Random, included: int) -> dict[str, tupl
     if not included:
         return included_shapes
     shapes_list = list(shapesanity_simple.items())
-    for basic_shape in ["Circle", "Square", "Windmill", "Star"]:
-        included_shapes[f"Shapesanity Uncolored {basic_shape}"] = ("Shapesanity Unprocessed Uncolored",
+    if amount >= 4:
+        for basic_shape in ["Circle", "Square", "Star"]:
+            included_shapes[f"Shapesanity Uncolored {basic_shape}"] = ("Shapesanity Unprocessed Uncolored",
+                                                                       LocationProgressType.DEFAULT)
+            shapes_list.remove((f"Shapesanity Uncolored {basic_shape}", "Shapesanity Unprocessed Uncolored"))
+        included_shapes[f"Shapesanity Uncolored Windmill"] = ("Shapesanity Stitched Uncolored",
                                                                    LocationProgressType.DEFAULT)
-        shapes_list.remove((f"Shapesanity Uncolored {basic_shape}", "Shapesanity Unprocessed Uncolored"))
+        shapes_list.remove((f"Shapesanity Uncolored Windmill", "Shapesanity Stitched Uncolored"))
     switched = False
     for counting in range(4, amount):
         if (len(shapes_list) == 0 or counting == amount//2) and not switched:

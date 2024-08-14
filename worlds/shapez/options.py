@@ -48,13 +48,6 @@ class RandomizeUpgradeRequirements(Toggle):
     default = True
 
 
-# TODO option to change level requirement checking:
-# vanilla: level 14 throughput, rest amount (default)
-# only_amount
-# only_throughput
-# mixed
-
-
 class RandomizeLevelLogic(Choice):
     """If level requirements are randomized, this sets how those random shapes are generated
     and how logic works for levels.
@@ -82,7 +75,7 @@ class RandomizeUpgradeLogic(Choice):
     Linear: Tier II requires nothing, III-VI require another random building each,
             and VII and onwards require all buildings.
     Hardcore: All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""
-    display_name = "Randomize upgrade logic"  # TODO more customizable than initially thought
+    display_name = "Randomize upgrade logic"
     option_vanilla_like = 0
     option_linear = 1
     option_hardcore = 2
@@ -129,7 +122,7 @@ class ShapesanityAmount(Range):
     display_name = "Shapesanity amount"
     range_start = 0
     range_end = 2144
-    default = 20
+    default = 100
 
 
 class TrapsProbability(Range):

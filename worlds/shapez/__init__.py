@@ -46,9 +46,7 @@ class ShapezWorld(World):
     options_dataclass = ShapezOptions
     options: ShapezOptions
     topology_present = True
-    web = ShapezWeb
-
-    # TODO TestBase, web docs, item and location descriptions
+    web = ShapezWeb()
 
     base_id = 20010707
     location_count: int = 0
@@ -84,16 +82,21 @@ class ShapezWorld(World):
             self.maxlevel = 26
             self.finaltier = 8
 
-        # Setting the seed for the game before any other randomization call is done TODO check actual seed range in game
+        # Setting the seed for the game before any other randomization call is done
         self.client_seed = self.random.randint(0, 2**32)
 
         # Determines the order of buildings for levels und upgrades logic
         if self.options.randomize_level_requirements.value:
             if self.options.randomize_level_logic.value in [1, 3]:
-                vanilla_list = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
-                for i in range(4, -1, -1):
-                    next_building = self.random.randint(0, i)
-                    self.level_logic.append(vanilla_list.pop(next_building))
+                vanilla_list = ["Cutter", "Painter", "Stacker"]
+                while len(vanilla_list) > 0:
+                    index = self.random.randint(0, len(vanilla_list)-1)
+                    next_building = vanilla_list.pop(index)
+                    if next_building == "Cutter":
+                        vanilla_list.append("Rotator")
+                    if next_building == "Painter":
+                        vanilla_list.append("Color Mixer")
+                    self.level_logic.append(next_building)
             else:
                 self.level_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
         else:
@@ -103,10 +106,15 @@ class ShapezWorld(World):
             if self.options.randomize_upgrade_logic.value == 2:
                 self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
             else:
-                vanilla_list = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
-                for i in range(4, -1, -1):
-                    next_building = self.random.randint(0, i)
-                    self.upgrade_logic.append(vanilla_list.pop(next_building))
+                vanilla_list = ["Cutter", "Painter", "Stacker"]
+                while len(vanilla_list) > 0:
+                    index = self.random.randint(0, len(vanilla_list)-1)
+                    next_building = vanilla_list.pop(index)
+                    if next_building == "Cutter":
+                        vanilla_list.append("Rotator")
+                    if next_building == "Painter":
+                        vanilla_list.append("Color Mixer")
+                    self.upgrade_logic.append(next_building)
         else:
             self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
 

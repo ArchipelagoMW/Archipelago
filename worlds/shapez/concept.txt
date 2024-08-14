@@ -81,7 +81,6 @@ Logical requirements:
 - red, green, blue shapes > painter
 - more colored shapes > painter, mixer
 - goal > cutter, stacker, painter, mixer, balancer, rotator, tunnel, blueprints
-- upgrades access > upgrades unlocker
 
 Regions:
 - Main > Levels with 1 Building, Levels with 5 Buildings, Upgrades Tier II,
