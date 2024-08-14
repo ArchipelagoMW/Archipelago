@@ -796,7 +796,7 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
 
     if ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions:
         time_travel_state = none_state.copy()
-        time_travel_state.collect(ootworld.create_item('Time Travel'), event=True)
+        time_travel_state.collect(ootworld.create_item('Time Travel'), prevent_sweep=True)
         time_travel_state._oot_update_age_reachable_regions(player)
 
     # Unless entrances are decoupled, we don't want the player to end up through certain entrances as the wrong age
