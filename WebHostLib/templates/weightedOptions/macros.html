@@ -138,7 +138,7 @@
                     id="{{ option_name }}-{{ key }}"
                     name="{{ option_name }}||{{ key }}"
                     value="1"
-                    checked="{{ "checked" if key in option.default else "" }}"
+                    {{ "checked" if key in option.default }}
                 />
                 <label for="{{ option_name }}-{{ key }}">
                     {{ key }}
