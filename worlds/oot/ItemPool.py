@@ -373,7 +373,7 @@ def get_pool_core(world):
             pending_junk_pool.append('Kokiri Sword')
         if world.shuffle_ocarinas:
             pending_junk_pool.append('Ocarina')
-        if world.shuffle_beans and world.multiworld.start_inventory[world.player].value.get('Magic Bean Pack', 0):
+        if world.shuffle_beans and world.options.start_inventory.value.get('Magic Bean Pack', 0):
             pending_junk_pool.append('Magic Bean Pack')
         if (world.gerudo_fortress != "open"
                 and world.shuffle_hideoutkeys in ['any_dungeon', 'overworld', 'keysanity', 'regional']):
@@ -512,7 +512,7 @@ def get_pool_core(world):
         # Magic Beans
         elif location.vanilla_item == 'Buy Magic Bean':
             if world.shuffle_beans:
-                item = 'Magic Bean Pack' if not world.multiworld.start_inventory[world.player].value.get('Magic Bean Pack', 0) else get_junk_item(world.random)[0]
+                item = 'Magic Bean Pack' if not world.options.start_inventory.value.get('Magic Bean Pack', 0) else get_junk_item(world.random)[0]
             shuffle_item = world.shuffle_beans
             if not shuffle_item:
                 location.show_in_spoiler = False
