@@ -129,7 +129,7 @@ class SC2MOGenMissionPools:
         pool = slot.option_mission_pool.intersection(self.master_list)
         
         difficulty_pools: Dict[int, List[int]] = {
-            diff: list(pool.intersection(self.difficulty_pools[diff]))
+            diff: sorted(pool.intersection(self.difficulty_pools[diff]))
             for diff in Difficulty if diff != Difficulty.RELATIVE
         }
 

@@ -293,7 +293,7 @@ class SC2MissionOrder(MissionOrderNode):
                     # Manually make a rule for prev missions
                     if len(mission.prev) > 0:
                         mission.entry_rule.target_amount += 1
-                        mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, list(mission.prev)))
+                        mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, mission.prev))
 
     def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode, rule_id: int = -1) -> EntryRule:
         if "rules" in data:
