@@ -1,7 +1,7 @@
 from math import floor
 from pkgutil import get_data
 from random import Random
-from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple, TypeVar, Optional
+from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
 
 T = TypeVar("T")
 
