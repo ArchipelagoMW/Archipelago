@@ -133,7 +133,7 @@ class MLSSPatchExtension(APPatchExtension):
         stream = io.BytesIO(rom)
         random.seed(options["seed"] + options["player"])
 
-        if options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2) and options["randomize_enemies"] == 0:
+        if options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2 and options["randomize_enemies"] == 0):
             raw = []
             for pos in bosses:
                 stream.seek(pos + 1)
@@ -164,6 +164,7 @@ class MLSSPatchExtension(APPatchExtension):
 
         enemies_raw = []
         groups = []
+        boss_groups = []
 
         if options["randomize_enemies"] == 0:
             return stream.getvalue()
@@ -171,7 +172,7 @@ class MLSSPatchExtension(APPatchExtension):
         if options["randomize_bosses"] == 2:
             for pos in bosses:
                 stream.seek(pos + 1)
-                groups += [stream.read(0x1F)]
+                boss_groups += [stream.read(0x1F)]
 
         for pos in enemies:
             stream.seek(pos + 8)
@@ -221,12 +222,19 @@ class MLSSPatchExtension(APPatchExtension):
             groups += [raw]
             chomp = False
 
-        random.shuffle(groups)
         arr = enemies
         if options["randomize_bosses"] == 2:
             arr += bosses
+            groups += boss_groups
+
+        random.shuffle(groups)
 
         for pos in arr:
+            if arr[-1] in boss_groups:
+                stream.seek(pos)
+                temp = stream.read(1)
+                stream.seek(pos)
+                stream.write(bytes([temp[0] | 0x8]))
             stream.seek(pos + 1)
             stream.write(groups.pop())
 
