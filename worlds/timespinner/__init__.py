@@ -101,6 +101,7 @@ class TimespinnerWorld(World):
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
             "HpCap": self.options.hp_cap.value,
+            "MpCap": self.options.mp_cap.value,
             "LevelCap": self.options.level_cap.value,
             "ExtraEarringsXP": self.options.extra_earrings_xp.value,
             "BossHealing": self.options.boss_healing.value,
@@ -118,6 +119,7 @@ class TimespinnerWorld(World):
             "RisingTides": self.options.rising_tides.value,
             "UnchainedKeys": self.options.unchained_keys.value,
             "PresentAccessWithWheelAndSpindle": self.options.back_to_the_future.value,
+            "PrismBreak": self.options.prism_break.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
@@ -254,6 +256,11 @@ class TimespinnerWorld(World):
             excluded_items.add('Timeworn Warp Beacon')
             excluded_items.add('Modern Warp Beacon')
             excluded_items.add('Mysterious Warp Beacon')
+
+        if not self.options.prism_break:
+            excluded_items.add('LaserAccessA')
+            excluded_items.add('LaserAccessI')
+            excluded_items.add('LaserAccessM')
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in self.item_name_groups['UseItem']:

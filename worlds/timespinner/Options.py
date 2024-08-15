@@ -186,6 +186,13 @@ class HpCap(Range):
     range_end = 999
     default = 999
 
+class MpCap(Range):
+    "Sets the number that Lunais's MP maxes out at."
+    display_name = "Aura Cap"
+    range_start = 45
+    range_end = 999
+    default = 999
+
 class LevelCap(Range):
     """Sets the max level Lunais can achieve."""
     display_name = "Level Cap"
@@ -359,12 +366,17 @@ class TrapChance(Range):
 class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
-    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
-    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" }
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", 'Throw Stun Trap' ]
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
     display_name = "Back to the future"
+
+class PrismBreak(Toggle):
+    """Adds 3 Laser Access items to the item pool to remove the lasers blocking the military hangar area
+    instead of needing to beat the Golden Idol, Aelana, and The Maw."""
+    display_name = "Prism Break"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -382,6 +394,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
     hp_cap: HpCap
+    mp_cap: MpCap
     level_cap: LevelCap
     extra_earrings_xp: ExtraEarringsXP
     boss_healing: BossHealing
@@ -400,6 +413,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     rising_tides_overrides: RisingTidesOverrides
     unchained_keys: UnchainedKeys
     back_to_the_future: PresentAccessWithWheelAndSpindle
+    prism_break: PrismBreak
     trap_chance: TrapChance
     traps: Traps
 
