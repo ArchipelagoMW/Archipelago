@@ -732,7 +732,7 @@ COLOSSUS_FIRE_LANCE                                     = "Fire Lance (Colossus)
 WRATHWALKER_AERIAL_TRACKING                             = "Aerial Tracking (Wrathwalker)"
 REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (Reaver)"
 DISRUPTOR_RESTRUCTURED_THRUSTERS                        = "Restructured Thrusters (Disruptor)"
-# Warp Prism
+WARP_PRISM_WARP_REFRACTION                              = "Warp Refraction (Warp Prism)"
 # Observer
 PHOENIX_DOUBLE_GRAVITON_BEAM                            = "Double Graviton Beam (Phoenix)"
 CORSAIR_NETWORK_DISRUPTION                              = "Network Disruption (Corsair)"
