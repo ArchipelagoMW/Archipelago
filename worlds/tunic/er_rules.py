@@ -1377,7 +1377,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             dagger_entry_paired_name, dagger_entry_paired_region = (
                 get_paired_portal("Archipelagos Redux, archipelagos_house_"))
             try:
-                dagger_entry_paired_entrance = world.world.get_entrance(dagger_entry_paired_name, player)
+                dagger_entry_paired_entrance = world.get_entrance(dagger_entry_paired_name)
             except KeyError:
                 # there is no paired entrance, so you must fight or dash past, which is done in the finally
                 pass
@@ -1394,7 +1394,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             # zip past enemies in fortress grave path to enter the dusty entrance, then come back out
             fort_dusty_paired_name, fort_dusty_paired_region = get_paired_portal("Fortress Reliquary, Dusty_")
             try:
-                fort_dusty_paired_entrance = world.world.get_entrance(fort_dusty_paired_name, player)
+                fort_dusty_paired_entrance = world.get_entrance(fort_dusty_paired_name)
             except KeyError:
                 # there is no paired entrance, so you can't run past to deaggro
                 # the path to dusty can be done via combat, so no need to do anything here
@@ -1412,7 +1412,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                 get_paired_portal("Fortress East, Fortress Courtyard_"))
             try:
                 fort_east_upper_right_paired_entrance = (
-                    world.world.get_entrance(fort_east_upper_right_paired_name, player))
+                    world.get_entrance(fort_east_upper_right_paired_name))
             except KeyError:
                 # no paired entrance, so you must fight, which is done in the finally
                 pass
