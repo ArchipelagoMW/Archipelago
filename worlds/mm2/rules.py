@@ -166,14 +166,14 @@ def set_rules(world: "MM2World") -> None:
             world.weapon_damage[8][12] = 0
 
         # weakness validation, it is better to confirm a completable seed than respect plando
-        boss_health = {boss: 0x1C if boss != 12 else 0x1C * 2 for boss in [*list(range(8)), 12]}
+        boss_health = {boss: 0x1C if boss != 12 else 0x1C * 2 for boss in [*range(8), 12]}
 
         weapon_energy = {key: float(0x1C) for key in weapon_costs}
         weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
-                       for boss in [*list(range(8)), 12]}
+                       for boss in [*range(8), 12]}
         flexibility = [(sum(1 if weapon_boss[boss][weapon] > 0 else 0 for weapon in range(9)) *
                         sum(weapon_boss[boss].values()), boss) for boss in weapon_boss if boss != 12]
-        used_weapons = {i: set() for i in [*list(range(8)), 12]}
+        used_weapons = {i: set() for i in [*range(8), 12]}
         for _, boss in [*sorted(flexibility), (0, 12)]:
             boss_damage = weapon_boss[boss]
             weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in

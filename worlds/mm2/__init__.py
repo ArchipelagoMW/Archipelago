@@ -145,7 +145,7 @@ class MM2World(World):
         return MM2Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choices(list(filler_item_weights.keys()),
+        return self.random.choices(list(filler_item_weights.keys()),
                                               weights=list(filler_item_weights.values()))[0]
 
     def create_items(self) -> None:
@@ -166,7 +166,7 @@ class MM2World(World):
             total_checks += 27
         remaining = total_checks - len(itempool)
         itempool.extend([self.create_item(name)
-                         for name in self.multiworld.random.choices(list(filler_item_weights.keys()),
+                         for name in self.random.choices(list(filler_item_weights.keys()),
                                                                     weights=list(filler_item_weights.values()),
                                                                     k=remaining)])
         self.multiworld.itempool += itempool
@@ -175,9 +175,9 @@ class MM2World(World):
 
     def generate_early(self) -> None:
         if (not self.options.yoku_jumps
-            and self.options.starting_robot_master.current_key == "heat_man") or \
+            and self.options.starting_robot_master == "heat_man") or \
                 (not self.options.enable_lasers
-                 and self.options.starting_robot_master.current_key == "quick_man"):
+                 and self.options.starting_robot_master == "quick_man"):
             robot_master_pool = [1, 2, 3, 5, 6, 7, ]
             if self.options.yoku_jumps:
                 robot_master_pool.append(0)

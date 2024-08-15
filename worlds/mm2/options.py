@@ -94,7 +94,7 @@ class Consumables(Choice):
     def get_option_name(cls, value: int) -> str:
         if value == 1:
             return "1-Ups/E-Tanks"
-        elif value == 2:
+        if value == 2:
             return "Weapon/Health Energy"
         return super().get_option_name(value)
 

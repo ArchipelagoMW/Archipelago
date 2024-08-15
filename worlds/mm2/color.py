@@ -186,7 +186,7 @@ def get_colors_for_item(name: str) -> Tuple[int, int]:
             color_1, color_2 = extrapolate_color(HTML_TO_NES[colors[0]])
     else:
         # generate hash
-        crc_hash = crc32(name.encode('utf-8'))
+        crc_hash = crc32(name.encode("utf-8"))
         hash_color = struct.pack("I", crc_hash)
         color_1 = hash_color[0] % 0x3F
         color_2 = hash_color[1] % 0x3F

@@ -8,7 +8,7 @@ config file.
 ## What does randomization do to this game?
 
 Weapons received from Robot Masters, access to each individual stage, and Items from Dr. Light are randomized
-into the multiworld. Access to the Wily Stages is locked behind receiving Item 1, 2, and 3. The game is complete upon 
+into the multiworld. Access to the Wily Stages is locked behind receiving Item 1, 2, and 3. The game is completed when 
 viewing the ending sequence after defeating the Alien.
 
 ## What Mega Man 2 items can appear in other players' worlds?
@@ -37,7 +37,7 @@ EnergyLink is an energy storage supported by certain games that is shared across
 Half of the energy that would be gained is lost upon transfer to the EnergyLink. 
 
 Energy from the EnergyLink storage can be converted into health, weapon energy, and lives at different conversion rates.
-You can find out how much of each type you can pull using `/pool` in the client. Additionally, you can have it 
+You can find out how much of each type you can pull using the `/pool` command in the client. Additionally, you can have it 
 automatically pull from the EnergyLink storage to keep Mega Man healed using the `/autoheal` command in the client. 
 Finally, you can use the `/request` command to request a certain type of energy from the storage.
 
@@ -67,7 +67,7 @@ the following:
 - Crash Man
 
 Colors attempt to map a list of HTML-defined colors to what the NES can render. A full list of applicable colors can be
-found [here](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/mm2/Color.py#L11). Alternatively, colors can 
+found [here](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/mm2/color.py#L11). Alternatively, colors can 
 be supplied directly using `$xx` format. A full list of NES colors can be found [here](https://www.nesdev.org/wiki/PPU_palettes#2C02).
 
 You can also pass only one color (such as `Mega Buster-Red`) and it will interpret a second color based off of the color
