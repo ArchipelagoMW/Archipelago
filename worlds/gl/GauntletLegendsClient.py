@@ -616,7 +616,7 @@ class GauntletLegendsContext(CommonContext):
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
         raw_locations = []
-        for location in level_locations.get((level[1] << 4) + _id, []):
+        for location in [location for location in level_locations.get((level[1] << 4) + _id, []) if self.difficulty >= location.difficulty]:
             if "Chest" in location.name:
                 if self.glslotdata["chests"]:
                     raw_locations += [location]
@@ -624,8 +624,7 @@ class GauntletLegendsContext(CommonContext):
                 if self.glslotdata["barrels"]:
                     raw_locations += [location]
             else:
-                if self.difficulty >= location.difficulty:
-                    raw_locations += [location]
+                raw_locations += [location]
         await ctx.send_msgs(
             [
                 {
