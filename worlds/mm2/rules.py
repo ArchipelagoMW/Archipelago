@@ -5,7 +5,7 @@ from .locations import heat_man_locations, air_man_locations, wood_man_locations
     quick_man_locations, flash_man_locations, metal_man_locations, crash_man_locations, wily_1_locations, \
     wily_2_locations, wily_3_locations, wily_4_locations, wily_5_locations, wily_6_locations
 from .options import bosses, weapons_to_id, Consumables, RandomWeaknesses
-from worlds.generic.Rules import add_rule, forbid_items
+from worlds.generic.Rules import add_rule
 
 if TYPE_CHECKING:
     from . import MM2World
@@ -77,7 +77,8 @@ def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int)
 def set_rules(world: "MM2World") -> None:
     # most rules are set on region, so we only worry about rules required within stage access
     # or rules variable on settings
-    if hasattr(world.multiworld, "re_gen_passthrough"):
+    if (hasattr(world.multiworld, "re_gen_passthrough")
+            and "Mega Man 2" in getattr(world.multiworld, "re_gen_passthrough")):
         slot_data = getattr(world.multiworld, "re_gen_passthrough")["Mega Man 2"]
         world.weapon_damage = slot_data["weapon_damage"]
     else:
