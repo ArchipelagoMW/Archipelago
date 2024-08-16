@@ -75,7 +75,7 @@ portal_mapping: List[Portal] = [
            destination="Town Basement", tag="_beach"),
     Portal(name="Changing Room Entrance", region="Overworld",
            destination="Changing Room", tag="_"),
-    Portal(name="Cube Cave Entrance", region="Overworld",
+    Portal(name="Cube Cave Entrance", region="Cube Cave Entrance Region",
            destination="CubeRoom", tag="_"),
     Portal(name="Stairs from Overworld to Mountain", region="Upper Overworld",
            destination="Mountain", tag="_"),
@@ -562,6 +562,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld Temple Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Town Portal": RegionInfo("Overworld Redux"),  # being able to go to or come from the portal
     "Overworld Spawn Portal": RegionInfo("Overworld Redux"),  # being able to go to or come from the portal
+    "Cube Cave Entrance Region": RegionInfo("Overworld Redux"),  # other side of the bomb wall
     "Stick House": RegionInfo("Sword Cave", dead_end=DeadEnd.all_cats),
     "Windmill": RegionInfo("Windmill"),
     "Old House Back": RegionInfo("Overworld Interiors"),  # part with the hc door
@@ -775,6 +776,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["UR"]], 
         "Overworld Old House Door":
             [],
+        "Cube Cave Entrance Region":
+            [],
     },
     "East Overworld": {
         "Above Ruined Passage":
@@ -917,6 +920,10 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
     "Overworld Spawn Portal": {
+        "Overworld":
+            [],
+    },
+    "Cube Cave Entrance Region": {
         "Overworld":
             [],
     },
