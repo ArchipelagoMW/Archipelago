@@ -121,23 +121,21 @@ class MM2World(World):
                                   lambda state, items=required_items: state.has_all(items, self.player))
             stage.add_locations(locations, MM2Location)
             for location in stage.get_locations():
-                if location.address is None and location.name is not dr_wily:
+                if location.address is None and location.name != dr_wily:
                     location.place_locked_item(MM2Item(location.name, ItemClassification.progression,
                                                        None, self.player))
-            if self.options.consumables in (Consumables.option_1up_etank,
-                                            Consumables.option_all):
-                if region in etank_1ups:
-                    stage.add_locations(etank_1ups[region], MM2Location)
-            if self.options.consumables in (Consumables.option_weapon_health,
-                                            Consumables.option_all):
-                if region in energy_pickups:
-                    stage.add_locations(energy_pickups[region], MM2Location)
+            if region in etank_1ups and self.options.consumables in (Consumables.option_1up_etank,
+                                                                     Consumables.option_all):
+                stage.add_locations(etank_1ups[region], MM2Location)
+            if region in energy_pickups and self.options.consumables in (Consumables.option_weapon_health,
+                                                                         Consumables.option_all):
+                stage.add_locations(energy_pickups[region], MM2Location)
             self.multiworld.regions.append(stage)
 
-    def create_item(self, name: str, force_non_progression: bool = False) -> MM2Item:
+    def create_item(self, name: str) -> MM2Item:
         item = item_table[name]
         classification = ItemClassification.filler
-        if item.progression and not force_non_progression:
+        if item.progression:
             classification = ItemClassification.progression_skip_balancing \
                 if item.skip_balancing else ItemClassification.progression
         if item.useful:
@@ -230,7 +228,7 @@ class MM2World(World):
                             if item.name in rbm_names
                             and item.player == self.player]
             placed_item = self.random.choice(valid_second)
-            rbm_defeated = f"{self.options.starting_robot_master.get_option_name(self.options.starting_robot_master.value)} - Defeated"
+            rbm_defeated = f"{robot_masters[self.options.starting_robot_master.value]} - Defeated"
             rbm_location = self.get_location(rbm_defeated)
             rbm_location.place_locked_item(placed_item)
             progitempool.remove(placed_item)
