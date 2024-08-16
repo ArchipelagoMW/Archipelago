@@ -1,6 +1,7 @@
 from typing import Dict, Set, List, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
-from .rules import has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage
+from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
+                    bomb_walls)
 from .er_data import Portal
 from BaseClasses import Region, CollectionState
 
@@ -11,6 +12,7 @@ laurels = "Hero's Laurels"
 grapple = "Magic Orb"
 ice_dagger = "Magic Dagger"
 fire_wand = "Magic Wand"
+gun = "Gun"
 lantern = "Lantern"
 fairies = "Fairy"
 coins = "Golden Coin"
@@ -29,6 +31,10 @@ gold_hexagon = "Gold Questagon"
 
 def has_ladder(ladder: str, state: CollectionState, world: "TunicWorld") -> bool:
     return not world.options.shuffle_ladders or state.has(ladder, world.player)
+
+
+def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
+    return has_sword(state, world.player) and state.can_reach_region("Shop", world.player)
 
 
 def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_pairs: Dict[Portal, Portal]) -> None:
@@ -217,12 +223,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld after Envoy"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        rule=lambda state: state.has_any({laurels, grapple, gun}, player)
         or state.has("Sword Upgrade", player, 4)
         or options.logic_rules)
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        rule=lambda state: state.has_any({laurels, grapple, gun}, player)
         or state.has("Sword Upgrade", player, 4)
         or options.logic_rules)
 
@@ -328,6 +334,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld Tunnel Turret"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Cube Cave Entrance Region"],
+        rule=lambda state: state.has(gun, player) or can_shop(state, world))
+    regions["Cube Cave Entrance Region"].connect(
+        connecting_region=regions["Overworld"])
 
     # Overworld side areas
     regions["Old House Front"].connect(
@@ -1526,6 +1538,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Fuse"),
              lambda state: has_ability(prayer, state, world))
+
+    # Bombable Walls
+    for location_name in bomb_walls:
+        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or can_shop(state, world))
 
     # Shop
     set_rule(world.get_location("Shop - Potion 1"),

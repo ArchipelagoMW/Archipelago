@@ -1,7 +1,7 @@
 from random import Random
 from typing import Dict, TYPE_CHECKING
 
-from worlds.generic.Rules import set_rule, forbid_item
+from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
 from .options import TunicOptions
 if TYPE_CHECKING:
@@ -11,6 +11,7 @@ laurels = "Hero's Laurels"
 grapple = "Magic Orb"
 ice_dagger = "Magic Dagger"
 fire_wand = "Magic Wand"
+gun = "Gun"
 lantern = "Lantern"
 fairies = "Fairy"
 coins = "Golden Coin"
@@ -25,6 +26,11 @@ red_hexagon = "Red Questagon"
 green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
+
+bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Wing] Bombable Wall",
+              "Overworld - [Central] Bombable Wall", "Overworld - [Southwest] Bombable Wall Near Fountain",
+              "Quarry - [West] Upper Area Bombable Wall", "Quarry - [East] Bombable Wall",
+              "Ruined Atoll - [Northwest] Bombable Wall"]
 
 
 def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
@@ -110,7 +116,7 @@ def set_region_rules(world: "TunicWorld") -> None:
         lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
     world.get_entrance("Overworld -> Quarry").access_rule = \
         lambda state: (has_sword(state, player) or state.has(fire_wand, player)) \
-        and (state.has_any({grapple, laurels}, player) or can_ladder_storage(state, world))
+        and (state.has_any({grapple, laurels, gun}, player) or can_ladder_storage(state, world))
     world.get_entrance("Quarry Back -> Quarry").access_rule = \
         lambda state: has_sword(state, player) or state.has(fire_wand, player)
     world.get_entrance("Quarry -> Lower Quarry").access_rule = \
@@ -325,6 +331,13 @@ def set_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
     set_rule(world.get_location("Hero's Grave - Feathers Relic"),
              lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+
+    # Bombable Walls
+    for location_name in bomb_walls:
+        # has_sword is there because you can buy bombs in the shop
+        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or has_sword(state, player))
+    add_rule(world.get_location("Cube Cave - Holy Cross Chest"),
+             lambda state: state.has(gun, player) or has_sword(state, player))
 
     # Shop
     set_rule(world.get_location("Shop - Potion 1"),
