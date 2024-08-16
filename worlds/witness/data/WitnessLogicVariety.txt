@@ -1028,7 +1028,7 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 Mountain Floor 1 At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
 
-Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 0x09FFB - Mountain Floor 2 Beyond Bridge - 0x09E86 - Mountain Floor 2 At Door - 0x09ED8 & 0x09E86 - Mountain Pink Bridge EP - TrueOneWay:
+Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 0x09FFB - Mountain Floor 2 Beyond Bridge - 0x09E86 - Mountain Floor 2 Above The Abyss - 0x09ED8 & 0x09E86 - Mountain Pink Bridge EP - TrueOneWay:
 158426 - 0x09FD3 (Near Row 1) - True - Stars & Stars + Same Colored Symbol & Colored Squares
 158427 - 0x09FD4 (Near Row 2) - 0x09FD3 - Stars & Stars + Same Colored Symbol & Triangles
 158428 - 0x09FD6 (Near Row 3) - 0x09FD4 - Stars & Stars + Same Colored Symbol & Colored Squares & Eraser
