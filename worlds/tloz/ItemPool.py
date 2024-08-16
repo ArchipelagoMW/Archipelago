@@ -1,8 +1,8 @@
+from collections import Counter
+
 from BaseClasses import ItemClassification
 from .Locations import level_locations, all_level_locations, standard_level_locations, shop_locations
 from .Options import TriforceLocations, StartingPosition
-
-from collections import Counter
 
 # Swords are in starting_weapons
 overworld_items = {
