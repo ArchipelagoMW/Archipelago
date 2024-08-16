@@ -256,7 +256,7 @@ class MM2World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
-            patch = MM2ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+            patch = MM2ProcedurePatch(player=self.player, player_name=self.player_name)
             patch_rom(self, patch)
 
             self.rom_name = patch.name
@@ -285,7 +285,7 @@ class MM2World(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.player_name]
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
