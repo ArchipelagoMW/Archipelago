@@ -81,6 +81,8 @@ easy_ls: List[LadderInfo] = [
     LadderInfo("West Garden before Boss", "Archipelagos Redux, Overworld Redux_upper"),
     # West Garden laurels exit
     LadderInfo("West Garden after Terry", "Archipelagos Redux, Overworld Redux_lowest"),
+    # Magic dagger house, only relevant with combat logic on
+    LadderInfo("West Garden after Terry", "Archipelagos Redux, archipelagos_house_"),
 
     # Atoll, use the little ladder you fix at the beginning
     LadderInfo("Ruined Atoll", "Atoll Redux, Overworld Redux_lower"),
