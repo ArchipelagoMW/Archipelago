@@ -10,7 +10,7 @@ from . import names
 from .rules import minimum_weakness_requirement
 from .text import MM2TextEntry
 from .color import get_colors_for_item, write_palette_shuffle
-from .options import EnergyLink, Consumables, ReduceFlashing, RandomMusic
+from .options import Consumables, ReduceFlashing, RandomMusic
 
 if TYPE_CHECKING:
     from . import MM2World
@@ -239,11 +239,11 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
                 # Friender has to be killed, need buster damage to not break logic
                 enemy_weaknesses[enemy][0] = max(enemy_weaknesses[enemy][0], 1)
 
-    for enemy, damage in enemy_weaknesses.items():
+    for enemy, damage_table in enemy_weaknesses.items():
         for weapon in enemy_weakness_ptrs:
-            if damage[weapon] < 0:
-                damage[weapon] = 256 + damage[weapon]
-            patch.write_byte(enemy_weakness_ptrs[weapon] + enemy_addresses[enemy], damage[weapon])
+            if damage_table[weapon] < 0:
+                damage_table[weapon] = 256 + damage_table[weapon]
+            patch.write_byte(enemy_weakness_ptrs[weapon] + enemy_addresses[enemy], damage_table[weapon])
 
     if world.options.quickswap:
         patch.write_byte(quickswap_ptr + 1, 0x01)

@@ -69,4 +69,4 @@ item_names = {
     "Items": {name for name in item_item_table.keys()}
 }
 
-lookup_item_to_id: Dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}
+lookup_item_to_id: Dict[str, int] = {item_name: data.code for item_name, data in item_table.items()}

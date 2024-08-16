@@ -366,9 +366,9 @@ class MegaMan2Client(BizHawkClient):
         if recv_amount < len(ctx.items_received):
             item = ctx.items_received[recv_amount]
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_amount, len(ctx.items_received)))
 
             if item.item & 0x130 == 0:
                 # Robot Master Weapon
@@ -555,7 +555,7 @@ class MegaMan2Client(BizHawkClient):
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names[new_check_id]
+            location = ctx.location_names.lookup_in_game(new_check_id)
             nes_logger.info(
                 f'New Check: {location} ({len(ctx.locations_checked)}/'
                 f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
