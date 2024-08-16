@@ -2,7 +2,7 @@ from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from .options import IceGrappling, LadderStorage
 from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
-                    laurels_zip)
+                    laurels_zip, bomb_walls)
 from .er_data import Portal
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from BaseClasses import Region, CollectionState
@@ -14,6 +14,7 @@ laurels = "Hero's Laurels"
 grapple = "Magic Orb"
 ice_dagger = "Magic Dagger"
 fire_wand = "Magic Wand"
+gun = "Gun"
 lantern = "Lantern"
 fairies = "Fairy"
 coins = "Golden Coin"
@@ -32,6 +33,10 @@ gold_hexagon = "Gold Questagon"
 
 def has_ladder(ladder: str, state: CollectionState, world: "TunicWorld") -> bool:
     return not world.options.shuffle_ladders or state.has(ladder, world.player)
+
+
+def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
+    return has_sword(state, world.player) and state.can_reach_region("Shop", world.player)
 
 
 def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_pairs: Dict[Portal, Portal]) -> None:
@@ -79,7 +84,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Belltower"],
-        rule=lambda state: state.has(laurels, player) 
+        rule=lambda state: state.has(laurels, player)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld"])
@@ -87,7 +92,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # ice grapple rudeling across rubble, drop bridge, ice grapple rudeling down
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld to West Garden Upper"],
-        rule=lambda state: has_ladder("Ladders to West Bell", state, world) 
+        rule=lambda state: has_ladder("Ladders to West Bell", state, world)
         or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Overworld to West Garden Upper"].connect(
         connecting_region=regions["Overworld Belltower"],
@@ -225,11 +230,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld after Envoy"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        rule=lambda state: state.has_any({laurels, grapple, gun}, player)
         or state.has("Sword Upgrade", player, 4))
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        rule=lambda state: state.has_any({laurels, grapple, gun}, player)
         or state.has("Sword Upgrade", player, 4))
 
     regions["Overworld after Envoy"].connect(
@@ -335,6 +340,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld Tunnel Turret"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Cube Cave Entrance Region"],
+        rule=lambda state: state.has(gun, player) or can_shop(state, world))
+    regions["Cube Cave Entrance Region"].connect(
+        connecting_region=regions["Overworld"])
 
     # Overworld side areas
     regions["Old House Front"].connect(
@@ -567,7 +578,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ability(prayer, state, world)
         and (has_ladder("Ladders in South Atoll", state, world)
              # shoot fuse and have the shot hit you mid-LS
-             or (can_ladder_storage(state, world) and state.has(fire_wand, player) 
+             or (can_ladder_storage(state, world) and state.has(fire_wand, player)
                  and options.ladder_storage >= LadderStorage.option_hard)))
     regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
@@ -685,7 +696,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Exterior from Overworld"].connect(
         connecting_region=regions["Fortress Exterior near cave"],
         rule=lambda state: state.has(laurels, player) or has_ability(prayer, state, world))
-  
+
     # shoot far fire pot, enemy gets aggro'd
     regions["Fortress Exterior near cave"].connect(
         connecting_region=regions["Fortress Courtyard"],
@@ -871,7 +882,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Rooted Ziggurat Lower Front"],
         rule=lambda state: (state.has(laurels, player)
                             or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
-        and has_ability(prayer, state, world) 
+        and has_ability(prayer, state, world)
         and has_sword(state, player))
 
     regions["Rooted Ziggurat Lower Back"].connect(
@@ -953,7 +964,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Back of Swamp Laurels Area"].connect(
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: laurels_zip(state, world)
-        or (state.has(laurels, player) 
+        or (state.has(laurels, player)
             and has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)))
 
     regions["Back of Swamp"].connect(
@@ -1367,6 +1378,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Fuse"),
              lambda state: has_ability(prayer, state, world))
+
+    # Bombable Walls
+    for location_name in bomb_walls:
+        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or can_shop(state, world))
 
     # Shop
     set_rule(world.get_location("Shop - Potion 1"),

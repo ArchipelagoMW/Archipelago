@@ -43,7 +43,7 @@ item_table: Dict[str, TunicItemData] = {
     "Magic Orb": TunicItemData(ItemClassification.progression, 1, 27),
     "Hero's Laurels": TunicItemData(ItemClassification.progression, 1, 28),
     "Lantern": TunicItemData(ItemClassification.progression, 1, 29),
-    "Gun": TunicItemData(ItemClassification.useful, 1, 30, "Weapons"),
+    "Gun": TunicItemData(ItemClassification.progression, 1, 30, "Weapons"),
     "Shield": TunicItemData(ItemClassification.useful, 1, 31),
     "Dath Stone": TunicItemData(ItemClassification.useful, 1, 32),
     "Hourglass": TunicItemData(ItemClassification.useful, 1, 33),
