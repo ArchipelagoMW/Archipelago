@@ -860,15 +860,15 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
         return item in self.value
 
 
-class CounterOption(OptionDict):
+class OptionCounter(OptionDict):
     min: typing.Optional[int] = None
     max: typing.Optional[int] = None
 
     def __init__(self, value: typing.Dict[str, int]):
-        super(CounterOption, self).__init__(collections.Counter(value))
+        super(OptionCounter, self).__init__(collections.Counter(value))
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
-        super(CounterOption, self).verify(world, player_name, plando_options)
+        super(OptionCounter, self).verify(world, player_name, plando_options)
 
         range_errors = []
 
@@ -891,13 +891,13 @@ class CounterOption(OptionDict):
             raise OptionError("\n".join(range_errors))
 
 
-class ItemDict(CounterOption):
+class ItemDict(OptionCounter):
     verify_item_name = True
 
     min = 0
 
     def __init__(self, value: typing.Dict[str, int]):
-        # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a CounterOption
+        # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a OptionCounter
         value = {item_name: amount for item_name, amount in value.items() if amount != 0}
 
         super(ItemDict, self).__init__(value)

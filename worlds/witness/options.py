@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, CounterOption, DefaultOnToggle, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
+from Options import Choice, OptionCounter, DefaultOnToggle, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -239,7 +239,7 @@ _default_trap_weights = {
 }
 
 
-class TrapWeights(CounterOption):
+class TrapWeights(OptionCounter):
     """
     Specify the weights determining how many copies of each trap item will be in your itempool.
     If you don't want a specific type of trap, you can set the weight for it to 0.
