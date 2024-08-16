@@ -409,7 +409,7 @@ class TunicWorld(World):
             all_state = self.multiworld.get_all_state(True)
             all_state.update_reachable_regions(self.player)
             paths = all_state.path
-            portal_names = [portal.name for portal in portal_mapping]
+            portal_names = {portal.name for portal in portal_mapping}.union({f"Shop Portal {i + 1}" for i in range(500)})
             for location in self.multiworld.get_locations(self.player):
                 # skipping event locations
                 if not location.address:
