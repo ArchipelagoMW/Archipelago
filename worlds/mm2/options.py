@@ -134,13 +134,16 @@ class EnemyWeaknesses(Toggle):
 
 
 class StrictWeaknesses(Toggle):
-    """Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
-    Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Alien)."""
+    """
+    Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
+    Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Alien).
+    """
     display_name = "Strict Boss Weaknesses"
 
 
 class RandomWeaknesses(Choice):
-    """None: Bosses will have their regular weaknesses.
+    """
+    None: Bosses will have their regular weaknesses.
     Shuffled: Weapon damage will be shuffled amongst the weapons, so Metal Blade may do Bubble Lead damage.
     Time Stopper will deplete half of a random Robot Master's HP.
     Randomized: Weapon damage will be fully randomized.
@@ -154,7 +157,7 @@ class RandomWeaknesses(Choice):
 
 
 class Wily5Requirement(Range):
-    """Change the amount of Robot Masters that are required to be defeated for
+    """Change the number of Robot Masters that are required to be defeated for
     the teleporter to the Wily Machine to appear."""
     display_name = "Wily 5 Requirement"
     default = 8
