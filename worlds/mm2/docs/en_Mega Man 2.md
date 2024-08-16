@@ -29,7 +29,7 @@ viewing the ending sequence after defeating the Alien.
 ## When the player receives an item, what happens?
 A sound effect will play based on the type of item received, and the effects of the item will be immediately applied, 
 such as unlocking the use of a weapon mid-stage. If the effects of the item cannot be fully applied (such as receiving 
-Health Energy while at full health), the remaining are withheld until they can be applied.
+Health Energy while at full health), the leftover amount is withheld until it can be applied.
 
 ## What is EnergyLink?
 EnergyLink is an energy storage supported by certain games that is shared across all worlds in a multiworld. In Mega Man
