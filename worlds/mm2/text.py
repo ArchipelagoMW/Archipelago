@@ -1,6 +1,7 @@
-from typing import Dict
+from typing import DefaultDict
+from collections import defaultdict
 
-MM2_WEAPON_ENCODING: Dict[str, int] = {
+MM2_WEAPON_ENCODING: DefaultDict[str, int] = defaultdict(lambda x: 0x40, {
     ' ': 0x40,
     'A': 0x41,
     'B': 0x42,
@@ -71,7 +72,7 @@ MM2_WEAPON_ENCODING: Dict[str, int] = {
     '7': 0xA7,
     '8': 0xA8,
     '9': 0xA9,
-}
+})
 
 
 class MM2TextEntry:
