@@ -756,8 +756,8 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
-        logging.error("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
-                      "Please switch over to sweep_for_advancements.")
+        Utils.deprecate("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
+                        "Please switch over to sweep_for_advancements.")
         self.sweep_for_advancements(locations)
 
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None) -> None:
