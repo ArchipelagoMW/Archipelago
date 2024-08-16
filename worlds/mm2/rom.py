@@ -406,10 +406,10 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-prg_offset = 0x8ED70
-prg_size = 0x40000
+PRG_OFFSET = 0x8ED70
+PRG_SIZE = 0x40000
 
 
 def extract_mm2(proteus: bytes) -> bytes:
-    mm2 = bytearray(proteus[prg_offset:prg_offset + prg_size])
+    mm2 = bytearray(proteus[PRG_OFFSET:PRG_OFFSET + PRG_SIZE])
     return bytes(mm2)
