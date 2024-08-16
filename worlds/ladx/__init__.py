@@ -24,7 +24,7 @@ from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions
+from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
 from .Rom import LADXDeltaPatch, get_base_rom_path
 
 DEVELOPER_MODE = False
@@ -65,7 +65,7 @@ class LinksAwakeningWebWorld(WebWorld):
         ["zig"]
     )]
     theme = "dirt"
-
+    option_groups = ladx_option_groups
 
 class LinksAwakeningWorld(World):
     """
@@ -98,9 +98,12 @@ class LinksAwakeningWorld(World):
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
-    #item_name_groups = {
-    #    "weapons": {"sword", "lance"}
-    #}
+    item_name_groups = {
+        "Instruments": {
+            "Full Moon Cello", "Conch Horn", "Sea Lily's Bell", "Surf Harp",
+            "Wind Marimba", "Coral Triangle", "Organ of Evening Calm", "Thunder Drum"
+        },
+    }
 
     prefill_dungeon_items = None
 
