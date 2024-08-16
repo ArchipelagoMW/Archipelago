@@ -1795,7 +1795,7 @@ item_table = {
     item_names.REAVER_KHALAI_REPLICATORS: ItemData(526 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 26, SC2Race.PROTOSS, parent_item=item_names.REAVER),
     item_names.DISRUPTOR_RESTRUCTURED_THRUSTERS: ItemData(527 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 27, SC2Race.PROTOSS, parent_item=item_names.DISRUPTOR),
     item_names.WARP_PRISM_WARP_REFRACTION: ItemData(528 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 28, SC2Race.PROTOSS, parent_item=item_names.WARP_PRISM),
-    # 529 reserved for Observer
+    item_names.OBSERVER_INDUCE_SCOPOPHOBIA: ItemData(529 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 29, SC2Race.PROTOSS, parent_item=item_names.OBSERVER),
     item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: ItemData(530 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 0, SC2Race.PROTOSS, parent_item=item_names.PHOENIX),
     item_names.CORSAIR_NETWORK_DISRUPTION: ItemData(531 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 1, SC2Race.PROTOSS, parent_item=item_names.CORSAIR),
     item_names.MIRAGE_GRAVITON_BEAM: ItemData(532 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 2, SC2Race.PROTOSS, parent_item=item_names.MIRAGE),
