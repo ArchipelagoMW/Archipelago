@@ -616,8 +616,7 @@ class MultiWorld():
 
         def location_relevant(location: Location) -> bool:
             """Determine if this location is relevant to sweep."""
-            return location.progress_type != LocationProgressType.EXCLUDED \
-                and (location.player in players["full"] or location.advancement)
+            return location.player in players["full"] or location.advancement
 
         def all_done() -> bool:
             """Check if all access rules are fulfilled"""
