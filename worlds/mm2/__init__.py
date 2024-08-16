@@ -228,7 +228,7 @@ class MM2World(World):
                             if item.name in rbm_names
                             and item.player == self.player]
             placed_item = self.random.choice(valid_second)
-            rbm_defeated = (f"{robot_masters[self.options.starting_robot_master.value].replace('Defeated', '')}"
+            rbm_defeated = (f"{robot_masters[self.options.starting_robot_master.value].replace(' Defeated', '')}"
                             f" - Defeated")
             rbm_location = self.get_location(rbm_defeated)
             rbm_location.place_locked_item(placed_item)
