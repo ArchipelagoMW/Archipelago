@@ -93,7 +93,7 @@ portal_mapping: List[Portal] = [
            destination="Town Basement", tag="_beach", direction=Direction.north),
     Portal(name="Changing Room Entrance", region="Overworld",
            destination="Changing Room", tag="_", direction=Direction.south),
-    Portal(name="Cube Cave Entrance", region="Overworld",
+    Portal(name="Cube Cave Entrance", region="Cube Cave Entrance Region",
            destination="CubeRoom", tag="_", direction=Direction.north),
     Portal(name="Stairs from Overworld to Mountain", region="Upper Overworld",
            destination="Mountain", tag="_", direction=Direction.north),
@@ -222,7 +222,7 @@ portal_mapping: List[Portal] = [
            destination="East Forest Redux", tag="_lower", direction=Direction.west),
     Portal(name="East Forest Hero's Grave", region="Forest Hero's Grave",
            destination="RelicVoid", tag="_teleporter_relic plinth", direction=Direction.floor),
-    
+
     Portal(name="Guard House 1 Dance Fox Exit", region="Guard House 1 West",
            destination="East Forest Redux", tag="_upper", direction=Direction.west),
     Portal(name="Guard House 1 Lower Exit", region="Guard House 1 West",
@@ -241,7 +241,7 @@ portal_mapping: List[Portal] = [
            destination="East Forest Redux Laddercave", tag="_", direction=Direction.south),
     Portal(name="Guard Captain Room Gate Exit", region="Forest Boss Room",
            destination="Forest Belltower", tag="_", direction=Direction.north),
-    
+
     Portal(name="Well Ladder Exit", region="Beneath the Well Ladder Exit",
            destination="Overworld Redux", tag="_entrance", direction=Direction.ladder_up),
     Portal(name="Well to Well Boss", region="Beneath the Well Back",
@@ -337,7 +337,7 @@ portal_mapping: List[Portal] = [
            destination="Fortress Main", tag="_", direction=Direction.south),
     Portal(name="Fortress to Far Shore", region="Fortress Arena Portal",
            destination="Transit", tag="_teleporter_spidertank", direction=Direction.floor),
-    
+
     Portal(name="Atoll Upper Exit", region="Ruined Atoll",
            destination="Overworld Redux", tag="_upper", direction=Direction.north),
     Portal(name="Atoll Lower Exit", region="Ruined Atoll Lower Entry Area",
@@ -589,6 +589,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld Temple Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Town Portal": RegionInfo("Overworld Redux", outlet_region="Overworld"),
     "Overworld Spawn Portal": RegionInfo("Overworld Redux", outlet_region="Overworld"),
+    "Cube Cave Entrance Region": RegionInfo("Overworld Redux", outlet_region="Overworld"),  # other side of the bomb wall
     "Stick House": RegionInfo("Sword Cave", dead_end=DeadEnd.all_cats),
     "Windmill": RegionInfo("Windmill"),
     "Old House Back": RegionInfo("Overworld Interiors"),  # part with the hc door
@@ -830,6 +831,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["LS2"]],
         "Overworld Old House Door":
             [],
+        "Cube Cave Entrance Region":
+            [],
     },
     "East Overworld": {
         "Above Ruined Passage":
@@ -984,6 +987,10 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     #     "Overworld":
     #         [],
     # },
+    "Cube Cave Entrance Region": {
+        "Overworld":
+            [],
+    },
 
     "Old House Front": {
         "Old House Back":
