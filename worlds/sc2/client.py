@@ -842,6 +842,7 @@ API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     for item_name, item_data in get_full_item_list().items()
     if item_data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2)
         and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
+        and item_name != item_names.OBSERVER_INDUCE_SCOPOPHOBIA
 }
 
 
