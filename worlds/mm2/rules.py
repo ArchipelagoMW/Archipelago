@@ -242,56 +242,56 @@ def set_rules(world: "MM2World") -> None:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss_locations:
             if i == 12:
-                add_rule(world.multiworld.get_location(location, world.player),
+                add_rule(world.get_location(location),
                          lambda state, weps=tuple(weapons): state.has_all(weps, world.player))
                 # TODO: when has_list gets added, check for a subset of possible weaknesses
             else:
-                add_rule(world.multiworld.get_location(location, world.player),
+                add_rule(world.get_location(location),
                          lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
 
     # Always require Crash Bomber for Boobeam Trap
-    add_rule(world.multiworld.get_location(names.wily_4, world.player),
+    add_rule(world.get_location(names.wily_4),
              lambda state: state.has(names.crash_bomber, world.player))
-    add_rule(world.multiworld.get_location(names.wily_stage_4, world.player),
+    add_rule(world.get_location(names.wily_stage_4),
              lambda state: state.has(names.crash_bomber, world.player))
 
     # Need to defeat x amount of robot masters for Wily 5
-    add_rule(world.multiworld.get_location(names.wily_5, world.player),
+    add_rule(world.get_location(names.wily_5),
              lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value))
-    add_rule(world.multiworld.get_location(names.wily_stage_5, world.player),
+    add_rule(world.get_location(names.wily_stage_5),
              lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value))
 
     if not world.options.yoku_jumps:
-        add_rule(world.multiworld.get_entrance("To Heat Man Stage", world.player),
+        add_rule(world.get_entrance("To Heat Man Stage"),
                  lambda state: state.has(names.item_2, world.player))
 
     if not world.options.enable_lasers:
-        add_rule(world.multiworld.get_entrance("To Quick Man Stage", world.player),
+        add_rule(world.get_entrance("To Quick Man Stage"),
                  lambda state: state.has(names.time_stopper, world.player))
 
     if world.options.consumables in (Consumables.option_1up_etank,
                                      Consumables.option_all):
-        add_rule(world.multiworld.get_location(names.flash_man_c2, world.player),
+        add_rule(world.get_location(names.flash_man_c2),
                  lambda state: state.has_any([names.item_1, names.item_2, names.item_3], world.player))
-        add_rule(world.multiworld.get_location(names.quick_man_c1, world.player),
+        add_rule(world.get_location(names.quick_man_c1),
                  lambda state: state.has_any([names.item_1, names.item_2, names.item_3], world.player))
-        add_rule(world.multiworld.get_location(names.metal_man_c2, world.player),
+        add_rule(world.get_location(names.metal_man_c2),
                  lambda state: state.has_any([names.item_1, names.item_2], world.player))
-        add_rule(world.multiworld.get_location(names.metal_man_c3, world.player),
+        add_rule(world.get_location(names.metal_man_c3),
                  lambda state: state.has_any([names.item_1, names.item_2], world.player))
-        add_rule(world.multiworld.get_location(names.crash_man_c3, world.player),
+        add_rule(world.get_location(names.crash_man_c3),
                  lambda state: state.has_any([names.item_1, names.item_2, names.item_3], world.player))
-        add_rule(world.multiworld.get_location(names.wily_2_c5, world.player),
+        add_rule(world.get_location(names.wily_2_c5),
                  lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.multiworld.get_location(names.wily_2_c6, world.player),
+        add_rule(world.get_location(names.wily_2_c6),
                  lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.multiworld.get_location(names.wily_3_c2, world.player),
+        add_rule(world.get_location(names.wily_3_c2),
                  lambda state: state.has(names.crash_bomber, world.player))
     if world.options.consumables in (Consumables.option_weapon_health,
                                      Consumables.option_all):
-        add_rule(world.multiworld.get_location(names.flash_man_c3, world.player),
+        add_rule(world.get_location(names.flash_man_c3),
                  lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.multiworld.get_location(names.flash_man_c4, world.player),
+        add_rule(world.get_location(names.flash_man_c4),
                  lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.multiworld.get_location(names.wily_3_c1, world.player),
+        add_rule(world.get_location(names.wily_3_c1),
                  lambda state: state.has(names.crash_bomber, world.player))
