@@ -116,7 +116,7 @@ class MM2World(World):
                 menu.connect(stage, f"To {region}",
                              lambda state, items=required_items: state.has_all(items, self.player))
             else:
-                old_stage = self.multiworld.get_region(prev_stage, self.player)
+                old_stage = self.get_region(prev_stage)
                 old_stage.connect(stage, f"To {region}",
                                   lambda state, items=required_items: state.has_all(items, self.player))
             stage.add_locations(locations, MM2Location)
@@ -190,7 +190,7 @@ class MM2World(World):
                 f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
     def generate_basic(self) -> None:
-        goal_location = self.multiworld.get_location(dr_wily, self.player)
+        goal_location = self.get_location(dr_wily)
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
