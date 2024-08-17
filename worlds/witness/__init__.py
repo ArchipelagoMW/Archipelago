@@ -241,7 +241,7 @@ class WitnessWorld(World):
             self.get_region(region).add_locations({loc: self.location_name_to_id[loc]}, WitnessLocation)
             self.reachable_early_locations.append(loc)
 
-            player = self.multiworld.get_player_name(self.player)
+            player = self.player_name
 
             info(
                 f"""Location "{loc}" had to be added to {player}'s world to hold the requested early good items."""
