@@ -137,13 +137,19 @@ class ShapezWorld(World):
         # Create regions and entrances based on included locations and player options
         self.multiworld.regions.extend(create_shapez_regions(self.player, self.multiworld, self.included_locations,
                                                              self.location_name_to_id,
-                                                             self.level_logic, self.upgrade_logic))
+                                                             self.level_logic, self.upgrade_logic,
+                                                             self.options.early_balancer_tunnel_and_trash.value))
 
-        goal_location = ShapezLocation(self.player, "Goal", None, None, None)
+        main_region = self.multiworld.get_region("Main", self.player)
+        goal_location = ShapezLocation(self.player, "Goal", None, main_region, LocationProgressType.DEFAULT)
         goal_location.place_locked_item(ShapezItem("Goal", ItemClassification.progression, None, self.player))
+        main_region.locations.append(goal_location)
+        goal_location.access_rule = lambda state: state.has_all(["Cutter", "Rotator", "Stacker", "Painter",
+                                                                 "Color Mixer"], self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Goal", self.player)
 
         # Connect Menu to rest of regions
-        menu_region.connect(self.multiworld.get_region("Main", self.player))
+        menu_region.connect(main_region)
 
     def create_items(self) -> None:
         # Include guaranteed items (game mechanic unlocks and 7x4 big upgrades)
@@ -168,6 +174,12 @@ class ShapezWorld(World):
 
         # Add correct number of items to itempool
         self.multiworld.itempool += included_items
+
+        # Add balancer, tunnel, and trash to early items if options say so
+        if self.options.early_balancer_tunnel_and_trash.value == 3:
+            self.multiworld.early_items[self.player]["Balancer"] = 1
+            self.multiworld.early_items[self.player]["Tunnel"] = 1
+            self.multiworld.early_items[self.player]["Trash"] = 1
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # Buildings logic; all buildings as individual parameters

@@ -59,7 +59,9 @@ upgrades = {
 }
 
 bundles = {
-    "Blueprint Shapes Bundle": ItemClassification.filler
+    "Blueprint Shapes Bundle": ItemClassification.filler,
+    "Level Shapes Bundle": ItemClassification.filler,
+    "Upgrade Shapes Bundle": ItemClassification.filler
 }
 
 traps = {
@@ -100,7 +102,7 @@ def filler(random: float) -> str:
     elif random < 0.66:
         return small_upgrades[int((random-0.16)*4/0.5)]  # Yes, I want this calculation to be written that way
     else:
-        return "Blueprint Shapes Bundle"
+        return list(bundles.keys())[int((random-0.66)*len(bundles)/0.34)]
 
 
 item_descriptions = {  # TODO

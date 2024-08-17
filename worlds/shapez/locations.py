@@ -177,9 +177,9 @@ for first_shape in ["C", "R", "W", "S"]:
                     shapesanity_complex[f"Shapesanity Checkered {ordered_combo}"] \
                         = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
                     # 2 empty corners && (2 different shapes || 2 different colors)
-                    shapesanity_complex[f"Shapesanity Cornered {ordered_combo}"] \
+                    shapesanity_complex[f"Shapesanity Cornered Singles {ordered_combo}"] \
                         = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
-                    shapesanity_complex[f"Shapesanity Adjacent {ordered_combo}"] \
+                    shapesanity_complex[f"Shapesanity Adjacent Singles {ordered_combo}"] \
                         = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
                     # 1 empty corner && (2 different shapes || 2 different colors)
                     shapesanity_complex[f"Shapesanity Adjacent 2-1 {first_combo} {second_combo}"] \
@@ -205,6 +205,7 @@ all_locations: list[str] = (["Level 1 Additional", "Level 20 Additional"]
                             + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 1001)]
                             # + achievement_locations
                             + list(shapesanity_simple)
+                            + list(shapesanity_medium)
                             + list(shapesanity_complex))
 all_locations.sort()
 
@@ -452,17 +453,17 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
 def addshapesanity(amount: int, random: Random, included: int) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with a given number of random shapesanity locations."""
     included_shapes: dict[str, tuple[str, LocationProgressType]] = {}
-    if not included:
-        return included_shapes
+    # if not included:
+    #     return included_shapes
     shapes_list = list(shapesanity_simple.items())
-    if amount >= 4:
-        for basic_shape in ["Circle", "Square", "Star"]:
-            included_shapes[f"Shapesanity Uncolored {basic_shape}"] = ("Shapesanity Unprocessed Uncolored",
-                                                                       LocationProgressType.DEFAULT)
-            shapes_list.remove((f"Shapesanity Uncolored {basic_shape}", "Shapesanity Unprocessed Uncolored"))
-        included_shapes[f"Shapesanity Uncolored Windmill"] = ("Shapesanity Stitched Uncolored",
+    # Always have at least 4 shapesanity checks because of sphere 1 usefulls + both hardcore logic
+    for basic_shape in ["Circle", "Square", "Star"]:
+        included_shapes[f"Shapesanity Uncolored {basic_shape}"] = ("Shapesanity Unprocessed Uncolored",
                                                                    LocationProgressType.DEFAULT)
-        shapes_list.remove((f"Shapesanity Uncolored Windmill", "Shapesanity Stitched Uncolored"))
+        shapes_list.remove((f"Shapesanity Uncolored {basic_shape}", "Shapesanity Unprocessed Uncolored"))
+    included_shapes[f"Shapesanity Uncolored Windmill"] = ("Shapesanity Stitched Uncolored",
+                                                          LocationProgressType.DEFAULT)
+    shapes_list.remove((f"Shapesanity Uncolored Windmill", "Shapesanity Stitched Uncolored"))
     switched = 0
     for counting in range(4, amount):
         if switched == 0 and (len(shapes_list) == 0 or counting == amount//2):

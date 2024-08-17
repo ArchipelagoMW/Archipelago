@@ -49,7 +49,7 @@ def create_entrance(player: int, name: str, parent: Region, connects: Region, ru
 def create_shapez_regions(player: int, multiworld: MultiWorld,
                           included_locations: dict[str, tuple[str, LocationProgressType]],
                           location_name_to_id: dict[str, int], level_logic_buildings: list[str],
-                          upgrade_logic_buildings: list[str]) -> list[Region]:
+                          upgrade_logic_buildings: list[str], early_useful: int) -> list[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
     regions: dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
 
@@ -87,6 +87,19 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
 #                    regions["Painted Shape Achievements"], regions["All Buildings Shapes"],
 #                    lambda state: state.has_all(["Rotator", "Stacker", "Cutter", "Color Mixer"], player))
 
+    # Add balancer, tunnel, and trash to early items if options say so
+    level_buildings_3_needed: list[str] = [level_logic_buildings[2]]
+    level_buildings_5_needed: list[str] = [level_logic_buildings[4]]
+    upgrade_buildings_3_needed: list[str] = [upgrade_logic_buildings[2]]
+    upgrade_buildings_5_needed: list[str] = [upgrade_logic_buildings[4]]
+    if early_useful == 2:
+        level_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
+        upgrade_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
+    elif early_useful == 1:
+        level_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
+        upgrade_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
+
+
     create_entrance(player, "First level building needed",
                     regions["Main"], regions["Levels with 1 Building"],
                     lambda state: state.has(level_logic_buildings[0], player))
@@ -95,13 +108,13 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                     lambda state: state.has(level_logic_buildings[1], player))
     create_entrance(player, "Third level building needed",
                     regions["Levels with 2 Buildings"], regions["Levels with 3 Buildings"],
-                    lambda state: state.has(level_logic_buildings[2], player))
+                    lambda state: state.has_all(level_buildings_3_needed, player))
     create_entrance(player, "Fourth level building needed",
                     regions["Levels with 3 Buildings"], regions["Levels with 4 Buildings"],
                     lambda state: state.has(level_logic_buildings[3], player))
     create_entrance(player, "Fifth level building needed",
                     regions["Levels with 4 Buildings"], regions["Levels with 5 Buildings"],
-                    lambda state: state.has(level_logic_buildings[4], player))
+                    lambda state: state.has_all(level_buildings_5_needed, player))
 
     create_entrance(player, "First upgrade building needed",
                     regions["Main"], regions["Upgrades with 1 Building"],
@@ -111,13 +124,13 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                     lambda state: state.has(upgrade_logic_buildings[1], player))
     create_entrance(player, "Third upgrade building needed",
                     regions["Upgrades with 2 Buildings"], regions["Upgrades with 3 Buildings"],
-                    lambda state: state.has(upgrade_logic_buildings[2], player))
+                    lambda state: state.has_all(upgrade_buildings_3_needed, player))
     create_entrance(player, "Fourth upgrade building needed",
                     regions["Upgrades with 3 Buildings"], regions["Upgrades with 4 Buildings"],
                     lambda state: state.has(upgrade_logic_buildings[3], player))
     create_entrance(player, "Fifth upgrade building needed",
                     regions["Upgrades with 4 Buildings"], regions["Upgrades with 5 Buildings"],
-                    lambda state: state.has(upgrade_logic_buildings[4], player))
+                    lambda state: state.has_all(upgrade_buildings_5_needed, player))
 
     create_entrance(player, "Shapesanity nothing",
                     regions["Main"], regions["Shapesanity Unprocessed Uncolored"], lambda state: True)

@@ -89,6 +89,21 @@ class SameLateUpgradeRequirements(Toggle):
     default = True
 
 
+class EarlyBalancerTunnelAndTrash(Choice):
+    """Makes the balancer, tunnel, and trash appear in earlier spheres.
+
+    None: Complete randomization.
+    5 buildings: Should be accessible before getting all 5 main buildings.
+    3 buildings: Should be accessible before getting the first 3 main buildings for levels and upgrades.
+    Sphere 1: Always accessible from start. Beware of generation failures."""
+    display_name = "Early balancer, tunnel, and trash"
+    option_none = 0
+    option_5_buildings = 1
+    option_3_buildings = 2
+    option_sphere_1 = 3
+    default = 2
+
+
 # class AdditionalLocations(Choice):
 #    """Achievements: Include up to 44 achievements (depending on other options) as additional locations.
 #    Shapesanity: Include up to 5664 shapes as additional locations."""
@@ -120,7 +135,7 @@ class SameLateUpgradeRequirements(Toggle):
 class ShapesanityAmount(Range):
     """Amount of one-layer-shapes that will be included as locations."""
     display_name = "Shapesanity amount"
-    range_start = 0
+    range_start = 4
     range_end = 5664
     default = 100
 
@@ -143,6 +158,7 @@ class ShapezOptions(PerGameCommonOptions):
     randomize_level_logic: RandomizeLevelLogic
     randomize_upgrade_logic: RandomizeUpgradeLogic
     same_late_upgrade_requirements: SameLateUpgradeRequirements
+    early_balancer_tunnel_and_trash: EarlyBalancerTunnelAndTrash
     # additional_locations: AdditionalLocations
     # exclude_softlock_achievements: ExcludeSoftlockAchievements
     # exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements
