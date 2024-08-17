@@ -178,13 +178,16 @@ class WitnessPlayerItems:
                 "Desert Doors", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
                 "Shadows Lower Doors", "Tunnels Doors", "Town Doors", "Town Tower Doors",
 
-                "Desert Light Room Entry (Door)", "Keep Tower Shortcut (Door)", "Shadows Timed Door",
+                "Keep Tower Shortcut (Door)", "Shadows Timed Door",
                 "Tunnels Town Shortcut (Door)", "Swamp Laser Shortcut (Door)",
 
                 "Desert Panels", "Keep Hedge Maze Panels", "Town Maze Panels",
 
                 "Shadows Door Timer (Panel)", "Keep Hedge Maze 1 (Panel)", "Town Maze Stairs (Panel)",
             }
+
+            if self._world.options.shuffle_doors == "doors":
+                door_set.add("Desert Light Room Entry (Door)")
 
             if not self._world.options.shuffle_symbols:
                 door_set |= {
