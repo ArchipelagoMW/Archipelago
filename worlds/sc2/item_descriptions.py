@@ -902,7 +902,7 @@ item_descriptions = {
     item_names.REAVER_KHALAI_REPLICATORS: "Reaver War Council upgrade. Reaver Scarabs no longer cost minerals.",
     item_names.DISRUPTOR_RESTRUCTURED_THRUSTERS: "Disruptor War Council upgrade. Allows the Disruptor to move while casting Purification Nova. Also allows the Disruptor to Blink.",
     item_names.WARP_PRISM_WARP_REFRACTION: "Warp Prism War Council upgrade. Warp Prisms gain +5 pickup range and unload units 10 times faster.",
-    # Observer
+    item_names.OBSERVER_INDUCE_SCOPOPHOBIA: "Observer War Council upgrade. " + _ability_desc("Observers", "Induce Scopophobia", "reduces the attack and movement speed of an enemy by 20%"),
     item_names.PHOENIX_DOUBLE_GRAVITON_BEAM: "Phoenix War Council upgrade. Phoenixes can now use Graviton Beam to lift two targets at once.",
     item_names.CORSAIR_NETWORK_DISRUPTION: "Corsair War Council upgrade. Triples the radius of Disruption Web.",
     item_names.MIRAGE_GRAVITON_BEAM: "Mirage War Council upgrade. Allows Mirages to use Graviton Beam.",

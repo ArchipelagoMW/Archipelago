@@ -733,7 +733,7 @@ WRATHWALKER_AERIAL_TRACKING                             = "Aerial Tracking (Wrat
 REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (Reaver)"
 DISRUPTOR_RESTRUCTURED_THRUSTERS                        = "Restructured Thrusters (Disruptor)"
 WARP_PRISM_WARP_REFRACTION                              = "Warp Refraction (Warp Prism)"
-# Observer
+OBSERVER_INDUCE_SCOPOPHOBIA                             = "Induce Scopophobia (Observer)"
 PHOENIX_DOUBLE_GRAVITON_BEAM                            = "Double Graviton Beam (Phoenix)"
 CORSAIR_NETWORK_DISRUPTION                              = "Network Disruption (Corsair)"
 MIRAGE_GRAVITON_BEAM                                    = "Graviton Beam (Mirage)"
