@@ -367,7 +367,7 @@ class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
     valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" }
-    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", 'Throw Stun Trap' ]
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" ]
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
