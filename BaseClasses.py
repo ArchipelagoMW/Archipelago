@@ -784,10 +784,10 @@ class CollectionState():
                     self.events.add(event)
                     item = event.item
                     assert isinstance(item, Item), "tried to collect Event with no Item"
-                    self.collect(item, True, event)
-                    # When a player collects an item, it could increase their number of accessible locations, so
-                    # check that player's locations in the next sweep iteration.
-                    next_players_to_check.add(item.player)
+                    if self.collect(item, True, event):
+                        # When a player collects an item, it could increase their number of accessible locations, so
+                        # check that player's locations in the next sweep iteration.
+                        next_players_to_check.add(item.player)
 
             if not next_players_to_check:
                 if not maybe_final_sweep:
