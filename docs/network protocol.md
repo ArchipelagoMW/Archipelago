@@ -702,14 +702,18 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 | checksum            | str            | A checksum hash of this game's data.                                                                                          |
 
 ### Tags
-Tags are represented as a list of strings, the common Client tags follow:
+Tags are represented as a list of strings, the common client tags follow:
 
-| Name       | Notes                                                                                                                                                                                                              |
-|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| AP         | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.                                                                                  |
-| DeathLink  | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets                                                                                                            |
-| Tracker    | Tells the server that this client will not send locations and is actually a Tracker. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped. |
-| TextOnly   | Tells the server that this client will not send locations and is intended for chat. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped.  |
+| Name      | Notes                                                                                                                                |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------|
+| AP        | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.    |
+| DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets.                             |
+| HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
+| Tracker   | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
+| TextOnly  | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
+
+¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
+²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.
 
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
