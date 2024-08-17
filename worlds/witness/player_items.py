@@ -175,26 +175,26 @@ class WitnessPlayerItems:
 
         if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
             door_set = {
-                "Desert Doors", "Caves Shortcuts", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
+                "Desert Doors", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
                 "Shadows Lower Doors", "Tunnels Doors", "Town Tower Doors",
 
-                "Desert Light Room Entry (Door)", "Caves Swamp Shortcut (Door)", "Caves Mountain Shortcut (Door)",
-                "Keep Tower Shortcut (Door)", "Shadows Timed Door", "Tunnels Town Shortcut (Door)",
-                "Swamp Laser Shortcut (Door)",
+                "Desert Light Room Entry (Door)", "Keep Tower Shortcut (Door)", "Shadows Timed Door",
+                "Tunnels Town Shortcut (Door)", "Swamp Laser Shortcut (Door)",
 
-                "Desert Panels", "Keep Hedge Maze Panels", "Town Panels",
+                "Desert Panels", "Keep Hedge Maze Panels", "Town Maze Panels",
 
-                "Shadows Door Timer (Panel)", "Glass Factory Entry (Panel)", "Keep Hedge Maze 1 (Panel)",
-                "Town Maze Stairs (Panel)"
+                "Shadows Door Timer (Panel)", "Keep Hedge Maze 1 (Panel)", "Town Maze Stairs (Panel)",
             }
 
             if not self._world.options.shuffle_symbols:
                 door_set |= {
-                    "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors", "Quarry Outside Panels"
+                    "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors"
 
                     "Bunker Entry (Door)", "Swamp Laser Shortcut (Door)", "Glass Factory Entry (Door)",
 
-                    "Bunker Panels", "Swamp Panels",
+                    "Bunker Panels", "Swamp Panels", "Quarry Outside Panels", "Glass Factory Panels"
+
+                    "Glass Factory Entry (Panel)",
                 }
 
                 if self._world.options.shuffle_vault_boxes:
