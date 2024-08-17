@@ -743,36 +743,63 @@ class CollectionState():
         The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
         yield statement.
         """
-        could_have_reachable_locations = True
-        while could_have_reachable_locations:
+        all_players = {player for player, _ in events_per_player}
+        players_to_check = all_players
+        # As an optimization, it is assumed that each player's world only logically depends on itself, but worlds are
+        # allowed to depend on other worlds, so once there are no more players that should be checked under this
+        # assumption, a final sweep iteration is performed that checks every player to confirm if the sweep is really
+        # finished.
+        maybe_final_sweep = False
+        while players_to_check:
             next_events_per_player: List[Tuple[int, List[Location]]] = []
-            could_have_reachable_locations = False
+            next_players_to_check = set()
 
             for player, locations in events_per_player:
+                if player not in players_to_check:
+                    next_events_per_player.append((player, locations))
+                    continue
+
                 # Accessibility of each location is checked first because a player's region accessibility cache becomes
                 # stale whenever one of their own items is collected into the state.
                 accessible_locations: List[Location] = []
                 inaccessible_locations: List[Location] = []
                 for location in locations:
                     if location.can_reach(self):
-                        # Locations containing Items that do not belong to `player` could be collected immediately
+                        # Locations containing items that do not belong to `player` could be collected immediately
                         # because they won't stale `player`'s region accessibility cache, but, for simplicity, all the
-                        # accessible locations are collected in a single loop.
+                        # accessible locations are collected from in a single loop.
                         accessible_locations.append(location)
                     else:
                         inaccessible_locations.append(location)
                 if inaccessible_locations:
                     next_events_per_player.append((player, inaccessible_locations))
 
+                # If the player does not receive any items for the rest of the sweep iteration, then skip checking their
+                # locations in the next sweep iteration. This makes the assumption that the player's world is only
+                # logically dependent on itself.
+                next_players_to_check.discard(player)
+
                 # Collect all the items from the accessible locations.
                 for event in accessible_locations:
                     self.events.add(event)
-                    assert isinstance(event.item, Item), "tried to collect Event with no Item"
-                    self.collect(event.item, True, event)
+                    item = event.item
+                    assert isinstance(item, Item), "tried to collect Event with no Item"
+                    self.collect(item, True, event)
+                    # When a player collects an item, it could increase their number of accessible locations, so
+                    # check that player's locations in the next sweep iteration.
+                    next_players_to_check.add(item.player)
 
-                if accessible_locations:
-                    could_have_reachable_locations = True
+            if not next_players_to_check:
+                if not maybe_final_sweep:
+                    # For performance, it is assumed that each player's world only logically depends on itself, but
+                    # worlds are allowed to logically depend on other worlds' items/locations/etc., so double check that
+                    # the sweep is finished by doing a final iteration that checks every player.
+                    maybe_final_sweep = True
+                    next_players_to_check = all_players
+            else:
+                maybe_final_sweep = False
 
+            players_to_check = next_players_to_check
             events_per_player = next_events_per_player
 
             if yield_each_sweep:
