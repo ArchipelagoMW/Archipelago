@@ -8,7 +8,7 @@ import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
-from collections import Counter, deque
+from collections import Counter, deque, defaultdict
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Set, Tuple, \
@@ -755,19 +755,58 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
+        # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
+        # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
+        events_per_player: List[Tuple[int, List[Location]]]
         if locations is None:
-            locations = self.multiworld.get_filled_locations()
-        reachable_events = True
-        # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.advancement and location not in self.events}
+            # `location.advancement` can only be True for filled locations, so unfilled locations are filtered out.
+            events_per_player = []
+            for player, locations_dict in self.multiworld.regions.location_cache.items():
+                filtered_locations = [location for location in locations_dict.values()
+                                      if location.advancement and location not in self.events]
+                if filtered_locations:
+                    events_per_player.append((player, filtered_locations))
+        else:
+            # Filter and separate the locations into a list for each player.
+            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
+            for location in locations:
+                if location.advancement and location not in self.events:
+                    events_per_player_dict[location.player].append(location)
+            # Convert to a list of tuples.
+            events_per_player = list(events_per_player_dict.items())
+            del events_per_player_dict
 
-        while reachable_events:
-            reachable_events = {location for location in locations if location.can_reach(self)}
-            locations -= reachable_events
-            for event in reachable_events:
-                self.events.add(event)
-                assert isinstance(event.item, Item), "tried to collect Event with no Item"
-                self.collect(event.item, True, event)
+        could_have_reachable_locations = True
+        while could_have_reachable_locations:
+            next_events_per_player: List[Tuple[int, List[Location]]] = []
+            could_have_reachable_locations = False
+
+            for player, locations in events_per_player:
+                # Accessibility of each location is checked first because a player's region accessibility cache becomes
+                # stale whenever one of their own items is collected into the state.
+                accessible_locations: List[Location] = []
+                inaccessible_locations: List[Location] = []
+                for location in locations:
+                    if location.can_reach(self):
+                        # Locations containing Items that do not belong to `player` could be collected immediately
+                        # because they won't stale `player`'s region accessibility cache, but, for simplicity, all the
+                        # accessible locations are collected in a single loop.
+                        accessible_locations.append(location)
+                    else:
+                        inaccessible_locations.append(location)
+                if inaccessible_locations:
+                    next_events_per_player.append((player, inaccessible_locations))
+
+                # Collect all the items from the accessible locations.
+                for event in accessible_locations:
+                    self.events.add(event)
+                    assert isinstance(event.item, Item), "tried to collect Event with no Item"
+                    self.collect(event.item, True, event)
+
+                if accessible_locations:
+                    could_have_reachable_locations = True
+
+            events_per_player = next_events_per_player
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
