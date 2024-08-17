@@ -417,7 +417,7 @@ class WitnessWorld(World):
                 self.get_location(location_name) for location_name in self.reachable_early_locations
                 if location_name not in tutorial_checks_in_order
             ),
-            key=lambda location_object: cast(int, location_object.address),
+            key=lambda location_object: static_witness_logic.ENTITIES_BY_NAME[location_object.name]["processing_order"]
         )
 
         early_good_item_placements = self.find_good_items_from_itempool(progitempool, available_locations)
