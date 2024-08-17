@@ -44,4 +44,4 @@ The Witness a un tracker fonctionnel qui supporte l'auto-tracking.
 4. Inscrivez l'adresse Archipelago, votre nom de joueur et le mot de passe du jeu multimonde.
 
 Le reste devrait être pris en charge par Poptracker - les items que vous recevrez et les puzzles que vous résolverez seront automatiquement indiqués. De plus, Poptracker est en mesure de détecter
-vos param�tres de jeu - les puzzles accessibles seront alors masqu�s ou affich�s en fonction de vos param�tres de randomization et de logique. Veuillez noter que le tracker peut �tre obsol�te.
+vos paramètres de jeu - les puzzles accessibles seront alors masqués ou affichés en fonction de vos paramètres de randomization et de logique. Veuillez noter que le tracker peut être obsolète.
