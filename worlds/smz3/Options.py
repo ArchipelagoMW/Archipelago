@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Option, PerGameCommonOptions, Toggle, DefaultOnToggle, Range
+from Options import Choice, Option, PerGameCommonOptions, Toggle, DefaultOnToggle, Range, ItemsAccessibility
 from dataclasses import dataclass
 
 class SMLogic(Choice):
@@ -127,18 +127,20 @@ class EnergyBeep(DefaultOnToggle):
     """Toggles the low health energy beep in Super Metroid."""
     display_name = "Energy Beep"
 
-@dataclass
-class SMZ3Options(PerGameCommonOptions):
-    sm_logic: SMLogic
-    sword_location: SwordLocation
-    morph_location: MorphLocation
-    goal: Goal
-    key_shuffle: KeyShuffle
-    open_tower: OpenTower
-    ganon_vulnerable: GanonVulnerable
-    open_tourian: OpenTourian
-    spin_jumps_animation: SpinJumpsAnimation
-    heart_beep_speed: HeartBeepSpeed
-    heart_color: HeartColor
-    quick_swap: QuickSwap
-    energy_beep: EnergyBeep
+
+smz3_options: typing.Dict[str, type(Option)] = {
+    "accessibility": ItemsAccessibility,
+    "sm_logic": SMLogic,
+    "sword_location": SwordLocation,
+    "morph_location": MorphLocation,
+    "goal": Goal,
+    "key_shuffle": KeyShuffle,
+    "open_tower": OpenTower, 
+    "ganon_vulnerable": GanonVulnerable,
+    "open_tourian": OpenTourian,
+    "spin_jumps_animation": SpinJumpsAnimation,
+    "heart_beep_speed": HeartBeepSpeed,
+    "heart_color": HeartColor, 
+    "quick_swap": QuickSwap,
+    "energy_beep": EnergyBeep
+    }
