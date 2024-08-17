@@ -2,16 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import (
-    Choice,
-    DefaultOnToggle,
-    OptionDict,
-    OptionGroup,
-    OptionSet,
-    PerGameCommonOptions,
-    Range,
-    Toggle,
-)
+from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, OptionSet, PerGameCommonOptions, Range, Toggle
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
