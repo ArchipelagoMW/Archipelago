@@ -216,7 +216,7 @@ class SubRuleEntryRule(EntryRule):
     
     def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
         if len(self.rules_to_check) == 0:
-            return -1
+            return self.min_depth
         # It should be guaranteed by is_fulfilled that enough rules have a valid depth because they are fulfilled
         filtered_rules = [rule for rule in self.rules_to_check if rule.get_depth(beaten_missions) > -1]
         sorted_rules = sorted(filtered_rules, key = lambda rule: rule.get_depth(beaten_missions))
