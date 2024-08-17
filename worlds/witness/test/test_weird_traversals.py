@@ -35,9 +35,14 @@ class TestWeirdTraversalRequirements(WitnessTestBase):
             # Always necessary
             self.assertAccessDependency(
                 ["Keep Pressure Plates 2"],
-                [
-                    ["Keep Pressure Plates 1 Exit (Door)", "Keep Pressure Plates 3 Exit (Door)"],
-                 ],
+                [["Keep Pressure Plates 1 Exit (Door)"]],
+                only_check_listed=True,
+            )
+
+            # Always necessary
+            self.assertAccessDependency(
+                ["Keep Pressure Plates 2"],
+                [["Keep Pressure Plates 3 Exit (Door)"]],
                 only_check_listed=True,
             )
 
