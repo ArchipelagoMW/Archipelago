@@ -545,45 +545,9 @@ class MultiWorld():
                 return True
             state = CollectionState(self)
 
-        prog_locations_per_player: List[Tuple[int, List[Location]]] = []
-        for player, locations_dict in self.regions.location_cache.items():
-            filtered_locations = [location for location in locations_dict.values()
-                                  if location.advancement and location not in state.locations_checked]
-            if filtered_locations:
-                prog_locations_per_player.append((player, filtered_locations))
-
-        could_have_reachable_locations = True
-        while could_have_reachable_locations:
-            next_locations_per_player: List[Tuple[int, List[Location]]] = []
-            could_have_reachable_locations = False
-
-            for player, locations in prog_locations_per_player:
-                # Accessibility of each location is checked first because a player's region accessibility cache becomes
-                # stale whenever one of their own items is collected into the state.
-                accessible_locations: List[Location] = []
-                inaccessible_locations: List[Location] = []
-                for location in locations:
-                    if location.can_reach(state):
-                        # Locations containing Items that do not belong to `player` could be collected immediately
-                        # because they won't stale `player`'s region accessibility cache, but, for simplicity, all the
-                        # accessible locations are collected in a single loop.
-                        accessible_locations.append(location)
-                    else:
-                        inaccessible_locations.append(location)
-                if inaccessible_locations:
-                    next_locations_per_player.append((player, inaccessible_locations))
-
-                # Collect all the items from the accessible locations.
-                for location in accessible_locations:
-                    state.collect(location.item, True, location)
-
-                if accessible_locations:
-                    could_have_reachable_locations = True
-
+        for _ in state.sweep_for_events(yield_each_sweep=True, checked_locations=state.locations_checked):
             if self.has_beaten_game(state):
                 return True
-
-            prog_locations_per_player = next_locations_per_player
 
         return False
 
@@ -773,28 +737,12 @@ class CollectionState():
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
 
-    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
-        # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
-        # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
-        events_per_player: List[Tuple[int, List[Location]]]
-        if locations is None:
-            # `location.advancement` can only be True for filled locations, so unfilled locations are filtered out.
-            events_per_player = []
-            for player, locations_dict in self.multiworld.regions.location_cache.items():
-                filtered_locations = [location for location in locations_dict.values()
-                                      if location.advancement and location not in self.events]
-                if filtered_locations:
-                    events_per_player.append((player, filtered_locations))
-        else:
-            # Filter and separate the locations into a list for each player.
-            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
-            for location in locations:
-                if location.advancement and location not in self.events:
-                    events_per_player_dict[location.player].append(location)
-            # Convert to a list of tuples.
-            events_per_player = list(events_per_player_dict.items())
-            del events_per_player_dict
-
+    def _sweep_for_events_impl(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
+                               ) -> Iterable[None]:
+        """
+        The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
+        yield statement.
+        """
         could_have_reachable_locations = True
         while could_have_reachable_locations:
             next_events_per_player: List[Tuple[int, List[Location]]] = []
@@ -826,6 +774,53 @@ class CollectionState():
                     could_have_reachable_locations = True
 
             events_per_player = next_events_per_player
+
+            if yield_each_sweep:
+                yield
+
+    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
+                         checked_locations: Optional[Set[Location]] = None) -> Optional[Iterable[None]]:
+        """
+        Sweep through the locations that contain uncollected advancement items, collecting the items into the state
+        until there are no more reachable locations that contain uncollected advancement items.
+
+        :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
+        :param yield_each_sweep: When True, return a generator that yields at the end of each sweep iteration.
+        :param checked_locations: Optional override of locations to filter out from the locations argument, defaults to
+        self.events when None.
+        """
+        if checked_locations is None:
+            checked_locations = self.events
+
+        # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
+        # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
+        events_per_player: List[Tuple[int, List[Location]]]
+        if locations is None:
+            # `location.advancement` can only be True for filled locations, so unfilled locations are filtered out.
+            events_per_player = []
+            for player, locations_dict in self.multiworld.regions.location_cache.items():
+                filtered_locations = [location for location in locations_dict.values()
+                                      if location.advancement and location not in checked_locations]
+                if filtered_locations:
+                    events_per_player.append((player, filtered_locations))
+        else:
+            # Filter and separate the locations into a list for each player.
+            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
+            for location in locations:
+                if location.advancement and location not in checked_locations:
+                    events_per_player_dict[location.player].append(location)
+            # Convert to a list of tuples.
+            events_per_player = list(events_per_player_dict.items())
+            del events_per_player_dict
+
+        if yield_each_sweep:
+            # Return a generator that will yield at the end of each sweep iteration.
+            return self._sweep_for_events_impl(events_per_player, True)
+        else:
+            # Create the generator, but tell it not to yield anything, so it will run to completion in zero iterations
+            # once started, then start and exhaust the generator by attempting to iterate it.
+            for _ in self._sweep_for_events_impl(events_per_player, False):
+                assert False, "Generator yielded when it should have run to completion without yielding"
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
