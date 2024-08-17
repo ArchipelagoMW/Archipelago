@@ -282,6 +282,9 @@ class SubRuleRuleData(RuleData):
         tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 4, missions) for rule in self.sub_rules)
         return tooltip
 
+    def shows_single_rule(self):
+        return self.amount == len(self.sub_rules) == 1
+
     def is_accessible(
         self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]

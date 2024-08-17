@@ -352,20 +352,25 @@ class SC2Manager(GameManager):
             if campaign_locked:
                 text = f"[color={COLOR_PARENT_LOCKED}]{text}[/color]"
                 tooltip += "To unlock this campaign, "
-                rule_tooltip = campaign_rule.tooltip(0, lookup_id_to_mission)
+                shown_rule = campaign_rule
                 extra_reqs = layout_has_rule or mission_has_rule
             elif layout_locked:
                 text = f"[color={COLOR_PARENT_LOCKED}]{text}[/color]"
                 tooltip += "To unlock this questline, "
-                rule_tooltip = layout_rule.tooltip(0, lookup_id_to_mission)
+                shown_rule = layout_rule
                 extra_reqs = mission_has_rule
             else:
                 text = f"[color={COLOR_MISSION_LOCKED}]{text}[/color]"
                 tooltip += "To unlock this mission, "
-                rule_tooltip = mission_rule.tooltip(0, lookup_id_to_mission)
+                shown_rule = mission_rule
+            rule_tooltip = shown_rule.tooltip(0, lookup_id_to_mission)
             tooltip += rule_tooltip.replace(rule_tooltip[0], rule_tooltip[0].lower(), 1)
+            extra_word = "are"
+            if shown_rule.shows_single_rule():
+                extra_word = "is"
+                tooltip += "."
             if extra_reqs:
-                tooltip += "\nThis mission will show additional requirements once the above are met."
+                tooltip += f"\nThis mission will show additional requirements once the above {extra_word} met."
 
         # Mark exit missions
         exit_for: str = ""
