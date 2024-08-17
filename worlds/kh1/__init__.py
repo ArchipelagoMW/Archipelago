@@ -93,19 +93,18 @@ class KH1World(World):
             possible_level_up_item_pool.append("Max AP Increase")
 
         # Fill remaining pool with items from other pool
-        while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
-            level_up_item_pool.append(possible_level_up_item_pool.pop(self.random.randrange(len(possible_level_up_item_pool))))
+        self.multiworld.random.shuffle(possible_level_up_item_pool)
+        level_up_item_pool = level_up_item_pool + possible_level_up_item_pool[:(100 - len(level_up_item_pool))]
 
         level_up_locations = list(get_locations_by_category("Levels").keys())
         self.random.shuffle(level_up_item_pool)
         starting_level_for_stats_only = self.options.force_stats_on_levels.value - 1
         while len(level_up_item_pool) > 0 and starting_level_for_stats_only < self.options.level_checks:
-            self.multiworld.get_location(level_up_locations[starting_level_for_stats_only], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
+            self.get_location(level_up_locations[starting_level_for_stats_only]).place_locked_item(self.create_item(level_up_item_pool.pop()))
             starting_level_for_stats_only += 1
         
         # Calculate prefilled locations and items
         prefilled_items = []
-        prefilled_locations = 1 # Victory
         if self.options.vanilla_emblem_pieces:
             prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
         
@@ -161,10 +160,6 @@ class KH1World(World):
         for i in range(self.determine_reports_in_pool()):
             item_pool += [self.create_item("Ansem's Report " + str(i+1))]
         
-        while len(item_pool) > total_locations:
-            removed_item = item_pool.pop(0)
-            logging.warn(f"Item {removed_item} had to be removed from {self.player_name}'s world due to insufficient location count")
-        
         while len(item_pool) < total_locations and len(level_up_item_pool) > 0:
             item_pool += [self.create_item(level_up_item_pool.pop())]
         
@@ -183,12 +178,12 @@ class KH1World(World):
             "puppies":         "Traverse Town Piano Room Return 99 Puppies Reward 2",
             "final_rest":      "End of the World Final Rest Chest"
         }
-        self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
+        self.get_location(goal_dict[self.options.goal.current_key]).place_locked_item(self.create_item("Victory"))
         if self.options.vanilla_emblem_pieces:
-            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)", self.player).place_locked_item(self.create_item("Emblem Piece (Flame)"))
-            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)", self.player).place_locked_item(self.create_item("Emblem Piece (Statue)"))
-            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)", self.player).place_locked_item(self.create_item("Emblem Piece (Fountain)"))
-            self.multiworld.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)", self.player).place_locked_item(self.create_item("Emblem Piece (Chest)"))
+            self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)").place_locked_item(self.create_item("Emblem Piece (Flame)"))
+            self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)").place_locked_item(self.create_item("Emblem Piece (Statue)"))
+            self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)").place_locked_item(self.create_item("Emblem Piece (Fountain)"))
+            self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)").place_locked_item(self.create_item("Emblem Piece (Chest)"))
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in self.fillers.values()]
