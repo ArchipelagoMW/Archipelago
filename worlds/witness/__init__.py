@@ -420,6 +420,8 @@ class WitnessWorld(World):
             key=lambda location_object: static_witness_logic.ENTITIES_BY_NAME[location_object.name]["processing_order"]
         )
 
+        available_locations = [location for location in available_locations if not location.item]
+
         early_good_item_placements = self.find_good_items_from_itempool(progitempool, available_locations)
 
         for location, item in early_good_item_placements:
