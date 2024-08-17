@@ -180,14 +180,14 @@ class DamageRandoOverrides(OptionDict):
     }
 
 class HpCap(Range):
-    "Sets the number that Lunais's HP maxes out at."
+    """Sets the number that Lunais's HP maxes out at."""
     display_name = "HP Cap"
     range_start = 1
     range_end = 999
     default = 999
 
-class MpCap(Range):
-    "Sets the number that Lunais's MP maxes out at."
+class AuraCap(Range):
+    """Sets the number that Lunais's MP maxes out at."""
     display_name = "Aura Cap"
     range_start = 45
     range_end = 999
@@ -394,7 +394,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
     hp_cap: HpCap
-    mp_cap: MpCap
+    aura_cap: AuraCap
     level_cap: LevelCap
     extra_earrings_xp: ExtraEarringsXP
     boss_healing: BossHealing
