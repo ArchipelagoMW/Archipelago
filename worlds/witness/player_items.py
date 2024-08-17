@@ -174,7 +174,7 @@ class WitnessPlayerItems:
             output["Symbol"] = symbols
 
         if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
-            door_set = {
+            doors = [
                 "Desert Doors", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
                 "Shadows Lower Doors", "Tunnels Doors", "Town Doors", "Town Tower Doors",
 
@@ -184,13 +184,13 @@ class WitnessPlayerItems:
                 "Desert Panels", "Keep Hedge Maze Panels", "Town Maze Panels",
 
                 "Shadows Door Timer (Panel)", "Keep Hedge Maze 1 (Panel)", "Town Maze Stairs (Panel)",
-            }
+            ]
 
             if self._world.options.shuffle_doors == "doors":
-                door_set.add("Desert Light Room Entry (Door)")
+                doors.append("Desert Light Room Entry (Door)")
 
             if not self._world.options.shuffle_symbols:
-                door_set |= {
+                doors += [
                     "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors"
 
                     "Bunker Entry (Door)", "Swamp Laser Shortcut (Door)", "Glass Factory Entry (Door)",
@@ -198,18 +198,18 @@ class WitnessPlayerItems:
                     "Bunker Panels", "Swamp Panels", "Quarry Outside Panels", "Glass Factory Panels"
 
                     "Glass Factory Entry (Panel)",
-                }
+                ]
 
                 if self._world.options.shuffle_vault_boxes:
-                    door_set |= {
+                    doors += [
                         "Windmill & Theater Doors",
 
                         "Windmill & Theater Panels",
 
                         "Windmill & Theater Control Panels",
-                    }
+                    ]
 
-            output["Door"] = (sorted(door_set))
+            output["Door"] = doors
 
         if (
             self._world.options.shuffle_EPs
