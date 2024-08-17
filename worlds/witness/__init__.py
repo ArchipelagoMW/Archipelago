@@ -46,7 +46,7 @@ class WitnessWebWorld(WebWorld):
     setup_fr = Tutorial(
         setup_en.tutorial_name,
         setup_en.description,
-        "Français",
+        "FranÃ§ais",
         "setup_fr.md",
         "setup/fr",
         ["Rever"]
