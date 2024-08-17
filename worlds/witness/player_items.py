@@ -176,7 +176,7 @@ class WitnessPlayerItems:
         if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
             door_set = {
                 "Desert Doors", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
-                "Shadows Lower Doors", "Tunnels Doors", "Town Tower Doors",
+                "Shadows Lower Doors", "Tunnels Doors", "Town Doors", "Town Tower Doors",
 
                 "Desert Light Room Entry (Door)", "Keep Tower Shortcut (Door)", "Shadows Timed Door",
                 "Tunnels Town Shortcut (Door)", "Swamp Laser Shortcut (Door)",
