@@ -32,22 +32,30 @@ class TestWeirdTraversalRequirements(WitnessTestBase):
             )
 
         with self.subTest("Expert Keep Pressure Plates 2"):
-            exit_paths = [
-                ["Keep Shadows Shortcut (Door)"],
-                ["Keep Pressure Plates 4 Exit (Door)", "Keep Tower Shortcut (Door)"],
-                ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
-                 "Keep Hedge Maze 4 Shortcut (Door)"],
-                ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
-                 "Keep Hedge Maze 3 Exit (Door)", "Keep Hedge Maze 3 Shortcut (Door)"],
-                ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
-                 "Keep Hedge Maze 3 Exit (Door)", "Keep Hedge Maze 2 Exit (Door)", "Keep Hedge Maze 2 Shortcut (Door)"],
-                ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
-                 "Keep Hedge Maze 3 Exit (Door)", "Keep Hedge Maze 2 Exit (Door)", "Keep Hedge Maze 1 Exit (Door)"],
-            ]
+            # Always necessary
+            self.assertAccessDependency(
+                ["Keep Pressure Plates 2"],
+                [
+                    ["Keep Pressure Plates 1 Exit (Door)", "Keep Pressure Plates 3 Exit (Door)"],
+                 ],
+                only_check_listed=True,
+            )
 
-            possible_items = [
-                ["Keep Pressure Plates 1 Exit (Door)", "Keep Pressure Plates 3 Exit (Door)", *exit_path]
-                for exit_path in exit_paths
-            ]
-
-            self.assertAccessDependency(["Keep Pressure Plates 2"], possible_items, only_check_listed=True)
+            # All the possible "Exit methods" from PP3
+            self.assertAccessDependency(
+                ["Keep Pressure Plates 2"],
+                [
+                    ["Keep Shadows Shortcut (Door)"],
+                    ["Keep Pressure Plates 4 Exit (Door)", "Keep Tower Shortcut (Door)"],
+                    ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
+                     "Keep Hedge Maze 4 Shortcut (Door)"],
+                    ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
+                     "Keep Hedge Maze 3 Exit (Door)", "Keep Hedge Maze 3 Shortcut (Door)"],
+                    ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
+                     "Keep Hedge Maze 3 Exit (Door)", "Keep Hedge Maze 2 Exit (Door)",
+                     "Keep Hedge Maze 2 Shortcut (Door)"],
+                    ["Keep Pressure Plates 4 Exit (Door)", "Keep Hedge Maze 4 Exit (Door)",
+                     "Keep Hedge Maze 3 Exit (Door)", "Keep Hedge Maze 2 Exit (Door)", "Keep Hedge Maze 1 Exit (Door)"],
+                 ],
+                only_check_listed=True,
+            )
