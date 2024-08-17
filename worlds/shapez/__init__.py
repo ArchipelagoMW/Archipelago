@@ -4,7 +4,7 @@ from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
-    big_upgrades, filler
+    big_upgrades, filler, trap
 from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
     addshapesanity
 from .presets import options_presets
@@ -138,17 +138,11 @@ class ShapezWorld(World):
         self.multiworld.regions.extend(create_shapez_regions(self.player, self.multiworld, self.included_locations,
                                                              self.location_name_to_id,
                                                              self.level_logic, self.upgrade_logic,
-                                                             self.options.early_balancer_tunnel_and_trash.value))
-
-        main_region = self.multiworld.get_region("Main", self.player)
-        goal_location = ShapezLocation(self.player, "Goal", None, main_region, LocationProgressType.DEFAULT)
-        goal_location.place_locked_item(ShapezItem("Goal", ItemClassification.progression, None, self.player))
-        main_region.locations.append(goal_location)
-        goal_location.access_rule = lambda state: state.has_all(["Cutter", "Rotator", "Stacker", "Painter",
-                                                                 "Color Mixer"], self.player)
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Goal", self.player)
+                                                             self.options.early_balancer_tunnel_and_trash.value,
+                                                             self.options.goal.value))
 
         # Connect Menu to rest of regions
+        main_region = self.multiworld.get_region("Main", self.player)
         menu_region.connect(main_region)
 
     def create_items(self) -> None:
@@ -166,8 +160,8 @@ class ShapezWorld(World):
         # Fill remaining locations with fillers
         for x in range(self.location_count - len(included_items)):
             if self.random.random() < traps_probability:
-                # Fill with trap (only 1 kind of traps atm)
-                included_items.append(self.create_item("Inventory Draining Trap"))
+                # Fill with trap
+                included_items.append(self.create_item(trap(self.random.random())))
             else:
                 # Fil with random filler item
                 included_items.append(self.create_item(filler(self.random.random())))
@@ -196,6 +190,7 @@ class ShapezWorld(World):
             "randomize_upgrade_requirements": bool(self.options.randomize_upgrade_requirements.value),
             "randomize_level_logic": self.options.randomize_level_logic.value,
             "randomize_upgrade_logic": self.options.randomize_upgrade_logic.value,
+            "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
             "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value)
         }
 

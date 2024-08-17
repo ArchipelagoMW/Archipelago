@@ -1,6 +1,7 @@
 from typing import Callable
 
-from BaseClasses import Entrance, Region, CollectionState, MultiWorld, LocationProgressType
+from BaseClasses import Entrance, Region, CollectionState, MultiWorld, LocationProgressType, ItemClassification
+from . import ShapezItem
 from .locations import ShapezLocation
 
 all_regions = [
@@ -23,7 +24,7 @@ all_regions = [
     # "Stored Shape Achievements",
     # "Trashed Shape Achievements",
     # "Wiring Achievements",
-    # "All Buildings Shapes"
+    "All Buildings Shapes"
 ] + [
   f"Shapesanity {processing} {coloring}"
   for processing in ["Unprocessed", "Cut", "Cut Rotated", "Stitched", "Half-Half"]
@@ -49,7 +50,7 @@ def create_entrance(player: int, name: str, parent: Region, connects: Region, ru
 def create_shapez_regions(player: int, multiworld: MultiWorld,
                           included_locations: dict[str, tuple[str, LocationProgressType]],
                           location_name_to_id: dict[str, int], level_logic_buildings: list[str],
-                          upgrade_logic_buildings: list[str], early_useful: int) -> list[Region]:
+                          upgrade_logic_buildings: list[str], early_useful: int, goal: int) -> list[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
     regions: dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
 
@@ -57,6 +58,18 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     for name, data in included_locations.items():
         regions[data[0]].locations.append(ShapezLocation(player, name, location_name_to_id[name],
                                                          regions[data[0]], data[1]))
+
+    if goal <= 1:
+        goal_region = regions["Levels with 5 Buildings"]
+    elif goal == 2:
+        goal_region = regions["Upgrades with 5 Buildings"]
+    else:
+        goal_region = regions["All Buildings Shapes"]
+    goal_location = ShapezLocation(player, "Goal", None, goal_region,
+                                   LocationProgressType.DEFAULT)
+    goal_location.place_locked_item(ShapezItem("Goal", ItemClassification.progression, None, player))
+    goal_region.locations.append(goal_location)
+    multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
     # Create Entrances for regions
 #    create_entrance(player, "Cutter needed", regions["Main"], regions["Cut Shape Achievements"],
@@ -99,7 +112,6 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
         level_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
         upgrade_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
 
-
     create_entrance(player, "First level building needed",
                     regions["Main"], regions["Levels with 1 Building"],
                     lambda state: state.has(level_logic_buildings[0], player))
@@ -131,6 +143,10 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     create_entrance(player, "Fifth upgrade building needed",
                     regions["Upgrades with 4 Buildings"], regions["Upgrades with 5 Buildings"],
                     lambda state: state.has_all(upgrade_buildings_5_needed, player))
+
+    create_entrance(player, "All buildings needed",
+                    regions["Main"], regions["All Buildings Shapes"],
+                    lambda state: state.has_all(["Cutter", "Rotator", "Stacker", "Painter", "Color Mixer"], player))
 
     create_entrance(player, "Shapesanity nothing",
                     regions["Main"], regions["Shapesanity Unprocessed Uncolored"], lambda state: True)

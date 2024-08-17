@@ -65,7 +65,10 @@ bundles = {
 }
 
 traps = {
-    "Inventory Draining Trap": ItemClassification.trap
+    "Inventory Draining Trap": ItemClassification.trap,
+    "Locked Building Trap": ItemClassification.trap,
+    "Throttled Building Trap": ItemClassification.trap,
+    "Malfunctioning Trap": ItemClassification.trap
 }
 
 item_table: dict[str, ItemClassification] = {
@@ -93,6 +96,11 @@ small_upgrades = [
     "Small Shape Processing Upgrade",
     "Small Color Processing Upgrade"
 ]
+
+
+def trap(random: float) -> str:
+    """Returns a random trap item."""
+    return list(traps.keys())[int(len(traps)*random)]
 
 
 def filler(random: float) -> str:

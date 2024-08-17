@@ -82,6 +82,17 @@ class RandomizeUpgradeLogic(Choice):
     default = 1
 
 
+class ThroughputLevelsRatio(Range):
+    """If level requirements are randomized, this sets the ratio of how many levels (approximately) will require either
+    a total amount or per second amount (throughput) of shapes delivered.
+    0 means only total, 100 means only throughput, and -1 means vanilla (only levels 14, 27 and beyond have throughput).
+    """
+    display_name = "Throughput levels ratio"
+    range_start = -1
+    range_end = 100
+    default = 0
+
+
 class SameLateUpgradeRequirements(Toggle):
     """If upgrade requirements are randomized, should the last 3 shapes for each category
     be the same, like in vanilla?"""
@@ -157,6 +168,7 @@ class ShapezOptions(PerGameCommonOptions):
     randomize_upgrade_requirements: RandomizeUpgradeRequirements
     randomize_level_logic: RandomizeLevelLogic
     randomize_upgrade_logic: RandomizeUpgradeLogic
+    throughput_levels_ratio: ThroughputLevelsRatio
     same_late_upgrade_requirements: SameLateUpgradeRequirements
     early_balancer_tunnel_and_trash: EarlyBalancerTunnelAndTrash
     # additional_locations: AdditionalLocations
