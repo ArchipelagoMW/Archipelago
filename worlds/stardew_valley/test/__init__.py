@@ -6,7 +6,7 @@ from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item, ItemClassification
+from BaseClasses import MultiWorld, CollectionState, PlandoOptions, get_seed, Location, Item, ItemClassification
 from Options import VerifyKeys
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
@@ -257,16 +257,16 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         return super().run_default_tests
 
     def collect_lots_of_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
         required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * 0.25))
         for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
 
     def collect_all_the_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
         required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * 0.95))
         for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
 
     def collect_everything(self):
         non_event_items = [item for item in self.multiworld.get_items() if item.code]
@@ -365,7 +365,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
 
         if issubclass(option, VerifyKeys):
             # Values should already be verified, but just in case...
-            option.verify_keys(value.value)
+            value.verify(StardewValleyWorld, "Tester", PlandoOptions.bosses)
 
         setattr(args, name, {1: value})
     multiworld.set_options(args)
