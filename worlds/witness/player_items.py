@@ -149,7 +149,7 @@ class WitnessPlayerItems:
 
         return output
 
-    def get_early_items(self, existing_items: List[Item]) -> Dict[str, List[str]]:
+    def get_early_items(self, existing_items: List[WitnessItem]) -> Dict[str, List[str]]:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """

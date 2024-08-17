@@ -45,7 +45,7 @@ class EarlyGoodItems(OptionSet):
     """
 
     valid_keys = {"Symbol", "Door / Door Panel", "Obelisk Key"}
-    default = {"Symbol"}
+    default = frozenset({"Symbol"})
 
 
 class ShuffleSymbols(DefaultOnToggle):

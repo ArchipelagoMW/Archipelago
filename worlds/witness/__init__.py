@@ -204,7 +204,9 @@ class WitnessWorld(World):
         self.reachable_early_locations = [location.name for location in early_locations]
 
         num_reachable_locations = len(early_locations)
-        num_reachable_tutorial_locations = sum(loc.parent_region.name == "Tutorial" for loc in early_locations)
+        num_reachable_tutorial_locations = sum(
+            cast(Region, loc.parent_region).name == "Tutorial" for loc in early_locations
+        )
 
         # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
 
@@ -335,7 +337,7 @@ class WitnessWorld(World):
         state = CollectionState(self.multiworld)
 
         placements = []
-        found_early_items = []
+        found_early_items: List[Item] = []
 
         while any(early_items.values()) and eligible_locations:
             next_findable_items_dict = {item_list.pop(): item_type for item_type, item_list in early_items.items()}
@@ -414,7 +416,7 @@ class WitnessWorld(World):
                 self.get_location(location_name) for location_name in self.reachable_early_locations
                 if location_name not in tutorial_checks_in_order
             ),
-            key=lambda location_object: location_object.address,
+            key=lambda location_object: cast(int, location_object.address),
         )
 
         early_good_item_placements = self.find_good_items_from_itempool(progitempool, available_locations)
