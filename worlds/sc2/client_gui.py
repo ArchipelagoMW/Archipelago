@@ -332,7 +332,8 @@ class SC2Manager(GameManager):
         text = mission_obj.mission_name
         tooltip: str = ""
         remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission_id)
-        parent_locked = campaign_id not in available_campaigns or layout_id not in available_layouts[campaign_id]
+        campaign_locked = campaign_id not in available_campaigns
+        layout_locked = layout_id not in available_layouts[campaign_id]
 
         # Map has uncollected locations
         if mission_id in unfinished_missions:
@@ -345,24 +346,31 @@ class SC2Manager(GameManager):
         # Map requirements not met
         else:
             mission_rule, layout_rule, campaign_rule = ctx.mission_id_to_entry_rules[mission_id]
-            if parent_locked:
+            mission_has_rule = mission_rule.amount > 0
+            layout_has_rule = layout_rule.amount > 0
+            extra_reqs = False
+            if campaign_locked:
                 text = f"[color={COLOR_PARENT_LOCKED}]{text}[/color]"
-                if campaign_id not in available_campaigns:
-                    tooltip += "To unlock this campaign, "
-                    rule_tooltip = campaign_rule.tooltip(0, lookup_id_to_mission)
-                else:
-                    tooltip += "To unlock this region, "
-                    rule_tooltip = layout_rule.tooltip(0, lookup_id_to_mission)
+                tooltip += "To unlock this campaign, "
+                rule_tooltip = campaign_rule.tooltip(0, lookup_id_to_mission)
+                extra_reqs = layout_has_rule or mission_has_rule
+            elif layout_locked:
+                text = f"[color={COLOR_PARENT_LOCKED}]{text}[/color]"
+                tooltip += "To unlock this questline, "
+                rule_tooltip = layout_rule.tooltip(0, lookup_id_to_mission)
+                extra_reqs = mission_has_rule
             else:
                 text = f"[color={COLOR_MISSION_LOCKED}]{text}[/color]"
                 tooltip += "To unlock this mission, "
                 rule_tooltip = mission_rule.tooltip(0, lookup_id_to_mission)
             tooltip += rule_tooltip.replace(rule_tooltip[0], rule_tooltip[0].lower(), 1)
+            if extra_reqs:
+                tooltip += "\nThis mission will show additional requirements once the above are met."
 
         # Mark exit missions
         exit_for: str = ""
         if is_layout_exit:
-            exit_for += layout_name if layout_name else "this region"
+            exit_for += layout_name if layout_name else "this questline"
         if is_campaign_exit:
             if exit_for:
                 exit_for += " and "
@@ -376,7 +384,7 @@ class SC2Manager(GameManager):
         if mission_id in self.ctx.final_mission_ids:
             if mission_id in available_missions:
                 text = f"[color={COLOR_MISSION_FINAL}]{mission_obj.mission_name}[/color]"
-            elif parent_locked:
+            elif campaign_locked or layout_locked:
                 text = f"[color={COLOR_FINAL_PARENT_LOCKED}]{mission_obj.mission_name}[/color]"
             else:
                 text = f"[color={COLOR_MISSION_FINAL_LOCKED}]{mission_obj.mission_name}[/color]"

@@ -15,6 +15,8 @@ Custom Mission Orders consist of three kinds of structures:
 - Campaigns contain layouts (like Mar Sara)
 - Layouts contain mission slots (like Liberation Day)
 
+As a note, layouts are also called questlines in the UI. Layouts and questlines refer to the same thing, though this document will only use layouts.
+
 To illustrate, the following is what the default custom mission order currently looks like. If you're not sure what some options mean, they will be explained in more depth later.
 ```yaml
   custom_mission_order:

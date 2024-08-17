@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class MissionOrderNode(ABC):
     parent: ReferenceType[MissionOrderNode]
-    __slots__ = ("parent",)
+    important_beat_event: bool
 
     def get_parent(self, address_so_far: str, full_address: str) -> MissionOrderNode:
         if self.parent is None:
@@ -312,6 +312,7 @@ class SC2MissionOrder(MissionOrderNode):
                 return CountMissionsEntryRule(missions, data["amount"], visual_reqs)
             missions: List[SC2MOGenMission] = []
             for (obj, address) in objects:
+                obj.important_beat_event = True
                 exits = obj.get_exits()
                 if len(exits) == 0:
                     raise ValueError(
@@ -430,6 +431,7 @@ class SC2MOGenCampaign(MissionOrderNode):
 
     def __init__(self, world: World, parent: ReferenceType[SC2MissionOrder], name: str, data: Dict[str, Any]):
         self.parent = parent
+        self.important_beat_event = False
         self.option_name = name
         self.option_display_name = data["display_name"]
         self.option_unique_name = data["unique_name"]
@@ -500,10 +502,15 @@ class SC2MOGenCampaign(MissionOrderNode):
         return self.display_name
 
     def get_slot_data(self) -> CampaignSlotData:
+        if self.important_beat_event:
+            exits = [slot.mission.id for slot in self.exits]
+        else:
+            exits = []
+
         return CampaignSlotData(
             self.get_visual_name(),
             asdict(self.entry_rule.to_slot_data()),
-            [slot.mission.id for slot in self.exits],
+            exits,
             [asdict(layout.get_slot_data()) for layout in self.layouts]
         )
 
@@ -539,6 +546,7 @@ class SC2MOGenLayout(MissionOrderNode):
 
     def __init__(self, world: World, parent: ReferenceType[SC2MOGenCampaign], name: str, data: Dict):
         self.parent: ReferenceType[SC2MOGenCampaign] = parent
+        self.important_beat_event = False
         self.option_name = name
         self.option_display_name = data.pop("display_name")
         self.option_unique_name = data.pop("unique_name")
@@ -744,11 +752,15 @@ class SC2MOGenLayout(MissionOrderNode):
             ]
             for column in self.layout_type.get_visual_layout()
         ]
+        if self.important_beat_event:
+            exits = [slot.mission.id for slot in self.exits]
+        else:
+            exits = []
 
         return LayoutSlotData(
             self.get_visual_name(),
             asdict(self.entry_rule.to_slot_data()),
-            [slot.mission.id for slot in self.exits],
+            exits,
             mission_slots
         )
 
@@ -773,6 +785,7 @@ class SC2MOGenMission(MissionOrderNode):
 
     def __init__(self, parent: ReferenceType[SC2MOGenLayout], parent_mission_pool: Set[int]):
         self.parent: ReferenceType[SC2MOGenLayout] = parent
+        self.important_beat_event = False
         self.option_mission_pool = parent_mission_pool
         self.option_goal = False
         self.option_entrance = False

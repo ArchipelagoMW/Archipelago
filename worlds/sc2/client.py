@@ -1364,7 +1364,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
 def calc_unfinished_nodes(
         ctx: SC2Context
-) -> typing.Tuple[typing.Set[int], typing.Set[int], typing.Set[int], typing.Set[int]]:
+) -> typing.Tuple[typing.List[int], typing.Dict[int, typing.List[int]], typing.List[int], typing.Set[int]]:
     unfinished_missions: typing.Set[int] = set()
 
     available_missions, available_layouts, available_campaigns = calc_available_nodes(ctx)
