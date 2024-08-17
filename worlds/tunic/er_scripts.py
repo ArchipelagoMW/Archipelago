@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, traversal_requirements, DeadEnd
+from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo
 from .er_rules import set_er_region_rules
 from Options import PlandoConnection
 from .options import EntranceRando
@@ -24,7 +24,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
 
     if world.options.entrance_rando:
-        for region_name, region_data in tunic_er_regions.items():
+        for region_name, region_data in world.er_regions.items():
             # if fewer shops is off, zig skip is not made
             if region_name == "Zig Skip Exit":
                 # need to check if there's a seed group for this first
@@ -42,7 +42,7 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         for portal1, portal2 in sorted_portal_pairs.items():
             world.multiworld.spoiler.set_entrance(portal1, portal2, "both", world.player)
     else:
-        for region_name, region_data in tunic_er_regions.items():
+        for region_name, region_data in world.er_regions.items():
             # filter out regions that are inaccessible in non-er
             if region_name not in ["Zig Skip Exit", "Purgatory"]:
                 regions[region_name] = Region(region_name, world.player, world.multiworld)
@@ -112,6 +112,7 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 # so, we need a bunch of shop regions that connect to the actual shop, but the actual shop cannot connect back
 def create_shop_region(world: "TunicWorld", regions: Dict[str, Region]) -> None:
     new_shop_name = f"Shop {world.shop_num}"
+    world.er_regions[new_shop_name] = RegionInfo("Shop", dead_end=DeadEnd.all_cats)
     new_shop_region = Region(new_shop_name, world.player, world.multiworld)
     new_shop_region.connect(regions["Shop"])
     regions[new_shop_name] = new_shop_region
@@ -196,7 +197,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
     # create separate lists for dead ends and non-dead ends
     for portal in portal_map:
-        dead_end_status = tunic_er_regions[portal.region].dead_end
+        dead_end_status = world.er_regions[portal.region].dead_end
         if dead_end_status == DeadEnd.free:
             two_plus.append(portal)
         elif dead_end_status == DeadEnd.all_cats:
@@ -252,7 +253,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
     non_dead_end_regions = set()
-    for region_name, region_info in tunic_er_regions.items():
+    for region_name, region_info in world.er_regions.items():
         if not region_info.dead_end:
             non_dead_end_regions.add(region_name)
         # if ice grappling to places is in logic, both places stop being dead ends

@@ -56,8 +56,7 @@ def has_ability(ability: str, state: CollectionState, world: "TunicWorld") -> bo
 
 # a check to see if you can whack things in melee at all
 def has_melee(state: CollectionState, player: int) -> bool:
-    return (state.has("Stick", player) or state.has("Sword Upgrade", player, 1)
-            or state.has("Sword", player))
+    return state.has_any({"Stick", "Sword", "Sword Upgrade"}, player)
 
 
 def has_sword(state: CollectionState, player: int) -> bool:

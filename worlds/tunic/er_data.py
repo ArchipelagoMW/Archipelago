@@ -1,5 +1,8 @@
-from typing import Dict, NamedTuple, List
+from typing import Dict, NamedTuple, List, TYPE_CHECKING, Optional
 from enum import IntEnum
+
+if TYPE_CHECKING:
+    from . import TunicWorld
 
 
 class Portal(NamedTuple):
@@ -519,6 +522,12 @@ portal_mapping: List[Portal] = [
 class RegionInfo(NamedTuple):
     game_scene: str  # the name of the scene in the actual game
     dead_end: int = 0  # if a region has only one exit
+    outlet_region: Optional[str] = None
+
+
+# gets the outlet region name if it exists, the region if it doesn't
+def get_portal_outlet_region(portal: Portal, world: "TunicWorld") -> str:
+    return world.er_regions[portal.region].outlet_region or portal.region
 
 
 class DeadEnd(IntEnum):
@@ -562,11 +571,11 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld Ruined Passage Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Old House Door": RegionInfo("Overworld Redux"),  # the too-small space between the door and the portal
     "Overworld Southeast Cross Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
-    "Overworld Fountain Cross Door": RegionInfo("Overworld Redux"),  # the small space between the door and the portal
+    "Overworld Fountain Cross Door": RegionInfo("Overworld Redux", outlet_region="Overworld"),
     "Overworld Temple Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
-    "Overworld Town Portal": RegionInfo("Overworld Redux"),  # being able to go to or come from the portal
-    "Overworld Spawn Portal": RegionInfo("Overworld Redux"),  # being able to go to or come from the portal
-    "Cube Cave Entrance Region": RegionInfo("Overworld Redux"),  # other side of the bomb wall
+    "Overworld Town Portal": RegionInfo("Overworld Redux", outlet_region="Overworld"),
+    "Overworld Spawn Portal": RegionInfo("Overworld Redux", outlet_region="Overworld"),
+    "Cube Cave Entrance Region": RegionInfo("Overworld Redux", outlet_region="Overworld"),  # other side of the bomb wall
     "Stick House": RegionInfo("Sword Cave", dead_end=DeadEnd.all_cats),
     "Windmill": RegionInfo("Windmill"),
     "Old House Back": RegionInfo("Overworld Interiors"),  # part with the hc door
@@ -595,7 +604,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Forest Belltower Lower": RegionInfo("Forest Belltower"),
     "East Forest": RegionInfo("East Forest Redux"),
     "East Forest Dance Fox Spot": RegionInfo("East Forest Redux"),
-    "East Forest Portal": RegionInfo("East Forest Redux"),
+    "East Forest Portal": RegionInfo("East Forest Redux", outlet_region="East Forest"),
     "Lower Forest": RegionInfo("East Forest Redux"),  # bottom of the forest
     "Guard House 1 East": RegionInfo("East Forest Redux Laddercave"),
     "Guard House 1 West": RegionInfo("East Forest Redux Laddercave"),
@@ -605,7 +614,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Forest Grave Path Main": RegionInfo("Sword Access"),
     "Forest Grave Path Upper": RegionInfo("Sword Access"),
     "Forest Grave Path by Grave": RegionInfo("Sword Access"),
-    "Forest Hero's Grave": RegionInfo("Sword Access"),
+    "Forest Hero's Grave": RegionInfo("Sword Access", outlet_region="Forest Grave Path by Grave"),
     "Dark Tomb Entry Point": RegionInfo("Crypt Redux"),  # both upper exits
     "Dark Tomb Upper": RegionInfo("Crypt Redux"),  # the part with the casket and the top of the ladder
     "Dark Tomb Main": RegionInfo("Crypt Redux"),
@@ -621,19 +630,20 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "West Garden at Dagger House": RegionInfo("Archipelagos Redux"),  # just outside magic dagger house
     "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
-    "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
+    "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted, outlet_region="West Garden by Portal"),
+    "West Garden by Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Laurels Exit Region": RegionInfo("Archipelagos Redux"),
     "West Garden before Boss": RegionInfo("Archipelagos Redux"),  # main west garden
     "West Garden after Boss": RegionInfo("Archipelagos Redux"),
-    "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux"),
+    "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux", outlet_region="West Garden before Terry"),
     "Ruined Atoll": RegionInfo("Atoll Redux"),
     "Ruined Atoll Lower Entry Area": RegionInfo("Atoll Redux"),
     "Ruined Atoll Ladder Tops": RegionInfo("Atoll Redux"),  # at the top of the 5 ladders in south Atoll
     "Ruined Atoll Frog Mouth": RegionInfo("Atoll Redux"),
     "Ruined Atoll Frog Eye": RegionInfo("Atoll Redux"),
-    "Ruined Atoll Portal": RegionInfo("Atoll Redux"),
-    "Ruined Atoll Statue": RegionInfo("Atoll Redux"),
+    "Ruined Atoll Portal": RegionInfo("Atoll Redux", outlet_region="Ruined Atoll"),
+    "Ruined Atoll Statue": RegionInfo("Atoll Redux", outlet_region="Ruined Atoll"),
     "Frog Stairs Eye Exit": RegionInfo("Frog Stairs"),
     "Frog Stairs Upper": RegionInfo("Frog Stairs"),
     "Frog Stairs Lower": RegionInfo("Frog Stairs"),
@@ -642,18 +652,20 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Frog's Domain Front": RegionInfo("frog cave main"),  # before combat
     "Frog's Domain Main": RegionInfo("frog cave main"),
     "Frog's Domain Back": RegionInfo("frog cave main"),
-    "Library Exterior Tree Region": RegionInfo("Library Exterior"),
+    "Library Exterior Tree Region": RegionInfo("Library Exterior", outlet_region="Library Exterior by Tree"),
+    "Library Exterior by Tree": RegionInfo("Library Exterior"),
     "Library Exterior Ladder Region": RegionInfo("Library Exterior"),
     "Library Hall Bookshelf": RegionInfo("Library Hall"),
     "Library Hall": RegionInfo("Library Hall"),
-    "Library Hero's Grave Region": RegionInfo("Library Hall"),
+    "Library Hero's Grave Region": RegionInfo("Library Hall", outlet_region="Library Hall"),
     "Library Hall to Rotunda": RegionInfo("Library Hall"),
     "Library Rotunda to Hall": RegionInfo("Library Rotunda"),
     "Library Rotunda": RegionInfo("Library Rotunda"),
     "Library Rotunda to Lab": RegionInfo("Library Rotunda"),
     "Library Lab": RegionInfo("Library Lab"),
     "Library Lab Lower": RegionInfo("Library Lab"),
-    "Library Portal": RegionInfo("Library Lab"),
+    "Library Lab on Portal Pad": RegionInfo("Library Lab"),
+    "Library Portal": RegionInfo("Library Lab", outlet_region="Library Lab on Portal Pad"),
     "Library Lab to Librarian": RegionInfo("Library Lab"),
     "Library Arena": RegionInfo("Library Arena", dead_end=DeadEnd.all_cats),
     "Fortress Exterior from East Forest": RegionInfo("Fortress Courtyard"),
@@ -674,22 +686,22 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Fortress Grave Path by Grave": RegionInfo("Fortress Reliquary"),
     "Fortress Grave Path Upper": RegionInfo("Fortress Reliquary", dead_end=DeadEnd.restricted),
     "Fortress Grave Path Dusty Entrance Region": RegionInfo("Fortress Reliquary"),
-    "Fortress Hero's Grave Region": RegionInfo("Fortress Reliquary"),
+    "Fortress Hero's Grave Region": RegionInfo("Fortress Reliquary", outlet_region="Fortress Grave Path by Grave"),
     "Fortress Leaf Piles": RegionInfo("Dusty", dead_end=DeadEnd.all_cats),
     "Fortress Arena": RegionInfo("Fortress Arena"),
-    "Fortress Arena Portal": RegionInfo("Fortress Arena"),
+    "Fortress Arena Portal": RegionInfo("Fortress Arena", outlet_region="Fortress Arena"),
     "Lower Mountain": RegionInfo("Mountain"),
     "Lower Mountain Stairs": RegionInfo("Mountain"),
     "Top of the Mountain": RegionInfo("Mountaintop", dead_end=DeadEnd.all_cats),
     "Quarry Connector": RegionInfo("Darkwoods Tunnel"),
     "Quarry Entry": RegionInfo("Quarry Redux"),
     "Quarry": RegionInfo("Quarry Redux"),
-    "Quarry Portal": RegionInfo("Quarry Redux"),
+    "Quarry Portal": RegionInfo("Quarry Redux", outlet_region="Quarry Entry"),
     "Quarry Back": RegionInfo("Quarry Redux"),
     "Quarry Monastery Entry": RegionInfo("Quarry Redux"),
     "Monastery Front": RegionInfo("Monastery"),
     "Monastery Back": RegionInfo("Monastery"),
-    "Monastery Hero's Grave Region": RegionInfo("Monastery"),
+    "Monastery Hero's Grave Region": RegionInfo("Monastery", outlet_region="Monastery Back"),
     "Monastery Rope": RegionInfo("Quarry Redux"),
     "Lower Quarry": RegionInfo("Quarry Redux"),
     "Even Lower Quarry": RegionInfo("Quarry Redux"),
@@ -705,17 +717,18 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the front for combat logic
     "Rooted Ziggurat Lower Mid Checkpoint": RegionInfo("ziggurat2020_3"),  # the mid-checkpoint before double admin
     "Rooted Ziggurat Lower Back": RegionInfo("ziggurat2020_3"),  # the boss side
-    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special),  # for use with fixed shop on
-    "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3"),  # the door itself on the zig 3 side
-    "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom"),
-    "Rooted Ziggurat Portal Room Exit": RegionInfo("ziggurat2020_FTRoom"),
+    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special, outlet_region="Rooted Ziggurat Lower Entry"),  # for use with fixed shop on
+    "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3", outlet_region="Rooted Ziggurat Lower Back"),  # the door itself on the zig 3 side
+    "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom", outlet_region="Rooted Ziggurat Portal Room"),
+    "Rooted Ziggurat Portal Room": RegionInfo("ziggurat2020_FTRoom"),
+    "Rooted Ziggurat Portal Room Exit": RegionInfo("ziggurat2020_FTRoom", outlet_region="Rooted Ziggurat Portal Room"),
     "Swamp Front": RegionInfo("Swamp Redux 2"),  # from the main entry to the top of the ladder after south
     "Swamp Mid": RegionInfo("Swamp Redux 2"),  # from the bottom of the ladder to the cathedral door
     "Swamp Ledge under Cathedral Door": RegionInfo("Swamp Redux 2"),  # the ledge with the chest and secret door
-    "Swamp to Cathedral Treasure Room": RegionInfo("Swamp Redux 2"),  # just the door
+    "Swamp to Cathedral Treasure Room": RegionInfo("Swamp Redux 2", outlet_region="Swamp Ledge under Cathedral Door"),  # just the door
     "Swamp to Cathedral Main Entrance Region": RegionInfo("Swamp Redux 2"),  # just the door
     "Back of Swamp": RegionInfo("Swamp Redux 2"),  # the area with hero grave and gauntlet entrance
-    "Swamp Hero's Grave Region": RegionInfo("Swamp Redux 2"),
+    "Swamp Hero's Grave Region": RegionInfo("Swamp Redux 2", outlet_region="Back of Swamp"),
     "Back of Swamp Laurels Area": RegionInfo("Swamp Redux 2"),  # the spots you need laurels to traverse
     "Cathedral Entry": RegionInfo("Cathedral Redux"),  # the checkpoint and easily-accessible chests
     "Cathedral Main": RegionInfo("Cathedral Redux"),  # the majority of Cathedral
@@ -727,10 +740,10 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Far Shore": RegionInfo("Transit"),
     "Far Shore to Spawn Region": RegionInfo("Transit"),
     "Far Shore to East Forest Region": RegionInfo("Transit"),
-    "Far Shore to Quarry Region": RegionInfo("Transit"),
-    "Far Shore to Fortress Region": RegionInfo("Transit"),
-    "Far Shore to Library Region": RegionInfo("Transit"),
-    "Far Shore to West Garden Region": RegionInfo("Transit"),
+    "Far Shore to Quarry Region": RegionInfo("Transit", outlet_region="Far Shore"),
+    "Far Shore to Fortress Region": RegionInfo("Transit", outlet_region="Far Shore"),
+    "Far Shore to Library Region": RegionInfo("Transit", outlet_region="Far Shore"),
+    "Far Shore to West Garden Region": RegionInfo("Transit", outlet_region="Far Shore"),
     "Hero Relic - Fortress": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
     "Hero Relic - Quarry": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
     "Hero Relic - West Garden": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
@@ -740,7 +753,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Purgatory": RegionInfo("Purgatory"),
     "Shop": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Spirit Arena": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats),
-    "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats)
+    "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats),
 }
 
 
@@ -803,6 +816,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Well to Furnace Rail":
             [["LS2"]],
         "Overworld Old House Door":
+            [],
+        "Cube Cave Entrance Region":
             [],
     },
     "East Overworld": {
@@ -962,6 +977,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld":
             [],
     },
+
     "Old House Front": {
         "Old House Back":
             [],
@@ -970,6 +986,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Old House Front":
             [["Hyperdash", "Zip"]],
     },
+
     "Furnace Fuse": {
         "Furnace Ladder Area":
             [["Hyperdash"]],
@@ -984,6 +1001,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Furnace Ladder Area":
             [["Hyperdash"]],
     },
+
     "Sealed Temple": {
         "Sealed Temple Rafters":
             [],
@@ -992,10 +1010,12 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Sealed Temple":
             [["Hyperdash"]],
     },
+
     "Hourglass Cave": {
         "Hourglass Cave Tower":
             [],
     },
+
     "Forest Belltower Upper": {
         "Forest Belltower Main":
             [],
@@ -1004,6 +1024,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Forest Belltower Lower":
             [],
     },
+
     "East Forest": {
         "East Forest Dance Fox Spot":
             [["Hyperdash"], ["IG1"], ["LS1"]],
@@ -1024,6 +1045,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "East Forest":
             [],
     },
+
     "Guard House 1 East": {
         "Guard House 1 West":
             [],
@@ -1032,6 +1054,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Guard House 1 East":
             [["Hyperdash"], ["LS1"]],
     },
+
     "Guard House 2 Upper": {
         "Guard House 2 Lower":
             [],
@@ -1040,6 +1063,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Guard House 2 Upper":
             [],
     },
+
     "Forest Grave Path Main": {
         "Forest Grave Path Upper":
             [["Hyperdash"], ["LS2"]],
@@ -1052,7 +1076,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Forest Grave Path by Grave": {
         "Forest Hero's Grave":
-            [], 
+            [],
         "Forest Grave Path Main":
             [["IG1"]],
     },
@@ -1060,6 +1084,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Forest Grave Path by Grave":
             [],
     },
+
     "Beneath the Well Ladder Exit": {
         "Beneath the Well Front":
             [],
@@ -1080,6 +1105,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Beneath the Well Main":
             [],
     },
+
     "Well Boss": {
         "Dark Tomb Checkpoint":
             [],
@@ -1088,6 +1114,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Well Boss":
             [["Hyperdash", "Zip"]],
     },
+
     "Dark Tomb Entry Point": {
         "Dark Tomb Upper":
             [],
@@ -1108,6 +1135,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Dark Tomb Main":
             [],
     },
+
     "West Garden before Terry": {
         "West Garden after Terry":
             [],
@@ -1159,13 +1187,20 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "West Garden Portal Item": {
         "West Garden at Dagger House":
             [["IG1"]],
-        "West Garden Portal":
-            [["Hyperdash", "West Garden South Checkpoint"]],
+        "West Garden by Portal":
+            [["Hyperdash"]],
     },
-    "West Garden Portal": {
+    "West Garden by Portal": {
+        "West Garden Portal":
+            [["West Garden South Checkpoint"]],
         "West Garden Portal Item":
             [["Hyperdash"]],
     },
+    "West Garden Portal": {
+        "West Garden by Portal":
+            [],
+    },
+
     "Ruined Atoll": {
         "Ruined Atoll Lower Entry Area":
             [["Hyperdash"], ["LS1"]],
@@ -1204,6 +1239,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Ruined Atoll":
             [],
     },
+
     "Frog Stairs Eye Exit": {
         "Frog Stairs Upper":
             [],
@@ -1224,6 +1260,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Frog Stairs Lower":
             [],
     },
+
     "Frog's Domain Entry": {
         "Frog's Domain Front":
             [],
@@ -1240,15 +1277,23 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Frog's Domain Back":
             [],
     },
+
     # cannot get from frogs back to front
     "Library Exterior Ladder Region": {
-        "Library Exterior Tree Region":
+        "Library Exterior by Tree":
             [],
     },
-    "Library Exterior Tree Region": {
+    "Library Exterior by Tree": {
+        "Library Exterior Tree Region":
+            [],
         "Library Exterior Ladder Region":
             [],
     },
+    "Library Exterior Tree Region": {
+        "Library Exterior by Tree":
+            [],
+    },
+
     "Library Hall Bookshelf": {
         "Library Hall":
             [],
@@ -1269,6 +1314,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Library Hall":
             [],
     },
+
     "Library Rotunda to Hall": {
         "Library Rotunda":
             [],
@@ -1296,17 +1342,24 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Library Lab to Librarian":
             [],
     },
-    "Library Portal": {
+    "Library Lab on Portal Pad": {
+        "Library Portal":
+            [],
         "Library Lab":
+            [],
+    },
+    "Library Portal": {
+        "Library Lab on Portal Pad":
             [],
     },
     "Library Lab to Librarian": {
         "Library Lab":
             [],
     },
+
     "Fortress Exterior from East Forest": {
         "Fortress Exterior from Overworld":
-            [], 
+            [],
         "Fortress Courtyard Upper":
             [["LS2"]],
         "Fortress Courtyard":
@@ -1314,9 +1367,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress Exterior from Overworld": {
         "Fortress Exterior from East Forest":
-            [["Hyperdash"]], 
+            [["Hyperdash"]],
         "Fortress Exterior near cave":
-            [], 
+            [],
         "Fortress Courtyard":
             [["Hyperdash"], ["IG1"], ["LS1"]],
     },
@@ -1344,6 +1397,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress Courtyard":
             [],
     },
+
     "Beneath the Vault Ladder Exit": {
         "Beneath the Vault Main":
             [],
@@ -1360,6 +1414,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Beneath the Vault Ladder Exit":
             [],
     },
+
     "Fortress East Shortcut Lower": {
         "Fortress East Shortcut Upper":
             [["IG1"]],
@@ -1368,6 +1423,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress East Shortcut Lower":
             [],
     },
+
     "Eastern Vault Fortress": {
         "Eastern Vault Fortress Gold Door":
             [["IG2"], ["Fortress Exterior from Overworld", "Beneath the Vault Back", "Fortress Courtyard Upper"]],
@@ -1376,6 +1432,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Eastern Vault Fortress":
             [["IG1"]],
     },
+
     "Fortress Grave Path Entry": {
         "Fortress Grave Path Combat":
             [],
@@ -1412,6 +1469,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress Grave Path by Grave":
             [],
     },
+
     "Fortress Arena": {
         "Fortress Arena Portal":
             [["Fortress Exterior from Overworld", "Beneath the Vault Back", "Eastern Vault Fortress"]],
@@ -1420,6 +1478,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Fortress Arena":
             [],
     },
+
     "Lower Mountain": {
         "Lower Mountain Stairs":
             [],
@@ -1428,6 +1487,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Lower Mountain":
             [],
     },
+
     "Monastery Back": {
         "Monastery Front":
             [["Hyperdash", "Zip"]],
@@ -1442,6 +1502,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Monastery Back":
             [],
     },
+
     "Quarry Entry": {
         "Quarry Portal":
             [["Quarry Connector"]],
@@ -1496,6 +1557,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Quarry Back":
             [],
     },
+
     "Rooted Ziggurat Upper Entry": {
         "Rooted Ziggurat Upper Front":
             [],
@@ -1508,10 +1570,12 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Rooted Ziggurat Upper Front":
             [["Hyperdash"]],
     },
+
     "Rooted Ziggurat Middle Top": {
         "Rooted Ziggurat Middle Bottom":
             [],
     },
+
     "Rooted Ziggurat Lower Entry": {
         "Rooted Ziggurat Lower Front":
             [],
@@ -1549,14 +1613,22 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Rooted Ziggurat Lower Back":
             [],
     },
+
     "Rooted Ziggurat Portal Room Exit": {
+        "Rooted Ziggurat Portal Room":
+            [],
+    },
+    "Rooted Ziggurat Portal Room": {
+        "Rooted Ziggurat Portal Room Exit":
+            [["Rooted Ziggurat Lower Back"]],
         "Rooted Ziggurat Portal":
             [],
     },
     "Rooted Ziggurat Portal": {
-        "Rooted Ziggurat Portal Room Exit":
-            [["Rooted Ziggurat Lower Back"]],
+        "Rooted Ziggurat Portal Room":
+            [],
     },
+
     "Swamp Front": {
         "Swamp Mid":
             [],
@@ -1601,6 +1673,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Back of Swamp":
             [],
     },
+
     "Cathedral Entry": {
         "Cathedral to Gauntlet":
             [],
@@ -1619,6 +1692,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Cathedral Main":
             [],
     },
+
     "Cathedral Gauntlet Checkpoint": {
         "Cathedral Gauntlet":
             [],
@@ -1631,6 +1705,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Cathedral Gauntlet":
             [["Hyperdash"]],
     },
+
     "Far Shore": {
         "Far Shore to Spawn Region":
             [["Hyperdash"]],
