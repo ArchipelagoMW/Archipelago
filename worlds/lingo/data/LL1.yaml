@@ -1556,6 +1556,8 @@
         room: Owl Hallway
         door: Shortcut to Hedge Maze
       Roof: True
+      The Incomparable:
+        door: Observant Entrance
     panels:
       DOWN:
         id: Maze Room/Panel_down_up
@@ -1967,6 +1969,9 @@
         door: Eight Door
       Orange Tower Sixth Floor:
         painting: True
+      Hedge Maze:
+        room: Hedge Maze
+        door: Observant Entrance
     panels:
       Achievement:
         id: Countdown Panels/Panel_incomparable_incomparable
@@ -2044,6 +2049,18 @@
             panel: I
           - room: Elements Area
             panel: A
+      Eight Door (Outside The Initiated):
+        id: Red Blue Purple Room Area Doors/Door_a_strands2
+        item_name: Outside The Initiated - Eight Door
+        item_group: Achievement Room Entrances
+        skip_location: True
+        panels:
+          - room: The Incomparable
+            panel: I (Seven)
+          - room: Courtyard
+            panel: I
+          - room: Elements Area
+            panel: A
     panel_doors:
       Giant Sevens:
         item_name: Giant Seven Panels
@@ -2062,8 +2079,8 @@
         room: The Incomparable
         door: Eight Door
       Outside The Initiated:
-        room: Outside The Initiated
-        door: Eight Door
+        room: The Incomparable
+        door: Eight Door (Outside The Initiated)
     paintings:
       - id: eight_painting2
         orientation: north
@@ -3305,7 +3322,8 @@
         room: Art Gallery
         door: Exit
       Eight Alcove:
-        door: Eight Door
+        room: The Incomparable
+        door: Eight Door (Outside The Initiated)
       The Optimistic: True
     panels:
       SEVEN (1):
@@ -3458,17 +3476,6 @@
             panel: GREEN
           - room: Outside The Agreeable
             panel: PURPLE
-      Eight Door:
-        id: Red Blue Purple Room Area Doors/Door_a_strands2
-        item_group: Achievement Room Entrances
-        skip_location: True
-        panels:
-          - room: The Incomparable
-            panel: I (Seven)
-          - room: Courtyard
-            panel: I
-          - room: Elements Area
-            panel: A
     panel_doors:
       UNCOVER:
         panels:
@@ -7649,6 +7656,8 @@
       LEAP:
         id: Double Room/Panel_leap_leap
         tag: midwhite
+        required_door:
+          door: Door to Cross
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
