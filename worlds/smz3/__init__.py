@@ -23,7 +23,7 @@ from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import SMZ3Options
-from Options import Accessibility
+from Options import Accessibility, ItemsAccessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -246,7 +246,7 @@ class SMZ3World(World):
             set_rule(entrance, lambda state, region=region: region.CanEnter(state.smz3state[self.player]))
             for loc in region.Locations:
                 l = self.locations[loc.Name]
-                if self.multiworld.accessibility[self.player] != 'full':
+                if self.multiworld.accessibility[self.player].value != Accessibility.option_full:
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
                         loc.alwaysAllow(item.item, state.smz3state[self.player])
@@ -553,7 +553,7 @@ class SMZ3World(World):
         # some small or big keys (those always_allow) can be unreachable in-game
         # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
         # so we need to remove those exceptions as progression items
-        if self.options.accessibility == 'items':
+        if self.options.accessibility.value == ItemsAccessibility.option_items:
             state = CollectionState(self.multiworld)
             locs = [self.multiworld.get_location("Swamp Palace - Big Chest", self.player),
                    self.multiworld.get_location("Skull Woods - Big Chest", self.player),
