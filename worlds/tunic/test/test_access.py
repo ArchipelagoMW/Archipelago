@@ -385,5 +385,4 @@ class TestERDecoupledPlando(TunicTestBase):
                    {"entrance": "Shop Portal 225", "exit": "Shop Portal 226", "direction": "entrance"},
                    {"entrance": "Shop Portal 227", "exit": "Shop Portal 228", "direction": "entrance"},
                    {"entrance": "Shop Portal 229", "exit": "Shop Portal 230", "direction": "entrance"},
-
                ]}
