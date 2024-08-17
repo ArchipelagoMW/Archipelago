@@ -2,7 +2,16 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
+from Options import (
+    Choice,
+    DefaultOnToggle,
+    OptionDict,
+    OptionGroup,
+    OptionSet,
+    PerGameCommonOptions,
+    Range,
+    Toggle,
+)
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -35,12 +44,17 @@ class EarlyCaves(Choice):
     alias_on = 2
 
 
-class EarlySymbolItem(DefaultOnToggle):
+class EarlyGoodItems(OptionSet):
     """
-    Put a random helpful symbol item on an early check, specifically Tutorial Gate Open if it is available early.
+    Put one random helpful item of each of the chosen types on an early check, specifically a sphere 1 Tutorial location.
+
+    If there aren't enough sphere 1 Tutorial locations, Tutorial First Hallway Straight and Tutorial First Hallway Bend may be added as locations.
+    If there still aren't enough sphere 1 Tutorial locations, a random local sphere 1 location is picked.
+    If no local sphere 1 locations are available, there are no further attempts to place the item.
     """
 
-    visibility = Visibility.none
+    valid_keys = {"Symbol", "Door / Door Panel", "Obelisk Key"}
+    default = {"Symbol"}
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -333,7 +347,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     mountain_lasers: MountainLasers
     challenge_lasers: ChallengeLasers
     early_caves: EarlyCaves
-    early_symbol_item: EarlySymbolItem
+    early_good_items: EarlyGoodItems
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage
     trap_weights: TrapWeights
@@ -379,6 +393,7 @@ witness_option_groups = [
         LaserHints
     ]),
     OptionGroup("Misc", [
+        EarlyGoodItems,
         EarlyCaves,
         ElevatorsComeToYou,
         DeathLink,

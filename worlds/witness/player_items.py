@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set, cast
+from typing import TYPE_CHECKING, Dict, List, cast
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -42,7 +42,7 @@ class WitnessPlayerItems:
                  player_locations: WitnessPlayerLocations) -> None:
         """Adds event items after logic changes due to options"""
 
-        self._world: "WitnessWorld" = world
+        self._world: WitnessWorld = world
         self._multiworld: MultiWorld = world.multiworld
         self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = player_logic
@@ -149,25 +149,81 @@ class WitnessPlayerItems:
 
         return output
 
-    def get_early_items(self) -> List[str]:
+    def get_early_items(self, existing_items: List[Item]) -> Dict[str, List[str]]:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
-        output: Set[str] = set()
-        if self._world.options.shuffle_symbols:
-            output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+        output: Dict[str, List[str]] = {}
+
+        existing_items_lookup = {existing_item.name for existing_item in existing_items}
+
+        if self._world.options.shuffle_symbols and "Symbol" in self._world.options.early_good_items.value:
+            symbols = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
 
             if self._world.options.shuffle_discarded_panels:
                 if self._world.options.puzzle_randomization == "sigma_expert":
-                    output.add("Arrows")
+                    symbols.append("Arrows")
                 else:
-                    output.add("Triangles")
+                    symbols.append("Triangles")
 
             # Replace progressive items with their parents.
-            output = {static_witness_logic.get_parent_progressive_item(item) for item in output}
+            symbols = [
+                static_witness_logic.get_parent_progressive_item(item) for item in symbols
+            ]
 
-        # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted([item for item in output if item in self.get_mandatory_items()])
+            output["Symbol"] = symbols
+
+        if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
+            door_set = {
+                "Desert Doors", "Caves Shortcuts", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
+                "Shadows Lower Doors", "Tunnels Doors", "Town Tower Doors",
+
+                "Desert Light Room Entry (Door)", "Caves Swamp Shortcut (Door)", "Caves Mountain Shortcut (Door)",
+                "Keep Tower Shortcut (Door)", "Shadows Timed Door", "Tunnels Town Shortcut (Door)",
+                "Swamp Laser Shortcut (Door)",
+
+                "Desert Panels", "Keep Hedge Maze Panels", "Town Panels",
+
+                "Shadows Door Timer (Panel)", "Glass Factory Entry (Panel)", "Keep Hedge Maze 1 (Panel)",
+                "Town Maze Stairs (Panel)"
+            }
+
+            if not self._world.options.shuffle_symbols:
+                door_set |= {
+                    "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors", "Quarry Outside Panels"
+
+                    "Bunker Entry (Door)", "Swamp Laser Shortcut (Door)", "Glass Factory Entry (Door)",
+
+                    "Bunker Panels", "Swamp Panels",
+                }
+
+                if self._world.options.shuffle_vault_boxes:
+                    door_set |= {
+                        "Windmill & Theater Doors",
+
+                        "Windmill & Theater Panels",
+
+                        "Windmill & Theater Control Panels",
+                    }
+
+            output["Door"] = (sorted(door_set))
+
+        if (
+            self._world.options.shuffle_EPs
+            and self._world.options.obelisk_keys
+            and "Obelisk Key" in self._world.options.early_good_items.value
+        ):
+            output["Obelisk Key"] = [
+                "Desert Obelisk Key", "Town Obelisk Key", "Quarry Obelisk Key",
+                "Treehouse Obelisk Key", "Monastery Obelisk Key", "Mountainside Obelisk Key"
+            ]
+
+        output = {
+            item_type: [item for item in item_list if item in existing_items_lookup]
+            for item_type, item_list in output.items()
+        }
+        return {item_type: item_list for item_type, item_list in output.items() if item_list}
+
 
     def get_door_ids_in_pool(self) -> List[int]:
         """

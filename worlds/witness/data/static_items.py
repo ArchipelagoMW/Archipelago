@@ -25,7 +25,10 @@ def populate_items() -> None:
             ITEM_GROUPS.setdefault("Symbols", set()).add(item_name)
         elif definition.category is ItemCategory.DOOR:
             classification = ItemClassification.progression
-            ITEM_GROUPS.setdefault("Doors", set()).add(item_name)
+            if "Obelisk Key" in item_name:
+                ITEM_GROUPS.setdefault("Obelisk Keys", set()).add(item_name)
+            else:
+                ITEM_GROUPS.setdefault("Doors", set()).add(item_name)
         elif definition.category is ItemCategory.LASER:
             classification = ItemClassification.progression_skip_balancing
             ITEM_GROUPS.setdefault("Lasers", set()).add(item_name)

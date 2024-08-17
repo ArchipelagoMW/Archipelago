@@ -6,7 +6,7 @@ from ..test import WitnessTestBase
 
 class TestEarlySymbolItemFalse(WitnessTestBase):
     options = {
-        "early_symbol_item": False,
+        "early_good_items": {},
 
         "shuffle_symbols": True,
         "shuffle_doors": "off",
@@ -32,16 +32,25 @@ class TestEarlySymbolItemFalse(WitnessTestBase):
 
 class TestEarlySymbolItemTrue(WitnessTestBase):
     options = {
-        "early_symbol_item": True,
+        "early_good_items": {"Symbol", "Door / Door Panel", "Obelisk Key"},
 
         "shuffle_symbols": True,
-        "shuffle_doors": "off",
-        "shuffle_boat": False,
-        "shuffle_lasers": False,
-        "obelisk_keys": False,
+        "shuffle_doors": "panels",
+        "shuffle_EPs": "individual",
+        "obelisk_keys": True,
     }
 
+    def setUp(self) -> None:
+        super().setUp()
+
     def test_early_good_item(self) -> None:
+        """
+        The items should be in the order:
+        Symbol item on Tutorial Gate Open
+        Door item on Tutorial Back Left
+        Obelisk Key on Tutorial Back Right
+        """
+
         distribute_items_restrictive(self.multiworld)
 
         gate_open = self.multiworld.get_location("Tutorial Gate Open", 1)
@@ -49,8 +58,26 @@ class TestEarlySymbolItemTrue(WitnessTestBase):
         self.assertTrue(gate_open.item is not None, "Somehow, no item got placed on Tutorial Gate Open.")
 
         self.assertTrue(
-            gate_open.item is not None and gate_open.item.classification & ItemClassification.progression,
-            "Early Good Item was off, yet a Symbol item ended up on Tutorial Gate Open.",
+            gate_open.item is not None and gate_open.item.name in self.world.item_name_groups["Symbols"],
+            "Early Good Item was on, yet no Symbol item ended up on Tutorial Gate Open.",
+        )
+
+        back_left = self.multiworld.get_location("Tutorial Back Left", 1)
+
+        self.assertTrue(back_left.item is not None, "Somehow, no item got placed on Tutorial Back Left.")
+
+        self.assertTrue(
+            back_left.item is not None and back_left.item.name in self.world.item_name_groups["Doors"],
+            "Early Good Item was on, yet no Door item ended up on Tutorial Back Left.",
+        )
+
+        back_right = self.multiworld.get_location("Tutorial Back Right", 1)
+
+        self.assertTrue(back_right.item is not None, "Somehow, no item got placed on Tutorial Back Right.")
+
+        self.assertTrue(
+            back_right.item is not None and back_right.item.name in self.world.item_name_groups["Obelisk Keys"],
+            "Early Good Item was on, yet no Obelisk Key item ended up on Tutorial Back Right.",
         )
 
 
