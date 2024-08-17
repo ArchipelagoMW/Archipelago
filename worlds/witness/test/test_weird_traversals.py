@@ -14,7 +14,7 @@ class TestWeirdTraversalRequirements(WitnessTestBase):
 
     def test_weird_traversal_requirements(self) -> None:
         """
-        Test that Door Shuffle grants early access to Swamp Laser from the back shortcut.
+        Test that Tunnels Theater Flowers EP and Expert PP2 consider all valid paths logically.
         """
 
         with self.subTest("Tunnels Theater Flowers EP"):
