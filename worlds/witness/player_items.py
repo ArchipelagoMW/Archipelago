@@ -175,7 +175,7 @@ class WitnessPlayerItems:
 
         if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
             doors = [
-                "Desert Doors", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
+                "Desert Doors & Elevator", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
                 "Shadows Lower Doors", "Tunnels Doors", "Town Doors", "Town Tower Doors",
 
                 "Keep Tower Shortcut (Door)", "Shadows Timed Door",
@@ -221,6 +221,10 @@ class WitnessPlayerItems:
                 "Desert Obelisk Key", "Town Obelisk Key", "Quarry Obelisk Key",
                 "Treehouse Obelisk Key", "Monastery Obelisk Key", "Mountainside Obelisk Key"
             ]
+
+        assert all(item in self._world.item_names for sublist in output.values() for item in sublist), (
+            [item for sublist in output.values() for item in sublist if item not in self._world.item_names]
+        )
 
         output = {
             item_type: [item for item in item_list if item in existing_items_lookup]
