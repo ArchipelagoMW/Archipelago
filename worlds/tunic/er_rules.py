@@ -3,7 +3,7 @@ from worlds.generic.Rules import set_rule, add_rule, forbid_item
 from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip, bomb_walls)
-from .er_data import Portal
+from .er_data import Portal, get_portal_outlet_region
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from .combat_logic import has_combat_reqs
 from BaseClasses import Region, CollectionState
@@ -44,14 +44,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     player = world.player
     options = world.options
 
-    # input scene destination tag, returns portal's name and paired portal's region
+    # input scene destination tag, returns portal's name and paired portal's outlet region or region
     def get_portal_info(portal_sd: str) -> Tuple[str, str]:
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
-                return portal1.name, portal2.region
+                return portal1.name, get_portal_outlet_region(portal2, world)
             if portal2.scene_destination() == portal_sd:
-                return portal2.name, portal1.region
-        raise Exception("no matches found in get_portal_info")
+                return portal2.name, get_portal_outlet_region(portal1, world)
+        raise Exception("No matches found in get_portal_info")
 
     # input scene destination tag, returns paired portal's name and region
     def get_paired_portal(portal_sd: str) -> Tuple[str, str]:
