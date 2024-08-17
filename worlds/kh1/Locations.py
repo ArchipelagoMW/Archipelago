@@ -185,7 +185,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Neverland Hold Yellow Trinity Left Blue Chest":                                    KH1LocationData("Neverland",        265_3811),
     "Neverland Galley Chest":                                                           KH1LocationData("Neverland",        265_3812),
     "Neverland Cabin Chest":                                                            KH1LocationData("Neverland",        265_3813),
-    "Neverland Hold Flight 1st Chest ":                                                 KH1LocationData("Neverland",        265_3814),
+    "Neverland Hold Flight 1st Chest":                                                  KH1LocationData("Neverland",        265_3814),
     "Neverland Clock Tower Chest":                                                      KH1LocationData("Neverland",        265_4014),
     "Neverland Hold Flight 2nd Chest":                                                  KH1LocationData("Neverland",        265_4051),
     "Neverland Hold Yellow Trinity Green Chest":                                        KH1LocationData("Neverland",        265_4052),

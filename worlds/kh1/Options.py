@@ -194,7 +194,7 @@ class RequiredReportsEotW(Range):
     default = 4
     range_start = 0
     range_end = 13
-    
+
 class RequiredReportsDoor(Range):
     """
     If Final Rest Door is set to "Reports", determines the number of Ansem's Reports required to manifest the door in Final Rest to challenge Ansem.
@@ -394,7 +394,7 @@ class KH1Options(PerGameCommonOptions):
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
     start_inventory_from_pool: StartInventoryPool
-    
+
 kh1_option_groups = [
     OptionGroup("Goal", [
         Goal,

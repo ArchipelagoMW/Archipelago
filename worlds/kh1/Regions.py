@@ -267,7 +267,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Neverland"].locations.append("Neverland Encounter Hook Cure Event")
     regions["Neverland"].locations.append("Neverland Galley Chest")
     regions["Neverland"].locations.append("Neverland Hold Aero Chest")
-    regions["Neverland"].locations.append("Neverland Hold Flight 1st Chest ")
+    regions["Neverland"].locations.append("Neverland Hold Flight 1st Chest")
     regions["Neverland"].locations.append("Neverland Hold Flight 2nd Chest")
     regions["Neverland"].locations.append("Neverland Hold Yellow Trinity Green Chest")
     regions["Neverland"].locations.append("Neverland Hold Yellow Trinity Left Blue Chest")

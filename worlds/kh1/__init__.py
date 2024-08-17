@@ -44,7 +44,6 @@ class KH1World(World):
     options_dataclass = KH1Options
     options: KH1Options
     topology_present = True
-    required_client_version = (0, 3, 5)
     web = KH1Web()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -57,7 +56,8 @@ class KH1World(World):
     fillers.update(get_items_by_category("Stat Ups"))
 
     def create_items(self):
-        #Handle starting worlds
+        self.place_predetermined_items()
+        # Handle starting worlds
         starting_worlds = []
         if self.options.starting_worlds > 0:
             possible_starting_worlds = ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah", "Monstro", "Halloween Town", "Neverland", "Hollow Bastion"]
@@ -73,46 +73,43 @@ class KH1World(World):
         possible_level_up_item_pool = []
         level_up_item_pool = []
         
-        #Calculate Level Up Items
-        if True: #Allow notepad++ to collapse this section
-            # Fill pool with mandatory items
-            for _ in range(self.options.item_slot_increase):
-                level_up_item_pool.append("Item Slot Increase")
-            for _ in range(self.options.accessory_slot_increase):
-                level_up_item_pool.append("Accessory Slot Increase")
+        # Calculate Level Up Items
+        # Fill pool with mandatory items
+        for _ in range(self.options.item_slot_increase):
+            level_up_item_pool.append("Item Slot Increase")
+        for _ in range(self.options.accessory_slot_increase):
+            level_up_item_pool.append("Accessory Slot Increase")
 
-            # Create other pool
-            for _ in range(self.options.strength_increase):
-                possible_level_up_item_pool.append("Strength Increase")
-            for _ in range(self.options.defense_increase):
-                possible_level_up_item_pool.append("Defense Increase")
-            for _ in range(self.options.hp_increase):
-                possible_level_up_item_pool.append("Max HP Increase")
-            for _ in range(self.options.mp_increase):
-                possible_level_up_item_pool.append("Max MP Increase")
-            for _ in range(self.options.ap_increase):
-                possible_level_up_item_pool.append("Max AP Increase")
+        # Create other pool
+        for _ in range(self.options.strength_increase):
+            possible_level_up_item_pool.append("Strength Increase")
+        for _ in range(self.options.defense_increase):
+            possible_level_up_item_pool.append("Defense Increase")
+        for _ in range(self.options.hp_increase):
+            possible_level_up_item_pool.append("Max HP Increase")
+        for _ in range(self.options.mp_increase):
+            possible_level_up_item_pool.append("Max MP Increase")
+        for _ in range(self.options.ap_increase):
+            possible_level_up_item_pool.append("Max AP Increase")
 
-            # Fill remaining pool with items from other pool
-            while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
-                level_up_item_pool.append(possible_level_up_item_pool.pop(self.random.randrange(len(possible_level_up_item_pool))))
+        # Fill remaining pool with items from other pool
+        while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
+            level_up_item_pool.append(possible_level_up_item_pool.pop(self.random.randrange(len(possible_level_up_item_pool))))
 
-            level_up_locations = list(get_locations_by_category("Levels").keys())
-            self.random.shuffle(level_up_item_pool)
-            starting_level_for_stats_only = self.options.force_stats_on_levels.value - 1
-            while len(level_up_item_pool) > 0 and starting_level_for_stats_only < self.options.level_checks:
-                self.multiworld.get_location(level_up_locations[starting_level_for_stats_only], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
-                starting_level_for_stats_only += 1
+        level_up_locations = list(get_locations_by_category("Levels").keys())
+        self.random.shuffle(level_up_item_pool)
+        starting_level_for_stats_only = self.options.force_stats_on_levels.value - 1
+        while len(level_up_item_pool) > 0 and starting_level_for_stats_only < self.options.level_checks:
+            self.multiworld.get_location(level_up_locations[starting_level_for_stats_only], self.player).place_locked_item(self.create_item(level_up_item_pool.pop()))
+            starting_level_for_stats_only += 1
         
-        #Calculate prefilled locations and items
-        if True: #Allow notepad++ to collapse this section
-            prefilled_items = []
-            prefilled_locations = 1 #Victory
-            if self.options.vanilla_emblem_pieces:
-                prefilled_locations = prefilled_locations + 4
-                prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
+        # Calculate prefilled locations and items
+        prefilled_items = []
+        prefilled_locations = 1 # Victory
+        if self.options.vanilla_emblem_pieces:
+            prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
         
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - prefilled_locations
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons", "Puppies"]
         if self.options.hundred_acre_wood:
@@ -165,29 +162,19 @@ class KH1World(World):
             item_pool += [self.create_item("Ansem's Report " + str(i+1))]
         
         while len(item_pool) > total_locations:
-            item_pool.pop(0)
+            removed_item = item_pool.pop(0)
+            logging.warn(f"Item {removed_item} had to be removed from {self.player_name}'s world due to insufficient location count")
         
         while len(item_pool) < total_locations and len(level_up_item_pool) > 0:
             item_pool += [self.create_item(level_up_item_pool.pop())]
         
         # Fill any empty locations with filler items.
-        item_names = []
-        attempts = 0  # If we ever try to add items 200 times, and all the items are used up, lets clear the item_names array, we probably don't have enough items
         while len(item_pool) < total_locations:
-            item_name = self.get_filler_item_name()
-            if item_name not in item_names:
-                item_names.append(item_name)
-                item_pool.append(self.create_item(item_name))
-                attempts = 0
-            elif attempts >= 200:
-                item_names = []
-                attempts = 0
-            else:
-                attempts = attempts + 1
-
+            item_pool.append(self.create_item(self.get_filler_item_name()))
+        
         self.multiworld.itempool += item_pool
 
-    def pre_fill(self) -> None:
+    def place_predetermined_items(self) -> None:
         goal_dict = {
             "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
             "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
