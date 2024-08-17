@@ -101,7 +101,7 @@ class TimespinnerWorld(World):
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
             "HpCap": self.options.hp_cap.value,
-            "MpCap": self.options.aura_cap.value,
+            "AuraCap": self.options.aura_cap.value,
             "LevelCap": self.options.level_cap.value,
             "ExtraEarringsXP": self.options.extra_earrings_xp.value,
             "BossHealing": self.options.boss_healing.value,
