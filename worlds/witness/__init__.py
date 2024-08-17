@@ -203,7 +203,7 @@ class WitnessWorld(World):
         ]
         self.reachable_early_locations = [location.name for location in early_locations]
 
-        num_reachable_locations = sum(not location.is_event for location in early_locations)
+        num_reachable_locations = len(early_locations)
         num_reachable_tutorial_locations = sum(loc.parent_region.name == "Tutorial" for loc in early_locations)
 
         # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
