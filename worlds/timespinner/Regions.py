@@ -1,14 +1,16 @@
 from typing import List, Set, Dict, Optional, Callable
 from BaseClasses import CollectionState, MultiWorld, Region, Entrance, Location
-from .Options import is_option_enabled
+from .Options import TimespinnerOptions
 from .Locations import LocationData, get_location_datas
 from .PreCalculatedWeights import PreCalculatedWeights
 from .LogicExtensions import TimespinnerLogic
 
 
-def create_regions_and_locations(world: MultiWorld, player: int, precalculated_weights: PreCalculatedWeights):
+def create_regions_and_locations(world: MultiWorld, player: int, options: TimespinnerOptions,
+                                 precalculated_weights: PreCalculatedWeights):
+
     locations_per_region: Dict[str, List[LocationData]] = split_location_datas_per_region(
-        get_location_datas(world, player, precalculated_weights))
+        get_location_datas(player, options, precalculated_weights))
 
     regions = [
         create_region(world, player, locations_per_region, 'Menu'),
@@ -53,7 +55,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
         create_region(world, player, locations_per_region, 'Space time continuum')
     ]
 
-    if is_option_enabled(world, player, "GyreArchives"):
+    if options.gyre_archives:
         regions.extend([
             create_region(world, player, locations_per_region, 'Ravenlord\'s Lair'),
             create_region(world, player, locations_per_region, 'Ifrit\'s Lair'),
@@ -64,13 +66,13 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
 
     world.regions += regions
 
-    connectStartingRegion(world, player)
+    connectStartingRegion(world, player, options)
 
     flooded: PreCalculatedWeights = precalculated_weights
-    logic = TimespinnerLogic(world, player, precalculated_weights)
+    logic = TimespinnerLogic(player, options, precalculated_weights)
 
     connect(world, player, 'Lake desolation', 'Lower lake desolation', lambda state: flooded.flood_lake_desolation or logic.has_timestop(state) or state.has('Talaria Attachment', player))
-    connect(world, player, 'Lake desolation', 'Upper lake desolation', lambda state: logic.has_fire(state) and state.can_reach('Upper Lake Serene', 'Region', player))
+    connect(world, player, 'Lake desolation', 'Upper lake desolation', lambda state: logic.has_fire(state) and state.can_reach('Upper Lake Serene', 'Region', player), "Upper Lake Serene")
     connect(world, player, 'Lake desolation', 'Skeleton Shaft', lambda state: flooded.flood_lake_desolation or logic.has_doublejump(state))
     connect(world, player, 'Lake desolation', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Upper lake desolation', 'Lake desolation')
@@ -80,7 +82,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(world, player, 'Eastern lake desolation', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Eastern lake desolation', 'Library')
     connect(world, player, 'Eastern lake desolation', 'Lower lake desolation')
-    connect(world, player, 'Eastern lake desolation', 'Upper lake desolation', lambda state: logic.has_fire(state) and state.can_reach('Upper Lake Serene', 'Region', player))
+    connect(world, player, 'Eastern lake desolation', 'Upper lake desolation', lambda state: logic.has_fire(state) and state.can_reach('Upper Lake Serene', 'Region', player), "Upper Lake Serene")
     connect(world, player, 'Library', 'Eastern lake desolation')
     connect(world, player, 'Library', 'Library top', lambda state: logic.has_doublejump(state) or state.has('Talaria Attachment', player)) 
     connect(world, player, 'Library', 'Varndagroth tower left', logic.has_keycard_D)
@@ -123,7 +125,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(world, player, 'Sealed Caves (Xarion)', 'Skeleton Shaft')
     connect(world, player, 'Sealed Caves (Xarion)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Refugee Camp', 'Forest')
-    connect(world, player, 'Refugee Camp', 'Library', lambda state: is_option_enabled(world, player, "Inverted") and is_option_enabled(world, player, "PresentAccessWithWheelAndSpindle") and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
+    connect(world, player, 'Refugee Camp', 'Library', lambda state: options.inverted and options.back_to_the_future and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
     connect(world, player, 'Refugee Camp', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Forest', 'Refugee Camp')
     connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: flooded.flood_lake_serene_bridge or state.has('Talaria Attachment', player) or logic.has_timestop(state))
@@ -178,14 +180,14 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(world, player, 'Space time continuum', 'Royal towers (lower)', lambda state: logic.can_teleport_to(state, "Past", "GateRoyalTowers"))
     connect(world, player, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: logic.can_teleport_to(state, "Past", "GateMaw"))
     connect(world, player, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: logic.can_teleport_to(state, "Past", "GateCavesOfBanishment"))
-    connect(world, player, 'Space time continuum', 'Ancient Pyramid (entrance)', lambda state: logic.can_teleport_to(state, "Time", "GateGyre") or (not is_option_enabled(world, player, "UnchainedKeys") and is_option_enabled(world, player, "EnterSandman")))
+    connect(world, player, 'Space time continuum', 'Ancient Pyramid (entrance)', lambda state: logic.can_teleport_to(state, "Time", "GateGyre") or (not options.unchained_keys and options.enter_sandman))
     connect(world, player, 'Space time continuum', 'Ancient Pyramid (left)', lambda state: logic.can_teleport_to(state, "Time", "GateLeftPyramid"))
     connect(world, player, 'Space time continuum', 'Ancient Pyramid (right)', lambda state: logic.can_teleport_to(state, "Time", "GateRightPyramid"))
 
-    if is_option_enabled(world, player, "GyreArchives"):
+    if options.gyre_archives:
         connect(world, player, 'The lab (upper)', 'Ravenlord\'s Lair', lambda state: state.has('Merchant Crow', player))
         connect(world, player, 'Ravenlord\'s Lair', 'The lab (upper)')
-        connect(world, player, 'Library top', 'Ifrit\'s Lair', lambda state: state.has('Kobo', player) and state.can_reach('Refugee Camp', 'Region', player))
+        connect(world, player, 'Library top', 'Ifrit\'s Lair', lambda state: state.has('Kobo', player) and state.can_reach('Refugee Camp', 'Region', player), "Refugee Camp")
         connect(world, player, 'Ifrit\'s Lair', 'Library top')
 
 
@@ -206,7 +208,6 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
         location.access_rule = location_data.rule
 
     if id is None:
-        location.event = True
         location.locked = True
     return location
 
@@ -221,12 +222,12 @@ def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str
     return region
 
 
-def connectStartingRegion(world: MultiWorld, player: int):
+def connectStartingRegion(world: MultiWorld, player: int, options: TimespinnerOptions):
     menu = world.get_region('Menu', player)
     tutorial = world.get_region('Tutorial', player)
     space_time_continuum = world.get_region('Space time continuum', player)
 
-    if is_option_enabled(world, player, "Inverted"):
+    if options.inverted:
         starting_region = world.get_region('Refugee Camp', player)
     else:
         starting_region = world.get_region('Lake desolation', player)
@@ -243,17 +244,19 @@ def connectStartingRegion(world: MultiWorld, player: int):
 
 
 def connect(world: MultiWorld, player: int, source: str, target: str, 
-            rule: Optional[Callable[[CollectionState], bool]] = None):
+            rule: Optional[Callable[[CollectionState], bool]] = None,
+            indirect: str = ""):
 
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
+    entrance = sourceRegion.connect(targetRegion, rule=rule)
 
-    connection = Entrance(player, "", sourceRegion)
-
-    if rule:
-        connection.access_rule = rule
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
+    if indirect:
+        indirectRegion = world.get_region(indirect, player)
+        if indirectRegion in world.indirect_connections:
+            world.indirect_connections[indirectRegion].add(entrance)
+        else:
+            world.indirect_connections[indirectRegion] = {entrance}
 
 
 def split_location_datas_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:

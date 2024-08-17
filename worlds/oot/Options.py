@@ -1,6 +1,7 @@
 import typing
 import random
-from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, OptionSet, DeathLink
+from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, OptionSet, DeathLink, PlandoConnections
+from .EntranceShuffle import entrance_shuffle_table
 from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
 
@@ -27,6 +28,11 @@ class TrackRandomRange(Range):
                 ret.randomized = True
             return ret
         raise RuntimeError(f"All options specified in \"{cls.display_name}\" are weighted as zero.")
+
+
+class OoTPlandoConnections(PlandoConnections):
+    entrances = set([connection[1][0] for connection in entrance_shuffle_table])
+    exits = set([connection[2][0] for connection in entrance_shuffle_table if len(connection) > 2])
 
 
 class Logic(Choice): 
@@ -1271,12 +1277,13 @@ class LogicTricks(OptionList):
     https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py
     """
     display_name = "Logic Tricks"
-    valid_keys = frozenset(normalized_name_tricks)
+    valid_keys = tuple(normalized_name_tricks.keys())
     valid_keys_casefold = True
 
 
 # All options assembled into a single dict
 oot_options: typing.Dict[str, type(Option)] = {
+    "plando_connections": OoTPlandoConnections,
     "logic_rules": Logic, 
     "logic_no_night_tokens_without_suns_song": NightTokens, 
     **open_options, 

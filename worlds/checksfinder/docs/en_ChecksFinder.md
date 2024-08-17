@@ -1,8 +1,8 @@
 # ChecksFinder
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What is considered a location check in ChecksFinder?
@@ -24,8 +24,3 @@ next to an icon, the number is how many you have gotten and the icon represents 
 Victory is achieved when the player wins a board they were given after they have received all of their Map Width, Map
 Height, and Map Bomb items. The game will say at the bottom of the screen how many of each you have received.
 
-## Unique Local Commands
-
-The following command is only available when using the ChecksFinderClient to play with Archipelago.
-
-- `/resync` Manually trigger a resync.

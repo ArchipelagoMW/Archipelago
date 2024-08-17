@@ -29,8 +29,8 @@ class TestHelpers(unittest.TestCase):
                 "event_loc": None,
             },
             "TestRegion2": {
-                "loc_1": 321,
-                "loc_2": 654,
+                "loc_3": 321,
+                "loc_4": 654,
             }
         }
 

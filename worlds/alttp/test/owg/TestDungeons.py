@@ -6,13 +6,14 @@ class TestDungeons(TestVanillaOWG):
     def testFirstDungeonChests(self):
         self.run_location_tests([
             ["Hyrule Castle - Map Chest", True, []],
-            ["Hyrule Castle - Map Guard Key Drop", True, []],
+            ["Hyrule Castle - Map Guard Key Drop", False, []],
+            ["Hyrule Castle - Map Guard Key Drop", True, ['Progressive Sword']],
 
             ["Sanctuary", True, []],
 
             ["Sewers - Secret Room - Left", False, []],
-            ["Sewers - Secret Room - Left", True, ['Progressive Glove']],
-            ["Sewers - Secret Room - Left", True, ['Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Pegasus Boots', 'Progressive Glove']],
+            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
 
             ["Eastern Palace - Compass Chest", True, []],
 
@@ -25,26 +26,25 @@ class TestDungeons(TestVanillaOWG):
             ["Desert Palace - Boss", False, [], ['Small Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Big Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Lamp', 'Fire Rod']],
-            ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Pegasus Boots', 'Lamp', 'Big Key (Desert Palace)']],
-            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Pegasus Boots', 'Fire Rod', 'Big Key (Desert Palace)']],
+            ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Pegasus Boots', 'Lamp', 'Big Key (Desert Palace)']],
+            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Pegasus Boots', 'Fire Rod', 'Big Key (Desert Palace)']],
 
             ["Tower of Hera - Basement Cage", False, []],
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Flute", "Progressive Glove"]],
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Flute", "Lamp"]],
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Magic Mirror", "Hammer"]],
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Magic Mirror", "Hookshot"]],
-            ["Tower of Hera - Basement Cage", True, ['Pegasus Boots']],
-            ["Tower of Hera - Basement Cage", True, ["Flute", "Magic Mirror"]],
-            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror"]],
+            ["Tower of Hera - Basement Cage", True, ['Pegasus Boots', 'Bomb Upgrade (50)']],
+            ["Tower of Hera - Basement Cage", True, ["Flute", "Magic Mirror", 'Bomb Upgrade (50)']],
+            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror", 'Bomb Upgrade (50)']],
             ["Tower of Hera - Basement Cage", True, ["Flute", "Hookshot", "Hammer"]],
-            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror"]],
+            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror", 'Bomb Upgrade (50)']],
 
             ["Castle Tower - Room 03", False, []],
             ["Castle Tower - Room 03", False, ['Progressive Sword'], ['Progressive Sword', 'Cape', 'Beat Agahnim 1']],
-            ["Castle Tower - Room 03", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
             ["Castle Tower - Room 03", True, ['Progressive Sword', 'Progressive Sword']],
-            ["Castle Tower - Room 03", True, ['Cape', 'Progressive Bow']],
-            ["Castle Tower - Room 03", True, ['Beat Agahnim 1', 'Fire Rod']],
+            ["Castle Tower - Room 03", True, ['Progressive Sword', 'Cape']],
+            ["Castle Tower - Room 03", True, ['Progressive Sword', 'Beat Agahnim 1']],
 
             ["Palace of Darkness - Shooter Room", False, []],
             ["Palace of Darkness - Shooter Room", False, [], ['Moon Pearl']],
@@ -69,9 +69,10 @@ class TestDungeons(TestVanillaOWG):
 
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
+            ["Skull Woods - Big Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
             #todo: Bomb Jump in logic?
             #["Skull Woods - Big Chest", True, ['Magic Mirror', 'Pegasus Boots', 'Big Key (Skull Woods)']],
-            ["Skull Woods - Big Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Skull Woods)']],
+            ["Skull Woods - Big Chest", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots', 'Big Key (Skull Woods)']],
 
             ["Skull Woods - Big Key Chest", False, []],
             ["Skull Woods - Big Key Chest", True, ['Magic Mirror', 'Pegasus Boots']],
@@ -89,10 +90,10 @@ class TestDungeons(TestVanillaOWG):
             ["Ice Palace - Compass Chest", False, []],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Bombos']],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Progressive Sword']],
-            ["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
-            ["Ice Palace - Compass Chest", True, ['Progressive Glove', 'Progressive Glove', 'Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Progressive Glove', 'Progressive Glove', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Fire Rod']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Bombos', 'Progressive Sword']],
 
             ["Misery Mire - Bridge Chest", False, []],
             ["Misery Mire - Bridge Chest", False, [], ['Moon Pearl']],
@@ -104,15 +105,15 @@ class TestDungeons(TestVanillaOWG):
             ["Turtle Rock - Compass Chest", False, [], ['Cane of Somaria']],
             #todo: does clip require sword?
             #["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Progressive Sword']],
+            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Progressive Sword']],
             ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Progressive Sword', 'Quake']],
-            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
 
             ["Turtle Rock - Chain Chomps", False, []],
             #todo: does clip require sword?
             #["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots']],
-            ["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots', 'Progressive Sword']],
-            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror']],
+            ["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots', 'Progressive Sword', 'Progressive Sword']],
+            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror', 'Progressive Bow']],
 
             ["Turtle Rock - Crystaroller Room", False, []],
             ["Turtle Rock - Crystaroller Room", False, [], ['Big Key (Turtle Rock)']],

@@ -36,32 +36,30 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
             with self.subTest("Game", game=game_name):
-                world = setup_solo_multiworld(world_type)
-                excluded = world.exclude_locations[1].value
-                state = world.get_all_state(False)
-                for location in world.get_locations():
-                    if location.name not in excluded:
-                        with self.subTest("Location should be reached", location=location):
-                            self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+                multiworld = setup_solo_multiworld(world_type)
+                state = multiworld.get_all_state(False)
+                for location in multiworld.get_locations():
+                    with self.subTest("Location should be reached", location=location.name):
+                        self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
-                for region in world.get_regions():
+                for region in multiworld.get_regions():
                     if region.name in unreachable_regions:
-                        with self.subTest("Region should be unreachable", region=region):
+                        with self.subTest("Region should be unreachable", region=region.name):
                             self.assertFalse(region.can_reach(state))
                     else:
-                        with self.subTest("Region should be reached", region=region):
+                        with self.subTest("Region should be reached", region=region.name):
                             self.assertTrue(region.can_reach(state))
 
                 with self.subTest("Completion Condition"):
-                    self.assertTrue(world.can_beat_game(state))
+                    self.assertTrue(multiworld.can_beat_game(state))
 
     def test_default_empty_state_can_reach_something(self):
         """Ensure empty state can reach at least one location with the defined options"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
-                world = setup_solo_multiworld(world_type)
-                state = CollectionState(world)
-                all_locations = world.get_locations()
+                multiworld = setup_solo_multiworld(world_type)
+                state = CollectionState(multiworld)
+                all_locations = multiworld.get_locations()
                 if all_locations:
                     locations = set()
                     for location in all_locations:

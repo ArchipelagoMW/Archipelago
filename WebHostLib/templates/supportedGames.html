@@ -41,28 +41,28 @@
         </div>
         {% for game_name in worlds | title_sorted %}
         {% set world = worlds[game_name] %}
-        <h2 class="collapse-toggle" data-game="{{ game_name }}">
-            <span class="collapse-arrow">▶</span>{{ game_name }}
-        </h2>
-        <p class="collapsed">
+        <details data-game="{{ game_name }}">
+            <summary class="h2">{{ game_name }}</summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
             {% if world.web.tutorials %}
             <span class="link-spacer">|</span>
-            <a href="{{ url_for("tutorial_landing") }}#{{ game_name }}">Setup Guides</a>
+            <a href="{{ url_for("tutorial_landing", _anchor = game_name | urlencode) }}">Setup Guides</a>
             {% endif %}
             {% if world.web.options_page is string %}
             <span class="link-spacer">|</span>
-            <a href="{{ world.web.settings_page }}">Options Page</a>
+            <a href="{{ world.web.options_page }}">Options Page (External Link)</a>
             {% elif world.web.options_page %}
             <span class="link-spacer">|</span>
             <a href="{{ url_for("player_options", game=game_name) }}">Options Page</a>
+            <span class="link-spacer">|</span>
+            <a href="{{ url_for("weighted_options", game=game_name) }}">Advanced Options</a>
             {% endif %}
             {% if world.web.bug_report_page %}
             <span class="link-spacer">|</span>
             <a href="{{ world.web.bug_report_page }}">Report a Bug</a>
             {% endif %}
-        </p>
+        </details>
         {% endfor %}
     </div>
 {% endblock %}

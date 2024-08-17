@@ -4,19 +4,14 @@ from . import MessengerTestBase
 
 class AllSealsRequired(MessengerTestBase):
     options = {
-        "shuffle_seals": "false",
         "goal": "power_seal_hunt",
     }
-
-    def test_seals_shuffled(self) -> None:
-        """Shuffle seals should be forced on when shop chest is the goal so test it."""
-        self.assertTrue(self.multiworld.shuffle_seals[self.player])
 
     def test_chest_access(self) -> None:
         """Defaults to a total of 45 power seals in the pool and required."""
         with self.subTest("Access Dependency"):
             self.assertEqual(len([seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]),
-                             self.multiworld.total_seals[self.player])
+                             self.world.options.total_seals)
             locations = ["Rescue Phantom"]
             items = [["Power Seal"]]
             self.assertAccessDependency(locations, items)
@@ -24,7 +19,7 @@ class AllSealsRequired(MessengerTestBase):
 
         self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.assertBeatable(False)
-        self.collect_all_but(["Power Seal", "Rescue Phantom"])
+        self.collect_all_but(["Power Seal", "Do the Thing!"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.assertBeatable(False)
         self.collect_by_name("Power Seal")
@@ -40,9 +35,9 @@ class HalfSealsRequired(MessengerTestBase):
 
     def test_seals_amount(self) -> None:
         """Should have 45 power seals in the item pool and half that required"""
-        self.assertEqual(self.multiworld.total_seals[self.player], 45)
-        self.assertEqual(self.multiworld.worlds[self.player].total_seals, 45)
-        self.assertEqual(self.multiworld.worlds[self.player].required_seals, 22)
+        self.assertEqual(self.world.options.total_seals, 45)
+        self.assertEqual(self.world.total_seals, 45)
+        self.assertEqual(self.world.required_seals, 22)
         total_seals = [seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]
         required_seals = [seal for seal in total_seals
                           if seal.classification == ItemClassification.progression_skip_balancing]
@@ -59,9 +54,9 @@ class ThirtyThirtySeals(MessengerTestBase):
 
     def test_seals_amount(self) -> None:
         """Should have 30 power seals in the pool and 33 percent of that required."""
-        self.assertEqual(self.multiworld.total_seals[self.player], 30)
-        self.assertEqual(self.multiworld.worlds[self.player].total_seals, 30)
-        self.assertEqual(self.multiworld.worlds[self.player].required_seals, 10)
+        self.assertEqual(self.world.options.total_seals, 30)
+        self.assertEqual(self.world.total_seals, 30)
+        self.assertEqual(self.world.required_seals, 10)
         total_seals = [seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]
         required_seals = [seal for seal in total_seals
                           if seal.classification == ItemClassification.progression_skip_balancing]
@@ -77,8 +72,8 @@ class MaxSealsNoShards(MessengerTestBase):
 
     def test_seals_amount(self) -> None:
         """Should set total seals to 70 since shards aren't shuffled."""
-        self.assertEqual(self.multiworld.total_seals[self.player], 85)
-        self.assertEqual(self.multiworld.worlds[self.player].total_seals, 70)
+        self.assertEqual(self.world.options.total_seals, 85)
+        self.assertEqual(self.world.total_seals, 70)
 
 
 class MaxSealsWithShards(MessengerTestBase):
@@ -90,9 +85,9 @@ class MaxSealsWithShards(MessengerTestBase):
 
     def test_seals_amount(self) -> None:
         """Should have 85 seals in the pool with all required and be a valid seed."""
-        self.assertEqual(self.multiworld.total_seals[self.player], 85)
-        self.assertEqual(self.multiworld.worlds[self.player].total_seals, 85)
-        self.assertEqual(self.multiworld.worlds[self.player].required_seals, 85)
+        self.assertEqual(self.world.options.total_seals, 85)
+        self.assertEqual(self.world.total_seals, 85)
+        self.assertEqual(self.world.required_seals, 85)
         total_seals = [seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]
         required_seals = [seal for seal in total_seals
                           if seal.classification == ItemClassification.progression_skip_balancing]

@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [DOOM 1993 (e.g. Steam version)](https://store.steampowered.com/app/2280/DOOM_1993/)
+- [DOOM 1993 (e.g. Steam version)](https://store.steampowered.com/app/2280/DOOM__DOOM_II/)
 - [Archipelago Crispy DOOM](https://github.com/Daivuk/apdoom/releases)
 
 ## Optional Software
@@ -15,7 +15,7 @@
 1. Download [APDOOM.zip](https://github.com/Daivuk/apdoom/releases) and extract it.
 2. Copy `DOOM.WAD` from your game's installation directory into the newly extracted folder.
    You can find the folder in steam by finding the game in your library,
-   right-clicking it and choosing **Manage -> Browse Local Files**.
+   right-clicking it and choosing **Manage -> Browse Local Files**. The WAD file is in the `/base/` folder.
 
 ## Joining a MultiWorld Game
 

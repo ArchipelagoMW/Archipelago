@@ -2,8 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Super Mario World Patch Setup`
-
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). 
 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
@@ -23,9 +22,10 @@
 
 ### Windows Setup
 
-1. During the installation of Archipelago, you will have been asked to install the SNI Client. If you did not do this,
-   or you are on an older version, you may run the installer again to install the SNI Client.
-2. During setup, you will be asked to locate your base ROM file. This is your Super Mario World ROM file.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file. 
+   This is your Super Mario World ROM file. This only needs to be done once.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
@@ -44,8 +44,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Super Mario World Player Settings Page](/games/Super%20Mario%20World/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Super Mario World Player Options Page](/games/Super%20Mario%20World/player-options)
 
 ### Verifying your config file
 

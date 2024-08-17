@@ -24,6 +24,8 @@ PROG_ITEMS = [
     # "Astral Seed",
     # "Astral Tea Leaves",
     "Money Wrench",
+    "Candle",
+    "Seashell",
 ]
 
 PHOBEKINS = [
@@ -44,6 +46,11 @@ FILLER = {
     "Time Shard (100)": 20,
     "Time Shard (300)": 10,
     "Time Shard (500)": 5,
+}
+
+TRAPS = {
+    "Teleport Trap": 5,
+    "Prophecy Trap": 10,
 }
 
 # item_name_to_id needs to be deterministic and match upstream
@@ -69,6 +76,8 @@ ALL_ITEMS = [
     *SHOP_ITEMS,
     *FIGURINES,
     "Money Wrench",
+    "Teleport Trap",
+    "Prophecy Trap",
 ]
 
 # locations
@@ -103,6 +112,52 @@ ALWAYS_LOCATIONS = [
     "Searing Crags - Pyro",
     "Bamboo Creek - Claustro",
     "Cloud Ruins - Acro",
+    # seals
+    "Ninja Village Seal - Tree House",
+    "Autumn Hills Seal - Trip Saws",
+    "Autumn Hills Seal - Double Swing Saws",
+    "Autumn Hills Seal - Spike Ball Swing",
+    "Autumn Hills Seal - Spike Ball Darts",
+    "Catacombs Seal - Triple Spike Crushers",
+    "Catacombs Seal - Crusher Gauntlet",
+    "Catacombs Seal - Dirty Pond",
+    "Bamboo Creek Seal - Spike Crushers and Doors",
+    "Bamboo Creek Seal - Spike Ball Pits",
+    "Bamboo Creek Seal - Spike Crushers and Doors v2",
+    "Howling Grotto Seal - Windy Saws and Balls",
+    "Howling Grotto Seal - Crushing Pits",
+    "Howling Grotto Seal - Breezy Crushers",
+    "Quillshroom Marsh Seal - Spikey Window",
+    "Quillshroom Marsh Seal - Sand Trap",
+    "Quillshroom Marsh Seal - Do the Spike Wave",
+    "Searing Crags Seal - Triple Ball Spinner",
+    "Searing Crags Seal - Raining Rocks",
+    "Searing Crags Seal - Rhythm Rocks",
+    "Glacial Peak Seal - Ice Climbers",
+    "Glacial Peak Seal - Projectile Spike Pit",
+    "Glacial Peak Seal - Glacial Air Swag",
+    "Tower of Time Seal - Time Waster",
+    "Tower of Time Seal - Lantern Climb",
+    "Tower of Time Seal - Arcane Orbs",
+    "Cloud Ruins Seal - Ghost Pit",
+    "Cloud Ruins Seal - Toothbrush Alley",
+    "Cloud Ruins Seal - Saw Pit",
+    "Cloud Ruins Seal - Money Farm Room",
+    "Underworld Seal - Sharp and Windy Climb",
+    "Underworld Seal - Spike Wall",
+    "Underworld Seal - Fireball Wave",
+    "Underworld Seal - Rising Fanta",
+    "Forlorn Temple Seal - Rocket Maze",
+    "Forlorn Temple Seal - Rocket Sunset",
+    "Sunken Shrine Seal - Ultra Lifeguard",
+    "Sunken Shrine Seal - Waterfall Paradise",
+    "Sunken Shrine Seal - Tabi Gauntlet",
+    "Riviere Turquoise Seal - Bounces and Balls",
+    "Riviere Turquoise Seal - Launch of Faith",
+    "Riviere Turquoise Seal - Flower Power",
+    "Elemental Skylands Seal - Air",
+    "Elemental Skylands Seal - Water",
+    "Elemental Skylands Seal - Fire",
 ]
 
 BOSS_LOCATIONS = [

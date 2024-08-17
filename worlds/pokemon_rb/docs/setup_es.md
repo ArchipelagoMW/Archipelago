@@ -17,7 +17,7 @@ Al usar BizHawk, esta guía solo es aplicable en los sistemas de Windows y Linux
 
 ## Software Opcional
 
-- [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/j-imbo/pkmnrb_jim/releases/latest), para usar con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
+- [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/coveleski/rb_tracker/releases/latest), para usar con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 
 ## Configurando BizHawk
@@ -51,7 +51,7 @@ opciones.
 
 ### ¿Dónde puedo obtener un archivo YAML?
 
-Puedes generar un archivo YAML or descargar su plantilla en la [página de configuración de jugador de Pokémon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-settings)
+Puedes generar un archivo YAML or descargar su plantilla en la [página de configuración de jugador de Pokémon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-options)
 
 Es importante tener en cuenta que la opción `game_version` determina el ROM que será parcheado.
 Tanto el jugador como la persona que genera (si está generando localmente) necesitarán el archivo del ROM
@@ -101,7 +101,7 @@ Ahora ya estás listo para tu aventura en Kanto.
 
 Pokémon Red and Blue tiene un mapa completamente funcional que soporta seguimiento automático. 
 
-1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/j-imbo/pkmnrb_jim/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
+1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/coveleski/rb_tracker/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
 2. Abre PopTracker, y carga el pack de Pokémon Red and Blue.
 3. Haz clic en el símbolo "AP" en la parte superior.
 4. Ingresa la dirección de AP, nombre del slot y contraseña (si es que hay).

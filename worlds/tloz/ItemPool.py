@@ -1,3 +1,5 @@
+from collections import Counter
+
 from BaseClasses import ItemClassification
 from .Locations import level_locations, all_level_locations, standard_level_locations, shop_locations
 from .Options import TriforceLocations, StartingPosition
@@ -58,11 +60,11 @@ map_compass_replacements = {
     "Small Key": 2,
     "Five Rupees": 2
 }
-basic_pool = {
-    item: overworld_items.get(item, 0) + shop_items.get(item, 0)
-    + major_dungeon_items.get(item, 0) + map_compass_replacements.get(item, 0)
-    for item in set(overworld_items) | set(shop_items) | set(major_dungeon_items) | set(map_compass_replacements)
-}
+basic_pool = Counter()
+basic_pool.update(overworld_items)
+basic_pool.update(shop_items)
+basic_pool.update(major_dungeon_items)
+basic_pool.update(map_compass_replacements)
 
 starting_weapons = ["Sword", "White Sword", "Magical Sword", "Magical Rod", "Red Candle"]
 guaranteed_shop_items = ["Small Key", "Bomb", "Water of Life (Red)", "Arrow"]
@@ -80,7 +82,7 @@ def generate_itempool(tlozworld):
             location.item.classification = ItemClassification.progression
 
 def get_pool_core(world):
-    random = world.multiworld.random
+    random = world.random
 
     pool = []
     placed_items = {}
@@ -93,14 +95,18 @@ def get_pool_core(world):
 
     # Starting Weapon
     start_weapon_locations = starting_weapon_locations.copy()
-    starting_weapon = random.choice(starting_weapons)
-    if world.multiworld.StartingPosition[world.player] == StartingPosition.option_safe:
+    final_starting_weapons = [weapon for weapon in starting_weapons
+                              if weapon not in world.options.non_local_items]
+    if not final_starting_weapons:
+        final_starting_weapons = starting_weapons
+    starting_weapon = random.choice(final_starting_weapons)
+    if world.options.StartingPosition == StartingPosition.option_safe:
         placed_items[start_weapon_locations[0]] = starting_weapon
-    elif world.multiworld.StartingPosition[world.player] in \
+    elif world.options.StartingPosition in \
             [StartingPosition.option_unsafe, StartingPosition.option_dangerous]:
-        if world.multiworld.StartingPosition[world.player] == StartingPosition.option_dangerous:
+        if world.options.StartingPosition == StartingPosition.option_dangerous:
             for location in dangerous_weapon_locations:
-                if world.multiworld.ExpandedPool[world.player] or "Drop" not in location:
+                if world.options.ExpandedPool or "Drop" not in location:
                     start_weapon_locations.append(location)
         placed_items[random.choice(start_weapon_locations)] = starting_weapon
     else:
@@ -111,35 +117,30 @@ def get_pool_core(world):
 
     # Triforce Fragments
     fragment = "Triforce Fragment"
-    if world.multiworld.ExpandedPool[world.player]:
+    if world.options.ExpandedPool:
         possible_level_locations = [location for location in all_level_locations
                                     if location not in level_locations[8]]
     else:
         possible_level_locations = [location for location in standard_level_locations
                                     if location not in level_locations[8]]
+    for location in placed_items.keys():
+        if location in possible_level_locations:
+            possible_level_locations.remove(location)
     for level in range(1, 9):
-        if world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_vanilla:
+        if world.options.TriforceLocations == TriforceLocations.option_vanilla:
             placed_items[f"Level {level} Triforce"] = fragment
-        elif world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_dungeons:
+        elif world.options.TriforceLocations == TriforceLocations.option_dungeons:
             placed_items[possible_level_locations.pop(random.randint(0, len(possible_level_locations) - 1))] = fragment
         else:
             pool.append(fragment)
 
-    # Level 9 junk fill
-    if world.multiworld.ExpandedPool[world.player] > 0:
-        spots = random.sample(level_locations[8], len(level_locations[8]) // 2)
-        for spot in spots:
-            junk = random.choice(list(minor_items.keys()))
-            placed_items[spot] = junk
-            minor_items[junk] -= 1
-
     # Finish Pool
     final_pool = basic_pool
-    if world.multiworld.ExpandedPool[world.player]:
-        final_pool = {
-            item: basic_pool.get(item, 0) + minor_items.get(item, 0) + take_any_items.get(item, 0)
-            for item in set(basic_pool) | set(minor_items) | set(take_any_items)
-        }
+    if world.options.ExpandedPool:
+        final_pool = Counter()
+        final_pool.update(basic_pool)
+        final_pool.update(minor_items)
+        final_pool.update(take_any_items)
         final_pool["Five Rupees"] -= 1
     for item in final_pool.keys():
         for i in range(0, final_pool[item]):
