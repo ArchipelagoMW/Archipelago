@@ -544,27 +544,46 @@ class MultiWorld():
             if self.has_beaten_game(self.state):
                 return True
             state = CollectionState(self)
-        prog_locations = {location for location in self.get_locations() if location.item
-                          and location.item.advancement and location not in state.locations_checked}
 
-        while prog_locations:
-            sphere: Set[Location] = set()
-            # build up spheres of collection radius.
-            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-            for location in prog_locations:
-                if location.can_reach(state):
-                    sphere.add(location)
+        prog_locations_per_player: List[Tuple[int, List[Location]]] = []
+        for player, locations_dict in self.regions.location_cache.items():
+            filtered_locations = [location for location in locations_dict.values()
+                                  if location.advancement and location not in state.locations_checked]
+            if filtered_locations:
+                prog_locations_per_player.append((player, filtered_locations))
 
-            if not sphere:
-                # ran out of places and did not finish yet, quit
-                return False
+        could_have_reachable_locations = True
+        while could_have_reachable_locations:
+            next_locations_per_player: List[Tuple[int, List[Location]]] = []
+            could_have_reachable_locations = False
 
-            for location in sphere:
-                state.collect(location.item, True, location)
-            prog_locations -= sphere
+            for player, locations in prog_locations_per_player:
+                # Accessibility of each location is checked first because a player's region accessibility cache becomes
+                # stale whenever one of their own items is collected into the state.
+                accessible_locations: List[Location] = []
+                inaccessible_locations: List[Location] = []
+                for location in locations:
+                    if location.can_reach(state):
+                        # Locations containing Items that do not belong to `player` could be collected immediately
+                        # because they won't stale `player`'s region accessibility cache, but, for simplicity, all the
+                        # accessible locations are collected in a single loop.
+                        accessible_locations.append(location)
+                    else:
+                        inaccessible_locations.append(location)
+                if inaccessible_locations:
+                    next_locations_per_player.append((player, inaccessible_locations))
+
+                # Collect all the items from the accessible locations.
+                for location in accessible_locations:
+                    state.collect(location.item, True, location)
+
+                if accessible_locations:
+                    could_have_reachable_locations = True
 
             if self.has_beaten_game(state):
                 return True
+
+            prog_locations_per_player = next_locations_per_player
 
         return False
 
