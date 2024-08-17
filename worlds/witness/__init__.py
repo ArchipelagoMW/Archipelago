@@ -347,7 +347,7 @@ class WitnessWorld(World):
 
             def keep_or_take_out(item: Item) -> bool:
                 if (
-                    item.code not in next_findable_items or item.player != self.player
+                    item.code not in next_findable_items
                     or not any(location.can_fill(state, item, check_access=False) for location in eligible_locations)
                 ):
                     return True  # Keep
@@ -355,7 +355,8 @@ class WitnessWorld(World):
                 found_early_items.append(item)
                 return False  # Take out
 
-            itempool[:] = [item for item in itempool if keep_or_take_out(item)]
+            local_player = self.player
+            itempool[:] = [item for item in itempool if item.player != local_player or keep_or_take_out(item)]
 
             # Bring them back into Symbol -> Door -> Obelisk Key order
             # The intent is that the Symbol is always on Tutorial Gate Open / generally that the order is predictable
