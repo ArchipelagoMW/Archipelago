@@ -225,6 +225,9 @@ class TimespinnerWorld(World):
         elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
                 and not self.options.unchained_keys:
             item.classification = ItemClassification.filler
+        elif name in {"Laser Access A", "Laser Access I", "Laser Access M"} \
+                and not self.options.prism_break:
+            item.classification = ItemClassification.filler
 
         return item
 
