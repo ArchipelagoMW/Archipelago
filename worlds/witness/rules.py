@@ -108,7 +108,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     # We don't have the Shadows shortcut. This means we need to come in through the PP4 exit door instead.
 
-    tower_to_pp4 = any( e.can_reach(state) for e in two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"])
+    tower_to_pp4 = any(e.can_reach(state) for e in two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"])
 
     # If we don't have the PP4 exit door, we've run out of options.
     if not tower_to_pp4:
