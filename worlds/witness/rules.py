@@ -211,7 +211,10 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 
     return (
         any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Windmill Interior"])
-        and any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Town", "Windmill Interior"])
+        and any(
+            e.can_reach(state) for e
+            in player_regions.two_way_entrance_register["Outside Windmill", "Windmill Interior"]
+        )
         or any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Town"])
     )
 
