@@ -48,14 +48,14 @@ gameplay_unlocks = {
 }
 
 upgrades = {
-    "Big Routing Upgrade": ItemClassification.useful,
-    "Big Extraction Upgrade": ItemClassification.useful,
-    "Big Shape Processing Upgrade": ItemClassification.useful,
-    "Big Color Processing Upgrade": ItemClassification.useful,
-    "Small Routing Upgrade": ItemClassification.filler,
-    "Small Extraction Upgrade": ItemClassification.filler,
-    "Small Shape Processing Upgrade": ItemClassification.filler,
-    "Small Color Processing Upgrade": ItemClassification.filler
+    "Big Belt Upgrade": ItemClassification.useful,
+    "Big Miner Upgrade": ItemClassification.useful,
+    "Big Processors Upgrade": ItemClassification.useful,
+    "Big Painting Upgrade": ItemClassification.useful,
+    "Small Belt Upgrade": ItemClassification.filler,
+    "Small Miner Upgrade": ItemClassification.filler,
+    "Small Processors Upgrade": ItemClassification.filler,
+    "Small Painting Upgrade": ItemClassification.filler
 }
 
 bundles = {
@@ -84,17 +84,17 @@ item_table: dict[str, ItemClassification] = {
 }
 
 big_upgrades = [
-    "Big Routing Upgrade",
-    "Big Extraction Upgrade",
-    "Big Shape Processing Upgrade",
-    "Big Color Processing Upgrade"
+    "Big Belt Upgrade",
+    "Big Miner Upgrade",
+    "Big Processors Upgrade",
+    "Big Painting Upgrade"
 ]
 
 small_upgrades = [
-    "Small Routing Upgrade",
-    "Small Extraction Upgrade",
-    "Small Shape Processing Upgrade",
-    "Small Color Processing Upgrade"
+    "Small Belt Upgrade",
+    "Small Miner Upgrade",
+    "Small Processors Upgrade",
+    "Small Painting Upgrade"
 ]
 
 
