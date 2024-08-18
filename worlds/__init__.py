@@ -33,7 +33,7 @@ __all__ = {
 }
 
 
-failed_world_loads: List[Tuple[str, str]] = []
+failed_world_loads: List[str] = []
 
 
 class GamesPackage(TypedDict, total=False):
@@ -133,7 +133,7 @@ class WorldSource:
             traceback.print_exc(file=file_like)
             file_like.seek(0)
             logging.exception(file_like.read())
-            failed_world_loads.append((os.path.basename(self.path).rsplit(".", 1)[0], traceback.format_exc()))
+            failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
 

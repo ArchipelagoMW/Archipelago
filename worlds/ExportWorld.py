@@ -62,8 +62,17 @@ def export_world(libfolder, world_type, output_dir, is_frozen):
 
     arch = metadata["arch"]
     os_type = metadata["os"]
-    base_file_name = f"{world_key}-{arch}-{os_type}-py{metadata['pyversion']}-{metadata['world_version']}"
-    world_file_name = f"{base_file_name}.apworld"
+    base_file_name = f"{world_key}"
+    parts = [base_file_name]
+    if arch != "any":
+        parts.append(arch)
+    if os_type != "any":
+        parts.append(os_type)
+    if metadata['pyversion'] != "any":
+        parts.append(f"py{metadata['pyversion']}")
+    if metadata["world_version"] != "0.0.0":
+        parts.append(metadata["world_version"])
+    world_file_name = f"{'-'.join(parts)}.apworld"
 
     output_name = output_dir / world_file_name
     with zipfile.ZipFile(output_name, "x", zipfile.ZIP_DEFLATED,
