@@ -450,8 +450,9 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     return locations
 
 
-def addshapesanity(amount: int, random: Random, included: int) -> dict[str, tuple[str, LocationProgressType]]:
+def addshapesanity(amount: int, random: Random) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with a given number of random shapesanity locations."""
+
     included_shapes: dict[str, tuple[str, LocationProgressType]] = {}
     # if not included:
     #     return included_shapes

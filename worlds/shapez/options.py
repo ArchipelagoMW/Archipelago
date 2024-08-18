@@ -4,12 +4,15 @@ from Options import Range, Toggle, Choice, PerGameCommonOptions
 
 
 class Goal(Choice):
-    """Vanilla: Complete level 26.
-    MAM: Complete a specified level after level 26. Every level before that and a few additional options will be a
-          location. It's recommended to build a Make-Anything-Machine (MAM).
-    Even fasterer: Upgrade everything to a specified tier after tier 8. Every upgrade before that will be a location.
-    Efficiency III: Deliver 500 blueprint shapes per second to the hub."""
+    """Sets the goal of your world.
+
+    - **Vanilla:** Complete level 26.
+    - **MAM:** Complete a specified level after level 26. Every level before that and a few additional options will be a
+           location. It's recommended to build a Make-Anything-Machine (MAM).
+    - **Even fasterer:** Upgrade everything to a specified tier after tier 8. Every upgrade before that will be a location.
+    - **Efficiency III:** Deliver 500 blueprint shapes per second to the hub."""
     display_name = "Goal"
+    rich_text_doc = True
     option_vanilla = 0
     option_mam = 1
     option_even_fasterer = 2
@@ -51,14 +54,16 @@ class RandomizeUpgradeRequirements(Toggle):
 class RandomizeLevelLogic(Choice):
     """If level requirements are randomized, this sets how those random shapes are generated
     and how logic works for levels.
-    Vanilla: Level 1 requires nothing, 2-4 require the cutter, 5-6 require the rotator, 7-8 require the painter,
-             9-10 require the color mixer, and 11 and onwards require the stacker.
-    Shuffled: Same as vanilla, but with shuffled order of buildings.
-    Stretched vanilla: After every floor(maxlevel/6) levels, another building is required,
-                       with the same order as vanilla.
-    Stretched shuffled: Same as stretched vanilla, but with shuffled order of buildings.
-    Hardcore: All levels (except level 1) have completely random shape requirements. Expect early BKs."""
+
+    - **Vanilla:** Level 1 requires nothing, 2-4 require the cutter, 5-6 require the rotator, 7-8 require the painter,
+               9-10 require the color mixer, and 11 and onwards require the stacker.
+    - **Shuffled:** Same as vanilla, but with shuffled order of buildings.
+    - **Stretched vanilla:** After every floor(maxlevel/6) levels, another building is required,
+                         with the same order as vanilla.
+    - **Stretched shuffled:** Same as stretched vanilla, but with shuffled order of buildings.
+    - **Hardcore:** All levels (except level 1) have completely random shape requirements. Expect early BKs."""
     display_name = "Randomize level logic"
+    rich_text_doc = True
     option_vanilla = 0
     option_shuffled = 1
     option_stretched_vanilla = 2
@@ -70,12 +75,14 @@ class RandomizeLevelLogic(Choice):
 class RandomizeUpgradeLogic(Choice):
     """If upgrade requirements are randomized, this sets how those random shapes are generated
     and how logic works for upgrades. All four categories will have the same logic.
-    Vanilla-like: Tier II requires up to two random buildings, III requires up to three random buildings,
-                  and IV and onwards require all processing buildings.
-    Linear: Tier II requires nothing, III-VI require another random building each,
-            and VII and onwards require all buildings.
-    Hardcore: All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""
+
+    - **Vanilla-like:** Tier II requires up to two random buildings, III requires up to three random buildings,
+                    and IV and onwards require all processing buildings.
+    - **Linear:** Tier II requires nothing, III-VI require another random building each,
+              and VII and onwards require all buildings.
+    - **Hardcore:** All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""
     display_name = "Randomize upgrade logic"
+    rich_text_doc = True
     option_vanilla_like = 0
     option_linear = 1
     option_hardcore = 2
@@ -94,8 +101,8 @@ class ThroughputLevelsRatio(Range):
 
 
 class SameLateUpgradeRequirements(Toggle):
-    """If upgrade requirements are randomized, should the last 3 shapes for each category
-    be the same, like in vanilla?"""
+    """If upgrade requirements are randomized, should the last 3 shapes for each category be the same,
+    like in vanilla?"""
     display_name = "Same late upgrade requirements"
     default = True
 
@@ -103,11 +110,12 @@ class SameLateUpgradeRequirements(Toggle):
 class EarlyBalancerTunnelAndTrash(Choice):
     """Makes the balancer, tunnel, and trash appear in earlier spheres.
 
-    None: Complete randomization.
-    5 buildings: Should be accessible before getting all 5 main buildings.
-    3 buildings: Should be accessible before getting the first 3 main buildings for levels and upgrades.
-    Sphere 1: Always accessible from start. Beware of generation failures."""
+    - **None:** Complete randomization.
+    - **5 buildings:** Should be accessible before getting all 5 main buildings.
+    - **3 buildings:** Should be accessible before getting the first 3 main buildings for levels and upgrades.
+    - **Sphere 1:** Always accessible from start. Beware of generation failures."""
     display_name = "Early balancer, tunnel, and trash"
+    rich_text_doc = True
     option_none = 0
     option_5_buildings = 1
     option_3_buildings = 2

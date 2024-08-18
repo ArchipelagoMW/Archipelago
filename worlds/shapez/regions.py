@@ -31,7 +31,8 @@ all_regions = [
 ]
 
 
-def create_entrance(player: int, name: str, parent: Region, connects: Region, rule: Callable[[CollectionState], bool]):
+def create_entrance(player: int, name: str, parent: Region, connects: Region,
+                    rule: Callable[[CollectionState], bool]) -> None:
     """Creates an entrance with a given access rule and connects both regions"""
     # Create conditional entrance further into the game
     entr = Entrance(player, name, parent)

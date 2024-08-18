@@ -10,7 +10,7 @@ from .locations import ShapezLocation, addlevels, all_locations, addupgrades, ad
 from .presets import options_presets
 from .options import ShapezOptions
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Item, Tutorial, LocationProgressType, ItemClassification
+from BaseClasses import Region, Item, Tutorial, LocationProgressType
 from .regions import create_shapez_regions
 
 
@@ -62,7 +62,7 @@ class ShapezWorld(World):
     location_name_to_id = {name: id for
                            id, name in enumerate(all_locations, base_id)}
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
         # both goal amounts for "MAM" and "Even fasterer" are set in a single option.
         if self.options.goal.value == 1 and self.options.goal_amount.value < 27:
@@ -130,8 +130,7 @@ class ShapezWorld(World):
         self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.value),
                                    **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.value),
                                    # **addachievements
-                                   **addshapesanity(self.options.shapesanity_amount.value, self.random, True)}
-#                                                    bool(self.options.additional_locations.value > 0))}
+                                   **addshapesanity(self.options.shapesanity_amount.value, self.random)}
         self.location_count = len(self.included_locations)
 
         # Create regions and entrances based on included locations and player options
