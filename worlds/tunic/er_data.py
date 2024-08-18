@@ -1531,12 +1531,20 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"], ["LS2"]],
         "Swamp Hero's Grave Region":
             [],
+        "Swamp Mid":
+            [["LS2"]],
+        "Swamp Front":
+            [["LS1"]],
+        "Swamp to Cathedral Main Entrance Region":
+            [["LS3"]],
+        "Swamp to Cathedral Treasure Room":
+            [["LS3"]]
     },
     "Back of Swamp Laurels Area": {
         "Back of Swamp":
             [["Hyperdash"]],
         "Swamp Mid":
-            [["IG1", "Hyperdash"]],
+            [["IG1", "Hyperdash"], ["Hyperdash", "Zip"]],
     },
     "Swamp Hero's Grave Region": {
         "Back of Swamp":
