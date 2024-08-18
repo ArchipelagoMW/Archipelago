@@ -36,7 +36,8 @@ class TurtleRandomizer(Choice):
 
 class EarlyBindSong(Choice):
     """
-    Force the Bind song to be in a location early in the multiworld (It is not guaranteed to be in your world).
+    Force the Bind song to be in a location early in the multiworld (or directly in your world if Early and Local is
+    selected).
     """
     display_name = "Early Bind song"
     option_off = 0
@@ -47,7 +48,8 @@ class EarlyBindSong(Choice):
 
 class EarlyEnergyForm(Choice):
     """
-    Force the Energy form to be in a location early in the multiworld (It is not guaranteed to be in your world).
+    Force the Energy form to be in a location early in the multiworld (or directly in your world if Early and Local is
+    selected).
     """
     display_name = "Early Energy form"
     option_off = 0
