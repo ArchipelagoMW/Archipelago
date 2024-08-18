@@ -1,4 +1,4 @@
-from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
+from .LADXR.checkMetadata import checkMetadataTable
 import json
 import logging
 import websockets

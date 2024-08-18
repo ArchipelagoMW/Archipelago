@@ -12,7 +12,12 @@ from worlds.generic.Rules import add_item_rule
 
 
 class FillError(RuntimeError):
-    pass
+    def __init__(self, *args: typing.Union[str, typing.Any], **kwargs) -> None:
+        if "multiworld" in kwargs and isinstance(args[0], str):
+            placements = (args[0] + f"\nAll Placements:\n" +
+                          f"{[(loc, loc.item) for loc in kwargs['multiworld'].get_filled_locations()]}")
+            args = (placements, *args[1:])
+        super().__init__(*args)
 
 
 def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
@@ -212,7 +217,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                             f"Unfilled locations:\n"
                             f"{', '.join(str(location) for location in locations)}\n"
                             f"Already placed {len(placements)}:\n"
-                            f"{', '.join(str(place) for place in placements)}")
+                            f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     item_pool.extend(unplaced_items)
 
@@ -299,7 +304,7 @@ def remaining_fill(multiworld: MultiWorld,
                             f"Unfilled locations:\n"
                             f"{', '.join(str(location) for location in locations)}\n"
                             f"Already placed {len(placements)}:\n"
-                            f"{', '.join(str(place) for place in placements)}")
+                            f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     itempool.extend(unplaced_items)
 
@@ -483,15 +488,15 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if panic_method == "swap":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
                              swap=True,
-                             on_place=mark_for_locking, name="Progression", single_player_placement=multiworld.players == 1)
+                             name="Progression", single_player_placement=multiworld.players == 1)
         elif panic_method == "raise":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
                              swap=False,
-                             on_place=mark_for_locking, name="Progression", single_player_placement=multiworld.players == 1)
+                             name="Progression", single_player_placement=multiworld.players == 1)
         elif panic_method == "start_inventory":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
                              swap=False, allow_partial=True,
-                             on_place=mark_for_locking, name="Progression", single_player_placement=multiworld.players == 1)
+                             name="Progression", single_player_placement=multiworld.players == 1)
             if progitempool:
                 for item in progitempool:
                     logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
@@ -506,7 +511,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
-                f"There are {len(progitempool)} more progression items than there are available locations."
+                f"There are {len(progitempool)} more progression items than there are available locations.",
+                multiworld=multiworld,
             )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
 
@@ -523,7 +529,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. "
-            f"There are {len(excludedlocations)} more excluded locations than filler or trap items."
+            f"There are {len(excludedlocations)} more excluded locations than filler or trap items.",
+            multiworld=multiworld,
         )
 
     restitempool = filleritempool + usefulitempool
@@ -589,7 +596,7 @@ def flood_items(multiworld: MultiWorld) -> None:
             if candidate_item_to_place is not None:
                 item_to_place = candidate_item_to_place
             else:
-                raise FillError('No more progress items left to place.')
+                raise FillError('No more progress items left to place.', multiworld=multiworld)
 
         # find item to replace with progress item
         location_list = multiworld.get_reachable_locations()
@@ -646,7 +653,6 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
 
         def get_sphere_locations(sphere_state: CollectionState,
                                  locations: typing.Set[Location]) -> typing.Set[Location]:
-            sphere_state.sweep_for_events(key_only=True, locations=locations)
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         def item_percentage(player: int, num: int) -> float:

@@ -184,7 +184,7 @@ def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePat
                 location.item.name
             ) for trainer in alternates)
 
-    player_name_ids: Dict[str, int] = {world.multiworld.player_name[world.player]: 0}
+    player_name_ids: Dict[str, int] = {world.player_name: 0}
     item_name_offsets: Dict[str, int] = {}
     next_item_name_offset = 0
     for i, (flag, item_player, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
@@ -208,7 +208,7 @@ def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePat
                 struct.pack("<B", 0)
             )
         else:
-            player_name = world.multiworld.player_name[item_player]
+            player_name = world.multiworld.get_player_name(item_player)
 
             if player_name not in player_name_ids:
                 # Only space for 50 player names
@@ -817,6 +817,8 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", patch: Pokemon
 
 
 def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
+    FORTREE_MOVE_TUTOR_INDEX = 24
+
     if easter_egg[0] == 2:
         for i in range(30):
             patch.write_token(
@@ -840,18 +842,26 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmer
     # Always set Fortree move tutor to Dig
     patch.write_token(
         APTokenTypes.WRITE,
-        data.rom_addresses["gTutorMoves"] + (24 * 2),
+        data.rom_addresses["gTutorMoves"] + (FORTREE_MOVE_TUTOR_INDEX * 2),
         struct.pack("<H", data.constants["MOVE_DIG"])
     )
 
     # Modify compatibility
     if world.options.tm_tutor_compatibility.value != -1:
         for species in data.species.values():
+            compatibility = bool_array_to_int([
+                world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value
+                for _ in range(32)
+            ])
+
+            # Make sure Dig tutor has reasonable (>=50%) compatibility
+            if world.options.tm_tutor_compatibility.value < 50:
+                compatibility &= ~(1 << FORTREE_MOVE_TUTOR_INDEX)
+                if world.random.random() < 0.5:
+                    compatibility |= 1 << FORTREE_MOVE_TUTOR_INDEX
+
             patch.write_token(
                 APTokenTypes.WRITE,
                 data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),
-                struct.pack("<I", bool_array_to_int([
-                    world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value
-                    for _ in range(32)
-                ]))
+                struct.pack("<I", compatibility)
             )

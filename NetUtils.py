@@ -198,7 +198,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         "slateblue": "6D8BE8",
         "plum": "AF99EF",
         "salmon": "FA8072",
-        "white": "FFFFFF"
+        "white": "FFFFFF",
+        "orange": "FF7700",
     }
 
     def __init__(self, ctx):
@@ -247,7 +248,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_item_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
-        node["text"] = self.ctx.item_names[item_id]
+        node["text"] = self.ctx.item_names.lookup_in_slot(item_id, node["player"])
         return self._handle_item_name(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
@@ -255,8 +256,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_location_id(self, node: JSONMessagePart):
-        item_id = int(node["text"])
-        node["text"] = self.ctx.location_names[item_id]
+        location_id = int(node["text"])
+        node["text"] = self.ctx.location_names.lookup_in_slot(location_id, node["player"])
         return self._handle_location_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):
@@ -396,12 +397,12 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
                 location_id not in checked]
 
     def get_remaining(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
-                      ) -> typing.List[int]:
+                      ) -> typing.List[typing.Tuple[int, int]]:
         checked = state[team, slot]
         player_locations = self[slot]
-        return sorted([player_locations[location_id][0] for
-                       location_id in player_locations if
-                       location_id not in checked])
+        return sorted([(player_locations[location_id][1], player_locations[location_id][0]) for
+                        location_id in player_locations if
+                        location_id not in checked])
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub
