@@ -27,8 +27,8 @@ class BundleLogicMixin(BaseLogicMixin):
         self.bundle = BundleLogic(*args, **kwargs)
 
 
-class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, TimeLogicMixin, RegionLogicMixin, MoneyLogicMixin, QualityLogicMixin, FishingLogicMixin, SkillLogicMixin,
-QuestLogicMixin]]):
+class BundleLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, TimeLogicMixin, RegionLogicMixin, MoneyLogicMixin, QualityLogicMixin, FishingLogicMixin,
+SkillLogicMixin, QuestLogicMixin]]):
     # Should be cached
     def can_complete_bundle(self, bundle: Bundle) -> StardewRule:
         item_rules = []
@@ -45,7 +45,7 @@ QuestLogicMixin]]):
             qualities.append(bundle_item.quality)
         quality_rules = self.get_quality_rules(qualities)
         item_rules = self.logic.has_n(*item_rules, count=bundle.number_required)
-        time_rule = True_() if time_to_grind <= 0 else self.logic.time.has_lived_months(time_to_grind)
+        time_rule = self.logic.time.has_lived_months(time_to_grind)
         return can_speak_junimo & item_rules & quality_rules & time_rule
 
     def get_quality_rules(self, qualities: List[str]) -> StardewRule:
