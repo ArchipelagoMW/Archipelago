@@ -12,7 +12,7 @@ from ..Locations import AquariaLocationNames
 class EnergyFormDualFormAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the energy form and dual form (and Li)"""
     options = {
-        "early_energy_form": False,
+        "early_energy_form": 0,
     }
 
     def test_energy_form_or_dual_form_location(self) -> None:

@@ -11,7 +11,7 @@ class ConfinedHomeWaterAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of region with the unconfine home water option disabled"""
     options = {
         "unconfine_home_water": 0,
-        "early_energy_form": False
+        "early_energy_form": 0
     }
 
     def test_confine_home_water_location(self) -> None:
