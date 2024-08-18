@@ -64,10 +64,9 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
     if final_rest_door_requirement == "puppies":
         if puppies_choice == "individual":
             return has_puppies_individual(state, player, 99)
-        elif puppies_choice == "triplets":
+        if puppies_choice == "triplets":
             return has_puppies_triplets(state, player, 99)
-        else:
-            return has_puppies_all(state, player, 99)
+        return has_puppies_all(state, player, 99)
     if final_rest_door_requirement == "postcards":
         return state.has("Postcard", player, 10)
     if final_rest_door_requirement == "superbosses":
