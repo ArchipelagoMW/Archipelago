@@ -66,7 +66,6 @@ non_apworlds: set = {
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "ChecksFinder",
     "Clique",
     "Final Fantasy",
     "Lufia II Ancient Cave",
