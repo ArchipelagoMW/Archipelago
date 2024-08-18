@@ -34,16 +34,21 @@ if typing.TYPE_CHECKING:
 
 
 def tuplize_version(version: str) -> Version:
-    return Version(*(int(piece, 10) for piece in version.split(".")))
+    if "-" in version:
+        version, tag = version.rsplit("-")
+    else:
+        tag = ""
+    return Version(*(int(piece, 10) for piece in version.split(".")), tag)
 
 
 class Version(typing.NamedTuple):
     major: int
     minor: int
     build: int
+    tag: str = ""
 
     def as_simple_string(self) -> str:
-        return ".".join(str(item) for item in self)
+        return f"{self.major}.{self.minor}.{self.build}{f'-{self.tag}' if self.tag else ''}"
 
 
 __version__ = "0.5.0"
