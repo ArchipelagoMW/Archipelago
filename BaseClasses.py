@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import collections
-import itertools
 import functools
 import logging
 import random
@@ -9,7 +8,7 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence, Hashable
+from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, NamedTuple, Optional, Set, Tuple, \
                    TypedDict, Union, Type, ClassVar
