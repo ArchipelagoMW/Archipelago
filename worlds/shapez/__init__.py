@@ -65,17 +65,17 @@ class ShapezWorld(World):
     def generate_early(self) -> None:
         # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
         # both goal amounts for "MAM" and "Even fasterer" are set in a single option.
-        if self.options.goal.value == 1 and self.options.goal_amount.value < 27:
+        if self.options.goal == 1 and self.options.goal_amount < 27:
             raise OptionError("When setting goal to 1 ('mam'), goal_amount must be at least 27")
 
         # Determines maxlevel and finaltier, which are needed for location and item generation
-        if self.options.goal.value == 0:
+        if self.options.goal == 0:
             self.maxlevel = 25
             self.finaltier = 8
-        elif self.options.goal.value == 1:
-            self.maxlevel = self.options.goal_amount.value - 1
+        elif self.options.goal == 1:
+            self.maxlevel = self.options.goal_amount - 1
             self.finaltier = 8
-        elif self.options.goal.value == 2:
+        elif self.options.goal == 2:
             self.maxlevel = 26
             self.finaltier = self.options.goal_amount.value
         else:
@@ -86,8 +86,8 @@ class ShapezWorld(World):
         self.client_seed = self.random.randint(0, 2**32)
 
         # Determines the order of buildings for levels und upgrades logic
-        if self.options.randomize_level_requirements.value:
-            if self.options.randomize_level_logic.value in [1, 3]:
+        if self.options.randomize_level_requirements:
+            if self.options.randomize_level_logic in [1, 3]:
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)
@@ -102,8 +102,8 @@ class ShapezWorld(World):
         else:
             self.level_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
 
-        if self.options.randomize_upgrade_requirements.value:
-            if self.options.randomize_upgrade_logic.value == 2:
+        if self.options.randomize_upgrade_requirements:
+            if self.options.randomize_upgrade_logic == 2:
                 self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
             else:
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
@@ -155,7 +155,7 @@ class ShapezWorld(World):
                                       + [self.create_item(name) for name in big_upgrades for _ in range(7)])
 
         # Get value from traps probability option and convert to float
-        traps_probability = self.options.traps_percentage.value/100
+        traps_probability = self.options.traps_percentage/100
         # Fill remaining locations with fillers
         for x in range(self.location_count - len(included_items)):
             if self.random.random() < traps_probability:
@@ -169,7 +169,7 @@ class ShapezWorld(World):
         self.multiworld.itempool += included_items
 
         # Add balancer, tunnel, and trash to early items if options say so
-        if self.options.early_balancer_tunnel_and_trash.value == 3:
+        if self.options.early_balancer_tunnel_and_trash == 3:
             self.multiworld.early_items[self.player]["Balancer"] = 1
             self.multiworld.early_items[self.player]["Tunnel"] = 1
             self.multiworld.early_items[self.player]["Trash"] = 1
