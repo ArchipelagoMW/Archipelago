@@ -175,9 +175,8 @@ hard_ls: List[LadderInfo] = [
     LadderInfo("Frog's Domain", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
     # the turret at the end here is not affected by enemy rando
     LadderInfo("Frog's Domain", "Frog's Domain Back", "Ladders to Frog's Domain", dest_is_region=True),
-    # enter the portal room from behind
-    # todo: double check this
-    LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
+    # todo: see if we can use that new laurels strat here
+    # LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
     # go behind the cathedral to reach the door, pretty easily doable
     LadderInfo("Swamp Mid", "Swamp Redux 2, Cathedral Redux_main", "Ladders in Swamp"),
     LadderInfo("Back of Swamp", "Swamp Redux 2, Cathedral Redux_main"),
