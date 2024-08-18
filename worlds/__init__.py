@@ -93,16 +93,16 @@ class WorldSource:
             start = time.perf_counter()
             if self.is_zip:
                 with zipfile.ZipFile(self.resolved_path) as zf:
-                    if zipfile.Path(zf, "metadata.json").exists():
-                        manifest = json.loads(zf.read("metadata.json"))
+                    if zipfile.Path(zf, os.path.join(self.path, "metadata.json")).exists():
+                        manifest = json.loads(zf.read(os.path.join(self.path, "metadata.json")))
                         self.check_manifest(manifest)
                 importer = zipimport.zipimporter(self.resolved_path)
                 if hasattr(importer, "find_spec"):  # new in Python 3.10
-                    spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
+                    spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0].split('-', 1)[0])
                     assert spec, f"{self.path} is not a loadable module"
                     mod = importlib.util.module_from_spec(spec)
                 else:  # TODO: remove with 3.8 support
-                    mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0])
+                    mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0].split('-', 1)[0])
 
                 if mod.__package__ is not None:
                     mod.__package__ = f"worlds.{mod.__package__}"

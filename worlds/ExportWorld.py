@@ -70,8 +70,10 @@ def export_world(libfolder, world_type, output_dir, is_frozen):
                          compresslevel=9) as zf:
         for path in world_directory.rglob("*.*"):
             relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
+            if any(part.startswith(".") or part == "__pycache__" for part in Path(relative_path).parts):
+                continue
             zf.write(path, relative_path)
-        zf.writestr("metadata.json", json.dumps(metadata, indent=4))
+        zf.writestr(os.path.join(world_key, "metadata.json"), json.dumps(metadata, indent=4))
         zf.close()
     return output_name
 
