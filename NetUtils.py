@@ -79,6 +79,7 @@ class NetworkItem(typing.NamedTuple):
     item: int
     location: int
     player: int
+    """ sending player """
     flags: int = 0
 
 
