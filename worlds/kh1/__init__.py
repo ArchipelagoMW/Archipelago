@@ -98,8 +98,8 @@ class KH1World(World):
 
         level_up_locations = list(get_locations_by_category("Levels").keys())
         self.random.shuffle(level_up_item_pool)
-        starting_level_for_stats_only = self.options.force_stats_on_levels.value - 1
-        while len(level_up_item_pool) > 0 and starting_level_for_stats_only < self.options.level_checks:
+        starting_level_for_stats_only = self.options.force_stats_on_levels.value
+        while len(level_up_item_pool) > 0 and starting_level_for_stats_only <= self.options.level_checks:
             self.get_location(level_up_locations[starting_level_for_stats_only]).place_locked_item(self.create_item(level_up_item_pool.pop()))
             starting_level_for_stats_only += 1
         
