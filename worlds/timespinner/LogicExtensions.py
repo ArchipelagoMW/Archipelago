@@ -95,8 +95,7 @@ class TimespinnerLogic:
     def can_kill_all_3_bosses(self, state: CollectionState) -> bool:
         if self.flag_prism_break:
             return state.has_all({'Laser Access M', 'Laser Access I', 'Laser Access A'}, self.player)
-        else:
-            return state.has_all({'Killed Maw', 'Killed Twins', 'Killed Aelana'}, self.player)
+        return state.has_all({'Killed Maw', 'Killed Twins', 'Killed Aelana'}, self.player)
 
     def has_teleport(self, state: CollectionState) -> bool:
         return self.flag_unchained_keys or state.has('Twin Pyramid Key', self.player)

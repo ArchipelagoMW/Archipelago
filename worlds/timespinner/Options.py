@@ -187,7 +187,7 @@ class HpCap(Range):
     default = 999
 
 class AuraCap(Range):
-    """Sets the maximum Aura Lunais is allowed to have. Level 1 is 80. Djinn Inferno costs 45"""
+    """Sets the maximum Aura Lunais is allowed to have. Level 1 is 80. Djinn Inferno costs 45."""
     display_name = "Aura Cap"
     range_start = 45
     range_end = 999
