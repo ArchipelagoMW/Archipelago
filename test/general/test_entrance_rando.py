@@ -67,7 +67,7 @@ class TestEntranceLookup(unittest.TestCase):
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
 
-        lookup = EntranceLookup(multiworld.per_slot_randoms[1], coupled=True)
+        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:
@@ -76,7 +76,8 @@ class TestEntranceLookup(unittest.TestCase):
         retrieved_targets = lookup.get_targets([ERTestGroups.TOP, ERTestGroups.BOTTOM],
                                                False, False)
         prev = None
-        group_order = [prev := group.randomization_group for group in retrieved_targets if prev != group.randomization_group]
+        group_order = [prev := group.randomization_group for group in retrieved_targets
+                       if prev != group.randomization_group]
         # technically possible that group order may not be shuffled, by some small chance, on some seeds. but generally
         # a shuffled list should alternate more frequently which is the desired behavior here
         self.assertGreater(len(group_order), 2)
@@ -87,7 +88,7 @@ class TestEntranceLookup(unittest.TestCase):
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
 
-        lookup = EntranceLookup(multiworld.per_slot_randoms[1], coupled=True)
+        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:
@@ -190,10 +191,8 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_determinism(self):
         """tests that the same output is produced for the same input"""
         multiworld1 = generate_test_multiworld()
-        multiworld1.worlds[1].random = multiworld1.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld1, 5)
         multiworld2 = generate_test_multiworld()
-        multiworld2.worlds[1].random = multiworld2.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld2, 5)
 
         result1 = randomize_entrances(multiworld1.worlds[1], False, directionally_matched_group_lookup)
@@ -207,7 +206,6 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_all_entrances_placed(self):
         """tests that all entrances and exits were placed, all regions are connected, and no dangling edges exist"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
 
         result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_lookup)
@@ -224,11 +222,10 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_coupling(self):
         """tests that in coupled mode, all 2 way transitions have an inverse"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         seen_placement_count = 0
 
-        def verify_coupled(state: ERPlacementState, placed_entrances: List[Entrance]):
+        def verify_coupled(_: ERPlacementState, placed_entrances: List[Entrance]):
             nonlocal seen_placement_count
             seen_placement_count += len(placed_entrances)
             self.assertEqual(2, len(placed_entrances))
@@ -243,7 +240,6 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_uncoupled(self):
         """tests that in uncoupled mode, no transitions have an (intentional) inverse"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         seen_placement_count = 0
 
@@ -260,7 +256,6 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_oneway_twoway_pairing(self):
         """tests that 1 ways are only paired to 1 ways and 2 ways are only paired to 2 ways"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         region26 = Region("region26", 1, multiworld)
         multiworld.regions.append(region26)
@@ -282,7 +277,6 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_group_constraints_satisfied(self):
         """tests that all grouping constraints are satisfied"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
 
         result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_lookup)
@@ -301,7 +295,6 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_minimal_entrance_rando(self):
         """tests that entrance randomization can complete with minimal accessibility and unreachable exits"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         multiworld.worlds[1].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
         multiworld.completion_condition[1] = lambda state: state.can_reach("region24", player=1)
         generate_disconnected_region_grid(multiworld, 5, 1)
@@ -322,7 +315,6 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_fails_when_mismatched_entrance_and_exit_count(self):
         """tests that entrance randomization fast-fails if the input exit and entrance count do not match"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         multiworld.get_region("region1", 1).create_exit("extra")
 
@@ -332,7 +324,6 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_fails_when_some_unreachable_exit(self):
         """tests that entrance randomization fails if an exit is never reachable (non-minimal accessibility)"""
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5)
         e = multiworld.get_entrance("region1_right", 1)
         set_rule(e, lambda state: False)
@@ -343,7 +334,7 @@ class TestRandomizeEntrances(unittest.TestCase):
     def test_fails_when_some_unconnectable_exit(self):
         """tests that entrance randomization fails if an exit can't be made into a valid placement (non-minimal)"""
         class CustomEntrance(Entrance):
-            def can_connect_to(self, other: Entrance, er_state: "ERPlacementState") -> bool:
+            def can_connect_to(self, other: Entrance, dead_end: bool, er_state: "ERPlacementState") -> bool:
                 if other.name == "region1_right":
                     return False
 
@@ -351,7 +342,6 @@ class TestRandomizeEntrances(unittest.TestCase):
             entrance_type = CustomEntrance
 
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5, region_type=CustomRegion)
 
         self.assertRaises(EntranceRandomizationError, randomize_entrances, multiworld.worlds[1], False,
@@ -363,7 +353,6 @@ class TestRandomizeEntrances(unittest.TestCase):
         available to place all progression items locally
         """
         multiworld = generate_test_multiworld()
-        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         multiworld.worlds[1].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
         multiworld.completion_condition[1] = lambda state: state.can_reach("region24", player=1)
         generate_disconnected_region_grid(multiworld, 5, 1)

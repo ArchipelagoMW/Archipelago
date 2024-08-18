@@ -20,6 +20,9 @@ Some important terminology to understand when reading this doc and working with 
   represented as `Entrance` objects. In this doc, the terms "entrances" and "exits" will be used in this sense; the
   `Entrance` class will always be referenced in a code block with an uppercase E.
 * Dead end - a region which can never give access to additional randomized transitions
+* One way transition - a transition that, in the game, is not safe to reverse through (for example, in Hollow Knight,
+  some transitions are inaccessible backwards in vanilla and would put you out of bounds). One way transitions are 
+  paired together during randomization to prevent such unsafe game states. Most transitions are not one way.
 
 ### Basic randomization strategy
 
@@ -195,6 +198,18 @@ graph LR
     classDef hidden display:none;
 ```
 
+#### ER and minimal accessibility
+
+In general, even on minimal accessibility, ER will prefer to provide access to as many regions as possible. This is for
+2 reasons:
+1. Generally, having items spread across the world is going to be a more fun/engaging experience for players than
+   severely restricting their map. Imagine an ER arrangement with just the start region, the goal region, and exactly
+   enough locations in between them to get the goal - this may be the intuitive behavior of minimal, or even the desired
+   behavior in some cases, but it is not a particularly interesting randomizer.
+2. Giving access to more of the world will give item fill a higher chance to succeed.
+
+However, ER will cull unreachable regions and exits if necessary to save the generation of a beaten minimal.
+
 ## Usage
 
 ### Defining entrances to be randomized
@@ -225,7 +240,8 @@ any integer you define and may be based on player options. Some possible use cas
 * Dungeon shuffle - only shuffle entrances within a dungeon/area with each other
 * Combinations of the above
 
-By default, all `Entrance`s are placed in the group 0.
+By default, all `Entrance`s are placed in the group 0. An entrance can only be a member of one group, but a given group
+may connect to many other groups.
 
 ### Calling generic ER
 
@@ -379,6 +395,8 @@ randomization, for instance helping to prevent restrictive sphere 1s or ensuring
 ## Implementation details
 
 This section is a medium-level explainer of the implementation of ER for those who don't want to decipher the code.
+However, a basic understanding of the mechanics of `fill_restrictive` will be helpful as many of the underlying
+algorithms are shared
 
 ER uses a forward fill approach to create the region layout. First, ER collects `all_state` and performs a region sweep
 from Menu, similar to fill. ER then proceeds in stages to complete the randomization:
@@ -393,6 +411,8 @@ The process for each connection will do the following:
 2. Get its group and check `target_group_lookup` to determine which groups are valid targets.
 3. Look up ER targets from those groups and find one which is valid according to `can_connect_to`
 4. Connect the source exit to the target's target_region and delete the target.
+   * In stage 1, before placing the last valid source transition, an additional speculative sweep is performed to ensure
+     that there will be an available exit after the placement so randomization can continue.
 5. If it's coupled mode, find the reverse exit and target by name and connect them as well.
 6. Sweep to update reachable regions.
 7. Call the `on_connect` callback.

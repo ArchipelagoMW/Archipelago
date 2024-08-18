@@ -170,6 +170,30 @@ class ERPlacementState:
         self.placements.append(source_exit)
         self.pairings.append((source_exit.name, target_entrance.name))
 
+    def test_speculative_connection(self, source_exit: Entrance, target_entrance: Entrance) -> bool:
+        copied_state = self.collection_state.copy()
+        # simulated connection. A real connection is unsafe because the region graph is shallow-copied and would
+        # propagate back to the real multiworld.
+        copied_state.reachable_regions[self.world.player].add(target_entrance.connected_region)
+        copied_state.blocked_connections[self.world.player].remove(source_exit)
+        copied_state.blocked_connections[self.world.player].update(target_entrance.connected_region.exits)
+        copied_state.update_reachable_regions(self.world.player)
+        copied_state.sweep_for_events()
+        # test that at there are newly reachable randomized exits that are ACTUALLY reachable
+        available_randomized_exits = copied_state.blocked_connections[self.world.player]
+        for _exit in available_randomized_exits:
+            if _exit.connected_region:
+                continue
+            # ignore the source exit, and, if coupled, the reverse exit. They're not actually new
+            if _exit.name == source_exit.name or (self.coupled and _exit.name == target_entrance.name):
+                continue
+            # technically this should be is_valid_source_transition, but that may rely on side effects from
+            # on_connect, which have not happened here (because we didn't do a real connection, and if we did, we would
+            # not want them to persist). can_reach is a close enough approximation most of the time.
+            if _exit.can_reach(copied_state):
+                return True
+        return False
+
     def connect(
             self,
             source_exit: Entrance,
@@ -260,6 +284,8 @@ def randomize_entrances(
         coupled: bool,
         target_group_lookup: Dict[int, List[int]],
         preserve_group_order: bool = False,
+        er_targets: List[Entrance] = None,
+        exits: List[Entrance] = None,
         on_connect: Optional[Callable[[ERPlacementState, List[Entrance]], None]] = None
 ) -> ERPlacementState:
     """
@@ -271,6 +297,11 @@ def randomize_entrances(
                                 used on an exit must be provided and must map to at least one other group. The default
                                 group is 0.
     :param preserve_group_order: Whether the order of groupings should be preserved for the returned target_groups
+    :param er_targets: The list of ER targets (Entrance objects with no parent region) to use for randomization.
+                       Remember to be deterministic! If not provided, automatically discovers all valid targets
+                       in your world.
+    :param exits: The list of exits (Entrance objects with no target region) to use for randomization.
+                  Remember to be deterministic! If not provided, automatically discovers all valid exits in your world.
     :param on_connect: A callback function which allows specifying side effects after a placement is completed
                        successfully and the underlying collection state has been updated.
     """
@@ -287,22 +318,30 @@ def randomize_entrances(
             entrance_lookup.remove(entrance)
         # propagate new connections
         er_state.collection_state.update_reachable_regions(world.player)
+        er_state.collection_state.sweep_for_events()
         if on_connect:
             on_connect(er_state, placed_exits)
 
-    def find_pairing(dead_end: bool, require_new_regions: bool) -> bool:
+    def find_pairing(dead_end: bool, require_new_exits: bool) -> bool:
         nonlocal perform_validity_check
         placeable_exits = er_state.find_placeable_exits(perform_validity_check)
         for source_exit in placeable_exits:
             target_groups = target_group_lookup[source_exit.randomization_group]
             for target_entrance in entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
-                # requiring a new region is a proxy for enforcing new entrances are added, thus growing the search
-                # space. this is not quite a full fidelity conversion, but doesn't seem to cause issues enough
-                # to do more complex checks.
-                # the new region requirement can be ignored on a beaten minimal, islands are no issue there
-                region_requirement_satisfied = (not perform_validity_check or not require_new_regions
+                # when requiring new exits, ideally we would like to make it so that every placement increases
+                # (or keeps the same number of) reachable exits. The goal is to continue to expand the search space
+                # so that we do not crash. In the interest of performance and bias reduction, generally, just checking
+                # that we are going to a new region is a good approximation. however, we should take extra care on the
+                # very last exit and check whatever exits we open up are functionally accessible.
+                # this requirement can be ignored on a beaten minimal, islands are no issue there.
+                exit_requirement_satisfied = (not perform_validity_check or not require_new_exits
                                                 or target_entrance.connected_region not in er_state.placed_regions)
-                if region_requirement_satisfied and source_exit.can_connect_to(target_entrance, er_state):
+                needs_speculative_sweep = (not dead_end and require_new_exits and perform_validity_check
+                                           and len(placeable_exits) == 1)
+                if exit_requirement_satisfied and source_exit.can_connect_to(target_entrance, dead_end, er_state):
+                    if (needs_speculative_sweep
+                            and not er_state.test_speculative_connection(source_exit, target_entrance)):
+                        continue
                     do_placement(source_exit, target_entrance)
                     return True
         else:
@@ -313,7 +352,7 @@ def randomize_entrances(
             # if we're in a stage where we're trying to get to new regions, we could also enter this
             # branch in a success state (when all regions of the preferred type have been placed, but there are still
             # additional unplaced entrances into those regions)
-            if require_new_regions:
+            if require_new_exits:
                 if all(e.connected_region in er_state.placed_regions for e in lookup):
                     return False
 
@@ -324,7 +363,7 @@ def randomize_entrances(
                     and world.multiworld.has_beaten_game(er_state.collection_state, world.player):
                 # ensure that we have enough locations to place our progression
                 accessible_location_count = 0
-                prog_item_count = len(er_state.collection_state.prog_items[world.player])
+                prog_item_count = sum(er_state.collection_state.prog_items[world.player].values())
                 # short-circuit location checking in this case
                 if prog_item_count == 0:
                     return True
@@ -342,20 +381,22 @@ def randomize_entrances(
             unplaced_exits = [exit_ for region in world.multiworld.get_regions(world.player)
                               for exit_ in region.exits if not exit_.connected_region]
             entrance_kind = "dead ends" if dead_end else "non-dead ends"
-            region_access_requirement = "requires" if require_new_regions else "does not require"
+            region_access_requirement = "requires" if require_new_exits else "does not require"
             raise EntranceRandomizationError(
                 f"None of the available entrances are valid targets for the available exits.\n"
                 f"Randomization stage is placing {entrance_kind} and {region_access_requirement} "
-                f"new region access by default\n"
+                f"new region/exit access by default\n"
                 f"Placeable entrances: {lookup}\n"
                 f"Placeable exits: {placeable_exits}\n"
                 f"All unplaced entrances: {unplaced_entrances}\n"
                 f"All unplaced exits: {unplaced_exits}")
 
-    er_targets = [entrance for region in world.multiworld.get_regions(world.player)
-                  for entrance in region.entrances if not entrance.parent_region]
-    exits = [ex for region in world.multiworld.get_regions(world.player)
-             for ex in region.exits if not ex.connected_region]
+    if not er_targets:
+        er_targets = sorted([entrance for region in world.multiworld.get_regions(world.player)
+                             for entrance in region.entrances if not entrance.parent_region], key=lambda x: x.name)
+    if not exits:
+        exits = sorted([ex for region in world.multiworld.get_regions(world.player)
+                        for ex in region.exits if not ex.connected_region], key=lambda x: x.name)
     if len(er_targets) != len(exits):
         raise EntranceRandomizationError(f"Unable to randomize entrances due to a mismatched count of "
                                          f"entrances ({len(er_targets)}) and exits ({len(exits)}.")
@@ -367,18 +408,18 @@ def randomize_entrances(
 
     # stage 1 - try to place all the non-dead-end entrances
     while entrance_lookup.others:
-        if not find_pairing(dead_end=False, require_new_regions=True):
+        if not find_pairing(dead_end=False, require_new_exits=True):
             break
     # stage 2 - try to place all the dead-end entrances
     while entrance_lookup.dead_ends:
-        if not find_pairing(dead_end=True, require_new_regions=True):
+        if not find_pairing(dead_end=True, require_new_exits=True):
             break
     # stage 3 - connect any dangling entrances that remain
     while entrance_lookup.others:
-        find_pairing(dead_end=False, require_new_regions=False)
+        find_pairing(dead_end=False, require_new_exits=False)
     # stage 4 - last chance for dead ends
     while entrance_lookup.dead_ends:
-        find_pairing(dead_end=True, require_new_regions=False)
+        find_pairing(dead_end=True, require_new_exits=False)
 
     running_time = time.perf_counter() - start_time
     if running_time > 1.0:

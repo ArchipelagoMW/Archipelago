@@ -941,7 +941,7 @@ class Entrance:
         """
         return self.can_reach(er_state.collection_state)
 
-    def can_connect_to(self, other: Entrance, er_state: "ERPlacementState") -> bool:
+    def can_connect_to(self, other: Entrance, dead_end: bool, er_state: "ERPlacementState") -> bool:
         """
         Determines whether a given Entrance is a valid target transition, that is, whether
         the entrance randomizer is allowed to pair this Entrance to that Entrance. By default,
@@ -949,6 +949,7 @@ class Entrance:
         two ways always go to two ways) and prevents connecting an exit to itself in coupled mode.
 
         :param other: The proposed Entrance to connect to
+        :param dead_end: Whether the other entrance considered a dead end by Entrance randomization
         :param er_state: The current (partial) state of the ongoing entrance randomization
         """
         # the implementation of coupled causes issues for self-loops since the reverse entrance will be the
