@@ -131,7 +131,7 @@ class BlindGoal(Toggle):
 class UnconfineHomeWater(Choice):
     """
     Open the way out of the Home Waters area so that Naija can go to open water and beyond without the bind song.
-    Note that if you put this option off, it is recommended to activate the Early Energy form and Early Bind Song
+    Note that if you turn this option off, it is recommended to turn on the Early Energy form and Early Bind Song
     options.
     """
     display_name = "Unconfine Home Waters Area"
