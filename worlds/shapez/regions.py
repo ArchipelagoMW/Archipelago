@@ -11,7 +11,6 @@ all_regions = [
     "Levels with 3 Buildings",
     "Levels with 4 Buildings",
     "Levels with 5 Buildings",
-    "Upgrades Tier II",
     "Upgrades with 1 Building",
     "Upgrades with 2 Buildings",
     "Upgrades with 3 Buildings",
@@ -150,79 +149,79 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
 
     create_entrance(player, "Shapesanity nothing",
                     regions["Main"], regions["Shapesanity Unprocessed Uncolored"], lambda state: True)
-    create_entrance(player, "Shapesanity basic painting",
+    create_entrance(player, "Shapesanity basic painting Unprocessed",
                     regions["Shapesanity Unprocessed Uncolored"], regions["Shapesanity Unprocessed Painted"],
                     lambda state: state.has("Painter", player))
-    create_entrance(player, "Shapesanity cutting",
+    create_entrance(player, "Shapesanity cutting Uncolored",
                     regions["Shapesanity Unprocessed Uncolored"], regions["Shapesanity Cut Uncolored"],
                     lambda state: state.has("Cutter", player))
-    create_entrance(player, "Shapesanity mixed painting",
+    create_entrance(player, "Shapesanity mixed painting Unprocessed",
                     regions["Shapesanity Unprocessed Painted"], regions["Shapesanity Unprocessed Mixed"],
                     lambda state: state.has("Color Mixer", player))
-    create_entrance(player, "Shapesanity cutting",
+    create_entrance(player, "Shapesanity cutting Painted",
                     regions["Shapesanity Unprocessed Painted"], regions["Shapesanity Cut Painted"],
                     lambda state: state.has("Cutter", player))
-    create_entrance(player, "Shapesanity cutting",
+    create_entrance(player, "Shapesanity cutting Mixed",
                     regions["Shapesanity Unprocessed Mixed"], regions["Shapesanity Cut Mixed"],
                     lambda state: state.has("Cutter", player))
-    create_entrance(player, "Shapesanity basic painting",
+    create_entrance(player, "Shapesanity basic painting Cut",
                     regions["Shapesanity Cut Uncolored"], regions["Shapesanity Cut Painted"],
                     lambda state: state.has("Painter", player))
-    create_entrance(player, "Shapesanity rotating",
+    create_entrance(player, "Shapesanity rotating Uncolored",
                     regions["Shapesanity Cut Uncolored"], regions["Shapesanity Cut Rotated Uncolored"],
                     lambda state: state.has("Rotator", player))
-    create_entrance(player, "Shapesanity stacking",
+    create_entrance(player, "Shapesanity stacking Uncolored",
                     regions["Shapesanity Cut Uncolored"], regions["Shapesanity Half-Half Uncolored"],
                     lambda state: state.has("Stacker", player))
-    create_entrance(player, "Shapesanity mixed painting",
+    create_entrance(player, "Shapesanity mixed painting Cut",
                     regions["Shapesanity Cut Painted"], regions["Shapesanity Cut Mixed"],
                     lambda state: state.has("Color Mixer", player))
-    create_entrance(player, "Shapesanity rotating",
+    create_entrance(player, "Shapesanity rotating Painted",
                     regions["Shapesanity Cut Painted"], regions["Shapesanity Cut Rotated Painted"],
                     lambda state: state.has("Rotator", player))
-    create_entrance(player, "Shapesanity stacking",
+    create_entrance(player, "Shapesanity stacking Painted",
                     regions["Shapesanity Cut Painted"], regions["Shapesanity Half-Half Painted"],
                     lambda state: state.has("Stacker", player))
-    create_entrance(player, "Shapesanity rotating",
+    create_entrance(player, "Shapesanity rotating Mixed",
                     regions["Shapesanity Cut Mixed"], regions["Shapesanity Cut Rotated Mixed"],
                     lambda state: state.has("Rotator", player))
-    create_entrance(player, "Shapesanity stacking",
+    create_entrance(player, "Shapesanity stacking Mixed",
                     regions["Shapesanity Cut Mixed"], regions["Shapesanity Half-Half Mixed"],
                     lambda state: state.has("Stacker", player))
-    create_entrance(player, "Shapesanity basic painting",
+    create_entrance(player, "Shapesanity basic painting Rotated",
                     regions["Shapesanity Cut Rotated Uncolored"], regions["Shapesanity Cut Rotated Painted"],
                     lambda state: state.has("Painter", player))
-    create_entrance(player, "Shapesanity stacking",
+    create_entrance(player, "Shapesanity stacking Cut Rotated Uncolored",
                     regions["Shapesanity Cut Rotated Uncolored"], regions["Shapesanity Stitched Uncolored"],
                     lambda state: state.has("Stacker", player))
-    create_entrance(player, "Shapesanity mixed painting",
+    create_entrance(player, "Shapesanity mixed painting Rotated",
                     regions["Shapesanity Cut Rotated Painted"], regions["Shapesanity Cut Rotated Mixed"],
                     lambda state: state.has("Color Mixer", player))
-    create_entrance(player, "Shapesanity stacking",
+    create_entrance(player, "Shapesanity stacking Cut Rotated Painted",
                     regions["Shapesanity Cut Rotated Painted"], regions["Shapesanity Stitched Painted"],
                     lambda state: state.has("Stacker", player))
-    create_entrance(player, "Shapesanity stacking",
+    create_entrance(player, "Shapesanity stacking Cut Rotated Mixed",
                     regions["Shapesanity Cut Rotated Mixed"], regions["Shapesanity Stitched Mixed"],
                     lambda state: state.has("Stacker", player))
-    create_entrance(player, "Shapesanity basic painting",
+    create_entrance(player, "Shapesanity basic painting Stitched",
                     regions["Shapesanity Stitched Uncolored"], regions["Shapesanity Stitched Painted"],
                     lambda state: state.has("Painter", player))
-    create_entrance(player, "Shapesanity mixed painting",
+    create_entrance(player, "Shapesanity mixed painting Stitched",
                     regions["Shapesanity Stitched Painted"], regions["Shapesanity Stitched Mixed"],
                     lambda state: state.has("Color Mixer", player))
-    create_entrance(player, "Shapesanity basic painting",
+    create_entrance(player, "Shapesanity basic painting Half-Half",
                     regions["Shapesanity Half-Half Uncolored"], regions["Shapesanity Half-Half Painted"],
                     lambda state: state.has("Painter", player))
-    create_entrance(player, "Shapesanity rotating",
+    create_entrance(player, "Shapesanity rotating Half-Half Uncolored",
                     regions["Shapesanity Half-Half Uncolored"], regions["Shapesanity Stitched Uncolored"],
                     lambda state: state.has("Rotator", player))
-    create_entrance(player, "Shapesanity mixed painting",
+    create_entrance(player, "Shapesanity mixed painting Half-Half",
                     regions["Shapesanity Half-Half Painted"], regions["Shapesanity Half-Half Mixed"],
                     lambda state: state.has("Color Mixer", player))
-    create_entrance(player, "Shapesanity rotating",
+    create_entrance(player, "Shapesanity rotating Half-Half Painted",
                     regions["Shapesanity Half-Half Painted"], regions["Shapesanity Stitched Painted"],
                     lambda state: state.has("Rotator", player))
-    create_entrance(player, "Shapesanity rotating",
+    create_entrance(player, "Shapesanity rotating Half-Half Mixed",
                     regions["Shapesanity Half-Half Mixed"], regions["Shapesanity Stitched Mixed"],
                     lambda state: state.has("Rotator", player))
 

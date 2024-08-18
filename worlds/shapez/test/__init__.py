@@ -16,3 +16,11 @@ class TestMinimum(ShapezTestBase):
 
 class TestMaximum(ShapezTestBase):
     options = options_presets["Maximum checks"]
+
+
+class TestRestrictive(ShapezTestBase):
+    options = options_presets["Restrictive start"]
+
+
+class TestQuick(ShapezTestBase):
+    options = options_presets["Quick game"]
