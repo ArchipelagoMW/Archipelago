@@ -93,15 +93,15 @@ class KH1World(World):
             possible_level_up_item_pool.append("Max AP Increase")
 
         # Fill remaining pool with items from other pool
-        self.multiworld.random.shuffle(possible_level_up_item_pool)
+        self.random.shuffle(possible_level_up_item_pool)
         level_up_item_pool = level_up_item_pool + possible_level_up_item_pool[:(100 - len(level_up_item_pool))]
 
         level_up_locations = list(get_locations_by_category("Levels").keys())
         self.random.shuffle(level_up_item_pool)
-        starting_level_for_stats_only = self.options.force_stats_on_levels.value
-        while len(level_up_item_pool) > 0 and starting_level_for_stats_only <= self.options.level_checks:
-            self.get_location(level_up_locations[starting_level_for_stats_only]).place_locked_item(self.create_item(level_up_item_pool.pop()))
-            starting_level_for_stats_only += 1
+        current_level_for_placing_stats = self.options.force_stats_on_levels.value
+        while len(level_up_item_pool) > 0 and current_level_for_placing_stats <= self.options.level_checks:
+            self.get_location(level_up_locations[current_level_for_placing_stats - 1]).place_locked_item(self.create_item(level_up_item_pool.pop()))
+            current_level_for_placing_stats += 1
         
         # Calculate prefilled locations and items
         prefilled_items = []
