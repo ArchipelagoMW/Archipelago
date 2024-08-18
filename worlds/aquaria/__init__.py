@@ -176,11 +176,14 @@ class AquariaWorld(World):
         """
         Launched when the Multiworld generator is ready to generate rules
         """
-
-        if self.options.early_energy_form:
+        if self.options.early_energy_form == 1:
             self.multiworld.early_items[self.player][ItemNames.ENERGY_FORM] = 1
-        if self.options.early_bind_song:
+        elif self.options.early_energy_form == 2:
+            self.multiworld.local_early_items[self.player][ItemNames.ENERGY_FORM] = 1
+        if self.options.early_bind_song == 1:
             self.multiworld.early_items[self.player][ItemNames.BIND_SONG] = 1
+        elif self.options.early_bind_song == 2:
+            self.multiworld.local_early_items[self.player][ItemNames.BIND_SONG] = 1
         self.regions.adjusting_rules(self.options)
         self.multiworld.completion_condition[self.player] = lambda \
             state: state.has(ItemNames.VICTORY, self.player)
