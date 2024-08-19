@@ -23,7 +23,7 @@ import time
 import typing
 
 
-from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
+from CommonClient import (CommonContext, ClientCommandProcessor, get_base_parser, gui_enabled, logger,
                           server_loop)
 from NetUtils import ClientStatus
 from worlds.ladx.Common import BASE_ID as LABaseID
@@ -448,10 +448,23 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
     task = asyncio.create_task(_log_exception(awaitable))
     all_tasks.add(task)
 
+class LinksAwakeningCommandProcessor(ClientCommandProcessor):
+    def __init__(self, ctx):
+        super().__init__(ctx)
+
+    def _cmd_deathlink(self):
+        """Toggles deathlink."""
+        if isinstance(self.ctx, LinksAwakeningContext):
+            Utils.async_start(self.ctx.update_death_link(!("DeathLink" in self.tags)))
+
+    def _cmd_check_tags(self):
+        """Prints current tags."""
+        logger.info(f"Tags: {self.tags}")
 
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
     game = "Links Awakening DX"
+    command_processor = LinksAwakeningCommandProcessor
     items_handling = 0b101
     want_slot_data = True
     la_task = None
@@ -519,7 +532,7 @@ class LinksAwakeningContext(CommonContext):
 
     async def send_deathlink(self):
         if "DeathLink" in self.tags:
-            loggerin.info("DeathLink: Sending death to your friends...")
+            logger.info("DeathLink: Sending death to your friends...")
             await self.send_msgs([{
                 "cmd": "Bounce", "tags": ["DeathLink"],
                 "data": {
@@ -567,7 +580,7 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
-                self.update_death_link(true)
+                self.update_death_link(True)
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
