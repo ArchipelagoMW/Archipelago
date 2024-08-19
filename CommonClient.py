@@ -352,14 +352,6 @@ class CommonContext:
         # execution
         self.keep_alive_task = asyncio.create_task(keep_alive(self), name="Bouncy")
 
-        if gui_enabled and self.ui_manager is None:
-            from kvui import GameManager
-
-            class TextManager(GameManager):
-                base_title = "Archipelago Text Client"
-
-            self.ui_manager = TextManager
-
     @property
     def suggested_address(self) -> str:
         if self.server_address:
@@ -671,9 +663,18 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
+    def make_gui(self):
+        """To return the object needed for run_gui so it can be overridden before being built"""
+        from kvui import GameManager
+
+        class TextManager(GameManager):
+            base_title = "Archipelago Text Client"
+
+        return GameManager(self)
+
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
-        self.ui = self.ui_manager(self)
+        self.ui = self.make_gui()
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def run_cli(self):
