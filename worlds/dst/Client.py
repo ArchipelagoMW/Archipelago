@@ -104,7 +104,7 @@ class DSTContext(CommonContext):
             self.dst_handler.enqueue({
                 "datatype": "HintInfo",
                 "item": hint["item"],
-                "locationname": self.location_names[hint["location"]],
+                "locationname": self.location_names.lookup_in_slot(hint["location"], hint["finding_player"]),
                 "findingname": self.player_names[hint["finding_player"]],
             }, False)
 
@@ -178,7 +178,7 @@ class DSTContext(CommonContext):
                             "location": loc.location,
                             "item": loc.item,
                             "player": loc.player,
-                            "itemname": self.item_names[loc.item],
+                            "itemname": self.item_names.lookup_in_slot(loc.item, loc.player),
                             "playername": self.player_names[loc.player],
                             "flags": loc.flags,
                         },
