@@ -97,12 +97,14 @@ class MM2World(World):
     web = MM2WebWorld()
     rom_name: bytearray
     world_version: Tuple[int, int, int] = (0, 3, 1)
+    wily_5_weapons: Dict[int, List[int]]
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
         self.weapon_damage = deepcopy(weapon_damage)
+        self.wily_5_weapons = {}
 
     def create_regions(self) -> None:
         menu = MM2Region("Menu", self.player, self.multiworld)
@@ -269,12 +271,14 @@ class MM2World(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "death_link": self.options.death_link.value,
-            "weapon_damage": self.weapon_damage
+            "weapon_damage": self.weapon_damage,
+            "wily_5_weapons": self.wily_5_weapons,
         }
 
     def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
         local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
-        return {"weapon_damage": local_weapon}
+        local_wily = {int(key): value for key, value in slot_data["wily_5_weapons"].items()}
+        return {"weapon_damage": local_weapon, "wily_5_weapons": local_wily}
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:
         # wait for self.rom_name to be available.
@@ -289,23 +293,17 @@ class MM2World(World):
         change = super().collect(state, item)
         if change and item.name in self.item_name_groups["Weapons"]:
             # need to evaluate robot master access
-            weapon = next((wp for wp in weapons_to_name if weapons_to_name[wp] == item.name), None)
-            if weapon:
-                for rbm in robot_masters:
-                    if self.weapon_damage[weapon][rbm] >= minimum_weakness_requirement[weapon]:
-                        state.prog_items[self.player][robot_masters[rbm]] = 1
+            for boss, reqs in self.wily_5_weapons.items():
+                if boss in robot_masters:
+                    if state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player):
+                        state.prog_items[self.player][robot_masters[boss]] = 1
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
         if change and item.name in self.item_name_groups["Weapons"]:
-            removed_weapon = next((weapons_to_name[weapon] == item.name for weapon in weapons_to_name), None)
-            received_weapons = {weapon for weapon in weapons_to_name
-                                if weapons_to_name[weapon] in state.prog_items[self.player]}
-            if removed_weapon:
-                for rbm in robot_masters:
-                    if self.weapon_damage[removed_weapon][rbm] > 0 and not any(self.weapon_damage[wp][rbm] >
-                                                                               minimum_weakness_requirement[wp]
-                                                                               for wp in received_weapons):
-                        state.prog_items[self.player][robot_masters[rbm]] = 0
+            for boss, reqs in self.wily_5_weapons.items():
+                if boss in robot_masters:
+                    if not state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player):
+                        state.prog_items[self.player][robot_masters[boss]] = 0
         return change

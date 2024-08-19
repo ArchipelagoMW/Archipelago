@@ -81,6 +81,7 @@ def set_rules(world: "MM2World") -> None:
             and "Mega Man 2" in getattr(world.multiworld, "re_gen_passthrough")):
         slot_data = getattr(world.multiworld, "re_gen_passthrough")["Mega Man 2"]
         world.weapon_damage = slot_data["weapon_damage"]
+        world.wily_5_weapons = slot_data["wily_5_weapons"]
     else:
         if world.options.random_weakness == RandomWeaknesses.option_shuffled:
             weapon_tables = [table for weapon, table in weapon_damage.items() if weapon not in (0, 8)]
@@ -149,8 +150,10 @@ def set_rules(world: "MM2World") -> None:
 
         for p_boss in world.options.plando_weakness:
             for p_weapon in world.options.plando_weakness[p_boss]:
-                if not any(w for w in world.weapon_damage
-                           if w != p_weapon and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]):
+                if world.options.plando_weakness[p_boss][p_weapon] < minimum_weakness_requirement[p_weapon] \
+                        and not any(w for w in world.weapon_damage
+                                    if w != p_weapon
+                                    and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]):
                     # we need to replace this weakness
                     weakness = world.random.choice([key for key in world.weapon_damage if key != p_weapon])
                     world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
@@ -158,7 +161,7 @@ def set_rules(world: "MM2World") -> None:
                     = world.options.plando_weakness[p_boss][p_weapon]
 
         if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
-            world.weapon_damage[0][world.options.starting_robot_master.value] = 1
+            world.weapon_damage[0][world.options.starting_robot_master.value] = weapon_damage[0][world.options.starting_robot_master.value]
 
         # final special case
         # There's a vanilla crash if Time Stopper kills Wily phase 1
@@ -172,10 +175,17 @@ def set_rules(world: "MM2World") -> None:
         weapon_energy = {key: float(0x1C) for key in weapon_costs}
         weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
                        for boss in [*range(8), 12]}
-        flexibility = [(sum(1 if weapon_boss[boss][weapon] > 0 else 0 for weapon in range(9)) *
-                        sum(weapon_boss[boss].values()), boss) for boss in weapon_boss if boss != 12]
+        flexibility = {
+            boss: (
+                    sum(damage_value > 0 for damage_value in
+                        weapon_damages.values())  # Amount of weapons that hit this boss
+                    * sum(weapon_damages.values())  # Overall damage that those weapons do
+            )
+            for boss, weapon_damages in weapon_boss.items() if boss != 12
+        }
+        flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
         used_weapons = {i: set() for i in [*range(8), 12]}
-        for _, boss in [*sorted(flexibility), (0, 12)]:
+        for boss in [*flexibility, 12]:
             boss_damage = weapon_boss[boss]
             weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
                              boss_damage.items() if weapon_energy[weapon] > 0}
@@ -214,7 +224,9 @@ def set_rules(world: "MM2World") -> None:
                     weapon_energy[wp] -= weapon_costs[wp] * uses
                     weapon_weight.pop(wp)
 
-    for i, boss_locations in zip(range(14), [
+        world.wily_5_weapons = {boss: sorted(used_weapons[boss]) for boss in used_weapons}
+
+    for i, boss_locations in enumerate([
         heat_man_locations,
         air_man_locations,
         wood_man_locations,
