@@ -1031,7 +1031,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Forest Grave Path Main": {
         "Forest Grave Path Upper":
-            [["Hyperdash"], ["LS2"]],
+            [["Hyperdash"], ["LS2"], ["IG3"]],
         "Forest Grave Path by Grave":
             [],
     },

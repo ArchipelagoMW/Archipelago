@@ -394,7 +394,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Forest Belltower Lower"],
         rule=lambda state: has_ladder("Ladder to East Forest", state, world))
 
-    # nmg: ice grapple up to dance fox spot, and vice versa
+    # ice grapple up to dance fox spot, and vice versa
     regions["East Forest"].connect(
         connecting_region=regions["East Forest Dance Fox Spot"],
         rule=lambda state: state.has(laurels, player)
@@ -431,18 +431,20 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Guard House 2 Upper"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
 
-    # nmg: ice grapple from upper grave path exit to the rest of it
+    # ice grapple from upper grave path exit to the rest of it
     regions["Forest Grave Path Upper"].connect(
         connecting_region=regions["Forest Grave Path Main"],
         rule=lambda state: state.has(laurels, player)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+    # for the ice grapple, lure a rudeling up top, then grapple push it across
     regions["Forest Grave Path Main"].connect(
         connecting_region=regions["Forest Grave Path Upper"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
     regions["Forest Grave Path Main"].connect(
         connecting_region=regions["Forest Grave Path by Grave"])
-    # nmg: ice grapple or laurels through the gate
+    # ice grapple or laurels through the gate
     regions["Forest Grave Path by Grave"].connect(
         connecting_region=regions["Forest Grave Path Main"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
