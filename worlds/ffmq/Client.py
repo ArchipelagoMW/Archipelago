@@ -71,7 +71,7 @@ class FFMQClient(SNIClient):
         received = await snes_read(ctx, RECEIVED_DATA[0], RECEIVED_DATA[1])
         data = await snes_read(ctx, READ_DATA_START, READ_DATA_END - READ_DATA_START)
         check_2 = await snes_read(ctx, 0xF53749, 1)
-        if check_1 != b'01' or check_2 != b'01':
+        if check_1 != b'\x01' or check_2 != b'\x01':
             return
 
         def get_range(data_range):

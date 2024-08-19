@@ -1393,7 +1393,7 @@ class OOTWorld(World):
             self.multiworld.worlds[item.player].collect(all_state, item)
         # If free_scarecrow give Scarecrow Song
         if self.free_scarecrow:
-            all_state.collect(self.create_item("Scarecrow Song"), event=True)
+            all_state.collect(self.create_item("Scarecrow Song"), prevent_sweep=True)
         all_state._oot_stale[self.player] = True
 
         return all_state
