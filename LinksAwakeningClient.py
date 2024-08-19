@@ -455,7 +455,7 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggles deathlink."""
         if isinstance(self.ctx, LinksAwakeningContext):
-            Utils.async_start(self.ctx.update_death_link(!("DeathLink" in self.tags)))
+            Utils.async_start(self.ctx.update_death_link("DeathLink" not in self.tags))
 
     def _cmd_check_tags(self):
         """Prints current tags."""
