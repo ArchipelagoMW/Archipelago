@@ -162,94 +162,123 @@ class DKC2StrictRules(DKC2Rules):
                     self.can_hover(state) or self.can_cartwheel(state)
                 ),
             LocationName.gangplank_galley_bonus_1:
-                self.true,
+                self.can_carry,
             LocationName.gangplank_galley_bonus_2:
-                self.true,
+                lambda state: self.can_cling(state) and self.has_invincibility(state),
 
             LocationName.lockjaws_locker_clear:
-                self.true,
+                self.can_swim,
             LocationName.lockjaws_locker_kong:
-                self.true,
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
             LocationName.lockjaws_locker_dk_coin:
-                self.true,
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
             LocationName.lockjaws_locker_bonus_1:
-                self.true,
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
 
             LocationName.topsail_trouble_clear:
-                self.true,
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
             LocationName.topsail_trouble_kong:
-                self.true,
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
             LocationName.topsail_trouble_dk_coin:
-                self.true,
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
             LocationName.topsail_trouble_bonus_1:
-                self.true,
+                lambda state: self.has_rattly(state) or (
+                    self.can_team_attack(state) and self.can_cling(state)
+                ),
             LocationName.topsail_trouble_bonus_2:
-                self.true,
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
 
             LocationName.krows_nest_clear:
-                self.true,
+                self.can_carry,
 
             LocationName.hot_head_hop_clear:
-                self.true,
+                self.has_kannons,
             LocationName.hot_head_hop_kong:
-                self.true,
+                lambda state: self.can_carry(state) and (
+                    self.can_team_attack(state) or
+                    self.has_squitter(state)
+                ),
             LocationName.hot_head_hop_dk_coin:
-                self.true,
+                self.has_squitter,
             LocationName.hot_head_hop_bonus_1:
-                self.true,
+                self.can_carry,
             LocationName.hot_head_hop_bonus_2:
-                self.true,
+                self.has_squitter,
             LocationName.hot_head_hop_bonus_3:
-                self.true,
+                lambda state: self.has_squitter(state) and self.has_kannons(state),
 
             LocationName.kannons_klaim_clear:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_kannons(state),
             LocationName.kannons_klaim_kong:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_kannons(state),
             LocationName.kannons_klaim_dk_coin:
-                self.true,
+                lambda state: self.can_hover(state) and self.has_kannons(state),
             LocationName.kannons_klaim_bonus_1:
-                self.true,
+                lambda state: self.can_use_diddy_barrels(state) and self.can_use_dixie_barrels(state) and
+                    self.can_hover(state),
             LocationName.kannons_klaim_bonus_2:
-                self.true,
+                lambda state: self.can_carry(state) and self.can_team_attack(state) and self.has_kannons(state),
             LocationName.kannons_klaim_bonus_3:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_kannons(state),
 
             LocationName.lava_lagoon_clear:
-                self.true,
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_invincibility(state) and
+                    self.has_kannons(state) and self.has_enguarde(state),
             LocationName.lava_lagoon_kong:
-                self.true,
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_invincibility(state) and
+                    self.has_kannons(state) and self.has_enguarde(state),
             LocationName.lava_lagoon_dk_coin:
-                self.true,
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_invincibility(state) and
+                    self.has_kannons(state) and self.has_enguarde(state),
             LocationName.lava_lagoon_bonus_1:
-                self.true,
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_invincibility(state) and
+                    self.has_kannons(state) and self.has_enguarde(state) and self.can_carry(state),
 
             LocationName.red_hot_ride_clear:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_rambi(state),
             LocationName.red_hot_ride_kong:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_rambi(state),
             LocationName.red_hot_ride_dk_coin:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_rambi(state) and self.can_team_attack(state),
             LocationName.red_hot_ride_bonus_1:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_rambi(state),
             LocationName.red_hot_ride_bonus_2:
-                self.true,
+                lambda state: self.can_carry(state) and self.has_rambi(state) and self.can_hover(state),
 
             LocationName.squawks_shaft_clear:
-                self.true,
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
             LocationName.squawks_shaft_kong:
-                self.true,
+                lambda state: self.has_kannons(state) and self.can_carry(state) and self.has_squawks(state),
             LocationName.squawks_shaft_dk_coin:
-                self.true,
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
             LocationName.squawks_shaft_bonus_1:
-                self.true,
+                lambda state: self.has_kannons(state) and self.can_carry(state) and (
+                    self.can_cartwheel(state) or 
+                    self.can_hover(state)
+                ),
             LocationName.squawks_shaft_bonus_2:
-                self.true,
+                lambda state: self.has_kannons(state) and self.can_team_attack(state),
             LocationName.squawks_shaft_bonus_3:
-                self.true,
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
 
             LocationName.kleevers_kiln_clear:
-                self.true,
+                lambda state: self.can_cling(state) and self.can_carry(state),
 
             LocationName.barrel_bayou_clear:
                 self.true,
