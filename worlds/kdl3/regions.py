@@ -152,7 +152,7 @@ def generate_valid_levels(world: "KDL3World", shuffle_mode: int) -> Dict[int, Li
                 if levels[level][stage] is None:
                     stage_candidates = [candidate for candidate in possible_stages
                                         if (shuffle_mode == 1 and candidate in default_levels[level])
-                                        or (shuffle_mode == 2 and ((candidate - 1) & 0x00FFFF) % 6 == stage)
+                                        or (shuffle_mode == 2 and (candidate & 0x00FFFF) % 6 == stage)
                                         or (shuffle_mode == 3)
                                         ]
                     if not stage_candidates:
