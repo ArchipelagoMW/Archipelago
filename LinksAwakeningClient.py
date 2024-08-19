@@ -457,10 +457,6 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LinksAwakeningContext):
             Utils.async_start(self.ctx.update_death_link("DeathLink" not in self.ctx.tags))
 
-    def _cmd_check_tags(self):
-        """Prints current tags."""
-        logger.info(f"Tags: {self.ctx.tags}")
-
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
     game = "Links Awakening DX"
@@ -551,8 +547,9 @@ class LinksAwakeningContext(CommonContext):
             self.won = True
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
-        if "DeathLink" in self.tags:
-            self.client.pending_deathlink = True
+        self.client.pending_deathlink = True
+        super(LinksAwakeningContext, self).on_deathlink(data)
+
 
     def new_checks(self, item_ids, ladxr_ids):
         self.found_checks += item_ids
