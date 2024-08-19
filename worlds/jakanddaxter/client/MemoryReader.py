@@ -1,4 +1,5 @@
 import random
+import struct
 from typing import ByteString, List, Callable
 import json
 import pymem
@@ -76,6 +77,8 @@ collected_bundle_offset = offsets.define(sizeof_uint32, 17)
 fire_canyon_unlock_offset = offsets.define(sizeof_float)
 mountain_pass_unlock_offset = offsets.define(sizeof_float)
 lava_tube_unlock_offset = offsets.define(sizeof_float)
+citizen_orb_amount_offset = offsets.define(sizeof_float)
+oracle_orb_amount_offset = offsets.define(sizeof_float)
 completion_goal_offset = offsets.define(sizeof_uint8)
 completed_offset = offsets.define(sizeof_uint8)
 
@@ -87,6 +90,11 @@ my_item_finder_offset = offsets.define(sizeof_uint8, 32)
 
 # The End.
 end_marker_offset = offsets.define(sizeof_uint8, 4)
+
+
+# Can't believe this is easier to do in GOAL than Python but that's how it be sometimes.
+def as_float(value: int) -> int:
+    return int(struct.unpack('f', value.to_bytes(sizeof_float, "little"))[0])
 
 
 # "Jak" to be replaced by player name in the Client.
@@ -239,10 +247,11 @@ class JakAndDaxterMemoryReader:
 
     def read_memory(self) -> List[int]:
         try:
-            next_cell_index = self.read_goal_address(0, sizeof_uint64)
-            next_buzzer_index = self.read_goal_address(next_buzzer_index_offset, sizeof_uint64)
-            next_special_index = self.read_goal_address(next_special_index_offset, sizeof_uint64)
+            # Need to grab these first and convert to floats, see below.
+            citizen_orb_amount = self.read_goal_address(citizen_orb_amount_offset, sizeof_float)
+            oracle_orb_amount = self.read_goal_address(oracle_orb_amount_offset, sizeof_float)
 
+            next_cell_index = self.read_goal_address(next_cell_index_offset, sizeof_uint64)
             for k in range(0, next_cell_index):
                 next_cell = self.read_goal_address(cells_checked_offset + (k * sizeof_uint32), sizeof_uint32)
                 cell_ap_id = Cells.to_ap_id(next_cell)
@@ -253,13 +262,16 @@ class JakAndDaxterMemoryReader:
                     # If orbsanity is ON and next_cell is one of the traders or oracles, then run a callback
                     # to add their amount to the DataStorage value holding our current orb trade total.
                     if next_cell in {11, 12, 31, 32, 33, 96, 97, 98, 99}:
-                        self.orbs_paid += 90
-                        logger.debug("Traded 90 orbs!")
+                        citizen_orb_amount = as_float(citizen_orb_amount)
+                        self.orbs_paid += citizen_orb_amount
+                        logger.debug(f"Traded {citizen_orb_amount} orbs!")
 
                     if next_cell in {13, 14, 34, 35, 100, 101}:
-                        self.orbs_paid += 120
-                        logger.debug("Traded 120 orbs!")
+                        oracle_orb_amount = as_float(oracle_orb_amount)
+                        self.orbs_paid += oracle_orb_amount
+                        logger.debug(f"Traded {oracle_orb_amount} orbs!")
 
+            next_buzzer_index = self.read_goal_address(next_buzzer_index_offset, sizeof_uint64)
             for k in range(0, next_buzzer_index):
                 next_buzzer = self.read_goal_address(buzzers_checked_offset + (k * sizeof_uint32), sizeof_uint32)
                 buzzer_ap_id = Flies.to_ap_id(next_buzzer)
@@ -267,6 +279,7 @@ class JakAndDaxterMemoryReader:
                     self.location_outbox.append(buzzer_ap_id)
                     logger.debug("Checked scout fly: " + str(next_buzzer))
 
+            next_special_index = self.read_goal_address(next_special_index_offset, sizeof_uint64)
             for k in range(0, next_special_index):
                 next_special = self.read_goal_address(specials_checked_offset + (k * sizeof_uint32), sizeof_uint32)
                 special_ap_id = Specials.to_ap_id(next_special)
@@ -284,7 +297,6 @@ class JakAndDaxterMemoryReader:
             self.deathlink_enabled = bool(deathlink_flag)
 
             next_cache_index = self.read_goal_address(next_orb_cache_index_offset, sizeof_uint64)
-
             for k in range(0, next_cache_index):
                 next_cache = self.read_goal_address(orb_caches_checked_offset + (k * sizeof_uint32), sizeof_uint32)
                 cache_ap_id = Caches.to_ap_id(next_cache)

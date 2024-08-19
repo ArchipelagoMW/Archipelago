@@ -200,4 +200,6 @@ class JakAndDaxterWorld(World):
                                     "fire_canyon_cell_count",
                                     "mountain_pass_cell_count",
                                     "lava_tube_cell_count",
+                                    "citizen_orb_trade_amount",
+                                    "oracle_orb_trade_amount",
                                     "jak_completion_condition")

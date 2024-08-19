@@ -7,9 +7,9 @@ all the options you need to configure and export a config file.
 
 At this time, there are several caveats and restrictions:
 - Power Cells and Scout Flies are **always** randomized.
-- Precursor Orbs are **never** randomized.
-- **All** of the traders in the game become in-logic checks **if and only if** you have enough Orbs (1530) to pay them all at once. 
-  - This is to prevent hard locks, where an item required for progression is locked behind a trade you can't afford.
+- **All** the traders in the game become in-logic checks **if and only if** you have enough Orbs to pay all of them at once. 
+    - This is to prevent hard locks, where an item required for progression is locked behind a trade you can't afford because you spent the orbs elsewhere.
+    - By default, that total is 1530.
 
 ## What does randomization do to this game?
 The game now contains the following Location checks:
@@ -56,10 +56,14 @@ This will show you a list of all the special items in the game, ones not normall
 Gray items indicate you do not possess that item, light blue items indicate you possess that item.
 
 ## What is the goal of the game once randomized?
-To complete the game, you must defeat the Gol and Maia and stop them from opening the Dark Eco silo.
+By default, to complete the game you must defeat the Gol and Maia and stop them from opening the Dark Eco silo. In order 
+to reach them, you will need at least 72 Power Cells to cross the Lava Tube, as well as the four special items for 
+freeing the Red, Blue, Yellow, and Green Sages.
 
-In order to reach them, you will need at least 72 Power Cells to cross the Lava Tube. In addition, 
-you will need the four special items that free the Red, Blue, Yellow, and Green Sages.
+Alternatively, you can choose from a handful of other completion conditions like defeating a particular boss, crossing
+a particular connector level, or opening the 100 Power Cell door after defeating the final boss. You can also customize
+the thresholds for connector levels and orb trades. These options allow you to tailor the expected length and difficulty
+of your run as you see fit.
 
 ## What happens when I pick up or receive a power cell?
 When you pick up a power cell, Jak and Daxter will perform their victory animation. Your power cell count will 
@@ -85,23 +89,23 @@ scout fly. So in short:
 
 - When you _pick up_ your 7th fly, the normal rules apply. 
 - When you _receive_ your 7th fly, 2 things will happen in quick succession.
-  - First, you will receive that scout fly, as normal.
-  - Second, you will immediately complete the "Free 7 Scout Flies" check, which will send out another item.
+    - First, you will receive that scout fly, as normal.
+    - Second, you will immediately complete the "Free 7 Scout Flies" check, which will send out another item.
 
 ## What does Deathlink do?
 If you enable Deathlink, all the other players in your Multiworld who also have it enabled will be linked on death. 
 That means when Jak dies in your game, the players in your Deathlink group also die. Likewise, if any of the other 
-players die, Jak will also die in a random fashion.
+players die, Jak will also die in a random, possibly spectacular fashion.
 
-You can turn off Deathlink at any time in the game by opening the game's menu, navigate to `Options`, 
+You can turn off Deathlink at any time in the game by opening the game's menu and navigating to `Options`, 
 then `Archipelago Options`, then `Deathlink`.
 
 ## What does Move Randomizer do?
 If you enable Move Randomizer, most of Jak's movement set will be added to the randomized item pool, and you will need 
 to receive the move in order to use it (i.e. you must find it, or another player must send it to you). Some moves have
 prerequisite moves that you must also have in order to use them (e.g. Crouch Jump is dependent on Crouch). Jak will only
-be able to run, swim (including underwater), and perform single jumps. Note that Flut Flut will have access to her full
-movement set at all times.
+be able to run, swim (including underwater), perform single jumps, and shoot yellow eco from his goggles ("firing from
+the hip" requires Punch). Note that Flut Flut and the Zoomer will have access to their full movement sets at all times.
 
 You can turn off Move Rando at any time in the game by opening the game's menu, navigate to `Options`, 
 then `Archipelago Options`, then `Move Randomizer`. This will give you access to the full movement set again.
@@ -134,9 +138,9 @@ a "bundle" of the correct number of orbs, you will trigger the next release in t
 will be added to the item pool to be randomized. There are several options to change the difficulty of this challenge. 
 
 - "Per Level" Orbsanity means the lists of orb checks are generated and populated for each level in the game.
-  - (Geyser Rock, Sandover Village, etc.)
+    - (Geyser Rock, Sandover Village, etc.)
 - "Global" Orbsanity means there is only one list of checks for the entire game.
-  - It does not matter where you pick up the orbs, they all count toward the same list.
+    - It does not matter where you pick up the orbs, they all count toward the same list.
 - The options with "Bundle Size" in the name indicate how many orbs are in a "bundle." This adds a number of Items 
   and Locations to the pool inversely proportional to the size of the bundle.
     - For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
@@ -161,20 +165,18 @@ to the nearest sage's hut to continue your journey.
 Depending on the nature of the bug, there are a couple of different options.
 
 * If you found a logical error in the randomizer, please create a new Issue 
-[here.](https://github.com/ArchipelaGOAL/Archipelago/issues)
-  * Use this page if:
+[here.](https://github.com/ArchipelaGOAL/Archipelago/issues) Use this page if:
     * An item required for progression is unreachable. 
     * The randomizer did not respect one of the Options you chose.
     * You see a mistake, typo, etc. on this webpage.
     * You see an error or stack trace appear on the text client.
-  * Please upload your config file and spoiler log file in the Issue, so we can troubleshoot the problem.
 
 * If you encountered an error in OpenGOAL, please create a new Issue 
-[here.](https://github.com/ArchipelaGOAL/ArchipelaGOAL/issues)
-  * Use this page if:
-    * You encounter a crash, freeze, reset, etc in the game.
+[here.](https://github.com/ArchipelaGOAL/ArchipelaGOAL/issues) Use this page if:
+    * You encounter a crash, freeze, reset, etc. in the game.
     * You fail to send Items you find in the game to the Archipelago server.
     * You fail to receive Items the server sends to you.
     * Your game disconnects from the server and cannot reconnect.
     * You go looking for a game item that has already disappeared before you could reach it.
-  * Please upload any log files that may have been generated.
+
+* Please upload your config file, spoiler log file, and any other generated logs in the Issue, so we can troubleshoot the problem.

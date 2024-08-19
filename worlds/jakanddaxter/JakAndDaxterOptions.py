@@ -3,8 +3,8 @@ from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Ra
 
 
 class EnableMoveRandomizer(Toggle):
-    """Enable to include movement options as items in the randomizer. Jak is only able to run, swim, and single jump
-    until you find his other moves.
+    """Enable to include movement options as items in the randomizer. Until you find his other moves, Jak is limited to
+    running, swimming, single-jumping, and shooting yellow eco through his goggles.
 
     This adds 11 items to the pool."""
     display_name = "Enable Move Randomizer"
@@ -51,7 +51,7 @@ class GlobalOrbsanityBundleSize(Choice):
     option_500_orbs = 500
     option_1000_orbs = 1000
     option_2000_orbs = 2000
-    default = 1
+    default = 20
 
 
 class PerLevelOrbsanityBundleSize(Choice):
@@ -64,11 +64,11 @@ class PerLevelOrbsanityBundleSize(Choice):
     option_10_orbs = 10
     option_25_orbs = 25
     option_50_orbs = 50
-    default = 1
+    default = 25
 
 
 class FireCanyonCellCount(Range):
-    """Set the number of orbs you need to cross Fire Canyon."""
+    """Set the number of power cells you need to cross Fire Canyon."""
     display_name = "Fire Canyon Cell Count"
     range_start = 0
     range_end = 100
@@ -76,7 +76,7 @@ class FireCanyonCellCount(Range):
 
 
 class MountainPassCellCount(Range):
-    """Set the number of orbs you need to reach Klaww and cross Mountain Pass."""
+    """Set the number of power cells you need to reach Klaww and cross Mountain Pass."""
     display_name = "Mountain Pass Cell Count"
     range_start = 0
     range_end = 100
@@ -84,11 +84,33 @@ class MountainPassCellCount(Range):
 
 
 class LavaTubeCellCount(Range):
-    """Set the number of orbs you need to cross Lava Tube."""
+    """Set the number of power cells you need to cross Lava Tube."""
     display_name = "Lava Tube Cell Count"
     range_start = 0
     range_end = 100
     default = 72
+
+
+# 222 is the maximum because there are 9 citizen trades and 2000 orbs to trade (2000/9 = 222).
+class CitizenOrbTradeAmount(Range):
+    """Set the number of orbs you need to trade to ordinary citizens for a power cell (Mayor, Uncle, etc.).
+
+    Along with Oracle Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000)."""
+    display_name = "Citizen Orb Trade Amount"
+    range_start = 0
+    range_end = 222
+    default = 90
+
+
+# 333 is the maximum because there are 6 oracle trades and 2000 orbs to trade (2000/6 = 333).
+class OracleOrbTradeAmount(Range):
+    """Set the number of orbs you need to trade to the Oracles for a power cell.
+
+    Along with Citizen Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000)."""
+    display_name = "Oracle Orb Trade Amount"
+    range_start = 0
+    range_end = 333
+    default = 120
 
 
 class CompletionCondition(Choice):
@@ -113,5 +135,7 @@ class JakAndDaxterOptions(PerGameCommonOptions):
     fire_canyon_cell_count: FireCanyonCellCount
     mountain_pass_cell_count: MountainPassCellCount
     lava_tube_cell_count: LavaTubeCellCount
+    citizen_orb_trade_amount: CitizenOrbTradeAmount
+    oracle_orb_trade_amount: OracleOrbTradeAmount
     jak_completion_condition: CompletionCondition
     start_inventory_from_pool: StartInventoryPool

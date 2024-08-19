@@ -130,6 +130,8 @@ class JakAndDaxterContext(CommonContext):
                                         slot_data["fire_canyon_cell_count"],
                                         slot_data["mountain_pass_cell_count"],
                                         slot_data["lava_tube_cell_count"],
+                                        slot_data["citizen_orb_trade_amount"],
+                                        slot_data["oracle_orb_trade_amount"],
                                         goal_id))
 
             # Because Orbsanity and the orb traders in the game are intrinsically linked, we need the server

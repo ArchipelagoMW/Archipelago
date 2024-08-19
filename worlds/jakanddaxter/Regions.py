@@ -133,6 +133,9 @@ def create_regions(multiworld: MultiWorld, options: JakAndDaxterOptions, player:
     # the connector levels. E.g. if you set Fire Canyon count to 99, we may not have 99 Locations in hub 1.
     verify_connector_level_accessibility(multiworld, options, player)
 
+    # Also verify that we didn't overload the trade amounts with more orbs than exist in the world.
+    verify_orbs_for_trades(multiworld, options, player)
+
 
 def verify_connector_level_accessibility(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int):
 
@@ -182,3 +185,26 @@ def verify_connector_level_accessibility(multiworld: MultiWorld, options: JakAnd
 
         for item in required_items:
             state.collect(JakAndDaxterItem(required_items[item], ItemClassification.progression, item, player))
+
+
+def verify_orbs_for_trades(multiworld: MultiWorld, options: JakAndDaxterOptions, player: int):
+
+    citizen_trade_orbs = 9 * options.citizen_orb_trade_amount
+    if citizen_trade_orbs > 2000:
+        raise OptionError(f"Settings conflict with {options.citizen_orb_trade_amount.display_name}: "
+                          f"required number of orbs to trade with citizens ({citizen_trade_orbs}) "
+                          f"is more than all the orbs in the game (2000).")
+
+    oracle_trade_orbs = 6 * options.oracle_orb_trade_amount
+    if oracle_trade_orbs > 2000:
+        raise OptionError(f"Settings conflict with {options.oracle_orb_trade_amount.display_name}: "
+                          f"required number of orbs to trade with oracles ({oracle_trade_orbs}) "
+                          f"is more than all the orbs in the game (2000).")
+
+    total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
+    if total_trade_orbs > 2000:
+        raise OptionError(f"Settings conflict with Orb Trade Amounts: "
+                          f"required number of orbs for all trades ({total_trade_orbs}) "
+                          f"is more than all the orbs in the game (2000). "
+                          f"Reduce the value of either {options.citizen_orb_trade_amount.display_name} "
+                          f"or {options.oracle_orb_trade_amount.display_name}.")

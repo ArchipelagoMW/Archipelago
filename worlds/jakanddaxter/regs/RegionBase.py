@@ -14,7 +14,7 @@ class JakAndDaxterRegion(Region):
     """
     Holds region information such as name, level name, number of orbs available, etc.
     We especially need orb counts to be tracked because we need to know when you can
-    afford the 90-orb and 120-orb payments for more checks.
+    afford the Citizen and Oracle orb payments for more checks.
     """
     game: str = jak1_name
     level_name: str

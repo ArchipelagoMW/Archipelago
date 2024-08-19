@@ -356,15 +356,18 @@ class JakAndDaxterReplClient:
     async def setup_options(self,
                             os_option: int, os_bundle: int,
                             fc_count: int, mp_count: int,
-                            lt_count: int, goal_id: int) -> bool:
+                            lt_count: int, ct_amount: int,
+                            ot_amount: int, goal_id: int) -> bool:
         ok = await self.send_form(f"(ap-setup-options! "
                                   f"(the uint {os_option}) (the uint {os_bundle}) "
                                   f"(the float {fc_count}) (the float {mp_count}) "
-                                  f"(the float {lt_count}) (the uint {goal_id}))")
+                                  f"(the float {lt_count}) (the float {ct_amount}) "
+                                  f"(the float {ot_amount}) (the uint {goal_id}))")
         message = (f"Setting options: \n"
                    f"    Orbsanity Option {os_option}, Orbsanity Bundle {os_bundle}, \n"
                    f"    FC Cell Count {fc_count}, MP Cell Count {mp_count}, \n"
-                   f"    LT Cell Count {lt_count}, Completion GOAL {goal_id}... ")
+                   f"    LT Cell Count {lt_count}, Citizen Orb Amt {ct_amount}, \n"
+                   f"    Oracle Orb Amt {ot_amount}, Completion GOAL {goal_id}... ")
         if ok:
             logger.debug(message + "Success!")
         else:
