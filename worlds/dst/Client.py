@@ -136,6 +136,19 @@ class DSTContext(CommonContext):
                         await asyncio.sleep(1.0)
                         self.logger.info("Waiting for Don't Starve Together server.")
                     async_start(dst_connect_hint())
+                
+                # Remind player of their goal
+                async def goal_hint():
+                    await asyncio.sleep(0.5)
+                    _goal = self.slotdata.get("goal")
+                    self.logger.info(f"Goal Type: {_goal}")
+                    if _goal == "survival":
+                        _days_to_survive = self.slotdata.get("days_to_survive", "Unknown")
+                        self.logger.info(f"Days to survive: {_days_to_survive}")
+                    elif _goal == "bosses_all" or _goal == "bosses_any":
+                        _bosses = [self.location_names.lookup_in_game(loc_id) for loc_id in self.slotdata.get("goal_locations", [])]
+                        self.logger.info(f"Bosses: {_bosses}")
+                async_start(goal_hint())
 
             elif cmd == "ReceivedItems":
                 items = [netitem.item for netitem in args["items"]]
