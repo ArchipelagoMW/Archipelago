@@ -60,6 +60,10 @@ class RuleData(ABC):
     @abstractmethod
     def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
         return ""
+    
+    @abstractmethod
+    def shows_single_rule(self) -> bool:
+        return False
 
     @abstractmethod
     def is_accessible(
@@ -109,6 +113,9 @@ class BeatMissionsRuleData(RuleData):
         tooltip += f"\n{indent}- ".join(req for req in reqs)
         return tooltip
     
+    def shows_single_rule(self) -> bool:
+        return len(self.visual_reqs) == 1
+
     def is_accessible(
         self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
@@ -182,6 +189,9 @@ class CountMissionsRuleData(RuleData):
         tooltip += f"\n{indent}- ".join(req for req in reqs)
         return tooltip
     
+    def shows_single_rule(self) -> bool:
+        return len(self.visual_reqs) == 1
+
     def is_accessible(
         self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
@@ -282,8 +292,8 @@ class SubRuleRuleData(RuleData):
         tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 4, missions) for rule in self.sub_rules)
         return tooltip
 
-    def shows_single_rule(self):
-        return self.amount == len(self.sub_rules) == 1
+    def shows_single_rule(self) -> bool:
+        return self.amount == len(self.sub_rules) == 1 and self.sub_rules[0].shows_single_rule()
 
     def is_accessible(
         self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],

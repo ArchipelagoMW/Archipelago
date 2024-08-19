@@ -601,8 +601,8 @@ class SC2MOGenLayout(MissionOrderNode):
                 self.entrances.append(mission)
             if mission.option_exit:
                 self.exits.append(mission)
-            if len(mission.option_next) > 0:
-                mission.next = {self.missions[idx] for idx in mission.option_next}
+            if mission.option_next is not None:
+                mission.next = [self.missions[idx] for idx in mission.option_next]
         
         # Set up missions' prev data
         seen_missions: Set[SC2MOGenMission] = set()
@@ -769,7 +769,7 @@ class SC2MOGenMission(MissionOrderNode):
     option_entrance: bool # whether this mission is unlocked when the layout is unlocked
     option_exit: bool # whether this mission is required to beat its parent layout
     option_empty: bool # whether this slot contains a mission at all
-    option_next: List[int] # indices of internally connected missions
+    option_next: Union[None, List[int]] # indices of internally connected missions
     option_entry_rules: List[Dict[str, Any]]
     option_difficulty: Difficulty # difficulty pool this mission pulls from
     option_mission_pool: Set[int] # Allowed mission IDs for this slot
@@ -791,7 +791,7 @@ class SC2MOGenMission(MissionOrderNode):
         self.option_entrance = False
         self.option_exit = False
         self.option_empty = False
-        self.option_next = []
+        self.option_next = None
         self.option_entry_rules = []
         self.option_difficulty = Difficulty.RELATIVE
         self.next = []

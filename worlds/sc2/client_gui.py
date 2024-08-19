@@ -271,8 +271,9 @@ class SC2Manager(GameManager):
                             continue
 
                         mission_obj = lookup_id_to_mission[mission_id]
-                        is_layout_exit = mission_id in layout.exits
-                        is_campaign_exit = mission_id in campaign.exits
+                        mission_finished = self.ctx.is_mission_completed(mission_id)
+                        is_layout_exit = mission_id in layout.exits and not mission_finished
+                        is_campaign_exit = mission_id in campaign.exits and not mission_finished
 
                         text, tooltip = self.mission_text(
                             self.ctx, mission_id, mission_obj,
@@ -370,7 +371,7 @@ class SC2Manager(GameManager):
                 extra_word = "is"
                 tooltip += "."
             if extra_reqs:
-                tooltip += f"\nThis mission will show additional requirements once the above {extra_word} met."
+                tooltip += f"\nThis mission has additional requirements\nthat will be shown once the above {extra_word} met."
 
         # Mark exit missions
         exit_for: str = ""

@@ -645,7 +645,7 @@ class SC2Context(CommonContext):
                 self.final_mission = args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)
             else:
                 self.final_mission_ids = args["slot_data"].get("final_mission_ids", [SC2Mission.ALL_IN.id])
-                self.final_locations = [mission_id * VICTORY_MODULO + get_location_offset(mission_id) for mission_id in self.final_mission_ids]
+                self.final_locations = [get_location_id(mission_id, 0) for mission_id in self.final_mission_ids]
             self.player_color_raynor = args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
             self.player_color_zerg = args["slot_data"].get("player_color_zerg", ColorChoice.option_orange)
             self.player_color_zerg_primal = args["slot_data"].get("player_color_zerg_primal", ColorChoice.option_purple)
@@ -855,18 +855,20 @@ class SC2Context(CommonContext):
         mission_id: int = mission.id
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
-            yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
+            yield get_location_id(mission_id, objective)
     
     def locations_for_mission_id(self, mission_id: int) -> typing.Iterable[int]:
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
-            yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
+            yield get_location_id(mission_id, objective)
 
     def uncollected_locations_in_mission(self, mission: SC2Mission) -> typing.Iterable[int]:
         for location_id in self.locations_for_mission(mission):
             if location_id in self.missing_locations:
                 yield location_id
 
+    def is_mission_completed(self, mission_id: int) -> bool:
+        return get_location_id(mission_id, 0) in self.checked_locations
 
 class CompatItemHolder(typing.NamedTuple):
     name: str
@@ -1024,7 +1026,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     if ctx.generic_upgrade_missions > 0:
         total_missions = sum(len(column) for campaign in ctx.custom_mission_order for layout in campaign.layouts for column in layout.missions)
         num_missions = int((ctx.generic_upgrade_missions / 100) * total_missions)
-        completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
+        completed = len([mission_id for mission_id in ctx.mission_id_to_location_ids if ctx.is_mission_completed(mission_id)])
         upgrade_count = min(completed // num_missions, WEAPON_ARMOR_UPGRADE_MAX_LEVEL) if num_missions > 0 else WEAPON_ARMOR_UPGRADE_MAX_LEVEL
 
         # Equivalent to "Progressive Weapon/Armor Upgrade" item
@@ -1139,7 +1141,7 @@ def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
         return kerrigan_level >= 35
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_half_completion:
         total_missions = len(ctx.mission_id_to_location_ids)
-        completed = sum((mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
+        completed = sum(ctx.is_mission_completed(mission_id)
                          for mission_id in ctx.mission_id_to_location_ids)
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
@@ -1298,7 +1300,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
                 if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
-                        victory_location = get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id
+                        victory_location = get_location_id(self.mission_id, 0)
                         send_victory = (
                             self.mission_id in self.ctx.final_mission_ids and
                             len(self.ctx.final_locations) == len(self.ctx.checked_locations.union([victory_location]).intersection(self.ctx.final_locations))
@@ -1321,7 +1323,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                         if not completed and game_state & (1 << (x + 2)):
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
-                                  "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id + x + 1]}])
+                                  "locations": [get_location_id(self.mission_id, x + 1)]}])
                             self.boni[x] = True
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
@@ -1388,9 +1390,7 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
     available_layouts: typing.Dict[int, typing.List[int]] = {}
     available_campaigns: typing.List[int] = []
 
-    def mission_beaten(mission_id: int) -> bool:
-        return (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
-    beaten_missions = {mission_id for mission_id in ctx.mission_id_to_entry_rules if mission_beaten(mission_id)}
+    beaten_missions = {mission_id for mission_id in ctx.mission_id_to_entry_rules if ctx.is_mission_completed(mission_id)}
 
     accessible_rules: typing.Set[int] = set()
     for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
@@ -1624,9 +1624,12 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
         return False
 
 
-def get_location_offset(mission_id):
+def get_location_offset(mission_id: int) -> int:
     return SC2WOL_LOC_ID_OFFSET if mission_id <= SC2Mission.ALL_IN.id \
         else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
+
+def get_location_id(mission_id: int, objective_id: int) -> int:
+    return get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective_id
 
 
 _has_forced_save = False
