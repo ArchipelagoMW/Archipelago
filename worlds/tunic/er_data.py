@@ -1501,6 +1501,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Swamp Front": {
         "Swamp Mid":
             [],
+        # get one pillar from the gate, then dash onto the gate, very tricky
+        "Back of Swamp Laurels Area":
+            [["Hyperdash", "Zip"]],
     },
     "Swamp Mid": {
         "Swamp Front":
@@ -1543,6 +1546,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Back of Swamp Laurels Area": {
         "Back of Swamp":
             [["Hyperdash"]],
+        # get one pillar from the gate, then dash onto the gate, very tricky
         "Swamp Mid":
             [["IG1", "Hyperdash"], ["Hyperdash", "Zip"]],
     },
