@@ -234,7 +234,6 @@ class MM2World(World):
             rbm_location.place_locked_item(placed_item)
             progitempool.remove(placed_item)
             fill_locations.remove(rbm_location)
-            self.multiworld.itempool.remove(placed_item)
             target_rbm = (placed_item.code & 0xF) - 1
             if self.options.strict_weakness or (self.options.random_weakness
                                                 and not (self.weapon_damage[0][target_rbm] > 0)):
