@@ -509,3 +509,8 @@ class LinksAwakeningWorld(World):
         if change and item.name in self.rupees:
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
+
+    def fill_slot_data(self) => dict:
+        return {
+            "death_link": self.options.death_link
+        }
