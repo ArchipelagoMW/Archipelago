@@ -106,7 +106,7 @@ class MinecraftWorld(World):
             'egg_shards_required': min(self.options.egg_shards_required.value,
                                        self.options.egg_shards_available.value),
             'egg_shards_available': self.options.egg_shards_available.value,
-            'required_bosses': self.options.required_bosses.value,
+            'required_bosses': self.options.required_bosses.current_key,
             'MC35': bool(self.options.send_defeated_mobs.value),
             'death_link': bool(self.options.death_link.value),
             'starting_items': json.dumps(self.options.starting_items.value),
