@@ -23,7 +23,7 @@ class TestMaxPanelHuntMinChecks(WitnessTestBase):
 
             for _ in range(100):
                 state_100.collect(panel_hunt_item, True)
-            state_100.sweep_for_events(False, [self.world.get_location("Tutorial Gate Open Solved")])
+            state_100.sweep_for_events([self.world.get_location("Tutorial Gate Open Solved")])
 
             self.assertTrue(self.multiworld.completion_condition[self.player](state_100))
 
@@ -33,7 +33,7 @@ class TestMaxPanelHuntMinChecks(WitnessTestBase):
 
             for _ in range(99):
                 state_99.collect(panel_hunt_item, True)
-            state_99.sweep_for_events(False, [self.world.get_location("Tutorial Gate Open Solved")])
+            state_99.sweep_for_events([self.world.get_location("Tutorial Gate Open Solved")])
 
             self.assertFalse(self.multiworld.completion_condition[self.player](state_99))
 

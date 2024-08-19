@@ -34,6 +34,7 @@ class TestMiscOptions(WitnessTestBase):
         "laser_hints": True,
         "hint_amount": 40,
         "area_hint_percentage": 100,
+        "vague_hints": "experimental",
     }
 
 
