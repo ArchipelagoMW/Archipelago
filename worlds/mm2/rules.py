@@ -70,8 +70,16 @@ weapon_costs = {
 }
 
 
-def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int) -> bool:
-    return state.has_from_list(robot_masters.values(), player, required)
+def can_defeat_enough_rbms(state: "CollectionState", player: int,
+                           required: int, boss_requirements: Dict[int, List[str]]):
+    can_defeat = 0
+    for boss, reqs in boss_requirements.items():
+        if boss in robot_masters:
+            if state.has_all(map(lambda x: weapons_to_name[x], reqs), player):
+                can_defeat += 1
+                if can_defeat >= required:
+                    return True
+    return False
 
 
 def set_rules(world: "MM2World") -> None:
@@ -269,7 +277,8 @@ def set_rules(world: "MM2World") -> None:
 
     # Need to defeat x amount of robot masters for Wily 5
     add_rule(world.get_location(names.wily_5),
-             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value))
+             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value,
+                                                  world.wily_5_weapons))
     add_rule(world.get_location(names.wily_stage_5),
              lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value))
 

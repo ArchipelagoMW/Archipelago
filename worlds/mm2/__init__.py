@@ -288,22 +288,3 @@ class MM2World(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.player_name]
-
-    def collect(self, state: "CollectionState", item: "Item") -> bool:
-        change = super().collect(state, item)
-        if change and item.name in self.item_name_groups["Weapons"]:
-            # need to evaluate robot master access
-            for boss, reqs in self.wily_5_weapons.items():
-                if boss in robot_masters:
-                    if state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player):
-                        state.prog_items[self.player][robot_masters[boss]] = 1
-        return change
-
-    def remove(self, state: "CollectionState", item: "Item") -> bool:
-        change = super().remove(state, item)
-        if change and item.name in self.item_name_groups["Weapons"]:
-            for boss, reqs in self.wily_5_weapons.items():
-                if boss in robot_masters:
-                    if not state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player):
-                        state.prog_items[self.player][robot_masters[boss]] = 0
-        return change
