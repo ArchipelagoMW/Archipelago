@@ -662,7 +662,7 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def make_gui(self):
+    def make_gui(self) -> "kvui.GameManager":
         """To return the object needed for run_gui so it can be overridden before being built"""
         from kvui import GameManager
 
