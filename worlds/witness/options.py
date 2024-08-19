@@ -173,6 +173,7 @@ class VictoryCondition(Choice):
     - Challenge: Beat the secret Challenge (requires Challenge Lasers).
     - Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
     - Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
+    - Panel Hunt: Solve a specific number of randomly selected panels before going to the secret ending in Tutorial.
 
     It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
     to count, the laser locks on the Elevator and Challenge Timer panels do not.
@@ -182,6 +183,62 @@ class VictoryCondition(Choice):
     option_challenge = 1
     option_mountain_box_short = 2
     option_mountain_box_long = 3
+    option_panel_hunt = 4
+
+
+class PanelHuntTotal(Range):
+    """
+    Sets the number of random panels that will get marked as "Panel Hunt" panels in the "Panel Hunt" game mode.
+    """
+    display_name = "Total Panel Hunt panels"
+    range_start = 5
+    range_end = 100
+    default = 40
+
+
+class PanelHuntRequiredPercentage(Range):
+    """
+    Determines the percentage of "Panel Hunt" panels that need to be solved to win.
+    """
+    display_name = "Percentage of required Panel Hunt panels"
+    range_start = 20
+    range_end = 100
+    default = 63
+
+
+class PanelHuntPostgame(Choice):
+    """
+    In panel hunt, there are technically no postgame locations.
+    Depending on your options, this can leave Mountain and Caves as two huge areas with Hunt Panels in them that cannot be reached until you get enough lasers to go through the very linear Mountain descent.
+    Panel Hunt tends to be more fun when the world is open.
+    This option lets you force anything locked by lasers to be disabled, and thus ineligible for Hunt Panels.
+    To compensate, the respective mountain box solution (short box / long box) will be forced to be a Hunt Panel.
+    Does nothing if Panel Hunt is not your victory condition.
+
+    Note: The "Mountain Lasers" option may also affect locations locked by challenge lasers if the only path to those locations leads through the Mountain Entry.
+    """
+
+    display_name = "Force postgame in Panel Hunt"
+
+    option_everything_is_eligible = 0
+    option_disable_mountain_lasers_locations = 1
+    option_disable_challenge_lasers_locations = 2
+    option_disable_anything_locked_by_lasers = 3
+    default = 3
+
+
+class PanelHuntDiscourageSameAreaFactor(Range):
+    """
+    The greater this value, the less likely it is that many Hunt Panels show up in the same area.
+
+    At 0, Hunt Panels will be selected randomly.
+    At 100, Hunt Panels will be almost completely evenly distributed between areas.
+    """
+    display_name = "Panel Hunt Discourage Same Area Factor"
+
+    range_start = 0
+    range_end = 100
+    default = 40
 
 
 class PuzzleRandomization(Choice):
@@ -332,6 +389,10 @@ class TheWitnessOptions(PerGameCommonOptions):
     victory_condition: VictoryCondition
     mountain_lasers: MountainLasers
     challenge_lasers: ChallengeLasers
+    panel_hunt_total: PanelHuntTotal
+    panel_hunt_required_percentage: PanelHuntRequiredPercentage
+    panel_hunt_postgame: PanelHuntPostgame
+    panel_hunt_discourage_same_area_factor: PanelHuntDiscourageSameAreaFactor
     early_caves: EarlyCaves
     early_symbol_item: EarlySymbolItem
     elevators_come_to_you: ElevatorsComeToYou
@@ -352,6 +413,12 @@ witness_option_groups = [
         MountainLasers,
         ChallengeLasers,
     ]),
+    OptionGroup("Panel Hunt Settings", [
+        PanelHuntRequiredPercentage,
+        PanelHuntTotal,
+        PanelHuntPostgame,
+        PanelHuntDiscourageSameAreaFactor,
+    ], start_collapsed=True),
     OptionGroup("Locations", [
         ShuffleDiscardedPanels,
         ShuffleVaultBoxes,
