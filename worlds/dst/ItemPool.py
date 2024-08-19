@@ -23,6 +23,7 @@ class DSTItemPool:
             # Don't shuffle nonshuffled items
             if (
                 name in nonshuffled
+                or "nonshuffled" in item.tags
                 or "progressive" in item.tags # Add these somewhere else
             ):
                 continue

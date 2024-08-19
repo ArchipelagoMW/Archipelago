@@ -1285,13 +1285,14 @@ def set_rules(dst_world: World) -> None:
         if "Celestial Champion" in _required_bosses: progression_required_bosses.add("Crab King")
         if "Scrappy Werepig" in _required_bosses: progression_required_bosses.add("Nightmare Werepig")
         
-        if options.goal.current_key == "bosses_any":
-            # Prevent goal bosses from having progression items if your goal is any
-            excluded.update(_required_bosses)
+        ## Commented because now Boss Defeat items are placed here
+        # if options.goal.current_key == "bosses_any":
+        #     # Prevent goal bosses from having progression items if your goal is any
+        #     excluded.update(_required_bosses)
 
-        elif options.goal.current_key == "bosses_all":
-            # Don't exclude bosses in the path of your goal bosses
-            excluded.update([boss_name for boss_name in _required_bosses if not boss_name in progression_required_bosses])
+        # elif options.goal.current_key == "bosses_all":
+        #     # Don't exclude bosses in the path of your goal bosses
+        #     excluded.update([boss_name for boss_name in _required_bosses if not boss_name in progression_required_bosses])
             
         # Unify progression bosses with required bosses
         progression_required_bosses.update(_required_bosses)

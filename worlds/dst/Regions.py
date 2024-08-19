@@ -18,6 +18,11 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       "Cave":     DSTRegionData([], []),
       "Ocean":    DSTRegionData([], []),
    }
+   NUM_JUNK_ITEMS:int = 30
+   BOSS_DEFEAT_LOCATIONS:Set = set(
+      options.required_bosses.value if (options.goal.current_key == "bosses_any" or options.goal.current_key == "bosses_all")
+      else []
+   )
 
    def create_event_item(name: str) -> None:
       item:DSTItem = multiworld.create_item(name, player)
@@ -33,8 +38,8 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
    def get_region_name_from_tags(tags: Set[str]):
       return "Cave" if "caves" in tags else "Ocean" if "ocean" in tags else "Forest"
    
-   # Get number of items that need to be placed, plus make space for junk items and traps
-   location_num_left_to_place:int = len(itempool.nonfiller_itempool) + 30
+   # Get number of items that need to be placed
+   location_num_left_to_place:int = len(itempool.nonfiller_itempool) + NUM_JUNK_ITEMS + len(BOSS_DEFEAT_LOCATIONS)
 
    # Check if locations are disabled by options
    filtered_location_data_table = {name: data for name, data in location_data_table.items() if not(
@@ -112,6 +117,10 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
             entrance = Entrance(player, exit_name, region)
             entrance.connect(multiworld.get_region(exit_name, player))
             region.exits.append(entrance)
+
+   # Fill boss locations with "Boss Defeat" items
+   for bossname in BOSS_DEFEAT_LOCATIONS:
+      multiworld.get_location(bossname, player).place_locked_item(multiworld.create_item("Boss Defeat", player))
 
    # Create events
    for loc_name, item_name in DSTAP_EVENTS.items(): create_event(loc_name, item_name)

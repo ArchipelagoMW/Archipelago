@@ -1,4 +1,4 @@
-VERSION:str = "1.1.2"
+VERSION:str = "1.1.2.2"
 ITEM_ID_OFFSET:int = 264000
 LOCATION_ID_OFFSET:int = 264000
 LOCATION_RESEARCH_RANGE = {"start": 264501, "end": 264900}
@@ -412,6 +412,7 @@ DSTAP_ITEMS = [
     [705, "Full Moon Phase Change",      "dstap_moonphasechange_full",            [ "seasonhelper", "useful" ] ],
     [706, "New Moon Phase Change",       "dstap_moonphasechange_new",             [ "seasonhelper", "useful" ] ],
     [707, "Extra Damage Against Bosses", "extrabossdamage",                       [ "abstract", "useful", "progressive" ] ],
+    [708, "Boss Defeat",                 "bossdefeat",                            [ "dummy", "nonshuffled" ] ],
 ]
 
 DSTAP_LOCATIONS = [
