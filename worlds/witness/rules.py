@@ -74,10 +74,10 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     """
 
     player = world.player
-    player_regions = world.player_regions
+    two_way_entrance_register = world.player_regions.two_way_entrance_register
 
     front_access = (
-        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
+        any(e.can_reach(state) for e in two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
         and state.can_reach_region("Keep", player)
     )
 
@@ -88,7 +88,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # Front access works. Now, we need to check for the many ways to access PP2 from the back.
     # All of those ways lead through the PP3 exit door from PP4. So we check this first.
 
-    fourth_to_third = any(e.can_reach(state) for e in player_regions.two_way_entrance_register[
+    fourth_to_third = any(e.can_reach(state) for e in two_way_entrance_register[
         "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate"
     ])
 
@@ -100,7 +100,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # The shadows shortcut is the simplest way.
 
     shadows_shortcut = (
-        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Pressure Plate", "Shadows"])
+        any(e.can_reach(state) for e in two_way_entrance_register["Keep 4th Pressure Plate", "Shadows"])
     )
 
     if shadows_shortcut:
@@ -108,9 +108,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     # We don't have the Shadows shortcut. This means we need to come in through the PP4 exit door instead.
 
-    tower_to_pp4 = any(
-        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"]
-    )
+    tower_to_pp4 = any(e.can_reach(state) for e in two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"])
 
     # If we don't have the PP4 exit door, we've run out of options.
     if not tower_to_pp4:
@@ -119,7 +117,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # We have the PP4 exit door. If we can get to Keep Tower from behind, we can do PP2.
     # The simplest way would be the Tower Shortcut.
 
-    tower_shortcut = any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep", "Keep Tower"])
+    tower_shortcut = any(e.can_reach(state) for e in two_way_entrance_register["Keep", "Keep Tower"])
 
     if tower_shortcut:
         return True
@@ -128,18 +126,14 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # Getting to Keep Tower through the hedge mazes. This can be done in a multitude of ways.
     # No matter what, though, we would need Hedge Maze 4 Exit to Keep Tower.
 
-    tower_access_from_hedges = any(
-        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Maze", "Keep Tower"]
-    )
+    tower_access_from_hedges = any(e.can_reach(state) for e in two_way_entrance_register["Keep 4th Maze", "Keep Tower"])
 
     if not tower_access_from_hedges:
         return False
 
     # We can reach Keep Tower from Hedge Maze 4. If we now have the Hedge 4 Shortcut, we are immediately good.
 
-    hedge_4_shortcut = any(
-        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Maze", "Keep"]
-    )
+    hedge_4_shortcut = any(e.can_reach(state) for e in two_way_entrance_register["Keep 4th Maze", "Keep"])
 
     # If we have the hedge 4 shortcut, that works.
     if hedge_4_shortcut:
@@ -147,27 +141,21 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     # We don't have the hedge 4 shortcut. This means we would now need to come through Hedge Maze 3.
 
-    hedge_3_to_4 = any(
-        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 4th Maze", "Keep 3rd Maze"]
-    )
+    hedge_3_to_4 = any(e.can_reach(state) for e in two_way_entrance_register["Keep 4th Maze", "Keep 3rd Maze"])
 
     if not hedge_3_to_4:
         return False
 
     # We can get to Hedge 4 from Hedge 3. If we have the Hedge 3 Shortcut, we're good.
 
-    hedge_3_shortcut = any(
-        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 3rd Maze", "Keep"]
-    )
+    hedge_3_shortcut = any(e.can_reach(state) for e in two_way_entrance_register["Keep 3rd Maze", "Keep"])
 
     if hedge_3_shortcut:
         return True
 
     # We don't have Hedge 3 Shortcut. This means we would now need to come through Hedge Maze 2.
 
-    hedge_2_to_3 = any(
-        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 3rd Maze", "Keep 2nd Maze"]
-    )
+    hedge_2_to_3 = any(e.can_reach(state) for e in two_way_entrance_register["Keep 3rd Maze", "Keep 2nd Maze"])
 
     if not hedge_2_to_3:
         return False
@@ -175,9 +163,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # We can get to Hedge 3 from Hedge 2. If we can get from Keep to Hedge 2, we're good.
     # This covers both Hedge 1 Exit and Hedge 2 Shortcut, because Hedge 1 is just part of the Keep region.
 
-    return any(
-        e.can_reach(state) for e in player_regions.two_way_entrance_register["Keep 2nd Maze", "Keep"]
-    )
+    return any(e.can_reach(state) for e in two_way_entrance_register["Keep 2nd Maze", "Keep"])
 
 
 def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") -> bool:
@@ -189,11 +175,11 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     # Checking for access to Theater is not necessary, as solvability of Tutorial Video is checked in the other half
     # of the Theater Flowers EP condition.
 
-    player_regions = world.player_regions
+    two_way_entrance_register = world.player_regions.two_way_entrance_register
 
     direct_access = (
-        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Windmill Interior"])
-        and any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Theater", "Windmill Interior"])
+        any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in two_way_entrance_register["Theater", "Windmill Interior"])
     )
 
     if direct_access:
@@ -210,9 +196,9 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     # We also need a way from Town to Tunnels.
 
     return (
-        any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Windmill Interior"])
-        and any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Town", "Windmill Interior"])
-        or any(e.can_reach(state) for e in player_regions.two_way_entrance_register["Tunnels", "Town"])
+        any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in two_way_entrance_register["Outside Windmill", "Windmill Interior"])
+        or any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Town"])
     )
 
 
