@@ -79,7 +79,7 @@ class NetworkItem(typing.NamedTuple):
     item: int
     location: int
     player: int
-    """ sending player, except in LocationInfo (from LocationScouts) when it is the receiving player """
+    """ Sending player, except in LocationInfo (from LocationScouts), where it is the receiving player. """
     flags: int = 0
 
 
