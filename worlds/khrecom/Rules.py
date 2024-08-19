@@ -59,7 +59,7 @@ def set_rules(khrecomworld):
     add_rule(khrecomworld.get_location("100 Acre Wood Tigger's Playground (Attack Cards Spellbinder)"),
         lambda state: state.has("World Card Neverland", player) and state.has("World Card Monstro", player))
     
-    #Days Rules
+    # Days Rules
     if options.days_locations:
         add_rule(khrecomworld.get_location("Traverse Town Room of Rewards (Enemy Cards Saix)"),
             lambda state: state.has("Key to Rewards Traverse Town", player))

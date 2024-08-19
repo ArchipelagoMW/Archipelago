@@ -38,12 +38,12 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Hollow Bastion Field (Attack Cards Divine Rose)":                   KHRECOMLocationData("Hollow Bastion"   , 269_0012),
     "Destiny Islands Room of Guidance (Attack Cards Oathkeeper)":        KHRECOMLocationData("Destiny Islands"  , 269_0013),
     "12F Exit Hall Larxene II (Attack Cards Oblivion)":                  KHRECOMLocationData("Exit Halls"       , 269_0014),
-    "Castle Oblivion Room of Rewards (Attack Cards Star Seeker)":        KHRECOMLocationData("Castle Oblivion"  , 269_0018), #Days Location
-    "Olympus Coliseum Room of Rewards (Attack Cards Total Eclipse)":     KHRECOMLocationData("Olympus Coliseum" , 269_0019), #Days Location
-    "Neverland Room of Rewards (Attack Cards Midnight Roar)":            KHRECOMLocationData("Neverland"        , 269_0020), #Days Location
-    "Traverse Town Bounty (Attack Cards Maverick Flare)":                KHRECOMLocationData("Traverse Town"    , 269_0021), #Days Location
-    "Destiny Islands Room of Rewards (Attack Cards Two Become One)":     KHRECOMLocationData("Destiny Islands"  , 269_0022), #Days Location
-    "Halloween Town Room of Rewards (Attack Cards Bond of Flame)":       KHRECOMLocationData("Halloween Town"   , 269_0023), #Days Location
+    "Castle Oblivion Room of Rewards (Attack Cards Star Seeker)":        KHRECOMLocationData("Castle Oblivion"  , 269_0018), # Days Location
+    "Olympus Coliseum Room of Rewards (Attack Cards Total Eclipse)":     KHRECOMLocationData("Olympus Coliseum" , 269_0019), # Days Location
+    "Neverland Room of Rewards (Attack Cards Midnight Roar)":            KHRECOMLocationData("Neverland"        , 269_0020), # Days Location
+    "Traverse Town Bounty (Attack Cards Maverick Flare)":                KHRECOMLocationData("Traverse Town"    , 269_0021), # Days Location
+    "Destiny Islands Room of Rewards (Attack Cards Two Become One)":     KHRECOMLocationData("Destiny Islands"  , 269_0022), # Days Location
+    "Halloween Town Room of Rewards (Attack Cards Bond of Flame)":       KHRECOMLocationData("Halloween Town"   , 269_0023), # Days Location
     "01F Exit Hall Axel I (Magic Cards Fire)":                           KHRECOMLocationData("Exit Halls"       , 269_0024),
     "Starting Checks (Magic Cards Blizzard)":                            KHRECOMLocationData("Starting"         , 269_0025),
     "06F Exit Hall Larxene I (Magic Cards Thunder)":                     KHRECOMLocationData("Exit Halls"       , 269_0026),
@@ -77,20 +77,20 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Destiny Islands Room of Guidance (Enemy Cards Darkside)":           KHRECOMLocationData("Destiny Islands"  , 269_0092),
     "12F Exit Hall Riku IV (Enemy Cards Riku)":                          KHRECOMLocationData("Exit Halls"       , 269_0093),
     "Wonderland Room of Beginnings (Enemy Cards Card Soldier)":          KHRECOMLocationData("Wonderland"       , 269_0094),
-   #"Twilight Town Bounty (Enemy Cards Ansem)":                          KHRECOMLocationData("Twilight Town"    , 269_0095), #RR
-    "Wonderland Room of Rewards (Enemy Cards Xemnas)":                   KHRECOMLocationData("Wonderland"       , 269_0096), #Days Location
-    "Hollow Bastion Room of Rewards (Enemy Cards Xigbar)":               KHRECOMLocationData("Hollow Bastion"   , 269_0097), #Days Location
-    "Monstro Room of Rewards (Enemy Cards Xaldin)":                      KHRECOMLocationData("Monstro"          , 269_0098), #Days Location
+   #"Twilight Town Bounty (Enemy Cards Ansem)":                          KHRECOMLocationData("Twilight Town"    , 269_0095), # RR
+    "Wonderland Room of Rewards (Enemy Cards Xemnas)":                   KHRECOMLocationData("Wonderland"       , 269_0096), # Days Location
+    "Hollow Bastion Room of Rewards (Enemy Cards Xigbar)":               KHRECOMLocationData("Hollow Bastion"   , 269_0097), # Days Location
+    "Monstro Room of Rewards (Enemy Cards Xaldin)":                      KHRECOMLocationData("Monstro"          , 269_0098), # Days Location
     "Twilight Town Room of Beginnings (Enemy Cards Vexen)":              KHRECOMLocationData("Twilight Town"    , 269_0099),
-   #"Castle Oblivion Bounty (Enemy Cards Lexaeus)":                      KHRECOMLocationData("Castle Oblivion"  , 269_0100), #RR
-   #"Destiny Islands Bounty (Enemy Cards Zexion)":                       KHRECOMLocationData("Destiny Islands"  , 269_0101), #RR
-    "Traverse Town Room of Rewards (Enemy Cards Saix)":                  KHRECOMLocationData("Traverse Town"    , 269_0102), #Days Location
+   #"Castle Oblivion Bounty (Enemy Cards Lexaeus)":                      KHRECOMLocationData("Castle Oblivion"  , 269_0100), # RR
+   #"Destiny Islands Bounty (Enemy Cards Zexion)":                       KHRECOMLocationData("Destiny Islands"  , 269_0101), # RR
+    "Traverse Town Room of Rewards (Enemy Cards Saix)":                  KHRECOMLocationData("Traverse Town"    , 269_0102), # Days Location
     "Castle Oblivion Room of Beginnings (Enemy Cards Axel)":             KHRECOMLocationData("Castle Oblivion"  , 269_0103),
-    "Atlantica Room of Rewards (Enemy Cards Demyx)":                     KHRECOMLocationData("Atlantica"        , 269_0104), #Days Location
-    "Agrabah Room of Rewards (Enemy Cards Luxord)":                      KHRECOMLocationData("Agrabah"          , 269_0105), #Days Location
+    "Atlantica Room of Rewards (Enemy Cards Demyx)":                     KHRECOMLocationData("Atlantica"        , 269_0104), # Days Location
+    "Agrabah Room of Rewards (Enemy Cards Luxord)":                      KHRECOMLocationData("Agrabah"          , 269_0105), # Days Location
     "Castle Oblivion Field Marluxia":                                    KHRECOMLocationData("Castle Oblivion"  , 269_0106),
     "12F Exit Hall Larxene II (Enemy Cards Larxene)":                    KHRECOMLocationData("Exit Halls"       , 269_0107),
-    "Twilight Town Room of Rewards (Enemy Cards Roxas)":                 KHRECOMLocationData("Twilight Town"    , 269_0108), #Days Location
+    "Twilight Town Room of Rewards (Enemy Cards Roxas)":                 KHRECOMLocationData("Twilight Town"    , 269_0108), # Days Location
     
     "Traverse Town Room of Beginnings":                                  KHRECOMLocationData("Traverse Town"    , 269_1011),
     "Traverse Town Room of Guidance":                                    KHRECOMLocationData("Traverse Town"    , 269_1012),
