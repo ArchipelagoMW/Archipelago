@@ -509,6 +509,7 @@ INFESTED_SIEGE_TANKS = "Infested Siege Tanks"
 INFESTED_BANSHEES    = "Infested Banshees"
 DEVOURING_ONES_MERCS = "Devouring Ones"
 HUNTER_KILLERS       = "Hunter Killers"
+TORRASQUE_MERC       = "Torrasque"
     
 # Kerrigan Upgrades
 KERRIGAN_KINETIC_BLAST           = "Kinetic Blast (Kerrigan Ability)"
