@@ -25,14 +25,25 @@ from .Client import FFMQClient
 
 
 class FFMQWebWorld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy Mystic Quest with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Alchav"]
-    )]
+        )
+    
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Artea"]
+        )
+    
+    tutorials = [setup_en, setup_fr]
 
 
 class FFMQWorld(World):

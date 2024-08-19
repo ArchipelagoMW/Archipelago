@@ -78,6 +78,9 @@
 # Kirby's Dream Land 3
 /worlds/kdl3/ @Silvris
 
+# Kingdom Hearts
+/worlds/kh1/ @gaithern
+
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
 
@@ -114,6 +117,9 @@
 
 # Ocarina of Time
 /worlds/oot/ @espeon65536
+
+# Old School Runescape
+/worlds/osrs @digiholic
 
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
