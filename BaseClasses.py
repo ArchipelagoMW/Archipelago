@@ -541,9 +541,9 @@ class MultiWorld():
                 return True
             state = starting_state.copy()
         else:
-            if self.has_beaten_game(self.state):
-                return True
             state = CollectionState(self)
+            if self.has_beaten_game(state):
+                return True
 
         for _ in state.sweep_for_events(yield_each_sweep=True, checked_locations=state.locations_checked):
             if self.has_beaten_game(state):
