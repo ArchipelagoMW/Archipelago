@@ -252,7 +252,6 @@ class MM2World(World):
                 weapon_location.place_locked_item(placed_weapon)
                 progitempool.remove(placed_weapon)
                 fill_locations.remove(weapon_location)
-                self.multiworld.itempool.remove(placed_weapon)
 
     def generate_output(self, output_directory: str) -> None:
         try:
