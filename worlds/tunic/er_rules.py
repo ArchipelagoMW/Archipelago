@@ -982,11 +982,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: state.has(laurels, player))
 
     # ice grapple down from the pillar, or do that really annoying laurels zip
+    # the zip goes to front or mid, just doing mid since mid -> front can be done with laurels alone
     regions["Back of Swamp Laurels Area"].connect(
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: laurels_zip(state, world)
         or (state.has(laurels, player)
             and has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)))
+    # get one pillar from the gate, then dash onto the gate, very tricky
+    regions["Swamp Front"].connect(
+        connecting_region=regions["Back of Swamp Laurels Area"],
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Back of Swamp"].connect(
         connecting_region=regions["Swamp Hero's Grave Region"],
