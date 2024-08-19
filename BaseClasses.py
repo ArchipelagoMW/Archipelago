@@ -738,7 +738,7 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def _sweep_for_events_impl(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
-                               ) -> Iterable[None]:
+                               ) -> Iterator[None]:
         """
         The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
         yield statement.
@@ -805,7 +805,7 @@ class CollectionState():
                 yield
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
-                         checked_locations: Optional[Set[Location]] = None) -> Optional[Iterable[None]]:
+                         checked_locations: Optional[Set[Location]] = None) -> Optional[Iterator[None]]:
         """
         Sweep through the locations that contain uncollected advancement items, collecting the items into the state
         until there are no more reachable locations that contain uncollected advancement items.
@@ -847,6 +847,7 @@ class CollectionState():
             # once started, then start and exhaust the generator by attempting to iterate it.
             for _ in self._sweep_for_events_impl(events_per_player, False):
                 assert False, "Generator yielded when it should have run to completion without yielding"
+            return None
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
