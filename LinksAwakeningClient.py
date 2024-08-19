@@ -548,7 +548,7 @@ class LinksAwakeningContext(CommonContext):
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         self.client.pending_deathlink = True
-        super(LinksAwakeningContext, self).on_deathlink(data)
+        await super(LinksAwakeningContext, self).on_deathlink(data)
 
 
     def new_checks(self, item_ids, ladxr_ids):
