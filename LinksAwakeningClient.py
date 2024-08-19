@@ -519,13 +519,13 @@ class LinksAwakeningContext(CommonContext):
 
     async def send_deathlink(self):
         if "DeathLink" in self.tags:
+            loggerin.info("DeathLink: Sending death to your friends...")
             await self.send_msgs([{
-                "cmd": "Bounce",
-                "tags": ["Deathlink"],
+                "cmd": "Bounce", "tags": ["DeathLink"],
                 "data": {
                     "time": time.time(),
                     "source": self.slot_info[self.slot].name,
-                    "cause": self.slot_info[self.slot].name + " had a nightmare",
+                    "cause": self.slot_info[self.slot].name + " had a nightmare"
                 }
             }])
 
