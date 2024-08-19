@@ -71,7 +71,7 @@ weapon_costs = {
 
 
 def can_defeat_enough_rbms(state: "CollectionState", player: int,
-                           required: int, boss_requirements: Dict[int, List[str]]):
+                           required: int, boss_requirements: Dict[int, List[int]]):
     can_defeat = 0
     for boss, reqs in boss_requirements.items():
         if boss in robot_masters:
@@ -280,7 +280,8 @@ def set_rules(world: "MM2World") -> None:
              lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value,
                                                   world.wily_5_weapons))
     add_rule(world.get_location(names.wily_stage_5),
-             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value))
+             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value,
+                                                  world.wily_5_weapons))
 
     if not world.options.yoku_jumps:
         add_rule(world.get_entrance("To Heat Man Stage"),
