@@ -208,7 +208,6 @@ class WitnessWorld(World):
                     # In Expert and Variety, only tag the item as early, rather than forcing it onto the gate.
                     # Same with panel hunt, since the Tutorial Gate Open panel is used for something else
                     self.multiworld.local_early_items[self.player][random_early_item] = 1
-                    self.multiworld.local_early_items[self.player][random_early_item] = 1
                 else:
                     # Force the item onto the tutorial gate check and remove it from our random pool.
                     gate_item = self.create_item(random_early_item)
