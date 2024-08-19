@@ -3,6 +3,7 @@ import os
 import sys
 import asyncio
 import shutil
+import logging
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -10,6 +11,8 @@ ModuleUpdate.update()
 import Utils
 
 item_num = 1
+
+logger = logging.getLogger("Client")
 
 if __name__ == "__main__":
     Utils.init_logging("KHRECOMClient", exception_logger="Client")
@@ -130,7 +133,7 @@ class KHRECOMContext(CommonContext):
 
 
 async def game_watcher(ctx: KHRECOMContext):
-    from worlds.khrecom.Locations import lookup_id_to_name
+    from .Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
         if ctx.syncing == True:
             sync_msg = [{'cmd': 'Sync'}]

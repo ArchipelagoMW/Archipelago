@@ -3,25 +3,25 @@
 ##Setting up the required mods
 1. Install OpenKH and the LUA Backend.
 
-    Download the latest release of OpenKH [here](https://github.com/OpenKH/OpenKh/releases/tag/latest)
+    Download the [latest release of OpenKH](https://github.com/OpenKH/OpenKh/releases/tag/latest)
     
-    Extract the files to a directory of your choosing.
+    Extract the files to a directory of your choosing
     
-    Open `OpenKh.Tools.ModsManager.exe` and run first time set up.
+    Open `OpenKh.Tools.ModsManager.exe` and run first time set up
     
     When prompted for game edition, choose PC Release via Epic Games Store and navigate to your `KH_1.5_2.5` folder in the path box and click `Next`
     
     When prompted, install Panacea, then click `Next`
     
-    When prompted, check ReCoM and click `Install and configure LUA backend`, then click `Next`.
+    When prompted, check ReCoM and click `Install and configure LUA backend`, then click `Next`
     
     Ensure that `Launch via Epic Games` is checked and click `Next`
     
-    You may skip extracting game data for ReCoM by checking `Skip Game Extraction` and clicking `Next`.
+    You may skip extracting game data for ReCoM by checking `Skip Game Extraction` and clicking `Next`
     
     Click `Finish`.
     
-2. Open `OpenKh.Tools.ModsManager.exe`.
+2. Open `OpenKh.Tools.ModsManager.exe`
 
 3. Click the drop down menu at the top-right and choose `Re:Chain of Memories`
 

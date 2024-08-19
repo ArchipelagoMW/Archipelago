@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
+from Options import Range, Toggle, DefaultOnToggle, OptionSet, PerGameCommonOptions, StartInventoryPool, OptionGroup
 
-class EarlyCure(DefaultOnToggle):
+class StartingCure(DefaultOnToggle):
     """
-    Toggle whether one of the starting checks should include Cure
+    Toggle whether you should start with a Card Set Cure
     """
-    display_name = "Early Cure"
+    display_name = "Starting Cure"
 
 class AttackPower(Range):
     """
@@ -23,11 +23,14 @@ class DaysLocations(DefaultOnToggle):
     """
     display_name = "Days Locations"
 
-class StartingWorlds(Toggle):
+class StartingWorlds(Range):
     """
-    Toggle whether 3 world cards are guaranteed as part of your starting checks.
+    Number of random world cards to start with in addition to Traverse Town, which is always available.
     """
     display_name = "Starting Worlds"
+    default = 0
+    range_start = 0
+    range_end = 11
 
 class ChecksBehindLeon(Toggle):
     """
@@ -294,7 +297,7 @@ class ExcludeSleights(OptionSet):
 
 @dataclass
 class KHRECOMOptions(PerGameCommonOptions):
-    early_cure: EarlyCure
+    starting_cure: StartingCure
     days_locations: DaysLocations
     checks_behind_leon: ChecksBehindLeon
     exp_multiplier: EXPMultiplier
@@ -327,3 +330,52 @@ class KHRECOMOptions(PerGameCommonOptions):
     exclude_cards: ExcludeCards
     exclude_enemy_cards: ExcludeEnemyCards
     exclude_sleights: ExcludeSleights
+    start_inventory_from_pool: StartInventoryPool
+
+khrecom_option_groups = [
+    OptionGroup("Starting", [
+        StartingCure,
+        StartingWorlds
+    ]),
+    OptionGroup("Locations", [
+        DaysLocations,
+        ChecksBehindLeon,
+        ChecksBehindMinigames,
+        ChecksBehindSleightsLevels
+    ]),
+    OptionGroup("Stats", [
+        EXPMultiplier,
+        AttackPower
+    ]),
+    OptionGroup("Cards", [
+        Value0On,
+        Value1On,
+        Value2On,
+        Value3On,
+        Value4On,
+        Value5On,
+        Value6On,
+        Value7On,
+        Value8On,
+        Value9On,
+        Value0POn,
+        Value1POn,
+        Value2POn,
+        Value3POn,
+        Value4POn,
+        Value5POn,
+        Value6POn,
+        Value7POn,
+        Value8POn,
+        Value9POn,
+    ]),
+    OptionGroup("Sleights and Enemy Card Counts", [
+        SleightAmount,
+        EnemyCardAmount
+    ]),
+    OptionGroup("Exclusions", [
+        ExcludeCards,
+        ExcludeEnemyCards,
+        ExcludeSleights
+    ]),
+]

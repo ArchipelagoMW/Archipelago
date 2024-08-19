@@ -2,11 +2,12 @@ from typing import List
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import KHRECOMItem, KHRECOMItemData, event_item_table, get_items_by_category, item_table
-from .Locations import KHRECOMLocation, location_table, get_locations_by_category
-from .Options import KHRECOMOptions
+from .Items import KHRECOMItem, KHRECOMItemData, get_items_by_category, item_table
+from .Locations import location_table
+from .Options import KHRECOMOptions, khrecom_option_groups
 from .Regions import create_regions
 from .Rules import set_rules
+from .Presets import khrecom_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 
@@ -29,6 +30,8 @@ class KHRECOMWeb(WebWorld):
         "khrecom/en",
         ["Gicu"]
     )]
+    option_groups = khrecom_option_groups
+    options_presets = khrecom_option_presets
 
 class KHRECOMWorld(World):
     """
@@ -40,7 +43,6 @@ class KHRECOMWorld(World):
     options: KHRECOMOptions
     topology_present = True
     data_version = 4
-    required_client_version = (0, 3, 5)
     web = KHRECOMWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -49,66 +51,58 @@ class KHRECOMWorld(World):
     def __init__(self, multiworld: "MultiWorld", player: int):
         super(KHRECOMWorld, self).__init__(multiworld, player)
         self.world_order = []
-        self.starting_worlds = []
     
     def create_items(self):
-        if self.options.starting_worlds:
-            possible_starting_worlds = get_items_by_category("World Unlocks", [])
-            self.starting_worlds = self.random.sample(list(possible_starting_worlds),3)
+        self.place_predetermined_items()
+        # Handle starting worlds
+        starting_worlds = []
+        if self.options.starting_worlds > 0:
+            possible_starting_worlds = [
+                "World Card Wonderland",
+                "World Card Olympus Coliseum",
+                "World Card Agrabah",
+                "World Card Monstro",
+                "World Card Atlantica",
+                "World Card Halloween Town",
+                "World Card Neverland",
+                "World Card Hollow Bastion",
+                "World Card 100 Acre Wood",
+                "World Card Twilight Town",
+                "World Card Destiny Islands"]
+            starting_worlds = self.random.sample(possible_starting_worlds, min(self.options.starting_worlds.value, len(possible_starting_worlds)))
+            for starting_world in starting_worlds:
+                self.multiworld.push_precollected(self.create_item(starting_world))
+        if self.options.starting_cure:
+            self.multiworld.push_precollected(self.create_item("Card Set Cure"))
         
         item_pool: List[KHRECOMItem] = []
-        filled_locations = 2 #Larxen II and Final Marluxia
-        if self.options.starting_worlds:
-            filled_locations = filled_locations + 3
-        if self.options.early_cure:
-            filled_locations = filled_locations + 1
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - filled_locations
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         sleights_added = 0
         enemy_cards_added = 0
         shuffled_item_list = list(item_table.items())
         self.random.shuffle(shuffled_item_list)
         for name, data in shuffled_item_list:
-            quantity = data.max_quantity
-            
             # Ignore filler, it will be added in a later stage.
             if data.category not in ["World Unlocks", "Gold Map Cards", "Friend Cards", "Enemy Cards", "Sleights"]:
                 continue
             elif data.category == "Enemy Cards" and enemy_cards_added < self.options.enemy_card_amount and name not in ["Enemy Card " + card_name for card_name in self.options.exclude_enemy_cards.value]:
-                enemy_cards_added = enemy_cards_added + quantity
-                item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                enemy_cards_added = enemy_cards_added + 1
+                item_pool.append(self.create_item(name))
             elif data.category == "Sleights" and sleights_added < self.options.sleight_amount and name not in ["Sleight " + sleight_name for sleight_name in self.options.exclude_sleights.value]:
-                sleights_added = sleights_added + quantity
-                item_pool += [self.create_item(name) for _ in range(0, quantity)]
-            elif data.category not in ["Sleights", "Enemy Cards"] and name not in self.starting_worlds and name != "Friend Card Pluto":
-                item_pool += [self.create_item(name) for _ in range(0, quantity)]
-
+                sleights_added = sleights_added + 1
+                item_pool.append(self.create_item(name))
+            elif data.category not in ["Sleights", "Enemy Cards"] and name not in starting_worlds and name != "Friend Card Pluto":
+                item_pool.append(self.create_item(name))
+        
         # Fill any empty locations with filler items.
-        item_names = []
-        attempts = 0 #If we ever try to add items 200 times, and all the items are used up, lets clear the item_names array, we probably don't have enough items
         while len(item_pool) < total_locations:
-            item_name = self.get_filler_item_name()
-            if item_name not in item_names or "Pack" in item_name:
-                item_names.append(item_name)
-                item_pool.append(self.create_item(item_name))
-                attempts = 0
-            elif attempts >= 200:
-                item_names = []
-                attempts = 0
-            else:
-                attempts = attempts + 1
-
+            item_pool.append(self.create_item(self.get_filler_item_name()))
+        
         self.multiworld.itempool += item_pool
 
-    def pre_fill(self) -> None:
-        self.multiworld.get_location("12F Exit Hall Larxene II (Enemy Cards Larxene)", self.player).place_locked_item(self.create_item("Friend Card Pluto"))
-        self.multiworld.get_location("Final Marluxia", self.player).place_locked_item(self.create_item("Victory"))
-        starting_locations = get_locations_by_category("Starting")
-        starting_locations = self.random.sample(list(starting_locations.keys()),4)
-        for i in range(4):
-            if i < 3 and self.options.starting_worlds:
-                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(self.starting_worlds[i]))
-            elif i == 3 and self.options.early_cure:
-                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure"))
+    def place_predetermined_items(self) -> None:
+        self.get_location("12F Exit Hall Larxene II (Enemy Cards Larxene)").place_locked_item(self.create_item("Friend Card Pluto"))
+        self.get_location("Final Marluxia").place_locked_item(self.create_item("Victory"))
 
     def get_filler_item_name(self) -> str:
         fillers = {}
@@ -116,8 +110,7 @@ class KHRECOMWorld(World):
         for card in self.options.exclude_cards.value:
             exclude.append("Card Set " + card)
         fillers.update(get_items_by_category("Sets", exclude))
-        weights = [data.weight for data in fillers.values()]
-        return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        return self.random.choices([filler for filler in fillers.keys()], k=1)[0]
         
     def create_item(self, name: str) -> KHRECOMItem:
         data = item_table[name]
@@ -128,7 +121,7 @@ class KHRECOMWorld(World):
         return KHRECOMItem(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options)
+        set_rules(self)
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
@@ -140,10 +133,27 @@ class KHRECOMWorld(World):
             world_order_string = world_order_string + str(world_id) + ","
         world_order_string = world_order_string[:-1]
         
-        set_values = [self.options.value_0_on, self.options.value_1_on, self.options.value_2_on, self.options.value_3_on, self.options.value_4_on,
-            self.options.value_5_on, self.options.value_6_on, self.options.value_7_on, self.options.value_8_on, self.options.value_9_on,
-            self.options.value_0_p_on, self.options.value_1_p_on, self.options.value_2_p_on, self.options.value_3_p_on, self.options.value_4_p_on, 
-            self.options.value_5_p_on, self.options.value_6_p_on, self.options.value_7_p_on, self.options.value_8_p_on, self.options.value_9_p_on]
+        set_values = [
+            self.options.value_0_on,
+            self.options.value_1_on,
+            self.options.value_2_on,
+            self.options.value_3_on,
+            self.options.value_4_on,
+            self.options.value_5_on,
+            self.options.value_6_on,
+            self.options.value_7_on,
+            self.options.value_8_on,
+            self.options.value_9_on,
+            self.options.value_0_p_on,
+            self.options.value_1_p_on,
+            self.options.value_2_p_on,
+            self.options.value_3_p_on,
+            self.options.value_4_p_on,
+            self.options.value_5_p_on,
+            self.options.value_6_p_on,
+            self.options.value_7_p_on,
+            self.options.value_8_p_on,
+            self.options.value_9_p_on]
         set_data = []
         set_data_string = ""
         for i in range(20):
