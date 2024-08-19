@@ -418,7 +418,6 @@ class LinksAwakeningClient():
             self.deathlink_debounce = True
 
         if self.pending_deathlink:
-            logger.info("Got a deathlink")
             self.gameboy.write_memory(LAClientConstants.wLinkHealth, [0])
             self.pending_deathlink = False
             self.deathlink_debounce = True
@@ -529,10 +528,11 @@ class LinksAwakeningContext(CommonContext):
     async def send_deathlink(self):
         if "DeathLink" in self.tags:
             logger.info("DeathLink: Sending death to your friends...")
+            self.last_death_link = time.time()
             await self.send_msgs([{
                 "cmd": "Bounce", "tags": ["DeathLink"],
                 "data": {
-                    "time": time.time(),
+                    "time": self.last_death_link,
                     "source": self.slot_info[self.slot].name,
                     "cause": self.slot_info[self.slot].name + " had a nightmare"
                 }
