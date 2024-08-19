@@ -73,6 +73,7 @@ Currently, the following games are supported:
 * Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
 * A Hat in Time
 * Old School Runescape
+* Kingdom Hearts 1
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

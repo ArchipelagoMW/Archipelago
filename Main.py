@@ -11,7 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
-from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, distribute_planned, \
+    flood_items
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
@@ -100,7 +101,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multiworld.early_items[player][item_name] = max(0, early-count)
                 remaining_count = count-early
                 if remaining_count > 0:
-                    local_early = multiworld.early_local_items[player].get(item_name, 0)
+                    local_early = multiworld.local_early_items[player].get(item_name, 0)
                     if local_early:
                         multiworld.early_items[player][item_name] = max(0, local_early - remaining_count)
                     del local_early
@@ -151,6 +152,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
     if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) for player in multiworld.player_ids):
         new_items: List[Item] = []
+        old_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
             player: getattr(multiworld.worlds[player].options,
                             "start_inventory_from_pool",
@@ -169,20 +171,24 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 depletion_pool[item.player][item.name] -= 1
                 # quick abort if we have found all items
                 if not target:
-                    new_items.extend(multiworld.itempool[i+1:])
+                    old_items.extend(multiworld.itempool[i+1:])
                     break
             else:
-                new_items.append(item)
+                old_items.append(item)
 
         # leftovers?
         if target:
             for player, remaining_items in depletion_pool.items():
                 remaining_items = {name: count for name, count in remaining_items.items() if count}
                 if remaining_items:
-                    raise Exception(f"{multiworld.get_player_name(player)}"
+                    logger.warning(f"{multiworld.get_player_name(player)}"
                                     f" is trying to remove items from their pool that don't exist: {remaining_items}")
-        assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
-        multiworld.itempool[:] = new_items
+                    # find all filler we generated for the current player and remove until it matches 
+                    removables = [item for item in new_items if item.player == player]
+                    for _ in range(sum(remaining_items.values())):
+                        new_items.remove(removables.pop())
+        assert len(multiworld.itempool) == len(new_items + old_items), "Item Pool amounts should not change."
+        multiworld.itempool[:] = new_items + old_items
 
     multiworld.link_items()
 
@@ -341,7 +347,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
                 if not multiworld.can_beat_game():
-                    raise Exception("Game appears as unbeatable. Aborting.")
+                    raise FillError("Game appears as unbeatable. Aborting.", multiworld=multiworld)
                 else:
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
