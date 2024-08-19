@@ -1,4 +1,5 @@
-from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink
+from dataclasses import dataclass
+from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink, PerGameCommonOptions
 
 class MinimumResourcePackAmount(Range):
     """The minimum amount of resources available in a resource pack"""
@@ -47,6 +48,8 @@ class IslandFrequencyLocations(Choice):
     option_progressive = 4
     option_anywhere = 5
     default = 2
+    def is_filling_frequencies_in_world(self):
+        return self.value <= self.option_random_on_island_random_order
 
 class IslandGenerationDistance(Choice):
     """Sets how far away islands spawn from you when you input their coordinates into the Receiver."""
@@ -76,16 +79,16 @@ class PaddleboardMode(Toggle):
     """Sets later story islands to be in logic without an Engine or Steering Wheel. May require lots of paddling."""
     display_name = "Paddleboard Mode"
 
-raft_options = {
-    "minimum_resource_pack_amount": MinimumResourcePackAmount,
-    "maximum_resource_pack_amount": MaximumResourcePackAmount,
-    "duplicate_items": DuplicateItems,
-    "filler_item_types": FillerItemTypes,
-    "island_frequency_locations": IslandFrequencyLocations,
-    "island_generation_distance": IslandGenerationDistance,
-    "expensive_research": ExpensiveResearch,
-    "progressive_items": ProgressiveItems,
-    "big_island_early_crafting": BigIslandEarlyCrafting,
-    "paddleboard_mode": PaddleboardMode,
-    "death_link": DeathLink
-}
+@dataclass
+class RaftOptions(PerGameCommonOptions):
+    minimum_resource_pack_amount: MinimumResourcePackAmount
+    maximum_resource_pack_amount: MaximumResourcePackAmount
+    duplicate_items: DuplicateItems
+    filler_item_types: FillerItemTypes
+    island_frequency_locations: IslandFrequencyLocations
+    island_generation_distance: IslandGenerationDistance
+    expensive_research: ExpensiveResearch
+    progressive_items: ProgressiveItems
+    big_island_early_crafting: BigIslandEarlyCrafting
+    paddleboard_mode: PaddleboardMode
+    death_link: DeathLink
