@@ -5,8 +5,8 @@ class Goal(Choice):
     """
     What must you accomplish to win the game?
     Survival: Survive a number of days to win.
-    Bosses (Any): Defeat any of the selected bosses to win.
-    Bosses (All): Defeat all selected bosses to win.
+    Bosses (Any): Defeat any boss listed in "Required Bosses" to win.
+    Bosses (All): Defeat all bosses listed in "Required Bosses" to win.
     """
     display_name = "Goal Type"
     default = 1
@@ -18,6 +18,7 @@ class DaysToSurvive(NamedRange):
     """
     Only applies for the survival goal. The number of days your character must survive for the survival goal. 
     Each day would last 8 real life minutes on default settings.
+    Being a ghost pauses your timer. Regenerating the world or dying in Wilderness mode resets your timer.
     """
     display_name = "Days to Survive"
     default = 70
@@ -33,28 +34,28 @@ class DaysToSurvive(NamedRange):
 
 class RequiredBosses(OptionSet):
     """
-    Which boss(es) are required to be defeated to beat the game?
+    Only applies for boss goal types. Which boss(es) are required to be defeated to beat the game?
     
-    Valid Bosses:
-        "Deerclops"
-        "Moose/Goose"
-        "Bearger"
-        "Ancient Guardian"
-        "Antlion"
-        "Dragonfly"
-        "Bee Queen"
-        "Klaus"
-        "Toadstool"
-        "Malbatross"
-        "Crab King"
-        "Frostjaw"
-        "Eye Of Terror"
-        "Retinazor"
-        "Spazmatism"
-        "Nightmare Werepig"
-        "Scrappy Werepig"
-        "Ancient Fuelweaver"
-        "Celestial Champion"
+    Valid Bosses:             Difficulty (Subjective)
+        "Deerclops"           - Easy / Seasonal 
+        "Moose/Goose"         - Easy / Seasonal   
+        "Bearger"             - Easy / Seasonal
+        "Ancient Guardian"    - Medium
+        "Antlion"             - Easy / Seasonal
+        "Dragonfly"           - Medium
+        "Bee Queen"           - Hard
+        "Klaus"               - Medium / Seasonal
+        "Toadstool"           - Hard
+        "Malbatross"          - Medium
+        "Crab King"           - Hard
+        "Frostjaw"            - Medium
+        "Eye Of Terror"       - Easy
+        "Retinazor"           - Hard
+        "Spazmatism"          - Hard
+        "Nightmare Werepig"   - Medium 
+        "Scrappy Werepig"     - Medium
+        "Ancient Fuelweaver"  - Hard
+        "Celestial Champion"  - Hard
 
     Example: ['Deerclops', 'Moose/Goose', 'Bearger']
     """
@@ -148,7 +149,7 @@ class SeasonChangeHelperItems(Toggle):
 
 class ExtraDamageAgainstBosses(NamedRange):
     """
-    This adds "Extra Damage Against Bosses" buffs as Archipelago items.
+    This adds "Extra Damage Against Bosses" buffs as Archipelago items. Recommended if playing solo.
     Each stack of this buff gives the player a permanent +10% damage against easier bosses and +25% damage against tougher ones.
     This is exponential. With 10 stacks, this turns into a x2.6 and x9.3 damage multipiers respectively.
     """
@@ -170,6 +171,8 @@ class ShuffleStartingRecipes(Toggle):
 
     This may leave you vulnerable to darkness on your first night!
     If you're not okay with this, you may want to add Torch to your starting items.
+
+    Sphere 1 will also be small, making generation more restrictive when generating alone.
     """
     display_name = "Shuffle Starting Recipes"
 
@@ -192,6 +195,8 @@ class PlayerSkillLevel(Choice):
     Easy: Ensure items that would be helpful for progression are accessible
     Advanced: Expects you to know the game well and to survive seasons under-equipped
     Expert: Expects you to survive in riskier conditions, such as entering the ruins without light, etc
+
+    Easier difficulties may make generation more restrictive.
     """
     display_name = "Player Skill Level"
     default = 0
