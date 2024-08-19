@@ -534,7 +534,7 @@ class LinksAwakeningContext(CommonContext):
                 "data": {
                     "time": self.last_death_link,
                     "source": self.slot_info[self.slot].name,
-                    "cause": self.slot_info[self.slot].name + " had a nightmare"
+                    "cause": self.slot_info[self.slot].name + " had a nightmare."
                 }
             }])
 
