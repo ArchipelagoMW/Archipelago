@@ -697,9 +697,7 @@ def get_compact_hint_args(hint: WitnessWordedHint, local_player_number: int) -> 
     """
 
     # Is Area Hint
-    if hint.area is not None:
-        assert hint.area_amount is not None, "Area hint had an undefined progression amount."
-
+    if hint.area_amount is not None:
         area_amount = hint.area_amount
         hunt_panels = hint.area_hunt_panels
 
