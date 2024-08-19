@@ -252,7 +252,6 @@ class CommonContext:
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
-    ui_manager: typing.Optional["type[kvui.GameManager]"] = None
     ui: typing.Optional["kvui.GameManager"] = None
     ui_task: typing.Optional["asyncio.Task[None]"] = None
     input_task: typing.Optional["asyncio.Task[None]"] = None
@@ -673,7 +672,7 @@ class CommonContext:
         return GameManager(self)
 
     def run_gui(self):
-        """Import kivy UI system and start running it as self.ui_task."""
+        """Import kivy UI system from make_gui() and start running it as self.ui_task."""
         self.ui = self.make_gui()
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
