@@ -203,6 +203,10 @@ def get_elevators_come_to_you() -> List[str]:
     return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
 
 
+def get_entity_hunt() -> List[str]:
+    return get_adjustment_file("settings/Entity_Hunt.txt")
+
+
 def get_sigma_normal_logic() -> List[str]:
     return get_adjustment_file("WitnessLogic.txt")
 
