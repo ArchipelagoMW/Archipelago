@@ -292,6 +292,9 @@ blacklisted_combos = {
     # See above comment
     "Time Rift - Deep Sea":             ["Alpine Free Roam", "Nyakuza Free Roam", "Contractual Obligations",
                                          "Murder on the Owl Express"],
+
+    # was causing test failures
+    "Time Rift - Balcony":              ["Alpine Free Roam"],
 }
 
 
@@ -656,6 +659,10 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
             if exit_act.name not in chapter_finales:
                 return False
 
+    exit_chapter: str = act_chapters.get(exit_act.name)
+    # make sure that certain time rift combinations never happen
+    always_block: bool = exit_chapter != "Mafia Town" and exit_chapter != "Subcon Forest"
+    if not ignore_certain_rules or always_block:
         if entrance_act.name in rift_access_regions and exit_act.name in rift_access_regions[entrance_act.name]:
             return False
 
@@ -681,9 +688,12 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     if act.name not in guaranteed_first_acts:
         return False
 
+    if world.options.ActRandomizer == ActRandomizer.option_light and "Time Rift" in act.name:
+        return False
+
     # If there's only a single level in the starting chapter, only allow Mafia Town or Subcon Forest levels
     start_chapter = world.options.StartingChapter
-    if start_chapter is ChapterIndex.ALPINE or start_chapter is ChapterIndex.SUBCON:
+    if start_chapter == ChapterIndex.ALPINE or start_chapter == ChapterIndex.SUBCON:
         if "Time Rift" in act.name:
             return False
 
@@ -720,7 +730,8 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     elif act.name == "Contractual Obligations" and world.options.ShuffleSubconPaintings:
         return False
 
-    if world.options.ShuffleSubconPaintings and act_chapters.get(act.name, "") == "Subcon Forest":
+    if world.options.ShuffleSubconPaintings and "Time Rift" not in act.name \
+       and act_chapters.get(act.name, "") == "Subcon Forest":
         # Only allow Subcon levels if painting skips are allowed
         if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
             return False
