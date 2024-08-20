@@ -116,10 +116,6 @@ class KHRECOMWorld(World):
         data = item_table[name]
         return KHRECOMItem(name, data.classification, data.code, self.player)
 
-    def create_event(self, name: str) -> KHRECOMItem:
-        data = event_item_table[name]
-        return KHRECOMItem(name, data.classification, data.code, self.player)
-
     def set_rules(self):
         set_rules(self)
 
