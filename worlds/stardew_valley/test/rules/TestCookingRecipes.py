@@ -17,14 +17,14 @@ class TestRecipeLearnLogic(SVTestBase):
         rule = self.world.logic.region.can_reach_location(location)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Progressive House"), event=False)
-        self.multiworld.state.collect(self.create_item("Radish Seeds"), event=False)
-        self.multiworld.state.collect(self.create_item("Spring"), event=False)
-        self.multiworld.state.collect(self.create_item("Summer"), event=False)
+        self.multiworld.state.collect(self.create_item("Progressive House"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Radish Seeds"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Spring"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Summer"), prevent_sweep=False)
         self.collect_lots_of_money()
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("The Queen of Sauce"), event=False)
+        self.multiworld.state.collect(self.create_item("The Queen of Sauce"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)
 
 
@@ -42,21 +42,21 @@ class TestRecipeReceiveLogic(SVTestBase):
         rule = self.world.logic.region.can_reach_location(location)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Progressive House"), event=False)
-        self.multiworld.state.collect(self.create_item("Radish Seeds"), event=False)
-        self.multiworld.state.collect(self.create_item("Summer"), event=False)
+        self.multiworld.state.collect(self.create_item("Progressive House"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Radish Seeds"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Summer"), prevent_sweep=False)
         self.collect_lots_of_money()
         self.assert_rule_false(rule, self.multiworld.state)
 
         spring = self.create_item("Spring")
         qos = self.create_item("The Queen of Sauce")
-        self.multiworld.state.collect(spring, event=False)
-        self.multiworld.state.collect(qos, event=False)
+        self.multiworld.state.collect(spring, prevent_sweep=False)
+        self.multiworld.state.collect(qos, prevent_sweep=False)
         self.assert_rule_false(rule, self.multiworld.state)
         self.multiworld.state.remove(spring)
         self.multiworld.state.remove(qos)
 
-        self.multiworld.state.collect(self.create_item("Radish Salad Recipe"), event=False)
+        self.multiworld.state.collect(self.create_item("Radish Salad Recipe"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)
 
     def test_get_chefsanity_check_recipe(self):
@@ -64,20 +64,20 @@ class TestRecipeReceiveLogic(SVTestBase):
         rule = self.world.logic.region.can_reach_location(location)
         self.assert_rule_false(rule, self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item("Spring"), event=False)
+        self.multiworld.state.collect(self.create_item("Spring"), prevent_sweep=False)
         self.collect_lots_of_money()
         self.assert_rule_false(rule, self.multiworld.state)
 
         seeds = self.create_item("Radish Seeds")
         summer = self.create_item("Summer")
         house = self.create_item("Progressive House")
-        self.multiworld.state.collect(seeds, event=False)
-        self.multiworld.state.collect(summer, event=False)
-        self.multiworld.state.collect(house, event=False)
+        self.multiworld.state.collect(seeds, prevent_sweep=False)
+        self.multiworld.state.collect(summer, prevent_sweep=False)
+        self.multiworld.state.collect(house, prevent_sweep=False)
         self.assert_rule_false(rule, self.multiworld.state)
         self.multiworld.state.remove(seeds)
         self.multiworld.state.remove(summer)
         self.multiworld.state.remove(house)
 
-        self.multiworld.state.collect(self.create_item("The Queen of Sauce"), event=False)
+        self.multiworld.state.collect(self.create_item("The Queen of Sauce"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)
