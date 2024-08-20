@@ -255,48 +255,17 @@ def generateRom(args, world: "LinksAwakeningWorld"):
 
     world_setup = world.ladxr_logic.world_setup
 
-    JUNK_HINT = 0.33
-    RANDOM_HINT= 0.66
-    # USEFUL_HINT = 1.0
+
     # TODO: filter events, filter unshuffled keys
     all_items = world.multiworld.get_items()
-    our_items = [item for item in all_items
-                 if item.player == world.player
-                 and item.location
-                 and item.code is not None
-                 and item.location.show_in_spoiler]
-    our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
-
-    def gen_hint():
-        chance = world.random.uniform(0, 1)
-        if chance < JUNK_HINT:
-            return None
-        elif chance < RANDOM_HINT:
-            location = world.random.choice(our_items).location
-        else: # USEFUL_HINT
-            location = world.random.choice(our_useful_items).location
-
-        if location.item.player == world.player:
-            name = "Your"
-        else:
-            name = f"{world.multiworld.player_name[location.item.player]}'s"
-
-        if isinstance(location, LinksAwakeningLocation):
-            location_name = location.ladxr_item.metadata.name
-        else:
-            location_name = location.name
-
-        hint = f"{name} {location.item} is at {location_name}"
-        if location.player != world.player:
-            hint += f" in {world.multiworld.player_name[location.player]}'s world"
-
-        # Cap hint size at 85
-        # Realistically we could go bigger but let's be safe instead
-        hint = hint[:85]
-
-        return hint
-
-    hints.addHints(rom, world.random, gen_hint)
+    hint_item_pool = [item for item in all_items
+                      if item.location
+                      and item.location.player == world.player
+                      and isinstance(item.location, LinksAwakeningLocation)
+                      and item.code is not None
+                      and item.location.show_in_spoiler
+                      and ItemClassification.progression in item.classification]
+    hints.addHints(rom, world.random, hint_item_pool)
 
     if world_setup.goal == "raft":
         patches.goal.setRaftGoal(rom)

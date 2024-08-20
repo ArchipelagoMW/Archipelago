@@ -49,12 +49,16 @@ useless_hint = [
 ]
 
 
-def addHints(rom, rnd, hint_generator):
+def addHints(rom, rnd, hint_item_pool):
     text_ids = hint_text_ids.copy()
     rnd.shuffle(text_ids)
+    pool = hint_item_pool.copy()
     for text_id in text_ids:
-        hint = hint_generator()
-        if not hint:
+        if len(pool) > 0:
+            chosen_index = rnd.randint(0, len(pool) - 1)
+            chosen = pool.pop(chosen_index)
+            hint = rnd.choice(hints.format("{%s}" % (chosen.name), chosen.location.ladxr_item.metadata.area)
+        else:
             hint = rnd.choice(hints).format(*rnd.choice(useless_hint))
         rom.texts[text_id] = formatText(hint)
 
