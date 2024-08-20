@@ -90,7 +90,7 @@ class WitnessWorld(World):
             "laser_ids_to_hints": self.laser_ids_to_hints,
             "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
+            "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
             "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
             "panel_hunt_required_absolute": self.panel_hunt_required_count
         }
