@@ -87,7 +87,10 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     import tempfile, zipfile, shutil
 
     if not apworld_src:
-        apworld_src = open_filename('Select APWorld file to install', (('APWorld', ('.apworld', '.zip')),))
+        apworld_src = open_filename(
+            'Select APWorld file to install',
+            (('APWorld', ('.apworld', '.zip')),),
+        )
         if not apworld_src:
             # user closed menu
             return
@@ -99,11 +102,13 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
             temp = pathlib.Path(tempfile.mkdtemp(prefix="apworld"))
 
             archive = zipfile.ZipFile(apworld_path)
-            archive_apworld = next(
-                n for n in archive.namelist() if n.endswith(".apworld")
-            )
-            archive.extract(archive_apworld, path=temp)
-            return _install_apworld(temp / archive_apworld)
+            try:
+                archive_apworld = next(n for n in archive.namelist() if n.endswith(".apworld"))
+                archive.extract(archive_apworld, path=temp)
+                return _install_apworld(temp / archive_apworld)
+
+            except StopIteration:
+                raise Exception(f"{apworld_path} does not contain any .apworld files")
 
         finally:
             shutil.rmtree(temp, ignore_errors=True)
