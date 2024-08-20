@@ -46,6 +46,8 @@ class TitsThe3rdMemoryIO():
     instance, as well as starting threads to activate certain game functionalities.
     """
 
+    OFFSET_FLAG_0: int = 0x2AD491C
+
     def __init__(self, exit_event: asyncio.Event):
         self.tits_the_3rd_mem: pymem.Pymem = None
         self.tits_the_3rd_pid: int = None
@@ -119,6 +121,16 @@ class TitsThe3rdMemoryIO():
             logger.info("Unable to find %s", scena_file_path)
             raise err
         return function_offsets
+
+    def _read_byte(self, offset):
+        """
+        Read 1 byte of data at <base_process_address> + offset and return it.
+
+        offset (int): the offset to read data from.
+        returns: The data represented as a byte string
+        """
+        data = self.tits_the_3rd_mem.read_bytes(self.tits_the_3rd_mem.base_address + offset, 1)
+        return data[0]
 
     def _read_word(self, offset):
         """
@@ -230,3 +242,20 @@ class TitsThe3rdMemoryIO():
     def allocate(self):
         """Allocate memory on the game process which we want to write to later."""
         self.scena_caller_alloc = self.tits_the_3rd_mem.allocate(150)
+
+    def read_flag(self, flag_number: int):
+        """
+        Read a provided flag value.
+        In the scena file, this is refered to as flag[X] where X is the flag number.
+
+        Args:
+            flag_number (int): The number of the flag to read.
+
+        Returns:
+            bool: The value of the flag. True if the flag is set, False otherwise.
+        """
+        flag_byte_offset = self.OFFSET_FLAG_0 + (flag_number // 8)
+        flag_bit = flag_number % 8
+        data = self._read_byte(flag_byte_offset)
+        flag_value = (data >> flag_bit) & 1
+        return bool(flag_value)
