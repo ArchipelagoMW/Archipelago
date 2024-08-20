@@ -36,8 +36,9 @@ randomized item and (optionally) enemy locations. You only need to do this once 
 
 To run _Dark Souls III_ in Archipelago mode:
 
-1. Start Steam. **Do not run in offline mode.** The mod will make sure you don't connect to the
-   DS3 servers, and running Steam in offline mode will make certain scripted invaders fail to spawn.
+1. Start Steam. **Do not run in offline mode.** Running Steam in offline mode will make certain
+   scripted invaders fail to spawn. Instead, change the game itself to offline mode on the menu
+   screen.
 
 2. Run `launchmod_darksouls3.bat`. This will start _Dark Souls III_ as well as a command prompt that
    you can use to interact with the Archipelago server.
