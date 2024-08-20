@@ -230,9 +230,11 @@ class BlasphemousWorld(World):
         multiworld = self.multiworld
         player = self.player
 
+        created_regions: List[str] = []
 
         for r in regions:
             multiworld.regions.append(Region(r["name"], player, multiworld))
+            created_regions.append(r["name"])
 
         self.get_region("Menu").add_exits({self.start_room: "New Game"})
 
@@ -250,10 +252,12 @@ class BlasphemousWorld(World):
             for t in r["transitions"]:
                 if t == r["name"]:
                     continue
-                try:
+                
+                if t in created_regions:
                     region.add_exits({t})
-                except KeyError:
+                else:
                     multiworld.regions.append(Region(t, player, multiworld))
+                    created_regions.append(t)
                     region.add_exits({t})
 
 

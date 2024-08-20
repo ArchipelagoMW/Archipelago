@@ -512,8 +512,16 @@ class BlasRules:
                         for region in self.indirect_regions[req]:
                             self.indirect_conditions.append((region, f"{name} -> {obj['target']}"))
                     reqs.append(self.string_rules[req])
-            clauses.append(lambda state, reqs=reqs: all(req(state) for req in reqs))
-        return lambda state: True if not clauses else any(clause(state) for clause in clauses)
+            if len(reqs) == 1:
+                clauses.append(reqs[0])
+            else:
+                clauses.append(lambda state, reqs=reqs: all(req(state) for req in reqs))
+        if not clauses:
+            return lambda state: True
+        elif len(clauses) == 1:
+            return clauses[0]
+        else:
+            return lambda state: any(clause(state) for clause in clauses)
 
     # Relics
     def blood(self, state: CollectionState) -> bool:
