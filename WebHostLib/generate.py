@@ -1,44 +1,57 @@
-import os
-import tempfile
-import random
+import concurrent.futures
 import json
+import os
+import pickle
+import random
+import tempfile
 import zipfile
 from collections import Counter
-from typing import Dict, Optional, Any
-from Utils import __version__
+from typing import Any, Dict, List, Optional, Union, Set
 
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import flash, redirect, render_template, request, session, url_for
+from pony.orm import commit, db_session
 
-from worlds.alttp.EntranceRandomizer import parse_arguments
+from BaseClasses import get_seed, seeddigits
+from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
-from BaseClasses import seeddigits, get_seed
-from Generate import handle_name, PlandoSettings
-import pickle
-
-from .models import Generation, STATE_ERROR, STATE_QUEUED, commit, db_session, Seed, UUID
+from Utils import __version__
 from WebHostLib import app
+from settings import ServerOptions, GeneratorOptions
+from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
+from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 
-def get_meta(options_source: dict) -> dict:
-    plando_options = {
-        options_source.get("plando_bosses", ""),
-        options_source.get("plando_items", ""),
-        options_source.get("plando_connections", ""),
-        options_source.get("plando_texts", "")
-    }
-    plando_options -= {""}
+def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[str], Dict[str, Any]]]:
+    plando_options: Set[str] = set()
+    for substr in ("bosses", "items", "connections", "texts"):
+        if options_source.get(f"plando_{substr}", substr in GeneratorOptions.plando_options):
+            plando_options.add(substr)
 
     server_options = {
-        "hint_cost": int(options_source.get("hint_cost", 10)),
-        "forfeit_mode": options_source.get("forfeit_mode", "goal"),
-        "remaining_mode": options_source.get("remaining_mode", "disabled"),
-        "collect_mode": options_source.get("collect_mode", "disabled"),
-        "item_cheat": bool(int(options_source.get("item_cheat", 1))),
+        "hint_cost": int(options_source.get("hint_cost", ServerOptions.hint_cost)),
+        "release_mode": options_source.get("release_mode", ServerOptions.release_mode),
+        "remaining_mode": options_source.get("remaining_mode", ServerOptions.remaining_mode),
+        "collect_mode": options_source.get("collect_mode", ServerOptions.collect_mode),
+        "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
         "server_password": options_source.get("server_password", None),
     }
-    return {"server_options": server_options, "plando_options": list(plando_options)}
+    generator_options = {
+        "spoiler": int(options_source.get("spoiler", GeneratorOptions.spoiler)),
+        "race": race,
+    }
+
+    if race:
+        server_options["item_cheat"] = False
+        server_options["remaining_mode"] = "disabled"
+        generator_options["spoiler"] = 0
+
+    return {
+        "server_options": server_options,
+        "plando_options": list(plando_options),
+        "generator_options": generator_options,
+    }
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -49,56 +62,55 @@ def generate(race=False):
         if 'file' not in request.files:
             flash('No file part')
         else:
-            file = request.files['file']
-            options = get_yaml_data(file)
-            if type(options) == str:
+            files = request.files.getlist('file')
+            options = get_yaml_data(files)
+            if isinstance(options, str):
                 flash(options)
             else:
-                meta = get_meta(request.form)
-                meta["race"] = race
-                results, gen_options = roll_options(options, meta["plando_options"])
-
-                if race:
-                    meta["server_options"]["item_cheat"] = False
-                    meta["server_options"]["remaining_mode"] = "disabled"
-
-                if any(type(result) == str for result in results.values()):
-                    return render_template("checkResult.html", results=results)
-                elif len(gen_options) > app.config["MAX_ROLL"]:
-                    flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players. "
-                          f"If you have a larger group, please generate it yourself and upload it.")
-                elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
-                    gen = Generation(
-                        options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
-                        # convert to json compatible
-                        meta=json.dumps(meta),
-                        state=STATE_QUEUED,
-                        owner=session["_id"])
-                    commit()
-
-                    return redirect(url_for("wait_seed", seed=gen.id))
-                else:
-                    try:
-                        seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
-                                           meta=meta, owner=session["_id"].int)
-                    except BaseException as e:
-                        from .autolauncher import handle_generation_failure
-                        handle_generation_failure(e)
-                        return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
-
-                    return redirect(url_for("view_seed", seed=seed_id))
+                meta = get_meta(request.form, race)
+                return start_generation(options, meta)
 
     return render_template("generate.html", race=race, version=__version__)
 
 
-def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
+def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any]):
+    results, gen_options = roll_options(options, set(meta["plando_options"]))
+
+    if any(type(result) == str for result in results.values()):
+        return render_template("checkResult.html", results=results)
+    elif len(gen_options) > app.config["MAX_ROLL"]:
+        flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players. "
+              f"If you have a larger group, please generate it yourself and upload it.")
+    elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
+        gen = Generation(
+            options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+            # convert to json compatible
+            meta=json.dumps(meta),
+            state=STATE_QUEUED,
+            owner=session["_id"])
+        commit()
+
+        return redirect(url_for("wait_seed", seed=gen.id))
+    else:
+        try:
+            seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
+                               meta=meta, owner=session["_id"].int)
+        except BaseException as e:
+            from .autolauncher import handle_generation_failure
+            handle_generation_failure(e)
+            return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
+
+        return redirect(url_for("view_seed", seed=seed_id))
+
+
+def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
     if not meta:
         meta: Dict[str, Any] = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
-    race = meta.setdefault("race", False)
+    race = meta.setdefault("generator_options", {}).setdefault("race", False)
 
-    try:
+    def task():
         target = tempfile.TemporaryDirectory()
         playercount = len(gen_options)
         seed = get_seed()
@@ -113,13 +125,15 @@ def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = 0 if race else 2
+        erargs.spoiler = meta["generator_options"].get("spoiler", 0)
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
-        erargs.plando_options = PlandoSettings.from_set(meta.setdefault("plando_options",
-                                                                        {"bosses", "items", "connections", "texts"}))
+        erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
+                                                                       {"bosses", "items", "connections", "texts"}))
+        erargs.skip_prog_balancing = False
+        erargs.skip_output = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
@@ -138,6 +152,23 @@ def gen_game(gen_options, meta: Optional[Dict[str, Any]] = None, owner=None, sid
         ERmain(erargs, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
+    thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    thread = thread_pool.submit(task)
+
+    try:
+        return thread.result(app.config["JOB_TIME"])
+    except concurrent.futures.TimeoutError as e:
+        if sid:
+            with db_session:
+                gen = Generation.get(id=sid)
+                if gen is not None:
+                    gen.state = STATE_ERROR
+                    meta = json.loads(gen.meta)
+                    meta["error"] = (
+                            "Allowed time for Generation exceeded, please consider generating locally instead. " +
+                            e.__class__.__name__ + ": " + str(e))
+                    gen.meta = json.dumps(meta)
+                    commit()
     except BaseException as e:
         if sid:
             with db_session:

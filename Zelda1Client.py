@@ -4,25 +4,27 @@ import asyncio
 import copy
 import json
 import logging
+import os
+import subprocess
 import time
+import typing
 from asyncio import StreamReader, StreamWriter
 from typing import List
 
-
 import Utils
-from worlds import lookup_any_location_id_to_name
+from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, console_loop, ClientCommandProcessor, logger, \
     get_base_parser
 
 from worlds.tloz.Items import item_game_ids
 from worlds.tloz.Locations import location_ids
-from worlds.tloz import Items, Locations
+from worlds.tloz import Items, Locations, Rom
 
 SYSTEM_MESSAGE_ID = 0
 
-CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart Zelda_connector.lua"
-CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator and make sure Zelda_connector.lua is running"
-CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart Zelda_connector.lua"
+CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_tloz.lua"
+CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator and make sure connector_tloz.lua is running"
+CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart connector_tloz.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
@@ -34,9 +36,8 @@ location_ids = location_ids
 items_by_id = {id: item for item, id in item_ids.items()}
 locations_by_id = {id: location for location, id in location_ids.items()}
 
+
 class ZeldaCommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx: CommonContext):
-        super().__init__(ctx)
 
     def _cmd_nes(self):
         """Check NES Connection State"""
@@ -44,10 +45,10 @@ class ZeldaCommandProcessor(ClientCommandProcessor):
             logger.info(f"NES Status: {self.ctx.nes_status}")
 
     def _cmd_toggle_msgs(self):
-        """Toggle displaying messages in bizhawk"""
+        """Toggle displaying messages in EmuHawk"""
         global DISPLAY_MSGS
         DISPLAY_MSGS = not DISPLAY_MSGS
-        logger.info(f"Messages are now {'enabled' if DISPLAY_MSGS  else 'disabled'}")
+        logger.info(f"Messages are now {'enabled' if DISPLAY_MSGS else 'disabled'}")
 
 
 class ZeldaContext(CommonContext):
@@ -59,6 +60,7 @@ class ZeldaContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
+        self.bonus_items = []
         self.nes_streams: (StreamReader, StreamWriter) = None
         self.nes_sync_task = None
         self.messages = {}
@@ -66,7 +68,11 @@ class ZeldaContext(CommonContext):
         self.nes_status = CONNECTION_INITIAL_STATUS
         self.game = 'The Legend of Zelda'
         self.awaiting_rom = False
-        self.display_msgs = True
+        self.shop_slots_left = 0
+        self.shop_slots_middle = 0
+        self.shop_slots_right = 0
+        self.shop_slots = [self.shop_slots_left, self.shop_slots_middle, self.shop_slots_right]
+        self.slot_data = dict()
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -84,6 +90,7 @@ class ZeldaContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
+            self.slot_data = args.get("slot_data", {})
             asyncio.create_task(parse_locations(self.locations_array, self, True))
         elif cmd == 'Print':
             msg = args['text']
@@ -128,13 +135,50 @@ class ZeldaContext(CommonContext):
 
 def get_payload(ctx: ZeldaContext):
     current_time = time.time()
+    bonus_items = [item for item in ctx.bonus_items]
     return json.dumps(
         {
             "items": [item.item for item in ctx.items_received],
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
-                         if key[0] > current_time - 10}
+                         if key[0] > current_time - 10},
+            "shops": {
+                "left": ctx.shop_slots_left,
+                "middle": ctx.shop_slots_middle,
+                "right": ctx.shop_slots_right
+            },
+            "bonusItems": bonus_items
         }
     )
+
+
+def reconcile_shops(ctx: ZeldaContext):
+    checked_location_names = [ctx.location_names.lookup_in_game(location) for location in ctx.checked_locations]
+    shops = [location for location in checked_location_names if "Shop" in location]
+    left_slots = [shop for shop in shops if "Left" in shop]
+    middle_slots = [shop for shop in shops if "Middle" in shop]
+    right_slots = [shop for shop in shops if "Right" in shop]
+    for shop in left_slots:
+        ctx.shop_slots_left |= get_shop_bit_from_name(shop)
+    for shop in middle_slots:
+        ctx.shop_slots_middle |= get_shop_bit_from_name(shop)
+    for shop in right_slots:
+        ctx.shop_slots_right |= get_shop_bit_from_name(shop)
+
+
+def get_shop_bit_from_name(location_name):
+    if "Potion" in location_name:
+        return Rom.potion_shop
+    elif "Arrow" in location_name:
+        return Rom.arrow_shop
+    elif "Shield" in location_name:
+        return Rom.shield_shop
+    elif "Ring" in location_name:
+        return Rom.ring_shop
+    elif "Candle" in location_name:
+        return Rom.candle_shop
+    elif "Take" in location_name:
+        return Rom.take_any
+    return 0  # this should never be hit
 
 
 async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone="None"):
@@ -146,7 +190,7 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
         locations_checked = []
         location = None
         for location in ctx.missing_locations:
-            location_name = lookup_any_location_id_to_name[location]
+            location_name = ctx.location_names.lookup_in_game(location)
 
             if location_name in Locations.overworld_locations and zone == "overworld":
                 status = locations_array[Locations.major_location_offsets[location_name]]
@@ -167,19 +211,37 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
                 if status & 0x10:
                     ctx.locations_checked.add(location)
                     locations_checked.append(location)
-            elif location_name in  Locations.cave_locations and zone == "caves":
-                caveType = "None"
-                if "caveType" in locations_array.keys():
-                    caveType = locations_array["caveType"]
-                if caveType != "None":
-                    location_data = f"{caveType} Item {locations_array['itemSlot']}"
-                    print(location_name)
-                    print(location_data)
-                    print("=======")
-                    if location_name == location_data:
-                        locations_checked.append(location)
+            elif (location_name in Locations.shop_locations or "Take" in location_name) and zone == "caves":
+                shop_bit = get_shop_bit_from_name(location_name)
+                slot = 0
+                context_slot = 0
+                if "Left" in location_name:
+                    slot = "slot1"
+                    context_slot = 0
+                elif "Middle" in location_name:
+                    slot = "slot2"
+                    context_slot = 1
+                elif "Right" in location_name:
+                    slot = "slot3"
+                    context_slot = 2
+                if locations_array[slot] & shop_bit > 0:
+                    locations_checked.append(location)
+                    ctx.shop_slots[context_slot] |= shop_bit
+                if locations_array["takeAnys"] and locations_array["takeAnys"] >= 4:
+                    if "Take Any" in location_name:
+                        short_name = None
+                        if "Left" in location_name:
+                            short_name = "TakeAnyLeft"
+                        elif "Middle" in location_name:
+                            short_name = "TakeAnyMiddle"
+                        elif "Right" in location_name:
+                            short_name = "TakeAnyRight"
+                        if short_name is not None:
+                            item_code = ctx.slot_data[short_name]
+                            if item_code > 0:
+                                ctx.bonus_items.append(item_code)
+                            locations_checked.append(location)
         if locations_checked:
-            print([ctx.location_names[location] for location in locations_checked])
             await ctx.send_msgs([
                 {"cmd": "LocationChecks",
                  "locations": locations_checked}
@@ -229,6 +291,7 @@ async def nes_sync_task(ctx: ZeldaContext):
                                         "the ROM using the same link but adding your slot name")
                         if ctx.awaiting_rom:
                             await ctx.server_auth(False)
+                    reconcile_shops(ctx)
                 except asyncio.TimeoutError:
                     logger.debug("Read Timed Out, Reconnecting")
                     error_status = CONNECTION_TIMING_OUT_STATUS
@@ -278,11 +341,21 @@ if __name__ == '__main__':
     Utils.init_logging("ZeldaClient")
 
     options = Utils.get_options()
-    DISPLAY_MSGS = options["ffr_options"]["display_msgs"]
+    DISPLAY_MSGS = options["tloz_options"]["display_msgs"]
+
+
+    async def run_game(romfile: str) -> None:
+        auto_start = typing.cast(typing.Union[bool, str],
+                                 Utils.get_options()["tloz_options"].get("rom_start", True))
+        if auto_start is True:
+            import webbrowser
+            webbrowser.open(romfile)
+        elif isinstance(auto_start, str) and os.path.isfile(auto_start):
+            subprocess.Popen([auto_start, romfile],
+                             stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
     async def main(args):
-        print(args)
         if args.diff_file:
             import Patch
             logging.info("Patch file was supplied. Creating nes rom..")
@@ -290,6 +363,7 @@ if __name__ == '__main__':
             if "server" in meta:
                 args.connect = meta["server"]
             logging.info(f"Wrote rom file to {romfile}")
+            async_start(run_game(romfile))
         ctx = ZeldaContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:

@@ -1,8 +1,8 @@
 # Timespinner
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -28,9 +28,7 @@ certain items to your own world.
 
 ## What does another world's item look like in Timespinner?
 
-Items belonging to other worlds are represented by the vanilla item Elemental
-Beads ([Elemental Beads Wiki Page](https://timespinnerwiki.com/Use_Items)), Elemental Beads have no use in the
-randomizer.
+Items belonging to other worlds are represented by the four orbs icon from the [Orb Collectors (Wiki Page)](https://timespinnerwiki.com/Achievements) achievement.
 
 ## When the player receives an item, what happens?
 

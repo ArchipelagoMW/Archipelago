@@ -24,7 +24,7 @@ item_table: Dict[str, ItemData] = {
     "Red Candle": ItemData(107, progression),
     "Book of Magic": ItemData(108, progression),
     "Magical Key": ItemData(109, useful),
-    "Red Ring": ItemData(110, useful),
+    "Red Ring": ItemData(110, progression),
     "Silver Arrow": ItemData(111, progression),
     "Sword": ItemData(112, progression),
     "White Sword": ItemData(113, progression),
@@ -37,7 +37,7 @@ item_table: Dict[str, ItemData] = {
     "Food": ItemData(120, progression),
     "Water of Life (Blue)": ItemData(121, useful),
     "Water of Life (Red)": ItemData(122, useful),
-    "Blue Ring": ItemData(123, useful),
+    "Blue Ring": ItemData(123, progression),
     "Triforce Fragment": ItemData(124, progression),
     "Power Bracelet": ItemData(125, useful),
     "Small Key": ItemData(126, filler),
@@ -45,55 +45,9 @@ item_table: Dict[str, ItemData] = {
     "Recovery Heart": ItemData(128, filler),
     "Five Rupees": ItemData(129, filler),
     "Rupee": ItemData(130, filler),
-    "Clock": ItemData(131, useful),
-    "Fairy": ItemData(132, useful)
+    "Clock": ItemData(131, filler),
+    "Fairy": ItemData(132, filler)
 
-}
-
-# Map/Compasses: 18
-# 6 Fairies
-# 3 Clocks
-# 1 Water of Life (Red)
-# 2 Water of Life (Blue)
-# 2 Bomb
-# 2 Small Key
-# 2 Five Rupees
-# Reasoning: Adding some variety to the vanilla game.
-
-# With Take Any caves and the Potion Shop, we have two empty slots.
-# They"ll be used for anti-frustration: an extra Sword and Silver Arrow
-item_amounts_all = {
-    "Sword": 2,
-    "Heart Container": 13,
-    "Magical Shield": 3,
-    "Food": 2,
-    "Triforce Fragment": 8,
-    "Small Key": 46,
-    "Bomb": 19,
-    "Five Rupees": 18,
-    "Water of Life (Red)": 5,
-    "Silver Arrow": 2,
-    "Rupee": 0,
-    "Fairy": 6,
-    "Clock": 3,
-    "Water of Life (Blue)": 3,
-}
-
-# Take Any caves are out, so we only get one extra slot to add in.
-item_amounts_standard = {
-    "Heart Container": 9,
-    "Magical Shield": 1,
-    "Food": 2,
-    "Small Key": 4,
-    "Five Rupees": 2,
-    "Bomb": 3,
-    "Triforce Fragment": 8,
-    "Silver Arrow": 2,
-    "Rupee": 0,
-    "Fairy": 6,
-    "Clock": 3,
-    "Water of Life (Blue)": 3,
-    "Water of Life (Red)": 2,
 }
 
 item_game_ids = {
@@ -166,11 +120,11 @@ item_prices = {
     "Arrow": 40,
     "Silver Arrow": 160,
     "Bow": 40,
-    "Magical Key": 250, # Replacing all small keys commands a high premium
+    "Magical Key": 250,  # Replacing all small keys commands a high premium
     "Raft": 80,
     "Stepladder": 80,
-    "Five Rupees": 255, # This could cost anything above 5 Rupees and be fine, but 255 is the funniest
-    "Magical Rod": 100, # White Sword with forever beams should cost at least more than the White Sword itself
+    "Five Rupees": 255,  # This could cost anything above 5 Rupees and be fine, but 255 is the funniest
+    "Magical Rod": 100,  # White Sword with forever beams should cost at least more than the White Sword itself
     "Book of Magic": 60,
     "Blue Ring": 125,
     "Red Ring": 250,
@@ -178,9 +132,9 @@ item_prices = {
     "Letter": 20,
     "Small Key": 40,
     "Heart Container": 80,
-    "Triforce Fragment": 200, # Since I couldn't make Zelda 1 track shop purchases, this is how to discourage repeat
-                              # Triforce purchases. The punishment for endless Rupee grinding to avoid searching out
-                              # Triforce pieces is that you're doing endless Rupee grinding to avoid playing the game
+    "Triforce Fragment": 200,  # Since I couldn't make Zelda 1 track shop purchases, this is how to discourage repeat
+    # Triforce purchases. The punishment for endless Rupee grinding to avoid searching out
+    # Triforce pieces is that you're doing endless Rupee grinding to avoid playing the game
     "Magical Shield": 45,
     "Boomerang": 5,
     "Magical Boomerang": 20,

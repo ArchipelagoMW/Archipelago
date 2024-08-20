@@ -4,7 +4,7 @@
     ["{{ key }}"] = {{ variable_to_lua(value) }}{% if not loop.last %},{% endif %}
 {% endfor -%}
 }
-{%- endmacro %}
+{% endmacro %}
 {% macro list_to_lua(list) -%}
 {
 {%- for key in list -%}

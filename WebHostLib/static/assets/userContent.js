@@ -6,6 +6,7 @@ window.addEventListener('load', () => {
         "order": [[ 3, "desc" ]],
         "info": false,
         "dom": "t",
+        "stateSave": true,
     });
   $("#seeds-table").DataTable({
         "paging": false,
@@ -13,5 +14,6 @@ window.addEventListener('load', () => {
         "order": [[ 2, "desc" ]],
         "info": false,
         "dom": "t",
+        "stateSave": true,
     });
 });

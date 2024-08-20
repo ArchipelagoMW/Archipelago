@@ -1,17 +1,17 @@
 # The Legend of Zelda (NES)
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
 
-All acquirable pickups (except maps and compasses) are shuffled amongst each other. Logic is in place to ensure both
-that the game is still completable, as well as ensuring that players aren't forced to enter dungeons undergeared.
+All acquirable pickups (except maps and compasses) are shuffled among each other. Logic is in place to ensure both
+that the game is still completable, and that players aren't forced to enter dungeons under-geared.
 
 Shops can contain any item in the game, with prices added for the items unavailable in stores. Rupee caves are worth
-more while shops will cost less, making shop routing and money management important without requiring mindless grinding.
+more while shops cost less, making shop routing and money management important without requiring mindless grinding.
 
 ## What items and locations get shuffled?
 
@@ -19,10 +19,9 @@ In general, all item pickups in the game. More formally:
 
 - Every inventory item.
 - Every item found in the five kinds of shops.
-- The Heart Containers and Waters of Life found in Take Any caves.
 - Optionally, Triforce Fragments can be shuffled to be within dungeons, or anywhere.
-- Optionally, enemy-held items and room clear items (except maps and compasses) can be included in the shuffle, along 
-with their slots
+- Optionally, enemy-held items and dungeon floor items can be included in the shuffle, along with their slots
+- Maps and compasses have been replaced with bonus items, including Clocks and Fairies.
 
 ## What items from The Legend of Zelda can appear in other players' worlds?
 
@@ -36,12 +35,16 @@ filler and useful items will cost less, and uncategorized items will be in the m
 
 ## Are there any other changes made?
 
-Yes. The map and compass for each dungeon start already acquired, and the Recorder will warp you between all eight
-levels regardless of Triforce count (note: it's possible for this to be your route to level 4!). Finally, to reduce
-frustration, there is an extra copy each of the Sword and the Silver Arrow in the pool.
+- The map and compass for each dungeon start already acquired, and other items can be found in their place.
+- The Recorder will warp you between all eight levels regardless of Triforce count
+  - It's possible for this to be your route to level 4!
+- Pressing Select will cycle through your inventory.
+- Shop purchases are tracked within sessions, indicated by the item being elevated from its normal position.
+- What slots from a Take Any Cave have been chosen are similarly tracked.
 
-## Is the randomized game compatible with any other Zelda 1 hacks?
+## Local Unique Commands
 
-None have been tested, though in theory minor graphical mods should work without issue. Limited testing has been 
-performed with the Infinite Hyrule program, and the client correctly accounts for this, but nothing is guaranteed;
-should you wish to mix and match hacks, any problems that arise are yours to handle.
+The following commands are only available when using the Zelda1Client to play with Archipelago.
+
+- `/nes` Check NES Connection State
+- `/toggle_msgs` Toggle displaying messages in EmuHawk

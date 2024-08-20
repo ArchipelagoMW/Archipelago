@@ -12,8 +12,8 @@
 - [QUsb2Snes](https://github.com/Skarsnik/QUsb2snes/releases) (Inclus dans les utilitaires précédents)
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
     - Un émulateur capable d'éxécuter des scripts Lua
-      ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
-      [BizHawk](http://tasvideos.org/BizHawk.html))
+      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+      [BizHawk](https://tasvideos.org/BizHawk))
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle
       compatible
 - Le fichier ROM de la v1.0 japonaise, sûrement nommé `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
@@ -60,15 +60,16 @@ peuvent avoir différentes options.
 
 ### Où est-ce que j'obtiens un fichier YAML ?
 
-La page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings) vous permet de configurer vos
+La page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-options) vous permet de configurer vos
 paramètres personnels et de les exporter vers un fichier YAML.
 
 ### Configuration avancée du fichier YAML
 
 Une version plus avancée du fichier YAML peut être créée en utilisant la page
-des [paramètres de pondération](/weighted-settings), qui vous permet de configurer jusqu'à trois préréglages. Cette page
-a de nombreuses options qui sont essentiellement représentées avec des curseurs glissants. Cela vous permet de choisir
-quelles sont les chances qu'une certaine option apparaisse par rapport aux autres disponibles dans une même catégorie.
+des [paramètres de pondération](/games/A Link to the Past/weighted-options), qui vous permet de configurer jusqu'à
+trois préréglages. Cette page a de nombreuses options qui sont essentiellement représentées avec des curseurs
+glissants. Cela vous permet de choisir quelles sont les chances qu'une certaine option apparaisse par rapport aux
+autres disponibles dans une même catégorie.
 
 Par exemple, imaginez que le générateur crée un seau étiqueté "Mélange des cartes", et qu'il place un morceau de papier
 pour chaque sous-option. Imaginez également que la valeur pour "On" est 20 et la valeur pour "Off" est 40.
@@ -83,11 +84,11 @@ chaque paramètre il faut au moins une option qui soit paramétrée sur un nombr
 ### Vérifier son fichier YAML
 
 Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous pouvez le vérifier sur la page du
-[Validateur de YAML](/mysterycheck).
+[Validateur de YAML](/check).
 
 ## Générer une partie pour un joueur
 
-1. Aller sur la page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings), configurez vos options,
+1. Aller sur la page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-options), configurez vos options,
    et cliquez sur le bouton "Generate Game".
 2. Il vous sera alors présenté une page d'informations sur la seed, où vous pourrez télécharger votre patch.
 3. Double-cliquez sur le patch et l'émulateur devrait se lancer automatiquement avec la seed. Etant donné que le client
@@ -112,13 +113,13 @@ Quand le client se lance automatiquement, QUsb2Snes devrait se lancer automatiqu
 c'est la première fois qu'il démarre, il vous sera peut-être demandé de l'autoriser à communiquer à travers le pare-feu
 Windows.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Chargez votre ROM si ce n'est pas déjà fait.
 2. Cliquez sur le menu "File" et survolez l'option **Lua Scripting**
 3. Cliquez alors sur **New Lua Script Window...**
 4. Dans la nouvelle fenêtre, sélectionnez **Browse...**
-5. Dirigez vous vers le dossier où vous avez extrait snes9x Multitroid, allez dans le dossier `lua`, puis
+5. Dirigez vous vers le dossier où vous avez extrait snes9x-rr, allez dans le dossier `lua`, puis
    choisissez `multibridge.lua`
 6. Remarquez qu'un nom vous a été assigné, et que l'interface Web affiche "SNES Device: Connected", avec ce même nom
    dans le coin en haut à gauche.

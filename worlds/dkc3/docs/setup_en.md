@@ -2,14 +2,13 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Donkey Kong Country 3 Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
-        - snes9x Multitroid
-          from: [snes9x Multitroid Download](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
-        - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
+        - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
         - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
@@ -24,9 +23,10 @@
 
 ### Windows Setup
 
-1. During the installation of Archipelago, you will have been asked to install the SNI Client. If you did not do this,
-   or you are on an older version, you may run the installer again to install the SNI Client.
-2. During setup, you will be asked to locate your base ROM file. This is your Donkey Kong Country 3 ROM file.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
+   This is your Donkey Kong Country 3 ROM file. This only needs to be done once.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
@@ -45,18 +45,18 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Donkey Kong Country 3 Player Settings Page](/games/Donkey%20Kong%20Country%203/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Donkey Kong Country 3 Player Options Page](/games/Donkey%20Kong%20Country%203/player-options)
 
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](/mysterycheck)
+validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [Donkey Kong Country 3 Player Settings Page](/games/Donkey%20Kong%20Country%203/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
+    - Player Options page: [Donkey Kong Country 3 Player Options Page](/games/Donkey%20Kong%20Country%203/player-options)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -81,30 +81,28 @@ client, and will also create your ROM in the same place as your patch file.
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Load your ROM file if it hasn't already been loaded.
 2. Click on the File menu and hover on **Lua Scripting**
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit.
+    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
 ##### BizHawk
 
-1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following these
-   menu options:
-   `Config --> Cores --> SNES --> BSNES`
-   Once you have changed the loaded core, you must restart BizHawk.
+1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
+    - (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
+    - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
 2. Load your ROM file if it hasn't already been loaded.
-3. Click on the Tools menu and click on **Lua Console**
-4. Click the button to open a new Lua script.
-5. Select the `Connector.lua` file included with your client
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+   If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
+3. Drag+drop the `Connector.lua` file included with your client onto the main EmuHawk window.
+    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
+    - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
+      with the file picker.
 
 ##### RetroArch 1.10.3 or newer
 

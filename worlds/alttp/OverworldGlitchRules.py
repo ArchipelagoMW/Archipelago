@@ -4,6 +4,8 @@ Helper functions to deliver entrance/exit/region sets to OWG rules.
 
 from BaseClasses import Entrance
 
+from .StateHelpers import can_lift_heavy_rocks, can_boots_clip_lw, can_boots_clip_dw, can_get_glitched_speed_dw
+
 
 def get_sword_required_superbunny_mirror_regions():
     """
@@ -11,11 +13,13 @@ def get_sword_required_superbunny_mirror_regions():
     """
     yield 'Spiral Cave (Top)'
 
+
 def get_boots_required_superbunny_mirror_regions():
     """
     Cave regions that superbunny can get through - but only with boots.
     """
     yield 'Two Brothers House'
+
 
 def get_boots_required_superbunny_mirror_locations():
     """
@@ -169,7 +173,7 @@ def get_boots_clip_exits_dw(inverted, player):
         yield ('Ganons Tower Ascent', 'Dark Death Mountain (West Bottom)', 'Dark Death Mountain (Top)')  # This only gets you to the GT entrance
         yield ('Dark Death Mountain Glitched Bridge', 'Dark Death Mountain (West Bottom)', 'Dark Death Mountain (Top)')
         yield ('Turtle Rock (Top) Clip Spot', 'Dark Death Mountain (Top)', 'Turtle Rock (Top)')
-        yield ('Ice Palace Clip', 'South Dark World', 'Dark Lake Hylia Central Island', lambda state: state.can_boots_clip_dw(player) and state.has('Flippers', player))
+        yield ('Ice Palace Clip', 'South Dark World', 'Dark Lake Hylia Central Island', lambda state: can_boots_clip_dw(state, player) and state.has('Flippers', player))
     else:
         yield ('Dark Desert Teleporter Clip Spot', 'Dark Desert', 'Dark Desert Ledge')
 
@@ -203,8 +207,7 @@ def get_mirror_offset_spots_lw(player):
     Mirror shenanigans placing a mirror portal with a broken camera
     """
     yield ('Death Mountain Offset Mirror', 'Death Mountain', 'Light World')
-    yield ('Death Mountain Offset Mirror (Houlihan Exit)', 'Death Mountain', 'Hyrule Castle Ledge', lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_dw(player) and state.has('Moon Pearl', player))
-
+    yield ('Death Mountain Offset Mirror (Houlihan Exit)', 'Death Mountain', 'Hyrule Castle Ledge', lambda state: state.has('Magic Mirror', player) and can_boots_clip_dw(state, player) and state.has('Moon Pearl', player))
 
 
 def get_invalid_bunny_revival_dungeons():
@@ -217,26 +220,7 @@ def get_invalid_bunny_revival_dungeons():
     yield 'Sanctuary'
 
 
-def no_logic_rules(world, player):
-    """
-    Add OWG transitions to no logic player's world
-    """
-    create_no_logic_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'))
-    create_no_logic_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player))
-
-    # Glitched speed drops.
-    create_no_logic_connections(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'))
-
-    # Mirror clip spots.
-    if world.mode[player] != 'inverted':
-        create_no_logic_connections(player, world, get_mirror_clip_spots_dw())
-        create_no_logic_connections(player, world, get_mirror_offset_spots_dw())
-    else:
-        create_no_logic_connections(player, world, get_mirror_offset_spots_lw(player))
-
-
 def overworld_glitch_connections(world, player):
-
     # Boots-accessible locations.
     create_owg_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'))
     create_owg_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player))
@@ -255,11 +239,11 @@ def overworld_glitch_connections(world, player):
 def overworld_glitches_rules(world, player):
 
     # Boots-accessible locations.
-    set_owg_connection_rules(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'), lambda state: state.can_boots_clip_lw(player))
-    set_owg_connection_rules(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player), lambda state: state.can_boots_clip_dw(player))
+    set_owg_connection_rules(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'), lambda state: can_boots_clip_lw(state, player))
+    set_owg_connection_rules(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player), lambda state: can_boots_clip_dw(state, player))
 
     # Glitched speed drops.
-    set_owg_connection_rules(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'), lambda state: state.can_get_glitched_speed_dw(player))
+    set_owg_connection_rules(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'), lambda state: can_get_glitched_speed_dw(state, player))
     # Dark Death Mountain Ledge Clip Spot also accessible with mirror.
     if world.mode[player] != 'inverted':
         add_alternate_rule(world.get_entrance('Dark Death Mountain Ledge Clip Spot', player), lambda state: state.has('Magic Mirror', player))
@@ -267,20 +251,20 @@ def overworld_glitches_rules(world, player):
     # Mirror clip spots.
     if world.mode[player] != 'inverted':
         set_owg_connection_rules(player, world, get_mirror_clip_spots_dw(), lambda state: state.has('Magic Mirror', player))
-        set_owg_connection_rules(player, world, get_mirror_offset_spots_dw(), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_lw(player))
+        set_owg_connection_rules(player, world, get_mirror_offset_spots_dw(), lambda state: state.has('Magic Mirror', player) and can_boots_clip_lw(state, player))
     else:
-        set_owg_connection_rules(player, world, get_mirror_offset_spots_lw(player), lambda state: state.has('Magic Mirror', player) and state.can_boots_clip_dw(player))
+        set_owg_connection_rules(player, world, get_mirror_offset_spots_lw(player), lambda state: state.has('Magic Mirror', player) and can_boots_clip_dw(state, player))
 
     # Regions that require the boots and some other stuff.
     if world.mode[player] != 'inverted':
-        world.get_entrance('Turtle Rock Teleporter', player).access_rule = lambda state: (state.can_boots_clip_lw(player) or state.can_lift_heavy_rocks(player)) and state.has('Hammer', player)
+        world.get_entrance('Turtle Rock Teleporter', player).access_rule = lambda state: (can_boots_clip_lw(state, player) or can_lift_heavy_rocks(state, player)) and state.has('Hammer', player)
         add_alternate_rule(world.get_entrance('Waterfall of Wishing', player), lambda state: state.has('Moon Pearl', player) or state.has('Pegasus Boots', player))
     else:
         add_alternate_rule(world.get_entrance('Waterfall of Wishing Cave', player), lambda state: state.has('Moon Pearl', player))
 
-    world.get_entrance('Dark Desert Teleporter', player).access_rule = lambda state: (state.has('Flute', player) or state.has('Pegasus Boots', player)) and state.can_lift_heavy_rocks(player)
-    add_alternate_rule(world.get_entrance('Catfish Exit Rock', player), lambda state: state.can_boots_clip_dw(player))
-    add_alternate_rule(world.get_entrance('East Dark World Broken Bridge Pass', player), lambda state: state.can_boots_clip_dw(player))
+    world.get_entrance('Dark Desert Teleporter', player).access_rule = lambda state: (state.has('Flute', player) or state.has('Pegasus Boots', player)) and can_lift_heavy_rocks(state, player)
+    add_alternate_rule(world.get_entrance('Catfish Exit Rock', player), lambda state: can_boots_clip_dw(state, player))
+    add_alternate_rule(world.get_entrance('East Dark World Broken Bridge Pass', player), lambda state: can_boots_clip_dw(state, player))
 
     # Zora's Ledge via waterwalk setup.
     add_alternate_rule(world.get_location('Zora\'s Ledge', player), lambda state: state.has('Pegasus Boots', player))
@@ -299,6 +283,7 @@ def create_no_logic_connections(player, world, connections):
         parent.exits.append(connection)
         connection.connect(target)
 
+
 def create_owg_connections(player, world, connections):
     for entrance, parent_region, target_region, *rule_override in connections:
         parent = world.get_region(parent_region, player)
@@ -306,6 +291,7 @@ def create_owg_connections(player, world, connections):
         connection = Entrance(player, entrance, parent)
         parent.exits.append(connection)
         connection.connect(target)
+
 
 def set_owg_connection_rules(player, world, connections, default_rule):
     for entrance, _, _, *rule_override in connections:

@@ -1,16 +1,15 @@
-import os
-import uuid
 import base64
+import os
 import socket
+import uuid
 
-from pony.flask import Pony
 from flask import Flask
 from flask_caching import Cache
 from flask_compress import Compress
+from pony.flask import Pony
 from werkzeug.routing import BaseConverter
 
 from Utils import title_sorted
-from .models import *
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -24,16 +23,21 @@ app.jinja_env.filters['all'] = all
 
 app.config["SELFHOST"] = True  # application process is in charge of running the websites
 app.config["GENERATORS"] = 8  # maximum concurrent world gens
+app.config["HOSTERS"] = 8  # maximum concurrent room hosters
 app.config["SELFLAUNCH"] = True  # application process is in charge of launching Rooms.
+app.config["SELFLAUNCHCERT"] = None  # can point to a SSL Certificate to encrypt Room websocket connections
+app.config["SELFLAUNCHKEY"] = None  # can point to a SSL Certificate Key to encrypt Room websocket connections
 app.config["SELFGEN"] = True  # application process is in charge of scheduling Generations.
 app.config["DEBUG"] = False
-app.config["PORT"] = 12000
+app.config["PORT"] = 80
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024  # 64 megabyte limit
 # if you want to deploy, make sure you have a non-guessable secret key
 app.config["SECRET_KEY"] = bytes(socket.gethostname(), encoding="utf-8")
-# at what amount of worlds should scheduling be used, instead of rolling in the webthread
-app.config["JOB_THRESHOLD"] = 2
+# at what amount of worlds should scheduling be used, instead of rolling in the web-thread
+app.config["JOB_THRESHOLD"] = 1
+# after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
+app.config["JOB_TIME"] = 600
 app.config['SESSION_PERMANENT'] = True
 
 # waitress uses one thread for I/O, these are for processing of views that then get sent
@@ -46,11 +50,11 @@ app.config["PONY"] = {
     'create_db': True
 }
 app.config["MAX_ROLL"] = 20
-app.config["CACHE_TYPE"] = "flask_caching.backends.SimpleCache"
-app.config["JSON_AS_ASCII"] = False
-app.config["PATCH_TARGET"] = "localhost"
+app.config["CACHE_TYPE"] = "SimpleCache"
+app.config["HOST_ADDRESS"] = ""
+app.config["ASSET_RIGHTS"] = False
 
-cache = Cache(app)
+cache = Cache()
 Compress(app)
 
 
@@ -73,11 +77,13 @@ def register():
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
     # has automatic patch integration
-    import Patch
-    app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: game_name in Patch.AutoPatchRegister.patch_types
+    import worlds.AutoWorld
+    import worlds.Files
+    app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: \
+        game_name in worlds.Files.AutoPatchRegister.patch_types
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it
-    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc
+    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots, options
 
     app.register_blueprint(api.api_endpoints)

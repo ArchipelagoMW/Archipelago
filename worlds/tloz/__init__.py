@@ -1,28 +1,57 @@
-import logging
 import os
-import random
 import threading
-from typing import NamedTuple, Union
+from pkgutil import get_data
 
+import bsdiff4
 import Utils
+import settings
+import typing
+
+from typing import NamedTuple, Union, Dict, Any
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
-from .Items import item_table, item_amounts_all, item_amounts_standard, item_prices, item_game_ids
-from .Locations import location_table, level_locations, major_locations, shop_locations, cave_locations, \
-    all_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
-from .Options import tloz_options
-from .Rom import TLoZDeltaPatch, get_base_rom_path
+from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
+from .Items import item_table, item_prices, item_game_ids
+from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
+    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations, \
+    take_any_locations, sword_cave_locations
+from .Options import TlozOptions
+from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
+from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule
+
+
+class TLoZSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Zelda 1"""
+        description = "The Legend of Zelda (U) ROM File"
+        copy_to = "Legend of Zelda, The (U) (PRG0) [!].nes"
+        md5s = [TLoZDeltaPatch.hash]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+                    true  for operating system default program
+        Alternatively, a path to a program to open the .nes file with
+        """
+
+    class DisplayMsgs(settings.Bool):
+        """Display message inside of Bizhawk"""
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
+    display_msgs: typing.Union[DisplayMsgs, bool] = True
+
 
 class TLoZWeb(WebWorld):
     theme = "stone"
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up The Legend of Zelda for Archipelago on your computer.",
         "English",
         "multiworld_en.md",
         "multiworld/en",
-        ["Rosalie"]
+        ["Rosalie and Figment"]
     )
 
     tutorials = [setup]
@@ -31,14 +60,15 @@ class TLoZWeb(WebWorld):
 class TLoZWorld(World):
     """
     The Legend of Zelda needs almost no introduction. Gather the eight fragments of the
-    Triforce of Courage, enter Death Mountain, defeat Ganon, and rescue Princess Zelda.
-    This randomizer shuffles all of the items in the game around, leading to a new adventure
+    Triforce of Wisdom, enter Death Mountain, defeat Ganon, and rescue Princess Zelda.
+    This randomizer shuffles all the items in the game around, leading to a new adventure
     every time.
     """
-    option_definitions = tloz_options
+    options_dataclass = TlozOptions
+    options: TlozOptions
+    settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
-    data_version = 1
     base_id = 7000
     web = TLoZWeb()
 
@@ -46,14 +76,9 @@ class TLoZWorld(World):
     location_name_to_id = location_table
 
     item_name_groups = {
-        'weapons': {
-            "Sword", "White Sword", "Magical Sword", "Magical Rod", "Red Candle"
-        },
+        'weapons': starting_weapons,
         'swords': {
             "Sword", "White Sword", "Magical Sword"
-        },
-        'good swords': {
-          "White Sword", "Magical Sword"
         },
         "candles": {
             "Candle", "Red Candle"
@@ -63,6 +88,21 @@ class TLoZWorld(World):
         }
     }
 
+    location_name_groups = {
+        "Shops": set(shop_locations),
+        "Take Any": set(take_any_locations),
+        "Sword Caves": set(sword_cave_locations),
+        "Level 1": set(level_locations[0]),
+        "Level 2": set(level_locations[1]),
+        "Level 3": set(level_locations[2]),
+        "Level 4": set(level_locations[3]),
+        "Level 5": set(level_locations[4]),
+        "Level 6": set(level_locations[5]),
+        "Level 7": set(level_locations[6]),
+        "Level 8": set(level_locations[7]),
+        "Level 9": set(level_locations[8])
+    }
+
     for k, v in item_name_to_id.items():
         item_name_to_id[k] = v + base_id
 
@@ -70,415 +110,251 @@ class TLoZWorld(World):
         if v is not None:
             location_name_to_id[k] = v + base_id
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.generator_in_use = threading.Event()
         self.rom_name_available_event = threading.Event()
         self.levels = None
+        self.filler_items = None
+
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld):
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def create_item(self, name: str):
-        return TLoZItem(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+        return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
 
     def create_event(self, event: str):
         return TLoZItem(event, ItemClassification.progression, None, self.player)
 
     def create_location(self, name, id, parent, event=False):
         return_location = TLoZLocation(self.player, name, id, parent)
-        return_location.event = event
         return return_location
 
     def create_regions(self):
-        menu = Region("Menu", None, "Menu", self.player, self.world)
-        overworld = Region("Overworld", None, "Overworld", self.player, self.world)
+        menu = Region("Menu", self.player, self.multiworld)
+        overworld = Region("Overworld", self.player, self.multiworld)
         self.levels = [None]  # Yes I'm making a one-indexed array in a zero-indexed language. I hate me too.
         for i in range(1, 10):
-            level = Region(f"Level {i}", None, f"Level {i}", self.player, self.world)
+            level = Region(f"Level {i}", self.player, self.multiworld)
             self.levels.append(level)
             new_entrance = Entrance(self.player, f"Level {i}", overworld)
             new_entrance.connect(level)
             overworld.exits.append(new_entrance)
-            self.world.regions.append(level)
+            self.multiworld.regions.append(level)
 
         for i, level in enumerate(level_locations):
             for location in level:
-                if self.world.ExpandedPool[self.player] or "Drop" not in location:
+                if self.options.ExpandedPool or "Drop" not in location:
                     self.levels[i + 1].locations.append(
                         self.create_location(location, self.location_name_to_id[location], self.levels[i + 1]))
 
         for level in range(1, 9):
             boss_event = self.create_location(f"Level {level} Boss Status", None,
-                                 self.world.get_region(f"Level {i}", self.player),
-                                 True)
+                                              self.multiworld.get_region(f"Level {level}", self.player),
+                                              True)
             boss_event.show_in_spoiler = False
             self.levels[level].locations.append(boss_event)
 
         for location in major_locations:
-            overworld.locations.append(
-                self.create_location(location, self.location_name_to_id[location], overworld))
+            if self.options.ExpandedPool or "Take Any" not in location:
+                overworld.locations.append(
+                    self.create_location(location, self.location_name_to_id[location], overworld))
 
         for location in shop_locations:
             overworld.locations.append(
                 self.create_location(location, self.location_name_to_id[location], overworld))
 
-        ganon = self.create_location("Ganon", None, self.world.get_region("Level 9", self.player))
-        zelda = self.create_location("Zelda", None, self.world.get_region("Level 9", self.player))
+        ganon = self.create_location("Ganon", None, self.multiworld.get_region("Level 9", self.player))
+        zelda = self.create_location("Zelda", None, self.multiworld.get_region("Level 9", self.player))
+        ganon.show_in_spoiler = False
+        zelda.show_in_spoiler = False
         self.levels[9].locations.append(ganon)
         self.levels[9].locations.append(zelda)
         begin_game = Entrance(self.player, "Begin Game", menu)
         menu.exits.append(begin_game)
         begin_game.connect(overworld)
-        self.world.regions.append(menu)
-        self.world.regions.append(overworld)
+        self.multiworld.regions.append(menu)
+        self.multiworld.regions.append(overworld)
+
 
     def create_items(self):
-        # We guarantee that there will always be a key, bomb, and potion in an ungated shop.
-        reserved_store_slots = random.sample(shop_locations[0:-3], 3)
-        self.world.get_location(
-            reserved_store_slots[0],
-            self.player
-        ).place_locked_item(
-            self.world.create_item(
-                "Small Key", self.player)
-        )
-        self.world.get_location(
-            reserved_store_slots[1],
-            self.player
-        ).place_locked_item(
-            self.world.create_item("Bomb", self.player))
-        self.world.get_location(
-            reserved_store_slots[2],
-            self.player
-        ).place_locked_item(
-            self.world.create_item("Water of Life (Red)", self.player))
+        # refer to ItemPool.py
+        generate_itempool(self)
 
-        item_amounts = item_amounts_all
-        if not self.world.ExpandedPool[self.player]:
-            item_amounts = item_amounts_standard
-            self.world.get_location(
-                "Take Any Item Left",
-                self.player
-            ).place_locked_item(self.world.create_item("Water of Life (Red)", self.player))
-            self.world.get_location(
-                "Take Any Item Right",
-                self.player
-            ).place_locked_item(self.world.create_item("Heart Container", self.player))
-        for item in map(self.create_item, self.item_name_to_id):
-            if item.name in item_amounts.keys():
-                if self.world.TriforceLocations[self.player] > 0 or item.name != "Triforce Fragment":
-                    i = 0
-                    for i in range(0, item_amounts[item.name]):
-                        self.world.itempool.append(item)
-                else:
-                    level = 1
-                    for i in range(0, item_amounts[item.name]):
-                        self.world.get_location(
-                            f"Level {level} Triforce",
-                            self.player
-                        ).place_locked_item(self.world.create_item(item.name, self.player))
-                        level = level + 1
-            else:
-                self.world.itempool.append(item)
-
-    def set_rules(self):
-        # Boss events for a nicer spoiler log playthrough
-        for level in range(1, 9):
-            boss = self.world.get_location(f"Level {level} Boss", self.player)
-            boss_event = self.world.get_location(f"Level {level} Boss Status", self.player)
-            status = self.create_event(f"Boss {level} Defeated")
-            boss_event.place_locked_item(status)
-            add_rule(boss_event, lambda state: state.can_reach(boss, "Location", self.player))
-
-        # If we're doing a safe start, everything past the starting screen requires a weapon.
-        if self.world.StartingPosition[self.player] == 0:
-            for location in cave_locations:
-                add_rule(self.world.get_location(location, self.player),
-                         lambda state: state.has_group("weapons", self.player))
-            for location in major_locations:
-                if location != "Starting Sword Cave":
-                    add_rule(self.world.get_location(location, self.player),
-                             lambda state: state.has_group("weapons", self.player))
-
-        # No dungeons without weapons, no unsafe dungeons
-        for i, level in enumerate(self.levels[1:10]):
-            for location in level.locations:
-                add_rule(self.world.get_location(location.name, self.player),
-                         lambda state: state.has_group("weapons", self.player))
-                add_rule(self.world.get_location(location.name, self.player),
-                         lambda state: state.has("Heart Container", self.player, 3 + i) or
-                                       (state.has("Blue Ring", self.player) and
-                                        state.has("Heart Container", self.player, int(i / 2))) or
-                                       (state.has("Red Ring", self.player) and
-                                        state.has("Heart Container", self.player, int(i / 4)))
-
-                         )
-        # No requiring anything in a shop until we can farm for money
-        # Unless someone likes to live dangerously, of course
-        for location in shop_locations:
-            if self.world.StartingPosition[self.player] != 2:
-                add_rule(self.world.get_location(location, self.player),
-                         lambda state: state.has_group("weapons", self.player))
-
-        # Everything from 4 on up has dark rooms
-        for level in self.levels[4:]:
-            for location in level.locations:
-                add_rule(self.world.get_location(location.name, self.player),
-                         lambda state: state.has_group("candles", self.player)
-                                       or (state.has("Magical Rod", self.player) and state.has("Book", self.player)))
-
-        # Everything from 5 on up has gaps
-        for level in self.levels[5:]:
-            for location in level.locations:
-                add_rule(self.world.get_location(location.name, self.player),
-                         lambda state: state.has("Stepladder", self.player))
-
-        add_rule(self.world.get_location("Level 5 Boss", self.player),
-                 lambda state: state.has("Recorder", self.player))
-
-        add_rule(self.world.get_location("Level 6 Boss", self.player),
-                 lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-
-        add_rule(self.world.get_location("Level 7 Item (Red Candle)", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Boss", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Key Drop (Stalfos)", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Bomb Drop (Digdogger)", self.player),
-                 lambda state: state.has("Recorder", self.player))
-        add_rule(self.world.get_location("Level 7 Rupee Drop (Dodongos)", self.player),
-                 lambda state: state.has("Recorder", self.player))
-
-        for location in food_locations:
-            add_rule(self.world.get_location(location, self.player),
-                     lambda state: state.has("Food", self.player))
-
-        add_rule(self.world.get_location("Level 8 Item (Magical Key)", self.player),
-                 lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-        add_rule(self.world.get_location("Level 8 Bomb Drop (Darknuts North)", self.player),
-                 lambda state: state.has("Bow", self.player) and state.has_group("arrows", self.player))
-
-        for location in self.levels[9].locations:
-            add_rule(self.world.get_location(location.name, self.player),
-                     lambda state: state.has("Triforce Fragment", self.player, 8) and
-                                   state.has_group("swords", self.player))
-
-        #for level in range(1, 9):
-        #    location = self.world.get_location(f"Level {level} Triforce", self.player)
-        #    boss_status = f"Boss {level} Defeated"
-        #    add_rule(location, lambda state: state.has(boss_status, self.player))
-
-        add_rule(self.world.get_location("Level 1 Triforce", self.player),
-                 lambda state: state.has("Boss 1 Defeated", self.player))
-
-        add_rule(self.world.get_location("Level 2 Triforce", self.player),
-                 lambda state: state.has("Boss 2 Defeated", self.player))
-
-        add_rule(self.world.get_location("Level 3 Triforce", self.player),
-                 lambda state: state.has("Boss 3 Defeated", self.player))
-
-        add_rule(self.world.get_location("Level 4 Triforce", self.player),
-                 lambda state: state.has("Boss 4 Defeated", self.player))
-
-        add_rule(self.world.get_location("Level 5 Triforce", self.player),
-                 lambda state: state.has("Boss 5 Defeated", self.player))
-
-        add_rule(self.world.get_location("Level 6 Triforce", self.player),
-                 lambda state: state.has("Boss 6 Defeated", self.player))
-
-        add_rule(self.world.get_location("Level 7 Triforce", self.player),
-                 lambda state: state.has("Boss 7 Defeated", self.player))
-
-        add_rule(self.world.get_location("Level 8 Triforce", self.player),
-                 lambda state: state.has("Boss 8 Defeated", self.player))
-
-
-
-        # Sword, raft, and ladder spots
-        add_rule(self.world.get_location("White Sword Pond", self.player),
-                 lambda state: state.has("Heart Container", self.player, 2))
-        add_rule(self.world.get_location("Magical Sword Grave", self.player),
-                 lambda state: state.has("Heart Container", self.player, 9))
-        add_rule(self.world.get_location("Ocean Heart Container", self.player),
-                 lambda state: state.has("Stepladder", self.player))
-        if self.world.StartingPosition[self.player] != 2:
-            # Don't allow Take Any Items until we can actually get in one
-            add_rule(self.world.get_location("Take Any Item Left", self.player),
-                     lambda state: state.has_group("candles", self.player) or
-                                   state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Item Middle", self.player),
-                     lambda state: state.has_group("candles", self.player) or
-                                   state.has("Raft", self.player))
-            add_rule(self.world.get_location("Take Any Item Right", self.player),
-                     lambda state: state.has_group("candles", self.player) or
-                                   state.has("Raft", self.player))
-        for location in self.levels[4].locations:
-            add_rule(self.world.get_location(location.name, self.player),
-                     lambda state: state.has("Raft", self.player) or state.has("Recorder", self.player))
-        for location in self.levels[7].locations:
-            add_rule(self.world.get_location(location.name, self.player),
-                     lambda state: state.has("Recorder", self.player))
-        for location in self.levels[8].locations:
-            add_rule(self.world.get_location(location.name, self.player),
-                     lambda state: state.has("Bow", self.player))
-
-        if self.world.TriforceLocations[self.player] == 1:
-            for location in location_table.keys():
-                if location  not in all_level_locations:
-                    forbid_item(self.world.get_location(location, self.player), "Triforce Fragment", self.player)
-
-        add_rule(self.world.get_location("Potion Shop Item Left", self.player),
-                 lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Potion Shop Item Middle", self.player),
-                 lambda state: state.has("Letter", self.player))
-        add_rule(self.world.get_location("Potion Shop Item Right", self.player),
-                 lambda state: state.has("Letter", self.player))
-
-        set_rule(self.world.get_region("Menu", self.player), lambda state: True)
-        set_rule(self.world.get_region("Overworld", self.player), lambda state: True)
+    # refer to Rules.py
+    set_rules = set_rules
 
     def generate_basic(self):
-        ganon = self.world.get_location("Ganon", self.player)
-        ganon.place_locked_item(self.create_event("Defeated Ganon!"))
+        ganon = self.multiworld.get_location("Ganon", self.player)
+        ganon.place_locked_item(self.create_event("Triforce of Power"))
         add_rule(ganon, lambda state: state.has("Silver Arrow", self.player) and state.has("Bow", self.player))
 
-        self.world.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
-        add_rule(self.world.get_location("Zelda", self.player),
-                 lambda state: ganon in state.locations_checked)
+        self.multiworld.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
+        add_rule(self.multiworld.get_location("Zelda", self.player),
+                 lambda state: state.has("Triforce of Power", self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
 
-        self.world.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
-
-    def apply_base_patch(self, rom_data):
-        # Remove Triforce check for recorder so you can always warp.
-        rom_data[0x60CC:0x60CF] = bytearray([0xA9, 0xFF, 0xEA])
-
+    def apply_base_patch(self, rom):
+        # The base patch source is on a different repo, so here's the summary of changes:
+        # Remove Triforce check for recorder, so you can always warp.
         # Remove level check for Triforce Fragments (and maps and compasses, but this won't matter)
-        rom_data[0x6C9B:0x6C9D] = bytearray([0xEA, 0xEA])
-
-        # Replace AND #07 TAY with a JSR to free space later in the bank
-        rom_data[0x6CB5:0x6CB8] = bytearray([0x20, 0xF0, 0x7E])
-
+        # Replace some code with a jump to free space
         # Check if we're picking up a Triforce Fragment. If so, increment the local count
-        # In either case, we do the instructions we overwrote with the JSR and then RTS to normal flow
-        # N.B.: the location of these instructions in the PRG ROM and where the bank is mapped to
-        # do not correspond to each other: while it is not an error that we're jumping to 7EF0,
-        # this was calculated by hand, and so if any errors arise it'll likely be here.
-        rom_data[0x7770:0x777B] = bytearray([0xE0, 0x1B, 0xD0, 0x03, 0xEE, 0x79, 0x06, 0x29, 0x07, 0xAA, 0x60])
-
-        # Reduce variety of boss roars in order to make room for additional dungeon items
-        rom_data[0x1534C] = 0x40
-
+        # In either case, we do the instructions we overwrote with the jump and then return to normal flow
         # Remove map/compass check so they're always on
-        rom_data[0x17614:0x17617] = bytearray([0xA9, 0xA1, 0x60])
+        # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
+        # go past 0x1F items for dungeon items.
+        base_patch = get_data(__name__, "z1_base_patch.bsdiff4")
+        rom_data = bsdiff4.patch(rom.read(), base_patch)
+        rom_data = bytearray(rom_data)
+        # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
+        # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
+        for i in range(0, 0x7F):
+            item = rom_data[first_quest_dungeon_items_early + i]
+            if item & 0b00100000:
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_early + i] = item
+            if item & 0b00011111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
+                rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
 
-        # Stealing a bit from the boss roars flag so we can have more dungeon items. This allows us to
-        # go past 0x1F items for dungeon drops.
-        rom_data[0x1785D] = 0x3F
+            item = rom_data[first_quest_dungeon_items_late + i]
+            if item & 0b00100000:
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_late + i] = item
+            if item & 0b00011111 == 0b00000011:
+                rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
+        return rom_data
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:
-            rom_data = bytearray(rom.read())
-
-            self.apply_base_patch(rom_data)
-
-            # Write each location's new data in
-            for location in self.world.get_filled_locations():
-                # Zelda and Ganon aren't real locations
-                if location.name == "Ganon" or location.name == "Zelda":
-                    continue
-
-                # Neither are boss defeat events
-                if "Status" in location.name:
-                    continue
-
-                # We, of course, only care about our own world
-                if location.player != self.player:
-                    continue
-
-                item = location.item.name
-                # Remote items are always gonna look like Rupees.
-                if location.item.player != self.player:
-                    item = "Rupee"
-
-                item_id = item_game_ids[item]
-                location_id = location_ids[location.name]
-
-                # Shop prices need to be set
-                if location.name in shop_locations:
-                    if location.name[-5:] == "Right":
-                        # Final item in stores has bit 6 and 7 set. It's what marks the cave a shop.
-                        item_id = item_id | 0b11000000
-                    price_location = shop_price_location_ids[location.name]
-                    item_price = item_prices[item]
-                    if item == "Rupee":
-                        item_class = location.item.classification
-                        if item_class == ItemClassification.progression:
-                            item_price = item_price * 2
-                        elif item_class == ItemClassification.useful:
-                            item_price = item_price // 2
-                        elif item_class == ItemClassification.filler:
-                            item_price = item_price // 2
-                        elif item_class == ItemClassification.trap:
-                            item_price = item_price * 2
-                    rom_data[price_location] = item_price
-                if location.name == "Take Any Item Right":
-                    # Same story as above: bit 6 is what makes this a Take Any cave
-                    item_id = item_id | 0b01000000
-                if location.name in all_level_locations:
-                    # We want to preserve room flags: darkness and boss roars
-                    room_flags = rom_data[location_id]
-                    # Since we're stealing a bit for more items, we need to change any bit 6 boss roars to bit 7.
-                    if room_flags & 0b00100000 > 0:
-                        room_flags = room_flags | 0b01000000
-                    item_flags = room_flags & 0b11000000
-                    item_id = item_id | item_flags
-                rom_data[location_id] = item_id
-
-            # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
-            secret_caves = random.sample(sorted(secret_money_ids), 3)
-            secret_cave_money_amounts = [20, 50, 100]
-            for i, amount in enumerate(secret_cave_money_amounts):
-                # Giving approximately double the money to keep grinding down
-                amount = amount * random.triangular(1.5, 2.5)
-                secret_cave_money_amounts[i] = int(amount)
-            for i, cave in enumerate(secret_caves):
-                rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
-            return rom_data
+            rom_data = self.apply_base_patch(rom)
+        # Write each location's new data in
+        for location in self.multiworld.get_filled_locations(self.player):
+            # Zelda and Ganon aren't real locations
+            if location.name == "Ganon" or location.name == "Zelda":
+                continue
+        
+            # Neither are boss defeat events
+            if "Status" in location.name:
+                continue
+        
+            item = location.item.name
+            # Remote items are always going to look like Rupees.
+            if location.item.player != self.player:
+                item = "Rupee"
+        
+            item_id = item_game_ids[item]
+            location_id = location_ids[location.name]
+        
+            # Shop prices need to be set
+            if location.name in shop_locations:
+                if location.name[-5:] == "Right":
+                    # Final item in stores has bit 6 and 7 set. It's what marks the cave a shop.
+                    item_id = item_id | 0b11000000
+                price_location = shop_price_location_ids[location.name]
+                item_price = item_prices[item]
+                if item == "Rupee":
+                    item_class = location.item.classification
+                    if item_class == ItemClassification.progression:
+                        item_price = item_price * 2
+                    elif item_class == ItemClassification.useful:
+                        item_price = item_price // 2
+                    elif item_class == ItemClassification.filler:
+                        item_price = item_price // 2
+                    elif item_class == ItemClassification.trap:
+                        item_price = item_price * 2
+                rom_data[price_location] = item_price
+            if location.name == "Take Any Item Right":
+                # Same story as above: bit 6 is what makes this a Take Any cave
+                item_id = item_id | 0b01000000
+            rom_data[location_id] = item_id
+        
+        # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
+        secret_caves = self.random.sample(sorted(secret_money_ids), 3)
+        secret_cave_money_amounts = [20, 50, 100]
+        for i, amount in enumerate(secret_cave_money_amounts):
+            # Giving approximately double the money to keep grinding down
+            amount = amount * self.random.triangular(1.5, 2.5)
+            secret_cave_money_amounts[i] = int(amount)
+        for i, cave in enumerate(secret_caves):
+            rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
+        return rom_data
 
     def generate_output(self, output_directory: str):
-        patched_rom = self.apply_randomizer()
-        outfilebase = 'AP_' + self.world.seed_name
-        outfilepname = f'_P{self.player}'
-        outfilepname += f"_{self.world.get_file_safe_player_name(self.player).replace(' ', '_')}"
-        outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.nes')
-
-        self.rom_name_text = f'LOZ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.world.seed:11}\0'
-        self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
-        self.romName.extend([0] * (0x20 - len(self.romName)))
-        self.rom_name = self.romName
-        patched_rom[0x10:0x30] = self.romName
-
-        self.playerName = bytearray(self.world.player_name[self.player], 'utf8')[:0x20]
-        self.playerName.extend([0] * (0x20 - len(self.playerName)))
-        patched_rom[0x30:0x50] = self.playerName
-
-
-        patched_filename = os.path.join(output_directory, outputFilename)
-
-        with open(patched_filename, 'wb') as patched_rom_file:
-            patched_rom_file.write(patched_rom)
-
-        patch = TLoZDeltaPatch(os.path.splitext(outputFilename)[0] + TLoZDeltaPatch.patch_file_ending,
-                               player=self.player,
-                               player_name=self.world.player_name[self.player], patched_path=outputFilename)
-        self.rom_name_available_event.set()
-        patch.write()
+        try:
+            patched_rom = self.apply_randomizer()
+            outfilebase = 'AP_' + self.multiworld.seed_name
+            outfilepname = f'_P{self.player}'
+            outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
+            outputFilename = os.path.join(output_directory, f'{outfilebase}{outfilepname}.nes')
+            self.rom_name_text = f'LOZ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
+            self.romName = bytearray(self.rom_name_text, 'utf8')[:0x20]
+            self.romName.extend([0] * (0x20 - len(self.romName)))
+            self.rom_name = self.romName
+            patched_rom[0x10:0x30] = self.romName
+            self.playerName = bytearray(self.multiworld.player_name[self.player], 'utf8')[:0x20]
+            self.playerName.extend([0] * (0x20 - len(self.playerName)))
+            patched_rom[0x30:0x50] = self.playerName
+            patched_filename = os.path.join(output_directory, outputFilename)
+            with open(patched_filename, 'wb') as patched_rom_file:
+                patched_rom_file.write(patched_rom)
+            patch = TLoZDeltaPatch(os.path.splitext(outputFilename)[0] + TLoZDeltaPatch.patch_file_ending,
+                                   player=self.player,
+                                   player_name=self.multiworld.player_name[self.player],
+                                   patched_path=outputFilename)
+            patch.write()
+            os.unlink(patched_filename)
+        finally:
+            self.rom_name_available_event.set()
 
     def modify_multidata(self, multidata: dict):
         import base64
+        self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.world.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    def get_filler_item_name(self) -> str:
+        if self.filler_items is None:
+            self.filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
+        return self.random.choice(self.filler_items)
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        if self.options.ExpandedPool:
+            take_any_left = self.multiworld.get_location("Take Any Item Left", self.player).item
+            take_any_middle = self.multiworld.get_location("Take Any Item Middle", self.player).item
+            take_any_right = self.multiworld.get_location("Take Any Item Right", self.player).item
+            if take_any_left.player == self.player:
+                take_any_left = take_any_left.code
+            else:
+                take_any_left = -1
+            if take_any_middle.player == self.player:
+                take_any_middle = take_any_middle.code
+            else:
+                take_any_middle = -1
+            if take_any_right.player == self.player:
+                take_any_right = take_any_right.code
+            else:
+                take_any_right = -1
+
+            slot_data = {
+                "TakeAnyLeft": take_any_left,
+                "TakeAnyMiddle": take_any_middle,
+                "TakeAnyRight": take_any_right
+            }
+        else:
+            slot_data = {
+                "TakeAnyLeft": -1,
+                "TakeAnyMiddle": -1,
+                "TakeAnyRight": -1
+            }
+        return slot_data
 
 
 class TLoZItem(Item):
@@ -487,29 +363,3 @@ class TLoZItem(Item):
 
 class TLoZLocation(Location):
     game = 'The Legend of Zelda'
-
-
-class PlandoItem(NamedTuple):
-    item: str
-    location: str
-    world: Union[bool, str] = False  # False -> own world, True -> not own world
-    from_pool: bool = True  # if item should be removed from item pool
-    force: str = 'silent'  # false -> warns if item not successfully placed. true -> errors out on failure to place item.
-
-    def warn(self, warning: str):
-        if self.force in ['true', 'fail', 'failure', 'none', 'false', 'warn', 'warning']:
-            logging.warning(f'{warning}')
-        else:
-            logging.debug(f'{warning}')
-
-    def failed(self, warning: str, exception=Exception):
-        if self.force in ['true', 'fail', 'failure']:
-            raise exception(warning)
-        else:
-            self.warn(warning)
-
-
-class PlandoConnection(NamedTuple):
-    entrance: str
-    exit: str
-    direction: str  # entrance, exit or both

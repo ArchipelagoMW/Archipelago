@@ -3,7 +3,7 @@ import re
 import copy
 from typing import List
 
-from worlds.smz3.TotalSMZ3.Config import Config, SMLogic
+from .Config import Config, SMLogic
 
 class ItemType(Enum):
     Nothing = 0
@@ -181,6 +181,7 @@ class Item:
     keycard = re.compile("^Card")
     smMap = re.compile("^SmMap")
 
+    def IsNameDungeonItem(item_name): return Item.dungeon.match(item_name)
     def IsDungeonItem(self): return self.dungeon.match(self.Type.name)
     def IsBigKey(self): return self.bigKey.match(self.Type.name)
     def IsKey(self): return self.key.match(self.Type.name)
@@ -787,15 +788,15 @@ class Progression:
             return self.Flute and self.CanLiftHeavy()
 
     def CanAccessMaridiaPortal(self, world):
-        import worlds.smz3.TotalSMZ3.Region
+        from .Region import RewardType
         if (world.Config.SMLogic == SMLogic.Normal):
             return self.MoonPearl and self.Flippers and \
                     self.Gravity and self.Morph and \
-                    (world.CanAcquire(self, worlds.smz3.TotalSMZ3.Region.RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
+                    (world.CanAcquire(self, RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
         else:
             return self.MoonPearl and self.Flippers and \
                     (self.CanSpringBallJump() or self.HiJump or self.Gravity) and self.Morph and \
-                    (world.CanAcquire(self, worlds.smz3.TotalSMZ3.Region.RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
+                    (world.CanAcquire(self, RewardType.Agahnim) or self.Hammer and self.CanLiftLight() or self.CanLiftHeavy())
 
 # Start of AP integration
 items_start_id = 84000

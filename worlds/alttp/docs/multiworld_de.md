@@ -6,8 +6,8 @@
 - [SNI](https://github.com/alttpo/sni/releases) (Integriert in Archipelago)
 - Hardware oder Software zum Laden und Abspielen von SNES Rom-Dateien fähig zu einer Internetverbindung
     - Ein Emulator, der mit SNI verbinden kann
-      ([snes9x Multitroid](https://drive.google.com/drive/folders/1_ej-pwWtCAHYXIrvs5Hro16A1s9Hi3Jz),
-      [BizHawk](http://tasvideos.org/BizHawk.html))
+      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+      [BizHawk](https://tasvideos.org/BizHawk))
     - Ein SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), oder andere kompatible Hardware
 - Die Japanische Zelda 1.0 ROM-Datei, mit folgendem Namen: `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
@@ -47,12 +47,12 @@ wählen können!
 
 ### Wo bekomme ich so eine YAML-Datei her?
 
-Die [Player Settings](/games/A Link to the Past/player-settings) Seite auf der Website ermöglicht das einfache Erstellen
+Die [Player Options](/games/A Link to the Past/player-options) Seite auf der Website ermöglicht das einfache Erstellen
 und Herunterladen deiner eigenen `yaml` Datei. Drei verschiedene Voreinstellungen können dort gespeichert werden.
 
 ### Deine YAML-Datei ist gewichtet!
 
-Die **Player Settings** Seite hat eine Menge Optionen, die man per Schieber einstellen kann. Das ermöglicht es,
+Die **Player Options** Seite hat eine Menge Optionen, die man per Schieber einstellen kann. Das ermöglicht es,
 verschiedene Optionen mit unterschiedlichen Wahrscheinlichkeiten in einer Kategorie ausgewürfelt zu werden
 
 Als Beispiel kann man sich die Option "Map Shuffle" als einen Eimer mit Zetteln zur Abstimmung Vorstellen. So kann man
@@ -67,7 +67,7 @@ Wenn du eine Option nicht gewählt haben möchtest, setze ihren Wert einfach auf
 
 ### Überprüfung deiner YAML-Datei
 
-Wenn man sichergehen will, ob die YAML-Datei funktioniert, kann man dies bei der [YAML Validator](/mysterycheck) Seite
+Wenn man sichergehen will, ob die YAML-Datei funktioniert, kann man dies bei der [YAML Validator](/check) Seite
 tun.
 
 ## ein Einzelspielerspiel erstellen
@@ -93,7 +93,7 @@ Wenn der client den Emulator automatisch gestartet hat, wird SNI ebenfalls im Hi
 Mal ist, wird möglicherweise ein Fenster angezeigt, wo man bestätigen muss, dass das Programm durch die Windows Firewall
 kommunizieren darf.
 
-##### snes9x Multitroid
+##### snes9x-rr
 
 1. Lade die Entsprechende ROM-Datei, wenn sie nicht schon automatisch geladen wurde.
 2. Klicke auf den Reiter "File" oben im Menü und wähle **Lua Scripting**
@@ -106,7 +106,7 @@ kommunizieren darf.
 
 ##### BizHawk
 
-1. Stelle sicher, dass der BSNES-Core in Bizhawk geladen wird. Dazu musst du auf das Tools-Menü in Bizhawk klicken und
+1. Stelle sicher, dass der BSNES-Core in BizHawk geladen wird. Dazu musst du auf das Tools-Menü in BizHawk klicken und
    folgende Optionen wählen:
    `Config --> Cores --> SNES --> BSNES`
 2. Lade die entsprechende ROM-Datei, wenn sie nicht schon automatisch geladen wurde.

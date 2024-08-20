@@ -1,6 +1,6 @@
 import base64
 
-from rom.ips import IPS_Patch
+from ..rom.ips import IPS_Patch
 
 def pc_to_snes(pcaddress):
     snesaddress=(((pcaddress<<1)&0x7F0000)|(pcaddress&0x7FFF)|0x8000)|0x800000
@@ -18,17 +18,50 @@ def snes_to_pc(B):
 
     return (A_1 << 16) | A_2
 
+VANILLA_ROM_SIZE = 3145728
+BANK_SIZE = 0x8000
+
 class ROM(object):
+    def __init__(self, data={}):
+        self.address = 0
+        self.maxAddress = VANILLA_ROM_SIZE
+
+    def close(self):
+        pass
+
+    def seek(self, address):
+        if address > self.maxAddress:
+            self.maxAddress = address
+        self.address = address
+
+    def tell(self):
+        if self.address > self.maxAddress:
+            self.maxAddress = self.address
+        return self.address
+
+    def inc(self, n=1):
+        self.address += n
+        self.tell()
+
+    def read(self, byteCount):
+        pass
+
     def readWord(self, address=None):
         return self.readBytes(2, address)
 
     def readByte(self, address=None):
         return self.readBytes(1, address)
 
+    def readLong(self, address=None):
+        return self.readBytes(3, address)
+
     def readBytes(self, size, address=None):
         if address != None:
             self.seek(address)
         return int.from_bytes(self.read(size), byteorder='little')
+    
+    def write(self, bytes):
+        pass
 
     def writeWord(self, word, address=None):
         self.writeBytes(word, 2, address)
@@ -36,25 +69,45 @@ class ROM(object):
     def writeByte(self, byte, address=None):
         self.writeBytes(byte, 1, address)
 
+    def writeLong(self, lng, address=None):
+        self.writeBytes(lng, 3, address)
+
     def writeBytes(self, value, size, address=None):
         if address != None:
             self.seek(address)
         self.write(value.to_bytes(size, byteorder='little'))
+
+    def ipsPatch(self, ipsPatches):
+        pass
+
+    def fillToNextBank(self):
+        off = self.maxAddress % BANK_SIZE
+        if off > 0:
+            self.seek(self.maxAddress + BANK_SIZE - off - 1)
+            self.writeByte(0xff)
+        assert (self.maxAddress % BANK_SIZE) == 0
         
 class RealROM(ROM):
     def __init__(self, name):
+        super(RealROM, self).__init__()
         self.romFile = open(name, "rb+")
-        self.address = 0
 
     def seek(self, address):
-        self.address = address
+        super(RealROM, self).seek(address)
         self.romFile.seek(address)
 
+    def tell(self):
+        self.address = self.romFile.tell()
+        return super(RealROM, self).tell()
+    
     def write(self, bytes):
         self.romFile.write(bytes)
+        self.tell()
 
     def read(self, byteCount):
-        return self.romFile.read(byteCount)
+        ret = self.romFile.read(byteCount)
+        self.tell()
+        return ret
 
     def close(self):
         self.romFile.close()

@@ -1,15 +1,13 @@
 from typing import Dict, List, Set, Tuple, TextIO
-
-from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
-from .Items import get_item_names_per_category, item_table, starter_melee_weapons, starter_spells, \
-    starter_progression_items, filler_items
-from .Locations import get_locations, starter_progression_locations, EventId
-from .LogicMixin import TimespinnerLogic
-from .Options import is_option_enabled, get_option_value, timespinner_options
-from .PyramidKeys import get_pyramid_keys_unlock
-from .Regions import create_regions
-from ..AutoWorld import World, WebWorld
-
+from BaseClasses import Item, Tutorial, ItemClassification
+from .Items import get_item_names_per_category
+from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
+from .Locations import get_location_datas, EventId
+from .Options import BackwardsCompatiableTimespinnerOptions, Toggle
+from .PreCalculatedWeights import PreCalculatedWeights
+from .Regions import create_regions_and_locations
+from worlds.AutoWorld import World, WebWorld
+import logging
 
 class TimespinnerWebWorld(WebWorld):
     theme = "ice"
@@ -33,224 +31,316 @@ class TimespinnerWebWorld(WebWorld):
 
     tutorials = [setup, setup_de]
 
-
 class TimespinnerWorld(World):
     """
     Timespinner is a beautiful metroidvania inspired by classic 90s action-platformers.
     Travel back in time to change fate itself. Join timekeeper Lunais on her quest for revenge against the empire that killed her family.
     """
-
-    option_definitions = timespinner_options
+    options_dataclass = BackwardsCompatiableTimespinnerOptions
+    options: BackwardsCompatiableTimespinnerOptions
     game = "Timespinner"
     topology_present = True
-    remote_items = False
-    data_version = 10
     web = TimespinnerWebWorld()
+    required_client_version = (0, 4, 2)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
+    location_name_to_id = {location.name: location.code for location in get_location_datas(-1, None, None)}
     item_name_groups = get_item_names_per_category()
 
-    locked_locations: List[str]
-    pyramid_keys_unlock: str
-    location_cache: List[Location]
+    precalculated_weights: PreCalculatedWeights
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def generate_early(self) -> None:
+        self.options.handle_backward_compatibility()
 
-        self.locked_locations = []
-        self.location_cache = []
-        self.pyramid_keys_unlock = get_pyramid_keys_unlock(world, player)
+        self.precalculated_weights = PreCalculatedWeights(self.options, self.random)
 
-    def generate_early(self):
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.world.start_inventory[self.player].value.pop('Meyef', 0) > 0:
-            self.world.StartWithMeyef[self.player].value = self.world.StartWithMeyef[self.player].option_true
-        if self.world.start_inventory[self.player].value.pop('Talaria Attachment', 0) > 0:
-            self.world.QuickSeed[self.player].value = self.world.QuickSeed[self.player].option_true
-        if self.world.start_inventory[self.player].value.pop('Jewelry Box', 0) > 0:
-            self.world.StartWithJewelryBox[self.player].value = self.world.StartWithJewelryBox[self.player].option_true
+        if self.options.start_inventory.value.pop('Meyef', 0) > 0:
+            self.options.start_with_meyef.value = Toggle.option_true
+        if self.options.start_inventory.value.pop('Talaria Attachment', 0) > 0:
+            self.options.quick_seed.value = Toggle.option_true
+        if self.options.start_inventory.value.pop('Jewelry Box', 0) > 0:
+            self.options.start_with_jewelry_box.value = Toggle.option_true
 
-    def create_regions(self):
-        create_regions(self.world, self.player, get_locations(self.world, self.player),
-                        self.location_cache, self.pyramid_keys_unlock)
+    def create_regions(self) -> None: 
+        create_regions_and_locations(self.multiworld, self.player, self.options, self.precalculated_weights)
 
-    def create_item(self, name: str) -> Item:
-        return create_item_with_correct_settings(self.world, self.player, name)
+    def create_items(self) -> None: 
+        self.create_and_assign_event_items()
 
-    def get_filler_item_name(self) -> str:
-        return self.world.random.choice(filler_items)
+        excluded_items: Set[str] = self.get_excluded_items()
 
-    def set_rules(self):
-        setup_events(self.player, self.locked_locations, self.location_cache)
+        self.assign_starter_items(excluded_items)
+        self.place_first_progression_item(excluded_items)
 
-        self.world.completion_condition[self.player] = lambda state: state.has('Killed Nightmare', self.player)
+        self.multiworld.itempool += self.get_item_pool(excluded_items)
 
-    def generate_basic(self):
-        excluded_items = get_excluded_items(self, self.world, self.player)
+    def set_rules(self) -> None:
+        final_boss: str
+        if self.options.dad_percent:
+            final_boss = "Killed Emperor"
+        else:
+            final_boss = "Killed Nightmare"
 
-        assign_starter_items(self.world, self.player, excluded_items, self.locked_locations)
-
-        if not is_option_enabled(self.world, self.player, "QuickSeed") and not is_option_enabled(self.world, self.player, "Inverted"):
-            place_first_progression_item(self.world, self.player, excluded_items, self.locked_locations)
-
-        pool = get_item_pool(self.world, self.player, excluded_items)
-
-        fill_item_pool_with_dummy_items(self, self.world, self.player, self.locked_locations, self.location_cache, pool)
-
-        self.world.itempool += pool
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(final_boss, self.player) 
 
     def fill_slot_data(self) -> Dict[str, object]:
-        slot_data: Dict[str, object] = {}
+        return {
+            # options
+            "StartWithJewelryBox": self.options.start_with_jewelry_box.value,
+            "DownloadableItems": self.options.downloadable_items.value,
+            "EyeSpy": self.options.eye_spy.value,
+            "StartWithMeyef": self.options.start_with_meyef.value,
+            "QuickSeed": self.options.quick_seed.value,
+            "SpecificKeycards": self.options.specific_keycards.value,
+            "Inverted": self.options.inverted.value,
+            "GyreArchives": self.options.gyre_archives.value,
+            "Cantoran": self.options.cantoran.value,
+            "LoreChecks": self.options.lore_checks.value,
+            "BossRando": self.options.boss_rando.value,
+            "DamageRando": self.options.damage_rando.value,
+            "DamageRandoOverrides": self.options.damage_rando_overrides.value,
+            "HpCap": self.options.hp_cap.value,
+            "LevelCap": self.options.level_cap.value,
+            "ExtraEarringsXP": self.options.extra_earrings_xp.value,
+            "BossHealing": self.options.boss_healing.value,
+            "ShopFill": self.options.shop_fill.value,
+            "ShopWarpShards": self.options.shop_warp_shards.value,
+            "ShopMultiplier": self.options.shop_multiplier.value,
+            "LootPool": self.options.loot_pool.value,
+            "DropRateCategory": self.options.drop_rate_category.value,
+            "FixedDropRate": self.options.fixed_drop_rate.value,
+            "LootTierDistro": self.options.loot_tier_distro.value,
+            "ShowBestiary": self.options.show_bestiary.value,
+            "ShowDrops": self.options.show_drops.value,
+            "EnterSandman": self.options.enter_sandman.value,
+            "DadPercent": self.options.dad_percent.value,
+            "RisingTides": self.options.rising_tides.value,
+            "UnchainedKeys": self.options.unchained_keys.value,
+            "PresentAccessWithWheelAndSpindle": self.options.back_to_the_future.value,
+            "Traps": self.options.traps.value,
+            "DeathLink": self.options.death_link.value,
+            "StinkyMaw": True,
+            # data
+            "PersonalItems": self.get_personal_items(),
+            "PyramidKeysGate": self.precalculated_weights.pyramid_keys_unlock,
+            "PresentGate": self.precalculated_weights.present_key_unlock,
+            "PastGate": self.precalculated_weights.past_key_unlock,
+            "TimeGate": self.precalculated_weights.time_key_unlock,
+            # rising tides
+            "Basement": int(self.precalculated_weights.flood_basement) + \
+                                    int(self.precalculated_weights.flood_basement_high),
+            "Xarion": self.precalculated_weights.flood_xarion,
+            "Maw": self.precalculated_weights.flood_maw,
+            "PyramidShaft": self.precalculated_weights.flood_pyramid_shaft,
+            "BackPyramid": self.precalculated_weights.flood_pyramid_back,
+            "CastleMoat": self.precalculated_weights.flood_moat,
+            "CastleCourtyard": self.precalculated_weights.flood_courtyard,
+            "LakeDesolation": self.precalculated_weights.flood_lake_desolation,
+            "DryLakeSerene": not self.precalculated_weights.flood_lake_serene,
+            "LakeSereneBridge": self.precalculated_weights.flood_lake_serene_bridge,
+            "Lab": self.precalculated_weights.flood_lab
+        }
 
-        for option_name in timespinner_options:
-            slot_data[option_name] = get_option_value(self.world, self.player, option_name)
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        if self.options.unchained_keys:
+            spoiler_handle.write(f'Modern Warp Beacon unlock:       {self.precalculated_weights.present_key_unlock}\n')
+            spoiler_handle.write(f'Timeworn Warp Beacon unlock:     {self.precalculated_weights.past_key_unlock}\n')
 
-        slot_data["StinkyMaw"] = True
-        slot_data["ProgressiveVerticalMovement"] = False
-        slot_data["ProgressiveKeycards"] = False
-        slot_data["PyramidKeysGate"] = self.pyramid_keys_unlock
-        slot_data["PersonalItems"] = get_personal_items(self.player, self.location_cache)
-
-        return slot_data
-
-    def write_spoiler_header(self, spoiler_handle: TextIO):
-        spoiler_handle.write('Twin Pyramid Keys unlock:        %s\n' % (self.pyramid_keys_unlock))
-
-
-def get_excluded_items(self: TimespinnerWorld, world: MultiWorld, player: int) -> Set[str]:
-    excluded_items: Set[str] = set()
-
-    if is_option_enabled(world, player, "StartWithJewelryBox"):
-        excluded_items.add('Jewelry Box')
-    if is_option_enabled(world, player, "StartWithMeyef"):
-        excluded_items.add('Meyef')
-    if is_option_enabled(world, player, "QuickSeed"):
-        excluded_items.add('Talaria Attachment')
-
-    for item in world.precollected_items[player]:
-        if item.name not in self.item_name_groups['UseItem']:
-            excluded_items.add(item.name)
-
-    return excluded_items
-
-
-def assign_starter_items(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    non_local_items = world.non_local_items[player].value
-
-    local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if item not in non_local_items)
-    if not local_starter_melee_weapons:
-        if 'Plasma Orb' in non_local_items:
-            raise Exception("Atleast one melee orb must be local")
+            if self.options.enter_sandman:
+                spoiler_handle.write(f'Mysterious Warp Beacon unlock:   {self.precalculated_weights.time_key_unlock}\n')
         else:
-            local_starter_melee_weapons = ('Plasma Orb',)
+            spoiler_handle.write(f'Twin Pyramid Keys unlock:        {self.precalculated_weights.pyramid_keys_unlock}\n')
+       
+        if self.options.rising_tides:
+            flooded_areas: List[str] = []
 
-    local_starter_spells = tuple(item for item in starter_spells if item not in non_local_items)
-    if not local_starter_spells:
-        if 'Lightwall' in non_local_items:
-            raise Exception("Atleast one spell must be local")
+            if self.precalculated_weights.flood_basement:
+                if self.precalculated_weights.flood_basement_high:
+                    flooded_areas.append("Castle Basement")
+                else:
+                    flooded_areas.append("Castle Basement (Savepoint available)")
+            if self.precalculated_weights.flood_xarion:
+                flooded_areas.append("Xarion (boss)")
+            if self.precalculated_weights.flood_maw:
+                flooded_areas.append("Maw (caves + boss)")
+            if self.precalculated_weights.flood_pyramid_shaft:
+                flooded_areas.append("Ancient Pyramid Shaft")
+            if self.precalculated_weights.flood_pyramid_back:
+                flooded_areas.append("Sandman\\Nightmare (boss)")
+            if self.precalculated_weights.flood_moat:
+                flooded_areas.append("Castle Ramparts Moat")
+            if self.precalculated_weights.flood_courtyard:
+                flooded_areas.append("Castle Courtyard")
+            if self.precalculated_weights.flood_lake_desolation:
+                flooded_areas.append("Lake Desolation")
+            if self.precalculated_weights.flood_lake_serene:
+                flooded_areas.append("Lake Serene")
+            if self.precalculated_weights.flood_lake_serene_bridge:
+                flooded_areas.append("Lake Serene Bridge")
+            if self.precalculated_weights.flood_lab:
+                flooded_areas.append("Lab")
+
+            if len(flooded_areas) == 0:
+                flooded_areas_string: str = "None"
+            else:
+                flooded_areas_string: str = ", ".join(flooded_areas)
+
+            spoiler_handle.write(f'Flooded Areas:                   {flooded_areas_string}\n')
+
+        if self.options.has_replaced_options:
+            warning = \
+                f"NOTICE: Timespinner options for player '{self.player_name}' where renamed from PasCalCase to snake_case, " \
+                "please update your yaml"
+
+            spoiler_handle.write("\n")
+            spoiler_handle.write(warning)
+            logging.warning(warning)
+
+    def create_item(self, name: str) -> Item:
+        data = item_table[name]
+
+        if data.useful:
+            classification = ItemClassification.useful
+        elif data.progression:
+            classification = ItemClassification.progression
+        elif data.trap:
+            classification = ItemClassification.trap
         else:
-            local_starter_spells = ('Lightwall',)
+            classification = ItemClassification.filler
+            
+        item = Item(name, classification, data.code, self.player)
 
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
-    assign_starter_item(world, player, excluded_items, locked_locations, 'Tutorial: Yo Momma 2', local_starter_spells)
+        if not item.advancement:
+            return item
 
+        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
+            item.classification = ItemClassification.filler
+        elif name == 'Oculus Ring' and not self.options.eye_spy:
+            item.classification = ItemClassification.filler
+        elif (name == 'Kobo' or name == 'Merchant Crow') and not self.options.gyre_archives:
+            item.classification = ItemClassification.filler
+        elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
+                and not self.options.unchained_keys:
+            item.classification = ItemClassification.filler
 
-def assign_starter_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str],
-        location: str, item_list: Tuple[str, ...]):
-
-    item_name = world.random.choice(item_list)
-
-    excluded_items.add(item_name)
-
-    item = create_item_with_correct_settings(world, player, item_name)
-
-    world.get_location(location, player).place_locked_item(item)
-
-    locked_locations.append(location)
-
-
-def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
-    pool: List[Item] = []
-
-    for name, data in item_table.items():
-        if name not in excluded_items:
-            for _ in range(data.count):
-                item = create_item_with_correct_settings(world, player, name)
-                pool.append(item)
-
-    return pool
-
-
-def fill_item_pool_with_dummy_items(self: TimespinnerWorld, world: MultiWorld, player: int, locked_locations: List[str],
-                                    location_cache: List[Location], pool: List[Item]):
-    for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
-        pool.append(item)
-
-
-def place_first_progression_item(world: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str]):
-    for item in world.precollected_items[player]:
-        if item.name in starter_progression_items:
-            return
-
-    local_starter_progression_items = tuple(
-        item for item in starter_progression_items if item not in world.non_local_items[player].value)
-    non_excluded_starter_progression_locations = tuple(
-        location for location in starter_progression_locations if location not in world.exclude_locations[player].value)
-
-    if not local_starter_progression_items or not non_excluded_starter_progression_locations:
-        return
-
-    progression_item = world.random.choice(local_starter_progression_items)
-    location = world.random.choice(non_excluded_starter_progression_locations)
-
-    excluded_items.add(progression_item)
-    locked_locations.append(location)
-
-    item = create_item_with_correct_settings(world, player, progression_item)
-
-    world.get_location(location, player).place_locked_item(item)
-
-
-def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
-    data = item_table[name]
-    if data.useful:
-        classification = ItemClassification.useful
-    elif data.progression:
-        classification = ItemClassification.progression
-    else:
-        classification = ItemClassification.filler
-    item = Item(name, classification, data.code, player)
-
-    if not item.advancement:
         return item
 
-    if (name == 'Tablet' or name == 'Library Keycard V') and not is_option_enabled(world, player, "DownloadableItems"):
-        item.classification = ItemClassification.filler
-    elif name == 'Oculus Ring' and not is_option_enabled(world, player, "EyeSpy"):
-        item.classification = ItemClassification.filler
-    elif (name == 'Kobo' or name == 'Merchant Crow') and not is_option_enabled(world, player, "GyreArchives"):
-        item.classification = ItemClassification.filler
+    def get_filler_item_name(self) -> str:
+        trap_chance: int = self.options.trap_chance.value
+        enabled_traps: List[str] = self.options.traps.value
 
-    return item
+        if self.random.random() < (trap_chance / 100) and enabled_traps:
+            return self.random.choice(enabled_traps)
+        else:
+            return self.random.choice(filler_items) 
 
+    def get_excluded_items(self) -> Set[str]:
+        excluded_items: Set[str] = set()
 
-def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]):
-    for location in location_cache:
-        if location.address == EventId:
-            item = Item(location.name, ItemClassification.progression, EventId, player)
+        if self.options.start_with_jewelry_box:
+            excluded_items.add('Jewelry Box')
+        if self.options.start_with_meyef:
+            excluded_items.add('Meyef')
+        if self.options.quick_seed:
+            excluded_items.add('Talaria Attachment')
 
-            locked_locations.append(location.name)
+        if self.options.unchained_keys:
+            excluded_items.add('Twin Pyramid Key')
 
-            location.place_locked_item(item)
+            if not self.options.enter_sandman:
+                excluded_items.add('Mysterious Warp Beacon')
+        else:
+            excluded_items.add('Timeworn Warp Beacon')
+            excluded_items.add('Modern Warp Beacon')
+            excluded_items.add('Mysterious Warp Beacon')
 
+        for item in self.multiworld.precollected_items[self.player]:
+            if item.name not in self.item_name_groups['UseItem']:
+                excluded_items.add(item.name)
 
-def get_personal_items(player: int, locations: List[Location]) -> Dict[int, int]:
-    personal_items: Dict[int, int] = {}
+        return excluded_items
 
-    for location in locations:
-        if location.address and location.item and location.item.code and location.item.player == player:
-            personal_items[location.address] = location.item.code
+    def assign_starter_items(self, excluded_items: Set[str]) -> None:
+        non_local_items: Set[str] = self.options.non_local_items.value
+        local_items: Set[str] = self.options.local_items.value
 
-    return personal_items
+        local_starter_melee_weapons = tuple(item for item in starter_melee_weapons if
+                                            item in local_items or not item in non_local_items)
+        if not local_starter_melee_weapons:
+            if 'Plasma Orb' in non_local_items:
+                raise Exception("Atleast one melee orb must be local")
+            else:
+                local_starter_melee_weapons = ('Plasma Orb',)
+
+        local_starter_spells = tuple(item for item in starter_spells if
+                                     item in local_items or not item in non_local_items)
+        if not local_starter_spells:
+            if 'Lightwall' in non_local_items:
+                raise Exception("Atleast one spell must be local")
+            else:
+                local_starter_spells = ('Lightwall',)
+
+        self.assign_starter_item(excluded_items, 'Tutorial: Yo Momma 1', local_starter_melee_weapons)
+        self.assign_starter_item(excluded_items, 'Tutorial: Yo Momma 2', local_starter_spells)
+
+    def assign_starter_item(self, excluded_items: Set[str], location: str, item_list: Tuple[str, ...]) -> None:
+        item_name = self.random.choice(item_list)
+
+        self.place_locked_item(excluded_items, location, item_name)
+
+    def place_first_progression_item(self, excluded_items: Set[str]) -> None:
+        if self.options.quick_seed or self.options.inverted or self.precalculated_weights.flood_lake_desolation:
+            return
+
+        for item_name in self.options.start_inventory.value.keys():
+            if item_name in starter_progression_items:
+                return
+
+        local_starter_progression_items = tuple(
+            item for item in starter_progression_items 
+                if item not in excluded_items and item not in self.options.non_local_items.value)
+
+        if not local_starter_progression_items:
+            return
+
+        progression_item = self.random.choice(local_starter_progression_items)
+
+        self.multiworld.local_early_items[self.player][progression_item] = 1
+
+    def place_locked_item(self, excluded_items: Set[str], location: str, item: str) -> None:
+        excluded_items.add(item)
+
+        item = self.create_item(item)
+
+        self.multiworld.get_location(location, self.player).place_locked_item(item)
+
+    def get_item_pool(self, excluded_items: Set[str]) -> List[Item]:
+        pool: List[Item] = []
+
+        for name, data in item_table.items():
+            if name not in excluded_items:
+                for _ in range(data.count):
+                    item = self.create_item(name)
+                    pool.append(item)
+
+        for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
+            item = self.create_item(self.get_filler_item_name())
+            pool.append(item)
+
+        return pool
+
+    def create_and_assign_event_items(self) -> None:
+        for location in self.multiworld.get_locations(self.player):
+            if location.address == EventId:
+                item = Item(location.name, ItemClassification.progression, EventId, self.player)
+                location.place_locked_item(item)
+
+    def get_personal_items(self) -> Dict[int, int]:
+        personal_items: Dict[int, int] = {}
+
+        for location in self.multiworld.get_locations(self.player):
+            if location.address and location.item and location.item.code and location.item.player == self.player:
+                personal_items[location.address] = location.item.code
+
+        return personal_items

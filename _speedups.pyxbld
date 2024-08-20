@@ -1,0 +1,10 @@
+# This file is used when doing pyximport
+import os
+
+def make_ext(modname, pyxfilename):
+    from distutils.extension import Extension
+    return Extension(name=modname,
+                     sources=[pyxfilename],
+                     depends=["intset.h"],
+                     include_dirs=[os.getcwd()],
+                     language="c")
