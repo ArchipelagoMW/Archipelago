@@ -350,6 +350,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Cube Cave Entrance Region"].connect(
         connecting_region=regions["Overworld"])
 
+    # drop a rudeling down, icebolt or ice bomb
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld to West Garden from Furnace"],
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
+
     # Overworld side areas
     regions["Old House Front"].connect(
         connecting_region=regions["Old House Back"])

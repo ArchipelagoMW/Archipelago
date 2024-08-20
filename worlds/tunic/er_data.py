@@ -805,6 +805,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Cube Cave Entrance Region":
             [],
+        # drop a rudeling, icebolt or ice bomb
+        "Overworld to West Garden from Furnace":
+            [["IG3"]],
     },
     "East Overworld": {
         "Above Ruined Passage":
