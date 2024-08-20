@@ -505,7 +505,7 @@ checked_locations.
 
 ### NetworkPlayer
 An object representing information about a player. See also [NetworkSlot](#NetworkSlot).
-
+#### Properties
 | Name  | Type | Notes                                                                                                           |
 | ----- | ---- | --------------------------------------------------------------------------------------------------------------- |
 | team  | int  | The team the player belongs to. Team numbers start from `0`.                                                    |
@@ -526,6 +526,7 @@ Example:
 
 ### NetworkItem
 Items that are sent over the net (in packets) use the following data structure and are sent as objects:
+#### Properties
 | Name     | Type | Notes                                                                                                                                                                                |
 | -------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | item     | int  | The item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.                          |
@@ -553,7 +554,7 @@ In JSON this may look like:
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are
 intended to be read in the order they are listed in the packet.
-
+#### Properties
 | Name   | Type        | Notes                                                                                                                                                                                                                                                                                                                                                        |
 | ------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | type   | str \| None | Used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. See below for possible values.                                                                                                                                                                        |
@@ -614,6 +615,7 @@ class ClientStatus(enum.IntEnum):
 ### NetworkVersion
 An object representing software versioning. Used in the [Connect](#Connect) packet to allow the client to inform the
 server of the Archipelago version it supports.
+#### Properties
 | Name  | Type |
 | ----- | ---- |
 | major | int  |
@@ -633,16 +635,13 @@ class SlotType(enum.IntFlag):
 
 ### NetworkSlot
 An object representing static information about a slot.
-
-```python
-import typing
-from NetUtils import SlotType
-class NetworkSlot(typing.NamedTuple):
-   name: str
-   game: str
-   type: SlotType
-   group_members: typing.List[int] = []  # only populated if type == group
-```
+#### Properties
+| Name          | Type                  | Notes                               |
+| ------------- | --------------------- | ----------------------------------- |
+| name          | str                   | Player name                         |
+| game          | str                   | The game the player is playing      |
+| type          | [SlotType](#SlotType) | The type of slot this is.           |
+| group_members | list[int]             | only populated if `type` is `group` |
 
 ### Permission
 An enumeration containing the possible command permission, for commands that may be restricted.
@@ -658,6 +657,7 @@ class Permission(enum.IntEnum):
 
 ### Hint
 An object representing a Hint.
+#### Properties
 | Name             | Type        | Notes                                                                                                                           |
 | ---------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | receiving_player | int         | The slot of the player receiving the item                                                                                       |
