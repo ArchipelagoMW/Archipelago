@@ -83,7 +83,7 @@ class EntityHuntPicker:
                 return False
             return True
 
-        return (
+        return not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
                 # However, I don't think they should be hunt panels in this case.
                 self.player_options.disable_non_randomized_puzzles
@@ -91,7 +91,7 @@ class EntityHuntPicker:
                 and panel_obj["locationType"] == "Discard"
         )
 
-    def _add_plandoed_hunt_panels_to_pre_picked(self):
+    def _add_plandoed_hunt_panels_to_pre_picked(self) -> None:
         """
         Add panels the player explicitly specified to be included in panel hunt to the pre picked hunt panels.
         Output a warning if a panel could not be added for some reason.
