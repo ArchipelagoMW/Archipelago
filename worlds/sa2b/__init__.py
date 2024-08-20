@@ -8,7 +8,7 @@ from worlds.AutoWorld import WebWorld, World
 from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
                            all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
-from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
+from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, minigame_trap_table, item_groups, \
                    eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
 from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
@@ -197,7 +197,7 @@ class SA2BWorld(World):
         # Not Generate Basic
         self.black_market_costs = dict()
 
-        if self.options.goal.value in [0, 2, 4, 5, 6]:
+        if self.options.goal.value in [0, 2, 4, 5, 6, 8]:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.options.goal.value == 1:
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
@@ -222,12 +222,17 @@ class SA2BWorld(World):
         if self.options.goal.value != 3:
             # Fill item pool with all required items
             for item in {**upgrades_table}:
-                itempool += [self.create_item(item, False, self.options.goal.value)]
+                itempool += [self.create_item(item, None, self.options.goal.value)]
 
             if self.options.goal.value in [1, 2, 6]:
                 # Some flavor of Chaos Emerald Hunt
                 for item in {**emeralds_table}:
                     itempool.append(self.create_item(item))
+
+            if self.options.goal.value in [8]:
+                # Minigame Madness
+                for item in {**minigame_trap_table}:
+                    itempool.append(self.create_item(item, ItemClassification.progression | ItemClassification.trap))
 
             # Black Market
             itempool += [self.create_item(ItemName.market_token) for _ in range(self.options.black_market_slots.value)]
@@ -296,7 +301,7 @@ class SA2BWorld(World):
 
         non_required_emblems = (total_emblem_count - max_required_emblems)
         junk_count = math.floor(non_required_emblems * (self.options.junk_fill_percentage.value / 100.0))
-        itempool += [self.create_item(ItemName.emblem, True) for _ in range(non_required_emblems - junk_count)]
+        itempool += [self.create_item(ItemName.emblem, ItemClassification.filler) for _ in range(non_required_emblems - junk_count)]
 
         # Carve Traps out of junk_count
         trap_weights = []
@@ -376,11 +381,11 @@ class SA2BWorld(World):
 
 
 
-    def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
+    def create_item(self, name: str, force_classification=None, goal=0) -> Item:
         data = item_table[name]
 
-        if force_non_progression:
-            classification = ItemClassification.filler
+        if force_classification is not None:
+            classification = force_classification
         elif name == ItemName.emblem or \
              name in emeralds_table.keys() or \
              (name == ItemName.knuckles_shovel_claws and goal in [4, 5]):

@@ -2362,7 +2362,7 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
         elif world.options.kart_race_checks == 1:
             location_table.update({**kart_race_mini_location_table})
 
-        if world.options.goal.value in [0, 2, 4, 5, 6]:
+        if world.options.goal.value in [0, 2, 4, 5, 6, 8]:
             location_table.update({**final_boss_location_table})
         elif world.options.goal.value in [7]:
             location_table.update({**chaos_chao_location_table})

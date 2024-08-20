@@ -84,7 +84,9 @@ trap_table = {
     ItemName.cutscene_trap:   ItemData(0xFF0039, False, True),
     ItemName.reverse_trap:    ItemData(0xFF003A, False, True),
     ItemName.literature_trap: ItemData(0xFF003B, False, True),
+}
 
+minigame_trap_table = {
     ItemName.pong_trap:            ItemData(0xFF0050, False, True),
     ItemName.platformer_trap:      ItemData(0xFF0051, False, True),
     ItemName.fishing_trap:         ItemData(0xFF0052, False, True),
@@ -252,6 +254,7 @@ item_table = {
     **upgrades_table,
     **junk_table,
     **trap_table,
+    **minigame_trap_table,
     **emeralds_table,
     **eggs_table,
     **fruits_table,
@@ -271,6 +274,7 @@ item_groups: typing.Dict[str, str] = {
     "Seeds":          list(seeds_table.keys()),
     "Hats":           list(hats_table.keys()),
     "Traps":          list(trap_table.keys()),
+    "Minigames":      list(minigame_trap_table.keys()),
 }
 
 try:

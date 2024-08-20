@@ -3,7 +3,7 @@ import math
 
 from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from worlds.AutoWorld import World
-from .Items import SA2BItem
+from .Items import SA2BItem, minigame_trap_table
 from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set,\
                                      chao_stat_swim_table, chao_stat_fly_table, chao_stat_run_table,\
                                      chao_stat_power_table, chao_stat_stamina_table,\
@@ -2237,7 +2237,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         grand_prix_region = create_region(multiworld, player, active_locations, LocationName.grand_prix_region,
                                           grand_prix_region_locations)
         conditional_regions += [grand_prix_region]
-    elif world.options.goal in [0, 2, 4, 5, 6]:
+    elif world.options.goal in [0, 2, 4, 5, 6, 8]:
         biolizard_region_locations = [
             LocationName.finalhazard,
         ]
@@ -2392,6 +2392,9 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
     elif world.options.goal == 7:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chaos_chao,
                 lambda state: (state.has_all(chao_animal_event_location_table.keys(), player)))
+    elif world.options.goal == 8:
+        connect(multiworld, player, names, LocationName.gate_0_region, LocationName.biolizard_region,
+                lambda state: (state.has_all(minigame_trap_table.keys(), player)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(multiworld, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])

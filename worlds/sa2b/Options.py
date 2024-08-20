@@ -24,6 +24,8 @@ class Goal(Choice):
     Boss Rush Chaos Emerald Hunt: Find the Seven Chaos Emeralds, then beat all of the bosses in the Boss Rush, ending with Finalhazard
 
     Chaos Chao: Raise a Chaos Chao to win
+
+    Minigame Madness: Win one of each Minigame Trap, then defeat Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -34,6 +36,7 @@ class Goal(Choice):
     option_cannons_core_boss_rush = 5
     option_boss_rush_chaos_emerald_hunt = 6
     option_chaos_chao = 7
+    option_minigame_madness = 8
     default = 0
 
     @classmethod
