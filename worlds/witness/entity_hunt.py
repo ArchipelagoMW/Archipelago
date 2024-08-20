@@ -126,7 +126,10 @@ class EntityHuntPicker:
         Make a list of all the ones that *are* eligible, plus a lookup of eligible panels per area.
         """
 
-        all_eligible_panels = [panel for panel in ALL_HUNTABLE_PANELS if self._entity_is_eligible(panel)]
+        all_eligible_panels = [
+            panel for panel in ALL_HUNTABLE_PANELS
+            if self._entity_is_eligible(panel)
+        ]
 
         eligible_panels_by_area = defaultdict(set)
         for eligible_panel in all_eligible_panels:
