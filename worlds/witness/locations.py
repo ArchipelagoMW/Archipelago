@@ -50,7 +50,7 @@ class WitnessPlayerLocations:
         self.CHECK_PANELHEX_TO_ID = {
             static_witness_logic.ENTITIES_BY_NAME[ch]["entity_hex"]: static_witness_locations.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS
-            if static_witness_logic.ENTITIES_BY_NAME[ch]["entityType"] in self.PANEL_TYPES_TO_SHUFFLE
+            if static_witness_logic.ENTITIES_BY_NAME[ch]["locationType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
         dog_hex = static_witness_logic.ENTITIES_BY_NAME["Town Pet the Dog"]["entity_hex"]
@@ -61,13 +61,9 @@ class WitnessPlayerLocations:
             sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
         )
 
-        event_locations = {
-            p for p in player_logic.USED_EVENT_NAMES_BY_HEX
-        }
-
         self.EVENT_LOCATION_TABLE = {
-            static_witness_locations.get_event_name(entity_hex): None
-            for entity_hex in event_locations
+            event_location: None
+            for event_location in player_logic.EVENT_ITEM_PAIRS
         }
 
         check_dict = {
@@ -80,5 +76,5 @@ class WitnessPlayerLocations:
 
     def add_location_late(self, entity_name: str) -> None:
         entity_hex = static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
-        self.CHECK_LOCATION_TABLE[entity_hex] = entity_name
+        self.CHECK_LOCATION_TABLE[entity_hex] = static_witness_locations.get_id(entity_hex)
         self.CHECK_PANELHEX_TO_ID[entity_hex] = static_witness_locations.get_id(entity_hex)

@@ -151,7 +151,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-.code-workspace
+*.code-workspace
 shell.nix
 
 # Spyder project settings

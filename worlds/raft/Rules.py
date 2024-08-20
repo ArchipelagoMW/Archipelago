@@ -5,10 +5,10 @@ from ..AutoWorld import LogicMixin
 
 class RaftLogic(LogicMixin):
     def raft_paddleboard_mode_enabled(self, player):
-        return self.multiworld.paddleboard_mode[player].value
+        return bool(self.multiworld.worlds[player].options.paddleboard_mode)
     
     def raft_big_islands_available(self, player):
-        return self.multiworld.big_island_early_crafting[player].value or self.raft_can_access_radio_tower(player)
+        return bool(self.multiworld.worlds[player].options.big_island_early_crafting) or self.raft_can_access_radio_tower(player)
 
     def raft_can_smelt_items(self, player):
         return self.has("Smelter", player)

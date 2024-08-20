@@ -10,8 +10,9 @@ from BaseClasses import Entrance, Region
 from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as static_witness_logic
+from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import WitnessRule, optimize_witness_rule
-from .locations import WitnessPlayerLocations, static_witness_locations
+from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
@@ -21,8 +22,20 @@ if TYPE_CHECKING:
 class WitnessPlayerRegions:
     """Class that defines Witness Regions"""
 
-    player_locations = None
-    logic = None
+    def __init__(self, player_locations: WitnessPlayerLocations, world: "WitnessWorld") -> None:
+        difficulty = world.options.puzzle_randomization
+
+        self.reference_logic: StaticWitnessLogicObj
+        if difficulty == "sigma_normal":
+            self.reference_logic = static_witness_logic.sigma_normal
+        elif difficulty == "sigma_expert":
+            self.reference_logic = static_witness_logic.sigma_expert
+        else:
+            self.reference_logic = static_witness_logic.vanilla
+
+        self.player_locations = player_locations
+        self.two_way_entrance_register: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])
+        self.created_region_names: Set[str] = set()
 
     @staticmethod
     def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> CollectionRule:
@@ -36,7 +49,7 @@ class WitnessPlayerRegions:
         return _meets_item_requirements(item_requirement, world)
 
     def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: WitnessRule,
-                            regions_by_name: Dict[str, Region]):
+                            regions_by_name: Dict[str, Region]) -> None:
         """
         connect two regions and set the corresponding requirement
         """
@@ -89,13 +102,23 @@ class WitnessPlayerRegions:
         """
         from . import create_region
 
-        all_locations = set()
-        regions_by_name = dict()
+        all_locations: Set[str] = set()
+        regions_by_name: Dict[str, Region] = {}
 
         regions_to_create = {
             k: v for k, v in self.reference_logic.ALL_REGIONS_BY_NAME.items()
             if k not in player_logic.UNREACHABLE_REGIONS
         }
+
+        event_locations_per_region = defaultdict(list)
+
+        for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
+            region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
+            if region is None:
+                region_name = "Entry"
+            else:
+                region_name = region["name"]
+            event_locations_per_region[region_name].append(event_location)
 
         for region_name, region in regions_to_create.items():
             locations_for_this_region = [
@@ -103,10 +126,8 @@ class WitnessPlayerRegions:
                 if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"]
                 in self.player_locations.CHECK_LOCATION_TABLE
             ]
-            locations_for_this_region += [
-                static_witness_locations.get_event_name(panel) for panel in region["entities"]
-                if static_witness_locations.get_event_name(panel) in self.player_locations.EVENT_LOCATION_TABLE
-            ]
+
+            locations_for_this_region += event_locations_per_region[region_name]
 
             all_locations = all_locations | set(locations_for_this_region)
 
@@ -121,17 +142,3 @@ class WitnessPlayerRegions:
         for region_name, region in regions_to_create.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)
-
-    def __init__(self, player_locations: WitnessPlayerLocations, world: "WitnessWorld") -> None:
-        difficulty = world.options.puzzle_randomization
-
-        if difficulty == "sigma_normal":
-            self.reference_logic = static_witness_logic.sigma_normal
-        elif difficulty == "sigma_expert":
-            self.reference_logic = static_witness_logic.sigma_expert
-        elif difficulty == "none":
-            self.reference_logic = static_witness_logic.vanilla
-
-        self.player_locations = player_locations
-        self.two_way_entrance_register: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])
-        self.created_region_names: Set[str] = set()

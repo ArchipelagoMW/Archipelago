@@ -3,6 +3,7 @@ import json
 import os
 from textwrap import dedent
 from typing import Dict, Union
+from docutils.core import publish_parts
 
 import yaml
 from flask import redirect, render_template, request, Response
@@ -64,6 +65,22 @@ def send_yaml(player_name: str, formatted_options: dict) -> Response:
 @app.template_filter("dedent")
 def filter_dedent(text: str) -> str:
     return dedent(text).strip("\n ")
+
+
+@app.template_filter("rst_to_html")
+def filter_rst_to_html(text: str) -> str:
+    """Converts reStructuredText (such as a Python docstring) to HTML."""
+    if text.startswith(" ") or text.startswith("\t"):
+        text = dedent(text)
+    elif "\n" in text:
+        lines = text.splitlines()
+        text = lines[0] + "\n" + dedent("\n".join(lines[1:]))
+
+    return publish_parts(text, writer_name='html', settings=None, settings_overrides={
+        'raw_enable': False,
+        'file_insertion_enabled': False,
+        'output_encoding': 'unicode'
+    })['body']
 
 
 @app.template_test("ordered")
@@ -211,6 +228,13 @@ def generate_yaml(game: str):
             elif key_parts[-1].endswith("-custom"):
                 if val:
                     options[key_parts[-1][:-7]] = val
+
+                del options[key]
+
+            # Detect keys which end with -range, indicating a NamedRange with a possible custom value
+            elif key_parts[-1].endswith("-range"):
+                if options[key_parts[-1][:-6]] == "custom":
+                    options[key_parts[-1][:-6]] = val
 
                 del options[key]
 
