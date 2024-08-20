@@ -541,9 +541,9 @@ class MultiWorld():
                 return True
             state = starting_state.copy()
         else:
-            if self.has_beaten_game(self.state):
-                return True
             state = CollectionState(self)
+            if self.has_beaten_game(state):
+                return True
         prog_locations = {location for location in self.get_locations() if location.item
                           and location.item.advancement and location not in state.locations_checked}
 
@@ -616,8 +616,7 @@ class MultiWorld():
 
         def location_relevant(location: Location) -> bool:
             """Determine if this location is relevant to sweep."""
-            return location.progress_type != LocationProgressType.EXCLUDED \
-                and (location.player in players["full"] or location.advancement)
+            return location.player in players["full"] or location.advancement
 
         def all_done() -> bool:
             """Check if all access rules are fulfilled"""
