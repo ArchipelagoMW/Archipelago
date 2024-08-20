@@ -97,7 +97,7 @@ class WitnessPlayerItems:
 
         # Add event items to the item definition list for later lookup.
         for event_location in self._locations.EVENT_LOCATION_TABLE:
-            location_name = player_logic.EVENT_ITEM_PAIRS[event_location]
+            location_name = player_logic.EVENT_ITEM_PAIRS[event_location][0]
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
 

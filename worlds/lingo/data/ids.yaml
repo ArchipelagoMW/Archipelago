@@ -1124,6 +1124,8 @@ doors:
     Eight Door:
       item: 444475
       location: 445219
+    Eight Door (Outside The Initiated):
+      item: 444578
   Orange Tower:
     Second Floor:
       item: 444476
@@ -1242,8 +1244,6 @@ doors:
     Entrance:
       item: 444516
       location: 445237
-    Eight Door:
-      item: 444578
   The Traveled:
     Color Hallways Entrance:
       item: 444517
