@@ -171,7 +171,7 @@ class ClientCommandProcessor(CommandProcessor):
 
 class CommonContext:
     # Should be adjusted as needed in subclasses
-    tags: typing.Set[str] = Set()
+    tags: typing.Set[str] = set()
     game: typing.Optional[str] = None
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
