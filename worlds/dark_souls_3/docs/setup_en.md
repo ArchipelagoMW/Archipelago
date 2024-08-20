@@ -53,7 +53,10 @@ To run _Dark Souls III_ in Archipelago mode:
 ### Where do I get a config file?
 
 The [Player Options](/games/Dark%20Souls%20III/player-options) page on the website allows you to
-configure your personal options and export them into a config file.
+configure your personal options and export them into a config file. The [AP client archive] also
+includes an options template.
+
+[AP client archive]: https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases
 
 ### Does this work with Proton?
 
@@ -62,7 +65,7 @@ things to keep in mind:
 
 * Because `DS3Randomizer.exe` relies on the .NET runtime, you'll need to do one of two things:
 
-  * Use the `DS3.Archipelago.*-self-contained.zip` [AP client file], which includes the .NET
+  * Use the `DS3.Archipelago.*-self-contained.zip` [AP client archive], which includes the .NET
     runtime. This is a much larger download, but it will allow you to run `DS3Randomizer.exe`
     directly from Proton without any issues.
 
@@ -72,6 +75,5 @@ things to keep in mind:
 
 * To run the game itself, just run `launchmod_darksouls3.bat` under Proton.
 
-[AP client file]: https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases
 [.NET Runtime]: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 [WINE]: https://www.winehq.org/
