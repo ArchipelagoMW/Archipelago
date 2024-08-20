@@ -1,22 +1,7 @@
-# Archipelago General Client
-## Archipelago Connection Handshake
-These steps should be followed in order to establish a gameplay connection with an Archipelago session.
+# Archipelago Network Protocol
 
-1. Client establishes WebSocket connection to Archipelago server.
-2. Server accepts connection and responds with a [RoomInfo](#RoomInfo) packet.
-3. Client may send a [GetDataPackage](#GetDataPackage) packet.
-4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.)
-5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
-6. Server validates the client's packet and responds with [Connected](#Connected) or
-  [ConnectionRefused](#ConnectionRefused).
-7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are
-  queued up for it.
-8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
-
-In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then
-the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
-
-There are also a number of community-supported libraries available that implement this network protocol to make
+## Community Archipelago Libraries
+There are a number of community-supported libraries available that implement this network protocol to make
 integrating with Archipelago easier.
 
 | Language/Runtime        | Project                                                                                            | Remarks                                                                         |
@@ -33,6 +18,24 @@ integrating with Archipelago easier.
 | Lua                     | [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)                                   |                                                                                 |
 | Game Maker + Studio 1.x | [gm-apclientpp](https://github.com/black-sliver/gm-apclientpp)                                     | For GM7, GM8 and GMS1.x, maybe older                                            |
 | GameMaker: Studio 2.x+  | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
+
+
+## Archipelago Connection Handshake
+These steps should be followed in order to establish a gameplay connection with an Archipelago session.
+
+1. Client establishes WebSocket connection to Archipelago server.
+2. Server accepts connection and responds with a [RoomInfo](#RoomInfo) packet.
+3. Client may send a [GetDataPackage](#GetDataPackage) packet.
+4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.)
+5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
+6. Server validates the client's packet and responds with [Connected](#Connected) or
+  [ConnectionRefused](#ConnectionRefused).
+7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are
+  queued up for it.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
+
+In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then
+the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
 ## Synchronizing Items
 After a client connects, it will receive all previously collected items for its associated slot in a
@@ -193,7 +196,7 @@ be ignored safely.
 | Name      | Type                                        | Message Types                                                    | Contents                                                |
 | --------- | ------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
 | data      | list\[[JSONMessagePart](#JSONMessagePart)\] | (all)                                                            | Textual content of this message                         |
-| type      | str \| None                                 | (any)                                                            | [PrintJsonType](#PrintJsonType) of this message         |
+| type      | Optional\[str\]                             | (any)                                                            | [PrintJsonType](#PrintJsonType) of this message         |
 | receiving | int                                         | ItemSend, ItemCheat, Hint                                        | Destination player's ID                                 |
 | item      | [NetworkItem](#NetworkItem)                 | ItemSend, ItemCheat, Hint                                        | Source player's ID, location ID, item ID and item flags |
 | found     | bool                                        | Hint                                                             | Whether the location hinted for was checked             |
@@ -242,23 +245,23 @@ see [Data Package Contents](#Data-Package-Contents) for more info.
 Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
 
 #### Arguments
-| Name  | Type                | Notes                                            |
-| ----- | ------------------- | ------------------------------------------------ |
-| games | list\[str\] \| None | Game names this message is targeting             |
-| slots | list\[int\] \| None | Player slot IDs that this message is targeting   |
-| tags  | list\[str\] \| None | Client [Tags](#Tags) this message is targeting   |
-| data  | dict                | The data in the [Bounce](#Bounce) package copied |
+| Name  | Type                    | Notes                                            |
+| ----- | ----------------------- | ------------------------------------------------ |
+| games | Optional\[list\[str\]\] | Game names this message is targeting             |
+| slots | Optional\[list\[int\]\] | Player slot IDs that this message is targeting   |
+| tags  | Optional\[list\[str\]\] | Client [Tags](#Tags) this message is targeting   |
+| data  | dict                    | The data in the [Bounce](#Bounce) package copied |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked
 for.
 
 #### Arguments
-| Name         | Type        | Notes                                                                                     |
-| ------------ | ----------- | ----------------------------------------------------------------------------------------- |
-| type         | str         | The [PacketProblemType](#PacketProblemType) that was detected in the packet.              |
-| original_cmd | str \| None | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
-| text         | str         | A descriptive message of the problem at hand.                                             |
+| Name         | Type            | Notes                                                                                     |
+| ------------ | --------------- | ----------------------------------------------------------------------------------------- |
+| type         | str             | The [PacketProblemType](#PacketProblemType) that was detected in the packet.              |
+| original_cmd | Optional\[str\] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
+| text         | str             | A descriptive message of the problem at hand.                                             |
 
 ##### PacketProblemType
 `PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are
@@ -399,21 +402,21 @@ Basic chat command which sends text to the server to be distributed to other cli
 Requests the data package from the server. Does not require client authentication.
 
 #### Arguments
-| Name  | Type                | Notes                                                                                                                 |
-| ----- | ------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| games | list\[str\] \| None | If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
+| Name  | Type                    | Notes                                                                                                                 |
+| ----- | ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| games | Optional\[list\[str\]\] | If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and the server will forward the
 message to all those targets to which any one requirement applies.
 
 #### Arguments
-| Name  | Type                | Notes                                        |
-| ----- | ------------------- | -------------------------------------------- |
-| games | list\[str\] \| None | Game names that should receive this message  |
-| slots | list\[int\] \| None | Player IDs that should receive this message  |
-| tags  | list\[str\] \| None | Client tags that should receive this message |
-| data  | dict                | Any data you want to send                    |
+| Name  | Type                    | Notes                                        |
+| ----- | ----------------------- | -------------------------------------------- |
+| games | Optional\[list\[str\]\] | Game names that should receive this message  |
+| slots | Optional\[list\[int\]\] | Player IDs that should receive this message  |
+| tags  | Optional\[list\[str\]\] | Client tags that should receive this message |
+| data  | dict                    | Any data you want to send                    |
 
 ### Get
 Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write
@@ -555,13 +558,13 @@ In JSON this may look like:
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are
 intended to be read in the order they are listed in the packet.
 #### Properties
-| Name   | Type        | Notes                                                                                                                                                                                                                                                                                                                                                        |
-| ------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| type   | str \| None | Used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. See below for possible values.                                                                                                                                                                        |
-| text   | str \| None | The content of the message part to be displayed.                                                                                                                                                                                                                                                                                                             |
-| color  | str \| None | `color` is used to denote a console color to display the message part with and is only send if the `type` is `color`. This is limited to console colors due to backwards compatibility needs with games such as ALttP. Although background colors as well as foreground colors are listed, only one may be applied at a time. See below for possible values. |
-| flags  | str \| None | Item flags. Only available if `type` is either `item_id` or `item_name`. See [NetworkItem](#NetworkItem) for more details.                                                                                                                                                                                                                                   |
-| player | str \| None | If the `type` is `item`, this represents the slot of the owner of the item. Otherwise, if the `type` is `location`, this represents the slot of the game where the location is from.                                                                                                                                                                         |
+| Name   | Type            | Notes                                                                                                                                                                                                                                                                                                                                                        |
+| ------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| type   | Optional\[str\] | Used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. See below for possible values.                                                                                                                                                                        |
+| text   | Optional\[str\] | The content of the message part to be displayed.                                                                                                                                                                                                                                                                                                             |
+| color  | Optional\[str\] | `color` is used to denote a console color to display the message part with and is only send if the `type` is `color`. This is limited to console colors due to backwards compatibility needs with games such as ALttP. Although background colors as well as foreground colors are listed, only one may be applied at a time. See below for possible values. |
+| flags  | Optional\[str\] | Item flags. Only available if `type` is either `item_id` or `item_name`. See [NetworkItem](#NetworkItem) for more details.                                                                                                                                                                                                                                   |
+| player | Optional\[str\] | If the `type` is `item`, this represents the slot of the owner of the item. Otherwise, if the `type` is `location`, this represents the slot of the game where the location is from.                                                                                                                                                                         |
 
 Possible values for `type` include:
 
@@ -658,15 +661,15 @@ class Permission(enum.IntEnum):
 ### Hint
 An object representing a Hint.
 #### Properties
-| Name             | Type        | Notes                                                                                                                           |
-| ---------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| receiving_player | int         | The slot of the player receiving the item                                                                                       |
-| finding_player   | int         | The slot of the player who has to find the item                                                                                 |
-| location         | int         | The location ID of the location where the item is                                                                               |
-| item             | int         | The ID of the item                                                                                                              |
-| found            | bool        | Whether or not the item has been found and sent to the receiving player                                                         |
-| entrance         | str \| None | When undefined or empty, the location can be found through vanilla means. Otherwise, this represents how to reach the location. |
-| item_flags       | int         | See [NetworkItem](#NetworkItem)                                                                                                 |
+| Name             | Type            | Notes                                                                                                                           |
+| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| receiving_player | int             | The slot of the player receiving the item                                                                                       |
+| finding_player   | int             | The slot of the player who has to find the item                                                                                 |
+| location         | int             | The location ID of the location where the item is                                                                               |
+| item             | int             | The ID of the item                                                                                                              |
+| found            | bool            | Whether or not the item has been found and sent to the receiving player                                                         |
+| entrance         | Optional\[str\] | When undefined or empty, the location can be found through vanilla means. Otherwise, this represents how to reach the location. |
+| item_flags       | int             | See [NetworkItem](#NetworkItem)                                                                                                 |
 
 ### Data Package Contents
 A data package is a JSON object which may contain arbitrary metadata to enable a client to interact with the Archipelago
@@ -743,8 +746,8 @@ Tags are represented as a list of strings, the common client tags follow:
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the
 following data:
 
-| Name   | Type        | Notes                                                                                                                                        |
-| ------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| time   | float       | Unix Time Stamp of time of death.                                                                                                            |
-| cause  | str \| None | Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
-| source | str         | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                |
+| Name   | Type            | Notes                                                                                                                                        |
+| ------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| time   | float           | Unix Time Stamp of time of death.                                                                                                            |
+| cause  | Optional\[str\] | Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
+| source | str             | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                |
