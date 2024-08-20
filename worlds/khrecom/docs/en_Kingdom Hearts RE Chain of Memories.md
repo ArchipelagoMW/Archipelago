@@ -1,8 +1,8 @@
 # Kingdom Hearts RE Chain of Memories (PC)
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains most of the options you need to 
+The [player settings page for this game](../player-options) contains most of the options you need to 
 configure and export a config file.
 
 ## What does randomization do to this game?
@@ -23,13 +23,13 @@ allowing you to challenge Marluxia.
 
 ## What items and locations get shuffled?
 
-###Items
+### Items
 
 World Unlocks, Key to Rewards for each floor, Enemy Cards, Sleights, and Card Sets are shuffled into the item pool.
 
 Card Sets are comprised of a card type and a value range which is defined in your settings.
 
-###Locations
+### Locations
 
 Acquiring certain cards and sleights for the first time are locations which yield a randomized multiworld item.
 

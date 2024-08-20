@@ -1,6 +1,6 @@
 from typing import List
 
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, MultiWorld
 from worlds.AutoWorld import WebWorld, World
 from .Items import KHRECOMItem, KHRECOMItemData, get_items_by_category, item_table
 from .Locations import location_table

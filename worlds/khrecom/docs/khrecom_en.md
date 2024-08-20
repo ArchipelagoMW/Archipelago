@@ -1,6 +1,6 @@
 # Kingdom Hearts RECOM Randomizer Setup Guide
 
-##Setting up the required mods
+## Setting up the required mods
 1. Install OpenKH and the LUA Backend.
 
     Download the [latest release of OpenKH](https://github.com/OpenKH/OpenKh/releases/tag/latest)
@@ -29,7 +29,7 @@
 
 5. In `Add a new mod from GitHub` paste `gaithern/KH-RECOM-AP-LUA`
 
-6. Click Install
+6. Click `Install`
 
 7. Navigate to Mod Loader and click `Build Only`
 

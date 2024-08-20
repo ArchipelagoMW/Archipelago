@@ -95,21 +95,24 @@ def set_rules(khrecomworld):
         lambda state: state.has("World Card Neverland", player))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Air Soldier"),
         lambda state: (
-            state.has("World Card Monstro", player) 
-            or state.has("World Card Agrabah", player) 
-            or state.has("World Card Twilight Town", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Twilight Town"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Air Soldier"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Twilight Town", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Twilight Town"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Air Soldier"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Twilight Town", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Twilight Town"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Aquatank"),
         lambda state: state.has("World Card Atlantica", player))
@@ -125,21 +128,24 @@ def set_rules(khrecomworld):
         lambda state: state.has("World Card Agrabah", player))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Barrel Spider"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Neverland", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Neverland"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Barrel Spider"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Neverland", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Neverland"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Barrel Spider"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Neverland", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Neverland"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Bouncywild"),
         lambda state: state.has("World Card Olympus Coliseum", player))
@@ -149,59 +155,68 @@ def set_rules(khrecomworld):
         lambda state: state.has("World Card Olympus Coliseum", player))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Creeper Plant"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Halloween Town", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Halloween Town",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Creeper Plant"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Halloween Town", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Halloween Town",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Creeper Plant"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Halloween Town", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Halloween Town",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Crescendo"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Neverland", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Neverland",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Crescendo"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Neverland", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Neverland",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Crescendo"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Neverland", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Neverland",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Darkball"),
         lambda state: (
-            state.has("World Card Atlantica", player)
-            or state.has("World Card Neverland", player)
-            or state.has("World Card Destiny Islands", player) 
+            state.has_any({
+                "World Card Atlantica",
+                "World Card Neverland",
+                "World Card Destiny Islands"}, player)
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Darkball"),
         lambda state: (
-            state.has("World Card Atlantica", player)
-            or state.has("World Card Neverland", player)
-            or state.has("World Card Destiny Islands", player) 
+            state.has_any({
+                "World Card Atlantica",
+                "World Card Neverland",
+                "World Card Destiny Islands"}, player)
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Darkball"),
         lambda state: (
-            state.has("World Card Atlantica", player)
-            or state.has("World Card Neverland", player)
-            or state.has("World Card Destiny Islands", player) 
+            state.has_any({
+                "World Card Atlantica",
+                "World Card Neverland",
+                "World Card Destiny Islands"}, player)
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Defender"),
@@ -227,39 +242,45 @@ def set_rules(khrecomworld):
         lambda state: state.has("World Card Halloween Town", player))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Green Requiem"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player) 
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah"}, player)
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Green Requiem"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player) 
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah"}, player)
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Green Requiem"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player) 
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah"}, player) 
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Large Body"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Olympus Coliseum", player)
-            or state.has("World Card Monstro", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Olympus Coliseum",
+                "World Card Monstro"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Large Body"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Olympus Coliseum", player)
-            or state.has("World Card Monstro", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Olympus Coliseum",
+                "World Card Monstro"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Large Body"),
         lambda state: (
-            state.has("World Card Wonderland", player)
-            or state.has("World Card Olympus Coliseum", player)
-            or state.has("World Card Monstro", player)
+            state.has_any({
+                "World Card Wonderland",
+                "World Card Olympus Coliseum",
+                "World Card Monstro"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Neoshadow"),
         lambda state: has_castle_oblivion(state, player))
@@ -293,36 +314,42 @@ def set_rules(khrecomworld):
         lambda state: state.has("World Card Atlantica", player))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Search Ghost"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Atlantica", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Atlantica"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Search Ghost"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Atlantica", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Atlantica"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Search Ghost"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Atlantica", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Atlantica"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Tornado Step"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Hollow Bastion", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Hollow Bastion",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Tornado Step"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Hollow Bastion", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Hollow Bastion",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Tornado Step"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Hollow Bastion", player)
-            or state.has("World Card Destiny Islands", player)
+            state.has_any({
+                "World Card Monstro",
+                "World Card Hollow Bastion",
+                "World Card Destiny Islands"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Wight Knight"),
         lambda state: state.has("World Card Halloween Town", player))
@@ -362,23 +389,26 @@ def set_rules(khrecomworld):
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Yellow Opera"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Neverland", player) 
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Neverland"}, player)
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Yellow Opera"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Neverland", player) 
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Neverland"}, player)
             or has_castle_oblivion(state, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Yellow Opera"),
         lambda state: (
-            state.has("World Card Monstro", player)
-            or state.has("World Card Agrabah", player)
-            or state.has("World Card Neverland", player) 
+            state.has_any({
+                "World Card Monstro",
+                "World Card Agrabah",
+                "World Card Neverland"}, player)
             or has_castle_oblivion(state, player)
         ))
     
@@ -459,8 +489,6 @@ def set_rules(khrecomworld):
         lambda state: state.has("World Card Destiny Islands", player) and has_x_worlds(state, player, 6))
     add_rule(khrecomworld.get_entrance("Castle Oblivion"),
         lambda state: has_castle_oblivion(state, player))
-    
-    
     
     # Win condition.
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

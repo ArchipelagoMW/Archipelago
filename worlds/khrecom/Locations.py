@@ -1,5 +1,4 @@
 from typing import Dict, NamedTuple, Optional
-import typing
 
 
 from BaseClasses import Location
@@ -307,7 +306,4 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Final Marluxia":                                                    KHRECOMLocationData("Final"            , 269_9999),
 }
 
-event_location_table: Dict[str, KHRECOMLocationData] = {
-}
-
-lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
+lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
