@@ -171,7 +171,7 @@ class ClientCommandProcessor(CommandProcessor):
 
 class CommonContext:
     # Should be adjusted as needed in subclasses
-    tags: typing.Set[str] = {"AP"}
+    tags: typing.Set[str] = Set()
     game: typing.Optional[str] = None
     items_handling: typing.Optional[int] = None
     want_slot_data: bool = True  # should slot_data be retrieved via Connect
@@ -997,7 +997,7 @@ def get_base_parser(description: typing.Optional[str] = None):
 def run_as_textclient():
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
-        tags = CommonContext.tags | {"TextOnly"}
+        tags = CommonContext.tags | {"AP", "TextOnly"}
         game = ""  # empty matches any game since 0.3.2
         items_handling = 0b111  # receive all items for /received
         want_slot_data = False  # Can't use game specific slot_data
