@@ -140,53 +140,53 @@ location_table_fates = {
 
 
 location_table_fates_events = {
-    'IsThereNoEscape?Event': None,
-    'DistantRelativesEvent': None,
-    'ChthonicColleaguesEvent': None,
-    'TheReluctantMusicianEvent': None,
-    'GoddessOfWisdomEvent': None,
-    'GodOfTheHeavensEvent': None,
-    'GodOfTheSeaEvent': None,
-    'GoddessOfLoveEvent': None,
-    'GodOfWarEvent': None,
-    'GoddessOfTheHuntEvent': None,
-    'GodOfWineEvent': None,
-    'GodOfSwiftnessEvent': None,
-    'GoddessOfSeasonsEvent': None,
-    'PowerWithoutEqualEvent': None,
-    'DivinePairingsEvent': None,
-    'PrimordialBoonsEvent': None,
-    'PrimordialBanesEvent': None,
-    'InfernalArmsEvent': None,
-    'TheStygianBladeEvent': None,
-    'TheHeartSeekingBowEvent': None,
-    'TheShieldOfChaosEvent': None,
-    'TheEternalSpearEvent': None,
-    'TheTwinFistsEvent': None,
-    'TheAdamantRailEvent': None,
-    'MasterOfArmsEvent': None,
-    'AViolentPastEvent': None,
-    'HarshConditionsEvent': None,
-    'SlashedBenefitsEvent': None,
-    'WantonRansackingEvent': None,
-    'ASimpleJobEvent': None,
-    'ChthonicKnowledgeEvent': None,
-    'CustomerLoyaltyEvent': None,
-    'DarkReflectionsEvent': None,
-    'CloseAtHeartEvent': None,
-    'DenizensOfTheDeepEvent': None,
-    'TheUselessTrinketEvent': None,
+    "IsThereNoEscape?Event": None,
+    "DistantRelativesEvent": None,
+    "ChthonicColleaguesEvent": None,
+    "TheReluctantMusicianEvent": None,
+    "GoddessOfWisdomEvent": None,
+    "GodOfTheHeavensEvent": None,
+    "GodOfTheSeaEvent": None,
+    "GoddessOfLoveEvent": None,
+    "GodOfWarEvent": None,
+    "GoddessOfTheHuntEvent": None,
+    "GodOfWineEvent": None,
+    "GodOfSwiftnessEvent": None,
+    "GoddessOfSeasonsEvent": None,
+    "PowerWithoutEqualEvent": None,
+    "DivinePairingsEvent": None,
+    "PrimordialBoonsEvent": None,
+    "PrimordialBanesEvent": None,
+    "InfernalArmsEvent": None,
+    "TheStygianBladeEvent": None,
+    "TheHeartSeekingBowEvent": None,
+    "TheShieldOfChaosEvent": None,
+    "TheEternalSpearEvent": None,
+    "TheTwinFistsEvent": None,
+    "TheAdamantRailEvent": None,
+    "MasterOfArmsEvent": None,
+    "AViolentPastEvent": None,
+    "HarshConditionsEvent": None,
+    "SlashedBenefitsEvent": None,
+    "WantonRansackingEvent": None,
+    "ASimpleJobEvent": None,
+    "ChthonicKnowledgeEvent": None,
+    "CustomerLoyaltyEvent": None,
+    "DarkReflectionsEvent": None,
+    "CloseAtHeartEvent": None,
+    "DenizensOfTheDeepEvent": None,
+    "TheUselessTrinketEvent": None,
 }
 
 #----------------------
 
 location_weapons_subfixes = [
     "SwordWeapon",
-	"SpearWeapon",
-	"ShieldWeapon",
-	"BowWeapon",
-	"FistWeapon",
-	"GunWeapon",
+    "SpearWeapon",
+    "ShieldWeapon",
+    "BowWeapon",
+    "FistWeapon",
+    "GunWeapon",
 ]
 
 #---------------------
@@ -284,7 +284,7 @@ def should_ignore_weapon_location(weaponLocation, options):
         return True
     if (options.initial_weapon.value == 5 and weaponLocation == "GunWeaponUnlockLocation"):
         return True
-    return False;
+    return False
 
 
 #-----------------------------------------------

@@ -28,7 +28,7 @@ templates with different difficulties in mind. We recommend starting with the Ea
 
 For launching the game to play in the multiworld you need to open the ArchipelagoLauncher.exe. There should be an option
 for HadesClient. This opens a window to look for your Hades installation path (the standard steam path being 
-C:\Program Files\Steam\steamapps\common\Hades ). Once the folder is selected the game should open Hades and the Archipelago client.
+`C:\Program Files\Steam\steamapps\common\Hades` ). Once the folder is selected the game should open Hades and the Archipelago client.
 
 Use the Client window to connect to the Archipelago server before choosing your save file. If this is done correctly, you should
 be able to start the game and get a location check on the first room, which prints a message on your console. If the connection

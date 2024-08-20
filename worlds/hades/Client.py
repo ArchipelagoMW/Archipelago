@@ -115,7 +115,7 @@ class HadesContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         # This is what is done when a package arrives.
-        if cmd in {"Connected"}:
+        if cmd == "Connected":
             # What should be done in a connection package
             self.cache_items_received_names.clear()
             self.missing_locations_cache = args["missing_locations"]
@@ -133,11 +133,11 @@ class HadesContext(CommonContext):
             self.is_connected = True
             self.is_receiving_items_from_connect_package = True 
 
-        if cmd in {"RoomInfo"}:
+        if cmd == "RoomInfo":
             # What should be done when room info is sent.
             self.seed_name = args["seed_name"]
         
-        if cmd in {"RoomUpdate"}:
+        if cmd == "RoomUpdate":
             if "checked_lodations" in args:
                 collect_locations_cache = ""
                 for location in args["checked_locations"]:
@@ -146,7 +146,7 @@ class HadesContext(CommonContext):
                     collect_locations_cache = collect_locations_cache[:-1]
                     subsume.Send(styx_scribe_send_prefix + "Locations collected:" + collect_locations_cache)
 
-        if cmd in {"ReceivedItems"}:
+        if cmd == "ReceivedItems":
             # What should be done when an Item is recieved.
             # NOTE THIS GETS ALL ITEMS THAT HAVE BEEN RECIEVED! WE USE THIS FOR RESYNCS!
             for item in args["items"]:
@@ -158,14 +158,14 @@ class HadesContext(CommonContext):
                 return;
             self.send_items()
 
-        if cmd in {"LocationInfo"}:
+        if cmd == "LocationInfo":
             if self.creating_location_to_item_mapping:
                 self.creating_location_to_item_mapping = False
                 asyncio.create_task(self.create_location_to_item_dictionary(args["locations"]))
                 return
             super().on_package(cmd, args)
             
-        if cmd in {"Bounced"}:
+        if cmd == "Bounced":
             if "tags" in args:
                 if "DeathLink" in args["tags"]:
                     self.on_deathlink(args["data"])
@@ -295,7 +295,7 @@ class HadesContext(CommonContext):
     # -------------deathlink section started --------------------------------
     def on_deathlink(self, data: dict):
         # What should be done when a deathlink message is recieved
-        if (self.deathlink_pending):
+        if self.deathlink_pending:
             return
         self.deathlink_pending = True
         subsume.Send(styx_scribe_send_prefix + "Deathlink recieved")
@@ -305,7 +305,7 @@ class HadesContext(CommonContext):
     def send_death(self, death_text: str = ""):
         # What should be done to send a death link
         # Avoid sending death if we died from a deathlink
-        if (self.deathlink_enabled == False or self.deathlink_pending == True):
+        if self.deathlink_pending or not self.deathlink_enabled:
             return
         self.deathlink_pending = True
         asyncio.create_task(super().send_death(death_text))

@@ -7,7 +7,7 @@ It gives the option to randomize Keepsakes, Weapons, Weapons hidden aspects, fil
 contractor store and "pact levels" into the item pool. Pact levels are forced heat pact from the heat menu, that 
 won't be decreased until the pact level item is received.
 
-Location consists of items from the contractor, keepsake locations, finishing fates from the fated list
+Location consist of items from the contractor, keepsake locations, finishing fates from the fated list
 and finishing rooms in 3 different modes. One is location-based, in which finishing each room gives an AP item.
 Another one is score-based, in which each room gives a score, and enough score gives an AP item. The last one
 is location based on the equipped weapon, in which finishing each room with new weapons gives an AP item. 

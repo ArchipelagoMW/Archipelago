@@ -62,13 +62,13 @@ def create_regions(ctx, location_database):
 
     #create correct underworld exit
     underworldExits = []
-    if (ctx.options.keepsakesanity.value==1):
+    if ctx.options.keepsakesanity:
         underworldExits += ["NPCS"]
         
-    if (ctx.options.weaponsanity.value==1):
+    if ctx.options.weaponsanity:
         underworldExits += ["Weapon Cache"]
         
-    if (ctx.options.storesanity.value==1):
+    if ctx.options.storesanity:
         underworldExits += ["Store Gemstones Entrance"]
         underworldExits += ["Store Diamonds Entrance"]
     
@@ -77,7 +77,7 @@ def create_regions(ctx, location_database):
 
     ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "Menu", None, ["Menu"])]    
 
-    if (ctx.options.location_system.value==3):
+    if ctx.options.location_system == "roomweaponbased":
         #do as below but per weapons
         subfixCounter = 0
         for weaponSubfix in location_weapons_subfixes:
@@ -103,7 +103,7 @@ def create_regions(ctx, location_database):
                                              "Underworld", None, underworldExits)]
 
     #here we set locations that depend on options
-    if (ctx.options.keepsakesanity.value==1):
+    if ctx.options.keepsakesanity:
         ctx.multiworld.regions += [create_region(ctx.multiworld,
                                                 ctx.player, 
                                                 location_database,
@@ -111,7 +111,7 @@ def create_regions(ctx, location_database):
                                                 [location for location in location_keepsakes], 
                                                 ["ExitNPCS"])] 
     
-    if (ctx.options.weaponsanity.value==1):
+    if ctx.options.weaponsanity:
         weaponChecks = {}
         for weaponLocation, weaponData in location_weapons.items():
             if (not should_ignore_weapon_location(weaponLocation, ctx.options)):
@@ -119,7 +119,7 @@ def create_regions(ctx, location_database):
         ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "WeaponsLocations", 
                                                 [location for location in weaponChecks], ["ExitWeaponCache"])]
         
-    if (ctx.options.storesanity.value==1):
+    if ctx.options.storesanity:
         ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "StoreGemstones", 
                                                 [location for location in location_store_gemstones], ["ExitGemStore"])] 
         ctx.multiworld.regions += [create_region(ctx.multiworld, 
@@ -129,7 +129,7 @@ def create_regions(ctx, location_database):
                                                 ["ExitDiamondStore"])] 
     
     fates_location = location_table_fates_events.copy()
-    if (ctx.options.fatesanity.value==1):
+    if ctx.options.fatesanity:
         fates_location.update(location_table_fates)
     ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "FatedList", 
                                              [location for location in fates_location], ["ExitFatedList"])] 
@@ -137,7 +137,7 @@ def create_regions(ctx, location_database):
 
     # link up regions
     ctx.multiworld.get_entrance("Menu", ctx.player).connect(ctx.multiworld.get_region("Underworld", ctx.player))
-    if (ctx.options.location_system.value==3):
+    if ctx.options.location_system == "roomweaponbased":
         for weaponSubfix in location_weapons_subfixes:
             ctx.multiworld.get_entrance("Zags room"+weaponSubfix, ctx.player).connect(
                 ctx.multiworld.get_region("Tartarus"+weaponSubfix, ctx.player))
@@ -176,18 +176,18 @@ def create_regions(ctx, location_database):
         ctx.multiworld.get_entrance("DieSL", ctx.player).connect(ctx.multiworld.get_region("Underworld", ctx.player))
 
     #here we connect locations that depend on options
-    if (ctx.options.keepsakesanity.value==1):
+    if ctx.options.keepsakesanity:
         ctx.multiworld.get_entrance("NPCS", ctx.player).connect(
             ctx.multiworld.get_region("KeepsakesLocations", ctx.player))
         ctx.multiworld.get_entrance("ExitNPCS", ctx.player).connect(ctx.multiworld.get_region("Underworld", ctx.player))
         
-    if (ctx.options.weaponsanity.value==1):
+    if ctx.options.weaponsanity:
         ctx.multiworld.get_entrance("Weapon Cache", ctx.player).connect(
             ctx.multiworld.get_region("WeaponsLocations", ctx.player))
         ctx.multiworld.get_entrance("ExitWeaponCache", ctx.player).connect(
             ctx.multiworld.get_region("Underworld", ctx.player))
         
-    if (ctx.options.storesanity.value==1):
+    if ctx.options.storesanity:
         ctx.multiworld.get_entrance("Store Gemstones Entrance", ctx.player).connect(
             ctx.multiworld.get_region("StoreGemstones", ctx.player))
         ctx.multiworld.get_entrance("ExitGemStore", ctx.player).connect(

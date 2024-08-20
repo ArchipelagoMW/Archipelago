@@ -1,14 +1,17 @@
+from typing import TYPE_CHECKING
 from BaseClasses import MultiWorld, Item, ItemClassification
-from .Items import item_table_pacts, item_table_weapons, item_table_keepsake, items_table_fates_completion, HadesItem
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule, add_rule, add_item_rule
+from .Items import item_table_pacts, item_table_keepsake, items_table_fates_completion, HadesItem
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 from Utils import visualize_regions
 from .Locations import location_weapons_subfixes
 
+if TYPE_CHECKING:
+    from . import HadesWorld
+
 class HadesLogic(LogicMixin):
-    #This is not working as expected
     def _total_heat_level(self, player:int, amount: int, options) -> bool:
-        if not options.heat_system.value == 1:
+        if not options.heat_system == "reverseheat":
             return True
         count=0
         for key in item_table_pacts.keys():
@@ -19,7 +22,7 @@ class HadesLogic(LogicMixin):
         return self.count(item, player)>=amount
 
     def _has_enough_routine_inspection(self, player: int, amount: int, options) -> bool:
-        if not options.heat_system.value == 1:
+        if not options.heat_system == "reverseheat":
             return True
         return self._has_enough_of_item(player, amount, "RoutineInspectionPactLevel")
     
@@ -32,7 +35,7 @@ class HadesLogic(LogicMixin):
             + self.count("InfernalTrove3Item", player) >=amount
     
     def _has_enough_weapons(self, player: int, options, amount: int) -> bool:
-        if (options.weaponsanity.value==0):
+        if not options.weaponsanity:
             return True
         count = 0
         if (self._has_weapon("SwordWeapon", player, options)):
@@ -62,35 +65,35 @@ class HadesLogic(LogicMixin):
         return amount_fates >= amount
     
     def _has_weapon(self, weaponSubfix, player:int, option) -> bool:
-        if (option.weaponsanity.value==0):
+        if not option.weaponsanity:
             return True
         if (weaponSubfix == "SwordWeapon"):
-            return ((option.initial_weapon.value == 0) or (self.has("SwordWeaponUnlockItem", player)))
+            return ((option.initial_weapon == "Sword") or (self.has("SwordWeaponUnlockItem", player)))
         if (weaponSubfix == "BowWeapon"):
-            return ((option.initial_weapon.value == 1) or (self.has("BowWeaponUnlockItem", player)))
+            return ((option.initial_weapon == "Bow") or (self.has("BowWeaponUnlockItem", player)))
         if (weaponSubfix == "SpearWeapon"):
-            return ((option.initial_weapon.value == 2) or (self.has("SpearWeaponUnlockItem", player)))
+            return ((option.initial_weapon == "Spear") or (self.has("SpearWeaponUnlockItem", player)))
         if (weaponSubfix == "ShieldWeapon"):
-            return ((option.initial_weapon.value == 3) or (self.has("ShieldWeaponUnlockItem", player)))
+            return ((option.initial_weapon == "Shield") or (self.has("ShieldWeaponUnlockItem", player)))
         if (weaponSubfix == "FistWeapon"):
-            return ((option.initial_weapon.value == 4) or (self.has("FistWeaponUnlockItem", player)))
+            return ((option.initial_weapon == "Fist") or (self.has("FistWeaponUnlockItem", player)))
         if (weaponSubfix == "GunWeapon"):
-            return ((option.initial_weapon.value == 5) or (self.has("GunWeaponUnlockItem", player)))
+            return ((option.initial_weapon == "Gun") or (self.has("GunWeaponUnlockItem", player)))
 
     def _can_get_victory(self, player: int, options) -> bool:
         can_win = self._has_defeated_boss("HadesVictory", player, options)
-        if (options.weaponsanity.value == 1):
+        if options.weaponsanity:
             weapons = options.weapons_clears_needed.value
             can_win = (can_win) and (self._enough_weapons_victories(player,options,weapons))
-        if (options.keepsakesanity.value == 1):
+        if options.keepsakesanity:
             keepsakes = options.keepsakes_needed.value
             can_win = (can_win) and (self._has_enough_keepsakes(player,keepsakes,options))
         fates = options.fates_needed.value
         can_win = (can_win) and (self._has_enough_fates_done(player,fates,options))
         return can_win
     
-    def _has_defeated_boss(self,bossVictory,player:int, options) -> bool:
-        if (options.location_system.value == 3):
+    def _has_defeated_boss(self, bossVictory,player:int, options) -> bool:
+        if options.location_system == "roomweaponbased":
             counter=0
             counter += self.count(bossVictory+"SwordWeapon", player)
             counter += self.count(bossVictory+"SpearWeapon", player)
@@ -103,7 +106,7 @@ class HadesLogic(LogicMixin):
            return self.has(bossVictory, player)
 
     def _enough_weapons_victories(self,player:int, options, amount: int) -> bool:
-        if (options.location_system.value == 3):
+        if options.location_system == "roomweaponbased":
             counter=0
             counter += self.count("HadesVictory"+"SwordWeapon", player)
             counter += self.count("HadesVictory"+"SpearWeapon", player)
@@ -117,13 +120,11 @@ class HadesLogic(LogicMixin):
 
 # -----------
 
-def set_rules(world: MultiWorld, player: int, number_items: int, location_table, options):
+def set_rules(world: "HadesWorld", player: int, number_items: int, location_table, options):
     # Set up some logic in areas to avoid having all heats "stack up" as batch in other games.
     total_routine_inspection = int(options.routine_inspection_pact_amount.value)
 
-    
-
-    if (options.location_system.value == 3):
+    if (options.location_system == "roomweaponbased"):
         set_weapon_region_rules(world, player, number_items, location_table, options, 
                                 "SwordWeapon", total_routine_inspection);
         set_weapon_region_rules(world, player, number_items, location_table, options, 
@@ -158,7 +159,7 @@ def set_rules(world: MultiWorld, player: int, number_items: int, location_table,
     forbid_important_items_on_late_styx(world, player, options)
     world.completion_condition[player] = lambda state: state._can_get_victory(player, options)
     
-    if (options.keepsakesanity.value==1):
+    if options.keepsakesanity:
         add_rule(world.get_entrance("NPCS", player), lambda state: True)
         add_rule(world.get_location("EurydiceKeepsake",player), lambda state:  \
                  state._has_defeated_boss("LernieVictory", player, options))
@@ -167,22 +168,21 @@ def set_rules(world: MultiWorld, player: int, number_items: int, location_table,
         add_rule(world.get_location("PatroclusKeepsake",player), lambda state:  \
                 state._has_defeated_boss("BrosVictory", player, options))
         set_keepsake_balance(world, player, location_table, options)
-    if (options.weaponsanity.value == 1):
+    if options.weaponsanity:
         add_rule(world.get_entrance("Weapon Cache", player), lambda state: True)
-    if (options.storesanity.value == 1):
+    if options.storesanity:
         set_store_rules(world, player, location_table, options)
-    if (options.fatesanity.value == 1):
+    if options.fatesanity:
         set_fates_rules(world, player, location_table, options, "")
     set_fates_rules(world, player, location_table, options, "Event")
     
 
-    if (options.keepsakesanity.value == 1 and options.storesanity.value == 1):
+    if options.keepsakesanity and options.storesanity:
         add_rule(world.get_location("OrpheusKeepsake", player), lambda state: \
                 state.has("CourtMusicianSentenceItem",player))
+        
 
-    visualize_regions(world.get_region("Menu", player), "my_world.puml")
-
-def set_keepsake_balance(world: MultiWorld, player: int, location_table, options):
+def set_keepsake_balance(world: "HadesWorld", player: int, location_table, options):
     set_rule(world.get_location("ZeusKeepsake", player), lambda state:   \
             state.has("ZeusKeepsake", player))
     set_rule(world.get_location("PoseidonKeepsake", player), lambda state:   \
@@ -203,7 +203,7 @@ def set_keepsake_balance(world: MultiWorld, player: int, location_table, options
             state._has_defeated_boss("MegVictory", player, options))
 
 
-def set_store_rules(world: MultiWorld, player: int, location_table, options):
+def set_store_rules(world: "HadesWorld", player: int, location_table, options):
     #Fountains
     set_rule(world.get_location("FountainUpgrade1Location", player), lambda state:  \
             state.has("FountainTartarusItem", player))
@@ -262,7 +262,7 @@ def set_store_rules(world: MultiWorld, player: int, location_table, options):
             state.has("DeluxeContractorDeskItem", player))
     
 
-def set_fates_rules(world: MultiWorld, player: int, location_table, options, subfix: str):
+def set_fates_rules(world: "HadesWorld", player: int, location_table, options, subfix: str):
     #Rules that dont depend on other settings
     set_rule(world.get_location("IsThereNoEscape?"+subfix, player), lambda state: \
             state._has_defeated_boss("HadesVictory", player, options))
@@ -278,7 +278,7 @@ def set_fates_rules(world: MultiWorld, player: int, location_table, options, sub
             state._has_defeated_boss("HadesVictory", player, options))
 
     #Rules that depend on storesanity
-    if (options.storesanity.value==1):
+    if options.storesanity:
         set_rule(world.get_location("TheReluctantMusician"+subfix, player), lambda state:  \
                 state.has("CourtMusicianSentenceItem", player))
         set_rule(world.get_location("DenizensOfTheDeep"+subfix, player), lambda state:  \
@@ -298,21 +298,21 @@ def set_fates_rules(world: MultiWorld, player: int, location_table, options, sub
             state._has_defeated_boss("HadesVictory", player, options))
    
     #rules that depend on weaponsanity:
-    if (options.weaponsanity.value==1):
+    if options.weaponsanity:
         set_rule(world.get_location("TheStygianBlade"+subfix, player), lambda state: \
-                state.has("SwordWeaponUnlockItem", player) or options.initial_weapon.value==0)
+                state.has("SwordWeaponUnlockItem", player) or options.initial_weapon == "Sword")
         set_rule(world.get_location("TheHeartSeekingBow"+subfix, player), lambda state: \
-                state.has("BowWeaponUnlockItem", player) or options.initial_weapon.value==1)
+                state.has("BowWeaponUnlockItem", player) or options.initial_weapon == "Bow")
         set_rule(world.get_location("TheEternalSpear"+subfix, player), lambda state: \
-                state.has("SpearWeaponUnlockItem", player) or options.initial_weapon.value==2)
+                state.has("SpearWeaponUnlockItem", player) or options.initial_weapon == "Spear")
         set_rule(world.get_location("TheShieldOfChaos"+subfix, player), lambda state: \
-                state.has("ShieldWeaponUnlockItem", player) or options.initial_weapon.value==3)
+                state.has("ShieldWeaponUnlockItem", player) or options.initial_weapon == "Shield")
         set_rule(world.get_location("TheTwinFists"+subfix, player), lambda state: \
-                state.has("FistWeaponUnlockItem", player) or options.initial_weapon.value==4)
+                state.has("FistWeaponUnlockItem", player) or options.initial_weapon == "Fist")
         set_rule(world.get_location("TheAdamantRail"+subfix, player), lambda state: \
-                state.has("GunWeaponUnlockItem", player) or options.initial_weapon.value==5)
+                state.has("GunWeaponUnlockItem", player) or options.initial_weapon == "Gun")
         
-    if (options.keepsakesanity.value==1):
+    if options.keepsakesanity:
         set_rule(world.get_location("CloseAtHeart"+subfix, player), lambda state: \
                 state._has_enough_keepsakes(player, 23, options))
         #This is balancing rules, so grinding gods is less painful
@@ -374,7 +374,7 @@ def set_fates_rules(world: MultiWorld, player: int, location_table, options, sub
                 state._has_defeated_boss("LernieVictory", player, options))
         
 
-def set_weapon_region_rules(world: MultiWorld, player: int, number_items: int, 
+def set_weapon_region_rules(world: "HadesWorld", player: int, number_items: int, 
                             location_table, options, weaponSubfix: str, total_routine_inspection:int):
     set_rule(world.get_entrance("Zags room"+weaponSubfix, player), lambda state: \
             state._has_weapon(weaponSubfix, player, options))
@@ -398,8 +398,8 @@ def set_weapon_region_rules(world: MultiWorld, player: int, number_items: int,
             state._has_enough_weapons(player, options, 6))
     
 
-def forbid_important_items_on_late_styx(world: MultiWorld, player: int, options):
-    if (options.location_system.value == 3):
+def forbid_important_items_on_late_styx(world: "HadesWorld", player: int, options):
+    if options.location_system == "roomweaponbased":
         for weaponString in location_weapons_subfixes:
                 late_styx_region = world.get_region("StyxLate"+weaponString, player)
                 for location in late_styx_region.locations:
@@ -413,8 +413,9 @@ def forbid_important_items_on_late_styx(world: MultiWorld, player: int, options)
                 
 
 #Helper for late styx not having important items. Thanks Scipio.
+#We use 0b0001 since it is the bitflag for progresive items
 def item_is_progression(item: Item) -> bool:
-    return (item.classification == ItemClassification.progression) or (item.classification == ItemClassification.progression_skip_balancing)
+    return item.classification & 0b0001
 
-def item_is_plando(world: MultiWorld, item: Item, player: int) -> bool:
+def item_is_plando(world: "HadesWorld", item: Item, player: int) -> bool:
     return item in world.plando_items[player]
