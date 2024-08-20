@@ -57,7 +57,7 @@ def addHints(rom, rnd, hint_item_pool):
         if len(pool) > 0:
             chosen_index = rnd.randint(0, len(pool) - 1)
             chosen = pool.pop(chosen_index)
-            hint = rnd.choice(hints.format("{%s}" % (chosen.name), chosen.location.ladxr_item.metadata.area)
+            hint = rnd.choice(hints).format(chosen.name, chosen.location.ladxr_item.metadata.area)
         else:
             hint = rnd.choice(hints).format(*rnd.choice(useless_hint))
         rom.texts[text_id] = formatText(hint)
