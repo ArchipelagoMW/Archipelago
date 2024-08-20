@@ -265,8 +265,11 @@ def patchMermaidStatue(rom):
         and  $10 ; scale
         ret  z
         ldh  a, [$F8]
-        and  $20
+        and  $20 ; ROOM_STATUS_EVENT_2
         ret  nz
+
+        ld hl, wTradeSequenceItem2
+        res 4, [hl] ; take the trade item
     """), fill_nop=True)
 
 
