@@ -77,21 +77,17 @@ class EntityHuntPicker:
         """
         panel_obj = static_witness_logic.ENTITIES_BY_HEX[panel_hex]
 
-        if plando:
-            if not self.player_logic.solvability_guaranteed(panel_hex):
-                warning(f"Panel {panel_obj['checkName']} is disabled and thus not eligible for panel hunt.")
-                return False
-            return True
+        if not self.player_logic.solvability_guaranteed(panel_hex) or panel_hex in self.player_logic.EXCLUDED_LOCATIONS:
+            if plando:
+                warning(f"Panel {panel_obj['checkName']} is disabled / excluded and thus not eligible for panel hunt.")
+            return False
 
-        return (
-            self.player_logic.solvability_guaranteed(panel_hex)
-            and not (
+        return not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
                 # However, I don't think they should be hunt panels in this case.
                 self.player_options.disable_non_randomized_puzzles
                 and not self.player_options.shuffle_discarded_panels
                 and panel_obj["locationType"] == "Discard"
-            )
         )
 
     def _add_plandoed_hunt_panels_to_pre_picked(self) -> None:
