@@ -161,6 +161,21 @@ Open the game's menu, navigate to `Options`, then to `Archipelago Options`, then
 Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 
 to the nearest sage's hut to continue your journey.
 
+## How does the HUD work? What are the alternate modes? (I didn't know there were alternate modes!)
+The game's normal HUD shows you how many power cells, precursor orbs, and scout flies you currently have. But if you 
+hold `L2 or R2` and press `Up or Down` on the D-Pad, the HUD will show you alternate modes. In all modes, the last 
+sent/received item and the player who sent/received it will be displayed below the Power Cell icon. This will help you 
+quickly reference information about which locations you've checked, newly received items and who to thank for them, etc. 
+Here is how the HUD works:
+
+| HUD Mode      | Button Combo                 | What You're Seeing                | Text Message                          |
+|---------------|------------------------------|-----------------------------------|---------------------------------------|
+| Normal        | `L2 or R2` + `Left or Right` | Items Received                    | `GOT {Your Item} FROM {Other Player}` |
+| Per-Level     | `L2 or R2` + `Down`          | Locations Checked (in this level) | `SENT {Other Item} TO {Other Player}` |
+| Global        | `L2 or R2` + `Up`            | Locations Checked (in the game)   | `SENT {Other Item} TO {Other Player}` |
+|               |                              |                                   |                                       |
+| (In Any Mode) |                              | (If you sent an Item to Yourself) | `FOUND {Your Item}`                   |
+
 ## I think I found a bug, where should I report it?
 Depending on the nature of the bug, there are a couple of different options.
 
