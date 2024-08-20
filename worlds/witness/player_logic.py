@@ -108,7 +108,6 @@ class WitnessPlayerLogic:
         self.EVENT_ITEM_PAIRS: Dict[str, Tuple[str, str]] = {}
         self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
         self.DISABLE_EVERYTHING_BEHIND: Set[str] = set()
-        self.PRECOMPLETED_LOCATIONS: Set[str] = set()
         self.EXCLUDED_ENTITIES: Set[str] = set()
         self.ADDED_CHECKS: Set[str] = set()
         self.VICTORY_LOCATION = "0x0356B"

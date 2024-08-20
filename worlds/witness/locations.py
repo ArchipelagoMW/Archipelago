@@ -44,7 +44,7 @@ class WitnessPlayerLocations:
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
             static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
-            for entity_hex in player_logic.COMPLETELY_DISABLED_ENTITIES | player_logic.PRECOMPLETED_LOCATIONS
+            for entity_hex in player_logic.COMPLETELY_DISABLED_ENTITIES
         }
 
         self.CHECK_PANELHEX_TO_ID = {
