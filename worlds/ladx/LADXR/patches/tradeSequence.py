@@ -330,7 +330,47 @@ def patchVarious(rom, settings):
         jp   z, $3F8D ; UnloadEntity 
     """), fill_nop=True)
     # Mimic invisibility
-    rom.patch(0x18, 0x2AC8, 0x2ACE, "", fill_nop=True)
+    rom.patch(0x19, 0x2AC0, ASM("""
+        cp   $97
+        jr   z, mermaidStatueCave
+        cp   $98
+        jr   nz, visible
+    mermaidStatueCave:
+        ld   a, [$DB7F]
+        and  a
+        jr   nz, 6
+    visible:
+    """), ASM("""
+        dec  a ; save one byte by only doing one cp
+        or   $01
+        cp   $97
+        jr   nz, visible
+    mermaidStatueCave:
+        ld   a, [wTradeSequenceItem2]
+        and  $20 ; MAGNIFYING_GLASS
+        jr   z, 6
+    visible:
+    """))
+    # Zol invisibility
+    rom.patch(0x06, 0x3BE9, ASM("""
+        cp   $97
+        jr   z, mermaidStatueCave
+        cp   $98
+        ret  nz ; visible
+    mermaidStatueCave:
+        ld   a, [$DB7F]
+        and  a
+        ret  z
+    """), ASM("""
+        dec  a ; save one byte by only doing one cp
+        or   $01
+        cp   $97
+        ret  nz ; visible
+    mermaidStatueCave:
+        ld   a, [wTradeSequenceItem2]
+        and  $20 ; MAGNIFYING_GLASS
+        ret  nz
+    """))
     # Ignore trade quest state for marin at beach
     rom.patch(0x18, 0x219E, 0x21A6, "", fill_nop=True)
     # Shift the magnifier 8 pixels
