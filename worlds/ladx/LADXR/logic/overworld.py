@@ -61,9 +61,9 @@ class World:
         self._addEntrance("banana_seller", sword_beach, banana_seller, r.bush)
         boomerang_cave = Location("Boomerang Cave")
         if options.boomerang == 'trade':
-            Location().add(BoomerangGuy()).connect(boomerang_cave, OR(BOOMERANG, HOOKSHOT, MAGIC_ROD, PEGASUS_BOOTS, FEATHER, SHOVEL))
+            Location().add(BoomerangGuy()).connect(boomerang_cave, AND(r.shuffled_magnifier), OR(BOOMERANG, HOOKSHOT, MAGIC_ROD, PEGASUS_BOOTS, FEATHER, SHOVEL))
         elif options.boomerang == 'gift':
-            Location().add(BoomerangGuy()).connect(boomerang_cave, None)
+            Location().add(BoomerangGuy()).connect(boomerang_cave, r.shuffled_magnifier)
         self._addEntrance("boomerang_cave", sword_beach, boomerang_cave, BOMB)
         self._addEntranceRequirementExit("boomerang_cave", None) # if exiting, you do not need bombs
 

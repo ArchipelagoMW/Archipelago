@@ -177,10 +177,11 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     patches.songs.upgradeManbo(rom)
     patches.songs.upgradeMamu(rom)
     if world.ladxr_settings.tradequest:
-        patches.tradeSequence.patchTradeSequence(rom, world.ladxr_settings.boomerang)
+        patches.tradeSequence.patchTradeSequence(rom, world.ladxr_settings)
     else:
         # Monkey bridge patch, always have the bridge there.
         rom.patch(0x00, 0x333D, assembler.ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
+        patches.tradeSequence.unrequiredTradeSequence(rom)
     patches.bowwow.fixBowwow(rom, everywhere=world.ladxr_settings.bowwow != 'normal')
     if world.ladxr_settings.bowwow != 'normal':
         patches.bowwow.bowwowMapPatches(rom)

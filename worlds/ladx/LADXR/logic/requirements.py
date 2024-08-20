@@ -265,6 +265,7 @@ class RequirementsSettings:
         self.rear_attack_range = OR(MAGIC_ROD, BOW) # mimic
         self.fire = OR(MAGIC_POWDER, MAGIC_ROD) # torches
         self.push_hardhat = OR(SHIELD, SWORD, HOOKSHOT, BOOMERANG)
+        self.shuffled_magnifier = TRADING_ITEM_MAGNIFYING_GLASS
 
         self.boss_requirements = [
             SWORD,  # D1 boss
@@ -293,6 +294,8 @@ class RequirementsSettings:
         }
 
         # Adjust for options
+        if not options.tradequest:
+            self.shuffled_magnifier = True
         if options.bowwow != 'normal':
             # We cheat in bowwow mode, we pretend we have the sword, as bowwow can pretty much do all what the sword ca$            # Except for taking out bushes (and crystal pillars are removed)
             self.bush.remove(SWORD)
