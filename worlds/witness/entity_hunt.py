@@ -46,7 +46,9 @@ class EntityHuntPicker:
         self.random = world.random
 
         self.PRE_PICKED_HUNT_ENTITIES = pre_picked_entities.copy()
-        self.HUNT_ENTITIES: Set[str] = set()
+        self.HUNT_ENTITIES = set()
+
+        self._add_plandoed_hunt_panels_to_pre_picked()
 
         self.ALL_ELIGIBLE_ENTITIES, self.ELIGIBLE_ENTITIES_PER_AREA = self._get_eligible_panels()
 
