@@ -27,10 +27,10 @@ green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
+# "Quarry - [East] Bombable Wall" is excluded from this list since it has slightly different rules
 bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Wing] Bombable Wall",
               "Overworld - [Central] Bombable Wall", "Overworld - [Southwest] Bombable Wall Near Fountain",
-              "Quarry - [West] Upper Area Bombable Wall", "Quarry - [East] Bombable Wall",
-              "Ruined Atoll - [Northwest] Bombable Wall"]
+              "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
 
 
 def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
@@ -348,8 +348,16 @@ def set_location_rules(world: "TunicWorld") -> None:
     # Bombable Walls
     for location_name in bomb_walls:
         # has_sword is there because you can buy bombs in the shop
-        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or has_sword(state, player))
+        set_rule(world.get_location(location_name),
+                 lambda state: state.has(gun, player)
+                 or has_sword(state, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     add_rule(world.get_location("Cube Cave - Holy Cross Chest"),
+             lambda state: state.has(gun, player)
+             or has_sword(state, player)
+             or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    # can't ice grapple to this one, not enough space
+    set_rule(world.get_location("Quarry - [East] Bombable Wall"),
              lambda state: state.has(gun, player) or has_sword(state, player))
 
     # Shop

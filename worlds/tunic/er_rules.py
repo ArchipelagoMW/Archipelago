@@ -124,10 +124,13 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world))
 
+    # for the hard ice grapple, get to the chest after the bomb wall, grab a slime, and grapple push down
+    # you can ice grapple through the bomb wall, so no need for shop logic checking
     regions["Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
-        or state.has(laurels, player))
+        or state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
@@ -1409,7 +1412,13 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # Bombable Walls
     for location_name in bomb_walls:
-        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or can_shop(state, world))
+        set_rule(world.get_location(location_name),
+                 lambda state: state.has(gun, player)
+                 or can_shop(state, world)
+                 or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    # not enough space to ice grapple into here
+    set_rule(world.get_location("Quarry - [East] Bombable Wall"),
+             lambda state: state.has(gun, player) or can_shop(state, world))
 
     # Shop
     set_rule(world.get_location("Shop - Potion 1"),
