@@ -44,13 +44,10 @@ class KHRECOMWorld(World):
     topology_present = True
     data_version = 4
     web = KHRECOMWeb()
+    world_order = []
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
-    
-    def __init__(self, multiworld: "MultiWorld", player: int):
-        super(KHRECOMWorld, self).__init__(multiworld, player)
-        self.world_order = []
     
     def create_items(self):
         self.place_predetermined_items()
