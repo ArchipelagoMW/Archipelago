@@ -11,8 +11,9 @@
 
 ## Setting Up
 
-First, download the client from the link above. It doesn't need to go into any particular directory;
-it'll automatically locate _Dark Souls III_ in your Steam installation folder.
+First, download the client from the link above (`DS3.Archipelago.*.zip`). It doesn't need to go
+into any particular directory; it'll automatically locate _Dark Souls III_ in your Steam
+installation folder.
 
 Version 3.0.0 of the randomizer _only_ supports the latest version of _Dark Souls III_, 1.15.2. This
 is the latest version, so you don't need to do any downpatching! However, if you've already
@@ -53,3 +54,24 @@ To run _Dark Souls III_ in Archipelago mode:
 
 The [Player Options](/games/Dark%20Souls%20III/player-options) page on the website allows you to
 configure your personal options and export them into a config file.
+
+### Does this work with Proton?
+
+The *Dark Souls III* Archipelago randomizer supports running on Linux under Proton. There are a few
+things to keep in mind:
+
+* Because `DS3Randomizer.exe` relies on the .NET runtime, you'll need to do one of two things:
+
+  * Use the `DS3.Archipelago.*-self-contained.zip` [AP client file], which includes the .NET
+    runtime. This is a much larger download, but it will allow you to run `DS3Randomizer.exe`
+    directly from Proton without any issues.
+
+  * Install the [.NET Runtime] under **plain [WINE]**, then run `DS3Randomizer.exe` under plain
+    WINE as well. This is more complicated up front, but it'll allow you to run multiple versions
+    of the randomizer with the same .NET installation.
+
+* To run the game itself, just run `launchmod_darksouls3.bat` under Proton.
+
+[AP client file]: https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases
+[.NET Runtime]: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+[WINE]: https://www.winehq.org/
