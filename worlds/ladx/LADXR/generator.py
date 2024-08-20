@@ -153,7 +153,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     if world.ladxr_settings.witch:
         patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
-    if not settings.rooster:
+    if not world.ladxr_settings.rooster:
         patches.maptweaks.tweakMap(rom)
         patches.maptweaks.tweakBirdKeyRoom(rom)
     patches.chest.fixChests(rom)
