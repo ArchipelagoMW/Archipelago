@@ -114,6 +114,6 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": DeathLink.default,
         "death_link_amnesty": DeathLinkAmnesty.default,
 
-        "shuffle_dog": ShuffleDog.default,
+        "shuffle_dog": ShuffleDog.option_random_item,
     },
 }
