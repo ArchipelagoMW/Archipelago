@@ -17,7 +17,7 @@
 
 4. Open RML and click Play. If you've already installed it, the executable that was used to install RML ("RMLLauncher.exe" unless renamed) should be used to run RML. Raft should start after clicking Play.
 
-5. Open the RML menu. This should open automatically when Raft first loads. If it does not, and you see RML information in the top center of the Raft main menu, press F9 to open it.
+5. Open the RML menu. This should open automatically when Raft first loads. If it does not, and you see RML information in the top center of the Raft main menu, press F9 to open it. If you do not see RML information at the top, close Raft+RML, go back to Step 4 and run RML as administrator.
 
 6. Navigate to the "Mod manager" tab in the left-hand menu.
 
