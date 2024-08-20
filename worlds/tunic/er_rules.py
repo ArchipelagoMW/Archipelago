@@ -596,7 +596,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Frog Stairs Eye Exit"].connect(
         connecting_region=regions["Frog Stairs Upper"],
-        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Frog Stairs Upper"].connect(
         connecting_region=regions["Frog Stairs Eye Exit"],
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
