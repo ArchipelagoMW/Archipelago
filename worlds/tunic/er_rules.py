@@ -524,9 +524,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["West Garden after Boss"].connect(
         connecting_region=regions["West Garden"],
         rule=lambda state: state.has(laurels, player))
+    # ice grapple push Garden Knight off the side
     regions["West Garden"].connect(
         connecting_region=regions["West Garden after Boss"],
-        rule=lambda state: state.has(laurels, player) or has_sword(state, player))
+        rule=lambda state: state.has(laurels, player) or has_sword(state, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     regions["West Garden"].connect(
         connecting_region=regions["West Garden Hero's Grave Region"],
@@ -556,7 +558,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_medium, state, world))
 
     # Atoll and Frog's Domain
-    # nmg: ice grapple the bird below the portal
+    # ice grapple the bird below the portal
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Lower Entry Area"],
         rule=lambda state: state.has(laurels, player)
@@ -1357,8 +1359,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Librarian - Hexagon Green"),
              lambda state: has_sword(state, player)
              and has_ladder("Ladders in Library", state, world))
+    # can ice grapple boss scav off the side
+    # the grapple from the other side of the bridge isn't in logic 'cause we don't have a misc tricks option
     set_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     # Swamp
     set_rule(world.get_location("Cathedral Gauntlet - Gauntlet Reward"),
