@@ -2742,52 +2742,52 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     or logic.protoss_competent_anti_air(state)
                 ))
         ),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3500, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_common_unit(state)
                 and (adv_tactics or logic.zerg_basic_anti_air(state)))
         ),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Mira Han", SC2_RACESWAP_LOC_ID_OFFSET + 1701, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Mira Han", SC2_RACESWAP_LOC_ID_OFFSET + 3501, LocationType.EXTRA,
             logic.zerg_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1702, LocationType.VANILLA,
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3502, LocationType.VANILLA,
             logic.zerg_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Mid Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1703, LocationType.VANILLA),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Southwest Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1704, LocationType.VANILLA,
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Mid Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3503, LocationType.VANILLA),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Southwest Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3504, LocationType.VANILLA,
             logic.zerg_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "North Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1705, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "North Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3505, LocationType.EXTRA,
             logic.zerg_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "South Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1706, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "South Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3506, LocationType.EXTRA,
             logic.zerg_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "West Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1707, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "West Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3507, LocationType.EXTRA,
             logic.zerg_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3600, LocationType.VICTORY,
             lambda state: (
                 logic.protoss_common_unit(state)
                 and (adv_tactics or logic.protoss_basic_anti_air(state)))
         ),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Mira Han", SC2_RACESWAP_LOC_ID_OFFSET + 1801, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Mira Han", SC2_RACESWAP_LOC_ID_OFFSET + 3601, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1802, LocationType.VANILLA,
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3602, LocationType.VANILLA,
             logic.protoss_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Mid Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1803, LocationType.VANILLA),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Southwest Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1804, LocationType.VANILLA,
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Mid Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3603, LocationType.VANILLA),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Southwest Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3604, LocationType.VANILLA,
             logic.protoss_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "North Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1805, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "North Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3605, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "South Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1806, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "South Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3606, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
-        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "West Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 1807, LocationType.EXTRA,
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "West Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3607, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
     ]
