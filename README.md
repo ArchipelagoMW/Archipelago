@@ -75,6 +75,7 @@ Currently, the following games are supported:
 * Old School Runescape
 * Kingdom Hearts 1
 * Mega Man 2
+* Yacht Dice
 * Kingdom Hearts RE: Chain of Memories
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
