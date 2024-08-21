@@ -30,6 +30,12 @@
 <MissionLayout>:
     rows: 1
 
+<RegionLayout>:
+    cols: 1
+
+<ColumnLayout>:
+    rows: 1
+
 <MissionCategory>:
     cols: 1
     spacing: [0,5]
@@ -41,3 +47,15 @@
     valign: 'middle'
     padding: [5,0,5,0]
     outline_width: 1
+    canvas.before:
+        Color:
+            rgba: (1, 193/255, 86/255, root.is_goal)
+        Line:
+            width: 1
+            rectangle: (self.x, self.y + 0.5, self.width, self.height)
+    canvas.after:
+        Color:
+            rgba: (0.8, 0.8, 0.8, root.is_exit)
+        Line:
+            width: 1
+            rectangle: (self.x + 2, self.y + 3, self.width - 4, self.height - 4)
