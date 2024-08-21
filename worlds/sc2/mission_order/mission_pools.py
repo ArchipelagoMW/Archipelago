@@ -122,10 +122,10 @@ class SC2MOGenMissionPools:
                 self._used_flags[flag] += 1
         self._used_missions.append(mission)
 
-    def pull_random_mission(self, world: World, slot: 'SC2MOGenMission') -> SC2Mission:
-        """Picks a random mission from the mission pool of the given slot, preferring a mission from `locked_ids` if allowed in the slot,
-        and marks it as present in the mission order."""
-        # Use a locked mission if possible in this slot
+    def pull_random_mission(self, world: World, slot: 'SC2MOGenMission', *, prefer_close_difficulty: bool = False) -> SC2Mission:
+        """Picks a random mission from the mission pool of the given slot and marks it as present in the mission order.
+
+        With `prefer_close_difficulty = True` the mission is picked to be as close to the slot's desired difficulty as possible."""
         pool = slot.option_mission_pool.intersection(self.master_list)
         
         difficulty_pools: Dict[int, List[int]] = {
@@ -133,30 +133,44 @@ class SC2MOGenMissionPools:
             for diff in Difficulty if diff != Difficulty.RELATIVE
         }
 
-        # Iteratively look down and up around the slot's desired difficulty
-        # Either a difficulty with valid missions is found, or an error is raised
         final_pool: List[int] = []
-        final_difficulty = Difficulty.RELATIVE
-        desired_diff = slot.option_difficulty
-        diff_offset = 0
-        while len(final_pool) == 0:
-            lower_diff = max(desired_diff - diff_offset, 1)
-            higher_diff = min(desired_diff + diff_offset, 5)
-            final_pool = difficulty_pools[lower_diff]
-            if len(final_pool) > 0:
-                final_difficulty = Difficulty(lower_diff)
-                break
-            final_pool = difficulty_pools[higher_diff]
-            if len(final_pool) > 0:
-                final_difficulty = Difficulty(higher_diff)
-                break
-            if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
-                raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
-            diff_offset += 1
+        desired_difficulty = slot.option_difficulty
+        if prefer_close_difficulty:
+            # Iteratively look down and up around the slot's desired difficulty
+            # Either a difficulty with valid missions is found, or an error is raised
+            difficulty_offset = 0
+            while len(final_pool) == 0:
+                lower_diff = max(desired_difficulty - difficulty_offset, 1)
+                higher_diff = min(desired_difficulty + difficulty_offset, 5)
+                final_pool = difficulty_pools[lower_diff]
+                if len(final_pool) > 0:
+                    break
+                final_pool = difficulty_pools[higher_diff]
+                if len(final_pool) > 0:
+                    break
+                if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
+                    raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
+                difficulty_offset += 1
         
+        else:
+            # Consider missions from all lower difficulties as well the desired difficulty
+            # Only take from higher difficulties if no lower difficulty is possible
+            final_pool = [
+                mission
+                for difficulty in range(Difficulty.STARTER, desired_difficulty + 1)
+                for mission in difficulty_pools[difficulty]
+            ]
+            difficulty_offset = 1
+            while len(final_pool) == 0:
+                higher_difficulty = desired_difficulty + difficulty_offset
+                if higher_difficulty > Difficulty.VERY_HARD:
+                    raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
+                final_pool = difficulty_pools[higher_difficulty]
+                difficulty_offset += 1
+
         # Remove the mission from the master list
         mission = lookup_id_to_mission[world.random.choice(final_pool)]
         self.master_list.remove(mission.id)
-        self.difficulty_pools[final_difficulty].remove(mission.id)
+        self.difficulty_pools[self.get_modified_mission_difficulty(mission)].remove(mission.id)
         self._add_mission_stats(mission)
         return mission

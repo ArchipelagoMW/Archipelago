@@ -80,6 +80,10 @@ class SC2MissionOrder(MissionOrderNode):
                 for mission in layout.missions:
                     if mission.option_goal and not mission.option_empty:
                         self.goal_missions.append(mission)
+        # Remove duplicates
+        for goal in self.goal_missions:
+            while self.goal_missions.count(goal) > 1:
+                self.goal_missions.remove(goal)
 
         # If not, set the last defined campaign as goal
         if len(self.goal_missions) == 0:
@@ -371,10 +375,14 @@ class SC2MissionOrder(MissionOrderNode):
             regions.append(mission_slot.region)
 
         # Shuffle & sort all slots to pick from smallest to biggest pool with tie-breaks by difficulty (lowest to highest), then randomly
-        for diff in sorted(self.sorted_missions.keys()):
-            world.random.shuffle(self.sorted_missions[diff])
+        # Additionally sort goals by difficulty (highest to lowest) with random tie-breaks
+        sorted_goals: List[SC2MOGenMission] = []
+        for difficulty in sorted(self.sorted_missions.keys()):
+            world.random.shuffle(self.sorted_missions[difficulty])
+            sorted_goals.extend(mission for mission in self.sorted_missions[difficulty] if mission in self.goal_missions)
         all_slots = [slot for diff in sorted(self.sorted_missions.keys()) for slot in self.sorted_missions[diff]]
         all_slots.sort(key = lambda slot: len(slot.option_mission_pool.intersection(self.mission_pools.master_list)))
+        sorted_goals.reverse()
 
         # Randomly assign locked missions to appropriate difficulties
         slots_for_locked: Dict[int, List[SC2MOGenMission]] = {locked: [] for locked in locked_ids}
@@ -397,6 +405,15 @@ class SC2MissionOrder(MissionOrderNode):
             mission_slot.set_mission(world, locked_mission, locations_per_region, location_cache)
             regions.append(mission_slot.region)
             all_slots.remove(mission_slot)
+            if mission_slot in sorted_goals:
+                sorted_goals.remove(mission_slot)
+
+        # Pick goal missions first with stricter difficulty matching, and starting with harder goals
+        for goal_slot in sorted_goals:
+            mission = self.mission_pools.pull_random_mission(world, goal_slot, prefer_close_difficulty=True)
+            goal_slot.set_mission(world, mission, locations_per_region, location_cache)
+            regions.append(goal_slot.region)
+            all_slots.remove(goal_slot)
 
         # Pick random missions
         for mission_slot in all_slots:
