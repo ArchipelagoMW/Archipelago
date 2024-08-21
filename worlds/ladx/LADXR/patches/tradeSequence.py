@@ -394,7 +394,7 @@ def patchVarious(rom, settings):
         # Always have the boomerang trade guy enabled (magnifier not needed)
         rom.patch(0x19, 0x05EC, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # show the guy
         rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # load the proper room layout
-        rom.patch(0x19, 0x05F4, ASM("ld a, [wTradeSequenceItem2]\nand a"), ASM("xor a"), fill_nop=True)
+    rom.patch(0x19, 0x05F4, ASM("ld a, [wTradeSequenceItem2]\nand a"), ASM("xor a"), fill_nop=True)
 
 
 def unrequiredTradeSequence(rom):
