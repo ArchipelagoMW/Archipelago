@@ -570,7 +570,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: state.has(laurels, player))
     wg_to_after_gk = regions["West Garden before Boss"].connect(
         connecting_region=regions["West Garden after Boss"],
-        rule=lambda state: state.has(laurels, player) or has_sword(state, player))
+        rule=lambda state: state.has(laurels, player) or has_sword(state, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     regions["West Garden before Terry"].connect(
         connecting_region=regions["West Garden Hero's Grave Region"],
@@ -1280,6 +1281,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         set_rule(wg_to_after_gk,
                  lambda state: state.has(laurels, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
                  or has_combat_reqs("Garden Knight", state, player))
         if not world.options.hexagon_quest:
             add_rule(heir_fight,
@@ -1611,7 +1613,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_sword(state, player)
              and has_ladder("Ladders in Library", state, world))
     set_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     # Swamp
     set_rule(world.get_location("Cathedral Gauntlet - Gauntlet Reward"),
@@ -1706,6 +1709,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  rule=lambda state: has_combat_reqs("The Librarian", state, player)
                  and has_ladder("Ladders in Library", state, world))
         combat_logic_to_loc("Rooted Ziggurat Lower - Hexagon Blue", "Boss Scavenger", set_instead=True)
+        if world.options.ice_grappling >= IceGrappling.option_medium:
+            add_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
+                     lambda state: has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
         combat_logic_to_loc("Cathedral Gauntlet - Gauntlet Reward", "Gauntlet", set_instead=True)
 
     if world.options.combat_logic == CombatLogic.option_on:
