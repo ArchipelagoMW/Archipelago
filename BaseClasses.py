@@ -425,11 +425,11 @@ class MultiWorld():
         ret = CollectionState(self)
 
         for item in self.itempool:
-            self.worlds[item.player].collect(ret, item)
+            ret.collect(item, prevent_sweep=True)
         for player in self.player_ids:
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
-                subworld.collect(ret, item)
+                ret.collect(item, prevent_sweep=True)
         ret.sweep_for_events()
 
         if use_cache:
@@ -862,26 +862,29 @@ class CollectionState():
         )
 
     # Item related
-    def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None) -> bool:
+    def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None):
         if location:
             self.locations_checked.add(location)
 
-        changed = self.multiworld.worlds[item.player].collect(self, item)
+        if not item.advancement:
+            return
 
+        self.multiworld.worlds[item.player].collect(self, item)
         self.stale[item.player] = True
 
-        if changed and not prevent_sweep:
+        if not prevent_sweep:
             self.sweep_for_events()
 
-        return changed
-
     def remove(self, item: Item):
-        changed = self.multiworld.worlds[item.player].remove(self, item)
-        if changed:
-            # invalidate caches, nothing can be trusted anymore now
-            self.reachable_regions[item.player] = set()
-            self.blocked_connections[item.player] = set()
-            self.stale[item.player] = True
+        if not item.advancement:
+            return
+
+        self.multiworld.worlds[item.player].remove(self, item)
+
+        # invalidate caches, nothing can be trusted anymore now
+        self.reachable_regions[item.player] = set()
+        self.blocked_connections[item.player] = set()
+        self.stale[item.player] = True
 
 
 class Entrance:
