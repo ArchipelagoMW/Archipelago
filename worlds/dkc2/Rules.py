@@ -416,7 +416,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.rickety_race_dk_coin:
                 self.has_skull_kart,
             LocationName.rickety_race_bonus_1:
-                lambda state: self.can_team_attack(state) and self.can_hover(state),
+                lambda state: self.has_skull_kart(state) and self.can_team_attack(state) and self.can_hover(state),
 
             LocationName.mudhole_marsh_clear:
                 lambda state: self.can_climb(state) and self.can_cling(state) and self.has_invincibility(state),
@@ -927,7 +927,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.rickety_race_dk_coin:
                 self.has_skull_kart,
             LocationName.rickety_race_bonus_1:
-                lambda state: self.can_team_attack(state) and (
+                lambda state: self.has_skull_kart(state) and self.can_team_attack(state) and (
                     self.can_hover(state) or 
                     (self.has_diddy(state) and self.can_cartwheel(state))
                 ),
