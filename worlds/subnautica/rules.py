@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Dict, Callable, Optional
 from worlds.generic.Rules import set_rule, add_rule
 from .locations import location_table, LocationDict
 from .creatures import all_creatures, aggressive, suffix, hatchable, containment
-from .options import AggressiveScanLogic, SwimRule
+from .options import AggressiveScanLogic, SwimRule, PropulsionCannonLogic
 import math
 
 if TYPE_CHECKING:
@@ -232,8 +232,14 @@ def can_access_location(state: "CollectionState", player: int, loc: LocationDict
         return False
 
     need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
+    propulsion_logic_flips = loc.get("propulsion_logic_flips", False)
+    propulsion_cannon_logic : PropulsionCannonLogic = state.multiworld.worlds[player].options.propulsion_cannon_logic
     if need_propulsion_cannon and not has_propulsion_cannon(state, player):
-        return False
+        if not propulsion_logic_flips or not propulsion_cannon_logic.value == 1:
+            return False
+    elif propulsion_logic_flips and not has_propulsion_cannon(state, player):
+        if propulsion_cannon_logic.value == 2:
+            return False
 
     pos = loc["position"]
     pos_x = pos["x"]

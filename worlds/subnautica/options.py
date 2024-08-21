@@ -130,6 +130,25 @@ class FillerItemsDistribution(ItemDict):
         return list(self.value.keys()), list(accumulate(self.value.values()))
 
 
+class PropulsionCannonLogic(Choice):
+    """This option controls whether you are expected to have a Propulsion Cannon for the Aurora.
+    Logically Required: Logic will not expect you to reach certain Aurora checks without a Propulsion Cannon.
+    Not Required: Propulsion Cannon is not used in logic to access the Aurora.
+    Strictly Required: Without the Propulsion Cannon, you cannot enter the Aurora.
+    """
+    auto_display_name = True
+    display_name = "Propulsion Cannon Logic"
+    option_logicrequirement = 0
+    option_norequirement = 1
+    option_strictrequirement = 2
+
+    def get_event_name(self) -> str:
+        return {
+            self.option_logicrequirement: "Logically Required",
+            self.option_norequirement: "Not Required",
+            self.option_strictrequirement: "Strictly Required"
+        }[self.value]
+
 @dataclass
 class SubnauticaOptions(PerGameCommonOptions):
     swim_rule: SwimRule
@@ -141,3 +160,4 @@ class SubnauticaOptions(PerGameCommonOptions):
     death_link: SubnauticaDeathLink
     start_inventory_from_pool: StartInventoryPool
     filler_items_distribution: FillerItemsDistribution
+    propulsion_cannon_logic: PropulsionCannonLogic
