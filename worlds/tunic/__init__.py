@@ -339,7 +339,8 @@ class TunicWorld(World):
                 except KeyError:
                     # logic bug, proceed with warning since it takes a long time to update AP
                     warning(f"{location.name} is not logically accessible for {self.player_name}. "
-                            "Creating entrance hint Inaccessible. Please report this to the TUNIC rando devs.")
+                            "Creating entrance hint Inaccessible. Please report this to the TUNIC rando devs. "
+                            "If you are using Plando Items (excluding early locations), then this is likely the cause.")
                     hint_text = "Inaccessible"
                 else:
                     while connection != ("Menu", None):
