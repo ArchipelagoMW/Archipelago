@@ -197,6 +197,8 @@ def set_rules(world: "MM2World") -> None:
             boss_damage = weapon_boss[boss]
             weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
                              boss_damage.items() if weapon_energy[weapon] > 0}
+            if boss_damage[8]:
+                boss_damage[8] = 1.75 * boss_damage[8]
             if any(boss_damage[i] > 0 for i in range(8)) and 8 in weapon_weight:
                 # We get exactly one use of Time Stopper during the rush
                 # So we want to make sure that use is absolutely needed
