@@ -99,7 +99,7 @@ Sent to clients when they connect to an Archipelago server.
 | hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                           |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                               |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                              |
-| datapackage_checksums | dict[str, str]                                | Checksum hash of the individual games' data packages the server will send. Used by newer clients to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents) for more information. |
+| datapackage_checksums | dict\[str, str\]                              | Checksum hash of the individual games' data packages the server will send. Used by newer clients to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents) for more information. |
 | seed_name             | str                                           | Uniquely identifying name of this generation                                                                                                                                                                           |
 | time                  | float                                         | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce.                                                                                                                |
 
@@ -153,7 +153,7 @@ Sent to clients when the connection handshake is successfully completed.
 | players           | list\[[NetworkPlayer](#NetworkPlayer)\]  | List denoting other players in the multiworld, whether connected or not.                                                                            |
 | missing_locations | list\[int\]                              | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things.                                               |
 | checked_locations | list\[int\]                              | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
-| slot_data         | dict\[str, any\]                         | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
+| slot_data         | Optional\[dict\[str, any\]\]             | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
 | slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | Maps each slot to a [NetworkSlot](#NetworkSlot) information.                                                                                        |
 | hint_points       | int                                      | Number of hint points that the current player has.                                                                                                  |
 
@@ -273,9 +273,9 @@ below but others may be added in the future.
 ### Retrieved
 Sent to clients as a response the a [Get](#Get) package.
 #### Arguments
-| Name | Type            | Notes                                                                                               |
-| ---- | --------------- | --------------------------------------------------------------------------------------------------- |
-| keys | dict\[str, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
+| Name | Type             | Notes                                                                                               |
+| ---- | ---------------- | --------------------------------------------------------------------------------------------------- |
+| keys | dict\[str, any\] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
 
 If a requested key was not present in the server's data, the associated value will be `null`.
 
@@ -641,7 +641,7 @@ An object representing static information about a slot.
 | name          | str                   | Player name                         |
 | game          | str                   | The game the player is playing      |
 | type          | [SlotType](#SlotType) | The type of slot this is.           |
-| group_members | list[int]             | only populated if `type` is `group` |
+| group_members | list\[int\]           | only populated if `type` is `group` |
 
 ### Permission
 An enumeration containing the possible command permission, for commands that may be restricted.
@@ -711,19 +711,19 @@ than any locally cached ones.
     ```
 
 #### Contents
-| Name  | Type                | Notes                                          |
-|-------|---------------------|------------------------------------------------|
-| games | dict[str, GameData] | Mapping of all Games and their respective data |
+| Name  | Type                  | Notes                                          |
+| ----- | --------------------- | ---------------------------------------------- |
+| games | dict\[str, GameData\] | Mapping of all Games and their respective data |
 
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of
 documentation.
 
-| Name                | Type           | Notes                                                 |
-|---------------------|----------------|-------------------------------------------------------|
-| item_name_to_id     | dict[str, int] | Mapping of all item names to their respective ID.     |
-| location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID. |
-| checksum            | str            | A checksum hash of this game's data.                  |
+| Name                | Type             | Notes                                                 |
+| ------------------- | ---------------- | ----------------------------------------------------- |
+| item_name_to_id     | dict\[str, int\] | Mapping of all item names to their respective ID.     |
+| location_name_to_id | dict\[str, int\] | Mapping of all location names to their respective ID. |
+| checksum            | str              | A checksum hash of this game's data.                  |
 
 ### Tags
 Tags are represented as a list of strings, the common client tags follow:
