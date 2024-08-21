@@ -19,7 +19,6 @@ integrating with Archipelago easier.
 | Game Maker + Studio 1.x | [gm-apclientpp](https://github.com/black-sliver/gm-apclientpp)                                     | For GM7, GM8 and GMS1.x, maybe older                                            |
 | GameMaker: Studio 2.x+  | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
 
-
 ## Archipelago Connection Handshake
 These steps should be followed in order to establish a gameplay connection with an Archipelago session.
 
@@ -123,7 +122,6 @@ the items in a player's run.
 * `auto-enabled`: Both of the above options together.
 * `disabled`: All collect modes disabled.
 * `goal`: Allows for manual use of collect command once a player completes their goal. (Disabled until goal completion)
-
 
 #### remaining
 Dictates what is allowed when it comes to a player querying the items remaining in their run.
@@ -275,9 +273,9 @@ below but others may be added in the future.
 ### Retrieved
 Sent to clients as a response the a [Get](#Get) package.
 #### Arguments
-| Name | Type             | Notes                                                                                               |
-| ---- | ---------------- | --------------------------------------------------------------------------------------------------- |
-| keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
+| Name | Type            | Notes                                                                                               |
+| ---- | --------------- | --------------------------------------------------------------------------------------------------- |
+| keys | dict\[str, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
 
 If a requested key was not present in the server's data, the associated value will be `null`.
 
@@ -515,7 +513,6 @@ An object representing information about a player. See also [NetworkSlot](#Netwo
 | slot  | int  | The slot of the player. Starts at `1`, and is unique for each player on a team. `0` is reserved for the server. |
 | alias | str  | The current alias of the player. The player can change this with the `!alias` command                           |
 | name  | str  | The initial name of the player, from when the game was generated.                                               |
-
 
 Example:
 ```json
