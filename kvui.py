@@ -5,8 +5,7 @@ import typing
 import re
 from collections import deque
 
-if __debug__:
-    assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
+assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
 
 if sys.platform == "win32":
     import ctypes
