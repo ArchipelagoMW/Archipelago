@@ -668,7 +668,7 @@ class DKC2StrictRules(DKC2Rules):
         super().set_dkc2_rules()
 
 
-class DKC2NormalRules(DKC2Rules):
+class DKC2LooseRules(DKC2Rules):
     def __init__(self, world: "DKC2World") -> None:
         super().__init__(world)
 

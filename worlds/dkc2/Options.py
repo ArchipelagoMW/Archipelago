@@ -23,14 +23,14 @@ class StartingKong(Choice):
     option_both = 2
     default = 0
 
-class LogicDifficulty(Choice):
+class Logic(Choice):
     """
     kual dificultad kieres
     """
-    display_name = "Logic Difficulty"
-    option_easy = 0
-    option_normal = 1
-    option_hard = 2
+    display_name = "Logic Setting"
+    option_strict = 0
+    option_loose = 1
+    option_expert = 2
     default = 1
 
 class KONGSanity(Toggle):
@@ -42,7 +42,7 @@ class KONGSanity(Toggle):
 
 class ShuffleLevels(Toggle):
     """
-    mueve niveles (no sirve)
+    mueve niveles
     """
     display_name = "Shuffle Levels"
 
@@ -52,6 +52,6 @@ class DKC2Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     starting_life_count: StartingLifeCount
     starting_kong: StartingKong
-    logic_difficulty: LogicDifficulty
+    logic: Logic
     kongsanity: KONGSanity
     shuffle_levels: ShuffleLevels

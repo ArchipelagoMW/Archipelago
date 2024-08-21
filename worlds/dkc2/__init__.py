@@ -14,10 +14,10 @@ from .Items import DKC2Item, ItemData, item_table, junk_table, item_groups
 from .Locations import DKC2Location, setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
-from .Options import DKC2Options, LogicDifficulty, StartingKong
+from .Options import DKC2Options, Logic, StartingKong
 from .Client import DKC2SNIClient
 from .Levels import generate_level_list, location_id_to_level_id
-from .Rules import DKC2StrictRules, DKC2NormalRules, DKC2ExpertRules
+from .Rules import DKC2StrictRules, DKC2LooseRules, DKC2ExpertRules
 from .Rom import patch_rom, DKC2ProcedurePatch, HASH_US, HASH_US_REV_1
 
 class DKC2Settings(settings.Group):
@@ -164,13 +164,13 @@ class DKC2World(World):
 
 
     def set_rules(self):
-        logic = self.options.logic_difficulty
-        if logic == LogicDifficulty.option_easy:
+        logic = self.options.logic
+        if logic == Logic.option_strict:
             DKC2StrictRules(self).set_dkc2_rules()
-        elif logic == LogicDifficulty.option_normal:
-            DKC2StrictRules(self).set_dkc2_rules()
-        elif logic == LogicDifficulty.option_hard:
-            DKC2StrictRules(self).set_dkc2_rules()
+        elif logic == Logic.option_loose:
+            DKC2LooseRules(self).set_dkc2_rules()
+        elif logic == Logic.option_expert:
+            DKC2ExpertRules(self).set_dkc2_rules()
         else:
             raise ValueError(f"Somehow you have a logic option that's currently invalid."
                              f" {logic} for {self.multiworld.get_player_name(self.player)}")
