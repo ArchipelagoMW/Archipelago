@@ -1,12 +1,11 @@
 import os
 
-from kivy.app import App
-from kivy.metrics import dp
-from kivy.uix.textinput import TextInput
-
 import Utils
 import typing
 from kvui import ContainerLayout, MainLayout, KivyJSONtoTextParser
+from kivy.app import App
+from kivy.metrics import dp
+from kivy.uix.textinput import TextInput
 from kivy.lang.builder import Builder
 from kivy.lang.parser import Parser
 from kivy.uix.button import Button
@@ -35,19 +34,34 @@ def hex_color_to_tuple(color: str) -> typing.Tuple[float, float, float, float]:
 
 
 default_colors: typing.Dict[str, str] = {
-        "white": "FFFFFF",
-        "black": "000000",
-        "red": "EE0000",
-        "green": "00FF7F",  # typically a location
-        "yellow": "FAFAD2",  # typically other slots/players
-        "blue": "6495ED",  # typically extra info (such as entrance)
-        "magenta": "EE00EE",  # typically your slot/player
-        "cyan": "00EEEE",  # typically regular item
-        "slateblue": "6D8BE8",  # typically useful item
-        "plum": "AF99EF",  # typically progression item
-        "salmon": "FA8072",  # typically trap item
-    }
+    "white": "FFFFFF",
+    "black": "000000",
+    "red": "EE0000",
+    "green": "00FF7F",
+    "yellow": "FAFAD2",
+    "blue": "6495ED",
+    "magenta": "EE00EE",
+    "cyan": "00EEEE",
+    "slateblue": "6D8BE8",
+    "plum": "AF99EF",
+    "salmon": "FA8072",
+    "orange": "FF7700",
+}
 
+color_usages: typing.Dict[str, str] = {
+    "white": "Text Color",
+    "black": "Black",
+    "red": "Red/Not Found",
+    "green": "Location/Found",
+    "yellow": "Other Players",
+    "blue": "Entrance",
+    "magenta": "Current Player",
+    "cyan": "Filler Item",
+    "slateblue": "Useful Item",
+    "plum": "Progression Item",
+    "salmon": "Trap Item",
+    "orange": "Command Echo",
+}
 
 class ColorPickerApp(App):
     base_title: str = "Archipelago Color Picker"
@@ -103,7 +117,8 @@ class ColorPickerApp(App):
         self.button_layout.padding = (10, 5)
 
         for color in self.text_colors:
-            new_button = Button(text=color.title(), background_color=hex_color_to_tuple(self.text_colors[color]))
+            new_button = Button(text=color_usages[color], background_color=hex_color_to_tuple(self.text_colors[color]))
+            new_button.real_name = color
             new_button.bind(on_release=lambda button: self.set_color(button))
             self.buttons[color] = new_button
             self.button_layout.add_widget(new_button)
@@ -131,11 +146,11 @@ class ColorPickerApp(App):
         self.parse_preset_kv(path)
 
     def set_color(self, button: Button):
-        self.current_color = button.text.lower()
+        self.current_color = button.real_name.lower()
         self.color_picker.set_color(hex_color_to_tuple(self.text_colors[self.current_color]))
 
     def get_color(self, button):
-        return hex_color_to_tuple(self.text_colors[button.text.lower()])
+        return hex_color_to_tuple(self.text_colors[button.real_name.lower()])
 
     def on_color(self, instance, value):
         self.text_colors[self.current_color] = instance.hex_color[1:-2]  # formatted usually #RRGGBBAA
@@ -187,7 +202,10 @@ class ColorPickerApp(App):
                 name = preset_name.text
                 if name:
                     popup.dismiss()
-                    file_path = os.path.join(Utils.local_path("data", "presets", f"{name}.kv"))
+                    file_name = f"{name}.kv" if not name.endswith(".kv") else name
+                    file_path = os.path.join(Utils.local_path("data", "presets", file_name))
+                    if not os.path.exists(os.path.dirname(file_path)):
+                        os.mkdir(os.path.dirname(file_path))
                     self.write_color_file(open(file_path, 'w'), self.text_colors)
                     self.populate_dropdown(self.preset_dropdown)
                     self.preset_dropdown.select(file_path)
