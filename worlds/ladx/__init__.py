@@ -512,5 +512,5 @@ class LinksAwakeningWorld(World):
 
     def fill_slot_data(self) -> dict:
         return {
-            "death_link": self.options.death_link
+            "death_link": self.options.death_link.value
         }
