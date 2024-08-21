@@ -128,6 +128,8 @@ class EntranceRando(TextChoice):
     
     If you set this option's value to a string, it will be used as a custom seed.
     Every player who uses the same custom seed will have the same entrances, choosing the most restrictive settings among these players for the purpose of pairing entrances.
+
+    Note: Entrance Rando does not play nicely with Plando Items. Use them at your own risk.
     """
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
