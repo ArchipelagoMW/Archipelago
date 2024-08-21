@@ -7,12 +7,13 @@ Description: Unit test used to test accessibility of locations with and without 
 from . import AquariaTestBase
 from ..Items import ItemNames
 from ..Locations import AquariaLocationNames
+from ..Options import TurtleRandomizer
 
 
 class FishFormAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the fish form"""
     options = {
-        "turtle_randomizer": 1,
+        "turtle_randomizer": TurtleRandomizer.option_all,
     }
 
     def test_fish_form_location(self) -> None:
