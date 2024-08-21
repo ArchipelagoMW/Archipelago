@@ -78,7 +78,7 @@ class CivVILocation(Location):
     game: str = "Civilization VI"
     location_type: CivVICheckType
 
-    def __init__(self, player: int, name: str = '', address: Optional[int] = None, parent: Optional[Region] = None):
+    def __init__(self, player: int, name: str = "", address: Optional[int] = None, parent: Optional[Region] = None):
         super().__init__(player, name, address, parent)
         if name.split("_")[0] == "TECH":
             self.location_type = CivVICheckType.TECH
@@ -142,28 +142,28 @@ def generate_era_location_table() -> Dict[EraType, Dict[str, CivVILocationData]]
     id_base = 0
 # Techs
     for data in new_techs:
-        era_type = data['EraType']
+        era_type = data["EraType"]
         if era_type not in era_locations:
             era_locations[era_type] = {}
 
         prereq_data = [
-            item for item in new_tech_prereqs if item['Technology'] == data['Type']]
+            item for item in new_tech_prereqs if item["Technology"] == data["Type"]]
 
         era_locations[era_type][data["Type"]] = CivVILocationData(
-            data["Type"], data['Cost'], data['UITreeRow'], id_base, era_type, CivVICheckType.TECH, prereq_data)
+            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.TECH, prereq_data)
         id_base += 1
 # Civics
     new_civic_prereqs = get_new_civic_prereqs_data()
     new_civics = get_new_civics_data()
 
     for data in new_civics:
-        era_type = data['EraType']
+        era_type = data["EraType"]
         if era_type not in era_locations:
             era_locations[era_type] = {}
         prereq_data = [
-            item for item in new_civic_prereqs if item['Civic'] == data['Type']]
+            item for item in new_civic_prereqs if item["Civic"] == data["Type"]]
         era_locations[era_type][data["Type"]] = CivVILocationData(
-            data["Type"], data['Cost'], data['UITreeRow'], id_base, era_type, CivVICheckType.CIVIC, prereq_data)
+            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.CIVIC, prereq_data)
         id_base += 1
 
 # Eras

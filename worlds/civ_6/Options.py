@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, StartInventory, Toggle
 
 
 class ProgressionStyle(Choice):
@@ -25,7 +25,6 @@ class ShuffleGoodyHuts(DefaultOnToggle):
 class BoostSanity(Toggle):
     """Boosts for Civics/Techs are location checks. Boosts can now be triggered even if the item has already been researched. If it is dependent upon a unit that is now obsolete, you can click toggle on/off the relevant tech in the tech tree."""
     display_name = "Boostsanity"
-
 
 
 class ExcludeMissableBoosts(Toggle):
@@ -66,6 +65,7 @@ class InGameFlagProgressionItems(DefaultOnToggle):
     """If enabled, an advisor icon will be added to any location that contains a progression item"""
     display_name = "Advisor Indicates Progression Items"
 
+
 class DeathLinkEffect(Choice):
     """What happens when a unit dies. Default is Unit Killed.\n
     Faith, and Gold will be decreased by the amount specified in 'Death Link Effect Percent'. \n
@@ -89,8 +89,19 @@ class DeathLinkEffectPercent(Range):
     range_end = 100
 
 
+class StartInventoryPool(StartInventory):
+    """Start with these items and don't place them in the world.
+
+    The game decides what the replacement items will be.
+    """
+    verify_item_name = True
+    display_name = "Start Inventory from Pool"
+    rich_text_doc = True
+
+
 @dataclass
 class CivVIOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     progression_style: ProgressionStyle
     shuffle_goody_hut_rewards: ShuffleGoodyHuts
     boostsanity: BoostSanity

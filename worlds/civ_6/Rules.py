@@ -12,12 +12,6 @@ if TYPE_CHECKING:
     from . import CivVIWorld
 
 
-def generate_has_required_items_lambda(prereqs: List[str], required_count: int, player: int) -> Callable[[CollectionState, int], bool]:
-    def has_required_items_lambda(state: CollectionState):
-        return has_required_items(state, prereqs, required_count, player)
-    return has_required_items_lambda
-
-
 def create_boost_rules(world: 'CivVIWorld'):
     boost_data_list = get_boosts_data()
     boost_locations = [location for location in world.location_table.values() if location.location_type == CivVICheckType.BOOST]
@@ -28,9 +22,7 @@ def create_boost_rules(world: 'CivVIWorld'):
         if not boost_data or boost_data.PrereqRequiredCount == 0:
             continue
 
-        set_rule(world_location,
-                 generate_has_required_items_lambda(boost_data.Prereq, boost_data.PrereqRequiredCount, world.player)
-                 )
+        set_rule(world_location, lambda state, prereqs=boost_data.Prereq, required_count=boost_data.PrereqRequiredCount: has_required_items(state, prereqs, required_count, world.player))
 
 
 def has_required_items(state: CollectionState, prereqs: List[str], required_count: int, player: int) -> bool:

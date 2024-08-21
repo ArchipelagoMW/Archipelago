@@ -1,6 +1,6 @@
 import math
 import os
-from typing import Dict, Optional, Set
+from typing import Any, Dict, Optional, Set
 
 from .Data import get_boosts_data
 
@@ -76,7 +76,7 @@ class CivVIWorld(World):
     def get_filler_item_name(self) -> str:
         return get_random_filler_by_rarity(self, FillerItemRarity.COMMON, self.item_table).name
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         create_regions(self, self.options, self.player)
 
     def set_rules(self) -> None:
@@ -92,7 +92,7 @@ class CivVIWorld(World):
 
         return CivVIItem(item, self.player, classification)
 
-    def create_items(self):
+    def create_items(self) -> None:
         progressive_era_item = None
         for item_name, data in self.item_table.items():
             # Don't add progressive items to the itempool here
@@ -145,7 +145,7 @@ class CivVIWorld(World):
                     get_random_filler_by_rarity(self, rarity, self.item_table).name)]
                 total_created += 1
 
-    def post_fill(self):
+    def post_fill(self) -> None:
         if self.options.pre_hint_items == "none":
             return
 
@@ -167,7 +167,7 @@ class CivVIWorld(World):
 
             start_location_hints.add(location_name)
 
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "progression_style": self.options.progression_style,
             "death_link": self.options.death_link,

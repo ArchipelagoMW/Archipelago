@@ -29,7 +29,7 @@ class CivVICommandProcessor(ClientCommandProcessor):
             Utils.async_start(self.ctx.update_death_link(
                 self.ctx.death_link_enabled), name="Update Deathlink")
             self.ctx.logger.info(
-                f"Deathlink is now {'enabled' if self.ctx.death_link_enabled else 'disabled'}")
+                f"Deathlink is now {"enabled" if self.ctx.death_link_enabled else "disabled"}")
 
     def _cmd_resync(self):
         """Resends all items to client, and has client resend all locations to server. This can take up to a minute if the player has received a lot of items"""
@@ -101,7 +101,7 @@ class CivVIContext(CommonContext):
         if text:
             message = text
         else:
-            message = f"Received from {data['source']}"
+            message = f"Received from {data["source"]}"
         self.death_link_message = message
         self.received_death_link = True
 
@@ -284,7 +284,7 @@ def main(connect=None, password=None, name=None):
 
     async def _main(connect, password, name):
         parser = get_base_parser()
-        parser.add_argument('apcivvi_file', default="", type=str, nargs='?', help="Path to apcivvi file")
+        parser.add_argument("apcivvi_file", default="", type=str, nargs="?", help="Path to apcivvi file")
         args = parser.parse_args()
         ctx = CivVIContext(connect, password, args.apcivvi_file)
 
@@ -295,7 +295,7 @@ def main(connect=None, password=None, name=None):
             if not os.path.exists(target_path):
                 os.makedirs(target_path, exist_ok=True)
                 logger.info("Extracting mod files to %s", target_path)
-                with zipfile.ZipFile(args.apcivvi_file, 'r') as zip_ref:
+                with zipfile.ZipFile(args.apcivvi_file, "r") as zip_ref:
                     for member in zip_ref.namelist():
                         zip_ref.extract(member, target_path)
 
@@ -327,10 +327,10 @@ def main(connect=None, password=None, name=None):
 
 def debug_main():
     parser = get_base_parser()
-    parser.add_argument('apcivvi_file', default="", type=str, nargs='?', help="Path to apcivvi file")
-    parser.add_argument('--name', default=None,
+    parser.add_argument("apcivvi_file", default="", type=str, nargs="?", help="Path to apcivvi file")
+    parser.add_argument("--name", default=None,
                         help="Slot Name to connect as.")
-    parser.add_argument('--debug', default=None,
+    parser.add_argument("--debug", default=None,
                         help="debug mode, additional logging")
     args = parser.parse_args()
     if args.debug:

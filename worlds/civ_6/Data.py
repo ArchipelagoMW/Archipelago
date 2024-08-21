@@ -33,11 +33,11 @@ def get_boosts_data() -> List[CivVIBoostData]:
     boosts = []
     for boost in boosts_json:
         boosts.append(CivVIBoostData(
-            Type=boost['Type'],
-            EraType=boost['EraType'],
-            Prereq=boost['Prereq'],
-            PrereqRequiredCount=boost['PrereqRequiredCount'],
-            Classification=boost['Classification']
+            Type=boost["Type"],
+            EraType=boost["EraType"],
+            Prereq=boost["Prereq"],
+            PrereqRequiredCount=boost["PrereqRequiredCount"],
+            Classification=boost["Classification"]
         ))
 
     return boosts

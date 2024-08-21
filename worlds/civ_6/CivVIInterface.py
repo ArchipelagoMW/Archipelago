@@ -5,11 +5,11 @@ from typing import List
 from .Items import CivVIItemData
 from .TunerClient import TunerClient, TunerConnectionException, TunerTimeoutException
 
+
 class ConnectionState(Enum):
     DISCONNECTED = 0
     IN_GAME = 1
     IN_MENU = 2
-
 
 
 class CivVIInterface:
@@ -28,7 +28,7 @@ class CivVIInterface:
             if result == "false":
                 return ConnectionState.IN_MENU
             self.last_error = None
-            return  ConnectionState.IN_GAME
+            return ConnectionState.IN_GAME
         except TunerTimeoutException:
             self.print_connection_error(
                 "Not connected to game, waiting for connection to be available")
@@ -55,7 +55,7 @@ class CivVIInterface:
         if isinstance(item.civ_vi_id, str):
             item_id = f'"{item.civ_vi_id}"'
         else:
-          item_id = item.civ_vi_id
+            item_id = item.civ_vi_id
 
         command = f"HandleReceiveItem({item_id}, \"{item.name}\", \"{item.item_type.value}\", \"{sender}\", {amount})"
         await self.tuner.send_game_command(command)
