@@ -39,7 +39,6 @@ class LightAccessTest(AquariaTestBase):
             "Abyss right area, bulb in the middle path",
             "Abyss right area, bulb behind the rock in the middle path",
             "Abyss right area, bulb in the left green room",
-            "Abyss right area, Transturtle",
             "Ice Cave, bulb in the room to the right",
             "Ice Cave, first bulb in the top exit room",
             "Ice Cave, second bulb in the top exit room",

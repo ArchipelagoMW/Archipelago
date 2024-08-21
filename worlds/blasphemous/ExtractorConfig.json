@@ -1,0 +1,19 @@
+{
+	"type": "WorldDefinition",
+	"configuration": "./output/StringWorldDefinition.json",
+	"emptyRegionsToKeep": [
+		"D17Z01S01",
+		"D01Z02S01",
+		"D02Z03S09",
+		"D03Z03S11",
+		"D04Z03S01",
+		"D06Z01S09",
+		"D20Z02S09",
+		"D09Z01S09[Cell24]",
+		"D09Z01S08[Cell7]",
+		"D09Z01S08[Cell18]",
+		"D09BZ01S01[Cell24]",
+		"D09BZ01S01[Cell17]",
+		"D09BZ01S01[Cell19]"
+	]
+}
