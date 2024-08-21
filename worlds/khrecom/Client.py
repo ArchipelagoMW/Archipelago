@@ -38,7 +38,6 @@ class KHRECOMContext(CommonContext):
     def __init__(self, server_address, password):
         super(KHRECOMContext, self).__init__(server_address, password)
         self.send_index: int = 0
-        self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
@@ -135,12 +134,6 @@ class KHRECOMContext(CommonContext):
 async def game_watcher(ctx: KHRECOMContext):
     from .Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
-        if ctx.syncing == True:
-            sync_msg = [{'cmd': 'Sync'}]
-            if ctx.locations_checked:
-                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-            await ctx.send_msgs(sync_msg)
-            ctx.syncing = False
         sending = []
         victory = False
         for root, dirs, files in os.walk(ctx.game_communication_path):
