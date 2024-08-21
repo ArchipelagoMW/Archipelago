@@ -178,9 +178,9 @@ class CivVIWorld(World):
         }
 
     def generate_output(self, output_directory: str):
-        mod_name = f"AP-{self.multiworld.get_file_safe_player_name(self.player)}"
+        mod_name = self.multiworld.get_out_file_name_base(self.player)
         mod_dir = os.path.join(
-            output_directory, mod_name + "_" + self.multiworld.seed_name)
+            output_directory, mod_name)
         mod_files = {
             f"NewItems.xml": generate_new_items(self),
             f"InitOptions.lua": generate_setup_file(self),
