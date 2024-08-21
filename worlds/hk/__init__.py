@@ -5,6 +5,7 @@ import typing
 from copy import deepcopy
 import itertools
 import operator
+from collections import defaultdict, Counter
 
 logger = logging.getLogger("Hollow Knight")
 
@@ -12,12 +13,12 @@ from .Items import item_table, lookup_type_to_names, item_name_groups
 from .Regions import create_regions
 from .Rules import set_rules, cost_terms, _hk_can_beat_thk, _hk_siblings_ending, _hk_can_beat_radiance
 from .Options import hollow_knight_options, hollow_knight_randomize_options, Goal, WhitePalace, CostSanity, \
-    shop_to_option, HKOptions
+    shop_to_option, HKOptions, GrubHuntGoal
 from .ExtractedData import locations, starts, multi_locations, location_to_region_lookup, \
     event_names, item_effects, connectors, one_ways, vanilla_shop_costs, vanilla_location_costs
 from .Charms import names as charm_names
 
-from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification
+from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, LogicMixin, WebWorld
 
 path_of_pain_locations = {
@@ -155,6 +156,7 @@ class HKWorld(World):
     ranges: typing.Dict[str, typing.Tuple[int, int]]
     charm_costs: typing.List[int]
     cached_filler_items = {}
+    grub_count: int
 
     def __init__(self, multiworld, player):
         super(HKWorld, self).__init__(multiworld, player)
@@ -164,6 +166,7 @@ class HKWorld(World):
         self.ranges = {}
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
+        self.grub_count = 0
 
     def generate_early(self):
         options = self.options
@@ -201,7 +204,7 @@ class HKWorld(World):
 
         # check for any goal that godhome events are relevant to
         all_event_names = event_names.copy()
-        if self.options.Goal in [Goal.option_godhome, Goal.option_godhome_flower]:
+        if self.options.Goal in [Goal.option_godhome, Goal.option_godhome_flower, Goal.option_any]:
             from .GodhomeData import godhome_event_names
             all_event_names.update(set(godhome_event_names))
 
@@ -441,11 +444,66 @@ class HKWorld(World):
             multiworld.completion_condition[player] = lambda state: state.count("Defeated_Pantheon_5", player)
         elif goal == Goal.option_godhome_flower:
             multiworld.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
+        elif goal == Goal.option_grub_hunt:
+            pass  # will set in stage_pre_fill()
         else:
             # Any goal
-            multiworld.completion_condition[player] = lambda state: _hk_can_beat_thk(state, player) or _hk_can_beat_radiance(state, player)
+            multiworld.completion_condition[player] = lambda state: _hk_siblings_ending(state, player) and \
+                _hk_can_beat_radiance(state, player) and state.count("Godhome_Flower_Quest", player)
 
         set_rules(self)
+
+    @classmethod
+    def stage_pre_fill(cls, multiworld: "MultiWorld"):
+        def set_goal(player, grub_rule: typing.Callable[[CollectionState], bool]):
+            world = multiworld.worlds[player]
+
+            if world.options.Goal == "grub_hunt":
+                multiworld.completion_condition[player] = grub_rule
+            else:
+                old_rule = multiworld.completion_condition[player]
+                multiworld.completion_condition[player] = lambda state: old_rule(state) and grub_rule(state)
+
+        worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.Goal in ["any", "grub_hunt"]]
+        if worlds:
+            grubs = [item for item in multiworld.get_items() if item.name == "Grub"]
+        all_grub_players = [world.player for world in worlds if world.options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]]
+
+        if all_grub_players:
+            group_lookup = defaultdict(set)
+            for group_id, group in multiworld.groups.items():
+                for player in group["players"]:
+                    group_lookup[group_id].add(player)
+
+            grub_count_per_player = Counter()
+            per_player_grubs_per_player = defaultdict(Counter)
+
+            for grub in grubs:
+                player = grub.player
+                if player in group_lookup:
+                    for real_player in group_lookup[player]:
+                        per_player_grubs_per_player[real_player][player] += 1
+                else:
+                    per_player_grubs_per_player[player][player] += 1
+
+                if grub.location and grub.location.player in group_lookup.keys():
+                    for real_player in group_lookup[grub.location.player]:
+                        grub_count_per_player[real_player] += 1
+                else:
+                    grub_count_per_player[player] += 1
+
+            for player, count in grub_count_per_player.items():
+                multiworld.worlds[player].grub_count = count
+
+            for player, grub_player_count in per_player_grubs_per_player.items():
+                if player in all_grub_players:
+                    set_goal(player, lambda state, g=grub_player_count: all(state.has("Grub", owner, count) for owner, count in g.items()))
+
+        for world in worlds:
+            if world.player not in all_grub_players:
+                world.grub_count = world.options.GrubHuntGoal.value
+                player = world.player
+                set_goal(player, lambda state, p=player, c=world.grub_count: state.has("Grub", p, c))
 
     def fill_slot_data(self):
         slot_data = {}
@@ -483,6 +541,8 @@ class HKWorld(World):
         slot_data["location_costs"] = location_costs
 
         slot_data["notch_costs"] = self.charm_costs
+
+        slot_data["grub_count"] = self.grub_count
 
         return slot_data
 
