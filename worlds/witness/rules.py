@@ -10,7 +10,6 @@ from worlds.generic.Rules import CollectionRule, set_rule
 
 from .data import static_logic as static_witness_logic
 from .data.utils import WitnessRule
-from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
@@ -31,40 +30,35 @@ laser_hexes = [
 ]
 
 
-def _has_laser(laser_hex: str, world: "WitnessWorld", player: int, redirect_required: bool) -> CollectionRule:
-    if laser_hex == "0x012FB" and redirect_required:
-        return lambda state: (
-            _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.player_locations)(state)
-            and state.has("Desert Laser Redirection", player)
-        )
+def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
+    required = world.panel_hunt_required_count
+    player = world.player
+    return lambda state: state.has("+1 Panel Hunt", player, required)
 
-    return _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.player_locations)
+
+def _has_laser(laser_hex: str, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
+    player = world.player
+    laser_name = static_witness_logic.ENTITIES_BY_HEX[laser_hex]["checkName"]
+
+    # Workaround for intentional naming inconsistency
+    if laser_name == "Symmetry Island Laser":
+        laser_name = "Symmetry Laser"
+
+    if laser_hex == "0x012FB" and redirect_required:
+        return lambda state: state.has_all([f"+1 Laser ({laser_name})", "Desert Laser Redirection"], player)
+
+    return lambda state: state.has(f"+1 Laser ({laser_name})", player)
 
 
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
     laser_lambdas = []
 
     for laser_hex in laser_hexes:
-        has_laser_lambda = _has_laser(laser_hex, world, world.player, redirect_required)
+        has_laser_lambda = _has_laser(laser_hex, world, redirect_required)
 
         laser_lambdas.append(has_laser_lambda)
 
     return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) >= amount
-
-
-def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic,
-                     player_locations: WitnessPlayerLocations) -> CollectionRule:
-    """
-    Determines whether a panel can be solved
-    """
-
-    panel_obj = player_logic.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]
-    entity_name = panel_obj["checkName"]
-
-    if entity_name + " Solved" in player_locations.EVENT_LOCATION_TABLE:
-        return lambda state: state.has(player_logic.EVENT_ITEM_PAIRS[entity_name + " Solved"], player)
-
-    return make_lambda(panel, world)
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
@@ -202,8 +196,9 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     )
 
 
-def _has_item(item: str, world: "WitnessWorld", player: int,
-              player_logic: WitnessPlayerLogic, player_locations: WitnessPlayerLocations) -> CollectionRule:
+def _has_item(item: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic) -> CollectionRule:
+    assert item not in static_witness_logic.ENTITIES_BY_HEX, "Requirements can no longer contain entity hexes directly."
+
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
         return region.can_reach
@@ -219,12 +214,13 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
     if item == "11 Lasers + Redirect":
         laser_req = world.options.challenge_lasers.value
         return _has_lasers(laser_req, world, True)
+    if item == "Entity Hunt":
+        # Right now, panel hunt is the only type of entity hunt. This may need to be changed later
+        return _can_do_panel_hunt(world)
     if item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
     if item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
-    if item in player_logic.USED_EVENT_NAMES_BY_HEX:
-        return _can_solve_panel(item, world, player, player_logic, player_locations)
 
     prog_item = static_witness_logic.get_parent_progressive_item(item)
     return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
@@ -237,7 +233,7 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
     """
 
     lambda_conversion = [
-        [_has_item(item, world, world.player, world.player_logic, world.player_locations) for item in subset]
+        [_has_item(item, world, world.player, world.player_logic) for item in subset]
         for subset in requirements
     ]
 
@@ -265,7 +261,8 @@ def set_rules(world: "WitnessWorld") -> None:
         real_location = location
 
         if location in world.player_locations.EVENT_LOCATION_TABLE:
-            real_location = location[:-7]
+            entity_hex = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
 
         associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
         entity_hex = associated_entity["entity_hex"]

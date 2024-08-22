@@ -430,7 +430,7 @@ class MultiWorld():
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
                 subworld.collect(ret, item)
-        ret.sweep_for_events()
+        ret.sweep_for_advancements()
 
         if use_cache:
             self._all_state = ret
@@ -545,7 +545,7 @@ class MultiWorld():
             if self.has_beaten_game(state):
                 return True
 
-        for _ in state.sweep_for_events(yield_each_sweep=True, checked_locations=state.locations_checked):
+        for _ in state.sweep_for_advancements(yield_each_sweep=True, checked_locations=state.locations_checked):
             if self.has_beaten_game(state):
                 return True
 
@@ -644,7 +644,7 @@ class CollectionState():
     multiworld: MultiWorld
     reachable_regions: Dict[int, Set[Region]]
     blocked_connections: Dict[int, Set[Entrance]]
-    events: Set[Location]
+    advancements: Set[Location]
     path: Dict[Union[Region, Entrance], PathValue]
     locations_checked: Set[Location]
     stale: Dict[int, bool]
@@ -656,7 +656,7 @@ class CollectionState():
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
         self.blocked_connections = {player: set() for player in parent.get_all_ids()}
-        self.events = set()
+        self.advancements = set()
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in parent.get_all_ids()}
@@ -705,7 +705,7 @@ class CollectionState():
                                  self.reachable_regions.items()}
         ret.blocked_connections = {player: entrance_set.copy() for player, entrance_set in
                                    self.blocked_connections.items()}
-        ret.events = self.events.copy()
+        ret.advancements = self.advancements.copy()
         ret.path = self.path.copy()
         ret.locations_checked = self.locations_checked.copy()
         for function in self.additional_copy_functions:
@@ -737,11 +737,16 @@ class CollectionState():
     def can_reach_region(self, spot: str, player: int) -> bool:
         return self.multiworld.get_region(spot, player).can_reach(self)
 
-    def _sweep_for_events_impl(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
-                               ) -> Iterator[None]:
+    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
+        Utils.deprecate("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
+                        "Please switch over to sweep_for_advancements.")
+        return self.sweep_for_advancements(locations)
+
+    def _sweep_for_advancements_impl(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
+                                     ) -> Iterator[None]:
         """
-        The implementation for sweep_for_events is separated here because it returns a generator due to the use of a
-        yield statement.
+        The implementation for sweep_for_advancements is separated here because it returns a generator due to the use
+        of a yield statement.
         """
         all_players = {player for player, _ in events_per_player}
         players_to_check = all_players
@@ -781,7 +786,7 @@ class CollectionState():
 
                 # Collect the items from the reachable locations.
                 for event in reachable_locations:
-                    self.events.add(event)
+                    self.advancements.add(event)
                     item = event.item
                     assert isinstance(item, Item), "tried to collect Event with no Item"
                     if self.collect(item, True, event):
@@ -804,8 +809,8 @@ class CollectionState():
             if yield_each_sweep:
                 yield
 
-    def sweep_for_events(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
-                         checked_locations: Optional[Set[Location]] = None) -> Optional[Iterator[None]]:
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
+                               checked_locations: Optional[Set[Location]] = None) -> Optional[Iterator[None]]:
         """
         Sweep through the locations that contain uncollected advancement items, collecting the items into the state
         until there are no more reachable locations that contain uncollected advancement items.
@@ -813,10 +818,10 @@ class CollectionState():
         :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
         :param yield_each_sweep: When True, return a generator that yields at the end of each sweep iteration.
         :param checked_locations: Optional override of locations to filter out from the locations argument, defaults to
-        self.events when None.
+        self.advancements when None.
         """
         if checked_locations is None:
-            checked_locations = self.events
+            checked_locations = self.advancements
 
         # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
         # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
@@ -841,11 +846,11 @@ class CollectionState():
 
         if yield_each_sweep:
             # Return a generator that will yield at the end of each sweep iteration.
-            return self._sweep_for_events_impl(events_per_player, True)
+            return self._sweep_for_advancements_impl(events_per_player, True)
         else:
             # Create the generator, but tell it not to yield anything, so it will run to completion in zero iterations
             # once started, then start and exhaust the generator by attempting to iterate it.
-            for _ in self._sweep_for_events_impl(events_per_player, False):
+            for _ in self._sweep_for_advancements_impl(events_per_player, False):
                 assert False, "Generator yielded when it should have run to completion without yielding"
             return None
 
@@ -951,7 +956,7 @@ class CollectionState():
         self.stale[item.player] = True
 
         if changed and not prevent_sweep:
-            self.sweep_for_events()
+            self.sweep_for_advancements()
 
         return changed
 
