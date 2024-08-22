@@ -108,8 +108,7 @@ class WitnessPlayerLogic:
         self.EVENT_ITEM_PAIRS: Dict[str, Tuple[str, str]] = {}
         self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
         self.DISABLE_EVERYTHING_BEHIND: Set[str] = set()
-        self.PRECOMPLETED_LOCATIONS: Set[str] = set()
-        self.EXCLUDED_LOCATIONS: Set[str] = set()
+        self.EXCLUDED_ENTITIES: Set[str] = set()
         self.ADDED_CHECKS: Set[str] = set()
         self.VICTORY_LOCATION = "0x0356B"
 
@@ -659,7 +658,7 @@ class WitnessPlayerLogic:
                 self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
             elif loc_obj["entityType"] == "Panel":
-                self.EXCLUDED_LOCATIONS.add(loc_obj["entity_hex"])
+                self.EXCLUDED_ENTITIES.add(loc_obj["entity_hex"])
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
