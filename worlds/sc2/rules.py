@@ -228,11 +228,7 @@ class SC2Logic:
         """
         return (
             self.morph_impaler_or_lurker(state)
-            or state.has(item_names.ABERRATION, self.player)
-            or (
-                state.has(item_names.MUTALISK, self.player)
-                and state.has_any({item_names.MUTALISK_SUNDERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE, item_names.MUTALISK_SEVERING_GLAIVE}, self.player)
-            )
+            or state.has_any({item_names.ABERRATION, item_names.MUTALISK}, self.player)
             or self.advanced_tactics
             and (
                 state.has_all({item_names.ZERGLING_BANELING_ASPECT, item_names.BANELING_CORROSIVE_ACID}, self.player)
