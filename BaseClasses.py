@@ -757,7 +757,7 @@ class CollectionState():
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
         Utils.deprecate("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
                         "Please switch over to sweep_for_advancements.")
-        self.sweep_for_advancements(locations)
+        return self.sweep_for_advancements(locations)
 
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
