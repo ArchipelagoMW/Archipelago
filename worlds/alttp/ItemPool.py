@@ -682,7 +682,7 @@ def get_pool_core(world, player: int):
     if 'triforce_hunt' in goal:
 
         if world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_extra:
-            treasure_hunt_total = (world.triforce_pieces_available[player].value
+            treasure_hunt_total = (world.triforce_pieces_required[player].value
                                    + world.triforce_pieces_extra[player].value)
         elif world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_percentage:
             percentage = float(world.triforce_pieces_percentage[player].value) / 100
