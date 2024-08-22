@@ -288,7 +288,9 @@ def generateRom(args, world: "LinksAwakeningWorld"):
 
         hint = f"{name} {location.item} is at {location_name}"
         if location.player != world.player:
-            hint += f" in {world.multiworld.player_name[location.player]}'s world"
+            # filter out { and } since they cause issues with string.format later on
+            player_name = world.multiworld.player_name[location.player].replace("{", "").replace("}", "")
+            hint += f" in {player_name}'s world"
 
         # Cap hint size at 85
         # Realistically we could go bigger but let's be safe instead
