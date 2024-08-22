@@ -293,13 +293,11 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
-            excluded = self.multiworld.worlds[self.player].options.exclude_locations.value
             state = self.multiworld.get_all_state(False)
             for location in self.multiworld.get_locations():
-                if location.name not in excluded:
-                    with self.subTest("Location should be reached", location=location.name):
-                        reachable = location.can_reach(state)
-                        self.assertTrue(reachable, f"{location.name} unreachable")
+                with self.subTest("Location should be reached", location=location.name):
+                    reachable = location.can_reach(state)
+                    self.assertTrue(reachable, f"{location.name} unreachable")
             with self.subTest("Beatable"):
                 self.multiworld.state = state
                 self.assertBeatable(True)

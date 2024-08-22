@@ -81,6 +81,9 @@
 # Kirby's Dream Land 3
 /worlds/kdl3/ @Silvris
 
+# Kingdom Hearts
+/worlds/kh1/ @gaithern
+
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
 
@@ -105,6 +108,9 @@
 
 # Minecraft
 /worlds/minecraft/ @KonoTyran @espeon65536
+
+# Mega Man 2
+/worlds/mm2/ @Silvris
 
 # MegaMan Battle Network 3
 /worlds/mmbn3/ @digiholic
@@ -198,6 +204,9 @@
 
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
+
+# Yacht Dice
+/worlds/yachtdice/ @spinerak
 
 # Yoshi's Island
 /worlds/yoshisisland/ @PinkSwitch
