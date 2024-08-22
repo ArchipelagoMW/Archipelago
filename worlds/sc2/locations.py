@@ -419,6 +419,33 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.terran_common_unit(state)
                 and (logic.marine_medic_upgrade(state) or adv_tactics))
         ),
+        make_location_data(SC2Mission.THE_DIG.mission_name, "Northwestern Protoss Base", SC2WOL_LOC_ID_OFFSET + 909, LocationType.MASTERY,
+            lambda state: (
+                logic.terran_basic_anti_air(state)
+                and logic.terran_defense_rating(state, False, True) >= 8
+                and logic.terran_defense_rating(state, False, False) >= 6
+                and logic.terran_common_unit(state)
+                and (logic.marine_medic_upgrade(state) or adv_tactics)
+                and (logic.terran_base_trasher(state) or state.has(item_names.COMMAND_CENTER_SCANNER_SWEEP, player)))
+        ),
+        make_location_data(SC2Mission.THE_DIG.mission_name, "Northeastern Protoss Base", SC2WOL_LOC_ID_OFFSET + 910, LocationType.MASTERY,
+            lambda state: (
+                logic.terran_basic_anti_air(state)
+                and logic.terran_defense_rating(state, False, True) >= 8
+                and logic.terran_defense_rating(state, False, False) >= 6
+                and logic.terran_common_unit(state)
+                and (logic.marine_medic_upgrade(state) or adv_tactics)
+                and (logic.terran_base_trasher(state) or state.has(item_names.COMMAND_CENTER_SCANNER_SWEEP, player)))
+        ),
+        make_location_data(SC2Mission.THE_DIG.mission_name, "Eastern Protoss Base", SC2WOL_LOC_ID_OFFSET + 911, LocationType.MASTERY,
+            lambda state: (
+                logic.terran_basic_anti_air(state)
+                and logic.terran_defense_rating(state, False, True) >= 8
+                and logic.terran_defense_rating(state, False, False) >= 6
+                and logic.terran_common_unit(state)
+                and (logic.marine_medic_upgrade(state) or adv_tactics)
+                and (logic.terran_base_trasher(state) or state.has(item_names.COMMAND_CENTER_SCANNER_SWEEP, player)))
+        ),
         make_location_data(SC2Mission.THE_MOEBIUS_FACTOR.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
             lambda state: (
                 logic.terran_basic_anti_air(state)

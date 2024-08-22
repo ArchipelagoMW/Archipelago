@@ -642,7 +642,7 @@ class SC2Context(CommonContext):
                 
             self.mission_order = args["slot_data"].get("mission_order", MissionOrder.option_vanilla)
             if self.slot_data_version < 4:
-                self.final_mission = args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)
+                self.final_mission_ids = [args["slot_data"].get("final_mission", SC2Mission.ALL_IN.id)]
             else:
                 self.final_mission_ids = args["slot_data"].get("final_mission_ids", [SC2Mission.ALL_IN.id])
                 self.final_locations = [get_location_id(mission_id, 0) for mission_id in self.final_mission_ids]
@@ -1334,9 +1334,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             location % VICTORY_MODULO for location in
             self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])
         ]
-        if self.mission_id == self.ctx.final_mission:
-            # Always make the final mission's victory location collectable
-            result.append(0)
         return result
 
     def missions_beaten_count(self):
