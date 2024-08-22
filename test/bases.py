@@ -24,7 +24,7 @@ class TestBase(unittest.TestCase):
         for item in items:
             item.classification = ItemClassification.progression
             state.collect(item, prevent_sweep=True)
-        state.sweep_for_events()
+        state.sweep_for_advancements()
         state.update_reachable_regions(1)
         self._state_cache[self.multiworld, tuple(items)] = state
         return state
@@ -221,8 +221,8 @@ class WorldTestBase(unittest.TestCase):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            if item.location and item.advancement and item.location in self.multiworld.state.events:
-                self.multiworld.state.events.remove(item.location)
+            if item.location and item.advancement and item.location in self.multiworld.state.advancements:
+                self.multiworld.state.advancements.remove(item.location)
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:

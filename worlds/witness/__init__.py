@@ -219,7 +219,7 @@ class WitnessWorld(World):
         # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
 
         state = CollectionState(self.multiworld)
-        state.sweep_for_events(locations=event_locations)
+        state.sweep_for_advancements(locations=event_locations)
 
         num_early_locs = sum(1 for loc in self.multiworld.get_reachable_locations(state, self.player) if loc.address)
 
