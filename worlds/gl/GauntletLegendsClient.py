@@ -631,7 +631,7 @@ class GauntletLegendsContext(CommonContext):
                     "cmd": "LocationScouts",
                     "locations": [
                         location.id
-                        for location in raw_locations
+                        for location in [location for location in raw_locations if min(self.difficulty, max(self.glslotdata["max"], self.players)) >= location.difficulty]
                     ],
                     "create_as_hint": 0,
                 },
