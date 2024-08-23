@@ -248,7 +248,7 @@ class OpenRCT2Toggle(Toggle):
 
 
 class LocationBalancing(Choice):
-    """Location balancing affects the density of progression items found in your world relative to other worlds. This setting changes nothing for solo games.
+    """Location balancing affects the density of progression items found in your world relative to other worlds. This option changes nothing for solo games.
 
     - Disabled: Location density in your world can fluctuate greatly depending on the settings of other players. In extreme cases, your world may be entirely populated with filler items
 
@@ -430,7 +430,7 @@ class DeathLink(Choice):
 
     - Enabled: When any ride crashes, everybody (with DeathLink enabled) dies. Inversely, when anybody (again, with DeathLink enabled) dies, a random ride will explode.
 
-    When enabled, there is a 20 second rest period between any deathlink event. Fix that coaster quickly!
+    When enabled, there is a 20-second rest period between any deathlink event. Fix that coaster quickly!
     """
     auto_display_name = True
     display_name = "DeathLink"
@@ -443,9 +443,9 @@ class SelectedVisibility(Choice):
 
     "Nothing" tells you nothing about the item you'll purchase. 
     
-    Recipient tells you who will recieve the item, but not what they'll receive. 
+    Recipient tells you who will receive the item, but not what they'll receive. 
     
-    Full tells you what you're buying and who recieves it.
+    Full tells you what you're buying and who receives it.
     """
     auto_display_name = True
     display_name = "Visibility"
@@ -468,8 +468,8 @@ class SelectedDifficulty(Choice):
     default = Difficulty.medium.value
 
 class SelectedIntensity(Choice):
-    """Choose a prefered intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
-    to a minimum of 8 intensity in most circumstances. Normal is reccommended for most players.
+    """Choose a preferred intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
+    to a minimum of 8 intensity in most circumstances. Normal is recommended for most players.
     """
     auto_display_name = True
     display_name = "Preferred Intensity"
@@ -496,11 +496,11 @@ class Ignore_Ride_Stat_Changes(OpenRCT2Toggle):
     display_name = "Ignore Ride Stat Changes"
 
 class SelectedScenarioLength(Choice):
-    """Choose how long this game will last. This will affect things such as unlock shop prices and if prerequisites are required before purchase. It's reccomended to choose based on how long other worlds in the multi-world take to complete.
-    Synchronus Short: Around 2 hours to complete.
-    Synchronus Long: Around 4 hours to complete.
-    Lengthy: Recommended for Asynchs.
-    Marathon: Recommended for Asynchs.
+    """Choose how long this game will last. This will affect things such as unlock shop prices and if prerequisites are required before purchase. It's recommended to choose based on how long other worlds in the multi-world take to complete.
+    Synchronous Short: Around 2 hours to complete.
+    Synchronous Long: Around 4 hours to complete.
+    Lengthy: Recommended for Asyncs.
+    Marathon: Recommended for Asyncs.
     """
     auto_display_name = True
     display_name = "Scenario Length"
@@ -511,7 +511,7 @@ class SelectedScenarioLength(Choice):
     default = Scenario_Length.synchronous_short.value
 
 class SelectedStatReRolls(Choice):
-    """How often to rerandomize the stats for ride types. Build the Theme Park of Theseus!
+    """How often to re-randomize the stats for ride types. Build the Theme Park of Theseus!
     """
     auto_display_name = True
     display_name = "Stat Re-Rolls"
@@ -588,7 +588,7 @@ class Guest_Objective(Range):
     default = 1000
 
 # class Include_Park_Value_Objective(OpenRCT2OnToggle):
-#     """Include an objective to achive a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
+#     """Include an objective to achieve a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
 #     display_name = "Include Park Value Objective"
 
 class Park_Value_Objective(Range):
@@ -599,7 +599,7 @@ class Park_Value_Objective(Range):
     default = 200000
 
 # class Include_Roller_Coaster_Objective(OpenRCT2OnToggle):
-#     """Include an objective to build a certain number of Roller Coasters with optional Paramaters. Multiple objectives can be enabled!"""
+#     """Include an objective to build a certain number of Roller Coasters with optional parameters. Multiple objectives can be enabled!"""
 #     display_name = "Include Roller Coaster Objective"
 
 class Roller_Coaster_Objective(Range):
@@ -685,7 +685,7 @@ class Shop_Maximum_Nausea(Range):
 class Required_Unique_Rides(Range):
     """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
     It's highly recommended to have this set to at least 1!"""
-    display_name = "Uniqe Ride Requirement"
+    display_name = "Unique Ride Requirement"
     range_start = 0
     range_end = 10
     default = 5
@@ -761,7 +761,7 @@ openrct2_option_groups = [
         SelectedRandomizationRange,
         Randomize_Park_Values,
         SelectedIntensity,
-        SelectedStatReRolls
+        SelectedStatReRolls,
     ]),
     OptionGroup("Goal Options", [
         Guest_Objective,
