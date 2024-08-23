@@ -65,7 +65,7 @@ bosses = {
         EventName.x_hunter_stage_2_clear,
     ],
     "Agile": [
-        LocationName.agile_defeated
+        LocationName.agile_defeated,
     ],
     "Magna Quartz": [
         f"{RegionName.crystal_snail_start} -> {RegionName.crystal_snail_quartz}"
@@ -196,7 +196,14 @@ def set_rules(world: MMX2World):
     set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail_arena} -> {RegionName.x_hunter_arena}", player), 
              lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
     set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail_arena} -> {RegionName.crystal_snail_after_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: 
+                state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value) and
+                (
+                    state.can_reach(LocationName.agile_defeated) or 
+                    state.can_reach(LocationName.serges_defeated) or 
+                    state.can_reach(LocationName.violen_defeated)
+                )
+            )
     set_rule(multiworld.get_entrance(f"{RegionName.overdrive_ostrich_arena} -> {RegionName.x_hunter_arena}", player), 
              lambda state: (
                     state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value) and

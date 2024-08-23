@@ -564,6 +564,7 @@ def handle_weaknesses(world):
             damage_table = damage_templates["Allow Buster"].copy()
         elif strictness_type == 2:
             damage_table = damage_templates["Allow Upgraded Buster"].copy()
+            world.boss_weaknesses[boss].append(weapons_chaotic["Charged Shot (Level 3)"][0])
         else:
             damage_table = damage_templates["Only Weakness"].copy()
 

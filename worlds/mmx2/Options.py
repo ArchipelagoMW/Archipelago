@@ -4,7 +4,7 @@ import typing
 from Options import Choice, Range, Toggle, DefaultOnToggle, OptionDict, OptionSet, OptionGroup, DeathLink, PerGameCommonOptions, StartInventoryPool
 from schema import Schema, And, Use, Optional
 
-from .Rom import action_buttons, action_names
+from .Rom import action_buttons, action_names, x_palette_set_offsets
 from .Weaknesses import boss_weaknesses, weapons_chaotic
 
 class EnergyLink(DefaultOnToggle):
@@ -274,6 +274,119 @@ class LogicHelmetCheckpoints(Toggle):
     """
     display_name = "Helmet Checkpoints In Logic"
 
+class BasePalette(Choice):
+    """
+    Base class for palettes
+    """
+    option_blue = 0
+    option_gold_armor = 1
+    option_charge_blue = 2
+    option_charge_pink = 3
+    option_charge_red = 4
+    option_charge_green = 5
+    option_acid_burst = 6
+    option_parasitic_bomb = 7
+    option_triad_thunder = 8
+    option_spinning_blade = 9
+    option_ray_splasher = 10
+    option_gravity_well = 11
+    option_frost_shield = 12
+    option_tornado_fang = 13
+    option_crystal_hunter = 14
+    option_bubble_splash = 15
+    option_silk_shot = 16
+    option_spin_wheel = 17
+    option_sonic_slicer = 18
+    option_strike_chain = 19
+    option_magnet_mine = 20
+    option_speed_burner = 21
+    option_homing_torpedo = 22
+    option_chameleon_sting = 23
+    option_rolling_shield = 24
+    option_fire_wave = 25
+    option_storm_tornado = 26
+    option_electric_spark = 27
+    option_boomerang_cutter = 28
+    option_shotgun_ice = 29
+
+
+class PaletteDefault(BasePalette):
+    """
+    Which color to use for X's default color
+    """
+    display_name = "X Palette"
+    default = 0
+
+class PaletteCrystalHunter(BasePalette):
+    """
+    Which color to use for X's Crystal Hunter
+    """
+    display_name = "Crystal Hunter Palette"
+    default = 14
+
+class PaletteBubbleSplash(BasePalette):
+    """
+    Which color to use for X's Bubble Splash
+    """
+    display_name = "Bubble Splash Palette"
+    default = 15
+
+class PaletteSilkShot(BasePalette):
+    """
+    Which color to use for X's Silk Shot
+    """
+    display_name = "Silk Shot Palette"
+    default = 16
+
+class PaletteSpinWheel(BasePalette):
+    """
+    Which color to use for X's Spin Wheel
+    """
+    display_name = "Spin Wheel Palette"
+    default = 17
+
+class PaletteSonicSlicer(BasePalette):
+    """
+    Which color to use for X's Sonic Slicer
+    """
+    display_name = "Sonic Slicer Palette"
+    default = 18
+
+class PaletteStrikeChain(BasePalette):
+    """
+    Which color to use for X's Strike Chain
+    """
+    display_name = "Strike Chain Palette"
+    default = 19
+
+class PaletteMagnetMine(BasePalette):
+    """
+    Which color to use for X's Magnet Mine
+    """
+    display_name = "Magnet Mine Palette"
+    default = 20
+
+class PaletteSpeedBurner(BasePalette):
+    """
+    Which color to use for X's Speed Burner
+    """
+    display_name = "Speed Burner Palette"
+    default = 21
+
+class SetPalettes(OptionDict):
+    """
+    Allows you to create colors for each weapon X has. Includes charge levels and Gold Armor customization.
+    This will override the option preset
+    
+    Each one expects 16 values which are mapped to X's colors.
+    The values can be in SNES RGB (bgr555) with the $ prefix or PC RGB (rgb888) with the # prefix.
+    """
+    display_name = "Set Custom Palettes"
+    schema = Schema({
+        Optional(color_set): list for color_set in x_palette_set_offsets.keys()
+    })
+    default = {}
+
 mmx2_option_groups = [
     OptionGroup("Gameplay Options", [
         StartingLifeCount,
@@ -301,6 +414,18 @@ mmx2_option_groups = [
         BaseSubTankCount,
         BaseBossRematchCount,
         BaseBundleUnlock,
+    ]),
+    OptionGroup("Aesthetic", [
+        SetPalettes,
+        PaletteDefault,
+        PaletteCrystalHunter,
+        PaletteBubbleSplash,
+        PaletteSilkShot,
+        PaletteSpinWheel,
+        PaletteSonicSlicer,
+        PaletteStrikeChain,
+        PaletteMagnetMine,
+        PaletteSpeedBurner,
     ]),
 ]
 
@@ -333,3 +458,13 @@ class MMX2Options(PerGameCommonOptions):
     base_heart_tank_count: BaseHeartTankCount
     base_sub_tank_count: BaseSubTankCount
     x_hunters_medal_count: XHuntersMedalCount
+    player_palettes: SetPalettes
+    palette_default: PaletteDefault
+    palette_crystal_hunter: PaletteCrystalHunter
+    palette_bubble_splash: PaletteBubbleSplash
+    palette_silk_shot: PaletteSilkShot
+    palette_spin_wheel: PaletteSpinWheel
+    palette_sonic_slicer: PaletteSonicSlicer
+    palette_strike_chain: PaletteStrikeChain
+    palette_magnet_mine: PaletteMagnetMine
+    palette_speed_burner: PaletteSpeedBurner
