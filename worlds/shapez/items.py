@@ -129,7 +129,7 @@ item_descriptions = {  # TODO
     "Stacker": "A processing building, that combines two shapes with missing parts or puts one on top of the other",
     "Quad Cutter": "A processing building, that cuts shapes in four quarter parts",
     "Double Painter": "A processing building, that paints two shapes in a given color",
-    "Rotator (180)": "A processing building, that rotates shapes 180 degrees",
+    "Rotator (180°)": "A processing building, that rotates shapes 180 degrees",
     "Quad Painter": "A processing building, that paint each quarter of a shape in another given color and requires " +
                     "wire inputs for each color to work",
     "Trash": "A building, that destroys unused shapes",
