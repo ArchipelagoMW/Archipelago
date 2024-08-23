@@ -441,7 +441,7 @@ class BasePalette(Choice):
     option_bubble_splash = 15
     option_silk_shot = 16
     option_spin_wheel = 17
-    option_spnic_slicer = 18
+    option_sonic_slicer = 18
     option_strike_chain = 19
     option_magnet_mine = 20
     option_speed_burner = 21
@@ -582,22 +582,7 @@ class SetPalettes(OptionDict):
     schema = Schema({
         Optional(color_set): list for color_set in x_palette_set_offsets.keys()
     })
-    default = {
-        "Default": [],
-        "Gold Armor": [],
-        "Charge Blue": [],
-        "Charge Pink": [],
-        "Charge Red": [],
-        "Charge Green": [],
-        "Acid Burst": [],
-        "Parasitic Bomb": [],
-        "Triad Thunder": [],
-        "Spinning Blade": [],
-        "Ray Splasher": [],
-        "Gravity Well": [],
-        "Frost Shield": [],
-        "Tornado Fang": [],
-    }
+    default = {}
 
 mmx3_option_groups = [
     OptionGroup("Gameplay Options", [
