@@ -1,6 +1,5 @@
 from enum import IntEnum
-from typing import TypedDict
-from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet, PerGameCommonOptions, OptionGroup
+from Options import DefaultOnToggle, Toggle, Range, Choice, PerGameCommonOptions, OptionGroup
 from dataclasses import dataclass
 
 class Scenario(IntEnum):
@@ -157,11 +156,6 @@ class Scenario(IntEnum):
     random_RCT2_expansions = 150
     archipelago_madness_vanilla = 151
     archipelago_madness_expansions = 152
-    
-class LocationBalancingMode(IntEnum):
-    disabled = 0
-    compromise = 1
-    full = 2
 
 class DeathLinkMode(IntEnum):
     disabled = 0
@@ -179,25 +173,25 @@ class Difficulty(IntEnum):
     hard = 3
     extreme = 4
 
-class Preferred_Intensity(IntEnum):
+class PreferredIntensity(IntEnum):
     less_intense = 0
     normal = 1
     more_intense = 2
 
-class Randomization_Range(IntEnum):
+class RandomizationRange(IntEnum):
     none = 0
     low = 1
     medium = 2
     high = 3
     extreme = 4
 
-class Scenario_Length(IntEnum):
+class ScenarioLength(IntEnum):
     synchronous_short = 0
     synchronous_long = 1
     lengthy = 2
     marathon = 3
     
-class Stat_ReRolls(IntEnum):
+class StatReRolls(IntEnum):
     never = 0
     infrequent = 1
     semi_frequent = 2
@@ -205,32 +199,32 @@ class Stat_ReRolls(IntEnum):
     very_frequent = 4
     extremely_frequent = 5
 
-class Difficult_Guest_Generation(IntEnum):
+class DifficultGuestGeneration(IntEnum):
     off = 0
     unlockable = 1
     on = 2
 
-class Difficult_Park_Rating(IntEnum):
+class DifficultParkRating(IntEnum):
     off = 0
     unlockable = 1
     on = 2
 
-class Forbid_High_Construction(IntEnum):
+class ForbidHighConstruction(IntEnum):
     off = 0
     unlockable = 1
     on = 2
 
-class Forbid_Landscape_Changes(IntEnum):
+class ForbidLandscapeChanges(IntEnum):
     off = 0
     unlockable = 1
     on = 2
 
-class Forbid_Marketing_Campaigns(IntEnum):
+class ForbidMarketingCampaigns(IntEnum):
     off = 0
     unlockable = 1
     on = 2
 
-class Forbid_Tree_Removal(IntEnum):
+class ForbidTreeRemoval(IntEnum):
     off = 0
     unlockable = 1
     on = 2
@@ -247,26 +241,10 @@ class OpenRCT2Toggle(Toggle):
         return self.value
 
 
-class LocationBalancing(Choice):
-    """Location balancing affects the density of progression items found in your world relative to other worlds. This option changes nothing for solo games.
-
-    - Disabled: Location density in your world can fluctuate greatly depending on the settings of other players. In extreme cases, your world may be entirely populated with filler items
-
-    - Compromise: Locations are balanced to a midpoint between "fair" and "natural"
-
-    - Full: Locations are balanced in an attempt to make the number of progression items sent out and received equal over the entire game"""
-    auto_display_name = True
-    display_name = "Location Balancing"
-    option_disabled = LocationBalancingMode.disabled.value
-    option_compromise = LocationBalancingMode.compromise.value
-    option_full = LocationBalancingMode.full.value
-    default = LocationBalancingMode.compromise.value
-
 class SelectedScenario(Choice):
     """Choose which scenario you'd like to play! Random won't choose scenarios that are unreasonably difficult/tedious.
     Future updates will allow custom scenarios.
     """
-    auto_display_name = True
     display_name = "Scenario"
     option_random_RCT1 = Scenario.random_RCT1.value
     option_random_loopy_landscapes = Scenario.random_loopy_landscapes.value
@@ -432,7 +410,6 @@ class DeathLink(Choice):
 
     When enabled, there is a 20-second rest period between any deathlink event. Fix that coaster quickly!
     """
-    auto_display_name = True
     display_name = "DeathLink"
     option_disabled = DeathLinkMode.disabled.value
     option_enabled = DeathLinkMode.enabled.value
@@ -447,7 +424,6 @@ class SelectedVisibility(Choice):
     
     Full tells you what you're buying and who receives it.
     """
-    auto_display_name = True
     display_name = "Visibility"
     option_nothing = Visibility.nothing.value
     option_recipient = Visibility.recipient.value
@@ -458,7 +434,6 @@ class SelectedDifficulty(Choice):
     """Choose a difficulty for the randomization. This will make rides have more difficult stat results (If that's enabled), as well as affect
     things like the loan interest rate.
     """
-    auto_display_name = True
     display_name = "Difficulty"
     option_very_easy = Difficulty.very_easy.value
     option_easy = Difficulty.easy.value
@@ -471,27 +446,25 @@ class SelectedIntensity(Choice):
     """Choose a preferred intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
     to a minimum of 8 intensity in most circumstances. Normal is recommended for most players.
     """
-    auto_display_name = True
     display_name = "Preferred Intensity"
-    option_less_intense = Preferred_Intensity.less_intense.value
-    option_normal = Preferred_Intensity.normal.value
-    option_more_intense = Preferred_Intensity.more_intense.value
-    default = Preferred_Intensity.normal.value
+    option_less_intense = PreferredIntensity.less_intense.value
+    option_normal = PreferredIntensity.normal.value
+    option_more_intense = PreferredIntensity.more_intense.value
+    default = PreferredIntensity.normal.value
 
 class SelectedRandomizationRange(Choice):
     """Influences how spread random values will be (Mostly this affects the excitement, intensity, and nausea ratings). The more extreme this value,
     the more extreme the difficulty will swing, with easy becoming much easier and hard becoming much more difficult.
     """
-    auto_display_name = True
     display_name = "Randomization Range"
-    option_none = Randomization_Range.none.value
-    option_low = Randomization_Range.low.value
-    option_medium = Randomization_Range.medium.value
-    option_high = Randomization_Range.high.value
-    option_extreme = Randomization_Range.extreme.value
-    default = Randomization_Range.medium.value
+    option_none = RandomizationRange.none.value
+    option_low = RandomizationRange.low.value
+    option_medium = RandomizationRange.medium.value
+    option_high = RandomizationRange.high.value
+    option_extreme = RandomizationRange.extreme.value
+    default = RandomizationRange.medium.value
 
-class Ignore_Ride_Stat_Changes(OpenRCT2Toggle):
+class IgnoreRideStatChanges(OpenRCT2Toggle):
     """Disables changes to base ride stats. If enabled, rides will always behave like they do in the base game."""
     display_name = "Ignore Ride Stat Changes"
 
@@ -502,77 +475,75 @@ class SelectedScenarioLength(Choice):
     Lengthy: Recommended for Asyncs.
     Marathon: Recommended for Asyncs.
     """
-    auto_display_name = True
     display_name = "Scenario Length"
-    option_synchronous_short = Scenario_Length.synchronous_short.value
-    option_synchronous_long = Scenario_Length.synchronous_long.value
-    option_lengthy = Scenario_Length.lengthy.value
-    option_marathon = Scenario_Length.marathon.value
-    default = Scenario_Length.synchronous_short.value
+    option_synchronous_short = ScenarioLength.synchronous_short.value
+    option_synchronous_long = ScenarioLength.synchronous_long.value
+    option_lengthy = ScenarioLength.lengthy.value
+    option_marathon = ScenarioLength.marathon.value
+    default = ScenarioLength.synchronous_short.value
 
 class SelectedStatReRolls(Choice):
     """How often to re-randomize the stats for ride types. Build the Theme Park of Theseus!
     """
-    auto_display_name = True
     display_name = "Stat Re-Rolls"
-    option_never = Stat_ReRolls.never.value
-    option_infrequent = Stat_ReRolls.infrequent.value
-    option_semi_frequent = Stat_ReRolls.semi_frequent.value
-    option_frequent = Stat_ReRolls.frequent.value
-    option_very_frequent = Stat_ReRolls.very_frequent.value
-    option_extremely_frequent = Stat_ReRolls.extremely_frequent.value
-    default = Stat_ReRolls.infrequent.value
+    option_never = StatReRolls.never.value
+    option_infrequent = StatReRolls.infrequent.value
+    option_semi_frequent = StatReRolls.semi_frequent.value
+    option_frequent = StatReRolls.frequent.value
+    option_very_frequent = StatReRolls.very_frequent.value
+    option_extremely_frequent = StatReRolls.extremely_frequent.value
+    default = StatReRolls.infrequent.value
 
 class SelectedDifficultGuestGeneration(Choice):
     """Makes guests harder to generate. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Difficult Guest Generation"
-    option_off = Difficult_Guest_Generation.off.value
-    option_unlockable = Difficult_Guest_Generation.unlockable.value
-    option_on = Difficult_Guest_Generation.on.value
-    default = Difficult_Guest_Generation.unlockable.value
+    option_off = DifficultGuestGeneration.off.value
+    option_unlockable = DifficultGuestGeneration.unlockable.value
+    option_on = DifficultGuestGeneration.on.value
+    default = DifficultGuestGeneration.unlockable.value
 
 class SelectedDifficultParkRating(Choice):
     """Makes park rating harder to improve. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Difficult Park Rating"
-    option_off = Difficult_Park_Rating.off.value
-    option_unlockable = Difficult_Park_Rating.unlockable.value
-    option_on = Difficult_Park_Rating.on.value
-    default = Difficult_Park_Rating.unlockable.value
+    option_off = DifficultParkRating.off.value
+    option_unlockable = DifficultParkRating.unlockable.value
+    option_on = DifficultParkRating.on.value
+    default = DifficultParkRating.unlockable.value
 
 class SelectedForbidHighConstruction(Choice):
     """Limits building to tree height. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid High Construction"
-    option_off = Forbid_High_Construction.off.value
-    option_unlockable = Forbid_High_Construction.unlockable.value
-    option_on = Forbid_High_Construction.on.value
-    default = Forbid_High_Construction.unlockable.value
+    option_off = ForbidHighConstruction.off.value
+    option_unlockable = ForbidHighConstruction.unlockable.value
+    option_on = ForbidHighConstruction.on.value
+    default = ForbidHighConstruction.unlockable.value
 
 class SelectedForbidLandscapeChanges(Choice):
     """Forbids the landscape from being altered. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid Landscape Changes"
-    option_off = Forbid_Landscape_Changes.off.value
-    option_unlockable = Forbid_Landscape_Changes.unlockable.value
-    option_on = Forbid_Landscape_Changes.on.value
-    default = Forbid_Landscape_Changes.unlockable.value
+    option_off = ForbidLandscapeChanges.off.value
+    option_unlockable = ForbidLandscapeChanges.unlockable.value
+    option_on = ForbidLandscapeChanges.on.value
+    default = ForbidLandscapeChanges.unlockable.value
 
 class SelectedForbidMarketingCampaigns(Choice):
     """Forbids marketing campaigns. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid Marketing Campaigns"
-    option_off = Forbid_Marketing_Campaigns.off.value
-    option_unlockable = Forbid_Marketing_Campaigns.unlockable.value
-    option_on = Forbid_Marketing_Campaigns.on.value
-    default = Forbid_Marketing_Campaigns.unlockable.value
+    option_off = ForbidMarketingCampaigns.off.value
+    option_unlockable = ForbidMarketingCampaigns.unlockable.value
+    option_on = ForbidMarketingCampaigns.on.value
+    default = ForbidMarketingCampaigns.unlockable.value
 
 class SelectedForbidTreeRemoval(Choice):
     """Forbids removing trees. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid Tree Removal"
-    option_off = Forbid_Tree_Removal.off.value
-    option_unlockable = Forbid_Tree_Removal.unlockable.value
-    option_on = Forbid_Tree_Removal.on.value
-    default = Forbid_Tree_Removal.unlockable.value
+    option_off = ForbidTreeRemoval.off.value
+    option_unlockable = ForbidTreeRemoval.unlockable.value
+    option_on = ForbidTreeRemoval.on.value
+    default = ForbidTreeRemoval.unlockable.value
 
 
-class Randomize_Park_Values(OpenRCT2OnToggle):
+class RandomizeParkValues(OpenRCT2OnToggle):
     """Randomizes values such as starting cash, starting bank loan amount, and the max bank loan"""
     display_name = "Randomize Park Values"
 
@@ -580,7 +551,7 @@ class Randomize_Park_Values(OpenRCT2OnToggle):
 #     """Include an objective to reach a certain number of guests. Multiple objectives can be enabled!"""
 #     display_name = "Include Guest Objective"
 
-class Guest_Objective(Range):
+class GuestObjective(Range):
     """Choose how many guests are required to win the scenario"""
     display_name = "Guest Objective"
     range_start = 1
@@ -591,7 +562,7 @@ class Guest_Objective(Range):
 #     """Include an objective to achieve a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
 #     display_name = "Include Park Value Objective"
 
-class Park_Value_Objective(Range):
+class ParkValueObjective(Range):
     """If enabled, choose what park value (In USD) is required to win the scenario."""
     display_name = "Park Value Objective"
     range_start = 0
@@ -602,35 +573,35 @@ class Park_Value_Objective(Range):
 #     """Include an objective to build a certain number of Roller Coasters with optional parameters. Multiple objectives can be enabled!"""
 #     display_name = "Include Roller Coaster Objective"
 
-class Roller_Coaster_Objective(Range):
+class RollerCoasterObjective(Range):
     """If enabled, choose how many coasters, and what prerequisites they need to beat the scenario."""
     display_name = "Roller Coaster Objective"
     range_start = 0
     range_end = 20
     default = 5
 
-class Roller_Coaster_Excitement(Range):
+class RollerCoasterExcitement(Range):
     """Select the minimum excitement 😀 for a coaster to count towards your objective. 0 will disable a minimum excitement rating."""
     display_name = "Excitement Requirement"
     range_start = 0
     range_end = 9
     default = 5
 
-class Roller_Coaster_Intensity(Range):
+class RollerCoasterIntensity(Range):
     """Select the minimum intensity 😬 for a coaster to count towards your objective. 0 will disable a minimum intensity rating."""
     display_name = "Intensity Requirement"
     range_start = 0
     range_end = 9
     default = 5
 
-class Roller_Coaster_Nausea(Range):
+class RollerCoasterNausea(Range):
     """Select the minimum nausea 🤢 for a coaster to count towards your objective. 0 will disable a minimum nausea rating."""
     display_name = "Nausea Requirement"
     range_start = 0
     range_end = 6
     default = 4
 
-class Shop_Minimum_Excitement(Range):
+class ShopMinimumExcitement(Range):
     """If the shop determines you need a ride with a minimum excitement, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
@@ -639,7 +610,7 @@ class Shop_Minimum_Excitement(Range):
     range_end = 10
     default = 0
 
-class Shop_Minimum_Intensity(Range):
+class ShopMinimumIntensity(Range):
     """If the shop determines you need a ride with a minimum intensity, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
@@ -648,7 +619,7 @@ class Shop_Minimum_Intensity(Range):
     range_end = 7
     default = 0
 
-class Shop_Minimum_Nausea(Range):
+class ShopMinimumNausea(Range):
     """If the shop determines you need a ride with a minimum nausea, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
@@ -657,7 +628,7 @@ class Shop_Minimum_Nausea(Range):
     range_end = 4
     default = 0
 
-class Shop_Maximum_Excitement(Range):
+class ShopMaximumExcitement(Range):
     """If the shop determines you need a ride with a maximum excitement, this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Excitement Requirement"
@@ -665,7 +636,7 @@ class Shop_Maximum_Excitement(Range):
     range_end = 10
     default = 5
 
-class Shop_Maximum_Intensity(Range):
+class ShopMaximumIntensity(Range):
     """If the shop determines you need a ride with a maximum intensity, this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Intensity Requirement"
@@ -673,7 +644,7 @@ class Shop_Maximum_Intensity(Range):
     range_end = 7
     default = 5
 
-class Shop_Maximum_Nausea(Range):
+class ShopMaximumNausea(Range):
     """If the shop determines you need a ride with a maximum nausea, this value will be the highest it can ask for.
     """
     display_name = "Maximum Shop Nausea Requirement"
@@ -682,7 +653,7 @@ class Shop_Maximum_Nausea(Range):
     default = 4
 
 
-class Required_Unique_Rides(Range):
+class RequiredUniqueRides(Range):
     """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
     It's highly recommended to have this set to at least 1!"""
     display_name = "Unique Ride Requirement"
@@ -690,40 +661,40 @@ class Required_Unique_Rides(Range):
     range_end = 10
     default = 5
 
-class Park_Rating_Objective(Range):
+class ParkRatingObjective(Range):
     """If enabled, choose the minimum park rating needed to beat the scenario."""
     display_name = "Park Rating Objective"
     range_start = 0
     range_end = 999
     default = 800
 
-class Pay_Off_Loan(OpenRCT2OnToggle):
+class PayOffLoan(OpenRCT2OnToggle):
     """Require Loan to be paid off before scenario completion is awarded. Multiple objectives can be enabled!"""
     display_name = "Pay Off Loan"
 
-class Monopoly_Mode(OpenRCT2Toggle):
+class MonopolyMode(OpenRCT2Toggle):
     """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
     display_name = "Monopoly Mode"
 
-class Include_Gamespeed_Items(OpenRCT2OnToggle):
+class IncludeGamespeedItems(OpenRCT2OnToggle):
     """If included, the ability to use the speed toggle will be restricted behind an item. 4 items total will be added, each progressively unlocking a faster speed."""
     display_name = "Include Gamespeed Items"
 
-class Furry_Convention_Traps(Range):
+class FurryConventionTraps(Range):
     """When found, instantly hosts a furry convention in your park! Adding traps will increase the total number of items in the world."""
     display_name = "Furry Convention Trap"
     range_start = 0
     range_end = 20
     default = 5
 
-class Bathroom_Traps(Range):
+class BathroomTraps(Range):
     """When found, instantly maxes out the bathroom stat of every guest! Adding traps will increase the total number of items in the world."""
     display_name = "Bathroom Trap"
     range_start = 0
     range_end = 20
     default = 5
 
-class Spam_Traps(Range):
+class SpamTraps(Range):
     """When found, spams ads all over the screen! Adding traps will increase the total number of items in the world."""
     display_name = "Spam Trap"
     range_start = 0
@@ -737,11 +708,11 @@ class Filler(Range):
     range_end = 50
     default = 10
 
-class Include_ATM(OpenRCT2OnToggle):
+class IncludeATM(OpenRCT2OnToggle):
     """Includes an ATM in the item list, regardless of whether it normally appears in the chosen scenario"""
     display_name = "Include ATM"
 
-class Include_First_Aid(OpenRCT2OnToggle):
+class IncludeFirstAid(OpenRCT2OnToggle):
     """Includes a First Aid Room in the item list, regardless of whether it normally appears in the chosen scenario"""
     display_name = "Include First Aid Room"
 
@@ -759,21 +730,21 @@ openrct2_option_groups = [
         SelectedDifficulty,
         SelectedScenarioLength,
         SelectedRandomizationRange,
-        Randomize_Park_Values,
+        RandomizeParkValues,
         SelectedIntensity,
         SelectedStatReRolls,
     ]),
     OptionGroup("Goal Options", [
-        Guest_Objective,
-        Park_Value_Objective,
-        Roller_Coaster_Objective,
-        Roller_Coaster_Excitement,
-        Roller_Coaster_Intensity,
-        Roller_Coaster_Nausea,
-        Required_Unique_Rides,
-        Park_Rating_Objective,
-        Pay_Off_Loan,
-        Monopoly_Mode
+        GuestObjective,
+        ParkValueObjective,
+        RollerCoasterObjective,
+        RollerCoasterExcitement,
+        RollerCoasterIntensity,
+        RollerCoasterNausea,
+        RequiredUniqueRides,
+        ParkRatingObjective,
+        PayOffLoan,
+        MonopolyMode
     ]),
     OptionGroup("Rules", [
         SelectedDifficultGuestGeneration,
@@ -784,74 +755,74 @@ openrct2_option_groups = [
         SelectedForbidTreeRemoval
     ]),
     OptionGroup("Shop Options", [
-        Shop_Minimum_Excitement,
-        Shop_Maximum_Excitement,
-        Shop_Minimum_Intensity,
-        Shop_Maximum_Intensity,
-        Shop_Minimum_Nausea,
-        Shop_Maximum_Nausea,
+        ShopMinimumExcitement,
+        ShopMaximumExcitement,
+        ShopMinimumIntensity,
+        ShopMaximumIntensity,
+        ShopMinimumNausea,
+        ShopMaximumNausea,
         SelectedVisibility
     ]),
     OptionGroup("Item & Trap Options", [
         Filler,
-        Include_ATM,
-        Include_First_Aid,
-        Include_Gamespeed_Items,
+        IncludeATM,
+        IncludeFirstAid,
+        IncludeGamespeedItems,
         Skips,
-        Furry_Convention_Traps,
-        Bathroom_Traps,
-        Spam_Traps
+        FurryConventionTraps,
+        BathroomTraps,
+        SpamTraps
     ]),
 ]
 
 @dataclass
 class openRCT2Options(PerGameCommonOptions):
     # generator options
-    location_balancing: LocationBalancing
+    # location_balancing: LocationBalancing
     difficulty: SelectedDifficulty
-    shop_minimum_excitement: Shop_Minimum_Excitement
-    shop_maximum_excitement: Shop_Maximum_Excitement
-    shop_minimum_intensity: Shop_Minimum_Intensity
-    shop_maximum_intensity: Shop_Maximum_Intensity
-    shop_minimum_nausea: Shop_Minimum_Nausea
-    shop_maximum_nausea: Shop_Maximum_Nausea
-    ignore_ride_stat_changes: Ignore_Ride_Stat_Changes
+    shop_minimum_excitement: ShopMinimumExcitement
+    shop_maximum_excitement: ShopMaximumExcitement
+    shop_minimum_intensity: ShopMinimumIntensity
+    shop_maximum_intensity: ShopMaximumIntensity
+    shop_minimum_nausea: ShopMinimumNausea
+    shop_maximum_nausea: ShopMaximumNausea
+    ignore_ride_stat_changes: IgnoreRideStatChanges
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario
     filler: Filler
-    include_atm: Include_ATM
-    include_first_aid: Include_First_Aid
+    include_atm: IncludeATM
+    include_first_aid: IncludeFirstAid
     skips: Skips
 
     # deathlink
     death_link: DeathLink
 
     # traps
-    furry_convention_traps: Furry_Convention_Traps
-    bathroom_traps: Bathroom_Traps
-    spam_traps: Spam_Traps
+    furry_convention_traps: FurryConventionTraps
+    bathroom_traps: BathroomTraps
+    spam_traps: SpamTraps
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
     randomization_range: SelectedRandomizationRange
     stat_rerolls: SelectedStatReRolls
-    randomize_park_values: Randomize_Park_Values
+    randomize_park_values: RandomizeParkValues
     visibility: SelectedVisibility
     preferred_intensity: SelectedIntensity
     # include_guest_objective: Include_Guest_Objective
-    guest_objective: Guest_Objective
+    guest_objective: GuestObjective
     # include_park_value_objective: Include_Park_Value_Objective
-    park_value_objective: Park_Value_Objective
+    park_value_objective: ParkValueObjective
     # include_roller_coaster_objective: Include_Roller_Coaster_Objective
-    roller_coaster_objective: Roller_Coaster_Objective
-    roller_coaster_excitement: Roller_Coaster_Excitement
-    roller_coaster_intensity: Roller_Coaster_Intensity
-    roller_coaster_nausea: Roller_Coaster_Nausea
-    required_unique_rides: Required_Unique_Rides
+    roller_coaster_objective: RollerCoasterObjective
+    roller_coaster_excitement: RollerCoasterExcitement
+    roller_coaster_intensity: RollerCoasterIntensity
+    roller_coaster_nausea: RollerCoasterNausea
+    required_unique_rides: RequiredUniqueRides
     # include_park_rating_objective: Include_Park_Rating_Objective
-    park_rating_objective: Park_Rating_Objective
-    pay_off_loan: Pay_Off_Loan
-    monopoly_mode: Monopoly_Mode
-    include_gamespeed_items: Include_Gamespeed_Items
+    park_rating_objective: ParkRatingObjective
+    pay_off_loan: PayOffLoan
+    monopoly_mode: MonopolyMode
+    include_gamespeed_items: IncludeGamespeedItems
     # park rules. Depending on the option, these may affect which items are created
     difficult_guest_generation: SelectedDifficultGuestGeneration
     difficult_park_rating: SelectedDifficultParkRating
