@@ -280,6 +280,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             name = "Your"
         else:
             name = f"{world.multiworld.player_name[location.item.player]}'s"
+            # filter out { and } since they cause issues with string.format later on
+            name = name.replace("{", "").replace("}", "")
 
         if isinstance(location, LinksAwakeningLocation):
             location_name = location.ladxr_item.metadata.name
