@@ -204,7 +204,7 @@ class SC2Logic:
             state.has(item_names.BATTLECRUISER, self.player) and self.terran_common_unit(state)
         )
 
-    def great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
+    def terran_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
         """
         Ability to deal with trains (moving target with a lot of HP)
         :param state:
@@ -212,12 +212,53 @@ class SC2Logic:
         """
         return (
             state.has_any({item_names.SIEGE_TANK, item_names.DIAMONDBACK, item_names.MARAUDER, item_names.CYCLONE, item_names.BANSHEE}, self.player)
-            or self.advanced_tactics
-            and (
-                state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
-                or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
-                or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
+            or (self.advanced_tactics
+                and (
+                    state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
+                    or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                    or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
+                )
             )
+        )
+    
+    def zerg_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
+        """
+        Ability to deal with trains (moving target with a lot of HP)
+        :param state:
+        :return:
+        """
+        return (
+            self.morph_impaler_or_lurker(state)
+            or state.has_all({item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK}, self.player)
+            or state.has(item_names.ABERRATION, self.player)
+            or (self.advanced_tactics
+                and (
+                    state.has_all({item_names.ZERGLING_BANELING_ASPECT, item_names.BANELING_CORROSIVE_ACID}, self.player)
+                    or state.has_all({item_names.ROACH, item_names.ROACH_GLIAL_RECONSTITUTION}, self.player)
+                )
+            )
+        )
+    
+    def protoss_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
+        """
+        Ability to deal with trains (moving target with a lot of HP)
+        :param state:
+        :return:
+        """
+        return (
+            state.has_any({item_names.ANNIHILATOR, item_names.INSTIGATOR, item_names.STALKER}, self.player)
+            or state.has_all({item_names.SLAYER, item_names.SLAYER_PHASE_BLINK}, self.player)
+            or (self.advanced_tactics
+                and  (
+                    state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_RAPID_POWER_CYCLING}, self.player)
+                    or state.has_all({item_names.VANGUARD, item_names.VANGUARD_RAPIDFIRE_CANNON}, self.player)
+                    or (
+                        state.has_any({item_names.VOID_RAY, item_names.DAWNBRINGER}, self.player)
+                        and state.has_all({item_names.DESTROYER, item_names.DESTROYER_REFORGED_BLOODSHARD_CORE}, self.player)
+                    )
+                ) 
+            )
+
         )
 
     def terran_can_rescue(self, state) -> bool:
@@ -759,7 +800,8 @@ class SC2Logic:
 
     def protoss_has_blink(self, state: CollectionState) -> bool:
         return (
-            state.has_any({item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER}, self.player)
+            state.has_any({item_names.STALKER, item_names.INSTIGATOR}, self.player)
+            or state.has_all({item_names.SLAYER, item_names.SLAYER_PHASE_BLINK}, self.player)
             or (
                 state.has(item_names.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK, self.player)
                 and state.has_any({item_names.DARK_TEMPLAR, item_names.BLOOD_HUNTER, item_names.AVENGER}, self.player)

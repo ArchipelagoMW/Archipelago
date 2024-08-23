@@ -649,7 +649,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.GHOST_OF_A_CHANCE.mission_name, "Third Island Spectres", SC2WOL_LOC_ID_OFFSET + 1605, LocationType.VANILLA),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
             lambda state: (
-                logic.great_train_robbery_train_stopper(state)
+                logic.terran_great_train_robbery_train_stopper(state)
                 and logic.terran_basic_anti_air(state))
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "North Defiler", SC2WOL_LOC_ID_OFFSET + 1701, LocationType.VANILLA),
@@ -664,26 +664,26 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "Kill Team", SC2WOL_LOC_ID_OFFSET + 1710, LocationType.CHALLENGE,
             lambda state: (
                 (adv_tactics or logic.terran_common_unit(state))
-                and logic.great_train_robbery_train_stopper(state)
+                and logic.terran_great_train_robbery_train_stopper(state)
                 and logic.terran_basic_anti_air(state))
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "Flawless", SC2WOL_LOC_ID_OFFSET + 1711, LocationType.CHALLENGE,
             lambda state:(
-                logic.great_train_robbery_train_stopper(state)
+                logic.terran_great_train_robbery_train_stopper(state)
                 and logic.terran_basic_anti_air(state)),
             flags=LocationFlag.PREVENTATIVE
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "2 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1712, LocationType.EXTRA,
-            logic.great_train_robbery_train_stopper
+            logic.terran_great_train_robbery_train_stopper
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "4 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1713, LocationType.EXTRA,
             lambda state: (
-                logic.great_train_robbery_train_stopper(state)
+                logic.terran_great_train_robbery_train_stopper(state)
                 and logic.terran_basic_anti_air(state))
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name, "6 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1714, LocationType.EXTRA,
             lambda state: (
-                logic.great_train_robbery_train_stopper(state)
+                logic.terran_great_train_robbery_train_stopper(state)
                 and logic.terran_basic_anti_air(state))
         ),
         make_location_data(SC2Mission.CUTTHROAT.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
@@ -2768,6 +2768,132 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and ((adv_tactics and logic.protoss_basic_anti_air(state))
                     or logic.protoss_competent_anti_air(state)
                 ))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3300, LocationType.VICTORY,
+            lambda state: (
+                logic.zerg_great_train_robbery_train_stopper(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "North Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3301, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Mid Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3302, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "South Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3303, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Close Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3304, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Northwest Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3305, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "North Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3306, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Northeast Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3307, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Southwest Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3308, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Southeast Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3309, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Kill Team", SC2_RACESWAP_LOC_ID_OFFSET + 3310, LocationType.CHALLENGE,
+            lambda state: (
+                (adv_tactics or logic.zerg_common_unit(state))
+                and logic.zerg_great_train_robbery_train_stopper(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 3311, LocationType.CHALLENGE,
+            lambda state:(
+                logic.zerg_great_train_robbery_train_stopper(state)
+                and logic.zerg_basic_anti_air(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "2 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3312, LocationType.EXTRA,
+            logic.zerg_great_train_robbery_train_stopper
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "4 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3313, LocationType.EXTRA,
+            lambda state: (
+                logic.zerg_great_train_robbery_train_stopper(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "6 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3314, LocationType.EXTRA,
+            lambda state: (
+                logic.zerg_great_train_robbery_train_stopper(state)
+                and logic.zerg_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3400, LocationType.VICTORY,
+            lambda state: (
+                logic.protoss_great_train_robbery_train_stopper(state)
+                and logic.protoss_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "North Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3401, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Mid Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3402, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "South Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3403, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Close Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3404, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Northwest Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3405, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "North Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3406, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Northeast Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3407, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Southwest Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3408, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Southeast Diamondback", SC2_RACESWAP_LOC_ID_OFFSET + 3409, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Kill Team", SC2_RACESWAP_LOC_ID_OFFSET + 3410, LocationType.CHALLENGE,
+            lambda state: (
+                (adv_tactics or logic.protoss_common_unit(state))
+                and logic.protoss_great_train_robbery_train_stopper(state)
+                and logic.protoss_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 3411, LocationType.CHALLENGE,
+            lambda state:(
+                logic.protoss_great_train_robbery_train_stopper(state)
+                and logic.protoss_basic_anti_air(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "2 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3412, LocationType.EXTRA,
+            logic.protoss_great_train_robbery_train_stopper
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "4 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3413, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_great_train_robbery_train_stopper(state)
+                and logic.protoss_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "6 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3414, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_great_train_robbery_train_stopper(state)
+                and logic.protoss_basic_anti_air(state))
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3500, LocationType.VICTORY,
+            lambda state: (
+                logic.zerg_common_unit(state)
+                and (adv_tactics or logic.zerg_basic_anti_air(state)))
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Mira Han", SC2_RACESWAP_LOC_ID_OFFSET + 3501, LocationType.EXTRA,
+            logic.zerg_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3502, LocationType.VANILLA,
+            logic.zerg_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Mid Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3503, LocationType.VANILLA),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Southwest Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3504, LocationType.VANILLA,
+            logic.zerg_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "North Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3505, LocationType.EXTRA,
+            logic.zerg_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "South Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3506, LocationType.EXTRA,
+            logic.zerg_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "West Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3507, LocationType.EXTRA,
+            logic.zerg_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3600, LocationType.VICTORY,
+            lambda state: (
+                logic.protoss_common_unit(state)
+                and (adv_tactics or logic.protoss_basic_anti_air(state)))
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Mira Han", SC2_RACESWAP_LOC_ID_OFFSET + 3601, LocationType.EXTRA,
+            logic.protoss_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3602, LocationType.VANILLA,
+            logic.protoss_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Mid Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3603, LocationType.VANILLA),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "Southwest Relic", SC2_RACESWAP_LOC_ID_OFFSET + 3604, LocationType.VANILLA,
+            logic.protoss_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "North Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3605, LocationType.EXTRA,
+            logic.protoss_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "South Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3606, LocationType.EXTRA,
+            logic.protoss_common_unit
+        ),
+        make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "West Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3607, LocationType.EXTRA,
+            logic.protoss_common_unit
         ),
     ]
 
