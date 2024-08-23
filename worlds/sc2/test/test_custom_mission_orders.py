@@ -128,7 +128,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
       self.generate_world(world_options)
       test_items_in_pool = [item for item in self.multiworld.itempool if item.name == test_item]
       self.assertEqual(len(test_items_in_pool), 1)
-      self.assertEqual(test_items_in_pool[0].classification == ItemClassification.progression)
+      self.assertEqual(test_items_in_pool[0].classification, ItemClassification.progression)
 
    def test_start_inventory_and_necessary_item_appears_once(self):
       # This is a filler upgrade with a parent
@@ -156,7 +156,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
       self.assertEqual(len(test_items_in_pool), 0)
       test_items_in_start_inventory = [item for item in self.multiworld.precollected_items[self.player] if item.name == test_item]
       self.assertEqual(len(test_items_in_start_inventory), 1)
-      self.assertEqual(test_items_in_start_inventory[0].classification == ItemClassification.progression)
+      self.assertEqual(test_items_in_start_inventory[0].classification, ItemClassification.progression)
 
    def test_start_inventory_and_locked_and_necessary_item_appears_once(self):
       # This is a filler upgrade with a parent
@@ -185,4 +185,4 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
       self.assertEqual(len(test_items_in_pool), 0)
       test_items_in_start_inventory = [item for item in self.multiworld.precollected_items[self.player] if item.name == test_item]
       self.assertEqual(len(test_items_in_start_inventory), 1)
-      self.assertEqual(test_items_in_start_inventory[0].classification == ItemClassification.progression)
+      self.assertEqual(test_items_in_start_inventory[0].classification, ItemClassification.progression)
