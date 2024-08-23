@@ -1,4 +1,4 @@
-from typing import Mapping, Any
+from typing import Any, List, Dict, Tuple, Mapping
 
 from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
@@ -50,11 +50,11 @@ class ShapezWorld(World):
 
     base_id = 20010707
     location_count: int = 0
-    level_logic: list[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
-    upgrade_logic: list[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+    level_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+    upgrade_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
     maxlevel: int = 25
     finaltier: int = 8
-    included_locations: dict[str, tuple[str, LocationProgressType]] = dict()
+    included_locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
     client_seed: int = 123
 
     item_name_to_id = {name: id for
@@ -146,7 +146,7 @@ class ShapezWorld(World):
 
     def create_items(self) -> None:
         # Include guaranteed items (game mechanic unlocks and 7x4 big upgrades)
-        included_items: list[Item] = ([self.create_item(name) for name in buildings_processing.keys()]
+        included_items: List[Item] = ([self.create_item(name) for name in buildings_processing.keys()]
                                       + [self.create_item(name) for name in buildings_routing.keys()]
                                       + [self.create_item(name) for name in buildings_other.keys()]
                                       + [self.create_item(name) for name in buildings_top_row.keys()]

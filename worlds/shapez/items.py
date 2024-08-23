@@ -1,3 +1,4 @@
+from typing import Dict
 
 from BaseClasses import Item, ItemClassification
 
@@ -71,7 +72,7 @@ traps = {
     "Malfunctioning Trap": ItemClassification.trap
 }
 
-item_table: dict[str, ItemClassification] = {
+item_table: Dict[str, ItemClassification] = {
     **buildings_processing,
     **buildings_routing,
     **buildings_other,

@@ -1,4 +1,5 @@
 from random import Random
+from typing import List, Tuple, Dict
 
 from BaseClasses import Location, LocationProgressType, Region
 
@@ -24,7 +25,7 @@ location_description = {  # TODO
 
 categories = ["Belt", "Miner", "Processors", "Painting"]
 
-translate: list[tuple[int, str]] = [
+translate: List[Tuple[int, str]] = [
     (1000, "M"),
     (900, "CM"),
     (500, "D"),
@@ -61,16 +62,16 @@ def color_to_needed_building(color1: str, color2: str = "Uncolored") -> str:
         return "Painted"
 
 
-def color_list_to_needed_building(color_list: list[str]) -> str:
+def color_list_to_needed_building(color_list: List[str]) -> str:
     for next_color in color_list:
         if next_color in ["y", "p", "c", "w"]:
             return "Mixed"
     return "Painted"
 
 
-shapesanity_simple: dict[str, str] = {}
-shapesanity_medium: dict[str, str] = {}
-shapesanity_complex: dict[str, str] = {}
+shapesanity_simple: Dict[str, str] = {}
+shapesanity_medium: Dict[str, str] = {}
+shapesanity_complex: Dict[str, str] = {}
 
 for shape in ["Circle", "Square", "Star"]:
     for color in ["Red", "Blue", "Green", "Yellow", "Purple", "Cyan", "White", "Uncolored"]:
@@ -154,7 +155,7 @@ for first_shape in ["C", "R", "W", "S"]:
                         = f"Shapesanity Stitched {color_to_needed_building(first_color, second_color)}"
 
 
-achievement_locations: list[str] = ["Painter", "Cutter", "Rotater", "Wait, they stack?", "Wires", "Storage", "Freedom",
+achievement_locations: List[str] = ["Painter", "Cutter", "Rotater", "Wait, they stack?", "Wires", "Storage", "Freedom",
                                     "The logo!", "To the moon", "It's piling up", "I'll use it later",
                                     "Efficiency 1", "Preparing to launch", "SpaceY", "Stack overflow", "It's a mess",
                                     "Faster", "Even faster", "Get rid of them", "It's been a long time", "Addicted",
@@ -166,7 +167,7 @@ achievement_locations: list[str] = ["Painter", "Cutter", "Rotater", "Wait, they 
                                     "I've seen that before ...", "Memories from the past", "I need trains",
                                     "A bit early?", "GPS"]
 
-all_locations: list[str] = (["Level 1 Additional", "Level 20 Additional"]
+all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional"]
                             + [f"Level {x}" for x in range(1, 1001)]
                             + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 1001)]
                             # + achievement_locations
@@ -176,12 +177,12 @@ all_locations: list[str] = (["Level 1 Additional", "Level 20 Additional"]
 all_locations.sort()
 
 
-def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationProgressType]]:
+def addlevels(maxlevel: int, logictype: int) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all level locations based on player options (maxlevel INCLUDED).
     If shape requirements are not randomized, give logic type 0."""
 
     # Level 1 is always directly accessible
-    locations: dict[str, tuple[str, LocationProgressType]] = {"Level 1": ("Main", LocationProgressType.PRIORITY),
+    locations: Dict[str, Tuple[str, LocationProgressType]] = {"Level 1": ("Main", LocationProgressType.PRIORITY),
                                                               "Level 1 Additional": (
                                                               "Main", LocationProgressType.PRIORITY)}
 
@@ -228,11 +229,11 @@ def addlevels(maxlevel: int, logictype: int) -> dict[str, tuple[str, LocationPro
     return locations
 
 
-def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, LocationProgressType]]:
+def addupgrades(finaltier: int, logictype: int) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all upgrade locations based on player options (finaltier INCLUDED).
     If shape requirements are not randomized, give logic type 0."""
 
-    locations: dict[str, tuple[str, LocationProgressType]] = {}
+    locations: Dict[str, Tuple[str, LocationProgressType]] = {}
 
     if logictype == 0:  # vanilla-like, Tier III is a special case here
         locations["Belt Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
@@ -273,10 +274,10 @@ def addupgrades(finaltier: int, logictype: int) -> dict[str, tuple[str, Location
 
 def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, excludeprogressive: bool,
                     maxlevel: int, levellogictype: int, upgradelogictype: int,
-                    goal: int) -> dict[str, tuple[str, LocationProgressType]]:
+                    goal: int) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all achievement locations based on player options."""
 
-    locations: dict[str, tuple[str, LocationProgressType]] = {}
+    locations: Dict[str, Tuple[str, LocationProgressType]] = {}
 
     if not include:
         return locations
@@ -416,10 +417,10 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     return locations
 
 
-def addshapesanity(amount: int, random: Random) -> dict[str, tuple[str, LocationProgressType]]:
+def addshapesanity(amount: int, random: Random) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with a given number of random shapesanity locations."""
 
-    included_shapes: dict[str, tuple[str, LocationProgressType]] = {}
+    included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
     # if not included:
     #     return included_shapes
     shapes_list = list(shapesanity_simple.items())

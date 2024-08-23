@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Dict, Tuple, List
 
 from BaseClasses import Entrance, Region, CollectionState, MultiWorld, LocationProgressType, ItemClassification
 from . import ShapezItem
@@ -48,11 +48,11 @@ def create_entrance(player: int, name: str, parent: Region, connects: Region,
 
 
 def create_shapez_regions(player: int, multiworld: MultiWorld,
-                          included_locations: dict[str, tuple[str, LocationProgressType]],
-                          location_name_to_id: dict[str, int], level_logic_buildings: list[str],
-                          upgrade_logic_buildings: list[str], early_useful: int, goal: int) -> list[Region]:
+                          included_locations: Dict[str, Tuple[str, LocationProgressType]],
+                          location_name_to_id: Dict[str, int], level_logic_buildings: List[str],
+                          upgrade_logic_buildings: List[str], early_useful: int, goal: int) -> List[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
-    regions: dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
+    regions: Dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
 
     # Creates ShapezLocations for every included location and puts them into the correct region
     for name, data in included_locations.items():
@@ -101,10 +101,10 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
 #                    lambda state: state.has_all(["Rotator", "Stacker", "Cutter", "Color Mixer"], player))
 
     # Add balancer, tunnel, and trash to early items if options say so
-    level_buildings_3_needed: list[str] = [level_logic_buildings[2]]
-    level_buildings_5_needed: list[str] = [level_logic_buildings[4]]
-    upgrade_buildings_3_needed: list[str] = [upgrade_logic_buildings[2]]
-    upgrade_buildings_5_needed: list[str] = [upgrade_logic_buildings[4]]
+    level_buildings_3_needed: List[str] = [level_logic_buildings[2]]
+    level_buildings_5_needed: List[str] = [level_logic_buildings[4]]
+    upgrade_buildings_3_needed: List[str] = [upgrade_logic_buildings[2]]
+    upgrade_buildings_5_needed: List[str] = [upgrade_logic_buildings[4]]
     if early_useful == 2:
         level_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
         upgrade_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
