@@ -728,6 +728,8 @@ item_descriptions = {
     item_names.INFESTED_SIEGE_TANKS: "Mercenary infested Siege Tanks that may be called in from the Predator Nest.",
     item_names.INFESTED_BANSHEES: "Mercenary infested Banshees that may be called in from the Predator Nest.",
     item_names.HUNTER_KILLERS: "Elite Hydralisks that may be called in from the Predator Nest.",
+    item_names.DEVOURING_ONES: "Mercenary Zerglings.",
+    item_names.TORRASQUE_MERC: "Torrasque Mercenary.",
     item_names.OVERLORD_VENTRAL_SACS: "Overlords gain the ability to transport ground units.",
     item_names.OVERLORD_GENERATE_CREEP: "Overlords gain the ability to generate creep while standing still.",
     item_names.OVERLORD_ANTENNAE: "Increases Overlord sight range.",
