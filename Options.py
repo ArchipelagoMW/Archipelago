@@ -973,6 +973,9 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                     if random.random() < float(text.get("percentage", 100)/100):
                         at = text.get("at", None)
                         if at is not None:
+                            if isinstance(at, dict):
+                                at = random.choices(list(at.keys()),
+                                                    weights=list(at.values()), k=1)
                             given_text = text.get("text", [])
                             if isinstance(given_text, dict):
                                 given_text = random.choices(list(given_text.keys()),
