@@ -256,7 +256,8 @@ class SC2Logic:
                         state.has_any({item_names.VOID_RAY, item_names.DAWNBRINGER}, self.player)
                         and state.has_all({item_names.DESTROYER, item_names.DESTROYER_REFORGED_BLOODSHARD_CORE}, self.player)
                     )
-            ) )
+                ) 
+            )
 
         )
 
