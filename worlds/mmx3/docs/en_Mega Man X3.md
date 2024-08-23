@@ -77,7 +77,7 @@ This will force `Blizzard Buffalo` to receive increased damage from the basic sh
 
 ## Unique Local Commands
 - `/resync` Deletes the current saved data in the server which will force every item to be given again. Only has 
-effect during the title screen.
+effect during the title screen. Reached locations will be kept intact.
 - `/heal <amount>` Only present with EnergyLink. Request a HP refill using EnergyLink's pool.
 - `/refill <amount>` Only present with EnergyLink. Request a Weapon Energy refill using EnergyLink's pool.
 - `/trade <amount>` Exchanges HP for Weapon Energy. The conversion rate is 1:1.

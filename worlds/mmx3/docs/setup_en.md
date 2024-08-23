@@ -61,7 +61,7 @@ files. Your patch file should have a `.apmmx3` extension.
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
 
-### Conectarse al multiserver
+### Connect to the multiworld
 
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
