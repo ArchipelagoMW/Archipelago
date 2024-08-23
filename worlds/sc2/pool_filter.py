@@ -59,10 +59,11 @@ class ValidInventory:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory: List[Item] = list(self.item_pool)
         locked_items: List[Item] = list(self.locked_items)
+        necessary_items: List[Item] = list(self.necessary_items)
         enable_morphling = self.world.options.enable_morphling == EnableMorphling.option_true
         item_list = get_full_item_list()
         self.logical_inventory = [
-            item.name for item in inventory + locked_items + self.existing_items
+            item.name for item in inventory + locked_items + self.existing_items + necessary_items
             if item_list[item.name].is_important_for_filtering()  # Track all Progression items and those with complex rules for filtering
         ]
         requirements = mission_requirements
@@ -90,7 +91,7 @@ class ValidInventory:
         maxNbUpgrade = get_option_value(self.world, "max_number_of_upgrades")
         if maxNbUpgrade != -1:
             unit_avail_upgrades = {}
-            # Needed to take into account locked/existing items
+            # Needed to take into account locked/existing/necessary items
             unit_nb_upgrades = {}
             for item in inventory:
                 cItem = item_list[item.name]
@@ -104,8 +105,8 @@ class ValidInventory:
                     else:
                         unit_avail_upgrades[cItem.parent_item].append(item)
                         unit_nb_upgrades[cItem.parent_item] += 1
-            # For those two categories, we count them but dont include them in removal
-            for item in locked_items + self.existing_items:
+            # For those categories, we count them but dont include them in removal
+            for item in locked_items + self.existing_items + necessary_items:
                 cItem = item_list[item.name]
                 if item.name in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
@@ -131,7 +132,7 @@ class ValidInventory:
 
         # Locking minimum upgrades for items that have already been locked/placed when minimum required
         if minimum_upgrades > 0:
-            known_items = self.existing_items + locked_items
+            known_items = self.existing_items + locked_items + necessary_items
             known_parents = [item for item in known_items if item in parent_items]
             for parent in known_parents:
                 child_items = self.item_children[parent]
@@ -161,22 +162,27 @@ class ValidInventory:
         for item in generic_items[:reserved_generic_amount]:
             locked_items.append(copy_item(item))
             inventory.remove(item)
-            if item.name not in self.logical_inventory and item.name not in self.locked_items:
+            if item.name not in self.logical_inventory:
                 removable_generic_items.append(item)
 
         # Main cull process
         unused_items: List[str] = []  # Reusable items for the second pass
-        while len(inventory) + len(locked_items) > inventory_size:
+        while len(inventory) + len(locked_items) + len(necessary_items) > inventory_size:
             if len(inventory) == 0:
                 # There are more items than locations and all of them are already locked due to YAML or logic.
                 # First, drop non-logic generic items to free up space
-                while len(removable_generic_items) > 0 and len(locked_items) > inventory_size:
+                while len(removable_generic_items) > 0 and len(locked_items) + len(necessary_items) > inventory_size:
                     removed_item = removable_generic_items.pop()
                     locked_items.remove(removed_item)
                 # If there still isn't enough space, push locked items into start inventory
                 self.world.random.shuffle(locked_items)
-                while len(locked_items) > inventory_size:
+                while len(locked_items) > 0 and len(locked_items) + len(necessary_items) > inventory_size:
                     item: Item = locked_items.pop()
+                    self.multiworld.push_precollected(item)
+                # If locked items weren't enough either, push necessary items into start inventory too
+                self.world.random.shuffle(necessary_items)
+                while len(necessary_items) > inventory_size:
+                    item: Item = necessary_items.pop()
                     self.multiworld.push_precollected(item)
                 break
             # Select random item from removable items
@@ -185,7 +191,7 @@ class ValidInventory:
             if minimum_upgrades > 0:
                 parent_item = parent_lookup.get(item, None)
                 if parent_item:
-                    count = sum(1 if item in self.item_children[parent_item] else 0 for item in inventory + locked_items)
+                    count = sum(1 if item in self.item_children[parent_item] else 0 for item in inventory + locked_items + necessary_items)
                     if count <= minimum_upgrades:
                         if parent_item in inventory:
                             # Attempt to remove parent instead, if possible
@@ -213,7 +219,7 @@ class ValidInventory:
                 if attempt_removal(item):
                     unused_items.append(item.name)
 
-        pool_items: List[str] = [item.name for item in (inventory + locked_items + self.existing_items)]
+        pool_items: List[str] = [item.name for item in (inventory + locked_items + self.existing_items + necessary_items)]
         unused_items = [
             unused_item for unused_item in unused_items
             if item_list[unused_item].parent_item is None
@@ -245,12 +251,16 @@ class ValidInventory:
         if not {item_names.MEDIVAC, item_names.HERCULES} & logical_inventory_set:
             inventory = [item for item in inventory if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
+            locked_items = [item for item in locked_items if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
         if item_names.MEDIVAC not in logical_inventory_set:
             # Don't allow L2 Siege Tank Transport Hook without Medivac
             inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             locked_transport_hooks = [item for item in locked_items if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            if len(inventory_transport_hooks) > 1:
-                inventory.remove(inventory_transport_hooks[0])
+            if len(inventory_transport_hooks) + len(locked_transport_hooks) > 1:
+                if len(inventory_transport_hooks) > 1:
+                    inventory.remove(inventory_transport_hooks[0])
+                else:
+                    locked_items.remove(locked_transport_hooks[0])
             if len(inventory_transport_hooks) + len(locked_transport_hooks) > 0:
                 # Transport Hook is in inventory, remove from unused_items
                 unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
@@ -263,6 +273,7 @@ class ValidInventory:
             # No orbital Command Spells
             inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
             unused_items = [item_name for item_name in unused_items if item_name !=item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+            locked_items = [item for item in locked_items if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
 
         # HotS
         # Baneling without sources => remove Baneling and upgrades
@@ -287,6 +298,7 @@ class ValidInventory:
             unused_items = [item_name for item_name in unused_items if item_name != item_names.BANELING_RAPID_METAMORPH]
         if not {item_names.MUTALISK, item_names.CORRUPTOR, item_names.SCOURGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
+            locked_items = [item for item in locked_items if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
             unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
         # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in and morphling is unavailable
         if not {item_names.MUTALISK, item_names.CORRUPTOR} & logical_inventory_set and not enable_morphling:
@@ -377,6 +389,7 @@ class ValidInventory:
 
         # Cull finished, adding locked items back into inventory
         inventory += locked_items
+        inventory += necessary_items
 
         # Replacing empty space with generically useful items
         replacement_items = [item for item in self.item_pool
@@ -393,13 +406,14 @@ class ValidInventory:
         return inventory
 
     def __init__(self, world: 'SC2World',
-                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
+                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item], necessary_items: List[Item]
     ):
         self.multiworld = world.multiworld
         self.player = world.player
         self.world: 'SC2World' = world
         self.logical_inventory = list()
         self.locked_items = locked_items[:]
+        self.necessary_items = necessary_items[:]
         self.existing_items = existing_items
         # Initial filter of item pool
         self.item_pool = []
@@ -428,7 +442,7 @@ class ValidInventory:
 
 
 def filter_items(world: 'SC2World', location_cache: List[Location],
-                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
+                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item], necessary_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
     The returned inventory must be capable of logically accessing every location in the world.
@@ -439,7 +453,7 @@ def filter_items(world: 'SC2World', location_cache: List[Location],
         mission_requirements = []
     else:
         mission_requirements = [(location.name, location.access_rule) for location in location_cache]
-    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items)
+    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items, necessary_items)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items

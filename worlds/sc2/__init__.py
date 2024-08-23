@@ -49,8 +49,10 @@ class ItemFilterFlags(enum.IntFlag):
     """Used to flag items that shouldn't be filtered out with their parents"""
     ForceProgression = enum.auto()
     """Used to flag items that aren't classified as progression by default"""
+    Necessary = enum.auto()
+    """Used to flag items that are never allowed to be culled"""
 
-    Unremovable = Locked|StartInventory|Plando
+    Unremovable = Locked|StartInventory|Plando|Necessary
 
 
 @dataclass
@@ -640,12 +642,12 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
 
 
 def flag_mission_order_required_items(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Locks items that are required by item rules in the mission order and forces them to be progression."""
+    """Marks items that are necessary for item rules in the mission order and forces them to be progression."""
     locks_required = world.custom_mission_order.get_items_to_lock()
     locks_done = {item: 0 for item in locks_required}
     for item in item_list:
         if item.name in locks_required and locks_done[item.name] < locks_required[item.name]:
-            item.flags |= ItemFilterFlags.Locked
+            item.flags |= ItemFilterFlags.Necessary
             item.flags |= ItemFilterFlags.ForceProgression
             locks_done[item.name] += 1
 
@@ -667,19 +669,22 @@ def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:
     pool: List[Item] = []
     locked_items: List[Item] = []
     existing_items: List[Item] = []
+    necessary_items: List[Item] = []
     for item in item_list:
         ap_item = create_item_with_correct_settings(world.player, item.name)
         if ItemFilterFlags.ForceProgression in item.flags:
             ap_item.classification = ItemClassification.progression
         if ItemFilterFlags.StartInventory in item.flags:
             existing_items.append(ap_item)
+        elif ItemFilterFlags.Necessary in item.flags:
+            necessary_items.append(ap_item)
         elif ItemFilterFlags.Locked in item.flags:
             locked_items.append(ap_item)
         else:
             pool.append(ap_item)
 
     fill_pool_with_kerrigan_levels(world, pool)
-    filtered_pool = filter_items(world, world.location_cache, pool, existing_items, locked_items)
+    filtered_pool = filter_items(world, world.location_cache, pool, existing_items, locked_items, necessary_items)
     return filtered_pool
 
 
