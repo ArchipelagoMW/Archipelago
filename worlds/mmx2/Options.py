@@ -280,10 +280,6 @@ class BasePalette(Choice):
     """
     option_blue = 0
     option_gold_armor = 1
-    option_charge_blue = 2
-    option_charge_pink = 3
-    option_charge_red = 4
-    option_charge_green = 5
     option_acid_burst = 6
     option_parasitic_bomb = 7
     option_triad_thunder = 8
@@ -401,6 +397,7 @@ mmx2_option_groups = [
     ]),
     OptionGroup("Boss Weakness Options", [
         BossWeaknessRando,
+        PlandoWeaknesses,
         BossWeaknessStrictness,
         BossRandomizedHP,
         LogicBossWeakness,
