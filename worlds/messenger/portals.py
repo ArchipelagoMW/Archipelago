@@ -251,8 +251,13 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     plando = world.options.portal_plando.value
     if not plando:
         plando = world.options.plando_connections.value
-    if plando and world.multiworld.plando_options & PlandoOptions.connections:
-        handle_planned_portals(plando)
+    if plando and world.multiworld.plando_options & PlandoOptions.connections and not world.plando_portals:
+        try:
+            handle_planned_portals(plando)
+        # any failure i expect will trigger on available_portals.remove
+        except ValueError:
+            raise ValueError(f"Unable to complete portal plando for Player {world.player_name}. "
+                             f"If you attempted to plando a checkpoint, checkpoints must be shuffled.")
 
     for portal in PORTALS:
         if portal in world.plando_portals:
