@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import collections
-import copy
 import itertools
 import functools
 import logging
@@ -290,6 +289,8 @@ class MultiWorld():
 
     def link_items(self) -> None:
         """Called to link together items in the itempool related to the registered item link groups."""
+        from worlds import AutoWorld
+
         for group_id, group in self.groups.items():
             def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
                 Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
@@ -300,15 +301,15 @@ class MultiWorld():
                     if item.player in counters and item.name in shared_pool:
                         counters[item.player][item.name] += 1
                         classifications[item.name] |= item.classification
-        
+
                 for player in players.copy():
                     if all([counters[player][item] == 0 for item in shared_pool]):
                         players.remove(player)
                         del (counters[player])
-        
+
                 if not players:
                     return None, None
-        
+
                 for item in shared_pool:
                     count = min(counters[player][item] for player in players)
                     if count:
@@ -318,11 +319,11 @@ class MultiWorld():
                         for player in players:
                             del (counters[player][item])
                 return counters, classifications
-        
+
             common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
             if not common_item_count:
                 continue
-        
+
             new_itempool: List[Item] = []
             for item_name, item_count in next(iter(common_item_count.values())).items():
                 for _ in range(item_count):
@@ -330,7 +331,7 @@ class MultiWorld():
                     # mangle together all original classification bits
                     new_item.classification |= classifications[item_name]
                     new_itempool.append(new_item)
-        
+
             region = Region("Menu", group_id, self, "ItemLink")
             self.regions.append(region)
             locations = region.locations
@@ -341,16 +342,16 @@ class MultiWorld():
                         None, region)
                     loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
                         state.has(item_name, group_id_, count_)
-        
+
                     locations.append(loc)
                     loc.place_locked_item(item)
                     common_item_count[item.player][item.name] -= 1
                 else:
                     new_itempool.append(item)
-        
+
             itemcount = len(self.itempool)
             self.itempool = new_itempool
-        
+
             while itemcount > len(self.itempool):
                 items_to_add = []
                 for player in group["players"]:
@@ -429,7 +430,7 @@ class MultiWorld():
             subworld = self.worlds[player]
             for item in subworld.get_pre_fill_items():
                 subworld.collect(ret, item)
-        ret.sweep_for_events()
+        ret.sweep_for_advancements()
 
         if use_cache:
             self._all_state = ret
@@ -540,9 +541,9 @@ class MultiWorld():
                 return True
             state = starting_state.copy()
         else:
-            if self.has_beaten_game(self.state):
-                return True
             state = CollectionState(self)
+            if self.has_beaten_game(state):
+                return True
         prog_locations = {location for location in self.get_locations() if location.item
                           and location.item.advancement and location not in state.locations_checked}
 
@@ -615,8 +616,7 @@ class MultiWorld():
 
         def location_relevant(location: Location) -> bool:
             """Determine if this location is relevant to sweep."""
-            return location.progress_type != LocationProgressType.EXCLUDED \
-                and (location.player in players["full"] or location.advancement)
+            return location.player in players["full"] or location.advancement
 
         def all_done() -> bool:
             """Check if all access rules are fulfilled"""
@@ -661,7 +661,7 @@ class CollectionState():
     multiworld: MultiWorld
     reachable_regions: Dict[int, Set[Region]]
     blocked_connections: Dict[int, Set[Entrance]]
-    events: Set[Location]
+    advancements: Set[Location]
     path: Dict[Union[Region, Entrance], PathValue]
     locations_checked: Set[Location]
     stale: Dict[int, bool]
@@ -673,7 +673,7 @@ class CollectionState():
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
         self.blocked_connections = {player: set() for player in parent.get_all_ids()}
-        self.events = set()
+        self.advancements = set()
         self.path = {}
         self.locations_checked = set()
         self.stale = {player: True for player in parent.get_all_ids()}
@@ -717,14 +717,14 @@ class CollectionState():
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
-        ret.prog_items = copy.deepcopy(self.prog_items)
-        ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
-                                 self.reachable_regions}
-        ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in
-                                   self.blocked_connections}
-        ret.events = copy.copy(self.events)
-        ret.path = copy.copy(self.path)
-        ret.locations_checked = copy.copy(self.locations_checked)
+        ret.prog_items = {player: counter.copy() for player, counter in self.prog_items.items()}
+        ret.reachable_regions = {player: region_set.copy() for player, region_set in
+                                 self.reachable_regions.items()}
+        ret.blocked_connections = {player: entrance_set.copy() for player, entrance_set in
+                                   self.blocked_connections.items()}
+        ret.advancements = self.advancements.copy()
+        ret.path = self.path.copy()
+        ret.locations_checked = self.locations_checked.copy()
         for function in self.additional_copy_functions:
             ret = function(self, ret)
         return ret
@@ -755,19 +755,24 @@ class CollectionState():
         return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, locations: Optional[Iterable[Location]] = None) -> None:
+        Utils.deprecate("sweep_for_events has been renamed to sweep_for_advancements. The functionality is the same. "
+                        "Please switch over to sweep_for_advancements.")
+        return self.sweep_for_advancements(locations)
+
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
             locations = self.multiworld.get_filled_locations()
-        reachable_events = True
-        # since the loop has a good chance to run more than once, only filter the events once
-        locations = {location for location in locations if location.advancement and location not in self.events}
+        reachable_advancements = True
+        # since the loop has a good chance to run more than once, only filter the advancements once
+        locations = {location for location in locations if location.advancement and location not in self.advancements}
 
-        while reachable_events:
-            reachable_events = {location for location in locations if location.can_reach(self)}
-            locations -= reachable_events
-            for event in reachable_events:
-                self.events.add(event)
-                assert isinstance(event.item, Item), "tried to collect Event with no Item"
-                self.collect(event.item, True, event)
+        while reachable_advancements:
+            reachable_advancements = {location for location in locations if location.can_reach(self)}
+            locations -= reachable_advancements
+            for advancement in reachable_advancements:
+                self.advancements.add(advancement)
+                assert isinstance(advancement.item, Item), "tried to collect Event with no Item"
+                self.collect(advancement.item, True, advancement)
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
@@ -862,20 +867,16 @@ class CollectionState():
         )
 
     # Item related
-    def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
+    def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None) -> bool:
         if location:
             self.locations_checked.add(location)
 
         changed = self.multiworld.worlds[item.player].collect(self, item)
 
-        if not changed and event:
-            self.prog_items[item.player][item.name] += 1
-            changed = True
-
         self.stale[item.player] = True
 
-        if changed and not event:
-            self.sweep_for_events()
+        if changed and not prevent_sweep:
+            self.sweep_for_advancements()
 
         return changed
 
@@ -1126,9 +1127,9 @@ class Location:
                     and (not check_access or self.can_reach(state))))
 
     def can_reach(self, state: CollectionState) -> bool:
-        # self.access_rule computes faster on average, so placing it first for faster abort
+        # Region.can_reach is just a cache lookup, so placing it first for faster abort on average
         assert self.parent_region, "Can't reach location without region"
-        return self.access_rule(state) and self.parent_region.can_reach(state)
+        return self.parent_region.can_reach(state) and self.access_rule(state)
 
     def place_locked_item(self, item: Item):
         if self.item:
@@ -1426,7 +1427,7 @@ class Spoiler:
                 # Maybe move the big bomb over to the Event system instead?
                 if any(exit_path == 'Pyramid Fairy' for path in self.paths.values()
                        for (_, exit_path) in path):
-                    if multiworld.mode[player] != 'inverted':
+                    if multiworld.worlds[player].options.mode != 'inverted':
                         self.paths[str(multiworld.get_region('Big Bomb Shop', player))] = \
                             get_path(state, multiworld.get_region('Big Bomb Shop', player))
                     else:

@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [DOOM 1993 (e.g. Steam version)](https://store.steampowered.com/app/2280/DOOM_1993/)
+- [DOOM 1993 (e.g. Steam version)](https://store.steampowered.com/app/2280/DOOM__DOOM_II/)
 - [Archipelago Crispy DOOM](https://github.com/Daivuk/apdoom/releases)
 
 ## Optional Software
