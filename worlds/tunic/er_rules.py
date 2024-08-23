@@ -1180,6 +1180,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     rule=lambda state: can_ladder_storage(state, world)
                     and (has_ladder("Ladders in South Atoll", state, world)
                          or state.has(key, player, 2)  # can do it from the rope
+                         # ice grapple push a crab into the door
+                         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
                          or options.ladder_storage >= LadderStorage.option_medium))  # use the little ladder
             # holy cross mid-ls to get in here
             elif ls_info.destination == "Swamp Redux 2, Cathedral Redux_secret":
@@ -1321,10 +1323,13 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     # Ruined Atoll
     set_rule(world.get_location("Ruined Atoll - [West] Near Kevin Block"),
              lambda state: state.has(laurels, player))
+    # ice grapple push a crab through the door
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Lower Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Upper Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     # Frog's Domain
     set_rule(world.get_location("Frog's Domain - Side Room Grapple Secret"),

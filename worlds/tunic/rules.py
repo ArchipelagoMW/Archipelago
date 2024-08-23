@@ -103,9 +103,11 @@ def set_region_rules(world: "TunicWorld") -> None:
         lambda state: has_stick(state, player) or state.has(fire_wand, player)
     world.get_entrance("Overworld -> Dark Tomb").access_rule = \
         lambda state: has_lantern(state, world)
+    # laurels in, ladder storage in through the furnace, or ice grapple down the belltower
     world.get_entrance("Overworld -> West Garden").access_rule = \
-        lambda state: state.has(laurels, player) \
-        or can_ladder_storage(state, world)
+        lambda state: (state.has(laurels, player)
+                       or can_ladder_storage(state, world)
+                       or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     world.get_entrance("Overworld -> Eastern Vault Fortress").access_rule = \
         lambda state: state.has(laurels, player) \
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world) \
@@ -276,10 +278,13 @@ def set_location_rules(world: "TunicWorld") -> None:
     # Ruined Atoll
     set_rule(world.get_location("Ruined Atoll - [West] Near Kevin Block"),
              lambda state: state.has(laurels, player))
+    # ice grapple push a crab through the door
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Lower Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Upper Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("Librarian - Hexagon Green"),
              lambda state: has_sword(state, player))
 
