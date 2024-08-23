@@ -212,11 +212,12 @@ class SC2Logic:
         """
         return (
             state.has_any({item_names.SIEGE_TANK, item_names.DIAMONDBACK, item_names.MARAUDER, item_names.CYCLONE, item_names.BANSHEE}, self.player)
-            or self.advanced_tactics
-            and (
-                state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
-                or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
-                or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
+            or (self.advanced_tactics
+                and (
+                    state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
+                    or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                    or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
+                )
             )
         )
     
@@ -230,10 +231,11 @@ class SC2Logic:
             self.morph_impaler_or_lurker(state)
             or state.has_all({item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK}, self.player)
             or state.has(item_names.ABERRATION, self.player)
-            or self.advanced_tactics
-            and (
-                state.has_all({item_names.ZERGLING_BANELING_ASPECT, item_names.BANELING_CORROSIVE_ACID}, self.player)
-                or state.has_all({item_names.ROACH, item_names.ROACH_GLIAL_RECONSTITUTION}, self.player)
+            or (self.advanced_tactics
+                and (
+                    state.has_all({item_names.ZERGLING_BANELING_ASPECT, item_names.BANELING_CORROSIVE_ACID}, self.player)
+                    or state.has_all({item_names.ROACH, item_names.ROACH_GLIAL_RECONSTITUTION}, self.player)
+                )
             )
         )
     
@@ -246,15 +248,15 @@ class SC2Logic:
         return (
             state.has_any({item_names.ANNIHILATOR, item_names.INSTIGATOR, item_names.STALKER}, self.player)
             or state.has_all({item_names.SLAYER, item_names.SLAYER_PHASE_BLINK}, self.player)
-            or self.advanced_tactics
-            and  (
-                state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_RAPID_POWER_CYCLING}, self.player)
-                or state.has_all({item_names.VANGUARD, item_names.VANGUARD_RAPIDFIRE_CANNON}, self.player)
-                or (
-                    state.has_any({item_names.VOID_RAY, item_names.DAWNBRINGER}, self.player)
-                    and state.has_all({item_names.DESTROYER, item_names.DESTROYER_REFORGED_BLOODSHARD_CORE}, self.player)
-                )
-            )
+            or (self.advanced_tactics
+                and  (
+                    state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_RAPID_POWER_CYCLING}, self.player)
+                    or state.has_all({item_names.VANGUARD, item_names.VANGUARD_RAPIDFIRE_CANNON}, self.player)
+                    or (
+                        state.has_any({item_names.VOID_RAY, item_names.DAWNBRINGER}, self.player)
+                        and state.has_all({item_names.DESTROYER, item_names.DESTROYER_REFORGED_BLOODSHARD_CORE}, self.player)
+                    )
+            ) )
 
         )
 
