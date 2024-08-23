@@ -230,7 +230,6 @@ class SC2Logic:
             self.morph_impaler_or_lurker(state)
             or state.has_all({item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK}, self.player)
             or state.has(item_names.ABERRATION, self.player)
-            or state.has(item_names.MALIGNANT_CREEP, self.player)
             or self.advanced_tactics
             and (
                 state.has_all({item_names.ZERGLING_BANELING_ASPECT, item_names.BANELING_CORROSIVE_ACID}, self.player)
@@ -247,7 +246,6 @@ class SC2Logic:
         return (
             state.has_any({item_names.ANNIHILATOR, item_names.INSTIGATOR, item_names.STALKER}, self.player)
             or state.has_all({item_names.SLAYER, item_names.SLAYER_PHASE_BLINK}, self.player)
-            or state.has(item_names.MATRIX_OVERLOAD, self.player)
             or self.advanced_tactics
             and  (
                 state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_RAPID_POWER_CYCLING}, self.player)
