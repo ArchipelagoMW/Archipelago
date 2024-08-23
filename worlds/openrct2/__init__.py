@@ -88,7 +88,7 @@ class OpenRCT2World(World):
     def __init__(self, multiworld, player: int):
         super().__init__(multiworld, player)
         self.starting_ride = None
-        self.item_table = {}
+        self.item_table = []
         self.location_prices = []  # This list is passed to OpenRCT2 to create the unlock shop
         self.rules = []
         self.unique_rides = []
@@ -260,7 +260,7 @@ class OpenRCT2World(World):
                          lambda state, selected_prereq=selected_item: state.has(selected_prereq, self.player))
                 # Only add rules if there's an item to be unlocked in the first place
                 if (selected_item in item_info["requires_height"]) and (
-                        self.options.forbid_high_construction.value == 1):
+                        self.options.forbid_high_construction.value == "unlockable"):
                     add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                         self.player).entrances[0],
                              lambda state, selected_prereq="Allow High Construction": state.has(selected_prereq,
@@ -268,7 +268,7 @@ class OpenRCT2World(World):
                     # print(
                     #     "Added rule: \nHave: Allow High Construction\nLocation: " +
                     #     get_previous_region_from_OpenRCT2_location(location_number))
-                if (selected_item in item_info["requires_landscaping"]) and self.options.forbid_landscape_changes.value == 1:
+                if (selected_item in item_info["requires_landscaping"]) and self.options.forbid_landscape_changes.value == "unlockable":
                     add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                         self.player).entrances[0],
                              lambda state, selected_prereq="Allow Landscape Changes":
@@ -382,7 +382,7 @@ class OpenRCT2World(World):
                             unlock["RidePrereq"] = \
                                 [self.random.randint(1, 3), chosen_prereq, excitement, intensity, nausea, 0]
                         elif (chosen_prereq in item_info["tracked_rides"]
-                              and (self.options.scenario_length.value == 0 or self.options.scenario_length.value == 1)):
+                              and (self.options.scenario_length.value == "synchronous_short" or self.options.scenario_length.value == "synchronous_long")):
                             unlock["RidePrereq"] = [self.random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
                         else:
                             if number > 100:
@@ -419,9 +419,9 @@ class OpenRCT2World(World):
             self.location_prices.append(unlock)
             # Handle unlocked rides
             if item in item_info["Rides"]:  # Don't put items in that require an impossible rule
-                if not (self.options.forbid_high_construction.value == 2 and item in item_info[
+                if not (self.options.forbid_high_construction.value == "on" and item in item_info[
                         "requires_height"]):
-                    if not (self.options.forbid_landscape_changes.value == 2 and item in item_info[
+                    if not (self.options.forbid_landscape_changes.value == "on" and item in item_info[
                             "requires_landscaping"]):
                         queued_prereqs.append(item)
             if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
