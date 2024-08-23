@@ -298,7 +298,12 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
 
-
+status_chain: typing.Dict[HintStatus, HintStatus] = {
+    HintStatus.HINT_UNSPECIFIED: HintStatus.HINT_NO_PRIORITY,
+    HintStatus.HINT_NO_PRIORITY: HintStatus.HINT_AVOID,
+    HintStatus.HINT_AVOID: HintStatus.HINT_PRIORITY,
+    HintStatus.HINT_PRIORITY: HintStatus.HINT_NO_PRIORITY,
+}
 class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
@@ -344,12 +349,6 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                         return
                     ctx = App.get_running_app().ctx
                     if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
-                        status_chain: typing.Dict[HintStatus, HintStatus] = {
-                            HintStatus.HINT_UNSPECIFIED: HintStatus.HINT_NO_PRIORITY,
-                            HintStatus.HINT_NO_PRIORITY: HintStatus.HINT_AVOID,
-                            HintStatus.HINT_AVOID: HintStatus.HINT_PRIORITY,
-                            HintStatus.HINT_PRIORITY: HintStatus.HINT_NO_PRIORITY,
-                        }
                         ctx.update_hint(self.hint["location"],
                                         self.hint["finding_player"],
                                         status_chain.get(self.hint["status"], HintStatus.HINT_UNSPECIFIED))
