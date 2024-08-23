@@ -178,7 +178,7 @@
         "Furry Convention Trap",
         "Spam Trap"
 	],
-    "rides": [
+    "Rides": [
         "Spiral Roller Coaster",
         "Stand Up Roller Coaster",
         "Suspended Swinging Coaster",
@@ -265,7 +265,7 @@
         "Submarine Ride",
         "River Rafts"
     ],
-    "roller_coasters": [
+    "Roller Coasters": [
         "Spiral Roller Coaster",
         "Stand Up Roller Coaster",
         "Suspended Swinging Coaster",
@@ -312,14 +312,14 @@
         "Classic Wooden Roller Coaster",
         "Classic Stand-up Roller Coaster"
     ],
-    "transport_rides": [
+    "Transport Rides": [
         "Miniature Railway",
         "Monorail",
         "Chairlift",
         "Lift",
         "Suspended Monorail"
     ],
-    "gentle_rides": [
+    "Gentle Rides": [
         "Car Ride",
         "Observation Tower",
         "Maze",
@@ -338,7 +338,7 @@
         "Monorail Cycles",
         "Monster Trucks"
     ],
-    "thrill_rides": [
+    "Thrill Rides": [
         "Launched Freefall",
         "Go Karts",
         "Swinging Ship",
@@ -351,7 +351,7 @@
         "Magic Carpet",
         "Enterprise"
     ],
-    "water_rides": [
+    "Water Rides": [
         "Boat Hire",
         "Dinghy Slide",
         "Log Flume",
@@ -480,10 +480,10 @@
         "River Rafts"
     ],
     "ride_types": [
-        "roller_coasters",
-        "transport_rides",
-        "gentle_rides",
-        "thrill_rides",
-        "water_rides"
+        "Roller Coasters",
+        "Transport Rides",
+        "Gentle Rides",
+        "Thrill Rides",
+        "Water Rides"
     ]
 }

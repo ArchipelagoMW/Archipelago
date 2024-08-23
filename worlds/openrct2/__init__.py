@@ -3,7 +3,7 @@ from typing import TextIO
 from Utils import local_path
 
 import worlds.LauncherComponents as LauncherComponents
-from BaseClasses import ItemClassification, Region, Item, Location, Tutorial
+from BaseClasses import ItemClassification, Region, Location, Tutorial
 from worlds.generic.Rules import add_rule
 
 from .Constants import base_id, item_info, location_info, scenario_info
@@ -11,8 +11,6 @@ from .Items import OpenRCT2Item, set_openRCT2_items
 from .Options import openRCT2Options, Scenario, openrct2_option_groups
 from worlds.AutoWorld import World, WebWorld
 
-import os
-import urllib.request
 
 class OpenRCT2WebWorld(WebWorld):
     theme = "partyTime"
@@ -56,14 +54,13 @@ LauncherComponents.icon_paths['openrct2icon'] = local_path('data', 'openrct2icon
 def get_previous_region_from_OpenRCT2_location(location_number: int):
     if location_number <= 2:
         return "OpenRCT2_Level_0"
-    elif location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
+    if location_number <= 2:
+        return "OpenRCT2_Level_0"
+    if location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
         return "OpenRCT2_Level_1"
-    else:
-        divider = location_number - 6
-        region = math.ceil(divider / 8) + 1
-        return f"OpenRCT2_Level_{region}"
-
-
+    divider = location_number - 6
+    region = math.ceil(divider / 8) + 1
+    return f"OpenRCT2_Level_{region}"
 class OpenRCT2World(World):
     """
     OpenRCT2 is a fan-made, open-source reimplementation of the classic simulation game. It faithfully preserves 
@@ -80,12 +77,12 @@ class OpenRCT2World(World):
     item_name_to_id = {name: id for id, name in enumerate(item_info["all_items"], base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_info["all_locations"], base_id)}
     item_name_groups = {
-        "roller_coasters": item_info["roller_coasters"],
-        "transport_rides": item_info["transport_rides"],
-        "gentle_rides": item_info["gentle_rides"],
-        "thrill_rides": item_info["thrill_rides"],
-        "water_rides": item_info["water_rides"],
-        "rides": item_info["rides"]
+        "Roller Coasters": item_info["Roller Coasters"],
+        "Transport Rides": item_info["Transport Rides"],
+        "Gentle Rides": item_info["Gentle Rides"],
+        "Thrill Rides": item_info["Thrill Rides"],
+        "Water Rides": item_info["Water Rides"],
+        "Rides": item_info["Rides"]
     }
 
     def __init__(self, multiworld, player: int):
@@ -228,7 +225,7 @@ class OpenRCT2World(World):
                     add_rule(region_entrance, lambda state: state.has("Cash Machine", self.player, 1))
                 if "First Aid" in self.item_table:
                     add_rule(region_entrance, lambda state: state.has("First Aid", self.player, 1))
-            add_rule(region_entrance, lambda state: state.has_group("rides", self.player, num_rides))
+            add_rule(region_entrance, lambda state: state.has_group("Rides", self.player, num_rides))
             count += 1
         final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
         final_region.connect(victory)
@@ -370,7 +367,7 @@ class OpenRCT2World(World):
                     if self.random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
                         chosen_prereq = self.random.choice(possible_prereqs)
                         set_openRCT2_rule("ride", chosen_prereq, number)
-                        if chosen_prereq in item_info["roller_coasters"] and chosen_prereq not in item_info[
+                        if chosen_prereq in item_info["Roller Coasters"] and chosen_prereq not in item_info[
                                 "stat_exempt_roller_coasters"]:
                             excitement = 0
                             intensity = 0
@@ -401,7 +398,7 @@ class OpenRCT2World(World):
                                 if ride in item_info[category]:
                                     category_selected = True
                         set_openRCT2_rule("category", category, number)
-                        if category == "roller_coasters" and any(item in possible_prereqs and item not in item_info["stat_exempt_roller_coasters"] for item in possible_prereqs):
+                        if category == "Roller Coasters" and any(item in possible_prereqs and item not in item_info["stat_exempt_roller_coasters"] for item in possible_prereqs):
                             excitement = 0
                             intensity = 0
                             nausea = 0
@@ -414,14 +411,14 @@ class OpenRCT2World(World):
                                 nausea = round(self.random.uniform(self.options.shop_minimum_nausea, self.options.shop_maximum_nausea), 1)
                             unlock["RidePrereq"] = \
                                 [self.random.randint(1, 4), category, excitement, intensity, nausea, 0]
-                        elif category == "transport_rides" or category == "water_rides" or category == "roller_coasters":
+                        elif category == "Transport Rides" or category == "Water Rides" or category == "Roller Coasters":
                             unlock["RidePrereq"] = [self.random.randint(1, 3), category, 0, 0, 0, 0]
                         else:
                             unlock["RidePrereq"] = [self.random.randint(1, 10), category, 0, 0, 0, 0]
             # Add the shop item to the shop prices
             self.location_prices.append(unlock)
             # Handle unlocked rides
-            if item in item_info["rides"]:  # Don't put items in that require an impossible rule
+            if item in item_info["Rides"]:  # Don't put items in that require an impossible rule
                 if not (self.options.forbid_high_construction.value == 2 and item in item_info[
                         "requires_height"]):
                     if not (self.options.forbid_landscape_changes.value == 2 and item in item_info[
@@ -438,7 +435,7 @@ class OpenRCT2World(World):
         # Okay, here's where we're going to take the last eligible rides in the logic table
         # and make them required for completion, if that's required.
         eligible_rides = [item for index, item in enumerate(self.item_table) if
-                          item in item_info["rides"] and item not in item_info["non_starters"]]
+                          item in item_info["Rides"] and item not in item_info["non_starters"]]
         eligible_rides = list(dict.fromkeys(eligible_rides))
         self.random.shuffle(eligible_rides)
         if self.options.required_unique_rides.value:
@@ -495,13 +492,13 @@ class OpenRCT2World(World):
             # If the item has a prereq that's a category instead of a specific ride, convert that to what
             # the in-game plugin will read
             if category in item_info["ride_types"]:
-                if category == "roller_coasters":
+                if category == "Roller Coasters":
                     self.location_prices[index]["RidePrereq"][1] = "rollercoaster"
-                elif category == "transport_rides":
+                elif category == "Transport Rides":
                     self.location_prices[index]["RidePrereq"][1] = "transport"
-                elif category == "gentle_rides":
+                elif category == "Gentle Rides":
                     self.location_prices[index]["RidePrereq"][1] = "gentle"
-                elif category == "thrill_rides":
+                elif category == "Thrill Rides":
                     self.location_prices[index]["RidePrereq"][1] = "thrill"
                 else:
                     self.location_prices[index]["RidePrereq"][1] = "water"
@@ -517,7 +514,7 @@ class OpenRCT2World(World):
 
     def create_item(self, item: str) -> OpenRCT2Item:
         classification = ItemClassification.useful
-        if item in item_info["rides"] or item in item_info["progression_rules"] or item in item_info["stalls"]:
+        if item in item_info["Rides"] or item in item_info["progression_rules"] or item in item_info["stalls"]:
             classification = ItemClassification.progression
         if item in item_info["filler_items"]:
             classification = ItemClassification.filler

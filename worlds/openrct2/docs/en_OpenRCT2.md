@@ -9,7 +9,7 @@
 
 The Archipelago Randomizer places every ride, scenery item, and (optionally) park restriction behind a large shop. Players can unlock items in the shop by buying them, unlocking different trees and goodies around every corner. Beware though, some shop items require certain rides to be built, and some require pleasing the Elder Gods themselves.
 
-Players may choose their own goal, multiple goals, or leave it up to the randomizer. Goals include paying off the park loan, obtaining a certain number of guests, building roller coasters, or even Archipelago specific goals, such as buying all the land on the map!
+Players may choose their own goal, multiple goals, or leave it up to the randomizer. Goals include paying off the park loan, obtaining a certain number of guests, building roller coasters, or even Archipelago-specific goals, such as buying all the land on the map!
 
 ## Items
 
@@ -30,6 +30,6 @@ Roller Coasters: Requires a minimum number of roller coasters to win. Additional
 
 Pay off loan: Requires the loan to be paid off to win.
 
-Unique Rides: An Archipelago exclusive objective. A list of unlockable rides will be given to you. At least 1 of each must be built to win. (Rides count as built once they have posted stats)
+Unique Rides: An Archipelago-exclusive objective. A list of unlockable rides will be given to you. At least 1 of each must be built to win. (Rides count as built once they have posted stats)
 
-Monopoly Mode: An Archipelago exclusive objective. (Nearly) Every unowned tile in the park will be purchasable. (Tiles with paths will have construction rights instead) Once you own the entire map, you win! 40 more items will be added to the item pool, 20 land purchase discounts and 20 construction rights discounts. Each one will reduce the cost of their respective tiles by $10, down to the price of free.
+Monopoly Mode: An Archipelago-exclusive objective. (Nearly) Every unowned tile in the park will be purchasable. (Tiles with paths will have construction rights instead) Once you own the entire map, you win! 40 more items will be added to the item pool, 20 land purchase discounts and 20 construction rights discounts. Each one will reduce the cost of their respective tiles by $10, down to the price of free.

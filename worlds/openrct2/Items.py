@@ -1,5 +1,4 @@
 from BaseClasses import Item
-import typing
 import copy
 from .Constants import item_info, Scenario_Items
 from .Options import *
@@ -7,7 +6,6 @@ from .Options import *
 
 class OpenRCT2Item(Item):
     game: str = "OpenRCT2"
-
 
 
 def set_openRCT2_items(world):
@@ -45,20 +43,23 @@ def set_openRCT2_items(world):
 
     for each in range(world.options.spam_traps.value):
         openRCT2_items.append("Spam Trap")
+
     for each in range(world.options.bathroom_traps.value):
         openRCT2_items.append("Bathroom Trap")
+
     for each in range(world.options.skips.value):
         openRCT2_items.append("Skip")
 
+    unlockable = 1 # For clairity in the next loop
+
     for number, rule in enumerate(item_info["park_rules"]):  # Check every rule type
-        if rules[number] == 1:  # If it's enabled and can be disabled
+        if rules[number] == unlockable:  # If it's enabled and can be disabled
             openRCT2_items.append(rule)  # Add an item to disable
 
     filler = world.options.filler.value
 
     filler_count = len(openRCT2_items) * (filler * .01) - 1
-    count = 0
-    while count < filler_count:
+    for _ in range(int(filler_count)):
         rarity = world.random.random()
         if rarity < .6:
             openRCT2_items.append(world.random.choice(item_info["filler_common"]))
@@ -66,7 +67,6 @@ def set_openRCT2_items(world):
             openRCT2_items.append(world.random.choice(item_info["filler_uncommon"]))
         else:
             openRCT2_items.append(world.random.choice(item_info["filler_rare"]))
-        count += 1
 
     openRCT2_items.append("Beauty Contest")
     
@@ -75,7 +75,7 @@ def set_openRCT2_items(world):
     # handles the starting ride
     found_starter = False
     while not found_starter:
-        candidate_list = [item for item in openRCT2_items if item in item_info["rides"] and item not in item_info["non_starters"]]  
+        candidate_list = [item for item in openRCT2_items if item in item_info["Rides"] and item not in item_info["non_starters"]]  
         candidate = world.random.choice(candidate_list)  
         starting_ride = candidate
         openRCT2_items.remove(candidate)

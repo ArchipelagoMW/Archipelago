@@ -7,7 +7,8 @@ def load_data_file(*args) -> dict:
     return json.loads(pkgutil.get_data(__name__, fname).decode())
 
 # ID of first item and location, could be hard-coded but code may be easier
-# to read with this as a propery.
+# to read with this as a property.
+
 base_id = 2000000
 
 
