@@ -199,9 +199,9 @@ def set_rules(world: MMX2World):
              lambda state: 
                 state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value) and
                 (
-                    state.can_reach(LocationName.agile_defeated) or 
-                    state.can_reach(LocationName.serges_defeated) or 
-                    state.can_reach(LocationName.violen_defeated)
+                    state.can_reach_location(LocationName.agile_defeated, player) or 
+                    state.can_reach_location(LocationName.serges_defeated, player) or 
+                    state.can_reach_location(LocationName.violen_defeated, player)
                 )
             )
     set_rule(multiworld.get_entrance(f"{RegionName.overdrive_ostrich_arena} -> {RegionName.x_hunter_arena}", player), 
