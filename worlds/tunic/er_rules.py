@@ -565,9 +565,13 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["West Garden Laurels Exit Region"],
         rule=lambda state: state.has(laurels, player))
 
-    regions["West Garden after Boss"].connect(
+    # laurels past, or ice grapple it off, or ice grapple to it then fight
+    after_gk_to_wg = regions["West Garden after Boss"].connect(
         connecting_region=regions["West Garden before Boss"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+        or (has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+            and has_sword(state, player)))
     wg_to_after_gk = regions["West Garden before Boss"].connect(
         connecting_region=regions["West Garden after Boss"],
         rule=lambda state: state.has(laurels, player) or has_sword(state, player)
@@ -1283,6 +1287,13 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                  lambda state: state.has(laurels, player)
                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
                  or has_combat_reqs("Garden Knight", state, player))
+        # laurels past, or ice grapple it off, or ice grapple to it and fight
+        set_rule(after_gk_to_wg,
+                 lambda state: state.has(laurels, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                 or (has_ice_grapple_logic(False, IceGrappling.option_easy, state, world) 
+                     and has_combat_reqs("Garden Knight", state, player)))
+
         if not world.options.hexagon_quest:
             add_rule(heir_fight,
                      lambda state: has_combat_reqs("The Heir", state, player))
