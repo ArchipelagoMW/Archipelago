@@ -68,6 +68,7 @@ non_apworlds: set = {
     "Archipelago",
     "Clique",
     "Final Fantasy",
+    "Final Fantasy IV Free Enterprise",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
