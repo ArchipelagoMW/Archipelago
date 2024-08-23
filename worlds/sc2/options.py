@@ -9,6 +9,7 @@ from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, Mis
     campaign_mission_table, SC2Race, MissionFlag
 from .mission_groups import mission_groups, MissionGroupNames
 from .mission_order.options import CustomMissionOrder
+from . import item_names
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -1151,3 +1152,47 @@ LEGACY_GRID_ORDERS = {3, 4, 8}  # Medium Grid, Mini Grid, and Tiny Grid respecti
 kerrigan_unit_available = [
     KerriganPresence.option_vanilla,
 ]
+
+# Names of upgrades to be included for different options
+upgrade_included_names: Dict[GenericUpgradeItems, Set[str]] = {
+    GenericUpgradeItems.option_individual_items: {
+        item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON,
+        item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR,
+        item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON,
+        item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR,
+        item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON,
+        item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR,
+        item_names.PROGRESSIVE_ZERG_MELEE_ATTACK,
+        item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK,
+        item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE,
+        item_names.PROGRESSIVE_ZERG_FLYER_ATTACK,
+        item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE,
+        item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON,
+        item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR,
+        item_names.PROGRESSIVE_PROTOSS_SHIELDS,
+        item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON,
+        item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR,
+    },
+    GenericUpgradeItems.option_bundle_weapon_and_armor: {
+        item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE,
+        item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE,
+        item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE,
+        item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE,
+        item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE,
+        item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE,
+    },
+    GenericUpgradeItems.option_bundle_unit_class: {
+        item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE,
+        item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE,
+        item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE,
+        item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE,
+        item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE,
+        item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE,
+        item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE,
+    },
+    GenericUpgradeItems.option_bundle_all: {
+        item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
+        item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
+        item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE,
+    }
+}

@@ -8,7 +8,7 @@ import logging
 from BaseClasses import Region, Location, CollectionState, Entrance
 from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
 from .layout_types import LayoutType
-from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData
+from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData, ItemEntryRule
 from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
 from worlds.AutoWorld import World
 
@@ -54,6 +54,7 @@ class SC2MissionOrder(MissionOrderNode):
     campaigns: List[SC2MOGenCampaign]
     sorted_missions: Dict[Difficulty, List[SC2MOGenMission]]
     fixed_missions: List[SC2MOGenMission]
+    items_to_lock: Dict[str, int]
     mission_pools: SC2MOGenMissionPools
     goal_missions: List[SC2MOGenMission]
     max_depth: int
@@ -62,6 +63,7 @@ class SC2MissionOrder(MissionOrderNode):
         self.campaigns = []
         self.sorted_missions = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
         self.fixed_missions = []
+        self.items_to_lock = {}
         self.mission_pools = mission_pools
         self.goal_missions = []
         self.parent = None
@@ -142,6 +144,10 @@ class SC2MissionOrder(MissionOrderNode):
     def get_final_missions(self) -> List[SC2MOGenMission]:
         """Returns the slots of all missions that are required to beat the mission order."""
         return self.goal_missions
+
+    def get_items_to_lock(self) -> Dict[str, int]:
+        """Returns a dict of item names and amounts that are required by Item entry rules."""
+        return self.items_to_lock
 
     def get_slot_data(self) -> List[Dict[str, Any]]:
         """Parses the mission order into a format usable for slot data."""
@@ -300,6 +306,15 @@ class SC2MissionOrder(MissionOrderNode):
                         mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, mission.prev))
 
     def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode, rule_id: int = -1) -> EntryRule:
+        if "items" in data:
+            items: Dict[str, int] = data["items"]
+            for (item, amount) in items.items():
+                if item in self.items_to_lock:
+                    # Lock the greatest required amount of each item
+                    self.items_to_lock[item] = max(self.items_to_lock[item, amount])
+                else:
+                    self.items_to_lock[item] = amount
+            return ItemEntryRule(items)
         if "rules" in data:
             rules = [self.dict_to_entry_rule(subrule, searcher) for subrule in data["rules"]]
             return SubRuleEntryRule(rules, data["amount"], rule_id)

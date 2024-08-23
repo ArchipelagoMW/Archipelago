@@ -262,7 +262,7 @@ entry_rules: []
 ```
 This defines access restrictions for parts of the mission order.
 
-There are three available rules:
+These are the available rules:
 ```yaml
 entry_rules:
   # Beat these things ("Beat rule")
@@ -270,10 +270,14 @@ entry_rules:
   # Beat X amount of missions from these things ("Count rule")
   - scope: []
     amount: -1
+  # Find these items ("Item rule")
+  - items: {}
   # Fulfill X amount of other conditions ("Subrule rule")
   - rules: []
     amount: -1
 ```
+Note that Item rules take both a name and amount for each item (see the example below). In general this rule treats items like the `locked_items` option, but as a notable difference all items required for Item rules are marked as progression. If multiple Item rules require the same item, the largest required amount will be locked, **not** the sum of all amounts.
+
 The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order.
 
 The basic form of an address is `<Campaign>/<Layout>/<Mission>`, where `<Campaign>` and `<Layout>` are the definition names (not `display_names`!) of a campaign and a layout within that campaign, and `<Mission>` is the index of a mission slot in that layout. The indices of mission slots are determined by the layout's type.
@@ -296,6 +300,12 @@ Below are examples of the available entry rules:
     Some Missions:
       type: grid
       size: 9
+      entry_rules:
+        # Item rule:
+        # To access the Some Missions layout,
+        # you have to find or receive your Marine
+        - items:
+          Marine: 1
     
     Wings of Liberty:
       Mar Sara:

@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from ..mission_tables import SC2Mission
+from ..items import item_table
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -67,7 +68,8 @@ class RuleData(ABC):
 
     @abstractmethod
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
+        self, beaten_missions: Set[int], received_items: Dict[int, int],
+        mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         return False
@@ -117,7 +119,8 @@ class BeatMissionsRuleData(RuleData):
         return len(self.visual_reqs) == 1
 
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
+        self, beaten_missions: Set[int], received_items: Dict[int, int],
+        mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         # Beat rules are accessible if all their missions are beaten and accessible
@@ -125,7 +128,7 @@ class BeatMissionsRuleData(RuleData):
             return False
         for mission_id in self.mission_ids:
             for rule in mission_id_to_entry_rules[mission_id]:
-                if not rule.is_accessible(beaten_missions, mission_id_to_entry_rules, accessible_rules, seen_rules):
+                if not rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules):
                     return False
         return True
     
@@ -193,13 +196,14 @@ class CountMissionsRuleData(RuleData):
         return len(self.visual_reqs) == 1
 
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
+        self, beaten_missions: Set[int], received_items: Dict[int, int],
+        mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         # Count rules are accessible if enough of their missions are beaten and accessible
         return self.amount <= sum(
             all(
-                rule.is_accessible(beaten_missions, mission_id_to_entry_rules, accessible_rules, seen_rules)
+                rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
                 for rule in mission_id_to_entry_rules[mission_id]
             )
             for mission_id in beaten_missions.intersection(self.mission_ids)
@@ -259,6 +263,13 @@ class SubRuleRuleData(RuleData):
         for rule_data in data["sub_rules"]:
             if "sub_rules" in rule_data:
                 rule = SubRuleRuleData.parse_from_dict(rule_data)
+            elif "item_ids" in rule_data:
+                # Slot data converts Dict[int, int] to Dict[str, int] for some reason
+                item_ids = {int(item): item_amount for (item, item_amount) in rule_data["item_ids"].items()}
+                rule = ItemRuleData(
+                    item_ids,
+                    rule_data["visual_reqs"]
+                )
             elif "amount" in rule_data:
                 rule = CountMissionsRuleData(
                     **{field: value for field, value in rule_data.items()}
@@ -296,7 +307,8 @@ class SubRuleRuleData(RuleData):
         return self.amount == len(self.sub_rules) == 1 and self.sub_rules[0].shows_single_rule()
 
     def is_accessible(
-        self, beaten_missions: Set[int], mission_id_to_entry_rules: Dict[int, MissionEntryRules],
+        self, beaten_missions: Set[int], received_items: Dict[int, int],
+        mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         # Early exit check for top-level entry rules
@@ -310,10 +322,64 @@ class SubRuleRuleData(RuleData):
             seen_rules.add(self.rule_id)
         # Sub-rule rules are accessible if enough of their child rules are accessible
         if self.amount <= sum(
-            rule.is_accessible(beaten_missions, mission_id_to_entry_rules, accessible_rules, seen_rules)
+            rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
             for rule in self.sub_rules
         ):
             if self.rule_id >= 0:
                 accessible_rules.add(self.rule_id)
             return True
         return False
+
+class ItemEntryRule(EntryRule):
+    items_to_check: Dict[str, int]
+
+    def __init__(self, items_to_check: Dict[str, int]) -> None:
+        super().__init__()
+        self.items_to_check = items_to_check
+
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+        # Region creation should assume items can be placed
+        return True
+    
+    def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
+        # Depth 0 means this rule requires 0 prior beaten missions
+        return 0
+    
+    def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
+        return lambda state: state.has_all_counts(self.items_to_check, player)
+    
+    def to_slot_data(self) -> RuleData:
+        item_ids = {item_table[item].code: amount for (item, amount) in self.items_to_check.items()}
+        visual_reqs = [item if amount == 1 else str(amount) + "x " + item for (item, amount) in self.items_to_check.items()]
+        return ItemRuleData(
+            item_ids,
+            visual_reqs
+        )
+
+@dataclass
+class ItemRuleData(RuleData):
+    item_ids: Dict[int, int]
+    visual_reqs: List[str]
+
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+        indent = " ".join("" for _ in range(indents))
+        if len(self.visual_reqs) == 1:
+            return f"Find {self.visual_reqs[0]}"
+        tooltip = f"Find all of these:\n{indent}- "
+        tooltip += f"\n{indent}- ".join(req for req in self.visual_reqs)
+        return tooltip
+    
+    def shows_single_rule(self) -> bool:
+        return len(self.visual_reqs) == 1
+
+    def is_accessible(
+        self, beaten_missions: Set[int], received_items: Dict[int, int],
+        mission_id_to_entry_rules: Dict[int, MissionEntryRules],
+        accessible_rules: Set[int], seen_rules: Set[int]
+    ) -> bool:
+        return all(
+            item in received_items and received_items[item] >= amount
+            for (item, amount) in self.item_ids.items()
+        )
+    
+

@@ -54,7 +54,7 @@ from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from .items import (
     lookup_id_to_name, get_full_item_list, ItemData,
-    race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles, upgrade_included_names,
+    race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
 from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, LocationFlag, SC2HOTS_LOC_ID_OFFSET
@@ -64,7 +64,7 @@ from .mission_tables import (
 )
 
 import colorama
-from .options import Option
+from .options import Option, upgrade_included_names
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
 
@@ -1392,20 +1392,24 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
     available_campaigns: typing.List[int] = []
 
     beaten_missions = {mission_id for mission_id in ctx.mission_id_to_entry_rules if ctx.is_mission_completed(mission_id)}
+    received_items: typing.Dict[int, int] = {}
+    for network_item in ctx.items_received:
+        received_items.setdefault(network_item.item, 0)
+        received_items[network_item.item] += 1
 
     accessible_rules: typing.Set[int] = set()
     for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
         available_layouts[campaign_idx] = []
-        if campaign.entry_rule.is_accessible(beaten_missions, ctx.mission_id_to_entry_rules, accessible_rules, set()):
+        if campaign.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
             available_campaigns.append(campaign_idx)
             for layout_idx, layout in enumerate(campaign.layouts):
-                if layout.entry_rule.is_accessible(beaten_missions, ctx.mission_id_to_entry_rules, accessible_rules, set()):
+                if layout.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
                     available_layouts[campaign_idx].append(layout_idx)
                     for column in layout.missions:
                         for mission in column:
                             if mission.mission_id == -1:
                                 continue
-                            if mission.entry_rule.is_accessible(beaten_missions, ctx.mission_id_to_entry_rules, accessible_rules, set()):
+                            if mission.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
                                 available_missions.append(mission.mission_id)
 
     return available_missions, available_layouts, available_campaigns
