@@ -573,7 +573,7 @@ class PaletteTornadoFang(BasePalette):
 class SetPalettes(OptionDict):
     """
     Allows you to create colors for each weapon X has. Includes charge levels and Gold Armor customization.
-    This will override the option set
+    This will override the option preset
     
     Each one expects 16 values which are mapped to X's colors.
     The values can be in SNES RGB (bgr555) with the $ prefix or PC RGB (rgb888) with the # prefix.
@@ -612,6 +612,7 @@ mmx3_option_groups = [
     ]),
     OptionGroup("Boss Weakness Options", [
         BossWeaknessRando,
+        PlandoWeaknesses,
         BossWeaknessStrictness,
         BossRandomizedHP,
         LogicBossWeakness,
