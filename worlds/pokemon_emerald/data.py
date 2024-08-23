@@ -383,7 +383,7 @@ def _init() -> None:
         label = []
         for word in map_name[4:].split("_"):
             # 1F, B1F, 2R, etc.
-            re_match = re.match("^B?\d[FRP]$", word)
+            re_match = re.match("^B?\d+[FRP]$", word)
             if re_match:
                 label.append(word)
                 continue
@@ -392,7 +392,7 @@ def _init() -> None:
             re_match = re.match("^([A-Z]+)(\d+)$", word)
             if re_match:
                 label.append(re_match.group(1).capitalize())
-                label.append(str(int(re_match.group(2))))
+                label.append(re_match.group(2).lstrip("0"))
                 continue
 
             if word == "OF":
