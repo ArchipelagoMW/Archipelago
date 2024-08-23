@@ -742,13 +742,11 @@ class TestAdvancements(MCTestBase):
             ["Serious Dedication", False, [], ['Brewing']],
             ["Serious Dedication", False, [], ['Bottles']],
             ["Serious Dedication", False, [], ['Bed']],
-            ["Serious Dedication", False, ['8 Netherite Scrap', '8 Netherite Scrap'], ['8 Netherite Scrap']],
+            ["Serious Dedication", False, [], ['8 Netherite Scrap']],
             ["Serious Dedication", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools',
-                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed',
-                                          '8 Netherite Scrap', '8 Netherite Scrap', '8 Netherite Scrap']],
+                                          'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed', '8 Netherite Scrap']],
             ["Serious Dedication", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools',
-                                          'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Bed',
-                                          '8 Netherite Scrap', '8 Netherite Scrap', '8 Netherite Scrap']],
+                                          'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Bed', '8 Netherite Scrap']],
             ])
 
     def test_42054(self):
@@ -917,13 +915,11 @@ class TestAdvancements(MCTestBase):
             ["Country Lode, Take Me Home", False, [], ['Brewing']],
             ["Country Lode, Take Me Home", False, [], ['Bottles']],
             ["Country Lode, Take Me Home", False, [], ['Bed']],
-            ["Country Lode, Take Me Home", False, ['8 Netherite Scrap', '8 Netherite Scrap'], ['8 Netherite Scrap']],
+            ["Country Lode, Take Me Home", False, [], ['8 Netherite Scrap']],
             ["Country Lode, Take Me Home", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools',
-                                                  'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed',
-                                                  '8 Netherite Scrap', '8 Netherite Scrap', '8 Netherite Scrap']],
+                                                  'Progressive Weapons', 'Progressive Armor', 'Brewing', 'Bottles', 'Bed', '8 Netherite Scrap']],
             ["Country Lode, Take Me Home", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools',
-                                                  'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Bed',
-                                                  '8 Netherite Scrap', '8 Netherite Scrap', '8 Netherite Scrap']],
+                                                  'Progressive Weapons', 'Shield', 'Brewing', 'Bottles', 'Bed', '8 Netherite Scrap']],
             ])
 
     def test_42067(self):
@@ -1019,11 +1015,10 @@ class TestAdvancements(MCTestBase):
             ["Cover Me in Debris", False, [], ['Brewing']],
             ["Cover Me in Debris", False, [], ['Bottles']],
             ["Cover Me in Debris", False, [], ['Bed']],
-            ["Cover Me in Debris", False, ['8 Netherite Scrap', '8 Netherite Scrap'], ['8 Netherite Scrap']],
+            ["Cover Me in Debris", False, ['8 Netherite Scrap'], ['8 Netherite Scrap']],
             ["Cover Me in Debris", True, ['Progressive Resource Crafting', 'Progressive Tools', 'Flint and Steel', 'Progressive Tools', 'Progressive Tools',
                                           'Progressive Weapons', 'Progressive Armor', 'Progressive Armor',
-                                          'Brewing', 'Bottles', 'Bed',
-                                          '8 Netherite Scrap', '8 Netherite Scrap', '8 Netherite Scrap']],
+                                          'Brewing', 'Bottles', 'Bed', '8 Netherite Scrap', '8 Netherite Scrap']],
             ])
 
     def test_42077(self):

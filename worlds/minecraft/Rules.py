@@ -338,7 +338,7 @@ def get_rules_lookup(world, player: int):
             "Voluntary Exile": lambda state: basic_combat(world, state, player),
             "Eye Spy": lambda state: enter_stronghold(world, state, player),
             "Serious Dedication": lambda state: (state.can_reach_location("Hidden in the Depths", player)
-                                                 and state.has("8 Netherite Scrap", player, 3)
+                                                 and state.has("8 Netherite Scrap", player)
                                                  and has_gold_ingots(world, state, player)),
             "Postmortal": lambda state: complete_raid(world, state, player),
             "Adventuring Time": lambda state: can_adventure(world, state, player)
@@ -359,7 +359,7 @@ def get_rules_lookup(world, player: int):
                                               and state.can_reach_region('The End', player)),  # chorus fruit
             "Subspace Bubble": lambda state: has_diamond_pickaxe(world, state, player),
             "Country Lode, Take Me Home": lambda state: state.can_reach_location("Hidden in the Depths", player)
-                                                        and state.has("8 Netherite Scrap", player, 3)
+                                                        and state.has("8 Netherite Scrap", player)
                                                         and has_gold_ingots(world, state, player),
             "Bee Our Guest": lambda state: state.has("Campfire", player)
                                            and has_bottle(world, state, player),
@@ -372,7 +372,7 @@ def get_rules_lookup(world, player: int):
                                               and has_bottle(world, state, player),
             "Ol' Betsy": lambda state: craft_crossbow(world, state, player),
             "Cover Me in Debris": lambda state: state.has("Progressive Armor", player, 2)
-                                                and state.has("8 Netherite Scrap", player, 3)
+                                                and state.has("8 Netherite Scrap", player, 2)
                                                 and state.can_reach_location("Hidden in the Depths", player),
             "Hot Topic": lambda state: state.has("Progressive Resource Crafting", player),
             "The Lie": lambda state: has_iron_ingots(world, state, player)
