@@ -29,8 +29,8 @@ class ShapezWeb(WebWorld):
         ["BlastSlimey"]
     )
     setup_de = Tutorial(
-        "Multiworld-Setup-Anleitung",
-        "Eine Anleitung zum Spielen von shapez in Archipelago",
+        setup_en.tutorial_name,
+        setup_en.description,
         "Deutsch",
         "setup_de.md",
         "setup/de",
