@@ -636,33 +636,28 @@ class Context:
         return 0
 
     def recheck_hints(self, team: typing.Optional[int] = None, slot: typing.Optional[int] = None,
-                      changed: typing.Optional[typing.Set[team_slot]] = None,
-                      already_updated: typing.Optional[typing.Set[team_slot]] = None) -> None:
-        if not already_updated:
-            already_updated = set()
-        needs_updating = set()
+                      changed: typing.Optional[typing.Set[team_slot]] = None) -> None:
+        """Refreshes the hints for the specified team/slot. Providing 'None' for either team or slot
+        will refresh all teams or all slots respectively. If a set is passed for 'changed', each (team,slot)
+        pair that has at least one hint modified will be added to the set.
+        """
         for hint_team, hint_slot in self.hints:
-            if (hint_team, hint_slot) in already_updated:
-                continue
-            if (team != hint_team and team is not None):
-                continue
-            if (slot != hint_slot and slot is not None):
-                continue
+            if team != hint_team and team is not None:
+                continue  # Check specified team only, all if team is None
+            if slot != hint_slot and slot is not None:
+                continue  # Check specified slot only, all if slot is None
             new_hints: typing.Set[Hint] = set()
             for hint in self.hints[hint_team, hint_slot]:
                 new_hint = hint.re_check(self, hint_team)
                 new_hints.add(new_hint)
                 if hint == new_hint:
                     continue
-                if changed is not None:
-                    changed.add((hint_team,hint_slot))
-                for player in (hint.finding_player, hint.receiving_player):
+                for player in self.slot_set(hint.receiving_player) | {hint.finding_player}:
+                    if changed is not None:
+                        changed.add((hint_team,player))
                     if slot is not None and slot != player:
-                        needs_updating.add((hint_team, player))
+                        self.replace_hint(hint_team, player, hint, new_hint)
             self.hints[hint_team, hint_slot] = new_hints
-            already_updated.add((hint_team, hint_slot))
-        for hint_team, hint_slot in needs_updating:
-            self.recheck_hints(hint_team, hint_slot, already_updated, changed)
 
     def get_rechecked_hints(self, team: int, slot: int):
         self.recheck_hints(team, slot)
@@ -756,7 +751,9 @@ class Context:
         return None
     
     def replace_hint(self, team: int, slot: int, old_hint: Hint, new_hint: Hint) -> None:
-        self.hints[team, slot] = {new_hint if hint == old_hint else hint for hint in self.hints[team, slot]}
+        if old_hint in self.hints[team, slot]:
+            self.hints[team, slot].remove(old_hint)
+            self.hints[team, slot].add(new_hint)
     
     # "events"
 
@@ -1066,7 +1063,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         ctx.save()
 
 
-def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str], status: HintStatus) \
+def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, str], auto_status: HintStatus) \
         -> typing.List[Hint]:
     hints = []
     slots: typing.Set[int] = {slot}
@@ -1083,7 +1080,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
         else:
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-            new_status = status
+            new_status = auto_status
             if found:
                 new_status = HintStatus.HINT_FOUND
             elif item_flags & ItemClassification.trap:
@@ -1094,13 +1091,13 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
     return hints
 
 
-def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str, status: HintStatus) \
+def collect_hint_location_name(ctx: Context, team: int, slot: int, location: str, auto_status: HintStatus) \
         -> typing.List[Hint]:
     seeked_location: int = ctx.location_names_for_game(ctx.games[slot])[location]
-    return collect_hint_location_id(ctx, team, slot, seeked_location, status)
+    return collect_hint_location_id(ctx, team, slot, seeked_location, auto_status)
 
 
-def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int, status: HintStatus) \
+def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location: int, auto_status: HintStatus) \
         -> typing.List[Hint]:
     prev_hint = ctx.get_hint(team, slot, seeked_location)
     if prev_hint:
@@ -1111,7 +1108,7 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
 
         found = seeked_location in ctx.location_checks[team, slot]
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
-        new_status = status
+        new_status = auto_status
         if found:
             new_status = HintStatus.HINT_FOUND
         elif item_flags & ItemClassification.trap:
@@ -1534,7 +1531,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
         points_available = get_client_points(self.ctx, self.client)
         cost = self.ctx.get_hint_cost(self.client.slot)
-        status = HintStatus.HINT_UNSPECIFIED if for_location else HintStatus.HINT_PRIORITY
+        auto_status = HintStatus.HINT_UNSPECIFIED if for_location else HintStatus.HINT_PRIORITY
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
@@ -1560,9 +1557,9 @@ class ClientMessageProcessor(CommonCommandProcessor):
                 self.output(f"Sorry, \"{hint_name}\" is marked as non-hintable.")
                 hints = []
             elif not for_location:
-                hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_id, status)
+                hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_id, auto_status)
             else:
-                hints = collect_hint_location_id(self.ctx, self.client.team, self.client.slot, hint_id, status)
+                hints = collect_hint_location_id(self.ctx, self.client.team, self.client.slot, hint_id, auto_status)
 
         else:
             game = self.ctx.games[self.client.slot]
@@ -1582,16 +1579,16 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hints = []
                     for item_name in self.ctx.item_name_groups[game][hint_name]:
                         if item_name in self.ctx.item_names_for_game(game):  # ensure item has an ID
-                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item_name, status))
+                            hints.extend(collect_hints(self.ctx, self.client.team, self.client.slot, item_name, auto_status))
                 elif not for_location and hint_name in self.ctx.item_names_for_game(game):  # item name
-                    hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name, status)
+                    hints = collect_hints(self.ctx, self.client.team, self.client.slot, hint_name, auto_status)
                 elif hint_name in self.ctx.location_name_groups[game]:  # location group name
                     hints = []
                     for loc_name in self.ctx.location_name_groups[game][hint_name]:
                         if loc_name in self.ctx.location_names_for_game(game):
-                            hints.extend(collect_hint_location_name(self.ctx, self.client.team, self.client.slot, loc_name, status))
+                            hints.extend(collect_hint_location_name(self.ctx, self.client.team, self.client.slot, loc_name, auto_status))
                 else:  # location name
-                    hints = collect_hint_location_name(self.ctx, self.client.team, self.client.slot, hint_name, status)
+                    hints = collect_hint_location_name(self.ctx, self.client.team, self.client.slot, hint_name, auto_status)
 
             else:
                 self.output(response)
