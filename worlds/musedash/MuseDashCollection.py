@@ -46,6 +46,7 @@ class MuseDashCollections:
         "CHAOS Glitch",
         "FM 17314 SUGAR RADIO",
         "Yume Ou Mono Yo Secret",
+        "Tsukuyomi Ni Naru Replaced"
     ]
 
     album_items: Dict[str, AlbumData] = {}
