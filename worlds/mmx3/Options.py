@@ -4,7 +4,7 @@ import typing
 from Options import Choice, Range, Toggle, DefaultOnToggle, OptionGroup, OptionDict, OptionSet, DeathLink, PerGameCommonOptions, StartInventoryPool
 from schema import Schema, And, Use, Optional
 
-from .Rom import action_buttons, action_names
+from .Rom import action_buttons, action_names, x_palette_set_offsets
 from .Weaknesses import boss_weaknesses, weapons_chaotic
 
 class EnergyLink(DefaultOnToggle):
@@ -375,6 +375,230 @@ class LogicHelmetCheckpoints(Toggle):
     """
     display_name = "Helmet Checkpoints In Logic"
 
+class VoltCatfishTweaks(OptionSet):
+    """
+    Behavior options for Volt Catfish. Everything can be stacked.
+    """
+    display_name = "Volt Catfish Tweaks"
+    valid_keys = {
+        "Spawns a spark after landing #1",
+        "Spawns a spark after landing #2",
+        "Spawns a spark after landing #3",
+        "Spawns a spark after landing #4",
+        "Bounces after landing #1",
+        "Bounces after landing #2",
+        "Bounces after landing #3",
+        "Bounces after landing #4",
+        "Leap random vertical speed",
+        "Leap random horizontal speed",
+        "Spawn a volt sphere #1",
+        "Spawn a volt sphere #2",
+        "Can't be stunned with incoming damage",
+        "Can't receive damage during Volt Shower",
+        "Halve barrier HP #1",
+        "Halve barrier HP #2",
+        "Halve barrier HP #3",
+    }
+    default = {
+        "Spawns a spark after landing #1",
+        "Spawns a spark after landing #2",
+        "Spawns a spark after landing #3",
+        "Spawns a spark after landing #4",
+        "Bounces after landing #1",
+        "Bounces after landing #2",
+        "Bounces after landing #3",
+        "Bounces after landing #4",
+        "Leap random vertical speed",
+        "Leap random horizontal speed",
+        "Spawn a volt sphere #1",
+        "Spawn a volt sphere #2",
+        "Can't be stunned with incoming damage",
+        "Can't receive damage during Volt Shower",
+        "Halve barrier HP #1",
+        "Halve barrier HP #2",
+        "Halve barrier HP #3",
+    }
+
+class BasePalette(Choice):
+    """
+    Base class for palettes
+    """
+    option_blue = 0
+    option_gold_armor = 1
+    option_charge_blue = 2
+    option_charge_pink = 3
+    option_charge_red = 4
+    option_charge_green = 5
+    option_acid_burst = 6
+    option_parasitic_bomb = 7
+    option_triad_thunder = 8
+    option_spinning_blade = 9
+    option_ray_splasher = 10
+    option_gravity_well = 11
+    option_frost_shield = 12
+    option_tornado_fang = 13
+    option_crystal_hunter = 14
+    option_bubble_splash = 15
+    option_silk_shot = 16
+    option_spin_wheel = 17
+    option_spnic_slicer = 18
+    option_strike_chain = 19
+    option_magnet_mine = 20
+    option_speed_burner = 21
+    option_homing_torpedo = 22
+    option_chameleon_sting = 23
+    option_rolling_shield = 24
+    option_fire_wave = 25
+    option_storm_tornado = 26
+    option_electric_spark = 27
+    option_boomerang_cutter = 28
+    option_shotgun_ice = 29
+    option_x4_default_armor = 30
+    option_x4_ultimate_armor = 31
+    option_x5_ultimate_armor = 32
+    option_x6_shadow_armor = 33
+    option_x6_blade_armor = 34
+    option_classic_blue = 35
+    option_smw_mario = 80
+    option_smw_luigi = 81
+    option_salvager_rex = 100
+    option_master_driver_rex_2 = 101
+    option_master_driver_rex_3 = 102
+    option_grand_marshall_shulk = 103
+    option_lifesage_nia = 104
+    option_royal_summoner_melia = 105
+    option_youmu = 180
+    option_yohane = 190
+    option_okayu = 200
+
+
+class PaletteDefault(BasePalette):
+    """
+    Which color to use for X's default color
+    """
+    display_name = "X Palette"
+    default = 0
+
+class PaletteGoldArmor(BasePalette):
+    """
+    Which color to use for X's Gold Armor
+    """
+    display_name = "Gold Armor Palette"
+    default = 1
+
+class PaletteChargeBlue(BasePalette):
+    """
+    Which color to use for X's Level 1 & 2 Charge
+    """
+    display_name = "Level 1 & 2 Charge Palette"
+    default = 2
+
+class PaletteChargePink(BasePalette):
+    """
+    Which color to use for X's Level 3 Charge
+    """
+    display_name = "Level 3 Charge Palette"
+    default = 3
+
+class PaletteChargeRed(BasePalette):
+    """
+    Which color to use for X's Level 4 Charge
+    """
+    display_name = "Level 4 Charge Palette"
+    default = 4
+
+class PaletteChargeGreen(BasePalette):
+    """
+    Which color to use for X's Z-Saber Charge
+    """
+    display_name = "Z-Saber Charge Palette"
+    default = 5
+
+class PaletteAcidBurst(BasePalette):
+    """
+    Which color to use for X's Acid Burst
+    """
+    display_name = "Acid Burst Palette"
+    default = 6
+
+class PaletteParasiticBomb(BasePalette):
+    """
+    Which color to use for X's Parasitic Bomb
+    """
+    display_name = "Parasitic Bomb Palette"
+    default = 7
+
+class PaletteTriadThunder(BasePalette):
+    """
+    Which color to use for X's Triad Thunder
+    """
+    display_name = "Triad Thunder Palette"
+    default = 8
+
+class PaletteSpinningBlade(BasePalette):
+    """
+    Which color to use for X's Spinning Blade
+    """
+    display_name = "Spinning Blade Palette"
+    default = 9
+
+class PaletteRaySplasher(BasePalette):
+    """
+    Which color to use for X's Ray Splasher
+    """
+    display_name = "Ray Splasher Palette"
+    default = 10
+
+class PaletteGravityWell(BasePalette):
+    """
+    Which color to use for X's Gravity Well
+    """
+    display_name = "Gravity Well Palette"
+    default = 11
+
+class PaletteFrostShield(BasePalette):
+    """
+    Which color to use for X's Frost Shield
+    """
+    display_name = "Frost Shield Palette"
+    default = 12
+
+class PaletteTornadoFang(BasePalette):
+    """
+    Which color to use for X's Tornado Fang
+    """
+    display_name = "Tornado Fang Palette"
+    default = 13
+
+class SetPalettes(OptionDict):
+    """
+    Allows you to create colors for each weapon X has. Includes charge levels and Gold Armor customization.
+    This will override the option set
+    
+    Each one expects 16 values which are mapped to X's colors.
+    The values can be in SNES RGB (bgr555) with the $ prefix or PC RGB (rgb888) with the # prefix.
+    """
+    display_name = "Set Custom Palettes"
+    schema = Schema({
+        Optional(color_set): list for color_set in x_palette_set_offsets.keys()
+    })
+    default = {
+        "Default": [],
+        "Gold Armor": [],
+        "Charge Blue": [],
+        "Charge Pink": [],
+        "Charge Red": [],
+        "Charge Green": [],
+        "Acid Burst": [],
+        "Parasitic Bomb": [],
+        "Triad Thunder": [],
+        "Spinning Blade": [],
+        "Ray Splasher": [],
+        "Gravity Well": [],
+        "Frost Shield": [],
+        "Tornado Fang": [],
+    }
+
 mmx3_option_groups = [
     OptionGroup("Gameplay Options", [
         StartingLifeCount,
@@ -416,6 +640,26 @@ mmx3_option_groups = [
         BitMedalCount,
         ByteMedalCount,
     ]),
+    OptionGroup("Enemy Tweaks", [
+        VoltCatfishTweaks,
+    ]),
+    OptionGroup("Aesthetic", [
+        SetPalettes,
+        PaletteDefault,
+        PaletteGoldArmor,
+        PaletteChargeBlue,
+        PaletteChargePink,
+        PaletteChargeRed,
+        PaletteChargeGreen,
+        PaletteAcidBurst,
+        PaletteParasiticBomb,
+        PaletteTriadThunder,
+        PaletteSpinningBlade,
+        PaletteRaySplasher,
+        PaletteGravityWell,
+        PaletteFrostShield,
+        PaletteTornadoFang,
+    ]),
 ]
 
 @dataclass
@@ -456,3 +700,19 @@ class MMX3Options(PerGameCommonOptions):
     logic_boss_weakness: LogicBossWeakness
     logic_vile_required: LogicRequireVileDefeatForDoppler
     logic_helmet_checkpoints: LogicHelmetCheckpoints
+    volt_catfish_tweaks: VoltCatfishTweaks
+    player_palettes: SetPalettes
+    palette_default: PaletteDefault
+    palette_gold_armor: PaletteGoldArmor
+    palette_charge_blue: PaletteChargeBlue
+    palette_charge_pink: PaletteChargePink
+    palette_charge_red: PaletteChargeRed
+    palette_charge_green: PaletteChargeGreen
+    palette_acid_burst: PaletteAcidBurst
+    palette_parasitic_bomb: PaletteParasiticBomb
+    palette_triad_thunder: PaletteTriadThunder
+    palette_spinning_blade: PaletteSpinningBlade
+    palette_ray_splasher: PaletteRaySplasher
+    palette_gravity_well: PaletteGravityWell
+    palette_frost_shield: PaletteFrostShield
+    palette_tornado_fang: PaletteTornadoFang

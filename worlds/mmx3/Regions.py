@@ -24,6 +24,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     toxic_seahorse_underwater = create_region(multiworld, player, active_locations, RegionName.toxic_seahorse_underwater)
     toxic_seahorse_hootareca = create_region(multiworld, player, active_locations, RegionName.toxic_seahorse_hootareca)
     toxic_seahorse_dam = create_region(multiworld, player, active_locations, RegionName.toxic_seahorse_dam)
+    toxic_seahorse_before_boss = create_region(multiworld, player, active_locations, RegionName.toxic_seahorse_before_boss)
     toxic_seahorse_boss = create_region(multiworld, player, active_locations, RegionName.toxic_seahorse_boss)
 
     tunnel_rhino = create_region(multiworld, player, active_locations, RegionName.tunnel_rhino)
@@ -99,6 +100,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         toxic_seahorse_underwater,
         toxic_seahorse_hootareca,
         toxic_seahorse_dam,
+        toxic_seahorse_before_boss,
         toxic_seahorse_boss,
         tunnel_rhino,
         tunnel_rhino_start,
@@ -374,7 +376,8 @@ def connect_regions(world: World):
     connect(world, RegionName.toxic_seahorse_bit_byte, RegionName.toxic_seahorse_underwater)
     connect(world, RegionName.toxic_seahorse_underwater, RegionName.toxic_seahorse_hootareca)
     connect(world, RegionName.toxic_seahorse_hootareca, RegionName.toxic_seahorse_dam)
-    connect(world, RegionName.toxic_seahorse_dam, RegionName.toxic_seahorse_boss)
+    connect(world, RegionName.toxic_seahorse_dam, RegionName.toxic_seahorse_before_boss)
+    connect(world, RegionName.toxic_seahorse_before_boss, RegionName.toxic_seahorse_boss)
 
     # Connect Tunnel Rhino
     connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_start)
@@ -458,7 +461,7 @@ def connect_regions(world: World):
     if world.options.logic_helmet_checkpoints.value:
         # Connect Toxic Seahorse
         connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_underwater)
-        connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_dam)
+        connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_before_boss)
 
         # Connect Tunnel Rhino
         connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_wall_jump)

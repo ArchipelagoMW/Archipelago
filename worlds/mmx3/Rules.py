@@ -1,7 +1,7 @@
 from worlds.generic.Rules import add_rule, set_rule
 from BaseClasses import CollectionState
 
-from . import MMX3World, item_groups
+from . import MMX3World
 from .Names import LocationName, ItemName, RegionName, EventName
 
 mavericks = [
@@ -22,7 +22,7 @@ bosses = {
         EventName.blizzard_buffalo_rematch
     ],
     "Toxic Seahorse": [
-        f"{RegionName.toxic_seahorse_dam} -> {RegionName.toxic_seahorse_boss}",
+        f"{RegionName.toxic_seahorse_before_boss} -> {RegionName.toxic_seahorse_boss}",
         LocationName.doppler_lab_3_toxic_seahorse,
         EventName.toxic_seahorse_rematch
     ],
@@ -222,7 +222,8 @@ def set_rules(world: MMX3World):
              lambda state: state.has(ItemName.maverick_medal, player, world.options.byte_medal_count.value) and
                            state.can_reach_location(LocationName.bit_defeat, player))
     set_rule(multiworld.get_location(EventName.byte_defeated, player),
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.byte_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.options.byte_medal_count.value) and
+                           state.can_reach_location(LocationName.bit_defeat, player))
 
     # Set Blizzard Buffalo collectible rules
     set_rule(multiworld.get_location(LocationName.blizzard_buffalo_heart_tank, player),

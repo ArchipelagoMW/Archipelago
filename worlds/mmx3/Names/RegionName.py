@@ -12,6 +12,7 @@ toxic_seahorse_bit_byte = "Toxic Seahorse - Bit & Byte Arena"
 toxic_seahorse_underwater = "Toxic Seahorse - Underwater Area"
 toxic_seahorse_hootareca = "Toxic Seahorse - Hootareca Arena"
 toxic_seahorse_dam = "Toxic Seahorse - Dam Area"
+toxic_seahorse_before_boss = "Toxic Seahorse - Before Boss Arena"
 toxic_seahorse_boss = "Toxic Seahorse - Boss Arena"
 
 tunnel_rhino = "Tunnel Rhino"

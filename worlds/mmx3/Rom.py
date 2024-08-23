@@ -1,15 +1,22 @@
-import typing
+
 import Utils
 import hashlib
+import struct
 import os
 import io
 from pathlib import Path
 from pkgutil import get_data
 
+from typing import TYPE_CHECKING, Iterable
+
+if TYPE_CHECKING:
+    from . import MMX3World
+
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 
 from .Graphics import graphics_slots
+from .Aesthetics import get_palette_bytes, player_palettes
 
 action_names = ("SHOT", "JUMP", "DASH", "SELECT_L", "SELECT_R", "MENU")
 action_buttons = ("Y", "B", "A", "L", "R", "X", "START", "SELECT")
@@ -63,6 +70,23 @@ refill_rom_data = {
     0xBD0033: ["weapon refill", 8]
 }
 
+x_palette_set_offsets = {
+    "Default": 0x62400,
+    "Charge Blue": 0x62F60,
+    "Charge Pink": 0x62F80,
+    "Charge Red": 0x625A0,
+    "Charge Green": 0x625E0,
+    "Gold Armor": 0x62580,
+    "Acid Burst": 0x62480,
+    "Parasitic Bomb": 0x624A0,
+    "Triad Thunder": 0x624C0,
+    "Spinning Blade": 0x624E0,
+    "Ray Splasher": 0x62500,
+    "Gravity Well": 0x62520,
+    "Frost Shield": 0x62540,
+    "Tornado Fang": 0x62560,
+}
+
 boss_weakness_offsets = {
     "Blast Hornet": 0x03674B,
     "Blizzard Buffalo": 0x036771,
@@ -110,6 +134,37 @@ boss_hp_caps_offsets = {
     "Press Disposer": 0x09C6B9,
 }
 
+boss_hp_threshold_offsets = {
+    "Volt Catfish": 0x9ECC3,
+    "Toxic Seahorse": 0x9E76B,
+    "Gravity Beetle": 0x9F57F,
+}
+
+enemy_tweaks_offsets = {
+    "Volt Catfish": 0xD8000,
+}
+
+enemy_tweaks_indexes = {
+    "Volt Catfish": {
+        "Spawns a spark after landing #1": 0x000001,
+        "Spawns a spark after landing #2": 0x000002,
+        "Spawns a spark after landing #3": 0x000004,
+        "Spawns a spark after landing #4": 0x000008,
+        "Bounces after landing #1": 0x000010,
+        "Bounces after landing #2": 0x000020,
+        "Bounces after landing #3": 0x000040,
+        "Bounces after landing #4": 0x000080,
+        "Leap random vertical speed": 0x000100,
+        "Leap random horizontal speed": 0x000200,
+        "Spawn a volt sphere #1": 0x000400,
+        "Spawn a volt sphere #2": 0x000800,
+        "Can't be stunned with incoming damage": 0x001000,
+        "Can't receive damage during Volt Shower": 0x002000,
+        "Halve barrier HP #1": 0x010000,
+        "Halve barrier HP #2": 0x020000,
+        "Halve barrier HP #3": 0x040000,
+    },
+}
 
 class MMX3PatchExtension(APPatchExtension):
     game = "Mega Man X3"
@@ -157,11 +212,42 @@ class MMX3ProcedurePatch(APProcedurePatch, APTokenMixin):
     def write_byte(self, offset, value):
         self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
 
-    def write_bytes(self, offset, value: typing.Iterable[int]):
+    def write_bytes(self, offset, value: Iterable[int]):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
 
-def adjust_boss_damage_table(world: World, patch: MMX3ProcedurePatch):
+def adjust_palettes(world: "MMX3World", patch: MMX3ProcedurePatch):
+    player_palette_options = {
+        "Default": world.options.palette_default.current_key,
+        "Gold Armor": world.options.palette_gold_armor.current_key,
+        "Charge Blue": world.options.palette_charge_blue.current_key,
+        "Charge Pink": world.options.palette_charge_pink.current_key,
+        "Charge Red": world.options.palette_charge_red.current_key,
+        "Charge Green": world.options.palette_charge_green.current_key,
+        "Acid Burst": world.options.palette_acid_burst.current_key,
+        "Parasitic Bomb": world.options.palette_parasitic_bomb.current_key,
+        "Triad Thunder": world.options.palette_triad_thunder.current_key,
+        "Spinning Blade": world.options.palette_spinning_blade.current_key,
+        "Ray Splasher": world.options.palette_ray_splasher.current_key,
+        "Gravity Well": world.options.palette_gravity_well.current_key,
+        "Frost Shield": world.options.palette_frost_shield.current_key,
+        "Tornado Fang": world.options.palette_tornado_fang.current_key,
+    }
+    player_custom_palettes = world.options.player_palettes
+    for palette_set, offset in x_palette_set_offsets.items():
+        palette_option = player_palette_options[palette_set]
+        palette = player_palettes[palette_option]
+
+        if palette_set in player_custom_palettes.keys():
+            if len(player_custom_palettes[palette_set]) == 0x10:
+                palette = player_custom_palettes[palette_set]
+            else:
+                print (f"[{world.multiworld.player_name[world.player]}] Custom palette set for {palette_set} doesn't have exactly 16 colors. Falling back to the selected preset ({palette_option})")
+        data = get_palette_bytes(palette)
+        patch.write_bytes(offset, data)
+        
+
+def adjust_boss_damage_table(world: "MMX3World", patch: MMX3ProcedurePatch):
     strictness = world.options.boss_weakness_strictness
     for boss, data in world.boss_weakness_data.items():
         try:
@@ -180,17 +266,23 @@ def adjust_boss_damage_table(world: World, patch: MMX3ProcedurePatch):
 
     # Write weaknesses to a table
     offset = 0x98000
-    for _, entries in world.boss_weaknesses.items():
-        data = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
+    excluded_bosses = [
+        "Dr. Doppler's Lab 1 Boss",
+        "Dr. Doppler's Lab 2 Boss", 
+    ]
+    for boss, entries in world.boss_weaknesses.items():
+        if boss in excluded_bosses:
+            continue
+        data = [0xFF for _ in range(16)]
         i = 0
         for entry in entries:
             data[i] = entry[1]
             i += 1
         patch.write_bytes(offset, bytearray(data))
-        offset += 8
+        offset += 16
 
 
-def adjust_boss_hp(world: World, patch: MMX3ProcedurePatch):
+def adjust_boss_hp(world: "MMX3World", patch: MMX3ProcedurePatch):
     option = world.options.boss_randomize_hp
     if option == "weak":
         ranges = [1,32]
@@ -201,11 +293,19 @@ def adjust_boss_hp(world: World, patch: MMX3ProcedurePatch):
     elif option == "chaotic":
         ranges = [1,64]
     
-    for _, offset in boss_hp_caps_offsets.items():
-        patch.write_byte(offset, world.random.randint(ranges[0], ranges[1]))
+    for boss, offset in boss_hp_caps_offsets.items():
+        if boss in boss_hp_threshold_offsets.keys():
+            value = world.random.randint(ranges[0] + 1, ranges[1])
+            value_threshold = world.random.randint(1, value - 1)
+            offset_threshold = boss_hp_threshold_offsets[boss]
+            patch.write_byte(offset_threshold, value_threshold)
+        else:
+            value = world.random.randint(ranges[0], ranges[1])
+        patch.write_byte(offset, value)
 
 
-def patch_rom(world: World, patch: MMX3ProcedurePatch):
+
+def patch_rom(world: "MMX3World", patch: MMX3ProcedurePatch):
     from Utils import __version__
 
     # Prepare some ROM locations to receive the basepatch
@@ -246,6 +346,7 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x1FD2D1, 0x14)
 
     adjust_boss_damage_table(world, patch)
+    adjust_palettes(world, patch)
     
     if world.options.boss_randomize_hp != "off":
         adjust_boss_hp(world, patch)
@@ -277,6 +378,17 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     button_config = world.options.button_configuration.value
     for action, button in button_config.items():
         patch.write_byte(action_offsets[action], button_values[button])
+
+    # Write tweaks
+    enemy_tweaks_available = {
+        "Volt Catfish": world.options.volt_catfish_tweaks.value,
+    }
+    for boss, offset in enemy_tweaks_offsets.items():
+        selected_tweaks = enemy_tweaks_available[boss]
+        final_value = 0
+        for tweak in selected_tweaks:
+            final_value |= enemy_tweaks_indexes[boss][tweak]
+        patch.write_bytes(offset, bytearray([final_value & 0xFF, (final_value >> 8) & 0xFF, (final_value >> 16) & 0xFF]))
 
     # Setup starting HP
     patch.write_byte(0x007487, world.options.starting_hp.value)
@@ -362,7 +474,8 @@ def patch_rom(world: World, patch: MMX3ProcedurePatch):
     patch.write_byte(0x17FFF1, value)
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
-    
+
+
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
