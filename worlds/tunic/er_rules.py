@@ -521,9 +521,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["West Garden Laurels Exit Region"],
         rule=lambda state: state.has(laurels, player))
 
+    # you can grapple Garden Knight to aggro it, then ledge it
     regions["West Garden after Boss"].connect(
         connecting_region=regions["West Garden"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     # ice grapple push Garden Knight off the side
     regions["West Garden"].connect(
         connecting_region=regions["West Garden after Boss"],
