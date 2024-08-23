@@ -228,11 +228,12 @@ class SC2Logic:
         """
         return (
             self.morph_impaler_or_lurker(state)
-            or state.has_any({item_names.ABERRATION, item_names.MUTALISK}, self.player)
+            or state.has_all({item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK}, self.player)
+            or state.has(item_names.ABERRATION, self.player)
+            or state.has(item_names.MALIGNANT_CREEP, self.player)
             or self.advanced_tactics
             and (
                 state.has_all({item_names.ZERGLING_BANELING_ASPECT, item_names.BANELING_CORROSIVE_ACID}, self.player)
-                or state.has_all({item_names.ZERGLING, item_names.ZERGLING_METABOLIC_BOOST}, self.player)
                 or state.has_all({item_names.ROACH, item_names.ROACH_GLIAL_RECONSTITUTION}, self.player)
             )
         )
@@ -246,15 +247,15 @@ class SC2Logic:
         return (
             state.has_any({item_names.ANNIHILATOR, item_names.INSTIGATOR, item_names.STALKER}, self.player)
             or state.has_all({item_names.SLAYER, item_names.SLAYER_PHASE_BLINK}, self.player)
+            or state.has(item_name.MATRIX_OVERLOAD, self.player)
             or self.advanced_tactics
             and  (
                 state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_RAPID_POWER_CYCLING}, self.player)
-                or state.has_all({item_names.VANGUARD, item_names.VANGUARD_RAPIDFIRE_CANNON, item_names.VANGUARD_FUSION_MORTARS}, self.player)
-                or state.has_all({item_names.DESTROYER, item_names.DESTROYER_REFORGED_BLOODSHARD_CORE, VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES}, self.player)
+                or state.has_all({item_names.VANGUARD, item_names.VANGUARD_RAPIDFIRE_CANNON}, self.player)
                 or (
-                    state.has(item_names.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK, self.player)
-                    and state.has_any({item_names.DARK_TEMPLAR, item_names.BLOOD_HUNTER, item_names.AVENGER}, self.player)
-                ) 
+                    state.has_any({item_names.VOID_RAY, item_names.DAWNBRINGER}, self.player)
+                    and state.has_all({item_names.DESTROYER, item_names.DESTROYER_REFORGED_BLOODSHARD_CORE}, self.player)
+                )
             )
 
         )
