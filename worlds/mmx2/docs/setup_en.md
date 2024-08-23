@@ -7,7 +7,7 @@
 - Software capable of loading and playing SNES ROM files:
    - [snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases)
    - [snes9x-rr](https://github.com/gocha/snes9x-rr/releases)
-   - [BSNES-plus](https://github.com/black-sliver/bsnes-plus). **Nota:** Do not reset within the emulator. It will cause 
+   - [BSNES-plus](https://github.com/black-sliver/bsnes-plus). **Note:** Do not reset within the emulator. It will cause 
    RAM corruption.
 - Your Mega Man X2 US ROM file from the original cartridge or extracted from the Legacy Collection. Archipelago can't 
 provide these.
@@ -61,7 +61,7 @@ files. Your patch file should have a `.apmmx2` extension.
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
 
-### Conectarse al multiserver
+### Connect to the multiserver
 
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
