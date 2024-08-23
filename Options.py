@@ -975,7 +975,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                         if at is not None:
                             if isinstance(at, dict):
                                 at = random.choices(list(at.keys()),
-                                                    weights=list(at.values()), k=1)
+                                                    weights=list(at.values()), k=1)[0]
                             given_text = text.get("text", [])
                             if isinstance(given_text, dict):
                                 given_text = random.choices(list(given_text.keys()),
