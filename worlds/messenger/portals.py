@@ -215,13 +215,13 @@ def shuffle_portals(world: "MessengerWorld") -> None:
 
         if "Portal" in warp:
             exit_string += "Portal"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}00"))
+            world.portal_mapping.insert(PORTALS.index(in_portal), int(f"{REGION_ORDER.index(parent)}00"))
         elif warp in SHOP_POINTS[parent]:
             exit_string += f"{warp} Shop"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}1{SHOP_POINTS[parent].index(warp)}"))
+            world.portal_mapping.insert(PORTALS.index(in_portal), int(f"{REGION_ORDER.index(parent)}1{SHOP_POINTS[parent].index(warp)}"))
         else:
             exit_string += f"{warp} Checkpoint"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}2{CHECKPOINTS[parent].index(warp)}"))
+            world.portal_mapping.insert(PORTALS.index(in_portal), int(f"{REGION_ORDER.index(parent)}2{CHECKPOINTS[parent].index(warp)}"))
 
         world.spoiler_portal_mapping[in_portal] = exit_string
         connect_portal(world, in_portal, exit_string)
@@ -284,8 +284,13 @@ def disconnect_portals(world: "MessengerWorld") -> None:
         entrance.connected_region = None
         if portal in world.spoiler_portal_mapping:
             del world.spoiler_portal_mapping[portal]
-    if len(world.portal_mapping) > len(world.spoiler_portal_mapping):
-        world.portal_mapping = world.portal_mapping[:len(world.spoiler_portal_mapping)]
+    if world.plando_portals:
+        indexes = [PORTALS.index(portal) for portal in world.plando_portals]
+        planned_portals = []
+        for index, portal_coord in enumerate(world.portal_mapping):
+            if index in indexes:
+                planned_portals.append(portal_coord)
+        world.portal_mapping = planned_portals
 
 
 def validate_portals(world: "MessengerWorld") -> bool:
