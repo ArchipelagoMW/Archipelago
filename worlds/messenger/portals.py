@@ -230,12 +230,15 @@ def shuffle_portals(world: "MessengerWorld") -> None:
 
     def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
         """checks the provided plando connections for portals and connects them"""
+        nonlocal available_portals
+
         for connection in plando_connections:
-            if connection.entrance not in PORTALS:
-                continue
             # let it crash here if input is invalid
-            create_mapping(connection.entrance, connection.exit)
+            available_portals.remove(connection.exit)
+            parent = create_mapping(connection.entrance, connection.exit)
             world.plando_portals.append(connection.entrance)
+            if shuffle_type < ShufflePortals.option_anywhere:
+                available_portals = [port for port in available_portals if port not in shop_points[parent]]
 
     shuffle_type = world.options.shuffle_portals
     shop_points = deepcopy(SHOP_POINTS)
