@@ -742,13 +742,13 @@ class CollectionState():
                         "Please switch over to sweep_for_advancements.")
         return self.sweep_for_advancements(locations)
 
-    def _sweep_for_advancements_impl(self, events_per_player: List[Tuple[int, List[Location]]], yield_each_sweep: bool,
-                                     ) -> Iterator[None]:
+    def _sweep_for_advancements_impl(self, advancements_per_player: List[Tuple[int, List[Location]]],
+                                     yield_each_sweep: bool) -> Iterator[None]:
         """
         The implementation for sweep_for_advancements is separated here because it returns a generator due to the use
         of a yield statement.
         """
-        all_players = {player for player, _ in events_per_player}
+        all_players = {player for player, _ in advancements_per_player}
         players_to_check = all_players
         # As an optimization, it is assumed that each player's world only logically depends on itself. However, worlds
         # are allowed to logically depend on other worlds, so once there are no more players that should be checked
@@ -756,12 +756,12 @@ class CollectionState():
         # sweep is finished.
         checking_if_finished = False
         while players_to_check:
-            next_events_per_player: List[Tuple[int, List[Location]]] = []
+            next_advancements_per_player: List[Tuple[int, List[Location]]] = []
             next_players_to_check = set()
 
-            for player, locations in events_per_player:
+            for player, locations in advancements_per_player:
                 if player not in players_to_check:
-                    next_events_per_player.append((player, locations))
+                    next_advancements_per_player.append((player, locations))
                     continue
 
                 # Accessibility of each location is checked first because a player's region accessibility cache becomes
@@ -777,7 +777,7 @@ class CollectionState():
                     else:
                         unreachable_locations.append(location)
                 if unreachable_locations:
-                    next_events_per_player.append((player, unreachable_locations))
+                    next_advancements_per_player.append((player, unreachable_locations))
 
                 # If the player does not receive any items for the rest of the sweep iteration, they will likely not
                 # have any reachable locations at the start of the next sweep iteration, so their locations can be
@@ -785,11 +785,11 @@ class CollectionState():
                 next_players_to_check.discard(player)
 
                 # Collect the items from the reachable locations.
-                for event in reachable_locations:
-                    self.advancements.add(event)
-                    item = event.item
-                    assert isinstance(item, Item), "tried to collect Event with no Item"
-                    if self.collect(item, True, event):
+                for advancement in reachable_locations:
+                    self.advancements.add(advancement)
+                    item = advancement.item
+                    assert isinstance(item, Item), "tried to collect advancement Location with no Item"
+                    if self.collect(item, True, advancement):
                         # The player the item belongs to may be able to reach additional locations in the next sweep
                         # iteration.
                         next_players_to_check.add(item.player)
@@ -804,7 +804,7 @@ class CollectionState():
                 checking_if_finished = False
 
             players_to_check = next_players_to_check
-            events_per_player = next_events_per_player
+            advancements_per_player = next_advancements_per_player
 
             if yield_each_sweep:
                 yield
@@ -825,32 +825,32 @@ class CollectionState():
 
         # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
         # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
-        events_per_player: List[Tuple[int, List[Location]]]
+        advancements_per_player: List[Tuple[int, List[Location]]]
         if locations is None:
             # `location.advancement` can only be True for filled locations, so unfilled locations are filtered out.
-            events_per_player = []
+            advancements_per_player = []
             for player, locations_dict in self.multiworld.regions.location_cache.items():
                 filtered_locations = [location for location in locations_dict.values()
                                       if location.advancement and location not in checked_locations]
                 if filtered_locations:
-                    events_per_player.append((player, filtered_locations))
+                    advancements_per_player.append((player, filtered_locations))
         else:
             # Filter and separate the locations into a list for each player.
-            events_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
+            advancements_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
             for location in locations:
                 if location.advancement and location not in checked_locations:
-                    events_per_player_dict[location.player].append(location)
+                    advancements_per_player_dict[location.player].append(location)
             # Convert to a list of tuples.
-            events_per_player = list(events_per_player_dict.items())
-            del events_per_player_dict
+            advancements_per_player = list(advancements_per_player_dict.items())
+            del advancements_per_player_dict
 
         if yield_each_sweep:
             # Return a generator that will yield at the end of each sweep iteration.
-            return self._sweep_for_advancements_impl(events_per_player, True)
+            return self._sweep_for_advancements_impl(advancements_per_player, True)
         else:
             # Create the generator, but tell it not to yield anything, so it will run to completion in zero iterations
             # once started, then start and exhaust the generator by attempting to iterate it.
-            for _ in self._sweep_for_advancements_impl(events_per_player, False):
+            for _ in self._sweep_for_advancements_impl(advancements_per_player, False):
                 assert False, "Generator yielded when it should have run to completion without yielding"
             return None
 
