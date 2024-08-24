@@ -216,7 +216,7 @@ class WitnessWorld(World):
 
         num_reachable_locations = len(early_locations)
         num_reachable_tutorial_locations = sum(
-            cast(Region, loc.parent_region).name == "Tutorial" for loc in early_locations
+            cast(Region, location.parent_region).name == "Tutorial" for location in early_locations
         )
 
         # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
