@@ -318,8 +318,13 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["Wi
         if item in prog_items_in_this_world
     ]
 
+    logging.debug(f"Always item hints: {always_items}")
+    logging.debug(f"Priority item hints: {priority_items}")
+
     if world.options.vague_hints:
         always_locations, priority_locations = [], []
+
+        logging.debug("No always / priority location hints because this world wants vague hints.")
     else:
         always_locations = [
             location for location in get_always_hint_locations(world)
@@ -330,10 +335,8 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["Wi
             if location in loc_in_this_world
         ]
 
-    logging.debug(f"Always item hints: {always_items}")
-    logging.debug(f"Always location hints: {always_locations}")
-    logging.debug(f"Priority item hints: {priority_items}")
-    logging.debug(f"Priority location hints: {priority_locations}")
+        logging.debug(f"Always location hints: {always_locations}")
+        logging.debug(f"Priority location hints: {priority_locations}")
 
     # Get always and priority location/item hints
     always_location_hints = {hint_from_location(world, location) for location in always_locations}
