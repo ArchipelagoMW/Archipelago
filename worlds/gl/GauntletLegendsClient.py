@@ -27,7 +27,7 @@ from .Locations import LocationData
 READ = "READ_CORE_RAM"
 WRITE = "WRITE_CORE_RAM"
 INV_ADDR = 0xC5BF0
-OBJ_ADDR = 0xC5B20
+OBJ_ADDR = 0xBC22C
 INV_UPDATE_ADDR = 0x56094
 INV_LAST_ADDR = 0x56084
 ACTIVE_POTION = 0xFD313
@@ -202,6 +202,7 @@ class GauntletLegendsContext(CommonContext):
         self.obelisk_locations: List[LocationData] = []
         self.chest_locations: List[LocationData] = []
         self.extra_items: int = 0
+        self.extra_spawners: int = 0
         self.limbo: bool = False
         self.in_portal: bool = False
         self.scaled: bool = False
@@ -273,60 +274,59 @@ class GauntletLegendsContext(CommonContext):
     # Objects are 0x3C bytes long
     # Modes: 0 = items, 1 = chests/barrels
     async def obj_read(self, mode=0):
-        obj_address = await self.get_obj_addr()
         _obj = []
-        if self.offset == -1:
-            b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(obj_address, 'x')} 3840")))
-            b.iterate(0x3C)
-            for i, arr in enumerate(b.split):
-                if arr[0] != 0xFF:
-                    self.offset = i
-                    break
         b: RamChunk
         if mode == 0:
-            b = RamChunk(
-                await self.socket.read(
-                    message_format(
-                        READ,
-                        f"0x{format(obj_address + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + 2) * 0x3C}",
-                    ),
-                ),
-            )
-            b.iterate(0x3C)
-            count = 0
-            for obj in b.split:
-                if obj[0] == 0xFF and obj[1] == 0xFF:
-                    count += 1
-            self.extra_items = count
-        else:
-            spawner_count = len([spawner for spawner in spawners[(self.current_level[1] << 4) + (self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if self.difficulty >= spawner])
-            count = 0
-            for i in range((spawner_count + 99) // 100):
+            while True:
                 b = RamChunk(
                     await self.socket.read(
                         message_format(
                             READ,
-                            f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)), 100) * 0x3C}",
+                            f"0x{format(OBJ_ADDR, 'x')} {(len(self.item_locations) + self.extra_items) * 0x3C}",
                         ),
                     ),
                 )
                 b.iterate(0x3C)
+                count = 0
                 for obj in b.split:
                     if obj[0] == 0xFF and obj[1] == 0xFF:
                         count += 1
-            self.extra_items += count
+                count -= self.extra_items
+                if count <= 0:
+                    break
+                self.extra_items = count
+        else:
+            spawner_count = len([spawner for spawner in spawners[(self.current_level[1] << 4) + (
+                self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if
+                                 self.difficulty >= spawner])
+            if self.extra_spawners == 0:
+                count = 0
+                for i in range((spawner_count + 99) // 100):
+                    b = RamChunk(
+                        await self.socket.read(
+                            message_format(
+                                READ,
+                                f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)), 100) * 0x3C}",
+                            ),
+                        ),
+                    )
+                    b.iterate(0x3C)
+                    for obj in b.split:
+                        if obj[0] == 0xFF and obj[1] == 0xFF:
+                            count += 1
+                self.extra_spawners += count
             b = RamChunk(
                 await self.socket.read(
                     message_format(
                         READ,
-                        f"0x{format(obj_address + ((self.offset + len(self.item_locations) + self.extra_items + spawner_count) * 0x3C), 'x')} {(len(self.chest_locations) + 2) * 0x3C}",
+                        f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')} {(len(self.chest_locations) + 2) * 0x3C}",
                     ),
                 ),
             )
             b.iterate(0x3C)
         for arr in b.split:
             _obj += [ObjectEntry(arr)]
-        _obj = [obj for obj in _obj if obj.raw[0] != 0xFF or obj.raw[1] != 0xFF]
+        _obj = [obj for obj in _obj if obj.raw[0] != 0xFF and obj.raw[1] != 0xFF]
         if mode == 1:
             self.chest_objects = _obj[:len(self.chest_locations)]
         else:
@@ -631,7 +631,7 @@ class GauntletLegendsContext(CommonContext):
                     "cmd": "LocationScouts",
                     "locations": [
                         location.id
-                        for location in [location for location in raw_locations if min(self.difficulty, max(self.glslotdata["max"], self.players)) >= location.difficulty]
+                        for location in [location for location in raw_locations if min(self.difficulty, self.glslotdata["max"]) >= location.difficulty]
                     ],
                     "create_as_hint": 0,
                 },
