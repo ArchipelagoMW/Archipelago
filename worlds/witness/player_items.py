@@ -217,7 +217,7 @@ class WitnessPlayerItems:
 
             existing_doors = [door for door in good_doors if door in existing_items_lookup]
 
-            # On some options combinations with doors, there just aren't a lot of good doors that unlock much.
+            # On some options combinations with doors, there just aren't a lot of doors that unlock much early.
             # In this case, we add some doors that aren't great, but are at least guaranteed to unlock 1 location.
 
             fallback_doors = [
