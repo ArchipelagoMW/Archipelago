@@ -822,7 +822,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                                     f"is not a valid location name from {world.game}. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
-    def __iter__(self):
+    def __iter__(self) -> typing.Iterator[typing.Any]:
         return self.value.__iter__()
 
     
