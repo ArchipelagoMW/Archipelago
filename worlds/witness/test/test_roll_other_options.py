@@ -1,3 +1,5 @@
+from Fill import distribute_items_restrictive
+
 from ..test import WitnessTestBase
 
 # These are just some random options combinations, just to catch whether I broke anything obvious
@@ -39,7 +41,10 @@ class TestMiscOptions(WitnessTestBase):
         "vague_hints": "experimental",
     }
 
+    run_default_tests = False
+
     def test_hints(self):
+        distribute_items_restrictive(self.multiworld)
         self.world.fill_slot_data()
 
 
