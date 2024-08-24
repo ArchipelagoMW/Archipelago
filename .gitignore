@@ -30,7 +30,11 @@
 *.apsave
 *.BIN
 *.puml
+*.private
+*.symbols
+*.script
 
+/worlds/ff4fe/FreeEnterpriseForAP/FreeEnt/.build/
 setups
 build
 bundle/components.wxs

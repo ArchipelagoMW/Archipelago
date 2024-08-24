@@ -165,7 +165,7 @@ def apply(env):
             ap_item = env.options.ap_data[str(id)]
             placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
             if placement is None:
-                treasure_assignment.assign(t, None)
+                treasure_assignment.assign(t, '{} gp'.format(10))
             else:
                 treasure_assignment.assign(t, placement.const)
     elif env.options.flags.has('treasure_vanilla'):
