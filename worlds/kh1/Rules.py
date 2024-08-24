@@ -1,5 +1,6 @@
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule
+from math import ceil
 
 SINGLE_PUPPIES = ["Puppy " + str(i).rjust(2,"0") for i in range(1,100)]
 TRIPLE_PUPPIES = ["Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0") for i in range(1,34)]
@@ -28,7 +29,7 @@ def has_puppies_all(state: CollectionState, player: int, puppies_required: int) 
     return state.has("All Puppies", player)
 
 def has_puppies_triplets(state: CollectionState, player: int, puppies_required: int) -> bool:
-    return state.has_from_list_unique(TRIPLE_PUPPIES, player, -(puppies_required / -3))
+    return state.has_from_list_unique(TRIPLE_PUPPIES, player, ceil(puppies_required / 3))
 
 def has_puppies_individual(state: CollectionState, player: int, puppies_required: int) -> bool:
     return state.has_from_list_unique(SINGLE_PUPPIES, player, puppies_required)
