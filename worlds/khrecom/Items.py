@@ -25,7 +25,7 @@ def get_items_by_category(category: str, exclude: list) -> Dict[str, KHRECOMItem
 
 item_table: Dict[str, KHRECOMItemData] = {
     #Victory
-    "Victory":                           KHRECOMItemData("Victory",          code = 268_0000, classification = ItemClassification.progression),
+    "Victory":                           KHRECOMItemData("VIC",              code = 268_0000, classification = ItemClassification.progression),
 
    #"Card Set Kingdom Key":              KHRECOMItemData("Sets",             code = 268_1001, classification = ItemClassification.filler),
     "Card Set Three Wishes":             KHRECOMItemData("Sets",             code = 268_1002, classification = ItemClassification.filler),
