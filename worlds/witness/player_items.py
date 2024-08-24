@@ -215,7 +215,7 @@ class WitnessPlayerItems:
             item = self.item_data[item_name]
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
-                #   items were removed from the pool when we pruned out all progression items not in the settings.
+                # items were removed from the pool when we pruned out all progression items not in the options.
                 output[cast_not_none(item.ap_code)] = [cast_not_none(static_witness_items.ITEM_DATA[child_item].ap_code)
                                                        for child_item in item.definition.child_item_names]
         return output
