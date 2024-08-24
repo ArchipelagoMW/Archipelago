@@ -1,0 +1,11 @@
+// make "L+R = running" check always succeed
+patch ($01F195 bus) { EA EA }
+
+// suppress "Can't Run" message
+patch ($03A0EB bus) { 60 }
+
+// patch various animations to assume running
+patch ($02DFF9 bus) { EA EA }
+patch ($02E35C bus) { EA EA }
+patch ($02E406 bus) { EA EA }
+patch ($02DF96 bus) { 80 }

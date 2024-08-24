@@ -1,0 +1,2427 @@
+// code that supports turning each actor index into
+// a specific unique character instance
+
+// dummy axtor mapping data for testing
+patch($21f700 bus) {
+    // %axtor map%
+    00  // axtor 0 should be unused
+    01  // DKCecil
+    02  // Kain1
+    03  // CRydia
+    04  // Tellah1
+    05  // Edward
+    06  // Rosa1
+    07  // Yang1
+    08  // Palom
+    09  // Porom
+    04  // Tellah2
+    01  // PCecil
+    04  // Tellah3
+    07  // Yang2
+    0E  // Cid
+    02  // Kain2
+    06  // Rosa2
+    03  // ARydia
+    12  // Edge
+    13  // Fusoya
+    02  // Kain3
+    15  // Golbez
+    16  // Anna
+    // %end%
+}
+
+patch($21f790 bus) {
+    // %name distinguishers%
+    //00 29 2A 2B 2E 2F 30 32 33 34 35 36 37 38 39 3A
+    //3B 3C 3D 3E 3F 40 41 79 7A 7B 7C 7D 7E 7F 14 31
+    00 8B 8C 8D 8E 8F 90 91 92 93 94 95 96 97 98 99
+    9A 9B 9C 9D 9E 9F A0 A1 A2 A3 A4 A5 A6 A7 A8 A9
+    // %end%
+}
+
+msfpatch {
+    .def CharEx__MaxAxtors              $18
+
+    .def CharEx__ShadowPartyBank        $70
+    .def CharEx__ShadowPartyAddr        $702000
+    .def CharEx__ShadowPartyDataSize    $600
+    .def CharEx__SpellSetBank           $70
+    .def CharEx__SpellSetAddr           $702600
+    .def CharEx__GlobalNames            $707000
+    .def CharEx__InitialStateSpellSets  $702CC0
+
+    .def CharEx__AxtorBeingGiven        $7e1619
+
+    .def MaxPartySize                   $21f0ff
+}
+
+msfpatch {
+    // this is a simple lookup function until we introduce
+    // data table obfuscation
+
+    Lookup_AxtorToActor:
+        // param A = axtor to lookup
+        xba
+        lda #$00
+        xba
+        tax
+        lda $21f700,x
+        rts
+}
+
+// general utility functions to push/pull shadow party slots from
+// expanded SRAM to WRAM and vice versa
+msfpatch {
+    // param: A = slot to pull
+    CharEx__PullShadowPartySlot:
+        jsr $_CharEx__LoadShadowPartySlotAddrX
+        ldy #$1140
+        lda #$3f
+
+        phb
+        mvn $.CharEx__ShadowPartyBank, $7e
+        lda #$00
+        xba
+        plb
+
+        rts
+
+    CharEx__PushShadowPartySlot:
+        lda $1140
+        and #$1f  // A = axtor number of character in shadow party work area
+        jsr $_CharEx__LoadShadowPartySlotAddrX
+        txy
+        ldx #$1140
+        lda #$3f
+
+        phb
+        mvn $7e, $.CharEx__ShadowPartyBank
+        lda #$00
+        xba
+        plb
+
+        rts
+
+
+    CharEx__PushPartySlotToShadowParty:
+        // A = index of party slot to push to shadow party, use the embedded
+        //     axtor number to determine which shadow party slot it goes to
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        adc #$1000
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        lda $0000,x
+        bne $01 // check if slot is empty, if so abort
+        rts
+
+        and #$1f // A = axtor number
+        phx
+        jsr $_CharEx__LoadShadowPartySlotAddrX
+        txy
+        plx
+        // now X = source party slot addr and Y = target shadow party slot addr
+
+        phb
+        lda #$3f
+        mvn $7e, $.CharEx__ShadowPartyBank
+        lda #$00
+        xba
+        plb
+
+        rts
+
+    CharEx__LoadShadowPartySlotAddrX:
+        // A *= 0x40
+        xba
+        rep #$20
+        .mx 0x00
+        lsr a
+        lsr a
+
+        clc
+        adc #$_CharEx__ShadowPartyAddr
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        rts
+}
+
+// general utility functions to push/pull spell sets from/to expanded SRAM.
+// the working area in WRAM for spell sets corresponds to original addresses
+// for spell sets 2, 3 and 4.
+msfpatch {
+    // A = axtor for spell sets to pull
+    CharEx__PullSpellSets:
+        jsr $_CharEx__LoadSpellSetsAddrX
+        ldy #$1590
+        lda #$47
+
+        phb
+        mvn $.CharEx__SpellSetBank, $7e
+        lda #$00
+        xba
+        plb
+
+        rts
+
+    CharEx__PushSpellSets:
+        jsr $_CharEx__LoadSpellSetsAddrX
+        txy
+        ldx #$1590
+        lda #$47
+
+        phb
+        mvn $7e,$.CharEx__SpellSetBank
+        lda #$00
+        xba
+        plb
+
+        rts
+
+    CharEx__LoadSpellSetsAddrX:
+        // A *= 0x48
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        sta $168e
+        asl a
+        asl a
+        asl a
+        clc
+        adc $168e
+
+        // A += base address of spell sets
+        adc #$_CharEx__SpellSetAddr
+
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        rts
+}
+
+msfpatch {
+    CharEx__ClearPartyWorkArea:
+        ldx #$0000
+    %LoopStart:
+        stz $1140,x
+        inx
+        cpx #$0040
+        bne $-LoopStart
+        rts
+}
+
+msfpatch {
+    CharEx__ClearSpellSetWorkArea:
+        ldx #$0000
+    %LoopStart:
+        stz $1590,x
+        inx
+        cpx #$0048
+        bne $-LoopStart
+        rts
+}
+
+msfpatch {
+    CharEx__ClearShadowParty:
+        stz $1680
+        stz $1681
+    %LoopStart:
+        ldx $1680
+        cpx #$_CharEx__ShadowPartyDataSize
+        bcs $+LoopDone
+        lda #$00
+        sta $=CharEx__ShadowPartyAddr,x
+        lda $1680
+        clc
+        adc #$40
+        sta $1680
+        lda $1681
+        adc #$00
+        sta $1681
+        bra $-LoopStart
+
+    %LoopDone:
+        rts
+}
+
+msfpatch {
+    // A = axtor for slot to clear
+    CharEx__ClearShadowPartySlot:
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        sta $=CharEx__ShadowPartyAddr,x
+        rts
+}
+
+// Replacement routine for the game's built-in "give actor" logic
+msfpatch {
+    // recode the give actor event command to use replacement routine
+    .addr $00e578
+        inx
+        stx $b3
+        lda $09d5,x
+        jsl $=CharEx__GiveAxtor
+        jmp $e0d3
+
+    .new
+    // A = axtor to give
+    CharEx__GiveAxtor:
+        sta $_CharEx__AxtorBeingGiven
+
+        // this is sadly ugly, but this pairs with
+        // our randomizer features... clear the flag we use
+        // to detect successful character add (flag 0xFE)
+        lda $129f
+        and #$bf
+        sta $129f
+
+        // first check if axtor is in shadow party, if not
+        // then initialize it
+        lda $_CharEx__AxtorBeingGiven
+        xba
+        rep #$20
+        .mx 0x00
+        and #$ff00
+        lsr a
+        lsr a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda $=CharEx__ShadowPartyAddr,x
+        bne $+AxtorInShadowParty
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_CharEx__InitializeAxtor
+        bra $+AxtorLoaded
+
+    %AxtorInShadowParty:
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_CharEx__PullShadowPartySlot
+
+    %AxtorLoaded:
+// %flag characters_commitment on%
+        // check bypass flag in case we are just Paladinizing Cecil
+        lda $1627 // [hardcoded] permajoin-bypass flag
+        bne $+EmptySlotSearch
+
+        // check for fully empty party,
+        // and do normal behavior if so
+        jsr $_Util__GetPartySize
+        cmp #$00
+        beq $+EmptySlotSearch
+
+        // check for full party, and skip adding axtor if so
+        cmp $=MaxPartySize
+        bcc $+HasEmptySlot
+        jmp $_Done
+    %HasEmptySlot:
+        jmp $_DoJoinMenu
+// %end%
+
+// %flag characters_commitment off%
+        // check for full party
+        jsr $_Util__GetPartySize
+        cmp $=MaxPartySize
+        bcc $+EmptySlotSearch
+        jmp $_DoJoinMenu
+// %end%
+
+    %EmptySlotSearch:
+        // search for empty party slot
+        stz $1681
+        stz $1682
+
+    %EmptySlotSearchLoop:
+        ldx $1681
+        lda $1000,x
+        beq $+EmptySlotFound
+        cpx #$0100
+        bcs $+EmptySlotNotFound
+        lda $1681
+        clc
+        adc #$40
+        sta $1681
+        lda $1682
+        adc #$00
+        sta $1682
+        bra $-EmptySlotSearchLoop
+
+    %EmptySlotNotFound:
+    %DoJoinMenu:
+        // defer to the join menu
+        jsr $_JoinFullPartyMenu__Start
+
+        // check result of menu
+        lda $1a01
+        bit #$01
+        beq $+Done  // if character dismissed, just quit now
+
+        // return to search loop, knowing we'll find an empty slot now
+        jmp $_EmptySlotSearch
+
+    %EmptySlotFound:
+        ldy #$0000
+    %CopyLoop:
+        lda $1140,y
+        sta $1000,x
+        inx
+        iny
+        cpy #$0040
+        bcc $-CopyLoop
+
+        // apply the battle routines to set character stats from equipment
+        rep #$20
+        .mx 0x00
+        lda $1681
+        lsr a
+        sta $3d
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        sep #$20
+        .mx 0x20
+        jsl $038006
+
+        // TODO: fill HP/MP to max?
+
+        // clear corresponding shadow party slot
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_CharEx__ClearShadowPartySlot
+
+        // this is sadly ugly, but this pairs with
+        // our randomizer features... need to set a
+        // flag for successful character add (flag 0xFE)
+        lda $129f
+        ora #$40
+        sta $129f
+
+        // cycle party leader if needed
+        jsr $_Util__GetPartySize
+        cmp #$01
+        bne $+Done
+        jsl $=CyclePartyLeader
+
+    %Done:
+        // finally done!
+        rtl
+}
+
+msfpatch {
+    // loads the initial state of the given axtor
+    // to the shadow party, and fills its initial
+    // spell set values
+    CharEx__InitializeAxtor:
+        sta $_CharEx__AxtorBeingGiven
+        jsr $_CharEx__ClearPartyWorkArea
+
+        // get reference actor number
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_Lookup_AxtorToActor
+        sta $1681
+
+        // check for Paladin Cecil, change reference actor if necessary
+        cmp #$01  // is this DKCecil?
+        bne $+AfterCecilCheck
+        lda #$0b  // CecilBecamePaladin plot flag
+        jsr $_Util__CheckPlotFlag
+        bcc $+AfterCecilCheck
+        lda #$0b  // PCecil actor number
+        sta $1681
+    %AfterCecilCheck:
+
+        // write actor number to map of known axtors
+        lda $_CharEx__AxtorBeingGiven
+        tax
+        lda $1681
+        sta $1240,x
+
+        // get actor load info byte
+        dec a
+        tax
+        lda $00e69a,x
+
+        // always load from stats!
+        and #$0f  // for safety, strip off the shadow party bits from old hybrid system
+        // (this section largely copied from 00:E60D)
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // copy 0x14 bytes from start of stats data into record
+        ldy #$0000
+    %CopyLoop1:
+        lda $0fa900,x
+        sta $1140,y
+        inx
+        iny
+        cpy #$0014
+        bne $-CopyLoop1
+
+        // copy 0x03 bytes into record offset 0x2D
+        ldy #$0000
+    %CopyLoop2:
+        lda $0fa900,x
+        sta $116d,y
+        inx
+        iny
+        cpy #$0003
+        bne $-CopyLoop2
+
+        // copy 0x09 bytes into record offset 0x37
+        ldy #$0000
+    %CopyLoop3:
+        lda $0fa900,x
+        sta $1177,y
+        inx
+        iny
+        cpy #$0009
+        bne $-CopyLoop3
+
+        // replace loaded actor value in stats record with axtor number
+        lda $1140
+        and #$e0
+        // %if wacky_all_characters_ambidextrous%
+        ora #$c0
+        // %end%
+        ora $_CharEx__AxtorBeingGiven
+        sta $1140
+
+        // promote Rydia to adult if needed
+        lda $1141
+        and #$0f
+        cmp #$02 // check for Child Rydia job
+        bne $+AfterRydiaCheck
+        lda #$07 // RydiaRejoined plot flag
+        jsr $_Util__CheckPlotFlag
+        bcc $+AfterRydiaCheck
+        lda $1141
+        and #$f0
+        ora #$0b // assign ARydia job
+        sta $1141
+        // also assign adult Rydia actor number to get updated command set
+        lda $_CharEx__AxtorBeingGiven
+        tax
+        lda #$11 // ARydia actor number
+        sta $1240,x
+        // set a flag bit in the reference actor value so the equip copy routine
+        // knows to look for adult Rydia
+        lda $1681
+        ora #$80
+        sta $1681
+    %AfterRydiaCheck:
+
+        // set Tellah's post-remembering actor number if needed for command set
+        lda $1141
+        and #$0f
+        cmp #$03 // Tellah job
+        bne $+AfterTellahCheck
+        lda #$0b // CecilBecamePaladin plot flag
+        jsr $_Util__CheckPlotFlag
+        bcc $+AfterTellahCheck
+        // assign new command set
+        lda $_CharEx__AxtorBeingGiven
+        tax
+        lda #$0c // Tellah3 actor
+        sta $1240,x
+    %AfterTellahCheck:
+
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_CharEx__InitializeAxtorName
+
+        // load equipment
+        dec $1681
+        lda $1681
+
+        // check for adult Rydia bit set above
+        bmi $+EquipFromAdultRydia
+        asl a
+        asl a
+        asl a
+        sec
+        sbc $1681
+        tax
+        inc $1681
+        bra $+EquipCopyStart
+
+    %EquipFromAdultRydia:
+        // if special Adult Rydia bit was set, clear the bit and load the
+        // number needed to load Adult Rydia's gear
+        and #$7F
+        sta $1681
+        inc $1681
+        ldx #$0070  // (Adult Rydia actor number minus 1) * 7
+
+    %EquipCopyStart:
+        ldy #$0000
+    %EquipCopyLoop:
+        lda $0fab00,x
+        sta $1170,y
+        inx
+        iny
+        cpy #$0007
+        bne $-EquipCopyLoop
+
+        // apply Fusoya challenge edits to starting HP if necessary
+        jsr $_FusoyaChallenge__FirstJoin
+
+        // %if wacky_initialize_axtor_hook%
+        jsl $=Wacky__InitializeAxtorHook
+        // %end%
+
+        // push "initialized" record to shadow party
+        // (still needs stats calculations, but that
+        // happens when actually added to party)
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_CharEx__PushShadowPartySlot
+
+        // initialize spell sets
+        lda $1141
+        and #$0f
+        sta $1681
+        asl a
+        clc
+        adc $1681
+        tax
+
+        lda $13fddd,x
+        sta $1682
+        lda $13fdde,x
+        sta $1683
+        lda $13fddf,x
+        sta $1684
+        // now $1682-1684 are the reference spell sets to use
+
+        jsr $_CharEx__ClearSpellSetWorkArea
+
+        stz $1685     // stores index to spell set index 
+        ldy #$0000    // Y is target pointer to spell set work area
+    %SpellSetLoop:
+        lda $1685
+        tax
+        lda $1682,x
+        cmp #$ff
+        bne $+SpellSetCopy
+
+        // blank spell set
+        lda #$00
+        ldx #$0000
+    %SpellSetBlankLoop:
+        sta $1590,y
+        iny
+        inx
+        cpx #$0018
+        bne $-SpellSetBlankLoop
+        jmp $_SpellSetNext
+
+    %SpellSetCopy:
+        // get pointer to source spell set
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        sta $1686
+        asl a
+        clc
+        adc $1686
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda #$18
+        sta $1686
+    %SpellSetCopyLoop:
+        lda $=CharEx__InitialStateSpellSets,x
+        // %if wacky_spell_filter_hook%
+          jsl $=Wacky__SpellFilterHook
+          bcc $+SpellSetCopyLoopNext
+        // %end%
+        // %if wacky_misspelled%
+          jsl $=Wacky__Misspell
+        // %end%
+        sta $1590,y
+    %SpellSetCopyLoopNext:
+        inx
+        iny
+        dec $1686
+        bne $-SpellSetCopyLoop
+
+    %SpellSetNext:
+        inc $1685
+        lda $1685
+        cmp #$03
+        bcc $-SpellSetLoop
+
+        // push spell sets
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_CharEx__PushSpellSets
+
+        rts
+}
+
+msfpatch {
+    CharEx__InitializeAxtorName:
+        // when called from GiveAxtor, this is a no-op;
+        // when called externally we don't need this
+        // value... but watch out in case the two streams
+        // cross later on
+        sta $_CharEx__AxtorBeingGiven
+
+        lda #$00
+        xba
+        lda $_CharEx__AxtorBeingGiven
+        asl a
+        sta $168e
+        asl a
+        clc
+        adc $168e
+        tax
+        lda $1180,x
+        beq $+NameNotYetInitialized
+        jmp $_NameInitialized
+
+    %NameNotYetInitialized:
+        phx // remember where name starts in case of distinguishers
+
+        txy
+
+        phy // remember Y because lookup can nerf it
+        lda $_CharEx__AxtorBeingGiven
+        jsr $_Lookup_AxtorToActor
+        tax
+        ply
+
+        lda $018456,x    // get default name index
+        asl a
+        sta $168e
+        asl a
+        clc
+        adc $168e
+        tax
+
+        lda #$06
+        sta $168f
+    %CopyNameLoop:
+        lda $=CharEx__GlobalNames,x
+        sta $1180,y
+        inx
+        iny
+        dec $168f
+        bne $-CopyNameLoop
+
+        ply // get back name offset for distinguishers if needed
+
+        lda $=PregameNames__TagSetting
+        beq $+NameInitialized
+        cmp #$02
+        beq $+UseSillyDistinguisher
+
+        // apply distinguisher
+        //   if last char is not whitespace, overwrite it
+        iny
+        iny
+        iny
+        iny
+        iny
+        lda $1180,y
+        cmp #$ff
+        bne $+FoundTagPosition
+
+        // otherwise look for last whitespace char and overwrite it
+        ldx #$0005
+    %FindLastWhitespaceLoop:
+        lda $1180,y
+        cmp #$ff
+        bne $+FoundNonWhitespace
+        cpx #$0000
+        beq $+FoundTagPosition
+        dex
+        dey
+        bra $-FindLastWhitespaceLoop
+
+    %FoundNonWhitespace:
+        iny
+    %FoundTagPosition:
+        lda $_CharEx__AxtorBeingGiven
+        tax
+        lda $21f790,x  // [hardcoded]
+        sta $1180,y
+
+        bra $+NameInitialized
+
+    %UseSillyDistinguisher:
+        lda $_CharEx__AxtorBeingGiven
+        tax
+        lda $21f790,x  // [hardcoded]
+    
+        // normalize distinguisher range
+        cmp #$80
+        bcs $+SillyDistinguisherHighRange
+        sec
+        sbc #$42
+        jmp $_DistinguisherNormalized
+    %SillyDistinguisherHighRange:
+        sec
+        sbc #$66  // 0x80 - 26
+    %DistinguisherNormalized:
+        jsr $_SillyNames__Start
+
+    %NameInitialized:
+        rts
+}
+
+// reorder and redirect new game init routines
+msfpatch {
+    .addr $00805c
+        jsl $=CharEx__InitSpellSets
+        jsr $92d0
+}
+
+// recode game init code that normally loads DKCecil in new game
+msfpatch {
+    .addr $0092d0
+        // safety: empty all party slots
+        stz $1000
+        stz $1040
+        stz $1080
+        stz $10c0
+        stz $1100
+
+        lda #$01   // starting character is axtor 01
+        jsl $=CharEx__GiveAxtor
+        rts
+}
+
+// remove old name init routines
+msfpatch {
+    .addr $019b34
+        jmp $9b50 // skips over name copying section of new game init
+
+    .addr $0197a1
+        jmp $97b3 // skips over name copying section of re-init corrupted save slot
+}
+
+// routine that inits global names
+msfpatch {
+    CharEx__InitGlobalNames:
+        // step 1: init global name data
+        phb
+        lda #$53
+        ldx #$a710
+        ldy #$_CharEx__GlobalNames
+        mvn $0f, $70
+        plb
+        rts
+}
+
+// recode routine that inits all spell sets
+msfpatch {
+    .new
+    // largely copied from 15:C23E but writes to new area
+    CharEx__InitSpellSets:
+        phb
+        lda #$7e
+        pha
+        plb
+
+        ldx #$0000   // X iterates over source data
+        ldy #$0000   // Y iterates over target data
+        stz $07
+    %LoopStart:
+        lda $0fc8c0,x
+        cmp #$ff
+        beq $+PadSpellSet
+        sta $2300,y  // use battle RAM working area for now
+        iny
+        inc $07
+        lda $07
+        cmp #$18
+        bne $+NextSpell
+        stz $07
+        bra $+NextSpell
+
+    %PadSpellSet:
+        lda #$00
+        sta $2300,y
+        iny
+        inc $07
+        lda $07
+        cmp #$18
+        bne $-PadSpellSet
+        stz $07
+
+    %NextSpell:
+        inx
+        cpy #$0138
+        bne $-LoopStart
+
+        // copy wholesale working area to live SRAM expansion area
+        phb
+        rep #$20
+        .mx 0x00
+        lda #$0137
+        ldx #$2300
+        ldy #$_CharEx__InitialStateSpellSets
+        mvn $7e, $70
+        plb
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        plb
+
+        rtl
+}
+
+// patch name source in dialogue boxes
+msfpatch {
+    .addr $00b31c
+        lda $1180,x
+}
+
+// patch name source on Namingway screen
+msfpatch {
+    .addr $01bb81
+        jmp $01bb89
+    .addr $01bb95
+        .mx 0x00
+        adc #$1180
+}
+
+// patch name display on main menu
+msfpatch {
+    .addr $0183b0
+        jmp $83b8
+    .addr $0183ce
+        lda $1180,x
+}
+
+// patch name display in battle
+msfpatch {
+    .addr $02a67e
+        lda $2000,x
+        and #$3f
+        jmp $a689
+
+    .addr $02a696
+        lda $1180,x
+
+    .addr $02a5c4
+        lda $2000,x
+        and #$3f
+        jmp $a5cf
+    .addr $02a5e3
+        lda $1180,x
+    .addr $02a5f5
+        lda $1180,x
+}
+
+// patch the name lookup for names in battle dialogue boxes
+// to refer to global name data, if required
+msfpatch {
+    // helper function that, given a name code value from original FF4
+    // (ie. 00 = Cecil, 01 = Kain, ... 0B = Fusoya), will return ether:
+    //   0x00-0x1F: the code for the Axtor whose name should be used
+    //   0x80-0x8D: the code for the global name to use | 0x80
+    CharEx__ResolveNameCode:
+        sta $1680  // remember name code for comparison
+        lda $=RandoFlag_characters_no_duplicates
+        beq $+DuplicatesAllowed
+
+        // character duplicates are off; if the name to be drawn is for
+        // a character that already has been discovered, use the version
+        // from the save data rather than from the global data
+
+        // iterate over known axtors
+        ldx #$0001
+        lda #$00
+        xba
+    %CheckKnownAxtors_LoopStart:
+        lda $1240,x
+        beq $+CheckKnownAxtors_LoopNext
+
+        // convert actor number -> name index
+        phx
+        tax
+        lda $018456,x  
+        plx
+
+        cmp $1680
+        bne $+CheckKnownAxtors_LoopNext
+
+        // found known axtor with same name code
+        txa
+        rts
+
+    %CheckKnownAxtors_LoopNext:
+        inx
+        cpx #$_CharEx__MaxAxtors
+        bcc $-CheckKnownAxtors_LoopStart
+
+        // if we don't have a known axtor with the same name, or
+        // we're playing with dupes allowed, then use the global
+        // name code
+    %DuplicatesAllowed:
+        lda $1680
+        ora #$80
+        rts
+}
+
+msfpatch {
+    .addr $02a64d
+        jml $=CharEx__BattleDialogueNames
+
+    .new
+    CharEx__BattleDialogueNames:
+        // displaced code
+
+        // (this is subroutine $02a499)
+        ldx $30
+        inx
+        stx $30
+
+        lda ($30)
+        jsr $_CharEx__ResolveNameCode
+        bmi $+UseGlobalName
+        jmp $_Return
+
+    %UseGlobalName:
+        and #$7f
+        // load from global names and store to unused axtor 0 name
+        // area for simplicity
+        asl a
+        sta $1680
+        asl a
+        clc
+        adc $1680
+        sta $1680
+        stz $1681
+
+        ldx $1680
+        phy
+        ldy #$0000
+    %CopyLoopStart:
+        lda $=CharEx__GlobalNames,x
+        sta $1180,y
+        inx
+        iny
+        cpy #$0006
+        bcc $-CopyLoopStart
+
+        ply
+        lda #$00
+    %Return:
+        jml $02a5cf
+}
+
+//--------------------------------------------------------------
+// Give Spell event command needs to:
+//   - add to source spell sets
+//   - add to spell sets of all party members using it
+//   - check if spell is already in spell set
+
+// recode Give Spell event command
+msfpatch {
+    .addr $00e7d8
+        inx
+        lda $09d5,x
+        tay
+        jsr $e2cb
+        jsl $=CharEx__GiveSpell
+        jmp $e0d3
+}
+
+msfpatch {
+    // params: A = spell to give, Y = spell set number
+    CharEx__GiveSpell:
+        sta $1680
+        sty $1681
+
+        // part 1: apply to original spell set
+        lda $1681
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        sta $1682
+        asl a
+        clc
+        adc $1682
+        adc #$_CharEx__InitialStateSpellSets
+        sta $1682
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        jsl $=CharEx__GiveSpell_Impl
+
+        // part 2: apply to spell sets of axtors in shadow party and party
+        stz $1686
+        stz $1687
+        stz $1688
+    %BothPartiesLoopStart:
+        ldx $1686
+
+        lda $1688
+        cmp #$.CharEx__MaxAxtors
+        bcs $+CheckActualParty
+
+        // check shadow party
+        lda $=CharEx__ShadowPartyAddr,x
+        beq $+BothPartiesLoopNext
+        inx
+        lda $=CharEx__ShadowPartyAddr,x
+        dex
+        and #$0f
+        bra $+GotJob
+
+    %CheckActualParty:
+        lda $1000,x
+        beq $+BothPartiesLoopNext
+        lda $1001,x
+        and #$0f
+
+    %GotJob:
+        sta $1689
+        asl a
+        clc
+        adc $1689
+        tax
+        ldy #$0000
+        lda $1681
+        cmp $13fddd,x
+        beq $+SpellSetFound
+        iny
+        cmp $13fdde,x
+        beq $+SpellSetFound
+        iny
+        cmp $13fddf,x
+        beq $+SpellSetFound
+
+    %BothPartiesLoopNext:
+        lda $1686
+        clc
+        adc #$40
+        sta $1686
+        lda $1687
+        adc #$00
+        sta $1687
+
+        inc $1688
+        lda $1688
+        cmp #$.CharEx__MaxAxtors
+        beq $+SwitchToActualParty
+        cmp #$1d    // [hardcoded] = max axtors + 5
+        bcc $-BothPartiesLoopStart
+
+        rtl
+
+    %SwitchToActualParty:
+        stz $1686
+        stz $1687
+        jmp $_BothPartiesLoopStart
+
+    %SpellSetFound:
+        // Y is index of axtor's spell set
+        sty $168a
+        stz $1689
+
+        lda $1688
+
+        // we lose the loop iterator $1688 when checking the party,
+        // so preserve it here to restore later
+        pha
+
+        // for loop iterations over the shadow party,
+        // the axtor number involved == the slot index
+        cmp #$.CharEx__MaxAxtors
+        bcc $+HaveAxtorNumber
+
+        // otherwise we have to get the axtor from
+        // the party slot
+        ldx $1686
+        lda $1000,x
+        and #$1f
+
+    %HaveAxtorNumber:
+        sta $1688 // temporarily override $1688 for math reasons
+
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        sec
+        sbc $1688 // A = axtor * 3
+        clc
+        adc $168a // A += spellset index
+        asl a
+        asl a
+        asl a
+        sta $168c
+        asl a
+        clc
+        adc $168c // A *= 0x18
+        adc #$_CharEx__SpellSetAddr
+        sta $1682
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        jsl $=CharEx__GiveSpell_Impl
+
+        // restore loop iterator
+        pla
+        sta $1688
+
+        jmp $_BothPartiesLoopNext
+}
+
+msfpatch {
+    CharEx__GiveSpell_Impl:
+        // %if wacky_spell_filter_hook%
+          lda $1680
+          jsl $=Wacky__SpellFilterHook
+          bcs $+CanLearnSpell
+          rtl
+        %CanLearnSpell:
+        // %end%
+        // %if wacky_misspelled%
+          lda $1680
+          pha
+          jsl $=Wacky__Misspell
+          sta $1680
+        // %end%
+        ldx $1682
+        ldy #$0000
+        stz $1684
+        stz $1685
+    %SearchLoop:
+        lda $700000,x
+        beq $+FoundEmptySlot
+        cmp $1680
+        beq $+Abort
+    %SearchLoopNext:
+        inx
+        iny
+        cpy #$0018
+        bcc $-SearchLoop
+
+        ldx $1684
+        cpx #$0000
+        beq $+Abort
+        lda $1680
+        sta $700000,x
+    %Abort:
+        // %if wacky_misspelled%
+          pla
+          sta $1680
+        // %end%
+        rtl
+
+    %FoundEmptySlot:
+        lda $1684
+        ora $1685
+        bne $-SearchLoopNext
+        stx $1684
+        bra $-SearchLoopNext
+}
+
+//------------------------------------
+// hack menu screen to use correct spell sets
+
+// pull spell sets into working area when needed
+msfpatch {
+    .addr $01aef9
+        jml $=CharEx__MenuSpells_PullSpells
+
+    .new
+    CharEx__MenuSpells_PullSpells:
+        // displaced instructions
+        cmp #$ff
+        bne $+DoPull
+        jml $01aeab
+
+    %DoPull:
+        phx
+        lda #$00
+        xba
+        lda $e8   // gets selected party slot
+        and #$0f
+        asl a
+        tax
+        rep #$20
+        .mx 0x00
+        lda $0FC625,x  // array of 1000/1040/.../1100
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda $0000,x
+        beq $+Abort
+        and #$1f
+        jsr $_CharEx__PullSpellSets
+    %Abort:
+        plx
+        jml $01aefd
+}
+
+// push spell sets when leaving magic menu
+msfpatch {
+    CharEx__MenuSpells_GetCurrentAxtor:
+        lda #$00
+        xba
+        lda $e8   // gets selected party slot
+        and #$0f
+        asl a
+        tax
+        rep #$20
+        .mx 0x00
+        lda $0FC625,x  // array of 1000/1040/.../1100
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda $0000,x
+        and #$1f    
+        rts
+}
+
+msfpatch {
+    .addr $01b019
+        jsl $=CharEx__MenuSpells_PushSpells
+
+    .new
+    CharEx__MenuSpells_PushSpells:
+        jsr $_CharEx__MenuSpells_GetCurrentAxtor
+        beq $+Abort
+        jsr $_CharEx__PushSpellSets
+    %Abort:
+        // displaced instructions
+        lda #$30
+        sta $3f
+        rtl
+}
+
+// push spell sets when leaving magic menu
+// via casting Sight / Exit / Warp
+msfpatch {
+    // this hooks in before we verify the successful
+    // cast, but the spell effects are shared with
+    // items so we can't hook into when they take
+    // effect. It doesn't hurt though if we push
+    // the spell sets early without necessarily
+    // casting the spell.
+
+    .addr $01b570
+        jml $=CharEx__MenuSpells_Casting
+
+    .new
+    CharEx__MenuSpells_Casting:
+        // replicate checks for Exit, Sight and Warp
+        // and push spell sets if casting any of them
+        cmp #$16
+        beq $+ExitOrSight
+        cmp #$17
+        beq $+ExitOrSight
+        cmp #$1b
+        beq $+Warp
+        jml $01b57c
+
+    %ExitOrSight:
+        pha
+        jsr $_CharEx__MenuSpells_GetCurrentAxtor
+        jsr $_CharEx__PushSpellSets
+        pla
+        jml $01b505
+
+    %Warp:
+        pha
+        jsr $_CharEx__MenuSpells_GetCurrentAxtor
+        jsr $_CharEx__PushSpellSets
+        pla
+        jml $01b4fc
+}
+
+// patch Edge check to use job instead of actor
+msfpatch {
+    .addr $01afaf
+        jsr $9007
+        jml $=CharEx__MenuSpells_NinjaCheck
+
+    .new
+    CharEx__MenuSpells_NinjaCheck:
+        lda $0001,x
+        and #$0f
+        cmp #$0c
+        beq $+IsEdge
+        jml $01afbc
+    %IsEdge:
+        jml $01afb6
+}
+
+// force code use of spell sets 2, 3, 4 (which corresponds)
+// to spell working area
+msfpatch {
+    .addr $01af71
+        jsl $=CharEx__MenuSpells_LoadSpellSet0
+        nop
+        nop
+        nop
+    .addr $01af85
+        jsl $=CharEx__MenuSpells_LoadSpellSet1
+        nop
+        nop
+        nop
+    .addr $01af99
+        jsl $=CharEx__MenuSpells_LoadSpellSet2
+        nop
+        nop
+        nop
+
+    .new
+    CharEx__MenuSpells_LoadSpellSet0:
+        lda #$02
+        sta $1b7e
+        lda $14ffa2,x
+        bpl $+Return
+        sta $1b7e
+    %Return:
+        rtl
+
+    CharEx__MenuSpells_LoadSpellSet1:
+        lda #$03
+        sta $1b7f
+        lda $14ffa3,x
+        bpl $-Return
+        sta $1b7f
+        rtl
+
+    CharEx__MenuSpells_LoadSpellSet2:
+        lda #$04
+        sta $1b80
+        lda $14ffa4,x
+        bpl $-Return
+        sta $1b80
+        rtl
+}
+
+//-----------------------------------------
+// load correct battle menu commands
+msfpatch {
+    .addr $038b90
+        jsl $=CharEx__BattleCommands
+
+    .new
+    CharEx__BattleCommands:
+        xba
+        lda #$00
+        xba
+        tax
+        lda $1240,x
+        beq $+Unknown
+        dec a
+    %Unknown:
+        rtl
+}
+
+//-----------------------------------------
+// load correct spell sets in battle
+msfpatch {
+    .addr $0389e6
+        jsl $=CharEx__BattleSpells_Pull
+
+    .new
+    CharEx__BattleSpells_Pull:
+        // displaced
+        stz $b8
+        stz $b5
+
+        // pull spell sets into working area
+        lda $2000,x
+        and #$1f
+        jsr $_CharEx__PullSpellSets
+        rtl
+
+    // in-place code rewrite to assume
+    // spell sets 2,3,4 (corresponding to work area)
+    .addr $038a03
+        jsl $=CharEx__BattleSpells_Load
+
+    .new
+    CharEx__BattleSpells_Load:
+        // instead of using spell set number
+        // from job, hardcode spell sets 2-4
+        lda $b5
+        clc
+        adc #$02
+
+        // displaced
+        sta $df
+        lda #$18
+        rtl
+}
+
+//----------------------------------------
+// fix menu screen to lookup correct levelup table entry
+msfpatch {
+    .addr $01aada
+        jsl $=CharEx__Menu_LevelTableRedirect
+
+    .new
+    CharEx__Menu_LevelTableRedirect:
+        and #$3f
+        xba
+        lda #$00
+        xba
+        tax
+        lda $1240,x
+        dec a
+        asl a
+        rtl    
+}
+
+//----------------------------------------
+// fix level up after battle
+
+// convert axtor->actor to look up level-up table
+msfpatch {
+    .addr $03ef03
+        jml $=CharEx__LevelUp_TableRedirect
+
+    .new
+    CharEx__LevelUp_TableRedirect:
+        lda #$00
+        xba
+        lda $1000,x
+        and #$1f
+        tax
+        lda $1240,x
+        dec a
+        jml $03ef09
+}
+
+// pull spell sets when levelling up
+msfpatch {
+    .addr $03f09c
+        jml $=CharEx__LevelUpSpells_Pull
+
+    .new
+    CharEx__LevelUpSpells_Pull:
+        phx
+        lda $1000,x
+        and #$1f
+        sta $1690
+        jsr $_CharEx__PullSpellSets
+        plx
+
+        // displaced
+        lda $1001,x
+        and #$0f
+        jml $03f0a1
+}
+
+// redirect spell learning routine to spell sets 2,3,4
+// (working area)
+msfpatch {
+    .addr $03f13a
+        jsl $=CharEx__LevelUpSpells_UseWorkingArea
+
+    .new
+    CharEx__LevelUpSpells_UseWorkingArea:
+        lda $b3
+        clc
+        adc #$02
+        sta $df
+        lda #$18
+        rtl
+}
+
+// push spell sets after level up
+msfpatch {
+    .addr $03f0c3
+        jml $=CharEx__LevelUpSpells_Push
+
+    .new
+    CharEx__LevelUpSpells_Push:
+        cmp #$03
+        bne $+Loop
+
+        lda $1690
+        jsr $_CharEx__PushSpellSets
+        jml $03f0c7
+
+    %Loop:
+        jml $03f0b0
+}
+
+//-----------------------------------------------
+// remove original Cover-actor-finder code, and also
+// fix agility scaler to correctly detect Cecil
+msfpatch {
+    .addr $038d5c
+        jml $=CharEx__AgilityAnchorMod
+
+    .new
+    CharEx__AgilityAnchorMod:
+        // %flags: ~vanilla_agility ~hero_challenge%
+        bra $+Accept
+        // %end%
+
+        // %flags: ~vanilla_agility hero_challenge%
+        lda $2000,x
+        and #$1f
+        cmp #$01
+        beq $+Accept
+        // %end%
+        
+        // %flags: vanilla_agility%
+        lda $2000,x
+        beq $+Next
+        lda $2001,x
+        and #$0f
+        cmp #$00 // DKCecil job
+        beq $+Accept
+        cmp #$09 // PCecil job
+        beq $+Accept
+        // %end%
+    %Next:
+        jml $038d69
+    %Accept:
+        jml $038d84
+}
+
+//-----------------------------------------------
+// fix Cover to work with multiple Paladins
+
+msfpatch {
+    .def CharEx__CoverCapable      $7e160a
+    .def CharEx__CoverAssignments  $7e160f
+
+    .def CharEx__CoverLoopCounterLo   $7e1680
+    .def CharEx__CoverLoopCounterHi   $7e1681
+    .def CharEx__CoverBestIndex       $7e1682
+    .def CharEx__CoverBestScoreLo     $7e1683
+    .def CharEx__CoverBestScoreHi     $7e1684
+    .def CharEx__CoverOffsetsChanged  $7e1685
+    .def CharEx__CoverCompareHPLo     $7e1686
+    .def CharEx__CoverCompareHPHi     $7e1687
+
+
+    .addr $03af98
+        jml $=CharEx__MultiCover
+
+    .new
+    CharEx__MultiCover:
+        stz $_CharEx__CoverOffsetsChanged
+        // do attacker==target check earlier
+        lda $cd
+        cmp $ce
+        bne $+CheckPossibleCovers
+    %CoverFailed:
+        lda $_CharEx__CoverOffsetsChanged
+        bne $+CoverFailedRestoreOffsets
+        jml $03affb
+    %CoverFailedRestoreOffsets:
+        jml $03aff6
+
+    %CheckPossibleCovers:
+        // iterate and check all possible covers
+        stz $_CharEx__CoverLoopCounterLo   // stores loop counter
+        stz $_CharEx__CoverLoopCounterHi   //   (16-bit)
+        stz $_CharEx__CoverBestIndex   // stores index of best cover character
+        dec $_CharEx__CoverBestIndex   //   (defaults to 0xFF)
+        stz $_CharEx__CoverBestScoreLo   // stores quality score of best cover character
+        stz $_CharEx__CoverBestScoreHi   //   (16-bit)
+
+    %LoopStart:
+        ldx $_CharEx__CoverLoopCounterLo
+
+        // check if unit is capable of cover
+        lda $_CharEx__CoverCapable,x
+        beq $+LoopNext
+
+        // replicate checks from original routine
+        // check: cover slot != attacker or defender
+        txa
+        cmp $cd
+        beq $+LoopNext
+        // %if ~wacky_cover_check%
+          cmp $ce
+          beq $+LoopNext
+        // %end%
+
+        // check if in a valid condition to cover
+        jsr $_Util__CalcBattleOffsets
+        inc $_CharEx__CoverOffsetsChanged 
+                  // this counter is used to keep track of whether
+                  //  we have loaded new battle offsets, so we can
+                  //  reset it later if needed
+        ldx $a6
+        lda $2003,x
+        and #$c0
+        bne $+LoopNext
+        lda $2004,x
+        and #$3c
+        bne $+LoopNext
+        lda $2005,x
+        and #$50
+        bne $+LoopNext
+        // %if ~wacky_cover_check%
+          // in bodyguard challenge, skip coverer's HP critical check
+          lda $2006,x
+          and #$01
+          bne $+LoopNext
+        // %end%
+
+        jmp $_CoverValid
+
+    %LoopNext:
+        inc $_CharEx__CoverLoopCounterLo
+        lda $_CharEx__CoverLoopCounterLo
+        cmp #$05
+        bcc $-LoopStart
+
+        jmp $_LoopComplete
+
+    %CoverValid:
+        phy
+        ldy $2007,x
+        sty $_CharEx__CoverCompareHPLo
+        ply
+
+        // apply 0x8000 bit if this character has been assigned to cover
+        ldx $_CharEx__CoverLoopCounterLo
+        lda $_CharEx__CoverAssignments,x
+        cmp $ce
+        bne $+CheckIfBetter
+        lda $_CharEx__CoverCompareHPHi
+        ora #$80
+        sta $_CharEx__CoverCompareHPHi
+    %CheckIfBetter:
+        lda $_CharEx__CoverBestIndex
+        cmp #$ff
+        beq $+IsBetter
+        // %if wacky_cover_check%
+            // take the first character we find, unless characters are explicitly 
+            // assigned to cover, in which case the normal logic takes priority
+            lda $_CharEx__CoverCompareHPHi
+            bpl $-LoopNext
+        // %end%
+        ldy $_CharEx__CoverCompareHPLo
+        cpy $_CharEx__CoverBestScoreLo
+        bcc $-LoopNext
+    %IsBetter:
+        ldy $_CharEx__CoverCompareHPLo
+        sty $_CharEx__CoverBestScoreLo
+        lda $_CharEx__CoverLoopCounterLo
+        sta $_CharEx__CoverBestIndex
+        jmp $_LoopNext
+
+    %LoopComplete:
+        lda $_CharEx__CoverBestIndex
+        bmi $+NoCoverFound
+        // store cover slot in "expected" place and resume flow
+        lda $_CharEx__CoverBestIndex
+        sta $355e
+        jml $03afd3
+
+    %NoCoverFound:
+        jmp $_CoverFailed
+}
+
+// alter effects of Cover and Off commands
+msfpatch {
+    .addr $03e617
+        jml $=CharEx__CoverCommand
+
+    .new
+    CharEx__CoverCommand:
+        lda #$00
+        xba
+        lda $cd
+        tax
+        lda $ce
+        sta $_CharEx__CoverAssignments,x
+        jsr $_CharEx__UpdateCoverStatusBits
+        jml $03e621
+
+    .addr $03e663
+        jml $=CharEx__OffCommand
+
+    .new
+    CharEx__OffCommand:
+        lda #$00
+        xba
+        lda $cd
+        tax
+        lda #$ff
+        sta $_CharEx__CoverAssignments,x
+        jsr $_CharEx__UpdateCoverStatusBits
+        jml $03e66d
+}
+
+msfpatch {
+    CharEx__UpdateCoverStatusBits:
+        stz $1680
+        stz $1681
+        stz $1682
+        stz $1683
+        stz $1684
+
+        stz $1685
+        stz $1686
+
+        lda #$00
+        xba
+
+    %AssignmentLoop:
+        ldx $1685
+        lda $_CharEx__CoverAssignments,x
+        bmi $+AssignmentLoopNext
+        tax
+        lda #$02
+        sta $1680,x
+    %AssignmentLoopNext:
+        inc $1685
+        lda $1685
+        cmp #$05
+        bcc $-AssignmentLoop
+
+        stz $1685
+        stz $1686
+        
+    %PartyLoop:
+        lda $1685
+        sta $1688
+        stz $1687
+        clc
+        ror $1688
+        ror $1687
+
+        ldx $1685
+        lda $1680,x
+        beq $+RemoveCoverBit
+
+        ldx $1687
+        ora $2006,x
+        sta $2006,x
+        bra $+PartyLoopNext
+
+    %RemoveCoverBit:
+        ldx $1687
+        lda #$fd
+        and $2006,x
+        sta $2006,x
+
+    %PartyLoopNext:
+        inc $1685
+        lda $1685
+        cmp #$05
+        bcc $-PartyLoop
+
+        rts
+}
+
+
+//-----------------------------------------------
+// fix Twin command
+
+// change twin-finder loop to find all twins, as well as all covers,
+//  and remember which slots are twin capable or cover capable
+msfpatch {
+    .def CharEx__TwinCapable      $7e1600
+    .def CharEx__TwinAssignments  $7e1605
+    .def CharEx__TwinCount        $7e1614
+
+    // quick injection to init twin counter
+    .addr $0395a4
+        jsl $=CharEx__TwinCountInit
+    .new
+    CharEx__TwinCountInit:
+        //displaced
+        tay
+        tax
+        sty $a9
+        // init counter
+        stz $_CharEx__TwinCount
+        rtl
+
+    .addr $0395a8   // 21 bytes to work with
+        jml $=CharEx__TwinFinderMod
+
+    .new
+    CharEx__TwinFinderMod:
+        lda #$00
+        xba
+        lda $a9
+        tax
+        stz $_CharEx__TwinCapable,x
+        stz $_CharEx__CoverCapable,x
+        lda #$ff
+        sta $_CharEx__TwinAssignments,x
+        sta $_CharEx__CoverAssignments,x
+
+        // also init no-autohide flags since we gotta somewhere
+        stz $_PreventAutoHideFlags
+
+        lda ($80),y
+        and #$1f
+        beq $+Abort
+
+        lda #$00
+        xba
+
+        iny
+        lda ($80),y
+        dey
+        and #$0f
+        sta $1680
+
+        // %if ~wacky_all_characters_cover%
+        cmp #$09
+        beq $+IsPaladinCecil
+        lda $a9
+        tax
+        lda #$00
+        bra $+MarkCover
+        // %end%
+
+    %IsPaladinCecil:
+        lda $a9
+        tax
+        lda #$01
+    %MarkCover:
+        sta $_CharEx__CoverCapable,x
+
+    %TwinCheck:
+        lda $1680
+        cmp #$07
+        beq $+IsTwin
+        cmp #$08
+        beq $+IsTwin
+
+        lda $a9
+        tax
+        lda #$00
+        bra $+MarkTwin
+
+    %IsTwin:
+        inc $_CharEx__TwinCount
+        lda $a9
+        tax
+        lda #$01
+    %MarkTwin:
+        sta $_CharEx__TwinCapable,x
+    
+    %Abort:
+        jml $0395c2
+
+}
+
+// hack Twin command to find and mark correct twin
+msfpatch {
+    .addr $03e43e
+        jml $=CharEx__TwinCommand
+
+    .new
+    CharEx__TwinCommand:
+        // count number of twins
+        lda $_CharEx__TwinCount
+        cmp #$03
+        bcs $+MultiTwins
+
+        cmp #$02
+        beq $+TwoTwins
+
+        // < 2 twins, break
+        jmp $_Abort
+
+    %TwoTwins:
+        // only two Twins, so logically determine other twin
+        stz $1680
+        stz $1681
+    %FindOnlyTwinLoop:
+        ldx $1680
+        lda $_CharEx__TwinCapable,x
+        beq $+LoopNext
+        lda $1680
+        cmp $cd
+        beq $+LoopNext
+        jmp $_FoundTwin
+    %LoopNext:
+        inc $1680
+        lda $1680
+        cmp #$05
+        bcc $-FindOnlyTwinLoop
+        // something went wrong if we couldn't find the other twin
+    %Abort:
+        jml $03e4d6
+
+    %FoundTwin:
+        sta $1690
+        jml $03e44c
+
+    %MultiTwins:
+        // build list of eligible twin candidates
+        stz $1680
+        stz $1681
+        stz $1682
+        stz $1683
+        stz $1684
+        stz $1685
+        stz $1686
+        stz $1687
+
+    %EligibleTwinLoop:
+        lda $1680
+        cmp $cd     // check if this is the current twin
+        beq $+EligibleTwinLoopNext
+        ldx $1680
+        lda $_CharEx__TwinCapable,x
+        beq $+EligibleTwinLoopNext  // check if unit is twin capable
+
+        // get party offset
+        rep #$20
+        .mx 0x00
+        txa
+        xba
+        lsr a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // perform standard twin validity checks (copy from 03:E451)
+        lda $2003,x
+        and #$c0
+        bne $+EligibleTwinLoopNext
+        lda $2004,x
+        and #$3c
+        bne $+EligibleTwinLoopNext
+        lda $2005,x
+        and #$44  // also check for twin bit
+        bne $+EligibleTwinLoopNext
+
+        // twin is valid
+        ldx $1682
+        lda $1680
+        sta $1684,x
+        inc $1682
+
+    %EligibleTwinLoopNext:
+        inc $1680
+        lda $1680
+        cmp #$05
+        bcc $-EligibleTwinLoop
+
+        // if no valid other twins were found, abort
+        lda $1682
+        beq $-Abort
+
+        // if one other twin was found, just use that one
+        dec a
+        beq $+EligibleTwinIndexChosen
+
+        // otherwise pick one randomly
+        ldx #$0000
+        jsl $=Util__BattleRNG
+
+    %EligibleTwinIndexChosen:
+        tax
+        lda $1684,x
+        sta $1690
+
+        rep #$20
+        .mx 0x00
+        xba
+        and #$ff00
+        lsr a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda $1690
+        jml $03e46f  // return to flow that completes twin actions on other twin
+
+    // alter validity check on other Twin to include check for Twin status bit
+    .addr $03e468
+        and #$44
+}
+
+msfpatch {
+    .addr $03e483
+        jml $=CharEx__RememberPartners
+
+    .new
+    CharEx__RememberPartners:
+        // write twin follow-up action (displaced from 03e483)
+        lda #$20
+        sta $2051,x
+
+        // remember twin partner numbers
+        lda $cd
+        sta $1680
+        stz $1681
+        lda $1690
+        sta $1682
+        stz $1683
+
+        lda $1680
+        ldx $1682
+        sta $_CharEx__TwinAssignments,x
+        lda $1682
+        ldx $1680
+        sta $_CharEx__TwinAssignments,x
+
+        jml $03e488
+}
+
+// fix Twin cast command to correctly look up other twin
+msfpatch {
+    .addr $03e4fc
+        jml $=CharEx__TwinCastCommand
+
+    .new
+    CharEx__TwinCastCommand:
+        lda #$00
+        xba
+        lda $cd
+        tax
+        lda $_CharEx__TwinAssignments,x
+        stz $d6
+        jml $03e50c
+}
+
+// fix Twin cast command to assign premature death bit in new location
+msfpatch {
+    .addr $03e537
+        jml $=CharEx__TwinPrematureDeathBit
+
+    .new
+    CharEx__TwinPrematureDeathBit:
+        lda #$00
+        xba
+        lda $a9
+        tax
+        lda $_CharEx__TwinCapable,x
+        ora #$80
+        sta $_CharEx__TwinCapable,x
+        jml $03e548
+}
+
+// fix Twin animations to animate correct characters
+msfpatch {
+    .addr $02c09b
+        jml $=CharEx__TwinStartAnimation
+
+    .new
+    CharEx__TwinStartAnimation:
+        lda #$00
+        xba
+        lda $48   // theory: this is slot of acting character
+        tax
+        lda #$0a
+        sta $f099,x
+        lda $_CharEx__TwinAssignments,x
+        tax
+        lda #$0a
+        sta $f099,x
+        jml $02c0b1
+}
+
+msfpatch {
+    .addr $02c0bf
+        jml $=CharEx__TwinCastAnimation
+
+    .new
+    CharEx__TwinCastAnimation:
+        // displaced
+        lda $3529
+        beq $+Continue
+        jml $02c100
+
+    %Continue:
+        lda #$00
+        xba
+
+        // lookup relevant twin slot values and stuff into old location,
+        // then erase twin assignment data
+        lda $48
+        sta $3539
+        // apply premature death bit if needed
+        tax
+        lda $_CharEx__TwinCapable,x
+        and #$80
+        ora $3539
+        sta $3539
+
+        lda $_CharEx__TwinAssignments,x
+        sta $353a
+        tax
+        lda $_CharEx__TwinCapable,x
+        and #$80
+        ora $353a
+        sta $353a
+
+        // erase twin assignments
+        lda #$ff
+        sta $_CharEx__TwinAssignments,x
+
+        lda $3539
+        and #$7f
+        tax
+        lda #$ff
+        sta $_CharEx__TwinAssignments,x
+
+        jml $02c0c4
+}
+
+msfpatch {
+    .addr $02c100
+        // fix Twin cast animation to clear premature death bits
+        jml $=CharEx__TwinClearPrematureDeathBits
+
+    .new
+    CharEx__TwinClearPrematureDeathBits:
+        lda #$00
+        xba
+
+        lda $3539
+        and #$7f
+        tax
+        lda $_CharEx__TwinCapable,x
+        and #$7f
+        sta $_CharEx__TwinCapable,x
+
+        lda $353a
+        and #$7f
+        tax
+        lda $_CharEx__TwinCapable,x
+        and #$7f
+        sta $_CharEx__TwinCapable,x
+
+        jml $02c114
+}
+
+// fix Twin-enable-check function
+msfpatch {
+    .addr $03a347
+        jml $=CharEx__TwinEnableCheck
+
+    .new
+    CharEx__TwinEnableCheck:
+        lda $_CharEx__TwinCount
+        cmp #$02
+        bcs $+CheckTwins
+
+    %Fail:
+        jml $03a371
+
+    %CheckTwins:
+        // instead of checking one twin partner, we have to check them ALL
+        stz $168a
+        stz $168b
+        stz $168c
+        stz $168d
+        lda #$00
+        xba
+    %LoopStart:
+        lda $168a
+        cmp $d0
+        beq $+Next
+        sta $168d
+        stz $168c
+
+        tax
+        lda $_CharEx__TwinCapable,x
+        beq $+Next
+
+        clc
+        ror $168d
+        ror $168c
+        ldx $168c
+        lda $2003,x
+        and #$fc
+        bne $+Next
+        lda $2004,x
+        and #$3c
+        bne $+Next
+        lda $2005,x
+        and #$40
+        bne $+Next
+
+        // successfully found valid Twin
+        jml $03a36f
+
+    %Next:
+        inc $168a
+        lda $168a
+        cmp #$05
+        bcc $-LoopStart
+        jmp $_Fail
+}
+
+// Remove hardcoded Fusoya/Golbez actor check
+// that injects W.Meteo
+msfpatch {
+    .addr $03e573
+        jmp $e57f
+}
+
+// Hacky: dummy out the instruction that sets the
+// slot number for "I just initiated Twin so
+// please do not show this slot's command box",
+// ie. the source of mimic glitch
+msfpatch {
+    .addr $03a62b
+        nop nop nop
+}
+
+//--------------------------------------------
+// Fix Edward auto-hide/show checks to check by job
+msfpatch {
+    .addr $03a402
+        lda $2001,x
+        and #$0f
+        cmp #$04
+
+    // the check normally at 03ab51 is handled in hide_softlock_fixes.f4c
+    // since it needs to be reordered
+}
+
+//--------------------------------------------
+// Fix AI scripts that respond to specific actors to use table lookup
+msfpatch {
+    .addr $03bf57
+        jml $=CharEx__AiConditionFix
+
+    .addr $03bf63
+        jml $=CharEx__AiConditionFix2
+
+    .new
+    CharEx__AiConditionFix:
+        lda #$00
+        xba
+        lda $2000,x
+        and #$1f
+        phx
+        tax
+        lda $1240,x
+        plx
+        cmp $ab
+        bne $+NoMatch
+        jml $03bf60
+
+    %NoMatch:
+        jml $03bf7d
+
+    // the original code stops after finding the first match, because
+    // actors are unique. Here, multiple party members may match the
+    // desired reference actor, so we need to support a full loop over
+    // the party.
+    CharEx__AiConditionFix2:
+        // rewrite of logic at 03bf68, but without losing the comparison
+        // value stored in AB, and allowing the next loop iteration to
+        // continue
+        lda $ab
+        pha
+        stx $00ab
+        phx
+        lda $a9
+        asl a
+        tax
+        lda $ab
+        sta $35d0,x
+        lda $ac
+        sta $35d1,x
+        inc $dd
+        plx
+        pla
+        sta $ab
+        jml $03bf7d
+}
+
+//--------------------------------------------
+// Utility function for no-dupes mode; given axtor A, returns the
+// lowest axtor number with the same actor
+msfpatch {
+    CharEx__SimplifyAxtorCode:
+        // borrow Util math registers for this since we know we're not calling into Util
+        sta $1670
+        lda $=RandoFlag_characters_no_duplicates
+        bne $+DuplicatesNotAllowed
+
+        // if dupes are allowed, accept original axtor code
+        lda $1670
+        rts
+
+    %DuplicatesNotAllowed:
+        // note which actor to compare against (known axtor list could have changed
+        // due to Rydia/Cecil/Tellah)
+        lda $1670
+        jsr $_Lookup_AxtorToActor
+        sta $1671
+
+        stz $1672
+        inc $1672
+    %SearchLoop:
+        lda $1672
+        cmp $1670   // check if we've reached the original axtor anyway
+        bcs $+Done
+        jsr $_Lookup_AxtorToActor
+        cmp $1671   // check for match of this axtor to original axtor
+        beq $+Done
+        inc $1672
+        bra $-SearchLoop
+
+    %Done:
+        lda $1672
+        rts
+}

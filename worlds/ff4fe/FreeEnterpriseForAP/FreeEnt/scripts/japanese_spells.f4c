@@ -1,0 +1,110 @@
+//---------------------------------------------------------
+// Japanese version spells and learned spell levels
+
+// LEARNED:   Tellah    Rosa    Porom    Fusoya
+// Protect    Ordeals   Lv 12   Lv 12    All
+// Shell      Ordeals   Lv 29   Lv 29    All
+// Dispel     Ordeals   Lv 31   Lv 31    All
+
+spellset(#Rosa) {
+    learned {
+        11  #Life1
+        12  #Armor
+        13  #Cure2
+        15  #Mute
+        18  #Heal
+        20  #Bersk
+        23  #Blink
+        24  #Charm
+        29  #Shell
+        30  #Cure3
+        30  #Size
+        31  #Dspel
+        33  #Fast
+        35  #Float
+        36  #Wall
+        38  #Cure4
+        45  #Life2
+        55  #White
+    }
+}
+
+spellset(#RydiaBlack) {
+    learned {
+        2  #Ice1
+        5  #Lit1
+        8  #Sleep
+        10  #Venom
+        12  #Warp
+        13  #Toad
+        15  #Stop
+        20  #Piggy
+        26  #Virus
+        32  #Psych
+        36  #Drain
+        39  #Ice3
+        42  #Fire3
+        45  #Lit3
+        47  #Quake
+        49  #Stone
+        51  #Weak
+        52  #Fatal
+        55  #Nuke
+        60  #Meteo
+    }
+}
+
+spellset(#Porom) {
+    learned {
+        11  #Life1
+        12  #Armor
+        13  #Cure2
+        15  #Mute
+        18  #Bersk
+        19  #Exit
+        20  #Heal
+        23  #Blink
+        25  #Charm
+        29  #Shell
+        31  #Size
+        31  #Dspel
+        33  #Cure3
+        38  #Fast
+        40  #Float
+        44  #Wall
+        48  #Cure4
+        52  #White
+        56  #Life2
+    }
+}
+
+// %fusoya initial spells%
+spellset(#FusoyaWhite) {
+    initial {
+        #Hold
+        #Mute
+        #Charm
+        #Blink
+        #Armor
+        #Shell
+        #Slow
+        #Fast
+        #Bersk
+        #Wall
+        #White
+        #Dspel
+        #Peep
+        #Cure1
+        #Cure2
+        #Cure3
+        #Cure4
+        #Heal
+        #Life1
+        #Life2
+        #Size
+        #Exit
+        #Sight
+        #Float
+    }
+}
+// %end%

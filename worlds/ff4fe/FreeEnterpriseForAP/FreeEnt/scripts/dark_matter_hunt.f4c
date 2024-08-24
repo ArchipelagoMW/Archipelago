@@ -1,0 +1,61 @@
+npc(#AstroObservatoryScholar)
+{
+    sprite #Scholar
+    default active
+    eventcall {
+        $4C
+    }
+}
+
+event($4C)
+{
+    [#B #If #ObjectiveComplete #objective.internal_dkmatter] {
+
+        [#B #If #HasDkMatter 1] {
+            map message 3
+            [#B #TakeAll #item.DkMatter]
+            [#B #EndEvent]
+        }
+
+        map message 4
+        [#B #EndEvent]        
+    }
+
+    [#B #If #not_HasDkMatter 30] {
+        map message 1
+        [#B #EndEvent]
+    }
+
+    map message 2
+    [#B #TakeAll #item.DkMatter]
+    [#B #Objectives_Tick #objective.internal_dkmatter]
+}
+
+text(map #AstroTowerObservatory message 1) {
+Hi, I'm Kory! Could you
+do me a favor and bring
+me 30 DkMatters?
+
+There are 45 of them
+scattered in chests
+all across the world
+and the moon!
+But I only need 30.
+Thanks!
+}
+
+text(map #AstroTowerObservatory message 2) {
+Outstanding! I'll take
+those. Thank you!
+}
+
+text(map #AstroTowerObservatory message 3) {
+More DkMatter? I'll take
+that. Thanks!
+}
+
+text(map #AstroTowerObservatory message 4) {
+No, I can't tell you what
+they're for. It's super
+secret science stuff.
+}

@@ -1,0 +1,91 @@
+01: char_cecil                               Get Cecil
+02: char_kain                                Get Kain
+03: char_rydia                               Get Rydia
+04: char_tellah                              Get Tellah
+05: char_edward                              Get Edward
+06: char_rosa                                Get Rosa
+07: char_yang                                Get Yang
+08: char_palom                               Get Palom
+09: char_porom                               Get Porom
+0E: char_cid                                 Get Cid
+12: char_edge                                Get Edge
+13: char_fusoya                              Get FuSoYa
+    boss_dmist                               Defeat D.Mist
+    boss_officer                             Defeat Officer
+    boss_octomamm                            Defeat Octomamm
+    boss_antlion                             Defeat Antlion
+    boss_waterhag                            Defeat Waterhag (boss version)
+    boss_mombomb                             Defeat MomBomb
+    boss_fabulgauntlet                       Defeat the Fabul Gauntlet
+    boss_milon                               Defeat Milon
+    boss_milonz                              Defeat Milon Z.
+    boss_mirrorcecil                         Defeat D.Knight
+    boss_guard                               Defeat the Guards (boss)
+    boss_karate                              Defeat Karate
+    boss_baigan                              Defeat Baigan
+    boss_kainazzo                            Defeat Kainazzo
+    boss_darkelf                             Defeat the Dark Elf (dragon form)
+    boss_magus                               Defeat the Magus Sisters
+    boss_valvalis                            Defeat Valvalis
+    boss_calbrena                            Defeat Calbrena
+    boss_golbez                              Defeat Golbez
+    boss_lugae                               Defeat Dr. Lugae
+    boss_darkimp                             Defeat the Dark Imps (boss)
+    boss_kingqueen                           Defeat K.Eblan and Q.Eblan
+    boss_rubicant                            Defeat Rubicant
+    boss_evilwall                            Defeat EvilWall
+    boss_asura                               Defeat Asura
+    boss_leviatan                            Defeat Leviatan
+    boss_odin                                Defeat Odin
+    boss_bahamut                             Defeat Bahamut
+    boss_elements                            Defeat Elements
+    boss_cpu                                 Defeat CPU
+    boss_paledim                             Defeat Pale Dim
+    boss_wyvern                              Defeat Wyvern
+    boss_plague                              Defeat Plague
+    boss_dlunar                              Defeat the D.Lunars
+    boss_ogopogo                             Defeat Ogopogo
+    quest_mistcave                           Defeat the boss of the Mist Cave
+    quest_waterfall                          Defeat the boss of the Waterfall
+    quest_antlionnest                        Complete the Antlion Nest
+    quest_hobs                               Rescue the hostage on Mt. Hobs
+    quest_fabul                              Defend Fabul
+    quest_ordeals                            Complete Mt. Ordeals
+    quest_baroninn                           Defeat the bosses of Baron Inn
+    quest_baroncastle                        Liberate Baron Castle
+    quest_magnes                             Complete Cave Magnes
+    quest_zot                                Complete the Tower of Zot
+    quest_dwarfcastle                        Defeat the bosses of Dwarf Castle
+    quest_lowerbabil                         Defeat the boss of Lower Bab-il
+    quest_falcon                             Launch the Falcon
+    quest_sealedcave                         Complete the Sealed Cave
+    quest_monsterqueen                       Defeat the queen at the Town of Monsters
+    quest_monsterking                        Defeat the king at the Town of Monsters
+    quest_baronbasement                      Defeat the Baron Castle basement throne
+    quest_giant                              Complete the Giant of Bab-il
+    quest_cavebahamut                        Complete Cave Bahamut
+    quest_murasamealtar                      Conquer the vanilla Murasame altar
+    quest_crystalaltar                       Conquer the vanilla Crystal Sword altar
+    quest_whitealtar                         Conquer the vanilla White Spear altar
+    quest_ribbonaltar                        Conquer the vanilla Ribbon room
+    quest_masamunealtar                      Conquer the vanilla Masamune altar
+    quest_burnmist                           Burn village Mist with the Package
+    quest_curefever                          Cure the fever with the SandRuby
+   #find_legend_sword                        Find the Legend Sword
+    quest_unlocksewer                        Unlock the sewer with the Baron Key
+    quest_music                              Break the Dark Elf's spell with the TwinHarp
+    quest_toroiatreasury                     Open the Toroia treasury with the Earth Crystal
+    quest_magma                              Drop the Magma Key into the Agart well
+    quest_supercannon                        Destroy the Super Cannon
+   #find_hook                                Find the Hook
+    quest_unlocksealedcave                   Unlock the Sealed Cave
+    quest_bigwhale                           Raise the Big Whale
+    quest_traderat                           Trade away the Rat Tail
+   #find_adamant                             Find the Adamant
+    quest_forge                              Have Kokkol forge Legend Sword with Adamant
+    quest_wakeyang                           Wake Yang with the Pan
+    quest_tradepan                           Return the Pan to Yang's wife
+   #find_spoon                               Find the Spoon
+    quest_tradepink                          Trade away the Pink Tail
+    quest_pass                               Unlock the Pass door in Toroia
+    internal_dkmatter                        Bring 30 DkMatters to Kory in Agart

@@ -1,0 +1,1341 @@
+<01> // [claw]FireClaw
+  0/80%
+  Inflicts Fire
+  Usable by Yang, Edge
+
+<02> // [claw]IceClaw
+  0/80%
+  Inflicts Ice
+  Usable by Yang, Edge
+
+<03> // [claw]Thunder
+  0/80%
+  Inflicts Bolt
+  Strong against robots
+  Usable by Yang, Edge
+
+<04> // [claw]Charm
+  0/50%
+  AGI+3
+  Inflicts Charm
+  Strong against giants
+  Usable by Yang, Edge
+
+<05> // [claw]Poison
+  0/90%
+  STR+3
+  Inflicts Poison
+  Usable by Yang, Edge
+
+<06> // [claw]CatClaw
+  0/99%
+  STR+5 AGI+5
+  Inflicts Sleep
+  Usable by Yang, Edge
+
+<07> // [rod]Rod
+  3/40%
+  Casts Dummy   
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<08> // [rod]IceRod
+  5/45%
+  Casts [blackmagic]Ice-1
+  Inflicts Ice
+  Strong against reptiles
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<09> // [rod]FlameRod
+  7/45%
+  WIS+3
+  Casts [blackmagic]Fire1
+  Inflicts Fire
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<0A> // [rod]Thunder
+  10/50%
+  WIS+3
+  Casts [blackmagic]Lit-1
+  Inflicts Bolt
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<0B> // [rod]Change
+  15/50%
+  WIS+5
+  Casts [blackmagic]Piggy
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<0C> // [rod]Charm
+  30/55%
+  WIS+10
+  Casts [whitemagic]Charm
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<0D> // [rod]Stardust
+  45/60%
+  WIS+15
+  Casts  Comet
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<0E> // [rod]Lilith
+  13/10%
+  WIS+5
+  Casts [blackmagic]Psych
+  Absorbs HP
+  Strong against undead
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<0F> // [staff]Staff
+  4/45%
+  Casts Dummy   
+  Usable by CRydia, Tellah, Rosa, Porom, PCecil, Fusoya
+
+<10> // [staff]Cure
+  8/50%
+  Casts Dummy   
+  Usable by CRydia, Tellah, Rosa, Porom, PCecil, Fusoya
+
+<11> // [staff]Silver
+  12/55%
+  WIL+3
+  Magnetic
+  Casts Dummy   
+  Strong against undead
+  Usable by CRydia, Tellah, Rosa, Porom, PCecil, Fusoya
+
+<12> // [staff]Power
+  30/99%
+  STR+10
+  Inflicts Berserk
+  Usable by CRydia, Tellah, Rosa, Porom, Fusoya
+
+<13> // [staff]Lunar
+  36/60%
+  WIL+10
+  Usable by CRydia, Tellah, Rosa, Porom, Fusoya
+
+<14> // [staff]Life
+  48/65%
+  WIL+15
+  Casts [whitemagic]Life1
+  Usable by CRydia, Tellah, Rosa, Porom, Fusoya
+
+<15> // [staff]Silence
+  52/60%
+  WIL+10
+  Casts [whitemagic]Mute 
+  Inflicts Mute
+  Strong against mages
+  Usable by CRydia, Tellah, Rosa, Porom, Fusoya
+
+<16> // [darksword]Shadow
+  10/80%
+  Magnetic
+  Inflicts Dark
+  Usable by DKCecil
+
+<17> // [darksword]Darkness
+  20/85%
+  Magnetic
+  Inflicts Dark
+  Usable by DKCecil
+
+<18> // [darksword]Black
+  30/90%
+  STR+5 AGI+5 VIT+5 WIS+5 WIL-10
+  Magnetic
+  Inflicts Dark, Swoon
+  Usable by DKCecil
+
+<19> // [lightsword]Legend
+  40/99%
+  WIL+3
+  Magnetic
+  Inflicts Holy
+  Usable by PCecil
+
+<1A> // [lightsword]Light
+  99/99%
+  STR+3 WIL+3
+  Throwable
+  Magnetic
+  Inflicts Holy
+  Usable by PCecil
+
+<1B> // [lightsword]Excalbur
+  160/99%
+  STR+10
+  Throwable
+  Magnetic
+  Inflicts Holy
+  Usable by PCecil
+
+<1C> // [sword]Fire
+  65/80%
+  Magnetic
+  Inflicts Fire
+  Usable by Kain, PCecil
+
+<1D> // [sword]IceBrand
+  75/80%
+  Magnetic
+  Inflicts Ice
+  Usable by Kain, PCecil
+
+<1E> // [sword]Defense
+  105/90%
+  VIT+15
+  Throwable
+  Magnetic
+  Usable by Kain, PCecil
+
+<1F> // [sword]Drain
+  45/50%
+  STR-5 AGI-5 VIT-5 WIS-5 WIL-5
+  Throwable
+  Magnetic
+  Absorbs HP
+  Strong against giants, slimes, undead
+  Usable by Kain, PCecil
+
+<20> // [sword]Ancient
+  35/77%
+  Throwable
+  Magnetic
+  Inflicts Curse
+  Strong against spirits
+  Usable by Kain, PCecil
+
+<21> // [sword]Slumber
+  55/77%
+  Throwable
+  Magnetic
+  Casts [blackmagic]Sleep
+  Inflicts Sleep
+  Usable by Kain, PCecil
+
+<22> // [sword]Medusa
+  77/66%
+  Throwable
+  Magnetic
+  Inflicts Calcify2
+  Usable by Kain, PCecil
+
+<23> // [spear]Spear
+  9/99%
+  Magnetic
+  Inflicts Air
+  Usable by Kain
+
+<24> // [spear]Wind
+  55/80%
+  Magnetic
+  Inflicts Air
+  Usable by Kain
+
+<25> // [spear]Flame
+  66/80%
+  Magnetic
+  Casts [blackmagic]Fire2
+  Inflicts Fire, Air
+  Usable by Kain
+
+<26> // [spear]Blizzard
+  77/80%
+  Magnetic
+  Casts [blackmagic]Ice-2
+  Inflicts Ice, Air
+  Usable by Kain
+
+<27> // [spear]Dragoon
+  99/80%
+  Throwable
+  Magnetic
+  Inflicts Air
+  Strong against dragons
+  Usable by Kain
+
+<28> // [spear]White
+  109/80%
+  Throwable
+  Magnetic
+  Casts [whitemagic]White
+  Inflicts Holy, Air
+  Strong against spirits
+  Usable by Kain
+
+<29> // [spear]Drain
+  88/22%
+  STR-10 AGI-10 VIT-10 WIS-10 WIL-10
+  Throwable
+  Magnetic
+  Absorbs HP
+  Strong against giants, slimes, undead
+  Usable by Kain
+
+<2A> // [spear]Gungnir
+  92/80%
+  VIT+15
+  Throwable
+  Magnetic
+  Inflicts Air
+  Usable by Kain
+
+<2B> // [katana]Short
+  25/90%
+  Throwable
+  Magnetic
+  Usable by Edge
+
+<2C> // [katana]Middle
+  32/90%
+  Magnetic
+  Usable by Edge
+
+<2D> // [katana]Long
+  40/90%
+  Magnetic
+  Usable by Edge
+
+<2E> // [katana]Ninja
+  48/90%
+  STR+5
+  Throwable
+  Magnetic
+  Usable by Edge
+
+<2F> // [katana]Murasame
+  55/90%
+  STR+5 AGI-5 VIT+5 WIS+5 WIL-5
+  Throwable
+  Magnetic
+  Usable by Edge
+
+<30> // [katana]Masamune
+  65/99%
+  AGI+3
+  Throwable
+  Magnetic
+  Casts [whitemagic]Fast 
+  Usable by Edge
+
+<31> // [knife]Assassin
+  29/55%
+  STR+5 AGI+5 VIT+5 WIS-10 WIL-10
+  Throwable
+  Magnetic
+  Inflicts Swoon
+  Usable by Kain, CRydia, Edward, Palom, PCecil, ARydia, Edge
+
+<32> // [knife]Mute
+  35/75%
+  WIS+5
+  Throwable
+  Magnetic
+  Inflicts Mute
+  Strong against mages
+  Usable by Kain, CRydia, Edward, Palom, PCecil, ARydia, Edge
+
+<33> // [whip]Whip
+  20/50%
+  Long range
+  Inflicts Stun
+  Usable by CRydia, ARydia
+
+<34> // [whip]Chain
+  30/55%
+  Long range
+  Magnetic
+  Inflicts Stun
+  Usable by CRydia, ARydia
+
+<35> // [whip]Blitz
+  40/60%
+  Long range
+  Inflicts Bolt, Stun
+  Usable by CRydia, ARydia
+
+<36> // [whip]Flame
+  50/65%
+  STR+5 AGI+5 VIT+5 WIS-5 WIL-5
+  Long range
+  Inflicts Fire, Stun
+  Usable by CRydia, ARydia
+
+<37> // [whip]Dragon
+  55/75%
+  STR+5 AGI+5 VIT+5 WIS-5 WIL-5
+  Long range
+  Inflicts Stun
+  Strong against dragons
+  Usable by CRydia, ARydia
+
+<38> // [axe]HandAxe
+  35/50%
+  STR+3
+  Throwable
+  Magnetic
+  Usable by Kain, PCecil, Cid
+
+<39> // [axe]Dwarf
+  62/69%
+  STR+5 AGI-5 VIT+5 WIS-5 WIL-5
+  Long range
+  Magnetic
+  Usable by Kain, PCecil, Cid
+
+<3A> // [axe]Ogre
+  80/85%
+  Magnetic
+  Strong against giants
+  Usable by Kain, PCecil, Cid
+
+<3B> // [knife]Silver
+  20/99%
+  Throwable
+  Magnetic
+  Strong against spirits
+  Usable by Kain, CRydia, Edward, Palom, PCecil, ARydia, Edge
+
+<3C> // [knife]Dancing
+  28/94%
+  Throwable
+  Magnetic
+  Casts Dummy   
+  Usable by Kain, CRydia, Edward, Palom, PCecil, ARydia, Edge
+
+<3D> // [sword]Silver
+  50/80%
+  Magnetic
+  Strong against spirits
+  Usable by Kain, PCecil
+
+<3E> // [knife]Spoon
+  255/99%
+  Throwable
+  Magnetic
+
+<3F> // [lightsword]Crystal
+  200/99%
+  STR+15 VIT+15 WIL+15
+  Magnetic
+  Inflicts Holy
+  Strong against undead
+  Usable by PCecil
+
+<40> // [shuriken]Shuriken
+  40/99%
+  Long range
+  Throwable
+  Magnetic
+  Inflicts Air
+
+<41> // [shuriken]Ninja
+  80/99%
+  Long range
+  Throwable
+  Magnetic
+  Inflicts Air
+
+<42> // [boomerang]Boomrang
+  20/80%
+  Long range
+  Inflicts Air
+  Usable by Edge
+
+<43> // [boomerang]FullMoon
+  40/85%
+  Long range
+  Inflicts Air
+  Usable by Edge
+
+<44> // [harp]Dreamer
+  8/85%
+  Two-handed
+  Long range
+  Inflicts Sleep
+  Usable by Edward
+
+<45> // [harp]Charm
+  18/90%
+  Two-handed
+  Long range
+  Inflicts Charm
+  Usable by Edward
+
+<46> // [$15]Dummy
+  200/99%
+  STR+15 VIT+15 WIL+15
+  Two-handed
+  Magnetic
+  Inflicts Holy
+  Strong against undead
+
+<47> // [axe]Poison
+  95/60%
+  Two-handed
+  Magnetic
+  Casts [blackmagic]Venom
+  Inflicts Poison
+  Strong against giants
+  Usable by Kain, PCecil, Cid
+
+<48> // [axe]RuneAxe
+  100/60%
+  Two-handed
+  Magnetic
+  Strong against mages
+  Usable by Kain, PCecil, Cid
+
+<49> // [wrench]Silver
+  55/75%
+  Two-handed
+  Magnetic
+  Strong against robots, spirits
+  Usable by Cid
+
+<4A> // [wrench]Earth
+  65/75%
+  STR+5
+  Two-handed
+  Magnetic
+  Casts [blackmagic]Quake
+  Inflicts Fire
+  Strong against robots
+  Usable by Cid
+
+<4B> // [wrench]Wooden
+  45/75%
+  Two-handed
+  Strong against robots
+  Usable by Cid
+
+<4C> // [sword]Avenger
+  80/95%
+  STR+10 AGI+10 VIT+10 WIS-10 WIL-10
+  Two-handed
+  Throwable
+  Magnetic
+  Usable by Kain, PCecil
+
+<4D> // [bow]ShortBow
+  10/30%
+  Long range
+  Inflicts Air
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<4E> // [bow]CrossBow
+  20/35%
+  Long range
+  Inflicts Air
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<4F> // [bow]GreatBow
+  30/40%
+  STR+3
+  Long range
+  Inflicts Air
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<50> // [bow]Archer
+  40/50%
+  STR+5
+  Long range
+  Inflicts Air
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<51> // [bow]ElvenBow
+  50/75%
+  WIS+5
+  Long range
+  Inflicts Air
+  Strong against mages
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<52> // [bow]Samurai
+  60/60%
+  STR+10
+  Long range
+  Inflicts Air
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<53> // [bow]Artemis
+  80/70%
+  STR+10 AGI+10 VIT+10 WIS-10 WIL-10
+  Long range
+  Inflicts Air
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<54> // [arrow]Iron
+  5/0%
+  Long range
+  Magnetic
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<55> // [arrow]White
+  10/0%
+  Long range
+  Inflicts Holy
+  Strong against spirits, undead
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<56> // [arrow]Fire
+  15/0%
+  Long range
+  Inflicts Fire
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<57> // [arrow]Ice
+  15/0%
+  Long range
+  Inflicts Ice
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<58> // [arrow]Lit
+  15/0%
+  Long range
+  Inflicts Bolt
+  Strong against robots
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<59> // [arrow]Darkness
+  20/0%
+  Long range
+  Inflicts Blind
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<5A> // [arrow]Poison
+  30/0%
+  Long range
+  Inflicts Poison
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<5B> // [arrow]Mute
+  35/0%
+  Long range
+  Inflicts Mute
+  Strong against mages
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<5C> // [arrow]Charm
+  40/0%
+  Long range
+  Inflicts Charm
+  Strong against giants
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<5D> // [arrow]Samurai
+  50/0%
+  Long range
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<5E> // [arrow]Medusa
+  1/0%
+  Long range
+  Inflicts Stone
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<5F> // [arrow]Artemis
+  75/0%
+  Long range
+  Strong against dragons
+  Usable by CRydia, Edward, Rosa, Palom, Porom, PCecil, Cid, ARydia, Fusoya
+
+<61> // [shield]Iron
+  1/20, 0/0
+  Magnetic
+  Usable by Kain, PCecil, Cid
+
+<62> // [shield]Shadow
+  1/22, 0/0
+  Magnetic
+  Usable by DKCecil
+
+<63> // [shield]Black
+  2/24, 0/1
+  Magnetic
+  Usable by DKCecil
+
+<64> // [shield]Paladin
+  2/24, 1/1
+  Magnetic
+  WIL+3
+  Defends against undead
+  Usable by PCecil
+
+<65> // [shield]Silver
+  3/26, 2/2
+  Magnetic
+  Defends against spirits
+  Usable by Kain, PCecil, Cid
+
+<66> // [shield]Fire
+  3/28, 2/2
+  Magnetic
+  Defends against Ice
+  Usable by Kain, PCecil, Cid
+
+<67> // [shield]Ice
+  3/30, 2/2
+  Magnetic
+  Defends against Fire
+  Defends against reptiles
+  Usable by Kain, PCecil, Cid
+
+<68> // [shield]Diamond
+  4/32, 2/3
+  Defends against Bolt
+  Usable by Kain, PCecil, Cid
+
+<69> // [shield]Aegis
+  4/34, 5/4
+  Magnetic
+  WIS+3
+  Defends against Stone, Calcify1, Calcify2
+  Defends against mages
+  Usable by Kain, PCecil, Cid
+
+<6A> // [shield]Samurai
+  5/36, 3/4
+  Magnetic
+  Usable by Kain, PCecil, Cid
+
+<6B> // [shield]Dragoon
+  6/38, 3/5
+  Defends against Fire, Ice, Bolt
+  Defends against dragons
+  Usable by Kain, PCecil, Cid
+
+<6C> // [shield]Crystal
+  7/40, 4/6
+  WIL+3
+  Defends against undead
+  Usable by PCecil
+
+<6D> // [helmet]Iron
+  3/0, 0/0
+  Magnetic
+  Usable by Kain, PCecil, Cid
+
+<6E> // [helmet]Shadow
+  4/0, 0/0
+  Magnetic
+  Usable by DKCecil
+
+<6F> // [helmet]Darkness
+  5/0, 1/0
+  Magnetic
+  Usable by DKCecil
+
+<70> // [helmet]Black
+  6/0, 1/1
+  Magnetic
+  Usable by DKCecil
+
+<71> // [helmet]Paladin
+  7/0, 2/1
+  Magnetic
+  WIL+3
+  Defends against undead
+  Usable by PCecil
+
+<72> // [helmet]Silver
+  8/0, 2/2
+  Magnetic
+  Defends against spirits
+  Usable by Kain, PCecil, Cid
+
+<73> // [helmet]Diamond
+  9/0, 2/2
+  Defends against Bolt
+  Usable by Kain, PCecil, Cid
+
+<74> // [helmet]Samurai
+  10/0, 6/3
+  Usable by Kain, PCecil, Cid, Edge
+
+<75> // [helmet]Dragoon
+  11/0, 7/4
+  Defends against Fire, Ice, Bolt
+  Defends against dragons
+  Usable by Kain, PCecil, Cid
+
+<76> // [helmet]Crystal
+  12/0, 8/5
+  WIL+3
+  Defends against Fire, Ice, Bolt
+  Defends against undead
+  Usable by PCecil
+
+<77> // [helmet]Cap
+  1/5, 1/1
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<78> // [helmet]Leather
+  2/6, 3/3
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<79> // [helmet]Gaea
+  3/7, 5/5
+  WIS+3 WIL+3
+  Usable by CRydia, Tellah, Rosa, Palom, Porom, PCecil, ARydia, Fusoya
+
+<7A> // [helmet]Wizard
+  5/8, 7/7
+  WIL+5
+  Defends against undead
+  Usable by CRydia, Tellah, Rosa, Palom, Porom, PCecil, ARydia, Fusoya
+
+<7B> // [helmet]Tiara
+  7/10, 10/9
+  Magnetic
+  WIS+10
+  Defends against Bolt
+  Defends against dragons
+  Usable by CRydia, Rosa, Porom, ARydia
+
+<7C> // [helmet]Ribbon
+  9/12, 12/12
+  Defends against Poison, Blind, Mute, Pig, Mini, Toad, Stone, Swoon, Calcify1, Calcify2, Curse
+  Defends against mages
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<7D> // [helmet]Headband
+  1/10, 1/1
+  STR+5
+  Defends against Charm
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<7E> // [helmet]Bandanna
+  3/12, 1/1
+  STR+5 VIT+5
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<7F> // [helmet]Ninja
+  5/14, 1/1
+  STR+3 AGI+3 VIT+3
+  Defends against Sleep
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<80> // [helmet]Glass
+  30/0, 0/0
+  Defends against Immune
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<81> // [armor]Iron
+  4/0, 1/0
+  Magnetic
+  Usable by Kain, PCecil, Cid
+
+<82> // [armor]Shadow
+  5/0, 1/0
+  Magnetic
+  Usable by DKCecil
+
+<83> // [armor]Darkness
+  7/0, 2/0
+  Magnetic
+  Usable by DKCecil
+
+<84> // [armor]Black
+  9/0, 3/0
+  Magnetic
+  Usable by DKCecil
+
+<85> // [armor]Paladin
+  11/0, 3/1
+  Magnetic
+  WIL+3
+  Defends against undead
+  Usable by PCecil
+
+<86> // [armor]Silver
+  13/0, 4/2
+  Magnetic
+  Defends against spirits
+  Usable by Kain, PCecil, Cid
+
+<87> // [armor]Fire
+  15/0, 4/2
+  Magnetic
+  Defends against Ice
+  Usable by Kain, PCecil, Cid
+
+<88> // [armor]Ice
+  17/0, 4/2
+  Magnetic
+  Defends against Fire
+  Usable by Kain, PCecil, Cid
+
+<89> // [armor]Diamond
+  19/0, 4/2
+  Defends against Bolt
+  Usable by Kain, PCecil, Cid
+
+<8A> // [armor]Samurai
+  21/0, 7/4
+  Usable by Kain, PCecil, Cid, Edge
+
+<8B> // [armor]Dragoon
+  23/0, 8/5
+  Defends against Fire, Ice, Bolt
+  Defends against dragons
+  Usable by Kain, PCecil, Cid
+
+<8C> // [armor]Crystal
+  25/0, 10/6
+  WIL+3
+  Defends against Blind, Mute, Pig, Mini, Toad, Berserk
+  Defends against undead
+  Usable by PCecil
+
+<8D> // [shirt]Cloth
+  1/10, 0/0
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<8E> // [shirt]Leather
+  2/10, 1/1
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<8F> // [shirt]Gaea
+  3/10, 3/3
+  Defends against Calcify1, Calcify2
+  Usable by CRydia, Tellah, Rosa, Palom, Porom, PCecil, ARydia, Fusoya
+
+<90> // [shirt]Wizard
+  5/10, 5/5
+  WIL+5
+  Usable by CRydia, Tellah, Rosa, Palom, Porom, PCecil, ARydia, Fusoya
+
+<91> // [shirt]Black
+  8/10, 7/7
+  WIL+5
+  Usable by CRydia, Tellah, Palom, ARydia, Fusoya
+
+<92> // [shirt]Sorcerer
+  12/10, 9/9
+  WIS+5 WIL+5
+  Defends against Bolt
+  Defends against undead
+  Usable by CRydia, Tellah, Rosa, Palom, Porom, PCecil, ARydia, Fusoya
+
+<93> // [shirt]White
+  18/10, 10/6
+  WIL+15
+  Defends against Blind
+  Defends against spirits, undead
+  Usable by CRydia, Tellah, Rosa, Porom, PCecil, Fusoya
+
+<94> // [shirt]Power
+  15/10, 0/0
+  STR+15
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<95> // [shirt]Heroine
+  20/40, 5/5
+  STR+15 AGI+15 VIT+15 WIS-15 WIL-15
+  Defends against Stun
+  Usable by CRydia, Rosa, Porom, ARydia
+
+<96> // [shirt]Prisoner
+  1/10, 1/0
+  Defends against Sleep
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<97> // [shirt]Bard
+  2/10, 1/0
+  Defends against Mute
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<98> // [shirt]Karate
+  5/20, 2/1
+  STR+3
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<99> // [shirt]Bl.Belt
+  10/30, 3/2
+  STR+5 VIT+5
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<9A> // [armor]Adamant
+  100/10, 20/12
+  STR+15 AGI+15 VIT+15 WIS+15 WIL+15
+  Defends against Fire, Ice, Bolt, Immune, Poison, Blind, Mute, Pig, Mini, Toad, Stone, Swoon, Calcify1, Calcify2, Charm, Sleep, Stun, Float, Curse
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<9B> // [shirt]Ninja
+  24/70, 15/8
+  AGI+3
+  Usable by Edge
+
+<9C> // [gauntlet]Iron
+  2/0, 0/0
+  Magnetic
+  Usable by Kain, PCecil, Cid, Edge
+
+<9D> // [gauntlet]Shadow
+  2/0, 0/0
+  Magnetic
+  Usable by DKCecil
+
+<9E> // [gauntlet]Darkness
+  3/0, 0/0
+  Magnetic
+  Usable by DKCecil
+
+<9F> // [gauntlet]Black
+  4/0, 0/0
+  Magnetic
+  Usable by DKCecil
+
+<A0> // [gauntlet]Paladin
+  5/0, 1/1
+  Magnetic
+  WIL+3
+  Defends against undead
+  Usable by PCecil
+
+<A1> // [gauntlet]Silver
+  6/0, 2/2
+  Magnetic
+  Defends against spirits
+  Usable by Kain, PCecil, Cid, Edge
+
+<A2> // [gauntlet]Diamond
+  7/0, 3/3
+  Defends against Bolt
+  Usable by Kain, PCecil, Cid
+
+<A3> // [gauntlet]Zeus
+  10/0, 0/0
+  STR+10 VIT+10
+  Defends against Mini
+  Defends against giants
+  Usable by Kain, Yang, PCecil, Cid, ARydia, Edge
+
+<A4> // [gauntlet]Samurai
+  8/0, 5/3
+  Usable by Kain, PCecil, Cid, Edge
+
+<A5> // [gauntlet]Dragoon
+  9/0, 6/3
+  Defends against Fire, Ice, Bolt
+  Defends against dragons
+  Usable by Kain, PCecil, Cid
+
+<A6> // [gauntlet]Crystal
+  10/0, 7/4
+  WIL+3
+  Defends against undead
+  Usable by PCecil
+
+<A7> // [ring]IronRing
+  2/10, 2/1
+  Magnetic
+  Usable by CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, ARydia, Edge, Fusoya
+
+<A8> // [ring]RubyRing
+  0/10, 3/2
+  Defends against Pig
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<A9> // [ring]Silver
+  4/10, 4/4
+  Magnetic
+  Defends against spirits
+  Usable by CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, ARydia, Edge, Fusoya
+
+<AA> // [ring]Strength
+  2/10, 2/2
+  Magnetic
+  STR+5
+  Usable by Kain, Yang, PCecil, Cid, ARydia, Edge
+
+<AB> // [ring]Rune
+  5/10, 8/8
+  WIS+3 WIL+3
+  Defends against Mute
+  Defends against mages
+  Usable by CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, ARydia, Edge, Fusoya
+
+<AC> // [ring]Crystal
+  20/15, 12/10
+  AGI+5
+  Defends against Charm, Sleep, Stun
+  Defends against dragons
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<AD> // [ring]Diamond
+  6/10, 8/6
+  Defends against Bolt
+  Usable by CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, ARydia, Edge, Fusoya
+
+<AE> // [ring]Protect
+  10/15, 12/10
+  VIT+15
+  Defends against Fire, Ice, Bolt
+  Usable by Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+<AF> // [ring]Cursed
+  0/0, 0/0
+  STR-15 AGI-15 VIT-15 WIS-15 WIL-15
+  Defends against Drain
+  Usable by DKCecil, Kain, CRydia, Tellah, Edward, Rosa, Yang, Palom, Porom, PCecil, Cid, ARydia, Edge, Fusoya
+
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,1,0,0,0,0,0,1,0
+0,0,0,0,0,0,1,0,0,0,0,0,1,0
+0,0,0,0,0,0,1,0,0,0,0,0,1,0
+0,0,0,0,0,0,1,0,0,0,0,0,1,0
+0,0,0,0,0,0,1,0,0,0,0,0,1,0
+0,0,0,0,0,0,1,0,0,0,0,0,1,0
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,1,0,0,1,1,0,0,0,1
+0,0,1,1,0,1,0,0,1,1,0,0,0,1
+0,0,1,1,0,1,0,0,1,1,0,0,0,1
+0,0,1,1,0,1,0,0,1,0,0,0,0,1
+0,0,1,1,0,1,0,0,1,0,0,0,0,1
+0,0,1,1,0,1,0,0,1,0,0,0,0,1
+0,0,1,1,0,1,0,0,1,0,0,0,0,1
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,1,1,0,1,0,0,1,0,1,0,1,1,0
+0,1,1,0,1,0,0,1,0,1,0,1,1,0
+0,0,1,0,0,0,0,0,0,0,0,1,0,0
+0,0,1,0,0,0,0,0,0,0,0,1,0,0
+0,0,1,0,0,0,0,0,0,0,0,1,0,0
+0,0,1,0,0,0,0,0,0,0,0,1,0,0
+0,0,1,0,0,0,0,0,0,0,0,1,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,1,0,1,0,0,1,0,1,0,1,1,0
+0,1,1,0,1,0,0,1,0,1,0,1,1,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,0,0,0,1,0,0,0,0,0,0,0,0,0
+0,0,0,0,1,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,0,0,0,0,0,0,0,0,0,1,0,0,0
+0,0,0,0,0,0,0,0,0,0,1,0,0,0
+0,0,0,0,0,0,0,0,0,0,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,0,0,0,0
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,1,0,1,1,0,1,1,1,1,1,0,1
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,1,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,1,1,0,1,0,1,1,1,0,1,0,1
+0,0,1,1,0,1,0,1,1,1,0,1,0,1
+0,0,1,0,0,1,0,0,1,0,0,1,0,0
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,1,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,1,1,0,1,0,1,1,1,0,1,0,1
+0,0,1,1,0,1,0,1,1,1,0,1,0,1
+0,0,1,1,0,0,0,1,0,0,0,1,0,1
+0,0,1,1,0,1,0,1,1,1,0,1,0,1
+0,0,1,1,0,1,0,0,1,1,0,0,0,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,1,0,0,1,0,0,1,0,0,1,0,0
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,0,0,0,0,0,0,0,0,0,0,1,0
+0,1,0,0,0,0,0,0,0,1,1,0,1,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,1,0,0,0,0,0,0,0,1,1,0,1,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,1,0,0,0,0,1,0,0,1,1,1,1,0
+0,1,0,0,0,0,0,0,0,1,1,0,1,0
+0,1,0,0,0,0,0,0,0,1,1,0,0,0
+0,0,0,0,0,0,0,0,0,1,0,0,0,0
+0,0,1,1,1,1,1,1,1,0,0,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,1,1,1,1,1,1,1,0,0,1,1,1
+0,1,0,0,0,0,1,0,0,1,1,1,1,0
+0,0,1,1,1,1,1,1,1,0,0,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,1,1,1,1,1,1,1,0,0,1,1,1
+0,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,1,1,1,1,1,1,1,1,1,1
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+UNUSED EQUIP TABLE ENTRIES: 00,03,04,05,08,09,0D,0E,0F,10,11,12,14,18,1A
+UNUSED ELEMENT TABLE ENTRIES: 08,0E,15,18,19,1A,1B,1C,1D,1E,1F,20,21,22,24,25,27,2C,2D,31,32,33,38,3B,3C,3D,3E,3F

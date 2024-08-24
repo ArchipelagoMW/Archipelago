@@ -1,0 +1,112 @@
+npc(#Bomb1)
+{
+    default active
+    sprite
+        // %mombomb_slot sprite main%
+        #Bomb
+        // %end%
+}
+
+placement($7F 6) {
+    // %mombomb_slot sprite main palette%
+    // %end%
+}
+
+// add event trigger for other entrance
+trigger(#MountHobsSummit 4)
+{
+    position 19 11
+    event call $14
+}
+mapgrid($7F 19 11) { 30 }
+
+npc(#Yang2)
+{
+    // %yang1_slot sprite%
+    sprite #dyn.AxYang1
+    // %end%
+}
+
+event($47)  //Yang joining, Mombomb battle
+{
+    consts(placement) {
+        0   Yang2
+        1   HoodedMonster1_A
+        2   HoodedMonster1_B
+        3   HoodedMonster1_C
+        4   HoodedMonster1_D
+        5   HoodedMonster1_E
+        6   Bomb1
+        7   ChildRydia
+        8   Edward1
+        9   Rosa1
+    }
+    // autodetected map #MountHobsSummit
+    
+    [#B #If #YPosition 20] {
+        player move right
+        batch 5 {
+            player move up
+        }
+    }
+
+    music #None
+    sound #Quake
+    p #Bomb1 spin
+    p #Bomb1 spin jump
+    pause 2
+    music #BossBattle
+
+    [#B #If #YPosition 11] {
+        player move down
+        player move down
+        batch {
+            player move right
+            p #Yang2 face left
+        }
+        player move right
+    }
+
+    [#B #If #not_YPosition 13] {
+        p #Yang2 face down
+        player move up
+        player move up
+    }
+
+    batch {
+        player face up
+        p #Yang2 toggle visible
+    }
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.hobs_character 0]
+        message #msg.fe_Joined
+        [#B #Objectives_TickRewardSlot #reward_slot.hobs_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.hobs_character]
+    }
+
+    player face up
+
+    sound #Quake
+    p #Bomb1 move down
+    p #Bomb1 move down
+    p #Bomb1 spin jump
+    p #Bomb1 move down
+    sound #None
+
+    p #Bomb1 toggle visible
+    deactivate #Yang2
+    deactivate #Bomb1
+
+    [#B #Rando_BossBattle #rando.mombomb_slot]
+    player face up
+
+    [#B #Objectives_TickBossSlot #rando.mombomb_slot]
+    [#B #Rando_PostBossBattle #rando.mombomb_slot]
+
+    [#B #Objectives_Tick #objective.quest_hobs]
+    music #Mountain
+    set #DefeatedMomBomb
+}
+
+text(map #MountHobsSummit message $09) {X}

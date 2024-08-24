@@ -1,0 +1,20 @@
+// make sure hero always gains EXP, even if dead
+msfpatch {
+    .addr $03edd7
+        jml $=HeroChallenge__HeroEXPCheck
+
+    .new
+    HeroChallenge__HeroEXPCheck:
+        // A currently contains axtor number
+        cmp #$01
+        beq $+IsHero
+
+        // displaced instructions
+        lda $1003,x
+        and #$c0
+        jml $03eddc
+
+    %IsHero:
+        // bypass is-dead check
+        jml $03edde
+}

@@ -1,0 +1,37 @@
+
+msfpatch {
+        // A = Bank
+        // Y = Address
+    LongCall:
+        // Stack: <- Small return, long return to LongCall_Return, rtl, rtl, X, long return from LongCall
+        phx
+        
+        // 8-bit mode for A
+        //.mx   0x20
+        //sep   #0x20
+        
+        // Push rtl twice
+        pea $6b6b
+        
+        // Keep this stack pointer
+        tsx
+        
+        // Push address for LongCall_Return
+        phk
+        pea $_LongCall_Return
+        
+        // Push pointer to rtl
+        phx
+        
+        // Push call destination and call
+        pha
+        dey
+        phy
+        rtl
+        
+    LongCall_Return:
+        nop
+        plx
+        plx
+        rtl
+}

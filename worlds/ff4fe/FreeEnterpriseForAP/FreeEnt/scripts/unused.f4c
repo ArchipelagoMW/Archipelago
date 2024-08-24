@@ -1,0 +1,917 @@
+consts(flag_unused) {
+    $04    PrologueComplete
+    $17    CampedInWateryPass
+    $4A    GotAdamant
+    $57    ExitedWateryPass
+}
+
+// ignore most messages before $20, they are system messages
+text(bank 1 message $0E) {X}
+text(bank 1 message $12) {X}
+
+// bank 1 messages in the range $20-7F are reserved for Kory Hints
+
+text(bank 1 message $80) {X}
+text(bank 1 message $81) {X}
+text(bank 1 message $82) {X}
+text(bank 1 message $83) {X}
+text(bank 1 message $84) {X}
+text(bank 1 message $85) {X}
+text(bank 1 message $86) {X}
+text(bank 1 message $87) {X}
+text(bank 1 message $88) {X}
+text(bank 1 message $89) {X}
+text(bank 1 message $8A) {X}
+text(bank 1 message $8B) {X}
+text(bank 1 message $8C) {X}
+text(bank 1 message $8D) {X}
+text(bank 1 message $8E) {X}
+text(bank 1 message $8F) {X}
+text(bank 1 message $90) {X}
+text(bank 1 message $91) {X}
+text(bank 1 message $92) {X}
+text(bank 1 message $93) {X}
+text(bank 1 message $94) {X}
+text(bank 1 message $95) {X}
+text(bank 1 message $96) {X}
+text(bank 1 message $97) {X}
+text(bank 1 message $98) {X}
+text(bank 1 message $99) {X}
+text(bank 1 message $9A) {X}
+text(bank 1 message $9B) {X}
+text(bank 1 message $9C) {X}
+text(bank 1 message $9D) {X}
+text(bank 1 message $9E) {X}
+text(bank 1 message $9F) {X}
+
+text(bank 1 message $A6) {X}
+text(bank 1 message $A7) {X}
+text(bank 1 message $A8) {X}
+text(bank 1 message $A9) {X}
+text(bank 1 message $AA) {X}
+text(bank 1 message $AB) {X}
+text(bank 1 message $AC) {X}
+text(bank 1 message $AD) {X}
+text(bank 1 message $AE) {X}
+text(bank 1 message $AF) {X}
+text(bank 1 message $B0) {X}
+text(bank 1 message $B1) {X}
+text(bank 1 message $B2) {X}
+text(bank 1 message $B3) {X}
+text(bank 1 message $B4) {X}
+text(bank 1 message $B5) {X}
+text(bank 1 message $B6) {X}
+text(bank 1 message $B7) {X}
+text(bank 1 message $B8) {X}
+text(bank 1 message $B9) {X}
+text(bank 1 message $BA) {X}
+text(bank 1 message $BB) {X}
+text(bank 1 message $BC) {X}
+text(bank 1 message $BD) {X}
+text(bank 1 message $BE) {X}
+text(bank 1 message $BF) {X}
+text(bank 1 message $C0) {X}
+text(bank 1 message $C1) {X}
+text(bank 1 message $C2) {X}
+text(bank 1 message $C3) {X}
+text(bank 1 message $C4) {X}
+text(bank 1 message $C5) {X}
+text(bank 1 message $C6) {X}
+text(bank 1 message $C7) {X}
+text(bank 1 message $C8) {X}
+text(bank 1 message $C9) {X}
+text(bank 1 message $CA) {X}
+text(bank 1 message $CB) {X}
+
+text(bank 1 message $D0) {X}
+text(bank 1 message $D1) {X}
+text(bank 1 message $D2) {X}
+text(bank 1 message $D3) {X}
+text(bank 1 message $D4) {X}
+text(bank 1 message $D5) {X}
+text(bank 1 message $D6) {X}
+text(bank 1 message $D7) {X}
+text(bank 1 message $D8) {X}
+text(bank 1 message $D9) {X}
+text(bank 1 message $DA) {X}
+
+text(bank 1 message $E1) {X}
+text(bank 1 message $E2) {X}
+text(bank 1 message $E3) {X}
+text(bank 1 message $E4) {X}
+text(bank 1 message $E5) {X}
+text(bank 1 message $E6) {X}
+text(bank 1 message $E7) {X}
+text(bank 1 message $E8) {X}
+text(bank 1 message $E9) {X}
+text(bank 1 message $EA) {X}
+text(bank 1 message $EB) {X}
+
+text(bank 1 message $EE) {X}
+text(bank 1 message $EF) {X}
+text(bank 1 message $F0) {X}
+text(bank 1 message $F1) {X}
+text(bank 1 message $F2) {X}
+text(bank 1 message $F3) {X}
+text(bank 1 message $F4) {X}
+text(bank 1 message $F5) {X}
+text(bank 1 message $F6) {X}
+text(bank 1 message $F7) {X}
+text(bank 1 message $F8) {X}
+text(bank 1 message $F9) {X}
+text(bank 1 message $FA) {X}
+text(bank 1 message $FB) {X}
+text(bank 1 message $FC) {X}
+text(bank 1 message $FD) {X}
+text(bank 1 message $FE) {X}
+text(bank 1 message $FF) {X}
+
+// 100 and 101 are namingway messages
+
+text(bank 1 message $10D) {X}
+text(bank 1 message $10E) {X}
+
+// message $11C is the harp song text
+
+text(bank 1 message $11E) {X}
+text(bank 1 message $11F) {X}
+text(bank 1 message $120) {X}
+text(bank 1 message $121) {X}
+text(bank 1 message $122) {X}
+text(bank 1 message $123) {X}
+text(bank 1 message $124) {X}
+text(bank 1 message $125) {X}
+text(bank 1 message $126) {X}
+text(bank 1 message $127) {X}
+text(bank 1 message $128) {X}
+text(bank 1 message $129) {X}
+text(bank 1 message $12A) {X}
+text(bank 1 message $12B) {X}
+text(bank 1 message $12C) {X}
+text(bank 1 message $12D) {X}
+text(bank 1 message $12E) {X}
+text(bank 1 message $12F) {X}
+text(bank 1 message $130) {X}
+text(bank 1 message $131) {X}
+text(bank 1 message $132) {X}
+text(bank 1 message $133) {X}
+text(bank 1 message $134) {X}
+
+text(bank 1 message $137) {X}
+text(bank 1 message $138) {X}
+text(bank 1 message $139) {X}
+text(bank 1 message $13A) {X}
+text(bank 1 message $13B) {X}
+text(bank 1 message $13C) {X}
+text(bank 1 message $13D) {X}
+text(bank 1 message $13E) {X}
+text(bank 1 message $13F) {X}
+text(bank 1 message $140) {X}
+
+text(bank 1 message $143) {X}
+text(bank 1 message $144) {X}
+text(bank 1 message $145) {X}
+text(bank 1 message $146) {X}
+text(bank 1 message $147) {X}
+text(bank 1 message $148) {X}
+text(bank 1 message $149) {X}
+
+text(bank 1 message $14D) {X}
+text(bank 1 message $14E) {X}
+text(bank 1 message $14F) {X}
+text(bank 1 message $150) {X}
+
+text(bank 1 message $153) {X}
+text(bank 1 message $154) {X}
+text(bank 1 message $155) {X}
+
+text(bank 1 message $158) {X}
+
+text(bank 1 message $15A) {X}
+text(bank 1 message $15B) {X}
+text(bank 1 message $15C) {X}
+text(bank 1 message $15D) {X}
+text(bank 1 message $15E) {X}
+text(bank 1 message $15F) {X}
+text(bank 1 message $160) {X}
+text(bank 1 message $161) {X}
+text(bank 1 message $162) {X}
+text(bank 1 message $163) {X}
+text(bank 1 message $164) {X}
+
+text(bank 1 message $166) {X}
+text(bank 1 message $167) {X}
+text(bank 1 message $168) {X}
+text(bank 1 message $169) {X}
+
+// 16A is the Mysidian Legend -- don't want to screw with that
+
+text(bank 1 message $16B) {X}
+
+text(bank 1 message $16D) {X}
+text(bank 1 message $16E) {X}
+text(bank 1 message $16F) {X}
+text(bank 1 message $170) {X}
+text(bank 1 message $171) {X}
+text(bank 1 message $172) {X}
+text(bank 1 message $173) {X}
+text(bank 1 message $174) {X}
+
+text(bank 1 message $176) {X}
+text(bank 1 message $177) {X}
+text(bank 1 message $178) {X}
+text(bank 1 message $179) {X}
+text(bank 1 message $17A) {X}
+text(bank 1 message $17B) {X}
+text(bank 1 message $17C) {X}
+text(bank 1 message $17D) {X}
+text(bank 1 message $17E) {X}
+text(bank 1 message $17F) {X}
+text(bank 1 message $180) {X}
+text(bank 1 message $181) {X}
+text(bank 1 message $182) {X}
+text(bank 1 message $183) {X}
+text(bank 1 message $184) {X}
+text(bank 1 message $185) {X}
+text(bank 1 message $186) {X}
+text(bank 1 message $187) {X}
+text(bank 1 message $188) {X}
+text(bank 1 message $189) {X}
+text(bank 1 message $18A) {X}
+text(bank 1 message $18B) {X}
+text(bank 1 message $18C) {X}
+text(bank 1 message $18D) {X}
+text(bank 1 message $18E) {X}
+text(bank 1 message $18F) {X}
+text(bank 1 message $190) {X}
+text(bank 1 message $191) {X}
+text(bank 1 message $192) {X}
+text(bank 1 message $193) {X}
+text(bank 1 message $194) {X}
+text(bank 1 message $195) {X}
+text(bank 1 message $196) {X}
+
+// 197, 198, 199 are Fabul dancer
+
+text(bank 1 message $19C) {X}
+text(bank 1 message $19D) {X}
+text(bank 1 message $19E) {X}
+text(bank 1 message $19F) {X}
+text(bank 1 message $1A0) {X}
+text(bank 1 message $1A1) {X}
+text(bank 1 message $1A2) {X}
+
+// 1A3, 1A4, 1A5 is Mysidia dancer
+
+text(bank 1 message $1A6) {X}
+text(bank 1 message $1A7) {X}
+text(bank 1 message $1A8) {X}
+text(bank 1 message $1A9) {X}
+text(bank 1 message $1AA) {X}
+text(bank 1 message $1AB) {X}
+text(bank 1 message $1AC) {X}
+text(bank 1 message $1AD) {X}
+text(bank 1 message $1AE) {X}
+text(bank 1 message $1AF) {X}
+text(bank 1 message $1B0) {X}
+text(bank 1 message $1B1) {X}
+text(bank 1 message $1B2) {X}
+text(bank 1 message $1B3) {X}
+
+text(bank 1 message $1B6) {X}
+text(bank 1 message $1B7) {X}
+text(bank 1 message $1B8) {X}
+text(bank 1 message $1B9) {X}
+text(bank 1 message $1BA) {X}
+text(bank 1 message $1BB) {X}
+text(bank 1 message $1BC) {X}
+
+text(bank 1 message $1BE) {X}
+text(bank 1 message $1BF) {X}
+text(bank 1 message $1C0) {X}
+text(bank 1 message $1C1) {X}
+
+// 1C2 is "Meanwhile", has utility
+
+text(bank 1 message $1C3) {X}
+text(bank 1 message $1C4) {X}
+text(bank 1 message $1C5) {X}
+text(bank 1 message $1C6) {X}
+text(bank 1 message $1C7) {X}
+text(bank 1 message $1C8) {X}
+
+text(bank 1 message $1CA) {X}
+text(bank 1 message $1CB) {X}
+text(bank 1 message $1CC) {X}
+text(bank 1 message $1CD) {X}
+text(bank 1 message $1CE) {X}
+text(bank 1 message $1CF) {X}
+
+// 1D0 is prologue text, maybe avoid messing with it
+
+text(bank 1 message $1D1) {X}
+text(bank 1 message $1D2) {X}
+text(bank 1 message $1D3) {X}
+text(bank 1 message $1D4) {X}
+text(bank 1 message $1D5) {X}
+text(bank 1 message $1D6) {X}
+
+// 1D7 is "That Night", has utility
+
+text(bank 1 message $1D8) {X}
+text(bank 1 message $1D9) {X}
+text(bank 1 message $1DA) {X}
+text(bank 1 message $1DB) {X}
+text(bank 1 message $1DC) {X}
+text(bank 1 message $1DD) {X}
+text(bank 1 message $1DE) {X}
+text(bank 1 message $1DF) {X}
+text(bank 1 message $1E0) {X}
+text(bank 1 message $1E1) {X}
+text(bank 1 message $1E2) {X}
+text(bank 1 message $1E3) {X}
+text(bank 1 message $1E4) {X}
+text(bank 1 message $1E5) {X}
+text(bank 1 message $1E6) {X}
+text(bank 1 message $1E7) {X}
+text(bank 1 message $1E8) {X}
+text(bank 1 message $1E9) {X}
+text(bank 1 message $1EA) {X}
+text(bank 1 message $1EB) {X}
+
+text(bank 1 message $1EF) {X}
+text(bank 1 message $1F0) {X}
+text(bank 1 message $1F1) {X}
+text(bank 1 message $1F2) {X}
+text(bank 1 message $1F3) {X}
+text(bank 1 message $1F4) {X}
+text(bank 1 message $1F5) {X}
+text(bank 1 message $1F6) {X}
+text(bank 1 message $1F7) {X}
+text(bank 1 message $1F8) {X}
+text(bank 1 message $1F9) {X}
+
+text(bank 1 message $1FD) {X}
+
+text(bank 1 message $1FF) {X}
+
+// bank 3 message 0 is save point info
+
+text(bank 3 message $01) {X}
+text(bank 3 message $02) {X}
+text(bank 3 message $03) {X}
+text(bank 3 message $04) {X}
+text(bank 3 message $05) {X}
+text(bank 3 message $06) {X}
+text(bank 3 message $07) {X}
+text(bank 3 message $08) {X}
+text(bank 3 message $09) {X}
+text(bank 3 message $0A) {X}
+text(bank 3 message $0B) {X}
+text(bank 3 message $0C) {X}
+text(bank 3 message $0D) {X}
+text(bank 3 message $0E) {X}
+text(bank 3 message $0F) {X}
+text(bank 3 message $10) {X}
+text(bank 3 message $11) {X}
+text(bank 3 message $12) {X}
+text(bank 3 message $13) {X}
+text(bank 3 message $14) {X}
+text(bank 3 message $15) {X}
+text(bank 3 message $16) {X}
+text(bank 3 message $17) {X}
+text(bank 3 message $18) {X}
+text(bank 3 message $19) {X}
+text(bank 3 message $1A) {X}
+text(bank 3 message $1B) {X}
+text(bank 3 message $1C) {X}
+text(bank 3 message $1D) {X}
+text(bank 3 message $1E) {X}
+text(bank 3 message $1F) {X}
+text(bank 3 message $20) {X}
+text(bank 3 message $21) {X}
+text(bank 3 message $22) {X}
+text(bank 3 message $23) {X}
+text(bank 3 message $24) {X}
+text(bank 3 message $25) {X}
+text(bank 3 message $26) {X}
+text(bank 3 message $27) {X}
+text(bank 3 message $28) {X}
+text(bank 3 message $29) {X}
+text(bank 3 message $2A) {X}
+text(bank 3 message $2B) {X}
+text(bank 3 message $2C) {X}
+text(bank 3 message $2D) {X}
+text(bank 3 message $2E) {X}
+text(bank 3 message $2F) {X}
+text(bank 3 message $30) {X}
+text(bank 3 message $31) {X}
+text(bank 3 message $32) {X}
+
+text(bank 3 message $34) {X}
+
+text(bank 3 message $38) {X}
+text(bank 3 message $39) {X}
+text(bank 3 message $3A) {X}
+text(bank 3 message $3B) {X}
+text(bank 3 message $3C) {X}
+text(bank 3 message $3D) {X}
+text(bank 3 message $3E) {X}
+text(bank 3 message $3F) {X}
+text(bank 3 message $40) {X}
+text(bank 3 message $41) {X}
+text(bank 3 message $42) {X}
+text(bank 3 message $43) {X}
+text(bank 3 message $44) {X}
+
+// bank 3 message $45 is "Wait!" and has no event reference; avoid touching
+
+text(bank 3 message $46) {X}
+text(bank 3 message $47) {X}
+text(bank 3 message $48) {X}
+text(bank 3 message $49) {X}
+text(bank 3 message $4A) {X}
+text(bank 3 message $4B) {X}
+text(bank 3 message $4C) {X}
+text(bank 3 message $4D) {X}
+text(bank 3 message $4E) {X}
+text(bank 3 message $4F) {X}
+text(bank 3 message $50) {X}
+text(bank 3 message $51) {X}
+text(bank 3 message $52) {X}
+text(bank 3 message $53) {X}
+text(bank 3 message $54) {X}
+text(bank 3 message $55) {X}
+text(bank 3 message $56) {X}
+text(bank 3 message $57) {X}
+text(bank 3 message $58) {X}
+text(bank 3 message $59) {X}
+text(bank 3 message $5A) {X}
+text(bank 3 message $5B) {X}
+text(bank 3 message $5C) {X}
+text(bank 3 message $5D) {X}
+text(bank 3 message $5E) {X}
+text(bank 3 message $5F) {X}
+text(bank 3 message $60) {X}
+text(bank 3 message $61) {X}
+text(bank 3 message $62) {X}
+text(bank 3 message $63) {X}
+text(bank 3 message $64) {X}
+text(bank 3 message $65) {X}
+text(bank 3 message $66) {X}
+text(bank 3 message $67) {X}
+text(bank 3 message $68) {X}
+text(bank 3 message $69) {X}
+text(bank 3 message $6A) {X}
+text(bank 3 message $6B) {X}
+text(bank 3 message $6C) {X}
+text(bank 3 message $6D) {X}
+text(bank 3 message $6E) {X}
+text(bank 3 message $6F) {X}
+text(bank 3 message $70) {X}
+text(bank 3 message $71) {X}
+text(bank 3 message $72) {X}
+text(bank 3 message $73) {X}
+text(bank 3 message $74) {X}
+text(bank 3 message $75) {X}
+text(bank 3 message $76) {X}
+text(bank 3 message $77) {X}
+text(bank 3 message $78) {X}
+text(bank 3 message $79) {X}
+text(bank 3 message $7A) {X}
+text(bank 3 message $7B) {X}
+text(bank 3 message $7C) {X}
+text(bank 3 message $7D) {X}
+text(bank 3 message $7E) {X}
+text(bank 3 message $7F) {X}
+
+text(bank 3 message $84) {X}
+text(bank 3 message $85) {X}
+text(bank 3 message $86) {X}
+text(bank 3 message $87) {X}
+text(bank 3 message $88) {X}
+text(bank 3 message $89) {X}
+text(bank 3 message $8A) {X}
+text(bank 3 message $8B) {X}
+text(bank 3 message $8C) {X}
+text(bank 3 message $8D) {X}
+text(bank 3 message $8E) {X}
+text(bank 3 message $8F) {X}
+text(bank 3 message $90) {X}
+text(bank 3 message $91) {X}
+text(bank 3 message $92) {X}
+text(bank 3 message $93) {X}
+text(bank 3 message $94) {X}
+text(bank 3 message $95) {X}
+text(bank 3 message $96) {X}
+text(bank 3 message $97) {X}
+text(bank 3 message $98) {X}
+text(bank 3 message $99) {X}
+text(bank 3 message $9A) {X}
+text(bank 3 message $9B) {X}
+text(bank 3 message $9C) {X}
+text(bank 3 message $9D) {X}
+text(bank 3 message $9E) {X}
+text(bank 3 message $9F) {X}
+text(bank 3 message $A0) {X}
+text(bank 3 message $A1) {X}
+text(bank 3 message $A2) {X}
+text(bank 3 message $A3) {X}
+text(bank 3 message $A4) {X}
+text(bank 3 message $A5) {X}
+text(bank 3 message $A6) {X}
+text(bank 3 message $A7) {X}
+text(bank 3 message $A8) {X}
+text(bank 3 message $A9) {X}
+text(bank 3 message $AA) {X}
+text(bank 3 message $AB) {X}
+text(bank 3 message $AC) {X}
+text(bank 3 message $AD) {X}
+text(bank 3 message $AE) {X}
+
+text(bank 3 message $B0) {X}
+text(bank 3 message $B1) {X}
+text(bank 3 message $B2) {X}
+text(bank 3 message $B3) {X}
+text(bank 3 message $B4) {X}
+text(bank 3 message $B5) {X}
+text(bank 3 message $B6) {X}
+text(bank 3 message $B7) {X}
+text(bank 3 message $B8) {X}
+text(bank 3 message $B9) {X}
+text(bank 3 message $BA) {X}
+text(bank 3 message $BB) {X}
+text(bank 3 message $BC) {X}
+text(bank 3 message $BD) {X}
+text(bank 3 message $BE) {X}
+text(bank 3 message $BF) {X}
+text(bank 3 message $C0) {X}
+text(bank 3 message $C1) {X}
+text(bank 3 message $C2) {X}
+text(bank 3 message $C3) {X}
+text(bank 3 message $C4) {X}
+text(bank 3 message $C5) {X}
+text(bank 3 message $C6) {X}
+text(bank 3 message $C7) {X}
+text(bank 3 message $C8) {X}
+text(bank 3 message $C9) {X}
+text(bank 3 message $CA) {X}
+text(bank 3 message $CB) {X}
+text(bank 3 message $CC) {X}
+text(bank 3 message $CD) {X}
+text(bank 3 message $CE) {X}
+text(bank 3 message $CF) {X}
+text(bank 3 message $D0) {X}
+text(bank 3 message $D1) {X}
+text(bank 3 message $D2) {X}
+text(bank 3 message $D3) {X}
+text(bank 3 message $D4) {X}
+text(bank 3 message $D5) {X}
+text(bank 3 message $D6) {X}
+text(bank 3 message $D7) {X}
+text(bank 3 message $D8) {X}
+text(bank 3 message $D9) {X}
+text(bank 3 message $DA) {X}
+text(bank 3 message $DB) {X}
+text(bank 3 message $DC) {X}
+text(bank 3 message $DD) {X}
+text(bank 3 message $DE) {X}
+text(bank 3 message $DF) {X}
+text(bank 3 message $E0) {X}
+text(bank 3 message $E1) {X}
+text(bank 3 message $E2) {X}
+text(bank 3 message $E3) {X}
+text(bank 3 message $E4) {X}
+text(bank 3 message $E5) {X}
+text(bank 3 message $E6) {X}
+text(bank 3 message $E7) {X}
+text(bank 3 message $E8) {X}
+text(bank 3 message $E9) {X}
+text(bank 3 message $EA) {X}
+text(bank 3 message $EB) {X}
+text(bank 3 message $EC) {X}
+text(bank 3 message $ED) {X}
+text(bank 3 message $EE) {X}
+text(bank 3 message $EF) {X}
+text(bank 3 message $F0) {X}
+text(bank 3 message $F1) {X}
+text(bank 3 message $F2) {X}
+text(bank 3 message $F3) {X}
+text(bank 3 message $F4) {X}
+text(bank 3 message $F5) {X}
+text(bank 3 message $F6) {X}
+text(bank 3 message $F7) {X}
+text(bank 3 message $F8) {X}
+text(bank 3 message $F9) {X}
+text(bank 3 message $FA) {X}
+text(bank 3 message $FB) {X}
+text(bank 3 message $FC) {X}
+text(bank 3 message $FD) {X}
+text(bank 3 message $FE) {X}
+text(bank 3 message $FF) {X}
+
+// event($08) // was Rydia learning Sylph, now used for objectives
+
+// event($11) // was talking to Cid in Baron, now used for path to Zeromus
+
+// event($12)  //was Speaking to Kain in Baron, now used for Feymarch chest
+
+// event($13)  //was Cecil's maid, now used for jumping up Babil
+
+// event($14)  //was Rosa greeting Cecil, now used for exiting Giant
+
+// event($15)  //was Cecil sleeping, Prologue, now used for Mist east side exit
+
+event($16) // Using soft potion on stone twins
+{ } // Erase for space
+
+// event($1C)  //was Devil's Road is sealed, now used for Ending
+
+// event($1D)  //was Attaching hook to Enterprise, now used for Ending
+
+// event($31)  //was Watery Cave camping, now used for Ending
+
+// event($40) // was Open the door!, now used for Guidingway introduction
+
+event($42) // Bombing Damcyan
+{ } // Erase for space
+
+event($4A) // Toroia clerics after Magnes
+{ } // Erase for space
+
+// event($4B) // was "WA!", now used for Kory hints
+
+// event($4C) // was We were also hypnotized, now Dark Matter Hunt
+
+// event($51)  //was Finding Rosa in Kaipo, now used for Rydia @ Hobs subroutine
+
+// event($52) // was discussion about rescuing Rosa, now used for post-game harp music
+
+event($5F) // putting out Ordeals fire
+{ } // Erase for space
+
+// event($64) // was talking to Elder after Ordeals, now FE Hall of Fame
+
+// event($72)  //was Edward in Toroia after defeating the Dark Elf, now used for Rydia's Mom key item slot
+
+event($80) // doomed Dark Elf battle
+{ } // Erase for space
+
+event($83) // sailing from Fabul
+{ } // Erase for space
+
+// event($88) // was praying elder, now used for wacky challenges
+
+event($89) // praying elder
+{ } // Erase for space
+
+event($8A) // praying elder
+{ } // Erase for space
+
+event($8B) // first entry to underworld
+{ } // Erase for space
+
+event($92) // authorized dwarves only
+{ } // Erase for space
+
+event($93) // sewer teleport
+{ } // Erase for space
+
+// event($9D)  // was returning from moon to the giant of babil, now used in giant valet
+
+event($A7) // reinforcing Falcon
+{ } // Erase for space
+
+event($A9) // entering Feymarch
+{ } // Erase for space
+
+event($B6) // Kain stealing dark crystal
+{ } // Erase for space
+
+// event($C5)  // was Talking to Giott, attaching the airship drill, now used for giant exit
+
+event($DA) // Elder praying
+{ } // Erase for space
+
+event($DB) // Smut
+{ } // Erase for space
+
+event($DC)  // Sealed with unknown power (lunar palace)
+{ } // Erase for space
+
+event($DE)  // Acquire Smut
+{ } // Erase for space
+
+event($DF)  // Get Grimoire
+{ } // Erase for space
+
+event($E0)  // Get Grimoire
+{ }
+
+// event($E3)  // was Trading the Pink Tail for Adamant Armor, now used for Upt Co Surprise
+
+// event($F2)  // was Watery Pass - North exiting message, now used for Ribbon Chest 2
+
+// event($F4)  //was Load Room of Wishes, play 'Long Way to Go', now used for Lunarian room
+
+// event($F5)  //was Load Room of Wishes, Yang/Cid/Edward, play 'Long Way to Go' -- now character retrieval
+
+// event($F7) // was Speaking to Sylph, now used for Golbez item delivery in K0 + Objectives
+
+// event($F8)  // was Grimoire, now used for sandbox event testing
+
+
+
+// places to try future events:
+//  the "..." event
+//  $41 (terrible bombardments)
+//  consolidate shop events
+//  consolidate inn events
+//  consolidate chocobo events
+//  save point message
+//  trap doors! christ
+//  dances?
+//  event $F6 (from eventcall $3D) seems... weird (loads Mysidia crystal room, from babil???)
+//  event $06 just enters tower of babil -- change overworld triggers to be teleports
+//  event $FE is underworld tank attack effect, but not easy to remove those triggers -- but could repurpose them to null event calls
+
+
+// eventcall($07)  was "Sealed with unknown power", now used for Giant exit
+
+// eventcall($10) // DamcyanBombing
+// {
+//     if not #DamcyanBombed:
+//         $42   //Red Wings bombing Damcyan
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($17) // Camping in Watery Cave
+// {
+//     if not #CampedInWateryPass:
+//         $31   //Watery Cave camping
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($19)
+// {
+//     if #FabulBattle, not #SpokeAboutRescuingRosa:
+//         $52   //Discussion about rescuing Rosa
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($1A)
+// {
+//     if #TwinsJoined, not #PalomExtinguishedFire:
+//         $5F   //Mt. Ordeals fire put out by Palom
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($1C)
+// {
+//     if not #DefeatedMilon1:
+//         $27   //Map message 0
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($1D)
+// {
+//     if not #DefeatedMilon1:
+//         $28   //Map message 1
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($25) // Tellah speaks while exiting first part of Watery Pass
+// {
+//     if not #ExitedWateryPass:
+//         $F2   //Watery Pass - North exiting message
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($29)
+// {
+//     if not #RosaSick:
+//         $51   //Rosa getting captured
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($2B)
+// {
+//     if #SpokeAboutRescuingRosa, not #LeviathanAttacked:
+//         $83   //Depart Fabul, Leviathan Attack
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($2C)
+// {
+//     if not #SpokeToToroiaClericsAfterCrystal, #GotEarthCrystal:
+//         $4A   //Toroia Clerics after Earth Crystal
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($3C)
+// {
+//     if #CPUBattle:
+//         $F5   //Load Room of Wishes, Yang/Cid/Edward, play 'Long Way to Go'
+//     else:
+//         $F4   //Load Room of Wishes, play 'Long Way to Go'
+// }
+// eventcall($3F)
+// {
+//     if #FoundFalcon, not #ReinforcedFalcon:
+//         $A7   //Cid meeting Edge, adding the heat shield to the Falcon
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($40)
+// {
+//     if not #EnteredFeymarch:
+//         $A9   //Feymarch entrance
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($48)
+// {
+//     if #GotDarkCrystal, not #KainStoleDarkCrystal2:
+//         $B6   //Kain stealing the Dark Crystal and leaving
+//     else:
+//         $00   //(no event)
+// }
+
+
+// npc(#KainNormal)             // used for generic Cecil NPC in overworld
+// {
+//     sprite #Transparent
+//     default inactive
+//     eventcall {
+//     }
+// }
+
+
+
+// formation($82)
+// formation($83)
+// formation($84)
+// formation($85)
+// formation($86)
+// formation($87)
+// formation($B7)
+// formation($CB)
+// formation($CF)
+// formation($D7)
+// formation($D8)
+// formation($D9)           -> regular yang fight (F2, original original Yang fight, used in boss rando)
+// formation($DA)           -> used as final formation in Fabul gauntlet for rando
+// formation($DB)           -> alt Rydia fight
+// formation($F4)           -> alt Yang fight
+// formation($126)
+// formation($127)
+// formation($17F)
+// formation($1A0)
+// formation($1A4)
+// formation($1A5)
+// formation($1A6)
+// formation($1BB)
+// formation($1C8)
+// formation($1C9)
+// formation($1CA)
+// formation($1CB)
+// formation($1CC)
+// formation($1CD)
+// formation($1CE)
+// formation($1CF)
+// formation($1D0)
+// formation($1D1)
+// formation($1D2)
+// formation($1D3)
+// formation($1D4)
+// formation($1D5)
+// formation($1D6)
+// formation($1D7)
+// formation($1F5)
+// formation($1F6)
+// formation($1F7)
+// formation($1F8)
+// formation($1F9)
+// formation($1FF)
+
+// monster($53)   // Dummy      -> used for Lunarian weirdness
+// monster($D6)   // Dummy      -> used for boss randomizer
+// monster($D7)   // Dummy      -> used for boss randomizer
+// monster($D9)   // Dummy      -> used for boss randomizer
+// monster($DA)   // Dummy      -> used for boss randomizer
+// monster($DB)   // Dummy      -> used for boss randomizer
+// monster($DC)   // Dummy      -> used for boss randomizer
+// monster($DD)   // Dummy      -> used for boss randomizer
+// monster($DE)   // Dummy      -> used for boss randomizer

@@ -1,0 +1,42 @@
+// Gate access to Toroia treasury behind Earth crystal
+
+npc(#ToroiaDancerAsks)
+{
+    eventcall {
+        if not #fe_GotEarthCrystal:
+            $9F   //'Do you have the Clerics' permission?' when you do
+        else:
+            $0A   //Do you have the clerics' permission?
+    }
+}
+
+event($0A)  //Do you have the clerics' permission?
+{
+    consts(placement) {
+        0   ToroiaDancerAsks
+    }
+    // autodetected map #ToroiaCastleHall
+    map message 0  // "This used to be a dungeon, but we keep our treasures"
+    confirm message $11B
+    map message 2  // "Okay. Go ahead. Take our treasures."
+    p #ToroiaDancerAsks face up
+    open door
+    pause 4
+    p #ToroiaDancerAsks face down
+    [#B #Objectives_Tick #objective.quest_toroiatreasury]
+
+cancel:
+    map message 3  // "Think about it."
+}
+
+// "have permission" -> "have earth crystal"
+text(bank 1 message $11B) {
+Have you found the Earth
+Crystal yet?[next]
+}
+
+
+
+// put a bridge near Toroia to simplify process for people
+// who get a ship stuck at Zot
+patch($169bd2 bus) { 3F }

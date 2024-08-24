@@ -1,0 +1,172 @@
+// alter Berserk behavior to use Show if character is hidden
+msfpatch {
+    .addr $03ac9c
+        jml $=ShowWhenBerserked
+
+    .new
+    ShowWhenBerserked:
+        ldx $a6
+        lda $2006,x
+        and #$80
+        bne $+IsHidden
+
+        // displaced
+        lda #$80
+        jml $03aca0
+
+    %IsHidden:
+        // detour to Show command
+        jml $03ad12
+}
+
+//--------------------------------------------------------
+// prevent auto-hide if character has been manually shown
+
+
+// hook into code that checks the selected command
+// to respond to Show by setting the "do-not-autohide flag
+msfpatch {
+    // initialized to zero at battle start in character_expansion.f4c
+    .def PreventAutoHideFlags  $7e1624
+
+    .addr $03a630
+        jml $=EdwardCommandChecks
+
+    .new
+    EdwardCommandChecks:
+        // displaced logic to check for Medicine
+        cmp #$0a
+        beq $+IsMedicine
+
+        // check for Show
+        cmp #$1c
+        beq $+IsShow
+
+        // is neither, return to original flow
+        jml $03a637
+
+    %IsMedicine:
+        jml $03a634
+
+    %IsShow:
+        tdc
+        lda $d0
+        tax
+        lda #$01
+        cpx #$0000
+        beq $+BitShiftDone
+    %BitShiftLoop:
+        asl a
+        dex
+        bne $-BitShiftLoop
+    %BitShiftDone:
+        ora $_PreventAutoHideFlags
+        sta $_PreventAutoHideFlags
+
+        // done
+        jml $03a637
+}
+
+// reorder and hook into code that checks for critical+edward
+// to clear the prevent-autohide flags if not critical
+
+msfpatch {
+    .addr $03ab4a
+        // check Edward first
+        lda $2001,x  // check by job and not by actor number
+        and #$0f
+        cmp #$04
+        bne $4e
+
+        jml $=EdwardCriticalCheck
+
+    .new
+    EdwardCriticalCheck:
+        lda $2006,x
+        and #$01
+        beq $+NotCritical
+        jml $03ab5a
+
+    %NotCritical:
+        // clear associated autohide flag
+        tdc
+        lda $8e
+        tax
+        lda #$01
+        cpx #$0000
+        beq $+DoneBitShift
+    %BitShiftLoop:
+        asl a
+        dex
+        bne $-BitShiftLoop
+    %DoneBitShift:
+        eor #$ff
+        and $_PreventAutoHideFlags
+        sta $_PreventAutoHideFlags
+        jml $03aba1
+}
+
+// hook into auto-hide detection logic to check the
+// prevention flags
+msfpatch {
+    .addr $03ab70
+        jml $=EdwardAutoHideCheck
+
+    .new
+    EdwardAutoHideCheck:
+        lda $2006,x
+        bpl $+CheckForHide
+        jml $03ab75
+
+    %CheckForHide:
+        tdc
+        lda $8e
+        tax
+        lda #$01
+        cpx #$0000
+        beq $+DoneBitShift
+    %BitShiftLoop:
+        asl a
+        dex
+        bne $-BitShiftLoop
+    %DoneBitShift:
+        and $_PreventAutoHideFlags
+        bne $+DontHide
+
+        jml $03ab80
+
+    %DontHide:
+        jml $03aba1
+}
+
+// hook into code that dismisses the command window if
+// auto-hide conditions are met to also check the flags
+msfpatch {
+    .addr $03a41b
+        jml $=EdwardAutoHideDismissMenuCheck
+
+    .new
+    EdwardAutoHideDismissMenuCheck:
+        and #$01
+        bne $+IsCritical
+
+        // not critical state
+    %NoAutoHide:
+        jml $03a41f
+
+    %IsCritical:
+        tdc
+        lda $d0
+        tax
+        lda #$01
+        cpx #$0000
+        beq $+DoneBitShift
+    %BitShiftLoop:
+        asl a
+        dex
+        bne $-BitShiftLoop
+    %DoneBitShift:
+        and $_PreventAutoHideFlags
+        bne $-NoAutoHide
+        jml $03a439
+}

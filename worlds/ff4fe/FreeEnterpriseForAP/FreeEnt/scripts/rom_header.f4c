@@ -1,0 +1,6 @@
+// Patch header to indicate ROM size is 0x200000 bytes
+patch($07fd7) { 0B }
+
+// Change game name
+patch($07fc0)
+{ 46 46 49 56 3A 20 46 52 45 45 20 45 4E 54 45 52 50 52 49 53 45 }

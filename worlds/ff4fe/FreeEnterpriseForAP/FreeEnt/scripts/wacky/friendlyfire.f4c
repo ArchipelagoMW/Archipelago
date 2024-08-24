@@ -1,0 +1,60 @@
+// make spells with fire element always heal
+msfpatch {
+    .addr $03E0FD
+        jml $=Wacky__FriendlyFire_SpellAbsorption
+    
+    .new
+    Wacky__FriendlyFire_SpellAbsorption:
+        // check current spell properties for fire
+        lda $28a2
+        bit #$01
+        bne $+HasFireElement
+        // normal case, do equivalent of displaced action and return
+        and $2726
+        jml $03e103
+    %HasFireElement:
+        // auto-absorb
+        jml $03e12a
+}
+
+// make attacks with fire element heal
+msfpatch {
+    .addr $03C77D
+        jsl $=Wacky__FriendlyFire_AttackAbsorption
+        nop
+    
+    .new
+    Wacky__FriendlyFire_AttackAbsorption:
+        lda $2699
+        bit #$01
+        beq $+Done
+
+        // has fire element; force restore bit of damage to be on
+        lda $a5
+        ora #$80
+        sta $a5
+
+        lda $2699
+    %Done:
+        and #$40
+        rtl
+}
+
+// prevent learning Cure spells
+msfpatch {
+    Wacky__SpellFilterHook:
+        cmp #$0e
+        bcc $+NotCureSpell
+        cmp #$12
+        bcs $+NotCureSpell
+        clc
+        rtl
+    %NotCureSpell:
+        sec
+        rtl
+}
+
+
+// make fireplaces be healing pots
+npc (#Fire) { eventcall { $7D } }
+npc (#Fireplace) { eventcall { $7D } }

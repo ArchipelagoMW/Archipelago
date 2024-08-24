@@ -1,0 +1,1025 @@
+// change VFX $0D pointer to do just the big whale landing part of MoonTravel vfx
+patch($041af) { 70 C6 }
+
+// hack giant attack animation to only do footsteps
+patch($00c6b4 bus) { 3f }  // shorter appearance flash time
+//patch($00c6c3 bus) { 01 }
+patch($00c6c9 bus) { ea ea ea ea ea ea }   // noop out the fireballs
+patch($00c7b3 bus) { 1f } // faster footsteps
+patch($00c812 bus) { 3f } // faster footsteps
+
+// hack airship fly in animation
+patch($00ca6d bus) { 78 }  // longer flight
+patch($00ca8d bus) { 78 }  // start lower
+patch($00cacd bus) { ea ea ea } // patch out dwarf tanks
+patch($00cadc bus) { ea ea ea } // patch out airships
+
+event($9D)  //Returning from the moon to Giant of Bab-il
+{
+    consts(placement) {
+        6  Valet
+    }
+    confirm message $14a
+
+    clear #Temp
+    [#B #If #BigWhaleOnMap 2] {
+        [#B #If #XPosition 8] {
+            p #Valet move down
+        }
+        p #Valet move left
+        p #Valet move left
+        p #Valet move down
+        [#B #If #not_XPosition 8] {
+            p #Valet move down
+        }
+
+        toggle tint $27
+        toggle tint $00
+        sound #Crystal
+        batch 30 {
+            screen flash
+        }
+        player invisible
+        vfx #MoonTravelToGiant
+
+        set #Temp
+    }
+
+    [#B #If #not_Flag #flag.Temp] {
+        [#B #If #XPosition 8] {
+            p #Valet move down
+        }
+        p #Valet move left
+        p #Valet move left
+        [#B #If #XPosition 8] {
+            p #Valet move up
+        }
+        p #Valet face up
+        pause 2
+        player invisible
+        load map #Overworld at $28 $e8 on big whale no transition no launch
+        vfx #fe_LandBigWhale
+    }
+
+    music #None
+    sound #Earthquake
+    toggle screen shake
+    pause 8
+    toggle screen shake
+    toggle tint $7A
+    toggle screen shake
+    sound $5E
+    batch 80 {
+        screen up down
+    }
+    toggle screen shake
+
+    player invisible
+    load map #Overworld at 34 221 no transition
+    toggle screen shake
+    batch 20 {
+        screen up down
+    }
+    toggle tint $00
+    toggle screen shake
+    sound $7E
+    batch 20 {
+        screen flash
+    }
+    sound #None
+    music #Giant
+    vfx #GiantAttack
+
+    //load map #Overworld at 34 227 no transition
+    vfx #AirshipFliesToGiantAndFade
+
+    load map #Black at 16 16 facing down no transition
+    sound #Falling
+    player visible
+    toggle run
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    toggle run
+    load map #GiantMouth at 9 10 facing down
+    toggle run
+    player toggle turning
+    batch 10 {
+        player move down
+    }
+    sound #HeavyDoor
+    pause 8
+    player toggle turning
+    toggle run
+    player face up
+
+cancel:
+}
+
+text(bank 1 message $14A) {
+I can take you to the
+Giant of Bab-il. Would you
+like to go?
+// %flag vanilla_giant off%
+[next]
+// %end%
+// %flag vanilla_giant on %
+
+You will have to complete
+the Giant to return here!
+[next]
+// %end%
+}
+
+//-------------------------------------------------
+// Create exit at entryway
+
+npc(#fe_GiantExit) {
+    sprite #Sparkle
+// %flag vanilla_giant on%
+    default inactive
+// %end%
+// %flag vanilla_giant off%
+    default active
+// %end%
+    eventcall {
+        $C5
+    }
+}
+
+placement($B5 0) {
+    npc #fe_GiantExit
+    position 9 22
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+event($C5) {
+    confirm message $14c
+    music #BigWhale
+    load map #Overworld at $28 $e8 on big whale
+cancel:
+}
+
+text(bank 1 message $14c) {
+Leave the Giant?[next]
+}
+
+//-------------------------------------------------
+// Elements
+
+placement($BC 0) {
+    npc #fe_DynamicNPC
+    // %elements_slot sprite up palette%
+    // %end%
+}
+
+placement($BC 1) {
+    npc #fe_DynamicNPC
+    // %elements_slot sprite left palette%
+    // %end%
+    face right
+}
+
+placement($BC 2) {
+    npc #fe_DynamicNPC
+    // %elements_slot sprite right palette%
+    // %end%
+    face left
+}
+
+placement($BC 3) {
+    npc #fe_DynamicNPC
+    // %elements_slot sprite down palette%
+    // %end%
+}
+
+// hacky way of disabling appearance affects
+//  according to who exists
+placement($BC 4) {
+    // %elements_slot sprite up palette%
+    npc #fe_None
+    // %end%
+}
+
+placement($BC 5) {
+    // %elements_slot sprite left palette%
+    npc #fe_None
+    // %end%
+}
+
+placement($BC 6) {
+    // %elements_slot sprite right palette%
+    npc #fe_None
+    // %end%
+}
+
+placement($BC 7) {
+    // %elements_slot sprite down palette%
+    npc #fe_None
+    // %end%
+}
+
+event($ED)  //Element Fiends battle
+{
+    consts(placement) {
+        0   Rubicant2
+        1   Valvalis
+        2   Kainazzo
+        3   HoodedMonster1
+        4   RubicantFlames
+        5   Teleporter_A
+        7   Teleporter_B
+        6   WaterSplash
+    }
+    // autodetected map #GiantLung
+    toggle music fade
+    pause 8
+    sound #Glow
+    toggle tint $7A
+    music #Zot fade in
+    batch 7 {
+        p #Rubicant2 toggle visible
+        p #Valvalis toggle visible
+        p #Kainazzo toggle visible
+        p #HoodedMonster1 toggle visible
+    }
+    pause 4
+    toggle tint $97
+    [#B #Rando_LoadWackySprite 8 1]
+    sound #HealingPot
+    vfx #HealingPot
+    batch 8 {
+        screen flash
+    }
+    message $0A   // "HP and MP recovered!"
+    toggle tint $00
+    clear status 
+    restore hp
+    restore mp
+    music #DecisiveBattle
+    [#B #Rando_BossBattle #rando.elements_slot]
+
+    player face up
+    music #None
+    [#B #Objectives_TickBossSlot #rando.elements_slot]
+    [#B #Rando_PostBossBattle #rando.elements_slot]
+    toggle tint $7A
+    sound #EnemyDefeat
+    batch 1 {
+        p #HoodedMonster1 toggle visible
+        p #Teleporter_B toggle visible
+        p #Kainazzo toggle visible
+        p #WaterSplash toggle visible
+        p #Valvalis toggle visible
+        p #Teleporter_A toggle visible
+        p #Rubicant2 toggle visible
+        p #RubicantFlames toggle visible
+    }
+    pause 4
+    batch 1 {
+        p #Teleporter_B toggle visible
+        p #WaterSplash toggle visible
+        p #Teleporter_A toggle visible
+        p #RubicantFlames toggle visible
+    }
+    set #FourFiendsBattle
+    music #Giant
+    toggle tint $00
+}
+
+//-------------------------------------------------
+// CPU battle
+
+// specifically nullify old Fusoya1 placement, which became Kaipo Inn pig
+placement($BD 1) {
+    npc #fe_None
+}
+
+placement($BD 5) {
+    // %kain3_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+placement($12f 8) {
+    // %kain3_slot npc2%
+    npc #fe_DynamicNPCU
+    // %end%
+    position 6 0
+    walking off
+    tangible
+    face down
+    palette 2
+    turning on
+    marching off
+    speed 3
+}
+
+
+event($E6)  //Giant of Bab-il CPU battle
+{
+    consts(placement) {
+        0   Edge1
+        1   Fusoya1
+        2   Rosa1
+        3   AdultRydia1
+        4   Golbez1
+        5   Kain1
+    }
+    // autodetected map #GiantCPU
+    player move up
+    player move up
+
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.objective_mode_classicgiant]
+    [#B #If #Flag #flag.Result] {
+        set #Temp
+    }
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #Flag #flag.Result] {
+        set #Temp
+    }
+    toggle music fade
+    toggle tint $D7
+    sound #Alert
+    pause 18
+    sound #None
+    music #BossBattle
+    [#B #Rando_BossBattle #rando.cpu_slot]
+
+    player face up
+    [#B #Objectives_TickBossSlot #rando.cpu_slot]
+    [#B #Rando_PostBossBattle #rando.cpu_slot]
+
+    music $42
+    vfx #GiantCPUExplosion
+
+    // need to do this before leaving this map
+    activate #fe_GiantExit
+
+    toggle music fade
+    toggle tint $00
+    pause 8
+    sound #Earthquake
+    toggle screen shake
+    pause 6
+    music #Hurry
+    sound #Earthquake
+
+    [#B #If #not_Flag #flag.Temp] {
+        pause 2
+        p #Kain1 toggle visible
+        p #Kain1 move down
+        p #Kain1 move down
+        pause 4
+        p #Kain1 move down
+        p #Kain1 move down
+        p #Kain1 move right
+        batch 3 {
+            p #Kain1 move down
+        }
+    }
+
+    pause 2
+    sound #Explosion
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    pause 8
+    sound #Explosion
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    sound #Explosion
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    sound #Earthquake
+    pause 2
+    player move right
+    batch 3 {
+        p #Kain1 move up
+        player move up
+    }
+    batch 1 {
+        p #Kain1 move left
+        player move up
+    }
+    batch 1 {
+        p #Kain1 move left
+        player move left
+    }
+    batch 1 {
+        p #Kain1 move up
+        player move left
+    }
+    batch 4 {
+        p #Kain1 move up
+        player move up
+    }
+
+    [#B #If #Flag #flag.Temp] {
+        player move up
+    }
+    [#B #If #not_Flag #flag.Temp] {
+        batch 1 {
+            p #Kain1 toggle visible
+            player move up
+        }
+    }
+    toggle screen shake
+
+    load map #fe_BlueSky at 16 16 facing down
+    player face down
+    music $43
+    toggle run
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    toggle run
+
+    consts(placement) {
+        8   Kain2
+    }
+    load map #BigWhale2 at 7 0 facing down
+    toggle run
+    music #None
+    batch 8 {
+        player move down
+    }
+    player lie down
+    toggle run
+    sound #HeavyDoor
+
+
+    [#B #If #not_Flag #flag.Temp] {
+        pause 8
+        sound #Falling
+        pause 3
+        p #Kain2 toggle visible
+        batch 8 {
+            p #Kain2 move down
+        }
+        p #Kain2 lie down
+        sound #HeavyDoor
+    }
+
+    pause 12
+
+    player bow head
+    pause 6
+    player face down
+    pause 6
+    player face up
+    pause 8
+    player face left
+
+    [#B #If #not_Flag #flag.Temp] {
+        pause 4
+        p #Kain2 bow head
+        pause 6
+        p #Kain2 face down
+        pause 6
+        p #Kain2 face right
+        pause 8
+    }
+
+    batch {
+        player wave out
+        p #Kain2 wave out
+    }
+    pause 8
+
+    [#B #Objectives_Tick #objective.quest_giant]
+
+    batch {
+        player face down
+        p #Kain2 move right
+    }
+
+    [#B #If #not_Flag #flag.Temp] {
+        p #Kain2 toggle visible
+    }
+
+    music #BigWhale
+
+    [#B #If #not_Flag #flag.Temp] {
+        sound #GetItem
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.giant_character 0]
+        message #msg.fe_Joined
+
+        [#B #Objectives_TickRewardSlot #reward_slot.giant_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.giant_character]
+        player face up
+    }
+
+    player move up
+
+    pause 2
+
+    clear status 
+    restore hp
+    restore mp
+
+    clear #KainStoleDarkCrystal
+    set #CPUBattle
+
+    load map #Overworld at $28 $e8 on big whale no transition
+}
+
+//------------------------------------------------
+// support for re-visiting the giant
+
+// make CPU battle only happen once
+eventcall($51)
+{
+    if not #CPUBattle:
+        $E6   //Giant of Bab-il CPU battle
+    else:
+        $00   // no event
+}
+
+// patch the door tile in the tileset to be a trigger
+patch($a19e0) { 01 80 }
+
+// hook up the trigger
+trigger(#GiantCPU 2) {
+    position 8 2
+    event call $07
+}
+
+eventcall($07) {
+    $14
+}
+
+event($14) {
+    load map #fe_BlueSky at 16 16 facing down
+    player face down
+    music $43
+    toggle run
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    toggle run
+
+    load map #BigWhale2 at 7 0 facing down
+    toggle run
+    music #None
+    batch 8 {
+        player move down
+    }
+    player lie down
+    toggle run
+    sound #HeavyDoor
+
+    pause 8
+
+    player bow head
+    pause 6
+    player face down
+    pause 6
+
+    music #BigWhale
+    player move up
+
+    pause 2
+
+    load map #Overworld at $28 $e8 on big whale no transition    
+}
+
+//------------------------------------------------
+// Blue sky map for leaving Giant
+
+consts(map) {
+    $BF  fe_BlueSky
+}
+
+map($BF)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C2  // all 7F
+    tileset $00
+    placement group $9B
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #None
+    background grid $DB direction up speed 3
+    name index $80
+    // treasure index 222
+}
+
+
+//------------------------------------------------
+// rewrite giant explode effect to be longer, slower fadeout
+// for Fell The Giant variant
+
+msfpatch {
+    GiantExplode_SlowFade:
+        txa
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        // %flag vintage on%
+        beq $02
+        ora #$01
+        // %end%
+        sta $2100
+        rtl
+
+    .addr $00cb37
+        ldx #$0200  // make effect longer
+
+    .addr $00cb41
+        cpx #$0100
+
+    .addr $00cb46
+        jsl $=GiantExplode_SlowFade
+}

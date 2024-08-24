@@ -1,0 +1,51 @@
+msfpatch {
+    .addr $00bf10
+        jsl $=Wacky__RatRace_OverrideSpeed
+
+    .new
+    Wacky__RatRace_OverrideSpeed:
+        lda $138303,x
+        ora #$c0
+        rtl
+}
+
+msfpatch {
+    .addr $00BF50
+        jsl $=Wacky__RatRace_ForceNPCWalking
+
+    .new
+    Wacky__RatRace_ForceNPCWalking:
+        lda $06
+        cmp #$65 // transparent
+        beq $+DoNotForceWalking
+        cmp #$46 // FatChocobo0
+        bcc $+ForceWalking
+        cmp #$4a // FatChocobo3 + 1
+        bcc $+DoNotForceWalking
+
+    %ForceWalking:
+        lda $138301,x
+        ora #$80
+        rtl
+
+    %DoNotForceWalking:
+        lda $138301,x
+        rtl
+}
+
+msfpatch {
+    .addr $00bf78
+        jml $=Wacky__RatRace_UnforceNPCWalkingIfInvisible
+    
+    .new
+    Wacky__RatRace_UnforceNPCWalkingIfInvisible:
+        cmp #$00
+        beq $+IsInvisible
+
+        jml $00BF7C
+
+    %IsInvisible:
+        lda #$00
+        sta $0902,y
+        jml $00BF7F
+}

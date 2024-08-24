@@ -1,0 +1,37 @@
+// remove HP displays in batle
+msfpatch {
+    .addr $02A6F6
+        jml $=Wacky__ImaginaryNumbers_HPDraw
+        nop
+
+    .new
+    Wacky__ImaginaryNumbers_HPDraw:
+        lda #$c5
+        sta $180c
+        sta $180d
+        sta $180e
+        sta $180f
+        jml $02a753
+}
+
+// remove MP displays in battle
+msfpatch {
+    .addr $02A70E
+        jml $=Wacky__ImaginaryNumbers_MPDraw
+        nop
+
+    .new
+    Wacky__ImaginaryNumbers_MPDraw:
+        lda #$7f  // we want EC but the routine will add 6D to each char
+        sta $180c
+        sta $180d
+        sta $180e
+        sta $180f
+        jml $02a737
+}
+
+// Replace "e" in "Change" BG2 tile map with "?"
+patch ($b7b98) { C5 }
+
+// Change the "Change" text to use an e from the "Need MP" tiles
+patch ($029ace bus) { DF }

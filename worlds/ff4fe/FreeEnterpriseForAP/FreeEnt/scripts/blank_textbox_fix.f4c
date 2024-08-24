@@ -1,0 +1,35 @@
+msfpatch {
+    .def TextboxFixFlag $7e162a
+
+    .addr $00b0f0
+        // in original dialog opening routine,
+        // instead of setting $df and $eb after
+        // loading the dialog, set a special flag
+        // that will allow these values to be set
+        // DURING the load of the dialog
+
+        lda #$01
+        sta $_TextboxFixFlag
+        jsr $b21f
+        nop
+
+    .addr $00b2a4
+        jsl $=TextboxFix
+
+    .new
+    TextboxFix:
+        lda $_TextboxFixFlag
+        beq $+NoSpecialFlag
+
+        stz $_TextboxFixFlag
+        lda #$01  // deferred initializations
+        sta $df   //  ...
+        sta $eb   //  ...
+
+    %NoSpecialFlag:
+        // displaced instructions
+        lda #$01
+        sta $ed
+
+        rtl
+}

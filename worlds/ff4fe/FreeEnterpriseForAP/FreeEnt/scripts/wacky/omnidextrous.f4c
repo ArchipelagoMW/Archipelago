@@ -1,0 +1,64 @@
+// make all armors interchangeable
+patch ($01bfd2 bus) { 6D AF }
+patch ($01bfd7 bus) { 6D AF }
+patch ($01bfdc bus) { 6D AF }
+
+// instantly pass "can equip" check for weapons/shields
+msfpatch {
+    .addr $01c00f
+        sec
+        rts
+}
+patch ($03F3D7 bus) { 80 }
+
+// items can be equipped by anyone
+msfpatch {
+    .addr $01c25e
+        lda #$00
+        nop nop
+
+    .addr $03A187
+        lda #$00
+}
+
+// allow ambidextrous characters to equip shields
+msfpatch {
+    .addr $01BFB4
+        ldx #$6c00
+}
+
+
+// fix defense, magic evade, mdef overflow
+msfpatch {
+    .addr $039A1B
+        jsl $=PatchDefenseOverflow
+    .addr $039AB6
+        jsl $=PatchDefenseOverflow
+    .addr $039ADD
+        jsl $=PatchDefenseOverflow
+
+    .new
+    PatchDefenseOverflow:
+        adc $a9
+        bcc $+NoOverflow
+        lda #$ff
+    %NoOverflow:
+        sta $a9
+        rtl
+}
+
+// fix evade overflow
+msfpatch {
+    .addr $0399F1
+        jsl $=PatchEvadeOverflow
+
+    .new
+    PatchEvadeOverflow:
+        adc $aa
+        bcc $+NoOverflow
+        lda #$ff
+    %NoOverflow:
+        sta $aa
+        rtl
+}
+

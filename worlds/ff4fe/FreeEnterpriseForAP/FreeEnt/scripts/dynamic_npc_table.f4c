@@ -1,0 +1,267 @@
+// It's gross, but we gotta keep all this table data in one spot
+
+patch($219000 bus) {
+    // -----------------------------------
+    ##map.Mist 00   #sprite.Man
+    ##map.Mist 01   #sprite.Man
+    ##map.Mist 02   #sprite.Man
+    ##map.Mist 03   #sprite.OldMan
+
+    // -----------------------------------
+    ##map.KaipoInn 02
+        // %officer_slot sprite left%
+        #sprite.Soldier
+        // %end%
+    ##map.KaipoInn 03
+        // %officer_slot sprite up%
+        #sprite.Soldier
+        // %end%
+    ##map.KaipoInn 04
+        // %officer_slot sprite down%
+        #sprite.Soldier
+        // %end%
+    ##map.KaipoInn 05
+        // %officer_slot sprite right%
+        #sprite.Soldier
+        // %end%
+
+    // -----------------------------------
+    ##map.Waterfall2F 00
+        // %octomamm_slot sprite up%
+        #sprite.OctomammTentacles
+        // %end%
+    ##map.Waterfall2F 01
+        // %octomamm_slot sprite left%
+        #sprite.OctomammTentacles
+        // %end%
+    ##map.Waterfall2F 02
+        // %octomamm_slot sprite down%
+        #sprite.OctomammTentacles
+        // %end%
+    ##map.Waterfall2F 03
+        // %octomamm_slot sprite right%
+        #sprite.OctomammTentacles
+        // %end%
+
+    // -----------------------------------
+    ##map.Fabul 08
+        // %fabulgauntlet_slot sprite 1%
+        #sprite.HoodedMonster
+        // %end%
+    ##map.Fabul 09
+        // %fabulgauntlet_slot sprite 2%
+        #sprite.HoodedMonster
+        // %end%
+    ##map.Fabul 0A
+        // %fabulgauntlet_slot sprite 3%
+        #sprite.HoodedMonster
+        // %end%
+
+    // -----------------------------------
+    ##map.MountOrdealsSummit 00
+        // %milon_slot sprite main%
+        #sprite.HoodedMonster
+        // %end%
+    ##map.MountOrdealsSummit 01
+        // %milonz_slot sprite main%
+        #sprite.HoodedMonster
+        // %end%
+
+    ##map.MountOrdealsSummit 02 #dyn.NonHero0
+    ##map.MountOrdealsSummit 03 #dyn.NonHero1
+    ##map.MountOrdealsSummit 04 #dyn.NonHero2
+    ##map.MountOrdealsSummit 05 #dyn.NonHero3
+
+    // -----------------------------------
+    ##map.BaronInn 01
+        // %karate_slot sprite main%
+        #sprite.Yang
+        // %end%
+    ##map.BaronInn 00
+        // %guard_slot sprite 1%
+        #sprite.Captain
+        // %end%
+    ##map.BaronInn 08
+        // %guard_slot sprite 2%
+        #sprite.Captain
+        // %end%
+
+    // -----------------------------------
+    ##map.BaronCastleLobby 04
+        // %baigan_slot sprite main%
+        #sprite.Captain
+        // %end%
+
+    // -----------------------------------
+    ##map.CaveMagnesCrystalRoom 02
+        // %darkelf_slot sprite main%
+        #sprite.DarkElf
+        // %end%
+
+    // -----------------------------------
+    ##map.Zot5F 00
+        // %magus_slot sprite up%
+        #sprite.MagusSister
+        // %end%
+    
+    ##map.Zot5F 01
+        // %magus_slot sprite left%
+        #sprite.MagusSister
+        // %end%
+    
+    ##map.Zot5F 02
+        // %magus_slot sprite right%
+        #sprite.MagusSister
+        // %end%
+
+    // -----------------------------------
+    ##map.ZotCommandCenter 04
+        // %valvalis_slot sprite main%
+        #sprite.Valvalis
+        // %end%
+
+    ##map.ZotCommandCenter 02
+        #sprite.FlameBottom // overwritten in zot_top.f4c to be ropes sprite
+
+    // -----------------------------------
+    ##map.DwarfCastleThroneRoom 0B
+        // %calbrena_slot sprite down%
+        #sprite.Calbrena
+        // %end%
+
+    // -----------------------------------
+    ##map.DwarfCastleCrystalRoom 08
+        // %calbrena_slot sprite up%
+        #sprite.Calbrena
+        // %end%
+    ##map.DwarfCastleCrystalRoom 09
+        // %calbrena_slot sprite right%
+        #sprite.Calbrena
+        // %end%
+    ##map.DwarfCastleCrystalRoom 0A
+        // %calbrena_slot sprite left%
+        #sprite.Calbrena
+        // %end%
+    ##map.DwarfCastleCrystalRoom 0B
+        // %calbrena_slot sprite down%
+        #sprite.Calbrena
+        // %end%
+    ##map.DwarfCastleCrystalRoom 05
+        // %golbez_slot sprite main%
+        #sprite.Golbez
+        // %end%
+
+    // -----------------------------------
+    ##map.BabilCannon 00
+        // %darkimp_slot sprite left%
+        #sprite.HoodedMonster
+        // %end%
+    ##map.BabilCannon 01
+        // %darkimp_slot sprite up%
+        #sprite.HoodedMonster
+        // %end%
+    ##map.BabilCannon 02
+        // %darkimp_slot sprite right%
+        #sprite.HoodedMonster
+        // %end%
+
+    // -----------------------------------
+    ##map.BabilB5 06
+        // %kingqueen_slot sprite left%
+        #sprite.King
+        // %end%
+    ##map.BabilB5 07
+        // %kingqueen_slot sprite right%
+        #sprite.Queen
+        // %end%
+
+    // -----------------------------------
+    ##map.GiantLung 00
+        // %elements_slot sprite up%
+        #sprite.Rubicant
+        // %end%
+    ##map.GiantLung 01
+        // %elements_slot sprite left%
+        #sprite.Valvalis
+        // %end%
+    ##map.GiantLung 02
+        // %elements_slot sprite right%
+        #sprite.Kainazzo
+        // %end%
+    ##map.GiantLung 03
+        // %elements_slot sprite down%
+        #sprite.HoodedMonster
+        // %end%
+
+    // -----------------------------------
+    // Axtor sprites
+
+    ##map.BaronCastleThroneRoom     05  #dyn.AxCid
+    ##map.Damcyan3F                 02  #dyn.AxEdward
+    ##map.DwarfCastleCrystalRoom    04  #dyn.AxARydia
+    ##map.GiantCPU                  05  #dyn.AxKain3
+    ##map.BigWhale2                 08  #dyn.AxKain3
+    ##map.KaipoHospital             06  #dyn.AxRosa1
+    ##map.KaipoInn                  06  #dyn.AxCRydia
+    ##map.LunarPalaceLobby          00  #dyn.AxFusoya
+    ##map.Mist                      04  #dyn.AxCRydia
+    ##map.FieldOutsideMist          00  #dyn.AxCRydia
+    ##map.MountOrdeals2F            02  #dyn.AxTellah2
+    ##map.HouseOfWishes             08  #dyn.AxPalom
+    ##map.HouseOfWishes             09  #dyn.AxPorom
+    ##map.BaronCastleLobby          07  #dyn.AxKain1
+    ##map.DockedAirship             05  #dyn.AxKain1
+    ##map.ZotCommandCenter          05  #dyn.AxRosa2
+    ##map.ZotCommandCenter          06  #dyn.AxRosa2
+
+    // -----------------------------------
+    // Character retrieval
+
+    ##map.MysidiaCrystalRoom        00  #dyn.AxDKCecil
+    ##map.MysidiaCrystalRoom        01  #dyn.AxCid
+    ##map.MysidiaCrystalRoom        02  #dyn.AxCRydia
+    ##map.MysidiaCrystalRoom        03  #dyn.AxRosa2
+    ##map.MysidiaCrystalRoom        04  #dyn.AxKain2
+    ##map.MysidiaCrystalRoom        05  #dyn.AxRosa1
+    ##map.MysidiaCrystalRoom        06  #dyn.AxARydia
+    ##map.MysidiaCrystalRoom        07  #dyn.AxKain1
+    ##map.MysidiaCrystalRoom        08  #dyn.AxYang1
+    ##map.MysidiaCrystalRoom        09  #dyn.AxEdge
+    ##map.MysidiaCrystalRoom        0A  #dyn.AxFusoya
+    ##map.MysidiaCrystalRoom        0B  #dyn.AxYang2
+
+    ##map.RoomOfWishes              03  #dyn.AxTellah2
+    ##map.RoomOfWishes              04  #dyn.AxEdward
+    ##map.RoomOfWishes              06  #dyn.AxTellah1
+    ##map.RoomOfWishes              07  #dyn.AxKain3
+    ##map.RoomOfWishes              08  #dyn.AxPalom
+    ##map.RoomOfWishes              09  #dyn.AxPorom
+
+    // -----------------------------------
+    // Mt. Hobs spell
+
+    ##map.MountHobsWest 08  
+        // %hobs sprite 0%
+        #sprite.Fire
+        // %end%
+    ##map.MountHobsWest 09
+        // %hobs sprite 1%
+        #sprite.Fire
+        // %end%
+    ##map.MountHobsWest 0A
+        // %hobs sprite 2%
+        #sprite.Fire
+        // %end%
+    ##map.MountHobsWest 0B
+        // %hobs sprite 3%
+        #sprite.Fire
+        // %end%
+    
+    // -----------------------------------
+    // Guidingway
+    ##map.BlackBG 00 #sprite.Namingway
+    
+    // -----------------------------------
+    // search end record
+    FF FF FF FF
+}

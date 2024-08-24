@@ -1,0 +1,15 @@
+FE_SITE_URL="http://127.0.0.1:8080"
+FE_BETA_SITE_URL="http://127.0.0.1:8080"
+
+# Generated seeds contain an embedded report encrypted with this key
+FE_EMBEDDED_REPORT_KEY="EMBEDDED_REPORT_KEY-------------"
+
+# Salt applied to randomization seed value
+FE_SALT="SALT"
+
+# Alternative salt applied when spoilers are enabled
+FE_SPOILER_SALT="SPOILER_SALT"
+
+# Alternative salt applied when test mode settings are enabled
+FE_TEST_SALT="TEST_SALT"
+

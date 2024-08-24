@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Generate</title>
+
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Lato');
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                background-color: #ccd;
+
+                font-family: 'Lato', sans-serif;
+            }
+
+            #main {
+                background-color: #eee;
+                border: 1rem solid #ddd;
+                min-width: 16rem;
+                max-width: 30rem;
+                padding: 1.5rem;
+                text-align: center;
+            }
+
+        </style>
+
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+    </head>
+
+    <body>
+        <form id="mainForm" method="POST" action="/generate">
+            <input type="hidden" name="flags" value="{{ flags }}">
+            <input type="hidden" name="seed" value="{{ seed }}">
+            <input type="hidden" name="metaconfig" value="{{ metaconfig }}">
+            <div id="main">
+                <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" data-callback="captchaComplete"></div>
+            </div>
+        </form>
+
+        <script>
+            function captchaComplete(token)
+            {
+                document.getElementById("mainForm").submit();
+            }
+        </script>
+    </body>
+</html>

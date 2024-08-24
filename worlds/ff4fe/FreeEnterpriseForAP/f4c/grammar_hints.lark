@@ -1,0 +1,5 @@
+start : hints_block*
+
+hints_block : "hints" _block_start hint* _block_end
+
+hint : "event" number "map" map_value    -> event_map_hint

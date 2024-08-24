@@ -1,0 +1,176 @@
+// patch Sing validity check to always succeed
+patch ($03a309 bus) { 60 }
+
+
+// change all characters' battle commands
+
+actor(#DKCecil)
+{
+    commands {
+        #Sing
+        // %flag japanese_abilities on%
+        #DarkWave
+        // %end%
+        #Item
+    }
+}
+
+actor(#Kain1)
+{
+    commands {
+        #Sing
+        #Jump
+        #Item
+    }
+}
+
+actor(#CRydia)
+{
+    commands {
+        #Sing
+        #White
+        #Black
+        #Call
+        #Item
+    }
+}
+
+actor(#Tellah1)
+{
+    commands {
+        #Sing
+        #White
+        #Black
+        // %flag japanese_abilities on%
+        #Recall
+        // %end%
+        #Item
+    }
+}
+
+actor(#Edward)
+{
+    commands {
+        #Sing
+        #Hide
+        // %flag japanese_abilities on%
+        #Medicine
+        // %end%
+        #Item
+    }
+}
+
+actor(#Rosa1)
+{
+    commands {
+        #Sing
+        #White
+        #Aim
+        // %flag japanese_abilities on%
+        #Pray
+        // %end%
+        #Item
+    }
+}
+
+actor(#Yang1)
+{
+    commands {
+        #Sing
+        #Kick
+        // %flag japanese_abilities on%
+        #Focus
+        #Fortify
+        // %end%
+        #Item
+    }
+}
+
+actor(#Palom)
+{
+    commands {
+        #Sing
+        #Black
+        #Twin
+        // %flag japanese_abilities on%
+        #Bluff
+        // %end%
+       #Item
+    }
+}
+
+actor(#Porom)
+{
+    commands {
+        #Sing
+        #White
+        #Twin
+        // %flag japanese_abilities on%
+        #Cry
+        // %end%
+        #Item
+    }
+}
+
+actor(#PCecil)
+{
+    commands {
+        #Sing
+        #White
+        #Cover
+        #Item
+    }
+}
+
+actor(#Tellah3)
+{
+    commands {
+        #Sing
+        #White
+        #Black
+        #Item
+    }
+}
+
+actor(#Cid)
+{
+    commands {
+        #Sing
+        #Peep
+        #Item
+    }
+}
+
+actor(#ARydia)
+{
+    commands {
+        #Sing
+        #Black
+        #Call
+        #Item
+    }
+}
+
+actor(#Edge)
+{
+    commands {
+        #Sing
+        #Dart
+        #Sneak
+        #Ninja
+        #Item
+    }
+}
+
+actor(#Fusoya)
+{
+    commands {
+        #Sing
+        #White
+        #Black
+        // %flag japanese_abilities on%
+        #Regen
+        // %end%
+        #Item
+    }
+}

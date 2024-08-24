@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <title>Generating...</title>
+
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Lato');
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                background-color: #ccd;
+
+                font-family: 'Lato', sans-serif;
+            }
+
+            #main {
+                background-color: #eee;
+                border: 1rem solid #ddd;
+                min-width: 16rem;
+                max-width: 30rem;
+                padding: 1.5rem;
+                text-align: center;
+            }
+
+            #sprite {
+                margin-bottom: 0.5rem;
+            }
+
+            #task_id {
+                margin-top: 0.25rem;
+                font-size: 0.8rem;
+                color: #666;
+            }
+
+            #sprite_timeout {
+                display: none;
+            }
+
+            #sprite_error {
+                display: none;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="main">
+            <div id="sprite">
+                <img id="sprite_activity" src="/static/activity-{{ sprite }}.gif">
+                <img id="sprite_timeout" src="/static/timeout-{{ sprite }}.gif">
+                <img id="sprite_error" src="/static/error-{{ sprite }}.gif">
+            </div>
+            <div id="status">Waiting for generator...</div>
+            <div id="task_id">(Task ID: {{ task_id }})</div>
+        </div>
+
+        <script>
+            function sendXHR(method, url, delegate)
+            {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if(xhr.readyState == 4 & xhr.status == 200)
+                    {
+                        delegate(xhr.responseText);
+                    }
+                };
+                xhr.open(method, url);
+                xhr.send();
+            }
+
+            function setSprite(state)
+            {
+                var STATES = ['activity', 'timeout', 'error'];
+                for(var st of STATES)
+                {
+                    document.getElementById("sprite_" + st).style.display = (state == st ? 'inline' : 'none');
+                }
+            }
+
+            var updateIntervalId = null;
+
+            function update()
+            {
+                sendXHR('GET', '/status?id={{ task_id }}', function(responseText)
+                {
+                    var response = JSON.parse(responseText);
+                    if(response.status == 'error')
+                    {
+                        clearInterval(updateIntervalId);
+                        setSprite('error');
+                        document.getElementById('status').textContent = "Error: " + response.error;
+                    }
+                    else if(response.status == 'done')
+                    {
+                        clearInterval(updateIntervalId);
+                        document.getElementById('status').textContent = "Done!";
+                        window.location = '/get?id=' + response.result;
+                    }
+                    else if(response.status == 'in_progress')
+                    {
+                        document.getElementById('status').textContent = "Generating...";
+                    }
+                    else if(response.status == 'pending')
+                    {
+                        // this is fine
+                    }
+                    else
+                    {
+                        clearInterval(updateIntervalId);
+                        document.getElementById('status').textContent = 'Unrecognized response status: ' + response.status;
+                    }
+                });
+            }
+
+            window.onload = function() 
+            {
+                updateIntervalId = setInterval(update, 2000);
+            }
+        </script>
+
+    </body>
+</html>

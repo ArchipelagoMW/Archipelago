@@ -1,0 +1,246 @@
+// hook into draw routine to draw additional text fields
+msfpatch {
+    .addr $01d18b
+        jml $=CustomMenu__ExtraText
+
+    .new
+    CustomMenu__ExtraText:
+        ldx #$040a
+        lda $=MSU1__Enabled
+        bne $+UseMSU1Text
+        ldy #$_Text__MusicSetting
+        bra $+ContinueMusicText
+    %UseMSU1Text:
+        ldy #$_Text__MusicSettingMSU1
+    %ContinueMusicText:
+        lda #$20
+        jsr $_MK_DrawText
+
+        ldx #$048a
+        ldy #$_Text__FlashSetting
+        lda #$20
+        jsr $_MK_DrawText
+
+        ldx #$054a
+        ldy #$_Text__Color
+        lda #$20
+        jsr $_MK_DrawText
+
+        // displaced instructions
+        lda #$53
+        sta $bb1e
+        jml $01d190
+
+    %Text__MusicSetting:
+        "Music         On  Off" [[ 00 ]]
+
+    %Text__MusicSettingMSU1:
+        "Music           MSU-1" [[ 00 ]]
+
+    %Text__FlashSetting:
+        "Flash FX      On  Off" [[ 00 ]]
+
+    %Text__Color:
+        " Color" [[ 00 ]]
+}
+
+// create extended data array to replace previous list
+// of cursor Y positions
+msfpatch {
+    CustomMenu__ExtendedCursorYPositions:
+        [[ 
+            30  // 00: Battle speed
+            50  // 01: Battle message speed
+            70  // 02: Dash
+            80  // 03: Music
+            90  // 04: Flash
+            A0  // 05: Window R
+            B0  // 06: Window G
+            C0  // 07: Window B
+            18  // 08: Encounters
+        ]]
+
+    .addr $01d1f1
+        lda $=CustomMenu__ExtendedCursorYPositions,x
+}
+
+// patch checks for menu wraparound
+// %flag encounter_toggle on%
+patch($01d292 bus) { 08 }
+patch($01d2a1 bus) { 09 }
+// %end%
+// %flag encounter_toggle off%
+patch($01d292 bus) { 07 }
+patch($01d2a1 bus) { 08 }
+// %end%
+
+// patch code that sets X position of cursor
+msfpatch {
+    CustomMenu__SetCursorX:
+        cmp #$05
+        bcc $+CustomMenu__SetCursorX_Normal
+        cmp #$08
+        bcs $+CustomMenu__SetCursorX_Normal
+
+    CustomMenu__SetCursorX_WindowColor:
+        lda #$68
+        jml $01d202
+
+    CustomMenu__SetCursorX_Normal:
+        lda #$18
+        jml $01d202
+
+    .addr $01d1f8
+        jml $=CustomMenu__SetCursorX
+}
+
+// get added settings and display additional finger cursors
+msfpatch {
+    CustomMenu__ShowOnOffCursors:
+        // %flag encounter_toggle on%
+        lda $_EncounterSetting
+        bne $+EncountersOff
+        ldx #$1888
+        stx $0314
+        bra $+CheckMusic
+    %EncountersOff:
+        ldx #$18a8
+        stx $0314
+        // %end%
+
+    %CheckMusic:
+        lda $=MSU1__Enabled
+        bne $+CheckFlash
+
+        lda $_MusicSetting
+        bne $+MusicOff
+        ldx #$8088
+        stx $0308
+        bra $+CheckFlash
+    %MusicOff:
+        ldx #$80a8
+        stx $0308
+
+    %CheckFlash:
+        lda $_FlashSetting
+        bne $+FlashOff
+        ldx #$9088
+        stx $0304
+        bra $+Done
+    %FlashOff:
+        ldx #$90a8
+        stx $0304
+
+    %Done:
+        // displaced instructions and resume
+        ldx #$300a
+        stx $0306
+        jml $01d266
+
+    .addr $01d260
+        jml $=CustomMenu__ShowOnOffCursors
+}
+
+// hook into left/right toggle to allow option to change
+msfpatch {
+    CustomMenu__LeftArrowHook:
+        lda $1ba7
+        cmp #$03
+        beq $+ToggleMusicSetting
+        cmp #$04
+        beq $+ToggleFlashSetting
+        cmp #$08
+        beq $+ToggleEncounterSetting
+
+        // resume code
+        cmp #$00
+        bne $04
+        jml $01d2b3
+        jml $01d2be
+
+    CustomMenu__RightArrowHook:
+        lda $1ba7
+        cmp #$03
+        beq $+ToggleMusicSetting
+        cmp #$04
+        beq $+ToggleFlashSetting
+        cmp #$08
+        beq $+ToggleEncounterSetting
+
+        // resume code
+        cmp #$00
+        bne $04
+        jml $01d2f5
+        jml $01d302
+
+    %ToggleEncounterSetting:
+        lda $_EncounterSetting
+        eor #$01
+        sta $_EncounterSetting
+
+        // also apply plot flag setting for some triggers
+        lda $128e
+        and #$fe
+        ora $_EncounterSetting
+        sta $128e
+
+    %Return:
+        jml $01d332
+
+    %ToggleMusicSetting:
+        // do nothing if MSU1 is running
+        lda $=MSU1__Enabled
+        bne $-Return
+
+        lda $_MusicSetting
+        eor #$01
+        sta $_MusicSetting
+
+        // restart currently playing track
+        lda $001e05  // remember track
+        pha
+
+        stz $1e01    // play "none"
+        lda #$01
+        sta $1e00
+        jsl $048004
+
+        pla          // play last track
+        sta $1e01
+        lda #$01
+        sta $1e00
+        jsl $048004
+
+        // play cursor sound which got muted
+        lda #$11
+        sta $1e00
+        jsl $048004
+
+        jmp $_Return
+
+    %ToggleFlashSetting:
+        lda $_FlashSetting
+        eor #$01
+        sta $_FlashSetting
+
+        jmp $_Return
+
+
+    .addr $01d2ae
+        jml $=CustomMenu__LeftArrowHook
+
+    .addr $01d2f0
+        jml $=CustomMenu__RightArrowHook
+}
+
+// move Sound/Dash menu option up one line
+patch ($01dda7 bus) { 4A }
+patch ($01ddaf bus) { 5E }
+patch ($01d25c bus) { 70 }  // cursor Y position
+
+// change "Window Color" to just "Window" and move down
+patch ($01dd98 bus) { CA 04 58 64 69 5F 6A 72 FF FF FF FF FF FF }
+
+// fix which menu options point to which window colors
+patch ($01d2dc bus) { 4C }
+patch ($01d322 bus) { 4C }

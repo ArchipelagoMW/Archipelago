@@ -1,0 +1,175 @@
+// This file is not used in any random challenges, but
+// provides a quick copy/paste source when defining
+// new random challenges that require command set changes
+
+actor(#DKCecil)
+{
+    commands {
+        #Fight
+        // %flag japanese_abilities on%
+        #DarkWave
+        // %end%
+        #Item
+    }
+}
+
+actor(#Kain1)
+{
+    commands {
+        #Fight
+        #Jump
+        #Item
+    }
+}
+
+actor(#CRydia)
+{
+    commands {
+        #Fight
+        #White
+        #Black
+        #Call
+        #Item
+    }
+}
+
+actor(#Tellah1)
+{
+    commands {
+        #Fight
+        #White
+        #Black
+        // %flag japanese_abilities on%
+        #Recall
+        // %end%
+        #Item
+    }
+}
+
+actor(#Edward)
+{
+    commands {
+        #Fight
+        #Sing
+        #Hide
+        // %flag japanese_abilities on%
+        #Medicine
+        // %end%
+        #Item
+    }
+}
+
+actor(#Rosa1)
+{
+    commands {
+        #Fight
+        #White
+        #Aim
+        // %flag japanese_abilities on%
+        #Pray
+        // %end%
+        #Item
+    }
+}
+
+actor(#Yang1)
+{
+    commands {
+        #Fight
+        #Kick
+        // %flag japanese_abilities on%
+        #Focus
+        #Fortify
+        // %end%
+        #Item
+    }
+}
+
+actor(#Palom)
+{
+    commands {
+        #Fight
+        #Black
+        #Twin
+        // %flag japanese_abilities on%
+        #Bluff
+        // %end%
+       #Item
+    }
+}
+
+actor(#Porom)
+{
+    commands {
+        #Fight
+        #White
+        #Twin
+        // %flag japanese_abilities on%
+        #Cry
+        // %end%
+        #Item
+    }
+}
+
+actor(#PCecil)
+{
+    commands {
+        #Fight
+        #White
+        #Cover
+        #Item
+    }
+}
+
+actor(#Tellah3)
+{
+    commands {
+        #Fight
+        #White
+        #Black
+        #Item
+    }
+}
+
+actor(#Cid)
+{
+    commands {
+        #Fight
+        #Peep
+        #Item
+    }
+}
+
+actor(#ARydia)
+{
+    commands {
+        #Fight
+        #Black
+        #Call
+        #Item
+    }
+}
+
+actor(#Edge)
+{
+    commands {
+        #Fight
+        #Dart
+        #Sneak
+        #Ninja
+        #Item
+    }
+}
+
+actor(#Fusoya)
+{
+    commands {
+        #Fight
+        #White
+        #Black
+        // %flag japanese_abilities on%
+        #Regen
+        // %end%
+        #Item
+    }
+}

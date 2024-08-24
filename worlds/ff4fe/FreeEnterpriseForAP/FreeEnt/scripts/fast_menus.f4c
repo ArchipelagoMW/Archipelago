@@ -1,0 +1,196 @@
+msfpatch {
+        .def  Var_Menu__FrameSkipCount  0x7e0ffd
+
+        // ---------------------------------------------------------------------------
+
+        .mx 0x00
+            
+    Menu__Scrolling_Speed_EquipDown:
+        pha
+        lda $99
+        clc
+        adc #$0004
+        sta $99
+        pla
+        rtl
+        
+        .mx 0x00
+
+    Menu__Scrolling_Speed_EquipUp:
+        pha
+        lda $99
+        sec
+        sbc #$0004
+        sta $99
+        pla
+        rtl
+        
+        // ---------------------------------------------------------------------------
+        
+        .mx 0x20
+
+    Menu__FrameSkip:
+        pha
+        lda $01c2
+        beq $+Menu__FrameSkip_Do
+        lda $=Var_Menu__FrameSkipCount
+        inc a
+        sta $=Var_Menu__FrameSkipCount
+        cmp #$03
+        bcc $+Menu__FrameSkip_Exit
+    Menu__FrameSkip_Do:
+        lda #$00
+        sta $=Var_Menu__FrameSkipCount
+
+        // Original code modified
+        lda #$01
+        ldy #$818a
+        jsr $=LongCall
+        pla
+        lda $c3
+        rtl
+    Menu__FrameSkip_Exit:
+        // Pull A and skip some code
+        pla
+        pla
+        pla
+        pla
+        jml $018572
+        
+        // ---------------------------------------------------------------------------
+        
+        .mx 0x20
+
+    Menu__FastScanline:
+        sta $7ffffe
+        lda $45
+        and #$03
+        dec a
+        bne $+Menu__FastScanline_Exit
+
+        // Original wait for vblank
+        lda #$01
+        ldy #$818a
+        jsr $=LongCall
+        
+    Menu__FastScanline_Exit:
+        // Original code and return
+        lda #$01
+        ldy #$8078
+        jsr $=LongCall
+        rtl
+        
+        // ---------------------------------------------------------------------------
+        
+        .mx 0x20
+
+    Menu__FadeInOutSkip:
+        lda $88
+        and #$7f
+        cmp #0
+        beq $+Menu__FadeInOutSkip_Do
+        cmp #3
+        beq $+Menu__FadeInOutSkip_Do
+        cmp #6
+        beq $+Menu__FadeInOutSkip_Do
+        cmp #9
+        beq $+Menu__FadeInOutSkip_Do
+        cmp #12
+        beq $+Menu__FadeInOutSkip_Do
+        cmp #15
+        beq $+Menu__FadeInOutSkip_Do
+        
+        // Original code and return
+        lda $88
+        rtl
+        
+    Menu__FadeInOutSkip_Do:
+        // Original wait for vblank call
+        lda #$01
+        ldy #$818a
+        jsr $=LongCall
+        
+        // Original code and return
+        lda $88
+        rtl
+
+        // ---------------------------------------------------------------------------       
+}
+
+msfpatch {
+
+    // Fade out, frame skip
+    .addr   $019484
+    jsr $=Menu__FadeInOutSkip
+    nop
+    
+    // Fade in, frame skip
+    .addr   $01946a
+    jsr $=Menu__FadeInOutSkip
+    nop
+    
+    // Menu scanline tile update downward, frame skip
+    .addr   $0183f8
+    jsr $=Menu__FastScanline
+    nop
+    nop
+    
+    // Menu scanline tile update upward, frame skip
+    .addr   $018438
+    jsr $=Menu__FastScanline
+    nop
+    nop
+    
+    // Menu animation, frame skip
+    .addr   $018561
+    jsr $=Menu__FrameSkip
+    nop
+    
+    // Inventory up
+    [01a059] = 0x04
+    [01a05f] = 0x04
+    // Inventory down
+    [01a003] = 0x04
+    [01a009] = 0x04
+    
+    // Patch scrolling speed
+    [01bf0a] = 0x04
+    .addr   $01bf0d
+    jsr $=Menu__Scrolling_Speed_EquipDown
+    
+    [01bedb] = 0x04
+    .addr   $01bede
+    jsr $=Menu__Scrolling_Speed_EquipUp    
+}
+
+// also speed up sell menu and treasure menu
+msfpatch {
+    .addr $01c8ba
+        jsr $=Menu__Scrolling_Speed_SellOrTreasureUp
+    .addr $01c8f3
+        jsr $=Menu__Scrolling_Speed_SellOrTreasureDown
+    .addr $01d718
+        jsr $=Menu__Scrolling_Speed_SellOrTreasureUp
+    .addr $01d74d
+        jsr $=Menu__Scrolling_Speed_SellOrTreasureDown
+
+    [01c8b5] = 0x04
+    [01c8ee] = 0x04
+    [01d715] = 0x04
+    [01d74a] = 0x04
+
+    .new
+    Menu__Scrolling_Speed_SellOrTreasureUp:
+        dec $9f
+        dec $9f
+        dec $9f
+        dec $9f
+        rtl
+
+    Menu__Scrolling_Speed_SellOrTreasureDown:
+        inc $9f
+        inc $9f
+        inc $9f
+        inc $9f
+        rtl
+}

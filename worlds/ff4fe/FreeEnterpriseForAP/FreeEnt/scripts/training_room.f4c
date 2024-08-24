@@ -1,0 +1,205 @@
+text(map #BaronTown message $11) {
+Free Enterprise differs
+in some important ways
+from the original game!
+
+Talk to the folks inside
+to find out more.
+}
+
+text(map #TrainingRoomMain message $02) {
+Stuck? Join the Free
+Enterprise Discord and
+ask away in the Newbie's
+Corner!
+}
+
+text(map #TrainingRoomMain message $00) {
+In Free Enterprise, your
+party members will never
+leave you__ unless your
+party gets too big!
+But you'll always get to
+choose who leaves, and a
+chance to take their stuff
+before they go.
+}
+
+text(map #TrainingRoomMain message $06) {
+The Pass will open a 
+secret passage that leads
+directly to the heart of
+the moon.
+}
+
+text(map #TrainingRoomMain message $03) {
+Take the Dark Crystal to
+Mysidia to raise the Big
+Whale from the sea.
+}
+
+text(map #TrainingRoomMain message $04) {
+To reach the Tower of Zot,
+speak to the green soldier
+with the Toroian clerics.
+}
+
+text(map #TrainingRoomMain message $07) {
+You will need the [crystal]Crystal
+to defeat Zeromus. Anyone
+can use it, not just
+[Cecil]!
+}
+
+text(map #TrainingRoomMain message $05) {
+Speak to the man on the
+bridge of the Big Whale to
+reach the Giant of Bab-il.
+}
+
+text(map #TrainingRoomMain message $01) {
+Completing the trial of
+Mt. Ordeals will turn all
+[Cecil]s into Paladins,
+even outside the party.
+Likewise, every [Tellah]
+will recall their spells
+and learn Meteo, wherever
+they are at the time.
+}
+
+text(map #TrainingRoomMain message $08) {
+Defeating the boss in the
+dwarf castle will make all
+[Rydia]s grow up, even if
+they're not with you.
+}
+
+text(map #TrainingRoomMain message $09) {
+Don't like what you found
+in a treasure chest? Press
+R to throw it away!
+
+Changed your mind? Check
+the chest again to get it
+back!
+
+If you leave the area and
+come back later though,
+it'll be gone forever!
+}
+
+text(map #TrainingRoomUpstairs message $01) {
+Golbez or Wyvern blocking
+you? StarVeil is a J item
+that can bail you out!
+}
+
+text(map #TrainingRoomUpstairs message $00) {
+Monster-in-a-box chests
+are in the same dungeons
+as they were before, but
+in different spots.
+In Cave Eblan, this
+includes the pots in the
+hospital!
+}
+
+text(map #TrainingRoomUpstairs message $02) {
+Characters in the middle
+slot get a boost to their
+attack and spell accuracy.
+}
+
+text(map #TrainingRoomUpstairs message $03) {
+With randomized bosses,
+rewards and item require-
+ments are based on the
+location, not the boss.
+For example, you win the
+Tower Key by defeating the
+boss in the Tower of
+Bab-il, not Dr. Lugae.
+You use the TwinHarp to
+beat the boss in Cave 
+Magnes, not the Dark Elf.
+And so on.
+}
+
+text(map #TrainingRoomUpstairs message $07) {
+[Yang]'s wife won't give
+you the Pan - or other
+randomized item - until
+you've visited him in
+the Sylph Cave. Also, she
+won't take back the Pan
+until you've used it to
+wake him up.
+}
+
+text(map #TrainingRoomUpstairs message $04) {
+If you have randomized key
+items, one can be earned
+by completing Baron 
+Castle.
+}
+
+text(map #TrainingRoomUpstairs message $0B) {
+Even when treasures have
+been randomized, the
+location of the Rat Tail
+chest does not change.
+It will, however, contain
+something different if you
+have randomized key items.
+}
+
+text(map #TrainingRoomUpstairs message $0A) {
+Back attack problems?
+Boost your agility with
+equips and outspeed your
+agility anchor.
+The crystals on the moon
+can teach you more about
+this.
+}
+
+text(map #TrainingRoomUpstairs message $09) {
+If you are playing with
+randomized bosses, save
+often! Even though the
+bosses have had their
+stats scaled to match the
+dungeon where they appear,
+a MegaNuke is still a
+MegaNuke.
+}
+
+text(map #TrainingRoomUpstairs message $08) {
+Hard-hitting physical
+boss? Remember that back
+row characters can help
+you a lot.
+Paladin [Cecil]'s cover
+ability can clutch you
+through tough fights if
+he's in the back row.
+}
+
+text(map #TrainingRoomUpstairs message $06) {
+The engineers in Baron
+will not give you the
+airship hook. You earn it
+by destroying the super
+cannon in the Tower of
+Bab-il. Of course, if you 
+have randomized key items,
+you'll get something else.
+}
+
+text(map #TrainingRoomUpstairs message $05) {
+Full details about this
+randomizer can be found at
+ff4fe.com!
+}
+

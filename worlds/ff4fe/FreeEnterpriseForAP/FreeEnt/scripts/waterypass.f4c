@@ -1,0 +1,80 @@
+// Tellah1 shows up in lots of maps, so instead just
+// use DarkKnightCecil2 for now (may become an issue
+// when trying the boss randomizer stuff)
+placement($6F 0)  //#WateryPass1F
+{
+    npc #fe_WateryPassTellah
+}
+
+npc(#fe_WateryPassTellah)
+{
+    // %tellah1_slot sprite%
+    sprite #dyn.AxTellah1
+    // %end%
+    default active
+    eventcall {
+        $3B   //Watery Cave Tellah Joining
+    }
+}
+
+event($3B)  //Watery Cave Tellah Joining
+{
+    consts(placement) {
+        0   Tellah1
+    }
+    // hinted map #WateryPass1F
+    p #Tellah1 bow head
+    p #Tellah1 face down
+    pause 4
+    [#B #If #XPosition 8] {
+        p #Tellah1 move right
+    }
+    [#B #If #YPosition 14] {
+        p #Tellah1 move up
+    }
+    [#B #If #YPosition 16] {
+        p #Tellah1 move down
+    }
+    p #Tellah1 toggle visible
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.watery_pass_character 0]
+    message #msg.fe_JoinedFanfare
+    music #Cave
+    [#B #Objectives_TickRewardSlot #reward_slot.watery_pass_character]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.watery_pass_character]
+    player face down
+    deactivate #fe_WateryPassTellah
+}
+
+// delete Watery Pass camping trigger
+trigger(#WateryPassSaveRoom 2)
+{
+    delete
+}
+mapgrid($54 4 10) { 01 }
+
+// delete exiting Watery Pass part 1 message trigger
+trigger(#WateryPass5F 6)
+{
+    delete
+}
+mapgrid($73 24 10) { 01 }
+
+//---------------------------------------------------------------------------
+
+// swim up and down waterfall
+
+eventcall($0E)
+{
+    $3E   //current too strong
+}
+
+event($3E)  //The current is too strong for us to get in!
+{
+    message $1EC   // "[Cecil]:The current is too  strong for us to get in!"
+    player move up
+}
+
+text(bank 1 message $1EC) {
+[name $f0]:The current is too
+ strong for us to get in!
+}

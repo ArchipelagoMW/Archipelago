@@ -1,0 +1,29 @@
+// hook into music loading code and hijack Edward's song score loading
+msfpatch {
+    MidiHarp__Start:
+        cmp #$12  // Edward's theme
+        beq $+MidiHarp__LoadScore
+
+        // resume normal operation
+        sta $4202   // displaced instruction
+        lda #$03    // displaced instruction
+        jml $048188
+
+    MidiHarp__LoadScore:
+        // hardcode midiharp score address
+        lda #$00
+        sta $10
+        lda #$C0
+        sta $11
+        lda #$21
+        sta $12
+        // jump back to code, bypassing normal
+        // score address lookup
+        jml $0481f3
+
+    .addr 0x048183
+        jml $=MidiHarp__Start
+}
+
+
+// target score needs to go to $21c000

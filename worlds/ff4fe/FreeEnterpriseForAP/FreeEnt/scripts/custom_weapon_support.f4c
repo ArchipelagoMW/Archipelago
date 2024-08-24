@@ -1,0 +1,201 @@
+// Idea: rather than edit the various code sections that check item ranges,
+//       use a "proxy item" in place of the actual custom weapon ID in those
+//       places -- eg. saying "the custom weapon should behave like item X,
+//       for the purposes of this code"
+
+
+// re-route calls to menu equipment compatibility check function via
+// our new wrapper
+msfpatch {
+    .addr $01a23d
+        jsr $_MenuEquipCompatibilityCheck__Wrapper
+
+    .addr $01bf43
+        jsr $_MenuEquipCompatibilityCheck__Wrapper
+}
+
+// create a wrapper around the equipment compatibility check to substitute
+// in the proxy item ID if needed
+msfpatch {
+    .def CustomWeapon__ItemID       $46
+    .def CustomWeapon__ProxyIDAddr  $21f0f8
+    .def CustomWeapon__RealIDAddr   $7e1695
+
+    .addr $01ff35  // beginning of free space at end of bank 01
+    MenuEquipCompatibilityCheck__Wrapper:
+        sta $_CustomWeapon__RealIDAddr
+        cmp #$.CustomWeapon__ItemID
+        beq $+DoSubstitution
+        // if item is not proxy, thunk to original function
+        jmp $bf7d
+
+    %DoSubstitution:
+        lda $=CustomWeapon__ProxyIDAddr
+        jsr $bf7d
+        lda $_CustomWeapon__RealIDAddr
+        sta $1b39 // this value was written during execution of the check, so un-substitute it for safety
+        rts
+}
+
+// alter equipment compatibility check in menu to substitute proxy item ID
+// for off-hand item if needed
+msfpatch {
+    .addr $01c023
+        jml $=CustomWeapon__HandleMenuOtherHandItem
+
+    .new
+    CustomWeapon__HandleMenuOtherHandItem:
+        // A already contains item ID
+        beq $+NoItem
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        sta $1b38
+        jml $01c02a
+    
+    %NoItem:
+        sta $1b38
+        jml $01c028
+}
+
+// make sure equip character compatibility check uses original item ID
+msfpatch {
+    // equip screen
+    .addr $01c24f
+        lda $_CustomWeapon__RealIDAddr
+
+    // shop sprites
+    .addr $01C768
+        sta $_CustomWeapon__RealIDAddr
+
+    // big chocobo sprites
+    .addr $01d0d9
+        sta $_CustomWeapon__RealIDAddr
+}
+
+// alter menu arrow check routine
+msfpatch {
+    .addr $01c233
+        pha
+        jsl $=CustomWeapon__HandleMenuArrowCheck
+        pla
+        rts
+
+    .new
+    CustomWeapon__HandleMenuArrowCheck:
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        cmp #$54
+        bcc $+NotArrow
+        cmp #$60
+        bcs $+NotArrow
+        sec
+        rtl
+    %NotArrow:
+        clc
+        rtl
+}
+
+// alter weapon type checks in battle to use proxy value
+msfpatch {
+    .addr $03f30c
+        jml $=CustomWeapon__HandleRightHandWeaponType
+    
+    .new
+    CustomWeapon__HandleRightHandWeaponType:
+        lda $2894
+        beq $+NoItem
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        jml $03f315
+    %NoItem:
+        jml $03f311
+}
+
+msfpatch {
+    .addr $03f342
+        jml $=CustomWeapon__HandleLeftHandWeaponType
+    
+    .new
+    CustomWeapon__HandleLeftHandWeaponType:
+        lda $2895
+        beq $+NoItem
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        jml $03f34b
+    %NoItem:
+        jml $03f347
+}
+
+// patch bow/arrow range checks in _update_equipment_data (routine at 038ed6)
+msfpatch {
+    .addr $038f25
+        jsl $=CustomWeapon__HandleBowCheck
+
+    .addr $038f3f
+        jsl $=CustomWeapon__HandleBowCheck
+
+    .addr $03a328
+        // this same approach happens to work with the aim check
+        jsl $=CustomWeapon__HandleBowCheck
+
+    .addr $03a30c
+        jsl $=CustomWeapon__HandleHarpCheck
+
+    .addr $03a31a
+        jsl $=CustomWeapon__HandleHarpCheck
+}
+
+msfpatch {
+    CustomWeapon__HandleBowCheck:
+        // this substitution overrides the BEQ check at the original location,
+        // but the BCC when we get back will handle the same case
+
+        // A = item ID
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        cmp #$4d  // original first comparison statement (item id < BOW)
+        rtl
+}
+
+msfpatch {
+    CustomWeapon__HandleHarpCheck:
+        // this substitution overrides the BEQ check at the original location,
+        // but the BCC when we get back will handle the same case
+
+        // A = item ID
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        cmp #$44  // original first comparison statement (item id < HARP)
+        rtl
+}
+
+msfpatch {
+    .addr $02949e
+        jsl $=CustomWeapon__HandleArrowEquipInBattle
+        bcs $0a  // original code had two branch instructions; we can condense to 1 to use extra 2 bytes for above jump
+    
+    .new
+    CustomWeapon__HandleArrowEquipInBattle:
+        // A = item ID
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        cmp #$60 // first value in armor range
+        rtl
+}
+
+
+// item_delivery_quantity.f4c handles the logic to deliver 99 arrows

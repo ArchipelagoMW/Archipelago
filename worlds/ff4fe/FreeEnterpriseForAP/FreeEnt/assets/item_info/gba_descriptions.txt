@@ -1,0 +1,105 @@
+<101> // [lightsword]Caliburn
+  Also known as Excalipoor.
+
+<102> // [lightsword]Flan
+  Stronger against slimes,
+  but still not very strong.
+
+<103> // [lightsword]Bringer
+  STR/AGI/VIT+15. Deals holy
+  damage. Casts [whitemagic]White.
+  Strong v. spirits/undead.
+
+<104> // [sword]Piggy
+  Inflicts Piggy.
+
+<105> // [spear]Abel
+  STR/AGI/VIT+15. Deals
+  lightning damage. Casts
+  [blackmagic]Weak. Strong vs. flying.
+
+<106> // [axe]Gigant
+  STR+15. Two-handed.
+  Inflicts Poison.
+
+<107> // [bow]Perseus
+  WIL+15. Strong against
+  flying enemies.
+
+<108> // [arrow]Perseus
+  Inflicts Charm.
+  Strong against giants.
+
+<109> // [whip]Mystic
+  WIS+15. Deals holy damage.
+  Inflicts Paralyze.
+
+<10A> // [knife]Triton
+  WIS+15.
+  Casts Flood.
+
+<10B> // [katana]Sasuke
+  AGI/VIT+10.
+
+<10C> // [katana]Mutsuno
+  STR/WIL+10.
+  Casts [whitemagic]Blink.
+
+<10D> // [shuriken]Scrap
+  Dart weapon.
+  Stronger against flying
+  enemies, but still bad.
+
+<10E> // [boomerang]Sunrise
+  AGI+10.
+  Strong against flying
+  enemies.
+
+<10F> // [claw]Tiger
+  AGI/VIT+10.
+  Inflicts Paralyze.
+
+<110> // [claw]Dragon
+  STR/WIL+10.
+  Deals holy damage.
+  Strong against dragons.
+
+<111> // [claw]Godhand
+  STR/AGI/VIT+15.
+  Deals holy damage.
+
+<112> // [wrench]Thor
+  STR+15. Two-handed. Deals
+  lightning damage. Casts
+  Blitz. Strong v.machines.
+
+<113> // [wrench]Flare
+  STR/VIT/WIS/WIL+15. 2-hand.
+  Deals fire damage. Casts
+  [blackmagic]Nuke. Strong v.machines.
+  
+<114> // [rod]Asura
+  WIS/WIL+15. Casts [whitemagic]White.
+  Deals holy damage.
+
+<115> // [staff]Seraphim
+  WIL+15.
+  Casts [whitemagic]Heal.
+
+<116> // [staff]Nirvana
+  VIT/WIL+15.
+  Casts [whitemagic]Wall.
+
+<117> // [harp]Apollo
+  STR/AGI/WIL+15. Two-handed.
+  Deals fire damage. Strong
+  against dragons.
+
+<118> // [harp]Requiem
+  STR/AGI/VIT/WIL/WIS-5.
+  Two-handed.
+
+<119> // [harp]Loki
+  STR/AGI/VIT+15. 2-hand.
+  Strong against all monster
+  categories but slimes.

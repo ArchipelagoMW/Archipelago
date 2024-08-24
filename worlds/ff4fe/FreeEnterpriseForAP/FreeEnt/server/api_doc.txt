@@ -1,0 +1,121 @@
+Slapdash FE Seed Generation API
+-------------------------------
+
+You will need an API key, you get these by talking to b0ardface.
+
+Overall flow for generating a seed:
+
+1. POST to /api/generate with your desired flags, seed (optional), and
+   metaconfig (optional; format described below)
+2. Monitor the status of the generation task at /api/task until finished
+3. Retrieve the generated seed info from /api/seed
+
+Note that if you are trying to generate a seed that already has been
+cached on the server, you might proceed directly from 1 to 3.
+
+--------------------------------------------------------------
+
+To initiate generation of a seed, make a POST request to:
+
+  /api/generate?key=<api_key>
+
+The body of this request should be a JSON object with the
+following format:
+
+  {
+    "flags"      : "<desired flag string>",
+    "seed"       : "<desired randomization seed; optional>",
+    "metaconfig" : <optional metaconfiguration object; see below>
+  }
+
+NOTE: For backwards compatibility, the flags and seed values may be
+passed as URL query parameters or formdata values in the body instead.
+To use metaconfigurations, you must use the JSON parameter format.
+
+The metaconfiguration object, and all fields within it, are optional.
+Note that when a metaconfiguration is specified, a "unique" seed is
+generated -- rerunning the same generation parameters later will
+result in a different seed.
+
+The metaconfig object has this format:
+
+  {
+    "hide_flags" : <bool>
+  }
+
+The generate call will return a JSON response in one of the following
+formats:
+
+  // If the generation process started correctly
+  {
+    'status' : 'ok',
+    'task_id' : <task_id:string>
+  }
+
+  // If the requested seed has already been generated
+  // and is still cached on the server
+  {
+    'status' : 'exists',
+    'seed_id' : <seed_id:string>
+  }
+
+  // If something went wrong
+  {
+    'status' : 'error',
+    'error' : <error_msg:string>
+  }
+
+--------------------------------------------------------------
+
+To monitor the status of a generation task in progress,
+make a GET query to:
+
+  /api/task?key=<api_key>&id=<task_id>
+
+This will return a JSON response in one of the following formats:
+
+  // If the task is waiting to start
+  {
+    'status' : 'pending'
+  }
+
+  // If the task is in progress
+  {
+    'status' : 'in_progress'
+  }
+
+  // If the task has completed successfully
+  {
+    'status' : 'done',
+    'seed_id' : <seed_id:string>
+  }
+
+  // If the task failed
+  {
+    'status' : 'error',
+    'error' : <error_msg:string>
+  }
+
+--------------------------------------------------------------
+
+To get info about a generated seed, make a GET query to:
+
+  /api/seed?key=<api_key>&id=<seed_id>
+
+This will return a JSON response in one of the following formats:
+
+  // If successful (example shown below)
+  {
+    "status":       "ok",
+    "version":      "0.3.0",
+    "seed":         "KW1FDT93",
+    "flags":        "Ji K Ps Ca -rescue T4gr S4 B -whyburn Etf Xsbk",
+    "verification": "Claw/Staff/Tent/Feather",
+    "url":          "http://ff4fe.com/get?id=bAAMAJGQEAMCpoA4.KW1FDT93"
+  }
+
+  // If something went wrong
+  {
+    'status' : 'error',
+    'error' : <error_msg:string>
+  }

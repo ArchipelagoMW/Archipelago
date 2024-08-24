@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" type="text/css" href="/static/common.css">
+  <link rel="stylesheet" type="text/css" href="/static/document.css">
+
+  <title>FF4FE - {{ title }}</title>
+</head>
+
+<body>
+  <script type="text/javascript" src="/navbar"></script>
+
+  <div id="cover" class="generic {{ title.lower() }}">
+    <div id="cover-title">
+      <div class="content-width">
+        <h2>
+          {{ title }}
+        </h2>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="document">
+    {% autoescape false %}
+    {{ content }}
+    {% endautoescape %}
+  </div>
+
+  <script type="text/javascript" src="/script/footer.js"></script>
+</body>
+
+</html>
+

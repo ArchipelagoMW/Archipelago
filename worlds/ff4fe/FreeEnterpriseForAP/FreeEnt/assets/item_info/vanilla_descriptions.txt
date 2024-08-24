@@ -1,0 +1,915 @@
+<01> // [claw]FireClaw
+  Deals fire damage.
+
+<02> // [claw]IceClaw
+  Deals ice damage.
+
+<03> // [claw]Thunder
+  Deals lightning damage.
+  Strong against machines.
+
+<04> // [claw]Charm
+  AGI+3. Inflicts Charm.
+  Strong against giants.
+
+<05> // [claw]Poison
+  STR+3.
+  Inflicts Poison.
+
+<06> // [claw]CatClaw
+  STR+5, AGI+5.
+  Inflicts Sleep.
+
+<07> // [rod]Rod
+  Use as an item to shoot
+  a magic arrow.
+
+<08> // [rod]IceRod
+  Casts [blackmagic]Ice-1. Deals ice
+  damage. Strong against
+  reptiles.
+
+<09> // [rod]FlameRod
+  WIS+3. Casts [blackmagic]Fire1.
+  Deals fire damage.
+
+<0A> // [rod]Thunder
+  WIS+3. Casts [blackmagic]Lit-1.
+  Deals lightning damage.
+
+<0B> // [rod]Change
+  WIS+5.
+  Casts [blackmagic]Piggy.
+
+<0C> // [rod]Charm
+  WIS+10.
+  Casts [whitemagic]Charm.
+
+<0D> // [rod]Stardust
+  WIS+15
+  Casts Comet.
+
+<0E> // [rod]Lilith
+  WIS+5. Casts [blackmagic]Psych.
+  Absorbs HP. Backfires
+  against undead.
+
+<0F> // [staff]Staff
+  Use as an item to cure
+  poison.
+
+<10> // [staff]Cure
+  Use as an item to heal
+  the party.
+
+<11> // [staff]Silver
+  WIL+3. Casts [whitemagic]Dspel.
+  Strong against undead.
+
+<12> // [staff]Power
+  STR+10.
+  Inflicts Berserk.
+
+<13> // [staff]Lunar
+  WIL+10.
+
+<14> // [staff]Life
+  WIL+15.
+  Casts [whitemagic]Life1.
+
+<15> // [staff]Silence
+  WIL+10. Casts [whitemagic]Mute.
+  Inflicts Mute. Strong
+  against mages.
+
+<16> // [darksword]Shadow
+  Deals dark damage.
+
+<17> // [darksword]Darkness
+  Deals dark damage.
+
+<18> // [darksword]Black
+  STR/AGI/VIT/WIS+5, WIL-10.
+  Deals dark damage.
+  Inflicts Swoon.
+
+<19> // [lightsword]Legend
+  WIL+3. Deals holy damage.
+  Kokkol can reforge this
+  sword using Adamant.
+
+<1A> // [lightsword]Light
+  STR+3, WIL+3.
+  Deals holy damage.
+
+<1B> // [lightsword]Excalbur
+  STR+10.
+  Deals holy damage.
+
+<1C> // [sword]Fire
+  Deals fire damage.
+
+<1D> // [sword]IceBrand
+  Deals ice damage.
+
+<1E> // [sword]Defense
+  VIT+15.
+
+<1F> // [sword]Drain
+  STR/AGI/VIT/WIS/WIL-5.
+  Absorbs HP. Strong against
+  giants and slimes.
+
+<20> // [sword]Ancient
+  Inflicts Curse.
+  Strong against spirits.
+
+<21> // [sword]Slumber
+  Casts [blackmagic]Sleep.
+  Inflicts Sleep.
+
+<22> // [sword]Medusa
+  You shouldn't have this.
+  Please report this bug.
+
+<23> // [spear]Spear
+  Strong against flying
+  enemies.
+
+<24> // [spear]Wind
+  Strong against flying
+  enemies.
+
+<25> // [spear]Flame
+  Casts [blackmagic]Fire2. Deals fire
+  damage. Strong against
+  flying enemies.
+
+<26> // [spear]Blizzard
+  Casts [blackmagic]Ice-2. Deals ice
+  damage. Strong against
+  flying enemies.
+
+<27> // [spear]Dragoon
+  Strong against dragons
+  and flying enemies.
+
+<28> // [spear]White
+  Casts [whitemagic]White. Deals holy
+  damage. Strong against
+  spirits and flying foes.
+
+<29> // [spear]Drain
+  STR/AGI/VIT/WIS/WIL-10.
+  Absorbs HP. Strong against
+  giants and slimes.
+
+<2A> // [spear]Gungnir
+  VIT+15.
+  Strong against flying
+  enemies.
+
+<2B> // [katana]Short
+
+<2C> // [katana]Middle
+
+<2D> // [katana]Long
+
+<2E> // [katana]Ninja
+  STR+5.
+
+<2F> // [katana]Murasame
+  STR/VIT/WIS+5, AGI/WIL-5.
+
+<30> // [katana]Masamune
+  AGI+3.
+  Casts [whitemagic]Fast.
+
+<31> // [knife]Assassin
+  STR/AGI/VIT+5, WIS/WIL-10.
+  Inflicts Swoon.
+
+<32> // [knife]Mute
+  WIS+5. Inflicts Mute.
+  Strong against mages.
+
+<33> // [whip]Whip
+  Inflicts Paralyze.
+
+<34> // [whip]Chain
+  Inflicts Paralyze.
+
+<35> // [whip]Blitz
+  Deals lightning damage.
+  Inflicts Paralyze.
+
+<36> // [whip]Flame
+  STR/AGI/VIT+5, WIS/WIL-5.
+  Deals fire damage.
+  Inflicts Paralyze.
+
+<37> // [whip]Dragon
+  STR/AGI/VIT+5, WIS/WIL-5.
+  Strong against dragons.
+  Inflicts Paralyze.
+
+<38> // [axe]HandAxe
+  STR+3.
+
+<39> // [axe]Dwarf
+  STR/VIT+5, AGI/WIS/WIL-5.
+
+<3A> // [axe]Ogre
+  Strong against giants.
+
+<3B> // [knife]Silver
+  Strong against spirits.
+
+<3C> // [knife]Dancing
+  Use as an item to throw
+  magic daggers.
+
+<3D> // [sword]Silver
+  Strong against spirits.
+
+<3E> // [knife]Spoon
+  Dart for massive damage.
+
+<3F> // [lightsword]Crystal
+  STR+15, VIT+15, WIL+15.
+  Deals holy damage.
+  Strong against undead.
+
+<40> // [shuriken]Shuriken
+  Dart weapon.
+  Strong against flying
+  enemies.
+
+<41> // [shuriken]Ninja
+  Dart weapon.
+  Strong against flying
+  enemies.
+
+<42> // [boomerang]Boomrang
+  Strong against flying
+  enemies.
+
+<43> // [boomerang]FullMoon
+  Strong against flying
+  enemies.
+
+<44> // [harp]Dreamer
+  Two-handed.
+  Inflicts Sleep.
+
+<45> // [harp]Charm
+  Two-handed.
+  Inflicts Charm.
+
+<46> // [$15]Dummy
+  You shouldn't see this.
+  Please report this bug.
+
+<47> // [axe]Poison
+  Two-handed. Casts [blackmagic]Venom.
+  Inflicts Poison. Strong
+  against giants.
+
+<48> // [axe]RuneAxe
+  Two-handed.
+  Strong against mages.
+
+<49> // [wrench]Silver
+  Two-handed.
+  Strong against machines
+  and spirits.
+
+<4A> // [wrench]Earth
+  STR+5. Two-handed. Casts
+  [blackmagic]Quake. Deals fire damage.
+  Strong against machines.
+
+<4B> // [wrench]Wooden
+  Two-handed.
+  Strong against machines.
+
+<4C> // [sword]Avenger
+  STR/AGI/VIT+10, WIS/WIL-10.
+  Two-handed. Grants Berserk.
+
+<4D> // [bow]ShortBow
+  Strong against flying
+  enemies.
+
+<4E> // [bow]CrossBow
+  Strong against flying
+  enemies.
+
+<4F> // [bow]GreatBow
+  STR+3.
+  Strong against flying
+  enemies.
+
+<50> // [bow]Archer
+  STR+5.
+  Strong against flying
+  enemies.
+
+<51> // [bow]ElvenBow
+  WIS+5. Strong against
+  mages and flying enemies.
+
+<52> // [bow]Samurai
+  STR+10.
+  Strong against flying
+  enemies.
+
+<53> // [bow]Artemis
+  STR/AGI/VIT+10, WIS/WIL-10.
+  Strong against flying
+  enemies.
+
+<54> // [arrow]Iron
+
+<55> // [arrow]White
+  Deals holy damage.
+  Strong against spirits and
+  undead.
+
+<56> // [arrow]Fire
+  Deals fire damage.
+
+<57> // [arrow]Ice
+  Deals ice damage.
+
+<58> // [arrow]Lit
+  Deals lightning damage.
+  Strong against machines.
+
+<59> // [arrow]Darkness
+  Inflicts Blind.
+
+<5A> // [arrow]Poison
+  Inflicts Poison.
+
+<5B> // [arrow]Mute
+  Inflicts Mute.
+  Strong against mages.
+
+<5C> // [arrow]Charm
+  Inflicts Charm.
+  Strong against giants.
+
+<5D> // [arrow]Samurai
+
+<5E> // [arrow]Medusa
+  Inflicts Stone.
+
+<5F> // [arrow]Artemis
+  Strong against dragons.
+
+<61> // [shield]Iron
+
+<62> // [shield]Shadow
+
+<63> // [shield]Black
+
+<64> // [shield]Paladin
+  WIL+3.
+  Resists undead.
+
+<65> // [shield]Silver
+  Resists spirits.
+
+<66> // [shield]Fire
+  Resists ice damage.
+
+<67> // [shield]Ice
+  Resists fire damage and
+  reptiles.
+
+<68> // [shield]Diamond
+  Resists lightning damage.
+
+<69> // [shield]Aegis
+  WIS+3. Prevents Stone.
+  Resists mages.
+
+<6A> // [shield]Samurai
+
+<6B> // [shield]Dragoon
+  Resists elemental damage
+  and dragons.
+
+<6C> // [shield]Crystal
+  WIL+3.
+  Resists undead.
+
+<6D> // [helmet]Iron
+
+<6E> // [helmet]Shadow
+
+<6F> // [helmet]Darkness
+
+<70> // [helmet]Black
+
+<71> // [helmet]Paladin
+  WIL+3.
+  Resists undead.
+
+<72> // [helmet]Silver
+  Resists spirits.
+
+<73> // [helmet]Diamond
+  Resists lightning damage.
+
+<74> // [helmet]Samurai
+
+<75> // [helmet]Dragoon
+  Resists elemental damage
+  and dragons.
+
+<76> // [helmet]Crystal
+  WIL+3.
+  Resists elemental damage
+  and undead.
+
+<77> // [helmet]Cap
+
+<78> // [helmet]Leather
+
+<79> // [helmet]Gaea
+  WIS+3, WIL+3.
+
+<7A> // [helmet]Wizard
+  WIL+5
+  Resists undead.
+
+<7B> // [helmet]Tiara
+  WIS+10
+  Resists lightning damage
+  and dragons.
+
+<7C> // [helmet]Ribbon
+  Prevents status ailments.
+  Resists mages.
+
+<7D> // [helmet]Headband
+  STR+5.
+  Prevents Charm.
+
+<7E> // [helmet]Bandanna
+  STR+5, VIT+5.
+
+<7F> // [helmet]Ninja
+  STR+3, AGI+3, VIT+3.
+  Prevents Sleep.
+
+<80> // [helmet]Glass
+
+<81> // [armor]Iron
+
+<82> // [armor]Shadow
+
+<83> // [armor]Darkness
+
+<84> // [armor]Black
+
+<85> // [armor]Paladin
+  WIL+3.
+  Resists undead.
+
+<86> // [armor]Silver
+  Resists spirits.
+
+<87> // [armor]Fire
+  Resists ice damage.
+
+<88> // [armor]Ice
+  Resists fire damage.
+
+<89> // [armor]Diamond
+  Resists lightning damage.
+
+<8A> // [armor]Samurai
+
+<8B> // [armor]Dragoon
+  Resists elemental damage
+  and dragons.
+
+<8C> // [armor]Crystal
+  WIL+3. Prevents Blind, Pig,
+  Mini, Toad, Mute, Berserk.
+  Resists undead.
+
+<8D> // [shirt]Cloth
+
+<8E> // [shirt]Leather
+
+<8F> // [shirt]Gaea
+  Prevents partial
+  petrification.
+
+<90> // [shirt]Wizard
+  WIL+5.
+
+<91> // [shirt]Black
+  WIL+5.
+
+<92> // [shirt]Sorcerer
+  WIS/WIL+5. Resists
+  lightning damage and
+  undead.
+
+<93> // [shirt]White
+  WIL+15. Prevents Blind.
+  Resists spirits and undead.
+
+<94> // [shirt]Power
+  STR+15.
+
+<95> // [shirt]Heroine
+  STR/AGI/VIT+15, WIS/WIL-15.
+  Prevents Paralyze.
+
+<96> // [shirt]Prisoner
+  Prevents Sleep.
+
+<97> // [shirt]Bard
+  Prevents Mute.
+
+<98> // [shirt]Karate
+  STR+3.
+
+<99> // [shirt]Bl.Belt
+  STR+5, VIT+5.
+
+<9A> // [armor]Adamant
+  STR/AGI/VIT/WIS/WIL+15.
+  Blocks elements/ailments.
+
+<9B> // [shirt]Ninja
+  AGI+3.
+
+<9C> // [gauntlet]Iron
+
+<9D> // [gauntlet]Shadow
+
+<9E> // [gauntlet]Darkness
+
+<9F> // [gauntlet]Black
+
+<A0> // [gauntlet]Paladin
+  WIL+3.
+  Resists undead.
+
+<A1> // [gauntlet]Silver
+  Resists spirits.
+
+<A2> // [gauntlet]Diamond
+  Resists lightning damage.
+
+<A3> // [gauntlet]Zeus
+  STR+10, VIT+10.
+  Prevents Mini.
+  Resists giants.
+
+<A4> // [gauntlet]Samurai
+
+<A5> // [gauntlet]Dragoon
+  Resists elemental damage
+  and dragons.
+
+<A6> // [gauntlet]Crystal
+  WIL+3.
+  Resists undead.
+
+<A7> // [ring]IronRing
+
+<A8> // [ring]RubyRing
+  Prevents Pig.
+
+<A9> // [ring]Silver
+  Resists spirits.
+
+<AA> // [ring]Strength
+  STR+5.
+
+<AB> // [ring]Rune
+  WIS/WIL+3. Prevents Mute.
+  Resists mages.
+
+<AC> // [ring]Crystal
+  AGI+5. Blocks Charm, Sleep,
+  Paralyze. Resists dragons.
+
+<AD> // [ring]Diamond
+  Resists lightning damage.
+
+<AE> // [ring]Protect
+  VIT+15.
+  Resists elemental damage.
+
+<AF> // [ring]Cursed
+  STR/AGI/VIT/WIS/WIL-15.
+  Absorbs resisted elements.
+
+<B0> // [$15]Bomb
+  Combat item. Casts [blackmagic]Fire1
+  on all enemies.
+
+<B1> // [$15]BigBomb
+  Combat item. Casts [blackmagic]Fire2
+  on all enemies.
+
+<B2> // [$15]Notus
+  Combat item. Casts [blackmagic]Ice-1
+  on all enemies.
+
+<B3> // [$15]Boreas
+  Combat item. Casts [blackmagic]Ice-2
+  on all enemies.
+
+<B4> // [$15]ThorRage
+  Combat item. Casts [blackmagic]Lit-1
+  on all enemies.
+
+<B5> // [$15]ZeusRage
+  Combat item. Casts [blackmagic]Lit-2
+  on all enemies.
+
+<B6> // [$15]Stardust
+  Combat item. Casts Comet.
+
+<B7> // [$15]Succubus
+  Combat item. Casts [blackmagic]Psych
+  on a single target.
+
+<B8> // [$15]Vampire
+  Combat item. Casts [blackmagic]Drain
+  on a single target.
+
+<B9> // [$15]Bacchus
+  Combat item. Berserks the
+  user.
+
+<BA> // [$15]Hermes
+  Combat item. Speeds up
+  the user.
+
+<BB> // [$15]HrGlass1
+  Combat item. Stops all
+  enemies for a short time.
+
+<BC> // [$15]HrGlass2
+  Combat item. Stops all
+  enemies for a moderate
+  amount of time.
+
+<BD> // [$15]HrGlass3
+  Combat item. Stops all
+  enemies for a long time.
+
+<BE> // [$15]SilkWeb
+  Combat item. Slows all
+  enemies.
+
+<BF> // [$15]Illusion
+  Combat item. Casts [whitemagic]Blink
+  on the user.
+
+<C0> // [$15]FireBomb
+  Combat item. Deals fire
+  damage to all enemies based
+  on user's HP.
+
+<C1> // [$15]Blizzard
+  Combat item. Deals ice
+  damage to all enemies based
+  on user's HP.
+
+<C2> // [$15]Lit-Bolt
+  Combat item. Deals
+  lightning damage to all
+  enemies based on user's HP.
+
+<C3> // [$15]StarVeil
+  Combat item. Casts [whitemagic]Wall
+  on the user.
+
+<C4> // [$15]Kamikaze
+  Combat item. Sacrifices the
+  user to deal damage equal
+  to their HP to a target.
+
+<C5> // [$15]MoonVeil
+  Combat item. Casts [whitemagic]Wall
+  on the user and raises a
+  barrier to evade attacks.
+
+<C6> // [$15]MuteBell
+  Combat item. Casts [whitemagic]Mute
+  on all enemies.
+
+<C7> // [$15]GaiaDrum
+  Combat item. Casts [blackmagic]Quake.
+
+<C8> // [crystal]Crystal
+  Combat item. Use on Zeromus
+  to unlock his final form.
+
+<C9> // [$15]Coffin
+  Combat item. Casts [blackmagic]Fatal.
+
+<CA> // [$15]Grimoire
+  Combat item. Invokes a
+  random summon spell.
+
+<CB> // [$15]Bestiary
+  Combat item. Inspects
+  an enemy's properties.
+
+<CC> // [$15]Alarm
+  Combat item. Removes Sleep.
+
+<CD> // [$15]Unihorn
+  Combat item. Removes Sleep,
+  Curse, Paralyze and Berserk
+  from all party members.
+
+<CE> // [potion]Cure1
+  Restores a small amount of
+  HP to one party member.
+
+<CF> // [potion]Cure2
+  Restores a moderate amount
+  of HP to one party member.
+
+<D0> // [potion]Cure3
+  Restores a large amount of
+  HP to one party member.
+
+<D1> // [potion]Ether1
+  Restores a small amount of
+  MP to one party member.
+
+<D2> // [potion]Ether2
+  Restores a moderate amount
+  of MP to one party member.
+
+<D3> // [potion]Elixir
+  Restores all HP and MP to
+  one party member.
+
+<D4> // [potion]Life
+  Revives a swooned party
+  member.
+
+<D5> // [$15]Soft
+  Removes Stone status.
+
+<D6> // [$15]MaidKiss
+  Removes Toad status.
+
+<D7> // [$15]Mallet
+  Removes Mini status.
+
+<D8> // [$15]DietFood
+  Removes Piggy status.
+
+<D9> // [$15]EchoNote
+  Removes Mute status.
+
+<DA> // [$15]Eyedrops
+  Removes Blind status.
+
+<DB> // [$15]Antidote
+  Removes Poison status.
+
+<DC> // [$15]Cross
+  Removes Curse status.
+
+<DD> // [potion]Heal
+  Removes any status ailment
+  except swoon.
+
+<DE> // [$15]Siren
+  Summons the rarest enemy
+  encounter for your current
+  location.
+
+<DF> // [$15]AuApple
+  Increases a character's
+  max HP by 100.
+
+<E0> // [$15]AgApple
+  Increases a character's
+  max HP by 50.
+
+<E1> // [$15]SomaDrop
+  Increases a character's
+  max MP by 10.
+
+<E2> // [tent]Tent
+  Use outdoors/at save points
+  to recover 1000 HP, 100 MP,
+  and status (except swoon).
+
+<E3> // [tent]Cabin
+  Use outdoors or at save
+  points to recover all HP,
+  MP, and status effects.
+
+<E4> // [$15]Smut
+  Oh my.
+
+<E5> // [$15]Exit
+  Teleports the party out of
+  the current area. Does not
+  work everywhere.
+
+<E6> // [$15]EagleEye
+  Use outdoors to show a map
+  of the surrounding area.
+
+<E7> // [callmagic]Imp
+  Teaches [callmagic]Imp to Callers.
+  Must have a Caller in party
+  to use.
+
+<E8> // [callmagic]Bomb
+  Teaches [callmagic]Bomb to Callers.
+  Must have a Caller in party
+  to use.
+
+<E9> // [callmagic]Cocka
+  Teaches [callmagic]Cocka to Callers.
+  Must have a Caller in party
+  to use.
+
+<EA> // [callmagic]Mage
+  Teaches [callmagic]Mage to Callers.
+  Must have a Caller in party
+  to use.
+
+<EB> // [$15]Carrot
+  Use where it smells like
+  chocobos to summon the
+  big chocobo.
+
+<EC> // [$15]Pass
+  Opens the Path to Zeromus
+  from the Toroia Cafe.
+
+<ED> // [$15]Whistle
+  Summons the big chocobo.
+
+<EE> // [$15]Package
+  Bring to village Mist.
+
+<EF> // [key]Baron
+  Opens the locked doors in
+  Baron town.
+
+<F0> // [$15]SandRuby
+  Bring to the Kaipo hospital
+  to heal the sick.
+
+<F1> // [crystal]Earth
+  The crystal of Toroia.
+
+<F2> // [key]Magma
+  A mysterious key.
+
+<F3> // [key]Luca
+  Unlocks the Sealed Cave.
+
+<F4> // [harp]TwinHarp
+  One of a matched pair of
+  harps, linked by magic.
+
+<F5> // [crystal]Darkness
+  The crystal of the Sealed
+  Cave.
+
+<F6> // [tail]Rat
+  The tail of a rat.
+
+<F7> // [$15]Adamant
+  Mythic metal used to forge
+  great weapons.
+
+<F8> // [$15]Pan
+  Borrowed cookware from a
+  loving spouse.
+
+<F9> // [tail]Pink
+  The tail of a PinkPuff.
+
+<FA> // [key]Tower
+  A key dropped by Lugae.
+
+<FB> // [$15]DkMatter
+  Does nothing but occupy
+  a slot in your inventory.
+

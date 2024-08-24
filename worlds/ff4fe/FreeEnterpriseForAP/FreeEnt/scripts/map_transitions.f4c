@@ -1,0 +1,150 @@
+msfpatch {
+    .def LoadMap__ExtendedFlags_Var  $7e158f
+}
+
+msfpatch {
+    // hook into where we check the transition flags for loading indoor maps
+    .addr $00ede0
+        jsl $=LoadMap__ExtendedFlags_Check
+        nop
+
+    // hook into where we check the transition flags for loading overworld/underworld/moon
+    .addr $00ee16
+        jsl $=LoadMap__ExtendedFlags_Check
+        nop
+
+    // hack load map command to be able to check for different kinds of transitions
+    .new
+    LoadMap__ExtendedFlags_Check:
+        stz $_LoadMap__ExtendedFlags_Var
+        lda $09d9,x
+        bit #$08        // no vehicle load currently uses bit 3, except "ship 2", 
+                        // so we use it as our sentinel value
+        bne $+CheckShip2
+
+    %Original:
+        // if flag is not set, then just perform displaced instructions
+        lda $09d9,x
+        and #$20
+        rtl
+
+    %CheckShip2:
+        // first check for ship 2; if true, do regular flow
+        and #$1f
+        cmp #$1f
+        beq $-Original
+
+        // with extended flags, we redefine the following bits:
+        //   bit 1 set => no transition out
+        //   bit 2 set => no transition in
+
+        and #$06
+        sta $_LoadMap__ExtendedFlags_Var  // hopefully no one is using this...
+
+        // remove special bits from the event command byte so that it doesn't get confused later
+        lda $09d9,x
+        and #$f0
+        sta $09d9,x
+
+        // done
+        jmp $_Original
+}
+
+msfpatch {
+    // hook into where we do the transition out on map load
+    .addr $00eee0
+        jml $=MapTransition__Out
+
+    .new
+    MapTransition__Out:
+        // we clear the treasure discard flags when leaving a map; do this here for treasure_discard.f4c
+        stz $_TreasureDiscard__Flags0
+        stz $_TreasureDiscard__Flags1
+        stz $_TreasureDiscard__Flags2
+
+        lda $_LoadMap__ExtendedFlags_Var
+        bit #$02
+        beq $+Normal
+        jml $00eef3
+    %Normal:
+        lda $ca
+        bne $+OtherReturn
+        jml $00eee4
+    %OtherReturn:
+        jml $00eeea
+}
+
+msfpatch {
+    // hook into where we do the transition in on map load
+    .addr $00ef16
+        jml $=MapTransition__In
+
+    .new
+    MapTransition__In:
+        lda $_LoadMap__ExtendedFlags_Var
+        bit #$04
+        beq $+Normal
+        jml $00ef22
+    %Normal:
+        lda $ca
+        bne $+OtherReturn
+        jml $00ef1a
+    %OtherReturn:
+        jml $00ef20
+}
+
+
+// patch Big Whale flight code to respond to our transition flags above
+msfpatch {
+    // hook into Big Whale launch
+    .addr $00a14d
+        jsl $=BigWhale__SkipAscent
+        nop nop
+
+    .new
+    BigWhale__SkipAscent:
+        lda $_LoadMap__ExtendedFlags_Var
+        beq $+Normal
+
+        lda #$00
+        ldy #$a1ec
+        jsl $=LongCall
+        bra $+Return
+
+    %Normal:
+        lda #$00
+        ldy #$a1e9
+        jsl $=LongCall
+
+    %Return:
+        ldx #$ff98      // displaced instruction
+        rtl
+}
+
+msfpatch {
+    // hook into Big Whale descent
+    .addr $00a18b
+        jsl $=BigWhale__SkipDescent
+        nop nop
+
+    .new
+    BigWhale__SkipDescent:
+        lda $_LoadMap__ExtendedFlags_Var
+        bne $+Return
+
+    %Normal:
+        lda #$00
+        ldy #$a219
+        jsl $=LongCall
+
+    %Return:
+        ldx #$0000      // displaced instruction
+        rtl
+}
+
+// patch moon travel event handler to not restore brightness after travel
+msfpatch {
+    .addr $00ec0e
+        nop nop nop nop nop
+}
+

@@ -1,0 +1,154 @@
+// Remove "discovering Rosa sick" trigger
+mapgrid($12 4 6) { 3B }
+trigger(#KaipoHospital 1)
+{
+    delete
+}
+
+npc(#RosaTiedUpSick)
+{
+    // %rosa1_slot sprite%
+    sprite #dyn.AxRosa1
+    // %end%
+    eventcall {
+        $3A   //Curing Rosa
+    }
+}
+
+placement($12 2)  //#KaipoHospital
+{
+    face up
+}
+
+placement($12 6)  //#KaipoHospital
+{
+    // %rosa1_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+
+event($3A)  //Curing Rosa
+{
+    consts(placement) {
+        2   RosaTiedUpSick
+        3   ChildRydia
+        4   Edward1
+        6   Rosa1
+    }
+    // hinted map #KaipoHospital
+    select item #SandRuby
+    take item #SandRuby
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.kaipo_character 0]
+        message $DC   // "Used the SandRuby over [Rosa]__!"
+    }
+    [#B #If #not_Flag #flag.Temp] {
+        message $DD   // "Used the SandRuby!"
+    }
+
+    sound #Crystal
+    batch 8 {
+        screen flash
+    }
+    toggle music fade
+    toggle tint $97
+    toggle tint $00
+    pause 12
+    batch 1 {
+        p #RosaTiedUpSick toggle visible
+        p #Rosa1 toggle visible
+    }
+    pause 8
+    p #Rosa1 face left
+    pause 4    
+
+    [#B #Objectives_Tick #objective.quest_curefever]
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.sandruby]
+    
+    music #None
+
+    [#B #If #Flag #flag.Temp] {
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.kaipo_character 0]
+
+        sound #GetItem
+        message #msg.fe_Joined
+        [#B #Objectives_TickRewardSlot #reward_slot.kaipo_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.kaipo_character]
+
+        pause 8
+
+        player face right
+    }
+    [#B #If #not_Flag #flag.Temp] {
+        [#B #SetPlacementSpeed 6 3] // Rosa1
+        p #Rosa1 spin jump
+        p #Rosa1 jump sideways
+        batch 1 {
+            player face left
+            p #Rosa1 move down
+        }
+        p #Rosa1 move left
+        p #Rosa1 move down
+        batch 1 {
+            player face down
+            p #Rosa1 spin
+        }
+        p #Rosa1 wave out
+        pause 6
+
+        batch 1 {
+            p #Rosa1 move down
+            player face down
+        }
+        batch 5 {
+            p #Rosa1 move down
+        }
+        p #Rosa1 toggle visible
+        pause 16
+        player face right
+        pause 4
+        player move right
+        player bow head
+    }
+
+    clear status 
+    restore hp
+    restore mp
+    set #RosaHealed
+    deactivate #RosaTiedUpSick
+
+    music #Town
+    toggle screen fade
+    load map #KaipoHospital at 4 5 facing down
+    pause 2
+    player visible
+    player wave in
+    toggle screen fade
+    pause 4
+    player face down
+}
+
+text(bank 1 message $DC) {
+Used the SandRuby over
+[name $e0]__!
+}
+
+text(bank 1 message $DD) {
+Used the SandRuby!
+}
+
+//---------------
+// Nullify EdwardHarp1 placement in Kaipo,
+// NPC is repurposed and this event
+// doesn't happen
+
+placement($02 7)  //#Kaipo
+{
+    npc #fe_None
+    position 0 0
+    intangible
+}

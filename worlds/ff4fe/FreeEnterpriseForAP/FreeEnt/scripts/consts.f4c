@@ -1,0 +1,91 @@
+// reappropriated constants
+
+consts(map) {
+    $15f  fe_LunarianRoom
+}
+
+consts(item) {
+    $E6    Sylph
+    $E7    Odin
+    $E8    Levia
+    $E9    Asura
+    $EA    Baham
+
+    $E4    fe_EagleEye
+
+    $46    fe_CustomWeapon
+}
+
+
+consts(flag) {
+    $01   UsedPass
+    $03   Temp
+    $22   Temp2	
+    $0F   CarryingAroundChildRydia
+
+    $24   SpokeToEdwardInToroia  // was GotTwinharp but means the same thing for our purposes
+
+    $60   fe_GotDarkCrystal
+    $61   fe_GotEarthCrystal
+    $62   fe_CharacterJoined
+    $63   fe_GotPackage
+    $64   fe_HasMagmaKey
+    $65   fe_GotLegendSword
+    $66   fe_CompletedEnoughObjectives
+    $67   fe_UnlockedSewer
+    $70   fe_EncountersOff
+    $71   fe_HeroSoloBattle
+    $72   fe_BossBypass
+    $7F   fe_UptCo
+}
+
+consts(vfx) {
+    $00   fe_ClearTilemapAndCHR        // was RedWingsFlying
+    $01   fe_RydiaBattleAltChar        // was RedWingsLanding
+    $09   fe_TitleScreen               // was Prologue
+    $0D   fe_LandBigWhale              // was ShipAtFabul
+}
+
+consts(msg) {
+    $107  fe_Received
+    $108  fe_ReceivedFanfare
+    $109  fe_Joined
+    $10A  fe_JoinedFanfare
+
+    $10F  fe_IntroSignout
+    $110  fe_ObjectiveEnumerate
+    $111  fe_ObjectiveComplete
+    $112  fe_EnoughObjectivesCompleteCrystal
+    $113  fe_EnoughObjectivesCompleteWin
+    $114  fe_ObjectiveIntro
+    $115  fe_ObjectiveOutro
+    $118  fe_WackyChallengeIntro
+    $119  fe_WackyChallengeTitle
+    $11A  fe_WackyChallengeDetail
+
+    $14B  fe_WackyDialogue
+}
+
+consts(event) {
+    $08   fe_ProcessObjectives
+    $1C   fe_Ending
+    $40   fe_GuidingwayIntro
+    $88   fe_WackyEvent
+}
+
+text(bank 1 message $107) {
+Received [name $e0]!
+}
+
+text(bank 1 message $108) {
+Received [name $e0]!
+[music $29][pause 40]
+}
+
+text(bank 1 message $109) {
+[name $e0] joined!
+}
+
+text(bank 1 message $10A) {
+[name $e0] joined![music $29][pause 40]
+}

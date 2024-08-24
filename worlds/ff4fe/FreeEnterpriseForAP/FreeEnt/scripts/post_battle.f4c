@@ -1,0 +1,19 @@
+msfpatch {
+    .addr $03f20d
+        // %flag characters_permadeath on%
+        jsl $=Permadeath
+        // %end%
+        // %flag characters_permadeader on%
+        jsl $=Permadeath
+        // %end%
+
+        // %if wacky_post_battle_hook%
+        jsl $=Wacky__PostBattleHook
+        // %end%
+
+        // %flag glitch_allow_duplication off%
+        jsl $=RemoveItemDuplication_PostBattle
+        // %end%
+
+        jmp $95d8
+}

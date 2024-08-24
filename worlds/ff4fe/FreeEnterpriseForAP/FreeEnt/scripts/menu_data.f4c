@@ -1,0 +1,49 @@
+// common file for adding extra "positioned string"
+// and other kinds of UI raw data directly into bank 01 
+// in the free space there
+
+msfpatch {
+    .addr $01de55   // free text area starts here
+
+    MenuData__MustTakeItem:
+        [[ 90 02 0E 05 ]] 
+        [[ D2 02 ]] "You must take" [[ 01 ]] 
+        [[ 52 03 ]] "  this item! " [[ 00 ]]
+
+    MenuData__TooMuch:
+        " TooMuch" [[ 00 ]]
+
+    MenuData__TreasureMenuTakeOnly:
+        // orig: 02 00 08 02 44 00 55 6D 60 5C 6E 70 6D 60 01 72 00 46 73 64 6F 01 5A 00 55 5C 66 60 FF 5C 67 67 00
+        // (note we also move these fields down a row due to the effects of
+        //  the item description windows on the Treasure menu)
+        [[ 42 00 08 02 ]]  // window spec
+        [[ 84 00 ]] "Treasure" [[ 01 ]]
+        [[ 9A 00 ]] "Take all" [[ 00 ]]
+
+    MenuData__EncounterSetting:
+        [[ 8A 00 ]] "Encounters    On  Off" [[ 00 ]]
+
+    MenuData__TrackCommand:
+        [[ 70 03 ]] "Track" [[ 00 ]]
+
+    MenuData__FatChocoboItemHint:
+        [[ 84 01 0C 02 C8 01 ]] "Item  Hint" [[ 00 ]]
+
+    MenuData__FatChocoboWhichHint:
+        [[ 8E 00 ]] "Locate which item?  " [[ 00 ]]
+
+    MenuData__FatChocoboHintNotAllowed:
+        [[ 8E 00 ]] "Can't help there!   " [[ 00 ]]
+
+    MenuData__FatChocoboHintNotNeeded:
+        [[ 8E 00 ]] "Already found that! " [[ 00 ]]
+
+    MenuData__FatChocoboHintConfirm:
+        [[ C6 02 18 0D ]]
+        [[ CA 03 ]] "You only get ONE hint," [[ 01 ]]
+        [[ 4A 04 ]] "across ALL your saves." [[ 01 ]]
+        [[ CA 04 ]] "    Are you sure?"     [[ 01 ]]
+        [[ 8A 05 ]] "      Yes    No"       [[ 00 ]]
+}
+

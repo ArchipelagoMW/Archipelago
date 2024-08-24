@@ -1,0 +1,95 @@
+msfpatch {
+    .addr $00b488
+        jsl $=DialogBoxBackground__On
+        rts
+
+    .new
+    DialogBoxBackground__On:
+        // displaced instructions
+        sta $2112
+        stz $2112
+
+        // set window area
+        lda #$10
+        sta $2128
+        lda #$f0
+        sta $2129
+        lda #$bb
+        sta $2123
+        sta $2125
+        /*
+        lda #$13
+        sta $212e
+        sta $212f
+        */
+
+        rtl
+
+    .addr $00b48f
+        jsl $=DialogBoxBackground__Off
+        nop
+        nop
+
+    .new
+    DialogBoxBackground__Off:
+        // Extra nops to burn equiv cycles as original
+        nop nop nop nop nop nop nop
+
+        lda #$33
+        sta $2123
+        sta $2125
+        rtl
+}
+
+// apply similar fix to item prompt dialogs
+msfpatch {
+    .addr $00aed3
+        jsl $=DialogBoxBackground__On
+        rts
+
+    .addr $00aeda
+        jsl $=DialogBoxBackground__Off
+        nop
+        nop
+}
+
+/* cycle counts
+jml         4
+lda #$10    2
+sta $2128   4
+lda #$f0    2
+sta $2129   4
+lda #$bb    2
+sta $2123   4
+sta $2125   4
+jml $00b48e 4
+TOTAL       30 added cycles to "on" area
+
+ldx #$0008  3
+dex         2
+bne $fd     3
+dex         2
+bne $fd     3
+dex         2
+bne $fd     3
+dex         2
+bne $fd     3
+dex         2
+bne $fd     3
+dex         2
+bne $fd     3
+dex         2
+bne $fd     3
+dex         2
+bne $fd     2
+TOTAL       42 cycles burned by vanilla loop
+
+jsl         8
+lda #$33    2
+sta $2123   4
+sta $2125   4
+rtl         6
+nop         2
+nop         2
+TOTAL       28 cycles used by code replacing vanilla loop
+*/

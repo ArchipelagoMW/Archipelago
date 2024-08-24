@@ -1,0 +1,438 @@
+/* ---------------------------------- */
+/* Common styling                     */
+/* ---------------------------------- */
+
+em.hard {
+  color: rgb(230, 100, 100);
+}
+
+/* ---------------------------------- */
+/* Cover image                        */
+/* ---------------------------------- */
+
+#cover.play {
+  background-image: url('background-whale.jpg');
+}
+
+
+/* ---------------------------------- */
+/* Page body                          */
+/* ---------------------------------- */
+
+.instruction {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.instruction > h1 {
+  border-radius: 0.25em;
+
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 2rem;
+
+  background-color: rgb(54, 52, 50);
+  color: rgb(230, 210, 190);
+}
+
+.instruction > p {
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.instruction hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-bottom: 0.5rem solid #334;
+
+}
+
+.clarification {
+  font-size: 0.8em;
+  font-style: italic;
+  color: rgb(170, 170, 170);
+}
+
+/* ---------------------------------- */
+/* Presets                            */
+/* ---------------------------------- */
+
+#presets-area {
+  background-color: #546;
+  border-radius: 1em;
+  padding: 0.5em 1em 0.5em 1em;
+  text-align: left;
+  max-width: 40em;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: none;
+}
+
+#presets-area.visible {
+  display: block;
+}
+
+#preset {
+  font-size: 1.5em;
+  background-color: rgba(0,0,0,0);
+  color: #b9d;
+  border: 0;
+  border-bottom: 1px solid #b9d;
+  margin-bottom: 0.3em;
+  width: 100%;
+  cursor: pointer;
+}
+
+#preset:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#preset:focus {
+  outline: none;
+}
+
+#preset-body {
+  display: flex;
+  align-items: flex-end;
+}
+
+#preset-details {
+  flex-grow: 1;  
+}
+
+#preset-apply-button {
+  display: block;
+  background-color: #cbd;
+  color: #546;
+  flex-grow: 0;
+}
+
+#preset-flags {
+  font-style: italic;
+  color: #b9d;
+  display: inline-block;
+}
+
+#preset-description {
+  margin-bottom: 0.2em;
+}
+
+#preset-apply-area {
+  text-align: left;
+}
+
+#custom-flag-string-area,
+#linked-flag-string-area {
+  background-color: #589;
+  border-radius: 1em;
+  padding: 0.2em 1em 0.2em 1em;
+
+  display: none;
+}
+
+#custom-flag-string-area.visible,
+#linked-flag-string-area.visible {
+  display: block;
+}
+
+#custom-flag-string-area .button {
+  background-color: #f0fcff;
+  color: #589;
+}
+
+#custom-flag-string,
+#linked-flag-string {
+  width: 100%;
+  border: 1px solid #8bc;
+  color: #f0fcff;
+  font-weight: bold;
+}
+
+#custom-flag-string:focus {
+  border-color: #cef;
+  background-color: #448290;
+}
+
+#custom-flag-string::placeholder {
+  color: #7ab;
+  font-weight: normal;
+}
+
+#flag-string-error-area {
+  background-color: #a44;
+  border-radius: 0em;
+  padding: 0.2em 1em 0.2em 1em;
+  max-width: 30em;
+  margin-top: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: none;
+}
+
+#flag-string-error-area.visible {
+  display: block;
+}
+
+/* ---------------------------------- */
+/* Flag sections                      */
+/* ---------------------------------- */
+
+#flags-container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 3em;
+}
+
+.flag-section > h1 {
+  margin-bottom: 0.8em;
+
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+
+  color: rgb(170, 160, 150);
+
+  border-bottom-width: 0.05em;
+  border-bottom-style: dotted;
+  border-bottom-color: rgb(170, 160, 150);
+}
+
+.flag-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 1em;
+
+  text-align: left;
+
+  margin-bottom: 1em;
+}
+
+.flag-list label {
+  font-size: 1.5em;
+
+  cursor: pointer;
+}
+
+.flag-list .separator {
+  grid-column-start: 1;
+  grid-column-end: 3;
+
+  border-bottom: 1px solid rgb(30, 30, 40);
+
+  display: none;
+}
+
+.flag-details {
+  font-size: 0.9em;
+  color: rgb(150, 150, 150);
+
+  /* hidden by default, shown by adding "visible" class name */
+  display: none;
+}
+
+.flag-details p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* hide default checkboxes and radio buttons in flag list, 
+   we will be using custom elements that can be styled */
+.flag-list input[type="checkbox"], 
+.flag-list input[type="radio"] {
+  display: none;
+}
+
+/* custom checkbox/radio button styling */
+.flag-checkbox, 
+.flag-radio-button {
+  min-width: 1.3em;
+  height: 1.3em;
+
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+
+  border-width: 0.05em;
+  border-style: solid; 
+  border-color: rgb(100, 90, 80);
+
+  font-weight: bold;
+  text-align: center;
+
+  color: rgba(0, 0, 0, 0.3);
+
+  user-select: none;
+}
+
+.flag-checkbox.hard, 
+.flag-radio-button.hard {
+  border-color: rgb(160, 40, 40);
+}
+
+.flag-checkbox {
+  /* mostly square */
+  border-radius: 0.1em;
+}
+
+/* radio buttons are circular */
+.flag-radio-button {
+  /* circular */
+  /* width: 1.3em; */
+  border-radius: 1em; 
+  overflow: hidden;
+}
+
+input:checked + .flag-checkbox, 
+input:checked + .flag-radio-button {
+  color: rgba(255, 255, 255, 0.4);
+  background-color: rgb(80, 75, 70);
+}
+
+input:checked + .flag-checkbox.hard, 
+input:checked + .flag-radio-button.hard {
+  color: rgb(210, 40, 40);
+  background-color: rgb(120, 20, 20);
+}
+
+/* default state of labels for checkboxes is dimmed */
+.flag-body > label {
+  color: rgb(80, 75, 70);
+}
+
+/* light up label text for checked boxes */
+/* (okay, I admit this is an ugly selector) */
+input:checked + * + .flag-body > label {
+  color: inherit;
+}
+
+/* show flag description text for checked boxes
+/* (yep, still an ugly selector) */
+input:checked + * + .flag-body > .flag-details {
+  display: block;
+}
+
+/* this selects lists of sub-options of flags */
+.flag-body > .flag-list {
+  margin-top: 1em;
+  opacity: 0.2;
+}
+.flag-body.auto-hide > .flag-list {
+  display: none; /* default hidden */
+}
+
+/* show flag suboptions box for checked boxes */
+/* (TODO: discover less ugly selectors) */
+input:checked + * + .flag-body > .flag-list {
+  display: grid;
+  opacity: 1;
+}
+
+
+/* ---------------------------------- */
+/* Text input boxes                   */
+/* ---------------------------------- */
+
+input[type="text"],
+textarea
+{
+  font-size: 1.5em;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+input[type="text"]:focus,
+textarea:focus
+{
+  outline: none;
+}
+
+
+#seed {
+  display: block;
+
+  text-transform: uppercase;
+
+  width: 10em;
+  margin-left: auto;
+  margin-right: auto;
+
+  border-width: 0.05em;
+  border-style: solid;
+  border-color: rgb(80, 80, 80);
+
+  color: rgb(160, 160, 160);
+}
+
+
+/* ---------------------------------- */
+/* Custom submit button               */
+/* ---------------------------------- */
+
+a.button {
+  display: inline-block;
+
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+
+  padding: 0.5em 1em 0.5em 1em;
+  border-radius: 1em;
+
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+
+  background-color: rgb(140, 100, 60);
+  color: rgb(250, 240, 230);
+
+  text-decoration: none;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+a.button:active {
+  position: relative;
+  top: 0.1em;
+}
+
+/* ---------------------------------- */
+/* Selected flag string               */
+/* ---------------------------------- */
+
+#selected-flag-string-area {
+  margin-top: 2em;
+  font-style: italic;
+  color: #888;
+}
+
+#selected-flag-string {
+  margin-top: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 30em;
+  border-radius: 0.2em;
+
+  padding: 0.2em;
+
+  font-style: normal;
+  color: #999;
+  background-color: #181810;
+}
+
+
+/* ---------------------------------- */
+/* Narrow layout changes              */
+/* ---------------------------------- */
+
+@media only screen and (max-width: 40rem) {
+  /* preset buttons become single column */
+  #presets {
+    grid-template-columns: auto;
+  }
+
+  /* flag sections become single column */
+  #flags-container {
+    grid-template-columns: auto;
+  }
+}

@@ -1,0 +1,126 @@
+// various edits to treat stack max size as 1
+msfpatch {
+    .addr $009839
+        nop nop nop nop
+    .addr $0098B6
+        cmp #$02
+    .addr $0098BB
+        sbc #$01
+    .addr $0098BF
+        lda #$01
+
+    .addr $01A3EA
+        cmp #$02
+    .addr $01A8FA
+        lda #$01
+    .addr $01AE37
+        cmp #$02
+    .addr $01C187
+        cmp #$02
+    .addr $01C190
+        sbc #$01
+    .addr $01C195
+        lda #$01
+    .addr $01C1B4
+        lda #$01
+    .addr $01D577
+        cmp #$02
+    .addr $01D7A2
+        cmp #$02
+
+    .addr $0294A8
+        lda #$01
+    .addr $02954B
+        lda #$01
+    .addr $0295E7
+        cmp #$02
+    .addr $0295EB
+        lda #$01
+    .addr $02B253
+        cmp #$02
+    .addr $02B279
+        cmp #$01
+    .addr $02B2D3
+        cmp #$02
+    
+    .addr $03E2A7
+        cmp #$02
+    .addr $03E2AC
+        lda #$01
+    .addr $03E2B6
+        sbc #$01
+}
+
+// fix weird behavior in battle menu when swapping items
+msfpatch {
+    .addr $02B2C1
+        nop nop
+}
+
+// patches to not draw item quantities in menus
+msfpatch {
+    .addr $00B050
+        lda #$FF
+    .addr $00B066
+        lda #$FF
+    .addr $00B06B
+        lda #$FF
+
+    .addr $01A1E0
+        lda #$FF
+    .addr $01A1ED
+        nop nop nop
+    .addr $01A21A
+        lda #$FF
+    .addr $01A227
+        nop nop nop
+
+    .addr $029E80
+        lda #$FF
+    .addr $029E8E
+        lda #$FF
+        nop
+    .addr $029E95
+        lda #$FF
+        nop
+    .addr $02A048
+        lda #$FF
+    .addr $02A05C
+        lda #$FF
+        nop
+    .addr $02A069
+        lda #$FF
+        nop
+}
+
+// shop edits:
+
+// don't draw buy/sell quantity option
+msfpatch {
+    .addr $01c436
+        nop nop nop nop nop nop nop nop nop
+    .addr $01c7f0
+        nop nop nop nop nop nop nop nop nop
+}
+
+// don't allow left/right to toggle quantity
+msfpatch {
+    .addr $01cb49
+        lda #$00
+}
+
+// prevent characters from joining with more than one arrow
+msfpatch {
+    Wacky__InitializeAxtorHook:
+        lda $1174
+        beq $+LeftHand
+        lda #$01
+        sta $1174
+    %LeftHand:
+        lda $1176
+        beq $+Done
+        lda #$01
+        sta $1176
+    %Done:
+        rtl
+}

@@ -1,0 +1,43 @@
+// completely disable solo battles; we will have none so shrug
+
+msfpatch {
+    .addr $00e3a3
+        // instead of original solo battle search loop,
+        // check for our custom plot flag
+        lda $128e  // [hardcoded] : #flag.fe_HeroSoloBattle
+        bit #$02   //    ...
+        beq $+NormalBattle
+        
+        // proceed to solo battle setup code, which is modified
+        // below to isolate the hero
+        ldy #$0000  // required for compatibility with following routine
+        jmp $e3e0
+
+    %NormalBattle:
+        jmp $e3bd
+}
+
+msfpatch {
+    .addr $00e3e0
+        // hardcode solo battle index 0
+        stz $06
+        lda #$80
+        sta $E4
+        jmp $00e3ee
+
+    .addr $00e403
+        // skip fusoya/golbez battle check
+        jmp $e40a
+
+    .addr $00e40d
+        // simplify solo battle search loop to a straight
+        // axtor 01 check
+        lda $1000,x
+        and #$1f
+        cmp #$01
+        beq $+FoundAxtor
+        jmp $e428
+    %FoundAxtor:
+        jmp $e430
+
+}

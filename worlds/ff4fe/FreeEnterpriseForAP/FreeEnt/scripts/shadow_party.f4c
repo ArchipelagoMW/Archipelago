@@ -1,0 +1,5 @@
+msfpatch {
+    .def ShadowParty__Address    $7e1140
+    .def ShadowParty__EndOffset  $000140
+}
+

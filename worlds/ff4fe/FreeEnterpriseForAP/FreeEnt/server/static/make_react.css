@@ -1,0 +1,681 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Lato');
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 1em;
+    background-image: url('/static/background-classicfe.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: Lato, sans-serif;
+}
+
+#appContainer {
+    display: none;
+}
+
+#spine {
+    max-width: 60rem;
+    margin: auto;
+}
+
+#version {
+    border: 1px solid silver;
+    background-color: black;
+    padding: 0.5em;
+    font-family: 'Anonymous Pro', monospace;
+    color: silver;
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+#betaChangelog {
+    border: 0.5em solid silver;
+    background-color: black;
+    padding: 1em;
+    font-family: 'Anonymous Pro', monospace;
+    color: silver;
+    margin-bottom: 1em;
+    overflow-x: scroll;
+}
+
+#betaChangelogContent {
+    margin-top: 1em;
+    white-space: pre;
+}
+
+.initializationPanel {
+    border: 0.5em solid silver;
+    padding: 1em;
+    background-color: #452f5d;
+    margin-bottom: 2em;
+    line-height: 1.2em;
+}
+
+.initializationButtons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.initializationButton {
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: 1px dotted pink;
+    color: pink;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    user-select: none;
+}
+
+.initializationButton:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.initializationPanel .error {
+    margin-top: 1em;
+    color: #f88;
+    font-family: 'Anonymous Pro', monospace;
+
+}
+
+.initializationPanel .warnings {
+    margin-top: 1em;
+    color: #fd8;
+    font-family: 'Anonymous Pro', monospace;
+}
+
+.initializationSubPanel {
+    margin-top: 1em;
+    padding: 1em;
+    border-radius: 0.5em;
+    background-color: #7f6898;
+}
+
+
+.flagStringInput {
+    font-size: 1.4em;
+    width: 100%;
+    border: 1px solid #452f5d;
+    background-color: unset;
+    font-family: 'Anonymous Pro', monospace;
+    color: white;
+    padding: 0.2em;
+    height: 5em;
+}
+
+.flagStringInput.initial {
+    border: 0;
+}
+
+.flagStringInput::placeholder {
+    color: #452f5d;
+}
+
+.flagStringInput:focus {
+    outline: none;
+}
+
+.applyFlagsButton {
+    display: block;
+    margin-top: 1em;
+    padding: 0.5em;
+    width: 10em;
+    margin-left: auto;
+    margin-right: auto;
+
+    border-radius: 0.5em;
+    background-color: #f5e3d0;
+    color: #a26626;
+    border-bottom: 0.1em solid #a26626;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    user-select: none;        
+}
+
+.applyFlagsButton:active {
+    position: relative;
+    top: 0.1em;
+}
+
+.initializationSubPanel.presets {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap: 0.8em;
+}
+
+.presetCategories {
+    padding-bottom: 0.5em;
+    font-size: 0.8em;
+    user-select: none;
+}
+
+.presetCategory {
+    border-bottom: 1px dotted #614183;    
+    color: #e1d8e4;
+    text-transform: uppercase;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    cursor: pointer;
+}
+
+.presetHeader {
+    border-bottom: 1px dotted #614183;    
+    padding-top: 0.5em;
+    color: rgb(72 46 78);
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.presetCategory:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.presetCategory.selected {
+    background-color: #a887ca;
+    color: #000;
+}
+
+.preset {
+    border: 1px solid #2a1046;
+    background-color: #614183;
+    padding: 0.7em;
+    user-select: none;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+}
+
+.preset:hover {
+    border-color: #caaaec;
+    background-color: #835baf;
+}
+
+.presetName {
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-bottom: 1px dotted white;
+    cursor: pointer;
+    user-select: none;
+}
+
+.presetDescription {
+    color: #e1d8e4;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.presetDescription p {
+    margin: 0.7em 0;    
+}
+
+.presetDescription a {
+    color: white;
+}
+
+.presetFlags {
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 0.85em;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 0.5em;
+    color: silver;
+    overflow-wrap: anywhere;
+}
+
+.flagEditor {
+}
+
+.flagSection {
+    margin-bottom: 0.3em;
+    padding: 1em;
+    background-color: #eee;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    border-left: 1em solid gray;
+}
+
+.shadow, .flagSection, .presetMenu, .metaSection {
+    box-shadow: 0em 0.5em 1em 0 rgba(0, 0, 0, 0.5);
+}
+
+.flagSection.objectives     { border-left-color: #89dada; }
+.flagSection.keyitems       { border-left-color: #5675b9; }
+.flagSection.pass           { border-left-color: #b3b78d; }
+.flagSection.characters     { border-left-color: #6db16f; }
+.flagSection.treasures      { border-left-color: #c57b8f; }
+.flagSection.shops          { border-left-color: #a988d4; }
+.flagSection.bosses         { border-left-color: #c7a888; }
+.flagSection.challenges     { border-left-color: #a5c2e0; }
+.flagSection.encounters     { border-left-color: #4d828e; }
+.flagSection.glitches       { border-left-color: #a5de65; }
+.flagSection.spoilers       { border-left-color: #111111; }
+
+.sectionTitle {
+    color: #888;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2em;
+    min-width: 10em;
+    margin-bottom: 0.5em;
+}
+
+.flagControlList {
+    margin: 0.2em;
+}
+
+.flagControl, .flagSelector {
+    margin-bottom: 0.2em;
+}
+
+.flagButton {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    border: 1px solid #ddd;
+    user-select: none;
+    color: #aaa;
+}
+.flagIcon {
+    padding: 0.3em;
+    text-align: center;
+    min-width: 2em;
+}
+.flagTitle {
+    padding: 0.3em 0.4em;
+}
+.flagName {
+    padding: 0.3em;
+    min-width: 2em;
+    text-align: right;
+    background-color: #ccc;
+    color:#eee;
+}
+.flagName.container {
+    text-align: center;
+}
+.flagButton.hard > .flagName {
+    background-color: #ebb;
+}
+
+.flagButton.selected {
+    border-color: darkblue;
+}
+.flagControl.container > .flagButton.selected, .flagButton.selected.null {
+    border-color: gray;
+}
+.flagButton.selected.null > .flagTitle {
+    background-color: unset;
+}
+.flagButton.selected.hard {
+    border-color: darkred;
+}
+.flagButton.selected > .flagTitle {
+    background-color: white;
+    color: black;
+}
+.flagButton.selected > .flagName {
+    color: white;
+    background-image: linear-gradient(blue, darkblue);    
+}
+.flagButton.selected.hard > .flagName {
+    color: white;
+    background-image: linear-gradient(red, darkred);    
+}
+.flagButton.selected > .flagName.container {
+    background-image: linear-gradient(lightgray, gray);    
+}
+.flagButton.selected.null > .flagName {
+    background-image: linear-gradient(gray, black);    
+}
+
+.flagSubsection {
+    display: none;
+    margin-bottom: 0.7em;
+}
+
+.flagControl.selected > .flagSubsection {
+    display: block;
+    border-left: 0.5em solid #ddd;
+    padding-left: 0.5em;
+}
+
+.flagDescription {
+    padding: 0.8em 0;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.flagDescription > em {
+    font-weight: bold;
+    font-style: normal;
+    color: #864;
+}
+
+.flagDescription > ul {
+    margin: 0;
+}
+
+.flagSubsection .flagControlList {
+}
+
+.flagSubsection .flagControlList .flagControl {
+}
+
+.flagControlList.compact {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+}
+
+.flagControlList.compact .flagIcon {
+    display: none;
+}
+
+.flagControlList.compact .flagButton {
+    display: block;
+    font-size: 0.85em;
+    margin: 0.2em;
+}
+
+.flagControlList.compact .flagTitle, .flagControlList.compact .flagName {
+    padding: 0 0.3em;
+}
+
+.flagSelectorContainer {
+    position: relative;
+}
+
+.flagSelectorContainer > .flagButton {
+    border-width: 0.5em;
+}
+
+.flagSelectorMenu {
+    padding: 0.6em;
+    border: 1px solid gray;
+    background-color: #f4f4f4;
+    box-shadow: 0.1em 0.2em 0.8em 0 rgba(0,0,0,0.5);
+    display: none;
+    position: absolute;
+    left: 0.5em;
+    right: -0.5em;
+    top: -1em;
+    z-index: 10000;
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
+.flagSelectorMenu .flagTitle {
+    padding-right: 2em;
+}
+
+.flagSelectorMenu.open {
+    display: block;
+}
+
+.menuDismissOverlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
+.flagButton:hover {
+    color: gray;
+}
+
+.separator {
+    margin-top: 1.5em;
+}
+
+.flagSelectorContainer.important {
+    border: 0.5em solid white;
+    border-radius: 0.5em;
+    margin-bottom: 1em;
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+}
+
+.flagSelectorContainer.important > div {
+    margin: 0;
+}
+
+#summary {
+    margin-top: 2em;
+    padding: 1em;
+    background-color: #323754;
+    color: white;
+    border: 0.5em solid silver;
+}
+
+#summaryInfo {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-row-gap: 0.5em;
+    font-family: 'Anonymous Pro', monospace;
+}
+
+#summaryInfo > div.label {
+    padding: 1em;
+}
+
+#flagStringContainer {
+    border: 1px dotted gray;
+    border-radius: 1rem;
+}
+
+#flagLogicLogDisplay .list {
+    border-bottom: 1px solid gray;
+    padding: 0.2em 1em;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+#flagLogicLogDisplay .list {
+}
+
+#flagLogicLogDisplay .correction {
+    color: #fbef7a;
+}
+
+#flagLogicLogDisplay .error {
+    color: #ff6c6c;
+}
+
+#flagStringRow {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+#flagStringDisplay {
+    padding: 1em;
+    hyphens: none;
+    overflow: auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+#binaryFlagStringDisplay {
+    border-top: 1px solid gray;
+    padding: 0 1rem;
+    color: gray;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+#flagStringCopyButton {
+    padding: 0 0.5rem;
+    font-size: 2rem;
+    border-left: 1px dotted gray;
+    border-top-right-radius: 1rem;
+    user-select: none;
+    cursor: pointer;
+}
+
+#flagStringCopyButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#flagStringCopyButton:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#seedInput {
+    border: 1px dotted gray;
+    border-radius: 1rem;
+    background-color: unset;
+    font-family: unset;
+    color: white;
+    font-size: 1.1em;
+    padding: 0.2rem 1rem;
+}
+
+#seedInput:focus {
+    outline: none;
+}
+
+.centerer {
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+
+#generateButtonContainer {
+    flex-direction: column;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+#generateButton {
+    background-color: #66908b;
+    border-radius: 0.5em;
+    padding: 0.4em 1em;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    user-select: none;
+    cursor: pointer;
+}
+
+#generateButton:hover {
+    background-color: #92c5bf;
+}
+
+#generateButton:active {
+    position: relative;
+    top: 0.1em;
+}
+
+.metaSection {
+    margin-bottom: 0.3em;
+    padding: 1em;
+    background-color: #722;
+
+    border-left: 1em solid white;
+}
+
+#metaconfigClickToShow {
+    font-size: 0.7em;
+    font-style: italic;
+    color: #aaa;
+}
+
+#metaconfigContent {
+    margin: 0;
+    padding: 0;
+}
+
+.metaSection .sectionTitle {
+    color: white;
+    cursor: pointer;
+}
+
+.metaSection .sectionDescription {
+    padding-left: 0.2em;
+    padding-bottom: 1em;
+    color: #aaa;
+    font-style: italic;
+}
+
+.metaSetting label {
+    user-select: none;
+    cursor: pointer;
+}
+
+.metaSettingsSection {
+    padding: 0.5em 1em;
+    margin-bottom: 0.3em;
+    border: 1px dotted white;
+    color: white;
+    font-family: 'Anonymous Pro', monospace;
+}
+
+.metaSettingsSubsection {
+    padding: 0.5em 1em;
+    margin-top: 0.5em;
+    background-color: #411;
+}
+
+.metaSettingDescription {
+    color: #aaa;
+    font-size: 0.8em;
+    margin-top: 0.5em;
+}
+
+#testSettings {
+}
+
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+}
+   
+.spinner {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: #000;
+    animation: spinner .6s linear infinite;
+}
+
+/* ---------------------------------- */
+/* Narrow layout changes              */
+/* ---------------------------------- */
+
+@media only screen and (max-width: 40rem) {
+    body {
+        padding: 1em 0;
+    }
+
+    .initializationSubPanel.presets {
+        display: block;
+    }
+
+    .flagButton > .flagName {
+        font-family: 'Open Sans Condensed', sans-serif;
+        font-size: 0.9em;
+    }
+
+    .flagSection {
+        grid-template-columns: auto;
+    }
+
+    #summaryInfo {
+        grid-template-columns: auto;
+        grid-row-gap: 0;
+    }
+}

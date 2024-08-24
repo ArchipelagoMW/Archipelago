@@ -1,0 +1,94 @@
+msfpatch {
+    .def FirstLaunch__IndicatorLo   $7070fe
+    .def FirstLaunch__IndicatorHi   $7070ff
+}
+
+msfpatch {
+    FirstLaunch__Check:
+        // check if first load by comparing the saved value
+        // with the modified ROM checksum (high bit forced on,
+        // low bit forced off) to prevent it accidentally matching
+        // against initialized empty SRAM if the checksum works
+        // out to 0000 or FFFF.
+        lda $00ffde
+        ora #$80
+        cmp $=FirstLaunch__IndicatorLo
+        bne $+IsFirst
+
+        lda $00ffdf
+        and #$fe
+        cmp $=FirstLaunch__IndicatorHi
+        bne $+IsFirst
+
+        clc
+        rts
+
+    %IsFirst:
+        sec
+        rts
+}
+
+msfpatch {
+    FirstLaunch__SetLaunched:
+        // set the "first launch" flag by copying ROM checksum
+        // and applying transformation
+        lda $00ffde
+        ora #$80
+        sta $=FirstLaunch__IndicatorLo  // [hardcoded]
+        lda $00ffdf
+        and #$fe
+        sta $=FirstLaunch__IndicatorHi  // [hardcoded]
+        rts
+}
+
+
+// hook in before first call to load game menu to initialize global data
+msfpatch {
+    .addr $008040
+        jsr $=FirstLaunch__InitFirstLaunchData
+
+    .new
+    FirstLaunch__InitFirstLaunchData:
+        // this is ugly, but we need to do this early on, so might as
+        // well do this here
+        jsr $_MSU1__Detect
+
+        jsr $_FirstLaunch__Check
+        bcc $+Done
+
+        jsr $_CharEx__InitGlobalNames
+
+        // reset global config stored in SRAM
+        lda #$00
+        sta $=PregameNames__TagSetting
+        sta $707100  // setting for "have global custom data"
+        sta $707101  // setting for "have global custom data"
+
+        // blank the save slots
+        sta $7007fe
+        sta $7007ff
+        sta $700ffe
+        sta $700fff
+        sta $7017fe
+        sta $7017ff
+        sta $701ffe
+        sta $701fff
+
+        // blank the global tracker data
+        ldx #$0000
+        lda #$00
+    %TrackerInitLoop:
+        sta $=Tracker__KeyItemLocations,x
+        inx
+        cpx #$0070
+        bcc $-TrackerInitLoop
+
+        // clear "has ever completed game" flag
+        lda #$00
+        sta $=Stats_EverCompleted
+
+    %Done:
+        jml $01800c  // jump to routine that used to be JSL'd to, so it will
+                     // return properly
+}
+

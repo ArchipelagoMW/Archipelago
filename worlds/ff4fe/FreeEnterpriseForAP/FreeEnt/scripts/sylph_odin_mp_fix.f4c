@@ -1,0 +1,33 @@
+msfpatch {
+    .addr $03db40
+        jml $=SylphFix
+
+    .addr $03e07b
+        jsl $=SylphOdinCommonRoutineFix
+        rts
+
+    .new
+    SylphFix:
+        // %flag glitch_allow_sylph off%
+        ldx $e3     // fix missing lookup of previous multiplication result
+        // %end%
+        
+        jsl $=SylphOdinCommonRoutineFix
+        lda $a9     // displaced
+        jmp $03db45 // return
+
+    SylphOdinCommonRoutineFix:
+        lda $2000,x
+        eor $2680  // compare against actor code in current actor record
+        and #$7f
+        bne $+NoMatch
+
+        // transfer MP
+        lda $268b
+        sta $200b,x
+        lda $268c
+        sta $200c,x
+
+    %NoMatch:
+        rtl
+}

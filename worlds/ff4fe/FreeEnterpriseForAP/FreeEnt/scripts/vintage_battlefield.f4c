@@ -1,0 +1,1017 @@
+//----------------------------------------
+// Vintage battlefield shenanigans
+
+// add palette colors we need for special borders
+msfpatch {
+    VintageBattlefield_LoadPalette:
+        // do original palette load
+        jsl $03f76e
+
+        // add colors we need
+        ldx #$39ce
+        stx $ed82
+        ldx #$7fff
+        stx $ed84
+
+        // return
+        rtl
+
+    .addr $0290f7
+        jsl $=VintageBattlefield_LoadPalette
+}
+
+// load special CHR data we need
+msfpatch {
+    VintageBattlefield__LoadCHR:
+        phb
+        pha 
+        plb 
+        sty $2116
+        stx $02
+        ldy #$0000
+    VintageBattlefield__LoadCHR_LoopStart:
+        rep #$20
+        .mx 0x00
+        pha 
+        ldx #$0010
+    VintageBattlefield__LoadCHR_InnerLoopStart:
+        lda ($02),y
+        sta $2118
+        iny 
+        iny 
+        dex 
+        bne $-VintageBattlefield__LoadCHR_InnerLoopStart
+        pla 
+        sep #$20
+        .mx 0x20
+
+        dec $00
+        bne $-VintageBattlefield__LoadCHR_LoopStart
+        plb 
+        rts 
+}
+
+msfpatch {
+    VintageBattlefield__LoadBorderCHR:
+        ldx #$0006
+        stx $00
+        ldx #$_VintageBattlefield__CHRData
+        lda #$20
+        ldy #$4530
+        jsr $_VintageBattlefield__LoadCHR
+
+        // perform displaced instructions and return
+        ldx #$0002
+        stx $00
+        jml $028b59
+
+    .addr $028b54
+        jml $=VintageBattlefield__LoadBorderCHR
+}
+
+msfpatch {
+    VintageBattlefield__CHRData:
+        [[
+        00 00 00 00 00 00 3f 00 60 1f 4f 30 58 20 50 20
+        00 00 00 00 00 00 00 3f 00 7f 00 7f 00 78 00 70
+        00 00 00 00 00 00 ff 00 00 ff ff 00 00 00 00 00
+        00 00 00 00 00 00 00 ff 00 ff 00 ff 00 00 00 00
+        00 00 00 00 00 00 fe 00 03 fc f9 06 0d 02 05 02
+        00 00 00 00 00 00 00 fe 00 ff 00 ff 00 0f 00 07
+        50 20 50 20 50 20 50 20 50 20 50 20 50 20 50 20
+        00 70 00 70 00 70 00 70 00 70 00 70 00 70 00 70
+        05 02 05 02 05 02 05 02 05 02 05 02 05 02 05 02
+        00 07 00 07 00 07 00 07 00 07 00 07 00 07 00 07
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+        ]]
+}
+
+// patch battle BG background loader to render FF1
+// battle frames
+msfpatch {
+    .addr $01e95c
+        jml $=VintageBattlefield__BorderTiles_TopHalf
+
+    .new
+    VintageBattlefield__BorderTiles_TopHalf:
+        // check for Zeromus
+        lda $1800
+        cmp #$b7
+        bne $+NotZeromus
+        lda $1801
+        and #$01
+        beq $+NotZeromus
+
+        // if Zeromus, keep top 4 rows
+        cpy #$0100
+        bcc $+Normal
+        jmp $_Blank
+
+    %NotZeromus:
+        // check for vertical line or blank columns
+        tya
+        lsr a
+        xba
+        lda #$00
+        xba
+        and #$1f
+        beq $+Blank
+        cmp #$1f
+        beq $+Blank
+        cmp #$01
+        beq $+LeftColumn
+        cmp #$1e
+        beq $+RightColumn
+
+        pha
+        lda $6cc0
+        beq $+NotBackAttack
+        pla
+        clc
+        adc #$0e
+        pha
+    %NotBackAttack:
+        pla
+
+        cmp #$16
+        beq $+RightColumn
+        cmp #$17
+        beq $+LeftColumn
+
+        // check for top row or blank rows
+        cpy #$0040
+        bcc $+TopRow
+        cpy #$0100
+        bcs $+Blank
+
+    %Normal:
+        // use normal graphic
+        lda $16ed80,x
+        jml $01e960
+
+    %Blank:
+        lda #$58
+        jmp $_Draw
+
+    %LeftColumn:
+        cpy #$0040
+        bcc $+TopLeftCorner
+        lda #$56
+        jmp $_Draw
+
+    %RightColumn:
+        cpy #$0040
+        bcc $+TopRightCorner
+        lda #$57
+        jmp $_Draw
+
+    %TopRow:
+        lda #$54
+        jmp $_Draw
+
+    %TopLeftCorner:
+        lda #$53
+        jmp $_Draw
+
+    %TopRightCorner:
+        lda #$55
+        jmp $_Draw
+
+    %Draw:
+        sta $6cfd,y
+        iny
+        lda #$06 // palette 1, tile page 2
+        sta $6cfd,y
+        iny
+        jml $01e982
+}
+
+msfpatch {
+    .addr $01e925
+        jml $=VintageBattlefield__BorderTiles_BottomHalf
+
+    .new
+    VintageBattlefield__BorderTiles_BottomHalf:
+        // check if Zeromus
+        lda $1800
+        cmp #$b7
+        bne $+NotZeromus
+        lda $1801
+        and #$01
+        beq $+NotZeromus
+        jmp $_Blank
+
+    %NotZeromus:
+        txa
+        lsr a
+        and #$1f
+        xba
+        lda #$00
+        xba
+
+        cmp #$01
+        beq $+LeftColumn
+        cmp #$1e
+        beq $+RightColumn
+
+        pha
+        lda $6cc0
+        beq $+NotBackAttack
+        pla
+        clc
+        adc #$0e
+        pha
+    %NotBackAttack:
+        pla
+
+        cmp #$16
+        beq $+RightColumn
+        cmp #$17
+        beq $+LeftColumn
+
+    %Blank:
+        lda #$58
+        jmp $_Draw
+
+    %LeftColumn:
+        lda #$56
+        jmp $_Draw
+
+    %RightColumn:
+        lda #$57
+        jmp $_Draw
+
+    %Draw:
+        sta $6efd,x
+        inx
+        lda #$06  // palette 1, tile page 2
+        sta $6efd,x
+        inx
+        jml $01e94c     
+}
+
+// battle window color black
+msfpatch { 
+    .addr $0290d8 
+        ldx #$0000
+}
+
+// default window color brighter blue
+patch($019B2C bus) { 80 40 }
+
+// remove mosaic effect from start and end of battle
+patch($0281fc bus) { 00 }
+patch($0387c0 bus) { A9 }  // change ORA #$03 to LDA #$03
+
+/**********************
+ SRC for CHR data; we compiled this
+ and then copied the compiled data
+ to a field above so that it could
+ live alongside other data in bank 20
+
+chr($228000 bus 4bit) {
+    00000000
+    00000000
+    00000000
+    00999999
+    099AAAAA
+    09AA9999
+    09A99000
+    09A90000
+}
+
+chr($228020 bus 4bit) {
+    00000000
+    00000000
+    00000000
+    99999999
+    AAAAAAAA
+    99999999
+    00000000
+    00000000
+}
+
+chr($228040 bus 4bit) {
+    00000000
+    00000000
+    00000000
+    99999990
+    AAAAAA99
+    99999AA9
+    000099A9
+    000009A9
+}
+
+chr($228060 bus 4bit) {
+    09A90000
+    09A90000
+    09A90000
+    09A90000
+    09A90000
+    09A90000
+    09A90000
+    09A90000
+}
+
+chr($228080 bus 4bit) {
+    000009A9
+    000009A9
+    000009A9
+    000009A9
+    000009A9
+    000009A9
+    000009A9
+    000009A9
+}
+
+chr($2280a0 bus 4bit) {
+    00000000
+    00000000
+    00000000
+    00000000
+    00000000
+    00000000
+    00000000
+    00000000
+}
+
+***************/
+
+
+patch($6FCCC) { 08 00 }
+patch($6FCD0) { 08 00 }
+patch($6FCD4) { 08 00 }
+patch($6FCD8) { 08 00 }
+patch($6FCDC) { 08 00 }
+patch($6FCE0) { 08 00 }
+patch($6FCE4) { 08 00 }
+patch($6FCE8) { 08 00 }
+patch($6FCEC) { 08 00 }
+patch($6FCF0) { 08 00 }
+patch($6FCF4) { 08 00 }
+patch($6FCF8) { 08 00 }
+patch($6FCFC) { 08 00 }
+patch($6FD00) { 08 00 }
+patch($6FD04) { 08 00 }
+
+
+// Font update
+patch($57200) {
+    00 00 00 FC F8 FE 0C FE E4 1E F4 0E F4 0E F4 0E 
+    FF 00 FF 0C FB 1E F5 3E FD 3E D9 7E F5 7E E3 3C 
+    FF 00 FF 00 EF 30 07 F8 E3 7C E1 3E C8 3F 81 6E 
+    C3 3C A1 7E 95 56 FB 3C 81 7E C7 B9 FF 18 E7 18 
+    FF 66 FF 24 FF 7E FF FF DB DB DB DB C3 7E C3 3C 
+    FF 00 FF 3E FF 7F D5 55 FF 7F FF 3E FF 08 FF 10 
+    FF 00 FF 3E FF 7F 80 00 ED 49 C9 49 FF 3E FF 1C 
+    FF 00 FF 3E FF 14 FF 14 F7 1C E3 3E C1 7F FF 7F 
+    FF 00 EF 1F BB 7C FF 7E 6F F0 FF F8 BF C0 7F 80 
+    FF 08 FF 24 FF 12 FF 49 FF 27 FF 17 FF 0E FF 00 
+    FF C0 FF D0 FF 30 FF 78 FF 0C FF 06 FF 03 FF 00 
+    FF 60 FF 90 FF 90 FF 48 FF 08 FF 04 FF 02 FF 01 
+    FF 80 FF C0 FF 60 FF 32 FF 1C FF 0C FF 12 FF 01 
+    FF C0 FF E0 FF 70 FF 39 FF 1E FF 0C FF 0A FF 11 
+    FF C0 FF E0 FF 70 FF 3A FF 1D FF 0E FF 16 FF 09 
+    FF 80 FF 60 FF 78 FF 30 FF 28 FF 0C FF 06 FF 03 
+    FF 02 FF 06 FF 0E FF 5C FF 38 FF 30 FF 48 FF 00 
+    FF 40 FF 40 FF 60 FF 30 FF 1A FF 0C FF 0A FF 01 
+    FF 00 FF 00 FF 64 FF 2C FF 10 FF 68 FF 4C FF 00 
+    FF 00 FF 3E FF 7F FF 70 FF 60 FF 60 FF 60 FF 20 
+    FF 44 FF 75 FF 75 FF 74 FF 44 FF 04 FF 04 FF 04 
+    FF 08 FF 77 FF 7F FF 7F FF 00 FF 08 FF 08 FF 08 
+    FF 08 FF 0C FF 0A FF 0A FF 08 FF 38 FF 70 FF 00 
+    FF 0F FF 31 FF 62 FF 44 FF 88 FF 90 FF A0 FF C0 
+    FF 80 FF 70 FF 60 FF 50 FF 08 FF 06 FF 07 FF 02 
+    EF 48 93 D0 A7 20 47 48 83 8C B1 06 F8 03 FC 01 
+    FF 30 FF 48 FF 44 FF 24 FD 12 FF 12 FF 21 FF 01 
+    FF 7F FF 41 FF 49 FF 5D FF 49 FF 49 FF 22 FF 1C 
+    FF 3E FF 01 FF 3E FF 7F FF 0F FF 0F FF 3E FF 07 
+    FF C3 DB BD FF 7E FF 7E FF 3C FF 66 E7 5A FF 00 
+    FF 00 FF 38 FF 3C FF 3C FF 1E FF 05 FF 02 FF 00 
+    FF 00 C3 00 91 18 B9 3C 91 3C 81 18 C3 00 FF 00 
+    FF 00 FF 3C FF 7E FB 7E FB 7E E7 7E FF 3C FF 00 
+    FF 00 C3 3C 91 7E B9 7E 91 7E 81 7E C3 3C FF 00 
+    FF 1C FF 1C FF 14 FF 36 FF 3E FF 63 FF 63 FF 00 
+    FF 7E FF 63 FF 63 FF 7E FF 63 FF 63 FF 7E FF 00 
+    FF 3E FF 63 FF 63 FF 60 FF 63 FF 63 FF 3E FF 00 
+    FF 7C FF 66 FF 63 FF 63 FF 63 FF 66 FF 7C FF 00 
+    FF 7F FF 60 FF 62 FF 7E FF 62 FF 60 FF 7F FF 00 
+    FF 7F FF 60 FF 62 FF 7E FF 62 FF 60 FF 60 FF 00 
+    FF 3E FF 63 FF 60 FF 6F FF 61 FF 63 FF 3E FF 00 
+    FF 63 FF 63 FF 63 FF 7F FF 63 FF 63 FF 63 FF 00 
+    FF 1E FF 0C FF 0C FF 0C FF 0C FF 0C FF 1E FF 00 
+    FF 07 FF 03 FF 03 FF 03 FF 63 FF 63 FF 3E FF 00 
+    FF 63 FF 66 FF 6C FF 78 FF 6C FF 66 FF 63 FF 00 
+    FF 60 FF 60 FF 60 FF 60 FF 60 FF 61 FF 7F FF 00 
+    FF 63 FF 63 FF 77 FF 7F FF 6B FF 63 FF 63 FF 00 
+    FF 63 FF 63 FF 73 FF 7B FF 6F FF 67 FF 63 FF 00 
+    FF 3E FF 63 FF 63 FF 63 FF 63 FF 63 FF 3E FF 00 
+    FF 7E FF 63 FF 63 FF 63 FF 7E FF 60 FF 60 FF 00 
+    FF 3E FF 63 FF 63 FF 63 FF 6D FF 66 FF 3B FF 00 
+    FF 7E FF 63 FF 63 FF 7E FF 6C FF 66 FF 63 FF 00 
+    FF 3E FF 63 FF 60 FF 3E FF 03 FF 63 FF 3E FF 00 
+    FF FF FF 99 FF 18 FF 18 FF 18 FF 18 FF 3C FF 00 
+    FF 63 FF 63 FF 63 FF 63 FF 63 FF 63 FF 3E FF 00 
+    FF 63 FF 63 FF 22 FF 36 FF 36 FF 1C FF 1C FF 00 
+    FF 63 FF 63 FF 6B FF 6B FF 7F FF 77 FF 22 FF 00 
+    FF 41 FF 63 FF 36 FF 1C FF 1C FF 36 FF 63 FF 00 
+    FF C3 FF 66 FF 3C FF 18 FF 18 FF 18 FF 3C FF 00 
+    FF 7F FF 43 FF 06 FF 0C FF 18 FF 31 FF 7F FF 00 
+    FF 00 FF 00 FF 1C FF 06 FF 1E FF 36 FF 1F FF 00 
+    FF 30 FF 30 FF 3C FF 36 FF 36 FF 36 FF 3C FF 00 
+    FF 00 FF 00 FF 1C FF 36 FF 30 FF 36 FF 1C FF 00 
+    FF 06 FF 06 FF 1E FF 36 FF 36 FF 36 FF 1F FF 00 
+    FF 00 FF 00 FF 1C FF 32 FF 3E FF 30 FF 1E FF 00 
+    FF 0C FF 1A FF 18 FF 3C FF 18 FF 18 FF 18 FF 00 
+    FF 00 FF 1E FF 14 FF 1C FF 36 FF 36 FF 1C FF 00 
+    FF 30 FF 30 FF 30 FF 3C FF 36 FF 36 FF 36 FF 00 
+    FF 00 FF 0C FF 00 FF 0C FF 0C FF 0C FF 0C FF 00 
+    FF 00 FF 0C FF 00 FF 0C FF 0C FF 0C FF 2C FF 18 
+    FF 30 FF 30 FF 33 FF 36 FF 3C FF 36 FF 33 FF 00 
+    FF 18 FF 18 FF 18 FF 18 FF 18 FF 18 FF 18 FF 00 
+    FF 00 FF 00 FF 7E FF 6D FF 6D FF 6D FF 6D FF 00 
+    FF 00 FF 00 FF 3C FF 36 FF 36 FF 36 FF 36 FF 00 
+    FF 00 FF 00 FF 1C FF 36 FF 36 FF 36 FF 1C FF 00 
+    FF 00 FF 00 FF 3C FF 36 FF 3C FF 30 FF 30 FF 00 
+    FF 00 FF 00 FF 1F FF 36 FF 1E FF 06 FF 06 FF 00 
+    FF 00 FF 00 FF 36 FF 19 FF 19 FF 18 FF 18 FF 00 
+    FF 00 FF 00 FF 1F FF 38 FF 1E FF 07 FF 3E FF 00 
+    FF 00 FF 18 FF 3E FF 18 FF 18 FF 18 FF 0C FF 00 
+    FF 00 FF 00 FF 33 FF 33 FF 33 FF 33 FF 1E FF 00 
+    FF 00 FF 00 FF 31 FF 31 FF 1A FF 1E FF 0C FF 00 
+    FF 00 FF 00 FF 6D FF 6D FF 6D FF 6D FF 36 FF 00 
+    FF 00 FF 00 FF 33 FF 1E FF 0C FF 1E FF 33 FF 00 
+    FF 00 FF 00 FF 33 FF 1E FF 0C FF 18 FF 30 FF 00 
+    FF 00 FF 00 FF 7E FF 0C FF 18 FF 30 FF 7E FF 00 
+    FF 00 FF 00 FF 00 FF 00 FF EC FF D4 FF D4 FF C4 
+    FF 00 FF 00 FF 00 FF 00 FF C4 FF FC FF C4 FF C4 
+    FF 00 FF 00 FF 00 FF 00 FF F8 FF C4 FF F8 FF C0 
+    FF 00 FF 10 FF 38 FF 38 FF 7C FF 44 FF D6 FF 00 
+    FF 1C FF 08 FF 08 FF 1C FF 3E FF 3E FF 1C FF 1C 
+    FF 00 FF E7 FF FF FF 7E FF 7E FF 7E FF 7E FF 00 
+    FF 1C FF 22 FF 41 FF 41 FF 41 FF 63 FF 3E F7 1C 
+    FF 10 FF 38 FF 6C FF 54 FF 54 FF 6C FF 38 FF 10 
+    FF 38 FF 6C FF 7C FF 10 FF 10 FF 30 FF 10 FF 30 
+    FF 70 FF 88 FF 04 FF 04 FF 08 FF 10 FF 12 FF 0C 
+    FF 3E FF 63 FF 63 FF 63 FF 63 FF 63 FF 3E FF 00 
+    FF 18 FF 38 FF 18 FF 18 FF 18 FF 18 FF 3C FF 00 
+    FF 3E FF 63 FF 63 FF 06 FF 18 FF 30 FF 7F FF 00 
+    FF 3E FF 63 FF 63 FF 0E FF 63 FF 63 FF 3E FF 00 
+    FF 0E FF 1E FF 36 FF 26 FF 66 FF 7F FF 06 FF 00 
+    FF 7F FF 60 FF 7E FF 03 FF 03 FF 63 FF 3E FF 00 
+    FF 3E FF 63 FF 60 FF 7E FF 63 FF 63 FF 3E FF 00 
+    FF 7F FF 63 FF 63 FF 06 FF 0C FF 18 FF 18 FF 00 
+    FF 3E FF 63 FF 63 FF 3E FF 63 FF 63 FF 3E FF 00 
+    FF 3E FF 63 FF 63 FF 3F FF 03 FF 63 FF 3E FF 00
+}
+
+// More font update
+patch ($57c00)
+{
+    FF 30 FF 30 FF 10 FF 20 FF 00 FF 00 FF 00 FF 00 
+    FF 00 FF 00 FF 00 FF 00 FF 00 FF 60 FF 60 FF 00 
+    FF 00 FF 00 FF 00 FF 3E FF 00 FF 00 FF 00 FF 00 
+    FF 00 FF 00 FF 00 FF 66 FF 66 FF 00 FF 00 FF 00 
+    FF 08 FF 08 FF 08 FF 08 FF 08 FF 00 FF 08 FF 00 
+    FF 1C FF 22 FF 22 FF 04 FF 08 FF 00 FF 08 FF 00 
+    FF 62 FF 64 FF 08 FF 10 FF 26 FF 46 FF 00 FF 00 
+    FF 01 FF 02 FF 04 FF 08 FF 10 FF 20 FF 40 FF 00 
+    FF 00 FF 30 FF 30 FF 00 FF 00 FF 30 FF 30 FF 00 
+    FF 00 FF 00 FF 00 FF 00 FF 00 FF 30 FF 30 FF 20 
+}
+
+
+text(spell name #Hold)  {[$15]HOLD}
+text(spell name #Mute)  {[$15]MUTE}
+text(spell name #Charm) {[$15]CHRM}
+text(spell name #Blink) {[$15]BLNK}
+text(spell name #Armor) {[$15]ARMR}
+text(spell name #Shell) {[$15]SHEL}
+text(spell name #Slow)  {[$15]SLOW}
+text(spell name #Fast)  {[$15]FAST}
+text(spell name #Bersk) {[$15]BRSK}
+text(spell name #Wall)  {[$15]WALL}
+text(spell name #White) {[$15]WHIT}
+text(spell name #Dspel) {[$15]DSPL}
+text(spell name #Peep)  {[$15]PEEP}
+text(spell name #Cure1) {[$15]CURE}
+text(spell name #Cure2) {[$15]CUR2}
+text(spell name #Cure3) {[$15]CUR3}
+text(spell name #Cure4) {[$15]CUR4}
+text(spell name #Heal)  {[$15]HEAL}
+text(spell name #Life1) {[$15]LIFE}
+text(spell name #Life2) {[$15]LIF2}
+text(spell name #Size)  {[$15]SIZE}
+text(spell name #Exit)  {[$15]EXIT}
+text(spell name #Sight) {[$15]SIGT}
+text(spell name #Float) {[$15]FLOT}
+text(spell name #Toad)  {[$15]TOAD}
+text(spell name #Piggy) {[$15]PIG}
+text(spell name #Warp)  {[$15]WARP}
+text(spell name #Venom) {[$15]VENM}
+text(spell name #Fire1) {[$15]FIR1}
+text(spell name #Fire2) {[$15]FIR2}
+text(spell name #Fire3) {[$15]FIR3}
+text(spell name #Ice1)  {[$15]ICE1}
+text(spell name #Ice2)  {[$15]ICE2}
+text(spell name #Ice3)  {[$15]ICE3}
+text(spell name #Lit1)  {[$15]LIT1}
+text(spell name #Lit2)  {[$15]LIT2}
+text(spell name #Lit3)  {[$15]LIT3}
+text(spell name #Virus) {[$15]VRUS}
+text(spell name #Weak)  {[$15]WEAK}
+text(spell name #Quake) {[$15]QAKE}
+text(spell name #Sleep) {[$15]SLEP}
+text(spell name #Stone) {[$15]STON}
+text(spell name #Fatal) {[$15]FATL}
+text(spell name #Stop)  {[$15]STOP}
+text(spell name #Drain) {[$15]DRAN}
+text(spell name #Psych) {[$15]PSYC}
+text(spell name #Meteo) {[$15]METO}
+text(spell name #Nuke)  {[$15]NUKE}
+text(spell name #Imp)   {[$15]IMP}
+text(spell name #Bomb)  {[$15]BOMB}
+text(spell name #Cocka) {[$15]COCA}
+text(spell name #Mage)  {[$15]MAGE}
+text(spell name #Chocb) {[$15]CHOC}
+text(spell name #Shiva) {[$15]SHIV}
+text(spell name #Indra) {[$15]INDR}
+text(spell name #Jinn)  {[$15]JINN}
+text(spell name #Titan) {[$15]TITN}
+text(spell name #Mist)  {[$15]MIST}
+text(spell name #Sylph) {[$15]SLPH}
+text(spell name #Odin)  {[$15]ODIN}
+text(spell name #Levia) {[$15]LEVI}
+text(spell name #Asura) {[$15]ASUR}
+text(spell name #Baham) {[$15]BAHA}
+text(spell name #Comet) {[$15]COMT}
+text(spell name #Flare) {[$15]FLAR}
+text(spell name #Flame) {[$15]FLAM}
+text(spell name #Flood) {[$15]FLOD}
+text(spell name #Blitz) {[$15]BLTZ}
+text(spell name #Smoke) {[$15]SMOK}
+text(spell name #Pin)   {[$15]PIN}
+text(spell name #Image) {[$15]IMAG}
+
+text(spell name #ImpEffect) {IMP     }
+text(spell name #BombEffect) {BOMB    }
+text(spell name #CockatriceEffect) {COCKTRIC}
+text(spell name #MageEffect) {MAGE    }
+text(spell name #ChocoboEffect) {CHOCOBO }
+text(spell name #ShivaEffect) {SHIVA   }
+text(spell name #IndraEffect) {INDRA   }
+text(spell name #JinnEffect) {JINN    }
+text(spell name #TitanEffect) {TITAN   }
+text(spell name #MistEffect) {MIST    }
+text(spell name #SylphEffect) {SYLPH   }
+text(spell name #OdinEffect) {ODIN    }
+text(spell name #LeviatanEffect) {LEVIATAN}
+text(spell name #AsuraEffect1) {ASURA   }
+text(spell name #AsuraEffect2) {ASURA   }
+text(spell name #AsuraEffect3) {ASURA   }
+text(spell name #BahamutEffect) {BAHAMUT }
+text(spell name #WMeteo) {W.METEO }
+text(spell name #Enemy_Gaze) {GAZE    }
+text(spell name #Enemy_Bluster) {BLUSTER }
+text(spell name #Enemy_Slap) {SLAP    }
+text(spell name #Enemy_Powder) {POWDER  }
+text(spell name #Enemy_Glance) {GLANCE  }
+text(spell name #Enemy_Charm) {CHARM   }
+text(spell name #Enemy_Tongue) {TONGUE  }
+text(spell name #Enemy_Curse) {CURSE   }
+text(spell name #Enemy_Ray) {RAY     }
+text(spell name #Enemy_Count) {COUNT   }
+text(spell name #Enemy_Beak) {BEAK    }
+text(spell name #Enemy_Petrify) {PETRIFY }
+text(spell name #Enemy_Blast) {BLAST   }
+text(spell name #Enemy_Hug) {HUG     }
+text(spell name #Enemy_Breath) {BREATH  }
+text(spell name #Enemy_Whisper) {WHISPER }
+text(spell name #Enemy_Entangle) {ENTANGLE}
+text(spell name #Enemy_WeakEnemy) {WEAK    }
+text(spell name #Enemy_Disrupt) {DISRUPT }
+text(spell name #Enemy_ColdMist) {COLDMIST}
+text(spell name #Enemy_Explode) {EXPLODE }
+text(spell name #Enemy_DullSong) {DULLSONG}
+text(spell name #Enemy_HoldGas) {HOLD GAS}
+text(spell name #Enemy_Gas) {GAS     }
+text(spell name #Enemy_Poison) {POISON  }
+text(spell name #Enemy_Maser) {MASER   }
+text(spell name #Enemy_Vanish) {VANISH  }
+text(spell name #Enemy_Demolish) {DEMOLISH}
+text(spell name #Enemy_BlkHole) {BLK.HOLE}
+text(spell name #Enemy_Dancing) {DANCING }
+text(spell name #Enemy_Disrupt2) {DISRUPT }
+text(spell name #Enemy_Storm) {STORM   }
+text(spell name #Enemy_Magnet) {MAGNET  }
+text(spell name #Enemy_Reaction) {REACTION}
+text(spell name #Enemy_Hatch) {HATCH   }
+text(spell name #Enemy_Remedy) {REMEDY  }
+text(spell name #Enemy_Absorb) {ABSORB  }
+text(spell name #Enemy_Heal) {HEAL    }
+text(spell name #Enemy_BigBang) {BIG BANG}
+text(spell name #Enemy_Vampire) {VAMPIRE }
+text(spell name #Enemy_Digest) {DIGEST  }
+text(spell name #Enemy_Pollen) {POLLEN  }
+text(spell name #Enemy_Crush) {CRUSH   }
+text(spell name #Enemy_Alert) {ALERT   }
+text(spell name #Enemy_Call) {CALL    }
+text(spell name #Enemy_Vanish2) {VANISH  }
+text(spell name #Enemy_Search) {SEARCH  }
+text(spell name #Enemy_Fission) {FISSION }
+text(spell name #Enemy_Retreat) {RETREAT }
+text(spell name #Enemy_Heal2) {HEAL    }
+text(spell name #Enemy_Beam) {BEAM    }
+text(spell name #Enemy_Globe199) {GLOBE199}
+text(spell name #Enemy_Fire) {FIRE    }
+text(spell name #Enemy_Blaze) {BLAZE   }
+text(spell name #Enemy_Blitz) {BLITZ   }
+text(spell name #Enemy_Thunder) {THUNDER }
+text(spell name #Enemy_DBreath) {D.BREATH}
+text(spell name #Enemy_BigWave) {BIG WAVE}
+text(spell name #Enemy_Blizzard) {BLIZZARD}
+text(spell name #Enemy_Wave) {WAVE    }
+text(spell name #Enemy_Tornado) {TORNADO }
+text(spell name #Enemy_Laser) {LASER   }
+text(spell name #Enemy_Explode2) {EXPLODE }
+text(spell name #Enemy_Quake) {QUAKE   }
+text(spell name #Enemy_Emission) {EMISSION}
+text(spell name #Enemy_HeatRay) {HEAT RAY}
+text(spell name #Enemy_Glare) {GLARE   }
+text(spell name #Enemy_Odin) {ODIN    }
+text(spell name #Enemy_MegaNuke) {MEGANUKE}
+text(spell name #Enemy_Needle) {NEEDLE  }
+text(spell name #Enemy_Counter) {COUNTER }
+text(spell name #Enemy_Recover) {RECOVER }
+text(spell name #Enemy_Remedy2) {REMEDY  }
+
+
+
+// Adjust on map transition
+msfpatch {
+    // remove mosaic effect
+    .addr $009011
+        lda #$03
+
+    // remove left/right window collapse
+    .addr $008ff8
+        lda #$00
+        nop
+        nop
+
+    .addr $009002
+        lda #$FF
+        nop
+        nop
+
+    // linearize shutter speed
+    .addr $008fea
+        asl a
+        cmp #$6e
+        bcc $02
+        lda #$6e
+
+    .addr $008fb4
+        jml $=VintageBattlefield__BottomShutter
+
+    .new
+    VintageBattlefield__BottomShutter:
+        asl a
+        sta $1680
+        lda #$dd
+        sec
+        sbc $1680
+        cmp #$6f
+        bcs $+Done
+        lda #$6f
+    %Done:
+        jml $008fbb
+
+}
+
+
+// supplemental palette fix for ocean color changes when
+// launching or landing airship
+patch($15c6b7 bus) {
+    E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 
+    E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 E0 44 
+}
+
+// update palette of damage numbers / effects so that color
+// used for Hold, etc. is more visible
+patch($74b2c) { E0 7E }
+
+// remove underworld palette tilt adjustment
+msfpatch {
+    .addr $15c52d
+        rtl
+}
+
+// adjust moon palette update
+msfpatch {
+    // only update mountain top
+    .addr $15c576
+        lda $15c5df,x
+        sta $0cdf
+        jmp $c5a3
+}
+// adjust moon palette transition values
+patch($15c5a9 bus) { 31 46 69 31 69 31 69 31 69 31 69 31 69 31 69 31 69 31 }
+patch($15c5df bus) { CE 2D 69 31 69 31 69 31 69 31 69 31 69 31 69 31 69 31 }
+
+
+//-----------------------------------------------------
+// change battle transition animations
+
+msfpatch {
+    .addr $0086df
+        jsl $=VintageBattlefield__BattleTransition
+        jmp $86ec
+
+    .addr $008709
+        jsl $=VintageBattlefield__BattleTransition
+        jmp $8711
+
+    .new
+    VintageBattlefield__BattleTransition:
+        stz $212d       // disable subscreen
+        lda #$83        // color math control set:
+        sta $2131       //   subtract, BG1, BG2
+
+        lda $79
+        and #$38        // use ??xxx??? bits of counter as RGB values
+        asl a
+        asl a
+        pha
+
+        lda $79
+        and #$07
+        cmp #$07
+        beq $+Off
+
+        pla
+        ora #$04        // tint intensity value
+        sta $2132       // write color register
+        rtl
+
+    %Off:
+        pla
+        sta $2132
+        rtl
+}
+
+//----------------------------------------------------
+// alter fade ins/outs to use harsher steps
+msfpatch {
+    .addr $008b9b
+        jsl $=VintageBattlefield__FadeCommand
+        nop
+
+    .addr $008bbe
+        jsl $=VintageBattlefield__FadeCommand
+        nop
+
+    .new
+    VintageBattlefield__FadeCommand:
+        // detect fade speed to determine which quantization to use
+        lda $82
+        and #$02
+        beq $+FastFade
+
+        // slow fade
+        lda $80
+        jsl $=VintageBattlefield__QuantizeBrightnessFine
+        rtl
+
+    %FastFade:
+        lda $80
+        jsl $=VintageBattlefield__QuantizeBrightness
+        rtl
+}
+
+msfpatch {
+    VintageBattlefield__QuantizeBrightnessFine:
+        pha
+        beq $+Keep
+        ora #$01
+    %Keep:
+        sta $002100
+        pla
+        rtl   
+}
+
+msfpatch {
+    VintageBattlefield__QuantizeBrightness:
+        pha
+        beq $+Keep
+        ora #$03
+    %Keep:
+        sta $002100
+        pla
+        rtl
+
+    VintageBattlefield__Load80QuantizeBrightness:
+        lda $80
+        jmp $_VintageBattlefield__QuantizeBrightness
+
+    VintageBattlefield__Load24QuantizeBrightness:
+        lda $24
+        jmp $_VintageBattlefield__QuantizeBrightness
+
+    VintageBattlefield__TXAQuantizeBrightnessFine:
+        txa
+        jmp $_VintageBattlefield__QuantizeBrightnessFine
+}
+
+msfpatch {
+    .addr $008fd0
+        jsl $=VintageBattlefield__QuantizeBrightness
+    .addr $009166
+        jsl $=VintageBattlefield__Load80QuantizeBrightness
+        nop
+
+    // looking through telescope
+    .addr $00c3d2
+        jsl $=VintageBattlefield__Load24QuantizeBrightness
+        nop
+    .addr $00c404
+        jsl $=VintageBattlefield__Load24QuantizeBrightness
+        nop
+    
+    // giant explode fade-out handled in giant.f4c
+    //.addr $00cb46
+    //    jsl $=VintageBattlefield__TXAQuantizeBrightness
+
+    // Agart mountains opening
+    .addr $00d2bf
+        jsl $=VintageBattlefield__TXAQuantizeBrightnessFine
+
+    // Mist mountain cave-in
+    .addr $00d357
+        jsl $=VintageBattlefield__TXAQuantizeBrightnessFine
+
+    // Red wings landing
+    .addr $00d930
+        jsl $=VintageBattlefield__Load80QuantizeBrightness
+        nop
+
+    // Red wings flying
+    .addr $00d944
+        jsl $=VintageBattlefield__Load80QuantizeBrightness
+        nop
+
+    // Kain arrives with red wings
+    .addr $00db12
+        jsl $=VintageBattlefield__TXAQuantizeBrightnessFine
+
+    // Enterprise evading red wings
+    .addr $00db4c
+        jsl $=VintageBattlefield__TXAQuantizeBrightnessFine
+
+    .addr $0181b7
+        jsl $=VintageBattlefield__QuantizeBrightness
+    .addr $019471
+        jsl $=VintageBattlefield__QuantizeBrightness
+    .addr $01948b
+        jsl $=VintageBattlefield__QuantizeBrightness
+    .addr $028382
+        jsl $=VintageBattlefield__QuantizeBrightnessFine
+    .addr $13e3d7
+        jsl $=VintageBattlefield__QuantizeBrightness
+}
+
+msfpatch {
+    .addr $0093da
+        jsl $=VintageBattlefield__QuantizeBrightness_WeirdFix
+        nop
+
+    .addr $009440
+        jsl $=VintageBattlefield__QuantizeBrightness_WeirdFix
+        nop
+
+    .addr $00a30d
+        jsl $=VintageBattlefield__QuantizeBrightness_WeirdFix
+        nop
+
+    .addr $00ca7a
+        jsl $=VintageBattlefield__QuantizeBrightness_WeirdFix
+        nop
+
+    .addr $00d9f0
+        jsl $=VintageBattlefield__QuantizeBrightness_WeirdFix
+        nop
+
+    .addr $00da5b
+        jsl $=VintageBattlefield__QuantizeBrightness_WeirdFix
+        nop
+
+    .addr $00da92
+        jsl $=VintageBattlefield__QuantizeBrightness_WeirdFix
+        nop
+
+    .new
+    VintageBattlefield__QuantizeBrightness_WeirdFix:
+        bcs $+Return
+        jsl $=VintageBattlefield__QuantizeBrightness
+    %Return:
+        rtl
+}
+
+// force battle fade-in to be coarse by other means
+msfpatch {
+    .addr $028208
+        jml $=VintageBattlefield__BattleFadeInHack
+
+    .new
+    VintageBattlefield__BattleFadeInHack:
+        lda $f13d
+        ora #$03
+        sta $6cc1
+        jml $02820e
+}
+
+msfpatch {
+    VintageBattlefield__QuantizeColor:
+        pha
+        bit #$1f
+        beq $+Keep
+        ora #$07
+    %Keep:
+        sta $002132
+        pla
+        rtl
+}
+
+msfpatch {
+    VintageBattlefield__QuantizeColorFine:
+        pha
+        bit #$1f
+        beq $+Keep
+        ora #$03
+    %Keep:
+        sta $002132
+        pla
+        rtl
+}
+
+msfpatch {
+    .addr $03fc57
+        jsl $=VintageBattlefield__QuantizeColor
+    .addr $03fcf7
+        jsl $=VintageBattlefield__QuantizeColor
+    .addr $03fd07
+        jsl $=VintageBattlefield__QuantizeColor
+}
+
+msfpatch {
+    VintageBattlefield__QuantizeColor_Package:
+        jsl $=VintageBattlefield__QuantizeColor
+        lda $7a
+        rtl
+
+    .addr $00d643
+        jsl $=VintageBattlefield__QuantizeColor_Package
+        nop
+}
+
+msfpatch {
+    VintageBattlefield__QuantizeColor_LoadMap:
+        ora $81
+        jsl $=VintageBattlefield__QuantizeColor
+        rtl
+
+    .addr $0084e5
+        jsl $=VintageBattlefield__QuantizeColor_LoadMap
+        nop
+}
+
+msfpatch {
+    VintageBattlefield__QuantizeColor_TintCommand:
+        ora $81
+        pha
+        lda $82
+        beq $+Coarse
+        pla
+        jsl $=VintageBattlefield__QuantizeColorFine
+        rtl
+
+    %Coarse:
+        pla
+        jsl $=VintageBattlefield__QuantizeColor
+        rtl
+
+    .addr $00e772
+        jsl $=VintageBattlefield__QuantizeColor_TintCommand
+        nop
+    .addr $00e795
+        jsl $=VintageBattlefield__QuantizeColor_TintCommand
+        nop
+}
+
+
+// disable enemy death palette fade
+msfpatch {
+    .addr $02e9cf
+        nop nop nop
+}

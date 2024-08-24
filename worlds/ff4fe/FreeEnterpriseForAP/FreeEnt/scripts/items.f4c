@@ -1,0 +1,480 @@
+// LOL fix a bug in the code that checks if
+// the price calculated is too high when attempting
+// to buy lots of an item.
+//   original code is trying to see if the calculated
+//   number is >= 0x989680 (10000000) but:
+//   (a) it loads $75 to check the top byte but then $75 again
+//       to check the bottom two... need to fix to $73
+//   (b) it fails if the top byte is > #$98 but the lower
+//       bytes are not > #$9680
+// So let's just rewrite this check
+msfpatch {
+    FixItemPriceTooHighCheck:
+        ldx $73
+        lda $76 // okay turns out result of calculation is 4 bytes
+        bne $+FixItemPriceTooHighCheck_TooHigh
+        lda $75
+        cmp #$98
+        beq $+FixItemPriceTooHighCheck_CheckLowerDigits
+        bcs $+FixItemPriceTooHighCheck_TooHigh
+
+        // price is fine
+    FixItemPriceTooHighCheck_Okay:
+        jml $018fa8
+
+    FixItemPriceTooHighCheck_CheckLowerDigits:
+        cpx #$9680
+        bcc $-FixItemPriceTooHighCheck_Okay
+
+    FixItemPriceTooHighCheck_TooHigh:
+        jml $01cac8
+    
+    .addr $01cab3
+        jml $=FixItemPriceTooHighCheck
+}
+
+// The text used is ugly, let's provide a new one
+msfpatch {
+    .addr $01caca
+        [[ $_MenuData__TooMuch ]]  // string itself defined in menu_text.f4c
+}
+
+// Need to fix another bug: if all the items in list are TooMuchGP,
+// then scrolling up or down will softlock as it can't find a place 
+// to land the cursor.
+// So let's rewrite those loops with an out.
+msfpatch {
+    BuyListUpArrow:
+        // save starting cursor so we know if we should stop
+        lda $1b7b
+        sta $43
+        // blank B accumulator in case
+        lda #$00
+        xba
+    BuyListUpArrow_LoopStart:
+        lda $1b7b
+        dec a
+        bpl $+BuyListUpArrow_NoWrap
+        lda $1b7d
+        dec a
+    BuyListUpArrow_NoWrap:
+        sta $1b7b
+        cmp $43
+        beq $+BuyListUpArrow_Done
+        tax
+        lda $1a78,x
+        bne $-BuyListUpArrow_LoopStart
+    BuyListUpArrow_Done:
+        // hook into extra item display code
+        jsl $=ExtraItemDescriptions__BuyMenuUpdate
+        jml $01c5df
+
+    .addr $01c5ca
+        jml $=BuyListUpArrow
+}
+
+
+msfpatch {
+    BuyListDownArrow:
+        // save starting cursor so we know if we should stop
+        lda $1b7b
+        sta $43
+        // blank B accumulator in case
+        lda #$00
+        xba
+    BuyListDownArrow_LoopStart:
+        lda $1b7b
+        inc a
+        cmp $1b7d
+        bcc $+BuyListDownArrow_NoWrap
+        lda #$00
+    BuyListDownArrow_NoWrap:
+        sta $1b7b
+        cmp $43
+        beq $+BuyListDownArrow_Done
+        tax
+        lda $1a78,x
+        bne $-BuyListDownArrow_LoopStart
+    BuyListDownArrow_Done:
+        // hook into extra item display code
+        jsl $=ExtraItemDescriptions__BuyMenuUpdate
+        jml $01c5fb
+
+    .addr $01c5e5
+        jml $=BuyListDownArrow
+}
+
+
+// Also need to check this "too much price" flag when attempting
+// to buy
+msfpatch {
+    BuyListOverflowPriceCheck:
+        lda #$00
+        xba
+        lda $1b7b
+        tax
+        lda $1a78,x
+        bne $+BuyListOverflowPriceCheck_TooMuch
+        // perform displaced instructions and return normally
+        lda $1b7b
+        asl a
+        asl a
+        jml $01c64e
+
+    BuyListOverflowPriceCheck_TooMuch:
+        // jump directly to fail condition
+        jml $01c6a0
+
+    .addr $01c649
+        jml $=BuyListOverflowPriceCheck
+}
+
+
+// support for megapricing
+// (no change to selling, since that value
+//  is limited to 2 bytes)
+msfpatch {
+    .def Megaprice_Table $218080
+
+    ItemPurchasePrice_Hook:
+        lda $0fa450,x
+        cmp #$ff
+        bne $+ItemPurchasePrice_ReturnNormal
+
+        // find item in megaprice table
+        ldx #$0000
+    %LookupLoop:
+        lda $=Megaprice_Table,x
+        beq $+NotFound
+        cmp $5d
+        beq $+Matched
+        inx
+        inx
+        inx
+        inx
+        bra $-LookupLoop
+
+    %NotFound:
+        lda #$ff
+        sta $45
+        sta $46
+        sta $47
+        bra $+Finish
+
+    %Matched:
+        inx
+        lda $=Megaprice_Table,x
+        sta $45
+        inx
+        lda $=Megaprice_Table,x
+        sta $46
+        inx
+        lda $=Megaprice_Table,x
+        sta $47
+
+    %Finish:
+        // dunno what this stuff is but seems important
+        // (from original code area)
+        rep #$20
+        .mx 0x00
+        tya
+        asl a
+        tax
+        lda $01c573,x
+        tay
+        sep #$20
+        .mx 0x20
+
+        jml $01c4f2
+
+    ItemPurchasePrice_ReturnNormal:
+        lda $0fa450,x  // need to re-do load to reset processor flags after our cmp #$fc
+        jml $01c4bc        
+
+    .addr $01c4b8
+        jml $=ItemPurchasePrice_Hook
+}
+
+//--------------------------------------------------------------------
+// General hooks for special item use code
+
+msfpatch {
+    Inventory_Use:
+        // check for whistle as before
+        cmp #$ed
+        bne $+NotWhistle
+        jml $01a328
+
+    %NotWhistle:
+        // check for garbage can
+        cmp #$ff
+        beq $+Inventory_UseTrashCan
+        // return to original flow
+        jml $01a333
+
+    Inventory_UseTrashCan:
+        // change cursor to TrashCan
+        jsr $_Inventory_LoadTrashCanCursorCHR
+
+        jml $01a365 // (go to RTS)
+
+    .addr $01a324
+        jml $=Inventory_Use
+}
+
+// hook into cursor update to create blinking effect
+msfpatch {
+    Inventory_UpdateCursor:
+        // displaced instructions
+        tax  
+        ldy #$0300
+
+        // check if in TrashCan mode, and use
+        // custom cursor update if so
+        lda $1b3b
+        cmp #$ff
+        bne $+Inventory_UpdateCursor_Normal
+
+        // choose cursor sprite based on timer value
+        lda $16a3
+    Inventory_UpdateCursor_NormalizeTimer:
+        cmp #$0f
+        bcc $+Inventory_UpdateCursor_CheckTimer
+        sec
+        sbc #$0f
+        bra $-Inventory_UpdateCursor_NormalizeTimer
+    Inventory_UpdateCursor_CheckTimer:
+        cmp #$05
+        bcs $+Inventory_UpdateCursor_Normal
+
+    Inventory_UpdateCursor_Blink:
+        lda #$08
+        rtl
+
+    Inventory_UpdateCursor_Normal:
+        lda #$0a
+        rtl
+
+    .addr $01a0f6
+        jsl $=Inventory_UpdateCursor
+        jsr $8288  // change sub call to bypass the hardcoded cursor number
+}
+
+// hook into cancel code
+msfpatch {
+    Inventory_CancelPressed:
+        // check if in trash can mode
+        lda $1b3b
+        cmp #$ff
+        beq $+Inventory_CancelTrashCan
+
+        // simulate displaced original check for if-second-cursor
+        lda $1b19
+        beq $04
+        jml $01a0c6
+        jml $01a0ce
+
+    Inventory_CancelTrashCan:
+        stz $1b3b
+        jsr $_Inventory_LoadOriginalCursorCHR
+        jml $01a0d7
+
+    .addr $01a0c1
+        jml $=Inventory_CancelPressed
+}
+
+// hook into select code
+msfpatch {
+    Inventory_SelectPressed:
+        // check if in trash can mode
+        lda $1b3b
+        cmp #$ff
+        beq $+Inventory_DoQuickTrash
+
+        // simulate displaced original check for if-second-cursor
+        lda $1b19
+        bne $04
+        jml $01a09f
+        jml $01a0a4
+
+    Inventory_DoQuickTrash:
+        // get inventory offset
+        lda $1b23
+        clc
+        adc $1b1a
+        asl a
+        adc $1b22
+        asl a
+        sta $45
+        stz $46
+        ldx $45
+
+        // check if trashable (copy of $01a38e et al)
+        lda $1441,x
+        beq $+Inventory_DoQuickTrash_NotOK
+        lda $1440,x
+        beq $+Inventory_DoQuickTrash_NotOK
+        cmp #$60
+        beq $+Inventory_DoQuickTrash_NotOK
+        cmp #$ed  // whistle
+        beq $+Inventory_DoQuickTrash_OK
+        cmp #$19  // legend sword
+        beq $+Inventory_DoQuickTrash_NotOK
+        cmp #$c8  // crystal
+        beq $+Inventory_DoQuickTrash_NotOK
+        cmp #$ec  // less than Pass
+        bcc $+Inventory_DoQuickTrash_OK
+
+    Inventory_DoQuickTrash_NotOK:
+        // play nope sound
+        lda #$12
+        sta $1e00
+        jsr $048004
+        jml $01a0a7
+
+    Inventory_DoQuickTrash_OK:
+        // inject a return address onto the stack
+        // since code we'll jump to eventually RTS's
+        ldx #$a0a7
+        phx
+
+        ldx $45
+        jml $01a3a8  // go to trashing routine
+
+    .addr $01a09a
+        jml $=Inventory_SelectPressed
+}
+
+msfpatch {
+    Inventory_LoadTrashCanCursorCHR:
+        jsr $_MK_VBlank
+        
+        // dma transfer to replace cursor
+        ldx #$4080
+        stx $1d
+        ldx #$_Inventory_TrashCanTopCHR
+        stx $1f
+        lda #$20
+        sta $21
+        lda #$80
+        sta $23
+        jsr $_Inventory_DMA
+        
+        ldx #$4180
+        stx $1d
+        ldx #$_Inventory_TrashCanBottomCHR
+        stx $1f
+        lda #$20
+        sta $21
+        lda #$80
+        sta $23
+        jsr $_Inventory_DMA
+
+        rts
+
+    Inventory_LoadOriginalCursorCHR:
+        jsr $_MK_VBlank
+        
+        // dma transfer to replace cursor
+        ldx #$4080
+        stx $1d
+        ldx #$_Inventory_OriginalCursorTopCHR
+        stx $1f
+        lda #$20
+        sta $21
+        lda #$80
+        sta $23
+        jsr $_Inventory_DMA
+        
+        ldx #$4180
+        stx $1d
+        ldx #$_Inventory_OriginalCursorBottomCHR
+        stx $1f
+        lda #$20
+        sta $21
+        lda #$80
+        sta $23
+        jsr $_Inventory_DMA
+
+        rts
+
+    Inventory_DMA:
+        // largely a copy of $018078, except $23 = number of bytes total
+        phb
+        tdc
+        pha
+        plb
+        lda #$80
+        sta $2115
+        tdc 
+        sta $420c
+        ldy $011d
+        sty $2116
+        lda #$01
+        sta $4300
+        lda #$18
+        sta $4301
+        rep #$20
+        lda $011f
+        sta $4302
+        lda $0121
+        sta $4304
+        sep #$20
+        lda $0123
+        sta $4305
+        stz $4306
+        lda #$01
+        sta $420b
+        plb 
+        rts 
+
+    Inventory_OriginalCursorTopCHR:
+        [[
+            00 00 00 00 40 40 FA 3C F9 6E C2 3C FC 40 C0 00 00 00 00 00 00 00 84 00 86 00 3C 00 80 00 00 00 02 3C 01 7E 21 7E 3A 3C 7E 00 7E 28 5E 04 7F 00 3C 00 7E 00 5E 00 04 00 7C 00 54 00 20 00 66 00
+            07 00 0f 07 19 0d 58 0f f0 5f b8 5f cf 6f a0 10
+            00 00 00 00 03 00 00 00 00 00 20 00 30 00 7f 00
+            80 00 c0 80 fc c0 02 00 03 fc c2 fc 3c 40 30 40
+            00 00 00 00 c0 00 fc 00 02 00 3c 00 e0 00 e0 00
+        ]]
+
+    Inventory_OriginalCursorBottomCHR:
+        [[
+            00 00 7C 00 7E 01 74 03 07 00 77 00 7E 00 5C 00 00 00 5C 00 72 00 04 00 03 00 76 00 5C 00 00 00 38 00 70 00 18 E0 3C C0 D8 20 E0 00 F0 00 60 00 30 00 40 00 10 00 38 00 C0 00 80 00 60 00 00 00
+            a0 1f b8 67 ff 18 5f 0f 1f 00 ff 00 ff 00 3f 00
+            7f 00 7f 00 5f 00 0f 00 00 00 00 00 00 00 00 00
+            70 a0 e0 40 e0 c0 c0 80 fc 00 ff 00 fe 00 80 00
+            e0 00 c0 00 c0 00 80 00 00 00 00 00 00 00 00 00
+        ]]
+
+    Inventory_TrashCanTopCHR:
+        [[ 
+            00 00 00 00 00 00 00 00 01 00 01 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 30 00 50 20 9E 60 01 FE 01 FE 06 F8 88 70 00 00 00 00 00 00 20 00 00 00 0E 00 88 00 70 00
+            03 00 04 03 1B 04 20 1F 41 3E 3F 00 21 1E 20 1F 00 00 03 00 04 00 18 00 3E 00 00 00 14 00 15 00 80 00 70 80 D0 20 9E 60 01 FE 01 FE 06 F8 88 70 00 00 80 00 00 00 20 00 00 00 0E 00 88 00 70 00
+        ]]
+
+    Inventory_TrashCanBottomCHR:
+        [[
+            00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 70 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00        
+            20 1F 20 1F 20 1F 20 1F 20 1F 20 1F 17 08 08 00 15 00 15 00 15 00 15 00 15 00 1F 00 08 00 00 00 78 80 08 F0 08 F0 08 F0 08 F0 08 F0 D0 20 20 00 00 00 50 00 50 00 50 00 50 00 F0 00 20 00 00 00
+        ]]
+}
+
+//---------------------------------------
+// Fix two-handed equip error message
+patch($01d9f2 bus) {
+92 03 0B 05
+D6 03
+58 60 5C 6B 6A 69 FF 64 6E 01 
+54 04
+6F 72 6A C2 63 5C 69 5F 60 5F C1 00
+}
+
+//---------------------------------------
+// Remove Medusa Sword from drops
+droptable($37) {
+    common #MedusaArrow
+    uncommon #MedusaArrow
+    rare #MedusaArrow
+    mythic #MedusaArrow
+}
+

@@ -1,0 +1,5144 @@
+npc($00)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+        $00   //(no event)
+    }
+}
+
+npc(#DoorOpener)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $0B   //Open a door
+    }
+}
+
+npc(#DarkElfSeal)
+{
+    sprite #Transparent
+    default inactive
+    eventcall {
+        $29   //Map message 2 - "     Sealed by Dark Elf."
+    }
+}
+
+npc(#BaronSoldier1)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $2D   //Map message 6 - "What are you?"
+        if #PrologueComplete:
+            $2C   //Map message 5 - "We're ordered not to let you in until you're back"
+        else:
+            $2B   //Map message 4 - "It'll be an early leave tomorrow morning."
+    }
+}
+
+npc(#BaronSoldier2)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        if #PrologueComplete:
+            $01   //Show first message
+        else:
+            $2E   //Map message 7 - "It's too late. Better to stay in, sir."
+        messages:
+            $05   // "We're ordered not to let you in until you're back"
+            $06   // "What are you?"
+    }
+}
+
+npc(#Kainazzo)
+{
+    sprite #Kainazzo
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Engineer1)
+{
+    sprite #Engineer
+    default active
+    eventcall {
+        if #Hook:
+            $03   //Show third message
+        if #ReinforcedEnterprise, not #Hook:
+            $1D   //Attaching hook to Enterprise
+        if #TwinsStone:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0D
+            $0E
+            $0F
+    }
+}
+
+npc(#Engineer2)
+{
+    sprite #Engineer
+    default active
+    eventcall {
+        if #Hook:
+            $03   //Show third message
+        if #ReinforcedEnterprise, not #Hook:
+            $1D   //Attaching hook to Enterprise
+        if #TwinsStone:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $10   // "I found a good place to goof off and take a nap_"
+            $11   // "Ghost! "
+            $12   // "Don't you think I'm getting better than my"
+    }
+}
+
+npc(#Baigan)
+{
+    sprite #Captain
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#CastleBaronWhiteMage1)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        if not #TwinsStone:
+            $01   //Show first message
+        else:
+            $02   //Show second message
+        messages:
+            $04   // "The King has become very energetic lately."
+            $05   // "We will help the soldiers with our white magic!"
+    }
+}
+
+npc(#CastleBaronWhiteMage2)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        if not #TwinsStone:
+            $01   //Show first message
+        else:
+            $02   //Show second message
+        messages:
+            $02   // "I'm studying the basics. I learned Cure 1 in my"
+            $03   // "I couldn't tell that the King was fake_"
+    }
+}
+
+npc(#CastleBaronWhiteMage3)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        if not #TwinsStone:
+            $01   //Show first message
+        else:
+            $02   //Show second message
+        messages:
+            $00
+            $01
+    }
+}
+
+npc(#CastleBaronBlackMage1)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        if not #TwinsStone:
+            $29   //Map message 2
+        else:
+            $2A   //Map message 3
+    }
+}
+
+npc(#CastleBaronBlackMage2)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        if not #TwinsStone:
+            $27   //Map message 0 - "I'm working on the use of magic spells in battles"
+        else:
+            $28   //Map message 1 - "I'm embarrassed that I couldn't spot the fake"
+    }
+}
+
+npc(#CastleBaronBlackMage3)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        if not #TwinsStone:
+            $2B   //Map message 4 - "Sleep! "
+        else:
+            $8F   //Being turned Mini in Baron's Classroom
+    }
+}
+
+npc(#CastleBaronSoldier1)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if #TwinsStone:
+            $28   //Map message 1
+        else:
+            $27   //Map message 0
+    }
+}
+
+npc(#Palom1)
+{
+    sprite #Palom
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Porom1)
+{
+    sprite #Porom
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#KainNormal)
+{
+    sprite #Kain
+    default active
+    eventcall {
+        if not #TalkedToKainInBaron:
+            $12   //Speaking to Kain in Baron
+        else:
+            $01   //Show first message
+        messages:
+            $0C
+    }
+}
+
+npc(#CastleBaronSoldier2)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if #TwinsStone:
+            $2A   //Map message 3
+        else:
+            $29   //Map message 2
+    }
+}
+
+npc(#CastleBaronSoldier3)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if #TwinsStone:
+            $2C   //Map message 5
+        else:
+            $2B   //Map message 4
+    }
+}
+
+npc(#CastleBaronSoldier4)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if #TwinsStone:
+            $2E   //Map message 7
+        else:
+            $2D   //Map message 6
+    }
+}
+
+npc(#BaronGuard)
+{
+    sprite #Captain
+    default active
+    eventcall {
+        if #TwinsStone:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0A
+            $0B
+    }
+}
+
+npc(#KingBaron)
+{
+    sprite #King
+    default active
+    eventcall {
+        $1B   //Kainazzo battle, losing twins
+    }
+}
+
+npc(#Elder1)
+{
+    sprite #Elder
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $64   //Paladin Cecil talking to Mysidian Elder
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $01   //Show first message
+        else:
+            $5E   //Talking with Mysidian Elder, twins joining
+        messages:
+            $16
+    }
+}
+
+npc(#HPStatusRecovery)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $7D   //HP restoring pot
+    }
+}
+
+npc(#Yang1)
+{
+    sprite #Yang
+    default inactive
+    eventcall {
+        $21   //Cecil/Yang fight
+    }
+}
+
+npc(#Rosa1)
+{
+    sprite #Rosa
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#CastleBaronSoldier5)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0A
+    }
+}
+
+npc(#ToroiaArmorShopWoman)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $6D   //Bring up Toroia armor shop
+    }
+}
+
+npc(#CastleBaronMysidiaBlackMage)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#CastleBaronMysidiaWhiteMage)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#CastleBaronBlackMage4)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $2B   //Map message 4 - "You don't understand! The crystal is not just"
+    }
+}
+
+npc(#CastleBaronSoldier6)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if #TwinsStone:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $08
+            $09
+    }
+}
+
+npc(#ToroiaWeaponShopDancer)
+{
+    sprite #DancerDress
+    default active
+    eventcall {
+        $6E   //Bring up Toroia weapon shop
+    }
+}
+
+npc(#ItemShopGirl)
+{
+    sprite #Girl
+    default active
+    eventcall {
+        $6F   //Bring up Eblan items shop
+    }
+}
+
+npc(#SleepingBubble1)
+{
+    sprite #SleepBubble
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $08
+    }
+}
+
+npc(#CecilMaid)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $13   //Cecil's maid
+    }
+}
+
+npc(#Rubicant1)
+{
+    sprite #Rubicant
+    default inactive
+    eventcall {
+        $0E   //Rubicant main battle
+    }
+}
+
+npc(#DarkKnightCecil1)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc(#LegendarySword)
+{
+    sprite #LegendarySword
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Kain1)
+{
+    sprite #Kain
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#MPRecovery)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $7E   //MP restoring pot
+    }
+}
+
+npc(#Captain)
+{
+    sprite #Captain
+    default inactive
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0C
+    }
+}
+
+npc(#Sparkle1)
+{
+    sprite #Sparkle
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#LockedDoorWaterway)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        if #CecilFoughtYang:
+            $1F   //Unlock the Waterway door
+        else:
+            $0C   //Locked
+    }
+}
+
+npc(#LockedDoorWeaponArmorShop)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        if #CecilFoughtYang:
+            $20   //Unlock the Weapon/Armor shop
+        else:
+            $0C   //Locked
+    }
+}
+
+npc(#BaronMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        if #TwinsStone:
+            $03   //Show third message
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $00
+            $01
+            $02
+    }
+}
+
+npc(#BaronOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        if #TwinsStone:
+            $03   //Show third message
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $03
+            $04
+            $05
+    }
+}
+
+npc(#Namingway1)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $0D   //Namingway
+    }
+}
+
+npc(#BaronToroiaWoman)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        if #TwinsStone:
+            $03   //Show third message
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $06
+            $07
+            $08
+    }
+}
+
+npc(#BaronBoy)
+{
+    sprite #Boy
+    default active
+    eventcall {
+        if #TwinsStone:
+            $03   //Show third message
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $09
+            $0A
+            $0B
+    }
+}
+
+npc(#BaronOldWoman)
+{
+    sprite #OldWoman
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0C
+    }
+}
+
+npc(#Cid1)
+{
+    sprite #Cid
+    default active
+    eventcall {
+    }
+}
+
+npc(#BaronDancer)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        if #TwinsStone:
+            $D6   //Baron Dancer's dance after killing Kainazzo
+        if not #TwinsStone, #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $D1   //Baron Dancer's dance
+        messages:
+            $0E
+            $0F
+            $10
+    }
+}
+
+npc(#RosaMom)
+{
+    sprite #OldWoman
+    default active
+    eventcall {
+        if #CecilBecamePaladin, #KainRegainedSenses:
+            $03   //Show third message
+        if #CecilBecamePaladin, not #KainRegainedSenses:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $00   // "[Rosa]'s mother:The King's  become dreadful."
+            $01   // "[Rosa]'s mother:[Rosa]  ran after you!"
+            $02   // "[Rosa]'s mother:[Rosa]!  Are you alright?"
+    }
+}
+
+npc(#BaronKaipoInnkeeper)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $22   //Staying at a 50 GP Inn
+    }
+}
+
+npc(#BaronInnGirl)
+{
+    sprite #Girl
+    default active
+    eventcall {
+        if #TwinsStone:
+            $03   //Show third message
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $00
+            $01
+            $09
+    }
+}
+
+npc(#BaronInnMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        if #TwinsStone:
+            $03   //Show third message
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $03   // "Welcome, Mr. Dark Knight! Money?"
+            $04   // "I heard that [Cid] is imprisoned in the castle"
+            $05   // "Have a refreshment? It's on me!"
+    }
+}
+
+npc(#BaronInnWoman)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        if #TwinsStone:
+            $03   //Show third message
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $06   // "[Cecil]! I_ I've done nothing_!"
+            $07   // "Soldiers from the Castle Baron are acting terrible"
+            $08   // "The city has become lively once again!"
+    }
+}
+
+npc(#CidDaughter)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        if #ReinforcedEnterprise:
+            $2E   //Map message 7 - "Is my father still making airships?"
+        if #TwinsStone:
+            $2D   //Map message 6 - "Take care, dad! Everyone, please take good"
+        if #CecilBecamePaladin:
+            $2C   //Map message 5 - "[Cecil]!? So, you are alive!"
+        else:
+            $28   //Map message 1 - "More all-night work! He still feels young_"
+    }
+}
+
+npc(#Books1)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#Books2)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#Books3)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#Cid2)
+{
+    sprite #Cid
+    default inactive
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#Fireplace)
+{
+    sprite #Fire
+    default active
+    eventcall {
+        $0F   //OUCH!
+    }
+}
+
+npc(#BaronWeaponShopMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $24   //Bring up Baron weapon shop
+    }
+}
+
+npc(#BaronArmorShopBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $25   //Bring up Baron armor shop
+    }
+}
+
+npc(#BaronKaipoToroiaItemShopBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $26   //Bring up Baron item shop
+    }
+}
+
+npc(#PaladinCecil1)
+{
+    sprite #PCecil
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#MistFarmAgartEblanMan)
+{
+    sprite #Man
+    default inactive
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#MistToroiaCafeMan)
+{
+    sprite #Man
+    default inactive
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#MistMan)
+{
+    sprite #Man
+    default inactive
+    eventcall {
+        $29   //Map message 2 - "I hear that the soul of Odin is sleeping under"
+    }
+}
+
+npc(#MistDamcyanFabulToroiaAgartOldMan)
+{
+    sprite #OldMan
+    default inactive
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#ChildRydia)
+{
+    sprite #CRydia
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#WomanLyingDown)
+{
+    sprite #WomanLyingDown
+    default active
+    eventcall {
+        $2D   //Map message 6 - "_ "
+    }
+}
+
+npc(#MistInnkeeper)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $22   //Staying at a 50 GP Inn
+    }
+}
+
+npc(#MistWeaponShopBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $33   //Bring up Mist weapon shop
+    }
+}
+
+npc(#MistArmorShopOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $34   //Bring up Mist armor shop
+    }
+}
+
+npc(#KaipoMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $27   //Map message 0 - "Welcome to Kaipo of the Damcyan Desert!"
+    }
+}
+
+npc(#KaipoBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $28   //Map message 1 - "Someone picked up a sick girl from Baron falling"
+    }
+}
+
+npc(#KaipoWoman1)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $29   //Map message 2 - "[Anna] fell in love with a man, but [Tellah] didn't"
+    }
+}
+
+npc(#KaipoDancer)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        $D2   //Kaipo Dancer's dance
+        messages:
+            $03   // "I want to go to Damcyan to be a dancer!"
+    }
+}
+
+npc(#KaipoBoy)
+{
+    sprite #Boy
+    default active
+    eventcall {
+        $2B   //Map message 4 - "Underground waterway is northeast of Kaipo."
+    }
+}
+
+npc(#KaipoToroiaMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#KaipoWoman2)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $2D   //Map message 6
+    }
+}
+
+npc(#KaipoWeaponShopOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $35   //Bring up Kaipo weapon shop
+    }
+}
+
+npc(#KaipoArmorShopBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $36   //Bring up Kaipo armor shop
+    }
+}
+
+npc(#FabulWeaponShopOldWoman)
+{
+    sprite #OldWoman
+    default active
+    eventcall {
+        $7B   //Bring up shop 01
+    }
+}
+
+npc(#DamcyanEblanZotLockedDoor)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $0C   //Locked
+    }
+}
+
+npc(#KaipoInn2FWoman)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $28   //Map message 1 - "Welcome! We have few customers"
+    }
+}
+
+npc(#KaipoInn2FScholar)
+{
+    sprite #Scholar
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#KaipoInn2FBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $2A   //Map message 3 - "Only the Damcyan Royalty can enter Cave Antlion to"
+    }
+}
+
+npc(#Advertisement)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#KaipoInnMysidiaAirshipSoldier)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+    }
+}
+
+npc(#KaipoSickhouseOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        if not #RosaHealed:
+            $29   //Map message 2 - "We need SandRuby to cure the fever. But it is in"
+        else:
+            $2C   //Map message 5 - "Good that you recovered. Drop by our house when you"
+    }
+}
+
+npc(#KaipoSickhouseOldWoman)
+{
+    sprite #OldWoman
+    default active
+    eventcall {
+        if not #RosaHealed:
+            $27   //Map message 0 - "A girl from Baron was kept from falling down."
+        else:
+            $28   //Map message 1 - "So, you are that [Cecil]. Take good care of her!"
+    }
+}
+
+npc(#RosaTiedUpSick)
+{
+    sprite #RosaTiedUpSick
+    default active
+    eventcall {
+        if #DefeatedAntlion:
+            $3A   //Curing Rosa
+        else:
+            $2B   //Map message 4
+    }
+}
+
+npc(#Edward1)
+{
+    sprite #Edward
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#EdwardHarp1)
+{
+    sprite #EdwardHarp
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Anna)
+{
+    sprite #Anna
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#HoodedMonster1)
+{
+    sprite #HoodedMonster
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Tellah1)
+{
+    sprite #Tellah
+    default inactive
+    eventcall {
+        if #ChildRydiaJoined, #RosaSick:
+            $3B   //Watery Cave Tellah Joining
+        else:
+            $27   //Map message 0
+    }
+}
+
+npc(#WaterSplash)
+{
+    sprite #Splash
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Octomamm)
+{
+    sprite #OctomammTentacles
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#FallenSoldier1)
+{
+    sprite #FallenSoldier
+    default inactive
+    eventcall {
+        $3F   //...
+    }
+}
+
+npc(#FallenSoldier2)
+{
+    sprite #FallenSoldier
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#AnnaFallen)
+{
+    sprite #AnnaFallen
+    default active
+    eventcall {
+    }
+}
+
+npc(#FallenSoldier3)
+{
+    sprite #FallenSoldier
+    default active
+    eventcall {
+        $41   //'Terrible bombardments from the airships'
+    }
+}
+
+npc(#FallenSoldier4)
+{
+    sprite #FallenSoldier
+    default active
+    eventcall {
+        $44   //Fallen soldier in Damcyan's basement
+    }
+}
+
+npc(#ToroiaInnWoman)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $70   //Staying at a 400 GP Inn
+    }
+}
+
+npc(#PalomStatue)
+{
+    sprite #StonePalom
+    default inactive
+    eventcall {
+        $16   //Item selection - soft
+    }
+}
+
+npc(#PoromStatue)
+{
+    sprite #StonePorom
+    default inactive
+    eventcall {
+        $16   //Item selection - soft
+    }
+}
+
+npc(#FireMagic)
+{
+    sprite #Fire
+    default inactive
+    eventcall {
+        $00   //(no event)
+    }
+}
+
+npc(#IceWall)
+{
+    sprite #IceWall
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#Yang2)
+{
+    sprite #Yang
+    default active
+    eventcall {
+    }
+}
+
+npc(#SilveraMini1)
+{
+    sprite #Mini
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#Bomb1)
+{
+    sprite #Bomb
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Monk)
+{
+    sprite #Monk
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#SheilaWaving)
+{
+    sprite #YangWifeWave
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#SilveraMini2)
+{
+    sprite #Mini
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#SilveraFrog1)
+{
+    sprite #Frog
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#FabulMonk1)
+{
+    sprite #Monk
+    default active
+    eventcall {
+        if #LeviathanAttacked:
+            $2A   //Map message 3
+        if #SpokeAboutRescuingRosa, not #LeviathanAttacked:
+            $29   //Map message 2
+        if not #LeviathanAttacked, #FabulBattle:
+            $28   //Map message 1
+        else:
+            $27   //Map message 0
+    }
+}
+
+npc(#AntlionLeftClaw)
+{
+    sprite #AntlionClawLeft
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#CaptainUnused)
+{
+    sprite #Captain
+    default inactive
+    eventcall {
+        $01   //Show first message
+        messages:
+            $02
+    }
+}
+
+npc(#CastleBaronDoorOpener)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $0B   //Open a door
+    }
+}
+
+npc(#ChocoboUnused)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#Golbez1)
+{
+    sprite #Golbez
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#MysidiaFabulCrystal)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+    }
+}
+
+npc(#Lightning1)
+{
+    sprite #Lightning
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#BlackChocoboFarm)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#SilveraPigDancer)
+{
+    sprite #Pig
+    default active
+    eventcall {
+        $D7   //Silvera 3 Dancers' dance
+    }
+}
+
+npc(#Queen1)
+{
+    sprite #Queen
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Dancer1)
+{
+    sprite #Dancer
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#BaronDancerDress)
+{
+    sprite #Transparent
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#FatChocoboTopLeft1)
+{
+    sprite #FatChocobo00
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboTopRight1)
+{
+    sprite #FatChocobo10
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboBottomLeft1)
+{
+    sprite #FatChocobo01
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboBottomRight1)
+{
+    sprite #FatChocobo11
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#WellSign)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        if #FoughtValvalis, not #UnderworldOpen:
+            $84   //Using Magma Key, opening Underworld
+        else:
+            $27   //Map message 0 - "[Cecil]:Looks really deep_"
+    }
+}
+
+npc(#YellowChocobo1)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $4F   //Mist mountains on a chocobo
+    }
+}
+
+npc(#WhiteChocobo1)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $50   //Touching a White Chocobo
+    }
+}
+
+npc(#DancerLegs)
+{
+    sprite #DancerLeg
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#OctomammTentacles)
+{
+    sprite #OctomammTentacles
+    default active
+    eventcall {
+    }
+}
+
+npc(#RubicantFlames)
+{
+    sprite #Fire
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#AntlionRightClaw)
+{
+    sprite #AntlionClawRight
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#OldManUnused)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#TrainingRoomSoldierOutside)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $11
+    }
+}
+
+npc(#CaveEblanaSoldier1)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $29   //Map message 2 - "This path leads to the Tower of Bab-il."
+    }
+}
+
+npc(#CaveEblanaSoldier2)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#SoldierUnused)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#CaveEblanaSoldier3)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $2B   //Map message 4 - "We're the people of Eblan."
+    }
+}
+
+npc(#FabulMonk2)
+{
+    sprite #Monk
+    default inactive
+    eventcall {
+        $28   //Map message 1 - "It's dangerous out! Please rest now."
+    }
+}
+
+npc(#FabulMonk3)
+{
+    sprite #Monk
+    default active
+    eventcall {
+        if #SpokeAboutRescuingRosa:
+            $2A   //Map message 3
+        if #FabulBattle:
+            $28   //Map message 1
+        else:
+            $27   //Map message 0
+    }
+}
+
+npc(#FabulMonk4)
+{
+    sprite #Monk
+    default active
+    eventcall {
+        $29   //Map message 2 - "Oh, I'm not sleeping! I am contemplating!"
+    }
+}
+
+npc(#FabulMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        if #FabulBattle:
+            $28   //Map message 1 - "What an attack!"
+        else:
+            $27   //Map message 0 - "Are you back from your training, [Yang]?"
+    }
+}
+
+npc(#FabulWoman1)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        if #FabulBattle:
+            $2A   //Map message 3 - "It's good that our town is within the castle!"
+        else:
+            $29   //Map message 2 - "We're safe in the castle!"
+    }
+}
+
+npc(#FabulBoy)
+{
+    sprite #Boy
+    default active
+    eventcall {
+        if #FabulBattle:
+            $2C   //Map message 5 - "ACHOOOO! "
+        else:
+            $2B   //Map message 4 - "Beat them up, sir!"
+    }
+}
+
+npc(#FabulDancer)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        $D3   //Fabul Dancer's dance
+    }
+}
+
+npc(#FabulOldWoman)
+{
+    sprite #OldWoman
+    default active
+    eventcall {
+        if #FabulBattle:
+            $2B   //Map message 4 - "The King used to be a great Karate fighter also."
+        else:
+            $2A   //Map message 3 - "It's our King's bedroom!"
+    }
+}
+
+npc(#FabulKing)
+{
+    sprite #King
+    default inactive
+    eventcall {
+        if #LeviathanAttacked:
+            $29   //Map message 2 - "King:If [Golbez] acquires  them all, the world will"
+        if not #LeviathanAttacked, #SpokeAboutRescuingRosa:
+            $2C   //Map message 5 - "King:Go to the harbor to  the east as soon as you"
+        else:
+            $27   //Map message 0 - "King of Fabul:We will have  to do something."
+    }
+}
+
+npc(#FabulWhiteMage)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        if #FabulBattle:
+            $28   //Map message 1 - "I wish I could use the white magic as well as"
+        else:
+            $27   //Map message 0 - "This is the nursing room."
+    }
+}
+
+npc(#FabulKarateFighter1)
+{
+    sprite #Monk
+    default inactive
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#FabulKarateFighter2)
+{
+    sprite #Monk
+    default inactive
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#FabulWoman2)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        if #GotSpoon:
+            $01   //Show first message
+        if #UsedPan, not #GotSpoon:
+            $F9   //Trading the Pan for the Spoon
+        if #GotPan:
+            $2B   //Map message 4 - "Come on! _Ooops! This onion makes my eyes"
+        if #FoundSleepingYang, not #GotPan:
+            $09   //Receiving the pan
+        if not #FoundSleepingYang, #YangDestroyedCannon:
+            $2A   //Map message 3 - "My husband's gone? Don't be kidding!"
+        if #KainRegainedSenses, not #YangDestroyedCannon:
+            $29   //Map message 2 - "Get going!"
+        if #FabulBattle:
+            $28   //Map message 1 - "[Yang]'s wife:My_!  You are alive!"
+        else:
+            $27   //Map message 0 - "Woman:Hi! Honey! [Yang]:It's my wife."
+        messages:
+            $0A   // "Don't worry about me! Tell [Yang] to get well"
+    }
+}
+
+npc(#MistBombUnused)
+{
+    sprite #Bomb
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#SilveraPig)
+{
+    sprite #Pig
+    default active
+    eventcall {
+        $2A   //Map message 3 - "We mine silver ores. Toads refine and Small"
+    }
+}
+
+npc(#SilveraFrog2)
+{
+    sprite #Frog
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#DarkElf)
+{
+    sprite #DarkElf
+    default active
+    eventcall {
+        if #GotTwinharp, #DarkElfBattle1:
+            $81   //Dark Elf 'Fire2' battle
+        if #GotTwinharp, not #DarkElfBattle1:
+            $73   //Dark Elf 'Me Attack You' battle
+        else:
+            $80   //Dark Elf 'You Fool' battle
+    }
+}
+
+npc(#BaronToroiaAgartWoman)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#SilveraWeaponShopFrog)
+{
+    sprite #Frog
+    default active
+    eventcall {
+        $23   //Bring up Silvera weapon shop
+    }
+}
+
+npc(#SilveraArmorShopPig)
+{
+    sprite #Pig
+    default active
+    eventcall {
+        $37   //Bring up Silvera armor shop
+    }
+}
+
+npc(#SilveraItemShopMini)
+{
+    sprite #Mini
+    default active
+    eventcall {
+        $38   //Bring up Silvera item shop
+    }
+}
+
+npc(#SilveraInnPig)
+{
+    sprite #Pig
+    default active
+    eventcall {
+        $32   //Staying at a 800 GP Inn
+    }
+}
+
+npc(#AgartBoy)
+{
+    sprite #Boy
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#CaveMagnesCrystal)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        $74   //Obtaining the Earth Crystal
+    }
+}
+
+npc(#KaipoToroiaAgartOldWoman)
+{
+    sprite #OldWoman
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#ToroiaAgartGirl)
+{
+    sprite #Girl
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#ToroiaAgartBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $2E   //Map message 7
+    }
+}
+
+npc(#AgartDancer)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        $D4   //Agart Dancer's dance
+    }
+}
+
+npc(#AgartWeaponShopMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $53   //Bring up Agart weapon shop
+    }
+}
+
+npc(#AgartArmorShopOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $54   //Bring up Agart armor shop
+    }
+}
+
+npc(#FabulInnOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $49   //Staying at a 100 GP Inn
+    }
+}
+
+npc(#MysidiaBlackMageFrog)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $2A   //Map message 3 - "You sure became a Paladin!"
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $28   //Map message 1 - "Wanna be a Paladin? HA! How could you?"
+        else:
+            $5D   //Being turned into a toad by a Black Mage
+    }
+}
+
+npc(#MysidiaBlackMage1)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $03   //Show third message
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $07
+            $08
+            $09
+    }
+}
+
+npc(#MysidiaBlackMage2)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $03   //Show third message
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0D
+            $0E
+            $0F
+    }
+}
+
+npc(#MysidiaWhiteMage1)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $2D   //Map message 6
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $2C   //Map message 5
+        else:
+            $2B   //Map message 4
+    }
+}
+
+npc(#MysidiaWhiteMage2)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $03   //Show third message
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0A
+            $0B
+            $0C
+    }
+}
+
+npc(#MysidiaWhiteMage3)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $01   //Show first message
+        else:
+            $57   //Speaking to the White Mage in Mysidia
+        messages:
+            $11   // "Wow! "
+            $12   // "Wow! "
+    }
+}
+
+npc(#MysidiaDancer)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        $D5   //Mysidia Dancer's dance
+    }
+}
+
+npc(#FabulMysidiaOldWoman)
+{
+    sprite #OldWoman
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#MysidiaInn2FInnkeeperWhiteMage)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        $56   //Staying at a 200 GP Inn
+    }
+}
+
+npc(#MysidiaWeaponShopBlackMage)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $5A   //Bring up Mysidia weapon shop
+    }
+}
+
+npc(#MysidiaArmorShopWhiteMage)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        $5B   //Bring up Mysidia armor shop
+    }
+}
+
+npc(#MysidiaItemShopBlackMage)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $5C   //Bring up Mysidia item shop
+    }
+}
+
+npc(#MysidiaBlackMagePoison)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        if #CecilBecamePaladin:
+            $02   //Show second message
+        if #TwinsJoined, not #CecilBecamePaladin:
+            $01   //Show first message
+        else:
+            $55   //Being poisoned by the bartender in Mysidia
+        messages:
+            $0B   // "Are you gonna be a Paladin?!"
+            $0C   // "Oh! You really did!"
+    }
+}
+
+npc(#Teleporter)
+{
+    sprite #Teleportation
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#MtOrdealsFlameTop)
+{
+    sprite #FlameTop
+    default active
+    eventcall {
+    }
+}
+
+npc(#MtOrdealsFlameBottom)
+{
+    sprite #FlameBottom
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#IceMagic)
+{
+    sprite #IceMagic
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#RydiaMom)
+{
+    sprite #WomanLyingDown
+    default active
+    eventcall {
+    }
+}
+
+npc(#Chamberlain)
+{
+    sprite #OldMan
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Valvalis)
+{
+    sprite #Valvalis
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#CecilRosaKiss1)
+{
+    sprite #CecilRosaKiss
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Ball)
+{
+    sprite #DeathBall
+    default active
+    eventcall {
+        $2D   //Map message 6 - "[Cecil]:If we were a second  late, [Rosa] would have"
+    }
+}
+
+npc(#BlackChocobo1)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $75   //Found Black Chocobo!
+    }
+}
+
+npc(#MagusSister)
+{
+    sprite #MagusSister
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#FatChocoboSpot1)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $4E   //Giving a Carrot to a Fat Chocobo
+    }
+}
+
+npc(#CastleToroiaCleric1)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $2B   //Map message 4
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $2A   //Map message 3
+        else:
+            $28   //Map message 1
+    }
+}
+
+npc(#CastleToroiaCleric2)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $2E   //Map message 7 - "Why are the crystals in the hands of an evil one_!"
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $2D   //Map message 6 - "Here's the crystal. Now, be careful."
+        else:
+            $2C   //Map message 5 - "Dark Elf is weak against metallic weapons."
+    }
+}
+
+npc(#CastleToroiaCleric3)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $03   //Show third message
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $08   // "Dark Elf is in a cave on an island over in"
+            $09   // "What was that?"
+            $0A   // "They took it? Then, get it back!"
+    }
+}
+
+npc(#CastleToroiaCleric4)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $03   //Show third message
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0B   // "If you can get it back, show it to us first, and"
+            $0C   // "Please use our treasure down in the basement."
+            $0D   // "It's not that we lost the crystal, but the problem"
+    }
+}
+
+npc(#CastleToroiaCleric5)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $03   //Show third message
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0E   // "Metals get heavy in the cave of the northwest!"
+            $0F   // "We're only lending it to you!"
+            $10   // "Crystals were all kept separately to avoid this"
+    }
+}
+
+npc(#CastleToroiaCleric6)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $03   //Show third message
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $11   // "You cannot have it, but if you can take it back,"
+            $12   // "What's that?"
+            $13   // "One who has all the crystals will acquire"
+    }
+}
+
+npc(#CastleToroiaCleric7)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $03   //Show third message
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $14   // "Crystal of Earth? Dark Elf took it, and we"
+            $15   // "Crystals increase the powers of the one who hold"
+            $16   // "If the rumor is true that there are more than four"
+    }
+}
+
+npc(#CastleToroiaCleric8)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        if #KainRegainedSenses:
+            $03   //Show third message
+        if #SpokeToToroiaClericsAfterCrystal, not #KainRegainedSenses:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $17   // "We the eight clerics rule this country. We used to"
+            $18   // "What in the world is happening!?"
+            $19   // "Oh my! It's not only us! We are all in a crisis!"
+    }
+}
+
+npc(#ToroiaDancer1)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#ToroiaDancer2)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#ToroiaEdward)
+{
+    sprite #Edward
+    default active
+    eventcall {
+    }
+}
+
+npc(#MysidiaBlackMage3)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $14   // "This is The Serpent Road leading to Baron. It is"
+    }
+}
+
+npc(#ElderPraying)
+{
+    sprite #ElderPraying
+    default active
+    eventcall {
+        if #BigWhaleSurfaced:
+            $DA   //Characters 2, 5: Toggle Visibility, Message EF07
+        if not #TwinsStone, not #ZotEndAndDrill:
+            $88   //Characters 2, 5: Toggle Visibility, Message EF00
+        if #TwinsStone, not #ZotEndAndDrill:
+            $89   //Characters 2, 5: Toggle Visibility, Message EF01
+        if #TwinsStone, #ZotEndAndDrill:
+            $8A   //Characters 2, 5: Toggle Visibility, Message EF04
+    }
+}
+
+npc(#CastleBaronCaptain)
+{
+    sprite #Captain
+    default active
+    eventcall {
+        if #TwinsStone:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0E   // "Treasure your life."
+            $0F   // "I knew there was something wrong about the King, but"
+    }
+}
+
+npc(#MysidiaWhiteMage4)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $15   // "The Serpent Road was named because it drains much"
+    }
+}
+
+npc(#SilveraFrog3)
+{
+    sprite #Frog
+    default active
+    eventcall {
+        $2D   //Map message 6 - "Yeah!"
+    }
+}
+
+npc(#MysidiaElder)
+{
+    sprite #Elder
+    default inactive
+    eventcall {
+        if #BigWhaleSurfaced:
+            $2E   //Map message 7
+        if not #TwinsStone, not #ZotEndAndDrill:
+            $27   //Map message 0
+        if #TwinsStone, not #ZotEndAndDrill:
+            $28   //Map message 1
+        if #TwinsStone, #ZotEndAndDrill:
+            $2B   //Map message 4
+    }
+}
+
+npc(#MysidiaBlackMagePraying1)
+{
+    sprite #BlackMagePraying
+    default active
+    eventcall {
+        if #BigWhaleSurfaced:
+            $2C   //Map message 5 - "We are wishing!"
+        else:
+            $29   //Map message 2 - "Our Elder has been wishing in this tower ever since."
+    }
+}
+
+npc(#MysidiaWhiteMagePraying1)
+{
+    sprite #WhiteMagePraying
+    default active
+    eventcall {
+        if #BigWhaleSurfaced:
+            $2D   //Map message 6 - "Hurry to the moon!"
+        else:
+            $2A   //Map message 3 - "We wish too_ for the sake of all those who live."
+    }
+}
+
+npc(#SilveraFrog4)
+{
+    sprite #Frog
+    default active
+    eventcall {
+        $27   //Map message 0 - "What's up? "
+    }
+}
+
+npc(#CaveEblanaWeaponShopOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $98   //Bring up Eblan weapon shop
+    }
+}
+
+npc(#CaveEblanaArmorShopMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $99   //Bring up Eblan armor shop
+    }
+}
+
+npc(#CaveEblanaInnBeardedMan)
+{
+    sprite #BeardedMan
+    default active
+    eventcall {
+        $97   //Staying at a 3,200 GP Inn
+    }
+}
+
+npc(#Edge1)
+{
+    sprite #Edge
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Rubicant2)
+{
+    sprite #Rubicant
+    default active
+    eventcall {
+    }
+}
+
+npc(#AdultRydia1)
+{
+    sprite #ARydia
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Crystal2)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+    }
+}
+
+npc(#FallenSoldier5)
+{
+    sprite #FallenSoldier
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#AirshipEngineer)
+{
+    sprite #Engineer
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#ToroiaDancerAsks)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        if not #SpokeToToroiaClericsAfterCrystal:
+            $9F   //'Do you have the Clerics' permission?' when you do
+        else:
+            $0A   //Do you have the clerics' permission?
+    }
+}
+
+npc(#FallenSoldier6)
+{
+    sprite #FallenSoldier
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#CaveEblanaOldMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        if not #EdgeJoined:
+            $2C   //Map message 5 - "To rescue the King and Queen, the Prince is"
+        else:
+            $01   //Show first message
+        messages:
+            $0A   // "We will hold out here. Please be careful."
+    }
+}
+
+npc(#CaveEblanaSoldier4)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if not #EdgeJoined:
+            $27   //Map message 0 - "Ah! "
+        else:
+            $01   //Show first message
+        messages:
+            $08   // "Our Prince is a great Ninja!"
+    }
+}
+
+npc(#CaveEblanaSoldier5)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        if not #EdgeJoined:
+            $2C   //Map message 5 - "Our Prince went to look around but hasn't come"
+        else:
+            $01   //Show first message
+        messages:
+            $09   // "We'll endure here until our Prince is back!"
+    }
+}
+
+npc(#AirshipDwarf)
+{
+    sprite #Dwarf
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#ZotKain)
+{
+    sprite #Kain
+    default active
+    eventcall {
+        $82   //Kain regaining his senses
+    }
+}
+
+npc(#Golbez2)
+{
+    sprite #Golbez
+    default active
+    eventcall {
+    }
+}
+
+npc(#ZotLockedDoor)
+{
+    sprite #Transparent
+    default inactive
+    eventcall {
+        $0C   //Locked
+    }
+}
+
+npc(#PassSeller)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $EF   //Bring up Toroia pass shop
+    }
+}
+
+npc(#PassReceiver)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $F0   //Do you have a pass?
+    }
+}
+
+npc(#GrottoAdamantMiniWantsTails)
+{
+    sprite #Mini
+    default active
+    eventcall {
+        if not #GotAdamant:
+            $E2   //Trading the Rat Tail for Adamant
+        else:
+            $E3   //Trading the Pink Tail for Adamant Armor
+    }
+}
+
+npc(#CaveEblanaSoldier6)
+{
+    sprite #Soldier
+    default inactive
+    eventcall {
+        $29   //Map message 2 - "Prince! It's dangerous!"
+    }
+}
+
+npc(#SaloonKingMan)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $D8   //Toroia Dance Troupe's dance
+    }
+}
+
+npc(#SilveraMini3)
+{
+    sprite #Mini
+    default active
+    eventcall {
+        $2C   //Map message 5 - "Hey!"
+    }
+}
+
+npc(#Fusoya1)
+{
+    sprite #Fusoya
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#MysidiaWhiteMagePraying2)
+{
+    sprite #WhiteMagePraying
+    default inactive
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#MysidiaBlackMagePraying2)
+{
+    sprite #BlackMagePraying
+    default inactive
+    eventcall {
+        $2D   //Map message 6
+    }
+}
+
+npc(#DarkKnightCecil2)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc(#DarkKnightCecil3)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc(#Dwarf1)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#Dwarf2)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#Dwarf3)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#Dwarf4)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#Dwarf5)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#Dwarf6)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $2D   //Map message 6 - "[Golbez] is gone!"
+    }
+}
+
+npc(#Dwarf7)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $2E   //Map message 7 - "Many bad guys on the upper world?"
+    }
+}
+
+npc(#KingGiott1)
+{
+    sprite #Giott
+    default active
+    eventcall {
+        if #Drill:
+            $02   //Show second message
+        if #SpokeToGiottAfterBabil, not #KainStoleDarkCrystal2:
+            $01   //Show first message
+        else:
+            $2E   //Map message 7
+        messages:
+            $09
+            $0A
+    }
+}
+
+npc(#Luca1)
+{
+    sprite #Luca
+    default inactive
+    eventcall {
+        if #Drill:
+            $03   //Show third message
+        if #SpokeToGiottAfterBabil, not #KainStoleDarkCrystal2:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $08
+            $0B
+            $10
+    }
+}
+
+npc(#Dwarf8)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $C7   //Bring up Dwarf weapons shop
+    }
+}
+
+npc(#Dwarf9)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $C8   //Bring up Dwarf armor shop
+    }
+}
+
+npc(#Dwarf10)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $6F   //Bring up Eblan items shop
+    }
+}
+
+npc(#Dwarf11)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $90   //Staying at a 1600 GP Inn
+    }
+}
+
+npc(#Rosa2)
+{
+    sprite #Rosa
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Kain2)
+{
+    sprite #Kain
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Yang3)
+{
+    sprite #Yang
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Cid3)
+{
+    sprite #Cid
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#AdultRydia2)
+{
+    sprite #ARydia
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Edge2)
+{
+    sprite #Edge
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Golbez3)
+{
+    sprite #Golbez
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#GolbezHand)
+{
+    sprite #GolbezHand
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Calbrena)
+{
+    sprite #Calbrena
+    default active
+    eventcall {
+    }
+}
+
+npc(#Dwarf12)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if not #RydiaRejoined:
+            $29   //Map message 2 - "You can't go through this wall without the King's"
+        else:
+            $91   //Dwarf in castle basement opens the door
+    }
+}
+
+npc(#Dwarf13)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $92   //Authorized dwarves only!
+    }
+}
+
+npc(#Dwarf14)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if #Drill:
+            $01   //Show first message
+        if #ReinforcedFalcon:
+            $2E   //Map message 7 - "He's a bit strange, but a nice guy, Lali!"
+        if not #FoundFalcon:
+            $27   //Map message 0 - "This is the nursing room!"
+        else:
+            $29   //Map message 2 - "That strange old man does not act like an old man!"
+        messages:
+            $09   // "He really put on the drills! He's great, Lali!"
+    }
+}
+
+npc(#Dwarf15)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if #Drill:
+            $01   //Show first message
+        if #ReinforcedFalcon:
+            $2D   //Map message 6 - "He shouldn't have done such thing!"
+        if not #FoundFalcon:
+            $28   //Map message 1 - "Dwarves are tough! But we get hurt too!"
+        else:
+            $2A   //Map message 3 - "He eats a lot saying it's tasteless, Lali!"
+        messages:
+            $0A   // "People from the upper world are not that bad!"
+    }
+}
+
+npc(#Crystal1)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        $AF   //Obtaining the Dark Crystal
+    }
+}
+
+npc(#GolbezFallen)
+{
+    sprite #GolbezFallen
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Dwarf16)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#FatChocoboTopLeft2)
+{
+    sprite #FatChocobo00
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboTopRight2)
+{
+    sprite #FatChocobo10
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboBottomLeft2)
+{
+    sprite #FatChocobo01
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboBottomRight2)
+{
+    sprite #FatChocobo11
+    default inactive
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboSpot2)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $4E   //Giving a Carrot to a Fat Chocobo
+    }
+}
+
+npc(#FatChocoboSpot3)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $0B   //Open a door
+    }
+}
+
+npc(#Namingway2)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $0D   //Namingway
+    }
+}
+
+npc(#Cid4)
+{
+    sprite #Cid
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Invisible1)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $85   //HP/MP/Status restoring pot
+    }
+}
+
+npc(#Lugae)
+{
+    sprite #Lugae
+    default active
+    eventcall {
+    }
+}
+
+npc(#Rubicant3)
+{
+    sprite #Rubicant
+    default active
+    eventcall {
+    }
+}
+
+npc(#Teleportation)
+{
+    sprite #Teleportation
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#HoodedMonster2)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+    }
+}
+
+npc(#Invisible2)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        if #YangDestroyedCannon:
+            $27   //Map message 0
+        if #LugaeBattle, not #YangDestroyedCannon:
+            $FA   //Using the Tower Key
+        else:
+            $0C   //Locked
+    }
+}
+
+npc(#Mist)
+{
+    sprite #Mist
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Cid5)
+{
+    sprite #Cid
+    default inactive
+    eventcall {
+        if #Drill:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $08   // "Zzzz__ Zzzz_"
+            $0B   // "[Cid]:Take care of the  airship, as you would"
+    }
+}
+
+npc(#Edge3)
+{
+    sprite #Edge
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Dwarf17)
+{
+    sprite #Dwarf
+    default inactive
+    eventcall {
+        $2B   //Map message 4 - "We're the nurses! And we are girls!"
+    }
+}
+
+npc(#Dwarf18)
+{
+    sprite #Dwarf
+    default inactive
+    eventcall {
+        $2C   //Map message 5 - "The hole to the upper world crumbled the other"
+    }
+}
+
+npc(#Dwarf19)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if #SpokeToGiottAfterBabil:
+            $01   //Show first message
+        else:
+            $27   //Map message 0 - "The tanks are our main forces!"
+        messages:
+            $0D   // "You'll have to fly to the Sealed Cave! But we can't"
+    }
+}
+
+npc(#Dwarf20)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if #SpokeToGiottAfterBabil:
+            $01   //Show first message
+        else:
+            $28   //Map message 1 - "The King has shown more love to Princess Luca"
+        messages:
+            $0C   // "There is a village called Tomra near the Sealed Cave"
+    }
+}
+
+npc(#Dwarf21)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if #SpokeToGiottAfterBabil:
+            $01   //Show first message
+        else:
+            $29   //Map message 2 - "Have you learned it? "
+        messages:
+            $0E   // "There is a cave that leads to the world of summoned"
+    }
+}
+
+npc(#Dwarf22)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if #SpokeToGiottAfterBabil:
+            $01   //Show first message
+        else:
+            $2A   //Map message 3 - "How do you like it here? Stay as long as you like!"
+        messages:
+            $0F   // "Can't fly over magma? Where is that strange man"
+    }
+}
+
+npc(#SleepingBubble2)
+{
+    sprite #SleepBubble
+    default inactive
+    eventcall {
+        $01   //Show first message
+        messages:
+            $08   // "Zzzz__ Zzzz_"
+    }
+}
+
+npc(#Dwarf23)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $AB   //Staying at a 6,400 GP Inn
+    }
+}
+
+npc(#Dwarf24)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $AC   //Bring up Tomra weapon shop
+    }
+}
+
+npc(#Dwarf25)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $AD   //Bring up Tomra armor shop
+    }
+}
+
+npc(#Dwarf26)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $AE   //Bring up Kaipo weapon shop
+    }
+}
+
+npc(#Luca2)
+{
+    sprite #Luca
+    default active
+    eventcall {
+        $2D   //Map message 6 - "I'm Luca. I can't find my dolls!"
+    }
+}
+
+npc(#DoubleDoor1)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        if not #OpenedSealedCave:
+            $A8   //Opening the Sealed Cave door
+        messages:
+            $00   // "T"
+    }
+}
+
+npc(#Lightning2)
+{
+    sprite #Lightning
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#DoubleDoor2)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $B7   //TrapDoor battle 3D
+    }
+}
+
+npc(#DoubleDoor3)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $B8   //TrapDoor battle 3E
+    }
+}
+
+npc(#DoubleDoor4)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $B9   //TrapDoor battle 3F
+    }
+}
+
+npc(#DoubleDoor5)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $BA   //TrapDoor battle 40
+    }
+}
+
+npc(#DoubleDoor6)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $BB   //TrapDoor battle 41
+    }
+}
+
+npc(#DoubleDoor7)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $BC   //TrapDoor battle 42
+    }
+}
+
+npc(#DoubleDoor8)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $BD   //TrapDoor battle 43
+    }
+}
+
+npc(#DoubleDoor9)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $BE   //TrapDoor battle 44
+    }
+}
+
+npc(#DoubleDoor10)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $BF   //TrapDoor battle 45
+    }
+}
+
+npc(#DoubleDoor11)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $C0   //TrapDoor battle 46
+    }
+}
+
+npc(#DoubleDoor12)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $C1   //TrapDoor battle 47
+    }
+}
+
+npc(#DoubleDoor13)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $C2   //TrapDoor battle 48
+    }
+}
+
+npc(#DoubleDoor14)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $C3   //TrapDoor battle 49
+    }
+}
+
+npc(#DoubleDoor15)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $C4   //TrapDoor battle 4A
+    }
+}
+
+npc(#HoodedMonster3)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#HoodedMonster4)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#HoodedMonster5)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#HoodedMonster6)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#Chocobo1)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $2B   //Map message 4 - "Hi, [Rydia]! What?"
+    }
+}
+
+npc(#Chocobo2)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $2C   //Map message 5 - "This is the Library. Why don't you study a bit?"
+    }
+}
+
+npc(#Bomb2)
+{
+    sprite #Bomb
+    default active
+    eventcall {
+        $2D   //Map message 6 - "[Rydia]! Glad to see you back!"
+    }
+}
+
+npc(#Bomb3)
+{
+    sprite #Bomb
+    default active
+    eventcall {
+        $2E   //Map message 7 - "[Rydia]! Oh! Your friends?"
+    }
+}
+
+npc(#OldMan1)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        if #LeviatanBattle:
+            $2A   //Map message 3
+        if #AsuraBattle, not #LeviatanBattle:
+            $CA   //Leviathan battle
+        else:
+            $2B   //Map message 4
+    }
+}
+
+npc(#Queen2)
+{
+    sprite #Queen
+    default active
+    eventcall {
+        if #AsuraBattle:
+            $29   //Map message 2
+        else:
+            $C9   //Asura battle
+    }
+}
+
+npc(#Invisible3)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#Invisible4)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#Invisible5)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#Invisible6)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#Invisible7)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $2D   //Map message 6
+    }
+}
+
+npc(#Invisible8)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $2E   //Map message 7
+    }
+}
+
+npc(#Invisible9)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $08
+    }
+}
+
+npc(#Invisible10)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $09
+    }
+}
+
+npc(#Invisible11)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0A
+    }
+}
+
+npc(#Invisible12)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0B   // "The Law_  True strength lies in the just mind."
+    }
+}
+
+npc(#HoodedMonster7)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+        $CB   //Bring up Feymarch weapon shop
+    }
+}
+
+npc(#Bomb4)
+{
+    sprite #Bomb
+    default active
+    eventcall {
+        $CC   //Bring up Feymarch armor shop
+    }
+}
+
+npc(#HoodedMonster8)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+        $CD   //Staying at a 12,800 GP Inn
+    }
+}
+
+npc(#Chocobo3)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $CE   //Bring up Tomra item shop
+    }
+}
+
+npc(#Bahamut)
+{
+    sprite #Bahamut
+    default active
+    eventcall {
+        if #BahamutBattle:
+            $2C   //Map message 5 - "I have indeed seen your strength and will."
+        if #LeviatanBattle, not #BahamutBattle:
+            $CF   //Bahamut battle
+        if not #LeviatanBattle:
+            $2B   //Map message 4 - "You haven't been accepted by the King."
+    }
+}
+
+npc(#Boy1)
+{
+    sprite #Boy
+    default active
+    eventcall {
+        if #BahamutBattle:
+            $29   //Map message 2 - "You're the first that Master Bahamut accepted!"
+        else:
+            $27   //Map message 0 - "What do you need?"
+    }
+}
+
+npc(#Girl1)
+{
+    sprite #Girl
+    default active
+    eventcall {
+        if #BahamutBattle:
+            $2A   //Map message 3 - "You seem to carry a lot of responsibilities with you."
+        else:
+            $28   //Map message 1 - "Oh_ You're a half_"
+    }
+}
+
+npc(#Fusoya2)
+{
+    sprite #Fusoya
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Sparkle2)
+{
+    sprite #Sparkle
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#DoubleDoor16)
+{
+    sprite #DoubleDoor
+    default active
+    eventcall {
+        $EC   //TrapDoor battle 68
+    }
+}
+
+npc(#Invisible13)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $E9   //Boarding Big Whale
+    }
+}
+
+npc(#BigWhaleCrystal)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #FusoyaJoined, not #CPUBattle:
+            $9D   //Returning from the moon to Giant of Bab-il
+        else:
+            $EA   //Travel to/from Moon
+    }
+}
+
+npc(#Invisible14)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $DE   //Obtaining the magazine
+    }
+}
+
+npc(#Invisible15)
+{
+    sprite #Transparent
+    default inactive
+    eventcall {
+        $DF   //Obtaining a Grimoire 6C
+    }
+}
+
+npc(#Invisible16)
+{
+    sprite #Transparent
+    default inactive
+    eventcall {
+        $E0   //Obtaining a Grimoire 6D
+    }
+}
+
+npc(#Smithy)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        if not #GotAdamant:
+            $27   //Map message 0 - "I'm not going to make another sword!"
+        else:
+            $EE   //Giving Adamant and Legend Sword to smithy
+    }
+}
+
+npc(#SmithyFinishedExcalibur)
+{
+    sprite #OldMan
+    default inactive
+    eventcall {
+        if not #GotExcalibur2, #BigWhaleSurfaced:
+            $E1   //Obtaining Excalibur
+        if not #BigWhaleSurfaced:
+            $2B   //Map message 4 - "Come back later!"
+        else:
+            $2D   //Map message 6 - "I've got my confidence back again!"
+    }
+}
+
+npc(#Soldier1)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#Man1)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#Soldier2)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#BlackMage1)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#WhiteMage1)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#Soldier3)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#Soldier4)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $2D   //Map message 6
+    }
+}
+
+npc(#BlackMage2)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $2E   //Map message 7
+    }
+}
+
+npc(#Invisible17)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $08   // "[Edward]'s harp_"
+    }
+}
+
+npc(#WhiteMage2)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $08
+    }
+}
+
+npc(#OldMan2)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $09
+    }
+}
+
+npc(#Girl2)
+{
+    sprite #Girl
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#Dancer2)
+{
+    sprite #Dancer
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#Midget)
+{
+    sprite #Mini
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#HoodedMonster9)
+{
+    sprite #HoodedMonster
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#Namingway3)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#Man2)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#Scholar1)
+{
+    sprite #Scholar
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#Boy2)
+{
+    sprite #Boy
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#Crystal3)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $27   //Map message 0 - "We are the crystals of the moon."
+        messages:
+            $08   // "The Tower of Bab-il was destroyed, and Zemus'"
+    }
+}
+
+npc(#Crystal4)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $28   //Map message 1 - "This moon is maintained by the balance with the eight"
+        messages:
+            $09   // "You will find weapons that once endangered the lives"
+    }
+}
+
+npc(#Crystal5)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $29   //Map message 2 - "The Lunarians are sleeping deep under the ground here"
+        messages:
+            $0A   // "[Fusoya] and KluYa's son went inside."
+    }
+}
+
+npc(#Crystal6)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $2A   //Map message 3 - "Zemus is a dreadful man. His evil mind does not"
+        messages:
+            $0B   // "All of our powers are used to neutralize the powers"
+    }
+}
+
+npc(#Crystal7)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $2B   //Map message 4 - "We, the eight crystals of the moon are confining"
+        messages:
+            $0C   // "Between our conflicting powers, exist an enormous"
+    }
+}
+
+npc(#Crystal8)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $2C   //Map message 5 - "Zemus used [Golbez] to gather the crystals and"
+        messages:
+            $0D   // "Even [Fusoya] should have a hard time fighting against"
+    }
+}
+
+npc(#Crystal9)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $2D   //Map message 6 - "Zemus has set up a field from within to block the"
+        messages:
+            $0E   // "Go toward the core!"
+    }
+}
+
+npc(#Crystal10)
+{
+    sprite #Crystal
+    default active
+    eventcall {
+        if #CPUBattle:
+            $01   //Show first message
+        else:
+            $2E   //Map message 7 - "From the center of this floor, there runs a path"
+        messages:
+            $0F   // "We shall guide you to the path that leads to the"
+    }
+}
+
+npc(#Yang4)
+{
+    sprite #Yang
+    default active
+    eventcall {
+        if #UsedPan:
+            $3F   //...
+        if #GotPan, not #UsedPan:
+            $E5   //Rydia learning Sylph using the Pan
+        else:
+            $3F   //...
+    }
+}
+
+npc(#Sylph1)
+{
+    sprite #Sylph
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Sylph2)
+{
+    sprite #Sylph
+    default active
+    eventcall {
+        if #RydiaLearnedSylph:
+            $01   //Show first message
+        if #CPUBattle, not #UsedPan:
+            $08   //Rydia learning Sylph
+        if #CPUBattle:
+            $01   //Show first message
+        if not #UsedPan:
+            $28   //Map message 1 - "Wow! Humans!"
+        else:
+            $29   //Map message 2 - "Never worry about [Yang]! We will take care of him."
+        messages:
+            $0F   // "[Yang] is all well now!"
+    }
+}
+
+npc(#Sylph3)
+{
+    sprite #Sylph
+    default active
+    eventcall {
+        if #RydiaLearnedSylph:
+            $01   //Show first message
+        if #CPUBattle, not #UsedPan:
+            $08   //Rydia learning Sylph
+        if #CPUBattle:
+            $01   //Show first message
+        if not #UsedPan:
+            $2A   //Map message 3 - "What are you doing here!? Get out!"
+        else:
+            $2B   //Map message 4 - "Don't take [Yang] away!"
+        messages:
+            $10   // "We miss [Yang]_"
+    }
+}
+
+npc(#Sylph4)
+{
+    sprite #Sylph
+    default active
+    eventcall {
+        if #RydiaLearnedSylph:
+            $01   //Show first message
+        if #CPUBattle, not #UsedPan:
+            $08   //Rydia learning Sylph
+        if #CPUBattle:
+            $01   //Show first message
+        if not #UsedPan:
+            $2C   //Map message 5 - "I won't let you take him!"
+        else:
+            $2D   //Map message 6 - "Humans. How violent!"
+        messages:
+            $11   // "Say hello to [Yang]_"
+    }
+}
+
+npc(#Sylph5)
+{
+    sprite #Sylph
+    default active
+    eventcall {
+        if #RydiaLearnedSylph:
+            $01   //Show first message
+        if #CPUBattle, not #UsedPan:
+            $08   //Rydia learning Sylph
+        if #CPUBattle:
+            $02   //Show second message
+        if not #UsedPan:
+            $F7   //Speaking to Sylph before Yang awakes
+        else:
+            $01   //Show first message
+        messages:
+            $08   // "[Yang] needs to rest!"
+            $12   // "How's [Yang]?"
+    }
+}
+
+npc(#Invisible18)
+{
+    sprite #Transparent
+    default inactive
+    eventcall {
+        $F8   //Obtaining a Grimoire 91
+    }
+}
+
+npc(#Dwarf27)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $D9   //Dwarf Castle Dancer's dance
+    }
+}
+
+npc(#Invisible19)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0C
+    }
+}
+
+npc(#Dwarf28)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if not #GotExcalibur:
+            $27   //Map message 0 - "This is the home of the world's greatest Black-"
+        else:
+            $29   //Map message 2 - "Lali-ho! Boss looks happy!"
+    }
+}
+
+npc(#Dwarf29)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        if not #GotExcalibur:
+            $28   //Map message 1 - "Boss has lost his confidence, Lali."
+        else:
+            $2A   //Map message 3 - "I'll become the greatest blacksmith too, Lali!"
+    }
+}
+
+npc(#SleepingBubble3)
+{
+    sprite #SleepBubble
+    default active
+    eventcall {
+        $2A   //Map message 3 - "Zzz_"
+    }
+}
+
+npc(#Fire)
+{
+    sprite #Fire
+    default active
+    eventcall {
+        $0F   //OUCH!
+    }
+}
+
+npc(#Invisible20)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+    }
+}
+
+npc(#Invisible21)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#Rosa3)
+{
+    sprite #Rosa
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#AdultRydia3)
+{
+    sprite #ARydia
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Edge4)
+{
+    sprite #Edge
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Kain3)
+{
+    sprite #Kain
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#CecilRosaKiss2)
+{
+    sprite #CecilRosaKiss
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Elder2)
+{
+    sprite #Elder
+    default active
+    eventcall {
+        $27   //Map message 0
+    }
+}
+
+npc(#Palom2)
+{
+    sprite #Palom
+    default active
+    eventcall {
+        $28   //Map message 1
+    }
+}
+
+npc(#Porom2)
+{
+    sprite #Porom
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#Edward2)
+{
+    sprite #Edward
+    default active
+    eventcall {
+        $2B   //Map message 4
+    }
+}
+
+npc(#Cid6)
+{
+    sprite #Cid
+    default active
+    eventcall {
+        $2D   //Map message 6
+    }
+}
+
+npc(#Yang5)
+{
+    sprite #Yang
+    default active
+    eventcall {
+        $2C   //Map message 5
+    }
+}
+
+npc(#Giott)
+{
+    sprite #Giott
+    default active
+    eventcall {
+        $2A   //Map message 3
+    }
+}
+
+npc(#Luca3)
+{
+    sprite #Luca
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0B
+    }
+}
+
+npc(#Engineer3)
+{
+    sprite #Engineer
+    default active
+    eventcall {
+        $2E   //Map message 7
+    }
+}
+
+npc(#Engineer4)
+{
+    sprite #Engineer
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $08
+    }
+}
+
+npc(#Cleric1)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $09
+    }
+}
+
+npc(#Cleric2)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0A
+    }
+}
+
+npc(#FatChocoboTopLeft3)
+{
+    sprite #FatChocobo00
+    default active
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboTopRight3)
+{
+    sprite #FatChocobo10
+    default active
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboBottomLeft3)
+{
+    sprite #FatChocobo01
+    default active
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#FatChocoboBottomRight3)
+{
+    sprite #FatChocobo11
+    default active
+    eventcall {
+        $4D   //Open Fat Chocobo screen
+    }
+}
+
+npc(#Zemus)
+{
+    sprite #Zemus
+    default active
+    eventcall {
+    }
+}
+
+npc(#ZemusFallen)
+{
+    sprite #ZemusFallen
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#WaveringFlame)
+{
+    sprite #ZeromusFlame
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Fusoya3)
+{
+    sprite #Fusoya
+    default active
+    eventcall {
+    }
+}
+
+npc(#Golbez4)
+{
+    sprite #Golbez
+    default active
+    eventcall {
+    }
+}
+
+npc(#KingGiott2)
+{
+    sprite #Giott
+    default active
+    eventcall {
+    }
+}
+
+npc(#Luca4)
+{
+    sprite #Luca
+    default active
+    eventcall {
+    }
+}
+
+npc(#Dwarf30)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+    }
+}
+
+npc(#Scholar2)
+{
+    sprite #Scholar
+    default active
+    eventcall {
+    }
+}
+
+npc(#Elder3)
+{
+    sprite #Elder
+    default active
+    eventcall {
+    }
+}
+
+npc(#Palom3)
+{
+    sprite #Palom
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Porom3)
+{
+    sprite #Porom
+    default active
+    eventcall {
+    }
+}
+
+npc(#BlackMage3)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+    }
+}
+
+npc(#WhiteMage3)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+    }
+}
+
+npc(#Girl3)
+{
+    sprite #Girl
+    default active
+    eventcall {
+    }
+}
+
+npc(#Boy3)
+{
+    sprite #Boy
+    default active
+    eventcall {
+    }
+}
+
+npc(#Woman1)
+{
+    sprite #Woman
+    default active
+    eventcall {
+    }
+}
+
+npc(#KarateFighter)
+{
+    sprite #Monk
+    default active
+    eventcall {
+    }
+}
+
+npc(#Rosa4)
+{
+    sprite #Rosa
+    default active
+    eventcall {
+    }
+}
+
+npc(#Cid7)
+{
+    sprite #Cid
+    default active
+    eventcall {
+    }
+}
+
+npc(#PaladinCecil2)
+{
+    sprite #PCecil
+    default active
+    eventcall {
+    }
+}
+
+npc(#Man3)
+{
+    sprite #Man
+    default active
+    eventcall {
+    }
+}
+
+npc(#OldMan3)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+    }
+}
+
+npc(#OldWoman)
+{
+    sprite #OldWoman
+    default active
+    eventcall {
+    }
+}
+
+npc(#Yang6)
+{
+    sprite #Yang
+    default active
+    eventcall {
+    }
+}
+
+npc(#Edward3)
+{
+    sprite #Edward
+    default active
+    eventcall {
+    }
+}
+
+npc(#Edge5)
+{
+    sprite #Edge
+    default active
+    eventcall {
+    }
+}
+
+npc(#AdultRydia4)
+{
+    sprite #ARydia
+    default active
+    eventcall {
+    }
+}
+
+npc(#KainHair)
+{
+    sprite #KainHair
+    default active
+    eventcall {
+    }
+}
+
+npc(#HeartBubble)
+{
+    sprite #HeartBubble
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#King)
+{
+    sprite #King
+    default active
+    eventcall {
+    }
+}
+
+npc(#Soldier5)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+    }
+}
+
+npc(#MilonGoblin)
+{
+    sprite #HoodedMonster
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Frog)
+{
+    sprite #Frog
+    default active
+    eventcall {
+    }
+}
+
+npc(#Porom4)
+{
+    sprite #Porom
+    default active
+    eventcall {
+    }
+}
+
+npc(#Cleric3)
+{
+    sprite #Cleric
+    default active
+    eventcall {
+    }
+}
+
+npc(#Dwarf31)
+{
+    sprite #Dwarf
+    default active
+    eventcall {
+        $CE   //Bring up Tomra item shop
+    }
+}
+
+npc(#Chocobo4)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $6F   //Bring up Eblan items shop
+    }
+}
+
+npc(#AstroObservatoryInvisible)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        $FD   //Viewing the moon through the telescope
+    }
+}
+
+npc(#YellowChocobo2)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $4F   //Mist mountains on a chocobo
+    }
+}
+
+npc(#WhiteChocobo2)
+{
+    sprite #Chocobo
+    default active
+    eventcall {
+        $50   //Touching a White Chocobo
+    }
+}
+
+npc(#BlackChocobo2)
+{
+    sprite #Chocobo
+    default inactive
+    eventcall {
+        $9C   //Found Black Chocobo!
+    }
+}
+
+npc(#AstroObservatoryScholar)
+{
+    sprite #Scholar
+    default active
+    eventcall {
+        $27   //Map message 0 - "I am Professor Kory. I research the moons here"
+    }
+}
+
+npc(#SleepingBubble4)
+{
+    sprite #SleepBubble
+    default active
+    eventcall {
+        $29   //Map message 2
+    }
+}
+
+npc(#CrystalSword)
+{
+    sprite #CrystalSword
+    default active
+    eventcall {
+        $58   //Winning the Crystal Sword
+    }
+}
+
+npc(#Masamune1)
+{
+    sprite #Masamune
+    default active
+    eventcall {
+        $59   //Winning the Masamune
+    }
+}
+
+npc(#Masamune2)
+{
+    sprite #Masamune
+    default active
+    eventcall {
+        $A3   //Winning the Murasame
+    }
+}
+
+npc(#WhiteSpear)
+{
+    sprite #WhiteSpear
+    default active
+    eventcall {
+        $A4   //Winning the Holy Lance
+    }
+}
+
+npc(#Dwarf32)
+{
+    sprite #Dwarf
+    default inactive
+    eventcall {
+        $F1   //Bring up Smith's shop
+    }
+}
+
+npc(#Namingway4)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $29   //Map message 2 - "We are the Humingway Family!"
+    }
+}
+
+npc(#Namingway5)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $2A   //Map message 3 - "I had a friend who was very good at making up"
+    }
+}
+
+npc(#Namingway6)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $27   //Map message 0 - "Changing name? What is it?"
+    }
+}
+
+npc(#Namingway7)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $07   //Hummingways
+    }
+}
+
+npc(#Namingway8)
+{
+    sprite #Namingway
+    default active
+    eventcall {
+        $B2   //Bring up Hummingway shop
+    }
+}
+
+npc(#Edward4)
+{
+    sprite #Edward
+    default active
+    eventcall {
+        if #FoundSleepingYang:
+            $2E   //Map message 7 - "Good to hear that [Yang] is doing okay."
+        if #YangDestroyedCannon:
+            $2D   //Map message 6 - "Oh_ [Yang]_ I wish I could do better_"
+        if #ZotEndAndDrill:
+            $2C   //Map message 5 - "[Tellah] too!? How come the people who"
+        if #EdwardAfterDarkElf:
+            $2B   //Map message 4 - "Please avenge [Anna]. For my sake too."
+        else:
+            $29   //Map message 2 - "[Edward]:[Cecil]__  Save [Rosa]_!"
+    }
+}
+
+npc(#EdwardHarp2)
+{
+    sprite #EdwardHarp
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Tellah2)
+{
+    sprite #Tellah
+    default inactive
+    eventcall {
+    }
+}
+
+npc(#Man4)
+{
+    sprite #Man
+    default active
+    eventcall {
+        $27   //Map message 0 - "[Edward] shouldn't move yet. Me? I'm a nurse."
+    }
+}
+
+npc(#Woman2)
+{
+    sprite #Woman
+    default active
+    eventcall {
+        $28   //Map message 1 - "He may not walk or get up until he's all well."
+    }
+}
+
+npc(#Soldier6)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $2A   //Map message 3 - "Please keep quiet. We have a patient here."
+    }
+}
+
+npc(#BlackMage4)
+{
+    sprite #BlackMage
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $09
+    }
+}
+
+npc(#WhiteMage4)
+{
+    sprite #WhiteMage
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0A
+    }
+}
+
+npc(#Soldier7)
+{
+    sprite #Soldier
+    default active
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0B
+    }
+}
+
+npc($1EE)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1EF)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F0)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F1)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F2)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F3)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F4)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F5)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F6)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F7)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F8)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1F9)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1FA)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1FB)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1FC)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1FD)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}
+
+npc($1FE)
+{
+    sprite #DKCecil
+    default active
+    eventcall {
+    }
+}

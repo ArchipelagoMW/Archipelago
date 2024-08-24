@@ -1,0 +1,32 @@
+
+msfpatch {
+    // Params: Buffer number, spell number
+    EvEx__Text_LoadSpellName:
+        jsr $_EvEx__ReadParameters_2
+        lda $_EvEx__Param2
+        stz $_EvEx__Param2
+        ldx $_EvEx__Param1
+
+        jsl $=TextBuffer__LoadSpellName
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    // params: reward slot, text buffer number
+    EvEx__Text_LoadRewardNameFromSlot:
+        jsr $_EvEx__ReadParameters_2
+        stz $_EvEx__Param3 // to make it easier to get buffer number in X later
+        lda $_EvEx__Param1
+        ldx $_EvEx__Param2
+        jsl $=Rewards__LoadNameFromSlot
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Text_LoadObjectiveNameForIndex:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        jsl $=TextBuffer__LoadObjectiveNameForIndex
+        jmp $_EvEx__End
+}

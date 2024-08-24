@@ -1,0 +1,65 @@
+ai_script_block_parameters : number         -> normal_script
+                           | "moon" number  -> moon_script
+
+ai_script_block_body : ai_script_item*
+
+?ai_script_item : chain_block
+                | ai_command
+
+chain_block : "chain" _block_start ai_command* _block_end
+
+!ai_command : "use" spell_value ["on" "group"]
+            | "use" "command" command_value
+            | "fight"
+            | "pass"
+            | "set" "race" races
+            | "set" "attack" "index" number
+            | "set" ["magic"] "defense" "index" number
+            | "speed" speed_delta
+            | "set" "resistance" elements
+            | "set" "spell" "power" number
+            | "set" "weakness" elements
+            | "set" "sprite" number
+            | "message" number ["next" "action"]
+            | "music" music_value
+            | "condition" condition_delta
+            | "set" "reaction" reaction_number
+            | "darken" number
+            | "debug" number
+            | "target" target
+            | "wait"
+            | "chain" "into"
+
+cast_on_group_specifier : "on" "group"
+
+command_or_spell_value : value
+
+next_action_message_specifier : "next" "action"
+
+!target : actor_value
+        | "self"
+        | "all" "monsters"
+        | "other" "monsters"
+        | "type" /[123]/ "monsters"
+        | ["random"] "front" "row"
+        | ["random"] "back" "row"
+        | "stunned" "monster"
+        | "sleeping" "monster"
+        | "charmed" "monster"
+        | "weak" "monster"
+        | "random" ["other"] "anything"
+        | "random" ["other"] "monster"
+        | "all" "characters"
+        | "dead" "monsters"
+
+!speed_delta : /[+-]/ number
+
+condition_delta : "+" "1"   -> condition_increment
+                | number    -> condition_set
+
+reaction_number : number
+
+races : race_value*
+elements: element_value*
+
+

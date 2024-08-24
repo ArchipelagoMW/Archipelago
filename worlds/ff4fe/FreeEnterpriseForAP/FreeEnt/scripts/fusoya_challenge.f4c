@@ -1,0 +1,316 @@
+msfpatch {
+    .def  FusoyaChallenge__Credits  $7e158b
+    .def  FusoyaChallenge__Spells   $21f600
+    .def  FusoyaChallenge__MaxCredits  $0e
+
+    .def  FusoyaChallenge__LearnedSpell1  $7e2630
+    .def  FusoyaChallenge__LearnedSpell2  $7e2631
+    .def  FusoyaChallenge__LearnedSpell3  $7e2632
+}
+
+
+msfpatch {
+    // called by character_expansion.f4c when adding Fusoya
+    // to set his initial stats appropriately
+
+    FusoyaChallenge__FirstJoin:
+        lda $=RandoFlag_vanilla_fusoya
+        beq $+ChallengeEnabled
+        rts
+
+    %ChallengeEnabled:
+        // actually check if this is Fusoya
+        lda $1141
+        and #$0f
+        cmp #$0d
+        beq $+IsFusoya
+        rts
+
+    %IsFusoya:
+        lda #$00
+        xba
+        lda $=FusoyaChallenge__Credits
+        // cap HP credit gain
+        cmp #$.FusoyaChallenge__MaxCredits
+        bcc $02
+        lda #$.FusoyaChallenge__MaxCredits
+
+        tax
+        rep #$20
+        .mx 0x00
+        lda #$01f4  // starts at 500
+        cpx #$0000
+        beq $+Done
+        clc
+    %HPLoopStart:
+        adc #$0064
+        dex
+        bne $-HPLoopStart
+
+    %Done:
+        // write new HP values
+        sta $1147
+        sta $1149
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        rts
+}
+
+
+// ----------------------------------------------------------
+// Fusoya challenge shared code
+
+msfpatch {
+    FusoyaChallenge__GiveHP:
+        // A = number of credits to give
+        bne $01
+        rts
+
+        // convert to HP bonus and store in Y
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        tax
+        lda #$0000
+    %BonusCalcLoop:
+        adc #$0064
+        dex
+        bne $-BonusCalcLoop
+        tay
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // pump all Fusoyas in the real party
+        ldx #$0000
+    %PartyLoop:
+        lda $1000,x
+        beq $+PartyLoopNext
+        lda $1001,x
+        and #$0f
+        cmp #$0d
+        bne $+PartyLoopNext
+
+        // Found Fusoya, pump him up
+        rep #$20
+        .mx 0x00
+
+        lda $1007,x
+        beq $+ThisOneIsDead
+
+        tya
+        clc
+        adc $1007,x
+        cmp #$270f
+        bcc $03
+        lda #$270f
+        sta $1007,x
+
+    %ThisOneIsDead:
+        tya
+        clc
+        adc $1009,x
+        cmp #$270f
+        bcc $03
+        lda #$270f
+        sta $1009,x
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+    %PartyLoopNext:
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-PartyLoop
+
+        // pump all Fusoyas in the shadow party
+        ldx #$0000
+    %ShadowPartyLoopStart:
+        lda $702000,x   // [hardcoded]
+        beq $+ShadowPartyLoopNext
+        lda $702001,x   // [hardcoded]
+        and #$0f
+        cmp #$0d
+        bne $+ShadowPartyLoopNext
+
+        rep #$20
+        .mx 0x00
+
+        tya
+        clc
+        adc $702007,x   // [hardcoded]
+        cmp #$270f
+        bcc $03
+        lda #$270f
+        sta $702007,x   // [hardcoded]
+
+        tya
+        clc
+        adc $702009,x   // [hardcoded]
+        cmp #$270f
+        bcc $03
+        lda #$270f
+        sta $702009,x   // [hardcoded]
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+    %ShadowPartyLoopNext:
+        jsr $_Util__XPlus40
+        cpx #$0600      // [hardcoded]
+        bcc $-ShadowPartyLoopStart
+
+        // all done!
+        rts
+
+    FusoyaChallenge__GiveHP_ShadowPartyLoopStart:
+        lda $=ShadowParty__Address,x
+        and #$1f
+        beq $+FusoyaChallenge__GiveHP_ShadowPartyLoopNext
+        inx
+        lda $=ShadowParty__Address,x
+        dex
+        and #$0f
+        cmp #$0d
+        bne $+FusoyaChallenge__GiveHP_ShadowPartyLoopNext
+
+        // Found Fusoya in party
+        rep #$20
+        .mx 0x00
+        txa
+        clc
+        adc #$09
+        tax
+
+        tya
+        clc
+        adc $=ShadowParty__Address,x
+        cmp #$270f
+        bcc $03
+        lda #$270f
+        sta $=ShadowParty__Address,x
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        rts
+
+    FusoyaChallenge__GiveHP_ShadowPartyLoopNext:
+        jsr $_Util__XPlus40
+        cpx #$_ShadowParty__EndOffset
+        bne $-FusoyaChallenge__GiveHP_ShadowPartyLoopStart
+
+        // Fusoya not found, do nothing
+        rts
+}
+
+
+
+// ----------------------------------------------------------
+//  Fusoya challenge level 2
+
+msfpatch {
+    FusoyaChallenge__AdvanceLevel2:
+        // the HP credits counter tells us what spells to give
+        lda #$00
+        xba
+        lda $_FusoyaChallenge__Credits
+        asl a
+        clc
+        adc $_FusoyaChallenge__Credits
+        tax
+
+        lda #$ff
+        sta $=FusoyaChallenge__LearnedSpell1
+        sta $=FusoyaChallenge__LearnedSpell2
+        sta $=FusoyaChallenge__LearnedSpell3
+        ldy #$0000
+    FusoyaChallenge__AdvanceLevel2_GiveLoop:
+        lda $=FusoyaChallenge__Spells,x
+        beq $+FusoyaChallenge__AdvanceLevel2_GiveLoopNext
+        cmp #$ff
+        beq $+FusoyaChallenge__AdvanceLevel2_GiveLoopNext
+
+        phx
+        tyx
+        sta $=FusoyaChallenge__LearnedSpell1,x
+
+        phy
+        ldy #$000a  // white magic set
+        cmp #$19
+        bcc $+HaveSpellSet
+        ldy #$000b  // black magic set
+    %HaveSpellSet:
+        jsl $=CharEx__GiveSpell
+        ply
+        plx
+
+    FusoyaChallenge__AdvanceLevel2_GiveLoopNext:
+        inx
+        iny
+        cpy #$0003
+        bne $-FusoyaChallenge__AdvanceLevel2_GiveLoop
+
+    // done giving spells; do HP credits
+        lda $_FusoyaChallenge__Credits
+        cmp #$.FusoyaChallenge__MaxCredits
+        bcs $+FusoyaChallenge__AdvanceLevel2_HPDone
+
+        inc $_FusoyaChallenge__Credits
+        lda #$01
+        jsr $_FusoyaChallenge__GiveHP
+
+    FusoyaChallenge__AdvanceLevel2_HPDone:
+        rts
+}
+
+// %flag characters_no_duplicates on%
+text(bank 1 message $103) {
+[Fusoya] unlocked [name $e0],
+ [name $e1], and [name $e2].
+}
+
+text(bank 1 message $104) {
+[Fusoya] unlocked [name $e0],
+ [name $e1], and [name $e2].
+
+
+[Fusoya] is at full power!
+}
+
+text(bank 1 message $105) {
+[Fusoya] is at full power!
+}
+// %end%
+
+// %flag characters_no_duplicates off%
+text(bank 1 message $103) {
+All [Fusoya]s unlocked 
+ [name $e0], [name $e1], and
+ [name $e2].
+}
+
+text(bank 1 message $104) {
+All [Fusoya]s unlocked
+ [name $e0], [name $e1], and
+ [name $e2].
+
+All [Fusoya]s are at full
+ power!
+}
+
+text(bank 1 message $105) {
+All [Fusoya]s are at full
+ power!
+}
+// %end%
+
+
+patch($21f600 bus) {
+// %fusoya challenge spells%
+// %end%
+}

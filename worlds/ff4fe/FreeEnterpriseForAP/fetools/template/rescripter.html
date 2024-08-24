@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <title>Rescripter</title>
+
+        <style type="text/css">
+            body {
+                font-family: monospace;
+                padding-bottom: 20em;
+            }
+
+            label {
+                font-weight: bold;
+            }
+
+            table {
+            }
+
+            th {
+                text-align: left;
+                border-bottom: 1px dotted #888;
+                background-color: #eee;
+            }
+
+            td {
+                padding-right: 1em;
+            }
+
+            td.label {
+                vertical-align: top;
+            }
+
+            button {
+                cursor: pointer;
+            }
+
+            #log {
+                white-space: pre-wrap;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Rescripter</h1>
+
+        <form id="mainForm">
+            <table>
+                <tr>
+                    <td class="label">
+                        Source FE ROM:
+                    </td>
+                    <td>
+                        <input type="file" name="sourceRom">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        Z Sprite(s):
+                    </td>
+                    <td>
+                        <table id="zSprites">
+                            <tr>
+                                <th>Label</th>
+                                <th>F4C file</th>
+                            </tr>
+                            {% for i in range(4) %}
+                            <tr>
+                                <td>
+                                    <input type="text" name="zSpriteLabel{{ i }}">
+                                </td>
+                                <td>
+                                    <input type="file" name="zSpriteFile{{ i }}" accept=".f4c">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        Harp Song(s):
+                    </td>
+                    <td>
+                        <table id="harpSongs">
+                            <tr>
+                                <th>Label</th>
+                                <th>F4C file</th>
+                            </tr>
+                            {% for i in range(4) %}
+                            <tr>
+                                <td>
+                                    <input type="text" name="harpSongLabel{{ i }}">
+                                </td>
+                                <td>
+                                    <input type="file" name="harpSongFile{{ i }}" accept=".f4c">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <button type="button" onclick="generateRescripts();">Generate rescripts</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <hr>
+
+        <div id="log">
+        </div>
+
+        <script src="/static/util.js"></script>
+        <script>
+            function clearLog()
+            {
+                document.getElementById('log').innerText = '';
+            }
+
+            function appendLog(logLine)
+            {
+                document.getElementById('log').innerText += '\n' + logLine;
+            }
+
+            async function generateRescripts()
+            {
+                clearLog();
+
+                let formData = new FormData(document.getElementById("mainForm"));
+
+                let response = await fetch('setup', { method: 'POST', body: formData });
+
+                if (!response.ok)
+                {
+                    let text = await response.text();
+                    appendLog(`${response.status} - ${response.statusText} : ${text}`);
+                    return;
+                }
+
+                let json = await response.json();
+
+                runJob(json.job);
+            }
+
+            var eventSource = null;
+            function runJob(jobId)
+            {
+                if (eventSource)
+                {
+                    eventSource.close();
+                }
+
+                eventSource = new EventSource(`run?job=${jobId}`);
+                eventSource.addEventListener('log', (e) => appendLog(e.data));
+                eventSource.addEventListener('download', (e) => {
+                    appendLog('(downloading received data)');
+                    downloadBase64(e.data, "rescripts.zip", "application/zip");
+                    });
+                eventSource.addEventListener('error', (e) => {
+                    appendLog('An error occurred in the event stream.');
+                    });
+                eventSource.addEventListener('done', (e) => {
+                    appendLog('(rescripter process complete)');
+                    eventSource.close();
+                    eventSource = null;
+                    });
+            }
+        </script>
+    </body>
+</html>

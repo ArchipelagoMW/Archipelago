@@ -1,0 +1,54 @@
+placement($7E 8) {
+    palette 0
+    face up
+    position 15 25
+    marching off
+}
+
+placement($7E 9) {
+    palette 0
+    face up
+    position 15 25
+    marching on
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Fire
+        9  Bomb
+    }
+
+    p #Bomb toggle visible
+    pause 5
+    sound #Explosion
+    p #Fire toggle visible
+    pause 8
+    batch {
+        p #Bomb toggle visible
+        p #Fire toggle visible
+    }
+    vfx #ScreenShakeAndExplosion
+
+    batch {
+        p 0 toggle visible
+        p 1 toggle visible
+        p 2 toggle visible
+        p 3 toggle visible
+        p 4 toggle visible
+        p 5 toggle visible
+        p 6 toggle visible
+        p 7 toggle visible
+    }
+    
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

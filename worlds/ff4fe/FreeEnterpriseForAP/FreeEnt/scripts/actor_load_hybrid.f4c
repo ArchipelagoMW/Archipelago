@@ -1,0 +1,84 @@
+// Allow a special actor loading info byte in this format:
+//  ?xxxyyyy
+// Which means:
+// If x > 0, then attempt to load actor from shadow party slot (x - 1),
+//   if that slot is populated.
+// Otherwise, load the character from base stats index y.
+
+msfpatch {
+    .addr $00E59D
+    jml $=ActorLoadHybrid__Start   // hook into original code
+}
+
+
+msfpatch {
+    .def ActorLoadHybrid__ResumeAddress $00e5a1
+
+    ActorLoadHybrid__Start:
+        // displaced instructions from entry hook
+        tay
+        lda $e69a,y
+        // A now contains actor load info byte
+
+        // check for hybrid case
+        pha
+        and #$70
+        bne $+ActorLoadHybrid__CheckSlot
+
+        // not hybrid case, return to original routine
+        pla
+        jml $=ActorLoadHybrid__ResumeAddress
+
+    ActorLoadHybrid__CheckSlot:
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        dec a
+
+        rep #$20
+        .mx 0x00
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda $1140,x
+        and #$1f
+        beq $+ActorLoadHybrid__ShadowSlotEmpty
+
+        // slot is filled
+        
+        // grab original load info byte from stack and
+        // convert to a "load from slot" code
+        pla
+        and #$70
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        dec a
+        ora #$80
+
+        // return to original code
+        jml $=ActorLoadHybrid__ResumeAddress
+
+    ActorLoadHybrid__ShadowSlotEmpty:
+        // grab original load info byte from stack and
+        // convert to "load from stats" code
+        pla
+        and #$0F
+
+        // return to original code
+        jml $=ActorLoadHybrid__ResumeAddress
+
+}
+
+
+

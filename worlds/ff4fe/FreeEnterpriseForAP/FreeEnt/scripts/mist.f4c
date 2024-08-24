@@ -1,0 +1,314 @@
+//------------------------------------------------------------------------------------------
+
+// change flag behavior on trigger
+eventcall($0C)
+{
+    if not #MistComplete, #fe_GotPackage:
+        $30   //Mist events
+    else:
+        $00   //(no event)
+}
+
+
+// alter npcs for child rydia if randomizing
+placement($01 4)  //#Mist
+{
+    // %crydia_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+
+    // set a palette in case this is a pig (under only-free-characters)
+    palette 1
+}
+
+placement($53 0)  //#FieldOutsideMist
+{
+    // %crydia_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+event($30)  //Mist events
+{
+    consts(placement) {
+        4   ChildRydia
+        5   RydiaMom
+    }
+    // autodetected map #Mist
+    music #None
+    take item #Package
+
+    p #ChildRydia toggle visible
+
+    player move right
+    pause 8
+    message $A0   // "       Package opened"
+    sound $7E
+    batch 20 {
+        screen flash
+    }
+    
+    [#B #Rando_LoadWackySprite 0 0]
+    pause 8
+
+    sound #Whirl
+    vfx #PackageOpen
+    music #Destruction
+    toggle tint $DF
+    vfx #PackageBombs
+    [#B #Objectives_Tick #objective.quest_burnmist]
+    [#B #ResetNPCPalette]
+    player face up
+    pause 4
+    player face right
+    pause 4
+    player face down
+    pause 4
+    player face right
+    pause 4
+    batch 3 {
+        player move right
+    }
+    player face up
+    pause 6
+
+    batch 4 {
+        player move up
+    }
+    batch 3 {
+        player move up
+    }
+    batch 1 {
+        player face right
+    }
+
+    batch 1 {
+        p #ChildRydia face left
+        player move right
+    }
+    player toggle turning
+    batch 1 {
+        player move right
+        p #ChildRydia move right
+    }
+    player toggle turning
+
+    player invisible
+
+    [#B #Rando_LoadAxtorFashionCode #actor.CRydia]
+
+    clear #Temp
+    [#B #Rando_CheckCharacterAltVersion #actor.CRydia]
+    [#B #If #Flag #flag.Result] {
+        vfx $01  // hijacked to mean alt Rydia battle
+        set #Temp
+    }
+
+    [#B #If #not_Flag #flag.Temp] {
+        vfx #RydiaBattle
+    }
+
+    [#B #Rando_LoadAxtorFashionCode $00]
+
+    consts(placement) {
+        0   ChildRydia
+    }
+    load map #FieldOutsideMist at 15 14 facing down
+    music #None
+    toggle tint $00
+    batch 1 {
+        player lie down
+        p #ChildRydia lie down
+    }
+
+    p #ChildRydia toggle visible
+    player visible
+    toggle screen fade
+    clear status 
+    restore hp
+    restore mp
+    pause 16
+    batch 2 {
+        screen blur
+    }
+    player bow head
+    pause 8
+    player face down
+    pause 6
+    player face left
+    pause 4
+    player face down
+    pause 4
+    player face right
+    pause 8
+    player move right
+    player move right
+    p #ChildRydia toggle visible
+    set #CarryingAroundChildRydia
+    player move right
+    batch 5 {
+        player move down
+    }
+    activate #MistMan   // all Mist NPCs have been consolidated into MistMan
+    deactivate #Cid2
+    deactivate #SleepingBubble1
+    set #MistComplete
+
+    [#B #PutEnterprise 104 118]
+    [#B #SaveVehiclesFromMist]
+    load map #Overworld at 103 119
+    player face down
+    music #Overworld
+}
+
+// Remove "No!" message from Titan fight
+ai_script($82)
+{
+    use #Enemy_Call
+}
+
+// need to relocate message due to hints stuff
+text(bank 1 message $A0) {
+
+      Package opened
+      automatically__
+
+}
+// --------------------------------------------------
+// setup Rydia fight
+monster($CE)
+{
+    gfx {
+        // %crydia_slot monster_gfx%
+        size $42
+        palette $02
+        // %end%
+        pointer $8000
+    }
+}
+
+text(monster name $CE) {
+// %crydia_slot monster_name%
+Girl
+// %end%
+}
+
+// --------------------------------------------------
+// setup alt character Rydia fight
+
+formation($DB)
+{
+    monsters {
+        $C7 x 1   // Girl (alt)
+        $CF x 1   // Titan   
+    }
+    calling
+    arrangement $32
+    can't run
+    no gameover
+    continue music
+    character battle
+    not floating enemies
+    gfx bits 1
+    cursor graph $23
+}
+
+monster($C7)   // was Zemus
+{
+    boss
+    level 1
+    hp 60000
+    gp 0
+    xp 0
+    attack index $00
+    defense index $60
+    magic defense index $A0
+    speed index $30
+    drop index $00
+    drop rate $00
+    attack sequence $88
+    gfx {
+        // %crydia_slot monster_gfx_alt%
+        size $4B
+        palette $0B
+        // %end%
+        pointer $8000
+    }
+}
+
+text(monster name $C7) {
+// %crydia_slot monster_name_alt%
+Caller
+// %end%
+}
+
+// Hijack VFX 01 to do the same as RydiaBattle
+// except with the other formation
+msfpatch {
+    .addr $00d879
+    lda #$DB
+    jmp $d2d5
+}
+
+
+
+// --------------------------------------------------
+// Erase triggers in Mist Cave
+mapgrid($6C 4 9) { 01 }
+mapgrid($6C 27 10) { 01 }
+
+trigger(#MistCave 6)
+{
+    delete
+}
+
+trigger(#MistCave 7)
+{
+    delete
+}
+
+// mist dragon event
+event($2F)  //Mist Dragon battle
+{
+    // autodetected map #MistCave
+    sound #Whirlpool
+    vfx #MistGathering
+    sound #None
+    [#B #Rando_BossBattle #rando.dmist_slot]
+    set #DefeatedMistDragon
+    [#B #Objectives_TickBossSlot #rando.dmist_slot]
+    [#B #Rando_PostBossBattle #rando.dmist_slot]    
+    [#B #Objectives_Tick #objective.quest_mistcave]
+    music #Cave
+}
+
+// Remove messages from Mist Dragon counterattack
+ai_script($81)
+{
+    use #Enemy_ColdMist
+}
+
+
+// Fix right side exit of Mist to go to right side of town in Overworld if no cave-in
+trigger(#Mist 8)
+{
+    position 29 16
+    event call $16
+}
+
+eventcall($16)
+{
+    $15
+}
+
+event($15)  //Cid greeting Cecil -> leaving Mist by right side
+{
+    music #Overworld 
+    [#B #If #Flag #flag.MistComplete] {
+        load map #Overworld at 95 119
+    } 
+    [#B #If #not_Flag #flag.MistComplete] {
+        load map #Overworld at 98 119
+    }
+}   
+

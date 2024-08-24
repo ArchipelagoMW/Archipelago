@@ -1,0 +1,41 @@
+// change MegaNuke in Wyvern
+ai_script(moon $25)
+{
+    // %wyvern meganuke replacement%
+    // %end%
+
+    pass
+
+    pass
+
+    condition 1
+    target self
+    use #Wall
+}
+
+
+// Enemy Odin command doesn't change sprites if in Wyvern battle
+msfpatch {
+    WyvernOdinGfxPatch:
+        pha
+        lda $1800
+        cmp #$fc
+        bne $+WyvernOdinGfxPatch_NotWyvernBattle
+        lda $1801
+        cmp #$01
+        bne $+WyvernOdinGfxPatch_NotWyvernBattle
+
+        // is Wyvern battle; do nothing and return
+        pla
+        rtl
+
+    WyvernOdinGfxPatch_NotWyvernBattle:
+        // do normal behavior
+        pla
+        jml $02cc5b
+
+    .addr $01fce6
+        jsl $=WyvernOdinGfxPatch
+    .addr $01fcf2
+        jsl $=WyvernOdinGfxPatch
+}

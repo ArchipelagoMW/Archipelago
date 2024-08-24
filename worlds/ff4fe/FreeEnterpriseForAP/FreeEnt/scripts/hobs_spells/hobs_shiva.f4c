@@ -1,0 +1,160 @@
+placement($7E 8) {
+    palette 2
+    face up
+    position 15 25
+    marching off
+    speed 2
+}
+
+placement($7E 9) {
+    palette 2
+    position 15 25
+    speed 3
+}
+
+placement($7E 10) {
+    palette 2
+    position 14 25
+    speed 3
+}
+
+placement($7E 11) {
+    palette 2
+    position 16 25
+    speed 3
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Shiva
+        9  Ice1
+        10  Ice2
+        11  Ice3
+    }
+
+    [#B #LoadNPCPalette $1a $05]
+    p #Shiva toggle visible
+    pause 4
+    
+    sound #Shiva
+
+    batch {
+        p #Ice1 toggle visible
+    }
+
+    batch {
+        p #Ice1 move up
+        p #Ice2 toggle visible
+    }
+
+    batch {
+        p #Ice1 move up
+        p #Ice2 move up
+        p #Ice3 toggle visible
+    }
+
+    batch {
+        p #Ice1 move up
+        p #Ice2 move up
+        p #Ice3 move up
+    }
+
+    batch {
+        p #Ice3 move up
+
+        p #Ice1 toggle visible
+        p #Ice2 toggle visible
+        p #Ice1 move down
+        p #Ice2 move down
+    }
+
+    batch {
+        p #Ice3 toggle visible
+        p #Ice3 move down
+        p #Ice1 move down
+        p #Ice2 move down
+    }
+
+    batch {
+        p #Ice3 move down
+        p #Ice2 toggle visible
+        p #Ice2 move up
+        p #Ice1 move down
+    }
+
+    batch {
+        p #Ice1 toggle visible
+        p #Ice1 move up
+        p #Ice2 move up
+    }
+
+    batch {
+        p #Ice2 toggle visible
+        p #Ice2 move down
+        p #Ice1 move up
+        p #Ice3 toggle visible
+        p #Ice3 move up
+    }
+
+    batch {
+        p #Ice2 move down
+        p #Ice1 move up
+        p #Ice3 move up
+    }
+
+    batch {
+        p #Ice1 toggle visible
+        p #Ice3 toggle visible
+        p #Ice1 move down
+        p #Ice3 move down
+    }
+
+    batch {
+        p #Ice1 move down
+        p #Ice3 move down
+    }
+
+    batch {
+        p #Ice3 toggle visible
+        p #Ice3 move up
+        p #Ice1 move down
+    }
+
+    batch {
+        p #Ice2 toggle visible
+        p #Ice2 move up
+        p #Ice3 move up
+    }
+
+    batch {
+        p #Ice1 toggle visible
+        p #Ice1 move up
+        p #Ice2 move up
+    }
+
+    batch 2 {
+        p #Ice1 move up
+    }
+
+    batch {
+        p #Ice1 toggle visible
+        p #Ice2 toggle visible
+        p #Ice3 toggle visible
+    }
+
+    pause 24
+
+    p #Shiva toggle visible
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

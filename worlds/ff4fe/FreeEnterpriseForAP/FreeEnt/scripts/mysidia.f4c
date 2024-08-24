@@ -1,0 +1,141 @@
+// Unseal the Serpent Road from the start
+npc(#MysidiaBlackMage3) {
+    default inactive
+}
+
+eventcall($06)
+{
+    $1E   //Devil's Road to Mysidia
+}
+
+//-------------------------------------------------------------------------
+
+// Palom/Porom joining
+
+npc(#Elder1)
+{
+    eventcall {
+        $5E   //Talking with Mysidian Elder, twins joining
+    }
+}
+
+placement($16 8)  //#HouseOfWishes
+{
+    // %palom_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+placement($16 9)  //#HouseOfWishes
+{
+    // %porom_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+event($5E)  //Talking with Mysidian Elder, twins joining
+{
+    consts(placement) {
+        7   Elder1
+        8   Palom1
+        9   Porom1
+        10   Teleporter
+    }
+    // hinted map #HouseOfWishes
+    p #Porom1 toggle visible
+    music #None
+    sound #HeavyDoor
+    batch 4 {
+        p #Porom1 move up
+    }
+    player move down
+    pause 6
+    p #Porom1 move right
+    p #Porom1 move up
+    player face right
+    pause 4
+    sound #Crush
+    p #Teleporter toggle visible
+    pause 4
+    batch 1 {
+        player face left
+        p #Porom1 face left
+    }
+    pause 4
+    music #PalomPorom
+    batch 1 {
+        p #Teleporter toggle visible
+        p #Palom1 toggle visible
+    }
+    p #Palom1 face down
+    batch 2 {
+        p #Palom1 spin
+    }
+    p #Palom1 spin jump
+    p #Palom1 face right
+    pause 4
+    batch {
+        p #Palom1 move right
+        p #Porom1 move left
+    }
+    batch {
+        player face down
+        p #Palom1 toggle visible
+        p #Porom1 toggle visible
+    }
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.mysidia_character_1 0]
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.mysidia_character_2 1]
+    
+    map message 21  // joined
+    set #TwinsJoined
+    music #Mysidia fade in
+
+    [#B #Objectives_TickRewardSlot #reward_slot.mysidia_character_1]
+    [#B #Objectives_TickRewardSlot #reward_slot.mysidia_character_2]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.mysidia_character_1]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.mysidia_character_2]
+
+    player face up
+    batch 5 {
+        p #Elder1 move up
+    }
+    p #Elder1 toggle visible
+
+    deactivate #Elder1
+}
+
+text(map #HouseOfWishes message $15) {
+[name $e0] and [name $e1]
+joined![music $29][pause 40]
+}
+
+//-------------------------------------
+// always use same version of tower of wishes
+
+trigger(#MysidiaCrystalRoom 1)
+{
+    teleport #RoomOfWishes at 5 12 facing up
+}
+
+map(#RoomOfWishes) {
+    music #LongWayToGo
+}
+
+
+//-------------------------------------
+// ...elder is weird
+
+npc(#ElderPraying)
+{
+    eventcall {
+        $2E   //map message 6
+    }
+}
+
+//-------------------------------------
+
+// fix "getting sleepy" message
+text(bank 1 message $1A4) {
+[name $f0]:Getting sleepy_
+}

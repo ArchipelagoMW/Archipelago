@@ -1,0 +1,184 @@
+msfpatch {
+    .def EncounterDangerous__Flag         $7e1588
+    .def EncounterDangerous__RNGCounter   $7e1587
+
+    .def EncounterDangerous__PrecalculatedFormationLevels  $21da00
+
+    EncounterDangerous__CheckFormation:
+        sta $1690
+        stz $1691
+
+        // When combining encounter_toggle with encounter_dangerous,
+        // always allow the formation if Encounters are on, otherwise
+        // still allow dangerous battles if Encounters are off
+        // %flag encounter_toggle on%
+        lda $_EncounterSetting
+        bne $+NormalEncountersOff
+        lda $1690
+        rtl
+    %NormalEncountersOff:
+        // %end%
+
+        lda $1701
+        beq $+NotUnderground
+        inc $1691
+    %NotUnderground:
+
+        // get average party level
+        // TODO: precalculate somewhere
+        stz $_Util__Divide_Dividend0
+        stz $_Util__Divide_Dividend1
+        stz $_Util__Divide_Dividend2
+        ldx #$0000
+    %PartyLevelSumLoop:
+        lda $1000,x
+        beq $+PartyLevelSumLoopNext
+        lda $1002,x
+        clc
+        adc $_Util__Divide_Dividend0
+        sta $_Util__Divide_Dividend0
+        bcc $+PartyLevelSumLoopNext
+        inc $_Util__Divide_Dividend1
+    %PartyLevelSumLoopNext:
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-PartyLevelSumLoop
+
+        lda #$05
+        sta $_Util__Divide_Divisor0
+        stz $_Util__Divide_Divisor1
+
+        jsr $_Util__Divide
+
+        ldx $_Util__Divide_Quotient0
+        stx $1680
+
+        // get average enemy level for formation
+        ldx $1690
+        lda $=EncounterDangerous__PrecalculatedFormationLevels,x
+        sta $1682
+        stz $1683
+
+        // RNG to simulate the "Surprised!" calculation
+        lda #$01
+        sta $1684
+        sta $1685
+
+        lda #$64 // RNG range 0 to 0x63
+        sta $168f
+        jsr $_NextRNG
+        cmp $1680
+        bcs $+PlayerCheckOver
+        inc $1684
+    %PlayerCheckOver:
+        dec $168f // for some reason, enemy's RNG is 0 to 0x62
+        jsr $_NextRNG
+        cmp $1682
+        bcs $+EnemyCheckOver
+        inc $1685
+    %EnemyCheckOver:
+
+        // check if dangerous
+        stz $_EncounterDangerous__Flag
+        lda $1684
+        cmp $1685
+        bcc $+Dangerous
+
+    %NotDangerous:    
+        lda #$ff
+        rtl
+
+    %Dangerous:
+        inc $_EncounterDangerous__Flag
+        // check for back attack
+        lda $1680 // avg player level
+        inc a
+        sta $168f // RNG range is 0 to avg player level
+        lsr $1682 // halve avg enemy level
+        jsr $_NextRNG
+        cmp $1682
+        bcs $+NotBackAttack
+
+        inc $_EncounterDangerous__Flag
+    %NotBackAttack:
+        lda $1690
+        rtl
+
+    %NextRNG:
+        inc $_EncounterDangerous__RNGCounter
+        lda $_EncounterDangerous__RNGCounter
+        sta $1686
+        stz $1687
+        ldx $1686
+        lda $14ee00,x
+        sta $_Util__Divide_Dividend0
+        stz $_Util__Divide_Dividend1
+        stz $_Util__Divide_Dividend2
+        lda $168f
+        sta $_Util__Divide_Divisor0
+        stz $_Util__Divide_Divisor1
+        jsr $_Util__Divide
+        lda $_Util__Divide_Remainder0
+        rts
+}
+
+
+// patch the various random battle checks
+msfpatch {
+    .addr $008a12
+        jml $=EncounterDangerous__Outdoors
+
+    .addr $008a7e
+        jml $=EncounterDangerous__Indoors
+
+    .new
+    EncounterDangerous__Outdoors:
+        lda $0ec796,x
+        jsl $=EncounterDangerous__CheckFormation
+        cmp #$ff
+        beq $+Abort
+        jml $008a16
+
+    EncounterDangerous__Indoors:
+        lda $0ec816,x
+        jsl $=EncounterDangerous__CheckFormation
+        cmp #$ff
+        beq $+Abort
+        jml $008a82
+
+    %Abort:
+        jml $008a90  // this is just an RTS
+}
+
+// patch the battle setup code to respond to dangerous flags
+msfpatch {
+    .addr $038c84
+        jml $=EncounterDangerous__FlagCheck
+
+    .new
+    EncounterDangerous__FlagCheck:
+        lda $_EncounterDangerous__Flag
+        bne $+FlagIsSet
+
+        // displaced "can't run" bit check
+        lda $38e5
+        and #$01
+        jml $038c89
+
+    %FlagIsSet:
+        lda #$80
+        sta $38d7
+        sta $38d8
+        lda $_EncounterDangerous__Flag
+        cmp #$02
+        bne $+Done
+
+        // is also back attack
+        lda #$08
+        sta $3581
+
+    %Done:
+        // clear flag for next battle
+        stz $_EncounterDangerous__Flag
+        jml $038d4e
+}

@@ -1,0 +1,47 @@
+// patch new game setup to stuff inventory with items
+
+msfpatch {
+    TestMode__NewGameSetup:
+        // displaced code
+        ldx #$3000
+        stx $16aa
+
+        // starting max GP
+        lda #$7f
+        sta $16a0
+        lda #$96
+        sta $16a1
+        lda #$98
+        sta $16a2
+
+        /*
+        // every item in fat chocobo inventory
+        ldx #$0000
+        ldy #$0000
+    TestMode__NewGameSetup_FatChocoboLoopStart:
+        cpy #$0000 // "no weapon"
+        beq $+TestMode__NewGameSetup_FatChocoboLoopNext
+        cpy #$0060 // "no armor"
+        beq $+TestMode__NewGameSetup_FatChocoboLoopNext
+        cpy #$0046 // dummy item
+        beq $+TestMode__NewGameSetup_FatChocoboLoopNext
+
+        tya
+        sta $1340,x
+        lda #$63
+        sta $1341,x
+        inx
+        inx
+    TestMode__NewGameSetup_FatChocoboLoopNext:
+        iny
+        cpy #$00ee
+        bcc $-TestMode__NewGameSetup_FatChocoboLoopStart
+        */
+
+        rtl
+
+
+    // This needs to be rewritten
+    // .addr $019b2b
+        //jsl $=TestMode__NewGameSetup
+}

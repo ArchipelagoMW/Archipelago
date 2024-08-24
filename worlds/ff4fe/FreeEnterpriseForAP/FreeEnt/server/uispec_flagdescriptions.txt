@@ -1,0 +1,492 @@
+[@O]
+You may add additional objectives to the game; they can be viewed in-game from the Track menu.
+
+[Omode:classicforge]
+Bring the Adamant and Legend Sword to Kokkol to complete this objective. In this mode, you will not receive the Excalibur from Kokkol; instead the Excalibur replaces the Crystal in the pool of key items. This mode forces the <em>Owin:crystal</em> flag to be on.
+
+[Omode:classicgiant]
+Defeat the Giant of Bab-il to complete this objective. In this mode, there is no character reward for finishing the Giant.
+
+[Omode:fiends]
+Defeat Milon, Milon Z., Kainazzo, Valvalis, Rubicant, and Elements to complete this mode.
+
+[Omode:dkmatter]
+45 Dark Matters are randomly placed in chests (MIABs excluded); bring 30 of them to Kory in Agart to complete this objective.
+
+[Orandom:tough_quest]
+Refers only to the more difficult, later-game quest objectives.
+
+[Owin:game]
+Complete the required number of objectives to immediately win the game. Zeromus cannot be fought in this mode.
+
+[Owin:crystal]
+Complete the required number of objectives to get the Crystal, then defeat Zeromus to win the game.
+
+[@Ocustom]
+<ul>
+    <li>Duplicate objectives will be omitted.</li>
+    <li>A character objective is met when the requirements to gain the character have been fulfilled; you do not need to actually add them to your party.</li>
+    <li>Starting characters do not count towards character objectives.</li>
+    <li>Setting the Pass quest objective with no other P flags will force Pkey to be enabled.</li>
+</ul>
+
+[Kmain]
+The locations of key items are shuffled amongst each other. For example, you may find the Magma Key in the Antlion's Nest instead of the Sandruby.
+
+The items randomized this way are the <em>Package, SandRuby, Legend Sword, Baron Key, TwinHarp, Earth Crystal, Magma Key, Tower Key, Airship Hook, Luca Key, Dark Crystal, Pink Tail, Rat Tail, Pan, Spoon, Adamant,</em> and the <em>Crystal used to transform Zeromus</em> (yes, you have to find it.)
+
+[Ksummon]
+Key items may be awarded by the Sylphs, the king and queen of the Feymarch, Odin's throne, and Cave Bahamut.
+
+[Kmoon]
+Key items may be awarded by the bosses of the Lunar Subterrane.
+
+[Kmiab]
+This excludes monster-in-a-box chests in the Lunar Subterrane, unless also using Kmoon or Kunsafe.
+
+[Knofree]
+Edward in Toroia will not give you a key item. Instead, a key item may be earned from Rydia's mom in Mist, who will appear after you have found and defeated the Mist Dragon.
+
+[Kforce:magma]
+You are guaranteed that there is a path to the underworld via the Magma Key, without needing to use the Hook route through Cave Eblan.
+
+[Kforce:hook]
+You are guaranteed that the Hook route through Cave Eblan is the only way to access the underworld.
+
+[Kunsafe]
+<ul>
+    <li>Normally, you are guaranteed a path to the underworld that does not require first going to the moon. This flag removes that check.</li>
+    <li>If Kmiab is enabled, key items may appear in the Lunar Subterrane monster-in-a-box chests.</li>
+</ul>
+
+[Pchests]
+Passes are placed in three random treasure chests (not on the moon).
+
+[Cstandard]
+Characters join your party in the same locations as the original game, but the character you meet there is randomized. For example, you may encounter Yang in the Watery Pass instead of Tellah. The randomizer will try to prevent more powerful characters (Fusoya and Edge, by default) from appearing in early-game positions.
+
+[Crelaxed]
+Characters join your party in the same locations as the original game, but the character you meet there is randomized. For example, you may encounter Yang in the Watery Pass instead of Tellah. Unlike the standard randomization, characters are equally likely to appear in any position.
+
+[Cnofree]
+Characters will not join your party in the Watery Pass, Damcyan, Mysidia, or Mt. Ordeals.
+
+[Cnoearned]
+Characters will not join your party in Kaipo, Mt. Hobs, Baron, Zot, the Dwarf Castle, Cave Eblan, the Lunar Palace, or the Giant of Bab-il.
+
+[Cmaybe]
+Normally, the randomizer will try to include every eligible character in the game at least once. This flag removes that logic, meaning some eligible characters may not appear.
+
+[@CrestrictDefine]
+Under standard settings, the randomizer considers Fusoya and Edge to be "restricted" characters due to their power level, and will try to place them in later-game positions. You may redefine which characters are considered "restricted" here.
+
+[@CstartDefine]
+Your starting character will be chosen among the options selected here, regardless of other flag settings.
+
+[@CstartModify]
+Your starting character will be selected as normal according to your other flag settings, modified by the options selected here.
+
+[Cj:spells]
+White mages will learn Armor, Shell, and Dispel. All mages learn spells at the levels they would in FF4j.
+
+[Cj:abilities]
+Characters retain the battle commands from FF4j that were removed in FF4us.
+
+[Cnodupes]
+If a duplicate character tries to join your party, instead nothing happens.
+
+[Cnekkie]
+Characters start with a random low-level weapon and no armor. (Duplicate characters will have the same starting gear.)
+
+[Cbye]
+Dismissed characters cannot be retrieved. (Normally, dismissed characters go to the Mysidia crystal room and the Tower of Wishes where they may be reclaimed.)
+
+[Cpermajoin]
+You have the choice of whether to accept each new party member, but once your party is full, you cannot recruit anyone else.
+
+[Cpermadeath]
+Party members that are "swoon" at the end of any battle are permanently removed from the game. (Does not apply to cutscene/story battles you are allowed to lose, ie. Dark Elf first round or Titan fight at Mist.)
+
+[Cpermadeader]
+Party members that are swoon or stone at the end of any battle are permanently removed from the game. (This includes the cutscene/story battles that you are normally allowed to lose; now you will game over if your party wipes during these battles.)
+
+[Chero]
+- The starting character is your hero.
+- The hero is the only instance of that character available (unless other flags force it).
+- The hero cannot be dismissed.
+- The hero fights the Mt. Ordeals mirror room boss alone.
+- Kokkol will craft an FF4 Advance weapon usable by the hero.
+- The hero gains EXP even if incapacitated.
+- The hero is your agility anchor.
+- The hero is exempt from permadeath.
+
+[Tshuffle]
+Treasure contents are the same as in original FF4, but their positions are shuffled. This randomization is weighted so that overworld treasures tend to remain in the overworld, and similarly for underworld/moon treasures.
+
+[Tstandard]
+A basic randomization, allowing items of reasonable strength to appear. Items are equally likely to appear in any chest regardless of location.
+
+[Tpro]
+A skill-testing randomization, limiting the strength of available items, and weighted to favor stronger items in later-game and infrequently-visited areas.
+
+[Twild]
+An unrestricted randomization, allowing equal chance for items to appear in any chest, including the most powerful items.
+
+[Twildish]
+Allows items of any strength to appear, including the most powerful items, but uses location-based weighting like the pro randomization.
+
+[Tjunk]
+Normally, poor-quality items in chests are replaced with an equivalent amount of GP (based on sell price) to reduce inventory bloat. Enable this flag if you want to keep them as items.
+
+[Tmoney]
+Instead of their assigned contents, all chests contain an equivalent amount of GP, based on sell price (monster-in-a-box chests excluded).
+
+[Sshuffle]
+The same items are available for sale in shops as in original FF4, but their locations are shuffled. This randomization is weighted so that overworld shop items tend to remain on the overworld, and similarly for underworld/moon shops.
+
+[Sstandard]
+A basic randomization, allowing items of moderate strength to appear in shops, and weighted to place stronger items in later-game shops.
+
+[Spro]
+A skill-testing randomization, limiting the strength of available items, and weighted to place stronger items in shops gated behind key items.
+
+[Swild]
+An unrestricted randomization, allowing equal chance for items to appear in any shop, including the most powerful items.
+
+[Sunsafe]
+Normally, the randomizer guarantees Cure2 potions, Life potions and StarVeils are readily available, and that Cure3 potions are available in seeds without white mages. This flag removes those checks.
+
+[Bstandard]
+The positions of bosses are shuffled. Boss stats are roughly scaled to match the battle it's replacing. For example, Rubicant in the Watery Pass would have the HP and speed of Octomamm. (Yes, this flag is janky, and a MegaNuke is still a MegaNuke. Save often.)
+
+[Bunsafe]
+Normally, you are guaranteed a path to the underworld that does not require defeating the most difficult bosses. This flag removes that check.
+
+[Bnofree]
+All boss battle enemies have the "boss bit" set.  The alternate win conditions are removed from the D.Knight, Karate, K/Q.Eblan, and WaterHag fights.
+
+[Balt:gauntlet]
+Replaces the Fabul Gauntlet boss with five unscaled normal enemy encounters from the nearby area.
+
+[Bwhichburn]
+The replacement attack will be weaker than MegaNuke (unless <em>Bunsafe</em> is enabled, in which case it may not be).
+
+[@G]
+The glitches explicitly referenced here are <em>disabled by default</em>; setting these flags enables them to act as they do in original FF4. Glitches not mentioned here remain intact and available.
+
+[Gsylph]
+When enabled, casting Sylph will only deduct MP from the caster if they are in the middle party slot.
+
+[Etoggle]
+Encounters can be enabled/disabled from the in-game Custom menu.
+
+[Ekeep:doors]
+Prevents the above encounter rate setting from applying to the TrapDoor fights in the Sealed Cave.
+
+[Ekeep:behemoths]
+Prevents the above encounter rate setting from applying to the forced Behemoth fights in Cave Bahamut.
+
+[Edanger]
+Back attacks and "Surprised!" encounters will still occur, even when encounters are disabled via <em>Etoggle</em> or <em>Enoencounters</em>.
+
+[Enoexp]
+Bosses and monster-in-a-box fights still award EXP.
+
+[@kit]
+Starter kits allow you to begin the game with additional items in your inventory.
+
+[-kit:basic]
+An assortment of basic utility potions and items.
+
+[-kit:better]
+An assortment of basic utility potions and items, and a few extra special-use combat items for sticky situations.
+
+[-kit:loaded]
+A wide array of utility potions and items.
+
+[-kit:cata]
+3 Life potions and a StarVeil.
+
+[-kit:freedom]
+10 Life potions, 3-5 StarVeils, 1-2 Sirens, and 10 ThorRages.
+
+[-kit:cid]
+5 Cure2 potions, a Bacchus wine, a Unihorn, and a tier 4-5 axe.
+
+[-kit:yang]
+2 CatClaws.
+
+[-kit:money]
+20000-80000 GP.
+
+[-kit:grabbag]
+8 random tier 1-5 items.
+
+[-kit:miab]
+3 HrGlass2s, 3 MuteBells, and an Assassin Dagger.
+
+[-kit:archer]
+A tier 4-6 bow, and 20 of a tier 3-6 arrow.
+
+[-kit:fabul]
+A Black Sword.
+
+[-kit:castlevania]
+A tier 3-5 whip and 3 Crosses.
+
+[-kit:summon]
+A random summon orb.
+
+[-kit:notdeme]
+3 Cure3 potions, 2 Elixirs, and an Illusion.
+
+[-kit:meme]
+A Ninja Shirt and a Drain Spear.
+
+[-kit:defense]
+Dragoon Armor and a Diamond Helm.
+
+[-kit:mist]
+10 Dancing Daggers, a Tiara, and a Change Rod.
+
+[-kit:mysidia]
+70 each of Cure2, Life, Heal and Ether1 potions, a Gaea Hat, a Paladin Shield, and a Silver Ring.
+
+[-kit:baron]
+10 Headbands, 10 Karate gis, a Thunder Claw, and a Thunder Rod.
+
+[-kit:dwarf]
+A Wizard Hat and Wizard Robe, 10 Rune Rings, a Dwarf Axe, an Elixir, and a Strength Ring.
+
+[-kit:eblan]
+An Ice Brand and a Blizzard Spear.
+
+[-kit:99]
+99 of a random item.
+
+[-kit:libra]
+50 Bestiaries. (A Bestiary has the same effect as Peep, but works against bosses (excluding Zeromus), which can be helpful for new players.)
+
+[-kit:green]
+A grab bag of items selected individually by FE devs without any coordination whatsoever.
+
+[-kit:random]
+One of the other kit options, selected at random.
+
+[-kit2:basic]
+An assortment of basic utility potions and items.
+
+[-kit2:better]
+An assortment of basic utility potions and items, and a few extra special-use combat items for sticky situations.
+
+[-kit2:loaded]
+A wide array of utility potions and items.
+
+[-kit2:cata]
+3 Life potions and a StarVeil.
+
+[-kit2:freedom]
+10 Life potions, 3-5 StarVeils, 1-2 Sirens, and 10 ThorRages.
+
+[-kit2:cid]
+5 Cure2 potions, a Bacchus wine, a Unihorn, and a tier 4-5 axe.
+
+[-kit2:yang]
+2 CatClaws.
+
+[-kit2:money]
+20000-80000 GP.
+
+[-kit2:grabbag]
+8 random tier 1-5 items.
+
+[-kit2:miab]
+3 HrGlass2s, 3 MuteBells, and an Assassin Dagger.
+
+[-kit2:archer]
+A tier 4-6 bow, and 20 of a tier 3-6 arrow.
+
+[-kit2:fabul]
+A Black Sword.
+
+[-kit2:castlevania]
+A tier 3-5 whip and 3 Crosses.
+
+[-kit2:summon]
+A random summon orb.
+
+[-kit2:notdeme]
+3 Cure3 potions, 2 Elixirs, and an Illusion.
+
+[-kit2:meme]
+A Ninja Shirt and a Drain Spear.
+
+[-kit2:defense]
+Dragoon Armor and a Diamond Helm.
+
+[-kit2:mist]
+10 Dancing Daggers, a Tiara, and a Change Rod.
+
+[-kit2:mysidia]
+70 each of Cure2, Life, Heal and Ether1 potions, a Gaea Hat, a Paladin Shield, and a Silver Ring.
+
+[-kit2:baron]
+10 Headbands, 10 Karate gis, a Thunder Claw, and a Thunder Rod.
+
+[-kit2:dwarf]
+A Wizard Hat and Wizard Robe, 10 Rune Rings, a Dwarf Axe, an Elixir, and a Strength Ring.
+
+[-kit2:eblan]
+An Ice Brand and a Blizzard Spear.
+
+[-kit2:99]
+99 of a random item.
+
+[-kit2:libra]
+50 Bestiaries. (A Bestiary has the same effect as Peep, but works against bosses (excluding Zeromus), which can be helpful for new players.)
+
+[-kit2:green]
+A grab bag of items selected individually by FE devs without any coordination whatsoever.
+
+[-kit2:random]
+One of the other kit options, selected at random.
+
+[-kit3:basic]
+An assortment of basic utility potions and items.
+
+[-kit3:better]
+An assortment of basic utility potions and items, and a few extra special-use combat items for sticky situations.
+
+[-kit3:loaded]
+A wide array of utility potions and items.
+
+[-kit3:cata]
+3 Life potions and a StarVeil.
+
+[-kit3:freedom]
+10 Life potions, 3-5 StarVeils, 1-2 Sirens, and 10 ThorRages.
+
+[-kit3:cid]
+5 Cure2 potions, a Bacchus wine, a Unihorn, and a tier 4-5 axe.
+
+[-kit3:yang]
+2 CatClaws.
+
+[-kit3:money]
+20000-80000 GP.
+
+[-kit3:grabbag]
+8 random tier 1-5 items.
+
+[-kit3:miab]
+3 HrGlass2s, 3 MuteBells, and an Assassin Dagger.
+
+[-kit3:archer]
+A tier 4-6 bow, and 20 of a tier 3-6 arrow.
+
+[-kit3:fabul]
+A Black Sword.
+
+[-kit3:castlevania]
+A tier 3-5 whip and 3 Crosses.
+
+[-kit3:summon]
+A random summon orb.
+
+[-kit3:notdeme]
+3 Cure3 potions, 2 Elixirs, and an Illusion.
+
+[-kit3:meme]
+A Ninja Shirt and a Drain Spear.
+
+[-kit3:defense]
+Dragoon Armor and a Diamond Helm.
+
+[-kit3:mist]
+10 Dancing Daggers, a Tiara, and a Change Rod.
+
+[-kit3:mysidia]
+70 each of Cure2, Life, Heal and Ether1 potions, a Gaea Hat, a Paladin Shield, and a Silver Ring.
+
+[-kit3:baron]
+10 Headbands, 10 Karate gis, a Thunder Claw, and a Thunder Rod.
+
+[-kit3:dwarf]
+A Wizard Hat and Wizard Robe, 10 Rune Rings, a Dwarf Axe, an Elixir, and a Strength Ring.
+
+[-kit3:eblan]
+An Ice Brand and a Blizzard Spear.
+
+[-kit3:libra]
+50 Bestiaries. (A Bestiary has the same effect as Peep, but works against bosses (excluding Zeromus), which can be helpful for new players.)
+
+[-kit3:99]
+99 of a random item.
+
+[-kit3:green]
+A grab bag of items selected individually by FE devs without any coordination whatsoever.
+
+[-kit3:random]
+One of the other kit options, selected at random.
+
+[-noadamants]
+Adamant Armors are not available. Trading the Pink Tail in the Adamant Grotto instead grants a strong item.
+
+[-smith:super]
+Instead of the Excalibur, Kokkol the Smith will forge a weapon from Final Fantasy 4 Advance. (Some weapons have been modified slightly due to technical limitations.)
+
+[-vintage]
+Enables the April Fools Day 2019 mode.
+
+[-pushbtojump]
+<ul>
+    <li>Enables the April Fools Day 2020 mode.</li>
+    <li>This flag does not affect the randomized placement of progression items.</li>
+    <li>Stability is absolutely not guaranteed.</li>
+    <li>Instability is absolutely guaranteed.</li>
+    <li>(If a door goes somewhere you don't expect it to go, it was probably a "return" door, which takes you back to your previous location.)</li>
+</ul>
+
+[-vanilla:fusoya]
+By default, Free Enterprise runs with the "FuSoYa Challenge", where FuSoYa begins with 500 HP and a collection of low-level spells, and each boss defeated grants him 100 HP and three random additional spells. This flag disables that challenge and restores vanilla's FuSoYa behavior, where he joins with 1900 HP and his full spellset.
+
+[-vanilla:agility]
+FF4 scales the speed of combat based on the agility stat of your party's "agility anchor". In Free Enterprise, the anchor is always the first occupied party slot (in the sequence of middle, top, bottom, top-middle, bottom-middle). However, in vanilla FF4, if Cecil is in the party, then he is the agility anchor, regardless of position. Enabling this flag will restore that behavior, making the first Cecil in your party the anchor, if present. (Note that this overrides the <em>Chero</em> agility effect, if playing with the hero challenge.)
+
+[-vanilla:hobs]
+By default, instead of learning Fire1 at Mt. Hobs, Rydia will learn a random summon (other than Leviatan and Bahamut). This flag removes that behavior.
+
+[@exp]
+To reduce grinding, Free Enterprise normally applies a number of experience boosts, which may be individually disabled by these flags.
+
+[-exp:split]
+Normally in Free Enterprise, earned EXP is not divided among the party, and each member receives the full amount. Set this flag to restore the original FF4 EXP distribution scheme (ie. earned EXP is divided among the surviving party members).
+
+[-exp:noboost]
+Normally in Free Enterprise, in a full party, low-level party members (at least 5 levels below the median level) earn double EXP. Set this flag to remove this bonus.
+
+[-exp:nokeybonus]
+By default in Free Enterprise, once 10 key items have been collected, earned EXP is doubled. Set this flag to remove this bonus.
+
+[-vanilla:growup]
+By default in Free Enterprise, the summons learned when Rydia ages are randomized. Set this flag to return to the vanilla summons learned at that time (Mist, Indra, Jinn, Shiva, and Titan).
+
+[-vanilla:fashion]
+To help distinguish duplicate characters, Free Enterprise randomizes the battle palettes of each character. Enabling this flag preserves each character's original battle colors.
+
+[-vanilla:miabs]
+By default, monster-in-a-box chests are relocated randomly within the same dungeon/area. This flag forces MIABs to remain in their original positions.
+
+[-vanilla:giant]
+Removes the added exit at the start of the Giant of Bab-il, forcing you to complete it in order to return to the Big Whale. (Be careful not to get stuck with your only save file being inside the Giant.) This exit is restored once the Giant is completed.
+
+[-vanilla:z]
+Free Enterprise replaces Zeromus' battle sprite with a random sprite. (Its battle behavior and stats are unchanged.) Enable this flag to preserve Zeromus' original battle sprite.
+
+[@wacky]
+<ul>
+    <li>Guidingway will introduce the challenge.</li>
+    <li>Guidingway will not explain the challenge.</li>
+    <li>Wacky challenges are not intended to be balanced, robust, coherent, fair, or bug-free.</li>
+    <li>(They are intended to be wacky.)</li>
+</ul>

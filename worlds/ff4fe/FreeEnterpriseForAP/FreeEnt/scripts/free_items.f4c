@@ -1,0 +1,2 @@
+// default qty in shops to 99 because lol
+patch($01c2d1 bus) { 63 }

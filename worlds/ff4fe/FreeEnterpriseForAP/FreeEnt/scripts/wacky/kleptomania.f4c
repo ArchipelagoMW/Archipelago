@@ -1,0 +1,207 @@
+// make sneak pull from our extended table
+msfpatch {
+    .addr $03e24d
+        jml $=Wacky__Kleptomania
+
+    .new
+    Wacky__Kleptomania:
+        // load current target monster slot
+        lda $ce
+        and #$7f
+        tax
+        // lookup monster type index (0-2)
+        lda $29b5,x
+        tax
+        // lookup actual monster type
+        lda $29ad,x
+        tax
+        // get item to sneak from extended data
+        lda $=Wacky__ROMData,x
+        // return to sneak flow
+        jml $03e25a
+}
+
+// don't skip icon in alert message
+msfpatch {
+    .addr $02A59E
+        nop
+        lda #$09
+}
+
+// improve Sneak success rate
+msfpatch {
+    .addr $03E1F0
+        lda #$4b  // 75 in decimal
+}
+
+
+// ----------------------------------------------
+// give everyone Sneak
+
+actor(#DKCecil)
+{
+    commands {
+        #Fight
+        // %flag japanese_abilities on%
+        #DarkWave
+        // %end%
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Kain1)
+{
+    commands {
+        #Fight
+        #Jump
+        #Sneak
+        #Item
+    }
+}
+
+actor(#CRydia)
+{
+    commands {
+        #Fight
+        #Black
+        #Call
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Tellah1)
+{
+    commands {
+        #Fight
+        #White
+        #Black
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Edward)
+{
+    commands {
+        #Fight
+        #Sing
+        #Hide
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Rosa1)
+{
+    commands {
+        #Fight
+        #White
+        #Aim
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Yang1)
+{
+    commands {
+        #Fight
+        #Kick
+        #Focus
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Palom)
+{
+    commands {
+        #Fight
+        #Black
+        // %flag japanese_abilities on%
+        #Bluff
+        // %end%
+        #Sneak
+       #Item
+    }
+}
+
+actor(#Porom)
+{
+    commands {
+        #Fight
+        #White
+        // %flag japanese_abilities on%
+        #Cry
+        // %end%
+        #Sneak
+        #Item
+    }
+}
+
+actor(#PCecil)
+{
+    commands {
+        #Fight
+        #White
+        #Cover
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Tellah3)
+{
+    commands {
+        #Fight
+        #White
+        #Black
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Cid)
+{
+    commands {
+        #Fight
+        #Peep
+        #Sneak
+        #Item
+    }
+}
+
+actor(#ARydia)
+{
+    commands {
+        #Fight
+        #Black
+        #Call
+        #Sneak
+        #Item
+    }
+}
+
+actor(#Edge)
+{
+    commands {
+        #Fight
+        #Dart
+        #Sneak
+        #Ninja
+        #Item
+    }
+}
+
+actor(#Fusoya)
+{
+    commands {
+        #Fight
+        #White
+        #Black
+        #Sneak
+        #Item
+    }
+}

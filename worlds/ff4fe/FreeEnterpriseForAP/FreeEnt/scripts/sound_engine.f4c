@@ -1,0 +1,97 @@
+// hook into sound engine loading code to add an additional code area
+msfpatch {
+    .addr $0480b0
+        .mx 0x00   // (starts in 16-bit accumulator mode)
+        jsl $=SPCEx__LoadExtension
+        nop
+
+    .new
+    SPCEx__LoadExtension:
+        .mx 0x00   // (starts in 16-bit accumulator mode)
+        // get extension length
+        lda $22f900
+        tay
+
+        // hardcode target address to 19a9
+        lda #$19a9
+        sta $2142
+
+        sep #$20
+        .mx 0x20
+
+        lda #$01
+        sta $2141
+        lda $08
+        sta $2140
+    %AddressCheck:
+        cmp $2140
+        bne $-AddressCheck
+        stz $08
+
+        phx
+        ldx #$0002
+    %LoadLoop:
+        lda $22f900,x
+        sta $2141
+        lda $08
+        sta $2140
+        inc $08
+    %WriteCheck:
+        cmp $2140
+        bne $-WriteCheck
+        inx
+        dey
+        bne $-LoadLoop
+
+        inc $08
+        inc $08
+        inc $08
+        ldy #$0000
+
+        plx
+        // displaced
+        lda $8683,x
+        rtl
+}
+
+// modify sound playback code to use mute setting
+patch ($0491e3 bus) {
+// 135C:
+    3F A9 19    // call $19a9
+}
+
+// add command 0xA0 to set the mute mode
+patch ($0492af bus) {
+// 1428:
+    5F B7 19    // jmp $19b7
+}
+
+patch ($22f900 bus) {
+// extension data length
+    25 00
+
+//19A9:
+    E4 EF       // mov a,$ef
+    F0 04       // beq +4
+    E4 00       // mov a,$00
+    2F 04       // bra +4
+    E4 43       // mov a,$43
+    2F 00       // bra +0 (for lag invariance)
+    CF          // mul ya
+    6F          // ret
+
+//19B7:
+    C8 FE       // cmp x,#$fe
+    D0 03       // bne +3
+    5F C8 19    // jmp $19c8
+    // displaced original code
+    C8 FF       // cmp x,#$ff
+    D0 03       // bne +3
+    5F 82 17    // jmp $1782
+    5F 2F 14    // jmp $142f (ie. return to original code)
+
+//19C8:
+    FA F5 EF    // mov $ef,$f5 (ie. transfer param to mute flag)
+    5F 2F 14    // jmp $142f (ie. return to original code)
+}
+

@@ -1,0 +1,87 @@
+msfpatch {
+    .addr $038117
+        jsl $=Wacky__ForwardIsBack_InvertFormationBit
+        nop
+    
+    .new
+    Wacky__ForwardIsBack_InvertFormationBit:
+        and #$08
+        eor #$08
+        sta $3581
+        rtl
+}
+
+msfpatch {
+    .addr $15b220
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15b341
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15b432
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15b552
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15b6ae
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15b773
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15b7de
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15b939
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15ba28
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    .addr $15bcff
+        jsl $=Wacky__ForwardIsBack_FlipPlayerSprite
+    
+    .new
+    Wacky__ForwardIsBack_FlipPlayerSprite:
+        bit #$fc
+        bne $+NotCardinal
+        eor #$02
+    %NotCardinal:
+        asl a
+        asl a
+        asl a
+        asl a
+        rtl
+}
+
+msfpatch {
+    .addr $00B989
+        jsl $=Wacky__ForwardIsBack_FlipNPC
+    
+    .new
+    Wacky__ForwardIsBack_FlipNPC:
+        bit #$fc
+        bne $+NotCardinal
+        eor #$02
+    %NotCardinal:
+        asl a
+        clc
+        adc $3d
+        rtl
+}
+
+msfpatch {
+    .addr $038c77
+        jsl $=Wacky__ForwardIsBack_SpecialCaseFights
+        nop
+
+    .new
+    Wacky__ForwardIsBack_SpecialCaseFights:
+        // Zeromus, Golbez, and Wyvern use normal ATB init even in back-attack
+        phx
+        ldx $1800
+        cpx #$01b7
+        beq $+NormalATBInit
+        cpx #$01b6
+        beq $+NormalATBInit
+        cpx #$01fc
+        beq $+NormalATBInit
+    %BackAttackATBInit:
+        lda #$80
+        sta $38d8
+    %NormalATBInit:
+        plx
+        rtl
+}

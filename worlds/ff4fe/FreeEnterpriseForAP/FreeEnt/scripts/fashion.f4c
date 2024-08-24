@@ -1,0 +1,433 @@
+msfpatch {
+    .def Fashion__BattleBankCache    $7072a0
+    .def Fashion__BattlePaletteCache $707200
+}
+
+// hook into menu screen routines that load the
+// battle sprites and change bank based on
+// alt palette index
+msfpatch {
+    .addr $018ded
+        jsl $=Fashion__MenuScreenCHR
+
+    .new
+    Fashion__MenuScreenCHR:
+        lda #$00
+        xba
+        lda $5a  // handily prestuffed with axtor
+        tax
+        lda $=Fashion__LookupTable,x
+        sta $_Fashion__Memo  // remember for palette loop
+        beq $+NormalCHR
+
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        sta $21
+
+        rtl
+
+    %NormalCHR:
+        lda #$1a
+        sta $21
+
+        rtl
+}
+
+msfpatch {
+    .addr $018e22
+        jml $=Fashion__MenuScreenPAL
+
+    .new
+    Fashion__MenuScreenPAL:
+        lda $_Fashion__Memo
+        beq $+NormalPalette
+
+        // do our own copy loop from a custom area
+
+        // step 1: exchange X and Y, we need slot number in X and read offset in Y
+        stx $_Fashion__ScratchLo
+        tyx
+        ldy $_Fashion__ScratchLo
+
+        // step 2: set to read from appropriate palette bank
+        phb
+
+        lda $_Fashion__Memo
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        pha
+        plb
+
+        // step 3: copy palette
+        lda #$20
+        sta $=Fashion__ScratchLo
+    %CopyLoopStart:
+        lda $_Fashion__PaletteDataOffset,y
+        sta $7efe28,x
+        inx
+        iny
+        lda $=Fashion__ScratchLo
+        dec a
+        sta $=Fashion__ScratchLo
+        bne $-CopyLoopStart
+
+        // return
+        plb
+        jml $018e33
+
+
+    %NormalPalette:
+        // displaced instructions and continue with original palette loop
+        lda #$20
+        sta $45
+        jml $018e26
+}
+
+
+
+// hook into battle screen routines that load the
+// battle sprites at battle start and use it to
+// initialize cached fashion data
+msfpatch {
+    // hook into code that loads job number in order to also store axtor
+    // number for us to use
+    .addr $02e098
+        jml $=Fashion__BattleFashionInit
+
+    .new
+    Fashion__BattleFashionInit:
+        phx
+
+        // save job
+        lda $2001,x
+        and #$0f
+        sta $_Fashion__ScratchHi
+
+        // lookup fashion code
+        lda #$00
+        xba
+        lda $2000,x
+        and #$1f
+        tax
+        lda $=Fashion__LookupTable,x
+        sta $_Fashion__Memo
+
+        // we need the slot number; $0A currently contains slot number * 0x0400
+        lda $0b
+        lsr a
+        lsr a
+        sta $_Fashion__ScratchLo
+        sta $1690  // also remember here for when we momentarily copy CHR
+        tax
+
+        // convert to bank and save in bank cache
+        lda $_Fashion__Memo
+        beq $+NormalCHRBank
+
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        bra $+HaveCHRBank
+    %NormalCHRBank:
+        lda #$1a
+    %HaveCHRBank:
+        sta $=Fashion__BattleBankCache,x
+
+        // precache the character's battle palette
+        lda $_Fashion__ScratchLo  // get slot
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax   // X = output offset
+
+        // get offset into source palette data
+        // (ScratchHi currently contains job)
+        stz $_Fashion__ScratchLo
+        clc
+        lsr $_Fashion__ScratchHi
+        ror $_Fashion__ScratchLo
+        lsr $_Fashion__ScratchHi
+        ror $_Fashion__ScratchLo
+        lsr $_Fashion__ScratchHi
+        ror $_Fashion__ScratchLo
+        ldy $_Fashion__ScratchLo  // Y = read offset
+
+        // get bank to read palettes from
+        lda $_Fashion__Memo
+        beq $+NormalPaletteBank
+
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        bra $+HavePaletteBank
+
+    %NormalPaletteBank:
+        lda #$1c
+
+    %HavePaletteBank:
+        phb
+        pha
+        plb
+
+        lda #$00
+        sta $=Fashion__ScratchLo
+    %CopyPaletteLoop:
+        lda $_Fashion__PaletteDataOffset,y
+        sta $=Fashion__BattlePaletteCache,x
+        inx
+        iny
+        lda $=Fashion__ScratchLo
+        inc a
+        sta $=Fashion__ScratchLo
+        cmp #$20
+        bcc $-CopyPaletteLoop
+
+        plb
+
+        // done init routines
+        plx
+
+        // displaced instructions and return
+        lda $2003,x
+        and #$08
+        jml $02e09d
+}
+
+msfpatch {
+    .addr $02e0d2
+        // we are hooking in at an awkward point here
+        jsl $=Fashion__BattleCHR
+
+    .new
+    Fashion__BattleCHR:
+        sep #$20  // displaced instruction
+
+        // X needs to be preserved here
+        phx
+
+        // lookup our bank number from our character slot
+        lda $1690
+        tax
+        lda $=Fashion__BattleBankCache,x
+
+        plx
+        rtl
+}
+
+msfpatch {
+    .addr $028f7e
+        jml $=Fashion__BattleCHR_AgainstAlly
+
+    .new
+    Fashion__BattleCHR_AgainstAlly:
+        ldy $6ccb,x   // displaced instruction
+
+        lda $_Fashion__PreloadedCode
+        beq $+NormalCHR
+
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        bra $+Return
+
+    %NormalCHR:
+        lda #$1a
+
+    %Return:
+        jml $028f83
+}
+
+// fix CHR loading when changing to/from piggy
+msfpatch {
+    .addr $02c020
+        jsl $=Fashion__BattleCHRUpdate
+
+    .new
+    Fashion__BattleCHRUpdate:
+        // lookup bank from cache
+        phx
+        // at this point $0A contains slot * 0x0400
+        lda #$00
+        xba
+        lda $0b
+        lsr a
+        lsr a
+        tax
+        lda $=Fashion__BattleBankCache,x
+        plx
+
+        // displaced
+        ldy $0a
+
+        rtl
+}
+
+
+
+// battle palette loading is a bit different; there is
+// a common routine at 0291a9 that loads a palette given
+// job A to palette slot X. So we need to hook into areas
+// that call this routine and have them lookup the alt
+// palette code for us.
+
+// $029132 is called before loading each player character
+// palette on battle init. This sub just defers to $03f6f5.
+// Replace with our own call that also calculates alt
+// palette data.
+msfpatch {
+    .addr $029132
+        jsl $=Fashion__BattlePAL_SetupNormal
+
+    .new
+    Fashion__BattlePAL_SetupNormal:
+        // copy first part of $03f6f5
+        tax
+        phx
+        rep #$20
+        .mx 0x00
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        tdc
+        sep #$20
+        .mx 0x20
+
+        // do fashion table lookup
+        phx
+        lda $2000,x
+        and #$1f
+        tax
+        lda $=Fashion__LookupTable,x
+        sta $_Fashion__Memo
+        plx
+
+        // defer to original intended function
+        // (it will RTL, returning to original address)
+        jml $03f704
+}
+
+// Hook into the code for against-ally battles, and
+// load the palette that was passed to us by external
+// events.
+msfpatch {
+    .addr $028f51
+        jsl $=Fashion__BattlePAL_SetupAgainstAlly
+
+    .new
+    Fashion__BattlePAL_SetupAgainstAlly:
+        // displaced instruction
+        sta $f10d,x
+
+        // transfer code set by external event
+        pha
+        lda $_Fashion__PreloadedCode
+        sta $_Fashion__Memo
+        pla
+
+        // displaced instruction and return
+        inx
+        rtl
+}
+
+// Third use case is ghosts; hijack those calls
+msfpatch {
+    .addr $01f0e3
+        jsl $=Fashion__BattlePAL_SetupGhost
+    .addr $01f0ed
+        jsl $=Fashion__BattlePAL_SetupGhost
+
+    .new
+    Fashion__BattlePAL_SetupGhost:
+        // ghosts just use default palette
+        stz $_Fashion__Memo
+        jml $0291a5  // use orig function's RTL to go home
+}
+
+// Patch 02:91A9 routine to respond to our setup code and copy
+// the correct palette.
+msfpatch {
+    .addr $0291c0
+        jml $=Fashion__BattlePAL
+
+    .new
+    Fashion__BattlePAL:
+        jsr $_Fashion__BattlePAL_Impl
+        bcc $+NormalPAL
+        jml $0291d1     // return address if alt palette
+
+    %NormalPAL:
+        // displaced instructions and return
+        lda #$20
+        sta $00
+        jml $0291c4     // return address if normal palette
+}
+
+msfpatch {
+    Fashion__BattlePAL_Impl:
+        lda $_Fashion__Memo
+        beq $+NormalPAL
+
+        // do our own copy loop from a custom area
+
+        // step 1: exchange X and Y, we need output 
+        // offset in X and read offset in Y
+        stx $_Fashion__ScratchLo
+        tyx
+        ldy $_Fashion__ScratchLo
+
+        // step 2: set to read from appropriate palette bank
+        phb
+
+        lda $_Fashion__Memo
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        pha
+        plb
+
+        // step 3: copy palette
+        lda #$20
+        sta $=Fashion__ScratchLo
+    %CopyLoopStart:
+        lda $_Fashion__PaletteDataOffset,y
+        sta $7eed50,x
+        inx
+        iny
+        lda $=Fashion__ScratchLo
+        dec a
+        sta $=Fashion__ScratchLo
+        bne $-CopyLoopStart
+
+        // return
+        plb
+        sec
+        rts
+
+    %NormalPAL:
+        clc
+        rts
+}
+
+//-----------------------------------------------------
+// In battle, character palettes are routinely updated;
+// for these ones we use the battle palette cache
+// to hopefully improve speed
+
+msfpatch {
+    // use slot instead of job code
+    .addr $02da75
+        bra $02
+
+    // lookup from cached palette area
+    .addr $02daa2
+        lda $=Fashion__BattlePaletteCache,x
+}

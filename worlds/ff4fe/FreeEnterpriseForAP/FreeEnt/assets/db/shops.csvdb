@@ -1,0 +1,269 @@
+id,memo,level,weapon,armor,item,manifest,jmanifest
+0x00,Kaipo Weapon,free,Y,,,"#item.Rod
+#item.Staff
+#item.ShortBow
+#item.IronArrow",
+0x01,Fabul Weapon/Armor,free,Y,Y,,"#item.FireClaw
+#item.IceClaw
+#item.ThunderClaw
+#item.BlackHelm
+#item.BlackArmor
+#item.BlackGauntlet",
+0x02,Mysidia Weapon,free,Y,,,"#item.IceRod
+#item.FlameRod
+#item.Cure
+#item.CrossBow
+#item.WhiteArrow",
+0x03,Baron Weapon,gated,Y,,,"#item.ThunderRod
+#item.Cure
+#item.FireClaw
+#item.IceClaw
+#item.ThunderClaw",
+0x04,Toroia Weapon,free,Y,,,"#item.Wooden
+#item.GreatBow
+#item.FireArrow
+#item.IceArrow
+#item.LitArrow",
+0x05,Silvera Weapon,free,Y,,,"#item.SilverStaff
+#item.SilverDagger
+#item.SilverHammer
+#item.SilverSword",
+0x06,Dwarf Castle Weapon,gated,Y,,,"#item.Dwarf
+#item.GreatBow
+#item.DarknessArrow
+#item.FireBrand
+#item.FlameSpear",
+0x07,Cave Eblan Weapon,gated,Y,,,"#item.PowerStaff
+#item.IceBrand
+#item.BlizzardSpear
+#item.Short
+#item.Boomrang
+#item.Archer
+#item.PoisonArrow",
+0x08,Tomra Weapon,gated,Y,,,"#item.Middle
+#item.Chain
+#item.Ogre
+#item.Archer
+#item.MuteArrow",
+0x09,Smithy Shop,kokkol,Y,Y,Y,"#item.Shuriken
+#item.NinjaStar
+#item.SamuraiArrow",
+0x0A,Kaipo Armor,free,,Y,,"#item.Cap
+#item.Cloth
+#item.LeatherArmor
+#item.IronRing",
+0x0B,Mysidia Armor,free,,Y,,"#item.GaeaHat
+#item.GaeaArmor
+#item.SilverRing
+#item.PaladinShield
+#item.PaladinHelm
+#item.PaladinArmor
+#item.PaladinGauntlet",
+0x0C,Baron Armor,gated,,Y,,"#item.Headband
+#item.Karate
+#item.SilverRing",
+0x0D,Toroia Armor,free,,Y,,"#item.Cap
+#item.LeatherHat
+#item.Cloth
+#item.LeatherArmor
+#item.RubyRing",
+0x0E,Silvera Armor,free,,Y,,"#item.SilverShield
+#item.SilverHelm
+#item.SilverArmor
+#item.SilverGauntlet",
+0x0F,Dwarf Castle Armor,gated,,Y,,"#item.FireShield
+#item.FireArmor
+#item.WizardHat
+#item.WizardArmor
+#item.Rune",
+0x10,Cave Eblan Armor,gated,,Y,,"#item.IceShield
+#item.IceArmor
+#item.BlackRobe",
+0x11,Tomra Armor,gated,,Y,,"#item.DiamondShield
+#item.DiamondHelm
+#item.DiamondArmor
+#item.DiamondGauntlet
+#item.Tiara
+#item.DiamondRing",
+0x12,Moon Item,gated,,,Y,"#item.Cure2
+#item.Life
+#item.Ether1
+#item.Ether2
+#item.Elixir
+#item.Cabin
+#item.Whistle","#item.Cure2
+#item.Life
+#item.Ether1
+#item.Ether2
+#item.Elixir
+#item.Cabin
+#item.Bestiary
+#item.Whistle"
+0x13,Baron Item,free,,,Y,"#item.Cure1
+#item.Life
+#item.Tent
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Cure1
+#item.Life
+#item.Soft
+#item.MaidKiss
+#item.EyeDrops
+#item.Antidote
+#item.Tent
+#item.Carrot"
+0x14,Mysidia Item,free,,,Y,"#item.Cure1
+#item.Cure2
+#item.Life
+#item.Tent
+#item.Cabin
+#item.Heal
+#item.Ether1","#item.Cure1
+#item.Cure2
+#item.Life
+#item.Soft
+#item.EchoNote
+#item.Antidote
+#item.Tent
+#item.Cabin"
+0x15,Silvera Item,free,,,Y,#item.Heal,"#item.MaidKiss
+#item.Mallet
+#item.DietFood"
+0x16,Mist Weapon,free,Y,,,"#item.Whip
+#item.Dancing",
+0x17,Mist Armor,free,,Y,,#item.Bard,
+0x18,Cave Eblan Item,gated,,,Y,"#item.Life
+#item.Cure1
+#item.Cure2
+#item.Tent
+#item.Cabin
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Soft
+#item.MaidKiss
+#item.Mallet
+#item.DietFood
+#item.EchoNote
+#item.EyeDrops
+#item.Antidote
+#item.Cross"
+0x1A,Agart Weapon,free,Y,,,"#item.Rod
+#item.Staff
+#item.Spear
+#item.Boomrang
+#item.ShortBow
+#item.CrossBow
+#item.IronArrow
+#item.WhiteArrow",
+0x1B,Agart Armor,free,,Y,,"#item.IronShield
+#item.IronHelm
+#item.IronArmor
+#item.IronGauntlet
+#item.IronRing",
+0x1C,Feymarch Weapon,gated,Y,,,"#item.Whip
+#item.Chain
+#item.Blitz
+#item.Long
+#item.CharmRod
+#item.Lunar
+#item.CharmArrow",
+0x1D,Feymarch Armor,gated,,Y,,"#item.Aegis
+#item.Sorcerer",
+0x1E,Tomra Item,gated,,,Y,"#item.Life
+#item.Cure1
+#item.Cure2
+#item.Tent
+#item.Cabin
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Life
+#item.Cure1
+#item.Cure2
+#item.Tent
+#item.Cabin
+#item.Carrot
+#item.fe_EagleEye
+#item.Heal"
+0x1F,Toroia Cafe Item,free,,,Y,#item.Pass,
+0x20,Kaipo Item,free,,,Y,"#item.Cure1
+#item.Life
+#item.Tent
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Cure1
+#item.Life
+#item.Soft
+#item.MaidKiss
+#item.EyeDrops
+#item.Antidote
+#item.Tent
+#item.Carrot"
+0x21,Fabul Item,free,,,Y,"#item.Cure1
+#item.Life
+#item.Tent
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Cure1
+#item.Life
+#item.Soft
+#item.MaidKiss
+#item.EyeDrops
+#item.Antidote
+#item.Tent
+#item.Carrot"
+0x22,Toroia Item,free,,,Y,"#item.Cure1
+#item.Life
+#item.Tent
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Cure1
+#item.Life
+#item.Soft
+#item.MaidKiss
+#item.EyeDrops
+#item.Antidote
+#item.Tent
+#item.Carrot"
+0x23,Agart Item,free,,,Y,"#item.Cure1
+#item.Life
+#item.Tent
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Cure1
+#item.Life
+#item.Soft
+#item.MaidKiss
+#item.EyeDrops
+#item.Antidote
+#item.Tent
+#item.Carrot"
+0x24,Dwarf Castle Item,gated,,,Y,"#item.Life
+#item.Cure1
+#item.Cure2
+#item.Tent
+#item.Cabin
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Life
+#item.Cure1
+#item.Cure2
+#item.Tent
+#item.Cabin
+#item.Carrot
+#item.fe_EagleEye
+#item.Heal"
+0x25,Feymarch Item,gated,,,Y,"#item.Life
+#item.Cure1
+#item.Cure2
+#item.Tent
+#item.Cabin
+#item.Carrot
+#item.Heal
+#item.Ether1","#item.Life
+#item.Cure1
+#item.Cure2
+#item.Tent
+#item.Cabin
+#item.Carrot
+#item.fe_EagleEye
+#item.Heal"

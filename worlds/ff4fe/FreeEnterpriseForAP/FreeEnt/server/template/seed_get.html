@@ -1,0 +1,791 @@
+<html>
+    <head>
+        {% if hide_flags %}
+        <title>FF4FE: (flags hidden) / {{ seed.seed }}</title>
+        {% else %}
+        <title>FF4FE: {{ seed.flags }} / {{ seed.seed }}</title>
+        {% endif %}
+
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Lato');
+            @import url('https://fonts.googleapis.com/css?family=Anonymous+Pro&display=swap');
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                background-color: #537b88;
+
+                font-family: 'Lato', sans-serif;
+            }
+
+            #main {
+                box-shadow: 0em 0.5em 1em 0 rgba(0, 0, 0, 0.5);
+                background-color: #303065;
+                border: 0.5rem solid silver;
+                max-width: 40rem;
+                padding: 1rem;
+            }
+
+            #heading {
+                margin: 1em;
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-row-gap: 0.5em;
+                grid-column-gap: 1em;
+                color: white;
+                font-family: 'Anonymous Pro', monospace;
+            }
+
+            #heading .label {
+                color: #aac;
+                display: inline;
+            }
+
+            #heading a {
+                color: #5ff;
+            }
+
+            #flags {
+                overflow: auto;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+            }
+
+            #flags a {
+                color: inherit;
+                text-decoration: inherit;
+            }
+
+            span.info_icon {
+                color: #6bc;
+            }
+
+            #seed {
+            }
+
+            #version {
+            }
+
+            #checksum-container {
+                display: inline-block;
+                background-color: #008;
+                padding: 0.2em;
+                border: 0.2em outset #fff;
+                border-radius: 0.4em;
+            }
+
+            img.checksum-tile {
+                width: 1em;
+                height: 1em;
+                image-rendering: pixelated;
+                margin-left: 0.5em;
+                margin-right: 0.5em;
+            }
+
+            #patch {
+                margin-left: 1rem;
+                margin-right: 1rem;
+                background-color: silver;
+                border-radius: 1rem;
+                padding: 1rem;
+                text-align: center;
+                color: #444;
+            }
+
+            #file_section {
+                display: flex;
+                align-items: stretch;
+                margin-top: 0.8rem;
+            }
+
+            #source_rom, #cached_file {
+                width: 100%;
+                padding: 0.5rem;
+                border: 0.1rem dashed #887;
+                border-radius: 0.5rem;
+                background-color: #eee;
+                flex-grow: 1;
+            }
+
+            #cached_file {
+                font-size: 0.8rem;
+                background-color: #dfd;
+                text-align: left;
+            }
+
+            #clear_cached_file_button {
+                display: inline-block;
+                border: 1px solid #888;
+                color: #555;
+                background-color: #eee;
+                margin-left: 0.5em;
+                padding-left: 0.4em;
+                padding-right: 0.4em;
+                cursor: pointer;
+            }
+
+            #clear_cached_file_button:hover {
+                background-color: #fff;
+            }
+
+            #source_rom:hover {
+                border-color: #bb8;
+                background-color: #fffff0;
+            }
+
+            #apply_button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                background-color: #ffee96;
+                border-radius: 0.5rem;
+                color: #796c26;
+                cursor: pointer;
+                user-select: none;
+                flex-grow: 0;
+                margin-left: 0.5rem;
+
+                position: relative;
+                top: -0.1rem;
+                box-shadow: 0 0.1rem #796c26;
+
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            #apply_button.disabled {
+                color: #888;
+                background-color: #ddd;
+                position: relative;
+                top: 0;
+                box-shadow: 0 0 0;
+                cursor: inherit;
+            }
+
+            #apply_button:active {
+                position: relative;
+                top: 0;
+                box-shadow: 0 0 0;
+            }
+
+            #error {
+                margin-top: 1rem;
+                color: #d44;
+                display: none;
+            }
+
+            #share {
+                font-size: 0.8rem;
+                padding: 1rem;
+                color: silver;
+                text-align: center;
+            }
+
+            #share a {
+                color: white;
+            }
+
+            #credit {
+                font-style: italic;
+                color: #ddd;
+                font-size: 0.8rem;
+                text-align: center;
+                padding: 0.5em;
+            }
+
+            #credit a {
+                color: #bdf;
+            }
+
+            #flag_info_container {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                background-color: rgba(255, 255, 255, 0.5);
+                overflow-y: scroll;
+            }
+
+            #flag_info_container.visible {
+                display: block;
+            }
+
+            #flag_info {
+                max-width: 30rem;
+                font-size: 0.9rem;
+                margin-right: 0;
+                margin-left: auto;
+                background-color: #fefef0;
+                padding: 2rem;
+            }
+
+            #flag_info .section {
+                margin-bottom: 1em;
+            }
+
+            #flag_info .title {
+                text-transform: uppercase;
+                font-size: 0.8em;
+                letter-spacing: 0.3em;
+                color: #aaa;
+                border-bottom: 1px dotted #aaa;
+            }
+
+            #flag_info .flag_container {
+                padding-top: 0.4em;
+                margin-bottom: 0;
+            }
+
+            #flag_info .disabled {
+                display: none;
+            }
+
+            #flag_info .disabled.shown {
+                display: block;
+            }
+
+            #flag_info .disabled.shown .flag {
+                text-decoration: line-through;
+                opacity: 0.4;
+            }
+
+            #flag_info .disabled.shown .flag_description {
+                display: none;
+            }
+
+            #flag_info div.flag {
+                margin: 0;
+            }
+
+            #flag_info span.flag {
+                display: inline-block;
+                font-weight:bold;
+                background-color: #887;
+                color: #ffe;
+                padding-left: 0.3em;
+                padding-right: 0.3em;
+                margin-right: 0.2em;
+            }
+
+            #flag_info span.anonymous {
+                color: #554;
+                font-size: 0.85em;
+            }
+
+            #flag_info span.anonymous::after {
+                content: ":";
+            }
+
+            #flag_info span.flag.hard {
+                background-color: #b55;
+            }
+
+            #flag_info div.flag.with_description {
+                cursor: pointer;
+            }
+
+            #flag_info .flag_description {
+                font-style: italic;
+                font-size: 0.9em;
+                color: #887;
+                display: none;
+            }
+
+            #flag_info .flag_description p {
+                margin: 0;
+                padding-top: 0.3em;
+                padding-bottom: 0.3em;
+            }
+
+            #flag_info .flag_subsection {
+                margin: 0;
+                border-left: 0.5em solid #ddc;
+                padding-left: 0.5em;
+            }
+
+            #flag_info_buttons {
+                margin-bottom: 1em;
+                display: flex;
+                justify-content: space-between;
+                background-color: #ddc;
+                padding: 0.4em;
+            }
+
+
+        </style>
+    </head>
+
+    <body>
+        <div id="main">
+            <div id="heading">
+                <div class="label">Flags:</div>
+                <div id="flags">
+                    {% if hide_flags %}
+                    (hidden)
+                    {% else %}
+                    <a href="{{ flags_url }}" target="_blank">{{ seed.flags }}</a>
+                    {% endif %}
+                </div>
+                <div class="label">Seed:</div>
+                <div id="seed">{{ seed.seed }}</div>
+                <div class="label">Version:</div>
+                <div id="version">{{ seed.version }}</div>
+                <div class="label">Check:</div>
+                <div>
+                    <div id="checksum-container">
+                        <img class="checksum-tile" src="data:image/png;base64,{{ checksum_images[0] }}" alt="{{ seed.verification[0] }}" title="{{ seed.verification[0] }}">
+                        <img class="checksum-tile" src="data:image/png;base64,{{ checksum_images[1] }}" alt="{{ seed.verification[1] }}" title="{{ seed.verification[1] }}">
+                        <img class="checksum-tile" src="data:image/png;base64,{{ checksum_images[2] }}" alt="{{ seed.verification[2] }}" title="{{ seed.verification[2] }}">
+                        <img class="checksum-tile" src="data:image/png;base64,{{ checksum_images[3] }}" alt="{{ seed.verification[3] }}" title="{{ seed.verification[3] }}">
+                    </div>
+                </div>
+                {% if test_settings %}
+                <div class="label">Test:</div>
+                <div>{{ test_settings }}</div>
+                {% endif %}
+                {% if spoiler %}
+                <div class="label">Spoiler:</div>
+                <div>
+                    <a href="javascript:;" onclick="viewSpoiler();">View spoiler</a> | 
+                    <a href="javascript:;" onclick="downloadSpoiler();">Download spoiler</a>
+                </div>
+                {% endif %}
+            </div>
+            <div id="patch">
+                <div id="patch_header">Please provide an uncompressed ROM of Final Fantasy II US v1.1:</div>
+                <div id="file_section">
+                    <div id="cached_file" style="display:none;">
+                        Loaded <span id="cached_file_name">ROM data</span> from local cache. <span id="clear_cached_file_button" onclick="clearCachedFile();">clear</span>
+                    </div>
+                    <input type="file" id="source_rom" onchange="handleRomFileChanged();">
+                    <div id="apply_button" class="disabled" onclick="tryPatch();">Apply</div>
+                </div>
+                <div id="error"></div>
+            </div>
+            <div id="share">
+                This seed can be shared by saving and distributing <a href="" download="FF4FE.{{ seed_key }}.html">this HTML file</a>, or by sharing this <a href="javascript:;" onclick="downloadBpsPatch();">BPS patch</a>. It can also be shared via <a href="{{ seed_url }}">this link</a>, though be aware that the link will expire if not accessed for some time.
+            </div>
+        </div>
+
+        <div id="credit">
+            BPS patch creation and application code by <a href="https://github.com/Alcaro" target="_blank">Alcaro</a>.
+        </div>
+
+        <div id="flag_info_container" onclick="hideFlagInfo();">
+            <div id="flag_info" onclick="event.stopPropagation();">
+                <div id="flag_info_buttons">
+                    <div>
+                        <input type="checkbox" id="showDisabledFlags" onchange="toggleDisabledFlags();">
+                        <label for="showDisabledFlags">Show disabled flags</label>
+                    </div>
+                    <div>
+                        <a href="{{ flags_url }}" target="_blank">Make new seed with these flags</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+
+            var INPUT_FILE_ERROR = "The provided ROM is incorrect; please verify you have the correct version of the game and try again.";
+            var bpsBytes = null;
+
+            function bytesToBase64(bytes) 
+            {
+                var binary = '';
+                var len = bytes.byteLength;
+                for (var i = 0; i < len; i++) {
+                    binary += String.fromCharCode( bytes[ i ] );
+                }
+                return window.btoa( binary );
+            }
+
+            function loadBase64(string)
+            {
+                let decoded = atob(string);
+                let bytes = new Uint8Array(decoded.length);
+                for(var i=0; i<decoded.length; i++)
+                {
+                    bytes[i] = decoded.charCodeAt(i);
+                }
+
+                return bytes;
+            }
+
+            function loadBpsPatchData()
+            {
+                if(bpsBytes === null)
+                {
+                    bpsBytes = loadBase64(RAW_PATCH);
+                }                
+            }
+
+            function downloadBpsPatch()
+            {
+                loadBpsPatchData();
+                download(bpsBytes, "FF4FE.{{ seed_key }}.bps", "application/octet-stream");
+            }
+
+            {% if spoiler: %}
+            var spoilerBytes = null;
+
+            function downloadSpoiler()
+            {
+                if(spoilerBytes === null)
+                {
+                    spoilerBytes = loadBase64(SPOILER_DATA);
+                }                
+                download(spoilerBytes, "FF4FE.{{ seed_key }}.spoiler.txt", "text/plain");
+            }
+
+            function viewSpoiler()
+            {
+                let wnd = window.open("", "_blank");
+                wnd.document.write("<html><head><title>SPOILER ({{ seed_key }})</title></head><body><pre>");
+                wnd.document.write(atob(SPOILER_DATA));
+                wnd.document.write("</pre></body></html>");
+                wnd.document.close();
+            }
+
+            var SPOILER_DATA = "{{ spoiler }}";
+            {% endif %}
+
+            function handleRomFileChanged()
+            {
+                updateFileControls();
+            }
+
+            function tryPatch()
+            {
+                loadBpsPatchData();
+                document.getElementById("error").style.display = "none";
+
+                var cachedRomData = window.localStorage.getItem('cached_rom_data');
+                if (cachedRomData != null)
+                {
+                    var romData = { 
+                        bytes: loadBase64(cachedRomData),
+                        name: window.localStorage.getItem('cached_rom_name'),
+                        mime: window.localStorage.getItem('cached_rom_mime')
+                        };
+                    continuePatch(romData, false);
+                }
+                else
+                {
+                    var romFileElem = document.getElementById("source_rom");
+                    if(romFileElem.files.length != 1)
+                    {
+                        return;
+                    }
+
+                    var romFile = romFileElem.files[0];
+                    var romReader = new FileReader();
+                    romReader.onload = function() {
+                        var romData = { bytes: new Uint8Array(this.result), name: romFile.name, mime: romFile.type };
+                        continuePatch(romData, true);
+                    };
+                    romReader.readAsArrayBuffer(romFile);
+                }
+            }
+                
+            function continuePatch(romData, shouldCacheRom)
+            {
+                try {
+                    var ret;
+                    try {
+                        ret = applyBps(romData.bytes, bpsBytes);
+                    } catch(e) {
+                        if (e === INPUT_FILE_ERROR) {
+                            var beheadedRom = romData.bytes.subarray(512);
+                            // maybe a headered rom? skip first 512 bytes for patching
+                            ret = applyBps(beheadedRom, bpsBytes);
+                            // if we reached here, there were no errors, so the assumption about a headered rom was correct.
+                        }
+                        else throw e;
+                    }
+                    var basename = "FF4FE.{{ seed_key }}";
+                    var ext = '.' + romData.name.split(".").pop();
+                    download(ret, basename + ext, romData.mime);
+
+                    if (shouldCacheRom)
+                    {
+                        window.localStorage.setItem('cached_rom_data', bytesToBase64(romData.bytes));
+                        window.localStorage.setItem('cached_rom_name', romData.name);
+                        window.localStorage.setItem('cached_rom_mime', romData.mime);
+                    }
+
+                } catch(e) {
+                    if (typeof(e)=='string')
+                    {
+                        document.getElementById("error").textContent = e;
+                        document.getElementById("error").style.display = "block";
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
+
+            function clearCachedFile()
+            {
+                window.localStorage.removeItem('cached_rom_data');
+                window.localStorage.removeItem('cached_rom_file');
+                window.localStorage.removeItem('cached_rom_mime');
+                updateFileControls();
+            }
+
+            function showFlagInfo()
+            {
+                document.getElementById('flag_info_container').className = "visible";
+            }
+
+            function hideFlagInfo()
+            {
+                document.getElementById('flag_info_container').className = "";
+            }
+
+            function toggleDisabledFlags()
+            {
+                var visible = document.getElementById("showDisabledFlags").checked;
+                for(var i = 0; i < DISABLED_FLAG_ELEMENT_IDS.length; i++)
+                {
+                    var elemId = DISABLED_FLAG_ELEMENT_IDS[i];
+                    var elem = document.getElementById(elemId);
+                    if(visible)
+                    {
+                        addClassName(elem, "shown");
+                    }
+                    else
+                    {
+                        removeClassName(elem, "shown");
+                    }
+                }
+            }
+
+            function toggleFlagDescription(flag)
+            {
+                var elem = document.getElementById("flag_description_" + flag);
+                if(elem)
+                {
+                    if(elem.style.display == 'block')
+                    {
+                        elem.style.display = null;
+                    }
+                    else
+                    {
+                        elem.style.display = 'block';
+                    }
+                }
+            }
+
+            function addClassName(elem, className)
+            {
+                if(typeof(elem) === 'string')
+                {
+                    elem = document.getElementById(elem);
+                }
+
+                if(elem)
+                {
+                    var classNames = elem.className.split(" ");
+                    if(classNames.indexOf(className) === -1)
+                    {
+                        elem.className += " " + className;
+                    }
+                }
+            }
+
+            function removeClassName(elem, className)
+            {
+                if(typeof(elem) === 'string')
+                {
+                    elem = document.getElementById(elem);
+                }
+
+                if(elem)
+                {
+                    var classNames = elem.className.split(" ");
+                    var index = classNames.indexOf(className);
+                    if(index !== -1)
+                    {
+                        classNames.splice(index, 1);
+                        elem.className = classNames.join(" ");
+                    }
+                }
+            }
+
+            function updateFileControls()
+            {
+                var hasCachedRom = (window.localStorage.getItem('cached_rom_data') !== null);
+                document.getElementById('cached_file').style.display = (hasCachedRom ? 'block' : 'none');
+                document.getElementById('source_rom').style.display = (hasCachedRom ? 'none' : 'block');
+
+                var cached_rom_name = window.localStorage.getItem('cached_rom_name');
+                if (cached_rom_name)
+                {
+                    var romNameElem = document.getElementById('cached_file_name');
+                    romNameElem.innerText = cached_rom_name;
+                }
+
+                var applyEnabled = false;
+                if (hasCachedRom)
+                {
+                    applyEnabled = true;
+                }
+                else
+                {
+                    var romFileElem = document.getElementById("source_rom");
+                    applyEnabled = (romFileElem.files.length == 1);
+                }
+
+                var applyButtonElem = document.getElementById("apply_button");
+                applyButtonElem.className = (applyEnabled ? '' : 'disabled');
+            }
+
+            window.onload = function() {
+                updateFileControls();
+            }
+        </script>
+
+        <script type="text/javascript">
+            // BPS patch code source: https://media.smwcentral.net/Alcaro/bps/
+            // author: https://www.smwcentral.net/?p=profile&id=1686
+            // smc support by randomdude999 (https://smwc.me/u/32552)
+
+            //no error checking, other than BPS signature, input size/crc and JS auto checking array bounds
+            function applyBps(rom, patch)
+            {
+                function crc32(bytes) {
+                    var c;
+                    var crcTable = [];
+                    for(var n =0; n < 256; n++){
+                        c = n;
+                        for(var k =0; k < 8; k++){
+                            c = ((c&1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+                        }
+                        crcTable[n] = c;
+                    }
+                    
+                    var crc = 0 ^ (-1);
+                    for (var i = 0; i < bytes.length; i++ ) {
+                        crc = (crc >>> 8) ^ crcTable[(crc ^ bytes[i]) & 0xFF];
+                    }
+                    return (crc ^ (-1)) >>> 0;
+                };
+                
+                var patchpos = 0;
+                function u8() { return patch[patchpos++]; }
+                function u32at(pos) { return (patch[pos+0]<<0 | patch[pos+1]<<8 | patch[pos+2]<<16 | patch[pos+3]<<24)>>>0; }
+                
+                function decode()
+                {
+                    var ret = 0;
+                    var sh = 0;
+                    while (true)
+                    {
+                        var next = u8();
+                        ret += (next^0x80) << sh;
+                        if (next&0x80) return ret;
+                        sh += 7;
+                    }
+                }
+                
+                function decodes()
+                {
+                    var enc = decode();
+                    var ret = enc>>1;
+                    if (enc&1) ret=-ret;
+                    return ret;
+                }
+                
+                if (u8()!=0x42 || u8()!=0x50 || u8()!=0x53 || u8()!=0x31) throw "Patch is not BPS format. (This should be impossible...)";
+                if (decode() != rom.length) throw INPUT_FILE_ERROR;
+                if (crc32(rom) != u32at(patch.length-12)) throw INPUT_FILE_ERROR;
+                
+                var out = new Uint8Array(decode());
+                var outpos = 0;
+                
+                var metalen = decode();
+                patchpos += metalen; // can't join these two, JS reads patchpos before calling decode
+                
+                var SourceRead=0;
+                var TargetRead=1;
+                var SourceCopy=2;
+                var TargetCopy=3;
+                
+                var inreadpos = 0;
+                var outreadpos = 0;
+                
+                while (patchpos < patch.length-12)
+                {
+                    var thisinstr = decode();
+                    var len = (thisinstr>>2)+1;
+                    var action = (thisinstr&3);
+                    
+                    switch (action)
+                    {
+                        case SourceRead:
+                        {
+                            for (var i=0;i<len;i++)
+                            {
+                                out[outpos] = rom[outpos];
+                                outpos++;
+                            }
+                        }
+                        break;
+                        case TargetRead:
+                        {
+                            for (var i=0;i<len;i++)
+                            {
+                                out[outpos++] = u8();
+                            }
+                        }
+                        break;
+                        case SourceCopy:
+                        {
+                            inreadpos += decodes();
+                            for (var i=0;i<len;i++) out[outpos++] = rom[inreadpos++];
+                        }
+                        break;
+                        case TargetCopy:
+                        {
+                            outreadpos += decodes();
+                            for (var i=0;i<len;i++) out[outpos++] = out[outreadpos++];
+                        }
+                        break;
+                    }
+                }
+                
+                return out;
+            }
+
+            function download(data, fname, mime)
+            {
+                var a = document.createElement("a");
+                a.href = URL.createObjectURL(new Blob([data], { type: mime || "application/octet-stream" }));
+                a.setAttribute("download", fname);
+                a.style.display = "none";
+                document.body.appendChild(a);
+                setTimeout(function() {
+                        a.click();
+                        document.body.removeChild(a);
+                        setTimeout(function(){ self.URL.revokeObjectURL(a.href); }, 250 );
+                    }, 66);
+            }
+
+            var RAW_PATCH = "{{ patch }}";
+        </script>
+
+    </body>
+</html>

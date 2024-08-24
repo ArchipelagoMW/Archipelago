@@ -1,0 +1,101 @@
+// Neutralize Damcyan bombing trigger to free up an event call
+trigger(#Overworld 17)
+{
+    event call $02
+}
+
+// Damcyan fire starts active
+npc(#FireMagic)
+{ default active }
+
+
+placement($41 2)  //#Damcyan3F
+{
+    // %edward_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+event($43)  //Tellah fighting Edward, Edward joining
+{
+    consts(placement) {
+        0   AnnaFallen
+        1   Tellah1
+        2   Edward1
+    }
+    // autodetected map #Damcyan3F
+
+    toggle music fade
+    player move up
+    player move up
+
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_free_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+
+        player face right
+        p #Edward1 toggle visible
+        batch 4 {
+            p #Edward1 move left
+        }
+        pause 5
+        batch 3 {
+            p #Edward1 move left
+        }    
+        p #Edward1 move up    
+        batch 2 {
+            p #Edward1 move left
+        }    
+        batch 1 {
+            p #Edward1 move up
+            player face up
+        }
+        p #Edward1 move left
+        p #Edward1 bow head
+    }
+    pause 2
+    player move up
+
+    pause 8
+    batch 9 {
+        p #AnnaFallen toggle visible
+    }
+    pause 8
+
+    [#B #If #Flag #flag.Temp] {
+        p #Edward1 face down
+        pause 4
+
+        batch 2 {
+            p #Edward1 move down
+        }
+        p #Edward1 toggle visible
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.damcyan_character 0]
+        sound #GetItem
+        message #msg.fe_Joined
+        [#B #Objectives_TickRewardSlot #reward_slot.damcyan_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.damcyan_character]
+        player face down
+    }
+    
+    batch 6 {
+        player move down
+    }
+        
+    player invisible
+    pause 2
+    music #Overworld
+    sound $62
+    load map #Overworld at 117 57 on hovercraft
+    player visible
+    set #TellahFightsEdward
+    clear #UnknownTellahLeaves
+    deactivate #AnnaFallen
+    deactivate #FallenSoldier2
+    deactivate #FallenSoldier1
+    deactivate #FallenSoldier3
+    deactivate #FireMagic
+}
+
+text(map #Damcyan3F message $0E) {X}

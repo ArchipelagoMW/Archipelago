@@ -1,0 +1,58 @@
+msfpatch {
+    ReduceRandomEncounters:
+        // check encounter toggle setting
+        pha
+        lda $_EncounterSetting
+        beq $+ReduceRandomEncounters_EncountersOn
+
+        // With EncounterDangerous, do the toggle check later
+        // %encounter dangerous on%
+        jmp $_ReduceRandomEncounters_EncountersOn
+        // %end%
+
+        // encounters are off, cancel this encounter check
+        pla
+        // pull the long return address, we going back another way
+        pla
+        pla
+        pla
+        // if indoors, jump to one address, otherwise just jump somewhere that's an RTS
+        lda $1700
+        cmp #$03
+        bcc $+ReduceRandomEncounters_NoEncounter_Outdoors
+        // jump to code for "no random battle" indoors
+        jml $008a60
+
+    ReduceRandomEncounters_NoEncounter_Outdoors:
+        // outdoor maps all just RTS when there's no encounter
+        jml $008993
+
+    ReduceRandomEncounters_EncountersOn:
+        pla
+        clc
+        adc $17ef
+        // %encounter reduction%
+        clc
+        asl a
+        bcc $02
+        lda #$ff
+        // %end%
+        rtl
+
+    // overworld
+    .addr $00898b
+        jsl $=ReduceRandomEncounters
+
+    // underworld
+    .addr $0089ac
+        jsl $=ReduceRandomEncounters
+
+    // moon
+    .addr $0089e3
+        jsl $=ReduceRandomEncounters
+
+    // indoor
+    .addr $008a58
+        jsl $=ReduceRandomEncounters
+
+}

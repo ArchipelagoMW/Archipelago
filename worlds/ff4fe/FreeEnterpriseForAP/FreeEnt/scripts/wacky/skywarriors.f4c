@@ -1,0 +1,57 @@
+// make all formations floating
+msfpatch {
+    .addr $028A46
+        jsl $=Wacky__SkyWarriors_FloatingFormation
+
+    .new
+    Wacky__SkyWarriors_FloatingFormation:
+        lda $0e8006,x
+        ora #$40
+        rtl
+}
+
+// make all enemies wind-vulnerable
+msfpatch {
+    .addr $0390fd
+        nop nop  // always process monster's extra info byte
+
+    .addr $039141
+        jml $=Wacky__SkyWarriors_AddWindWeakness
+    
+    .new
+    Wacky__SkyWarriors_AddWindWeakness:
+        lda $28a5
+        and #$20
+        bne $+HasExistingWeaknessData
+
+        // invent weakness data
+        lda #$a0
+        sta $2021,x
+        sta $2020,x
+        jml $039154
+
+    %HasExistingWeaknessData:
+        lda $28a6,y
+        bpl $+MildWeakness
+        ora #$20
+        jml $03914d
+    %MildWeakness:
+        ora #$20
+        jml $039150
+}
+
+// force all party members to float
+msfpatch {
+    Wacky__StatusEnforcement_Calculate:
+        lda #$40
+        sta $_Wacky__StatusEnforcement_OutputByte1
+        rtl
+}
+
+/*
+// cancel out the float reset that happens on map transition
+msfpatch {
+    .addr $0085DB
+        rts
+}
+*/

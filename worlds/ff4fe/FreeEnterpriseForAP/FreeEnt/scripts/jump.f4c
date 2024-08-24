@@ -1,0 +1,807 @@
+msfpatch {
+    .def Jump__Status       $7e1629
+
+    .addr $00a753
+        jml $=Jump__Input
+
+    .addr $00a9ca
+        jml $=Jump__WorldMapInput
+
+    .new
+    Jump__Input:
+        stz $168a // easy access "is outdoors" flag
+
+        // check for pending warp or cutscene
+        lda $b1
+        ora $d1
+        bne $+CantJumpIndoor
+
+        lda $03
+        and #$80
+        bne $+JumpButtonPressed
+
+    %CantJumpIndoor:
+        // return to normal flow
+        lda $03
+        and #$01
+        jml $00a757
+
+    Jump__WorldMapInput:
+        lda #$01
+        sta $168a // easy access "is indoors" flag
+
+        lda $1704
+        bne $+CantJumpOutdoor
+
+        lda $03
+        and #$80
+        bne $+JumpButtonPressed
+
+    %CantJumpOutdoor:
+        // return to normal flow
+        lda $03
+        and #$0f
+        jml $00a9ce
+
+    %ArrowMasks: [[ 08 01 04 02 ]]
+
+    %JumpButtonPressed:
+        // allow face direction to change based on arrow presses
+        ldx #$0000
+    %ChangeFaceLoop:
+        lda $=ArrowMasks,x
+        and $03
+        beq $+ChangeFaceLoopNext
+        txa
+        sta $1705
+        bra $+ChangeFaceLoopDone
+    %ChangeFaceLoopNext:
+        inx
+        cpx #$0004
+        bcc $-ChangeFaceLoop
+    %ChangeFaceLoopDone:
+
+        lda $168a
+        bne $+NoBonk
+
+        // no bonk if not on bridge tile
+        lda $a1
+        bmi $+Bonk // also bonk if on no-jump-on-or-through tile
+        and #$04
+        beq $+NoBonk
+
+        // no bonk if on layer 1
+        lda $d2
+        and #$01
+        bne $+NoBonk
+
+    %Bonk:
+        lda #$2c
+        jsr $_Util__PlaySFX
+        jml $00a7bf
+
+    %NoBonk:
+        // determine how many tiles we can jump
+
+        lda $1705 // get face direction
+        tax
+
+        // convert one-tile away coordinates into NPC map offset
+        lda $a8ec,x
+        clc
+        adc $1706
+        sta $0c
+        lda $a8f1,x
+        clc
+        adc $1707
+        sta $0e
+        ldx #$c09d
+        jsl $=Bank00LongCallX
+        ldx $3d
+        stx $1680
+
+        lda $1705 // get face direction
+        asl a
+        tax
+
+        // get properties for one tile away
+        lda $a3,x
+        sta $1682
+
+        // get NPC offset and properties for two tiles away
+        lda $=TwoStepOffsets,x
+        clc
+        adc $1706
+        sta $0c
+        sta $1a
+
+        inx
+        lda $=TwoStepOffsets,x
+        clc
+        adc $1707
+        sta $0e
+        sta $1b
+
+        ldx #$c09d
+        jsl $=Bank00LongCallX
+        ldx $3d
+        stx $1684
+
+        ldx #$9da2
+        jsl $=Bank00LongCallX
+
+        ldx $1e
+        stx $1686 // remember properties of two tiles away
+
+        lda $168a
+        beq $+FarTileIndoorCheck
+
+        // check if two tiles away is a landable tile
+        lda $1686
+        and #$41
+        beq $+FarTileInvalid
+        bra $+FarTileValidOutdoor
+
+    %FarTileIndoorCheck:
+        // check for added 0x80 bit on intervening tile, which means 
+        //  "can't jump over or jump to"
+        lda $1682
+        bpl $+NoInterveningObstruction
+        jmp $_NearTileInvalid
+    %NoInterveningObstruction:
+
+        // check if two tiles away is a landable tile
+
+        // check whether is walkable
+        lda $1686
+        bmi $+FarTileInvalid  // checks for added 0x80 bit
+        and #$03       
+        beq $+FarTileInvalid
+        
+        // check NPC map
+        ldx $1684
+        lda $7f4c00,x  
+        bmi $+FarTileInvalid
+
+    %FarTileValid:
+        lda #$ff
+        sta $7f4c00,x  // write NPC map at player landing spot
+        lda $1686
+        and #$04
+        beq $+FarTileNotBridge
+        lda #$01
+        sta $d2
+    %FarTileNotBridge:
+    %FarTileValidOutdoor:
+        lda #$33
+        sta $_Jump__Status  // jump status = stage 1 of 2, two spaces
+        lda $1705
+        inc a
+        sta $ab  // set move direction
+        sta $0709
+        jmp $_JumpInitiated
+
+    %FarTileInvalid:
+        lda $168a
+        beq $+NearTileIndoorCheck
+
+        // check if next tile is landable
+        lda $1682
+        and #$41
+        beq $+NearTileInvalid
+        bra $+NearTileValidOutdoor
+
+    %NearTileIndoorCheck:
+        // check if next tile is landable
+        lda $1682
+        and #$03
+        beq $+NearTileInvalid
+        ldx $1680
+        lda $7f4c00,x
+        bmi $+NearTileInvalid
+
+    %NearTileValid:
+        lda #$ff
+        sta $7f4c00,x  // write NPC map at player landing spot
+        lda $1682
+        and #$04
+        beq $+NearTileNotBridge
+        lda #$01
+        sta $d2
+    %NearTileNotBridge:
+    %NearTileValidOutdoor:
+        lda #$31
+        sta $_Jump__Status  // jump status = stage 1 of 2, one space
+        lda $1705
+        inc a
+        sta $ab  // set move direction
+        sta $0709
+        jmp $_JumpInitiated
+
+    %NearTileInvalid:
+        // jump in place:
+        lda #$30
+        sta $_Jump__Status  // jump status = stage 1 of 2, zero spaces
+        // play hop sound effect
+        lda #$25
+        jsr $_Util__PlaySFX
+        // return to code past all input checks
+        lda $168a
+        beq $+ReturnStationaryIndoor
+        jml $00aa47
+    %ReturnStationaryIndoor:
+        jml $00a7bf
+
+    %JumpInitiated:
+        // play hop sound effect
+        lda #$25
+        jsr $_Util__PlaySFX
+
+        // done
+        lda $168a
+        beq $+ReturnDirectionalIndoor
+        jml $00aa4f
+    %ReturnDirectionalIndoor:
+        jml $00a818
+
+    %TwoStepOffsets:
+        [[ 00 FE
+           02 00
+           00 02
+           FE 00 ]]
+}
+
+msfpatch {
+    .addr $00a723
+        jml $=Jump__Continue
+
+    .addr $00a966
+        jml $=Jump__WorldMapContinue
+
+    .new
+    Jump__Continue:
+        stz $168a  // quick reference is-indoors
+
+        // perform original check first
+        lda $d5
+        bne $+BetweenMoves
+        jml $00a727
+
+    Jump__WorldMapContinue:
+        lda #$01
+        sta $168a  // quick reference is-outdoors
+
+        // perform original check first
+        lda $d5
+        bne $+BetweenMovesOutdoor
+        jml $00a96a
+
+    %BetweenMoves:
+        lda $_Jump__Status
+        bne $+IsJumping
+        jml $00a72a
+
+    %BetweenMovesOutdoor:
+        lda $_Jump__Status
+        bne $+IsJumping
+        jml $00a96b
+
+    %IsJumping:
+        bit #$20
+        beq $+CompleteDescent
+
+        // set stage 2 of 2
+        and #$df
+        sta $_Jump__Status
+
+        // set direction according to how many spaces left to move
+        bit #$02
+        beq $+FallInPlace
+
+        lda $1705
+        inc a
+        sta $ab
+        stz $0709
+        bra $+CompleteAscent
+
+    %FallInPlace:
+        stz $ab
+        stz $0709
+    %CompleteAscent:
+        lda $168a
+        beq $+CompleteAscentIndoor
+        jml $00aa52
+    %CompleteAscentIndoor:
+        jml $00a81e  // bypasses poison/damage
+
+    %CompleteDescent:
+        stz $_Jump__Status
+        lda $168a
+        beq $+CompleteDescentIndoor
+        stz $ab
+        stz $0709
+        jml $00aa52
+    %CompleteDescentIndoor:
+        jml $00a7bf
+}
+
+msfpatch {
+    .addr $15b233
+        jml $=Jump__SpriteAdjust
+
+    .addr $15b349
+        jml $=Jump__SpriteAdjustOutdoor    
+
+    .new
+    Jump__SpriteAdjust:
+        lda $_Jump__Status
+        bne $+IsJumping
+        lda $ab
+        beq $+UseNormalIndoor
+        // return to normal check
+        jml $15b237
+
+    Jump__SpriteAdjustOutdoor:
+        lda $_Jump__Status
+        bne $+IsJumping
+        lda $ab
+        beq $+UseNormal
+        // return to normal check
+        jml $15b34d
+
+    %IsJumping:
+        // always use "stride" sprite while mid-jump
+        lda #$08
+        clc
+        adc $07
+        sta $07
+
+        // adjust height according to jump stage and frame counter
+        lda $d5
+        bmi $+AdjustHeight  // detects the 0x81 sentinel value created in mist_clip_fix.f4c
+        bne $+UseNormal
+    %AdjustHeight:
+        lda $_Jump__Status
+        and #$20
+        lsr a
+        eor #$10
+        sta $1670
+
+        lda #$0f
+        sta $1672
+        jsr $_Jump__CheckIfOnMoon
+        bcs $+UseMoonTiming
+        lsr $1670
+        lsr $1672
+    %UseMoonTiming:
+
+        lda $7b
+        dec a
+        and $1672
+        clc
+        adc $1670
+        tax
+
+        jsr $_Jump__CheckIfOnMoon
+        bcc $+IsNotOnMoon
+
+    %IsOnMoon:
+        lda $=MoonOffsets,x
+        bra $+HaveOffset
+
+    %IsNotOnMoon:
+        lda $=Offsets,x
+    %HaveOffset:
+        sta $06
+
+    %UseNormal:
+        lda $1700
+        cmp #$03
+        beq $+UseNormalIndoor
+
+        jml $15b365
+
+    %UseNormalIndoor:
+        jml $15b24f
+
+    %Offsets:
+        [[ 00 03 06 08 0B 0D 0E 0F 10 0F 0E 0D 0B 08 06 03 00 ]]
+
+    %MoonOffsets:
+        [[ 00 03 06 09 0C 0F 11 14 16 18 1A 1C 1D 1E 1F 1F 20 1F 1F 1E 1D 1C 1A 18 16 14 11 0F 0C 09 06 03 00 ]]
+}
+
+msfpatch {
+    Jump__CheckIfOnMoon:
+        lda $1700
+        cmp #$02
+        beq $+IsOnMoon
+        cmp #$03
+        bne $+IsNotOnMoon
+        lda $1701
+        beq $+IsNotOnMoon
+        lda $1702
+        cmp #$2f
+        beq $+OnBigWhale
+        cmp #$5a  // first moon map is 15A (Bahamut)
+        bcc $+IsNotOnMoon
+        cmp #$67  // Lunar Sub/Core maps are 167+, don't do high bounces in there
+        bcs $+IsNotOnMoon
+
+    %IsOnMoon:
+        sec
+        rts
+
+    %OnBigWhale:
+        // big whale interior is on moon if big whale itself is on moon
+        lda $1727
+        cmp #$02
+        beq $-IsOnMoon
+    %IsNotOnMoon:
+        clc
+        rts
+
+}
+
+msfpatch {
+    .addr $15b2b0
+        jml $=Jump__SubmergedSprite
+
+    .new
+    Jump__SubmergedSprite:
+        // never submerge sprite if mid-jump
+        lda $_Jump__Status
+        bne $+Bypass
+
+        // original check
+        lda $a2
+        and #$08
+        jml $15b2b4
+
+    %Bypass:
+        jml $15b2f8
+}
+
+msfpatch {
+    .addr $15b397
+        jml $=Jump__SubmergedSpriteOutdoor
+
+    .new
+    Jump__SubmergedSpriteOutdoor:
+        // never submerge sprite if mid-jump
+        lda $_Jump__Status
+        bne $+Bypass
+
+        // original check
+        lda $a2
+        and #$08
+        jml $15b39b
+
+    %Bypass:
+        jml $15b3ad
+}
+
+msfpatch {
+    .addr $00a653
+        jml $=Jump__AllowJumpInPlace
+
+    .new
+    Jump__AllowJumpInPlace:
+        lda $_Jump__Status
+        bne $+IsJumping
+        // displaced check
+        lda $ab
+        bne $+IsMoving
+
+        // not moving
+        jml $00a722
+
+    %IsJumping:
+        // fixed jumping speed
+        jsr $_Jump__CheckIfOnMoon
+        bcs $+OnMoon
+
+        lda #$01
+        sta $ac
+        bra $+IsMoving
+
+    %OnMoon:
+        stz $ac
+
+    %IsMoving:
+        jml $00a65a
+}
+
+msfpatch {
+    .addr $0099b1
+        jml $=Jump__AllowJumpInPlace2
+
+    .new
+    Jump__AllowJumpInPlace2:
+        stz $cd  // (displaced)
+        lda $_Jump__Status
+        bne $+StillJumping
+        lda $ab  // (displaced)
+        jml $0099b5
+
+    %StillJumping:
+        jml $0099b9
+}
+
+msfpatch {
+    .addr $009b16
+        jml $=Jump__AllowJumpInPlace2Outdoor
+
+    .new
+    Jump__AllowJumpInPlace2Outdoor:
+        stz $cd  // (displaced)
+        lda $_Jump__Status
+        bne $+StillJumping
+        lda $ab  // (displaced)
+        jml $009b1a
+
+    %StillJumping:
+        jml $009b1e
+}
+
+msfpatch {
+    .addr $0099cd
+        jml $=Jump__BypassMiddleTile
+
+    .new
+    Jump__BypassMiddleTile:
+        lda $_Jump__Status
+        bne $+Bypass
+
+        // displaced
+        lda $a1
+        and #$08
+        jml $0099d1
+
+    %Bypass:
+        jml $0099f9
+}
+
+msfpatch {
+    .addr $009b32
+        jml $=Jump__BypassMiddleTileOutdoor
+
+    .new
+    Jump__BypassMiddleTileOutdoor:
+        lda $_Jump__Status
+        bne $+Bypass
+
+        // displaced
+        stz $1a02
+        lda $1704
+        jml $009b38
+
+    %Bypass:
+        jml $009b67
+}
+
+msfpatch {
+    .addr $0081f4
+        jml $=Jump__BlockMenu
+
+    .new
+    Jump__BlockMenu:
+        lda $_Jump__Status
+        bne $+BlockMenu
+
+        //displaced
+        lda $d5
+        beq $+BlockMenu
+
+        // normal
+        jml $0081f9
+
+    %BlockMenu:
+        jml $0081f8
+}
+
+msfpatch {
+    .addr $00964a
+        jml $=Jump__BlockAction
+
+    .new
+    Jump__BlockAction:
+        lda $_Jump__Status
+        bne $+BlockAction
+
+        // displaced
+        inc $54
+        lda $ea
+        jml $00964e
+
+    %BlockAction:
+        jml $009649
+}
+
+msfpatch {
+    .addr $009a03
+        jsr $=Jump__CancelJumpFromTriggerIndoor
+
+    .new
+    Jump__CancelJumpFromTriggerIndoor:
+        stz $_Jump__Status
+
+        // displaced
+        stz $d6
+        lda $a1
+        rtl
+}
+
+// prevent jumping into houses
+patch($a1278) { 80 04 80 04 80 04 80 04}
+patch($a1288) { 80 04 80 04 80 04 80 04}
+patch($a129c) {             80 04 80 04}
+patch($a1280) { 80 04 80 04 80 04 }
+patch($a1290) { 80 04 80 04 80 04 }
+patch($a12a0) { 80 04 03 04 80 04 }
+patch($a1296) { 82 }
+patch($a1298) { 82 }
+patch($a12a6) { 83 }
+patch($a12a8) { 83 }
+
+patch($a12c0) { 80 }
+patch($a12c2) { 80 }
+patch($a12c4) { 82 }
+patch($a12c6) { 82 }
+
+patch($a1220) { 80 04 82 0C 80 04 }
+
+// prevent jumping through indoor walls
+patch($a1380) { 80 }
+patch($a1382) { 80 }
+patch($a1480) { 80 }
+patch($a1482) { 80 }
+patch($a1484) { 80 }
+patch($a1486) { 80 }
+patch($a1488) { 80 }
+patch($a148e) { 80 }
+
+// prevent jumping through some castle exterior walls
+patch($a11f0) { 82 }
+patch($a11f2) { 82 }
+
+// prevent jumping through lunar sub walls
+patch($a1a06) { 80 04 80 04 80 04 }
+patch($a1a16) { 80 04 00 04 80 04 }
+patch($a1a26) { 80 04 80 04 80 04 }
+
+// prevent jumping through cave walls
+patch($a1c06) { 80 04 80 04 80 04 }
+patch($a1c16) { 80 }
+patch($a1c1a) { 80 }
+patch($a1c26) { 80 04 80 04 80 04 }
+
+// prevent jumping across pillar bases
+patch($a0fa8) { 80 }
+patch($a14aa) { 80 }
+patch($a1552) { 80 }
+patch($a1566) { 80 }
+patch($a1aa8) { 80 }
+
+// prevent jumping through prison bars
+patch($a149a) { 80 }
+
+
+// fix crash when talking to NPCs without event call data
+msfpatch {
+    .addr $00f060
+        jml $=FixNPCNoEventCallCrash
+
+    .new
+    FixNPCNoEventCallCrash:
+        sta $41  // displaced
+
+        lda $139800,x
+        sta $1670
+        lda $139801,x
+        sta $1671
+        ldx $1670
+        cpx $40
+        beq $+IsNullEventCall
+        inx
+        cpx $40
+        beq $+IsNullEventCall
+
+        // it's fine, continue as normal
+        ldx $40 // displaced
+        jml $00f064
+
+    %IsNullEventCall:
+        jml $00f0ed
+}
+
+// add door trigger for Tower of Babil door that you can cross halves to
+trigger(#BabilFloorIceMail2 3)
+{
+    position 10 4
+    teleport #BabilFloorAirship at 10 5 facing down
+}
+
+// there is a door you can reach past the babil crystal room that is not
+// hooked up; set it to be a return door
+mapgrid($AC 6 7) { 71 }
+
+
+//-------------------------------------------------------------------------
+
+msfpatch {
+    .addr $02b993
+        jml $=Jump__BattleInput
+
+    .new
+    Jump__BattleInput:
+        lda $38
+        bmi $+JumpButtonPressed
+
+        // displaced
+        lda $37
+        bmi $+ConfirmButtonPressed
+    %Return:
+        jml $02b9dd
+
+    %ConfirmButtonPressed:
+        // reset top command to be "Fight"
+        lda $1822
+        tax
+        lda $0dffd4,x
+        tax
+        lda {% wacky_fightcommandreplacement : #$00 %}
+        sta $3303,x        
+
+        jml $02b997
+
+    %JumpButtonPressed:
+        // get offset to battle menu data
+        lda $1822
+        tax
+        lda $0dffd4,x
+        tax
+
+        // if fight command is disabled, prevent this action
+        lda $3302,x
+        bmi $+Invalid
+
+        // change top command to be "Jump" and pretend we selected it
+        lda #$06
+        sta $3303,x
+
+        stz $60
+
+        // sfx
+        lda #$25
+        jsr $_Util__PlaySFX
+
+        jml $02b997
+
+    %Invalid:
+        // "bad" sfx
+        lda #$12
+        sta $f416
+        jmp $_Return
+}
+
+msfpatch {
+    .addr $02aa78
+        jml $=Jump__BattleMenuReset
+
+    .new
+    Jump__BattleMenuReset:
+        ldx #$0000
+        stx $5f
+
+        // reset top menu item to be Fight
+        lda $1822
+        tax
+        lda $0dffd4,x
+        tax
+        lda {% wacky_fightcommandreplacement : #$00 %}
+        sta $3303,x        
+
+        // continue as normal
+        jml $02aa7d
+}

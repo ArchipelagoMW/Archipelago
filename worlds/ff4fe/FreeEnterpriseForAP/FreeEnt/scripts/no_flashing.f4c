@@ -1,0 +1,145 @@
+// rewrite "screen flash" event command to respect no flash flag
+msfpatch {
+    .addr $00eb9d
+        jml $=NoFlash__RescriptEventCommand
+    // use spare space to create a longcall interface
+    NoFlash__LongCall8F1E:
+        jsr $8f1e
+        rtl
+
+    .new
+    NoFlash__RescriptEventCommand:
+        lda #$02
+        sta $79
+    %LoopStart:
+        lda $_FlashSetting
+        beq $+FlashOn
+        stz $c4
+        bra $+Continue
+    %FlashOn:
+        inc $c4
+    %Continue:
+        jsl $=NoFlash__LongCall8F1E
+        dec $79
+        bne $-LoopStart
+        jml $00e0d3
+}
+
+// disable flash effect in damage floors
+msfpatch {
+    .addr $00a666
+        jsl $=NoFlash__DamageFloors
+
+    .new
+    NoFlash__DamageFloors:
+        lda $_FlashSetting
+        beq $+FlashOn
+        stz $c4
+    %FlashOn:
+        inc $7b // displaced
+        lda $ac
+        rtl
+}
+
+// (poison effect is disabled in dash.f4c)
+
+// disable flash effects in battle
+msfpatch {
+    .addr $03fcd7
+        jml $=NoFlash__DisableBattleFlashes
+
+    .new
+    NoFlash__DisableBattleFlashes:
+        lda $_FlashSetting
+        bne $+FlashOff
+
+        // displaced check
+        lda $ef89
+        and #$02
+        bne $+FlashOff
+        jml $03fcdb
+
+    %FlashOff:
+        jml $03fd20
+}
+
+
+// disable high-intensity flash effects in spell effect scripts
+msfpatch {
+    .addr $02f68b
+        jml $=NoFlash__SpellVFX
+
+    .new
+    NoFlash__SpellVFX:
+        and #$07
+        sta $ef87
+
+        lda $_FlashSetting
+        beq $+Return
+
+        // only apply fix to color mode type 02
+        lda $ef87
+        cmp #$02
+        bne $+Return
+
+        // only apply fix to white/green/cyan/yellow (ie. colors with green)
+        lda $ef88
+        and #$40
+        beq $+Return
+
+        // fix: change color mode 02 to 03
+        lda #$03
+        sta $ef87
+
+    %Return:
+        jml $02f690
+}
+
+
+// alter Exit/Warp effects scripts to not trigger in MistCave by:
+//  - no-op'ing toggle tint commands inside Mist Cave
+//  - treating all "toggle tint $00" commands as "tint off"
+msfpatch {
+    .addr $00e734
+        jml $=NoFlash__DisableTintInMistCave
+
+    .new
+    NoFlash__DisableTintInMistCave:
+        lda $81
+        bne $+TintOff
+
+        // treat "toggle tint $00" always as tint off
+        lda $09d5,x
+        beq $+TintOff
+
+        // check for MistCave 
+        lda $1700
+        cmp #$03
+        bne $+NotMistCave
+        lda $1701
+        bne $+NotMistCave
+        lda $1702
+        cmp #$6c  // [hardcoded] Mist Cave map
+        bne $+NotMistCave
+
+        // is Mist Cave, so just do nothing
+        jml $00e744
+    
+    %NotMistCave:
+        // return to tint activation code
+        jml $00e738
+
+    %TintOff:
+        jml $00e741
+}
+
+
+
+
+/*
+// manually disable flashes in specific spell effects
+patch ($0fd6ff bus) { 63 }  // Lit-3
+patch ($0fdb93 bus) { c3 }  // Sylph
+patch ($0fdb9f bus) { c3 }  // Sylph
+patch ($0fdac6 bus) { 63 }  // Blizzard item
+*/

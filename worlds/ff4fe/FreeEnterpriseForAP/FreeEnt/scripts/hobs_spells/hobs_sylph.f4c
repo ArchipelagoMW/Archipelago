@@ -1,0 +1,110 @@
+map(#MountHobsWest) {
+    npc palettes $01 $05
+}
+
+placement($7E 8) {
+    palette 1
+    face down
+    position 13 23
+    marching on
+    speed 2
+}
+
+placement($7E 9) {
+    palette 1
+    face down
+    position 16 23
+    marching on
+    speed 2
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Sylph1
+        9  Sylph2
+    }
+
+    sound #Sylph
+    batch {
+        p #Sylph1 toggle visible
+        p #Sylph2 toggle visible
+    }
+    batch {
+        p #Sylph1 move up
+        p #Sylph2 move up
+    }
+    batch {
+        p #Sylph1 move right
+        p #Sylph2 move right
+    }
+    batch {
+        p #Sylph1 move down
+        p #Sylph2 move down
+    }
+    batch {
+        p #Sylph1 move left
+        p #Sylph2 move left
+    }
+    batch {
+        p #Sylph1 move up
+        p #Sylph2 move up
+    }
+    batch {
+        p #Sylph1 move right
+        p #Sylph2 move right
+    }
+    batch {
+        p #Sylph1 move down
+        p #Sylph2 move down
+    }
+    batch {
+        p #Sylph1 move left
+        p #Sylph2 move left
+    }
+    batch {
+        p #Sylph1 move up
+        p #Sylph2 move up
+    }
+    batch {
+        p #Sylph1 move right
+        p #Sylph2 move right
+    }
+    batch {
+        p #Sylph1 move down
+        p #Sylph2 move down
+    }
+    batch {
+        p #Sylph1 move left
+        p #Sylph2 move left
+    }
+    screen flash
+    [#B #LoadNPCPalette $1e $06]
+    screen flash
+    [#B #LoadNPCPalette $1a $06]
+    batch {
+        p 0 toggle visible
+        p 1 toggle visible
+        p 2 toggle visible
+        p 3 toggle visible
+        p 4 toggle visible
+        p 5 toggle visible
+        p 6 toggle visible
+        p 7 toggle visible
+    }
+    batch {
+        p #Sylph1 toggle visible
+        p #Sylph2 toggle visible
+    }
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

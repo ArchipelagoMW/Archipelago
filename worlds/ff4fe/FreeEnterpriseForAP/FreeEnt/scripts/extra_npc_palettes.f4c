@@ -1,0 +1,72 @@
+msfpatch {
+    // A contains index number of the extra NPC palette to load (optionally with top two bits
+    // set, for simpler interoperability with specifying palette in map)
+    ExtraNPCPalettes__Load:
+        and #$3f
+        stz $3d
+        sta $3e
+
+        lsr $3e
+        ror $3d
+        lsr $3e
+        ror $3d
+
+        ldx $3d
+        ldy #$0000
+
+    ExtraNPCPalettes__Load_LoopStart:
+        lda $21b000,x
+        sta $0e5b,y
+        inx
+        iny
+        tya
+        and #$0f
+        bne $-ExtraNPCPalettes__Load_LoopStart
+    
+    ExtraNPCPalettes__Load_LoopMid:
+        lda #$00
+        sta $0e5b,y
+        iny
+        tya
+        and #$0f
+        bne $-ExtraNPCPalettes__Load_LoopMid
+
+        tya
+        and #$7f
+        bne $-ExtraNPCPalettes__Load_LoopStart
+
+        rts
+
+
+    ExtraNPCPalettes__ResetToMapDefault:
+        lda #$00
+        ldy #$bfeb
+        jsl $=LongCall
+        rts
+}
+
+
+// Hook into map NPC palette loading function
+msfpatch {
+    ExtraNPCPalettes__MapLoadHook:
+        // A contains map info palette byte
+        pha
+        and #$c0
+        cmp #$c0
+        beq $+ExtraNPCPalettes__MapLoadHook_IsExtraPalette
+
+        // return to original functionality
+        pla
+        and #$0f    // displaced instruction
+        ldy #$0000  // displaced instruction
+        jml $00bff3
+
+    ExtraNPCPalettes__MapLoadHook_IsExtraPalette:
+        pla
+        jsr $_ExtraNPCPalettes__Load
+        jml $00c003
+
+    .addr $00bfee
+        jml $=ExtraNPCPalettes__MapLoadHook
+        nop
+}

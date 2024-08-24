@@ -1,0 +1,273 @@
+// Big whale surfacing events
+
+eventcall($49)
+{
+    if #fe_GotDarkCrystal, not #BigWhaleSurfaced:
+        $9E   //Big Whale surfacing
+    else:
+        $00   //(no event)
+}
+
+// patch vfx BigWhaleShining to only do the part
+// that gives you the big whale
+patch($00c1e9 bus) { FB CC }  // redirect pointer to end of handler
+
+
+//-------------------------------------------
+
+// Repurpose map #TowerOfWishesAfterGiant to be used for this
+// cutscene, to avoid placement requirements in normal tower
+// for character retrieval
+
+npc(#fe_ElderPraying) {
+    default inactive
+    sprite #ElderPraying
+    eventcall {}
+}
+
+npc(#fe_BlackMagePraying) {
+    default active
+    sprite #BlackMagePraying
+    eventcall {}
+}
+
+npc(#fe_WhiteMagePraying) {
+    default active
+    sprite #WhiteMagePraying
+    eventcall {}
+}
+
+placement($133 0)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_BlackMagePraying
+    position 4 3
+    walking off
+    tangible
+    face down
+    palette 1
+    turning off
+    marching on
+    speed 2
+}
+
+placement($133 1)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_WhiteMagePraying
+    position 6 3
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($133 2)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_ElderPraying
+    position 5 2
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 3)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_BlackMagePraying
+    position 3 4
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 4)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_WhiteMagePraying
+    position 6 4
+    walking off
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 5)  //#TowerOfWishesAfterGiant
+{
+    npc #Elder2
+    position 5 2
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 6)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_BlackMagePraying
+    position 4 4
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 7)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_WhiteMagePraying
+    position 7 4
+    walking off
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 8)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_BlackMagePraying
+    position 4 5
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 9)  //#TowerOfWishesAfterGiant
+{
+    npc #fe_WhiteMagePraying
+    position 6 5
+    walking off
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+placement($133 10) { delete }
+placement($133 11) { delete }
+
+
+
+//-------------------------------------------
+
+
+event($9E)  //Big Whale surfacing
+{
+    consts(placement) {
+        9   CastleBaronMysidiaBlackMage
+        10   CastleBaronMysidiaWhiteMage
+        11   MysidiaElder
+    }
+    // autodetected map #Mysidia
+    batch 1 {
+        p #MysidiaElder toggle visible
+        p #CastleBaronMysidiaBlackMage toggle visible
+        p #CastleBaronMysidiaWhiteMage toggle visible
+    }
+    batch 6 {
+        p #CastleBaronMysidiaBlackMage move down
+        p #CastleBaronMysidiaWhiteMage move down
+        p #MysidiaElder move down
+    }
+    message $156   // "Elder:We have been waiting  for you!"
+    pause 4
+    toggle music fade
+    toggle screen fade
+    music #Prelude
+
+    consts(placement) {
+        2   ElderPraying
+        3   MysidiaBlackMagePraying2_A
+        6   MysidiaBlackMagePraying2_B
+        8   MysidiaBlackMagePraying2_C
+        4   MysidiaWhiteMagePraying2_A
+        7   MysidiaWhiteMagePraying2_B
+        9   MysidiaWhiteMagePraying2_C
+        5   MysidiaElder
+    }
+    load map #TowerOfWishesAfterGiant at 5 4 
+    player face up
+
+    toggle screen fade
+    message $157   // "Elder:Wish, everyone!  The legend shall come"
+    pause 8
+    p #MysidiaElder face up
+    pause 4
+    batch 1 {
+        p #ElderPraying toggle visible
+        p #MysidiaElder toggle visible
+    }
+    pause 16
+    toggle music fade
+    toggle tint $E9
+    toggle tint $00
+    toggle tint $C9
+    toggle tint $00
+    toggle tint $A9
+    toggle tint $00
+    toggle tint $89
+    toggle tint $00
+    toggle tint $69
+    toggle tint $00
+    toggle tint $49
+    toggle tint $00
+    toggle tint $29
+    batch 30 {
+        screen flash
+    }
+    sound #Whirlpool
+
+    music #LongFanfare
+    player invisible
+    load map #Overworld at 150 202 no transition
+    vfx #BigWhaleRising
+    consts(placement) {
+        5   MysidiaElder
+    }
+    load map #TowerOfWishesAfterGiant at 5 4 no transition
+    batch 1 {
+        player visible
+        p #MysidiaElder face up
+    }
+    pause 8
+    message $159   // "Elder:That is_ "
+    toggle tint $00
+    vfx $2A // hacked to just give big whale
+    set #BigWhaleSurfaced
+    take item #DarkCrystal
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.dark_crystal]
+    player face down
+    [#B #Objectives_Tick #objective.quest_bigwhale]
+
+    pause 2
+    batch 8 {
+        player move down
+    }
+    load map #Overworld at 153 199 
+    player face down
+}
+

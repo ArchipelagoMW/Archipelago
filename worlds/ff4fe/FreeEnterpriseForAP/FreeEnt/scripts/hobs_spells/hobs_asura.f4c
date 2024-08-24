@@ -1,0 +1,108 @@
+placement($7E 8) {
+    palette 0
+    face down
+    position 15 25
+    marching off
+    speed 3
+}
+
+placement($7E 9) {
+    palette 0
+    face down
+    position 15 25
+    marching off
+    speed 3
+}
+
+placement($7E 10) {
+    palette 0
+    face down
+    position 15 25
+    marching off
+    speed 3
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Face1
+        9  Face2
+        10  Face3
+    }
+
+    p #Face1 toggle visible
+    batch {
+        p #Face1 toggle visible
+        p #Face2 toggle visible
+    }
+    batch {
+        p #Face2 toggle visible
+        p #Face3 toggle visible
+    }
+    batch {
+        p #Face3 toggle visible
+        p #Face1 toggle visible
+    }
+
+    pause 4
+
+    batch {
+        p #Face1 toggle visible
+        p #Face2 toggle visible
+    }
+    batch {
+        p #Face2 toggle visible
+        p #Face3 toggle visible
+    }
+    batch {
+        p #Face3 toggle visible
+        p #Face1 toggle visible
+    }
+    batch {
+        p #Face1 toggle visible
+        p #Face2 toggle visible
+    }
+
+    pause 4
+
+    batch {
+        p #Face2 toggle visible
+        p #Face3 toggle visible
+    }
+    p #Face3 toggle visible
+
+    // custom outro
+    toggle tint $00
+    pause 4
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+
+    sound #Cure
+    batch 5 {
+        screen flash
+    }
+    restore hp
+
+    pause 4
+    [#B #Text_LoadSpellName 0 #spell.Asura]
+    music #CharacterJoined
+    map message 5
+    give spell #RydiaCall #spell.Asura
+
+
+    [#B #Return]
+}
+

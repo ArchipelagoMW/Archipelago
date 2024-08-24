@@ -1,0 +1,430 @@
+// Support for dynamic NPC sprite codes -- ie. determine
+// which sprite to use based on game logic
+//
+//  0x90      : DKCecil or Paladin Cecil, depending on game state
+//  0x91      : Child Rydia or Adult Rydia, depending on game state
+//  0xC0-0xDF : axtors, current depending on game state
+
+consts(dyn)
+{
+    $80     Slot0
+    $81     Slot1
+    $82     Slot2
+    $83     Slot3
+    $84     Slot4
+    $85     OccupiedSlot0
+    $86     OccupiedSlot1
+    $87     OccupiedSlot2
+    $88     OccupiedSlot3
+    $89     OccupiedSlot4
+    $8A     NonHero0
+    $8B     NonHero1
+    $8C     NonHero2
+    $8D     NonHero3
+
+    $8F     PartyLeader
+    $90     Cecil
+    $91     Rydia
+
+    $C1     AxDKCecil
+    $C2     AxKain1
+    $C3     AxCRydia
+    $C4     AxTellah1
+    $C5     AxEdward
+    $C6     AxRosa1
+    $C7     AxYang1
+    $C8     AxPalom
+    $C9     AxPorom
+    $CA     AxTellah2
+    $CD     AxYang2
+    $CE     AxCid
+    $CF     AxKain2
+    $D0     AxRosa2
+    $D1     AxARydia
+    $D2     AxEdge
+    $D3     AxFusoya
+    $D4     AxKain3     
+}
+
+msfpatch {
+    // codes:
+    //  0x80-0x84 : Party member in slot 0-4
+    //  0x85-0x89 : Party member in 0-4th non-empty slot
+    //  0x8F      : Party leader (at the time the map is loaded)
+    DynamicParty__Search:
+        cmp #$85
+        bcs $03
+        jmp $_DynamicParty__Search_PartySlot
+
+        cmp #$8a
+        bcs $03
+        jmp $_DynamicParty__Search_PartySlotNonEmpty
+
+        cmp #$8e
+        bcs $03
+        jmp $_DynamicParty__Search_NonHero
+
+        cmp #$8f
+        bne $03
+        jmp $_DynamicParty__Search_PartyLeader
+
+        //Invalid code
+    DynamicParty__Search_ReturnInvalid:
+        ldx #$ffff
+        rts
+
+    DynamicParty__Search_PartySlot:
+        sec
+        sbc #$80
+        jsr $_Util__SlotToPartyOffset
+
+        // check if party slot is empty
+        lda $1000,x
+        and #$1f
+        bne $03
+        jmp $_DynamicParty__Search_ReturnInvalid
+
+        // success, offset already in X
+        rts
+
+    DynamicParty__Search_NonHero:
+        stz $3e
+        inc $3e
+        sec
+        sbc #$8a
+        bra $+Search_PartySlotNonEmpty_Common
+    DynamicParty__Search_PartySlotNonEmpty:
+        stz $3e
+        sec
+        sbc #$85
+    %Search_PartySlotNonEmpty_Common:
+        tay
+        stz $3d
+    %Search_PartySlotNonEmpty_LoopStart:
+        lda $3d
+        jsr $_Util__SlotToPartyOffset
+        lda $1000,x
+        and #$1f
+        beq $+Search_PartySlotNonEmpty_LoopNext
+
+        cmp #$01 // check for hero
+        bne $+NotHero
+        lda $3e  // if this is a nonhero search, bypass hero
+        bne $+Search_PartySlotNonEmpty_LoopNext
+    %NotHero:
+        cpy #$0000
+        beq $+Search_PartySlotNonEmpty_Found
+        dey
+
+    %Search_PartySlotNonEmpty_LoopNext:
+        inc $3d
+        cpx #$0100
+        bne $-Search_PartySlotNonEmpty_LoopStart
+        jmp $_DynamicParty__Search_ReturnInvalid
+
+    %Search_PartySlotNonEmpty_Found:
+        // X already contains offset
+        rts
+
+
+    DynamicParty__Search_PartyLeader:
+        lda $1703
+        jsr $_Util__SlotToPartyOffset
+        rts
+}
+
+msfpatch {
+    .addr $00c0c9
+        jsl $=DynamicSprites__Start
+}
+
+msfpatch {
+    DynamicSprites__Start:
+        // replaced command from source code that loads the sprite
+        lda $12f000,x
+        bmi $+DynamicSprites__IsDynamic
+        rtl
+
+    DynamicSprites__IsDynamic:
+        cmp #$fe
+        bne $+IsStillDynamic
+        // this is the "dynamic NPC" which defers to a lookup table.
+        // hooks into dynamic_npc.f4c
+        jsl $=DynamicNPC__Start
+        bmi $+IsStillDynamic
+        rtl
+
+    %IsStillDynamic:
+        cmp #$90
+        bcs $+NotSearch
+        jmp $_DynamicSprites__Search
+
+    %NotSearch:
+        cmp #$90
+        bne $+NotCecil
+        jmp $_DynamicSprites__Cecil
+
+    %NotCecil:
+        cmp #$91
+        bne $+NotRydia
+        jmp $_DynamicSprites__Rydia
+
+    %NotRydia:
+        cmp #$c0
+        bcc $+NotAxtor
+        cmp #$e0
+        bcs $+NotAxtor
+        jmp $_DynamicSprites__Axtor
+
+    %NotAxtor:
+    DynamicSprites__ReturnInvalid:
+        lda #$65  // transparent
+        rtl
+
+    DynamicSprites__Search:
+        jsr $_DynamicParty__Search
+        cpx #$ffff
+        beq $-DynamicSprites__ReturnInvalid
+        
+        // job number = sprite number
+        lda $1001,x
+        and #$0f
+        rtl
+
+    DynamicSprites__Cecil:
+        // hardcoded to check plot flag $0B
+        lda $1281
+        and #$08
+        beq $+DynamicSprites__CecilDarkKnight
+
+        lda #$09
+        rtl
+
+    DynamicSprites__CecilDarkKnight:
+        lda #$00
+        rtl
+
+    DynamicSprites__Rydia:
+        // hardcoded to check plot flag $07
+        lda $1280
+        and #$80
+        beq $+DynamicSprites__ChildRydia
+
+        lda #$0b
+        rtl
+
+    DynamicSprites__ChildRydia:
+        lda #$02
+        rtl
+
+    DynamicSprites__Piggy:
+        lda #$10
+        rtl
+
+    DynamicSprites__Axtor:
+        sec
+        sbc #$c0
+        jsr $_Lookup_AxtorToActor
+        beq $-DynamicSprites__ReturnInvalid
+        cmp #$01
+        beq $-DynamicSprites__Cecil
+        cmp #$03
+        beq $-DynamicSprites__Rydia
+        cmp #$fe
+        beq $-DynamicSprites__Piggy
+        // otherwise, lookup job for actor
+        // from our convenient lookup table
+        dec a
+        asl a
+        xba
+        lda #$00
+        xba
+        tax
+        lda $218980,x   // [hardcoded]
+        rtl
+}
+
+
+
+//-----------------------------------------------------------------------------
+// Extended name codes:
+//  0x80-0x9F : by party search
+//  0xC0-0xDF : axtor
+//  0xE0-0xEF : text buffers
+//  0xF0      : party leader
+//  0xF1-0xFE : extra char tiles
+
+
+// hook into original name code display
+msfpatch {
+    .addr $00b30b
+        jml $=DynamicNames__Start
+}
+
+msfpatch {
+    DynamicNames__Start:
+        bmi $+DynamicNames__IsDynamic
+
+    DynamicNames__NonDynamic:
+        jsr $_CharEx__ResolveNameCode
+        bmi $+DynamicNames__FromGlobalNames
+        jmp $_DynamicNames__FromKnownAxtor
+
+    DynamicNames__FromGlobalNames:
+        and #$7f
+        // emulate original code routine,
+        // but loading from the global name table
+        asl a
+        sta $18
+        asl a
+        clc
+        adc $18
+        sta $18
+        stz $19
+        ldx $18
+        ldy $3d
+        stz $07
+    DynamicNames__Vanilla_Loop:
+        lda $=CharEx__GlobalNames,x
+        cmp #$ff
+        beq $+DynamicNames__Vanilla_Done
+        sta $0774,y
+        iny
+        inx
+        inc $07
+        lda $07
+        cmp #$06
+        bne $-DynamicNames__Vanilla_Loop
+    DynamicNames__Vanilla_Done:
+        sty $3d
+        jml $00b335
+
+    DynamicNames__Return:
+        // displaced code from original
+        asl a
+        sta $18
+        asl a
+        jml $00b30f
+
+    DynamicNames__IsDynamic:
+        cmp #$F0
+        bne $03
+        jmp $_DynamicNames__PartyLeader
+
+        cmp #$A0
+        bcs $03
+        jmp $_DynamicNames__Search
+
+        cmp #$C0
+        bcs $03
+        jmp $_DynamicNames__Invalid
+
+        cmp #$E0
+        bcs $03
+        jmp $_DynamicNames__Axtor
+
+        cmp #$F0
+        bcs $03
+        jmp $_DynamicNames__TextBuffer
+
+        cmp #$FF
+        bcs $03
+        jmp $_DynamicNames__ExtraChar
+
+        // Invalid code
+    DynamicNames__Invalid:
+        lda #$0e
+        jmp $_DynamicNames__Return
+
+    DynamicNames__PartyLeader:
+        lda $1703
+        jsr $_Util__SlotToPartyOffset
+        lda $1000,x
+        and #$1f
+        jmp $_DynamicNames__FromKnownAxtor
+
+    DynamicNames__Search:
+        jsr $_DynamicParty__Search
+        lda $1000,x
+        and #$1f
+        jmp $_DynamicNames__FromKnownAxtor
+
+    DynamicNames__FromKnownAxtor:
+        jmp $_DynamicNames__Return
+
+    DynamicNames__Axtor:
+        and #$3f
+        jsr $_CharEx__SimplifyAxtorCode
+        sta $1681
+        xba
+        lda #$00
+        xba
+
+        // check if Axtor name has been initialized, if so use that name
+        asl a
+        sta $1682
+        asl a
+        clc 
+        adc $1682
+        tax
+        lda $1180,x  // hardcoded
+        beq $+AxtorNameUninitialized
+        lda $1681
+        jmp $_DynamicNames__FromKnownAxtor
+
+    %AxtorNameUninitialized:
+        lda $1681
+        jsr $_Lookup_AxtorToActor
+        // lookup name code for actor
+        tax
+        lda $018456,x
+        // defer to basic name code handling
+        jmp $_DynamicNames__NonDynamic
+}
+
+msfpatch {
+    // all char codes in text boxes are spoken for
+    // with dual-tile encoding, so if we draw a new
+    // tile and want to display it, we need to use
+    // a name lookup
+    DynamicNames__ExtraChar:
+        sec
+        sbc #$f1
+        clc
+        adc #$c7
+        ldy $3d
+        sta $0774,y
+        iny
+        sty $3d
+        jml $00b335
+}
+
+msfpatch {
+    DynamicNames__TextBuffer:
+        // copy text from the specific text buffer
+        sec
+        sbc #$e0
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        xba
+        lda #$00
+        xba
+        tax
+
+        // do our own text display
+        ldy $3d
+    %CopyLoopStart:
+        lda $=TextBuffer__BufferRootAddr,x
+        beq $+Done
+        sta $0774,y
+        iny
+        inx
+        bra $-CopyLoopStart
+    %Done:
+        sty $3d
+        // jump back to original code
+        jml $00b335
+}

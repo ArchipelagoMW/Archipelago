@@ -1,0 +1,364 @@
+
+
+//------------------------------------------------------------
+// battle
+
+// patch Crystal to be usable by any character
+patch($1a134) { EA EA 80 }  // enables item in battle
+patch($767d4) { 08 00 }     // fix Zeromus reaction
+
+// patch Zeromus Fusoya/Golbez ghost command to do nothing but re-enable fight
+patch($01f021 bus) { 4C C4 EF } // overwrite second instruction to "jump to end of battle command handler"
+
+ai_script(moon $47) // remove Zeromus fight messages
+{
+    chain {
+        use #GhostFusoyaGolbez  // hacked to only unpause battle
+
+        condition 2
+        use #ZeromusShake2
+    }
+}
+
+
+// patch Crystal to be single target so that we don't Nuke Glitch Into Crazy Town
+patch($0f9710 bus) { 80 }
+
+
+
+//------------------------------------------------------------
+// cutscene
+
+npc(#WaveringFlame) {
+    default active
+}
+
+
+
+placement($172 4)  //#LunarCoreZemusRoom
+{
+    npc #fe_PartyMember1U
+    position 15 12
+    walking off
+    tangible
+    face up
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+placement($172 5)  //#LunarCoreZemusRoom
+{
+    npc #fe_PartyMember2U
+    position 15 12
+    walking off
+    tangible
+    face up
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+placement($172 6)  //#LunarCoreZemusRoom
+{
+    npc #fe_PartyMember3U
+    position 15 12
+    walking off
+    tangible
+    face up
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+placement($172 7)  //#LunarCoreZemusRoom
+{
+    npc #fe_PartyMember4U
+    position 15 12
+    walking off
+    tangible
+    face up
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+placement($172 8)  //#LunarCoreZemusRoom
+{
+    npc #fe_PartyMember5U
+    position 15 12
+    walking off
+    tangible
+    face up
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+npc(#GolbezFallen) {
+    // %golbez awards item%
+    default active
+    // %end%
+}
+
+placement($172 10)  //#LunarCoreZemusRoom
+{
+    // npc #GolbezFallen
+    position 16 15
+}
+
+npc(#Zemus)       { default inactive }
+npc(#ZemusFallen) { default inactive }
+
+event($E7)  //Zeromus Battle, Ending Events
+{
+    consts(placement) {
+        4   PartyMember1
+        5   PartyMember2
+        6   PartyMember3
+        7   PartyMember4
+        8   PartyMember5
+
+        3   WaveringFlame
+        10  GolbezFallen
+    }
+    // autodetected map #LunarCoreZemusRoom
+    toggle music fade
+    toggle tint $FA
+
+    // %golbez awards item%
+        pause 6
+        player face right
+        pause 6
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.fallen_golbez_item 0]
+        sound #Crystal
+        message #msg.fe_Received
+        [#B #Objectives_TickRewardSlot #reward_slot.fallen_golbez_item]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.fallen_golbez_item]
+        player face up
+    // %end%
+
+    // reload placement sprites in case party config
+    // changed since entering the room
+    [#B #ReloadPlacementSprite 4]
+    pause 1
+    [#B #ReloadPlacementSprite 5]
+    pause 1
+    [#B #ReloadPlacementSprite 6]
+    pause 1
+    [#B #ReloadPlacementSprite 7]
+    pause 1
+    [#B #ReloadPlacementSprite 8]
+
+    player move up
+    player move up
+    player move up
+
+    // wish I knew why I had to do this <-- INVESTIGATE
+    batch {
+        p #PartyMember1 face up
+        p #PartyMember2 face up
+        p #PartyMember3 face up
+        p #PartyMember4 face up
+        p #PartyMember5 face up
+    }
+
+    [#B #PlacementSetVisibleByPartyLeader 4]
+    player invisible
+
+    pause 3
+
+    player move up
+    player move up
+    player move up
+
+    pause 6
+
+    message $33 from bank 3   // "I am the Absolute Dark Substance__product of"
+
+    pause 4
+
+    message $80 from bank 3   // "My name is Zeromus_ I am_ the hatred_!![music $0B]"
+
+    sound #Earthquake
+    toggle screen shake
+    pause 24
+    batch 10 {
+        screen flash
+    }
+    sound #Electric
+
+    pause 12
+
+    clear status 
+    restore hp
+    restore mp
+
+    music #Prologue
+    
+    player move down
+    player move down
+    pause 8
+
+    [#B #PlacementSetVisible 4]
+    [#B #PlacementSetVisible 5]
+    [#B #PlacementSetVisible 6]
+    [#B #PlacementSetVisible 7]
+    [#B #PlacementSetVisible 8]
+    batch {
+        p #PartyMember1 face down
+        p #PartyMember2 move right
+        p #PartyMember4 move right
+        p #PartyMember3 move left
+        p #PartyMember5 move left
+    }
+    batch {
+        p #PartyMember2 move right
+        p #PartyMember4 face down
+        p #PartyMember3 move left
+        p #PartyMember5 face down
+    }
+    batch {
+        p #PartyMember2 face down
+        p #PartyMember3 face down
+    }
+    pause 6
+    batch {
+        p #PartyMember1 bow head
+        p #PartyMember2 bow head
+        p #PartyMember3 bow head
+        p #PartyMember4 bow head
+        p #PartyMember5 bow head
+    }
+    pause 2
+    batch {
+        p #PartyMember1 face down
+        p #PartyMember2 face down
+        p #PartyMember3 face down
+        p #PartyMember4 face down
+        p #PartyMember5 face down
+    }
+    pause 8
+    batch {
+        p #PartyMember1 face up
+        p #PartyMember2 face up
+        p #PartyMember3 face up
+        p #PartyMember4 face up
+        p #PartyMember5 face up
+    }
+    pause 8
+
+    message $35 from bank 3
+    
+    pause 2
+
+    [#B #If #PartyFormation 0] {
+        batch {
+            p #PartyMember1 move up
+            p #PartyMember2 move up
+            p #PartyMember3 move up
+            player move up
+        }
+    }
+
+    [#B #If #not_PartyFormation 0] {
+        batch {
+            p #PartyMember4 move up
+            p #PartyMember5 move up
+            player move up
+        }
+    }
+
+    batch {
+        p #PartyMember1 move up
+        p #PartyMember2 move up
+        p #PartyMember3 move up
+        p #PartyMember4 move up
+        p #PartyMember5 move up
+        player move up
+    }
+
+    fight $B7
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.crystal]
+
+    pause 8
+
+    [#B #If #Flag #flag.fe_UptCo] {
+        [#B #GotoEvent $E3]
+    }
+
+    [#B #Ending_SaveEndgameTime]
+
+    message $36 from bank 3   // "_I _will _not _perish_ _as _long _as _there _is_"
+    sound #Earthquake
+    pause 24
+    sound $5E
+    pause 24
+    sound #Explosion
+    batch 8 {
+        screen flash
+    }
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    pause 8
+    sound #Explosion
+    batch 4 {
+        screen flash
+    }
+    toggle screen shake
+    batch 5 {
+        screen up down
+    }
+    toggle screen shake
+    sound #Explosion
+    batch 4 {
+        screen flash
+    }
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    pause 8
+    music $42
+    toggle screen shake
+    batch 80 {
+        screen up down
+    }
+    toggle screen shake
+    pause 16
+    batch 15 {
+        p #WaveringFlame toggle visible
+    }
+    toggle music fade
+    toggle tint $00
+    toggle screen shake
+
+    // for convenience, define ending in separate file
+    [#B #GotoEvent $1C]    
+}
+
+text(bank 3 message $80) {
+My name is Zeromus_
+I am_ the hatred_!!
+}
+
+text(bank 3 message $35) {
+ Zeromus!
+
+
+
+ For all those living
+ on the earth_
+
+
+ We will destroy you!
+}

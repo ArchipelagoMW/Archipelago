@@ -1,0 +1,365 @@
+// create new trigger for leaving Zemus room via the north
+mapgrid($172 15 0) { 66 \ 3B }
+trigger(#LunarCoreZemusRoom 1)
+{
+    position 15 0
+    teleport #fe_LunarianRoom at 10 16 facing up
+}
+
+// dialog triggers for NPCs in Zeromus room
+npc(#WaveringFlame)
+{
+    eventcall {
+        $28 // map message 1
+    }
+}
+
+npc(#GolbezFallen)
+{
+    eventcall {
+        $29 // map message 2
+    }
+}
+
+// handled by dialogue_rando to be more inclusive
+// text(map #LunarCoreZemusRoom message $01) {
+// Zeromus:Hey guys.
+// }
+
+text(map #LunarCoreZemusRoom message $02) {
+[name $f0]:Weird-looking rug.
+}
+
+// -------------------------------------------------
+// Go go gadget hidden Fusoya room!
+
+map(#fe_LunarianRoom) {
+    battle background $0D 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $65  // hummingway
+    tileset $0C
+    placement group $7d
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #ChocoboForest
+    background grid $62 scroll both direction up speed 2
+    name index $80
+}
+
+placement($17d 0)
+{
+    npc #fe_FusocoboFight
+    position 10 5
+    walking off
+    tangible
+    face down
+    palette 2
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17d 1)
+{
+    npc #fe_Fusocobo
+    position 3 5
+    walking on
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17d 2)
+{
+    npc #fe_Fusocobo
+    position 17 5
+    walking on
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17d 3)
+{
+    npc #fe_Fusocobo
+    position 1 11
+    walking on
+    tangible
+    face right
+    palette 1
+    turning on
+    marching on
+    speed 3
+}
+
+placement($17d 4)
+{
+    npc #fe_Fusocobo
+    position 4 10
+    walking on
+    tangible
+    face up
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17d 5)
+{
+    npc #fe_Fusocobo
+    position 5 13
+    walking on
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 1
+}
+
+placement($17d 6)
+{
+    npc #fe_Fusocobo
+    position 8 16
+    walking on
+    tangible
+    face right
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17d 7)
+{
+    npc #fe_Fusocobo
+    position 10 12
+    walking on
+    tangible
+    face up
+    palette 1
+    turning on
+    marching on
+    speed 3
+}
+
+placement($17d 8)
+{
+    npc #fe_FusocoboWhite
+    position 13 11
+    walking on
+    tangible
+    face left
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17d 9)
+{
+    npc #fe_Fusocobo
+    position 11 13
+    walking on
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 1
+}
+
+placement($17d 10)
+{
+    npc #fe_Fusocobo
+    position 16 12
+    walking on
+    tangible
+    face up
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17d 11)
+{
+    npc #fe_Fusocobo
+    position 17 8
+    walking on
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 3
+}
+
+
+npc(#fe_Fusocobo)
+{
+    sprite #Fusoya
+    default active
+    eventcall { 
+        $27 // map message 0
+    }
+}
+
+npc(#fe_FusocoboWhite)
+{
+    sprite #Fusoya
+    default active
+    eventcall {
+        $50
+    }
+}
+
+npc(#fe_FusocoboFight)
+{
+    sprite #Fusoya
+    default active
+    eventcall {
+        $F4
+    }
+}
+
+// alter white chocobo event to point to different message if in bonus room
+event($50)  //Touching a White Chocobo
+{
+    [#B #If #Map #map.fe_LunarianRoom] {
+        map message 1
+    }
+    [#B #If #not_Map #map.fe_LunarianRoom] {
+        message $10   // "White Chocobo!"
+    }
+
+    sound #Cure
+    toggle tint $2F
+    batch 8 {
+        screen flash
+    }
+    toggle tint $00
+    give mp 500
+    message $15   // "MP recovered!"
+}
+
+event($F4) {
+    confirm message $106
+    fight $b9
+    p 0 spin jump
+    p 0 spin jump
+    map message 2
+cancel:
+}
+
+text(map #fe_LunarianRoom message 0) {
+Fu__pa__?
+Fu__pa__?
+}
+
+text(map #fe_LunarianRoom message 1) {
+Fu__pa!
+}
+
+text(map #fe_LunarianRoom message 2) {
+Fupa!
+}
+
+text(bank 1 message $106) {
+Fu__pa?[next]
+}
+
+formation($1b9)
+{
+    monsters {
+        $53 x 1
+    }
+    not calling
+    not floating enemies
+    arrangement $0f
+    can't run
+    continue music
+    character battle
+    gfx bits 0
+    cursor graph $00
+}
+
+text(monster name $53) {}
+
+monster($53)   // Dummy   
+{
+    boss
+    level 69
+    hp 65000
+    gp 0
+    xp 0
+
+    // stats taken from King-Ryu
+    attack index $48         // (10, 80, 128)
+    defense index $DD        // (10, 80, 54)
+    magic defense index $D1  // (8, 80, 39)
+    speed index $25          // (34, 37)
+
+    drop index $3e
+    drop rate $00
+    attack sequence $f7  // reappropriate a script from a dev room fight
+    reaction sequence none
+    gfx {
+        size $4d
+        palette $0d
+        pointer $8000
+    }
+}
+
+ai_script($fa)
+{
+    chain {
+        use $AF
+        use $AF
+    }
+
+    pass
+
+    chain {
+        use $AF
+        use $AF
+        use $AF
+        use $AF
+    }
+
+    pass
+
+    use $AF
+    use $AF
+    use $AF
+    use $AF
+    use $AF
+    use $AF
+    use $AF
+    use $AF
+    use $AF
+    use $AF
+
+    pass
+
+    pass
+
+    chain {
+        use #Enemy_Hug
+        use #Enemy_Retreat
+    }
+}
+
+// the formation is set up to be "EvilWall"-like in baron_town.f4c,
+// as that code is always on and used to disable the effects it
+// has on formation F4, which is used in Baron town

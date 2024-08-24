@@ -1,0 +1,326 @@
+
+droptable($02) {
+    common #Antidote
+    uncommon #EchoNote
+    rare #Cross
+    mythic #Tent
+}
+
+droptable($03) {
+    common #EyeDrops
+    uncommon #Life
+    rare #Alarm
+    mythic #Soft
+}
+
+droptable($04) {
+    common #DietFood
+    uncommon #Mallet
+    rare #MaidKiss
+    mythic #Heal
+}
+
+droptable($05) {
+    common #FireArrow
+    uncommon #Bomb
+    rare #BigBomb
+    mythic #FireBomb
+}
+
+droptable($06) {
+    common #IceArrow
+    uncommon #Notus
+    rare #Boreas
+    mythic #Blizzard
+}
+
+droptable($07) {
+    common #LitArrow
+    uncommon #ThorRage
+    rare #ZeusRage
+    mythic #LitBolt
+}
+
+droptable($09) {
+    common #Antidote
+    uncommon #Unihorn
+    rare #PoisonArrow
+    mythic #PoisonArrow
+}
+
+droptable($0A) {
+    common #Ether1
+    uncommon #Stardust
+    rare #MoonVeil
+    mythic #ArtemisArrow
+}
+
+droptable($0B) {
+    common #MuteBell
+    uncommon #Unihorn
+    rare #HrGlass1
+    mythic #Ether1
+}
+
+droptable($0D) {
+    common #Soft
+    uncommon #Soft
+    rare #Soft
+    mythic #Soft
+}
+
+droptable($0E) {
+    common #MaidKiss
+    uncommon #MaidKiss
+    rare #MaidKiss
+    mythic #MaidKiss
+}
+
+droptable($0F) {
+    common #StarVeil
+    uncommon #Cure3
+    rare #Elixir
+    mythic #Glass
+}
+
+droptable($11) {
+    common #Cure1
+    uncommon #Cure2
+    rare #Heal
+    mythic #SomaDrop
+}
+
+droptable($12) {
+    common #LeatherHat
+    uncommon #Cure2
+    rare #Cabin
+    mythic #AgApple
+}
+
+droptable($13) {
+    common #Cap
+    uncommon #LeatherArmor
+    rare #Cure2
+    mythic #AgApple
+}
+
+droptable($14) {
+    common #FireBomb
+    uncommon #FireBomb
+    rare #FireBomb
+    // %flag no_cursed_rings on%
+    mythic #FireBomb
+    // %end%
+    // %flag no_cursed_rings off%
+    mythic #Cursed
+    // %end%
+}
+
+droptable($16) {
+    common #CharmHarp
+    uncommon #RubyRing
+    rare #StarVeil
+    mythic #CharmArrow
+}
+
+droptable($18) {
+    common #Tent
+    uncommon #ZeusRage
+    rare #ZeusRage
+    mythic #ZeusRage
+}
+
+droptable($1A) {
+    common #Stardust
+    uncommon #MoonVeil
+    rare #MoonVeil
+    mythic #MoonVeil
+}
+
+droptable($1B) {
+    common #FlameSpear
+    uncommon #BlizzardSpear
+    rare #WhiteSpear
+    mythic #Gungnir
+}
+
+droptable($1C) {
+    common #Notus
+    uncommon #Ether1
+    rare #Ether1
+    mythic #Ether1
+}
+
+droptable($1F) {
+    common #Heal
+    uncommon #Bacchus
+    rare #SamuraiArrow
+    mythic #SomaDrop
+}
+
+droptable($20) {
+    common #Bacchus
+    uncommon #Headband
+    rare #Strength
+    mythic #Zeus
+}
+
+droptable($21) {
+    common #Illusion
+    uncommon #Illusion
+    rare #Illusion
+    mythic #Illusion
+}
+
+droptable($22) {
+    common #Cure
+    uncommon #Rune
+    rare #Silence
+    mythic #Grimoire
+}
+
+droptable($23) {
+    common #Stardust
+    uncommon #StarVeil
+    rare #MoonVeil
+    mythic #AgApple
+}
+
+droptable($24) {
+    common #ThorRage
+    uncommon #ZeusRage
+    rare #LitBolt
+    mythic #AgApple
+}
+
+droptable($25) {
+    common #ZeusRage
+    uncommon #HrGlass3
+    rare #Soft
+    mythic #AuApple
+}
+
+droptable($27) {
+    common #Succubus
+    uncommon #Succubus
+    rare #AgApple
+    mythic #Lilith
+}
+
+droptable($29) {
+    common #ArtemisArrow
+    uncommon #MoonVeil
+    rare #Heroine
+    mythic #ArtemisBow
+}
+
+droptable($2B) {
+    common #EyeDrops
+    uncommon #Elixir
+    rare #HrGlass3
+    mythic #Protect
+}
+
+droptable($2C) {
+    common #Blizzard
+    uncommon #Shuriken
+    rare #DragonWhip
+    mythic #DragoonSpear
+}
+
+droptable($30) {
+    common #MaidKiss
+    uncommon #Ether2
+    rare #SomaDrop
+    mythic #Ribbon
+}
+
+droptable($31) {
+    common #LitBolt
+    uncommon #LitBolt
+// %flag drops_no_sirens on%
+    rare #AgApple
+// %end%
+// %flag drops_no_sirens off%
+    rare #Siren
+// %end%
+    mythic #AgApple
+}
+
+droptable($32) {
+    common #Vampire
+    uncommon #Vampire
+    rare #Succubus
+    mythic #Succubus
+}
+
+// %flag no_cursed_rings on%
+droptable($33) {
+    mythic #Cure1
+}
+// %end%
+
+// %flag drops_no_sirens off%
+droptable($34) {
+    common #Siren
+    uncommon #Siren
+    rare #Siren
+    mythic #Siren
+}
+// %end%
+
+droptable($35) {
+    common #SilkWeb
+    uncommon #SilkWeb
+    rare #GaiaDrum
+// %flag drops_no_sirens on%
+    mythic #GaiaDrum
+// %end%
+// %flag drops_no_sirens off%
+    mythic #Siren
+// %end%
+}
+
+droptable($36) {
+    common #Unihorn
+    uncommon #Coffin
+    rare #Coffin
+    mythic #CatClaw
+}
+
+droptable($38) {
+    common #Cure1
+    uncommon #Tent
+    rare #HrGlass1
+    mythic #HrGlass1    // normally Imp but we removed those
+}
+
+droptable($39) {
+    common #Life
+    uncommon #Soft
+    rare #Soft
+    mythic #Soft        // normally Cockatrice but we removed those
+}
+
+droptable($3A) {
+    common #Bomb
+    uncommon #Notus
+    rare #Kamikaze
+    mythic #Kamikaze    // normally Bomb summon but we removed those
+}
+
+droptable($3B) {
+    common #Cure2
+    uncommon #Unihorn
+    rare #HrGlass3
+    mythic #HrGlass3    // normally Mage summon but we removed those
+}
+
+droptable($3F) {
+    common #DkMatter
+    uncommon #DkMatter
+    rare #DkMatter
+    mythic #DkMatter
+}
+
+// Price changes US to JP embedded in items.f4c

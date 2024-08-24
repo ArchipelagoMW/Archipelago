@@ -1,0 +1,208 @@
+/**** NOTE: UNUSED, but preserved for reference ****/
+
+// use dummy item FC as our magic item for the pass shop
+text(item name $FC) {
+// %pass_slot shop%
+Pass
+// %end%
+}
+
+shop($1F) {
+    $FC
+}
+
+// this patch just sets the price on the dummy item; don't
+// feel like writing an item price compiler yet
+patch($0fa54c bus) {
+    8A
+}
+
+
+event($EF)  //Bring up Toroia pass shop
+{
+    consts(placement) {
+        8  PassSeller
+    }
+    shop $1F
+    [#B #If #Item $FC] {
+        player visible
+        take item $FC
+        // %pass_slot give%
+        give item #Pass
+        // %end%
+        map message 6
+        p #PassSeller move up
+        p #PassSeller move right
+        p #PassSeller move right
+        batch 5 {
+            p #PassSeller move down
+        }
+        p #PassSeller toggle visible
+        deactivate #PassSeller
+    }
+}
+
+text(map #ToroiaCafe message $06) {
+That was my last one.
+Now I can go home!
+}
+
+
+
+
+
+/*
+How to hack the pass shop so that you can only buy one thing.
+Necessary components:
+- Qty is locked to 1 when purchasing
+    - in the qty select sub, check for mode == Buy and
+       $1A00 == shop ID; refuse to move to other quantity 
+       if the values match
+    - question: if I choose a large quantity in the sell menu,
+       will the cursor stay there if I switch to the buy menu?
+    - also need to prevent the "10" display from appearing
+
+- Exit menu after purchase successfully made
+    - need to find where the "thank you" message comes from and gets dismissed
+    - need to find how to exit the menu after that
+
+Shop dissassembly memos:
+$1A00 - shop ID
+$1A01 - 0 = Weapon, 1 = Armor, 2 = Item
+$1B79 - 0 = Buy, 1 = Sell, 2 = Exit
+$1B7A - 0 = Qty 1, 1 = Qty XX
+$1B7C - value of XX when using Qty XX
+*/
+
+msfpatch {
+    .addr 0x01cb47
+    jsl $=PassShop__QtyHook
+
+    .addr 0x01c5fb
+    jsl $=PassShop__QtyHook
+}
+
+msfpatch {
+    PassShop__QtyHook:
+        // check if we are in the Pass Shop
+        lda $1a00
+        cmp #$1f
+        bne $+PassShop__QtyResume
+
+        // check if we are in the Buy menu
+        lda $1b79
+        bne $+PassShop__QtyResume
+
+        // checks passed.
+        // return to original code ignoring command input.
+        // (A already loaded with 0 from previous check)
+        rtl
+
+    PassShop__QtyResume:
+        // displaced original code
+        lda $01
+        and #$03
+        rtl
+}
+
+
+// don't display the quantity when buying in the pass shop
+msfpatch {
+    .addr 0x01c436
+        jsl $=PassShop__HideQty
+        beq $03
+}
+
+msfpatch {
+    PassShop__HideQty:
+        // check for pass shop
+        lda $1a00
+        cmp #$1f
+        bne $+PassShop__HideQty_Normal
+
+        // is pass shop; set quantity to 0 to bypass display
+        lda #$00
+        rtl
+
+    PassShop__HideQty_Normal:
+        // displaced code
+        ldy #$019A
+        lda $1b7c
+        rtl
+}
+
+// set qty to 1 when entering buy menu
+msfpatch {
+    .addr 0x01c3da
+        jsl $=PassShop__SetQty1
+}
+
+msfpatch {
+    PassShop__SetQty1:
+        // check for pass shop
+        lda $1a00
+        cmp #$1f
+        bne $+PassShop__SetQty1_Done
+
+        // is pass shop; force qty position to 1
+        stz $1b7a
+
+    PassShop__SetQty1_Done:
+        // displaced original code
+        lda $34
+        sta $db
+        rtl
+}
+
+
+// Exiting shop menu immediately after purchase
+// Patching inside purchase routine. So stack return addresses are:
+//   purchase item sub (3 bytes)
+//   buy-list navigation loop
+//   top level menu
+//   wherever top level menu was called from
+msfpatch {
+
+    PassShop__ExitAfterPurchase:
+        // check for correct shop
+        lda $1a00
+        cmp #$1f
+        bne $+PassShop__ExitAfterPurchase_Normal
+
+        // replicate check for buttons released
+        lda $02
+        ora $03
+        beq $+PassShop__ExitAfterPurchase_DoExit
+        rtl
+
+    PassShop__ExitAfterPurchase_DoExit:
+        // remember return address from hook function
+        plx
+        pla
+
+        // pop return addresses for other subs on stack
+        ply
+        ply
+        ply
+
+        // put return address back on stack
+        pha
+        phx
+
+        // make sure when we return, the check for no-buttons-pressed passes
+        lda #$00
+        rtl
+
+    PassShop__ExitAfterPurchase_Normal:
+        // displaced code
+        lda $02
+        ora $03
+        rtl
+
+}
+
+msfpatch {
+    .addr 0x01C740
+    jsl $=PassShop__ExitAfterPurchase    
+}
+

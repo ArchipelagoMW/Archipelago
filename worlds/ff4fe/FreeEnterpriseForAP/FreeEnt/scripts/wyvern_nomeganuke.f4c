@@ -1,0 +1,7 @@
+// remove MegaNuke from Wyvern
+ai_script(moon $25)
+{
+    condition 1
+    target self
+    use #Wall
+}

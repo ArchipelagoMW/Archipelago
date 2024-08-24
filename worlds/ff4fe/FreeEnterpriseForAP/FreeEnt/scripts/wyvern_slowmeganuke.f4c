@@ -1,0 +1,16 @@
+// give a turn or two before MegaNuke in Wyvern
+ai_script(moon $25)
+{
+    pass
+    pass
+
+    use #Enemy_MegaNuke
+
+    pass
+
+    pass
+
+    condition 1
+    target self
+    use #Wall
+}

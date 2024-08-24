@@ -1,0 +1,58 @@
+//-----------------------------------------------
+// path to Zot
+
+npc(#fe_ZotValet) {
+    sprite #Soldier
+    default active
+    eventcall {
+        $66
+    }
+}
+
+placement($56 10) {
+    npc #fe_ZotValet
+    position 5 14
+    walking off
+    tangible
+    face down
+    palette 3
+    turning on
+    marching on
+    speed 2    
+}
+
+event($66) {
+    confirm message $102
+    toggle music fade
+    sound #Glow
+    load map #Overworld at 36 83 on enterprise no transition no launch
+    vfx #ReturnToZot
+    load map #Zot1F at 8 26 facing right
+    player face right
+    music #Zot
+    toggle screen fade
+    player move right
+cancel:
+}
+
+text(bank 1 message $102) {
+I can take you to the
+Tower of Zot. Would you
+like to go?[next]
+}
+
+// delete cutscene trigger in cleric room
+mapgrid($56 5 16) { 25 }
+trigger(#ToroiaCastleClericRoom 2) { delete }
+
+//---------------------------------------------
+// don't land Enterprise after returning from tower
+event($8E)  //Exiting the Tower of Zot
+{
+    toggle music fade
+    toggle screen fade
+    load map #Overworld at 36 83 on enterprise no launch
+    player face left
+    music #Airship fade in
+    vfx #BigWhaleLanding
+}

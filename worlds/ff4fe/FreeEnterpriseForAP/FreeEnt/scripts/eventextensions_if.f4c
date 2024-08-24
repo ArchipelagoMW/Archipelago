@@ -1,0 +1,424 @@
+consts(eventext) {
+    // if condition types
+    $00    True
+    $01    Flag
+    $02    Item
+    $03    Job
+    $04    PartySize
+    $05    Map
+    $06    SelectedItem
+    $07    ActorFamily
+    $08    Character
+    $09    XPosition
+    $0A    YPosition
+    $0B    BigWhaleOnMap
+    $0C    PartyFormation
+    $0D    ChecksumValid
+    $0E    ObjectivesEnabled
+    $0F    AllObjectivesComplete
+    $10    RandoFlag
+    $11    ObjectiveComplete
+    $12    HasDkMatter
+    $13    HasEverCompletedSeed
+    $14    EnoughObjectivesComplete
+    $15    PartyFull
+    $16    PartyLeaderHasJob
+
+    $80    False
+    $81    not_Flag
+    $82    not_Item
+    $83    not_Job
+    $84    not_PartySize
+    $85    not_Map
+    $86    not_SelectedItem
+    $87    not_ActorFamily
+    $88    not_Character
+    $89    not_XPosition
+    $8A    not_YPosition
+    $8B    not_BigWhaleOnMap
+    $8C    not_PartyFormation
+    $8D    not_ChecksumValid
+    $8E    not_ObjectivesEnabled
+    $8F    not_AllObjectivesComplete
+    $90    not_RandoFlag
+    $91    not_ObjectiveComplete
+    $92    not_HasDkMatter
+    $93    not_HasEverCompletedSeed
+    $94    not_EnoughObjectivesComplete
+    $95    not_PartyFull
+    $96    not_PartyLeaderHasJob
+}
+
+msfpatch {
+    EvEx__If_Handlers:
+        [[
+            $_EvEx__If_Success       // this is the #If #True case
+            $_EvEx__If_Flag
+            $_EvEx__If_Item
+            $_EvEx__If_Job
+            $_EvEx__If_PartySize
+            $_EvEx__If_Map
+            $_EvEx__If_SelectedItem
+            $_EvEx__If_ActorFamily
+            $_EvEx__If_Character
+            $_EvEx__If_XPosition
+            $_EvEx__If_YPosition
+            $_EvEx__If_BigWhaleOnMap
+            $_EvEx__If_PartyFormation
+            $_EvEx__If_ChecksumValid
+            $_EvEx__If_ObjectivesEnabled
+            $_EvEx__If_AllObjectivesComplete
+            $_EvEx__If_RandoFlag
+            $_EvEx__If_ObjectiveComplete
+            $_EvEx__If_HasDkMatter
+            $_EvEx__If_HasEverCompletedSeed
+            $_EvEx__If_EnoughObjectivesComplete
+            $_EvEx__If_PartyFull
+            $_EvEx__If_PartyLeaderHasJob
+        ]]
+
+    .def EvEx__If_Param 0x09d8
+
+    // parameters: <condition type>, <condition param>, <bytes to advance program counter>
+    EvEx__If:
+        jsr $_EvEx__ReadParameters_3
+        lda $09d7
+        and #$7f
+        asl a
+        tax
+        lda $=EvEx__If_Handlers,x
+        sta $063d
+        inx
+        lda $=EvEx__If_Handlers,x
+        sta $063e
+        
+        jmp ($063d)
+
+    EvEx__If_Fail:
+        lda $09d7
+        and #$80
+        beq $+EvEx__If_Bypass
+        jmp $_EvEx__End
+
+    EvEx__If_Success:
+        lda $09d7
+        and #$80
+        bne $+EvEx__If_Bypass
+        jmp $_EvEx__End
+
+    EvEx__If_Bypass:
+        lda $09d3
+        clc
+        adc $09d9
+        sta $09d3
+        lda $09d4
+        adc #$00
+        sta $09d4
+        jmp $_EvEx__End
+
+    EvEx__If_Flag:
+        lda $_EvEx__If_Param
+        // code below is largely taken from 00:F133
+        pha         
+        lsr a
+        lsr a
+        lsr a
+        sta $3d
+        stz $3e
+        pla
+        and #$07
+        tay
+        // at this point: $3D = (flag >> 3), Y = (flag & 0x07)
+    
+        lda #$01
+    EvEx__If_Flag_LoopStart:
+        cpy #$0000
+        beq $+EvEx__If_Flag_LoopEnd
+        asl a
+        dey
+        bra $-EvEx__If_Flag_LoopStart
+    
+    EvEx__If_Flag_LoopEnd:
+        ldx $3d
+        and $1280,x
+        beq $03
+        jmp $_EvEx__If_Success
+        jmp $_EvEx__If_Fail
+
+
+    EvEx__If_Item:
+        lda $_EvEx__If_Param   // param is item number
+        ldx #$0000
+
+    EvEx__If_Item_InventoryLoopStart:
+        cmp $1440,x
+        bne $+EvEx__If_Item_InventoryLoopNext
+        lda $1441,x     // check quantity > 0
+        beq $03
+        jmp $_EvEx__If_Success
+        lda $_EvEx__If_Param
+    EvEx__If_Item_InventoryLoopNext:
+        inx
+        inx
+        cpx #$0060
+        bne $-EvEx__If_Item_InventoryLoopStart
+
+        ldx #$0000
+    EvEx__If_Item_EquipLoopStart:
+        lda $1000,x
+        and #$1f
+        beq $+EvEx__If_Item_EquipLoopNext   // check if character slot is empty
+        lda $_EvEx__If_Param
+        cmp $1030,x
+        beq $+EvEx__If_Item_EquipLoopFound
+        cmp $1031,x
+        beq $+EvEx__If_Item_EquipLoopFound
+        cmp $1032,x
+        beq $+EvEx__If_Item_EquipLoopFound
+        cmp $1033,x
+        bne $+EvEx__If_Item_EquipLoopOtherHand
+        lda $1034,x
+        bne $+EvEx__If_Item_EquipLoopFound
+        lda $_EvEx__If_Param
+    EvEx__If_Item_EquipLoopOtherHand:
+        cmp $1035,x
+        bne $+EvEx__If_Item_EquipLoopNext
+        lda $1036,x
+        bne $+EvEx__If_Item_EquipLoopFound
+    EvEx__If_Item_EquipLoopNext:
+        jsr $_EvEx__XPlus40
+        cpx #$0140
+        bne $+EvEx__If_Item_EquipLoopStart
+        jmp $_EvEx__If_Fail
+    EvEx__If_Item_EquipLoopFound:
+        jmp $_EvEx__If_Success
+
+    EvEx__If_Job:
+        // param is job to check for
+        ldx #$0000
+    EvEx__If_Job_LoopStart:
+        lda $1001,x
+        and #$0f
+        cmp $_EvEx__If_Param
+        bne $+EvEx__If_Job_LoopNext
+        lda $1000,x
+        and #$1f
+        beq $+EvEx__If_Job_LoopNext
+        jmp $_EvEx__If_Success
+    EvEx__If_Job_LoopNext:
+        jsr $_EvEx__XPlus40
+        cpx #$0140
+        bne $-EvEx__If_Job_LoopStart
+        jmp $_EvEx__If_Fail
+}
+
+msfpatch {
+    EvEx__If_PartySize:
+        ldx #$0000
+    %LoopStart:
+        lda $1000,x
+        beq $+LoopNext
+        dec $_EvEx__Param2
+    %LoopNext:
+        jsr $_EvEx__XPlus40
+        cpx #$0140
+        bne $-LoopStart
+        lda $_EvEx__Param2
+        bne $+SizeMismatch
+        jmp $_EvEx__If_Success
+    %SizeMismatch:
+        jmp $_EvEx__If_Fail
+}
+
+msfpatch {
+    EvEx__If_PartyFull:
+        jsr $_Util__GetPartySize
+        cmp $=MaxPartySize
+        bcs $+Full
+        jmp $_EvEx__If_Fail
+    %Full:
+        jmp $_EvEx__If_Success
+}
+
+msfpatch {
+    EvEx__If_Map:
+        lda $_EvEx__Param2
+        cmp $1702
+        beq $03
+        jmp $_EvEx__If_Fail
+        jmp $_EvEx__If_Success
+
+    EvEx__If_SelectedItem:
+        lda $_EvEx__Param2
+        cmp $08fb
+        beq $03
+        jmp $_EvEx__If_Fail
+        jmp $_EvEx__If_Success
+
+
+    EvEx__If_ActorFamily:
+        ldy #$0000
+    EvEx__If_ActorFamily_SlotLoopStart:
+        lda $1000,y
+        and #$1f
+        beq $+EvEx__If_ActorFamily_SlotLoopNext
+        asl a
+        tax
+        
+        lda $218980,x
+        cmp $_EvEx__Param2
+        bne $03
+        jmp $_EvEx__If_Success
+        
+        lda $218981,x
+        cmp $_EvEx__Param2
+        bne $03
+        jmp $_EvEx__If_Success
+
+    EvEx__If_ActorFamily_SlotLoopNext:
+        jsr $_EvEx__YPlus40
+        cpy #$0140
+        bne $-EvEx__If_ActorFamily_SlotLoopStart
+
+        jmp $_EvEx__If_Fail
+
+    EvEx__If_Character:
+        ldy #$0000
+        lda $_EvEx__Param2
+        tax
+        lda $2189C0,x
+        sta $3d
+    EvEx__If_Character_LoopStart:
+        lda $1000,y
+        beq $+EvEx__If_Character_LoopNext
+        lda $1001,y
+        and #$0f
+        cmp $_EvEx__Param2
+        bne $03
+        jmp $_EvEx__If_Success
+        cmp $3d
+        bne $03
+        jmp $_EvEx__If_Success
+
+    EvEx__If_Character_LoopNext:
+        jsr $_EvEx__YPlus40
+        cpy #$0140
+        bne $-EvEx__If_Character_LoopStart
+
+        jmp $_EvEx__If_Fail
+
+
+    EvEx__If_XPosition:
+        lda $_EvEx__If_Param
+        cmp $1706
+        bne $03
+        jmp $_EvEx__If_Success
+        jmp $_EvEx__If_Fail
+
+
+    EvEx__If_YPosition:
+        lda $_EvEx__If_Param
+        cmp $1707
+        bne $03
+        jmp $_EvEx__If_Success
+        jmp $_EvEx__If_Fail    
+
+
+    EvEx__If_BigWhaleOnMap:
+        lda $_EvEx__If_Param
+        cmp $1727
+        bne $03
+        jmp $_EvEx__If_Success
+        jmp $_EvEx__If_Fail            
+
+
+    EvEx__If_PartyFormation:
+        lda $_EvEx__If_Param
+        and #$01
+        sta $_EvEx__If_Param
+
+        lda $16a8
+        and #$01
+        cmp $_EvEx__If_Param
+        
+        bne $03
+
+        jmp $_EvEx__If_Success
+        jmp $_EvEx__If_Fail            
+}
+
+msfpatch {
+    EvEx__If_ChecksumValid:
+        jsr $_FirstLaunch__Check
+        bcs $+Mismatch
+        jmp $_EvEx__If_Success
+    %Mismatch:
+        jmp $_EvEx__If_Fail
+}
+
+msfpatch {
+    EvEx__If_RandoFlag:
+        lda #$00
+        xba
+        lda $_EvEx__If_Param
+        tax
+        lda $21f0d0,x  // [hardcoded]
+        beq $+Disabled
+        jmp $_EvEx__If_Success
+    %Disabled:
+        jmp $_EvEx__If_Fail
+}
+
+msfpatch {
+    EvEx__If_HasDkMatter:
+        stz $1680
+        ldx #$0000
+    %CheckLoop:
+        lda $1440,x
+        cmp #$fb
+        bne $+Next
+        lda $1441,x
+        clc
+        adc $1680
+        bcc $+NoOverflow
+        lda #$ff
+    %NoOverflow:
+        sta $1680
+    %Next:
+        inx
+        inx
+        cpx #$0060
+        bcc $-CheckLoop
+
+        lda $1680
+        cmp $_EvEx__If_Param
+        bcc $+Fail
+        jmp $_EvEx__If_Success
+    %Fail:
+        jmp $_EvEx__If_Fail
+}
+
+msfpatch {
+    EvEx__If_HasEverCompletedSeed:
+        lda $=Stats_EverCompleted
+        beq $+Fail
+        jmp $_EvEx__If_Success
+    %Fail:
+        jmp $_EvEx__If_Fail
+}
+
+msfpatch {
+    EvEx__If_PartyLeaderHasJob:
+        lda $1703 // party leader
+        jsr $_Util__SlotToPartyOffset
+        lda $1000,x
+        beq $+NoMatch
+        lda $1001,x
+        and #$0f
+        cmp $_EvEx__If_Param
+        bne $+NoMatch
+        jmp $_EvEx__If_Success
+    %NoMatch:
+        jmp $_EvEx__If_Fail
+        
+}

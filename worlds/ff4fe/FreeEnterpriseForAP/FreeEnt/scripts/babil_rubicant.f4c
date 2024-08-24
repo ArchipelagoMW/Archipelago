@@ -1,0 +1,292 @@
+// make flames independent from Damcyan flames
+placement($AC 5)  //#BabilB5
+{ npc #RubicantFlames }
+
+event($9B)  //Ninja into Bab-il
+{
+    // autodetected map #BabilB1
+    player face left
+    player toggle turning
+    player move right
+    player toggle turning
+    toggle run
+    player face down
+    player face right
+    player face up
+    player face left
+    player face down
+    player face right
+    player face up
+    player face left
+    player face down
+    player face right
+    player face up
+    player face left
+    sound #Jump
+    player move left
+    player invisible
+    batch 3 {
+        player move left
+    }
+    player visible
+    toggle run
+}
+
+event($A0)  //Ninja out of Bab-il
+{
+    // autodetected map #BabilB1
+    player toggle turning
+    player move left
+    player toggle turning
+    toggle run
+    player face down
+    player face right
+    player face up
+    player face left
+    player face down
+    player face right
+    player face up
+    player face left
+    player face down
+    player face right
+    player face up
+    player face left
+    sound #Jump
+    player move right
+    player invisible
+    batch 3 {
+        player move right
+    }
+    player visible
+    toggle run
+}
+
+//--------------------------------------------------
+// King/Queen Eblan stuff
+
+placement($AC 6)  //#BabilB5
+{
+    npc #fe_DynamicNPC
+    // %kingqueen_slot sprite left palette%
+    // %end%
+}
+
+placement($AC 7)  //#BabilB5
+{
+    npc #fe_DynamicNPC
+    // %kingqueen_slot sprite right palette%
+    // %end%
+}
+
+npc(#Rubicant1) {
+    sprite
+        // %rubicant_slot sprite main%
+        #sprite.Rubicant
+        // %end%
+}
+
+placement($AC 0) {
+    // %rubicant_slot sprite main palette%
+    // %end%
+}
+
+event($A1)  //Fighting Edge's parents
+{
+    consts(placement) {
+        0   Rubicant1
+        1   Edge1
+        2   Rosa1
+        3   Kain1
+        4   AdultRydia1
+        5   FireMagic
+        6   KingBaron
+        7   Queen1
+    }
+    // autodetected map #BabilB5
+    player face up
+    sound $7E
+    batch 20 {
+        screen flash
+    }
+    [#B #LoadExtraNPCPalette #rando.kingqueen_slot]
+    music #Surprise
+    batch 11 {
+        p #Queen1 toggle visible
+        p #KingBaron toggle visible
+    }
+    pause 2
+    player move up
+    player move up
+    music #BossBattle
+    batch 1 {
+        p #KingBaron toggle visible
+        p #Queen1 toggle visible
+    }
+    [#B #Rando_BossBattle #rando.kingqueen_slot]
+
+    [#B #ResetNPCPalette]
+
+    player face up
+    music #None
+    [#B #Objectives_TickBossSlot #rando.kingqueen_slot]
+    [#B #Rando_PostBossBattle #rando.kingqueen_slot]
+    pause 8
+    sound #Glow
+    toggle tint $D7
+    sound #Fire
+    p #FireMagic toggle visible
+    pause 6
+    batch 11 {
+        p #FireMagic toggle visible
+        p #Rubicant1 toggle visible
+    }
+    music #Zot fade in
+    toggle tint $00
+    pause 4
+    player move up
+
+    [#B #Text_LoadSpellName 0 #spell.Flood]
+    [#B #Text_LoadSpellName 1 #spell.Blitz]
+    music #DecisiveBattle
+    [#B #If #Character #character.Edge] {
+        message $136
+    }
+    [#B #If #not_Character #character.Edge] {
+        message $135
+    }
+    
+    give spell #Edge #Flood
+    give spell #Edge #Blitz
+    activate #Rubicant1
+    set #FoughtEdgeParents
+}
+
+// %flag characters_no_duplicates on%
+text(bank 1 message $135) {
+[Edge] acquired
+[name $e0] and [name $e1],
+wherever he is!
+}
+
+text(bank 1 message $136) {
+[Edge] acquired
+[name $e0] and [name $e1]!
+}
+// %end%
+
+// %flag characters_no_duplicates off%
+text(bank 1 message $135) {
+All [Edge]s acquired
+[name $e0] and [name $e1],
+wherever they are!
+}
+
+text(bank 1 message $136) {
+All [Edge]s acquired
+[name $e0] and [name $e1]!
+}
+// %end%
+
+// need to rename Flood and Blitz to not start
+// with a space
+text(spell name #Flood) {[$15]Flood}
+text(spell name #Blitz) {[$15]Blitz}
+
+
+// alter messages in King/Queen fight
+ai_script($C3)
+{
+    // %free boss%
+    message $30   // "King:I will bring you"
+    message $31   // " all down to the Hades!"
+    // %end%
+    pass
+    
+    use #Fire2
+    
+    pass
+    
+    use #Fire2
+    
+    use #Fire2
+    
+    // %free boss%
+    pass
+    
+    darken $00
+    music #Sad
+    target type 1 monsters
+    use #CommandEnemy
+    set sprite $1F
+    condition 1
+    wait
+    
+    target self
+    use #Enemy_Vanish
+    // %end%
+}
+
+ai_script($C4)
+{
+    // %free boss%
+    target self
+    use #Enemy_Vanish
+    // %end%
+
+    use #Fire1
+}
+
+
+//---------------------------------------
+// Rubicant fight
+
+event($0E)  //Rubicant main battle
+{
+    consts(placement) {
+        0   Rubicant1
+        1   Edge1
+        2   Rosa1
+        3   Kain1
+        4   AdultRydia1
+        5   FireMagic
+        8   KaipoInnMysidiaAirshipSoldier_A
+        9   KaipoInnMysidiaAirshipSoldier_B
+        10   KaipoInnMysidiaAirshipSoldier_C
+        11   Chamberlain
+    }
+    // autodetected map #BabilB5
+    toggle tint $87
+    [#B #Rando_LoadWackySprite 1 1]
+    sound #HealingPot
+    vfx #HealingPot
+    batch 8 {
+        screen flash
+    }
+    message $0A   // "HP and MP recovered!"
+    toggle tint $00
+    clear status 
+    restore hp
+    restore mp
+    music #DecisiveBattle
+    [#B #Rando_BossBattle #rando.rubicant_slot]
+
+    player face up
+    music #None
+    [#B #Objectives_TickBossSlot #rando.rubicant_slot]
+    [#B #Rando_PostBossBattle #rando.rubicant_slot]
+    pause 6
+    sound #Glow
+    toggle tint $D7
+    sound #Fire
+    batch 11 {
+        p #Rubicant1 toggle visible
+        p #FireMagic toggle visible
+    }
+    pause 4
+    p #FireMagic toggle visible
+    toggle tint $00
+    player face up
+    music #Babil
+    deactivate #Rubicant1
+    set #RubicantBattle
+}

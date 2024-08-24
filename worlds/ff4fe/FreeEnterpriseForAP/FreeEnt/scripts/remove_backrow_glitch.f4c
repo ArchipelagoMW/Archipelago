@@ -1,0 +1,17 @@
+// Fix long range bit glitch
+msfpatch {
+    .addr $039d9a
+        jml $=LongRangeFix
+
+    .new
+    LongRangeFix:
+        and #$20  // displaced check
+        beq $+ClearLongRangeBit
+        jml $039d9e
+    %ClearLongRangeBit:
+        ldy #$0001
+        lda ($80),y
+        and #$df
+        sta ($80),y
+        jml $039da7
+}

@@ -1,0 +1,69 @@
+msfpatch {
+    // rewrite the big chocobo menu handling to instead do a save menu
+    .addr $01ccd3
+        jsr $873a  // preserve VRAM
+    Wacky__SaveUsBigChocobo_WhistleEntryPoint:
+        jsr $8c7f  // menu init
+        jmp $cb66  // do menu
+    Wacky__SaveUsBigChocobo_SaveMenuComplete:
+        lda $1a88
+        bne $+ReturnFromWhistle
+        jmp $873f  // thunk to VRAM restore
+    %ReturnFromWhistle:
+        rts
+
+    // use extra space here for extra functionality
+    Wacky__SaveUsBigChocobo_CancelCheck:
+        bcc $+Canceled
+        lda $1a3c
+        jmp $cbbb
+    %Canceled:
+        jsr $9484  // fade out
+        jsr $8d2f  // tilemap init
+        jsr $8d6c  // OAM init
+        jsr $824f  // push OAM to VRAM
+        jmp $cb7c  // loop back to main save menu
+
+
+    .addr $01cbff
+        jmp $_Wacky__SaveUsBigChocobo_SaveMenuComplete
+
+    .addr $01cbb6
+        jmp $_Wacky__SaveUsBigChocobo_CancelCheck
+
+    .addr $01CCB7
+        jsr $_Wacky__SaveUsBigChocobo_WhistleEntryPoint
+}
+
+// force save option in main menu to always be disabled
+msfpatch {
+    // force grey text
+    .addr $018934
+        lda #$00
+        nop
+    // force "disabled" effect when selected
+    .addr $01CB5B
+        lda #$00
+        nop
+}
+
+// prevent Whistle use while in vehicle
+msfpatch {
+    .addr $01A328
+        jml $=Wacky__SaveUsBigChocobo_WhistleCheck
+    
+    .new
+    Wacky__SaveUsBigChocobo_WhistleCheck:
+        lda $1704
+        bne $+InVehicle
+
+        // displaced inventory updates
+        dec $1441,x
+        bne $+StillHaveWhistles
+        jml $01a32d
+    %StillHaveWhistles:
+        jml $01a330
+    
+    %InVehicle:
+        jml $01a33e
+}

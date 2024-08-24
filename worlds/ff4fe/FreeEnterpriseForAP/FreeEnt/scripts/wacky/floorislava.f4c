@@ -1,0 +1,5 @@
+// all tiles are damage tiles
+msfpatch {
+    .addr $0095E7
+        nop nop
+}

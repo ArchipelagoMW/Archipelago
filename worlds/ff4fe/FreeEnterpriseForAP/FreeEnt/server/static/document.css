@@ -1,0 +1,84 @@
+#cover.generic {
+    background-color: #112;
+    max-height: 16rem;
+}
+
+#cover.changelog {
+    background-image: url('background-cecils.jpg');
+    max-height: none;
+}
+
+#cover.resources {
+    background-image: url('background-party.jpg');
+    max-height: none;
+}
+
+#cover.details {
+    background-image: url('background-kain.jpg');
+    max-height: none;
+}
+
+#document {
+    max-width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    color: #a0a098;
+    line-height: 1.3em;
+}
+
+#document h1 {
+    font-family: 'Open Sans Condensed', sans-serif;
+    text-transform: uppercase;
+    color: rgb(254, 254, 254);
+    font-size: 1.8rem;
+    margin-top: 1.5em;
+    background-color: #444;
+    padding: 0.4em;
+    text-align: center;
+    border-radius: 0.5em;
+}
+
+#document h2 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #f4f4f4;
+    margin-top: 1.5em;
+}
+
+#document li {
+    margin-top: 0.9rem;
+    margin-bottom: 0.9rem;
+}
+
+#document code {
+    background-color: rgba(0,0,0,0.5);
+    border: 1px solid #333;
+    color: #eee;
+    padding: 0.1em 0.3em 0.1em 0.3em;
+}
+
+#document a {
+    color: #8ef;
+    text-decoration: underline;
+    text-decoration-color: #278;
+}
+
+#document table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#document th {
+    text-align: left;
+    padding: 0.1em 0.5em 0.1em 0.5em;
+    background-color: #448;
+    color: #fed;
+    font-weight: normal;
+    font-style: italic;
+}
+
+#document td {
+    border: 1px solid #444;
+    padding: 0.1em 0.5em 0.1em 0.5em;
+}

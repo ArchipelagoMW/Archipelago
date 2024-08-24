@@ -1,0 +1,260 @@
+//-------------------------------------------------------------------
+// set up Hook item
+consts(item) {
+    $FC     fe_Hook
+}
+text(item name #fe_Hook) {Hook}
+
+
+//-------------------------------------------------------------------
+// make PinkPuffs just directly drop Adamant Armor
+droptable($28) {
+    common #Ether2
+    uncommon #Elixir
+    rare #NinjaStar
+    mythic 
+        // %pink_tail_item const%
+        #AdamantArmor
+        // %end%
+}
+
+
+//-------------------------------------------------------------------
+// support code for key item randomization
+
+msfpatch {
+    SetPlotFlag:
+        // copy of $00f133
+        pha
+        lsr a
+        lsr a
+        lsr a
+        sta $3d
+        stz $3e
+        pla
+        and #$07
+        tay
+
+        lda #$01
+    SetPlotFlag_LoopStart:
+        cpy #$0000
+        beq $05
+        asl a
+        dey
+        jmp $_SetPlotFlag_LoopStart
+        ldx $3d
+        ora $1280,x
+        sta $1280,x
+
+        rts
+
+
+    KeyItemEx__KeyItemFlags:
+        [[
+        FC 36   // hook
+        F5 60   // dark crystal
+        F1 61   // earth crystal
+        EE 63   // package
+        19 65   // legend sword
+        00
+        ]]
+
+    KeyItemEx__SetFlagForItem:
+        // A contains item in question
+        sta $3d
+        ldx #$0000
+    KeyItemEx__SetFlagForItem_LoopStart:
+        lda $=KeyItemEx__KeyItemFlags,x
+        beq $+KeyItemEx__SetFlagForItem_Done
+        cmp $3d
+        beq $+KeyItemEx__SetFlagForItem_Found
+        inx
+        inx
+        jmp $_KeyItemEx__SetFlagForItem_LoopStart
+
+    KeyItemEx__SetFlagForItem_Found:
+        inx
+        lda $=KeyItemEx__KeyItemFlags,x
+        jsr $_SetPlotFlag
+    KeyItemEx__SetFlagForItem_Done:
+        rts
+
+
+
+    KeyItemEx__IsKeyItem:
+        cmp #$19  // legend sword
+        beq $+KeyItemEx__IsKeyItem_Yes
+        cmp #$3e  // spoon
+        beq $+KeyItemEx__IsKeyItem_Yes
+        cmp #$c8  // crystal
+        beq $+KeyItemEx__IsKeyItem_Yes
+        cmp #$fc  // hook
+        beq $+KeyItemEx__IsKeyItem_Yes
+
+        cmp #$ee
+        bcc $+KeyItemEx__IsKeyItem_No
+        cmp #$fb
+        bcs $+KeyItemEx__IsKeyItem_No
+
+
+    KeyItemEx__IsKeyItem_Yes:
+        sec
+        rts
+
+    KeyItemEx__IsKeyItem_No:
+        clc
+        rts
+}
+
+
+//-------------------------------------------------------------------
+// Fix the message that shows up when you try to not take a key item
+
+// fix address to use
+msfpatch { 
+    .addr $01d7ec  
+        [[ $_MenuData__MustTakeItem ]] // string itself defined in menu_text.f4c
+}
+
+//-------------------------------------------------------------------
+// Treasure menu: when receiving special item codes FC+, only allow 
+//  "Take All" and have it just exit the menu
+
+// hook into code that displays command names at top
+msfpatch {
+    .addr $01d803
+        jml $=TreasureMenu_TopLevelText
+}
+
+msfpatch {
+    TreasureMenu_TopLevelText:
+        lda $ff28
+        cmp #$fc  // check for hook or other special items
+        bcs $+IsPlaceholderItem
+
+        ldy #$ddd1  // use normal text
+    %Return:
+        // need to use LongCall to perform displaced subroutine call
+        ldx #$82fb
+        jsr $_MK_DoLongCallX
+
+        // return to code after displaced code
+        jml $01d809
+
+    %IsPlaceholderItem:
+        // use custom text
+        ldy #$_MenuData__TreasureMenuTakeOnly
+        bra $-Return
+}
+
+
+// hook into button press routine for top level of Treasure menu
+// and do alternate routine if we are receiving the hook/special item codes
+msfpatch {
+    .addr $01d50c
+        jml $=TreasureMenu_TopLevelCursor
+}
+
+msfpatch {
+    TreasureMenu_TopLevelCursor:
+        lda $ff28
+        cmp #$fc
+        bcs $+IsPlaceholderItem
+
+        // normal return: do displaced instructions and go back
+        lda $01
+        and #$03
+        jml $01d510
+
+    %IsPlaceholderItem:
+        // do our own cursor routine: only accept A and B and they
+        // just discard and exit
+        lda $00
+        and #$80
+        bne $+TakeItem
+        lda $01
+        and #$80
+        bne $+TakeItem
+
+        // return to original code after cursor checks
+        jml $01d541
+
+    %TakeItem:
+        // erase placeholder item from top list
+        stz $ff28
+        stz $ff29
+        // force "Exit" selection
+        lda #$ff
+        sta $60
+        // jump to code that cancels out of menu
+        jml $01d524
+}
+
+
+
+//------------------------------------------------------------------
+// unsellable item changes
+msfpatch {
+    Shop__UnsellableItemCheck:
+        cmp #$19  // Legend sword
+        beq $+Shop__UnsellableItemCheck_Unsellable
+        cmp #$c8  // Zeromus crystal
+        beq $+Shop__UnsellableItemCheck_Unsellable
+
+        cmp #$ec  // Pass
+        beq $+Shop__UnsellableItemCheck_PassCheck
+
+        // Hook is "sellable", but you can't have it in inventory
+        // so this is mostly to keep the ability to discard it
+        // if received from a MIAB chest
+        cmp #$fc  // #item.fe_Hook
+        beq $+Shop__UnsellableItemCheck_Sellable
+
+        cmp #$ee  // Key items
+        bcs $+Shop__UnsellableItemCheck_Unsellable
+
+        // item is sellable
+    Shop__UnsellableItemCheck_Sellable:
+        clc
+        rtl
+
+    Shop__UnsellableItemCheck_Unsellable:
+        sec
+        rtl
+
+    Shop__UnsellableItemCheck_PassCheck:
+        // Pass is sellable if pass is in shops
+        lda $=RandoFlag_pass_in_shop
+        beq $-Shop__UnsellableItemCheck_Unsellable
+        bra $-Shop__UnsellableItemCheck_Sellable
+
+    .addr $01c927
+        jsl $=Shop__UnsellableItemCheck
+        nop nop nop nop nop nop
+
+    .addr $01cf94
+        jsl $=Shop__UnsellableItemCheck
+        bcs $03
+        jmp $cfa2   // sellable
+        jmp $cfcf   // unsellable
+
+    .addr $01d787
+        jsl $=Shop__UnsellableItemCheck
+        nop nop nop nop nop nop
+
+    .addr $01d7d3
+        jsl $=Shop__UnsellableItemCheck
+        nop nop nop nop nop nop
+
+    .addr $01a25c
+        // this is a weird one
+        jsl $=Shop__UnsellableItemCheck
+        bcs $14
+        nop nop
+
+    // .addr $01a25c  // checks for Legend Sword and Zeromus Crystal but not key items?
+    // .addr $01a276  // already checks for Pass+
+    // .addr $01a397  // already checks for Pass+
+    // .addr $01b2c6  // only checks for Legend Sword? or may not even be a Legend Sword check
+    
+}

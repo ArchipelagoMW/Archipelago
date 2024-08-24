@@ -1,0 +1,103 @@
+placement($7C 0)
+{
+    npc #fe_DynamicNPC
+    position 19 9
+    walking off
+    tangible
+    face left
+    palette 0
+    turning off
+    marching off
+    speed 3
+}
+
+event($40) // guidingway introduction
+{
+    // %intro disable%
+    [#B #EndEvent]
+    // %end%
+
+    pause 4
+    player invisible
+    load map #BlackBG at 10 10 no transition
+    consts(placement)
+    {
+        0  Guidingway
+    }
+
+    p #Guidingway toggle visible
+    batch 9 {
+        p #Guidingway move left
+    }
+    p #Guidingway move down
+    pause 4
+
+    // %if wacky_challenge_enabled%
+    message #msg.fe_WackyChallengeIntro
+    sound #Crystal
+    batch 5 {
+        screen flash
+    }
+    message #msg.fe_WackyChallengeTitle
+    // %end%
+    // %if wacky_challenge_show_detail%
+    message #msg.fe_WackyChallengeDetail
+    // %end%
+
+    message #msg.fe_IntroSignout
+
+    p #Guidingway spin jump
+    p #Guidingway move up
+    batch 8 {
+        p #Guidingway move left
+    }
+    p #Guidingway toggle visible
+
+    load map #Overworld at 102 155 on enterprise no transition no launch
+    player visible
+}
+
+text(bank 1 message $114) {
+Your objectives for this
+run are__
+}
+
+text(bank 1 message $110) {
+          - [name $e2] -
+[name $e0]
+[name $e1]
+}
+
+// %flag objective_zeromus on%
+text(bank 1 message $115) {
+Complete {% required objective count text : all objectives %}
+in any order to earn the
+[crystal]Crystal,
+
+then defeat Zeromus on the
+moon to win the game.
+}
+// %end%
+
+// %flag objective_zeromus off%
+text(bank 1 message $115) {
+Complete {% required objective count text : all objectives %}
+in any order to win the
+game!
+}
+// %end%
+
+text(bank 1 message $10f) {
+Happy hunting!
+}
+
+text(bank 1 message $118) {
+You have been assigned
+the wacky challenge:
+}
+
+text(bank 1 message $119) {
+
+{% wacky challenge title: This is a bug! %}
+}
+

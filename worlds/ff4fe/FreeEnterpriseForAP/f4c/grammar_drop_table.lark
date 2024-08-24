@@ -1,0 +1,14 @@
+droptable_block_params : number
+
+droptable_block_body : droptable_entry*
+
+!droptable_entry : rarity droptable_item
+
+!rarity : "common"
+        | "uncommon"
+        | "rare"
+        | "mythic"
+
+?droptable_item : item_value
+                | "none"
+

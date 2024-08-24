@@ -1,0 +1,114 @@
+placement($7E 0) { speed 3 }
+placement($7E 1) { speed 3 }
+placement($7E 2) { speed 3 }
+placement($7E 3) { speed 3 }
+placement($7E 4) { speed 3 }
+placement($7E 5) { speed 3 }
+placement($7E 6) { speed 3 }
+placement($7E 7) { speed 3 }
+
+placement($7E 8) {
+    palette 2
+    face up
+    position 15 25
+    marching off
+    speed 3
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Mist
+    }
+
+    p #Mist toggle visible
+    pause 4
+    
+    sound #Mist
+
+    p 4 move up
+    p 4 move up
+
+    batch 2 {
+        p 4 move up
+        p 7 move up
+    }
+
+    batch {
+        p 4 move up
+        p 7 move up
+        p 5 move up
+    }
+
+    batch 2 {
+        p 4 move up
+        p 7 move up
+        p 5 move up
+        p 6 move up
+    }
+
+    batch {
+        p 7 move up
+        p 5 move up
+        p 6 move up
+        p 3 move up
+    }
+
+    batch 2 {
+        p 5 move up
+        p 6 move up
+        p 3 move up
+        p 1 move up
+    }
+
+    batch {
+        p 6 move up
+        p 3 move up
+        p 1 move up
+        p 2 move up
+    }
+
+    batch {
+        p 3 move up
+        p 1 move up
+        p 2 move up
+    }
+
+    batch {
+        p 1 move up
+        p 2 move up
+    }
+
+    batch 2 {
+        p 2 move up
+        p 0 move up
+    }
+
+    batch 2 {
+        p 0 move up
+    }
+
+    batch {
+        p 0 toggle visible
+        p 1 toggle visible
+        p 2 toggle visible
+        p 3 toggle visible
+        p 4 toggle visible
+        p 5 toggle visible
+        p 6 toggle visible
+        p 7 toggle visible
+    }
+
+    p #Mist toggle visible
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

@@ -1,0 +1,23 @@
+// %behemoth1 disable%
+trigger(#Bahamut2F 3)
+{
+    delete
+}
+mapgrid($15b 17 12) { 34 }
+// %end%
+
+// %behemoth2 disable%
+trigger(#BahamutFloor 0)
+{
+    delete
+}
+mapgrid($15c 8 26) { 34 }
+// %end%
+
+// %behemoth3 disable%
+trigger(#BahamutFloor 1)
+{
+    delete
+}
+mapgrid($15c 25 16) { 34 }
+// %end%

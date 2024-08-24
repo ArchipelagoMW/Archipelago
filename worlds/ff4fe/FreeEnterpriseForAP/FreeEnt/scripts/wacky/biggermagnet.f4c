@@ -1,0 +1,19 @@
+// do magnetism check for all battles
+msfpatch {
+    .addr $0380B2
+        jsl $=Wacky__AlwaysMagnetCheck
+        nop
+
+    .new
+    Wacky__AlwaysMagnetCheck:
+        // hardcoded check for dark elf's plot flag
+        lda $129c
+        and #$02
+        bne $+MagnetInEffect
+        stz $352c
+        rtl
+    %MagnetInEffect:
+        lda #$80
+        sta $352c
+        rtl
+}

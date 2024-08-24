@@ -1,0 +1,84 @@
+placement($7E 0) { speed 3 }
+placement($7E 1) { speed 3 }
+placement($7E 2) { speed 3 }
+placement($7E 3) { speed 3 }
+placement($7E 4) { speed 3 }
+placement($7E 5) { speed 3 }
+placement($7E 6) { speed 3 }
+placement($7E 7) { speed 3 }
+
+placement($7E 8) {
+    palette 1
+    face up
+    position 15 25
+    marching off
+}
+
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Titan
+    }
+
+    p #Titan toggle visible
+    pause 5
+    player toggle turning
+    p #Titan move up
+    
+    sound #Quake
+
+    pause 3
+    toggle screen shake
+    pause 3
+
+    batch {
+        p 5 move down
+    }
+    batch {
+        p 5 toggle visible
+    }
+    batch {
+        p 6 move down
+        p 2 move down
+    }
+    batch {
+        p 6 toggle visible
+        p 2 toggle visible
+    }
+    batch {
+        p 4 move down
+        p 7 move down
+    }
+    batch {
+        p 4 toggle visible
+        p 7 toggle visible
+    }
+    batch {
+        p 1 move down
+        p 3 move down
+        p 0 move down
+    }
+    batch {
+        p 1 toggle visible
+        p 3 toggle visible
+        p 0 toggle visible
+    }
+
+    toggle screen shake
+
+    p #Titan move down
+    p #Titan toggle visible
+    player toggle turning
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

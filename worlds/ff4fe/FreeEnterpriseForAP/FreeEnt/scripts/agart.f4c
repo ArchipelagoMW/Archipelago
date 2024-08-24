@@ -1,0 +1,68 @@
+npc(#WellSign)
+{
+    eventcall {
+        $84   //Using Magma Key, opening Underworld
+    }
+}
+
+event($84)  //Using Magma Key, opening Underworld
+{
+    [#B #If #not_Item #item.Magma] {
+        map message 0 // looks deep
+        [#B #EndEvent]
+    }
+
+    select item #Magma
+    toggle music fade
+    take item #Magma
+    clear #fe_HasMagmaKey
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.magma_key]
+    pause 16
+    music $43
+    pause 56
+
+    [#B #If #Flag #flag.UnderworldOpen] {
+        pause 12
+        message $A4 // that's gone
+
+        [#B #Objectives_Tick #objective.quest_magma]
+
+        music #Town fade in
+        [#B #EndEvent]
+    }
+
+    toggle tint $D8
+    sound #Earthquake
+    toggle screen shake
+    pause 32
+    music $42
+    toggle screen shake
+    batch 80 {
+        screen up down
+    }
+    toggle screen shake
+    vfx #AgartMountainExplosion
+    load map #AgartWell at 9 10 
+    player face up
+    toggle screen shake
+    toggle music fade
+    toggle screen fade
+    set #UnderworldOpen
+    toggle music fade
+    toggle screen shake
+    pause 6
+
+    vfx #PopWarpStack
+    [#B #Objectives_Tick #objective.quest_magma]
+    music #Town fade in
+    toggle tint $00
+    sound #None
+}
+
+text(map #AgartWell message 0) {
+[name $f0]:Looks really deep_
+}
+
+text(bank 1 message $A4) {
+[name $f0]:Well, that's gone.
+}

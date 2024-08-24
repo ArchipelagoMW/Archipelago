@@ -1,0 +1,104 @@
+//-------------------------------------------------
+// Big Whale crystal only does moon travel, no event
+
+npc(#BigWhaleCrystal)
+{
+    eventcall {
+        $EA   //Travel to/from Moon
+    }
+}
+
+//-------------------------------------------------
+// Big Whale can land on craters on moon
+
+// patch tileset data to mark craters as landable
+patch($A0C82) { 85 55 }
+patch($A0C84) { 85 55 }
+patch($A0C86) { 85 55 }
+patch($A0C8E) { 85 55 }
+patch($A0CA0) { 85 55 }
+patch($A0CA2) { 85 55 }
+patch($A0CA4) { 85 55 }
+patch($A0CA6) { 85 55 }
+patch($A0CAE) { 85 55 }
+patch($A0CB0) { 85 55 }
+patch($A0CC0) { 85 55 }
+patch($A0CC2) { 85 55 }
+patch($A0CC4) { 85 55 }
+patch($A0CC6) { 85 55 }
+patch($A0CE6) { 85 55 }
+patch($A0CF6) { 85 55 }
+patch($A0CF8) { 85 55 }
+patch($A0CFA) { 85 55 }
+patch($A0CFC) { 85 55 }
+patch($A0D16) { 85 55 }
+patch($A0D18) { 85 55 }
+patch($A0D1A) { 85 55 }
+patch($A0D1C) { 85 55 }
+patch($A0D36) { 85 55 }
+patch($A0D38) { 85 55 }
+patch($A0D3A) { 85 55 }
+patch($A0D3C) { 85 55 }
+patch($A0D56) { 85 55 }
+patch($A0D58) { 85 55 }
+patch($A0D5A) { 85 55 }
+patch($A0D5C) { 85 55 }
+
+//--------------------------------------------------
+// Valet on bridge to transport to Giant of Bab-il
+
+npc(#fe_GiantValet) {
+    sprite #Soldier
+    default active
+    eventcall {
+        $9D   // event scripted in giant.f4c
+    }
+}
+
+placement($12f 6) {
+    npc #fe_GiantValet
+    position 9 7
+    walking off
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+
+//--------------------------------------------------
+// Engineer on bridge explaining landing upgrades
+
+npc(#fe_BigWhaleEngineer)
+{
+    sprite #Engineer
+    default active
+    eventcall {
+        $27  // map message 0
+    }
+}
+
+placement($12f 7) {
+    npc #fe_BigWhaleEngineer
+    position 5 7
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+text(map #BigWhale2 message 0) {
+We've upgraded the Big
+Whale. Now you can land
+on the craters on the
+moon!
+No more hiking to the
+palace! I mean, unless
+you want.
+}
+
