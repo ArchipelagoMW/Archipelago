@@ -412,7 +412,7 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: ((state._lttp_has_key('Small Key (Thieves Town)', player, 3)) or (location_item_name(state, 'Thieves\' Town - Big Chest', player) == ("Small Key (Thieves Town)", player)) and state._lttp_has_key('Small Key (Thieves Town)', player, 2)) and state.has('Hammer', player))
     set_rule(multiworld.get_location('Thieves\' Town - Blind\'s Cell', player),
              lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
-    if multiworld.accessibility[player] != 'locations' and not multiworld.key_drop_shuffle[player]:
+    if multiworld.accessibility[player] != 'full' and not multiworld.key_drop_shuffle[player]:
         set_always_allow(multiworld.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player)
     set_rule(multiworld.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
     set_rule(multiworld.get_location('Thieves\' Town - Spike Switch Pot Key', player),
@@ -547,7 +547,7 @@ def global_rules(multiworld: MultiWorld, player: int):
                 location_item_name(state, 'Ganons Tower - Map Chest', player) in [('Big Key (Ganons Tower)', player)] and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
 
     # this seemed to be causing generation failure, disable for now
-    # if world.accessibility[player] != 'locations':
+    # if world.accessibility[player] != 'full':
     #     set_always_allow(world.get_location('Ganons Tower - Map Chest', player), lambda state, item: item.name == 'Small Key (Ganons Tower)' and item.player == player and state._lttp_has_key('Small Key (Ganons Tower)', player, 7) and state.can_reach('Ganons Tower (Hookshot Room)', 'region', player))
 
     # It is possible to need more than 6 keys to get through this entrance if you spend keys elsewhere. We reflect this in the chest requirements.
