@@ -47,7 +47,7 @@ for location in locationscsv.create_view():
             all_locations.append(new_location)
         continue
     new_location = LocationData("", location.world, location.area, int(location.flag, 16))
-    subname = f" -- {location.spoilersubarea if location.spoilersubarea != "" else ""}"
+    subname = f" -- {location.spoilersubarea if location.spoilersubarea != '' else ''}"
     new_location.name = (f"{location.spoilerarea}"
                          f"{subname}"
                          f" -- {location.spoilerdetail}")
@@ -57,7 +57,7 @@ locationscsv = csvdb.CsvDb(os.path.join(os.path.dirname(__file__), "FreeEnterpri
 
 for location in locationscsv.create_view():
     new_location = LocationData("", location.world, location.area, int(location.fecode, 16) + 0x200)
-    subname = f" -- {location.spoilersubarea if location.spoilersubarea != "" else ""}"
+    subname = f" -- {location.spoilersubarea if location.spoilersubarea != '' else ''}"
     new_location.name = (f"{location.spoilerarea}"
                          f"{subname}"
                          f" -- {location.spoilerdetail}")
