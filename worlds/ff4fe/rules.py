@@ -3,6 +3,7 @@ area_rules = {
     "BaronCastle": ["Baron Key", "Baigan Slot Defeated"],
     "Sewer": ["Baron Key"],
     "ToroiaTreasury": ["Earth Crystal"],
+    "Adamant": ["Hook"],
     "UpperBabilAfterFall": ["King and Queen Slot Defeated", "Rubicant Slot Defeated"],
     "SealedCave": ["Luca Key"]
 }
@@ -37,5 +38,7 @@ individual_location_rules = {
     "Dwarf Castle Character": ["Golbez Slot Defeated"],
     "Cave Eblana Character": ["Hook"],
     "Lunar Palace Character": ["Darkness Crystal"],
-    "Giant of Bab-il Character": ["CPU Slot Defeated"]
+    "Giant of Bab-il Character": ["CPU Slot Defeated"],
+    "Adamant -- Cave -- Rat Tail Trade item": ["Rat Tail"],
+    "Adamant -- Cave -- Pink Tail Trade item": ["Pink Tail"]
 }

@@ -26,9 +26,9 @@ treasure_found_locations_start = 0xF512A0
 treasure_found_size = 64
 key_items_tracker_start_location = 0xF51500
 key_items_tracker_size = 3
-
 items_received_location_start = 0xF5177E
 items_received_size = 2
+victory_byte_location= 0xE070F2
 
 special_flag_key_items = {
     "Hook": (0xF51286, 0b01000000),

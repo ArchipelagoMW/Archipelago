@@ -63,7 +63,7 @@ def create_key_item_pool(multiworld: World) -> List[str]:
     if multiworld.options.PassEnabled.current_key == "false":
         key_item_pool.remove("Pass")
     if multiworld.options.DarkMatterHunt.current_key == "true":
-        dark_matter_count = 75  # Placeholder until option for number of Dark Matters is made
+        dark_matter_count = 45  # Placeholder until option for number of Dark Matters is made
         for i in range(dark_matter_count):
             key_item_pool.append("DkMatter")
     return key_item_pool

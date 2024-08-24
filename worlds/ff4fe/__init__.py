@@ -83,6 +83,12 @@ class FF4FEWorld(World):
         super().__init__(multiworld, player)
         self.rom_name_available_event = threading.Event()
 
+    def generate_early(self) -> None:
+        self.options.local_items.value.update(
+            ["Cecil", "Kain", "Rydia", "Tellah", "Edward", "Rosa",
+             "Yang", "Palom", "Porom", "Cid", "Edge", "Fusoya", "None"])
+        pass
+
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
@@ -248,13 +254,16 @@ class FF4FEWorld(World):
         hero_challenge_flags = ""
         if self.options.HeroChallenge.current_key != "none":
             hero_challenge_flags = f"hero/start:{self.options.HeroChallenge.current_key.lower()}/"
-        default_flags = (f"Onone "
+        dark_matter_flags = "Onone"
+        if self.options.DarkMatterHunt.current_key == "true":
+            dark_matter_flags = f"Omode:dkmatter"
+        default_flags = (f"{dark_matter_flags} "
                          f"Kmain/summon/moon/miab/unsafe "
                          f"Pshop/key "
                          f"Crelaxed/{hero_challenge_flags}j:spells,abilities "
                          f"Twild/junk "
                          f"Swild "
-                         f"Bstandard/unsafe/alt:gauntlet/whichburn "
+                         f"Bstandard/alt:gauntlet/whichburn "
                          f"Etoggle/keep:doors,behemoths "
                          f"Gnone "
                          f"-spoon")
