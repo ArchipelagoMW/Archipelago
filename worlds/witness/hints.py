@@ -220,7 +220,7 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
 def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> WitnessWordedHint:
     location_name = hint.location.name
     if hint.location.player != world.player:
-        location_name += " (" + world.multiworld.get_player_name(hint.location.player) + ")"
+        location_name += " (" + world.player_name + ")"
 
     item = hint.location.item
 
@@ -229,7 +229,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
         item_name = item.name
 
         if item.player != world.player:
-            item_name += " (" + world.multiworld.get_player_name(item.player) + ")"
+            item_name += " (" + world.player_name + ")"
 
     hint_text = ""
     area: Optional[str] = None
@@ -388,8 +388,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
 
     while len(hints) < hint_amount:
         if not prog_items_in_this_world and not locations_in_this_world and not hints_to_use_first:
-            player_name = world.multiworld.get_player_name(world.player)
-            logging.warning(f"Ran out of items/locations to hint for player {player_name}.")
+            logging.warning(f"Ran out of items/locations to hint for player {world.player_name}.")
             break
 
         location_hint: Optional[WitnessLocationHint]
@@ -590,8 +589,7 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
         hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", prog_amount, hunt_panels))
 
     if len(hinted_areas) < amount:
-        player_name = world.multiworld.get_player_name(world.player)
-        logging.warning(f"Was not able to make {amount} area hints for player {player_name}. "
+        logging.warning(f"Was not able to make {amount} area hints for player {world.player_name}. "
                         f"Made {len(hinted_areas)} instead, and filled the rest with random location hints.")
 
     return hints, unhinted_locations_per_area
@@ -680,8 +678,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     # If we still don't have enough for whatever reason, throw a warning, proceed with the lower amount
     if len(generated_hints) != hint_amount:
-        player_name = world.multiworld.get_player_name(world.player)
-        logging.warning(f"Couldn't generate {hint_amount} hints for player {player_name}. "
+        logging.warning(f"Couldn't generate {hint_amount} hints for player {world.player_name}. "
                         f"Generated {len(generated_hints)} instead.")
 
     return generated_hints
