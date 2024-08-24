@@ -39,6 +39,9 @@ class TestMiscOptions(WitnessTestBase):
         "vague_hints": "experimental",
     }
 
+    def test_hints(self):
+        self.world.fill_slot_data()
+
 
 class TestMaxEntityShuffle(WitnessTestBase):
     options = {
