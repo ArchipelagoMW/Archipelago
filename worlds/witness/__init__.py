@@ -221,10 +221,10 @@ class WitnessWorld(World):
 
         # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
 
-        needed_size = 2
-        needed_size += self.options.puzzle_randomization == "sigma_expert"
-        needed_size += self.options.shuffle_symbols
-        needed_size += self.options.shuffle_doors > 0
+        needed_size_overall = 2
+        needed_size_overall += self.options.puzzle_randomization == "sigma_expert"
+        needed_size_overall += self.options.shuffle_symbols
+        needed_size_overall += self.options.shuffle_doors > 0
         
         needed_size_to_hold_tutorial_items = len(self.options.early_good_items.value)
 
