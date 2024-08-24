@@ -378,6 +378,8 @@ the server will forward the message to all those targets to which any one requir
 | operator | str         | Optional. Controls whether the "games", "slots" and "tags" conditions are chained via "or" or "and". Default: "or". |
 | data     | dict        | Any data you want to send                                                                                           |
 
+Note: Using the "and" operator without setting any conditions will result in the packet being sent to **all** clients, unlike how Python's `all()` would usually behave.
+
 ### Get
 Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
 #### Arguments
