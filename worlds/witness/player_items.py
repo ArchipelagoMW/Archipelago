@@ -232,7 +232,6 @@ class WitnessPlayerItems:
         }
         return {item_type: item_list for item_type, item_list in output.items() if item_list}
 
-
     def get_door_ids_in_pool(self) -> List[int]:
         """
         Returns the total set of all door IDs that are controlled by items in the pool.

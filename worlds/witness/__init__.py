@@ -225,7 +225,7 @@ class WitnessWorld(World):
         needed_size_overall += self.options.puzzle_randomization == "sigma_expert"
         needed_size_overall += self.options.shuffle_symbols
         needed_size_overall += self.options.shuffle_doors > 0
-        
+
         needed_size_to_hold_tutorial_items = len(self.options.early_good_items.value)
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
@@ -268,7 +268,7 @@ class WitnessWorld(World):
             self.reachable_early_locations.append(loc)
 
             warning(
-                f"""Location "{loc}" had to be added to {self.player_name}'s world 
+                f"""Location "{loc}" had to be added to {self.player_name}'s world
                 due to insufficient sphere 1 size."""
             )
 
