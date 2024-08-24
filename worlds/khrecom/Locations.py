@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set
 
 
 from BaseClasses import Location
@@ -307,3 +307,11 @@ location_table: Dict[str, KHRECOMLocationData] = {
 }
 
 lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
+
+# Make location categories
+location_name_groups: Dict[str, Set[str]] = {}
+for location in location_table.keys():
+    category = location_table[location].category
+    if category not in location_name_groups.keys():
+        location_name_groups[category] = set()
+    location_name_groups[category].add(location)

@@ -2,8 +2,8 @@ from typing import List
 
 from BaseClasses import Tutorial, MultiWorld
 from worlds.AutoWorld import WebWorld, World
-from .Items import KHRECOMItem, KHRECOMItemData, get_items_by_category, item_table
-from .Locations import location_table
+from .Items import KHRECOMItem, KHRECOMItemData, get_items_by_category, item_table, item_name_groups
+from .Locations import location_table, location_name_groups
 from .Options import KHRECOMOptions, khrecom_option_groups
 from .Regions import create_regions
 from .Rules import set_rules
@@ -48,6 +48,8 @@ class KHRECOMWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
+    item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
     
     def create_items(self):
         self.place_predetermined_items()

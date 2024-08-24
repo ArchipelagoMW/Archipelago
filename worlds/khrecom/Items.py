@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Item, ItemClassification
 
@@ -10,7 +10,7 @@ class KHRECOMItem(Item):
 class KHRECOMItemData(NamedTuple):
     category: str
     sub: str = "None"
-    code: Optional[int] = None
+    code: int = 0
     classification: ItemClassification = ItemClassification.filler
 
 
@@ -250,3 +250,11 @@ item_table: Dict[str, KHRECOMItemData] = {
     "Friend Card Jack":                  KHRECOMItemData("Friend Cards",     code = 268_5007, classification = ItemClassification.progression),
     "Friend Card Pluto":                 KHRECOMItemData("Friend Cards",     code = 268_5008, classification = ItemClassification.progression),
 }
+
+# Make item categories
+item_name_groups: Dict[str, Set[str]] = {}
+for item in item_table.keys():
+    category = item_table[item].category
+    if category not in item_name_groups.keys():
+        item_name_groups[category] = set()
+    item_name_groups[category].add(item)
