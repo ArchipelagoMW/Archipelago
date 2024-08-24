@@ -142,10 +142,11 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
 
 def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Location) -> Tuple[str, str]:
     allow_regions = world.options.vague_hints == "experimental"
+    containing_world = world.multiworld.worlds[hint_loc.player]
 
     possible_location_groups = {
         group_name: group_locations
-        for group_name, group_locations in world.multiworld.worlds[hint_loc.player].location_name_groups.items()
+        for group_name, group_locations in containing_world.location_name_groups.items()
         if hint_loc.name in group_locations
     }
 
@@ -174,14 +175,25 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
             for location_group, x in valid_location_groups.items()
         }
 
+        logging.debug(
+            f"Player {world.player_name}: Eligible location groups for location "
+            f'"{hint_loc}" ({containing_world.game}): {location_groups_with_weights}.'
+        )
+
         location_groups = list(location_groups_with_weights.keys())
         weights = list(location_groups_with_weights.values())
 
         return world.random.choices(location_groups, weights, k=1)[0], "Group"
 
+    logging.debug(
+        f"Player {world.player_name}: "
+        f"Couldn't find suitable location group for location \"{hint_loc}\" ({containing_world.game})."
+    )
     if allow_regions:
+        logging.debug(f'Falling back on parent region "{hint_loc.parent_region}".')
         return cast(Region, hint_loc.parent_region).name, "Region"
 
+    logging.debug('Falling back on hinting the "Everywhere" group.')
     return "Everywhere", "Everywhere"
 
 
@@ -204,6 +216,11 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
 
     if world.options.vague_hints:
         chosen_group, group_type = try_getting_location_group_for_location(world, hint.location)
+
+        logging.debug(
+            f"Player {world.player_name}: Vague hints: "
+            f'Chose group "{chosen_group}" of type "{group_type}" for location "{hint.location}".'
+        )
 
         if hint.location.player == world.player:
             area = chosen_group
@@ -313,6 +330,11 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["Wi
             if location in loc_in_this_world
         ]
 
+    logging.debug(f'Player "{world.player_name}": Always item hints: {always_items}')
+    logging.debug(f'Player "{world.player_name}": Always location hints: {always_locations}')
+    logging.debug(f'Player "{world.player_name}": Priority item hints: {priority_items}')
+    logging.debug(f'Player "{world.player_name}": Priority location hints: {priority_locations}')
+
     # Get always and priority location/item hints
     always_location_hints = {hint_from_location(world, location) for location in always_locations}
     always_item_hints = {hint_from_item(world, item, own_itempool) for item in always_items}
@@ -334,6 +356,15 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["Wi
     priority_hints = sorted(priority_generator, key=lambda h: h.location)
     world.random.shuffle(always_hints)
     world.random.shuffle(priority_hints)
+
+    logging.debug(
+        f'Player "{world.player_name}": Finalized always hints: '
+        f"{[f'{hint.location.item} on {hint.location}' for hint in always_hints]}"
+    )
+    logging.debug(
+        f'Player "{world.player_name}": Finalized priority hint candidates: '
+        f"{[f'{hint.location.item} on {hint.location}' for hint in priority_hints]}"
+    )
 
     return always_hints, priority_hints
 
@@ -389,6 +420,11 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
 
         next_random_hint_is_location = not next_random_hint_is_location
 
+    logging.debug(
+        f'Player "{world.player_name}": Remaining hints: '
+        f"{[f'{hint.location.item} on {hint.location}' for hint in hints]}"
+    )
+
     return hints
 
 
@@ -414,9 +450,13 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
     areas = sorted(area for area in items_per_area if unhinted_location_percentage_per_area[area])
     weights = [unhinted_location_percentage_per_area[area] for area in areas]
 
+    logging.debug(f'Player "{world.player_name}": Area weights: {unhinted_location_percentage_per_area}')
+
     amount = min(amount, len(weights))
 
     hinted_areas = weighted_sample(world.random, areas, weights, amount)
+
+    logging.debug(f'Player "{world.player_name}": Chosen area hints ({len(hinted_areas)}): {hinted_areas}')
 
     return hinted_areas, unhinted_locations_per_area
 
@@ -540,6 +580,8 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: List[Ite
             elif local_lasers:
                 hint_string += f"\n{local_lasers} of them are lasers."
 
+    logging.debug(f'Player "{world.player_name}": Wording area hint for {hinted_area} as: "{hint_string}"')
+
     return hint_string, total_progression, hunt_panels
 
 
@@ -565,6 +607,10 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
 
 def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
                      already_hinted_locations: Set[Location]) -> List[WitnessWordedHint]:
+    start_line = f"Witness hints: {world.player_name} start"
+    dashes = "-" * len(start_line)
+    logging.debug(f"{dashes}\n{start_line}\n{dashes}")
+
     generated_hints: List[WitnessWordedHint] = []
 
     state = CollectionState(world.multiworld)
@@ -592,10 +638,23 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     # Make up to half of the rest of the location hints priority hints, using up to half of the possibly priority hints
     remaining_location_hints = intended_location_hints - always_hints_to_use
-    priority_hints_to_use = int(max(0.0, min(
-        possible_priority_hints * world.options.priority_hints_percentage_out_of_possible / 100,
-        remaining_location_hints * world.options.priority_hints_percentage_out_of_remaining / 100,
-    )))
+
+    priority_cap_possible = possible_priority_hints * world.options.priority_hints_percentage_out_of_possible / 100
+    priority_cap_remain = remaining_location_hints * world.options.priority_hints_percentage_out_of_remaining / 100
+
+    priority_hints_to_use = int(max(0.0, min(priority_cap_possible, priority_cap_remain)))
+
+    amount_of_priority_hint_candidates = len(priority_hints)
+
+    logging.debug(
+        f'Player "{world.player_name}": '
+        f"Using {priority_hints_to_use} priority out of {amount_of_priority_hint_candidates} candidates. "
+        f"This is the floor of the lower number out of\n"
+        f"1. {world.options.priority_hints_percentage_out_of_possible}% of {possible_priority_hints} "
+        f"possible priority hints, which is {priority_cap_possible}.\n"
+        f"2. {world.options.priority_hints_percentage_out_of_remaining}% of {remaining_location_hints} "
+        f"remaining hint slots after area and always hints, which is {priority_cap_remain}."
+    )
 
     for _ in range(always_hints_to_use):
         location_hint = always_hints.pop()
@@ -628,19 +687,55 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
         intended_location_hints = remaining_needed_location_hints + location_hints_created_in_round_1
 
         always_hints_to_use = min(intended_location_hints, generated_always_hints)
-        priority_hints_to_use = int(max(0.0, min(possible_priority_hints / 2, remaining_location_hints / 2)))
+        remaining_location_hints = intended_location_hints - always_hints_to_use
+
+        priority_cap_possible = possible_priority_hints * world.options.priority_hints_percentage_out_of_possible / 100
+        priority_cap_remain = remaining_location_hints * world.options.priority_hints_percentage_out_of_remaining / 100
+
+        priority_hints_to_use = int(max(0.0, min(priority_cap_possible, priority_cap_remain)))
 
         # If we now need more always hints and priority hints than we thought previously, make some more.
         more_always_hints = always_hints_to_use - amt_of_used_always_hints
         more_priority_hints = priority_hints_to_use - amt_of_used_priority_hints
 
+        if more_always_hints or more_priority_hints:
+            logging.debug(
+                f'Player "{world.player_name}": '
+                f"Reusing always and priority hints as fallback after not enough area hints could be made. "
+                f"There are {remaining_needed_location_hints} more hints to make now."
+            )
+
+            logging.debug(
+                f'Player "{world.player_name}": '
+                f"Now, we will actually use {priority_hints_to_use} out of {amount_of_priority_hint_candidates} "
+                f"priority candidates. This is the floor of the lower number out of\n"
+                f"1. {world.options.priority_hints_percentage_out_of_possible}% of {possible_priority_hints} "
+                f"possible priority hints, which is {priority_cap_possible}.\n"
+                f"2. {world.options.priority_hints_percentage_out_of_remaining}% of {remaining_location_hints} "
+                f"remaining hint slots after area and always hints, which is {priority_cap_remain}."
+            )
+
         extra_always_and_priority_hints: List[WitnessLocationHint] = []
 
         for _ in range(more_always_hints):
-            extra_always_and_priority_hints.append(always_hints.pop())
+            extra_always_hint = always_hints.pop()
+
+            logging.debug(
+                f'Player "{world.player_name}": Adding late always hint: '
+                f"{extra_always_hint.location.item} on {extra_always_hint.location}"
+            )
+
+            extra_always_and_priority_hints.append(extra_always_hint)
 
         for _ in range(more_priority_hints):
-            extra_always_and_priority_hints.append(priority_hints.pop())
+            extra_priority_hint = priority_hints.pop()
+
+            logging.debug(
+                f'Player "{world.player_name}": Adding late priority hint: '
+                f"{extra_priority_hint.location.item} on {extra_priority_hint.location}"
+            )
+
+            extra_always_and_priority_hints.append(extra_priority_hint)
 
         generated_hints += make_extra_location_hints(
             world, hint_amount - len(generated_hints), world.own_itempool, already_hinted_locations,
@@ -651,6 +746,10 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
     if len(generated_hints) != hint_amount:
         logging.warning(f"Couldn't generate {hint_amount} hints for player {world.player_name}. "
                         f"Generated {len(generated_hints)} instead.")
+
+    end_line = f"Witness hints: {world.player_name} end"
+    dashes = "-" * len(end_line)
+    logging.debug(f"{dashes}\n{end_line}\n{dashes}")
 
     return generated_hints
 
