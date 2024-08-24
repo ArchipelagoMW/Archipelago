@@ -1841,6 +1841,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 conditions.append(lambda bounceclient: set(bounceclient.tags) & tags)
             if "slots" in args:
                 conditions.append(lambda bounceclient: bounceclient.slot in slots)
+            if not conditions:
+                # "And" on an empty list should send to all clients, which is not how all() would behave naturally.
+                conditions.append(lambda _: True)
 
             condition_concatenator = any if operator == "or" else all
 
