@@ -193,8 +193,7 @@ class WitnessPlayerItems:
                 doors += [
                     "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors"
 
-                    "Bunker Entry (Door)", "Swamp Laser Shortcut (Door)", "Glass Factory Entry (Door)",
-                    "Symmetry Island Lower (Door)",
+                    "Bunker Entry (Door)", "Glass Factory Entry (Door)", "Symmetry Island Lower (Door)",
 
                     "Bunker Panels", "Swamp Panels", "Quarry Outside Panels", "Glass Factory Panels"
 
