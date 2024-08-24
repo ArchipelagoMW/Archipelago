@@ -2,8 +2,8 @@
 
 ## Configuration
 
-1. Only items plando has to be enabled before it can be used (opt-in).
-2. To do so, go to your installation directory (Windows default: `C:\ProgramData\Archipelago`), then open the host.yaml
+1. All plando options are enabled by default, except for "items plando" which has to be enabled before it can be used (opt-in).
+2. To enable it, go to your installation directory (Windows default: `C:\ProgramData\Archipelago`), then open the host.yaml
    file with a text editor.
 3. In it, you're looking for the option key `plando_options`. To enable all plando modules you can set the value
    to `bosses, items, texts, connections`
