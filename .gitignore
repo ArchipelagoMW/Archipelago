@@ -28,7 +28,6 @@
 *multisave
 *.archipelago
 *.apsave
-*.BIN
 *.puml
 *.private
 *.symbols
