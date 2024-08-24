@@ -1825,9 +1825,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
-            operator = args.get("operator", "or")
+            boolean_operator = args.get("operator", "or")
 
-            if operator not in ("or", "and"):
+            if boolean_operator not in ("or", "and"):
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
                                               "text": "Bounce", "original_cmd": cmd}])
                 return
@@ -1846,7 +1846,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 # "And" on an empty list should send to all clients, which is not how all() would behave naturally.
                 conditions.append(lambda _: True)
 
-            condition_concatenator = any if operator == "or" else all
+            condition_concatenator = any if boolean_operator == "or" else all
 
             for bounceclient in ctx.endpoints:
                 if client.team != bounceclient.team:
