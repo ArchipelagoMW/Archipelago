@@ -88,6 +88,8 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
     discards = world.options.shuffle_discarded_panels
     wincon = world.options.victory_condition
 
+    existing_items_lookup = {item.name for item in world.own_itempool}
+
     if discards and world.options.discard_symbol_hint == "priority_hint":
         if difficulty == "sigma_expert":
             priority.add("Arrows")
@@ -109,14 +111,14 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
     needed_symbols = world.options.priority_symbols - number_of_symbols
     needed_lasers = world.options.priority_lasers - number_of_lasers
 
-    possible_symbols = sorted(world.item_name_groups["Symbols"] - priority)
-    possible_lasers = sorted(world.item_name_groups["Lasers"] - priority)
+    possible_symbols = sorted(world.item_name_groups["Symbols"] & existing_items_lookup - priority)
+    possible_lasers = sorted(world.item_name_groups["Lasers"] & existing_items_lookup - priority)
 
     if needed_symbols > 0:
-        priority.update(world.random.sample(possible_symbols, needed_symbols))
+        priority.update(world.random.sample(possible_symbols, min(len(possible_symbols), needed_symbols)))
 
     if needed_lasers > 0:
-        priority.update(world.random.sample(possible_lasers, needed_lasers))
+        priority.update(world.random.sample(possible_lasers, min(len(possible_lasers), needed_lasers)))
 
     return sorted(priority)
 
