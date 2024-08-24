@@ -609,6 +609,9 @@ class WitnessPlayerLogic:
                 adjustment_linesets_in_order.append(get_complex_doors())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
 
+        if not world.options.shuffle_dog:
+            adjustment_linesets_in_order.append(["Disabled Locations:", "0xFFF80 (Town Pet the Dog)"])
+
         if world.options.shuffle_boat:
             adjustment_linesets_in_order.append(get_boat())
 
@@ -890,7 +893,7 @@ class WitnessPlayerLogic:
         )
 
     def determine_unrequired_entities(self, world: "WitnessWorld") -> None:
-        """Figure out which major items are actually useless in this world's settings"""
+        """Figure out which major items are actually useless in this world's options"""
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs

@@ -37,6 +37,8 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
         "death_link_amnesty": DeathLinkAmnesty.default,
+
+        "shuffle_dog": ShuffleDog.default,
     },
 
     # For relative beginners who want to move to the next step.
@@ -73,6 +75,8 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
         "death_link_amnesty": DeathLinkAmnesty.default,
+
+        "shuffle_dog": ShuffleDog.default,
     },
 
     # Allsanity but without the BS (no expert, no tedious EPs).
@@ -109,5 +113,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
         "death_link_amnesty": DeathLinkAmnesty.default,
+
+        "shuffle_dog": ShuffleDog.option_random_item,
     },
 }
