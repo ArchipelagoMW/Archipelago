@@ -189,12 +189,13 @@ class WitnessWorld(World):
             event_locations.append(location_obj)
 
         # Place other locked items
-        dog_puzzle_skip = self.create_item("Puzzle Skip")
-        self.get_location("Town Pet the Dog").place_locked_item(dog_puzzle_skip)
 
-        self.own_itempool.append(dog_puzzle_skip)
+        if self.options.shuffle_dog == "puzzle_skip":
+            dog_puzzle_skip = self.create_item("Puzzle Skip")
+            self.get_location("Town Pet the Dog").place_locked_item(dog_puzzle_skip)
 
-        self.items_placed_early.append("Puzzle Skip")
+            self.own_itempool.append(dog_puzzle_skip)
+            self.items_placed_early.append("Puzzle Skip")
 
         if self.options.early_symbol_item:
             # Pick an early item to place on the tutorial gate.
@@ -213,7 +214,7 @@ class WitnessWorld(World):
                     self.own_itempool.append(gate_item)
                     self.items_placed_early.append(random_early_item)
 
-        # There are some really restrictive settings in The Witness.
+        # There are some really restrictive options in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
         # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
@@ -221,11 +222,14 @@ class WitnessWorld(World):
         state = CollectionState(self.multiworld)
         state.sweep_for_advancements(locations=event_locations)
 
-        num_early_locs = sum(1 for loc in self.multiworld.get_reachable_locations(state, self.player) if loc.address)
+        num_early_locs = sum(
+            1 for loc in self.multiworld.get_reachable_locations(state, self.player)
+            if loc.address and not loc.item
+        )
 
-        # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
+        # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
 
-        needed_size = 3
+        needed_size = 2
         needed_size += self.options.puzzle_randomization == "sigma_expert"
         needed_size += self.options.shuffle_symbols
         needed_size += self.options.shuffle_doors > 0
