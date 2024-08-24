@@ -47,7 +47,7 @@ class MuseDashCollections:
         "FM 17314 SUGAR RADIO",
         "Yume Ou Mono Yo Secret",
         "Echo over you... Secret",
-        "Tsukuyomi Ni Naru Replaced"
+        "Tsukuyomi Ni Naru Replaced",
     ]
 
     album_items: Dict[str, AlbumData] = {}
