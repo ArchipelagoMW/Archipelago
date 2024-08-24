@@ -1822,12 +1822,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = set(args.get("games", []))
-            tags = set(args.get("tags", []))
-            slots = set(args.get("slots", []))
-            operator = args.get("operator", "or")
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
+
+            operator = args.get("operator", "or")
 
             if operator not in ("or", "and"):
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
@@ -1836,10 +1834,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
             conditions = []
             if "games" in args:
+                games = set(args["games"])
                 conditions.append(lambda bounceclient: ctx.games[bounceclient.slot] in games)
             if "tags" in args:
+                tags = set(args["tags"])
                 conditions.append(lambda bounceclient: set(bounceclient.tags) & tags)
             if "slots" in args:
+                slots = set(args["slots"])
                 conditions.append(lambda bounceclient: bounceclient.slot in slots)
             if not conditions:
                 # "And" on an empty list should send to all clients, which is not how all() would behave naturally.
