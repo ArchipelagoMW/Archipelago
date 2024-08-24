@@ -139,7 +139,11 @@ class ShapezWorld(World):
 
         # Connect Menu to rest of regions
         main_region = self.multiworld.get_region("Main", self.player)
-        menu_region.connect(main_region)
+        if self.options.lock_belt_and_extractor:
+            menu_region.connect(main_region, "Belt and Extractor",
+                                lambda state: state.has_all(["Belt", "Extractor"], self.player))
+        else:
+            menu_region.connect(main_region)
 
     def create_items(self) -> None:
         # Include guaranteed items (game mechanic unlocks and 7x4 big upgrades)
@@ -150,6 +154,9 @@ class ShapezWorld(World):
                                       + [self.create_item(name) for name in buildings_wires.keys()]
                                       + [self.create_item(name) for name in gameplay_unlocks.keys()]
                                       + [self.create_item(name) for name in big_upgrades for _ in range(7)])
+
+        if self.options.lock_belt_and_extractor:
+            included_items.extend([self.create_item("Belt"), self.create_item("Extractor")])
 
         # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage/100
@@ -187,7 +194,8 @@ class ShapezWorld(World):
             "randomize_level_logic": self.options.randomize_level_logic.current_key,
             "randomize_upgrade_logic": self.options.randomize_upgrade_logic.current_key,
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
-            "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value)
+            "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value),
+            "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value)
         }
 
         return {**level_logic_data, **upgrade_logic_data, **option_data, "seed": self.client_seed}

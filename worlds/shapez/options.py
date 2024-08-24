@@ -123,6 +123,13 @@ class EarlyBalancerTunnelAndTrash(Choice):
     default = 2
 
 
+class LockBeltAndExtractor(Toggle):
+    """Locks Belts and Extractors and adds them into the item pool.
+    **Be careful with this option, as every single location in this game needs both of them.**"""
+    display_name = "Lock Belt and Extractor"
+    default = False
+
+
 # class AdditionalLocations(Choice):
 #    """Achievements: Include up to 44 achievements (depending on other options) as additional locations.
 #    Shapesanity: Include up to 5664 shapes as additional locations."""
@@ -179,6 +186,7 @@ class ShapezOptions(PerGameCommonOptions):
     throughput_levels_ratio: ThroughputLevelsRatio
     same_late_upgrade_requirements: SameLateUpgradeRequirements
     early_balancer_tunnel_and_trash: EarlyBalancerTunnelAndTrash
+    lock_belt_and_extractor: LockBeltAndExtractor
     # additional_locations: AdditionalLocations
     # exclude_softlock_achievements: ExcludeSoftlockAchievements
     # exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements

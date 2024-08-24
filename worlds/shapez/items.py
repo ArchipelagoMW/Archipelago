@@ -72,6 +72,11 @@ traps = {
     "Malfunctioning Trap": ItemClassification.trap
 }
 
+belt_and_extractor = {
+    "Belt": ItemClassification.progression,
+    "Extractor": ItemClassification.progression
+}
+
 item_table: Dict[str, ItemClassification] = {
     **buildings_processing,
     **buildings_routing,
@@ -81,7 +86,8 @@ item_table: Dict[str, ItemClassification] = {
     **gameplay_unlocks,
     **upgrades,
     **bundles,
-    **traps
+    **traps,
+    **belt_and_extractor
 }
 
 big_upgrades = [
@@ -161,7 +167,11 @@ item_descriptions = {  # TODO
                                "or random upgrade requirement shapes, by half",
     "Locked Building Trap": "Locks a random building from being placed for 15-60 seconds",
     "Throttled Building Trap": "Halves the speed of a random building for 15-60 seconds",
-    "Malfunctioning Trap": "Makes a random building process items incorrectly for 15-60 seconds"
+    "Malfunctioning Trap": "Makes a random building process items incorrectly for 15-60 seconds",
+    "Belt": "One of the most important buildings in the game, that transports your shapes and colors from one " +
+            "place to another",
+    "Extractor": "One of the most important buildings in the game, that extracts shapes from those randomly " +
+                 "generated patches"
 }
 
 
