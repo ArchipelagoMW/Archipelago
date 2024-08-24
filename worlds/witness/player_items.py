@@ -171,27 +171,35 @@ class WitnessPlayerItems:
                 static_witness_logic.get_parent_progressive_item(item) for item in symbols
             ]
 
-            output["Symbol"] = symbols
+            output["Symbol"] = [symbol for symbol in symbols if symbol in existing_items_lookup]
 
         if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
             doors = [
                 "Desert Doors & Elevator", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
-                "Shadows Lower Doors", "Tunnels Doors", "Town Doors", "Town Tower Doors",
+                "Shadows Lower Doors", "Tunnels Doors",
 
-                "Keep Tower Shortcut (Door)", "Shadows Timed Door",
-                "Tunnels Town Shortcut (Door)", "Swamp Laser Shortcut (Door)",
+                "Keep Tower Shortcut (Door)", "Shadows Timed Door", "Tunnels Town Shortcut (Door)",
 
-                "Desert Panels", "Keep Hedge Maze Panels", "Town Maze Panels",
+                "Desert Panels", "Keep Hedge Maze Panels",
 
                 "Shadows Door Timer (Panel)", "Keep Hedge Maze 1 (Panel)", "Town Maze Stairs (Panel)",
             ]
+
+            if self._world.options.shuffle_vault_boxes:
+                doors.append("Windmill & Theater Doors")
+                if not self._world.options.shuffle_symbols:
+                    doors += [
+                        "Windmill & Theater Panels",
+
+                        "Windmill & Theater Control Panels",
+                    ]
 
             if self._world.options.shuffle_doors == "doors":
                 doors.append("Desert Light Room Entry (Door)")
 
             if not self._world.options.shuffle_symbols:
                 doors += [
-                    "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors"
+                    "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors",
 
                     "Bunker Entry (Door)", "Glass Factory Entry (Door)", "Symmetry Island Lower (Door)",
 
@@ -202,33 +210,43 @@ class WitnessPlayerItems:
 
                 if self._world.options.shuffle_vault_boxes:
                     doors += [
-                        "Windmill & Theater Doors",
-
                         "Windmill & Theater Panels",
 
                         "Windmill & Theater Control Panels",
                     ]
 
-            output["Door"] = doors
+            existing_doors = [door for door in doors if door in existing_items_lookup]
 
-        if (
-            self._world.options.shuffle_EPs
-            and self._world.options.obelisk_keys
-            and "Obelisk Key" in self._world.options.early_good_items.value
-        ):
-            output["Obelisk Key"] = [
+            # On some options combinations with doors, there just aren't a lot of good doors that unlock much.
+            # In this case, we add some doors that aren't great, but are at least guaranteed to unlock 1 location.
+
+            fallback_doors = [
+                "Swamp Laser Shortcut (Door)",  # Always Swamp Laser
+                "Town Maze Panels",  # Always Town Maze Panel
+                "Town Doors",  # Always Town Church Lattice
+                "Town Church Entry (Door)",  # ditto
+                "Town Tower Doors",  # Always Town Laser
+            ]
+
+            while len(existing_doors) < 4 and fallback_doors:
+                fallback_door = fallback_doors.pop()
+                if fallback_door in existing_items_lookup:
+                    existing_doors.append(fallback_door)
+
+            output["Door"] = existing_doors
+
+        if "Obelisk Key" in self._world.options.early_good_items.value:
+            obelisk_keys = [
                 "Desert Obelisk Key", "Town Obelisk Key", "Quarry Obelisk Key",
                 "Treehouse Obelisk Key", "Monastery Obelisk Key", "Mountainside Obelisk Key"
             ]
+            output["Obelisk Key"] = [key for key in obelisk_keys if key in existing_items_lookup]
 
         assert all(item in self._world.item_names for sublist in output.values() for item in sublist), (
             [item for sublist in output.values() for item in sublist if item not in self._world.item_names]
         )
 
-        output = {
-            item_type: [item for item in item_list if item in existing_items_lookup]
-            for item_type, item_list in output.items()
-        }
+        # Cull empty lists
         return {item_type: item_list for item_type, item_list in output.items() if item_list}
 
     def get_door_ids_in_pool(self) -> List[int]:
