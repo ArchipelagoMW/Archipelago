@@ -1825,13 +1825,30 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             games = set(args.get("games", []))
             tags = set(args.get("tags", []))
             slots = set(args.get("slots", []))
+            operator = args.get("operator", "or")
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
+            if operator not in ("or", "and"):
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                              "text": "Bounce", "original_cmd": cmd}])
+                return
+
+            conditions = []
+            if "games" in args:
+                conditions.append(lambda bounceclient: ctx.games[bounceclient.slot] in games)
+            if "tags" in args:
+                conditions.append(lambda bounceclient: set(bounceclient.tags) & tags)
+            if "slots" in args:
+                conditions.append(lambda bounceclient: bounceclient.slot in slots)
+
+            condition_concatenator = any if operator == "or" else all
+
             for bounceclient in ctx.endpoints:
-                if client.team == bounceclient.team and (ctx.games[bounceclient.slot] in games or
-                                                         set(bounceclient.tags) & tags or
-                                                         bounceclient.slot in slots):
+                if client.team != bounceclient.team:
+                    continue
+
+                if condition_concatenator(condition(bounceclient) for condition in conditions):
                     await ctx.send_encoded_msgs(bounceclient, msg)
 
         elif cmd == "Get":
