@@ -158,23 +158,23 @@ class WitnessPlayerItems:
         existing_items_lookup = {existing_item.name for existing_item in existing_items}
 
         if self._world.options.shuffle_symbols and "Symbol" in self._world.options.early_good_items.value:
-            symbols = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
+            good_symbols = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
 
             if self._world.options.shuffle_discarded_panels:
                 if self._world.options.puzzle_randomization == "sigma_expert":
-                    symbols.append("Arrows")
+                    good_symbols.append("Arrows")
                 else:
-                    symbols.append("Triangles")
+                    good_symbols.append("Triangles")
 
             # Replace progressive items with their parents.
-            symbols = [
-                static_witness_logic.get_parent_progressive_item(item) for item in symbols
+            good_symbols = [
+                static_witness_logic.get_parent_progressive_item(item) for item in good_symbols
             ]
 
-            output["Symbol"] = [symbol for symbol in symbols if symbol in existing_items_lookup]
+            output["Symbol"] = [symbol for symbol in good_symbols if symbol in existing_items_lookup]
 
         if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
-            doors = [
+            good_doors = [
                 "Desert Doors & Elevator", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
                 "Shadows Lower Doors", "Tunnels Doors",
 
@@ -186,19 +186,19 @@ class WitnessPlayerItems:
             ]
 
             if self._world.options.shuffle_vault_boxes:
-                doors.append("Windmill & Theater Doors")
+                good_doors.append("Windmill & Theater Doors")
                 if not self._world.options.shuffle_symbols:
-                    doors += [
+                    good_doors += [
                         "Windmill & Theater Panels",
 
                         "Windmill & Theater Control Panels",
                     ]
 
             if self._world.options.shuffle_doors == "doors":
-                doors.append("Desert Light Room Entry (Door)")
+                good_doors.append("Desert Light Room Entry (Door)")
 
             if not self._world.options.shuffle_symbols:
-                doors += [
+                good_doors += [
                     "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors",
 
                     "Bunker Entry (Door)", "Glass Factory Entry (Door)", "Symmetry Island Lower (Door)",
@@ -209,13 +209,13 @@ class WitnessPlayerItems:
                 ]
 
                 if self._world.options.shuffle_vault_boxes:
-                    doors += [
+                    good_doors += [
                         "Windmill & Theater Panels",
 
                         "Windmill & Theater Control Panels",
                     ]
 
-            existing_doors = [door for door in doors if door in existing_items_lookup]
+            existing_doors = [door for door in good_doors if door in existing_items_lookup]
 
             # On some options combinations with doors, there just aren't a lot of good doors that unlock much.
             # In this case, we add some doors that aren't great, but are at least guaranteed to unlock 1 location.
