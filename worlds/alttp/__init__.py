@@ -356,6 +356,8 @@ class ALTTPWorld(World):
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
+                else:
+                    self.options.local_items.value |= self.dungeon_local_item_names
 
         self.difficulty_requirements = difficulties[multiworld.item_pool[player].current_key]
 
