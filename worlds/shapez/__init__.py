@@ -18,7 +18,6 @@ class ShapezWeb(WebWorld):
     options_presets = options_presets
     rich_text_options_doc = True
     theme = "stone"
-    bug_report_page = "https://github.com/BlastSlimey/ShapezArchipelago/issues"
     game_info_languages = ['en', 'de']
     setup_en = Tutorial(
         "Multiworld Setup Guide",
@@ -55,30 +54,28 @@ class ShapezWorld(World):
     maxlevel: int = 25
     finaltier: int = 8
     included_locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
-    client_seed: int = 123
+    client_seed: int = 123  # Placeholder value
 
-    item_name_to_id = {name: id for
-                       id, name in enumerate(item_table.keys(), base_id)}
-    location_name_to_id = {name: id for
-                           id, name in enumerate(all_locations, base_id)}
+    item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
+    location_name_to_id = {name: id for id, name in enumerate(all_locations, base_id)}
 
     def generate_early(self) -> None:
         # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
         # both goal amounts for "MAM" and "Even fasterer" are set in a single option.
-        if self.options.goal == 1 and self.options.goal_amount < 27:
+        if self.options.goal == "mam" and self.options.goal_amount < 27:
             raise OptionError("When setting goal to 1 ('mam'), goal_amount must be at least 27")
 
         # Determines maxlevel and finaltier, which are needed for location and item generation
-        if self.options.goal == 0:
+        if self.options.goal == "vanilla":
             self.maxlevel = 25
             self.finaltier = 8
-        elif self.options.goal == 1:
+        elif self.options.goal == "mam":
             self.maxlevel = self.options.goal_amount - 1
             self.finaltier = 8
-        elif self.options.goal == 2:
+        elif self.options.goal == "even_fasterer":
             self.maxlevel = 26
             self.finaltier = self.options.goal_amount.value
-        else:
+        else:  # goal == efficiency_iii
             self.maxlevel = 26
             self.finaltier = 8
 
@@ -87,7 +84,7 @@ class ShapezWorld(World):
 
         # Determines the order of buildings for levels und upgrades logic
         if self.options.randomize_level_requirements:
-            if self.options.randomize_level_logic in [1, 3]:
+            if self.options.randomize_level_logic in ["shuffled", "stretched_shuffled"]:
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)
@@ -103,7 +100,7 @@ class ShapezWorld(World):
             self.level_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
 
         if self.options.randomize_upgrade_requirements:
-            if self.options.randomize_upgrade_logic == 2:
+            if self.options.randomize_upgrade_logic == "hardcore":
                 self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
             else:
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
@@ -127,8 +124,8 @@ class ShapezWorld(World):
         self.multiworld.regions.append(menu_region)
 
         # Create list of all included locations based on player options
-        self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.value),
-                                   **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.value),
+        self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key),
+                                   **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.current_key),
                                    # **addachievements
                                    **addshapesanity(self.options.shapesanity_amount.value, self.random)}
         self.location_count = len(self.included_locations)
@@ -137,8 +134,8 @@ class ShapezWorld(World):
         self.multiworld.regions.extend(create_shapez_regions(self.player, self.multiworld, self.included_locations,
                                                              self.location_name_to_id,
                                                              self.level_logic, self.upgrade_logic,
-                                                             self.options.early_balancer_tunnel_and_trash.value,
-                                                             self.options.goal.value))
+                                                             self.options.early_balancer_tunnel_and_trash.current_key,
+                                                             self.options.goal.current_key))
 
         # Connect Menu to rest of regions
         main_region = self.multiworld.get_region("Main", self.player)
@@ -169,7 +166,7 @@ class ShapezWorld(World):
         self.multiworld.itempool += included_items
 
         # Add balancer, tunnel, and trash to early items if options say so
-        if self.options.early_balancer_tunnel_and_trash == 3:
+        if self.options.early_balancer_tunnel_and_trash == "sphere_1":
             self.multiworld.early_items[self.player]["Balancer"] = 1
             self.multiworld.early_items[self.player]["Tunnel"] = 1
             self.multiworld.early_items[self.player]["Trash"] = 1
@@ -181,14 +178,14 @@ class ShapezWorld(World):
 
         # Options that are relevant to the mod
         option_data = {
-            "goal": self.options.goal.value,
+            "goal": self.options.goal.current_key,
             "maxlevel": self.maxlevel,
             "finaltier": self.finaltier,
             "required_shapes_multiplier": self.options.required_shapes_multiplier.value,
             "randomize_level_requirements": bool(self.options.randomize_level_requirements.value),
             "randomize_upgrade_requirements": bool(self.options.randomize_upgrade_requirements.value),
-            "randomize_level_logic": self.options.randomize_level_logic.value,
-            "randomize_upgrade_logic": self.options.randomize_upgrade_logic.value,
+            "randomize_level_logic": self.options.randomize_level_logic.current_key,
+            "randomize_upgrade_logic": self.options.randomize_upgrade_logic.current_key,
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
             "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value)
         }

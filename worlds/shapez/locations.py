@@ -177,7 +177,7 @@ all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional"]
 all_locations.sort()
 
 
-def addlevels(maxlevel: int, logictype: int) -> Dict[str, Tuple[str, LocationProgressType]]:
+def addlevels(maxlevel: int, logictype: str) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all level locations based on player options (maxlevel INCLUDED).
     If shape requirements are not randomized, give logic type 0."""
 
@@ -186,7 +186,7 @@ def addlevels(maxlevel: int, logictype: int) -> Dict[str, Tuple[str, LocationPro
                                                               "Level 1 Additional": (
                                                               "Main", LocationProgressType.PRIORITY)}
 
-    if logictype == 0 or logictype == 1:  # Vanilla or shuffled
+    if logictype in ["vanilla", "shuffled"]:
         locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         locations["Level 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         locations["Level 3"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
@@ -199,7 +199,7 @@ def addlevels(maxlevel: int, logictype: int) -> Dict[str, Tuple[str, LocationPro
         locations["Level 10"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
         for x in range(11, maxlevel+1):
             locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-    elif logictype == 2 or logictype == 3:  # Both stretched variants
+    elif logictype in ["stretched_vanilla", "stretched_shuffled"]:
         phaselength = maxlevel//6
         l20phase = 20//phaselength
         if l20phase == 0:
@@ -221,7 +221,7 @@ def addlevels(maxlevel: int, logictype: int) -> Dict[str, Tuple[str, LocationPro
             locations[f"Level {x}"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
         for x in range(phaselength*5, maxlevel+1):
             locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-    else:  # logictype == 4 aka hardcore
+    else:  # logictype == hardcore
         locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         for x in range(2, maxlevel+1):
             locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
@@ -229,13 +229,13 @@ def addlevels(maxlevel: int, logictype: int) -> Dict[str, Tuple[str, LocationPro
     return locations
 
 
-def addupgrades(finaltier: int, logictype: int) -> Dict[str, Tuple[str, LocationProgressType]]:
+def addupgrades(finaltier: int, logictype: str) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all upgrade locations based on player options (finaltier INCLUDED).
     If shape requirements are not randomized, give logic type 0."""
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = {}
 
-    if logictype == 0:  # vanilla-like, Tier III is a special case here
+    if logictype == "vanilla_like":  # Tier III is a special case here
         locations["Belt Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         locations["Miner Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         locations["Processors Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
@@ -248,7 +248,7 @@ def addupgrades(finaltier: int, logictype: int) -> Dict[str, Tuple[str, Location
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
                                                                LocationProgressType.DEFAULT)
-    elif logictype == 1:  # linear
+    elif logictype == "linear":
         for cat in categories:
             locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         for cat in categories:
@@ -261,7 +261,7 @@ def addupgrades(finaltier: int, logictype: int) -> Dict[str, Tuple[str, Location
             for cat in categories:
                 locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
                                                                LocationProgressType.DEFAULT)
-    else: # logictype == 2 aka hardcore
+    else: # logictype == hardcore
         for cat in categories:
             locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         for x in range(3, finaltier+1):
@@ -273,7 +273,7 @@ def addupgrades(finaltier: int, logictype: int) -> Dict[str, Tuple[str, Location
 
 
 def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, excludeprogressive: bool,
-                    maxlevel: int, levellogictype: int, upgradelogictype: int,
+                    maxlevel: int, levellogictype: str, upgradelogictype: str,
                     goal: int) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all achievement locations based on player options."""
 
@@ -323,12 +323,12 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
     locations["Memories from the past"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["I need trains"] = ("Main", LocationProgressType.DEFAULT)
     locations["GPS"] = ("Main", LocationProgressType.DEFAULT)
-    if upgradelogictype == 1:
+    if upgradelogictype == "linear":
         locations["Faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
     else:
         locations["Faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
     # Achievements that depend on the level
-    if levellogictype in [0, 1, 4]:
+    if levellogictype in ["vanilla", "shuffled", "hardcore"]:
         locations["Wires"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         if goal: # not goal == 0
             locations["Freedom"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
@@ -380,7 +380,7 @@ def addachievements(include: bool, excludesoftlock: bool, excludelong: bool, exc
         unreasonable_type = LocationProgressType.DEFAULT
 
     if not excludesoftlock:
-        if levellogictype in [0, 1, 4]:
+        if levellogictype in ["vanilla", "shuffled", "hardcore"]:
             locations["Speedrun Master"] = ("Levels with 5 Buildings", unreasonable_type)
             locations["Speedrun Novice"] = ("Levels with 5 Buildings", unreasonable_type)
             locations["Not an idle game"] = ("Levels with 5 Buildings", unreasonable_type)

@@ -1,7 +1,7 @@
 from typing import Callable, Dict, Tuple, List
 
 from BaseClasses import Entrance, Region, CollectionState, MultiWorld, LocationProgressType, ItemClassification
-from . import ShapezItem
+from .items import ShapezItem
 from .locations import ShapezLocation
 
 all_regions = [
@@ -50,7 +50,7 @@ def create_entrance(player: int, name: str, parent: Region, connects: Region,
 def create_shapez_regions(player: int, multiworld: MultiWorld,
                           included_locations: Dict[str, Tuple[str, LocationProgressType]],
                           location_name_to_id: Dict[str, int], level_logic_buildings: List[str],
-                          upgrade_logic_buildings: List[str], early_useful: int, goal: int) -> List[Region]:
+                          upgrade_logic_buildings: List[str], early_useful: str, goal: str) -> List[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
     regions: Dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
 
@@ -59,9 +59,9 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
         regions[data[0]].locations.append(ShapezLocation(player, name, location_name_to_id[name],
                                                          regions[data[0]], data[1]))
 
-    if goal <= 1:
+    if goal in ["vanilla", "mam"]:
         goal_region = regions["Levels with 5 Buildings"]
-    elif goal == 2:
+    elif goal == "even_fasterer":
         goal_region = regions["Upgrades with 5 Buildings"]
     else:
         goal_region = regions["All Buildings Shapes"]
@@ -105,10 +105,10 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     level_buildings_5_needed: List[str] = [level_logic_buildings[4]]
     upgrade_buildings_3_needed: List[str] = [upgrade_logic_buildings[2]]
     upgrade_buildings_5_needed: List[str] = [upgrade_logic_buildings[4]]
-    if early_useful == 2:
+    if early_useful == "3_buildings":
         level_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
         upgrade_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
-    elif early_useful == 1:
+    elif early_useful == "5_buildings":
         level_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
         upgrade_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
 
