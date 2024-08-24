@@ -431,7 +431,7 @@ def add_helmet_logic(world: MMX3World):
 
     set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_underwater}", player), 
              lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_dam}", player), 
+    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_before_boss}", player), 
              lambda state: state.has(ItemName.third_armor_helmet, player, 1))
     
     set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino} -> {RegionName.tunnel_rhino_wall_jump}", player), 
