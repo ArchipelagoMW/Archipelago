@@ -210,7 +210,7 @@ class WitnessWorld(World):
 
         early_locations = [
             location for location in self.multiworld.get_reachable_locations(state, self.player)
-            if not location.is_event and not loc.item
+            if not location.is_event and not location.item
         ]
         self.reachable_early_locations = [location.name for location in early_locations]
 
