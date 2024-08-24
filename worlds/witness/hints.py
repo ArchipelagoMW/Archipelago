@@ -176,7 +176,7 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
         }
 
         logging.debug(
-            f"Player {world.player_name}: Eligible location groups for location "
+            f"Eligible location groups for location "
             f'"{hint_loc}" ({containing_world.game}): {location_groups_with_weights}.'
         )
 
@@ -186,7 +186,6 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
         return world.random.choices(location_groups, weights, k=1)[0], "Group"
 
     logging.debug(
-        f"Player {world.player_name}: "
         f"Couldn't find suitable location group for location \"{hint_loc}\" ({containing_world.game})."
     )
     if allow_regions:
