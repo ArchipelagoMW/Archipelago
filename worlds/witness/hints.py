@@ -217,8 +217,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
         chosen_group, group_type = try_getting_location_group_for_location(world, hint.location)
 
         logging.debug(
-            f"Player {world.player_name}: Vague hints: "
-            f'Chose group "{chosen_group}" of type "{group_type}" for location "{hint.location}".'
+            f'Vague hints: Chose group "{chosen_group}" of type "{group_type}" for location "{hint.location}".'
         )
 
         if hint.location.player == world.player:
