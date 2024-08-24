@@ -35,7 +35,7 @@ class TestMiscOptions(WitnessTestBase):
         "death_link_amnesty": 3,
         "laser_hints": True,
         "hint_amount": 40,
-        "area_hint_percentage": 100,
+        "area_hint_percentage": 75,
         "vague_hints": "experimental",
     }
 
