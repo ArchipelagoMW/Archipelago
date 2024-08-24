@@ -132,8 +132,10 @@ class EntranceRando(TextChoice):
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
     alias_false = 0
+    alias_off = 0
     option_no = 0
     alias_true = 1
+    alias_on = 1
     option_yes = 1
     default = 0
 
@@ -173,7 +175,14 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
     
     
-class TUNICPlandoConnections(PlandoConnections):
+class TunicPlandoConnections(PlandoConnections):
+    """
+    Generic connection plando. Format is:
+    - entrance: "Entrance Name"
+      exit: "Exit Name"
+      percentage: 100
+    Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
+    """
     entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
     exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
 
@@ -198,7 +207,7 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
-    plando_connections: TUNICPlandoConnections
+    plando_connections: TunicPlandoConnections
       
 
 tunic_option_groups = [
