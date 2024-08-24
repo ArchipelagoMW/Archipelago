@@ -1,5 +1,10 @@
 from .Names import ItemName
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from . import MMXWorld
+
 WEAKNESS_UNCHARGED_DMG = 0x03
 WEAKNESS_CHARGED_DMG = 0x05
 
@@ -362,7 +367,7 @@ weapons_chaotic = {
     ],
 }
 
-def handle_weaknesses(world):
+def handle_weaknesses(world: "MMXWorld"):
     shuffle_type = world.options.boss_weakness_rando.value
     strictness_type = world.options.boss_weakness_strictness.value
     boss_weakness_plando = world.options.boss_weakness_plando.value
@@ -382,6 +387,8 @@ def handle_weaknesses(world):
             damage_table = damage_templates["Allow Buster"].copy()
         elif strictness_type == 2:
             damage_table = damage_templates["Allow Upgraded Buster"].copy()
+            world.boss_weaknesses[boss].append(weapons_chaotic["Charged Shot (Level 3)"][0])
+            world.boss_weaknesses[boss].append(weapons_chaotic["Charged Shot (Level 3)"][1])
         else:
             damage_table = damage_templates["Only Weakness"].copy()
 

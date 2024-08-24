@@ -1,12 +1,16 @@
-import typing
-import bsdiff4
 import Utils
 import hashlib
 import os
-from pkgutil import get_data
+
+from typing import TYPE_CHECKING, Iterable
+
+if TYPE_CHECKING:
+    from . import MMXWorld
 
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
+
+from .Aesthetics import get_palette_bytes, player_palettes
 
 HASH_US = 'a10071fa78554b57538d0b459e00d224'
 HASH_US_REV_1 = 'df1cc0c8c8c4b61e3b834cc03366611c'
@@ -54,6 +58,18 @@ refill_rom_data = {
     STARTING_ID + 0x0034: ["1up", 0],
     STARTING_ID + 0x0032: ["weapon refill", 2],
     STARTING_ID + 0x0033: ["weapon refill", 8],
+}
+
+x_palette_set_offsets = {
+    "Default": 0x02B700,
+    "Homing Torpedo": 0x02CC40,
+    "Chameleon Sting": 0x02CC60,
+    "Rolling Shield": 0x02CD20,
+    "Fire Wave": 0x02CD00,
+    "Storm Tornado": 0x02CCC0,
+    "Electric Spark": 0x02CCE0,
+    "Boomerang Cutter": 0x02CCA0,
+    "Shotgun Ice": 0x02CC80,
 }
 
 boss_weakness_offsets = {
@@ -156,11 +172,37 @@ class MMXProcedurePatch(APProcedurePatch, APTokenMixin):
     def write_byte(self, offset, value):
         self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
 
-    def write_bytes(self, offset, value: typing.Iterable[int]):
+    def write_bytes(self, offset, value: Iterable[int]):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
 
-def adjust_boss_damage_table(world: World, patch: MMXProcedurePatch):
+def adjust_palettes(world: "MMXWorld", patch: MMXProcedurePatch):
+    player_palette_options = {
+        "Default": world.options.palette_default.current_key,
+        "Homing Torpedo": world.options.palette_homing_torpedo.current_key,
+        "Chameleon Sting": world.options.palette_chameleon_sting.current_key,
+        "Rolling Shield": world.options.palette_rolling_shield.current_key,
+        "Fire Wave": world.options.palette_fire_wave.current_key,
+        "Storm Tornado": world.options.palette_storm_tornado.current_key,
+        "Electric Spark": world.options.palette_electric_spark.current_key,
+        "Boomerang Cutter": world.options.palette_boomerang_cutter.current_key,
+        "Shotgun Ice": world.options.palette_shotgun_ice.current_key,
+    }
+    player_custom_palettes = world.options.player_palettes
+    for palette_set, offset in x_palette_set_offsets.items():
+        palette_option = player_palette_options[palette_set]
+        palette = player_palettes[palette_option]
+
+        if palette_set in player_custom_palettes.keys():
+            if len(player_custom_palettes[palette_set]) == 0x10:
+                palette = player_custom_palettes[palette_set]
+            else:
+                print (f"[{world.multiworld.player_name[world.player]}] Custom palette set for {palette_set} doesn't have exactly 16 colors. Falling back to the selected preset ({palette_option})")
+        data = get_palette_bytes(palette)
+        patch.write_bytes(offset, data)
+
+
+def adjust_boss_damage_table(world: "MMXWorld", patch: MMXProcedurePatch):
     for boss, data in world.boss_weakness_data.items():
         offset = boss_weakness_offsets[boss]
         patch.write_bytes(offset, bytearray(data))
@@ -171,17 +213,16 @@ def adjust_boss_damage_table(world: World, patch: MMXProcedurePatch):
     # Write weaknesses to a table
     offset = 0x17E9A2
     for _, entries in world.boss_weaknesses.items():
-        data = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
+        data = [0xFF for _ in range(16)]
         i = 0
         for entry in entries:
             data[i] = entry[1]
             i += 1
         patch.write_bytes(offset, bytearray(data))
-        #print (f"Boss: {_} | Offset: 0x{offset - 0x17E9A2:04X}")
-        offset += 8
+        offset += 16
 
 
-def adjust_boss_hp(world: World, patch: MMXProcedurePatch):
+def adjust_boss_hp(world: "MMXWorld", patch: MMXProcedurePatch):
     option = world.options.boss_randomize_hp
     if option == "weak":
         ranges = [1,32]
@@ -196,7 +237,7 @@ def adjust_boss_hp(world: World, patch: MMXProcedurePatch):
         patch.write_byte(offset, world.random.randint(ranges[0], ranges[1]))
 
 
-def patch_rom(world: World, patch: MMXProcedurePatch):
+def patch_rom(world: "MMXWorld", patch: MMXProcedurePatch):
     # Prepare some ROM locations to receive the basepatch output
     patch.write_bytes(0x00098C, bytearray([0xFF,0xFF,0xFF]))
     patch.write_bytes(0x0009AE, bytearray([0xFF,0xFF,0xFF]))
@@ -238,7 +279,8 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
                                            0xFF,0xFF,0xFF,0xFF,0xFF]))
 
     adjust_boss_damage_table(world, patch)
-    
+    adjust_palettes(world, patch)
+
     if world.options.boss_randomize_hp != "off":
         adjust_boss_hp(world, patch)
 
@@ -279,7 +321,6 @@ def patch_rom(world: World, patch: MMXProcedurePatch):
         final_value = 0
         for tweak in selected_tweaks:
             final_value |= enemy_tweaks_indexes[boss][tweak]
-        #print (f"Boss: {boss} | Offset: 0x{offset:06X} | Config: 0x{final_value:04X}")
         patch.write_bytes(offset, bytearray([final_value & 0xFF, (final_value >> 8) & 0xFF]))
 
     # Edit the ROM header

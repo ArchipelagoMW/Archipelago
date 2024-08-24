@@ -31,6 +31,7 @@ MMX_MAX_HP                  = WRAM_START + 0x01F9A
 MMX_CURRENT_HP              = WRAM_START + 0x00BCF
 MMX_UNLOCKED_CHARGED_SHOT   = MMX_RAM + 0x0016
 MMX_UNLOCKED_AIR_DASH       = MMX_RAM + 0x0022
+MMX_FORTRESS_PROGRESS       = WRAM_START + 0x01F7B
 
 MMX_SFX_FLAG            = MMX_RAM + 0x0003
 MMX_SFX_NUMBER          = MMX_RAM + 0x0004
@@ -605,10 +606,16 @@ class MMXSNIClient(SNIClient):
         menu_state = await snes_read(ctx, MMX_MENU_STATE, 0x1)
         gameplay_state = await snes_read(ctx, MMX_GAMEPLAY_STATE, 0x1)
         can_move = await snes_read(ctx, MMX_CAN_MOVE, 0x7)
+        heart_tank = await snes_read(ctx, MMX_ENABLE_HEART_TANK, 0x1)
+        hp_refill = await snes_read(ctx, MMX_ENABLE_HP_REFILL, 0x1)
+        weapon_refill = await snes_read(ctx, MMX_ENABLE_WEAPON_REFILL, 0x1)
         if menu_state[0] != 0x04 or \
             gameplay_state[0] != 0x04 or \
             can_move != b'\x00\x00\x00\x00\x00\x00\x00' or \
-            receiving_item[0] != 0x00:
+            receiving_item[0] != 0x00 or \
+            heart_tank[0] != 0x00 or \
+            hp_refill[0] != 0x00 or \
+            weapon_refill[0] != 0x00:
             return
         
         skip_hp = False
@@ -704,11 +711,13 @@ class MMXSNIClient(SNIClient):
         receiving_item = await snes_read(ctx, MMX_RECEIVING_ITEM, 0x1)
         menu_state = await snes_read(ctx, MMX_MENU_STATE, 0x1)
         gameplay_state = await snes_read(ctx, MMX_GAMEPLAY_STATE, 0x1)
+        progress = await snes_read(ctx, MMX_FORTRESS_PROGRESS, 0x1)
         can_move = await snes_read(ctx, MMX_CAN_MOVE, 0x7)
         hp_refill = await snes_read(ctx, MMX_ENABLE_HP_REFILL, 0x1)
         weapon_refill = await snes_read(ctx, MMX_ENABLE_WEAPON_REFILL, 0x1)
         if menu_state[0] != 0x04 or \
            gameplay_state[0] != 0x04 or \
+           progress[0] >= 0x04 or \
            hp_refill[0] != 0x00 or \
            weapon_refill[0] != 0x00 or \
            can_move != b'\x00\x00\x00\x00\x00\x00\x00' or \

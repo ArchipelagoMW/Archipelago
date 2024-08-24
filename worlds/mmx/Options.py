@@ -4,7 +4,7 @@ import typing
 from Options import OptionGroup, Choice, Range, Toggle, DefaultOnToggle, OptionSet, OptionDict, DeathLink, PerGameCommonOptions, StartInventoryPool
 from schema import Schema, And, Use, Optional
 
-from .Rom import action_buttons, action_names
+from .Rom import action_buttons, action_names, x_palette_set_offsets
 from .Weaknesses import boss_weaknesses, weapons_chaotic
 
 class EnergyLink(DefaultOnToggle):
@@ -332,6 +332,114 @@ class SparkMandrillTweaks(OptionSet):
     }
     default = {}
 
+class BasePalette(Choice):
+    """
+    Base class for palettes
+    """
+    option_blue = 0
+    option_gold_armor = 1
+    option_acid_burst = 6
+    option_parasitic_bomb = 7
+    option_triad_thunder = 8
+    option_spinning_blade = 9
+    option_ray_splasher = 10
+    option_gravity_well = 11
+    option_frost_shield = 12
+    option_tornado_fang = 13
+    option_crystal_hunter = 14
+    option_bubble_splash = 15
+    option_silk_shot = 16
+    option_spin_wheel = 17
+    option_sonic_slicer = 18
+    option_strike_chain = 19
+    option_magnet_mine = 20
+    option_speed_burner = 21
+    option_homing_torpedo = 22
+    option_chameleon_sting = 23
+    option_rolling_shield = 24
+    option_fire_wave = 25
+    option_storm_tornado = 26
+    option_electric_spark = 27
+    option_boomerang_cutter = 28
+    option_shotgun_ice = 29
+
+class PaletteDefault(BasePalette):
+    """
+    Which color to use for X's default color
+    """
+    display_name = "X Palette"
+    default = 0
+
+class PaletteHomingTorpedo(BasePalette):
+    """
+    Which color to use for X's Homing Torpedo
+    """
+    display_name = "Homing Torpedo Palette"
+    default = 22
+
+class PaletteChameleonSting(BasePalette):
+    """
+    Which color to use for X's Chameleon Sting
+    """
+    display_name = "Chameleon Sting Palette"
+    default = 23
+
+class PaletteRollingShield(BasePalette):
+    """
+    Which color to use for X's Rolling Shield
+    """
+    display_name = "Rolling Shield Palette"
+    default = 24
+
+class PaletteFireWave(BasePalette):
+    """
+    Which color to use for X's Fire Wave
+    """
+    display_name = "Fire Wave Palette"
+    default = 25
+
+class PaletteStormTornado(BasePalette):
+    """
+    Which color to use for X's Storm Tornado
+    """
+    display_name = "Storm Tornado Palette"
+    default = 26
+
+class PaletteElectricSpark(BasePalette):
+    """
+    Which color to use for X's Electric Spark
+    """
+    display_name = "Electric Spark Palette"
+    default = 27
+
+class PaletteBoomerangCutter(BasePalette):
+    """
+    Which color to use for X's Boomerang Cutter
+    """
+    display_name = "Boomerang Cutter Palette"
+    default = 28
+
+class PaletteShotgunIce(BasePalette):
+    """
+    Which color to use for X's Shotgun Ice
+    """
+    display_name = "Shotgun Ice Palette"
+    default = 29
+
+class SetPalettes(OptionDict):
+    """
+    Allows you to create colors for each weapon X has. Includes charge levels and Gold Armor customization.
+    This will override the option preset
+    
+    Each one expects 16 values which are mapped to X's colors.
+    The values can be in SNES RGB (bgr555) with the $ prefix or PC RGB (rgb888) with the # prefix.
+    """
+    display_name = "Set Custom Palettes"
+    schema = Schema({
+        Optional(color_set): list for color_set in x_palette_set_offsets.keys()
+    })
+    default = {}
+
 mmx_option_groups = [
     OptionGroup("Gameplay Options", [
         StartingLifeCount,
@@ -357,6 +465,7 @@ mmx_option_groups = [
     ]),
     OptionGroup("Boss Weaknesses", [
         BossWeaknessRando,
+        PlandoWeaknesses,
         BossWeaknessStrictness,
         BossRandomizedHP,
         LogicBossWeakness,
@@ -365,6 +474,18 @@ mmx_option_groups = [
         ChillPenguinTweaks,
         ArmoredArmadilloTweaks,
         SparkMandrillTweaks,
+    ]),
+    OptionGroup("Aesthetic", [
+        SetPalettes,
+        PaletteDefault,
+        PaletteHomingTorpedo,
+        PaletteChameleonSting,
+        PaletteRollingShield,
+        PaletteFireWave,
+        PaletteStormTornado,
+        PaletteElectricSpark,
+        PaletteBoomerangCutter,
+        PaletteShotgunIce,
     ]),
 ]
 
@@ -402,3 +523,13 @@ class MMXOptions(PerGameCommonOptions):
     chill_penguin_tweaks: ChillPenguinTweaks
     armored_armadillo_tweaks: ArmoredArmadilloTweaks
     spark_mandrill_tweaks: SparkMandrillTweaks
+    player_palettes: SetPalettes
+    palette_default: PaletteDefault
+    palette_homing_torpedo: PaletteHomingTorpedo
+    palette_chameleon_sting: PaletteChameleonSting
+    palette_rolling_shield: PaletteRollingShield
+    palette_fire_wave: PaletteFireWave
+    palette_storm_tornado: PaletteStormTornado
+    palette_electric_spark: PaletteElectricSpark
+    palette_boomerang_cutter: PaletteBoomerangCutter
+    palette_shotgun_ice: PaletteShotgunIce
