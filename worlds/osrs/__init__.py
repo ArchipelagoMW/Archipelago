@@ -56,8 +56,8 @@ class OSRSWorld(World):
 
     locations_by_category: typing.Dict[str, typing.List[LocationRow]]
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.region_name_to_data = {}
         self.location_name_to_data = {}
 
@@ -524,7 +524,9 @@ class OSRSWorld(World):
         return region
 
     def create_item(self, item_name: str) -> "Item":
-        item = [item for item in item_rows if item.name == item_name][0]
+        items = [item for item in item_rows if item.name == item_name]
+        assert len(items) > 0, f"No matching item found for name {item_name} for player {self.player_name}"
+        item = items[0]
         index = item_rows.index(item)
         return OSRSItem(item.name, item.progression, self.base_id + index, self.player)
 
