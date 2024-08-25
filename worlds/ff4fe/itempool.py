@@ -31,17 +31,17 @@ def create_character_pool(multiworld: World, chosen_character: str) -> List[str]
     filled_character_slots = 2  # Starting characters
     if multiworld.options.HeroChallenge.current_key != "none":
         character_pool.append(chosen_character)
-        filled_character_slots -= 1
-    if multiworld.options.NoFreeCharacters.current_key == "false":
+        filled_character_slots += 1
+    if multiworld.options.NoFreeCharacters.current_key == "true":
         filled_character_slots += len(free_character_locations)
-    if multiworld.options.NoEarnedCharacters.current_key == "false":
+    if multiworld.options.NoEarnedCharacters.current_key == "true":
         filled_character_slots += len(earned_character_locations)
-    if filled_character_slots > len(items.characters) - 1:
+    if (character_slots - filled_character_slots) > len(allowed_characters):
         character_pool.extend([character for character in allowed_characters if character != "None"])
-        filled_character_slots -= len(allowed_characters)
-        character_pool.extend(multiworld.random.choices(allowed_characters, k=filled_character_slots))
+        filled_character_slots += len(allowed_characters)
+        character_pool.extend(multiworld.random.choices(allowed_characters, k=(character_slots - filled_character_slots)))
     else:
-        character_pool.extend(multiworld.random.sample(allowed_characters, filled_character_slots))
+        character_pool.extend(multiworld.random.sample(allowed_characters, character_slots - filled_character_slots))
     for x in range(len(character_pool), character_slots):
         character_pool.append("None")
     return character_pool

@@ -36,7 +36,7 @@ all_items: list[ItemData] = []
 filler_items: list[ItemData] = []
 useful_items: list[ItemData] = []
 
-itemscsv = csvdb.CsvDb(os.path.join(os.path.dirname(__file__), "FreeEnterpriseForAP/FreeEnt/assets/db/items.csvdb"))
+itemscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/assets/db/items.csvdb").decode().splitlines())
 
 for item in itemscsv.create_view():
     item_tier = int(item.tier) if item.tier.isdecimal() else -1

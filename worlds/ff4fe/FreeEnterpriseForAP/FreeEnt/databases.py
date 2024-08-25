@@ -1,3 +1,5 @@
+import pkgutil
+
 try:
     from . import csvdb
 except ImportError:
@@ -7,7 +9,7 @@ import os
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'assets', 'db')
 
-_curves_db = csvdb.CsvDb(os.path.join(DB_PATH, 'curves.csvdb'), {
+_curves_db = csvdb.CsvDb(pkgutil.get_data(__name__, 'assets/db/curves.csvdb').decode().splitlines(), {
     'wikiindex' : int,
     'tier1' : int,
     'tier2' : int,
@@ -19,7 +21,7 @@ _curves_db = csvdb.CsvDb(os.path.join(DB_PATH, 'curves.csvdb'), {
     'tier8' : int,
     })
 
-_treasure_db = csvdb.CsvDb(os.path.join(DB_PATH, 'treasure.csvdb'), {
+_treasure_db = csvdb.CsvDb(pkgutil.get_data(__name__, 'assets/db/treasure.csvdb').decode().splitlines(), {
     'ordr' : int,
     'flag' : csvdb.HexInt,
     'index' : int,
@@ -28,26 +30,26 @@ _treasure_db = csvdb.CsvDb(os.path.join(DB_PATH, 'treasure.csvdb'), {
     'fight' : csvdb.NullableHexInt
     })
 
-_items_db = csvdb.CsvDb(os.path.join(DB_PATH, 'items.csvdb'), {
+_items_db = csvdb.CsvDb(pkgutil.get_data(__name__, 'assets/db/items.csvdb').decode().splitlines(), {
     'code' : csvdb.HexInt,
     'tier' : int,
     'price' : int,
     'equip' : csvdb.List(',')
     })
 
-_shops_db = csvdb.CsvDb(os.path.join(DB_PATH, 'shops.csvdb'), {
+_shops_db = csvdb.CsvDb(pkgutil.get_data(__name__, 'assets/db/shops.csvdb').decode().splitlines(), {
     'id' : csvdb.HexInt,
     'manifest' : csvdb.List('\n', filter_func=str.strip),
     'jmanifest' : csvdb.List('\n', filter_func=str.strip)
     })
 
-_spells_db = csvdb.CsvDb(os.path.join(DB_PATH, 'spells.csvdb'), {
+_spells_db = csvdb.CsvDb(pkgutil.get_data(__name__, 'assets/db/spells.csvdb').decode().splitlines(), {
     'code' : csvdb.HexInt,
     'mp' : int,
     'data' : csvdb.List(',', value_type=csvdb.HexInt)
     })
 
-_custom_weapons_db = csvdb.CsvDb(os.path.join(DB_PATH, 'custom_weapons.csvdb'), {
+_custom_weapons_db = csvdb.CsvDb(pkgutil.get_data(__name__, 'assets/db/custom_weapons.csvdb').decode().splitlines(), {
     'id' : csvdb.HexInt,
     'equip' : csvdb.List(','),
     'use' : csvdb.List(','),

@@ -1,3 +1,4 @@
+import pkgutil
 import re
 import json
 import math
@@ -95,7 +96,7 @@ class ConditionalTransformer(f4c.lark.Transformer):
 sections = {}
 cur_section = None
 
-with open('flagspec.txt', 'r') as infile:
+with pkgutil.get_data(__name__, "flagspec.txt").decode().splitlines() as infile:
     for line in infile:
         if line.strip().startswith('#'):
             continue

@@ -1,3 +1,4 @@
+import pkgutil
 import re
 import os
 import math
@@ -52,8 +53,8 @@ def _extract_part(value, part):
 def _load_parser():
     global _msf_parser
     if _msf_parser is None:
-        with open(os.path.join(os.path.dirname(__file__), "grammar_myselfpatch.lark"), 'r') as infile:
-            _msf_parser = lark.Lark(infile.read())
+        infile = pkgutil.get_data(__name__, "grammar_myselfpatch.lark").decode()
+        _msf_parser = lark.Lark(infile)
 
     global _expr_transformer
     if _expr_transformer is None:

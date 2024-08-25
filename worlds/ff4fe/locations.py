@@ -16,12 +16,15 @@ class LocationData():
     surface: str
     area: str
     fe_id: int
+    major_slot: bool
 
-    def __init__(self, name, surface, area, fe_id):
+    def __init__(self, name, surface, area, fe_id, major_slot):
         self.name = name
         self.surface = surface
         self.area = area
         self.fe_id = fe_id
+        self.major_slot = major_slot
+
 
     def to_json(self):
         return {
@@ -31,12 +34,12 @@ class LocationData():
 
 all_locations: list[LocationData] = []
 
-locationscsv = csvdb.CsvDb(os.path.join(os.path.dirname(__file__), "FreeEnterpriseForAP/FreeEnt/assets/db/treasure.csvdb"))
+locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/assets/db/treasure.csvdb").decode().splitlines())
 
 for location in locationscsv.create_view():
     if location.exclude != "":
         if location.exclude == "key":
-            new_location = LocationData("", location.world, location.area, int(location.flag, 16))
+            new_location = LocationData("", location.world, location.area, int(location.flag, 16), True)
             if location.world == "Underworld":  # Rat Tail location
                 new_location.name = f"Town of Monsters -- B4F (first area) -- Rat Tail"
             if location.world == "Moon":  # Ribbon location
@@ -46,17 +49,17 @@ for location in locationscsv.create_view():
                     new_location.name = f"Lunar Subterrane -- B7 (right room) -- Ribbon Right"
             all_locations.append(new_location)
         continue
-    new_location = LocationData("", location.world, location.area, int(location.flag, 16))
+    new_location = LocationData("", location.world, location.area, int(location.flag, 16), location.fight != "")
     subname = f" -- {location.spoilersubarea if location.spoilersubarea != '' else ''}"
     new_location.name = (f"{location.spoilerarea}"
                          f"{subname}"
                          f" -- {location.spoilerdetail}")
     all_locations.append(new_location)
 
-locationscsv = csvdb.CsvDb(os.path.join(os.path.dirname(__file__), "FreeEnterpriseForAP/FreeEnt/assets/db/rewardslots.csvdb"))
+locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/assets/db/rewardslots.csvdb").decode().splitlines())
 
 for location in locationscsv.create_view():
-    new_location = LocationData("", location.world, location.area, int(location.fecode, 16) + 0x200)
+    new_location = LocationData("", location.world, location.area, int(location.fecode, 16) + 0x200, True)
     subname = f" -- {location.spoilersubarea if location.spoilersubarea != '' else ''}"
     new_location.name = (f"{location.spoilerarea}"
                          f"{subname}"
@@ -112,7 +115,7 @@ earned_character_locations = [
 
 
 for location in character_slots:
-    all_locations.append(LocationData(location[0], location[1], location[2], location[3] + 0x200))
+    all_locations.append(LocationData(location[0], location[1], location[2], location[3] + 0x200, True))
 
 mutually_exclusive_slots = [
     ["Starting Character 1", "Starting Character 2"],
@@ -125,3 +128,5 @@ areas = []
 for location in all_locations:
     if location.area not in areas:
         areas.append(location.area)
+
+print("stuff")

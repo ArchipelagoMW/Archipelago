@@ -1,4 +1,5 @@
 import os
+import pkgutil
 
 from . import rewards
 from .address import *
@@ -376,7 +377,7 @@ def apply(env):
     env.meta['available_nonstarting_characters'] = set()
     for slot in assignment:
         character = assignment[slot]
-        if character is None:
+        if character is None or character == "none":
             if slot in ['crydia_slot', 'rosa1_slot', 'yang2_slot', 'rosa2_slot', 'kain2_slot']:
                 axtor_map[SLOTS[slot]] = 0xFE  # placeholder piggy for required overworld NPCs
             else:
@@ -410,7 +411,7 @@ def apply(env):
     # TODO: need more complex logic for this so it can be obfuscated
     for slot in ['crydia_slot', 'yang2_slot']:
         ch = assignment[slot]
-        if ch is None:
+        if ch is None or ch == "none":
             ch = 'piggy'
 
         monster_gfx_sprite = CHARACTER_MONSTER_GFX[ch][0]
@@ -438,8 +439,7 @@ def apply(env):
     # do fashion here too for convenience
     if not env.options.flags.has('vanilla_fashion'):
         fashion_filename = ('fashion_vintage.bin' if env.options.flags.has('vintage') else 'fashion.bin')
-        with open(os.path.join(os.path.dirname(__file__), 'assets', 'fashion', fashion_filename), 'rb') as infile:
-            env.add_binary(UnheaderedAddress(0x140000), infile.read())
+        env.add_binary(UnheaderedAddress(0x140000), pkgutil.get_data(__name__, f"assets/fashion/{fashion_filename}"))
         env.add_file('scripts/fashion.f4c')
 
         NUM_PALETTES = 13
@@ -449,7 +449,7 @@ def apply(env):
         fashion_codes = [0] * 0x20
         for slot in resolve_order:
             character = assignment[slot]
-            if character is None:
+            if character is None or character == "none":
                 continue
 
             code = env.rnd.choice(available_palettes[character])

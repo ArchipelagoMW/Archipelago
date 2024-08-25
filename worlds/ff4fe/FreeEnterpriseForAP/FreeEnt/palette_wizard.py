@@ -1,3 +1,5 @@
+import pkgutil
+
 MAP_PALETTE_PAIRS = {
     'BaronTown' : [0x00, 0x01],
     'Mist' : [0x00, 0x09],
@@ -501,7 +503,7 @@ class PaletteWizard:
 if __name__ == '__main__':
     # do quick and dirty analysis to generate data for ourselves
     import re
-    with open('../f4c/dump.mapinfo.f4c', 'r') as infile:
+    with pkgutil.get_data(__name__, "../f4c/dump.mapinfo.f4c") as infile:
         current_map = None
         for line in infile:
             m = re.search(r'^map\(#(?P<name>.*)\)', line)

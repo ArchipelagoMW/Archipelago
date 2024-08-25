@@ -58,10 +58,10 @@ class FF4FEWorld(World):
     location_name_to_id = {location.name: id for
                            id, location in enumerate(all_locations, base_id)}
 
-    with open("ids.json", 'w') as file:
-        file.write(json.dumps(item_name_to_id, ensure_ascii=False, indent=2))
-        file.write("---")
-        file.write(json.dumps(location_name_to_id, ensure_ascii=False, indent=2))
+    #with open("ids.json", 'w') as file:
+    #    file.write(json.dumps(item_name_to_id, ensure_ascii=False, indent=2))
+    #    file.write("---")
+    #    file.write(json.dumps(location_name_to_id, ensure_ascii=False, indent=2))
 
     chosen_character = "None"
 
@@ -160,23 +160,21 @@ class FF4FEWorld(World):
         for location in locations.character_locations:
             add_item_rule(self.multiworld.get_location(location, self.player),
                      lambda item: item.name in items.characters and item.player == self.player)
+            if self.options.NoFreeCharacters.current_key == "true":
+                if location in locations.free_character_locations:
+                    add_item_rule(self.multiworld.get_location(location, self.player),
+                                  lambda item: item.name == "None")
+            if self.options.NoEarnedCharacters.current_key == "true":
+                if location in locations.earned_character_locations:
+                    add_item_rule(self.multiworld.get_location(location, self.player),
+                                  lambda item: item.name == "None")
 
-        def check_exclusive_slot(item, member):
-            if item.player != self.player or item.name == "None":
-                return True
-            location = self.multiworld.get_location(member, self.player)
-            if location.item is not None:
-                if location.item.name == item.name:
-                    return False
-            return True
-
-        for pair in locations.mutually_exclusive_slots:
-            break
-            for member in pair:
-                for other_member in pair:
-                    if other_member != member:
-                        add_item_rule(self.multiworld.get_location(member, self.player),
-                                      lambda item, true_other_member=other_member: check_exclusive_slot(item, true_other_member))
+        #for pair in locations.mutually_exclusive_slots:
+        #    for member in pair:
+        #        for other_member in pair:
+        #            if other_member != member:
+        #                add_item_rule(self.multiworld.get_location(member, self.player),
+        #                              lambda item, true_other_member=other_member: check_exclusive_slot(item, true_other_member))
 
         for location in locations.all_locations:
             if location.name not in locations.character_locations:
@@ -206,6 +204,9 @@ class FF4FEWorld(World):
                 for requirement in FERules.area_rules[location.area]:
                     add_rule(self.multiworld.get_location(location.name, self.player),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
+            if location.major_slot:
+                add_item_rule(self.multiworld.get_location(location.name, self.player),
+                         lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
 
         for location in [event for event in events.boss_events]:
             if location.area in topology.hook_areas:
@@ -245,6 +246,7 @@ class FF4FEWorld(World):
         placement_dict["seed"] = self.player + self.multiworld.seed
         placement_dict["output_file"] = f'{self.multiworld.get_out_file_name_base(self.player)}' + '.sfc'
         placement_dict["flags"] = self.create_flags_from_options()
+        placement_dict["temp_dir"] = output_directory
 
         patch = FF4FEProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("placement_file.json" , json.dumps(placement_dict).encode("UTF-8"))
@@ -300,3 +302,12 @@ class FF4FEWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    def check_exclusive_slot(item, member):
+        if item.player != self.player or item.name == "None":
+            return True
+        location = self.multiworld.get_location(member, self.player)
+        if location.item is not None:
+            if location.item.name == item.name:
+                return False
+        return True

@@ -28,10 +28,10 @@ class MakeCommand(CLICommand):
         options.quickstart = args.quickstart
         options.ap_data = json.loads(args.ap_data)
 
-        if args.lastseed:
-            if os.path.exists('.lastseed'):
-                with open('.lastseed', 'r') as infile:
-                    options.seed = infile.read().strip()
+        #if args.lastseed:
+        #    if os.path.exists('.lastseed'):
+        #        with open('.lastseed', 'r') as infile:
+        #            options.seed = infile.read().strip()
 
         if args.seed:
             options.seed = args.seed
@@ -43,27 +43,29 @@ class MakeCommand(CLICommand):
         options.beta = args.beta
         options.spoiler_only = args.spoileronly
 
-        if args.test:
-            if os.path.isfile(args.test):
-                with open(args.test, 'r') as infile:
-                    options.test_settings = json.load(infile)
-            else:
-                try:
-                    options.test_settings = json.loads(args.test)
-                except json.decoder.JSONDecodeError as e:
-                    options.test_settings = {}
-                    for pair in args.test.split(';'):
-                        if pair.strip():
-                            parts = pair.split(':')
-                            key = parts[0].strip()
-                            if len(parts) == 1:
-                                val = True
-                            else:
-                                val = parts[1].strip()
+        #if args.test:
+        #    if os.path.isfile(args.test):
+        #        with open(args.test, 'r') as infile:
+        #            options.test_settings = json.load(infile)
+        #    else:
+        #        try:
+        #            options.test_settings = json.loads(args.test)
+        #        except json.decoder.JSONDecodeError as e:
+        #            options.test_settings = {}
+        #            for pair in args.test.split(';'):
+        #                if pair.strip():
+        #                    parts = pair.split(':')
+        #                    key = parts[0].strip()
+        #                    if len(parts) == 1:
+        #                        val = True
+        #                    else:
+        #                        val = parts[1].strip()
 
-                            options.test_settings[key] = val
+        #                    options.test_settings[key] = val
 
         options.cache_path = os.path.join(os.path.dirname(__file__), '.build')
+        if options.ap_data is not None:
+            options.cache_path = os.path.join(options.ap_data["temp_dir"], '.build')
 
         build_output = generator.generate(args.rom, force_recompile=args.recompile)
         seed = build_output.seed
@@ -77,28 +79,28 @@ class MakeCommand(CLICommand):
             with open(output_filename, 'wb') as outfile:
                 outfile.write(build_output.rom)
 
-        with open('.lastseed', 'w') as outfile:
-            outfile.write('{}\n'.format(seed))
+        #with open('.lastseed', 'w') as outfile:
+        #    outfile.write('{}\n'.format(seed))
 
-        if report is not None:
-            with open(output_filename + '.symbols', 'w') as outfile:
-                symbol_names = [pair[1] for pair in sorted([[report.symbols[name], name] for name in report.symbols])]
-                for n in symbol_names:
-                    outfile.write(f'{report.symbols[n]:6X}  {n}\n')
+        #if report is not None:
+        #    with open(output_filename + '.symbols', 'w') as outfile:
+        #        symbol_names = [pair[1] for pair in sorted([[report.symbols[name], name] for name in report.symbols])]
+        #        for n in symbol_names:
+        #            outfile.write(f'{report.symbols[n]:6X}  {n}\n')
 
-        with open(output_filename + '.script', 'w') as outfile:
-            outfile.write(build_output.script)
+        #with open(output_filename + '.script', 'w') as outfile:
+        #    outfile.write(build_output.script)
 
-        if (build_output.public_spoiler is not None):
-            with open(output_filename + '.spoiler.public', 'w') as outfile:
-                outfile.write(build_output.public_spoiler)
+        #if (build_output.public_spoiler is not None):
+        #    with open(output_filename + '.spoiler.public', 'w') as outfile:
+        #        outfile.write(build_output.public_spoiler)
 
-        with open(output_filename + '.spoiler.private', 'w') as outfile:
-            outfile.write(build_output.private_spoiler)
+        #with open(output_filename + '.spoiler.private', 'w') as outfile:
+        #    outfile.write(build_output.private_spoiler)
 
-        if args.metrics and report is not None:
-            print(report.metrics)
-            print(', '.join(build_output.verification))
+        #if args.metrics and report is not None:
+        #    print(report.metrics)
+        #    print(', '.join(build_output.verification))
 
 if __name__ == '__main__':
     MakeCommand().run_as_main()

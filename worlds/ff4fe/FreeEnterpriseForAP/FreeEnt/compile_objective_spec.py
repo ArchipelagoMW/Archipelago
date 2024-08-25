@@ -1,10 +1,11 @@
+import pkgutil
 import re
 import shutil
 
 CUSTOM_OBJECTIVE_COUNT = 8
 objectives = []
 
-with open('objectivespec.txt', 'r') as infile:
+with pkgutil.get_data(__name__, "objectivespec.txt").decode().splitlines() as infile:
     next_code = 0x20
     for line in infile:
         line = line.strip()
@@ -49,7 +50,7 @@ with open('scripts/objective_data.f4c', 'w') as outfile:
 
 print('Updating flagspec')
 flagspec_lines = []
-with open('flagspec.txt', 'r') as infile:
+with pkgutil.get_data(__name__, "flagspec.txt").decode().splitlines() as infile:
     in_section = False
     for line in infile:
         if 'BEGIN_AUTO_OBJECTIVES' in line:

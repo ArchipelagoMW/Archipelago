@@ -73,6 +73,7 @@ class FF4FEPatchExtension(APPatchExtension):
             ]
             args = parser.parse_args(arguments)
             cmd.execute(args)
+        os.unlink("ff4base.sfc")
         with open(output_file, "rb") as file:
             rom_data = bytearray(file.read())
             rom_data[ROM_NAME:ROM_NAME+20] = bytes(rom_name, encoding="utf-8")

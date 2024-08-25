@@ -37,9 +37,9 @@ class PassEnabled(Toggle):
 
 class UsefulPercentage(Range):
     display_name = "Useful Item Percentage"
-    range_start = 0
+    range_start = 25
     range_end = 100
-    default = 30
+    default = 35
 
 
 @dataclass

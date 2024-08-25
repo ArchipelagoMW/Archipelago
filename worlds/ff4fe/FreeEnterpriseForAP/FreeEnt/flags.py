@@ -1,3 +1,4 @@
+import pkgutil
 import re
 import math
 import base64
@@ -9,8 +10,7 @@ try:
 except ModuleNotFoundError:
     from . import flagsetcore
 
-with open(os.path.join(os.path.dirname(__file__), 'flagspec.pickle'), 'rb') as infile:
-    _flagspec = pickle.load(infile)
+_flagspec = pickle.loads(pkgutil.get_data(__name__, 'flagspec.pickle'))
 
 class FlagSetCoreLib:
     def b64encode(self, byte_list):

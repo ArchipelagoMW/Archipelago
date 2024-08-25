@@ -180,7 +180,7 @@ class FF4FEClient(SNIClient):
                     snes_buffered_write(ctx, Rom.inventory_start_location + i + 1, bytes([1]))
                 else:
                     item_count = inventory_data[i + 1]
-                    item_count = min(item_count + 1, 99)
+                    item_count = min((item_count + 10) if "Arrows" in item_received_name else (item_count + 1), 99)
                     snes_buffered_write(ctx, Rom.inventory_start_location + i + 1, bytes([item_count]))
                 self.increment_items_received(ctx, items_received_amount)
 

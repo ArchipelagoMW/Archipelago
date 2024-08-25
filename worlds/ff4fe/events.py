@@ -43,4 +43,4 @@ boss_events = []
 boss_slot_names = [boss[2] for boss in boss_event_data]
 
 for event in boss_event_data:
-    boss_events.append(LocationData(event[2], event[0], event[1], 0xFFFF))
+    boss_events.append(LocationData(event[2], event[0], event[1], 0xFFFF, True))

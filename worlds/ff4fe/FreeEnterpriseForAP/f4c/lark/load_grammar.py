@@ -1,6 +1,7 @@
 "Parses and creates Grammar objects"
 
 import os.path
+import pkgutil
 from itertools import chain
 import re
 from ast import literal_eval
@@ -495,8 +496,7 @@ _imported_grammars = {}
 def import_grammar(grammar_path):
     if grammar_path not in _imported_grammars:
         for import_path in IMPORT_PATHS:
-            with open(os.path.join(import_path, grammar_path)) as f:
-                text = f.read()
+            text = pkgutil.get_data(__name__, os.path.join(import_path, grammar_path)).decode()
             grammar = load_grammar(text, grammar_path)
             _imported_grammars[grammar_path] = grammar
 

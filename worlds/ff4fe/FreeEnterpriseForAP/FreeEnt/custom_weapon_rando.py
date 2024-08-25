@@ -1,4 +1,6 @@
 import os
+import pkgutil
+
 from . import databases
 from .rewards import RewardSlot, ItemReward
 from .spoilers import SpoilerRow
@@ -160,8 +162,8 @@ def apply(env):
     env.add_binary(UnheaderedAddress(0x7A590 + CUSTOM_WEAPON_ELEMENT_TABLE_INDEX * 0x03), [element_value & 0xFF, (element_value >> 8) & 0xFF, (element_value >> 16) & 0xFF], as_script=True)
 
     # set override item description
-    with open(os.path.join(os.path.dirname(__file__), 'assets', 'item_info', f'custom_weapon_{custom_weapon.id:X}_description.bin'), 'rb') as infile:
-        description_data = infile.read()
+    infile = pkgutil.get_data(__name__, f"assets/item_info/custom_weapon_{custom_weapon.id:X}_description.bin")
+    description_data = infile
     env.meta.setdefault('item_description_overrides', {})[CUSTOM_WEAPON_ITEM_ID] = description_data
 
     # write proxy item value

@@ -60,13 +60,12 @@ class Row:
         return str(self._data)
 
 class CsvDb:
-    def __init__(self, path, column_types={}):
+    def __init__(self, infile, column_types={}):
         self._rows = []
-        with open(path, 'r') as infile:
-            reader = csv.reader(infile)
+        reader = csv.reader(infile)
 
-            header_row = next(reader)
-            self._rows = [Row(src_row, header_row, column_types) for src_row in reader]
+        header_row = next(reader)
+        self._rows = [Row(src_row, header_row, column_types) for src_row in reader]
 
     def create_view(self):
         return View(self)
