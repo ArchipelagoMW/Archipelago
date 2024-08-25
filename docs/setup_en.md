@@ -48,8 +48,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal
-settings and export a config file from them: [Wario Land 4 Player Settings Page](/games/Wario%20Land%204/player-settings)
+The Player options page on the website allows you to configure your personal
+options and export a config file from them: [Wario Land 4 Player options Page](/games/Wario%20Land%204/player-options)
 
 ### Verifying your config file
 
