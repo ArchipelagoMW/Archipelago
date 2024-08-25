@@ -192,7 +192,7 @@ class TestFillRestrictive(unittest.TestCase):
         location_pool = player1.locations[1:] + player2.locations
         item_pool = player1.prog_items[:-1] + player2.prog_items
         fill_restrictive(multiworld, multiworld.state, location_pool, item_pool)
-        multiworld.state.sweep_for_events()  # collect everything
+        multiworld.state.sweep_for_advancements()  # collect everything
 
         # all of player2's locations and items should be accessible (not all of player1's)
         for item in player2.prog_items:
@@ -443,8 +443,8 @@ class TestFillRestrictive(unittest.TestCase):
         item = player1.prog_items[0]
         item.code = None
         location.place_locked_item(item)
-        multiworld.state.sweep_for_events()
-        multiworld.state.sweep_for_events()
+        multiworld.state.sweep_for_advancements()
+        multiworld.state.sweep_for_advancements()
         self.assertTrue(multiworld.state.prog_items[item.player][item.name], "Sweep did not collect - Test flawed")
         self.assertEqual(multiworld.state.prog_items[item.player][item.name], 1, "Sweep collected multiple times")
 
