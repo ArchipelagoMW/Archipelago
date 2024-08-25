@@ -45,8 +45,7 @@ from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
-from kivy.metrics import dp, sp
-from kivy.effects.scroll import ScrollEffect
+from kivy.metrics import dp
 from kivy.uix.widget import Widget
 from kivy.uix.layout import Layout
 from kivy.utils import escape_markup
@@ -61,13 +60,14 @@ from kivymd.app import MDApp
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsItemIcon, MDTabsCarousel
+from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsCarousel
 from kivymd.uix.button import MDButton, MDButtonText, MDButtonIcon
 from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.recycleview import MDRecycleView
 from kivymd.uix.textfield.textfield import MDTextField
 from kivymd.uix.progressindicator import MDLinearProgressIndicator
 from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.tooltip import MDTooltip, MDTooltipPlain
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -145,7 +145,7 @@ class HoverBehavior(object):
 Factory.register("HoverBehavior", HoverBehavior)
 
 
-class ToolTip(MDLabel):
+class ToolTip(MDTooltipPlain):
     pass
 
 
@@ -157,32 +157,47 @@ class HovererableLabel(HoverBehavior, MDLabel):
     pass
 
 
-class TooltipLabel(HovererableLabel):
-    tooltip = None
+class TooltipLabel(HovererableLabel, MDTooltip):
+    tooltip_display_delay = 0.1
 
     def create_tooltip(self, text, x, y):
         text = text.replace("<br>", "\n").replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
-        if self.tooltip:
-            # update
-            self.tooltip.children[0].text = text
-        else:
-            self.tooltip = MDFloatLayout()
-            tooltip_label = ToolTip(text=text)
-            self.tooltip.add_widget(tooltip_label)
-            fade_in_animation.start(self.tooltip)
-            MDApp.get_running_app().root.add_widget(self.tooltip)
-
-        # handle left-side boundary to not render off-screen
-        x = max(x, 3 + self.tooltip.children[0].texture_size[0] / 2)
-
         # position float layout
-        self.tooltip.x = x - self.tooltip.width / 2
-        self.tooltip.y = y - self.tooltip.height / 2 + 48
+        center_x, center_y = self.to_window(self.center_x, self.center_y)
+        self.shift_y = y - center_y
+        shift_x = center_x - x
+        if shift_x > 0:
+            self.shift_left = shift_x
+        else:
+            self.shift_right = shift_x
 
-    def remove_tooltip(self):
-        if self.tooltip:
-            MDApp.get_running_app().root.remove_widget(self.tooltip)
-            self.tooltip = None
+        if self._tooltip:
+            # update
+            self._tooltip.text = text
+        else:
+            self._tooltip = ToolTip(text=text, pos_hint={})
+            self.display_tooltip()
+
+    def display_tooltip(self, *args) -> None:
+        """Reimpl because of KivyMD bug"""
+        from kivymd.material_resources import DEVICE_TYPE
+
+        if not self._tooltip or self._tooltip.parent:
+            return
+
+        def passthrough(instance, value):
+            pass
+
+        Window.add_widget(self._tooltip)
+        x, y = self.adjust_tooltip_position()
+        self._tooltip.x, self._tooltip.y = x, y
+
+        if DEVICE_TYPE == "desktop":
+            Clock.schedule_once(
+                self.animation_tooltip_show, self.tooltip_display_delay
+            )
+        else:
+            Clock.schedule_once(self.animation_tooltip_show, 0)
 
     def on_mouse_pos(self, window, pos):
         if not self.get_root_window():
@@ -209,22 +224,22 @@ class TooltipLabel(HovererableLabel):
 
     def on_leave(self):
         self.remove_tooltip()
+        self._tooltip = None
 
 
-class ServerLabel(HovererableLabel):
+class ServerLabel(HovererableLabel, MDTooltip):
+    tooltip_display_delay = 0.1
+
     def __init__(self, *args, **kwargs):
         super(HovererableLabel, self).__init__(*args, **kwargs)
-        self.layout = MDFloatLayout()
-        self.popuplabel = ServerToolTip(text="Test")
-        self.layout.add_widget(self.popuplabel)
+        self._tooltip = ServerToolTip(text="Test")
 
     def on_enter(self):
-        self.popuplabel.text = self.get_text()
-        MDApp.get_running_app().root.add_widget(self.layout)
-        fade_in_animation.start(self.layout)
+        self._tooltip.text = self.get_text()
+        self.display_tooltip()
 
     def on_leave(self):
-        MDApp.get_running_app().root.remove_widget(self.layout)
+        self.animation_tooltip_dismiss()
 
     @property
     def ctx(self) -> context_type:
