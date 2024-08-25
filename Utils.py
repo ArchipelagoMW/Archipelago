@@ -17,6 +17,8 @@ import logging
 import warnings
 
 from argparse import Namespace
+
+import Utils
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from typing_extensions import TypeGuard
@@ -295,8 +297,7 @@ OptionsType = Settings  # TODO: remove when removing get_options
 
 
 def get_options() -> Settings:
-    # TODO: switch to Utils.deprecate after 0.4.4
-    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    deprecate("Utils.get_options() is deprecated. Use the settings API instead.")
     return get_settings()
 
 
