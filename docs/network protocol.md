@@ -219,7 +219,7 @@ Sent to clients after a client requested this message be sent to them, more info
 #### Arguments
 | Name     | Type        | Notes                                                                                                          |
 |----------|-------------|----------------------------------------------------------------------------------------------------------------|
-| teams    | list\[int\] | Optional. Teams this message is targeting                                                                      |
+| teams    | list\[int\] | Optional. Teams this message is targeting. Default assumed value when the key is not present is own team.      |
 | games    | list\[str\] | Optional. Game names this message is targeting                                                                 |
 | slots    | list\[int\] | Optional. Player slot IDs that this message is targeting                                                       |
 | tags     | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting                                                       |
