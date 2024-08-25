@@ -609,7 +609,10 @@ class GauntletLegendsContext(CommonContext):
         self.current_level = level
         players = await self.active_players()
         player_level = await self.player_level()
-        self.difficulty = min(players + (min(player_level // vanilla[level[1]], 3)), 4)
+        if self.clear_counts.get(str(level), 0) != 0:
+            self.difficulty = min(players + (min(player_level // vanilla[level[1]], 3)), 4)
+        else:
+            self.difficulty = players
         _id = level[0]
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
