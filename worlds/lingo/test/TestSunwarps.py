@@ -19,7 +19,8 @@ class TestVanillaDoorsNormalSunwarps(LingoTestBase):
 
 class TestSimpleDoorsNormalSunwarps(LingoTestBase):
     options = {
-        "shuffle_doors": "simple",
+        "shuffle_doors": "doors",
+        "group_doors": "true",
         "sunwarp_access": "normal"
     }
 
@@ -37,7 +38,8 @@ class TestSimpleDoorsNormalSunwarps(LingoTestBase):
 
 class TestSimpleDoorsDisabledSunwarps(LingoTestBase):
     options = {
-        "shuffle_doors": "simple",
+        "shuffle_doors": "doors",
+        "group_doors": "true",
         "sunwarp_access": "disabled"
     }
 
@@ -56,7 +58,8 @@ class TestSimpleDoorsDisabledSunwarps(LingoTestBase):
 
 class TestSimpleDoorsUnlockSunwarps(LingoTestBase):
     options = {
-        "shuffle_doors": "simple",
+        "shuffle_doors": "doors",
+        "group_doors": "true",
         "sunwarp_access": "unlock"
     }
 
@@ -78,7 +81,8 @@ class TestSimpleDoorsUnlockSunwarps(LingoTestBase):
 
 class TestComplexDoorsNormalSunwarps(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
+        "group_doors": "false",
         "sunwarp_access": "normal"
     }
 
@@ -96,7 +100,8 @@ class TestComplexDoorsNormalSunwarps(LingoTestBase):
 
 class TestComplexDoorsDisabledSunwarps(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
+        "group_doors": "false",
         "sunwarp_access": "disabled"
     }
 
@@ -115,7 +120,8 @@ class TestComplexDoorsDisabledSunwarps(LingoTestBase):
 
 class TestComplexDoorsIndividualSunwarps(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
+        "group_doors": "false",
         "sunwarp_access": "individual"
     }
 
@@ -142,7 +148,8 @@ class TestComplexDoorsIndividualSunwarps(LingoTestBase):
 
 class TestComplexDoorsProgressiveSunwarps(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
+        "group_doors": "false",
         "sunwarp_access": "progressive"
     }
 

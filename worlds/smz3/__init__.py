@@ -215,7 +215,6 @@ class SMZ3World(World):
 
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
-        allJunkItems = niceItems + junkItems
         self.junkItemsNames = [item.Type.name for item in junkItems]
 
         if (self.smz3World.Config.Keysanity):
@@ -228,7 +227,8 @@ class SMZ3World(World):
                 self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
         itemPool = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in progressionItems] + \
-                    [SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in allJunkItems]
+                    [SMZ3Item(item.Type.name, ItemClassification.useful, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in niceItems] + \
+                    [SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in junkItems]
         self.smz3DungeonItems = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in self.dungeon]
         self.multiworld.itempool += itemPool
 
@@ -244,7 +244,7 @@ class SMZ3World(World):
             set_rule(entrance, lambda state, region=region: region.CanEnter(state.smz3state[self.player]))
             for loc in region.Locations:
                 l = self.locations[loc.Name]
-                if self.multiworld.accessibility[self.player] != 'locations':
+                if self.multiworld.accessibility[self.player] != 'full':
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
                         loc.alwaysAllow(item.item, state.smz3state[self.player])
