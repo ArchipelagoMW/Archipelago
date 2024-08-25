@@ -495,7 +495,7 @@ def apply(env):
                 ap_item = env.options.ap_data[str(id)]
                 placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
                 if placement is None:
-                    reward = EmptyReward()
+                    reward = ItemReward("#item.Cure1")
                 else:
                     reward = ItemReward(placement.const)
                 rewards_assignment[slot] = reward
