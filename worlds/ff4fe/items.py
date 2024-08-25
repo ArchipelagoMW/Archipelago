@@ -41,7 +41,7 @@ itemscsv = csvdb.CsvDb(os.path.join(os.path.dirname(__file__), "FreeEnterpriseFo
 for item in itemscsv.create_view():
     item_tier = int(item.tier) if item.tier.isdecimal() else -1
     item_classification = ItemClassification.filler
-    if item.spoilername == "":
+    if item.spoilername == "" or item.spoilername == "Medusa Sword":
         continue
     if item.subtype == "key" or item.spoilername == "Legend Sword":
         item_classification = ItemClassification.progression if item.spoilername != "DkMatter" \

@@ -941,7 +941,7 @@ def apply(env):
             potential_key_item_slots.extend(CHEST_ITEM_SLOTS)
 
     env.add_binary(BusAddress(0x21dc00), [1 if s in potential_key_item_slots else 0 for s in range(RewardSlot.MAX_COUNT)], as_script=True)
-    env.add_substitution('randomizer key item count', '{:02X}'.format(rewards_assignment.count_key_items()))
+    env.add_substitution('randomizer key item count', '{:02X}'.format(17))
 
     # setup objectives reference table, and create boss metadata for random objectives purposes
     boss_objective_consts = []

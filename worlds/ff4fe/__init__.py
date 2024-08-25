@@ -26,8 +26,6 @@ from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule
 
 class FF4FEWebWorld(WebWorld):
     theme = "partyTime"
-    tutorials = [
-    ]
 
 
 class FF4FESettings(settings.Group):
@@ -59,6 +57,11 @@ class FF4FEWorld(World):
                        id, item in enumerate(all_items, base_id)}
     location_name_to_id = {location.name: id for
                            id, location in enumerate(all_locations, base_id)}
+
+    with open("ids.json", 'w') as file:
+        file.write(json.dumps(item_name_to_id, ensure_ascii=False, indent=2))
+        file.write("---")
+        file.write(json.dumps(location_name_to_id, ensure_ascii=False, indent=2))
 
     chosen_character = "None"
 
@@ -258,7 +261,7 @@ class FF4FEWorld(World):
         if self.options.DarkMatterHunt.current_key == "true":
             dark_matter_flags = f"Omode:dkmatter"
         default_flags = (f"{dark_matter_flags} "
-                         f"Kmain/summon/moon/miab/unsafe "
+                         f"Kmain/summon/moon/unsafe "
                          f"Pshop/key "
                          f"Crelaxed/{hero_challenge_flags}j:spells,abilities "
                          f"Twild/junk "

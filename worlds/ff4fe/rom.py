@@ -6,6 +6,8 @@ import random
 import typing
 
 from typing import TYPE_CHECKING, Optional, BinaryIO
+
+import Utils
 from BaseClasses import Item, Location
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
@@ -30,6 +32,8 @@ items_received_location_start = 0xF5177E
 items_received_size = 2
 victory_byte_location= 0xE070F2
 
+key_items_found_location = 0xF51578
+
 special_flag_key_items = {
     "Hook": (0xF51286, 0b01000000),
     "Darkness Crystal": (0xF5128C, 0b00000001),
@@ -40,7 +44,7 @@ special_flag_key_items = {
 
 def get_base_rom_as_bytes() -> bytes:
     with open(get_settings().ff4fe_options.rom_file, "rb") as infile:
-        base_rom_bytes = bytes(infile.read())
+        base_rom_bytes = bytes(Utils.read_snes_rom(infile))
     return base_rom_bytes
 
 
@@ -69,7 +73,6 @@ class FF4FEPatchExtension(APPatchExtension):
             ]
             args = parser.parse_args(arguments)
             cmd.execute(args)
-        rom_data = bytes()
         with open(output_file, "rb") as file:
             rom_data = bytearray(file.read())
             rom_data[ROM_NAME:ROM_NAME+20] = bytes(rom_name, encoding="utf-8")

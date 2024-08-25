@@ -7,7 +7,6 @@ from worlds.AutoSNIClient import SNIClient
 from . import rom as Rom
 from . import items
 from . import locations
-from .rom import key_items_tracker_size
 
 if typing.TYPE_CHECKING:
     from SNIClient import SNIContext, snes_buffered_write
@@ -32,7 +31,7 @@ class FF4FEClient(SNIClient):
 
         ctx.game = self.game
 
-        ctx.items_handling = 0b111  # get sent remote and starting items
+        ctx.items_handling = 0b111
 
         ctx.rom = rom_name
 
@@ -67,6 +66,7 @@ class FF4FEClient(SNIClient):
         if self.location_name_to_id is None:
             from . import FF4FEWorld
             self.location_name_to_id = FF4FEWorld.location_name_to_id
+
 
         if self.key_item_names is None:
             from . import FF4FEWorld
@@ -137,7 +137,7 @@ class FF4FEClient(SNIClient):
         items_received_data = await snes_read(ctx, Rom.items_received_location_start, Rom.items_received_size)
         if items_received_data is None:
             return
-        items_received_amount = int.from_bytes(items_received_data, "little")
+        items_received_amount = int.from_bytes(items_received_data, "big")
         if items_received_amount >= len(ctx.items_received):
             return
         inventory_data = await snes_read(ctx, Rom.inventory_start_location, Rom.inventory_size)
@@ -149,7 +149,7 @@ class FF4FEClient(SNIClient):
         item_received_name = ctx.item_names.lookup_in_game(item_received_id, ctx.game)
         item_received_game_id = [item.fe_id for item in items.all_items if item.name == item_received_name].pop()
         if item_received_name in items.characters:
-            snes_buffered_write(ctx, Rom.items_received_location_start, bytes([items_received_amount + 1]))
+            self.increment_items_received(ctx, items_received_amount)
             return
         if item_received_name in Rom.special_flag_key_items.keys():
             flag_byte = Rom.special_flag_key_items[item_received_name][0]
@@ -161,25 +161,28 @@ class FF4FEClient(SNIClient):
             key_item_received_value = key_item_received_value | flag_bit
             snes_buffered_write(ctx, flag_byte, bytes([key_item_received_value]))
             if item_received_name == "Hook":
-                snes_buffered_write(ctx, Rom.items_received_location_start, bytes([items_received_amount + 1]))
+                self.increment_items_received(ctx, items_received_amount)
                 snes_logger.info('Received %s from %s (%s)' % (
                     item_received_name,
                     ctx.player_names[item_received.player],
                     ctx.location_names[item_received.location]))
                 return
         if item_received.player == ctx.slot and item_received.location != -1:
-            snes_buffered_write(ctx, Rom.items_received_location_start, bytes([items_received_amount + 1]))
+            self.increment_items_received(ctx, items_received_amount)
             return
         for i, byte in enumerate(inventory_data):
             if i % 2 == 1:
                 continue
             if inventory_data[i] == 0 or inventory_data[i] == item_received_game_id:
+
                 snes_buffered_write(ctx, Rom.inventory_start_location + i, bytes([item_received_game_id]))
                 if inventory_data[i] == 0:
                     snes_buffered_write(ctx, Rom.inventory_start_location + i + 1, bytes([1]))
                 else:
-                    snes_buffered_write(ctx, Rom.inventory_start_location + i + 1, bytes([inventory_data[i + 1] + 1]))
-                snes_buffered_write(ctx, Rom.items_received_location_start, bytes([items_received_amount + 1]))
+                    item_count = inventory_data[i + 1]
+                    item_count = min(item_count + 1, 99)
+                    snes_buffered_write(ctx, Rom.inventory_start_location + i + 1, bytes([item_count]))
+                self.increment_items_received(ctx, items_received_amount)
 
                 snes_logger.info('Received %s from %s (%s)' % (
                     item_received_name,
@@ -203,27 +206,40 @@ class FF4FEClient(SNIClient):
 
     async def resolve_key_items(self, ctx):
         from SNIClient import snes_buffered_write, snes_read
-        tracker_data = await snes_read(ctx, Rom.key_items_tracker_start_location, key_items_tracker_size)
+        tracker_data = await snes_read(ctx, Rom.key_items_tracker_start_location, Rom.key_items_tracker_size)
         if tracker_data is None:
             return
+        new_tracker_bytes = bytearray(tracker_data[:Rom.key_items_tracker_size])
         key_items_collected = [item.item for item in ctx.items_received
                                if item.item in self.key_item_names.values()
                                and item.item != "Pass"]
         for key_item in self.key_items_with_flags.keys():
             if self.key_items_with_flags[key_item] in key_items_collected:
-                key_item_info = Rom.special_flag_key_items[key_item]
-                key_items_data = await snes_read(ctx, key_item_info[0], 1)
-                if key_items_data is None:
-                    continue
-                new_byte = key_items_data[0] | key_item_info[1]
-                snes_buffered_write(ctx, Rom.special_flag_key_items[key_item][0], bytes([new_byte]))
+                flag_byte = Rom.special_flag_key_items[key_item][0]
+                flag_bit = Rom.special_flag_key_items[key_item][1]
+                key_item_received_data = await snes_read(ctx, flag_byte, 1)
+                if key_item_received_data is None:
+                    return
+                key_item_received_value = key_item_received_data[0]
+                key_item_received_value = key_item_received_value | flag_bit
+                snes_buffered_write(ctx, flag_byte, bytes([key_item_received_value]))
         for key_item in key_items_collected:
             item_received_name = ctx.item_names.lookup_in_game(key_item, ctx.game)
             if item_received_name != "Pass":
                 key_item_index = items.key_items_tracker_ids[item_received_name]
                 byte = key_item_index // 8
                 bit = key_item_index % 8
-                new_tracker_byte = tracker_data[byte] | (2 ** bit)
-                snes_buffered_write(ctx, Rom.key_items_tracker_start_location + byte, bytes([new_tracker_byte]))
+                new_tracker_bytes[byte] = new_tracker_bytes[byte] | (2 ** bit)
+        for i in range(Rom.key_items_tracker_size):
+            snes_buffered_write(ctx, Rom.key_items_tracker_start_location + i, bytes([new_tracker_bytes[i]]))
+        snes_buffered_write(ctx, Rom.key_items_found_location, bytes([len(key_items_collected)]))
 
 
+
+    def increment_items_received(self, ctx, items_received_amount):
+        from SNIClient import snes_buffered_write
+        new_count = items_received_amount + 1
+        lower_byte = new_count % 256
+        upper_byte = new_count // 256
+        snes_buffered_write(ctx, Rom.items_received_location_start, bytes([upper_byte]))
+        snes_buffered_write(ctx, Rom.items_received_location_start + 1, bytes([lower_byte]))
