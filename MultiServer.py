@@ -1825,6 +1825,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
+            teams = set(args.get("teams", client.team))
             boolean_operator = args.get("operator", "or")
 
             if boolean_operator not in ("or", "and"):
@@ -1832,7 +1833,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                               "text": "Bounce", "original_cmd": cmd}])
                 return
 
-            conditions = []
+            conditions = [lambda bounceclient: bounceclient.team in teams]
             if "games" in args:
                 games = set(args["games"])
                 conditions.append(lambda bounceclient: ctx.games[bounceclient.slot] in games)
@@ -1842,9 +1843,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if "slots" in args:
                 slots = set(args["slots"])
                 conditions.append(lambda bounceclient: bounceclient.slot in slots)
-            if not conditions:
-                # "And" on an empty list should send to all clients, which is not how all() would behave naturally.
-                conditions.append(lambda _: True)
 
             condition_concatenator = any if boolean_operator == "or" else all
 
