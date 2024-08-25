@@ -725,7 +725,7 @@ item_descriptions = {
     item_names.KERRIGAN_LEVELS_35: "Gives Kerrigan +35 Levels.",
     item_names.KERRIGAN_LEVELS_70: "Gives Kerrigan +70 Levels.",
     item_names.INFESTED_MEDICS: "Mercenary infested Medics that may be called in from the Predator Nest.",
-    item_names.INFESTED_SIEGE_TANKS: "Mercenary infested Siege Tanks that may be called in from the Predator Nest.",
+    item_names.INFESTED_SIEGE_BREAKERS: "Mercenary infested Siege Breakers that may be called in from the Predator Nest.",
     item_names.INFESTED_BANSHEES: "Mercenary infested Banshees that may be called in from the Predator Nest.",
     item_names.HUNTER_KILLERS: "Elite Hydralisks that may be called in from the Predator Nest.",
     item_names.DEVOURING_ONES: "Mercenary Zerglings.",

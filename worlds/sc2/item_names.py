@@ -505,7 +505,7 @@ ULTRALISK_TYRANNOZOR_ASPECT             = "Tyrannozor Aspect (Ultralisk)"
 
 # Zerg Mercs
 INFESTED_MEDICS      = "Infested Medics"
-INFESTED_SIEGE_TANKS = "Infested Siege Tanks"
+INFESTED_SIEGE_BREAKERS = "Infested Siege Breakers"
 INFESTED_BANSHEES    = "Infested Banshees"
 DEVOURING_ONES = "Devouring Ones"
 HUNTER_KILLERS       = "Hunter Killers"
