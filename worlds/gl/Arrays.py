@@ -455,6 +455,17 @@ colors = {
     3: 0xA4,
 }
 
+# Level for vanilla scaling
+vanilla: Dict[int, int] = {
+    0x2: 10,
+    0x1: 25,
+    0x7: 40,
+    0x9: 50,
+    0xF: 100,
+    0x11: 70,
+    0x8: 80,
+}
+
 no_obelisks = [
     88870012,
     88870010,

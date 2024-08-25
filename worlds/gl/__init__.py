@@ -75,6 +75,7 @@ class GauntletLegendsWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 5, 0)
     crc32: str = None
+    death: List[Item] = []
 
     disabled_locations: typing.List[LocationData]
 
@@ -211,8 +212,9 @@ class GauntletLegendsWorld(World):
                     freq *= 2
                 if item.item_name == "Death":
                     trap_count += freq
+                    self.death = []
                     for i in range(freq):
-                        self.multiworld.itempool.append(self.create_item(item.item_name))
+                        self.death += [self.create_item(item.item_name)]
                 else:
                     filler_items += [item.item_name for _ in range(freq)]
 
@@ -232,15 +234,10 @@ class GauntletLegendsWorld(World):
             "Gates of the Underworld", "Region", self.player,
         )
 
-    def fill_hook(self,
-                  progitempool: List["Item"],
-                  usefulitempool: List["Item"],
-                  filleritempool: List["Item"],
-                  fill_locations: List["Location"]) -> None:
-        locations = [location for location in fill_locations if location.player == self.player]
-        items = [item for item in self.multiworld.itempool if item.name == "Death" and item.player == self.player]
+    def pre_fill(self) -> None:
+        locations = [location for location in self.multiworld.get_unfilled_locations(self.player)]
         self.random.shuffle(locations)
-        fast_fill(self.multiworld, items, locations)
+        fast_fill(self.multiworld, self.death, locations)
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]

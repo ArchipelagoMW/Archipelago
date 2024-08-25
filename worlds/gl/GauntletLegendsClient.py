@@ -19,7 +19,7 @@ from .Arrays import (
     level_locations,
     mirror_levels,
     spawners,
-    timers, sounds, colors,
+    timers, sounds, colors, vanilla,
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
@@ -608,10 +608,8 @@ class GauntletLegendsContext(CommonContext):
             level = [0x1, 0xF]
         self.current_level = level
         players = await self.active_players()
-        if self.clear_counts.get(str(level), 0) != 0:
-            self.difficulty = players + (0 if level[1] != 2 else min(await self.player_level() // 10, 3))
-        else:
-            self.difficulty = players
+        player_level = await self.player_level()
+        self.difficulty = min(players + (min(player_level // vanilla[level[1]], 3)), 4)
         _id = level[0]
         if level[1] == 1:
             _id = castle_id.index(level[0]) + 1
@@ -677,23 +675,19 @@ class GauntletLegendsContext(CommonContext):
         for i, obj in enumerate(self.item_objects):
             if obj.raw[24] != 0x0:
                 if self.item_locations[i].id not in self.locations_checked:
-                    self.locations_checked += [self.item_locations[i].id]
                     acquired += [self.item_locations[i].id]
         for j in range(len(self.obelisk_locations)):
             ob = await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name], 0)
             if ob:
-                self.locations_checked += [self.obelisk_locations[j].id]
                 acquired += [self.obelisk_locations[j].id]
         for k, obj in enumerate(self.chest_objects):
             if "Chest" in self.chest_locations[k].name:
                 if obj.raw[24] != 0x0:
                     if self.chest_locations[k].id not in self.locations_checked:
-                        self.locations_checked += [self.chest_locations[k].id]
                         acquired += [self.chest_locations[k].id]
             else:
                 if obj.raw[0x33] != 0:
                     if self.chest_locations[k].id not in self.locations_checked:
-                        self.locations_checked += [self.chest_locations[k].id]
                         acquired += [self.chest_locations[k].id]
         dead = await self.dead()
         if dead:
@@ -920,7 +914,8 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         continue
                     await asyncio.sleep(0.1)
                     checking = await ctx.location_loop()
-                    if checking:
+                    if len(checking) > 0:
+                        ctx.locations_checked += checking
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
                     bitwise = await ctx.inv_bitwise("Hell", 0x100, 0)
                     if not ctx.finished_game and bitwise:
