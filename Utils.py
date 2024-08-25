@@ -18,7 +18,6 @@ import warnings
 
 from argparse import Namespace
 
-import Utils
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from typing_extensions import TypeGuard
