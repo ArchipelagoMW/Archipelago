@@ -185,9 +185,6 @@ class TooltipLabel(HovererableLabel, MDTooltip):
         if not self._tooltip or self._tooltip.parent:
             return
 
-        def passthrough(instance, value):
-            pass
-
         Window.add_widget(self._tooltip)
         x, y = self.adjust_tooltip_position()
         self._tooltip.x, self._tooltip.y = x, y
@@ -490,15 +487,12 @@ class MessageBox(Popup):
 
 class ClientTabs(MDTabsPrimary):
     carousel: MDTabsCarousel
+    lock_swiping = True
 
     def __init__(self, *args, **kwargs):
-        self.carousel = MDTabsCarousel()
+        self.carousel = MDTabsCarousel(lock_swiping=True)
         super().__init__(*args, MDDivider(size_hint_y=None, height=dp(4)), self.carousel, **kwargs)
         self.size_hint_y = 1
-
-    def on_size(self, *args) -> None:
-        super().on_size(*args)
-        print(args)
 
 
 class GameManager(MDApp):
