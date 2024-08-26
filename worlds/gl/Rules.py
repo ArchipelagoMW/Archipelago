@@ -20,10 +20,7 @@ def prog_count(state, player, diff):
 
 
 def set_rules(world: "GauntletLegendsWorld"):
-    runestones = [item.item_name for item in item_list if "Runestone" in item.item_name]
     obelisks = [item.item_name for item in item_list if "Obelisk" in item.item_name]
-    mirror_shards = [item.item_name for item in item_list if "Mirror" in item.item_name]
-    boss_weapons = [item.item_name for item in item_list if item.progression == ItemClassification.useful]
 
     for location in [
         location
@@ -35,13 +32,6 @@ def set_rules(world: "GauntletLegendsWorld"):
             or location.id in no_obelisks
     ] + [location for location in all_locations if "Obelisk" in location.name and world.options.obelisks == 1]:
         for item in obelisks:
-            if location.name not in world.disabled_locations:
-                forbid_item(world.get_location(location.name), item, world.player)
-
-    for location in [
-        location for location in all_locations if "Barrel" in location.name and "Barrel of Gold" not in location.name
-    ]:
-        for item in runestones + mirror_shards + boss_weapons:
             if location.name not in world.disabled_locations:
                 forbid_item(world.get_location(location.name), item, world.player)
 

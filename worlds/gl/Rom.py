@@ -7,7 +7,7 @@ import zlib
 from typing import Dict, List, Tuple
 
 import Utils
-from BaseClasses import Location
+from BaseClasses import Location, ItemClassification
 from settings import get_settings
 
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
@@ -55,6 +55,7 @@ class LevelData:
     end: bytes
     items_replaced_by_obelisks: int = 0
     chests_replaced_by_obelisks: int = 0
+    chests_replaced_by_items: int = 0
     obelisks_replaced_by_items: int = 0
 
     def __init__(self):
@@ -137,11 +138,9 @@ class GLPatchExtension(APPatchExtension):
                     if "Chest" in location_name or (
                         "Barrel" in location_name and "Barrel of Gold" not in location_name
                     ):
-                        data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12] = 0x27
-                        data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][13] = 0x4
+                        data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12:14] = [0x27, 0x4]
                     else:
-                        data.items[j - data.items_replaced_by_obelisks][6] = 0x27
-                        data.items[j - data.items_replaced_by_obelisks][7] = 0x4
+                        data.items[j - data.items_replaced_by_obelisks][6:8] = [0x27, 0x4]
                 else:
                     if "Obelisk" in items_by_id[item[0]].item_name:
                         if chest_barrel(location_name):
@@ -179,6 +178,18 @@ class GLPatchExtension(APPatchExtension):
                         else:
                             del data.items[j - data.items_replaced_by_obelisks]
                             data.items_replaced_by_obelisks += 1
+                    elif (items_by_id[item[0]].progression == ItemClassification.useful or items_by_id[item[0]].progression == ItemClassification.progression) and chest_barrel(location_name):
+                        chest_index = j - (
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)
+                        chest = data.chests[chest_index]
+                        slice_ = bytearray(chest[0:6])
+                        data.items += [
+                            slice_
+                            + bytes(item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4])
+                            + bytes([chest[11], 0x0, 0x0, 0x0]),
+                        ]
+                        del data.chests[chest_index]
+                        data.chests_replaced_by_items += 1
                     else:
                         if chest_barrel(location_name):
                             data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12] = item_dict[item[0]][0]
@@ -318,8 +329,8 @@ def get_level_data(stream: io.BytesIO, size: int, level=0) -> (io.BytesIO, Level
 def level_data_reformat(data: LevelData) -> bytes:
     stream = io.BytesIO()
     obelisk_offset = 24 * (data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks - data.obelisks_replaced_by_items)
-    item_offset = 12 * (data.obelisks_replaced_by_items - data.items_replaced_by_obelisks)
-    chest_offset = 16 * data.chests_replaced_by_obelisks
+    item_offset = 12 * (data.chests_replaced_by_items + data.obelisks_replaced_by_items - data.items_replaced_by_obelisks)
+    chest_offset = 16 * (data.chests_replaced_by_obelisks + data.chests_replaced_by_items)
     stream.write(int.to_bytes(0x5C, 4, "big"))
     stream.write(int.to_bytes(data.spawner_addr + item_offset, 4, "big"))
     stream.write(int.to_bytes(data.spawner_addr + item_offset, 4, "big"))

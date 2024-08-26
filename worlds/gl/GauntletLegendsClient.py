@@ -176,6 +176,7 @@ class GauntletLegendsContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
+        self.useful: List[NetworkItem] = []
         self.deathlink_pending: bool = False
         self.deathlink_enabled: bool = False
         self.deathlink_triggered: bool = False
@@ -646,24 +647,29 @@ class GauntletLegendsContext(CommonContext):
             if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
                and item.player == self.slot
         ]
+        self.useful = [
+            item
+            for item in self.location_scouts
+            if "Obelisk" not in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
+                and (items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.useful
+                or items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.progression)
+                and item.player == self.slot
+        ]
         self.obelisk_locations = [
             location for location in raw_locations if location.id in [item.location for item in self.obelisks]
         ]
         self.item_locations = [
-            location
-            for location in raw_locations
-            if "Chest" not in location.name
-               and ("Barrel" not in location.name or "Barrel of Gold" in location.name)
-               and location not in self.obelisk_locations
+            location for location in raw_locations
+            if ("Chest" not in location.name
+                and ("Barrel" not in location.name or "Barrel of Gold" in location.name))
+                and location not in self.obelisk_locations
+                or location.id in [item.location for item in self.useful]
         ]
         self.chest_locations = [
-            location
-            for location in raw_locations
-            if "Chest" in location.name
-               or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
-               and location not in self.obelisk_locations
-        ]
+            location for location in raw_locations
+            if location not in self.obelisk_locations and location not in self.item_locations]
         max_value: int = self.glslotdata['max']
+        logger.info(f"Items: {len(self.item_locations)} Chests: {len(self.chest_locations)} Obelisks: {len(self.obelisk_locations)}")
         logger.info(
             f"Locations: {len([location for location in self.obelisk_locations + self.item_locations + self.chest_locations if location.difficulty <= max_value and location.id not in self.locations_checked])} Difficulty: { max_value if self.glslotdata['instant_max'] else self.difficulty}",
         )
