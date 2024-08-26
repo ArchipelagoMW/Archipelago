@@ -606,9 +606,9 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
 
 
 def place_events(self: "PSYWorld"):
-    final_boss_location = self.multiworld.get_location(LocationName.MeatCircusFinalBossEvent, self.player)
-    oleander_boss_location = self.multiworld.get_location(LocationName.OleanderBrainTankBossEvent, self.player)
-    redeemed_required_brains = self.multiworld.get_location(LocationName.RedeemedBrainsEvent, self.player)
+    final_boss_location = self.get_location(LocationName.MeatCircusFinalBossEvent)
+    oleander_boss_location = self.get_location(LocationName.OleanderBrainTankBossEvent)
+    redeemed_required_brains = self.get_location(LocationName.RedeemedBrainsEvent)
     # Meat Circus Bosses
     if self.options.RequireMeatCircus:
         victory = final_boss_location
@@ -701,26 +701,26 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, mctc_escort_cobwebs)
 
 
-def create_psyregions(world: MultiWorld, player: int):
+def create_psyregions(multiworld: MultiWorld, player: int):
     # Create all default regions.
     for region_name, location_names in DEFAULT_REGIONS.items():
-        region = Region(region_name, player, world)
+        region = Region(region_name, player, multiworld)
         region.locations.extend(PSYLocation(player, loc_name, ALL_LOCATIONS[loc_name] + AP_LOCATION_OFFSET, region)
                                 for loc_name in location_names)
-        world.regions.append(region)
+        multiworld.regions.append(region)
 
     # Add the regions for event locations.
-    reg_caja_brains = Region(RegionName.CAJABrains, player, world)
+    reg_caja_brains = Region(RegionName.CAJABrains, player, multiworld)
     reg_caja_brains.locations.append(PSYLocation(player, LocationName.RedeemedBrainsEvent, None, reg_caja_brains))
-    world.regions.append(reg_caja_brains)
+    multiworld.regions.append(reg_caja_brains)
 
-    reg_aslb_boss = Region(RegionName.ASLBBoss, player, world)
+    reg_aslb_boss = Region(RegionName.ASLBBoss, player, multiworld)
     reg_aslb_boss.locations.append(PSYLocation(player, LocationName.OleanderBrainTankBossEvent, None, reg_aslb_boss))
-    world.regions.append(reg_aslb_boss)
+    multiworld.regions.append(reg_aslb_boss)
 
-    reg_mctc_boss = Region(RegionName.MCTCBoss, player, world)
+    reg_mctc_boss = Region(RegionName.MCTCBoss, player, multiworld)
     reg_mctc_boss.locations.append(PSYLocation(player, LocationName.MeatCircusFinalBossEvent, None, reg_mctc_boss))
-    world.regions.append(reg_mctc_boss)
+    multiworld.regions.append(reg_mctc_boss)
 
 
 def connect_regions(multiworld: MultiWorld, player: int):
