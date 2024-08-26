@@ -178,24 +178,6 @@ class TooltipLabel(HovererableLabel, MDTooltip):
             self._tooltip = ToolTip(text=text, pos_hint={})
             self.display_tooltip()
 
-    def display_tooltip(self, *args) -> None:
-        """Reimpl because of KivyMD bug"""
-        from kivymd.material_resources import DEVICE_TYPE
-
-        if not self._tooltip or self._tooltip.parent:
-            return
-
-        Window.add_widget(self._tooltip)
-        x, y = self.adjust_tooltip_position()
-        self._tooltip.x, self._tooltip.y = x, y
-
-        if DEVICE_TYPE == "desktop":
-            Clock.schedule_once(
-                self.animation_tooltip_show, self.tooltip_display_delay
-            )
-        else:
-            Clock.schedule_once(self.animation_tooltip_show, 0)
-
     def on_mouse_pos(self, window, pos):
         if not self.get_root_window():
             return  # Abort if not displayed

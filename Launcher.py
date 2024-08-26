@@ -235,13 +235,14 @@ def run_gui():
                     self._client_layout.layout.add_widget(build_button(client[1]))
 
         def build(self):
-            self.theme_cls.theme_style = "Dark"
+            self.theme_cls.theme_style = "Light"
             self.theme_cls.primary_palette = "Green"
             self.container = MDFloatLayout()
+            self.container.md_bg_color = self.theme_cls.backgroundColor
             self.grid = MDGridLayout(cols=2)
             self.container.add_widget(self.grid)
-            self.grid.add_widget(MDLabel(text="General", size_hint_y=None, height=40))
-            self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40))
+            self.grid.add_widget(MDLabel(text="General", size_hint_y=None, height=40, color=self.theme_cls.primaryColor))
+            self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40, color=self.theme_cls.primaryColor))
             self._tool_layout = ScrollBox()
             self._tool_layout.layout.orientation = "vertical"
             self._tool_layout.layout.spacing = 10
