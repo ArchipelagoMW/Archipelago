@@ -51,6 +51,9 @@ class ShapezWorld(World):
     location_count: int = 0
     level_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
     upgrade_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+    # Placeholder values in case something goes wrong
+    random_logic_phase_length: List[int] = [1, 1, 1, 1, 1]
+    category_random_logic_amounts: Dict[str, int] = {"belt": 0, "miner": 1, "processors": 2, "painting": 3}
     maxlevel: int = 25
     finaltier: int = 8
     included_locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
@@ -115,6 +118,25 @@ class ShapezWorld(World):
         else:
             self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
 
+        # Determine lenghts of phases in level logic type "random"
+        if self.options.randomize_level_logic.current_key.startswith("random"):
+            remaininglength = self.maxlevel - 1
+            for phase in range(0, 5):
+                if self.random.random() < 0.1:  # Make sure that longer phases are less frequent
+                    self.random_logic_phase_length[phase] = self.random.randint(0, remaininglength)
+                else:
+                    self.random_logic_phase_length[phase] = self.random.randint(0, remaininglength // 6 - phase)
+                remaininglength -= self.random_logic_phase_length[phase]
+
+        # Determine lenghts of phases in level logic type "random"
+        if self.options.randomize_upgrade_logic == "category_random":
+            cats = ["belt", "miner", "processors", "painting"]
+            nextcat = self.random.choice(cats)
+            self.category_random_logic_amounts[nextcat] = 0
+            cats.remove(nextcat)
+            for cat in cats:
+                self.category_random_logic_amounts[cat] = self.random.randint(0, 6)
+
     def create_item(self, name: str) -> Item:
         return ShapezItem(name, item_table[name], self.item_name_to_id[name], self.player)
 
@@ -124,8 +146,10 @@ class ShapezWorld(World):
         self.multiworld.regions.append(menu_region)
 
         # Create list of all included locations based on player options
-        self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key),
-                                   **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.current_key),
+        self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key,
+                                               self.random_logic_phase_length),
+                                   **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.current_key,
+                                                 self.category_random_logic_amounts),
                                    # **addachievements
                                    **addshapesanity(self.options.shapesanity_amount.value, self.random)}
         self.location_count = len(self.included_locations)
@@ -182,6 +206,9 @@ class ShapezWorld(World):
         # Buildings logic; all buildings as individual parameters
         level_logic_data = {f"Level building {x+1}": self.level_logic[x] for x in range(5)}
         upgrade_logic_data = {f"Upgrade building {x+1}": self.upgrade_logic[x] for x in range(5)}
+        logic_type_random_data = {f"Phase {x} length": self.random_logic_phase_length[x] for x in range(0, 5)}
+        logic_type_cat_random_data = {f"{cat} category buildings amount": self.category_random_logic_amounts[cat]
+                                      for cat in ["belt", "miner", "processors", "painting"]}
 
         # Options that are relevant to the mod
         option_data = {
@@ -198,5 +225,6 @@ class ShapezWorld(World):
             "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value)
         }
 
-        return {**level_logic_data, **upgrade_logic_data, **option_data, "seed": self.client_seed}
+        return {**level_logic_data, **upgrade_logic_data, **option_data, **logic_type_random_data,
+                **logic_type_cat_random_data, "seed": self.client_seed}
 

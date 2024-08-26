@@ -112,6 +112,9 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
         level_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
         upgrade_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
 
+    # regions["Main"].connect(regions["Levels with 1 Building"], "First level building needed",
+    #                         lambda state: state.has(level_logic_buildings[0], player))
+
     create_entrance(player, "First level building needed",
                     regions["Main"], regions["Levels with 1 Building"],
                     lambda state: state.has(level_logic_buildings[0], player))
