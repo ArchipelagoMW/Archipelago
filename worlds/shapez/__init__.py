@@ -121,7 +121,7 @@ class ShapezWorld(World):
             self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
 
         # Determine lenghts of phases in level logic type "random"
-        if self.options.randomize_level_logic.current_key.startswith("random"):
+        if self.options.randomize_level_logic.current_key.startswith("random_steps"):
             remaininglength = self.maxlevel - 1
             for phase in range(0, 5):
                 if self.random.random() < 0.1:  # Make sure that longer phases are less frequent

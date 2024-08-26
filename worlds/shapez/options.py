@@ -65,7 +65,7 @@ class RandomizeLevelLogic(Choice):
     - **Stretched:** After every floor(maxlevel/6) levels, another building is required.
     - **Quick:** Every Level, except level 1, requires another building, with level 6 and onwards requiring all
     buildings.
-    - **Random:** After a random amount of levels, another building is required, with level 1 always requiring none.
+    - **Random steps:** After a random amount of levels, another building is required, with level 1 always requiring none.
     This can potentially behave like any other option.
     - **Hardcore:** All levels (except level 1) have completely random shape requirements and thus require all
     buildings. Expect early BKs."""
@@ -77,8 +77,8 @@ class RandomizeLevelLogic(Choice):
     option_stretched_shuffled = 3
     option_quick = 4
     option_quick_shuffled = 5
-    option_random = 6
-    option_random_shuffled = 7
+    option_random_steps = 6
+    option_random_steps_shuffled = 7
     option_hardcore = 8
     default = 2
 

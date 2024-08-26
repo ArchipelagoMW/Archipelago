@@ -233,7 +233,7 @@ def addlevels(maxlevel: int, logictype: str,
         for x in range(6, maxlevel+1):
             locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
 
-    elif logictype.startswith("random"):
+    elif logictype.startswith("random_steps"):
         nextlevel = 2
         l20set = False
         for _ in range(0, random_logic_phase_length[0]):
@@ -286,7 +286,7 @@ def addupgrades(finaltier: int, logictype: str,
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = {}
 
-    if logictype == "vanilla_like":  # Tier III is a special case here
+    if logictype == "vanilla_like":
         locations["Belt Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         locations["Miner Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
         locations["Processors Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
