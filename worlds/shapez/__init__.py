@@ -87,7 +87,7 @@ class ShapezWorld(World):
 
         # Determines the order of buildings for levels und upgrades logic
         if self.options.randomize_level_requirements:
-            if self.options.randomize_level_logic in ["shuffled", "stretched_shuffled"]:
+            if self.options.randomize_level_logic.current_key.endswith("shuffled"):
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)
@@ -105,6 +105,8 @@ class ShapezWorld(World):
         if self.options.randomize_upgrade_requirements:
             if self.options.randomize_upgrade_logic == "hardcore":
                 self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+            elif self.options.randomize_upgrade_logic == "category":
+                self.upgrade_logic = ["Cutter", "Rotator", "Stacker", "Painter", "Color Mixer"]
             else:
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
