@@ -8,12 +8,15 @@ Description: Unit test used to test accessibility of locations with and without 
 from . import AquariaTestBase, after_home_water_locations
 from ..Items import ItemNames
 from ..Locations import AquariaLocationNames
+from ..Options import UnconfineHomeWater, EarlyBindSong
 
 
 class BindSongAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the bind song"""
     options = {
         "bind_song_needed_to_get_under_rock_bulb": False,
+        "unconfine_home_water": UnconfineHomeWater.option_off,
+        "early_bind_song": EarlyBindSong.option_off
     }
 
     def test_bind_song_location(self) -> None:

@@ -9,7 +9,8 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, MultiWorld, ItemClassification
 from .Items import item_table, AquariaItem, ItemType, ItemGroup, ItemNames
 from .Locations import location_table, AquariaLocationNames
-from .Options import AquariaOptions
+from .Options import (AquariaOptions, IngredientRandomizer, TurtleRandomizer, EarlyBindSong, EarlyEnergyForm,
+                      UnconfineHomeWater, Objective)
 from .Regions import AquariaRegions
 
 
@@ -65,7 +66,7 @@ class AquariaWorld(World):
     web: WebWorld = AquariaWeb()
     "The web page generation informations"
 
-    item_name_to_id: ClassVar[Dict[str, int]] =\
+    item_name_to_id: ClassVar[Dict[str, int]] = \
         {name: data.id for name, data in item_table.items()}
     "The name and associated ID of each item of the world"
 
@@ -150,22 +151,32 @@ class AquariaWorld(World):
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
-        if self.options.turtle_randomizer.value > 0:
-            if self.options.turtle_randomizer.value == 2:
-                self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE, precollected)
+        if self.options.turtle_randomizer.value != TurtleRandomizer.option_none:
+            if self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final:
+                self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
+                                     precollected)
         else:
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT, AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE, precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT, AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS, AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE,
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT,
+                                 AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT,
+                                 AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS,
+                                 AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE,
                                  precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST, AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE,
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST,
+                                 AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE,
                                  precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE, precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE, precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE,
+                                 precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
+                                 precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
+                                 precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE, precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE,
+                                 precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
+                                 precollected)
         for name, data in item_table.items():
             if name not in self.exclude:
                 for i in range(data.count):
@@ -176,17 +187,17 @@ class AquariaWorld(World):
         """
         Launched when the Multiworld generator is ready to generate rules
         """
-        if self.options.early_energy_form == 1:
+        if self.options.early_energy_form == EarlyEnergyForm.option_early:
             self.multiworld.early_items[self.player][ItemNames.ENERGY_FORM] = 1
-        elif self.options.early_energy_form == 2:
+        elif self.options.early_energy_form == EarlyEnergyForm.option_early_and_local:
             self.multiworld.local_early_items[self.player][ItemNames.ENERGY_FORM] = 1
-        if self.options.early_bind_song == 1:
+        if self.options.early_bind_song == EarlyBindSong.option_early:
             self.multiworld.early_items[self.player][ItemNames.BIND_SONG] = 1
-        elif self.options.early_bind_song == 2:
+        elif self.options.early_bind_song == EarlyBindSong.option_early_and_local:
             self.multiworld.local_early_items[self.player][ItemNames.BIND_SONG] = 1
         self.regions.adjusting_rules(self.options)
         self.multiworld.completion_condition[self.player] = lambda \
-            state: state.has(ItemNames.VICTORY, self.player)
+                state: state.has(ItemNames.VICTORY, self.player)
 
     def generate_basic(self) -> None:
         """
@@ -194,13 +205,13 @@ class AquariaWorld(World):
         Used to fill then `ingredients_substitution` list
         """
         simple_ingredients_substitution = [i for i in range(27)]
-        if self.options.ingredient_randomizer.value > 0:
-            if self.options.ingredient_randomizer.value == 1:
+        if self.options.ingredient_randomizer.value > IngredientRandomizer.option_off:
+            if self.options.ingredient_randomizer.value == IngredientRandomizer.option_common_ingredients:
                 simple_ingredients_substitution.pop(-1)
                 simple_ingredients_substitution.pop(-1)
                 simple_ingredients_substitution.pop(-1)
             self.random.shuffle(simple_ingredients_substitution)
-            if self.options.ingredient_randomizer.value == 1:
+            if self.options.ingredient_randomizer.value == IngredientRandomizer.option_common_ingredients:
                 simple_ingredients_substitution.extend([24, 25, 26])
         dishes_substitution = [i for i in range(27, 76)]
         if self.options.dish_randomizer:
@@ -224,7 +235,9 @@ class AquariaWorld(World):
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarian_translate": bool(self.options.aquarian_translation.value),
                 "blind_goal": bool(self.options.blind_goal.value),
-                "secret_needed": self.options.objective.value > 0,
+<<<<<<< HEAD
+                "secret_needed":
+                    self.options.objective.value == Objective.option_obtain_secrets_and_kill_the_creator,
                 "locations_item_types": location_items,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
@@ -232,7 +245,11 @@ class AquariaWorld(World):
                 "skip_final_boss_3rd_form": bool(self.options.skip_final_boss_3rd_form.value),
                 "infinite_hot_soup": bool(self.options.infinite_hot_soup.value),
                 "open_body_tongue": bool(self.options.open_body_tongue.value),
-                "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
-                "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
+                "unconfine_home_water_energy_door":
+                    self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_energy_door
+                    or self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_both,
+                "unconfine_home_water_transturtle":
+                    self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_transturtle
+                    or self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_both,
                 "maximum_ingredient_amount": self.options.maximum_ingredient_amount.value
                 }

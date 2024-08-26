@@ -8,12 +8,13 @@ Description: Unit test used to test accessibility of locations with and without 
 from . import AquariaTestBase
 from ..Items import ItemNames
 from ..Locations import AquariaLocationNames
+from ..Options import EarlyEnergyForm
 
 
 class EnergyFormAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the energy form"""
     options = {
-        "early_energy_form": False,
+        "early_energy_form": EarlyEnergyForm.option_off
     }
 
     def test_energy_form_location(self) -> None:

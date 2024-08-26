@@ -5,13 +5,14 @@ Description: Unit test used to test accessibility of region with the unconfined 
 """
 
 from . import AquariaTestBase
+from ..Options import UnconfineHomeWater, EarlyEnergyForm
 
 
 class UnconfineHomeWaterTransturtleAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of region with the unconfine home water option enabled"""
     options = {
-        "unconfine_home_water": 2,
-        "early_energy_form": False
+        "unconfine_home_water": UnconfineHomeWater.option_via_transturtle,
+        "early_energy_form": EarlyEnergyForm.option_off
     }
 
     def test_unconfine_home_water_transturtle_location(self) -> None:

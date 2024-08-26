@@ -6,13 +6,14 @@ Description: Unit test used to test accessibility of region with the unconfined 
 """
 
 from . import AquariaTestBase
+from ..Options import UnconfineHomeWater, EarlyEnergyForm
 
 
 class UnconfineHomeWaterBothAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of region with the unconfine home water option enabled"""
     options = {
-        "unconfine_home_water": 3,
-        "early_energy_form": False
+        "unconfine_home_water": UnconfineHomeWater.option_via_both,
+        "early_energy_form": EarlyEnergyForm.option_off
     }
 
     def test_unconfine_home_water_both_location(self) -> None:

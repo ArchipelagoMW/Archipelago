@@ -8,7 +8,7 @@ from typing import Dict, Optional
 from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, CollectionState
 from .Items import AquariaItem, ItemNames
 from .Locations import AquariaLocations, AquariaLocation, AquariaLocationNames
-from .Options import AquariaOptions
+from .Options import AquariaOptions, UnconfineHomeWater
 from worlds.generic.Rules import add_rule, set_rule
 
 
@@ -1312,13 +1312,15 @@ class AquariaRegions:
         if options.big_bosses_to_beat.value > 0:
             add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_loby, self.final_boss),
                                                   self.player), lambda state: _has_big_bosses(state, self.player))
-        if options.objective.value == 1:
+        if options.objective.value == options.objective.option_obtain_secrets_and_kill_the_creator:
             add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_loby, self.final_boss),
                                                   self.player), lambda state: _has_secrets(state, self.player))
-        if options.unconfine_home_water.value in [0, 1]:
+        if (options.unconfine_home_water.value == UnconfineHomeWater.option_via_energy_door or
+                options.unconfine_home_water.value == UnconfineHomeWater.option_off):
             add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.home_water, self.home_water_transturtle),
                                                   self.player), lambda state: _has_bind_song(state, self.player))
-        if options.unconfine_home_water.value in [0, 2]:
+        if (options.unconfine_home_water.value == UnconfineHomeWater.option_via_transturtle or
+                options.unconfine_home_water.value == UnconfineHomeWater.option_off):
             add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.home_water, self.openwater_tl),
                                                   self.player),
                      lambda state: _has_bind_song(state, self.player) and
