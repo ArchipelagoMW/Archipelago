@@ -235,7 +235,6 @@ class AquariaWorld(World):
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarian_translate": bool(self.options.aquarian_translation.value),
                 "blind_goal": bool(self.options.blind_goal.value),
-<<<<<<< HEAD
                 "secret_needed":
                     self.options.objective.value == Objective.option_obtain_secrets_and_kill_the_creator,
                 "locations_item_types": location_items,
