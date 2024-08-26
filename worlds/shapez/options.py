@@ -24,6 +24,7 @@ class GoalAmount(Range):
     """Specify, what level or tier (when either MAM or even fasterer is chosen as goal) is required to reach the goal.
     If MAM is set as the goal and this is set to less than 27, it will raise an OptionError."""
     display_name = "Goal amount"
+    rich_text_doc = True
     range_start = 9
     range_end = 1000
     default = 27
@@ -34,6 +35,7 @@ class RequiredShapesMultiplier(Range):
     For level 1, the amount of shapes ranges from 3 to 300.
     For level 26, it ranges from 5k to 500k."""
     display_name = "Required shapes multiplier"
+    rich_text_doc = True
     range_start = 1
     range_end = 100
     default = 10
@@ -42,12 +44,14 @@ class RequiredShapesMultiplier(Range):
 class RandomizeLevelRequirements(Toggle):
     """Randomize the required shapes to complete levels."""
     display_name = "Randomize level requirements"
+    rich_text_doc = True
     default = True
 
 
 class RandomizeUpgradeRequirements(Toggle):
     """Randomize the required shapes to buy upgrades."""
     display_name = "Randomize upgrade requirements"
+    rich_text_doc = True
     default = True
 
 
@@ -110,6 +114,7 @@ class ThroughputLevelsRatio(Range):
     0 means only total, 100 means only throughput, and -1 means vanilla (only levels 14, 27 and beyond have throughput).
     """
     display_name = "Throughput levels ratio"
+    rich_text_doc = True
     range_start = -1
     range_end = 100
     default = 0
@@ -119,6 +124,7 @@ class SameLateUpgradeRequirements(Toggle):
     """If upgrade requirements are randomized, should the last 3 shapes for each category be the same,
     like in vanilla?"""
     display_name = "Same late upgrade requirements"
+    rich_text_doc = True
     default = True
 
 
@@ -142,6 +148,7 @@ class LockBeltAndExtractor(Toggle):
     """Locks Belts and Extractors and adds them into the item pool.
     **Be careful with this option, as every single location in this game needs both of them.**"""
     display_name = "Lock Belt and Extractor"
+    rich_text_doc = True
     default = False
 
 
@@ -176,6 +183,7 @@ class LockBeltAndExtractor(Toggle):
 class ShapesanityAmount(Range):
     """Amount of one-layer-shapes that will be included as locations."""
     display_name = "Shapesanity amount"
+    rich_text_doc = True
     range_start = 4
     range_end = 5664
     default = 100
@@ -184,6 +192,7 @@ class ShapesanityAmount(Range):
 class TrapsProbability(Range):
     """The probability of any filler item (in percent) being replaced by a trap."""
     display_name = "Traps Percentage"
+    rich_text_doc = True
     range_start = 0
     range_end = 100
     default = 0
