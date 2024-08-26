@@ -132,8 +132,10 @@ class EntranceRando(TextChoice):
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
     alias_false = 0
+    alias_off = 0
     option_no = 0
     alias_true = 1
+    alias_on = 1
     option_yes = 1
     default = 0
 

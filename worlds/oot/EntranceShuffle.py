@@ -445,7 +445,7 @@ def shuffle_random_entrances(ootworld):
 
     # Gather locations to keep reachable for validation
     all_state = ootworld.get_state_with_complete_itempool()
-    all_state.sweep_for_events(locations=ootworld.get_locations())
+    all_state.sweep_for_advancements(locations=ootworld.get_locations())
     locations_to_ensure_reachable = {loc for loc in world.get_reachable_locations(all_state, player) if not (loc.type == 'Drop' or (loc.type == 'Event' and 'Subrule' in loc.name))}
 
     # Set entrance data for all entrances
@@ -791,12 +791,12 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
     all_state = all_state_orig.copy()
     none_state = none_state_orig.copy()
 
-    all_state.sweep_for_events(locations=ootworld.get_locations())
-    none_state.sweep_for_events(locations=ootworld.get_locations())
+    all_state.sweep_for_advancements(locations=ootworld.get_locations())
+    none_state.sweep_for_advancements(locations=ootworld.get_locations())
 
     if ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions:
         time_travel_state = none_state.copy()
-        time_travel_state.collect(ootworld.create_item('Time Travel'), event=True)
+        time_travel_state.collect(ootworld.create_item('Time Travel'), prevent_sweep=True)
         time_travel_state._oot_update_age_reachable_regions(player)
 
     # Unless entrances are decoupled, we don't want the player to end up through certain entrances as the wrong age

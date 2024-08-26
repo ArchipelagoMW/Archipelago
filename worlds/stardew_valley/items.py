@@ -409,8 +409,9 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     else:
         items.append(item_factory(Wallet.bears_knowledge, ItemClassification.useful))  # Not necessary outside of SVE
     items.append(item_factory(Wallet.iridium_snake_milk))
-    items.append(item_factory("Fairy Dust Recipe"))
     items.append(item_factory("Dark Talisman"))
+    if options.exclude_ginger_island == ExcludeGingerIsland.option_false:
+        items.append(item_factory("Fairy Dust Recipe"))
 
 
 def create_help_wanted_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
