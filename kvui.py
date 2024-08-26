@@ -5,6 +5,8 @@ import typing
 import re
 from collections import deque
 
+assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
+
 if sys.platform == "win32":
     import ctypes
 
@@ -595,8 +597,9 @@ class GameManager(App):
                                              "!help for server commands.")
 
     def connect_button_action(self, button):
+        self.ctx.username = None
+        self.ctx.password = None
         if self.ctx.server:
-            self.ctx.username = None
             async_start(self.ctx.disconnect())
         else:
             async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
