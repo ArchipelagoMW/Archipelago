@@ -71,7 +71,7 @@ jobs:
         os:
           - ubuntu-latest
         python:
-          - {version: '3.11'}  # current
+          - {version: '3.12'}  # current
 
     steps:
     - uses: actions/checkout@v4
