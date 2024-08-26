@@ -127,7 +127,7 @@ class ShapezWorld(World):
                 if self.random.random() < 0.1:  # Make sure that longer phases are less frequent
                     self.random_logic_phase_length[phase] = self.random.randint(0, remaininglength)
                 else:
-                    self.random_logic_phase_length[phase] = self.random.randint(0, remaininglength // 6 - phase)
+                    self.random_logic_phase_length[phase] = self.random.randint(0, remaininglength // (6 - phase))
                 remaininglength -= self.random_logic_phase_length[phase]
 
         # Determine lenghts of phases in level logic type "random"
