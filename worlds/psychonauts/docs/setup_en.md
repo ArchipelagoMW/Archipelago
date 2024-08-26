@@ -27,14 +27,12 @@ file path and copy address as text. This will copy the address of your Psychonau
 Run ArchipelagoLauncher.exe and open host.yaml from the Archipelago Launcher, find the psychonauts_options and paste
 your Psychonauts game directory into the root_directory setting between the quotes. If the pasted root directory
 contains single slashes between lines, change all of these to double
-slashes. `If you don't, the client may fail to open.`
+slashes. **If you don't, the client may fail to open.**
 
 <h3 style="text-transform:none";>Installing A Seed</h3>
 
 When generating from the website, your player slot will have a Psychonauts.zip seed on the room page. Download the seed,
-then extract it to access the RandoSeed.lua file inside. If the game is generated locally, extract the Archipelago
-Seed.zip in the output folder (or have the person who generated the seed do this and send you the Psychonauts.zip), then
-extract your Psychonauts.zip. Copy RandoSeed.lua, then find your Psychonauts directory where Astralathe and the
+then extract it to access the RandoSeed.lua file inside. Copy RandoSeed.lua, then find your Psychonauts directory where Astralathe and the
 PsychoRando mod are installed. Inside ModResource, open the PsychoRando mod folder, find the Scripts folder and paste
 RandoSeed.lua inside. Make sure to overwrite the old file.
 
@@ -48,5 +46,5 @@ Enter the Yellow Door and choose a bunk to start a new game. Raz will wake up in
 start playing! <br>
 Most checks will be sent to you anywhere outside a load or cutscene. Checks are sent one item at a time. <br>
 To swap between seeds, just change your RandoSeed.lua in the Scripts folder. The Client uses the seed name from
-RandoSeed.lua to keep information between seeds seperated. <br>
+RandoSeed.lua to keep information between seeds separated. <br>
 

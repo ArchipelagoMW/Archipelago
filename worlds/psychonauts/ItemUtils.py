@@ -7,6 +7,5 @@ def repeated_item_names_gen(item_names: Iterable[str], item_counts: Dict[str, in
     `item_counts`.
     """
     for item_name in item_names:
-        item_count = item_counts[item_name]
-        for _ in range(item_count):
+        for _ in range(item_counts[item_name]):
             yield item_name

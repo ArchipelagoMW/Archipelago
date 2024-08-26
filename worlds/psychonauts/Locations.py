@@ -626,7 +626,7 @@ ALL_FILLABLE_LOCATIONS: Dict[str, int] = {
     **BV_CHECKS,
     **MC_CHECKS,
     **DEEP_ARROWHEAD_LOCATIONS,
-    **MENTAL_COBWEB_LOCATIONS
+    **MENTAL_COBWEB_LOCATIONS,
 }
 
 ALL_LOCATIONS: Dict[str, int] = {
@@ -639,7 +639,7 @@ ALL_LOCATIONS: Dict[str, int] = {
 # placed.
 _FULLY_REMOTE_LOCATION_IDS: Set[int] = {
     *DEEP_ARROWHEAD_LOCATIONS.values(),
-    *MENTAL_COBWEB_LOCATIONS.values()
+    *MENTAL_COBWEB_LOCATIONS.values(),
 }
 # IDs of locations that place items into the game world, and are therefore used in PsychoSeed generation.
 PSYCHOSEED_LOCATION_IDS: Set[int] = set(ALL_FILLABLE_LOCATIONS.values())

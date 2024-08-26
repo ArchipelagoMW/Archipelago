@@ -1,25 +1,22 @@
 from dataclasses import dataclass
 from typing import List
 
-from Options import Choice, Range, Toggle, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions
 
 
 class StartingLevitation(Toggle):
-    """Start with Levitation Level 1"""
+    """Start with Levitation Level 1."""
     display_name = "Start with Levitation"
-    default = False
 
 
-class StartingMentalMagnet(Toggle):
+class StartingMentalMagnet(DefaultOnToggle):
     """Start with Mental Magnet, pulling health, ammo, and arrowhead drops towards you."""
     display_name = "Start with Mental Magnet"
-    default = True
 
 
 class StartingCobwebDuster(Toggle):
     """Start with the Cobweb Duster."""
     display_name = "Start with Cobweb Duster"
-    default = False
 
 
 class RandomStartingMinds(Range):
@@ -30,25 +27,22 @@ class RandomStartingMinds(Range):
     default = 3
 
 
-class LootboxVaults(Toggle):
-    """Turns all Memory Vaults into Lootboxes! Vaults will contain 10-50 Arrowheads, with a 50% chance to recieve a rank up.
+class LootboxVaults(DefaultOnToggle):
+    """Turns all Memory Vaults into Lootboxes! Vaults will contain 10-50 Arrowheads, with a 50% chance to receive a rank up.
     If you get really lucky, you can even win jackpots of up to 250 Arrowheads or Five Ranks Up!
     If False, Vaults will always give One Rank Up and 15 Arrowheads."""
     display_name = "Lootbox Vaults"
-    default = True
 
 
 class EasyMillaRace(Toggle):
-    """Make the race in Milla's Mind easier by removing Bobby from the race, and increasing player speed to 1.5x"""
+    """Make the race in Milla's Mind easier by removing Bobby from the race and increasing player speed to 1.5x"""
     display_name = "Easy Milla Race"
-    default = False
 
 
 class EasyFlightMode(Toggle):
     """Replicate the Levitation Flight Glitch by simply holding down float in the air. No more button mashing.
     WARNING: Makes getting locations out of logic VERY easy."""
-    display_name = "Easy Flight Mode"
-    default = False
+    display_name = "Easy Flight Mode"   
 
 
 class EnemyDamageMultiplier(Range):
@@ -62,8 +56,7 @@ class EnemyDamageMultiplier(Range):
 
 class InstantDeathMode(Toggle):
     """Take any amount of damage, die instantly. Has priority over Enemy Damage Multiplier."""
-    display_name = "Instant Death Mode"
-    default = False
+    display_name = "Instant Death Mode"    
 
 
 class Goal(Choice):
@@ -90,10 +83,9 @@ class BrainsRequired(Range):
     default = 10
 
 
-class RequireMeatCircus(Toggle):
+class RequireMeatCircus(DefaultOnToggle):
     """Require finishing Meat Circus Final Bosses in addition to your goal."""
     display_name = "Require Meat Circus"
-    default = True
 
 
 class DeepArrowheadShuffle(Toggle):
@@ -105,7 +97,6 @@ class DeepArrowheadShuffle(Toggle):
 
     The Deep Arrowheads found under the Lake are not affected by this option."""
     display_name = "Deep Arrowhead Shuffle"
-    default = False
 
 
 class MentalCobwebShuffle(Toggle):
@@ -114,7 +105,6 @@ class MentalCobwebShuffle(Toggle):
     Mental Cobweb locations must be collected using the Cobweb Duster. Collecting a Mental Cobweb will not add it to
     Raz's inventory, so the loom in Ford's Sanctuary will have no use."""
     display_name = "Mental Cobweb Shuffle"
-    default = False
 
 
 @dataclass

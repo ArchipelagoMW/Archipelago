@@ -3,7 +3,7 @@
 <h2 style="text-transform:none";>Changes from the vanilla game</h2>
 
 This randomizer seeks to revitalize the original Psychonauts experience and add replayability by randomizing the
-locations of most items, and allowing access to minds to play them in any order through the Collective Unconscious.
+locations of most items and allowing access to minds to play them in any order through the Collective Unconscious.
 There are several options for ways to finish the game, allowing for different goals beyond beating the final boss.
 
 In addition, there are other changes to the game that make it better optimized for a randomizer:
@@ -11,7 +11,7 @@ In addition, there are other changes to the game that make it better optimized f
 - Starting inventory always contains the Smelling Salts, Bacon, and 100 Psicores for redeeming Psicards in Ford's
   Sanctuary.
 - Player starting location is the Collective Unconscious, with access to each mind locked behind Mind Unlock items.
-- Psychic Powers are now Progressive Items, with Two to Three of each Power available.
+- Psychic Powers are now Progressive Items, with two to three of each Power available.
 - Access to the Campgrounds is locked by Sasha's Button, and other areas in the camp are locked as well:
     - The Kid's Cabins require Lili's Bracelet
     - The Reception Area requires the Squirrel Roast Dinner
@@ -23,20 +23,20 @@ In addition, there are other changes to the game that make it better optimized f
 - Memory Vaults now provide additional arrowheads and Rank Ups on opening.
 - In Gloria’s Theater, the Megaphone item is no longer given to the player after giving the Knight of Joy script to
   Gloria, and is instead part of the collectibles pool. The scripts themselves are left untouched.
-- New Randomizer Only Locations:
-    - Basic Braining, End of Obstacle Course Platform (Two)
-    - Milla’s Dance Party, Ending Room with Milla (One)
-    - Lungfishopolis, Before the Kochamara Boss (Two)
-    - Gloria’s Theater, Inside Gloria’s Room (One)
-    - Waterloo World, Reward for Helping the Carpenter, Knight, and each of the Three Villagers Respectively (Five)
-    - Black Velvetopia, Reward for Defeating Each Wrestler (Four)
+- New randomizer exclusive locations:
+    - Basic Braining: End of Obstacle Course Platform (Two)
+    - Milla’s Dance Party: Ending Room with Milla (One)
+    - Lungfishopolis: Before the Kochamara Boss (Two)
+    - Gloria’s Theater: Inside Gloria’s Room (One)
+    - Waterloo World: Reward for Helping the Carpenter, Knight, and each of the Three Villagers Respectively (Five)
+    - Black Velvetopia: Reward for Defeating Each Wrestler (Four)
 - Upon completing a level, Raz is returned to the Collective Unconscious instead of the vanilla game location.
   Additionally, an item will spawn outside the mental door as a reward.
 
 <h2 style="text-transform:none";>Where is the options page</h2>
 
 The [player options page for this game](../player-options) contains all the options you need to configure and export a
-config file.
+config (YAML) file.
 
 <h2 style="text-transform:none";>What is randomized in this game?</h2>
 

@@ -131,8 +131,7 @@ class PSYWorld(World):
         return ItemName.PsiCard
 
     def create_event_item(self, name: str) -> Item:
-        item_classification = ItemClassification.progression
-        created_item = PSYItem(name, item_classification, None, self.player)
+        created_item = PSYItem(name, ItemClassification.progression, None, self.player)
         return created_item
 
     @staticmethod
