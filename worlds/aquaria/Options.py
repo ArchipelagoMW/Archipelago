@@ -34,18 +34,26 @@ class TurtleRandomizer(Choice):
     default = 2
 
 
-class EarlyBindSong(DefaultOnToggle):
+class EarlyBindSong(Choice):
     """
     Force the Bind song to be in a location early in the multiworld (It is not guaranteed to be in your world).
     """
     display_name = "Early Bind song"
+    option_off = 0
+    option_early = 1
+    option_early_and_local = 2
+    default = 1
 
 
-class EarlyEnergyForm(DefaultOnToggle):
+class EarlyEnergyForm(Choice):
     """
     Force the Energy form to be in a location early in the multiworld (It is not guaranteed to be in your world).
     """
     display_name = "Early Energy form"
+    option_off = 0
+    option_early = 1
+    option_early_and_local = 2
+    default = 1
 
 
 class AquarianTranslation(Toggle):
