@@ -2,7 +2,6 @@ from random import Random
 from typing import List, Tuple, Dict
 
 from BaseClasses import Location, LocationProgressType, Region
-from . import ShapezWorld
 
 location_description = {  # TODO
     "Level 1": "TODO",
