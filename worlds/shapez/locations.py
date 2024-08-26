@@ -314,16 +314,21 @@ def addupgrades(finaltier: int, logictype: str,
                                                                LocationProgressType.DEFAULT)
 
     elif logictype == "category":
-        for x in range(2, finaltier+1):
+        for x in range(2, 7):
             locations[f"Belt Upgrade Tier {roman(x)}"] = ("Main", LocationProgressType.DEFAULT)
-        for x in range(2, finaltier+1):
+        for x in range(7, finaltier+1):
+            locations[f"Belt Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
+        for x in range(2, 7):
             locations[f"Miner Upgrade Tier {roman(x)}"] = ("Main", LocationProgressType.DEFAULT)
+        for x in range(7, finaltier+1):
+            locations[f"Miner Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
         locations["Processors Upgrade Tier II"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
         locations["Processors Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
         locations["Processors Upgrade Tier IV"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
         locations["Processors Upgrade Tier V"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
-        for x in range(6, finaltier+1):
-            locations[f"Processors Upgrade Tier {roman(x)}"] = ("Upgrades with 3 Buildings",
+        locations["Processors Upgrade Tier VI"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
+        for x in range(7, finaltier+1):
+            locations[f"Processors Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
                                                                 LocationProgressType.DEFAULT)
         locations["Painting Upgrade Tier II"] = ("Upgrades with 4 Buildings", LocationProgressType.DEFAULT)
         locations["Painting Upgrade Tier III"] = ("Upgrades with 4 Buildings", LocationProgressType.DEFAULT)
@@ -334,17 +339,29 @@ def addupgrades(finaltier: int, logictype: str,
     elif logictype == "category_random":
         regions = ["Main", "Upgrades with 1 Building", "Upgrades with 2 Buildings", "Upgrades with 3 Buildings",
                    "Upgrades with 4 Buildings", "Upgrades with 5 Buildings"]
-        for x in range(2, finaltier+1):
+        for x in range(2, 7):
             locations[f"Belt Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["belt"]],
                                                           LocationProgressType.DEFAULT)
-        for x in range(2, finaltier+1):
+        for x in range(7, finaltier+1):
+            locations[f"Belt Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
+                                                          LocationProgressType.DEFAULT)
+        for x in range(2, 7):
             locations[f"Miner Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["miner"]],
                                                            LocationProgressType.DEFAULT)
-        for x in range(2, finaltier+1):
+        for x in range(7, finaltier+1):
+            locations[f"Miner Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
+                                                           LocationProgressType.DEFAULT)
+        for x in range(2, 7):
             locations[f"Processors Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["processors"]],
                                                                 LocationProgressType.DEFAULT)
-        for x in range(2, finaltier+1):
+        for x in range(7, finaltier+1):
+            locations[f"Processors Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
+                                                                LocationProgressType.DEFAULT)
+        for x in range(2, 7):
             locations[f"Painting Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["painting"]],
+                                                              LocationProgressType.DEFAULT)
+        for x in range(7, finaltier+1):
+            locations[f"Painting Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
                                                               LocationProgressType.DEFAULT)
 
     else: # logictype == hardcore
