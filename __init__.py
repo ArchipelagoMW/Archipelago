@@ -34,7 +34,7 @@ class WL4Web(WebWorld):
         'English',
         'setup_en.md',
         'setup/en',
-        ['lil David']
+        ['lil David', 'Fairweather-Furry']
     )
 
     theme = 'jungle'
