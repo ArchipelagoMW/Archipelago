@@ -1,12 +1,16 @@
 from typing import List
-from BaseClasses import CollectionState, MultiWorld
+
+from BaseClasses import CollectionState
 from .RegionBase import JakAndDaxterRegion
-from .. import JakAndDaxterOptions, EnableOrbsanity
-from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs
+from .. import EnableOrbsanity, JakAndDaxterWorld
+from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
 # God help me... here we go.
-def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxterOptions, player: int) -> List[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxterRegion]:
+    multiworld = world.multiworld
+    options = world.options
+    player = world.player
 
     # We need a few helper functions.
     def can_cross_main_gap(state: CollectionState, p: int) -> bool:
@@ -19,8 +23,7 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
                      or state.has_all({"Roll", "Roll Jump"}, p)))
 
     def can_jump_blockers(state: CollectionState, p: int) -> bool:
-        return (state.has("Double Jump", p)
-                or state.has("Jump Dive", p)
+        return (state.has_any({"Double Jump", "Jump Dive"}, p)
                 or state.has_all({"Crouch", "Crouch Jump"}, p)
                 or state.has_all({"Crouch", "Crouch Uppercut"}, p)
                 or state.has_all({"Punch", "Punch Uppercut"}, p))
@@ -190,15 +193,12 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     if options.enable_orbsanity == EnableOrbsanity.option_per_level:
         orbs = JakAndDaxterRegion("Orbsanity", player, multiworld, level_name)
 
-        bundle_size = options.level_orbsanity_bundle_size.value
-        bundle_count = int(200 / bundle_size)
+        bundle_count = 200 // world.orb_bundle_size
         for bundle_index in range(bundle_count):
             orbs.add_orb_locations(12,
                                    bundle_index,
-                                   bundle_size,
-                                   access_rule=lambda state, bundle=bundle_index:
-                                   can_reach_orbs(state, player, multiworld, options, level_name)
-                                   >= (bundle_size * (bundle + 1)))
+                                   access_rule=lambda state, level=level_name, bundle=bundle_index:
+                                   can_reach_orbs_level(state, player, world, level, bundle))
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 

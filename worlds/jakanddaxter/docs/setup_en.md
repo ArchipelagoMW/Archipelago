@@ -26,8 +26,7 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Click `View Folder`. 
   - In the new file explorer window, take note of the current path. It should contain `gk.exe` and `goalc.exe`.
 - Verify that the mod launcher copied the extracted ISO files to the mod directory:
-  - `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data` should have *all* the same files as
-  - `%appdata%/OpenGOAL-Mods/_iso_data`, if it doesn't, copy those files over manually.
+  - `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data` and `%appdata%/OpenGOAL-Mods/_iso_data` should have *all* the same files; if they don't, copy those files over manually.
   - And then `Recompile` if you needed to copy the files over.
 - **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE MOD LAUNCHER.** It will run in retail mode, which is incompatible with Archipelago. We need it to run in debug mode (see below).
 
@@ -43,7 +42,7 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Back in the Archipelago Launcher, click `Open host.yaml`.
 - In the text file that opens, search for `jakanddaxter_options`.
   - You should see the block of YAML below. If you do not see it, you will need to add it.
-  - If the default path does not contain `gk.exe` and `goalc.exe`, you will need to provide the path you noted earlier. **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/ `.**
+  - If the default path does not contain `gk.exe` and `goalc.exe`, you will need to provide the path you noted earlier. **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
 
 ```
 jakanddaxter_options:
@@ -162,8 +161,7 @@ PAL versions of the game seem to require additional troubleshooting/setup in ord
 
 ### Known Issues
 
-- The game needs to run in debug mode in order to allow the repl to connect to it. We hide the debug text on screen and play the game's introductory cutscenes properly.
+- The game needs to boot in debug mode in order to allow the repl to connect to it. We disable debug mode once we connect to the AP server.
 - The powershell windows cannot be run as background processes due to how the repl works, so the best we can do is minimize them.
-- The client is currently not very robust and doesn't handle failures gracefully. This may result in items not being delivered to the game, or location checks not being delivered to the server.
 - Orbsanity checks may show up out of order in the text client.
 - Large item releases may take up to several minutes for the game to process them all. 

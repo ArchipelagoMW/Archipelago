@@ -1,29 +1,26 @@
 from typing import List
-from BaseClasses import CollectionState, MultiWorld
+
 from .RegionBase import JakAndDaxterRegion
-from .. import JakAndDaxterOptions, EnableOrbsanity
-from ..Rules import can_free_scout_flies, can_trade, can_reach_orbs
-from ..locs import CellLocations as Cells, ScoutLocations as Scouts
+from .. import EnableOrbsanity, JakAndDaxterWorld
+from ..Rules import can_free_scout_flies, can_reach_orbs_level
+from ..locs import ScoutLocations as Scouts
 
 
-def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxterOptions, player: int) -> List[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxterRegion]:
+    multiworld = world.multiworld
+    options = world.options
+    player = world.player
 
     total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
 
     # No area is inaccessible in VC even with only running and jumping.
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 50)
-    main_area.add_cell_locations([96], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs))
-    main_area.add_cell_locations([97], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs, 96))
-    main_area.add_cell_locations([98], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs, 97))
-    main_area.add_cell_locations([99], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs, 98))
-    main_area.add_cell_locations([100], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs))
-    main_area.add_cell_locations([101], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs, 100))
+    main_area.add_cell_locations([96], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
+    main_area.add_cell_locations([97], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 96))
+    main_area.add_cell_locations([98], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 97))
+    main_area.add_cell_locations([99], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 98))
+    main_area.add_cell_locations([100], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
+    main_area.add_cell_locations([101], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 100))
 
     # Hidden Power Cell: you can carry yellow eco from Spider Cave just by running and jumping
     # and using your Goggles to shoot the box (you do not need Punch to shoot from FP mode).
@@ -43,15 +40,12 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     if options.enable_orbsanity == EnableOrbsanity.option_per_level:
         orbs = JakAndDaxterRegion("Orbsanity", player, multiworld, level_name)
 
-        bundle_size = options.level_orbsanity_bundle_size.value
-        bundle_count = int(50 / bundle_size)
+        bundle_count = 50 // world.orb_bundle_size
         for bundle_index in range(bundle_count):
             orbs.add_orb_locations(11,
                                    bundle_index,
-                                   bundle_size,
-                                   access_rule=lambda state, bundle=bundle_index:
-                                   can_reach_orbs(state, player, multiworld, options, level_name)
-                                   >= (bundle_size * (bundle + 1)))
+                                   access_rule=lambda state, level=level_name, bundle=bundle_index:
+                                   can_reach_orbs_level(state, player, world, level, bundle))
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 

@@ -1,7 +1,6 @@
-from typing import List, Callable
+from typing import Iterable, Callable, Optional
 from BaseClasses import MultiWorld, Region
 from ..GameID import jak1_name
-from ..JakAndDaxterOptions import JakAndDaxterOptions
 from ..Locations import JakAndDaxterLocation, location_table
 from ..locs import (OrbLocations as Orbs,
                     CellLocations as Cells,
@@ -26,7 +25,7 @@ class JakAndDaxterRegion(Region):
         self.level_name = level_name
         self.orb_count = orb_count
 
-    def add_cell_locations(self, locations: List[int], access_rule: Callable = None):
+    def add_cell_locations(self, locations: Iterable[int], access_rule: Optional[Callable] = None):
         """
         Adds a Power Cell Location to this region with the given access rule.
         Converts Game ID's to AP ID's for you.
@@ -35,7 +34,7 @@ class JakAndDaxterRegion(Region):
             ap_id = Cells.to_ap_id(loc)
             self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
 
-    def add_fly_locations(self, locations: List[int], access_rule: Callable = None):
+    def add_fly_locations(self, locations: Iterable[int], access_rule: Optional[Callable] = None):
         """
         Adds a Scout Fly Location to this region with the given access rule.
         Converts Game ID's to AP ID's for you.
@@ -44,7 +43,7 @@ class JakAndDaxterRegion(Region):
             ap_id = Scouts.to_ap_id(loc)
             self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
 
-    def add_special_locations(self, locations: List[int], access_rule: Callable = None):
+    def add_special_locations(self, locations: Iterable[int], access_rule: Optional[Callable] = None):
         """
         Adds a Special Location to this region with the given access rule.
         Converts Game ID's to AP ID's for you.
@@ -55,7 +54,7 @@ class JakAndDaxterRegion(Region):
             ap_id = Specials.to_ap_id(loc)
             self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
 
-    def add_cache_locations(self, locations: List[int], access_rule: Callable = None):
+    def add_cache_locations(self, locations: Iterable[int], access_rule: Optional[Callable] = None):
         """
         Adds an Orb Cache Location to this region with the given access rule.
         Converts Game ID's to AP ID's for you.
@@ -64,7 +63,7 @@ class JakAndDaxterRegion(Region):
             ap_id = Caches.to_ap_id(loc)
             self.add_jak_locations(ap_id, location_table[ap_id], access_rule)
 
-    def add_orb_locations(self, level_index: int, bundle_index: int, bundle_size: int, access_rule: Callable = None):
+    def add_orb_locations(self, level_index: int, bundle_index: int, access_rule: Optional[Callable] = None):
         """
         Adds Orb Bundle Locations to this region equal to `bundle_count`. Used only when Per-Level Orbsanity is enabled.
         The orb factory class will handle AP ID enumeration.
@@ -78,7 +77,7 @@ class JakAndDaxterRegion(Region):
             location.access_rule = access_rule
         self.locations.append(location)
 
-    def add_jak_locations(self, ap_id: int, name: str, access_rule: Callable = None):
+    def add_jak_locations(self, ap_id: int, name: str, access_rule: Optional[Callable] = None):
         """
         Helper function to add Locations. Not to be used directly.
         """

@@ -1,11 +1,14 @@
 from typing import List
-from BaseClasses import CollectionState, MultiWorld
+
 from .RegionBase import JakAndDaxterRegion
-from .. import JakAndDaxterOptions, EnableOrbsanity
-from ..Rules import can_free_scout_flies, can_trade, can_reach_orbs
+from .. import EnableOrbsanity, JakAndDaxterWorld
+from ..Rules import can_free_scout_flies, can_reach_orbs_level
 
 
-def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxterOptions, player: int) -> List[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxterRegion]:
+    multiworld = world.multiworld
+    options = world.options
+    player = world.player
 
     total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
 
@@ -13,10 +16,8 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
 
     # Yakows requires no combat.
     main_area.add_cell_locations([10])
-    main_area.add_cell_locations([11], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs))
-    main_area.add_cell_locations([12], access_rule=lambda state:
-                                 can_trade(state, player, multiworld, options, total_trade_orbs))
+    main_area.add_cell_locations([11], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
+    main_area.add_cell_locations([12], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
 
     # These 4 scout fly boxes can be broken by running with all the blue eco from Sentinel Beach.
     main_area.add_fly_locations([262219, 327755, 131147, 65611])
@@ -34,10 +35,8 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     yakow_cliff.add_fly_locations([75], access_rule=lambda state: can_free_scout_flies(state, player))
 
     oracle_platforms = JakAndDaxterRegion("Oracle Platforms", player, multiworld, level_name, 6)
-    oracle_platforms.add_cell_locations([13], access_rule=lambda state:
-                                        can_trade(state, player, multiworld, options, total_trade_orbs))
-    oracle_platforms.add_cell_locations([14], access_rule=lambda state:
-                                        can_trade(state, player, multiworld, options, total_trade_orbs, 13))
+    oracle_platforms.add_cell_locations([13], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
+    oracle_platforms.add_cell_locations([14], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 13))
     oracle_platforms.add_fly_locations([393291], access_rule=lambda state:
                                        can_free_scout_flies(state, player))
 
@@ -70,15 +69,12 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     if options.enable_orbsanity == EnableOrbsanity.option_per_level:
         orbs = JakAndDaxterRegion("Orbsanity", player, multiworld, level_name)
 
-        bundle_size = options.level_orbsanity_bundle_size.value
-        bundle_count = int(50 / bundle_size)
+        bundle_count = 50 // world.orb_bundle_size
         for bundle_index in range(bundle_count):
             orbs.add_orb_locations(1,
                                    bundle_index,
-                                   bundle_size,
-                                   access_rule=lambda state, bundle=bundle_index:
-                                   can_reach_orbs(state, player, multiworld, options, level_name)
-                                   >= (bundle_size * (bundle + 1)))
+                                   access_rule=lambda state, level=level_name, bundle=bundle_index:
+                                   can_reach_orbs_level(state, player, world, level, bundle))
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 

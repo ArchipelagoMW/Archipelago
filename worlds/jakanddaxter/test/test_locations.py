@@ -3,11 +3,8 @@ import typing
 from . import JakAndDaxterTestBase
 from .. import jak1_id
 from ..regs.RegionBase import JakAndDaxterRegion
-from ..locs import (OrbLocations as Orbs,
-                    CellLocations as Cells,
-                    ScoutLocations as Scouts,
-                    SpecialLocations as Specials,
-                    OrbCacheLocations as Caches)
+from ..locs import (ScoutLocations as Scouts,
+                    SpecialLocations as Specials)
 
 
 class LocationsTest(JakAndDaxterTestBase):

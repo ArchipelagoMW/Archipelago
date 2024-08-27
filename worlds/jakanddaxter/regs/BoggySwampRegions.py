@@ -1,11 +1,15 @@
 from typing import List
-from BaseClasses import CollectionState, MultiWorld
+
+from BaseClasses import CollectionState
 from .RegionBase import JakAndDaxterRegion
-from .. import JakAndDaxterOptions, EnableOrbsanity
-from ..Rules import can_fight, can_reach_orbs
+from .. import EnableOrbsanity, JakAndDaxterWorld
+from ..Rules import can_fight, can_reach_orbs_level
 
 
-def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxterOptions, player: int) -> List[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxterRegion]:
+    multiworld = world.multiworld
+    options = world.options
+    player = world.player
 
     # This level is full of short-medium gaps that cannot be crossed by single jump alone.
     # These helper functions list out the moves that can cross all these gaps (painting with a broad brush but...)
@@ -155,15 +159,12 @@ def build_regions(level_name: str, multiworld: MultiWorld, options: JakAndDaxter
     if options.enable_orbsanity == EnableOrbsanity.option_per_level:
         orbs = JakAndDaxterRegion("Orbsanity", player, multiworld, level_name)
 
-        bundle_size = options.level_orbsanity_bundle_size.value
-        bundle_count = int(200 / bundle_size)
+        bundle_count = 200 // world.orb_bundle_size
         for bundle_index in range(bundle_count):
             orbs.add_orb_locations(8,
                                    bundle_index,
-                                   bundle_size,
-                                   access_rule=lambda state, bundle=bundle_index:
-                                   can_reach_orbs(state, player, multiworld, options, level_name)
-                                   >= (bundle_size * (bundle + 1)))
+                                   access_rule=lambda state, level=level_name, bundle=bundle_index:
+                                   can_reach_orbs_level(state, player, world, level, bundle))
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 

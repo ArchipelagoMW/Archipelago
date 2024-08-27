@@ -1,14 +1,17 @@
-import logging
 import os
 import subprocess
-import typing
-import asyncio
 import colorama
+
+import asyncio
+from asyncio import Task
+
+from typing import Set, Awaitable, Optional, List
+
 import pymem
-from pymem.exception import ProcessNotFound, ProcessError
+from pymem.exception import ProcessNotFound
 
 import Utils
-from NetUtils import ClientStatus, NetworkItem
+from NetUtils import ClientStatus
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled
 from .JakAndDaxterOptions import EnableOrbsanity
 
@@ -20,10 +23,10 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 
-all_tasks = set()
+all_tasks: Set[Task] = set()
 
 
-def create_task_log_exception(awaitable: typing.Awaitable) -> asyncio.Task:
+def create_task_log_exception(awaitable: Awaitable) -> asyncio.Task:
     async def _log_exception(a):
         try:
             return await a
@@ -81,7 +84,7 @@ class JakAndDaxterContext(CommonContext):
     repl_task: asyncio.Task
     memr_task: asyncio.Task
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
+    def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
         self.repl = JakAndDaxterReplClient()
         self.memr = JakAndDaxterMemoryReader()
         # self.repl.load_data()
@@ -195,11 +198,11 @@ class JakAndDaxterContext(CommonContext):
             self.repl.received_deathlink = True
             super().on_deathlink(data)
 
-    async def ap_inform_location_check(self, location_ids: typing.List[int]):
+    async def ap_inform_location_check(self, location_ids: List[int]):
         message = [{"cmd": "LocationChecks", "locations": location_ids}]
         await self.send_msgs(message)
 
-    def on_location_check(self, location_ids: typing.List[int]):
+    def on_location_check(self, location_ids: List[int]):
         create_task_log_exception(self.ap_inform_location_check(location_ids))
 
     async def ap_inform_finished_game(self):

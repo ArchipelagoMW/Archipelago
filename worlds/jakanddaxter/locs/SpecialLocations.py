@@ -21,12 +21,14 @@ special_offset = 2048
 # These helper functions do all the math required to get information about each
 # special check and translate its ID between AP and OpenGOAL.
 def to_ap_id(game_id: int) -> int:
-    assert game_id < jak1_id, f"Attempted to convert {game_id} to an AP ID, but it already is one."
+    if game_id >= jak1_id:
+        raise ValueError(f"Attempted to convert {game_id} to an AP ID, but it already is one.")
     return jak1_id + special_offset + game_id   # Add the offsets and the orb Actor ID.
 
 
 def to_game_id(ap_id: int) -> int:
-    assert ap_id >= jak1_id, f"Attempted to convert {ap_id} to a Jak 1 ID, but it already is one."
+    if ap_id < jak1_id:
+        raise ValueError(f"Attempted to convert {ap_id} to a Jak 1 ID, but it already is one.")
     return ap_id - jak1_id - special_offset  # Reverse process, subtract the offsets.
 
 

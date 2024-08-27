@@ -180,14 +180,14 @@ Here is how the HUD works:
 Depending on the nature of the bug, there are a couple of different options.
 
 * If you found a logical error in the randomizer, please create a new Issue 
-[here.](https://github.com/ArchipelaGOAL/Archipelago/issues) Use this page if:
+[here](https://github.com/ArchipelaGOAL/Archipelago/issues). Use this page if:
     * An item required for progression is unreachable. 
     * The randomizer did not respect one of the Options you chose.
     * You see a mistake, typo, etc. on this webpage.
     * You see an error or stack trace appear on the text client.
 
 * If you encountered an error in OpenGOAL, please create a new Issue 
-[here.](https://github.com/ArchipelaGOAL/ArchipelaGOAL/issues) Use this page if:
+[here](https://github.com/ArchipelaGOAL/ArchipelaGOAL/issues). Use this page if:
     * You encounter a crash, freeze, reset, etc. in the game.
     * You fail to send Items you find in the game to the Archipelago server.
     * You fail to receive Items the server sends to you.

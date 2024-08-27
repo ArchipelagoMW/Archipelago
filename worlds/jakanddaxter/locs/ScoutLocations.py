@@ -23,7 +23,8 @@ fly_offset = 1024
 # These helper functions do all the math required to get information about each
 # scout fly and translate its ID between AP and OpenGOAL.
 def to_ap_id(game_id: int) -> int:
-    assert game_id < jak1_id, f"Attempted to convert {game_id} to an AP ID, but it already is one."
+    if game_id >= jak1_id:
+        raise ValueError(f"Attempted to convert {game_id} to an AP ID, but it already is one.")
     cell_id = get_cell_id(game_id)                         # Get the power cell ID from the lowest 7 bits.
     buzzer_index = (game_id - cell_id) >> 9                # Get the index, bit shift it down 9 places.
     compressed_id = fly_offset + buzzer_index + cell_id    # Add the offset, the bit-shifted index, and the cell ID.
@@ -31,7 +32,8 @@ def to_ap_id(game_id: int) -> int:
 
 
 def to_game_id(ap_id: int) -> int:
-    assert ap_id >= jak1_id, f"Attempted to convert {ap_id} to a Jak 1 ID, but it already is one."
+    if ap_id < jak1_id:
+        raise ValueError(f"Attempted to convert {ap_id} to a Jak 1 ID, but it already is one.")
     compressed_id = ap_id - jak1_id                        # Reverse process. First thing: subtract the game's ID.
     cell_id = get_cell_id(compressed_id)                   # Get the power cell ID from the lowest 7 bits.
     buzzer_index = compressed_id - fly_offset - cell_id    # Get the bit-shifted index.
@@ -42,7 +44,8 @@ def to_game_id(ap_id: int) -> int:
 # Make sure to use this function ONLY when the input argument does NOT include jak1_id,
 # because that number may flip some of the bottom 7 bits, and that will throw off this bit mask.
 def get_cell_id(buzzer_id: int) -> int:
-    assert buzzer_id < jak1_id, f"Attempted to bit mask {buzzer_id}, but it is polluted by the game's ID {jak1_id}."
+    if buzzer_id >= jak1_id:
+        raise ValueError(f"Attempted to bit mask {buzzer_id}, but it is polluted by the game's ID {jak1_id}.")
     return buzzer_id & 0b1111111
 
 
@@ -184,7 +187,7 @@ locVC_scoutTable = {
 
 # Spider Cave
 locSC_scoutTable = {
-    327765: "SC: Scout Fly Near Dark Dave Entrance",
+    327765: "SC: Scout Fly Near Dark Cave Entrance",
     262229: "SC: Scout Fly In Dark Cave",
     393301: "SC: Scout Fly Main Cave, Overlooking Entrance",
     196693: "SC: Scout Fly Main Cave, Near Dark Crystal",
