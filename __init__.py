@@ -18,7 +18,7 @@ from .types import ItemType, LocationType, Passage
 
 class WL4Settings(settings.Group):
     class RomFile(settings.UserFilePath):
-        '''File name of the Wario Land 4 ROM'''
+        """File name of the Wario Land 4 ROM"""
         description = 'Wario Land 4 ROM File'
         copy_to = 'Wario Land 4.gba'
         md5s = [MD5_US_EU, MD5_JP]
@@ -43,13 +43,13 @@ class WL4Web(WebWorld):
 
 
 class WL4World(World):
-    '''
+    """
     A golden pyramid has been discovered deep in the jungle, and Wario has set
     out to rob it. But when he enters, he finds the Golden Diva's curse has
     taken away his moves! To escape with his life and more importantly, the
     treasure, Wario must find his abilities to defeat the passage bosses and
     the Golden Diva.
-    '''
+    """
 
     game: str = 'Wario Land 4'
     options_dataclass = WL4Options

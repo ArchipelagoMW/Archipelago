@@ -11,7 +11,7 @@ main_levels = ['Palm Tree Paradise', 'Wildflower Fields', 'Mystic Lake', 'Monsoo
 class TestHelpers(WL4TestBase):
 
     def test_item_filter(self):
-        '''Ensure item filters and item names match.'''
+        """Ensure item filters and item names match."""
         with self.subTest('Jewel Pieces'):
             pieces = items.filter_items(type=ItemType.JEWEL)
             assert all(map(lambda p: p[0].endswith('Piece'), pieces))
@@ -27,7 +27,7 @@ class TestHelpers(WL4TestBase):
                 assert all(map(lambda p: passage.short_name() in p, pieces))
 
     def test_location_filter(self):
-        '''Test that the location filter and location names match'''
+        """Test that the location filter and location names match"""
         with self.subTest('Hall of Hieroglyphs'):
             checks = locations.get_level_locations(Passage.ENTRY, 0)
             assert all(map(lambda l: l.startswith('Hall of Hieroglyphs'), checks))

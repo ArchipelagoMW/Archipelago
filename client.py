@@ -64,7 +64,7 @@ def _batched(iterable, n):
         yield batch
 
 def batches(iterable: Iterable, n: int):
-    '''Batch data into tuples of length n. The last batch may be shorter.'''
+    """Batch data into tuples of length n. The last batch may be shorter."""
 
     try:
         return itertools.batched(iterable, n)
@@ -113,7 +113,7 @@ TRACKER_EVENT_FLAGS = [
 
 
 def cmd_deathlink(self):
-    '''Toggle death link from client. Overrides default setting.'''
+    """Toggle death link from client. Overrides default setting."""
 
     client_handler = self.ctx.client_handler
     client_handler.death_link.client_override = True
