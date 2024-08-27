@@ -27,27 +27,27 @@ Since each location has its own rule, it's possible that an item required for pr
 can't reach all of its locations or complete it. 
 However, mission completion is always required to gain access to new missions.
 
-Except for mission completion, these categories can be disabled in the game's settings. 
+Aside from mission completion, the other location categories can be disabled in the player options.
 For instance, you can disable getting items for reaching required milestones.
 
 When you receive items, they will immediately become available, even during a mission, and you will be
 notified via a text box in the top-right corner of the game screen. 
 Item unlocks are also logged in the Archipelago client.
 
-Missions are launched through the Starcraft 2 Archipelago client, through the Starcraft 2 Launcher tab. 
+Missions are launched through the StarCraft 2 Archipelago client, through the StarCraft 2 Launcher tab. 
 The between mission segments on the Hyperion, the Leviathan, and the Spear of Adun are not included. 
 Additionally, metaprogression currencies such as credits and Solarite are not used.
 
 ## What is the goal of this game when randomized?
 
 The goal is to beat the final mission in the mission order. 
-The yaml configuration file controls the mission order (e.g. blitz, grid, etc.), which of the four Starcraft 2 
-campaigns can be used to populate the mission order and how missions are shuffled. 
-Since the first two options determine the number of missions in a Starcraft 2 world, they can be used to customize the 
+The yaml configuration file controls the mission order (e.g. blitz, grid, etc.), which combination of the four 
+StarCraft 2 campaigns can be used to populate the mission order and how missions are shuffled. 
+Since the first two options determine the number of missions in a StarCraft 2 world, they can be used to customize the 
 expected time to complete the world. 
 Note that the evolution missions from Heart of the Swarm are not included in the randomizer.
 
-## What non-randomized changes are there from vanilla Starcraft 2?
+## What non-randomized changes are there from vanilla StarCraft 2?
 
 1. Some missions have more vespene geysers available to allow a wider variety of units.
 2. Many new units and upgrades have been added as items, coming from co-op, melee, later campaigns, later expansions, 
@@ -68,7 +68,7 @@ See the [Advanced YAML Guide](/tutorial/Archipelago/advanced_settings/en) for mo
 
 ## Unique Local Commands
 
-The following commands are only available when using the Starcraft 2 Client to play with Archipelago. 
+The following commands are only available when using the StarCraft 2 Client to play with Archipelago. 
 You can list them any time in the client with `/help`.
 
 * `/download_data` Download the most recent release of the necessary files for playing SC2 with Archipelago. 
@@ -87,7 +87,7 @@ Will overwrite existing files
     amounts, controlling AI allies, etc.
 * `/disable_mission_check` Disables the check to see if a mission is available to play. 
 Meant for co-op runs where one player can play the next mission in a chain the other player is doing.
-* `/play [mission_id]` Starts a Starcraft 2 mission based off of the mission_id provided
+* `/play [mission_id]` Starts a StarCraft 2 mission based off of the mission_id provided
 * `/available` Get what missions are currently available to play
 * `/unfinished` Get what missions are currently available to play and have not had all locations checked
 * `/set_path [path]` Manually set the SC2 install directory (if the automatic detection fails)

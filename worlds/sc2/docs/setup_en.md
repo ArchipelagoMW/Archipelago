@@ -59,7 +59,7 @@ For StarCraft 2, this option doesn't have much impact.
 It is an Archipelago option designed to balance world progression by swapping items in spheres. 
 If the Progression Balancing of one world is greater than that of others, items in that world are more likely to be 
 obtained early, and vice versa if its value is smaller. 
-However, StarCraft 2 is more permissive regarding the items that can be used to progress, so this setting has little 
+However, StarCraft 2 is more permissive regarding the items that can be used to progress, so this option has little 
 influence on progression in a StarCraft 2 world. 
 StarCraft 2. 
 Since this option increases the time required to generate a MultiWorld, we recommend deactivating it (i.e., setting it 
