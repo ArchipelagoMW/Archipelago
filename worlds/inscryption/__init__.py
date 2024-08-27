@@ -62,8 +62,19 @@ class InscryptionWorld(World):
             else:
                 self.required_epitaph_pieces_name = "Epitaph Pieces"
                 self.required_epitaph_pieces_count = 1
-        elif self.options.painting_checks_balancing == PaintingChecksBalancing.option_force_filler:
+
+        if self.options.painting_checks_balancing == PaintingChecksBalancing.option_balanced:
+            act1_items[6]['classification'] = ItemClassification.progression
+            act1_items[11]['classification'] = ItemClassification.progression
+        else:
+            act1_items[6]['classification'] = ItemClassification.useful
+            act1_items[11]['classification'] = ItemClassification.useful
+
+        if self.options.painting_checks_balancing == PaintingChecksBalancing.option_force_filler \
+                and self.options.goal == Goal.option_first_act:
             act1_items[3]['classification'] = ItemClassification.filler
+        else:
+            act1_items[3]['classification'] = ItemClassification.useful
 
     def create_item(self, name: str) -> Item:
         item_id = self.item_name_to_id[name]

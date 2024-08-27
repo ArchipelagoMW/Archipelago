@@ -7,7 +7,6 @@ class Act1DeathLinkBehaviour(Choice):
     """If DeathLink is enabled, determines what counts as a death in act 1. This affects deaths sent and received.
     Sacrificed: Send a death when sacrificed by Leshy. Receiving a death will extinguish all candles.
     Candle Extinguished: Send a death when a candle is extinguished. Receiving a death will extinguish a candle."""
-    auto_display_name = True
     display_name = "Act 1 Death Link Behaviour"
     option_sacrificed = 0
     option_candle_extinguished = 1

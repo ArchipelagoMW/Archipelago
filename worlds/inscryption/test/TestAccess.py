@@ -210,3 +210,12 @@ class AccessTestUnordered(InscryptionTestBase):
              "Act 2 - Tentacle", "Act 2 - Ancient Obol", "Act 2 - Mycologists Holo Key"],
             [["Monocle"]]
         )
+
+class AccessTestBalancedPaintings(InscryptionTestBase):
+    options = {
+        "painting_checks_balancing": 1,
+    }
+
+    def test_paintings(self) -> None:
+        self.assertAccessDependency(["Act 1 - Painting 2", "Act 1 - Painting 3"],
+                                    [["Oil Painting's Clover Plant", "Squirrel Totem Head"]])

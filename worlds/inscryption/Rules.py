@@ -1,6 +1,6 @@
 from typing import Dict, Callable, TYPE_CHECKING
-from BaseClasses import CollectionState, LocationProgressType, ItemClassification
-from .Options import EpitaphPiecesRandomization, Goal, PaintingChecksBalancing
+from BaseClasses import CollectionState, LocationProgressType
+from .Options import Goal, PaintingChecksBalancing
 
 if TYPE_CHECKING:
     from . import InscryptionWorld
@@ -160,12 +160,12 @@ class InscryptionRules:
 
     def set_all_rules(self) -> None:
         multiworld = self.world.multiworld
-        if self.world.options.goal.value != Goal.option_first_act:
+        if self.world.options.goal != Goal.option_first_act:
             multiworld.completion_condition[self.player] = self.has_epilogue_requirements
         else:
             multiworld.completion_condition[self.player] = self.has_act2_requirements
         for region in multiworld.get_regions(self.player):
-            if self.world.options.goal.value == Goal.option_full_story_in_order:
+            if self.world.options.goal == Goal.option_full_story_in_order:
                 if region.name in self.region_rules:
                     for entrance in region.entrances:
                         entrance.access_rule = self.region_rules[region.name]
