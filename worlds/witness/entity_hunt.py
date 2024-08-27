@@ -82,7 +82,9 @@ class EntityHuntPicker:
                 warning(f"Panel {panel_obj['checkName']} is disabled / excluded and thus not eligible for panel hunt.")
             return False
 
-        return not (
+        return (
+            (plando or panel_hex not in self.player_logic.EXCLUDED_ENTITIES)
+            and not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
                 # However, I don't think they should be hunt panels in this case.
                 self.player_options.disable_non_randomized_puzzles

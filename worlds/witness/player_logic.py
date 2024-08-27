@@ -108,8 +108,7 @@ class WitnessPlayerLogic:
         self.EVENT_ITEM_PAIRS: Dict[str, Tuple[str, str]] = {}
         self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
         self.DISABLE_EVERYTHING_BEHIND: Set[str] = set()
-        self.PRECOMPLETED_LOCATIONS: Set[str] = set()
-        self.EXCLUDED_LOCATIONS: Set[str] = set()
+        self.EXCLUDED_ENTITIES: Set[str] = set()
         self.ADDED_CHECKS: Set[str] = set()
         self.VICTORY_LOCATION = "0x0356B"
 
@@ -610,6 +609,9 @@ class WitnessPlayerLogic:
                 adjustment_linesets_in_order.append(get_complex_doors())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
 
+        if not world.options.shuffle_dog:
+            adjustment_linesets_in_order.append(["Disabled Locations:", "0xFFF80 (Town Pet the Dog)"])
+
         if world.options.shuffle_boat:
             adjustment_linesets_in_order.append(get_boat())
 
@@ -659,7 +661,7 @@ class WitnessPlayerLogic:
                 self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
             elif loc_obj["entityType"] == "Panel":
-                self.EXCLUDED_LOCATIONS.add(loc_obj["entity_hex"])
+                self.EXCLUDED_ENTITIES.add(loc_obj["entity_hex"])
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
@@ -772,8 +774,7 @@ class WitnessPlayerLogic:
                     # If we are disabling a laser, something has gone wrong.
                     if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
                         laser_name = static_witness_logic.ENTITIES_BY_HEX[entity]["checkName"]
-                        player_name = world.multiworld.get_player_name(world.player)
-                        raise RuntimeError(f"Somehow, {laser_name} was disabled for player {player_name}."
+                        raise RuntimeError(f"Somehow, {laser_name} was disabled for player {world.player_name}."
                                            f" This is not allowed to happen, please report to Violet.")
 
                     newly_discovered_disabled_entities.add(entity)
@@ -891,7 +892,7 @@ class WitnessPlayerLogic:
         )
 
     def determine_unrequired_entities(self, world: "WitnessWorld") -> None:
-        """Figure out which major items are actually useless in this world's settings"""
+        """Figure out which major items are actually useless in this world's options"""
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs

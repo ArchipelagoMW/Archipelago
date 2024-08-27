@@ -140,11 +140,17 @@ class ShuffleEnvironmentalPuzzles(Choice):
     option_obelisk_sides = 2
 
 
-class ShuffleDog(Toggle):
+class ShuffleDog(Choice):
     """
-    Adds petting the Town dog into the location pool.
+    Adds petting the dog statue in Town into the location pool.
+    Alternatively, you can force it to be a Puzzle Skip.
     """
     display_name = "Pet the Dog"
+
+    option_off = 0
+    option_puzzle_skip = 1
+    option_random_item = 2
+    default = 1
 
 
 class EnvironmentalPuzzlesDifficulty(Choice):
@@ -446,6 +452,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    shuffle_dog: ShuffleDog
 
 
 witness_option_groups = [
@@ -494,5 +501,8 @@ witness_option_groups = [
         ElevatorsComeToYou,
         DeathLink,
         DeathLinkAmnesty,
+    ]),
+    OptionGroup("Silly Options", [
+        ShuffleDog,
     ])
 ]

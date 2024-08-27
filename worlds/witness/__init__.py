@@ -90,7 +90,7 @@ class WitnessWorld(World):
             "laser_ids_to_hints": self.laser_ids_to_hints,
             "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
+            "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
             "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
             "panel_hunt_required_absolute": self.panel_hunt_required_count
         }
@@ -128,10 +128,10 @@ class WitnessWorld(World):
         )
 
         if not has_locally_relevant_progression and self.multiworld.players == 1:
-            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
+            warning(f"{self.player_name}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
         elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
-            raise OptionError(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+            raise OptionError(f"{self.player_name}'s Witness world doesn't have enough"
                               f" progression items that can be placed in other players' worlds. Please turn on Symbol"
                               f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
@@ -189,12 +189,13 @@ class WitnessWorld(World):
             event_locations.append(location_obj)
 
         # Place other locked items
-        dog_puzzle_skip = self.create_item("Puzzle Skip")
-        self.get_location("Town Pet the Dog").place_locked_item(dog_puzzle_skip)
 
-        self.own_itempool.append(dog_puzzle_skip)
+        if self.options.shuffle_dog == "puzzle_skip":
+            dog_puzzle_skip = self.create_item("Puzzle Skip")
+            self.get_location("Town Pet the Dog").place_locked_item(dog_puzzle_skip)
 
-        self.items_placed_early.append("Puzzle Skip")
+            self.own_itempool.append(dog_puzzle_skip)
+            self.items_placed_early.append("Puzzle Skip")
 
         if self.options.early_symbol_item:
             # Pick an early item to place on the tutorial gate.
@@ -213,19 +214,22 @@ class WitnessWorld(World):
                     self.own_itempool.append(gate_item)
                     self.items_placed_early.append(random_early_item)
 
-        # There are some really restrictive settings in The Witness.
+        # There are some really restrictive options in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
         # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
 
         state = CollectionState(self.multiworld)
-        state.sweep_for_events(locations=event_locations)
+        state.sweep_for_advancements(locations=event_locations)
 
-        num_early_locs = sum(1 for loc in self.multiworld.get_reachable_locations(state, self.player) if loc.address)
+        num_early_locs = sum(
+            1 for loc in self.multiworld.get_reachable_locations(state, self.player)
+            if loc.address and not loc.item
+        )
 
-        # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
+        # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
 
-        needed_size = 3
+        needed_size = 2
         needed_size += self.options.puzzle_randomization == "sigma_expert"
         needed_size += self.options.shuffle_symbols
         needed_size += self.options.shuffle_doors > 0
@@ -247,9 +251,10 @@ class WitnessWorld(World):
             self.player_locations.add_location_late(loc)
             self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
 
-            player = self.multiworld.get_player_name(self.player)
-
-            warning(f"""Location "{loc}" had to be added to {player}'s world due to insufficient sphere 1 size.""")
+            warning(
+                f"""Location "{loc}" had to be added to {self.player_name}'s world 
+                due to insufficient sphere 1 size."""
+            )
 
     def create_items(self) -> None:
         # Determine pool size.
@@ -286,7 +291,7 @@ class WitnessWorld(World):
             self.multiworld.push_precollected(self.create_item(inventory_item_name))
 
         if len(item_pool) > pool_size:
-            error(f"{self.multiworld.get_player_name(self.player)}'s Witness world has too few locations ({pool_size})"
+            error(f"{self.player_name}'s Witness world has too few locations ({pool_size})"
                   f" to place its necessary items ({len(item_pool)}).")
             return
 
@@ -296,7 +301,7 @@ class WitnessWorld(World):
         num_puzzle_skips = self.options.puzzle_skip_amount.value
 
         if num_puzzle_skips > remaining_item_slots:
-            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world has insufficient locations"
+            warning(f"{self.player_name}'s Witness world has insufficient locations"
                     f" to place all requested puzzle skips.")
             num_puzzle_skips = remaining_item_slots
         item_pool["Puzzle Skip"] = num_puzzle_skips
