@@ -504,12 +504,12 @@ ROACH_PRIMAL_IGNITER_ASPECT             = "Primal Igniter Aspect (Roach)"
 ULTRALISK_TYRANNOZOR_ASPECT             = "Tyrannozor Aspect (Ultralisk)"
 
 # Zerg Mercs
-INFESTED_MEDICS      = "Infested Medics"
+INFESTED_MEDICS         = "Infested Medics"
 INFESTED_SIEGE_BREAKERS = "Infested Siege Breakers"
-INFESTED_BANSHEES    = "Infested Banshees"
-DEVOURING_ONES = "Devouring Ones"
-HUNTER_KILLERS       = "Hunter Killers"
-TORRASQUE_MERC       = "Torrasque"
+INFESTED_DUSK_WINGS     = "Infested Dusk Wings"
+DEVOURING_ONES          = "Devouring Ones"
+HUNTER_KILLERS          = "Hunter Killers"
+TORRASQUE_MERC          = "Torrasque"
     
 # Kerrigan Upgrades
 KERRIGAN_KINETIC_BLAST           = "Kinetic Blast (Kerrigan Ability)"
