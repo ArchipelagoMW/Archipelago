@@ -107,6 +107,7 @@ class JakAndDaxterContext(CommonContext):
         if password_requested and not self.password:
             await super(JakAndDaxterContext, self).server_auth(password_requested)
         await self.get_username()
+        self.tags = set()
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):

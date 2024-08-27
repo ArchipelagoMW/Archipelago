@@ -11,16 +11,14 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
     options = world.options
     player = world.player
 
-    total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
-
     # No area is inaccessible in VC even with only running and jumping.
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 50)
-    main_area.add_cell_locations([96], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    main_area.add_cell_locations([97], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 96))
-    main_area.add_cell_locations([98], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 97))
-    main_area.add_cell_locations([99], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 98))
-    main_area.add_cell_locations([100], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    main_area.add_cell_locations([101], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 100))
+    main_area.add_cell_locations([96], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    main_area.add_cell_locations([97], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, 96))
+    main_area.add_cell_locations([98], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, 97))
+    main_area.add_cell_locations([99], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, 98))
+    main_area.add_cell_locations([100], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    main_area.add_cell_locations([101], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, 100))
 
     # Hidden Power Cell: you can carry yellow eco from Spider Cave just by running and jumping
     # and using your Goggles to shoot the box (you do not need Punch to shoot from FP mode).

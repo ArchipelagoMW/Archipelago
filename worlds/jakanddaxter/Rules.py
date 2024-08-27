@@ -174,11 +174,10 @@ def enforce_multiplayer_limits(options: JakAndDaxterOptions):
                           f"{friendly_message}")
 
 
-def verify_orb_trade_amounts(options: JakAndDaxterOptions):
+def verify_orb_trade_amounts(world: JakAndDaxterWorld):
 
-    total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
-    if total_trade_orbs > 2000:
-        raise OptionError(f"Required number of orbs for all trades ({total_trade_orbs}) "
+    if world.total_trade_orbs > 2000:
+        raise OptionError(f"Required number of orbs for all trades ({world.total_trade_orbs}) "
                           f"is more than all the orbs in the game (2000). "
-                          f"Reduce the value of either {options.citizen_orb_trade_amount.display_name} "
-                          f"or {options.oracle_orb_trade_amount.display_name}.")
+                          f"Reduce the value of either {world.options.citizen_orb_trade_amount.display_name} "
+                          f"or {world.options.oracle_orb_trade_amount.display_name}.")

@@ -10,14 +10,12 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
     options = world.options
     player = world.player
 
-    total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
-
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 26)
 
     # Yakows requires no combat.
     main_area.add_cell_locations([10])
-    main_area.add_cell_locations([11], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    main_area.add_cell_locations([12], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
+    main_area.add_cell_locations([11], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    main_area.add_cell_locations([12], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
 
     # These 4 scout fly boxes can be broken by running with all the blue eco from Sentinel Beach.
     main_area.add_fly_locations([262219, 327755, 131147, 65611])
@@ -35,8 +33,8 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
     yakow_cliff.add_fly_locations([75], access_rule=lambda state: can_free_scout_flies(state, player))
 
     oracle_platforms = JakAndDaxterRegion("Oracle Platforms", player, multiworld, level_name, 6)
-    oracle_platforms.add_cell_locations([13], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    oracle_platforms.add_cell_locations([14], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 13))
+    oracle_platforms.add_cell_locations([13], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    oracle_platforms.add_cell_locations([14], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, 13))
     oracle_platforms.add_fly_locations([393291], access_rule=lambda state:
                                        can_free_scout_flies(state, player))
 

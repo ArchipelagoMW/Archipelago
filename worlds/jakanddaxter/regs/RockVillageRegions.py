@@ -10,15 +10,13 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
     options = world.options
     player = world.player
 
-    total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
-
     # This includes most of the area surrounding LPC as well, for orb_count purposes. You can swim and single jump.
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 23)
-    main_area.add_cell_locations([31], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    main_area.add_cell_locations([32], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    main_area.add_cell_locations([33], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    main_area.add_cell_locations([34], access_rule=lambda state: world.can_trade(state, total_trade_orbs, None))
-    main_area.add_cell_locations([35], access_rule=lambda state: world.can_trade(state, total_trade_orbs, 34))
+    main_area.add_cell_locations([31], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    main_area.add_cell_locations([32], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    main_area.add_cell_locations([33], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    main_area.add_cell_locations([34], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, None))
+    main_area.add_cell_locations([35], access_rule=lambda state: world.can_trade(state, world.total_trade_orbs, 34))
 
     # These 2 scout fly boxes can be broken by running with nearby blue eco.
     main_area.add_fly_locations([196684, 262220])

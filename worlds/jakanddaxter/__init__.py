@@ -1,8 +1,13 @@
-from typing import Dict, Any, ClassVar, Tuple, Callable, Optional
+from typing import Dict, Any, ClassVar, Tuple, Callable, Optional, Union
+
+import Utils
 import settings
 
 from Utils import local_path
-from BaseClasses import Item, ItemClassification, Tutorial, CollectionState
+from BaseClasses import (Item,
+                         ItemClassification as ItemClass,
+                         Tutorial,
+                         CollectionState)
 from .GameID import jak1_id, jak1_name, jak1_max
 from .JakAndDaxterOptions import JakAndDaxterOptions, EnableOrbsanity
 from .Locations import (JakAndDaxterLocation,
@@ -48,7 +53,13 @@ class JakAndDaxterSettings(settings.Group):
         Ensure this path contains forward slashes (/) only."""
         description = "ArchipelaGOAL Root Directory"
 
+    class EnforceFriendlyOptions(settings.Bool):
+        """Enforce friendly player options to be used in a multiplayer seed.
+        Disabling this allows for more disruptive and challenging options, but may impact seed generation."""
+        description = "ArchipelaGOAL Enforce Friendly Options"
+
     root_directory: RootDirectory = RootDirectory("%appdata%/OpenGOAL-Mods/archipelagoal")
+    enforce_friendly_options: Union[EnforceFriendlyOptions, bool] = True
 
 
 class JakAndDaxterWebWorld(WebWorld):
@@ -107,23 +118,27 @@ class JakAndDaxterWorld(World):
                    {11, 12, 31, 32, 33, 96, 97, 98, 99, 13, 14, 34, 35, 100, 101}},
     }
 
-    # Functions and Variables that are Options-driven, keep them as instance variables here so that we don't clog up
+    # These functions and variables are Options-driven, keep them as instance variables here so that we don't clog up
     # the seed generation routines with options checking. So we set these once, and then just use them as needed.
     can_trade: Callable[[CollectionState, int, Optional[int]], bool]
-    orb_bundle_size: int = 0
     orb_bundle_item_name: str = ""
+    orb_bundle_size: int = 0
+    total_trade_orbs: int = 0
 
+    # Handles various options validation, rules enforcement, and caching of important information.
     def generate_early(self) -> None:
         # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
         # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
-        if self.multiworld.players > 1:
+        enforce_friendly_options = Utils.get_settings()["jakanddaxter_options"]["enforce_friendly_options"]
+        if self.multiworld.players > 1 and enforce_friendly_options:
             from .Rules import enforce_multiplayer_limits
             enforce_multiplayer_limits(self.options)
 
         # Verify that we didn't overload the trade amounts with more orbs than exist in the world.
         # This is easy to do by accident even in a single-player world.
+        self.total_trade_orbs = (9 * self.options.citizen_orb_trade_amount) + (6 * self.options.oracle_orb_trade_amount)
         from .Rules import verify_orb_trade_amounts
-        verify_orb_trade_amounts(self.options)
+        verify_orb_trade_amounts(self)
 
         # Cache the orb bundle size and item name for quicker reference.
         if self.options.enable_orbsanity == EnableOrbsanity.option_per_level:
@@ -146,36 +161,39 @@ class JakAndDaxterWorld(World):
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "jakanddaxter.puml")
 
     # Helper function to reuse some nasty if/else trees.
-    def item_type_helper(self, item) -> Tuple[int, ItemClassification]:
+    def item_type_helper(self, item) -> Tuple[int, ItemClass]:
         # Make 101 Power Cells.
         if item in range(jak1_id, jak1_id + Scouts.fly_offset):
-            classification = ItemClassification.progression_skip_balancing
+            classification = ItemClass.progression_skip_balancing
             count = 101
 
         # Make 7 Scout Flies per level.
         elif item in range(jak1_id + Scouts.fly_offset, jak1_id + Specials.special_offset):
-            classification = ItemClassification.progression_skip_balancing
+            classification = ItemClass.progression_skip_balancing
             count = 7
 
         # Make only 1 of each Special Item.
         elif item in range(jak1_id + Specials.special_offset, jak1_id + Caches.orb_cache_offset):
-            classification = ItemClassification.progression
+            classification = ItemClass.progression | ItemClass.useful
             count = 1
 
         # Make only 1 of each Move Item.
         elif item in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset):
-            classification = ItemClassification.progression
+            classification = ItemClass.progression | ItemClass.useful
             count = 1
 
         # Make N Precursor Orb bundles, where N is 2000 / bundle size.
         elif item in range(jak1_id + Orbs.orb_offset, jak1_max):
-            classification = ItemClassification.progression_skip_balancing
+            if self.total_trade_orbs == 0:
+                classification = ItemClass.filler  # If you don't need orbs to do trades, they are useless.
+            else:
+                classification = ItemClass.progression_skip_balancing
             count = 2000 // self.orb_bundle_size if self.orb_bundle_size > 0 else 0  # Don't divide by zero!
 
         # Under normal circumstances, we will create 0 filler items.
         # We will manually create filler items as needed.
         elif item == jak1_max:
-            classification = ItemClassification.filler
+            classification = ItemClass.filler
             count = 0
 
         # If we try to make items with ID's higher than we've defined, something has gone wrong.
@@ -193,7 +211,7 @@ class JakAndDaxterWorld(World):
             # then fill the item pool with a corresponding amount of filler items.
             if item_name in self.item_name_groups["Moves"] and not self.options.enable_move_randomizer:
                 self.multiworld.push_precollected(self.create_item(item_name))
-                self.multiworld.itempool += [self.create_filler()]
+                self.multiworld.itempool.append(self.create_filler())
                 continue
 
             # Handle Orbsanity option.
