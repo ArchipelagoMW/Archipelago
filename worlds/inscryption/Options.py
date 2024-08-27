@@ -18,7 +18,6 @@ class Goal(Choice):
     Full Story In Order: Complete each act in order. You can return to previously completed acts.
     Full Story Any Order: Complete each act in any order. All acts are available from the start.
     First Act: Complete Act 1 by finding the New Game button. Great for a smaller scale randomizer."""
-    auto_display_name = True
     display_name = "Goal"
     option_full_story_in_order = 0
     option_full_story_any_order = 1
@@ -36,7 +35,6 @@ class RandomizeDeck(Choice):
     Every Encounter Within Same Type: Randomize cards within the same type every encounter (keep rarity/scrybe type).
     Every Encounter Any Type: Randomize cards into any possible card every encounter.
     Starting Only: Only randomize cards given at the beginning of runs and acts."""
-    auto_display_name = True
     display_name = "Randomize Deck"
     option_disable = 0
     option_every_encounter_within_same_type = 1
@@ -49,7 +47,6 @@ class RandomizeSigils(Choice):
     Disable: Disable the feature.
     Randomize Addons: Only randomize sigils added from sacrifices or other means.
     Randomize All: Randomize all sigils."""
-    auto_display_name = True
     display_name = "Randomize Abilities"
     option_disable = 0
     option_randomize_addons = 1
@@ -61,7 +58,6 @@ class OptionalDeathCard(Choice):
     Disable: Disable the feature.
     Always on: The choice is always offered after losing all candles.
     DeathLink Only: The choice is only offered after receiving a DeathLink event."""
-    auto_display_name = True
     display_name = "Optional Death Card"
     option_disable = 0
     option_always_on = 1
@@ -84,7 +80,6 @@ class EpitaphPiecesRandomization(Choice):
     All Pieces: Randomizes all nine pieces as their own item.
     In Groups: Randomizes pieces in groups of three.
     As One Item: Group all nine pieces as a single item."""
-    auto_display_name = True
     display_name = "Epitaph Pieces Randomization"
     option_all_pieces = 0
     option_in_groups = 1
@@ -96,11 +91,11 @@ class PaintingChecksBalancing(Choice):
     None: Adds no progression logic to these painting checks. They will all count as sphere 1 (early game checks).
     Balanced: Adds rules to these painting checks. Early game items are less likely to appear into these paintings.
     Force Filler: For when you dislike doing these last two paintings. Their checks will only contain filler items."""
-    auto_display_name = True
     display_name = "Painting Checks Balancing"
     option_none = 0
     option_balanced = 1
     option_force_filler = 2
+
 
 @dataclass
 class InscryptionOptions(DeathLinkMixin, PerGameCommonOptions):

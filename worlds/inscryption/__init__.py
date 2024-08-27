@@ -4,7 +4,7 @@ from .Locations import act1_locations, act2_locations, act3_locations, regions_t
 from .Regions import inscryption_regions_all, inscryption_regions_act_1
 from typing import Dict, Any
 from . import Rules
-from BaseClasses import Region, Item, Tutorial, ItemClassification, LocationProgressType
+from BaseClasses import Region, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 
 
@@ -48,6 +48,22 @@ class InscryptionWorld(World):
     item_name_to_id = {item['name']: i + base_id for i, item in enumerate(all_items)}
     all_locations = act1_locations + act2_locations + act3_locations
     location_name_to_id = {location: i + base_id for i, location in enumerate(all_locations)}
+    required_epitaph_pieces_count = 9
+    required_epitaph_pieces_name = "Epitaph Piece"
+
+    def generate_early(self) -> None:
+        if self.options.goal != Goal.option_first_act:
+            if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
+                self.required_epitaph_pieces_name = "Epitaph Piece"
+                self.required_epitaph_pieces_count = 9
+            elif self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_in_groups:
+                self.required_epitaph_pieces_name = "Epitaph Pieces"
+                self.required_epitaph_pieces_count = 3
+            else:
+                self.required_epitaph_pieces_name = "Epitaph Pieces"
+                self.required_epitaph_pieces_count = 1
+        elif self.options.painting_checks_balancing == PaintingChecksBalancing.option_force_filler:
+            act1_items[3]['classification'] = ItemClassification.filler
 
     def create_item(self, name: str) -> Item:
         item_id = self.item_name_to_id[name]
@@ -60,9 +76,9 @@ class InscryptionWorld(World):
             else act1_items
 
         if self.options.goal != Goal.option_first_act:
-            if self.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_all_pieces:
+            if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
                 useful_items.remove(act2_items[3])
-            elif self.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_in_groups:
+            elif self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_in_groups:
                 useful_items.remove(act2_items[2])
                 useful_items[len(act1_items) + 2]['count'] = 3
             else:
@@ -91,7 +107,7 @@ class InscryptionWorld(World):
             self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
 
         for region_name, region_connections in used_regions.items():
-            region = self.multiworld.get_region(region_name, self.player)
+            region = self.get_region(region_name)
             region.add_exits(region_connections)
             region.add_locations({
                 location: self.location_name_to_id[location] for location in regions_to_locations[region_name]
@@ -99,28 +115,17 @@ class InscryptionWorld(World):
 
     def set_rules(self) -> None:
         Rules.InscryptionRules(self).set_all_rules()
-        if self.options.painting_checks_balancing.value == PaintingChecksBalancing.option_balanced:
-            Rules.InscryptionRules(self).set_painting_rules()
-        elif self.options.painting_checks_balancing.value == PaintingChecksBalancing.option_force_filler and \
-                sum(item.classification == ItemClassification.filler for item in self.multiworld.itempool) >= 2:
-            region = self.multiworld.get_region("Act 1", self.player)
-            loc = next((x for x in region.locations if x.name == "Act 1 - Painting 2"), None)
-            if loc is not None:
-                loc.progress_type = LocationProgressType.EXCLUDED
-            loc = next((x for x in region.locations if x.name == "Act 1 - Painting 3"), None)
-            if loc is not None:
-                loc.progress_type = LocationProgressType.EXCLUDED
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return {
-            "death_link": self.options.death_link.value,
-            "act1_death_link_behaviour": self.options.act1_death_link_behaviour.value,
-            "goal": self.options.goal.value,
-            "randomize_codes": self.options.randomize_codes.value,
-            "randomize_deck": self.options.randomize_deck.value,
-            "randomize_sigils": self.options.randomize_sigils.value,
-            "optional_death_card": self.options.optional_death_card.value,
-            "skip_tutorial": self.options.skip_tutorial.value,
-            "skip_epilogue": self.options.skip_epilogue.value,
-            "epitaph_pieces_randomization": self.options.epitaph_pieces_randomization.value
-        }
+        return self.options.as_dict(
+            "death_link",
+            "act1_death_link_behaviour",
+            "goal",
+            "randomize_codes",
+            "randomize_deck",
+            "randomize_sigils",
+            "optional_death_card",
+            "skip_tutorial",
+            "skip_epilogue",
+            "epitaph_pieces_randomization"
+        )

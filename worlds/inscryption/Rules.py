@@ -1,6 +1,6 @@
 from typing import Dict, Callable, TYPE_CHECKING
-from BaseClasses import CollectionState
-from .Options import EpitaphPiecesRandomization, Goal
+from BaseClasses import CollectionState, LocationProgressType, ItemClassification
+from .Options import EpitaphPiecesRandomization, Goal, PaintingChecksBalancing
 
 if TYPE_CHECKING:
     from . import InscryptionWorld
@@ -104,18 +104,13 @@ class InscryptionRules:
         return state.has("Magnificus Eye", self.player)
 
     def has_useful_act1_items(self, state: CollectionState) -> bool:
-        return state.has("Oil Painting's Clover Plant", self.player) and state.has("Squirrel Totem Head", self.player)
+        return state.has_all(("Oil Painting's Clover Plant", "Squirrel Totem Head"), self.player)
 
     def has_all_epitaph_pieces(self, state: CollectionState) -> bool:
-        if self.world.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_all_pieces:
-            return state.has("Epitaph Piece", self.player, 9)
-        elif self.world.options.epitaph_pieces_randomization.value == EpitaphPiecesRandomization.option_in_groups:
-            return state.has("Epitaph Pieces", self.player, 3)
-        else:
-            return state.has("Epitaph Pieces", self.player, 1)
+        return state.has(self.world.required_epitaph_pieces_name, self.player, self.world.required_epitaph_pieces_count)
 
     def has_camera_and_meat(self, state: CollectionState) -> bool:
-        return state.has("Camera Replica", self.player) and state.has("Pile Of Meat", self.player)
+        return state.has_all(("Camera Replica", "Pile Of Meat"), self.player)
 
     def has_monocle(self, state: CollectionState) -> bool:
         return state.has("Monocle", self.player)
@@ -178,12 +173,9 @@ class InscryptionRules:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
 
-    def set_painting_rules(self) -> None:
-        region = self.world.multiworld.get_region("Act 1", self.player)
-        loc = next((x for x in region.locations if x.name == "Act 1 - Painting 2"), None)
-        if loc is not None:
-            loc.access_rule = self.has_useful_act1_items
-        loc = next((x for x in region.locations if x.name == "Act 1 - Painting 3"), None)
-        if loc is not None:
-            loc.access_rule = self.has_useful_act1_items
-
+        if self.world.options.painting_checks_balancing == PaintingChecksBalancing.option_balanced:
+            self.world.get_location("Act 1 - Painting 2").access_rule = self.has_useful_act1_items
+            self.world.get_location("Act 1 - Painting 3").access_rule = self.has_useful_act1_items
+        elif self.world.options.painting_checks_balancing == PaintingChecksBalancing.option_force_filler:
+            self.world.get_location("Act 1 - Painting 2").progress_type = LocationProgressType.EXCLUDED
+            self.world.get_location("Act 1 - Painting 3").progress_type = LocationProgressType.EXCLUDED
