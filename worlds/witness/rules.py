@@ -3,7 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from collections import Counter
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union, cast
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union, cast, NamedTuple
 
 from BaseClasses import CollectionState
 
@@ -16,12 +16,14 @@ from .player_logic import WitnessPlayerLogic
 if TYPE_CHECKING:
     from . import WitnessWorld
 
-SimpleItemRepresentation = Tuple[str, int]
+class SimpleItemRepresentation(NamedTuple):
+    item: str
+    count: int
 
 
 def _can_do_panel_hunt(world: "WitnessWorld") -> SimpleItemRepresentation:
     required = world.panel_hunt_required_count
-    return "+1 Panel Hunt", required
+    return SimpleItemRepresentation("+1 Panel Hunt", required)
 
 
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
@@ -201,7 +203,7 @@ def _has_item(item: str, world: "WitnessWorld",
     prog_item = static_witness_logic.get_parent_progressive_item(item)
     needed_amount = player_logic.MULTI_AMOUNTS[item]
 
-    simple_rule: SimpleItemRepresentation = (prog_item, needed_amount)
+    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(prog_item, needed_amount)
     return simple_rule
 
 
@@ -238,15 +240,17 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
             converted_sublist.append(rule)
             continue
 
-    collection_rules = [rule for rule in requirement if not isinstance(rule, tuple)]
-    item_rules = [cast(SimpleItemRepresentation, rule) for rule in requirement if isinstance(rule, tuple)]
+    collection_rules = [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
+    item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
 
-    if len(item_rules) == 1:
+    if len(item_rules) == 0:
+        item_rules_converted = []
+    elif len(item_rules) == 1:
         item = item_rules[0][0]
         count = item_rules[0][1]
         item_rules_converted = [lambda state: state.has(item, player, count)]
     else:
-        item_counts = dict(item_rules)
+        item_counts = {item_rule.item: item_rule.count for item_rule in item_rules}
         item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
 
     return collection_rules + item_rules_converted
