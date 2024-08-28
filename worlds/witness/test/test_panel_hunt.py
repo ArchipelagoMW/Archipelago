@@ -14,7 +14,7 @@ class TestMaxPanelHuntMinChecks(WitnessTestBase):
         "shuffle_vault_boxes": False,
     }
 
-    def test_correct_panels_were_picked(self):
+    def test_correct_panels_were_picked(self) -> None:
         with self.subTest("Check that 100 Hunt Panels were actually picked."):
             self.assertEqual(len(self.multiworld.find_item_locations("+1 Panel Hunt", self.player)), 100)
 
@@ -64,7 +64,7 @@ class TestPanelHuntPostgame(WitnessMultiworldTestBase):
         "shuffle_discarded_panels": True,
     }
 
-    def test_panel_hunt_postgame(self):
+    def test_panel_hunt_postgame(self) -> None:
         for player_minus_one, options in enumerate(self.options_per_world):
             player = player_minus_one + 1
             postgame_option = options["panel_hunt_postgame"]
