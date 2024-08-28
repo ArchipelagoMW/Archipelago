@@ -42,7 +42,7 @@ class WitnessPlayerItems:
                  player_locations: WitnessPlayerLocations) -> None:
         """Adds event items after logic changes due to options"""
 
-        self._world: "WitnessWorld" = world
+        self._world: WitnessWorld = world
         self._multiworld: MultiWorld = world.multiworld
         self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = player_logic
