@@ -147,7 +147,7 @@ class L2ACSNIClient(SNIClient):
                 snes_items_received += 1
 
                 snes_logger.info("Received %s from %s (%s) (%d/%d in list)" % (
-                    ctx.item_names.lookup_in_slot(item.item),
+                    ctx.item_names.lookup_in_game(item.item),
                     ctx.player_names[item.player],
                     ctx.location_names.lookup_in_slot(item.location, item.player),
                     snes_items_received, len(ctx.items_received)))

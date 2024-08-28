@@ -5,7 +5,7 @@ from NetUtils import ClientStatus, NetworkItem
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-from worlds.yugioh06 import item_to_index
+from . import item_to_index
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext

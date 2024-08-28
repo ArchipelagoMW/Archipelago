@@ -12,6 +12,7 @@ and won't show up in the wild. Previously they would be forced to show up exactl
 
 - The Lilycove Wailmer now logically block you from the east. Actual game behavior is still unchanged for now.
 - Water encounters in Slateport now correctly require Surf.
+- Mirage Tower can no longer be your only logical access to a species in the wild, since it can permanently disappear.
 - Updated the tracker link in the setup guide.
 
 # 2.1.1
