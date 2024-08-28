@@ -254,7 +254,7 @@ class WitnessWorld(World):
             self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
 
             warning(
-                f"""Location "{loc}" had to be added to {self.player_name}'s world 
+                f"""Location "{loc}" had to be added to {self.player_name}'s world
                 due to insufficient sphere 1 size."""
             )
 

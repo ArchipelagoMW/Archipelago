@@ -72,7 +72,7 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
             desert_discard = "0x17CE7"
             triangles = frozenset({frozenset({"Triangles"})})
             arrows = frozenset({frozenset({"Arrows"})})
-            both = frozenset({frozenset(({"Triangles", "Arrows"}))})
+            both = frozenset({frozenset({"Triangles", "Arrows"})})
 
             self.assertEqual(self.multiworld.worlds[1].player_logic.REQUIREMENTS_BY_HEX[desert_discard], triangles)
             self.assertEqual(self.multiworld.worlds[2].player_logic.REQUIREMENTS_BY_HEX[desert_discard], arrows)
