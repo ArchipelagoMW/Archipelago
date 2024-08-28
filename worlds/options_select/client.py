@@ -317,7 +317,7 @@ class YamlCreator(App):
         self.container.add_widget(self.main_layout)
         self.scrollbox = ScrollBox(size_hint_x=None, width=dp(150))
         self.scrollbox.layout.orientation = "vertical"
-        for world, cls in AutoWorldRegister.world_types.items():
+        for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
             if world == "Archipelago":
                 continue
             world_button = Button(text=world, size_hint_y=None)
