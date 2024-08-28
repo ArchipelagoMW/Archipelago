@@ -102,7 +102,7 @@ class YamlCreator(App):
 
     def export_options(self, _: Widget):
         if self.name_input.text and self.current_game:
-            file_name = Utils.save_filename("Export Options File As...", [("YAML", ["*.yaml"])],
+            file_name = save_filename("Export Options File As...", [("YAML", ["*.yaml"])],
                                             Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
             options = {
                 "name": self.name_input.text,
