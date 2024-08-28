@@ -22,19 +22,19 @@ Go to the latest release from the [APSudoku Releases page](https://github.com/AP
 	- Enter the room password (optional)
 	- Select DeathLink related settings (optional)
 	- Press `Connect`
-3. Optional things:
-	- You can check other settings under `Settings` &rarr; `Sudoku`, and can change the colors used under `Settings` &rarr; `Theme`.
-	- While connected, you can view the `Console` and `Hints` tabs for standard TextClient-like features
-	- You can also use the `Tracking` tab to view either a basic tracker or a valid [GodotAP tracker pack](https://github.com/EmilyV99/GodotAP/blob/main/tracker_packs/GET_PACKS.md)
 4. Under the `Sudoku` tab
-	- While connected, the number of "unhinted" locations for your slot is shown in the upper-left. (If this reads 0, no further hints can be earned for this slot, as every locations is already hinted)
-	- Click the various `?` buttons for information on how to play/control
 	- Choose puzzle difficulty
 	- Click `Start` to generate a puzzle
 5. Try to solve the Sudoku. Click `Check` when done
 	- A correct solution rewards you with 1 hint for a location in the world you are connected to
 	- An incorrect solution has no penalty, unless DeathLink is enabled (see below)
 
+Info:
+- You can set various settings under `Settings` &rarr; `Sudoku`, and can change the colors used under `Settings` &rarr; `Theme`.
+- While connected, you can view the `Console` and `Hints` tabs for standard TextClient-like features
+- You can also use the `Tracking` tab to view either a basic tracker or a valid [GodotAP tracker pack](https://github.com/EmilyV99/GodotAP/blob/main/tracker_packs/GET_PACKS.md)
+- While connected, the number of "unhinted" locations for your slot is shown in the upper-left of the the `Sudoku` tab. (If this reads 0, no further hints can be earned for this slot, as every locations is already hinted)
+- Click the various `?` buttons for information on controls/how to play
 ## DeathLink Support
 
 If `DeathLink` is enabled when you click `Connect`:
