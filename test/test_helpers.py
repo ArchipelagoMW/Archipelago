@@ -36,7 +36,7 @@ class TestHelpers(WL4TestBase):
             for level in range(4):
                 level_name = main_levels[passage * 4 - 4 + level]
                 with self.subTest(level_name):
-                    checks = locations.get_level_locations(passage, level)
+                    checks = locations.get_level_locations(Passage(passage), level)
                     assert all(map(lambda l: l.startswith(level_name), checks))
 
         with self.subTest('Golden Passage'):

@@ -40,8 +40,8 @@ def _get_symbols() -> Mapping[str, int]:
             if label[0] in ('@', '.'):
                 continue
 
-            addr = int(addr, base=16)
-            symbols[label] = addr
+            address = int(addr, base=16)
+            symbols[label] = address
     return symbols
 
 
@@ -51,11 +51,11 @@ def _get_charset() -> Mapping[str, int]:
     with StringIO(symbol_data) as stream:
         for line in stream:
             try:
-                byte, character = line.strip().split('=')
+                encoded, character = line.strip().split('=')
             except ValueError:
                 continue
 
-            byte = int(byte, base=16)
+            byte = int(encoded, base=16)
             charset[character] = byte
     return charset
 

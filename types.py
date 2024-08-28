@@ -40,6 +40,9 @@ class ItemFlag(IntFlag):
     FULL_HEALTH = 1 << 6
     FULL_HEALTH_2 = 1 << 7
 
+    BOSS_CLEAR = 1 << 5
+    DIVA_CLEAR = 1 << 4
+
 
 class Passage(IntEnum):
     ENTRY = 0

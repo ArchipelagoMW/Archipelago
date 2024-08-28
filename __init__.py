@@ -129,9 +129,9 @@ class WL4World(World):
         if self.options.goal.is_treasure_hunt():
             goal = 'Sound Room - Emergency Exit'
 
-        goal = self.multiworld.get_location(goal, self.player)
-        goal.place_locked_item(self.create_item('Escape the Pyramid'))
-        goal.show_in_spoiler = False
+        goal_loc = self.multiworld.get_location(goal, self.player)
+        goal_loc.place_locked_item(self.create_item('Escape the Pyramid'))
+        goal_loc.show_in_spoiler = False
 
     def create_items(self):
         difficulty = self.options.difficulty
@@ -206,7 +206,7 @@ class WL4World(World):
         ))
 
         output_filename = self.multiworld.get_out_file_name_base(self.player)
-        patch.write(output_path / f'{output_filename}{patch.patch_file_ending}')
+        patch.write(f'{(output_path / output_filename).with_suffix(patch.patch_file_ending)}')
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
@@ -231,10 +231,10 @@ class WL4World(World):
         checks = filter(lambda p: self.options.difficulty in p[1].difficulties, location_table.items())
         if not self.options.goal.needs_treasure_hunt():
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
-        checks = {name for name, _ in checks}
+        check_names = {name for name, _ in checks}
 
         if self.options.goal.needs_diva():
-            checks.remove('Sound Room - Emergency Exit')
+            check_names.remove('Sound Room - Emergency Exit')
         else:
-            checks.remove('Golden Diva')
-        return checks
+            check_names.remove('Golden Diva')
+        return check_names

@@ -1,6 +1,6 @@
-from typing import NamedTuple, Optional, Sequence, Tuple, Union
+from typing import NamedTuple, Optional, Sequence, Tuple
 
-from BaseClasses import Location, MultiWorld, Region
+from BaseClasses import Location, Region
 
 from .data import ap_id_offset
 from .options import Difficulty
@@ -9,9 +9,9 @@ from .types import ItemFlag, LocationType, Passage
 
 class LocationData(NamedTuple):
     source: LocationType
-    status_bit: Tuple[Passage, int, ItemFlag]
+    status_bit: Tuple[Optional[Passage], Optional[int], Optional[ItemFlag]]  # TODO: Handle Sound Room differently
     region_in_level: Optional[str]
-    difficulties: Sequence[Difficulty]
+    difficulties: Sequence[int]
 
     def passage(self):
         return self.status_bit[0]
@@ -244,33 +244,36 @@ location_table = {
     'Golden Passage - Bat Room Box':                      LocationData(LocationType.BOX,   (Passage.GOLDEN,   0, ItemFlag.JEWEL_SW),       'Passage',         _ALL),
     'Golden Passage - Mad Scienstein Box':                LocationData(LocationType.BOX,   (Passage.GOLDEN,   0, ItemFlag.JEWEL_NW),       'Passage',         _ALL),
 
-    'Golden Diva':                                        LocationData(LocationType.BOSS,  (Passage.GOLDEN,   4, 0x10),                    None,              _ALL),
+    'Golden Diva':                                        LocationData(LocationType.BOSS,  (Passage.GOLDEN,   4, ItemFlag.DIVA_CLEAR),     None,              _ALL),
 
     'Sound Room - Emergency Exit':                        LocationData(LocationType.EVENT, (None,          None, None),                    None,              _ALL),
 }
 
 
-location_name_to_id = {name: (ap_id_offset + index) for (index, name) in enumerate(location_table)}
+location_name_to_id = {name: ap_id_offset + index
+                       for (index, (name, data)) in enumerate(location_table.items())
+                       if data.source not in (LocationType.BOSS, LocationType.KEYZER, LocationType.EVENT)}
 
 
 class WL4Location(Location):
     game: str = 'Wario Land 4'
 
     def __init__(self, player: int, name: str, code: Optional[int], parent: Optional[Region],
-                 type: LocationType, status_position: Tuple[Passage, int, int],
-                 difficulty: Difficulty):
+                 type: LocationType, status_position: Tuple[Optional[Passage], Optional[int], Optional[int]],  # FIXME
+                 difficulty: Sequence[int]):
         super().__init__(player, name, code, parent)
+        assert (type in (LocationType.BOSS, LocationType.KEYZER, LocationType.EVENT)) == (code is None)
         self.type = type
         self.passage, self.level, self.flag = status_position
         self.difficulty = difficulty
-        if type in (LocationType.BOSS, LocationType.KEYZER, LocationType.EVENT) or code is None:
+        if code is None:
             self.address = None
             self.event = True
 
     @classmethod
     def from_name(cls, player: int, name: str, parent: Optional[Region] = None):
         type, status, _, difficulty = location_table[name]
-        return cls(player, name, location_name_to_id[name], parent, type,
+        return cls(player, name, location_name_to_id.get(name, None), parent, type,
                    status, difficulty)
 
     def entry_offset(self):

@@ -45,7 +45,7 @@ from .types import Box, ItemFlag, ItemType, Passage
 # For AP item, classifications are as reported by ItemClassification.as_flag()
 
 
-def ap_id_from_wl4_data(data: ItemData) -> int:
+def ap_id_from_wl4_data(data: ItemData) -> Optional[int]:
     cat, itemid, _ = data
     if cat == ItemType.EVENT or itemid == None:
         return None
@@ -216,8 +216,8 @@ item_table = {
 }
 
 
-def filter_items(*, type: ItemType = None, passage: Passage = None) -> Iterable[Tuple[str, ItemData]]:
-    items = item_table.items()
+def filter_items(*, type: Optional[ItemType] = None, passage: Optional[Passage] = None) -> Iterable[Tuple[str, ItemData]]:
+    items: Iterable[Tuple[str, ItemData]] = item_table.items()
     if type != None:
         items = filter(lambda i: i[1].type == type, items)
     if passage != None:
@@ -225,5 +225,5 @@ def filter_items(*, type: ItemType = None, passage: Passage = None) -> Iterable[
     return items
 
 
-def filter_item_names(*, type: ItemType = None, passage: Passage = None) -> Iterable[str]:
+def filter_item_names(*, type: Optional[ItemType] = None, passage: Optional[Passage] = None) -> Iterable[str]:
     return map(lambda entry: entry[0], filter_items(type=type, passage=passage))

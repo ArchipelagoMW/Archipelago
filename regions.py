@@ -117,9 +117,9 @@ def get_region_names(level_name: str, merge: bool = False) -> Sequence[str]:
     entrance = f'{level_name} (entrance)'
     regions = regions_in_levels[level_name]
     if regions and not merge:
-        regions = (f'{level_name} - {region}' for region in regions)
+        regions = [f'{level_name} - {region}' for region in regions]
     else:
-        regions = (level_name,)
+        regions = [level_name]
     return entrance, *regions
 
 
