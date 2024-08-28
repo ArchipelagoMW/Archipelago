@@ -28,8 +28,7 @@ class CivVICommandProcessor(ClientCommandProcessor):
             self.ctx.death_link_just_changed = True
             Utils.async_start(self.ctx.update_death_link(
                 self.ctx.death_link_enabled), name="Update Deathlink")
-            self.ctx.logger.info(
-                f"Deathlink is now {"enabled" if self.ctx.death_link_enabled else "disabled"}")
+            self.ctx.logger.info(f"Deathlink is now {'enabled' if self.ctx.death_link_enabled else 'disabled'}")
 
     def _cmd_resync(self):
         """Resends all items to client, and has client resend all locations to server. This can take up to a minute if the player has received a lot of items"""
@@ -101,7 +100,7 @@ class CivVIContext(CommonContext):
         if text:
             message = text
         else:
-            message = f"Received from {data["source"]}"
+            message = f"Received from {data['source']}"
         self.death_link_message = message
         self.received_death_link = True
 
@@ -109,6 +108,7 @@ class CivVIContext(CommonContext):
         if password_requested and not self.password:
             await super(CivVIContext, self).server_auth(password_requested)
         await self.get_username()
+        self.tags = set()
         await self.send_connect()
 
     def run_gui(self):
