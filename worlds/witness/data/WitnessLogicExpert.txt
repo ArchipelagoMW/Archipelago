@@ -530,7 +530,7 @@ Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x2
 158219 - 0x0A0C8 (Cargo Box Entry Panel) - True - Squares & Black/White Squares & Shapers & Triangles
 Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
 158707 - 0x09F98 (Desert Laser Redirect Control) - True - True
-158904 - 0xFFD03 (Desert Laser Activated + Redirected) - 0x09F98 & 0x012FB - True
+159804 - 0xFFD03 (Desert Laser Activated + Redirected) - 0x09F98 & 0x012FB - True
 158220 - 0x18590 (Transparent) - True - Symmetry
 158221 - 0x28AE3 (Vines) - 0x18590 - True
 158222 - 0x28938 (Apple Tree) - 0x28AE3 - True
@@ -981,7 +981,7 @@ Mountainside Obelisk (Mountainside) - Entry - True:
 159739 - 0x00367 (Obelisk) - True - True
 
 Mountainside (Mountainside) - Main Island - True - Mountaintop - True - Mountainside Vault - 0x00085:
-159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
+159550 - 0x28B91 (Thundercloud EP) - 0xFFD03 - True
 158612 - 0x17C42 (Discard) - True - Arrows
 158665 - 0x002A6 (Vault Panel) - True - Symmetry & Colored Squares & Triangles & Stars & Stars + Same Colored Symbol
 Door - 0x00085 (Vault Door) - 0x002A6
