@@ -17,7 +17,7 @@ Go to the latest release from the [APSudoku Releases page](https://github.com/AP
 
 1. Run the APSudoku executable.
 2. Under `Settings` &rarr; `Connection` at the top-right:
-	- Enter the server IP & port number
+	- Enter the server IP and port number
 	- Enter the name of the slot you wish to connect to
 	- Enter the room password (optional)
 	- Select DeathLink related settings (optional)
@@ -38,6 +38,6 @@ Go to the latest release from the [APSudoku Releases page](https://github.com/AP
 ## DeathLink Support
 
 If `DeathLink` is enabled when you click `Connect`:
-- Lose a life if you check an incorrect puzzle (not an _incomplete_ puzzle- if any cells are empty, you get off with a warning), or quit a puzzle without solving it (including disconnecting).
+- Lose a life if you check an incorrect puzzle (not an _incomplete_ puzzle- if any cells are empty, you get off with a warning), or if you quit a puzzle without solving it (including disconnecting).
 - Your life count is customizable (default 0). Dying with 0 lives left kills linked players AND resets your puzzle.
 - On receiving a DeathLink from another player, your puzzle resets. 
