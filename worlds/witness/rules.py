@@ -16,8 +16,9 @@ from .player_logic import WitnessPlayerLogic
 if TYPE_CHECKING:
     from . import WitnessWorld
 
+
 class SimpleItemRepresentation(NamedTuple):
-    item: str
+    item_name: str
     count: int
 
 
@@ -250,7 +251,7 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
         count = item_rules[0][1]
         item_rules_converted = [lambda state: state.has(item, player, count)]
     else:
-        item_counts = {item_rule.item: item_rule.count for item_rule in item_rules}
+        item_counts = {item_rule.item_name: item_rule.count for item_rule in item_rules}
         item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
 
     return collection_rules + item_rules_converted
