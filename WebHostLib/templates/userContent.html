@@ -78,11 +78,9 @@
                         {% for seed in seeds %}
                             <tr>
                                 <td><a href="{{ url_for("view_seed", seed=seed.id) }}">{{ seed.id|suuid }}</a></td>
-                                <td>
+                                <td title="{{ games(seed.slots) }}">
                                     {% if seed.multidata %}
-                                        <div title="{{ games(seed.slots) }}">
-                                            {{ seed.slots|length }}
-                                        </div>
+                                        {{ seed.slots|length }}
                                     {% else %}
                                         1
                                     {% endif %}
