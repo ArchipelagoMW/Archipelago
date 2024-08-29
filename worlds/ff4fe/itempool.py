@@ -28,7 +28,7 @@ def create_character_pool(multiworld: World, chosen_character: str) -> List[str]
     #if multiworld.options.AllowDuplicateCharacters.value == False:
     #    allowed_characters.clear()
     character_slots = 18 # All slots
-    filled_character_slots = 2  # Starting characters
+    filled_character_slots = 0
     if multiworld.options.HeroChallenge.current_key != "none":
         character_pool.append(chosen_character)
         filled_character_slots += 1

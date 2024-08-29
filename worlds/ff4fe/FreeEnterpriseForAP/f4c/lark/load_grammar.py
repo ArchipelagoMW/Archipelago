@@ -16,7 +16,7 @@ from .common import is_terminal, GrammarError, LexerConf, ParserConf, PatternStr
 
 from .tree import Tree as T, Transformer, InlineTransformer, Visitor
 
-__path__ = os.path.dirname(__file__)
+__path__ = os.path.dirname(__name__)
 IMPORT_PATHS = [os.path.join(__path__, 'grammars')]
 
 _TOKEN_NAMES = {

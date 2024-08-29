@@ -1,5 +1,6 @@
 import os
 import json
+import tempfile
 
 from .. import FreeEnt
 from .cli_command import CLICommand
@@ -63,9 +64,7 @@ class MakeCommand(CLICommand):
 
         #                    options.test_settings[key] = val
 
-        options.cache_path = os.path.join(os.path.dirname(__file__), '.build')
-        if options.ap_data is not None:
-            options.cache_path = os.path.join(options.ap_data["temp_dir"], '.build')
+        options.cache_path = os.path.join(tempfile.TemporaryDirectory().name, '.build')
 
         build_output = generator.generate(args.rom, force_recompile=args.recompile)
         seed = build_output.seed
@@ -91,12 +90,12 @@ class MakeCommand(CLICommand):
         #with open(output_filename + '.script', 'w') as outfile:
         #    outfile.write(build_output.script)
 
-        #if (build_output.public_spoiler is not None):
-        #    with open(output_filename + '.spoiler.public', 'w') as outfile:
-        #        outfile.write(build_output.public_spoiler)
+        if (build_output.public_spoiler is not None):
+            with open(output_filename + '.spoiler.public', 'w') as outfile:
+                outfile.write(build_output.public_spoiler)
 
-        #with open(output_filename + '.spoiler.private', 'w') as outfile:
-        #    outfile.write(build_output.private_spoiler)
+        with open(output_filename + '.spoiler.private', 'w') as outfile:
+            outfile.write(build_output.private_spoiler)
 
         #if args.metrics and report is not None:
         #    print(report.metrics)

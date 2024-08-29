@@ -133,6 +133,16 @@ def apply(env):
 
     treasure_assignment = TreasureAssignment(autosells)
 
+    if env.options.ap_data is not None:
+        for t in treasure_dbview:
+            id = t.flag
+            ap_item = env.options.ap_data[str(id)]
+            placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
+            if placement is None:
+                treasure_assignment.assign(t, '{} gp'.format(10))
+            else:
+                treasure_assignment.assign(t, placement.const)
+
     fight_chest_locations = ['{} {}'.format(*env.meta['miab_locations'][slot]) for slot in env.meta['miab_locations']]
     fight_treasure_areas = list(set([t.area for t in treasure_dbview.find_all(lambda t: t.fight is not None)]))
     for area in fight_treasure_areas:
@@ -160,14 +170,7 @@ def apply(env):
             treasure_assignment.remap(old, new)
 
     if env.options.ap_data is not None:
-        for t in treasure_dbview:
-            id = t.flag
-            ap_item = env.options.ap_data[str(id)]
-            placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
-            if placement is None:
-                treasure_assignment.assign(t, '{} gp'.format(10))
-            else:
-                treasure_assignment.assign(t, placement.const)
+        pass
     elif env.options.flags.has('treasure_vanilla'):
         # for various reasons we really do need to assign every treasure chest still
         for t in treasure_dbview:
@@ -291,10 +294,10 @@ def apply(env):
         reward_slot_name =  f'#reward_slot.{chest_slot.name}'
         orig_chest = treasure_dbview.find_one(lambda t: t.map == orig_chest_number[0] and t.index == orig_chest_number[1])
         treasure_assignment.assign(
-            '{} {}'.format(chest_number[0], chest_number[1]), 
-            reward_slot_name, 
+            '{} {}'.format(chest_number[0], chest_number[1]),
+            reward_slot_name,
             orig_chest.fight,
-            remap = False)
+            remap = True)
 
     env.add_script(treasure_assignment.get_script())
 

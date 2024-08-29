@@ -43,11 +43,11 @@ class FF4FEClient(SNIClient):
 
     async def game_watcher(self, ctx: SNIContext) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        await self.check_victory(ctx)
         if await self.connection_check(ctx) == False:
             return
         await self.location_check(ctx)
         await self.reward_check(ctx)
-        await self.check_victory(ctx)
         await self.received_items_check(ctx)
         await self.resolve_key_items(ctx)
         await snes_flush_writes(ctx)
@@ -117,6 +117,8 @@ class FF4FEClient(SNIClient):
             byte = i // 8
             bit = i % 8
             checked = reward_data[byte] & (2 ** bit)
+            if i == 1:
+                checked = 1  # FE never actually flags your starting character as obtained, amazingly
             if checked > 0:
                 reward_found = [reward for reward in locations.all_locations if reward.fe_id == i + 0x200]
                 if len(reward_found) > 0:
@@ -177,7 +179,9 @@ class FF4FEClient(SNIClient):
 
                 snes_buffered_write(ctx, Rom.inventory_start_location + i, bytes([item_received_game_id]))
                 if inventory_data[i] == 0:
-                    snes_buffered_write(ctx, Rom.inventory_start_location + i + 1, bytes([1]))
+                    snes_buffered_write(ctx,
+                                        Rom.inventory_start_location + i + 1,
+                                        bytes([10 if "Arrows" in item_received_name else 1]))
                 else:
                     item_count = inventory_data[i + 1]
                     item_count = min((item_count + 10) if "Arrows" in item_received_name else (item_count + 1), 99)
@@ -190,9 +194,6 @@ class FF4FEClient(SNIClient):
                     ctx.location_names[item_received.location]))
                 break
 
-        # place item
-        # increment items received
-
     async def check_victory(self, ctx):
         from SNIClient import snes_buffered_write, snes_read
         victory_data = await snes_read(ctx, Rom.victory_byte_location, 1)
@@ -202,7 +203,6 @@ class FF4FEClient(SNIClient):
             if not ctx.finished_game:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
-        pass
 
     async def resolve_key_items(self, ctx):
         from SNIClient import snes_buffered_write, snes_read
@@ -213,16 +213,32 @@ class FF4FEClient(SNIClient):
         key_items_collected = [item.item for item in ctx.items_received
                                if item.item in self.key_item_names.values()
                                and item.item != "Pass"]
+        key_items_flag_byte = None
+        buffered_flag_byte = None
         for key_item in self.key_items_with_flags.keys():
             if self.key_items_with_flags[key_item] in key_items_collected:
                 flag_byte = Rom.special_flag_key_items[key_item][0]
-                flag_bit = Rom.special_flag_key_items[key_item][1]
-                key_item_received_data = await snes_read(ctx, flag_byte, 1)
-                if key_item_received_data is None:
-                    return
-                key_item_received_value = key_item_received_data[0]
-                key_item_received_value = key_item_received_value | flag_bit
-                snes_buffered_write(ctx, flag_byte, bytes([key_item_received_value]))
+                if key_item == "Hook":
+                    flag_bit = Rom.special_flag_key_items[key_item][1]
+                    key_item_received_data = await snes_read(ctx, flag_byte, 1)
+                    if key_item_received_data is None:
+                        return
+                    hook_received_value = key_item_received_data[0]
+                    hook_received_value = hook_received_value | flag_bit
+                    snes_buffered_write(ctx, flag_byte, bytes([hook_received_value]))
+                elif key_items_flag_byte is None:
+                    flag_bit = Rom.special_flag_key_items[key_item][1]
+                    key_item_received_data = await snes_read(ctx, flag_byte, 1)
+                    if key_item_received_data is None:
+                        return
+                    key_items_flag_byte = key_item_received_data[0]
+                    key_items_flag_byte = key_items_flag_byte | flag_bit
+                    buffered_flag_byte = flag_byte
+                else:
+                    flag_bit = Rom.special_flag_key_items[key_item][1]
+                    key_items_flag_byte = key_items_flag_byte | flag_bit
+        if key_items_flag_byte is not None and buffered_flag_byte is not None:
+            snes_buffered_write(ctx, buffered_flag_byte, bytes([key_items_flag_byte]))
         for key_item in key_items_collected:
             item_received_name = ctx.item_names.lookup_in_game(key_item, ctx.game)
             if item_received_name != "Pass":

@@ -50,7 +50,7 @@ for location in locationscsv.create_view():
             all_locations.append(new_location)
         continue
     new_location = LocationData("", location.world, location.area, int(location.flag, 16), location.fight != "")
-    subname = f" -- {location.spoilersubarea if location.spoilersubarea != '' else ''}"
+    subname = f"{((' -- ' + location.spoilersubarea) if location.spoilersubarea != '' else '')}"
     new_location.name = (f"{location.spoilerarea}"
                          f"{subname}"
                          f" -- {location.spoilerdetail}")
@@ -77,7 +77,7 @@ character_slots = [
     ("Mysidia Character 1", "Overworld", "Mysidia", 0x08),
     ("Mysidia Character 2", "Overworld", "Mysidia", 0x09),
     ("Mt. Ordeals Character", "Overworld", "MountOrdeals", 0x0A),
-    ("Baron Inn Character", "Overworld", "BaronTown", 0x0D),
+    ("Baron Inn Character", "Overworld", "BaronWeaponShop", 0x0D),
     ("Baron Castle Character", "Overworld", "BaronCastle", 0x0E),
     ("Tower of Zot Character 1", "Overworld", "Zot", 0x0F),
     ("Tower of Zot Character 2", "Overworld", "Zot", 0x10),
@@ -97,8 +97,6 @@ free_character_locations = [
     "Mt. Ordeals Character",
 ]
 
-#Kaipo, Mt. Hobs, Baron, Zot, the Dwarf Castle, Cave Eblan, the Lunar Palace, or the Giant of Bab-il.
-
 earned_character_locations = [
     "Mist Character",
     "Kaipo Character",
@@ -112,7 +110,6 @@ earned_character_locations = [
     "Lunar Palace Character",
     "Giant of Bab-il Character"
 ]
-
 
 for location in character_slots:
     all_locations.append(LocationData(location[0], location[1], location[2], location[3] + 0x200, True))
@@ -128,5 +125,3 @@ areas = []
 for location in all_locations:
     if location.area not in areas:
         areas.append(location.area)
-
-print("stuff")

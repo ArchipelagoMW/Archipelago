@@ -4,6 +4,7 @@ import json
 import os
 import pkgutil
 import threading
+from typing import Mapping, Any
 
 import Utils
 import settings
@@ -13,9 +14,9 @@ from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
 from .options import FF4FEOptions  # the options we defined earlier
 from .items import FF4FEItem, all_items, ItemData # data used below to add items to the World
 from .locations import FF4FELocation, all_locations, LocationData  # same as above
-from . import topology
+from . import topology, flags
 from .itempool import create_itempool
-from . import events
+from . import events, items
 from . import rules as FERules
 from .Client import FF4FEClient
 from worlds.AutoWorld import World, WebWorld
@@ -49,39 +50,15 @@ class FF4FEWorld(World):
 
     web = FF4FEWebWorld()
     topology_present = True
-
-
     base_id = 7191991
-
     item_name_to_id = {item.name: id for
                        id, item in enumerate(all_items, base_id)}
     location_name_to_id = {location.name: id for
                            id, location in enumerate(all_locations, base_id)}
-
-    #with open("ids.json", 'w') as file:
-    #    file.write(json.dumps(item_name_to_id, ensure_ascii=False, indent=2))
-    #    file.write("---")
-    #    file.write(json.dumps(location_name_to_id, ensure_ascii=False, indent=2))
-
     chosen_character = "None"
+    item_name_groups = items.item_name_groups
 
-    item_name_groups = {
-        "characters": [
-            "Cecil",
-            "Kain",
-            "Rydia",
-            "Tellah",
-            "Edward",
-            "Rosa",
-            "Yang",
-            "Palom",
-            "Porom",
-            "Cid",
-            "Edge",
-            "Fusoya",
-            "None",
-        ],
-    }
+
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.rom_name_available_event = threading.Event()
@@ -145,10 +122,12 @@ class FF4FEWorld(World):
         item_pool_result = create_itempool(locations.all_locations, self)
         item_pool = item_pool_result[0]
         self.chosen_character = item_pool_result[1]
-        if self.chosen_character != "None":
-            exclude.append(self.create_item(self.chosen_character))
+        chosen_character_placed = False
 
         for item in map(self.create_item, item_pool):
+            if item.name == self.chosen_character and chosen_character_placed == False:
+                chosen_character_placed = True
+                continue
             if item in exclude:
                 exclude.remove(item)  # this is destructive. create unique list above
                 self.multiworld.push_precollected(self.create_item(self.multiworld.random.choice(items.filler_items).name))
@@ -168,13 +147,6 @@ class FF4FEWorld(World):
                 if location in locations.earned_character_locations:
                     add_item_rule(self.multiworld.get_location(location, self.player),
                                   lambda item: item.name == "None")
-
-        #for pair in locations.mutually_exclusive_slots:
-        #    for member in pair:
-        #        for other_member in pair:
-        #            if other_member != member:
-        #                add_item_rule(self.multiworld.get_location(member, self.player),
-        #                              lambda item, true_other_member=other_member: check_exclusive_slot(item, true_other_member))
 
         for location in locations.all_locations:
             if location.name not in locations.character_locations:
@@ -200,6 +172,9 @@ class FF4FEWorld(World):
             if location.area in topology.moon_areas:
                 add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has("Darkness Crystal", self.player))
+                if self.options.UnsafeKeyItemPlacement.current_key == "true":
+                    add_rule(self.multiworld.get_location(location.name, self.player),
+                             lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
             if location.area in FERules.area_rules.keys():
                 for requirement in FERules.area_rules[location.area]:
                     add_rule(self.multiworld.get_location(location.name, self.player),
@@ -207,6 +182,15 @@ class FF4FEWorld(World):
             if location.major_slot:
                 add_item_rule(self.multiworld.get_location(location.name, self.player),
                          lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
+            for i in range(len(FERules.location_tiers.keys())):
+                if location.area in FERules.location_tiers[i]:
+                    add_rule(self.multiworld.get_location(location.name, self.player),
+                             lambda state, tier=i: state.has_group("characters",
+                                                           self.player,
+                                                           FERules.logical_gating[tier]["characters"]) and
+                                           state.has_group("key_items",
+                                                           self.player,
+                                                           FERules.logical_gating[tier]["key_items"]))
 
         for location in [event for event in events.boss_events]:
             if location.area in topology.hook_areas:
@@ -218,10 +202,22 @@ class FF4FEWorld(World):
             if location.area in topology.moon_areas:
                 add_rule(self.multiworld.get_location(location.name, self.player),
                          lambda state: state.has("Darkness Crystal", self.player))
+                if self.options.UnsafeKeyItemPlacement.current_key == "true":
+                    add_rule(self.multiworld.get_location(location.name, self.player),
+                             lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
             if location.name in FERules.boss_rules.keys():
                 for requirement in FERules.boss_rules[location.name]:
                     add_rule(self.multiworld.get_location(location.name, self.player),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
+            for i in range(len(FERules.location_tiers.keys())):
+                if location.area in FERules.location_tiers[i]:
+                    add_rule(self.multiworld.get_location(location.name, self.player),
+                             lambda state, tier=i: state.has_group("characters",
+                                                           self.player,
+                                                           FERules.logical_gating[tier]["characters"]) and
+                                           state.has_group("key_items",
+                                                           self.player,
+                                                           FERules.logical_gating[tier]["key_items"]))
 
         for location in FERules.individual_location_rules.keys():
             for requirement in FERules.individual_location_rules[location]:
@@ -245,8 +241,7 @@ class FF4FEWorld(World):
         placement_dict = self.create_placement_file(str(self.rom_name_text))
         placement_dict["seed"] = self.player + self.multiworld.seed
         placement_dict["output_file"] = f'{self.multiworld.get_out_file_name_base(self.player)}' + '.sfc'
-        placement_dict["flags"] = self.create_flags_from_options()
-        placement_dict["temp_dir"] = output_directory
+        placement_dict["flags"] = flags.create_flags_from_options(self.options)
 
         patch = FF4FEProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("placement_file.json" , json.dumps(placement_dict).encode("UTF-8"))
@@ -255,6 +250,15 @@ class FF4FEWorld(World):
         )
         patch.write(rom_path)
 
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        slot_data = {
+            "DarkMatterHunt": self.options.HeroChallenge.current_key,
+            "NoEarnedCharacters": self.options.NoEarnedCharacters.current_key,
+            "NoFreeCharacters": self.options.NoEarnedCharacters.current_key,
+            "PassEnabled": self.options.PassEnabled.current_key
+        }
+        return slot_data
+
     def create_flags_from_options(self):
         hero_challenge_flags = ""
         if self.options.HeroChallenge.current_key != "none":
@@ -262,10 +266,15 @@ class FF4FEWorld(World):
         dark_matter_flags = "Onone"
         if self.options.DarkMatterHunt.current_key == "true":
             dark_matter_flags = f"Omode:dkmatter"
+        free_character_flags = ""
+        if self.options.NoFreeCharacters.current_key == "true":
+            free_character_flags += "nofree/"
+        if self.options.NoEarnedCharacters.current_key == "true":
+            free_character_flags += "noearned/"
         default_flags = (f"{dark_matter_flags} "
                          f"Kmain/summon/moon/unsafe "
                          f"Pshop/key "
-                         f"Crelaxed/{hero_challenge_flags}j:spells,abilities "
+                         f"Crelaxed/{hero_challenge_flags}{free_character_flags}j:spells,abilities "
                          f"Twild/junk "
                          f"Swild "
                          f"Bstandard/alt:gauntlet/whichburn "
@@ -303,7 +312,7 @@ class FF4FEWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
-    def check_exclusive_slot(item, member):
+    def check_exclusive_slot(self, item, member):
         if item.player != self.player or item.name == "None":
             return True
         location = self.multiworld.get_location(member, self.player)

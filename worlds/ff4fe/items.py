@@ -46,7 +46,7 @@ for item in itemscsv.create_view():
     if item.subtype == "key" or item.spoilername == "Legend Sword":
         item_classification = ItemClassification.progression if item.spoilername != "DkMatter" \
             else ItemClassification.progression_skip_balancing
-    elif (int(item.tier) > 4) if item.tier.isdecimal() else False:
+    elif item.spoilername == "Spoon" or ((int(item.tier) > 4) if item.tier.isdecimal() else False):
         item_classification = ItemClassification.useful
     new_item = ItemData(item.spoilername, item_classification, item_tier, int(item.code, 16))
     all_items.append(new_item)
@@ -91,7 +91,7 @@ for character in character_data:
     all_items.append(new_item)
 
 key_items = [item for item in all_items if
-             item.classification == ItemClassification.progression
+             (item.classification == ItemClassification.progression or item.name == "Spoon")
              and item.name not in characters]
 
 key_item_names = [item.name for item in all_items if
@@ -119,3 +119,8 @@ key_items_tracker_order = [
 ]
 
 key_items_tracker_ids = {k: i for i, k in enumerate(key_items_tracker_order)}
+
+item_name_groups = {
+    "characters": [*characters],
+    "key_items": [*key_items_tracker_order]
+}

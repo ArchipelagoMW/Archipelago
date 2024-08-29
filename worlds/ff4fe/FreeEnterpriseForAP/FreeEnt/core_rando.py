@@ -456,7 +456,8 @@ def apply(env):
         keyitem_assigner.slot_tier(1).extend(good_miabs)
         keyitem_assigner.slot_tier(3).extend(bad_miabs)
     else:
-        keyitem_assigner.slot_tier(3).extend(CHEST_ITEM_SLOTS)
+        pass
+        #keyitem_assigner.slot_tier(3).extend(CHEST_ITEM_SLOTS)
     
 
     if env.options.flags.has('pass_in_key_items'):
@@ -489,9 +490,14 @@ def apply(env):
         if env.options.ap_data is not None:
             for slot in RewardSlot:
                 skip_list = [0x2D, 0x39, 0x3A, 0x5A, 0x5D, 0x5F, 0x60]
-                if slot < 0x20 or slot in skip_list or (slot >= 0x3C and slot <= 0x58):
+                if slot < 0x20 or slot in skip_list:
                     continue  # not doing characters here
-                id = slot + 0x200
+                if slot >= 0x3C and slot <= 0x58:
+                    id = treasure_dbview.find_one(
+                        lambda t: t.map == CHEST_NUMBERS[slot][0] and
+                                  t.index == CHEST_NUMBERS[slot][1]).flag
+                else:
+                    id = slot + 0x200
                 ap_item = env.options.ap_data[str(id)]
                 placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
                 if placement is None:
@@ -863,12 +869,13 @@ def apply(env):
     if env.meta.get('has_objectives', False) and env.meta.get('zeromus_required', True):
         rewards_assignment[RewardSlot.fixed_crystal] = KeyItemReward('#item.Crystal')
 
-    if env.options.flags.has('no_adamants'):
-        items = items_dbview.find_all(lambda it: it.tier in [7, 8])
-        pink_tail_item = env.rnd.choice(items)
-        rewards_assignment[RewardSlot.pink_trade_item] = ItemReward(pink_tail_item.const)
-    else:
-        rewards_assignment[RewardSlot.pink_trade_item] = ItemReward('#item.AdamantArmor')
+    #if env.options.flags.has('no_adamants'):
+    #    items = items_dbview.find_all(lambda it: it.tier in [7, 8])
+    #    pink_tail_item = env.rnd.choice(items)
+    #    rewards_assignment[RewardSlot.pink_trade_item] = ItemReward(pink_tail_item.const)
+    #else:
+    #    rewards_assignment[RewardSlot.pink_trade_item] = ItemReward(pink_tail_item.const)
+        #rewards_assignment[RewardSlot.pink_trade_item] = ItemReward('#item.AdamantArmor')
 
     # for now, assign flat character positions
     rewards_assignment[RewardSlot.starting_character] = AxtorReward('#actor.DKCecil')
@@ -929,10 +936,6 @@ def apply(env):
         potential_key_item_slots = [s for s in range(RewardSlot.MAX_COUNT) if s in rewards_assignment and isinstance(rewards_assignment[s], ItemReward) and rewards_assignment[s].is_key]
     else:
         potential_key_item_slots = list(ITEM_SLOTS)
-        if env.options.flags.has('no_free_key_item'):
-            potential_key_item_slots.remove(RewardSlot.toroia_hospital_item)
-        else:
-            potential_key_item_slots.remove(RewardSlot.rydias_mom_item)
         if env.options.flags.has('key_items_in_summon_quests'):
             potential_key_item_slots.extend(SUMMON_QUEST_SLOTS)
         if env.options.flags.has('key_items_in_moon_bosses'):
