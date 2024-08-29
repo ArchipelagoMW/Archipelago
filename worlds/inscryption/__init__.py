@@ -50,6 +50,8 @@ class InscryptionWorld(World):
     location_name_to_id = {location: i + base_id for i, location in enumerate(all_locations)}
     required_epitaph_pieces_count = 9
     required_epitaph_pieces_name = "Epitaph Piece"
+    act1_painting_reqs_progression = False
+    act1_skink_filler = False
 
     def generate_early(self) -> None:
         if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
@@ -63,17 +65,11 @@ class InscryptionWorld(World):
             self.required_epitaph_pieces_count = 1
 
         if self.options.painting_checks_balancing == PaintingChecksBalancing.option_balanced:
-            act1_items[6]["classification"] = ItemClassification.progression
-            act1_items[11]["classification"] = ItemClassification.progression
-        else:
-            act1_items[6]["classification"] = ItemClassification.useful
-            act1_items[11]["classification"] = ItemClassification.useful
+            self.act1_painting_reqs_progression = True
 
         if self.options.painting_checks_balancing == PaintingChecksBalancing.option_force_filler \
                 and self.options.goal == Goal.option_first_act:
-            act1_items[3]["classification"] = ItemClassification.filler
-        else:
-            act1_items[3]["classification"] = ItemClassification.useful
+            self.act1_skink_filler = True
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)["name"]
@@ -97,6 +93,13 @@ class InscryptionWorld(World):
             else:
                 useful_items.remove(act2_items[2])
                 useful_items[len(act1_items) + 2]["count"] = 1
+
+        if self.act1_painting_reqs_progression:
+            useful_items[6]["classification"] = ItemClassification.progression
+            useful_items[11]["classification"] = ItemClassification.progression
+
+        if self.act1_skink_filler:
+            useful_items[3]["classification"] = ItemClassification.filler
 
         for item in useful_items:
             for _ in range(item["count"]):
