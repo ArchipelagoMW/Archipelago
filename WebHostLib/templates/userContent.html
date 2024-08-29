@@ -1,20 +1,20 @@
 {% extends 'tablepage.html' %}
 
-{% macro games(slots) -%}
-    {% set gameList = [] %}
-    {% set maxGamesToShow = 10 %}
+{%- macro games(slots) -%}
+    {%- set gameList = [] -%}
+    {%- set maxGamesToShow = 10 -%}
 
-    {% for slot in (slots|list|sort(attribute="player_id"))[:maxGamesToShow] %}
-        {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] %}
-        {% set _ = gameList.append(player) %}
-    {% endfor %}
+    {%- for slot in (slots|list|sort(attribute="player_id"))[:maxGamesToShow] -%}
+        {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] -%}
+        {% set _ = gameList.append(player) -%}
+    {%- endfor -%}
 
-    {% if slots|length > maxGamesToShow %}
-        {% set _ = gameList.append("... and " + (slots|length - maxGamesToShow)|string + " more") %}
-    {% endif %}
+    {%- if slots|length > maxGamesToShow -%}
+        {% set _ = gameList.append("... and " + (slots|length - maxGamesToShow)|string + " more") -%}
+    {%- endif -%}
 
     {{ gameList|join('\n') }}
-{%- endmacro %}
+{%- endmacro -%}
 
 {% block head %}
     {{ super() }}
