@@ -381,8 +381,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
              lambda state: can_use_hat(state, world, HatType.ICE), "or")
 
     # Moderate: Clock Tower Chest + Ruined Tower with nothing
-    add_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player), lambda state: True)
-    add_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player), lambda state: True)
 
     # Moderate: enter and clear The Subcon Well without Hookshot and without hitting the bell
     for loc in world.multiworld.get_region("The Subcon Well", world.player).locations:
@@ -432,8 +432,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     if world.is_dlc1():
         # Moderate: clear Rock the Boat without Ice Hat
-        add_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player), lambda state: True)
-        add_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", world.player), lambda state: True)
+        set_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player), lambda state: True)
+        set_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", world.player), lambda state: True)
 
         # Moderate: clear Deep Sea without Ice Hat
         set_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", world.player),
