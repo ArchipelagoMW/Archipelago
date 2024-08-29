@@ -126,18 +126,25 @@ class ServerToolTip(ToolTip):
     pass
 
 
+class PassBox(BoxLayout):
+    def on_touch_down(self, touch):
+        super().on_touch_down(touch)
+
+
 class ScrollBox(ScrollView):
     layout: BoxLayout
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.layout = BoxLayout(size_hint_y=None)
+        self.layout = PassBox(size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter("height"))
         self.add_widget(self.layout)
         self.effect_cls = ScrollEffect
         self.bar_width = dp(12)
         self.scroll_type = ["content", "bars"]
 
+    def on_touch_down(self, touch):
+        super().on_touch_down(touch)
 
 class HovererableLabel(HoverBehavior, Label):
     pass
@@ -173,6 +180,8 @@ class TooltipLabel(HovererableLabel):
     def on_mouse_pos(self, window, pos):
         if not self.get_root_window():
             return  # Abort if not displayed
+        if self.disabled:
+            return
         super().on_mouse_pos(window, pos)
         if self.refs and self.hovered:
 

@@ -1,9 +1,12 @@
 from kvui import (App, ScrollBox, Button, MainLayout, ContainerLayout, dp, Widget, BoxLayout, TooltipLabel, ToolTip,
                   Label)
+from kivy.effects.scroll import ScrollEffect
 from kivy.graphics import Rectangle, Color
+from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.uix.slider import Slider
 from kivy.uix.dropdown import DropDown
 from kivy.uix.checkbox import CheckBox
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 from kivy.uix.togglebutton import ToggleButton
 from kivy.metrics import sp
@@ -16,50 +19,7 @@ from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, OptionDict,
                      Removed, Visibility, VerifyKeys, PlandoTexts, PlandoConnections, ItemLinks)
 
-try:
-    from Utils import save_filename
-except ImportError:
-    import logging
-    import subprocess
-    def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]],
-                      suggest: str = "") \
-            -> typing.Optional[str]:
-        logging.info(f"Opening file save dialog for {title}.")
-
-        def run(*args: str):
-            return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
-        if Utils.is_linux:
-            # prefer native dialog
-            from shutil import which
-            kdialog = which("kdialog")
-            if kdialog:
-                k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-                return run(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
-            zenity = which("zenity")
-            if zenity:
-                z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in
-                             filetypes)
-                selection = (f"--filename={suggest}",) if suggest else ()
-                return run(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
-
-        # fall back to tk
-        try:
-            import tkinter
-            import tkinter.filedialog
-        except Exception as e:
-            logging.error('Could not load tkinter, which is likely not installed. '
-                          f'This attempt was made because open_filename was used for "{title}".')
-            raise e
-        else:
-            try:
-                root = tkinter.Tk()
-            except tkinter.TclError:
-                return None  # GUI not available. None is the same as a user clicking "cancel"
-            root.withdraw()
-            return tkinter.filedialog.asksaveasfilename(title=title,
-                                                        filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
-                                                        initialfile=suggest or None)
+from .core import save_filename, FixedTooltipLabel
 
 def validate_url(x):
     try:
@@ -88,6 +48,27 @@ def check_random(value: typing.Any):
     if value.startswith("random-"):
         return "random"
     return value
+
+class ScrollAccordion(ScrollView):
+    layout: Accordion
+
+    def __init__(self, **kwargs):
+        orientation = kwargs.pop("orientation", "vertical")
+        super().__init__(**kwargs)
+
+        self.layout = Accordion(orientation=orientation)
+        super().add_widget(self.layout)
+        self.effect_cls = ScrollEffect
+        self.bar_width = dp(12)
+        self.scroll_type = ["bars"]
+
+    def add_widget(self, widget, *args, **kwargs):
+        self.layout.add_widget(widget, *args, **kwargs)
+
+    def on_touch_down(self, touch):
+        if self.layout.on_touch_down(touch):
+            return True
+        return super().on_touch_down(touch)
 
 class YamlCreator(App):
     container: ContainerLayout
@@ -236,7 +217,7 @@ class YamlCreator(App):
         option_base.bind(pos=redraw, size=redraw)
 
         tooltip = filter_tooltip(option.__doc__)
-        option_label = TooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}",
+        option_label = FixedTooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}",
                                     size_hint_y=None)
         label_box = BoxLayout(orientation="horizontal")
         label_box.add_widget(option_label)
@@ -265,16 +246,11 @@ class YamlCreator(App):
                     if self.options[name].isnumeric() or self.options[name] in ("True", "False"):
                         self.options[name] = eval(self.options[name])
 
-                def recursive_disable(inst: Widget, val: bool):
-                    inst.disabled = val
-                    for child in inst.children:
-                        recursive_disable(child, val)
-
                 base_object = instance.parent.parent
                 label_object = instance.parent
                 for child in base_object.children:
                     if child is not label_object:
-                        recursive_disable(child, value)
+                        child.disabled = value
             default_random = option.default == "random"
             random_toggle = ToggleButton(size_hint_x=None, width=100, text="Random?",
                                          state="down" if default_random else "normal")
@@ -305,13 +281,28 @@ class YamlCreator(App):
                     webbrowser.open(new_url)
                 # else just fall through
         else:
-            new_scroll = ScrollBox()
-            new_scroll.scroll_type = ["bars"]
-            new_scroll.layout.orientation = "vertical"
-            new_scroll.layout.spacing = dp(3)
+            new_scroll = ScrollAccordion()
+            group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
+            groups = {name: [] for name in group_names}
             for name, option in cls.options_dataclass.type_hints.items():
-                if option is not Removed and option.visibility & Visibility.simple_ui:
-                    new_scroll.layout.add_widget(self.create_option(option, name))
+                group = next((group.name for group in cls.web.option_groups if option in group.options), "Game Options")
+                groups[group].append((name, option))
+            for group, options in groups.items():
+                group_item = AccordionItem(title=group)
+                group_box = ScrollBox()
+                group_box.layout.orientation = "vertical"
+                group_box.scroll_type = ["bars"]
+                for name, option in options:
+                    if name and option is not Removed and option.visibility & Visibility.simple_ui:
+                        group_box.layout.add_widget(self.create_option(option, name))
+                group_item.box = group_box
+                def disable_box(instance, value):
+                    instance.box.disabled = value
+                group_item.bind(collapse=disable_box)
+                disable_box(group_item, True)
+                group_item.add_widget(group_box)
+                new_scroll.add_widget(group_item)
+            new_scroll.layout.children[0].collapse = False
             self.option_layout.add_widget(new_scroll)
         self.game_label.text = f"Game: {self.current_game}"
 
