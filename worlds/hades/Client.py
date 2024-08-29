@@ -86,6 +86,7 @@ class HadesContext(CommonContext):
         if password_requested and not self.password:
             await super(HadesContext, self).server_auth(password_requested)
         await self.get_username()
+        self.tags = set()
         await self.send_connect()
 
     async def connection_closed(self):

@@ -251,8 +251,8 @@ class HadesWorld(World):
         return "Darkness"
 
 
-def create_region(world: MultiWorld, player: int, location_database, name: str, locations=None, exits=None):
-    ret = Region(name, player, world)
+def create_region(multiworld: MultiWorld, player: int, location_database, name: str, locations=None, exits=None):
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             loc_id = location_database.get(location, 0)

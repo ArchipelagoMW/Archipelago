@@ -217,22 +217,22 @@ def create_trap_pool():
 
 def create_pact_pool_amount(options) -> Dict[str, int]:
     item_pool_pacts = {
-        "HardLaborPactLevel": int(options.hard_labor_pact_amount.value),
-        "LastingConsequencesPactLevel": int(options.lasting_consequences_pact_amount.value),
-        "ConvenienceFeePactLevel": int(options.convenience_fee_pact_amount.value),
-        "JurySummonsPactLevel": int(options.jury_summons_pact_amount.value),
-        "ExtremeMeasuresPactLevel": int(options.extreme_measures_pact_amount.value),
-        "CalisthenicsProgramPactLevel": int(options.calisthenics_program_pact_amount.value),
-        "BenefitsPackagePactLevel": int(options.benefits_package_pact_amount.value),
-        "MiddleManagementPactLevel": int(options.middle_management_pact_amount.value),
-        "UnderworldCustomsPactLevel": int(options.underworld_customs_pact_amount.value),
-        "ForcedOvertimePactLevel": int(options.forced_overtime_pact_amount.value),
-        "HeightenedSecurityPactLevel": int(options.heightened_security_pact_amount.value),
-        "RoutineInspectionPactLevel": int(options.routine_inspection_pact_amount.value),
-        "DamageControlPactLevel": int(options.damage_control_pact_amount.value),
-        "ApprovalProcessPactLevel": int(options.approval_process_pact_amount.value),
-        "TightDeadlinePactLevel": int(options.tight_deadline_pact_amount.value),
-        "PersonalLiabilityPactLevel": int(options.personal_liability_pact_amount.value),
+        "HardLaborPactLevel": int(options.hard_labor_pact_amount),
+        "LastingConsequencesPactLevel": int(options.lasting_consequences_pact_amount),
+        "ConvenienceFeePactLevel": int(options.convenience_fee_pact_amount),
+        "JurySummonsPactLevel": int(options.jury_summons_pact_amount),
+        "ExtremeMeasuresPactLevel": int(options.extreme_measures_pact_amount),
+        "CalisthenicsProgramPactLevel": int(options.calisthenics_program_pact_amount),
+        "BenefitsPackagePactLevel": int(options.benefits_package_pact_amount),
+        "MiddleManagementPactLevel": int(options.middle_management_pact_amount),
+        "UnderworldCustomsPactLevel": int(options.underworld_customs_pact_amount),
+        "ForcedOvertimePactLevel": int(options.forced_overtime_pact_amount),
+        "HeightenedSecurityPactLevel": int(options.heightened_security_pact_amount),
+        "RoutineInspectionPactLevel": int(options.routine_inspection_pact_amount),
+        "DamageControlPactLevel": int(options.damage_control_pact_amount),
+        "ApprovalProcessPactLevel": int(options.approval_process_pact_amount),
+        "TightDeadlinePactLevel": int(options.tight_deadline_pact_amount),
+        "PersonalLiabilityPactLevel": int(options.personal_liability_pact_amount),
     }
     return item_pool_pacts
 
