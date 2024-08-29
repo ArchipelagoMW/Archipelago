@@ -3,7 +3,7 @@
 ## Required Software
 
 - [Dark Souls III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
-- [Dark Souls III AP Client](https://github.com/nex3/Dark-Souls-III-Archipelago-client/releases)
+- [Dark Souls III AP Client](https://github.com/nex3/Dark-Souls-III-Archipelago-client/releases/latest)
 
 ## Optional Software
 
@@ -57,7 +57,7 @@ The [Player Options](/games/Dark%20Souls%20III/player-options) page on the websi
 configure your personal options and export them into a config file. The [AP client archive] also
 includes an options template.
 
-[AP client archive]: https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases
+[AP client archive]: https://github.com/nex3/Dark-Souls-III-Archipelago-client/releases/latest
 
 ### Does this work with Proton?
 
