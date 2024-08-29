@@ -855,6 +855,9 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
 
     for entrance in regions["Time Rift - Alpine Skyline"].entrances:
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Crayon"))
+        if entrance.parent_region.name == "Alpine Free Roam":
+            add_rule(entrance,
+                     lambda state: can_use_hookshot(state, world) and can_hit(state, world, umbrella_only=True))
 
     if world.is_dlc1():
         for entrance in regions["Time Rift - Balcony"].entrances:
@@ -933,6 +936,9 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
 
     for entrance in world.multiworld.get_region("Time Rift - Alpine Skyline", world.player).entrances:
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Crayon"))
+        if entrance.parent_region.name == "Alpine Free Roam":
+            add_rule(entrance,
+                     lambda state: can_use_hookshot(state, world) and can_hit(state, world, umbrella_only=True))
 
     if world.is_dlc1():
         for entrance in world.multiworld.get_region("Time Rift - Balcony", world.player).entrances:
