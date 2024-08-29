@@ -17,7 +17,7 @@ Go to the latest release from the [APSudoku Releases page](https://github.com/AP
 
 1. Run the APSudoku executable.
 2. Under `Settings` &rarr; `Connection` at the top-right:
-	- Enter the server IP and port number
+	- Enter the server address and port number
 	- Enter the name of the slot you wish to connect to
 	- Enter the room password (optional)
 	- Select DeathLink related settings (optional)
