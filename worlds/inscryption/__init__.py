@@ -45,41 +45,43 @@ class InscryptionWorld(World):
     options_dataclass = InscryptionOptions
     options: InscryptionOptions
     all_items = act1_items + act2_items + act3_items + filler_items
-    item_name_to_id = {item['name']: i + base_id for i, item in enumerate(all_items)}
+    item_name_to_id = {item["name"]: i + base_id for i, item in enumerate(all_items)}
     all_locations = act1_locations + act2_locations + act3_locations
     location_name_to_id = {location: i + base_id for i, location in enumerate(all_locations)}
     required_epitaph_pieces_count = 9
     required_epitaph_pieces_name = "Epitaph Piece"
 
     def generate_early(self) -> None:
-        if self.options.goal != Goal.option_first_act:
-            if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
-                self.required_epitaph_pieces_name = "Epitaph Piece"
-                self.required_epitaph_pieces_count = 9
-            elif self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_in_groups:
-                self.required_epitaph_pieces_name = "Epitaph Pieces"
-                self.required_epitaph_pieces_count = 3
-            else:
-                self.required_epitaph_pieces_name = "Epitaph Pieces"
-                self.required_epitaph_pieces_count = 1
+        if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
+            self.required_epitaph_pieces_name = "Epitaph Piece"
+            self.required_epitaph_pieces_count = 9
+        elif self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_in_groups:
+            self.required_epitaph_pieces_name = "Epitaph Pieces"
+            self.required_epitaph_pieces_count = 3
+        else:
+            self.required_epitaph_pieces_name = "Epitaph Pieces"
+            self.required_epitaph_pieces_count = 1
 
         if self.options.painting_checks_balancing == PaintingChecksBalancing.option_balanced:
-            act1_items[6]['classification'] = ItemClassification.progression
-            act1_items[11]['classification'] = ItemClassification.progression
+            act1_items[6]["classification"] = ItemClassification.progression
+            act1_items[11]["classification"] = ItemClassification.progression
         else:
-            act1_items[6]['classification'] = ItemClassification.useful
-            act1_items[11]['classification'] = ItemClassification.useful
+            act1_items[6]["classification"] = ItemClassification.useful
+            act1_items[11]["classification"] = ItemClassification.useful
 
         if self.options.painting_checks_balancing == PaintingChecksBalancing.option_force_filler \
                 and self.options.goal == Goal.option_first_act:
-            act1_items[3]['classification'] = ItemClassification.filler
+            act1_items[3]["classification"] = ItemClassification.filler
         else:
-            act1_items[3]['classification'] = ItemClassification.useful
+            act1_items[3]["classification"] = ItemClassification.useful
+
+    def get_filler_item_name(self) -> str:
+        return self.random.choice(filler_items)["name"]
 
     def create_item(self, name: str) -> Item:
         item_id = self.item_name_to_id[name]
         item_data = self.all_items[item_id - base_id]
-        return InscryptionItem(name, item_data['classification'], item_id, self.player)
+        return InscryptionItem(name, item_data["classification"], item_id, self.player)
 
     def create_items(self) -> None:
         nb_items_added = 0
@@ -91,14 +93,14 @@ class InscryptionWorld(World):
                 useful_items.remove(act2_items[3])
             elif self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_in_groups:
                 useful_items.remove(act2_items[2])
-                useful_items[len(act1_items) + 2]['count'] = 3
+                useful_items[len(act1_items) + 2]["count"] = 3
             else:
                 useful_items.remove(act2_items[2])
-                useful_items[len(act1_items) + 2]['count'] = 1
+                useful_items[len(act1_items) + 2]["count"] = 1
 
         for item in useful_items:
             for _ in range(item["count"]):
-                new_item = self.create_item(item['name'])
+                new_item = self.create_item(item["name"])
                 self.multiworld.itempool.append(new_item)
                 nb_items_added += 1
 
@@ -108,7 +110,7 @@ class InscryptionWorld(World):
         for i in range(filler_count):
             index = i % len(filler_items)
             filler_item = filler_items[index]
-            new_item = self.create_item(filler_item['name'])
+            new_item = self.create_item(filler_item["name"])
             self.multiworld.itempool.append(new_item)
 
     def create_regions(self) -> None:
