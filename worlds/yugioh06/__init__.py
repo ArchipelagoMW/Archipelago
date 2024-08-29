@@ -399,12 +399,14 @@ class Yugioh06World(World):
         self.playerName.extend([0] * (0x20 - len(self.playerName)))
         patch = YGO06ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "patch.bsdiff4"))
+        procedure = [("apply_bsdiff4", ["base_patch.bsdiff4"]), ("apply_tokens", ["token_data.bin"])]
         if self.is_draft_mode:
-            patch.procedure.insert(1, ("apply_bsdiff4", ["draft_patch.bsdiff4"]))
+            procedure.insert(1, ("apply_bsdiff4", ["draft_patch.bsdiff4"]))
             patch.write_file("draft_patch.bsdiff4", pkgutil.get_data(__name__, "patches/draft.bsdiff4"))
         if self.options.ocg_arts:
-            patch.procedure.insert(1, ("apply_bsdiff4", ["ocg_patch.bsdiff4"]))
+            procedure.insert(1, ("apply_bsdiff4", ["ocg_patch.bsdiff4"]))
             patch.write_file("ocg_patch.bsdiff4", pkgutil.get_data(__name__, "patches/ocg.bsdiff4"))
+        patch.procedure = procedure
         write_tokens(self, patch)
 
         # Write Output

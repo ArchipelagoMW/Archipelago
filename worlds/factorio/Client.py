@@ -247,7 +247,7 @@ async def game_watcher(ctx: FactorioContext):
                     if ctx.locations_checked != research_data:
                         bridge_logger.debug(
                             f"New researches done: "
-                            f"{[ctx.location_names[rid] for rid in research_data - ctx.locations_checked]}")
+                            f"{[ctx.location_names.lookup_in_game(rid) for rid in research_data - ctx.locations_checked]}")
                         ctx.locations_checked = research_data
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(research_data)}])
                     death_link_tick = data.get("death_link_tick", 0)
@@ -360,7 +360,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     transfer_item: NetworkItem = ctx.items_received[ctx.send_index]
                     item_id = transfer_item.item
                     player_name = ctx.player_names[transfer_item.player]
-                    item_name = ctx.item_names[item_id]
+                    item_name = ctx.item_names.lookup_in_game(item_id)
                     factorio_server_logger.info(f"Sending {item_name} to Nauvis from {player_name}.")
                     commands[ctx.send_index] = f"/ap-get-technology {item_name}\t{ctx.send_index}\t{player_name}"
                     ctx.send_index += 1

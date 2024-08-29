@@ -37,8 +37,6 @@ class Hylics2World(World):
     options_dataclass = Hylics2Options
     options: Hylics2Options
 
-    data_version = 3
-
 
     def set_rules(self):
         Rules.set_rules(self)

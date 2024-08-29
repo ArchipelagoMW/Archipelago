@@ -8,11 +8,15 @@ from .Locations import DLCQuestLocation, location_table
 from .Options import DLCQuestOptions
 from .Regions import create_regions
 from .Rules import set_rules
+from .presets import dlcq_options_presets
+from .option_groups import dlcq_option_groups
 
 client_version = 0
 
 
 class DLCqwebworld(WebWorld):
+    options_presets = dlcq_options_presets
+    option_groups = dlcq_option_groups
     setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Archipelago DLCQuest game on your computer.",
@@ -42,8 +46,6 @@ class DLCqworld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
-
-    data_version = 1
 
     options_dataclass = DLCQuestOptions
     options: DLCQuestOptions

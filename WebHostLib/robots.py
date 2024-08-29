@@ -8,7 +8,8 @@ from . import cache
 def robots():
     # If this host is not official, do not allow search engine crawling
     if not app.config["ASSET_RIGHTS"]:
-        return app.send_static_file('robots.txt')
+        # filename changed in case the path is intercepted and served by an outside service
+        return app.send_static_file('robots_file.txt')
 
     # Send 404 if the host has affirmed this to be the official WebHost
     abort(404)

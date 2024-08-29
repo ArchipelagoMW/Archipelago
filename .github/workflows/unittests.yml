@@ -24,7 +24,7 @@ on:
       - '.github/workflows/unittests.yml'
 
 jobs:
-  build:
+  unit:
     runs-on: ${{ matrix.os }}
     name: Test Python ${{ matrix.python.version }} ${{ matrix.os }}
 
@@ -60,3 +60,32 @@ jobs:
     - name: Unittests
       run: |
         pytest -n auto
+
+  hosting:
+    runs-on: ${{ matrix.os }}
+    name: Test hosting with ${{ matrix.python.version }} on ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        python:
+          - {version: '3.11'}  # current
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python.version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python.version }}
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+        python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+    - name: Test hosting
+      run: |
+        source venv/bin/activate
+        export PYTHONPATH=$(pwd)
+        python test/hosting/__main__.py

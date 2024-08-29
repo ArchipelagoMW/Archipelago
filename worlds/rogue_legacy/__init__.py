@@ -35,7 +35,6 @@ class RLWorld(World):
     game = "Rogue Legacy"
     option_definitions = rl_options
     topology_present = True
-    data_version = 4
     required_client_version = (0, 3, 5)
     web = RLWeb()
 

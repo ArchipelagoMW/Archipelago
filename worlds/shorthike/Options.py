@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+from Options import Choice, OptionGroup, PerGameCommonOptions, Range, StartInventoryPool, Toggle, DefaultOnToggle
 
 class Goal(Choice):
     """Choose the end goal.
@@ -22,8 +22,10 @@ class CoinsInShops(Toggle):
     default = False
 
 class GoldenFeathers(Range):
-    """Number of Golden Feathers in the item pool.
-    (Note that for the Photo and Help Everyone goals, a minimum of 12 Golden Feathers is enforced)"""
+    """
+    Number of Golden Feathers in the item pool.
+    (Note that for the Photo and Help Everyone goals, a minimum of 12 Golden Feathers is enforced)
+    """
     display_name = "Golden Feathers"
     range_start = 0
     range_end = 20
@@ -42,6 +44,20 @@ class Buckets(Range):
     range_start = 0
     range_end = 2
     default = 2
+
+class Sticks(Range):
+    """Number of Sticks in the item pool."""
+    display_name = "Sticks"
+    range_start = 1
+    range_end = 8
+    default = 8
+
+class ToyShovels(Range):
+    """Number of Toy Shovels in the item pool."""
+    display_name = "Toy Shovels"
+    range_start = 1
+    range_end = 5
+    default = 5
 
 class GoldenFeatherProgression(Choice):
     """Determines which locations are considered in logic based on the required amount of golden feathers to reach them.
@@ -76,6 +92,40 @@ class FillerCoinAmount(Choice):
     option_50_coins = 9
     default = 1
 
+class RandomWalkieTalkie(DefaultOnToggle):
+    """
+    When enabled, the Walkie Talkie item will be placed into the item pool. Otherwise, it will be placed in its vanilla location.
+    This item usually allows the player to locate Avery around the map or restart a race.
+    """
+    display_name = "Randomize Walkie Talkie"
+
+class EasierRaces(Toggle):
+    """When enabled, the Running Shoes will be added as a logical requirement for beating any of the races."""
+    display_name = "Easier Races"
+
+class ShopCheckLogic(Choice):
+    """Determines which items will be added as logical requirements to making certain purchases in shops."""
+    display_name = "Shop Check Logic"
+    option_nothing = 0
+    option_fishing_rod = 1
+    option_shovel = 2
+    option_fishing_rod_and_shovel = 3
+    option_golden_fishing_rod = 4
+    option_golden_fishing_rod_and_shovel = 5
+    default = 1
+
+class MinShopCheckLogic(Choice):
+    """
+    Determines the minimum cost of a shop item that will have the shop check logic applied to it.
+    If the cost of a shop item is less than this value, no items will be required to access it.
+    This is based on the vanilla prices of the shop item. The set cost multiplier will not affect this value.
+    """
+    display_name = "Minimum Shop Check Logic Application"
+    option_40_coins = 0
+    option_100_coins = 1
+    option_400_coins = 2
+    default = 1
+
 @dataclass
 class ShortHikeOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -84,6 +134,37 @@ class ShortHikeOptions(PerGameCommonOptions):
     golden_feathers: GoldenFeathers
     silver_feathers: SilverFeathers
     buckets: Buckets
+    sticks: Sticks
+    toy_shovels: ToyShovels
     golden_feather_progression: GoldenFeatherProgression
     cost_multiplier: CostMultiplier
     filler_coin_amount: FillerCoinAmount
+    random_walkie_talkie: RandomWalkieTalkie
+    easier_races: EasierRaces
+    shop_check_logic: ShopCheckLogic
+    min_shop_check_logic: MinShopCheckLogic
+
+shorthike_option_groups = [
+    OptionGroup("General Options", [
+        Goal,
+        FillerCoinAmount,
+        RandomWalkieTalkie
+    ]),
+    OptionGroup("Logic Options", [
+        GoldenFeatherProgression,
+        EasierRaces
+    ]),
+    OptionGroup("Item Pool Options", [
+        GoldenFeathers,
+        SilverFeathers,
+        Buckets,
+        Sticks,
+        ToyShovels
+    ]),
+    OptionGroup("Shop Options", [
+        CoinsInShops,
+        CostMultiplier,
+        ShopCheckLogic,
+        MinShopCheckLogic
+    ])
+]

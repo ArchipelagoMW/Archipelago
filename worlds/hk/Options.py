@@ -1,9 +1,12 @@
 import typing
 import re
+from dataclasses import dataclass, make_dataclass
+
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
+from schema import And, Schema, Optional
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -212,7 +215,7 @@ class MinimumEggPrice(Range):
     Only takes effect if the EggSlotShops option is greater than 0."""
     display_name = "Minimum Egg Price"
     range_start = 1
-    range_end = 21
+    range_end = 20
     default = 1
 
 
@@ -296,6 +299,9 @@ class PlandoCharmCosts(OptionDict):
     This is set after any random Charm Notch costs, if applicable."""
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
+    schema = Schema({
+        Optional(name): And(int, lambda n: 6 >= n >= 0) for name in charm_names
+        })
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
@@ -399,7 +405,18 @@ class Goal(Choice):
     option_radiance = 3
     option_godhome = 4
     option_godhome_flower = 5
+    option_grub_hunt = 6
     default = 0
+
+
+class GrubHuntGoal(NamedRange):
+    """The amount of grubs required to finish Grub Hunt.
+    On 'All' any grubs from item links replacements etc. will be counted"""
+    display_name = "Grub Hunt Goal"
+    range_start = 1
+    range_end = 46
+    special_range_names = {"all": -1}
+    default = 46
 
 
 class WhitePalace(Choice):
@@ -516,7 +533,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     **{
         option.__name__: option
         for option in (
-            StartLocation, Goal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
+            StartLocation, Goal, GrubHuntGoal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
             DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,
@@ -534,3 +551,5 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     },
     **cost_sanity_weights
 }
+
+HKOptions = make_dataclass("HKOptions", [(name, option) for name, option in hollow_knight_options.items()], bases=(PerGameCommonOptions,))
