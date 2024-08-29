@@ -302,7 +302,7 @@ class YamlCreator(App):
                 disable_box(group_item, True)
                 group_item.add_widget(group_box)
                 new_scroll.add_widget(group_item)
-            new_scroll.layout.children[0].collapse = False
+            new_scroll.layout.children[-1].collapse = False
             self.option_layout.add_widget(new_scroll)
         self.game_label.text = f"Game: {self.current_game}"
 
