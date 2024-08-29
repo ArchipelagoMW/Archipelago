@@ -8,7 +8,7 @@ integrating with Archipelago easier.
 | ----------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | Python                  | [Archipelago CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py) |                                                                                 |
 |                         | [Archipelago SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py)       | For Super Nintendo Game Support; Utilizes [SNI](https://github.com/alttpo/sni). |
-| JVM (Java / Kotlin)     | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java)      |                                                                                 |
+| JVM (Java / Kotlin)     | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Java-Client)                       |                                                                                 |
 | .NET (C# / F# / VB.NET) | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
 | C++                     | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | header-only                                                                     |
 |                         | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
