@@ -1,5 +1,21 @@
 {% extends 'tablepage.html' %}
 
+{% macro games(slots) -%}
+    {% set gameList = [] %}
+    {% set maxGamesToShow = 10 %}
+
+    {% for slot in (slots|list|sort(attribute="player_id"))[:maxGamesToShow] %}
+        {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] %}
+        {% set _ = gameList.append(player) %}
+    {% endfor %}
+
+    {% if slots|length > maxGamesToShow %}
+        {% set _ = gameList.append("... and " + (slots|length - maxGamesToShow)|string + " more") %}
+    {% endif %}
+
+    {{ gameList|join('\n') }}
+{%- endmacro %}
+
 {% block head %}
     {{ super() }}
     <title>User Content</title>
@@ -34,14 +50,7 @@
                                 <td><a href="{{ url_for("view_seed", seed=room.seed.id) }}">{{ room.seed.id|suuid }}</a></td>
                                 <td><a href="{{ url_for("host_room", room=room.id) }}">{{ room.id|suuid }}</a></td>
                                 <td>
-                                    {% set title = [] %}
-
-                                    {% for slot in room.seed.slots|list|sort(attribute="player_id") %}
-                                        {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] %}
-                                        {% set _ = title.append(player) %}
-                                    {% endfor %}
-
-                                    <div title="{{ title|join('\n') }}">
+                                    <div title="{{ games(room.seed.slots) }}">
                                         {{ room.seed.slots|length }}
                                     </div>
                                 </td>
@@ -73,14 +82,7 @@
                                 <td><a href="{{ url_for("view_seed", seed=seed.id) }}">{{ seed.id|suuid }}</a></td>
                                 <td>
                                     {% if seed.multidata %}
-                                        {% set title = [] %}
-
-                                        {% for slot in seed.slots|list|sort(attribute="player_id") %}
-                                            {% set player = "#" + slot["player_id"]|string + " " + slot["player_name"] + " : " + slot["game"] %}
-                                            {% set _ = title.append(player) %}
-                                        {% endfor %}
-
-                                        <div title="{{ title|join('\n') }}">
+                                        <div title="{{ games(seed.slots) }}">
                                             {{ seed.slots|length }}
                                         </div>
                                     {% else %}
