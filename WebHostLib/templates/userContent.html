@@ -56,7 +56,7 @@
                                 </td>
                                 <td>{{ room.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
                                 <td>{{ room.last_activity.strftime("%Y-%m-%d %H:%M") }}</td>
-                                <td><a href="{{ url_for("disown_room", room=room.id) }}">Delete next maintenance.</td>
+                                <td><a href="{{ url_for("disown_room", room=room.id) }}">Delete next maintenance.</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
