@@ -1,12 +1,11 @@
 from kvui import (App, ScrollBox, Button, MainLayout, ContainerLayout, dp, Widget, BoxLayout, TooltipLabel, ToolTip,
                   Label)
-from kivy.effects.scroll import ScrollEffect
 from kivy.graphics import Rectangle, Color
 from kivy.uix.accordion import Accordion, AccordionItem
+from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.slider import Slider
 from kivy.uix.dropdown import DropDown
 from kivy.uix.checkbox import CheckBox
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 from kivy.uix.togglebutton import ToggleButton
 from kivy.metrics import sp
@@ -30,6 +29,8 @@ def validate_url(x):
 
 
 def filter_tooltip(tooltip):
+    if tooltip is None:
+        tooltip = "No tooltip available"
     return dedent(tooltip).replace("\n", "<br>").replace("&", "&amp;").replace("[", "&bl;").replace("]", "&br;")
 
 
@@ -199,7 +200,9 @@ class YamlCreator(App):
         option_label = FixedTooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}",
                                     size_hint_y=None)
         label_box = BoxLayout(orientation="horizontal")
-        label_box.add_widget(option_label)
+        label_anchor = AnchorLayout(anchor_x="right", anchor_y="center")
+        label_anchor.add_widget(option_label)
+        label_box.add_widget(label_anchor)
 
         option_base.add_widget(label_box)
         if issubclass(option, NamedRange):
@@ -274,6 +277,7 @@ class YamlCreator(App):
                 group_item = AccordionItem(title=group)
                 group_box = ScrollBox()
                 group_box.layout.orientation = "vertical"
+                group_box.layout.spacing = dp(3)
                 group_box.scroll_type = ["bars"]
                 for name, option in options:
                     if name and option is not Removed and option.visibility & Visibility.simple_ui:
