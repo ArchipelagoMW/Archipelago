@@ -109,8 +109,8 @@ def set_access_rules(world: WL4World):
             location.access_rule = rule.apply_world(world)
         except KeyError as k:
             # Raise for invalid location names, not ones that aren't in this player's world
-            if name not in locations.location_table:
-                raise ValueError(f'Location {name} does not exist') from k
+            assert name in locations.location_table or name in locations.event_table, \
+                f"{name} is not a valid location name"
 
 
 escape_regions = {

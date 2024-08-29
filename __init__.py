@@ -8,7 +8,7 @@ from worlds.AutoWorld import WebWorld, World
 from .client import WL4Client
 from .data import data_path
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import get_level_locations, get_level_location_data, location_name_to_id, location_table
+from .locations import get_level_locations, location_name_to_id, location_table, event_table
 from .options import Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
@@ -57,8 +57,7 @@ class WL4World(World):
     settings: ClassVar[WL4Settings]
     topology_present = False
 
-    item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()
-                       if data[1] is not None}
+    item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()}
     location_name_to_id = location_name_to_id
 
     required_client_version = (0, 5, 0)
@@ -83,22 +82,22 @@ class WL4World(World):
         'Wildflower Fields': set(get_level_locations(Passage.EMERALD, 1)),
         'Mystic Lake': set(get_level_locations(Passage.EMERALD, 2)),
         'Monsoon Jungle': set(get_level_locations(Passage.EMERALD, 3)),
-        'Cractus Treasures': set(k for k, v in get_level_location_data(Passage.EMERALD, 4) if v.source != LocationType.BOSS),
+        'Cractus Treasures': set(get_level_locations(Passage.EMERALD, 4)),
         'The Curious Factory': set(get_level_locations(Passage.RUBY, 0)),
         'The Toxic Landfill': set(get_level_locations(Passage.RUBY, 1)),
         '40 Below Fridge': set(get_level_locations(Passage.RUBY, 2)),
         'Pinball Zone': set(get_level_locations(Passage.RUBY, 3)),
-        'Cuckoo Condor Treasures': set(k for k, v in get_level_location_data(Passage.RUBY, 4) if v.source != LocationType.BOSS),
+        'Cuckoo Condor Treasures': set(get_level_locations(Passage.RUBY, 4)),
         'Toy Block Tower': set(get_level_locations(Passage.TOPAZ, 0)),
         'The Big Board': set(get_level_locations(Passage.TOPAZ, 1)),
         'Doodle Woods': set(get_level_locations(Passage.TOPAZ, 2)),
         'Domino Row': set(get_level_locations(Passage.TOPAZ, 3)),
-        'Aerodent Treasures': set(k for k, v in get_level_location_data(Passage.TOPAZ, 4) if v.source != LocationType.BOSS),
+        'Aerodent Treasures': set(get_level_locations(Passage.TOPAZ, 4)),
         'Crescent Moon Village': set(get_level_locations(Passage.SAPPHIRE, 0)),
         'Arabian Night': set(get_level_locations(Passage.SAPPHIRE, 1)),
         'Fiery Cavern': set(get_level_locations(Passage.SAPPHIRE, 2)),
         'Hotel Horror': set(get_level_locations(Passage.SAPPHIRE, 3)),
-        'Catbat Treasures': set(k for k, v in get_level_location_data(Passage.SAPPHIRE, 4) if v.source != LocationType.BOSS),
+        'Catbat Treasures': set(get_level_locations(Passage.SAPPHIRE, 4)),
         'Golden Passage': set(get_level_locations(Passage.GOLDEN, 0)),
     }
 
@@ -221,7 +220,7 @@ class WL4World(World):
         )
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
-        return WL4Item.from_name(name, self.player, force_non_progression)
+        return WL4Item(name, self.player, force_non_progression)
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
@@ -233,8 +232,9 @@ class WL4World(World):
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
         check_names = {name for name, _ in checks}
 
+        event_names = set(event_table.keys())
         if self.options.goal.needs_diva():
-            check_names.remove('Sound Room - Emergency Exit')
+            event_names.remove('Sound Room - Emergency Exit')
         else:
-            check_names.remove('Golden Diva')
-        return check_names
+            event_names.remove('Golden Diva')
+        return check_names.union(event_names)

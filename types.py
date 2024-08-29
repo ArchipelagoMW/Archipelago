@@ -8,7 +8,6 @@ class ItemType(IntEnum):
     JEWEL = 0
     CD = 1
     ITEM = 2
-    EVENT = 3
     ABILITY = 4
     TREASURE = 5
 
@@ -24,10 +23,7 @@ class Box(IntEnum):
 
 class LocationType(IntEnum):
     BOX = 0
-    BOSS = 1
-    KEYZER = 2
     CHEST = 3
-    EVENT = 4
 
 
 class ItemFlag(IntFlag):

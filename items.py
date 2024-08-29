@@ -45,10 +45,8 @@ from .types import Box, ItemFlag, ItemType, Passage
 # For AP item, classifications are as reported by ItemClassification.as_flag()
 
 
-def ap_id_from_wl4_data(data: ItemData) -> Optional[int]:
+def ap_id_from_wl4_data(data: ItemData) -> int:
     cat, itemid, _ = data
-    if cat == ItemType.EVENT or itemid == None:
-        return None
     if cat == ItemType.JEWEL:
         passage, quad = itemid
         item = (passage << 2) | quad
@@ -62,7 +60,7 @@ def ap_id_from_wl4_data(data: ItemData) -> Optional[int]:
     elif cat == ItemType.TREASURE:
         item = 0x70 | itemid
     else:
-        raise ValueError(f'Unexpected WL4 item type: {data[0]}')
+        raise ValueError(f'Unexpected WL4 item type: {cat}')
     return ap_id_offset + item
 
 
@@ -95,32 +93,29 @@ def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
 
 class WL4Item(Item):
     game: str = 'Wario Land 4'
-    type: ItemType
+    type: Optional[ItemType]
     passage: Optional[Passage]
     level: Optional[int]
     flag: Optional[ItemFlag]
 
-    def __init__(self, name, player, data, force_non_progression):
-        type, id, prog = data
-        if force_non_progression:
-            prog = IC.filler
-        super(WL4Item, self).__init__(name, prog, ap_id_from_wl4_data(data), player)
-        self.type = type
-        if type == ItemType.JEWEL:
+    def __init__(self, name: str, player: int, force_non_progression: bool = False):
+        if name in item_table:
+            data = item_table[name]
+            self.type, id, prog = data
+            code = ap_id_from_wl4_data(data)
+        else:
+            self.type = code = None
+            prog = IC.progression
+        super(WL4Item, self).__init__(name, IC.filler if force_non_progression else prog, code, player)
+        if self.type == ItemType.JEWEL:
             self.passage = id[0]
             self.level = None
             self.flag = 1 << id[1]
-        elif type == ItemType.CD:
+        elif self.type == ItemType.CD:
             self.passage, self.level = id
             self.flag = ItemFlag.CD
         else:
             self.passage = self.level = self.flag = None
-
-    @classmethod
-    def from_name(cls, name: str, player: int, force_non_progression: bool = False):
-        data = item_table[name]
-        created_item = cls(name, player, data, force_non_progression)
-        return created_item
 
 
 class ItemData(NamedTuple):
@@ -207,12 +202,6 @@ item_table = {
     'Heart':                            ItemData(ItemType.ITEM,     0x82,                              IC.filler),
     'Lightning Trap':                   ItemData(ItemType.ITEM,     0x83,                              IC.trap),
     'Minigame Coin':                    ItemData(ItemType.ITEM,     0x84,                              IC.filler),
-#   'Entry Passage Clear':              ItemData(ItemType.EVENT,    None,                              IC.filler),
-    'Emerald Passage Clear':            ItemData(ItemType.EVENT,    None,                              IC.progression),
-    'Ruby Passage Clear':               ItemData(ItemType.EVENT,    None,                              IC.progression),
-    'Topaz Passage Clear':              ItemData(ItemType.EVENT,    None,                              IC.progression),
-    'Sapphire Passage Clear':           ItemData(ItemType.EVENT,    None,                              IC.progression),
-    'Escape the Pyramid':               ItemData(ItemType.EVENT,    None,                              IC.progression),
 }
 
 

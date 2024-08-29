@@ -291,7 +291,7 @@ def create_starting_inventory(world: WL4World, patch: WL4ProcedurePatch):
             copies = 4 - required_jewels
 
         for _ in range(copies):
-            start_inventory.add(WL4Item.from_name(name, world.player))
+            start_inventory.add(WL4Item(name, world.player))
 
     # Free Keyzer
     def set_keyzer(passage, level):
