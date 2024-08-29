@@ -49,27 +49,6 @@ def check_random(value: typing.Any):
         return "random"
     return value
 
-class ScrollAccordion(ScrollView):
-    layout: Accordion
-
-    def __init__(self, **kwargs):
-        orientation = kwargs.pop("orientation", "vertical")
-        super().__init__(**kwargs)
-
-        self.layout = Accordion(orientation=orientation)
-        super().add_widget(self.layout)
-        self.effect_cls = ScrollEffect
-        self.bar_width = dp(12)
-        self.scroll_type = ["bars"]
-
-    def add_widget(self, widget, *args, **kwargs):
-        self.layout.add_widget(widget, *args, **kwargs)
-
-    def on_touch_down(self, touch):
-        if self.layout.on_touch_down(touch):
-            return True
-        return super().on_touch_down(touch)
-
 class YamlCreator(App):
     container: ContainerLayout
     main_layout: MainLayout
@@ -281,7 +260,11 @@ class YamlCreator(App):
                     webbrowser.open(new_url)
                 # else just fall through
         else:
-            new_scroll = ScrollAccordion()
+            def set_min(instance: Accordion, value: int):
+                while (instance.min_space * len(instance.children)) + 120 >= value:
+                    instance.min_space -= 1
+            accordion = Accordion(orientation="vertical")
+            accordion.bind(height=set_min)
             group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
             groups = {name: [] for name in group_names}
             for name, option in cls.options_dataclass.type_hints.items():
@@ -301,9 +284,9 @@ class YamlCreator(App):
                 group_item.bind(collapse=disable_box)
                 disable_box(group_item, True)
                 group_item.add_widget(group_box)
-                new_scroll.add_widget(group_item)
-            new_scroll.layout.children[-1].collapse = False
-            self.option_layout.add_widget(new_scroll)
+                accordion.add_widget(group_item)
+            accordion.children[-1].collapse = False
+            self.option_layout.add_widget(accordion)
         self.game_label.text = f"Game: {self.current_game}"
 
     def build(self):
