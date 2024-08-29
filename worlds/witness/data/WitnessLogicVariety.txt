@@ -1013,7 +1013,7 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers & Stars & Stars + Same Colored Symbol
 158412 - 0x09E69 (Right Row 4) - 0x09E72 - Black/White Squares & Eraser & Stars & Stars + Same Colored Symbol
 158413 - 0x09E7B (Right Row 5) - 0x09E69 - Dots & Full Dots & Triangles
-158414 - 0x09E73 (Left Row 1) - True - Arrows & Dots
+158414 - 0x09E73 (Left Row 1) - True - Dots & Black/White Squares
 158415 - 0x09E75 (Left Row 2) - 0x09E73 - Arrows & Black/White Squares
 158416 - 0x09E78 (Left Row 3) - 0x09E75 - Arrows & Stars
 158417 - 0x09E79 (Left Row 4) - 0x09E78 - Arrows & Shapers & Rotated Shapers
@@ -1118,9 +1118,9 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158458 - 0x01A0D (Blue Tunnel Left First 1) - True - Symmetry & Triangles & Arrows
 158459 - 0x008B8 (Blue Tunnel Left Second 1) - True - Triangles & Colored Squares & Arrows
 158460 - 0x00973 (Blue Tunnel Left Second 2) - 0x008B8 - Triangles & Colored Squares & Arrows
-158461 - 0x0097B (Blue Tunnel Left Second 3) - 0x00973 - Triangles Colored Squares & Arrows & Stars & Stars + Same Colored Symbol
-158462 - 0x0097D (Blue Tunnel Left Second 4) - 0x0097B - Triangles Colored Squares & Arrows & Stars & Stars + Same Colored Symbol
-158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Triangles Colored Squares & Arrows & Stars & Stars + Same Colored Symbol & Eraser
+158461 - 0x0097B (Blue Tunnel Left Second 3) - 0x00973 - Triangles & Colored Squares & Arrows & Stars & Stars + Same Colored Symbol
+158462 - 0x0097D (Blue Tunnel Left Second 4) - 0x0097B - Triangles & Colored Squares & Arrows & Stars & Stars + Same Colored Symbol
+158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Triangles & Colored Squares & Arrows & Stars & Stars + Same Colored Symbol
 158464 - 0x00994 (Blue Tunnel Right Second 1) - True - Rotated Shapers & Triangles
 158465 - 0x334D5 (Blue Tunnel Right Second 2) - 0x00994 - Rotated Shapers & Triangles
 158466 - 0x00995 (Blue Tunnel Right Second 3) - 0x334D5 - Rotated Shapers & Triangles
