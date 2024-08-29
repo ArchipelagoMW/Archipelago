@@ -347,6 +347,11 @@ class ZillionContext(CommonContext):
                         "operations": [{"operation": "replace", "value": doors_b64}]
                     }
                     async_start(self.send_msgs([payload]))
+            elif isinstance(event_from_game, events.MapEventFromGame):
+                row = event_from_game.map_index // 8
+                col = event_from_game.map_index % 8
+                room_name = f"({chr(row + 64)}-{col + 1})"
+                logger.info(f"You are at {room_name}")
             else:
                 logger.warning(f"WARNING: unhandled event from game {event_from_game}")
 

@@ -553,7 +553,7 @@ NOVA|73-4|Happy Otaku Pack Vol.19|True|6|8|10|
 Heaven's Gradius|73-5|Happy Otaku Pack Vol.19|True|6|8|10|
 Ray Tuning|74-0|CHUNITHM COURSE MUSE|True|6|8|10|
 World Vanquisher|74-1|CHUNITHM COURSE MUSE|True|6|8|10|11
-Tsukuyomi Ni Naru|74-2|CHUNITHM COURSE MUSE|False|5|7|9|
+Tsukuyomi Ni Naru Replaced|74-2|CHUNITHM COURSE MUSE|True|5|7|9|
 The wheel to the right|74-3|CHUNITHM COURSE MUSE|True|5|7|9|11
 Climax|74-4|CHUNITHM COURSE MUSE|True|4|8|11|11
 Spider's Thread|74-5|CHUNITHM COURSE MUSE|True|5|8|10|12
@@ -567,3 +567,16 @@ SUPERHERO|75-0|Novice Rider Pack|False|2|4|7|
 Highway_Summer|75-1|Novice Rider Pack|True|2|4|6|
 Mx. Black Box|75-2|Novice Rider Pack|True|5|7|9|
 Sweet Encounter|75-3|Novice Rider Pack|True|2|4|7|
+Echo over you... Secret|0-55|Default Music|False|6|8|10|
+Echo over you...|0-56|Default Music|False|1|4|0|
+Tsukuyomi Ni Naru|74-6|CHUNITHM COURSE MUSE|True|5|8|10|
+disco light|76-0|MUSE RADIO FM105|True|5|7|9|
+room light feat.chancylemon|76-1|MUSE RADIO FM105|True|3|5|7|
+Invisible|76-2|MUSE RADIO FM105|True|3|5|8|
+Christmas Season-LLABB|76-3|MUSE RADIO FM105|True|1|4|7|
+Hyouryu|77-0|Let's Rhythm Jam!|False|6|8|10|
+The Whole Rest|77-1|Let's Rhythm Jam!|False|5|8|10|11
+Hydra|77-2|Let's Rhythm Jam!|False|4|7|11|
+Pastel Lines|77-3|Let's Rhythm Jam!|False|3|6|9|
+LINK x LIN#S|77-4|Let's Rhythm Jam!|False|3|6|9|
+Arcade ViruZ|77-5|Let's Rhythm Jam!|False|6|8|10|
