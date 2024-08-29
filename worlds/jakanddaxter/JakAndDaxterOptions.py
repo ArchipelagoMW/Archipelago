@@ -51,7 +51,8 @@ class GlobalOrbsanityBundleSize(Choice):
     option_500_orbs = 500
     option_1000_orbs = 1000
     option_2000_orbs = 2000
-    friendly_minimum = 5
+    multiplayer_minimum = 5
+    multiplayer_maximum = 400
     default = 20
 
 
@@ -65,7 +66,7 @@ class PerLevelOrbsanityBundleSize(Choice):
     option_10_orbs = 10
     option_25_orbs = 25
     option_50_orbs = 50
-    friendly_minimum = 5
+    multiplayer_minimum = 5
     default = 25
 
 
@@ -74,7 +75,8 @@ class FireCanyonCellCount(Range):
     display_name = "Fire Canyon Cell Count"
     range_start = 0
     range_end = 100
-    friendly_maximum = 30
+    multiplayer_maximum = 30
+    singleplayer_maximum = 34
     default = 20
 
 
@@ -83,7 +85,8 @@ class MountainPassCellCount(Range):
     display_name = "Mountain Pass Cell Count"
     range_start = 0
     range_end = 100
-    friendly_maximum = 60
+    multiplayer_maximum = 60
+    singleplayer_maximum = 63
     default = 45
 
 
@@ -92,7 +95,8 @@ class LavaTubeCellCount(Range):
     display_name = "Lava Tube Cell Count"
     range_start = 0
     range_end = 100
-    friendly_maximum = 90
+    multiplayer_maximum = 90
+    singleplayer_maximum = 99
     default = 72
 
 
@@ -105,7 +109,7 @@ class CitizenOrbTradeAmount(Range):
     display_name = "Citizen Orb Trade Amount"
     range_start = 0
     range_end = 222
-    friendly_maximum = 120
+    multiplayer_maximum = 120
     default = 90
 
 
@@ -118,7 +122,7 @@ class OracleOrbTradeAmount(Range):
     display_name = "Oracle Orb Trade Amount"
     range_start = 0
     range_end = 333
-    friendly_maximum = 150
+    multiplayer_maximum = 150
     default = 120
 
 

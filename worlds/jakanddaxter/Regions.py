@@ -126,5 +126,5 @@ def create_regions(world: JakAndDaxterWorld):
         multiworld.completion_condition[player] = lambda state: state.can_reach(fd, "Region", player)
 
     else:
-        raise OptionError(f"Unknown completion goal ID ({options.jak_completion_condition.value}).")
-
+        raise OptionError(f"{world.player_name}: Unknown completion goal ID "
+                          f"({options.jak_completion_condition.value}).")

@@ -122,62 +122,94 @@ def can_fight(state: CollectionState, player: int) -> bool:
     return state.has_any({"Jump Dive", "Jump Kick", "Punch", "Kick"}, player)
 
 
-def enforce_multiplayer_limits(options: JakAndDaxterOptions):
+def enforce_multiplayer_limits(world: JakAndDaxterWorld):
+    options = world.options
     friendly_message = ""
 
     if (options.enable_orbsanity == EnableOrbsanity.option_global
-            and options.global_orbsanity_bundle_size.value < GlobalOrbsanityBundleSize.friendly_minimum):
+            and (options.global_orbsanity_bundle_size.value < GlobalOrbsanityBundleSize.multiplayer_minimum
+                 or options.global_orbsanity_bundle_size.value > GlobalOrbsanityBundleSize.multiplayer_maximum)):
         friendly_message += (f"  "
                              f"{options.global_orbsanity_bundle_size.display_name} must be no less than "
-                             f"{GlobalOrbsanityBundleSize.friendly_minimum} (currently "
+                             f"{GlobalOrbsanityBundleSize.multiplayer_minimum} and no greater than"
+                             f"{GlobalOrbsanityBundleSize.multiplayer_maximum} (currently "
                              f"{options.global_orbsanity_bundle_size.value}).\n")
 
     if (options.enable_orbsanity == EnableOrbsanity.option_per_level
-            and options.level_orbsanity_bundle_size.value < PerLevelOrbsanityBundleSize.friendly_minimum):
+            and options.level_orbsanity_bundle_size.value < PerLevelOrbsanityBundleSize.multiplayer_minimum):
         friendly_message += (f"  "
                              f"{options.level_orbsanity_bundle_size.display_name} must be no less than "
-                             f"{PerLevelOrbsanityBundleSize.friendly_minimum} (currently "
+                             f"{PerLevelOrbsanityBundleSize.multiplayer_minimum} (currently "
                              f"{options.level_orbsanity_bundle_size.value}).\n")
 
-    if options.fire_canyon_cell_count.value > FireCanyonCellCount.friendly_maximum:
+    if options.fire_canyon_cell_count.value > FireCanyonCellCount.multiplayer_maximum:
         friendly_message += (f"  "
                              f"{options.fire_canyon_cell_count.display_name} must be no greater than "
-                             f"{FireCanyonCellCount.friendly_maximum} (currently "
+                             f"{FireCanyonCellCount.multiplayer_maximum} (currently "
                              f"{options.fire_canyon_cell_count.value}).\n")
 
-    if options.mountain_pass_cell_count.value > MountainPassCellCount.friendly_maximum:
+    if options.mountain_pass_cell_count.value > MountainPassCellCount.multiplayer_maximum:
         friendly_message += (f"  "
                              f"{options.mountain_pass_cell_count.display_name} must be no greater than "
-                             f"{MountainPassCellCount.friendly_maximum} (currently "
+                             f"{MountainPassCellCount.multiplayer_maximum} (currently "
                              f"{options.mountain_pass_cell_count.value}).\n")
 
-    if options.lava_tube_cell_count.value > LavaTubeCellCount.friendly_maximum:
+    if options.lava_tube_cell_count.value > LavaTubeCellCount.multiplayer_maximum:
         friendly_message += (f"  "
                              f"{options.lava_tube_cell_count.display_name} must be no greater than "
-                             f"{LavaTubeCellCount.friendly_maximum} (currently "
+                             f"{LavaTubeCellCount.multiplayer_maximum} (currently "
                              f"{options.lava_tube_cell_count.value}).\n")
 
-    if options.citizen_orb_trade_amount.value > CitizenOrbTradeAmount.friendly_maximum:
+    if options.citizen_orb_trade_amount.value > CitizenOrbTradeAmount.multiplayer_maximum:
         friendly_message += (f"  "
                              f"{options.citizen_orb_trade_amount.display_name} must be no greater than "
-                             f"{CitizenOrbTradeAmount.friendly_maximum} (currently "
+                             f"{CitizenOrbTradeAmount.multiplayer_maximum} (currently "
                              f"{options.citizen_orb_trade_amount.value}).\n")
 
-    if options.oracle_orb_trade_amount.value > OracleOrbTradeAmount.friendly_maximum:
+    if options.oracle_orb_trade_amount.value > OracleOrbTradeAmount.multiplayer_maximum:
         friendly_message += (f"  "
                              f"{options.oracle_orb_trade_amount.display_name} must be no greater than "
-                             f"{OracleOrbTradeAmount.friendly_maximum} (currently "
+                             f"{OracleOrbTradeAmount.multiplayer_maximum} (currently "
                              f"{options.oracle_orb_trade_amount.value}).\n")
 
     if friendly_message != "":
-        raise OptionError(f"Please adjust the following Options for a multiplayer game.\n"
+        raise OptionError(f"{world.player_name}: Please adjust the following Options for a multiplayer game.\n"
                           f"{friendly_message}")
+
+
+def enforce_singleplayer_limits(world: JakAndDaxterWorld):
+    options = world.options
+    friendly_message = ""
+
+    if options.fire_canyon_cell_count.value > FireCanyonCellCount.singleplayer_maximum:
+        friendly_message += (f"  "
+                             f"{options.fire_canyon_cell_count.display_name} must be no greater than "
+                             f"{FireCanyonCellCount.singleplayer_maximum} (currently "
+                             f"{options.fire_canyon_cell_count.value}).\n")
+
+    if options.mountain_pass_cell_count.value > MountainPassCellCount.singleplayer_maximum:
+        friendly_message += (f"  "
+                             f"{options.mountain_pass_cell_count.display_name} must be no greater than "
+                             f"{MountainPassCellCount.singleplayer_maximum} (currently "
+                             f"{options.mountain_pass_cell_count.value}).\n")
+
+    if options.lava_tube_cell_count.value > LavaTubeCellCount.singleplayer_maximum:
+        friendly_message += (f"  "
+                             f"{options.lava_tube_cell_count.display_name} must be no greater than "
+                             f"{LavaTubeCellCount.singleplayer_maximum} (currently "
+                             f"{options.lava_tube_cell_count.value}).\n")
+
+    if friendly_message != "":
+        raise OptionError(f"The options you have chosen may result in seed generation failures."
+                          f"Please adjust the following Options for a singleplayer game.\n"
+                          f"{friendly_message} "
+                          f"Or set 'enforce_friendly_options' in host.yaml to false. (Use at your own risk!)")
 
 
 def verify_orb_trade_amounts(world: JakAndDaxterWorld):
 
     if world.total_trade_orbs > 2000:
-        raise OptionError(f"Required number of orbs for all trades ({world.total_trade_orbs}) "
-                          f"is more than all the orbs in the game (2000). "
-                          f"Reduce the value of either {world.options.citizen_orb_trade_amount.display_name} "
+        raise OptionError(f"{world.player_name}: Required number of orbs for all trades ({world.total_trade_orbs}) "
+                          f"is more than all the orbs in the game (2000). Reduce the value of either "
+                          f"{world.options.citizen_orb_trade_amount.display_name} "
                           f"or {world.options.oracle_orb_trade_amount.display_name}.")

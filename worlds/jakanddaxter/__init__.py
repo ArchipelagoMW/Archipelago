@@ -130,12 +130,16 @@ class JakAndDaxterWorld(World):
         # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
         # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
         enforce_friendly_options = Utils.get_settings()["jakanddaxter_options"]["enforce_friendly_options"]
-        if self.multiworld.players > 1 and enforce_friendly_options:
-            from .Rules import enforce_multiplayer_limits
-            enforce_multiplayer_limits(self.options)
+        if enforce_friendly_options:
+            if self.multiworld.players > 1:
+                from .Rules import enforce_multiplayer_limits
+                enforce_multiplayer_limits(self)
+            else:
+                from .Rules import enforce_singleplayer_limits
+                enforce_singleplayer_limits(self)
 
         # Verify that we didn't overload the trade amounts with more orbs than exist in the world.
-        # This is easy to do by accident even in a single-player world.
+        # This is easy to do by accident even in a singleplayer world.
         self.total_trade_orbs = (9 * self.options.citizen_orb_trade_amount) + (6 * self.options.oracle_orb_trade_amount)
         from .Rules import verify_orb_trade_amounts
         verify_orb_trade_amounts(self)
