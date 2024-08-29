@@ -1,7 +1,9 @@
 import unittest
+from typing import cast
 from unittest.mock import MagicMock, Mock
 
-from ..stardew_rule import Received, And, Or, HasProgressionPercent, false_, true_
+from .. import StardewRule
+from ..stardew_rule import Received, And, Or, HasProgressionPercent, false_, true_, Count
 
 
 class TestSimplification(unittest.TestCase):
@@ -72,7 +74,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
         collection_state = MagicMock()
         other_rule = MagicMock()
         other_rule.evaluate_while_simplifying = Mock(return_value=(other_rule, expected_result))
-        rule = And(Or(other_rule))
+        rule = And(Or(cast(StardewRule, other_rule)))
 
         _, actual_result = rule.evaluate_while_simplifying(collection_state)
 
@@ -101,8 +103,9 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
     def test_short_circuit_when_combinable_rules_is_false(self):
         collection_state = MagicMock()
+        collection_state.has = Mock(return_value=False)
         other_rule = MagicMock()
-        rule = And(HasProgressionPercent(1, 10), other_rule)
+        rule = And(Received("Potato", 1, 10), cast(StardewRule, other_rule))
 
         rule.evaluate_while_simplifying(collection_state)
 
@@ -110,16 +113,16 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
 
     def test_identity_is_removed_from_other_rules(self):
         collection_state = MagicMock()
-        rule = Or(false_, HasProgressionPercent(1, 10))
+        rule = Or(false_, Received("Potato", 1, 10))
 
         rule.evaluate_while_simplifying(collection_state)
 
         self.assertEqual(1, len(rule.current_rules))
-        self.assertIn(HasProgressionPercent(1, 10), rule.current_rules)
+        self.assertIn(Received("Potato", 1, 10), rule.current_rules)
 
     def test_complement_replaces_combinable_rules(self):
         collection_state = MagicMock()
-        rule = Or(HasProgressionPercent(1, 10), true_)
+        rule = Or(Received("Potato", 1, 10), true_)
 
         rule.evaluate_while_simplifying(collection_state)
 
@@ -129,7 +132,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
         expected_simplified = true_
         expected_result = True
         collection_state = MagicMock()
-        rule = Or(Or(expected_simplified), HasProgressionPercent(1, 10))
+        rule = Or(Or(expected_simplified), Received("Potato", 1, 10))
 
         actual_simplified, actual_result = rule.evaluate_while_simplifying(collection_state)
 
@@ -141,7 +144,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
         collection_state = MagicMock()
         other_rule = MagicMock()
         other_rule.evaluate_while_simplifying = Mock(return_value=(other_rule, False))
-        rule = Or(other_rule, HasProgressionPercent(1, 10))
+        rule = Or(cast(StardewRule, other_rule), Received("Potato", 1, 10))
 
         rule.evaluate_while_simplifying(collection_state)
         other_rule.assert_not_called()
@@ -157,7 +160,7 @@ class TestEvaluateWhileSimplifying(unittest.TestCase):
         a_rule.evaluate_while_simplifying = Mock(return_value=(a_rule, False))
         another_rule = MagicMock()
         another_rule.evaluate_while_simplifying = Mock(return_value=(another_rule, False))
-        rule = And(a_rule, another_rule)
+        rule = And(cast(StardewRule, a_rule), cast(StardewRule, another_rule))
 
         rule.evaluate_while_simplifying(collection_state)
         # This test is completely messed up because sets are used internally and order of the rules cannot be ensured.
@@ -183,7 +186,7 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
     def test_nested_call_in_the_internal_rule_being_evaluated_does_check_the_internal_rule(self):
         collection_state = MagicMock()
         internal_rule = MagicMock()
-        rule = Or(internal_rule)
+        rule = Or(cast(StardewRule, internal_rule))
 
         called_once = False
         internal_call_result = None
@@ -212,7 +215,7 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
         an_internal_rule.evaluate_while_simplifying = Mock(return_value=(an_internal_rule, True))
         another_internal_rule = MagicMock()
         another_internal_rule.evaluate_while_simplifying = Mock(return_value=(another_internal_rule, True))
-        rule = Or(an_internal_rule, another_internal_rule)
+        rule = Or(cast(StardewRule, an_internal_rule), cast(StardewRule, another_internal_rule))
 
         rule.evaluate_while_simplifying(collection_state)
         # This test is completely messed up because sets are used internally and order of the rules cannot be ensured.
@@ -242,3 +245,61 @@ class TestEvaluateWhileSimplifyingDoubleCalls(unittest.TestCase):
         self.assertTrue(called_once)
         self.assertTrue(internal_call_result)
         self.assertTrue(actual_result)
+
+
+class TestCount(unittest.TestCase):
+
+    def test_duplicate_rule_count_double(self):
+        expected_result = True
+        collection_state = MagicMock()
+        simplified_rule = Mock()
+        other_rule = Mock(spec=StardewRule)
+        other_rule.evaluate_while_simplifying = Mock(return_value=(simplified_rule, expected_result))
+        rule = Count([cast(StardewRule, other_rule), other_rule, other_rule], 2)
+
+        actual_result = rule(collection_state)
+
+        other_rule.evaluate_while_simplifying.assert_called_once_with(collection_state)
+        self.assertEqual(expected_result, actual_result)
+
+    def test_simplified_rule_is_reused(self):
+        expected_result = False
+        collection_state = MagicMock()
+        simplified_rule = Mock(return_value=expected_result)
+        other_rule = Mock(spec=StardewRule)
+        other_rule.evaluate_while_simplifying = Mock(return_value=(simplified_rule, expected_result))
+        rule = Count([cast(StardewRule, other_rule), cast(StardewRule, other_rule), cast(StardewRule, other_rule)], 2)
+
+        actual_result = rule(collection_state)
+
+        other_rule.evaluate_while_simplifying.assert_called_once_with(collection_state)
+        self.assertEqual(expected_result, actual_result)
+
+        other_rule.evaluate_while_simplifying.reset_mock()
+
+        actual_result = rule(collection_state)
+
+        other_rule.evaluate_while_simplifying.assert_not_called()
+        simplified_rule.assert_called()
+        self.assertEqual(expected_result, actual_result)
+
+    def test_break_if_not_enough_rule_to_complete(self):
+        expected_result = False
+        collection_state = MagicMock()
+        simplified_rule = Mock()
+        never_called_rule = Mock()
+        other_rule = Mock(spec=StardewRule)
+        other_rule.evaluate_while_simplifying = Mock(return_value=(simplified_rule, expected_result))
+        rule = Count([cast(StardewRule, other_rule)] * 4, 2)
+
+        actual_result = rule(collection_state)
+
+        other_rule.evaluate_while_simplifying.assert_called_once_with(collection_state)
+        never_called_rule.assert_not_called()
+        never_called_rule.evaluate_while_simplifying.assert_not_called()
+        self.assertEqual(expected_result, actual_result)
+
+    def test_evaluate_without_shortcircuit_when_rules_are_all_different(self):
+        rule = Count([cast(StardewRule, Mock()) for i in range(5)], 2)
+
+        self.assertEqual(rule.evaluate, rule.evaluate_without_shortcircuit)
