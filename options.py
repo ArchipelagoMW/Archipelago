@@ -8,7 +8,7 @@ class Goal(Choice):
     Golden Diva: Defeat the four main passage bosses, reach the depths of the pyramid, and defeat the Golden Diva
     Golden Treasure Hunt: Find the golden treasures scattered in the world, and escape through the Sound Room
     Golden Diva Treasure Hunt: Find the golden treasures, and then defeat the Golden Diva
-    Local Golden Treasure Hunt: Find the treasures scattered in the pyramid and esape through the Sound Room
+    Local Golden Treasure Hunt: Find the treasures scattered in the pyramid and escape through the Sound Room
     Local Golden Diva Treasure Hunt: Find the golden treasures in the pyramid and defeat the Golden Diva
     """
     display_name = 'Goal'
@@ -47,7 +47,7 @@ class GoldenTreasureCount(Range):
 class Difficulty(Choice):
     """
     The game's difficulty level.
-    Hard and S-Hard have slightly less locations to check since some Full Health item boxes are missing on those difficulties.
+    Hard and S-Hard have slightly fewer locations to check since some Full Health item boxes are missing on those difficulties.
     """
     display_name = 'Difficulty'
     option_normal = 0
@@ -59,8 +59,7 @@ class Difficulty(Choice):
 class Logic(Choice):
     """
     Advanced logic enables some strategies that are more difficult or can risk forcing a Give Up, many of which involve Grab.
-    The list of tricks in advanced logic can be found at https://discord.com/channels/731205301247803413/1079899101732290620/1203556009776250931
-    Videos of some tricks can be found at https://www.youtube.com/playlist?list=PL9fyDZ3k7Qw0WclTCDDImKQDjNi2Sy0Gp
+    A list of these strategies can be found on the game page.
     """
     display_name = 'Logic'
     option_basic = 0
@@ -137,7 +136,7 @@ class SmashThroughHardBlocks(Toggle):
 class MultiworldSend(Choice):
     """
     When to tell the server you've found items.
-    On escape: Only count your locations after the game saves.
+    On Escape: Only count your locations after the game saves.
     Immediately: Count your locations as you take them from the box.
     Regardless of this setting, sending other players items from a level you can't clear is not in logic.
     """
@@ -164,8 +163,8 @@ class MusicShuffle(Choice):
     """
     Music shuffle type
     None: Music is not shuffled
-    Levels only: Only shuffle music between the main levels
-    Levels and extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
+    Levels Only: Only shuffle music between the main levels
+    Levels And Extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
     Full: Shuffle all music
     Disabled: Disable all music
     """
