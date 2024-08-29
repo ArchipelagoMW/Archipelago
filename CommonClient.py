@@ -662,18 +662,18 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def make_gui(self) -> "kvui.GameManager":
-        """To return the object needed for run_gui so it can be overridden before being built"""
+    def make_gui(self) -> type:
+        """To return the Kivy App class needed for run_gui so it can be overridden before being built"""
         from kvui import GameManager
 
         class TextManager(GameManager):
             base_title = "Archipelago Text Client"
 
-        return GameManager(self)
+        return TextManager
 
     def run_gui(self):
         """Import kivy UI system from make_gui() and start running it as self.ui_task."""
-        self.ui = self.make_gui()
+        self.ui = self.make_gui()(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def run_cli(self):
