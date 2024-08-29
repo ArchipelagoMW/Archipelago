@@ -103,11 +103,7 @@ h3 {
     gap: 1rem;
 }
 
-.inventory-grid.keys {
-    grid-template-columns: repeat(9, minmax(0, 1fr));
-}
-
-.inventory-grid.charms {
+.inventory-grid.keys, .inventory-grid.charms {
     grid-template-columns: repeat(10, minmax(0, 1fr));
 }
 
