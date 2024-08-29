@@ -74,7 +74,7 @@ def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
                                                 d[1][1][0] == passage and
                                                 d[1][1][1] == quad,
                                       item_table.items()))
-        elif val >> 5 == 1:
+        else:
             level = val & 3
             candidates = tuple(filter(lambda d: d[1][0] == ItemType.CD and
                                                 d[1][1] == (passage, level),
@@ -131,10 +131,9 @@ class ItemData(NamedTuple):
     def box(self):
         if self.type == ItemType.JEWEL:
             return self.id[1]
-        elif self.type == ItemType.CD:
+        if self.type == ItemType.CD:
             return Box.CD
-        else:
-            return None
+        return None
 
 
 item_table = {
@@ -207,9 +206,9 @@ item_table = {
 
 def filter_items(*, type: Optional[ItemType] = None, passage: Optional[Passage] = None) -> Iterable[Tuple[str, ItemData]]:
     items: Iterable[Tuple[str, ItemData]] = item_table.items()
-    if type != None:
+    if type is not None:
         items = filter(lambda i: i[1].type == type, items)
-    if passage != None:
+    if passage is not None:
         items = filter(lambda i: i[1].passage() == passage, items)
     return items
 

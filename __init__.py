@@ -55,7 +55,6 @@ class WL4World(World):
     options_dataclass = WL4Options
     options: WL4Options
     settings: ClassVar[WL4Settings]
-    topology_present = False
 
     item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()}
     location_name_to_id = location_name_to_id
@@ -72,7 +71,7 @@ class WL4World(World):
         'CDs': set(filter_item_names(type=ItemType.CD)),
         'Abilities': set(filter_item_names(type=ItemType.ABILITY)),
         'Golden Treasure': set(filter_item_names(type=ItemType.TREASURE)),
-        'Traps': { 'Wario Form Trap', 'Lightning Trap'},
+        'Traps': {'Wario Form Trap', 'Lightning Trap'},
         'Junk': {'Heart', 'Minigame Coin'},
     }
 
@@ -107,7 +106,7 @@ class WL4World(World):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
             self.options.local_items.value.update(self.item_name_groups['Golden Treasure'])
         if self.options.required_jewels > self.options.pool_jewels:
-            self.options.pool_jewels = PoolJewels(self.options.required_jewels)
+            self.options.pool_jewels = PoolJewels(self.options.required_jewels.value)
         if self.options.required_jewels >= 1 and self.options.golden_jewels == 0:
             self.options.golden_jewels = GoldenJewels(1)
 
@@ -119,16 +118,16 @@ class WL4World(World):
 
         passages = ('Emerald', 'Ruby', 'Topaz', 'Sapphire')
         for passage in passages:
-            location = self.multiworld.get_region(f'{passage} Passage Boss', self.player).locations[0]
+            location = self.get_region(f'{passage} Passage Boss').locations[0]
             location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
             location.show_in_spoiler = False
 
         if self.options.goal.needs_diva():
             goal = 'Golden Diva'
-        if self.options.goal.is_treasure_hunt():
+        else:  # Golden Treasure Hunt
             goal = 'Sound Room - Emergency Exit'
 
-        goal_loc = self.multiworld.get_location(goal, self.player)
+        goal_loc = self.get_location(goal)
         goal_loc.place_locked_item(self.create_item('Escape the Pyramid'))
         goal_loc.show_in_spoiler = False
 
@@ -174,22 +173,20 @@ class WL4World(World):
                 full_health_items -= 8
             else:
                 raise ValueError('Not enough locations to place abilities for '
-                                 f'{self.multiworld.player_name[self.player]}. '
-                                 'Set the "Required Jewels" setting to a lower '
-                                 'value and try again.')
+                                 f'{self.player_name}. Set the "Required '
+                                 'Jewels" setting to a lower value and try '
+                                 'again.')
 
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
 
-        if (treasure_hunt):
+        if treasure_hunt:
             for name in filter_item_names(type=ItemType.TREASURE):
                 itempool.append(self.create_item(name))
 
         junk_count = total_required_locations - len(itempool)
         junk_item_pool = tuple(filter_item_names(type=ItemType.ITEM))
-        for _ in range(junk_count):
-            item_name = self.multiworld.random.choice(junk_item_pool)
-            itempool.append(self.create_item(item_name))
+        itempool.extend(self.create_item(self.random.choice(junk_item_pool)) for _ in range(junk_count))
 
         self.multiworld.itempool += itempool
 

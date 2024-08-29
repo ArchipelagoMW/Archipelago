@@ -105,10 +105,9 @@ def make_boss_access_rule(world: WL4World, passage: Passage, jewels_needed: int)
 def set_access_rules(world: WL4World):
     for name, rule in location_rules.items():
         try:
-            location = world.multiworld.get_location(name, world.player)
+            location = world.get_location(name)
             location.access_rule = rule.apply_world(world)
-        except KeyError as k:
-            # Raise for invalid location names, not ones that aren't in this player's world
+        except KeyError:
             assert name in locations.location_table or name in locations.event_table, \
                 f"{name} is not a valid location name"
 

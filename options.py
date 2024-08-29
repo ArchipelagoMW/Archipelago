@@ -53,7 +53,7 @@ class Difficulty(Choice):
     option_normal = 0
     option_hard = 1
     option_s_hard = 2
-    default = 0
+    default = option_normal
 
 
 class Logic(Choice):

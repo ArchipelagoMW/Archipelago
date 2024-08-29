@@ -15,7 +15,7 @@ class TestHelpers(WL4TestBase):
         with self.subTest('Jewel Pieces'):
             pieces = items.filter_items(type=ItemType.JEWEL)
             assert all(map(lambda p: p[0].endswith('Piece'), pieces))
-            assert all(map(lambda p: p[1].type, pieces))
+            assert all(map(lambda p: p[1].type == ItemType.JEWEL, pieces))
 
         with self.subTest('CDs'):
             cds = items.filter_item_names(type=ItemType.CD)
