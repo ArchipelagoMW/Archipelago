@@ -346,7 +346,7 @@ Door - 0x3865F (Second Barrier) - 0x38663
 158164 - 0x09DB4 (Back First Row 9) - 0x09DB3 - Stars & Stars + Same Colored Symbol & Eraser & Colored Squares & Triangles
 158165 - 0x275FA (Hook Control) - True - Shapers & Eraser
 158167 - 0x0A3CB (Back Second Row 1) - 0x09DB4 - Black/White Squares & Colored Squares & Eraser & Shapers
-158168 - 0x0A3CC (Back Second Row 2) - 0x0A3CB - Stars & Stars + Same Colored Symbol & & Eraser & Shapers
+158168 - 0x0A3CC (Back Second Row 2) - 0x0A3CB - Stars & Stars + Same Colored Symbol & Eraser & Shapers
 158169 - 0x0A3D0 (Back Second Row 3) - 0x0A3CC - Triangles & Eraser & Shapers
 159401 - 0x005F6 (Hook EP) - 0x275FA & 0x03852 & 0x3865F - True
 
