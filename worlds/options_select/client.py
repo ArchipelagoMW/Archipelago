@@ -97,6 +97,7 @@ class YamlCreator(App):
     player_options: MainLayout
     option_layout: MainLayout
     name_input: TextInput
+    game_label: Label
     current_game: str
     options: typing.Dict[str, typing.Any]
 
@@ -288,10 +289,13 @@ class YamlCreator(App):
         self.option_layout.clear_widgets()
         self.options.clear()
         cls: typing.Type[World] = world_button.world_cls
+
         self.current_game = cls.game
         if not cls.web.options_page:
+            self.current_game = "None"
             return
         elif isinstance(cls.web.options_page, str):
+            self.current_game = "None"
             if validate_url(cls.web.options_page):
                 webbrowser.open(cls.web.options_page)
             else:
@@ -309,6 +313,7 @@ class YamlCreator(App):
                 if option is not Removed and option.visibility & Visibility.simple_ui:
                     new_scroll.layout.add_widget(self.create_option(option, name))
             self.option_layout.add_widget(new_scroll)
+        self.game_label.text = f"Game: {self.current_game}"
 
     def build(self):
         self.options = {}
@@ -328,13 +333,17 @@ class YamlCreator(App):
         self.main_panel = MainLayout(rows=2)
         self.player_options = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(60))
         name_box = BoxLayout(orientation="vertical")
+        button_box = BoxLayout(orientation="vertical")
+        self.game_label = Label(text="Game: None")
+        button_box.add_widget(self.game_label)
         name_box.add_widget(Label(text="Player Name"))
         self.name_input = TextInput(multiline=False)
         name_box.add_widget(self.name_input)
         self.player_options.add_widget(name_box)
         export_button = Button(text="Export Options")
         export_button.bind(on_press=self.export_options)
-        self.player_options.add_widget(export_button)
+        button_box.add_widget(export_button)
+        self.player_options.add_widget(button_box)
         self.option_layout = MainLayout(cols=1)
         self.main_panel.add_widget(self.player_options)
         self.main_panel.add_widget(self.option_layout)
