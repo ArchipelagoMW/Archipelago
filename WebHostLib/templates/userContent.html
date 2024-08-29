@@ -90,7 +90,7 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ seed.creation_time.strftime("%Y-%m-%d %H:%M") }}</td>
-                                <td><a href="{{ url_for("disown_seed", seed=seed.id) }}">Delete next maintenance.</td>
+                                <td><a href="{{ url_for("disown_seed", seed=seed.id) }}">Delete next maintenance.</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
