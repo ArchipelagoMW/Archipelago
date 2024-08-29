@@ -94,9 +94,9 @@ class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def get_base_rom_path(file_name: str = '') -> Path:
-    options = Utils.get_options()
+    from . import WL4World
     if not file_name:
-        file_name = options['wl4_options']['rom_file']
+        file_name = WL4World.settings.rom_file
 
     file_path = Path(file_name)
     if file_path.exists():
