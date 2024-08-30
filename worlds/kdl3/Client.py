@@ -36,8 +36,10 @@ KDL3_STARS_FLAG = SRAM_1_START + 0x901A
 KDL3_GIFTING_FLAG = SRAM_1_START + 0x901C
 KDL3_LEVEL_ADDR = SRAM_1_START + 0x9020
 KDL3_IS_DEMO = SRAM_1_START + 0x5AD5
-KDL3_GAME_STATE = SRAM_1_START + 0x36D0
 KDL3_GAME_SAVE = SRAM_1_START + 0x3617
+KDL3_CURRENT_WORLD = SRAM_1_START + 0x363F
+KDL3_CURRENT_LEVEL = SRAM_1_START + 0x3641
+KDL3_GAME_STATE = SRAM_1_START + 0x36D0
 KDL3_LIFE_COUNT = SRAM_1_START + 0x39CF
 KDL3_KIRBY_HP = SRAM_1_START + 0x39D1
 KDL3_BOSS_HP = SRAM_1_START + 0x39D5
@@ -46,8 +48,6 @@ KDL3_LIFE_VISUAL = SRAM_1_START + 0x39E3
 KDL3_HEART_STARS = SRAM_1_START + 0x53A7
 KDL3_WORLD_UNLOCK = SRAM_1_START + 0x53CB
 KDL3_LEVEL_UNLOCK = SRAM_1_START + 0x53CD
-KDL3_CURRENT_WORLD = SRAM_1_START + 0x53CF
-KDL3_CURRENT_LEVEL = SRAM_1_START + 0x53D3
 KDL3_BOSS_STATUS = SRAM_1_START + 0x53D5
 KDL3_INVINCIBILITY_TIMER = SRAM_1_START + 0x54B1
 KDL3_MG5_STATUS = SRAM_1_START + 0x5EE4
@@ -74,7 +74,9 @@ deathlink_messages = defaultdict(lambda: " was defeated.", {
     0x0202: " was out-numbered by Pon & Con.",
     0x0203: " was defeated by Ado's powerful paintings.",
     0x0204: " was clobbered by King Dedede.",
-    0x0205: " lost their battle against Dark Matter."
+    0x0205: " lost their battle against Dark Matter.",
+    0x0300: " couldn't overcome the Boss Butch.",
+    0x0400: " is bad at jumping.",
 })
 
 
@@ -281,6 +283,11 @@ class KDL3SNIClient(SNIClient):
                 for i in range(5):
                     level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
                     self.levels[i] = unpack("HHHHHHH", level_data)
+                self.levels[5] = [0x0205,  # Hyper Zone
+                                  0,  # MG-5, can't send from here
+                                  0x0300,  # Boss Butch
+                                  0x0400,  # Jumping
+                                  0, 0, 0]
 
             if self.consumables is None:
                 consumables = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
@@ -314,7 +321,7 @@ class KDL3SNIClient(SNIClient):
                 current_world = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_WORLD, 2))[0]
                 current_level = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_LEVEL, 2))[0]
                 currently_dead = current_hp[0] == 0x00
-                message = deathlink_messages[self.levels[current_world][current_level - 1]]
+                message = deathlink_messages[self.levels[current_world][current_level]]
                 await ctx.handle_deathlink_state(currently_dead, f"{ctx.player_names[ctx.slot]}{message}")
 
             recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 2)
@@ -323,9 +330,9 @@ class KDL3SNIClient(SNIClient):
                 item = ctx.items_received[recv_amount]
                 recv_amount += 1
                 logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                    color(ctx.item_names[item.item], 'red', 'bold'),
+                    color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                     color(ctx.player_names[item.player], 'yellow'),
-                    ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
+                    ctx.location_names.lookup_in_slot(item.location, item.player), recv_amount, len(ctx.items_received)))
 
                 snes_buffered_write(ctx, KDL3_RECV_COUNT, pack("H", recv_amount))
                 item_idx = item.item & 0x00000F
@@ -408,7 +415,7 @@ class KDL3SNIClient(SNIClient):
 
             for new_check_id in new_checks:
                 ctx.locations_checked.add(new_check_id)
-                location = ctx.location_names[new_check_id]
+                location = ctx.location_names.lookup_in_game(new_check_id)
                 snes_logger.info(
                     f'New Check: {location} ({len(ctx.locations_checked)}/'
                     f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')

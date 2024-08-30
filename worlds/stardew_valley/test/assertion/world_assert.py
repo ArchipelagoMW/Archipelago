@@ -13,7 +13,7 @@ def get_all_item_names(multiworld: MultiWorld) -> List[str]:
 
 
 def get_all_location_names(multiworld: MultiWorld) -> List[str]:
-    return [location.name for location in multiworld.get_locations() if not location.event]
+    return [location.name for location in multiworld.get_locations() if location.address is not None]
 
 
 class WorldAssertMixin(RuleAssertMixin, TestCase):
@@ -33,14 +33,14 @@ class WorldAssertMixin(RuleAssertMixin, TestCase):
         self.assert_can_reach_victory(multiworld)
         multiworld.state.remove(item)
         self.assert_cannot_reach_victory(multiworld)
-        multiworld.state.collect(item, event=False)
+        multiworld.state.collect(item, prevent_sweep=False)
         self.assert_can_reach_victory(multiworld)
 
     def assert_item_was_not_necessary_for_victory(self, item: StardewItem, multiworld: MultiWorld):
         self.assert_can_reach_victory(multiworld)
         multiworld.state.remove(item)
         self.assert_can_reach_victory(multiworld)
-        multiworld.state.collect(item, event=False)
+        multiworld.state.collect(item, prevent_sweep=False)
         self.assert_can_reach_victory(multiworld)
 
     def assert_can_win(self, multiworld: MultiWorld):
@@ -48,12 +48,12 @@ class WorldAssertMixin(RuleAssertMixin, TestCase):
         self.assert_can_reach_victory(multiworld)
 
     def assert_same_number_items_locations(self, multiworld: MultiWorld):
-        non_event_locations = [location for location in multiworld.get_locations() if not location.event]
+        non_event_locations = [location for location in multiworld.get_locations() if location.address is not None]
         self.assertEqual(len(multiworld.itempool), len(non_event_locations))
 
     def assert_can_reach_everything(self, multiworld: MultiWorld):
         for location in multiworld.get_locations():
-            self.assert_rule_true(location.access_rule, multiworld.state)
+            self.assert_reach_location_true(location, multiworld.state)
 
     def assert_basic_checks(self, multiworld: MultiWorld):
         self.assert_same_number_items_locations(multiworld)

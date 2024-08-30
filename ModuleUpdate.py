@@ -70,7 +70,7 @@ def install_pkg_resources(yes=False):
         subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools"])
 
 
-def update(yes=False, force=False):
+def update(yes: bool = False, force: bool = False) -> None:
     global update_ran
     if not update_ran:
         update_ran = True

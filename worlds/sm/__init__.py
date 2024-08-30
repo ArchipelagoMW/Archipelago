@@ -99,7 +99,6 @@ class SMWorld(World):
 
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 3
     option_definitions = sm_options
     settings: typing.ClassVar[SMSettings]
 
@@ -358,16 +357,26 @@ class SMWorld(World):
     def post_fill(self):
         def get_player_ItemLocation(progression_only: bool):
             return [
-                    ItemLocation(copy.copy(ItemManager.Items[
-                        itemLoc.item.type if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                        'ArchipelagoItem']),
-                        copy.copy(locationsDict[itemLoc.name] if itemLoc.game == self.game else
-                                    locationsDict[first_local_collected_loc.name]),
-                        itemLoc.item.player,
-                        True)
-                        for itemLoc in spheres if itemLoc.item.player == self.player and (not progression_only or itemLoc.item.advancement)
-                    ]
-        
+                ItemLocation(
+                    copy.copy(
+                        ItemManager.Items[
+                            itemLoc.item.type
+                            if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items
+                            else 'ArchipelagoItem'
+                        ]
+                    ),
+                    copy.copy(
+                        locationsDict[itemLoc.name]
+                        if itemLoc.game == self.game
+                        else locationsDict[first_local_collected_loc.name]
+                    ),
+                    itemLoc.item.player,
+                    True
+                )
+                for itemLoc in spheres
+                if itemLoc.item.player == self.player and (not progression_only or itemLoc.item.advancement)
+            ]
+
         # Having a sorted itemLocs from collection order is required for escapeTrigger when Tourian is Disabled.
         # We cant use stage_post_fill for this as its called after worlds' post_fill.
         # get_spheres could be cached in multiworld?

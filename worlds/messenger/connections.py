@@ -567,15 +567,6 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
             "Elemental Skylands - Earth Generator Shop",
         ],
         "Earth Generator Shop": [
-            "Elemental Skylands - Fire Shmup",
-        ],
-        "Fire Shmup": [
-            "Elemental Skylands - Fire Intro Shop",
-        ],
-        "Fire Intro Shop": [
-            "Elemental Skylands - Fire Generator Shop",
-        ],
-        "Fire Generator Shop": [
             "Elemental Skylands - Water Shmup",
         ],
         "Water Shmup": [
@@ -585,6 +576,15 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
             "Elemental Skylands - Water Generator Shop",
         ],
         "Water Generator Shop": [
+            "Elemental Skylands - Fire Shmup",
+        ],
+        "Fire Shmup": [
+            "Elemental Skylands - Fire Intro Shop",
+        ],
+        "Fire Intro Shop": [
+            "Elemental Skylands - Fire Generator Shop",
+        ],
+        "Fire Generator Shop": [
             "Elemental Skylands - Right",
         ],
         "Right": [

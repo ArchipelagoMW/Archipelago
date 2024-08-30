@@ -1540,7 +1540,6 @@ def create_regions(self):
                     item = self.create_filler()
                 elif location.original_item == "Pokedex":
                     if self.multiworld.randomize_pokedex[self.player] == "vanilla":
-                        location_object.event = True
                         event = True
                     item = self.create_item("Pokedex")
                 elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
@@ -1561,7 +1560,7 @@ def create_regions(self):
                             <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                         item = self.create_item(self.select_trap())
 
-                if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement):
+                if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement) and location.original_item != "Exp. All":
                     continue
 
                 if item.name in start_inventory and start_inventory[item.name] > 0 and \
@@ -1948,7 +1947,7 @@ def create_regions(self):
                 for entrance in reversed(region.exits):
                     if isinstance(entrance, PokemonRBWarp):
                         region.exits.remove(entrance)
-            multiworld.regions.entrance_cache[self.player] = cache
+            multiworld.regions.entrance_cache[self.player] = cache.copy()
             if badge_locs:
                 for loc in badge_locs:
                     loc.item = None
@@ -2440,7 +2439,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             state_copy = state.copy()
             state_copy.collect(item, True)
-            state.sweep_for_events(locations=event_locations)
+            state.sweep_for_advancements(locations=event_locations)
             new_reachable_entrances = len([entrance for entrance in entrances if entrance in reachable_entrances or
                                            entrance.parent_region.can_reach(state_copy)])
             return new_reachable_entrances > len(reachable_entrances)
@@ -2481,7 +2480,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
         while entrances:
             state.update_reachable_regions(player)
-            state.sweep_for_events(locations=event_locations)
+            state.sweep_for_advancements(locations=event_locations)
 
             multiworld.random.shuffle(entrances)
 
