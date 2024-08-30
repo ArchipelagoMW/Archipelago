@@ -557,6 +557,10 @@ item_descriptions = {
     item_names.DEFILER: "Support caster. Can use the Dark Swarm, Consume, and Plague abilities.",
     item_names.INFESTED_MARINE: "General-purpose Infested infantry. Has a timed life of 90 seconds.",
     item_names.INFESTED_BUNKER: "Defensive structure. Periodically spawns Infested infantry that fight from inside. Acts as a mobile ground transport while uprooted.",
+    item_names.INFESTED_SIEGE_TANK: "Siege tank. Can uproot itself to provide mobile tank support. Can use the Deep Tunnel ability.",
+    item_names.INFESTED_DIAMONDBACK: "Fast, high-damage attacker. Can attack while moving and can bring flying units to the ground.",
+    item_names.INFESTED_BANSHEE: "Tactical-strike aircraft. Can cloak and can be upgraded to burrow.",
+    item_names.INFESTED_LIBERATOR: "Anti-Air flying attacker.  Attacks deal high area-damage.",
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "melee ground units"),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "ranged ground units"),
     item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE: GENERIC_UPGRADE_TEMPLATE.format("armor", ZERG, "ground units"),
@@ -674,6 +678,15 @@ item_descriptions = {
     item_names.NYDUS_WORM_RAVENOUS_APPETITE: "Allows Nydus Worms to unload and load units nearly instantly.",
     item_names.NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(DISPLAY_NAME_WORMS),
     item_names.OMEGA_WORM_OUROBOROS_STRAIN: "Allows Omega Worms to train a limited assortment of combat units (Zerglings, Roachs, Hydralisks, and Aberrations) at a reduced time and cost.",
+    item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS:  inspect.cleandoc("""
+        Level 1: Infested Siege Tanks generate 1 Volatile Biomass every 30 seconds.
+        Level 2: Infested Siege Tanks generate 1 Volatile Biomass every 10 seconds.
+    """),
+    item_names.INFESTED_SIEGE_TANK_ACIDIC_ENZYMES: "Infested Siege Tanks deal an additional 15 damage to armored units and structures in both modes.",
+    item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL: _ability_desc("Infested Siege Tanks", "Deep Tunnel", "allows them to burrow to any visible location on the map covered in creep"),
+    item_names.INFESTED_SIEGE_TANK_SATURATED_CULTURES: "Infested Diamondbacks leave behind a trail of acid when moving that deals 20 damage per second to enemy units.",
+    item_names.INFESTED_SIEGE_TANK_CAUSTIC_MUCUS: "Reduces the cooldown of the Infested Diamondback's Fungal Snare by 15 seconds.",
+    item_names.FRIGHTFUL_FLESHWELDER: "Reduces infested mechnical unit resource cost and build time by 30%.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",

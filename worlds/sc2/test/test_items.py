@@ -99,7 +99,8 @@ class TestItems(unittest.TestCase):
         progressive_groups: List[items.ItemTypeEnum] = [
             items.TerranItemType.Progressive,
             items.TerranItemType.Progressive_2,
-            items.ProtossItemType.Progressive
+            items.ProtossItemType.Progressive,
+            items.ZergItemType.Progressive
         ]
 
         quantities: List[int] = [
