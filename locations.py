@@ -1,6 +1,6 @@
-from typing import NamedTuple, Optional, Sequence, Tuple, Union
+from typing import NamedTuple, Optional, Sequence, Tuple
 
-from BaseClasses import Location, MultiWorld, Region
+from BaseClasses import Location, Region
 
 from .data import ap_id_offset
 from .options import Difficulty
@@ -11,7 +11,7 @@ class LocationData(NamedTuple):
     source: LocationType
     status_bit: Tuple[Passage, int, ItemFlag]
     region_in_level: Optional[str]
-    difficulties: Sequence[Difficulty]
+    difficulties: Sequence[int]
 
     def passage(self):
         return self.status_bit[0]
@@ -43,8 +43,6 @@ location_table = {
     'Hall of Hieroglyphs - Third Jewel Box':              LocationData(LocationType.BOX,   (Passage.ENTRY,    0, ItemFlag.JEWEL_SW),       None,              _ALL),
     'Hall of Hieroglyphs - Fourth Jewel Box':             LocationData(LocationType.BOX,   (Passage.ENTRY,    0, ItemFlag.JEWEL_NW),       None,              _ALL),
     'Hall of Hieroglyphs - Full Health Item Box':         LocationData(LocationType.BOX,   (Passage.ENTRY,    0, ItemFlag.FULL_HEALTH),    None,              _ALL),
-
-#   'Spoiled Rotten':                                     LocationData(LocationType.BOSS,  (Passage.ENTRY,    4, ItemFlag.KEYZER),         None,              _ALL),
 
     # Emerald Passage
     # Palm Tree Paradise
@@ -92,7 +90,6 @@ location_table = {
     'Monsoon Jungle - CD Box':                            LocationData(LocationType.BOX,   (Passage.EMERALD,  3, ItemFlag.CD),            'Upper',            _ALL),
     'Monsoon Jungle - Full Health Item Box':              LocationData(LocationType.BOX,   (Passage.EMERALD,  3, ItemFlag.FULL_HEALTH),   'Upper',            _ALL),
 
-    'Cractus':                                            LocationData(LocationType.BOSS,  (Passage.EMERALD,  4, ItemFlag.KEYZER),         None,              _ALL),
     'Cractus - 0:55':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Cractus - 0:35':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_SE),       None,              _ALL),
     'Cractus - 0:15':                                     LocationData(LocationType.CHEST, (Passage.EMERALD,  4, ItemFlag.JEWEL_SW),       None,              _ALL),
@@ -138,7 +135,6 @@ location_table = {
     'Pinball Zone - Pink Room Full Health Item Box':      LocationData(LocationType.BOX,   (Passage.RUBY,     3, ItemFlag.FULL_HEALTH),   'Late Rooms',       _S_HARD),
     'Pinball Zone - Rolling Room Full Health Item Box':   LocationData(LocationType.BOX,   (Passage.RUBY,     3, ItemFlag.FULL_HEALTH_2), 'Early Rooms',      _S_HARD),
 
-    'Cuckoo Condor':                                      LocationData(LocationType.BOSS,  (Passage.RUBY,     4, ItemFlag.KEYZER),         None,              _ALL),
     'Cuckoo Condor - 0:55':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Cuckoo Condor - 0:35':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_SE),       None,              _ALL),
     'Cuckoo Condor - 0:15':                               LocationData(LocationType.CHEST, (Passage.RUBY,     4, ItemFlag.JEWEL_SW),       None,              _ALL),
@@ -188,7 +184,6 @@ location_table = {
     'Domino Row - Keyzer Room Box':                       LocationData(LocationType.BOX,   (Passage.TOPAZ,    3, ItemFlag.JEWEL_NW),      'After Lake',       _ALL),
     'Domino Row - CD Box':                                LocationData(LocationType.BOX,   (Passage.TOPAZ,    3, ItemFlag.CD),            'After Lake',       _ALL),
 
-    'Aerodent':                                           LocationData(LocationType.BOSS,  (Passage.TOPAZ,    4, ItemFlag.KEYZER),         None,              _ALL),
     'Aerodent - 0:55':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Aerodent - 0:35':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_SE),       None,              _ALL),
     'Aerodent - 0:15':                                    LocationData(LocationType.CHEST, (Passage.TOPAZ,    4, ItemFlag.JEWEL_SW),       None,              _ALL),
@@ -232,7 +227,6 @@ location_table = {
     'Hotel Horror - Exterior Box':                        LocationData(LocationType.BOX,   (Passage.SAPPHIRE, 3, ItemFlag.JEWEL_NW),      'Hotel',            _HARDER),
     'Hotel Horror - CD Box':                              LocationData(LocationType.BOX,   (Passage.SAPPHIRE, 3, ItemFlag.CD),            'Switch Room',      _ALL),
 
-    'Catbat':                                             LocationData(LocationType.BOSS,  (Passage.SAPPHIRE, 4, ItemFlag.KEYZER),         None,              _ALL),
     'Catbat - 0:55':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_NE),       None,              _ALL),
     'Catbat - 0:35':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_SE),       None,              _ALL),
     'Catbat - 0:15':                                      LocationData(LocationType.CHEST, (Passage.SAPPHIRE, 4, ItemFlag.JEWEL_SW),       None,              _ALL),
@@ -243,42 +237,50 @@ location_table = {
     'Golden Passage - River Box':                         LocationData(LocationType.BOX,   (Passage.GOLDEN,   0, ItemFlag.JEWEL_SE),       'Passage',         _ALL),
     'Golden Passage - Bat Room Box':                      LocationData(LocationType.BOX,   (Passage.GOLDEN,   0, ItemFlag.JEWEL_SW),       'Passage',         _ALL),
     'Golden Passage - Mad Scienstein Box':                LocationData(LocationType.BOX,   (Passage.GOLDEN,   0, ItemFlag.JEWEL_NW),       'Passage',         _ALL),
+}
 
-    'Golden Diva':                                        LocationData(LocationType.BOSS,  (Passage.GOLDEN,   4, 0x10),                    None,              _ALL),
-
-    'Sound Room - Emergency Exit':                        LocationData(LocationType.EVENT, (None,          None, None),                    None,              _ALL),
+event_table = {
+    # 'Spoiled Rotten':              Passage.ENTRY,
+    'Cractus':                     Passage.EMERALD,
+    'Cuckoo Condor':               Passage.RUBY,
+    'Aerodent':                    Passage.TOPAZ,
+    'Catbat':                      Passage.SAPPHIRE,
+    'Golden Diva':                 Passage.GOLDEN,
+    'Sound Room - Emergency Exit': None,
 }
 
 
-location_name_to_id = {name: (ap_id_offset + index) for (index, name) in enumerate(location_table)}
+location_name_to_id = {name: ap_id_offset + index for index, name in enumerate(location_table)}
 
 
 class WL4Location(Location):
     game: str = 'Wario Land 4'
+    type: Optional[LocationType]
+    passage: Optional[int]
+    level: Optional[int]
+    flag: Optional[int]
+    difficulty: Sequence[int]
 
-    def __init__(self, player: int, name: str, code: Optional[int], parent: Optional[Region],
-                 type: LocationType, status_position: Tuple[Passage, int, int],
-                 difficulty: Difficulty):
-        super().__init__(player, name, code, parent)
-        self.type = type
-        self.passage, self.level, self.flag = status_position
-        self.difficulty = difficulty
-        if type in (LocationType.BOSS, LocationType.KEYZER, LocationType.EVENT) or code is None:
-            self.address = None
+    def __init__(self, player: int, name: str, parent: Optional[Region] = None):
+        super().__init__(player, name, location_name_to_id.get(name, None), parent)
+        if name in location_table:
+            self.type, status, _, self.difficulty = location_table[name]
+            self.passage, self.level, self.flag = status
+            self.event = False
+        else:
+            self.type = self.level = self.flag = None
+            self.difficulty = _ALL
+            self.passage = event_table[name]
             self.event = True
 
-    @classmethod
-    def from_name(cls, player: int, name: str, parent: Optional[Region] = None):
-        type, status, _, difficulty = location_table[name]
-        return cls(player, name, location_name_to_id[name], parent, type,
-                   status, difficulty)
-
     def entry_offset(self):
-        if self.flag == ItemFlag.KEYZER:
+        if self.event:
             return None
         return self.flag.bit_length() - (1 if self.flag < ItemFlag.KEYZER else 2)
 
     def level_offset(self):
+        if self.event:
+            return None
         return (self.passage * 5 + self.level) * (len(ItemFlag) - 1)
 
 def get_level_locations(passage: Passage, level: int):

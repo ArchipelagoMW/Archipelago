@@ -117,9 +117,9 @@ def get_region_names(level_name: str, merge: bool = False) -> Sequence[str]:
     entrance = f'{level_name} (entrance)'
     regions = regions_in_levels[level_name]
     if regions and not merge:
-        regions = (f'{level_name} - {region}' for region in regions)
+        regions = [f'{level_name} - {region}' for region in regions]
     else:
-        regions = (level_name,)
+        regions = [level_name]
     return entrance, *regions
 
 
@@ -138,7 +138,7 @@ def create_level_regions(world: WL4World, location_table: Set[str]):
             else:
                 region_name = name
             if loc_name in location_table:
-                location = WL4Location.from_name(world.player, loc_name, regions[region_name])
+                location = WL4Location(world.player, loc_name, regions[region_name])
                 regions[region_name].locations.append(location)
         return regions.values()
 
@@ -297,7 +297,7 @@ def create_region(world: WL4World, location_table: Set[str], name: str,
     region = WL4Region(name, world)
     for location in locations:
         if location in location_table:
-            region.locations.append(WL4Location.from_name(world.player, location, region))
+            region.locations.append(WL4Location(world.player, location, region))
     return region
 
 

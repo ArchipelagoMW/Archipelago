@@ -57,3 +57,29 @@ display to when you take one from a chest. Unlike when the item is in a box, the
 available to be used immediately, rather than only after exiting the level. On the pyramid screen,
 there will be a display using a pop-up window to tell the player what they received. If the item is
 junk, Wario will receive it the next time he enters a level, or immediately if he's already in one.
+
+## What does advanced logic mean?
+
+Some items can be obtained by more difficult strategies that aren't obvious when you're playing the
+vanilla game. Likewise, some levels expect certain abilities during their escapes, but those
+abilities can be skipped with some setup steps on the way to the frog switch. Advanced logic can
+expect you to use those strategies.
+
+A full list of these strategies is as follows:
+
+- In Pinball Zone, you can get through the fruit room with only grab by throwing one of the lower
+pinballs at the ones on the ledges.
+- Also in Pinball Zone, you can use Heavy Grab in place of Ground Pound in the jungle room by
+carrying a Ringosuki to the top of the room and using Fat Wario.
+- In Doodle Woods, you can reach the Gray Square Box on Hard and S-Hard by throwing a Toy Car at the
+gray blocks. The Normal version of that room doesn't have any enemies you can throw.
+- In Domino Row, you can open the way down the red tower by either breaking the blocks with Head Smash
+or by throwing a Toy Car from the top of the room. You need to do one of these things to escape
+without Ground Pound.
+- To fight Catbat, you're normally expected to use Enemy Jump as the behavior when jumping off of
+the waves is strange without it. To ground pound his head without Enemy Jump, you need to start
+walking before you jump; jumps from a standstill won't work. When the waves start oscillating, jump
+at the apex or else you will be bounced off.
+
+Videos of some of these strategies can be found at this YouTube playlist: [Wario Land 4 Archipelago
+Tricks](https://www.youtube.com/playlist?list=PL9fyDZ3k7Qw0WclTCDDImKQDjNi2Sy0Gp)

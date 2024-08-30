@@ -4,7 +4,6 @@ import functools
 from typing import Callable, Mapping, NamedTuple, Optional, Sequence, Tuple, Union, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from Options import Option
 
 from . import items, locations, options
 from .types import ItemType, Passage
@@ -17,20 +16,18 @@ if TYPE_CHECKING:
 RequiredItem = Union[str, Tuple[str, int]]
 
 
-helpers: Mapping[str, RequiredItem] = {
-    'Ground Pound':        'Progressive Ground Pound',
+helpers: Mapping[str, Tuple[str, int]] = {
+    'Ground Pound':       ('Progressive Ground Pound', 1),
     'Super Ground Pound': ('Progressive Ground Pound', 2),
-    'Grab':                'Progressive Grab',
-    'Heavy Grab':         ('Progressive Grab', 2)
+    'Grab':               ('Progressive Grab', 1),
+    'Heavy Grab':         ('Progressive Grab', 2),
 }
 
 
 def resolve_helper(item_name: RequiredItem):
-    requirement = helpers.get(item_name, item_name)
-    if isinstance(requirement, str):
-        return (requirement, 1)
-    else:
-        return requirement
+    if isinstance(item_name, str):
+        return helpers.get(item_name, (item_name, 1))
+    return item_name
 
 
 class Requirement(NamedTuple):
@@ -46,14 +43,14 @@ class Requirement(NamedTuple):
         return functools.partial(self.inner, world)
 
 
-def has(item_name: str) -> Requirement:
+def has(item_name: RequiredItem) -> Requirement:
     item, count = resolve_helper(item_name)
     return Requirement(lambda w, s: s.has(item, w.player, count))
 
-def has_all(items: Sequence[str]) -> Requirement:
+def has_all(items: Sequence[RequiredItem]) -> Requirement:
     return Requirement(lambda w, s: all(has(item).inner(w, s) for item in items))
 
-def has_any(items: Sequence[str]) -> Requirement:
+def has_any(items: Sequence[RequiredItem]) -> Requirement:
     return Requirement(lambda w, s: any(has(item).inner(w, s) for item in items))
 
 def has_treasures() -> Requirement:
@@ -62,16 +59,16 @@ def has_treasures() -> Requirement:
                                     >= w.options.golden_treasure_count)
 
 
-def option(option_name: str, choice: Option):
+def option(option_name: str, choice: int):
     return Requirement(lambda w, _: getattr(w.options, option_name) == choice)
 
-def difficulty(difficulty: options.Difficulty):
+def difficulty(difficulty: int):
     return option('difficulty', difficulty)
 
-def not_difficulty(_difficulty: options.Difficulty):
+def not_difficulty(_difficulty: int):
     return Requirement(lambda w, s: not difficulty(_difficulty).inner(w, s))
 
-def logic(logic: options.Logic):
+def logic(logic: int):
     return option('logic', logic)
 
 
@@ -108,12 +105,11 @@ def make_boss_access_rule(world: WL4World, passage: Passage, jewels_needed: int)
 def set_access_rules(world: WL4World):
     for name, rule in location_rules.items():
         try:
-            location = world.multiworld.get_location(name, world.player)
+            location = world.get_location(name)
             location.access_rule = rule.apply_world(world)
-        except KeyError as k:
-            # Raise for invalid location names, not ones that aren't in this player's world
-            if name not in locations.location_table:
-                raise ValueError(f'Location {name} does not exist') from k
+        except KeyError:
+            assert name in locations.location_table or name in locations.event_table, \
+                f"{name} is not a valid location name"
 
 
 escape_regions = {
@@ -161,7 +157,7 @@ advanced = options.Logic.option_advanced
 
 
 # Regions are linear, so each region from the same level adds to the previous
-region_rules: Mapping[str, Requirement] = {
+region_rules: Mapping[str, Optional[Requirement]] = {
     'Hall of Hieroglyphs':                  has_all(['Dash Attack', 'Grab', 'Super Ground Pound']),
 
     'Palm Tree Paradise':                   None,
@@ -203,9 +199,9 @@ region_rules: Mapping[str, Requirement] = {
 
 location_rules: Mapping[str, Requirement] = {
     'Cractus':              has('Ground Pound'),
-    'Cractus - 0:55':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic('advanced')),
-    'Cractus - 0:35':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic('advanced')),
-    'Cractus - 0:15':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic('advanced')),
+    'Cractus - 0:55':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic(advanced)),
+    'Cractus - 0:35':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic(advanced)),
+    'Cractus - 0:15':       has('Ground Pound') & (not_difficulty(s_hard) | has('Enemy Jump') | logic(advanced)),
     'Cuckoo Condor':        has('Grab'),
     'Cuckoo Condor - 0:55': has('Grab'),
     'Cuckoo Condor - 0:35': has('Grab'),

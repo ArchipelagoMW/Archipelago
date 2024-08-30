@@ -1,15 +1,17 @@
+import logging
 from pathlib import Path
 import settings
 from typing import Any, ClassVar, Mapping
 
 from BaseClasses import Item, Tutorial
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from .client import WL4Client
 from .data import data_path
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import get_level_locations, get_level_location_data, location_name_to_id, location_table
-from .options import Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
+from .locations import get_level_locations, location_name_to_id, location_table, event_table
+from .options import Difficulty, Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
 from .rules import set_access_rules
@@ -18,7 +20,7 @@ from .types import ItemType, LocationType, Passage
 
 class WL4Settings(settings.Group):
     class RomFile(settings.UserFilePath):
-        '''File name of the Wario Land 4 ROM'''
+        """File name of the Wario Land 4 ROM"""
         description = 'Wario Land 4 ROM File'
         copy_to = 'Wario Land 4.gba'
         md5s = [MD5_US_EU, MD5_JP]
@@ -34,7 +36,7 @@ class WL4Web(WebWorld):
         'English',
         'setup_en.md',
         'setup/en',
-        ['lil David']
+        ['lil David', 'Fairweather-Furry']
     )
 
     theme = 'jungle'
@@ -43,22 +45,20 @@ class WL4Web(WebWorld):
 
 
 class WL4World(World):
-    '''
+    """
     A golden pyramid has been discovered deep in the jungle, and Wario has set
     out to rob it. But when he enters, he finds the Golden Diva's curse has
     taken away his moves! To escape with his life and more importantly, the
     treasure, Wario must find his abilities to defeat the passage bosses and
     the Golden Diva.
-    '''
+    """
 
     game: str = 'Wario Land 4'
     options_dataclass = WL4Options
     options: WL4Options
     settings: ClassVar[WL4Settings]
-    topology_present = False
 
-    item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()
-                       if data[1] is not None}
+    item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()}
     location_name_to_id = location_name_to_id
 
     required_client_version = (0, 5, 0)
@@ -73,7 +73,7 @@ class WL4World(World):
         'CDs': set(filter_item_names(type=ItemType.CD)),
         'Abilities': set(filter_item_names(type=ItemType.ABILITY)),
         'Golden Treasure': set(filter_item_names(type=ItemType.TREASURE)),
-        'Traps': { 'Wario Form Trap', 'Lightning Trap'},
+        'Traps': {'Wario Form Trap', 'Lightning Trap'},
         'Junk': {'Heart', 'Minigame Coin'},
     }
 
@@ -83,22 +83,22 @@ class WL4World(World):
         'Wildflower Fields': set(get_level_locations(Passage.EMERALD, 1)),
         'Mystic Lake': set(get_level_locations(Passage.EMERALD, 2)),
         'Monsoon Jungle': set(get_level_locations(Passage.EMERALD, 3)),
-        'Cractus Treasures': set(k for k, v in get_level_location_data(Passage.EMERALD, 4) if v.source != LocationType.BOSS),
+        'Cractus Treasures': set(get_level_locations(Passage.EMERALD, 4)),
         'The Curious Factory': set(get_level_locations(Passage.RUBY, 0)),
         'The Toxic Landfill': set(get_level_locations(Passage.RUBY, 1)),
         '40 Below Fridge': set(get_level_locations(Passage.RUBY, 2)),
         'Pinball Zone': set(get_level_locations(Passage.RUBY, 3)),
-        'Cuckoo Condor Treasures': set(k for k, v in get_level_location_data(Passage.RUBY, 4) if v.source != LocationType.BOSS),
+        'Cuckoo Condor Treasures': set(get_level_locations(Passage.RUBY, 4)),
         'Toy Block Tower': set(get_level_locations(Passage.TOPAZ, 0)),
         'The Big Board': set(get_level_locations(Passage.TOPAZ, 1)),
         'Doodle Woods': set(get_level_locations(Passage.TOPAZ, 2)),
         'Domino Row': set(get_level_locations(Passage.TOPAZ, 3)),
-        'Aerodent Treasures': set(k for k, v in get_level_location_data(Passage.TOPAZ, 4) if v.source != LocationType.BOSS),
+        'Aerodent Treasures': set(get_level_locations(Passage.TOPAZ, 4)),
         'Crescent Moon Village': set(get_level_locations(Passage.SAPPHIRE, 0)),
         'Arabian Night': set(get_level_locations(Passage.SAPPHIRE, 1)),
         'Fiery Cavern': set(get_level_locations(Passage.SAPPHIRE, 2)),
         'Hotel Horror': set(get_level_locations(Passage.SAPPHIRE, 3)),
-        'Catbat Treasures': set(k for k, v in get_level_location_data(Passage.SAPPHIRE, 4) if v.source != LocationType.BOSS),
+        'Catbat Treasures': set(get_level_locations(Passage.SAPPHIRE, 4)),
         'Golden Passage': set(get_level_locations(Passage.GOLDEN, 0)),
     }
 
@@ -108,9 +108,20 @@ class WL4World(World):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
             self.options.local_items.value.update(self.item_name_groups['Golden Treasure'])
         if self.options.required_jewels > self.options.pool_jewels:
-            self.options.pool_jewels = PoolJewels(self.options.required_jewels)
+            logging.warn(f'{self.player_name} has Required Jewels set to '
+                         f'{self.options.required_jewels.value} but Pool Jewels set to '
+                         f'{self.options.pool_jewels.value}. Setting Pool Jewels to '
+                         f'{self.options.required_jewels.value}')
+            self.options.pool_jewels = PoolJewels(self.options.required_jewels.value)
         if self.options.required_jewels >= 1 and self.options.golden_jewels == 0:
+            logging.warn(f'{self.player_name} has Required Jewels set to at least 1 but '
+                         f'Golden Jewels set to {self.options.golden_jewels}. Setting Golden '
+                         'Jewels to 1.')
             self.options.golden_jewels = GoldenJewels(1)
+
+        if self.options.required_jewels == 4 and self.options.difficulty != Difficulty.option_normal:
+            raise OptionError(f'Not enough locations to place abilities for {self.player_name}. '
+                              'Set the "Required Jewels" option to a lower value and try again.')
 
     def create_regions(self):
         location_table = self.setup_locations()
@@ -120,18 +131,18 @@ class WL4World(World):
 
         passages = ('Emerald', 'Ruby', 'Topaz', 'Sapphire')
         for passage in passages:
-            location = self.multiworld.get_region(f'{passage} Passage Boss', self.player).locations[0]
+            location = self.get_region(f'{passage} Passage Boss').locations[0]
             location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
             location.show_in_spoiler = False
 
         if self.options.goal.needs_diva():
             goal = 'Golden Diva'
-        if self.options.goal.is_treasure_hunt():
+        else:  # Golden Treasure Hunt
             goal = 'Sound Room - Emergency Exit'
 
-        goal = self.multiworld.get_location(goal, self.player)
-        goal.place_locked_item(self.create_item('Escape the Pyramid'))
-        goal.show_in_spoiler = False
+        goal_loc = self.get_location(goal)
+        goal_loc.place_locked_item(self.create_item('Escape the Pyramid'))
+        goal_loc.show_in_spoiler = False
 
     def create_items(self):
         difficulty = self.options.difficulty
@@ -171,26 +182,19 @@ class WL4World(World):
 
         # Remove full health items to make space for abilities
         if required_jewels == 4:
-            if difficulty == 0:
-                full_health_items -= 8
-            else:
-                raise ValueError('Not enough locations to place abilities for '
-                                 f'{self.multiworld.player_name[self.player]}. '
-                                 'Set the "Required Jewels" setting to a lower '
-                                 'value and try again.')
+            full_health_items -= 8
+        assert full_health_items > 0
 
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
 
-        if (treasure_hunt):
+        if treasure_hunt:
             for name in filter_item_names(type=ItemType.TREASURE):
                 itempool.append(self.create_item(name))
 
         junk_count = total_required_locations - len(itempool)
         junk_item_pool = tuple(filter_item_names(type=ItemType.ITEM))
-        for _ in range(junk_count):
-            item_name = self.multiworld.random.choice(junk_item_pool)
-            itempool.append(self.create_item(item_name))
+        itempool.extend(self.create_item(self.random.choice(junk_item_pool)) for _ in range(junk_count))
 
         self.multiworld.itempool += itempool
 
@@ -206,7 +210,7 @@ class WL4World(World):
         ))
 
         output_filename = self.multiworld.get_out_file_name_base(self.player)
-        patch.write(output_path / f'{output_filename}{patch.patch_file_ending}')
+        patch.write(f'{(output_path / output_filename).with_suffix(patch.patch_file_ending)}')
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
@@ -221,7 +225,7 @@ class WL4World(World):
         )
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
-        return WL4Item.from_name(name, self.player, force_non_progression)
+        return WL4Item(name, self.player, force_non_progression)
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
@@ -231,10 +235,11 @@ class WL4World(World):
         checks = filter(lambda p: self.options.difficulty in p[1].difficulties, location_table.items())
         if not self.options.goal.needs_treasure_hunt():
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
-        checks = {name for name, _ in checks}
+        check_names = {name for name, _ in checks}
 
+        event_names = set(event_table.keys())
         if self.options.goal.needs_diva():
-            checks.remove('Sound Room - Emergency Exit')
+            event_names.remove('Sound Room - Emergency Exit')
         else:
-            checks.remove('Golden Diva')
-        return checks
+            event_names.remove('Golden Diva')
+        return check_names.union(event_names)

@@ -40,8 +40,8 @@ def _get_symbols() -> Mapping[str, int]:
             if label[0] in ('@', '.'):
                 continue
 
-            addr = int(addr, base=16)
-            symbols[label] = addr
+            address = int(addr, base=16)
+            symbols[label] = address
     return symbols
 
 
@@ -51,11 +51,11 @@ def _get_charset() -> Mapping[str, int]:
     with StringIO(symbol_data) as stream:
         for line in stream:
             try:
-                byte, character = line.strip().split('=')
+                encoded, character = line.strip().split('=')
             except ValueError:
                 continue
 
-            byte = int(byte, base=16)
+            byte = int(encoded, base=16)
             charset[character] = byte
     return charset
 
@@ -65,14 +65,14 @@ charset = _get_charset()
 
 
 def get_symbol(symbol: str, offset: int = 0) -> int:
-    '''Convert a label name and offset to an address on GBA system bus.'''
+    """Convert a label name and offset to an address on GBA system bus."""
 
     return symbols[symbol.lower()] + offset
 
 
 def encode_str(msg: str) -> bytes:
-    '''Encode a string into Wario Land 4's text format. Unrecognized characters
-    are converted to spaces.'''
+    """Encode a string into Wario Land 4's text format. Unrecognized characters
+    are converted to spaces."""
 
     encoded = []
     for c in msg:
