@@ -485,8 +485,8 @@ INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS = "Progressive Automated Mitos
 INFESTED_SIEGE_TANK_ACIDIC_ENZYMES                = "Acidic Enzymes (Infested Siege Tank)"
 INFESTED_SIEGE_TANK_DEEP_TUNNEL                   = "Deep Tunnel (Infested Siege Tank)"
 FRIGHTFUL_FLESHWELDER                             = "Frightful Fleshwelder (Infested Siege Tank)"
-INFESTED_SIEGE_TANK_SATURATED_CULTURES            = "Saturated Cultures (Infested Diamondback)"
-INFESTED_SIEGE_TANK_CAUSTIC_MUCUS                 = "Caustic Mucus (Infested Diamondback)"
+INFESTED_DIAMONDBACK_SATURATED_CULTURES            = "Saturated Cultures (Infested Diamondback)"
+INFESTED_DIAMONDBACK_CAUSTIC_MUCUS                 = "Caustic Mucus (Infested Diamondback)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
