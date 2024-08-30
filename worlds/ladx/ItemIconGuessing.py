@@ -15,10 +15,10 @@ FORBIDDEN = [
 
     "BLUE",     # BLUE_TUNIC
     "RED",      # RED_TUNIC
-    
+
     "TRADING",  # TRADING_ITEM_*
     "ITEM",     # TRADING_ITEM_*
-    
+
     "BAD",      # BAD_HEART_CONTAINER
     "GOLD",     # GOLD_LEAF
     "MAGIC",    # MAGIC_POWDER, MAGIC_ROD
@@ -72,6 +72,7 @@ SYNONYMS = {
     'POUCH': 'MAGIC_POWDER',
     'SACK': 'MAGIC_POWDER',
     'BOMBCHU': 'BOMB',
+    'FIRECRACKER': 'BOMB',
     'TNT': 'BOMB',
     'BLADE': 'SWORD',
     'CUT': 'SWORD',
@@ -150,6 +151,7 @@ SYNONYMS = {
     'BELL': 'INSTRUMENT3',
     'CHIME': 'INSTRUMENT3',
     'HARP': 'INSTRUMENT4',
+    'KANTELE': 'INSTRUMENT4',
     'MARIMBA': 'INSTRUMENT5',
     'XYLOPHONE': 'INSTRUMENT5',
     'TRIANGLE': 'INSTRUMENT6',
@@ -170,10 +172,12 @@ SYNONYMS = {
     'HIVE': 'TRADING_ITEM_HONEYCOMB',
     'HONEY': 'TRADING_ITEM_HONEYCOMB',
     'FRUIT': 'TRADING_ITEM_PINEAPPLE',
+    'GOURD': 'TRADING_ITEM_PINEAPPLE',
     'FLOWER': 'TRADING_ITEM_HIBISCUS',
     'PETAL': 'TRADING_ITEM_HIBISCUS',
     'CARD': 'TRADING_ITEM_LETTER',
     'MESSAGE': 'TRADING_ITEM_LETTER',
+    'DUSTY': 'TRADING_ITEM_BROOM',  # Tunic: a broom
     'SWEEP': 'TRADING_ITEM_BROOM',
     'CLAW': 'TRADING_ITEM_FISHING_HOOK',
     'AMULET': 'TRADING_ITEM_NECKLACE',
@@ -186,7 +190,9 @@ SYNONYMS = {
     'MIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'SCOPE': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'CHAOS': 'PIECE_OF_POWER', # Chaos emerald
+    'TRIANGLE': 'PIECE_OF_POWER',
     'POWER': 'PIECE_OF_POWER',
+    'QUESTAGON': 'PIECE_OF_POWER',  # Tunic: triforce piece equivalent
     'STAR': 'PIECE_OF_POWER',
     'TRIFORCE': 'PIECE_OF_POWER',
 
@@ -207,4 +213,19 @@ PHRASES = {
     'BOSS KEY': 'NIGHTMARE_KEY',
     'HEART PIECE': 'HEART_PIECE',
     'PIECE OF HEART': 'HEART_PIECE',
+    'ALL-SEEING EYE': 'TRADING_ITEM_MAGNIFYING_GLASS',  # Noita: lets you find secrets
+
+    # TUNIC
+    'MAGIC ORB': 'HOOKSHOT',
+    'HP BERRY': 'GUARDIAN_ACORN',
+    'MP BERRY': 'GUARDIAN_ACORN',
+    'HP OFFERING': 'TRADING_ITEM_HIBISCUS',  # Tunic: a flower
+    'HERO RELIC - HP': 'TRADING_ITEM_HIBISCUS',
+    'MP OFFERING': 'TOADSTOOL',  # Tunic: a mushroom
+    'HERO RELIC - MP': 'TOADSTOOL',
+    'SP OFFERING': 'FEATHER',  # Tunic: a feather
+    'HERO RELIC - SP': 'FEATHER',
+    'INVERTED ASH': 'MEDICINE',  # Tunic: card with a potion on it
+    "AURA'S GEM": 'SHIELD',  # Tunic: card that enhances the shield
+    'SPRING FALLS': 'TRADING_ITEM_HIBISCUS',  # Tunic: a flower
 }
