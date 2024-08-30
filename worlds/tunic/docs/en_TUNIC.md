@@ -82,8 +82,13 @@ Notes:
 - The Entrance Randomizer option must be enabled for it to work.
 - The `direction` field is not supported. Connections are always coupled.
 - For a list of entrance names, check `er_data.py` in the TUNIC world folder or generate a game with the Entrance Randomizer option enabled and check the spoiler log.
-- There is no limit to the number of Shops hard-coded into place.
+- There is no limit to the number of Shops you can plando.
 - If you have more than one shop in a scene, you may be wrong warped when exiting a shop.
 - If you have a shop in every scene, and you have an odd number of shops, it will error out.
 
 See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
+
+## Is there anything else I should know?
+You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
+You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
+You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.

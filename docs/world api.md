@@ -456,8 +456,9 @@ In addition, the following methods can be implemented and are called in this ord
   called to place player's regions and their locations into the MultiWorld's regions list.
   If it's hard to separate, this can be done during `generate_early` or `create_items` as well.
 * `create_items(self)`
-  called to place player's items into the MultiWorld's itempool. After this step all regions
-  and items have to be in the MultiWorld's regions and itempool, and these lists should not be modified afterward.
+  called to place player's items into the MultiWorld's itempool. By the end of this step all regions, locations and
+  items have to be in the MultiWorld's regions and itempool. You cannot add or remove items, locations, or regions
+  after this step. Locations cannot be moved to different regions after this step.
 * `set_rules(self)`
   called to set access and item rules on locations and entrances.
 * `generate_basic(self)`
