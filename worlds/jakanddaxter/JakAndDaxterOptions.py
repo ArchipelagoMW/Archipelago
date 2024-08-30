@@ -51,8 +51,8 @@ class GlobalOrbsanityBundleSize(Choice):
     option_500_orbs = 500
     option_1000_orbs = 1000
     option_2000_orbs = 2000
-    multiplayer_minimum = 5
-    multiplayer_maximum = 400
+    multiplayer_minimum = 10
+    multiplayer_maximum = 200
     default = 20
 
 
@@ -66,7 +66,7 @@ class PerLevelOrbsanityBundleSize(Choice):
     option_10_orbs = 10
     option_25_orbs = 25
     option_50_orbs = 50
-    multiplayer_minimum = 5
+    multiplayer_minimum = 10
     default = 25
 
 

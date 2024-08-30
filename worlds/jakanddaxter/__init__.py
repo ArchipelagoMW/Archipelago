@@ -54,8 +54,8 @@ class JakAndDaxterSettings(settings.Group):
         description = "ArchipelaGOAL Root Directory"
 
     class EnforceFriendlyOptions(settings.Bool):
-        """Enforce friendly player options to be used in a multiplayer seed.
-        Disabling this allows for more disruptive and challenging options, but may impact seed generation."""
+        """Enforce friendly player options in both single and multiplayer seeds. Disabling this allows for
+        more disruptive and challenging options, but may impact seed generation. Use at your own risk!"""
         description = "ArchipelaGOAL Enforce Friendly Options"
 
     root_directory: RootDirectory = RootDirectory("%appdata%/OpenGOAL-Mods/archipelagoal")

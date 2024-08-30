@@ -49,10 +49,11 @@ def count_reachable_orbs_global(state: CollectionState,
                                 multiworld: MultiWorld) -> int:
 
     accessible_orbs = 0
-    for region in multiworld.get_regions(player):
-        if region.can_reach(state):
-            # Only cast the region when we need to.
-            accessible_orbs += typing.cast(JakAndDaxterRegion, region).orb_count
+    # Cast all regions upfront to access their unique attributes.
+    for region in typing.cast(typing.List[JakAndDaxterRegion], multiworld.get_regions(player)):
+        # Rely on short-circuiting to skip region.can_reach whenever possible.
+        if region.orb_count > 0 and region.can_reach(state):
+            accessible_orbs += region.orb_count
     return accessible_orbs
 
 
@@ -62,9 +63,10 @@ def count_reachable_orbs_level(state: CollectionState,
                                level_name: str = "") -> int:
 
     accessible_orbs = 0
-    # Need to cast all regions upfront.
+    # Cast all regions upfront to access their unique attributes.
     for region in typing.cast(typing.List[JakAndDaxterRegion], multiworld.get_regions(player)):
-        if region.level_name == level_name and region.can_reach(state):
+        # Rely on short-circuiting to skip region.can_reach whenever possible.
+        if region.level_name == level_name and region.orb_count > 0 and region.can_reach(state):
             accessible_orbs += region.orb_count
     return accessible_orbs
 
