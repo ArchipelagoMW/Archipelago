@@ -125,6 +125,7 @@ BATTLECRUISER_TACTICAL_JUMP                        = "Tactical Jump (Battlecruis
 BATTLECRUISER_BEHEMOTH_PLATING                     = "Behemoth Plating (Battlecruiser)"
 BATTLECRUISER_COVERT_OPS_ENGINES                   = "Covert Ops Engines (Battlecruiser)"
 BATTLECRUISER_BEHEMOTH_REACTOR                     = "Behemoth Reactor (Battlecruiser)"
+BATTLECRUISER_FIELD_ASSIST_TARGETING_SYSTEM        = "Field-Assist Target System (Battlecruiser)"
 BUNKER_NEOSTEEL_BUNKER                             = "Neosteel Bunker (Bunker)"
 BUNKER_PROJECTILE_ACCELERATOR                      = "Projectile Accelerator (Bunker)"
 BUNKER_SHRIKE_TURRET                               = "Shrike Turret (Bunker)"

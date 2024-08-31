@@ -452,6 +452,7 @@ item_descriptions = {
     item_names.MISSILE_TURRET_RESOURCE_EFFICENCY: _get_resource_efficiency_desc(item_names.MISSILE_TURRET),
     item_names.SCIENCE_VESSEL_TACTICAL_JUMP: "Allows Science Vessels to warp to a target location anywhere on the map.",
     item_names.LIBERATOR_COMPRESSED_ROCKET_FUEL: "Increases Liberator attack range in Fighter mode by 4.",
+    item_names.BATTLECRUISER_FIELD_ASSIST_TARGETING_SYSTEM: "Increases attack range of nearby friendly ground units by 1.",
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
