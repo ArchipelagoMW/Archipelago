@@ -968,40 +968,35 @@ def get_act_by_number(world: "HatInTimeWorld", chapter_name: str, num: int) -> R
 def create_thug_shops(world: "HatInTimeWorld"):
     min_items: int = world.options.NyakuzaThugMinShopItems.value
     max_items: int = world.options.NyakuzaThugMaxShopItems.value
-    count = -1
-    step = 0
-    old_name = ""
+
+    thug_location_counts: Dict[str, int] = {}
 
     for key, data in shop_locations.items():
-        if data.nyakuza_thug == "":
+        thug_name = data.nyakuza_thug
+        if thug_name == "":
+            # Different shop type.
             continue
 
-        if old_name != "" and old_name == data.nyakuza_thug:
+        if thug_name not in world.nyakuza_thug_items:
+            shop_item_count = world.random.randint(min_items, max_items)
+            world.nyakuza_thug_items[thug_name] = shop_item_count
+        else:
+            shop_item_count = world.nyakuza_thug_items[thug_name]
+
+        if shop_item_count <= 0:
             continue
 
-        try:
-            if world.nyakuza_thug_items[data.nyakuza_thug] <= 0:
-                continue
-        except KeyError:
-            pass
+        location_count = thug_location_counts.setdefault(thug_name, 0)
+        if location_count >= shop_item_count:
+            # Already created all the locations for this thug.
+            continue
 
-        if count == -1:
-            count = world.random.randint(min_items, max_items)
-            world.nyakuza_thug_items.setdefault(data.nyakuza_thug, count)
-            if count <= 0:
-                continue
-
-        if count >= 1:
-            region = world.multiworld.get_region(data.region, world.player)
-            loc = HatInTimeLocation(world.player, key, data.id, region)
-            region.locations.append(loc)
-            world.shop_locs.append(loc.name)
-
-            step += 1
-            if step >= count:
-                old_name = data.nyakuza_thug
-                step = 0
-                count = -1
+        # Create the shop location.
+        region = world.multiworld.get_region(data.region, world.player)
+        loc = HatInTimeLocation(world.player, key, data.id, region)
+        region.locations.append(loc)
+        world.shop_locs.append(loc.name)
+        thug_location_counts[thug_name] = location_count + 1
 
 
 def create_events(world: "HatInTimeWorld") -> int:
