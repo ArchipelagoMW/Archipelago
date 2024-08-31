@@ -42,7 +42,7 @@ class WitnessPlayerItems:
                  player_locations: WitnessPlayerLocations) -> None:
         """Adds event items after logic changes due to options"""
 
-        self._world: "WitnessWorld" = world
+        self._world: WitnessWorld = world
         self._multiworld: MultiWorld = world.multiworld
         self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = player_logic
@@ -97,7 +97,7 @@ class WitnessPlayerItems:
 
         # Add event items to the item definition list for later lookup.
         for event_location in self._locations.EVENT_LOCATION_TABLE:
-            location_name = player_logic.EVENT_ITEM_PAIRS[event_location]
+            location_name = player_logic.EVENT_ITEM_PAIRS[event_location][0]
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
 
@@ -215,7 +215,7 @@ class WitnessPlayerItems:
             item = self.item_data[item_name]
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
-                #   items were removed from the pool when we pruned out all progression items not in the settings.
+                # items were removed from the pool when we pruned out all progression items not in the options.
                 output[cast(int, item.ap_code)] = [cast(int, static_witness_items.ITEM_DATA[child_item].ap_code)
                                                    for child_item in item.definition.child_item_names]
         return output
