@@ -833,6 +833,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Cube Cave Entrance Region":
             [],
+        # drop a rudeling, icebolt or ice bomb
+        "Overworld to West Garden from Furnace":
+            [["IG3"]],
     },
     "East Overworld": {
         "Above Ruined Passage":
@@ -1080,7 +1083,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
 
     "Forest Grave Path Main": {
         "Forest Grave Path Upper":
-            [["Hyperdash"], ["LS2"]],
+            [["Hyperdash"], ["LS2"], ["IG3"]],
         "Forest Grave Path by Grave":
             [],
     },
@@ -1090,7 +1093,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Forest Grave Path by Grave": {
         "Forest Hero's Grave":
-            [], 
+            [],
         "Forest Grave Path Main":
             [["IG1"]],
     },
@@ -1373,7 +1376,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
 
     "Fortress Exterior from East Forest": {
         "Fortress Exterior from Overworld":
-            [], 
+            [],
         "Fortress Courtyard Upper":
             [["LS2"]],
         "Fortress Courtyard":
@@ -1381,9 +1384,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Fortress Exterior from Overworld": {
         "Fortress Exterior from East Forest":
-            [["Hyperdash"]], 
+            [["Hyperdash"]],
         "Fortress Exterior near cave":
-            [], 
+            [],
         "Fortress Courtyard":
             [["Hyperdash"], ["IG1"], ["LS1"]],
     },
@@ -1642,6 +1645,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Swamp Front": {
         "Swamp Mid":
             [],
+        # get one pillar from the gate, then dash onto the gate, very tricky
+        "Back of Swamp Laurels Area":
+            [["Hyperdash", "Zip"]],
     },
     "Swamp Mid": {
         "Swamp Front":
@@ -1672,12 +1678,21 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"], ["LS2"]],
         "Swamp Hero's Grave Region":
             [],
+        "Swamp Mid":
+            [["LS2"]],
+        "Swamp Front":
+            [["LS1"]],
+        "Swamp to Cathedral Main Entrance Region":
+            [["LS3"]],
+        "Swamp to Cathedral Treasure Room":
+            [["LS3"]]
     },
     "Back of Swamp Laurels Area": {
         "Back of Swamp":
             [["Hyperdash"]],
+        # get one pillar from the gate, then dash onto the gate, very tricky
         "Swamp Mid":
-            [["IG1", "Hyperdash"]],
+            [["IG1", "Hyperdash"], ["Hyperdash", "Zip"]],
     },
     "Swamp Hero's Grave Region": {
         "Back of Swamp":

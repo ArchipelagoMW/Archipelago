@@ -151,10 +151,13 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world))
 
+    # for the hard ice grapple, get to the chest after the bomb wall, grab a slime, and grapple push down
+    # you can ice grapple through the bomb wall, so no need for shop logic checking
     regions["Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
-        or state.has(laurels, player))
+        or state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
@@ -238,9 +241,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Upper Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
 
+    # ice grapple push guard captain down the ledge
     regions["Upper Overworld"].connect(
         connecting_region=regions["Overworld after Temple Rafters"],
-        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world))
+        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_medium, state, world))
     regions["Overworld after Temple Rafters"].connect(
         connecting_region=regions["Upper Overworld"],
         rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world)
@@ -327,7 +332,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ability(holy_cross, state, world))
 
-    # not including ice grapple through this because we're not including it on the other door
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Fountain Cross Door"],
         rule=lambda state: has_ability(holy_cross, state, world)
@@ -381,6 +385,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Cube Cave Entrance Region"].connect(
         connecting_region=regions["Overworld"])
 
+    # drop a rudeling down, icebolt or ice bomb
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld to West Garden from Furnace"],
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
+
     # Overworld side areas
     regions["Old House Front"].connect(
         connecting_region=regions["Old House Back"])
@@ -428,7 +437,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Forest Belltower Lower"],
         rule=lambda state: has_ladder("Ladder to East Forest", state, world))
 
-    # nmg: ice grapple up to dance fox spot, and vice versa
+    # ice grapple up to dance fox spot, and vice versa
     regions["East Forest"].connect(
         connecting_region=regions["East Forest Dance Fox Spot"],
         rule=lambda state: state.has(laurels, player)
@@ -465,18 +474,20 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Guard House 2 Upper"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
 
-    # nmg: ice grapple from upper grave path exit to the rest of it
+    # ice grapple from upper grave path exit to the rest of it
     regions["Forest Grave Path Upper"].connect(
         connecting_region=regions["Forest Grave Path Main"],
         rule=lambda state: state.has(laurels, player)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+    # for the ice grapple, lure a rudeling up top, then grapple push it across
     regions["Forest Grave Path Main"].connect(
         connecting_region=regions["Forest Grave Path Upper"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
     regions["Forest Grave Path Main"].connect(
         connecting_region=regions["Forest Grave Path by Grave"])
-    # nmg: ice grapple or laurels through the gate
+    # ice grapple or laurels through the gate
     regions["Forest Grave Path by Grave"].connect(
         connecting_region=regions["Forest Grave Path Main"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
@@ -565,12 +576,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["West Garden Laurels Exit Region"],
         rule=lambda state: state.has(laurels, player))
 
-    regions["West Garden after Boss"].connect(
+    # laurels past, or ice grapple it off, or ice grapple to it then fight
+    after_gk_to_wg = regions["West Garden after Boss"].connect(
         connecting_region=regions["West Garden before Boss"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+        or (has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+            and has_sword(state, player)))
+    # ice grapple push Garden Knight off the side
     wg_to_after_gk = regions["West Garden before Boss"].connect(
         connecting_region=regions["West Garden after Boss"],
-        rule=lambda state: state.has(laurels, player) or has_sword(state, player))
+        rule=lambda state: state.has(laurels, player) or has_sword(state, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     regions["West Garden before Terry"].connect(
         connecting_region=regions["West Garden Hero's Grave Region"],
@@ -600,7 +617,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_medium, state, world))
 
     # Atoll and Frog's Domain
-    # nmg: ice grapple the bird below the portal
+    # ice grapple the bird below the portal
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Lower Entry Area"],
         rule=lambda state: state.has(laurels, player)
@@ -645,7 +662,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Frog Stairs Eye Exit"].connect(
         connecting_region=regions["Frog Stairs Upper"],
-        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Frog Stairs Upper"].connect(
         connecting_region=regions["Frog Stairs Eye Exit"],
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
@@ -1038,9 +1056,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
 
+    # grapple push the enemy by the door down, then grapple to it. Really jank
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Ledge under Cathedral Door"],
-        rule=lambda state: has_ladder("Ladders in Swamp", state, world))
+        rule=lambda state: has_ladder("Ladders in Swamp", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
     # ice grapple enemy standing at the door
     regions["Swamp Ledge under Cathedral Door"].connect(
         connecting_region=regions["Swamp Mid"],
@@ -1060,11 +1080,17 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Back of Swamp"],
         rule=lambda state: state.has(laurels, player))
 
-    # nmg: can ice grapple down while you're on the pillars
+    # ice grapple down from the pillar, or do that really annoying laurels zip
+    # the zip goes to front or mid, just doing mid since mid -> front can be done with laurels alone
     regions["Back of Swamp Laurels Area"].connect(
         connecting_region=regions["Swamp Mid"],
-        rule=lambda state: state.has(laurels, player)
-        and has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+        rule=lambda state: laurels_zip(state, world)
+        or (state.has(laurels, player)
+            and has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)))
+    # get one pillar from the gate, then dash onto the gate, very tricky
+    regions["Swamp Front"].connect(
+        connecting_region=regions["Back of Swamp Laurels Area"],
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Back of Swamp"].connect(
         connecting_region=regions["Swamp Hero's Grave Region"],
@@ -1238,9 +1264,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                     connecting_region=regions[dest_region],
                     name=portal_name + " (LS) " + ls_info.origin,
                     rule=lambda state: can_ladder_storage(state, world)
-                    and (state.has("Ladders in South Atoll", player)
-                         or not options.shuffle_ladders  # if ladder shuffle is off, don't gotta worry about ladders
+                    and (has_ladder("Ladders in South Atoll", state, world)
                          or state.has(key, player, 2)  # can do it from the rope
+                         # ice grapple push a crab into the door
+                         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
                          or options.ladder_storage >= LadderStorage.option_medium))  # use the little ladder
             # holy cross mid-ls to get in here
             elif ls_info.destination == "Swamp Redux 2, Cathedral Redux_secret":
@@ -1249,7 +1276,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                         connecting_region=regions[dest_region],
                         name=portal_name + " (LS) " + ls_info.origin,
                         rule=lambda state: can_ladder_storage(state, world) and has_ability(holy_cross, state, world)
-                        and (state.has("Ladders in Swamp", player) or not options.shuffle_ladders))
+                        and has_ladder("Ladders in Swamp", state, world))
                 else:
                     regions[ls_info.origin].connect(
                         connecting_region=regions[dest_region],
@@ -1275,7 +1302,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     if world.options.combat_logic >= CombatLogic.option_bosses_only:
         set_rule(wg_to_after_gk,
                  lambda state: state.has(laurels, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
                  or has_combat_reqs("Garden Knight", state, player))
+        # laurels past, or ice grapple it off, or ice grapple to it and fight
+        set_rule(after_gk_to_wg,
+                 lambda state: state.has(laurels, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                 or (has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+                     and has_combat_reqs("Garden Knight", state, player)))
+
         if not world.options.hexagon_quest:
             add_rule(heir_fight,
                      lambda state: has_combat_reqs("The Heir", state, player))
@@ -1565,10 +1600,13 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     # Ruined Atoll
     set_rule(world.get_location("Ruined Atoll - [West] Near Kevin Block"),
              lambda state: state.has(laurels, player))
+    # ice grapple push a crab through the door
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Lower Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Upper Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     # Frog's Domain
     set_rule(world.get_location("Frog's Domain - Side Room Grapple Secret"),
@@ -1605,8 +1643,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Librarian - Hexagon Green"),
              lambda state: has_sword(state, player)
              and has_ladder("Ladders in Library", state, world))
+    # can ice grapple boss scav off the side
+    # the grapple from the other side of the bridge isn't in logic 'cause we don't have a misc tricks option
     set_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     # Swamp
     set_rule(world.get_location("Cathedral Gauntlet - Gauntlet Reward"),
@@ -1666,7 +1707,13 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # Bombable Walls
     for location_name in bomb_walls:
-        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or can_shop(state, world))
+        set_rule(world.get_location(location_name),
+                 lambda state: state.has(gun, player)
+                 or can_shop(state, world)
+                 or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    # not enough space to ice grapple into here
+    set_rule(world.get_location("Quarry - [East] Bombable Wall"),
+             lambda state: state.has(gun, player) or can_shop(state, world))
 
     # Shop
     set_rule(world.get_location("Shop - Potion 1"),
@@ -1701,6 +1748,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                  rule=lambda state: has_combat_reqs("The Librarian", state, player)
                  and has_ladder("Ladders in Library", state, world))
         combat_logic_to_loc("Rooted Ziggurat Lower - Hexagon Blue", "Boss Scavenger", set_instead=True)
+        if world.options.ice_grappling >= IceGrappling.option_medium:
+            add_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
+                     lambda state: has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
         combat_logic_to_loc("Cathedral Gauntlet - Gauntlet Reward", "Gauntlet", set_instead=True)
 
     if world.options.combat_logic == CombatLogic.option_on:
