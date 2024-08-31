@@ -473,6 +473,7 @@ PHRASES = {
     'HERO RELIC - SP': 'FEATHER',
     'HP BERRY': 'GUARDIAN_ACORN',
     'HP OFFERING': 'TRADING_ITEM_HIBISCUS',  # a flower
+    'LUCKY UP': 'HEART_CONTAINER',  # card with a heart on it
     'INVERTED ASH': 'MEDICINE',  # card with a potion on it
     'MAGIC ORB': 'HOOKSHOT',
     'MP BERRY': 'GUARDIAN_ACORN',
