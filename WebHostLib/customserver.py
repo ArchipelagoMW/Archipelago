@@ -325,10 +325,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         def run(self):
             while 1:
                 next_room = rooms_to_run.get(block=True,  timeout=None)
+                gc.collect(0)
                 task = asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
                 self._tasks.append(task)
                 task.add_done_callback(self._done)
                 logging.info(f"Starting room {next_room} on {name}.")
+                del task  # delete reference to task object
 
     starter = Starter()
     starter.daemon = True
