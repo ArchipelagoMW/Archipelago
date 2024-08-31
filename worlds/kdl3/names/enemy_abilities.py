@@ -809,7 +809,7 @@ vanilla_enemies = {'Waddle Dee': 'No Ability',
 
 enemy_restrictive: List[Tuple[List[str], List[str]]] = [
     # abilities, enemies, set_all (False to set any)
-    (["Burning Ability", "Stone Ability"], ["Rocky", "Sparky", "Babut", "Squishy", ]),  # Ribbon Field 5 - 7
+    (["Stone Ability"], ["Rocky", "Sparky", "Babut", "Squishy", ]),  # Ribbon Field 5 - 7
     # Sand Canyon 6
     (["Parasol Ability", "Cutter Ability"], ['Bukiset (Parasol)', 'Bukiset (Cutter)']),
     (["Spark Ability", "Clean Ability"], ['Bukiset (Spark)', 'Bukiset (Clean)']),
