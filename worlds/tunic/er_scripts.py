@@ -807,7 +807,6 @@ def sort_portals(portal_pairs: Dict[Portal, Portal], world: "TunicWorld") -> Dic
     largest_shop_number = max(world.used_shop_numbers)
     reference_list.extend([f"Shop Portal {i + 1}" for i in range(largest_shop_number)])
 
-
     for name in reference_list:
         for portal1, portal2 in portal_pairs.items():
             if name == portal1.name:
