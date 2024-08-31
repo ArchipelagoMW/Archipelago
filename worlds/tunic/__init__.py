@@ -78,6 +78,9 @@ class TunicWorld(World):
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
 
+    using_ut: bool  # so we can check if we're using UT only once
+    passthrough: Dict[str, Any]
+
     def generate_early(self) -> None:
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
@@ -94,19 +97,24 @@ class TunicWorld(World):
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
-                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.options.start_with_sword.value = passthrough["start_with_sword"]
-                self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
-                self.options.sword_progression.value = passthrough["sword_progression"]
-                self.options.ability_shuffling.value = passthrough["ability_shuffling"]
-                self.options.logic_rules.value = passthrough["logic_rules"]
-                self.options.lanternless.value = passthrough["lanternless"]
-                self.options.maskless.value = passthrough["maskless"]
-                self.options.hexagon_quest.value = passthrough["hexagon_quest"]
-                self.options.entrance_rando.value = passthrough["entrance_rando"]
-                self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
+                self.using_ut = True
+                self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                self.options.start_with_sword.value = self.passthrough["start_with_sword"]
+                self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
+                self.options.sword_progression.value = self.passthrough["sword_progression"]
+                self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
+                self.options.logic_rules.value = self.passthrough["logic_rules"]
+                self.options.lanternless.value = self.passthrough["lanternless"]
+                self.options.maskless.value = self.passthrough["maskless"]
+                self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
+                self.options.entrance_rando.value = self.passthrough["entrance_rando"]
+                self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+            else:
+                self.using_ut = False
+        else:
+            self.using_ut = False
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -275,12 +283,10 @@ class TunicWorld(World):
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
 
         # stuff for universal tracker support, can be ignored for standard gen
-        if hasattr(self.multiworld, "re_gen_passthrough"):
-            if "TUNIC" in self.multiworld.re_gen_passthrough:
-                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
-                self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
-                self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
+        if self.using_ut:
+            self.ability_unlocks["Pages 24-25 (Prayer)"] = self.passthrough["Hexagon Quest Prayer"]
+            self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
+            self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
 
         # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
         if self.options.entrance_rando or self.options.shuffle_ladders:
