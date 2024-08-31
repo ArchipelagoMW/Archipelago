@@ -1,13 +1,21 @@
 import random
 from dataclasses import dataclass
+from typing import List
 
-from Options import DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
-    PerGameCommonOptions, PlandoConnections
-from .Names import LocationName
+from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
+    PerGameCommonOptions, Visibility, NamedRange, OptionGroup, PlandoConnections
+from .names import location_name
+
+
+class RemoteItems(DefaultOnToggle):
+    """
+    Enables receiving items from your own world, primarily for co-op play.
+    """
+    display_name = "Remote Items"
 
 
 class KDL3PlandoConnections(PlandoConnections):
-    entrances = exits = {f"{i} {j}" for i in LocationName.level_names for j in range(1, 7)}
+    entrances = exits = {f"{i} {j}" for i in location_name.level_names for j in range(1, 7)}
 
 
 class Goal(Choice):
@@ -30,6 +38,7 @@ class Goal(Choice):
             return cls.name_lookup[value].upper()
         return super().get_option_name(value)
 
+
 class GoalSpeed(Choice):
     """
     Normal: the goal is unlocked after purifying the five bosses
@@ -40,13 +49,14 @@ class GoalSpeed(Choice):
     option_fast = 1
 
 
-class TotalHeartStars(Range):
+class MaxHeartStars(Range):
     """
     Maximum number of heart stars to include in the pool of items.
+    If fewer available locations exist in the pool than this number, the number of available locations will be used instead.
     """
     display_name = "Max Heart Stars"
     range_start = 5  # set to 5 so strict bosses does not degrade
-    range_end = 50  # 30 default locations + 30 stage clears + 5 bosses - 14 progression items = 51, so round down
+    range_end = 99  # previously set to 50, set to highest it can be should there be less locations than heart stars
     default = 30
 
 
@@ -84,9 +94,9 @@ class BossShuffle(PlandoBosses):
     Singularity: All (non-Zero) bosses will be replaced with a single boss
     Supports plando placement.
     """
-    bosses = frozenset(LocationName.boss_names.keys())
+    bosses = frozenset(location_name.boss_names.keys())
 
-    locations = frozenset(LocationName.level_names.keys())
+    locations = frozenset(location_name.level_names.keys())
 
     duplicate_bosses = True
 
@@ -278,7 +288,8 @@ class KirbyFlavorPreset(Choice):
     option_orange = 11
     option_lime = 12
     option_lavender = 13
-    option_custom = 14
+    option_miku = 14
+    option_custom = 15
     default = 0
 
     @classmethod
@@ -296,6 +307,7 @@ class KirbyFlavor(OptionDict):
     A custom color for Kirby. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
     "15", with their values being an HTML hex color.
     """
+    display_name = "Custom Kirby Flavor"
     default = {
       "1": "B01810",
       "2": "F0E0E8",
@@ -313,6 +325,7 @@ class KirbyFlavor(OptionDict):
       "14": "F8F8F8",
       "15": "B03830",
     }
+    visibility = Visibility.template | Visibility.spoiler  # likely never supported on guis
 
 
 class GooeyFlavorPreset(Choice):
@@ -352,6 +365,7 @@ class GooeyFlavor(OptionDict):
     A custom color for Gooey. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
     "15", with their values being an HTML hex color.
     """
+    display_name = "Custom Gooey Flavor"
     default = {
         "1": "000808",
         "2": "102838",
@@ -363,6 +377,7 @@ class GooeyFlavor(OptionDict):
         "8": "D0C0C0",
         "9": "F8F8F8",
     }
+    visibility = Visibility.template | Visibility.spoiler  # likely never supported on guis
 
 
 class MusicShuffle(Choice):
@@ -402,14 +417,27 @@ class Gifting(Toggle):
     display_name = "Gifting"
 
 
+class TotalHeartStars(NamedRange):
+    """
+    Deprecated. Use max_heart_stars instead. Supported for only one version.
+    """
+    default = -1
+    range_start = 5
+    range_end = 99
+    special_range_names = {
+        "default": -1
+    }
+    visibility = Visibility.none
+
+
 @dataclass
-class KDL3Options(PerGameCommonOptions):
+class KDL3Options(PerGameCommonOptions, DeathLinkMixin):
+    remote_items: RemoteItems
     plando_connections: KDL3PlandoConnections
-    death_link: DeathLink
     game_language: GameLanguage
     goal: Goal
     goal_speed: GoalSpeed
-    total_heart_stars: TotalHeartStars
+    max_heart_stars: MaxHeartStars
     heart_stars_required: HeartStarsRequired
     filler_percentage: FillerPercentage
     trap_percentage: TrapPercentage
@@ -435,3 +463,17 @@ class KDL3Options(PerGameCommonOptions):
     gooey_flavor: GooeyFlavor
     music_shuffle: MusicShuffle
     virtual_console: VirtualConsoleChanges
+
+    total_heart_stars: TotalHeartStars  # remove in 2 versions
+
+
+kdl3_option_groups: List[OptionGroup] = [
+    OptionGroup("Goal Options", [Goal, GoalSpeed, MaxHeartStars, HeartStarsRequired, JumpingTarget, ]),
+    OptionGroup("World Options", [RemoteItems, StrictBosses, OpenWorld, OpenWorldBossRequirement, ConsumableChecks,
+                                  StarChecks, FillerPercentage, TrapPercentage, GooeyTrapPercentage,
+                                  SlowTrapPercentage, AbilityTrapPercentage, LevelShuffle, BossShuffle,
+                                  AnimalRandomization, CopyAbilityRandomization,  BossRequirementRandom,
+                                  Gifting, ]),
+    OptionGroup("Cosmetic Options", [GameLanguage, BossShuffleAllowBB, KirbyFlavorPreset, KirbyFlavor,
+                                     GooeyFlavorPreset, GooeyFlavor, MusicShuffle, VirtualConsoleChanges, ]),
+]
