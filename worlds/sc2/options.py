@@ -7,8 +7,8 @@ from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list, \
     campaign_mission_table, SC2Race, MissionFlag
+from .mission_orders import vanilla_shuffle_order, mini_campaign_order
 from .mission_groups import mission_groups, MissionGroupNames
-from .mission_order.options import CustomMissionOrder
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -129,7 +129,6 @@ class MissionOrder(Choice):
     Grid: Missions are arranged into a grid. Completing a mission unlocks the adjacent missions. Corners may be omitted to make the grid more square. Complete the bottom-right mission to win.
     Golden Path: A required line of missions with several optional branches, similar to the Wings of Liberty campaign.
     Hopscotch: Missions alternate between mandatory missions and pairs of optional missions.
-    Custom: Uses the YAML's custom mission order option. See documentation for usage.
     """
     display_name = "Mission Order"
     option_vanilla = 0
@@ -140,7 +139,6 @@ class MissionOrder(Choice):
     option_grid = 9
     option_golden_path = 10
     option_hopscotch = 11
-    option_custom = 99
 
 
 class MaximumCampaignSize(Range):
@@ -150,7 +148,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 101
+    range_end = 105
     default = 83
 
 
@@ -1018,7 +1016,6 @@ class Starcraft2Options(PerGameCommonOptions):
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
 
-    custom_mission_order: CustomMissionOrder
 
 def get_option_value(world: Union['SC2World', None], name: str) -> Union[int, FrozenSet]:
     if world is None:
@@ -1132,11 +1129,17 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     return excluded_missions
 
 
-static_mission_orders = [
+campaign_depending_orders = [
     MissionOrder.option_vanilla,
     MissionOrder.option_vanilla_shuffled,
     MissionOrder.option_mini_campaign
 ]
+
+static_mission_orders = {
+    MissionOrder.option_vanilla: vanilla_shuffle_order,
+    MissionOrder.option_vanilla_shuffled: vanilla_shuffle_order,
+    MissionOrder.option_mini_campaign: mini_campaign_order
+}
 
 dynamic_mission_orders = [
     MissionOrder.option_golden_path,

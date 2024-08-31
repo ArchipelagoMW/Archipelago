@@ -1130,19 +1130,22 @@ item_table = {
     item_names.ZERGLING_HARDENED_CARAPACE:
         ItemData(200 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 0, SC2Race.ZERG, parent_item=item_names.ZERGLING, origin={"hots"}),
     item_names.ZERGLING_ADRENAL_OVERLOAD:
-        ItemData(201 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 1, SC2Race.ZERG, parent_item=item_names.ZERGLING, origin={"hots"}),
+        ItemData(201 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 1, SC2Race.ZERG, parent_item=item_names.ZERGLING, 
+                 origin={"hots"}, classification=ItemClassification.progression),
     item_names.ZERGLING_METABOLIC_BOOST:
         ItemData(202 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 2, SC2Race.ZERG, parent_item=item_names.ZERGLING,
                  origin={"hots"}, classification=ItemClassification.filler),
     item_names.ROACH_HYDRIODIC_BILE:
-        ItemData(203 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 3, SC2Race.ZERG, parent_item=item_names.ROACH, origin={"hots"}),
+        ItemData(203 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 3, SC2Race.ZERG, parent_item=item_names.ROACH, 
+                 origin={"hots"}, classification=ItemClassification.progression),
     item_names.ROACH_ADAPTIVE_PLATING:
         ItemData(204 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 4, SC2Race.ZERG, parent_item=item_names.ROACH, origin={"hots"}),
     item_names.ROACH_TUNNELING_CLAWS:
         ItemData(205 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 5, SC2Race.ZERG, parent_item=item_names.ROACH,
                  origin={"hots"}, classification=ItemClassification.filler),
     item_names.HYDRALISK_FRENZY:
-        ItemData(206 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 6, SC2Race.ZERG, parent_item=item_names.HYDRALISK, origin={"hots"}),
+        ItemData(206 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 6, SC2Race.ZERG, parent_item=item_names.HYDRALISK, \
+                 origin={"hots"}, classification=ItemClassification.progression),
     item_names.HYDRALISK_ANCILLARY_CARAPACE:
         ItemData(207 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 7, SC2Race.ZERG, parent_item=item_names.HYDRALISK,
                  origin={"hots"}, classification=ItemClassification.filler),
@@ -1341,7 +1344,7 @@ item_table = {
                  origin={"ext"}, classification=ItemClassification.filler),
     item_names.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION:
         ItemData(271 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 11, SC2Race.ZERG, parent_item=item_names.SWARM_QUEEN,
-                 origin={"ext"}),
+                 origin={"ext"}, classification=ItemClassification.progression),
     item_names.SWARM_QUEEN_RESOURCE_EFFICIENCY:
         ItemData(272 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 12, SC2Race.ZERG, parent_item=item_names.SWARM_QUEEN,
                  origin={"ext"}),
@@ -1762,7 +1765,7 @@ item_table = {
     item_names.HAVOC_DETECT_WEAKNESS: ItemData(374 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 14, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.HAVOC),
     item_names.HAVOC_BLOODSHARD_RESONANCE: ItemData(375 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 15, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.HAVOC),
     item_names.ZEALOT_SENTINEL_CENTURION_LEG_ENHANCEMENTS: ItemData(376 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 16, SC2Race.PROTOSS, origin={"bw"}),
-    item_names.ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY: ItemData(377 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 17, SC2Race.PROTOSS, origin={"bw"}),
+    item_names.ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY: ItemData(377 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 17, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"bw"}),
     item_names.ORACLE_BOSONIC_CORE: ItemData(378 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 18, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.ORACLE),
     item_names.SCOUT_RESOURCE_EFFICIENCY: ItemData(379 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 19, SC2Race.PROTOSS, origin={"ext"}, parent_item=item_names.SCOUT),
     item_names.IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION: ItemData(380 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 20, SC2Race.PROTOSS, origin={"ext"}),
@@ -1784,7 +1787,7 @@ item_table = {
     item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY: ItemData(509 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 9, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
     item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY: ItemData(510 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 10, SC2Race.PROTOSS, parent_item=item_names.DARK_TEMPLAR),
     item_names.BLOOD_HUNTER_BRUTAL_EFFICIENCY: ItemData(511 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 11, SC2Race.PROTOSS, parent_item=item_names.BLOOD_HUNTER),
-    item_names.SENTRY_DOUBLE_SHIELD_RECHARGE: ItemData(512 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 12, SC2Race.PROTOSS, parent_item=item_names.SENTRY),
+    item_names.SENTRY_DOUBLE_SHIELD_RECHARGE: ItemData(512 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 12, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.SENTRY),
     item_names.ENERGIZER_MOBILE_CHRONO_BEAM: ItemData(513 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 13, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.ENERGIZER),
     item_names.HAVOC_ENDURING_SIGHT: ItemData(514 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 14, SC2Race.PROTOSS, parent_item=item_names.HAVOC),
     item_names.HIGH_TEMPLAR_PLASMA_SURGE: ItemData(515 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 15, SC2Race.PROTOSS, parent_item=item_names.HIGH_TEMPLAR),

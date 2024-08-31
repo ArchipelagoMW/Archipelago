@@ -212,12 +212,11 @@ class SC2Logic:
         """
         return (
             state.has_any({item_names.SIEGE_TANK, item_names.DIAMONDBACK, item_names.MARAUDER, item_names.CYCLONE, item_names.BANSHEE}, self.player)
-            or (self.advanced_tactics
-                and (
-                    state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
-                    or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
-                    or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
-                )
+            or self.advanced_tactics
+            and (
+                state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
+                or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
             )
         )
     
@@ -238,7 +237,7 @@ class SC2Logic:
                 )
             )
         )
-    
+
     def protoss_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
         """
         Ability to deal with trains (moving target with a lot of HP)
@@ -258,7 +257,6 @@ class SC2Logic:
                     )
                 ) 
             )
-
         )
 
     def terran_can_rescue(self, state) -> bool:
@@ -389,7 +387,7 @@ class SC2Logic:
             and self.terran_defense_rating(state, True) >= 3
         )
 
-    def engine_of_destruction_requirement(self, state: CollectionState):
+    def terran_engine_of_destruction_requirement(self, state: CollectionState):
         return (
             self.marine_medic_upgrade(state)
             and (state.has(item_names.WRAITH, self.player)
@@ -399,6 +397,54 @@ class SC2Logic:
                 )
             )
         )
+
+    def zerg_engine_of_destruction_requirement(self, state: CollectionState):
+        return (
+            self.zergling_hydra_roach_start(state)
+            and state.has(item_names.SWARM_QUEEN, self.player)
+            and (
+                    self.zerg_competent_anti_air(state)
+                    and self.zerg_common_unit(state)
+                )
+
+        )
+
+
+    def protoss_engine_of_destruction_requirement(self, state: CollectionState):
+        return (
+            self.zealot_sentry_slayer_start(state)
+            and (
+                    state.has(item_names.SENTRY, self.player)
+                    or (self.advanced_tactics
+                        and state.has(item_names.SHIELD_BATTERY, self.player)
+                    )   
+                )
+            and (
+                    self.protoss_competent_anti_air(state)
+                    and self.protoss_common_unit(state)
+                )
+        )
+
+    def zergling_hydra_roach_start(self, state: CollectionState):
+        """
+        Created mainly for engine of destruction start, but works for other missions with no-build starts.
+        :param state:
+        :return:
+        """
+        return (
+            state.has_any({item_names.ZERGLING_ADRENAL_OVERLOAD, item_names.HYDRALISK_FRENZY, item_names.ROACH_HYDRIODIC_BILE}, self.player)
+        )
+
+    def zealot_sentry_slayer_start(self, state: CollectionState):
+        """
+        Created mainly for engine of destruction start, but works for other missions with no-build starts.
+        :param state:
+        :return:
+        """
+        return (
+            state.has_any({item_names.ZEALOT_WHIRLWIND, item_names.SENTRY_DOUBLE_SHIELD_RECHARGE, item_names.SLAYER_PHASE_BLINK}, self.player)
+        )
+
 
     def all_in_requirement(self, state: CollectionState):
         """
@@ -701,6 +747,7 @@ class SC2Logic:
             return self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state)
 
     # LotV
+
 
     def protoss_defense_rating(self, state: CollectionState, zerg_enemy: bool) -> int:
         """

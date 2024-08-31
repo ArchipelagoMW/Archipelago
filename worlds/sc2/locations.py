@@ -419,33 +419,6 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.terran_common_unit(state)
                 and (logic.marine_medic_upgrade(state) or adv_tactics))
         ),
-        make_location_data(SC2Mission.THE_DIG.mission_name, "Northwestern Protoss Base", SC2WOL_LOC_ID_OFFSET + 909, LocationType.MASTERY,
-            lambda state: (
-                logic.terran_basic_anti_air(state)
-                and logic.terran_defense_rating(state, False, True) >= 8
-                and logic.terran_defense_rating(state, False, False) >= 6
-                and logic.terran_common_unit(state)
-                and (logic.marine_medic_upgrade(state) or adv_tactics)
-                and (logic.terran_base_trasher(state) or state.has(item_names.COMMAND_CENTER_SCANNER_SWEEP, player)))
-        ),
-        make_location_data(SC2Mission.THE_DIG.mission_name, "Northeastern Protoss Base", SC2WOL_LOC_ID_OFFSET + 910, LocationType.MASTERY,
-            lambda state: (
-                logic.terran_basic_anti_air(state)
-                and logic.terran_defense_rating(state, False, True) >= 8
-                and logic.terran_defense_rating(state, False, False) >= 6
-                and logic.terran_common_unit(state)
-                and (logic.marine_medic_upgrade(state) or adv_tactics)
-                and (logic.terran_base_trasher(state) or state.has(item_names.COMMAND_CENTER_SCANNER_SWEEP, player)))
-        ),
-        make_location_data(SC2Mission.THE_DIG.mission_name, "Eastern Protoss Base", SC2WOL_LOC_ID_OFFSET + 911, LocationType.MASTERY,
-            lambda state: (
-                logic.terran_basic_anti_air(state)
-                and logic.terran_defense_rating(state, False, True) >= 8
-                and logic.terran_defense_rating(state, False, False) >= 6
-                and logic.terran_common_unit(state)
-                and (logic.marine_medic_upgrade(state) or adv_tactics)
-                and (logic.terran_base_trasher(state) or state.has(item_names.COMMAND_CENTER_SCANNER_SWEEP, player)))
-        ),
         make_location_data(SC2Mission.THE_MOEBIUS_FACTOR.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
             lambda state: (
                 logic.terran_basic_anti_air(state)
@@ -711,34 +684,34 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_common_unit
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Odin", SC2WOL_LOC_ID_OFFSET + 1901, LocationType.EXTRA,
             logic.marine_medic_upgrade
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Loki", SC2WOL_LOC_ID_OFFSET + 1902, LocationType.CHALLENGE,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Lab Devourer", SC2WOL_LOC_ID_OFFSET + 1903, LocationType.VANILLA,
             logic.marine_medic_upgrade
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "North Devourer", SC2WOL_LOC_ID_OFFSET + 1904, LocationType.VANILLA,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Southeast Devourer", SC2WOL_LOC_ID_OFFSET + 1905, LocationType.VANILLA,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "West Base", SC2WOL_LOC_ID_OFFSET + 1906, LocationType.EXTRA,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Northwest Base", SC2WOL_LOC_ID_OFFSET + 1907, LocationType.EXTRA,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Northeast Base", SC2WOL_LOC_ID_OFFSET + 1908, LocationType.EXTRA,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION.mission_name, "Southeast Base", SC2WOL_LOC_ID_OFFSET + 1909, LocationType.EXTRA,
-            logic.engine_of_destruction_requirement
+            logic.terran_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
             logic.terran_competent_comp
@@ -2895,6 +2868,118 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.CUTTHROAT_P.mission_name, "West Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 3607, LocationType.EXTRA,
             logic.protoss_common_unit
         ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3700, LocationType.VICTORY,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Odin", SC2_RACESWAP_LOC_ID_OFFSET + 3701, LocationType.EXTRA,
+            logic.zergling_hydra_roach_start
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Loki", SC2_RACESWAP_LOC_ID_OFFSET + 3702, LocationType.CHALLENGE,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Lab Devourer", SC2_RACESWAP_LOC_ID_OFFSET + 3703, LocationType.VANILLA,
+            logic.zergling_hydra_roach_start
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "North Devourer", SC2_RACESWAP_LOC_ID_OFFSET + 3704, LocationType.VANILLA,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Southeast Devourer", SC2_RACESWAP_LOC_ID_OFFSET + 3705, LocationType.VANILLA,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "West Base", SC2_RACESWAP_LOC_ID_OFFSET + 3706, LocationType.EXTRA,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Northwest Base", SC2_RACESWAP_LOC_ID_OFFSET + 3707, LocationType.EXTRA,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Northeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 3708, LocationType.EXTRA,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name, "Southeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 3709, LocationType.EXTRA,
+            logic.zerg_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3800, LocationType.VICTORY,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Odin", SC2_RACESWAP_LOC_ID_OFFSET + 3801, LocationType.EXTRA,
+            logic.zealot_sentry_slayer_start
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Loki", SC2_RACESWAP_LOC_ID_OFFSET + 3802, LocationType.CHALLENGE,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Lab Devourer", SC2_RACESWAP_LOC_ID_OFFSET + 3803, LocationType.VANILLA,
+            logic.zealot_sentry_slayer_start
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "North Devourer", SC2_RACESWAP_LOC_ID_OFFSET + 3804, LocationType.VANILLA,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Southeast Devourer", SC2_RACESWAP_LOC_ID_OFFSET + 3805, LocationType.VANILLA,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "West Base", SC2_RACESWAP_LOC_ID_OFFSET + 3806, LocationType.EXTRA,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Northwest Base", SC2_RACESWAP_LOC_ID_OFFSET + 3807, LocationType.EXTRA,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Northeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 3808, LocationType.EXTRA,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name, "Southeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 3809, LocationType.EXTRA,
+            logic.protoss_engine_of_destruction_requirement
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3900, LocationType.VICTORY,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Tower 1", SC2_RACESWAP_LOC_ID_OFFSET + 3901, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Tower 2", SC2_RACESWAP_LOC_ID_OFFSET + 3902, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Tower 3", SC2_RACESWAP_LOC_ID_OFFSET + 3903, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 3904, LocationType.VANILLA),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Barracks", SC2_RACESWAP_LOC_ID_OFFSET + 3905, LocationType.EXTRA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Factories", SC2_RACESWAP_LOC_ID_OFFSET + 3906, LocationType.EXTRA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Starports", SC2_RACESWAP_LOC_ID_OFFSET + 3907, LocationType.EXTRA,
+            lambda state: adv_tactics or logic.zerg_competent_comp(state)
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Brutalisk Prime Survives", SC2_RACESWAP_LOC_ID_OFFSET + 3908, LocationType.CHALLENGE,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 3909, LocationType.EXTRA),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 4000, LocationType.VICTORY,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Tower 1", SC2_RACESWAP_LOC_ID_OFFSET + 4001, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Tower 2", SC2_RACESWAP_LOC_ID_OFFSET + 4002, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Tower 3", SC2_RACESWAP_LOC_ID_OFFSET + 4003, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 4004, LocationType.VANILLA),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "All Barracks", SC2_RACESWAP_LOC_ID_OFFSET + 4005, LocationType.EXTRA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "All Factories", SC2_RACESWAP_LOC_ID_OFFSET + 4006, LocationType.EXTRA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "All Starports", SC2_RACESWAP_LOC_ID_OFFSET + 4007, LocationType.EXTRA,
+            lambda state: adv_tactics or logic.protoss_competent_comp(state)
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Nyon's Vengeance Survives", SC2_RACESWAP_LOC_ID_OFFSET + 4008, LocationType.CHALLENGE,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 4009, LocationType.EXTRA),
     ]
 
     beat_events = []
