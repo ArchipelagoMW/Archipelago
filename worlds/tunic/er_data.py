@@ -523,7 +523,6 @@ class RegionInfo(NamedTuple):
     game_scene: str  # the name of the scene in the actual game
     dead_end: int = 0  # if a region has only one exit
     outlet_region: Optional[str] = None
-    is_fake_region: bool = False
 
 
 # gets the outlet region name if it exists, the region if it doesn't
@@ -665,7 +664,6 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Library Rotunda to Lab": RegionInfo("Library Rotunda"),
     "Library Lab": RegionInfo("Library Lab"),
     "Library Lab Lower": RegionInfo("Library Lab"),
-    "Library Lab on Portal Pad": RegionInfo("Library Lab", outlet_region="Library Lab on Portal Pad"),
     "Library Lab on Portal Pad": RegionInfo("Library Lab"),
     "Library Portal": RegionInfo("Library Lab", outlet_region="Library Lab on Portal Pad"),
     "Library Lab to Librarian": RegionInfo("Library Lab"),
