@@ -97,7 +97,7 @@ def create_regions(world: "Sly1World"):
     create_region_and_connect(world, "Ghastly Voyage", "Swamp's Dark Center - Second Gate -> Ghastly Voyage", vv_hub_2)
     create_region_and_connect(world, "Down Home Cooking", "Swamp's Dark Center - Second Gate -> Down Home Cooking", vv_hub_2)
     create_region_and_connect(world, "Deadly Dance", "Swamp's Dark Center - Second Gate -> Deadly Dance", vv_hub_2)
-    vv_intro.connect(vv_hub, "Rocky Start -> Swamp's Dark Center")
+    vv_intro.connect(vv_hub, "Dread Swamp Path -> Swamp's Dark Center")
 
     # ------------------------------- Fire in the Sky ---------------------------------- #
     fits_intro = create_region_and_connect(world, "Perilous Ascent", "Hideout -> Perilous Ascent", hideout)
@@ -105,7 +105,7 @@ def create_regions(world: "Sly1World"):
     create_region_and_connect(world, "Flaming Temple of Flame", "Inside the Stronghold -> Flaming Temple of Flame", fits_hub)
     create_region_and_connect(world, "Unseen Foe", "Inside the Stronghold -> Unseen Foe", fits_hub)
     create_region_and_connect(world, "King of the Hill", "Inside the Stronghold -> King of the Hill", fits_hub)
-    fits_hub_2 = create_region_and_connect(world, "Inside the Stronghold", "Inside the Stronghold -> Inside the Stronghold - Second Gate", fits_hub)
+    fits_hub_2 = create_region_and_connect(world, "Inside the Stronghold - Second Gate", "Inside the Stronghold -> Inside the Stronghold - Second Gate", fits_hub)
     create_region_and_connect(world, "Rapid Fire Assault", "Inside the Stronghold - Second Gate -> Rapid Fire Assault", fits_hub_2)
     create_region_and_connect(world, "Desperate Race", "Inside the Stronghold - Second Gate -> Desperate Race", fits_hub_2)
     create_region_and_connect(world, "Duel by the Dragon", "Inside the Stronghold - Second Gate -> Duel by the Dragon", fits_hub_2)

@@ -15,7 +15,8 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     
         itempool += create_multiple_items(world, name, item_amount, item_type)
 
-    itempool += create_junk_items(world, get_total_locations() - len(itempool))
+    # itempool += create_junk_items(world, get_total_locations(world) - len(itempool))
+    print(itempool)
     return itempool
 
 def create_item(world: "Sly1World", name: str) -> Item:
@@ -42,42 +43,49 @@ def create_junk_items(world: "Sly1World", count: int) -> List[Item]:
 
 sly_items = {
     # Progressive Moves
-    "Progressive Dive Attack": ItemData(100020001, ItemClassification.useful, 2),
-    "Progressive Roll": ItemData(100020002, ItemClassification.useful, 2),
-    "Progressive Slow Motion": ItemData(100020003, ItemClassification.useful, 3),
-    "Progressive Safety": ItemData(100020007, ItemClassification.useful, 2),
-    "Progressive Invisibility": ItemData(100020010, ItemClassification.progression_skip_balancing, 2),
+    "Progressive Dive Attack": ItemData(10020001, ItemClassification.useful, 2),
+    "Progressive Roll": ItemData(10020002, ItemClassification.useful, 2),
+    "Progressive Slow Motion": ItemData(10020003, ItemClassification.useful, 3),
+    "Progressive Safety": ItemData(10020007, ItemClassification.useful, 2),
+    "Progressive Invisibility": ItemData(10020010, ItemClassification.progression_skip_balancing, 2),
     
     # Non-progressive Moves
-    "Coin Magnet": ItemData(100020004, ItemClassification.useful),
-    "Mine": ItemData(100020005, ItemClassification.useful),
-    "Fast": ItemData(100020006, ItemClassification.useful),
-    "Decoy": ItemData(100020008, ItemClassification.useful),
-    "Hacking": ItemData(100020009, ItemClassification.useful),
+    "Coin Magnet": ItemData(10020004, ItemClassification.useful),
+    "Mine": ItemData(10020005, ItemClassification.useful),
+    "Fast": ItemData(10020006, ItemClassification.useful),
+    "Decoy": ItemData(10020008, ItemClassification.useful),
+    "Hacking": ItemData(10020009, ItemClassification.useful),
 
     # Blueprints
-    "ToT Blueprints": ItemData(100020011, ItemClassification.useful),
-    "SSE Blueprints": ItemData(100020012, ItemClassification.useful),
-    "VV Blueprints": ItemData(100020013, ItemClassification.useful),
-    "FitS Blueprints": ItemData(100020014, ItemClassification.useful),
+    "ToT Blueprints": ItemData(10020011, ItemClassification.useful),
+    "SSE Blueprints": ItemData(10020012, ItemClassification.useful),
+    "VV Blueprints": ItemData(10020013, ItemClassification.useful),
+    "FitS Blueprints": ItemData(10020014, ItemClassification.useful),
 
     # Keys
-    "ToT Key": ItemData(100020015, ItemClassification.progression, 7),
-    "SSE Key": ItemData(100020016, ItemClassification.progression, 7),
-    "VV Key": ItemData(100020017, ItemClassification.progression, 7),
-    "FitS Key": ItemData(100020018, ItemClassification.progression, 7),
+    "ToT Key": ItemData(10020015, ItemClassification.progression, 7),
+    "SSE Key": ItemData(10020016, ItemClassification.progression, 7),
+    "VV Key": ItemData(10020017, ItemClassification.progression, 7),
+    "FitS Key": ItemData(10020018, ItemClassification.progression, 7)
+}
 
-    # Levels/Worlds - TBI
+sly_episodes = {
+    "Tides of Terror": ItemData(10020021, ItemClassification.progression),
+    "Sunset Snake Eyes": ItemData(10020022, ItemClassification.progression),
+    "Vicious Voodoo": ItemData(10020023, ItemClassification.progression),
+    "Fire in the Sky": ItemData(10020024, ItemClassification.progression)
 }
 
 junk_items = {
     # Junk
-    "Charm": ItemData(100020019, ItemClassification.filler),
-    "1-Up": ItemData(100020020, ItemClassification.filler)
+    "Charm": ItemData(10020019, ItemClassification.filler),
+    "1-Up": ItemData(10020020, ItemClassification.filler)
 
     # Traps - TBI
 }
 
 item_table = {
-    **sly_items
+    **sly_items,
+    **sly_episodes,
+    **junk_items
 }
