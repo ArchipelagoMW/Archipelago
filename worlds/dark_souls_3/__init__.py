@@ -1252,6 +1252,9 @@ class DarkSouls3World(World):
                 lambda item: not item.advancement
             )
 
+        # Prevent the player from prioritizing and "excluding" the same location
+        self.options.priority_locations.value -= allow_useful_locations
+
         if self.options.excluded_location_behavior == "allow_useful":
             self.options.exclude_locations.value.clear()
 
