@@ -1504,16 +1504,19 @@ class DarkSouls3World(World):
         # We include all the items the game knows about so that users can manually request items
         # that aren't randomized, and then we _also_ include all the items that are placed in
         # practice `item_dictionary.values()` doesn't include upgraded or infused weapons.
-        all_items = {
-            cast(DarkSouls3Item, location.item).data
+        items_by_name = {
+            location.item.name: cast(DarkSouls3Item, location.item).data
             for location in self.multiworld.get_filled_locations()
             # item.code None is used for events, which we want to skip
             if location.item.code is not None and location.item.player == self.player
-        }.union(item_dictionary.values())
+        }
+        for item in item_dictionary.values():
+            if item.name not in items_by_name:
+                items_by_name[item.name] = item
 
         ap_ids_to_ds3_ids: Dict[str, int] = {}
         item_counts: Dict[str, int] = {}
-        for item in all_items:
+        for item in items_by_name.values():
             if item.ap_code is None: continue
             if item.ds3_code: ap_ids_to_ds3_ids[str(item.ap_code)] = item.ds3_code
             if item.count != 1: item_counts[str(item.ap_code)] = item.count
