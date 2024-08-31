@@ -155,8 +155,7 @@ class TunicWorld(World):
                         if is_mismatched:
                             raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
                                             f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
-                                            f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
-                                            f"connection {cxn.entrance} <-> {cxn.exit}")
+                                            f"{tunic.player_name}'s plando connection {cxn.entrance} <-> {cxn.exit}")
                     if new_cxn:
                         cls.seed_groups[group]["plando"].value.append(cxn)
 
@@ -187,17 +186,17 @@ class TunicWorld(World):
         if self.options.laurels_location:
             laurels = self.create_item("Hero's Laurels")
             if self.options.laurels_location == "6_coins":
-                self.multiworld.get_location("Coins in the Well - 6 Coins", self.player).place_locked_item(laurels)
+                self.get_location("Coins in the Well - 6 Coins").place_locked_item(laurels)
             elif self.options.laurels_location == "10_coins":
-                self.multiworld.get_location("Coins in the Well - 10 Coins", self.player).place_locked_item(laurels)
+                self.get_location("Coins in the Well - 10 Coins").place_locked_item(laurels)
             elif self.options.laurels_location == "10_fairies":
-                self.multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", self.player).place_locked_item(laurels)
+                self.get_location("Secret Gathering Place - 10 Fairy Reward").place_locked_item(laurels)
             items_to_create["Hero's Laurels"] = 0
 
         if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
                 hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
-                self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
+                self.get_location(location).place_locked_item(hex_item)
                 items_to_create[rgb_hexagon] = 0
             items_to_create[gold_hexagon] -= 3
 
@@ -297,15 +296,15 @@ class TunicWorld(World):
                 self.multiworld.regions.append(region)
 
             for region_name, exits in tunic_regions.items():
-                region = self.multiworld.get_region(region_name, self.player)
+                region = self.get_region(region_name)
                 region.add_exits(exits)
 
             for location_name, location_id in self.location_name_to_id.items():
-                region = self.multiworld.get_region(location_table[location_name].region, self.player)
+                region = self.get_region(location_table[location_name].region)
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
 
-            victory_region = self.multiworld.get_region("Spirit Arena", self.player)
+            victory_region = self.get_region("Spirit Arena")
             victory_location = TunicLocation(self.player, "The Heir", None, victory_region)
             victory_location.place_locked_item(TunicItem("Victory", ItemClassification.progression, None, self.player))
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
@@ -339,10 +338,9 @@ class TunicWorld(World):
                     name, connection = paths[location.parent_region]
                 except KeyError:
                     # logic bug, proceed with warning since it takes a long time to update AP
-                    warning(f"{location.name} is not logically accessible for "
-                            f"{self.multiworld.get_file_safe_player_name(self.player)}. "
-                            "Creating entrance hint Inaccessible. "
-                            "Please report this to the TUNIC rando devs.")
+                    warning(f"{location.name} is not logically accessible for {self.player_name}. "
+                            "Creating entrance hint Inaccessible. Please report this to the TUNIC rando devs. "
+                            "If you are using Plando Items (excluding early locations), then this is likely the cause.")
                     hint_text = "Inaccessible"
                 else:
                     while connection != ("Menu", None):
@@ -410,7 +408,9 @@ class TunicWorld(World):
         return slot_data
 
     # for the universal tracker, doesn't get called in standard gen
+    # docs: https://github.com/FarisTheAncient/Archipelago/blob/tracker/worlds/tracker/docs/re-gen-passthrough.md
     @staticmethod
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+        # we are using re_gen_passthrough over modifying the world here due to complexities with ER
         return slot_data
