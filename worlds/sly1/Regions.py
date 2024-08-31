@@ -57,8 +57,8 @@ episode_regions = {
 def create_regions(world: "Sly1World"): 
     # I think this is where I would stitch in the paris files with a menu region
     # That connects to both the hideout and paris through a save file
-    # menu = create_region(world, "Menu")
-    hideout = create_region(world, "Hideout")
+    menu = create_region(world, "Menu")
+    hideout = create_region_and_connect(world, "Hideout", "Save File -> Hideout", menu)
 
     # ------------------------------- Tides of Terror ---------------------------------- #
     tot_intro = create_region_and_connect(world, "Stealthy Approach", "Hideout -> Stealthy Approach", hideout)
