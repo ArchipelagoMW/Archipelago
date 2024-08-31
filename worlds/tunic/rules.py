@@ -27,10 +27,10 @@ green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
+# "Quarry - [East] Bombable Wall" is excluded from this list since it has slightly different rules
 bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Wing] Bombable Wall",
               "Overworld - [Central] Bombable Wall", "Overworld - [Southwest] Bombable Wall Near Fountain",
-              "Quarry - [West] Upper Area Bombable Wall", "Quarry - [East] Bombable Wall",
-              "Ruined Atoll - [Northwest] Bombable Wall"]
+              "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
 
 
 def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
@@ -102,9 +102,11 @@ def set_region_rules(world: "TunicWorld") -> None:
         lambda state: has_melee(state, player) or state.has(fire_wand, player)
     world.get_entrance("Overworld -> Dark Tomb").access_rule = \
         lambda state: has_lantern(state, world)
+    # laurels in, ladder storage in through the furnace, or ice grapple down the belltower
     world.get_entrance("Overworld -> West Garden").access_rule = \
-        lambda state: state.has(laurels, player) \
-        or can_ladder_storage(state, world)
+        lambda state: (state.has(laurels, player)
+                       or can_ladder_storage(state, world)
+                       or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     world.get_entrance("Overworld -> Eastern Vault Fortress").access_rule = \
         lambda state: state.has(laurels, player) \
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world) \
@@ -275,10 +277,13 @@ def set_location_rules(world: "TunicWorld") -> None:
     # Ruined Atoll
     set_rule(world.get_location("Ruined Atoll - [West] Near Kevin Block"),
              lambda state: state.has(laurels, player))
+    # ice grapple push a crab through the door
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Lower Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Upper Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("Librarian - Hexagon Green"),
              lambda state: has_sword(state, player))
 
@@ -347,8 +352,16 @@ def set_location_rules(world: "TunicWorld") -> None:
     # Bombable Walls
     for location_name in bomb_walls:
         # has_sword is there because you can buy bombs in the shop
-        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or has_sword(state, player))
+        set_rule(world.get_location(location_name),
+                 lambda state: state.has(gun, player)
+                 or has_sword(state, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     add_rule(world.get_location("Cube Cave - Holy Cross Chest"),
+             lambda state: state.has(gun, player)
+             or has_sword(state, player)
+             or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    # can't ice grapple to this one, not enough space
+    set_rule(world.get_location("Quarry - [East] Bombable Wall"),
              lambda state: state.has(gun, player) or has_sword(state, player))
 
     # Shop

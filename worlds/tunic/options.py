@@ -199,8 +199,8 @@ class IceGrappling(Choice):
     Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
     Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
     Hard includes luring or grappling enemies to get to where you want to go.
-    The Medium and Hard options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks.
-    Note: You will still be expected to ice grapple to the slime in East Forest even with this option off.
+    The Medium and Hard options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Note: You will still be expected to ice grapple to the slime in East Forest from below with this option off.
     """
     internal_name = "ice_grappling"
     display_name = "Ice Grapple Logic"
@@ -236,7 +236,7 @@ class LadderStorageWithoutItems(Toggle):
     If enabled, you will be expected to perform Ladder Storage without progression items.
     This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
 
-    This option has no effect if you do not have Ladder Storage Logic enabled
+    This option has no effect if you do not have Ladder Storage Logic enabled.
     """
     internal_name = "ladder_storage_without_items"
     display_name = "Ladder Storage without Items"

@@ -450,8 +450,9 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             shop_count = 0
     
     for i in range(shop_count):
-        # todo: put a try except here for when the pop fails to say "too many shops plando'd"
         portal1 = two_plus.pop()
+        if portal1 is None:
+            raise Exception("TUNIC: Too many shops in the pool, or something else went wrong.")
         portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
                          destination="Previous Region", tag="_")
         create_shop_region(world, regions)

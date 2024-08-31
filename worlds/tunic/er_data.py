@@ -235,12 +235,12 @@ portal_mapping: List[Portal] = [
            destination="Sewer_Boss", tag="_"),
     Portal(name="Well Exit towards Furnace", region="Beneath the Well Back",
            destination="Overworld Redux", tag="_west_aqueduct"),
-    
+
     Portal(name="Well Boss to Well", region="Well Boss",
            destination="Sewer", tag="_"),
     Portal(name="Checkpoint to Dark Tomb", region="Dark Tomb Checkpoint",
            destination="Crypt Redux", tag="_"),
-    
+
     Portal(name="Dark Tomb to Overworld", region="Dark Tomb Entry Point",
            destination="Overworld Redux", tag="_"),
     Portal(name="Dark Tomb to Furnace", region="Dark Tomb Dark Exit",
@@ -262,7 +262,7 @@ portal_mapping: List[Portal] = [
            destination="RelicVoid", tag="_teleporter_relic plinth"),
     Portal(name="West Garden to Far Shore", region="West Garden Portal",
            destination="Transit", tag="_teleporter_archipelagos_teleporter"),
-    
+
     Portal(name="Magic Dagger House Exit", region="Magic Dagger House",
            destination="Archipelagos Redux", tag="_"),
 
@@ -339,7 +339,7 @@ portal_mapping: List[Portal] = [
            destination="Frog Stairs", tag="_eye"),
     Portal(name="Frog Stairs Mouth Entrance", region="Ruined Atoll Frog Mouth",
            destination="Frog Stairs", tag="_mouth"),
-    
+
     Portal(name="Frog Stairs Eye Exit", region="Frog Stairs Eye Exit",
            destination="Atoll Redux", tag="_eye"),
     Portal(name="Frog Stairs Mouth Exit", region="Frog Stairs Upper",
@@ -348,39 +348,39 @@ portal_mapping: List[Portal] = [
            destination="frog cave main", tag="_Entrance"),
     Portal(name="Frog Stairs to Frog's Domain's Exit", region="Frog Stairs Lower",
            destination="frog cave main", tag="_Exit"),
-    
+
     Portal(name="Frog's Domain Ladder Exit", region="Frog's Domain Entry",
            destination="Frog Stairs", tag="_Entrance"),
     Portal(name="Frog's Domain Orb Exit", region="Frog's Domain Back",
            destination="Frog Stairs", tag="_Exit"),
-    
+
     Portal(name="Library Exterior Tree", region="Library Exterior Tree Region",
            destination="Atoll Redux", tag="_"),
     Portal(name="Library Exterior Ladder", region="Library Exterior Ladder Region",
            destination="Library Hall", tag="_"),
-    
+
     Portal(name="Library Hall Bookshelf Exit", region="Library Hall Bookshelf",
            destination="Library Exterior", tag="_"),
     Portal(name="Library Hero's Grave", region="Library Hero's Grave Region",
            destination="RelicVoid", tag="_teleporter_relic plinth"),
     Portal(name="Library Hall to Rotunda", region="Library Hall to Rotunda",
            destination="Library Rotunda", tag="_"),
-    
+
     Portal(name="Library Rotunda Lower Exit", region="Library Rotunda to Hall",
            destination="Library Hall", tag="_"),
     Portal(name="Library Rotunda Upper Exit", region="Library Rotunda to Lab",
            destination="Library Lab", tag="_"),
-    
+
     Portal(name="Library Lab to Rotunda", region="Library Lab Lower",
            destination="Library Rotunda", tag="_"),
     Portal(name="Library to Far Shore", region="Library Portal",
            destination="Transit", tag="_teleporter_library teleporter"),
     Portal(name="Library Lab to Librarian Arena", region="Library Lab to Librarian",
            destination="Library Arena", tag="_"),
-    
+
     Portal(name="Librarian Arena Exit", region="Library Arena",
            destination="Library Lab", tag="_"),
-    
+
     Portal(name="Stairs to Top of the Mountain", region="Lower Mountain Stairs",
            destination="Mountaintop", tag="_"),
     Portal(name="Mountain to Quarry", region="Lower Mountain",
@@ -523,6 +523,7 @@ class RegionInfo(NamedTuple):
     game_scene: str  # the name of the scene in the actual game
     dead_end: int = 0  # if a region has only one exit
     outlet_region: Optional[str] = None
+    is_fake_region: bool = False
 
 
 # gets the outlet region name if it exists, the region if it doesn't
@@ -664,6 +665,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Library Rotunda to Lab": RegionInfo("Library Rotunda"),
     "Library Lab": RegionInfo("Library Lab"),
     "Library Lab Lower": RegionInfo("Library Lab"),
+    "Library Lab on Portal Pad": RegionInfo("Library Lab", outlet_region="Library Lab on Portal Pad"),
     "Library Lab on Portal Pad": RegionInfo("Library Lab"),
     "Library Portal": RegionInfo("Library Lab", outlet_region="Library Lab on Portal Pad"),
     "Library Lab to Librarian": RegionInfo("Library Lab"),
@@ -819,6 +821,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         "Cube Cave Entrance Region":
             [],
+        # drop a rudeling, icebolt or ice bomb
+        "Overworld to West Garden from Furnace":
+            [["IG3"]],
     },
     "East Overworld": {
         "Above Ruined Passage":
@@ -1066,7 +1071,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
 
     "Forest Grave Path Main": {
         "Forest Grave Path Upper":
-            [["Hyperdash"], ["LS2"]],
+            [["Hyperdash"], ["LS2"], ["IG3"]],
         "Forest Grave Path by Grave":
             [],
     },
@@ -1337,7 +1342,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Library Lab": {
         "Library Lab Lower":
             [["Hyperdash"]],
-        "Library Portal":
+        "Library Lab on Portal Pad":
             [],
         "Library Lab to Librarian":
             [],
@@ -1632,6 +1637,9 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Swamp Front": {
         "Swamp Mid":
             [],
+        # get one pillar from the gate, then dash onto the gate, very tricky
+        "Back of Swamp Laurels Area":
+            [["Hyperdash", "Zip"]],
     },
     "Swamp Mid": {
         "Swamp Front":
@@ -1662,12 +1670,21 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"], ["LS2"]],
         "Swamp Hero's Grave Region":
             [],
+        "Swamp Mid":
+            [["LS2"]],
+        "Swamp Front":
+            [["LS1"]],
+        "Swamp to Cathedral Main Entrance Region":
+            [["LS3"]],
+        "Swamp to Cathedral Treasure Room":
+            [["LS3"]]
     },
     "Back of Swamp Laurels Area": {
         "Back of Swamp":
             [["Hyperdash"]],
+        # get one pillar from the gate, then dash onto the gate, very tricky
         "Swamp Mid":
-            [["IG1", "Hyperdash"]],
+            [["IG1", "Hyperdash"], ["Hyperdash", "Zip"]],
     },
     "Swamp Hero's Grave Region": {
         "Back of Swamp":

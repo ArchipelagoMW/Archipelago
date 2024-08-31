@@ -102,6 +102,9 @@ easy_ls: List[LadderInfo] = [
     # Fortress main entry and grave path lower entry, ls at the ladder by the telescope
     LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Main_Big Door"),
     LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Lower"),
+    # Use the top of the ladder by the telescope
+    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Upper"),
+    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress East_"),
 
     # same as above, except from the east side of the area
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Overworld Redux_"),
@@ -128,9 +131,7 @@ easy_ls: List[LadderInfo] = [
 medium_ls: List[LadderInfo] = [
     # region-destination versions of easy ls spots
     LadderInfo("East Forest", "East Forest Dance Fox Spot", dest_is_region=True),
-    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard", dest_is_region=True),
-    LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard", dest_is_region=True),
-    LadderInfo("Fortress Exterior near cave", "Fortress Courtyard", "Ladder to Beneath the Vault", dest_is_region=True),
+    # fortress courtyard knockdowns are never logically relevant, the fuse requires upper
     LadderInfo("Back of Swamp", "Swamp Mid", dest_is_region=True),
     LadderInfo("Back of Swamp", "Swamp Front", dest_is_region=True),
 
@@ -141,8 +142,6 @@ medium_ls: List[LadderInfo] = [
     LadderInfo("Forest Grave Path Main", "Sword Access, East Forest Redux_upper"),
 
     # Upper exits from the courtyard. Use the ramp in the courtyard, then the blocks north of the first fuse
-    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Upper"),
-    LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress East_"),
     LadderInfo("Fortress Exterior from Overworld", "Fortress Courtyard Upper", dest_is_region=True),
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Reliquary_Upper"),
     LadderInfo("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress East_"),
@@ -177,8 +176,10 @@ hard_ls: List[LadderInfo] = [
     LadderInfo("Beneath the Well Front", "Beneath the Well Back", "Ladders in Well", dest_is_region=True),
     # go through the hexagon engraving above the vault door
     LadderInfo("Frog's Domain Front", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
-    # maybe a little egregious -- ice grapple a spider off, then use it to push into the portal room
-    LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
+    # the turret at the end here is not affected by enemy rando
+    LadderInfo("Frog's Domain Front", "Frog's Domain Back", "Ladders to Frog's Domain", dest_is_region=True),
+    # todo: see if we can use that new laurels strat here
+    # LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
     # go behind the cathedral to reach the door, pretty easily doable
     LadderInfo("Swamp Mid", "Swamp Redux 2, Cathedral Redux_main", "Ladders in Swamp"),
     LadderInfo("Back of Swamp", "Swamp Redux 2, Cathedral Redux_main"),
