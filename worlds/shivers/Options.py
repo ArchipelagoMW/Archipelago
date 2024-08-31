@@ -92,6 +92,21 @@ class FullPots(Choice):
     option_mixed = 2
 
 
+class PuzzleCollectBehavior(Choice):
+    """
+    Defines what happens to puzzles on collect.
+    - Solve None: No puzzles will be solved when collected.
+    - Prevent Out Of Logic Access: All puzzles, except Red Door and Skull Door, will be solved when collected.
+    This prevents out of logic access to Gods Room and Slide.
+    - Solve All: All puzzles will be solved when collected. (original behavior)
+    """
+    display_name = "Puzzle Collect Behavior"
+    option_solve_none = 0
+    option_prevent_out_of_logic_access = 1
+    option_solve_all = 2
+    default = 1
+
+
 @dataclass
 class ShiversOptions(PerGameCommonOptions):
     ixupi_captures_needed: IxupiCapturesNeeded
@@ -104,3 +119,4 @@ class ShiversOptions(PerGameCommonOptions):
     early_lightning: EarlyLightning
     location_pot_pieces: LocationPotPieces
     full_pots: FullPots
+    puzzle_collect_behavior: PuzzleCollectBehavior
