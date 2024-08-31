@@ -1,3 +1,5 @@
+# The forbidden list is used to break word associations when the item
+# it would match is not the ideal one.
 FORBIDDEN = [
     # MAX_ARROWS_UPGRADE, MAX_BOMBS_UPGRADE, MAX_POWDER_UPGRADE
     # arrows and bombs will be matched to arrow and bomb respectively through pluralization
@@ -31,6 +33,7 @@ FORBIDDEN = [
 ]
 
 SYNONYMS = {
+    # POWER_BRACELET
     'ANKLET': 'POWER_BRACELET',
     'ARMLET': 'POWER_BRACELET',
     'BAND': 'POWER_BRACELET',
@@ -43,37 +46,59 @@ SYNONYMS = {
     'GLOVE': 'POWER_BRACELET',
     'RING': 'POWER_BRACELET',
     'STRENGTH': 'POWER_BRACELET',
+
+    # SHIELD
     'AEGIS': 'SHIELD',
-    'AEGISSHIELD': 'SHIELD', # Final Fantasy 1
     'BUCKLER': 'SHIELD',
     'SHLD': 'SHIELD',
+
+    # BOW
     'BALLISTA': 'BOW',
+
+    # HOOKSHOT
     'GRAPPLE': 'HOOKSHOT',
     'GRAPPLING': 'HOOKSHOT',
     'ROPE': 'HOOKSHOT',
+
+    # MAGIC_ROD
     'BEAM': 'MAGIC_ROD',
     'CANE': 'MAGIC_ROD',
     'STAFF': 'MAGIC_ROD',
     'WAND': 'MAGIC_ROD',
+
+    # PEGASUS_BOOTS
     'BOOT': 'PEGASUS_BOOTS',
     'GREAVES': 'PEGASUS_BOOTS',
     'RUN': 'PEGASUS_BOOTS',
     'SHOE': 'PEGASUS_BOOTS',
     'SPEED': 'PEGASUS_BOOTS',
+
+    # OCARINA
     'FLUTE': 'OCARINA',
     'RECORDER': 'OCARINA',
+
+    # FEATHER
     'JUMP': 'FEATHER',
     'PLUME': 'FEATHER',
     'WING': 'FEATHER',
+
+    # SHOVEL
     'DIG': 'SHOVEL',
+
+    # MAGIC_POWDER
     'BAG': 'MAGIC_POWDER',
     'CASE': 'MAGIC_POWDER',
     'DUST': 'MAGIC_POWDER',
     'POUCH': 'MAGIC_POWDER',
     'SACK': 'MAGIC_POWDER',
+
+    # BOMB
+    'BLAST': 'BOMB',
     'BOMBCHU': 'BOMB',
     'FIRECRACKER': 'BOMB',
     'TNT': 'BOMB',
+
+    # SWORD
     'BLADE': 'SWORD',
     'CUT': 'SWORD',
     'DAGGER': 'SWORD',
@@ -91,46 +116,119 @@ SYNONYMS = {
     'SABRE': 'SWORD',
     'SCIMITAR': 'SWORD',
     'SLASH': 'SWORD',
-    'VORPAL': 'SWORD', # Final Fantasy 1
-    'XCALBER': 'SWORD', # Final Fantasy 1
+
+    # FLIPPERS
     'FLIPPER': 'FLIPPERS',
     'SWIM': 'FLIPPERS',
+
+    # MEDICINE
     'BOTTLE': 'MEDICINE',
     'FLASK': 'MEDICINE',
     'LEMONADE': 'MEDICINE',
-    'OXYALE': 'MEDICINE', # Final Fantasy 1
     'POTION': 'MEDICINE',
     'TEA': 'MEDICINE',
+
+    # TAIL_KEY
+
+    # ANGLER_KEY
+
+    # FACE_KEY
+
+    # BIRD_KEY
+
+    # SLIME_KEY
+
+    # GOLD_LEAF
     'HERB': 'GOLD_LEAF',
+
+    # RUPEES_20
+    'COIN': 'RUPEES_20',
+    'MONEY': 'RUPEES_20',
+
+    # RUPEES_50
+
+    # RUPEES_100
+
+    # RUPEES_200
+
+    # RUPEES_500
+    'GEM': 'RUPEES_500',
+    'JEWEL': 'RUPEES_500',
+
+    # SEASHELL
     'CARAPACE': 'SEASHELL',
     'CONCH': 'SEASHELL',
     'SHELL': 'SEASHELL',
+
+    # MESSAGE (master stalfos message)
+    'NOTHING': 'MESSAGE',
+    'TRAP': 'MESSAGE',
+
+    # BOOMERANG
     'BOOMER': 'BOOMERANG',
+
+    # HEART_PIECE
+
+    # BOWWOW
     'BEAST': 'BOWWOW',
     'PET': 'BOWWOW',
+
+    # ARROWS_10
+
+    # SINGLE_ARROW
     'MISSILE': 'SINGLE_ARROW',
     'QUIVER': 'SINGLE_ARROW',
+
+    # ROOSTER
     'BIRD': 'ROOSTER',
     'CHICKEN': 'ROOSTER',
-    'COJIRO': 'ROOSTER', # Ocarina of Time
     'CUCCO': 'ROOSTER',
     'FLY': 'ROOSTER',
     'GRIFFIN': 'ROOSTER',
     'GRYPHON': 'ROOSTER',
+
+    # MAX_POWDER_UPGRADE
+
+    # MAX_BOMBS_UPGRADE
+
+    # MAX_ARROWS_UPGRADE
+
+    # RED_TUNIC
+
+    # BLUE_TUNIC
     'ARMOR': 'BLUE_TUNIC',
-    'DRAGONARMOR': 'BLUE_TUNIC', # Final Fantasy 1
     'MAIL': 'BLUE_TUNIC',
     'SUIT': 'BLUE_TUNIC',
+
+    # HEART_CONTAINER
     'TANK': 'HEART_CONTAINER',
+
+    # BAD_HEART_CONTAINER
+
+    # TOADSTOOL
     'FUNGAL': 'TOADSTOOL',
     'FUNGUS': 'TOADSTOOL',
     'MUSHROOM': 'TOADSTOOL',
     'SHROOM': 'TOADSTOOL',
+
+    # GUARDIAN_ACORN
     'NUT': 'GUARDIAN_ACORN',
     'SEED': 'GUARDIAN_ACORN',
-    'KEY': 'KEY', # Without this, keys show up as nightmare keys
+
+    # KEY
+    'KEY': 'KEY', # Without this, foreign keys show up as nightmare keys
+
+    # NIGHTMARE_KEY
+
+    # MAP
+
+    # COMPASS
+
+    # STONE_BEAK
     'FOSSIL': 'STONE_BEAK',
     'RELIC': 'STONE_BEAK',
+
+    # SONG1
     'BOLERO': 'SONG1',
     'LULLABY': 'SONG1',
     'MELODY': 'SONG1',
@@ -140,91 +238,246 @@ SYNONYMS = {
     'REQUIEM': 'SONG1',
     'SERENADE': 'SONG1',
     'SONG': 'SONG1',
+
+    # SONG2
     'FISH': 'SONG2',
     'SURF': 'SONG2',
+
+    # SONG3
     'FROG': 'SONG3',
+
+    # INSTRUMENT1
     'CELLO': 'INSTRUMENT1',
     'GUITAR': 'INSTRUMENT1',
     'LUTE': 'INSTRUMENT1',
     'VIOLIN': 'INSTRUMENT1',
+
+    # INSTRUMENT2
     'HORN': 'INSTRUMENT2',
+
+    # INSTRUMENT3
     'BELL': 'INSTRUMENT3',
     'CHIME': 'INSTRUMENT3',
+
+    # INSTRUMENT4
     'HARP': 'INSTRUMENT4',
     'KANTELE': 'INSTRUMENT4',
+
+    # INSTRUMENT5
     'MARIMBA': 'INSTRUMENT5',
     'XYLOPHONE': 'INSTRUMENT5',
+
+    # INSTRUMENT6 (triangle)
+
+    # INSTRUMENT7
     'KEYBOARD': 'INSTRUMENT7',
     'ORGAN': 'INSTRUMENT7',
     'PIANO': 'INSTRUMENT7',
+
+    # INSTRUMENT8
     'DRUM': 'INSTRUMENT8',
+
+    # TRADING_ITEM_YOSHI_DOLL
     'DINOSAUR': 'TRADING_ITEM_YOSHI_DOLL',
     'DRAGON': 'TRADING_ITEM_YOSHI_DOLL',
     'TOY': 'TRADING_ITEM_YOSHI_DOLL',
+
+    # TRADING_ITEM_RIBBON
     'HAIRBAND': 'TRADING_ITEM_RIBBON',
     'HAIRPIN': 'TRADING_ITEM_RIBBON',
+
+    # TRADING_ITEM_DOG_FOOD
     'CAN': 'TRADING_ITEM_DOG_FOOD',
+
+    # TRADING_ITEM_BANANAS
     'BANANA': 'TRADING_ITEM_BANANAS',
+
+    # TRADING_ITEM_STICK
     'BRANCH': 'TRADING_ITEM_STICK',
     'TWIG': 'TRADING_ITEM_STICK',
+
+    # TRADING_ITEM_HONEYCOMB
     'BEEHIVE': 'TRADING_ITEM_HONEYCOMB',
     'HIVE': 'TRADING_ITEM_HONEYCOMB',
     'HONEY': 'TRADING_ITEM_HONEYCOMB',
+
+    # TRADING_ITEM_PINEAPPLE
+    'FOOD': 'TRADING_ITEM_PINEAPPLE',
     'FRUIT': 'TRADING_ITEM_PINEAPPLE',
     'GOURD': 'TRADING_ITEM_PINEAPPLE',
+
+    # TRADING_ITEM_HIBISCUS
     'FLOWER': 'TRADING_ITEM_HIBISCUS',
     'PETAL': 'TRADING_ITEM_HIBISCUS',
+
+    # TRADING_ITEM_LETTER
     'CARD': 'TRADING_ITEM_LETTER',
     'MESSAGE': 'TRADING_ITEM_LETTER',
-    'DUSTY': 'TRADING_ITEM_BROOM',  # Tunic: a broom
+
+    # TRADING_ITEM_BROOM
     'SWEEP': 'TRADING_ITEM_BROOM',
+
+    # TRADING_ITEM_FISHING_HOOK
     'CLAW': 'TRADING_ITEM_FISHING_HOOK',
+
+    # TRADING_ITEM_NECKLACE
     'AMULET': 'TRADING_ITEM_NECKLACE',
     'BEADS': 'TRADING_ITEM_NECKLACE',
     'PEARLS': 'TRADING_ITEM_NECKLACE',
     'PENDANT': 'TRADING_ITEM_NECKLACE',
     'ROSARY': 'TRADING_ITEM_NECKLACE',
+
+    # TRADING_ITEM_SCALE
+
+    # TRADING_ITEM_MAGNIFYING_GLASS
     'FINDER': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'LENS': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'MIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'SCOPE': 'TRADING_ITEM_MAGNIFYING_GLASS',
-    'CHAOS': 'PIECE_OF_POWER', # Chaos emerald
+    'XRAY': 'TRADING_ITEM_MAGNIFYING_GLASS',
+
+    # PIECE_OF_POWER
     'TRIANGLE': 'PIECE_OF_POWER',
     'POWER': 'PIECE_OF_POWER',
-    'QUESTAGON': 'PIECE_OF_POWER',  # Tunic: triforce piece equivalent
     'STAR': 'PIECE_OF_POWER',
     'TRIFORCE': 'PIECE_OF_POWER',
-
-    #SMZ3
-    'BIGKEY': 'NIGHTMARE_KEY',
-    'SANCTUARYHEARTCONTAINER': 'HEART_CONTAINER',
-    'BOSSHEARTCONTAINER': 'HEART_CONTAINER',
-    'HEARTCONTAINER': 'HEART_CONTAINER',
-    'ENERGYTANK': 'HEART_CONTAINER',
-    'BLUEBOOMERANG': 'BOOMERANG',
-    'MAGICMIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
-
-    # TODO: Also use AP item name
 }
 
+# for multi-word matches and game specific matches
 PHRASES = {
+    # Generic
     'BIG KEY': 'NIGHTMARE_KEY',
     'BOSS KEY': 'NIGHTMARE_KEY',
     'HEART PIECE': 'HEART_PIECE',
     'PIECE OF HEART': 'HEART_PIECE',
-    'ALL-SEEING EYE': 'TRADING_ITEM_MAGNIFYING_GLASS',  # Noita: lets you find secrets
+
+    # Final Fantasy 1
+    'AEGISSHIELD': 'SHIELD',
+    'DRAGONARMOR': 'BLUE_TUNIC',
+    'OXYALE': 'MEDICINE',
+    'VORPAL': 'SWORD',
+    'XCALBER': 'SWORD',
+
+    # The Legend of Zelda
+    'WATER OF LIFE': 'MEDICINE',
+
+    # Noita
+    'ALL-SEEING EYE': 'TRADING_ITEM_MAGNIFYING_GLASS',  # lets you find secrets
+
+    # Ocarina of Time
+    'COJIRO': 'ROOSTER',
+
+    #SMZ3
+    'ARROWUPGRADE10': 'MAX_ARROWS_UPGRADE',
+    'ARROWUPGRADE5': 'MAX_ARROWS_UPGRADE',
+    'BIGKEY': 'NIGHTMARE_KEY',
+    'BIGKEYDP': 'NIGHTMARE_KEY',
+    'BIGKEYEP': 'NIGHTMARE_KEY',
+    'BIGKEYGT': 'NIGHTMARE_KEY',
+    'BIGKEYIP': 'NIGHTMARE_KEY',
+    'BIGKEYMM': 'NIGHTMARE_KEY',
+    'BIGKEYPD': 'NIGHTMARE_KEY',
+    'BIGKEYSP': 'NIGHTMARE_KEY',
+    'BIGKEYSW': 'NIGHTMARE_KEY',
+    'BIGKEYTH': 'NIGHTMARE_KEY',
+    'BIGKEYTR': 'NIGHTMARE_KEY',
+    'BIGKEYTT': 'NIGHTMARE_KEY',
+    'BLUEBOOMERANG': 'BOOMERANG',
+    'BOMBUPGRADE10': 'MAX_BOMBS_UPGRADE',
+    'BOMBUPGRADE5': 'MAX_BOMBS_UPGRADE',
+    'BOTTLEWITHBEE': 'MEDICINE',
+    'BOTTLEWITHBLUEPOTION': 'MEDICINE',
+    'BOTTLEWITHFAIRY': 'MEDICINE',
+    'BOTTLEWITHGOLDBEE': 'MEDICINE',
+    'BOTTLEWITHGREENPOTION': 'MEDICINE',
+    'BOTTLEWITHREDPOTION': 'MEDICINE',
+    'BYRNA': 'MAGIC_ROD',
+    'COMPASSDP': 'COMPASS',
+    'COMPASSEP': 'COMPASS',
+    'COMPASSGT': 'COMPASS',
+    'COMPASSIP': 'COMPASS',
+    'COMPASSMM': 'COMPASS',
+    'COMPASSPD': 'COMPASS',
+    'COMPASSSP': 'COMPASS',
+    'COMPASSSW': 'COMPASS',
+    'COMPASSTH': 'COMPASS',
+    'COMPASSTR': 'COMPASS',
+    'COMPASSTT': 'COMPASS',
+    'ETANK': 'HEART_CONTAINER',
+    'FIFTYRUPEES': 'RUPEES_50',
+    'FIREROD': 'MAGIC_ROD',
+    'FIVERUPEES': 'RUPEES_20',
+    'HEARTCONTAINER': 'HEART_CONTAINER',
+    'HEARTCONTAINERREFILL': 'HEART_CONTAINER',
+    'HEARTPIECE': 'HEART_PIECE',
+    'HIJUMP': 'FEATHER',
+    'ICEROD': 'MAGIC_ROD',
+    'KEYCT': 'KEY',
+    'KEYDP': 'KEY',
+    'KEYGT': 'KEY',
+    'KEYHC': 'KEY',
+    'KEYIP': 'KEY',
+    'KEYMM': 'KEY',
+    'KEYPD': 'KEY',
+    'KEYSP': 'KEY',
+    'KEYSW': 'KEY',
+    'KEYTH': 'KEY',
+    'KEYTR': 'KEY',
+    'KEYTT': 'KEY',
+    'MAPDP': 'MAP',
+    'MAPEP': 'MAP',
+    'MAPGT': 'MAP',
+    'MAPHC': 'MAP',
+    'MAPIP': 'MAP',
+    'MAPMM': 'MAP',
+    'MAPPD': 'MAP',
+    'MAPSP': 'MAP',
+    'MAPSW': 'MAP',
+    'MAPTH': 'MAP',
+    'MAPTR': 'MAP',
+    'MAPTT': 'MAP',
+    'ONEHUNDREDRUPEES': 'RUPEES_100',
+    'ONERUPEE': 'RUPEES_20',
+    'POWERBOMB': 'BOMB',
+    'PROGRESSIVEGLOVE': 'POWER_BRACELET',
+    'PROGRESSIVESHIELD': 'SHIELD',
+    'PROGRESSIVESWORD': 'SWORD',
+    'PROGRESSIVETUNIC': 'RED_TUNIC',
+    'REDBOOMERANG': 'BOOMERANG',
+    'SILVERARROWS': 'SINGLE_ARROW',
+    'SMMAPBRINSTAR': 'MAP',
+    'SMMAPLOWERNORFAIR': 'MAP',
+    'SMMAPMARIDIA': 'MAP',
+    'SMMAPWRECKEDSHIP': 'MAP',
+    'SOMARIA': 'MAGIC_ROD',
+    'SPACEJUMP': 'FEATHER',
+    'SPEEDBOOSTER': 'PEGASUS_BOOTS',
+    'TENARROWS': 'ARROWS_10',
+    'THREEBOMBS': 'BOMB',
+    'THREEHUNDREDRUPEES': 'RUPEES_500',
+    'TWENTYRUPEES': 'RUPEES_20',
+    'TWENTYRUPEES2': 'RUPEES_20',
+    'VARIA': 'RED_TUNIC',
+
+    # Sonic Adventure 2 Battle
+    'CHAOS EMERALD': 'PIECE_OF_POWER',
+
+    # Super Mario World
+    'P-BALLOON': 'FEATHER',
 
     # TUNIC
-    'MAGIC ORB': 'HOOKSHOT',
-    'HP BERRY': 'GUARDIAN_ACORN',
-    'MP BERRY': 'GUARDIAN_ACORN',
-    'HP OFFERING': 'TRADING_ITEM_HIBISCUS',  # Tunic: a flower
+    "AURA'S GEM": 'SHIELD',  # card that enhances the shield
+    'DUSTY': 'TRADING_ITEM_BROOM',  # a broom
     'HERO RELIC - HP': 'TRADING_ITEM_HIBISCUS',
-    'MP OFFERING': 'TOADSTOOL',  # Tunic: a mushroom
     'HERO RELIC - MP': 'TOADSTOOL',
-    'SP OFFERING': 'FEATHER',  # Tunic: a feather
     'HERO RELIC - SP': 'FEATHER',
-    'INVERTED ASH': 'MEDICINE',  # Tunic: card with a potion on it
-    "AURA'S GEM": 'SHIELD',  # Tunic: card that enhances the shield
-    'SPRING FALLS': 'TRADING_ITEM_HIBISCUS',  # Tunic: a flower
+    'HP BERRY': 'GUARDIAN_ACORN',
+    'HP OFFERING': 'TRADING_ITEM_HIBISCUS',  # a flower
+    'INVERTED ASH': 'MEDICINE',  # card with a potion on it
+    'MAGIC ORB': 'HOOKSHOT',
+    'MP BERRY': 'GUARDIAN_ACORN',
+    'MP OFFERING': 'TOADSTOOL',  # a mushroom
+    'QUESTAGON': 'PIECE_OF_POWER',  # triforce piece equivalent
+    'SP OFFERING': 'FEATHER',  # a feather
+    'SPRING FALLS': 'TRADING_ITEM_HIBISCUS',  # a flower
 }
