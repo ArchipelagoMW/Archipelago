@@ -227,18 +227,20 @@ def is_radiated(x: float, y: float, z: float) -> bool:
 
 
 def can_access_location(state: "CollectionState", player: int, loc: LocationDict) -> bool:
-    need_laser_cutter = loc.get("need_laser_cutter", False)
-    if need_laser_cutter and not has_laser_cutter(state, player):
-        return False
-
-    need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
-    propulsion_logic_flips = loc.get("propulsion_logic_flips", False)
-    propulsion_cannon_logic : PropulsionCannonLogic = state.multiworld.worlds[player].options.propulsion_cannon_logic
-    if need_propulsion_cannon and not has_propulsion_cannon(state, player):
-        if not propulsion_logic_flips or not propulsion_cannon_logic.value == 1:
+    propulsion_cannon_logic: PropulsionCannonLogic = state.multiworld.worlds[player].options.propulsion_cannon_logic
+    if propulsion_cannon_logic.value == 2:
+        cannon_logic_control = loc.get("cannon_logic_control", 0)
+    else:
+        cannon_logic_control = 0
+        
+    if not has_laser_cutter(state, player):
+        need_laser_cutter = loc.get("need_laser_cutter", False)
+        if need_laser_cutter or (cannon_logic_control == 2):
             return False
-    elif propulsion_logic_flips and not has_propulsion_cannon(state, player):
-        if propulsion_cannon_logic.value == 2:
+
+    if not has_propulsion_cannon(state, player):
+        need_propulsion_cannon = loc.get("need_propulsion_cannon", False)
+        if need_propulsion_cannon and (cannon_logic_control == 0):
             return False
 
     pos = loc["position"]

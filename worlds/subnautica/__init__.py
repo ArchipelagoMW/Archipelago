@@ -53,6 +53,8 @@ class SubnauticaWorld(World):
             raise Exception("Filler Items Distribution needs at least one positive weight.")
         if self.options.early_seaglide:
             self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
+        if self.options.propulsion_cannon_logic.current_key == "early_propulsion_cannon":
+            self.multiworld.local_early_items[self.player]["Propulsion Cannon Fragment"] = 2
 
         scan_option: options.AggressiveScanLogic = self.options.creature_scan_logic
         creature_pool = scan_option.get_pool()
@@ -72,7 +74,7 @@ class SubnauticaWorld(World):
 
         # Link regions together
         menu_region.connect(planet_region, "Lifepod 5")
-
+        
         # Create regular locations
         location_names = itertools.chain((location["name"] for location in locations.location_table.values()),
                                          (creature + creatures.suffix for creature in self.creatures_to_scan))
