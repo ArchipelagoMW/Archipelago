@@ -57,3 +57,11 @@ def set_rules(world: "Sly1World"):
              lambda state: state.has("VV Key", world.player, 7))
     add_rule(world.multiworld.get_entrance("Inside the Stronghold - Second Gate -> Flame Fu!", world.player),
              lambda state: state.has("FitS Key", world.player, 7))
+    
+    set_rule(world.multiworld.get_entrance("Hideout -> Cold Heart of Hate", world.player),
+             lambda state: state.has("Beat Raleigh", world.player)
+             and state.has("Beat Muggshot", world.player)
+             and state.has("Mz Ruby", world.player)
+             and state.has("Beat Panda King", world.player))
+        
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

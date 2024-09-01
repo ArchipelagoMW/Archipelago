@@ -23,7 +23,6 @@ class ItemData(NamedTuple):
 class LocData(NamedTuple):
     ap_code: Optional[int]
     region: Optional[str]
-    key_requirement: int = 0
 
 episode_type_to_name = {
     EpisodeType.ToT:      "Tides of Terror",
