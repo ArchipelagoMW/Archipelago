@@ -210,7 +210,7 @@ class SC2Mission(Enum):
     SAFE_HAVEN_P = 95, "Safe Haven (Protoss)", SC2Campaign.WOL, "Colonist", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_safe_haven", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     HAVENS_FALL_Z = 96, "Haven's Fall (Zerg)", SC2Campaign.WOL, "Colonist", SC2Race.ZERG, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
     HAVENS_FALL_P = 97, "Haven's Fall (Protoss)", SC2Campaign.WOL, "Colonist", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
-    SMASH_AND_GRAB_Z = 98, "Smash and Grab (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap 
+    SMASH_AND_GRAB_Z = 98, "Smash and Grab (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
     SMASH_AND_GRAB_P = 99, "Smash and Grab (Protoss)", SC2Campaign.WOL, "Artifact", SC2Race.PROTOSS, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
     # 100/101 - The Dig
     # 102/103 - Moebius Factor
@@ -283,116 +283,6 @@ class MissionInfo(NamedTuple):
     ui_vertical_padding: int = 0   # How many blank padding tiles go above this mission in the launcher
 
 
-class FillMission(NamedTuple):
-    type: MissionPools
-    connect_to: List[MissionConnection]
-    category: str
-    number: int = 0  # number of worlds need beaten
-    completion_critical: bool = False  # missions needed to beat game
-    or_requirements: bool = False  # true if the requirements should be or-ed instead of and-ed
-    removal_priority: int = 0  # how many missions missing from the pool required to remove this mission
-    ui_vertical_padding: int = 0  # How many blank padding tiles go above this mission in the launcher
-
-
-vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
-    SC2Campaign.WOL: {
-        SC2Mission.LIBERATION_DAY.mission_name: MissionInfo(SC2Mission.LIBERATION_DAY, [], SC2Mission.LIBERATION_DAY.area, completion_critical=True),
-        SC2Mission.THE_OUTLAWS.mission_name: MissionInfo(SC2Mission.THE_OUTLAWS, [MissionConnection(1, SC2Campaign.WOL)], SC2Mission.THE_OUTLAWS.area, completion_critical=True),
-        SC2Mission.ZERO_HOUR.mission_name: MissionInfo(SC2Mission.ZERO_HOUR, [MissionConnection(2, SC2Campaign.WOL)], SC2Mission.ZERO_HOUR.area, completion_critical=True),
-        SC2Mission.EVACUATION.mission_name: MissionInfo(SC2Mission.EVACUATION, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.EVACUATION.area),
-        SC2Mission.OUTBREAK.mission_name: MissionInfo(SC2Mission.OUTBREAK, [MissionConnection(4, SC2Campaign.WOL)], SC2Mission.OUTBREAK.area),
-        SC2Mission.SAFE_HAVEN.mission_name: MissionInfo(SC2Mission.SAFE_HAVEN, [MissionConnection(5, SC2Campaign.WOL)], SC2Mission.SAFE_HAVEN.area, number=7),
-        SC2Mission.HAVENS_FALL.mission_name: MissionInfo(SC2Mission.HAVENS_FALL, [MissionConnection(5, SC2Campaign.WOL)], SC2Mission.HAVENS_FALL.area, number=7),
-        SC2Mission.SMASH_AND_GRAB.mission_name: MissionInfo(SC2Mission.SMASH_AND_GRAB, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.SMASH_AND_GRAB.area, completion_critical=True),
-        SC2Mission.THE_DIG.mission_name: MissionInfo(SC2Mission.THE_DIG, [MissionConnection(8, SC2Campaign.WOL)], SC2Mission.THE_DIG.area, number=8, completion_critical=True),
-        SC2Mission.THE_MOEBIUS_FACTOR.mission_name: MissionInfo(SC2Mission.THE_MOEBIUS_FACTOR, [MissionConnection(9, SC2Campaign.WOL)], SC2Mission.THE_MOEBIUS_FACTOR.area, number=11, completion_critical=True),
-        SC2Mission.SUPERNOVA.mission_name: MissionInfo(SC2Mission.SUPERNOVA, [MissionConnection(10, SC2Campaign.WOL)], SC2Mission.SUPERNOVA.area, number=14, completion_critical=True),
-        SC2Mission.MAW_OF_THE_VOID.mission_name: MissionInfo(SC2Mission.MAW_OF_THE_VOID, [MissionConnection(11, SC2Campaign.WOL)], SC2Mission.MAW_OF_THE_VOID.area, completion_critical=True),
-        SC2Mission.DEVILS_PLAYGROUND.mission_name: MissionInfo(SC2Mission.DEVILS_PLAYGROUND, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.DEVILS_PLAYGROUND.area, number=4),
-        SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name: MissionInfo(SC2Mission.WELCOME_TO_THE_JUNGLE, [MissionConnection(13, SC2Campaign.WOL)], SC2Mission.WELCOME_TO_THE_JUNGLE.area),
-        SC2Mission.BREAKOUT.mission_name: MissionInfo(SC2Mission.BREAKOUT, [MissionConnection(14, SC2Campaign.WOL)], SC2Mission.BREAKOUT.area, number=8),
-        SC2Mission.GHOST_OF_A_CHANCE.mission_name: MissionInfo(SC2Mission.GHOST_OF_A_CHANCE, [MissionConnection(14, SC2Campaign.WOL)], SC2Mission.GHOST_OF_A_CHANCE.area, number=8),
-        SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name: MissionInfo(SC2Mission.THE_GREAT_TRAIN_ROBBERY, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.THE_GREAT_TRAIN_ROBBERY.area, number=6),
-        SC2Mission.CUTTHROAT.mission_name: MissionInfo(SC2Mission.CUTTHROAT, [MissionConnection(17, SC2Campaign.WOL)], SC2Mission.THE_GREAT_TRAIN_ROBBERY.area),
-        SC2Mission.ENGINE_OF_DESTRUCTION.mission_name: MissionInfo(SC2Mission.ENGINE_OF_DESTRUCTION, [MissionConnection(18, SC2Campaign.WOL)], SC2Mission.ENGINE_OF_DESTRUCTION.area),
-        SC2Mission.MEDIA_BLITZ.mission_name: MissionInfo(SC2Mission.MEDIA_BLITZ, [MissionConnection(19, SC2Campaign.WOL)], SC2Mission.MEDIA_BLITZ.area),
-        SC2Mission.PIERCING_OF_THE_SHROUD.mission_name: MissionInfo(SC2Mission.PIERCING_OF_THE_SHROUD, [MissionConnection(20, SC2Campaign.WOL)], SC2Mission.PIERCING_OF_THE_SHROUD.area),
-        SC2Mission.GATES_OF_HELL.mission_name: MissionInfo(SC2Mission.GATES_OF_HELL, [MissionConnection(12, SC2Campaign.WOL)], SC2Mission.GATES_OF_HELL.area, completion_critical=True),
-        SC2Mission.BELLY_OF_THE_BEAST.mission_name: MissionInfo(SC2Mission.BELLY_OF_THE_BEAST, [MissionConnection(22, SC2Campaign.WOL)], SC2Mission.BELLY_OF_THE_BEAST.area, completion_critical=True),
-        SC2Mission.SHATTER_THE_SKY.mission_name: MissionInfo(SC2Mission.SHATTER_THE_SKY, [MissionConnection(22, SC2Campaign.WOL)], SC2Mission.SHATTER_THE_SKY.area, completion_critical=True),
-        SC2Mission.ALL_IN.mission_name: MissionInfo(SC2Mission.ALL_IN, [MissionConnection(23, SC2Campaign.WOL), MissionConnection(24, SC2Campaign.WOL)], SC2Mission.ALL_IN.area, or_requirements=True, completion_critical=True)
-    },
-    SC2Campaign.PROPHECY: {
-        SC2Mission.WHISPERS_OF_DOOM.mission_name: MissionInfo(SC2Mission.WHISPERS_OF_DOOM, [MissionConnection(9, SC2Campaign.WOL)], SC2Mission.WHISPERS_OF_DOOM.area),
-        SC2Mission.A_SINISTER_TURN.mission_name: MissionInfo(SC2Mission.A_SINISTER_TURN, [MissionConnection(1, SC2Campaign.PROPHECY)], SC2Mission.A_SINISTER_TURN.area),
-        SC2Mission.ECHOES_OF_THE_FUTURE.mission_name: MissionInfo(SC2Mission.ECHOES_OF_THE_FUTURE, [MissionConnection(2, SC2Campaign.PROPHECY)], SC2Mission.ECHOES_OF_THE_FUTURE.area),
-        SC2Mission.IN_UTTER_DARKNESS.mission_name: MissionInfo(SC2Mission.IN_UTTER_DARKNESS, [MissionConnection(3, SC2Campaign.PROPHECY)], SC2Mission.IN_UTTER_DARKNESS.area)
-    },
-    SC2Campaign.HOTS: {
-        SC2Mission.LAB_RAT.mission_name: MissionInfo(SC2Mission.LAB_RAT, [], SC2Mission.LAB_RAT.area, completion_critical=True),
-        SC2Mission.BACK_IN_THE_SADDLE.mission_name: MissionInfo(SC2Mission.BACK_IN_THE_SADDLE, [MissionConnection(1, SC2Campaign.HOTS)], SC2Mission.BACK_IN_THE_SADDLE.area, completion_critical=True),
-        SC2Mission.RENDEZVOUS.mission_name: MissionInfo(SC2Mission.RENDEZVOUS, [MissionConnection(2, SC2Campaign.HOTS)], SC2Mission.RENDEZVOUS.area, completion_critical=True),
-        SC2Mission.HARVEST_OF_SCREAMS.mission_name: MissionInfo(SC2Mission.HARVEST_OF_SCREAMS, [MissionConnection(3, SC2Campaign.HOTS)], SC2Mission.HARVEST_OF_SCREAMS.area),
-        SC2Mission.SHOOT_THE_MESSENGER.mission_name: MissionInfo(SC2Mission.SHOOT_THE_MESSENGER, [MissionConnection(4, SC2Campaign.HOTS)], SC2Mission.SHOOT_THE_MESSENGER.area),
-        SC2Mission.ENEMY_WITHIN.mission_name: MissionInfo(SC2Mission.ENEMY_WITHIN, [MissionConnection(5, SC2Campaign.HOTS)], SC2Mission.ENEMY_WITHIN.area),
-        SC2Mission.DOMINATION.mission_name: MissionInfo(SC2Mission.DOMINATION, [MissionConnection(3, SC2Campaign.HOTS)], SC2Mission.DOMINATION.area),
-        SC2Mission.FIRE_IN_THE_SKY.mission_name: MissionInfo(SC2Mission.FIRE_IN_THE_SKY, [MissionConnection(7, SC2Campaign.HOTS)], SC2Mission.FIRE_IN_THE_SKY.area),
-        SC2Mission.OLD_SOLDIERS.mission_name: MissionInfo(SC2Mission.OLD_SOLDIERS, [MissionConnection(8, SC2Campaign.HOTS)], SC2Mission.OLD_SOLDIERS.area),
-        SC2Mission.WAKING_THE_ANCIENT.mission_name: MissionInfo(SC2Mission.WAKING_THE_ANCIENT, [MissionConnection(6, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.HOTS)], SC2Mission.WAKING_THE_ANCIENT.area, completion_critical=True, or_requirements=True),
-        SC2Mission.THE_CRUCIBLE.mission_name: MissionInfo(SC2Mission.THE_CRUCIBLE, [MissionConnection(10, SC2Campaign.HOTS)], SC2Mission.THE_CRUCIBLE.area, completion_critical=True),
-        SC2Mission.SUPREME.mission_name: MissionInfo(SC2Mission.SUPREME, [MissionConnection(11, SC2Campaign.HOTS)], SC2Mission.SUPREME.area, completion_critical=True),
-        SC2Mission.INFESTED.mission_name: MissionInfo(SC2Mission.INFESTED, [MissionConnection(6, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.HOTS), MissionConnection(12, SC2Campaign.HOTS)], SC2Mission.INFESTED.area),
-        SC2Mission.HAND_OF_DARKNESS.mission_name: MissionInfo(SC2Mission.HAND_OF_DARKNESS, [MissionConnection(13, SC2Campaign.HOTS)], SC2Mission.HAND_OF_DARKNESS.area),
-        SC2Mission.PHANTOMS_OF_THE_VOID.mission_name: MissionInfo(SC2Mission.PHANTOMS_OF_THE_VOID, [MissionConnection(14, SC2Campaign.HOTS)], SC2Mission.PHANTOMS_OF_THE_VOID.area),
-        SC2Mission.WITH_FRIENDS_LIKE_THESE.mission_name: MissionInfo(SC2Mission.WITH_FRIENDS_LIKE_THESE, [MissionConnection(6, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.HOTS), MissionConnection(12, SC2Campaign.HOTS)], SC2Mission.WITH_FRIENDS_LIKE_THESE.area),
-        SC2Mission.CONVICTION.mission_name: MissionInfo(SC2Mission.CONVICTION, [MissionConnection(16, SC2Campaign.HOTS)], SC2Mission.CONVICTION.area),
-        SC2Mission.PLANETFALL.mission_name: MissionInfo(SC2Mission.PLANETFALL, [MissionConnection(15, SC2Campaign.HOTS), MissionConnection(17, SC2Campaign.HOTS)], SC2Mission.PLANETFALL.area, completion_critical=True),
-        SC2Mission.DEATH_FROM_ABOVE.mission_name: MissionInfo(SC2Mission.DEATH_FROM_ABOVE, [MissionConnection(18, SC2Campaign.HOTS)], SC2Mission.DEATH_FROM_ABOVE.area, completion_critical=True),
-        SC2Mission.THE_RECKONING.mission_name: MissionInfo(SC2Mission.THE_RECKONING, [MissionConnection(19, SC2Campaign.HOTS)], SC2Mission.THE_RECKONING.area, completion_critical=True),
-    },
-    SC2Campaign.PROLOGUE: {
-        SC2Mission.DARK_WHISPERS.mission_name: MissionInfo(SC2Mission.DARK_WHISPERS, [], SC2Mission.DARK_WHISPERS.area),
-        SC2Mission.GHOSTS_IN_THE_FOG.mission_name: MissionInfo(SC2Mission.GHOSTS_IN_THE_FOG, [MissionConnection(1, SC2Campaign.PROLOGUE)], SC2Mission.GHOSTS_IN_THE_FOG.area),
-        SC2Mission.EVIL_AWOKEN.mission_name: MissionInfo(SC2Mission.EVIL_AWOKEN, [MissionConnection(2, SC2Campaign.PROLOGUE)], SC2Mission.EVIL_AWOKEN.area)
-    },
-    SC2Campaign.LOTV: {
-        SC2Mission.FOR_AIUR.mission_name: MissionInfo(SC2Mission.FOR_AIUR, [], SC2Mission.FOR_AIUR.area, completion_critical=True),
-        SC2Mission.THE_GROWING_SHADOW.mission_name: MissionInfo(SC2Mission.THE_GROWING_SHADOW, [MissionConnection(1, SC2Campaign.LOTV)], SC2Mission.THE_GROWING_SHADOW.area, completion_critical=True),
-        SC2Mission.THE_SPEAR_OF_ADUN.mission_name: MissionInfo(SC2Mission.THE_SPEAR_OF_ADUN, [MissionConnection(2, SC2Campaign.LOTV)], SC2Mission.THE_SPEAR_OF_ADUN.area, completion_critical=True),
-        SC2Mission.SKY_SHIELD.mission_name: MissionInfo(SC2Mission.SKY_SHIELD, [MissionConnection(3, SC2Campaign.LOTV)], SC2Mission.SKY_SHIELD.area, completion_critical=True),
-        SC2Mission.BROTHERS_IN_ARMS.mission_name: MissionInfo(SC2Mission.BROTHERS_IN_ARMS, [MissionConnection(4, SC2Campaign.LOTV)], SC2Mission.BROTHERS_IN_ARMS.area, completion_critical=True),
-        SC2Mission.AMON_S_REACH.mission_name: MissionInfo(SC2Mission.AMON_S_REACH, [MissionConnection(3, SC2Campaign.LOTV)], SC2Mission.AMON_S_REACH.area, completion_critical=True),
-        SC2Mission.LAST_STAND.mission_name: MissionInfo(SC2Mission.LAST_STAND, [MissionConnection(6, SC2Campaign.LOTV)], SC2Mission.LAST_STAND.area, completion_critical=True),
-        SC2Mission.FORBIDDEN_WEAPON.mission_name: MissionInfo(SC2Mission.FORBIDDEN_WEAPON, [MissionConnection(5, SC2Campaign.LOTV), MissionConnection(7, SC2Campaign.LOTV)], SC2Mission.FORBIDDEN_WEAPON.area, completion_critical=True, or_requirements=True),
-        SC2Mission.TEMPLE_OF_UNIFICATION.mission_name: MissionInfo(SC2Mission.TEMPLE_OF_UNIFICATION, [MissionConnection(5, SC2Campaign.LOTV), MissionConnection(7, SC2Campaign.LOTV), MissionConnection(8, SC2Campaign.LOTV)], SC2Mission.TEMPLE_OF_UNIFICATION.area, completion_critical=True),
-        SC2Mission.THE_INFINITE_CYCLE.mission_name: MissionInfo(SC2Mission.THE_INFINITE_CYCLE, [MissionConnection(9, SC2Campaign.LOTV)], SC2Mission.THE_INFINITE_CYCLE.area, completion_critical=True),
-        SC2Mission.HARBINGER_OF_OBLIVION.mission_name: MissionInfo(SC2Mission.HARBINGER_OF_OBLIVION, [MissionConnection(10, SC2Campaign.LOTV)], SC2Mission.HARBINGER_OF_OBLIVION.area, completion_critical=True),
-        SC2Mission.UNSEALING_THE_PAST.mission_name: MissionInfo(SC2Mission.UNSEALING_THE_PAST, [MissionConnection(11, SC2Campaign.LOTV)], SC2Mission.UNSEALING_THE_PAST.area, completion_critical=True),
-        SC2Mission.PURIFICATION.mission_name: MissionInfo(SC2Mission.PURIFICATION, [MissionConnection(12, SC2Campaign.LOTV)], SC2Mission.PURIFICATION.area, completion_critical=True),
-        SC2Mission.STEPS_OF_THE_RITE.mission_name: MissionInfo(SC2Mission.STEPS_OF_THE_RITE, [MissionConnection(11, SC2Campaign.LOTV)], SC2Mission.STEPS_OF_THE_RITE.area, completion_critical=True),
-        SC2Mission.RAK_SHIR.mission_name: MissionInfo(SC2Mission.RAK_SHIR, [MissionConnection(14, SC2Campaign.LOTV)], SC2Mission.RAK_SHIR.area, completion_critical=True),
-        SC2Mission.TEMPLAR_S_CHARGE.mission_name: MissionInfo(SC2Mission.TEMPLAR_S_CHARGE, [MissionConnection(13, SC2Campaign.LOTV), MissionConnection(15, SC2Campaign.LOTV)], SC2Mission.TEMPLAR_S_CHARGE.area, completion_critical=True, or_requirements=True),
-        SC2Mission.TEMPLAR_S_RETURN.mission_name: MissionInfo(SC2Mission.TEMPLAR_S_RETURN, [MissionConnection(13, SC2Campaign.LOTV), MissionConnection(15, SC2Campaign.LOTV), MissionConnection(16, SC2Campaign.LOTV)], SC2Mission.TEMPLAR_S_RETURN.area, completion_critical=True),
-        SC2Mission.THE_HOST.mission_name: MissionInfo(SC2Mission.THE_HOST, [MissionConnection(17, SC2Campaign.LOTV)], SC2Mission.THE_HOST.area, completion_critical=True),
-        SC2Mission.SALVATION.mission_name: MissionInfo(SC2Mission.SALVATION, [MissionConnection(18, SC2Campaign.LOTV)], SC2Mission.SALVATION.area, completion_critical=True),
-    },
-    SC2Campaign.EPILOGUE: {
-        SC2Mission.INTO_THE_VOID.mission_name: MissionInfo(SC2Mission.INTO_THE_VOID, [MissionConnection(25, SC2Campaign.WOL), MissionConnection(20, SC2Campaign.HOTS), MissionConnection(19, SC2Campaign.LOTV)], SC2Mission.INTO_THE_VOID.area, completion_critical=True),
-        SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name: MissionInfo(SC2Mission.THE_ESSENCE_OF_ETERNITY, [MissionConnection(1, SC2Campaign.EPILOGUE)], SC2Mission.THE_ESSENCE_OF_ETERNITY.area, completion_critical=True),
-        SC2Mission.AMON_S_FALL.mission_name: MissionInfo(SC2Mission.AMON_S_FALL, [MissionConnection(2, SC2Campaign.EPILOGUE)], SC2Mission.AMON_S_FALL.area, completion_critical=True),
-    },
-    SC2Campaign.NCO: {
-        SC2Mission.THE_ESCAPE.mission_name: MissionInfo(SC2Mission.THE_ESCAPE, [], SC2Mission.THE_ESCAPE.area, completion_critical=True),
-        SC2Mission.SUDDEN_STRIKE.mission_name: MissionInfo(SC2Mission.SUDDEN_STRIKE, [MissionConnection(1, SC2Campaign.NCO)], SC2Mission.SUDDEN_STRIKE.area, completion_critical=True),
-        SC2Mission.ENEMY_INTELLIGENCE.mission_name: MissionInfo(SC2Mission.ENEMY_INTELLIGENCE, [MissionConnection(2, SC2Campaign.NCO)], SC2Mission.ENEMY_INTELLIGENCE.area, completion_critical=True),
-        SC2Mission.TROUBLE_IN_PARADISE.mission_name: MissionInfo(SC2Mission.TROUBLE_IN_PARADISE, [MissionConnection(3, SC2Campaign.NCO)], SC2Mission.TROUBLE_IN_PARADISE.area, completion_critical=True),
-        SC2Mission.NIGHT_TERRORS.mission_name: MissionInfo(SC2Mission.NIGHT_TERRORS, [MissionConnection(4, SC2Campaign.NCO)], SC2Mission.NIGHT_TERRORS.area, completion_critical=True),
-        SC2Mission.FLASHPOINT.mission_name: MissionInfo(SC2Mission.FLASHPOINT, [MissionConnection(5, SC2Campaign.NCO)], SC2Mission.FLASHPOINT.area, completion_critical=True),
-        SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name: MissionInfo(SC2Mission.IN_THE_ENEMY_S_SHADOW, [MissionConnection(6, SC2Campaign.NCO)], SC2Mission.IN_THE_ENEMY_S_SHADOW.area, completion_critical=True),
-        SC2Mission.DARK_SKIES.mission_name: MissionInfo(SC2Mission.DARK_SKIES, [MissionConnection(7, SC2Campaign.NCO)], SC2Mission.DARK_SKIES.area, completion_critical=True),
-        SC2Mission.END_GAME.mission_name: MissionInfo(SC2Mission.END_GAME, [MissionConnection(8, SC2Campaign.NCO)], SC2Mission.END_GAME.area, completion_critical=True),
-    }
-}
 
 lookup_id_to_mission: Dict[int, SC2Mission] = {
     mission.id: mission for mission in SC2Mission

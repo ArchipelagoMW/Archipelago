@@ -456,10 +456,6 @@ class SC2Logic:
             state.has_any({item_names.ZEALOT_WHIRLWIND, item_names.SENTRY_DOUBLE_SHIELD_RECHARGE, item_names.SLAYER_PHASE_BLINK}, self.player)
         )
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c614949c1 (real fixes)
     def all_in_requirement(self, state: CollectionState):
         """
         All-in
