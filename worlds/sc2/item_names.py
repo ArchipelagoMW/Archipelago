@@ -489,6 +489,8 @@ INFESTED_DIAMONDBACK_SATURATED_CULTURES           = "Saturated Cultures (Infeste
 INFESTED_DIAMONDBACK_CAUSTIC_MUCUS                = "Caustic Mucus (Infested Diamondback)"
 INFESTED_BANSHEE_BRACED_EXOSKELETON               = "Braced Exoskeleton (Infested Banshee)"
 INFESTED_BANSHEE_RAPID_HIBERNATION                = "Rapid Hibernation (Infested Banshee)"
+INFESTED_LIBERATOR_CLOUD_DISPERSAL                = "Cloud Dispersal (Infested Liberator)"
+INFESTED_LIBERATOR_VIRAL_CONTAMINATION            = "Viral Contamination (Infested Liberator)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"

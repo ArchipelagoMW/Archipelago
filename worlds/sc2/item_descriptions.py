@@ -688,6 +688,8 @@ item_descriptions = {
     item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS: "Reduces the cooldown of the Infested Diamondback's Fungal Snare by 15 seconds.",
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON: "Infested Banshees gain +100 life.",
     item_names.INFESTED_BANSHEE_RAPID_HIBERNATION: "Infested Banshees regenerate 20 life and energy per second while burrowed.",
+    item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL: "Infested Liberators instantly transform into a cloud of microscopic organisms while attacking, reducing the damage they take by 85%.",
+    item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
     item_names.FRIGHTFUL_FLESHWELDER: "Reduces infested mechnical unit resource cost by 30%.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
