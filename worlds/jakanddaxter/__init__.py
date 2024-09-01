@@ -58,7 +58,7 @@ class JakAndDaxterSettings(settings.Group):
         more disruptive and challenging options, but may impact seed generation. Use at your own risk!"""
         description = "ArchipelaGOAL Enforce Friendly Options"
 
-    root_directory: RootDirectory = RootDirectory("%appdata%/OpenGOAL-Mods/archipelagoal")
+    root_directory: RootDirectory = RootDirectory("%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal")
     enforce_friendly_options: Union[EnforceFriendlyOptions, bool] = True
 
 
@@ -116,6 +116,7 @@ class JakAndDaxterWorld(World):
         "Precursor Orbs": set(orb_location_table.values()),
         "Trades": {location_table[Cells.to_ap_id(k)] for k in
                    {11, 12, 31, 32, 33, 96, 97, 98, 99, 13, 14, 34, 35, 100, 101}},
+        "'Free 7 Scout Flies' Power Cells": set(Cells.loc7SF_cellTable.values()),
     }
 
     # These functions and variables are Options-driven, keep them as instance variables here so that we don't clog up
@@ -242,26 +243,30 @@ class JakAndDaxterWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
         if change:
-            # No matter the option, no matter the item, set the caches to stale.
-            state.prog_items[self.player]["Reachable Orbs Fresh"] = False
+            # Orbsanity as an option is no-factor to these conditions. Matching the item name implies Orbsanity is ON,
+            # so we don't need to check the option. When Orbsanity is OFF, there won't even be any orb bundle items
+            # to collect.
 
-            # Matching the item name implies Orbsanity is ON, so we don't need to check the option.
-            # When Orbsanity is OFF, there won't even be any orb bundle items to collect.
-            # Give the player the appropriate number of Tradeable Orbs based on bundle size.
+            # Orb items do not intrinsically unlock anything that contains more Reachable Orbs, so they do not need to
+            # set the cache to stale. They just change how many orbs you have to trade with.
             if item.name == self.orb_bundle_item_name:
-                state.prog_items[self.player]["Tradeable Orbs"] += self.orb_bundle_size
+                state.prog_items[self.player]["Tradeable Orbs"] += self.orb_bundle_size  # Give a bundle of Trade Orbs
+
+            # However, every other item that changes the CollectionState should set the cache to stale, because they
+            # likely made it possible to reach more orb locations (level unlocks, region unlocks, etc.).
+            else:
+                state.prog_items[self.player]["Reachable Orbs Fresh"] = False
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
         if change:
-            # No matter the option, no matter the item, set the caches to stale.
-            state.prog_items[self.player]["Reachable Orbs Fresh"] = False
 
-            # The opposite of what we did in collect: Take away from the player
-            # the appropriate number of Tradeable Orbs based on bundle size.
+            # Do the same thing we did in collect, except subtract trade orbs instead of add.
             if item.name == self.orb_bundle_item_name:
-                state.prog_items[self.player]["Tradeable Orbs"] -= self.orb_bundle_size
+                state.prog_items[self.player]["Tradeable Orbs"] -= self.orb_bundle_size  # Take a bundle of Trade Orbs
+            else:
+                state.prog_items[self.player]["Reachable Orbs Fresh"] = False
 
             # TODO - 3.8 compatibility, remove this block when no longer required.
             if state.prog_items[self.player]["Tradeable Orbs"] < 1:

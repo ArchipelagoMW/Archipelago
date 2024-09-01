@@ -12,8 +12,8 @@ from ..Levels import level_table_with_global
 # from parent actors DON'T have an Actor ID themselves - the parent object keeps track of how many of its orbs
 # have been picked up.
 
-# In order to deal with this mess, we're creating a factory class that will generate Orb Locations for us.
-# This will be compatible with both Global Orbsanity and Per-Level Orbsanity, allowing us to create any
+# In order to deal with this mess, we're creating 2 extra functions that will create and identify Orb Locations for us.
+# These will be compatible with both Global Orbsanity and Per-Level Orbsanity, allowing us to create any
 # number of Locations depending on the bundle size chosen, while also guaranteeing that each has a unique address.
 
 # We can use 2^15 to offset them from Orb Caches, because Orb Cache ID's max out at (jak1_id + 17792).

@@ -3,165 +3,166 @@
 ## Required Software
 
 - A legally purchased copy of *Jak And Daxter: The Precursor Legacy.*
-- [The OpenGOAL Mod Launcher](https://jakmods.dev/)
+- [The OpenGOAL Launcher](https://opengoal.dev/)
 - [The Jak and Daxter .APWORLD package](https://github.com/ArchipelaGOAL/Archipelago/releases)
 
-At this time, this method of setup works on Windows only, but Linux support is a strong likelihood in the near future. 
-(OpenGOAL itself supports Linux, and the mod launcher is runnable with Python.)
-
-## Preparations
-
-- Dump your copy of the game as an ISO file to your PC.
-- Install the Mod Launcher.
-- If you are prompted by the Mod Launcher at any time during setup, provide the path to your ISO file.
+At this time, this method of setup works on Windows only, but Linux support is a strong likelihood in the near future as OpenGOAL itself supports Linux.
 
 ## Installation
 
-***OpenGOAL Mod Launcher***
+### OpenGOAL Launcher
 
-- Run the Mod Launcher and click `ArchipelaGOAL` in the mod list.
-- Click `Install` and wait for it to complete.
-  - If you have yet to be prompted for the ISO, click `Re-Extract` and provide the path to your ISO file.
-- Click `Recompile`. This may take between 30-60 seconds. It should run to 100% completion. If it does not, see the Troubleshooting section.
-- Click `View Folder`. 
-  - In the new file explorer window, take note of the current path. It should contain `gk.exe` and `goalc.exe`.
-- Verify that the mod launcher copied the extracted ISO files to the mod directory:
-  - `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data` and `%appdata%/OpenGOAL-Mods/_iso_data` should have *all* the same files; if they don't, copy those files over manually.
-  - And then `Recompile` if you needed to copy the files over.
-- **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE MOD LAUNCHER.** It will run in retail mode, which is incompatible with Archipelago. We need it to run in debug mode (see below).
-
-***Archipelago Launcher***
-
-- Copy the `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
-  - Reminder: the default installation location for Archipelago is `C:\ProgramData\Archipelago`.
-- Run the Archipelago Launcher.
-- From the left-most list, click `Generate Template Options`.
-- Select `Jak and Daxter The Precursor Legacy.yaml`. 
-- In the text file that opens, enter the name you want and remember it for later.
-- Save this file in `Archipelago/players`. You can now close the file.
-- Back in the Archipelago Launcher, click `Open host.yaml`.
-- In the text file that opens, search for `jakanddaxter_options`.
-  - You should see the block of YAML below. If you do not see it, you will need to add it.
-  - If the default path does not contain `gk.exe` and `goalc.exe`, you will need to provide the path you noted earlier. **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
+- Follow the installation process for the official OpenGOAL Launcher. See [here](https://opengoal.dev/docs/usage/installation).
+    - You must set up a vanilla installation of Jak and Daxter before you can install mods for it.
+- Follow the setup process for adding mods to the OpenGOAL Launcher. See [here](https://jakmods.dev/).
+- Install the `ArchipelaGOAL` mod from the `Available Mods` list, then click on `ArchipelaGOAL` from the `Installed Mods` list.
+- **If you installed the OpenGOAL Launcher to a non-default directory, you must follow the steps below.**
+    - In the bottom right corner of `ArchipelaGOAL`, click `Advanced`, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
+    - In the File Explorer, go to the parent directory for `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Take note of this directory.
+    - Run the Archipelago Launcher, then click on `Open host.yaml`. You should see a new text editor open that file.
+    - Search for `jakanddaxter_options`, then find the `root_directory` entry underneath it. Paste the directory you noted earlier (the one containing gk.exe and goalc.exe) inside the double quotes. 
+      **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
 
 ```
 jakanddaxter_options:
   # Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe).
   # Ensure this path contains forward slashes (/) only.
-  root_directory: "%appdata%/OpenGOAL-Mods/archipelagoal"
+  root_directory: "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal"
 ```
 
-- Back in the Launcher, from the left-most list, click `Generate`. A window will appear to generate your seed and close itself.
+  - Save the file and close it.
+- **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Jak and Daxter Client should handle everything for you (see below).
+
+### Archipelago Launcher
+
+- Copy the `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
+    - Reminder: the default installation location for Archipelago is `C:\ProgramData\Archipelago`.
+- Run the Archipelago Launcher.
+- From the left-most list, click `Generate Template Options`.
+- Select `Jak and Daxter The Precursor Legacy.yaml`. 
+- In the text file that opens, enter the name you want and remember it for later.
+- Save this file in `Archipelago/players`. You can now close the file.
+- Back in the Archipelago Launcher, from the left-most list, click `Generate`. A window will appear to generate your seed and close itself.
 - If you plan to host the game yourself, from the left-most list, click `Host`.
-  - When asked to select your multiworld seed, navigate to `Archipelago/output` and select the zip file containing the seed you just generated.
-  - You can sort by Date Modified to make it easy to find.
+    - When asked to select your multiworld seed, navigate to `Archipelago/output` and select the zip file containing the seed you just generated.
+    - You can sort by Date Modified to make it easy to find.
 
 ## Updates and New Releases
 
-***OpenGOAL Mod Launcher***
+### OpenGOAL Launcher
 
-- Run the Mod Launcher and click `ArchipelaGOAL` in the mod list.
-- Click `Launch` to download and install any new updates that have been released.
-- You can verify your version once you reach the title screen menu by navigating to `Options > Game Options > Miscellaneous > Speedrunner Mode`.
-- Turn on `Speedrunner Mode` and exit the menu. You should see the installed version number in the bottom left corner. Then turn `Speedrunner Mode` back off.
-- Once you've verified your version, you can close the game. Remember, this is just for downloading updates. **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE MOD LAUNCHER.**
+If you are in the middle of an async game, and you do not want to update the mod, you do not need to do this step. The mod will only update when you tell it to.
+
+- Run the OpenGOAL Launcher, then click `Features`, then click `Mods`, then click on `ArchipelaGOAL` from the `Installed Mods` list.
+- Click `Update` to download and install any new updates that have been released.
+- You can verify your version by clicking `Versions`. The version you are using will say `(Active)` next to it.
  
-***Archipelago Launcher***
+### Archipelago Launcher
 
 - Copy the latest `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
 
 ## Starting a Game
 
-***New Game***
+### New Game
 
 - Run the Archipelago Launcher.
 - From the right-most list, find and click `Jak and Daxter Client`.
 - 4 new windows should appear:
-  - A powershell window will open to run the OpenGOAL compiler. It should take about 30 seconds to compile the game.
-    - As before, it should run to 100% completion, and you should hear a musical cue to indicate it is done. If it does not run to 100%, or you do not hear the musical cue, see the Troubleshooting section.
-  - Another powershell window will open to run the game.
-  - The game window itself will launch, and Jak will be standing outside Samos's Hut.
+  - Two powershell windows will open to run the OpenGOAL compiler and the game. They should take about 30 seconds to compile.
+      - You should hear a musical cue to indicate the compilation was a success. If you do not, see the Troubleshooting section.
+  - The game window itself will launch, and Jak will be standing outside Samos's Hut. 
+      - Once compilation is complete, the title intro sequence will start.
   - Finally, the Archipelago text client will open.
-    - You should see several messages appear after the compiler has run to 100% completion. If you see `The REPL is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup.
-    - The game should then load in the title screen.
+      - If you see `The REPL is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup.
 - You can *minimize* the 2 powershell windows, **BUT DO NOT CLOSE THEM.** They are required for Archipelago and the game to communicate with each other.
 - Use the text client to connect to the Archipelago server while on the title screen. This will communicate your current settings to the game.
 - Start a new game in the title screen, and play through the cutscenes.
 - Once you reach Geyser Rock, you can start the game!
-  - You can leave Geyser Rock immediately if you so choose - just step on the warp gate button.
+    - You can leave Geyser Rock immediately if you so choose - just step on the warp gate button.
 
-***Returning / Async Game***
+### Returning / Async Game
 
 - The same steps as New Game apply, with some exceptions: 
-  - Connect to the Archipelago server **BEFORE** you load your save file. This is to allow AP to give the game your current settings and all the items you had previously.
-  - **THESE SETTINGS AFFECT LOADING AND SAVING OF SAVE FILES, SO IT IS IMPORTANT TO DO THIS FIRST.**
-  - Then, instead of choosing `New Game` in the title menu, choose `Load Game`, then choose the save file **CORRESPONDING TO YOUR CURRENT ARCHIPELAGO CONNECTION.** 
+    - Connect to the Archipelago server **BEFORE** you load your save file. This is to allow AP to give the game your current settings and all the items you had previously.
+    - **THESE SETTINGS AFFECT LOADING AND SAVING OF SAVE FILES, SO IT IS IMPORTANT TO DO THIS FIRST.**
+    - Then, instead of choosing `New Game` in the title menu, choose `Load Game`, then choose the save file **CORRESPONDING TO YOUR CURRENT ARCHIPELAGO CONNECTION.** 
 
 ## Troubleshooting
 
-***Installation Failure***
+### The Game Fails To Load The Title Screen
 
-- If you encounter errors during extraction or compilation of the game when using the Mod Launcher, you may see errors like this:
+You may start the game via the Text Client, but it never loads in the title screen. Check the Compiler window and you may see an error like this.
+
 ```
 -- Compilation Error! -- 
 Input file iso_data/jak1/MUS/TWEAKVAL.MUS does not exist.
 ```
-  - If this occurs, you may need to copy the extracted data to the mod folder manually.
-    - From a location like this: `%appdata%/OpenGOAL-Mods/_iso_data`
-    - To a location like this: `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data`
-    - Then try clicking `Recompile` in the Mod Launcher (ensure you have selected the right mod first!)
 
-***Game Failure***
+If this happens, run the OpenGOAL Launcher.
 
-- If at any point the text client says `The <gk/goalc> process has died`, you will need to restart the appropriate 
-  application:
-  - Open a new powershell window.
-  - Navigating to the directory containing `gk.exe` and `goalc.exe` via `cd`.
-  - Run the command corresponding to the dead process:
-    - `.\gk.exe --game jak1 -- -v -boot -fakeiso -debug`
-    - `.\goalc.exe --game jak1`
-  - Then enter the following commands into the text client to reconnect everything to the game.
+- On the **vanilla** Jak and Daxter page, click `Advanced`, then click `Open Game Data Folder`. Copy the `iso_data` folder from this location.
+- Back in the OpenGOAL Launcher, click `Features`, then click `Mods`, then click `ArchipelaGOAL`, then click `Advanced`, then click `Open Game Data Folder` again.
+- Paste the `iso_data` folder you copied here.
+- Back on the ArchipelaGOAL page in the OpenGOAL Launcher, click `Advanced`, then click `Compile`.
+
+### The Text Client Says "The <gk/goalc> process has died"
+
+If at any point the text client says `The <gk/goalc> process has died`, you will need to restart the appropriate application.
+
+- Run the OpenGOAL Launcher, then click `Features`, then click `Mods`, then click `ArchipelaGOAL`.
+- If the gk process died, click `Advanced`, then click `Play in Debug Mode`.
+- If the goalc process died, click `Advanced`, then click `Open REPL`.
+- Then enter the following commands into the text client to reconnect everything to the game.
     - `/repl connect`
     - `/memr connect`
-  - Once these are done, you can enter `/repl status` and `/memr status` to verify.
-- If the game freezes by replaying the same two frames over and over, but the music still runs in the background, you may have accidentally interacted with the powershell windows in the background - they halt the game if you:scroll up in them, highlight text in them, etc.
-  - To unfreeze the game, scroll to the very bottom of the log output and right click. That will release powershell from your control and allow the game to continue.
-  - It is recommended to keep these windows minimized and out of your way.
-- If the client cannot open a REPL connection to the game, you may need to ensure you are not hosting anything on ports 8181 and 8112.
+- Once these are done, you can enter `/repl status` and `/memr status` to verify.
 
-***Special PAL Instructions***
+### The Game Freezes On The Same Two Frames, But The Music Is Still Playing
+
+If the game freezes by replaying the same two frames over and over, but the music still runs in the background, you may have accidentally interacted with the powershell windows in the background. They halt the game if you scroll up in them, highlight text in them, etc.
+
+- To unfreeze the game, scroll to the very bottom of the powershell window and right click. That will release powershell from your control and allow the game to continue.
+- It is recommended to keep these windows minimized and out of your way.
+
+### The Client Cannot Open A REPL Connection
+
+If the client cannot open a REPL connection to the game, you may need to ensure you are not hosting anything on ports `8181` and `8112`.
+
+### Special PAL Instructions
 
 PAL versions of the game seem to require additional troubleshooting/setup in order to work properly. Below are some instructions that may help.
+If you see `-- Compilation Error! --` after pressing `Compile` or Launching the ArchipelaGOAL mod, try these steps.
 
-- If you have `-- Compilation Error! --` after pressing `Recompile` or Launching the ArchipelaGOAL mod. Try this:
-  - Remove these folders if you have them: 
-    - `%appdata%/OpenGOAL-Mods/iso_data`
-    - `%appdata%/OpenGOAL-Mods/archipelagoal/iso_data`
-    - `%appdata%/OpenGOAL-Mods/archipelagoal/data/iso_data`
-  - Place Jak1 ISO in: `%appdata%/OpenGOAL-Mods/archipelagoal` rename it to `JakAndDaxter.iso`
-  - Type "CMD" in Windows search, Right click Command Prompt, and pick "Run as Administrator"
-  - Run: `cd %appdata%\OpenGOAL-Mods\archipelagoal`
-  - Then run: `extractor.exe --extract --extract-path .\data\iso_data "JakAndDaxter.iso"` 
-    - (Command should end by saying `Uses Decompiler Config Version - ntsc_v1` or `... - pal`)
-  - Rename: `%appdata%\OpenGOAL-Mods\archipelagoal\data\iso_data\jak1` to `jak1_pal`*
-  - Run next: `decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "pal" data\iso_data data\decompiler_out`*
-    - *For NTSCv1 (USA Black Label) keep the folder as `jak1`, and use command: `decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "ntsc_v1" data\iso_data data\decompiler_out`
-  - Rename: `%appdata%\OpenGOAL-Mods\archipelagoal\data\iso_data\jak1_pal` to `jak1`
-  - Rename: `%appdata%\OpenGOAL-Mods\archipelagoal\data\decompiler_out\jak1_pal` to `jak1`
-- You have to do this last bit in two different terminal **(2 powershell)**. First, from one terminal, launch the compiler:
-  - `cd %appdata%\OpenGOAL-Mods\archipelagoal`
-  - `.\goalc.exe --user-auto --game jak1`
-  - From the compiler (in the same terminal): `(mi)`
-  - This should compile the game. **Note that the parentheses are important.** 
+- Remove these folders if you have them: 
+    - `<opengoal active version directory>/iso_data`
+    - `<archipelagoal directory>/iso_data`
+    - `<archipelagoal directory>/data/iso_data`
+- Place your Jak1 ISO in `<archipelagoal directory>` and rename it to `JakAndDaxter.iso`
+- Type `cmd` in Windows search, right click `Command Prompt`, and pick `Run as Administrator`
+- Run `cd <archipelagoal directory>`
+- Then run `.\extractor.exe --extract --extract-path .\data\iso_data "JakAndDaxter.iso"` 
+    - This command should end by saying `Uses Decompiler Config Version - ntsc_v1` or `... - pal`. Take note of this message.
+- If you saw `ntsc_v1`:
+    - In cmd, run `.\decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "ntsc_v1" data\iso_data data\decompiler_out`
+- If you saw `pal`:
+    - Rename `<archipelagoal directory>\data\iso_data\jak1` to `jak1_pal`
+    - Back in cmd, run `.\decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "pal" data\iso_data data\decompiler_out`
+    - Rename `<archipelagoal directory>\data\iso_data\jak1_pal` back to `jak1`
+    - Rename `<archipelagoal directory>\data\decompiler_out\jak1_pal` back to `jak1`
+- Open a **brand new** Powershell window and launch the compiler:
+    - `cd <archipelagoal directory>`
+    - `.\goalc.exe --user-auto --game jak1`
+    - From the compiler (in the same window): `(mi)`. This should compile the game. **Note that the parentheses are important.** 
     - **Don't close this first terminal, you will need it at the end.**
-- Then, **from the second terminal (powershell)**, execute the game:
-  - `cd %appdata%\OpenGOAL-Mods\archipelagoal`
-  - `.\gk.exe -v --game jak1 -- -boot -fakeiso -debug`
-- Finally, **from the first terminal still in the Goalc compiler**, connect to the game: `(lt)`
+- Then, open **another brand new** Powershell window and execute the game:
+    - `cd <archipelagoal directory>`
+    - `.\gk.exe -v --game jak1 -- -boot -fakeiso -debug`
+- Finally, **from the first Powershell still in the Goalc compiler**, connect to the game: `(lt)`.
 
-### Known Issues
+## Known Issues
 
-- The game needs to boot in debug mode in order to allow the repl to connect to it. We disable debug mode once we connect to the AP server.
-- The powershell windows cannot be run as background processes due to how the repl works, so the best we can do is minimize them.
+- The game needs to boot in debug mode in order to allow the REPL to connect to it. We disable debug mode once we connect to the AP server.
+- The REPL Powershell window is orphaned once you close the game - you will have to kill it manually when you stop playing.
+- The powershell windows cannot be run as background processes due to how the REPL works, so the best we can do is minimize them.
 - Orbsanity checks may show up out of order in the text client.
 - Large item releases may take up to several minutes for the game to process them all. 
