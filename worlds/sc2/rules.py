@@ -212,11 +212,12 @@ class SC2Logic:
         """
         return (
             state.has_any({item_names.SIEGE_TANK, item_names.DIAMONDBACK, item_names.MARAUDER, item_names.CYCLONE, item_names.BANSHEE}, self.player)
-            or self.advanced_tactics
-            and (
-                state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
-                or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
-                or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
+            or (self.advanced_tactics
+                and (
+                    state.has_all({item_names.REAPER, item_names.REAPER_G4_CLUSTERBOMB}, self.player)
+                    or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                    or state.has_any({item_names.VULTURE, item_names.LIBERATOR}, self.player)
+                )
             )
         )
     
