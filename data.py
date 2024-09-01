@@ -6,7 +6,7 @@ import pkgutil
 from typing import Mapping
 
 
-ap_id_offset = 0xEC00
+ap_id_offset = 0xEC0000
 
 
 class Domain(Enum):

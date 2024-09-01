@@ -25,6 +25,10 @@ class LocationData(NamedTuple):
     def level_id(self):
         return self.status_bit[0:2]
 
+    def to_ap_id(self):
+        passage, level, flag = self.status_bit
+        return ap_id_offset + ((passage * 6 + level) << 5) + flag.bit_length()
+
 
 _NORMAL = (Difficulty.option_normal,)
 _HARD = (Difficulty.option_hard,)
@@ -250,7 +254,7 @@ event_table = {
 }
 
 
-location_name_to_id = {name: ap_id_offset + index for index, name in enumerate(location_table)}
+location_name_to_id = {name: data.to_ap_id() for name, data in location_table.items()}
 
 
 class WL4Location(Location):
