@@ -1508,6 +1508,10 @@ item_table = {
         ItemData(363 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 20, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
     item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS:
         ItemData(364 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 21, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON:
+        ItemData(365 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 22, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
+    item_names.INFESTED_BANSHEE_RAPID_HIBERNATION:
+        ItemData(366 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 23, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),

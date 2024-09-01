@@ -686,6 +686,8 @@ item_descriptions = {
     item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL: _ability_desc("Infested Siege Tanks", "Deep Tunnel", "allows them to burrow to any visible location on the map covered in creep"),
     item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES: "Infested Diamondbacks leave behind a trail of acid when moving that deals 20 damage per second to enemy units.",
     item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS: "Reduces the cooldown of the Infested Diamondback's Fungal Snare by 15 seconds.",
+    item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON: "Infested Banshees gain +100 life.",
+    item_names.INFESTED_BANSHEE_RAPID_HIBERNATION: "Infested Banshees regenerate 20 life and energy per second while burrowed.",
     item_names.FRIGHTFUL_FLESHWELDER: "Reduces infested mechnical unit resource cost by 30%.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
