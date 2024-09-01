@@ -1205,7 +1205,7 @@ class CommonCommandProcessor(CommandProcessor):
             timer = 10
         else:
             if timer > 60 * 60:
-                raise ValueError(f"{timer} is considered an unreasonably high number.")
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
 
         async_start(countdown(self.ctx, timer))
         return True
@@ -2044,7 +2044,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 amount: int = int(amount)
                 if amount > 100:
-                    raise ValueError(f"{amount} is considered an unreasonably high number.")
+                    raise ValueError(f"{amount} is invalid. Maximum is 100.")
                 new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(int(amount))]
                 send_items_to(self.ctx, team, slot, *new_items)
 
