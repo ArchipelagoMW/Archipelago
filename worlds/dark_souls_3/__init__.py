@@ -1252,6 +1252,9 @@ class DarkSouls3World(World):
                 lambda item: not item.advancement
             )
 
+        # Prevent the player from prioritizing and "excluding" the same location
+        self.options.priority_locations.value -= allow_useful_locations
+
         if self.options.excluded_location_behavior == "allow_useful":
             self.options.exclude_locations.value.clear()
 
@@ -1292,10 +1295,10 @@ class DarkSouls3World(World):
         locations = location if isinstance(location, list) else [location]
         for location in locations:
             data = location_dictionary[location]
-            if data.dlc and not self.options.enable_dlc: return
-            if data.ngp and not self.options.enable_ngp: return
+            if data.dlc and not self.options.enable_dlc: continue
+            if data.ngp and not self.options.enable_ngp: continue
 
-            if not self._is_location_available(location): return
+            if not self._is_location_available(location): continue
             if isinstance(rule, str):
                 assert item_dictionary[rule].classification == ItemClassification.progression
                 rule = lambda state, item=rule: state.has(item, self.player)
