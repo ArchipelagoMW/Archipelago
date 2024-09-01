@@ -2950,7 +2950,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Starports", SC2_RACESWAP_LOC_ID_OFFSET + 3907, LocationType.EXTRA,
             lambda state: adv_tactics or logic.zerg_competent_comp(state)
         ),
-        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Brutalisk Prime Survives", SC2_RACESWAP_LOC_ID_OFFSET + 3908, LocationType.CHALLENGE,
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Odin Not Trashed", SC2_RACESWAP_LOC_ID_OFFSET + 3908, LocationType.CHALLENGE,
             logic.zerg_competent_comp
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 3909, LocationType.EXTRA),
@@ -2976,7 +2976,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "All Starports", SC2_RACESWAP_LOC_ID_OFFSET + 4007, LocationType.EXTRA,
             lambda state: adv_tactics or logic.protoss_competent_comp(state)
         ),
-        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Nyon's Vengeance Survives", SC2_RACESWAP_LOC_ID_OFFSET + 4008, LocationType.CHALLENGE,
+        make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Odin Not Trashed", SC2_RACESWAP_LOC_ID_OFFSET + 4008, LocationType.CHALLENGE,
             logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 4009, LocationType.EXTRA),

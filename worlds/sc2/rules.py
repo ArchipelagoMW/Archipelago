@@ -401,7 +401,7 @@ class SC2Logic:
     def zerg_engine_of_destruction_requirement(self, state: CollectionState):
         return (
             self.zergling_hydra_roach_start(state)
-            and state.has(item_names.SWARM_QUEEN, self.player)
+            and self.zerg_repair_odin(state)
             and (
                     self.zerg_competent_anti_air(state)
                     and self.zerg_common_unit(state)
@@ -413,16 +413,27 @@ class SC2Logic:
     def protoss_engine_of_destruction_requirement(self, state: CollectionState):
         return (
             self.zealot_sentry_slayer_start(state)
-            and (
-                    state.has(item_names.SENTRY, self.player)
-                    or (self.advanced_tactics
-                        and state.has(item_names.SHIELD_BATTERY, self.player)
-                    )   
-                )
+            and self.protoss_repair_odin(state)
             and (
                     self.protoss_competent_anti_air(state)
                     and self.protoss_common_unit(state)
                 )
+        )
+
+    def zerg_repair_odin(self, state: CollectionState):
+        return (
+            state.has_all({item_names.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION, item_names.SWARM_QUEEN}, self.player)
+            or (self.advanced_tactics
+                and state.has(item_names.SWARM_QUEEN, self.player)
+            )   
+        )
+
+    def protoss_repair_odin(self, state: CollectionState):
+        return (
+            state.has(item_names.SENTRY, self.player)
+            or (self.advanced_tactics
+                and state.has(item_names.SHIELD_BATTERY, self.player)
+            )   
         )
 
     def zergling_hydra_roach_start(self, state: CollectionState):
@@ -445,7 +456,10 @@ class SC2Logic:
             state.has_any({item_names.ZEALOT_WHIRLWIND, item_names.SENTRY_DOUBLE_SHIELD_RECHARGE, item_names.SLAYER_PHASE_BLINK}, self.player)
         )
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c614949c1 (real fixes)
     def all_in_requirement(self, state: CollectionState):
         """
         All-in
