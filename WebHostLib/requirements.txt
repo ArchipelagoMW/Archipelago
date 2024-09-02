@@ -1,6 +1,6 @@
 flask>=3.0.3
 werkzeug>=3.0.3
-pony>=0.7.17
+pony>=0.7.18
 waitress>=3.0.0
 Flask-Caching>=2.3.0
 Flask-Compress>=1.15
