@@ -38,3 +38,9 @@ class Sly1Options(PerGameCommonOptions):
 sly1_option_groups: Dict[str, List[Any]] = {
     "General Options": [StartingEpisode, IncludeHourglasses, AlwaysSpawnHourglasses]
 }
+
+slot_data_options: List[str] = {
+    "StartingEpisode",
+    "IncludeHourglasses",
+    "AlwaysSpawnHourglasses"
+}

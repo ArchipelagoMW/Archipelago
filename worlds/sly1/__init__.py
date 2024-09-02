@@ -1,8 +1,9 @@
 
+from typing import Any, Mapping, Dict
 from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
 from .Items import item_table, create_itempool, create_item, event_item_pairs, sly_episodes
-from .Locations import get_location_names
+from .Locations import get_location_names, get_total_locations
 from .Options import Sly1Options
 from .Regions import create_regions
 from .Types import EpisodeType, episode_type_to_name, Sly1Item
@@ -56,6 +57,20 @@ class Sly1World(World):
     def create_item(self, name: str) -> Item:
         return create_item(self, name)
     
+    def fill_slot_data(self) -> Dict[str, object]:
+        slot_data: Dict[str, object] = {
+            "Options": {
+                "StartingEpisode": self.options.StartingEpisode,
+                "IncludeHourglasses": self.options.IncludeHourglasses,
+                "AlwaysSpawnHourglasses": self.options.AlwaysSpawnHourglasses
+            },
+            "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
+            "Slot": self.multiworld.player_name[self.player],  # to connect to server
+            "TotalLocations": get_total_locations(self)
+        }
+
+        return slot_data
+
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         return super().collect(state, item)
     
