@@ -125,6 +125,7 @@ BATTLECRUISER_TACTICAL_JUMP                        = "Tactical Jump (Battlecruis
 BATTLECRUISER_BEHEMOTH_PLATING                     = "Behemoth Plating (Battlecruiser)"
 BATTLECRUISER_COVERT_OPS_ENGINES                   = "Covert Ops Engines (Battlecruiser)"
 BATTLECRUISER_BEHEMOTH_REACTOR                     = "Behemoth Reactor (Battlecruiser)"
+BATTLECRUISER_FIELD_ASSIST_TARGETING_SYSTEM        = "Field-Assist Target System (Battlecruiser)"
 BUNKER_NEOSTEEL_BUNKER                             = "Neosteel Bunker (Bunker)"
 BUNKER_PROJECTILE_ACCELERATOR                      = "Projectile Accelerator (Bunker)"
 BUNKER_SHRIKE_TURRET                               = "Shrike Turret (Bunker)"
@@ -508,6 +509,9 @@ ULTRALISK_TYRANNOZOR_ASPECT             = "Tyrannozor Aspect (Ultralisk)"
 INFESTED_MEDICS      = "Infested Medics"
 INFESTED_SIEGE_TANKS = "Infested Siege Tanks"
 INFESTED_BANSHEES    = "Infested Banshees"
+DEVOURING_ONES = "Devouring Ones"
+HUNTER_KILLERS       = "Hunter Killers"
+TORRASQUE_MERC       = "Torrasque"
     
 # Kerrigan Upgrades
 KERRIGAN_KINETIC_BLAST           = "Kinetic Blast (Kerrigan Ability)"
@@ -638,6 +642,7 @@ SCOUT_RESOURCE_EFFICIENCY                               = "Resource Efficiency (
 TEMPEST_TECTONIC_DESTABILIZERS                          = "Tectonic Destabilizers (Tempest)"
 TEMPEST_QUANTIC_REACTOR                                 = "Quantic Reactor (Tempest)"
 TEMPEST_GRAVITY_SLING                                   = "Gravity Sling (Tempest)"
+TEMPEST_INTERPLANETARY_RANGE                            = "Interplanetary Range (Tempest)"
 PHOENIX_CLASS_IONIC_WAVELENGTH_FLUX                     = "Ionic Wavelength Flux (Phoenix/Mirage/Skirmisher)"
 PHOENIX_CLASS_ANION_PULSE_CRYSTALS                      = "Anion Pulse-Crystals (Phoenix/Mirage/Skirmisher)"
 CORSAIR_STEALTH_DRIVE                                   = "Stealth Drive (Corsair)"
@@ -671,6 +676,9 @@ VANGUARD_MATTER_DISPERSION                              = "Matter Dispersion (Va
 IMMORTAL_ANNIHILATOR_STALWART_SINGULARITY_CHARGE        = "Singularity Charge (Immortal/Annihilator/Stalwart)"
 IMMORTAL_ANNIHILATOR_STALWART_ADVANCED_TARGETING_MECHANICS = "Advanced Targeting Mechanics (Immortal/Annihilator/Stalwart)"
 IMMORTAL_ANNIHILATOR_STALWART_DISRUPTOR_DISPERSION      = "Disruptor Dispersion (Immortal/Annihilator/Stalwart)"
+DISRUPTOR_CLOAKING_MODULE                               = "Cloaking Module (Disruptor)"
+DISRUPTOR_PERFECTED_POWER                               = "Perfected Power (Disruptor)"
+DISRUPTOR_RESTRAINED_DESTRUCTION                        = "Restrained Destruction (Disruptor)"
 COLOSSUS_PACIFICATION_PROTOCOL                          = "Pacification Protocol (Colossus)"
 WRATHWALKER_RAPID_POWER_CYCLING                         = "Rapid Power Cycling (Wrathwalker)"
 WRATHWALKER_EYE_OF_WRATH                                = "Eye of Wrath (Wrathwalker)"
@@ -717,28 +725,36 @@ SENTRY_DOUBLE_SHIELD_RECHARGE                           = "Double Shield Recharg
 ENERGIZER_MOBILE_CHRONO_BEAM                            = "Mobile Chrono Beam (Energizer)"
 HAVOC_ENDURING_SIGHT                                    = "Enduring Sight (Havoc)"
 HIGH_TEMPLAR_PLASMA_SURGE                               = "Plasma Surge (High Templar)"
-# Signifier
-# Ascendant
+SIGNIFIER_FEEDBACK                                      = "Feedback (Signifier)"
+ASCENDANT_ABILITY_EFFICIENCY                            = "Ability Efficiency (Ascendant)"
 DARK_ARCHON_INDOMITABLE_WILL                            = "Indomitable Will (Dark Archon)"
 IMMORTAL_IMPROVED_BARRIER                               = "Improved Barrier (Immortal)"
 VANGUARD_RAPIDFIRE_CANNON                               = "Rapid-Fire Cannon (Vanguard)"
 VANGUARD_FUSION_MORTARS                                 = "Fusion Mortars (Vanguard)"
 ANNIHILATOR_AERIAL_TRACKING                             = "Aerial Tracking (Annihilator)"
 STALWART_DUALITY_CHARGE                                 = "Duality Charge (Stalwart)"
-# Colossus
+COLOSSUS_FIRE_LANCE                                     = "Fire Lance (Colossus)"
 WRATHWALKER_AERIAL_TRACKING                             = "Aerial Tracking (Wrathwalker)"
 REAVER_KHALAI_REPLICATORS                               = "Khalai Replicators (Reaver)"
-# Disruptor
-# Warp Prism
-# Observer
+DISRUPTOR_RESTRUCTURED_THRUSTERS                        = "Restructured Thrusters (Disruptor)"
+WARP_PRISM_WARP_REFRACTION                              = "Warp Refraction (Warp Prism)"
+OBSERVER_INDUCE_SCOPOPHOBIA                             = "Induce Scopophobia (Observer)"
 PHOENIX_DOUBLE_GRAVITON_BEAM                            = "Double Graviton Beam (Phoenix)"
-# Corsair
+CORSAIR_NETWORK_DISRUPTION                              = "Network Disruption (Corsair)"
 MIRAGE_GRAVITON_BEAM                                    = "Graviton Beam (Mirage)"
 SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmisher)"
-# Void Ray
+VOID_RAY_PRISMATIC_RANGE                                = "Prismatic Range (Void Ray)"
 DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"
 # Warp Ray
 # Dawnbringer
+# Carrier
+SKYLORD_HYPERJUMP                                       = "Hyperjump (Skylord)"
+# Trireme
+TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempest)"
+# Scout
+ARBITER_ABILITY_EFFICIENCY                              = "Ability Efficiency (Arbiter)"
+# Oracle
+# Mothership
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"

@@ -3,16 +3,7 @@ from BaseClasses import  Item, Location
 from .items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
     upgrade_item_types,
 )
-from .mission_tables import (MissionInfo, MissionPools,
-    get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations,
-    SC2Campaign, SC2CampaignGoalPriority, SC2Mission,
-)
-from .options import (get_option_value, MissionOrder,
-    get_enabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech,
-    TakeOverAIAllies, campaign_depending_orders,
-    ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels, EnableMorphling,
-    static_mission_orders, dynamic_mission_orders
-)
+from .options import get_option_value, EnableMorphling, RequiredTactics
 from . import item_groups, item_names
 
 if TYPE_CHECKING:
@@ -25,175 +16,6 @@ BARRACKS_UNITS = set(item_groups.barracks_units)
 FACTORY_UNITS = set(item_groups.factory_units)
 STARPORT_UNITS = set(item_groups.starport_units)
 INF_TERRAN_UNITS = set(item_groups.infterr_units)
-
-
-def filter_missions(world: 'SC2World') -> Dict[MissionPools, List[SC2Mission]]:
-
-    """
-    Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
-    """
-    mission_order_type = get_option_value(world, "mission_order")
-    shuffle_no_build = get_option_value(world, "shuffle_no_build")
-    enabled_campaigns = get_enabled_campaigns(world)
-    grant_story_tech = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
-    grant_story_levels = get_option_value(world, "grant_story_levels") != GrantStoryLevels.option_disabled
-    extra_locations = get_option_value(world, "extra_locations")
-    excluded_missions: Set[SC2Mission] = get_excluded_missions(world)
-    mission_pools: Dict[MissionPools, List[SC2Mission]] = {}
-    for mission in SC2Mission:
-        if not mission_pools.get(mission.pool):
-            mission_pools[mission.pool] = list()
-        mission_pools[mission.pool].append(mission)
-    # A bit of safeguard:
-    for mission_pool in MissionPools:
-        if not mission_pools.get(mission_pool):
-            mission_pools[mission_pool] = []
-
-    if mission_order_type == MissionOrder.option_vanilla:
-        # Vanilla uses the entire mission pool
-        goal_priorities: Dict[SC2Campaign, SC2CampaignGoalPriority] = {campaign: get_campaign_goal_priority(campaign) for campaign in enabled_campaigns}
-        goal_level = max(goal_priorities.values())
-        candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-        candidate_campaigns.sort(key=lambda it: it.id)
-        goal_campaign = world.random.choice(candidate_campaigns)
-        if campaign_final_mission_locations[goal_campaign] is not None:
-            mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
-        else:
-            mission_pools[MissionPools.FINAL] = [list(campaign_alt_final_mission_locations[goal_campaign].keys())[0]]
-        remove_final_mission_from_other_pools(mission_pools)
-        return mission_pools
-
-    # Finding the goal map
-    goal_mission: Optional[SC2Mission] = None
-    if mission_order_type in campaign_depending_orders:
-        # Prefer long campaigns over shorter ones and harder missions over easier ones
-        goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
-        goal_level = max(goal_priorities.values())
-        candidate_campaigns: List[SC2Campaign] = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-        candidate_campaigns.sort(key=lambda it: it.id)
-
-        goal_campaign = world.random.choice(candidate_campaigns)
-        primary_goal = campaign_final_mission_locations[goal_campaign]
-        if primary_goal is None or primary_goal.mission in excluded_missions:
-            # No primary goal or its mission is excluded
-            candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
-            candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
-            if len(candidate_missions) == 0:
-                raise Exception("There are no valid goal missions. Please exclude fewer missions.")
-            goal_mission = world.random.choice(candidate_missions)
-        else:
-            goal_mission = primary_goal.mission
-    else:
-        # Find one of the missions with the hardest difficulty
-        available_missions: List[SC2Mission] = \
-            [mission for mission in SC2Mission
-             if (mission not in excluded_missions and mission.campaign in enabled_campaigns)]
-        available_missions.sort(key=lambda it: it.id)
-        # Loop over pools, from hardest to easiest
-        for mission_pool in range(MissionPools.VERY_HARD, MissionPools.STARTER - 1, -1):
-            pool_missions: List[SC2Mission] = [mission for mission in available_missions if mission.pool == mission_pool]
-            if pool_missions:
-                goal_mission = world.random.choice(pool_missions)
-                break
-    if goal_mission is None:
-        raise Exception("There are no valid goal missions. Please exclude fewer missions.")
-
-    # Excluding missions
-    for difficulty, mission_pool in mission_pools.items():
-        mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
-    mission_pools[MissionPools.FINAL] = [goal_mission]
-
-    # Mission pool changes
-    adv_tactics = get_option_value(world, "required_tactics") != RequiredTactics.option_standard
-
-    def move_mission(mission: SC2Mission, current_pool, new_pool):
-        if mission in mission_pools[current_pool]:
-            mission_pools[current_pool].remove(mission)
-            mission_pools[new_pool].append(mission)
-    # WoL
-    if shuffle_no_build == ShuffleNoBuild.option_false or adv_tactics:
-        # Replacing No Build missions with Easy missions
-        # WoL
-        move_mission(SC2Mission.ZERO_HOUR, MissionPools.EASY, MissionPools.STARTER)
-        move_mission(SC2Mission.EVACUATION, MissionPools.EASY, MissionPools.STARTER)
-        move_mission(SC2Mission.DEVILS_PLAYGROUND, MissionPools.EASY, MissionPools.STARTER)
-        # LotV
-        move_mission(SC2Mission.THE_GROWING_SHADOW, MissionPools.EASY, MissionPools.STARTER)
-        move_mission(SC2Mission.THE_SPEAR_OF_ADUN, MissionPools.EASY, MissionPools.STARTER)
-        if extra_locations == ExtraLocations.option_enabled:
-            move_mission(SC2Mission.SKY_SHIELD, MissionPools.EASY, MissionPools.STARTER)
-        # Pushing this to Easy
-        move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.MEDIUM, MissionPools.EASY)
-        if shuffle_no_build == ShuffleNoBuild.option_false:
-            # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
-            move_mission(SC2Mission.OUTBREAK, MissionPools.EASY, MissionPools.MEDIUM)
-            # Pushing extra Normal missions to Easy
-            move_mission(SC2Mission.ECHOES_OF_THE_FUTURE, MissionPools.MEDIUM, MissionPools.EASY)
-            move_mission(SC2Mission.CUTTHROAT, MissionPools.MEDIUM, MissionPools.EASY)
-        # Additional changes on Advanced Tactics
-        if adv_tactics:
-            # WoL
-            move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.EASY, MissionPools.STARTER)
-            move_mission(SC2Mission.SMASH_AND_GRAB, MissionPools.EASY, MissionPools.STARTER)
-            move_mission(SC2Mission.THE_MOEBIUS_FACTOR, MissionPools.MEDIUM, MissionPools.EASY)
-            move_mission(SC2Mission.WELCOME_TO_THE_JUNGLE, MissionPools.MEDIUM, MissionPools.EASY)
-            move_mission(SC2Mission.ENGINE_OF_DESTRUCTION, MissionPools.HARD, MissionPools.MEDIUM)
-            # LotV
-            move_mission(SC2Mission.AMON_S_REACH, MissionPools.EASY, MissionPools.STARTER)
-    # Prophecy needs to be adjusted on tiny grid
-    if enabled_campaigns == {SC2Campaign.PROPHECY} and mission_order_type == MissionOrder.option_tiny_grid:
-        move_mission(SC2Mission.A_SINISTER_TURN, MissionPools.MEDIUM, MissionPools.EASY)
-    # Prologue's only valid starter is the goal mission
-    if enabled_campaigns == {SC2Campaign.PROLOGUE} \
-            or mission_order_type in campaign_depending_orders \
-            and get_option_value(world, "shuffle_campaigns") == ShuffleCampaigns.option_false:
-        move_mission(SC2Mission.DARK_WHISPERS, MissionPools.EASY, MissionPools.STARTER)
-    # HotS
-    kerriganless = get_option_value(world, "kerrigan_presence") not in kerrigan_unit_available \
-        or SC2Campaign.HOTS not in enabled_campaigns
-    if adv_tactics:
-        # Medium -> Easy
-        for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
-            move_mission(mission, MissionPools.MEDIUM, MissionPools.EASY)
-        # Hard -> Medium
-        move_mission(SC2Mission.PHANTOMS_OF_THE_VOID, MissionPools.HARD, MissionPools.MEDIUM)
-        if not kerriganless:
-            # Additional starter mission assuming player starts with minimal anti-air
-            move_mission(SC2Mission.WAKING_THE_ANCIENT, MissionPools.EASY, MissionPools.STARTER)
-    if grant_story_tech:
-        # Additional starter mission if player is granted story tech
-        move_mission(SC2Mission.ENEMY_WITHIN, MissionPools.EASY, MissionPools.STARTER)
-        move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
-        move_mission(SC2Mission.THE_ESCAPE, MissionPools.MEDIUM, MissionPools.STARTER)
-        move_mission(SC2Mission.IN_THE_ENEMY_S_SHADOW, MissionPools.MEDIUM, MissionPools.STARTER)
-    if (grant_story_tech and grant_story_levels) or kerriganless:
-        # The player has, all the stuff he needs, provided under these settings
-        move_mission(SC2Mission.SUPREME, MissionPools.MEDIUM, MissionPools.STARTER)
-        move_mission(SC2Mission.THE_INFINITE_CYCLE, MissionPools.HARD, MissionPools.STARTER)
-    if get_option_value(world, "take_over_ai_allies") == TakeOverAIAllies.option_true:
-        move_mission(SC2Mission.HARBINGER_OF_OBLIVION, MissionPools.MEDIUM, MissionPools.STARTER)
-    if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
-        # Conditionally moving Easy missions to Starter
-        move_mission(SC2Mission.HARVEST_OF_SCREAMS, MissionPools.EASY, MissionPools.STARTER)
-        move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
-    if len(mission_pools[MissionPools.STARTER]) < 2:
-        move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
-    if len(mission_pools[MissionPools.STARTER]) + len(mission_pools[MissionPools.EASY]) < 2:
-        # Flashpoint needs just a few items at start but competent comp at the end
-        move_mission(SC2Mission.FLASHPOINT, MissionPools.HARD, MissionPools.EASY)
-
-    remove_final_mission_from_other_pools(mission_pools)
-    return mission_pools
-
-
-def remove_final_mission_from_other_pools(mission_pools: Dict[MissionPools, List[SC2Mission]]):
-    final_missions = mission_pools[MissionPools.FINAL]
-    for pool, missions in mission_pools.items():
-        if pool == MissionPools.FINAL:
-            continue
-        for final_mission in final_missions:
-            while final_mission in missions:
-                missions.remove(final_mission)
 
 
 def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> List[Item]:
@@ -589,7 +411,7 @@ class ValidInventory:
         self.item_pool = []
         item_quantities: dict[str, int] = dict()
         # Inventory restrictiveness based on number of missions with checks
-        mission_count = sum(len(campaign) for campaign in world.mission_req_table.values())
+        mission_count = world.custom_mission_order.get_mission_count()
         self.min_units_per_structure = int(mission_count / 7)
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
@@ -611,7 +433,7 @@ class ValidInventory:
                 self.item_children[item] = get_item_upgrades(self.item_pool, item)
 
 
-def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],
+def filter_items(world: 'SC2World', location_cache: List[Location],
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
@@ -619,13 +441,11 @@ def filter_items(world: 'SC2World', mission_req_table: Dict[SC2Campaign, Dict[st
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
-    mission_requirements = [(location.name, location.access_rule) for location in location_cache]
+    if world.options.required_tactics.value == RequiredTactics.option_no_logic:
+        mission_requirements = []
+    else:
+        mission_requirements = [(location.name, location.access_rule) for location in location_cache]
     valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items
-
-
-def missions_in_mission_table(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> Set[SC2Mission]:
-    return set([mission.mission for campaign_missions in mission_req_table.values() for mission in
-                campaign_missions.values()])

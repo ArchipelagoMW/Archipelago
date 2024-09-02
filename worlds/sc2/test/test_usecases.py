@@ -4,7 +4,7 @@ Unit tests for yaml usecases we want to support
 
 from .test_base import Sc2SetupTestBase
 from .. import get_all_missions, item_groups, item_names, items, mission_tables, options
-from ..mission_tables import vanilla_mission_req_table, SC2Campaign, SC2Race
+from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -61,7 +61,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        missions = get_all_missions(self.world.mission_req_table)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertNotIn(mission_tables.SC2Mission.THE_ESCAPE, missions)
         self.assertNotIn(mission_tables.SC2Mission.IN_THE_ENEMY_S_SHADOW, missions)
         for mission in missions:
@@ -86,9 +86,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             },
         }
         self.generate_world(world_options)
-        world_item_names = [item.name for item in self.multiworld.itempool]
+        world_item_names = [item.name for item in self.multiworld.itempool + self.multiworld.precollected_items[1]]
         self.assertTrue(world_item_names)
-        missions = get_all_missions(self.world.mission_req_table)
+        missions = get_all_missions(self.world.custom_mission_order)
         for mission in missions:
             self.assertIn(mission_tables.MissionFlag.Terran, mission.flags)
         self.assertIn(item_names.MARINE, world_item_names)
@@ -148,7 +148,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         self.assertTrue(world_item_names)
-        missions = get_all_missions(self.world.mission_req_table)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertEqual(len(missions), 7, "Wrong number of missions in free protoss seed")
         for mission in missions:
             self.assertIn(mission.campaign, (mission_tables.SC2Campaign.PROLOGUE, mission_tables.SC2Campaign.PROPHECY))
@@ -279,6 +279,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
-        self.assertEqual(len(world_regions), len(vanilla_mission_req_table.get(SC2Campaign.WOL)))
+        NUM_WOL_MISSIONS = len([mission for mission in SC2Mission if mission.campaign == SC2Campaign.WOL and MissionFlag.RaceSwap not in mission.flags])
+        self.assertEqual(len(world_regions), NUM_WOL_MISSIONS)
         races = set(mission_tables.lookup_name_to_mission[mission].race for mission in world_regions)
         self.assertTrue(SC2Race.ZERG in races or SC2Race.PROTOSS in races)

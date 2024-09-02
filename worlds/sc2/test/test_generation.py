@@ -5,7 +5,7 @@ from typing import *
 from .test_base import Sc2SetupTestBase
 
 from .. import item_groups, item_names, items, mission_groups, mission_tables, options, locations
-from .. import get_all_missions
+from .. import get_all_missions, get_first_mission
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -106,7 +106,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
         }
         self.generate_world(world_options)
-        missions = get_all_missions(self.world.mission_req_table)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertTrue(missions)
         self.assertNotIn(mission_tables.SC2Mission.WAKING_THE_ANCIENT, missions)
         self.assertNotIn(mission_tables.SC2Mission.THE_CRUCIBLE, missions)
@@ -373,7 +373,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'grant_story_tech': options.GrantStoryTech.option_true,
         }
         self.generate_world(world_options)
-        missions = get_all_missions(self.world.mission_req_table)
+        missions = get_all_missions(self.world.custom_mission_order)
         self.assertIn(mission_tables.SC2Mission.TEMPLE_OF_UNIFICATION, missions)
         itempool = [item.name for item in self.multiworld.itempool]
         self.assertTrue(itempool)
@@ -517,3 +517,15 @@ class TestItemFiltering(Sc2SetupTestBase):
         speedrun_location_name = f"{mission_tables.SC2Mission.LAB_RAT.mission_name}: Win In Under 10 Minutes"
         self.assertIn(speedrun_location_name, all_location_names)
         self.assertNotIn(speedrun_location_name, world_location_names)
+
+    def test_nco_and_wol_picks_correct_starting_mission(self):
+        world_options = {
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+        }
+        self.generate_world(world_options)
+        self.assertEqual(get_first_mission(self.world, self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
+
