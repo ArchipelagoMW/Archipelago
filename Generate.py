@@ -578,4 +578,3 @@ if __name__ == '__main__':
                            " This would be a memory leak."
     # in case of error-free exit should not need confirmation
     atexit.unregister(confirmation)
-
