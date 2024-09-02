@@ -1,5 +1,5 @@
 
-from typing import Any, Mapping, Dict
+from typing import Dict
 from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
 from .Items import item_table, create_itempool, create_item, event_item_pairs, sly_episodes
@@ -60,7 +60,7 @@ class Sly1World(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {
             "Options": {
-                "StartingEpisode": self.options.StartingEpisode,
+                "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
                 "IncludeHourglasses": self.options.IncludeHourglasses,
                 "AlwaysSpawnHourglasses": self.options.AlwaysSpawnHourglasses
             },
