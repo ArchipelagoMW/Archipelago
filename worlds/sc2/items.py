@@ -982,7 +982,7 @@ item_table = {
         ItemData(752 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 6, SC2Race.TERRAN,
                  parent_item=item_names.BATTLECRUISER, origin={"ext"}),
     item_names.PREDATOR_ADAPTIVE_DEFENSES:
-        ItemData(752 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 6, SC2Race.TERRAN,
+        ItemData(753 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 7, SC2Race.TERRAN,
                  parent_item=item_names.PREDATOR, origin={"ext"}),
 
     # Filler items to fill remaining spots

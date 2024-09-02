@@ -440,7 +440,7 @@ item_descriptions = {
     item_names.PLANETARY_FORTRESS_ADVANCED_TARGETING: "Planetary Fortress can attack air units.",
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR: "Allows Valkyries to shoot air while moving.",
     item_names.VALKYRIE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.VALKYRIE),
-    item_names.PREDATOR_VESPENE_SYNTHESIS: "Gives 1 free Vespene per target hit with Retribution Field.",
+    item_names.PREDATOR_VESPENE_SYNTHESIS: "Gives 1 free Vespene per target hit with Lightning Field.",
     item_names.PREDATOR_ADAPTIVE_DEFENSES: "Predators gain a shield that halves incoming ranged and splash damage while active.",
     item_names.BATTLECRUISER_BEHEMOTH_PLATING: "Increases Battlecruiser armor by 2.",
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES: "Increases Battlecruiser movement speed.",
