@@ -71,6 +71,8 @@ class Wargroove2World(World):
         return {
             'seed': "".join(
                 self.random.choice(string.ascii_letters) for _ in range(16)),
+            'victory_locations': self.options.victory_locations.value,
+            'objective_locations': self.options.objective_locations.value,
             'income_boost': self.options.income_boost.value,
             'commander_defense_boost': self.options.commander_defense_boost.value,
             'starting_groove_multiplier': self.options.groove_boost.value,
@@ -133,9 +135,10 @@ class Wargroove2World(World):
             pool.append(Wargroove2Item("Income Boost", self.player))
 
         # Matching number of unfilled locations with filler items
-        total_locations = len(self.first_level.location_rules.keys())
+        total_locations = 0
+        total_locations += self.get_total_locations_in_level(self.first_level)
         for level in self.level_list[0:LEVEL_COUNT]:
-            total_locations += len(level.location_rules.keys())
+            total_locations += self.get_total_locations_in_level(level)
         locations_remaining = total_locations - len(pool)
         while locations_remaining > 0:
             # Filling the pool equally with the groove boost
@@ -192,3 +195,12 @@ class Wargroove2World(World):
 
     def get_filler_item_name(self) -> str:
         return "Groove Boost"
+
+    def get_total_locations_in_level(self, level: Wargroove2Level):
+        total_locations = 0
+        for location_name in level.location_rules.keys():
+            if location_name.endswith("Victory"):
+                total_locations += self.options.victory_locations
+            else:
+                total_locations += self.options.objective_locations
+        return total_locations

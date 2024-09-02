@@ -59,6 +59,15 @@ class Wargroove2Level:
         for location_name, rule in self.location_rules.items():
             set_rule(multiworld.get_location(location_name, self.player), lambda state, rule=rule:
             state.can_reach(self.region, 'Region', self.player) and rule(state) and additional_rule(state))
+            loc_id = location_table.get(location_name, 0)
+            extras = 1
+            if loc_id is not None and location_name.endswith("Victory"):
+                extras = multiworld.worlds[self.player].options.victory_locations.value
+            elif loc_id is not None:
+                extras = multiworld.worlds[self.player].options.objective_locations.value
+            for i in range(1, extras):
+                set_rule(multiworld.get_location(location_name + f" Extra {i}", self.player), lambda state, rule=rule:
+                state.can_reach(self.region, 'Region', self.player) and rule(state) and additional_rule(state))
         set_region_exit_rules(self.region, multiworld, self.player, self.victory_locations, operator='and')
 
     def define_region(self, name: str, multiworld: MultiWorld, exits=None) -> Region:
@@ -66,8 +75,19 @@ class Wargroove2Level:
         if self.location_rules.keys():
             for location in self.location_rules.keys():
                 loc_id = location_table.get(location, 0)
-                location = Wargroove2Location(self.player, location, loc_id, self.region)
-                self.region.locations.append(location)
+                wg2_location = Wargroove2Location(self.player, location, loc_id, self.region)
+                self.region.locations.append(wg2_location)
+                extras = 1
+                if loc_id is not None and location.endswith("Victory"):
+                    extras = multiworld.worlds[self.player].options.victory_locations.value
+                elif loc_id is not None:
+                    extras = multiworld.worlds[self.player].options.objective_locations.value
+                for i in range(1, extras):
+                    extra_location = location + f" Extra {i}"
+                    loc_id = location_table.get(extra_location, 0)
+                    wg2_location = Wargroove2Location(self.player, extra_location, loc_id, self.region)
+                    self.region.locations.append(wg2_location)
+
         if exits:
             for exit in exits:
                 self.region.exits.append(Entrance(self.player, f"{name} exits to {exit}", self.region))

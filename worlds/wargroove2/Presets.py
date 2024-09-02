@@ -4,6 +4,8 @@ from .Options import *
 
 wargroove2_option_presets: Dict[str, Dict[str, Any]] = {
     "Easy": {
+        "victory_locations": 3,
+        "objective_locations": 2,
         "income_boost": 50,
         "commander_defense_boost": 5,
         "groove_boost": 10,
@@ -13,6 +15,8 @@ wargroove2_option_presets: Dict[str, Dict[str, Any]] = {
     },
 
     "Hard": {
+        "victory_locations": 2,
+        "objective_locations": 1,
         "income_boost": 0,
         "commander_defense_boost": 0,
         "groove_boost": 0,
