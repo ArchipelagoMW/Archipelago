@@ -10,14 +10,14 @@ import typing
 from typing import Tuple, List, Iterable, Dict
 
 from settings import get_settings
-from worlds.wargroove2 import Wargroove2World
-from worlds.wargroove2.Items import item_table, faction_table, CommanderData, ItemData, item_id_name
+from . import Wargroove2World
+from .Items import item_table, faction_table, CommanderData, ItemData, item_id_name
 
 import ModuleUpdate
-from worlds.wargroove2.Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, get_level_table, FINAL_LEVEL_1, \
+from .Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, get_level_table, FINAL_LEVEL_1, \
     FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, get_final_levels
-from worlds.wargroove2.Locations import location_table
-from worlds.wargroove2.RegionFilter import Wargroove2LogicFilter
+from .Locations import location_table
+from .RegionFilter import Wargroove2LogicFilter
 
 ModuleUpdate.update()
 

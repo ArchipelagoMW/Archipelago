@@ -1,19 +1,22 @@
-class Wargroove2LogicFilter:
-    items: [str]
+from typing import List
 
-    def __init__(self, items: [str]):
+
+class Wargroove2LogicFilter:
+    items: List[str]
+
+    def __init__(self, items: List[str]):
         self.items = items
 
     def has(self, item: str, player: int) -> bool:
         return item in self.items
 
-    def has_all(self, items: [str], player: int) -> bool:
+    def has_all(self, items: List[str], player: int) -> bool:
         for item in items:
             if item not in self.items:
                 return False
         return True
 
-    def has_any(self, items: [str], player: int) -> bool:
+    def has_any(self, items: List[str], player: int) -> bool:
         for item in items:
             if item in self.items:
                 return True

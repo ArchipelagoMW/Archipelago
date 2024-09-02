@@ -21,18 +21,17 @@ def create_regions(world: "Wargroove2World") -> None:
 
     # Define Level 1s
     for level_num in range(0, 4):
-        next_level = level_num * 4 + 4 - level_num
+        next_level = level_num * 3 + 4
         multiworld.regions += [level_list[level_num].define_region(region_names[level_num], multiworld, exits=[
             region_names[next_level],
-            region_names[
-                next_level + 1],
-            region_names[
-                next_level + 2]])]
+            region_names[next_level + 1],
+            region_names[next_level + 2]
+        ])]
     # Define Level 2s
     for level_num in range(4, 16):
         next_level = level_num + 12
         multiworld.regions += [level_list[level_num].define_region(region_names[level_num], multiworld,
-                                                              exits=[region_names[next_level]])]
+                                                                   exits=[region_names[next_level]])]
     # Define Level 3s
     for level_num in range(16, 28):
         final_level_name = FINAL_LEVEL_1
@@ -42,13 +41,14 @@ def create_regions(world: "Wargroove2World") -> None:
             final_level_name = FINAL_LEVEL_3
         elif level_num >= 19:
             final_level_name = FINAL_LEVEL_2
-        multiworld.regions += [level_list[level_num].define_region(region_names[level_num], multiworld, exits=[final_level_name])]
+        multiworld.regions += [level_list[level_num].define_region(region_names[level_num], multiworld,
+                                                                   exits=[final_level_name])]
 
     # Define Final Levels
     multiworld.regions += [final_levels[0].define_region(FINAL_LEVEL_1, multiworld),
-                      final_levels[1].define_region(FINAL_LEVEL_2, multiworld),
-                      final_levels[2].define_region(FINAL_LEVEL_3, multiworld),
-                      final_levels[3].define_region(FINAL_LEVEL_4, multiworld)]
+                           final_levels[1].define_region(FINAL_LEVEL_2, multiworld),
+                           final_levels[2].define_region(FINAL_LEVEL_3, multiworld),
+                           final_levels[3].define_region(FINAL_LEVEL_4, multiworld)]
 
     # # link up our regions with the entrances
     world.get_entrance("Menu exits to Humble Beginnings Rebirth").connect(
@@ -63,7 +63,7 @@ def create_regions(world: "Wargroove2World") -> None:
         world.get_region(region_names[3]))
     # Define Levels 1-4
     for level_num in range(0, 4):
-        next_level = level_num * 4 + 4 - level_num
+        next_level = level_num * 3 + 4
         world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level]}").connect(
             world.get_region(region_names[next_level]))
         world.get_entrance(f"{region_names[level_num]} exits to {region_names[next_level + 1]}").connect(

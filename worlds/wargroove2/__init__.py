@@ -60,12 +60,12 @@ class Wargroove2World(World):
     game = "Wargroove 2"
     topology_present = True
     web = Wargroove2Web()
-    level_list: [Wargroove2Level] = None
-    first_level: Wargroove2Level = None
-    final_levels: [Wargroove2Level] = None
+    level_list: typing.List[Wargroove2Level] = []
+    first_level: Wargroove2Level
+    final_levels: typing.List[Wargroove2Level] = []
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = location_table
+    item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
+    location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
 
     def _get_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
@@ -150,10 +150,10 @@ class Wargroove2World(World):
             self.get_location(final_level.victory_locations[0]).place_locked_item(victory)
         # Placing victory event at final location
         self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has("Wargroove 2 Victory", self.player, self.options.final_levels)
+            state.has("Wargroove 2 Victory", self.player, self.options.final_levels.value)
 
     def set_rules(self) -> None:
-        set_rules(self.multiworld, self.level_list, self.first_level, self.final_levels, self.player)
+        set_rules(self)
 
     def create_item(self, name: str) -> Item:
         return Wargroove2Item(name, self.player)

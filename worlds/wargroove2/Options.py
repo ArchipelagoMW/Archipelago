@@ -1,4 +1,3 @@
-import typing
 from dataclasses import dataclass
 
 from Options import Choice, Range, DeathLink, PerGameCommonOptions, StartInventoryPool
@@ -38,9 +37,13 @@ class LevelShuffleSeed(Range):
 
 class CommanderChoice(Choice):
     """How the player's commander is selected for missions.
-    Locked Random: The player's commander is randomly predetermined for each level.
-    Unlockable Factions: The player starts with Mercival and can unlock playable factions.
-    Random Starting Faction:  The player starts with a random starting faction and can unlock the rest.
+
+    - Locked Random: The player's commander is randomly predetermined for each level.
+
+    - Unlockable Factions: The player starts with Mercival and can unlock playable factions.
+
+    - Random Starting Faction:  The player starts with a random starting faction and can unlock the rest.
+
     When playing with unlockable factions, faction items are added to the pool."""
     display_name = "Commander Choice"
     option_locked_random = 0
