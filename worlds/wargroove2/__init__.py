@@ -67,19 +67,6 @@ class Wargroove2World(World):
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
 
-    def _get_slot_data(self) -> typing.Dict[str, typing.Any]:
-        return {
-            'seed': "".join(
-                self.random.choice(string.ascii_letters) for _ in range(16)),
-            'income_boost': self.options.income_boost.value,
-            'commander_defense_boost': self.options.commander_defense_boost.value,
-            'starting_groove_multiplier': self.options.groove_boost.value,
-            'level_shuffle_seed': self.options.level_shuffle_seed.value,
-            'can_choose_commander': self.options.commander_choice.value != 0,
-            'final_levels': self.options.final_levels.value,
-            'death_link': self.options.death_link.value == 1,
-        }
-
     def generate_early(self) -> None:
         # First level
         self.first_level = get_first_level(self.player)
@@ -162,7 +149,7 @@ class Wargroove2World(World):
         create_regions(self)
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
-        slot_data = self._get_slot_data()
+        slot_data = {'seed': "".join(self.random.choice(string.ascii_letters) for _ in range(16))}
         for option_name in self.options.__dict__.keys():
             option = getattr(self.options, option_name)
             if isinstance(option, NumericOption):

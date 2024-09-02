@@ -187,8 +187,8 @@ class Wargroove2Context(CommonContext):
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                 json.dump(args["slot_data"], f)
-                self.can_choose_commander = self.slot_data["can_choose_commander"]
-                self.starting_groove_multiplier = self.slot_data["starting_groove_multiplier"]
+                self.can_choose_commander = self.slot_data["commander_choice"] != 0
+                self.starting_groove_multiplier = self.slot_data["groove_boost"]
                 self.income_boost_multiplier = self.slot_data["income_boost"]
                 self.commander_defense_boost_multiplier = self.slot_data["commander_defense_boost"]
                 f.close()
