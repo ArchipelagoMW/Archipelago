@@ -1,7 +1,7 @@
 from BaseClasses import Location
-from typing import Dict
+from typing import Dict, Optional
 
-location_table: Dict[str, int] = {
+location_table: Dict[str, Optional[int]] = {
     "Humble Beginnings Rebirth: Talk to Nadia": 253001,
     "Humble Beginnings Rebirth: Victory": 253002,
     "Humble Beginnings Rebirth: Good Dog": 253003,
