@@ -4,7 +4,7 @@
 
 - Wargroove 2 installed through Steam on Windows
   - Only the Steam Windows version is supported. MAC and Switch are not supported.
-- [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
 ## Backup playerProgress files
 `playerProgress` and `playerProgress.bak` contain save data for all of your Wargroove 2 campaigns. 
