@@ -661,6 +661,8 @@ ARBITER_ENHANCED_CLOAK_FIELD                            = "Enhanced Cloak Field 
 CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT                = "Graviton Catapult (Carrier/Skylord/Purger)"
 CARRIER_SKYLORD_PURGER_HULL_OF_PAST_GLORIES             = "Hull of Past Glories (Carrier/Skylord/Purger)"
 VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES      = "Flux Vanes (Void Ray/Destroyer/Warp Ray/Dawnbringer)"
+DAWNBRINGER_ANTI_SURFACE_COUNTERMEASURES                = "Anti-Surface Countermeasures (Dawnbringer)"
+DAWNBRINGER_ENHANCED_SHIELD_GENERATOR                   = "Enhanced Shield Generator (Dawnbringer)"
 DESTROYER_RESOURCE_EFFICIENCY                           = "Resource Efficiency (Destroyer)"
 WARP_PRISM_GRAVITIC_DRIVE                               = "Gravitic Drive (Warp Prism)"
 WARP_PRISM_PHASE_BLASTER                                = "Phase Blaster (Warp Prism)"
@@ -746,7 +748,7 @@ SKIRMISHER_PEER_CONTEMPT                                = "Peer Contempt (Skirmi
 VOID_RAY_PRISMATIC_RANGE                                = "Prismatic Range (Void Ray)"
 DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"
 # Warp Ray
-# Dawnbringer
+DAWNBRINGER_SOLARITE_LENS                               = "Solarite Lens (Dawnbringer)"
 # Carrier
 SKYLORD_HYPERJUMP                                       = "Hyperjump (Skylord)"
 # Trireme

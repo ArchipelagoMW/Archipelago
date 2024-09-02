@@ -832,6 +832,8 @@ item_descriptions = {
     item_names.CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT: "Carriers can launch Interceptors more quickly.",
     item_names.CARRIER_SKYLORD_PURGER_HULL_OF_PAST_GLORIES: "Carriers gain +2 armour.",
     item_names.VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES: "Increases movement speed of Void Ray variants.",
+    item_names.DAWNBRINGER_ANTI_SURFACE_COUNTERMEASURES: "Dawnbringers take reduced damage from non-spell ground sources.",
+    item_names.DAWNBRINGER_ENHANCED_SHIELD_GENERATOR: "Increases Dawnbringer maximum shields by +50.",
     item_names.DESTROYER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DESTROYER),
     item_names.WARP_PRISM_GRAVITIC_DRIVE: "Increases the movement speed of Warp Prisms.",
     item_names.WARP_PRISM_PHASE_BLASTER: "Equips Warp Prisms with an auto-attack that can hit ground and air targets.",
@@ -915,7 +917,7 @@ item_descriptions = {
     item_names.VOID_RAY_PRISMATIC_RANGE: "Void Ray War Council upgrade. Void Rays gain increased range as they charge their beam.",
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
     # Warp Ray
-    # Dawnbringer
+    item_names.DAWNBRINGER_SOLARITE_LENS: "Dawnbringer War Council upgrade. Dawnbringers gain +2 range.",
     # Carrier
     item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map."),
     # Trireme
