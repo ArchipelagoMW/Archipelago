@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Set
 
 from BaseClasses import  CollectionState
 from .options import (
@@ -7,9 +7,9 @@ from .options import (
     get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
 )
 from .items import (
-    get_basic_units, tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings,
+    tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings,
     kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings,
-    pvz_defense_ratings
+    pvz_defense_ratings, no_logic_basic_units, advanced_basic_units, basic_units
 )
 from .mission_tables import SC2Race, SC2Campaign
 from . import item_names
@@ -1391,3 +1391,12 @@ class SC2Logic:
         self.spear_of_adun_autonomously_cast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
         self.enabled_campaigns = get_enabled_campaigns(world)
         self.mission_order = get_option_value(world, "mission_order")
+
+def get_basic_units(world: 'SC2World', race: SC2Race) -> Set[str]:
+    logic_level = get_option_value(world, 'required_tactics')
+    if logic_level == RequiredTactics.option_no_logic:
+        return no_logic_basic_units[race]
+    elif logic_level == RequiredTactics.option_advanced:
+        return advanced_basic_units[race]
+    else:
+        return basic_units[race]

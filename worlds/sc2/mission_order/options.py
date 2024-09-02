@@ -9,6 +9,8 @@ import copy
 
 from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
+from ..items import item_table
+from ..item_groups import item_name_groups
 from .structs import Difficulty, LayoutType
 from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz
 from .presets_static import (
@@ -73,7 +75,10 @@ MissionCountEntryRule = {
 BeatMissionsEntryRule = {
     "scope": [str],
 }
-EntryRule = Or(SubRuleEntryRule, MissionCountEntryRule, BeatMissionsEntryRule)
+ItemEntryRule = {
+    "items": {str: int}
+}
+EntryRule = Or(SubRuleEntryRule, MissionCountEntryRule, BeatMissionsEntryRule, ItemEntryRule)
 
 class CustomMissionOrder(OptionDict):
     """
@@ -211,7 +216,6 @@ class CustomMissionOrder(OptionDict):
                     ordered_layouts[key].update(layouts[key])
                 else:
                     ordered_layouts[key] = layouts[key]
-                    
 
             # Campaign values = default options (except for default layouts) + preset options (except for layouts) +  campaign options
             self.value[campaign] = {key: value for (key, value) in self.default["Default Campaign"].items() if type(value) != dict}
@@ -220,8 +224,6 @@ class CustomMissionOrder(OptionDict):
             _resolve_special_options(self.value[campaign])
 
             for layout in ordered_layouts:
-                # if type(value[campaign][layout]) != dict:
-                #     continue
                 # Layout values = default options + campaign's global options + layout options
                 self.value[campaign][layout] = copy.deepcopy(self.default["Default Campaign"][GLOBAL_ENTRY])
                 self.value[campaign][layout].update(global_dict)
@@ -301,16 +303,32 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
         resolved["amount"] = _resolve_potential_range(option_value["amount"])
     if "scope" in option_value:
         # A scope may be a list or a single address
-        # Since addresses can be a single index, they may be ranges
         if type(option_value["scope"]) == list:
-            resolved["scope"] = [_resolve_potential_range(str(subscope)) for subscope in option_value["scope"]]
+            resolved["scope"] = [str(subscope) for subscope in option_value["scope"]]
         else:
-            resolved["scope"] = [_resolve_potential_range(str(option_value["scope"]))]
+            resolved["scope"] = [str(option_value["scope"])]
     if "rules" in option_value:
         resolved["rules"] = [_resolve_entry_rule(subrule) for subrule in option_value["rules"]]
         # Make sure sub-rule rules have a specified amount
         if not "amount" in option_value:
             resolved["amount"] = -1
+    if "items" in option_value:
+        option_items: Dict[str, Any] = option_value["items"]
+        resolved_items = {item: int(_resolve_potential_range(str(amount))) for (item, amount) in option_items.items()}
+        resolved_items = _resolve_item_names(resolved_items)
+        resolved["items"] = {}
+        for item in resolved_items:
+            if item not in item_table:
+                raise ValueError(f"Item rule contains \"{item}\", which is not a valid item name.")
+            amount = max(0, resolved_items[item])
+            quantity = item_table[item].quantity
+            if amount == 0:
+                final_amount = quantity
+            elif quantity == 0:
+                final_amount = amount
+            else:
+                final_amount = min(quantity, amount)
+            resolved["items"][item] = final_amount
     return resolved
 
 def _resolve_potential_range(option_value: Union[Any, str]) -> Union[Any, int]:
@@ -382,3 +400,17 @@ def _custom_range(text: str) -> int:
 
 def _triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
     return int(round(random.triangular(lower, end, tri), 0))
+
+# Version of options.Sc2ItemDict.verify without World
+def _resolve_item_names(value: Dict[str, int]) -> Dict[str, int]:
+    new_value: dict[str, int] = {}
+    case_insensitive_group_mapping = {
+        group_name.casefold(): group_value for group_name, group_value in item_name_groups.items()
+    }
+    case_insensitive_group_mapping.update({item.casefold(): {item} for item in item_table})
+    for group_name in value:
+        item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
+        for item_name in item_names:
+            new_value[item_name] = new_value.get(item_name, 0) + value[group_name]
+    return new_value
+    

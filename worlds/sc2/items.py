@@ -4,7 +4,6 @@ from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
 import enum
 
-from .options import get_option_value, RequiredTactics, GenericUpgradeItems
 from .mission_tables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import item_names
 from worlds.AutoWorld import World
@@ -1964,16 +1963,6 @@ not_balanced_starting_units = {
 }
 
 
-def get_basic_units(world: 'SC2World', race: SC2Race) -> typing.Set[str]:
-    logic_level = get_option_value(world, 'required_tactics')
-    if logic_level == RequiredTactics.option_no_logic:
-        return no_logic_basic_units[race]
-    elif logic_level == RequiredTactics.option_advanced:
-        return advanced_basic_units[race]
-    else:
-        return basic_units[race]
-
-
 # Items that can be placed before resources if not already in
 # General upgrades and Mercs
 second_pass_placeable_items: typing.Tuple[str, ...] = (
@@ -2287,50 +2276,6 @@ upgrade_bundles: Dict[str, List[str]] = {
             item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR,
             item_names.PROGRESSIVE_PROTOSS_SHIELDS
         ],
-}
-
-# Names of upgrades to be included for different options
-upgrade_included_names: Dict[GenericUpgradeItems, Set[str]] = {
-    GenericUpgradeItems.option_individual_items: {
-        item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON,
-        item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR,
-        item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON,
-        item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR,
-        item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON,
-        item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR,
-        item_names.PROGRESSIVE_ZERG_MELEE_ATTACK,
-        item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK,
-        item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE,
-        item_names.PROGRESSIVE_ZERG_FLYER_ATTACK,
-        item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE,
-        item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON,
-        item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR,
-        item_names.PROGRESSIVE_PROTOSS_SHIELDS,
-        item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON,
-        item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR,
-    },
-    GenericUpgradeItems.option_bundle_weapon_and_armor: {
-        item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE,
-        item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE,
-        item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE,
-        item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE,
-        item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE,
-        item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE,
-    },
-    GenericUpgradeItems.option_bundle_unit_class: {
-        item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE,
-        item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE,
-        item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE,
-        item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE,
-        item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE,
-        item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE,
-        item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE,
-    },
-    GenericUpgradeItems.option_bundle_all: {
-        item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
-        item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
-        item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE,
-    }
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if

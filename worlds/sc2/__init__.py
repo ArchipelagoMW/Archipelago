@@ -11,7 +11,7 @@ from worlds.AutoWorld import WebWorld, World
 from . import item_names
 from .items import (
     StarcraftItem, filler_items, get_full_item_list, ProtossItemType,
-    get_basic_units, ItemData, upgrade_included_names, kerrigan_actives, kerrigan_passives,
+    ItemData, kerrigan_actives, kerrigan_passives,
     not_balanced_starting_units,
 )
 from . import items
@@ -23,7 +23,9 @@ from .options import (
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems, RequiredTactics,
+    upgrade_included_names
 )
+from .rules import get_basic_units
 from . import settings
 from .pool_filter import filter_items
 from .mission_tables import (
@@ -45,8 +47,12 @@ class ItemFilterFlags(enum.IntFlag):
     Excluded = enum.auto()
     AllowedOrphan = enum.auto()
     """Used to flag items that shouldn't be filtered out with their parents"""
+    ForceProgression = enum.auto()
+    """Used to flag items that aren't classified as progression by default"""
+    Necessary = enum.auto()
+    """Used to flag items that are never allowed to be culled"""
 
-    Unremovable = Locked|StartInventory|Plando
+    Unremovable = Locked|StartInventory|Plando|Necessary
 
 
 @dataclass
@@ -145,6 +151,7 @@ class SC2World(World):
         flag_user_excluded_item_sets(self, item_list)
         flag_war_council_items(self, item_list)
         flag_and_add_resource_locations(self, item_list)
+        flag_mission_order_required_items(self, item_list)
         pool: List[Item] = prune_item_pool(self, item_list)
         pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
 
@@ -156,7 +163,10 @@ class SC2World(World):
         if self.options.required_tactics == RequiredTactics.option_no_logic:
             # Forcing completed goal and minimal accessibility on no logic
             self.options.accessibility.value = Accessibility.option_minimal
-            self.multiworld.completion_condition[self.player] = lambda state: True
+            required_items = self.custom_mission_order.get_items_to_lock()
+            self.multiworld.completion_condition[self.player] = lambda state, required_items=required_items: all(
+                state.has(item, self.player, amount) for (item, amount) in required_items.items()
+            )
         else:
             self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 
@@ -631,6 +641,17 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
                 world.locked_locations.append(location.name)
 
 
+def flag_mission_order_required_items(world: SC2World, item_list: List[FilterItem]) -> None:
+    """Marks items that are necessary for item rules in the mission order and forces them to be progression."""
+    locks_required = world.custom_mission_order.get_items_to_lock()
+    locks_done = {item: 0 for item in locks_required}
+    for item in item_list:
+        if item.name in locks_required and locks_done[item.name] < locks_required[item.name]:
+            item.flags |= ItemFilterFlags.Necessary
+            item.flags |= ItemFilterFlags.ForceProgression
+            locks_done[item.name] += 1
+
+
 def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:
     """Prunes the item pool size to be less than the number of available locations"""
 
@@ -648,17 +669,22 @@ def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:
     pool: List[Item] = []
     locked_items: List[Item] = []
     existing_items: List[Item] = []
+    necessary_items: List[Item] = []
     for item in item_list:
         ap_item = create_item_with_correct_settings(world.player, item.name)
+        if ItemFilterFlags.ForceProgression in item.flags:
+            ap_item.classification = ItemClassification.progression
         if ItemFilterFlags.StartInventory in item.flags:
             existing_items.append(ap_item)
+        elif ItemFilterFlags.Necessary in item.flags:
+            necessary_items.append(ap_item)
         elif ItemFilterFlags.Locked in item.flags:
             locked_items.append(ap_item)
         else:
             pool.append(ap_item)
 
     fill_pool_with_kerrigan_levels(world, pool)
-    filtered_pool = filter_items(world, world.location_cache, pool, existing_items, locked_items)
+    filtered_pool = filter_items(world, world.location_cache, pool, existing_items, locked_items, necessary_items)
     return filtered_pool
 
 
