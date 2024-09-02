@@ -4,6 +4,7 @@ import os
 import pkgutil
 import tempfile
 import typing
+import re
 
 import bsdiff4
 
@@ -379,9 +380,6 @@ class LinksAwakeningWorld(World):
                 self.name_cache[item] = item
                 splits = item.split("_")
                 self.name_cache["".join(splits)] = item
-                for word in ['RUPEE', 'RUPEES']:
-                    if word in splits:
-                        self.name_cache["".join(reversed(splits))] = item
                 for word in item.split("_"):
                     if word not in ItemIconGuessing.FORBIDDEN and not word.isnumeric():
                         self.name_cache[word] = item
@@ -400,7 +398,9 @@ class LinksAwakeningWorld(World):
         for phrase in ItemIconGuessing.PHRASES.keys():
             if phrase in uppered:
                 return ItemIconGuessing.PHRASES[phrase]
-        possibles = other.upper().split(" ")
+        # pattern for breaking down camelCase, also separates out digits
+        pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
+        possibles = pattern.sub(' ', other).upper().replace('_', ' ').split(" ")
         rejoined = "".join(possibles)
         if rejoined in self.name_cache:
             return self.name_cache[rejoined]
