@@ -1,8 +1,5 @@
-from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
-from BaseClasses import Location, Entrance, Region
 from .Types import episode_type_to_shortened_name
-from .Options import StartingEpisode
 from .Locations import hourglass_locations
 from typing import TYPE_CHECKING
 
@@ -72,9 +69,6 @@ def set_rules(world: "Sly1World"):
     # Hourglass Rules
     for key, data in hourglass_locations.items():
         loc = world.multiworld.get_location(key, world.player)
-        print(f"Accessing {loc.name}")
-        
-        print(f'Adding {data.key_requirement} {episode_type_to_shortened_name[data.key_type]} Key requirement to {loc.name}')
         add_rule(loc, lambda state: state.has(f'{episode_type_to_shortened_name[data.key_type]} Key', world.player, data.key_requirement))
 
         

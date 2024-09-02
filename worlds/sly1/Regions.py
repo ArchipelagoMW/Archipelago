@@ -1,5 +1,5 @@
 from BaseClasses import Region
-from .Types import EpisodeType, Sly1Location
+from .Types import Sly1Location
 from .Locations import location_table
 from typing import TYPE_CHECKING
 

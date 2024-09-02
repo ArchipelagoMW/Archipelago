@@ -1,5 +1,5 @@
-from enum import IntEnum, IntFlag
-from typing import NamedTuple, Optional, List
+from enum import IntEnum
+from typing import NamedTuple, Optional
 from BaseClasses import Location, Item, ItemClassification
 
 class Sly1Location(Location):

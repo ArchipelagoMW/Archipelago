@@ -1,5 +1,5 @@
 from BaseClasses import Item, ItemClassification
-from .Types import ItemData, Sly1Item
+from .Types import ItemData, Sly1Item, episode_type_to_name, EpisodeType
 from .Locations import get_total_locations
 from typing import List, Dict, TYPE_CHECKING
 
@@ -8,6 +8,9 @@ if TYPE_CHECKING:
 
 def create_itempool(world: "Sly1World") -> List[Item]:
     itempool: List[Item] = []
+
+    starting_episode = (episode_type_to_name[EpisodeType(world.options.StartingEpisode)])
+    del item_table[starting_episode]
 
     for name in item_table.keys():
         item_type: ItemClassification = item_table.get(name).classification
@@ -32,7 +35,6 @@ def create_multiple_items(world: "Sly1World", name: str, count: int = 1,
 
     return itemlist
 
-# Fix this, it sucks ass
 def create_junk_items(world: "Sly1World", count: int) -> List[Item]:
     junk_pool: List[Item] = []
     # For now, all junk has equal weights
