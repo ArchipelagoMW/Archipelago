@@ -3,6 +3,7 @@ from worlds.AutoWorld import LogicMixin
 if TYPE_CHECKING:
     from . import Wargroove2World
 
+
 class Wargroove2Logic(LogicMixin):
     pass
 
