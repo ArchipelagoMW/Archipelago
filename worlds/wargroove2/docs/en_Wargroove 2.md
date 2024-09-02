@@ -40,10 +40,10 @@ action is taken in game.
 
 ## What is the goal of this game when randomized?
 
-The goal is to beat 1-4 final levels ending with the name `Finale` by finding the `Final North`, `Final East`, 
-`Final South` or `Final West` depending on which Finale the player is playing.
-All final levels require the `Final Center`. The `Northern Finale` for example, requires `Final North` and 
-`Final Center`, but the `Western Finale` requires `Final West` and `Final Center`.
+The goal is to beat 1-4 final levels ending with the name "Finale" by finding the "Final North", "Final East", 
+"Final South" or "Final West" items depending on which Finale the player is playing.
+All final levels require the "Final Center". The "Northern Finale" for example, requires "Final North" and 
+"Final Center" but the "Western Finale" requires "Final West" and "Final Center".
 
 ## Contributing levels to the randomizer
 
