@@ -103,6 +103,12 @@ class WL4World(World):
 
     web = WL4Web()
 
+    JEWEL_PIECES = tuple(filter_items(type=ItemType.JEWEL))
+    CDS = tuple(filter_item_names(type=ItemType.CD))
+    ABILITIES = tuple(filter_item_names(type=ItemType.ABILITY))
+    GOLDEN_TREASURES = tuple(filter_item_names(type=ItemType.TREASURE))
+    FILLER_ITEMS = tuple(filter_item_names(type=ItemType.ITEM))
+
     def generate_early(self):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
             self.options.local_items.value.update(self.item_name_groups['Golden Treasure'])
@@ -157,7 +163,7 @@ class WL4World(World):
 
         required_jewels = self.options.required_jewels.value
         pool_jewels = self.options.pool_jewels.value
-        for name, item in filter_items(type=ItemType.JEWEL):
+        for name, item in self.JEWEL_PIECES:
             force_non_progression = required_jewels == 0
             if item.passage() == Passage.ENTRY:
                 copies = min(pool_jewels, 1)
@@ -171,10 +177,10 @@ class WL4World(World):
             for _ in range(copies):
                 itempool.append(self.create_item(name, force_non_progression))
 
-        for name in filter_item_names(type=ItemType.CD):
+        for name in self.CDS:
             itempool.append(self.create_item(name))
 
-        for name in filter_item_names(type=ItemType.ABILITY):
+        for name in self.ABILITIES:
             itempool.append(self.create_item(name))
             if name.startswith('Progressive'):
                 itempool.append(self.create_item(name))
@@ -188,12 +194,11 @@ class WL4World(World):
             itempool.append(self.create_item('Full Health Item'))
 
         if treasure_hunt:
-            for name in filter_item_names(type=ItemType.TREASURE):
+            for name in self.GOLDEN_TREASURES:
                 itempool.append(self.create_item(name))
 
         junk_count = total_required_locations - len(itempool)
-        junk_item_pool = tuple(filter_item_names(type=ItemType.ITEM))
-        itempool.extend(self.create_item(self.random.choice(junk_item_pool)) for _ in range(junk_count))
+        itempool.extend(self.create_item(self.get_filler_item_name()) for _ in range(junk_count))
 
         self.multiworld.itempool += itempool
 
@@ -222,6 +227,9 @@ class WL4World(World):
             'portal',
             'death_link',
         )
+
+    def get_filler_item_name(self) -> str:
+        return self.random.choice(self.FILLER_ITEMS)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         return WL4Item(name, self.player, force_non_progression)

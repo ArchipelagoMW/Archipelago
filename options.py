@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range, OptionGroup
+from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range, OptionGroup, StartInventoryPool
 
 
 class Goal(Choice):
@@ -226,3 +226,4 @@ class WL4Options(PerGameCommonOptions):
     smash_through_hard_blocks: SmashThroughHardBlocks
     music_shuffle: MusicShuffle
     wario_voice_shuffle: WarioVoiceShuffle
+    start_inventory_from_pool: StartInventoryPool
