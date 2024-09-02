@@ -1,12 +1,23 @@
 
-from BaseClasses import MultiWorld, Item, ItemClassification
-from worlds.AutoWorld import World, CollectionState
+from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
+from worlds.AutoWorld import World, CollectionState, WebWorld
 from .Items import item_table, create_itempool, create_item, event_item_pairs, sly_episodes
 from .Locations import get_location_names
 from .Options import Sly1Options
 from .Regions import create_regions
 from .Types import EpisodeType, episode_type_to_name, Sly1Item
 from .Rules import set_rules
+
+class Sly1Web(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Sly Cooper and the Thievius Raccoonus for Archipelago. "
+        "This guide covers single-player, multiworld, and related software.",
+        "English",
+        "sly_1_en.md",
+        "sly-1/en",
+        ["Nep & Philiard"]
+    )]
 
 class Sly1World(World):
     """
