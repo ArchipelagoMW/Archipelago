@@ -1,8 +1,9 @@
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from BaseClasses import Location, Entrance, Region
-from .Types import EpisodeType
+from .Types import episode_type_to_shortened_name
 from .Options import StartingEpisode
+from .Locations import hourglass_locations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -17,17 +18,21 @@ def set_rules(world: "Sly1World"):
     add_rule(world.multiworld.get_entrance("Hideout -> Dread Swamp Path", world.player),
              lambda state: state.has("Vicious Voodoo", world.player))
     add_rule(world.multiworld.get_entrance("Hideout -> Perilous Ascent", world.player),
-             lambda state: state.has("Vicious Voodoo", world.player))
+             lambda state: state.has("Fire in the Sky", world.player))
     
     # Main Hub Access
     add_rule(world.multiworld.get_entrance("Hideout -> Prowling the Grounds", world.player),
-             lambda state: state.has("ToT Key", world.player))
+             lambda state: state.has("ToT Key", world.player)
+             and state.has("Tides of Terror", world.player))
     add_rule(world.multiworld.get_entrance("Hideout -> Muggshot's Turf", world.player),
-             lambda state: state.has("SSE Key", world.player))
+             lambda state: state.has("SSE Key", world.player)
+             and state.has("Sunset Snake Eyes", world.player))
     add_rule(world.multiworld.get_entrance("Hideout -> Swamp's Dark Center", world.player),
-             lambda state: state.has("VV Key", world.player))
+             lambda state: state.has("VV Key", world.player)
+             and state.has("Vicious Voodoo", world.player))
     add_rule(world.multiworld.get_entrance("Hideout -> Inside the Stronghold", world.player),
-             lambda state: state.has("FitS Key", world.player))
+             lambda state: state.has("FitS Key", world.player)
+             and state.has("Fire in the Sky", world.player))
     
     add_rule(world.multiworld.get_entrance("Stealthy Approach -> Prowling the Grounds", world.player),
              lambda state: state.has("ToT Key", world.player))
@@ -61,7 +66,16 @@ def set_rules(world: "Sly1World"):
     set_rule(world.multiworld.get_entrance("Hideout -> Cold Heart of Hate", world.player),
              lambda state: state.has("Beat Raleigh", world.player)
              and state.has("Beat Muggshot", world.player)
-             and state.has("Mz Ruby", world.player)
+             and state.has("Beat Mz. Ruby", world.player)
              and state.has("Beat Panda King", world.player))
+    
+    # Hourglass Rules
+    for key, data in hourglass_locations.items():
+        loc = world.multiworld.get_location(key, world.player)
+        print(f"Accessing {loc.name}")
+        
+        print(f'Adding {data.key_requirement} {episode_type_to_shortened_name[data.key_type]} Key requirement to {loc.name}')
+        add_rule(loc, lambda state: state.has(f'{episode_type_to_shortened_name[data.key_type]} Key', world.player, data.key_requirement))
+
         
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

@@ -9,10 +9,11 @@ class Sly1Item(Item):
     game = "Sly Cooper and the Thievius Raccoonus"
 
 class EpisodeType(IntEnum):
-    ToT = 1
+    TOT = 1
     SSE = 2
     VV = 3
-    FitS = 4
+    FITS = 4
+    CHOH = 5
 
 class ItemData(NamedTuple):
     ap_code: Optional[int]
@@ -23,10 +24,21 @@ class ItemData(NamedTuple):
 class LocData(NamedTuple):
     ap_code: Optional[int]
     region: Optional[str]
+    key_type: Optional[EpisodeType]
+    key_requirement: Optional[int] = 0
 
 episode_type_to_name = {
-    EpisodeType.ToT:      "Tides of Terror",
+    EpisodeType.TOT:      "Tides of Terror",
     EpisodeType.SSE:      "Sunset Snake Eyes",
     EpisodeType.VV:       "Vicious Voodoo",
-    EpisodeType.FitS:     "Fire in the Sky"
+    EpisodeType.FITS:     "Fire in the Sky",
+    EpisodeType.CHOH:     "Cold Heart of Hate"
+}
+
+episode_type_to_shortened_name = {
+    EpisodeType.TOT:    "ToT",
+    EpisodeType.SSE:    "SSE",
+    EpisodeType.VV:     "VV",
+    EpisodeType.FITS:   "FitS",
+    EpisodeType.CHOH:   "CHoH"
 }
