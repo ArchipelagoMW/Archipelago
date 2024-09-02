@@ -27,7 +27,10 @@ class LocationData(NamedTuple):
 
     def to_ap_id(self):
         passage, level, flag = self.status_bit
-        return ap_id_offset + ((passage * 6 + level) << 5) + flag.bit_length()
+        return (ap_id_offset +
+                ((passage * 6 + level) << 8) +
+                sum(1 << difficulty << 5 for difficulty in self.difficulties) +
+                flag.bit_length())
 
 
 _NORMAL = (Difficulty.option_normal,)
