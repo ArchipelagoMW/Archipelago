@@ -10,7 +10,7 @@ config file.
 This randomizer shuffles units, map events, factions and boosts. It features a custom, non-linear campaign with 4 
 final levels and 4 branching paths. The player cannot beat the final levels without specific items scattered throughout 
 the branching paths. Certain levels on these paths may require specific units or items in order to progress.
-Where levels appear in the campaign are randomized.
+Where levels appear in the campaign is randomized.
 
 ## What items and locations get shuffled?
 
