@@ -33,7 +33,7 @@ from .Locations import (
     postJokes,
     baseUltraRocks,
     coins,
-    cacklettas_soul
+    cacklettas_soul,
 )
 from . import StateLogic
 
