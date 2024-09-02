@@ -1,12 +1,11 @@
 from __future__ import annotations
 
+from enum import IntEnum
 from typing import Any, Iterable, NamedTuple, Optional, Tuple
 
-from BaseClasses import Item
-from BaseClasses import ItemClassification as IC
+from BaseClasses import Item, ItemClassification as IC
 
-from .data import ap_id_offset
-from .types import Box, ItemFlag, ItemType, Passage
+from .data import ap_id_offset, ItemFlag, Passage
 
 
 # Items are encoded as 8-bit numbers as follows:
@@ -43,6 +42,23 @@ from .types import Box, ItemFlag, ItemType, Passage
 #  - 4 = Minigame coin
 #
 # For AP item, classifications are as reported by ItemClassification.as_flag()
+
+
+class Box(IntEnum):
+    JEWEL_NE = 0
+    JEWEL_SE = 1
+    JEWEL_SW = 2
+    JEWEL_NW = 3
+    CD = 4
+    FULL_HEALTH = 5
+
+
+class ItemType(IntEnum):
+    JEWEL = 0
+    CD = 1
+    ITEM = 2
+    ABILITY = 4
+    TREASURE = 5
 
 
 def ap_id_from_wl4_data(data: ItemData) -> int:

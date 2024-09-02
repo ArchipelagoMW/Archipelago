@@ -7,12 +7,9 @@ from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional
 import Utils
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
-from worlds._bizhawk import RequestFailedError
-from worlds._bizhawk.client import BizHawkClient
 
-from .data import encode_str, get_symbol
+from .data import Passage, encode_str, get_symbol
 from .locations import get_level_locations, location_name_to_id, location_table
-from .types import Passage
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -140,7 +137,7 @@ class DeathLinkCtx:
         return repr(self)
 
 
-class WL4Client(BizHawkClient):
+class WL4Client(bizhawk.client.BizHawkClient):
     game = 'Wario Land 4'
     system = 'GBA'
     patch_suffix = '.apwl4'
@@ -171,7 +168,7 @@ class WL4Client(BizHawkClient):
                 read(get_symbol('PlayerName'), 64),
                 read(get_symbol('SeedName'), 64),
             ]))
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             return False  # Should verify on the next pass
 
         game_name = next(read_result).decode('ascii')
@@ -271,7 +268,7 @@ class WL4Client(BizHawkClient):
                 read8(fhi_1_address),
                 read8(fhi_2_address),
             ]))
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             return
 
         game_mode = next_int(read_result)
@@ -426,7 +423,7 @@ class WL4Client(BizHawkClient):
 
         try:
             await bizhawk.guarded_write(bizhawk_ctx, write_list, guard_list)
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             return
 
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:

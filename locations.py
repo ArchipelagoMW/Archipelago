@@ -1,10 +1,15 @@
+from enum import IntEnum
 from typing import NamedTuple, Optional, Sequence, Tuple
 
 from BaseClasses import Location, Region
 
-from .data import ap_id_offset
+from .data import ItemFlag, Passage, ap_id_offset
 from .options import Difficulty
-from .types import ItemFlag, LocationType, Passage
+
+
+class LocationType(IntEnum):
+    BOX = 0
+    CHEST = 3
 
 
 class LocationData(NamedTuple):

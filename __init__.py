@@ -8,14 +8,13 @@ from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from .client import WL4Client
-from .data import data_path
-from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import get_level_locations, location_name_to_id, location_table, event_table
+from .data import Passage, data_path
+from .items import ItemType, WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
+from .locations import LocationType, get_level_locations, location_name_to_id, location_table, event_table
 from .options import Difficulty, Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
 from .rules import set_access_rules
-from .types import ItemType, LocationType, Passage
 
 
 class WL4Settings(settings.Group):

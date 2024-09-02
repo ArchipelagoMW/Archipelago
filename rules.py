@@ -5,9 +5,10 @@ from typing import Callable, Mapping, NamedTuple, Optional, Sequence, Tuple, Uni
 
 from BaseClasses import CollectionState
 
-from . import items, locations, options
-from .types import ItemType, Passage
-from .options import Goal
+from .data import Passage
+from .items import ItemType, filter_item_names
+from .locations import location_table, event_table
+from .options import Difficulty, Goal, Logic
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -55,7 +56,7 @@ def has_any(items: Sequence[RequiredItem]) -> Requirement:
 
 def has_treasures() -> Requirement:
     return Requirement(lambda w, s: sum(has(item).inner(w, s)
-                                        for item in items.filter_item_names(type=ItemType.TREASURE))
+                                        for item in filter_item_names(type=ItemType.TREASURE))
                                     >= w.options.golden_treasure_count)
 
 
@@ -98,7 +99,7 @@ def get_access_rule(world: WL4World, region_name: str):
 
 def make_boss_access_rule(world: WL4World, passage: Passage, jewels_needed: int):
     jewel_list = [(name, jewels_needed)
-                  for name in items.filter_item_names(type=ItemType.JEWEL, passage=passage)]
+                  for name in filter_item_names(type=ItemType.JEWEL, passage=passage)]
     return has_all(jewel_list).apply_world(world)
 
 
@@ -108,7 +109,7 @@ def set_access_rules(world: WL4World):
             location = world.get_location(name)
             location.access_rule = rule.apply_world(world)
         except KeyError:
-            assert name in locations.location_table or name in locations.event_table, \
+            assert name in location_table or name in event_table, \
                 f"{name} is not a valid location name"
 
 
@@ -149,11 +150,11 @@ frog_switch_regions = {
 }
 
 
-normal = options.Difficulty.option_normal
-hard = options.Difficulty.option_hard
-s_hard = options.Difficulty.option_s_hard
-basic = options.Logic.option_basic
-advanced = options.Logic.option_advanced
+normal = Difficulty.option_normal
+hard = Difficulty.option_hard
+s_hard = Difficulty.option_s_hard
+basic = Logic.option_basic
+advanced = Logic.option_advanced
 
 
 # Regions are linear, so each region from the same level adds to the previous

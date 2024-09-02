@@ -9,9 +9,8 @@ from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import Utils
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin, APTokenTypes
 
-from .data import ap_id_offset, encode_str, get_symbol
-from .items import WL4Item, filter_items
-from .types import ItemType, Passage
+from .data import Passage, ap_id_offset, encode_str, get_symbol
+from .items import ItemType, WL4Item, filter_items
 from .options import Difficulty, Goal, MusicShuffle, OpenDoors, Portal, SmashThroughHardBlocks
 
 if TYPE_CHECKING:
