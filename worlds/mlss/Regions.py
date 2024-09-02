@@ -33,6 +33,7 @@ from .Locations import (
     postJokes,
     baseUltraRocks,
     coins,
+    cacklettas_soul
 )
 from . import StateLogic
 
@@ -71,6 +72,7 @@ def create_regions(world: "MLSSWorld", excluded: typing.List[str]):
     create_region(world, "BooStatue", booStatue, excluded)
     create_region(world, "Oasis", oasis, excluded)
     create_region(world, "BaseUltraRocks", baseUltraRocks, excluded)
+    create_region(world, "Cackletta's Soul", cacklettas_soul, excluded)
 
     if world.options.coins:
         create_region(world, "Coins", coins, excluded)
@@ -221,6 +223,9 @@ def connect_regions(world: "MLSSWorld"):
             "Bowser's Castle Mini",
             lambda state: StateLogic.canMini(state, world.player) and StateLogic.thunder(state, world.player),
         )
+        connect(world, names,"Bowser's Castle Mini","Cackletta's Soul")
+    else:
+        connect(world, names, "PostJokes", "Cackletta's Soul")
     connect(world, names, "Chucklehuck Woods", "Winkle", lambda state: StateLogic.canDash(state, world.player))
     connect(
         world,

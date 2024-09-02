@@ -90,6 +90,8 @@ class MLSSWorld(World):
         self.get_location(LocationName.PantsShopStartingFlag1).place_locked_item(item)
         item = self.create_item("Chuckle Bean")
         self.get_location(LocationName.PantsShopStartingFlag2).place_locked_item(item)
+        item = self.create_item("Victory")
+        self.get_location("Cackletta's Soul").place_locked_item(item)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -143,14 +145,7 @@ class MLSSWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self, self.disabled_locations)
-        if self.options.castle_skip:
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-                "PostJokes", "Region", self.player
-            )
-        else:
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-                "Bowser's Castle Mini", "Region", self.player
-            )
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_item(self, name: str) -> MLSSItem:
         item = item_table[name]

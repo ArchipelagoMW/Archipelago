@@ -766,6 +766,10 @@ oasis: typing.List[LocationData] = [
     LocationData("Oho Oasis Thunderhand", 0x1E9409, 2),
 ]
 
+cacklettas_soul: typing.List[LocationData] = [
+    LocationData("Cackletta's Soul", 0xF00000, 0),
+]
+
 nonBlock = [
     (0x434B, 0x1, 0x243844),  # Farm Mole 1
     (0x434B, 0x1, 0x24387D),  # Farm Mole 2
@@ -845,6 +849,7 @@ nonBlock = [
     (0x433D, 0x8, 0xDA0005),  # Beanstar
     (0x430F, 0x40, 0xDA0006),  # Jojora
     (0x433D, 0x10, 0xDA0007),  # Birdo
+    (0x4407, 0x40, 0xF00000),  # Cackletta
 ]
 
 roomException = {

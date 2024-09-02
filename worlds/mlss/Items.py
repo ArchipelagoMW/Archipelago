@@ -160,6 +160,7 @@ itemList: typing.List[ItemData] = [
     ItemData(77771142, "Game Boy Horror SP", ItemClassification.useful, 0xFE),
     ItemData(77771143, "Woo Bean", ItemClassification.skip_balancing, 0x1C),
     ItemData(77771144, "Hee Bean", ItemClassification.skip_balancing, 0x1F),
+    ItemData(77771145, "Victory", ItemClassification.progression, 0x0)
 ]
 
 item_frequencies: typing.Dict[str, int] = {
@@ -184,6 +185,7 @@ item_frequencies: typing.Dict[str, int] = {
     "Hoo Bean": 100,
     "Chuckle Bean": 200,
     "Hammers": 3,
+    "Victory": 0
 }
 
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in itemList}
