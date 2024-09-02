@@ -185,7 +185,7 @@ item_frequencies: typing.Dict[str, int] = {
     "Hoo Bean": 100,
     "Chuckle Bean": 200,
     "Hammers": 3,
-    "Victory": 0
+    "Victory": 0,
 }
 
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in itemList}
