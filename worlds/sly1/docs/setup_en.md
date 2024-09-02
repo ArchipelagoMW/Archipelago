@@ -15,7 +15,7 @@ an experience customized for their taste, and different players in the same mult
 ### Where do I get a YAML file?
 
 You can customize your options by visiting
-the [Sly 1 Options Page](/games/Slay%201/player-options).
+the [Sly Cooper and the Thievius Raccoonus Options Page](/games/Sly%20Cooper%20and%20the%20Thievius%20Raccoonus/player-options).
 
 probably
 

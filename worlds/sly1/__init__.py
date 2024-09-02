@@ -9,15 +9,15 @@ from .Types import EpisodeType, episode_type_to_name, Sly1Item
 from .Rules import set_rules
 
 class Sly1Web(WebWorld):
-    theme = "grassFlowers"
+    theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Sly Cooper and the Thievius Raccoonus for Archipelago. "
         "This guide covers single-player, multiworld, and related software.",
         "English",
-        "sly-1_en.md",
-        "sly-1/en",
-        ["Nep & Philiard"]
+        "setup_en.md",
+        "setup/en",
+        ["Nep"]
     )]
 
 class Sly1World(World):
@@ -31,6 +31,7 @@ class Sly1World(World):
     location_name_to_id = get_location_names()
     options_dataclass = Sly1Options
     options = Sly1Options
+    web = Sly1Web()
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
