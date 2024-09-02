@@ -10,14 +10,31 @@ At this time, this method of setup works on Windows only, but Linux support is a
 
 ## Installation
 
+### Archipelago Launcher
+
+- Copy the `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
+    - Reminder: the default installation location for Archipelago is `C:\ProgramData\Archipelago`.
+- Run the Archipelago Launcher.
+- From the left-most list, click `Generate Template Options`.
+- Select `Jak and Daxter The Precursor Legacy.yaml`. 
+- In the text file that opens, enter the name you want and remember it for later.
+- Save this file in `Archipelago/players`. You can now close the file.
+- Back in the Archipelago Launcher, from the left-most list, click `Generate`. A window will appear to generate your seed and close itself.
+- If you plan to host the game yourself, from the left-most list, click `Host`.
+    - When asked to select your multiworld seed, navigate to `Archipelago/output` and select the zip file containing the seed you just generated.
+    - You can sort by Date Modified to make it easy to find.
+
 ### OpenGOAL Launcher
 
 - Follow the installation process for the official OpenGOAL Launcher. See [here](https://opengoal.dev/docs/usage/installation).
     - You must set up a vanilla installation of Jak and Daxter before you can install mods for it.
 - Follow the setup process for adding mods to the OpenGOAL Launcher. See [here](https://jakmods.dev/).
 - Install the `ArchipelaGOAL` mod from the `Available Mods` list, then click on `ArchipelaGOAL` from the `Installed Mods` list.
-- **If you installed the OpenGOAL Launcher to a non-default directory, you must follow the steps below.**
-    - In the bottom right corner of `ArchipelaGOAL`, click `Advanced`, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
+- **As a temporary measure, you may need to copy the extracted ISO data to the mod directory so the compiler will work properly.**
+    - If you have the NTSC version of the game, follow the `The Game Fails To Load The Title Screen` instructions below.
+    - If you have the PAL version of the game, follow the `Special PAL Instructions` instructions **instead.**
+- **If you installed the OpenGOAL Launcher to a non-default directory, you must follow these steps.**
+    - While on the ArchipelaGOAL page, click `Advanced`, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
     - In the File Explorer, go to the parent directory for `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Take note of this directory.
     - Run the Archipelago Launcher, then click on `Open host.yaml`. You should see a new text editor open that file.
     - Search for `jakanddaxter_options`, then find the `root_directory` entry underneath it. Paste the directory you noted earlier (the one containing gk.exe and goalc.exe) inside the double quotes. 
@@ -33,21 +50,11 @@ jakanddaxter_options:
   - Save the file and close it.
 - **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Jak and Daxter Client should handle everything for you (see below).
 
+## Updates and New Releases
+ 
 ### Archipelago Launcher
 
-- Copy the `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
-    - Reminder: the default installation location for Archipelago is `C:\ProgramData\Archipelago`.
-- Run the Archipelago Launcher.
-- From the left-most list, click `Generate Template Options`.
-- Select `Jak and Daxter The Precursor Legacy.yaml`. 
-- In the text file that opens, enter the name you want and remember it for later.
-- Save this file in `Archipelago/players`. You can now close the file.
-- Back in the Archipelago Launcher, from the left-most list, click `Generate`. A window will appear to generate your seed and close itself.
-- If you plan to host the game yourself, from the left-most list, click `Host`.
-    - When asked to select your multiworld seed, navigate to `Archipelago/output` and select the zip file containing the seed you just generated.
-    - You can sort by Date Modified to make it easy to find.
-
-## Updates and New Releases
+- Copy the latest `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
 
 ### OpenGOAL Launcher
 
@@ -56,10 +63,6 @@ If you are in the middle of an async game, and you do not want to update the mod
 - Run the OpenGOAL Launcher, then click `Features`, then click `Mods`, then click on `ArchipelaGOAL` from the `Installed Mods` list.
 - Click `Update` to download and install any new updates that have been released.
 - You can verify your version by clicking `Versions`. The version you are using will say `(Active)` next to it.
- 
-### Archipelago Launcher
-
-- Copy the latest `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
 
 ## Starting a Game
 
@@ -98,7 +101,7 @@ You may start the game via the Text Client, but it never loads in the title scre
 Input file iso_data/jak1/MUS/TWEAKVAL.MUS does not exist.
 ```
 
-If this happens, run the OpenGOAL Launcher.
+If this happens, run the OpenGOAL Launcher. If you are using a PAL version of the game, you should skip these instructions and follow `Special PAL Instructions` below.
 
 - On the **vanilla** Jak and Daxter page, click `Advanced`, then click `Open Game Data Folder`. Copy the `iso_data` folder from this location.
 - Back in the OpenGOAL Launcher, click `Features`, then click `Mods`, then click `ArchipelaGOAL`, then click `Advanced`, then click `Open Game Data Folder` again.
@@ -157,7 +160,7 @@ If you see `-- Compilation Error! --` after pressing `Compile` or Launching the 
 - Then, open **another brand new** Powershell window and execute the game:
     - `cd <archipelagoal directory>`
     - `.\gk.exe -v --game jak1 -- -boot -fakeiso -debug`
-- Finally, **from the first Powershell still in the Goalc compiler**, connect to the game: `(lt)`.
+- Finally, **from the first Powershell still in the GOALC compiler**, connect to the game: `(lt)`.
 
 ## Known Issues
 

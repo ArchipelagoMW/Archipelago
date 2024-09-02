@@ -292,8 +292,9 @@ async def run_game(ctx: JakAndDaxterContext):
             return
 
         if gk_path:
+            # Prefixing ampersand and wrapping gk_path in quotes is necessary for paths with spaces in them.
             gk_process = subprocess.Popen(
-                ["powershell.exe", gk_path, "--game jak1", "--", "-v", "-boot", "-fakeiso", "-debug"],
+                ["powershell.exe", f"& \"{gk_path}\"", "--game jak1", "--", "-v", "-boot", "-fakeiso", "-debug"],
                 creationflags=subprocess.CREATE_NEW_CONSOLE)  # These need to be new consoles for stability.
 
     if not goalc_running:
@@ -306,8 +307,9 @@ async def run_game(ctx: JakAndDaxterContext):
             return
 
         if goalc_path:
+            # Prefixing ampersand and wrapping goalc_path in quotes is necessary for paths with spaces in them.
             goalc_process = subprocess.Popen(
-                ["powershell.exe", goalc_path, "--game jak1"],
+                ["powershell.exe", f"& \"{goalc_path}\"", "--game jak1"],
                 creationflags=subprocess.CREATE_NEW_CONSOLE)  # These need to be new consoles for stability.
 
     # Auto connect the repl and memr agents. Sleep 5 because goalc takes just a little bit of time to load,
