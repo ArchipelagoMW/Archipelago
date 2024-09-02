@@ -5,7 +5,7 @@ from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.craftable_names import ModEdible, Edible
 from ..strings.crop_names import Fruit, Vegetable, SVEFruit, DistantLandsCrop
-from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish
+from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish, SVEWaterItem
 from ..strings.flower_names import Flower
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
 from ..strings.ingredient_names import Ingredient
@@ -195,7 +195,7 @@ mixed_berry_pie = shop_recipe(SVEMeal.mixed_berry_pie, Region.saloon, 3500, {Fru
                               ModNames.sve)
 mushroom_berry_rice = friendship_and_shop_recipe(SVEMeal.mushroom_berry_rice, ModNPC.marlon, 6, Region.adventurer_guild, 1500, {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10,
                                                                                                Ingredient.rice: 1, Ingredient.sugar: 2}, ModNames.sve)
-seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEFish.dulse_seaweed: 2, WaterItem.seaweed: 2, Ingredient.oil: 1}, ModNames.sve)
+seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEWaterItem.dulse_seaweed: 2, WaterItem.seaweed: 2, Ingredient.oil: 1}, ModNames.sve)
 void_delight = friendship_and_shop_recipe(SVEMeal.void_delight, NPC.krobus, 10, Region.sewer, 5000,
                                           {SVEFish.void_eel: 1, Loot.void_essence: 50, Loot.solar_essence: 20}, ModNames.sve)
 void_salmon_sushi = friendship_and_shop_recipe(SVEMeal.void_salmon_sushi, NPC.krobus, 10, Region.sewer, 5000,

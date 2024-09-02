@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Tuple, TypedDict
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
@@ -12,6 +12,14 @@ from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_opt
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
+from settings import Group, Bool
+
+
+class TunicSettings(Group):
+    class DisableLocalSpoiler(Bool):
+        """Disallows the TUNIC client from creating a local spoiler log."""
+
+    disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
 
 
 class TunicWeb(WebWorld):
@@ -57,6 +65,7 @@ class TunicWorld(World):
 
     options: TunicOptions
     options_dataclass = TunicOptions
+    settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
 
@@ -112,7 +121,7 @@ class TunicWorld(World):
                 cls.seed_groups[group] = SeedGroup(logic_rules=tunic.options.logic_rules.value,
                                                    laurels_at_10_fairies=tunic.options.laurels_location == 3,
                                                    fixed_shop=bool(tunic.options.fixed_shop),
-                                                   plando=multiworld.plando_connections[tunic.player])
+                                                   plando=tunic.options.plando_connections)
                 continue
                 
             # lower value is more restrictive
@@ -125,9 +134,9 @@ class TunicWorld(World):
             if tunic.options.fixed_shop:
                 cls.seed_groups[group]["fixed_shop"] = True
 
-            if multiworld.plando_connections[tunic.player]:
+            if tunic.options.plando_connections:
                 # loop through the connections in the player's yaml
-                for cxn in multiworld.plando_connections[tunic.player]:
+                for cxn in tunic.options.plando_connections:
                     new_cxn = True
                     for group_cxn in cls.seed_groups[group]["plando"]:
                         # if neither entrance nor exit match anything in the group, add to group
@@ -146,14 +155,13 @@ class TunicWorld(World):
                         if is_mismatched:
                             raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
                                             f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
-                                            f"{tunic.multiworld.get_player_name(tunic.player)}'s plando "
-                                            f"connection {cxn.entrance} <-> {cxn.exit}")
+                                            f"{tunic.player_name}'s plando connection {cxn.entrance} <-> {cxn.exit}")
                     if new_cxn:
                         cls.seed_groups[group]["plando"].value.append(cxn)
 
-    def create_item(self, name: str) -> TunicItem:
+    def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
-        return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
+        return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
 
@@ -178,19 +186,17 @@ class TunicWorld(World):
         if self.options.laurels_location:
             laurels = self.create_item("Hero's Laurels")
             if self.options.laurels_location == "6_coins":
-                self.multiworld.get_location("Coins in the Well - 6 Coins", self.player).place_locked_item(laurels)
+                self.get_location("Coins in the Well - 6 Coins").place_locked_item(laurels)
             elif self.options.laurels_location == "10_coins":
-                self.multiworld.get_location("Coins in the Well - 10 Coins", self.player).place_locked_item(laurels)
+                self.get_location("Coins in the Well - 10 Coins").place_locked_item(laurels)
             elif self.options.laurels_location == "10_fairies":
-                self.multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", self.player).place_locked_item(laurels)
-            self.slot_data_items.append(laurels)
+                self.get_location("Secret Gathering Place - 10 Fairy Reward").place_locked_item(laurels)
             items_to_create["Hero's Laurels"] = 0
 
         if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
                 hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
-                self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
-                self.slot_data_items.append(hex_item)
+                self.get_location(location).place_locked_item(hex_item)
                 items_to_create[rgb_hexagon] = 0
             items_to_create[gold_hexagon] -= 3
 
@@ -236,33 +242,30 @@ class TunicWorld(World):
             remove_filler(items_to_create[gold_hexagon])
 
             for hero_relic in item_name_groups["Hero Relics"]:
-                relic_item = TunicItem(hero_relic, ItemClassification.useful, self.item_name_to_id[hero_relic], self.player)
-                tunic_items.append(relic_item)
+                tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
                 items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
             for page in item_name_groups["Abilities"]:
                 if items_to_create[page] > 0:
-                    page_item = TunicItem(page, ItemClassification.useful, self.item_name_to_id[page], self.player)
-                    tunic_items.append(page_item)
+                    tunic_items.append(self.create_item(page, ItemClassification.useful))
                     items_to_create[page] = 0
 
         if self.options.maskless:
-            mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
-            tunic_items.append(mask_item)
+            tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
             items_to_create["Scavenger Mask"] = 0
 
         if self.options.lanternless:
-            lantern_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
-            tunic_items.append(lantern_item)
+            tunic_items.append(self.create_item("Lantern", ItemClassification.useful))
             items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
-                tunic_item: TunicItem = self.create_item(item)
-                if item in slot_data_item_names:
-                    self.slot_data_items.append(tunic_item)
-                tunic_items.append(tunic_item)
+                tunic_items.append(self.create_item(item))
+
+        for tunic_item in tunic_items:
+            if tunic_item.name in slot_data_item_names:
+                self.slot_data_items.append(tunic_item)
 
         self.multiworld.itempool += tunic_items
 
@@ -293,15 +296,15 @@ class TunicWorld(World):
                 self.multiworld.regions.append(region)
 
             for region_name, exits in tunic_regions.items():
-                region = self.multiworld.get_region(region_name, self.player)
+                region = self.get_region(region_name)
                 region.add_exits(exits)
 
             for location_name, location_id in self.location_name_to_id.items():
-                region = self.multiworld.get_region(location_table[location_name].region, self.player)
+                region = self.get_region(location_table[location_name].region)
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
 
-            victory_region = self.multiworld.get_region("Spirit Arena", self.player)
+            victory_region = self.get_region("Spirit Arena")
             victory_location = TunicLocation(self.player, "The Heir", None, victory_region)
             victory_location.place_locked_item(TunicItem("Victory", ItemClassification.progression, None, self.player))
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
@@ -335,10 +338,9 @@ class TunicWorld(World):
                     name, connection = paths[location.parent_region]
                 except KeyError:
                     # logic bug, proceed with warning since it takes a long time to update AP
-                    warning(f"{location.name} is not logically accessible for "
-                            f"{self.multiworld.get_file_safe_player_name(self.player)}. "
-                            "Creating entrance hint Inaccessible. "
-                            "Please report this to the TUNIC rando devs.")
+                    warning(f"{location.name} is not logically accessible for {self.player_name}. "
+                            "Creating entrance hint Inaccessible. Please report this to the TUNIC rando devs. "
+                            "If you are using Plando Items (excluding early locations), then this is likely the cause.")
                     hint_text = "Inaccessible"
                 else:
                     while connection != ("Menu", None):
@@ -373,7 +375,8 @@ class TunicWorld(World):
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
-            "Entrance Rando": self.tunic_portal_pairs
+            "Entrance Rando": self.tunic_portal_pairs,
+            "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
         }
 
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
@@ -405,7 +408,9 @@ class TunicWorld(World):
         return slot_data
 
     # for the universal tracker, doesn't get called in standard gen
+    # docs: https://github.com/FarisTheAncient/Archipelago/blob/tracker/worlds/tracker/docs/re-gen-passthrough.md
     @staticmethod
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+        # we are using re_gen_passthrough over modifying the world here due to complexities with ER
         return slot_data

@@ -272,8 +272,9 @@ panels:
     PAINTING (4): 445081
     PAINTING (5): 445082
     ROOM: 445083
-  Orange Tower Seventh Floor:
+  Ending Area:
     THE END: 444620
+  Orange Tower Seventh Floor:
     THE MASTER: 444621
     MASTERY: 444622
   Behind A Smile:
@@ -1123,6 +1124,8 @@ doors:
     Eight Door:
       item: 444475
       location: 445219
+    Eight Door (Outside The Initiated):
+      item: 444578
   Orange Tower:
     Second Floor:
       item: 444476
@@ -1241,8 +1244,6 @@ doors:
     Entrance:
       item: 444516
       location: 445237
-    Eight Door:
-      item: 444578
   The Traveled:
     Color Hallways Entrance:
       item: 444517
@@ -1477,3 +1478,145 @@ progression:
   Progressive Art Gallery: 444563
   Progressive Colorful: 444580
   Progressive Pilgrimage: 444583
+  Progressive Suits Area: 444602
+  Progressive Symmetry Room: 444608
+  Progressive Number Hunt: 444654
+panel_doors:
+  Starting Room:
+    HIDDEN: 444589
+  Hidden Room:
+    OPEN: 444590
+  Hub Room:
+    ORDER: 444591
+    SLAUGHTER: 444592
+    TRACE: 444594
+    RAT: 444595
+    OPEN: 444596
+  Crossroads:
+    DECAY: 444597
+    NOPE: 444598
+    WE ROT: 444599
+    WORDS SWORD: 444600
+    BEND HI: 444601
+  Lost Area:
+    LOST: 444603
+  Amen Name Area:
+    AMEN NAME: 444604
+  The Tenacious:
+    Black Palindromes: 444605
+  Near Far Area:
+    NEAR FAR: 444606
+  Warts Straw Area:
+    WARTS STRAW: 444609
+  Leaf Feel Area:
+    LEAF FEEL: 444610
+  Outside The Agreeable:
+    MASSACRED: 444611
+    BLACK: 444612
+    CLOSE: 444613
+    RIGHT: 444614
+  Compass Room:
+    Lookout: 444615
+  Hedge Maze:
+    DOWN: 444617
+  The Perceptive:
+    GAZE: 444618
+  The Observant:
+    BACKSIDE: 444619
+    STAIRS: 444621
+  The Incomparable:
+    Giant Sevens: 444622
+  Orange Tower:
+    Access: 444623
+  Orange Tower First Floor:
+    SECRET: 444624
+  Orange Tower Fourth Floor:
+    HOT CRUSTS: 444625
+  Orange Tower Fifth Floor:
+    SIZE: 444626
+  First Second Third Fourth:
+    FIRST SECOND THIRD FOURTH: 444627
+  The Colorful (White):
+    BEGIN: 444628
+  The Colorful (Black):
+    FOUND: 444630
+  The Colorful (Red):
+    LOAF: 444631
+  The Colorful (Yellow):
+    CREAM: 444632
+  The Colorful (Blue):
+    SUN: 444633
+  The Colorful (Purple):
+    SPOON: 444634
+  The Colorful (Orange):
+    LETTERS: 444635
+  The Colorful (Green):
+    WALLS: 444636
+  The Colorful (Brown):
+    IRON: 444637
+  The Colorful (Gray):
+    OBSTACLE: 444638
+  Owl Hallway:
+    STRAYS: 444639
+  Outside The Initiated:
+    UNCOVER: 444640
+    OXEN: 444641
+  Outside The Bold:
+    UNOPEN: 444642
+    BEGIN: 444643
+  Outside The Undeterred:
+    ZERO: 444644
+    PEN: 444645
+    TWO: 444646
+    THREE: 444647
+    FOUR: 444648
+  Number Hunt:
+    FIVE: 444649
+    SIX: 444650
+    SEVEN: 444651
+    EIGHT: 444652
+    NINE: 444653
+  Color Hunt:
+    EXIT: 444655
+    RED: 444656
+    BLUE: 444658
+    YELLOW: 444659
+    ORANGE: 444660
+    PURPLE: 444661
+    GREEN: 444662
+  The Bearer:
+    FARTHER: 444663
+    MIDDLE: 444664
+  Knight Night (Final):
+    TRUSTED: 444665
+  Outside The Wondrous:
+    SHRINK: 444666
+  Hallway Room (1):
+    CASTLE: 444667
+  Hallway Room (2):
+    COUNTERCLOCKWISE: 444669
+  Hallway Room (3):
+    TRANSFORMATION: 444670
+  Hallway Room (4):
+    WHEELBARROW: 444671
+  Outside The Wanderer:
+    WANDERLUST: 444672
+  Art Gallery:
+    ORDER: 444673
+  Room Room:
+    STAIRS: 444674
+    Colors: 444676
+  Outside The Wise:
+    KITTEN CAT: 444677
+  Outside The Scientific:
+    OPEN: 444678
+  Directional Gallery:
+    TURN LEARN: 444679
+panel_groups:
+  Tenacious Entrance Panels: 444593
+  Symmetry Room Panels: 444607
+  Backside Entrance Panels: 444620
+  Colorful Panels: 444629
+  Color Hunt Panels: 444657
+  Hallway Room Panels: 444668
+  Room Room Panels: 444675

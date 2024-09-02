@@ -8,12 +8,12 @@ unrandomized_dict: Dict[str, str] = {
 }
 
 
-junk_locations: Set[str] = [
+junk_locations: Set[str] = {
     "Albero: Donate 50000 Tears",
     "Ossuary: 11th reward",
     "AtTotS: Miriam's gift",
     "TSC: Jocinero's final reward"
-]
+}
 
 
 thorn_set: Set[str] = {

@@ -16,8 +16,8 @@ class ShopSource(ItemSource):
     other_requirements: Tuple[Requirement, ...] = ()
 
     def __post_init__(self):
-        assert self.money_price or self.items_price, "At least money price or items price need to be defined."
-        assert self.items_price is None or all(type(p) == tuple for p in self.items_price), "Items price should be a tuple."
+        assert self.money_price is not None or self.items_price is not None, "At least money price or items price need to be defined."
+        assert self.items_price is None or all(isinstance(p, tuple) for p in self.items_price), "Items price should be a tuple."
 
 
 @dataclass(frozen=True, **kw_only)
