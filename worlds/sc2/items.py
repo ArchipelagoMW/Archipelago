@@ -1532,6 +1532,7 @@ item_table = {
     item_names.DEVOURING_ONES: ItemData(603 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 3, SC2Race.ZERG, origin={"ext"}),
     item_names.HUNTER_KILLERS: ItemData(604 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 4, SC2Race.ZERG, origin={"ext"}),
     item_names.TORRASQUE_MERC: ItemData(605 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 5, SC2Race.ZERG, origin={"ext"}),
+    item_names.HUNTERLING: ItemData(606 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 6, SC2Race.ZERG, origin={"ext"}),
 
     # Misc Upgrades
     item_names.OVERLORD_VENTRAL_SACS: ItemData(700 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 6, SC2Race.ZERG, origin={"bw"}, classification=ItemClassification.progression),
