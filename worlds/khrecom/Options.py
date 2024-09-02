@@ -17,7 +17,7 @@ class AttackPower(Range):
     range_end = 100
     default = 10
 
-class DaysLocations(DefaultOnToggle):
+class DaysLocations(Toggle):
     """
     Toggle whether locations not available to the player until they watch 358/2 Days are included in the locations list.
     """
