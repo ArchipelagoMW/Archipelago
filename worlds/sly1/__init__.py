@@ -9,12 +9,13 @@ from .Types import EpisodeType, episode_type_to_name, Sly1Item
 from .Rules import set_rules
 
 class Sly1Web(WebWorld):
+    theme = "grassFlowers"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Sly Cooper and the Thievius Raccoonus for Archipelago. "
         "This guide covers single-player, multiworld, and related software.",
         "English",
-        "sly_1_en.md",
+        "sly-1_en.md",
         "sly-1/en",
         ["Nep & Philiard"]
     )]
@@ -40,9 +41,6 @@ class Sly1World(World):
 
     def create_regions(self):
         create_regions(self)
-
-        # If needed, can create a boss locations and input a proof of victory item
-        # Add them to the correct location here
 
     def create_items(self):
         self.multiworld.itempool += create_itempool(self)
