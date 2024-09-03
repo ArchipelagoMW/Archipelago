@@ -260,7 +260,7 @@ namespace Sly1AP
             if (id == 10020022)
             {
                 keys.MuggshotStart = 1;
-                Memory.Write(0x2027CF00, keys.MuggshotStart);
+                Memory.Write(0x2027CAC8, keys.MuggshotStart);
             }
             if (id == 10020023)
             {
@@ -309,7 +309,7 @@ namespace Sly1AP
             Memory.Write(0x2027D34C, keys.MzRubyKeys);
             Memory.Write(0x2027D798, keys.PandaKingKeys);
             Memory.Write(0x2027C67C, keys.RaleighStart);
-            Memory.Write(0x2027CF00, keys.MuggshotStart);
+            Memory.Write(0x2027CAC8, keys.MuggshotStart);
             Memory.Write(0x2027CF14, keys.MzRubyStart);
             Memory.Write(0x2027D360, keys.PandaKingStart);
             //Make all maps selectable from the start.
