@@ -92,9 +92,9 @@ item_table = {
 }
 
 event_item_pairs: Dict[str, str] = {
-    "Eye of the Storm": "Beat Raleigh",
-    "Last Call": "Beat Muggshot",
-    "Deadly Dance": "Beat Mz. Ruby",
-    "Flame Fu!": "Beat Panda King",
-    "Cold Heart of Hate": "Victory"
+    "Beat Raleigh": "Beat Raleigh",
+    "Beat Muggshot": "Beat Muggshot",
+    "Beat Mz. Ruby": "Beat Mz. Ruby",
+    "Beat Panda King": "Beat Panda King",
+    "Beat Clockwerk": "Victory"
 }

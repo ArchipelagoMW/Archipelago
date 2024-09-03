@@ -97,11 +97,11 @@ sly_locations = {
 
 
     ## Boss Victories
-    "Beat Raleigh": LocData(None, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Beat Muggshot": LocData(None, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Beat Mz Ruby": LocData(None, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
-    "Beat Panda King": LocData(None, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
-    "Beat Clockwerk": LocData(None, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
+    "Eye of the Storm": LocData(None, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
+    "Last Call": LocData(None, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
+    "Deadly Dance": LocData(None, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
+    "Flame Fu!": LocData(None, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
+    "Cold Heart of Hate": LocData(None, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
 }
 
 hourglass_locations = {
@@ -135,11 +135,11 @@ hourglass_locations = {
 }
 
 event_locations = {
-    "Eye of the Storm": LocData(None, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Last Call": LocData(None, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Deadly Dance": LocData(None, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
-    "Flame Fu!": LocData(None, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
-    "Cold Heart of Hate": LocData(None, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
+    "Beat Raleigh": LocData(None, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
+    "Beat Muggshot": LocData(None, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
+    "Beat Mz. Ruby": LocData(None, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
+    "Beat Panda King": LocData(None, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
+    "Beat Clockwerk": LocData(None, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
 }
 
 location_table = {
