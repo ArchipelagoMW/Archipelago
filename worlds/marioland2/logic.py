@@ -49,8 +49,20 @@ def mushroom_zone_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def tree_zone_1_normal_exit(state, player):
+    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player),
+
+
 def tree_zone_1_coins(state, player, coins):
     return coins <= 87 or not is_auto_scroll(state, player, "Tree Zone 1")
+
+
+def tree_zone_2_secret_exit(state, player):
+    return has_pipe_right(state, player) and state.has("Carrot", player)
+
+
+def tree_zone_2_midway_bell(state, player):
+    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player)
 
 
 def tree_zone_2_coins(state, player, coins):
@@ -69,6 +81,10 @@ def tree_zone_2_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def tree_zone_3_normal_exit(state, player):
+    return not is_auto_scroll(state, player, "Tree Zone 3")
+
+
 def tree_zone_3_coins(state, player, coins):
     if is_auto_scroll(state, player, "Tree Zone 3"):
         return coins <= 4
@@ -77,6 +93,17 @@ def tree_zone_3_coins(state, player, coins):
     elif state.has_any(["Mushroom", "Fire Flower"], player) and coins <= 21:
         return True
     return state.has("Carrot", player)
+
+
+def tree_zone_4_normal_exit(state, player):
+    if has_pipe_down(state, player):
+        return tree_zone_4_midway_bell(state, player)
+    return False
+
+
+def tree_zone_4_midway_bell(state, player):
+    return ((has_pipe_right(state, player) and has_pipe_up(state, player))
+            or state.has("Tree Zone 4 Midway Bell", player))
 
 
 def tree_zone_4_coins(state, player, coins):
@@ -103,6 +130,10 @@ def tree_zone_4_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def tree_zone_5_boss(state, player):
+    return has_pipe_right(state, player) and (has_pipe_up(state, player) or state.has("Carrot", player))
+
+
 def tree_zone_5_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Tree Zone 5")
     reachable_coins = 0
@@ -121,29 +152,15 @@ def tree_zone_5_coins(state, player, coins):
     return coins <= reachable_coins
 
 
-def hippo_zone_coins(state, player, coins):
-    auto_scroll = is_auto_scroll(state, player, "Hippo Zone")
-    # This is all somewhat forgiving.
-    reachable_coins = 4
-    if auto_scroll:
-        if state.has("Hippo Bubble", player):
-            reachable_coins = 160
-        elif state.has("Carrot", player):
-            reachable_coins = 90
-        elif state.has("Water Physics", player):
-            reachable_coins = 28
-    else:
-        if state.has_any(["Water Physics", "Hippo Bubble", "Carrot"], player):
-            reachable_coins += 108
-            if state.has_any(["Mushroom", "Fire Flower", "Hippo Bubble"], player):
-                reachable_coins += 6
-        if state.has_all(["Fire Flower", "Water Physics"], player):
-            reachable_coins += 1
-        if state.has("Hippo Bubble", player):
-            reachable_coins += 52
-    return coins <= reachable_coins
+def pumpkin_zone_1_normal_exit(state, player):
+    return pumpkin_zone_1_midway_bell(state, player)
 
 
+def pumpkin_zone_1_midway_bell(state, player):
+    return ((has_pipe_down(state, player) and not is_auto_scroll(state, player, "Pumpkin Zone 1"))
+            or state.has("Pumpkin Zone 1 Midway Bell", player))
+    
+    
 def pumpkin_zone_1_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Pumpkin Zone 1")
     if auto_scroll:
@@ -154,6 +171,15 @@ def pumpkin_zone_1_coins(state, player, coins):
         if has_pipe_up(state, player):
             reachable_coins += 2
     return coins <= reachable_coins
+
+
+def pumpkin_zone_2_normal_exit(state, player):
+    return has_pipe_down(state, player) and has_pipe_up(state, player) and has_pipe_right(state, player) and state.has(
+        "Water Physics", player) and not is_auto_scroll(state, player, "Pumpkin Zone 2")
+
+
+def pumpkin_zone_2_secret_exit(state, player):
+    return pumpkin_zone_1_normal_exit(state, player) and state.has_any(["Mushroom", "Fire Flower"], player)
 
 
 def pumpkin_zone_2_coins(state, player, coins):
@@ -182,6 +208,10 @@ def pumpkin_zone_secret_course_1_coins(state, player, coins):
         return True
 
 
+def pumpkin_zone_3_normal_exit(state, player):
+    return state.has("Carrot", player)
+
+
 def pumpkin_zone_3_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Pumpkin Zone 3")
     reachable_coins = 38
@@ -190,6 +220,10 @@ def pumpkin_zone_3_coins(state, player, coins):
     if has_pipe_down(state, player) and not auto_scroll:
         reachable_coins += 11
     return coins <= reachable_coins
+
+
+def pumpkin_zone_4_boss(state, player):
+    return has_pipe_right(state, player)
 
 
 def pumpkin_zone_4_coins(state, player, coins):
@@ -207,6 +241,21 @@ def pumpkin_zone_4_coins(state, player, coins):
             if has_pipe_up(state, player):
                 reachable_coins += 16
     return coins <= reachable_coins
+
+
+def mario_zone_1_normal_exit(state, player):
+    if has_pipe_right(state, player):
+        if state.has_any(["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 Midway Bell"], player):
+            return True
+        if is_auto_scroll(state, player, "Mario Zone 1"):
+            return True
+    return False
+
+
+def mario_zone_1_midway_bell(state, player):
+    # It is possible to get as small mario, but it is a very precise jump and you will die afterward.
+    return ((state.has_any(["Mushroom", "Fire Flower", "Carrot"], player) and has_pipe_right(state, player))
+            or state.has("Mario Zone 1 Midway Bell", player))
 
 
 def mario_zone_1_coins(state, player, coins):
@@ -247,6 +296,10 @@ def mario_zone_3_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def mario_zone_4_boss(state, player):
+    return has_pipe_right(state, player)
+
+
 def mario_zone_4_coins(state, player, coins):
     return coins <= 63 or not is_auto_scroll(state, player, "Mario Zone 4")
 
@@ -261,6 +314,10 @@ def not_blocked_by_sharks(state, player):
     if sharks == 1:
         return state.has_any(["Mushroom", "Fire Flower"], player)
     return False
+
+
+def turtle_zone_1_normal_exit(state, player):
+    return not_blocked_by_sharks(state, player)
 
 
 def turtle_zone_1_coins(state, player, coins):
@@ -279,6 +336,21 @@ def turtle_zone_1_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def turtle_zone_2_normal_exit(state, player):
+    return (has_pipe_up(state, player) and has_pipe_down(state, player) and has_pipe_right(state, player) and
+            has_pipe_left(state, player) and state.has("Water Physics", player)
+            and not is_auto_scroll(state, player, "Turtle Zone 2"))
+
+
+def turtle_zone_2_secret_exit(state, player):
+    return (has_pipe_up(state, player) and state.has("Water Physics", player)
+            and not is_auto_scroll(state, player, "Turtle Zone 2"))
+
+
+def turtle_zone_2_midway_bell(state, player):
+    return turtle_zone_2_secret_exit(state, player) or state.has("Turtle Zone 2 Midway Bell", player)
+    
+    
 def turtle_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Turtle Zone 2")
     reachable_coins = 2
@@ -301,6 +373,10 @@ def turtle_zone_2_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def turtle_zone_secret_course_normal_exit(state, player):
+    return state.has_any(["Fire Flower", "Carrot"], player)
+
+
 def turtle_zone_secret_course_coins(state, player, coins):
     reachable_coins = 53
     if state.has("Carrot", player):
@@ -310,8 +386,53 @@ def turtle_zone_secret_course_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def turtle_zone_3_boss(state, player):
+    return has_pipe_right(state, player)
+
+
 def turtle_zone_3_coins(state, player, coins):
     return state.has_any(["Water Physics", "Mushroom", "Fire Flower", "Carrot"], player) or coins <= 51
+
+
+def hippo_zone_normal_or_secret_exit(state, player):
+    return (state.has_any(["Hippo Bubble", "Water Physics"], player)
+            or (state.has("Carrot", player)
+                and not is_auto_scroll(state, player, "Hippo Zone")))
+
+
+def hippo_zone_coins(state, player, coins):
+    auto_scroll = is_auto_scroll(state, player, "Hippo Zone")
+    # This is all somewhat forgiving.
+    reachable_coins = 4
+    if auto_scroll:
+        if state.has("Hippo Bubble", player):
+            reachable_coins = 160
+        elif state.has("Carrot", player):
+            reachable_coins = 90
+        elif state.has("Water Physics", player):
+            reachable_coins = 28
+    else:
+        if state.has_any(["Water Physics", "Hippo Bubble", "Carrot"], player):
+            reachable_coins += 108
+            if state.has_any(["Mushroom", "Fire Flower", "Hippo Bubble"], player):
+                reachable_coins += 6
+        if state.has_all(["Fire Flower", "Water Physics"], player):
+            reachable_coins += 1
+        if state.has("Hippo Bubble", player):
+            reachable_coins += 52
+    return coins <= reachable_coins
+
+
+def space_zone_1_normal_exit(state, player):
+    # It is possible, however tricky, to beat the Moon Stage without Carrot or Space Physics.
+    # However, it requires somewhat precisely jumping off enemies. Enemy shuffle may make this impossible.
+    # Instead, I will just always make one or the other required, since it is difficult without them anyway.
+    return state.has_any(["Space Physics", "Carrot"], player)
+
+
+def space_zone_1_secret_exit(state, player):
+    # One or the other is actually necessary for the secret exit.
+    return state.has_any(["Space Physics", "Carrot"], player) and not is_auto_scroll(state, player, "Space Zone 1")
 
 
 def space_zone_1_coins(state, player, coins):
@@ -326,6 +447,11 @@ def space_zone_1_coins(state, player, coins):
             reachable_coins += 40
     return (coins <= 21 or (coins <= 50 and state.has_any(["Mushroom", "Fire Flower"], player))
             or state.has_any(["Carrot", "Space Physics"], player))
+
+
+def space_zone_2_midway_bell(state, player):
+    return state.has_any(["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower",
+                          "Carrot"], player),
 
 
 def space_zone_2_boss(state, player):
@@ -366,6 +492,18 @@ def space_zone_secret_course_coins(state, player, coins):
     return coins <= 96 or not is_auto_scroll(state, player, "Space Zone Secret Course")
 
 
+def macro_zone_1_normal_exit(state, player):
+    return has_pipe_down(state, player) or state.has("Macro Zone 1 Midway Bell", player)
+
+
+def macro_zone_1_secret_exit(state, player):
+    return state.has("Fire Flower", player) and has_pipe_up(state, player) and macro_zone_1_midway_bell(state, player)
+
+
+def macro_zone_1_midway_bell(state, player):
+    return has_pipe_down(state, player) or state.has("Macro Zone 1 Midway Bell", player)
+
+
 def macro_zone_1_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Macro Zone 1")
     reachable_coins = 0
@@ -392,6 +530,16 @@ def macro_zone_secret_course_coins(state, player, coins):
     return state.has_any(["Mushroom", "Fire Flower"], player)
 
 
+def macro_zone_2_normal_exit(state, player):
+    return (has_pipe_down(state, player) or state.has("Macro Zone 2 Midway Bell", player)) and state.has(
+        "Water Physics", player) and has_pipe_up(state, player) and not is_auto_scroll(state, player, "Macro Zone 2")
+    
+    
+def macro_zone_2_midway_bell(state, player):
+    return ((has_pipe_down(state, player) and state.has("Water Physics", player))
+            or state.has("Macro Zone 2 Midway Bell", player))
+
+
 def macro_zone_2_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Macro Zone 2")
     if coins <= 27:
@@ -402,6 +550,16 @@ def macro_zone_2_coins(state, player, coins):
         if state.has("Macro Zone 2 Midway Bell", player):
             # Cannot return to the first section from the bell
             return coins <= 42
+
+
+def macro_zone_3_normal_exit(state, player):
+    return ((has_pipe_down(state, player) and has_pipe_down(state, player))
+            or state.has("Macro Zone 3 Midway Bell", player),)
+
+
+def macro_zone_3_midway_bell(state, player):
+    return ((has_pipe_down(state, player) and has_pipe_down(state, player))
+            or state.has("Macro Zone 3 Midway Bell", player))
 
 
 def macro_zone_3_coins(state, player, coins):
@@ -426,6 +584,10 @@ def macro_zone_3_coins(state, player, coins):
     return coins <= reachable_coins
 
 
+def macro_zone_4_boss(state, player):
+    return has_pipe_right(state, player)
+
+
 def macro_zone_4_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Macro Zone 4")
     reachable_coins = 61
@@ -434,3 +596,12 @@ def macro_zone_4_coins(state, player, coins):
         if state.has("Carrot", player):
             reachable_coins += 6
     return coins <= reachable_coins
+
+
+def marios_castle_wario(state, player):
+    return has_pipe_right(state, player) and has_pipe_left(state, player)
+
+
+def marios_castle_midway_bell(state, player):
+    return ((has_pipe_right(state, player) and has_pipe_left(state, player))
+            or state.has("Mario's Castle Midway Bell", player))
