@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, StartInventory, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, StartInventory, StartInventoryPool, Toggle
 
 
 class ProgressionStyle(Choice):
@@ -28,7 +28,7 @@ class BoostSanity(Toggle):
 
 
 class ExcludeMissableBoosts(Toggle):
-    """If boostsanity is enabled, this will prevent any boosts that are 'missable' from having progression items. Disabling this will potentially require multiple playthroughs to complete the seed."""
+    """If Boostsanity is enabled, this will prevent any boosts that are 'missable' from having progression items. Disabling this will potentially require multiple playthroughs to complete the seed."""
     display_name = "Exclude Missable Boosts"
 
 
@@ -69,7 +69,7 @@ class InGameFlagProgressionItems(DefaultOnToggle):
 class DeathLinkEffect(Choice):
     """What happens when a unit dies. Default is Unit Killed.\n
     Faith, and Gold will be decreased by the amount specified in 'Death Link Effect Percent'. \n
-    Era score is decrased by 1.\n
+    Era score is decreased by 1.\n
     Any will select any of these options any time a death link is received."""
     display_name = "Death Link Effect"
     option_unit_killed = 0
@@ -87,16 +87,6 @@ class DeathLinkEffectPercent(Range):
     default = 20
     range_start = 1
     range_end = 100
-
-
-class StartInventoryPool(StartInventory):
-    """Start with these items and don't place them in the world.
-
-    The game decides what the replacement items will be.
-    """
-    verify_item_name = True
-    display_name = "Start Inventory from Pool"
-    rich_text_doc = True
 
 
 @dataclass
