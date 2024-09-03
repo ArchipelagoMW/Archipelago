@@ -9,17 +9,24 @@ def did_include_hourglasses(world: "Sly1World") -> bool:
 
 def get_total_locations(world: "Sly1World") -> int:
     total = 0
-    for _ in location_table:
-        total += 1
+    for name in location_table:
+        if not did_include_hourglasses(world) and name in hourglass_locations:
+            continue
 
-    if did_include_hourglasses(world):
-        for _ in hourglass_locations:
+        if is_valid_location:
             total += 1
+
     return total
 
 def get_location_names() -> Dict[str, int]:
     names = {name: data.ap_code for name, data in location_table.items()}
     return names
+
+def is_valid_location(world: "Sly1World",name) -> bool:
+    if not did_include_hourglasses(world) and name in hourglass_locations:
+        return False
+    
+    return True
 
 sly_locations = {
     ## Key Locations - Finishing the level
@@ -125,9 +132,9 @@ hourglass_locations = {
     "Unseen Foe Hourglass": LocData(10020323, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 7),
     "Flaming Temple of Flame Hourglass": LocData(10020324, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 7),
     "Duel by the Dragon Hourglass": LocData(10020328, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 7),
-
 }
 
 location_table = {
-    **sly_locations
+    **sly_locations,
+    **hourglass_locations
 }

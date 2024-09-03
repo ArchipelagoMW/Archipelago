@@ -1,7 +1,6 @@
 from BaseClasses import Region
 from .Types import Sly1Location
-from .Locations import location_table, hourglass_locations
-from .Rules import did_include_hourglasses
+from .Locations import location_table, is_valid_location, hourglass_locations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -114,7 +113,7 @@ def create_region(world: "Sly1World", name: str) -> Region:
 
     for (key, data) in location_table.items():
         if data.region == name:
-            if not did_include_hourglasses(world) and key in hourglass_locations:
+            if not is_valid_location(world, key):
                 continue
             location = Sly1Location(world.player, key, data.ap_code, reg)
             reg.locations.append(location)
