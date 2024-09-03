@@ -23,6 +23,8 @@ namespace Sly1AP
         public static bool IsConnected { get; set; } = false;
         public static ArchipelagoClient Client { get; set; }
         public static GameState CurrentGameState = new GameState();
+        public static Moves slyMoves = new Moves();
+        public static Keys keys = new Keys();
         public static async Task Main()
         {
             Console.SetBufferSize(Console.BufferWidth, 32766);
@@ -35,7 +37,14 @@ namespace Sly1AP
             Console.WriteLine("Beginning main loop.");
             while (true)
             {
-                Thread.Sleep(1);
+                if (!IsConnected)
+                {
+                    Console.WriteLine("Not connected to Archipelago. Press any key to exit.");
+                    Console.ReadKey();
+                    return;
+                };
+                UpdateValues();
+                Thread.Sleep(100);
             }
         }
 
@@ -45,7 +54,7 @@ namespace Sly1AP
             string Address = Console.ReadLine();
             Console.WriteLine("Enter Slot Name:");
             string SlotName = Console.ReadLine();
-            Console.WriteLine("Enter Password:");
+            Console.WriteLine("Enter Password: ");
             string Password = Console.ReadLine();
             IsConnected = await ConnectAsync(Address, SlotName, Password);
         }
@@ -67,10 +76,26 @@ namespace Sly1AP
             var locations = Helpers.GetLocations();
             Client.PopulateLocations(locations);
             await Client.Login(playerName, password);
-            //ConfigureOptions(Client.Options);
+            ConfigureOptions(Client.Options);
             Client.ItemReceived += (e, args) =>
             {
                 Console.WriteLine($"Received: " + args.Item.Name);
+                if (args.Item.Id >= 10020001 & args.Item.Id <= 100200014)
+                {
+                    UpdateMoves(args.Item.Id);
+                }
+                if (args.Item.Id >= 10020015 & args.Item.Id <= 10020018)
+                {
+                    UpdateKeys(args.Item.Id);
+                }
+                if (args.Item.Id >= 10020021 & args.Item.Id <= 10020024)
+                {
+                    UpdateLevels(args.Item.Id);
+                }
+                if (args.Item.Id >= 10020019 & args.Item.Id <= 10020020)
+                {
+                    UpdateJunk(args.Item.Id);
+                }
             };
             return true;
         }
@@ -82,6 +107,217 @@ namespace Sly1AP
                 Console.WriteLine("Options dictionary is null.");
                 return;
             }
+            if (options.ContainsKey("StartingEpisode"))
+            {
+                string StartingEpisode = Convert.ToString(options["StartingEpisode"]);
+                Console.WriteLine(StartingEpisode);
+                if (StartingEpisode == "Tides Of Terror")
+                {
+                    keys.RaleighStart = 1;
+                    Memory.Write(0x2027CAC4, keys.RaleighStart);
+                }
+                if (StartingEpisode == "Sunset Snake Eyes")
+                {
+                    keys.MuggshotStart = 1;
+                    Memory.Write(0x2027CAC8, keys.MuggshotStart);
+                }
+                if (StartingEpisode == "Vicious Voodoo")
+                {
+                    keys.MzRubyStart = 1;
+                    Memory.Write(0x2027D35C, keys.MzRubyStart);
+                }
+                if (StartingEpisode == "Fire In The Sky")
+                {
+                    keys.PandaKingStart = 1;
+                    Memory.Write(0x2027D7A8, keys.PandaKingStart);
+                }
+            }
+        }
+        //This probably looks like gore to actual programmers, but it works.
+        public static void UpdateMoves(int id)
+        {
+            //var addresses = new Addresses();
+            //Progressive Moves
+            if (id == 10020001)
+            {
+                slyMoves.SlyMoves += slyMoves.DiveAttack;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+                slyMoves.DiveAttack += 14;
+            }
+            if (id == 10020002)
+            {
+                slyMoves.SlyMoves += slyMoves.Roll;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+                slyMoves.Roll += 1016;
+            }
+            if (id == 10020003)
+            {
+                slyMoves.SlyMoves += slyMoves.Slow;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+                if (slyMoves.Slow == 8)
+                {
+                    slyMoves.Slow += 4080;
+                }
+                else
+                {
+                    slyMoves.Slow += 28688;
+                }
+            }
+            if (id == 10020007)
+            {
+                slyMoves.SlyMoves += slyMoves.Safety;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+                slyMoves.Safety += 16128;
+            }
+            if (id == 10020010)
+            {
+                slyMoves.SlyMoves += slyMoves.Invisibility;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+                slyMoves.Invisibility = 8192;
+            }
+            //Regular Moves
+            if (id == 10020004)
+            {
+                slyMoves.SlyMoves += slyMoves.CoinMagnet;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            if (id == 10020005)
+            {
+                slyMoves.SlyMoves += slyMoves.Mine;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            if (id == 10020006)
+            {
+                slyMoves.SlyMoves += slyMoves.Fast;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            if (id == 10020008)
+            {
+                slyMoves.SlyMoves += slyMoves.Decoy;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            if (id == 10020009)
+            {
+                slyMoves.SlyMoves += slyMoves.Hacking;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            //Blueprints
+            if (id == 10020011)
+            {
+                slyMoves.SlyMoves += slyMoves.RaleighBlueprint;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            if (id == 10020012)
+            {
+                slyMoves.SlyMoves += slyMoves.MuggshotBlueprint;
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            if (id == 10020013)
+            {
+                slyMoves.SlyMoves += (slyMoves.MzRubyBlueprint);
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            if (id == 10020014)
+            {
+                slyMoves.SlyMoves += (slyMoves.PandaKingBlueprint);
+                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            }
+            return;
+        }
+        public static void UpdateKeys(int id)
+        {
+            //Keys
+            if (id == 10020015)
+            {
+                keys.RaleighKeys += 1;
+                Memory.Write(0x2027CAB4, keys.RaleighKeys);
+            }
+            if (id == 10020016)
+            {
+                keys.MuggshotKeys += 1;
+                Memory.Write(0x2027CF00, keys.MuggshotKeys);
+            }
+            if (id == 10020017)
+            {
+                keys.MzRubyKeys += 1;
+                Memory.Write(0x2027D34C, keys.MzRubyKeys);
+            }
+            if (id == 10020018)
+            {
+                keys.PandaKingKeys += 1;
+                Memory.Write(0x2027D798, keys.PandaKingKeys);
+            }
+            return;
+        }
+        public static void UpdateLevels(int id)
+        {
+            //Levels
+            if (id == 10020021)
+            {
+                keys.RaleighStart = 1;
+                Memory.Write(0x2027C67C, keys.RaleighStart);
+            }
+            if (id == 10020022)
+            {
+                keys.MuggshotStart = 1;
+                Memory.Write(0x2027CF00, keys.MuggshotStart);
+            }
+            if (id == 10020023)
+            {
+                keys.MzRubyStart = 1;
+                Memory.Write(0x2027CF14, keys.MzRubyStart);
+            }
+            if (id == 10020024)
+            {
+                keys.PandaKingStart = 1;
+                Memory.Write(0x2027D360, keys.PandaKingStart);
+            }
+            return;
+        }
+        public static void UpdateJunk(int id)
+        {
+            //Junk
+            //Don't continuously update these or else they'll never go down!
+            if (id == 10020020)
+            {
+                var Lives = Memory.ReadInt(0x2027DC00);
+                Lives += 1;
+                Memory.Write(0x2027DC00, Lives);
+            }
+            if (id == 10020019)
+            {
+                var Charms = Memory.ReadInt(0x2027DC04);
+                if (Charms < 2)
+                {
+                    Charms += 1;
+                    Memory.Write(0x2027DC04, Charms);
+                }
+                else
+                {
+                    var Lives = Memory.ReadInt(0x2027DC00);
+                    Lives += 1;
+                    Memory.Write(0x2027DC00, Lives);
+                }
+            }
+            return;
+        }
+        public static void UpdateValues()
+        {
+            Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            Memory.Write(0x2027CAB4, keys.RaleighKeys);
+            Memory.Write(0x2027CF00, keys.MuggshotKeys);
+            Memory.Write(0x2027D34C, keys.MzRubyKeys);
+            Memory.Write(0x2027D798, keys.PandaKingKeys);
+            Memory.Write(0x2027C67C, keys.RaleighStart);
+            Memory.Write(0x2027CF00, keys.MuggshotStart);
+            Memory.Write(0x2027CF14, keys.MzRubyStart);
+            Memory.Write(0x2027D360, keys.PandaKingStart);
+            //Make all maps selectable from the start.
+            Memory.Write(0x2027CAC4, keys.Map);
+            Memory.Write(0x2027CF10, keys.Map);
+            Memory.Write(0x2027D35C, keys.Map);
+            Memory.Write(0x2027D7A8, keys.Map);
+            return;
         }
     }
 }
