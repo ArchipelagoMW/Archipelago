@@ -119,11 +119,11 @@ class MarioLand2World(World):
                     self.auto_scroll_levels[level] = 2
                 elif self.options.auto_scroll_mode == "chaos":
                     self.auto_scroll_levels[level] = self.random.randint(1, 3)
-                    if (self.options.accessibility == "locations"
+                    if (self.options.accessibility == "full"
                             and level_id_to_name[level] in unbeatable_scroll_levels
                             and self.auto_scroll_levels[level] != 2):
                         self.auto_scroll_levels[level] = self.random.choice([1, 3])
-                elif (self.options.accessibility == "locations"
+                elif (self.options.accessibility == "full"
                       and level_id_to_name[level] in unbeatable_scroll_levels):
                     self.auto_scroll_levels[level] = 0
                 if self.auto_scroll_levels[level] == 1 and "trap" in self.options.auto_scroll_mode.current_key:
@@ -182,7 +182,7 @@ class MarioLand2World(World):
             self.num_coin_locations = [[region, 1] for region in created_regions if region != "Mario's Castle"]
             self.max_coin_locations = {region: len(coins_coords[region]) for region in created_regions
                                        if region != "Mario's Castle"}
-            if self.options.accessibility == "locations" or self.options.auto_scroll_mode == "always":
+            if self.options.accessibility == "full" or self.options.auto_scroll_mode == "always":
                 for level in self.max_coin_locations:
                     if level in auto_scroll_max and self.auto_scroll_levels[level_name_to_id[level]] in (1, 3):
                         self.max_coin_locations[level] = min(auto_scroll_max[level], self.max_coin_locations[level])

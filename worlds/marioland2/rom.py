@@ -26,7 +26,7 @@ def randomize_music(patch, random):
 
 def generate_output(self, output_directory: str):
 
-    patch = SuperMarioLand2ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+    patch = SuperMarioLand2ProcedurePatch(player=self.player, player_name=self.player_name)
 
     patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "basepatch.bsdiff4"))
     random = self.random
