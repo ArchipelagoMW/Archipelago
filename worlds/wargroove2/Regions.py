@@ -1,5 +1,5 @@
 from BaseClasses import Region, Entrance
-from worlds.wargroove2.Levels import first_level, region_names, \
+from .Levels import first_level, region_names, \
     FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
