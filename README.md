@@ -73,6 +73,9 @@ Currently, the following games are supported:
 * Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
 * A Hat in Time
 * Old School Runescape
+* Kingdom Hearts 1
+* Mega Man 2
+* Yacht Dice
 * Super Mario Land 2: 6 Golden Coins
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
