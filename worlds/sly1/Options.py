@@ -28,24 +28,16 @@ class IncludeHourglasses(DefaultOnToggle):
     """
     display_name = "Include Hourglasses"
 
-class AlwaysSpawnHourglasses(Toggle):
-    """
-    If enabled, Hourglasses will always be spawned even if the boss is not defeated.
-    """
-    display_name = "Always Spawn Hourglasses"
-
 @dataclass
 class Sly1Options(PerGameCommonOptions):
     StartingEpisode:            StartingEpisode
     IncludeHourglasses:         IncludeHourglasses
-    AlwaysSpawnHourglasses:     AlwaysSpawnHourglasses
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [StartingEpisode, IncludeHourglasses, AlwaysSpawnHourglasses]
+    "General Options": [StartingEpisode, IncludeHourglasses]
 }
 
 slot_data_options: List[str] = {
     "StartingEpisode",
-    "IncludeHourglasses",
-    "AlwaysSpawnHourglasses"
+    "IncludeHourglasses"
 }

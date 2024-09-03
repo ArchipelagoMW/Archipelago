@@ -18,8 +18,6 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     
         itempool += create_multiple_items(world, name, item_amount, item_type)
     
-    print(get_total_locations(world))
-    print(len(itempool))
     itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(event_item_pairs))
     return itempool
 
