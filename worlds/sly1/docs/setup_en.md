@@ -2,7 +2,10 @@
 
 ## Required Software
 
-A legally obtained ISO of Sly Cooper and the Thievius Raccoonus
+- A legally obtained NTSC ISO of Sly Cooper and the Thievius Raccoonus
+- [v1.6.0 of PCSX2](https://pcsx2.net/downloads)
+    - Select show previous versions and choose v1.6.0
+- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 ## Configuring your YAML file
 
@@ -16,8 +19,6 @@ an experience customized for their taste, and different players in the same mult
 
 You can customize your options by visiting
 the [Sly Cooper and the Thievius Raccoonus Options Page](/games/Sly%20Cooper%20and%20the%20Thievius%20Raccoonus/player-options).
-
-probably
 
 ### Connect to the MultiServer
 
