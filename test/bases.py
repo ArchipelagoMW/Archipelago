@@ -292,12 +292,12 @@ class WorldTestBase(unittest.TestCase):
         """Ensure all state can reach everything and complete the game with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
-        with self.subTest("Game", game=self.game):
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             excluded = self.multiworld.worlds[self.player].options.exclude_locations.value
             state = self.multiworld.get_all_state(False)
             for location in self.multiworld.get_locations():
                 if location.name not in excluded:
-                    with self.subTest("Location should be reached", location=location):
+                    with self.subTest("Location should be reached", location=location.name):
                         reachable = location.can_reach(state)
                         self.assertTrue(reachable, f"{location.name} unreachable")
             with self.subTest("Beatable"):
@@ -308,7 +308,7 @@ class WorldTestBase(unittest.TestCase):
         """Ensure empty state can reach at least one location with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
-        with self.subTest("Game", game=self.game):
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             state = CollectionState(self.multiworld)
             locations = self.multiworld.get_reachable_locations(state, self.player)
             self.assertGreater(len(locations), 0,
@@ -329,7 +329,7 @@ class WorldTestBase(unittest.TestCase):
                 for n in range(len(locations) - 1, -1, -1):
                     if locations[n].can_reach(state):
                         sphere.append(locations.pop(n))
-                self.assertTrue(sphere or self.multiworld.accessibility[1] == "minimal",
+                self.assertTrue(sphere or self.multiworld.worlds[1].options.accessibility == "minimal",
                                 f"Unreachable locations: {locations}")
                 if not sphere:
                     break

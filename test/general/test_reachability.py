@@ -41,15 +41,15 @@ class TestBase(unittest.TestCase):
                 state = multiworld.get_all_state(False)
                 for location in multiworld.get_locations():
                     if location.name not in excluded:
-                        with self.subTest("Location should be reached", location=location):
+                        with self.subTest("Location should be reached", location=location.name):
                             self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
                 for region in multiworld.get_regions():
                     if region.name in unreachable_regions:
-                        with self.subTest("Region should be unreachable", region=region):
+                        with self.subTest("Region should be unreachable", region=region.name):
                             self.assertFalse(region.can_reach(state))
                     else:
-                        with self.subTest("Region should be reached", region=region):
+                        with self.subTest("Region should be reached", region=region.name):
                             self.assertTrue(region.can_reach(state))
 
                 with self.subTest("Completion Condition"):

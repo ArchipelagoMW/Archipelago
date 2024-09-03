@@ -483,15 +483,15 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if panic_method == "swap":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
                              swap=True,
-                             on_place=mark_for_locking, name="Progression", single_player_placement=multiworld.players == 1)
+                             name="Progression", single_player_placement=multiworld.players == 1)
         elif panic_method == "raise":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
                              swap=False,
-                             on_place=mark_for_locking, name="Progression", single_player_placement=multiworld.players == 1)
+                             name="Progression", single_player_placement=multiworld.players == 1)
         elif panic_method == "start_inventory":
             fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
                              swap=False, allow_partial=True,
-                             on_place=mark_for_locking, name="Progression", single_player_placement=multiworld.players == 1)
+                             name="Progression", single_player_placement=multiworld.players == 1)
             if progitempool:
                 for item in progitempool:
                     logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
@@ -646,7 +646,6 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
 
         def get_sphere_locations(sphere_state: CollectionState,
                                  locations: typing.Set[Location]) -> typing.Set[Location]:
-            sphere_state.sweep_for_events(key_only=True, locations=locations)
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         def item_percentage(player: int, num: int) -> float:

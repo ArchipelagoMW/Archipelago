@@ -19,7 +19,7 @@ class TestDifferentSettings(SVTestCase):
         multiworld = setup_multiworld(multiplayer_options)
 
         self.check_location_rule(multiworld, 1, FestivalCheck.egg_hunt, False)
-        self.check_location_rule(multiworld, 2, FestivalCheck.egg_hunt, True, False)
+        self.check_location_rule(multiworld, 2, FestivalCheck.egg_hunt, True, True)
         self.check_location_rule(multiworld, 3, FestivalCheck.egg_hunt, True, True)
 
     def test_different_money_settings(self):
