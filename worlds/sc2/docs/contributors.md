@@ -14,6 +14,7 @@ Contibutors are listed with preferred or Discord names first, with github userna
 * Alice Voltaire (@AliceVoltaire)
 * Genderdruid (@ArchonofFail)
 * CrazedCollie (@FoxOfWar)
+* Bones (@itsjustbones)
 
 ### Additional Beta testing and bug reports
 * Varcklen (@Varcklen)
