@@ -7,7 +7,8 @@ import typing
 from BaseClasses import Item, Tutorial, ItemClassification
 from Options import NumericOption
 from .Items import item_table, faction_table, Wargroove2Item
-from .Levels import Wargroove2Level, get_level_table, get_first_level, get_final_levels, region_names, FINAL_LEVEL_1, \
+from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
+    final_levels, region_names, FINAL_LEVEL_1, \
     FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT
 from .Locations import location_table
 from .Presets import wargroove2_option_presets
@@ -61,20 +62,12 @@ class Wargroove2World(World):
     topology_present = True
     web = Wargroove2Web()
     level_list: typing.List[Wargroove2Level] = []
-    first_level: Wargroove2Level
     final_levels: typing.List[Wargroove2Level] = []
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
 
     def generate_early(self) -> None:
-        # First level
-        self.first_level = get_first_level(self.player)
-
-        # Standard levels
-        self.level_list = get_level_table(self.player)
-        low_victory_checks_levels = list(level for level in self.level_list if level.low_victory_checks)
-        high_victory_checks_levels = list(level for level in self.level_list if not level.low_victory_checks)
         if self.options.level_shuffle_seed == 0:
             random = self.random
         else:
@@ -86,10 +79,8 @@ class Wargroove2World(World):
         random.shuffle(non_starting_levels)
         self.level_list = low_victory_checks_levels[0:4] + non_starting_levels
 
-        # Final Levels
-        self.final_levels = get_final_levels(self.player)
-        final_levels_no_ocean = list(level for level in self.final_levels if not level.has_ocean)
-        final_levels_ocean = list(level for level in self.final_levels if level.has_ocean)
+        final_levels_no_ocean = list(level for level in final_levels if not level.has_ocean)
+        final_levels_ocean = list(level for level in final_levels if level.has_ocean)
         random.shuffle(final_levels_no_ocean)
         random.shuffle(final_levels_ocean)
         non_north_levels = final_levels_ocean + final_levels_no_ocean[1:]
@@ -120,7 +111,7 @@ class Wargroove2World(World):
             pool.append(Wargroove2Item("Income Boost", self.player))
 
         # Matching number of unfilled locations with filler items
-        total_locations = len(self.first_level.location_rules.keys())
+        total_locations = len(first_level.location_rules.keys())
         for level in self.level_list[0:LEVEL_COUNT]:
             total_locations += len(level.location_rules.keys())
         locations_remaining = total_locations - len(pool)

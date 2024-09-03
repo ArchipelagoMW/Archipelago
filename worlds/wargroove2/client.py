@@ -17,8 +17,9 @@ from settings import get_settings
 from . import Wargroove2World
 from .Items import item_table, faction_table, CommanderData, ItemData, item_id_name
 
-from .Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, get_level_table, FINAL_LEVEL_1, \
-    FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, get_final_levels
+from .Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, \
+    low_victory_checks_levels, high_victory_checks_levels, \
+    FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, final_levels
 from .Locations import location_table
 from .RegionFilter import Wargroove2LogicFilter
 from NetUtils import ClientStatus
@@ -376,7 +377,7 @@ class Wargroove2Context(CommonContext):
 
             def update_levels(self):
                 received_names = [item_id_name[item.item] for item in self.ctx.items_received]
-                levels = get_level_table(self.ctx.slot)
+                levels = low_victory_checks_levels + high_victory_checks_levels
                 level_rules = {level.name: level.location_rules for level in levels}
                 region_filter = Wargroove2LogicFilter(received_names)
                 self.level_1_Layout.clear_widgets()
@@ -395,7 +396,7 @@ class Wargroove2Context(CommonContext):
                         level_name: str = self.ctx.slot_data[region_name]
                         level_name_text = f"\n{level_name}"
                         for location_name in level_rules[level_name].keys():
-                            is_beatable: bool = level_rules[level_name][location_name](region_filter)
+                            is_beatable: bool = level_rules[level_name][location_name](region_filter, self.ctx.slot)()
                             is_fully_beaten = is_fully_beaten and \
                                               location_table[location_name] in self.ctx.checked_locations
                             if location_name.endswith(": Victory"):
@@ -448,7 +449,6 @@ class Wargroove2Context(CommonContext):
                         self.level_4_Layout.add_widget(label)
                     level_counter += 1
 
-                final_levels = get_final_levels(self.ctx.slot)
                 final_level_rules = {final_level.name: final_level.location_rules for final_level in final_levels}
                 final_level_1_name = None
                 final_level_2_name = None
@@ -470,7 +470,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_1_name}"
                     is_beatable: bool = final_level_rules[final_level_1_name] \
-                        [f"{final_level_1_name}: Victory"](region_filter)
+                        [f"{final_level_1_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -487,7 +487,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_2_name}"
                     is_beatable: bool = final_level_rules[final_level_2_name] \
-                        [f"{final_level_2_name}: Victory"](region_filter)
+                        [f"{final_level_2_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -504,7 +504,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_3_name}"
                     is_beatable: bool = final_level_rules[final_level_3_name] \
-                        [f"{final_level_3_name}: Victory"](region_filter)
+                        [f"{final_level_3_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -521,7 +521,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_4_name}"
                     is_beatable: bool = final_level_rules[final_level_4_name] \
-                        [f"{final_level_4_name}: Victory"](region_filter)
+                        [f"{final_level_4_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
