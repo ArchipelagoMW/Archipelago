@@ -147,6 +147,9 @@ class StaticWitnessLogicObj:
             elif "EP" in entity_name:
                 entity_type = "EP"
                 location_type = "EP"
+            elif "Pet the Dog" in entity_name:
+                entity_type = "Event"
+                location_type = "Good Boi"
             elif entity_hex.startswith("0xFF"):
                 entity_type = "Event"
                 location_type = None
