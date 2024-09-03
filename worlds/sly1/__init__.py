@@ -59,9 +59,10 @@ class Sly1World(World):
     
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {
-            "Options": {
+            "options": {
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
-                "IncludeHourglasses": self.options.IncludeHourglasses
+                "IncludeHourglasses": self.options.IncludeHourglasses.value,
+                "AlwaysSpawnHourglasses": self.options.AlwaysSpawnHourglasses.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server
