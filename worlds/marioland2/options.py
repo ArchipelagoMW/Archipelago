@@ -76,7 +76,7 @@ class CoinsanityChecks(Range):
     """
     Number of Coinsanity checks.
     A higher number means more checks, and smaller coin amounts per coin item in the item pool.
-    If Accessibility is set to Locations, auto-scroll levels may have a lower maximum count, which may lead to this
+    If Accessibility is set to Full, auto-scroll levels may have a lower maximum count, which may lead to this
     value being limited.
     """
     default_name = "Coinsanity Checks"
