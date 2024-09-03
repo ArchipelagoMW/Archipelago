@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xPLMyKjIO8E=",
+  "dgSpecHash": "ZH4LOLZKCjs=",
   "success": true,
-  "projectFilePath": "C:\\Users\\fello\\source\\repos\\Sly1AP\\Sly1AP.csproj",
+  "projectFilePath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\fello\\.nuget\\packages\\archipelago.core\\0.0.5\\archipelago.core.0.0.5.nupkg.sha512",
     "C:\\Users\\fello\\.nuget\\packages\\archipelago.multiclient.net\\6.3.1\\archipelago.multiclient.net.6.3.1.nupkg.sha512",

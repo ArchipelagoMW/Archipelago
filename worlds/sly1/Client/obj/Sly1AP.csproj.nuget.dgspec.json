@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fello\\source\\repos\\Sly1AP\\Sly1AP.csproj": {}
+    "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fello\\source\\repos\\Sly1AP\\Sly1AP.csproj": {
+    "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fello\\source\\repos\\Sly1AP\\Sly1AP.csproj",
+        "projectUniqueName": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
         "projectName": "Sly1AP",
-        "projectPath": "C:\\Users\\fello\\source\\repos\\Sly1AP\\Sly1AP.csproj",
+        "projectPath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
         "packagesPath": "C:\\Users\\fello\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fello\\source\\repos\\Sly1AP\\obj\\",
+        "outputPath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\fello\\AppData\\Roaming\\NuGet\\NuGet.Config",
