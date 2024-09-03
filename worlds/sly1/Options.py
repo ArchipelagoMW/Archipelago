@@ -15,7 +15,7 @@ class StartingEpisode(Choice):
     Determines which episode you will have the intro for at the beginning of the game.
     """
     display_name = "Starting Episode"
-    option_tides_of_terror = 1
+    option_tide_of_terror = 1
     option_sunset_snake_eyes = 2
     option_vicious_voodoo = 3
     option_fire_in_the_sky = 4

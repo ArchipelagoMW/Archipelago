@@ -71,7 +71,7 @@ sly_items = {
 }
 
 sly_episodes = {
-    "Tides of Terror": ItemData(10020021, ItemClassification.progression),
+    "Tide of Terror": ItemData(10020021, ItemClassification.progression),
     "Sunset Snake Eyes": ItemData(10020022, ItemClassification.progression),
     "Vicious Voodoo": ItemData(10020023, ItemClassification.progression),
     "Fire in the Sky": ItemData(10020024, ItemClassification.progression)

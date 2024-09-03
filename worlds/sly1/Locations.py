@@ -30,7 +30,7 @@ def is_valid_location(world: "Sly1World",name) -> bool:
 
 sly_locations = {
     ## Key Locations - Finishing the level
-    # Tides of Terror
+    # Tide of Terror
     "Stealthy Approach Key": LocData(10020101, "Stealthy Approach", key_type=EpisodeType.TOT),
     "Into the Machine Key": LocData(10020102, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
     "High Class Heist Key": LocData(10020103, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
@@ -68,7 +68,7 @@ sly_locations = {
 
 
     ## Vault Locations - Collecting all bottles in level
-    # Tides of Terror
+    # Tide of Terror
     "Stealthy Approach Vault": LocData(10020201, "Stealthy Approach", key_type=EpisodeType.TOT),
     "Into the Machine Vault": LocData(10020202, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
     "High Class Heist Vault": LocData(10020203, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
@@ -106,7 +106,7 @@ sly_locations = {
 
 hourglass_locations = {
     ## Hourglass Locations - Speedrunning the level
-    # Tides of Terror
+    # Tide of Terror
     "Stealthy Approach Hourglass": LocData(10020301, "Stealthy Approach"),
     "Into the Machine Hourglass": LocData(10020302, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
     "High Class Heist Hourglass": LocData(10020303, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
