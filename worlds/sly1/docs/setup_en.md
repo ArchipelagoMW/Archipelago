@@ -22,4 +22,10 @@ the [Sly Cooper and the Thievius Raccoonus Options Page](/games/Sly%20Cooper%20a
 
 ### Connect to the MultiServer
 
-uh dunno
+1. Launch PCSX2 and boot your copy of Sly 1
+    - You can also add various patch files (ie: Bentley Skipper)
+    - Make sure you reload the patch files if you add them after booting the game
+    - Patch files must also be named correctly for them to work properly
+2. Launch SlyAP.exe from the client folder
+    - Under address input your archipelago connection address (ie: archipelago.gg:51780)
+    - PCSX2 must be open before the Sly client is opened or it will give an error
