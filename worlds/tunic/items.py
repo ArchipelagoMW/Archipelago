@@ -43,7 +43,7 @@ item_table: Dict[str, TunicItemData] = {
     "Magic Orb": TunicItemData(ItemClassification.progression, 1, 27),
     "Hero's Laurels": TunicItemData(ItemClassification.progression, 1, 28),
     "Lantern": TunicItemData(ItemClassification.progression, 1, 29),
-    "Gun": TunicItemData(ItemClassification.useful, 1, 30, "Weapons"),
+    "Gun": TunicItemData(ItemClassification.progression, 1, 30, "Weapons"),
     "Shield": TunicItemData(ItemClassification.useful, 1, 31),
     "Dath Stone": TunicItemData(ItemClassification.useful, 1, 32),
     "Hourglass": TunicItemData(ItemClassification.useful, 1, 33),
@@ -235,9 +235,10 @@ extra_groups: Dict[str, Set[str]] = {
     "Questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"},
     "Ladder to Atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint Ladders in Well, now it won't
     "Ladders to Bell": {"Ladders to West Bell"},
-    "Ladders to Well": {"Ladders in Well"},  # fuzzy matching decided ladders in well was ladders to west bell
+    "Ladders to Well": {"Ladders in Well"},  # fuzzy matching decided Ladders in Well was Ladders to West Bell
     "Ladders in Atoll": {"Ladders in South Atoll"},
     "Ladders in Ruined Atoll": {"Ladders in South Atoll"},
+    "Ladders in Town": {"Ladders in Overworld Town"},  # fuzzy matching decided this was Ladders in South Atoll
 }
 
 item_name_groups.update(extra_groups)
