@@ -82,7 +82,7 @@ class InscryptionWorld(World):
     def create_items(self) -> None:
         nb_items_added = 0
         useful_items = (act1_items + act2_items + act3_items) if self.options.goal != Goal.option_first_act \
-            else act1_items
+            else act1_items.copy()
 
         if self.options.goal != Goal.option_first_act:
             if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
