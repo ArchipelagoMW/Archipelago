@@ -18,7 +18,7 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     
         itempool += create_multiple_items(world, name, item_amount, item_type)
     
-    itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - 5)
+    itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(event_item_pairs))
     return itempool
 
 def create_item(world: "Sly1World", name: str) -> Item:
@@ -88,7 +88,6 @@ junk_items = {
 item_table = {
     **sly_items,
     **sly_episodes,
-    **junk_items
 }
 
 event_item_pairs: Dict[str, str] = {

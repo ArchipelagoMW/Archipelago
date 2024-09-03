@@ -1,6 +1,6 @@
 from worlds.generic.Rules import add_rule, set_rule
 from .Types import episode_type_to_shortened_name
-from .Locations import hourglass_locations
+from .Locations import hourglass_locations, did_include_hourglasses
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -67,9 +67,9 @@ def set_rules(world: "Sly1World"):
              and state.has("Beat Panda King", world.player))
     
     # Hourglass Rules
-    for key, data in hourglass_locations.items():
-        loc = world.multiworld.get_location(key, world.player)
-        add_rule(loc, lambda state: state.has(f'{episode_type_to_shortened_name[data.key_type]} Key', world.player, data.key_requirement))
+    if did_include_hourglasses(world):
+        for key, data in hourglass_locations.items():
+            loc = world.multiworld.get_location(key, world.player)
+            add_rule(loc, lambda state: state.has(f'{episode_type_to_shortened_name[data.key_type]} Key', world.player, data.key_requirement))
 
-        
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

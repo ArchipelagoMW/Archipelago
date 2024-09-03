@@ -2,7 +2,7 @@
 
 ## Required Software
 
-no clue
+A legally obtained ISO of Sly Cooper and the Thievius Raccoonus
 
 ## Configuring your YAML file
 

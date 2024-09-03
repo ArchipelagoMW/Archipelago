@@ -22,11 +22,16 @@ class StartingEpisode(Choice):
     default = 1
 
 class IncludeHourglasses(DefaultOnToggle):
-    """If enabled, Hourglasses are included in the locations."""
+    """
+    If enabled, Hourglasses are included in the locations.
+    If Hourglasses are disabled then there are more items than locations for this game alone.
+    """
     display_name = "Include Hourglasses"
 
 class AlwaysSpawnHourglasses(Toggle):
-    """If enabled, Hourglasses will always be spawned even if the boss is not defeated."""
+    """
+    If enabled, Hourglasses will always be spawned even if the boss is not defeated.
+    """
     display_name = "Always Spawn Hourglasses"
 
 @dataclass

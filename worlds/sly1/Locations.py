@@ -4,11 +4,17 @@ from typing import Dict, TYPE_CHECKING
 if TYPE_CHECKING:
     from . import Sly1World
 
+def did_include_hourglasses(world: "Sly1World") -> bool:
+    return bool(world.options.IncludeHourglasses)
+
 def get_total_locations(world: "Sly1World") -> int:
-    # Temporarily just counts the amount. This will be important when options come along.
     total = 0
     for _ in location_table:
         total += 1
+
+    if did_include_hourglasses(world):
+        for _ in hourglass_locations:
+            total += 1
     return total
 
 def get_location_names() -> Dict[str, int]:
@@ -123,6 +129,5 @@ hourglass_locations = {
 }
 
 location_table = {
-    **sly_locations,
-    **hourglass_locations
+    **sly_locations
 }

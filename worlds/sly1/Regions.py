@@ -1,6 +1,7 @@
 from BaseClasses import Region
 from .Types import Sly1Location
-from .Locations import location_table
+from .Locations import location_table, hourglass_locations
+from .Rules import did_include_hourglasses
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -47,7 +48,7 @@ if TYPE_CHECKING:
 #     "The Cold Heart of Hate":   "The Cold Heart of Hate"
 # }
 
-def create_regions(world: "Sly1World"): 
+def create_regions(world: "Sly1World"):
     # I think this is where I would stitch in the paris files with a menu region
     # That connects to both the hideout and paris through a save file
     menu = create_region(world, "Menu")
@@ -113,6 +114,8 @@ def create_region(world: "Sly1World", name: str) -> Region:
 
     for (key, data) in location_table.items():
         if data.region == name:
+            if not did_include_hourglasses(world) and key in hourglass_locations:
+                continue
             location = Sly1Location(world.player, key, data.ap_code, reg)
             reg.locations.append(location)
     
