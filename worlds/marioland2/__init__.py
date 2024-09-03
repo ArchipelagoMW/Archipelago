@@ -403,7 +403,7 @@ class MarioLand2World(World):
                     self.auto_scroll_levels[level_name_to_id[level]] = 0
                     del item_counts[auto_scroll_item]
                     continue
-                raise Exception(f"Too many items in the item pool for Super Mario Land 2 player {self.multiworld.player_name[self.player]}")
+                raise Exception(f"Too many items in the item pool for Super Mario Land 2 player {self.player_name}")
                 # item = self.random.choice(list(item_counts))
                 # item_counts[item] -= 1
                 # if item_counts[item] == 0:
