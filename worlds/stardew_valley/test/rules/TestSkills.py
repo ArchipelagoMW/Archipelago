@@ -46,6 +46,20 @@ class TestSkillProgressionProgressive(SVTestBase):
 
             self.reset_collection_state()
 
+    def test_has_level_requires_exact_amount_of_levels(self):
+        logic: StardewLogic = self.multiworld.worlds[1].logic
+        rule = logic.skill.has_level(Skill.farming, 8)
+        level_rule = logic.received("Farming Level", 8)
+
+        self.assertEqual(level_rule, rule)
+
+    def test_has_previous_level_requires_one_less_level_than_requested(self):
+        logic: StardewLogic = self.multiworld.worlds[1].logic
+        rule = logic.skill.has_previous_level(Skill.farming, 8)
+        level_rule = logic.received("Farming Level", 7)
+
+        self.assertEqual(level_rule, rule)
+
     def test_has_mastery_requires_10_levels(self):
         logic: StardewLogic = self.multiworld.worlds[1].logic
         rule = logic.skill.has_mastery(Skill.farming)
