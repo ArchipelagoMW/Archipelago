@@ -87,17 +87,17 @@ def tree_zone_4_coins(state, player, coins):
         if has_pipe_right(state, player):
             reachable_coins += 4
             if has_pipe_down(state, player):
-                reachable_coins += 46
+                reachable_coins += 10
                 if not auto_scroll:
-                    reachable_coins += 10
+                    reachable_coins += 46
     elif state.has("Tree Zone 4 Midway Bell", player):
         if not auto_scroll:
             if has_pipe_left(state, player):
                 reachable_coins += 18
                 if has_pipe_down(state, player):
-                    reachable_coins += 46
+                    reachable_coins += 10
                     if has_pipe_up(state, player):
-                        reachable_coins += 10
+                        reachable_coins += 46
         elif has_pipe_down(state, player):
             reachable_coins += 10
     return coins <= reachable_coins
