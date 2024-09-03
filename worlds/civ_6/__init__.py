@@ -41,7 +41,7 @@ class CivVIWeb(WebWorld):
 
 class CivVIWorld(World):
     """
-    Civilization VI is a turn-based strategy video game in which one or more players compete alongside computer-controlled AI opponents to grow their individual civilization from a small tribe to control the entire planet across several periods of development.
+    Civilization VI is a turn-based strategy video game in which one or more players compete alongside computer-controlled opponents to grow their individual civilization from a small tribe to control the entire planet across several periods of development.
     """
 
     game: str = "Civilization VI"
