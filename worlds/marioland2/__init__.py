@@ -236,11 +236,9 @@ class MarioLand2World(World):
                 ["Tree Coin", "Space Coin", "Macro Coin", "Pumpkin Coin", "Turtle Coin"], self.player)
                 and state.has("Mario Coin Fragment", self.player, self.coin_fragments_required))
         else:
-            entrance_rules["Menu -> Mario's Castle"] = lambda state: ([
-                    state.has("Tree Coin", self.player), state.has("Space Coin", self.player),
-                    state.has("Macro Coin", self.player), state.has("Pumpkin Coin", self.player),
-                    state.has("Mario Coin", self.player), state.has("Turtle Coin", self.player)
-                ].count(True) >= self.options.required_golden_coins)
+            entrance_rules["Menu -> Mario's Castle"] = lambda state: state.has_from_list_unique([
+                "Tree Coin", "Space Coin", "Macro Coin", "Pumpkin Coin", "Mario Coin", "Turtle Coin"
+                ], self.player, self.options.required_golden_coins)
 
 
         for entrance, rule in entrance_rules.items():
