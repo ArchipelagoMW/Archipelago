@@ -151,24 +151,11 @@ class GLPatchExtension(APPatchExtension):
                             slice_
                             + bytearray(
                                 [
-                                    0x0,
-                                    0x0,
-                                    0x26,
-                                    0x1,
-                                    0x0,
+                                    0x0, 0x0, 0x26, 0x1, 0x0,
                                     location_data[location_name].difficulty,
-                                    0x0,
-                                    0x0,
-                                    0x0,
+                                    0x0, 0x0, 0x0,
                                     item[0] - 77780054,
-                                    0x3F,
-                                    0x80,
-                                    0x0,
-                                    0x0,
-                                    0x0,
-                                    0x0,
-                                    0x0,
-                                    0x0,
+                                    0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
                                 ],
                             ),
                         ]
