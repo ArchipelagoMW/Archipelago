@@ -7,30 +7,29 @@ import asyncio
 import pkgutil
 import random
 import typing
+import Utils
+import json
+import logging
+import ModuleUpdate
 from typing import Tuple, List, Iterable, Dict
 
 from settings import get_settings
 from . import Wargroove2World
 from .Items import item_table, faction_table, CommanderData, ItemData, item_id_name
 
-import ModuleUpdate
 from .Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, get_level_table, FINAL_LEVEL_1, \
     FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, get_final_levels
 from .Locations import location_table
 from .RegionFilter import Wargroove2LogicFilter
-
-ModuleUpdate.update()
-
-import Utils
-import json
-import logging
-
-if __name__ == "__main__":
-    Utils.init_logging("Wargroove2Client", exception_logger="Client")
-
 from NetUtils import ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
+
+
+ModuleUpdate.update()
+
+if __name__ == "__main__":
+    Utils.init_logging("Wargroove2Client", exception_logger="Client")
 
 wg2_logger = logging.getLogger("WG2")
 
@@ -44,7 +43,7 @@ class Wargroove2ClientCommandProcessor(ClientCommandProcessor):
     def _cmd_commander(self, *commander_name: Iterable[str]):
         """Set the current commander to the given commander."""
         if commander_name:
-            self.ctx.set_commander(' '.join(commander_name))
+            self.ctx.set_commander(' '.join(commander_name[0]))
         else:
             if self.ctx.can_choose_commander:
                 commanders = self.ctx.get_commanders()
@@ -340,7 +339,7 @@ class Wargroove2Context(CommonContext):
             level_4_Layout: GridLayout(cols=1)
             trigger_tracker: BoxLayout
             boost_tracker: BoxLayout
-            commander_buttons: Dict[int, List[CommanderButton]]
+            commander_buttons: Dict[str, List[CommanderButton]]
             tracker_items = {
                 "Swordsman": ItemData(None, "Unit", False),
                 "Dog": ItemData(None, "Unit", False),
@@ -467,7 +466,8 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_1_name in stored_data:
                     level_name_text = f"\n{final_level_1_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_1_name is not None and region_filter.has_all({"Final North", "Final Center"}, self.ctx.slot):
+                elif final_level_1_name is not None and region_filter.has_all(["Final North", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_1_name}"
                     is_beatable: bool = final_level_rules[final_level_1_name] \
                         [f"{final_level_1_name}: Victory"](region_filter)
@@ -483,7 +483,8 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_2_name in stored_data:
                     level_name_text = f"\n{final_level_2_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_2_name is not None and region_filter.has_all({"Final East", "Final Center"}, self.ctx.slot):
+                elif final_level_2_name is not None and region_filter.has_all(["Final East", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_2_name}"
                     is_beatable: bool = final_level_rules[final_level_2_name] \
                         [f"{final_level_2_name}: Victory"](region_filter)
@@ -499,7 +500,8 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_3_name in stored_data:
                     level_name_text = f"\n{final_level_3_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_3_name is not None and region_filter.has_all({"Final South", "Final Center"}, self.ctx.slot):
+                elif final_level_3_name is not None and region_filter.has_all(["Final South", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_3_name}"
                     is_beatable: bool = final_level_rules[final_level_3_name] \
                         [f"{final_level_3_name}: Victory"](region_filter)
@@ -515,7 +517,8 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_4_name in stored_data:
                     level_name_text = f"\n{final_level_4_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_4_name is not None and region_filter.has_all({"Final West", "Final Center"}, self.ctx.slot):
+                elif final_level_4_name is not None and region_filter.has_all(["Final West", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_4_name}"
                     is_beatable: bool = final_level_rules[final_level_4_name] \
                         [f"{final_level_4_name}: Victory"](region_filter)
@@ -621,7 +624,7 @@ class Wargroove2Context(CommonContext):
         """Sets the current commander to the given one, if possible"""
         if not self.can_choose_commander:
             wg2_logger.error("Cannot set commanders in this game mode.")
-            return
+            return False
         match_name = commander_name.lower()
         for commander, unlocked in self.get_commanders():
             if commander.name.lower() == match_name or commander.alt_name and commander.alt_name.lower() == match_name:
@@ -649,7 +652,7 @@ class Wargroove2Context(CommonContext):
 
 async def game_watcher(ctx: Wargroove2Context):
     while not ctx.exit_event.is_set():
-        if ctx.syncing == True:
+        if ctx.syncing:
             sync_msg = [{'cmd': 'Sync'}]
             if ctx.locations_checked:
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
