@@ -16,7 +16,7 @@ Unlocking paths to new levels requires finding or receiving Zone Progression ite
 "Turtle Zone Progression" will unlock the path from Turtle Zone 1 to Turtle Zone 2. Paths to secret levels are separate
 items, so Turtle Zone Secret will open the path from Turtle Zone 2 to the Turtle Zone Secret Course.
 
-Depending on settings, there may be some "Zone Progression x2" item that opens two paths at once.
+Depending on settings, there may be some "Zone Progression x2" items that open two paths at once.
 
 The path from Tree Zone 2 to the branch to Tree Zone 3 and 4 is one unlock, so both levels will open at this point.
 
