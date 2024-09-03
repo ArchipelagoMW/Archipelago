@@ -79,8 +79,8 @@ sly_episodes = {
 
 junk_items = {
     # Junk
-    "Charm": ItemData(10020019, ItemClassification.filler),
-    "1-Up": ItemData(10020020, ItemClassification.filler)
+    "Charm": ItemData(10020019, ItemClassification.filler, 0),
+    "1-Up": ItemData(10020020, ItemClassification.filler, 0)
 
     # Traps - TBI
 }

@@ -24,7 +24,7 @@ class ItemData(NamedTuple):
 class LocData(NamedTuple):
     ap_code: Optional[int]
     region: Optional[str]
-    key_type: Optional[EpisodeType]
+    key_type: Optional[EpisodeType] = None
     key_requirement: Optional[int] = 0
 
 episode_type_to_name = {
