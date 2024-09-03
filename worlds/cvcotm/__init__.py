@@ -5,21 +5,22 @@ import base64
 import logging
 
 from BaseClasses import Item, Region, Tutorial, ItemClassification
-from .items import CVCotMItem, filler_item_names, action_cards, attribute_cards, cvcotm_item_info, \
+from .items import CVCotMItem, FILLER_ITEM_NAMES, ACTION_CARDS, ATTRIBUTE_CARDS, cvcotm_item_info, \
     get_item_names_to_ids, get_item_counts
-from .locations import CVCotMLocation, get_location_names_to_ids, base_id, get_named_locations_data, \
-    get_locations_by_area
-from .options import cvcotm_option_groups, CVCotMOptions, SubWeaponShuffle
-from .regions import get_region_info, get_all_region_names, get_named_entrances_data
+from .locations import CVCotMLocation, get_location_names_to_ids, BASE_ID, get_named_locations_data, \
+    get_location_name_groups
+from .options import cvcotm_option_groups, CVCotMOptions, SubWeaponShuffle, IronMaidenBehavior, RequiredSkirmishes, \
+    CompletionGoal
+from .regions import get_region_info, get_all_region_names
 from .rules import CVCotMRules
 from .data import iname, lname
 from .presets import cvcotm_options_presets
 from worlds.AutoWorld import WebWorld, World
 
-from .aesthetics import shuffle_sub_weapons, get_location_data, get_countdown_flags, populate_enemy_drops,\
+from .aesthetics import shuffle_sub_weapons, get_location_data, get_countdown_flags, populate_enemy_drops, \
     get_start_inventory_data
 from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch, CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, \
-    CVCotM_VC_US_HASH
+    CVCOTM_VC_US_HASH
 from .client import CastlevaniaCotMClient
 
 
@@ -28,7 +29,7 @@ class CVCotMSettings(settings.Group):
         """File name of the Castlevania CotM US rom"""
         copy_to = "Castlevania - Circle of the Moon (USA).gba"
         description = "Castlevania CotM (US) ROM File"
-        md5s = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCotM_VC_US_HASH]
+        md5s = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -52,29 +53,30 @@ class CVCotMWeb(WebWorld):
 
 class CVCotMWorld(World):
     """
-    Castlevania: Circle of the Moon is the first of three Castlevania games released for the GameBoy Advance.
-    As Nathan Graves, utilizing the Dual Set-Up System in conjunction with the Hunter Whip, you must battle your way
-    through Camilla's castle and rescue your master!
+    Castlevania: Circle of the Moon is a launch title for the Game Boy Advance and the first of three Castlevania games
+    released for the handheld in the "Metroidvania" format. As Nathan Graves, wielding the Hunter Whip and utilizing the
+    Dual Set-Up System for new possibilities, you must battle your way through Camilla's castle and rescue your master
+    from a demonic ritual to restore the Count's power...
     """
     game = "Castlevania - Circle of the Moon"
     item_name_groups = {
-        "DSS": action_cards.union(attribute_cards),
-        "Card": action_cards.union(attribute_cards),
-        "Action": action_cards,
-        "Action Card": action_cards,
-        "Attribute": attribute_cards,
-        "Attribute Card": attribute_cards,
+        "DSS": ACTION_CARDS.union(ATTRIBUTE_CARDS),
+        "Card": ACTION_CARDS.union(ATTRIBUTE_CARDS),
+        "Action": ACTION_CARDS,
+        "Action Card": ACTION_CARDS,
+        "Attribute": ATTRIBUTE_CARDS,
+        "Attribute Card": ATTRIBUTE_CARDS,
         "Freeze": {iname.serpent, iname.cockatrice, iname.mercury, iname.mars},
         "Freeze Action": {iname.mercury, iname.mars},
         "Freeze Attribute": {iname.serpent, iname.cockatrice}
     }
-    location_name_groups = get_locations_by_area()
+    location_name_groups = get_location_name_groups()
     options_dataclass = CVCotMOptions
     options: CVCotMOptions
     settings: typing.ClassVar[CVCotMSettings]
-    topology_present = True
+    hint_blacklist = {lname.ba24}  # The Battle Arena reward, if it's put in, will always be a Last Key.
 
-    item_name_to_id = {name: cvcotm_item_info[name].code + base_id for name in cvcotm_item_info
+    item_name_to_id = {name: cvcotm_item_info[name].code + BASE_ID for name in cvcotm_item_info
                        if cvcotm_item_info[name].code is not None}
     location_name_to_id = get_location_names_to_ids()
 
@@ -90,16 +92,31 @@ class CVCotMWorld(World):
         # Generate the player's unique authentication
         self.auth = bytearray(self.multiworld.random.getrandbits(8) for _ in range(16))
 
-        # If Require All Bosses is on, force Required and Available Last Keys to 8.
-        if self.options.require_all_bosses:
+        # If playing with the Completion Goal option set to Battle Arena while the Required Skirmishes option is set to
+        # All Bosses And Arena, set the latter down to just All Bosses instead. The Location in the Ceremonial Room
+        # would require the Goal to be sent before it can be accessed at all, and that would be weird.
+        if self.options.completion_goal == CompletionGoal.option_battle_arena and self.options.required_skirmishes == \
+                RequiredSkirmishes.option_all_bosses_and_arena:
+            logging.warning(f"[{self.multiworld.player_name[self.player]}] Requiring a Last Key to be obtained from "
+                            f"the Battle Arena while requiring just the Battle Arena to be completed for Goal "
+                            f"completion makes the Ceremonial Room item impossible to obtain without completing the "
+                            f"Goal first. Changing Required Skirmishes to just All Bosses.")
+            self.options.required_skirmishes = RequiredSkirmishes.option_all_bosses
+
+        # If Required Skirmishes are on, force the Required and Available Last Keys to 8 or 9 depending on which option
+        # was chosen.
+        if self.options.required_skirmishes == RequiredSkirmishes.option_all_bosses:
             self.options.required_last_keys.value = 8
             self.options.available_last_keys.value = 8
+        elif self.options.required_skirmishes == RequiredSkirmishes.option_all_bosses_and_arena:
+            self.options.required_last_keys.value = 9
+            self.options.available_last_keys.value = 9
 
         self.total_last_keys = self.options.available_last_keys.value
         self.required_last_keys = self.options.required_last_keys.value
 
         # If there are more Last Keys required than there are Last Keys in total, drop the required Last Keys to
-        # something valid.
+        # the total Last Keys.
         if self.required_last_keys > self.total_last_keys:
             self.required_last_keys = self.total_last_keys
             logging.warning(f"[{self.multiworld.player_name[self.player]}] The Required Last Keys "
@@ -118,9 +135,9 @@ class CVCotMWorld(World):
         for reg in created_regions:
 
             # Add the Entrances to all the Regions.
-            ent_names = get_region_info(reg.name, "entrances")
-            if ent_names is not None:
-                reg.add_exits(get_named_entrances_data(ent_names))
+            ent_destinations_and_names = get_region_info(reg.name, "entrances")
+            if ent_destinations_and_names is not None:
+                reg.add_exits(ent_destinations_and_names)
 
             # Add the Locations to all the Regions.
             loc_names = get_region_info(reg.name, "locations")
@@ -142,7 +159,7 @@ class CVCotMWorld(World):
 
         code = cvcotm_item_info[name].code
         if code is not None:
-            code += base_id
+            code += BASE_ID
 
         created_item = CVCotMItem(name, classification, code, self.player)
 
@@ -165,24 +182,29 @@ class CVCotMWorld(World):
             self.multiworld.local_early_items[self.player][iname.double] = 1
 
     def generate_output(self, output_directory: str) -> None:
-        active_locations = self.multiworld.get_locations(self.player)
+        # Get out all the Locations that are not Events. Only take the Iron Maiden switch if the Maiden Detonator is in
+        # the item pool.
+        active_locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None and
+                            (loc.name != lname.ct21 or self.options.iron_maiden_behavior ==
+                             IronMaidenBehavior.option_detonator_in_pool)]
 
-    # Location data
+        # Location data
         offset_data = get_location_data(self, active_locations)
-    # Sub-weapons
+        # Sub-weapons
         if self.options.sub_weapon_shuffle:
             offset_data.update(shuffle_sub_weapons(self))
-    # Item drop randomization
+        # Item drop randomization
         if self.options.item_drop_randomization:
             offset_data.update(populate_enemy_drops(self))
-    # Countdown
+        # Countdown
         if self.options.countdown:
             offset_data.update(get_countdown_flags(self, active_locations))
-    # Start Inventory
-        offset_data.update(get_start_inventory_data(self.player, self.multiworld.precollected_items[self.player]))
+        # Start Inventory
+        start_inventory_data = get_start_inventory_data(self.multiworld.precollected_items[self.player])
+        offset_data.update(start_inventory_data[0])
 
         patch = CVCotMProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
-        patch_rom(self, patch, offset_data)
+        patch_rom(self, patch, offset_data, start_inventory_data[1])
 
         rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
                                                   f"{patch.patch_file_ending}")
@@ -191,13 +213,14 @@ class CVCotMWorld(World):
 
     def fill_slot_data(self) -> dict:
         return {"death_link": self.options.death_link.value,
-                "break_iron_maidens": self.options.break_iron_maidens.value,
+                "iron_maiden_behavior": self.options.iron_maiden_behavior.value,
                 "ignore_cleansing": self.options.ignore_cleansing.value,
+                "skip_tutorials": self.options.skip_tutorials.value,
                 "required_last_keys": self.required_last_keys,
                 "completion_goal": self.options.completion_goal.value}
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(filler_item_names)
+        return self.random.choice(FILLER_ITEM_NAMES)
 
     def modify_multidata(self, multidata: typing.Dict[str, typing.Any]):
         # Put the player's unique authentication in connect_names.

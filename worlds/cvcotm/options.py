@@ -30,11 +30,17 @@ class AlwaysAllowSpeedDash(Toggle):
     display_name = "Always Allow Speed Dash"
 
 
-class BreakIronMaidens(Toggle):
+class IronMaidenBehavior(Choice):
     """
-    Breaks the iron maiden barriers from the start of the game, so you will not have to climb Chapel Tower and defeat Adramelech to go past them.
+    Sets how the iron maiden barriers blocking the entrances to Underground Gallery and Waterway will behave.
+    Vanilla: Vanilla behavior. Must press the button guarded by Adramelech to break them.
+    Start Broken: The maidens will be broken from the start.
+    Detonator In Pool: Adds a Maiden Detonator item in the pool that will detonate the maidens when found. Adramelech will guard an extra check.
     """
-    display_name = "Break Iron Maidens"
+    display_name = "Iron Maiden Behavior"
+    option_vanilla = 0
+    option_start_broken = 1
+    option_detonator_in_pool = 2
 
 
 class RequiredLastKeys(Range):
@@ -50,7 +56,7 @@ class RequiredLastKeys(Range):
 class AvailableLastKeys(Range):
     """
     How many Last Keys are in the pool in total.
-    To see this in-game, check the Last Key in the Magic Item menu or touch the Ceremonial Room door.
+    To see this in-game, select the Last Key in the Magic Item menu (when you have at least one) or touch the Ceremonial Room door.
     """
     range_start = 0
     range_end = 9
@@ -82,15 +88,16 @@ class BuffShooterStrength(Toggle):
 class ItemDropRandomization(Choice):
     """
     Randomizes what enemies drop what items as well as the drop rates for said items.
-    Bosses and candle enemies will be guaranteed to have rare items in all of their drop slots, and easily-farmable enemies (like most that infinitely spawn) will only drop low-tier items in all of theirs.
-    All other enemies will drop a low or regular-tier item in their common drop slot, and a low, regular, or rare-tier item in their rare drop slot.
-    The common slot item has a 5-10% base chance of appearing, and the rare has a 3-5% chance.
-    If Hard is chosen, all enemies below 150 HP will be considered easily-farmable (in addition to the ones that already are) and rare items that land on bosses and candle enemies will be exclusive to them.
+    Bosses and candle enemies will be guaranteed to have high-tier items in all of their drop slots, and "easy" enemies (below 61 HP) will only drop low-tier items in all of theirs.
+    All other enemies will drop a low or mid-tier item in their common drop slot, and a low, mid, or high-tier item in their rare drop slot.
+    The common slot item has a 6-10% base chance of appearing, and the rare has a 3-6% chance.
+    If Tiered is chosen, all enemies below 144 (instead of 61) HP will be considered "easy", rare items that land on bosses will be exclusive to them, enemies with 144-369 HP will have a low-tier in its common slot and a mid-tier in its rare slot, and enemies with more than 369 HP will have a mid-tier in its common slot and a high-tier in its rare slot.
+    See the Game Page for more info.
     """
     display_name = "Item Drop Randomization"
     option_disabled = 0
     option_normal = 1
-    option_hard = 2
+    option_tiered = 2
     default = 1
 
 
@@ -123,17 +130,21 @@ class SubWeaponShuffle(Toggle):
 
 class DisableBattleArenaMPDrain(Toggle):
     """
-    Makes the Battle Arena not drain Nathan's MP, so that DSS combos can be freely used.
+    Makes the Battle Arena not drain Nathan's MP, so that DSS combos can be used like normal.
     """
     display_name = "Disable Battle Arena MP Drain"
 
 
-class RequireAllBosses(Toggle):
+class RequiredSkirmishes(Choice):
     """
-    Forces a Last Key behind every boss and requires all 8 of them to enter the Ceremonial Room.
-    The Required and Available Last Keys options will both be forced to 8.
+    Forces a Last Key after every boss or after every boss and the Battle Arena and forces the required Last Keys to enter the Ceremonial Room to 8 or 9 for All Bosses and All Bosses And Arena respectively.
+    The Available and Required Last Keys options will be overridden to the respective values.
     """
-    display_name = "Require All Bosses"
+    display_name = "Required Skirmishes"
+    option_none = 0
+    option_all_bosses = 1
+    option_all_bosses_and_arena = 2
+    default = 0
 
 
 class EarlyDouble(DefaultOnToggle):
@@ -143,11 +154,62 @@ class EarlyDouble(DefaultOnToggle):
     display_name = "Early Double"
 
 
+class NerfRocWing(Toggle):
+    """
+    Initially nerfs the Roc Wing by removing its ability to jump infinitely and reducing its jump height. You can power it back up to its vanilla behavior by obtaining the following:
+    Double: Allows one jump in midair, using your double jump.
+    Kick Boots: Restores its vanilla jump height.
+    Both: Enables infinite midair jumping.
+    Note that holding A while Roc jumping will cause you to rise slightly higher; this is accounted for in logic.
+    """
+    display_name = "Nerf Roc Wing"
+
+
+class PlutoGriffinAirSpeed(Toggle):
+    """
+    Enables jumping with the Pluto + Griffin combo active without losing the speed boost gained from it. Anything made possible with the increased midair speed is out of logic.
+    """
+    display_name = "DSS Pluto and Griffin Run Speed in Air"
+
+
 class SkipDialogues(Toggle):
     """
     Skips all cutscene dialogue before the ending.
     """
-    display_name = "Skip Dialogues"
+    display_name = "Skip Cutscene Dialogue"
+
+
+class SkipTutorials(Toggle):
+    """
+    Skips all Magic Item-related tutorial textboxes.
+    """
+    display_name = "Skip Magic Item Tutorials"
+
+
+class BattleArenaMusic(Choice):
+    """
+    Enables any looping song from the game to play inside the Battle Arena instead of it being silent the whole time.
+    """
+    display_name = "Battle Arena Music"
+    option_nothing = 0
+    option_requiem = 1
+    option_a_vision_of_dark_secrets = 2
+    option_inversion = 3
+    option_awake = 4
+    option_the_sinking_old_sanctuary = 5
+    option_clockwork = 6
+    option_shudder = 7
+    option_fate_to_despair = 8
+    option_aquarius = 9
+    option_clockwork_mansion = 10
+    option_big_battle = 11
+    option_nightmare = 12
+    option_vampire_killer = 13
+    option_illusionary_dance = 14
+    option_proof_of_blood = 15
+    option_repose_of_souls = 16
+    option_circle_of_the_moon = 17
+    default = 0
 
 
 class DeathLink(Choice):
@@ -168,7 +230,7 @@ class DeathLink(Choice):
 class CompletionGoal(Choice):
     """
     The goal for game completion. Can be defeating Dracula, winning in the Battle Arena, or both.
-    If you aren't sure which one you have while playing, check the Dash Boots in the Magic Item menu.
+    If you aren't sure which one you have while playing, select the Dash Boots in the Magic Item menu.
     """
     display_name = "Completion Goal"
     option_dracula = 0
@@ -181,15 +243,13 @@ class CompletionGoal(Choice):
 class CVCotMOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     completion_goal: CompletionGoal
-    required_last_keys: RequiredLastKeys
-    available_last_keys: AvailableLastKeys
-    require_all_bosses: RequireAllBosses
-    break_iron_maidens: BreakIronMaidens
     ignore_cleansing: IgnoreCleansing
-    early_double: EarlyDouble
     auto_run: AutoRun
     dss_patch: DSSPatch
     always_allow_speed_dash: AlwaysAllowSpeedDash
+    iron_maiden_behavior: IronMaidenBehavior
+    required_last_keys: RequiredLastKeys
+    available_last_keys: AvailableLastKeys
     buff_ranged_familiars: BuffRangedFamiliars
     buff_sub_weapons: BuffSubWeapons
     buff_shooter_strength: BuffShooterStrength
@@ -198,14 +258,20 @@ class CVCotMOptions(PerGameCommonOptions):
     countdown: Countdown
     sub_weapon_shuffle: SubWeaponShuffle
     disable_battle_arena_mp_drain: DisableBattleArenaMPDrain
+    required_skirmishes: RequiredSkirmishes
+    pluto_griffin_air_speed: PlutoGriffinAirSpeed
     skip_dialogues: SkipDialogues
+    skip_tutorials: SkipTutorials
+    nerf_roc_wing: NerfRocWing
+    early_double: EarlyDouble
+    battle_arena_music: BattleArenaMusic
     death_link: DeathLink
 
 
 cvcotm_option_groups = [
     OptionGroup("gameplay tweaks", [
-        AutoRun, DSSPatch, AlwaysAllowSpeedDash, BuffRangedFamiliars, BuffSubWeapons, BuffShooterStrength,
-        ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle, DisableBattleArenaMPDrain,
-        SkipDialogues, DeathLink
+        AutoRun, DSSPatch, AlwaysAllowSpeedDash, PlutoGriffinAirSpeed, BuffRangedFamiliars, BuffSubWeapons,
+        BuffShooterStrength, ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle,
+        DisableBattleArenaMPDrain, SkipDialogues, SkipTutorials, BattleArenaMusic, DeathLink
     ])
 ]

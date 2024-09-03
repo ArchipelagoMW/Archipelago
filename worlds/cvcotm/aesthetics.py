@@ -1,29 +1,64 @@
 from BaseClasses import ItemClassification, Location, Item
-from .options import ItemDropRandomization, Countdown
+from .options import ItemDropRandomization, Countdown, RequiredSkirmishes
 from .locations import cvcotm_location_info
-from .items import cvcotm_item_info
+from .items import cvcotm_item_info, MAJORS_CLASSIFICATIONS
 from .data import iname
 
-from typing import TYPE_CHECKING, Dict, List, Iterable
+from typing import TYPE_CHECKING, Dict, List, Iterable, Tuple, NamedTuple, Optional, TypedDict
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
 
-# amount per = Amount this stat increases per Max Up the player starts with.
-# max allowed = The most amount of this stat the player is allowed to start with. Problems arise if the stat exceeds
-#               9999, so we must ensure it can't if the player raises any class to level 99 as well as collects 255 of
-#               that max up. The game caps hearts at 999 automatically, so it doesn't matter so much for that one.
-# variable = The key variable in extra_stats that the stat max up affects.
-extra_starting_stat_info = {
-    iname.hp_max: {"amount per": 10,
-                   "max allowed": 5289,
+
+class StatInfo(TypedDict):
+    # Amount this stat increases per Max Up the player starts with.
+    amount_per: int
+    # The most amount of this stat the player is allowed to start with. Problems arise if the stat  exceeds 9999, so we
+    # must ensure it can't if the player raises any class to level 99 as well as collects 255 of that max up. The game
+    # caps hearts at 999 automatically, so it doesn't matter so much for that one.
+    max_allowed: int
+    # The key variable in extra_stats that the stat max up affects.
+    variable: str
+
+
+extra_starting_stat_info: Dict[str, StatInfo] = {
+    iname.hp_max: {"amount_per": 10,
+                   "max_allowed": 5289,
                    "variable": "extra health"},
-    iname.mp_max: {"amount per": 10,
-                   "max allowed": 3129,
+    iname.mp_max: {"amount_per": 10,
+                   "max_allowed": 3129,
                    "variable": "extra magic"},
-    iname.heart_max: {"amount per": 6,
-                      "max allowed": 999,
+    iname.heart_max: {"amount_per": 6,
+                      "max_allowed": 999,
                       "variable": "extra hearts"},
+}
+
+other_player_subtype_bytes = {
+    0xE4: 0x03,
+    0xE6: 0x14,
+    0xE8: 0x0A
+}
+
+
+class OtherGameAppearancesInfo(TypedDict):
+    # What type of item to place for the other player.
+    type: int
+    # What item to display it as for the other player.
+    appearance: int
+
+
+other_game_item_appearances: Dict[str, Dict[str, OtherGameAppearancesInfo]] = {
+    # NOTE: Symphony of the Night is currently an unsupported world not in main.
+    "Symphony of the Night": {"Life Vessel": {"type": 0xE4,
+                                              "appearance": 0x01},
+                              "Heart Vessel": {"type": 0xE4,
+                                               "appearance": 0x00}},
+    "Timespinner": {"Max HP": {"type": 0xE4,
+                               "appearance": 0x01},
+                    "Max Aura": {"type": 0xE4,
+                                 "appearance": 0x02},
+                    "Max Sand": {"type": 0xE8,
+                                 "appearance": 0x0E}}
 }
 
 # 0 = Holy water  22
@@ -132,169 +167,244 @@ rom_sub_weapon_offsets = {
     0xD7D52: b"\x00",
 }
 
-easy_items = [
-    1,  # Leather Armor
-    12,  # Cotton Robe
-    17,  # Cotton Clothes
-    34,  # Wristband
+LOW_ITEMS = [
     41,  # Potion
+    42,  # Meat
+    48,  # Mind Restore
+    51,  # Heart
     46,  # Antidote
     47,  # Cure Curse
-    48,  # Mind Restore
-    51  # Heart
-]
 
-common_items = easy_items + [
+    17,  # Cotton Clothes
+    18,  # Prison Garb
+    12,  # Cotton Robe
+    1,  # Leather Armor
     2,  # Bronze Armor
     3,  # Gold Armor
-    4,  # Chainmail
-    5,  # Steel Armor
 
+    39,  # Toy Ring
+    40,  # Bear Ring
+    34,  # Wristband
+    36,  # Arm Guard
+    37,  # Magic Gauntlet
+    38,  # Miracle Armband
+    35,  # Gauntlet
+]
+
+MID_ITEMS = [
+    43,  # Spiced Meat
+    49,  # Mind High
+    52,  # Heart High
+
+    19,  # Stylish Suit
+    20,  # Nightsuit
     13,  # Silk Robe
     14,  # Rainbow Robe
+    4,  # Chainmail
+    5,  # Steel Armor
+    6,  # Platinum Armor
 
-    18,  # Prison Garb
-    19,  # Stylish Suit
-
-    23,  # Double Grips
     24,  # Star Bracelet
+    29,  # Cursed Ring
     25,  # Strength Ring
     26,  # Hard Ring
     27,  # Intelligence Ring
     28,  # Luck Ring
-    29,  # Cursed Ring
-
-    35,  # Gauntlet
-    36,  # Arm Guard
-    37,  # Magic Gauntlet
-    38,  # Miracle Armband
-    40,  # Bear Ring
-    39,  # Toy Ring
-
-    42,  # Meat
-    43,  # Spiced Meat
-
-    52,  # Heart High
+    23,  # Double Grips
 ]
 
-rare_items = [
-    6,  # Platinum Armor
+HIGH_ITEMS = [
+    44,  # Potion High
+    45,  # Potion Ex
+    50,  # Mind Ex
+    53,  # Heart Ex
+    54,  # Heart Mega
+
+    21,  # Ninja Garb
+    22,  # Soldier Fatigues
+    15,  # Magic Robe
+    16,  # Sage Robe
+
     7,  # Diamond Armor
     8,  # Mirror Armor
     9,  # Needle Armor
     10,  # Dark Armor
 
-    15,  # Magic Robe
-    16,  # Sage Robe
-
-    20,  # Nightsuit
-    21,  # Ninja Garb
-    22,  # Soldier Fatigues
-
     30,  # Strength Armband
     31,  # Defense Armband
     32,  # Sage Armband
     33,  # Gambler Armband
-
-    44,  # Potion High
-    45,  # Potion Ex
-
-    49,  # Mind High
-    50,  # Mind Ex
-
-    53,  # Heart Ex
-    54,  # Heart Mega
 ]
 
-all_items = rare_items + common_items
+COMMON_ITEMS = LOW_ITEMS + MID_ITEMS
 
-easily_farmable_enemies = [
-    0,  # Medusa Head
-    1,  # Zombie
-    2,  # Ghoul
-    3,  # Wight
-    7,  # Skeleton Bomber
-    14,  # Fleaman
-    16,  # Bat
-    17,  # Spirit
-    18,  # Ectoplasm
-    19,  # Specter
-    40,  # Devil Tower
-    46,  # Gargoyle
-    50,  # Poison Worm
-    51,  # Myconid
-    54,  # Merman
-    58,  # Gremlin
-    59,  # Hopper
-    82,  # Evil Hand
-    87,  # Mummy
-]
+RARE_ITEMS = LOW_ITEMS + MID_ITEMS + HIGH_ITEMS
 
-below_150_hp_enemies = easily_farmable_enemies + [
-    4,  # Clinking Man
-    5,  # Zombie Thief
-    8,  # Electric Skeleton
-    9,  # Skeleton Spear
-    10,  # Skeleton Boomerang
-    11,  # Skeleton Soldier
-    12,  # Skeleton Knight
-    13,  # Bone Tower
-    15,  # Poltergeist
-    20,  # Axe Armor
-    26,  # Earth Armor
-    29,  # Stone Armor
-    35,  # Bloody Sword
-    41,  # Skeleton Athlete
-    42,  # Harpy
-    44,  # Imp
-    45,  # Mudman
-    47,  # Slime
-    48,  # Frozen Shade
-    49,  # Heat Shade
-    52,  # Will-O-Wisp
-    53,  # Spearfish
-    57,  # Marionette
-    60,  # Evil Pillar
-    63,  # Bone Head
-    64,  # Fox Archer
-    65,  # Fox Hunter
-    77,  # Hyena
-    78,  # Fishhead
-    79,  # Dryad
-    81,  # Brain Float
-    83,  # Abiondarg
-    86,  # Witch
-    93,  # King Moth
-    94,  # Killer Bee
-    96,  # Lizard-man
-    113,  # Devil Tower (Battle Arena)
-    119,  # Bone Tower (Battle Arena)
-    122,  # Bloody Sword (Battle Arena)
-    133,  # Evil Pillar (Battle Arena)
-]
 
-bosses = [
-    68,  # Cerberus
-    76,  # Necromancer
-    84,  # Iron Golem
-    89,  # Adramelech
-    95,  # Zombie Dragon
-    100,  # Death
-    101,  # Camilla
-    102,  # Hugh
-    103,  # Dracula I
-]
+class CVCotMEnemyData(NamedTuple):
+    name: str
+    hp: int
+    attack: int
+    defense: int
+    exp: int
+    type: Optional[str] = None
 
-candles = [
-    136,  # Scary Candle
-    137,  # Trick Candle
-    80,  # Mimic Candle
+
+cvcotm_enemy_info: List[CVCotMEnemyData] = [
+    CVCotMEnemyData("Medusa Head", 6, 120, 60, 2),
+    CVCotMEnemyData("Zombie", 48, 70, 20, 2),
+    CVCotMEnemyData("Ghoul", 100, 190, 79, 3),
+    CVCotMEnemyData("Wight", 110, 235, 87, 4),
+    CVCotMEnemyData("Clinking Man", 80, 135, 25, 21),
+    CVCotMEnemyData("Zombie Thief", 120, 185, 30, 58),
+    CVCotMEnemyData("Skeleton", 25, 65, 45, 4),
+    CVCotMEnemyData("Skeleton Bomber", 20, 50, 40, 4),
+    CVCotMEnemyData("Electric Skeleton", 42, 80, 50, 30),
+    CVCotMEnemyData("Skeleton Spear", 30, 65, 46, 6),
+    CVCotMEnemyData("Skeleton Boomerang", 60, 170, 90, 112),
+    CVCotMEnemyData("Skeleton Soldier", 35, 90, 60, 16),
+    CVCotMEnemyData("Skeleton Knight", 50, 140, 80, 39),
+    CVCotMEnemyData("Bone Tower", 84, 201, 280, 160),
+    CVCotMEnemyData("Fleaman", 60, 142, 45, 29),
+    CVCotMEnemyData("Poltergeist", 105, 360, 380, 510),
+    CVCotMEnemyData("Bat", 5, 50, 15, 4),
+    CVCotMEnemyData("Spirit", 9, 55, 17, 1),
+    CVCotMEnemyData("Ectoplasm", 12, 165, 51, 2),
+    CVCotMEnemyData("Specter", 15, 295, 95, 3),
+    CVCotMEnemyData("Axe Armor", 55, 120, 130, 31),
+    CVCotMEnemyData("Flame Armor", 160, 320, 300, 280),
+    CVCotMEnemyData("Flame Demon", 300, 315, 270, 600),
+    CVCotMEnemyData("Ice Armor", 240, 470, 520, 1500),
+    CVCotMEnemyData("Thunder Armor", 204, 340, 320, 800),
+    CVCotMEnemyData("Wind Armor", 320, 500, 460, 1800),
+    CVCotMEnemyData("Earth Armor", 130, 230, 280, 240),
+    CVCotMEnemyData("Poison Armor", 260, 382, 310, 822),
+    CVCotMEnemyData("Forest Armor", 370, 390, 390, 1280),
+    CVCotMEnemyData("Stone Armor", 90, 220, 320, 222),
+    CVCotMEnemyData("Ice Demon", 350, 492, 510, 4200),
+    CVCotMEnemyData("Holy Armor", 350, 420, 450, 1700),
+    CVCotMEnemyData("Thunder Demon", 180, 270, 230, 450),
+    CVCotMEnemyData("Dark Armor", 400, 680, 560, 3300),
+    CVCotMEnemyData("Wind Demon", 400, 540, 490, 3600),
+    CVCotMEnemyData("Bloody Sword", 30, 220, 500, 200),
+    CVCotMEnemyData("Golem", 650, 520, 700, 1400),
+    CVCotMEnemyData("Earth Demon", 150, 90, 85, 25),
+    CVCotMEnemyData("Were-wolf", 160, 265, 110, 140),
+    CVCotMEnemyData("Man Eater", 400, 330, 233, 700),
+    CVCotMEnemyData("Devil Tower", 10, 140, 200, 17),
+    CVCotMEnemyData("Skeleton Athlete", 100, 100, 50, 25),
+    CVCotMEnemyData("Harpy", 120, 275, 200, 271),
+    CVCotMEnemyData("Siren", 160, 443, 300, 880),
+    CVCotMEnemyData("Imp", 90, 220, 99, 103),
+    CVCotMEnemyData("Mudman", 25, 79, 30, 2),
+    CVCotMEnemyData("Gargoyle", 60, 160, 66, 3),
+    CVCotMEnemyData("Slime", 40, 102, 18, 11),
+    CVCotMEnemyData("Frozen Shade", 112, 490, 560, 1212),
+    CVCotMEnemyData("Heat Shade", 80, 240, 200, 136),
+    CVCotMEnemyData("Poison Worm", 120, 30, 20, 12),
+    CVCotMEnemyData("Myconid", 50, 250, 114, 25),
+    CVCotMEnemyData("Will O'Wisp", 11, 110, 16, 9),
+    CVCotMEnemyData("Spearfish", 40, 360, 450, 280),
+    CVCotMEnemyData("Merman", 60, 303, 301, 10),
+    CVCotMEnemyData("Minotaur", 410, 520, 640, 2000),
+    CVCotMEnemyData("Were-horse", 400, 540, 360, 1970),
+    CVCotMEnemyData("Marionette", 80, 160, 150, 127),
+    CVCotMEnemyData("Gremlin", 30, 80, 33, 2),
+    CVCotMEnemyData("Hopper", 40, 87, 35, 8),
+    CVCotMEnemyData("Evil Pillar", 20, 460, 800, 480),
+    CVCotMEnemyData("Were-panther", 200, 300, 130, 270),
+    CVCotMEnemyData("Were-jaguar", 270, 416, 170, 760),
+    CVCotMEnemyData("Bone Head", 24, 60, 80, 7),
+    CVCotMEnemyData("Fox Archer", 75, 130, 59, 53),
+    CVCotMEnemyData("Fox Hunter", 100, 290, 140, 272),
+    CVCotMEnemyData("Were-bear", 265, 250, 140, 227),
+    CVCotMEnemyData("Grizzly", 600, 380, 200, 960),
+    CVCotMEnemyData("Cerberus", 600, 150, 100, 500, "boss"),
+    CVCotMEnemyData("Beast Demon", 150, 330, 250, 260),
+    CVCotMEnemyData("Arch Demon", 320, 505, 400, 1000),
+    CVCotMEnemyData("Demon Lord", 460, 660, 500, 1950),
+    CVCotMEnemyData("Gorgon", 230, 215, 165, 219),
+    CVCotMEnemyData("Catoblepas", 550, 500, 430, 1800),
+    CVCotMEnemyData("Succubus", 150, 400, 350, 710),
+    CVCotMEnemyData("Fallen Angel", 370, 770, 770, 6000),
+    CVCotMEnemyData("Necromancer", 500, 200, 250, 2500, "boss"),
+    CVCotMEnemyData("Hyena", 93, 140, 70, 105),
+    CVCotMEnemyData("Fishhead", 80, 320, 504, 486),
+    CVCotMEnemyData("Dryad", 120, 300, 360, 300),
+    CVCotMEnemyData("Mimic Candle", 990, 600, 600, 6600, "candle"),
+    CVCotMEnemyData("Brain Float", 20, 50, 25, 10),
+    CVCotMEnemyData("Evil Hand", 52, 150, 120, 63),
+    CVCotMEnemyData("Abiondarg", 88, 388, 188, 388),
+    CVCotMEnemyData("Iron Golem", 640, 290, 450, 8000, "boss"),
+    CVCotMEnemyData("Devil", 1080, 800, 900, 10000),
+    CVCotMEnemyData("Witch", 144, 330, 290, 600),
+    CVCotMEnemyData("Mummy", 100, 100, 35, 3),
+    CVCotMEnemyData("Hipogriff", 300, 500, 210, 740),
+    CVCotMEnemyData("Adramelech", 1800, 380, 360, 16000, "boss"),
+    CVCotMEnemyData("Arachne", 330, 420, 288, 1300),
+    CVCotMEnemyData("Death Mantis", 200, 318, 240, 400),
+    CVCotMEnemyData("Alraune", 774, 490, 303, 2500),
+    CVCotMEnemyData("King Moth", 140, 290, 160, 150),
+    CVCotMEnemyData("Killer Bee", 8, 308, 108, 88),
+    CVCotMEnemyData("Dragon Zombie", 1400, 390, 440, 15000, "boss"),
+    CVCotMEnemyData("Lizardman", 100, 345, 400, 800),
+    CVCotMEnemyData("Franken", 1200, 700, 350, 2100),
+    CVCotMEnemyData("Legion", 420, 610, 375, 1590),
+    CVCotMEnemyData("Dullahan", 240, 550, 440, 2200),
+    CVCotMEnemyData("Death", 880, 600, 800, 60000, "boss"),
+    CVCotMEnemyData("Camilla", 1500, 650, 700, 80000, "boss"),
+    CVCotMEnemyData("Hugh", 1400, 570, 750, 120000, "boss"),
+    CVCotMEnemyData("Dracula", 1100, 805, 850, 150000, "boss"),
+    CVCotMEnemyData("Dracula", 3000, 1000, 1000, 0, "final boss"),
+    CVCotMEnemyData("Skeleton Medalist", 250, 100, 100, 1500),
+    CVCotMEnemyData("Were-jaguar", 320, 518, 260, 1200, "battle arena"),
+    CVCotMEnemyData("Were-wolf", 340, 525, 180, 1100, "battle arena"),
+    CVCotMEnemyData("Catoblepas", 560, 510, 435, 2000, "battle arena"),
+    CVCotMEnemyData("Hipogriff", 500, 620, 280, 1900, "battle arena"),
+    CVCotMEnemyData("Wind Demon", 490, 600, 540, 4000, "battle arena"),
+    CVCotMEnemyData("Witch", 210, 480, 340, 1000, "battle arena"),
+    CVCotMEnemyData("Stone Armor", 260, 585, 750, 3000, "battle arena"),
+    CVCotMEnemyData("Devil Tower", 50, 560, 700, 600, "battle arena"),
+    CVCotMEnemyData("Skeleton", 150, 400, 200, 500, "battle arena"),
+    CVCotMEnemyData("Skeleton Bomber", 150, 400, 200, 550, "battle arena"),
+    CVCotMEnemyData("Electric Skeleton", 150, 400, 200, 700, "battle arena"),
+    CVCotMEnemyData("Skeleton Spear", 150, 400, 200, 580, "battle arena"),
+    CVCotMEnemyData("Flame Demon", 680, 650, 600, 4500, "battle arena"),
+    CVCotMEnemyData("Bone Tower", 120, 500, 650, 800, "battle arena"),
+    CVCotMEnemyData("Fox Hunter", 160, 510, 220, 600, "battle arena"),
+    CVCotMEnemyData("Poison Armor", 380, 680, 634, 3600, "battle arena"),
+    CVCotMEnemyData("Bloody Sword", 55, 600, 1200, 2000, "battle arena"),
+    CVCotMEnemyData("Abiondarg", 188, 588, 288, 588, "battle arena"),
+    CVCotMEnemyData("Legion", 540, 760, 480, 2900, "battle arena"),
+    CVCotMEnemyData("Marionette", 200, 420, 400, 1200, "battle arena"),
+    CVCotMEnemyData("Minotaur", 580, 700, 715, 4100, "battle arena"),
+    CVCotMEnemyData("Arachne", 430, 590, 348, 2400, "battle arena"),
+    CVCotMEnemyData("Succubus", 300, 670, 630, 3100, "battle arena"),
+    CVCotMEnemyData("Demon Lord", 590, 800, 656, 4200, "battle arena"),
+    CVCotMEnemyData("Alraune", 1003, 640, 450, 5000, "battle arena"),
+    CVCotMEnemyData("Hyena", 210, 408, 170, 1000, "battle arena"),
+    CVCotMEnemyData("Devil Armor", 500, 804, 714, 6600),
+    CVCotMEnemyData("Evil Pillar", 55, 655, 900, 1500, "battle arena"),
+    CVCotMEnemyData("White Armor", 640, 770, 807, 7000),
+    CVCotMEnemyData("Devil", 1530, 980, 1060, 30000, "battle arena"),
+    CVCotMEnemyData("Scary Candle", 150, 300, 300, 900, "candle"),
+    CVCotMEnemyData("Trick Candle", 200, 400, 400, 1400, "candle"),
+    CVCotMEnemyData("Nightmare", 250, 550, 550, 2000),
+    CVCotMEnemyData("Lilim", 400, 800, 800, 8000),
+    CVCotMEnemyData("Lilith", 660, 960, 960, 20000),
 ]
+# NOTE: Coffin is omitted from the end of this, as its presence doesn't
+# actually impact the randomizer (all stats and drops inherited from Mummy).
+
+BOSS_IDS = [enemy_id for enemy_id in range(len(cvcotm_enemy_info)) if cvcotm_enemy_info[enemy_id].type == "boss"]
+
+ENEMY_TABLE_START = 0xCB2C4
 
 NUMBER_ENEMIES = 141
 NUMBER_ITEMS = 55
 
 COUNTDOWN_TABLE_ADDR = 0x673400
+ITEM_ID_SHINNING_ARMOR = 11
 
 
 def shuffle_sub_weapons(world: "CVCotMWorld") -> Dict[int, bytes]:
@@ -308,27 +418,24 @@ def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Locatio
     """Figures out which Countdown numbers to increase for each Location after verifying the Item on the Location should
     count towards a number.
 
-    Which number to increase is determined by the Location's "countdown" key in the location_info dict."""
+    Which number to increase is determined by the Location's "countdown" attr in its CVCotMLocationData."""
 
     next_pos = COUNTDOWN_TABLE_ADDR + 0x40
-    countdown_flags = [[] for _ in range(16)]
+    countdown_flags: List[List[int]] = [[] for _ in range(16)]
     countdown_dict = {}
     ptr_offset = COUNTDOWN_TABLE_ADDR
 
-    # Loop over every Location and add the correct flag values of all Useful and Progression-classified Items to the
-    # array of flags the Countdown will track.
+    # Loop over every Location.
     for loc in active_locations:
-        if ((loc.item.advancement or loc.item.classification == ItemClassification.useful)
-                or world.options.countdown == Countdown.option_all_locations) and loc.address is not None:
-            countdown_index = cvcotm_location_info[loc.name].countdown
-            # If we're looking at a locally-placed DSS Card, take the card's parameter value for the flag.
-            if (loc.item.player == world.player or (loc.item.player in world.multiworld.groups and world.player in
-                                                    world.multiworld.groups[loc.item.player]['players'])) \
-                    and "Card" in loc.item.name:
-                countdown_flags[countdown_index] += [loc.item.code & 0xFF, 0x80]
-            # Otherwise, just use the Location's address.
-            else:
-                countdown_flags[countdown_index] += [loc.address & 0xFF, 0]
+        # If the Location's Item is not Progression/Useful-classified with the "Majors" Countdown being used, or if the
+        # Location is the Iron Maiden switch with the vanilla Iron Maiden behavior, skip adding its flag to the arrays.
+        if (not loc.item.classification | MAJORS_CLASSIFICATIONS and world.options.countdown ==
+                Countdown.option_majors):
+            continue
+
+        countdown_index = cvcotm_location_info[loc.name].countdown
+        # Take the Location's address if the above condition is satisfied, and get the flag value out of it.
+        countdown_flags[countdown_index] += [loc.address & 0xFF, 0]
 
     # Write the Countdown flag arrays and array pointers correctly. Each flag list should end with a 0xFFFF to indicate
     # the end of an area's list.
@@ -342,109 +449,193 @@ def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Locatio
 
 
 def get_location_data(world: "CVCotMWorld", active_locations: Iterable[Location]) -> Dict[int, bytes]:
-    """Gets ALL the item data to go into the ROM. Item data consists of four bytes: the first dictates what category of
-    items it belongs to (the higher byte of the item's AP code), the third is which item in that category it is (the
-    lower byte of the code), and the second and fourth are always 0x01 and 0x00 respectively. Other game items will
-    always appear as the unused Map item, which does nothing but set the flag for that location when picked up."""
+    """Gets ALL the Item data to go into the ROM. Items consist of four bytes; the first two represent the object ID
+    for the "category" of item that it belongs to, the third is the sub-value for which item within that "category" it
+    is, and the fourth controls the appearance it takes."""
 
     location_bytes = {}
 
     for loc in active_locations:
-        # If the Location is an event, skip it.
-        if loc.address is None:
-            continue
+        # Figure out the item ID bytes to put in each Location's offset here.
+        # If it's a CotM Item, always write the Item's primary type byte.
+        if loc.item.game == "Castlevania - Circle of the Moon":
+            type_byte = cvcotm_item_info[loc.item.name].code >> 8
 
-        # Figure out the item ID bytes to put in each Location here. Write the item itself if either it's the player's
-        # very own, or it belongs to an Item Link that the player is a part of.
-        if loc.item.player == world.player:
-            code = cvcotm_item_info[loc.item.name].code
-            location_bytes[cvcotm_location_info[loc.name].offset] = bytes([code >> 8, 0x01, code & 0x00FF, 0x00])
+            # If the Item is for this player, set the subtype to actually be that Item.
+            # Otherwise, set a dummy subtype value that is different for every item type.
+            if loc.item.player == world.player:
+                subtype_byte = cvcotm_item_info[loc.item.name].code & 0xFF
+            else:
+                subtype_byte = other_player_subtype_bytes[type_byte]
+
+            # If it's a DSS Card, set the appearance based on whether it's progression or not; freeze combo cards should
+            # all appear blue in color while the others are standard purple/yellow. Otherwise, set the appearance the
+            # same way as the subtype for local items regardless of whether it's actually local or not.
+            if type_byte == 0xE6:
+                if loc.item.advancement:
+                    appearance_byte = 1
+                else:
+                    appearance_byte = 0
+            else:
+                appearance_byte = cvcotm_item_info[loc.item.name].code & 0xFF
+
+        # If it's not a CotM Item at all, always set the primary type to that of a Magic Item and the subtype to that of
+        # a dummy item. The AP Items are all under Magic Items.
         else:
-            # Make the item the unused Map - our multiworld item.
-            location_bytes[cvcotm_location_info[loc.name].offset] = bytes([0xE8, 0x01, 0x05, 0x00])
+            type_byte = 0xE8
+            subtype_byte = 0x0A
+            # Decide which AP Item to use to represent the other game item.
+            if loc.item.advancement:
+                appearance_byte = 0x0C  # Progression
+            elif loc.item.classification == ItemClassification.useful:
+                appearance_byte = 0x0B  # Useful
+            elif loc.item.classification == ItemClassification.trap:
+                appearance_byte = 0x0D  # Trap
+            else:
+                appearance_byte = 0x0A  # Filler
 
+            # Check if the Item's game is in the other game item appearances' dict, and if so, if the Item is under that
+            # game's name. If it is, change the appearance accordingly.
+            # Right now, only SotN and Timespinner stat ups are supported.
+            other_game_name = world.multiworld.worlds[loc.item.player].game
+            if other_game_name in other_game_item_appearances:
+                if loc.item.name in other_game_item_appearances[other_game_name]:
+                    type_byte = other_game_item_appearances[other_game_name][loc.item.name]["type"]
+                    subtype_byte = other_player_subtype_bytes[type_byte]
+                    appearance_byte = other_game_item_appearances[other_game_name][loc.item.name]["appearance"]
+
+        # Create the correct bytes object for the Item on that Location.
+        location_bytes[cvcotm_location_info[loc.name].offset] = bytes([type_byte, 1, subtype_byte, appearance_byte])
     return location_bytes
 
 
 def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
-    """Randomizes the enemy-dropped items throughout the game within each other. There are three tiers of drops: Easy,
-    Common, and Rare. Easier enemies will only have Easy drops, bosses and candle enemies will be guaranteed to have
-    Rare drops, and everything else can have Easy or Common items in its Common drop slot and any item in its Rare drop
-    slot.
+    """Randomizes the enemy-dropped items throughout the game within each other. There are three tiers of item drops:
+    Low, Mid, and High. Each enemy has two item slots that can both drop its own item; a Common slot and a Rare one.
 
-    If Item Drop Randomization is set to Hard, more enemies will be considered "easy" in addition to the ones that
-    already are, and all Rare drops assigned to candles and bosses will be exclusive to them."""
-    placed_easy_items = [0] * len(easy_items)
-    placed_common_items = [0] * len(common_items)
-    forced_rares = [0] * len(rare_items)
+    On Normal item randomization, easy enemies (below 61 HP) will only have Low-tier drops in both of their stats,
+    bosses and candle enemies will be guaranteed to have High drops in one or both of their slots respectively (bosses
+    are made to only drop one slot 100% of the time), and everything else can have a Low or Mid-tier item in its Common
+    drop slot and a Low, Mid, OR High-tier item in its Rare drop slot.
+
+    If Item Drop Randomization is set to Tiered, the HP threshold for enemies being considered "easily" will raise to
+    below 144, enemies in the 144-369 HP range (inclusive) will have a Low-tier item in its Common slot and a Mid-tier
+    item in its rare slot, and enemies with more than 369 HP will have a Mid-tier in its Common slot and a High-tier in
+    its Rare slot. Candles and bosses still have Rares in all their slots, but now the guaranteed drops that land on
+    bosses will be exclusive to them; no other enemy in the game will have their item.
+
+    This and select_drop are the most directly adapted code from upstream CotMR in this package by far. Credit where
+    it's due to Spooky for writing the original, and Malaert64 for further refinements and updating what used to be
+    Random Item Hardmode to instead be Tiered Item Mode. The original C code this was adapted from can be found here:
+    https://github.com/calm-palm/cotm-randomizer/blob/master/Program/randomizer.c#L1028"""
+
+    placed_low_items = [0] * len(LOW_ITEMS)
+    placed_mid_items = [0] * len(MID_ITEMS)
+    placed_high_items = [0] * len(HIGH_ITEMS)
+
+    placed_common_items = [0] * len(COMMON_ITEMS)
+    placed_rare_items = [0] * len(RARE_ITEMS)
 
     regular_drops = [0] * NUMBER_ENEMIES
     regular_drop_chances = [0] * NUMBER_ENEMIES
     rare_drops = [0] * NUMBER_ENEMIES
     rare_drop_chances = [0] * NUMBER_ENEMIES
 
-    # Set boss and candle items first to prevent boss drop duplicates.
-    # If item hard mode is enabled, make these items exclusive to these enemies by adding an arbitrary integer larger
-    # than could be reached normally (e.g.the total number of enemies).
-    # Bosses
-    for boss_id in bosses:
-        regular_drops[boss_id] = select_drop(world, rare_items, forced_rares, True)
+    # Set boss items first to prevent boss drop duplicates.
+    # If Tiered mode is enabled, make these items exclusive to these enemies by adding an arbitrary integer larger
+    # than could be reached normally (e.g.the total number of enemies) and use the placed high items array instead of
+    # the placed rare items one.
+    if world.options.item_drop_randomization == ItemDropRandomization.option_tiered:
+        for boss_id in BOSS_IDS:
+            regular_drops[boss_id] = select_drop(world, HIGH_ITEMS, placed_high_items, True)
+    else:
+        for boss_id in BOSS_IDS:
+            regular_drops[boss_id] = select_drop(world, RARE_ITEMS, placed_rare_items, start_index=len(COMMON_ITEMS))
 
-    # Candles
-    for candle_id in candles:
-        regular_drops[candle_id] = select_drop(world, rare_items, forced_rares, True)
-        rare_drops[candle_id] = select_drop(world, rare_items, forced_rares, True)
-
-    # Add the forced rare items onto the main placed rare items list.
-    placed_rare_items = ([0] * len(common_items)) + forced_rares
-
+    # Setting drop logic for all enemies.
     for i in range(NUMBER_ENEMIES):
+
         # Give Dracula II Shining Armor occasionally as a joke.
-        if i == 104:
-            regular_drops[i] = rare_drops[i] = 11
+        if cvcotm_enemy_info[i].type == "final boss":
+            regular_drops[i] = rare_drops[i] = ITEM_ID_SHINNING_ARMOR
             regular_drop_chances[i] = rare_drop_chances[i] = 5000
+
         # Set bosses' secondary item to none since we already set the primary item earlier.
-        elif i in bosses:
+        elif cvcotm_enemy_info[i].type == "boss":
             # Set rare drop to none.
             rare_drops[i] = 0
 
-            # Max out rare boss drops (normally, drops are hard capped to 50 % and 25 % respectively regardless of drop
-            # rate, but fusecavator's patch AllowAlwaysDrop.ips allows setting the regular item drop chance to 10000 to
-            # force a drop always).
+            # Max out rare boss drops (normally, drops are capped to 50% and 25% for common and rare respectively, but
+            # Fuse's patch AllowAlwaysDrop.ips allows setting the regular item drop chance to 10000 to force a drop
+            # always)
             regular_drop_chances[i] = 10000
             rare_drop_chances[i] = 0
 
-        # Trivially easy enemies that can be easily farmed AND we are NOT using the hard mode option
-        # OR
-        # We ARE using the hard mode option and the enemy is below 150 HP.
-        elif (world.options.item_drop_randomization == ItemDropRandomization.option_normal and i in
-              easily_farmable_enemies) or (world.options.item_drop_randomization == ItemDropRandomization.option_hard
-                                           and i in below_150_hp_enemies):
-            regular_drops[i] = select_drop(world, easy_items, placed_easy_items)
-            rare_drops[i] = select_drop(world, easy_items, placed_easy_items)
+        # Candle enemies use a similar placement logic to the bosses, except items that land on them are NOT exclusive
+        # to them on Tiered mode.
+        elif cvcotm_enemy_info[i].type == "candle":
+            if world.options.item_drop_randomization == ItemDropRandomization.option_tiered:
+                regular_drops[i] = select_drop(world, HIGH_ITEMS, placed_high_items)
+                rare_drops[i] = select_drop(world, HIGH_ITEMS, placed_high_items)
+            else:
+                regular_drops[i] = select_drop(world, RARE_ITEMS, placed_rare_items, start_index=len(COMMON_ITEMS))
+                rare_drops[i] = select_drop(world, RARE_ITEMS, placed_rare_items, start_index=len(COMMON_ITEMS))
 
-            # Level 1 rate between 5-10 % and rare between 3-8%.
-            regular_drop_chances[i] = 500 + world.random.randint(0, 500)
-            rare_drop_chances[i] = 300 + world.random.randint(0, 500)
-
-        # It is a "Candle" enemy.
-        elif i in candles:
-            # Set a regular drop chance between 20-30 % and a rare drop chance between 15-20%.
+            # Set base drop chances at 20-30% for common and 15-20% for rare.
             regular_drop_chances[i] = 2000 + world.random.randint(0, 1000)
             rare_drop_chances[i] = 1500 + world.random.randint(0, 500)
 
-        # Regular enemies
+        # On All Bosses and Battle Arena Required, the Shinning Armor at the end of Battle Arena is removed.
+        # We compensate for this by giving the Battle Arena Devil a 100% chance to drop Shinning Armor.
+        elif cvcotm_enemy_info[i].name == "Devil" and cvcotm_enemy_info[i].type == "battle arena" and \
+                world.options.required_skirmishes == RequiredSkirmishes.option_all_bosses_and_arena:
+            regular_drops[i] = ITEM_ID_SHINNING_ARMOR
+            rare_drops[i] = 0
+
+            regular_drop_chances[i] = 10000
+            rare_drop_chances[i] = 0
+
+        # Low-tier items drop from enemies that are trivial to farm (60 HP or less)
+        # on Normal drop logic, or enemies under 144 HP on Tiered logic.
+        elif (world.options.item_drop_randomization == ItemDropRandomization.option_normal and
+              cvcotm_enemy_info[i].hp <= 60) or \
+                (world.options.item_drop_randomization == ItemDropRandomization.option_tiered and
+                 cvcotm_enemy_info[i].hp <= 143):
+            # Low-tier enemy drops.
+            regular_drops[i] = select_drop(world, LOW_ITEMS, placed_low_items)
+            rare_drops[i] = select_drop(world, LOW_ITEMS, placed_low_items)
+
+            # Set base drop chances at 6-10% for common and 3-6% for rare.
+            regular_drop_chances[i] = 600 + world.random.randint(0, 400)
+            rare_drop_chances[i] = 300 + world.random.randint(0, 300)
+
+        # Rest of Tiered logic, by Malaert64.
+        elif world.options.item_drop_randomization == ItemDropRandomization.option_tiered:
+            # If under 370 HP, mid-tier enemy.
+            if cvcotm_enemy_info[i].hp <= 369:
+                regular_drops[i] = select_drop(world, LOW_ITEMS, placed_low_items)
+                rare_drops[i] = select_drop(world, MID_ITEMS, placed_mid_items)
+            # Otherwise, enemy HP is 370+, thus high-tier enemy.
+            else:
+                regular_drops[i] = select_drop(world, MID_ITEMS, placed_mid_items)
+                rare_drops[i] = select_drop(world, HIGH_ITEMS, placed_high_items)
+
+            # Set base drop chances at 6-10% for common and 3-6% for rare.
+            regular_drop_chances[i] = 600 + world.random.randint(0, 400)
+            rare_drop_chances[i] = 300 + world.random.randint(0, 300)
+
+        # Regular enemies outside Tiered logic.
         else:
             # Select a random regular and rare drop for every enemy from their respective lists.
-            regular_drops[i] = select_drop(world, common_items, placed_common_items)
-            rare_drops[i] = select_drop(world, all_items, placed_rare_items)
+            regular_drops[i] = select_drop(world, COMMON_ITEMS, placed_common_items)
+            rare_drops[i] = select_drop(world, RARE_ITEMS, placed_rare_items)
 
-            # Otherwise, set a regular drop chance between 5-10 % and a rare drop chance between 3-5%.
-            regular_drop_chances[i] = 500 + world.random.randint(0, 500)
-            rare_drop_chances[i] = 300 + world.random.randint(0, 200)
+            # Set base drop chances at 6-10% for common and 3-6% for rare.
+            regular_drop_chances[i] = 600 + world.random.randint(0, 400)
+            rare_drop_chances[i] = 300 + world.random.randint(0, 300)
 
     # Return the randomized drop data as bytes with their respective offsets.
-    enemy_address = 0xCB2C4
+    enemy_address = ENEMY_TABLE_START
     drop_data = {}
     for i in range(NUMBER_ENEMIES):
         drop_data[enemy_address] = bytes([regular_drops[i], 0, regular_drop_chances[i] & 0xFF,
@@ -455,8 +646,8 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
     return drop_data
 
 
-def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[int], exclusive_drop: bool = False) \
-        -> int:
+def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[int], exclusive_drop: bool = False,
+                start_index: int = 0) -> int:
     """Chooses a drop from a given list of drops based on another given list of how many drops from that list were
     selected before. In order to ensure an even number of drops are distributed, drops that were selected the least are
     the ones that will be picked from.
@@ -466,12 +657,12 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
 
     number_valid_drops = 0
     eligible_items = [0] * NUMBER_ITEMS
-    lowest_number = drops_placed[0]
+    lowest_number = drops_placed[start_index]
 
-    # Only make eligible drops which we have placed the least
-    i = 0
+    # Only make eligible drops which we have placed the least.
+    i = start_index
     while i < len(drop_list):
-        # A drop with the priority we are expecting is available to add as a candidate
+        # A drop with the priority we are expecting is available to add as a candidate.
         if drops_placed[i] == lowest_number:
             eligible_items[number_valid_drops] = i
             number_valid_drops += 1
@@ -481,20 +672,21 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
         # We have to lower the lowest number and start from the beginning of the loop to capture all the valid indices.
         elif drops_placed[i] < lowest_number:
             lowest_number = drops_placed[i]
-            number_valid_drops = i = 0
+            number_valid_drops = 0
+            i = start_index
 
         else:
             i += 1
 
-    # Post-condition: Our array eligible_items has number_valid_drops many valid item indices as its elements
+    # Post-condition: Our array eligible_items has number_valid_drops many valid item indices as its elements.
 
-    # Select a random valid item from the index of valid choices
+    # Select a random valid item from the index of valid choices.
     random_result = world.random.randrange(number_valid_drops)
 
     # Increment the number of this item placed, unless it should be exclusive to the boss / candle, in which case
-    # set it to an arbitrarily large number to make it exclusive (use NUMBER_ENEMIES for simplicity)
-    if world.options.item_drop_randomization == ItemDropRandomization.option_hard and exclusive_drop:
-        drops_placed[eligible_items[random_result]] += NUMBER_ENEMIES
+    # set it to an arbitrarily large number to make it exclusive.
+    if exclusive_drop:
+        drops_placed[eligible_items[random_result]] += 999
     else:
         drops_placed[eligible_items[random_result]] += 1
 
@@ -502,7 +694,7 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
     return drop_list[eligible_items[random_result]]
 
 
-def get_start_inventory_data(player: int, precollected_items: List[Item]) -> Dict[int, bytes]:
+def get_start_inventory_data(precollected_items: List[Item]) -> Tuple[Dict[int, bytes], bool]:
     """Calculate and return the starting inventory arrays. Different items go into different arrays, so they all have
     to be handled accordingly."""
     start_inventory_data = {}
@@ -512,29 +704,31 @@ def get_start_inventory_data(player: int, precollected_items: List[Item]) -> Dic
     extra_stats = {"extra health": 0,
                    "extra magic": 0,
                    "extra hearts": 0}
+    start_with_detonator = False
 
     # Always start with the Dash Boots.
     magic_items_array[0] = 1
 
     for item in precollected_items:
-        if item.player != player:
-            continue
 
         array_offset = item.code & 0xFF
 
+        # If it's the Maiden Detonator we're starting with, set the boolean for it to True.
+        if item.name == iname.ironmaidens:
+            start_with_detonator = True
         # If it's a Max Up we're starting with, check if increasing the extra amount of that stat will put us over the
         # max amount of the stat allowed. If it will, set the current extra amount to the max. Otherwise, increase it by
         # the amount that it should.
-        if "Max Up" in item.name:
+        elif "Max Up" in item.name:
             info = extra_starting_stat_info[item.name]
-            if extra_stats[info["variable"]] + info["amount per"] > info["max allowed"]:
-                extra_stats[info["variable"]] = info["max allowed"]
+            if extra_stats[info["variable"]] + info["amount_per"] > info["max_allowed"]:
+                extra_stats[info["variable"]] = info["max_allowed"]
             else:
-                extra_stats[info["variable"]] += info["amount per"]
+                extra_stats[info["variable"]] += info["amount_per"]
         # If it's a DSS card we're starting with, set that card's value in the cards array.
         elif "Card" in item.name:
             cards_array[array_offset] = 1
-        # If it's none of the above, it has to be a Magic Item.
+        # If it's none of the above, it has to be a regular Magic Item.
         # Increase that Magic Item's value in the Magic Items array if it's not greater than 240. Last Keys are the only
         # Magic Item wherein having more than one is relevant.
         else:
@@ -575,4 +769,4 @@ def get_start_inventory_data(player: int, precollected_items: List[Item]) -> Dic
     start_inventory_data[0xE095E] = int.to_bytes(50 + extra_stats["extra magic"], 2, "little")
     start_inventory_data[0xE0964] = int.to_bytes(50 + extra_stats["extra hearts"], 2, "little")
 
-    return start_inventory_data
+    return start_inventory_data, start_with_detonator

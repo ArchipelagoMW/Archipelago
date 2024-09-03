@@ -5,6 +5,7 @@ heavy_ring =  "Heavy Ring"
 cleansing =   "Cleansing"
 roc_wing =    "Roc Wing"
 last_key =    "Last Key"
+ironmaidens = "Maiden Detonator"
 
 heart_max =   "Heart Max Up"
 mp_max =      "MP Max Up"
@@ -31,7 +32,5 @@ saturn =      "Saturn Card"
 uranus =      "Uranus Card"
 pluto =       "Pluto Card"
 
-ironmaidens = "Iron maidens broken"
-dracula =     "The Count Downed"
-
+dracula =        "The Count Downed"
 shinning_armor = "Where's My Super Suit?"

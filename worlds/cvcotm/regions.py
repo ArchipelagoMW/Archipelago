@@ -1,11 +1,11 @@
 from .data import lname
-from typing import List, Optional, Dict
+from typing import List, Optional
 
 # # #    KEY    # # #
-# "locations" = The Locations to add to that Region when putting in said Region.
-# "entrances" = The Entrances to add to that Region when putting in said Region.
+# "locations" = A list of the Locations to add to that Region when adding said Region.
+# "entrances" = A dict of the connecting Regions to the Entrances' names to add to that Region when adding said Region.
 cvcotm_region_info = {
-    "Menu": {"entrances": ["At an Old Austrian Castle"]},
+    "Menu": {"entrances": {"Catacomb": "At an Old Austrian Castle"}},
 
     "Catacomb": {"locations": [lname.sr3,
                                lname.cc1,
@@ -25,11 +25,11 @@ cvcotm_region_info = {
                                lname.cc22,
                                lname.cc24,
                                lname.cc25],
-                 "entrances": ["Catacomb to Stairway"]},
+                 "entrances": {"Abyss Stairway": "Catacomb to Stairway"}},
 
     "Abyss Stairway": {"locations": [lname.as2,
                                      lname.as3],
-                       "entrances": ["Stairway to Audience"]},
+                       "entrances": {"Audience Room": "Stairway to Audience"}},
 
     "Audience Room": {"locations": [lname.as4,
                                     lname.as9,
@@ -57,14 +57,14 @@ cvcotm_region_info = {
                                     lname.ow2,
                                     lname.th1,
                                     lname.th3],
-                      "entrances": ["Audience to Machine Bottom",
-                                    "Audience to Machine Top",
-                                    "Audience to Chapel",
-                                    "Audience to Gallery",
-                                    "Audience to Warehouse",
-                                    "Audience to Waterway",
-                                    "Audience to Observation",
-                                    "Ceremonial Door"]},
+                      "entrances": {"Machine Tower Bottom": "Audience to Machine Bottom",
+                                    "Machine Tower Top": "Audience to Machine Top",
+                                    "Chapel Tower Bottom": "Audience to Chapel",
+                                    "Underground Gallery Lower": "Audience to Gallery",
+                                    "Underground Warehouse Start": "Audience to Warehouse",
+                                    "Underground Waterway Start": "Audience to Waterway",
+                                    "Observation Tower": "Audience to Observation",
+                                    "Ceremonial Room": "Ceremonial Door"}},
 
     "Machine Tower Bottom": {"locations": [lname.mt0,
                                            lname.mt2,
@@ -74,7 +74,7 @@ cvcotm_region_info = {
                                            lname.mt8,
                                            lname.mt10,
                                            lname.mt11],
-                             "entrances": ["Machine Bottom to Top"]},
+                             "entrances": {"Machine Tower Top": "Machine Bottom to Top"}},
 
     "Machine Tower Top": {"locations": [lname.mt13,
                                         lname.mt14,
@@ -82,48 +82,52 @@ cvcotm_region_info = {
                                         lname.mt19]},
 
     "Eternal Corridor Pit": {"locations": [lname.ec5],
-                             "entrances": ["Corridor to Gallery"]},
+                             "entrances": {"Underground Gallery Upper": "Corridor to Gallery",
+                                           "Chapel Tower Bottom": "Escape the Gallery Pit"}},
 
-    "Chapel Tower": {"locations": [lname.ec7,
-                                   lname.ec9,
-                                   lname.ct1,
-                                   lname.ct4,
-                                   lname.ct5,
-                                   lname.ct6,
-                                   lname.ct6b,
-                                   lname.ct8,
-                                   lname.ct10,
-                                   lname.ct13,
-                                   lname.ct15,
-                                   lname.ct16,
-                                   lname.ct18,
-                                   lname.ct_switch,
-                                   lname.ct22],
-                     "entrances": ["Into the Corridor Pit",
-                                   "Dip Into Waterway End",
-                                   "Arena Passage"]},
+    "Chapel Tower Bottom": {"locations": [lname.ec7,
+                                          lname.ec9,
+                                          lname.ct1,
+                                          lname.ct4,
+                                          lname.ct5,
+                                          lname.ct6,
+                                          lname.ct6b,
+                                          lname.ct8,
+                                          lname.ct10,
+                                          lname.ct13,
+                                          lname.ct15],
+                            "entrances": {"Eternal Corridor Pit": "Into the Corridor Pit",
+                                          "Underground Waterway End": "Dip Into Waterway End",
+                                          "Chapel Tower Top": "Climb to Chapel Top"}},
+
+    "Chapel Tower Top": {"locations": [lname.ct16,
+                                       lname.ct18,
+                                       lname.ct21,
+                                       lname.ct22],
+                         "entrances": {"Battle Arena": "Arena Passage"}},
 
     "Battle Arena": {"locations": [lname.ct26,
                                    lname.ct26b,
-                                   lname.ba24]},
+                                   lname.ba24,
+                                   lname.arena_victory]},
 
     "Underground Gallery Upper": {"locations": [lname.ug0,
                                                 lname.ug1,
                                                 lname.ug2,
                                                 lname.ug3,
                                                 lname.ug3b],
-                                  "entrances": ["Gallery to Corridor",
-                                                "Gallery Upper to Lower"]},
+                                  "entrances": {"Eternal Corridor Pit": "Gallery to Corridor",
+                                                "Underground Gallery Lower": "Gallery Upper to Lower"}},
 
     "Underground Gallery Lower": {"locations": [lname.ug8,
                                                 lname.ug10,
                                                 lname.ug13,
                                                 lname.ug15,
                                                 lname.ug20],
-                                  "entrances": ["Gallery Lower to Upper"]},
+                                  "entrances": {"Underground Gallery Upper": "Gallery Lower to Upper"}},
 
     "Underground Warehouse Start": {"locations": [lname.uw1],
-                                    "entrances": ["Into Warehouse Main"]},
+                                    "entrances": {"Underground Warehouse Main": "Into Warehouse Main"}},
 
     "Underground Warehouse Main": {"locations": [lname.uw6,
                                                  lname.uw8,
@@ -139,7 +143,7 @@ cvcotm_region_info = {
                                                  lname.uw25]},
 
     "Underground Waterway Start": {"locations": [lname.uy1],
-                                   "entrances": ["Into Waterway Main"]},
+                                   "entrances": {"Underground Waterway Main": "Into Waterway Main"}},
 
     "Underground Waterway Main": {"locations": [lname.uy3,
                                                 lname.uy3b,
@@ -150,7 +154,7 @@ cvcotm_region_info = {
                                                 lname.uy9,
                                                 lname.uy9b,
                                                 lname.uy12],
-                                  "entrances": ["Onward to Waterway End"]},
+                                  "entrances": {"Underground Waterway End": "Onward to Waterway End"}},
 
     "Underground Waterway End": {"locations": [lname.uy12b,
                                                lname.uy13,
@@ -172,53 +176,10 @@ cvcotm_region_info = {
                                       lname.dracula]},
 }
 
-# # #    KEY    # # #
-# "connection" = The name of the Region the Entrance connects into.
-# "rule" = What rule should be applied to the Entrance during set_rules, as defined in self.rules in the CVCotMRules
-#          class definition in rules.py.
-cvcotm_entrance_info = {
-    "At an Old Austrian Castle": {"destination": "Catacomb"},
-    "Catacomb to Stairway": {"destination": "Abyss Stairway", "rule": "Double OR Kick"},
-    "Stairway to Audience": {"destination": "Audience Room", "rule": "Double"},
-    "Audience to Machine Bottom": {"destination": "Machine Tower Bottom", "rule": "Tackle"},
-    "Audience to Machine Top": {"destination": "Machine Tower Top", "rule": "Kick"},
-    "Audience to Chapel": {"destination": "Chapel Tower", "rule": "Kick"},
-    "Audience to Gallery": {"destination": "Underground Gallery Lower", "rule": "Iron Maiden AND Push"},
-    "Audience to Warehouse": {"destination": "Underground Warehouse Start", "rule": "Push"},
-    "Audience to Waterway": {"destination": "Underground Waterway Start", "rule": "Iron Maiden"},
-    "Audience to Observation": {"destination": "Observation Tower", "rule": "Roc"},
-    "Ceremonial Door": {"destination": "Ceremonial Room", "rule": "Last Keys"},
-    "Machine Bottom to Top": {"destination": "Machine Tower Top"},
-    "Corridor to Gallery": {"destination": "Underground Gallery Upper", "rule": "Iron Maiden"},
-    "Arena Passage": {"destination": "Battle Arena", "rule": "Push AND Roc"},
-    "Into the Corridor Pit": {"destination": "Eternal Corridor Pit"},
-    "Dip Into Waterway End": {"destination": "Underground Waterway End", "rule": "Roc"},
-    "Gallery to Corridor": {"destination": "Eternal Corridor Pit"},
-    "Gallery Upper to Lower": {"destination": "Underground Gallery Lower", "rule": "Tackle"},
-    "Gallery Lower to Upper": {"destination": "Underground Gallery Upper", "rule": "Tackle"},
-    "Into Warehouse Main": {"destination": "Underground Warehouse Main", "rule": "Tackle"},
-    "Into Waterway Main": {"destination": "Underground Waterway Main", "rule": "Cleansing"},
-    "Onward to Waterway End": {"destination": "Underground Waterway End"},
-}
-
 
 def get_region_info(region: str, info: str) -> Optional[List[str]]:
     return cvcotm_region_info[region].get(info, None)
 
 
-def get_entrance_info(entrance: str, info: str) -> Optional[str]:
-    return cvcotm_entrance_info[entrance].get(info, None)
-
-
 def get_all_region_names() -> List[str]:
     return [reg_name for reg_name in cvcotm_region_info]
-
-
-def get_named_entrances_data(entrances: List[str]) -> Dict[str, str]:
-    entrances_with_destinations = {}
-
-    # Get all the Entrances' destinations and put them in a dict with said Entrance names.
-    for ent_name in entrances:
-        entrances_with_destinations.update({get_entrance_info(ent_name, "destination"): ent_name})
-
-    return entrances_with_destinations

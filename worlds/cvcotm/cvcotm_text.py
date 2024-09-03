@@ -101,8 +101,8 @@ def cvcotm_text_truncate(cvcotm_text: str, textbox_len_limit: int) -> str:
 
 def cvcotm_text_wrap(cvcotm_text: str, textbox_len_limit: int, total_lines: int = 4) -> str:
     """Rebuilds a string with some of its spaces replaced with newlines to ensure the text wraps properly in an in-game
-    textbox of a given length. If we're over the number of lines allowed per textbox, place an A prompt instead of a
-    newline."""
+    textbox of a given length. If the number of lines allowed per textbox is exceeded, an A prompt will be placed
+    instead of a newline."""
     words = cvcotm_text.split(" ")
     new_text = ""
     line_len = 0

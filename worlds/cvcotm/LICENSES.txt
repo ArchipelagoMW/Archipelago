@@ -1,4 +1,48 @@
 
+Regarding the sprite data specifically for the Archipelago logo found in data > patches.py:
+
+The Archipelago Logo is © 2022 by Krista Corkos and Christopher Wilson and licensed under Attribution-NonCommercial 4.0
+International. Logo modified by Liquid Cat to fit artstyle and uses within this mod. To view a copy of this license,
+visit http://creativecommons.org/licenses/by-nc/4.0/
+
+The other custom sprites that I made, as long as you don't lie by claiming you were the one who drew them, I am fine
+with you using and distributing them however you want to. -Liquid Cat
+
+========================================================================================================================
+
+For the lz10.py and cvcotm_text.py modules specifically the MIT license applies. Its terms are as follows:
+
+MIT License
+
+cvcotm_text.py Copyright (c) 2024 Liquid Cat
+(Please consider the associated pixel data for the ASCII characters missing from CotM in data > patches.py
+in the public domain, if there was any thought that that could even be copyrighted. -Liquid Cat)
+
+lz10.py Copyright (c) 2024 lilDavid, NoiseCrush
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+========================================================================================================================
+
+Everything else in this world package not mentioned above can be assumed covered by standalone CotMR's Apache license
+being a piece of a direct derivative of it. The terms are as follows:
+
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -187,7 +231,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2021 DevAnj, fusecavator, spooky
+   Copyright 2021-2024 DevAnj, fusecavator, spooky, Malaert64
 
    APworld version by Liquid Cat
 

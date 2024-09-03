@@ -4,7 +4,7 @@ import logging
 import json
 
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
-from typing import Dict, Optional, TYPE_CHECKING
+from typing import Dict, Optional, Collection, TYPE_CHECKING
 
 import hashlib
 import os
@@ -12,8 +12,9 @@ import pkgutil
 
 from .data import patches
 from .locations import cvcotm_location_info
-from .text import cvcotm_string_to_bytearray
-from .options import CompletionGoal
+from .cvcotm_text import cvcotm_string_to_bytearray
+from .options import CompletionGoal, IronMaidenBehavior, RequiredSkirmishes
+from .lz10 import decompress
 from settings import get_settings
 
 if TYPE_CHECKING:
@@ -21,13 +22,19 @@ if TYPE_CHECKING:
 
 CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # Original GBA cartridge ROM
 CVCOTM_AC_US_HASH = "87a1bd6577b6702f97a60fc55772ad74"  # Castlevania Advance Collection ROM
-CVCotM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console ROM
+CVCOTM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console ROM
 
 # NOTE: The Wii U VC version is untested as of when this comment was written. I am only including its hash in case it
 # does work. If someone who has it can confirm it does indeed work, this comment should be removed. If it doesn't, the
-# hash should be removed in addition.
+# hash should be removed in addition. See the Game Page for more information about supported versions.
 
-AREA_LIST_START = 0xD9A40
+ARCHIPELAGO_IDENTIFIER_START = 0x7FFF00
+AUTH_NUMBER_START = 0x7FFF10
+QUEUED_TEXT_STRING_START = 0x7CEB00
+MULTIWORLD_TEXTBOX_POINTERS_START = 0x671C10
+
+BATTLE_ARENA_SONG_IDS = [0x01, 0x03, 0x12, 0x06, 0x08, 0x09, 0x07, 0x0A, 0x0B,
+                         0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x13, 0x14]
 
 
 class RomData:
@@ -44,7 +51,7 @@ class RomData:
     def write_byte(self, offset: int, value: int) -> None:
         self.file[offset] = value
 
-    def write_bytes(self, offset: int, values) -> None:
+    def write_bytes(self, offset: int, values: Collection[int]) -> None:
         self.file[offset:offset + len(values)] = values
 
     def get_bytes(self) -> bytes:
@@ -63,7 +70,7 @@ class RomData:
             # Get the ROM offset bytes of the current record.
             rom_offset = int.from_bytes(ips_file[file_pos:file_pos + 3], "big")
 
-            # If we've hit the "EOF" codeword (aka 0x454F46), stop iterating because we've hit the end of the file.
+            # If we've hit the "EOF" codeword (aka 0x454F46), stop iterating because we've reached the end of the patch.
             if rom_offset == 0x454F46:
                 return
 
@@ -71,7 +78,7 @@ class RomData:
             bytes_size = int.from_bytes(ips_file[file_pos + 3:file_pos + 5], "big")
 
             if bytes_size != 0:
-                # Write the data to the ROM.
+                # Write the bytes to the ROM.
                 self.write_bytes(rom_offset, ips_file[file_pos + 5:file_pos + 5 + bytes_size])
 
                 # Increase our position in the IPS patch to the start of the next record.
@@ -82,7 +89,7 @@ class RomData:
                 rle_size = int.from_bytes(ips_file[file_pos + 5:file_pos + 7], "big")
 
                 # Get the byte to be written over and over.
-                rle_byte = ips_file[file_pos + 7:file_pos + 8]
+                rle_byte = int.from_bytes(ips_file[file_pos + 7:file_pos + 8], "big")
 
                 # Write the RLE byte to the ROM the RLE size times over.
                 self.write_bytes(rom_offset, [rle_byte for _ in range(rle_size)])
@@ -95,13 +102,22 @@ class CVCotMPatchExtensions(APPatchExtension):
     game = "Castlevania - Circle of the Moon"
 
     @staticmethod
-    def apply_ips_patches(caller: APProcedurePatch, rom: bytes, options_file: str) -> bytes:
+    def apply_patches(caller: APProcedurePatch, rom: bytes, options_file: str) -> bytes:
+        """Applies every patch to mod the game into its rando state, both CotMR's pre-made IPS patches and some
+        additional byte writes. Each patch is credited to its author."""
+
         rom_data = RomData(rom)
         options = json.loads(caller.get_file(options_file).decode("utf-8"))
 
         # This patch allows placing DSS cards on pedestals, prevents them from timing out, and removes them from enemy
-        # drop tables. Created by DevAnj but drop and pedestal item replacements have been stripped out.
-        rom_data.apply_ips("CardUp_v3_Custom.ips")
+        # drop tables. Created by DevAnj originally as a standalone hack known as Card Mode, it has been modified for
+        # this randomizer's purposes by stripping out additional things like drop and pedestal item replacements.
+
+        # Further modified by Liquid Cat to make placed cards set their flags upon pickup (instead of relying on whether
+        # the card is in the player's inventory when determining to spawn it or not), enable placing dummy DSS Cards to
+        # represent other players' Cards in a multiworld setting, and turn specific cards blue to visually indicate
+        # their status as valid ice/stone combo cards.
+        rom_data.apply_ips("CardUp_v3_Custom2.ips")
 
         # This patch replaces enemy drops that included DSS cards. Created by DevAnj as part of the Card Up patch but
         # modified for different replacement drops (Lowered rate, Potion instead of Meat, and no Shinning Armor change
@@ -192,11 +208,11 @@ class CVCotMPatchExtensions(APPatchExtension):
             rom_data.write_byte(0xDFB4, options["required_last_keys"])
             rom_data.write_byte(0xCB84, options["required_last_keys"])
 
-        # Optional patch created by Fusecavator. Doubles the damage of projectiles fired by ranged familiars.
+        # Optional patch created by Fusecavator. Doubles the damage dealt by projectiles fired by ranged familiars.
         if options["buff_ranged_familiars"]:
             rom_data.apply_ips("BuffFamiliars.ips")
 
-        # Optional patch created by Fusecavator. Increases the base damage of some sub-weapons.
+        # Optional patch created by Fusecavator. Increases the base damage dealt by some sub-weapons.
         # Changes below (normal multiplier on left/shooter on right):
         # Original:                         Changed:
         # Dagger:            45 / 141 ----> 100 / 141 (Non-Shooter buffed)
@@ -204,7 +220,7 @@ class CVCotMPatchExtensions(APPatchExtension):
         # Axe:               89 / 158 ----> 125 / 158 (Non-Shooter somewhat buffed)
         # Axe crush:         89 / 126 ----> 125 / 158 (Both buffed to match non-crush values)
         # Holy water:        63 / 100 ---->  63 / 100 (Unchanged)
-        # Holy water crush:  45 / 63  ---->  63 / 100 (Large buff to Shooter, non-Shooter buffed)
+        # Holy water crush:  45 / 63  ---->  63 / 100 (Large buff to Shooter, non-Shooter slightly buffed)
         # Cross:            110 / 173 ----> 110 / 173 (Unchanged)
         # Cross crush:      100 / 141 ----> 110 / 173 (Slightly buffed to match non-crush values)
         if options["buff_sub_weapons"]:
@@ -230,7 +246,81 @@ class CVCotMPatchExtensions(APPatchExtension):
         if options["disable_battle_arena_mp_drain"]:
             rom_data.apply_ips("NoMPDrain.ips")
 
-        # Everything from this line and below was created and added by Liquid Cat for this Archipelago version.
+        # Patch created by Fusecavator. Makes various changes to dropped item graphics to avoid garbled Magic Items and
+        # allow displaying arbitrary items on pedestals. Modified by Liquid Cat for the purposes of changing the
+        # appearances of items regardless of what they really are, as well as allowing additional Magic Items.
+        rom_data.apply_ips("DropReworkMultiEdition.ips")
+        # Decompress the Magic Item graphics and reinsert them (decompressed) where the patch expects them.
+        # Doing it this way is more copyright-safe.
+        rom_data.write_bytes(0x678C00, decompress(rom_data.read_bytes(0x630690, 0x605))[0x300:])
+
+        # Everything past here was added by Liquid Cat.
+
+        # Makes the Pluto + Griffin speed increase apply even while in the air, instead of losing it.
+        if options["pluto_griffin_air_speed"]:
+            rom_data.apply_ips("DSSRunSpeed.ips")
+
+        # Move the item sprite info table.
+        rom_data.write_bytes(0x678A00, rom_data.read_bytes(0x630B98, 0x98))
+        # Update the ldr numbers pointing to the above item sprite table.
+        rom_data.write_bytes(0x95A08, [0x00, 0x8A, 0x67, 0x08])
+        rom_data.write_bytes(0x100380, [0x00, 0x8A, 0x67, 0x08])
+        # Move the magic item text ID table.
+        rom_data.write_bytes(0x6788B0, rom_data.read_bytes(0x100A7E, 0x48))
+        # Update the ldr numbers pointing to the above magic item text ID table.
+        rom_data.write_bytes(0x95C10, [0xB0, 0x88, 0x67, 0x08])
+        rom_data.write_bytes(0x95CE0, [0xB0, 0x88, 0x67, 0x08])
+        # Move the magic item pickup function jump table.
+        rom_data.write_bytes(0x678B20, rom_data.read_bytes(0x95B80, 0x24))
+        # Update the ldr number point to the above jump table.
+        rom_data.write_bytes(0x95B7C, [0x20, 0x8B, 0x67, 0x08])
+        rom_data.write_byte(0x95B6A, 0x09)  # Raise the magic item function index limit.
+
+        # Make the Maiden Detonator detonate the maidens when picked up.
+        rom_data.write_bytes(0x678B44, [0x90, 0x1F, 0x67, 0x08])
+        rom_data.write_bytes(0x671F90, patches.maiden_detonator)
+        # Add the text for detonating the maidens.
+        rom_data.write_bytes(0x671C0C, [0xC0, 0x1F, 0x67, 0x08])
+        rom_data.write_bytes(0x671FC0, cvcotm_string_to_bytearray("    「Iron Maidens」 broken◊", "little middle", 0,
+                                                                  wrap=False))
+
+        # Put the new text string IDs for all our new items.
+        rom_data.write_bytes(0x6788F8, [0xF1, 0x84, 0xF1, 0x84, 0xF1, 0x84, 0xF1, 0x84,
+                                        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
+        # Have the game get the entry in that table to use by adding the item's parameter.
+        rom_data.write_bytes(0x95980, [0x0A, 0x30, 0x00, 0x00, 0x00, 0x00])
+        # Add the AP Item sprites and their associated info.
+        rom_data.write_bytes(0x679080, patches.extra_item_sprites)
+        rom_data.write_bytes(0x678A98, [0xF8, 0xFF, 0xF8, 0xFF, 0xFC, 0x21, 0x45, 0x00,
+                                        0xF8, 0xFF, 0xF8, 0xFF, 0x00, 0x22, 0x45, 0x00,
+                                        0xF8, 0xFF, 0xF8, 0xFF, 0x04, 0x22, 0x45, 0x00,
+                                        0xF8, 0xFF, 0xF8, 0xFF, 0x08, 0x22, 0x45, 0x00,
+                                        0xF8, 0xFF, 0xF8, 0xFF, 0x0C, 0x22, 0x45, 0x00,
+                                        0xF8, 0xFF, 0xF8, 0xFF, 0x10, 0x32, 0x45, 0x00])
+        # Enable changing the Magic Item appearance separately from what it really is.
+        # Change these ldrh's to ldrb's to read only the high or low byte of the object list entry's parameter field.
+        rom_data.write_bytes(0x9597A, [0xC1, 0x79])
+        rom_data.write_bytes(0x95B64, [0x80, 0x79])
+        rom_data.write_bytes(0x95BF0, [0x81, 0x79])
+        rom_data.write_bytes(0x95CBE, [0x82, 0x79])
+        # Enable changing the Max Up appearance separately from what it really is.
+        rom_data.write_bytes(0x5DE98, [0xC1, 0x79])
+        rom_data.write_byte(0x5E152, 0x13)
+        rom_data.write_byte(0x5E15C, 0x0E)
+        rom_data.write_byte(0x5E20A, 0x0B)
+
+        # Set the 0xF0 flag on the iron maiden switch if we're placing an Item on it.
+        if options["iron_maiden_behavior"] == IronMaidenBehavior.option_detonator_in_pool:
+            rom_data.write_byte(0xD47B4, 0xF0)
+
+        if options["nerf_roc_wing"]:
+            # Prevent Roc jumping in midair if the Double is not in the player's inventory.
+            rom_data.write_bytes(0x6B8A0, [0x00, 0x4A, 0x97, 0x46, 0x00, 0x9A, 0x67, 0x08])
+            rom_data.write_bytes(0x679A00, patches.doubleless_roc_midairs_preventer)
+
+            # Make Roc Wing not jump as high if Kick Boots isn't in the inventory.
+            rom_data.write_bytes(0x6B8B4, [0x00, 0x49, 0x8F, 0x46, 0x60, 0x9A, 0x67, 0x08])
+            rom_data.write_bytes(0x679A60, patches.kickless_roc_height_shortener)
 
         # Give the player their Start Inventory upon entering their name on a new file.
         rom_data.write_bytes(0x7F70, [0x00, 0x48, 0x87, 0x46, 0x00, 0x00, 0x68, 0x08])
@@ -248,12 +338,12 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.write_bytes(0x6CE14, [0x00, 0x4A, 0x97, 0x46, 0xC0, 0xFF, 0x7F, 0x08])
         rom_data.write_bytes(0x7FFFC0, patches.transition_textbox_delayer)
 
-        # Write the code that prevents the Map from playing its normal pickup sound.
-        rom_data.write_bytes(0x95BE4, [0x00, 0x4A, 0x97, 0x46, 0x50, 0xFE, 0x7F, 0x08])
-        rom_data.write_bytes(0x7FFE50, patches.map_sfx_preventer)
-
-        # Change the pointer to the DSS tutorial text to instead point to our AP messaging text location.
-        rom_data.write_bytes(0x6710BC, [0x00, 0xEB, 0x7C, 0x08])
+        # Write the code that allows any sound to be played with any Magic Item.
+        rom_data.write_bytes(0x95BE4, [0x00, 0x4A, 0x97, 0x46, 0x00, 0x98, 0x67, 0x08])
+        rom_data.write_bytes(0x679800, patches.magic_item_sfx_customizer)
+        # Array of sound IDs for each Magic Item.
+        rom_data.write_bytes(0x6797C0, [0xB4, 0x01, 0xB4, 0x01, 0xB4, 0x01, 0xB4, 0x01, 0xB4, 0x01, 0xB4, 0x01,
+                                        0xB4, 0x01, 0xB4, 0x01, 0xB4, 0x01, 0x79, 0x00])
 
         # Write all the data for the missing ASCII text characters.
         for offset, data in patches.missing_char_data.items():
@@ -286,22 +376,28 @@ class CVCotMPatchExtensions(APPatchExtension):
         # KCEK didn't program hardcoded checks for these, thankfully!
         rom_data.write_byte(0xBF3BC, 0xB4)
 
-        # Nuke all the item tutorials
-        rom_data.write_byte(0x5EB55, 0xE0)  # DSS
-        rom_data.write_byte(0x393B8C, 0x00)  # Dash Boots
-        rom_data.write_byte(0x393BDD, 0x00)  # Double
-        rom_data.write_byte(0x393C33, 0x00)  # Tackle
-        rom_data.write_byte(0x393CC2, 0x00)  # Kick Boots
-        rom_data.write_byte(0x393D41, 0x00)  # Heavy Ring
-        rom_data.write_byte(0x393D86, 0x00)  # Cleansing
-        rom_data.write_byte(0x393DF5, 0x00)  # Roc Wing
-        rom_data.write_byte(0x393E65, 0x00)  # Last Key
+        # Insert the multiworld message pointer at the end of the text pointers.
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START, int.to_bytes(QUEUED_TEXT_STRING_START + 0x8000000,
+                                                                             4, "little"))
+        # Insert pointers for every item tutorial.
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 4,  [0x8E, 0x3B, 0x39, 0x08])
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 8,  [0xDF, 0x3B, 0x39, 0x08])
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 12, [0x35, 0x3C, 0x39, 0x08])
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 16, [0xC4, 0x3C, 0x39, 0x08])
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 20, [0x41, 0x3D, 0x39, 0x08])
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 24, [0x88, 0x3D, 0x39, 0x08])
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 28, [0xF7, 0x3D, 0x39, 0x08])
+        rom_data.write_bytes(MULTIWORLD_TEXTBOX_POINTERS_START + 32, [0x67, 0x3E, 0x39, 0x08])
 
         # Write the completion goal messages over the menu Dash Boots tutorial and Battle Arena's explanation message.
         if options["completion_goal"] == CompletionGoal.option_dracula:
             dash_tutorial_message = "Your goal is:\n  Dracula◊"
-            arena_goal_message = "Your goal is:\n「Dracula」▶" \
-                                 "You don't have to win the Arena, but you are certainly welcome to try!◊"
+            if options["required_skirmishes"] == RequiredSkirmishes.option_all_bosses_and_arena:
+                arena_goal_message = "Your goal is:\n「Dracula」▶" \
+                                     "A required 「Last Key」 is waiting for you at the end of the Arena. Good luck!◊"
+            else:
+                arena_goal_message = "Your goal is:\n「Dracula」▶" \
+                                     "You don't have to win the Arena, but you are certainly welcome to try!◊"
         elif options["completion_goal"] == CompletionGoal.option_battle_arena:
             dash_tutorial_message = "Your goal is:\n  Battle Arena◊"
             arena_goal_message = "Your goal is:\n「Battle Arena」▶" \
@@ -325,7 +421,19 @@ class CVCotMPatchExtensions(APPatchExtension):
         rom_data.write_bytes(0x394098, cvcotm_string_to_bytearray(key_tutorial_message, "big top", 4,
                                                                   skip_textbox_controllers=True))
 
-        # Skip all the cutscene dialogue before the ending if the option is enabled.
+        # Nuke all the tutorial-related text if Skip Tutorials is enabled.
+        if options["skip_tutorials"]:
+            rom_data.write_byte(0x5EB55, 0xE0)  # DSS
+            rom_data.write_byte(0x393B8C, 0x00)  # Dash Boots
+            rom_data.write_byte(0x393BDD, 0x00)  # Double
+            rom_data.write_byte(0x393C33, 0x00)  # Tackle
+            rom_data.write_byte(0x393CC2, 0x00)  # Kick Boots
+            rom_data.write_byte(0x393D41, 0x00)  # Heavy Ring
+            rom_data.write_byte(0x393D86, 0x00)  # Cleansing
+            rom_data.write_byte(0x393DF5, 0x00)  # Roc Wing
+            rom_data.write_byte(0x393E65, 0x00)  # Last Key
+
+        # Nuke all the cutscene dialogue before the ending if Skip Dialogues is enabled.
         if options["skip_dialogues"]:
             rom_data.write_byte(0x392372, 0x00)
             rom_data.write_bytes(0x3923C9, [0x20, 0x80, 0x00])
@@ -345,7 +453,6 @@ class CVCotMPatchExtensions(APPatchExtension):
             rom_data.write_byte(0x393114, 0x00)
             rom_data.write_byte(0x392771, 0x00)
             rom_data.write_byte(0x3928E9, 0x00)
-            rom_data.write_byte(0x393A0C, 0x00)
             rom_data.write_byte(0x392A3C, 0x00)
             rom_data.write_byte(0x392A55, 0x00)
             rom_data.write_byte(0x392A8B, 0x00)
@@ -358,32 +465,37 @@ class CVCotMPatchExtensions(APPatchExtension):
             rom_data.write_byte(0x392F09, 0x00)
             rom_data.write_byte(0x392FE4, 0x00)
 
+        # Make the Battle Arena play the player's chosen track.
+        if options["battle_arena_music"]:
+            arena_track_id = BATTLE_ARENA_SONG_IDS[options["battle_arena_music"] - 1]
+            rom_data.write_bytes(0xEDEF0, [0xFC, 0xFF, arena_track_id])
+            rom_data.write_bytes(0xEFA50, [0xFC, 0xFF, arena_track_id])
+            rom_data.write_bytes(0xF24F0, [0xFC, 0xFF, arena_track_id])
+            rom_data.write_bytes(0xF3420, [0xF5, 0xFF])
+            rom_data.write_bytes(0xF3430, [0xFC, 0xFF, arena_track_id])
+
         return rom_data.get_bytes()
 
     @staticmethod
-    def fix_item_graphics(caller: APProcedurePatch, rom: bytes) -> bytes:
+    def fix_item_positions(caller: APProcedurePatch, rom: bytes) -> bytes:
+        """After writing all the items into the ROM via token application, translates Magic Items in non-Magic Item
+        Locations up by 8 units and the reverse down by 8 units. This is necessary for them to look properly placed,
+        as Magic Items are offset differently on the Y axis from the other item types."""
         rom_data = RomData(rom)
         for loc in cvcotm_location_info:
             offset = cvcotm_location_info[loc].offset
             if offset is None:
                 continue
-            item_category = rom_data.read_byte(offset)
+            item_type = rom_data.read_byte(offset)
 
-            # Magic Items in Max Up locations should have their Y position decreased by 8.
-            if item_category == 0xE8 and cvcotm_location_info[loc].type not in ["magic item", "boss"]:
+            # Magic Items in non-Magic Item Locations should have their Y position decreased by 8.
+            if item_type == 0xE8 and cvcotm_location_info[loc].type not in ["magic item", "boss"]:
                 y_pos = int.from_bytes(rom_data.read_bytes(offset-2, 2), "little")
                 y_pos -= 8
                 rom_data.write_bytes(offset-2, int.to_bytes(y_pos, 2, "little"))
 
-                # Fix the Magic Item's graphics if it's in a room it can be fixed in (the room graphics value is 0xFFFF,
-                # meaning it's not loading any additional graphics)
-                gfx_offset = cvcotm_location_info[loc].room_gfx
-                if gfx_offset is not None:
-                    if rom_data.read_bytes(gfx_offset, 2) == b"\xFF\xFF":
-                        rom_data.write_bytes(gfx_offset, b"\x0A\x00")
-
-            # Max Ups in Magic Item locations should have their Y position increased by 8.
-            if item_category != 0xE8 and cvcotm_location_info[loc].type in ["magic item", "boss"]:
+            # Non-Magic Items in Magic Item Locations should have their Y position increased by 8.
+            if item_type != 0xE8 and cvcotm_location_info[loc].type in ["magic item", "boss"]:
                 y_pos = int.from_bytes(rom_data.read_bytes(offset - 2, 2), "little")
                 y_pos += 8
                 rom_data.write_bytes(offset - 2, int.to_bytes(y_pos, 2, "little"))
@@ -392,16 +504,16 @@ class CVCotMPatchExtensions(APPatchExtension):
 
 
 class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCotM_VC_US_HASH]
+    hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]
     patch_file_ending: str = ".apcvcotm"
     result_file_ending: str = ".gba"
 
     game = "Castlevania - Circle of the Moon"
 
     procedure = [
-        ("apply_ips_patches", ["options.json"]),
+        ("apply_patches", ["options.json"]),
         ("apply_tokens", ["token_data.bin"]),
-        ("fix_item_graphics", [])
+        ("fix_item_positions", [])
     ]
 
     @classmethod
@@ -409,16 +521,17 @@ class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_bytes()
 
 
-def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Dict[int, bytes]) -> None:
+def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Dict[int, bytes],
+              start_with_detonator: bool) -> None:
 
     # Write all the new item values
     for offset, data in offset_data.items():
         patch.write_token(APTokenTypes.WRITE, offset, data)
 
     # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
-    patch.write_token(APTokenTypes.WRITE, 0x7FFF00, "ARCHIPELAG02".encode("utf-8"))
+    patch.write_token(APTokenTypes.WRITE, ARCHIPELAGO_IDENTIFIER_START, "ARCHIPELAG03".encode("utf-8"))
     # Write the slot authentication
-    patch.write_token(APTokenTypes.WRITE, 0x7FFF10, bytes(world.auth))
+    patch.write_token(APTokenTypes.WRITE, AUTH_NUMBER_START, bytes(world.auth))
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 
@@ -426,9 +539,11 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
     options_dict = {
         "auto_run": world.options.auto_run.value,
         "dss_patch": world.options.dss_patch.value,
-        "break_iron_maidens": world.options.break_iron_maidens.value,
+        "break_iron_maidens": start_with_detonator,
+        "iron_maiden_behavior": world.options.iron_maiden_behavior.value,
         "required_last_keys": world.required_last_keys,
         "available_last_keys": world.options.available_last_keys.value,
+        "required_skirmishes": world.options.required_skirmishes.value,
         "buff_ranged_familiars": world.options.buff_ranged_familiars.value,
         "buff_sub_weapons": world.options.buff_sub_weapons.value,
         "buff_shooter_strength": world.options.buff_shooter_strength.value,
@@ -437,6 +552,10 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
         "disable_battle_arena_mp_drain": world.options.disable_battle_arena_mp_drain.value,
         "completion_goal": world.options.completion_goal.value,
         "skip_dialogues": world.options.skip_dialogues.value,
+        "skip_tutorials": world.options.skip_tutorials.value,
+        "nerf_roc_wing": world.options.nerf_roc_wing.value,
+        "pluto_griffin_air_speed": world.options.pluto_griffin_air_speed.value,
+        "battle_arena_music": world.options.battle_arena_music.value,
         "seed": world.multiworld.seed
     }
 
@@ -451,7 +570,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCotM_VC_US_HASH]:
+        if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]:
             raise Exception("Supplied Base ROM does not match known MD5s for Castlevania: Circle of the Moon USA."
                             "Get the correct game and version, then dump it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)
