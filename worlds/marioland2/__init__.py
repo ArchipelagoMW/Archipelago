@@ -405,7 +405,7 @@ class MarioLand2World(World):
                     self.auto_scroll_levels[level_name_to_id[level]] = 0
                     del item_counts[auto_scroll_item]
                     continue
-                raise Exception(f"Too many items in the item pool for Super Mario Land 2 player {self.multiworld.player_name[self.player]}")
+                raise Exception(f"Too many items in the item pool for Super Mario Land 2 player {self.player_name}")
                 # item = self.random.choice(list(item_counts))
                 # item_counts[item] -= 1
                 # if item_counts[item] == 0:
@@ -434,7 +434,7 @@ class MarioLand2World(World):
                              'utf8')[:21]
         rom_name.extend([0] * (21 - len(rom_name)))
         new_name = base64.b64encode(bytes(rom_name)).decode()
-        multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        multidata["connect_names"][new_name] = multidata["connect_names"][self.player_name]
 
 
 class MarioLand2Location(Location):
