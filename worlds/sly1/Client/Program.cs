@@ -70,7 +70,7 @@ namespace Sly1AP
             //ConfigureOptions(Client.Options);
             Client.ItemReceived += (e, args) =>
             {
-                Console.WriteLine($"Received: + {JsonConvert.SerializeObject(args.Item)}");
+                Console.WriteLine($"Received: " + args.Item.Name);
             };
             return true;
         }
