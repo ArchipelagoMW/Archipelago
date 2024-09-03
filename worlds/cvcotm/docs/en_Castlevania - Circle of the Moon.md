@@ -130,8 +130,8 @@ Low, Mid, OR High-tier item in its Rare drop slot.
 
 If Item Drop Randomization is set to Tiered, the HP threshold for enemies being considered "easy" will raise to below
 144, enemies in the 144-369 HP range (inclusive) will have a Low-tier item in its Common slot and a Mid-tier item in
-its rare slot, and enemies with more than 369 HP will have a Mid-tier in its Common slot and a  High-tier in its Rare
-slot, making them more worthwile to go after. Candles and bosses still have Rares in all their slots, but now the guaranteed
+its rare slot, and enemies with more than 369 HP will have a Mid-tier in its Common slot and a High-tier in its Rare
+slot, making them more worthwhile to go after. Candles and bosses still have Rares in all their slots, but now the guaranteed
 drops that land on bosses will be exclusive to them; no other enemy in the game will have their item.
 
 Note that the Shinning Armor <sup>sic</sup> can never be placed randomly onto a normal enemy; you can only receive it by completing the Battle Arena.
