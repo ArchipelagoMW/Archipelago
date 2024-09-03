@@ -445,6 +445,7 @@ def space_zone_1_coins(state, player, coins):
         # so the coins up there must be out of logic if there is auto scrolling.
         if state.has("Space Physics", player):
             reachable_coins += 40
+        return coins <= reachable_coins
     return (coins <= 21 or (coins <= 50 and state.has_any(["Mushroom", "Fire Flower"], player))
             or state.has_any(["Carrot", "Space Physics"], player))
 
