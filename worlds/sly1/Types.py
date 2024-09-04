@@ -20,6 +20,9 @@ class ItemData(NamedTuple):
     classification: ItemClassification
     count: Optional[int] = 1
 
+class EventData(NamedTuple):
+    name:       str
+    ap_code:    Optional[int] = None
 
 class LocData(NamedTuple):
     ap_code: Optional[int]

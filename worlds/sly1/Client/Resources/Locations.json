@@ -497,36 +497,8 @@
         "AddressBit": 3
     },
     {
-        "Name": "Beat Raleigh",
-        "Id": 10020401,
-        "Address": "0x2027DC18",
-        "CheckType": 0,
-        "AddressBit": 5
-    },
-    {
-        "Name": "Beat Muggshot",
-        "Id": 10020402,
-        "Address": "0x2027DC18",
-        "CheckType": 0,
-        "AddressBit": 7
-    },
-    {
-        "Name": "Beat Mz. Ruby",
-        "Id": 10020403,
-        "Address": "0x2027DC19",
-        "CheckType": 0,
-        "AddressBit": 1
-    },
-    {
-        "Name": "Beat Panda King",
-        "Id": 10020404,
-        "Address": "0x2027DC19",
-        "CheckType": 0,
-        "AddressBit": 3
-    },
-    {
         "Name": "Beat Clockwerk",
-        "Id": 10020405,
+        "Id": 10020233,
         "Address": "0x2027DC19",
         "CheckType": 0,
         "AddressBit": 5

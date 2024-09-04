@@ -48,7 +48,7 @@ class Sly1World(World):
         self.multiworld.itempool += create_itempool(self)
 
         for event, item in event_item_pairs.items():
-            event_item = Sly1Item(item, ItemClassification.progression, None, self.player)
+            event_item = Sly1Item(item, ItemClassification.progression_skip_balancing, None, self.player)
             self.multiworld.get_location(event, self.player).place_locked_item(event_item)
 
     def set_rules(self):
