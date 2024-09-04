@@ -16,6 +16,6 @@ namespace Sly1AP.Models
         public int MuggshotStart { get; set; } = 0;
         public int MzRubyStart { get; set; } = 0;
         public int PandaKingStart { get; set; } = 0;
-        public int Map { get; set; } = 21;
+        public int Map { get; set; } = 33;
     }
 }

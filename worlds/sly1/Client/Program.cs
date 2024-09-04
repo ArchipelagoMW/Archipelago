@@ -168,7 +168,7 @@ namespace Sly1AP
                 if (StartingEpisode == "Tide Of Terror")
                 {
                     keys.RaleighStart = 1;
-                    Memory.Write(0x2027CAC4, keys.RaleighStart);
+                    Memory.Write(0x2027C67C, keys.RaleighStart);
                 }
                 if (StartingEpisode == "Sunset Snake Eyes")
                 {
@@ -178,12 +178,12 @@ namespace Sly1AP
                 if (StartingEpisode == "Vicious Voodoo")
                 {
                     keys.MzRubyStart = 1;
-                    Memory.Write(0x2027D35C, keys.MzRubyStart);
+                    Memory.Write(0x2027CF14, keys.MzRubyStart);
                 }
                 if (StartingEpisode == "Fire In The Sky")
                 {
                     keys.PandaKingStart = 1;
-                    Memory.Write(0x2027D7A8, keys.PandaKingStart);
+                    Memory.Write(0x2027D360, keys.PandaKingStart);
                 }
             }
         }

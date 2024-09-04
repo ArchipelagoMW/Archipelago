@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj": {}
+    "c:\\workspace\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj": {
+    "c:\\workspace\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
+        "projectUniqueName": "c:\\workspace\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
         "projectName": "Sly1AP",
-        "projectPath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
-        "packagesPath": "C:\\Users\\fello\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\obj\\",
+        "projectPath": "c:\\workspace\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
+        "packagesPath": "C:\\Users\\Hunter Oppel\\.nuget\\packages\\",
+        "outputPath": "c:\\workspace\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\fello\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Hunter Oppel\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,8 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://nuget.bepinex.dev/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
@@ -35,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -75,7 +69,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
