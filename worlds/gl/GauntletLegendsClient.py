@@ -43,6 +43,7 @@ PLAYER_MOVEMENT = 0xFD307
 SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
+PAUSED = 0xC5B18
 
 BOSS_ADDR = 0x289C08
 TIME = 0xC5B1C
@@ -56,23 +57,15 @@ class RetroSocket:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     async def write(self, message: str):
-        await asyncio.sleep(0)
+        await asyncio.sleep(0.01)
         self.socket.sendto(message.encode(), (self.host, self.port))
 
     async def read(self, message) -> Optional[bytes]:
-        await asyncio.sleep(0)
         self.socket.sendto(message.encode(), (self.host, self.port))
-
-        self.socket.settimeout(2)
-        try:
-            data, addr = self.socket.recvfrom(30000)
-        except socket.timeout:
-            raise Exception("Socket receive timed out. No data received within the specified timeout.")
-        except ConnectionResetError:
-            raise Exception("Retroarch is not open. Please open Retroarch and load the correct ROM.")
-        response = data.decode().split(" ")
+        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
+        data = response.decode().split(" ")
         b = b""
-        for s in response[2:]:
+        for s in data[2:]:
             if "-1" in s:
                 logger.info("-1 response")
                 raise Exception("Client tried to read from an invalid address or could not successfully make a connection to Retroarch.")
@@ -86,6 +79,8 @@ class RetroSocket:
             data, addr = self.socket.recvfrom(1000)
         except ConnectionResetError:
             raise Exception("Retroarch not detected. Please make sure your ROM is open in Retroarch.")
+        except Exception as e:
+            raise e
         return True
 
 
@@ -204,6 +199,7 @@ class GauntletLegendsContext(CommonContext):
         self.chest_locations: List[LocationData] = []
         self.extra_items: int = 0
         self.extra_spawners: int = 0
+        self.extra_chests: int = 0
         self.limbo: bool = False
         self.in_portal: bool = False
         self.scaled: bool = False
@@ -307,7 +303,7 @@ class GauntletLegendsContext(CommonContext):
                         await self.socket.read(
                             message_format(
                                 READ,
-                                f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)), 100) * 0x3C}",
+                                f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)) + count, 100) * 0x3C}",
                             ),
                         ),
                     )
@@ -316,15 +312,24 @@ class GauntletLegendsContext(CommonContext):
                         if obj[0] == 0xFF and obj[1] == 0xFF:
                             count += 1
                 self.extra_spawners += count
-            b = RamChunk(
-                await self.socket.read(
-                    message_format(
-                        READ,
-                        f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')} {len(self.chest_locations) * 0x3C}",
+            while True:
+                b = RamChunk(
+                    await self.socket.read(
+                        message_format(
+                            READ,
+                            f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')} {len(self.chest_locations) * 0x3C}",
+                        ),
                     ),
-                ),
-            )
-            b.iterate(0x3C)
+                )
+                b.iterate(0x3C)
+                count = 0
+                for obj in b.split:
+                    if obj[0] == 0xFF and obj[1] == 0xFF:
+                        count += 1
+                count -= self.extra_chests
+                if count <= 0:
+                    break
+                self.extra_chests = count
         for arr in b.split:
             _obj += [ObjectEntry(arr)]
         _obj = [obj for obj in _obj if obj.raw[1] != 0xFF]
@@ -501,7 +506,7 @@ class GauntletLegendsContext(CommonContext):
                 self.retro_connected = True
                 self.deathlink_enabled = self.glslotdata["death_link"]
             else:
-                raise Exception("Retroarch not detected. Please open you patched ROM in Retroarch.")
+                raise Exception("Retroarch not detected. Please open your patched ROM in Retroarch.")
         elif cmd == "Retrieved":
             if "keys" not in args:
                 logger.warning(f"invalid Retrieved packet to GLClient: {args}")
@@ -698,8 +703,8 @@ class GauntletLegendsContext(CommonContext):
                 if obj.raw[0x33] != 0:
                     if self.chest_locations[k].id not in self.locations_checked:
                         acquired += [self.chest_locations[k].id]
-        dead = await self.dead()
-        if dead:
+        paused = await self.paused()
+        if paused:
             return []
         return acquired
 
@@ -724,6 +729,10 @@ class GauntletLegendsContext(CommonContext):
     async def boss(self) -> int:
         temp = await self.socket.read(message_format(READ, f"0x{format(PLAYER_BOSSING, 'x')} 1"))
         return temp[0]
+
+    async def paused(self) -> int:
+        temp = await self.socket.read(message_format(READ, f"0x{format(PAUSED, 'x')} 1"))
+        return temp[0] != 0x3
 
     # Checks if a player is currently exiting a level
     # Checks for both death and completion
@@ -766,6 +775,8 @@ class GauntletLegendsContext(CommonContext):
     async def var_reset(self):
         self.objects_loaded = False
         self.extra_items = 0
+        self.extra_spawners = 0
+        self.extra_chests = 0
         self.item_locations = []
         self.item_objects = []
         self.chest_locations = []
