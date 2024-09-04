@@ -1,7 +1,5 @@
 from typing import Dict, TypedDict, List
 
-
-
 class Vector(TypedDict):
     x: float
     y: float
