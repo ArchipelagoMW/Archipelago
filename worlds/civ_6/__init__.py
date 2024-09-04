@@ -74,7 +74,7 @@ class CivVIWorld(World):
                 self.location_table[location.name] = location
 
     def get_filler_item_name(self) -> str:
-        return get_random_filler_by_rarity(self, FillerItemRarity.COMMON, self.item_table).name
+        return get_random_filler_by_rarity(self, FillerItemRarity.COMMON).name
 
     def create_regions(self) -> None:
         create_regions(self, self.options, self.player)
@@ -103,7 +103,7 @@ class CivVIWorld(World):
             item_to_create = item_name
             if self.options.progression_style != "none":
                 item: CivVIItemData = self.item_table[item_name]
-                if item.progression_name != None:
+                if item.progression_name:
                     item_to_create = self.item_table[item.progression_name].name
 
             self.multiworld.itempool += [self.create_item(
@@ -123,8 +123,7 @@ class CivVIWorld(World):
             num_filler_items += 10
 
         if self.options.boostsanity:
-            boost_data = get_boosts_data()
-            num_filler_items += len(boost_data)
+            num_filler_items += len(get_boosts_data())
 
         filler_count = {rarity: math.ceil(FILLER_DISTRIBUTION[rarity] * num_filler_items) for rarity in FillerItemRarity.__reversed__()}
         min_count = 1
@@ -135,7 +134,7 @@ class CivVIWorld(World):
                 if total_created >= num_filler_items:
                     break
                 self.multiworld.itempool += [self.create_item(
-                    get_random_filler_by_rarity(self, rarity, self.item_table).name)]
+                    get_random_filler_by_rarity(self, rarity).name)]
                 total_created += 1
 
     def post_fill(self) -> None:

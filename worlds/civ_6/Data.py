@@ -17,8 +17,6 @@ def _get_data(key: str):
     return _cache[key]
 
 
-def get_boosts_data():
-    return _get_data("boosts")
 @dataclass
 class CivVIBoostData():
     Type: str

@@ -22,11 +22,11 @@ def create_boost_rules(world: 'CivVIWorld'):
         if not boost_data or boost_data.PrereqRequiredCount == 0:
             continue
 
-        set_rule(world_location, lambda state, prereqs=boost_data.Prereq, required_count=boost_data.PrereqRequiredCount: has_required_items(state, prereqs, required_count, world.player))
+        set_rule(world_location, lambda state, prereqs=boost_data.Prereq, required_count=boost_data.PrereqRequiredCount: has_required_items(state, prereqs, required_count, world))
 
 
-def has_required_items(state: CollectionState, prereqs: List[str], required_count: int, player: int) -> bool:
-    world: 'CivVIWorld' = state.multiworld.worlds[player]
+def has_required_items(state: CollectionState, prereqs: List[str], required_count: int, world: 'CivVIWorld') -> bool:
+    player = world.player
     has_progressive_items = world.options.progression_style != "none"
     if has_progressive_items:
         count = 0

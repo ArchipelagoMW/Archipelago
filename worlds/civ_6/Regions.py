@@ -60,8 +60,7 @@ def has_required_progressive_districts(state: CollectionState, era: EraType, pla
                 required_counts[key] += 1
 
     for key, value in required_counts.items():
-        has_amount = state.has(format_item_name(key), player, required_counts[key])
-        if not has_amount:
+        if not state.has(format_item_name(key), player, required_counts[key]):
             return False
     return True
 

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, List, Optional, TYPE_CHECKING, List
+from typing import Dict, Optional, TYPE_CHECKING, List
 from BaseClasses import Item, ItemClassification
 from .Data import get_era_required_items_data, get_existing_civics_data, get_existing_techs_data, get_goody_hut_rewards_data, get_progressive_districts_data
 from .Enum import CivVICheckType
@@ -122,7 +122,7 @@ def format_item_name(name: str) -> str:
     return " ".join([part.capitalize() for part in name_parts])
 
 
-def get_item_by_civ_name(item_name: List[str], item_table: Dict[str, 'CivVIItemData']) -> 'CivVIItemData':
+def get_item_by_civ_name(item_name: str, item_table: Dict[str, 'CivVIItemData']) -> 'CivVIItemData':
     """Gets the names of the items in the item_table"""
     for item in item_table.values():
         if item_name == item.civ_name:
@@ -131,7 +131,7 @@ def get_item_by_civ_name(item_name: List[str], item_table: Dict[str, 'CivVIItemD
     raise Exception(f"Item {item_name} not found in item_table")
 
 
-def _generate_tech_items(id_base: int, required_items: List[str], progressive_items: Dict[str, str]) -> List[CivVIItemData]:
+def _generate_tech_items(id_base: int, required_items: List[str], progressive_items: Dict[str, str]) -> Dict[str, CivVIItemData]:
     # Generate Techs
     existing_techs = get_existing_techs_data()
     tech_table = {}
@@ -164,7 +164,7 @@ def _generate_tech_items(id_base: int, required_items: List[str], progressive_it
     return tech_table
 
 
-def _generate_civics_items(id_base: int, required_items: List[str], progressive_items: Dict[str, str]) -> List[CivVIItemData]:
+def _generate_civics_items(id_base: int, required_items: List[str], progressive_items: Dict[str, str]) -> Dict[str, CivVIItemData]:
     civic_id = 0
     civic_table = {}
     existing_civics = get_existing_civics_data()
@@ -198,7 +198,7 @@ def _generate_civics_items(id_base: int, required_items: List[str], progressive_
     return civic_table
 
 
-def _generate_progressive_district_items(id_base: int) -> List[CivVIItemData]:
+def _generate_progressive_district_items(id_base: int) -> Dict[str, CivVIItemData]:
     progressive_table = {}
     progressive_id_base = 0
     progressive_items = get_progressive_districts_data()
@@ -221,7 +221,7 @@ def _generate_progressive_district_items(id_base: int) -> List[CivVIItemData]:
     return progressive_table
 
 
-def _generate_progressive_era_items(id_base: int) -> List[CivVIItemData]:
+def _generate_progressive_era_items(id_base: int) -> Dict[str, CivVIItemData]:
     """Generates the single progressive district item"""
     era_table = {}
     # Generate progressive eras
@@ -239,7 +239,7 @@ def _generate_progressive_era_items(id_base: int) -> List[CivVIItemData]:
     return era_table
 
 
-def _generate_goody_hut_items(id_base: int) -> List[CivVIItemData]:
+def _generate_goody_hut_items(id_base: int) -> Dict[str, CivVIItemData]:
     # Generate goody hut items
     goody_huts = get_filler_item_data()
     goody_table = {}
@@ -281,14 +281,14 @@ def generate_item_table() -> Dict[str, CivVIItemData]:
     return item_table
 
 
-def get_items_by_type(item_type: CivVICheckType, item_table: Dict[str, CivVIItemData]) -> List[CivVIItemData]:
+def get_items_by_type(item_type: CivVICheckType, item_table: Dict[str, CivVIItemData]) -> Dict[str, CivVIItemData]:
     """
     Returns a list of items that match the given item type
     """
     return [item for item in item_table.values() if item.item_type == item_type]
 
 
-def get_random_filler_by_rarity(world: 'CivVIWorld', rarity: FillerItemRarity, item_table: Dict[str, CivVIItemData]) -> CivVIItemData:
+def get_random_filler_by_rarity(world: 'CivVIWorld', rarity: FillerItemRarity) -> FillerItemData:
     """
     Returns a random filler item by rarity
     """
