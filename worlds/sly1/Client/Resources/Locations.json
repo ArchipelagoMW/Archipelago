@@ -1,5 +1,12 @@
 [
     {
+        "Name": "Paris Files",
+        "Id": 10020000,
+        "Address": "0x2027DC18",
+        "CheckType": 1,
+        "CompareValue": 1
+    },
+    {
         "Name": "Stealthy Approach Key",
         "Id": 10020101,
         "Address": "0x2027C67C",
@@ -131,6 +138,34 @@
         "Address": "0x2027C94C",
         "CheckType": 0,
         "AddressBit": 1
+    },
+    {
+        "Name": "Beat Raleigh",
+        "Id": 1,
+        "Address": "0x2027DC18",
+        "CheckType": 0,
+        "AddressBit": 5
+    },
+    {
+        "Name": "Beat Muggshot",
+        "Id": 2,
+        "Address": "0x2027DC18",
+        "CheckType": 0,
+        "AddressBit": 7
+    },
+    {
+        "Name": "Beat Mz. Ruby",
+        "Id": 3,
+        "Address": "0x2027DC19",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Beat Panda King",
+        "Id": 4,
+        "Address": "0x2027DC19",
+        "CheckType": 0,
+        "AddressBit": 3
     }
-    
+
 ]

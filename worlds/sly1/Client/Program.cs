@@ -44,6 +44,10 @@ namespace Sly1AP
                     return;
                 };
                 UpdateValues();
+                if (Memory.ReadInt(0x2027DC18) == 2721)
+                {
+                    Memory.Write(0x2027D7AC, 1);
+                }
                 Thread.Sleep(100);
             }
         }
@@ -77,6 +81,8 @@ namespace Sly1AP
             Client.PopulateLocations(locations);
             await Client.Login(playerName, password);
             ConfigureOptions(Client.Options);
+            //Try to get the player's current values before they get overridden. Cheaty way of doing save-load for the time being.
+            GetValues();
             Client.ItemReceived += (e, args) =>
             {
                 Console.WriteLine($"Received: " + args.Item.Name);
@@ -99,7 +105,7 @@ namespace Sly1AP
             };
             return true;
         }
-        public static async void ConfigureOptions(Dictionary<string, object> options)
+        public static void ConfigureOptions(Dictionary<string, object> options)
         {
             var Options = new ArchipelagoOptions();
             if (options == null)
@@ -318,6 +324,18 @@ namespace Sly1AP
             Memory.Write(0x2027D35C, keys.Map);
             Memory.Write(0x2027D7A8, keys.Map);
             return;
+        }
+        public static void GetValues()
+        {
+            slyMoves.SlyMoves = Memory.ReadUInt(0x2027DC10);
+            keys.RaleighKeys = Memory.ReadInt(0x2027CAB4);
+            keys.MuggshotKeys = Memory.ReadInt(0x2027CF00);
+            keys.MzRubyKeys = Memory.ReadInt(0x2027D34C);
+            keys.PandaKingKeys = Memory.ReadInt(0x2027D798);
+            keys.RaleighStart = Memory.ReadInt(0x2027C67C);
+            keys.MuggshotStart = Memory.ReadInt(0x2027CAC8);
+            keys.MzRubyStart = Memory.ReadInt(0x2027CF14);
+            keys.PandaKingStart = Memory.ReadInt(0x2027D360);
         }
     }
 }
