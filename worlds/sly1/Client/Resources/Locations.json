@@ -3,8 +3,8 @@
         "Name": "Paris Files",
         "Id": 10020000,
         "Address": "0x2027DC18",
-        "CheckType": 1,
-        "CompareValue": 1
+        "CheckType": 0,
+        "AddressBit": 0
     },
     {
         "Name": "Stealthy Approach Key",

@@ -48,7 +48,7 @@
           "dependencies": {
             "Archipelago.Core": {
               "target": "Package",
-              "version": "[0.0.5, )"
+              "version": "[0.0.6, )"
             },
             "Archipelago.MultiClient.Net": {
               "target": "Package",

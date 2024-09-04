@@ -25,6 +25,7 @@ namespace Sly1AP
         public static GameState CurrentGameState = new GameState();
         public static Moves slyMoves = new Moves();
         public static Keys keys = new Keys();
+        public static int GameCompletion { get; set; } = 0;
         public static async Task Main()
         {
             // Console.SetBufferSize(Console.BufferWidth, 32766);
@@ -48,7 +49,7 @@ namespace Sly1AP
                 {
                     Memory.Write(0x2027D7AC, 1);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(1);
             }
         }
 
@@ -74,13 +75,18 @@ namespace Sly1AP
             }
             Console.WriteLine($"Connected to PCSX2.");
 
+            //Set the game completion flag to 0, so boss locations won't be sent unintentionally.
+            Memory.Write(0x2027DC18, 0);
+
             Console.WriteLine($"Connecting to Archipelago.");
             ArchipelagoClient Client = new(client);
             await Client.Connect(address, "Sly Cooper and the Thievius Raccoonus");
             var locations = Helpers.GetLocations();
             Client.PopulateLocations(locations);
             await Client.Login(playerName, password);
-            ConfigureOptions(Client.Options);
+            //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
+            UpdateStart();
+            var SentLocations = Client.GameState.CompletedLocations;
             var ReceivedItems = Client.GameState.ReceivedItems;
             foreach (var item in ReceivedItems)
             {
@@ -101,6 +107,31 @@ namespace Sly1AP
                     UpdateJunk(item.Id);
                 }
             }
+            foreach (var loc in SentLocations)
+            {
+                if (loc.Name == "Paris Files")
+                {
+                    GameCompletion += 1;
+                }
+                if (loc.Name == "Eye of the Storm")
+                {
+                    GameCompletion += 32;
+                }
+                if (loc.Name == "Last Call")
+                {
+                    GameCompletion += 128;
+                }
+                if (loc.Name == "Deadly Dance")
+                {
+                    GameCompletion += 512;
+                }
+                if (loc.Name == "Flame-Fu!")
+                {
+                    GameCompletion += 2048;
+                }
+
+            }
+            ConfigureOptions(Client.Options);
             Client.ItemReceived += (e, args) =>
             {
                 Console.WriteLine($"Received: " + args.Item.Name);
@@ -349,6 +380,19 @@ namespace Sly1AP
             keys.MuggshotStart = Memory.ReadInt(0x2027CAC8);
             keys.MzRubyStart = Memory.ReadInt(0x2027CF14);
             keys.PandaKingStart = Memory.ReadInt(0x2027D360);
+        }
+        public static void UpdateStart()
+        {
+            Memory.Write(0x2027DC10, 0);
+            Memory.Write(0x2027CAB4, 0);
+            Memory.Write(0x2027CF00, 0);
+            Memory.Write(0x2027D34C, 0);
+            Memory.Write(0x2027D798, 0);
+            Memory.Write(0x2027C67C, 0);
+            Memory.Write(0x2027CAC8, 0);
+            Memory.Write(0x2027CF14, 0);
+            Memory.Write(0x2027D360, 0);
+            GetValues();
         }
     }
 }
