@@ -99,11 +99,10 @@ sly_locations = {
 
 
     ## Boss Victories
-    "Eye of the Storm": LocData(None, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Last Call": LocData(None, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Deadly Dance": LocData(None, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
-    "Flame Fu!": LocData(None, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
-    "Cold Heart of Hate": LocData(None, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
+    "Eye of the Storm": LocData(10020229, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
+    "Last Call": LocData(10020230, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
+    "Deadly Dance": LocData(10020231, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
+    "Flame Fu!": LocData(10020232, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
 }
 
 hourglass_locations = {
@@ -137,11 +136,11 @@ hourglass_locations = {
 }
 
 event_locations = {
-    "Beat Raleigh": LocData(None, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Beat Muggshot": LocData(None, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Beat Mz. Ruby": LocData(None, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
-    "Beat Panda King": LocData(None, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
-    "Beat Clockwerk": LocData(None, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
+    "Beat Raleigh": LocData(10020401, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
+    "Beat Muggshot": LocData(10020402, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
+    "Beat Mz. Ruby": LocData(10020403, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
+    "Beat Panda King": LocData(10020404, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
+    "Beat Clockwerk": LocData(10020405, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
 }
 
 location_table = {
