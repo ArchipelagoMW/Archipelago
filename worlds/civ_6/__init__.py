@@ -93,7 +93,6 @@ class CivVIWorld(World):
         return CivVIItem(item, self.player, classification)
 
     def create_items(self) -> None:
-        progressive_era_item = None
         for item_name, data in self.item_table.items():
             # These item types are handled individually
             if data.item_type in [CivVICheckType.PROGRESSIVE_DISTRICT, CivVICheckType.ERA, CivVICheckType.GOODY]:
