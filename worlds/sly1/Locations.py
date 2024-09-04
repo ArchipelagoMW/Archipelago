@@ -29,6 +29,8 @@ def is_valid_location(world: "Sly1World",name) -> bool:
     return True
 
 sly_locations = {
+    "Paris Files": LocData(10020000, "Paris",),
+
     ## Key Locations - Finishing the level
     # Tide of Terror
     "Stealthy Approach Key": LocData(10020101, "Stealthy Approach", key_type=EpisodeType.TOT),

@@ -52,6 +52,8 @@ def create_regions(world: "Sly1World"):
     # That connects to both the hideout and paris through a save file
     menu = create_region(world, "Menu")
     hideout = create_region_and_connect(world, "Hideout", "Save File -> Hideout", menu)
+    paris = create_region_and_connect(world, "Paris", "Save file -> Paris", menu)
+    paris.connect(hideout, "Paris -> Hideout")
 
     # ------------------------------- Tide of Terror ---------------------------------- #
     tot_intro = create_region_and_connect(world, "Stealthy Approach", "Hideout -> Stealthy Approach", hideout)
