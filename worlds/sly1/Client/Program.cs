@@ -54,11 +54,11 @@ namespace Sly1AP
 
         private static async Task Initialise()
         {
-            Console.WriteLine("Enter Address:");
+            Console.Write("Enter Address: ");
             string Address = Console.ReadLine();
-            Console.WriteLine("Enter Slot Name:");
+            Console.Write("Enter Slot Name: ");
             string SlotName = Console.ReadLine();
-            Console.WriteLine("Enter Password: ");
+            Console.Write("Enter Password: ");
             string Password = Console.ReadLine();
             IsConnected = await ConnectAsync(Address, SlotName, Password);
         }
@@ -116,7 +116,6 @@ namespace Sly1AP
             if (options.ContainsKey("StartingEpisode"))
             {
                 string StartingEpisode = Convert.ToString(options["StartingEpisode"]);
-                Console.WriteLine(StartingEpisode);
                 if (StartingEpisode == "Tide Of Terror")
                 {
                     keys.RaleighStart = 1;
@@ -314,10 +313,6 @@ namespace Sly1AP
             Memory.Write(0x2027CF00, keys.MuggshotKeys);
             Memory.Write(0x2027D34C, keys.MzRubyKeys);
             Memory.Write(0x2027D798, keys.PandaKingKeys);
-            Memory.Write(0x2027C67C, keys.RaleighStart);
-            Memory.Write(0x2027CAC8, keys.MuggshotStart);
-            Memory.Write(0x2027CF14, keys.MzRubyStart);
-            Memory.Write(0x2027D360, keys.PandaKingStart);
             //Make all maps selectable from the start.
             Memory.Write(0x2027CAC4, keys.Map);
             Memory.Write(0x2027CF10, keys.Map);
