@@ -95,17 +95,11 @@ class CivVIWorld(World):
     def create_items(self) -> None:
         progressive_era_item = None
         for item_name, data in self.item_table.items():
-            # Don't add progressive items to the itempool here
-            if data.item_type == CivVICheckType.PROGRESSIVE_DISTRICT:
-                continue
-            if data.item_type == CivVICheckType.ERA:
-                # Don't add era items in this way
-                progressive_era_item = data
-                continue
-            if data.item_type == CivVICheckType.GOODY:
+            # These item types are handled individually
+            if data.item_type in [CivVICheckType.PROGRESSIVE_DISTRICT, CivVICheckType.ERA, CivVICheckType.GOODY]:
                 continue
 
-                # If we're using progressive districts, we need to check if we need to create a different item instead
+            # If we're using progressive districts, we need to check if we need to create a different item instead
             item_to_create = item_name
             if self.options.progression_style != "none":
                 item: CivVIItemData = self.item_table[item_name]
@@ -121,8 +115,7 @@ class CivVIWorld(World):
             for era in EraType:
                 if era.value == "ERA_ANCIENT":
                     continue
-                self.multiworld.itempool += [self.create_item(
-                    progressive_era_item.name)]
+                self.multiworld.itempool += [self.create_item(self.item_table.get("Progressive Era").name)]
 
         num_filler_items = 0
         # Goody items, create 10 by default if options are enabled
