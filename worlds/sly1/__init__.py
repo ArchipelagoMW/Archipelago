@@ -48,7 +48,7 @@ class Sly1World(World):
         self.multiworld.itempool += create_itempool(self)
 
         for event, item in event_item_pairs.items():
-            event_item = Sly1Item(item, ItemClassification.progression, None, self.player)
+            event_item = Sly1Item(item, ItemClassification.progression_skip_balancing, None, self.player)
             self.multiworld.get_location(event, self.player).place_locked_item(event_item)
 
     def set_rules(self):
@@ -59,10 +59,9 @@ class Sly1World(World):
     
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {
-            "Options": {
+            "options": {
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
-                "IncludeHourglasses": self.options.IncludeHourglasses,
-                "AlwaysSpawnHourglasses": self.options.AlwaysSpawnHourglasses
+                "IncludeHourglasses": self.options.IncludeHourglasses.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server

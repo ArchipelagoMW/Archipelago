@@ -8,14 +8,14 @@ if TYPE_CHECKING:
 
 ## Would be for level randomizing if that ever happens
 # level_names = {
-#     "A Stealthy Approach":      "Tides of Terror - Intro",
-#     "Into the Machine":         "Tides of Terror - First Gate",
-#     "High Class Heist":         "Tides of Terror - First Gate",
-#     "The Fire Down Below":      "Tides of Terror - First Gate",
-#     "A Cunning Disguise":       "Tides of Terror - First Gate",
-#     "The Gunboat Graveyard":    "Tides of Terror - Second Gate",
-#     "Treasure in the Depths":   "Tides of Terror - Second Gate",
-#     "The Eye of the Storm":     "Tides of Terror - Boss",
+#     "A Stealthy Approach":      "Tide of Terror - Intro",
+#     "Into the Machine":         "Tide of Terror - First Gate",
+#     "High Class Heist":         "Tide of Terror - First Gate",
+#     "The Fire Down Below":      "Tide of Terror - First Gate",
+#     "A Cunning Disguise":       "Tide of Terror - First Gate",
+#     "The Gunboat Graveyard":    "Tide of Terror - Second Gate",
+#     "Treasure in the Depths":   "Tide of Terror - Second Gate",
+#     "The Eye of the Storm":     "Tide of Terror - Boss",
 
 #     "A Rocky Start":            "Sunset Snake Eyes - Intro",
 #     "At the Dog Track":         "Sunset Snake Eyes - First Gate",
@@ -48,12 +48,12 @@ if TYPE_CHECKING:
 # }
 
 def create_regions(world: "Sly1World"):
-    # I think this is where I would stitch in the paris files with a menu region
-    # That connects to both the hideout and paris through a save file
     menu = create_region(world, "Menu")
     hideout = create_region_and_connect(world, "Hideout", "Save File -> Hideout", menu)
+    paris = create_region_and_connect(world, "Paris", "Save file -> Paris", menu)
+    paris.connect(hideout, "Paris -> Hideout")
 
-    # ------------------------------- Tides of Terror ---------------------------------- #
+    # ------------------------------- Tide of Terror ---------------------------------- #
     tot_intro = create_region_and_connect(world, "Stealthy Approach", "Hideout -> Stealthy Approach", hideout)
     tot_hub = create_region_and_connect(world, "Prowling the Grounds", "Hideout -> Prowling the Grounds", hideout)
     create_region_and_connect(world, "Into the Machine", "Prowling the Grounds -> Into the Machine", tot_hub)

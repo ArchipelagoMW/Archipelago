@@ -20,15 +20,18 @@ class ItemData(NamedTuple):
     classification: ItemClassification
     count: Optional[int] = 1
 
+class EventData(NamedTuple):
+    name:       str
+    ap_code:    Optional[int] = None
 
 class LocData(NamedTuple):
     ap_code: Optional[int]
     region: Optional[str]
-    key_type: Optional[EpisodeType]
+    key_type: Optional[EpisodeType] = None
     key_requirement: Optional[int] = 0
 
 episode_type_to_name = {
-    EpisodeType.TOT:      "Tides of Terror",
+    EpisodeType.TOT:      "Tide of Terror",
     EpisodeType.SSE:      "Sunset Snake Eyes",
     EpisodeType.VV:       "Vicious Voodoo",
     EpisodeType.FITS:     "Fire in the Sky",

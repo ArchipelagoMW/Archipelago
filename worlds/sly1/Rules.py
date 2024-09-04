@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 def set_rules(world: "Sly1World"):
     # Episode Access
     add_rule(world.multiworld.get_entrance("Hideout -> Stealthy Approach", world.player),
-             lambda state: state.has("Tides of Terror", world.player))
+             lambda state: state.has("Tide of Terror", world.player))
     add_rule(world.multiworld.get_entrance("Hideout -> Rocky Start", world.player),
              lambda state: state.has("Sunset Snake Eyes", world.player))
     add_rule(world.multiworld.get_entrance("Hideout -> Dread Swamp Path", world.player),
@@ -20,7 +20,7 @@ def set_rules(world: "Sly1World"):
     # Main Hub Access
     add_rule(world.multiworld.get_entrance("Hideout -> Prowling the Grounds", world.player),
              lambda state: state.has("ToT Key", world.player)
-             and state.has("Tides of Terror", world.player))
+             and state.has("Tide of Terror", world.player))
     add_rule(world.multiworld.get_entrance("Hideout -> Muggshot's Turf", world.player),
              lambda state: state.has("SSE Key", world.player)
              and state.has("Sunset Snake Eyes", world.player))
