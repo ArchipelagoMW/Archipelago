@@ -6244,6 +6244,20 @@ grass_location_table: Dict[str, TunicLocationData] = {
     "Swamp - Back of Swamp Laurels Area Grass swamp (994) (33.5, 8.0, 31.8)": TunicLocationData("Back of Swamp Laurels Area", "Back of Swamp Laurels Area"),
 }
 
+excluded_grass_locations = {
+    "Overworld - Overworld Bush (7) (-39.0, 40.0, -41.0)",
+    "Overworld - Overworld Bush (2) (-41.0, 40.0, -41.0)",
+    "Overworld - Overworld Bush (16) (53.0, 12.0, -151.0)",
+    "Overworld - Overworld Bush (9) (-19.0, 28.0, -103.0)",
+    "Overworld - Overworld Bush (23) (-19.0, 28.0, -105.0)",
+    "Overworld - Overworld Bush (26) (-19.0, 28.0, -107.0)",
+    "Overworld - Overworld Bush (47) (91.0, 12.0, -155.0)",
+    "Overworld - Overworld Bush (42) (91.0, 12.0, -157.0)",
+    "Overworld - East Overworld Bush (58) (58.0, 44.0, -109.0)",
+    "Overworld - East Overworld Bush (62) (66.5, 44.0, -111.0)",
+    "Overworld - East Overworld Bush (64) (56.0, 44.0, -107.0)",
+}
+
 grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + index for index, name in enumerate(grass_location_table)}
 
 

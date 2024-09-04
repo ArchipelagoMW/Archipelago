@@ -9,7 +9,7 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections
-from .grass import grass_location_table, grass_location_name_to_id
+from .grass import grass_location_table, grass_location_name_to_id, excluded_grass_locations
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -209,6 +209,9 @@ class TunicWorld(World):
             items_to_create["Glass Cannon"] = 0
             tunic_items.append(self.create_item("Gun", ItemClassification.progression))
             items_to_create["Gun"] = 0
+            for grass_location in excluded_grass_locations:
+                self.multiworld.get_location(grass_location, self.player).place_locked_item(self.create_item("Grass"))
+            items_to_create["Grass"] -= len(excluded_grass_locations)
 
         if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
