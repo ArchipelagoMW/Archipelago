@@ -1,4 +1,5 @@
 import logging
+from random import Random
 from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
@@ -27,15 +28,20 @@ from .strings.goal_names import Goal as GoalName
 from .strings.metal_names import Ore
 from .strings.region_names import Region as RegionName, LogicRegion
 
+logger = logging.getLogger(__name__)
+
+STARDEW_VALLEY = "Stardew Valley"
+UNIVERSAL_TRACKER_SEED_PROPERTY = "ut_seed"
+
 client_version = 0
 
 
 class StardewLocation(Location):
-    game: str = "Stardew Valley"
+    game: str = STARDEW_VALLEY
 
 
 class StardewItem(Item):
-    game: str = "Stardew Valley"
+    game: str = STARDEW_VALLEY
 
 
 class StardewWebWorld(WebWorld):
@@ -60,7 +66,7 @@ class StardewValleyWorld(World):
     Stardew Valley is an open-ended country-life RPG. You can farm, fish, mine, fight, complete quests,
     befriend villagers, and uncover dark secrets.
     """
-    game = "Stardew Valley"
+    game = STARDEW_VALLEY
     topology_present = False
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -95,6 +101,17 @@ class StardewValleyWorld(World):
         self.total_progression_items = 0
         # self.all_progression_items = dict()
 
+        # Taking the seed specified in slot data for UT, otherwise just generating the seed.
+        self.seed = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY, self.random.getrandbits(64))
+        self.random = Random(self.seed)
+
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Optional[int]:
+        # If the seed is not specified in the slot data, this mean the world was generated before Universal Tracker support.
+        seed = slot_data.get(UNIVERSAL_TRACKER_SEED_PROPERTY)
+        if seed is None:
+            logger.warning(f"World was generated before Universal Tracker support. Tracker might not be accurate.")
+        return seed
+
     def generate_early(self):
         self.force_change_options_if_incompatible()
         self.content = create_content(self.options)
@@ -108,12 +125,12 @@ class StardewValleyWorld(World):
             self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
             goal_name = self.options.goal.current_key
             player_name = self.multiworld.player_name[self.player]
-            logging.warning(
+            logger.warning(
                 f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
         if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
             self.options.walnutsanity.value = Walnutsanity.preset_none
             player_name = self.multiworld.player_name[self.player]
-            logging.warning(
+            logger.warning(
                 f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({player_name})'s world, so walnutsanity was force disabled")
 
     def create_regions(self):
@@ -413,6 +430,7 @@ class StardewValleyWorld(World):
         included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
         slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
+            UNIVERSAL_TRACKER_SEED_PROPERTY: self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": bundles,
