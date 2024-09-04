@@ -114,7 +114,6 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
             "Forlorn Temple - Rocket Maze Checkpoint",
         ],
         "Rocket Maze Checkpoint": [
-            "Forlorn Temple - Sunny Day Checkpoint",
             "Forlorn Temple - Climb Shop",
         ],
     },
