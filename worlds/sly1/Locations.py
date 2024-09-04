@@ -30,7 +30,7 @@ def is_valid_location(world: "Sly1World",name) -> bool:
 
 sly_locations = {
     ## Key Locations - Finishing the level
-    # Tides of Terror
+    # Tide of Terror
     "Stealthy Approach Key": LocData(10020101, "Stealthy Approach", key_type=EpisodeType.TOT),
     "Into the Machine Key": LocData(10020102, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
     "High Class Heist Key": LocData(10020103, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
@@ -68,7 +68,7 @@ sly_locations = {
 
 
     ## Vault Locations - Collecting all bottles in level
-    # Tides of Terror
+    # Tide of Terror
     "Stealthy Approach Vault": LocData(10020201, "Stealthy Approach", key_type=EpisodeType.TOT),
     "Into the Machine Vault": LocData(10020202, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
     "High Class Heist Vault": LocData(10020203, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
@@ -105,36 +105,45 @@ sly_locations = {
 }
 
 hourglass_locations = {
-    ## Hourglass Locations - Speedrunning the level after beating boss
-    # Tides of Terror
-    "Stealthy Approach Hourglass": LocData(10020301, "Stealthy Approach", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Into the Machine Hourglass": LocData(10020302, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 7),
-    "High Class Heist Hourglass": LocData(10020303, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Fire Down Below Hourglass": LocData(10020304, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Cunning Disguise Hourglass": LocData(10020305, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 7),
-    "Gunboat Graveyard Hourglass": LocData(10020306, "Prowling the Grounds - Second Gate", key_type=EpisodeType.TOT, key_requirement = 7),
+    ## Hourglass Locations - Speedrunning the level
+    # Tide of Terror
+    "Stealthy Approach Hourglass": LocData(10020301, "Stealthy Approach"),
+    "Into the Machine Hourglass": LocData(10020302, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
+    "High Class Heist Hourglass": LocData(10020303, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
+    "Fire Down Below Hourglass": LocData(10020304, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
+    "Cunning Disguise Hourglass": LocData(10020305, "Prowling the Grounds", key_type=EpisodeType.TOT, key_requirement = 1),
+    "Gunboat Graveyard Hourglass": LocData(10020306, "Prowling the Grounds - Second Gate", key_type=EpisodeType.TOT, key_requirement = 3),
 
     # Sunset Snake Eyes
-    "Rocky Start Hourglass": LocData(10020308, "Rocky Start", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Boneyard Casino Hourglass": LocData(10020311, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Straight to the Top Hourglass": LocData(10020312, "Muggshot's Turf - Second Gate", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Two to Tango Hourglass": LocData(10020313, "Muggshot's Turf - Second Gate", key_type=EpisodeType.SSE, key_requirement = 7),
-    "Back Alley Heist Hourglass": LocData(10020314, "Muggshot's Turf - Second Gate", key_type=EpisodeType.SSE, key_requirement = 7),
+    "Rocky Start Hourglass": LocData(10020308, "Rocky Start"),
+    "Boneyard Casino Hourglass": LocData(10020311, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1),
+    "Straight to the Top Hourglass": LocData(10020312, "Muggshot's Turf - Second Gate", key_type=EpisodeType.SSE, key_requirement = 3),
+    "Two to Tango Hourglass": LocData(10020313, "Muggshot's Turf - Second Gate", key_type=EpisodeType.SSE, key_requirement = 3),
+    "Back Alley Heist Hourglass": LocData(10020314, "Muggshot's Turf - Second Gate", key_type=EpisodeType.SSE, key_requirement = 3),
 
     # Vicious Voodoo
-    "Dread Swamp Path Hourglass": LocData(10020315, "Dread Swamp Path", key_type=EpisodeType.VV, key_requirement = 7),
-    "Lair of the Beast Hourglass": LocData(10020316, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 7),
-    "Grave Undertaking Hourglass": LocData(10020317, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 7),
-    "Descent into Danger Hourglass": LocData(10020319, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 7),
+    "Dread Swamp Path Hourglass": LocData(10020315, "Dread Swamp Path"),
+    "Lair of the Beast Hourglass": LocData(10020316, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 1),
+    "Grave Undertaking Hourglass": LocData(10020317, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 1),
+    "Descent into Danger Hourglass": LocData(10020319, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3),
 
     # Fire in the Sky
-    "Perilous Ascent Hourglass": LocData(10020322, "Perilous Ascent", key_type=EpisodeType.FITS, key_requirement = 7),
-    "Unseen Foe Hourglass": LocData(10020323, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 7),
-    "Flaming Temple of Flame Hourglass": LocData(10020324, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 7),
-    "Duel by the Dragon Hourglass": LocData(10020328, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 7),
+    "Perilous Ascent Hourglass": LocData(10020322, "Perilous Ascent"),
+    "Unseen Foe Hourglass": LocData(10020323, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 1),
+    "Flaming Temple of Flame Hourglass": LocData(10020324, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 1),
+    "Duel by the Dragon Hourglass": LocData(10020328, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3),
+}
+
+event_locations = {
+    "Beat Raleigh": LocData(None, "Eye of the Storm", key_type=EpisodeType.TOT, key_requirement = 7),
+    "Beat Muggshot": LocData(None, "Last Call", key_type=EpisodeType.SSE, key_requirement = 7),
+    "Beat Mz. Ruby": LocData(None, "Deadly Dance", key_type=EpisodeType.VV, key_requirement = 7),
+    "Beat Panda King": LocData(None, "Flame Fu!", key_type=EpisodeType.FITS, key_requirement = 7),
+    "Beat Clockwerk": LocData(None, "Cold Heart of Hate", key_type=EpisodeType.CHOH)
 }
 
 location_table = {
     **sly_locations,
-    **hourglass_locations
+    **hourglass_locations,
+    **event_locations
 }

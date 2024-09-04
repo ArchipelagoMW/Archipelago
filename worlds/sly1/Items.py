@@ -18,8 +18,6 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     
         itempool += create_multiple_items(world, name, item_amount, item_type)
     
-    print(get_total_locations(world))
-    print(len(itempool))
     itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(event_item_pairs))
     return itempool
 
@@ -73,7 +71,7 @@ sly_items = {
 }
 
 sly_episodes = {
-    "Tides of Terror": ItemData(10020021, ItemClassification.progression),
+    "Tide of Terror": ItemData(10020021, ItemClassification.progression),
     "Sunset Snake Eyes": ItemData(10020022, ItemClassification.progression),
     "Vicious Voodoo": ItemData(10020023, ItemClassification.progression),
     "Fire in the Sky": ItemData(10020024, ItemClassification.progression)
@@ -81,8 +79,8 @@ sly_episodes = {
 
 junk_items = {
     # Junk
-    "Charm": ItemData(10020019, ItemClassification.filler),
-    "1-Up": ItemData(10020020, ItemClassification.filler)
+    "Charm": ItemData(10020019, ItemClassification.filler, 0),
+    "1-Up": ItemData(10020020, ItemClassification.filler, 0)
 
     # Traps - TBI
 }
@@ -94,9 +92,9 @@ item_table = {
 }
 
 event_item_pairs: Dict[str, str] = {
-    "Eye of the Storm": "Beat Raleigh",
-    "Last Call": "Beat Muggshot",
-    "Deadly Dance": "Beat Mz. Ruby",
-    "Flame Fu!": "Beat Panda King",
-    "Cold Heart of Hate": "Victory"
+    "Beat Raleigh": "Beat Raleigh",
+    "Beat Muggshot": "Beat Muggshot",
+    "Beat Mz. Ruby": "Beat Mz. Ruby",
+    "Beat Panda King": "Beat Panda King",
+    "Beat Clockwerk": "Victory"
 }

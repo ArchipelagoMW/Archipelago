@@ -2,7 +2,10 @@
 
 ## Required Software
 
-A legally obtained ISO of Sly Cooper and the Thievius Raccoonus
+- A legally obtained NTSC ISO of Sly Cooper and the Thievius Raccoonus
+- [v1.6.0 of PCSX2](https://pcsx2.net/downloads)
+    - Select show previous versions and choose v1.6.0
+- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 ## Configuring your YAML file
 
@@ -17,8 +20,12 @@ an experience customized for their taste, and different players in the same mult
 You can customize your options by visiting
 the [Sly Cooper and the Thievius Raccoonus Options Page](/games/Sly%20Cooper%20and%20the%20Thievius%20Raccoonus/player-options).
 
-probably
-
 ### Connect to the MultiServer
 
-uh dunno
+1. Launch PCSX2 and boot your copy of Sly 1
+    - You can also add various patch files (ie: Bentley Skipper)
+    - Make sure you reload the patch files if you add them after booting the game
+    - Patch files must also be named correctly for them to work properly
+2. Launch SlyAP.exe from the client folder
+    - Under address input your archipelago connection address (ie: archipelago.gg:51780)
+    - PCSX2 must be open before the Sly client is opened or it will give an error
