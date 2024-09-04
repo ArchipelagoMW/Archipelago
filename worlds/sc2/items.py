@@ -1773,6 +1773,8 @@ item_table = {
     item_names.DISRUPTOR_PERFECTED_POWER:  ItemData(382 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 22, SC2Race.PROTOSS, origin={"ext"}),
     item_names.DISRUPTOR_RESTRAINED_DESTRUCTION: ItemData(383 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 23, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}),
     item_names.TEMPEST_INTERPLANETARY_RANGE: ItemData(384 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 24, SC2Race.PROTOSS, parent_item=item_names.TEMPEST),
+    item_names.DAWNBRINGER_ANTI_SURFACE_COUNTERMEASURES: ItemData(385 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 25, SC2Race.PROTOSS, parent_item=item_names.DAWNBRINGER),
+    item_names.DAWNBRINGER_ENHANCED_SHIELD_GENERATOR: ItemData(386 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 26, SC2Race.PROTOSS, parent_item=item_names.DAWNBRINGER),
 
     # War Council
     item_names.ZEALOT_WHIRLWIND: ItemData(500 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 0, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.ZEALOT),
@@ -1812,7 +1814,7 @@ item_table = {
     item_names.VOID_RAY_PRISMATIC_RANGE: ItemData(534 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 4, SC2Race.PROTOSS, parent_item=item_names.VOID_RAY),
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 5, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.DESTROYER),
     # 536 reserved for Warp Ray
-    # 537 reserved for Dawnbringer
+    item_names.DAWNBRINGER_SOLARITE_LENS: ItemData(537 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 7, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.DAWNBRINGER),
     # 538 reserved for Carrier
     item_names.SKYLORD_HYPERJUMP: ItemData(539 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 9, SC2Race.PROTOSS, parent_item=item_names.SKYLORD),
     # 540 reserved for Trireme
