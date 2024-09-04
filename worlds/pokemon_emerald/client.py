@@ -122,6 +122,7 @@ class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
     system = "GBA"
     patch_suffix = ".apemerald"
+
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
@@ -139,8 +140,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
     current_map: Optional[int]
 
-    def __init__(self) -> None:
-        super().__init__()
+    def initialize_client(self):
         self.local_checked_locations = set()
         self.local_set_events = {}
         self.local_found_key_items = {}
@@ -182,9 +182,7 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.want_slot_data = True
         ctx.watcher_timeout = 0.125
 
-        self.death_counter = None
-        self.previous_death_link = 0
-        self.ignore_next_death_link = False
+        self.initialize_client()
 
         return True
 
