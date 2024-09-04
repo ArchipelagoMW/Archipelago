@@ -14,9 +14,324 @@
         "AddressBit": 1
     },
     {
+        "Name": "Into the Machine Key",
+        "Id": 10020102,
+        "Address": "0x2027C7E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "High Class Heist Key",
+        "Id": 10020103,
+        "Address": "0x2027C76C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Fire Down Below Key",
+        "Id": 10020104,
+        "Address": "0x2027C8D4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Cunning Disguise Key",
+        "Id": 10020105,
+        "Address": "0x2027C85C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Gunboat Graveyard Key",
+        "Id": 10020106,
+        "Address": "0x2027C9C4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Treasure in the Depths Key",
+        "Id": 10020107,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rocky Start Key",
+        "Id": 10020108,
+        "Address": "0x2027CAC8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "At the Dog Track Key",
+        "Id": 10020109,
+        "Address": "0x2027CCA8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Murray's Big Gamble Key",
+        "Id": 10020110,
+        "Address": "0x2027CC30",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Boneyard Casino Key",
+        "Id": 10020111,
+        "Address": "0x2027CBB8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Straight to the Top Key",
+        "Id": 10020112,
+        "Address": "0x2027CD98",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Two to Tango Key",
+        "Id": 10020113,
+        "Address": "0x2027CD20",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Back Alley Heist Key",
+        "Id": 10020114,
+        "Address": "0x2027CE10",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Dread Swamp Path Key",
+        "Id": 10020115,
+        "Address": "0x2027CF14",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Lair of the Beast Key",
+        "Id": 10020116,
+        "Address": "0x2027D004",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Grave Undertaking Key",
+        "Id": 10020117,
+        "Address": "0x2027D07C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Piranha Lake Key",
+        "Id": 10020118,
+        "Address": "0x2027D0F4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Descent into Danger Key",
+        "Id": 10020119,
+        "Address": "0x2027D16C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Ghastly Voyage Key",
+        "Id": 10020120,
+        "Address": "0x2027D1E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Down Home Cooking Key",
+        "Id": 10020121,
+        "Address": "0x2027D25C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Perilous Ascent Key",
+        "Id": 10020122,
+        "Address": "0x2027D360",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Unseen Foe Key",
+        "Id": 10020123,
+        "Address": "0x2027D4C8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Flaming Temple of Flame Key",
+        "Id": 10020124,
+        "Address": "0x2027D450",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "King of the Hill Key",
+        "Id": 10020125,
+        "Address": "0x2027D540",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Rapid Fire Assault Key",
+        "Id": 10020126,
+        "Address": "0x2027D5B8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Desperate Race Key",
+        "Id": 10020127,
+        "Address": "0x2027D6A8",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Duel by the Dragon Key",
+        "Id": 10020128,
+        "Address": "0x2027D630",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
         "Name": "Stealthy Approach Vault",
         "Id": 10020201,
         "Address": "0x2027C67C",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Into the Machine Vault",
+        "Id": 10020202,
+        "Address": "0x2027C7E4",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "High Class Heist Vault",
+        "Id": 10020203,
+        "Address": "0x2027C76C",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Fire Down Below Vault",
+        "Id": 10020204,
+        "Address": "0x2027C8D4",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Cunning Disguise Vault",
+        "Id": 10020205,
+        "Address": "0x2027C85C",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Gunboat Graveyard Vault",
+        "Id": 10020206,
+        "Address": "0x2027C9C4",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Rocky Start Vault",
+        "Id": 10020208,
+        "Address": "0x2027CAC8",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Boneyard Casino Vault",
+        "Id": 10020211,
+        "Address": "0x2027CBB8",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Straight to the Top Vault",
+        "Id": 10020212,
+        "Address": "0x2027CD98",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Two to Tango Vault",
+        "Id": 10020213,
+        "Address": "0x2027CD20",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Back Alley Heist Vault",
+        "Id": 10020214,
+        "Address": "0x2027CE10",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Dread Swamp Path Vault",
+        "Id": 10020215,
+        "Address": "0x2027CF14",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Lair of the Beast Vault",
+        "Id": 10020216,
+        "Address": "0x2027D004",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Grave Undertaking Vault",
+        "Id": 10020217,
+        "Address": "0x2027D07C",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Descent into Danger Vault",
+        "Id": 10020219,
+        "Address": "0x2027D16C",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Perilous Ascent Vault",
+        "Id": 10020222,
+        "Address": "0x2027D360",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Unseen Foe Vault",
+        "Id": 10020223,
+        "Address": "0x2027D4C8",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Flaming Temple of Flame Vault",
+        "Id": 10020224,
+        "Address": "0x2027D450",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Duel by the Dragon Vault",
+        "Id": 10020228,
+        "Address": "0x2027D630",
         "CheckType": 0,
         "AddressBit": 2
     },
@@ -28,39 +343,11 @@
         "AddressBit": 3
     },
     {
-        "Name": "Into the Machine Key",
-        "Id": 10020102,
-        "Address": "0x2027C7E4",
-        "CheckType": 0,
-        "AddressBit": 1
-    },
-    {
-        "Name": "Into the Machine Vault",
-        "Id": 10020202,
-        "Address": "0x2027C7E4",
-        "CheckType": 0,
-        "AddressBit": 2
-    },
-    {
         "Name": "Into the Machine Hourglass",
         "Id": 10020302,
         "Address": "0x2027C7E4",
         "CheckType": 0,
         "AddressBit": 3
-    },
-    {
-        "Name": "High Class Heist Key",
-        "Id": 10020103,
-        "Address": "0x2027C76C",
-        "CheckType": 0,
-        "AddressBit": 1
-    },
-    {
-        "Name": "High Class Heist Vault",
-        "Id": 10020203,
-        "Address": "0x2027C76C",
-        "CheckType": 0,
-        "AddressBit": 2
     },
     {
         "Name": "High Class Heist Hourglass",
@@ -70,39 +357,11 @@
         "AddressBit": 3
     },
     {
-        "Name": "Fire Down Below Key",
-        "Id": 10020104,
-        "Address": "0x2027C8D4",
-        "CheckType": 0,
-        "AddressBit": 1
-    },
-    {
-        "Name": "Fire Down Below Vault",
-        "Id": 10020204,
-        "Address": "0x2027C8D4",
-        "CheckType": 0,
-        "AddressBit": 2
-    },
-    {
         "Name": "Fire Down Below Hourglass",
         "Id": 10020304,
         "Address": "0x2027C8D4",
         "CheckType": 0,
         "AddressBit": 3
-    },
-    {
-        "Name": "Cunning Disguise Key",
-        "Id": 10020105,
-        "Address": "0x2027C85C",
-        "CheckType": 0,
-        "AddressBit": 1
-    },
-    {
-        "Name": "Cunning Disguise Vault",
-        "Id": 10020205,
-        "Address": "0x2027C85C",
-        "CheckType": 0,
-        "AddressBit": 2
     },
     {
         "Name": "Cunning Disguise Hourglass",
@@ -112,20 +371,6 @@
         "AddressBit": 3
     },
     {
-        "Name": "Gunboat Graveyard Key",
-        "Id": 10020106,
-        "Address": "0x2027C9C4",
-        "CheckType": 0,
-        "AddressBit": 1
-    },
-    {
-        "Name": "Gunboat Graveyard Vault",
-        "Id": 10020206,
-        "Address": "0x2027C9C4",
-        "CheckType": 0,
-        "AddressBit": 2
-    },
-    {
         "Name": "Gunboat Graveyard Hourglass",
         "Id": 10020306,
         "Address": "0x2027C9C4",
@@ -133,11 +378,95 @@
         "AddressBit": 3
     },
     {
-        "Name": "Treasure in the Depths Key",
-        "Id": 10020107,
-        "Address": "0x2027C94C",
+        "Name": "Rocky Start Hourglass",
+        "Id": 10020308,
+        "Address": "0x2027CAC8",
         "CheckType": 0,
-        "AddressBit": 1
+        "AddressBit": 3
+    },
+    {
+        "Name": "Boneyard Casino Hourglass",
+        "Id": 10020311,
+        "Address": "0x2027CBB8",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Straight to the Top Hourglass",
+        "Id": 10020312,
+        "Address": "0x2027CD98",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Two to Tango Hourglass",
+        "Id": 10020313,
+        "Address": "0x2027CD20",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Back Alley Heist Hourglass",
+        "Id": 10020314,
+        "Address": "0x2027CE10",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Dread Swamp Path Hourglass",
+        "Id": 10020315,
+        "Address": "0x2027CF14",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Lair of the Beast Hourglass",
+        "Id": 10020316,
+        "Address": "0x2027D004",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Grave Undertaking Hourglass",
+        "Id": 10020317,
+        "Address": "0x2027D07C",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Descent into Danger Hourglass",
+        "Id": 10020319,
+        "Address": "0x2027D16C",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Perilous Ascent Hourglass",
+        "Id": 10020322,
+        "Address": "0x2027D360",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Unseen Foe Hourglass",
+        "Id": 10020323,
+        "Address": "0x2027D4C8",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Flaming Temple of Flame Hourglass",
+        "Id": 10020324,
+        "Address": "0x2027D450",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Duel by the Dragon Hourglass",
+        "Id": 10020328,
+        "Address": "0x2027D630",
+        "CheckType": 0,
+        "AddressBit": 3
     },
     {
         "Name": "Beat Raleigh",
