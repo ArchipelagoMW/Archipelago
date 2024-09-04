@@ -3,14 +3,134 @@
         "Name": "Stealthy Approach Key",
         "Id": 10020101,
         "Address": "0x2027C67C",
-        "CheckType": 1,
-        "CheckValue": 3
+        "CheckType": 0,
+        "AddressBit": 1
     },
     {
-        "Name": "Stealthy Approach Key",
-        "Id": 10020101,
+        "Name": "Stealthy Approach Vault",
+        "Id": 10020201,
         "Address": "0x2027C67C",
-        "CheckType": 1,
-        "CheckValue": 7
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Stealthy Approach Hourglass",
+        "Id": 10020301,
+        "Address": "0x2027C67C",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Into the Machine Key",
+        "Id": 10020101,
+        "Address": "0x2027C7E4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Into the Machine Vault",
+        "Id": 10020201,
+        "Address": "0x2027C7E4",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Into the Machine Hourglass",
+        "Id": 10020301,
+        "Address": "0x2027C7E4",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "High Class Heist Key",
+        "Id": 10020101,
+        "Address": "0x2027C76C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "High Class Heist Vault",
+        "Id": 10020201,
+        "Address": "0x2027C76C",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "High Class Heist Hourglass",
+        "Id": 10020301,
+        "Address": "0x2027C76C",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Fire Down Below Key",
+        "Id": 10020101,
+        "Address": "0x2027C8D4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Fire Down Below Vault",
+        "Id": 10020201,
+        "Address": "0x2027C8D4",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Fire Down Below Hourglass",
+        "Id": 10020301,
+        "Address": "0x2027C8D4",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Cunning Disguise Key",
+        "Id": 10020101,
+        "Address": "0x2027C85C",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Cunning Disguise Vault",
+        "Id": 10020201,
+        "Address": "0x2027C85C",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Cunning Disguise Hourglass",
+        "Id": 10020301,
+        "Address": "0x2027C85C",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Gunboat Graveyard Key",
+        "Id": 10020101,
+        "Address": "0x2027C9C4",
+        "CheckType": 0,
+        "AddressBit": 1
+    },
+    {
+        "Name": "Gunboat Graveyard Vault",
+        "Id": 10020201,
+        "Address": "0x2027C9C4",
+        "CheckType": 0,
+        "AddressBit": 2
+    },
+    {
+        "Name": "Gunboat Graveyard Hourglass",
+        "Id": 10020301,
+        "Address": "0x2027C9C4",
+        "CheckType": 0,
+        "AddressBit": 3
+    },
+    {
+        "Name": "Treasure in the Depths Key",
+        "Id": 10020101,
+        "Address": "0x2027C94C",
+        "CheckType": 0,
+        "AddressBit": 1
     }
+    
 ]
