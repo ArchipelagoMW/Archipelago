@@ -37,6 +37,7 @@ class CivVIWeb(WebWorld):
         "setup/en",
         ["hesto2"]
     )]
+    theme = "ocean"
 
 
 class CivVIWorld(World):
@@ -44,7 +45,7 @@ class CivVIWorld(World):
     Civilization VI is a turn-based strategy video game in which one or more players compete alongside computer-controlled opponents to grow their individual civilization from a small tribe to control the entire planet across several periods of development.
     """
 
-    game: str = "Civilization VI"
+    game = "Civilization VI"
     topology_present = False
     options_dataclass = CivVIOptions
     options: CivVIOptions
@@ -59,7 +60,6 @@ class CivVIWorld(World):
     item_table: Dict[str, CivVIItemData] = {}
     location_by_era: Dict[EraType, Dict[str, CivVILocationData]]
 
-    data_version = 1
     required_client_version = (0, 4, 5)
 
     def __init__(self, multiworld: "MultiWorld", player: int):

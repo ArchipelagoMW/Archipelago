@@ -42,13 +42,13 @@ class ResearchCostMultiplier(Choice):
 
 
 class PreHintItems(Choice):
-    """Controls if/what items in the tech/civics trees are pre hinted for the multiworld.\n
-    All : All items in the tech & civics trees are pre hinted.\n
-    Progression items: Only locations in the trees containing progression items are pre hinted.\n
-    No Junk: Pre hint the progression and useful items.\n
-    None: No items are pre hinted.
+    """Controls if/what items in the tech/civics trees are pre-hinted for the multiworld.\n
+    All : All items in the tech & civics trees are pre-hinted.\n
+    Progression items: Only locations in the trees containing progression items are pre-hinted.\n
+    No Junk: pre-hint the progression and useful items.\n
+    None: No items are pre-hinted.
     """
-    display_name = "Tech/Civic Tree Pre Hinted Items"
+    display_name = "Tech/Civic Tree pre-hinted Items"
     option_all = 0
     option_progression_items = 1
     option_no_junk = 2
@@ -57,7 +57,7 @@ class PreHintItems(Choice):
 
 
 class HideItemNames(Toggle):
-    """Each Tech and Civic Location will have a title of 'Unrevealed' until its prereqs have been researched. Note that hints will still be pre collected if that option is enabled."""
+    """Each Tech and Civic Location will have a title of 'Unrevealed' until its prereqs have been researched. Note that hints will still be precollected if that option is enabled."""
     display_name = "Hide Item Names"
 
 
