@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "Sly1AP/1.0.0": {
         "dependencies": {
+          "Archipelago.Core": "0.0.5",
           "Archipelago.MultiClient.Net": "6.3.1",
           "Archipelago.PCSX2": "0.0.5"
         },

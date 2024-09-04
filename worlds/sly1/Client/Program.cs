@@ -81,8 +81,26 @@ namespace Sly1AP
             Client.PopulateLocations(locations);
             await Client.Login(playerName, password);
             ConfigureOptions(Client.Options);
-            //Try to get the player's current values before they get overridden. Cheaty way of doing save-load for the time being.
-            GetValues();
+            var ReceivedItems = Client.GameState.ReceivedItems;
+            foreach (var item in ReceivedItems)
+            {
+                if (item.Id >= 10020001 & item.Id <= 100200014)
+                {
+                    UpdateMoves(item.Id);
+                }
+                if (item.Id >= 10020015 & item.Id <= 10020018)
+                {
+                    UpdateKeys(item.Id);
+                }
+                if (item.Id >= 10020021 & item.Id <= 10020024)
+                {
+                    UpdateLevels(item.Id);
+                }
+                if (item.Id >= 10020019 & item.Id <= 10020020)
+                {
+                    UpdateJunk(item.Id);
+                }
+            }
             Client.ItemReceived += (e, args) =>
             {
                 Console.WriteLine($"Received: " + args.Item.Name);
