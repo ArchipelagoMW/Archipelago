@@ -152,8 +152,8 @@ The Japanese Version should have no problem displaying these.
 ### Toad does not have an item for me.
 
 This happens on older builds when you load an existing file that had already received an item from that toad.
-To resolve this, exit and start from a `NEW` file. The server will automatically restore your progress. Alternatively, 
-updating your build will prevent this issue in the future.
+To resolve this, exit and start from a `NEW` file. The server will automatically restore your progress.
+Alternatively, updating your build will prevent this issue in the future.
 
 ### What happens if I lose connection?
 
