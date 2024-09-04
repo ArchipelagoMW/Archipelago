@@ -68,16 +68,18 @@ class Wargroove2World(World):
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
 
     def generate_early(self) -> None:
-        if self.options.level_shuffle_seed == 0:
+        if self.options.level_shuffle_seed.value == 0:
             random = self.random
         else:
             random = Random(str(self.options.level_shuffle_seed))
 
-        random.shuffle(low_victory_checks_levels)
-        random.shuffle(high_victory_checks_levels)
-        non_starting_levels = high_victory_checks_levels + low_victory_checks_levels[4:]
+        low_victory_checks_levels_copy = low_victory_checks_levels.copy()
+        high_victory_checks_levels_copy = high_victory_checks_levels.copy()
+        random.shuffle(low_victory_checks_levels_copy)
+        random.shuffle(high_victory_checks_levels_copy)
+        non_starting_levels = high_victory_checks_levels_copy + low_victory_checks_levels_copy[4:]
         random.shuffle(non_starting_levels)
-        self.level_list = low_victory_checks_levels[0:4] + non_starting_levels
+        self.level_list = low_victory_checks_levels_copy[0:4] + non_starting_levels
 
         final_levels_no_ocean = list(level for level in final_levels if not level.has_ocean)
         final_levels_ocean = list(level for level in final_levels if level.has_ocean)
