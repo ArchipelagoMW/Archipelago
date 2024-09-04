@@ -548,6 +548,20 @@ def addshapesanity(amount: int, random: Random) -> Dict[str, Tuple[str, Location
         included_shapes[next_shape[0]] = (next_shape[1], LocationProgressType.DEFAULT)
     return included_shapes
 
+def addshapesanity_ut(list_of_location_names: List[str]) -> Dict[str, Tuple[str, LocationProgressType]]:
+    """Returns the same information as addshapesanity but will add specific values based on a UT rebuild"""
+
+    included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
+
+    for shape in list_of_location_names:
+        for options in [shapesanity_simple, shapesanity_medium, shapesanity_complex]:
+            if shape in options:
+                next_shape = options[shape]
+                break
+        else:
+            raise ValueError(f"Could not find shapesanity location {shape}")
+        included_shapes[shape] = (next_shape, LocationProgressType.DEFAULT)
+    return included_shapes
 
 class ShapezLocation(Location):
     game = "shapez"
