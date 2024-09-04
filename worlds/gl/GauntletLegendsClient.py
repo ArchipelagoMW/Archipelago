@@ -350,50 +350,33 @@ class GauntletLegendsContext(CommonContext):
             name = "Obelisk"
         if "Mirror" in name:
             name = "Mirror Shard"
+        players_to_check = range(self.players) if one is None else [one]
         zero = False
-        if one is None:
-            for player in range(self.players):
-                added = False
-                for item in self.inventory[player]:
-                    if item.name == name:
-                        zero = (item.count == 0 and "Health" not in name)
-                        if name in timers:
-                            count *= 96
-                        if "Compass" in name:
-                            item.count = count
-                        elif "Health" in name:
-                            max_health = await self.item_from_name("Max", player)
-                            item.count = min(max(item.count + count, 0), max_health.count)
-                        elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
-                            item.count |= count
-                        else:
-                            item.count += count
-                        await self.write_item(item)
-                        added = True
-                if not added:
-                    await self.inv_add(name, count, player)
-            if zero:
-                await self.inv_refactor()
-        else:
-            for item in self.inventory[one]:
+
+        for player in players_to_check:
+            added = False
+            for item in self.inventory[player]:
                 if item.name == name:
-                    zero = item.count == 0
+                    zero = (item.count == 0 and "Health" not in name)
                     if name in timers:
                         count *= 96
                     if "Compass" in name:
                         item.count = count
                     elif "Health" in name:
-                        max_health = await self.item_from_name("Max", one)
+                        max_health = await self.item_from_name("Max", player)
                         item.count = min(max(item.count + count, 0), max_health.count)
                     elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
                         item.count |= count
                     else:
                         item.count += count
                     await self.write_item(item)
-                    if zero:
-                        await self.inv_refactor()
-                    return
-            await self.inv_add(name, count, one)
+                    added = True
+                    break
+            if not added:
+                await self.inv_add(name, count, player)
+                continue
+            if zero:
+                await self.inv_refactor()
 
     # Rewrite entire inventory in RAM.
     # This is necessary since item entries are not cleared after full use until a level is completed.
