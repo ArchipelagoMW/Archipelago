@@ -8,7 +8,7 @@ class Goal(Choice):
     """
     Determines the goal of the seed
 
-    Knautilus: Scuttle the Knautilus in Krematoa and defeat Baron K. Roolenstein
+    Knautilus: Raise the submarine in Krematoa and defeat Baron K. Roolenstein
 
     Banana Bird Hunt: Find a certain number of Banana Birds and rescue their mother
     """
@@ -16,6 +16,19 @@ class Goal(Choice):
     option_knautilus = 0
     option_banana_bird_hunt = 1
     default = 0
+
+class SwapFinalBoss(DefaultOnToggle):
+    """
+    Swaps Kastle Kaos with the Knautilus, changing which boss has to be beaten to win the game.
+
+    The credits will play after Kastle Kaos is cleared.
+    Swapping Kastle Kaos into Krematoa thus makes for a victory with a bit more fanfare.
+
+    The final boss will be located in Krematoa, regardless of this setting.
+
+    Only applies if Goal is set to Knautilus. Otherwise, this setting has no effect.
+    """
+    display_name = "Swap Final Boss"
 
 
 class IncludeTradeSequence(Toggle):
@@ -187,6 +200,7 @@ class DKC3Options(PerGameCommonOptions):
     #include_trade_sequence: IncludeTradeSequence          # Disabled
 
     goal: Goal
+    swap_final_boss: SwapFinalBoss
     krematoa_bonus_coin_cost: KrematoaBonusCoinCost
     percentage_of_extra_bonus_coins: PercentageOfExtraBonusCoins
     number_of_banana_birds: NumberOfBananaBirds

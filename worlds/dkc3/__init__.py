@@ -112,7 +112,10 @@ class DKC3World(World):
         self.multiworld.get_location(LocationName.rocket_rush_flag, self.player).place_locked_item(self.create_item(ItemName.krematoa_cog))
         number_of_bosses = 8
         if self.options.goal == "knautilus":
-            self.multiworld.get_location(LocationName.kastle_kaos, self.player).place_locked_item(self.create_item(ItemName.victory))
+            if self.options.swap_final_boss:
+                self.multiworld.get_location(LocationName.kastle_kaos, self.player).place_locked_item(self.create_item(ItemName.victory))
+            else:
+                self.multiworld.get_location(LocationName.knautilus, self.player).place_locked_item(self.create_item(ItemName.victory))
             number_of_bosses = 7
         else:
             self.multiworld.get_location(LocationName.banana_bird_mother, self.player).place_locked_item(self.create_item(ItemName.victory))

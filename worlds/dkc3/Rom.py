@@ -611,7 +611,7 @@ def patch_rom(world: World, rom: LocalRom, active_level_list):
         rom.write_byte(0x34C213, (0x32 + level_dict[active_level_list[25]].levelID))
         rom.write_byte(0x34C21B, (0x32 + level_dict[active_level_list[26]].levelID))
 
-    if world.options.goal == "knautilus":
+    if world.options.goal == "knautilus" and world.options.swap_final_boss:
         # Swap Kastle KAOS and Knautilus
         rom.write_byte(0x34D4E1, 0xC2)
         rom.write_byte(0x34D4E2, 0x24)

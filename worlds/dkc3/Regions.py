@@ -901,7 +901,7 @@ def connect_regions(world: World, level_list):
         connect(world, world.player, names, LocationName.krematoa_region, krematoa_levels[i],
                 lambda state, i=i: (state.has(ItemName.bonus_coin, world.player, world.options.krematoa_bonus_coin_cost.value * (i+1))))
 
-    if world.options.goal == "knautilus":
+    if world.options.goal == "knautilus" and world.options.swap_final_boss:
         connect(world, world.player, names, LocationName.kaos_kore_region, LocationName.knautilus_region)
         connect(world, world.player, names, LocationName.krematoa_region, LocationName.kastle_kaos_region,
                 lambda state: (state.has(ItemName.krematoa_cog, world.player, 5)))
