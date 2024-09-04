@@ -1,3 +1,5 @@
+from worlds.ff4fe import events, items
+
 area_rules = {
     "BaronWeaponShop": ["Baron Key"],
     "BaronCastle": ["Baron Key", "Baigan Slot Defeated"],
@@ -10,15 +12,15 @@ area_rules = {
 
 boss_rules = {
     "Officer Slot": ["Package"],
-    "Milonz Slot": ["Milon Slot Defeated"],
-    "Mirror Cecil Slot": ["Milon Slot Defeated", "Milonz Slot Defeated"],
-    "Karate Slot": ["Guard Slot Defeated"],
+    "Milon Z. Slot": ["Milon Slot Defeated"],
+    "Mirror Cecil Slot": ["Milon Slot Defeated", "Milon Z. Slot Defeated"],
+    "Karate Slot": ["Guards Slot Defeated"],
     "Baigan Slot": ["Baron Key"],
     "Kainazzo Slot": ["Baron Key", "Baigan Slot Defeated"],
-    "Darkelf Slot": ["TwinHarp"],
-    "Valvalis Slot": ["Earth Crystal", "Magus Slot Defeated"],
+    "Dark Elf Slot": ["TwinHarp"],
+    "Valvalis Slot": ["Earth Crystal", "Magus Sisters Slot Defeated"],
     "Golbez Slot": ["Calbrena Slot Defeated"],
-    "Dark Imp Slot": ["Tower Key"],
+    "Dark Imps Slot": ["Tower Key"],
     "Rubicant Slot": ["King and Queen Slot Defeated"],
     "Odin Slot": ["Baron Key", "Baigan Slot Defeated"],
     "CPU Slot": ["Elements Slot Defeated"],
@@ -34,7 +36,7 @@ individual_location_rules = {
     ],
     "Mist Character": ["Package"],
     "Kaipo Character": ["SandRuby"],
-    "Mt. Hobs Character": ["Mombomb Slot Defeated"],
+    "Mt. Hobs Character": ["MomBomb Slot Defeated"],
     "Baron Inn Character": ["Karate Slot Defeated"],
     "Baron Castle Character": ["Kainazzo Slot Defeated"],
     "Tower of Zot Character 1": ["Valvalis Slot Defeated"],
@@ -52,14 +54,19 @@ individual_location_rules = {
     "Fabul -- West tower 3F (Yang's room) -- Found Yang item": ["Hook", "Magma Key"],
     "Fabul -- West tower 3F (Yang's room) -- Pan Trade item": ["Hook", "Magma Key", "Pan"],
     "Mt. Ordeals -- Mirror Room -- item": ["Mirror Cecil Slot Defeated"],
-    "Cave Magnes -- Crystal Room -- item": ["Darkelf Slot Defeated"],
+    "Cave Magnes -- Crystal Room -- item": ["Dark Elf Slot Defeated"],
     "Tower of Bab-il (lower) -- 5F -- item (Super Cannon destruction)": ["Dark Imp Slot Defeated"],
     "Baron Castle -- Basement -- Odin item": ["Odin Slot Defeated"],
     "Cave Bahamut -- B3F -- Baham item": ["Bahamut Slot Defeated"],
     "Town of Monsters -- Throne Room -- Asura item": ["Asura Slot Defeated"],
     "Town of Monsters -- Throne Room -- Levia item": ["Leviatan Slot Defeated"],
     "Adamant -- Cave -- Rat Tail Trade item": ["Rat Tail"],
-    "Adamant -- Cave -- Pink Tail Trade item": ["Pink Tail"]
+    "Adamant -- Cave -- Pink Tail Trade item": ["Pink Tail"],
+    "Kokkol's House 2F -- Kokkol -- forge item": ["Legend Sword", "Adamant"],
+    "Lunar Subterrane -- B7 (right room) -- Ribbon Left": ["D. Lunars Slot Defeated"],
+    "Lunar Subterrane -- B7 (right room) -- Ribbon Right": ["D. Lunars Slot Defeated"],
+    "Objectives Status": [*[item for item in items.key_item_names if item not in ["Crystal", "Spoon", "Pass"]]],
+    "Objective Reward": ["All Objectives Cleared"]
 }
 
 location_tiers = {

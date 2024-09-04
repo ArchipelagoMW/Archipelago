@@ -10,7 +10,7 @@ cached_changelog = {'content' : None, 'mtime' : None}
 
 def get(resource_name):
     should_load = False
-    source_path = os.path.join(os.path.dirname(__file__), 'content', resource_name)
+    source_path = os.path.join(__file__, 'content', resource_name)
     if not os.path.exists(source_path):
         return None
     current_mtime = os.path.getmtime(source_path)

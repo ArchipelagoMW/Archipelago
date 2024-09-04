@@ -1,0 +1,7 @@
+// ------------------------------------------------------------------------------------
+// Consts
+
+const_block_params : identifier
+
+const_block_body : const_definition*
+const_definition : number identifier

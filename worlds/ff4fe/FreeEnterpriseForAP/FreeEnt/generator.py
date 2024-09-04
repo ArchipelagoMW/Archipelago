@@ -240,7 +240,7 @@ class GeneratorOutput:
 
 class Environment:
     def __init__(self, options, file_root=None):
-        self._file_root = (os.path.dirname(__file__) if file_root is None else file_root)
+        self._file_root = (__file__ if file_root is None else file_root)
         self._options = options
         self._meta = dict()
         self._rewards = rewards.RewardsAssignment()
@@ -553,7 +553,7 @@ def build(romfile, options, force_recompile=False):
         options.flags.unset('-vanilla:hobs')
 
 
-    env = Environment(options, os.path.dirname(__file__))
+    env = Environment(options, __file__)
 
     formatted_flags = (env.options.flags.to_string(pretty=True, wrap_width=68).replace('\n', '\n            '))
 
@@ -644,7 +644,7 @@ def build(romfile, options, force_recompile=False):
             method(env)
 
     if not options.flags.has('vanilla_z') or options.flags.has('vintage'):
-        ZEROMUS_PICS_DIR = os.path.join(os.path.dirname(__file__), 'compiled_zeromus_pics')
+        ZEROMUS_PICS_DIR = os.path.join('compiled_zeromus_pics')
         if not options.flags.has('vanilla_z'):
             z_asset = select_from_catalog(os.path.join(ZEROMUS_PICS_DIR, 'catalog'), env)
             if options.flags.has('vintage'):
@@ -657,7 +657,7 @@ def build(romfile, options, force_recompile=False):
         env.add_scripts('// [[[ ZEROMUS SPRITE START ]]]\n' + zeromus_sprite_script + '\n// [[[ ZEROMUS SPRITE END ]]]\n')
 
     env.add_file('scripts/midiharp.f4c')
-    HARP_SONGS_DIR = os.path.join(os.path.dirname(__file__), 'compiled_songs')
+    HARP_SONGS_DIR = os.path.join('compiled_songs')
     song_asset = select_from_catalog(os.path.join(HARP_SONGS_DIR, 'catalog'), env) + '.asset'
     env.add_substitution('midiharp default credits', '')
     infile = pkgutil.get_data(__name__, HARP_SONGS_DIR + "/" + song_asset).decode()

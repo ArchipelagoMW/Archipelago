@@ -1,0 +1,5829 @@
+formation($00)
+{
+    monsters {
+        $00 x 3   // Imp     
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($01)
+{
+    monsters {
+        $03 x 2   // FloatEye
+    }
+    arrangement $01
+    floating enemies
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($02)
+{
+    monsters {
+        $03 x 1   // FloatEye
+        $02 x 2   // Eagle   
+    }
+    arrangement $02
+    floating enemies
+    gfx bits 2
+    cursor graph $03
+}
+
+formation($03)
+{
+    monsters {
+        $02 x 3   // Eagle   
+    }
+    arrangement $1C
+    floating enemies
+    gfx bits 2
+    cursor graph $19
+}
+
+formation($04)
+{
+    monsters {
+        $00 x 3   // Imp     
+        $07 x 1   // SwordRat
+    }
+    arrangement $03
+    gfx bits 2
+    cursor graph $04
+}
+
+formation($05)
+{
+    monsters {
+        $07 x 2   // SwordRat
+        $00 x 2   // Imp     
+    }
+    arrangement $04
+    gfx bits 2
+    cursor graph $05
+}
+
+formation($06)
+{
+    monsters {
+        $00 x 3   // Imp     
+        $00 x 1   // Imp     
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($07)
+{
+    monsters {
+        $04 x 3   // Larva   
+    }
+    arrangement $28
+    gfx bits 2
+    cursor graph $22
+}
+
+formation($08)
+{
+    monsters {
+        $0A x 2   // SandMoth
+        $04 x 2   // Larva   
+    }
+    arrangement $07
+    gfx bits 2
+    cursor graph $08
+}
+
+formation($09)
+{
+    monsters {
+        $09 x 3   // Sand Man
+        $09 x 1   // Sand Man
+    }
+    arrangement $28
+    gfx bits 2
+    cursor graph $22
+}
+
+formation($0A)
+{
+    monsters {
+        $0B x 1   // Sandpede
+        $09 x 2   // Sand Man
+    }
+    arrangement $0A
+    gfx bits 2
+    cursor graph $0B
+}
+
+formation($0B)
+{
+    monsters {
+        $0C x 1   // SandWorm
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($0C)
+{
+    monsters {
+        $0E x 3   // EvilShel
+        $29 x 1   // WaterBug
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($0D)
+{
+    monsters {
+        $10 x 3   // Pike    
+    }
+    arrangement $0C
+    gfx bits 2
+    cursor graph $0D
+}
+
+formation($0E)
+{
+    monsters {
+        $0D x 3   // CaveToad
+    }
+    arrangement $0D
+    gfx bits 2
+    cursor graph $0E
+}
+
+formation($0F)
+{
+    monsters {
+        $10 x 2   // Pike    
+        $0E x 2   // EvilShel
+    }
+    arrangement $05
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($10)
+{
+    monsters {
+        $0F x 3   // Zombie  
+        $0F x 1   // Zombie  
+    }
+    arrangement $0E
+    gfx bits 2
+    cursor graph $0F
+}
+
+formation($11)
+{
+    monsters {
+        $10 x 2   // Pike    
+        $0E x 2   // EvilShel
+        $29 x 2   // WaterBug
+    }
+    arrangement $04
+    gfx bits 2
+    cursor graph $05
+}
+
+formation($12)
+{
+    monsters {
+        $13 x 3   // Jelly   
+        $13 x 1   // Jelly   
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($13)
+{
+    monsters {
+        $08 x 2   // TinyMage
+        $15 x 2   // WaterHag
+        $15 x 2   // WaterHag
+    }
+    arrangement $10
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($14)
+{
+    monsters {
+        $0D x 2   // CaveToad
+        $0D x 2   // CaveToad
+    }
+    arrangement $0D
+    gfx bits 2
+    cursor graph $0E
+}
+
+formation($15)
+{
+    monsters {
+        $0D x 2   // CaveToad
+        $12 x 2   // Mad Toad
+    }
+    arrangement $7C
+    gfx bits 2
+    cursor graph $4F
+}
+
+formation($16)
+{
+    monsters {
+        $2A x 1   // Aligator
+        $10 x 2   // Pike    
+    }
+    arrangement $15
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($17)
+{
+    monsters {
+        $2A x 2   // Aligator
+    }
+    arrangement $6B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($18)
+{
+    monsters {
+        $0F x 3   // Zombie  
+        $0F x 3   // Zombie  
+    }
+    arrangement $08
+    gfx bits 2
+    cursor graph $09
+}
+
+formation($19)
+{
+    monsters {
+        $2A x 1   // Aligator
+        $29 x 2   // WaterBug
+    }
+    arrangement $15
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($1A)
+{
+    monsters {
+        $12 x 3   // Mad Toad
+        $12 x 1   // Mad Toad
+    }
+    arrangement $7C
+    gfx bits 2
+    cursor graph $4F
+}
+
+formation($1B)
+{
+    monsters {
+        $08 x 3   // TinyMage
+        $08 x 1   // TinyMage
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($1C)
+{
+    monsters {
+        $00 x 3   // Imp     
+        $00 x 3   // Imp     
+        $00 x 2   // Imp     
+    }
+    arrangement $13
+    gfx bits 2
+    cursor graph $0F
+}
+
+formation($1D)
+{
+    monsters {
+        $07 x 2   // SwordRat
+        $00 x 2   // Imp     
+        $08 x 2   // TinyMage
+    }
+    arrangement $04
+    gfx bits 2
+    cursor graph $05
+}
+
+formation($1E)
+{
+    monsters {
+        $0C x 1   // SandWorm
+        $0B x 1   // Sandpede
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($1F)
+{
+    monsters {
+        $0C x 2   // SandWorm
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($20)
+{
+    monsters {
+        $00 x 3   // Imp     
+        $1B x 1   // Imp Cap.
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($21)
+{
+    monsters {
+        $1A x 1   // Turtle  
+        $00 x 2   // Imp     
+    }
+    arrangement $15
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($22)
+{
+    monsters {
+        $14 x 2   // Cream   
+        $14 x 2   // Cream   
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($23)
+{
+    monsters {
+        $01 x 1   // Basilisk
+        $00 x 3   // Imp     
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($24)
+{
+    monsters {
+        $1A x 2   // Turtle  
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($25)
+{
+    monsters {
+        $16 x 1   // Weeper  
+        $1A x 1   // Turtle  
+        $01 x 1   // Basilisk
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($26)
+{
+    monsters {
+        $01 x 1   // Basilisk
+        $1A x 1   // Turtle  
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($27)
+{
+    monsters {
+        $16 x 2   // Weeper  
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($28)
+{
+    monsters {
+        $23 x 3   // Skelton 
+        $23 x 1   // Skelton 
+    }
+    arrangement $08
+    gfx bits 2
+    cursor graph $09
+}
+
+formation($29)
+{
+    monsters {
+        $22 x 2   // Spirit  
+    }
+    arrangement $24
+    gfx bits 2
+    cursor graph $20
+}
+
+formation($2A)
+{
+    monsters {
+        $25 x 1   // Gargoyle
+        $24 x 2   // Cocktric
+    }
+    arrangement $1D
+    floating enemies
+    gfx bits 2
+    cursor graph $1A
+}
+
+formation($2B)
+{
+    monsters {
+        $55 x 3   // Bomb    
+    }
+    arrangement $24
+    gfx bits 2
+    cursor graph $20
+}
+
+formation($2C)
+{
+    monsters {
+        $24 x 3   // Cocktric
+    }
+    arrangement $02
+    floating enemies
+    gfx bits 2
+    cursor graph $03
+}
+
+formation($2D)
+{
+    monsters {
+        $25 x 2   // Gargoyle
+    }
+    arrangement $1E
+    floating enemies
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($2E)
+{
+    monsters {
+        $56 x 2   // GrayBomb
+        $55 x 2   // Bomb    
+    }
+    arrangement $13
+    gfx bits 2
+    cursor graph $0F
+}
+
+formation($2F)
+{
+    monsters {
+        $22 x 2   // Spirit  
+        $23 x 2   // Skelton 
+    }
+    arrangement $10
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($30)
+{
+    monsters {
+        $56 x 1   // GrayBomb
+        $55 x 2   // Bomb    
+        $56 x 1   // GrayBomb
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($31)
+{
+    monsters {
+        $2F x 1   // Red Bone
+        $23 x 3   // Skelton 
+    }
+    arrangement $0B
+    gfx bits 2
+    cursor graph $0C
+}
+
+formation($32)
+{
+    monsters {
+        $56 x 2   // GrayBomb
+        $55 x 2   // Bomb    
+        $55 x 2   // Bomb    
+    }
+    arrangement $04
+    gfx bits 2
+    cursor graph $05
+}
+
+formation($33)
+{
+    monsters {
+        $22 x 3   // Spirit  
+        $23 x 2   // Skelton 
+        $2F x 1   // Red Bone
+    }
+    arrangement $23
+    gfx bits 2
+    cursor graph $1F
+}
+
+formation($34)
+{
+    monsters {
+        $1B x 3   // Imp Cap.
+        $1F x 1   // Needler 
+    }
+    arrangement $03
+    gfx bits 2
+    cursor graph $04
+}
+
+formation($35)
+{
+    monsters {
+        $1B x 3   // Imp Cap.
+        $1F x 3   // Needler 
+    }
+    arrangement $0F
+    gfx bits 2
+    cursor graph $10
+}
+
+formation($36)
+{
+    monsters {
+        $1B x 2   // Imp Cap.
+        $1B x 2   // Imp Cap.
+        $00 x 2   // Imp     
+    }
+    arrangement $13
+    gfx bits 2
+    cursor graph $0F
+}
+
+formation($37)
+{
+    monsters {
+        $07 x 3   // SwordRat
+        $1F x 3   // Needler 
+    }
+    arrangement $0C
+    gfx bits 2
+    cursor graph $0D
+}
+
+formation($38)
+{
+    monsters {
+        $28 x 1   // Raven   
+    }
+    arrangement $6B
+    floating enemies
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($39)
+{
+    monsters {
+        $28 x 1   // Raven   
+        $24 x 3   // Cocktric
+    }
+    arrangement $1F
+    floating enemies
+    gfx bits 2
+    cursor graph $1B
+}
+
+formation($3A)
+{
+    monsters {
+        $1F x 2   // Needler 
+        $07 x 2   // SwordRat
+    }
+    arrangement $05
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($3B)
+{
+    monsters {
+        $1B x 3   // Imp Cap.
+        $00 x 3   // Imp     
+    }
+    arrangement $0F
+    gfx bits 2
+    cursor graph $10
+}
+
+formation($3C)
+{
+    monsters {
+        $22 x 3   // Spirit  
+        $2E x 1   // Soul    
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($3D)
+{
+    monsters {
+        $2E x 2   // Soul    
+        $2F x 2   // Red Bone
+    }
+    arrangement $10
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($3E)
+{
+    monsters {
+        $23 x 3   // Skelton 
+        $2F x 2   // Red Bone
+    }
+    arrangement $78
+    gfx bits 2
+    cursor graph $37
+}
+
+formation($3F)
+{
+    monsters {
+        $5D x 1   // Lilith  
+        $2F x 2   // Red Bone
+    }
+    arrangement $09
+    gfx bits 2
+    cursor graph $0A
+}
+
+formation($40)
+{
+    monsters {
+        $30 x 1   // Ghoul   
+        $2F x 2   // Red Bone
+        $23 x 2   // Skelton 
+    }
+    arrangement $22
+    gfx bits 2
+    cursor graph $1E
+}
+
+formation($41)
+{
+    monsters {
+        $22 x 2   // Spirit  
+        $2E x 2   // Soul    
+        $2F x 2   // Red Bone
+    }
+    arrangement $21
+    gfx bits 2
+    cursor graph $1D
+}
+
+formation($42)
+{
+    monsters {
+        $0F x 2   // Zombie  
+        $30 x 2   // Ghoul   
+    }
+    arrangement $08
+    gfx bits 2
+    cursor graph $09
+}
+
+formation($43)
+{
+    monsters {
+        $30 x 2   // Ghoul   
+        $2E x 2   // Soul    
+    }
+    arrangement $55
+    gfx bits 2
+    cursor graph $36
+}
+
+formation($44)
+{
+    monsters {
+        $32 x 1   // Revenant
+        $30 x 3   // Ghoul   
+    }
+    arrangement $28
+    gfx bits 2
+    cursor graph $22
+}
+
+formation($45)
+{
+    monsters {
+        $0F x 3   // Zombie  
+        $30 x 2   // Ghoul   
+        $32 x 2   // Revenant
+    }
+    arrangement $22
+    gfx bits 2
+    cursor graph $1E
+}
+
+formation($46)
+{
+    monsters {
+        $5D x 1   // Lilith  
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($47)
+{
+    monsters {
+        $2E x 2   // Soul    
+        $30 x 2   // Ghoul   
+        $32 x 2   // Revenant
+    }
+    arrangement $10
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($48)
+{
+    monsters {
+        $2E x 3   // Soul    
+        $30 x 1   // Ghoul   
+        $32 x 1   // Revenant
+    }
+    arrangement $23
+    gfx bits 2
+    cursor graph $1F
+}
+
+formation($49)
+{
+    monsters {
+        $5D x 2   // Lilith  
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($4A)
+{
+    monsters {
+        $2B x 2   // Piranha 
+        $49 x 1   // FangShel
+        $0E x 1   // EvilShel
+    }
+    arrangement $05
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($4B)
+{
+    monsters {
+        $10 x 3   // Pike    
+        $2B x 3   // Piranha 
+    }
+    arrangement $06
+    gfx bits 2
+    cursor graph $07
+}
+
+formation($4C)
+{
+    monsters {
+        $37 x 1   // Crocdile
+        $2B x 2   // Piranha 
+    }
+    arrangement $15
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($4D)
+{
+    monsters {
+        $49 x 3   // FangShel
+        $2A x 1   // Aligator
+        $37 x 1   // Crocdile
+    }
+    arrangement $17
+    gfx bits 2
+    cursor graph $16
+}
+
+formation($4E)
+{
+    monsters {
+        $2B x 2   // Piranha 
+        $36 x 2   // ElecFish
+    }
+    arrangement $7C
+    gfx bits 2
+    cursor graph $4F
+}
+
+formation($4F)
+{
+    monsters {
+        $37 x 1   // Crocdile
+        $36 x 3   // ElecFish
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($50)
+{
+    monsters {
+        $39 x 1   // AquaWorm
+        $2B x 3   // Piranha 
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($51)
+{
+    monsters {
+        $38 x 2   // Hydra   
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($52)
+{
+    monsters {
+        $37 x 2   // Crocdile
+    }
+    arrangement $6B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($53)
+{
+    monsters {
+        $39 x 1   // AquaWorm
+        $36 x 3   // ElecFish
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($54)
+{
+    monsters {
+        $39 x 1   // AquaWorm
+        $38 x 1   // Hydra   
+        $37 x 1   // Crocdile
+    }
+    arrangement $25
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($55)
+{
+    monsters {
+        $3A x 2   // Guard   
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($56)
+{
+    monsters {
+        $3A x 1   // Guard   
+        $38 x 2   // Hydra   
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($57)
+{
+    monsters {
+        $39 x 2   // AquaWorm
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($58)
+{
+    monsters {
+        $3C x 3   // StingRat
+        $06 x 2   // Treant  
+    }
+    arrangement $23
+    gfx bits 2
+    cursor graph $1F
+}
+
+formation($59)
+{
+    monsters {
+        $42 x 1   // Panther 
+        $3C x 3   // StingRat
+    }
+    arrangement $6C
+    gfx bits 2
+    cursor graph $49
+}
+
+formation($5A)
+{
+    monsters {
+        $21 x 1   // Cannibal
+        $06 x 2   // Treant  
+    }
+    arrangement $0A
+    gfx bits 2
+    cursor graph $0B
+}
+
+formation($5B)
+{
+    monsters {
+        $3D x 1   // Python  
+        $3C x 2   // StingRat
+    }
+    arrangement $15
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($5C)
+{
+    monsters {
+        $41 x 1   // Ogre    
+        $42 x 2   // Panther 
+    }
+    arrangement $79
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($5D)
+{
+    monsters {
+        $41 x 2   // Ogre    
+    }
+    arrangement $5B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($5E)
+{
+    monsters {
+        $05 x 3   // Cave Bat
+    }
+    arrangement $4F
+    floating enemies
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($5F)
+{
+    monsters {
+        $42 x 2   // Panther 
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($60)
+{
+    monsters {
+        $3F x 2   // Mage    
+    }
+    arrangement $1C
+    gfx bits 2
+    cursor graph $19
+}
+
+formation($61)
+{
+    monsters {
+        $34 x 1   // CaveNaga
+        $41 x 1   // Ogre    
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($62)
+{
+    monsters {
+        $34 x 1   // CaveNaga
+        $3D x 2   // Python  
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($63)
+{
+    monsters {
+        $41 x 3   // Ogre    
+    }
+    arrangement $50
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($64)
+{
+    monsters {
+        $33 x 1   // VampGirl
+        $05 x 3   // Cave Bat
+    }
+    arrangement $27
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($65)
+{
+    monsters {
+        $3F x 1   // Mage    
+        $42 x 1   // Panther 
+        $41 x 1   // Ogre    
+    }
+    arrangement $4E
+    gfx bits 2
+    cursor graph $2F
+}
+
+formation($66)
+{
+    monsters {
+        $42 x 2   // Panther 
+        $41 x 2   // Ogre    
+    }
+    arrangement $2E
+    gfx bits 2
+    cursor graph $26
+}
+
+formation($67)
+{
+    monsters {
+        $34 x 2   // CaveNaga
+        $3D x 2   // Python  
+    }
+    arrangement $2F
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($68)
+{
+    monsters {
+        $33 x 2   // VampGirl
+        $05 x 3   // Cave Bat
+    }
+    arrangement $51
+    gfx bits 2
+    cursor graph $33
+}
+
+formation($69)
+{
+    monsters {
+        $42 x 2   // Panther 
+        $41 x 1   // Ogre    
+        $34 x 1   // CaveNaga
+    }
+    arrangement $2E
+    gfx bits 2
+    cursor graph $26
+}
+
+formation($6A)
+{
+    monsters {
+        $33 x 1   // VampGirl
+        $05 x 3   // Cave Bat
+        $05 x 3   // Cave Bat
+    }
+    arrangement $2C
+    gfx bits 2
+    cursor graph $24
+}
+
+formation($6B)
+{
+    monsters {
+        $46 x 1   // Marion  
+        $47 x 1   // Puppet  
+        $47 x 2   // Puppet  
+    }
+    calling
+    arrangement $6D
+    gfx bits 2
+    cursor graph $4A
+}
+
+formation($6C)
+{
+    monsters {
+        $46 x 1   // Marion  
+        $47 x 1   // Puppet  
+        $47 x 3   // Puppet  
+    }
+    calling
+    arrangement $24
+    gfx bits 2
+    cursor graph $20
+}
+
+formation($6D)
+{
+    monsters {
+        $44 x 1   // Centaur 
+        $78 x 2   // IceBeast
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($6E)
+{
+    monsters {
+        $44 x 2   // Centaur 
+        $78 x 2   // IceBeast
+    }
+    arrangement $2F
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($6F)
+{
+    monsters {
+        $44 x 3   // Centaur 
+    }
+    arrangement $50
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($70)
+{
+    monsters {
+        $44 x 1   // Centaur 
+        $70 x 2   // Gremlin 
+    }
+    arrangement $79
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($71)
+{
+    monsters {
+        $1C x 2   // Slime   
+        $1C x 2   // Slime   
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($72)
+{
+    monsters {
+        $75 x 1   // Ice Liz 
+        $1C x 3   // Slime   
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($73)
+{
+    monsters {
+        $13 x 1   // Jelly   
+        $1C x 2   // Slime   
+        $14 x 1   // Cream   
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($74)
+{
+    monsters {
+        $70 x 2   // Gremlin 
+        $75 x 2   // Ice Liz 
+    }
+    arrangement $6E
+    gfx bits 2
+    cursor graph $36
+}
+
+formation($75)
+{
+    monsters {
+        $58 x 2   // Carapace
+        $75 x 2   // Ice Liz 
+    }
+    arrangement $26
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($76)
+{
+    monsters {
+        $43 x 2   // SwordMan
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($77)
+{
+    monsters {
+        $43 x 1   // SwordMan
+        $75 x 2   // Ice Liz 
+    }
+    arrangement $54
+    gfx bits 2
+    cursor graph $35
+}
+
+formation($78)
+{
+    monsters {
+        $43 x 2   // SwordMan
+        $75 x 2   // Ice Liz 
+    }
+    arrangement $57
+    gfx bits 2
+    cursor graph $38
+}
+
+formation($79)
+{
+    monsters {
+        $43 x 1   // SwordMan
+        $78 x 2   // IceBeast
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($7A)
+{
+    monsters {
+        $4D x 2   // EpeeGirl
+        $43 x 2   // SwordMan
+    }
+    arrangement $19
+    gfx bits 2
+    cursor graph $08
+}
+
+formation($7B)
+{
+    monsters {
+        $4D x 3   // EpeeGirl
+    }
+    arrangement $56
+    gfx bits 2
+    cursor graph $37
+}
+
+formation($7C)
+{
+    monsters {
+        $7A x 1   // Witch   
+        $4D x 1   // EpeeGirl
+        $43 x 1   // SwordMan
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($7D)
+{
+    monsters {
+        $4D x 1   // EpeeGirl
+        $75 x 1   // Ice Liz 
+        $78 x 1   // IceBeast
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($7E)
+{
+    monsters {
+        $7A x 1   // Witch   
+        $4D x 1   // EpeeGirl
+        $44 x 1   // Centaur 
+    }
+    arrangement $49
+    gfx bits 2
+    cursor graph $2F
+}
+
+formation($7F)
+{
+    monsters {
+        $7A x 1   // Witch   
+        $78 x 2   // IceBeast
+        $4D x 1   // EpeeGirl
+    }
+    arrangement $19
+    gfx bits 2
+    cursor graph $08
+}
+
+formation($80)
+{
+    monsters {
+        $7A x 1   // Witch   
+        $43 x 2   // SwordMan
+        $4D x 1   // EpeeGirl
+    }
+    arrangement $19
+    gfx bits 2
+    cursor graph $08
+}
+
+formation($81)
+{
+    monsters {
+        $7A x 1   // Witch   
+        $4D x 2   // EpeeGirl
+    }
+    arrangement $54
+    gfx bits 2
+    cursor graph $35
+}
+
+formation($82)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($83)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($84)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($85)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($86)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($87)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($88)
+{
+    monsters {
+        $61 x 1   // Roc     
+        $26 x 2   // Roc Baby
+    }
+    arrangement $1F
+    floating enemies
+    gfx bits 2
+    cursor graph $1B
+}
+
+formation($89)
+{
+    monsters {
+        $61 x 1   // Roc     
+        $26 x 3   // Roc Baby
+    }
+    arrangement $1F
+    floating enemies
+    gfx bits 2
+    cursor graph $1B
+}
+
+formation($8A)
+{
+    monsters {
+        $60 x 3   // HugeCell
+        $60 x 1   // HugeCell
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($8B)
+{
+    monsters {
+        $60 x 3   // HugeCell
+    }
+    arrangement $0C
+    gfx bits 2
+    cursor graph $0D
+}
+
+formation($8C)
+{
+    monsters {
+        $65 x 3   // GiantBat
+    }
+    arrangement $4F
+    floating enemies
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($8D)
+{
+    monsters {
+        $65 x 3   // GiantBat
+        $65 x 1   // GiantBat
+    }
+    arrangement $91
+    floating enemies
+    gfx bits 2
+    cursor graph $5A
+}
+
+formation($8E)
+{
+    monsters {
+        $65 x 3   // GiantBat
+        $05 x 3   // Cave Bat
+    }
+    arrangement $90
+    floating enemies
+    gfx bits 2
+    cursor graph $59
+}
+
+formation($8F)
+{
+    monsters {
+        $59 x 2   // Ironback
+    }
+    arrangement $6B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($90)
+{
+    monsters {
+        $59 x 1   // Ironback
+        $4C x 1   // Armadilo
+        $19 x 1   // BlackLiz
+    }
+    arrangement $58
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($91)
+{
+    monsters {
+        $59 x 2   // Ironback
+        $19 x 2   // BlackLiz
+    }
+    arrangement $1A
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($92)
+{
+    monsters {
+        $31 x 3   // Skull   
+    }
+    arrangement $0B
+    gfx bits 2
+    cursor graph $0C
+}
+
+formation($93)
+{
+    monsters {
+        $31 x 2   // Skull   
+        $31 x 2   // Skull   
+    }
+    arrangement $28
+    gfx bits 2
+    cursor graph $22
+}
+
+formation($94)
+{
+    monsters {
+        $2F x 3   // Red Bone
+        $31 x 2   // Skull   
+    }
+    arrangement $78
+    gfx bits 2
+    cursor graph $37
+}
+
+formation($95)
+{
+    monsters {
+        $93 x 1   // Staleman
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($96)
+{
+    monsters {
+        $93 x 1   // Staleman
+        $31 x 2   // Skull   
+    }
+    arrangement $09
+    gfx bits 2
+    cursor graph $0A
+}
+
+formation($97)
+{
+    monsters {
+        $93 x 1   // Staleman
+        $31 x 2   // Skull   
+        $2F x 2   // Red Bone
+    }
+    arrangement $09
+    gfx bits 2
+    cursor graph $0A
+}
+
+formation($98)
+{
+    monsters {
+        $63 x 2   // Mad Ogre
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($99)
+{
+    monsters {
+        $63 x 3   // Mad Ogre
+    }
+    arrangement $1C
+    gfx bits 2
+    cursor graph $19
+}
+
+formation($9A)
+{
+    monsters {
+        $63 x 2   // Mad Ogre
+        $63 x 2   // Mad Ogre
+    }
+    arrangement $2B
+    gfx bits 2
+    cursor graph $06
+}
+
+formation($9B)
+{
+    monsters {
+        $6D x 2   // BlackCat
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($9C)
+{
+    monsters {
+        $6D x 3   // BlackCat
+    }
+    arrangement $56
+    gfx bits 2
+    cursor graph $37
+}
+
+formation($9D)
+{
+    monsters {
+        $3B x 1   // Lamia   
+        $6D x 1   // BlackCat
+        $63 x 1   // Mad Ogre
+    }
+    arrangement $49
+    gfx bits 2
+    cursor graph $2F
+}
+
+formation($9E)
+{
+    monsters {
+        $63 x 1   // Mad Ogre
+        $6D x 2   // BlackCat
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($9F)
+{
+    monsters {
+        $63 x 2   // Mad Ogre
+        $6D x 2   // BlackCat
+    }
+    arrangement $2F
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($A0)
+{
+    monsters {
+        $3B x 1   // Lamia   
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($A1)
+{
+    monsters {
+        $3B x 2   // Lamia   
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($A2)
+{
+    monsters {
+        $3B x 3   // Lamia   
+    }
+    arrangement $52
+    gfx bits 2
+    cursor graph $34
+}
+
+formation($A3)
+{
+    monsters {
+        $3B x 1   // Lamia   
+        $63 x 1   // Mad Ogre
+    }
+    arrangement $4C
+    gfx bits 2
+    cursor graph $23
+}
+
+formation($A4)
+{
+    monsters {
+        $6D x 2   // BlackCat
+        $3B x 1   // Lamia   
+    }
+    arrangement $58
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($A5)
+{
+    monsters {
+        $6D x 2   // BlackCat
+        $3B x 2   // Lamia   
+    }
+    arrangement $1A
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($A6)
+{
+    monsters {
+        $69 x 3   // Balloon 
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($A7)
+{
+    monsters {
+        $69 x 2   // Balloon 
+        $69 x 2   // Balloon 
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($A8)
+{
+    monsters {
+        $63 x 1   // Mad Ogre
+        $6D x 1   // BlackCat
+        $69 x 2   // Balloon 
+    }
+    arrangement $7E
+    gfx bits 2
+    cursor graph $51
+}
+
+formation($A9)
+{
+    monsters {
+        $3E x 1   // Grudger 
+        $63 x 1   // Mad Ogre
+        $69 x 2   // Balloon 
+    }
+    arrangement $4B
+    gfx bits 2
+    cursor graph $31
+}
+
+formation($AA)
+{
+    monsters {
+        $3E x 2   // Grudger 
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($AB)
+{
+    monsters {
+        $3E x 3   // Grudger 
+    }
+    arrangement $50
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($AC)
+{
+    monsters {
+        $69 x 3   // Balloon 
+        $3E x 1   // Grudger 
+    }
+    arrangement $72
+    gfx bits 2
+    cursor graph $4B
+}
+
+formation($AD)
+{
+    monsters {
+        $3E x 2   // Grudger 
+        $3B x 1   // Lamia   
+    }
+    arrangement $5A
+    gfx bits 2
+    cursor graph $3B
+}
+
+formation($AE)
+{
+    monsters {
+        $4E x 3   // BladeMan
+    }
+    arrangement $50
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($AF)
+{
+    monsters {
+        $6D x 1   // BlackCat
+        $4E x 1   // BladeMan
+        $63 x 1   // Mad Ogre
+    }
+    arrangement $4E
+    gfx bits 2
+    cursor graph $2F
+}
+
+formation($B0)
+{
+    monsters {
+        $4E x 1   // BladeMan
+        $6D x 1   // BlackCat
+        $69 x 3   // Balloon 
+    }
+    arrangement $4A
+    gfx bits 2
+    cursor graph $30
+}
+
+formation($B1)
+{
+    monsters {
+        $63 x 1   // Mad Ogre
+        $4E x 1   // BladeMan
+        $6D x 1   // BlackCat
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($B2)
+{
+    monsters {
+        $85 x 1   // Green D.
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($B3)
+{
+    monsters {
+        $62 x 1   // Sorcerer
+        $63 x 1   // Mad Ogre
+        $4E x 2   // BladeMan
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($B4)
+{
+    monsters {
+        $62 x 1   // Sorcerer
+        $6D x 1   // BlackCat
+        $4E x 2   // BladeMan
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($B5)
+{
+    monsters {
+        $62 x 1   // Sorcerer
+        $4E x 1   // BladeMan
+        $4E x 2   // BladeMan
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($B6)
+{
+    monsters {
+        $62 x 1   // Sorcerer
+        $85 x 1   // Green D.
+        $4E x 2   // BladeMan
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($B7)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($B8)
+{
+    monsters {
+        $96 x 1   // Searcher
+        $88 x 1   // Machine 
+    }
+    calling
+    arrangement $80
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($B9)
+{
+    monsters {
+        $96 x 1   // Searcher
+        $88 x 1   // Machine 
+        $88 x 2   // Machine 
+    }
+    calling
+    arrangement $81
+    gfx bits 2
+    cursor graph $53
+}
+
+formation($BA)
+{
+    monsters {
+        $88 x 2   // Machine 
+        $68 x 1   // Beamer  
+    }
+    arrangement $75
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($BB)
+{
+    monsters {
+        $88 x 2   // Machine 
+        $68 x 2   // Beamer  
+    }
+    arrangement $61
+    gfx bits 2
+    cursor graph $3F
+}
+
+formation($BC)
+{
+    monsters {
+        $96 x 1   // Searcher
+        $91 x 1   // Horseman
+        $88 x 2   // Machine 
+    }
+    calling
+    arrangement $81
+    gfx bits 2
+    cursor graph $53
+}
+
+formation($BD)
+{
+    monsters {
+        $91 x 1   // Horseman
+        $88 x 2   // Machine 
+    }
+    arrangement $79
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($BE)
+{
+    monsters {
+        $89 x 1   // MacGiant
+    }
+    arrangement $76
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($BF)
+{
+    monsters {
+        $89 x 1   // MacGiant
+        $88 x 0   // Machine 
+    }
+    arrangement $67
+    gfx bits 2
+    cursor graph $45
+}
+
+formation($C0)
+{
+    monsters {
+        $91 x 1   // Horseman
+        $68 x 2   // Beamer  
+    }
+    arrangement $44
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($C1)
+{
+    monsters {
+        $91 x 1   // Horseman
+        $68 x 1   // Beamer  
+        $88 x 1   // Machine 
+    }
+    arrangement $48
+    gfx bits 2
+    cursor graph $2E
+}
+
+formation($C2)
+{
+    monsters {
+        $96 x 1   // Searcher
+        $89 x 1   // MacGiant
+    }
+    calling
+    arrangement $5E
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($C3)
+{
+    monsters {
+        $89 x 1   // MacGiant
+        $91 x 1   // Horseman
+    }
+    arrangement $46
+    gfx bits 2
+    cursor graph $23
+}
+
+formation($C4)
+{
+    monsters {
+        $96 x 1   // Searcher
+        $91 x 1   // Horseman
+        $68 x 2   // Beamer  
+    }
+    calling
+    arrangement $5E
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($C5)
+{
+    monsters {
+        $88 x 2   // Machine 
+        $68 x 3   // Beamer  
+    }
+    arrangement $12
+    gfx bits 2
+    cursor graph $12
+}
+
+formation($C6)
+{
+    monsters {
+        $91 x 2   // Horseman
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($C7)
+{
+    monsters {
+        $6E x 1   // D.Machin
+    }
+    arrangement $7B
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($C8)
+{
+    monsters {
+        $96 x 1   // Searcher
+        $6E x 1   // D.Machin
+        $68 x 2   // Beamer  
+    }
+    calling
+    arrangement $82
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($C9)
+{
+    monsters {
+        $89 x 1   // MacGiant
+        $88 x 1   // Machine 
+        $68 x 1   // Beamer  
+    }
+    arrangement $6A
+    gfx bits 2
+    cursor graph $48
+}
+
+formation($CA)
+{
+    monsters {
+        $89 x 1   // MacGiant
+        $91 x 1   // Horseman
+        $68 x 1   // Beamer  
+    }
+    arrangement $47
+    gfx bits 2
+    cursor graph $1A
+}
+
+formation($CB)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($CC)
+{
+    monsters {
+        $88 x 3   // Machine 
+        $68 x 2   // Beamer  
+    }
+    arrangement $83
+    gfx bits 2
+    cursor graph $54
+}
+
+formation($CD)
+{
+    monsters {
+        $68 x 1   // Beamer  
+        $88 x 2   // Machine 
+        $91 x 1   // Horseman
+    }
+    arrangement $45
+    gfx bits 2
+    cursor graph $1B
+}
+
+formation($CE)
+{
+    monsters {
+        $89 x 2   // MacGiant
+    }
+    arrangement $5B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($CF)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($D0)
+{
+    monsters {
+        $00 x 3   // Imp     
+        $00 x 3   // Imp     
+    }
+    arrangement $03
+    gfx bits 2
+    cursor graph $04
+}
+
+formation($D1)
+{
+    monsters {
+        $07 x 3   // SwordRat
+        $07 x 3   // SwordRat
+    }
+    arrangement $06
+    gfx bits 2
+    cursor graph $07
+}
+
+formation($D2)
+{
+    monsters {
+        $5A x 2   // FlameDog
+        $19 x 2   // BlackLiz
+    }
+    arrangement $1A
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($D3)
+{
+    monsters {
+        $91 x 1   // Horseman
+        $88 x 2   // Machine 
+    }
+    arrangement $4D
+    gfx bits 2
+    cursor graph $19
+}
+
+formation($D4)
+{
+    monsters {
+        $91 x 1   // Horseman
+        $8F x 2   // Juclyote
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($D5)
+{
+    monsters {
+        $91 x 2   // Horseman
+    }
+    arrangement $71
+    gfx bits 2
+    cursor graph $2D
+}
+
+formation($D6)
+{
+    monsters {
+        $90 x 1   // EvilMask
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($D7)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($D8)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($D9)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($DA)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($DB)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($DC)
+{
+    monsters {
+        $C1 x 1   // Elements
+        $C2 x 1   // Elements
+    }
+    transforming
+    arrangement $36
+    boss death
+    can't run
+    continue music
+    gfx bits 1
+    cursor graph $00
+}
+
+formation($DD)
+{
+    monsters {
+        $C5 x 1   // CPU     
+        $D5 x 1   // Attacker
+        $C6 x 1   // Defender
+    }
+    arrangement $42
+    can't run
+    continue music
+    floating enemies
+    gfx bits 1
+    cursor graph $2C
+}
+
+formation($DE)
+{
+    monsters {
+        $A1 x 1   // D.Mist  
+    }
+    arrangement $33
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($DF)
+{
+    monsters {
+        $A2 x 1   // Octomamm
+    }
+    arrangement $30
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($E0)
+{
+    monsters {
+        $A3 x 1   // Antlion 
+    }
+    arrangement $31
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($E1)
+{
+    monsters {
+        $A4 x 1   // MomBomb 
+        $55 x 3   // Bomb    
+        $56 x 3   // GrayBomb
+    }
+    transforming
+    arrangement $34
+    can't run
+    continue music
+    gfx bits 3
+    cursor graph $27
+}
+
+formation($E2)
+{
+    monsters {
+        $A5 x 1   // Milon   
+        $D3 x 2   // Ghast   
+        $D3 x 2   // Ghast   
+    }
+    arrangement $35
+    can't run
+    boss music
+    gfx bits 3
+    cursor graph $28
+}
+
+formation($E3)
+{
+    monsters {
+        $A6 x 1   // Milon Z.
+    }
+    arrangement $36
+    back attack
+    boss death
+    can't run
+    fiend music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($E4)
+{
+    monsters {
+        $A7 x 1   // Baigan  
+        $A8 x 1   // RightArm
+        $A9 x 1   // Left Arm
+    }
+    arrangement $3D
+    can't run
+    boss music
+    gfx bits 2
+    cursor graph $2A
+}
+
+formation($E5)
+{
+    monsters {
+        $AA x 1   // Kainazzo
+    }
+    arrangement $38
+    boss death
+    can't run
+    fiend music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($E6)
+{
+    monsters {
+        $AB x 1   // Dark Elf
+    }
+    arrangement $3A
+    can't run
+    no gameover
+    continue music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($E7)
+{
+    monsters {
+        $AC x 1   // Dark Elf
+        $C3 x 1   // Dark Elf
+    }
+    transforming
+    arrangement $3A
+    can't run
+    continue music
+    gfx bits 1
+    cursor graph $00
+}
+
+formation($E8)
+{
+    monsters {
+        $AD x 1   // Sandy   
+        $AE x 1   // Cindy   
+        $AF x 1   // Mindy   
+    }
+    arrangement $3B
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $19
+}
+
+formation($E9)
+{
+    monsters {
+        $B0 x 1   // Golbez  
+    }
+    arrangement $41
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $02
+}
+
+formation($EA)
+{
+    monsters {
+        $B1 x 1   // Valvalis
+    }
+    arrangement $39
+    boss death
+    can't run
+    fiend music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($EB)
+{
+    monsters {
+        $D0 x 3   // FloatEye
+    }
+    arrangement $50
+    can't run
+    continue music
+    auto battle
+    floating enemies
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($EC)
+{
+    monsters {
+        $CE x 1   // Girl    
+        $CF x 1   // Titan   
+    }
+    calling
+    arrangement $32
+    can't run
+    no gameover
+    continue music
+    character battle
+    gfx bits 1
+    cursor graph $23
+}
+
+formation($ED)
+{
+    monsters {
+        $1E x 1   // Officer 
+        $1D x 3   // Soldier 
+    }
+    arrangement $0B
+    can't run
+    boss music
+    gfx bits 2
+    cursor graph $0C
+}
+
+formation($EE)
+{
+    monsters {
+        $CB x 1   // Bard    
+    }
+    arrangement $FF
+    can't run
+    continue music
+    character battle
+    auto battle
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($EF)
+{
+    monsters {
+        $C4 x 1   // WaterHag
+    }
+    arrangement $00
+    can't run
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($F0)
+{
+    monsters {
+        $1B x 3   // Imp Cap.
+    }
+    arrangement $00
+    can't run
+    continue music
+    auto battle
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($F1)
+{
+    monsters {
+        $CA x 1   // Dragoon 
+    }
+    arrangement $FF
+    can't run
+    no gameover
+    continue music
+    character battle
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($F2)
+{
+    monsters {
+        $CC x 1   // Karate  
+    }
+    arrangement $FF
+    can't run
+    continue music
+    character battle
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($F3)
+{
+    monsters {
+        $B0 x 1   // Golbez  
+    }
+    arrangement $41
+    boss death
+    can't run
+    continue music
+    auto battle
+    gfx bits 0
+    cursor graph $02
+}
+
+formation($F4)
+{
+    monsters {
+        $D6 x 1   // Dummy   
+    }
+    arrangement $00
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($F5)
+{
+    monsters {
+        $D1 x 1   // Raven   
+    }
+    arrangement $6B
+    can't run
+    continue music
+    auto battle
+    floating enemies
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($F6)
+{
+    monsters {
+        $CD x 1   // D.Knight
+    }
+    arrangement $FF
+    can't run
+    continue music
+    character battle
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($F7)
+{
+    monsters {
+        $2D x 1   // General 
+        $2C x 2   // Fighter 
+    }
+    arrangement $0B
+    can't run
+    continue music
+    gfx bits 2
+    cursor graph $0C
+}
+
+formation($F8)
+{
+    monsters {
+        $16 x 1   // Weeper  
+        $1B x 1   // Imp Cap.
+        $15 x 1   // WaterHag
+    }
+    arrangement $09
+    can't run
+    continue music
+    gfx bits 2
+    cursor graph $0A
+}
+
+formation($F9)
+{
+    monsters {
+        $25 x 1   // Gargoyle
+    }
+    arrangement $16
+    can't run
+    continue music
+    floating enemies
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($FA)
+{
+    monsters {
+        $3A x 2   // Guard   
+    }
+    arrangement $14
+    can't run
+    continue music
+    gfx bits 2
+    cursor graph $13
+}
+
+formation($FB)
+{
+    monsters {
+        $BC x 1   // Odin    
+    }
+    arrangement $41
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $02
+}
+
+formation($FC)
+{
+    monsters {
+        $AB x 1   // Dark Elf
+    }
+    arrangement $3A
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($FD)
+{
+    monsters {
+        $BB x 1   // Rubicant
+    }
+    arrangement $37
+    can't run
+    no gameover
+    boss music
+    auto battle
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($FE)
+{
+    monsters {
+        $B9 x 1   // K.Eblan 
+        $BA x 1   // Q.Eblan 
+    }
+    arrangement $3E
+    can't run
+    continue music
+    gfx bits 0
+    cursor graph $2B
+}
+
+formation($FF)
+{
+    monsters {
+        $BB x 1   // Rubicant
+    }
+    arrangement $37
+    boss death
+    can't run
+    continue music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($100)
+{
+    monsters {
+        $18 x 3   // Dark Imp
+    }
+    arrangement $03
+    can't run
+    gfx bits 2
+    cursor graph $04
+}
+
+formation($101)
+{
+    monsters {
+        $4C x 2   // Armadilo
+    }
+    arrangement $6B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($102)
+{
+    monsters {
+        $18 x 3   // Dark Imp
+        $4C x 1   // Armadilo
+        $19 x 1   // BlackLiz
+    }
+    arrangement $17
+    gfx bits 2
+    cursor graph $16
+}
+
+formation($103)
+{
+    monsters {
+        $4C x 1   // Armadilo
+        $52 x 2   // Tortoise
+    }
+    arrangement $52
+    gfx bits 2
+    cursor graph $34
+}
+
+formation($104)
+{
+    monsters {
+        $18 x 2   // Dark Imp
+        $18 x 2   // Dark Imp
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($105)
+{
+    monsters {
+        $52 x 1   // Tortoise
+        $18 x 2   // Dark Imp
+    }
+    arrangement $15
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($106)
+{
+    monsters {
+        $52 x 2   // Tortoise
+        $4C x 1   // Armadilo
+        $19 x 1   // BlackLiz
+    }
+    arrangement $1A
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($107)
+{
+    monsters {
+        $19 x 3   // BlackLiz
+    }
+    arrangement $58
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($108)
+{
+    monsters {
+        $46 x 1   // Marion  
+        $64 x 1   // EvilDoll
+        $64 x 2   // EvilDoll
+    }
+    calling
+    arrangement $6D
+    gfx bits 2
+    cursor graph $4A
+}
+
+formation($109)
+{
+    monsters {
+        $46 x 1   // Marion  
+        $64 x 1   // EvilDoll
+        $64 x 3   // EvilDoll
+    }
+    calling
+    arrangement $24
+    gfx bits 2
+    cursor graph $20
+}
+
+formation($10A)
+{
+    monsters {
+        $5A x 2   // FlameDog
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($10B)
+{
+    monsters {
+        $5A x 3   // FlameDog
+    }
+    arrangement $58
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($10C)
+{
+    monsters {
+        $5A x 2   // FlameDog
+        $5A x 2   // FlameDog
+    }
+    arrangement $1A
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($10D)
+{
+    monsters {
+        $67 x 1   // FlameMan
+        $5A x 2   // FlameDog
+    }
+    arrangement $54
+    gfx bits 2
+    cursor graph $35
+}
+
+formation($10E)
+{
+    monsters {
+        $67 x 2   // FlameMan
+        $5A x 2   // FlameDog
+    }
+    arrangement $57
+    gfx bits 2
+    cursor graph $38
+}
+
+formation($10F)
+{
+    monsters {
+        $19 x 2   // BlackLiz
+    }
+    arrangement $6B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($110)
+{
+    monsters {
+        $19 x 3   // BlackLiz
+    }
+    arrangement $52
+    gfx bits 2
+    cursor graph $34
+}
+
+formation($111)
+{
+    monsters {
+        $19 x 1   // BlackLiz
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($112)
+{
+    monsters {
+        $52 x 2   // Tortoise
+        $19 x 1   // BlackLiz
+    }
+    arrangement $58
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($113)
+{
+    monsters {
+        $52 x 2   // Tortoise
+        $19 x 2   // BlackLiz
+    }
+    arrangement $1A
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($114)
+{
+    monsters {
+        $81 x 3   // Tofu    
+        $81 x 1   // Tofu    
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($115)
+{
+    monsters {
+        $81 x 3   // Tofu    
+        $81 x 3   // Tofu    
+    }
+    arrangement $0C
+    gfx bits 2
+    cursor graph $0D
+}
+
+formation($116)
+{
+    monsters {
+        $57 x 1   // Chimera 
+        $81 x 3   // Tofu    
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($117)
+{
+    monsters {
+        $57 x 1   // Chimera 
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($118)
+{
+    monsters {
+        $57 x 2   // Chimera 
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($119)
+{
+    monsters {
+        $57 x 1   // Chimera 
+        $67 x 1   // FlameMan
+    }
+    arrangement $71
+    gfx bits 2
+    cursor graph $2D
+}
+
+formation($11A)
+{
+    monsters {
+        $57 x 1   // Chimera 
+        $67 x 2   // FlameMan
+    }
+    arrangement $25
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($11B)
+{
+    monsters {
+        $57 x 1   // Chimera 
+        $5A x 2   // FlameDog
+    }
+    arrangement $25
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($11C)
+{
+    monsters {
+        $5C x 1   // Stoneman
+        $50 x 1   // Medusa  
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($11D)
+{
+    monsters {
+        $50 x 2   // Medusa  
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($11E)
+{
+    monsters {
+        $5C x 2   // Stoneman
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($11F)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $57 x 1   // Chimera 
+    }
+    calling
+    arrangement $5E
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($120)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $5C x 1   // Stoneman
+    }
+    calling
+    arrangement $5E
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($121)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $40 x 1   // Naga    
+    }
+    calling
+    arrangement $5E
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($122)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $5A x 1   // FlameDog
+    }
+    calling
+    arrangement $5E
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($123)
+{
+    monsters {
+        $40 x 2   // Naga    
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($124)
+{
+    monsters {
+        $50 x 1   // Medusa  
+        $40 x 1   // Naga    
+    }
+    arrangement $4C
+    gfx bits 2
+    cursor graph $23
+}
+
+formation($125)
+{
+    monsters {
+        $5C x 1   // Stoneman
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($126)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($127)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($128)
+{
+    monsters {
+        $3B x 1   // Lamia   
+        $5E x 1   // Q.Lamia 
+    }
+    arrangement $6B
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($129)
+{
+    monsters {
+        $3B x 3   // Lamia   
+        $5E x 1   // Q.Lamia 
+    }
+    arrangement $26
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($12A)
+{
+    monsters {
+        $5E x 1   // Q.Lamia 
+        $3B x 1   // Lamia   
+        $6D x 2   // BlackCat
+    }
+    arrangement $26
+    eggs (no yes no)
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($12B)
+{
+    monsters {
+        $5E x 1   // Q.Lamia 
+        $3B x 1   // Lamia   
+        $3B x 2   // Lamia   
+    }
+    arrangement $26
+    eggs (no yes no)
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($12C)
+{
+    monsters {
+        $84 x 1   // Ironman 
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($12D)
+{
+    monsters {
+        $84 x 2   // Ironman 
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($12E)
+{
+    monsters {
+        $84 x 1   // Ironman 
+        $4E x 2   // BladeMan
+    }
+    arrangement $25
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($12F)
+{
+    monsters {
+        $85 x 1   // Green D.
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($130)
+{
+    monsters {
+        $4E x 1   // BladeMan
+        $6D x 1   // BlackCat
+        $5E x 1   // Q.Lamia 
+    }
+    arrangement $58
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($131)
+{
+    monsters {
+        $84 x 1   // Ironman 
+        $6D x 2   // BlackCat
+    }
+    arrangement $25
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($132)
+{
+    monsters {
+        $62 x 1   // Sorcerer
+        $5E x 1   // Q.Lamia 
+        $6D x 2   // BlackCat
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($133)
+{
+    monsters {
+        $62 x 1   // Sorcerer
+        $84 x 1   // Ironman 
+        $6D x 2   // BlackCat
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($134)
+{
+    monsters {
+        $62 x 1   // Sorcerer
+        $5E x 1   // Q.Lamia 
+        $6D x 2   // BlackCat
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($135)
+{
+    monsters {
+        $3E x 2   // Grudger 
+        $4E x 2   // BladeMan
+    }
+    arrangement $2F
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($136)
+{
+    monsters {
+        $3E x 1   // Grudger 
+        $4E x 2   // BladeMan
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($137)
+{
+    monsters {
+        $3E x 1   // Grudger 
+        $6D x 2   // BlackCat
+        $4E x 1   // BladeMan
+    }
+    arrangement $5D
+    gfx bits 2
+    cursor graph $3C
+}
+
+formation($138)
+{
+    monsters {
+        $71 x 1   // Centpede
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($139)
+{
+    monsters {
+        $11 x 1   // TrapRose
+        $71 x 2   // Centpede
+    }
+    arrangement $1C
+    gfx bits 2
+    cursor graph $19
+}
+
+formation($13A)
+{
+    monsters {
+        $11 x 2   // TrapRose
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($13B)
+{
+    monsters {
+        $17 x 2   // RocLarva
+        $17 x 2   // RocLarva
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($13C)
+{
+    monsters {
+        $76 x 2   // RockMoth
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($13D)
+{
+    monsters {
+        $76 x 2   // RockMoth
+        $17 x 2   // RocLarva
+    }
+    arrangement $07
+    gfx bits 2
+    cursor graph $08
+}
+
+formation($13E)
+{
+    monsters {
+        $11 x 1   // TrapRose
+        $76 x 2   // RockMoth
+    }
+    arrangement $65
+    gfx bits 2
+    cursor graph $43
+}
+
+formation($13F)
+{
+    monsters {
+        $11 x 1   // TrapRose
+        $76 x 2   // RockMoth
+        $17 x 2   // RocLarva
+    }
+    arrangement $65
+    gfx bits 2
+    cursor graph $43
+}
+
+formation($140)
+{
+    monsters {
+        $7C x 1   // ToadLady
+        $5F x 3   // TinyToad
+    }
+    arrangement $63
+    gfx bits 2
+    cursor graph $41
+}
+
+formation($141)
+{
+    monsters {
+        $7C x 1   // ToadLady
+        $5F x 3   // TinyToad
+        $5F x 3   // TinyToad
+    }
+    arrangement $64
+    gfx bits 2
+    cursor graph $42
+}
+
+formation($142)
+{
+    monsters {
+        $8B x 2   // Molbol  
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($143)
+{
+    monsters {
+        $8B x 3   // Molbol  
+    }
+    arrangement $58
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($144)
+{
+    monsters {
+        $8B x 1   // Molbol  
+        $54 x 2   // Ghost   
+    }
+    arrangement $15
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($145)
+{
+    monsters {
+        $54 x 3   // Ghost   
+    }
+    arrangement $0C
+    gfx bits 2
+    cursor graph $0D
+}
+
+formation($146)
+{
+    monsters {
+        $54 x 2   // Ghost   
+        $54 x 2   // Ghost   
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($147)
+{
+    monsters {
+        $8B x 1   // Molbol  
+        $54 x 1   // Ghost   
+        $7D x 1   // DarkTree
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($148)
+{
+    monsters {
+        $54 x 3   // Ghost   
+        $7D x 2   // DarkTree
+    }
+    arrangement $23
+    gfx bits 2
+    cursor graph $1F
+}
+
+formation($149)
+{
+    monsters {
+        $7D x 2   // DarkTree
+        $8B x 1   // Molbol  
+        $54 x 1   // Ghost   
+    }
+    arrangement $62
+    gfx bits 2
+    cursor graph $40
+}
+
+formation($14A)
+{
+    monsters {
+        $71 x 1   // Centpede
+        $8B x 2   // Molbol  
+    }
+    arrangement $18
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($14B)
+{
+    monsters {
+        $7D x 2   // DarkTree
+        $8B x 2   // Molbol  
+    }
+    arrangement $6E
+    gfx bits 2
+    cursor graph $36
+}
+
+formation($14C)
+{
+    monsters {
+        $73 x 2   // Red Eye 
+    }
+    arrangement $01
+    floating enemies
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($14D)
+{
+    monsters {
+        $73 x 3   // Red Eye 
+    }
+    arrangement $1C
+    floating enemies
+    gfx bits 2
+    cursor graph $19
+}
+
+formation($14E)
+{
+    monsters {
+        $27 x 1   // Hooligan
+        $73 x 1   // Red Eye 
+    }
+    arrangement $1E
+    floating enemies
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($14F)
+{
+    monsters {
+        $27 x 1   // Hooligan
+    }
+    arrangement $1E
+    floating enemies
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($150)
+{
+    monsters {
+        $27 x 2   // Hooligan
+    }
+    arrangement $1E
+    floating enemies
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($151)
+{
+    monsters {
+        $4B x 2   // Warrior 
+        $8E x 2   // Fiend   
+    }
+    arrangement $53
+    gfx bits 2
+    cursor graph $09
+}
+
+formation($152)
+{
+    monsters {
+        $4B x 2   // Warrior 
+        $8E x 2   // Fiend   
+        $8E x 2   // Fiend   
+    }
+    arrangement $53
+    gfx bits 2
+    cursor graph $09
+}
+
+formation($153)
+{
+    monsters {
+        $79 x 1   // Conjurer
+        $00 x 1   // Imp     
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($154)
+{
+    monsters {
+        $79 x 1   // Conjurer
+        $76 x 1   // RockMoth
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($155)
+{
+    monsters {
+        $79 x 1   // Conjurer
+        $66 x 1   // Arachne 
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($156)
+{
+    monsters {
+        $79 x 1   // Conjurer
+        $4F x 1   // HugeNaga
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($157)
+{
+    monsters {
+        $79 x 1   // Conjurer
+        $9D x 1   // Clapper 
+    }
+    calling
+    arrangement $59
+    gfx bits 2
+    cursor graph $3A
+}
+
+formation($158)
+{
+    monsters {
+        $66 x 1   // Arachne 
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($159)
+{
+    monsters {
+        $66 x 2   // Arachne 
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($15A)
+{
+    monsters {
+        $9D x 1   // Clapper 
+    }
+    arrangement $5B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($15B)
+{
+    monsters {
+        $9D x 2   // Clapper 
+    }
+    arrangement $5B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($15C)
+{
+    monsters {
+        $7B x 1   // TrapDoor
+        $7E x 1   // Mantcore
+    }
+    calling
+    arrangement $25
+    can't run
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($15D)
+{
+    monsters {
+        $7B x 1   // TrapDoor
+        $7E x 1   // Mantcore
+    }
+    calling
+    arrangement $25
+    can't run
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($15E)
+{
+    monsters {
+        $7B x 1   // TrapDoor
+        $8D x 1   // Yellow D
+    }
+    calling
+    arrangement $25
+    can't run
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($15F)
+{
+    monsters {
+        $7B x 1   // TrapDoor
+        $8D x 1   // Yellow D
+    }
+    calling
+    arrangement $25
+    can't run
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($160)
+{
+    monsters {
+        $77 x 2   // Were Bat
+        $77 x 2   // Were Bat
+    }
+    arrangement $91
+    floating enemies
+    gfx bits 2
+    cursor graph $5A
+}
+
+formation($161)
+{
+    monsters {
+        $77 x 3   // Were Bat
+    }
+    arrangement $1C
+    floating enemies
+    gfx bits 2
+    cursor graph $19
+}
+
+formation($162)
+{
+    monsters {
+        $45 x 1   // VampLady
+        $77 x 3   // Were Bat
+    }
+    arrangement $27
+    gfx bits 2
+    cursor graph $21
+}
+
+formation($163)
+{
+    monsters {
+        $45 x 1   // VampLady
+        $77 x 3   // Were Bat
+        $77 x 3   // Were Bat
+    }
+    arrangement $2C
+    gfx bits 2
+    cursor graph $24
+}
+
+formation($164)
+{
+    monsters {
+        $45 x 2   // VampLady
+        $77 x 3   // Were Bat
+    }
+    arrangement $51
+    gfx bits 2
+    cursor graph $33
+}
+
+formation($165)
+{
+    monsters {
+        $8D x 1   // Yellow D
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($166)
+{
+    monsters {
+        $4A x 2   // Screamer
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($167)
+{
+    monsters {
+        $7E x 1   // Mantcore
+        $4A x 1   // Screamer
+    }
+    arrangement $71
+    gfx bits 2
+    cursor graph $2D
+}
+
+formation($168)
+{
+    monsters {
+        $4F x 2   // HugeNaga
+    }
+    arrangement $01
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($169)
+{
+    monsters {
+        $4A x 1   // Screamer
+        $4F x 1   // HugeNaga
+    }
+    arrangement $5B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($16A)
+{
+    monsters {
+        $4F x 1   // HugeNaga
+        $4A x 2   // Screamer
+    }
+    arrangement $50
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($16B)
+{
+    monsters {
+        $7E x 1   // Mantcore
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($16C)
+{
+    monsters {
+        $7E x 2   // Mantcore
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($16D)
+{
+    monsters {
+        $7E x 1   // Mantcore
+        $4F x 2   // HugeNaga
+    }
+    arrangement $74
+    gfx bits 2
+    cursor graph $4C
+}
+
+formation($16E)
+{
+    monsters {
+        $4F x 1   // HugeNaga
+        $4F x 1   // HugeNaga
+    }
+    arrangement $20
+    eggs (yes yes no)
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($16F)
+{
+    monsters {
+        $8D x 1   // Yellow D
+        $4F x 1   // HugeNaga
+    }
+    arrangement $20
+    eggs (yes yes no)
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($170)
+{
+    monsters {
+        $7F x 2   // MoonCell
+        $82 x 2   // Pudding 
+    }
+    arrangement $28
+    gfx bits 2
+    cursor graph $22
+}
+
+formation($171)
+{
+    monsters {
+        $8F x 1   // Juclyote
+        $6A x 2   // Grenade 
+    }
+    arrangement $8D
+    gfx bits 2
+    cursor graph $57
+}
+
+formation($172)
+{
+    monsters {
+        $8F x 2   // Juclyote
+        $7F x 2   // MoonCell
+        $6A x 1   // Grenade 
+    }
+    arrangement $4A
+    gfx bits 2
+    cursor graph $30
+}
+
+formation($173)
+{
+    monsters {
+        $99 x 1   // Procyote
+        $8F x 2   // Juclyote
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($174)
+{
+    monsters {
+        $99 x 1   // Procyote
+        $82 x 2   // Pudding 
+    }
+    arrangement $8C
+    gfx bits 2
+    cursor graph $56
+}
+
+formation($175)
+{
+    monsters {
+        $8F x 1   // Juclyote
+        $99 x 2   // Procyote
+    }
+    arrangement $85
+    gfx bits 2
+    cursor graph $55
+}
+
+formation($176)
+{
+    monsters {
+        $72 x 1   // Red Worm
+        $99 x 1   // Procyote
+        $8F x 1   // Juclyote
+    }
+    arrangement $09
+    gfx bits 2
+    cursor graph $0A
+}
+
+formation($177)
+{
+    monsters {
+        $72 x 2   // Red Worm
+    }
+    arrangement $20
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($178)
+{
+    monsters {
+        $D9 x 1   // Dummy   
+    }
+    arrangement $00
+    continue music
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($179)
+{
+    monsters {
+        $D7 x 1   // Dummy   
+    }
+    arrangement $00
+    continue music
+    floating enemies
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($17A)
+{
+    monsters {
+        $DB x 1   // Dummy   
+    }
+    arrangement $00
+    continue music
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($17B)
+{
+    monsters {
+        $DA x 1   // Dummy   
+    }
+    arrangement $16
+    continue music
+    floating enemies
+    gfx bits 0
+    cursor graph $15
+}
+
+formation($17C)
+{
+    monsters {
+        $DD x 1   // Dummy   
+    }
+    arrangement $70
+    continue music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($17D)
+{
+    monsters {
+        $DC x 1   // Dummy   
+    }
+    arrangement $70
+    continue music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($17E)
+{
+    monsters {
+        $DE x 1   // Dummy   
+    }
+    arrangement $70
+    continue music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($17F)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($180)
+{
+    monsters {
+        $97 x 1   // Warlock 
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($181)
+{
+    monsters {
+        $97 x 1   // Warlock 
+        $8A x 1   // Kary    
+    }
+    arrangement $84
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($182)
+{
+    monsters {
+        $97 x 1   // Warlock 
+        $8A x 2   // Kary    
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($183)
+{
+    monsters {
+        $92 x 1   // RedGiant
+    }
+    arrangement $76
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($184)
+{
+    monsters {
+        $97 x 1   // Warlock 
+        $8A x 1   // Kary    
+        $92 x 1   // RedGiant
+    }
+    arrangement $85
+    gfx bits 2
+    cursor graph $55
+}
+
+formation($185)
+{
+    monsters {
+        $92 x 2   // RedGiant
+    }
+    arrangement $5B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($186)
+{
+    monsters {
+        $97 x 2   // Warlock 
+        $92 x 1   // RedGiant
+    }
+    arrangement $85
+    gfx bits 2
+    cursor graph $55
+}
+
+formation($187)
+{
+    monsters {
+        $35 x 1   // D.Bone  
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($188)
+{
+    monsters {
+        $8C x 1   // Ging-Ryu
+    }
+    arrangement $76
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($189)
+{
+    monsters {
+        $35 x 1   // D.Bone  
+        $97 x 1   // Warlock 
+    }
+    arrangement $71
+    gfx bits 2
+    cursor graph $2D
+}
+
+formation($18A)
+{
+    monsters {
+        $9C x 2   // King-Ryu
+    }
+    arrangement $86
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($18B)
+{
+    monsters {
+        $97 x 3   // Warlock 
+    }
+    arrangement $4F
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($18C)
+{
+    monsters {
+        $9B x 1   // Blue D. 
+    }
+    arrangement $7B
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($18D)
+{
+    monsters {
+        $94 x 1   // FatalEye
+    }
+    arrangement $76
+    floating enemies
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($18E)
+{
+    monsters {
+        $9B x 2   // Blue D. 
+    }
+    arrangement $6F
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($18F)
+{
+    monsters {
+        $8C x 1   // Ging-Ryu
+        $92 x 1   // RedGiant
+    }
+    arrangement $5B
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($190)
+{
+    monsters {
+        $94 x 2   // FatalEye
+    }
+    arrangement $01
+    floating enemies
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($191)
+{
+    monsters {
+        $51 x 1   // D.Fossil
+    }
+    arrangement $70
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($192)
+{
+    monsters {
+        $9C x 1   // King-Ryu
+    }
+    arrangement $76
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($193)
+{
+    monsters {
+        $9C x 1   // King-Ryu
+        $8C x 1   // Ging-Ryu
+    }
+    arrangement $86
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($194)
+{
+    monsters {
+        $20 x 1   // Tricker 
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($195)
+{
+    monsters {
+        $20 x 1   // Tricker 
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($196)
+{
+    monsters {
+        $86 x 3   // PinkPuff
+        $86 x 2   // PinkPuff
+    }
+    arrangement $7A
+    gfx bits 2
+    cursor graph $4E
+}
+
+formation($197)
+{
+    monsters {
+        $90 x 1   // EvilMask
+    }
+    arrangement $70
+    boss music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($198)
+{
+    monsters {
+        $A0 x 1   // Behemoth
+    }
+    arrangement $7B
+    can't run
+    boss music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($199)
+{
+    monsters {
+        $9F x 1   // Red D.  
+    }
+    arrangement $7B
+    boss music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($19A)
+{
+    monsters {
+        $9F x 2   // Red D.  
+    }
+    arrangement $6B
+    boss music
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($19B)
+{
+    monsters {
+        $9F x 1   // Red D.  
+        $A0 x 1   // Behemoth
+    }
+    arrangement $6B
+    boss music
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($19C)
+{
+    monsters {
+        $90 x 1   // EvilMask
+    }
+    arrangement $88
+    boss music
+    gfx bits 2
+    cursor graph $23
+}
+
+formation($19D)
+{
+    monsters {
+        $A0 x 2   // Behemoth
+    }
+    arrangement $6F
+    boss music
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($19E)
+{
+    monsters {
+        $90 x 2   // EvilMask
+    }
+    arrangement $01
+    boss music
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($19F)
+{
+    monsters {
+        $9F x 3   // Red D.  
+    }
+    arrangement $89
+    boss music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1A0)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $8B
+    continue music
+    floating enemies
+    gfx bits 2
+    cursor graph $23
+}
+
+formation($1A1)
+{
+    monsters {
+        $80 x 1   // Breath  
+    }
+    arrangement $70
+    boss death
+    boss music
+    transparent
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1A2)
+{
+    monsters {
+        $83 x 1   // Mind    
+    }
+    arrangement $70
+    boss death
+    boss music
+    transparent
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1A3)
+{
+    monsters {
+        $A0 x 1   // Behemoth
+    }
+    arrangement $7B
+    boss music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1A4)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1A5)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1A6)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1A7)
+{
+    monsters {
+        $B2 x 3   // Cal     
+        $D2 x 3   // Brena   
+        $B3 x 1   // Calbrena
+    }
+    calling
+    transforming
+    arrangement $3C
+    can't run
+    continue music
+    gfx bits 4
+    cursor graph $29
+}
+
+formation($1A8)
+{
+    monsters {
+        $B4 x 1   // Golbez  
+        $B5 x 1   // Shadow  
+    }
+    calling
+    arrangement $41
+    can't run
+    gfx bits 0
+    cursor graph $02
+}
+
+formation($1A9)
+{
+    monsters {
+        $B6 x 1   // Dr.Lugae
+        $B7 x 1   // Balnab  
+        $D4 x 1   // Balnab-Z
+    }
+    calling
+    transforming
+    arrangement $40
+    can't run
+    continue music
+    gfx bits 0
+    cursor graph $23
+}
+
+formation($1AA)
+{
+    monsters {
+        $B9 x 1   // K.Eblan 
+        $BA x 1   // Q.Eblan 
+    }
+    arrangement $3E
+    can't run
+    gfx bits 0
+    cursor graph $2B
+}
+
+formation($1AB)
+{
+    monsters {
+        $BB x 1   // Rubicant
+    }
+    arrangement $37
+    can't run
+    fiend music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($1AC)
+{
+    monsters {
+        $BC x 1   // Odin    
+    }
+    arrangement $00
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($1AD)
+{
+    monsters {
+        $BD x 1   // Leviatan
+    }
+    arrangement $00
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($1AE)
+{
+    monsters {
+        $BE x 1   // Bahamut 
+    }
+    arrangement $00
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($1AF)
+{
+    monsters {
+        $BF x 1   // EvilWall
+    }
+    arrangement $3F
+    can't run
+    continue music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($1B0)
+{
+    monsters {
+        $C0 x 1   // Asura   
+    }
+    arrangement $00
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($1B1)
+{
+    monsters {
+        $C1 x 1   // Elements
+        $C2 x 1   // Elements
+    }
+    transforming
+    arrangement $36
+    can't run
+    continue music
+    gfx bits 1
+    cursor graph $00
+}
+
+formation($1B2)
+{
+    monsters {
+        $C5 x 1   // CPU     
+        $C6 x 1   // Defender
+        $D5 x 1   // Attacker
+    }
+    arrangement $42
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $2C
+}
+
+formation($1B3)
+{
+    monsters {
+        $C7 x 1   // Zemus   
+    }
+    arrangement $00
+    boss death
+    can't run
+    boss music
+    auto battle
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($1B4)
+{
+    monsters {
+        $D8 x 1   // Zeromus 
+    }
+    arrangement $00
+    can't run
+    no gameover
+    continue music
+    auto battle
+    gfx bits 0
+    cursor graph $01
+}
+
+formation($1B5)
+{
+    monsters {
+        $B8 x 1   // Dr.Lugae
+    }
+    arrangement $40
+    can't run
+    boss music
+    gfx bits 0
+    cursor graph $23
+}
+
+formation($1B6)
+{
+    monsters {
+        $B4 x 1   // Golbez  
+        $B5 x 1   // Shadow  
+    }
+    calling
+    arrangement $41
+    can't run
+    continue music
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($1B7)
+{
+    monsters {
+        $C8 x 1   // Zeromus 
+        $C9 x 1   // Zeromus 
+    }
+    transforming
+    arrangement $43
+    can't run
+    continue music
+    gfx bits 5
+    cursor graph $2D
+}
+
+formation($1B8)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1B9)
+{
+    monsters {
+        $D9 x 1   // Dummy   
+    }
+    arrangement $16
+    can't run
+    continue music
+    floating enemies
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($1BA)
+{
+    monsters {
+        $DA x 1   // Dummy   
+    }
+    arrangement $16
+    can't run
+    continue music
+    floating enemies
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($1BB)
+{
+    monsters {
+        $82 x 2   // Pudding 
+        $82 x 2   // Pudding 
+    }
+    arrangement $11
+    gfx bits 2
+    cursor graph $11
+}
+
+formation($1BC)
+{
+    monsters {
+        $82 x 2   // Pudding 
+        $6A x 2   // Grenade 
+    }
+    arrangement $04
+    gfx bits 2
+    cursor graph $05
+}
+
+formation($1BD)
+{
+    monsters {
+        $69 x 2   // Balloon 
+        $6A x 2   // Grenade 
+    }
+    arrangement $04
+    gfx bits 2
+    cursor graph $05
+}
+
+formation($1BE)
+{
+    monsters {
+        $1C x 1   // Slime   
+        $81 x 1   // Tofu    
+        $82 x 1   // Pudding 
+    }
+    arrangement $00
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1BF)
+{
+    monsters {
+        $72 x 1   // Red Worm
+        $6A x 3   // Grenade 
+    }
+    arrangement $16
+    gfx bits 2
+    cursor graph $15
+}
+
+formation($1C0)
+{
+    monsters {
+        $93 x 1   // Staleman
+        $31 x 2   // Skull   
+        $31 x 2   // Skull   
+    }
+    arrangement $09
+    can't run
+    gfx bits 2
+    cursor graph $0A
+}
+
+formation($1C1)
+{
+    monsters {
+        $6D x 2   // BlackCat
+        $3B x 1   // Lamia   
+    }
+    arrangement $58
+    can't run
+    gfx bits 2
+    cursor graph $39
+}
+
+formation($1C2)
+{
+    monsters {
+        $63 x 3   // Mad Ogre
+    }
+    arrangement $50
+    can't run
+    gfx bits 2
+    cursor graph $32
+}
+
+formation($1C3)
+{
+    monsters {
+        $5A x 1   // FlameDog
+    }
+    arrangement $70
+    can't run
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1C4)
+{
+    monsters {
+        $63 x 2   // Mad Ogre
+        $63 x 2   // Mad Ogre
+    }
+    arrangement $2D
+    can't run
+    gfx bits 2
+    cursor graph $25
+}
+
+formation($1C5)
+{
+    monsters {
+        $85 x 1   // Green D.
+    }
+    arrangement $70
+    can't run
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1C6)
+{
+    monsters {
+        $93 x 2   // Staleman
+    }
+    arrangement $20
+    can't run
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($1C7)
+{
+    monsters {
+        $6C x 1   // Last Arm
+    }
+    arrangement $70
+    can't run
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1C8)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1C9)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1CA)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1CB)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1CC)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1CD)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1CE)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1CF)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D0)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D1)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D2)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D3)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D4)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D5)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D6)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D7)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1D8)
+{
+    monsters {
+        $11 x 1   // TrapRose
+        $48 x 2   // GlomWing
+        $74 x 2   // Crawler 
+    }
+    arrangement $65
+    gfx bits 2
+    cursor graph $43
+}
+
+formation($1D9)
+{
+    monsters {
+        $50 x 1   // Medusa  
+        $5B x 1   // Gorgon  
+        $5C x 1   // Stoneman
+    }
+    arrangement $8F
+    gfx bits 2
+    cursor graph $55
+}
+
+formation($1DA)
+{
+    monsters {
+        $6F x 1   // Talantla
+        $6D x 2   // BlackCat
+    }
+    arrangement $79
+    gfx bits 2
+    cursor graph $14
+}
+
+formation($1DB)
+{
+    monsters {
+        $19 x 1   // BlackLiz
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1DC)
+{
+    monsters {
+        $3B x 1   // Lamia   
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1DD)
+{
+    monsters {
+        $4F x 1   // HugeNaga
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1DE)
+{
+    monsters {
+        $85 x 1   // Green D.
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1DF)
+{
+    monsters {
+        $8D x 1   // Yellow D
+    }
+    arrangement $70
+    eggs (yes no no)
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1E0)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $57 x 1   // Chimera 
+    }
+    calling
+    arrangement $5E
+    can't run
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($1E1)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $5C x 1   // Stoneman
+    }
+    calling
+    arrangement $5E
+    can't run
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($1E2)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $40 x 1   // Naga    
+    }
+    calling
+    arrangement $5E
+    can't run
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($1E3)
+{
+    monsters {
+        $87 x 1   // Alert   
+        $5A x 1   // FlameDog
+    }
+    calling
+    arrangement $5E
+    can't run
+    gfx bits 2
+    cursor graph $3D
+}
+
+formation($1E4)
+{
+    monsters {
+        $4B x 3   // Warrior 
+        $4B x 2   // Warrior 
+    }
+    arrangement $56
+    can't run
+    gfx bits 2
+    cursor graph $37
+}
+
+formation($1E5)
+{
+    monsters {
+        $7C x 1   // ToadLady
+        $5F x 3   // TinyToad
+        $5F x 3   // TinyToad
+    }
+    arrangement $64
+    can't run
+    gfx bits 2
+    cursor graph $42
+}
+
+formation($1E6)
+{
+    monsters {
+        $54 x 3   // Ghost   
+        $54 x 3   // Ghost   
+    }
+    arrangement $03
+    can't run
+    gfx bits 2
+    cursor graph $04
+}
+
+formation($1E7)
+{
+    monsters {
+        $7D x 2   // DarkTree
+        $8B x 2   // Molbol  
+    }
+    arrangement $1A
+    can't run
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($1E8)
+{
+    monsters {
+        $8B x 1   // Molbol  
+        $8B x 1   // Molbol  
+    }
+    arrangement $20
+    can't run
+    gfx bits 2
+    cursor graph $17
+}
+
+formation($1E9)
+{
+    monsters {
+        $71 x 2   // Centpede
+    }
+    arrangement $01
+    can't run
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($1EA)
+{
+    monsters {
+        $99 x 2   // Procyote
+        $8F x 2   // Juclyote
+    }
+    arrangement $8E
+    can't run
+    gfx bits 2
+    cursor graph $58
+}
+
+formation($1EB)
+{
+    monsters {
+        $92 x 2   // RedGiant
+    }
+    arrangement $5B
+    can't run
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($1EC)
+{
+    monsters {
+        $97 x 2   // Warlock 
+        $8A x 2   // Kary    
+    }
+    arrangement $8E
+    can't run
+    gfx bits 2
+    cursor graph $58
+}
+
+formation($1ED)
+{
+    monsters {
+        $97 x 1   // Warlock 
+        $8A x 3   // Kary    
+    }
+    arrangement $54
+    can't run
+    gfx bits 2
+    cursor graph $35
+}
+
+formation($1EE)
+{
+    monsters {
+        $9F x 1   // Red D.  
+        $9B x 1   // Blue D. 
+    }
+    arrangement $6B
+    can't run
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($1EF)
+{
+    monsters {
+        $9B x 2   // Blue D. 
+    }
+    arrangement $6F
+    can't run
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($1F0)
+{
+    monsters {
+        $A0 x 1   // Behemoth
+    }
+    arrangement $7B
+    can't run
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1F1)
+{
+    monsters {
+        $9F x 2   // Red D.  
+    }
+    arrangement $6F
+    can't run
+    gfx bits 2
+    cursor graph $02
+}
+
+formation($1F2)
+{
+    monsters {
+        $51 x 1   // D.Fossil
+        $97 x 1   // Warlock 
+    }
+    arrangement $71
+    can't run
+    gfx bits 2
+    cursor graph $2D
+}
+
+formation($1F3)
+{
+    monsters {
+        $A0 x 1   // Behemoth
+    }
+    arrangement $7B
+    can't run
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1F4)
+{
+    monsters {
+        $A0 x 1   // Behemoth
+    }
+    arrangement $7B
+    can't run
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1F5)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1F6)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1F7)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1F8)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1F9)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}
+
+formation($1FA)
+{
+    monsters {
+        $9A x 1   // Ogopogo 
+    }
+    arrangement $70
+    can't run
+    fiend music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($1FB)
+{
+    monsters {
+        $9E x 1   // Pale Dim
+    }
+    arrangement $8A
+    can't run
+    fiend music
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1FC)
+{
+    monsters {
+        $98 x 1   // Wyvern  
+    }
+    arrangement $70
+    can't run
+    fiend music
+    gfx bits 0
+    cursor graph $00
+}
+
+formation($1FD)
+{
+    monsters {
+        $95 x 1   // D. Lunar
+        $95 x 1   // D. Lunar
+    }
+    arrangement $20
+    can't run
+    fiend music
+    gfx bits 2
+    cursor graph $1C
+}
+
+formation($1FE)
+{
+    monsters {
+        $6B x 1   // Plague  
+    }
+    arrangement $8A
+    can't run
+    fiend music
+    floating enemies
+    gfx bits 2
+    cursor graph $00
+}
+
+formation($1FF)
+{
+    monsters {
+        $00 x 1   // Imp     
+    }
+    arrangement $00
+    floating enemies
+    gfx bits 2
+    cursor graph $01
+}

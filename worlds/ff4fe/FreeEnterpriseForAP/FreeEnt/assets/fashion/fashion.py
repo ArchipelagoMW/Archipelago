@@ -373,13 +373,13 @@ def action_build(args):
     print('Scanning src directory...')
     bank_srcs = []
     for job_index,job in enumerate(JOBS):
-        filenames = sorted(glob.glob(os.path.join(os.path.dirname(__file__), 'src', job, '*.png')))
+        filenames = sorted(glob.glob(os.path.join(__file__, 'src', job, '*.png')))
         for i,filename in enumerate(filenames):
             while i >= len(bank_srcs):
                 bank_srcs.append([None] * len(JOBS))
             bank_srcs[i][job_index] = filename
 
-    with open(os.path.join(os.path.dirname(__file__), 'piggy.bin'), 'rb') as infile:
+    with open(os.path.join(__file__, 'piggy.bin'), 'rb') as infile:
         piggy_data = infile.read()
 
     combined_bank_stream = io.BytesIO()
@@ -426,11 +426,11 @@ def action_build(args):
 
     print('Writing combined banks')
     combined_bank_stream.seek(0)
-    with open(os.path.join(os.path.dirname(__file__), 'fashion.bin'), 'wb') as outfile:
+    with open(os.path.join(__file__, 'fashion.bin'), 'wb') as outfile:
         outfile.write(combined_bank_stream.read())
 
     combined_vintage_bank_stream.seek(0)
-    with open(os.path.join(os.path.dirname(__file__), 'fashion_vintage.bin'), 'wb') as outfile:
+    with open(os.path.join(__file__, 'fashion_vintage.bin'), 'wb') as outfile:
         outfile.write(combined_vintage_bank_stream.read())
 
 if __name__ == '__main__':

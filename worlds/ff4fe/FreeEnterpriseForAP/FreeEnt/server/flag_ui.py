@@ -41,9 +41,9 @@ class CachedResult:
     def get_result(self):
         return self._result
 
-UISPEC_PATH = os.path.join(os.path.dirname(__file__), "uispec.txt")
-UISPEC_FLAGDESCRIPTIONS_PATH = os.path.join(os.path.dirname(__file__), "uispec_flagdescriptions.txt")
-UISPEC_PRESETS_PATH = os.path.join(os.path.dirname(__file__), "uispec_presets.txt")
+UISPEC_PATH = os.path.join(__file__, "uispec.txt")
+UISPEC_FLAGDESCRIPTIONS_PATH = os.path.join(__file__, "uispec_flagdescriptions.txt")
+UISPEC_PRESETS_PATH = os.path.join(__file__, "uispec_presets.txt")
 
 _cached_section_data = CachedResult(UISPEC_PATH)
 _cached_flag_html = CachedResult(UISPEC_PATH)

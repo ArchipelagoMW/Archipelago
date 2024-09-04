@@ -498,6 +498,8 @@ def apply(env):
                                   t.index == CHEST_NUMBERS[slot][1]).flag
                 else:
                     id = slot + 0x200
+                if int(id) == 0x25B and env.options.flags.has('objective_mode_classicforge'):
+                    continue
                 ap_item = env.options.ap_data[str(id)]
                 placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
                 if placement is None:
@@ -543,6 +545,8 @@ def apply(env):
         # assign bosses
         if not env.options.flags.has('bosses_vanilla'):
             env.rnd.shuffle(bosses)
+            while bosses[len(bosses) - 1] in env.meta["objective_required_bosses"]:
+                env.rnd.shuffle(bosses)
             for i,k in enumerate(assignable_boss_slots):
                 boss_assignment[k] = bosses[i]
 
@@ -618,14 +622,8 @@ def apply(env):
         # make sure key items are all obtainable
         if DEBUG:
             print('testing reachability')
-        tests = keyitem_assigner.item_tier(0).items + keyitem_assigner.item_tier(1).items
-        tests = [reward.item for reward in tests]
-        if env.options.flags.has('key_items_vanilla'):
-            if '#item.Crystal' in tests:
-                tests.remove('#item.Crystal')
-
-        if env.options.flags.has('no_free_key_item'):
-            tests.append('dmist')
+        tests = []
+        tests.append('dmist')
 
         underground_path_disallowed = []
         if not env.options.flags.has('bosses_vanilla') and not env.options.flags.has('bosses_unsafe'):
@@ -643,16 +641,6 @@ def apply(env):
                 mean_bosses.append('dmist')
 
             underground_path_disallowed.extend(mean_bosses)
-
-        if not env.options.flags.has('key_items_vanilla') and not unsafe:
-            # must be able to access underground without accessing moon
-            underground_path_disallowed.append('moon')
-        
-        if underground_path_disallowed:
-            tests.append(['underground', underground_path_disallowed])
-
-        if env.options.flags.has('key_items_force_hook'):
-            tests.append(['#item.Magma', [], 'underground'])
 
         # must be able to encounter all bosses required of forced objective flags
         tests.extend(env.meta.get('objective_required_bosses', []))

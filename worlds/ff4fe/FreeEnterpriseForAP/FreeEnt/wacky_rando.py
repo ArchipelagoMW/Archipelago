@@ -64,7 +64,7 @@ def apply(env):
 
         # apply script of the same name, if it exists
         script_filename = f'scripts/wacky/{wacky_challenge}.f4c'
-        if os.path.isfile(os.path.join(os.path.dirname(__file__), script_filename)):
+        if os.path.isfile(os.path.join(__file__, script_filename)):
             env.add_file(script_filename)
 
         apply_func = globals().get(f'apply_{wacky_challenge}', None)

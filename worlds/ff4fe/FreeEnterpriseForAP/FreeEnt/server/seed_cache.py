@@ -7,7 +7,7 @@ class CachedSeed:
 
 class SeedCache:
     def __init__(self):
-        self._store = store.FileStore(os.path.join(os.path.dirname(__file__), '_seeds'))
+        self._store = store.FileStore(os.path.join(__file__, '_seeds'))
 
     def make_key(self, flags, seed):
         return f'{flags}.{seed}'

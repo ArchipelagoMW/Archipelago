@@ -111,8 +111,19 @@ earned_character_locations = [
     "Giant of Bab-il Character"
 ]
 
+restricted_character_locations = [
+    "Starting Character 1",
+    "Starting Character 2",
+    *free_character_locations,
+    "Baron Inn Character",
+    "Mt. Hobs Character"
+]
+
 for location in character_slots:
     all_locations.append(LocationData(location[0], location[1], location[2], location[3] + 0x200, True))
+
+all_locations.append(LocationData("Objectives Status", "Overworld", "BaronTown", 0xEEEE, False))
+all_locations.append(LocationData("Objective Reward", "Overworld", "BaronTown", 0xEEEF, False))
 
 mutually_exclusive_slots = [
     ["Starting Character 1", "Starting Character 2"],
@@ -125,3 +136,6 @@ areas = []
 for location in all_locations:
     if location.area not in areas:
         areas.append(location.area)
+
+for i in range(32):
+    all_locations.append(LocationData(f"Objective {i + 1} Status", "Overworld", "BaronTown", 0xEE00 + i, False))

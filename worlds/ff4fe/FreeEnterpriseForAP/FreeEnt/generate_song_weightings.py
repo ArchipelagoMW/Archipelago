@@ -2,7 +2,7 @@ import os
 import json
 import pkgutil
 
-SONGS_PATH = os.path.join(os.path.dirname(__file__), "compiled_songs")
+SONGS_PATH = os.path.join(__file__, "compiled_songs")
 
 with pkgutil.get_data(__name__, SONGS_PATH + "/catalog").decode().splitlines() as infile:
     asset_ids = list(filter(lambda x: x, infile.read().split()))

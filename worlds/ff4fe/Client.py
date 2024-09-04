@@ -7,6 +7,7 @@ from worlds.AutoSNIClient import SNIClient
 from . import rom as Rom
 from . import items
 from . import locations
+from .rom import objective_threshold_size
 
 if typing.TYPE_CHECKING:
     from SNIClient import SNIContext, snes_buffered_write
@@ -48,6 +49,7 @@ class FF4FEClient(SNIClient):
             return
         await self.location_check(ctx)
         await self.reward_check(ctx)
+        await self.objective_check(ctx)
         await self.received_items_check(ctx)
         await self.resolve_key_items(ctx)
         await snes_flush_writes(ctx)
@@ -67,7 +69,6 @@ class FF4FEClient(SNIClient):
             from . import FF4FEWorld
             self.location_name_to_id = FF4FEWorld.location_name_to_id
 
-
         if self.key_item_names is None:
             from . import FF4FEWorld
             self.key_item_names = {item: id for item, id in FF4FEWorld.item_name_to_id.items()
@@ -85,6 +86,7 @@ class FF4FEClient(SNIClient):
             sentinel_value = sentinel_data[0]
             if sentinel_value != 0:
                 return False
+
         return True
 
     async def location_check(self, ctx: SNIContext):
@@ -127,9 +129,30 @@ class FF4FEClient(SNIClient):
                     if location_id not in ctx.locations_checked:
                         ctx.locations_checked.add(location_id)
                         snes_logger.info(
-                            f'New Check: {reward_found.name} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                            f'New Check: {reward_found.name} '
+                            f'({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                         await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
+
+    async def objective_check(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        objective_progress_data = await snes_read(ctx, Rom.objective_progress_start_location, Rom.objective_progress_size)
+        if objective_progress_data is None:
+            return False
+        objective_threshold_data = await snes_read(ctx, Rom.objective_threshold_start_location, Rom.objective_threshold_size)
+        if objective_threshold_data is None:
+            return False
+        for i in range(objective_threshold_size):
+            objective_progress = objective_progress_data[i]
+            objective_threshold = objective_threshold_data[i]
+            if objective_progress > 0:
+                location_id = self.location_name_to_id[f"Objective {i + 1} Status"]
+                if location_id not in ctx.locations_checked:
+                    ctx.locations_checked.add(location_id)
+                    snes_logger.info(
+                        f'New Check: Objective {i + 1} Cleared! '
+                        f'({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                    await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
     async def flag_check(self, ctx):
         pass
@@ -145,11 +168,15 @@ class FF4FEClient(SNIClient):
         inventory_data = await snes_read(ctx, Rom.inventory_start_location, Rom.inventory_size)
         if inventory_data is None:
             return
+        junk_tier_data = await snes_read(ctx, Rom.junk_tier_byte, 1)
+        if junk_tier_data is None:
+            return
 
         item_received = ctx.items_received[items_received_amount]
         item_received_id = item_received.item
         item_received_name = ctx.item_names.lookup_in_game(item_received_id, ctx.game)
-        item_received_game_id = [item.fe_id for item in items.all_items if item.name == item_received_name].pop()
+        item_received_game_data = [item for item in items.all_items if item.name == item_received_name].pop()
+        item_received_game_id = item_received_game_data.fe_id
         if item_received_name in items.characters:
             self.increment_items_received(ctx, items_received_amount)
             return
@@ -172,6 +199,28 @@ class FF4FEClient(SNIClient):
         if item_received.player == ctx.slot and item_received.location != -1:
             self.increment_items_received(ctx, items_received_amount)
             return
+        if item_received_name in items.sellable_item_names and item_received.location != -2:
+            if item_received_game_data.tier <= junk_tier_data[0]:
+                item_price = item_received_game_data.price // 2
+                current_gp_data = await snes_read(ctx, Rom.gp_byte_location, Rom.gp_byte_size)
+                if current_gp_data is None:
+                    return
+                current_gp_amount = int.from_bytes(current_gp_data, "little")
+                current_gp_amount += item_price
+
+                lower_byte = current_gp_amount % (2**8)
+                middle_byte = (current_gp_amount // (2**8)) % (2**8)
+                upper_byte = current_gp_amount // (2**16)
+                snes_buffered_write(ctx, Rom.gp_byte_location, bytes([lower_byte]))
+                snes_buffered_write(ctx, Rom.gp_byte_location + 1, bytes([middle_byte]))
+                snes_buffered_write(ctx, Rom.gp_byte_location + 2, bytes([upper_byte]))
+                self.increment_items_received(ctx, items_received_amount)
+                snes_logger.info('Received %s from %s (%s)' % (
+                    item_received_name,
+                    ctx.player_names[item_received.player],
+                    ctx.location_names[item_received.location]))
+                snes_logger.info(f"Automatically sold {item_received_name} for {item_price} GP.")
+                return
         for i, byte in enumerate(inventory_data):
             if i % 2 == 1:
                 continue
@@ -259,3 +308,6 @@ class FF4FEClient(SNIClient):
         upper_byte = new_count // 256
         snes_buffered_write(ctx, Rom.items_received_location_start, bytes([upper_byte]))
         snes_buffered_write(ctx, Rom.items_received_location_start + 1, bytes([lower_byte]))
+
+    def add_money(self, ctx, amount):
+        from SNIClient import snes_buffered_write

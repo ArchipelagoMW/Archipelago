@@ -106,7 +106,7 @@ class Api:
     @cherrypy.expose
     def doc(self):
         cherrypy.response.headers['Content-Type'] = "text/plain"
-        with open(os.path.join(os.path.dirname(__file__), 'api_doc.txt'), 'r') as infile:
+        with open(os.path.join(__file__, 'api_doc.txt'), 'r') as infile:
             return infile.read()
 
     @cherrypy.expose
@@ -179,7 +179,7 @@ class Site:
     def __init__(self, server):
         self._server = server
         self._env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'template')),
+            loader=jinja2.FileSystemLoader(os.path.join(__file__, 'template')),
             autoescape=jinja2.select_autoescape(['html', 'xml']),
             )
 
@@ -200,7 +200,7 @@ class Site:
     @cherrypy.expose
     def make(self, flags=None, seed=None):
         if cherrypy.request.app.config['FreeEnt']['beta']:
-            with open(os.path.join(os.path.dirname(__file__), 'content', 'beta_changelog.txt'), 'r') as infile:
+            with open(os.path.join(__file__, 'content', 'beta_changelog.txt'), 'r') as infile:
                 beta_changelog = infile.read()
         else:
             beta_changelog = None
@@ -290,7 +290,7 @@ class Site:
         checksum_images = []
         for tile in cached_seed.verification:
             if tile not in CHECKSUM_IMAGES:
-                with open(os.path.join(os.path.dirname(__file__), 'static', f'checksum-{tile}.png'), 'rb') as infile:
+                with open(os.path.join(__file__, 'static', f'checksum-{tile}.png'), 'rb') as infile:
                     CHECKSUM_IMAGES[tile] = base64.b64encode(infile.read()).decode('utf-8')
             checksum_images.append(CHECKSUM_IMAGES[tile])
 
@@ -335,7 +335,7 @@ class Site:
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def presets(self):
-        with open(os.path.join(os.path.dirname(__file__), 'presets.json'), "r") as infile:
+        with open(os.path.join(__file__, 'presets.json'), "r") as infile:
             presets = json.load(infile)
         
         processed_presets = []
@@ -360,23 +360,23 @@ def run(config, task_queue):
     conf = {
         '/static' : {
             'tools.staticdir.on' : True,
-            'tools.staticdir.dir' : os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')),
+            'tools.staticdir.dir' : os.path.abspath(os.path.join(__file__, 'static')),
             'tools.expires.on' : True,
             'tools.expires.secs' : (24 * 60 * 60),  # 24 hours
         },
         '/script' : {
             'tools.staticdir.on' : True,
-            'tools.staticdir.dir' : os.path.abspath(os.path.join(os.path.dirname(__file__), 'script')),
+            'tools.staticdir.dir' : os.path.abspath(os.path.join(__file__, 'script')),
             'tools.expires.on' : True,
             'tools.expires.secs' : 0,
         },
         '/favicon.ico': {
             'tools.staticfile.on': True,
-            'tools.staticfile.filename': os.path.abspath(os.path.join(os.path.dirname(__file__), 'static', 'favicon.ico'))
+            'tools.staticfile.filename': os.path.abspath(os.path.join(__file__, 'static', 'favicon.ico'))
         },
         'FreeEnt' : {
             'beta' : config.beta,
-            'hibernation_mode' : os.path.exists(os.path.join(os.path.dirname(__file__), 'hibernate')),
+            'hibernation_mode' : os.path.exists(os.path.join(__file__, 'hibernate')),
             'require_api_key' : (not config.local)
         },
     }
@@ -401,7 +401,7 @@ def run(config, task_queue):
 
     if not config.local:
         try:
-            with open(os.path.join(os.path.dirname(__file__), '.password'), 'r') as infile:
+            with open(os.path.join(__file__, '.password'), 'r') as infile:
                 admin_pass = infile.read().strip()
         except FileNotFoundError:
             admin_pass = (False, False, False) #ie. should never match string

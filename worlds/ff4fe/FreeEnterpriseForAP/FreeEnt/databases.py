@@ -7,7 +7,7 @@ except ImportError:
 
 import os
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'assets', 'db')
+DB_PATH = os.path.join(__file__, 'assets', 'db')
 
 _curves_db = csvdb.CsvDb(pkgutil.get_data(__name__, 'assets/db/curves.csvdb').decode().splitlines(), {
     'wikiindex' : int,

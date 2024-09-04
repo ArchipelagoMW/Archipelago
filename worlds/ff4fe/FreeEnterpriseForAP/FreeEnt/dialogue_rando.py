@@ -5,9 +5,9 @@ import os
 
 from .flatfilecache import FlatFileCache
 
-TEXT_DB_PATH = os.path.join(os.path.dirname(__file__), 'assets', 'db', 'text_db.csv')
-OCCUPATIONS_PATH = os.path.join(os.path.dirname(__file__), 'assets', 'db', 'occupations.txt')
-ZEROMUS_WIN_GAME_PATH = os.path.join(os.path.dirname(__file__), 'assets', 'db', 'zeromus_win_game.txt')
+TEXT_DB_PATH = os.path.join('assets', 'db', 'text_db.csv')
+OCCUPATIONS_PATH = os.path.join('assets', 'db', 'occupations.txt')
+ZEROMUS_WIN_GAME_PATH = os.path.join('assets', 'db', 'zeromus_win_game.txt')
 
 class MapMessage:
     def __init__(self):

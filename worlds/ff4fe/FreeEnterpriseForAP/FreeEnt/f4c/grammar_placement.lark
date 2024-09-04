@@ -1,0 +1,20 @@
+placement_block_parameters : number number
+
+placement_block_body : placement_block_item*
+
+placement_block_item : "npc" npc_value              -> npc
+                     | "position" number number     -> position
+                     | "walking" on_off             -> walking
+                     | "tangible"                   -> tangible
+                     | "intangible"                 -> intangible
+                     | "face" direction             -> face
+                     | "palette" number             -> palette
+                     | "turning" on_off             -> turning
+                     | "marching" on_off            -> marching
+                     | "speed" number               -> speed
+                     | "delete"                     -> delete
+
+?on_off : "on"    -> on
+        | "true"  -> on
+        | "off"   -> off
+        | "false" -> off

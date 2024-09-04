@@ -1,0 +1,5081 @@
+monster($00)   // Imp     
+{
+    level 3
+    hp 6
+    gp 10
+    xp 20
+    attack index $01         // (1, 75, 19)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $02          // (1, 2)
+    drop index $38
+    drop rate $01
+    attack sequence $00
+    gfx {
+        size $01
+        palette $00
+        pointer $C103
+    }
+}
+
+monster($01)   // Basilisk
+{
+    level 5
+    hp 90
+    gp 30
+    xp 120
+    attack index $06         // (2, 90, 15)
+    defense index $62        // (0, 0, 2)
+    magic defense index $A6  // (1, 40, 9)
+    speed index $06          // (3, 6)
+    drop index $0D
+    drop rate $01
+    attack sequence $06
+    resist status #Piggy #Mini
+    race #Reptile
+    gfx {
+        size $06
+        palette $01
+        pointer $8B7C
+    }
+}
+
+monster($02)   // Eagle   
+{
+    level 5
+    hp 18
+    gp 10
+    xp 30
+    attack index $03         // (1, 80, 21)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $02          // (1, 2)
+    drop index $39
+    drop rate $01
+    attack sequence $0B
+    resist status #Piggy #Mini #Toad
+    weak element #Air
+    gfx {
+        size $03
+        palette $02
+        pointer $C163
+    }
+}
+
+monster($03)   // FloatEye
+{
+    level 4
+    hp 20
+    gp 10
+    xp 40
+    attack index $02         // (1, 80, 20)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $03          // (1, 3)
+    drop index $03
+    drop rate $01
+    attack sequence $0E
+    resist status #Piggy #Mini #Toad #Berserk #Sleep #Stun
+    weak element #Air
+    gfx {
+        size $04
+        palette $03
+        pointer $8450
+    }
+}
+
+monster($04)   // Larva   
+{
+    level 5
+    hp 28
+    gp 15
+    xp 50
+    attack index $02         // (1, 80, 20)
+    defense index $61        // (0, 0, 1)
+    magic defense index $A1  // (0, 0, 4)
+    speed index $03          // (1, 3)
+    drop index $10
+    drop rate $01
+    attack sequence $2F
+    resist status #Piggy #Mini #Toad
+    reaction sequence $30
+    gfx {
+        size $01
+        palette $04
+        pointer $8198
+    }
+}
+
+monster($05)   // Cave Bat
+{
+    level 20
+    hp 150
+    gp 155
+    xp 630
+    attack index $15         // (3, 95, 42)
+    defense index $70        // (2, 15, 3)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $0F          // (12, 15)
+    drop index $10
+    drop rate $01
+    attack sequence $13
+    resist element #Lit #Absorb
+    resist status #Piggy #Mini #Toad
+    weak element #Holy #Air #Immune
+    gfx {
+        size $03
+        palette $05
+        pointer $9240
+    }
+}
+
+monster($06)   // Treant  
+{
+    level 19
+    hp 260
+    gp 150
+    xp 1000
+    attack index $1C         // (4, 90, 48)
+    defense index $6F        // (1, 90, 1)
+    magic defense index $B3  // (3, 60, 15)
+    speed index $10          // (13, 16)
+    drop index $04
+    drop rate $01
+    attack sequence $14
+    resist status #Piggy #Mini #Toad
+    weak element #Fire
+    spell power 2
+    reaction sequence $15
+    gfx {
+        size $02
+        palette $06
+        pointer $9048
+    }
+}
+
+monster($07)   // SwordRat
+{
+    level 4
+    hp 30
+    gp 20
+    xp 70
+    attack index $03         // (1, 80, 21)
+    defense index $60        // (0, 0, 0)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $03          // (1, 3)
+    drop index $0D
+    drop rate $01
+    attack sequence $18
+    resist status #Mini #Toad
+    reaction sequence $19
+    gfx {
+        size $03
+        palette $07
+        pointer $92D0
+    }
+}
+
+monster($08)   // TinyMage
+{
+    level 6
+    hp 69
+    gp 100
+    xp 260
+    attack index $01         // (1, 75, 19)
+    defense index $62        // (0, 0, 2)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $04          // (2, 4)
+    drop index $26
+    drop rate $01
+    attack sequence $1C
+    resist status #Piggy #Toad
+    spell power 3
+    race #Mage
+    reaction sequence $1D
+    gfx {
+        size $00
+        palette $08
+        pointer $8000
+    }
+}
+
+monster($09)   // Sand Man
+{
+    level 5
+    hp 20
+    gp 20
+    xp 80
+    attack index $02         // (1, 80, 20)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A1  // (0, 0, 4)
+    speed index $04          // (2, 4)
+    drop index $02
+    drop rate $01
+    attack sequence $00
+    weak element #Ice #Immune
+    race #Reptile
+    gfx {
+        size $02
+        palette $09
+        pointer $91B0
+    }
+}
+
+monster($0A)   // SandMoth
+{
+    level 5
+    hp 40
+    gp 20
+    xp 80
+    attack index $03         // (1, 80, 21)
+    defense index $63        // (0, 0, 3)
+    magic defense index $A2  // (1, 30, 5)
+    speed index $04          // (2, 4)
+    drop index $03
+    drop rate $01
+    attack sequence $1E
+    resist status #Blind #Piggy #Mini #Toad
+    weak element #Air
+    gfx {
+        size $06
+        palette $0A
+        pointer $8C0C
+    }
+}
+
+monster($0B)   // Sandpede
+{
+    level 6
+    hp 60
+    gp 25
+    xp 80
+    attack index $04         // (2, 85, 11)
+    defense index $63        // (0, 0, 3)
+    magic defense index $A1  // (0, 0, 4)
+    speed index $04          // (2, 4)
+    drop index $01
+    drop rate $01
+    attack sequence $20
+    resist status #Blind #Piggy #Mini #Toad
+    gfx {
+        size $05
+        palette $0B
+        pointer $85DC
+    }
+}
+
+monster($0C)   // SandWorm
+{
+    level 6
+    hp 75
+    gp 25
+    xp 90
+    attack index $07         // (2, 90, 16)
+    defense index $66        // (1, 35, 2)
+    magic defense index $A4  // (1, 40, 7)
+    speed index $03          // (1, 3)
+    drop index $11
+    drop rate $01
+    attack sequence $26
+    resist status #Blind #Piggy #Mini #Sleep
+    spell power 10
+    gfx {
+        size $07
+        palette $0C
+        pointer $9528
+    }
+}
+
+monster($0D)   // CaveToad
+{
+    level 6
+    hp 44
+    gp 25
+    xp 90
+    attack index $04         // (2, 85, 11)
+    defense index $62        // (0, 0, 2)
+    magic defense index $A3  // (1, 60, 6)
+    speed index $05          // (2, 5)
+    drop index $0E
+    drop rate $01
+    attack sequence $2C
+    resist status #Toad
+    weak element #Ice
+    race #Reptile
+    gfx {
+        size $03
+        palette $0D
+        pointer $9288
+    }
+}
+
+monster($0E)   // EvilShel
+{
+    level 6
+    hp 58
+    gp 30
+    xp 110
+    attack index $04         // (2, 85, 11)
+    defense index $65        // (1, 30, 1)
+    magic defense index $A5  // (1, 60, 8)
+    speed index $06          // (3, 6)
+    drop index $04
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Mini
+    weak element #Lit #Immune
+    gfx {
+        size $01
+        palette $0E
+        pointer $8138
+    }
+}
+
+monster($0F)   // Zombie  
+{
+    level 6
+    hp 40
+    gp 35
+    xp 120
+    attack index $05         // (2, 85, 13)
+    defense index $64        // (1, 25, 2)
+    magic defense index $A6  // (1, 40, 9)
+    speed index $05          // (2, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    resist element #Dark #Immune
+    resist status #Poison #Piggy #Mini #Toad #Swoon #Sleep #Stun
+    weak element #Fire #Holy
+    race #Zombie
+    gfx {
+        size $02
+        palette $0F
+        pointer $90D8
+    }
+}
+
+monster($10)   // Pike    
+{
+    level 7
+    hp 65
+    gp 35
+    xp 120
+    attack index $04         // (2, 85, 11)
+    defense index $65        // (1, 30, 1)
+    magic defense index $A4  // (1, 40, 7)
+    speed index $06          // (3, 6)
+    drop index $01
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Mini
+    weak element #Lit #Immune
+    gfx {
+        size $03
+        palette $10
+        pointer $9318
+    }
+}
+
+monster($11)   // TrapRose
+{
+    level 23
+    hp 300
+    gp 35
+    xp 1210
+    attack index $23         // (5, 80, 62)
+    defense index $64        // (1, 25, 2)
+    magic defense index $A3  // (1, 60, 6)
+    speed index $14          // (17, 20)
+    drop index $04
+    drop rate $01
+    attack sequence $2E
+    resist status #Blind #Piggy #Mini #Toad
+    weak element #Fire #Immune
+    gfx {
+        size $05
+        palette $11
+        pointer $881C
+    }
+}
+
+monster($12)   // Mad Toad
+{
+    level 7
+    hp 59
+    gp 35
+    xp 130
+    attack index $04         // (2, 85, 11)
+    defense index $67        // (1, 40, 1)
+    magic defense index $A4  // (1, 40, 7)
+    speed index $08          // (5, 8)
+    drop index $0E
+    drop rate $01
+    attack sequence $00
+    resist status #Toad
+    weak element #Ice
+    race #Reptile
+    reaction sequence $2D
+    gfx {
+        size $03
+        palette $12
+        pointer $9288
+    }
+}
+
+monster($13)   // Jelly   
+{
+    level 7
+    hp 35
+    gp 35
+    xp 140
+    attack index $06         // (2, 90, 15)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $A4  // (1, 40, 7)
+    speed index $08          // (5, 8)
+    drop index $01
+    drop rate $01
+    attack sequence $00
+    resist status #Charm
+    weak element #Fire #Immune
+    race #Slime
+    gfx {
+        size $01
+        palette $13
+        pointer $8108
+    }
+}
+
+monster($14)   // Cream   
+{
+    level 8
+    hp 55
+    gp 35
+    xp 150
+    attack index $07         // (2, 90, 16)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $AD  // (2, 60, 12)
+    speed index $09          // (6, 9)
+    drop index $01
+    drop rate $01
+    attack sequence $00
+    resist status #Charm
+    weak element #Lit #Immune
+    race #Slime
+    gfx {
+        size $01
+        palette $14
+        pointer $8108
+    }
+}
+
+monster($15)   // WaterHag
+{
+    level 8
+    hp 48
+    gp 40
+    xp 140
+    attack index $08         // (2, 95, 18)
+    defense index $68        // (1, 45, 2)
+    magic defense index $A8  // (2, 40, 7)
+    speed index $0D          // (10, 13)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    weak element #Lit
+    race #Reptile
+    gfx {
+        size $02
+        palette $15
+        pointer $91B0
+    }
+}
+
+monster($16)   // Weeper  
+{
+    level 9
+    hp 100
+    gp 40
+    xp 160
+    attack index $08         // (2, 95, 18)
+    defense index $6A        // (1, 55, 2)
+    magic defense index $AB  // (2, 60, 10)
+    speed index $09          // (6, 9)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    spell power 144
+    race #Spirit
+    gfx {
+        size $05
+        palette $16
+        pointer $86FC
+    }
+}
+
+monster($17)   // RocLarva
+{
+    level 36
+    hp 800
+    gp 40
+    xp 2830
+    attack index $28         // (6, 70, 72)
+    defense index $85        // (3, 55, 3)
+    magic defense index $B7  // (4, 60, 17)
+    speed index $1A          // (23, 26)
+    drop index $10
+    drop rate $01
+    attack sequence $31
+    resist status #Piggy #Mini #Toad
+    reaction sequence $32
+    gfx {
+        size $01
+        palette $17
+        pointer $8198
+    }
+}
+
+monster($18)   // Dark Imp
+{
+    level 16
+    hp 199
+    gp 45
+    xp 1940
+    attack index $20         // (5, 70, 56)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $15          // (18, 21)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    gfx {
+        size $01
+        palette $18
+        pointer $C103
+    }
+}
+
+monster($19)   // BlackLiz
+{
+    level 25
+    hp 700
+    gp 45
+    xp 1300
+    attack index $23         // (5, 80, 62)
+    defense index $82        // (3, 40, 4)
+    magic defense index $B3  // (3, 60, 15)
+    speed index $18          // (21, 24)
+    drop index $37
+    drop rate $01
+    attack sequence $07
+    resist status #Piggy #Mini
+    weak element #Ice
+    spell power 16
+    race #Reptile
+    reaction sequence $08
+    gfx {
+        size $06
+        palette $19
+        pointer $8B7C
+    }
+}
+
+monster($1A)   // Turtle  
+{
+    level 12
+    hp 150
+    gp 80
+    xp 240
+    attack index $0A         // (2, 99, 20)
+    defense index $6F        // (1, 90, 1)
+    magic defense index $A7  // (1, 60, 10)
+    speed index $09          // (6, 9)
+    drop index $02
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Mini
+    weak element #Ice #Immune
+    race #Reptile
+    gfx {
+        size $06
+        palette $1A
+        pointer $8DBC
+    }
+}
+
+monster($1B)   // Imp Cap.
+{
+    level 9
+    hp 37
+    gp 50
+    xp 190
+    attack index $06         // (2, 90, 15)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A8  // (2, 40, 7)
+    speed index $07          // (4, 7)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    gfx {
+        size $01
+        palette $1B
+        pointer $C103
+    }
+}
+
+monster($1C)   // Slime   
+{
+    level 21
+    hp 50
+    gp 50
+    xp 760
+    attack index $1D         // (4, 90, 50)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $AA  // (2, 40, 9)
+    speed index $10          // (13, 16)
+    drop index $01
+    drop rate $01
+    attack sequence $00
+    resist status #Charm
+    weak element #Fire
+    race #Slime
+    gfx {
+        size $01
+        palette $1C
+        pointer $8108
+    }
+}
+
+monster($1D)   // Soldier 
+{
+    level 9
+    hp 27
+    gp 55
+    xp 160
+    attack index $0A         // (2, 99, 20)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A1  // (0, 0, 4)
+    speed index $02          // (1, 2)
+    drop index $00
+    drop rate $00
+    attack sequence $82
+    resist status #Charm
+    reaction sequence $83
+    gfx {
+        size $02
+        palette $1D
+        pointer $9000
+    }
+}
+
+monster($1E)   // Officer 
+{
+    level 11
+    hp 221
+    gp 80
+    xp 400
+    attack index $0D         // (3, 75, 26)
+    defense index $6C        // (1, 65, 2)
+    magic defense index $AD  // (2, 60, 12)
+    speed index $04          // (2, 4)
+    drop index $00
+    drop rate $00
+    attack sequence $80
+    gfx {
+        size $02
+        palette $1E
+        pointer $9000
+    }
+}
+
+monster($1F)   // Needler 
+{
+    level 14
+    hp 110
+    gp 55
+    xp 370
+    attack index $0A         // (2, 99, 20)
+    defense index $6C        // (1, 65, 2)
+    magic defense index $A9  // (2, 60, 8)
+    speed index $0A          // (7, 10)
+    drop index $0D
+    drop rate $01
+    attack sequence $1A
+    resist status #Mini #Toad
+    reaction sequence $19
+    gfx {
+        size $03
+        palette $1F
+        pointer $92D0
+    }
+}
+
+monster($20)   // Tricker 
+{
+    level 97
+    hp 12000
+    gp 10700
+    xp 21000
+    attack index $5F         // (13, 99, 174)
+    defense index $7A        // (2, 70, 3)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $34          // (66, 66)
+    drop index $38
+    drop rate $01
+    attack sequence $E8
+    weak element #Lit
+    spell power 143
+    reaction sequence $E9
+    gfx {
+        size $01
+        palette $20
+        pointer $C103
+    }
+}
+
+monster($21)   // Cannibal
+{
+    level 19
+    hp 370
+    gp 220
+    xp 960
+    attack index $0C         // (3, 75, 24)
+    defense index $6C        // (1, 65, 2)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $0F          // (12, 15)
+    drop index $04
+    drop rate $01
+    attack sequence $2E
+    resist status #Blind #Piggy #Mini #Toad
+    weak element #Fire
+    gfx {
+        size $05
+        palette $21
+        pointer $881C
+    }
+}
+
+monster($22)   // Spirit  
+{
+    level 10
+    hp 50
+    gp 125
+    xp 290
+    attack index $0C         // (3, 75, 24)
+    defense index $69        // (1, 50, 1)
+    magic defense index $AA  // (2, 40, 9)
+    speed index $07          // (4, 7)
+    drop index $33
+    drop rate $01
+    attack sequence $11
+    resist element #Fire #Absorb
+    resist status #Poison #Blind #Stone #Swoon #Calcify1 #Calcify2 #Sleep #Stun
+    weak element #Holy #Immune
+    spell power 2
+    race #Spirit
+    gfx {
+        size $01
+        palette $22
+        pointer $80A8
+    }
+}
+
+monster($23)   // Skelton 
+{
+    level 10
+    hp 50
+    gp 125
+    xp 240
+    attack index $0A         // (2, 99, 20)
+    defense index $6A        // (1, 55, 2)
+    magic defense index $A1  // (0, 0, 4)
+    speed index $09          // (6, 9)
+    drop index $00
+    drop rate $00
+    attack sequence $33
+    resist element #Dark
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Swoon #Berserk #Charm #Sleep #Stun #Float #Curse
+    weak element #Fire #Holy #Immune
+    race #Zombie
+    gfx {
+        size $02
+        palette $23
+        pointer $9090
+    }
+}
+
+monster($24)   // Cocktric
+{
+    level 11
+    hp 100
+    gp 120
+    xp 280
+    attack index $0C         // (3, 75, 24)
+    defense index $63        // (0, 0, 3)
+    magic defense index $AC  // (2, 40, 11)
+    speed index $08          // (5, 8)
+    drop index $39
+    drop rate $01
+    attack sequence $0C
+    resist status #Piggy #Mini #Toad
+    weak element #Air #Immune
+    gfx {
+        size $03
+        palette $24
+        pointer $C163
+    }
+}
+
+monster($25)   // Gargoyle
+{
+    level 12
+    hp 160
+    gp 100
+    xp 320
+    attack index $0E         // (3, 80, 28)
+    defense index $6E        // (1, 80, 2)
+    magic defense index $AD  // (2, 60, 12)
+    speed index $09          // (6, 9)
+    drop index $00
+    drop rate $00
+    attack sequence $2A
+    resist status #Piggy #Mini #Swoon
+    weak element #Holy #Air #Immune
+    race #Reptile
+    gfx {
+        size $06
+        palette $25
+        pointer $8EDC
+    }
+}
+
+monster($26)   // Roc Baby
+{
+    level 23
+    hp 50
+    gp 85
+    xp 1010
+    attack index $22         // (5, 80, 60)
+    defense index $6A        // (1, 55, 2)
+    magic defense index $AA  // (2, 40, 9)
+    speed index $21          // (30, 33)
+    drop index $39
+    drop rate $01
+    attack sequence $0B
+    resist status #Piggy #Mini #Toad
+    weak element #Air #Immune
+    reaction sequence $0D
+    gfx {
+        size $03
+        palette $26
+        pointer $C163
+    }
+}
+
+monster($27)   // Hooligan
+{
+    level 48
+    hp 1900
+    gp 485
+    xp 4090
+    attack index $3B         // (8, 99, 108)
+    defense index $78        // (2, 55, 3)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $23          // (32, 35)
+    drop index $33
+    drop rate $01
+    attack sequence $2B
+    resist status #Piggy #Mini #Swoon
+    weak element #Holy #Air
+    race #Spirit
+    gfx {
+        size $06
+        palette $27
+        pointer $8EDC
+    }
+}
+
+monster($28)   // Raven   
+{
+    level 15
+    hp 941
+    gp 700
+    xp 740
+    attack index $0E         // (3, 80, 28)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $06          // (3, 6)
+    drop index $12
+    drop rate $01
+    attack sequence $35
+    resist status #Piggy #Mini #Toad
+    weak element #Air
+    gfx {
+        size $09
+        palette $28
+        pointer $9B58
+    }
+}
+
+monster($29)   // WaterBug
+{
+    level 8
+    hp 110
+    gp 80
+    xp 230
+    attack index $07         // (2, 90, 16)
+    defense index $70        // (2, 15, 3)
+    magic defense index $AC  // (2, 40, 11)
+    speed index $08          // (5, 8)
+    drop index $02
+    drop rate $01
+    attack sequence $36
+    weak element #Lit
+    reaction sequence $37
+    gfx {
+        size $01
+        palette $29
+        pointer $8078
+    }
+}
+
+monster($2A)   // Aligator
+{
+    level 8
+    hp 150
+    gp 95
+    xp 240
+    attack index $0A         // (2, 99, 20)
+    defense index $6E        // (1, 80, 2)
+    magic defense index $AE  // (3, 40, 10)
+    speed index $07          // (4, 7)
+    drop index $13
+    drop rate $01
+    attack sequence $84
+    resist status #Piggy #Mini
+    weak element #Ice #Immune
+    gfx {
+        size $06
+        palette $2A
+        pointer $8C9C
+    }
+}
+
+monster($2B)   // Piranha 
+{
+    level 16
+    hp 105
+    gp 145
+    xp 460
+    attack index $0F         // (3, 80, 30)
+    defense index $70        // (2, 15, 3)
+    magic defense index $AE  // (3, 40, 10)
+    speed index $0D          // (10, 13)
+    drop index $01
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Mini #Toad
+    weak element #Lit
+    gfx {
+        size $03
+        palette $2B
+        pointer $9318
+    }
+}
+
+monster($2C)   // Fighter 
+{
+    level 12
+    hp 65
+    gp 100
+    xp 410
+    attack index $0E         // (3, 80, 28)
+    defense index $62        // (0, 0, 2)
+    magic defense index $A1  // (0, 0, 4)
+    speed index $02          // (1, 2)
+    drop index $00
+    drop rate $00
+    attack sequence $82
+    resist element #Dark #Holy
+    resist status #Charm
+    reaction sequence $83
+    gfx {
+        size $02
+        palette $2C
+        pointer $9000
+    }
+}
+
+monster($2D)   // General 
+{
+    level 15
+    hp 320
+    gp 155
+    xp 610
+    attack index $12         // (3, 90, 36)
+    defense index $71        // (2, 20, 2)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $09          // (6, 9)
+    drop index $00
+    drop rate $00
+    attack sequence $81
+    gfx {
+        size $02
+        palette $2D
+        pointer $9000
+    }
+}
+
+monster($2E)   // Soul    
+{
+    level 16
+    hp 150
+    gp 165
+    xp 510
+    attack index $0E         // (3, 80, 28)
+    defense index $70        // (2, 15, 3)
+    magic defense index $AE  // (3, 40, 10)
+    speed index $0C          // (9, 12)
+    drop index $33
+    drop rate $01
+    attack sequence $11
+    resist element #Fire #Absorb
+    resist status #Poison #Blind #Stone #Swoon #Calcify1 #Calcify2 #Sleep #Stun
+    weak element #Holy #Immune
+    race #Spirit
+    gfx {
+        size $01
+        palette $2E
+        pointer $80A8
+    }
+}
+
+monster($2F)   // Red Bone
+{
+    level 13
+    hp 170
+    gp 170
+    xp 320
+    attack index $11         // (3, 85, 34)
+    defense index $70        // (2, 15, 3)
+    magic defense index $A7  // (1, 60, 10)
+    speed index $0B          // (8, 11)
+    drop index $00
+    drop rate $00
+    attack sequence $33
+    resist element #Dark
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Swoon #Berserk #Charm #Sleep #Stun #Float #Curse
+    weak element #Fire #Holy #Immune
+    race #Zombie
+    gfx {
+        size $02
+        palette $2F
+        pointer $9090
+    }
+}
+
+monster($30)   // Ghoul   
+{
+    level 16
+    hp 120
+    gp 180
+    xp 580
+    attack index $10         // (3, 85, 32)
+    defense index $64        // (1, 25, 2)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $0C          // (9, 12)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    resist element #Dark #Immune
+    resist status #Poison #Piggy #Mini #Toad #Swoon #Sleep #Stun
+    weak element #Fire #Holy
+    race #Zombie
+    gfx {
+        size $02
+        palette $30
+        pointer $90D8
+    }
+}
+
+monster($31)   // Skull   
+{
+    level 31
+    hp 740
+    gp 120
+    xp 1580
+    attack index $29         // (6, 70, 74)
+    defense index $72        // (2, 25, 3)
+    magic defense index $B8  // (4, 40, 18)
+    speed index $18          // (21, 24)
+    drop index $00
+    drop rate $00
+    attack sequence $34
+    attack status #Curse
+    resist element #Dark
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Swoon #Berserk #Charm #Sleep #Stun #Float #Curse
+    weak element #Fire #Holy #Immune
+    race #Zombie
+    gfx {
+        size $02
+        palette $31
+        pointer $9090
+    }
+}
+
+monster($32)   // Revenant
+{
+    level 17
+    hp 160
+    gp 190
+    xp 680
+    attack index $12         // (3, 90, 36)
+    defense index $6F        // (1, 90, 1)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $0D          // (10, 13)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    resist element #Dark #Immune
+    resist status #Poison #Piggy #Mini #Toad #Swoon #Sleep #Stun
+    weak element #Fire #Holy
+    race #Zombie
+    gfx {
+        size $02
+        palette $32
+        pointer $90D8
+    }
+}
+
+monster($33)   // VampGirl
+{
+    level 20
+    hp 250
+    gp 195
+    xp 820
+    attack index $13         // (3, 90, 38)
+    defense index $73        // (2, 30, 2)
+    magic defense index $B3  // (3, 60, 15)
+    speed index $10          // (13, 16)
+    drop index $32
+    drop rate $01
+    attack sequence $3B
+    resist element #Lit #Absorb
+    resist status #Swoon
+    weak element #Fire #Holy #Immune
+    spell power 21
+    race #Zombie
+    gfx {
+        size $05
+        palette $33
+        pointer $854C
+    }
+}
+
+monster($34)   // CaveNaga
+{
+    level 20
+    hp 255
+    gp 205
+    xp 750
+    attack index $14         // (3, 95, 40)
+    defense index $76        // (2, 45, 3)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $11          // (14, 17)
+    drop index $09
+    drop rate $01
+    attack sequence $00
+    weak element #Holy #Immune
+    spell power 5
+    race #Reptile
+    reaction sequence $48
+    gfx {
+        size $05
+        palette $34
+        pointer $88AC
+    }
+}
+
+monster($35)   // D.Bone  
+{
+    level 79
+    hp 9000
+    gp 6750
+    xp 14100
+    attack index $4E         // (11, 75, 140)
+    defense index $7D        // (3, 15, 3)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $24          // (33, 36)
+    drop index $14
+    drop rate $01
+    attack sequence $3D
+    attack status #Poison
+    resist element #Dark #Immune
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Swoon #Berserk #Sleep #Stun #Float #Curse
+    weak element #Fire
+    race #Dragon #Zombie
+    reaction sequence $3E
+    gfx {
+        size $07
+        palette $35
+        pointer $95E8
+    }
+}
+
+monster($36)   // ElecFish
+{
+    level 17
+    hp 200
+    gp 230
+    xp 650
+    attack index $14         // (3, 95, 40)
+    defense index $62        // (0, 0, 2)
+    magic defense index $B1  // (3, 60, 13)
+    speed index $0C          // (9, 12)
+    drop index $04
+    drop rate $01
+    attack sequence $00
+    resist element #Lit #Absorb
+    resist status #Piggy #Mini
+    weak element #Air #Immune
+    gfx {
+        size $03
+        palette $36
+        pointer $9318
+    }
+}
+
+monster($37)   // Crocdile
+{
+    level 17
+    hp 292
+    gp 300
+    xp 870
+    attack index $13         // (3, 90, 38)
+    defense index $68        // (1, 45, 2)
+    magic defense index $AD  // (2, 60, 12)
+    speed index $0B          // (8, 11)
+    drop index $13
+    drop rate $01
+    attack sequence $84
+    resist status #Piggy #Mini
+    weak element #Ice #Immune
+    gfx {
+        size $06
+        palette $37
+        pointer $8C9C
+    }
+}
+
+monster($38)   // Hydra   
+{
+    level 15
+    hp 200
+    gp 230
+    xp 680
+    attack index $13         // (3, 90, 38)
+    defense index $7B        // (2, 80, 2)
+    magic defense index $B4  // (4, 40, 14)
+    speed index $0C          // (9, 12)
+    drop index $09
+    drop rate $01
+    attack sequence $46
+    resist status #Piggy #Mini
+    weak element #Ice #Lit
+    spell power 26
+    race #Reptile
+    gfx {
+        size $06
+        palette $38
+        pointer $8E4C
+    }
+}
+
+monster($39)   // AquaWorm
+{
+    level 18
+    hp 638
+    gp 350
+    xp 1200
+    attack index $16         // (3, 99, 44)
+    defense index $60        // (0, 0, 0)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $0D          // (10, 13)
+    drop index $11
+    drop rate $01
+    attack sequence $27
+    resist status #Blind #Piggy #Mini #Sleep
+    weak element #Lit
+    gfx {
+        size $07
+        palette $39
+        pointer $9528
+    }
+}
+
+monster($3A)   // Guard   
+{
+    level 18
+    hp 200
+    gp 500
+    xp 720
+    attack index $17         // (3, 99, 46)
+    defense index $6F        // (1, 90, 1)
+    magic defense index $B2  // (3, 40, 14)
+    speed index $0E          // (11, 14)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    spell power 26
+    race #Mage
+    reaction sequence $3F
+    gfx {
+        size $04
+        palette $3A
+        pointer $8234
+    }
+}
+
+monster($3B)   // Lamia   
+{
+    level 34
+    hp 1200
+    gp 1210
+    xp 2060
+    attack index $26         // (5, 99, 68)
+    defense index $82        // (3, 40, 4)
+    magic defense index $BA  // (5, 40, 16)
+    speed index $1B          // (24, 27)
+    drop index $16
+    drop rate $01
+    attack sequence $41
+    resist status #Sleep #Stun
+    race #Reptile
+    reaction sequence $B1
+    gfx {
+        size $06
+        palette $3B
+        pointer $8D2C
+    }
+}
+
+monster($3C)   // StingRat
+{
+    level 20
+    hp 300
+    gp 220
+    xp 1210
+    attack index $16         // (3, 99, 44)
+    defense index $78        // (2, 55, 3)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $0E          // (11, 14)
+    drop index $0D
+    drop rate $01
+    attack sequence $1B
+    resist status #Mini #Toad
+    reaction sequence $19
+    gfx {
+        size $03
+        palette $3C
+        pointer $92D0
+    }
+}
+
+monster($3D)   // Python  
+{
+    level 20
+    hp 90
+    gp 225
+    xp 760
+    attack index $17         // (3, 99, 46)
+    defense index $60        // (0, 0, 0)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $0C          // (9, 12)
+    drop index $09
+    drop rate $01
+    attack sequence $46
+    resist status #Piggy #Mini
+    weak element #Ice #Holy #Immune
+    gfx {
+        size $06
+        palette $3D
+        pointer $8E4C
+    }
+}
+
+monster($3E)   // Grudger 
+{
+    level 35
+    hp 1400
+    gp 150
+    xp 2460
+    attack index $27         // (5, 99, 70)
+    defense index $86        // (3, 60, 4)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $1D          // (26, 29)
+    drop index $07
+    drop rate $01
+    attack sequence $00
+    resist element #Lit #Absorb
+    weak element #Holy
+    gfx {
+        size $05
+        palette $3E
+        pointer $86FC
+    }
+}
+
+monster($3F)   // Mage    
+{
+    level 15
+    hp 500
+    gp 235
+    xp 1100
+    attack index $16         // (3, 99, 44)
+    defense index $72        // (2, 25, 3)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $06          // (3, 6)
+    drop index $3B
+    drop rate $01
+    attack sequence $47
+    resist status #Poison #Swoon #Stun
+    gfx {
+        size $04
+        palette $3F
+        pointer $C1AB
+    }
+}
+
+monster($40)   // Naga    
+{
+    level 27
+    hp 900
+    gp 150
+    xp 1120
+    attack index $25         // (5, 90, 66)
+    defense index $7D        // (3, 15, 3)
+    magic defense index $B2  // (3, 40, 14)
+    speed index $1A          // (23, 26)
+    drop index $09
+    drop rate $01
+    attack sequence $00
+    spell power 5
+    race #Reptile
+    reaction sequence $49
+    gfx {
+        size $05
+        palette $40
+        pointer $88AC
+    }
+}
+
+monster($41)   // Ogre    
+{
+    level 20
+    hp 865
+    gp 240
+    xp 1100
+    attack index $22         // (5, 80, 60)
+    defense index $6A        // (1, 55, 2)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $0A          // (7, 10)
+    drop index $20
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Toad
+    weak element #Holy
+    race #Giant
+    gfx {
+        size $05
+        palette $41
+        pointer $84BC
+    }
+}
+
+monster($42)   // Panther 
+{
+    level 20
+    hp 285
+    gp 255
+    xp 830
+    attack index $1C         // (4, 90, 48)
+    defense index $79        // (2, 60, 2)
+    magic defense index $B6  // (4, 40, 16)
+    speed index $0A          // (7, 10)
+    drop index $36
+    drop rate $01
+    attack sequence $4B
+    resist status #Mini #Toad
+    weak element #Holy
+    gfx {
+        size $04
+        palette $42
+        pointer $8378
+    }
+}
+
+monster($43)   // SwordMan
+{
+    level 21
+    hp 320
+    gp 175
+    xp 1100
+    attack index $20         // (5, 70, 56)
+    defense index $71        // (2, 20, 2)
+    magic defense index $B9  // (4, 60, 19)
+    speed index $20          // (29, 32)
+    drop index $15
+    drop rate $01
+    attack sequence $00
+    resist element #Dark #Immune
+    resist status #Swoon
+    weak element #Fire #Holy
+    race #Zombie
+    reaction sequence $4F
+    gfx {
+        size $04
+        palette $43
+        pointer $81C8
+    }
+}
+
+monster($44)   // Centaur 
+{
+    level 21
+    hp 380
+    gp 175
+    xp 1000
+    attack index $1F         // (4, 99, 54)
+    defense index $6F        // (1, 90, 1)
+    magic defense index $AE  // (3, 40, 10)
+    speed index $11          // (14, 17)
+    drop index $15
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Toad
+    gfx {
+        size $05
+        palette $44
+        pointer $878C
+    }
+}
+
+monster($45)   // VampLady
+{
+    level 41
+    hp 2375
+    gp 190
+    xp 4600
+    attack index $30         // (7, 80, 88)
+    defense index $84        // (3, 50, 4)
+    magic defense index $C2  // (6, 40, 24)
+    speed index $23          // (32, 35)
+    drop index $32
+    drop rate $01
+    attack sequence $3C
+    weak element #Fire #Holy
+    spell power 31
+    race #Mage #Zombie
+    gfx {
+        size $05
+        palette $45
+        pointer $854C
+    }
+}
+
+monster($46)   // Marion  
+{
+    level 22
+    hp 473
+    gp 195
+    xp 1110
+    attack index $1F         // (4, 99, 54)
+    defense index $70        // (2, 15, 3)
+    magic defense index $B7  // (4, 60, 17)
+    speed index $12          // (15, 18)
+    drop index $22
+    drop rate $01
+    attack sequence $5E
+    resist status #Piggy #Toad
+    spell power 35
+    race #Mage
+    gfx {
+        size $02
+        palette $46
+        pointer $91F8
+    }
+}
+
+monster($47)   // Puppet  
+{
+    level 22
+    hp 256
+    gp 180
+    xp 950
+    attack index $20         // (5, 70, 56)
+    defense index $70        // (2, 15, 3)
+    magic defense index $B6  // (4, 40, 16)
+    speed index $13          // (16, 19)
+    drop index $21
+    drop rate $01
+    attack sequence $61
+    weak element #Fire
+    spell power 15
+    reaction sequence $62
+    gfx {
+        size $01
+        palette $47
+        pointer $8168
+    }
+}
+
+monster($48)   // GlomWing
+{
+    level 41
+    hp 1380
+    gp 510
+    xp 2860
+    attack index $30         // (7, 80, 88)
+    defense index $86        // (3, 60, 4)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $22          // (31, 34)
+    drop index $0A
+    drop rate $01
+    attack sequence $1E
+    weak element #Air #Immune
+    gfx {
+        size $06
+        palette $48
+        pointer $8C0C
+    }
+}
+
+monster($49)   // FangShel
+{
+    level 25
+    hp 300
+    gp 350
+    xp 1050
+    attack index $15         // (3, 95, 42)
+    defense index $77        // (2, 50, 2)
+    magic defense index $B3  // (3, 60, 15)
+    speed index $10          // (13, 16)
+    drop index $04
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Mini
+    weak element #Lit #Immune
+    gfx {
+        size $01
+        palette $49
+        pointer $8138
+    }
+}
+
+monster($4A)   // Screamer
+{
+    level 44
+    hp 1000
+    gp 205
+    xp 3100
+    attack index $2E         // (6, 90, 84)
+    defense index $8A        // (4, 15, 4)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $24          // (33, 36)
+    drop index $07
+    drop rate $01
+    attack sequence $00
+    race #Robot #Giant
+    gfx {
+        size $05
+        palette $4A
+        pointer $86FC
+    }
+}
+
+monster($4B)   // Warrior 
+{
+    level 49
+    hp 2400
+    gp 575
+    xp 4300
+    attack index $37         // (8, 80, 102)
+    defense index $8C        // (4, 25, 4)
+    magic defense index $BB  // (5, 60, 17)
+    speed index $23          // (32, 35)
+    drop index $15
+    drop rate $01
+    attack sequence $00
+    reaction sequence $4F
+    gfx {
+        size $04
+        palette $4B
+        pointer $81C8
+    }
+}
+
+monster($4C)   // Armadilo
+{
+    level 27
+    hp 300
+    gp 195
+    xp 1600
+    attack index $21         // (5, 70, 58)
+    defense index $86        // (3, 60, 4)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $18          // (21, 24)
+    drop index $0C
+    drop rate $01
+    attack sequence $00
+    resist status #Mini #Toad
+    gfx {
+        size $06
+        palette $4C
+        pointer $8A5C
+    }
+}
+
+monster($4D)   // EpeeGirl
+{
+    level 26
+    hp 390
+    gp 200
+    xp 1260
+    attack index $20         // (5, 70, 56)
+    defense index $72        // (2, 25, 3)
+    magic defense index $B5  // (4, 60, 15)
+    speed index $14          // (17, 20)
+    drop index $15
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Toad
+    reaction sequence $50
+    gfx {
+        size $04
+        palette $4D
+        pointer $82A0
+    }
+}
+
+monster($4E)   // BladeMan
+{
+    level 35
+    hp 1050
+    gp 215
+    xp 2600
+    attack index $28         // (6, 70, 72)
+    defense index $86        // (3, 60, 4)
+    magic defense index $B9  // (4, 60, 19)
+    speed index $1A          // (23, 26)
+    drop index $15
+    drop rate $01
+    attack sequence $00
+    weak element #Holy
+    race #Spirit
+    reaction sequence $40
+    gfx {
+        size $04
+        palette $4E
+        pointer $8234
+    }
+}
+
+monster($4F)   // HugeNaga
+{
+    level 32
+    hp 1200
+    gp 240
+    xp 3600
+    attack index $2B         // (6, 80, 78)
+    defense index $89        // (3, 90, 3)
+    magic defense index $C4  // (6, 50, 26)
+    speed index $23          // (32, 35)
+    drop index $09
+    drop rate $01
+    attack sequence $00
+    race #Reptile
+    reaction sequence $4A
+    gfx {
+        size $05
+        palette $4F
+        pointer $88AC
+    }
+}
+
+monster($50)   // Medusa  
+{
+    level 28
+    hp 430
+    gp 225
+    xp 1250
+    attack index $24         // (5, 90, 64)
+    defense index $82        // (3, 40, 4)
+    magic defense index $B4  // (4, 40, 14)
+    speed index $18          // (21, 24)
+    drop index $37
+    drop rate $01
+    attack sequence $52
+    gfx {
+        size $06
+        palette $50
+        pointer $8F6C
+    }
+}
+
+monster($51)   // D.Fossil
+{
+    level 79
+    hp 10000
+    gp 8100
+    xp 15100
+    attack index $4A         // (10, 90, 132)
+    defense index $80        // (3, 30, 4)
+    magic defense index $D3  // (9, 80, 41)
+    speed index $25          // (34, 37)
+    drop index $14
+    drop rate $01
+    attack sequence $7B
+    attack status #Stun
+    resist element #Dark
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Swoon #Berserk #Sleep #Stun #Float #Curse
+    weak element #Fire #Holy
+    race #Dragon #Zombie
+    reaction sequence $7C
+    gfx {
+        size $07
+        palette $51
+        pointer $95E8
+    }
+}
+
+monster($52)   // Tortoise
+{
+    level 28
+    hp 400
+    gp 235
+    xp 1700
+    attack index $25         // (5, 90, 66)
+    defense index $74        // (2, 35, 3)
+    magic defense index $BB  // (5, 60, 17)
+    speed index $18          // (21, 24)
+    drop index $0C
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Mini
+    weak element #Ice
+    race #Reptile
+    gfx {
+        size $06
+        palette $52
+        pointer $8DBC
+    }
+}
+
+monster($53)   // Dummy   
+{
+    level 29
+    hp 2000
+    gp 240
+    xp 2850
+    attack index $4A         // (10, 90, 132)
+    defense index $94        // (4, 70, 4)
+    magic defense index $CA  // (7, 50, 32)
+    speed index $23          // (32, 35)
+    drop index $0B
+    drop rate $01
+    attack sequence $54
+    gfx {
+        size $02
+        palette $53
+        pointer $9120
+    }
+}
+
+monster($54)   // Ghost   
+{
+    level 39
+    hp 1100
+    gp 365
+    xp 3700
+    attack index $36         // (8, 80, 100)
+    defense index $85        // (3, 55, 3)
+    magic defense index $B4  // (4, 40, 14)
+    speed index $20          // (29, 32)
+    drop index $33
+    drop rate $01
+    attack sequence $12
+    resist element #Fire #Absorb
+    resist status #Poison #Blind #Stone #Swoon #Calcify1 #Calcify2 #Sleep #Stun
+    spell power 10
+    gfx {
+        size $01
+        palette $54
+        pointer $80A8
+    }
+}
+
+monster($55)   // Bomb    
+{
+    level 14
+    hp 50
+    gp 80
+    xp 370
+    attack index $09         // (2, 95, 19)
+    defense index $75        // (2, 40, 2)
+    magic defense index $B5  // (4, 60, 15)
+    speed index $06          // (3, 6)
+    drop index $00
+    drop rate $00
+    attack sequence $01
+    resist status #Poison #Piggy #Mini #Toad
+    gfx {
+        size $01
+        palette $55
+        pointer $C133
+    }
+}
+
+monster($56)   // GrayBomb
+{
+    level 14
+    hp 100
+    gp 105
+    xp 450
+    attack index $11         // (3, 85, 34)
+    defense index $63        // (0, 0, 3)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $0A          // (7, 10)
+    drop index $00
+    drop rate $00
+    attack sequence $01
+    resist status #Poison #Piggy #Mini #Toad
+    reaction sequence $02
+    gfx {
+        size $01
+        palette $56
+        pointer $C133
+    }
+}
+
+monster($57)   // Chimera 
+{
+    level 28
+    hp 700
+    gp 230
+    xp 2300
+    attack index $2C         // (6, 90, 80)
+    defense index $7D        // (3, 15, 3)
+    magic defense index $B8  // (4, 40, 18)
+    speed index $17          // (20, 23)
+    drop index $05
+    drop rate $01
+    attack sequence $58
+    resist element #Fire #Ice #Lit #Absorb
+    resist status #Piggy #Mini #Toad #Swoon #Sleep #Stun
+    gfx {
+        size $07
+        palette $57
+        pointer $93A8
+    }
+}
+
+monster($58)   // Carapace
+{
+    level 25
+    hp 700
+    gp 230
+    xp 1350
+    attack index $22         // (5, 80, 60)
+    defense index $7A        // (2, 70, 3)
+    magic defense index $AC  // (2, 40, 11)
+    speed index $15          // (18, 21)
+    drop index $0C
+    drop rate $01
+    attack sequence $00
+    resist element #Fire #Absorb
+    resist status #Piggy #Mini
+    weak element #Ice #Immune
+    race #Reptile
+    gfx {
+        size $06
+        palette $58
+        pointer $8DBC
+    }
+}
+
+monster($59)   // Ironback
+{
+    level 29
+    hp 100
+    gp 235
+    xp 1100
+    attack index $29         // (6, 70, 74)
+    defense index $90        // (4, 45, 4)
+    magic defense index $B5  // (4, 60, 15)
+    speed index $1B          // (24, 27)
+    drop index $0C
+    drop rate $01
+    attack sequence $00
+    resist status #Mini #Toad
+    gfx {
+        size $06
+        palette $59
+        pointer $8A5C
+    }
+}
+
+monster($5A)   // FlameDog
+{
+    level 29
+    hp 1221
+    gp 245
+    xp 1720
+    attack index $25         // (5, 90, 66)
+    defense index $7F        // (3, 25, 3)
+    magic defense index $A1  // (0, 0, 4)
+    speed index $18          // (21, 24)
+    drop index $05
+    drop rate $01
+    attack sequence $5A
+    resist element #Fire #Absorb
+    resist status #Mini #Toad
+    weak element #Ice #Immune
+    gfx {
+        size $06
+        palette $5A
+        pointer $8AEC
+    }
+}
+
+monster($5B)   // Gorgon  
+{
+    level 32
+    hp 2000
+    gp 250
+    xp 3050
+    attack index $3B         // (8, 99, 108)
+    defense index $94        // (4, 70, 4)
+    magic defense index $D2  // (9, 50, 40)
+    speed index $22          // (31, 34)
+    drop index $37
+    drop rate $01
+    attack sequence $53
+    gfx {
+        size $06
+        palette $5B
+        pointer $8F6C
+    }
+}
+
+monster($5C)   // Stoneman
+{
+    level 32
+    hp 2000
+    gp 240
+    xp 2950
+    attack index $2E         // (6, 90, 84)
+    defense index $79        // (2, 60, 2)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $1B          // (24, 27)
+    drop index $1D
+    drop rate $01
+    attack sequence $00
+    resist status #Poison #Blind #Mute #Mini #Toad #Stone #Swoon
+    weak element #Ice #Immune
+    race #Giant
+    gfx {
+        size $07
+        palette $5C
+        pointer $98E8
+    }
+}
+
+monster($5D)   // Lilith  
+{
+    level 33
+    hp 320
+    gp 365
+    xp 2750
+    attack index $17         // (3, 99, 46)
+    defense index $78        // (2, 55, 3)
+    magic defense index $B1  // (3, 60, 13)
+    speed index $0A          // (7, 10)
+    drop index $27
+    drop rate $01
+    attack sequence $42
+    resist status #Swoon #Sleep #Stun
+    weak element #Fire #Immune
+    race #Reptile #Zombie
+    reaction sequence $43
+    gfx {
+        size $06
+        palette $5D
+        pointer $8D2C
+    }
+}
+
+monster($5E)   // Q.Lamia 
+{
+    level 34
+    hp 1100
+    gp 250
+    xp 2900
+    attack index $29         // (6, 70, 74)
+    defense index $84        // (3, 50, 4)
+    magic defense index $C9  // (7, 80, 31)
+    speed index $18          // (21, 24)
+    drop index $16
+    drop rate $01
+    attack sequence $44
+    resist status #Sleep #Stun
+    race #Reptile
+    reaction sequence $45
+    gfx {
+        size $06
+        palette $5E
+        pointer $8D2C
+    }
+}
+
+monster($5F)   // TinyToad
+{
+    level 43
+    hp 400
+    gp 335
+    xp 1850
+    attack index $01         // (1, 75, 19)
+    defense index $60        // (0, 0, 0)
+    magic defense index $CF  // (8, 80, 37)
+    speed index $10          // (13, 16)
+    drop index $0E
+    drop rate $01
+    attack sequence $5C
+    resist status #Piggy #Mini #Toad
+    weak element #Ice
+    spell power 47
+    race #Reptile #Mage
+    reaction sequence $5D
+    gfx {
+        size $00
+        palette $5F
+        pointer $800C
+    }
+}
+
+monster($60)   // HugeCell
+{
+    level 26
+    hp 555
+    gp 255
+    xp 1510
+    attack index $22         // (5, 80, 60)
+    defense index $80        // (3, 30, 4)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $16          // (19, 22)
+    drop index $01
+    drop rate $01
+    attack sequence $36
+    reaction sequence $38
+    gfx {
+        size $01
+        palette $60
+        pointer $8078
+    }
+}
+
+monster($61)   // Roc     
+{
+    level 27
+    hp 999
+    gp 150
+    xp 1410
+    attack index $25         // (5, 90, 66)
+    defense index $60        // (0, 0, 0)
+    magic defense index $AA  // (2, 40, 9)
+    speed index $18          // (21, 24)
+    drop index $12
+    drop rate $01
+    attack sequence $35
+    resist status #Piggy #Mini #Toad
+    weak element #Air
+    gfx {
+        size $09
+        palette $61
+        pointer $9B58
+    }
+}
+
+monster($62)   // Sorcerer
+{
+    level 34
+    hp 1000
+    gp 275
+    xp 2370
+    attack index $2D         // (6, 90, 82)
+    defense index $80        // (3, 30, 4)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $1C          // (25, 28)
+    drop index $22
+    drop rate $01
+    attack sequence $5F
+    resist status #Piggy #Toad
+    spell power 50
+    race #Mage
+    gfx {
+        size $02
+        palette $62
+        pointer $91F8
+    }
+}
+
+monster($63)   // Mad Ogre
+{
+    level 32
+    hp 1700
+    gp 270
+    xp 2370
+    attack index $2D         // (6, 90, 82)
+    defense index $80        // (3, 30, 4)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $1F          // (28, 31)
+    drop index $20
+    drop rate $01
+    attack sequence $00
+    resist status #Piggy #Toad
+    spell power 53
+    race #Giant #Mage
+    gfx {
+        size $05
+        palette $63
+        pointer $84BC
+    }
+}
+
+monster($64)   // EvilDoll
+{
+    level 30
+    hp 300
+    gp 270
+    xp 1420
+    attack index $24         // (5, 90, 64)
+    defense index $7A        // (2, 70, 3)
+    magic defense index $B1  // (3, 60, 13)
+    speed index $19          // (22, 25)
+    drop index $21
+    drop rate $01
+    attack sequence $63
+    reaction sequence $64
+    gfx {
+        size $01
+        palette $64
+        pointer $8168
+    }
+}
+
+monster($65)   // GiantBat
+{
+    level 31
+    hp 399
+    gp 365
+    xp 1280
+    attack index $20         // (5, 70, 56)
+    defense index $89        // (3, 90, 3)
+    magic defense index $BA  // (5, 40, 16)
+    speed index $1F          // (28, 31)
+    drop index $10
+    drop rate $01
+    attack sequence $13
+    resist element #Lit #Absorb
+    resist status #Piggy #Mini #Toad
+    weak element #Fire #Air
+    gfx {
+        size $03
+        palette $65
+        pointer $9240
+    }
+}
+
+monster($66)   // Arachne 
+{
+    level 53
+    hp 3500
+    gp 585
+    xp 4400
+    attack index $37         // (8, 80, 102)
+    defense index $7D        // (3, 15, 3)
+    magic defense index $BC  // (5, 40, 18)
+    speed index $23          // (32, 35)
+    drop index $35
+    drop rate $01
+    attack sequence $23
+    weak element #Ice #Air #Immune
+    spell power 10
+    reaction sequence $24
+    gfx {
+        size $05
+        palette $66
+        pointer $866C
+    }
+}
+
+monster($67)   // FlameMan
+{
+    level 31
+    hp 579
+    gp 300
+    xp 1720
+    attack index $28         // (6, 70, 72)
+    defense index $82        // (3, 40, 4)
+    magic defense index $A4  // (1, 40, 7)
+    speed index $20          // (29, 32)
+    drop index $17
+    drop rate $01
+    attack sequence $00
+    resist element #Fire #Absorb
+    weak element #Ice
+    gfx {
+        size $04
+        palette $67
+        pointer $8234
+    }
+}
+
+monster($68)   // Beamer  
+{
+    level 50
+    hp 1800
+    gp 890
+    xp 3250
+    attack index $30         // (7, 80, 88)
+    defense index $90        // (4, 45, 4)
+    magic defense index $D3  // (9, 80, 41)
+    speed index $1F          // (28, 31)
+    drop index $18
+    drop rate $01
+    attack sequence $65
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    race #Robot
+    gfx {
+        size $03
+        palette $68
+        pointer $9360
+    }
+}
+
+monster($69)   // Balloon 
+{
+    level 33
+    hp 600
+    gp 315
+    xp 2480
+    attack index $25         // (5, 90, 66)
+    defense index $76        // (2, 45, 3)
+    magic defense index $B9  // (4, 60, 19)
+    speed index $1A          // (23, 26)
+    drop index $3A
+    drop rate $01
+    attack sequence $01
+    resist status #Poison #Piggy #Mini #Toad
+    weak element #Air
+    reaction sequence $03
+    gfx {
+        size $01
+        palette $69
+        pointer $C133
+    }
+}
+
+monster($6A)   // Grenade 
+{
+    level 39
+    hp 820
+    gp 630
+    xp 2650
+    attack index $3B         // (8, 99, 108)
+    defense index $90        // (4, 45, 4)
+    magic defense index $CF  // (8, 80, 37)
+    speed index $1F          // (28, 31)
+    drop index $3A
+    drop rate $01
+    attack sequence $00
+    resist status #Poison #Piggy #Mini #Toad
+    weak element #Air
+    reaction sequence $04
+    gfx {
+        size $01
+        palette $6A
+        pointer $C133
+    }
+}
+
+monster($6B)   // Plague  
+{
+    boss
+    level 96
+    hp 28000
+    gp 550
+    xp 31200
+    attack index $51         // (11, 90, 146)
+    defense index $91        // (4, 50, 5)
+    magic defense index $CA  // (7, 50, 32)
+    speed index $20          // (29, 32)
+    drop index $00
+    drop rate $00
+    attack sequence $66
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Charm #Sleep #Stun
+    weak element #Air
+    gfx {
+        size $04
+        palette $6B
+        pointer $8450
+    }
+}
+
+monster($6C)   // Last Arm
+{
+    boss
+    level 40
+    hp 9500
+    gp 340
+    xp 8800
+    attack index $48         // (10, 80, 128)
+    defense index $93        // (4, 60, 5)
+    magic defense index $D9  // (10, 80, 47)
+    speed index $14          // (17, 20)
+    drop index $34
+    drop rate $01
+    attack sequence $6F
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    race #Robot
+    reaction sequence $FB
+    gfx {
+        size $01
+        palette $6C
+        pointer $80D8
+    }
+}
+
+monster($6D)   // BlackCat
+{
+    level 35
+    hp 593
+    gp 345
+    xp 2800
+    attack index $26         // (5, 99, 68)
+    defense index $76        // (2, 45, 3)
+    magic defense index $BB  // (5, 60, 17)
+    speed index $19          // (22, 25)
+    drop index $36
+    drop rate $01
+    attack sequence $4C
+    resist status #Mini #Toad
+    reaction sequence $4D
+    gfx {
+        size $04
+        palette $6D
+        pointer $8378
+    }
+}
+
+monster($6E)   // D.Machin
+{
+    level 67
+    hp 15000
+    gp 2550
+    xp 41500
+    attack index $4C         // (10, 99, 136)
+    defense index $94        // (4, 70, 4)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $26          // (35, 38)
+    drop index $25
+    drop rate $01
+    attack sequence $7E
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Charm #Sleep #Stun #Curse
+    spell power 56
+    race #Dragon
+    reaction sequence $50
+    gfx {
+        size $09
+        palette $6E
+        pointer $9C30
+    }
+}
+
+monster($6F)   // Talantla
+{
+    level 42
+    hp 2315
+    gp 600
+    xp 2800
+    attack index $3C         // (8, 99, 110)
+    defense index $91        // (4, 50, 5)
+    magic defense index $CF  // (8, 80, 37)
+    speed index $21          // (30, 33)
+    drop index $35
+    drop rate $01
+    attack sequence $25
+    weak element #Air
+    spell power 5
+    gfx {
+        size $05
+        palette $6F
+        pointer $866C
+    }
+}
+
+monster($70)   // Gremlin 
+{
+    level 23
+    hp 385
+    gp 275
+    xp 1500
+    attack index $20         // (5, 70, 56)
+    defense index $6E        // (1, 80, 2)
+    magic defense index $B3  // (3, 60, 15)
+    speed index $16          // (19, 22)
+    drop index $0B
+    drop rate $01
+    attack sequence $55
+    weak element #Fire
+    spell power 31
+    race #Mage
+    reaction sequence $56
+    gfx {
+        size $02
+        palette $70
+        pointer $9120
+    }
+}
+
+monster($71)   // Centpede
+{
+    level 36
+    hp 600
+    gp 345
+    xp 2800
+    attack index $2A         // (6, 80, 76)
+    defense index $8D        // (4, 30, 5)
+    magic defense index $C7  // (7, 80, 29)
+    speed index $19          // (22, 25)
+    drop index $35
+    drop rate $01
+    attack sequence $21
+    resist status #Blind #Piggy #Mini #Toad
+    spell power 3
+    reaction sequence $22
+    gfx {
+        size $05
+        palette $71
+        pointer $85DC
+    }
+}
+
+monster($72)   // Red Worm
+{
+    level 37
+    hp 7000
+    gp 310
+    xp 7350
+    attack index $45         // (10, 75, 126)
+    defense index $90        // (4, 45, 4)
+    magic defense index $DD  // (10, 80, 54)
+    speed index $20          // (29, 32)
+    drop index $1C
+    drop rate $01
+    attack sequence $28
+    resist status #Blind #Piggy #Mini #Sleep
+    weak element #Fire #Immune
+    spell power 15
+    reaction sequence $29
+    gfx {
+        size $07
+        palette $72
+        pointer $9528
+    }
+}
+
+monster($73)   // Red Eye 
+{
+    level 45
+    hp 2000
+    gp 465
+    xp 3500
+    attack index $36         // (8, 80, 100)
+    defense index $8C        // (4, 25, 4)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $23          // (32, 35)
+    drop index $03
+    drop rate $01
+    attack sequence $0F
+    resist status #Piggy #Mini #Toad #Berserk #Sleep #Stun
+    weak element #Air
+    gfx {
+        size $04
+        palette $73
+        pointer $8450
+    }
+}
+
+monster($74)   // Crawler 
+{
+    level 43
+    hp 1555
+    gp 540
+    xp 3900
+    attack index $36         // (8, 80, 100)
+    defense index $86        // (3, 60, 4)
+    magic defense index $C2  // (6, 40, 24)
+    speed index $1F          // (28, 31)
+    drop index $10
+    drop rate $01
+    attack sequence $31
+    resist status #Piggy #Mini #Toad
+    reaction sequence $32
+    gfx {
+        size $01
+        palette $74
+        pointer $8198
+    }
+}
+
+monster($75)   // Ice Liz 
+{
+    level 23
+    hp 400
+    gp 290
+    xp 1500
+    attack index $21         // (5, 70, 58)
+    defense index $75        // (2, 40, 2)
+    magic defense index $B2  // (3, 40, 14)
+    speed index $14          // (17, 20)
+    drop index $06
+    drop rate $01
+    attack sequence $09
+    resist element #Ice #Absorb
+    resist status #Piggy #Mini
+    weak element #Fire #Immune
+    spell power 2
+    race #Reptile
+    reaction sequence $0A
+    gfx {
+        size $06
+        palette $75
+        pointer $8B7C
+    }
+}
+
+monster($76)   // RockMoth
+{
+    level 39
+    hp 850
+    gp 315
+    xp 3200
+    attack index $29         // (6, 70, 74)
+    defense index $77        // (2, 50, 2)
+    magic defense index $B8  // (4, 40, 18)
+    speed index $1C          // (25, 28)
+    drop index $03
+    drop rate $01
+    attack sequence $1F
+    resist status #Blind #Piggy #Mini #Toad
+    weak element #Air
+    gfx {
+        size $06
+        palette $76
+        pointer $8C0C
+    }
+}
+
+monster($77)   // Were Bat
+{
+    level 32
+    hp 800
+    gp 355
+    xp 2050
+    attack index $33         // (7, 90, 94)
+    defense index $81        // (3, 35, 3)
+    magic defense index $C3  // (6, 60, 25)
+    speed index $22          // (31, 34)
+    drop index $10
+    drop rate $01
+    attack sequence $13
+    resist element #Lit #Absorb
+    resist status #Piggy #Mini #Toad
+    weak element #Fire #Air
+    gfx {
+        size $03
+        palette $77
+        pointer $9240
+    }
+}
+
+monster($78)   // IceBeast
+{
+    level 40
+    hp 445
+    gp 280
+    xp 1570
+    attack index $24         // (5, 90, 64)
+    defense index $70        // (2, 15, 3)
+    magic defense index $B1  // (3, 60, 13)
+    speed index $15          // (18, 21)
+    drop index $06
+    drop rate $01
+    attack sequence $5B
+    resist element #Ice #Absorb
+    resist status #Mini #Toad
+    weak element #Fire
+    spell power 3
+    gfx {
+        size $06
+        palette $78
+        pointer $8AEC
+    }
+}
+
+monster($79)   // Conjurer
+{
+    level 48
+    hp 3000
+    gp 475
+    xp 3700
+    attack index $38         // (8, 90, 104)
+    defense index $8F        // (4, 40, 5)
+    magic defense index $B8  // (4, 40, 18)
+    speed index $23          // (32, 35)
+    drop index $22
+    drop rate $01
+    attack sequence $60
+    resist status #Piggy #Toad
+    spell power 60
+    race #Mage
+    gfx {
+        size $02
+        palette $79
+        pointer $91F8
+    }
+}
+
+monster($7A)   // Witch   
+{
+    level 26
+    hp 300
+    gp 330
+    xp 1670
+    attack index $1D         // (4, 90, 50)
+    defense index $73        // (2, 30, 2)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $16          // (19, 22)
+    drop index $26
+    drop rate $01
+    attack sequence $67
+    resist status #Toad
+    spell power 46
+    race #Mage
+    gfx {
+        size $04
+        palette $7A
+        pointer $830C
+    }
+}
+
+monster($7B)   // TrapDoor
+{
+    boss
+    level 58
+    hp 5000
+    gp 4500
+    xp 31100
+    attack index $30         // (7, 80, 88)
+    defense index $7D        // (3, 15, 3)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $1A          // (23, 26)
+    drop index $00
+    drop rate $00
+    attack sequence $D8
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    reaction sequence $D9
+    gfx {
+        size $07
+        palette $7B
+        pointer $9768
+    }
+}
+
+monster($7C)   // ToadLady
+{
+    level 40
+    hp 2960
+    gp 600
+    xp 3500
+    attack index $35         // (7, 99, 98)
+    defense index $70        // (2, 15, 3)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $20          // (29, 32)
+    drop index $30
+    drop rate $01
+    attack sequence $68
+    resist status #Piggy #Mini #Sleep #Stun
+    spell power 223
+    race #Mage
+    gfx {
+        size $04
+        palette $7C
+        pointer $830C
+    }
+}
+
+monster($7D)   // DarkTree
+{
+    level 40
+    hp 1800
+    gp 525
+    xp 5550
+    attack index $38         // (8, 90, 104)
+    defense index $89        // (3, 90, 3)
+    magic defense index $CA  // (7, 50, 32)
+    speed index $21          // (30, 33)
+    drop index $04
+    drop rate $01
+    attack sequence $16
+    resist status #Piggy #Mini #Toad
+    weak element #Fire
+    spell power 74
+    race #Mage
+    reaction sequence $17
+    gfx {
+        size $02
+        palette $7D
+        pointer $9048
+    }
+}
+
+monster($7E)   // Mantcore
+{
+    level 44
+    hp 2000
+    gp 1200
+    xp 35000
+    attack index $35         // (7, 99, 98)
+    defense index $85        // (3, 55, 3)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $1E          // (27, 30)
+    drop index $05
+    drop rate $01
+    attack sequence $59
+    resist element #Fire #Ice #Lit #Absorb
+    resist status #Piggy #Mini #Toad #Swoon #Sleep #Stun
+    gfx {
+        size $07
+        palette $7E
+        pointer $93A8
+    }
+}
+
+monster($7F)   // MoonCell
+{
+    level 48
+    hp 980
+    gp 1100
+    xp 3300
+    attack index $37         // (8, 80, 102)
+    defense index $8F        // (4, 40, 5)
+    magic defense index $D5  // (9, 80, 43)
+    speed index $25          // (34, 37)
+    drop index $0A
+    drop rate $01
+    attack sequence $39
+    resist status #Piggy #Mini #Toad
+    reaction sequence $3A
+    gfx {
+        size $01
+        palette $7F
+        pointer $8078
+    }
+}
+
+monster($80)   // Breath  
+{
+    boss
+    level 98
+    hp 31300
+    gp 50000
+    xp 60000
+    attack index $55         // (12, 75, 154)
+    defense index $60        // (0, 0, 0)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $3F          // (69, 69)
+    drop index $00
+    drop rate $00
+    attack sequence $F2
+    resist status #Blind #Piggy #Mini #Toad #Swoon #Sleep
+    spell power 99
+    reaction sequence $F3
+    gfx {
+        size $07
+        palette $80
+        pointer $9828
+    }
+}
+
+monster($81)   // Tofu    
+{
+    level 30
+    hp 102
+    gp 385
+    xp 1060
+    attack index $25         // (5, 90, 66)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $19          // (22, 25)
+    drop index $01
+    drop rate $01
+    attack sequence $00
+    resist status #Charm
+    weak element #Ice
+    race #Slime
+    gfx {
+        size $01
+        palette $81
+        pointer $8108
+    }
+}
+
+monster($82)   // Pudding 
+{
+    level 50
+    hp 1050
+    gp 1300
+    xp 3060
+    attack index $3F         // (9, 85, 116)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $25          // (34, 37)
+    drop index $0A
+    drop rate $01
+    attack sequence $00
+    resist status #Charm
+    race #Slime
+    gfx {
+        size $01
+        palette $82
+        pointer $8108
+    }
+}
+
+monster($83)   // Mind    
+{
+    boss
+    level 98
+    hp 12300
+    gp 50000
+    xp 65000
+    attack index $49         // (10, 85, 130)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3F          // (69, 69)
+    drop index $00
+    drop rate $00
+    attack sequence $F0
+    resist status #Blind #Piggy #Mini #Toad #Swoon #Sleep
+    spell power 99
+    reaction sequence $F1
+    gfx {
+        size $07
+        palette $83
+        pointer $9828
+    }
+}
+
+monster($84)   // Ironman 
+{
+    level 36
+    hp 2500
+    gp 385
+    xp 3700
+    attack index $2C         // (6, 90, 80)
+    defense index $70        // (2, 15, 3)
+    magic defense index $BE  // (5, 40, 20)
+    speed index $18          // (21, 24)
+    drop index $1E
+    drop rate $01
+    attack sequence $00
+    resist status #Poison #Blind #Mute #Mini #Toad #Swoon
+    race #Giant
+    gfx {
+        size $07
+        palette $84
+        pointer $98E8
+    }
+}
+
+monster($85)   // Green D.
+{
+    level 37
+    hp 2200
+    gp 370
+    xp 4800
+    attack index $30         // (7, 80, 88)
+    defense index $83        // (3, 45, 3)
+    magic defense index $B8  // (4, 40, 18)
+    speed index $1B          // (24, 27)
+    drop index $31
+    drop rate $01
+    attack sequence $6C
+    resist status #Piggy #Mini #Toad #Sleep
+    spell power 3
+    race #Dragon
+    reaction sequence $B0
+    gfx {
+        size $07
+        palette $85
+        pointer $9468
+    }
+}
+
+monster($86)   // PinkPuff
+{
+    level 96
+    hp 10000
+    gp 55555
+    xp 10000
+    attack index $5F         // (13, 99, 174)
+    defense index $99        // (5, 40, 5)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $25          // (34, 37)
+    drop index $28
+    drop rate $01
+    attack sequence $7D
+    resist status #Charm
+    spell power 127
+    race #Slime
+    gfx {
+        size $01
+        palette $86
+        pointer $8108
+    }
+}
+
+monster($87)   // Alert   
+{
+    level 16
+    hp 1425
+    gp 380
+    xp 2100
+    attack index $3D         // (9, 75, 112)
+    defense index $60        // (0, 0, 0)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $1A          // (23, 26)
+    drop index $34
+    drop rate $01
+    attack sequence $70
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    race #Robot
+    reaction sequence $71
+    gfx {
+        size $01
+        palette $87
+        pointer $80D8
+    }
+}
+
+monster($88)   // Machine 
+{
+    level 60
+    hp 3600
+    gp 985
+    xp 8200
+    attack index $40         // (9, 90, 118)
+    defense index $7F        // (3, 25, 3)
+    magic defense index $D2  // (9, 50, 40)
+    speed index $27          // (36, 39)
+    drop index $07
+    drop rate $01
+    attack sequence $76
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    race #Robot
+    gfx {
+        size $02
+        palette $88
+        pointer $9168
+    }
+}
+
+monster($89)   // MacGiant
+{
+    level 60
+    hp 8500
+    gp 1500
+    xp 31000
+    attack index $45         // (10, 75, 126)
+    defense index $85        // (3, 55, 3)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $24          // (33, 36)
+    drop index $19
+    drop rate $01
+    attack sequence $00
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Charm #Sleep #Stun
+    race #Robot #Giant
+    reaction sequence $78
+    gfx {
+        size $08
+        palette $89
+        pointer $9A80
+    }
+}
+
+monster($8A)   // Kary    
+{
+    level 61
+    hp 2700
+    gp 3500
+    xp 13100
+    attack index $3F         // (9, 85, 116)
+    defense index $81        // (3, 35, 3)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $26          // (35, 38)
+    drop index $29
+    drop rate $01
+    attack sequence $51
+    resist status #Piggy #Toad
+    gfx {
+        size $04
+        palette $8A
+        pointer $82A0
+    }
+}
+
+monster($8B)   // Molbol  
+{
+    level 34
+    hp 1999
+    gp 460
+    xp 11000
+    attack index $2F         // (6, 99, 86)
+    defense index $74        // (2, 35, 3)
+    magic defense index $C1  // (6, 60, 23)
+    speed index $18          // (21, 24)
+    drop index $1F
+    drop rate $01
+    attack sequence $72
+    resist status #Piggy #Mini #Swoon
+    gfx {
+        size $06
+        palette $8B
+        pointer $89CC
+    }
+}
+
+monster($8C)   // Ging-Ryu
+{
+    level 97
+    hp 7500
+    gp 19000
+    xp 25000
+    attack index $43         // (9, 99, 124)
+    defense index $8E        // (4, 35, 4)
+    magic defense index $D6  // (9, 50, 44)
+    speed index $24          // (33, 36)
+    drop index $23
+    drop rate $01
+    attack sequence $73
+    resist status #Blind #Mute #Piggy #Toad #Stone #Swoon #Calcify1 #Calcify2 #Stun #Float #Curse
+    spell power 95
+    race #Dragon
+    reaction sequence $74
+    gfx {
+        size $08
+        palette $8C
+        pointer $99A8
+    }
+}
+
+monster($8D)   // Yellow D
+{
+    level 40
+    hp 1800
+    gp 1500
+    xp 34000
+    attack index $37         // (8, 80, 102)
+    defense index $86        // (3, 60, 4)
+    magic defense index $BF  // (5, 60, 21)
+    speed index $1F          // (28, 31)
+    drop index $31
+    drop rate $01
+    attack sequence $6D
+    resist element #Lit #Absorb
+    resist status #Piggy #Mini #Toad #Sleep
+    race #Dragon
+    reaction sequence $6E
+    gfx {
+        size $07
+        palette $8D
+        pointer $9468
+    }
+}
+
+monster($8E)   // Fiend   
+{
+    level 45
+    hp 2980
+    gp 650
+    xp 6400
+    attack index $36         // (8, 80, 100)
+    defense index $8B        // (4, 20, 5)
+    magic defense index $D5  // (9, 80, 43)
+    speed index $23          // (32, 35)
+    drop index $0B
+    drop rate $01
+    attack sequence $55
+    spell power 79
+    race #Mage
+    reaction sequence $57
+    gfx {
+        size $02
+        palette $8E
+        pointer $9120
+    }
+}
+
+monster($8F)   // Juclyote
+{
+    level 54
+    hp 1700
+    gp 1560
+    xp 7200
+    attack index $37         // (8, 80, 102)
+    defense index $85        // (3, 55, 3)
+    magic defense index $D6  // (9, 50, 44)
+    speed index $23          // (32, 35)
+    drop index $1A
+    drop rate $01
+    attack sequence $00
+    attack status #Poison
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    gfx {
+        size $04
+        palette $8F
+        pointer $83E4
+    }
+}
+
+monster($90)   // EvilMask
+{
+    boss
+    level 99
+    hp 25500
+    gp 65000
+    xp 50000
+    attack index $48         // (10, 80, 128)
+    defense index $89        // (3, 90, 3)
+    magic defense index $B9  // (4, 60, 19)
+    speed index $2B          // (40, 43)
+    drop index $0F
+    drop rate $01
+    attack sequence $E6
+    spell power 14
+    race #Robot
+    gfx {
+        size $05
+        palette $90
+        pointer $893C
+    }
+}
+
+monster($91)   // Horseman
+{
+    level 61
+    hp 3000
+    gp 1220
+    xp 9900
+    attack index $45         // (10, 75, 126)
+    defense index $60        // (0, 0, 0)
+    magic defense index $D5  // (9, 80, 43)
+    speed index $2B          // (40, 43)
+    drop index $15
+    drop rate $02
+    attack sequence $00
+    resist status #Piggy #Mini #Toad
+    race #Robot
+    gfx {
+        size $05
+        palette $91
+        pointer $878C
+    }
+}
+
+monster($92)   // RedGiant
+{
+    level 97
+    hp 11800
+    gp 7000
+    xp 18900
+    attack index $42         // (9, 99, 122)
+    defense index $89        // (3, 90, 3)
+    magic defense index $D1  // (8, 80, 39)
+    speed index $25          // (34, 37)
+    drop index $19
+    drop rate $01
+    attack sequence $6A
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Charm #Sleep #Stun #Float #Curse
+    spell power 57
+    race #Giant
+    reaction sequence $6B
+    gfx {
+        size $08
+        palette $92
+        pointer $9A80
+    }
+}
+
+monster($93)   // Staleman
+{
+    level 32
+    hp 2100
+    gp 445
+    xp 2100
+    attack index $2F         // (6, 99, 86)
+    defense index $88        // (3, 80, 4)
+    magic defense index $BF  // (5, 60, 21)
+    speed index $17          // (20, 23)
+    drop index $2A
+    drop rate $01
+    attack sequence $00
+    attack status #Sleep
+    resist status #Poison #Blind #Mute #Mini #Toad #Swoon
+    weak element #Ice
+    race #Giant
+    gfx {
+        size $07
+        palette $93
+        pointer $98E8
+    }
+}
+
+monster($94)   // FatalEye
+{
+    boss
+    level 99
+    hp 25000
+    gp 65200
+    xp 40000
+    attack index $50         // (11, 85, 144)
+    defense index $95        // (4, 80, 5)
+    magic defense index $AB  // (2, 60, 10)
+    speed index $20          // (29, 32)
+    drop index $2B
+    drop rate $01
+    attack sequence $85
+    resist status #Piggy #Mini #Toad #Berserk #Sleep #Stun
+    weak element #Air
+    gfx {
+        size $04
+        palette $94
+        pointer $8450
+    }
+}
+
+monster($95)   // D. Lunar
+{
+    boss
+    level 99
+    hp 21000
+    gp 0
+    xp 50000
+    attack index $50         // (11, 85, 144)
+    defense index $80        // (3, 30, 4)
+    magic defense index $DD  // (10, 80, 54)
+    speed index $01          // (30, 30)
+    drop index $00
+    drop rate $00
+    attack sequence $B2
+    weak element #Fire
+    spell power 36
+    race #Dragon #Zombie
+    reaction sequence $B3
+    gfx {
+        size $07
+        palette $95
+        pointer $95E8
+    }
+}
+
+monster($96)   // Searcher
+{
+    level 30
+    hp 5500
+    gp 900
+    xp 18200
+    attack index $4D         // (10, 99, 138)
+    defense index $90        // (4, 45, 4)
+    magic defense index $DC  // (10, 50, 52)
+    speed index $1A          // (23, 26)
+    drop index $34
+    drop rate $01
+    attack sequence $70
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    race #Robot
+    reaction sequence $71
+    gfx {
+        size $01
+        palette $96
+        pointer $80D8
+    }
+}
+
+monster($97)   // Warlock 
+{
+    level 71
+    hp 4250
+    gp 2400
+    xp 17300
+    attack index $3A         // (8, 70, 80)
+    defense index $95        // (4, 80, 5)
+    magic defense index $C7  // (7, 80, 29)
+    speed index $25          // (34, 37)
+    drop index $30
+    drop rate $01
+    attack sequence $69
+    resist status #Toad
+    spell power 44
+    race #Mage
+    gfx {
+        size $04
+        palette $97
+        pointer $830C
+    }
+}
+
+monster($98)   // Wyvern  
+{
+    boss
+    level 99
+    hp 25000
+    gp 0
+    xp 64300
+    attack index $58         // (12, 90, 160)
+    defense index $95        // (4, 80, 5)
+    magic defense index $DC  // (10, 50, 52)
+    speed index $2E          // (43, 46)
+    drop index $00
+    drop rate $00
+    attack sequence $EA
+    spell power 8
+    race #Dragon
+    reaction sequence $EB
+    gfx {
+        size $BB
+        palette $00
+        pointer $C868
+    }
+}
+
+monster($99)   // Procyote
+{
+    level 61
+    hp 2200
+    gp 1850
+    xp 8100
+    attack index $39         // (8, 90, 106)
+    defense index $95        // (4, 80, 5)
+    magic defense index $C9  // (7, 80, 31)
+    speed index $25          // (34, 37)
+    drop index $1A
+    drop rate $01
+    attack sequence $00
+    attack status #Poison
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    gfx {
+        size $04
+        palette $99
+        pointer $83E4
+    }
+}
+
+monster($9A)   // Ogopogo 
+{
+    boss
+    level 62
+    hp 37000
+    gp 0
+    xp 61100
+    attack index $53         // (11, 99, 150)
+    defense index $92        // (4, 55, 4)
+    magic defense index $D2  // (9, 50, 40)
+    speed index $3B          // (38, 38)
+    drop index $00
+    drop rate $00
+    attack sequence $EC
+    spell power 127
+    reaction sequence $ED
+    gfx {
+        size $BD
+        palette $00
+        pointer $C724
+    }
+}
+
+monster($9B)   // Blue D. 
+{
+    boss
+    level 98
+    hp 13200
+    gp 40200
+    xp 36000
+    attack index $50         // (11, 85, 144)
+    defense index $94        // (4, 70, 4)
+    magic defense index $D3  // (9, 80, 41)
+    speed index $27          // (36, 39)
+    drop index $2C
+    drop rate $01
+    attack sequence $79
+    resist element #Fire #Ice #Lit #Dark #Holy #Air #Absorb
+    resist status #Blind #Mute #Piggy #Mini #Toad #Stone #Charm #Sleep #Stun
+    race #Dragon
+    reaction sequence $7A
+    gfx {
+        size $09
+        palette $9B
+        pointer $9C30
+    }
+}
+
+monster($9C)   // King-Ryu
+{
+    level 97
+    hp 8200
+    gp 23000
+    xp 30000
+    attack index $48         // (10, 80, 128)
+    defense index $DD        // (10, 80, 54)
+    magic defense index $D1  // (8, 80, 39)
+    speed index $25          // (34, 37)
+    drop index $24
+    drop rate $01
+    attack sequence $E2
+    resist status #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Charm #Stun #Float #Curse
+    spell power 30
+    race #Dragon
+    reaction sequence $E3
+    gfx {
+        size $08
+        palette $9C
+        pointer $99A8
+    }
+}
+
+monster($9D)   // Clapper 
+{
+    level 54
+    hp 7000
+    gp 900
+    xp 8000
+    attack index $43         // (9, 99, 124)
+    defense index $90        // (4, 45, 4)
+    magic defense index $DD  // (10, 80, 54)
+    speed index $23          // (32, 35)
+    drop index $25
+    drop rate $01
+    attack sequence $75
+    resist element #Lit #Absorb
+    resist status #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Charm #Sleep #Stun #Float #Curse
+    weak element #Air
+    race #Dragon
+    gfx {
+        size $08
+        palette $9D
+        pointer $99A8
+    }
+}
+
+monster($9E)   // Pale Dim
+{
+    boss
+    level 98
+    hp 27300
+    gp 0
+    xp 59000
+    attack index $50         // (11, 85, 144)
+    defense index $99        // (5, 40, 5)
+    magic defense index $DA  // (10, 50, 48)
+    speed index $2B          // (40, 43)
+    drop index $00
+    drop rate $00
+    attack sequence $EE
+    resist element #Fire #Ice #Lit #Absorb
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Sleep #Stun
+    spell power 31
+    race #Dragon
+    reaction sequence $EF
+    gfx {
+        size $07
+        palette $9E
+        pointer $96A8
+    }
+}
+
+monster($9F)   // Red D.  
+{
+    boss
+    level 99
+    hp 15000
+    gp 65000
+    xp 51800
+    attack index $58         // (12, 90, 160)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $2C          // (41, 44)
+    drop index $2E
+    drop rate $01
+    attack sequence $E4
+    resist element #Fire #Absorb
+    resist status #Blind #Mute #Piggy #Mini #Toad #Stone #Charm #Stun
+    weak element #Ice
+    spell power 79
+    race #Dragon
+    gfx {
+        size $09
+        palette $9F
+        pointer $9C30
+    }
+}
+
+monster($A0)   // Behemoth
+{
+    boss
+    level 99
+    hp 16000
+    gp 65000
+    xp 58700
+    attack index $55         // (12, 75, 154)
+    defense index $96        // (4, 90, 4)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $03          // (1, 3)
+    drop index $2F
+    drop rate $01
+    attack sequence $F5
+    spell power 63
+    reaction sequence $C3
+    gfx {
+        size $09
+        palette $A0
+        pointer $9D08
+    }
+}
+
+monster($A1)   // D.Mist  
+{
+    boss
+    level 10
+    hp 465
+    gp 200
+    xp 700
+    attack index $07         // (2, 90, 16)
+    defense index $9E        // (0, 0, 5)
+    magic defense index $C9  // (7, 80, 31)
+    speed index $30          // (5, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $86
+    resist element #Holy #Absorb
+    spell power 10
+    reaction sequence $87
+    gfx {
+        size $80
+        palette $A1
+        pointer $C544
+    }
+}
+
+monster($A2)   // Octomamm
+{
+    boss
+    level 10
+    hp 2350
+    gp 500
+    xp 1200
+    attack index $0B         // (2, 99, 22)
+    defense index $60        // (0, 0, 0)
+    magic defense index $C3  // (6, 60, 25)
+    speed index $31          // (31, 31)
+    drop index $00
+    drop rate $00
+    attack sequence $8A
+    resist element #Holy #Absorb
+    weak element #Lit #Dark
+    reaction sequence $8B
+    gfx {
+        size $84
+        palette $A2
+        pointer $A000
+    }
+}
+
+monster($A3)   // Antlion 
+{
+    boss
+    level 2
+    hp 1000
+    gp 800
+    xp 1500
+    attack index $04         // (2, 85, 11)
+    defense index $62        // (0, 0, 2)
+    magic defense index $A9  // (2, 60, 8)
+    speed index $30          // (5, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $DC
+    reaction sequence $DD
+    gfx {
+        size $8C
+        palette $00
+        pointer $A10E
+    }
+}
+
+monster($A4)   // MomBomb 
+{
+    boss
+    level 15
+    hp 10800
+    gp 1200
+    xp 1900
+    attack index $0F         // (3, 80, 30)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A6  // (1, 40, 9)
+    speed index $39          // (7, 7)
+    drop index $00
+    drop rate $00
+    attack sequence $90
+    weak element #Dark
+    spell power 5
+    gfx {
+        size $A4
+        palette $00
+        pointer $A195
+    }
+}
+
+monster($A5)   // Milon   
+{
+    boss
+    level 15
+    hp 3100
+    gp 2500
+    xp 3200
+    attack index $01         // (1, 75, 19)
+    defense index $66        // (1, 35, 2)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $33          // (8, 8)
+    drop index $00
+    drop rate $00
+    attack sequence $91
+    spell power 14
+    reaction sequence $92
+    gfx {
+        size $8E
+        palette $00
+        pointer $A249
+    }
+}
+
+monster($A6)   // Milon Z.
+{
+    boss
+    level 15
+    hp 3000
+    gp 3000
+    xp 4000
+    attack index $16         // (3, 99, 44)
+    defense index $6B        // (1, 60, 1)
+    magic defense index $C0  // (6, 40, 22)
+    speed index $32          // (9, 9)
+    drop index $00
+    drop rate $00
+    attack sequence $95
+    attack status #Poison
+    resist element #Ice #Absorb
+    weak element #Fire #Holy #Air
+    spell power 31
+    race #Zombie
+    gfx {
+        size $8F
+        palette $00
+        pointer $A249
+    }
+}
+
+monster($A7)   // Baigan  
+{
+    boss
+    level 9
+    hp 3500
+    gp 3000
+    xp 4800
+    attack index $1E         // (4, 99, 52)
+    defense index $60        // (0, 0, 0)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $33          // (8, 8)
+    drop index $00
+    drop rate $00
+    attack sequence $9B
+    spell power 9
+    reaction sequence $9C
+    gfx {
+        size $A1
+        palette $00
+        pointer $ACC3
+    }
+}
+
+monster($A8)   // RightArm
+{
+    boss
+    level 9
+    hp 350
+    gp 0
+    xp 10
+    attack index $20         // (5, 70, 56)
+    defense index $62        // (0, 0, 2)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $35          // (4, 4)
+    drop index $00
+    drop rate $00
+    attack sequence $9A
+    spell power 9
+    gfx {
+        size $A2
+        palette $00
+        pointer $ACC3
+    }
+}
+
+monster($A9)   // Left Arm
+{
+    boss
+    level 9
+    hp 350
+    gp 0
+    xp 10
+    attack index $20         // (5, 70, 56)
+    defense index $62        // (0, 0, 2)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $30          // (5, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $99
+    spell power 9
+    gfx {
+        size $A3
+        palette $00
+        pointer $ACC3
+    }
+}
+
+monster($AA)   // Kainazzo
+{
+    boss
+    level 16
+    hp 4000
+    gp 4000
+    xp 5500
+    attack index $16         // (3, 99, 44)
+    defense index $77        // (2, 50, 2)
+    magic defense index $DA  // (10, 50, 48)
+    speed index $36          // (15, 15)
+    drop index $00
+    drop rate $00
+    attack sequence $9D
+    weak element #Ice
+    spell power 29
+    reaction sequence $9E
+    gfx {
+        size $92
+        palette $00
+        pointer $A543
+    }
+}
+
+monster($AB)   // Dark Elf
+{
+    boss
+    level 15
+    hp 65000
+    gp 0
+    xp 0
+    attack index $DF         // (99, 99, 254)
+    defense index $60        // (0, 0, 0)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $31          // (31, 31)
+    drop index $00
+    drop rate $00
+    attack sequence $9F
+    spell power 57
+    gfx {
+        size $97
+        palette $AB
+        pointer $A834
+    }
+}
+
+monster($AC)   // Dark Elf
+{
+    boss
+    level 15
+    hp 22000
+    gp 4000
+    xp 1000
+    attack index $00         // (1, 75, 18)
+    defense index $60        // (0, 0, 0)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $32          // (9, 9)
+    drop index $00
+    drop rate $00
+    attack sequence $A0
+    weak element #Holy #Immune
+    spell power 1
+    reaction sequence $A1
+    gfx {
+        size $97
+        palette $AB
+        pointer $A834
+    }
+}
+
+monster($AD)   // Sandy   
+{
+    boss
+    level 16
+    hp 2500
+    gp 3000
+    xp 3000
+    attack index $0F         // (3, 80, 30)
+    defense index $69        // (1, 50, 1)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $39          // (7, 7)
+    drop index $00
+    drop rate $00
+    attack sequence $A3
+    spell power 11
+    race #Mage
+    gfx {
+        size $98
+        palette $00
+        pointer $A8A0
+    }
+}
+
+monster($AE)   // Cindy   
+{
+    boss
+    level 16
+    hp 4300
+    gp 3000
+    xp 3000
+    attack index $22         // (5, 80, 60)
+    defense index $68        // (1, 45, 2)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $39          // (7, 7)
+    drop index $00
+    drop rate $00
+    attack sequence $A5
+    spell power 11
+    race #Mage
+    gfx {
+        size $99
+        palette $00
+        pointer $A8A0
+    }
+}
+
+monster($AF)   // Mindy   
+{
+    boss
+    level 16
+    hp 2200
+    gp 3000
+    xp 3000
+    attack index $0F         // (3, 80, 30)
+    defense index $69        // (1, 50, 1)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $39          // (7, 7)
+    drop index $00
+    drop rate $00
+    attack sequence $A4
+    spell power 11
+    race #Mage
+    gfx {
+        size $9A
+        palette $00
+        pointer $A8A0
+    }
+}
+
+monster($B0)   // Golbez  
+{
+    level 26
+    hp 65500
+    gp 0
+    xp 1
+    attack index $01         // (1, 75, 19)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3F          // (69, 69)
+    drop index $00
+    drop rate $00
+    attack sequence $C7
+    weak element #Holy #Immune
+    reaction sequence $C8
+    gfx {
+        size $A9
+        palette $00
+        pointer $AEB2
+    }
+}
+
+monster($B1)   // Valvalis
+{
+    boss
+    level 36
+    hp 6000
+    gp 5500
+    xp 9500
+    attack index $27         // (5, 99, 70)
+    defense index $60        // (0, 0, 0)
+    magic defense index $B0  // (3, 40, 12)
+    speed index $37          // (18, 18)
+    drop index $00
+    drop rate $00
+    attack sequence $A6
+    spell power 63
+    reaction sequence $A7
+    gfx {
+        size $95
+        palette $00
+        pointer $A543
+    }
+}
+
+monster($B2)   // Cal     
+{
+    level 31
+    hp 1000
+    gp 500
+    xp 1000
+    attack index $1F         // (4, 99, 54)
+    defense index $60        // (0, 0, 0)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $13          // (16, 19)
+    drop index $00
+    drop rate $00
+    attack sequence $AC
+    spell power 31
+    reaction sequence $AD
+    gfx {
+        size $01
+        palette $B2
+        pointer $8168
+    }
+}
+
+monster($B3)   // Calbrena
+{
+    boss
+    level 47
+    hp 4624
+    gp 5000
+    xp 15000
+    attack index $34         // (7, 99, 96)
+    defense index $6E        // (1, 80, 2)
+    magic defense index $C3  // (6, 60, 25)
+    speed index $38          // (11, 11)
+    drop index $00
+    drop rate $00
+    attack sequence $AA
+    spell power 41
+    reaction sequence $AB
+    gfx {
+        size $9B
+        palette $00
+        pointer $A99C
+    }
+}
+
+monster($B4)   // Golbez  
+{
+    boss
+    level 31
+    hp 22001
+    gp 10000
+    xp 15000
+    attack index $26         // (5, 99, 68)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3A          // (27, 27)
+    drop index $00
+    drop rate $00
+    attack sequence $C9
+    weak element #Fire #Holy
+    spell power 1
+    reaction sequence $CA
+    gfx {
+        size $A9
+        palette $00
+        pointer $AEB2
+    }
+}
+
+monster($B5)   // Shadow  
+{
+    boss
+    level 7
+    hp 1
+    gp 1000
+    xp 5000
+    attack index $2F         // (6, 99, 86)
+    defense index $80        // (3, 30, 4)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $34          // (66, 66)
+    drop index $00
+    drop rate $00
+    attack sequence $CB
+    spell power 31
+    race #Dragon
+    gfx {
+        size $08
+        palette $B5
+        pointer $99A8
+    }
+}
+
+monster($B6)   // Dr.Lugae
+{
+    boss
+    level 32
+    hp 4416
+    gp 2000
+    xp 5500
+    attack index $00         // (1, 75, 18)
+    defense index $60        // (0, 0, 0)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $38          // (11, 11)
+    drop index $00
+    drop rate $00
+    attack sequence $B9
+    reaction sequence $BA
+    gfx {
+        size $A5
+        palette $00
+        pointer $AD59
+    }
+}
+
+monster($B7)   // Balnab  
+{
+    boss
+    level 32
+    hp 3927
+    gp 2500
+    xp 5500
+    attack index $2F         // (6, 99, 86)
+    defense index $60        // (0, 0, 0)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $31          // (31, 31)
+    drop index $00
+    drop rate $00
+    attack sequence $BB
+    spell power 31
+    race #Robot
+    gfx {
+        size $A6
+        palette $00
+        pointer $AD59
+    }
+}
+
+monster($B8)   // Dr.Lugae
+{
+    boss
+    level 25
+    hp 6600
+    gp 4000
+    xp 15000
+    attack index $2F         // (6, 99, 86)
+    defense index $69        // (1, 50, 1)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3A          // (27, 27)
+    drop index $3C
+    drop rate $03
+    attack sequence $BD
+    spell power 7
+    race #Robot
+    reaction sequence $BE
+    gfx {
+        size $A5
+        palette $00
+        pointer $AD59
+    }
+}
+
+monster($B9)   // K.Eblan 
+{
+    boss
+    level 15
+    hp 60000
+    gp 0
+    xp 0
+    attack index $3F         // (9, 85, 116)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3D          // (53, 53)
+    drop index $00
+    drop rate $00
+    attack sequence $B6
+    gfx {
+        size $9D
+        palette $00
+        pointer $AB7C
+    }
+}
+
+monster($BA)   // Q.Eblan 
+{
+    boss
+    level 15
+    hp 60000
+    gp 0
+    xp 0
+    attack index $0F         // (3, 80, 30)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $36          // (15, 15)
+    drop index $00
+    drop rate $00
+    attack sequence $B7
+    reaction sequence $B8
+    gfx {
+        size $9E
+        palette $00
+        pointer $AB7C
+    }
+}
+
+monster($BB)   // Rubicant
+{
+    boss
+    level 50
+    hp 25200
+    gp 7000
+    xp 25000
+    attack index $30         // (7, 80, 88)
+    defense index $6F        // (1, 90, 1)
+    magic defense index $CF  // (8, 80, 37)
+    speed index $3B          // (38, 38)
+    drop index $00
+    drop rate $00
+    attack sequence $B4
+    resist element #Fire #Absorb
+    resist status #Berserk
+    spell power 16
+    reaction sequence $B5
+    gfx {
+        size $90
+        palette $00
+        pointer $A249
+    }
+}
+
+monster($BC)   // Odin    
+{
+    boss
+    level 53
+    hp 20500
+    gp 0
+    xp 18000
+    attack index $3F         // (9, 85, 116)
+    defense index $7C        // (2, 90, 3)
+    magic defense index $CA  // (7, 50, 32)
+    speed index $2E          // (43, 46)
+    drop index $00
+    drop rate $00
+    attack sequence $C0
+    weak element #Lit #Immune
+    spell power 95
+    reaction sequence $C1
+    gfx {
+        size $AA
+        palette $00
+        pointer $C5F8
+    }
+}
+
+monster($BD)   // Leviatan
+{
+    boss
+    level 79
+    hp 35000
+    gp 0
+    xp 28000
+    attack index $5F         // (13, 99, 174)
+    defense index $9E        // (0, 0, 5)
+    magic defense index $D9  // (10, 80, 47)
+    speed index $3D          // (53, 53)
+    drop index $00
+    drop rate $00
+    attack sequence $C2
+    weak element #Lit
+    spell power 34
+    gfx {
+        size $AE
+        palette $00
+        pointer $C724
+    }
+}
+
+monster($BE)   // Bahamut 
+{
+    boss
+    level 47
+    hp 37000
+    gp 0
+    xp 35000
+    attack index $5F         // (13, 99, 174)
+    defense index $61        // (0, 0, 1)
+    magic defense index $A5  // (1, 60, 8)
+    speed index $3A          // (27, 27)
+    drop index $00
+    drop rate $00
+    attack sequence $C4
+    spell power 17
+    reaction sequence $C5
+    gfx {
+        size $AF
+        palette $00
+        pointer $C868
+    }
+}
+
+monster($BF)   // EvilWall
+{
+    boss
+    level 37
+    hp 19000
+    gp 8000
+    xp 23000
+    attack index $2E         // (6, 90, 84)
+    defense index $66        // (1, 35, 2)
+    magic defense index $C7  // (7, 80, 29)
+    speed index $34          // (66, 66)
+    drop index $00
+    drop rate $00
+    attack sequence $BF
+    spell power 79
+    reaction sequence $7F
+    gfx {
+        size $9C
+        palette $00
+        pointer $AA53
+    }
+}
+
+monster($C0)   // Asura   
+{
+    boss
+    level 63
+    hp 23000
+    gp 0
+    xp 20000
+    attack index $47         // (10, 99, 134)
+    defense index $60        // (0, 0, 0)
+    magic defense index $CF  // (8, 80, 37)
+    speed index $34          // (66, 66)
+    drop index $00
+    drop rate $00
+    attack sequence $CC
+    spell power 69
+    race #Mage
+    reaction sequence $CD
+    gfx {
+        size $B6
+        palette $00
+        pointer $C9CA
+    }
+}
+
+monster($C1)   // Elements
+{
+    boss
+    level 79
+    hp 57000
+    gp 10000
+    xp 40000
+    attack index $44         // (10, 80, 128)
+    defense index $74        // (2, 35, 3)
+    magic defense index $86  // (3, 60, 4)
+    speed index $3C          // (89, 89)
+    drop index $00
+    drop rate $00
+    attack sequence $CE
+    spell power 15
+    reaction sequence $CF
+    gfx {
+        size $8F
+        palette $00
+        pointer $A249
+    }
+}
+
+monster($C2)   // Elements
+{
+    boss
+    level 79
+    hp 47000
+    gp 10000
+    xp 62500
+    attack index $46         // (10, 90, 132)
+    defense index $68        // (1, 45, 2)
+    magic defense index $63  // (0, 0, 3)
+    speed index $3C          // (89, 89)
+    drop index $00
+    drop rate $00
+    attack sequence $D0
+    spell power 31
+    reaction sequence $D1
+    gfx {
+        size $B3
+        palette $00
+        pointer $A543
+    }
+}
+
+monster($C3)   // Dark Elf
+{
+    level 19
+    hp 3000
+    gp 5000
+    xp 6000
+    attack index $1F         // (4, 99, 54)
+    defense index $63        // (0, 0, 3)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $38          // (11, 11)
+    drop index $00
+    drop rate $00
+    attack sequence $A2
+    resist element #Holy #Absorb
+    resist status #Blind #Mute #Piggy #Mini #Toad #Stone #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    weak element #Holy #Immune
+    spell power 15
+    race #Dragon
+    gfx {
+        size $07
+        palette $C3
+        pointer $96A8
+    }
+}
+
+monster($C4)   // WaterHag
+{
+    boss
+    level 5
+    hp 45672
+    gp 100
+    xp 800
+    attack index $00         // (1, 75, 18)
+    defense index $63        // (0, 0, 3)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $30          // (5, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $8E
+    reaction sequence $8F
+    gfx {
+        size $02
+        palette $15
+        pointer $91B0
+    }
+}
+
+monster($C5)   // CPU     
+{
+    boss
+    level 48
+    hp 20000
+    gp 10333
+    xp 50000
+    attack index $5F         // (13, 99, 174)
+    defense index $90        // (4, 45, 4)
+    magic defense index $D0  // (8, 50, 38)
+    speed index $3B          // (38, 38)
+    drop index $00
+    drop rate $00
+    attack sequence $4E
+    spell power 127
+    gfx {
+        size $B8
+        palette $C5
+        pointer $B000
+    }
+}
+
+monster($C6)   // Defender
+{
+    boss
+    level 48
+    hp 2000
+    gp 0
+    xp 50000
+    attack index $3F         // (9, 85, 116)
+    defense index $97        // (5, 20, 5)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $3E          // (111, 111)
+    drop index $00
+    drop rate $00
+    attack sequence $D2
+    spell power 47
+    gfx {
+        size $BA
+        palette $C5
+        pointer $B0F3
+    }
+}
+
+monster($C7)   // Zemus   
+{
+    boss
+    level 63
+    hp 65500
+    gp 0
+    xp 0
+    attack index $3F         // (9, 85, 116)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $02          // (1, 2)
+    drop index $00
+    drop rate $00
+    attack sequence $D4
+    reaction sequence $D5
+    gfx {
+        size $BE
+        palette $00
+        pointer $B12C
+    }
+}
+
+monster($C8)   // Zeromus 
+{
+    boss
+    level 96
+    hp 60000
+    gp 0
+    xp 0
+    attack index $3F         // (9, 85, 116)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3F          // (69, 69)
+    drop index $3F
+    drop rate $00
+    attack sequence $DE
+    resist element #Fire #Ice #Lit #Holy #Absorb
+    spell power 41
+    reaction sequence $DF
+    gfx {
+        size $BF
+        palette $00
+        pointer $B21C
+    }
+}
+
+monster($C9)   // Zeromus 
+{
+    boss
+    level 96
+    hp 61000
+    gp 0
+    xp 0
+    attack index $5F         // (13, 99, 174)
+    defense index $6F        // (1, 90, 1)
+    magic defense index $BB  // (5, 60, 17)
+    speed index $3F          // (69, 69)
+    drop index $3F
+    drop rate $00
+    attack sequence $E0
+    spell power 32
+    reaction sequence $E1
+    gfx {
+        size $B9
+        palette $00
+        pointer $32DF
+    }
+}
+
+monster($CA)   // Dragoon 
+{
+    boss
+    level 47
+    hp 65000
+    gp 0
+    xp 0
+    attack index $10         // (3, 85, 32)
+    defense index $60        // (0, 0, 0)
+    magic defense index $6F  // (1, 90, 1)
+    speed index $3D          // (53, 53)
+    drop index $00
+    drop rate $00
+    attack sequence $C6
+    gfx {
+        size $41
+        palette $01
+        pointer $8000
+    }
+}
+
+monster($CB)   // Bard    
+{
+    boss
+    level 5
+    hp 60000
+    gp 0
+    xp 0
+    attack index $05         // (2, 85, 13)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3F          // (69, 69)
+    drop index $00
+    drop rate $00
+    attack sequence $8C
+    reaction sequence $8D
+    gfx {
+        size $44
+        palette $04
+        pointer $8000
+    }
+}
+
+monster($CC)   // Karate  
+{
+    boss
+    level 31
+    hp 4000
+    gp 0
+    xp 0
+    attack index $2F         // (6, 99, 86)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $07          // (4, 7)
+    drop index $00
+    drop rate $00
+    attack sequence $A8
+    reaction sequence $A9
+    gfx {
+        size $46
+        palette $06
+        pointer $8000
+    }
+}
+
+monster($CD)   // D.Knight
+{
+    boss
+    level 17
+    hp 1000
+    gp 0
+    xp 0
+    attack index $17         // (3, 99, 46)
+    defense index $60        // (0, 0, 0)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $30          // (5, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $97
+    reaction sequence $98
+    gfx {
+        size $40
+        palette $00
+        pointer $8000
+    }
+}
+
+monster($CE)   // Girl    
+{
+    boss
+    level 1
+    hp 60000
+    gp 0
+    xp 0
+    attack index $00         // (1, 75, 18)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $30          // (5, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $88
+    gfx {
+        size $42
+        palette $02
+        pointer $8000
+    }
+}
+
+monster($CF)   // Titan   
+{
+    boss
+    level 1
+    hp 60000
+    gp 0
+    xp 0
+    attack index $00         // (1, 75, 18)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $34          // (66, 66)
+    drop index $00
+    drop rate $00
+    attack sequence $89
+    gfx {
+        size $82
+        palette $CF
+        pointer $C484
+    }
+}
+
+monster($D0)   // FloatEye
+{
+    boss
+    level 1
+    hp 1
+    gp 0
+    xp 0
+    attack index $00         // (1, 75, 18)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $02          // (1, 2)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    weak element #Fire #Immune
+    gfx {
+        size $04
+        palette $03
+        pointer $8450
+    }
+}
+
+monster($D1)   // Raven   
+{
+    boss
+    level 1
+    hp 1
+    gp 0
+    xp 0
+    attack index $01         // (1, 75, 19)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $02          // (1, 2)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    weak element #Lit #Immune
+    gfx {
+        size $09
+        palette $28
+        pointer $9B58
+    }
+}
+
+monster($D2)   // Brena   
+{
+    boss
+    level 15
+    hp 300
+    gp 500
+    xp 1000
+    attack index $1F         // (4, 99, 54)
+    defense index $67        // (1, 40, 1)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $13          // (16, 19)
+    drop index $00
+    drop rate $00
+    attack sequence $AE
+    spell power 31
+    reaction sequence $AF
+    gfx {
+        size $01
+        palette $D3
+        pointer $8168
+    }
+}
+
+monster($D3)   // Ghast   
+{
+    level 15
+    hp 170
+    gp 200
+    xp 150
+    attack index $15         // (3, 95, 42)
+    defense index $67        // (1, 40, 1)
+    magic defense index $8F  // (4, 40, 5)
+    speed index $05          // (2, 5)
+    drop index $00
+    drop rate $00
+    attack sequence $93
+    resist element #Dark #Immune
+    resist status #Poison #Blind #Mute #Piggy #Mini #Toad #Swoon #Calcify1 #Calcify2 #Berserk #Charm #Sleep #Stun #Float #Curse
+    weak element #Fire #Holy
+    race #Zombie
+    reaction sequence $94
+    gfx {
+        size $02
+        palette $32
+        pointer $90D8
+    }
+}
+
+monster($D4)   // Balnab-Z
+{
+    boss
+    level 47
+    hp 4000
+    gp 2500
+    xp 20
+    attack index $3E         // (9, 80, 114)
+    defense index $67        // (1, 40, 1)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $31          // (31, 31)
+    drop index $00
+    drop rate $00
+    attack sequence $BC
+    gfx {
+        size $A7
+        palette $00
+        pointer $AD59
+    }
+}
+
+monster($D5)   // Attacker
+{
+    boss
+    level 79
+    hp 2000
+    gp 0
+    xp 50000
+    attack index $3F         // (9, 85, 116)
+    defense index $97        // (5, 20, 5)
+    magic defense index $AF  // (3, 60, 11)
+    speed index $31          // (31, 31)
+    drop index $00
+    drop rate $00
+    attack sequence $D3
+    spell power 47
+    gfx {
+        size $BC
+        palette $C5
+        pointer $B0F3
+    }
+}
+
+monster($D6)   // Dummy   
+{
+    level 63
+    hp 1999
+    gp 0
+    xp 0
+    attack index $DF         // (99, 99, 254)
+    defense index $60        // (0, 0, 0)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $3F          // (69, 69)
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    gfx {
+        size $BB
+        palette $00
+        pointer $32DF
+    }
+}
+
+monster($D7)   // Dummy   
+{
+    level 63
+    hp 2
+    gp 50
+    xp 0
+    attack index $3F         // (9, 85, 116)
+    defense index $DE        // (99, 100, 255)
+    magic defense index $DE  // (99, 100, 255)
+    speed index $0F          // (12, 15)
+    drop index $08
+    drop rate $03
+    attack sequence $F8
+    reaction sequence $F6
+    gfx {
+        size $01
+        palette $55
+        pointer $C133
+    }
+}
+
+monster($D8)   // Zeromus 
+{
+    boss
+    level 63
+    hp 65000
+    gp 0
+    xp 0
+    attack index $DF         // (99, 99, 254)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $02          // (1, 2)
+    drop index $00
+    drop rate $00
+    attack sequence $D6
+    resist element #Fire #Ice #Lit #Dark #Holy #Absorb
+    spell power 127
+    reaction sequence $D7
+    gfx {
+        size $BF
+        palette $00
+        pointer $B21C
+    }
+}
+
+monster($D9)   // Dummy   
+{
+    level 1
+    hp 1969
+    gp 5
+    xp 10
+    attack index $5F         // (13, 99, 174)
+    defense index $80        // (3, 30, 4)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $34          // (66, 66)
+    drop index $00
+    drop rate $00
+    attack sequence $DB
+    spell power 63
+    gfx {
+        size $02
+        palette $79
+        pointer $91F8
+    }
+}
+
+monster($DA)   // Dummy   
+{
+    level 31
+    hp 1
+    gp 10
+    xp 5
+    attack index $DF         // (99, 99, 254)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3F          // (69, 69)
+    drop index $00
+    drop rate $00
+    attack sequence $DA
+    weak element #Fire #Ice #Lit #Holy #Air #Immune
+    gfx {
+        size $00
+        palette $DA
+        pointer $8000
+    }
+}
+
+monster($DB)   // Dummy   
+{
+    level 31
+    hp 10000
+    gp 150
+    xp 100
+    attack index $01         // (1, 75, 19)
+    defense index $80        // (3, 30, 4)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $3F          // (69, 69)
+    drop index $00
+    drop rate $00
+    attack sequence $F7
+    gfx {
+        size $02
+        palette $2D
+        pointer $9000
+    }
+}
+
+monster($DC)   // Dummy   
+{
+    level 31
+    hp 60000
+    gp 0
+    xp 500
+    attack index $01         // (1, 75, 19)
+    defense index $DF        // (99, 99, 254)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $3D          // (53, 53)
+    drop index $0E
+    drop rate $03
+    attack sequence $F9
+    reaction sequence $FC
+    gfx {
+        size $06
+        palette $DC
+        pointer $8D2C
+    }
+}
+
+monster($DD)   // Dummy   
+{
+    level 31
+    hp 65000
+    gp 10
+    xp 20
+    attack index $00         // (1, 75, 18)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $33          // (8, 8)
+    drop index $00
+    drop rate $00
+    attack sequence $FA
+    gfx {
+        size $05
+        palette $DD
+        pointer $84BC
+    }
+}
+
+monster($DE)   // Dummy   
+{
+    level 1
+    hp 65000
+    gp 0
+    xp 5
+    attack index $DF         // (99, 99, 254)
+    defense index $DE        // (99, 100, 255)
+    magic defense index $DF  // (99, 99, 254)
+    speed index $37          // (18, 18)
+    drop index $3E
+    drop rate $03
+    attack sequence $FD
+    gfx {
+        size $01
+        palette $B2
+        pointer $8168
+    }
+}
+
+monster($DF)   // Egg     
+{
+    level 3
+    hp 6
+    gp 0
+    xp 0
+    attack index $01         // (1, 75, 19)
+    defense index $60        // (0, 0, 0)
+    magic defense index $A0  // (0, 0, 0)
+    speed index $02          // (1, 2)
+    drop index $38
+    drop rate $01
+    attack sequence $00
+    gfx {
+        size $00
+        palette $00
+        pointer $8000
+    }
+}

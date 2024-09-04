@@ -82,7 +82,20 @@ def _calculate_stats_byte(*stats):
 
 def apply(env):
     custom_weapon = None
-    if 'custom_weapon' in env.options.test_settings:
+    if env.options.ap_data is not None and not env.options.flags.has('objective_mode_classicforge'):
+        id = RewardSlot.forge_item + 0x200
+        ap_item = env.options.ap_data[str(id)]
+        items_dbview = databases.get_items_dbview()
+        placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
+        if placement is None:
+            env.meta['rewards_assignment'][RewardSlot.forge_item] = ItemReward("#item.Cure1")
+        else:
+            if env.options.flags.has('hero_challenge'):
+                available_weapons = databases.get_custom_weapons_dbview().find_all(
+                    lambda cw: not cw.disabled and _is_user(cw, env.meta['starting_character']))
+                custom_weapon = env.rnd.choice(available_weapons)
+            env.meta['rewards_assignment'][RewardSlot.forge_item] = ItemReward(placement.const)
+    elif 'custom_weapon' in env.options.test_settings:
         custom_weapon = databases.get_custom_weapons_dbview().find_one(lambda cw: env.options.test_settings['custom_weapon'].lower() in f"{cw.name}|{cw.spoilername}".lower())
     elif env.options.flags.has('hero_challenge'):
         available_weapons = databases.get_custom_weapons_dbview().find_all(lambda cw: not cw.disabled and _is_user(cw, env.meta['starting_character']))

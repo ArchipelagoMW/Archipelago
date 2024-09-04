@@ -54,7 +54,7 @@ def _generate_impl(config, db, task_doc, build_cache_dir_name):
     options.clean_cache = False
     if build_cache_dir_name is None:
         build_cache_dir_name = FreeEnt.VERSION_STR
-    options.cache_path = os.path.join(os.path.dirname(__file__), '_build', build_cache_dir_name)
+    options.cache_path = os.path.join(__file__, '_build', build_cache_dir_name)
 
     source_rom_path = config.rom
     with open(source_rom_path, 'rb') as infile:
@@ -80,7 +80,7 @@ def _generate_impl(config, db, task_doc, build_cache_dir_name):
     else:
         flips_binary = 'flips-linux'
 
-    flips_path = os.path.join(os.path.dirname(__file__), 'bin', flips_binary)
+    flips_path = os.path.join(__file__, 'bin', flips_binary)
     if not os.path.exists(flips_path):
         raise Exception("FLIPS binary not found")
     

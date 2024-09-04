@@ -1,0 +1,3188 @@
+ai_script($00)
+{
+    pass
+}
+
+ai_script($01)
+{
+    fight
+}
+
+ai_script($02)
+{
+    target random monster
+    fight
+}
+
+ai_script($03)
+{
+    fight
+    
+    fight
+    
+    use #Enemy_Explode2
+}
+
+ai_script($04)
+{
+    use #Enemy_Explode2
+}
+
+ai_script($05)
+{
+    use #Enemy_Reaction
+}
+
+ai_script($06)
+{
+    target random monster
+    use #Enemy_Petrify
+}
+
+ai_script($07)
+{
+    fight
+    
+    fight
+    
+    use #Enemy_Petrify
+}
+
+ai_script($08)
+{
+    use #Enemy_Petrify
+}
+
+ai_script($09)
+{
+    target random monster
+    use #Ice2
+}
+
+ai_script($0A)
+{
+    target random anything
+    use #Fatal
+}
+
+ai_script($0B)
+{
+    use #Ice2
+}
+
+ai_script($0C)
+{
+    target random monster
+    use #Enemy_Beak
+}
+
+ai_script($0D)
+{
+    use #Enemy_Beak
+}
+
+ai_script($0E)
+{
+    target random monster
+    use #Fatal
+}
+
+ai_script($0F)
+{
+    fight
+    
+    fight
+    
+    use #Enemy_Gaze
+}
+
+ai_script($10)
+{
+    target all characters
+    use #Enemy_Count
+    target self
+    use #Stop
+}
+
+ai_script($11)
+{
+    use #Enemy_Count
+}
+
+ai_script($12)
+{
+    target random monster
+    use #Fire1
+}
+
+ai_script($13)
+{
+    use #Fire1
+    
+    fight
+}
+
+ai_script($14)
+{
+    target random monster
+    use #Sleep
+}
+
+ai_script($15)
+{
+    use #Fire2
+    
+    fight
+    
+    use #Sleep
+}
+
+ai_script($16)
+{
+    target random monster
+    use #Enemy_Vampire
+}
+
+ai_script($17)
+{
+    use #Enemy_Vampire
+}
+
+ai_script($18)
+{
+    use #Peep
+    message $8B next action   // "!"
+    message $8C next action   // "!"
+    wait
+    target self
+    use #Peep
+    message $8D next action   // "!"
+    message $8E next action   // "!"
+    message $90 next action   // "!"
+    wait
+    message $91 next action   // "!"
+    message $92 next action   // "!"
+    message $93 next action   // "!"
+    use #Enemy_Retreat
+}
+
+ai_script($19)
+{
+    use #Stop
+}
+
+ai_script($1A)
+{
+    target random monster
+    use #Bersk
+}
+
+ai_script($1B)
+{
+    use #Bersk
+}
+
+ai_script($1C)
+{
+    target random monster
+    use #Enemy_Needle
+}
+
+ai_script($1D)
+{
+    use #Enemy_Needle
+}
+
+ai_script($1E)
+{
+    use #Fatal
+}
+
+ai_script($1F)
+{
+    use #Lit1
+    
+    use #Ice1
+    
+    use #Fire1
+}
+
+ai_script($20)
+{
+    use #Psych
+}
+
+ai_script($21)
+{
+    use #Hold
+}
+
+ai_script($22)
+{
+    fight
+    
+    use #Enemy_Powder
+}
+
+ai_script($23)
+{
+    fight
+    
+    use #Enemy_HeatRay
+}
+
+ai_script($24)
+{
+    target all monsters
+    use #Enemy_Quake
+}
+
+ai_script($25)
+{
+    fight
+    
+    use #Enemy_Quake
+}
+
+ai_script($26)
+{
+    use #Enemy_Quake
+}
+
+ai_script($27)
+{
+    fight
+    
+    use #Enemy_Hug
+    
+    fight
+}
+
+ai_script($28)
+{
+    target all monsters
+    use #Enemy_Tornado
+}
+
+ai_script($29)
+{
+    use #Enemy_Tornado
+}
+
+ai_script($2A)
+{
+    target all monsters
+    use #Enemy_Wave
+}
+
+ai_script($2B)
+{
+    use #Enemy_Wave
+}
+
+ai_script($2C)
+{
+    target self
+    use #Enemy_Retreat
+}
+
+ai_script($2D)
+{
+    use #Enemy_Vampire
+}
+
+ai_script($2E)
+{
+    target random monster
+    use #Weak
+}
+
+ai_script($2F)
+{
+    fight
+    
+    fight
+    
+    fight
+    
+    use #Weak
+}
+
+ai_script($30)
+{
+    use #Weak
+    
+    fight
+}
+
+ai_script($31)
+{
+    use #Toad
+}
+
+ai_script($32)
+{
+    use #Enemy_Pollen
+}
+
+ai_script($33)
+{
+    chain {
+        condition 1
+        pass
+        
+        use #Enemy_Search
+    }
+    
+    chain {
+        use #Enemy_Disrupt2
+        
+        condition 0
+        pass
+    }
+    
+    pass
+    
+    pass
+}
+
+ai_script($34)
+{
+    message $8A next action   // "A monster appeared!"
+    use #Transform3
+}
+
+ai_script($35)
+{
+    use #Slow
+}
+
+ai_script($36)
+{
+    use #Lit1
+}
+
+ai_script($37)
+{
+    use #Lit2
+}
+
+ai_script($38)
+{
+    pass
+}
+
+ai_script($39)
+{
+    pass
+    
+    pass
+    
+    fight
+    
+    use #Enemy_Retreat
+}
+
+ai_script($3A)
+{
+    use #Enemy_Remedy2
+}
+
+ai_script($3B)
+{
+    target other monsters
+    use #CommandEnemy
+    message $52 next action   // "Officer:Attack!"
+}
+
+ai_script($3C)
+{
+    message $B3   // "!"
+    message $B4   // "!"
+    target self
+    use #Sleep
+    
+    use #EndBattle
+}
+
+ai_script($3D)
+{
+    fight
+    
+    fight
+    
+    fight
+    
+    use #Enemy_Absorb
+}
+
+ai_script($3E)
+{
+    fight
+    
+    use #Lit2
+    
+    fight
+    
+    use #Enemy_Glance
+}
+
+ai_script($3F)
+{
+    target all monsters
+    use #Enemy_Fire
+}
+
+ai_script($40)
+{
+    use #Enemy_Fire
+}
+
+ai_script($41)
+{
+    target all monsters
+    use #Enemy_Thunder
+}
+
+ai_script($42)
+{
+    use #Enemy_Thunder
+}
+
+ai_script($43)
+{
+    use #Piggy
+}
+
+ai_script($44)
+{
+    use #Size
+}
+
+ai_script($45)
+{
+    use #Wall
+}
+
+ai_script($46)
+{
+    use #Virus
+}
+
+ai_script($47)
+{
+    use #Enemy_Charm
+}
+
+ai_script($48)
+{
+    use #Enemy_Slap
+}
+
+ai_script($49)
+{
+    target random monster
+    use #Enemy_Charm
+}
+
+ai_script($4A)
+{
+    fight
+    
+    fight
+    
+    use #Enemy_Entangle
+}
+
+ai_script($4B)
+{
+    use #Peep
+}
+
+ai_script($4C)
+{
+    use #Enemy_Blast
+    
+    use #Drain
+}
+
+ai_script($4D)
+{
+    use #Enemy_Tongue
+}
+
+ai_script($4E)
+{
+    use #Mute
+}
+
+ai_script($4F)
+{
+    target random monster
+    use #Enemy_Bluster
+}
+
+ai_script($50)
+{
+    use #Enemy_Bluster
+}
+
+ai_script($51)
+{
+    use #Enemy_Absorb
+}
+
+ai_script($52)
+{
+    use #Enemy_Curse
+}
+
+ai_script($53)
+{
+    use #Enemy_Ray
+}
+
+ai_script($54)
+{
+    target random monster
+    use #Charm
+}
+
+ai_script($55)
+{
+    fight
+    
+    use #Charm
+    
+    fight
+}
+
+ai_script($56)
+{
+    use #Charm
+}
+
+ai_script($57)
+{
+    use #Enemy_Blaze
+}
+
+ai_script($58)
+{
+    target self
+    use #Enemy_Hatch
+}
+
+ai_script($59)
+{
+    target all monsters
+    use #Enemy_Blizzard
+}
+
+ai_script($5A)
+{
+    use #Enemy_Blizzard
+    
+    fight
+}
+
+ai_script($5B)
+{
+    use #Toad on group
+}
+
+ai_script($5C)
+{
+    use #Enemy_Call
+}
+
+ai_script($5D)
+{
+    target random monster
+    use #Drain
+}
+
+ai_script($5E)
+{
+    target random monster
+    use #Warp
+}
+
+ai_script($5F)
+{
+    use #Fire1
+}
+
+ai_script($60)
+{
+    use #Ice1
+}
+
+ai_script($61)
+{
+    target other monsters
+    use #CommandEnemy
+    message $51 next action   // "General:Charge!"
+}
+
+ai_script($62)
+{
+    target random monster
+    use #Enemy_Beam
+}
+
+ai_script($63)
+{
+    use #Enemy_Beam
+}
+
+ai_script($64)
+{
+    target all monsters
+    use #Enemy_Emission
+}
+
+ai_script($65)
+{
+    use #Enemy_Emission
+}
+
+ai_script($66)
+{
+    target random monster
+    use #Fast
+}
+
+ai_script($67)
+{
+    use #Slow
+    
+    use #Mute
+}
+
+ai_script($68)
+{
+    target self
+    use #Toad
+    
+    use #Toad
+    
+    use #Toad
+    
+    target self
+    use #Toad
+    
+    use #Enemy_Retreat
+}
+
+ai_script($69)
+{
+    target other monsters
+    use #CommandEnemy
+    message $89 next action   // "Croak, my dears!"
+}
+
+ai_script($6A)
+{
+    target random monster
+    use #Stone
+}
+
+ai_script($6B)
+{
+    fight
+    
+    use #Nuke
+}
+
+ai_script($6C)
+{
+    use #Fire2
+    
+    use #Psych
+    
+    use #Drain
+    
+    use #Fatal
+}
+
+ai_script($6D)
+{
+    target self
+    use #Wall
+}
+
+ai_script($6E)
+{
+    use #Enemy_Digest
+}
+
+ai_script($6F)
+{
+    chain {
+        fight
+        
+        fight
+    }
+}
+
+ai_script($70)
+{
+    fight
+    
+    use #Enemy_Thunder
+}
+
+ai_script($71)
+{
+    use #Enemy_Search
+    
+    use #Enemy_Magnet
+    
+    use #Enemy_Search
+    
+    use #Enemy_Beam
+}
+
+ai_script($72)
+{
+    message $08 next action   // " __Identifying object__"
+    pass
+}
+
+ai_script($73)
+{
+    use #Enemy_Alert
+}
+
+ai_script($74)
+{
+    use #Enemy_Breath
+    
+    fight
+    
+    use #Enemy_Digest
+    
+    fight
+}
+
+ai_script($75)
+{
+    fight
+    
+    fight
+    
+    use #Enemy_Blitz
+}
+
+ai_script($76)
+{
+    use #Enemy_Blitz
+}
+
+ai_script($77)
+{
+    use #Fire2
+}
+
+ai_script($78)
+{
+    target random anything
+    use #Enemy_Laser
+}
+
+ai_script($79)
+{
+    use #Enemy_Laser
+}
+
+ai_script($7A)
+{
+    use #Enemy_Fire
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+}
+
+ai_script($7B)
+{
+    use #Enemy_Magnet
+}
+
+ai_script($7C)
+{
+    use #Enemy_Fission
+}
+
+ai_script($7D)
+{
+    message $67 next action   // "!"
+    pass
+    
+    message $67 next action   // "!"
+    pass
+    
+    message $67 next action   // "!"
+    pass
+    
+    message $67 next action   // "!"
+    pass
+    
+    message $67 next action   // "!"
+    pass
+    
+    message $67 next action   // "!"
+    pass
+    
+    message $67 next action   // "!"
+    pass
+    
+    fight
+}
+
+ai_script($7E)
+{
+    pass
+}
+
+ai_script($7F)
+{
+    pass
+}
+
+ai_script($80)
+{
+    fight
+    
+    fight
+    
+    fight
+    
+    chain {
+        message $00   // "Turned into mist!"
+        pass
+        
+        set sprite $01
+        use #InvincibleOn
+        
+        condition 1
+        pass
+    }
+    
+    pass
+    
+    pass
+    
+    pass
+    
+    chain {
+        message $01   // "Now! Get ready to fight!"
+        pass
+        
+        set sprite $00
+        use #InvincibleOff
+        
+        condition 0
+        pass
+    }
+}
+
+ai_script($81)
+{
+    use #Enemy_ColdMist
+    message $02   // "Do not fight now!"
+    message $03   // "Fighting when mist will"
+    message $04   // "freeze you with Breath!"
+}
+
+ai_script($82)
+{
+    message $13 next action   // "Girl:NO!!"
+    use #Enemy_Call
+}
+
+ai_script($83)
+{
+    chain {
+        set sprite $43
+        use #Enemy_Quake
+        
+        use #EndBattle
+    }
+}
+
+ai_script($84)
+{
+    set sprite $05
+    speed + 9
+    condition + 1
+    pass
+}
+
+ai_script($85)
+{
+    set sprite $06
+    speed + 8
+    condition + 1
+    pass
+}
+
+ai_script($86)
+{
+    set sprite $07
+    speed + 7
+    condition + 1
+    pass
+}
+
+ai_script($87)
+{
+    set sprite $08
+    speed + 6
+    condition + 1
+    pass
+}
+
+ai_script($88)
+{
+    set sprite $09
+    speed + 5
+    condition + 1
+    pass
+}
+
+ai_script($89)
+{
+    set sprite $0A
+    speed + 4
+    condition + 1
+    message $48   // "[Tellah]:Good job!"
+    message $49   // " He's slowing down!"
+    pass
+}
+
+ai_script($8A)
+{
+    set sprite $0B
+    speed + 3
+    condition + 1
+    pass
+}
+
+ai_script($8B)
+{
+    condition + 1
+    pass
+}
+
+ai_script($8C)
+{
+    message $05 next action   // "Good luck__"
+    pass
+    
+    message $05 next action   // "Good luck__"
+    pass
+    
+    message $05 next action   // "Good luck__"
+    pass
+    
+    message $05 next action   // "Good luck__"
+    condition 0
+    pass
+}
+
+ai_script($8D)
+{
+    condition 1
+    pass
+}
+
+ai_script($8E)
+{
+    use #Enemy_Counter
+}
+
+ai_script($8F)
+{
+    message $16   // "[Tellah]:You swindler!"
+    message $17   // "Bard:Please! Listen!"
+    condition 1
+    pass
+}
+
+ai_script($90)
+{
+    message $18   // "[Tellah]:You spoony bard!"
+    message $19   // "Bard:Please!"
+    condition 2
+    pass
+}
+
+ai_script($91)
+{
+    message $1A   // "[Tellah]:Shut up!"
+    message $1B   // "Bard:Listen!"
+    condition 3
+    pass
+}
+
+ai_script($92)
+{
+    message $1C   // "[Tellah]:Shut your mouth!"
+    message $1D   // "Bard:I_ I__"
+    message $15   // "Anna:Please! Stop!"
+    use #EndBattle
+}
+
+ai_script($93)
+{
+    use #GhostAnna
+    message $40   // "Anna:[Edward]!"
+    message $41   // "[Edward]:A_ Anna?!"
+    message $42   // "Anna:__ Fight, [Edward]!"
+    condition 1
+}
+
+ai_script($94)
+{
+    message $43   // " Believe in yourself"
+    use #GhostDisappear
+    message $44   // " and be strong!"
+    condition 2
+    set defense index $60
+}
+
+ai_script($95)
+{
+    message $45 next action   // "ARRRGH__!"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($96)
+{
+    message $3F next action   // "Exploding!"
+    pass
+    
+    chain {
+        use #Enemy_Explode
+        
+        use #Transform3
+    }
+}
+
+ai_script($97)
+{
+    set sprite $0D
+    condition 1
+    pass
+}
+
+ai_script($98)
+{
+    pass
+    
+    message $07 next action   // "Milon:Go, my children!"
+    target other monsters
+    use #CommandEnemy
+    
+    pass
+}
+
+ai_script($99)
+{
+    use #Lit1
+    
+    fight
+}
+
+ai_script($9A)
+{
+    message $06   // "Milon:Oh__ My body__!!"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($9B)
+{
+    use #Drain
+}
+
+ai_script($9C)
+{
+    message $14   // "Milon Z:Fall flat into"
+    message $23   // " the deep ravine!"
+    condition 1
+    pass
+}
+
+ai_script($9D)
+{
+    message $AA   // "!"
+    use #Enemy_DullSong
+}
+
+ai_script($9E)
+{
+    use command #DarkWave
+    
+    use command #DarkWave
+    
+    use command #DarkWave
+    
+    message $20   // "Justice is not the only"
+    message $21   // "right in this world."
+    message $22   // "Some day, you will see."
+    message $94   // "Go_ [Cecil]_ "
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($9F)
+{
+    use command #DarkWave
+    message $1E   // "To be a real Paladin,"
+    wait
+    use command #DarkWave
+    message $1F   // "you must not fight now!"
+    condition 0
+}
+
+ai_script($A0)
+{
+    fight
+    
+    use #Enemy_Entangle
+    
+    fight
+}
+
+ai_script($A1)
+{
+    fight
+    
+    use #Enemy_Vampire
+}
+
+ai_script($A2)
+{
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    target other monsters
+    use #Fast
+    
+    fight
+}
+
+ai_script($A3)
+{
+    target dead monsters
+    use #Enemy_Recover
+}
+
+ai_script($A4)
+{
+    target self
+    use #Wall
+}
+
+ai_script($A5)
+{
+    chain {
+        set reaction $01
+        pass
+        
+        message $46   // "Gathering the water!"
+        pass
+        
+        set sprite $13
+        pass
+        
+        set weakness #Lit
+        pass
+    }
+    
+    use #Enemy_Wave
+    
+    target self
+    use #Fast
+}
+
+ai_script($A6)
+{
+    target self
+    use #Enemy_Remedy
+    
+    set defense index $7A
+    condition 1
+    pass
+}
+
+ai_script($A7)
+{
+    fight
+    condition 1
+}
+
+ai_script($A8)
+{
+    chain {
+        condition 0
+        pass
+        
+        set reaction $00
+        pass
+        
+        set sprite $12
+        pass
+        
+        set weakness #Ice
+        pass
+        
+        message $74   // "The Lit scared him!"
+        pass
+    }
+}
+
+ai_script($A9)
+{
+    chain {
+        condition 2
+        pass
+        
+        set reaction $00
+        pass
+        
+        set sprite $14
+        pass
+        
+        set weakness #Ice
+        pass
+        
+        message $47   // "Hiding inside the shell!"
+        pass
+    }
+}
+
+ai_script($AA)
+{
+    pass
+    
+    pass
+    
+    pass
+    
+    message $09   // "DarkElf:ME ATTACK YOU!"
+    chain {
+        use #Fire2 on group
+        
+        use #Lit2 on group
+        
+        use #Ice2 on group
+    }
+    
+    use #Weak on group
+    
+    message $0A   // "[Yang]:Oh_ "
+    message $0B   // "[Cecil]:We can't_"
+    message $0C   // "[Tellah]:My dear_"
+    use #EndBattle
+}
+
+ai_script($AB)
+{
+    message $2C   // "DarkElf:YOU FOOLS!"
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    use #Quake on group
+}
+
+ai_script($AC)
+{
+    chain {
+        use #Fire2 on group
+        
+        use #Lit2 on group
+        
+        use #Ice2 on group
+    }
+    
+    use #Weak
+    
+    use #Enemy_Whisper
+}
+
+ai_script($AD)
+{
+    chain {
+        message $0D   // "DarkElf:ME CHANGE!"
+        pass
+        
+        music #BossBattle
+        pass
+        
+        use #Transform3
+    }
+}
+
+ai_script($AE)
+{
+    fight
+    
+    use #Enemy_DBreath
+}
+
+ai_script($AF)
+{
+    message $64 next action   // "Sandy:There you go!"
+    target type 1 monsters
+    use #Wall
+}
+
+ai_script($B0)
+{
+    use #Charm
+    
+    use #Bersk
+    
+    use #Slow
+    
+    target all monsters
+    use #Cure2
+}
+
+ai_script($B1)
+{
+    message $65 next action   // "Mindy:Here it goes!"
+    message $66 next action   // "Magus 3:DELTA ATTACK!!"
+    target type 1 monsters
+    use #Fire2
+    
+    message $65 next action   // "Mindy:Here it goes!"
+    message $66 next action   // "Magus 3:DELTA ATTACK!!"
+    target type 1 monsters
+    use #Lit2
+    
+    message $65 next action   // "Mindy:Here it goes!"
+    message $66 next action   // "Magus 3:DELTA ATTACK!!"
+    target type 1 monsters
+    use #Ice2
+    
+    message $65 next action   // "Mindy:Here it goes!"
+    message $66 next action   // "Magus 3:DELTA ATTACK!!"
+    target type 1 monsters
+    use #Virus
+}
+
+ai_script($B2)
+{
+    use #Fire1
+    
+    use #Lit1
+    
+    use #Ice1
+    
+    use #Venom
+}
+
+ai_script($B3)
+{
+    message $2D next action   // "Cindy:Come on, Mindy!"
+    fight
+}
+
+ai_script($B4)
+{
+    fight
+    
+    target dead monsters
+    use #Enemy_Remedy2
+}
+
+ai_script($B5)
+{
+    chain {
+        use #Weak
+        
+        use #Enemy_Ray
+    }
+    
+    fight
+}
+
+ai_script($B6)
+{
+    fight
+    
+    pass
+    condition 0
+}
+
+ai_script($B7)
+{
+    chain {
+        set defense index $90
+        set magic defense index $DE
+        pass
+        
+        condition 1
+        pass
+        
+        set sprite $16
+        pass
+    }
+}
+
+ai_script($B8)
+{
+    set sprite $15
+    condition 2
+    set defense index $60
+    set magic defense index $B0
+    fight
+}
+
+ai_script($B9)
+{
+    message $2E next action   // "Must stop her spin!"
+    message $2F next action   // "[Kain]! Jump!!"
+    pass
+}
+
+ai_script($BA)
+{
+    message $0E next action   // "[Cecil]:Come on, [Yang]!"
+    target #DKCecil
+    fight
+    
+    message $0F next action   // "[Yang]:Shut up!"
+    use command #Kick
+    
+    message $10 next action   // "[Cecil]:__ It's me!"
+    target #DKCecil
+    fight
+    
+    message $11 next action   // "[Yang]:ACHOOOOO"
+    use command #Kick
+    condition 1
+}
+
+ai_script($BB)
+{
+    message $12 next action   // "[Yang]:Ouch!"
+    use #EndBattle
+}
+
+ai_script($BC)
+{
+    message $7E next action   // "Ran out of power."
+    music #Calbrena
+    use #Transform3
+}
+
+ai_script($BD)
+{
+    message $7D next action   // "Turned into Calbrena!"
+    music #BossBattle
+    use #Transform3
+}
+
+ai_script($BE)
+{
+    message $69   // "Rubicant:Was it Flame?"
+    message $6B   // " I will show you how!"
+    set sprite $11
+    use #Enemy_Glare
+}
+
+ai_script($BF)
+{
+    chain {
+        set sprite $11
+        pass
+        
+        set resistance 
+        set weakness #Ice #Immune
+        pass
+    }
+    
+    pass
+    
+    use #Enemy_Glare
+    
+    chain {
+        set sprite $10
+        pass
+        
+        set resistance #Ice #Absorb
+        set weakness #Ice #Absorb
+        pass
+    }
+    
+    fight
+    
+    chain {
+        set sprite $11
+        pass
+        
+        set resistance 
+        set weakness #Ice #Immune
+        pass
+    }
+    
+    pass
+    
+    use #Enemy_Glare
+    
+    chain {
+        set sprite $10
+        pass
+        
+        set resistance #Ice #Absorb
+        set weakness #Ice #Absorb
+        pass
+    }
+    
+    pass
+    condition 1
+}
+
+ai_script($C0)
+{
+    target all characters
+    use #Life1
+}
+
+ai_script($C1)
+{
+    target all characters
+    use #Fire2
+}
+
+ai_script($C2)
+{
+    message $8F   // "Rubicant:I lost now_"
+    message $6A   // " But I shall return!"
+    message $05   // "Good luck__"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($C3)
+{
+    message $30   // "King:I will bring you"
+    message $31   // " all down to the Hades!"
+    pass
+    
+    use #Fire2
+    
+    message $32   // "[Edge]:Dad? Mom?"
+    message $33   // " What's wrong with you?"
+    pass
+    
+    use #Fire2
+    
+    use #Fire2
+    
+    message $34   // "[Edge]:It's me! [Edge]!"
+    pass
+    
+    darken $00
+    music #Sad
+    target type 1 monsters
+    use #CommandEnemy
+    set sprite $1F
+    condition 1
+    wait
+    message $36   // "King:[Edge]_ Listen_"
+    pass
+    
+    message $37   // " We're no longer human."
+    pass
+    
+    message $38   // " We must not live long."
+    pass
+    
+    message $39   // "Queen:I'm sorry, dear_"
+    pass
+    
+    message $6C   // "[Edge]:___"
+    pass
+    
+    message $6D   // "King:Before we lose our"
+    pass
+    
+    message $6E   // " mind__ We must go__"
+    pass
+    
+    message $6F   // " Take care, [Edge]_"
+    pass
+    
+    message $70   // "[Edge]:NO!! Please!"
+    pass
+    
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($C4)
+{
+    message $71   // "Queen:Good bye, [Edge]."
+    message $72   // "[Edge]:Don't! Mom!"
+    message $73   // " DON'T GO!!"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($C5)
+{
+    set sprite $60
+    message $35   // "They became conscious."
+    pass
+}
+
+ai_script($C6)
+{
+    chain {
+        message $57   // "Dr.:Go, Balnab!"
+        pass
+        
+        message $58   // "Balnab:GRRRR!"
+        pass
+        
+        condition 1
+        pass
+    }
+}
+
+ai_script($C7)
+{
+    pass
+    
+    chain {
+        message $5F next action   // "Dr.:I must oil him__"
+        pass
+        
+        target type 1 monsters
+        use #Enemy_Heal
+        
+        message $58 next action   // "Balnab:GRRRR!"
+        pass
+    }
+    
+    pass
+}
+
+ai_script($C8)
+{
+    message $5C   // "Dr.:Oh__ My dear__!"
+    message $5D   // "Dr.:I will operate him"
+    message $5E   // " directly now!"
+    use #Transform3
+    condition 0
+}
+
+ai_script($C9)
+{
+    message $59   // "Dr.:__ OUCH! Not me!"
+    message $5A   // " Them! Over there!"
+    message $58   // "Balnab:GRRRR!"
+    message $5B   // "Dr.:Beat them up!"
+    condition 2
+    pass
+}
+
+ai_script($CA)
+{
+    message $60   // "Balnab:O_ Oil_ O_I__L_"
+    use #Enemy_Explode2
+}
+
+ai_script($CB)
+{
+    target type 0 monsters
+    fight
+    condition 2
+}
+
+ai_script($CC)
+{
+    fight
+    
+    fight
+    
+    message $63   // "Dr.:_What's this button?"
+    use #Enemy_Explode2
+}
+
+ai_script($CD)
+{
+    message $61   // "Now_ the real fight!"
+    pass
+    
+    chain {
+        message $62   // "____ Watch!!"
+        pass
+        
+        set sprite $28
+        pass
+        
+        music #BossBattle
+        pass
+        
+        condition 1
+        use #Enemy_Poison
+    }
+}
+
+ai_script($CE)
+{
+    use #Enemy_Beam
+    
+    use #Enemy_Laser
+    
+    use #Enemy_Emission
+    
+    target all characters
+    use #Enemy_Heal
+}
+
+ai_script($CF)
+{
+    use #Enemy_Gas
+}
+
+ai_script($D0)
+{
+    use #Enemy_Crush
+    
+    pass
+}
+
+ai_script($D1)
+{
+    chain {
+        use $AF
+        
+        fight
+        condition + 1
+    }
+}
+
+ai_script($D2)
+{
+    use #Enemy_Petrify
+}
+
+ai_script($D3)
+{
+    fight
+    
+    fight
+    
+    fight
+    
+    set sprite $2B
+    pass
+    
+    pass
+    
+    use #Enemy_Odin
+    
+    fight
+    
+    fight
+    
+    set sprite $2B
+    pass
+    
+    pass
+    
+    use #Enemy_Odin
+    
+    fight
+    
+    chain {
+        set sprite $2B
+        pass
+        
+        condition 1
+        pass
+    }
+    
+    condition 0
+    use #Enemy_Odin
+}
+
+ai_script($D4)
+{
+    message $68 next action   // "Thunder struck Odin!"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($D5)
+{
+    chain {
+        set sprite $2D
+        pass
+        
+        use #Enemy_BigWave
+    }
+    
+    set sprite $2E
+    pass
+    
+    use #Ice2
+    
+    use #Ice2
+    
+    pass
+    
+    chain {
+        set sprite $2D
+        pass
+        
+        use #Enemy_BigWave
+    }
+    
+    set sprite $2E
+    pass
+    
+    use #Ice2
+    
+    pass
+}
+
+ai_script($D6)
+{
+    target all characters
+    use #Enemy_Maser
+}
+
+ai_script($D7)
+{
+    target type 0 monsters
+    use #Enemy_Remedy
+}
+
+ai_script($D8)
+{
+    message $78 next action   // "           5"
+    pass
+    
+    message $79 next action   // "           4"
+    pass
+    
+    message $7A next action   // "           3"
+    pass
+    
+    message $7B next action   // "           2"
+    pass
+    
+    message $7C next action   // "           1"
+    pass
+    
+    chain {
+        set sprite $30
+        pass
+        
+        use #Enemy_MegaNuke
+    }
+    
+    set sprite $2F
+    pass
+}
+
+ai_script($D9)
+{
+    message $3A   // "[Cecil]:[Kain]!? [Kain]!"
+    message $3B   // "[Kain]:___"
+    use command #Jump
+    
+    pass
+    
+    message $3C   // "[Cecil]:What's wrong?"
+    message $3D   // "[Kain]:___ HA!"
+    use command #Jump
+    condition 1
+}
+
+ai_script($DA)
+{
+    use command #Jump
+}
+
+ai_script($DB)
+{
+    chain {
+        message $3E next action   // "[Kain]:Got you!"
+        use command #Jump
+        
+        use #EndBattle
+    }
+}
+
+ai_script($DC)
+{
+    message $2A   // "Golbez:No one can ever"
+    message $2B   // " defeat me_ _ _"
+    pass
+}
+
+ai_script($DD)
+{
+    message $24   // "[Tellah]:M_ Meteo_ _"
+    message $25   // "[Cecil]:No! Don't!"
+    message $26   // "[Yang]:It'll destroy you!"
+    message $27   // "[Tellah]:I'm spending my"
+    message $28   // " life to defeat_ YOU!"
+    pass
+}
+
+ai_script($DE)
+{
+    message $29   // "Golbez:No way_!"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($DF)
+{
+    pass
+    
+    pass
+    
+    chain {
+        message $4A   // "Golbez:HA HA HA!"
+        pass
+        
+        message $4B   // " Is that it?"
+        pass
+        
+        message $4C   // " Now __!"
+        target all characters
+        use #Enemy_HoldGas
+        
+        message $4D   // " Wait till you see"
+        pass
+        
+        message $4E   // " the real terror!"
+        pass
+        
+        message $4F   // " Meal time, Shadow!"
+        use #Enemy_Call
+        
+        condition 1
+        pass
+    }
+}
+
+ai_script($E0)
+{
+    pass
+}
+
+ai_script($E1)
+{
+    message $53   // "Golbez:That Mist blew my"
+    message $B0   // " Shadow Dragon away__?!"
+    target all characters
+    use #Enemy_Heal2
+    message $54   // "????:You can move now!"
+    message $55   // "[Cecil]:Who is it_ ?"
+    wait
+    music #DecisiveBattle
+    use #ReturnRydia
+    condition 2
+}
+
+ai_script($E2)
+{
+    use #Virus
+    
+    use #Lit3
+    
+    use #Fire2
+}
+
+ai_script($E3)
+{
+    message $56   // "Golbez:W_ Why_ _?"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($E4)
+{
+    chain {
+        target #Yang2
+        use #Enemy_Demolish
+        
+        target #Kain2
+        use #Enemy_Demolish
+        
+        target #Rosa2
+        use #Enemy_Demolish
+    }
+    
+    chain {
+        message $50   // "Golbez:And you, [Cecil]!"
+        pass
+        
+        use #InvincibleOff
+        
+        use #SummonMistDragon
+        
+        use #Unsure_KillShadow
+    }
+}
+
+ai_script($E5)
+{
+    set sprite $36
+    target self
+    use #Cure4
+    condition 1
+}
+
+ai_script($E6)
+{
+    set sprite $35
+    target self
+    use #Cure3
+    condition 2
+}
+
+ai_script($E7)
+{
+    set sprite $37
+    target self
+    use #Life1
+    condition 0
+}
+
+ai_script($E8)
+{
+    set sprite $37
+    set sprite $35
+    set sprite $36
+    set sprite $37
+    condition 2
+    fight
+}
+
+ai_script($E9)
+{
+    set sprite $36
+    set sprite $37
+    set sprite $35
+    set sprite $36
+    condition 0
+    fight
+}
+
+ai_script($EA)
+{
+    set sprite $35
+    set sprite $36
+    set sprite $37
+    set sprite $35
+    condition 1
+    fight
+}
+
+ai_script($EB)
+{
+    chain {
+        set resistance #Ice #Lit #Dark #Holy #Air #Absorb
+        pass
+        
+        set weakness #Fire #Immune
+        pass
+        
+        set race #Zombie
+        pass
+    }
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    use #Enemy_Curse
+}
+
+ai_script($EC)
+{
+    condition 1
+    set sprite $11
+    set resistance #Fire #Lit #Dark #Holy #Air #Absorb
+    set weakness #Ice #Immune
+    set race #Mage
+    pass
+}
+
+ai_script($ED)
+{
+    target all characters
+    use #Fire2
+    
+    target all characters
+    use #Fire3
+    
+    target all characters
+    use #Enemy_Glare
+}
+
+ai_script($EE)
+{
+    use #Transform3
+}
+
+ai_script($EF)
+{
+    chain {
+        condition 2
+        pass
+        
+        set resistance #Fire #Ice #Dark #Holy #Air #Absorb
+        pass
+        
+        set weakness #Lit #Immune
+        pass
+        
+        set race 
+        pass
+    }
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    use #Enemy_BigWave
+}
+
+ai_script($F0)
+{
+    condition 3
+    set sprite $74
+    set resistance 
+    set weakness #Holy
+    set race 
+    pass
+}
+
+ai_script($F1)
+{
+    fight
+    
+    use #Enemy_Ray
+    
+    fight
+    
+    use #Enemy_Ray
+    
+    fight
+    
+    use #Enemy_Storm
+}
+
+ai_script($F2)
+{
+    target self
+    use #Wall
+}
+
+ai_script($F3)
+{
+    use #Enemy_Globe199
+    
+    use #Enemy_Globe199
+    
+    target dead monsters
+    use #Enemy_Recover
+}
+
+ai_script($F4)
+{
+    fight
+    
+    use #Enemy_Glance
+    
+    fight
+    
+    fight
+    
+    use #Hold
+    
+    fight
+}
+
+ai_script($F5)
+{
+    chain {
+        fight
+        
+        fight
+    }
+    
+    pass
+    
+    condition 0
+    pass
+}
+
+ai_script($F6)
+{
+    target self
+    use #Ice2
+}
+
+ai_script($F7)
+{
+    target self
+    use #Wall
+    condition 1
+}
+
+ai_script($F8)
+{
+    use #Enemy_Blaze
+    
+    fight
+    
+    fight
+}
+
+ai_script($F9)
+{
+    message $AD   // "!"
+    message $AE   // "!"
+    use #Enemy_Explode2
+}
+
+ai_script($FA)
+{
+    message $96   // "!"
+    message $97   // "!"
+    message $98   // "!"
+    use #EndBattle
+}
+
+ai_script($FB)
+{
+    music #Fabul
+    darken $00
+    message $B5   // "!"
+    pass
+    
+    pass
+    
+    pass
+    
+    message $B6   // "!"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script($FC)
+{
+    message $B7   // "!"
+    message $B8   // "!"
+    message $B9   // "!"
+    use #EndBattle
+}
+
+ai_script($FD)
+{
+    message $76 next action   // "!"
+    use #Enemy_Slap
+}
+
+ai_script($FE)
+{
+    
+}
+
+ai_script($FF)
+{
+    
+}
+
+ai_script(moon $00)
+{
+    use #Fire2
+    
+    use #Psych
+    
+    use #Drain
+    
+    use #Lit2
+    
+    use #Ice2
+}
+
+ai_script(moon $01)
+{
+    target random monster
+    use #Stone
+}
+
+ai_script(moon $02)
+{
+    fight
+    
+    use #Weak
+}
+
+ai_script(moon $03)
+{
+    fight
+}
+
+ai_script(moon $04)
+{
+    target random anything
+    use #Enemy_Hug
+}
+
+ai_script(moon $05)
+{
+    fight
+    
+    use #Enemy_Hug
+    
+    use #Enemy_Retreat
+}
+
+ai_script(moon $06)
+{
+    fight
+    
+    target all characters
+    use #Enemy_Emission
+}
+
+ai_script(moon $07)
+{
+    use #Enemy_Beam
+}
+
+ai_script(moon $08)
+{
+    use #Enemy_Explode2
+}
+
+ai_script(moon $09)
+{
+    fight
+}
+
+ai_script(moon $0A)
+{
+    use #Enemy_Fire
+}
+
+ai_script(moon $0B)
+{
+    fight
+    
+    fight
+    
+    fight
+    
+    use #Enemy_Blaze
+}
+
+ai_script(moon $0C)
+{
+    target random anything
+    use #Enemy_Entangle
+    
+    target random anything
+    fight
+}
+
+ai_script(moon $0D)
+{
+    use #Enemy_Tornado
+}
+
+ai_script(moon $0E)
+{
+    fight
+    
+    use #Enemy_Blizzard
+    
+    fight
+    
+    fight
+    
+    use #Enemy_Blizzard
+}
+
+ai_script(moon $0F)
+{
+    target random anything
+    fight
+}
+
+ai_script(moon $10)
+{
+    use #Enemy_Blizzard
+}
+
+ai_script(moon $11)
+{
+    use #Enemy_Count
+}
+
+ai_script(moon $12)
+{
+    fight
+}
+
+ai_script(moon $13)
+{
+    use #Fast
+    
+    use #Bersk
+    
+    use #Charm
+}
+
+ai_script(moon $14)
+{
+    fight
+    
+    use #Enemy_Curse
+    
+    fight
+}
+
+ai_script(moon $15)
+{
+    use #Enemy_Fire
+}
+
+ai_script(moon $16)
+{
+    fight
+    
+    use #Enemy_Blitz
+    
+    fight
+}
+
+ai_script(moon $17)
+{
+    use #Enemy_Thunder
+}
+
+ai_script(moon $18)
+{
+    use #Enemy_Entangle
+}
+
+ai_script(moon $19)
+{
+    fight
+    
+    fight
+    
+    chain {
+        fight
+        
+        fight
+    }
+}
+
+ai_script(moon $1A)
+{
+    target self
+    use #Fire3
+    
+    target self
+    fight
+}
+
+ai_script(moon $1B)
+{
+    fight
+    
+    use #Enemy_HeatRay
+    
+    fight
+}
+
+ai_script(moon $1C)
+{
+    use #Enemy_Bluster
+}
+
+ai_script(moon $1D)
+{
+    fight
+}
+
+ai_script(moon $1E)
+{
+    use #Enemy_Storm
+}
+
+ai_script(moon $1F)
+{
+    target self
+    use #Wall
+    
+    target all characters
+    use #Wall
+    
+    condition 1
+    pass
+}
+
+ai_script(moon $20)
+{
+    target self
+    use #White
+    
+    target self
+    use #Nuke
+    
+    target self
+    use #Virus
+    
+    target self
+    use #White
+    
+    target all characters
+    use #Cure3
+    
+    target random other anything
+    use #Fast
+    
+    target self
+    use #Wall
+}
+
+ai_script(moon $21)
+{
+    target self
+    use #Peep
+}
+
+ai_script(moon $22)
+{
+    target all characters
+    use #Lit3
+}
+
+ai_script(moon $23)
+{
+    message $AF   // "HA HA HA! Thanks a lot!"
+    message $B2   // "It's my turn now!"
+    target self
+    use #Fast
+    condition 2
+}
+
+ai_script(moon $24)
+{
+    message $99   // "Let's dance!"
+    condition 1
+    pass
+}
+
+ai_script(moon $25)
+{
+    use #Enemy_MegaNuke
+    
+    pass
+    
+    pass
+    
+    condition 1
+    target self
+    use #Wall
+}
+
+ai_script(moon $26)
+{
+    set spell power 12
+    target self
+    use #Nuke
+    set spell power 8
+    wait
+    set spell power 12
+    target self
+    use #Nuke
+    set spell power 8
+    wait
+    set spell power 12
+    target self
+    use #Nuke
+    set spell power 8
+    wait
+    pass
+}
+
+ai_script(moon $27)
+{
+    set spell power 6
+    use #Enemy_MegaNuke
+}
+
+ai_script(moon $28)
+{
+    chain {
+        use #Enemy_BigWave
+        
+        use #Enemy_BigWave
+    }
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    use #Enemy_BigWave
+    
+    fight
+    
+    fight
+}
+
+ai_script(moon $29)
+{
+    use #Enemy_WeakEnemy
+}
+
+ai_script(moon $2A)
+{
+    use #Enemy_Blaze
+}
+
+ai_script(moon $2B)
+{
+    fight
+    
+    use #Enemy_Fire
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    target all characters
+    use #Enemy_Breath
+}
+
+ai_script(moon $2C)
+{
+    target random other monster
+    use #Virus
+}
+
+ai_script(moon $2D)
+{
+    target all monsters
+    use #Wall
+    condition 1
+}
+
+ai_script(moon $2E)
+{
+    use #Enemy_Fire
+}
+
+ai_script(moon $2F)
+{
+    target self
+    use #Enemy_Remedy
+}
+
+ai_script(moon $30)
+{
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+    
+    fight
+}
+
+ai_script(moon $31)
+{
+    use #Enemy_Quake
+}
+
+ai_script(moon $32)
+{
+    use #Slow
+}
+
+ai_script(moon $33)
+{
+    use #Enemy_Glare
+}
+
+ai_script(moon $34)
+{
+    use #Enemy_Blizzard
+}
+
+ai_script(moon $35)
+{
+    use #Enemy_Blitz
+}
+
+ai_script(moon $36)
+{
+    target all characters
+    use #Enemy_Count
+}
+
+ai_script(moon $37)
+{
+    target all characters
+    use #Fast
+}
+
+ai_script(moon $38)
+{
+    fight
+    
+    fight
+    
+    target all characters
+    use #Charm
+    
+    fight
+}
+
+ai_script(moon $39)
+{
+    target self
+    use #Armor
+}
+
+ai_script(moon $3A)
+{
+    target self
+    use #Shell
+}
+
+ai_script(moon $3B)
+{
+    message $95 next action   // " _ Report _"
+    use #Peep
+}
+
+ai_script(moon $3C)
+{
+    use #Enemy_Blast
+}
+
+ai_script(moon $3D)
+{
+    target self
+    use #Enemy_Remedy
+    
+    target self
+    use #Wall
+}
+
+ai_script(moon $3E)
+{
+    pass
+}
+
+ai_script(moon $3F)
+{
+    message $B2   // "It's my turn now!"
+    message $B3   // "!"
+    message $B4   // "!"
+    message $B5   // "!"
+    use #EndBattle
+}
+
+ai_script(moon $40)
+{
+    message $B6   // "!"
+    message $B7   // "!"
+    message $B8   // "!"
+    music #BossBattle
+    use #Transform3
+}
+
+ai_script(moon $41)
+{
+    pass
+}
+
+ai_script(moon $42)
+{
+    message $7F   // "[Fusoya]:Do the Meteo now!"
+    message $80   // "Golbez:I'm ready!"
+    message $81   // "Zemus:Silly!"
+    condition 1
+    pass
+}
+
+ai_script(moon $43)
+{
+    message $82   // "Zemus:This is just"
+    message $83   // " the beginning__ _"
+    target self
+    use #Enemy_Vanish
+}
+
+ai_script(moon $44)
+{
+    message $84   // "[Fusoya]:__ It's no use!"
+    message $85   // " __ Use the Crystal!"
+    pass
+}
+
+ai_script(moon $45)
+{
+    message $86   // "Zeromus:You, the man of"
+    message $87   // " Darkness using it does"
+    message $88   // " not mean anything to"
+    message $AB   // " me, you fools!"
+    target all characters
+    use #Meteo
+}
+
+ai_script(moon $46)
+{
+    use #Enemy_Vanish2
+}
+
+ai_script(moon $47)
+{
+    chain {
+        use #GhostPalomPorom
+        
+        message $9D   // "[Palom]:[Cecil]!"
+        message $9E   // "[Porom]:Here's our power!"
+        message $9F   // "Received the vitality!"
+        use #GhostFlash
+        
+        target all characters
+        use #GhostRevive
+        
+        use #GhostDisappear
+    }
+    
+    chain {
+        use #GhostEdwardTellah
+        
+        message $9A   // "[Edward]:Do your best!"
+        message $9B   // "[Tellah]:Don't give it up!"
+        message $9C   // "Received the energy!"
+        use #GhostFlash
+        
+        target #Rosa2
+        use #GhostHeal
+        
+        target #ARydia
+        use #GhostHeal
+        
+        use #GhostDisappear
+        condition 1
+    }
+}
+
+ai_script(moon $48)
+{
+    chain {
+        use #GhostYangCid
+        
+        message $A0   // "[Yang]:Concentrate!"
+        message $A1   // "[Cid]:Hold on to it!"
+        message $A2   // "Received the energy!"
+        use #GhostFlash
+        
+        target #Edge
+        use #GhostHeal
+        
+        target #Kain3
+        use #GhostHeal
+        
+        use #GhostDisappear
+    }
+    
+    chain {
+        use #GhostFusoyaGolbez
+        
+        message $A3   // "[Fusoya]:Bless him, Moon!"
+        use #GhostFlash
+        
+        target all characters
+        use #GhostHeal
+        
+        message $A4   // "Golbez:My dear brother!"
+        message $A5   // " Let your sacred power"
+        message $A6   // " be with the Crystal!"
+        message $A7   // " Zeromus! It's the end!"
+        use #GhostDisappear
+        
+        condition 2
+        use #ZeromusShake2
+    }
+}
+
+ai_script(moon $49)
+{
+    chain {
+        use #Enemy_Disrupt
+        
+        use #ZeromusShake2
+    }
+}
+
+ai_script(moon $4A)
+{
+    message $AC   // "His true colors emerged!"
+    darken $00
+    music #None
+    message $A9   // "Zeromus:GRR__ERRRGH__"
+    music #Zeromus
+    use #Transform3
+    darken $80
+}
+
+ai_script(moon $4B)
+{
+    use #InvincibleOff
+    
+    use #ZeromusShake2
+    
+    use #Enemy_BigBang
+    condition 3
+}
+
+ai_script(moon $4C)
+{
+    pass
+    
+    use #ZeromusShake2
+    
+    set spell power 31
+    use #Enemy_BigBang
+    
+    use #Enemy_BlkHole
+    message $75   // "Magics became invalid."
+    wait
+    pass
+    
+    use #ZeromusShake2
+    
+    set spell power 32
+    use #Enemy_BigBang
+    
+    set spell power 36
+    target all characters
+    use #Virus
+    
+    use #Enemy_BlkHole
+    message $75   // "Magics became invalid."
+    wait
+    pass
+    
+    use #ZeromusShake2
+    
+    set spell power 32
+    use #Enemy_BigBang
+    
+    use #Enemy_BlkHole
+    message $75   // "Magics became invalid."
+}
+
+ai_script(moon $4D)
+{
+    set spell power 14
+    use #Nuke
+}
+
+ai_script(moon $4E)
+{
+    set spell power 14
+    use #Nuke
+}
+
+ai_script(moon $4F)
+{
+    use #Enemy_WeakEnemy
+}
+
+ai_script(moon $50)
+{
+    use #Enemy_Dancing
+    music #BlackChocobo
+    wait
+    fight
+    
+    fight
+    
+    use #Enemy_Dancing
+    music #YellowChocobo
+    wait
+    fight
+    
+    fight
+    
+    use #Enemy_Dancing
+    music #FatChocobo
+    wait
+    fight
+    
+    fight
+    
+    use #Enemy_Dancing
+    music #Mysidia
+    wait
+    fight
+    
+    use #Enemy_Charm
+}
+
+ai_script(moon $51)
+{
+    message $78 next action   // "           5"
+    pass
+    
+    message $79 next action   // "           4"
+    pass
+    
+    message $7A next action   // "           3"
+    pass
+    
+    message $7B next action   // "           2"
+    pass
+    
+    message $7C next action   // "           1"
+    pass
+    
+    chain {
+        set sprite $30
+        pass
+        
+        use #Enemy_MegaNuke
+    }
+    
+    set sprite $2F
+    pass
+}
+
+ai_script(moon $52)
+{
+    target self
+    use #Wall
+    condition 1
+}
+
+ai_script(moon $53)
+{
+    fight
+}
+
+ai_script(moon $54)
+{
+    condition 4
+    use #Enemy_Vanish2
+}
+
+ai_script(moon $55)
+{
+    pass
+    
+    use #ZeromusShake2
+    
+    set spell power 31
+    use #Enemy_BigBang
+    
+    use #Enemy_BlkHole
+    message $75   // "Magics became invalid."
+    wait
+    set spell power 14
+    use #Nuke
+    
+    pass
+    
+    pass
+    
+    use #ZeromusShake2
+    
+    set spell power 32
+    use #Enemy_BigBang
+}
+
+ai_script(moon $56)
+{
+    condition 5
+    pass
+}
+
+ai_script(moon $57)
+{
+    chain {
+        set spell power 3
+        pass
+        
+        target all characters
+        use #Meteo
+    }
+    
+    pass
+}
+
+ai_script(moon $58)
+{
+    set spell power 36
+    target all characters
+    use #Virus
+}
+
+ai_script(moon $59)
+{
+    use #Virus
+}

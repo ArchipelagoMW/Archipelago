@@ -7,7 +7,7 @@ import f4c.lark
 
 import version
 
-CONDITIONAL_GRAMMAR = '''
+CONDITIONAL_GRAMMAR = r'''
     rule      : expr "=>" consequences
     implicit  : flag ":" expr
 
@@ -96,7 +96,7 @@ class ConditionalTransformer(f4c.lark.Transformer):
 sections = {}
 cur_section = None
 
-with pkgutil.get_data(__name__, "flagspec.txt").decode().splitlines() as infile:
+with open("flagspec.txt") as infile:
     for line in infile:
         if line.strip().startswith('#'):
             continue

@@ -32,7 +32,15 @@ items_received_location_start = 0xE02FFE
 items_received_size = 2
 victory_byte_location= 0xE070F2
 
+objective_threshold_start_location = 0x21F820
+objective_threshold_size = 32
+objective_progress_start_location = 0xF51520
+objective_progress_size = 32
+
 key_items_found_location = 0xF51578
+gp_byte_location = 0xF516A0
+gp_byte_size = 3
+junk_tier_byte = 0x1FFC00
 
 special_flag_key_items = {
     "Hook": (0xF51286, 0b01000000),
@@ -58,6 +66,11 @@ class FF4FEPatchExtension(APPatchExtension):
         output_file = placements["output_file"]
         rom_name = placements["rom_name"]
         flags = placements["flags"]
+        junk_tier = 1
+        try:
+            junk_tier = placements["junk_tier"]
+        except KeyError:
+            junk_tier = 1
         placements = json.dumps(json.loads(caller.get_file(placement_file)))
         cmd = MakeCommand()
         parser = argparse.ArgumentParser()
@@ -77,6 +90,7 @@ class FF4FEPatchExtension(APPatchExtension):
         with open(output_file, "rb") as file:
             rom_data = bytearray(file.read())
             rom_data[ROM_NAME:ROM_NAME+20] = bytes(rom_name, encoding="utf-8")
+            rom_data[junk_tier_byte:junk_tier_byte + 1] = bytes([junk_tier])
         return rom_data
 
 
