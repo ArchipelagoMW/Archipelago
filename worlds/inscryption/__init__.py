@@ -50,10 +50,10 @@ class InscryptionWorld(World):
     location_name_to_id = {location: i + base_id for i, location in enumerate(all_locations)}
     required_epitaph_pieces_count = 9
     required_epitaph_pieces_name = "Epitaph Piece"
-    act1_painting_reqs_progression = False
-    act1_skink_filler = False
 
     def generate_early(self) -> None:
+        self.all_items = [item.copy() for item in self.all_items]
+
         if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
             self.required_epitaph_pieces_name = "Epitaph Piece"
             self.required_epitaph_pieces_count = 9
@@ -65,11 +65,15 @@ class InscryptionWorld(World):
             self.required_epitaph_pieces_count = 1
 
         if self.options.painting_checks_balancing == PaintingChecksBalancing.option_balanced:
-            self.act1_painting_reqs_progression = True
+            self.all_items[6]["classification"] = ItemClassification.progression
+            self.all_items[11]["classification"] = ItemClassification.progression
 
         if self.options.painting_checks_balancing == PaintingChecksBalancing.option_force_filler \
                 and self.options.goal == Goal.option_first_act:
-            self.act1_skink_filler = True
+            self.all_items[3]["classification"] = ItemClassification.filler
+
+        if self.options.epitaph_pieces_randomization != EpitaphPiecesRandomization.option_all_pieces:
+            self.all_items[len(act1_items) + 3]["count"] = self.required_epitaph_pieces_count
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)["name"]
@@ -81,25 +85,18 @@ class InscryptionWorld(World):
 
     def create_items(self) -> None:
         nb_items_added = 0
-        useful_items = (act1_items + act2_items + act3_items) if self.options.goal != Goal.option_first_act \
-            else act1_items.copy()
+        useful_items = self.all_items.copy()
 
         if self.options.goal != Goal.option_first_act:
+            useful_items = [item for item in useful_items
+                            if not any(filler_item["name"] == item["name"] for filler_item in filler_items)]
             if self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_all_pieces:
-                useful_items.remove(act2_items[3])
-            elif self.options.epitaph_pieces_randomization == EpitaphPiecesRandomization.option_in_groups:
-                useful_items.remove(act2_items[2])
-                useful_items[len(act1_items) + 2]["count"] = 3
+                useful_items.pop(len(act1_items) + 3)
             else:
-                useful_items.remove(act2_items[2])
-                useful_items[len(act1_items) + 2]["count"] = 1
-
-        if self.act1_painting_reqs_progression:
-            useful_items[6]["classification"] = ItemClassification.progression
-            useful_items[11]["classification"] = ItemClassification.progression
-
-        if self.act1_skink_filler:
-            useful_items[3]["classification"] = ItemClassification.filler
+                useful_items.pop(len(act1_items) + 2)
+        else:
+            useful_items = [item for item in useful_items
+                            if any(act1_item["name"] == item["name"] for act1_item in act1_items)]
 
         for item in useful_items:
             for _ in range(item["count"]):
