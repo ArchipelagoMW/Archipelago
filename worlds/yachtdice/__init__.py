@@ -231,8 +231,9 @@ class YachtDiceWorld(World):
         weights["Roll"] = weights["Roll"] / 5 * self.frags_per_roll
 
         extra_points_added = [0]  # make it a mutible type so we can change the value in the function
+        step_score_multipliers_added = [0]
 
-        def get_item_to_add(weights, extra_points_added):
+        def get_item_to_add(weights, extra_points_added, step_score_multipliers_added):
             all_items = self.itempool + self.precollected
             dice_fragments_in_pool = all_items.count("Dice") * self.frags_per_dice + all_items.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * self.frags_per_dice:
@@ -244,6 +245,9 @@ class YachtDiceWorld(World):
             # Don't allow too many extra points
             if extra_points_added[0] > 400:
                 weights["Points"] = 0
+
+            if step_score_multipliers_added[0] > 10:
+                weights["Step Score Multiplier"] = 0
 
             # if all weights are zero, allow to add fixed score multiplier, double category, points.
             if sum(weights.values()) == 0:
@@ -266,6 +270,7 @@ class YachtDiceWorld(World):
                 return "Fixed Score Multiplier"
             elif which_item_to_add == "Step Score Multiplier":
                 weights["Step Score Multiplier"] /= 1.1
+                step_score_multipliers_added[0] += 1
                 return "Step Score Multiplier"
             elif which_item_to_add == "Double category":
                 # Below entries are the weights to add each category.
@@ -307,7 +312,7 @@ class YachtDiceWorld(World):
 
         # adding 17 items as a start seems like the smartest way to get close to 1000 points
         for _ in range(17):
-            self.itempool.append(get_item_to_add(weights, extra_points_added))
+            self.itempool.append(get_item_to_add(weights, extra_points_added, step_score_multipliers_added))
 
         score_in_logic = dice_simulation_fill_pool(
             self.itempool + self.precollected,
@@ -335,7 +340,7 @@ class YachtDiceWorld(World):
         else:
             # Keep adding items until a score of 1000 is in logic
             while score_in_logic < 1000:
-                item_to_add = get_item_to_add(weights, extra_points_added)
+                item_to_add = get_item_to_add(weights, extra_points_added, step_score_multipliers_added)
                 self.itempool.append(item_to_add)
                 if item_to_add == "1 Point":
                     score_in_logic += 1
