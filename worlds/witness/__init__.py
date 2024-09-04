@@ -2,10 +2,10 @@
 Archipelago init file for The Witness
 """
 import dataclasses
-from logging import error, warning
-from typing import Any, Dict, List, Optional, cast
+from logging import debug, error, info, warning
+from typing import Any, Dict, List, Optional, Tuple, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -74,6 +74,7 @@ class WitnessWorld(World):
     items_placed_early: List[str]
     own_itempool: List[WitnessItem]
 
+    reachable_early_locations: List[str]
     panel_hunt_required_count: int
 
     def _get_slot_data(self) -> Dict[str, Any]:
@@ -197,27 +198,7 @@ class WitnessWorld(World):
             self.own_itempool.append(dog_puzzle_skip)
             self.items_placed_early.append("Puzzle Skip")
 
-        if self.options.early_symbol_item:
-            # Pick an early item to place on the tutorial gate.
-            early_items = [
-                item for item in self.player_items.get_early_items() if item in self.player_items.get_mandatory_items()
-            ]
-            if early_items:
-                random_early_item = self.random.choice(early_items)
-                if (
-                    self.options.puzzle_randomization == "sigma_expert"
-                    or self.options.victory_condition == "panel_hunt"
-                ):
-                    # In Expert and Panel Hunt, only tag the item as early, rather than forcing it onto the gate.
-                    self.multiworld.local_early_items[self.player][random_early_item] = 1
-                else:
-                    # Force the item onto the tutorial gate check and remove it from our random pool.
-                    gate_item = self.create_item(random_early_item)
-                    self.get_location("Tutorial Gate Open").place_locked_item(gate_item)
-                    self.own_itempool.append(gate_item)
-                    self.items_placed_early.append(random_early_item)
-
-        # There are some really restrictive options in The Witness.
+        # There are some really restrictive settings in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
         # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
@@ -225,19 +206,34 @@ class WitnessWorld(World):
         state = CollectionState(self.multiworld)
         state.sweep_for_advancements(locations=event_locations)
 
-        num_early_locs = sum(
-            1 for loc in self.multiworld.get_reachable_locations(state, self.player)
-            if loc.address and not loc.item
+        # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
+
+        early_locations = [
+            location for location in self.multiworld.get_reachable_locations(state, self.player)
+            if not location.is_event and not location.item
+        ]
+        self.reachable_early_locations = [location.name for location in early_locations]
+
+        num_reachable_locations = len(early_locations)
+        num_reachable_tutorial_locations = sum(
+            cast(Region, location.parent_region).name == "Tutorial" for location in early_locations
         )
 
         # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
 
-        needed_size = 2
-        needed_size += self.options.puzzle_randomization == "sigma_expert"
-        needed_size += self.options.shuffle_symbols
-        needed_size += self.options.shuffle_doors > 0
+        needed_size_overall = 2
+        needed_size_overall += self.options.puzzle_randomization == "sigma_expert"
+        needed_size_overall += self.options.shuffle_symbols
+        needed_size_overall += self.options.shuffle_doors > 0
+
+        needed_size_to_hold_tutorial_items = len(self.options.early_good_items.value)
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
+
+        extra_tutorial_checks = [
+            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
+            ("Tutorial First Hallway", "Tutorial First Hallway Straight")
+        ]
 
         extra_checks = [
             ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
@@ -246,16 +242,33 @@ class WitnessWorld(World):
             ("Desert Outside", "Desert Surface 2"),
         ]
 
-        for i in range(num_early_locs, needed_size):
+        for i in range(num_reachable_tutorial_locations, needed_size_to_hold_tutorial_items):
+            if not extra_tutorial_checks:
+                break
+
+            region, loc = extra_tutorial_checks.pop(0)
+            extra_checks.pop(0)
+            self.player_locations.add_location_late(loc)
+            self.get_region(region).add_locations({loc: self.location_name_to_id[loc]}, WitnessLocation)
+            self.reachable_early_locations.append(loc)
+
+            player = self.player_name
+
+            info(
+                f"""Location "{loc}" had to be added to {player}'s world to hold the requested early good items."""
+            )
+
+        for i in range(num_reachable_locations, needed_size_overall):
             if not extra_checks:
                 break
 
             region, loc = extra_checks.pop(0)
             self.player_locations.add_location_late(loc)
-            self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
+            self.get_region(region).add_locations({loc: self.location_name_to_id[loc]}, WitnessLocation)
+            self.reachable_early_locations.append(loc)
 
             warning(
-                f"""Location "{loc}" had to be added to {self.player_name}'s world 
+                f"""Location "{loc}" had to be added to {self.player_name}'s world
                 due to insufficient sphere 1 size."""
             )
 
@@ -322,6 +335,111 @@ class WitnessWorld(World):
             self.multiworld.itempool += new_items
             if self.player_items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
+
+    def find_good_items_from_itempool(self, itempool: List[Item],
+                                      eligible_locations: List[Location]) -> List[Tuple[Location, Item]]:
+        early_items = self.player_items.get_early_items(self.own_itempool)
+
+        if not early_items:
+            return []
+
+        for item_list in early_items.values():
+            self.random.shuffle(item_list)
+
+        state = CollectionState(self.multiworld)
+
+        placements = []
+        found_early_items: List[Item] = []
+
+        while any(early_items.values()) and eligible_locations:
+            next_findable_items_dict = {item_list.pop(): item_type for item_type, item_list in early_items.items()}
+            next_findable_items = {self.item_name_to_id[item_name] for item_name in next_findable_items_dict}
+
+            found_early_items = []
+
+            def keep_or_take_out(item: Item) -> bool:
+                if (
+                    item.code not in next_findable_items
+                    or not any(location.can_fill(state, item, check_access=False) for location in eligible_locations)
+                ):
+                    return True  # Keep
+                next_findable_items.remove(item.code)
+                found_early_items.append(item)
+                return False  # Take out
+
+            local_player = self.player
+            itempool[:] = [item for item in itempool if item.player != local_player or keep_or_take_out(item)]
+
+            # Bring them back into Symbol -> Door -> Obelisk Key order
+            # The intent is that the Symbol is always on Tutorial Gate Open / generally that the order is predictable
+            correct_order = {item_name: i for i, item_name in enumerate(next_findable_items_dict)}
+            found_early_items.sort(key=lambda item: correct_order[item.name])
+
+            for item in found_early_items:
+                location = next(
+                    (location for location in eligible_locations if location.can_fill(state, item, check_access=False)),
+                    None,
+                )
+                if location is not None:
+                    placements.append((location, item))
+                    eligible_locations.remove(location)
+                    del early_items[next_findable_items_dict[item.name]]
+                else:
+                    itempool.append(item)  # Put item back if it can't be placed anywhere
+
+        if early_items:
+            if not eligible_locations:
+                error(f'Could not find a suitable location for "early good items" of types {list(early_items)} in '
+                      f"{self.player_name}'s world. They are excluded or already contain plandoed items.\n")
+            else:
+                error(f"Could not find any \"early good item\" of types {list(early_items)} in {self.player_name}'s"
+                      f" world, they were all plandoed elsewhere.")
+
+        return placements
+
+    def fill_hook(self, progitempool: List[Item], _: List[Item], _2: List[Item],
+                  fill_locations: List[Location]) -> None:
+        if not self.options.early_good_items.value:
+            return
+
+        # Pick an early item to put on Tutorial Gate Open.
+        # Done after plando to avoid conflicting with it.
+        # Done in fill_hook because multiworld itempool manipulation is not allowed in pre_fill.
+
+        tutorial_checks_in_order = [
+            "Tutorial Gate Open",
+            "Tutorial Back Left",
+            "Tutorial Back Right",
+            "Tutorial Front Left",
+            "Tutorial First Hallway Straight",
+            "Tutorial First Hallway Bend",
+            "Tutorial Patio Floor",  # Don't think this can ever happen, but why not classify as many as possible
+            "Tutorial First Hallway EP",
+            "Tutorial Cloud EP",
+            "Tutorial Patio Flowers EP",
+        ]
+
+        available_locations = [
+            self.get_location(location_name) for location_name in tutorial_checks_in_order
+            if location_name in self.reachable_early_locations
+        ]
+
+        available_locations += sorted(
+            (
+                self.get_location(location_name) for location_name in self.reachable_early_locations
+                if location_name not in tutorial_checks_in_order
+            ),
+            key=lambda location_object: static_witness_logic.ENTITIES_BY_NAME[location_object.name]["processing_order"]
+        )
+
+        available_locations = [location for location in available_locations if not location.item]
+
+        early_good_item_placements = self.find_good_items_from_itempool(progitempool, available_locations)
+
+        for location, item in early_good_item_placements:
+            debug(f"Placing early good item {item} on early location {location}.")
+            location.place_locked_item(item)
+            fill_locations.remove(location)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         self.log_ids_to_hints: Dict[int, CompactHintData] = {}
