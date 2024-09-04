@@ -27,7 +27,7 @@ namespace Sly1AP
         public static Keys keys = new Keys();
         public static async Task Main()
         {
-            Console.SetBufferSize(Console.BufferWidth, 32766);
+            // Console.SetBufferSize(Console.BufferWidth, 32766);
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             Console.WriteLine("Sly 1 Archipelago Randomizer");
@@ -111,7 +111,7 @@ namespace Sly1AP
             {
                 string StartingEpisode = Convert.ToString(options["StartingEpisode"]);
                 Console.WriteLine(StartingEpisode);
-                if (StartingEpisode == "Tides Of Terror")
+                if (StartingEpisode == "Tide Of Terror")
                 {
                     keys.RaleighStart = 1;
                     Memory.Write(0x2027CAC4, keys.RaleighStart);
