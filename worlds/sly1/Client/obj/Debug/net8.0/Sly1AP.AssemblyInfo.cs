@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sly1AP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+adade7d69e22211fe119ed639ff48c4a165d8e69")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0bfd4b2e349971812a987e2b78b5766b5c6e28a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sly1AP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sly1AP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
