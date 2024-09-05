@@ -60,7 +60,7 @@ To account for this case, we would have to recheck all entrances every time a ne
 
 Because most games do not check for region access inside of entrance access conditions, AP has decided to **eschew this rechecking** and just checks every entrance once. This gives a significant performance gain to AP as a whole, about 30%-50%.
 
-However, because some games *did* start using things like `region.can_reach` inside entrance access conditions, we provided a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
+However, there is a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
 This keeps almost all of the performance upsides. Even a game making heavy use of indirect conditions (See: The Witness) is still way way faster than if it just blanket "rechecked all entrances until nothing new is found".
 The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is simple: They call `region.can_reach` on their respective parent/source region.
 
