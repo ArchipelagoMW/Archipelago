@@ -70,7 +70,7 @@ item_table: Dict[str, ItemData] = {
 
 }
 
-item_id_name: {int, str} = {}
+item_id_name: Dict[int, str] = {}
 for name in item_table.keys():
     id = item_table[name].code
     if id is not None:
@@ -80,7 +80,7 @@ for name in item_table.keys():
 class CommanderData(NamedTuple):
     name: str
     internal_name: str
-    alt_name: str = None
+    alt_name: Optional[str] = None
 
 
 faction_table: Dict[str, List[CommanderData]] = {
@@ -128,7 +128,7 @@ faction_table: Dict[str, List[CommanderData]] = {
 class Wargroove2Item(Item):
     game = "Wargroove 2"
 
-    def __init__(self, name, player: int = None):
+    def __init__(self, name, player):
         item_data = item_table[name]
         super(Wargroove2Item, self).__init__(
             name,

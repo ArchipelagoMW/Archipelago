@@ -7,30 +7,29 @@ import asyncio
 import pkgutil
 import random
 import typing
-from typing import Tuple, List, Iterable, Dict
-
-from settings import get_settings
-from worlds.wargroove2 import Wargroove2World
-from worlds.wargroove2.Items import item_table, faction_table, CommanderData, ItemData, item_id_name
-
-import ModuleUpdate
-from worlds.wargroove2.Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, get_level_table, FINAL_LEVEL_1, \
-    FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, get_final_levels
-from worlds.wargroove2.Locations import location_table, location_id_name
-from worlds.wargroove2.RegionFilter import Wargroove2LogicFilter
-
-ModuleUpdate.update()
-
 import Utils
 import json
 import logging
+import ModuleUpdate
+from typing import Tuple, List, Iterable, Dict
 
-if __name__ == "__main__":
-    Utils.init_logging("Wargroove2Client", exception_logger="Client")
+from settings import get_settings
+from . import Wargroove2World
+from .Items import item_table, faction_table, CommanderData, ItemData, item_id_name
 
+from .Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, \
+    low_victory_checks_levels, high_victory_checks_levels, \
+    FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, final_levels
+from .Locations import location_table, location_id_name
+from .RegionFilter import Wargroove2LogicFilter
 from NetUtils import ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
+
+ModuleUpdate.update()
+
+if __name__ == "__main__":
+    Utils.init_logging("Wargroove2Client", exception_logger="Client")
 
 wg2_logger = logging.getLogger("WG2")
 
@@ -44,7 +43,7 @@ class Wargroove2ClientCommandProcessor(ClientCommandProcessor):
     def _cmd_commander(self, *commander_name: Iterable[str]):
         """Set the current commander to the given commander."""
         if commander_name:
-            self.ctx.set_commander(' '.join(commander_name))
+            self.ctx.set_commander(' '.join(commander_name[0]))
         else:
             if self.ctx.can_choose_commander:
                 commanders = self.ctx.get_commanders()
@@ -57,7 +56,7 @@ class Wargroove2ClientCommandProcessor(ClientCommandProcessor):
 
 
 class Wargroove2Context(CommonContext):
-    command_processor: int = Wargroove2ClientCommandProcessor
+    command_processor = Wargroove2ClientCommandProcessor
     game = "Wargroove 2"
     items_handling = 0b111  # full remote
     current_commander: CommanderData = faction_table["Starter"][0]
@@ -71,9 +70,9 @@ class Wargroove2Context(CommonContext):
     has_death_link: bool = False
     final_levels: int = 1
     level_shuffle_seed: int = 0
-    slot_data: {}
+    slot_data: dict
     stored_finale_key: str = ""
-    completed_final_regions: [str] = []
+    completed_final_regions: list = []
     faction_item_ids = {
         'Starter': 0,
         'Cherrystone': 252034,
@@ -92,7 +91,7 @@ class Wargroove2Context(CommonContext):
 
     def __init__(self, server_address, password):
         super(Wargroove2Context, self).__init__(server_address, password)
-        self.send_index: int = 0
+        self.send_index = 0
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
@@ -193,8 +192,8 @@ class Wargroove2Context(CommonContext):
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                 json.dump(args["slot_data"], f)
-                self.can_choose_commander = self.slot_data["can_choose_commander"]
-                self.starting_groove_multiplier = self.slot_data["starting_groove_multiplier"]
+                self.can_choose_commander = self.slot_data["commander_choice"] != 0
+                self.starting_groove_multiplier = self.slot_data["groove_boost"]
                 self.income_boost_multiplier = self.slot_data["income_boost"]
                 self.commander_defense_boost_multiplier = self.slot_data["commander_defense_boost"]
                 f.close()
@@ -208,7 +207,7 @@ class Wargroove2Context(CommonContext):
             self.update_commander_data()
             self.ui.update_ui()
 
-            random.seed(self.seed_name + str(self.slot))
+            random.seed(str(self.seed_name) + str(self.slot))
             # Our indexes start at 0 and we have ?? levels
             for i in range(0, 100):
                 filename = f"seed{i}"
@@ -221,18 +220,20 @@ class Wargroove2Context(CommonContext):
                 file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory, level_file_name))
                 if file_data is None:
                     print_error_and_close("Wargroove2Client couldn't find Wargoove 2 level files in install!")
-                with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
-                    f.write(file_data)
-                    f.close()
+                else:
+                    with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
+                        f.write(file_data)
+                        f.close()
             for i in range(0, FINAL_LEVEL_COUNT):
                 filename = f"AP_{i + LEVEL_COUNT + 1}.map"
                 level_file_name = self.slot_data[f"Final Level File #{i}"]
                 file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory, level_file_name))
                 if file_data is None:
                     print_error_and_close("Wargroove2Client couldn't find Wargoove 2 level files in install!")
-                with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
-                    f.write(file_data)
-                    f.close()
+                else:
+                    with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
+                        f.write(file_data)
+                        f.close()
 
         if cmd in {"RoomInfo"}:
             self.seed_name = args["seed_name"]
@@ -290,18 +291,13 @@ class Wargroove2Context(CommonContext):
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager, HoverBehavior, ServerToolTip
+        from kvui import GameManager
         from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.lang import Builder
-        from kivy.uix.button import Button
         from kivy.uix.togglebutton import ToggleButton
         from kivy.uix.boxlayout import BoxLayout
         from kivy.uix.gridlayout import GridLayout
-        from kivy.uix.image import AsyncImage, Image
-        from kivy.uix.stacklayout import StackLayout
         from kivy.uix.label import Label
-        from kivy.properties import ColorProperty
-        from kivy.uix.image import Image
         import pkgutil
 
         class TrackerLayout(BoxLayout):
@@ -346,10 +342,10 @@ class Wargroove2Context(CommonContext):
             level_4_Layout: GridLayout(cols=1)
             trigger_tracker: BoxLayout
             boost_tracker: BoxLayout
-            commander_buttons: Dict[int, List[CommanderButton]]
+            commander_buttons: Dict[str, List[CommanderButton]]
             tracker_items = {
-                "Swordsman": ItemData(None, "Unit", False),
-                "Dog": ItemData(None, "Unit", False),
+                "Swordsman": ItemData(None, "Unit"),
+                "Dog": ItemData(None, "Unit"),
                 **item_table
             }
 
@@ -364,8 +360,8 @@ class Wargroove2Context(CommonContext):
                 return container
 
             def build_levels(self) -> LevelsLayout:
+                levels_layout = LevelsLayout(orientation="horizontal")
                 try:
-                    levels_layout = LevelsLayout(orientation="horizontal")
                     level_tracker = LevelTracker(padding=[0, 20])
                     self.level_1_Layout = GridLayout(cols=1)
                     self.level_2_Layout = GridLayout(cols=1)
@@ -377,13 +373,13 @@ class Wargroove2Context(CommonContext):
                     level_tracker.add_widget(self.level_4_Layout)
                     levels_layout.add_widget(level_tracker)
                     self.update_levels()
-                    return levels_layout
                 except Exception as e:
                     print(e)
+                return levels_layout
 
             def update_levels(self):
                 received_names = [item_id_name[item.item] for item in self.ctx.items_received]
-                levels = get_level_table(self.ctx.slot)
+                levels = low_victory_checks_levels + high_victory_checks_levels
                 level_rules = {level.name: level.location_rules for level in levels}
                 region_filter = Wargroove2LogicFilter(received_names)
                 self.level_1_Layout.clear_widgets()
@@ -399,10 +395,10 @@ class Wargroove2Context(CommonContext):
                     is_fully_beaten = True
                     is_victory_reached = False
                     if level_counter <= LEVEL_COUNT and hasattr(self.ctx, 'slot_data'):
-                        level_name: str = self.ctx.slot_data[region_name]
+                        level_name = self.ctx.slot_data[region_name]
                         level_name_text = f"\n{level_name}"
                         for location_name in level_rules[level_name].keys():
-                            is_beatable: bool = level_rules[level_name][location_name](region_filter)
+                            is_beatable = level_rules[level_name][location_name](region_filter, self.ctx.slot)()
                             is_fully_beaten = is_fully_beaten and \
                                               location_table[location_name] in self.ctx.checked_locations
                             if location_name.endswith(": Victory"):
@@ -455,7 +451,6 @@ class Wargroove2Context(CommonContext):
                         self.level_4_Layout.add_widget(label)
                     level_counter += 1
 
-                final_levels = get_final_levels(self.ctx.slot)
                 final_level_rules = {final_level.name: final_level.location_rules for final_level in final_levels}
                 final_level_1_name = None
                 final_level_2_name = None
@@ -473,10 +468,11 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_1_name in stored_data:
                     level_name_text = f"\n{final_level_1_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_1_name is not None and region_filter.has_all({"Final North", "Final Center"}, self.ctx.slot):
+                elif final_level_1_name is not None and region_filter.has_all(["Final North", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_1_name}"
-                    is_beatable: bool = final_level_rules[final_level_1_name] \
-                        [f"{final_level_1_name}: Victory"](region_filter)
+                    is_beatable = final_level_rules[final_level_1_name] \
+                        [f"{final_level_1_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -489,10 +485,11 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_2_name in stored_data:
                     level_name_text = f"\n{final_level_2_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_2_name is not None and region_filter.has_all({"Final East", "Final Center"}, self.ctx.slot):
+                elif final_level_2_name is not None and region_filter.has_all(["Final East", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_2_name}"
-                    is_beatable: bool = final_level_rules[final_level_2_name] \
-                        [f"{final_level_2_name}: Victory"](region_filter)
+                    is_beatable = final_level_rules[final_level_2_name] \
+                        [f"{final_level_2_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -505,10 +502,11 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_3_name in stored_data:
                     level_name_text = f"\n{final_level_3_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_3_name is not None and region_filter.has_all({"Final South", "Final Center"}, self.ctx.slot):
+                elif final_level_3_name is not None and region_filter.has_all(["Final South", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_3_name}"
-                    is_beatable: bool = final_level_rules[final_level_3_name] \
-                        [f"{final_level_3_name}: Victory"](region_filter)
+                    is_beatable = final_level_rules[final_level_3_name] \
+                        [f"{final_level_3_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -521,10 +519,11 @@ class Wargroove2Context(CommonContext):
                 if stored_data is not None and final_level_4_name in stored_data:
                     level_name_text = f"\n{final_level_4_name}"
                     status_color = (1.0, 1.0, 1.0, 1)
-                elif final_level_4_name is not None and region_filter.has_all({"Final West", "Final Center"}, self.ctx.slot):
+                elif final_level_4_name is not None and region_filter.has_all(["Final West", "Final Center"],
+                                                                              self.ctx.slot):
                     level_name_text = f"\n{final_level_4_name}"
-                    is_beatable: bool = final_level_rules[final_level_4_name] \
-                        [f"{final_level_4_name}: Victory"](region_filter)
+                    is_beatable = final_level_rules[final_level_4_name] \
+                        [f"{final_level_4_name}: Victory"](region_filter, self.ctx.slot)()
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -535,8 +534,8 @@ class Wargroove2Context(CommonContext):
                 self.level_4_Layout.add_widget(label)
 
             def build_tracker(self) -> TrackerLayout:
+                tracker = TrackerLayout(orientation="horizontal")
                 try:
-                    tracker = TrackerLayout(orientation="horizontal")
                     commander_select = CommanderSelect(orientation="vertical")
                     self.commander_buttons = {}
 
@@ -571,6 +570,7 @@ class Wargroove2Context(CommonContext):
                     return tracker
                 except Exception as e:
                     print(e)
+                return tracker
 
             def update_tracker(self):
                 received_ids = [item.item for item in self.ctx.items_received]
@@ -627,7 +627,7 @@ class Wargroove2Context(CommonContext):
         """Sets the current commander to the given one, if possible"""
         if not self.can_choose_commander:
             wg2_logger.error("Cannot set commanders in this game mode.")
-            return
+            return False
         match_name = commander_name.lower()
         for commander, unlocked in self.get_commanders():
             if commander.name.lower() == match_name or commander.alt_name and commander.alt_name.lower() == match_name:
@@ -642,6 +642,7 @@ class Wargroove2Context(CommonContext):
                     return False
         else:
             wg2_logger.error(f"{commander_name} is not a recognized Wargroove 2 commander.")
+            return False
 
     def get_commanders(self) -> List[Tuple[CommanderData, bool]]:
         """Gets a list of commanders with their unlocked status"""
@@ -655,13 +656,13 @@ class Wargroove2Context(CommonContext):
 
 async def game_watcher(ctx: Wargroove2Context):
     while not ctx.exit_event.is_set():
-        if ctx.syncing == True:
+        if ctx.syncing:
             sync_msg = [{'cmd': 'Sync'}]
             if ctx.locations_checked:
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
             ctx.syncing = False
-        sending = []
+        sending: list = []
         victory = False
         await ctx.update_death_link(ctx.has_death_link)
         for root, dirs, files in os.walk(ctx.game_communication_path):
@@ -683,8 +684,9 @@ async def game_watcher(ctx: Wargroove2Context):
                 if file == "deathLinkSend" and ctx.has_death_link:
                     with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
                         failed_mission = f.read()
-                        await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed {failed_mission}")
-                        f.close()
+                        if ctx.slot is not None:
+                            await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed {failed_mission}")
+                            f.close()
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "victory":
                     with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
