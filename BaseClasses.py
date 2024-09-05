@@ -692,17 +692,25 @@ class CollectionState():
 
     def update_reachable_regions(self, player: int):
         self.stale[player] = False
+        world: AutoWorld.World = self.multiworld.worlds[player]
         reachable_regions = self.reachable_regions[player]
-        blocked_connections = self.blocked_connections[player]
         queue = deque(self.blocked_connections[player])
-        start = self.multiworld.get_region("Menu", player)
+        start: Region = world.get_region(world.origin_region_name)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
         if start not in reachable_regions:
             reachable_regions.add(start)
-            blocked_connections.update(start.exits)
+            self.blocked_connections[player].update(start.exits)
             queue.extend(start.exits)
 
+        if world.explicit_indirect_conditions:
+            self._update_reachable_regions_explicit_indirect_conditions(player, queue)
+        else:
+            self._update_reachable_regions_auto_indirect_conditions(player, queue)
+
+    def _update_reachable_regions_explicit_indirect_conditions(self, player: int, queue: deque):
+        reachable_regions = self.reachable_regions[player]
+        blocked_connections = self.blocked_connections[player]
         # run BFS on all connections, and keep track of those blocked by missing items
         while queue:
             connection = queue.popleft()
@@ -721,6 +729,29 @@ class CollectionState():
                 for new_entrance in self.multiworld.indirect_connections.get(new_region, set()):
                     if new_entrance in blocked_connections and new_entrance not in queue:
                         queue.append(new_entrance)
+
+    def _update_reachable_regions_auto_indirect_conditions(self, player: int, queue: deque):
+        reachable_regions = self.reachable_regions[player]
+        blocked_connections = self.blocked_connections[player]
+        new_connection: bool = True
+        # run BFS on all connections, and keep track of those blocked by missing items
+        while new_connection:
+            new_connection = False
+            while queue:
+                connection = queue.popleft()
+                new_region = connection.connected_region
+                if new_region in reachable_regions:
+                    blocked_connections.remove(connection)
+                elif connection.can_reach(self):
+                    assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                    reachable_regions.add(new_region)
+                    blocked_connections.remove(connection)
+                    blocked_connections.update(new_region.exits)
+                    queue.extend(new_region.exits)
+                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
+                    new_connection = True
+            # sweep for indirect connections, mostly Entrance.can_reach(unrelated_Region)
+            queue.extend(blocked_connections)
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
