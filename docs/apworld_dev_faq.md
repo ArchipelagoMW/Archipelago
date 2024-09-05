@@ -50,7 +50,7 @@ item_pool += [self.create_filler() for _ in range(total_locations - len(item_poo
 
 The world API document mentions indirect conditions and **when** you should use them, but not *how* they work and *why* they are necessary. This is because the explanation is quite complicated.
 
-Region sweep (the algorithm that determines which regions are reachable) is a Breadth-First Search of the region graph from the Menu region, checking entrances one by one and adding newly reached nodes (regions) and their entrances to the queue until there is nothing more to check.
+Region sweep (the algorithm that determines which regions are reachable) is a Breadth-First Search of the region graph from the origin region, checking entrances one by one and adding newly reached nodes (regions) and their entrances to the queue until there is nothing more to check.
 
 For performance reasons AP only checks every entrance once. However, if entrance access conditions depend on regions, then it is possible for this to happen:
 1. An entrance that depends on a region is checked and determined to be nontraversable because the region hasn't been reached yet during the graph search.
