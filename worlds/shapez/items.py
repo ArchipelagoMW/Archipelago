@@ -49,7 +49,7 @@ gameplay_unlocks = {
 }
 
 upgrades = {
-    "Big Belt Upgrade": ItemClassification.useful,
+    "Big Belt Upgrade": ItemClassification.progression,
     "Big Miner Upgrade": ItemClassification.useful,
     "Big Processors Upgrade": ItemClassification.useful,
     "Big Painting Upgrade": ItemClassification.useful,

@@ -10,7 +10,7 @@ class Goal(Choice):
     - **MAM:** Complete a specified level after level 26. Every level before that and a few additional options will be a
     location. It's recommended to build a Make-Anything-Machine (MAM).
     - **Even fasterer:** Upgrade everything to a specified tier after tier 8. Every upgrade before that will be a location.
-    - **Efficiency III:** Deliver 500 blueprint shapes per second to the hub."""
+    - **Efficiency III:** Deliver 256 blueprint shapes per second to the hub."""
     display_name = "Goal"
     rich_text_doc = True
     option_vanilla = 0

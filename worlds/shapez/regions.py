@@ -3,6 +3,7 @@ from typing import Callable, Dict, Tuple, List
 from BaseClasses import Entrance, Region, CollectionState, MultiWorld, LocationProgressType, ItemClassification
 from .items import ShapezItem
 from .locations import ShapezLocation
+from worlds.generic.Rules import add_rule
 
 all_regions = [
     "Main",
@@ -68,6 +69,8 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     goal_location = ShapezLocation(player, "Goal", None, goal_region,
                                    LocationProgressType.DEFAULT)
     goal_location.place_locked_item(ShapezItem("Goal", ItemClassification.progression, None, player))
+    if goal == "efficiency_iii":
+        add_rule(goal_location, lambda state: state.has("Big Belt Upgrade", player, 7))
     goal_region.locations.append(goal_location)
     multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
