@@ -36,7 +36,9 @@ One of the involved parties can open a pull request with a change to this docume
 be approved by all of the other involved parties.
 
 This should usually be a quick process, but core reserves its right to make their own assessment.  
-For example, adding 5 people who we have never heard of might raise some questions.
+For example, adding 5 people who we have never heard of might raise some questions.  
+Adding some information to the PR description about contributions the new world maintainer candidate has made should
+help in this regard.
 
 ### Getting Voted
 
