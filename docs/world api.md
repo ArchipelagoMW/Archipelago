@@ -303,7 +303,7 @@ generation (entrance randomization).
 An access rule is a function that returns `True` or `False` for a `Location` or `Entrance` based on the current `state`
 (items that have been collected).
 
-The two possible ways to make a CollectionRule are:
+The two possible ways to make a [CollectionRule](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L10) are:
 - `def rule(state: CollectionState) -> bool:`
 - `lambda state: ... boolean expression ...`
 
@@ -654,7 +654,7 @@ def set_rules(self) -> None:
 
 Custom methods can be defined for your logic rules. The access rule that ultimately gets assigned to the Location or
 Entrance should be
-a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L9).
+a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L10).
 Typically, this is done by defining a lambda expression on demand at the relevant bit, typically calling other
 functions, but this can also be achieved by defining a method with the appropriate format and assigning it directly.
 For an example, see [The Messenger](/worlds/messenger/rules.py).
