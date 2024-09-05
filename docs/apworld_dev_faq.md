@@ -54,8 +54,9 @@ Region sweep (the algorithm that determines which regions are reachable) is a Br
 
 For performance reasons, AP only checks every entrance once. However, if entrance access conditions depend on regions, then it is possible for this to happen:
 1. An entrance that depends on a region is checked and determined to be nontraversable because the region hasn't been reached yet during the graph search.
-2. After that, the region is reached by the graph search. The entrance *would* now be determined to be traversable if it were rechecked.
+2. After that, the region is reached by the graph search.
 
+The entrance *would* now be determined to be traversable if it were rechecked, but it is not.
 To account for this case, AP would have to recheck all entrances every time a new region is reached, until no new regions are reached.
 
 However, there is a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
