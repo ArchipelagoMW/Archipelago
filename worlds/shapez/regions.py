@@ -17,13 +17,13 @@ all_regions = [
     "Upgrades with 3 Buildings",
     "Upgrades with 4 Buildings",
     "Upgrades with 5 Buildings",
-    # "Cut Shape Achievements",
-    # "Rotated Shape Achievements",
-    # "Stacked Shape Achievements",
-    # "Painted Shape Achievements",
-    # "Stored Shape Achievements",
-    # "Trashed Shape Achievements",
-    # "Wiring Achievements",
+    "Cut Shape Achievements",
+    "Rotated Shape Achievements",
+    "Stacked Shape Achievements",
+    "Painted Shape Achievements",
+    "Stored Shape Achievements",
+    "Trashed Shape Achievements",
+    "Wiring Achievements",
     "All Buildings Shapes"
 ] + [
   f"Shapesanity {processing} {coloring}"
@@ -75,33 +75,33 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
     # Create Entrances for regions
-#    create_entrance(player, "Cutter needed", regions["Main"], regions["Cut Shape Achievements"],
-#                    lambda state: state.has("Cutter", player))
-#    create_entrance(player, "Rotator needed", regions["Main"], regions["Rotated Shape Achievements"],
-#                    lambda state: state.has("Rotator", player))
-#    create_entrance(player, "Stacker needed", regions["Main"], regions["Stacked Shape Achievements"],
-#                    lambda state: state.has("Stacker", player))
-#    create_entrance(player, "Painter needed", regions["Main"], regions["Painted Shape Achievements"],
-#                    lambda state: state.has("Painter", player))
-#    create_entrance(player, "Storage needed", regions["Main"], regions["Stored Shape Achievements"],
-#                    lambda state: state.has("Storage", player))
-#    create_entrance(player, "Trash needed", regions["Main"], regions["Trashed Shape Achievements"],
-#                    lambda state: state.has("Trash", player))
-#    create_entrance(player, "Wires needed", regions["Main"], regions["Wiring Achievements"],
-#                    lambda state: state.has("Wires", player))
+    create_entrance(player, "Cutter needed", regions["Main"], regions["Cut Shape Achievements"],
+                    lambda state: state.has("Cutter", player))
+    create_entrance(player, "Rotator needed", regions["Main"], regions["Rotated Shape Achievements"],
+                    lambda state: state.has("Rotator", player))
+    create_entrance(player, "Stacker needed", regions["Main"], regions["Stacked Shape Achievements"],
+                    lambda state: state.has("Stacker", player))
+    create_entrance(player, "Painter needed", regions["Main"], regions["Painted Shape Achievements"],
+                    lambda state: state.has("Painter", player))
+    create_entrance(player, "Storage needed", regions["Main"], regions["Stored Shape Achievements"],
+                    lambda state: state.has("Storage", player))
+    create_entrance(player, "Trash needed", regions["Main"], regions["Trashed Shape Achievements"],
+                    lambda state: state.has("Trash", player))
+    create_entrance(player, "Wires needed", regions["Main"], regions["Wiring Achievements"],
+                    lambda state: state.has("Wires", player))
 
-#    create_entrance(player, "More than cutter needed",
-#                    regions["Cut Shape Achievements"], regions["All Buildings Shapes"],
-#                    lambda state: state.has_all(["Rotator", "Stacker", "Painter", "Color Mixer"], player))
-#    create_entrance(player, "More than rotator needed",
-#                    regions["Rotated Shape Achievements"], regions["All Buildings Shapes"],
-#                    lambda state: state.has_all(["Cutter", "Stacker", "Painter", "Color Mixer"], player))
-#    create_entrance(player, "More than stacker needed",
-#                    regions["Stacked Shape Achievements"], regions["All Buildings Shapes"],
-#                    lambda state: state.has_all(["Rotator", "Cutter", "Painter", "Color Mixer"], player))
-#    create_entrance(player, "More than painter needed",
-#                    regions["Painted Shape Achievements"], regions["All Buildings Shapes"],
-#                    lambda state: state.has_all(["Rotator", "Stacker", "Cutter", "Color Mixer"], player))
+    create_entrance(player, "More than cutter needed",
+                    regions["Cut Shape Achievements"], regions["All Buildings Shapes"],
+                    lambda state: state.has_all(["Rotator", "Stacker", "Painter", "Color Mixer"], player))
+    create_entrance(player, "More than rotator needed",
+                    regions["Rotated Shape Achievements"], regions["All Buildings Shapes"],
+                    lambda state: state.has_all(["Cutter", "Stacker", "Painter", "Color Mixer"], player))
+    create_entrance(player, "More than stacker needed",
+                    regions["Stacked Shape Achievements"], regions["All Buildings Shapes"],
+                    lambda state: state.has_all(["Rotator", "Cutter", "Painter", "Color Mixer"], player))
+    create_entrance(player, "More than painter needed",
+                    regions["Painted Shape Achievements"], regions["All Buildings Shapes"],
+                    lambda state: state.has_all(["Rotator", "Stacker", "Cutter", "Color Mixer"], player))
 
     # Add balancer, tunnel, and trash to early items if options say so
     level_buildings_3_needed: List[str] = [level_logic_buildings[2]]

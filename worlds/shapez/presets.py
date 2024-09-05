@@ -1,15 +1,15 @@
 options_presets = {
     "Minimum checks": {
         "goal": "vanilla",
-        # "additional_locations": 1,
+        "include_achievements": False,
         "shapesanity_amount": 4
     },
     "Maximum checks": {
         "goal": "even_fasterer",
         "goal_amount": 1000,
-        # "additional_locations": True,
-        # "exclude_softlock_achievements": False,
-        # "exclude_long_playtime_achievements": False,
+        "include_achievements": True,
+        "exclude_softlock_achievements": False,
+        "exclude_long_playtime_achievements": False,
         "shapesanity_amount": 60920
     },
     "Restrictive start": {
@@ -19,6 +19,7 @@ options_presets = {
         "randomize_level_logic": "hardcore",
         "randomize_upgrade_logic": "hardcore",
         "early_balancer_tunnel_and_trash": "sphere_1",
+        "include_achievements": False,
         "shapesanity_amount": 4
     },
     "Quick game": {
@@ -28,6 +29,7 @@ options_presets = {
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "hardcore",
         "randomize_upgrade_logic": "hardcore",
+        "include_achievements": False,
         "shapesanity_amount": 4
     }
 }

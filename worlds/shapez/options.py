@@ -152,32 +152,28 @@ class LockBeltAndExtractor(Toggle):
     default = False
 
 
-# class AdditionalLocations(Choice):
-#    """Achievements: Include up to 44 achievements (depending on other options) as additional locations.
-#    Shapesanity: Include up to 5664 shapes as additional locations."""
-#    display_name = "Additional locations"
-#    option_achievements = 0
-#    option_shapesanity = 1
-#    option_both = 2
-#    default = 0
+class IncludeAchievements(Toggle):
+    """Include up to 45 achievements (depending on other options) as additional locations."""
+    display_name = "Include Achievements"
+    default = True
 
 
-# class ExcludeSoftlockAchievements(Toggle):
-#    """Exclude 6 achievements, that can become unreachable in a save file, if not achieved until a certain level."""
-#    display_name = "Exclude softlock achievements"
-#    default = True
+class ExcludeSoftlockAchievements(Toggle):
+    """Exclude 6 achievements, that can become unreachable in a save file, if not achieved until a certain level."""
+    display_name = "Exclude softlock achievements"
+    default = True
 
 
-# class ExcludeLongPlaytimeAchievements(Toggle):
-#    """Exclude 2 achievements, that require actively playing for a really long time."""
-#    display_name = "Exclude long playtime achievements"
-#    default = True
+class ExcludeLongPlaytimeAchievements(Toggle):
+    """Exclude 2 achievements, that require actively playing for a really long time."""
+    display_name = "Exclude long playtime achievements"
+    default = True
 
 
-# class ExcludeProgressionUnreasonable(Toggle):
-#    """Exclude progression and useful items from being placed into softlock and long playtime achievements."""
-#    display_name = "Exclude progression items in softlock and long playtime achievements"
-#    default = True
+class ExcludeProgressionUnreasonable(Toggle):
+    """Exclude progression and useful items from being placed into softlock and long playtime achievements."""
+    display_name = "Exclude progression items in softlock and long playtime achievements"
+    default = True
 
 
 class ShapesanityAmount(Range):
@@ -211,11 +207,10 @@ class ShapezOptions(PerGameCommonOptions):
     same_late_upgrade_requirements: SameLateUpgradeRequirements
     early_balancer_tunnel_and_trash: EarlyBalancerTunnelAndTrash
     lock_belt_and_extractor: LockBeltAndExtractor
-    # additional_locations: AdditionalLocations
-    # exclude_softlock_achievements: ExcludeSoftlockAchievements
-    # exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements
-    # exclude_progression_unreasonable: ExcludeProgressionUnreasonable
+    include_achievements: IncludeAchievements
+    exclude_softlock_achievements: ExcludeSoftlockAchievements
+    exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements
+    exclude_progression_unreasonable: ExcludeProgressionUnreasonable
     shapesanity_amount: ShapesanityAmount
     traps_percentage: TrapsProbability
-#    include_background_music: IncludeBackgroundMusic
 
