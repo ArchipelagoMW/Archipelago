@@ -57,7 +57,7 @@ For performance reasons, AP only checks every entrance once. However, if entranc
 2. After that, the region is reached by the graph search.
 
 The entrance *would* now be determined to be traversable if it were rechecked, but it is not.
-To account for this case, AP would have to recheck all entrances every time a new region is reached, until no new regions are reached.
+To account for this case, AP would have to recheck all entrances every time a new region is reached until no new regions are reached.
 
 However, there is a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
 This keeps almost all of the performance upsides. Even a game making heavy use of indirect conditions (See: The Witness) is still significantly faster than if it just blanket "rechecked all entrances until nothing new is found".
