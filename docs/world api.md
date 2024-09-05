@@ -288,8 +288,8 @@ like entrance randomization in logic.
 
 Regions have a list called `exits`, containing `Entrance` objects representing transitions to other regions.
 
-There must be one special region, "Menu", from which the logic unfolds. AP assumes that a player will always be able to
-return to the "Menu" region by resetting the game ("Save and quit").
+There must be one special region (Called "Menu" by default, but configurable using [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L295-L296)),
+from which the logic unfolds. AP assumes that a player will always be able to return to this starting region by resetting the game ("Save and quit").
 
 ### Entrances
 
