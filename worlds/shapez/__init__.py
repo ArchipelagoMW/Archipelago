@@ -76,7 +76,8 @@ class ShapezWorld(World):
                 self.level_logic = [self.passthrough[f"Level building {i+1}"] for i in range(5)]
                 self.upgrade_logic = [self.passthrough[f"Upgrade building {i+1}"] for i in range(5)]
                 self.random_logic_phase_length = [self.passthrough[f"Phase {i} length"] for i in range(5)]
-                self.category_random_logic_amounts = {cat: self.passthrough[f"{cat} category buildings amount"] for cat in ["belt", "miner", "processors", "painting"]}
+                self.category_random_logic_amounts = {cat: self.passthrough[f"{cat} category buildings amount"]
+                                                      for cat in ["belt", "miner", "processors", "painting"]}
                 return
 
         # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
@@ -256,7 +257,6 @@ class ShapezWorld(World):
 
         return {**level_logic_data, **upgrade_logic_data, **option_data, **logic_type_random_data,
                 **logic_type_cat_random_data, "seed": self.client_seed, "shapesanity": shapesanity_list}
-    
-    def interpret_slot_data(self, slot_data: dict[str, any]):
-        return slot_data
 
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        return slot_data
