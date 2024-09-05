@@ -35,7 +35,7 @@ When a world is unmaintained, the [core maintainers](https://github.com/orgs/Arc
 can vote for a new maintainer if there is a candidate.
 For a vote to pass, the majority of participating core maintainers must vote in the affirmative.
 The time limit is 1 week, but can end early if the majority is reached earlier.
-Voting shall be conducted on Discord in #ap-world-dev.
+Voting shall be conducted on Discord in #ap-core-dev.
 
 ## Dropping out
 
