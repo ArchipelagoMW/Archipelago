@@ -26,8 +26,16 @@ Unless these are shared between multiple people, we expect the following from ea
 ### Adding a World
 
 When we merge your world into the core Archipelago repository, you automatically become world maintainer unless you
-nominate someone else (i.e. there are multiple devs). You can define who is allowed to approve changes to your world
-in the [CODEOWNERS](/docs/CODEOWNERS) document.
+nominate someone else (i.e. there are multiple devs).
+
+### Being added as a maintainer to an existing implementation
+
+At any point, a world maintainer can approve the addition of another world maintainer to their world.  
+This can be done through an update of the [CODEOWNERS](/docs/CODEOWNERS) document.  
+One of the involved parties can open a pull request with a change to this document. This PR must then be approved by all of the other involved parties.
+
+This should usually be a quick process, but core reserves its right to make their own assessment.  
+For example, adding 5 people who we have never heard of might raise some questions.
 
 ### Getting Voted
 
