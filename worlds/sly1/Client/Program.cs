@@ -1,19 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Archipelago.PCSX2;
-using Archipelago.Core.Models;
-using Sly1AP.Models;
-using Archipelago.Core.Util;
-using Newtonsoft.Json;
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection.PortableExecutable;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Archipelago.Core;
-using System.IO.Pipes;
-using System.Security.Cryptography.X509Certificates;
+using Archipelago.Core.Models;
+using Archipelago.Core.Util;
+using Archipelago.PCSX2;
+using Sly1AP.Models;
 
 namespace Sly1AP
 {
@@ -49,7 +40,17 @@ namespace Sly1AP
                 {
                     Memory.Write(0x2027D7AC, 1);
                 }
-                Thread.Sleep(1);
+                if (Memory.ReadByte(0x202623C0) == 0)
+                {
+                    Thread.Sleep(1000);
+                    if (Memory.ReadByte(0x202623C0) == 0)
+                    {
+                        Console.WriteLine("Lost connection to PCSX2. Press any key to exit.");
+                        Console.ReadKey();
+                        return;
+                    }
+                }
+                Thread.Sleep(100);
             }
         }
 
@@ -82,8 +83,8 @@ namespace Sly1AP
             ArchipelagoClient Client = new(client);
             await Client.Connect(address, "Sly Cooper and the Thievius Raccoonus");
             var locations = Helpers.GetLocations();
-            Client.PopulateLocations(locations);
             await Client.Login(playerName, password);
+            Client.PopulateLocations(locations);
             //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
             ConfigureOptions(Client.Options);
             UpdateStart();
@@ -102,10 +103,6 @@ namespace Sly1AP
                 if (item.Id >= 10020021 & item.Id <= 10020024)
                 {
                     UpdateLevels(item.Id);
-                }
-                if (item.Id >= 10020019 & item.Id <= 10020020)
-                {
-                    UpdateJunk(item.Id);
                 }
             }
             foreach (var loc in SentLocations)
@@ -165,22 +162,22 @@ namespace Sly1AP
             if (options.ContainsKey("StartingEpisode"))
             {
                 string StartingEpisode = Convert.ToString(options["StartingEpisode"]);
-                if (StartingEpisode == "Tide Of Terror")
+                if (StartingEpisode == "Tide Of Terror" & Memory.ReadInt(0x2027C67C) == 0)
                 {
                     keys.RaleighStart = 1;
                     Memory.Write(0x2027C67C, keys.RaleighStart);
                 }
-                if (StartingEpisode == "Sunset Snake Eyes")
+                if (StartingEpisode == "Sunset Snake Eyes" & Memory.ReadInt(0x2027CAC8) == 0)
                 {
                     keys.MuggshotStart = 1;
                     Memory.Write(0x2027CAC8, keys.MuggshotStart);
                 }
-                if (StartingEpisode == "Vicious Voodoo")
+                if (StartingEpisode == "Vicious Voodoo" & Memory.ReadInt(0x2027CF14) == 0)
                 {
                     keys.MzRubyStart = 1;
                     Memory.Write(0x2027CF14, keys.MzRubyStart);
                 }
-                if (StartingEpisode == "Fire In The Sky")
+                if (StartingEpisode == "Fire In The Sky" & Memory.ReadInt(0x2027D360) == 0)
                 {
                     keys.PandaKingStart = 1;
                     Memory.Write(0x2027D360, keys.PandaKingStart);
@@ -362,11 +359,23 @@ namespace Sly1AP
             Memory.Write(0x2027CF00, keys.MuggshotKeys);
             Memory.Write(0x2027D34C, keys.MzRubyKeys);
             Memory.Write(0x2027D798, keys.PandaKingKeys);
-            //Make all maps selectable from the start.
-            Memory.Write(0x2027CAC4, keys.Map);
-            Memory.Write(0x2027CF10, keys.Map);
-            Memory.Write(0x2027D35C, keys.Map);
-            Memory.Write(0x2027D7A8, keys.Map);
+            //Make all maps selectable.
+            if (Memory.ReadInt(0x2027CAC4) == 0)
+            {
+                Memory.Write(0x2027CAC4, keys.Map);
+            }
+            if (Memory.ReadInt(0x2027CF10) == 0)
+            {
+                Memory.Write(0x2027CF10, keys.Map);
+            }
+            if (Memory.ReadInt(0x2027D35C) == 0)
+            {
+                Memory.Write(0x2027D35C, keys.Map);
+            }
+            if (Memory.ReadInt(0x2027D7A8) == 0)
+            {
+                Memory.Write(0x2027D7A8, keys.Map);
+            }
             return;
         }
         public static void GetValues()

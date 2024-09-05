@@ -23,8 +23,8 @@ class Sly1Web(WebWorld):
 
 class Sly1World(World):
     """
-    Sly Cooper and the Thievius Raccoonus is a action stealth game.
-    Avenge your father and take back the pages of the Thievius Raccoonus from the fiendish five.
+    Sly Cooper and the Thievius Raccoonus is a action-stealth game set in a cartoony cel-shaded world.
+    Avenge your father and take back the pages of the Thievius Raccoonus from the Fiendish Five!
     """
 
     game = "Sly Cooper and the Thievius Raccoonus"

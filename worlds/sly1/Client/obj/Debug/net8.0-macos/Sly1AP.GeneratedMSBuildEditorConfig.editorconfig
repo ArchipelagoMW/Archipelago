@@ -1,5 +1,5 @@
 is_global = true
-build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0-macos
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = 
 build_property.ProjectTypeGuids = 

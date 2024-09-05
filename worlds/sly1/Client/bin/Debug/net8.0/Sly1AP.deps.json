@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "Sly1AP/1.0.0": {
         "dependencies": {
-          "Archipelago.Core": "0.0.6",
+          "Archipelago.Core": "0.0.8",
           "Archipelago.MultiClient.Net": "6.3.1",
           "Archipelago.PCSX2": "0.0.5"
         },
@@ -16,7 +16,7 @@
           "Sly1AP.dll": {}
         }
       },
-      "Archipelago.Core/0.0.6": {
+      "Archipelago.Core/0.0.8": {
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.3.1",
           "Newtonsoft.Json": "13.0.3"
@@ -38,7 +38,7 @@
       },
       "Archipelago.PCSX2/0.0.5": {
         "dependencies": {
-          "Archipelago.Core": "0.0.6",
+          "Archipelago.Core": "0.0.8",
           "Microsoft.CSharp": "4.7.0",
           "Newtonsoft.Json": "13.0.3",
           "System.Data.DataSetExtensions": "4.5.0"
@@ -68,12 +68,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Archipelago.Core/0.0.6": {
+    "Archipelago.Core/0.0.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-fcVMKTvSEjoDuau12t3Fdo82556yJ/UgSVDCGcf+JvIuide1qBDI9gygWU5AzvQOxL3Dr6HeezcVR4b2h0/3uw==",
-      "path": "archipelago.core/0.0.6",
-      "hashPath": "archipelago.core.0.0.6.nupkg.sha512"
+      "sha512": "sha512-v6qJjttRBj8sfbC6TebwIf7iLuS7I63hpLJuDvPr5/VEKJVpc9/kmCVS6UWalNjmcTMVfeGha2nhZMNj4x3HGw==",
+      "path": "archipelago.core/0.0.8",
+      "hashPath": "archipelago.core.0.0.8.nupkg.sha512"
     },
     "Archipelago.MultiClient.Net/6.3.1": {
       "type": "package",
