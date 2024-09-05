@@ -3,6 +3,7 @@ using System.Text;
 using Archipelago.Core;
 using Archipelago.Core.Models;
 using Archipelago.Core.Util;
+using Archipelago.MultiClient.Net.Packets;
 using Archipelago.PCSX2;
 using Sly1AP.Models;
 
@@ -90,7 +91,9 @@ namespace Sly1AP
             UpdateStart();
             var SentLocations = Client.GameState.CompletedLocations;
             var ReceivedItems = Client.GameState.ReceivedItems;
-            foreach (var item in ReceivedItems)
+            var NewItems = new List<Item>(ReceivedItems);
+            var NewLocations = new List<Location>(SentLocations);
+            foreach (var item in NewItems)
             {
                 if (item.Id >= 10020001 & item.Id <= 100200014)
                 {
@@ -105,7 +108,7 @@ namespace Sly1AP
                     UpdateLevels(item.Id);
                 }
             }
-            foreach (var loc in SentLocations)
+            foreach (var loc in NewLocations)
             {
                 if (loc.Name == "Paris Files")
                 {
