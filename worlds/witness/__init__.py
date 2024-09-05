@@ -204,11 +204,10 @@ class WitnessWorld(World):
             ]
             if early_items:
                 random_early_item = self.random.choice(early_items)
-                if (
-                    self.options.puzzle_randomization == "sigma_expert"
-                    or self.options.victory_condition == "panel_hunt"
-                ):
-                    # In Expert and Panel Hunt, only tag the item as early, rather than forcing it onto the gate.
+                mode = self.options.puzzle_randomization
+                if mode == "sigma_expert" or mode == "umbra_variety" or self.options.victory_condition == "panel_hunt":
+                    # In Expert and Variety, only tag the item as early, rather than forcing it onto the gate.
+                    # Same with panel hunt, since the Tutorial Gate Open panel is used for something else
                     self.multiworld.local_early_items[self.player][random_early_item] = 1
                 else:
                     # Force the item onto the tutorial gate check and remove it from our random pool.
@@ -255,7 +254,7 @@ class WitnessWorld(World):
             self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
 
             warning(
-                f"""Location "{loc}" had to be added to {self.player_name}'s world 
+                f"""Location "{loc}" had to be added to {self.player_name}'s world
                 due to insufficient sphere 1 size."""
             )
 
