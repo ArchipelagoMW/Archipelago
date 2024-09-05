@@ -52,13 +52,11 @@ The world API document mentions indirect conditions and **when** you should use 
 
 Region sweep (the algorithm that determines which regions are reachable) is a Breadth First Search of the region graph from the Menu region, checking entrances one by one and adding newly reached nodes (regions) and their entrances to the queue until there is nothing more to check.
 
-However, if entrance access conditions depend on regions, then it is possible for this to happen:
+For performance reasons AP only checks every entrance once. However, if entrance access conditions depend on regions, then it is possible for this to happen:
 1. An entrance that depends on a region is checked and determined to be nontraversable because the region hasn't been reached yet during the graph search.
 2. After that, the region is reached by the graph search. The entrance *would* now be determined to be traversable if it were rechecked.
 
-To account for this case, we would have to recheck all entrances every time a new region is reached, until no new regions are reached.
-
-Because most games do not check for region access inside of entrance access conditions, AP has decided to **eschew this rechecking** and just checks every entrance once. This gives a significant performance gain to AP as a whole, about 30%-50%.
+To account for this case, AP would have to recheck all entrances every time a new region is reached, until no new regions are reached.
 
 However, there is a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
 This keeps almost all of the performance upsides. Even a game making heavy use of indirect conditions (See: The Witness) is still way way faster than if it just blanket "rechecked all entrances until nothing new is found".
