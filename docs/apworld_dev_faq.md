@@ -63,4 +63,5 @@ This keeps almost all of the performance upsides. Even a game making heavy use o
 The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is simple: They call `region.can_reach` on their respective parent/source region.
 
 We recognize it can feel like a trap since it will not alert you when you are missing an indirect condition, and that some games have very complex access rules.
-There is an open Pull Request that makes this behavior optional via a world class attribute: [Core: Region handling customization](https://github.com/ArchipelagoMW/Archipelago/pull/3682).
+As of [PR #3682 (Core: Region handling customization)](https://github.com/ArchipelagoMW/Archipelago/pull/3682) being merged, it is also possible for a world to opt out of indirect conditions entirely, although it does come at a flat performance cost.
+It should only be used by games that *really* need it. For most games, it should be reasonable to know all entrance->region dependencies, and in this case, indirect conditions are still preferred because they are faster.
