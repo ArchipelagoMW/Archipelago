@@ -87,8 +87,8 @@ namespace Sly1AP
             await Client.Login(playerName, password);
             Client.PopulateLocations(locations);
             //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
-            ConfigureOptions(Client.Options);
             UpdateStart();
+            ConfigureOptions(Client.Options);
             var SentLocations = Client.GameState.CompletedLocations;
             var ReceivedItems = Client.GameState.ReceivedItems;
             var NewItems = new List<Item>(ReceivedItems);
@@ -400,10 +400,10 @@ namespace Sly1AP
             Memory.Write(0x2027CF00, 0);
             Memory.Write(0x2027D34C, 0);
             Memory.Write(0x2027D798, 0);
-            Memory.Write(0x2027C67C, 0);
-            Memory.Write(0x2027CAC8, 0);
-            Memory.Write(0x2027CF14, 0);
-            Memory.Write(0x2027D360, 0);
+            // Memory.Write(0x2027C67C, 0);
+            // Memory.Write(0x2027CAC8, 0);
+            // Memory.Write(0x2027CF14, 0);
+            // Memory.Write(0x2027D360, 0);
             GetValues();
         }
     }
