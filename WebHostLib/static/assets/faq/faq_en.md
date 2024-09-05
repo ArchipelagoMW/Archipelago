@@ -77,4 +77,4 @@ There, you will find examples of games in the `worlds` folder:
 You may also find developer documentation in the `docs` folder:  
 [/docs Folder in Archipelago Code](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs).
 
-If you have more questions, feel free to ask in the **#archipelago-dev** channel on our Discord.
+If you have more questions, feel free to ask in the **#ap-world-dev** channel on our Discord.
