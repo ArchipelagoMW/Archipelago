@@ -51,7 +51,7 @@ for example when they become unreachable.
 For a vote to pass, the majority of participating core maintainers must vote in the affirmative.
 The time limit is 2 weeks, but can end early if the majority is reached earlier AND the world maintainer was pinged and
 made their case or was pinged and has been unreachable for more than 2 weeks already.
-Voting shall be conducted on Discord in #ap-world-dev. Commits that are a direct result of the voting shall include
+Voting shall be conducted on Discord in #ap-core-dev. Commits that are a direct result of the voting shall include
 date, voting members and final result in the commit message.
 
 ## Handling of Unmaintained Worlds
