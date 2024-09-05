@@ -328,6 +328,9 @@ Even doing `state.can_reach_location` or `state.can_reach_entrance` is problemat
 You can use `multiworld.register_indirect_condition(region, entrance)` to explicitly tell the generator that, when a given region becomes accessible, it is necessary to re-check a specific entrance.
 You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the relevant code and can reason why it will never lead to problems in your case.
 
+Alternatively, you can set [world.explicit_indirect_conditions = False]([https://github.com/ArchipelagoMW/Archipelago/pull/3682](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L301)),
+in which case your world takes a flat performance hit to not have to worry about indirect conditions.
+
 ### Item Rules
 
 An item rule is a function that returns `True` or `False` for a `Location` based on a single item. It can be used to
