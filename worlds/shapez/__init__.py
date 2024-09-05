@@ -178,13 +178,13 @@ class ShapezWorld(World):
                                                      self.category_random_logic_amounts),
                                        **addshapesanity(self.options.shapesanity_amount.value, self.random)}
         if self.options.include_achievements:
-            self.included_locations += addachievements(bool(self.options.exclude_softlock_achievements),
-                                                       bool(self.options.exclude_long_playtime_achievements),
-                                                       bool(self.options.exclude_progression_unreasonable),
-                                                       self.maxlevel, self.options.randomize_upgrade_logic.current_key,
-                                                       self.category_random_logic_amounts,
-                                                       self.options.goal.current_key,
-                                                       self.included_locations)
+            self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
+                                                           bool(self.options.exclude_long_playtime_achievements),
+                                                           bool(self.options.exclude_progression_unreasonable),
+                                                           self.maxlevel, self.options.randomize_upgrade_logic.current_key,
+                                                           self.category_random_logic_amounts,
+                                                           self.options.goal.current_key,
+                                                           self.included_locations))
 
         self.location_count = len(self.included_locations)
 
