@@ -52,7 +52,7 @@ The world API document mentions indirect conditions and **when** you should use 
 
 Region sweep (the algorithm that determines which regions are reachable) is a Breadth-First Search of the region graph from the origin region, checking entrances one by one and adding newly reached nodes (regions) and their entrances to the queue until there is nothing more to check.
 
-For performance reasons, AP only checks every entrance once. However, if entrance access conditions depend on regions, then it is possible for this to happen:
+For performance reasons, AP only checks every entrance once. However, if an entrance's access condition depends on regions, then it is possible for this to happen:
 1. An entrance that depends on a region is checked and determined to be nontraversable because the region hasn't been reached yet during the graph search.
 2. After that, the region is reached by the graph search.
 
