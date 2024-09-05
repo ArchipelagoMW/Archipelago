@@ -30,15 +30,13 @@ nominate someone else (i.e. there are multiple devs).
 
 ### Being added as a maintainer to an existing implementation
 
-At any point, a world maintainer can authorize the addition of another world maintainer to their world.  
+At any point, a world maintainer can approve the addition of another world maintainer to their world.  
 This can be done through an update of the [CODEOWNERS](/docs/CODEOWNERS) document.  
 Specifically, one of the involved parties should open a pull request with a change to this document. This PR must be
-approved by all existing maintainers of the world, the new world maintainer candidate, and one core maintainer.
+approved by all existing maintainers of the world and the new world maintainer candidate.  
+Finally, the PR must be approved by one core maintainer. It is recommended that you add some information to the PR
+description about what contributions the new world maintainer has made to help the core maintainer make this final call.
 
-This should usually be a quick process, but core reserves its right to make their own assessment.  
-For example, adding 5 people who we have never heard of might raise some questions.  
-Adding some information to the PR description about contributions the new world maintainer candidate has made should
-help in this regard.
 
 ### Getting Voted
 
