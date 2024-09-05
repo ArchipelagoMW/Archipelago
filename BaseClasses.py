@@ -1088,9 +1088,9 @@ class Region:
             exits = dict.fromkeys(exits)
         return [
             self.connect(
-              self.multiworld.get_region(connecting_region, self.player),
-              name,
-              rules[connecting_region] if rules and connecting_region in rules else None,
+                self.multiworld.get_region(connecting_region, self.player),
+                name,
+                rules[connecting_region] if rules and connecting_region in rules else None,
             )
             for connecting_region, name in exits.items()
         ]
