@@ -140,7 +140,7 @@ options in a yaml. The flags are as follows:
 * `spoiler` (`0b1000`): This option shows up in spoiler logs
 
 ```python
-from Options import Visibility
+from Options import Choice, Visibility
 
 class HiddenChoiceOption(Choice):
     visibility = Visibility.none
