@@ -114,7 +114,7 @@ class Wargroove2World(World):
 
         # Matching number of unfilled locations with filler items
         total_locations = 0
-        total_locations += self.get_total_locations_in_level(self.first_level)
+        total_locations += self.get_total_locations_in_level(first_level)
 
         for level in self.level_list[0:LEVEL_COUNT]:
             total_locations += self.get_total_locations_in_level(level)

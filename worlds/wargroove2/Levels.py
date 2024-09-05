@@ -63,14 +63,14 @@ class Wargroove2Level:
             loc_id = location_table.get(location_name, 0)
             extras = 1
             if loc_id is not None and location_name.endswith("Victory"):
-                extras = world.worlds[player].options.victory_locations.value
+                extras = world.options.victory_locations.value
             elif loc_id is not None:
-                extras = world.worlds[player].options.objective_locations.value
+                extras = world.options.objective_locations.value
             for i in range(1, extras):
-                set_rule(world.get_location(location_name + f" Extra {i}", player), lambda state, rule=rule:
-                state.can_reach_region(self.region_name, player) and rule(state)() and additional_rule(state))
+                set_rule(world.get_location(location_name + f" Extra {i}"), lambda state, rule=rule:
+                state.can_reach_region(self.region_name, player) and rule(state, player)() and additional_rule(state))
         region = world.get_region(self.region_name)
-        set_region_exit_rules(region, world, player, self.victory_locations, operator='and')
+        set_region_exit_rules(region, world, self.victory_locations, operator='and')
 
     def define_region(self, name: str, multiworld: MultiWorld, player: int, exits=None) -> Region:
         self.region_name = name
