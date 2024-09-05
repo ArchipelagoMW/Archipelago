@@ -130,7 +130,9 @@ class Difficulty(Choice):
 ```
 
 ### Option Visibility
-Every option has a Visibility IntFlag, defaulting to `all` (`0b1111`). This lets you choose where the option will be displayed. The flags are:
+Every option has a Visibility IntFlag, defaulting to `all` (`0b1111`). This lets you choose where the option will be
+displayed. This only impacts where options are displayed, not how they can be used. Hidden options are still valid
+options in a yaml. The flags are as follows:
 * `none` (`0b0000`): This option is not shown anywhere
 * `template` (`0b0001`): This option shows up in template yamls
 * `simple_ui` (`0b0010`): This option shows up on the options page
