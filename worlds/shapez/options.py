@@ -181,12 +181,12 @@ class LockBeltAndExtractor(Toggle):
 
 
 class ShapesanityAmount(Range):
-    """Amount of one-layer-shapes that will be included as locations."""
+    """Amount of single-layer shapes that will be included as locations."""
     display_name = "Shapesanity amount"
     rich_text_doc = True
     range_start = 4
-    range_end = 5664
-    default = 100
+    range_end = 60920
+    default = 50
 
 
 class TrapsProbability(Range):
