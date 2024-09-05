@@ -62,11 +62,11 @@ def color_to_needed_building(color_list: List[str]) -> str:
     return "Uncolored"
 
 
-shapesanity_simple: dict[str, str] = {}
-shapesanity_1_4: dict[str, str] = {}
-shapesanity_two_sided: dict[str, str] = {}
-shapesanity_three_parts: dict[str, str] = {}
-shapesanity_four_parts: dict[str, str] = {}
+shapesanity_simple: Dict[str, str] = {}
+shapesanity_1_4: Dict[str, str] = {}
+shapesanity_two_sided: Dict[str, str] = {}
+shapesanity_three_parts: Dict[str, str] = {}
+shapesanity_four_parts: Dict[str, str] = {}
 
 for shape in ["Circle", "Square", "Star"]:
     for color in ["Red", "Blue", "Green", "Yellow", "Purple", "Cyan", "White", "Uncolored"]:
