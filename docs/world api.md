@@ -329,7 +329,7 @@ You can use `multiworld.register_indirect_condition(region, entrance)` to explic
 You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the relevant code and can reason why it will never lead to problems in your case.
 
 Alternatively, you can set [world.explicit_indirect_conditions = False](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L301),
-in which case your world takes a flat performance hit to not have to worry about indirect conditions.
+avoiding the need for indirect conditions at the expense of performance.
 
 ### Item Rules
 
