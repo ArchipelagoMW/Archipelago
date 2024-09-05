@@ -34,7 +34,7 @@ At any point, a world maintainer can approve the addition of another maintainer 
 This can be done through an update of the [CODEOWNERS](/docs/CODEOWNERS) document.  
 Specifically, one of the involved parties should open a pull request with a change to this document. This PR must be
 approved by all existing maintainers of the world and the new world maintainer candidate.  
-Finally, the PR must be approved by one core maintainer. It is recommended that you add some information to the PR
+Finally, the addition must be approved by one core maintainer. It is recommended that you add some information to the PR
 description about what contributions the new world maintainer has made to help the core maintainer make this final call.
 
 
