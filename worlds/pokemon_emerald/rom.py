@@ -114,6 +114,14 @@ class PokemonEmeraldProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
+    # TODO: Remove when the base patch is updated to include this change
+    # Moves an NPC to avoid overlapping people during trainersanity
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x53A298 + (0x18 * 7) + 4,  # Space Center 1F event address + 8th event + 4-byte offset for x coord
+        struct.pack("<H", 11)
+    )
+
     # Set free fly location
     if world.options.free_fly_location:
         patch.write_token(
@@ -817,6 +825,8 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", patch: Pokemon
 
 
 def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
+    FORTREE_MOVE_TUTOR_INDEX = 24
+
     if easter_egg[0] == 2:
         for i in range(30):
             patch.write_token(
@@ -840,18 +850,26 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmer
     # Always set Fortree move tutor to Dig
     patch.write_token(
         APTokenTypes.WRITE,
-        data.rom_addresses["gTutorMoves"] + (24 * 2),
+        data.rom_addresses["gTutorMoves"] + (FORTREE_MOVE_TUTOR_INDEX * 2),
         struct.pack("<H", data.constants["MOVE_DIG"])
     )
 
     # Modify compatibility
     if world.options.tm_tutor_compatibility.value != -1:
         for species in data.species.values():
+            compatibility = bool_array_to_int([
+                world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value
+                for _ in range(32)
+            ])
+
+            # Make sure Dig tutor has reasonable (>=50%) compatibility
+            if world.options.tm_tutor_compatibility.value < 50:
+                compatibility &= ~(1 << FORTREE_MOVE_TUTOR_INDEX)
+                if world.random.random() < 0.5:
+                    compatibility |= 1 << FORTREE_MOVE_TUTOR_INDEX
+
             patch.write_token(
                 APTokenTypes.WRITE,
                 data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),
-                struct.pack("<I", bool_array_to_int([
-                    world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value
-                    for _ in range(32)
-                ]))
+                struct.pack("<I", compatibility)
             )
