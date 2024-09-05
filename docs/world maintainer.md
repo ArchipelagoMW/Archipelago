@@ -37,7 +37,6 @@ approved by all existing maintainers of the world and the new world maintainer c
 Finally, the addition must be approved by one core maintainer. To help them make this final call, it is recommended that
 you add some information to the PR description about what contributions the new world maintainer has made to the world.
 
-
 ### Getting Voted
 
 When a world is unmaintained, the [core maintainers](https://github.com/orgs/ArchipelagoMW/people)
