@@ -348,9 +348,12 @@ class ValidInventory:
         if not {item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer/Warp Ray/Dawnbringer)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer/Warp Ray/Dawnbringer)")]
-        if not {item_names.CARRIER, item_names.SKYLORD, item_names.PURGER} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Carrier/Skylord/Purger)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Skylord/Purger)")]
+        if not {item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Carrier/Skylord/Trireme)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Skylord/Trireme)")]
+        if not {item_names.CARRIER, item_names.TRIREME} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Carrier/Trireme)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Trireme)")]
         if not {item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator/Stalwart)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator/Stalwart)")]
