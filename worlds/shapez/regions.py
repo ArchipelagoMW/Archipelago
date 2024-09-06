@@ -1,6 +1,6 @@
 from typing import Dict, Tuple, List
 
-from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification
+from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification, CollectionState
 from .items import ShapezItem
 from .locations import ShapezLocation
 from worlds.generic.Rules import add_rule
@@ -24,12 +24,69 @@ all_regions = [
     "Stored Shape Achievements",
     "Trashed Shape Achievements",
     "Wiring Achievements",
+    "MAM needed",
     "All Buildings Shapes"
 ] + [
   f"Shapesanity {processing} {coloring}"
   for processing in ["Unprocessed", "Cut", "Cut Rotated", "Stitched", "Half-Half"]
   for coloring in ["Uncolored", "Mixed", "Painted"]
 ]
+
+
+def has_cutter(state: CollectionState, player: int) -> bool:
+    return state.has("Cutter", player)
+
+
+def has_rotator(state: CollectionState, player: int) -> bool:
+    return state.has_any(["Rotator", "Rotator (CCW)"], player)
+
+
+def has_stacker(state: CollectionState, player: int) -> bool:
+    return state.has("Stacker", player)
+
+
+def has_painter(state: CollectionState, player: int) -> bool:
+    return state.has_any(["Painter", "Double Painter", "Quad Painter"], player)
+
+
+def has_mixer(state: CollectionState, player: int) -> bool:
+    return state.has("Color Mixer", player)
+
+
+def has_tunnel(state: CollectionState, player: int) -> bool:
+    return state.has_any(["Tunnel", "Tunnel Tier II"], player)
+
+
+def has_balancer(state: CollectionState, player: int) -> bool:
+    return state.has("Balancer", player) or state.has_all(["Compact Merger", "Compact Splitter"], player)
+
+
+def can_build_mam(state: CollectionState, player: int) -> bool:
+    return has_cutter(state, player) and has_rotator(state, player) and has_stacker(state, player) and \
+           has_painter(state, player) and has_mixer(state, player) and has_balancer(state, player) and \
+           has_tunnel(state, player) and state.has_all(["Belt Reader", "Storage", "Item Filter", "Wires",
+                                                        "Logic Gates", "Virtual Processing"], player)
+
+
+def has_cutter_rotator(state: CollectionState, player: int) -> bool:
+    return (has_cutter(state, player) and has_rotator(state, player)) or state.has("Quad Cutter", player)
+
+
+def has_logic_list_building(state: CollectionState, player: int, buildings: str, includeuseful: bool) -> bool:
+    if includeuseful:
+        useful = state.has("Trash", player) and has_balancer(state, player) and has_tunnel(state, player)
+    else:
+        useful = True
+    if buildings == "Cutter":
+        return useful and has_cutter(state, player)
+    elif buildings == "Rotator":
+        return useful and has_cutter_rotator(state, player)
+    elif buildings == "Stacker":
+        return useful and has_stacker(state, player)
+    elif buildings == "Painter":
+        return useful and has_painter(state, player)
+    elif buildings == "Color Mixer":
+        return useful and has_mixer(state, player)
 
 
 def create_shapez_regions(player: int, multiworld: MultiWorld,
@@ -60,92 +117,100 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
 
     # Create Entrances for regions
     regions["Main"].connect(regions["Cut Shape Achievements"], "Cutter needed",
-                            lambda state: state.has("Cutter", player))
+                            lambda state: has_cutter(state, player))
     regions["Main"].connect(regions["Rotated Shape Achievements"], "Rotator needed",
-                            lambda state: state.has("Rotator", player))
+                            lambda state: has_rotator(state, player))
     regions["Main"].connect(regions["Stacked Shape Achievements"], "Stacker needed",
-                            lambda state: state.has("Stacker", player))
+                            lambda state: has_stacker(state, player))
     regions["Main"].connect(regions["Painted Shape Achievements"], "Painter needed",
-                            lambda state: state.has("Painter", player))
+                            lambda state: has_painter(state, player))
     regions["Main"].connect(regions["Stored Shape Achievements"], "Storage needed",
                             lambda state: state.has("Storage", player))
     regions["Main"].connect(regions["Trashed Shape Achievements"], "Trash needed",
                             lambda state: state.has("Trash", player))
     regions["Main"].connect(regions["Wiring Achievements"], "Wires needed",
                             lambda state: state.has("Wires", player))
+    regions["Main"].connect(regions["MAM needed"], "Building a MAM",
+                            lambda state: can_build_mam(state, player))
 
     regions["Main"].connect(regions["All Buildings Shapes"], "All buildings needed",
-                            lambda state: state.has_all(["Cutter", "Rotator", "Stacker",
-                                                         "Painter", "Color Mixer"], player))
-
-    # Add balancer, tunnel, and trash to early items if options say so
-    level_buildings_3_needed: List[str] = [level_logic_buildings[2]]
-    level_buildings_5_needed: List[str] = [level_logic_buildings[4]]
-    upgrade_buildings_3_needed: List[str] = [upgrade_logic_buildings[2]]
-    upgrade_buildings_5_needed: List[str] = [upgrade_logic_buildings[4]]
-    if early_useful == "3_buildings":
-        level_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
-        upgrade_buildings_3_needed.extend(["Balancer", "Tunnel", "Trash"])
-    elif early_useful == "5_buildings":
-        level_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
-        upgrade_buildings_5_needed.extend(["Balancer", "Tunnel", "Trash"])
+                            lambda state: has_cutter(state, player) and has_rotator(state, player) and
+                                          has_stacker(state, player) and has_painter(state, player) and
+                                          has_mixer(state, player))
 
     regions["Main"].connect(regions["Levels with 1 Building"], "First level building needed",
-                            lambda state: state.has(level_logic_buildings[0], player))
+                            lambda state: has_logic_list_building(state, player, level_logic_buildings[0], False))
     regions["Levels with 1 Building"].connect(regions["Levels with 2 Buildings"], "Second level building needed",
-                                              lambda state: state.has(level_logic_buildings[1], player))
+                                              lambda state: has_logic_list_building(state, player,
+                                                                                    level_logic_buildings[1], False))
     regions["Levels with 2 Buildings"].connect(regions["Levels with 3 Buildings"], "Third level building needed",
-                                               lambda state: state.has_all(level_buildings_3_needed, player))
+                                               lambda state: has_logic_list_building(state, player,
+                                                                                     level_logic_buildings[2],
+                                                                                     early_useful == "3_buildings"))
     regions["Levels with 3 Buildings"].connect(regions["Levels with 4 Buildings"], "Fourth level building needed",
-                                               lambda state: state.has(level_logic_buildings[3], player))
+                                               lambda state: has_logic_list_building(state, player,
+                                                                                     level_logic_buildings[3], False))
     regions["Levels with 4 Buildings"].connect(regions["Levels with 5 Buildings"], "Fifth level building needed",
-                                               lambda state: state.has_all(level_buildings_5_needed, player))
+                                               lambda state: has_logic_list_building(state, player,
+                                                                                     level_logic_buildings[4],
+                                                                                     early_useful == "5_buildings"))
     regions["Main"].connect(regions["Upgrades with 1 Building"], "First upgrade building needed",
-                            lambda state: state.has(upgrade_logic_buildings[0], player))
+                            lambda state: has_logic_list_building(state, player, upgrade_logic_buildings[0], False))
     regions["Upgrades with 1 Building"].connect(regions["Upgrades with 2 Buildings"], "Second upgrade building needed",
-                                                lambda state: state.has(upgrade_logic_buildings[1], player))
+                                                lambda state: has_logic_list_building(state, player,
+                                                                                      upgrade_logic_buildings[1],
+                                                                                      False))
     regions["Upgrades with 2 Buildings"].connect(regions["Upgrades with 3 Buildings"], "Third upgrade building needed",
-                                                 lambda state: state.has_all(upgrade_buildings_3_needed, player))
+                                                 lambda state: has_logic_list_building(state, player,
+                                                                                       upgrade_logic_buildings[2],
+                                                                                       early_useful == "3_buildings"))
     regions["Upgrades with 3 Buildings"].connect(regions["Upgrades with 4 Buildings"], "Fourth upgrade building needed",
-                                                 lambda state: state.has(upgrade_logic_buildings[3], player))
+                                                 lambda state: has_logic_list_building(state, player,
+                                                                                       upgrade_logic_buildings[3],
+                                                                                       False))
     regions["Upgrades with 4 Buildings"].connect(regions["Upgrades with 5 Buildings"], "Fifth upgrade building needed",
-                                                 lambda state: state.has_all(upgrade_buildings_5_needed, player))
+                                                 lambda state: has_logic_list_building(state, player,
+                                                                                       upgrade_logic_buildings[4],
+                                                                                       early_useful == "5_buildings"))
 
     regions["Main"].connect(regions["Shapesanity Unprocessed Uncolored"], "Shapesanity nothing",
                             lambda state: True)
     regions["Main"].connect(regions["Shapesanity Unprocessed Painted"], "Shapesanity painting",
-                            lambda state: state.has("Painter", player))
+                            lambda state: has_painter(state, player))
     regions["Shapesanity Unprocessed Painted"].connect(regions["Shapesanity Unprocessed Mixed"], "Shapesanity mixing",
-                                                       lambda state: state.has("Color Mixer", player))
+                                                       lambda state: has_mixer(state, player))
     regions["Main"].connect(regions["Shapesanity Cut Uncolored"], "Shapesanity cutting",
-                            lambda state: state.has("Cutter", player))
+                            lambda state: has_cutter(state, player))
     regions["Shapesanity Cut Uncolored"].connect(regions["Shapesanity Cut Painted"], "Shapesanity painting cut",
-                                                 lambda state: state.has("Painter", player))
+                                                 lambda state: has_painter(state, player))
     regions["Shapesanity Cut Painted"].connect(regions["Shapesanity Cut Mixed"], "Shapesanity mixing cut",
-                                               lambda state: state.has("Color Mixer", player))
+                                               lambda state: has_mixer(state, player))
+    regions["Main"].connect(regions["Shapesanity Cut Rotated Uncolored"], "Shapesanity quad cutting",
+                            lambda state: has_cutter_rotator(state, player))
     regions["Shapesanity Cut Uncolored"].connect(regions["Shapesanity Cut Rotated Uncolored"],
                                                  "Shapesanity rotating cut",
-                                                 lambda state: state.has("Rotator", player))
-    regions["Shapesanity Cut Painted"].connect(regions["Shapesanity Cut Rotated Painted"],
-                                               "Shapesanity rotating cut painted",
-                                               lambda state: state.has("Rotator", player))
-    regions["Shapesanity Cut Mixed"].connect(regions["Shapesanity Cut Rotated Mixed"], "Shapesanity rotating cut mixed",
-                                             lambda state: state.has("Rotator", player))
+                                                 lambda state: has_rotator(state, player))
+    regions["Shapesanity Cut Rotated Uncolored"].connect(regions["Shapesanity Cut Rotated Painted"],
+                                                         "Shapesanity painting cut rotated",
+                                                         lambda state: has_painter(state, player))
+    regions["Shapesanity Cut Rotated Painted"].connect(regions["Shapesanity Cut Rotated Mixed"],
+                                                       "Shapesanity mixing cut rotated",
+                                                       lambda state: has_mixer(state, player))
     regions["Shapesanity Cut Uncolored"].connect(regions["Shapesanity Half-Half Uncolored"], "Shapesanity stacking cut",
-                                                 lambda state: state.has("Stacker", player))
+                                                 lambda state: has_stacker(state, player))
     regions["Shapesanity Cut Painted"].connect(regions["Shapesanity Half-Half Painted"],
                                                "Shapesanity stacking cut painted",
-                                               lambda state: state.has("Stacker", player))
+                                               lambda state: has_stacker(state, player))
     regions["Shapesanity Cut Mixed"].connect(regions["Shapesanity Half-Half Mixed"], "Shapesanity stacking cut mixed",
-                                             lambda state: state.has("Stacker", player))
+                                             lambda state: has_stacker(state, player))
     regions["Shapesanity Cut Rotated Uncolored"].connect(regions["Shapesanity Stitched Uncolored"],
                                                          "Shapesanity stitching",
-                                                         lambda state: state.has("Stacker", player))
+                                                         lambda state: has_stacker(state, player))
     regions["Shapesanity Stitched Uncolored"].connect(regions["Shapesanity Stitched Painted"],
                                                       "Shapesanity painting stitched",
-                                                      lambda state: state.has("Painter", player))
+                                                      lambda state: has_painter(state, player))
     regions["Shapesanity Stitched Painted"].connect(regions["Shapesanity Stitched Mixed"],
                                                     "Shapesanity mixing stitched",
-                                                    lambda state: state.has("Color Mixer", player))
+                                                    lambda state: has_mixer(state, player))
 
     return list(regions.values())

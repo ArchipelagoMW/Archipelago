@@ -473,10 +473,7 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     locations["Wires"] = (presentlocations["Level 20"][0], LocationProgressType.DEFAULT)
     if not goal == "vanilla":
         locations["Freedom"] = (presentlocations["Level 26"][0], LocationProgressType.DEFAULT)
-        if maxlevel >= 27:
-            locations["MAM (Make Anything Machine)"] = (presentlocations["Level 27"][0], LocationProgressType.DEFAULT)
-        else:
-            locations["MAM (Make Anything Machine)"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        locations["MAM (Make Anything Machine)"] = ("MAM needed", LocationProgressType.DEFAULT)
     if maxlevel >= 50:
         locations["Can't stop"] = (presentlocations["Level 50"][0], LocationProgressType.DEFAULT)
     elif not goal == "vanilla":

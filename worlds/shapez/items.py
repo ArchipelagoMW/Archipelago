@@ -6,13 +6,13 @@ buildings_processing = {
     "Cutter": ItemClassification.progression,
     "Rotator": ItemClassification.progression,
     "Painter": ItemClassification.progression,
-    "Rotator (CCW)": ItemClassification.useful,
+    "Rotator (CCW)": ItemClassification.progression,
     "Color Mixer": ItemClassification.progression,
     "Stacker": ItemClassification.progression,
-    "Quad Cutter": ItemClassification.useful,
-    "Double Painter": ItemClassification.useful,
+    "Quad Cutter": ItemClassification.progression,
+    "Double Painter": ItemClassification.progression,
     "Rotator (180°)": ItemClassification.useful,
-    "Quad Painter": ItemClassification.useful
+    "Quad Painter": ItemClassification.progression
 }
 
 # Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
@@ -20,9 +20,9 @@ buildings_processing = {
 buildings_routing = {
     "Balancer": ItemClassification.progression,
     "Tunnel": ItemClassification.progression,
-    "Compact Merger": ItemClassification.useful,
-    "Tunnel Tier II": ItemClassification.useful,
-    "Compact Splitter": ItemClassification.useful
+    "Compact Merger": ItemClassification.progression,
+    "Tunnel Tier II": ItemClassification.progression,
+    "Compact Splitter": ItemClassification.progression
 }
 
 buildings_other = {
