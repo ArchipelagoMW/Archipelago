@@ -165,106 +165,201 @@ refresh_components: Optional[Callable[[], None]] = None
 
 def run_gui():
     from kvui import (MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
-                      ContainerLayout, ImageIcon)
+                      ContainerLayout, Widget, MDBoxLayout)
     from kivy.core.window import Window
+    from kivy.metrics import dp
     from kivy.uix.image import AsyncImage
+    from kivymd.uix.button import MDIconButton
+    from kivymd.uix.card import MDCard
+    from kivymd.uix.menu import MDDropdownMenu
+    from kivymd.uix.navigationdrawer import MDNavigationDrawerDivider
     from kivymd.uix.relativelayout import MDRelativeLayout
+    from kivymd.uix.screen import MDScreen
+    from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 
     class Launcher(MDApp):
         base_title: str = "Archipelago Launcher"
         container: ContainerLayout
+        navigation: MDBoxLayout
         grid: MDGridLayout
-        _tool_layout: Optional[ScrollBox] = None
-        _client_layout: Optional[ScrollBox] = None
+        button_layout: Optional[ScrollBox] = None
 
         def __init__(self, ctx=None):
             self.title = self.base_title
             self.ctx = ctx
             self.icon = r"data/icon.png"
+            self.favorites = []
+            persistent = Utils.persistent_load()
+            if "launcher" in persistent:
+                if "favorites" in persistent["launcher"]:
+                    self.favorites.extend(persistent["launcher"]["favorites"])
             super().__init__()
 
-        def _refresh_components(self) -> None:
+        def _refresh_components(self, type_filter: Optional[Sequence[Union[str, Type]]] = None) -> None:
+            if not type_filter:
+                type_filter = [Type.CLIENT, Type.ADJUSTER, Type.TOOL, Type.MISC]
+            favorites = "favorites" in type_filter
 
-            def build_button(component: Component, col=1):
+            def build_card(component: Component) -> Widget:
                 """
-                Builds a button widget for a given component.
+                Builds a card widget for a given component.
 
                 Args:
                     component (Component): The component associated with the button.
 
                 Returns:
-                    None. The button is added to the parent grid layout.
+                    The created Card Widget.
 
                 """
-                if component.icon != "icon":
-                    image = ImageIcon(source=icon_paths[component.icon],
-                                      size=(38, 38), size_hint=(None, 1), pos=(5, 0))
-                    button = MDButton(image, MDButtonText(text=component.display_name, pos=(15, 0)),
-                                      style="elevated", size_hint_y=None, height=40)
-                else:
-                    button = MDButton(MDButtonText(text=component.display_name, pos=(15, 0)),
-                                      style="elevated", size_hint_y=None, height=40)
+                button_card = MDCard(style="filled", padding="4dp", size_hint=(1, None), height=dp(75))
+                button_layout = MDRelativeLayout()
+                button_card.add_widget(button_layout)
+
+                source = icon_paths[component.icon]
+                image = AsyncImage(source=source, size=(40, 40), size_hint_y=None,
+                                   pos_hint={"center_x": 0.1, "center_y": 0.5})
+
+                button_layout.add_widget(image)
+                button_layout.add_widget(MDLabel(text=component.display_name,
+                                                 pos_hint={"center_x": 0.5,
+                                                           "center_y": 0.85 if component.description else 0.65},
+                                                 halign="center", font_style="Title", role="medium",
+                                                 theme_text_color="Custom", text_color=self.theme_cls.primaryColor))
+                if component.description:
+                    button_layout.add_widget(MDLabel(text=component.description,
+                                                     pos_hint={"center_x": 0.5, "center_y": 0.35}, halign="center",
+                                                     role="small", theme_text_color="Custom",
+                                                     text_color=self.theme_cls.primaryColor))
+
+                favorite_button = MDIconButton(icon="star" if component.display_name in self.favorites
+                                               else "star-outline",
+                                               style="standard", pos_hint={"center_x": 0.85, "center_y": 0.8},
+                                               theme_text_color="Custom", text_color=self.theme_cls.primaryColor)
+                favorite_button.component = component
+
+                def set_favorite(caller):
+                    if caller.component.display_name in self.favorites:
+                        self.favorites.remove(caller.component.display_name)
+                        caller.icon = "star-outline"
+                    else:
+                        self.favorites.append(caller.component.display_name)
+                        caller.icon = "star"
+
+                favorite_button.bind(on_release=set_favorite)
+                button_layout.add_widget(favorite_button)
+                context_button = MDIconButton(icon="menu", style="standard",
+                                              pos_hint={"center_x": 0.95, "center_y": 0.8}, theme_text_color="Custom",
+                                              text_color=self.theme_cls.primaryColor)
+
+                def open_menu(caller):
+                    menu_items = [
+                        {
+                            "text": "Add shortcut on desktop"
+                        }
+                    ]
+                    MDDropdownMenu(caller=caller, items=menu_items).open()
+                context_button.bind(on_release=open_menu)
+                button_layout.add_widget(context_button)
+
+                button = MDButton(MDButtonText(text="Open"), pos_hint={"center_x": 0.9, "center_y": 0.25},
+                                  size_hint_y=None,  height=dp(25))
                 button.component = component
                 button.bind(on_release=self.component_action)
-                button.size_hint = (1, 1)
+                button_layout.add_widget(button)
 
-                return button
+                return button_card
 
             # clear before repopulating
-            assert self._tool_layout and self._client_layout, "must call `build` first"
-            tool_children = reversed(self._tool_layout.layout.children)
+            assert self.button_layout, "must call `build` first"
+            tool_children = reversed(self.button_layout.layout.children)
             for child in tool_children:
-                self._tool_layout.layout.remove_widget(child)
-            client_children = reversed(self._client_layout.layout.children)
-            for child in client_children:
-                self._client_layout.layout.remove_widget(child)
+                self.button_layout.layout.remove_widget(child)
 
             _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
             _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
             _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
             _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
 
-            for (tool, client) in itertools.zip_longest(itertools.chain(
-                _tools.items(), _miscs.items(), _adjusters.items()
-            ), _clients.items()):
-                # column 1
-                if tool:
-                    self._tool_layout.layout.add_widget(build_button(tool[1]))
-                # column 2
-                if client:
-                    self._client_layout.layout.add_widget(build_button(client[1]))
+            for (name, component) in itertools.chain(
+                    _tools.items(), _miscs.items(), _adjusters.items(), _clients.items()):
+                if component.type in type_filter or favorites and component.display_name in self.favorites:
+                    self.button_layout.layout.add_widget(build_card(component))
 
         def build(self):
-            self.theme_cls.theme_style = "Light"
+            self.theme_cls.theme_style = "Dark"
             self.theme_cls.primary_palette = "Green"
-            self.container = MDFloatLayout()
-            self.container.md_bg_color = self.theme_cls.backgroundColor
+            self.top_screen = MDFloatLayout()
+            self.top_screen.md_bg_color = self.theme_cls.backgroundColor
+            #drawer_button = MDIconButton(icon="menu", theme_text_color="Custom", text_color=self.theme_cls.primaryColor)
+            #drawer_button.pos_hint = {"center_x": 0.05, "center_y": 0.95}
+            #self.screen.add_widget(drawer_button)
             self.grid = MDGridLayout(cols=2)
-            self.container.add_widget(self.grid)
-            self.grid.add_widget(MDLabel(text="General", size_hint_y=None, height=40, color=self.theme_cls.primaryColor))
-            self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40, color=self.theme_cls.primaryColor))
-            self._tool_layout = ScrollBox()
-            self._tool_layout.layout.orientation = "vertical"
-            self._tool_layout.layout.spacing = 10
-            self.grid.add_widget(self._tool_layout)
-            self._client_layout = ScrollBox()
-            self._client_layout.layout.orientation = "vertical"
-            self._client_layout.layout.spacing = 10
-            self.grid.add_widget(self._client_layout)
+            self.navigation = MDGridLayout(cols=1, size_hint_x=0.25, width=dp(50))
+            self.top_screen.add_widget(self.grid)
+            self.grid.add_widget(self.navigation)
+            self.button_layout = ScrollBox()
+            self.button_layout.layout.orientation = "vertical"
+            self.button_layout.layout.spacing = 10
+            self.grid.add_widget(self.button_layout)
             self.grid.padding = 10
             self.grid.spacing = 5
-
             self._refresh_components()
+
+            # handle navigation drawer
+            #menu = MDNavigationDrawerMenu(MDNavigationDrawerLabel(text="Components"))
+            #self.drawer = MDNavigationDrawer(menu, radius=(0, dp(16), dp(16), 0), drawer_type="modal")
+
+            #drawer_button.bind(on_release=toggle_drawer)
+            #self.drawer.menu = menu
+            menu_icons = {
+                "Client": "controller",
+                "Tool": "desktop-classic",
+                "Adjuster": "wrench",
+                "Misc": "dots-horizontal-circle-outline"
+            }
+
+            def filter_clients(caller):
+                self._refresh_components(caller.type)
+
+            all_item = MDButton(
+                MDButtonIcon(icon="asterisk"),
+                MDButtonText(text="All"),
+                style="text"
+            )
+            all_item.type = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
+            all_item.bind(on_release=filter_clients)
+            self.navigation.add_widget(all_item)
+            for type in (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC):
+                name = str(type).rsplit(".")[1].title()
+                item = MDButton(
+                    MDButtonIcon(icon=menu_icons[name]),
+                    MDButtonText(text=name),
+                    style="text"
+                )
+                item.type = (type,)
+                item.bind(on_release=filter_clients)
+                self.navigation.add_widget(item)
+            favorite_item = MDButton(
+                MDButtonIcon(icon="star"),
+                MDButtonText(text="Favorites"),
+                style="text"
+            )
+            favorite_item.type = ("favorites",)
+            favorite_item.bind(on_release=filter_clients)
+            self.navigation.add_widget(favorite_item)
+            self.navigation.add_widget(MDNavigationDrawerDivider())
 
             global refresh_components
             refresh_components = self._refresh_components
 
             Window.bind(on_drop_file=self._on_drop_file)
 
-            return self.container
+            return self.top_screen
 
         @staticmethod
         def component_action(button):
+            MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
             if button.component.func:
                 button.component.func()
             else:
@@ -283,6 +378,10 @@ def run_gui():
             # Closing the window explicitly cleans it up.
             self.root_window.close()
             super()._stop(*largs)
+
+        def on_stop(self):
+            Utils.persistent_store("launcher", "favorites", self.favorites)
+            super().on_stop()
 
     Launcher().run()
 
