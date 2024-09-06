@@ -973,6 +973,5 @@ def launch():
     import colorama
 
     colorama.init()
-
     asyncio.run(main())
     colorama.deinit()
