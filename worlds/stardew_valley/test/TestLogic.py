@@ -12,7 +12,7 @@ from ..options import BundleRandomization
 
 def collect_all(mw):
     for item in mw.get_items():
-        mw.state.collect(item, event=True)
+        mw.state.collect(item, prevent_sweep=True)
 
 
 class LogicTestBase(RuleAssertMixin, TestCase):
