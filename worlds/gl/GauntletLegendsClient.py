@@ -19,7 +19,10 @@ from .Arrays import (
     level_locations,
     mirror_levels,
     spawners,
-    timers, sounds, colors, vanilla,
+    timers,
+    sounds,
+    colors,
+    vanilla,
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
