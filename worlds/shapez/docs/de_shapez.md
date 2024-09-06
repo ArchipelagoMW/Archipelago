@@ -16,7 +16,7 @@ einer YAML-Datei.
 ## Inwiefern wird das Spiel randomisiert?
 
 Alle Belohnungen aus den Tutorial-Level (das Freischalten von Gebäuden und Spielmechaniken) und Verbesserungen durch
-Upgrades werden dem Itempool der Multiwelt hinzugefügt. Außerdem werden, wenn so in den Spieler-Optionen eingestellt,
+Upgrades werden dem Itempool der Multiworld hinzugefügt. Außerdem werden, wenn so in den Spieler-Optionen festgelegt,
 die Bedingungen zum Abschließen eines Levels und zum Kaufen der Upgrades randomisiert.
 
 ## Was ist das Ziel von shapez in Archipelago?
@@ -26,8 +26,8 @@ Zielen entscheiden:
 1. Vanilla: Schließe Level 26 ab (eigentlich das Ende des Tutorials).
 2. MAM: Schließe ein bestimmtes Level nach Level 26 ab, das zuvor in den Spieler-Optionen festgelegt wurde. Es ist
 empfohlen, eine Maschine zu bauen, die alles automatisch herstellt ("Make-Anything-Machine", kurz MAM).
-3. Even fasterer: Kaufe alle Upgrades bis zu einer in den Spieler-Optionen festgelegten Stufe (nach Stufe 8).
-4. Efficiency III: Liefere 500 Blaupausen-Formen ins Zentrum.
+3. Even Fasterer: Kaufe alle Upgrades bis zu einer in den Spieler-Optionen festgelegten Stufe (nach Stufe 8).
+4. Efficiency III: Liefere 256 Blaupausen-Formen pro Sekunde ins Zentrum.
 
 ## Welche Items können in den Welten anderer Spieler erscheinen?
 
@@ -42,8 +42,9 @@ empfohlen, eine Maschine zu bauen, die alles automatisch herstellt ("Make-Anythi
 ## Was ist eine Location / ein Check?
 
 - Level (minimum 1-25, bis zu 1000 je nach Spieler-Optionen, mit zusätzlichen Checks für Level 1 und 20)
-- Upgrades (minimum Stufen II-VII (2-8), bis zu M (1000) je nach Spieler-Optionen)
-- Bestimmte Formen mindestens einmal ins Zentrum liefern ("Shapesanity")
+- Upgrades (minimum Stufen II-VIII (2-8), bis zu M (1000) je nach Spieler-Optionen)
+- Bestimmte Formen mindestens einmal ins Zentrum liefern ("Shapesanity", bis zu 75800)
+- Errungenschaften (bis zu 45)
 
 ## Was passiert, wenn der Spieler ein Item erhält?
 
@@ -51,7 +52,7 @@ Ein Pop-Up erscheint, das das/die erhaltene(n) Item(s) und eventuell weitere Inf
 
 ## Was bedeuten die Namen dieser ganzen Shapesanity Dinger?
 
-Hier ist ein englischer Spicker (bloß nicht dem Lehrer zeigen):
+Hier ist ein Spicker für die Englischarbeit (bloß nicht dem Lehrer zeigen):
 ![image](https://imgur.com/a/IB64WyU)
 
 ## Kann ich auch weitere Mods neben dem AP Client installieren?

@@ -41,7 +41,7 @@ Du kannst auf der [shapez-Spieler-Optionen-Seite](/games/shapez/player-options) 
 ## Einem MultiWorld-Spiel beitreten
 
 1. Öffne das Spiel.
-2. Gib den Slot-Namen, die Adresse, den Port und das Password (optional) in die dafür vorgesehene Box im Hauptmenü ein.
+2. Gib im Hauptmenü den Slot-Namen, die Adresse, den Port und das Passwort (optional) in die dafür vorgesehene Box ein.
 3. Drücke auf "Connect".
    - Erneutes Drücken trennt die Verbindung zum Server.
    - Ob du verbunden bist, steht direkt daneben.

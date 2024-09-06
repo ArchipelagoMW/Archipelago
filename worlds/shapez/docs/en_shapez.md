@@ -4,7 +4,7 @@
 
 shapez is an automation game about cutting, rotating, stacking, and painting shapes, that you extract from randomly
 generated patches on an infinite canvas, and sending them to the hub to complete levels. The "tutorial", where you
-unlock a new building or game mechanic (almost) every level, lasts until level 26, where you unlock freeplay with 
+unlock a new building or game mechanic (almost) each level, lasts until level 26, where you unlock freeplay with 
 infinitely more levels, that require a new, randomly generated shape. Alongside the levels, you can unlock upgrades,
 that make your buildings work faster.
 
@@ -15,7 +15,7 @@ and export a config file.
 
 ## What does randomization do to this game?
 
-Buildings and gameplay mechanics, that your normally unlocks by completing a level, and upgrade improvements are put 
+Buildings and gameplay mechanics, that you normally unlocks by completing a level, and upgrade improvements are put 
 into the item pool of the multiworld. Also, if enabled, the requirements for completing a level or buying an upgrade are
 randomized.
 
@@ -23,11 +23,11 @@ randomized.
 
 As the game has no actual goal where the game ends, there are (currently) 4 different goals you can choose from in the 
 player options:
-1. Vanilla: Complete level 26 (normally the end of the tutorial).
+1. Vanilla: Complete level 26 (the end of the tutorial).
 2. MAM: Complete an in the player options specified level after level 26. It's recommended to build a 
 Make-Anything-Machine (MAM).
-3. Even fasterer: Upgrade everything to a specified tier after tier 8.
-4. Efficiency III: Deliver 500 blueprint shapes per second to the hub.
+3. Even Fasterer: Upgrade everything to an in the player options specified tier after tier 8.
+4. Efficiency III: Deliver 256 blueprint shapes per second to the hub.
 
 ## Which items can be in another player's world?
 
@@ -41,9 +41,10 @@ Make-Anything-Machine (MAM).
 
 ## What is considered a location check?
 
-- Levels (minimum 1-25, up to 1000 depending on player options, with additional checks for levels 1 and 20)
-- Upgrades (minimum tiers II-VII (2-8), up to M (1000) depending on player options)
-- Delivering certain shapes at least once to the hub ("shapesanity")
+- Levels (minimum 1-25, up to 999 depending on player options, with additional checks for levels 1 and 20)
+- Upgrades (minimum tiers II-VIII (2-8), up to M (1000) depending on player options)
+- Delivering certain shapes at least once to the hub ("shapesanity", up to 75800)
+- Achievements (up to 45)
 
 ## When the player receives an item, what happens?
 
