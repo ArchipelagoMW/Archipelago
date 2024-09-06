@@ -48,7 +48,7 @@ class RLWorld(World):
     def fill_slot_data(self) -> dict:
         return {option_name: self.get_setting(option_name).value for option_name in rl_options}
 
-    def generate_early(self):        
+    def generate_early(self):
         # Check validation of names.
         additional_lady_names = len(self.get_setting("additional_lady_names").value)
         additional_sir_names = len(self.get_setting("additional_sir_names").value)
