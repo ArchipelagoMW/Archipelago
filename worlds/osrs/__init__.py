@@ -56,8 +56,8 @@ class OSRSWorld(World):
 
     locations_by_category: typing.Dict[str, typing.List[LocationRow]]
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.region_name_to_data = {}
         self.location_name_to_data = {}
 
