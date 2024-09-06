@@ -24,10 +24,10 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
     if world.options.entrance_rando:
         portal_pairs = pair_portals(world)
-
         # output the entrances to the spoiler log here for convenience
-        for portal1, portal2 in portal_pairs.items():
-            world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+        sorted_portal_pairs = sort_portals(portal_pairs)
+        for portal1, portal2 in sorted_portal_pairs.items():
+            world.multiworld.spoiler.set_entrance(portal1, portal2, "both", world.player)
     else:
         portal_pairs = vanilla_portals()
 
@@ -130,7 +130,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
-    player_name = world.multiworld.get_player_name(world.player)
+    player_name = world.player_name
     portal_map = portal_mapping.copy()
     logic_rules = world.options.logic_rules.value
     fixed_shop = world.options.fixed_shop
@@ -504,3 +504,29 @@ def update_reachable_regions(connected_regions: Set[str], traversal_reqs: Dict[s
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic)
 
     return connected_regions
+
+
+# sort the portal dict by the name of the first portal, referring to the portal order in the master portal list
+def sort_portals(portal_pairs: Dict[Portal, Portal]) -> Dict[str, str]:
+    sorted_pairs: Dict[str, str] = {}
+    reference_list: List[str] = [portal.name for portal in portal_mapping]
+    reference_list.append("Shop Portal")
+
+    # note: this is not necessary yet since the shop portals aren't numbered yet -- they will be when decoupled happens
+    # due to plando, there can be a variable number of shops
+    # I could either do it like this, or just go up to like 200, this seemed better
+    # shop_count = 0
+    # for portal1, portal2 in portal_pairs.items():
+    #     if portal1.name.startswith("Shop"):
+    #         shop_count += 1
+    #     if portal2.name.startswith("Shop"):
+    #         shop_count += 1
+    # reference_list.extend([f"Shop Portal {i + 1}" for i in range(shop_count)])
+
+    for name in reference_list:
+        for portal1, portal2 in portal_pairs.items():
+            if name == portal1.name:
+                sorted_pairs[portal1.name] = portal2.name
+                break
+    return sorted_pairs
+
