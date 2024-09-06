@@ -641,6 +641,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Beneath the Well Back": RegionInfo("Sewer"),  # the back two portals, and all 4 upper chests
     "West Garden before Terry": RegionInfo("Archipelagos Redux"),  # the lower entry point, near hero grave
     "West Garden after Terry": RegionInfo("Archipelagos Redux"),  # after Terry, up until next chompignons
+    "West Garden West Combat": RegionInfo("Archipelagos Redux"),  # for grass rando basically
     "West Garden at Dagger House": RegionInfo("Archipelagos Redux"),  # just outside magic dagger house
     "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
@@ -1166,8 +1167,10 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "West Garden after Terry": {
         "West Garden before Terry":
             [],
-        "West Garden South Checkpoint":
+        "West Garden West Combat":
             [],
+        "West Garden South Checkpoint":
+            [["Hyperdash"]],
         "West Garden Laurels Exit Region":
             [["LS1"]],
     },
@@ -1177,6 +1180,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "West Garden at Dagger House":
             [],
         "West Garden after Terry":
+            [["Hyperdash"]],
+        "West Garden West Combat":
             [],
     },
     "West Garden before Boss": {
