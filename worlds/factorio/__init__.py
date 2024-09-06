@@ -101,6 +101,7 @@ class Factorio(World):
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     tech_mix: int = 0
     skip_silo: bool = False
+    origin_region_name = "Nauvis"
     science_locations: typing.List[FactorioScienceLocation]
 
     settings: typing.ClassVar[FactorioSettings]
@@ -125,9 +126,6 @@ class Factorio(World):
     def create_regions(self):
         player = self.player
         random = self.multiworld.random
-        menu = Region("Menu", player, self.multiworld)
-        crash = Entrance(player, "Crash Land", menu)
-        menu.exits.append(crash)
         nauvis = Region("Nauvis", player, self.multiworld)
 
         location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo + \
@@ -184,8 +182,7 @@ class Factorio(World):
             event = FactorioItem(f"Automated {ingredient}", ItemClassification.progression, None, player)
             location.place_locked_item(event)
 
-        crash.connect(nauvis)
-        self.multiworld.regions += [menu, nauvis]
+        self.multiworld.regions.append(nauvis)
 
     def create_items(self) -> None:
         player = self.player
