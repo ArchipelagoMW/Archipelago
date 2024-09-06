@@ -20,7 +20,7 @@ from . import events, items
 from . import rules as FERules
 from .Client import FF4FEClient
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Location, Entrance, Item, ItemClassification, MultiWorld
+from BaseClasses import Region, Location, Entrance, Item, ItemClassification, MultiWorld, LocationProgressType
 from .rom import FF4FEProcedurePatch
 from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule
 
@@ -160,7 +160,7 @@ class FF4FEWorld(World):
         self.chosen_character = item_pool_result[1]
         chosen_character_placed = False
         for item in map(self.create_item, item_pool):
-            if item == self.chosen_character and not chosen_character_placed:
+            if item.name == self.chosen_character and not chosen_character_placed:
                 (self.multiworld.get_location("Starting Character 1", self.player)
                  .place_locked_item(self.create_item(self.chosen_character)))
                 chosen_character_placed = True
@@ -175,7 +175,6 @@ class FF4FEWorld(World):
             self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
-        # TODO: Add in restriction to useful or above for later game areas
         for location in locations.character_locations:
             add_item_rule(self.multiworld.get_location(location, self.player),
                      lambda item: item.name in items.characters and item.player == self.player)
@@ -243,7 +242,7 @@ class FF4FEWorld(World):
                 for requirement in FERules.area_rules[location.area]:
                     add_rule(self.multiworld.get_location(location.name, self.player),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
-            if location.major_slot:
+            if location.major_slot and location.name not in self.options.exclude_locations:
                 add_item_rule(self.multiworld.get_location(location.name, self.player),
                          lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
             for i in range(len(FERules.location_tiers.keys())):

@@ -172,8 +172,7 @@ def apply(env):
             print('---')
             raise Exception("Ok things are fuckered")
         for old,new in zip(remapped_original_chests, remapped_new_chests):
-            pass
-            #treasure_assignment.remap(old, new)
+            treasure_assignment.remap(old, new)
 
     if env.options.ap_data is not None:
         pass
@@ -285,12 +284,14 @@ def apply(env):
         ap_item = env.options.ap_data[str(id)]
         placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
         if placement is None:
-            treasure_assignment.assign(new_chest, "#item.Cure1", orig_chest.fight)
+            env.assignments[reward_slot_name] = "#item.Cure1"
         else:
-            treasure_assignment.assign(
-                new_chest,
-                placement.const,
-                orig_chest.fight)
+            env.assignments[reward_slot_name] = placement.const
+        treasure_assignment.assign(
+            '{} {}'.format(chest_number[0], chest_number[1]),
+            reward_slot_name,
+            orig_chest.fight,
+            remap=False)
 
     env.add_script(treasure_assignment.get_script())
 

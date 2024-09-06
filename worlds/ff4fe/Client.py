@@ -199,7 +199,7 @@ class FF4FEClient(SNIClient):
         if item_received.player == ctx.slot and item_received.location != -1:
             self.increment_items_received(ctx, items_received_amount)
             return
-        if item_received_name in items.sellable_item_names and item_received.location != -2:
+        if item_received_name in items.sellable_item_names and item_received.location >= 0:
             if item_received_game_data.tier <= junk_tier_data[0]:
                 item_price = item_received_game_data.price // 2
                 current_gp_data = await snes_read(ctx, Rom.gp_byte_location, Rom.gp_byte_size)

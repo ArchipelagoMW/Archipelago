@@ -9,10 +9,12 @@ def create_itempool(locations: List[LocationData], multiworld: World) -> Tuple[L
     chosen_character = get_chosen_character(multiworld)
     character_pool = create_character_pool(multiworld, chosen_character)
     key_item_pool = create_key_item_pool(multiworld)
-    location_count = len(locations) - len(character_pool) - len(key_item_pool) - 1  # Objective Status location hack
+    location_count = len(locations) - len(character_pool) - len(key_item_pool) - 33  # Objective Status locations hack
+    if multiworld.is_vanilla_game():
+        location_count -= 1
     if (multiworld.options.HeroChallenge.current_key != "none"
             and multiworld.options.ForgeTheCrystal.current_key == "false"):
-        location_count -= 1  # We're manyally placing the Advance Weapon at Kokkol
+        location_count -= 1  # We're manually placing the Advance Weapon at Kokkol
     if multiworld.options.ConquerTheGiant.current_key == "true":
         location_count -= 1  # No Kain3 location in Giant%
     useful_percentage = multiworld.options.UsefulPercentage.value
@@ -60,7 +62,7 @@ def create_character_pool(multiworld: World, chosen_character: str) -> List[str]
     return character_pool[:18]
 
 
-def get_chosen_character(multiworld):
+def get_chosen_character(multiworld: World):
     chosen_character = "None"
     if multiworld.options.HeroChallenge.current_key != "none":
         option_value = str(multiworld.options.HeroChallenge.current_key)

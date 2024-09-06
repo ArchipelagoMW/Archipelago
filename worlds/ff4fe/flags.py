@@ -28,11 +28,9 @@ def build_objective_flags(options: FF4FEOptions):
         primary_objectives.append("dkmatter")
     objective_flags += ",".join(primary_objectives)
     if objective_flags == "Omode:":
-        objective_flags += "none/"
-    else:
-        objective_flags += "/"
+        objective_flags += "none"
     if options.AdditionalObjectives.value != 0:
-        objective_flags += f"random:{options.AdditionalObjectives.value}"
+        objective_flags += f"/random:{options.AdditionalObjectives.value}"
     if options.ObjectiveReward.current_key == "crystal" or options.ForgeTheCrystal.current_key == "true":
         objective_flags += "/win:crystal/req:all"
     else:

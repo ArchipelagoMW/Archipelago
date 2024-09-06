@@ -834,6 +834,13 @@ def apply(env):
         for area in areas:
             new_chests = env.rnd.sample(treasure_dbview.find_all(lambda t: t.area == area), len(areas[area]))
             for i,slot in enumerate(areas[area]):
+                id = new_chests[i].flag
+                ap_item = env.options.ap_data[str(id)]
+                placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
+                if placement is None:
+                    rewards_assignment[slot] = ItemReward("#item.Cure1")
+                else:
+                    rewards_assignment[slot] = ItemReward(placement.const)
                 env.meta['miab_locations'][slot] = [new_chests[i].map, new_chests[i].index]
 
     # hacky cleanup step for _1 and _2 suffixes, and build key item metadata for random objectives
