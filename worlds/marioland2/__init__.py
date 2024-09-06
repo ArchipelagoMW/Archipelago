@@ -252,7 +252,7 @@ class MarioLand2World(World):
                     location.access_rule = lambda state, coin_rule=rule, num_coins=coins: \
                         coin_rule(state, self.player, num_coins)
             else:
-                rule = getattr(logic, location.parent_region.name.lower().replace(
+                rule = getattr(logic, location.name.lower().replace(
                     " - ", "_").replace(" ", "_").replace("'", ""), None)
                 if rule:
                     location.access_rule = lambda state, loc_rule=rule: loc_rule(state, self.player)
