@@ -1,4 +1,14 @@
 options_presets = {
+    "Most vanilla": {
+        "goal": "vanilla",
+        "randomize_level_requirements": False,
+        "randomize_upgrade_requirements": False,
+        "early_balancer_tunnel_and_trash": "sphere_1",
+        "include_achievements": True,
+        "exclude_softlock_achievements": False,
+        "exclude_long_playtime_achievements": False,
+        "shapesanity_amount": 4
+    },
     "Minimum checks": {
         "goal": "vanilla",
         "include_achievements": False,
@@ -13,7 +23,7 @@ options_presets = {
         "shapesanity_amount": 60920
     },
     "Restrictive start": {
-        "goal": 0,
+        "goal": "vanilla",
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "hardcore",
@@ -23,7 +33,7 @@ options_presets = {
         "shapesanity_amount": 4
     },
     "Quick game": {
-        "goal": 3,
+        "goal": "efficiency_iii",
         "required_shapes_multiplier": 1,
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,

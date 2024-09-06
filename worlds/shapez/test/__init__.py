@@ -10,6 +10,10 @@ class TestDefault(ShapezTestBase):
     options = {}
 
 
+class TestMostVanilla(ShapezTestBase):
+    options = options_presets["Most vanilla"]
+
+
 class TestMinimum(ShapezTestBase):
     options = options_presets["Minimum checks"]
 
