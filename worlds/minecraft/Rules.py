@@ -352,10 +352,10 @@ def get_rules_lookup(world, player: int):
                                          and has_diamond_pickaxe(world, state, player)
                                          and state.has("Progressive Resource Crafting", player, 2)),
             "Withering Heights": lambda state: can_kill_wither(world, state, player),
-            "A Balanced Diet": lambda state: (has_bottle(world, state, player) # honey bottle
-                                              and state.has("Campfire", player) # honey bottle
+            "A Balanced Diet": lambda state: (has_bottle(world, state, player)  # honey bottle
+                                              and state.has("Campfire", player)  # honey bottle
                                               and state.has("Fishing Rod", player)
-                                              and state.can_reach_location("Overpowered", player) # gapple, notch apple
+                                              and state.can_reach_location("Overpowered", player)  # gapple, notch apple
                                               and state.can_reach_region('The End', player)),  # chorus fruit
             "Subspace Bubble": lambda state: has_diamond_pickaxe(world, state, player),
             "Country Lode, Take Me Home": lambda state: state.can_reach_location("Hidden in the Depths", player)
