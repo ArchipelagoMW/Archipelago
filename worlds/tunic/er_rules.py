@@ -1389,7 +1389,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(wg_checkpoint_to_west_combat,
                  lambda state: has_combat_reqs("West Garden", state, player))
 
-        # expectation for the grass here is that the player will dash to it and cut it, or fight
+        # maybe a little too generous? probably fine though
         set_rule(wg_checkpoint_to_before_boss,
                  lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
 
@@ -1840,6 +1840,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Faeries", "West Garden")
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
+        combat_logic_to_loc("West Garden - [Central Highlands] Holy Cross (Blue Lines)", "West Garden")
+        combat_logic_to_loc("West Garden - [Central Highlands] Behind Guard Captain", "West Garden")
 
         # with combat logic on, I presume the player will want to be able to see to avoid the spiders
         set_rule(world.get_location("Beneath the Fortress - Bridge"),

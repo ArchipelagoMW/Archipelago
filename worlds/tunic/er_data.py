@@ -643,13 +643,13 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "West Garden after Terry": RegionInfo("Archipelagos Redux"),  # after Terry, up until next chompignons
     "West Garden West Combat": RegionInfo("Archipelagos Redux"),  # for grass rando basically
     "West Garden at Dagger House": RegionInfo("Archipelagos Redux"),  # just outside magic dagger house
-    "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),
+    "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),  # the checkpoint and the blue lines area
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
     "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted, outlet_region="West Garden by Portal"),
     "West Garden by Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Laurels Exit Region": RegionInfo("Archipelagos Redux"),
-    "West Garden before Boss": RegionInfo("Archipelagos Redux"),  # main west garden
+    "West Garden before Boss": RegionInfo("Archipelagos Redux"),  # up the ladder before garden knight
     "West Garden after Boss": RegionInfo("Archipelagos Redux"),
     "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux", outlet_region="West Garden before Terry"),
     "Ruined Atoll": RegionInfo("Atoll Redux"),
