@@ -420,7 +420,7 @@ class KH2World(World):
         Fills keyblade slots with abilities determined on player's setting
         """
         keyblade_locations = [self.multiworld.get_location(location, self.player) for location in Keyblade_Slots.keys()]
-        state = self.multiworld.get_all_state(False, True)
+        state = self.multiworld.get_all_state(False, False)
         keyblade_ability_pool_copy = self.keyblade_ability_pool.copy()
         fill_restrictive(self.multiworld, state, keyblade_locations, keyblade_ability_pool_copy, True, True, allow_excluded=True)
 
