@@ -22,6 +22,7 @@ namespace Sly1AP
         {
             // Console.SetBufferSize(Console.BufferWidth, 32766);
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            ThreadPool.SetMinThreads(500, 500);
 
             Console.WriteLine("Sly 1 Archipelago Randomizer");
 
@@ -51,7 +52,7 @@ namespace Sly1AP
                         return;
                     }
                 }
-                Thread.Sleep(100);
+                await Task.Delay(1000);
             }
         }
 
@@ -90,8 +91,8 @@ namespace Sly1AP
             UpdateStart();
             ConfigureOptions(Client.Options);
             var SentLocations = Client.GameState.CompletedLocations;
-            var ReceivedItems = Client.GameState.ReceivedItems;
-            var NewItems = new List<Item>(ReceivedItems);
+            var ItemsReceived = Client.GameState.ReceivedItems;
+            var NewItems = new List<Item>(ItemsReceived);
             var NewLocations = new List<Location>(SentLocations);
             foreach (var item in NewItems)
             {
@@ -306,22 +307,22 @@ namespace Sly1AP
         public static void UpdateLevels(int id)
         {
             //Levels
-            if (id == 10020021)
+            if (id == 10020021 & Memory.ReadInt(0x2027C67C) == 0)
             {
                 keys.RaleighStart = 1;
                 Memory.Write(0x2027C67C, keys.RaleighStart);
             }
-            if (id == 10020022)
+            if (id == 10020022 & Memory.ReadInt(0x2027CAC8) == 0)
             {
                 keys.MuggshotStart = 1;
                 Memory.Write(0x2027CAC8, keys.MuggshotStart);
             }
-            if (id == 10020023)
+            if (id == 10020023 & Memory.ReadInt(0x2027CF14) == 0)
             {
                 keys.MzRubyStart = 1;
                 Memory.Write(0x2027CF14, keys.MzRubyStart);
             }
-            if (id == 10020024)
+            if (id == 10020024 & Memory.ReadInt(0x2027D360) == 0)
             {
                 keys.PandaKingStart = 1;
                 Memory.Write(0x2027D360, keys.PandaKingStart);
@@ -400,10 +401,6 @@ namespace Sly1AP
             Memory.Write(0x2027CF00, 0);
             Memory.Write(0x2027D34C, 0);
             Memory.Write(0x2027D798, 0);
-            // Memory.Write(0x2027C67C, 0);
-            // Memory.Write(0x2027CAC8, 0);
-            // Memory.Write(0x2027CF14, 0);
-            // Memory.Write(0x2027D360, 0);
             GetValues();
         }
     }
