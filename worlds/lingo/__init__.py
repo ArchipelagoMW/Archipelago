@@ -9,7 +9,7 @@ from worlds.AutoWorld import WebWorld, World
 from .datatypes import Room, RoomEntrance
 from .items import ALL_ITEM_TABLE, ITEMS_BY_GROUP, TRAP_ITEMS, LingoItem
 from .locations import ALL_LOCATION_TABLE, LOCATIONS_BY_GROUP
-from .options import LingoOptions, lingo_option_groups
+from .options import LingoOptions, lingo_option_groups, SunwarpAccess, VictoryCondition
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
 
@@ -54,14 +54,17 @@ class LingoWorld(World):
     player_logic: LingoPlayerLogic
 
     def generate_early(self):
-        if not (self.options.shuffle_doors or self.options.shuffle_colors or self.options.shuffle_sunwarps):
+        if not (self.options.shuffle_doors or self.options.shuffle_colors or
+                (self.options.sunwarp_access >= SunwarpAccess.option_unlock and
+                 self.options.victory_condition == VictoryCondition.option_pilgrimage)):
             if self.multiworld.players == 1:
-                warning(f"{self.multiworld.get_player_name(self.player)}'s Lingo world doesn't have any progression"
-                        f" items. Please turn on Door Shuffle, Color Shuffle, or Sunwarp Shuffle if that doesn't seem"
-                        f" right.")
+                warning(f"{self.player_name}'s Lingo world doesn't have any progression items. Please turn on Door"
+                        f" Shuffle or Color Shuffle, or use item-blocked sunwarps with the Pilgrimage victory condition"
+                        f" if that doesn't seem right.")
             else:
-                raise OptionError(f"{self.multiworld.get_player_name(self.player)}'s Lingo world doesn't have any"
-                                  f" progression items. Please turn on Door Shuffle, Color Shuffle or Sunwarp Shuffle.")
+                raise OptionError(f"{self.player_name}'s Lingo world doesn't have any progression items. Please turn on"
+                                  f" Door Shuffle or Color Shuffle, or use item-blocked sunwarps with the Pilgrimage"
+                                  f" victory condition.")
 
         self.player_logic = LingoPlayerLogic(self)
 
@@ -82,7 +85,7 @@ class LingoWorld(World):
                 state.collect(self.create_item(self.player_logic.forced_good_item), True)
 
             all_locations = self.multiworld.get_locations(self.player)
-            state.sweep_for_events(locations=all_locations)
+            state.sweep_for_advancements(locations=all_locations)
 
             unreachable_locations = [location for location in all_locations
                                      if not state.can_reach_location(location.name, self.player)]
@@ -167,7 +170,8 @@ class LingoWorld(World):
         slot_options = [
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
             "enable_pilgrimage", "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks",
-            "early_color_hallways", "pilgrimage_allows_roof_access", "pilgrimage_allows_paintings", "shuffle_sunwarps"
+            "early_color_hallways", "pilgrimage_allows_roof_access", "pilgrimage_allows_paintings", "shuffle_sunwarps",
+            "group_doors"
         ]
 
         slot_data = {

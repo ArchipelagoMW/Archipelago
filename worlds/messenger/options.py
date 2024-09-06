@@ -3,15 +3,15 @@ from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
-from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, \
+from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
     PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
 from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
-class MessengerAccessibility(Accessibility):
-    default = Accessibility.option_locations
+class MessengerAccessibility(ItemsAccessibility):
     # defaulting to locations accessibility since items makes certain items self-locking
-    __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
+    default = ItemsAccessibility.option_full
+    __doc__ = ItemsAccessibility.__doc__
 
 
 class PortalPlando(PlandoConnections):

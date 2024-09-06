@@ -14,6 +14,7 @@ from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
+from ..strings.craftable_names import Fishing
 from ..strings.fish_names import SVEFish
 from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
@@ -74,15 +75,17 @@ class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLog
     def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:
             return True_()
-        rod_rule = self.logic.tool.has_fishing_rod(2)
         if fish_quality == FishQuality.silver:
-            return rod_rule
+            return self.logic.tool.has_fishing_rod(2)
         if fish_quality == FishQuality.gold:
-            return rod_rule & self.logic.skill.has_level(Skill.fishing, 4)
+            return self.logic.skill.has_level(Skill.fishing, 4) & self.can_use_tackle(Fishing.quality_bobber)
         if fish_quality == FishQuality.iridium:
-            return rod_rule & self.logic.skill.has_level(Skill.fishing, 10)
+            return self.logic.skill.has_level(Skill.fishing, 10) & self.can_use_tackle(Fishing.quality_bobber)
 
         raise ValueError(f"Quality {fish_quality} is unknown.")
+
+    def can_use_tackle(self, tackle: str) -> StardewRule:
+        return self.logic.tool.has_fishing_rod(4) & self.logic.has(tackle)
 
     def can_catch_every_fish(self) -> StardewRule:
         rules = [self.has_max_fishing()]
