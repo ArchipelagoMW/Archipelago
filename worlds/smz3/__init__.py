@@ -20,7 +20,8 @@ from .TotalSMZ3.Region import IReward, IMedallionAccess
 from .TotalSMZ3.Text.Texts import openFile
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 from .Rom import SMZ3ProcedurePatch
-from .Options import smz3_options
+from .Options import SMZ3Options
+from Options import ItemsAccessibility
 from .Client import SMZ3SNIClient
 
 world_folder = os.path.dirname(__file__)
@@ -450,7 +451,7 @@ class SMZ3World(World):
             patches.update(self.apply_item_names())
             patches.update(self.apply_customization())
 
-            patch = SMZ3ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+            patch = SMZ3ProcedurePatch(player=self.player, player_name=self.player_name)
             patch.write_tokens(patches)
             rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
                                                       f"{patch.patch_file_ending}")
