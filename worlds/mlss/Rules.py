@@ -562,6 +562,36 @@ def set_rules(world: "MLSSWorld", excluded):
                           or StateLogic.thunder(state, world.player),
         )
 
+    if not world.options.difficult_logic:
+        add_rule(
+            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom1Block),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Block1),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Digspot),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom3Digspot),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndFurnaceRoom1Block1),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndFurnaceRoom1Block2),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+        add_rule(
+            world.get_location(LocationName.JokesEndFurnaceRoom1Block3),
+            lambda state: StateLogic.canCrash(state, world.player),
+        )
+
     if world.options.coins:
         add_rule(
             world.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock1),
@@ -667,33 +697,5 @@ def set_rules(world: "MLSSWorld", excluded):
         if not world.options.difficult_logic:
             add_rule(
                 world.get_location(LocationName.JokesEndNorthofBridgeRoomCoinBlock),
-                lambda state: StateLogic.canCrash(state, world.player),
-            )
-            add_rule(
-                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom1Block),
-                lambda state: StateLogic.canCrash(state, world.player),
-            )
-            add_rule(
-                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Block1),
-                lambda state: StateLogic.canCrash(state, world.player),
-            )
-            add_rule(
-                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Digspot),
-                lambda state: StateLogic.canCrash(state, world.player),
-            )
-            add_rule(
-                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom3Digspot),
-                lambda state: StateLogic.canCrash(state, world.player),
-            )
-            add_rule(
-                world.get_location(LocationName.JokesEndFurnaceRoom1Block1),
-                lambda state: StateLogic.canCrash(state, world.player),
-            )
-            add_rule(
-                world.get_location(LocationName.JokesEndFurnaceRoom1Block2),
-                lambda state: StateLogic.canCrash(state, world.player),
-            )
-            add_rule(
-                world.get_location(LocationName.JokesEndFurnaceRoom1Block3),
                 lambda state: StateLogic.canCrash(state, world.player),
             )
