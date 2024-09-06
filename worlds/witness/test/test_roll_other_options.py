@@ -54,6 +54,7 @@ class TestMaxEntityShuffle(WitnessTestBase):
 
 class TestPostgameGroupedDoors(WitnessTestBase):
     options = {
+        "puzzle_randomization": "umbra_variety",
         "shuffle_postgame": True,
         "shuffle_discarded_panels": True,
         "shuffle_doors": "doors",
