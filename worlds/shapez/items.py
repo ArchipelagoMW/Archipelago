@@ -65,11 +65,20 @@ bundles = {
     "Upgrade Shapes Bundle": ItemClassification.filler
 }
 
-traps = {
-    "Inventory Draining Trap": ItemClassification.trap,
+standard_traps = {
     "Locked Building Trap": ItemClassification.trap,
     "Throttled Building Trap": ItemClassification.trap,
     "Malfunctioning Trap": ItemClassification.trap
+}
+
+random_draining_trap = {
+    "Inventory Draining Trap": ItemClassification.trap
+}
+
+split_draining_traps = {
+    "Blueprint Shapes Draining Trap": ItemClassification.trap,
+    "Level Shapes Draining Trap": ItemClassification.trap,
+    "Upgrade Shapes Draining Trap": ItemClassification.trap
 }
 
 belt_and_extractor = {
@@ -86,7 +95,9 @@ item_table: Dict[str, ItemClassification] = {
     **gameplay_unlocks,
     **upgrades,
     **bundles,
-    **traps,
+    **standard_traps,
+    **random_draining_trap,
+    **split_draining_traps,
     **belt_and_extractor
 }
 
@@ -105,9 +116,14 @@ small_upgrades = [
 ]
 
 
-def trap(random: float) -> str:
+def trap(random: float, split_draining: bool) -> str:
     """Returns a random trap item."""
-    return list(traps.keys())[int(len(traps)*random)]
+    random_value = (len(standard_traps)+1)*random
+    if random_value > 0:
+        return list(standard_traps.keys())[int(random_value)-1]
+    else:
+        return "Inventory Draining Trap" \
+            if not split_draining else list(split_draining_traps.keys())[int(random_value*3)]
 
 
 def filler(random: float) -> str:
@@ -163,8 +179,11 @@ item_descriptions = {  # TODO
                            "instantly delivered to the hub",
     "Upgrade Shapes Bundle": "A bundle with some shapes needed for a random upgrade, " +
                            "instantly delivered to the hub",
-    "Inventory Draining Trap": "Randomly drains either blueprint shapes, or current level requirement shapes, " +
+    "Inventory Draining Trap": "Randomly drains either blueprint shapes, current level requirement shapes, " +
                                "or random upgrade requirement shapes, by half",
+    "Blueprint Shapes Draining Trap": "Drains the stored blueprint shapes by half",
+    "Level Shapes Draining Trap": "Drains the current level requirement shapes by half",
+    "Upgrade Shapes Draining Trap": "Drains a random upgrade requirement shape by half",
     "Locked Building Trap": "Locks a random building from being placed for 15-60 seconds",
     "Throttled Building Trap": "Halves the speed of a random building for 15-60 seconds",
     "Malfunctioning Trap": "Makes a random building process items incorrectly for 15-60 seconds",

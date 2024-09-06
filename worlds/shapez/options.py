@@ -122,7 +122,7 @@ class ThroughputLevelsRatio(Range):
 
 class SameLateUpgradeRequirements(Toggle):
     """If upgrade requirements are randomized, should the last 3 shapes for each category be the same,
-    like in vanilla?"""
+    as in vanilla?"""
     display_name = "Same late upgrade requirements"
     rich_text_doc = True
     default = True
@@ -155,24 +155,28 @@ class LockBeltAndExtractor(Toggle):
 class IncludeAchievements(Toggle):
     """Include up to 45 achievements (depending on other options) as additional locations."""
     display_name = "Include Achievements"
+    rich_text_doc = True
     default = True
 
 
 class ExcludeSoftlockAchievements(Toggle):
     """Exclude 6 achievements, that can become unreachable in a save file, if not achieved until a certain level."""
     display_name = "Exclude softlock achievements"
+    rich_text_doc = True
     default = True
 
 
 class ExcludeLongPlaytimeAchievements(Toggle):
     """Exclude 2 achievements, that require actively playing for a really long time."""
     display_name = "Exclude long playtime achievements"
+    rich_text_doc = True
     default = True
 
 
 class ExcludeProgressionUnreasonable(Toggle):
     """Exclude progression and useful items from being placed into softlock and long playtime achievements."""
     display_name = "Exclude progression items in softlock and long playtime achievements"
+    rich_text_doc = True
     default = True
 
 
@@ -194,6 +198,14 @@ class TrapsProbability(Range):
     default = 0
 
 
+class SplitInventoryDrainingTrap(Toggle):
+    """If set to true, the inventory draining trap will be split into level, upgrade, and blueprint draining traps
+    instead of executing as one of those 3 randomly."""
+    display_name = "Split Inventory Draining Trap"
+    rich_text_doc = True
+    default = False
+
+
 @dataclass
 class ShapezOptions(PerGameCommonOptions):
     goal: Goal
@@ -213,4 +225,5 @@ class ShapezOptions(PerGameCommonOptions):
     exclude_progression_unreasonable: ExcludeProgressionUnreasonable
     shapesanity_amount: ShapesanityAmount
     traps_percentage: TrapsProbability
+    split_inventory_draining_trap: SplitInventoryDrainingTrap
 

@@ -218,11 +218,12 @@ class ShapezWorld(World):
 
         # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage/100
+        split_draining = bool(self.options.split_inventory_draining_trap.value)
         # Fill remaining locations with fillers
         for x in range(self.location_count - len(included_items)):
             if self.random.random() < traps_probability:
                 # Fill with trap
-                included_items.append(self.create_item(trap(self.random.random())))
+                included_items.append(self.create_item(trap(self.random.random(), split_draining)))
             else:
                 # Fil with random filler item
                 included_items.append(self.create_item(filler(self.random.random())))
