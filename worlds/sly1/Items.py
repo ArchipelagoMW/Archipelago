@@ -10,7 +10,11 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     itempool: List[Item] = []
 
     starting_episode = (episode_type_to_name[EpisodeType(world.options.StartingEpisode)])
-    del item_table[starting_episode]
+    if starting_episode == "All":
+        for episode in sly_episodes.keys():
+            del item_table[episode]
+    else:
+        del item_table[starting_episode]
 
     for name in item_table.keys():
         item_type: ItemClassification = item_table.get(name).classification
@@ -70,7 +74,10 @@ sly_items = {
     "ToT Key": ItemData(10020015, ItemClassification.progression, 7),
     "SSE Key": ItemData(10020016, ItemClassification.progression, 7),
     "VV Key": ItemData(10020017, ItemClassification.progression, 7),
-    "FitS Key": ItemData(10020018, ItemClassification.progression, 7)
+    "FitS Key": ItemData(10020018, ItemClassification.progression, 7),
+
+    # Victory
+    "Victory": ItemData(10020025, ItemClassification.progression, 0)
 }
 
 sly_episodes = {
@@ -78,8 +85,6 @@ sly_episodes = {
     "Sunset Snake Eyes": ItemData(10020022, ItemClassification.progression),
     "Vicious Voodoo": ItemData(10020023, ItemClassification.progression),
     "Fire in the Sky": ItemData(10020024, ItemClassification.progression),
-
-    "Victory": ItemData(10020025, ItemClassification.progression, 0)
 }
 
 junk_items = {

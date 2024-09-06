@@ -19,6 +19,7 @@ class StartingEpisode(Choice):
     option_sunset_snake_eyes = 2
     option_vicious_voodoo = 3
     option_fire_in_the_sky = 4
+    option_all = 6
     default = 1
 
 class IncludeHourglasses(DefaultOnToggle):

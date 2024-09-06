@@ -14,6 +14,7 @@ class EpisodeType(IntEnum):
     VV = 3
     FITS = 4
     CHOH = 5
+    ALL = 6
 
 class ItemData(NamedTuple):
     ap_code: Optional[int]
@@ -35,7 +36,8 @@ episode_type_to_name = {
     EpisodeType.SSE:      "Sunset Snake Eyes",
     EpisodeType.VV:       "Vicious Voodoo",
     EpisodeType.FITS:     "Fire in the Sky",
-    EpisodeType.CHOH:     "Cold Heart of Hate"
+    EpisodeType.CHOH:     "Cold Heart of Hate",
+    EpisodeType.ALL:      "All"
 }
 
 episode_type_to_shortened_name = {

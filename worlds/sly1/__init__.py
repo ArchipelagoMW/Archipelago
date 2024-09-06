@@ -39,7 +39,9 @@ class Sly1World(World):
         
     def generate_early(self):
         starting_episode = (episode_type_to_name[EpisodeType(self.options.StartingEpisode)])
-        self.multiworld.push_precollected(self.create_item(starting_episode))
+        if starting_episode == "All":
+            for episode in sly_episodes.keys():
+                self.multiworld.push_precollected(self.create_item(episode))
 
     def create_regions(self):
         create_regions(self)
