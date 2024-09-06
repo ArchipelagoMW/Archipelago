@@ -13,19 +13,6 @@ from .Options import CivVIOptions
 from .Regions import create_regions
 from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
-
-
-def run_client(url: Optional[str] = None):
-    print("Running Civ6 Client")
-    from .Civ6Client import main  # lazy import
-    launch_subprocess(main, name="Civ6Client")
-
-
-components.append(
-    Component("Civ6 Client", func=run_client, component_type=Type.CLIENT,
-              file_identifier=SuffixIdentifier(".apcivvi"))
-)
 
 
 class CivVIWeb(WebWorld):
