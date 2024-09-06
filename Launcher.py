@@ -330,8 +330,7 @@ if __name__ == '__main__':
                            help="Pass either a patch file, a generated game or the name of a component to run.")
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
-    args, unknown_args = parser.parse_known_args()
-    main(args)
+    main(parser.parse_args())
 
     from worlds.LauncherComponents import processes
     for process in processes:
