@@ -19,11 +19,10 @@ class GoalTestOrdered(InscryptionTestBase):
             self.remove(item)
             self.assertBeatable(False)
             self.collect(item)
-        for i in range(9):
-            item = self.get_item_by_name("Epitaph Piece")
-            self.remove(item)
-            self.assertBeatable(False)
-            self.collect(item)
+        item = self.get_item_by_name("Epitaph Piece")
+        self.remove(item)
+        self.assertBeatable(False)
+        self.collect(item)
 
 
 class GoalTestUnordered(InscryptionTestBase):
@@ -44,11 +43,10 @@ class GoalTestUnordered(InscryptionTestBase):
             self.remove(item)
             self.assertBeatable(False)
             self.collect(item)
-        for i in range(9):
-            item = self.get_item_by_name("Epitaph Piece")
-            self.remove(item)
-            self.assertBeatable(False)
-            self.collect(item)
+        item = self.get_item_by_name("Epitaph Piece")
+        self.remove(item)
+        self.assertBeatable(False)
+        self.collect(item)
 
 
 class GoalTestAct1(InscryptionTestBase):
@@ -81,11 +79,10 @@ class GoalTestGroupedEpitaphs(InscryptionTestBase):
             self.remove(item)
             self.assertBeatable(False)
             self.collect(item)
-        for i in range(3):
-            item = self.get_item_by_name("Epitaph Pieces")
-            self.remove(item)
-            self.assertBeatable(False)
-            self.collect(item)
+        item = self.get_item_by_name("Epitaph Pieces")
+        self.remove(item)
+        self.assertBeatable(False)
+        self.collect(item)
 
 
 class GoalTestEpitaphsAsOne(InscryptionTestBase):
