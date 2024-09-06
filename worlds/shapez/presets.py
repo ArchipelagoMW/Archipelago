@@ -20,7 +20,7 @@ options_presets = {
         "include_achievements": True,
         "exclude_softlock_achievements": False,
         "exclude_long_playtime_achievements": False,
-        "shapesanity_amount": 60920
+        "shapesanity_amount": 75800
     },
     "Restrictive start": {
         "goal": "vanilla",

@@ -185,7 +185,7 @@ class ShapesanityAmount(Range):
     display_name = "Shapesanity amount"
     rich_text_doc = True
     range_start = 4
-    range_end = 60920
+    range_end = 75800
     default = 50
 
 

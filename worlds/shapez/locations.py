@@ -167,7 +167,9 @@ for first_shape in ["C", "R", "W", "S"]:
                                     ordered_all = " ".join(sorted([first_combo, second_combo, third_combo]))
                                     shapesanity_three_parts[f"Shapesanity Singles {ordered_all}"] \
                                         = f"Shapesanity Stitched {color_region}"
-                                shapesanity_three_parts[f"Shapesanity 2-1-1 {first_combo} {ordered_two}"] \
+                                shapesanity_three_parts[f"Shapesanity Adjacent 2-1-1 {first_combo} {ordered_two}"] \
+                                    = f"Shapesanity Stitched {color_region}"
+                                shapesanity_three_parts[f"Shapesanity Cornered 2-1-1 {first_combo} {ordered_two}"] \
                                     = f"Shapesanity Stitched {color_region}"
 for first_shape in ["C", "R", "W", "S"]:
     for second_shape in ["C", "R", "W", "S"]:
