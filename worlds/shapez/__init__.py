@@ -154,7 +154,7 @@ class ShapezWorld(World):
             self.category_random_logic_amounts[nextcat] = 0
             cats.remove(nextcat)
             for cat in cats:
-                self.category_random_logic_amounts[cat] = self.random.randint(0, 6)
+                self.category_random_logic_amounts[cat] = self.random.randint(0, 5)
 
     def create_item(self, name: str) -> Item:
         return ShapezItem(name, item_table[name], self.item_name_to_id[name], self.player)
