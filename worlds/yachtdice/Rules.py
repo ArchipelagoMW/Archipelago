@@ -29,7 +29,7 @@ class Category:
         mean_score = 0
         for key, value in yacht_weights[self.name, min(8, num_dice), min(8, num_rolls)].items():
             mean_score += key * value / 100000
-        return mean_score * self.quantity
+        return mean_score
 
 
 class ListState:
