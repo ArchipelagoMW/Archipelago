@@ -257,7 +257,10 @@ class ShapezWorld(World):
             "randomize_upgrade_logic": self.options.randomize_upgrade_logic.current_key,
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
             "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value),
-            "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value)
+            "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value),
+            "include_achievements": bool(self.options.include_achievements.value),
+            "exclude_softlock_achievements": bool(self.options.exclude_softlock_achievements),
+            "exclude_long_playtime_achievements": bool(self.options.exclude_long_playtime_achievements)
         }
 
         shapesanity_list = [k for k in self.included_locations.keys() if "Shapesanity" in k]
