@@ -17,6 +17,7 @@ from .utils import (
     get_items,
     get_sigma_expert_logic,
     get_sigma_normal_logic,
+    get_umbra_variety_logic,
     get_vanilla_logic,
     logical_or_witness_rules,
     parse_lambda,
@@ -147,6 +148,9 @@ class StaticWitnessLogicObj:
             elif "EP" in entity_name:
                 entity_type = "EP"
                 location_type = "EP"
+            elif "Pet the Dog" in entity_name:
+                entity_type = "Event"
+                location_type = "Good Boi"
             elif entity_hex.startswith("0xFF"):
                 entity_type = "Event"
                 location_type = None
@@ -289,6 +293,11 @@ def get_sigma_expert() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_sigma_expert_logic())
 
 
+@cache_argsless
+def get_umbra_variety() -> StaticWitnessLogicObj:
+    return StaticWitnessLogicObj(get_umbra_variety_logic())
+
+
 def __getattr__(name: str) -> StaticWitnessLogicObj:
     if name == "vanilla":
         return get_vanilla()
@@ -296,6 +305,8 @@ def __getattr__(name: str) -> StaticWitnessLogicObj:
         return get_sigma_normal()
     if name == "sigma_expert":
         return get_sigma_expert()
+    if name == "umbra_variety":
+        return get_umbra_variety()
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 

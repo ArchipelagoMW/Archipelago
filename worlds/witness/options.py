@@ -129,11 +129,17 @@ class ShuffleEnvironmentalPuzzles(Choice):
     option_obelisk_sides = 2
 
 
-class ShuffleDog(Toggle):
+class ShuffleDog(Choice):
     """
-    Adds petting the Town dog into the location pool.
+    Adds petting the dog statue in Town into the location pool.
+    Alternatively, you can force it to be a Puzzle Skip.
     """
     display_name = "Pet the Dog"
+
+    option_off = 0
+    option_puzzle_skip = 1
+    option_random_item = 2
+    default = 1
 
 
 class EnvironmentalPuzzlesDifficulty(Choice):
@@ -244,10 +250,15 @@ class PanelHuntDiscourageSameAreaFactor(Range):
 class PuzzleRandomization(Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
+    "Sigma Normal" randomizes puzzles close to their original mechanics and difficulty.
+    "Sigma Expert" is an entirely new experience with extremely difficult random puzzles. Do not underestimate this mode, it is brutal.
+    "Umbra Variety" focuses on unique symbol combinations not featured in the original game. It is harder than Sigma Normal, but easier than Sigma Expert.
+    "None" means that the puzzles are unchanged from the original game.
     """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
+    option_umbra_variety = 3
     option_none = 2
 
 
@@ -424,6 +435,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    shuffle_dog: ShuffleDog
 
 
 witness_option_groups = [
@@ -471,5 +483,8 @@ witness_option_groups = [
         ElevatorsComeToYou,
         DeathLink,
         DeathLinkAmnesty,
+    ]),
+    OptionGroup("Silly Options", [
+        ShuffleDog,
     ])
 ]
