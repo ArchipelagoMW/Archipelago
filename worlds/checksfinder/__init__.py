@@ -44,15 +44,15 @@ class ChecksFinderWorld(World):
         self.multiworld.regions += [menu, board]
 
     def create_items(self):
-        # Generate item pool
-        itempool = []
+        # Generate list of items
+        items_to_create = []
         # Add the map width and height stuff
-        itempool += ["Map Width"] * 5  # 10 - 5
-        itempool += ["Map Height"] * 5  # 10 - 5
+        items_to_create += ["Map Width"] * 5  # 10 - 5
+        items_to_create += ["Map Height"] * 5  # 10 - 5
         # Add the map bombs
-        itempool += ["Map Bombs"] * 15  # 20 - 5
-        # Convert itempool into real items
-        itempool = [self.create_item(item) for item in itempool]
+        items_to_create += ["Map Bombs"] * 15  # 20 - 5
+        # Convert list into real items
+        itempool = [self.create_item(item) for item in items_to_create]
 
         self.multiworld.itempool += itempool
 

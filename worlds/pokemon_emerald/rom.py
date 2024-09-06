@@ -114,6 +114,14 @@ class PokemonEmeraldProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
+    # TODO: Remove when the base patch is updated to include this change
+    # Moves an NPC to avoid overlapping people during trainersanity
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x53A298 + (0x18 * 7) + 4,  # Space Center 1F event address + 8th event + 4-byte offset for x coord
+        struct.pack("<H", 11)
+    )
+
     # Set free fly location
     if world.options.free_fly_location:
         patch.write_token(

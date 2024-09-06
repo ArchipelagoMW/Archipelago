@@ -1,9 +1,10 @@
-from test.bases import WorldTestBase
-from test.general import gen_steps, setup_multiworld
-from test.multiworld.test_multiworlds import MultiworldTestBase
 from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union, cast
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region
+
+from test.bases import WorldTestBase
+from test.general import gen_steps, setup_multiworld
+from test.multiworld.test_multiworlds import MultiworldTestBase
 
 from .. import WitnessWorld
 
@@ -159,3 +160,36 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
         if isinstance(item_names, str):
             item_names = (item_names,)
         return [item for item in self.multiworld.itempool if item.name in item_names and item.player == player]
+
+    def assert_location_exists(self, location_name: str, player: int, strict_check: bool = True) -> None:
+        """
+        Assert that a location exists in this world.
+        If strict_check, also make sure that this (non-event) location COULD exist.
+        """
+
+        world = self.multiworld.worlds[player]
+
+        if strict_check:
+            self.assertIn(location_name, world.location_name_to_id, f"Location {location_name} can never exist")
+
+        try:
+            world.get_location(location_name)
+        except KeyError:
+            self.fail(f"Location {location_name} does not exist.")
+
+    def assert_location_does_not_exist(self, location_name: str, player: int, strict_check: bool = True) -> None:
+        """
+        Assert that a location exists in this world.
+        If strict_check, be explicit about whether the location could exist in the first place.
+        """
+
+        world = self.multiworld.worlds[player]
+
+        if strict_check:
+            self.assertIn(location_name, world.location_name_to_id, f"Location {location_name} can never exist")
+
+        self.assertRaises(
+            KeyError,
+            lambda _: world.get_location(location_name),
+            f"Location {location_name} exists, but is not supposed to.",
+        )
