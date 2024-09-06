@@ -19,7 +19,7 @@ class WitnessPlayerLocations:
     def __init__(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> None:
         """Defines locations AFTER logic changes due to options"""
 
-        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Good Boi"}
         self.CHECK_LOCATIONS = static_witness_locations.GENERAL_LOCATIONS.copy()
 
         if world.options.shuffle_discarded_panels:
@@ -52,10 +52,6 @@ class WitnessPlayerLocations:
             for ch in self.CHECK_LOCATIONS
             if static_witness_logic.ENTITIES_BY_NAME[ch]["locationType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
-
-        dog_hex = static_witness_logic.ENTITIES_BY_NAME["Town Pet the Dog"]["entity_hex"]
-        dog_id = static_witness_locations.ALL_LOCATIONS_TO_ID["Town Pet the Dog"]
-        self.CHECK_PANELHEX_TO_ID[dog_hex] = dog_id
 
         self.CHECK_PANELHEX_TO_ID = dict(
             sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
