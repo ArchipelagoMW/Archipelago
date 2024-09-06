@@ -194,7 +194,7 @@ for first_shape in ["C", "R", "W", "S"]:
                                                     = f"Shapesanity Stitched {color_region}"
 
 
-achievement_locations: List[str] = ["Painter", "Cutter", "Rotater", "Wait, they stack?", "Wires", "Storage", "Freedom",
+achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter", "Rotater", "Wait, they stack?", "Wires", "Storage", "Freedom",
                                     "The logo!", "To the moon", "It's piling up", "I'll use it later",
                                     "Efficiency 1", "Preparing to launch", "SpaceY", "Stack overflow", "It's a mess",
                                     "Faster", "Even faster", "Get rid of them", "It's been a long time", "Addicted",
@@ -209,12 +209,12 @@ achievement_locations: List[str] = ["Painter", "Cutter", "Rotater", "Wait, they 
 all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional"]
                             + [f"Level {x}" for x in range(1, 1001)]
                             + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 1001)]
-                            # + achievement_locations
                             + list(shapesanity_simple)
                             + list(shapesanity_1_4)
                             + list(shapesanity_two_sided)
                             + list(shapesanity_three_parts)
-                            + list(shapesanity_four_parts))
+                            + list(shapesanity_four_parts)
+                            + achievement_locations)
 all_locations.sort()
 
 
