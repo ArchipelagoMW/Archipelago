@@ -331,19 +331,9 @@ if __name__ == '__main__':
                            help="Update host.yaml and exit.")
     run_group.add_argument("Patch|Game|Component", type=str, nargs="?",
                            help="Pass either a patch file, a generated game or the name of a component to run.")
-    run_group.add_argument("--",
-                           help="Arguments to pass to component.",
-                           dest="args", default=[])
-    args = sys.argv[1:]
-    if "--" in args:
-        i = args.index("--")
-        passthrough_args = args[i+1:]
-        args = args[:i]
-        args = parser.parse_args(args)
-        args.args = passthrough_args
-    else:
-        args = parser.parse_args()
-    main(args)
+    run_group.add_argument("args", nargs="*",
+                           help="Arguments to pass to component.")
+    main(parser.parse_args())
 
     from worlds.LauncherComponents import processes
     for process in processes:
