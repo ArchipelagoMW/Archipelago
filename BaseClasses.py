@@ -424,7 +424,7 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool) -> CollectionState:
+    def get_all_state(self, use_cache: bool, collect_pre_fill_items: bool = True) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
             return cached.copy()
@@ -433,10 +433,11 @@ class MultiWorld():
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
-        for player in self.player_ids:
-            subworld = self.worlds[player]
-            for item in subworld.get_pre_fill_items():
-                subworld.collect(ret, item)
+        if collect_pre_fill_items:
+            for player in self.player_ids:
+                subworld = self.worlds[player]
+                for item in subworld.get_pre_fill_items():
+                    subworld.collect(ret, item)
         ret.sweep_for_advancements()
 
         if use_cache:
