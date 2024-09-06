@@ -10,7 +10,7 @@ from .Regions import create_regions, location_table, set_rules, stage_set_rules,
     non_dead_end_crest_warps
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
-from .Options import option_definitions
+from .Options import FFMQOptions
 from .Client import FFMQClient
 
 
@@ -25,14 +25,25 @@ from .Client import FFMQClient
 
 
 class FFMQWebWorld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy Mystic Quest with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Alchav"]
-    )]
+        )
+    
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Artea"]
+        )
+    
+    tutorials = [setup_en, setup_fr]
 
 
 class FFMQWorld(World):
@@ -45,7 +56,8 @@ class FFMQWorld(World):
 
     item_name_to_id = {name: data.id for name, data in item_table.items() if data.id is not None}
     location_name_to_id = location_table
-    option_definitions = option_definitions
+    options_dataclass = FFMQOptions
+    options: FFMQOptions
 
     topology_present = True
 
@@ -67,20 +79,14 @@ class FFMQWorld(World):
         super().__init__(world, player)
 
     def generate_early(self):
-        if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
-            self.multiworld.brown_boxes[self.player].value = 1
-        if self.multiworld.enemies_scaling_lower[self.player].value > \
-                self.multiworld.enemies_scaling_upper[self.player].value:
-            (self.multiworld.enemies_scaling_lower[self.player].value,
-             self.multiworld.enemies_scaling_upper[self.player].value) =\
-                (self.multiworld.enemies_scaling_upper[self.player].value,
-                 self.multiworld.enemies_scaling_lower[self.player].value)
-        if self.multiworld.bosses_scaling_lower[self.player].value > \
-                self.multiworld.bosses_scaling_upper[self.player].value:
-            (self.multiworld.bosses_scaling_lower[self.player].value,
-             self.multiworld.bosses_scaling_upper[self.player].value) =\
-                (self.multiworld.bosses_scaling_upper[self.player].value,
-                 self.multiworld.bosses_scaling_lower[self.player].value)
+        if self.options.sky_coin_mode == "shattered_sky_coin":
+            self.options.brown_boxes.value = 1
+        if self.options.enemies_scaling_lower.value > self.options.enemies_scaling_upper.value:
+            self.options.enemies_scaling_lower.value, self.options.enemies_scaling_upper.value = \
+                self.options.enemies_scaling_upper.value, self.options.enemies_scaling_lower.value
+        if self.options.bosses_scaling_lower.value > self.options.bosses_scaling_upper.value:
+            self.options.bosses_scaling_lower.value, self.options.bosses_scaling_upper.value = \
+                self.options.bosses_scaling_upper.value, self.options.bosses_scaling_lower.value
 
     @classmethod
     def stage_generate_early(cls, multiworld):
@@ -94,20 +100,20 @@ class FFMQWorld(World):
         rooms_data = {}
 
         for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
-            if (world.multiworld.map_shuffle[world.player] or world.multiworld.crest_shuffle[world.player] or
-                    world.multiworld.crest_shuffle[world.player]):
-                if world.multiworld.map_shuffle_seed[world.player].value.isdigit():
-                    multiworld.random.seed(int(world.multiworld.map_shuffle_seed[world.player].value))
-                elif world.multiworld.map_shuffle_seed[world.player].value != "random":
-                    multiworld.random.seed(int(hash(world.multiworld.map_shuffle_seed[world.player].value))
-                                                + int(world.multiworld.seed))
+            if (world.options.map_shuffle or world.options.crest_shuffle or world.options.shuffle_battlefield_rewards
+                    or world.options.companions_locations):
+                if world.options.map_shuffle_seed.value.isdigit():
+                    multiworld.random.seed(int(world.options.map_shuffle_seed.value))
+                elif world.options.map_shuffle_seed.value != "random":
+                    multiworld.random.seed(int(hash(world.options.map_shuffle_seed.value))
+                                           + int(world.multiworld.seed))
 
                 seed = hex(multiworld.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()
-                map_shuffle = multiworld.map_shuffle[world.player].value
-                crest_shuffle = multiworld.crest_shuffle[world.player].current_key
-                battlefield_shuffle = multiworld.shuffle_battlefield_rewards[world.player].current_key
-                companion_shuffle = multiworld.companions_locations[world.player].value
-                kaeli_mom = multiworld.kaelis_mom_fight_minotaur[world.player].current_key
+                map_shuffle = world.options.map_shuffle.value
+                crest_shuffle = world.options.crest_shuffle.current_key
+                battlefield_shuffle = world.options.shuffle_battlefield_rewards.current_key
+                companion_shuffle = world.options.companions_locations.value
+                kaeli_mom = world.options.kaelis_mom_fight_minotaur.current_key
 
                 query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}&cs={companion_shuffle}&km={kaeli_mom}"
 
@@ -175,14 +181,14 @@ class FFMQWorld(World):
 
     def extend_hint_information(self, hint_data):
         hint_data[self.player] = {}
-        if self.multiworld.map_shuffle[self.player]:
+        if self.options.map_shuffle:
             single_location_regions = ["Subregion Volcano Battlefield", "Subregion Mac's Ship", "Subregion Doom Castle"]
             for subregion in ["Subregion Foresta", "Subregion Aquaria", "Subregion Frozen Fields", "Subregion Fireburg",
                               "Subregion Volcano Battlefield", "Subregion Windia", "Subregion Mac's Ship",
                               "Subregion Doom Castle"]:
                 region = self.multiworld.get_region(subregion, self.player)
                 for location in region.locations:
-                    if location.address and self.multiworld.map_shuffle[self.player] != "dungeons":
+                    if location.address and self.options.map_shuffle != "dungeons":
                         hint_data[self.player][location.address] = (subregion.split("Subregion ")[-1]
                                                                     + (" Region" if subregion not in
                                                                        single_location_regions else ""))
@@ -202,14 +208,13 @@ class FFMQWorld(World):
                             for location in exit_check.connected_region.locations:
                                 if location.address:
                                     hint = []
-                                    if self.multiworld.map_shuffle[self.player] != "dungeons":
+                                    if self.options.map_shuffle != "dungeons":
                                         hint.append((subregion.split("Subregion ")[-1] + (" Region" if subregion not
                                                     in single_location_regions else "")))
-                                    if self.multiworld.map_shuffle[self.player] != "overworld" and subregion not in \
-                                            ("Subregion Mac's Ship", "Subregion Doom Castle"):
+                                    if self.options.map_shuffle != "overworld":
                                         hint.append(overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu",
                                             "Pazuzu's"))
-                                    hint = " - ".join(hint)
+                                    hint = " - ".join(hint).replace(" - Mac Ship", "")
                                     if location.address in hint_data[self.player]:
                                         hint_data[self.player][location.address] += f"/{hint}"
                                     else:
