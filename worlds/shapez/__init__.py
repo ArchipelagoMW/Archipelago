@@ -100,7 +100,7 @@ class ShapezWorld(World):
             self.finaltier = 8
 
         # Setting the seed for the game before any other randomization call is done
-        self.client_seed = self.random.randint(0, 2**32)
+        self.client_seed = self.random.randint(0, 100000)
 
         # Determines the order of buildings for levels und upgrades logic
         if self.options.randomize_level_requirements:
