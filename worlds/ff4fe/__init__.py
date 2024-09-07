@@ -1,28 +1,24 @@
-# world/mygame/__init__.py
-import argparse
 import json
 import os
-import pkgutil
 import threading
+import typing
 from typing import Mapping, Any
 
 import Utils
 import settings
-import typing
-
-from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
-from .options import FF4FEOptions  # the options we defined earlier
-from .items import FF4FEItem, all_items, ItemData # data used below to add items to the World
-from .locations import FF4FELocation, all_locations, LocationData  # same as above
-from . import topology, flags
-from .itempool import create_itempool
+from BaseClasses import Region, ItemClassification, MultiWorld
+from worlds.AutoWorld import World, WebWorld
+from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 from . import events, items
 from . import rules as FERules
+from . import topology, flags
 from .Client import FF4FEClient
-from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Location, Entrance, Item, ItemClassification, MultiWorld, LocationProgressType
+from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
+from .itempool import create_itempool
+from .items import FF4FEItem, all_items, ItemData  # data used below to add items to the World
+from .locations import FF4FELocation, all_locations, LocationData  # same as above
+from .options import FF4FEOptions  # the options we defined earlier
 from .rom import FF4FEProcedurePatch
-from ..generic.Rules import set_rule, add_rule, forbid_item, add_item_rule
 
 
 class FF4FEWebWorld(WebWorld):
@@ -67,24 +63,19 @@ class FF4FEWorld(World):
         self.options.local_items.value.update(
             ["Cecil", "Kain", "Rydia", "Tellah", "Edward", "Rosa",
              "Yang", "Palom", "Porom", "Cid", "Edge", "Fusoya", "None"])
-        pass
 
     def is_vanilla_game(self):
-        return (self.options.ForgeTheCrystal.current_key == "false"
-                and self.options.ConquerTheGiant.current_key == "false"
-                and self.options.DefeatTheFiends.current_key == "false"
-                and self.options.FindTheDarkMatter.current_key == "false"
-                and self.options.AdditionalObjectives.value == 0)
+        return self.get_objective_count() == 0
 
     def get_objective_count(self):
         objective_count = 0
-        if self.options.ForgeTheCrystal.current_key == "true":
+        if self.options.ForgeTheCrystal:
             objective_count += 1
-        if self.options.ConquerTheGiant.current_key == "true":
+        if self.options.ConquerTheGiant:
             objective_count += 1
-        if self.options.DefeatTheFiends.current_key == "true":
+        if self.options.DefeatTheFiends:
             objective_count += 6
-        if self.options.FindTheDarkMatter.current_key == "true":
+        if self.options.FindTheDarkMatter:
             objective_count += 1
         objective_count += self.options.AdditionalObjectives.value
         return min(objective_count, 32)
@@ -161,13 +152,13 @@ class FF4FEWorld(World):
         chosen_character_placed = False
         for item in map(self.create_item, item_pool):
             if item.name == self.chosen_character and not chosen_character_placed:
-                (self.multiworld.get_location("Starting Character 1", self.player)
+                (self.get_location("Starting Character 1")
                  .place_locked_item(self.create_item(self.chosen_character)))
                 chosen_character_placed = True
                 continue
             if item.name == "Crystal":
                 if not self.is_vanilla_game():
-                    (self.multiworld.get_location("Objective Reward", self.player)
+                    (self.get_location("Objective Reward")
                      .place_locked_item(self.create_item("Crystal")))
                     continue
             if item.name.startswith("Objective"):
@@ -176,80 +167,78 @@ class FF4FEWorld(World):
 
     def set_rules(self) -> None:
         for location in locations.character_locations:
-            add_item_rule(self.multiworld.get_location(location, self.player),
-                     lambda item: item.name in items.characters and item.player == self.player)
-            if self.options.NoFreeCharacters.current_key == "true":
+            add_item_rule(self.get_location(location),
+                          lambda item: item.name in items.characters and item.player == self.player)
+            if self.options.NoFreeCharacters:
                 if location in locations.free_character_locations:
-                    add_item_rule(self.multiworld.get_location(location, self.player),
+                    add_item_rule(self.get_location(location),
                                   lambda item: item.name == "None")
-            if self.options.NoEarnedCharacters.current_key == "true":
+            if self.options.NoEarnedCharacters:
                 if location in locations.earned_character_locations:
-                    add_item_rule(self.multiworld.get_location(location, self.player),
+                    add_item_rule(self.get_location(location),
                                   lambda item: item.name == "None")
             if len(self.options.AllowedCharacters.value.difference(self.options.RestrictedCharacters.value)) > 0:
                 if location in locations.restricted_character_locations:
-                    add_item_rule(self.multiworld.get_location(location, self.player),
+                    add_item_rule(self.get_location(location),
                                   lambda item: item.name not in self.options.RestrictedCharacters.value)
 
         for location in locations.all_locations:
             if location.name not in locations.character_locations:
                 if location.name.startswith("Objective") or location.name == "Kokkol's House 2F -- Kokkol -- forge item":
                     try:
-                        self.multiworld.get_location(location.name, self.player)
+                        self.get_location(location.name)
                     except KeyError:
                         continue
-                add_item_rule(self.multiworld.get_location(location.name, self.player),
+                add_item_rule(self.get_location(location.name),
                               lambda item: item.name not in items.characters)
 
-        if self.options.AllowDuplicateCharacters.current_key == "false" and len(self.options.AllowedCharacters.value) > 1:
-            add_item_rule(self.multiworld.get_location("Starting Character 2", self.player),
+        if not self.options.AllowDuplicateCharacters and len(self.options.AllowedCharacters.value) > 1:
+            add_item_rule(self.get_location("Starting Character 2"),
                           lambda item: item.name != self.chosen_character)
 
-        if self.options.ConquerTheGiant.current_key == "true":
-            (self.multiworld.get_location(
-                "Giant of Bab-il Character",
-                self.player)
+        if self.options.ConquerTheGiant:
+            (self.get_location(
+                "Giant of Bab-il Character")
              .place_locked_item(self.create_item("None")))
 
         if (self.options.HeroChallenge.current_key != "none"
-                and self.options.ForgeTheCrystal.current_key == "false"):
-            self.multiworld.get_location(
-                "Kokkol's House 2F -- Kokkol -- forge item",
-                self.player).place_locked_item(self.create_item("Advance Weapon"))
-        set_rule(self.multiworld.get_location("Zeromus", self.player),
+                and not self.options.ForgeTheCrystal):
+            self.get_location(
+                "Kokkol's House 2F -- Kokkol -- forge item").place_locked_item(self.create_item("Advance Weapon"))
+        set_rule(self.get_location("Zeromus"),
                  lambda state: state.has("Pass", self.player)
                                 or state.has("Darkness Crystal", self.player))
 
         for location in [location for location in all_locations]:
             if location.area in topology.hook_areas:
-                add_rule(self.multiworld.get_location(location.name, self.player),
+                add_rule(self.get_location(location.name),
                          lambda state: state.has("Hook", self.player))
             if location.area in topology.underworld_areas:
                 if location.name == "Kokkol's House 2F -- Kokkol -- forge item":
                     try:
-                        self.multiworld.get_location(location.name, self.player)
+                        self.get_location(location.name)
                     except KeyError:
                         continue
-                add_rule(self.multiworld.get_location(location.name, self.player),
+                add_rule(self.get_location(location.name),
                          lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
             if location.area in topology.moon_areas:
-                add_rule(self.multiworld.get_location(location.name, self.player),
+                add_rule(self.get_location(location.name),
                          lambda state: state.has("Darkness Crystal", self.player))
-                if self.options.UnsafeKeyItemPlacement.current_key == "true":
-                    add_rule(self.multiworld.get_location(location.name, self.player),
+                if self.options.UnsafeKeyItemPlacement:
+                    add_rule(self.get_location(location.name),
                              lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
             if location.area in FERules.area_rules.keys():
                 for requirement in FERules.area_rules[location.area]:
-                    add_rule(self.multiworld.get_location(location.name, self.player),
+                    add_rule(self.get_location(location.name),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
             if location.major_slot and location.name not in self.options.exclude_locations:
-                add_item_rule(self.multiworld.get_location(location.name, self.player),
-                         lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
+                add_item_rule(self.get_location(location.name),
+                              lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
             for i in range(len(FERules.location_tiers.keys())):
                 if (location.area in FERules.location_tiers[i]
                         and location.name not in locations.character_locations
                         and not location.name.startswith("Objective")):
-                    add_rule(self.multiworld.get_location(location.name, self.player),
+                    add_rule(self.get_location(location.name),
                              lambda state, tier=i: state.has_group("characters",
                                                            self.player,
                                                            FERules.logical_gating[tier]["characters"]) and
@@ -259,24 +248,24 @@ class FF4FEWorld(World):
 
         for location in [event for event in events.boss_events]:
             if location.area in topology.hook_areas:
-                add_rule(self.multiworld.get_location(location.name, self.player),
+                add_rule(self.get_location(location.name),
                          lambda state: state.has("Hook", self.player))
             if location.area in topology.underworld_areas:
-                add_rule(self.multiworld.get_location(location.name, self.player),
+                add_rule(self.get_location(location.name),
                          lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
             if location.area in topology.moon_areas:
-                add_rule(self.multiworld.get_location(location.name, self.player),
+                add_rule(self.get_location(location.name),
                          lambda state: state.has("Darkness Crystal", self.player))
-                if self.options.UnsafeKeyItemPlacement.current_key == "true":
-                    add_rule(self.multiworld.get_location(location.name, self.player),
+                if self.options.UnsafeKeyItemPlacement:
+                    add_rule(self.get_location(location.name),
                              lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
             if location.name in FERules.boss_rules.keys():
                 for requirement in FERules.boss_rules[location.name]:
-                    add_rule(self.multiworld.get_location(location.name, self.player),
+                    add_rule(self.get_location(location.name),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
             for i in range(len(FERules.location_tiers.keys())):
                 if location.area in FERules.location_tiers[i]:
-                    add_rule(self.multiworld.get_location(location.name, self.player),
+                    add_rule(self.get_location(location.name),
                              lambda state, tier=i: state.has_group("characters",
                                                            self.player,
                                                            FERules.logical_gating[tier]["characters"]) and
@@ -286,7 +275,7 @@ class FF4FEWorld(World):
 
         for location in FERules.individual_location_rules.keys():
             try:
-                ap_location = self.multiworld.get_location(location, self.player)
+                ap_location = self.get_location(location)
                 for requirement in FERules.individual_location_rules[location]:
                     add_rule(ap_location,
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
@@ -297,25 +286,25 @@ class FF4FEWorld(World):
                     raise KeyError
 
         for event in events.boss_events:
-            self.multiworld.get_location(event.name, self.player).place_locked_item(
+            self.get_location(event.name).place_locked_item(
                 self.create_event(event.name + " Defeated")
             )
 
-        add_item_rule(self.multiworld.get_location("Zeromus", self.player),
+        add_item_rule(self.get_location("Zeromus"),
                       lambda state: state.has("Crystal", self.player)
                                     or (self.options.ObjectiveReward.current_key == "win"
                                         and not self.is_vanilla_game()))
 
         for i in range(self.get_objective_count()):
-            (self.multiworld.get_location(f"Objective {i + 1} Status", self.player)
+            (self.get_location(f"Objective {i + 1} Status")
                        .place_locked_item(self.create_item(f"Objective {i + 1} Cleared")))
             for requirement in FERules.individual_location_rules["Objectives Status"]:
-                add_rule(self.multiworld.get_location(f"Objective {i + 1} Status", self.player),
+                add_rule(self.get_location(f"Objective {i + 1} Status"),
                          lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
 
 
         if not self.is_vanilla_game():
-            self.multiworld.get_location("Objectives Status", self.player).place_locked_item(
+            self.get_location("Objectives Status").place_locked_item(
                 self.create_event("All Objectives Cleared")
             )
 
@@ -390,8 +379,12 @@ class FF4FEWorld(World):
     def check_exclusive_slot(self, item, member):
         if item.player != self.player or item.name == "None":
             return True
-        location = self.multiworld.get_location(member, self.player)
+        location = self.get_location(member)
         if location.item is not None:
             if location.item.name == item.name:
                 return False
         return True
+
+    def get_filler_item_name(self) -> str:
+        filler_items = [item.name for item in items.filler_items]
+        return self.random.choice(filler_items)

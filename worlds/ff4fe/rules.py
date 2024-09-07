@@ -1,4 +1,4 @@
-from worlds.ff4fe import events, items
+from . import items
 
 area_rules = {
     "BaronWeaponShop": ["Baron Key"],

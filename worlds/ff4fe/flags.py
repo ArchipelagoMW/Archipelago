@@ -18,20 +18,20 @@ def create_flags_from_options(options: FF4FEOptions):
 def build_objective_flags(options: FF4FEOptions):
     objective_flags = "Omode:"
     primary_objectives = []
-    if options.ForgeTheCrystal.current_key == "true":
+    if options.ForgeTheCrystal:
         primary_objectives.append("classicforge")
-    if options.ConquerTheGiant.current_key == "true":
+    if options.ConquerTheGiant:
         primary_objectives.append("classicgiant")
-    if options.DefeatTheFiends.current_key == "true":
+    if options.DefeatTheFiends:
         primary_objectives.append("fiends")
-    if options.FindTheDarkMatter.current_key == "true":
+    if options.FindTheDarkMatter:
         primary_objectives.append("dkmatter")
     objective_flags += ",".join(primary_objectives)
     if objective_flags == "Omode:":
         objective_flags += "none"
     if options.AdditionalObjectives.value != 0:
         objective_flags += f"/random:{options.AdditionalObjectives.value}"
-    if options.ObjectiveReward.current_key == "crystal" or options.ForgeTheCrystal.current_key == "true":
+    if options.ObjectiveReward.current_key == "crystal" or options.ForgeTheCrystal:
         objective_flags += "/win:crystal/req:all"
     else:
         objective_flags += "/win:game/req:all"
@@ -44,9 +44,9 @@ def build_pass_flags(options: FF4FEOptions):
     pass_flags = ""
     pass_key_flags = ""
     pass_shop_flags = ""
-    if options.PassEnabled.current_key == "true":
+    if options.PassEnabled:
         pass_key_flags = f"key"
-    if options.PassInShops.current_key == "true":
+    if options.PassInShops:
         pass_shop_flags = f"shop"
     if pass_key_flags != "" and pass_shop_flags != "":
         pass_flags = f"P{pass_key_flags}/{pass_shop_flags}"
@@ -62,15 +62,15 @@ def build_characters_flags(options: FF4FEOptions):
     if options.HeroChallenge.current_key != "none":
         hero_challenge_flags = f"hero/start:{options.HeroChallenge.current_key.lower()}/"
     free_character_flags = ""
-    if options.NoFreeCharacters.current_key == "true":
+    if options.NoFreeCharacters:
         free_character_flags += "nofree/"
-    if options.NoEarnedCharacters.current_key == "true":
+    if options.NoEarnedCharacters:
         free_character_flags += "noearned/"
     duplicate_character_flags = ""
-    if options.AllowDuplicateCharacters.current_key == "false":
+    if not options.AllowDuplicateCharacters:
         duplicate_character_flags += "nodupes/"
     permajoin_flags = ""
-    if options.CharactersPermajoin.current_key == "true":
+    if options.CharactersPermajoin:
         permajoin_flags = "permajoin/"
     permadeath_flags = ""
     if options.CharactersPermajoin.current_key == "yes":
@@ -99,7 +99,7 @@ def build_shops_flags(options: FF4FEOptions):
         shops_flags = f"Swild"
     elif options.ShopRandomization.current_key == "cabins":
         shops_flags = f"Scabins"
-    if options.FreeShops.current_key == "true":
+    if options.FreeShops:
         shops_flags += "/free"
     return shops_flags
 

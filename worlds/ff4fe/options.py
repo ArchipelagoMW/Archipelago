@@ -1,7 +1,6 @@
-# options.py
 from dataclasses import dataclass
 
-from Options import Toggle, Range, Choice, PerGameCommonOptions, ItemSet, DefaultOnToggle
+from Options import Toggle, Range, Choice, PerGameCommonOptions, ItemSet, DefaultOnToggle, StartInventoryPool
 
 class ForgeTheCrystal(Toggle):
     """Bring the Adamant and Legend Sword to clear this objective.
@@ -279,3 +278,4 @@ class FF4FEOptions(PerGameCommonOptions):
     StarterKitOne: StarterKitOne
     StarterKitTwo: StarterKitTwo
     StarterKitThree: StarterKitThree
+    start_inventory_from_pool: StartInventoryPool

@@ -19,5 +19,5 @@ class TestCharacters(FF4FETestBase):
         self.setUp()
         for pair in locations.mutually_exclusive_slots:
             self.assertFalse(
-                self.multiworld.get_location(pair[0], self.player).item.name == self.multiworld.get_location(pair[1], self.player).item.name and
-                self.multiworld.get_location(pair[0], self.player).item.name == self.multiworld.get_location(pair[1], self.player).item.name)
+                self.get_location(pair[0], self.player).item.name == self.get_location(pair[1], self.player).item.name and
+                self.get_location(pair[0], self.player).item.name == self.get_location(pair[1], self.player).item.name)
