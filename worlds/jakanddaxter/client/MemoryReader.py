@@ -59,7 +59,8 @@ buzzers_received_offset = offsets.define(sizeof_uint8, 16)
 specials_received_offset = offsets.define(sizeof_uint8, 32)
 
 # Deathlink information.
-died_offset = offsets.define(sizeof_uint8)
+death_count_offset = offsets.define(sizeof_uint32)
+death_cause_offset = offsets.define(sizeof_uint8)
 deathlink_enabled_offset = offsets.define(sizeof_uint8)
 
 # Move Rando information.
@@ -98,41 +99,41 @@ def as_float(value: int) -> int:
 
 
 # "Jak" to be replaced by player name in the Client.
-def autopsy(died: int) -> str:
-    if died in [1, 2, 3, 4]:
+def autopsy(cause: int) -> str:
+    if cause in [1, 2, 3, 4]:
         return random.choice(["Jak said goodnight.",
                               "Jak stepped into the light.",
                               "Jak gave Daxter his insect collection.",
                               "Jak did not follow Step 1."])
-    if died == 5:
+    if cause == 5:
         return "Jak fell into an endless pit."
-    if died == 6:
+    if cause == 6:
         return "Jak drowned in the spicy water."
-    if died == 7:
+    if cause == 7:
         return "Jak tried to tackle a Lurker Shark."
-    if died == 8:
+    if cause == 8:
         return "Jak hit 500 degrees."
-    if died == 9:
+    if cause == 9:
         return "Jak took a bath in a pool of dark eco."
-    if died == 10:
+    if cause == 10:
         return "Jak got bombarded with flaming 30-ton boulders."
-    if died == 11:
+    if cause == 11:
         return "Jak hit 800 degrees."
-    if died == 12:
+    if cause == 12:
         return "Jak ceased to be."
-    if died == 13:
+    if cause == 13:
         return "Jak got eaten by the dark eco plant."
-    if died == 14:
+    if cause == 14:
         return "Jak burned up."
-    if died == 15:
+    if cause == 15:
         return "Jak hit the ground hard."
-    if died == 16:
+    if cause == 16:
         return "Jak crashed the zoomer."
-    if died == 17:
+    if cause == 17:
         return "Jak got Flut Flut hurt."
-    if died == 18:
+    if cause == 18:
         return "Jak poisoned the whole darn catch."
-    if died == 19:
+    if cause == 19:
         return "Jak collided with too many obstacles."
     return "Jak died."
 
@@ -154,6 +155,7 @@ class JakAndDaxterMemoryReader:
     deathlink_enabled: bool = False
     send_deathlink: bool = False
     cause_of_death: str = ""
+    death_count: int = 0
 
     # Orbsanity handling
     orbsanity_enabled: bool = False
@@ -286,10 +288,12 @@ class JakAndDaxterMemoryReader:
                     self.location_outbox.append(special_ap_id)
                     logger.debug("Checked special: " + str(next_special))
 
-            died = self.read_goal_address(died_offset, sizeof_uint8)
-            if died > 0:
+            death_count = self.read_goal_address(death_count_offset, sizeof_uint32)
+            death_cause = self.read_goal_address(death_cause_offset, sizeof_uint8)
+            if death_count > self.death_count:
+                self.cause_of_death = autopsy(death_cause)  # The way he names his variables? Wack!
                 self.send_deathlink = True
-                self.cause_of_death = autopsy(died)
+                self.death_count += 1
 
             # Listen for any changes to this setting.
             deathlink_flag = self.read_goal_address(deathlink_enabled_offset, sizeof_uint8)

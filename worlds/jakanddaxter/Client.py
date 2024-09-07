@@ -222,10 +222,9 @@ class JakAndDaxterContext(CommonContext):
             await self.send_death(death_text)
             logger.info(death_text)
 
-        # Reset all flags.
+        # Reset all flags, but leave the death count alone.
         self.memr.send_deathlink = False
         self.memr.cause_of_death = ""
-        await self.repl.reset_deathlink()
 
     def on_deathlink_check(self):
         create_task_log_exception(self.ap_inform_deathlink())

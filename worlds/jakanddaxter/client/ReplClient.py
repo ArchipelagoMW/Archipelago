@@ -79,10 +79,6 @@ class JakAndDaxterReplClient:
 
         if self.received_deathlink:
             await self.receive_deathlink()
-
-            # Reset all flags.
-            # As a precaution, we should reset our own deathlink flag as well.
-            await self.reset_deathlink()
             self.received_deathlink = False
 
     # This helper function formats and sends `form` as a command to the REPL.
@@ -329,14 +325,6 @@ class JakAndDaxterReplClient:
             logger.debug(f"Received deathlink signal!")
         else:
             logger.error(f"Unable to receive deathlink signal!")
-        return ok
-
-    async def reset_deathlink(self) -> bool:
-        ok = await self.send_form("(set! (-> *ap-info-jak1* died) 0)")
-        if ok:
-            logger.debug(f"Reset deathlink flag!")
-        else:
-            logger.error(f"Unable to reset deathlink flag!")
         return ok
 
     async def subtract_traded_orbs(self, orb_count: int) -> bool:
