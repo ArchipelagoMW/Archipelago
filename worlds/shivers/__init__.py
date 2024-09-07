@@ -199,7 +199,7 @@ class ShiversWorld(World):
 
         storageitems += [self.create_item("Empty") for i in range(3)]
 
-        state = self.multiworld.get_all_state(True)
+        state = self.multiworld.get_all_state(True, False)
 
         self.random.shuffle(storagelocs)
         self.random.shuffle(storageitems)
@@ -207,6 +207,21 @@ class ShiversWorld(World):
         fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True, True)
 
         self.storage_placements = {location.name: location.item.name for location in storagelocs}
+
+    def get_pre_fill_items(self) -> List["Item"]:
+        if self.options.full_pots == "pieces":
+            return [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i]) for i in range(20)]
+        elif self.options.full_pots == "complete":
+            return [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i]) for i in range(10)]
+        else:
+            pool = []
+            for i in range(10):
+                if self.pot_completed_list[i] == 0:
+                    pool.extend([self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i]),
+                                 self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 80 + i])])
+                else:
+                    pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i]))
+            return pool
 
     set_rules = set_rules
 
