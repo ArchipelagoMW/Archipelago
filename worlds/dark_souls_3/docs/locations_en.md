@@ -1450,7 +1450,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>FS: Yhorm&#x27;s Great Machete - Ludleth for Yhorm</td><td>Boss weapon for Yhorm the Giant</td></tr>
 <tr><td>FS: Yhorm&#x27;s Greatshield - Ludleth for Yhorm</td><td>Boss weapon for Yhorm the Giant</td></tr>
 <tr><td>FS: Young Dragon Ring - Orbeck for one scroll and buying three spells</td><td>Given by Orbeck after purchasing four sorceries from him, and giving him one scroll, as a non-sorcerer.</td></tr>
-<tr><td>FSBT: Armor of the Sun - crow for Siegbr‰u</td><td>Trade Siegbrau with crow</td></tr>
+<tr><td>FSBT: Armor of the Sun - crow for Siegbr√§u</td><td>Trade Siegbr√§u with crow</td></tr>
 <tr><td>FSBT: Blessed Gem - crow for Moaning Shield</td><td>Trade Moaning Shield with crow</td></tr>
 <tr><td>FSBT: Covetous Silver Serpent Ring - illusory wall past rafters</td><td>From the Firelink Shrine roof, past the rafters and an illusory wall</td></tr>
 <tr><td>FSBT: Estus Ring - tower base</td><td>Dropping down from the Bell Tower to where Irina eventually resides</td></tr>
@@ -1829,7 +1829,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>PC: Rusted Gold Coin - halls above swamp</td><td>In the corridors leading to the Profaned Capital toxic pool</td></tr>
 <tr><td>PC: Rusted Gold Coin - palace, mimic in far room</td><td>Dropped by the right mimic surrounded by the Jailers to the right of the Profaned Flame</td></tr>
 <tr><td>PC: Shriving Stone - swamp, by chapel door</td><td>At the far end of the Profaned Capital toxic pool, to the left of the door leading to the Monstrosities of Sin</td></tr>
-<tr><td>PC: Siegbr‰u - Siegward after killing boss</td><td>Given by Siegward after helping him defeat Yhorm the Giant. You must talk to him before Emma teleports you.</td></tr>
+<tr><td>PC: Siegbr√§u - Siegward after killing boss</td><td>Given by Siegward after helping him defeat Yhorm the Giant. You must talk to him before Emma teleports you.</td></tr>
 <tr><td>PC: Soul of Yhorm the Giant</td><td>Dropped by Yhorm the Giant</td></tr>
 <tr><td>PC: Storm Ruler - Siegward</td><td>Dropped by Siegward upon death or quest completion.</td></tr>
 <tr><td>PC: Storm Ruler - boss room</td><td>To the right of Yhorm&#x27;s throne</td></tr>
@@ -1995,7 +1995,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>RC: Shira&#x27;s Gloves - Shira&#x27;s room after killing ashes NPC</td><td>Found in Shira&#x27;s room in Ringed City after killing her in post-Filianore Ringed City.</td></tr>
 <tr><td>RC: Shira&#x27;s Trousers - Shira&#x27;s room after killing ashes NPC</td><td>Found in Shira&#x27;s room in Ringed City after killing her in post-Filianore Ringed City.</td></tr>
 <tr><td>RC: Shriving Stone - wall tower, bottom floor center</td><td>In the cylindrical building before the long stairs with many Harald Legion Knights, in the center structure on the first floor.</td></tr>
-<tr><td>RC: Siegbr‰u - Lapp</td><td>Given by Lapp within the Ringed Inner Wall.</td></tr>
+<tr><td>RC: Siegbr√§u - Lapp</td><td>Given by Lapp within the Ringed Inner Wall.</td></tr>
 <tr><td>RC: Simple Gem - grave, up stairs after first drop</td><td>In Shared Grave, following the path after falling down from the crumbling stairs and continuing upward.</td></tr>
 <tr><td>RC: Soul of Darkeater Midir</td><td>Dropped by Darkeater Midir</td></tr>
 <tr><td>RC: Soul of Slave Knight Gael</td><td>Dropped by Slave Knight Gael</td></tr>
@@ -2073,7 +2073,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>RS: Great Swamp Ring - miniboss drop, by Farron Keep</td><td>Dropped by Greater Crab in Crucifixion Woods close to the Farron Keep outer wall</td></tr>
 <tr><td>RS: Green Blossom - by deep water</td><td>In the Crucifixion Woods crab area out in the open, close to the edge of the deep water area</td></tr>
 <tr><td>RS: Green Blossom - water beneath stronghold</td><td>In the Crucifixion Woods crab area close to the Crucifixion Woods bonfire, along the left wall of the water area, to the right of the entrance to the building before Crystal Sage</td></tr>
-<tr><td>RS: Heretic&#x27;s Staff - stronghold left room</td><td>In the building before Crystal Sage, entering from near Cruficixion Woods, in a corner under the first stairwell and balcony</td></tr>
+<tr><td>RS: Heretic&#x27;s Staff - stronghold left room</td><td>In the building before Crystal Sage, entering from near Cruicfixion Woods, in a corner under the first stairwell and balcony</td></tr>
 <tr><td>RS: Heysel Pick - Heysel drop</td><td>Dropped by Heysel when she invades in Road of Sacrifices</td></tr>
 <tr><td>RS: Homeward Bone - balcony by Farron Keep</td><td>At the far end of the building where you descend into Farron Keep, by the balcony</td></tr>
 <tr><td>RS: Large Soul of an Unknown Traveler - left of stairs to Farron Keep</td><td>In the area before you descend into Farron Keep, before the stairs to the far left</td></tr>
