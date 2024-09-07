@@ -1,3 +1,0 @@
-[2022-03-10 22:16:54,847] Serving on http://0.0.0.0:12000
-[2022-03-10 22:17:12,200] Generating 34b16969-d2d9-4682-a0e8-d231f97800af for 1 players
-[2022-03-10 22:17:14,548] Generation finished for seed 34b16969-d2d9-4682-a0e8-d231f97800af
