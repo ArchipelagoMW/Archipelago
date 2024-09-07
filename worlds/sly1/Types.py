@@ -45,5 +45,6 @@ episode_type_to_shortened_name = {
     EpisodeType.SSE:    "SSE",
     EpisodeType.VV:     "VV",
     EpisodeType.FITS:   "FitS",
-    EpisodeType.CHOH:   "CHoH"
+    EpisodeType.CHOH:   "CHoH",
+    EpisodeType.ALL:    "All"
 }

@@ -1,5 +1,7 @@
+import random
+
 from BaseClasses import Item, ItemClassification
-from .Types import ItemData, Sly1Item, episode_type_to_name, EpisodeType, EventData
+from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
 from .Locations import get_total_locations
 from typing import List, Dict, TYPE_CHECKING
 
@@ -9,6 +11,7 @@ if TYPE_CHECKING:
 def create_itempool(world: "Sly1World") -> List[Item]:
     itempool: List[Item] = []
 
+    # Remove starting episode
     starting_episode = (episode_type_to_name[EpisodeType(world.options.StartingEpisode)])
     if starting_episode == "All":
         for episode in sly_episodes.keys():
@@ -48,6 +51,12 @@ def create_junk_items(world: "Sly1World", count: int) -> List[Item]:
     for i in range(count):
         junk_pool.append(world.create_item(world.random.choices(list(junk_items.keys()), k=1)[0]))
     return junk_pool
+
+def set_keys(starting_episode: str):
+    starting_key = f'{starting_episode} Key'
+    key = item_table[starting_key]
+    updated_key = ItemData(key.ap_code, key.classification, key.count - 1)
+    item_table.update({starting_key: updated_key})
 
 sly_items = {
     # Progressive Moves

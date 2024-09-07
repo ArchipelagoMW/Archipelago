@@ -22,7 +22,14 @@ class StartingEpisode(Choice):
     option_all = 6
     default = 1
 
-class IncludeHourglasses(DefaultOnToggle):
+class AvoidEarlyBK(Toggle):
+    """
+    Determines if you will start with 1 key for your chosen starting episode.
+    If all is selected, you are given 1 key for a random episode.
+    """
+    display_name = "Avoid Early BK"
+
+class IncludeHourglasses(Toggle):
     """
     If enabled, Hourglasses are included in the locations.
     If Hourglasses are disabled then there are more items than locations for this game alone.
@@ -33,6 +40,7 @@ class IncludeHourglasses(DefaultOnToggle):
 class Sly1Options(PerGameCommonOptions):
     StartingEpisode:            StartingEpisode
     IncludeHourglasses:         IncludeHourglasses
+    AvoidEarlyBK:               AvoidEarlyBK
 
 sly1_option_groups: Dict[str, List[Any]] = {
     "General Options": [StartingEpisode, IncludeHourglasses]
@@ -40,5 +48,6 @@ sly1_option_groups: Dict[str, List[Any]] = {
 
 slot_data_options: List[str] = {
     "StartingEpisode",
-    "IncludeHourglasses"
+    "IncludeHourglasses",
+    "AvoidEarlyBK"
 }

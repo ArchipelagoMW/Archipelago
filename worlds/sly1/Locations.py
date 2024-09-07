@@ -7,6 +7,9 @@ if TYPE_CHECKING:
 def did_include_hourglasses(world: "Sly1World") -> bool:
     return bool(world.options.IncludeHourglasses)
 
+def did_avoid_early_bk(world: "Sly1World") -> bool:
+    return bool(world.options.AvoidEarlyBK)
+
 def get_total_locations(world: "Sly1World") -> int:
     total = 0
     for name in location_table:

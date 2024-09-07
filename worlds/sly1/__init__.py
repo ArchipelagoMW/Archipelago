@@ -1,12 +1,13 @@
+import random
 
 from typing import Dict
 from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
-from .Items import item_table, create_itempool, create_item, event_item_pairs, sly_episodes
-from .Locations import get_location_names, get_total_locations
+from .Items import item_table, create_itempool, create_item, set_keys, event_item_pairs, sly_episodes
+from .Locations import get_location_names, get_total_locations, did_avoid_early_bk
 from .Options import Sly1Options
 from .Regions import create_regions
-from .Types import EpisodeType, episode_type_to_name, Sly1Item
+from .Types import Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
 from .Rules import set_rules
 
 class Sly1Web(WebWorld):
@@ -38,10 +39,23 @@ class Sly1World(World):
         super().__init__(multiworld, player)
         
     def generate_early(self):
-        starting_episode = (episode_type_to_name[EpisodeType(self.options.StartingEpisode)])
-        if starting_episode == "All":
+        starting_episode = EpisodeType(self.options.StartingEpisode)
+        starting_episode_long = episode_type_to_name[starting_episode]
+        starting_episode_short = episode_type_to_shortened_name[starting_episode]
+        
+        # Starting Episode - please clean this up oml
+        if starting_episode_long == "All":
             for episode in sly_episodes.keys():
                 self.multiworld.push_precollected(self.create_item(episode))
+        else:
+            self.multiworld.push_precollected(self.create_item(starting_episode_long))
+
+        # Avoid Early BK
+        if did_avoid_early_bk(self):
+            if starting_episode_long == "All":
+                starting_episode_short = episode_type_to_shortened_name[EpisodeType(random.randrange(1, 4))]
+            self.multiworld.push_precollected(self.create_item(f'{starting_episode_short} Key'))
+            set_keys(starting_episode_short)
 
     def create_regions(self):
         create_regions(self)
@@ -63,7 +77,8 @@ class Sly1World(World):
         slot_data: Dict[str, object] = {
             "options": {
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
-                "IncludeHourglasses": self.options.IncludeHourglasses.value
+                "IncludeHourglasses": self.options.IncludeHourglasses.value,
+                "AvoidEarlyBK": self.options.AvoidEarlyBK.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server
