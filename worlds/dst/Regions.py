@@ -5,7 +5,6 @@ from .Items import DSTItem, item_data_table
 from .ItemPool import DSTItemPool
 from .Options import DSTOptions
 from .Constants import DSTAP_EVENTS, BOSS_COMPLETION_GOALS
-import random
 
 class DSTRegionData(NamedTuple):
    connecting_regions: List[str] = []
@@ -77,7 +76,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
    
    for _, group in RESEARCH_GROUPS.items():
       # Shuffle groups!
-      random.shuffle(group)
+      multiworld.random.shuffle(group)
 
       # Guarantee 6 of each group
       for _ in range(6):
@@ -93,7 +92,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       remaining_research += group
 
    # And shuffle again!
-   random.shuffle(remaining_research)
+   multiworld.random.shuffle(remaining_research)
 
    # Make locations until there's nothing to place left
    while location_num_left_to_place > 0 and len(remaining_research):

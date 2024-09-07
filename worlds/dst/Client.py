@@ -141,7 +141,7 @@ class DSTContext(CommonContext):
                 async def goal_hint():
                     await asyncio.sleep(0.5)
                     _goal = self.slotdata.get("goal")
-                    self.logger.info(f"Goal Type: {_goal}")
+                    self.logger.info(f"Goal type: {_goal}")
                     if _goal == "survival":
                         _days_to_survive = self.slotdata.get("days_to_survive", "Unknown")
                         self.logger.info(f"Days to survive: {_days_to_survive}")
@@ -248,8 +248,10 @@ class DSTContext(CommonContext):
                 await self.send_msgs([{"cmd": "LocationChecks", "locations": self.locations_checked}])
 
             elif eventtype == "Hint": #I think this should be deterministic enough for races, does not account for manual hints
+                random.seed(self.seed_name + str(self.slot))
                 if len(self.missing_locations):
                     valid = list(self.missing_locations.difference(self.locations_scouted))
+                    valid.sort()
                     if len(valid):
                         hint = random.choice(valid)
                         self.locations_scouted.add(hint)

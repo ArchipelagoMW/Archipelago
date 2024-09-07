@@ -1,5 +1,3 @@
-import random
-
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from .Options import DSTOptions, Goal
@@ -52,7 +50,7 @@ class DSTWorld(World):
         if self.options.goal.value == Goal.option_bosses_any or self.options.goal.value == Goal.option_bosses_all:
             if not len(self.options.required_bosses.value):
                 # You didn't choose a boss... Selecting one at random!
-                self.options.required_bosses.value.add(random.choice(self.options.required_bosses.valid_keys))
+                self.options.required_bosses.value.add(self.multiworld.random.choice(self.options.required_bosses.valid_keys))
         self.dst_itempool.decide_itempools(self)
 
     def create_item(self, name: str) -> Item:

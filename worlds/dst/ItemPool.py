@@ -1,16 +1,15 @@
 from typing import List, Set, FrozenSet
 from worlds.AutoWorld import World
 from BaseClasses import ItemClassification as IC
-import random
 from .Items import item_data_table, DSTItem
 from .Options import DSTOptions
 from .Constants import ITEM_ID_OFFSET
 
 class DSTItemPool:
     nonfiller_itempool:List[str] = list() # All items enabled by the options except junk
-    filler_items:Set = set()
-    trap_items:Set = set()
-    seasontrap_items:Set = set()
+    filler_items:List[str] = list()
+    trap_items:List[str] = list()
+    seasontrap_items:List[str] = list()
     locked_items_local_id:Set = set()
 
     def decide_itempools(self, world:World) -> None:
@@ -46,12 +45,12 @@ class DSTItemPool:
 
             # Put junk items in the filler pool
             if "junk" in item.tags:
-                self.filler_items.add(name)
+                self.filler_items.append(name)
                 continue
 
             # Put trap items in the trap pools
             if "trap" in item.tags:
-                (self.seasontrap_items if "seasontrap" in item.tags else self.trap_items).add(name)
+                (self.seasontrap_items if "seasontrap" in item.tags else self.trap_items).append(name)
                 continue
 
             # All recipe items that must be locked in DST, converted to local id so that it uses less digits
@@ -88,13 +87,13 @@ class DSTItemPool:
             "high": 0.8,
         }
         # Decide if we get a trap, and choose the one with the highest number
-        regulartrap_roll = WEIGHTS[options.trap_items.current_key] - random.random()
-        seasontrap_roll = WEIGHTS[options.season_trap_items.current_key] - random.random()
+        regulartrap_roll = WEIGHTS[options.trap_items.current_key] - world.multiworld.random.random()
+        seasontrap_roll = WEIGHTS[options.season_trap_items.current_key] - world.multiworld.random.random()
         target_pool = (
             self.filler_items if max(regulartrap_roll, seasontrap_roll) < 0.0 
             else self.trap_items if regulartrap_roll > seasontrap_roll 
             else self.seasontrap_items
         )
         if len(target_pool) > 0:
-            return random.choice(list(target_pool))
+            return world.multiworld.random.choice(list(target_pool))
         return "20 Health"
