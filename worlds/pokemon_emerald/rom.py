@@ -686,7 +686,12 @@ def _set_encounter_tables(world: "PokemonEmeraldWorld", patch: PokemonEmeraldPro
     }
     """
     for map_data in world.modified_maps.values():
-        tables = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
+        tables = [
+            map_data.land_encounters,
+            map_data.water_encounters,
+            map_data.fishing_encounters,
+            map_data.rock_smash_encounters,
+        ]
         for table in tables:
             if table is not None:
                 for i, species_id in enumerate(table.slots):

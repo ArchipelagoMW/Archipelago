@@ -19,7 +19,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
     Also creates and places events and connects regions via warps and the exits defined in the JSON.
     """
     # Used in connect_to_map_encounters. Splits encounter categories into "subcategories" and gives them names
-    # and rules so the rods can only access their specific slots.
+    # and rules so the rods can only access their specific slots. Rock smash encounters are not considered in logic.
     encounter_categories: Dict[str, List[Tuple[Optional[str], range, Optional[Callable[[CollectionState], bool]]]]] = {
         "LAND": [(None, range(0, 12), None)],
         "WATER": [(None, range(0, 5), None)],

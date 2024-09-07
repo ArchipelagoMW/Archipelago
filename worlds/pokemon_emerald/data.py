@@ -139,6 +139,7 @@ class MapData:
     land_encounters: Optional[EncounterTableData]
     water_encounters: Optional[EncounterTableData]
     fishing_encounters: Optional[EncounterTableData]
+    rock_smash_encounters: Optional[EncounterTableData]
 
 
 class EventData(NamedTuple):
@@ -356,6 +357,7 @@ def _init() -> None:
         land_encounters = None
         water_encounters = None
         fishing_encounters = None
+        rock_smash_encounters = None
 
         if "land_encounters" in map_json:
             land_encounters = EncounterTableData(
@@ -372,13 +374,19 @@ def _init() -> None:
                 map_json["fishing_encounters"]["slots"],
                 map_json["fishing_encounters"]["address"]
             )
+        if "rock_smash_encounters" in map_json:
+            rock_smash_encounters = EncounterTableData(
+                map_json["rock_smash_encounters"]["slots"],
+                map_json["rock_smash_encounters"]["address"]
+            )
 
         data.maps[map_name] = MapData(
             map_name,
             map_json["header_address"],
             land_encounters,
             water_encounters,
-            fishing_encounters
+            fishing_encounters,
+            rock_smash_encounters
         )
 
     # Load/merge region json files
