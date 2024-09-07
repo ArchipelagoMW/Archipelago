@@ -111,6 +111,7 @@ components.extend([
 def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
+    launch_args = (path, *launch_args)
     client_component = None
     text_client_component = None
     if "game" in queries:
@@ -138,7 +139,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
             layout = BoxLayout(orientation="vertical")
 
             if client_component is None:
-                self.remaining_time = 5
+                self.remaining_time = 8
                 label_text = (f"A game client able to parse uri's was not detected for {game}.\n"
                               f"Launching Text Client in 5 seconds...")
                 self.timer_label = Label(text=label_text)
@@ -165,7 +166,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
             return layout
 
         def update_label(self, dt):
-            if self.remaining_time > 0:
+            if self.remaining_time > 1:
                 # countdown the timer and string replace the number
                 self.remaining_time -= 1
                 self.timer_label.text = self.timer_label.text.replace(

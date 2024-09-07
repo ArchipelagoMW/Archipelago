@@ -1033,7 +1033,7 @@ def run_as_textclient(*args):
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    args = parser.parse_args(args)
+    args = parser.parse_args(args if args else None)  # this is necessary as long as CommonClient itself is launchable
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
