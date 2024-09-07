@@ -117,7 +117,10 @@ class RaftWorld(World):
     
     def get_pre_fill_items(self):
         if self.options.island_frequency_locations.is_filling_frequencies_in_world():
-            return [loc.item for loc in self.multiworld.get_filled_locations()]
+            return [self.create_item(frequency) for frequency in ("Vasagatan Frequency", "Balboa Island Frequency",
+                                                                  "Caravan Island Frequency", "Tangaroa Frequency",
+                                                                  "Varuna Point Frequency", "Temperance Frequency",
+                                                                  "Utopia Frequency")]
         return []
     
     def create_item_replaceAsNecessary(self, name: str) -> Item:
