@@ -492,7 +492,7 @@ def set_rules(dst_world: World) -> None:
             and basic_sanity_management(state)
             and (
                 state.has("Dark Sword", player) 
-                or (state.has("Bat Bat", player) and CAVES_ENABLED and purple_gem(state))
+                or (CAVES_ENABLED and state.has("Bat Bat", player) and purple_gem(state))
                 or state.has_all(["Papyrus", "Night Armor"], player)
             )
         )
@@ -755,7 +755,8 @@ def set_rules(dst_world: World) -> None:
             and heavy_lifting(state) # Carrying suspicious marble
             and base_making(state) # Potter's wheel ingredients
             and state.has("Potter's Wheel", player) 
-            and (state.has("Defeat Celestial Champion", player) or not state.has("Mysterious Energy", player)) # Can't happen during moonstorms
+            ## TODO: This line probably doesn't work the way I want it to, so disabling
+            # and (state.has("Defeat Celestial Champion", player) or not state.has("Mysterious Energy", player)) # Can't happen during moonstorms
             and (EXPERT_PLAYER_BIAS or arena_building(state))
         )
 
