@@ -1,4 +1,4 @@
-from worlds.ff4fe import FF4FEOptions
+from . import FF4FEOptions
 
 
 def create_flags_from_options(options: FF4FEOptions):

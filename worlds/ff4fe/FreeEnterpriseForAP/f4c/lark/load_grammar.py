@@ -78,7 +78,7 @@ TOKENS = {
     '_TO': '->',
     '_IGNORE': r'%ignore',
     '_IMPORT': r'%import',
-    'NUMBER': '\d+',
+    'NUMBER': r'\d+',
 }
 
 RULES = {

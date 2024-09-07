@@ -453,7 +453,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     input_data = ' '.join(args.data)
 
-    if re.match('^\s*([A-Fa-f0-9]{2}\s*)*$', input_data):
+    if re.match(r'^\s*([A-Fa-f0-9]{2}\s*)*$', input_data):
         # decode text from hex
         byte_list = []
         input_data = re.sub(r'[^A-Fa-f0-9]', '', input_data)

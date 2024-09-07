@@ -11,13 +11,13 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 from . import events, items
 from . import rules as FERules
-from . import topology, flags
 from .Client import FF4FEClient
 from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
 from .itempool import create_itempool
 from .items import FF4FEItem, all_items, ItemData  # data used below to add items to the World
 from .locations import FF4FELocation, all_locations, LocationData  # same as above
 from .options import FF4FEOptions  # the options we defined earlier
+from . import topology, flags
 from .rom import FF4FEProcedurePatch
 
 
