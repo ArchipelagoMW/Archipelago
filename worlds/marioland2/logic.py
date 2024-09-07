@@ -449,8 +449,7 @@ def space_zone_1_coins(state, player, coins):
 
 
 def space_zone_2_midway_bell(state, player):
-    return state.has_any(["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower",
-                          "Carrot"], player),
+    return state.has_any(["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower", "Carrot"], player)
 
 
 def space_zone_2_boss(state, player):
