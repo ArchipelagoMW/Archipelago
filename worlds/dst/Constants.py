@@ -394,8 +394,8 @@ DSTAP_ITEMS = [
 
     # Traps (651 - 700)
     [651, "Ice Trap",                    "",                                      [ "trap" ] ],
-    [652, "Drop Item",                   "",                                      [ "trap" ] ],
-    [653, "Surprise Slurper",            "",                                      [ "trap" ] ],
+    [652, "Drop Item",                   "",                                      [ "trap", "deprecated" ] ],
+    [653, "Slurper Trap",                "",                                      [ "trap" ] ],
     [654, "Spore Trap",                  "",                                      [ "trap" ] ],
     [655, "Boomerang Trap",              "",                                      [ "trap" ] ],
     [656, "Bee Trap",                    "",                                      [ "trap" ] ],
