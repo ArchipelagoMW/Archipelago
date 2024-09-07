@@ -96,9 +96,7 @@ def tree_zone_3_coins(state, player, coins):
 
 
 def tree_zone_4_normal_exit(state, player):
-    if has_pipe_down(state, player):
-        return tree_zone_4_midway_bell(state, player)
-    return False
+    return has_pipe_down(state, player) and tree_zone_4_midway_bell(state, player)
 
 
 def tree_zone_4_midway_bell(state, player):
