@@ -139,9 +139,9 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
             layout = BoxLayout(orientation="vertical")
 
             if client_component is None:
-                self.remaining_time = 8
-                label_text = (f"A game client able to parse uri's was not detected for {game}.\n"
-                              f"Launching Text Client in 5 seconds...")
+                self.remaining_time = 7
+                label_text = (f"A game client able to parse URIs was not detected for {game}.\n"
+                              f"Launching Text Client in 7 seconds...")
                 self.timer_label = Label(text=label_text)
                 layout.add_widget(self.timer_label)
                 Clock.schedule_interval(self.update_label, 1)
