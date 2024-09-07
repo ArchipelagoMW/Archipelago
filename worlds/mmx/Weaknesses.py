@@ -367,7 +367,7 @@ weapons_chaotic = {
     ],
 }
 
-def handle_weaknesses(world: "MMXWorld"):
+def handle_weaknesses(world: "MMXWorld") -> None:
     shuffle_type = world.options.boss_weakness_rando.value
     strictness_type = world.options.boss_weakness_strictness.value
     boss_weakness_plando = world.options.boss_weakness_plando.value

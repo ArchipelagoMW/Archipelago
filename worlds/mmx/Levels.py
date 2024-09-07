@@ -1,5 +1,3 @@
-
-from worlds.AutoWorld import World
 from .Names import LocationName
 
 location_id_to_level_id = {

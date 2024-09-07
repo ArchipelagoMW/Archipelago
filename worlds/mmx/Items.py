@@ -1,11 +1,10 @@
-import typing
-
-from BaseClasses import Item, ItemClassification
-from worlds.AutoWorld import World
+from BaseClasses import Item
 from .Names import ItemName
 
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+from typing import NamedTuple, Optional, Dict
+
+class ItemData(NamedTuple):
+    code: Optional[int]
     progression: bool
     trap: bool = False
     quantity: int = 1
@@ -112,4 +111,4 @@ item_table = {
     **special_weapons,
 }
 
-lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

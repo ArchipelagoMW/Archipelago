@@ -1,8 +1,10 @@
-import typing
-
 from BaseClasses import Location
-from worlds.AutoWorld import World
 from .Names import LocationName
+
+from typing import TYPE_CHECKING, Dict
+
+if TYPE_CHECKING:
+    from . import MMXWorld
 
 class MMXLocation(Location):
     game = "Mega Man X"
@@ -180,7 +182,7 @@ location_groups = {
     },
 }
     
-def setup_locations(world: World):
+def setup_locations(world: "MMXWorld") -> Dict[int, str]:
     location_table = {
         **stage_clears,
         **stage_location_table,
@@ -193,4 +195,4 @@ def setup_locations(world: World):
 
     return location_table
 
-lookup_id_to_name: typing.Dict[int, str] = {id: name for name, _ in all_locations.items()}
+lookup_id_to_name: Dict[int, str] = {id: name for name, _ in all_locations.items()}

@@ -1,16 +1,17 @@
 import Utils
 import hashlib
 import os
-
-from typing import TYPE_CHECKING, Iterable
-
-if TYPE_CHECKING:
-    from . import MMXWorld
+import settings
 
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from .Aesthetics import get_palette_bytes, player_palettes
+
+from typing import TYPE_CHECKING, Iterable
+
+if TYPE_CHECKING:
+    from . import MMXWorld
 
 HASH_US = 'a10071fa78554b57538d0b459e00d224'
 HASH_US_REV_1 = 'df1cc0c8c8c4b61e3b834cc03366611c'
@@ -169,14 +170,14 @@ class MMXProcedurePatch(APProcedurePatch, APTokenMixin):
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
 
-    def write_byte(self, offset, value):
+    def write_byte(self, offset, value) -> None:
         self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
 
-    def write_bytes(self, offset, value: Iterable[int]):
+    def write_bytes(self, offset, value: Iterable[int]) -> None:
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
 
-def adjust_palettes(world: "MMXWorld", patch: MMXProcedurePatch):
+def adjust_palettes(world: "MMXWorld", patch: MMXProcedurePatch) -> None:
     player_palette_options = {
         "Default": world.options.palette_default.current_key,
         "Homing Torpedo": world.options.palette_homing_torpedo.current_key,
@@ -202,7 +203,7 @@ def adjust_palettes(world: "MMXWorld", patch: MMXProcedurePatch):
         patch.write_bytes(offset, data)
 
 
-def adjust_boss_damage_table(world: "MMXWorld", patch: MMXProcedurePatch):
+def adjust_boss_damage_table(world: "MMXWorld", patch: MMXProcedurePatch) -> None:
     for boss, data in world.boss_weakness_data.items():
         offset = boss_weakness_offsets[boss]
         patch.write_bytes(offset, bytearray(data))
@@ -222,7 +223,7 @@ def adjust_boss_damage_table(world: "MMXWorld", patch: MMXProcedurePatch):
         offset += 16
 
 
-def adjust_boss_hp(world: "MMXWorld", patch: MMXProcedurePatch):
+def adjust_boss_hp(world: "MMXWorld", patch: MMXProcedurePatch) -> None:
     option = world.options.boss_randomize_hp
     if option == "weak":
         ranges = [1,32]
@@ -237,7 +238,7 @@ def adjust_boss_hp(world: "MMXWorld", patch: MMXProcedurePatch):
         patch.write_byte(offset, world.random.randint(ranges[0], ranges[1]))
 
 
-def patch_rom(world: "MMXWorld", patch: MMXProcedurePatch):
+def patch_rom(world: "MMXWorld", patch: MMXProcedurePatch) -> None:
     # Prepare some ROM locations to receive the basepatch output
     patch.write_bytes(0x00098C, bytearray([0xFF,0xFF,0xFF]))
     patch.write_bytes(0x0009AE, bytearray([0xFF,0xFF,0xFF]))
@@ -388,7 +389,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
+    options: settings.Settings = settings.get_settings()
     if not file_name:
         file_name = options["mmx_options"]["rom_file"]
     if not os.path.exists(file_name):

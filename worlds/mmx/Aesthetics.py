@@ -109,6 +109,7 @@ player_palettes = {
     ],
 }
 
+
 def get_palette_bytes(palette: Dict[str, List]) -> bytearray:
     output_data = bytearray()
     for hexcol in palette:
@@ -125,6 +126,7 @@ def get_palette_bytes(palette: Dict[str, List]) -> bytearray:
             byte_data = rgb888_to_bgr555(col[0], col[1], col[2])
             output_data.extend(bytearray(byte_data))
     return output_data
+
 
 def rgb888_to_bgr555(red, green, blue) -> bytes:
     red = red >> 3

@@ -1,13 +1,19 @@
-import typing
-
-from BaseClasses import CollectionState, MultiWorld, Region, Entrance, ItemClassification
+from BaseClasses import MultiWorld, Region, ItemClassification
 from .Locations import MMXLocation
 from .Items import MMXItem
-from .Names import LocationName, ItemName, RegionName, EventName
+from .Names import LocationName, RegionName, EventName
 from worlds.AutoWorld import World
 
+from typing import TYPE_CHECKING, Dict
 
-def create_regions(multiworld: MultiWorld, player: int, world: World, active_locations):
+if TYPE_CHECKING:
+    from . import MMXWorld
+
+
+def create_regions(world: "MMXWorld", active_locations: Dict[int, str]) -> None:
+    multiworld = world.multiworld
+    player = world.player
+
     menu = create_region(multiworld, player, active_locations, 'Menu')
 
     intro = create_region(multiworld, player, active_locations, RegionName.intro)
@@ -323,7 +329,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, RegionName.sigma_fortress_3_after_rematch_4, LocationName.sigma_fortress_3_1up)
 
 
-def connect_regions(world: World):
+def connect_regions(world: World) -> None:
     connect(world, "Menu", RegionName.intro)
     
     connect(world, RegionName.intro, RegionName.armored_armadillo)
@@ -440,7 +446,7 @@ def connect_regions(world: World):
         connect(world, RegionName.sigma_fortress_3, RegionName.sigma_fortress_3_after_rematch_5)
 
 
-def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
+def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None) -> Region:
     ret = Region(name, player, multiworld)
     if locations:
         for locationName in locations:
@@ -452,7 +458,7 @@ def create_region(multiworld: MultiWorld, player: int, active_locations, name: s
     return ret
 
 
-def add_event_to_region(multiworld: MultiWorld, player: int, region_name: str, event_name: str, event_item=None):
+def add_event_to_region(multiworld: MultiWorld, player: int, region_name: str, event_name: str, event_item=None) -> None:
     region = multiworld.get_region(region_name, player)
     event = MMXLocation(player, event_name, None, region)
     if event_item:
@@ -462,7 +468,7 @@ def add_event_to_region(multiworld: MultiWorld, player: int, region_name: str, e
     region.locations.append(event)
 
 
-def add_location_to_region(multiworld: MultiWorld, player: int, active_locations, region_name: str, location_name: str):
+def add_location_to_region(multiworld: MultiWorld, player: int, active_locations, region_name: str, location_name: str) -> None:
     region = multiworld.get_region(region_name, player)
     loc_id = active_locations.get(location_name, 0)
     if loc_id:
@@ -470,7 +476,7 @@ def add_location_to_region(multiworld: MultiWorld, player: int, active_locations
         region.locations.append(location)
 
 
-def connect(world: World, source: str, target: str):
+def connect(world: World, source: str, target: str) -> None:
     source_region: Region = world.multiworld.get_region(source, world.player)
     target_region: Region = world.multiworld.get_region(target, world.player)
     source_region.connect(target_region)

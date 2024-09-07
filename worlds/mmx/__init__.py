@@ -1,24 +1,22 @@
-import dataclasses
 import os
-import typing
-import math
 import settings
-import hashlib
 import threading
 import pkgutil
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from .Items import MMXItem, ItemData, item_table, junk_table, item_groups
-from .Locations import MMXLocation, setup_locations, all_locations, location_groups
+from .Items import MMXItem, item_table, junk_table, item_groups
+from .Locations import setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
-from .Names import ItemName, LocationName, EventName
+from .Names import ItemName, LocationName
 from .Options import MMXOptions, mmx_option_groups
 from .Client import MMXSNIClient
+from .Rules import build_rules
 from .Levels import location_id_to_level_id
 from .Weaknesses import handle_weaknesses, weapon_id
 from .Rom import patch_rom, MMXProcedurePatch, HASH_US, HASH_LEGACY
+
+from typing import Dict, List, Any, ClassVar, TextIO
 
 class MMXSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -66,7 +64,7 @@ class MMXWorld(World):
     game = "Mega Man X"
     web = MMXWeb()
 
-    settings: typing.ClassVar[MMXSettings]
+    settings: ClassVar[MMXSettings]
     
     options_dataclass = MMXOptions
     options: MMXOptions
@@ -89,15 +87,15 @@ class MMXWorld(World):
         LocationName.intro_completed,
     }
 
-    def __init__(self, multiworld: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int) -> None:
         self.rom_name_available_event = threading.Event()
         super().__init__(multiworld, player)
 
     def create_regions(self) -> None:
         location_table = setup_locations(self)
-        create_regions(self.multiworld, self.player, self, location_table)
+        create_regions(self, location_table)
 
-        itempool: typing.List[MMXItem] = []
+        itempool: List[MMXItem] = []
         
         connect_regions(self)
         
@@ -221,7 +219,7 @@ class MMXWorld(World):
         self.multiworld.itempool += itempool
 
 
-    def create_item(self, name: str, force_classification=False) -> Item:
+    def create_item(self, name: str, force_classification: ItemClassification = False) -> Item:
         data = item_table[name]
 
         if force_classification:
@@ -238,18 +236,15 @@ class MMXWorld(World):
         return created_item
 
 
-    def set_rules(self):
-        from .Rules import set_rules
+    def set_rules(self) -> None:
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Mega Man X" in self.multiworld.re_gen_passthrough:
-                    slot_data = self.multiworld.re_gen_passthrough["Mega Man X"]
-                    self.boss_weaknesses = slot_data["weakness_rules"]
-        set_rules(self)
+                    self.boss_weaknesses = self.multiworld.re_gen_passthrough["Mega Man X"]["weakness_rules"]
+        build_rules(self)
 
 
-
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> Dict[int, Any]:
         slot_data = {}
         # Write options to slot_data
         slot_data["energy_link"] = self.options.energy_link.value
@@ -294,7 +289,7 @@ class MMXWorld(World):
         return slot_data
 
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         if ItemName.legs not in self.options.start_inventory_from_pool and self.options.early_legs:
             self.multiworld.early_items[self.player][ItemName.legs] = 1
             
@@ -304,14 +299,14 @@ class MMXWorld(World):
         handle_weaknesses(self)
 
 
-    def interpret_slot_data(self, slot_data):
+    def interpret_slot_data(self, slot_data: dict) -> Dict[str, Any]:
         local_weaknesses = dict()
         for boss, entries in slot_data["weakness_rules"].items():
             local_weaknesses[boss] = entries.copy()
         return {"weakness_rules": local_weaknesses}
     
 
-    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
         if self.options.boss_weakness_rando != "vanilla":
             spoiler_handle.write(f"\nMega Man X boss weaknesses for {self.multiworld.player_name[self.player]}:\n")
             
@@ -323,7 +318,7 @@ class MMXWorld(World):
                 spoiler_handle.writelines(f"{boss + ':':<30s}{weaknesses}\n")
 
 
-    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if not self.options.boss_weakness_rando:
             return
         
@@ -380,7 +375,7 @@ class MMXWorld(World):
         return self.random.choice(list(junk_table.keys()))
 
 
-    def generate_output(self, output_directory: str):
+    def generate_output(self, output_directory: str) -> None:
         try:
             patch = MMXProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
             patch.write_file("mmx_basepatch.bsdiff4", pkgutil.get_data(__name__, "data/mmx_basepatch.bsdiff4"))
@@ -396,7 +391,7 @@ class MMXWorld(World):
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
 
-    def modify_multidata(self, multidata: dict):
+    def modify_multidata(self, multidata: dict) -> None:
         import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
