@@ -5,6 +5,8 @@
 - A legally obtained NTSC ISO of Sly Cooper and the Thievius Raccoonus
 - [v1.6.0 of PCSX2](https://pcsx2.net/downloads)
     - Select show previous versions and choose v1.6.0
+- The Sly 1 AP client (Find the latest [here](https://github.com/hoppel16/ArchipelagoBranchSly1/releases))
+    - You may need to also install .NET 8.0
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 ## Configuring your YAML file
@@ -22,10 +24,17 @@ the [Sly Cooper and the Thievius Raccoonus Options Page](/games/Sly%20Cooper%20a
 
 ### Connect to the MultiServer
 
-1. Launch PCSX2 and boot your copy of Sly 1
-    - You can also add various patch files (ie: Bentley Skipper)
-    - Make sure you reload the patch files if you add them after booting the game
-    - Patch files must also be named correctly for them to work properly
-2. Launch SlyAP.exe from the client folder
-    - Under address input your archipelago connection address (ie: archipelago.gg:51780)
-    - PCSX2 must be open before the Sly client is opened or it will give an error
+1. Open PCSX2 v1.6.0 and load Sly 1
+
+2. Add Cheats (Optional)
+    - Find the cheats folder in your PCSX2 directory.
+    - Place any cheat files (with .pnach extension) in this folder.
+    - In PCSX2, go to System > Enable Cheats.
+
+3. Create a New Game
+
+4. Set Up the Client
+    - Extract client.zip and find sly1ap.exe in the extracted files
+        - You may need to download .NET 8.0
+    - Run sly1ap.exe
+
