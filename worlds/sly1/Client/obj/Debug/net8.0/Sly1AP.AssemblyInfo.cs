@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sly1AP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57f21d9f33fb4bcf8f817ee679495da64e8dfa75")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aaf071b701b76e37476f8c8fa8deecaed9d07d62")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sly1AP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sly1AP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

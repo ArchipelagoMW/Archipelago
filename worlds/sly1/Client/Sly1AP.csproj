@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Archipelago.Core" Version="0.0.8" />
+    <PackageReference Include="Archipelago.Core" Version="0.0.10" />
     <PackageReference Include="Archipelago.MultiClient.Net" Version="6.3.1" />
     <PackageReference Include="Archipelago.PCSX2" Version="0.0.5" />
   </ItemGroup>

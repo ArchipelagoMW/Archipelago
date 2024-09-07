@@ -166,7 +166,7 @@ namespace Sly1AP
             if (options.ContainsKey("StartingEpisode"))
             {
                 string StartingEpisode = Convert.ToString(options["StartingEpisode"]);
-                if (StartingEpisode == "Tide Of Terror" & Memory.ReadInt(0x2027C67C) == 0)
+                if (StartingEpisode == "Tide of Terror" & Memory.ReadInt(0x2027C67C) == 0)
                 {
                     keys.RaleighStart = 1;
                     Memory.Write(0x2027C67C, keys.RaleighStart);
@@ -181,9 +181,20 @@ namespace Sly1AP
                     keys.MzRubyStart = 1;
                     Memory.Write(0x2027CF14, keys.MzRubyStart);
                 }
-                if (StartingEpisode == "Fire In The Sky" & Memory.ReadInt(0x2027D360) == 0)
+                if (StartingEpisode == "Fire in the Sky" & Memory.ReadInt(0x2027D360) == 0)
                 {
                     keys.PandaKingStart = 1;
+                    Memory.Write(0x2027D360, keys.PandaKingStart);
+                }
+                if (StartingEpisode == "All" & Memory.ReadInt(0x2027C67C) == 0 & Memory.ReadInt(0x2027CAC8) == 0 & Memory.ReadInt(0x2027CF14) == 0 & Memory.ReadInt(0x2027D360) == 0)
+                {
+                    keys.RaleighStart = 1;
+                    keys.MuggshotStart = 1;
+                    keys.MzRubyStart = 1;
+                    keys.PandaKingStart = 1;
+                    Memory.Write(0x2027C67C, keys.RaleighStart);
+                    Memory.Write(0x2027CAC8, keys.MuggshotStart);
+                    Memory.Write(0x2027CF14, keys.MzRubyStart);
                     Memory.Write(0x2027D360, keys.PandaKingStart);
                 }
             }

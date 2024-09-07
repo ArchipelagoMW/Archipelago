@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using System.IO;
 using Archipelago.Core.Util;
+using Sly1AP.Models;
 
 namespace Sly1AP
 {
