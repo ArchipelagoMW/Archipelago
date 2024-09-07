@@ -8,6 +8,8 @@ from typing import Any, Dict, List, Set, Tuple, Optional
 import os
 import logging
 
+from typing_extensions import override
+
 from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
 
@@ -97,7 +99,7 @@ class ZillionWorld(World):
             self.buffer = []
 
         def write(self, msg: str) -> None:
-            if msg.endswith('\n'):
+            if msg.endswith("\n"):
                 self.buffer.append(msg[:-1])
                 self.logger.debug("".join(self.buffer))
                 self.buffer = []
@@ -122,7 +124,7 @@ class ZillionWorld(World):
     slot_data_ready: threading.Event
     """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world: MultiWorld, player: int) -> None:
         super().__init__(world, player)
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
@@ -133,6 +135,7 @@ class ZillionWorld(World):
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
         self.id_to_zz_item = id_to_zz_item
 
+    @override
     def generate_early(self) -> None:
         if not hasattr(self.multiworld, "zillion_logic_cache"):
             setattr(self.multiworld, "zillion_logic_cache", {})
@@ -153,12 +156,13 @@ class ZillionWorld(World):
         # just in case the options changed anything (I don't think they do)
         assert self.zz_system.randomizer, "init failed"
         for zz_name in self.zz_system.randomizer.locations:
-            if zz_name != 'main':
+            if zz_name != "main":
                 assert self.zz_system.randomizer.loc_name_2_pretty[zz_name] in self.location_name_to_id, \
                     f"{self.zz_system.randomizer.loc_name_2_pretty[zz_name]} not in location map"
 
         self._make_item_maps(zz_op.start_char)
 
+    @override
     def create_regions(self) -> None:
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         assert self.id_to_zz_item, "generate_early hasn't been called"
@@ -178,13 +182,13 @@ class ZillionWorld(World):
                 zz_loc.req.gun = 1
             assert len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) != 0
 
-        start = self.zz_system.randomizer.regions['start']
+        start = self.zz_system.randomizer.regions["start"]
 
-        all: Dict[str, ZillionRegion] = {}
+        all_regions: Dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
-            all[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
-            self.multiworld.regions.append(all[here_name])
+            all_regions[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
+            self.multiworld.regions.append(all_regions[here_name])
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
         queue = deque([start])
@@ -194,7 +198,7 @@ class ZillionWorld(World):
             here_name = "Menu" if zz_here.name == "start" else zz_reg_name_to_reg_name(zz_here.name)
             if here_name in done:
                 continue
-            here = all[here_name]
+            here = all_regions[here_name]
 
             for zz_loc in zz_here.locations:
                 # if local gun reqs didn't place "keyword" item
@@ -221,15 +225,16 @@ class ZillionWorld(World):
                     self.my_locations.append(loc)
 
             for zz_dest in zz_here.connections.keys():
-                dest_name = "Menu" if zz_dest.name == 'start' else zz_reg_name_to_reg_name(zz_dest.name)
-                dest = all[dest_name]
-                exit = Entrance(p, f"{here_name} to {dest_name}", here)
-                here.exits.append(exit)
-                exit.connect(dest)
+                dest_name = "Menu" if zz_dest.name == "start" else zz_reg_name_to_reg_name(zz_dest.name)
+                dest = all_regions[dest_name]
+                exit_ = Entrance(p, f"{here_name} to {dest_name}", here)
+                here.exits.append(exit_)
+                exit_.connect(dest)
 
                 queue.append(zz_dest)
             done.add(here.name)
 
+    @override
     def create_items(self) -> None:
         if not self.id_to_zz_item:
             self._make_item_maps("JJ")
@@ -253,14 +258,11 @@ class ZillionWorld(World):
                 self.logger.debug(f"Zillion Items: {item_name}  1")
                 self.multiworld.itempool.append(self.create_item(item_name))
 
-    def set_rules(self) -> None:
-        # logic for this game is in create_regions
-        pass
-
+    @override
     def generate_basic(self) -> None:
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         # main location name is an alias
-        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations['main'].name]
+        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations["main"].name]
 
         self.multiworld.get_location(main_loc_name, self.player)\
             .place_locked_item(self.create_item("Win"))
@@ -268,21 +270,17 @@ class ZillionWorld(World):
             lambda state: state.has("Win", self.player)
 
     @staticmethod
-    def stage_generate_basic(multiworld: MultiWorld, *args: Any) -> None:
+    def stage_generate_basic(multiworld: MultiWorld, *args: Any) -> None:  # noqa: ANN401
         # item link pools are about to be created in main
         # JJ can't be an item link unless all the players share the same start_char
         # (The reason for this is that the JJ ZillionItem will have a different ZzItem depending
         #  on whether the start char is Apple or Champ, and the logic depends on that ZzItem.)
         for group in multiworld.groups.values():
-            # TODO: remove asserts on group when we can specify which members of TypedDict are optional
-            assert "game" in group
-            if group["game"] == "Zillion":
-                assert "item_pool" in group
+            if group["game"] == "Zillion" and "item_pool" in group:
                 item_pool = group["item_pool"]
                 to_stay: Chars = "JJ"
                 if "JJ" in item_pool:
-                    assert "players" in group
-                    group_players = group["players"]
+                    group_players = set(group["players"])
                     players_start_chars: List[Tuple[int, Chars]] = []
                     for player in group_players:
                         z_world = multiworld.worlds[player]
@@ -301,11 +299,12 @@ class ZillionWorld(World):
                     for p, sc in players_start_chars:
                         if sc != to_stay:
                             group_players.remove(p)
-                assert "world" in group
+                    group["players"] = group_players
                 group_world = group["world"]
                 assert isinstance(group_world, ZillionWorld)
                 group_world._make_item_maps(to_stay)
 
+    @override
     def post_fill(self) -> None:
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
         This happens before progression balancing,  so the items may not be in their final locations yet."""
@@ -362,10 +361,11 @@ class ZillionWorld(World):
                 f"in world {self.player} didn't get an item"
             )
 
-        game_id = self.multiworld.player_name[self.player].encode() + b'\x00' + self.multiworld.seed_name[-6:].encode()
+        game_id = self.multiworld.player_name[self.player].encode() + b"\x00" + self.multiworld.seed_name[-6:].encode()
 
         return GenData(multi_items, self.zz_system.get_game(), game_id)
 
+    @override
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use multiworld.random here.
         If you need any last-second randomization, use self.random instead."""
@@ -387,6 +387,7 @@ class ZillionWorld(World):
 
         self.logger.debug(f"Zillion player {self.player} finished generate_output")
 
+    @override
     def fill_slot_data(self) -> ZillionSlotInfo:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
@@ -411,6 +412,7 @@ class ZillionWorld(World):
 
     # end of ordered Main.py calls
 
+    @override
     def create_item(self, name: str) -> Item:
         """Create an item for this world type and player.
         Warning: this may be called with self.multiworld = None, for example by MultiServer"""
@@ -431,6 +433,7 @@ class ZillionWorld(World):
         z_item = ZillionItem(name, classification, item_id, self.player, zz_item)
         return z_item
 
+    @override
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         return "Empty"

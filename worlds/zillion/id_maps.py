@@ -98,7 +98,7 @@ loc_name_to_id: Dict[str, int] = {
 
 
 def zz_reg_name_to_reg_name(zz_reg_name: str) -> str:
-    if zz_reg_name[0] == 'r' and zz_reg_name[3] == 'c':
+    if zz_reg_name[0] == "r" and zz_reg_name[3] == "c":
         row, col = parse_reg_name(zz_reg_name)
         end = zz_reg_name[5:]
         return f"{make_room_name(row, col)} {end.upper()}"

@@ -263,7 +263,7 @@ class ZillionMapGen(Choice):
     option_full = 2
     default = 0
 
-    def zz_value(self) -> Literal['none', 'rooms', 'full']:
+    def zz_value(self) -> Literal["none", "rooms", "full"]:
         if self.value == ZillionMapGen.option_none:
             return "none"
         if self.value == ZillionMapGen.option_rooms:
