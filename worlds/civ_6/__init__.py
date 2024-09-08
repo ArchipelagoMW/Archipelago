@@ -16,7 +16,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 
-def run_client(url: Optional[str] = None):
+def run_client(*args):
     print("Running Civ6 Client")
     from .Civ6Client import main  # lazy import
     launch_subprocess(main, name="Civ6Client")
