@@ -88,7 +88,7 @@ def launch_textclient(*args):
     if CommonClient.gui_enabled:
         launch_subprocess(CommonClient.run_as_textclient, name="TextClient", args=args)
     else:
-        CommonClient.run_as_textclient()
+        CommonClient.run_as_textclient(*args)
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
