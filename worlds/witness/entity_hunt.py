@@ -145,7 +145,7 @@ class EntityHuntPicker:
 
         remaining_entities, remaining_entity_weights = [], []
         for area, eligible_entities in self.ELIGIBLE_ENTITIES_PER_AREA.items():
-            for panel in eligible_entities - self.HUNT_ENTITIES:
+            for panel in sorted(eligible_entities - self.HUNT_ENTITIES):
                 remaining_entities.append(panel)
                 remaining_entity_weights.append(allowance_per_area[area])
 
