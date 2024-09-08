@@ -296,7 +296,7 @@ class PokemonRedBlueWorld(World):
                     if attempt > 1:
                         for mon in poke_data.pokemon_data.keys():
                             state.collect(self.create_item(mon), True)
-                    state.sweep_for_events()
+                    state.sweep_for_advancements()
                     self.multiworld.random.shuffle(badges)
                     self.multiworld.random.shuffle(badgelocs)
                     badgelocs_copy = badgelocs.copy()
@@ -443,7 +443,7 @@ class PokemonRedBlueWorld(World):
         self.multiworld.elite_four_pokedex_condition[self.player].total = \
             int((len(reachable_mons) / 100) * self.multiworld.elite_four_pokedex_condition[self.player].value)
 
-        if self.multiworld.accessibility[self.player] == "locations":
+        if self.multiworld.accessibility[self.player] == "full":
             balls = [self.create_item(ball) for ball in ["Poke Ball", "Great Ball", "Ultra Ball"]]
             traps = [self.create_item(trap) for trap in item_groups["Traps"]]
             locations = [location for location in self.multiworld.get_locations(self.player) if "Pokedex - " in
