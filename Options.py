@@ -786,17 +786,22 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     verify_location_name: bool = False
     value: typing.Any
 
-    @classmethod
-    def verify_keys(cls, data: typing.Iterable[str]) -> None:
-        if cls.valid_keys:
-            data = set(data)
-            dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
-            extra = dataset - cls._valid_keys
+    def verify_keys(self) -> None:
+        if self.valid_keys:
+            data = set(self.value)
+            dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
+            extra = dataset - self._valid_keys
             if extra:
-                raise Exception(f"Found unexpected key {', '.join(extra)} in {cls}. "
-                                f"Allowed keys: {cls._valid_keys}.")
+                raise OptionError(
+                    f"Found unexpected key {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
+                    f"Allowed keys: {self._valid_keys}."
+                )
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        try:
+            self.verify_keys()
+        except OptionError as validation_error:
+            raise OptionError(f"Player {player_name} has invalid option keys:\n{validation_error}")
         if self.convert_name_groups and self.verify_item_name:
             new_value = type(self.value)()  # empty container of whatever value is
             for item_name in self.value:
@@ -833,7 +838,6 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     @classmethod
     def from_any(cls, data: typing.Dict[str, typing.Any]) -> OptionDict:
         if type(data) == dict:
-            cls.verify_keys(data)
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
@@ -879,7 +883,6 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     @classmethod
     def from_any(cls, data: typing.Any):
         if is_iterable_except_str(data):
-            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
@@ -905,7 +908,6 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
     @classmethod
     def from_any(cls, data: typing.Any):
         if is_iterable_except_str(data):
-            cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
 
@@ -948,6 +950,19 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
             self.value = []
             logging.warning(f"The plando texts module is turned off, "
                             f"so text for {player_name} will be ignored.")
+        else:
+            super().verify(world, player_name, plando_options)
+
+    def verify_keys(self) -> None:
+        if self.valid_keys:
+            data = set(text.at for text in self)
+            dataset = set(word.casefold() for word in data) if self.valid_keys_casefold else set(data)
+            extra = dataset - self._valid_keys
+            if extra:
+                raise OptionError(
+                    f"Invalid \"at\" placement {', '.join(extra)} in {getattr(self, 'display_name', self)}. "
+                    f"Allowed placements: {self._valid_keys}."
+                )
 
     @classmethod
     def from_any(cls, data: PlandoTextsFromAnyType) -> Self:
@@ -971,7 +986,6 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                         texts.append(text)
                 else:
                     raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
-            cls.verify_keys([text.at for text in texts])
             return cls(texts)
         else:
             raise NotImplementedError(f"Cannot Convert from non-list, got {type(data)}")
@@ -1144,18 +1158,35 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 
 
 class Accessibility(Choice):
-    """Set rules for reachability of your items/locations.
+    """
+    Set rules for reachability of your items/locations.
+    
+    **Full:** ensure everything can be reached and acquired.
 
-    - **Locations:** ensure everything can be reached and acquired.
-    - **Items:** ensure all logically relevant items can be acquired.
-    - **Minimal:** ensure what is needed to reach your goal can be acquired.
+    **Minimal:** ensure what is needed to reach your goal can be acquired.
     """
     display_name = "Accessibility"
     rich_text_doc = True
-    option_locations = 0
-    option_items = 1
+    option_full = 0
     option_minimal = 2
     alias_none = 2
+    alias_locations = 0
+    alias_items = 0
+    default = 0
+
+
+class ItemsAccessibility(Accessibility):
+    """
+    Set rules for reachability of your items/locations.
+    
+    **Full:** ensure everything can be reached and acquired.
+
+    **Minimal:** ensure what is needed to reach your goal can be acquired.
+
+    **Items:** ensure all logically relevant items can be acquired. Some items, such as keys, may be self-locking, and
+    some locations may be inaccessible.
+    """
+    option_items = 1
     default = 1
 
 
@@ -1205,6 +1236,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
+        assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
             if option_name in type(self).type_hints:
@@ -1486,31 +1518,3 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)
-
-
-if __name__ == "__main__":
-
-    from worlds.alttp.Options import Logic
-    import argparse
-
-    map_shuffle = Toggle
-    compass_shuffle = Toggle
-    key_shuffle = Toggle
-    big_key_shuffle = Toggle
-    hints = Toggle
-    test = argparse.Namespace()
-    test.logic = Logic.from_text("no_logic")
-    test.map_shuffle = map_shuffle.from_text("ON")
-    test.hints = hints.from_text('OFF')
-    try:
-        test.logic = Logic.from_text("overworld_glitches_typo")
-    except KeyError as e:
-        print(e)
-    try:
-        test.logic_owg = Logic.from_text("owg")
-    except KeyError as e:
-        print(e)
-    if test.map_shuffle:
-        print("map_shuffle is on")
-    print(f"Hints are {bool(test.hints)}")
-    print(test)
