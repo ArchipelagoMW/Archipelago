@@ -25,7 +25,7 @@ def launch_client():
     launch_subprocess(launch, name="FactorioClient")
 
 
-components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("Factorio Client", "Factorio", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
 
 
 class FactorioSettings(settings.Group):

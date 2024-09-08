@@ -17,7 +17,7 @@ def launch_client():
     launch_subprocess(launch, name="KH1 Client")
 
 
-components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("KH1 Client", "Kingdom Hearts", "KH1Client", func=launch_client, component_type=Type.CLIENT))
 
 
 class KH1Web(WebWorld):

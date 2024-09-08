@@ -18,7 +18,7 @@ def run_client():
     p.start()
 
 
-components.append(Component("Undertale Client", "UndertaleClient"))
+components.append(Component("Undertale Client", "Undertale", "UndertaleClient"))
 # components.append(Component("Undertale Client", func=run_client))
 
 

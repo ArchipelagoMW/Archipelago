@@ -18,7 +18,7 @@ def launch_client(*args) -> None:
     launch_subprocess(launch, name="BizHawkClient")
 
 
-component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
+component = Component("BizHawk Client", ["Archipelago"], "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
                       file_identifier=SuffixIdentifier())
 components.append(component)
 
@@ -37,6 +37,7 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
             if "game" in namespace:
                 AutoBizHawkClientRegister.game_handlers[systems][namespace["game"]] = new_class()
+                component.game_name.append(namespace["game"])
 
         # Update launcher component's suffixes
         if "patch_suffix" in namespace:

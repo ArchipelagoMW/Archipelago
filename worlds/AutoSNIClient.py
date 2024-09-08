@@ -10,7 +10,7 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 if TYPE_CHECKING:
     from SNIClient import SNIContext
 
-component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"))
+component = Component('SNI Client', ["Archipelago"], 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"))
 components.append(component)
 
 
@@ -39,6 +39,7 @@ class AutoSNIClientRegister(abc.ABCMeta):
         new_class = super().__new__(cls, name, bases, dct)
         if "game" in dct:
             AutoSNIClientRegister.game_handlers[dct["game"]] = new_class()
+            component.game_name.append(dct["game"])
 
         if "patch_suffix" in dct:
             patch_suffix = dct["patch_suffix"]
