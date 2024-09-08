@@ -60,6 +60,7 @@ class Component:
 
 processes = weakref.WeakSet()
 
+
 def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
     global processes
     import multiprocessing
