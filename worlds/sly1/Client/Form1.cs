@@ -45,10 +45,13 @@ namespace Sly1AP
                     Thread.Sleep(1000);
                     if (Memory.ReadByte(0x202623C0) == 0)
                     {
-                        WriteLine("Lost connection to PCSX2. Press any key to exit.");
-                        Console.ReadKey();
+                        WriteLine("Lost connection to PCSX2.");
                         return;
                     }
+                }
+                if (!Client.IsConnected)
+                {
+                    return;
                 }
                 await Task.Delay(1000);
             }
