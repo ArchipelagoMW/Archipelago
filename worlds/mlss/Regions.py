@@ -223,7 +223,7 @@ def connect_regions(world: "MLSSWorld"):
             "Bowser's Castle Mini",
             lambda state: StateLogic.canMini(state, world.player) and StateLogic.thunder(state, world.player),
         )
-        connect(world, names,"Bowser's Castle Mini","Cackletta's Soul")
+        connect(world, names, "Bowser's Castle Mini", "Cackletta's Soul")
     else:
         connect(world, names, "PostJokes", "Cackletta's Soul")
     connect(world, names, "Chucklehuck Woods", "Winkle", lambda state: StateLogic.canDash(state, world.player))
