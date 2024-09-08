@@ -33,6 +33,7 @@ buildings_other = {
 buildings_top_row = {
     "Belt Reader": ItemClassification.progression,
     "Storage": ItemClassification.progression,
+    "Switch": ItemClassification.progression,
     "Item Filter": ItemClassification.progression,
     "Display": ItemClassification.useful
 }
@@ -159,6 +160,7 @@ item_descriptions = {  # TODO
     "Chaining Extractor": "An upgrade to extractors, that can increase the output without balancers or mergers",
     "Belt Reader": "A wired building, that shows the average amount of items passing through per second",
     "Storage": "A building, that stores up to 5000 of a certain shape",
+    "Switch": "A building, that sends a constant boolean signal",
     "Item Filter": "A wired building, that filters items based on wire input",
     "Display": "A wired building, that displays a shape or color based on wire input",
     "Wires": "The main building of the wires layer, that carries signals between other buildings",

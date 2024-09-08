@@ -48,7 +48,9 @@ def has_stacker(state: CollectionState, player: int) -> bool:
 
 
 def has_painter(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Painter", "Double Painter", "Quad Painter"], player)
+    return (state.has_any(["Painter", "Double Painter"], player) or
+            (state.has_all(["Quad Painter", "Wires"], player) and
+             state.has_any(["Switch", "Constant Signal"], player)))
 
 
 def has_mixer(state: CollectionState, player: int) -> bool:

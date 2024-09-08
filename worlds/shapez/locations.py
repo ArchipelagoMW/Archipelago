@@ -7,6 +7,7 @@ location_description = {  # TODO
     "Level 1": "TODO",
     "Level 1 Additional": "TODO",
     "Level 20 Additional": "TODO",
+    "Level 20 Additional 2": "TODO",
     "Level 26": "TODO",
     "Level 1000": "TODO",
     "Belt Upgrade Tier II": "TODO",
@@ -208,7 +209,7 @@ achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter
                                     "I've seen that before ...", "Memories from the past", "I need trains",
                                     "A bit early?", "GPS"]
 
-all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional"]
+all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
                             + [f"Level {x}" for x in range(1, 1001)]
                             + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 1001)]
                             + list(shapesanity_simple)
@@ -232,6 +233,7 @@ def addlevels(maxlevel: int, logictype: str,
 
     if logictype.startswith("vanilla"):
         locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         locations["Level 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         locations["Level 3"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         locations["Level 4"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
@@ -249,10 +251,14 @@ def addlevels(maxlevel: int, logictype: str,
         l20phase = 20//phaselength
         if l20phase == 0:
             locations["Level 20 Additional"] = ("Main", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Main", LocationProgressType.DEFAULT)
         elif l20phase == 1:
             locations["Level 20 Additional"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         else:
             locations["Level 20 Additional"] = (f"Levels with {min(l20phase, 5)} Buildings",
+                                                LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = (f"Levels with {min(l20phase, 5)} Buildings",
                                                 LocationProgressType.DEFAULT)
         for x in range(2, phaselength):
             locations[f"Level {x}"] = ("Main", LocationProgressType.DEFAULT)
@@ -269,6 +275,7 @@ def addlevels(maxlevel: int, logictype: str,
 
     elif logictype.startswith("quick"):
         locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         locations["Level 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
         locations["Level 3"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
         locations["Level 4"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
@@ -284,38 +291,45 @@ def addlevels(maxlevel: int, logictype: str,
             nextlevel += 1
         if nextlevel > 20 and not l20set:
             locations["Level 20 Additional"] = ("Main", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Main", LocationProgressType.DEFAULT)
             l20set = True
         for _ in range(0, random_logic_phase_length[1]):
             locations[f"Level {nextlevel}"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
             nextlevel += 1
         if nextlevel > 20 and not l20set:
             locations["Level 20 Additional"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
             l20set = True
         for _ in range(0, random_logic_phase_length[2]):
             locations[f"Level {nextlevel}"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
             nextlevel += 1
         if nextlevel > 20 and not l20set:
             locations["Level 20 Additional"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
             l20set = True
         for _ in range(0, random_logic_phase_length[3]):
             locations[f"Level {nextlevel}"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
             nextlevel += 1
         if nextlevel > 20 and not l20set:
             locations["Level 20 Additional"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
             l20set = True
         for _ in range(0, random_logic_phase_length[4]):
             locations[f"Level {nextlevel}"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
             nextlevel += 1
         if nextlevel > 20 and not l20set:
             locations["Level 20 Additional"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
             l20set = True
         for x in range(nextlevel, maxlevel+1):
             locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         if not l20set:
             locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+            locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
 
     else:  # logictype == hardcore
         locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
         for x in range(2, maxlevel+1):
             locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
 
