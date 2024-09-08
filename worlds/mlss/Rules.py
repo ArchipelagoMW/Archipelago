@@ -681,10 +681,10 @@ def set_rules(world: "MLSSWorld", excluded):
         add_rule(
             world.get_location(LocationName.JokesEndSecondFloorWestRoomCoinBlock),
             lambda state: StateLogic.ultra(state, world.player)
-                            and StateLogic.fire(state, world.player)
-                            and (StateLogic.membership(state, world.player)
-                            or (StateLogic.canDig(state, world.player)
-                            and StateLogic.canMini(state, world.player))),
+                          and StateLogic.fire(state, world.player)
+                          and (StateLogic.membership(state, world.player)
+                          or (StateLogic.canDig(state, world.player)
+                          and StateLogic.canMini(state, world.player))),
         )
         add_rule(
             world.get_location(LocationName.JokesEndNorthofBridgeRoomCoinBlock),
