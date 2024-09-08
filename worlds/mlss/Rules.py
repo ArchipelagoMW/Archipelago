@@ -218,9 +218,9 @@ def set_rules(world: "MLSSWorld", excluded):
     add_rule(
         world.get_location(LocationName.BeanbeanOutskirtsUltraHammerUpgrade),
         lambda state: StateLogic.thunder(state, world.player)
-                        and StateLogic.pieces(state, world.player)
-                        and StateLogic.castleTown(state, world.player)
-                        and StateLogic.rose(state, world.player),
+                      and StateLogic.pieces(state, world.player)
+                      and StateLogic.castleTown(state, world.player)
+                      and StateLogic.rose(state, world.player),
     )
     add_rule(
         world.get_location(LocationName.BeanbeanOutskirtsSoloLuigiCaveMole),
