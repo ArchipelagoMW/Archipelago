@@ -84,7 +84,6 @@ class TunicWorld(World):
     seed_groups: Dict[str, SeedGroup] = {}
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
-    combat_logic_enabled: bool = False
 
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
