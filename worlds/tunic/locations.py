@@ -1,6 +1,7 @@
 from typing import Dict, NamedTuple, Set, Optional
 from .grass import grass_location_table
 
+
 class TunicLocationData(NamedTuple):
     region: str
     er_region: str  # entrance rando region
@@ -320,7 +321,7 @@ hexagon_locations: Dict[str, str] = {
     "Blue Questagon": "Rooted Ziggurat Lower - Hexagon Blue",
 }
 
-location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
+standard_location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
 
 all_locations = location_table.copy()
 all_locations.update(grass_location_table)

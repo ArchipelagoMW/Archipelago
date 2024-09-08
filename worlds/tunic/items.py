@@ -164,7 +164,7 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders in Library": TunicItemData(ItemClassification.progression, 0, 148, "Ladders"),
     "Ladders in Lower Quarry": TunicItemData(ItemClassification.progression, 0, 149, "Ladders"),
     "Ladders in Swamp": TunicItemData(ItemClassification.progression, 0, 150, "Ladders"),
-    "Grass": TunicItemData(ItemClassification.filler, 0, 151, "Grass"),
+    "Grass": TunicItemData(ItemClassification.filler, 0, 151),
 }
 
 fool_tiers: List[List[str]] = [
