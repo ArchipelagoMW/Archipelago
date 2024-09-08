@@ -68,3 +68,57 @@ class TestER(TunicTestBase):
         self.assertFalse(self.can_reach_location("Overworld - [Southwest] Flowers Holy Cross"))
         self.collect_by_name(["Pages 42-43 (Holy Cross)"])
         self.assertTrue(self.can_reach_location("Overworld - [Southwest] Flowers Holy Cross"))
+
+
+class TestERSpecial(TunicTestBase):
+    options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
+               options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
+               options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
+               options.FixedShop.internal_name: options.FixedShop.option_false,
+               options.IceGrappling.internal_name: options.IceGrappling.option_easy,
+               "plando_connections": [
+                   {
+                       "entrance": "Stick House Entrance",
+                       "exit": "Ziggurat Portal Room Entrance"
+                   },
+                   {
+                       "entrance": "Ziggurat Lower to Ziggurat Tower",
+                       "exit": "Secret Gathering Place Exit"
+                   }
+               ]}
+    # with these plando connections, you need to ice grapple from the back of lower zig to the front to get laurels
+
+
+# ensure that ladder storage connections connect to the outlet region, not the portal's region
+class TestLadderStorage(TunicTestBase):
+    options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
+               options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
+               options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
+               options.FixedShop.internal_name: options.FixedShop.option_false,
+               options.LadderStorage.internal_name: options.LadderStorage.option_hard,
+               options.LadderStorageWithoutItems.internal_name: options.LadderStorageWithoutItems.option_false,
+               "plando_connections": [
+                   {
+                       "entrance": "Fortress Courtyard Shop",
+                       # "exit": "Ziggurat Portal Room Exit"
+                       "exit": "Spawn to Far Shore"
+                   },
+                   {
+                       "entrance": "Fortress Courtyard to Beneath the Vault",
+                       "exit": "Stick House Exit"
+                   },
+                   {
+                       "entrance": "Stick House Entrance",
+                       "exit": "Fortress Courtyard to Overworld"
+                   },
+                   {
+                       "entrance": "Old House Waterfall Entrance",
+                       "exit": "Ziggurat Portal Room Entrance"
+                   },
+               ]}
+
+    def test_ls_to_shop_entrance(self) -> None:
+        self.collect_by_name(["Magic Orb"])
+        self.assertFalse(self.can_reach_location("Fortress Courtyard - Page Near Cave"))
+        self.collect_by_name(["Pages 24-25 (Prayer)"])
+        self.assertTrue(self.can_reach_location("Fortress Courtyard - Page Near Cave"))
