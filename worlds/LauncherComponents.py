@@ -61,7 +61,7 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()):
+def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
     global processes
     import multiprocessing
     process = multiprocessing.Process(target=func, name=name, args=args)
@@ -85,7 +85,7 @@ class SuffixIdentifier:
 
 def launch_textclient(*args):
     import CommonClient
-    launch_subprocess(CommonClient.run_as_textclient, "TextClient", args)
+    launch_subprocess(CommonClient.run_as_textclient, name="TextClient", args=args)
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
