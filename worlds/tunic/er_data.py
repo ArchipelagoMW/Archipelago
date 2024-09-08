@@ -1295,7 +1295,6 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
 
-    # cannot get from frogs back to front
     "Library Exterior Ladder Region": {
         "Library Exterior by Tree":
             [],
@@ -1354,7 +1353,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Library Lab": {
         "Library Lab Lower":
             [["Hyperdash"]],
-        "Library Portal":
+        "Library Lab on Portal Pad":
             [],
         "Library Lab to Librarian":
             [],
