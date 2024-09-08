@@ -184,6 +184,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.player_options = {}
 
     player = 1
+    erargs.name = {}
     while player <= args.multi:
         path = player_path_cache[player]
         if path:
@@ -200,8 +201,6 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                             except Exception as e:
                                 raise Exception(f"Error setting {k} to {v} for player {player}") from e
 
-                    if not getattr(erargs, "name", None):
-                        setattr(erargs, "name", {})  # if the first slot does not define a name we won't have a name obj to look up
                     if path == args.weights_file_path:  # if name came from the weights file, just use base player name
                         erargs.name[player] = f"Player{player}"
                     elif player not in erargs.name:  # if name was not specified, generate it from filename
