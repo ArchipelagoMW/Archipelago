@@ -1,8 +1,8 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {
-      "Archipelago.Core/0.0.10": {
+    "net8.0-windows7.0": {
+      "Archipelago.Core/0.0.11": {
         "type": "package",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.3.1",
@@ -79,14 +79,14 @@
     }
   },
   "libraries": {
-    "Archipelago.Core/0.0.10": {
-      "sha512": "66IlufEOYdET9+GXWUvvwF6Livh+wkCc/iNX61rTLiC5HH729xvtxPtUVnY+KhNnHRZbqVr37V4ZbJRwl9q/Rw==",
+    "Archipelago.Core/0.0.11": {
+      "sha512": "GiZXuArBpMXdkE8a6fU1hFotsq6balGgbljYj7o4ts4hb78TmxzCBbqzZIOw/qGyRmxXG0q76GDf0qPVgnF2Iw==",
       "type": "package",
-      "path": "archipelago.core/0.0.10",
+      "path": "archipelago.core/0.0.11",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "archipelago.core.0.0.10.nupkg.sha512",
+        "archipelago.core.0.0.11.nupkg.sha512",
         "archipelago.core.nuspec",
         "lib/net8.0/Archipelago.Core.dll"
       ]
@@ -258,8 +258,8 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net8.0": [
-      "Archipelago.Core >= 0.0.10",
+    "net8.0-windows7.0": [
+      "Archipelago.Core >= 0.0.11",
       "Archipelago.MultiClient.Net >= 6.3.1",
       "Archipelago.PCSX2 >= 0.0.5"
     ]
@@ -281,7 +281,7 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net8.0"
+        "net8.0-windows"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -289,8 +289,8 @@
         "https://nuget.bepinex.dev/v3/index.json": {}
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
           "projectReferences": {}
         }
       },
@@ -306,12 +306,12 @@
       }
     },
     "frameworks": {
-      "net8.0": {
-        "targetAlias": "net8.0",
+      "net8.0-windows7.0": {
+        "targetAlias": "net8.0-windows",
         "dependencies": {
           "Archipelago.Core": {
             "target": "Package",
-            "version": "[0.0.10, )"
+            "version": "[0.0.11, )"
           },
           "Archipelago.MultiClient.Net": {
             "target": "Package",
@@ -336,6 +336,9 @@
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WindowsForms": {
+            "privateAssets": "none"
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"

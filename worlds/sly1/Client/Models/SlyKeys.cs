@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sly1AP.Models
 {
-    public class Keys
+    public class SlyKeys
     {
         public int RaleighKeys { get; set; } = 0;
         public int MuggshotKeys { get; set; } = 0;
