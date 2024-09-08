@@ -10,7 +10,8 @@
 ## Required Software
 
 - An installable, up-to-date PC version of shapez ([Steam](https://store.steampowered.com/app/1318690/shapez/)).
-- The shapezipelago mod from the [GitHub page](https://github.com/BlastSlimey/shapezipelago/releases) or the [mod.io page](https://mod.io/g/shapez/m/shapezipelago).
+- The shapezipelago mod from the [GitHub page](https://github.com/BlastSlimey/shapezipelago/releases) or the 
+[mod.io page](https://mod.io/g/shapez/m/shapezipelago).
 
 ## Optional Software
 
@@ -34,7 +35,8 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [shapez Player Options Page](/games/shapez/player-options)
+You can generate a yaml or download a template by visiting the 
+[shapez Player Options Page](/games/shapez/player-options)
 
 ## Joining a MultiWorld Game
 

@@ -9,7 +9,8 @@ class Goal(Choice):
     - **Vanilla:** Complete level 26.
     - **MAM:** Complete a specified level after level 26. Every level before that and a few additional options will be a
     location. It's recommended to build a Make-Anything-Machine (MAM).
-    - **Even fasterer:** Upgrade everything to a specified tier after tier 8. Every upgrade before that will be a location.
+    - **Even fasterer:** Upgrade everything to a specified tier after tier 8. Every upgrade before that will be a
+    location.
     - **Efficiency III:** Deliver 256 blueprint shapes per second to the hub."""
     display_name = "Goal"
     rich_text_doc = True
@@ -65,8 +66,8 @@ class RandomizeLevelLogic(Choice):
     - **Stretched:** After every floor(maxlevel/6) levels, another building is required.
     - **Quick:** Every Level, except level 1, requires another building, with level 6 and onwards requiring all
     buildings.
-    - **Random steps:** After a random amount of levels, another building is required, with level 1 always requiring none.
-    This can potentially behave like any other option.
+    - **Random steps:** After a random amount of levels, another building is required, with level 1 always requiring
+    none. This can potentially behave like any other option.
     - **Hardcore:** All levels (except level 1) have completely random shape requirements and thus require all
     buildings. Expect early BKs."""
     display_name = "Randomize level logic"
@@ -92,8 +93,8 @@ class RandomizeUpgradeLogic(Choice):
     - **Linear:** Tier II requires nothing, III-VI require another random building each,
     and VII and onwards require all buildings.
     - **Category:** Belt and miner upgrades require no building (up to tier IV), processors upgrades require the
-    cutter (all tiers), rotator (tier IV and onwards), and stacker (tier VI and onwards, and painting upgrades require the
-    cutter, rotator, stacker, painter (all tiers) and color mixer (tiers V and onwards). Tier VII and onwards will
+    cutter (all tiers), rotator (tier IV and onwards), and stacker (tier VI and onwards, and painting upgrades require
+    the cutter, rotator, stacker, painter (all tiers) and color mixer (tiers V and onwards). Tier VII and onwards will
     always require all buildings.
     - **Category random:** Each upgrades category (up to tier IV) requires a random amount of buildings (in order),
     with one category always requiring no buildings. Tier V and onwards will always require all buildings.
