@@ -6,15 +6,15 @@ from typing import Dict, List
 import zipfile
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
-from worlds.civ_6.Data import get_progressive_districts_data
-from worlds.civ_6.DeathLink import handle_check_deathlink
+from .Data import get_progressive_districts_data
+from .DeathLink import handle_check_deathlink
 from NetUtils import ClientStatus
 import Utils
-from worlds.civ_6.CivVIInterface import CivVIInterface, ConnectionState
-from worlds.civ_6.Enum import CivVICheckType
-from worlds.civ_6.Items import CivVIItemData, generate_item_table, get_item_by_civ_name
-from worlds.civ_6.Locations import generate_era_location_table
-from worlds.civ_6.TunerClient import TunerErrorException, TunerTimeoutException
+from .CivVIInterface import CivVIInterface, ConnectionState
+from .Enum import CivVICheckType
+from .Items import CivVIItemData, generate_item_table, get_item_by_civ_name
+from .Locations import generate_era_location_table
+from .TunerClient import TunerErrorException, TunerTimeoutException
 
 
 class CivVICommandProcessor(ClientCommandProcessor):
@@ -336,7 +336,3 @@ def debug_main():
     if args.debug:
         logger.setLevel(logging.DEBUG)
     main(args.connect, args.password, args.name)
-
-
-if __name__ == '__main__':
-    main()
