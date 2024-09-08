@@ -64,7 +64,7 @@ sly_items = {
     "Progressive Roll": ItemData(10020002, ItemClassification.useful, 2),
     "Progressive Slow Motion": ItemData(10020003, ItemClassification.useful, 3),
     "Progressive Safety": ItemData(10020007, ItemClassification.useful, 2),
-    "Progressive Invisibility": ItemData(10020010, ItemClassification.progression_skip_balancing, 2),
+    "Progressive Invisibility": ItemData(10020010, ItemClassification.progression, 2),
     
     # Non-progressive Moves
     "Coin Magnet": ItemData(10020004, ItemClassification.useful),

@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Choice, OptionGroup, Toggle, DefaultOnToggle
+from Options import Choice, OptionGroup, Toggle, OptionSet
 
 def create_option_groups() -> List[OptionGroup]:
     option_group_list: List[OptionGroup] = []
@@ -36,14 +36,37 @@ class IncludeHourglasses(Toggle):
     """
     display_name = "Include Hourglasses"
 
+# NOT YET IMPLEMENTED
+# class ExcludeMinigames(OptionSet):
+#     """
+#     Choose which minigames types you want to exclude as locations.
+#     crabs: Treasure in the Depths
+#     races: At the Dog Track, A Desperate Race
+#     turrets: Murray's Big Gamble, The King of the Hill
+#     hover blasters: A Ghastly Voyage, Rapid Fire Assualt
+#     chicken killing: Down Home Cooking
+#     swamp skiff: Piranha Lake
+#     """
+#     display_name = "Exclude Minigames"
+#     valid_keys = {
+#         "crabs",
+#         "races",
+#         "turrets",
+#         "hover blasters",
+#         "shicken killing",
+#         "swamp skiff"
+#     }
+
 @dataclass
 class Sly1Options(PerGameCommonOptions):
     StartingEpisode:            StartingEpisode
     IncludeHourglasses:         IncludeHourglasses
     AvoidEarlyBK:               AvoidEarlyBK
+    # ExcludeMinigames:           ExcludeMinigames
 
 sly1_option_groups: Dict[str, List[Any]] = {
     "General Options": [StartingEpisode, IncludeHourglasses]
+    # "Minigames": [ExcludeMinigames]
 }
 
 slot_data_options: List[str] = {

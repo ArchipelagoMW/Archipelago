@@ -72,4 +72,13 @@ def set_rules(world: "Sly1World"):
             loc = world.multiworld.get_location(key, world.player)
             add_rule(loc, lambda state: state.has(f'{episode_type_to_shortened_name[data.key_type]} Key', world.player, data.key_requirement))
 
+        add_rule(world.multiworld.get_location("Unseen Foe Hourglass", world.player),
+             lambda state: state.has("Progressive Invisibility", world.player, 1))
+
+    # Extra rules for Unseen Foe
+    add_rule(world.multiworld.get_location("Unseen Foe Key", world.player),
+             lambda state: state.has("Progressive Invisibility", world.player, 1))
+    add_rule(world.multiworld.get_location("Unseen Foe Vault", world.player),
+             lambda state: state.has("Progressive Invisibility", world.player, 1))
+
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
