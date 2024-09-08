@@ -6,7 +6,6 @@ from .locations import ShapezLocation
 from worlds.generic.Rules import add_rule
 
 all_regions = [
-    "Menu",
     "Main",
     "Levels with 1 Building",
     "Levels with 2 Buildings",
@@ -96,9 +95,11 @@ def has_logic_list_building(state: CollectionState, player: int, buildings: str,
 def create_shapez_regions(player: int, multiworld: MultiWorld,
                           included_locations: Dict[str, Tuple[str, LocationProgressType]],
                           location_name_to_id: Dict[str, int], level_logic_buildings: List[str],
-                          upgrade_logic_buildings: List[str], early_useful: str, goal: str) -> List[Region]:
+                          upgrade_logic_buildings: List[str], early_useful: str, goal: str,
+                          menu_region: Region) -> List[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
     regions: Dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
+    regions["Menu"] = menu_region
 
     # Creates ShapezLocations for every included location and puts them into the correct region
     for name, data in included_locations.items():
