@@ -71,6 +71,11 @@ def can_build_mam(state: CollectionState, player: int) -> bool:
                                                         "Logic Gates", "Virtual Processing"], player)
 
 
+def can_place_blueprint(state: CollectionState, player: int) -> bool:
+    return (state.has("Blueprints", player) and has_stacker(state, player) and
+            has_painter(state, player) and has_mixer(state, player))
+
+
 def has_logic_list_building(state: CollectionState, player: int, buildings: str, includeuseful: bool) -> bool:
     if includeuseful:
         useful = state.has("Trash", player) and has_balancer(state, player) and has_tunnel(state, player)
@@ -132,7 +137,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     regions["Main"].connect(regions["Wiring Achievements"], "Wires needed",
                             lambda state: state.has("Wires", player))
     regions["Main"].connect(regions["Blueprint Achievements"], "Blueprints needed",
-                            lambda state: state.has("Blueprints", player))
+                            lambda state: can_place_blueprint(state, player))
     regions["Main"].connect(regions["MAM needed"], "Building a MAM",
                             lambda state: can_build_mam(state, player))
 
