@@ -87,12 +87,14 @@ class WitnessPlayerLogic:
         self.DIFFICULTY = world.options.puzzle_randomization
 
         self.REFERENCE_LOGIC: StaticWitnessLogicObj
-        if self.DIFFICULTY == "sigma_expert":
+        if self.DIFFICULTY == "sigma_normal":
+            self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
+        elif self.DIFFICULTY == "sigma_expert":
             self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
+        elif self.DIFFICULTY == "umbra_variety":
+            self.REFERENCE_LOGIC = static_witness_logic.umbra_variety
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
-        else:
-            self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
 
         self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
