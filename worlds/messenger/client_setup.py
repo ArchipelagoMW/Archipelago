@@ -1,3 +1,4 @@
+import argparse
 import io
 import logging
 import os.path
@@ -16,7 +17,7 @@ from Utils import is_windows, messagebox, tuplize_version
 MOD_URL = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
 
 
-def launch_game(url: Optional[str] = None) -> None:
+def launch_game(*args) -> None:
     """Check the game installation, then launch it"""
     def courier_installed() -> bool:
         """Check if Courier is installed"""
@@ -140,7 +141,7 @@ def launch_game(url: Optional[str] = None) -> None:
     except ValueError as e:
         logging.error(e)
         messagebox("Invalid File", "Selected file did not match expected hash. "
-                                   "Please try again and ensure you select The Messenger.exe.")
+                   "Please try again and ensure you select The Messenger.exe.")
         return
     working_directory = os.getcwd()
     # setup ssl context
@@ -156,14 +157,14 @@ def launch_game(url: Optional[str] = None) -> None:
         pass
     if not courier_installed():
         should_install = ask_yes_no_cancel("Install Courier",
-                                        "No Courier installation detected. Would you like to install now?")
+                                           "No Courier installation detected. Would you like to install now?")
         if not should_install:
             return
         logging.info("Installing Courier")
         install_courier()
     if not mod_installed():
         should_install = ask_yes_no_cancel("Install Mod",
-                                        "No randomizer mod detected. Would you like to install now?")
+                                           "No randomizer mod detected. Would you like to install now?")
         if not should_install:
             return
         logging.info("Installing Mod")
@@ -172,25 +173,32 @@ def launch_game(url: Optional[str] = None) -> None:
         latest = request_data(MOD_URL)["tag_name"]
         if available_mod_update(latest):
             should_update = ask_yes_no_cancel("Update Mod",
-                                           f"New mod version detected. Would you like to update to {latest} now?")
+                                              f"New mod version detected. Would you like to update to {latest} now?")
             if should_update:
                 logging.info("Updating mod")
                 install_mod()
             elif should_update is None:
                 return
-    should_launch = ask_yes_no_cancel("Launch Game",
-                                   "Mod installed and up to date. Would you like to launch the game now?")
-    if not should_launch:
-        return
+
+    if not args:
+        should_launch = ask_yes_no_cancel("Launch Game",
+                                          "Mod installed and up to date. Would you like to launch the game now?")
+        if not should_launch:
+            return
+
+    parser = argparse.ArgumentParser(description="Messenger Client Launcher")
+    parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
+    args = parser.parse_args(args)
+
     if not is_windows:
-        if url:
-            open_file(f"steam://rungameid/764790//{url}/")
+        if args.url:
+            open_file(f"steam://rungameid/764790//{args.url}/")
         else:
             open_file("steam://rungameid/764790")
     else:
         os.chdir(game_folder)
-        if url:
-            subprocess.Popen([MessengerWorld.settings.game_path, str(url)])
+        if args.url:
+            subprocess.Popen([MessengerWorld.settings.game_path, str(args.url)])
         else:
             subprocess.Popen(MessengerWorld.settings.game_path)
         os.chdir(working_directory)
