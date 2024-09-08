@@ -1045,6 +1045,8 @@ def run_as_textclient(*args):
                 args.name = urllib.parse.unquote(url.username)
             if url.password:
                 args.password = urllib.parse.unquote(url.password)
+        else:
+            parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
 
     colorama.init()
 
