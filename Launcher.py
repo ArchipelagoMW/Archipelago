@@ -99,12 +99,12 @@ def update_settings():
 
 components.extend([
     # Functions
-    Component("Open host.yaml", func=open_host_yaml),
-    Component("Open Patch", func=open_patch),
-    Component("Generate Template Options", func=generate_yamls),
-    Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
-    Component("Browse Files", func=browse_files),
+    Component("Open host.yaml", "Archipelago", func=open_host_yaml),
+    Component("Open Patch", "Archipelago", func=open_patch),
+    Component("Generate Template Options", "Archipelago", func=generate_yamls),
+    Component("Discord Server", "Archipelago", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
+    Component("Unrated/18+ Discord Server", "Archipelago", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Browse Files", "Archipelago", func=browse_files),
 ])
 
 
