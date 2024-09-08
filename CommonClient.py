@@ -1037,7 +1037,6 @@ def run_as_textclient(*args):
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
     args = parser.parse_args(args)
 
-
     if args.url:
         url = urllib.parse.urlparse(args.url)
         args.connect = url.netloc
