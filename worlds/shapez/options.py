@@ -146,7 +146,7 @@ class EarlyBalancerTunnelAndTrash(Choice):
 
 class LockBeltAndExtractor(Toggle):
     """Locks Belts and Extractors and adds them into the item pool.
-    **Be careful with this option, as every single location in this game needs both of them.**"""
+    **Be careful with this option, as almost every single location in this game needs both of them.**"""
     display_name = "Lock Belt and Extractor"
     rich_text_doc = True
     default = False

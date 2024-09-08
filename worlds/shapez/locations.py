@@ -426,7 +426,7 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
 
-    locations["My eyes no longer hurt"] = ("Main", LocationProgressType.DEFAULT)
+    locations["My eyes no longer hurt"] = ("Menu", LocationProgressType.DEFAULT)
     locations["Painter"] = ("Painted Shape Achievements", LocationProgressType.DEFAULT)
     locations["Cutter"] = ("Cut Shape Achievements", LocationProgressType.DEFAULT)
     locations["Rotater"] = ("Rotated Shape Achievements", LocationProgressType.DEFAULT)
@@ -443,7 +443,7 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     locations["It's a mess"] = ("Main", LocationProgressType.DEFAULT)
     locations["Even faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
     locations["Get rid of them"] = ("Trashed Shape Achievements", LocationProgressType.DEFAULT)
-    locations["Getting into it"] = ("Main", LocationProgressType.DEFAULT)
+    locations["Getting into it"] = ("Menu", LocationProgressType.DEFAULT)
     locations["Now it's easy"] = ("Blueprint Achievements", LocationProgressType.DEFAULT)
     locations["Computer Guy"] = ("Wiring Achievements", LocationProgressType.DEFAULT)
     locations["Efficiency 2"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
@@ -456,7 +456,7 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     locations["I've seen that before ..."] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["Memories from the past"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
     locations["I need trains"] = ("Main", LocationProgressType.DEFAULT)
-    locations["GPS"] = ("Main", LocationProgressType.DEFAULT)
+    locations["GPS"] = ("Menu", LocationProgressType.DEFAULT)
     # Achievements that depend on upgrades
     if upgradelogictype == "linear":
         locations["Faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
@@ -499,8 +499,8 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
         locations["A bit early?"] = ("All Buildings Shapes", unreasonable_type)
 
     if not excludelong:
-        locations["It's been a long time"] = ("Main", unreasonable_type)
-        locations["Addicted"] = ("Main", unreasonable_type)
+        locations["It's been a long time"] = ("Menu", unreasonable_type)
+        locations["Addicted"] = ("Menu", unreasonable_type)
 
     return locations
 

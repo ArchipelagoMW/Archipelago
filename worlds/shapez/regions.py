@@ -6,6 +6,7 @@ from .locations import ShapezLocation
 from worlds.generic.Rules import add_rule
 
 all_regions = [
+    "Menu",
     "Main",
     "Levels with 1 Building",
     "Levels with 2 Buildings",

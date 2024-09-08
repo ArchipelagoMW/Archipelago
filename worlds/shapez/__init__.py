@@ -160,10 +160,6 @@ class ShapezWorld(World):
         return ShapezItem(name, item_table[name], self.item_name_to_id[name], self.player)
 
     def create_regions(self) -> None:
-        # Create Menu region like in docs
-        menu_region = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(menu_region)
-
         # Create list of all included locations based on player options
         if self.ut_active:
             self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key,
@@ -194,6 +190,9 @@ class ShapezWorld(World):
                                                              self.level_logic, self.upgrade_logic,
                                                              self.options.early_balancer_tunnel_and_trash.current_key,
                                                              self.options.goal.current_key))
+
+        menu_region = self.multiworld.get_region("Menu", self.player)
+        self.multiworld.regions.append(menu_region)
 
         # Connect Menu to rest of regions
         main_region = self.multiworld.get_region("Main", self.player)
