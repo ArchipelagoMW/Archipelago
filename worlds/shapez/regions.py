@@ -71,10 +71,6 @@ def can_build_mam(state: CollectionState, player: int) -> bool:
                                                         "Logic Gates", "Virtual Processing"], player)
 
 
-def has_cutter_rotator(state: CollectionState, player: int) -> bool:
-    return (has_cutter(state, player) and has_rotator(state, player)) or state.has("Quad Cutter", player)
-
-
 def has_logic_list_building(state: CollectionState, player: int, buildings: str, includeuseful: bool) -> bool:
     if includeuseful:
         useful = state.has("Trash", player) and has_balancer(state, player) and has_tunnel(state, player)
@@ -83,7 +79,7 @@ def has_logic_list_building(state: CollectionState, player: int, buildings: str,
     if buildings == "Cutter":
         return useful and has_cutter(state, player)
     elif buildings == "Rotator":
-        return useful and has_cutter_rotator(state, player)
+        return useful and has_rotator(state, player)
     elif buildings == "Stacker":
         return useful and has_stacker(state, player)
     elif buildings == "Painter":
@@ -193,7 +189,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     regions["Shapesanity Cut Painted"].connect(regions["Shapesanity Cut Mixed"], "Shapesanity mixing cut",
                                                lambda state: has_mixer(state, player))
     regions["Main"].connect(regions["Shapesanity Cut Rotated Uncolored"], "Shapesanity quad cutting",
-                            lambda state: has_cutter_rotator(state, player))
+                            lambda state: has_cutter(state, player) and has_rotator(state, player))
     regions["Shapesanity Cut Uncolored"].connect(regions["Shapesanity Cut Rotated Uncolored"],
                                                  "Shapesanity rotating cut",
                                                  lambda state: has_rotator(state, player))
