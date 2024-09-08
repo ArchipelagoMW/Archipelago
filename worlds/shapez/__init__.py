@@ -160,9 +160,7 @@ class ShapezWorld(World):
         return ShapezItem(name, item_table[name], self.item_name_to_id[name], self.player)
 
     def create_regions(self) -> None:
-        # Create Menu region like in docs
         menu_region = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(menu_region)
 
         # Create list of all included locations based on player options
         if self.ut_active:
@@ -181,7 +179,8 @@ class ShapezWorld(World):
             self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
                                                            bool(self.options.exclude_long_playtime_achievements),
                                                            bool(self.options.exclude_progression_unreasonable),
-                                                           self.maxlevel, self.options.randomize_upgrade_logic.current_key,
+                                                           self.maxlevel,
+                                                           self.options.randomize_upgrade_logic.current_key,
                                                            self.category_random_logic_amounts,
                                                            self.options.goal.current_key,
                                                            self.included_locations))
