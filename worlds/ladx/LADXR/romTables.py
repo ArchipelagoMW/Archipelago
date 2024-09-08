@@ -13,6 +13,7 @@ class Texts(PointerTable):
             "pointers_bank": 0x1C,
             "banks_addr": 0x741,
             "banks_bank": 0x1C,
+            "expand_to_end_of_bank": {0x09}
         })
 
 
@@ -185,6 +186,7 @@ class ROMWithTables(ROM):
 
         # Ability to patch any text in the game with different text
         self.texts = Texts(self)
+
         # Ability to modify rooms
         self.entities = Entities(self)
         self.rooms_overworld_top = RoomsOverworldTop(self)
@@ -202,6 +204,9 @@ class ROMWithTables(ROM):
         self.itemNames = {}
 
     def save(self, filename, *, name=None):
+        # Assert special handling of bank 9 expansion is fine
+        for i in range(0x3d42, 0x4000):
+            assert self.banks[9][i] == 0, self.banks[9][i]
         self.texts.store(self)
         self.entities.store(self)
         self.rooms_overworld_top.store(self)

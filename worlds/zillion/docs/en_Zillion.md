@@ -4,9 +4,9 @@ Zillion is a metroidvania-style game released in 1987 for the 8-bit Sega Master 
 
 It's based on the anime Zillion (赤い光弾ジリオン, Akai Koudan Zillion).
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
 ## What changes are made to this game?
 
@@ -67,8 +67,16 @@ Note that in "restrictive" mode, Champ is the only one that can get Zillion powe
 
 Canisters retain their original appearance, so you won't know if an item belongs to another player until you collect it.
 
-When you collect an item, you see the name of the player it goes to. You can see in the client log what item was collected.
+When you collect an item, you see the name of the player it goes to. You can see in the client log what item was
+collected.
 
 ## When the player receives an item, what happens?
 
 The item collect sound is played. You can see in the client log what item was received.
+
+## Unique Local Commands
+
+The following commands are only available when using the ZillionClient to play with Archipelago.
+
+- `/sms` Tell the client that Zillion is running in RetroArch.
+- `/map` Toggle view of the map tracker.

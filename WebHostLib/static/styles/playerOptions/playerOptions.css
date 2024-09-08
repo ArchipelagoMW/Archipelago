@@ -1,0 +1,310 @@
+@import "../markdown.css";
+html {
+  background-image: url("../../static/backgrounds/grass.png");
+  background-repeat: repeat;
+  background-size: 650px 650px;
+  overflow-x: hidden;
+}
+
+#player-options {
+  box-sizing: border-box;
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #eeffeb;
+  word-break: break-word;
+}
+#player-options #player-options-header h1 {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+#player-options #player-options-header h1:nth-child(2) {
+  font-size: 1.4rem;
+  margin-top: -8px;
+  margin-bottom: 0.5rem;
+}
+#player-options .js-warning-banner {
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #f3f309;
+  color: #000000;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+#player-options .group-container {
+  padding: 0;
+  margin: 0;
+}
+#player-options .group-container h2 {
+  user-select: none;
+  cursor: unset;
+}
+#player-options .group-container h2 label {
+  cursor: pointer;
+}
+#player-options #player-options-button-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+#player-options #user-message {
+  display: none;
+  width: calc(100% - 8px);
+  background-color: #ffe86b;
+  border-radius: 4px;
+  color: #000000;
+  padding: 4px;
+  text-align: center;
+  cursor: pointer;
+}
+#player-options h1 {
+  font-size: 2.5rem;
+  font-weight: normal;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 4px #000000;
+}
+#player-options h2 {
+  font-size: 40px;
+  font-weight: normal;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  text-transform: lowercase;
+  text-shadow: 1px 1px 2px #000000;
+}
+#player-options h3, #player-options h4, #player-options h5, #player-options h6 {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+#player-options input:not([type]) {
+  border: 1px solid #000000;
+  padding: 3px;
+  border-radius: 3px;
+  min-width: 150px;
+}
+#player-options input:not([type]):focus {
+  border: 1px solid #ffffff;
+}
+#player-options select {
+  border: 1px solid #000000;
+  padding: 3px;
+  border-radius: 3px;
+  min-width: 150px;
+  background-color: #ffffff;
+  text-overflow: ellipsis;
+}
+#player-options .game-options {
+  display: flex;
+  flex-direction: row;
+}
+#player-options .game-options .left, #player-options .game-options .right {
+  display: grid;
+  grid-template-columns: 12rem auto;
+  grid-row-gap: 0.5rem;
+  grid-auto-rows: min-content;
+  align-items: start;
+  min-width: 480px;
+  width: 50%;
+}
+#player-options #meta-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 3px;
+}
+#player-options #meta-options input, #player-options #meta-options select {
+  box-sizing: border-box;
+  width: 200px;
+}
+#player-options .left, #player-options .right {
+  flex-grow: 1;
+  margin-bottom: 0.5rem;
+}
+#player-options .left {
+  margin-right: 20px;
+}
+#player-options .select-container {
+  display: flex;
+  flex-direction: row;
+  max-width: 270px;
+}
+#player-options .select-container select {
+  min-width: 200px;
+  flex-grow: 1;
+}
+#player-options .select-container select:disabled {
+  background-color: lightgray;
+}
+#player-options .range-container {
+  display: flex;
+  flex-direction: row;
+  max-width: 270px;
+}
+#player-options .range-container input[type=range] {
+  flex-grow: 1;
+}
+#player-options .range-container .range-value {
+  min-width: 20px;
+  margin-left: 0.25rem;
+}
+#player-options .named-range-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 270px;
+}
+#player-options .named-range-container .named-range-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.25rem;
+}
+#player-options .named-range-container .named-range-wrapper input[type=range] {
+  flex-grow: 1;
+}
+#player-options .free-text-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 270px;
+}
+#player-options .free-text-container input[type=text] {
+  flex-grow: 1;
+}
+#player-options .text-choice-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 270px;
+}
+#player-options .text-choice-container .text-choice-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.25rem;
+}
+#player-options .text-choice-container .text-choice-wrapper select {
+  flex-grow: 1;
+}
+#player-options .option-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(20, 20, 20, 0.25);
+  border-radius: 3px;
+  color: #ffffff;
+  max-height: 10rem;
+  min-width: 14.5rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  padding-left: 0.25rem;
+}
+#player-options .option-container .option-divider {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(20, 20, 20, 0.25);
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+}
+#player-options .option-container .option-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 0.125rem;
+  margin-top: 0.125rem;
+  user-select: none;
+}
+#player-options .option-container .option-entry:hover {
+  background-color: rgba(20, 20, 20, 0.25);
+}
+#player-options .option-container .option-entry input[type=checkbox] {
+  margin-right: 0.25rem;
+}
+#player-options .option-container .option-entry input[type=number] {
+  max-width: 1.5rem;
+  max-height: 1rem;
+  margin-left: 0.125rem;
+  text-align: center;
+  /* Hide arrows on input[type=number] fields */
+  -moz-appearance: textfield;
+}
+#player-options .option-container .option-entry input[type=number]::-webkit-outer-spin-button, #player-options .option-container .option-entry input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#player-options .option-container .option-entry label {
+  flex-grow: 1;
+  margin-right: 0;
+  min-width: unset;
+  display: unset;
+}
+#player-options .randomize-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 22px;
+  max-width: 30px;
+  margin: 0 0 0 0.25rem;
+  font-size: 14px;
+  border: 1px solid black;
+  border-radius: 3px;
+  background-color: #d3d3d3;
+  user-select: none;
+}
+#player-options .randomize-button:hover {
+  background-color: #c0c0c0;
+  cursor: pointer;
+}
+#player-options .randomize-button label {
+  line-height: 22px;
+  padding-left: 5px;
+  padding-right: 2px;
+  margin-right: 4px;
+  width: 100%;
+  height: 100%;
+  min-width: unset;
+}
+#player-options .randomize-button label:hover {
+  cursor: pointer;
+}
+#player-options .randomize-button input[type=checkbox] {
+  display: none;
+}
+#player-options .randomize-button:has(input[type=checkbox]:checked) {
+  background-color: #ffef00; /* Same as .interactive in globalStyles.css */
+}
+#player-options .randomize-button:has(input[type=checkbox]:checked):hover {
+  background-color: #eedd27;
+}
+#player-options .randomize-button[data-tooltip]::after {
+  left: unset;
+  right: 0;
+}
+#player-options label {
+  display: block;
+  margin-right: 4px;
+  cursor: default;
+  word-break: break-word;
+}
+#player-options th, #player-options td {
+  border: none;
+  padding: 3px;
+  font-size: 17px;
+  vertical-align: top;
+}
+
+@media all and (max-width: 1024px) {
+  #player-options {
+    border-radius: 0;
+  }
+  #player-options #meta-options {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  #player-options .game-options {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+/*# sourceMappingURL=playerOptions.css.map */

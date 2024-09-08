@@ -1,18 +1,22 @@
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
-from BaseClasses import MultiWorld, CollectionState
+from worlds.generic.Rules import set_rule, add_rule
+from BaseClasses import CollectionState
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from . import UndertaleWorld
 
 
-def _undertale_is_route(state: CollectionState, player: int, route: int):
+def _undertale_is_route(world: "UndertaleWorld", route: int):
     if route == 3:
-        return state.multiworld.route_required[player].current_key == "all_routes"
-    if state.multiworld.route_required[player].current_key == "all_routes":
+        return world.options.route_required.current_key == "all_routes"
+    if world.options.route_required.current_key == "all_routes":
         return True
     if route == 0:
-        return state.multiworld.route_required[player].current_key == "neutral"
+        return world.options.route_required.current_key == "neutral"
     if route == 1:
-        return state.multiworld.route_required[player].current_key == "pacifist"
+        return world.options.route_required.current_key == "pacifist"
     if route == 2:
-        return state.multiworld.route_required[player].current_key == "genocide"
+        return world.options.route_required.current_key == "genocide"
     return False
 
 
@@ -27,7 +31,7 @@ def _undertale_has_plot(state: CollectionState, player: int, item: str):
         return state.has("DT Extractor", player)
 
 
-def _undertale_can_level(state: CollectionState, exp: int, lvl: int):
+def _undertale_can_level(exp: int, lvl: int):
     if exp >= 10 and lvl == 1:
         return True
     elif exp >= 30 and lvl == 2:
@@ -70,49 +74,43 @@ def _undertale_can_level(state: CollectionState, exp: int, lvl: int):
 
 
 # Sets rules on entrances and advancements that are always applied
-def set_rules(multiworld: MultiWorld, player: int):
+def set_rules(world: "UndertaleWorld"):
+    player = world.player
+    multiworld = world.multiworld
     set_rule(multiworld.get_entrance("Ruins Hub", player), lambda state: state.has("Ruins Key", player))
     set_rule(multiworld.get_entrance("Snowdin Hub", player), lambda state: state.has("Snowdin Key", player))
     set_rule(multiworld.get_entrance("Waterfall Hub", player), lambda state: state.has("Waterfall Key", player))
     set_rule(multiworld.get_entrance("Hotland Hub", player), lambda state: state.has("Hotland Key", player))
     set_rule(multiworld.get_entrance("Core Hub", player), lambda state: state.has("Core Key", player))
-    if _undertale_is_route(multiworld.state, player, 1):
-        add_rule(multiworld.get_entrance("Snowdin Hub", player), lambda state: state.has("ACT", player) and state.has("MERCY", player))
-        add_rule(multiworld.get_entrance("Waterfall Hub", player), lambda state: state.has("ACT", player) and state.has("MERCY", player))
-        add_rule(multiworld.get_entrance("Hotland Hub", player), lambda state: state.has("ACT", player) and state.has("MERCY", player))
-        add_rule(multiworld.get_entrance("Core Hub", player), lambda state: state.has("ACT", player) and state.has("MERCY", player))
-    if _undertale_is_route(multiworld.state, player, 2) or _undertale_is_route(multiworld.state, player, 3):
-        add_rule(multiworld.get_entrance("Snowdin Hub", player), lambda state: state.has("FIGHT", player))
-        add_rule(multiworld.get_entrance("Waterfall Hub", player), lambda state: state.has("FIGHT", player))
-        add_rule(multiworld.get_entrance("Hotland Hub", player), lambda state: state.has("FIGHT", player))
-        add_rule(multiworld.get_entrance("Core Hub", player), lambda state: state.has("FIGHT", player))
-    if _undertale_is_route(multiworld.state, player, 0):
-        add_rule(multiworld.get_entrance("Snowdin Hub", player), lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
-        add_rule(multiworld.get_entrance("Waterfall Hub", player), lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
-        add_rule(multiworld.get_entrance("Hotland Hub", player), lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
-        add_rule(multiworld.get_entrance("Core Hub", player), lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
     set_rule(multiworld.get_entrance("Core Exit", player),
              lambda state: _undertale_has_plot(state, player, "Mettaton Plush"))
     set_rule(multiworld.get_entrance("New Home Exit", player),
              lambda state: (state.has("Left Home Key", player) and
                             state.has("Right Home Key", player)) or
-                           state.has("Key Piece", player, state.multiworld.key_pieces[player]))
-    if _undertale_is_route(multiworld.state, player, 1):
+                           state.has("Key Piece", player, world.options.key_pieces.value))
+    if _undertale_is_route(world, 1):
         set_rule(multiworld.get_entrance("Papyrus\" Home Entrance", player),
                  lambda state: _undertale_has_plot(state, player, "Complete Skeleton"))
         set_rule(multiworld.get_entrance("Undyne\"s Home Entrance", player),
                  lambda state: _undertale_has_plot(state, player, "Fish") and state.has("Papyrus Date", player))
         set_rule(multiworld.get_entrance("Lab Elevator", player),
-                 lambda state: state.has("Alphys Date", player) and _undertale_has_plot(state, player, "DT Extractor"))
+                 lambda state: state.has("Alphys Date", player) and state.has("DT Extractor", player) and
+                               ((state.has("Left Home Key", player) and state.has("Right Home Key", player)) or
+                                 state.has("Key Piece", player, world.options.key_pieces.value)))
         set_rule(multiworld.get_location("Alphys Date", player),
-                 lambda state: state.has("Undyne Letter EX", player) and state.has("Undyne Date", player))
+                 lambda state: state.can_reach("New Home", "Region", player) and state.has("Undyne Letter EX", player)
+                               and state.has("Undyne Date", player))
         set_rule(multiworld.get_location("Papyrus Plot", player),
                  lambda state: state.can_reach("Snowdin Town", "Region", player))
         set_rule(multiworld.get_location("Undyne Plot", player),
                  lambda state: state.can_reach("Waterfall", "Region", player))
         set_rule(multiworld.get_location("True Lab Plot", player),
                  lambda state: state.can_reach("New Home", "Region", player)
-                               and state.can_reach("Letter Quest", "Location", player))
+                               and state.can_reach("Letter Quest", "Location", player)
+                               and state.can_reach("Alphys Date", "Location", player)
+                               and ((state.has("Left Home Key", player) and
+                                    state.has("Right Home Key", player)) or
+                                    state.has("Key Piece", player, world.options.key_pieces.value)))
         set_rule(multiworld.get_location("Chisps Machine", player),
                  lambda state: state.can_reach("True Lab", "Region", player))
         set_rule(multiworld.get_location("Dog Sale 1", player),
@@ -128,8 +126,8 @@ def set_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_location("Hush Trade", player),
                  lambda state: state.can_reach("News Show", "Region", player) and state.has("Hot Dog...?", player, 1))
         set_rule(multiworld.get_location("Letter Quest", player),
-                 lambda state: state.can_reach("New Home Exit", "Entrance", player))
-    if (not _undertale_is_route(multiworld.state, player, 2)) or _undertale_is_route(multiworld.state, player, 3):
+                 lambda state: state.can_reach("Last Corridor", "Region", player) and state.has("Undyne Date", player))
+    if (not _undertale_is_route(world, 2)) or _undertale_is_route(world, 3):
         set_rule(multiworld.get_location("Nicecream Punch Card", player),
                  lambda state: state.has("Punch Card", player, 3) and state.can_reach("Waterfall", "Region", player))
         set_rule(multiworld.get_location("Nicecream Snowdin", player),
@@ -140,32 +138,32 @@ def set_rules(multiworld: MultiWorld, player: int):
                  lambda state: state.can_reach("Waterfall", "Region", player))
         set_rule(multiworld.get_location("Apron Hidden", player),
                  lambda state: state.can_reach("Cooking Show", "Region", player))
-    if _undertale_is_route(multiworld.state, player, 2) and \
-            (multiworld.rando_love[player] or multiworld.rando_stats[player]):
+    if _undertale_is_route(world, 2) and \
+            (bool(world.options.rando_love.value) or bool(world.options.rando_stats.value)):
         maxlv = 1
         exp = 190
         curarea = "Old Home"
 
         while maxlv < 20:
             maxlv += 1
-            if multiworld.rando_love[player]:
+            if world.options.rando_love:
                 set_rule(multiworld.get_location(("LOVE " + str(maxlv)), player), lambda state: False)
-            if multiworld.rando_stats[player]:
+            if world.options.rando_stats:
                 set_rule(multiworld.get_location(("ATK "+str(maxlv)), player), lambda state: False)
                 set_rule(multiworld.get_location(("HP "+str(maxlv)), player), lambda state: False)
-                if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                if maxlv in {5, 9, 13, 17}:
                     set_rule(multiworld.get_location(("DEF "+str(maxlv)), player), lambda state: False)
         maxlv = 1
         while maxlv < 20:
-            while _undertale_can_level(multiworld.state, exp, maxlv):
+            while _undertale_can_level(exp, maxlv):
                 maxlv += 1
-                if multiworld.rando_stats[player]:
+                if world.options.rando_stats:
                     if curarea == "Old Home":
                         add_rule(multiworld.get_location(("ATK "+str(maxlv)), player),
                                  lambda state: (state.can_reach("Old Home", "Region", player)), combine="or")
                         add_rule(multiworld.get_location(("HP "+str(maxlv)), player),
                                  lambda state: (state.can_reach("Old Home", "Region", player)), combine="or")
-                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                        if maxlv == 5 or maxlv == 9 or maxlv == 13 or maxlv == 17:
                             add_rule(multiworld.get_location(("DEF "+str(maxlv)), player),
                                      lambda state: (state.can_reach("Old Home", "Region", player)), combine="or")
                     elif curarea == "Snowdin Town":
@@ -173,7 +171,7 @@ def set_rules(multiworld: MultiWorld, player: int):
                                  lambda state: (state.can_reach("Snowdin Town", "Region", player)), combine="or")
                         add_rule(multiworld.get_location(("HP "+str(maxlv)), player),
                                  lambda state: (state.can_reach("Snowdin Town", "Region", player)), combine="or")
-                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                        if maxlv == 5 or maxlv == 9 or maxlv == 13 or maxlv == 17:
                             add_rule(multiworld.get_location(("DEF "+str(maxlv)), player),
                                      lambda state: (state.can_reach("Snowdin Town", "Region", player)), combine="or")
                     elif curarea == "Waterfall":
@@ -181,7 +179,7 @@ def set_rules(multiworld: MultiWorld, player: int):
                                  lambda state: (state.can_reach("Waterfall", "Region", player)), combine="or")
                         add_rule(multiworld.get_location(("HP "+str(maxlv)), player),
                                  lambda state: (state.can_reach("Waterfall", "Region", player)), combine="or")
-                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                        if maxlv == 5 or maxlv == 9 or maxlv == 13 or maxlv == 17:
                             add_rule(multiworld.get_location(("DEF "+str(maxlv)), player),
                                      lambda state: (state.can_reach("Waterfall", "Region", player)), combine="or")
                     elif curarea == "News Show":
@@ -189,7 +187,7 @@ def set_rules(multiworld: MultiWorld, player: int):
                                  lambda state: (state.can_reach("News Show", "Region", player)), combine="or")
                         add_rule(multiworld.get_location(("HP "+str(maxlv)), player),
                                  lambda state: (state.can_reach("News Show", "Region", player)), combine="or")
-                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                        if maxlv == 5 or maxlv == 9 or maxlv == 13 or maxlv == 17:
                             add_rule(multiworld.get_location(("DEF "+str(maxlv)), player),
                                      lambda state: (state.can_reach("News Show", "Region", player)), combine="or")
                     elif curarea == "Core":
@@ -197,7 +195,7 @@ def set_rules(multiworld: MultiWorld, player: int):
                                  lambda state: (state.can_reach("Core Exit", "Entrance", player)), combine="or")
                         add_rule(multiworld.get_location(("HP "+str(maxlv)), player),
                                  lambda state: (state.can_reach("Core Exit", "Entrance", player)), combine="or")
-                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                        if maxlv == 5 or maxlv == 9 or maxlv == 13 or maxlv == 17:
                             add_rule(multiworld.get_location(("DEF "+str(maxlv)), player),
                                      lambda state: (state.can_reach("Core Exit", "Entrance", player)), combine="or")
                     elif curarea == "Sans":
@@ -205,13 +203,13 @@ def set_rules(multiworld: MultiWorld, player: int):
                                  lambda state: (state.can_reach("New Home Exit", "Entrance", player)), combine="or")
                         add_rule(multiworld.get_location(("HP "+str(maxlv)), player),
                                  lambda state: (state.can_reach("New Home Exit", "Entrance", player)), combine="or")
-                        if maxlv == 9 or maxlv == 13 or maxlv == 17:
+                        if maxlv == 5 or maxlv == 9 or maxlv == 13 or maxlv == 17:
                             add_rule(multiworld.get_location(("DEF "+str(maxlv)), player),
                                      lambda state: (state.can_reach("New Home Exit", "Entrance", player)), combine="or")
-                if multiworld.rando_love[player]:
+                if world.options.rando_love:
                     if curarea == "Old Home":
                         add_rule(multiworld.get_location(("LOVE "+str(maxlv)), player),
-                                 lambda state: ( state.can_reach("Old Home", "Region", player)), combine="or")
+                                 lambda state: (state.can_reach("Old Home", "Region", player)), combine="or")
                     elif curarea == "Snowdin Town":
                         add_rule(multiworld.get_location(("LOVE "+str(maxlv)), player),
                                  lambda state: (state.can_reach("Snowdin Town", "Region", player)), combine="or")
@@ -247,46 +245,8 @@ def set_rules(multiworld: MultiWorld, player: int):
                 curarea = "Sans"
                 maxlv = 1
                 exp = 99999
-    set_rule(multiworld.get_entrance("??? Exit", player), lambda state: state.has("FIGHT", player))
     set_rule(multiworld.get_location("Snowman", player),
              lambda state: state.can_reach("Snowdin Town", "Region", player))
-    add_item_rule(multiworld.get_location("Starting Key", player), lambda item: item.name == "Ruins Key" or
-                                                                                item.name == "Snowdin Key" or
-                                                                                item.name == "Waterfall Key" or
-                                                                                item.name == "Hotland Key")
-    if _undertale_is_route(multiworld.state, player, 1):
-        set_rule(multiworld.get_location("Donut Sale", player),
-                 lambda state: state.has("ACT", player) and state.has("MERCY", player))
-        set_rule(multiworld.get_location("Cider Sale", player),
-                 lambda state: state.has("ACT", player) and state.has("MERCY", player))
-        set_rule(multiworld.get_location("Ribbon Cracks", player),
-                 lambda state: state.has("ACT", player) and state.has("MERCY", player))
-        set_rule(multiworld.get_location("Toy Knife Edge", player),
-                 lambda state: state.has("ACT", player) and state.has("MERCY", player))
-        set_rule(multiworld.get_location("B.Scotch Pie Given", player),
-                 lambda state: state.has("ACT", player) and state.has("MERCY", player))
-    if _undertale_is_route(multiworld.state, player, 2) or _undertale_is_route(multiworld.state, player, 3):
-        set_rule(multiworld.get_location("Donut Sale", player),
-                 lambda state: state.has("FIGHT", player))
-        set_rule(multiworld.get_location("Cider Sale", player),
-                 lambda state: state.has("FIGHT", player))
-        set_rule(multiworld.get_location("Ribbon Cracks", player),
-                 lambda state: state.has("FIGHT", player))
-        set_rule(multiworld.get_location("Toy Knife Edge", player),
-                 lambda state: state.has("FIGHT", player))
-        set_rule(multiworld.get_location("B.Scotch Pie Given", player),
-                 lambda state: state.has("FIGHT", player))
-    if _undertale_is_route(multiworld.state, player, 0):
-        set_rule(multiworld.get_location("Donut Sale", player),
-                 lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
-        set_rule(multiworld.get_location("Cider Sale", player),
-                 lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
-        set_rule(multiworld.get_location("Ribbon Cracks", player),
-                 lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
-        set_rule(multiworld.get_location("Toy Knife Edge", player),
-                 lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
-        set_rule(multiworld.get_location("B.Scotch Pie Given", player),
-                 lambda state: ((state.has("ACT", player) and state.has("MERCY", player)) or state.has("FIGHT", player)))
     set_rule(multiworld.get_location("Mettaton Plot", player),
              lambda state: state.can_reach("Core Exit", "Entrance", player))
     set_rule(multiworld.get_location("Bunny 1", player),
@@ -356,9 +316,9 @@ def set_rules(multiworld: MultiWorld, player: int):
 
 
 # Sets rules on completion condition
-def set_completion_rules(multiworld: MultiWorld, player: int):
-    completion_requirements = lambda state: state.can_reach("New Home Exit", "Entrance", player) and state.has("FIGHT", player)
-    if _undertale_is_route(multiworld.state, player, 1):
-        completion_requirements = lambda state: state.can_reach("True Lab", "Region", player)
-
-    multiworld.completion_condition[player] = lambda state: completion_requirements(state)
+def set_completion_rules(world: "UndertaleWorld"):
+    player = world.player
+    multiworld = world.multiworld
+    multiworld.completion_condition[player] = lambda state: state.can_reach("Barrier", "Region", player)
+    if _undertale_is_route(world, 1):
+        multiworld.completion_condition[player] = lambda state: state.can_reach("True Lab", "Region", player)

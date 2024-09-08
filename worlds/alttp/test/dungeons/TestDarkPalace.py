@@ -11,29 +11,37 @@ class TestDarkPalace(TestDungeon):
 
             ["Palace of Darkness - The Arena - Ledge", False, []],
             ["Palace of Darkness - The Arena - Ledge", False, [], ['Progressive Bow']],
-            ["Palace of Darkness - The Arena - Ledge", True, ['Progressive Bow']],
+            ["Palace of Darkness - The Arena - Ledge", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Palace of Darkness - The Arena - Ledge", True, ['Progressive Bow', 'Bomb Upgrade (+5)']],
 
             ["Palace of Darkness - Map Chest", False, []],
             ["Palace of Darkness - Map Chest", False, [], ['Progressive Bow']],
-            ["Palace of Darkness - Map Chest", True, ['Progressive Bow']],
+            ["Palace of Darkness - Map Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Palace of Darkness - Map Chest", True, ['Progressive Bow', 'Bomb Upgrade (+5)']],
+            ["Palace of Darkness - Map Chest", True, ['Progressive Bow', 'Pegasus Boots']],
 
             #Lower requirement for self-locking key
             #No lower requirement when bow/hammer is out of logic
             ["Palace of Darkness - Big Key Chest", False, []],
             ["Palace of Darkness - Big Key Chest", False, [key]*5, [key]],
-            ["Palace of Darkness - Big Key Chest", True, [key]*6],
+            ["Palace of Darkness - Big Key Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Palace of Darkness - Big Key Chest", True, [key]*6 + ['Bomb Upgrade (+5)']],
 
             ["Palace of Darkness - The Arena - Bridge", False, []],
             ["Palace of Darkness - The Arena - Bridge", False, [], [key, 'Progressive Bow']],
             ["Palace of Darkness - The Arena - Bridge", False, [], [key, 'Hammer']],
+            ["Palace of Darkness - The Arena - Bridge", False, [], [key, 'Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
             ["Palace of Darkness - The Arena - Bridge", True, [key]],
-            ["Palace of Darkness - The Arena - Bridge", True, ['Progressive Bow', 'Hammer']],
+            ["Palace of Darkness - The Arena - Bridge", True, ['Progressive Bow', 'Hammer', 'Bomb Upgrade (+5)']],
+            ["Palace of Darkness - The Arena - Bridge", True, ['Progressive Bow', 'Hammer', 'Pegasus Boots']],
 
             ["Palace of Darkness - Stalfos Basement", False, []],
             ["Palace of Darkness - Stalfos Basement", False, [], [key, 'Progressive Bow']],
             ["Palace of Darkness - Stalfos Basement", False, [], [key, 'Hammer']],
+            ["Palace of Darkness - Stalfos Basement", False, [], [key, 'Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
             ["Palace of Darkness - Stalfos Basement", True, [key]],
-            ["Palace of Darkness - Stalfos Basement", True, ['Progressive Bow', 'Hammer']],
+            ["Palace of Darkness - Stalfos Basement", True, ['Progressive Bow', 'Hammer', 'Bomb Upgrade (+5)']],
+            ["Palace of Darkness - Stalfos Basement", True, ['Progressive Bow', 'Hammer', 'Pegasus Boots']],
 
             ["Palace of Darkness - Compass Chest", False, []],
             ["Palace of Darkness - Compass Chest", False, [key]*3, [key]],
@@ -67,8 +75,9 @@ class TestDarkPalace(TestDungeon):
             ["Palace of Darkness - Big Chest", False, []],
             ["Palace of Darkness - Big Chest", False, [], ['Lamp']],
             ["Palace of Darkness - Big Chest", False, [], ['Big Key (Palace of Darkness)']],
+            ["Palace of Darkness - Big Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
             ["Palace of Darkness - Big Chest", False, [key]*5, [key]],
-            ["Palace of Darkness - Big Chest", True, ['Lamp', 'Big Key (Palace of Darkness)'] + [key]*6],
+            ["Palace of Darkness - Big Chest", True, ['Bomb Upgrade (+5)', 'Lamp', 'Big Key (Palace of Darkness)'] + [key]*6],
 
             ["Palace of Darkness - Boss", False, []],
             ["Palace of Darkness - Boss", False, [], ['Lamp']],

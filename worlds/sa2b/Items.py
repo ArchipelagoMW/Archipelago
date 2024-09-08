@@ -22,7 +22,8 @@ class SA2BItem(Item):
 
 # Separate tables for each type of item.
 emblems_table = {
-    ItemName.emblem:  ItemData(0xFF0000, True),
+    ItemName.emblem:       ItemData(0xFF0000, True),
+    ItemName.market_token: ItemData(0xFF001F, True),
 }
 
 upgrades_table = {
@@ -82,6 +83,7 @@ trap_table = {
     ItemName.ice_trap:        ItemData(0xFF0037, False, True),
     ItemName.slow_trap:       ItemData(0xFF0038, False, True),
     ItemName.cutscene_trap:   ItemData(0xFF0039, False, True),
+    ItemName.reverse_trap:    ItemData(0xFF003A, False, True),
 
     ItemName.pong_trap:       ItemData(0xFF0050, False, True),
 }
@@ -96,6 +98,142 @@ emeralds_table = {
     ItemName.blue_emerald:   ItemData(0xFF0046, True),
 }
 
+eggs_table = {
+    ItemName.normal_egg:              ItemData(0xFF0100, False),
+    ItemName.yellow_monotone_egg:     ItemData(0xFF0101, False),
+    ItemName.white_monotone_egg:      ItemData(0xFF0102, False),
+    ItemName.brown_monotone_egg:      ItemData(0xFF0103, False),
+    ItemName.sky_blue_monotone_egg:   ItemData(0xFF0104, False),
+    ItemName.pink_monotone_egg:       ItemData(0xFF0105, False),
+    ItemName.blue_monotone_egg:       ItemData(0xFF0106, False),
+    ItemName.grey_monotone_egg:       ItemData(0xFF0107, False),
+    ItemName.green_monotone_egg:      ItemData(0xFF0108, False),
+    ItemName.red_monotone_egg:        ItemData(0xFF0109, False),
+    ItemName.lime_green_monotone_egg: ItemData(0xFF010A, False),
+    ItemName.purple_monotone_egg:     ItemData(0xFF010B, False),
+    ItemName.orange_monotone_egg:     ItemData(0xFF010C, False),
+    ItemName.black_monotone_egg:      ItemData(0xFF010D, False),
+
+    ItemName.yellow_twotone_egg:     ItemData(0xFF010E, False),
+    ItemName.white_twotone_egg:      ItemData(0xFF010F, False),
+    ItemName.brown_twotone_egg:      ItemData(0xFF0110, False),
+    ItemName.sky_blue_twotone_egg:   ItemData(0xFF0111, False),
+    ItemName.pink_twotone_egg:       ItemData(0xFF0112, False),
+    ItemName.blue_twotone_egg:       ItemData(0xFF0113, False),
+    ItemName.grey_twotone_egg:       ItemData(0xFF0114, False),
+    ItemName.green_twotone_egg:      ItemData(0xFF0115, False),
+    ItemName.red_twotone_egg:        ItemData(0xFF0116, False),
+    ItemName.lime_green_twotone_egg: ItemData(0xFF0117, False),
+    ItemName.purple_twotone_egg:     ItemData(0xFF0118, False),
+    ItemName.orange_twotone_egg:     ItemData(0xFF0119, False),
+    ItemName.black_twotone_egg:      ItemData(0xFF011A, False),
+
+    ItemName.normal_shiny_egg:     ItemData(0xFF011B, False),
+    ItemName.yellow_shiny_egg:     ItemData(0xFF011C, False),
+    ItemName.white_shiny_egg:      ItemData(0xFF011D, False),
+    ItemName.brown_shiny_egg:      ItemData(0xFF011E, False),
+    ItemName.sky_blue_shiny_egg:   ItemData(0xFF011F, False),
+    ItemName.pink_shiny_egg:       ItemData(0xFF0120, False),
+    ItemName.blue_shiny_egg:       ItemData(0xFF0121, False),
+    ItemName.grey_shiny_egg:       ItemData(0xFF0122, False),
+    ItemName.green_shiny_egg:      ItemData(0xFF0123, False),
+    ItemName.red_shiny_egg:        ItemData(0xFF0124, False),
+    ItemName.lime_green_shiny_egg: ItemData(0xFF0125, False),
+    ItemName.purple_shiny_egg:     ItemData(0xFF0126, False),
+    ItemName.orange_shiny_egg:     ItemData(0xFF0127, False),
+    ItemName.black_shiny_egg:      ItemData(0xFF0128, False),
+}
+
+fruits_table = {
+    ItemName.chao_garden_fruit: ItemData(0xFF0200, False),
+    ItemName.hero_garden_fruit: ItemData(0xFF0201, False),
+    ItemName.dark_garden_fruit: ItemData(0xFF0202, False),
+
+    ItemName.strong_fruit:   ItemData(0xFF0203, False),
+    ItemName.tasty_fruit:    ItemData(0xFF0204, False),
+    ItemName.hero_fruit:     ItemData(0xFF0205, False),
+    ItemName.dark_fruit:     ItemData(0xFF0206, False),
+    ItemName.round_fruit:    ItemData(0xFF0207, False),
+    ItemName.triangle_fruit: ItemData(0xFF0208, False),
+    ItemName.square_fruit:   ItemData(0xFF0209, False),
+    ItemName.heart_fruit:    ItemData(0xFF020A, False),
+    ItemName.chao_fruit:     ItemData(0xFF020B, False),
+    ItemName.smart_fruit:    ItemData(0xFF020C, False),
+
+    ItemName.orange_fruit: ItemData(0xFF020D, False),
+    ItemName.blue_fruit:   ItemData(0xFF020E, False),
+    ItemName.pink_fruit:   ItemData(0xFF020F, False),
+    ItemName.green_fruit:  ItemData(0xFF0210, False),
+    ItemName.purple_fruit: ItemData(0xFF0211, False),
+    ItemName.yellow_fruit: ItemData(0xFF0212, False),
+    ItemName.red_fruit:    ItemData(0xFF0213, False),
+
+    ItemName.mushroom_fruit:       ItemData(0xFF0214, False),
+    ItemName.super_mushroom_fruit: ItemData(0xFF0215, False),
+    ItemName.mint_candy_fruit:     ItemData(0xFF0216, False),
+    ItemName.grapes_fruit:         ItemData(0xFF0217, False),
+}
+
+seeds_table = {
+    ItemName.strong_seed:   ItemData(0xFF0300, False),
+    ItemName.tasty_seed:    ItemData(0xFF0301, False),
+    ItemName.hero_seed:     ItemData(0xFF0302, False),
+    ItemName.dark_seed:     ItemData(0xFF0303, False),
+    ItemName.round_seed:    ItemData(0xFF0304, False),
+    ItemName.triangle_seed: ItemData(0xFF0305, False),
+    ItemName.square_seed:   ItemData(0xFF0306, False),
+}
+
+hats_table = {
+    ItemName.pumpkin_hat:       ItemData(0xFF0401, False),
+    ItemName.skull_hat:         ItemData(0xFF0402, False),
+    ItemName.apple_hat:         ItemData(0xFF0403, False),
+    ItemName.bucket_hat:        ItemData(0xFF0404, False),
+    ItemName.empty_can_hat:     ItemData(0xFF0405, False),
+    ItemName.cardboard_box_hat: ItemData(0xFF0406, False),
+    ItemName.flower_pot_hat:    ItemData(0xFF0407, False),
+    ItemName.paper_bag_hat:     ItemData(0xFF0408, False),
+    ItemName.pan_hat:           ItemData(0xFF0409, False),
+    ItemName.stump_hat:         ItemData(0xFF040A, False),
+    ItemName.watermelon_hat:    ItemData(0xFF040B, False),
+
+    ItemName.red_wool_beanie_hat:   ItemData(0xFF040C, False),
+    ItemName.blue_wool_beanie_hat:  ItemData(0xFF040D, False),
+    ItemName.black_wool_beanie_hat: ItemData(0xFF040E, False),
+    ItemName.pacifier_hat:          ItemData(0xFF040F, False),
+}
+
+animals_table = {
+    ItemName.animal_penguin:      ItemData(0xFF0500, False),
+    ItemName.animal_seal:         ItemData(0xFF0501, False),
+    ItemName.animal_otter:        ItemData(0xFF0502, False),
+    ItemName.animal_rabbit:       ItemData(0xFF0503, False),
+    ItemName.animal_cheetah:      ItemData(0xFF0504, False),
+    ItemName.animal_warthog:      ItemData(0xFF0505, False),
+    ItemName.animal_bear:         ItemData(0xFF0506, False),
+    ItemName.animal_tiger:        ItemData(0xFF0507, False),
+    ItemName.animal_gorilla:      ItemData(0xFF0508, False),
+    ItemName.animal_peacock:      ItemData(0xFF0509, False),
+    ItemName.animal_parrot:       ItemData(0xFF050A, False),
+    ItemName.animal_condor:       ItemData(0xFF050B, False),
+    ItemName.animal_skunk:        ItemData(0xFF050C, False),
+    ItemName.animal_sheep:        ItemData(0xFF050D, False),
+    ItemName.animal_raccoon:      ItemData(0xFF050E, False),
+    ItemName.animal_halffish:     ItemData(0xFF050F, False),
+    ItemName.animal_skeleton_dog: ItemData(0xFF0510, False),
+    ItemName.animal_bat:          ItemData(0xFF0511, False),
+    ItemName.animal_dragon:       ItemData(0xFF0512, False),
+    ItemName.animal_unicorn:      ItemData(0xFF0513, False),
+    ItemName.animal_phoenix:      ItemData(0xFF0514, False),
+}
+
+chaos_drives_table = {
+    ItemName.chaos_drive_yellow: ItemData(0xFF0515, False),
+    ItemName.chaos_drive_green:  ItemData(0xFF0516, False),
+    ItemName.chaos_drive_red:    ItemData(0xFF0517, False),
+    ItemName.chaos_drive_purple: ItemData(0xFF0518, False),
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -107,12 +245,25 @@ item_table = {
     **junk_table,
     **trap_table,
     **emeralds_table,
+    **eggs_table,
+    **fruits_table,
+    **seeds_table,
+    **hats_table,
+    **animals_table,
+    **chaos_drives_table,
     **event_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
 
-item_groups: typing.Dict[str, str] = {"Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()]}
+item_groups: typing.Dict[str, str] = {
+    "Chaos Emeralds": list(emeralds_table.keys()),
+    "Eggs":           list(eggs_table.keys()),
+    "Fruits":         list(fruits_table.keys()),
+    "Seeds":          list(seeds_table.keys()),
+    "Hats":           list(hats_table.keys()),
+    "Traps":          list(trap_table.keys()),
+}
 
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.shadow_air_shoes].code] = "and the Soap Shoes"

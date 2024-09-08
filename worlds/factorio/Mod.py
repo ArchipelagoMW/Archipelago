@@ -5,7 +5,7 @@ import os
 import shutil
 import threading
 import zipfile
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Any, List, Callable, Tuple, Union
 
 import jinja2
 
@@ -24,6 +24,7 @@ data_template: Optional[jinja2.Template] = None
 data_final_template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
 control_template: Optional[jinja2.Template] = None
+settings_template: Optional[jinja2.Template] = None
 
 template_load_lock = threading.Lock()
 
@@ -62,15 +63,24 @@ recipe_time_ranges = {
 class FactorioModFile(worlds.Files.APContainer):
     game = "Factorio"
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
+    writing_tasks: List[Callable[[], Tuple[str, Union[str, bytes]]]]
+
+    def __init__(self, *args: Any, **kwargs: Any):
+        super().__init__(*args, **kwargs)
+        self.writing_tasks = []
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile):
         # directory containing Factorio mod has to come first, or Factorio won't recognize this file as a mod.
         mod_dir = self.path[:-4]  # cut off .zip
         for root, dirs, files in os.walk(mod_dir):
             for file in files:
-                opened_zipfile.write(os.path.join(root, file),
-                                     os.path.relpath(os.path.join(root, file),
+                filename = os.path.join(root, file)
+                opened_zipfile.write(filename,
+                                     os.path.relpath(filename,
                                                      os.path.join(mod_dir, '..')))
+        for task in self.writing_tasks:
+            target, content = task()
+            opened_zipfile.writestr(target, content)
         # now we can add extras.
         super(FactorioModFile, self).write_contents(opened_zipfile)
 
@@ -98,6 +108,7 @@ def generate_mod(world: "Factorio", output_directory: str):
     locations = [(location, location.item)
                  for location in world.science_locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
+    versioned_mod_name = mod_name + "_" + Utils.__version__
 
     random = multiworld.per_slot_randoms[player]
 
@@ -153,48 +164,40 @@ def generate_mod(world: "Factorio", output_directory: str):
     template_data["free_sample_blacklist"].update({item: 1 for item in multiworld.free_sample_blacklist[player].value})
     template_data["free_sample_blacklist"].update({item: 0 for item in multiworld.free_sample_whitelist[player].value})
 
-    control_code = control_template.render(**template_data)
-    data_template_code = data_template.render(**template_data)
-    data_final_fixes_code = data_final_template.render(**template_data)
-    settings_code = settings_template.render(**template_data)
-
-    mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
-    en_locale_dir = os.path.join(mod_dir, "locale", "en")
-    os.makedirs(en_locale_dir, exist_ok=True)
+    zf_path = os.path.join(output_directory, versioned_mod_name + ".zip")
+    mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])
 
     if world.zip_path:
-        # Maybe investigate read from zip, write to zip, without temp file?
         with zipfile.ZipFile(world.zip_path) as zf:
             for file in zf.infolist():
                 if not file.is_dir() and "/data/mod/" in file.filename:
                     path_part = Utils.get_text_after(file.filename, "/data/mod/")
-                    target = os.path.join(mod_dir, path_part)
-                    os.makedirs(os.path.split(target)[0], exist_ok=True)
-
-                    with open(target, "wb") as f:
-                        f.write(zf.read(file))
+                    mod.writing_tasks.append(lambda arcpath=versioned_mod_name+"/"+path_part, content=zf.read(file):
+                                             (arcpath, content))
     else:
-        shutil.copytree(os.path.join(os.path.dirname(__file__), "data", "mod"), mod_dir, dirs_exist_ok=True)
+        basepath = os.path.join(os.path.dirname(__file__), "data", "mod")
+        for dirpath, dirnames, filenames in os.walk(basepath):
+            base_arc_path = (versioned_mod_name+"/"+os.path.relpath(dirpath, basepath)).rstrip("/.\\")
+            for filename in filenames:
+                mod.writing_tasks.append(lambda arcpath=base_arc_path+"/"+filename,
+                                                file_path=os.path.join(dirpath, filename):
+                                         (arcpath, open(file_path, "rb").read()))
 
-    with open(os.path.join(mod_dir, "data.lua"), "wt") as f:
-        f.write(data_template_code)
-    with open(os.path.join(mod_dir, "data-final-fixes.lua"), "wt") as f:
-        f.write(data_final_fixes_code)
-    with open(os.path.join(mod_dir, "control.lua"), "wt") as f:
-        f.write(control_code)
-    with open(os.path.join(mod_dir, "settings.lua"), "wt") as f:
-        f.write(settings_code)
-    locale_content = locale_template.render(**template_data)
-    with open(os.path.join(en_locale_dir, "locale.cfg"), "wt") as f:
-        f.write(locale_content)
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/data.lua",
+                                      data_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/data-final-fixes.lua",
+                                      data_final_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/control.lua",
+                                      control_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
+                                      settings_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
+                                      locale_template.render(**template_data)))
+
     info = base_info.copy()
     info["name"] = mod_name
-    with open(os.path.join(mod_dir, "info.json"), "wt") as f:
-        json.dump(info, f, indent=4)
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/info.json",
+                                      json.dumps(info, indent=4)))
 
-    # zip the result
-    zf_path = os.path.join(mod_dir + ".zip")
-    mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])
+    # write the mod file
     mod.write()
-
-    shutil.rmtree(mod_dir)

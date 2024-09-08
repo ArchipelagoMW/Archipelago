@@ -53,7 +53,7 @@ If this file does exist, then it will be used.
 
 class FactorioWeb(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Factorio software on your computer.",
         "English",
         "setup_en.md",
@@ -95,13 +95,13 @@ class Factorio(World):
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }
-    data_version = 8
     required_client_version = (0, 4, 2)
 
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     tech_mix: int = 0
     skip_silo: bool = False
+    origin_region_name = "Nauvis"
     science_locations: typing.List[FactorioScienceLocation]
 
     settings: typing.ClassVar[FactorioSettings]
@@ -126,9 +126,6 @@ class Factorio(World):
     def create_regions(self):
         player = self.player
         random = self.multiworld.random
-        menu = Region("Menu", player, self.multiworld)
-        crash = Entrance(player, "Crash Land", menu)
-        menu.exits.append(crash)
         nauvis = Region("Nauvis", player, self.multiworld)
 
         location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo + \
@@ -185,8 +182,7 @@ class Factorio(World):
             event = FactorioItem(f"Automated {ingredient}", ItemClassification.progression, None, player)
             location.place_locked_item(event)
 
-        crash.connect(nauvis)
-        self.multiworld.regions += [menu, nauvis]
+        self.multiworld.regions.append(nauvis)
 
     def create_items(self) -> None:
         player = self.player
@@ -246,7 +242,8 @@ class Factorio(World):
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
                     (ingredient not in technology_table or state.has(ingredient, player)) and \
                     all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
-                        for technology in required_technologies[sub_ingredient])
+                        for technology in required_technologies[sub_ingredient]) and \
+                    all(state.has(technology.name, player) for technology in required_technologies[custom_recipe.crafting_machine])
             else:
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
@@ -541,7 +538,7 @@ class FactorioScienceLocation(FactorioLocation):
         super(FactorioScienceLocation, self).__init__(player, name, address, parent)
         # "AP-{Complexity}-{Cost}"
         self.complexity = int(self.name[3]) - 1
-        self.rel_cost = int(self.name[5:], 16)
+        self.rel_cost = int(self.name[5:])
 
         self.ingredients = {Factorio.ordered_science_packs[self.complexity]: 1}
         for complexity in range(self.complexity):

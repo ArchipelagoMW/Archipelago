@@ -1,36 +1,57 @@
-{% extends 'tablepage.html' %}
+{% extends "tablepage.html" %}
 {% block head %}
     {{ super() }}
     <title>{{ player_name }}&apos;s Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tracker.css") }}"/>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/trackerCommon.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="styles/tracker.css") }}"/>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/trackerCommon.js") }}"></script>
 {% endblock %}
 
 {% block body %}
-    {% include 'header/dirtHeader.html' %}
-    <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}" data-second="{{ saving_second }}">
-        <div id="tracker-header-bar">
-            <input placeholder="Search" id="search"/>
-            <span class="info">This tracker will automatically update itself periodically.</span>
+    {% include "header/dirtHeader.html" %}
+
+    <div id="tracker-navigation">
+        <div class="tracker-navigation-bar">
+            <a
+                class="tracker-navigation-button"
+                href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}"
+            >
+                 🡸 Return to Multiworld Tracker
+            </a>
+            {% if game_specific_tracker %}
+            <a
+                class="tracker-navigation-button"
+                href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}"
+            >
+                Game-Specific Tracker
+            </a>
+            {% endif %}
         </div>
+    </div>
+
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker | suuid }}/{{ team }}/{{ player }}" data-second="{{ saving_second }}">
+        <div id="tracker-header-bar">
+            <input placeholder="Search" id="search" />
+            <div class="info">This tracker will automatically update itself periodically.</div>
+        </div>
+        <div id="tables-container">
             <div class="table-wrapper">
                 <table id="received-table" class="table non-unique-item-table">
                     <thead>
                         <tr>
                             <th>Item</th>
                             <th>Amount</th>
-                            <th>Order Received</th>
+                            <th>Last Order Received</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                    {% for id, count in inventory.items() %}
-                    <tr>
-                        <td>{{ id | item_name }}</td>
-                        <td>{{ count }}</td>
-                        <td>{{received_items[id]}}</td>
-                    </tr>
+                    {% for id, count in inventory.items() if count > 0 %}
+                        <tr>
+                            <td>{{ item_id_to_name[game][id] }}</td>
+                            <td>{{ count }}</td>
+                            <td>{{ received_items[id] }}</td>
+                        </tr>
                     {%- endfor -%}
 
                     </tbody>
@@ -39,24 +60,62 @@
             <div class="table-wrapper">
                 <table id="locations-table" class="table non-unique-item-table">
                     <thead>
-                    <tr>
-                        <th>Location</th>
-                        <th>Checked</th>
-                    </tr>
+                        <tr>
+                            <th>Location</th>
+                            <th class="center-column">Checked</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        {% for name in checked_locations %}
+
+                    {%- for location in locations -%}
                         <tr>
-                            <td>{{ name | location_name}}</td>
-                            <td>✔</td>
+                            <td>{{ location_id_to_name[game][location] }}</td>
+                            <td class="center-column">
+                                {% if location in checked_locations %}✔{% endif %}
+                            </td>
                         </tr>
-                        {%- endfor -%}
-                        {% for name in not_checked_locations %}
+                    {%- endfor -%}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-wrapper">
+                <table id="hints-table" class="table non-unique-item-table">
+                    <thead>
                         <tr>
-                            <td>{{ name | location_name}}</td>
-                            <td></td>
+                            <th>Finder</th>
+                            <th>Receiver</th>
+                            <th>Item</th>
+                            <th>Location</th>
+                            <th>Game</th>
+                            <th>Entrance</th>
+                            <th class="center-column">Found</th>
                         </tr>
-                        {%- endfor -%}
+                    </thead>
+                    <tbody>
+                    {%- for hint in hints -%}
+                        <tr>
+                            <td>
+                                {% if hint.finding_player == player %}
+                                    <b>{{ player_names_with_alias[(team, hint.finding_player)] }}</b>
+                                {% else %}
+                                    {{ player_names_with_alias[(team, hint.finding_player)] }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if hint.receiving_player == player %}
+                                    <b>{{ player_names_with_alias[(team, hint.receiving_player)] }}</b>
+                                {% else %}
+                                    {{ player_names_with_alias[(team, hint.receiving_player)] }}
+                                {% endif %}
+                            </td>
+                            <td>{{ item_id_to_name[games[(team, hint.receiving_player)]][hint.item] }}</td>
+                            <td>{{ location_id_to_name[games[(team, hint.finding_player)]][hint.location] }}</td>
+                            <td>{{ games[(team, hint.finding_player)] }}</td>
+                            <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
+                            <td class="center-column">{% if hint.found %}✔{% endif %}</td>
+                        </tr>
+                    {%- endfor -%}
                     </tbody>
                 </table>
             </div>

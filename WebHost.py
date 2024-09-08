@@ -1,3 +1,4 @@
+import argparse
 import os
 import multiprocessing
 import logging
@@ -12,34 +13,41 @@ ModuleUpdate.update()
 import Utils
 import settings
 
+if typing.TYPE_CHECKING:
+    from flask import Flask
+
 Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
-
-from WebHostLib import register, app as raw_app
-from waitress import serve
-
-from WebHostLib.models import db
-from WebHostLib.autolauncher import autohost, autogen
-from WebHostLib.lttpsprites import update_sprites_lttp
-from WebHostLib.options import create as create_options_files
-
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
     configpath = os.path.abspath(Utils.user_path('config.yaml'))
 
 
-def get_app():
-    register()
+def get_app() -> "Flask":
+    from WebHostLib import register, cache, app as raw_app
+    from WebHostLib.models import db
+
     app = raw_app
     if os.path.exists(configpath) and not app.config["TESTING"]:
         import yaml
         app.config.from_file(configpath, yaml.safe_load)
         logging.info(f"Updated config from {configpath}")
+    # inside get_app() so it's usable in systems like gunicorn, which do not run WebHost.py, but import it.
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config_override', default=None,
+                        help="Path to yaml config file that overrules config.yaml.")
+    args = parser.parse_known_args()[0]
+    if args.config_override:
+        import yaml
+        app.config.from_file(os.path.abspath(args.config_override), yaml.safe_load)
+        logging.info(f"Updated config from {args.config_override}")
     if not app.config["HOST_ADDRESS"]:
         logging.info("Getting public IP, as HOST_ADDRESS is empty.")
         app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
         logging.info(f"HOST_ADDRESS was set to {app.config['HOST_ADDRESS']}")
 
+    register()
+    cache.init_app(app)
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     return app
@@ -60,6 +68,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             worlds[game] = world
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
+    shutil.rmtree(base_target_path, ignore_errors=True)
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
         target_path = os.path.join(base_target_path, game)
@@ -120,6 +129,11 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
+
+    from WebHostLib.lttpsprites import update_sprites_lttp
+    from WebHostLib.autolauncher import autohost, autogen, stop
+    from WebHostLib.options import create as create_options_files
+
     try:
         update_sprites_lttp()
     except Exception as e:
@@ -136,4 +150,13 @@ if __name__ == "__main__":
         if app.config["DEBUG"]:
             app.run(debug=True, port=app.config["PORT"])
         else:
+            from waitress import serve
             serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])
+    else:
+        from time import sleep
+        try:
+            while True:
+                sleep(1)  # wait for process to be killed
+        except (SystemExit, KeyboardInterrupt):
+            pass
+    stop()  # stop worker threads

@@ -10,7 +10,9 @@ def level_scaling(multiworld):
     while locations:
         sphere = set()
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
-            if multiworld.level_scaling[world.player] != "by_spheres_and_distance":
+            if (multiworld.level_scaling[world.player] != "by_spheres_and_distance"
+                    and (multiworld.level_scaling[world.player] != "auto" or multiworld.door_shuffle[world.player]
+                         in ("off", "simple"))):
                 continue
             regions = {multiworld.get_region("Menu", world.player)}
             checked_regions = set()
@@ -45,18 +47,18 @@ def level_scaling(multiworld):
                     return True
                 if (("Rock Tunnel 1F - Wild Pokemon" in location.name
                         and any([multiworld.get_entrance(e, location.player).connected_region.can_reach(state)
-                                 for e in ['Rock Tunnel 1F-NE to Route 10-N',
-                                           'Rock Tunnel 1F-NE to Rock Tunnel B1F-E',
-                                           'Rock Tunnel 1F-NW to Rock Tunnel B1F-E',
-                                           'Rock Tunnel 1F-NW to Rock Tunnel B1F-W',
-                                           'Rock Tunnel 1F-S to Route 10-S',
-                                           'Rock Tunnel 1F-S to Rock Tunnel B1F-W']])) or
+                                 for e in ['Rock Tunnel 1F-NE 1 to Route 10-N',
+                                           'Rock Tunnel 1F-NE 2 to Rock Tunnel B1F-E 1',
+                                           'Rock Tunnel 1F-NW 1 to Rock Tunnel B1F-E 2',
+                                           'Rock Tunnel 1F-NW 2 to Rock Tunnel B1F-W 1',
+                                           'Rock Tunnel 1F-S 1 to Route 10-S',
+                                           'Rock Tunnel 1F-S 2 to Rock Tunnel B1F-W 2']])) or
                         ("Rock Tunnel B1F - Wild Pokemon" in location.name and
                          any([multiworld.get_entrance(e, location.player).connected_region.can_reach(state)
-                             for e in ['Rock Tunnel B1F-E to Rock Tunnel 1F-NE',
-                                       'Rock Tunnel B1F-E to Rock Tunnel 1F-NW',
-                                       'Rock Tunnel B1F-W to Rock Tunnel 1F-NW',
-                                       'Rock Tunnel B1F-W to Rock Tunnel 1F-S']]))):
+                             for e in ['Rock Tunnel B1F-E 1 to Rock Tunnel 1F-NE 2',
+                                       'Rock Tunnel B1F-E 2 to Rock Tunnel 1F-NW 1',
+                                       'Rock Tunnel B1F-W 1 to Rock Tunnel 1F-NW 2',
+                                       'Rock Tunnel B1F-W 2 to Rock Tunnel 1F-S 2']]))):
                     # Even if checks in Rock Tunnel are out of logic due to lack of Flash, it is very easy to
                     # wander in the dark and encounter wild Pokémon, even unintentionally while attempting to
                     # leave the way you entered. We'll count the wild Pokémon as reachable as soon as the Rock
@@ -135,4 +137,3 @@ def level_scaling(multiworld):
                     sphere_objects[object].level = level_list_copy.pop(0)
     for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
         world.finished_level_scaling.set()
-

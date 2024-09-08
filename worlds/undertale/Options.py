@@ -1,5 +1,5 @@
-import typing
-from Options import Choice, Option, Toggle, Range
+from Options import Choice, Toggle, Range, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class RouteRequired(Choice):
@@ -9,6 +9,17 @@ class RouteRequired(Choice):
     option_pacifist = 1
     option_genocide = 2
     option_all_routes = 3
+    default = 0
+
+
+class StartingArea(Choice):
+    """Which area to start with access to."""
+    display_name = "Starting Area"
+    option_ruins = 0
+    option_snowdin = 1
+    option_waterfall = 2
+    option_hotland = 3
+    option_core = 4
     default = 0
 
 
@@ -75,16 +86,17 @@ class RandoBattleOptions(Toggle):
     default = 0
 
 
-undertale_options: typing.Dict[str, type(Option)] = {
-    "route_required":                           RouteRequired,
-    "key_hunt":                                 KeyHunt,
-    "key_pieces":                               KeyPieces,
-    "rando_love":                               RandomizeLove,
-    "rando_stats":                              RandomizeStats,
-    "temy_include":                             IncludeTemy,
-    "no_equips":                                NoEquips,
-    "only_flakes":                              OnlyFlakes,
-    "prog_armor":                               ProgressiveArmor,
-    "prog_weapons":                             ProgressiveWeapons,
-    "rando_item_button":                     RandoBattleOptions,
-}
+@dataclass
+class UndertaleOptions(PerGameCommonOptions):
+    route_required:                           RouteRequired
+    starting_area:                            StartingArea
+    key_hunt:                                 KeyHunt
+    key_pieces:                               KeyPieces
+    rando_love:                               RandomizeLove
+    rando_stats:                              RandomizeStats
+    temy_include:                             IncludeTemy
+    no_equips:                                NoEquips
+    only_flakes:                              OnlyFlakes
+    prog_armor:                               ProgressiveArmor
+    prog_weapons:                             ProgressiveWeapons
+    rando_item_button:                        RandoBattleOptions

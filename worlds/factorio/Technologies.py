@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import json
+import orjson
 import logging
 import os
 import string
@@ -20,7 +20,7 @@ pool = ThreadPoolExecutor(1)
 
 
 def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
-    return json.loads(pkgutil.get_data(__name__, "data/" + data_name + ".json").decode())
+    return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name + ".json"))
 
 
 techs_future = pool.submit(load_json_data, "techs")

@@ -79,6 +79,7 @@ class NetworkItem(typing.NamedTuple):
     item: int
     location: int
     player: int
+    """ Sending player, except in LocationInfo (from LocationScouts), where it is the receiving player. """
     flags: int = 0
 
 
@@ -198,7 +199,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         "slateblue": "6D8BE8",
         "plum": "AF99EF",
         "salmon": "FA8072",
-        "white": "FFFFFF"
+        "white": "FFFFFF",
+        "orange": "FF7700",
     }
 
     def __init__(self, ctx):
@@ -247,7 +249,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_item_id(self, node: JSONMessagePart):
         item_id = int(node["text"])
-        node["text"] = self.ctx.item_names[item_id]
+        node["text"] = self.ctx.item_names.lookup_in_slot(item_id, node["player"])
         return self._handle_item_name(node)
 
     def _handle_location_name(self, node: JSONMessagePart):
@@ -255,8 +257,8 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_location_id(self, node: JSONMessagePart):
-        item_id = int(node["text"])
-        node["text"] = self.ctx.location_names[item_id]
+        location_id = int(node["text"])
+        node["text"] = self.ctx.location_names.lookup_in_slot(location_id, node["player"])
         return self._handle_location_name(node)
 
     def _handle_entrance_name(self, node: JSONMessagePart):
@@ -290,8 +292,8 @@ def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 
     parts.append({"text": str(item_id), "player": player, "flags": item_flags, "type": JSONTypes.item_id, **kwargs})
 
 
-def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
-    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.location_id, **kwargs})
+def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) -> None:
+    parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
 class Hint(typing.NamedTuple):
@@ -390,31 +392,39 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         checked = state[team, slot]
         if not checked:
             # This optimizes the case where everyone connects to a fresh game at the same time.
-            return list(self)
+            return list(self[slot])
         return [location_id for
                 location_id in self[slot] if
                 location_id not in checked]
 
     def get_remaining(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
-                      ) -> typing.List[int]:
+                      ) -> typing.List[typing.Tuple[int, int]]:
         checked = state[team, slot]
         player_locations = self[slot]
-        return sorted([player_locations[location_id][0] for
-                       location_id in player_locations if
-                       location_id not in checked])
+        return sorted([(player_locations[location_id][1], player_locations[location_id][0]) for
+                        location_id in player_locations if
+                        location_id not in checked])
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub
     LocationStore = _LocationStore
 else:
     try:
-        import pyximport
-        pyximport.install()
-    except ImportError:
-        pyximport = None
-    try:
         from _speedups import LocationStore
+        import _speedups
+        import os.path
+        if os.path.isfile("_speedups.pyx") and os.path.getctime(_speedups.__file__) < os.path.getctime("_speedups.pyx"):
+            warnings.warn(f"{_speedups.__file__} outdated! "
+                          f"Please rebuild with `cythonize -b -i _speedups.pyx` or delete it!")
     except ImportError:
-        warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
-                      "Install a matching C++ compiler for your platform to compile _speedups.")
-        LocationStore = _LocationStore
+        try:
+            import pyximport
+            pyximport.install()
+        except ImportError:
+            pyximport = None
+        try:
+            from _speedups import LocationStore
+        except ImportError:
+            warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
+                          "Install a matching C++ compiler for your platform to compile _speedups.")
+            LocationStore = _LocationStore

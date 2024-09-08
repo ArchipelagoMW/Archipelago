@@ -4,3 +4,4 @@ class Ingredient:
     oil = "Oil"
     rice = "Rice"
     vinegar = "Vinegar"
+    qi_seasoning = "Qi Seasoning"

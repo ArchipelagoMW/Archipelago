@@ -10,7 +10,7 @@ wait for someone else in the multiworld to "activate" their button before they c
 
 Clique can be played on most modern HTML5-capable browsers.
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure
+The [player options page for this game](../player-options) contains all the options you need to configure
 and export a config file.

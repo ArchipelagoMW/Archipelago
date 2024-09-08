@@ -29,14 +29,14 @@ from .TextBox import character_table, NORMAL_LINE_WIDTH, rom_safe_text
 from .texture_util import ci4_rgba16patch_to_ci8, rgba16_patch
 from .Utils import __version__
 
-from worlds.Files import APContainer
+from worlds.Files import APPatch
 from Utils import __version__ as ap_version
 
 AP_PROGRESSION = 0xD4
 AP_JUNK = 0xD5
 
 
-class OoTContainer(APContainer):
+class OoTContainer(APPatch):
     game: str = 'Ocarina of Time'
 
     def __init__(self, patch_data: bytes, base_path: str, output_directory: str,
@@ -2094,10 +2094,14 @@ def patch_rom(world, rom):
         if not world.dungeon_mq['Ganons Castle']:
             chest_name = 'Ganons Castle Light Trial Lullaby Chest'
             location = world.get_location(chest_name)
-            if location.item.game == 'Ocarina of Time':
-                item = read_rom_item(rom, location.item.index)
+            if not location.item.trap:
+                if location.item.game == 'Ocarina of Time':
+                    item = read_rom_item(rom, location.item.index)
+                else:
+                    item = read_rom_item(rom, AP_PROGRESSION if location.item.advancement else AP_JUNK)
             else:
-                item = read_rom_item(rom, AP_PROGRESSION if location.item.advancement else AP_JUNK)
+                looks_like_index = get_override_entry(world, location)[5]
+                item = read_rom_item(rom, looks_like_index)
             if item['chest_type'] in (GOLD_CHEST, GILDED_CHEST, SKULL_CHEST_BIG):
                 rom.write_int16(0x321B176, 0xFC40) # original 0xFC48
 
@@ -2106,10 +2110,14 @@ def patch_rom(world, rom):
             chest_name = 'Spirit Temple Compass Chest'
             chest_address = 0x2B6B07C
             location = world.get_location(chest_name)
-            if location.item.game == 'Ocarina of Time':
-                item = read_rom_item(rom, location.item.index)
+            if not location.item.trap:
+                if location.item.game == 'Ocarina of Time':
+                    item = read_rom_item(rom, location.item.index)
+                else:
+                    item = read_rom_item(rom, AP_PROGRESSION if location.item.advancement else AP_JUNK)
             else:
-                item = read_rom_item(rom, AP_PROGRESSION if location.item.advancement else AP_JUNK)
+                looks_like_index = get_override_entry(world, location)[5]
+                item = read_rom_item(rom, looks_like_index)
             if item['chest_type'] in (BROWN_CHEST, SILVER_CHEST, SKULL_CHEST_SMALL):
                 rom.write_int16(chest_address + 2, 0x0190) # X pos
                 rom.write_int16(chest_address + 6, 0xFABC) # Z pos
@@ -2120,10 +2128,14 @@ def patch_rom(world, rom):
             chest_address_0 = 0x21A02D0  # Address in setup 0
             chest_address_2 = 0x21A06E4  # Address in setup 2
             location = world.get_location(chest_name)
-            if location.item.game == 'Ocarina of Time':
-                item = read_rom_item(rom, location.item.index)
+            if not location.item.trap:
+                if location.item.game == 'Ocarina of Time':
+                    item = read_rom_item(rom, location.item.index)
+                else:
+                    item = read_rom_item(rom, AP_PROGRESSION if location.item.advancement else AP_JUNK)
             else:
-                item = read_rom_item(rom, AP_PROGRESSION if location.item.advancement else AP_JUNK)
+                looks_like_index = get_override_entry(world, location)[5]
+                item = read_rom_item(rom, looks_like_index)
             if item['chest_type'] in (BROWN_CHEST, SILVER_CHEST, SKULL_CHEST_SMALL):
                 rom.write_int16(chest_address_0 + 6, 0x0172)  # Z pos
                 rom.write_int16(chest_address_2 + 6, 0x0172)  # Z pos
@@ -2170,7 +2182,7 @@ def patch_rom(world, rom):
             'Shadow Temple':      ("the \x05\x45Shadow Temple",      'Bongo Bongo',   0x7f, 0xa3),
         }
         for dungeon in world.dungeon_mq:
-            if dungeon in ['Gerudo Training Ground', 'Ganons Castle']:
+            if dungeon in ['Thieves Hideout', 'Gerudo Training Ground', 'Ganons Castle']:
                 pass
             elif dungeon in ['Bottom of the Well', 'Ice Cavern']:
                 dungeon_name, boss_name, compass_id, map_id = dungeon_list[dungeon]

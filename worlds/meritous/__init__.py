@@ -7,7 +7,7 @@ from BaseClasses import Item, MultiWorld, Tutorial
 from Fill import fill_restrictive
 from .Items import item_table, item_groups, MeritousItem
 from .Locations import location_table, MeritousLocation
-from .Options import meritous_options, cost_scales
+from .Options import MeritousOptions, cost_scales
 from .Regions import create_regions
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
@@ -17,7 +17,7 @@ client_version = 1
 
 class MeritousWeb(WebWorld):
     tutorials = [Tutorial(
-        "Meritous Setup Tutorial",
+        "Meritous Setup Guide",
         "A guide to setting up the Archipelago Meritous software on your computer.",
         "English",
         "setup_en.md",
@@ -44,15 +44,14 @@ class MeritousWorld(World):
     location_name_to_id = location_table
     item_name_groups = item_groups
 
-    data_version = 2
-
     # NOTE: Remember to change this before this game goes live
     required_client_version = (0, 2, 4)
 
-    option_definitions = meritous_options
+    options: MeritousOptions
+    options_dataclass = MeritousOptions
 
-    def __init__(self, world: MultiWorld, player: int):
-        super(MeritousWorld, self).__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super(MeritousWorld, self).__init__(multiworld, player)
         self.goal = 0
         self.include_evolution_traps = False
         self.include_psi_keys = False
@@ -97,11 +96,11 @@ class MeritousWorld(World):
             return "Crystals x2000"
 
     def generate_early(self):
-        self.goal = self.multiworld.goal[self.player].value
-        self.include_evolution_traps = self.multiworld.include_evolution_traps[self.player].value
-        self.include_psi_keys = self.multiworld.include_psi_keys[self.player].value
-        self.item_cache_cost = self.multiworld.item_cache_cost[self.player].value
-        self.death_link = self.multiworld.death_link[self.player].value
+        self.goal = self.options.goal.value
+        self.include_evolution_traps = self.options.include_evolution_traps.value
+        self.include_psi_keys = self.options.include_psi_keys.value
+        self.item_cache_cost = self.options.item_cache_cost.value
+        self.death_link = self.options.death_link.value
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)

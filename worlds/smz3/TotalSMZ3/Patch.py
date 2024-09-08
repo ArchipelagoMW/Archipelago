@@ -319,7 +319,7 @@ class Patch:
     def WriteZ3Locations(self, locations: List[Location]):
         for location in locations:
             if (location.Type == LocationType.HeraStandingKey):
-                self.patches.append((Snes(0x9E3BB), [0xE4] if location.APLocation.item.game == "SMZ3" and location.APLocation.item.item.Type == ItemType.KeyTH else [0xEB]))
+                self.patches.append((Snes(0x9E3BB), [0xEB]))
             elif (location.Type in [LocationType.Pedestal, LocationType.Ether, LocationType.Bombos]):
                 text = Texts.ItemTextbox(location.APLocation.item.item if location.APLocation.item.game == "SMZ3" else Item(ItemType.Something))
                 if (location.Type == LocationType.Pedestal):
@@ -616,7 +616,8 @@ class Patch:
                     "H" if self.myWorld.Config.SMLogic == Config.SMLogic.Hard else \
                     "X"
 
-        self.title = f"ZSM{Patch.Major}{Patch.Minor}{Patch.Patch}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
+        from Utils import __version__
+        self.title = f"ZSM{Patch.Major}{Patch.Minor}{Patch.Patch}{__version__.replace('.', '')[0:3]}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
         self.patches.append((Snes(0x00FFC0), bytearray(self.title, 'utf8')))
         self.patches.append((Snes(0x80FFC0), bytearray(self.title, 'utf8')))
     
