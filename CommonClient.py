@@ -662,17 +662,19 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def run_gui(self):
-        """Import kivy UI system and start running it as self.ui_task."""
+    def make_gui(self) -> type:
+        """To return the Kivy App class needed for run_gui so it can be overridden before being built"""
         from kvui import GameManager
 
         class TextManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
             base_title = "Archipelago Text Client"
 
-        self.ui = TextManager(self)
+        return TextManager
+
+    def run_gui(self):
+        """Import kivy UI system from make_gui() and start running it as self.ui_task."""
+        ui_class = self.make_gui()
+        self.ui = ui_class(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def run_cli(self):
@@ -994,7 +996,7 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
-def run_as_textclient():
+def run_as_textclient(*args):
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
         tags = CommonContext.tags | {"TextOnly"}
@@ -1033,7 +1035,7 @@ def run_as_textclient():
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    args = parser.parse_args()
+    args = parser.parse_args(args if args else None)  # this is necessary as long as CommonClient itself is launchable
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
