@@ -24,6 +24,7 @@ all_regions = [
     "Stored Shape Achievements",
     "Trashed Shape Achievements",
     "Wiring Achievements",
+    "Blueprint Achievements"
     "MAM needed",
     "All Buildings Shapes"
 ] + [
@@ -130,6 +131,8 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                             lambda state: state.has("Trash", player))
     regions["Main"].connect(regions["Wiring Achievements"], "Wires needed",
                             lambda state: state.has("Wires", player))
+    regions["Main"].connect(regions["Blueprint Achievements"], "Blueprints needed",
+                            lambda state: state.has("Blueprints", player))
     regions["Main"].connect(regions["MAM needed"], "Building a MAM",
                             lambda state: can_build_mam(state, player))
 
