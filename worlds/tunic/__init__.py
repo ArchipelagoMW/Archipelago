@@ -122,7 +122,7 @@ class TunicWorld(World):
         self.player_location_table = standard_location_name_to_id.copy()
 
         if self.options.grass_randomizer:
-            if self.settings.limit_grass_rando and self.options.grass_fill < 95:
+            if self.settings.limit_grass_rando and self.options.grass_fill < 95 and self.multiworld.players > 1:
                 raise OptionError(f"TUNIC: Player {self.player_name} has their Grass Fill option set too low. "
                                   f"They must either bring it above 95% or the host needs to disable limit_grass_rando "
                                   f"in their host.yaml settings")
