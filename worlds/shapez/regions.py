@@ -25,7 +25,7 @@ all_regions = [
     "Stored Shape Achievements",
     "Trashed Shape Achievements",
     "Wiring Achievements",
-    "Blueprint Achievements"
+    "Blueprint Achievements",
     "MAM needed",
     "All Buildings Shapes"
 ] + [
