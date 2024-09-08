@@ -16,6 +16,9 @@ def get_total_locations(world: "Sly1World") -> int:
         if not did_include_hourglasses(world) and name in hourglass_locations:
             continue
 
+        if location_table[name].level_type in world.options.ExcludeMinigames.value:
+            continue
+
         if is_valid_location:
             total += 1
 
@@ -27,6 +30,10 @@ def get_location_names() -> Dict[str, int]:
 
 def is_valid_location(world: "Sly1World",name) -> bool:
     if not did_include_hourglasses(world) and name in hourglass_locations:
+        return False
+    
+    print(location_table[name].level_type)
+    if location_table[name].level_type in world.options.ExcludeMinigames.value:
         return False
     
     return True
@@ -130,15 +137,15 @@ hourglass_locations = {
 }
 
 minigame_locations = {
-    "Treasure in the Depths Key": LocData(10020107, "Prowling the Grounds - Second Gate", key_type=EpisodeType.TOT, key_requirement = 3),
-    "At the Dog Track Key": LocData(10020109, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1),
-    "Murray's Big Gamble Key": LocData(10020110, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1),
-    "Piranha Lake Key": LocData(10020118, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 1),
-    "Ghastly Voyage Key": LocData(10020120, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3),
-    "Down Home Cooking Key": LocData(10020121, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3),
-    "King of the Hill Key": LocData(10020125, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 1),
-    "Rapid Fire Assault Key": LocData(10020126, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3),
-    "Desperate Race Key": LocData(10020127, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3)
+    "Treasure in the Depths Key": LocData(10020107, "Prowling the Grounds - Second Gate", key_type=EpisodeType.TOT, key_requirement = 3, level_type = "Crabs"),
+    "At the Dog Track Key": LocData(10020109, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1, level_type = "Races"),
+    "Murray's Big Gamble Key": LocData(10020110, "Muggshot's Turf", key_type=EpisodeType.SSE, key_requirement = 1, level_type = "Turrets"),
+    "Piranha Lake Key": LocData(10020118, "Swamp's Dark Center", key_type=EpisodeType.VV, key_requirement = 1, level_type = "Swamp Skiff"),
+    "Ghastly Voyage Key": LocData(10020120, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3, level_type = "Hover Blasters"),
+    "Down Home Cooking Key": LocData(10020121, "Swamp's Dark Center - Second Gate", key_type=EpisodeType.VV, key_requirement = 3, level_type = "Chicken Killing"),
+    "King of the Hill Key": LocData(10020125, "Inside the Stronghold", key_type=EpisodeType.FITS, key_requirement = 1, level_type = "Turrets"),
+    "Rapid Fire Assault Key": LocData(10020126, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3, level_type = "Hover Blasters"),
+    "Desperate Race Key": LocData(10020127, "Inside the Stronghold - Second Gate", key_type=EpisodeType.FITS, key_requirement = 3, level_type = "Races")
 }
 
 event_locations = {

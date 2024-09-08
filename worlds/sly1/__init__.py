@@ -42,7 +42,7 @@ class Sly1World(World):
         starting_episode = EpisodeType(self.options.StartingEpisode)
         starting_episode_long = episode_type_to_name[starting_episode]
         starting_episode_short = episode_type_to_shortened_name[starting_episode]
-        
+
         # Starting Episode - please clean this up oml
         if starting_episode_long == "All":
             for episode in sly_episodes.keys():

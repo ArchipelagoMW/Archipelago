@@ -30,6 +30,7 @@ class LocData(NamedTuple):
     region: Optional[str]
     key_type: Optional[EpisodeType] = None
     key_requirement: Optional[int] = 0
+    level_type: Optional[str] = None
 
 episode_type_to_name = {
     EpisodeType.TOT:      "Tide of Terror",

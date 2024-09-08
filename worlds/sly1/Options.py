@@ -36,41 +36,41 @@ class IncludeHourglasses(Toggle):
     """
     display_name = "Include Hourglasses"
 
-# NOT YET IMPLEMENTED
-# class ExcludeMinigames(OptionSet):
-#     """
-#     Choose which minigames types you want to exclude as locations.
-#     crabs: Treasure in the Depths
-#     races: At the Dog Track, A Desperate Race
-#     turrets: Murray's Big Gamble, The King of the Hill
-#     hover blasters: A Ghastly Voyage, Rapid Fire Assualt
-#     chicken killing: Down Home Cooking
-#     swamp skiff: Piranha Lake
-#     """
-#     display_name = "Exclude Minigames"
-#     valid_keys = {
-#         "crabs",
-#         "races",
-#         "turrets",
-#         "hover blasters",
-#         "shicken killing",
-#         "swamp skiff"
-#     }
+class ExcludeMinigames(OptionSet):
+    """
+    Choose which minigames types you want to exclude as locations.
+    Crabs: Treasure in the Depths
+    Races: At the Dog Track, A Desperate Race
+    Turrets: Murray's Big Gamble, The King of the Hill
+    Hover Blasters: A Ghastly Voyage, Rapid Fire Assualt
+    Chicken Killing: Down Home Cooking
+    Swamp Skiff: Piranha Lake
+    """
+    display_name = "Exclude Minigames"
+    valid_keys = {
+        "Crabs",
+        "Races",
+        "Turrets",
+        "Hover Blasters",
+        "Chicken Killing",
+        "Swamp Skiff"
+    }
 
 @dataclass
 class Sly1Options(PerGameCommonOptions):
-    StartingEpisode:            StartingEpisode
-    IncludeHourglasses:         IncludeHourglasses
-    AvoidEarlyBK:               AvoidEarlyBK
-    # ExcludeMinigames:           ExcludeMinigames
+    StartingEpisode:        StartingEpisode
+    IncludeHourglasses:     IncludeHourglasses
+    AvoidEarlyBK:           AvoidEarlyBK
+    ExcludeMinigames:       ExcludeMinigames
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [StartingEpisode, IncludeHourglasses]
-    # "Minigames": [ExcludeMinigames]
+    "General Options": [StartingEpisode, IncludeHourglasses],
+    "ExcludeMinigames": [ExcludeMinigames]
 }
 
 slot_data_options: List[str] = {
     "StartingEpisode",
     "IncludeHourglasses",
-    "AvoidEarlyBK"
+    "AvoidEarlyBK",
+    "ExcludeMinigames"
 }
