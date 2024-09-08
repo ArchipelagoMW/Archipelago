@@ -676,7 +676,7 @@ def set_rules(world: "MLSSWorld", excluded):
         add_rule(
             world.get_location(LocationName.GwarharLagoonFirstUnderwaterAreaRoom2CoinBlock),
             lambda state: StateLogic.canDash(state, world.player)
-            and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
+                            and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
         )
         add_rule(
             world.get_location(LocationName.JokesEndSecondFloorWestRoomCoinBlock),
