@@ -175,13 +175,21 @@ class NumberOfChildren(Range):
     default = 3
 
 
-class AdditionalNames(OptionSet):
+class AdditionalLadyNames(OptionSet):
     """
     Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
     of names your children can have. The first value will also be your initial character's name depending on Starting
     Gender.
     """
-    display_name = "Additional Names"
+    display_name = "Additional Lady Names"
+
+class AdditionalSirNames(OptionSet):
+    """
+    Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
+    of names your children can have. The first value will also be your initial character's name depending on Starting
+    Gender.
+    """
+    display_name = "Additional Sir Names"
 
 
 class AllowDefaultNames(DefaultOnToggle):
@@ -374,6 +382,6 @@ class RLOptions(PerGameCommonOptions):
     crit_chance_pool: CritChanceUpPool
     crit_damage_pool: CritDamageUpPool
     allow_default_names: AllowDefaultNames
-    additional_lady_names: AdditionalNames
-    additional_sir_names: AdditionalNames
+    additional_lady_names: AdditionalLadyNames
+    additional_sir_names: AdditionalSirNames
     death_link: DeathLink
