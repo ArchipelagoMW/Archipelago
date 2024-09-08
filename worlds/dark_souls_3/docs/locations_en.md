@@ -2073,7 +2073,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>RS: Great Swamp Ring - miniboss drop, by Farron Keep</td><td>Dropped by Greater Crab in Crucifixion Woods close to the Farron Keep outer wall</td></tr>
 <tr><td>RS: Green Blossom - by deep water</td><td>In the Crucifixion Woods crab area out in the open, close to the edge of the deep water area</td></tr>
 <tr><td>RS: Green Blossom - water beneath stronghold</td><td>In the Crucifixion Woods crab area close to the Crucifixion Woods bonfire, along the left wall of the water area, to the right of the entrance to the building before Crystal Sage</td></tr>
-<tr><td>RS: Heretic&#x27;s Staff - stronghold left room</td><td>In the building before Crystal Sage, entering from near Cruicfixion Woods, in a corner under the first stairwell and balcony</td></tr>
+<tr><td>RS: Heretic&#x27;s Staff - stronghold left room</td><td>In the building before Crystal Sage, entering from near Crucifixion Woods, in a corner under the first stairwell and balcony</td></tr>
 <tr><td>RS: Heysel Pick - Heysel drop</td><td>Dropped by Heysel when she invades in Road of Sacrifices</td></tr>
 <tr><td>RS: Homeward Bone - balcony by Farron Keep</td><td>At the far end of the building where you descend into Farron Keep, by the balcony</td></tr>
 <tr><td>RS: Large Soul of an Unknown Traveler - left of stairs to Farron Keep</td><td>In the area before you descend into Farron Keep, before the stairs to the far left</td></tr>
