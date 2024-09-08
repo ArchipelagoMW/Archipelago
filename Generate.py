@@ -155,6 +155,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
+    erargs.name = {}
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
@@ -184,7 +185,6 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.player_options = {}
 
     player = 1
-    erargs.name = {}
     while player <= args.multi:
         path = player_path_cache[player]
         if path:
