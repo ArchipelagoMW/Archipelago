@@ -67,6 +67,21 @@ def update_dict(dictionary, entries):
     return dictionary
 
 
+def queue_gc():
+    import gc
+    from threading import Thread
+
+    gc_thread: typing.Optional[Thread] = getattr(queue_gc, "_thread", None)
+    def async_collect():
+        time.sleep(2)
+        setattr(queue_gc, "_thread", None)
+        gc.collect()
+    if not gc_thread:
+        gc_thread = Thread(target=async_collect)
+        setattr(queue_gc, "_thread", gc_thread)
+        gc_thread.start()
+
+
 # functions callable on storable data on the server by clients
 modify_functions = {
     # generic:
@@ -551,6 +566,9 @@ class Context:
                         self.logger.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
                     else:
                         self.save_dirty = False
+                if not atexit_save:  # if atexit is used, that keeps a reference anyway
+                    queue_gc()
+
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
@@ -1203,6 +1221,10 @@ class CommonCommandProcessor(CommandProcessor):
             timer = int(seconds, 10)
         except ValueError:
             timer = 10
+        else:
+            if timer > 60 * 60:
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
+
         async_start(countdown(self.ctx, timer))
         return True
 
@@ -2039,6 +2061,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
             item_name, usable, response = get_intended_text(item_name, names)
             if usable:
                 amount: int = int(amount)
+                if amount > 100:
+                    raise ValueError(f"{amount} is invalid. Maximum is 100.")
                 new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(int(amount))]
                 send_items_to(self.ctx, team, slot, *new_items)
 
