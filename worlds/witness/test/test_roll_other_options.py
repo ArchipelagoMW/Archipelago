@@ -12,6 +12,7 @@ class TestExpertNonRandomizedEPs(WitnessTestBase):
         "victory_condition": "challenge",
         "shuffle_discarded_panels": False,
         "shuffle_boat": False,
+        "shuffle_dog": "off",
     }
 
 
@@ -24,6 +25,7 @@ class TestVanillaAutoElevatorsPanels(WitnessTestBase):
         "early_caves": True,
         "shuffle_vault_boxes": True,
         "mountain_lasers": 11,
+        "shuffle_dog": "puzzle_skip",
     }
 
 
@@ -46,11 +48,13 @@ class TestMaxEntityShuffle(WitnessTestBase):
         "obelisk_keys": True,
         "shuffle_lasers": "anywhere",
         "victory_condition": "mountain_box_long",
+        "shuffle_dog": "random_item",
     }
 
 
 class TestPostgameGroupedDoors(WitnessTestBase):
     options = {
+        "puzzle_randomization": "umbra_variety",
         "shuffle_postgame": True,
         "shuffle_discarded_panels": True,
         "shuffle_doors": "doors",

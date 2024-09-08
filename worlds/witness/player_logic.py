@@ -87,12 +87,14 @@ class WitnessPlayerLogic:
         self.DIFFICULTY = world.options.puzzle_randomization
 
         self.REFERENCE_LOGIC: StaticWitnessLogicObj
-        if self.DIFFICULTY == "sigma_expert":
+        if self.DIFFICULTY == "sigma_normal":
+            self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
+        elif self.DIFFICULTY == "sigma_expert":
             self.REFERENCE_LOGIC = static_witness_logic.sigma_expert
+        elif self.DIFFICULTY == "umbra_variety":
+            self.REFERENCE_LOGIC = static_witness_logic.umbra_variety
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
-        else:
-            self.REFERENCE_LOGIC = static_witness_logic.sigma_normal
 
         self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
@@ -116,18 +118,19 @@ class WitnessPlayerLogic:
         self.HUNT_ENTITIES: Set[str] = set()
 
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
-            "0x00509": "+1 Laser (Symmetry Laser)",
-            "0x012FB": "+1 Laser (Desert Laser)",
+            "0x00509": "+1 Laser",
+            "0x012FB": "+1 Laser (Unredirected)",
             "0x09F98": "Desert Laser Redirection",
-            "0x01539": "+1 Laser (Quarry Laser)",
-            "0x181B3": "+1 Laser (Shadows Laser)",
-            "0x014BB": "+1 Laser (Keep Laser)",
-            "0x17C65": "+1 Laser (Monastery Laser)",
-            "0x032F9": "+1 Laser (Town Laser)",
-            "0x00274": "+1 Laser (Jungle Laser)",
-            "0x0C2B2": "+1 Laser (Bunker Laser)",
-            "0x00BF6": "+1 Laser (Swamp Laser)",
-            "0x028A4": "+1 Laser (Treehouse Laser)",
+            "0xFFD03": "+1 Laser (Redirected)",
+            "0x01539": "+1 Laser",
+            "0x181B3": "+1 Laser",
+            "0x014BB": "+1 Laser",
+            "0x17C65": "+1 Laser",
+            "0x032F9": "+1 Laser",
+            "0x00274": "+1 Laser",
+            "0x0C2B2": "+1 Laser",
+            "0x00BF6": "+1 Laser",
+            "0x028A4": "+1 Laser",
             "0x17C34": "Mountain Entry",
             "0xFFF00": "Bottom Floor Discard Turns On",
         }
@@ -609,6 +612,9 @@ class WitnessPlayerLogic:
                 adjustment_linesets_in_order.append(get_complex_doors())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
 
+        if not world.options.shuffle_dog:
+            adjustment_linesets_in_order.append(["Disabled Locations:", "0xFFF80 (Town Pet the Dog)"])
+
         if world.options.shuffle_boat:
             adjustment_linesets_in_order.append(get_boat())
 
@@ -771,8 +777,7 @@ class WitnessPlayerLogic:
                     # If we are disabling a laser, something has gone wrong.
                     if static_witness_logic.ENTITIES_BY_HEX[entity]["entityType"] == "Laser":
                         laser_name = static_witness_logic.ENTITIES_BY_HEX[entity]["checkName"]
-                        player_name = world.multiworld.get_player_name(world.player)
-                        raise RuntimeError(f"Somehow, {laser_name} was disabled for player {player_name}."
+                        raise RuntimeError(f"Somehow, {laser_name} was disabled for player {world.player_name}."
                                            f" This is not allowed to happen, please report to Violet.")
 
                     newly_discovered_disabled_entities.add(entity)
@@ -890,7 +895,7 @@ class WitnessPlayerLogic:
         )
 
     def determine_unrequired_entities(self, world: "WitnessWorld") -> None:
-        """Figure out which major items are actually useless in this world's settings"""
+        """Figure out which major items are actually useless in this world's options"""
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
