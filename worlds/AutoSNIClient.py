@@ -39,6 +39,7 @@ class AutoSNIClientRegister(abc.ABCMeta):
         new_class = super().__new__(cls, name, bases, dct)
         if "game" in dct:
             AutoSNIClientRegister.game_handlers[dct["game"]] = new_class()
+            assert isinstance(component.game_name, list)
             component.game_name.append(dct["game"])
 
         if "patch_suffix" in dct:
