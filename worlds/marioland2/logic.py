@@ -49,12 +49,12 @@ def mushroom_zone_coins(state, player, coins):
     return coins <= reachable_coins
 
 
-def tree_zone_1_normal_exit(state, player):
-    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player),
-
-
 def tree_zone_1_coins(state, player, coins):
     return coins <= 87 or not is_auto_scroll(state, player, "Tree Zone 1")
+
+
+def tree_zone_2_normal_exit(state, player):
+    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player),
 
 
 def tree_zone_2_secret_exit(state, player):
@@ -179,7 +179,7 @@ def pumpkin_zone_2_normal_exit(state, player):
 
 
 def pumpkin_zone_2_secret_exit(state, player):
-    return pumpkin_zone_1_normal_exit(state, player) and state.has_any(["Mushroom", "Fire Flower"], player)
+    return pumpkin_zone_2_normal_exit(state, player) and state.has_any(["Mushroom", "Fire Flower"], player)
 
 
 def pumpkin_zone_2_coins(state, player, coins):
@@ -208,7 +208,7 @@ def pumpkin_zone_secret_course_1_coins(state, player, coins):
         return True
 
 
-def pumpkin_zone_3_normal_exit(state, player):
+def pumpkin_zone_3_secret_exit(state, player):
     return state.has("Carrot", player)
 
 
@@ -348,7 +348,8 @@ def turtle_zone_2_secret_exit(state, player):
 
 
 def turtle_zone_2_midway_bell(state, player):
-    return turtle_zone_2_secret_exit(state, player) or state.has("Turtle Zone 2 Midway Bell", player)
+    return ((state.has("Water Physics", player) and not is_auto_scroll(state, player, "Turtle Zone 2"))
+            or state.has("Turtle Zone 2 Midway Bell", player))
     
     
 def turtle_zone_2_coins(state, player, coins):
@@ -554,13 +555,12 @@ def macro_zone_2_coins(state, player, coins):
 
 
 def macro_zone_3_normal_exit(state, player):
-    return ((has_pipe_down(state, player) and has_pipe_down(state, player))
+    return ((has_pipe_down(state, player) and has_pipe_up(state, player))
             or state.has("Macro Zone 3 Midway Bell", player),)
 
 
 def macro_zone_3_midway_bell(state, player):
-    return ((has_pipe_down(state, player) and has_pipe_down(state, player))
-            or state.has("Macro Zone 3 Midway Bell", player))
+    return macro_zone_3_normal_exit(state, player)
 
 
 def macro_zone_3_coins(state, player, coins):
