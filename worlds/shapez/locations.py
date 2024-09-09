@@ -140,9 +140,9 @@ for first_shape in ["C", "R", "W", "S"]:
                     shapesanity_two_sided[f"Shapesanity Checkered {ordered_combo}"] \
                         = f"Shapesanity Stitched {color_region}"
                     # 2 empty corners && (2 different shapes || 2 different colors)
-                    shapesanity_two_sided[f"Shapesanity Cornered {ordered_combo}"] \
+                    shapesanity_two_sided[f"Shapesanity Cornered Singles {ordered_combo}"] \
                         = f"Shapesanity Stitched {color_region}"
-                    shapesanity_two_sided[f"Shapesanity Adjacent {ordered_combo}"] \
+                    shapesanity_two_sided[f"Shapesanity Adjacent Singles {ordered_combo}"] \
                         = f"Shapesanity Stitched {color_region}"
                     # 1 empty corner && (2 different shapes || 2 different colors)
                     shapesanity_two_sided[f"Shapesanity Adjacent 2-1 {first_combo} {second_combo}"] \
