@@ -2,7 +2,7 @@
 Functions related to pokemon species and moves
 """
 import functools
-from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple, Literal
+from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
 from .data import (NUM_REAL_SPECIES, OUT_OF_LOGIC_MAPS, EncounterType, EncounterTableData, LearnsetMove, SpeciesData,
                    MapData, data)
