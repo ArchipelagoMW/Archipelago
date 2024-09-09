@@ -6269,20 +6269,18 @@ for loc_name, loc_data in grass_location_table.items():
 
 def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
     player = world.player
-    if world.options.start_with_sword:
-        return True
-    else:
-        # no gun or wand because they're extremely tedious
-        return (has_sword(state, player)
-                or (has_stick(state, player) and state.has("Glass Cannon", player)))
+    # no gun or wand because they're extremely tedious
+    return (has_sword(state, player)
+            or (has_stick(state, player) and state.has("Glass Cannon", player)))
 
 
 def set_grass_location_rules(world: "TunicWorld") -> None:
     player = world.player
 
-    for location in grass_location_table.keys():
-        set_rule(world.get_location(location),
-                 lambda state: can_break_grass(state, world))
+    if not world.options.start_with_sword:
+        for location in grass_location_table.keys():
+            set_rule(world.get_location(location),
+                     lambda state: can_break_grass(state, world))
 
     set_rule(world.get_location("Fortress Courtyard - Fortress Courtyard Upper Grass (1) (72.0, 8.0, -29.0)"),
              lambda state: state.has("Magic Wand", player))
