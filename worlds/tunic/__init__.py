@@ -7,7 +7,7 @@ from .rules import set_location_rules, set_region_rules, randomize_ability_unloc
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
-from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups
+from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
@@ -240,6 +240,9 @@ class TunicWorld(World):
             items_to_create["Grass"] = len(grass_location_table)
             tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression))
             items_to_create["Glass Cannon"] = 0
+            for grass_location in excluded_grass_locations:
+                self.multiworld.get_location(grass_location, self.player).place_locked_item(self.create_item("Grass"))
+            items_to_create["Grass"] -= len(excluded_grass_locations)
 
         if self.options.keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
