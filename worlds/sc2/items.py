@@ -60,6 +60,7 @@ class ZergItemType(ItemTypeEnum):
     Mutation_2 = "Mutation", 10
     Mutation_3 = "Mutation", 11
     Mutation_4 = "Mutation", 12
+    Progressive = "Progressive Upgrade", 13
 
 
 class ProtossItemType(ItemTypeEnum):
@@ -1116,6 +1117,18 @@ item_table = {
     item_names.OMEGA_WORM:
         ItemData(19 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 18, SC2Race.ZERG,
                  classification=ItemClassification.useful, origin={"ext"}),
+    item_names.INFESTED_SIEGE_TANK:
+        ItemData(20 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 19, SC2Race.ZERG,
+                 classification=ItemClassification.useful, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK:
+        ItemData(21 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 20, SC2Race.ZERG,
+                 classification=ItemClassification.useful, origin={"ext"}),
+    item_names.INFESTED_BANSHEE:
+        ItemData(22 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 21, SC2Race.ZERG,
+                 classification=ItemClassification.useful, origin={"ext"}),
+    item_names.INFESTED_LIBERATOR:
+        ItemData(23 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 22, SC2Race.ZERG,
+                 classification=ItemClassification.useful, origin={"ext"}),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
@@ -1487,6 +1500,25 @@ item_table = {
     item_names.NYDUS_WORM_RAVENOUS_APPETITE:
         ItemData(358 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 16, SC2Race.ZERG, parent_item=item_names.NYDUS_WORM,
                  origin={"ext"}, classification=ItemClassification.useful),
+    item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS:
+        ItemData(359 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 0, SC2Race.ZERG,
+                 parent_item=item_names.INFESTED_SIEGE_TANK, quantity=2, origin={"ext"}),
+    item_names.INFESTED_SIEGE_TANK_ACIDIC_ENZYMES:
+        ItemData(360 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 17, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL:
+        ItemData(361 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 18, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES:
+        ItemData(362 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 19, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS:
+        ItemData(363 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 20, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON:
+        ItemData(364 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 21, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
+    item_names.INFESTED_BANSHEE_RAPID_HIBERNATION:
+        ItemData(365 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 22, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
+    item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL:
+        ItemData(366 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 23, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR, origin={"ext"}),
+    item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION:
+        ItemData(367 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 24, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR, origin={"ext"}),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
@@ -1529,8 +1561,8 @@ item_table = {
 
     # Zerg Mercs
     item_names.INFESTED_MEDICS: ItemData(600 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 0, SC2Race.ZERG, origin={"ext"}),
-    item_names.INFESTED_SIEGE_TANKS: ItemData(601 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 1, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
-    item_names.INFESTED_BANSHEES: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 2, SC2Race.ZERG, origin={"ext"}),
+    item_names.INFESTED_SIEGE_BREAKERS: ItemData(601 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 1, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
+    item_names.INFESTED_DUSK_WINGS: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 2, SC2Race.ZERG, origin={"ext"}),
     item_names.DEVOURING_ONES: ItemData(603 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 3, SC2Race.ZERG, origin={"ext"}),
     item_names.HUNTER_KILLERS: ItemData(604 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 4, SC2Race.ZERG, origin={"ext"}),
     item_names.TORRASQUE_MERC: ItemData(605 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 5, SC2Race.ZERG, origin={"ext"}),
@@ -1541,6 +1573,7 @@ item_table = {
     item_names.OVERLORD_GENERATE_CREEP: ItemData(701 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 7, SC2Race.ZERG, origin={"ext"}),
     item_names.OVERLORD_ANTENNAE: ItemData(702 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 8, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.filler),
     item_names.OVERLORD_PNEUMATIZED_CARAPACE: ItemData(703 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 9, SC2Race.ZERG, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER: ItemData(704 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 11, SC2Race.ZERG, origin={"ext"}),
 
     # Morphs
     item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG, origin={"bw"}),
@@ -2100,7 +2133,7 @@ zvx_defense_ratings = {
     # corpser roach: 1
     # creep tumors (swarm queen or overseer): 1
     # w/ malignant creep: 1
-    item_names.INFESTED_SIEGE_TANKS: 5,
+    item_names.INFESTED_SIEGE_BREAKERS: 5,
     # "Graduating Range": 1,
     item_names.INFESTED_BUNKER: 3,
 }

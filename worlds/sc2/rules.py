@@ -476,8 +476,8 @@ class SC2Logic:
                 defense_score += 1
             if state.has(item_names.MALIGNANT_CREEP, self.player):
                 defense_score += 1
-        # Infested Siege Tanks
-        if state.has_all({item_names.INFESTED_SIEGE_TANKS, item_names.SIEGE_TANK_GRADUATING_RANGE}, self.player):
+        # Infested Siege Breakers
+        if state.has_all({item_names.INFESTED_SIEGE_BREAKERS, item_names.SIEGE_TANK_GRADUATING_RANGE}, self.player):
             defense_score += 1
 
         # General enemy-based rules
