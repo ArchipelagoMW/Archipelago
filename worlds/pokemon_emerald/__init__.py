@@ -656,7 +656,7 @@ class PokemonEmeraldWorld(World):
                         if encounter_type == EncounterType.FISHING:
                             species_maps[encounter].add(map_data.name[4:] + slot_to_rod[slot])
                         else:
-                            species_maps[encounter].add(map_data.name[4:] + "_" + encounter_type)
+                            species_maps[encounter].add(map_data.name[4:] + "_" + encounter_type.value)
 
             hint_data[self.player] = {
                 self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(maps)

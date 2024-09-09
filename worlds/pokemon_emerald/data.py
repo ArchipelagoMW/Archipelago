@@ -5,7 +5,7 @@ defined data (like location labels or usable pokemon species), some cleanup
 and sorting, and Warp methods.
 """
 from dataclasses import dataclass
-from enum import IntEnum, StrEnum
+from enum import IntEnum, Enum
 import orjson
 from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
 import pkgutil
@@ -132,7 +132,8 @@ class EncounterTableData(NamedTuple):
     address: int
 
 
-class EncounterType(StrEnum):
+# class EncounterType(StrEnum):  # StrEnum introduced in python 3.11
+class EncounterType(Enum):
     LAND = "LAND"
     WATER = "WATER"
     FISHING = "FISHING"

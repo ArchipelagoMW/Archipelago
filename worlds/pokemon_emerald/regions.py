@@ -43,7 +43,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
         # For each of land, water, and fishing, connect the region if indicated by include_slots
         for i, (encounter_type, subcategories) in enumerate(encounter_categories.items()):
             if include_slots[i]:
-                region_name = f"{map_name}_{encounter_type}_ENCOUNTERS"
+                region_name = f"{map_name}_{encounter_type.value}_ENCOUNTERS"
 
                 # If the region hasn't been created yet, create it now
                 try:

@@ -254,7 +254,7 @@ def _rename_wild_events(world: "PokemonEmeraldWorld", map_data: MapData, new_slo
         # Fishing locations include the rod name
         subcategory_str = "" if subcategory_name is None else "_" + subcategory_name
         encounter_location_index = subcategory_species.index(new_species_id) + 1
-        encounter_location_name = f"{map_data.name}_{encounter_type}_ENCOUNTERS{subcategory_str}_{encounter_location_index}"
+        encounter_location_name = f"{map_data.name}_{encounter_type.value}_ENCOUNTERS{subcategory_str}_{encounter_location_index}"
         try:
             # Get the corresponding location and change the event name to reflect the new species
             slot_location = world.multiworld.get_location(encounter_location_name, world.player)
