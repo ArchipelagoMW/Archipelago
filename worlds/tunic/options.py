@@ -174,6 +174,7 @@ class GrassFill(Range):
     range_start = 0
     range_end = 100
     default = 95
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler 
 
 
 class TunicPlandoConnections(PlandoConnections):
