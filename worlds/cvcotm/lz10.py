@@ -39,11 +39,11 @@ def compress(data: bytearray):
     # body
     length = 0
     for tokens in chunkit(_compress(data), 8):
-        flags = [type(t) == tuple for t in tokens]
+        flags = [type(t) is tuple for t in tokens]
         byteOut.extend(struct.pack(">B", packflags(flags)))
 
         for t in tokens:
-            if type(t) == tuple:
+            if type(t) is tuple:
                 count, disp = t
                 count -= 3
                 disp = (-disp) - 1
@@ -87,7 +87,7 @@ class SlidingWindow:
 
         self.start = 0
         self.stop = 0
-        #self.index = self.disp_min - 1
+        # self.index = self.disp_min - 1
         self.index = 0
 
         assert self.match_max is not None

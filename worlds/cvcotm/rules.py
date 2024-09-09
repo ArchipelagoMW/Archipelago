@@ -205,4 +205,4 @@ class CVCotMRules:
             multiworld.completion_condition[self.player] = lambda state: state.has(iname.shinning_armor, self.player)
         else:
             multiworld.completion_condition[self.player] = \
-                lambda state: state.has_all({iname.dracula, iname.shinning_armor}, self.player)
+                lambda state: state.has_all([iname.dracula, iname.shinning_armor], self.player)
