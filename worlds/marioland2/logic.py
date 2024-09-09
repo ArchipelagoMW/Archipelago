@@ -204,6 +204,7 @@ def pumpkin_zone_secret_course_1_coins(state, player, coins):
         if auto_scroll:
             return coins <= 172
         return True
+    return False
 
 
 def pumpkin_zone_3_secret_exit(state, player):
