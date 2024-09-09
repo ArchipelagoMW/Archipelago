@@ -13,7 +13,7 @@
 3. Abra o jogo, tudo preparado!
 
 ### O que fazer se o Lumafly falha em encontrar a sua pasta de instalação
-1. Encontre a pasta manualment.
+1. Encontre a pasta manualmente.
    * Xbox Game Pass:
       1. Entre no seu aplicativo XBox e mova seu mouse em cima de "Hollow Knight" na sua barra da esquerda. 
       2. Clique nos 3 pontos depois clique gerenciar.
@@ -21,11 +21,11 @@
       4. Clique em "Hollow Knight", depois em "Conteúdo", depois clique na barra com o endereço e a copie.
    * Steam:
       1. Você provavelmente colocou sua biblioteca Steam num local não padrão. Se esse for o caso você provavelmente sabe onde está
-         . Encontre sua biblioteca Steam e depois encontre a pasta do Hollow Knight e copie o endereço.
+         . Encontre sua biblioteca Steam, depois encontre a pasta do Hollow Knight e copie seu endereço.
          * Windows - `C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight`
          * Linux/Steam Deck - ~/.local/share/Steam/steamapps/common/Hollow Knight
          * Mac - ~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app
-2. Rode o Lumafly como administrador e, quando ele te perguntar pelo endereço do arquivo, cole o endereço do arquivo que você copiou.
+2. Rode o Lumafly como administrador e, quando ele perguntar pelo endereço do arquivo, cole o endereço do arquivo que você copiou.
 
 ## Configurando seu arquivo YAML
 ### O que é um YAML e por que eu preciso de um?
@@ -48,5 +48,5 @@ para gerar o YAML usando a interface gráfica.
    
 ## Dicas e outros comandos
 Enquanto jogar um multiworld, você pode interagir com o servidor usando varios comandos listado no
-[Guia de comandos](/tutorial/Archipelago/commands/en). Você pode usar o cliente de texto Archipelago para isso,
+[Guia de comandos](/tutorial/Archipelago/commands/en). Você pode usar o cliente de texto do Archipelago para isso,
 que está incluido na ultima versão do [Archipelago software](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
