@@ -545,12 +545,12 @@ def addshapesanity(amount: int, random: Random) -> Dict[str, Tuple[str, Location
     shapes_list = list(shapesanity_simple.items())
     # Always have at least 4 shapesanity checks because of sphere 1 usefulls + both hardcore logic
     for basic_shape in ["Circle", "Square", "Star"]:
-        included_shapes[f"Shapesanity Uncolored {basic_shape}"] = ("Shapesanity Unprocessed Uncolored",
+        included_shapes[f"Shapesanity Uncolored {basic_shape}"] = ("Shapesanity Full Uncolored",
                                                                    LocationProgressType.DEFAULT)
-        shapes_list.remove((f"Shapesanity Uncolored {basic_shape}", "Shapesanity Unprocessed Uncolored"))
-    included_shapes[f"Shapesanity Uncolored Windmill"] = ("Shapesanity Stitched Uncolored",
+        shapes_list.remove((f"Shapesanity Uncolored {basic_shape}", "Shapesanity Full Uncolored"))
+    included_shapes[f"Shapesanity Uncolored Windmill"] = ("Shapesanity East Windmill Uncolored",
                                                           LocationProgressType.DEFAULT)
-    shapes_list.remove((f"Shapesanity Uncolored Windmill", "Shapesanity Stitched Uncolored"))
+    shapes_list.remove((f"Shapesanity Uncolored Windmill", "Shapesanity East Windmill Uncolored"))
     switched = 0
     for counting in range(4, amount):
         if switched == 0 and (len(shapes_list) == 0 or counting == amount//2):
