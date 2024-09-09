@@ -1216,6 +1216,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
+    options = world.options
 
     if options.grass_randomizer:
         set_grass_location_rules(world)
