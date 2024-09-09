@@ -221,25 +221,25 @@ its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 ### Examples
 
 ```yaml
-  plando_connections:
-    # example block 1 - A Link to the Past
-    - entrance: Cave Shop (Lake Hylia)
-      exit: Cave 45
-      direction: entrance
-    - entrance: Cave 45
-      exit: Cave Shop (Lake Hylia)
-      direction: entrance
-    - entrance: Agahnims Tower
-      exit: Old Man Cave Exit (West)
-      direction: exit
-  
-    # example block 2 - Minecraft
-    - entrance: Overworld Structure 1
-      exit: Nether Fortress
-      direction: both
-    - entrance: Overworld Structure 2
-      exit: Village
-      direction: both
+plando_connections:
+  # example block 1 - A Link to the Past
+  - entrance: Cave Shop (Lake Hylia)
+    exit: Cave 45
+    direction: entrance
+  - entrance: Cave 45
+    exit: Cave Shop (Lake Hylia)
+    direction: entrance
+  - entrance: Agahnims Tower
+    exit: Old Man Cave Exit (West)
+    direction: exit
+
+  # example block 2 - Minecraft
+  - entrance: Overworld Structure 1
+    exit: Nether Fortress
+    direction: both
+  - entrance: Overworld Structure 2
+    exit: Village
+    direction: both
 ```
 
 1. These connections are decoupled, so going into the Lake Hylia Cave Shop will take you to the inside of Cave 45, and
