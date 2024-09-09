@@ -283,7 +283,6 @@ class TunicOptions(PerGameCommonOptions):
     laurels_location: LaurelsLocation
     lanternless: Lanternless
     maskless: Maskless
-    laurels_location: LaurelsLocation
     grass_randomizer: GrassRandomizer
     grass_fill: GrassFill
     laurels_zips: LaurelsZips
