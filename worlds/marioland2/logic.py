@@ -96,9 +96,7 @@ def tree_zone_3_coins(state, player, coins):
 
 
 def tree_zone_4_normal_exit(state, player):
-    if has_pipe_down(state, player):
-        return tree_zone_4_midway_bell(state, player)
-    return False
+    return has_pipe_down(state, player) and tree_zone_4_midway_bell(state, player)
 
 
 def tree_zone_4_midway_bell(state, player):
@@ -452,8 +450,7 @@ def space_zone_1_coins(state, player, coins):
 
 
 def space_zone_2_midway_bell(state, player):
-    return state.has_any(["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower",
-                          "Carrot"], player),
+    return state.has_any(["Space Physics", "Space Zone 2 Midway Bell", "Mushroom", "Fire Flower", "Carrot"], player)
 
 
 def space_zone_2_boss(state, player):
