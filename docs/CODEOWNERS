@@ -118,9 +118,6 @@
 # Noita
 /worlds/noita/ @ScipioWright @heinermann
 
-# Ocarina of Time
-/worlds/oot/ @espeon65536
-
 # Old School Runescape
 /worlds/osrs @digiholic
 
@@ -229,6 +226,9 @@
 
 # Links Awakening DX
 # /worlds/ladx/
+
+# Ocarina of Time
+# /worlds/oot/
 
 ## Disabled Unmaintained Worlds
 
