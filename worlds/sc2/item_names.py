@@ -484,7 +484,6 @@ OMEGA_WORM_OUROBOROS_STRAIN                       = "Ouroboros Strain (Omega Wor
 INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS = "Progressive Automated Mitosis (Infested Siege Tank)"
 INFESTED_SIEGE_TANK_ACIDIC_ENZYMES                = "Acidic Enzymes (Infested Siege Tank)"
 INFESTED_SIEGE_TANK_DEEP_TUNNEL                   = "Deep Tunnel (Infested Siege Tank)"
-FRIGHTFUL_FLESHWELDER                             = "Frightful Fleshwelder (Zerg)"
 INFESTED_DIAMONDBACK_SATURATED_CULTURES           = "Saturated Cultures (Infested Diamondback)"
 INFESTED_DIAMONDBACK_CAUSTIC_MUCUS                = "Caustic Mucus (Infested Diamondback)"
 INFESTED_BANSHEE_BRACED_EXOSKELETON               = "Braced Exoskeleton (Infested Banshee)"
@@ -550,6 +549,7 @@ TWIN_DRONES                      = "Twin Drones (Zerg)"
 MALIGNANT_CREEP                  = "Malignant Creep (Zerg)"
 VESPENE_EFFICIENCY               = "Vespene Efficiency (Zerg)"
 ZERG_CREEP_STOMACH               = "Creep Stomach (Zerg)"
+FRIGHTFUL_FLESHWELDER            = "Frightful Fleshwelder (Zerg)"
 
 # Kerrigan Levels
 KERRIGAN_LEVELS_1  = "1 Kerrigan Level"
