@@ -47,7 +47,9 @@ These steps can also be followed to launch the game and check for mod updates af
 2. Click on your slot name on the left side.
 3. Click the "The Messenger" button in the prompt.
 4. Follow the remaining prompts. This process will check that you have the mod installed and will also check for updates
-   before launching The Messenger.
+   before launching The Messenger. If you are using the Steam version of The Messenger you may also get a prompt from
+   Steam asking if the game should be launched with arguments. These arguments are the URI with which the mod uses to
+   connect.
 5. Start a new save. You will already be connected in The Messenger and do not need to go through the menus.
 
 ### Manual Connection
