@@ -22,14 +22,6 @@ def set_rules(multiworld, world, player):
         item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
-    if world.options.accessibility != "full":
-        multiworld.get_location("Cerulean Bicycle Shop", player).always_allow = (lambda state, item:
-                                                                                   item.name == "Bike Voucher"
-                                                                                   and item.player == player)
-        multiworld.get_location("Fuchsia Warden's House - Safari Zone Warden", player).always_allow = (lambda state, item:
-                                                                                        item.name == "Gold Teeth" and
-                                                                                        item.player == player)
-
     access_rules = {
         "Rival's House - Rival's Sister": lambda state: state.has("Oak's Parcel", player),
         "Oak's Lab - Oak's Post-Route-22-Rival Gift": lambda state: state.has("Oak's Parcel", player),
