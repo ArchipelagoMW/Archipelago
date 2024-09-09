@@ -43,12 +43,12 @@ These steps can also be followed to launch the game and check for mod updates af
 
 ### Automatic Connection on archipelago.gg
 
-1. Go to the room page for the game you are going to join.
-2. Click on your name on the left side.
+1. Go to the room page of the MultiWorld you are going to join.
+2. Click on your slot name on the left side.
 3. Click the "The Messenger" button in the prompt.
 4. Follow the remaining prompts. This process will check that you have the mod installed and will also check for updates
-   before launching the game.
-5. Start a new save. You will already be connected in game and do not need to go through the menus.
+   before launching The Messenger.
+5. Start a new save. You will already be connected in The Messenger and do not need to go through the menus.
 
 ### Manual Connection
 
