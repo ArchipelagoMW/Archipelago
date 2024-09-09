@@ -5,7 +5,7 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
@@ -21,6 +21,7 @@
     <PackageReference Include="Archipelago.Core" Version="0.0.11" />
     <PackageReference Include="Archipelago.MultiClient.Net" Version="6.3.1" />
     <PackageReference Include="Archipelago.PCSX2" Version="0.0.5" />
+    <PackageReference Include="Memory.dll.x86" Version="1.2.27" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,6 +10,7 @@ using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.Design.AxImporter;
 using Archipelago.Core;
 using Sly1AP.Models;
+using System.Windows;
 
 namespace Sly1AP
 {
@@ -36,6 +37,7 @@ namespace Sly1AP
             while (true)
             {
                 UpdateValues();
+                CutsceneSkip();
                 if (Memory.ReadInt(0x2027DC18) == 2721)
                 {
                     Memory.Write(0x2027D7AC, 1);
@@ -426,6 +428,8 @@ namespace Sly1AP
             {
                 outputTextbox.Text += output;
                 outputTextbox.Text += System.Environment.NewLine;
+                outputTextbox.SelectionStart = outputTextbox.Text.Length;
+                outputTextbox.ScrollToCaret();
 
                 System.Diagnostics.Debug.WriteLine(output + System.Environment.NewLine);
             });
