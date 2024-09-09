@@ -1,8 +1,8 @@
-from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, LocationProgressType
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
-from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
+from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
@@ -338,8 +338,11 @@ class TunicWorld(World):
         tunic_grass_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                                 if world.options.grass_randomizer]
         tunic_players_with_grass: List[int] = [world.player for world in tunic_grass_worlds]
+        # we need to reserve a couple locations so that we don't fill up every sphere 1 location
+        reserved_locations: Set[str] = set(multiworld.random.sample(sphere_one, 2))
         unfilled_locations = [loc for loc in multiworld.get_unfilled_locations_for_players(
-            location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY]
+            location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY
+                              and loc.name not in reserved_locations]
         grass_fill: List[TunicItem] = []
         for world in tunic_grass_worlds:
             grass_fill.extend(world.local_filler)
