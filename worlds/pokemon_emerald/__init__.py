@@ -15,7 +15,7 @@ import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, data as emerald_data
+from .data import LEGENDARY_POKEMON, EncounterType, MapData, SpeciesData, TrainerData, data as emerald_data
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
 from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
@@ -619,18 +619,10 @@ class PokemonEmeraldWorld(World):
             spoiler_handle.write(f"\n\nWild Pokemon ({self.player_name}):\n\n")
 
             species_maps = defaultdict(set)
-            for map in self.modified_maps.values():
-                if map.land_encounters is not None:
-                    for encounter in map.land_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
-
-                if map.water_encounters is not None:
-                    for encounter in map.water_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
-
-                if map.fishing_encounters is not None:
-                    for encounter in map.fishing_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
+            for map_data in self.modified_maps.values():
+                for encounter_data in map_data.encounters.values():
+                    for encounter in encounter_data.slots:
+                        species_maps[encounter].add(map_data.name[4:])
 
             lines = [f"{emerald_data.species[species].label}: {', '.join(maps)}\n"
                      for species, maps in species_maps.items()]
@@ -658,18 +650,13 @@ class PokemonEmeraldWorld(World):
             }
 
             species_maps = defaultdict(set)
-            for map in self.modified_maps.values():
-                if map.land_encounters is not None:
-                    for encounter in map.land_encounters.slots:
-                        species_maps[encounter].add(map.name[4:] + "_GRASS")
-
-                if map.water_encounters is not None:
-                    for encounter in map.water_encounters.slots:
-                        species_maps[encounter].add(map.name[4:] + "_WATER")
-
-                if map.fishing_encounters is not None:
-                    for slot, encounter in enumerate(map.fishing_encounters.slots):
-                        species_maps[encounter].add(map.name[4:] + slot_to_rod[slot])
+            for map_data in self.modified_maps.values():
+                for encounter_type, encounter_data in map_data.encounters.items():
+                    for slot, encounter in enumerate(encounter_data.slots):
+                        if encounter_type == EncounterType.FISHING:
+                            species_maps[encounter].add(map_data.name[4:] + slot_to_rod[slot])
+                        else:
+                            species_maps[encounter].add(map_data.name[4:] + "_" + encounter_type)
 
             hint_data[self.player] = {
                 self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(maps)
