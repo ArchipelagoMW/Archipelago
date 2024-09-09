@@ -27,11 +27,13 @@ class Component:
     cli: bool
     func: Optional[Callable]
     file_identifier: Optional[Callable[[str], bool]]
+    game_name: Optional[str]
+    supports_uri: Optional[bool]
 
-    def __init__(self, display_name: str, script_name: Optional[str] = None,
-                 frozen_name: Optional[str] = None, cli: bool = False, icon: str = 'icon',
-                 component_type: Optional[Type] = None, func: Optional[Callable] = None,
-                 file_identifier: Optional[Callable[[str], bool]] = None, description: Optional[str] = None,):
+    def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
+                 cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
+                 func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
+                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: Optional[str] = None):
         self.display_name = display_name
         self.description = description if description else ""
         self.script_name = script_name
@@ -48,6 +50,8 @@ class Component:
             Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
+        self.game_name = game_name
+        self.supports_uri = supports_uri
 
     def handles_file(self, path: str):
         return self.file_identifier(path) if self.file_identifier else False
@@ -59,10 +63,10 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None):
+def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
     global processes
     import multiprocessing
-    process = multiprocessing.Process(target=func, name=name)
+    process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
     processes.add(process)
 
@@ -81,9 +85,9 @@ class SuffixIdentifier:
         return False
 
 
-def launch_textclient():
+def launch_textclient(*args):
     import CommonClient
-    launch_subprocess(CommonClient.run_as_textclient, name="TextClient")
+    launch_subprocess(CommonClient.run_as_textclient, name="TextClient", args=args)
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
