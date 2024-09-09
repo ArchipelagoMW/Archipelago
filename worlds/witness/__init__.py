@@ -61,7 +61,7 @@ class WitnessWorld(World):
     item_name_groups = static_witness_items.ITEM_GROUPS
     location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
 
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 5, 1)
 
     player_logic: WitnessPlayerLogic
     player_locations: WitnessPlayerLocations
