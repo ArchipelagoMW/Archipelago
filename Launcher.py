@@ -124,10 +124,10 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import App, Button, BoxLayout, Label, Clock, Window
+    from kvui import MDApp, MDButton, MDBoxLayout, MDLabel, Clock, Window
 
-    class Popup(App):
-        timer_label: Label
+    class Popup(MDApp):
+        timer_label: MDLabel
         remaining_time: Optional[int]
 
         def __init__(self):
@@ -136,26 +136,26 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
             super().__init__()
 
         def build(self):
-            layout = BoxLayout(orientation="vertical")
+            layout = MDBoxLayout(orientation="vertical")
 
             if client_component is None:
                 self.remaining_time = 7
                 label_text = (f"A game client able to parse URIs was not detected for {game}.\n"
                               f"Launching Text Client in 7 seconds...")
-                self.timer_label = Label(text=label_text)
+                self.timer_label = MDLabel(text=label_text)
                 layout.add_widget(self.timer_label)
                 Clock.schedule_interval(self.update_label, 1)
             else:
-                layout.add_widget(Label(text="Select client to open and connect with."))
-                button_row = BoxLayout(orientation="horizontal", size_hint=(1, 0.4))
+                layout.add_widget(MDLabel(text="Select client to open and connect with."))
+                button_row = MDBoxLayout(orientation="horizontal", size_hint=(1, 0.4))
 
-                text_client_button = Button(
+                text_client_button = MDButton(
                     text=text_client_component.display_name,
                     on_release=lambda *args: run_component(text_client_component, *launch_args)
                 )
                 button_row.add_widget(text_client_button)
 
-                game_client_button = Button(
+                game_client_button = MDButton(
                     text=client_component.display_name,
                     on_release=lambda *args: run_component(client_component, *launch_args)
                 )
@@ -176,7 +176,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
                 # our timer is finished so launch text client and close down
                 run_component(text_client_component, *launch_args)
                 Clock.unschedule(self.update_label)
-                App.get_running_app().stop()
+                MDApp.get_running_app().stop()
                 Window.close()
 
     Popup().run()
