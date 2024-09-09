@@ -973,7 +973,19 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                     if random.random() < float(text.get("percentage", 100)/100):
                         at = text.get("at", None)
                         if at is not None:
+                            if isinstance(at, dict):
+                                if at:
+                                    at = random.choices(list(at.keys()),
+                                                        weights=list(at.values()), k=1)[0]
+                                else:
+                                    raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                             given_text = text.get("text", [])
+                            if isinstance(given_text, dict):
+                                if not given_text:
+                                    given_text = []
+                                else:
+                                    given_text = random.choices(list(given_text.keys()),
+                                                                weights=list(given_text.values()), k=1)
                             if isinstance(given_text, str):
                                 given_text = [given_text]
                             texts.append(PlandoText(
@@ -981,6 +993,8 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                                 given_text,
                                 text.get("percentage", 100)
                             ))
+                        else:
+                            raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                 elif isinstance(text, PlandoText):
                     if random.random() < float(text.percentage/100):
                         texts.append(text)
