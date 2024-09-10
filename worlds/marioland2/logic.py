@@ -54,7 +54,7 @@ def tree_zone_1_coins(state, player, coins):
 
 
 def tree_zone_2_normal_exit(state, player):
-    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player),
+    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player)
 
 
 def tree_zone_2_secret_exit(state, player):
@@ -555,7 +555,7 @@ def macro_zone_2_coins(state, player, coins):
 
 def macro_zone_3_normal_exit(state, player):
     return ((has_pipe_down(state, player) and has_pipe_up(state, player))
-            or state.has("Macro Zone 3 Midway Bell", player),)
+            or state.has("Macro Zone 3 Midway Bell", player))
 
 
 def macro_zone_3_midway_bell(state, player):
@@ -566,7 +566,7 @@ def macro_zone_3_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Macro Zone 3")
     reachable_coins = 7
     if not auto_scroll:
-        reachable_coins = 24
+        reachable_coins += 17
     if has_pipe_up(state, player) and has_pipe_down(state, player):
         if auto_scroll:
             reachable_coins += 56
