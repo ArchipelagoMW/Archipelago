@@ -1422,9 +1422,6 @@ class Spoiler:
             self.create_paths(state, collection_spheres)
 
         # repair the multiworld again
-        for location, item in restore_later.items():
-            location.item = item
-
         for item in removed_precollected:
             multiworld.push_precollected(item)
 
