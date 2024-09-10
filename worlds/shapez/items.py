@@ -120,7 +120,7 @@ small_upgrades = [
 def trap(random: float, split_draining: bool) -> str:
     """Returns a random trap item."""
     random_value = (len(standard_traps)+1)*random
-    if random_value > 0:
+    if random_value >= 1:
         return list(standard_traps.keys())[int(random_value)-1]
     else:
         return "Inventory Draining Trap" \
