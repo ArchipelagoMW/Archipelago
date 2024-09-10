@@ -23,8 +23,8 @@
       1. Você provavelmente colocou sua biblioteca Steam num local não padrão. Se esse for o caso você provavelmente sabe onde está
          . Encontre sua biblioteca Steam, depois encontre a pasta do Hollow Knight e copie seu endereço.
          * Windows - `C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight`
-         * Linux/Steam Deck - ~/.local/share/Steam/steamapps/common/Hollow Knight
-         * Mac - ~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app
+         * Linux/Steam Deck - `~/.local/share/Steam/steamapps/common/Hollow Knight`
+         * Mac - `~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app`
 2. Rode o Lumafly como administrador e, quando ele perguntar pelo endereço do arquivo, cole o endereço do arquivo que você copiou.
 
 ## Configurando seu arquivo YAML
