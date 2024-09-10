@@ -1,10 +1,16 @@
 from .data import lname
-from typing import List, Optional
+from typing import Dict, List, Optional, TypedDict, Union
+
+
+class RegionInfo(TypedDict, total=False):
+    locations: List[str]
+    entrances: Dict[str, str]
+
 
 # # #    KEY    # # #
 # "locations" = A list of the Locations to add to that Region when adding said Region.
 # "entrances" = A dict of the connecting Regions to the Entrances' names to add to that Region when adding said Region.
-cvcotm_region_info = {
+cvcotm_region_info: Dict[str, RegionInfo] = {
     "Menu": {"entrances": {"Catacomb": "At an Old Austrian Castle"}},
 
     "Catacomb": {"locations": [lname.sr3,
@@ -177,7 +183,7 @@ cvcotm_region_info = {
 }
 
 
-def get_region_info(region: str, info: str) -> Optional[List[str]]:
+def get_region_info(region: str, info: str) -> Optional[Union[List[str], Dict[str, str]]]:
     return cvcotm_region_info[region].get(info, None)
 
 

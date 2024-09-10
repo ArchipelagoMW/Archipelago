@@ -219,10 +219,11 @@ class DeathLink(Choice):
     """
     display_name = "DeathLink"
     option_off = 0
+    alias_false = 0
     alias_no = 0
+    option_on = 1
     alias_true = 1
     alias_yes = 1
-    option_on = 1
     option_arena_on = 2
     default = 0
 

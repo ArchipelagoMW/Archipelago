@@ -74,7 +74,7 @@ class CVCotMWorld(World):
     options_dataclass = CVCotMOptions
     options: CVCotMOptions
     settings: typing.ClassVar[CVCotMSettings]
-    hint_blacklist = {lname.ba24}  # The Battle Arena reward, if it's put in, will always be a Last Key.
+    hint_blacklist = frozenset({lname.ba24})  # The Battle Arena reward, if it's put in, will always be a Last Key.
 
     item_name_to_id = {name: cvcotm_item_info[name].code + BASE_ID for name in cvcotm_item_info
                        if cvcotm_item_info[name].code is not None}
@@ -90,18 +90,18 @@ class CVCotMWorld(World):
 
     def generate_early(self) -> None:
         # Generate the player's unique authentication
-        self.auth = bytearray(self.multiworld.random.getrandbits(8) for _ in range(16))
+        self.auth = bytearray(self.random.getrandbits(8) for _ in range(16))
 
         # If playing with the Completion Goal option set to Battle Arena while the Required Skirmishes option is set to
         # All Bosses And Arena, set the latter down to just All Bosses instead. The Location in the Ceremonial Room
         # would require the Goal to be sent before it can be accessed at all, and that would be weird.
         if self.options.completion_goal == CompletionGoal.option_battle_arena and self.options.required_skirmishes == \
                 RequiredSkirmishes.option_all_bosses_and_arena:
-            logging.warning(f"[{self.multiworld.player_name[self.player]}] Requiring a Last Key to be obtained from "
+            logging.warning(f"[{self.player_name}] Requiring a Last Key to be obtained from "
                             f"the Battle Arena while requiring just the Battle Arena to be completed for Goal "
                             f"completion makes the Ceremonial Room item impossible to obtain without completing the "
                             f"Goal first. Changing Required Skirmishes to just All Bosses.")
-            self.options.required_skirmishes = RequiredSkirmishes.option_all_bosses
+            self.options.required_skirmishes.value = RequiredSkirmishes.option_all_bosses
 
         # If Required Skirmishes are on, force the Required and Available Last Keys to 8 or 9 depending on which option
         # was chosen.
@@ -119,11 +119,15 @@ class CVCotMWorld(World):
         # the total Last Keys.
         if self.required_last_keys > self.total_last_keys:
             self.required_last_keys = self.total_last_keys
-            logging.warning(f"[{self.multiworld.player_name[self.player]}] The Required Last Keys "
+            logging.warning(f"[{self.player_name}] The Required Last Keys "
                             f"({self.options.required_last_keys.value}) is higher than the Available Last Keys "
                             f"({self.options.available_last_keys.value}). Lowering the required number to: "
                             f"{self.required_last_keys}")
             self.options.required_last_keys.value = self.required_last_keys
+
+        # Place the Double in local_early_items if the Early Double setting is on.
+        if self.options.early_double:
+            self.multiworld.local_early_items[self.player][iname.double] = 1
 
     def create_regions(self) -> None:
         # Create every Region object.
@@ -176,11 +180,6 @@ class CVCotMWorld(World):
         # Set all the Entrance and Location rules properly.
         CVCotMRules(self).set_cvcotm_rules()
 
-    def pre_fill(self) -> None:
-        # Place the Double in local_early_items if the Early Double setting is on.
-        if self.options.early_double:
-            self.multiworld.local_early_items[self.player][iname.double] = 1
-
     def generate_output(self, output_directory: str) -> None:
         # Get out all the Locations that are not Events. Only take the Iron Maiden switch if the Maiden Detonator is in
         # the item pool.
@@ -203,7 +202,7 @@ class CVCotMWorld(World):
         start_inventory_data = get_start_inventory_data(self.multiworld.precollected_items[self.player])
         offset_data.update(start_inventory_data[0])
 
-        patch = CVCotMProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        patch = CVCotMProcedurePatch(player=self.player, player_name=self.player_name)
         patch_rom(self, patch, offset_data, start_inventory_data[1])
 
         rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
@@ -225,4 +224,4 @@ class CVCotMWorld(World):
     def modify_multidata(self, multidata: typing.Dict[str, typing.Any]):
         # Put the player's unique authentication in connect_names.
         multidata["connect_names"][base64.b64encode(self.auth).decode("ascii")] = \
-            multidata["connect_names"][self.multiworld.player_name[self.player]]
+            multidata["connect_names"][self.player_name]

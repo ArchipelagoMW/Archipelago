@@ -109,8 +109,7 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, 
         start_card_cap = 8
 
         # Get out all cards from start_inventory_from_pool that the player isn't starting with 0 of.
-        start_cards = [item for item in world.options.start_inventory_from_pool.value if "Card" in item and
-                       world.options.start_inventory_from_pool.value[item]]
+        start_cards = [item for item in world.options.start_inventory_from_pool.value if "Card" in item]
 
         # Check for ice/stone cards that are in the player's starting cards. Increase the starting card capacity by 1
         # for each card type satisfied.
@@ -145,7 +144,7 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, 
             for card in removed_start_cards:
                 del world.options.start_inventory_from_pool.value[card]
 
-            logging.warning(f"[{world.multiworld.player_name[world.player]}] Too many DSS Cards in "
+            logging.warning(f"[{world.player_name}] Too many DSS Cards in "
                             f"Start Inventory from Pool to satisfy the Halve DSS Cards Placed option. The following "
                             f"{len(removed_start_cards)} card(s) were removed: {removed_start_cards}")
 

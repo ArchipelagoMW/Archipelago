@@ -180,8 +180,8 @@ def get_location_names_to_ids() -> Dict[str, int]:
 
 
 def get_location_name_groups() -> Dict[str, Set[str]]:
-    loc_name_groups = {"Breakable Secrets": set(),
-                       "Bosses": set()}
+    loc_name_groups: Dict[str, Set[str]] = {"Breakable Secrets": set(),
+                                            "Bosses": set()}
 
     for loc_name in cvcotm_location_info:
         # If we are looking at an event Location, don't include it.

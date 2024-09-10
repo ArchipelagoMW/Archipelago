@@ -22,30 +22,30 @@ item pool as well; you will now find these as randomized items rather than by fa
 Yes. All alternate modes (Magician, Fighter, Shooter, and Thief Mode) are all unlocked and usable from the start by registering
 the name password shown on the Data Select screen for the mode of your choice. 
 
-If you intend to play Magician Mode, putting all of your cards in `Start Inventory from Pool` is recommended due to the fact
+If you intend to play Magician Mode, putting all of your cards in "Start Inventory from Pool" is recommended due to the fact
 that it naturally starts with all cards. In Fighter Mode, unlike in the regular game, you will be able to receive and use
 DSS Cards like in all other modes.
 
 ## What is the goal of Castlevania: Circle of the Moon when randomized?
 
-Depending on what was chosen for the `Completion Goal` option, your goal may be to defeat Dracula, complete the Battle Arena, or both.
+Depending on what was chosen for the "Completion Goal" option, your goal may be to defeat Dracula, complete the Battle Arena, or both.
 
-- `Dracula`: Make it to the Ceremonial Room and kill Dracula's first and second forms to view the credits. The door to the
+- "Dracula": Make it to the Ceremonial Room and kill Dracula's first and second forms to view the credits. The door to the
 Ceremonial Room can be set to require anywhere between 0-9 Last Keys to open it.
-- `Battle Arena`: Survive every room in the Battle Arena and pick up the Shinning Armor <sup>sic</sup> on the pedestal at the end. To make it
-easier, the `Disable Battle Arena Mp Drain` option can be enabled to make the Battle Arena not drain your MP to 0, allowing
+- "Battle Arena": Survive every room in the Battle Arena and pick up the Shinning Armor <sup>sic</sup> on the pedestal at the end. To make it
+easier, the "Disable Battle Arena Mp Drain" option can be enabled to make the Battle Arena not drain your MP to 0, allowing
 DSS to be used. Reaching the Battle Arena in the first place requires finding the Heavy Ring and Roc Wing (as well as Double or Kick Boots
-if `Nerf Roc Wing` is on).
-- `Battle Arena And Dracula`: Complete both of the above-mentioned objectives. The server will remember which ones (if any) were
+if "Nerf Roc Wing" is on).
+- "Battle Arena And Dracula": Complete both of the above-mentioned objectives. The server will remember which ones (if any) were
 already completed on previous sessions upon connecting.
 
-NOTE: If `All Bosses` was chosen for the `Required Skirmishes` option, 8 Last Keys will be required, and they will be guaranteed
-to be placed behind all 8 bosses (that are not Dracula). If `All Bosses And Arena` was chosen for the option, an additional
+NOTE: If "All Bosses" was chosen for the "Required Skirmishes" option, 8 Last Keys will be required, and they will be guaranteed
+to be placed behind all 8 bosses (that are not Dracula). If "All Bosses And Arena" was chosen for the option, an additional
 required 9th Last Key will be placed on the Shinning Armor <sup>sic</sup> pedestal at the end of the Battle Arena in addition to
 the 8 that will be behind all the bosses. Because it would be impossible to obtain the Ceremonial Room floor item before completing
-the goal if just winning in the Battle Arena were required for goal completion, the `Completion Goal` option's `Battle Arena`
-choice and the `Required Skirmishes` option's `All Bosses And Arena` choice are incompatible with each other; the latter option 
-will change to `All Bosses` in such a case.
+the goal if just winning in the Battle Arena were required for goal completion, the "Completion Goal" option's "Battle Arena"
+choice and the "Required Skirmishes" option's "All Bosses And Arena" choice are incompatible with each other; the latter option 
+will change to "All Bosses" in such a case.
 
 If you aren't sure what goal you have, there are two in-game ways you can check:
 
@@ -64,7 +64,7 @@ Stat max ups, Magic Items, and DSS Cards are all randomized into the item pool, 
 that you would normally find the first two types of items on.
 
 The sole exception is the pedestal at the end of the Battle Arena. This location, most of the time, will always have 
-Shinning Armor <sup>sic</sup> unless `Required Skirmishes` is set to `All Bosses And Arena`, in which case it will have a Last Key instead.
+Shinning Armor <sup>sic</sup> unless "Required Skirmishes" is set to "All Bosses And Arena", in which case it will have a Last Key instead.
 
 ## Which items can be in another player's world?
 
@@ -80,10 +80,10 @@ Items for other Circle of the Moon players will show up in your game as that ite
 picking it up. Items for non-Circle of the Moon players will show up as one of four Archipelago Items depending on how its 
 classified:
 
-* `Filler`: Just the six spheres, nothing extra.
-* `Useful`: Blue plus sign in the top-right corner.
-* `Progression`: Orange up arrow in the top-right corner.
-* `Trap`: Reports from the local residents of the remote Austrian village of \[REDACTED], Styria claim that they disguise themselves
+* "Filler": Just the six spheres, nothing extra.
+* "Useful": Blue plus sign in the top-right corner.
+* "Progression": Orange up arrow in the top-right corner.
+* "Trap": Reports from the local residents of the remote Austrian village of \[REDACTED], Styria claim that they disguise themselves
 as Progression but with the important difference of \[DATA EXPUNGED]. Verification of these claims are currently pending...
 
 Upon sending an item, a textbox announcing the item being sent and the player who it's for will show up on-screen, accompanied
@@ -135,7 +135,7 @@ slot, making them more worthwhile to go after. Candles and bosses still have Rar
 drops that land on bosses will be exclusive to them; no other enemy in the game will have their item.
 
 Note that the Shinning Armor <sup>sic</sup> can never be placed randomly onto a normal enemy; you can only receive it by completing the Battle Arena.
-If `Required Skirmishes` is set to `All Bosses And Arena`, which replaces the Shinning Armor <sup>sic</sup> on the pedestal at the end with
+If "Required Skirmishes" is set to "All Bosses And Arena", which replaces the Shinning Armor <sup>sic</sup> on the pedestal at the end with
 a Last Key, the Devil fought in the last room before the end pedestal will drop Shinning Armor <sup>sic</sup> 100% of the time upon defeat.
 
 For more information and an exact breakdown of what items are considered which tier, see Malaert64's guide 

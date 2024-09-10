@@ -2,10 +2,10 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
 - A Castlevania: Circle of the Moon ROM of the US version specifically. The Archipelago community cannot provide this.
 The Castlevania Advance Collection ROM can technically be used, but it has no audio. The Wii U Virtual Console ROM is untested.
-- [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later
+- [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later.
 
 ### Configuring BizHawk
 
@@ -66,7 +66,7 @@ Castlevania: Circle of the Moon has a fully functional map tracker that supports
 
 1. Download [Castlevania: Circle of the Moon AP Tracker](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest) and
 [PopTracker](https://github.com/black-sliver/PopTracker/releases).
-2. Put the tracker pack into packs/ in your PopTracker install.
+2. Put the tracker pack into `packs/` in your PopTracker install.
 3. Open PopTracker, and load the Castlevania: Circle of the Moon pack.
 4. For autotracking, click on the "AP" symbol at the top.
 5. Enter the Archipelago server address (the one you connected your client to), slot name, and password.
