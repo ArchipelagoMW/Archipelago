@@ -65,6 +65,8 @@ class SA2BWorld(World):
 
     location_table: typing.Dict[str, int]
 
+    shuffled_region_list: typing.List[int]
+    levels_per_gate: typing.List[int]
     mission_map: typing.Dict[int, int]
     mission_count_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
@@ -260,12 +262,12 @@ class SA2BWorld(World):
         elif self.options.level_gate_costs.value == 1:
             gate_cost_mult = 0.8
 
-        shuffled_region_list = list(range(30))
+        self.shuffled_region_list = list(range(30))
         emblem_requirement_list = list()
-        self.multiworld.random.shuffle(shuffled_region_list)
-        levels_per_gate = self.get_levels_per_gate()
+        self.multiworld.random.shuffle(self.shuffled_region_list)
+        self.levels_per_gate = self.get_levels_per_gate()
 
-        check_for_impossible_shuffle(shuffled_region_list, math.ceil(levels_per_gate[0]), self.multiworld)
+        check_for_impossible_shuffle(self.shuffled_region_list, math.ceil(self.levels_per_gate[0]), self.multiworld)
         levels_added_to_gate = 0
         total_levels_added = 0
         current_gate = 0
@@ -275,11 +277,11 @@ class SA2BWorld(World):
         gates = list()
         gates.append(LevelGate(0))
         for i in range(30):
-            gates[current_gate].gate_levels.append(shuffled_region_list[i])
+            gates[current_gate].gate_levels.append(self.shuffled_region_list[i])
             emblem_requirement_list.append(current_gate_emblems)
             levels_added_to_gate += 1
             total_levels_added += 1
-            if levels_added_to_gate >= levels_per_gate[current_gate]:
+            if levels_added_to_gate >= self.levels_per_gate[current_gate]:
                 current_gate += 1
                 if current_gate > self.options.number_of_level_gates.value:
                     current_gate = self.options.number_of_level_gates.value
@@ -290,7 +292,7 @@ class SA2BWorld(World):
                     self.gate_costs[current_gate] = current_gate_emblems
                 levels_added_to_gate = 0
 
-        self.region_emblem_map = dict(zip(shuffled_region_list, emblem_requirement_list))
+        self.region_emblem_map = dict(zip(self.shuffled_region_list, emblem_requirement_list))
 
         first_cannons_core_mission, final_cannons_core_mission = get_first_and_last_cannons_core_missions(self.mission_map, self.mission_count_map)
 
@@ -414,11 +416,16 @@ class SA2BWorld(World):
         set_rules(self.multiworld, self, self.player, self.gate_bosses, self.boss_rush_map, self.mission_map, self.mission_count_map, self.black_market_costs)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
-        print_mission_orders_to_spoiler(self.mission_map, self.mission_count_map, self.multiworld.player_name[self.player], spoiler_handle)
+        print_mission_orders_to_spoiler(self.mission_map,
+                                        self.mission_count_map,
+                                        self.shuffled_region_list,
+                                        self.levels_per_gate,
+                                        self.multiworld.player_name[self.player],
+                                        spoiler_handle)
 
         if self.options.number_of_level_gates.value > 0 or self.options.goal.value in [4, 5, 6]:
             spoiler_handle.write("\n")
-            header_text = "Sonic Adventure 2 Bosses for {}:\n"
+            header_text = "SA2 Bosses for {}:\n"
             header_text = header_text.format(self.multiworld.player_name[self.player])
             spoiler_handle.write(header_text)
 
@@ -476,7 +483,6 @@ class SA2BWorld(World):
         for i in range(self.options.black_market_slots.value):
             location = self.multiworld.get_location(LocationName.chao_black_market_base + str(i + 1), self.player)
             er_hint_data[location.address] = str(self.black_market_costs[i]) + " " + str(ItemName.market_token)
-
 
         hint_data[self.player] = er_hint_data
 

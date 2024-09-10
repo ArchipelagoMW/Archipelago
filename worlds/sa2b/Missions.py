@@ -340,21 +340,48 @@ def get_first_and_last_cannons_core_missions(mission_map: typing.Dict[int, int],
     return first_location_name, last_location_name
 
 
-def print_mission_orders_to_spoiler(mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int], player_name: str, spoiler_handle: typing.TextIO):
+def print_mission_orders_to_spoiler(mission_map: typing.Dict[int, int],
+                                    mission_count_map: typing.Dict[int, int],
+                                    shuffled_region_list: typing.Dict[int, int],
+                                    levels_per_gate: typing.Dict[int, int],
+                                    player_name: str,
+                                    spoiler_handle: typing.TextIO):
     spoiler_handle.write("\n")
-    header_text = "Sonic Adventure 2 Mission Orders for {}:\n"
+    header_text = "SA2 Mission Orders for {}:\n"
     header_text = header_text.format(player_name)
     spoiler_handle.write(header_text)
 
-    for stage in range(31):
-        mission_count = mission_count_map[stage]
-        mission_order: typing.List[int] = mission_orders[mission_map[stage]]
-        stage_prefix: str = stage_name_prefixes[stage]
+    level_index = 0
+    for gate_idx in range(len(levels_per_gate)):
+        gate_len = levels_per_gate[gate_idx]
+        gate_levels = shuffled_region_list[int(level_index):int(level_index+gate_len)]
+        gate_levels.sort()
 
-        for mission in range(mission_count):
-            stage_prefix += str(mission_order[mission]) + " "
+        gate_text = "Gate {}:\n"
+        gate_text = gate_text.format(gate_idx)
+        spoiler_handle.write(gate_text)
 
-        spoiler_handle.write(stage_prefix)
+        for i in range(len(gate_levels)):
+            stage = gate_levels[i]
+            mission_count = mission_count_map[stage]
+            mission_order: typing.List[int] = mission_orders[mission_map[stage]]
+            stage_prefix: str = stage_name_prefixes[stage]
+
+            for mission in range(mission_count):
+                stage_prefix += str(mission_order[mission]) + " "
+
+            spoiler_handle.write(stage_prefix)
+            spoiler_handle.write("\n")
+
+        level_index += gate_len
         spoiler_handle.write("\n")
 
+    mission_count = mission_count_map[30]
+    mission_order: typing.List[int] = mission_orders[mission_map[30]]
+    stage_prefix: str = stage_name_prefixes[30]
 
+    for mission in range(mission_count):
+        stage_prefix += str(mission_order[mission]) + " "
+
+    spoiler_handle.write(stage_prefix)
+    spoiler_handle.write("\n\n")
