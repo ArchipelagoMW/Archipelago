@@ -552,11 +552,9 @@ class MultiWorld():
             if self.has_beaten_game(state):
                 return True
 
-        if locations is None:
-            prog_locations = {location for location in self.get_locations() if location.item
-                              and location.item.advancement and location not in state.locations_checked}
-        else:
-            prog_locations = set(locations)
+        base_locations = self.get_locations() if locations is None else locations
+        prog_locations = {location for location in base_locations if location.item
+                          and location.item.advancement and location not in state.locations_checked}
 
         while prog_locations:
             sphere: Set[Location] = set()
@@ -1369,10 +1367,8 @@ class Spoiler:
                               location.item.player)
                 required_locations.remove(location)
                 if multiworld.can_beat_game(state_cache[num], required_locations):
-                    print(f"Don't need {location}")
                     to_delete.add(location)
                 else:
-                    print(f"Still need {location}")
                     # still required, got to keep it around
                     required_locations.add(location)
 
