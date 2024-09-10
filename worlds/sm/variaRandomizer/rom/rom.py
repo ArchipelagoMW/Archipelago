@@ -86,7 +86,67 @@ class ROM(object):
             self.seek(self.maxAddress + BANK_SIZE - off - 1)
             self.writeByte(0xff)
         assert (self.maxAddress % BANK_SIZE) == 0
-        
+
+class FakeROM(ROM):
+    # to have the same code for real ROM and the webservice
+    def __init__(self, data={}):
+        super(FakeROM, self).__init__()
+        self.data = data
+        self.ipsPatches = []
+
+    def write(self, bytes):
+        for byte in bytes:
+            self.data[self.address] = byte
+            self.inc()
+
+    def read(self, byteCount):
+        bytes = []
+        for i in range(byteCount):
+            bytes.append(self.data[self.address])
+            self.inc()
+
+        return bytes
+
+    def ipsPatch(self, ipsPatches):
+        self.ipsPatches += ipsPatches
+
+    # generate ips from self data
+    def ips(self):
+        groupedData = {}
+        startAddress = -1
+        prevAddress = -1
+        curData = []
+        for address in sorted(self.data):
+            if address == prevAddress + 1:
+                curData.append(self.data[address])
+                prevAddress = address
+            else:
+                if len(curData) > 0:
+                    groupedData[startAddress] = curData
+                startAddress = address
+                prevAddress = address
+                curData = [self.data[startAddress]]
+        if startAddress != -1:
+            groupedData[startAddress] = curData
+
+        return IPS_Patch(groupedData)
+
+    # generate final IPS for web patching with first the IPS patches, then written data
+    def close(self):
+        self.mergedIPS = IPS_Patch()
+        for ips in self.ipsPatches:
+            self.mergedIPS.append(ips)
+        self.mergedIPS.append(self.ips())
+        #patchData = mergedIPS.encode()
+        #self.data = {}
+        #self.data["ips"] = base64.b64encode(patchData).decode()
+        #if mergedIPS.truncate_length is not None:
+        #    self.data["truncate_length"] = mergedIPS.truncate_length
+        #self.data["max_size"] = mergedIPS.max_size
+
+    def getPatchDict(self):
+        return self.mergedIPS.toDict()
+                
 class RealROM(ROM):
     def __init__(self, name):
         super(RealROM, self).__init__()
