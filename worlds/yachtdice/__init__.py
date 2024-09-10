@@ -466,6 +466,9 @@ class YachtDiceWorld(World):
         menu.exits.append(connection)
         connection.connect(board)
         self.multiworld.regions += [menu, board]
+        
+    def get_filler_item_name(self) -> str:
+        return "Good RNG"
 
     def set_rules(self):
         """
