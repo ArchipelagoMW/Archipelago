@@ -491,7 +491,7 @@ auto_scroll_max = {
     "Pumpkin Zone 4": 45,
     "Pumpkin Zone Secret Course 1": 172,
     "Mario Zone 1": 68,
-    "Mario Zone 3": 47,
+    "Mario Zone 3": 29,
     "Mario Zone 4": 63,
     "Turtle Zone 1": 66,
     "Turtle Zone 2": 8,
