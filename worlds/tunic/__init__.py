@@ -350,7 +350,7 @@ class TunicWorld(World):
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
                 if replaced_item in item_name_groups["Abilities"] and self.options.ability_shuffling \
-                        and self.options.hexagon_quest_ability_type.value == 1:
+                        and self.options.hexagon_quest_ability_type == "pages":
                     continue
                 filler_name = self.get_filler_item_name()
                 items_to_create[filler_name] += items_to_create[replaced_item]
