@@ -160,31 +160,35 @@ class JakAndDaxterContext(CommonContext):
 
     async def json_to_game_text(self, args: dict):
         if "type" in args and args["type"] in {"ItemSend"}:
+            my_item_name = Optional[str]
+            my_item_finder = Optional[str]
+            their_item_name = Optional[str]
+            their_item_owner = Optional[str]
             item = args["item"]
             recipient = args["receiving"]
 
             # Receiving an item from the server.
             if self.slot_concerns_self(recipient):
-                self.repl.my_item_name = self.item_names.lookup_in_game(item.item)
+                my_item_name = self.item_names.lookup_in_game(item.item)
 
                 # Did we find it, or did someone else?
                 if self.slot_concerns_self(item.player):
-                    self.repl.my_item_finder = "MYSELF"
+                    my_item_finder = "MYSELF"
                 else:
-                    self.repl.my_item_finder = self.player_names[item.player]
+                    my_item_finder = self.player_names[item.player]
 
             # Sending an item to the server.
             if self.slot_concerns_self(item.player):
-                self.repl.their_item_name = self.item_names.lookup_in_slot(item.item, recipient)
+                their_item_name = self.item_names.lookup_in_slot(item.item, recipient)
 
                 # Does it belong to us, or to someone else?
                 if self.slot_concerns_self(recipient):
-                    self.repl.their_item_owner = "MYSELF"
+                    their_item_owner = "MYSELF"
                 else:
-                    self.repl.their_item_owner = self.player_names[recipient]
+                    their_item_owner = self.player_names[recipient]
 
             # Write to game display.
-            await self.repl.write_game_text()
+            self.repl.queue_game_text(my_item_name, my_item_finder, their_item_name, their_item_owner)
 
     def on_print_json(self, args: dict) -> None:
 
