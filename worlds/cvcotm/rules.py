@@ -168,9 +168,7 @@ class CVCotMRules:
 
     def can_touch_water(self, state: CollectionState) -> bool:
         """Cleansing unless it's ignored, in which case this will always return True."""
-        if self.ignore_cleansing:
-            return True
-        return state.has(iname.cleansing, self.player)
+        return self.ignore_cleansing or state.has(iname.cleansing, self.player)
 
     def broke_iron_maidens(self, state: CollectionState) -> bool:
         """Maiden Detonator unless the Iron Maidens start broken, in which case this will always return True."""
