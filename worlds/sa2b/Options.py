@@ -649,109 +649,214 @@ class BaseMissionCount(Range):
     default = 2
 
 
-class SpeedMissionCount(BaseMissionCount):
+class SonicMissionCount(BaseMissionCount):
     """
-    The number of active missions to include for Sonic and Shadow stages
+    The number of active missions to include for Sonic stages
     """
-    display_name = "Speed Mission Count"
+    display_name = "Sonic Mission Count"
 
 
-class SpeedMission2(DefaultOnToggle):
+class SonicMission2(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow 100 rings missions should be included
+    Determines if the Sonic 100 rings missions should be included
     """
-    display_name = "Speed Mission 2"
+    display_name = "Sonic Mission 2"
 
 
-class SpeedMission3(DefaultOnToggle):
+class SonicMission3(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow lost chao missions should be included
+    Determines if the Sonic lost chao missions should be included
     """
-    display_name = "Speed Mission 3"
+    display_name = "Sonic Mission 3"
 
 
-class SpeedMission4(DefaultOnToggle):
+class SonicMission4(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow time trial missions should be included
+    Determines if the Sonic time trial missions should be included
     """
-    display_name = "Speed Mission 4"
+    display_name = "Sonic Mission 4"
 
 
-class SpeedMission5(DefaultOnToggle):
+class SonicMission5(DefaultOnToggle):
     """
-    Determines if the Sonic and Shadow hard missions should be included
+    Determines if the Sonic hard missions should be included
     """
-    display_name = "Speed Mission 5"
+    display_name = "Sonic Mission 5"
 
 
-class MechMissionCount(BaseMissionCount):
+class ShadowMissionCount(BaseMissionCount):
     """
-    The number of active missions to include for Tails and Eggman stages
+    The number of active missions to include for Shadow stages
     """
-    display_name = "Mech Mission Count"
+    display_name = "Shadow Mission Count"
 
 
-class MechMission2(DefaultOnToggle):
+class ShadowMission2(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman 100 rings missions should be included
+    Determines if the Shadow 100 rings missions should be included
     """
-    display_name = "Mech Mission 2"
+    display_name = "Shadow Mission 2"
 
 
-class MechMission3(DefaultOnToggle):
+class ShadowMission3(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman lost chao missions should be included
+    Determines if the Shadow lost chao missions should be included
     """
-    display_name = "Mech Mission 3"
+    display_name = "Shadow Mission 3"
 
 
-class MechMission4(DefaultOnToggle):
+class ShadowMission4(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman time trial missions should be included
+    Determines if the Shadow time trial missions should be included
     """
-    display_name = "Mech Mission 4"
+    display_name = "Shadow Mission 4"
 
 
-class MechMission5(DefaultOnToggle):
+class ShadowMission5(DefaultOnToggle):
     """
-    Determines if the Tails and Eggman hard missions should be included
+    Determines if the Shadow hard missions should be included
     """
-    display_name = "Mech Mission 5"
+    display_name = "Shadow Mission 5"
 
 
-class HuntMissionCount(BaseMissionCount):
+class TailsMissionCount(BaseMissionCount):
     """
-    The number of active missions to include for Knuckles and Rouge stages
+    The number of active missions to include for Tails stages
     """
-    display_name = "Hunt Mission Count"
+    display_name = "Tails Mission Count"
 
 
-class HuntMission2(DefaultOnToggle):
+class TailsMission2(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge 100 rings missions should be included
+    Determines if the Tails 100 rings missions should be included
     """
-    display_name = "Hunt Mission 2"
+    display_name = "Tails Mission 2"
 
 
-class HuntMission3(DefaultOnToggle):
+class TailsMission3(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge lost chao missions should be included
+    Determines if the Tails lost chao missions should be included
     """
-    display_name = "Hunt Mission 3"
+    display_name = "Tails Mission 3"
 
 
-class HuntMission4(DefaultOnToggle):
+class TailsMission4(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge time trial missions should be included
+    Determines if the Tails time trial missions should be included
     """
-    display_name = "Hunt Mission 4"
+    display_name = "Tails Mission 4"
 
 
-class HuntMission5(DefaultOnToggle):
+class TailsMission5(DefaultOnToggle):
     """
-    Determines if the Knuckles and Rouge hard missions should be included
+    Determines if the Tails hard missions should be included
     """
-    display_name = "Hunt Mission 5"
+    display_name = "Tails Mission 5"
+
+
+class EggmanMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Eggman stages
+    """
+    display_name = "Eggman Mission Count"
+
+
+class EggmanMission2(DefaultOnToggle):
+    """
+    Determines if the Eggman 100 rings missions should be included
+    """
+    display_name = "Eggman Mission 2"
+
+
+class EggmanMission3(DefaultOnToggle):
+    """
+    Determines if the Eggman lost chao missions should be included
+    """
+    display_name = "Eggman Mission 3"
+
+
+class EggmanMission4(DefaultOnToggle):
+    """
+    Determines if the Eggman time trial missions should be included
+    """
+    display_name = "Eggman Mission 4"
+
+
+class EggmanMission5(DefaultOnToggle):
+    """
+    Determines if the Eggman hard missions should be included
+    """
+    display_name = "Eggman Mission 5"
+
+
+class KnucklesMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Knuckles stages
+    """
+    display_name = "Knuckles Mission Count"
+
+
+class KnucklesMission2(DefaultOnToggle):
+    """
+    Determines if the Knuckles 100 rings missions should be included
+    """
+    display_name = "Knuckles Mission 2"
+
+
+class KnucklesMission3(DefaultOnToggle):
+    """
+    Determines if the Knuckles lost chao missions should be included
+    """
+    display_name = "Knuckles Mission 3"
+
+
+class KnucklesMission4(DefaultOnToggle):
+    """
+    Determines if the Knuckles time trial missions should be included
+    """
+    display_name = "Knuckles Mission 4"
+
+
+class KnucklesMission5(DefaultOnToggle):
+    """
+    Determines if the Knuckles hard missions should be included
+    """
+    display_name = "Knuckles Mission 5"
+
+
+class RougeMissionCount(BaseMissionCount):
+    """
+    The number of active missions to include for Rouge stages
+    """
+    display_name = "Rouge Mission Count"
+
+
+class RougeMission2(DefaultOnToggle):
+    """
+    Determines if the Rouge 100 rings missions should be included
+    """
+    display_name = "Rouge Mission 2"
+
+
+class RougeMission3(DefaultOnToggle):
+    """
+    Determines if the Rouge lost chao missions should be included
+    """
+    display_name = "Rouge Mission 3"
+
+
+class RougeMission4(DefaultOnToggle):
+    """
+    Determines if the Rouge time trial missions should be included
+    """
+    display_name = "Rouge Mission 4"
+
+
+class RougeMission5(DefaultOnToggle):
+    """
+    Determines if the Rouge hard missions should be included
+    """
+    display_name = "Rouge Mission 5"
 
 
 class KartMissionCount(BaseMissionCount):
@@ -1025,26 +1130,47 @@ sa2b_option_groups = [
         PinballTrapWeight,
         MinigameTrapDifficulty,
     ]),
-    OptionGroup("Speed Missions", [
-        SpeedMissionCount,
-        SpeedMission2,
-        SpeedMission3,
-        SpeedMission4,
-        SpeedMission5,
+    OptionGroup("Sonic Missions", [
+        SonicMissionCount,
+        SonicMission2,
+        SonicMission3,
+        SonicMission4,
+        SonicMission5,
     ]),
-    OptionGroup("Mech Missions", [
-        MechMissionCount,
-        MechMission2,
-        MechMission3,
-        MechMission4,
-        MechMission5,
+    OptionGroup("Shadow Missions", [
+        ShadowMissionCount,
+        ShadowMission2,
+        ShadowMission3,
+        ShadowMission4,
+        ShadowMission5,
     ]),
-    OptionGroup("Hunt Missions", [
-        HuntMissionCount,
-        HuntMission2,
-        HuntMission3,
-        HuntMission4,
-        HuntMission5,
+    OptionGroup("Tails Missions", [
+        TailsMissionCount,
+        TailsMission2,
+        TailsMission3,
+        TailsMission4,
+        TailsMission5,
+    ]),
+    OptionGroup("Eggman Missions", [
+        EggmanMissionCount,
+        EggmanMission2,
+        EggmanMission3,
+        EggmanMission4,
+        EggmanMission5,
+    ]),
+    OptionGroup("Knuckles Missions", [
+        KnucklesMissionCount,
+        KnucklesMission2,
+        KnucklesMission3,
+        KnucklesMission4,
+        KnucklesMission5,
+    ]),
+    OptionGroup("Rouge Missions", [
+        RougeMissionCount,
+        RougeMission2,
+        RougeMission3,
+        RougeMission4,
+        RougeMission5,
     ]),
     OptionGroup("Kart Missions", [
         KartMissionCount,
@@ -1139,23 +1265,41 @@ class SA2BOptions(PerGameCommonOptions):
     voice_shuffle: VoiceShuffle
     narrator: Narrator
 
-    speed_mission_count: SpeedMissionCount
-    speed_mission_2: SpeedMission2
-    speed_mission_3: SpeedMission3
-    speed_mission_4: SpeedMission4
-    speed_mission_5: SpeedMission5
+    sonic_mission_count: SonicMissionCount
+    sonic_mission_2: SonicMission2
+    sonic_mission_3: SonicMission3
+    sonic_mission_4: SonicMission4
+    sonic_mission_5: SonicMission5
 
-    mech_mission_count: MechMissionCount
-    mech_mission_2: MechMission2
-    mech_mission_3: MechMission3
-    mech_mission_4: MechMission4
-    mech_mission_5: MechMission5
+    shadow_mission_count: ShadowMissionCount
+    shadow_mission_2: ShadowMission2
+    shadow_mission_3: ShadowMission3
+    shadow_mission_4: ShadowMission4
+    shadow_mission_5: ShadowMission5
 
-    hunt_mission_count: HuntMissionCount
-    hunt_mission_2: HuntMission2
-    hunt_mission_3: HuntMission3
-    hunt_mission_4: HuntMission4
-    hunt_mission_5: HuntMission5
+    tails_mission_count: TailsMissionCount
+    tails_mission_2: TailsMission2
+    tails_mission_3: TailsMission3
+    tails_mission_4: TailsMission4
+    tails_mission_5: TailsMission5
+
+    eggman_mission_count: EggmanMissionCount
+    eggman_mission_2: EggmanMission2
+    eggman_mission_3: EggmanMission3
+    eggman_mission_4: EggmanMission4
+    eggman_mission_5: EggmanMission5
+
+    knuckles_mission_count: KnucklesMissionCount
+    knuckles_mission_2: KnucklesMission2
+    knuckles_mission_3: KnucklesMission3
+    knuckles_mission_4: KnucklesMission4
+    knuckles_mission_5: KnucklesMission5
+
+    rouge_mission_count: RougeMissionCount
+    rouge_mission_2: RougeMission2
+    rouge_mission_3: RougeMission3
+    rouge_mission_4: RougeMission4
+    rouge_mission_5: RougeMission5
 
     kart_mission_count: KartMissionCount
     kart_mission_2: KartMission2
