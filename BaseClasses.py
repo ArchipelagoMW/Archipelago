@@ -542,7 +542,7 @@ class MultiWorld():
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
-    def can_beat_game(self, starting_state: Optional[CollectionState] = None, locations: Set[Location] = None) -> bool:
+    def can_beat_game(self, starting_state: Optional[CollectionState] = None, locations: Iterable[Location] = None) -> bool:
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -553,14 +553,16 @@ class MultiWorld():
                 return True
 
         if locations is None:
-            locations = {location for location in self.get_locations() if location.item
-                         and location.item.advancement and location not in state.locations_checked}
+            prog_locations = {location for location in self.get_locations() if location.item
+                              and location.item.advancement and location not in state.locations_checked}
+        else:
+            prog_locations = set(locations)
 
-        while locations:
+        while prog_locations:
             sphere: Set[Location] = set()
             # build up spheres of collection radius.
             # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-            for location in locations:
+            for location in prog_locations:
                 if location.can_reach(state):
                     sphere.add(location)
 
@@ -570,7 +572,7 @@ class MultiWorld():
 
             for location in sphere:
                 state.collect(location.item, True, location)
-            locations -= sphere
+            prog_locations -= sphere
 
             if self.has_beaten_game(state):
                 return True
@@ -1367,8 +1369,10 @@ class Spoiler:
                               location.item.player)
                 required_locations.remove(location)
                 if multiworld.can_beat_game(state_cache[num], required_locations):
+                    print(f"Don't need {location}")
                     to_delete.add(location)
                 else:
+                    print(f"Still need {location}")
                     # still required, got to keep it around
                     required_locations.add(location)
 
