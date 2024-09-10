@@ -46,10 +46,34 @@ def create_multiple_items(world: "Sly1World", name: str, count: int = 1,
     return itemlist
 
 def create_junk_items(world: "Sly1World", count: int) -> List[Item]:
+    trap_chance = world.options.TrapChance.value
     junk_pool: List[Item] = []
-    # For now, all junk has equal weights
+    junk_list: Dict[str, int] = {}
+    trap_list: Dict[str, int] = {}
+
+    for name in item_table.keys():
+        ic = item_table[name].classification
+        if ic == ItemClassification.filler:
+            junk_list[name] = junk_weights.get(name)
+
+        elif trap_chance > 0 and ic == ItemClassification.trap:
+            if name == "Ice Physics Trap":
+                trap_list[name] = world.options.IcePhysicsTrapWeight.value
+            elif name == "Speed Change Trap":
+                trap_list[name] = world.options.SpeedChangeTrapWeight.value
+            elif name == "Bentley Jumpscare Trap":
+                trap_list[name] = world.options.BentleyJumpscareTrapWeight.value
+            elif name == "Ball Trap":
+                trap_list[name] = world.options.BallTrapWeight.value
+
     for i in range(count):
-        junk_pool.append(world.create_item(world.random.choices(list(junk_items.keys()), k=1)[0]))
+        if trap_chance > 0 and world.random.randint(1,100) <= trap_chance:
+            junk_pool.append(world.create_item(
+                world.random.choices(list(trap_list.keys()), weights=list(trap_list.values()), k=1)[0]))
+        else:
+            junk_pool.append(world.create_item(
+                world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0]))
+
     return junk_pool
 
 def set_keys(starting_episode: str):
@@ -99,9 +123,19 @@ sly_episodes = {
 junk_items = {
     # Junk
     "Charm": ItemData(10020019, ItemClassification.filler, 0),
-    "1-Up": ItemData(10020020, ItemClassification.filler, 0)
+    "1-Up": ItemData(10020020, ItemClassification.filler, 0),
 
-    # Traps - TBI
+    # Traps
+    "Ice Physics Trap": ItemData(10020021, ItemClassification.trap, 0),
+    "Speed Change Trap": ItemData(10020022, ItemClassification.trap, 0),
+
+    "Ball Trap": ItemData(10020023, ItemClassification.trap, 0),
+    "Bentley Jumpscare Trap": ItemData(10020024, ItemClassification.trap, 0),
+}
+
+junk_weights = {
+    "Charm": 40,
+    "1-Up": 20
 }
 
 item_table = {

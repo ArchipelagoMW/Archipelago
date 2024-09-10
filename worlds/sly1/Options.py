@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Choice, OptionGroup, Toggle, OptionSet
+from Options import Choice, OptionGroup, Toggle, OptionSet, Range
 
 def create_option_groups() -> List[OptionGroup]:
     option_group_list: List[OptionGroup] = []
@@ -56,16 +56,74 @@ class ExcludeMinigames(OptionSet):
         "Swamp Skiff"
     }
 
+class TrapChance(Range):
+    """
+    Determines the chance for any junk item to become a trap.
+    Set it to 0 for no traps.
+    """
+    display_name = "Include Traps"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+class IcePhysicsTrapWeight(Range):
+    """
+    The weight of ice physics traps in the trap pool.
+    Ice physics traps turn on the low friction cheat code for x seconds.
+    """
+    display_name = "Ice Physics Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 25
+
+class SpeedChangeTrapWeight(Range):
+    """
+    The weight of speed change traps in the trap pool.
+    Speed change traps change the game speed for x seconds.
+    """
+    display_name = "Speed Change Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 25
+
+class BentleyJumpscareTrapWeight(Range):
+    """
+    The weight of bentley jumpscare traps in the trap pool.
+    :archiPleading:
+    """
+    display_name = "Bentley Jumpscare Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 25
+
+class BallTrapWeight(Range):
+    """
+    The weight of ball traps in the trap pool.
+    Ball traps force sly to stay in the roll form for x seconds.
+    """
+    display_name = "Ball Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 25
+
 @dataclass
 class Sly1Options(PerGameCommonOptions):
-    StartingEpisode:        StartingEpisode
-    IncludeHourglasses:     IncludeHourglasses
-    AvoidEarlyBK:           AvoidEarlyBK
-    ExcludeMinigames:       ExcludeMinigames
+    StartingEpisode:                StartingEpisode
+    IncludeHourglasses:             IncludeHourglasses
+    AvoidEarlyBK:                   AvoidEarlyBK
+    ExcludeMinigames:               ExcludeMinigames
+    TrapChance:                     TrapChance
+    IcePhysicsTrapWeight:           IcePhysicsTrapWeight
+    SpeedChangeTrapWeight:          SpeedChangeTrapWeight
+    BentleyJumpscareTrapWeight:     BentleyJumpscareTrapWeight
+    BallTrapWeight:                 BallTrapWeight
 
 sly1_option_groups: Dict[str, List[Any]] = {
     "General Options": [StartingEpisode, IncludeHourglasses],
-    "ExcludeMinigames": [ExcludeMinigames]
+    "Exclude Minigames": [ExcludeMinigames],
+    "Trap Options": [TrapChance, IcePhysicsTrapWeight,
+                     SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
+                     BallTrapWeight]
 }
 
 slot_data_options: List[str] = {

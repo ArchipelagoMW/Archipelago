@@ -32,7 +32,6 @@ def is_valid_location(world: "Sly1World",name) -> bool:
     if not did_include_hourglasses(world) and name in hourglass_locations:
         return False
     
-    print(location_table[name].level_type)
     if location_table[name].level_type in world.options.ExcludeMinigames.value:
         return False
     
