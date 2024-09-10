@@ -273,10 +273,10 @@ def check_options(world: "TunicWorld"):
     options = world.options
     if options.hexagon_quest:
         hexagon_goal = options.hexagon_goal.value
-        if options.ability_shuffling and options.hexagon_quest_ability_type.value == 0:
+        if options.ability_shuffling and options.hexagon_quest_ability_type == "hexagons":
             if hexagon_goal < 3:
                 logging.warning("TUNIC: Hexagon Quest goal is too low for Shuffled Abilities (Hexagons). Option will be switched to Pages.")
-                world.options.hexagon_quest_ability_type.value = 1
+                world.options.hexagon_quest_ability_type = "pages"
             if hexagon_goal < 15 and options.keys_behind_bosses:
                 logging.warning("TUNIC: Hexagon Quest goal is too low for Shuffled Abilities (Hexagons) + Keys Behind Bosses. Keys Behind Bosses will be ignored during generation.")
                 world.options.keys_behind_bosses.value = 0
