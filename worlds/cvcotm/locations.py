@@ -197,7 +197,7 @@ def get_location_name_groups() -> Dict[str, Set[str]]:
         else:
             loc_name_groups[area_name].add(loc_name)
 
-        # If the word "fake" is in the Location's name, add it to the "Fake Walls" Location group.
+        # If the word "fake" is in the Location's name, add it to the "Breakable Walls" Location group.
         if "fake" in loc_name.casefold():
             loc_name_groups["Breakable Secrets"].add(loc_name)
 
