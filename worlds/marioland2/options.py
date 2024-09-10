@@ -1,4 +1,4 @@
-from Options import Toggle, Choice, NamedRange, Range, PerGameCommonOptions
+from Options import Toggle, Choice, NamedRange, Range, PerGameCommonOptions, ItemsAccessibility
 from dataclasses import dataclass
 
 
@@ -179,6 +179,7 @@ class EnergyLink(Toggle):
 
 @dataclass
 class SML2Options(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
     shuffle_golden_coins: ShuffleGoldenCoins
     required_golden_coins: GoldenCoinsRequired
     mario_coin_fragment_percentage: MarioCoinFragmentPercentage
