@@ -429,7 +429,7 @@ def get_countdown_flags(world: "CVCotMWorld", active_locations: Iterable[Locatio
     for loc in active_locations:
         # If the Location's Item is not Progression/Useful-classified with the "Majors" Countdown being used, or if the
         # Location is the Iron Maiden switch with the vanilla Iron Maiden behavior, skip adding its flag to the arrays.
-        if (not loc.item.classification | MAJORS_CLASSIFICATIONS and world.options.countdown ==
+        if (not loc.item.classification & MAJORS_CLASSIFICATIONS and world.options.countdown ==
                 Countdown.option_majors):
             continue
 

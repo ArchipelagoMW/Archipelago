@@ -176,10 +176,8 @@ class CVCotMRules:
                 or state.has(iname.ironmaidens, self.player))
 
     def can_open_ceremonial_door(self, state: CollectionState) -> bool:
-        """The required number of Last Keys unless it was set to 0, in which case this will always return True."""
-        if self.required_last_keys:
-            return state.has(iname.last_key, self.player, self.required_last_keys)
-        return True
+        """The required number of Last Keys. If 0 keys are required, this should always return True."""
+        return state.has(iname.last_key, self.player, self.required_last_keys)
 
     def set_cvcotm_rules(self) -> None:
         multiworld = self.world.multiworld
