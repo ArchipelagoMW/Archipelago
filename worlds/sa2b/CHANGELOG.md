@@ -4,9 +4,10 @@
 ## v2.4 - WIP
 
 ### Features:
+- Missions can now be enabled and disabled per-character, instead of just per-style
 
 ### Quality of Life:
-
+- Gate Stages and Mission Orders are now displayed in the spoiler log
 - Moved SA2B to the new Options system
 
 ### Bug Fixes:
