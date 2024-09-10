@@ -565,7 +565,7 @@ def macro_zone_3_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Macro Zone 3")
     reachable_coins = 7
     if not auto_scroll:
-        reachable_coins = 24
+        reachable_coins += 17
     if has_pipe_up(state, player) and has_pipe_down(state, player):
         if auto_scroll:
             reachable_coins += 56
