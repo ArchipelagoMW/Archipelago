@@ -172,9 +172,8 @@ class CVCotMRules:
 
     def broke_iron_maidens(self, state: CollectionState) -> bool:
         """Maiden Detonator unless the Iron Maidens start broken, in which case this will always return True."""
-        if self.iron_maiden_behavior == IronMaidenBehavior.option_start_broken:
-            return True
-        return state.has(iname.ironmaidens, self.player)
+        return (self.iron_maiden_behavior == IronMaidenBehavior.option_start_broken
+                or state.has(iname.ironmaidens, self.player))
 
     def can_open_ceremonial_door(self, state: CollectionState) -> bool:
         """The required number of Last Keys unless it was set to 0, in which case this will always return True."""
