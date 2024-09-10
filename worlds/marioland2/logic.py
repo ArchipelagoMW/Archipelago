@@ -552,6 +552,7 @@ def macro_zone_2_coins(state, player, coins):
             return coins <= 42
     return False
 
+
 def macro_zone_3_normal_exit(state, player):
     return ((has_pipe_down(state, player) and has_pipe_up(state, player))
             or state.has("Macro Zone 3 Midway Bell", player),)

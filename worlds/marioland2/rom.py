@@ -1,7 +1,6 @@
 import hashlib
 import os
 import pkgutil
-import bsdiff4
 
 import Utils
 
