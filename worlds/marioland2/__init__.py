@@ -105,7 +105,7 @@ class MarioLand2World(World):
         if self.options.marios_castle_midway_bell:
             self.sprite_data["Mario's Castle"][35]["sprite"] = "Midway Bell"
 
-        if self.options.auto_scroll_chances == -1:
+        if self.options.auto_scroll_chances == "vanilla":
             self.auto_scroll_levels = [int(i in [19, 25, 30]) for i in range(32)]
         else:
             self.auto_scroll_levels = [int(self.random.randint(1, 100) < self.options.auto_scroll_chances)
