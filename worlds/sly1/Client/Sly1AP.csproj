@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,6 @@
     <PackageReference Include="Archipelago.Core" Version="0.0.11" />
     <PackageReference Include="Archipelago.MultiClient.Net" Version="6.3.1" />
     <PackageReference Include="Archipelago.PCSX2" Version="0.0.5" />
-    <PackageReference Include="Memory.dll.x86" Version="1.2.27" />
   </ItemGroup>
 
   <ItemGroup>
