@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
-                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, SlotType)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -61,6 +61,7 @@ class ClientCommandProcessor(CommandProcessor):
         if address:
             self.ctx.server_address = None
             self.ctx.username = None
+            self.ctx.password = None
         elif not self.ctx.server_address:
             self.output("Please specify an address.")
             return False
@@ -225,6 +226,9 @@ class CommonContext:
         def lookup_in_slot(self, code: int, slot: typing.Optional[int] = None) -> str:
             """Returns the name for an item/location id in the context of a specific slot or own slot if `slot` is
             omitted.
+
+            Use of `lookup_in_slot` should not be used when not connected to a server. If looking in own game, set
+            `ctx.game` and use `lookup_in_game` method instead.
             """
             if slot is None:
                 slot = self.ctx.slot
@@ -248,7 +252,7 @@ class CommonContext:
     starting_reconnect_delay: int = 5
     current_reconnect_delay: int = starting_reconnect_delay
     command_processor: typing.Type[CommandProcessor] = ClientCommandProcessor
-    ui = None
+    ui: typing.Optional["kvui.GameManager"] = None
     ui_task: typing.Optional["asyncio.Task[None]"] = None
     input_task: typing.Optional["asyncio.Task[None]"] = None
     keep_alive_task: typing.Optional["asyncio.Task[None]"] = None
@@ -493,6 +497,11 @@ class CommonContext:
         """Gets called before sending a Say to the server from the user.
         Returned text is sent, or sending is aborted if None is returned."""
         return text
+    
+    def on_ui_command(self, text: str) -> None:
+        """Gets called by kivy when the user executes a command starting with `/` or `!`.
+        The command processor is still called; this is just intended for command echoing."""
+        self.ui.print_json([{"text": text, "type": "color", "color": "orange"}])
 
     def update_permissions(self, permissions: typing.Dict[str, int]):
         for permission_name, permission_flag in permissions.items():
@@ -506,6 +515,7 @@ class CommonContext:
     async def shutdown(self):
         self.server_address = ""
         self.username = None
+        self.password = None
         self.cancel_autoreconnect()
         if self.server and not self.server.socket.closed:
             await self.server.socket.close()
@@ -652,17 +662,19 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def run_gui(self):
-        """Import kivy UI system and start running it as self.ui_task."""
+    def make_gui(self) -> type:
+        """To return the Kivy App class needed for run_gui so it can be overridden before being built"""
         from kvui import GameManager
 
         class TextManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
             base_title = "Archipelago Text Client"
 
-        self.ui = TextManager(self)
+        return TextManager
+
+    def run_gui(self):
+        """Import kivy UI system from make_gui() and start running it as self.ui_task."""
+        ui_class = self.make_gui()
+        self.ui = ui_class(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def run_cli(self):
@@ -854,7 +866,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.team = args["team"]
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
-        ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
+        ctx.slot_info = {0: NetworkSlot("Archipelago", "Archipelago", SlotType.player)}
+        ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         ctx.stored_data_notification_keys.add(f"_read_hints_{ctx.team}_{ctx.slot}")
@@ -983,7 +996,7 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
-def run_as_textclient():
+def run_as_textclient(*args):
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
         tags = CommonContext.tags | {"TextOnly"}
@@ -1022,15 +1035,18 @@ def run_as_textclient():
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
-        args.connect = url.netloc
-        if url.username:
-            args.name = urllib.parse.unquote(url.username)
-        if url.password:
-            args.password = urllib.parse.unquote(url.password)
+        if url.scheme == "archipelago":
+            args.connect = url.netloc
+            if url.username:
+                args.name = urllib.parse.unquote(url.username)
+            if url.password:
+                args.password = urllib.parse.unquote(url.password)
+        else:
+            parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
 
     colorama.init()
 
@@ -1040,4 +1056,4 @@ def run_as_textclient():
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)  # force log-level to work around log level resetting to WARNING
-    run_as_textclient()
+    run_as_textclient(*sys.argv[1:])  # default value for parse_args

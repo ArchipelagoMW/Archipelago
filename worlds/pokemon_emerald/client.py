@@ -122,6 +122,7 @@ class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
     system = "GBA"
     patch_suffix = ".apemerald"
+
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
@@ -137,8 +138,9 @@ class PokemonEmeraldClient(BizHawkClient):
     previous_death_link: float
     ignore_next_death_link: bool
 
-    def __init__(self) -> None:
-        super().__init__()
+    current_map: Optional[int]
+
+    def initialize_client(self):
         self.local_checked_locations = set()
         self.local_set_events = {}
         self.local_found_key_items = {}
@@ -150,6 +152,7 @@ class PokemonEmeraldClient(BizHawkClient):
         self.death_counter = None
         self.previous_death_link = 0
         self.ignore_next_death_link = False
+        self.current_map = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -179,9 +182,7 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.want_slot_data = True
         ctx.watcher_timeout = 0.125
 
-        self.death_counter = None
-        self.previous_death_link = 0
-        self.ignore_next_death_link = False
+        self.initialize_client()
 
         return True
 
@@ -243,6 +244,7 @@ class PokemonEmeraldClient(BizHawkClient):
             sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
             sb2_address = int.from_bytes(guards["SAVE BLOCK 2"][1], "little")
 
+            await self.handle_tracker_info(ctx, guards)
             await self.handle_death_link(ctx, guards)
             await self.handle_received_items(ctx, guards)
             await self.handle_wonder_trade(ctx, guards)
@@ -402,6 +404,30 @@ class PokemonEmeraldClient(BizHawkClient):
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             pass
+
+    async def handle_tracker_info(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+        # Current map
+        sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
+
+        read_result = await bizhawk.guarded_read(
+            ctx.bizhawk_ctx,
+            [(sb1_address + 0x4, 2, "System Bus")],
+            [guards["SAVE BLOCK 1"]]
+        )
+        if read_result is None:  # Save block moved
+            return
+
+        current_map = int.from_bytes(read_result[0], "big")
+        if current_map != self.current_map:
+            self.current_map = current_map
+            await ctx.send_msgs([{
+                "cmd": "Bounce",
+                "slots": [ctx.slot],
+                "data": {
+                    "type": "MapUpdate",
+                    "mapId": current_map,
+                },
+            }])
 
     async def handle_death_link(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
         """

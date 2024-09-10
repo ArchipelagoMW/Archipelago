@@ -7,7 +7,7 @@ from .ror2environments import environment_vanilla_table, environment_vanilla_ord
     environment_sotv_orderedstages_table, environment_sotv_table, collapse_dict_list_vertical, shift_by_offset
 
 from BaseClasses import Item, ItemClassification, Tutorial
-from .options import ItemWeights, ROR2Options
+from .options import ItemWeights, ROR2Options, ror2_option_groups
 from worlds.AutoWorld import World, WebWorld
 from .regions import create_explore_regions, create_classic_regions
 from typing import List, Dict, Any
@@ -22,6 +22,8 @@ class RiskOfWeb(WebWorld):
         "setup/en",
         ["Ijwu", "Kindasneaki"]
     )]
+
+    option_groups = ror2_option_groups
 
 
 class RiskOfRainWorld(World):
@@ -44,7 +46,7 @@ class RiskOfRainWorld(World):
     }
     location_name_to_id = item_pickups
 
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 5, 0)
     web = RiskOfWeb()
     total_revivals: int
 

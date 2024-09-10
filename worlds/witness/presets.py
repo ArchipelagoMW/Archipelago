@@ -3,6 +3,13 @@ from typing import Any, Dict
 from .options import *
 
 witness_option_presets: Dict[str, Dict[str, Any]] = {
+    # Best for beginners. This is just default options, but with a much easier goal that skips the Mountain puzzles.
+    "Beginner Mode": {
+        "victory_condition": VictoryCondition.option_mountain_box_short,
+
+        "puzzle_skip_amount": 15,
+    },
+
     # Great for short syncs & scratching that "speedrun with light routing elements" itch.
     "Short & Dense": {
         "progression_balancing": 30,
@@ -37,6 +44,8 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
         "death_link_amnesty": DeathLinkAmnesty.default,
+
+        "shuffle_dog": ShuffleDog.default,
     },
 
     # For relative beginners who want to move to the next step.
@@ -73,6 +82,8 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
         "death_link_amnesty": DeathLinkAmnesty.default,
+
+        "shuffle_dog": ShuffleDog.default,
     },
 
     # Allsanity but without the BS (no expert, no tedious EPs).
@@ -109,5 +120,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
         "death_link_amnesty": DeathLinkAmnesty.default,
+
+        "shuffle_dog": ShuffleDog.option_random_item,
     },
 }
