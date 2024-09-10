@@ -773,7 +773,7 @@ class SC2Logic:
         return (
             state.has_any({
                 item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR, item_names.DRAGOON, item_names.ADEPT,
-                item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.SKYLORD, item_names.PURGER
+                item_names.VOID_RAY, item_names.DESTROYER, item_names.TEMPEST, item_names.SKYLORD,
             }, self.player)
             or ((
                     state.has_any({
@@ -812,7 +812,7 @@ class SC2Logic:
         return (
             state.has_any({
                 item_names.SCOUT, item_names.TEMPEST,
-                item_names.CARRIER, item_names.SKYLORD, item_names.PURGER,
+                item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
                 item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER,
                 item_names.MOTHERSHIP,
             }, self.player)
@@ -855,7 +855,7 @@ class SC2Logic:
 
     def protoss_fleet(self, state: CollectionState) -> bool:
         return state.has_any({
-            item_names.CARRIER, item_names.SKYLORD, item_names.PURGER, item_names.TEMPEST, item_names.VOID_RAY,
+            item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME, item_names.TEMPEST, item_names.VOID_RAY,
             item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER
         }, self.player)
 
@@ -924,7 +924,7 @@ class SC2Logic:
         return (
             state.has_any({
                 item_names.ANNIHILATOR, item_names.ASCENDANT, item_names.TEMPEST, item_names.CARRIER,
-                item_names.SKYLORD, item_names.PURGER, item_names.VOID_RAY, item_names.WARP_RAY,
+                item_names.SKYLORD, item_names.TRIREME, item_names.VOID_RAY, item_names.WARP_RAY,
                 item_names.WRATHWALKER, item_names.VANGUARD
             }, self.player)
             or (state.has_any({item_names.IMMORTAL, item_names.STALWART}, self.player)
@@ -1070,7 +1070,7 @@ class SC2Logic:
         if self.take_over_ai_allies:
             return (
                 (
-                    state.has_any({item_names.BATTLECRUISER, item_names.CARRIER, item_names.SKYLORD, item_names.PURGER}, self.player)
+                    state.has_any({item_names.BATTLECRUISER, item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME}, self.player)
                     or (state.has(item_names.ULTRALISK, self.player)
                         and self.protoss_competent_anti_air(state)
                         and (

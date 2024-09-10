@@ -1687,7 +1687,7 @@ item_table = {
     item_names.SKYLORD:
         ItemData(33 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 12, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
-    item_names.PURGER:
+    item_names.TRIREME:
         ItemData(34 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit_2, 13, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"ext"}),
     item_names.SKIRMISHER:
@@ -1746,10 +1746,10 @@ item_table = {
     item_names.ARBITER_SPACETIME_ANCHOR: ItemData(330 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 0, SC2Race.PROTOSS, origin={"bw"}, parent_item=item_names.ARBITER),
     item_names.ARBITER_RESOURCE_EFFICIENCY: ItemData(331 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 1, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=item_names.ARBITER),
     item_names.ARBITER_ENHANCED_CLOAK_FIELD: ItemData(332 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 2, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=item_names.ARBITER),
-    item_names.CARRIER_SKYLORD_PURGER_GRAVITON_CATAPULT:
-        ItemData(333 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 3, SC2Race.PROTOSS, origin={"wol"}),
-    item_names.CARRIER_SKYLORD_PURGER_HULL_OF_PAST_GLORIES:
-        ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 4, SC2Race.PROTOSS, origin={"bw"}),
+    item_names.CARRIER_TRIREME_GRAVITON_CATAPULT:
+        ItemData(333 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 3, SC2Race.PROTOSS),
+    item_names.CARRIER_SKYLORD_TRIREME_HULL_OF_PAST_GLORIES:
+        ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 4, SC2Race.PROTOSS),
     item_names.VOID_RAY_DESTROYER_WARP_RAY_DAWNBRINGER_FLUX_VANES:
         ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_2, 5, SC2Race.PROTOSS, classification=ItemClassification.filler,
                  origin={"ext"}),

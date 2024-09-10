@@ -563,7 +563,7 @@ item_name_groups[ItemGroupNames.ROBO_UNITS] = robo_units = [
 item_name_groups[ItemGroupNames.STARGATE_UNITS] = stargate_units = [
     item_names.PHOENIX, item_names.SKIRMISHER, item_names.MIRAGE, item_names.CORSAIR,
     item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER,
-    item_names.CARRIER, item_names.SKYLORD, item_names.PURGER,
+    item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
     item_names.TEMPEST, item_names.SCOUT, item_names.MOTHERSHIP,
     item_names.ARBITER, item_names.ORACLE,
 ]
@@ -589,7 +589,7 @@ item_name_groups[ItemGroupNames.TAL_DARIM_UNITS] = [
 item_name_groups[ItemGroupNames.PURIFIER_UNITS] = [
     item_names.SENTINEL, item_names.ADEPT, item_names.INSTIGATOR, item_names.ENERGIZER,
     item_names.STALWART, item_names.COLOSSUS, item_names.DISRUPTOR,
-    item_names.MIRAGE, item_names.DAWNBRINGER, item_names.PURGER, item_names.TEMPEST,
+    item_names.MIRAGE, item_names.DAWNBRINGER, item_names.TRIREME, item_names.TEMPEST,
 ]
 item_name_groups[ItemGroupNames.SOA_ITEMS] = soa_items = [
     *[item_name for item_name, item_data in items.item_table.items() if item_data.type == items.ProtossItemType.Spear_Of_Adun],
