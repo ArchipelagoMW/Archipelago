@@ -11,6 +11,8 @@ using static System.Windows.Forms.Design.AxImporter;
 using Archipelago.Core;
 using Sly1AP.Models;
 using System.Windows;
+using System.Timers;
+using System.Security.Policy;
 
 namespace Sly1AP
 {
@@ -23,6 +25,7 @@ namespace Sly1AP
         public static Moves slyMoves = new Moves();
         public static SlyKeys keys = new SlyKeys();
         public static int GameCompletion { get; set; } = 0;
+        public static Random rnd = new Random();
         public Form1()
         {
             InitializeComponent();
@@ -96,7 +99,7 @@ namespace Sly1AP
             var NewLocations = new List<Location>(SentLocations);
             foreach (var item in NewItems)
             {
-                if (item.Id >= 10020001 & item.Id <= 100200014)
+                if (item.Id >= 10020001 & item.Id <= 10020014)
                 {
                     UpdateMoves(item.Id);
                 }
@@ -152,6 +155,14 @@ namespace Sly1AP
                 if (args.Item.Id >= 10020019 & args.Item.Id <= 10020020)
                 {
                     UpdateJunk(args.Item.Id);
+                }
+                if (args.Item.Id >= 10020021 & args.Item.Id <= 10020024)
+                {
+                    UpdateTraps(args.Item.Id);
+                }
+                if (args.Item.Id == 10020025)
+                {
+                    Client.SendGoalCompletion();
                 }
             };
             await Loop();
@@ -374,6 +385,89 @@ namespace Sly1AP
                 }
             }
             return;
+        }
+        public static void UpdateTraps(int id)
+        {
+            var TrapTimer = new System.Timers.Timer(10000);
+            TrapTimer.AutoReset = false;
+            //Traps
+            if (id == 10020021)
+            {
+                TrapTimer.Start();
+                if (TrapTimer.Interval != 0) // Check if the trap timer is not 0
+                {
+                   Memory.Write(0x20274AD0, 1060655596);
+                }
+                TrapTimer.Elapsed += (sender, e) =>
+                {
+                    Memory.Write(0x20274AD0, 0);
+                    Memory.Write(0x20274AD2, -49280);
+                    TrapTimer.Stop();
+                    TrapTimer.Dispose();
+                };
+            }
+            if (id == 10020022)
+            {
+                TrapTimer.Start();
+                int random = rnd.Next(1, 3);
+                if (TrapTimer.Interval != 0)
+                {
+                    if (random == 1)
+                    {
+                        Memory.Write(0x20261850, 1056964608);
+                    }
+                    if (random == 2)
+                    {
+                        Memory.Write(0x20261850, 1069547520);
+                    }
+                }
+                TrapTimer.Elapsed += (sender, e) =>
+                {
+                    Memory.Write(0x20261850, 1065353216);
+                    //Memory.Write(0x20261852, -128);
+                    TrapTimer.Stop();
+                    TrapTimer.Dispose();
+                };
+            }
+            if (id == 10020023)
+            {
+                TrapTimer.Start();
+                uint TrueMoves = slyMoves.SlyMoves;
+                while (TrapTimer.Enabled == true)
+                {
+                    if (TrapTimer.Enabled == true)
+                    {
+                        slyMoves.SlyMoves = 4;
+                        Memory.Write(0x20274F74, 1);
+                        Memory.Write(0x20262D18, 16);
+                        Memory.Write(0x20262D22, 0xFF);
+                        Memory.Write(0x20262D1A, 16);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                };
+                TrapTimer.Elapsed += (sender, e) =>
+                {
+                    Memory.Write(0x20262D18, 0);
+                    Memory.Write(0x20262D22, 0);
+                    Memory.Write(0x20262D1A, 0);
+                    Memory.Write(0x20262D1C, 0);
+                    return;
+                };
+                TrapTimer.Stop();
+                TrapTimer.Dispose();
+                slyMoves.SlyMoves = TrueMoves;
+            }
+            if (id == 10020024)
+            {
+                int random = rnd.Next(Helpers.bentley.Length);
+                string SoundFile = Helpers.bentley[random];
+                var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(SoundFile);
+                SoundPlayer player = new SoundPlayer(stream);
+                player.Play();
+            }
         }
         public static void UpdateValues()
         {

@@ -31,5 +31,10 @@ namespace Sly1AP
                 return jsonFile;
             }
         }
+        public static string[] bentley = { "Sly1AP.Bentley.Bentley1.wav", "Sly1AP.Bentley.Bentley2.wav", "Sly1AP.Bentley.Bentley3.wav", "Sly1AP.Bentley.Bentley4.wav", 
+                                           "Sly1AP.Bentley.Bentley5.wav", "Sly1AP.Bentley.Bentley6.wav", "Sly1AP.Bentley.Bentley7.wav", "Sly1AP.Bentley.Bentley8.wav",
+                                           "Sly1AP.Bentley.Bentley9.wav", "Sly1AP.Bentley.Bentley10.wav", "Sly1AP.Bentley.Bentley11.wav", "Sly1AP.Bentley.Bentley12.wav", 
+                                           "Sly1AP.Bentley.Bentley13.wav", "Sly1AP.Bentley.Bentley14.wav", "Sly1AP.Bentley.Bentley15.wav"};
+        //public List<string> BentleyLines = new List<string>(bentley);
     }
 }
