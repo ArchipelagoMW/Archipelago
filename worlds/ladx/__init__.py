@@ -510,7 +510,7 @@ class LinksAwakeningWorld(World):
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
 
-    def fill_slot_data(self) -> dict:
-        return {
-            "death_link": self.options.death_link.value
-        }
+    def fill_slot_data(self):
+        slot_data = { "death_link": self.options.death_link.value }
+
+        return slot_data

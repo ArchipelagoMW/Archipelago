@@ -475,6 +475,7 @@ class LinksAwakeningContext(CommonContext):
 
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
+        self.slot_data = {}
         if magpie:
             self.magpie_enabled = True
             self.magpie = MagpieBridge()
@@ -576,8 +577,10 @@ class LinksAwakeningContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
-            if 'death_link' in args['slot_data'] and args['slot_data']['death_link']:
-                self.update_death_link(True)
+            self.slot_data = args.get("slot_data", {})
+            if self.slot_data.get("death_link"):
+                Utils.async_start(self.update_death_link(True))
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
