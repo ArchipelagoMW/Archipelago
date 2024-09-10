@@ -72,6 +72,14 @@ class WebHostContext(Context):
         self.video = {}
         self.tags = ["AP", "WebHost"]
 
+    def __del__(self):
+        try:
+            import psutil
+            from Utils import format_SI_prefix
+            self.logger.debug(f"Context destroyed, Mem: {format_SI_prefix(psutil.Process().memory_info().rss, 1024)}iB")
+        except ImportError:
+            self.logger.debug("Context destroyed")
+
     def _load_game_data(self):
         for key, value in self.static_server_data.items():
             # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
@@ -249,6 +257,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 ctx = WebHostContext(static_server_data, logger)
                 ctx.load(room_id)
                 ctx.init_save()
+                assert ctx.server is None
                 try:
                     ctx.server = websockets.serve(
                         functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
@@ -279,6 +288,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     ctx.auto_shutdown = Room.get(id=room_id).timeout
                 if ctx.saving:
                     setattr(asyncio.current_task(), "save", lambda: ctx._save(True))
+                assert ctx.shutdown_task is None
                 ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
                 await ctx.shutdown_task
 
@@ -325,10 +335,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         def run(self):
             while 1:
                 next_room = rooms_to_run.get(block=True,  timeout=None)
+                gc.collect()
                 task = asyncio.run_coroutine_threadsafe(start_room(next_room), loop)
                 self._tasks.append(task)
                 task.add_done_callback(self._done)
                 logging.info(f"Starting room {next_room} on {name}.")
+                del task  # delete reference to task object
 
     starter = Starter()
     starter.daemon = True

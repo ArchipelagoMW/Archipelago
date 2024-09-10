@@ -1,6 +1,6 @@
 import unittest
 
-from BaseClasses import PlandoOptions
+from BaseClasses import MultiWorld, PlandoOptions
 from Options import ItemLinks
 from worlds.AutoWorld import AutoWorldRegister
 
@@ -47,3 +47,15 @@ class TestOptions(unittest.TestCase):
             self.assertIn("Bow", link.value[0]["item_pool"])
         
         # TODO test that the group created using these options has the items
+
+    def test_item_links_resolve(self):
+        """Test item link option resolves correctly."""
+        item_link_group = [{
+            "name": "ItemLinkTest",
+            "item_pool": ["Everything"],
+            "link_replacement": False,
+            "replacement_item": None,
+        }]
+        item_links = {1: ItemLinks.from_any(item_link_group), 2: ItemLinks.from_any(item_link_group)}
+        for link in item_links.values():
+            self.assertEqual(link.value[0], item_link_group[0])
