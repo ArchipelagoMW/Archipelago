@@ -150,6 +150,21 @@ sample_chao_names = [
 	"Hubert",
 	"Corvus",
 	"Nigel",
+	"Benjamin",
+	"Gooey",
+	"Maddy",
+	"AFGNCAAP",
+	"Reinhardt",
+	"Claire",
+	"Yoshi",
+	"Peasley",
+	"Faux",
+	"Naija",
+	"Kaiba",
+	"Hat Kid",
+	"TzTokJad",
+	"Sora",
+	"WoodMan",
 ]
 
 totally_real_item_names = [
@@ -240,6 +255,20 @@ totally_real_item_names = [
 	"Ladder",
 
 	"Visible Dots",
+
+	"CooCoo",
+
+	"Blueberry",
+
+	"Ear of Luigi",
+
+	"Mega Nut",
+
+	"DUELIST ALLIANCE",
+	"DUEL OVERLOAD",
+	"POWER OF THE ELEMENTS",
+	"S:P Little Knight",
+	"Red-Eyes Dark Dragoon",
 ]
 
 all_exits = [
