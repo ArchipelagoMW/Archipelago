@@ -108,7 +108,7 @@ class MarioLand2World(World):
         if self.options.auto_scroll_chances == "vanilla":
             self.auto_scroll_levels = [int(i in [19, 25, 30]) for i in range(32)]
         else:
-            self.auto_scroll_levels = [int(self.random.randint(1, 100) < self.options.auto_scroll_chances)
+            self.auto_scroll_levels = [int(self.random.randint(1, 100) <= self.options.auto_scroll_chances)
                                        for _ in range(32)]
 
         self.auto_scroll_levels[level_name_to_id["Mario's Castle"]] = 0
