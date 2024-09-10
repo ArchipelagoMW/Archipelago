@@ -9,7 +9,7 @@
 ## Instalando o mod Archipelago Mod usando Lumafly
 1. Abra o Lumafly e confirme que ele localizou sua pasta de instalação do hollow knight.
 2. Clique em "Install(instalar)" perto da opção "Archipelago" mod.
-   * Se quiser, instale tambem o "Archipelago Map Mod(mod do mapa do archipelago)" para usar-lo como rastreador dentro do jogo.
+   * Se quiser, instale também o "Archipelago Map Mod(mod do mapa do archipelago)" para usá-lo como rastreador dentro do jogo.
 3. Abra o jogo, tudo preparado!
 
 ### O que fazer se o Lumafly falha em encontrar a sua pasta de instalação
@@ -17,10 +17,10 @@
    * Xbox Game Pass:
       1. Entre no seu aplicativo XBox e mova seu mouse em cima de "Hollow Knight" na sua barra da esquerda. 
       2. Clique nos 3 pontos depois clique gerenciar.
-      3. Va nos arquivos e selecione procurar. 
+      3. Vá nos arquivos e selecione procurar. 
       4. Clique em "Hollow Knight", depois em "Conteúdo", depois clique na barra com o endereço e a copie.
    * Steam:
-      1. Você provavelmente colocou sua biblioteca Steam num local não padrão. Se esse for o caso você provavelmente sabe onde está
+      1. Você provavelmente colocou sua biblioteca Steam num local não padrão. Se esse for o caso você provavelmente sabe onde está.
          . Encontre sua biblioteca Steam, depois encontre a pasta do Hollow Knight e copie seu endereço.
          * Windows - `C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight`
          * Linux/Steam Deck - `~/.local/share/Steam/steamapps/common/Hollow Knight`
@@ -47,6 +47,6 @@ para gerar o YAML usando a interface gráfica.
    * Ou clique em começar e pause o jogo enquanto estiver nele.
    
 ## Dicas e outros comandos
-Enquanto jogar um multiworld, você pode interagir com o servidor usando varios comandos listado no
+Enquanto jogar um multiworld, você pode interagir com o servidor usando vários comandos listado no
 [Guia de comandos](/tutorial/Archipelago/commands/en). Você pode usar o cliente de texto do Archipelago para isso,
 que está incluido na ultima versão do [Archipelago software](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
