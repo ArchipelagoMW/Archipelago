@@ -542,7 +542,7 @@ class MultiWorld():
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
-    def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
+    def can_beat_game(self, starting_state: Optional[CollectionState] = None, locations: Set[Location] = None) -> bool:
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -551,14 +551,16 @@ class MultiWorld():
             state = CollectionState(self)
             if self.has_beaten_game(state):
                 return True
-        prog_locations = {location for location in self.get_locations() if location.item
-                          and location.item.advancement and location not in state.locations_checked}
 
-        while prog_locations:
+        if locations is None:
+            locations = {location for location in self.get_locations() if location.item
+                         and location.item.advancement and location not in state.locations_checked}
+
+        while locations:
             sphere: Set[Location] = set()
             # build up spheres of collection radius.
             # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-            for location in prog_locations:
+            for location in locations:
                 if location.can_reach(state):
                     sphere.add(location)
 
@@ -568,7 +570,7 @@ class MultiWorld():
 
             for location in sphere:
                 state.collect(location.item, True, location)
-            prog_locations -= sphere
+            locations -= sphere
 
             if self.has_beaten_game(state):
                 return True
