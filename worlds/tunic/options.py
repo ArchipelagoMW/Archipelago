@@ -167,7 +167,7 @@ class GrassFill(Range):
     Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with Grass Randomizer enabled.
     To keep things balanced, this option must be set to 95% or higher. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
     This option ignores items placed in your local_items or non_local_items.
-    This option does nothing on single player games or if Grass Randomizer is not enabled.
+    This option does nothing in single player games or if Grass Randomizer is not enabled.
     """
     internal_name = "grass_fill"
     display_name = "Grass Fill Percent"
