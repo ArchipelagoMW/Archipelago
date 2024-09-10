@@ -300,7 +300,7 @@ def mario_zone_4_boss(state, player):
 
 
 def mario_zone_4_coins(state, player, coins):
-    return coins <= 63 or not is_auto_scroll(state, player, "Mario Zone 4")
+    return coins <= 60 or not is_auto_scroll(state, player, "Mario Zone 4")
 
 
 def not_blocked_by_sharks(state, player):

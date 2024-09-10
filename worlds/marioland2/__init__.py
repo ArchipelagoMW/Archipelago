@@ -185,7 +185,12 @@ class MarioLand2World(World):
             if self.options.accessibility == "full" or self.options.auto_scroll_mode == "always":
                 for level in self.max_coin_locations:
                     if level in auto_scroll_max and self.auto_scroll_levels[level_name_to_id[level]] in (1, 3):
-                        self.max_coin_locations[level] = min(auto_scroll_max[level], self.max_coin_locations[level])
+                        if isinstance(auto_scroll_max[level], tuple):
+                            self.max_coin_locations[level] = min(
+                                auto_scroll_max[level][int(self.options.shuffle_midway_bells.value)],
+                                self.max_coin_locations[level])
+                        else:
+                            self.max_coin_locations[level] = min(auto_scroll_max[level], self.max_coin_locations[level])
             coinsanity_checks = min(sum(self.max_coin_locations.values()), coinsanity_checks)
             for i in range(coinsanity_checks - 31):
                 self.num_coin_locations.sort(key=lambda region: self.max_coin_locations[region[0]] / region[1])
