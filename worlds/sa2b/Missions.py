@@ -328,13 +328,33 @@ def get_mission_table(multiworld: MultiWorld, world: World, player: int):
 
 
 def get_first_and_last_cannons_core_missions(mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
-        mission_count = mission_count_map[30]
-        mission_order: typing.List[int] = mission_orders[mission_map[30]]
-        stage_prefix: str = stage_name_prefixes[30]
+    mission_count = mission_count_map[30]
+    mission_order: typing.List[int] = mission_orders[mission_map[30]]
+    stage_prefix: str = stage_name_prefixes[30]
 
-        first_mission_number = mission_order[0]
-        last_mission_number = mission_order[mission_count - 1]
-        first_location_name: str = stage_prefix + str(first_mission_number)
-        last_location_name: str = stage_prefix + str(last_mission_number)
+    first_mission_number = mission_order[0]
+    last_mission_number = mission_order[mission_count - 1]
+    first_location_name: str = stage_prefix + str(first_mission_number)
+    last_location_name: str = stage_prefix + str(last_mission_number)
 
-        return first_location_name, last_location_name
+    return first_location_name, last_location_name
+
+
+def print_mission_orders_to_spoiler(mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int], player_name: str, spoiler_handle: typing.TextIO):
+    spoiler_handle.write("\n")
+    header_text = "Sonic Adventure 2 Mission Orders for {}:\n"
+    header_text = header_text.format(player_name)
+    spoiler_handle.write(header_text)
+
+    for stage in range(31):
+        mission_count = mission_count_map[stage]
+        mission_order: typing.List[int] = mission_orders[mission_map[stage]]
+        stage_prefix: str = stage_name_prefixes[stage]
+
+        for mission in range(mission_count):
+            stage_prefix += str(mission_order[mission]) + " "
+
+        spoiler_handle.write(stage_prefix)
+        spoiler_handle.write("\n")
+
+
