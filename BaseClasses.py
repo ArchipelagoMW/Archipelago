@@ -1461,15 +1461,12 @@ class Spoiler:
 
             return True
 
-        restore_later: Dict[Location, Item] = {}
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
             # The sphere is modified while iterating, so a tuple copy of the sphere is iterated instead.
             for location in tuple(sphere):
                 # we remove the item at location and check if game is still beatable
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
                               location.item.player)
-                old_item = location.item
-                location.item = None
 
                 sphere.remove(location)
 
@@ -1483,12 +1480,8 @@ class Spoiler:
                 for sphere_location in sphere:
                     state.collect(sphere_location.item, True, sphere_location)
 
-                if try_to_beat_game_and_update_spheres(state):
-                    # The item at this location is not needed to beat the game.
-                    restore_later[location] = old_item
-                else:
-                    # The item at this location is needed to beat the game.
-                    location.item = old_item
+                if not try_to_beat_game_and_update_spheres(state):
+                    # The item at this location is needed to beat the game, so add it back into the sphere.
                     sphere.add(location)
 
             if sphere:
@@ -1522,9 +1515,6 @@ class Spoiler:
             self.create_paths(state, required_spheres)
 
         # repair the multiworld again
-        for location, item in restore_later.items():
-            location.item = item
-
         for item in removed_precollected:
             multiworld.push_precollected(item)
 
