@@ -54,7 +54,7 @@ def tree_zone_1_coins(state, player, coins):
 
 
 def tree_zone_2_normal_exit(state, player):
-    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player),
+    return has_pipe_right(state, player) or state.has("Tree Zone 2 Midway Bell", player)
 
 
 def tree_zone_2_secret_exit(state, player):
