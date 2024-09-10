@@ -1035,15 +1035,18 @@ def run_as_textclient(*args):
     parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
-    args = parser.parse_args(args if args else None)  # this is necessary as long as CommonClient itself is launchable
+    args = parser.parse_args(args)
 
     if args.url:
         url = urllib.parse.urlparse(args.url)
-        args.connect = url.netloc
-        if url.username:
-            args.name = urllib.parse.unquote(url.username)
-        if url.password:
-            args.password = urllib.parse.unquote(url.password)
+        if url.scheme == "archipelago":
+            args.connect = url.netloc
+            if url.username:
+                args.name = urllib.parse.unquote(url.username)
+            if url.password:
+                args.password = urllib.parse.unquote(url.password)
+        else:
+            parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
 
     colorama.init()
 
@@ -1053,4 +1056,4 @@ def run_as_textclient(*args):
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)  # force log-level to work around log level resetting to WARNING
-    run_as_textclient()
+    run_as_textclient(*sys.argv[1:])  # default value for parse_args
