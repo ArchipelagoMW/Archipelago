@@ -4,7 +4,7 @@ from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
-    big_upgrades, filler, trap
+    big_upgrades, filler, trap, bundles
 from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
     addshapesanity, addshapesanity_ut
 from .presets import options_presets
@@ -158,6 +158,9 @@ class ShapezWorld(World):
 
     def create_item(self, name: str) -> Item:
         return ShapezItem(name, item_table[name], self.item_name_to_id[name], self.player)
+
+    def get_filler_item_name(self) -> str:
+        return list(bundles.keys())[self.random.randint(0, len(bundles)-1)]
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
