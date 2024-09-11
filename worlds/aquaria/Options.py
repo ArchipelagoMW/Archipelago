@@ -29,7 +29,10 @@ class DishRandomizer(Toggle):
 
 
 class TurtleRandomizer(Choice):
-    """Randomize the transportation turtle."""
+    """
+    Randomize the transportation turtle.
+    If the objective is killing the four enemy gods, the abyss and body transportation turtle cannot be obtained.
+    """
     display_name = "Turtle Randomizer"
     option_none = 0
     alias_off = 0
@@ -80,6 +83,7 @@ class BigBossesToBeat(Range):
     """
     The number of big bosses to beat before having access to the creator (the final boss). The big bosses are
     "Fallen God", "Mithalan God", "Drunian God", "Lumerean God" and "The Golem".
+    Have no effect if the objective is killing the four enemy gods.
     """
     display_name = "Big bosses to beat"
     range_start = 0
@@ -89,10 +93,12 @@ class BigBossesToBeat(Range):
 
 class MiniBossesToBeat(Range):
     """
-    The number of minibosses to beat before having access to the creator (the final boss). The minibosses are
+    The number of minibosses to beat before having access to the goal. The minibosses are
     "Nautilus Prime", "Blaster Peg Prime", "Mergog", "Mithalan priests", "Octopus Prime", "Crabbius Maximus",
     "Mantis Shrimp Prime" and "King Jellyfish God Prime".
     Note that the Energy Statue and Simon Says are not minibosses.
+    Also note that if the objective is killing the four enemy gods, it might be needed to go in the abyss and
+    buuble cave to kill "King Jellyfish God Prime" and "Mantis Shrimp Prime".
     """
     display_name = "Minibosses to beat"
     range_start = 0
@@ -102,11 +108,13 @@ class MiniBossesToBeat(Range):
 
 class Objective(Choice):
     """
-    The game objective can be to kill the creator or to kill the creator after obtaining all three secret memories.
+    The game objective can be to kill the creator, to kill the creator after obtaining all three secret memories or
+    to kill the four enemy gods ("Fallen God", "Mithalan God", "Drunian God", "Lumerean God").
     """
     display_name = "Objective"
     option_kill_the_creator = 0
     option_obtain_secrets_and_kill_the_creator = 1
+    option_killing_the_four_gods = 2
     default = 0
 
 
@@ -185,6 +193,7 @@ class NoProgressionAbyss(Toggle):
     """
     Make sure that there are no progression items in the Abyss
     Can be usefull to get smaller runs.
+    Have no effect if the objective is killing the four enemy gods.
     """
     display_name = "No progression in the Abyss"
 
@@ -193,6 +202,7 @@ class NoProgressionSunkenCity(Toggle):
     """
     Make sure that there are no progression items in the Sunken City
     Can be usefull to get smaller runs.
+    Have no effect if the objective is killing the four enemy gods.
     """
     display_name = "No progression in the Sunken City"
 
@@ -201,16 +211,24 @@ class NoProgressionBody(Toggle):
     """
     Make sure that there are no progression items in the Body (including the before boss transturtle room
     and the boss location. Can be usefull to get smaller runs.
+    Have no effect if the objective is killing the four enemy gods.
     """
     display_name = "No progression in the Body"
 
 
-class LightNeededToGetToDarkPlaces(DefaultOnToggle):
+class LightNeededToGetToDarkPlaces(Choice):
     """
     Make sure that the sun form or the dumbo pet can be acquired before getting to dark places.
     Be aware that navigating in dark places without light is extremely difficult.
+    You can also force the sun form to be accessible.
     """
     display_name = "Light needed to get to dark places"
+    option_off = 0
+    alias_false = 0
+    option_on = 1
+    alias_true = 1
+    option_sun_form = 2
+    default = 1
 
 
 class BindSongNeededToGetUnderRockBulb(Toggle):
@@ -222,8 +240,8 @@ class BindSongNeededToGetUnderRockBulb(Toggle):
 
 class BlindGoal(Toggle):
     """
-    Hide the goal's requirements from the help page so that you have to go to the last boss door to know
-    what is needed to access the boss.
+    Hide the goal's requirements from the help page so that you have to access the goal (accessing the last boss door
+     or beating the four gods) to see what is needed.
     """
     display_name = "Hide the goal's requirements"
 

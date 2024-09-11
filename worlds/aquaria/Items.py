@@ -232,6 +232,7 @@ class ItemNames:
     SECOND_SECRET_OBTAINED = "Second Secret obtained"
     THIRD_SECRET_OBTAINED = "Third Secret obtained"
 
+
 """Information data for every (not event) item."""
 item_table = {
     #       name:           ID,    Nb,   Item Type,        Item Group
@@ -372,3 +373,18 @@ item_table = {
     ItemNames.TRANSTURTLE_SIMON_SAYS: ItemData(698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
     ItemNames.TRANSTURTLE_ARNASSI_RUINS: ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
 }
+
+
+four_gods_excludes = [ItemNames.ANEMONE, ItemNames.ARNASSI_STATUE, ItemNames.BIG_SEED, ItemNames.GLOWING_SEED,
+                      ItemNames.BLACK_PEARL, ItemNames.TOOTH, ItemNames.ENERGY_STATUE, ItemNames.KROTITE_ARMOR,
+                      ItemNames.GOLDEN_STARFISH, ItemNames.GOLDEN_GEAR, ItemNames.JELLY_BEACON, ItemNames.JELLY_COSTUME,
+                      ItemNames.JELLY_PLANT, ItemNames.MITHALAS_DOLL, ItemNames.MITHALAN_DRESS,
+                      ItemNames.MITHALAS_BANNER, ItemNames.MITHALAS_POT, ItemNames.MUTANT_COSTUME, ItemNames.SEED_BAG,
+                      ItemNames.KING_S_SKULL, ItemNames.SONG_PLANT_SPORE, ItemNames.STONE_HEAD, ItemNames.SUN_KEY,
+                      ItemNames.GIRL_COSTUME, ItemNames.ODD_CONTAINER, ItemNames.TRIDENT, ItemNames.TURTLE_EGG,
+                      ItemNames.JELLY_EGG, ItemNames.URCHIN_COSTUME, ItemNames.BABY_WALKER, ItemNames.TRANSTURTLE_ABYSS,
+                      ItemNames.TRANSTURTLE_BODY, ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM,
+                      ItemNames.RAINBOW_MUSHROOM, ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE,
+                      ItemNames.LEAF_POULTICE, ItemNames.LEECHING_POULTICE, ItemNames.LEECHING_POULTICE,
+                      ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT,
+                      ItemNames.SEA_LOAF_X_2, ItemNames.ARCANE_POULTICE]

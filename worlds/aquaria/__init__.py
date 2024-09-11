@@ -7,7 +7,7 @@ Description: Main module for Aquaria game multiworld randomizer
 from typing import List, Dict, ClassVar, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, MultiWorld, ItemClassification
-from .Items import item_table, AquariaItem, ItemType, ItemGroup, ItemNames
+from .Items import item_table, AquariaItem, ItemType, ItemGroup, ItemNames, four_gods_excludes
 from .Locations import location_table, AquariaLocationNames
 from .Options import (AquariaOptions, IngredientRandomizer, TurtleRandomizer, EarlyBindSong, EarlyEnergyForm,
                       UnconfineHomeWater, Objective)
@@ -93,7 +93,7 @@ class AquariaWorld(World):
     options: AquariaOptions
     "Every options of the world"
 
-    regions: AquariaRegions
+    regions: AquariaRegions | None
     "Used to manage Regions"
 
     exclude: List[str]
@@ -101,7 +101,7 @@ class AquariaWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
         super(AquariaWorld, self).__init__(multiworld, player)
-        self.regions = AquariaRegions(multiworld, player)
+        self.regions = None
         self.ingredients_substitution = []
         self.exclude = []
 
@@ -109,9 +109,10 @@ class AquariaWorld(World):
         """
         Create every Region in `regions`
         """
-        self.regions.add_regions_to_world()
-        self.regions.connect_regions()
-        self.regions.add_event_locations()
+        self.regions = AquariaRegions(self.multiworld, self.player, self.options)
+        self.regions.add_regions_to_world(self.options)
+        self.regions.connect_regions(self.options)
+        self.regions.add_event_locations(self.options)
 
     def create_item(self, name: str) -> AquariaItem:
         """
@@ -131,12 +132,13 @@ class AquariaWorld(World):
 
         return result
 
-    def __pre_fill_item(self, item_name: str, location_name: str, precollected) -> None:
+    def __pre_fill_item(self, item_name: str, location_name: str, classification: ItemClassification,
+                        precollected) -> None:
         """Pre-assign an item to a location"""
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            item = AquariaItem(item_name, ItemClassification.useful, data.id, self.player)
+            item = AquariaItem(item_name, classification, data.id, self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
@@ -151,37 +153,47 @@ class AquariaWorld(World):
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
+        local_exclude = []
+        if self.options.objective.value == Objective.option_killing_the_four_gods:
+            local_exclude = four_gods_excludes[:]
         if self.options.turtle_randomizer.value != TurtleRandomizer.option_none:
-            if self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final:
+            if self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final and \
+               self.options.objective.value != Objective.option_killing_the_four_gods:
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
-                                     precollected)
+                                     ItemClassification.progression, precollected)
         else:
             self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT,
-                                 AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE, precollected)
+                                 AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE,
+                                 ItemClassification.progression, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT,
-                                 AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
+                                 AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE,
+                                 ItemClassification.progression, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS,
                                  AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE,
-                                 precollected)
+                                 ItemClassification.progression, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST,
                                  AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE,
-                                 precollected)
+                                 ItemClassification.progression, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE,
-                                 precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
-                                 precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
-                                 precollected)
+                                 ItemClassification.progression, precollected)
+            if self.options.objective.value != Objective.option_killing_the_four_gods:
+                self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
+                                     ItemClassification.progression, precollected)
+                self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
+                                     ItemClassification.progression, precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
             self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE,
-                                 precollected)
+                                 ItemClassification.progression, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
-                                 precollected)
+                                 ItemClassification.progression, precollected)
         for name, data in item_table.items():
             if name not in self.exclude:
                 for i in range(data.count):
-                    item = self.create_item(name)
-                    self.multiworld.itempool.append(item)
+                    if name in local_exclude:
+                        local_exclude.remove(name)
+                    else:
+                        item = self.create_item(name)
+                        self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
         """
@@ -222,22 +234,17 @@ class AquariaWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         """
-        Send some usefull informations to the client.
+        Send some useful information to the client.
         """
-        location_items = [-1] * len(Locations.location_table)
-        for location in self.multiworld.get_filled_locations(self.player):
-            if location.address != None:
-                if (location.item.player != self.player):
-                    location_items[location.address - self.base_id] = -(location.item.classification.as_flag() + 1)
-                else:
-                    location_items[location.address - self.base_id] = location.item.code - self.base_id
-
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarian_translate": bool(self.options.aquarian_translation.value),
                 "blind_goal": bool(self.options.blind_goal.value),
                 "secret_needed":
                     self.options.objective.value == Objective.option_obtain_secrets_and_kill_the_creator,
-                "locations_item_types": location_items,
+                "kill_creator_goal":
+                    self.options.objective.value == Objective.option_obtain_secrets_and_kill_the_creator or
+                    self.options.objective.value == Objective.option_kill_the_creator,
+                "four_gods_goal": self.options.objective.value == Objective.option_killing_the_four_gods,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
