@@ -13,7 +13,7 @@
 - Rastreador Sonic Adventure 2 (Tracker)
 	- PopTracker de: [Página de Lançamentos de PopTracker](https://github.com/black-sliver/PopTracker/releases/)
 	- Sonic Adventure 2: Battle Archipelago PopTracker pack de: [Página de Lançamentos de SA2B AP Tracker](https://github.com/PoryGone/SA2B_AP_Tracker/releases/)
-- Mods "Quality of life"
+- Mods qualidade de vida
 	- SA2 Volume Controls de: [Página de Mod de SA2 Volume Controls](https://gamebanana.com/mods/381193)
 - Sonic Adventure DX de: [Página da Loja Steam de Sonic Adventure DX](https://store.steampowered.com/app/71250/Sonic_Adventure_DX/)
 	- Para o funcionamento da opção `SADX Music` (Veja "Opções Adicionais" para instruções).
@@ -24,9 +24,9 @@
 
 2. Abra o jogo sem mods pelo menos uma vez.
 
-3. Instale SA Mod Manager como de acordo com [suas instruções](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file).
+3. Instale SA Mod Manager de acordo com [suas instruções](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file).
 
-4. Extraia o mod do Archipelago no diretório `/mods` na pasta em que você instalou Sonic Adventure 2: Battle, a fim que `/mods/SA2B_Archipelago` seja um endereço válido.
+4. Extraia o mod do Archipelago na pasta `/mods` na pasta em que você instalou Sonic Adventure 2: Battle, a fim que `/mods/SA2B_Archipelago` seja um endereço válido.
 
 5. Na pasta SA2B_Archipelago, execute o script `CopyAPCppDLL.bat` (a janela vai rapidamente abrir e fechar sozinha).
 
@@ -40,7 +40,7 @@
 
 3. Abra o jogo sem mods pelo menos uma vez.
 
-4. Crie um diretório `/mods` e outro diretório `/SAManager` na pasta em que você instalou Sonic Adventure 2: Battle.
+4. Crie uma pasta `/mods` e outra pasta `/SAManager` na pasta em que você instalou Sonic Adventure 2: Battle.
 
 5. Instale SA Mod Manager como de acordo com [suas instruções](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). Especificamente, extraia o arquivo SAModManager.exe para a pasta em que Sonic Adventure 2: Battle foi instalado. Para executar o programa, adicione `SAModManager.exe` como um jogo não Steam (No canto inferior esquerdo da biblioteca Steam). Nas propriedades para SA Mod Manager na Steam, habilite o uso de Proton como ferramenta de compatibilidade.
 
@@ -102,7 +102,7 @@ Se você deseja usar a opção `SADX Music` do Randomizer, você deve possuir um
 	- Limite o framerate usando o mod manager:
 		1. Execute `SAModManager.exe`.
 		2. Selecione a aba `Definições do Jogo`, e então selecione a subaba `Correções`.
-		3. Marque a caixinha do `Lock Framerate` na seção Correções.
+		3. Marque a caixinha do `Lock Framerate` (Limitar Framerate) na seção Correções.
 		4. Aperte o botão `Salvar`.
 	- Se estiver usando uma placa de vídeo da NVidia:
 		1. Abra NVIDIA Control Panel.
@@ -114,7 +114,7 @@ Se você deseja usar a opção `SADX Music` do Randomizer, você deve possuir um
 
 - Inputs de Controle não estão funcionando.
 	1. Execute Launcher.exe na mesma pasta em que instalou Sonic Adventure 2: Battle.
-	2. Selecione a aba `Player` e re-selecione o controle do player 1.
+	2. Selecione a aba `Player` e re-selecione o controle do método de input do player 1.
 	3. Clique o botão `Save settings and launch SONIC ADVENTURE 2`. (Quaisquer configurações do mod manager irão aplicar mesmo se o jogo for iniciado dessa maneira ao invés de iniciado pelo mod manager)
 	
 -  O jogo crasha após logos.
