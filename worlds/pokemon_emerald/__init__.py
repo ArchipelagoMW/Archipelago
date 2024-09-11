@@ -711,6 +711,7 @@ class PokemonEmeraldWorld(World):
             "trainersanity",
             "modify_118",
             "death_link",
+            "normalize_encounter_rates",
         )
         slot_data["free_fly_location_id"] = self.free_fly_location_id
         slot_data["hm_requirements"] = self.hm_requirements
