@@ -53,6 +53,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
+from kivy.uix.dropdown import DropDown
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
@@ -298,16 +299,11 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
 
-status_chain: typing.Dict[HintStatus, HintStatus] = {
-    HintStatus.HINT_UNSPECIFIED: HintStatus.HINT_NO_PRIORITY,
-    HintStatus.HINT_NO_PRIORITY: HintStatus.HINT_AVOID,
-    HintStatus.HINT_AVOID: HintStatus.HINT_PRIORITY,
-    HintStatus.HINT_PRIORITY: HintStatus.HINT_NO_PRIORITY,
-}
 class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
     index = None
+    dropdown: DropDown
 
     def __init__(self):
         super(HintLabel, self).__init__()
@@ -320,6 +316,28 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.hint = {}
         for child in self.children:
             child.bind(texture_size=self.set_height)
+
+
+        ctx = App.get_running_app().ctx
+        self.dropdown = DropDown()
+
+        def set_value(button):
+            self.dropdown.select(button.status)
+
+        def select(instance, data):
+            ctx.update_hint(self.hint["location"],
+                            self.hint["finding_player"],
+                            data)
+
+        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
+            name = str(status.name).replace("HINT_", "").replace("_", " ").title()
+            status_button = Button(text=name, size_hint_y=None, height=dp(50))
+            status_button.status = status
+            status_button.bind(on_release=set_value)
+            self.dropdown.add_widget(status_button)
+
+        self.dropdown.bind(on_select=select)
+        self.dropdown.bind(on_dismiss=lambda x: print("Dismissed"))
 
     def set_height(self, instance, value):
         self.height = max([child.texture_size[1] for child in self.children])
@@ -349,9 +367,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                         return
                     ctx = App.get_running_app().ctx
                     if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
-                        ctx.update_hint(self.hint["location"],
-                                        self.hint["finding_player"],
-                                        status_chain.get(self.hint["status"], HintStatus.HINT_UNSPECIFIED))
+                        # open a dropdown
+                        self.dropdown.open(self.ids["status"])
                 else:
                     if self.selected:
                         self.parent.clear_selection()
