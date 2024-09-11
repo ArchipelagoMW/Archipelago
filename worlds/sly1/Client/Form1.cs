@@ -432,7 +432,21 @@ namespace Sly1AP
             if (id == 10020023)
             {
                 TrapTimer.Start();
-                uint TrueMoves = slyMoves.SlyMoves;
+                uint TrueMoves = 4;
+                if (slyMoves.SlyMoves != 4)
+                {
+                    TrueMoves = slyMoves.SlyMoves;
+                }
+
+                //Get the current position of Sly's data in code.
+                uint SlyPos = (Memory.ReadUInt(0x20262E10) + 536870912) + 8736;
+                uint BodyPos = SlyPos + 8;
+                uint CanePos = SlyPos + 28;
+                //Reset Sly's current action to 0.
+                Memory.Write(SlyPos, 0);
+                Memory.Write(BodyPos, 0);
+                Memory.Write(CanePos, 0);
+
                 while (TrapTimer.Enabled == true)
                 {
                     if (TrapTimer.Enabled == true)
