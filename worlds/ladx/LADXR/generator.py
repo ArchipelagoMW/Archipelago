@@ -268,6 +268,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
 
     def gen_hint():
+        if not world.options.in_game_hints:
+            return 'Hints are disabled!'
         chance = world.random.uniform(0, 1)
         if chance < JUNK_HINT:
             return None
