@@ -137,10 +137,14 @@ class SC2Logic:
                 item_names.MISSILE_TURRET, item_names.THOR, item_names.WAR_PIGS, item_names.SPARTAN_COMPANY,
                 item_names.HELS_ANGELS, item_names.BATTLECRUISER, item_names.MARINE, item_names.WRAITH,
                 item_names.VALKYRIE, item_names.CYCLONE, item_names.WINGED_NIGHTMARES, item_names.BRYNHILDS,
+                item_names.SKY_FURY,
             ), self.player)
             or self.terran_competent_anti_air(state)
             or self.advanced_tactics and (
-                state.has_any((item_names.GHOST, item_names.SPECTRE, item_names.WIDOW_MINE, item_names.LIBERATOR), self.player)
+                state.has_any((
+                    item_names.GHOST, item_names.SPECTRE, item_names.WIDOW_MINE, item_names.LIBERATOR,
+                    item_names.PRIDE_OF_AUGUSTRGRAD,
+                ), self.player)
                 or (
                     state.has_all((item_names.SIEGE_TANK, item_names.MEDIVAC), self.player)
                     and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2

@@ -35,6 +35,9 @@ WIDOW_MINE     = "Widow Mine"
 CYCLONE        = "Cyclone"
 HERC           = "HERC"
 WARHOUND       = "Warhound"
+# Elites
+PRIDE_OF_AUGUSTRGRAD = "Pride of Augustgrad"
+SKY_FURY             = "Sky Fury"
 
 # Terran Buildings
 BUNKER                              = "Bunker"
@@ -289,6 +292,7 @@ VIKING_RIPWAVE_MISSILES                            = "Ripwave Missiles (Viking)"
 VIKING_SMART_SERVOS                                = "Smart Servos (Viking)"
 VIKING_SHREDDER_ROUNDS                             = "Shredder Rounds (Viking)"
 VIKING_WILD_MISSILES                               = "W.I.L.D. Missiles (Viking)"
+VIKING_AESIR_TURBINES                              = "Aesir Turbines (Viking)"
 VULTURE_AUTO_LAUNCHERS                             = "Auto Launchers (Vulture)"
 VULTURE_ION_THRUSTERS                              = "Ion Thrusters (Vulture)"
 VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE         = "Progressive Replenishable Magazine (Vulture)"

@@ -107,6 +107,7 @@ class ItemGroupNames:
     TERRAN_PROGRESSIVE_UPGRADES = "Terran Progressive Upgrades"
     TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES = "Terran Original Progressive Upgrades"
     """Progressive items where level 1 appeared in WoL"""
+    MENGSK_UNITS = "Mengsk Units"
 
     ZERG_ITEMS = "Zerg Items"
     ZERG_UNITS = "Zerg Units"
@@ -197,7 +198,7 @@ item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
 item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.MEDIVAC, item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
     item_names.BATTLECRUISER, item_names.HERCULES, item_names.SCIENCE_VESSEL, item_names.RAVEN,
-    item_names.LIBERATOR, item_names.VALKYRIE,
+    item_names.LIBERATOR, item_names.VALKYRIE, item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
 ]
 item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
     item_name for item_name, item_data in items.item_table.items()
@@ -372,6 +373,9 @@ item_name_groups[ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS] = nco_units + nco_bas
 item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressive_items = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type in (items.TerranItemType.Progressive, items.TerranItemType.Progressive_2)
+]
+item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
+    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
 ]
 item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     wol_units

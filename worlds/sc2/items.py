@@ -207,6 +207,13 @@ item_table = {
     item_names.WARHOUND:
         ItemData(23 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 27, SC2Race.TERRAN,
                  classification=ItemClassification.progression, origin={"ext"}),
+    # Elites
+    item_names.PRIDE_OF_AUGUSTRGRAD:
+        ItemData(50 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 28, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, origin={"ext"}),
+    item_names.SKY_FURY:
+        ItemData(51 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 29, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, origin={"ext"}),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
@@ -984,6 +991,9 @@ item_table = {
     item_names.PREDATOR_ADAPTIVE_DEFENSES:
         ItemData(753 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 7, SC2Race.TERRAN,
                  parent_item=item_names.PREDATOR, origin={"ext"}),
+    item_names.VIKING_AESIR_TURBINES:
+        ItemData(754 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 8, SC2Race.TERRAN,
+                 parent_item=item_names.VIKING, origin={"ext"}),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:

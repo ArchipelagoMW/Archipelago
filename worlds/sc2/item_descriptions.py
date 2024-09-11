@@ -150,6 +150,11 @@ item_descriptions = {
     item_names.WARHOUND: inspect.cleandoc("""
         Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
     """),
+    item_names.PRIDE_OF_AUGUSTRGRAD: "Powerful Royal Guard Warship.",
+    item_names.SKY_FURY: inspect.cleandoc("""
+        Durable Royal Guard support flyer. Loaded with strong anti-capital air missiles. 
+        Can switch into Assault Mode to attack ground units.
+    """),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "vehicles"),
@@ -454,6 +459,7 @@ item_descriptions = {
     item_names.SCIENCE_VESSEL_TACTICAL_JUMP: "Allows Science Vessels to warp to a target location anywhere on the map.",
     item_names.LIBERATOR_COMPRESSED_ROCKET_FUEL: "Increases Liberator attack range in Fighter mode by 4.",
     item_names.BATTLECRUISER_FIELD_ASSIST_TARGETING_SYSTEM: "Battlecruisers increase the attack range of nearby friendly ground units by 1.",
+    item_names.VIKING_AESIR_TURBINES: "Increases Viking movement speed by 55%.",
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",
