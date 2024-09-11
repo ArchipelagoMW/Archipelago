@@ -337,7 +337,6 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             self.dropdown.add_widget(status_button)
 
         self.dropdown.bind(on_select=select)
-        self.dropdown.bind(on_dismiss=lambda x: print("Dismissed"))
 
     def set_height(self, instance, value):
         self.height = max([child.texture_size[1] for child in self.children])
