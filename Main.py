@@ -34,7 +34,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     multiworld = MultiWorld(args.multi)
 
     logger = logging.getLogger()
-
     multiworld.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     multiworld.plando_options = args.plando_options
     multiworld.plando_items = args.plando_items.copy()
