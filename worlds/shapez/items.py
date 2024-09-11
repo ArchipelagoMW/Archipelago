@@ -137,7 +137,7 @@ def filler(random: float) -> str:
         return list(bundles.keys())[int((random-0.66)*len(bundles)/0.34)]
 
 
-item_descriptions = {  # TODO
+item_descriptions = {
     # Items
     "Balancer": "A routing building, that can merge two belts into one, split a belt in two, " +
                 "or balance the items of two belts",

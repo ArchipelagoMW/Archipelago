@@ -10,7 +10,7 @@ from .locations import ShapezLocation, addlevels, all_locations, addupgrades, ad
 from .presets import options_presets, options_presets_lite
 from .options import ShapezOptions, ShapezLiteOptions
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Item, Tutorial, LocationProgressType, Location
+from BaseClasses import Region, Item, Tutorial, LocationProgressType
 from .regions import create_shapez_regions
 
 
@@ -196,7 +196,7 @@ class ShapezWorld(World):
                                                              self.level_logic, self.upgrade_logic,
                                                              self.options.early_balancer_tunnel_and_trash.current_key,
                                                              self.options.goal.current_key, menu_region,
-                                                             self.item_type))
+                                                             self.item_type, self.location_type))
 
         # Connect Menu to rest of regions
         main_region = self.multiworld.get_region("Main", self.player)
