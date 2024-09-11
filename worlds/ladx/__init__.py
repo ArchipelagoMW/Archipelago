@@ -512,3 +512,6 @@ class LinksAwakeningWorld(World):
         if change and item.name in self.rupees:
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
+
+    def get_filler_item_name(self) -> str:
+        return "Nothing"
