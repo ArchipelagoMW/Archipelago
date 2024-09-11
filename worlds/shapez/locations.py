@@ -229,7 +229,7 @@ achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter
                                     "I need trains", "A bit early?", "GPS"]
 
 all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
-                            + [f"Level {x}" for x in range(1, 1001)]
+                            + [f"Level {x}" for x in range(1, 1000)]
                             + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 1001)]
                             + list(shapesanity_simple)
                             + list(shapesanity_1_4)

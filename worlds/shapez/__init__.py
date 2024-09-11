@@ -56,7 +56,7 @@ class ShapezWorld(World):
     category_random_logic_amounts: Dict[str, int] = {"belt": 0, "miner": 1, "processors": 2, "painting": 3}
     maxlevel: int = 25
     finaltier: int = 8
-    included_locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
+    included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
     client_seed: int = 123  # Placeholder value
 
     item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
