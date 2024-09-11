@@ -156,7 +156,7 @@ namespace Sly1AP
                 {
                     UpdateJunk(args.Item.Id);
                 }
-                if (args.Item.Id >= 10020021 & args.Item.Id <= 10020024)
+                if (args.Item.Id >= 10020026 & args.Item.Id <= 10020029)
                 {
                     UpdateTraps(args.Item.Id);
                 }
@@ -391,7 +391,7 @@ namespace Sly1AP
             var TrapTimer = new System.Timers.Timer(10000);
             TrapTimer.AutoReset = false;
             //Traps
-            if (id == 10020021)
+            if (id == 10020026)
             {
                 TrapTimer.Start();
                 if (TrapTimer.Interval != 0) // Check if the trap timer is not 0
@@ -406,7 +406,7 @@ namespace Sly1AP
                     TrapTimer.Dispose();
                 };
             }
-            if (id == 10020022)
+            if (id == 10020027)
             {
                 TrapTimer.Start();
                 int random = rnd.Next(1, 3);
@@ -429,7 +429,7 @@ namespace Sly1AP
                     TrapTimer.Dispose();
                 };
             }
-            if (id == 10020023)
+            if (id == 10020028)
             {
                 TrapTimer.Start();
                 uint TrueMoves = 4;
@@ -474,7 +474,7 @@ namespace Sly1AP
                 TrapTimer.Dispose();
                 slyMoves.SlyMoves = TrueMoves;
             }
-            if (id == 10020024)
+            if (id == 10020029)
             {
                 int random = rnd.Next(Helpers.bentley.Length);
                 string SoundFile = Helpers.bentley[random];

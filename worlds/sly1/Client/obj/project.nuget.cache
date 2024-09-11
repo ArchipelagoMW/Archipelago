@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "sznxDyNw8+s=",
+  "dgSpecHash": "4f63If0Nvb+yOSPOI4lK5NgaeiIxUznqMb0h4Ix3lpNkxDrE1j3mhQTl3gGtttPzSLAHWe3fD3f8BQwyczAvZQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
+  "projectFilePath": "c:\\workspace\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.core\\0.0.11\\archipelago.core.0.0.11.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.multiclient.net\\6.3.1\\archipelago.multiclient.net.6.3.1.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.pcsx2\\0.0.5\\archipelago.pcsx2.0.0.5.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512"
+    "C:\\Users\\Hunter Oppel\\.nuget\\packages\\archipelago.core\\0.0.11\\archipelago.core.0.0.11.nupkg.sha512",
+    "C:\\Users\\Hunter Oppel\\.nuget\\packages\\archipelago.multiclient.net\\6.3.1\\archipelago.multiclient.net.6.3.1.nupkg.sha512",
+    "C:\\Users\\Hunter Oppel\\.nuget\\packages\\archipelago.pcsx2\\0.0.5\\archipelago.pcsx2.0.0.5.nupkg.sha512",
+    "C:\\Users\\Hunter Oppel\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\Hunter Oppel\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Hunter Oppel\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512"
   ],
   "logs": []
 }
