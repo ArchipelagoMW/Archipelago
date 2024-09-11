@@ -787,6 +787,9 @@ class HintLog(RecycleView):
         for hint in hints:
             if not hint.get("status"): # Allows connecting to old servers
                 hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
+            hint_status_node = self.parser.handle_node({"type": "color",
+                                                        "color": status_colors.get(hint["status"], "red"),
+                                                        "text": status_names.get(hint["status"], "Unknown")})
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
                 "item": {"text": self.parser.handle_node({
@@ -805,8 +808,7 @@ class HintLog(RecycleView):
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
                 "status": {
-                    "text": self.parser.handle_node({"type": "color", "color": status_colors.get(hint["status"], "red"),
-                                                     "text": status_names.get(hint["status"], "Unknown")}),
+                    "text": f"[u]{hint_status_node}[/u]",
                     "hint": hint,
                 },
             })
