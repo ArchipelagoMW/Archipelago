@@ -13,12 +13,12 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty
 
-from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
-    SC2Mission, SC2Race, SC2Campaign
-from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
-from worlds.sc2.Options import LocationInclusion
-from worlds.sc2 import SC2World, get_first_mission
+from .Client import SC2Context, calc_unfinished_missions, parse_unlock
+from .MissionTables import (lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, SC2Mission, SC2Race,
+                            SC2Campaign)
+from .Locations import LocationType, lookup_location_id_to_type
+from .Options import LocationInclusion
+from . import SC2World, get_first_mission
 
 
 class HoverableButton(HoverBehavior, Button):
@@ -269,7 +269,7 @@ class SC2Manager(GameManager):
         for loc in self.ctx.locations_for_mission(mission_name):
             if loc in self.ctx.missing_locations:
                 count += 1
-                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names[loc])
+                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names.lookup_in_game(loc))
 
         plando_locations = []
         for plando_loc in self.ctx.plando_locations:

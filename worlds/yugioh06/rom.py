@@ -22,8 +22,6 @@ class YGO06ProcedurePatch(APProcedurePatch, APTokenMixin):
     patch_file_ending = ".apygo06"
     result_file_ending = ".gba"
 
-    procedure = [("apply_bsdiff4", ["base_patch.bsdiff4"]), ("apply_tokens", ["token_data.bin"])]
-
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()

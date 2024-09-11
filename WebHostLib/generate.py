@@ -6,7 +6,7 @@ import random
 import tempfile
 import zipfile
 from collections import Counter
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, Set
 
 from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
@@ -16,6 +16,7 @@ from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
 from Utils import __version__
 from WebHostLib import app
+from settings import ServerOptions, GeneratorOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
 from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
@@ -23,25 +24,22 @@ from .upload import upload_zip_to_db
 
 
 def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[str], Dict[str, Any]]]:
-    plando_options = {
-        options_source.get("plando_bosses", ""),
-        options_source.get("plando_items", ""),
-        options_source.get("plando_connections", ""),
-        options_source.get("plando_texts", "")
-    }
-    plando_options -= {""}
+    plando_options: Set[str] = set()
+    for substr in ("bosses", "items", "connections", "texts"):
+        if options_source.get(f"plando_{substr}", substr in GeneratorOptions.plando_options):
+            plando_options.add(substr)
 
     server_options = {
-        "hint_cost": int(options_source.get("hint_cost", 10)),
-        "release_mode": options_source.get("release_mode", "goal"),
-        "remaining_mode": options_source.get("remaining_mode", "disabled"),
-        "collect_mode": options_source.get("collect_mode", "disabled"),
-        "item_cheat": bool(int(options_source.get("item_cheat", 1))),
+        "hint_cost": int(options_source.get("hint_cost", ServerOptions.hint_cost)),
+        "release_mode": options_source.get("release_mode", ServerOptions.release_mode),
+        "remaining_mode": options_source.get("remaining_mode", ServerOptions.remaining_mode),
+        "collect_mode": options_source.get("collect_mode", ServerOptions.collect_mode),
+        "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
         "server_password": options_source.get("server_password", None),
     }
     generator_options = {
-        "spoiler": int(options_source.get("spoiler", 0)),
-        "race": race
+        "spoiler": int(options_source.get("spoiler", GeneratorOptions.spoiler)),
+        "race": race,
     }
 
     if race:

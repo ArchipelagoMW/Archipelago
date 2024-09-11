@@ -2,8 +2,7 @@ from copy import deepcopy
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
-from worlds.generic import PlandoConnection
-from .options import ShufflePortals
+from Options import PlandoConnection
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -207,6 +206,8 @@ REGION_ORDER = [
 
 def shuffle_portals(world: "MessengerWorld") -> None:
     """shuffles the output of the portals from the main hub"""
+    from .options import ShufflePortals
+
     def create_mapping(in_portal: str, warp: str) -> str:
         """assigns the chosen output to the input"""
         parent = out_to_parent[warp]
@@ -247,7 +248,9 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     available_portals = [val for zone in shop_points.values() for val in zone]
     world.random.shuffle(available_portals)
 
-    plando = world.multiworld.plando_connections[world.player]
+    plando = world.options.portal_plando.value
+    if not plando:
+        plando = world.options.plando_connections.value
     if plando and world.multiworld.plando_options & PlandoOptions.connections:
         handle_planned_portals(plando)
 

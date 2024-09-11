@@ -39,8 +39,6 @@ class BumpStikWorld(World):
     location_name_to_id = location_table
     item_name_groups = item_groups
 
-    data_version = 1
-
     required_client_version = (0, 3, 8)
 
     options: BumpstikOptions

@@ -3,7 +3,6 @@ A module containing context and functions relevant to running the client. This m
 checking or launching the client, otherwise it will probably cause circular import issues.
 """
 
-
 import asyncio
 import enum
 import subprocess
@@ -77,7 +76,7 @@ class BizHawkClientContext(CommonContext):
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool=False):
         self.password_requested = password_requested
 
         if self.bizhawk_ctx.connection_status != ConnectionStatus.CONNECTED:
@@ -103,7 +102,7 @@ class BizHawkClientContext(CommonContext):
         await self.send_connect()
         self.auth_status = AuthStatus.PENDING
 
-    async def disconnect(self, allow_autoreconnect: bool = False):
+    async def disconnect(self, allow_autoreconnect: bool=False):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         await super().disconnect(allow_autoreconnect)
 
@@ -148,7 +147,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
                 script_version = await get_script_version(ctx.bizhawk_ctx)
 
                 if script_version != EXPECTED_SCRIPT_VERSION:
-                    logger.info(f"Connector script is incompatible. Expected version {EXPECTED_SCRIPT_VERSION} but got {script_version}. Disconnecting.")
+                    logger.info(f"Connector script is incompatible. Expected version {EXPECTED_SCRIPT_VERSION} but "
+                                f"got {script_version}. Disconnecting.")
                     disconnect(ctx.bizhawk_ctx)
                     continue
 
@@ -168,6 +168,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
                 ctx.auth = None
                 ctx.username = None
                 ctx.client_handler = None
+                ctx.finished_game = False
                 await ctx.disconnect(False)
             ctx.rom_hash = rom_hash
 
@@ -177,7 +178,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
                 if ctx.client_handler is None:
                     if not showed_no_handler_message:
-                        logger.info("No handler was found for this game")
+                        logger.info("No handler was found for this game. Double-check that the apworld is installed "
+                                    "correctly and that you loaded the right ROM file.")
                         showed_no_handler_message = True
                     continue
                 else:

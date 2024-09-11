@@ -40,7 +40,6 @@ class FF1World(World):
     settings_key = "ffr_options"
     game = "Final Fantasy"
     topology_present = False
-    data_version = 2
 
     ff1_items = FF1Items()
     ff1_locations = FF1Locations()
