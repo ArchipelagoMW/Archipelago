@@ -198,3 +198,7 @@ item_descriptions = {  # TODO
 
 class ShapezItem(Item):
     game = "shapez"
+
+
+class ShapezLiteItem(ShapezItem):
+    game = "shapez lite"

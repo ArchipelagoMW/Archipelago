@@ -239,6 +239,12 @@ all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level
                             + achievement_locations)
 all_locations.sort()
 
+all_locations_lite: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
+                                 + [f"Level {x}" for x in range(1, 120)]
+                                 + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 121)]
+                                 + achievement_locations)
+all_locations_lite.sort()
+
 
 def addlevels(maxlevel: int, logictype: str,
               random_logic_phase_length: List[int]) -> Dict[str, Tuple[str, LocationProgressType]]:
@@ -594,3 +600,7 @@ class ShapezLocation(Location):
     def __init__(self, player: int, name: str, address: int, region: Region, progress_type: LocationProgressType):
         super(ShapezLocation, self).__init__(player, name, address, region)
         self.progress_type = progress_type
+
+
+class ShapezLiteLocation(ShapezLocation):
+    game = "shapez lite"

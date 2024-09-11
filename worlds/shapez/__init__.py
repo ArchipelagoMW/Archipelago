@@ -1,16 +1,16 @@
-from typing import Any, List, Dict, Tuple, Mapping
+from typing import Any, List, Dict, Tuple, Mapping, Type
 
 from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
-    big_upgrades, filler, trap, bundles
+    big_upgrades, filler, trap, bundles, ShapezLiteItem
 from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
-    addshapesanity, addshapesanity_ut
+    addshapesanity, addshapesanity_ut, ShapezLiteLocation, all_locations_lite
 from .presets import options_presets
-from .options import ShapezOptions
+from .options import ShapezOptions, ShapezLiteOptions
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Item, Tutorial, LocationProgressType
+from BaseClasses import Region, Item, Tutorial, LocationProgressType, Location
 from .regions import create_shapez_regions
 
 
@@ -46,18 +46,21 @@ class ShapezWorld(World):
     options: ShapezOptions
     topology_present = True
     web = ShapezWeb()
+    item_type: Type[Item] = ShapezItem
+    location_type: Type[ShapezLocation] = ShapezLocation
+    lite: bool = False
 
     base_id = 20010707
+    # Placeholder values in case something goes wrong
     location_count: int = 0
     level_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
     upgrade_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
-    # Placeholder values in case something goes wrong
     random_logic_phase_length: List[int] = [1, 1, 1, 1, 1]
     category_random_logic_amounts: Dict[str, int] = {"belt": 0, "miner": 1, "processors": 2, "painting": 3}
     maxlevel: int = 25
     finaltier: int = 8
     included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
-    client_seed: int = 123  # Placeholder value
+    client_seed: int = 123
 
     item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(all_locations, base_id)}
@@ -157,7 +160,7 @@ class ShapezWorld(World):
                 self.category_random_logic_amounts[cat] = self.random.randint(0, 5)
 
     def create_item(self, name: str) -> Item:
-        return ShapezItem(name, item_table[name], self.item_name_to_id[name], self.player)
+        return self.item_type(name, item_table[name], self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
         return list(bundles.keys())[self.random.randint(0, len(bundles)-1)]
@@ -166,19 +169,16 @@ class ShapezWorld(World):
         menu_region = Region("Menu", self.player, self.multiworld)
 
         # Create list of all included locations based on player options
-        if self.ut_active:
-            self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key,
-                                                   self.random_logic_phase_length),
-                                       **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.current_key,
-                                                     self.category_random_logic_amounts),
-                                       **addshapesanity_ut(self.passthrough["shapesanity"])}
-        else:
-            self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key,
-                                                   self.random_logic_phase_length),
-                                       **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.current_key,
-                                                     self.category_random_logic_amounts),
-                                       **addshapesanity(self.options.shapesanity_amount.value, self.random)}
-        if self.options.include_achievements:
+        self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key,
+                                               self.random_logic_phase_length),
+                                   **addupgrades(self.finaltier, self.options.randomize_upgrade_logic.current_key,
+                                                 self.category_random_logic_amounts)}
+        if not self.lite:
+            if self.ut_active:
+                self.included_locations.update(addshapesanity_ut(self.passthrough["shapesanity"]))
+            else:
+                self.included_locations.update(addshapesanity(self.options.shapesanity_amount.value, self.random))
+        if self.lite or self.options.include_achievements:
             self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
                                                            bool(self.options.exclude_long_playtime_achievements),
                                                            bool(self.options.exclude_progression_unreasonable),
@@ -195,7 +195,8 @@ class ShapezWorld(World):
                                                              self.location_name_to_id,
                                                              self.level_logic, self.upgrade_logic,
                                                              self.options.early_balancer_tunnel_and_trash.current_key,
-                                                             self.options.goal.current_key, menu_region))
+                                                             self.options.goal.current_key, menu_region,
+                                                             self.item_type))
 
         # Connect Menu to rest of regions
         main_region = self.multiworld.get_region("Main", self.player)
@@ -260,7 +261,7 @@ class ShapezWorld(World):
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
             "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value),
             "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value),
-            "include_achievements": bool(self.options.include_achievements.value),
+            "include_achievements": True if self.lite else bool(self.options.include_achievements.value),
             "exclude_softlock_achievements": bool(self.options.exclude_softlock_achievements),
             "exclude_long_playtime_achievements": bool(self.options.exclude_long_playtime_achievements)
         }
@@ -272,3 +273,15 @@ class ShapezWorld(World):
 
     def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
         return slot_data
+
+
+class ShapezLiteWorld(ShapezWorld):
+    game = "shapez lite"
+    options_dataclass = ShapezLiteOptions
+    options: ShapezLiteOptions
+    web = ShapezWeb()
+    item_type = ShapezLiteItem
+    location_type = ShapezLiteLocation
+    lite = True
+    base_id = 20000707
+    location_name_to_id = {name: id for id, name in enumerate(all_locations_lite, base_id)}

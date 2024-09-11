@@ -1,6 +1,6 @@
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple, List, Type
 
-from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification, CollectionState
+from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification, CollectionState, Item, Location
 from .items import ShapezItem
 from .locations import ShapezLocation
 from worlds.generic.Rules import add_rule
@@ -121,15 +121,16 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                           included_locations: Dict[str, Tuple[str, LocationProgressType]],
                           location_name_to_id: Dict[str, int], level_logic_buildings: List[str],
                           upgrade_logic_buildings: List[str], early_useful: str, goal: str,
-                          menu_region: Region) -> List[Region]:
+                          menu_region: Region,
+                          item_type: Type[Item], location_type: Type[ShapezLocation]) -> List[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
     regions: Dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
     regions["Menu"] = menu_region
 
     # Creates ShapezLocations for every included location and puts them into the correct region
     for name, data in included_locations.items():
-        regions[data[0]].locations.append(ShapezLocation(player, name, location_name_to_id[name],
-                                                         regions[data[0]], data[1]))
+        regions[data[0]].locations.append(location_type(player, name, location_name_to_id[name],
+                                                        regions[data[0]], data[1]))
 
     if goal in ["vanilla", "mam"]:
         goal_region = regions["Levels with 5 Buildings"]
@@ -137,9 +138,9 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
         goal_region = regions["Upgrades with 5 Buildings"]
     else:
         goal_region = regions["All Buildings Shapes"]
-    goal_location = ShapezLocation(player, "Goal", None, goal_region,
-                                   LocationProgressType.DEFAULT)
-    goal_location.place_locked_item(ShapezItem("Goal", ItemClassification.progression, None, player))
+    goal_location = location_type(player, "Goal", None, goal_region,
+                                  LocationProgressType.DEFAULT)
+    goal_location.place_locked_item(item_type("Goal", ItemClassification.progression, None, player))
     if goal == "efficiency_iii":
         add_rule(goal_location, lambda state: state.has("Big Belt Upgrade", player, 7))
     goal_region.locations.append(goal_location)
