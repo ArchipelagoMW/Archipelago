@@ -7,7 +7,7 @@ from .items import item_descriptions, item_table, ShapezItem, \
     big_upgrades, filler, trap, bundles, ShapezLiteItem
 from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
     addshapesanity, addshapesanity_ut, ShapezLiteLocation, all_locations_lite
-from .presets import options_presets
+from .presets import options_presets, options_presets_lite
 from .options import ShapezOptions, ShapezLiteOptions
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Region, Item, Tutorial, LocationProgressType, Location
@@ -275,11 +275,15 @@ class ShapezWorld(World):
         return slot_data
 
 
+class ShapezLiteWeb(ShapezWeb):
+    options_presets = options_presets_lite
+
+
 class ShapezLiteWorld(ShapezWorld):
     game = "shapez lite"
     options_dataclass = ShapezLiteOptions
     options: ShapezLiteOptions
-    web = ShapezWeb()
+    web = ShapezLiteWeb()
     item_type = ShapezLiteItem
     location_type = ShapezLiteLocation
     lite = True

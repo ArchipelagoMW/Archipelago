@@ -1,9 +1,13 @@
 from test.bases import WorldTestBase
-from .. import options_presets
+from .. import options_presets, options_presets_lite
 
 
 class ShapezTestBase(WorldTestBase):
     game = "shapez"
+
+
+class ShapezLiteTestBase(WorldTestBase):
+    game = "shapez lite"
 
 
 class TestDefault(ShapezTestBase):
@@ -28,3 +32,23 @@ class TestRestrictive(ShapezTestBase):
 
 class TestQuick(ShapezTestBase):
     options = options_presets["Quick game"]
+
+
+class TestDefaultLite(ShapezLiteTestBase):
+    options = {}
+
+
+class TestMostVanillaLite(ShapezLiteTestBase):
+    options = options_presets_lite["Most vanilla"]
+
+
+class TestMaximumLite(ShapezLiteTestBase):
+    options = options_presets_lite["Maximum checks"]
+
+
+class TestRestrictiveLite(ShapezLiteTestBase):
+    options = options_presets_lite["Restrictive start"]
+
+
+class TestQuickLite(ShapezLiteTestBase):
+    options = options_presets_lite["Quick game"]
