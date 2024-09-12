@@ -199,3 +199,6 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+/worlds/sly1/Client/obj
+/worlds/sly1/Client/obj
+/worlds/sly1/Client/bin

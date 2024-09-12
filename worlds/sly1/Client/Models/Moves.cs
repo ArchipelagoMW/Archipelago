@@ -13,6 +13,7 @@ namespace Sly1AP.Models
         public uint Roll { get; set; } = 4;
         public uint Slow { get; set; } = 8;
         public uint Safety { get; set; } = 256;
+        public int SafetyCount { get; set; } = 0;
         public uint Invisibility { get; set; } = 65536;
         public uint CoinMagnet { get; set; } = 32;
         public uint Mine { get; set; } = 64;

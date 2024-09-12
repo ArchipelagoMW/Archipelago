@@ -58,7 +58,7 @@ namespace Sly1AP
                 {
                     return;
                 }
-                await Task.Delay(1000);
+                await Task.Delay(1);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Sly1AP
             WriteLine($"Connected to PCSX2.");
 
             //Set the game completion flag to 0, so boss locations won't be sent unintentionally.
-            Memory.Write(0x2027DC18, 0);
+            //Memory.Write(0x2027DC18, 0);
 
             WriteLine($"Connecting to Archipelago.");
             Client = new ArchipelagoClient(client);
@@ -91,7 +91,6 @@ namespace Sly1AP
             Client.PopulateLocations(locations);
             //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
             UpdateStart();
-            CutsceneSkip();
             ConfigureOptions(Client.Options);
             var SentLocations = Client.GameState.CompletedLocations;
             var ItemsReceived = Client.GameState.ReceivedItems;
@@ -205,7 +204,8 @@ namespace Sly1AP
                     keys.PandaKingStart = 1;
                     Memory.Write(0x2027D360, keys.PandaKingStart);
                 }
-                if (StartingEpisode == "All" & Memory.ReadInt(0x2027C67C) == 0 & Memory.ReadInt(0x2027CAC8) == 0 & Memory.ReadInt(0x2027CF14) == 0 & Memory.ReadInt(0x2027D360) == 0)
+                if (StartingEpisode == "All" & Memory.ReadInt(0x2027C67C) == 0 & Memory.ReadInt(0x2027CAC8) == 0 
+                    & Memory.ReadInt(0x2027CF14) == 0 & Memory.ReadInt(0x2027D360) == 0)
                 {
                     keys.RaleighStart = 1;
                     keys.MuggshotStart = 1;
@@ -226,19 +226,16 @@ namespace Sly1AP
             if (id == 10020001)
             {
                 slyMoves.SlyMoves += slyMoves.DiveAttack;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
                 slyMoves.DiveAttack += 14;
             }
             if (id == 10020002)
             {
                 slyMoves.SlyMoves += slyMoves.Roll;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
                 slyMoves.Roll += 1016;
             }
             if (id == 10020003)
             {
                 slyMoves.SlyMoves += slyMoves.Slow;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
                 if (slyMoves.Slow == 8)
                 {
                     slyMoves.Slow += 4080;
@@ -251,61 +248,51 @@ namespace Sly1AP
             if (id == 10020007)
             {
                 slyMoves.SlyMoves += slyMoves.Safety;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
                 slyMoves.Safety += 16128;
+                slyMoves.SafetyCount += 1;
             }
             if (id == 10020010)
             {
                 slyMoves.SlyMoves += slyMoves.Invisibility;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
                 slyMoves.Invisibility = 8192;
             }
             //Regular Moves
             if (id == 10020004)
             {
                 slyMoves.SlyMoves += slyMoves.CoinMagnet;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
             }
             if (id == 10020005)
             {
                 slyMoves.SlyMoves += slyMoves.Mine;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
             }
             if (id == 10020006)
             {
                 slyMoves.SlyMoves += slyMoves.Fast;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
             }
             if (id == 10020008)
             {
                 slyMoves.SlyMoves += slyMoves.Decoy;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
             }
             if (id == 10020009)
             {
                 slyMoves.SlyMoves += slyMoves.Hacking;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
             }
             //Blueprints
             if (id == 10020011)
             {
                 slyMoves.SlyMoves += slyMoves.RaleighBlueprint;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
             }
             if (id == 10020012)
             {
                 slyMoves.SlyMoves += slyMoves.MuggshotBlueprint;
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
             }
             if (id == 10020013)
             {
-                slyMoves.SlyMoves += (slyMoves.MzRubyBlueprint);
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+                slyMoves.SlyMoves += slyMoves.MzRubyBlueprint;
             }
             if (id == 10020014)
             {
-                slyMoves.SlyMoves += (slyMoves.PandaKingBlueprint);
-                Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+                slyMoves.SlyMoves += slyMoves.PandaKingBlueprint;
             }
             return;
         }
@@ -386,7 +373,7 @@ namespace Sly1AP
             }
             return;
         }
-        public static void UpdateTraps(int id)
+        public static async void UpdateTraps(int id)
         {
             var TrapTimer = new System.Timers.Timer(10000);
             TrapTimer.AutoReset = false;
@@ -432,7 +419,8 @@ namespace Sly1AP
             if (id == 10020028)
             {
                 TrapTimer.Start();
-                uint TrueMoves = 4;
+                uint TrueMoves = 0;
+                int TrueSelect = 0;
                 if (slyMoves.SlyMoves != 4)
                 {
                     TrueMoves = slyMoves.SlyMoves;
@@ -447,20 +435,26 @@ namespace Sly1AP
                 Memory.Write(BodyPos, 0);
                 Memory.Write(CanePos, 0);
 
+                if (slyMoves.SafetyCount == 1)
+                {
+                    slyMoves.SlyMoves = 260;
+                }
+                if (slyMoves.SafetyCount == 2)
+                {
+                    slyMoves.SlyMoves = 16644;
+                }
+                else
+                {
+                    slyMoves.SlyMoves = 4;
+                }
+
                 while (TrapTimer.Enabled == true)
                 {
-                    if (TrapTimer.Enabled == true)
-                    {
-                        slyMoves.SlyMoves = 4;
-                        Memory.Write(0x20274F74, 1);
-                        Memory.Write(0x20262D18, 16);
-                        Memory.Write(0x20262D22, 0xFF);
-                        Memory.Write(0x20262D1A, 16);
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    Memory.Write(0x20274F74, 1);
+                    Memory.Write(0x20262D18, 16);
+                    Memory.Write(0x20262D22, 0xFF);
+                    Memory.Write(0x20262D1A, 16);
+                    await Task.Delay(1);
                 };
                 TrapTimer.Elapsed += (sender, e) =>
                 {
@@ -468,11 +462,12 @@ namespace Sly1AP
                     Memory.Write(0x20262D22, 0);
                     Memory.Write(0x20262D1A, 0);
                     Memory.Write(0x20262D1C, 0);
-                    return;
                 };
                 TrapTimer.Stop();
                 TrapTimer.Dispose();
                 slyMoves.SlyMoves = TrueMoves;
+                Memory.Write(0x20274F74, TrueSelect);
+                return;
             }
             if (id == 10020029)
             {
@@ -511,7 +506,6 @@ namespace Sly1AP
         }
         public static void GetValues()
         {
-            slyMoves.SlyMoves = Memory.ReadUInt(0x2027DC10);
             keys.RaleighKeys = Memory.ReadInt(0x2027CAB4);
             keys.MuggshotKeys = Memory.ReadInt(0x2027CF00);
             keys.MzRubyKeys = Memory.ReadInt(0x2027D34C);
@@ -523,7 +517,13 @@ namespace Sly1AP
         }
         public static void UpdateStart()
         {
-            Memory.Write(0x2027DC10, 0);
+            slyMoves.SlyMoves = 0;
+            slyMoves.Roll = 4;
+            slyMoves.DiveAttack = 2;
+            slyMoves.Slow = 8;
+            slyMoves.Safety = 256;
+            slyMoves.Invisibility = 65536;
+            slyMoves.SafetyCount = 0;
             Memory.Write(0x2027CAB4, 0);
             Memory.Write(0x2027CF00, 0);
             Memory.Write(0x2027D34C, 0);
@@ -584,13 +584,25 @@ namespace Sly1AP
         }
         private void CutsceneSkip()
         {
-            Memory.Write(0x2027C3C0, 1);
-            Memory.Write(0x2027C424, 1);
-            Memory.Write(0x2027C960, 1);
-            Memory.Write(0x2027D9A0, 1);
-            Memory.Write(0x2027D9A4, 1);
-            Memory.Write(0x2027CD3C, 1);
-            Memory.Write(0x2027D678, 1);
+            //Dialogue Skipper
+            //uint Cutscene = Memory.ReadUInt(0x2027051C) + 536870912;
+            //uint Playing = Cutscene + 744;
+            //if (Memory.ReadUInt(Cutscene) != 0)
+            //{
+                //Memory.Write(Playing, 0);
+            //}
+
+            //Bentley Skipper
+            if (Memory.ReadInt(0x20270458) == 2)
+            {
+                Memory.Write(0x20270458, 0);
+            }
+
+            //FMV Skipper
+            if (Memory.ReadInt(0x20269A18) > 20)
+            {
+                Memory.Write(0x20269A60, 0);
+            }
         }
     }
 }

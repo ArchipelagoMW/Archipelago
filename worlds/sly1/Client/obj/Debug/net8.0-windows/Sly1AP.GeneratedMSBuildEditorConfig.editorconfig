@@ -14,6 +14,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Sly1AP
-build_property.ProjectDir = c:\workspace\ArchipelagoBranchSly1\worlds\sly1\Client\
+build_property.ProjectDir = C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
