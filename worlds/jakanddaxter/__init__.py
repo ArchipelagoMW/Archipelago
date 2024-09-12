@@ -219,9 +219,10 @@ class JakAndDaxterWorld(World):
 
             # Don't divide by zero!
             if self.orb_bundle_size > 0:
-                item_count = 2000 // self.orb_bundle_size
+                item_count = 2000 // self.orb_bundle_size  # Integer division here, bundle size is a factor of 2000.
 
-                prog_count = ceil(self.total_trade_orbs // self.orb_bundle_size)
+                # Have enough bundles to do all trades. The rest can be filler.
+                prog_count = ceil(self.total_trade_orbs / self.orb_bundle_size)
                 non_prog_count = item_count - prog_count
 
                 counts_and_classes.append((prog_count, ItemClass.progression_skip_balancing))
