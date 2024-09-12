@@ -213,10 +213,9 @@ class WargrooveContext(CommonContext):
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager, HoverBehavior, ServerToolTip
+        from kvui import GameManager, HoverBehavior, ServerToolTip, ToggleButton
         from kivy.lang import Builder
-        from kivymd.uix.behaviors.toggle_behavior import MDToggleButtonBehavior
-        from kivymd.uix.button import MDButton, MDButtonText
+        from kivymd.uix.button import MDButtonText
         from kivymd.uix.boxlayout import MDBoxLayout
         from kivymd.uix.label import MDLabel
         from kivymd.uix.tab import MDTabsItem, MDTabsItemText
@@ -228,7 +227,7 @@ class WargrooveContext(CommonContext):
         class CommanderSelect(MDBoxLayout):
             pass
 
-        class CommanderButton(MDButton, MDToggleButtonBehavior):
+        class CommanderButton(ToggleButton):
             pass
 
         class FactionBox(MDBoxLayout):
@@ -279,10 +278,7 @@ class WargrooveContext(CommonContext):
                         commander_group = CommanderGroup()
                         commander_buttons = []
                         for commander in commanders:
-                            commander_button = CommanderButton(MDButtonText(commander.name),
-                                                               background_normal=self.theme_cls.surfaceContainerLowColor,
-                                                               background_down=self.theme_cls.primaryColor,
-                                                               group="commanders")
+                            commander_button = CommanderButton(MDButtonText(commander.name), group="commanders")
                             if faction == "Starter":
                                 commander_button.disabled = False
                             commander_button.bind(on_press=lambda instance: self.ctx.set_commander(instance.text))

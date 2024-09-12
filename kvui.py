@@ -48,7 +48,7 @@ from kivy.uix.layout import Layout
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
-from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.behaviors import FocusBehavior, ToggleButtonBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
@@ -120,21 +120,10 @@ class ScrollBox(MDScrollView):
         self.scroll_type = ["bars"]
 
 #thanks kivymd
-class ToggleButton(MDButton):
-    state: typing.Literal["normal", "down"]
-
+class ToggleButton(MDButton, ToggleButtonBehavior):
     def __init__(self, *args, **kwargs):
         super(ToggleButton, self).__init__(*args, **kwargs)
         self.bind(state=self._update_bg)
-
-    def _do_press(self):
-        pass
-
-    def _do_release(self, *args) -> None:
-        if self.state == "down":
-            self.state = "normal"
-        else:
-            self.state = "down"
 
     def _update_bg(self, _, state: str):
         if self.theme_bg_color == "Primary":
