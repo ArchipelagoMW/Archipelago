@@ -18,43 +18,53 @@ class FillError(RuntimeError):
 
 
 class FillLogger():
-    min_size: int = 1000   # minimum number of items we care about reporting (non-tty)
-    min_time: float = 0.25 # minimum time (in seconds) between reports (tty)
+    """
+        FillLogger class variables:
+        min_size -- minimum number of items we care about reporting
+        min_time -- minimum time (in seconds) between reports (used in dynamic logging only)
+        step     -- number of items between reports (used in fixed logging only)
+    """
+    min_size: int = 1000
+    min_time: float = 0.25
+    step: int = 1000
+    is_debug: bool = False
 
     def __init__(self, total_items: int):
         self.start_time = time.time()
         self.prev_time = time.time()
         self.cur_time = time.time()
-        self.step: int = max(round(total_items * 0.1), 1000)
-        self.total_items: int = total_items
-        self.is_debug: bool   = False
-
-        if logging.getLogger().isEnabledFor(logging.DEBUG):
-            self.is_debug = True
+        self.step = max(round(total_items * 0.1), 1000)
+        self.total_items = total_items
+        self.is_debug = logging.getLogger().isEnabledFor(logging.DEBUG)
 
     def log_fill_progress(self, name: str, placed: int, final: bool = False) -> None:
         # never print the small stuff
         if self.total_items < self.min_size:
             return
 
-        self.log_nontty(name, placed, final)
+        self.log_fixed(name, placed, final)
         if not self.is_debug:
-            self.log_tty(name, placed, final)
+            self.log_dynamic(name, placed, final)
 
-    def log_nontty(self, name: str, placed: int, final: bool) -> None:
+    def log_fixed(self, name: str, placed: int, final: bool) -> None:
+        """ Intended for logging to files and during debugging. Only logs a fixed number of times (10 or fewer)."""
         if not final and placed % self.step:
             return
 
-        extra_args: Dict[Str, Bool] = {}
+        extra_args = {}
         if not self.is_debug:
             extra_args = {"NoStream": True}
 
-        status: str = "Finished" if final else "Current"
-        pct: float = round(100 * (placed / self.total_items), 2)
+        status = "Finished" if final else "Current"
+        pct = round(100 * (placed / self.total_items), 2)
         logging.info(f"{status} fill step ({name}) at {placed}/{self.total_items} ({pct}%) items placed.",
                      extra=extra_args)
 
-    def log_tty(self, name: str, placed: int, final: bool) -> None:
+    def log_dynamic(self, name: str, placed: int, final: bool) -> None:
+        """
+        Intended for standard terminal/console output, log lines overwrite each other (via carriage return)
+        so in the end only one log line shows for each phase.
+        """
         self.cur_time = time.time()
 
         # Always print final, otherwise skip if the time between prints is too short
@@ -65,14 +75,14 @@ class FillLogger():
         self.prev_time = self.cur_time
 
         # time's hour field only goes to 24 (mod 24); calculate hours by hand
-        status: str = "Finished" if final else "Current"
-        pct: float = round(100 * (placed / self.total_items), 2)
-        diff: int = round(self.cur_time - self.start_time)
-        hrs: int = int(diff / 3600)
-        elapsed: str = time.strftime(f"{hrs:02}h:%Mm:%Ss", time.gmtime(diff))
+        status = "Finished" if final else "Current"
+        pct = round(100 * (placed / self.total_items), 2)
+        diff = round(self.cur_time - self.start_time)
+        hrs = int(diff / 3600)
+        elapsed = time.strftime(f"{hrs:02}h:%Mm:%Ss", time.gmtime(diff))
 
         # Store the terminator in case someone else is doing something interesting
-        old_term: str = logging.StreamHandler.terminator
+        old_term = logging.StreamHandler.terminator
         if not final:
             logging.StreamHandler.terminator = '\r'
 
