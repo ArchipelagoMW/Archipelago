@@ -11,13 +11,15 @@ if TYPE_CHECKING:
 def create_itempool(world: "Sly1World") -> List[Item]:
     itempool: List[Item] = []
 
-    # Remove starting episode
+    # Create all episodes except for the starting episode as items
     starting_episode = (episode_type_to_name[EpisodeType(world.options.StartingEpisode)])
-    if starting_episode == "All":
-        for episode in sly_episodes.keys():
-            del item_table[episode]
-    else:
-        del item_table[starting_episode]
+
+    for episode in sly_episodes.keys():
+        if starting_episode == "All":
+            break
+        if starting_episode == episode:
+            continue
+        itempool.append(create_item(world, episode))
 
     for name in item_table.keys():
         item_type: ItemClassification = item_table.get(name).classification
@@ -114,10 +116,10 @@ sly_items = {
 }
 
 sly_episodes = {
-    "Tide of Terror": ItemData(10020021, ItemClassification.progression),
-    "Sunset Snake Eyes": ItemData(10020022, ItemClassification.progression),
-    "Vicious Voodoo": ItemData(10020023, ItemClassification.progression),
-    "Fire in the Sky": ItemData(10020024, ItemClassification.progression),
+    "Tide of Terror": ItemData(10020021, ItemClassification.progression, 0),
+    "Sunset Snake Eyes": ItemData(10020022, ItemClassification.progression, 0),
+    "Vicious Voodoo": ItemData(10020023, ItemClassification.progression, 0),
+    "Fire in the Sky": ItemData(10020024, ItemClassification.progression, 0),
 }
 
 junk_items = {
