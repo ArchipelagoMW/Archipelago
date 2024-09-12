@@ -1605,11 +1605,23 @@ def create_regions(self):
         for region in locations_per_region:
             assert not locations_per_region[region], f"locations not assigned to region {region}"
 
+    # `logic.fossil_checks()` checks for access to regions, so indirect conditions must be registered for each of these
+    # regions when an entrance uses `logic.fossil_checks()` in its access rule.
+    fossil_checks_region_names = ["Mt Moon B2F", "Cinnabar Lab Fossil Room", "Cinnabar Island"]
+    fossil_checks_regions = [self.get_region(region_name) for region_name in fossil_checks_region_names]
+
+    def register_fossil_checks_indirect_conditions(entrance_name: str):
+        entrance = self.get_entrance(entrance_name)
+        for fossil_checks_region in fossil_checks_regions:
+            self.multiworld.register_indirect_condition(fossil_checks_region, entrance)
+
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
     connect(multiworld, player, "Menu", "Evolution", one_way=True)
     connect(multiworld, player, "Menu", "Fossil", lambda state: logic.fossil_checks(state,
         state.multiworld.second_fossil_check_condition[player].value, player), one_way=True)
+    register_fossil_checks_indirect_conditions("Menu to Fossil")
+
     connect(multiworld, player, "Pallet Town", "Route 1")
     connect(multiworld, player, "Route 1", "Viridian City")
     connect(multiworld, player, "Viridian City", "Route 22")
@@ -1697,6 +1709,7 @@ def create_regions(self):
     connect(multiworld, player, "Pallet Town", "Old Rod Fishing", lambda state: state.has("Old Rod", player), one_way=True)
     connect(multiworld, player, "Pallet Town", "Good Rod Fishing", lambda state: state.has("Good Rod", player), one_way=True)
     connect(multiworld, player, "Cinnabar Lab Fossil Room", "Fossil Level", lambda state: logic.fossil_checks(state, 1, player), one_way=True)
+    register_fossil_checks_indirect_conditions("Cinnabar Lab Fossil Room to Fossil Level")
     connect(multiworld, player, "Route 5 Gate-N", "Route 5 Gate-S", lambda state: logic.can_pass_guards(state, player))
     connect(multiworld, player, "Route 6 Gate-N", "Route 6 Gate-S", lambda state: logic.can_pass_guards(state, player))
     connect(multiworld, player, "Route 7 Gate-W", "Route 7 Gate-E", lambda state: logic.can_pass_guards(state, player))
