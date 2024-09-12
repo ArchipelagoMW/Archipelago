@@ -1,5 +1,5 @@
 from random import Random
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Optional
 
 from BaseClasses import Location, LocationProgressType, Region
 
@@ -597,7 +597,8 @@ def addshapesanity_ut(list_of_location_names: List[str]) -> Dict[str, Tuple[str,
 class ShapezLocation(Location):
     game = "shapez"
 
-    def __init__(self, player: int, name: str, address: int | None, region: Region, progress_type: LocationProgressType):
+    def __init__(self, player: int, name: str, address: Optional[int], region: Region,
+                 progress_type: LocationProgressType):
         super(ShapezLocation, self).__init__(player, name, address, region)
         self.progress_type = progress_type
 
