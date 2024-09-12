@@ -1938,9 +1938,9 @@ flavor_key_item_table = {
 campaign_to_layout_names = get_used_layout_names()
 named_layout_key_item_table = {
     item_names._TEMPLATE_NAMED_LAYOUT_KEY.format(layout_name, campaign.campaign_name):
-        ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 3 + 500, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+        ItemData(layout_start + i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 3 + 500, FactionlessItemType.Nothing, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0, origin={"key"})
-    for (campaign, layout_names) in campaign_to_layout_names.items() for (i, layout_name) in enumerate(layout_names)
+    for (campaign, (layout_start, layout_names)) in campaign_to_layout_names.items() for (i, layout_name) in enumerate(layout_names)
 }
 # Named campaign keys (3800 - 3999)
 campaign_names = [campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL]

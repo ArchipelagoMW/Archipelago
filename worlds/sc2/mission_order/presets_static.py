@@ -1,4 +1,4 @@
-from typing import Dict, Any, Callable, List
+from typing import Dict, Any, Callable, List, Tuple
 import copy
 
 from ..mission_groups import MissionGroupNames
@@ -826,7 +826,7 @@ def _remove_key_rules(entry_rules: List[Dict[str, Any]]) -> List[Dict[str, Any]]
 def static_preset(preset: Dict[str, Any]) -> Callable[[Dict[str, Any]], Dict[str, Any]]:
     return lambda options: _build_static_preset(copy.deepcopy(preset), options)
 
-def get_used_layout_names() -> Dict[SC2Campaign, List[str]]:
+def get_used_layout_names() -> Dict[SC2Campaign, Tuple[int, List[str]]]:
     campaign_to_preset: Dict[SC2Campaign, Dict[str, Any]] = {
         SC2Campaign.WOL: preset_wol_with_prophecy,
         SC2Campaign.PROPHECY: preset_prophecy,
@@ -836,8 +836,14 @@ def get_used_layout_names() -> Dict[SC2Campaign, List[str]]:
         SC2Campaign.EPILOGUE: preset_lotv_epilogue,
         SC2Campaign.NCO: preset_nco
     }
-    campaign_to_layout_names: Dict[SC2Campaign, List[str]] = {
-        campaign: [value for value in preset.keys() if isinstance(preset[value], dict) and value != "global"]
-        for (campaign, preset) in campaign_to_preset.items()
-    }
+    campaign_to_layout_names: Dict[SC2Campaign, Tuple[int, List[str]]] = { SC2Campaign.GLOBAL: (0, []) }
+    for campaign in SC2Campaign:
+        if campaign == SC2Campaign.GLOBAL:
+            continue
+        previous_campaign = [prev for prev in SC2Campaign if prev.id == campaign.id - 1][0]
+        previous_size = campaign_to_layout_names[previous_campaign][0]
+        preset = campaign_to_preset[campaign]
+        new_layouts = [value for value in preset.keys() if isinstance(preset[value], dict) and value != "global"]
+        campaign_to_layout_names[campaign] = (previous_size + len(campaign_to_layout_names[previous_campaign][1]), new_layouts)
+    campaign_to_layout_names.pop(SC2Campaign.GLOBAL)
     return campaign_to_layout_names
