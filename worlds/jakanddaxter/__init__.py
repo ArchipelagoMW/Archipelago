@@ -1,5 +1,5 @@
 from typing import Dict, Any, ClassVar, Tuple, Callable, Optional, Union, List
-
+from math import ceil
 import Utils
 import settings
 
@@ -221,7 +221,7 @@ class JakAndDaxterWorld(World):
             if self.orb_bundle_size > 0:
                 item_count = 2000 // self.orb_bundle_size
 
-                prog_count = -(-self.total_trade_orbs // self.orb_bundle_size)  # Lazy ceil using integer division.
+                prog_count = ceil(self.total_trade_orbs // self.orb_bundle_size)
                 non_prog_count = item_count - prog_count
 
                 counts_and_classes.append((prog_count, ItemClass.progression_skip_balancing))
