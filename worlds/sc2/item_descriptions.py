@@ -565,7 +565,7 @@ item_descriptions = {
     item_names.DEFILER: "Support caster. Can use the Dark Swarm, Consume, and Plague abilities.",
     item_names.INFESTED_MARINE: "General-purpose Infested infantry. Has a timed life of 90 seconds.",
     item_names.INFESTED_BUNKER: "Defensive structure. Periodically spawns Infested infantry that fight from inside. Acts as a mobile ground transport while uprooted.",
-    item_names.INFESTED_SIEGE_TANK: "Siege tank. Can uproot itself to provide mobile tank support. Can use the Deep Tunnel ability.",
+    item_names.INFESTED_SIEGE_TANK: "Siege tank. Can uproot itself to provide mobile tank support.",
     item_names.INFESTED_DIAMONDBACK: "Fast, high-damage attacker. Can attack while moving and can bring flying units to the ground.",
     item_names.INFESTED_BANSHEE: "Tactical-strike aircraft. Can cloak and can be upgraded to burrow.",
     item_names.INFESTED_LIBERATOR: "Anti-Air flying attacker.  Attacks deal high area-damage.",

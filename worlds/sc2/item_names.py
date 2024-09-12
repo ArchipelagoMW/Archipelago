@@ -348,7 +348,7 @@ BROOD_QUEEN          = "Brood Queen"
 DEFILER              = "Defiler"
 INFESTED_MARINE      = "Infested Marine"
 INFESTED_SIEGE_TANK  = "Infested Siege Tank"
-INFESTED_DIAMONDBACK = "Infested Diamonback"
+INFESTED_DIAMONDBACK = "Infested Diamondback"
 INFESTED_BANSHEE     = "Infested Banshee"
 INFESTED_LIBERATOR   = "Infested Liberator"
 
