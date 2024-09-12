@@ -214,38 +214,33 @@ class WargrooveContext(CommonContext):
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager, HoverBehavior, ServerToolTip
-        from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.lang import Builder
-        from kivy.uix.button import Button
-        from kivy.uix.togglebutton import ToggleButton
-        from kivy.uix.boxlayout import BoxLayout
-        from kivy.uix.gridlayout import GridLayout
-        from kivy.uix.image import AsyncImage, Image
-        from kivy.uix.stacklayout import StackLayout
-        from kivy.uix.label import Label
-        from kivy.properties import ColorProperty
-        from kivy.uix.image import Image
+        from kivymd.uix.behaviors.toggle_behavior import MDToggleButtonBehavior
+        from kivymd.uix.button import MDButton, MDButtonText
+        from kivymd.uix.boxlayout import MDBoxLayout
+        from kivymd.uix.label import MDLabel
+        from kivymd.uix.tab import MDTabsItem, MDTabsItemText
         import pkgutil
 
-        class TrackerLayout(BoxLayout):
+        class TrackerLayout(MDBoxLayout):
             pass
 
-        class CommanderSelect(BoxLayout):
+        class CommanderSelect(MDBoxLayout):
             pass
 
-        class CommanderButton(ToggleButton):
+        class CommanderButton(MDButton, MDToggleButtonBehavior):
             pass
 
-        class FactionBox(BoxLayout):
+        class FactionBox(MDBoxLayout):
             pass
 
-        class CommanderGroup(BoxLayout):
+        class CommanderGroup(MDBoxLayout):
             pass
 
-        class ItemTracker(BoxLayout):
+        class ItemTracker(MDBoxLayout):
             pass
 
-        class ItemLabel(Label):
+        class ItemLabel(MDLabel):
             pass
 
         class WargrooveManager(GameManager):
@@ -256,8 +251,8 @@ class WargrooveContext(CommonContext):
             base_title = "Archipelago Wargroove Client"
             ctx: WargrooveContext
             unit_tracker: ItemTracker
-            trigger_tracker: BoxLayout
-            boost_tracker: BoxLayout
+            trigger_tracker: MDBoxLayout
+            boost_tracker: MDBoxLayout
             commander_buttons: Dict[int, List[CommanderButton]]
             tracker_items = {
                 "Swordsman": ItemData(None, "Unit", False),
@@ -267,9 +262,10 @@ class WargrooveContext(CommonContext):
 
             def build(self):
                 container = super().build()
-                panel = TabbedPanelItem(text="Wargroove")
+                panel = MDTabsItem(MDTabsItemText(text="Wargroove"))
                 panel.content = self.build_tracker()
                 self.tabs.add_widget(panel)
+                self.tabs.carousel.add_widget(panel.content)
                 return container
 
             def build_tracker(self) -> TrackerLayout:
@@ -283,21 +279,21 @@ class WargrooveContext(CommonContext):
                         commander_group = CommanderGroup()
                         commander_buttons = []
                         for commander in commanders:
-                            commander_button = CommanderButton(text=commander.name, group="commanders")
+                            commander_button = CommanderButton(MDButtonText(commander.name), group="commanders")
                             if faction == "Starter":
                                 commander_button.disabled = False
                             commander_button.bind(on_press=lambda instance: self.ctx.set_commander(instance.text))
                             commander_buttons.append(commander_button)
                             commander_group.add_widget(commander_button)
                         self.commander_buttons[faction] = commander_buttons
-                        faction_box.add_widget(Label(text=faction, size_hint_x=None, pos_hint={'left': 1}, size_hint_y=None, height=10))
+                        faction_box.add_widget(MDLabel(text=faction, size_hint_x=None, pos_hint={'left': 1}, size_hint_y=None, height=10))
                         faction_box.add_widget(commander_group)
                         commander_select.add_widget(faction_box)
                     item_tracker = ItemTracker(padding=[0,20])
-                    self.unit_tracker = BoxLayout(orientation="vertical")
-                    other_tracker = BoxLayout(orientation="vertical")
-                    self.trigger_tracker = BoxLayout(orientation="vertical")
-                    self.boost_tracker = BoxLayout(orientation="vertical")
+                    self.unit_tracker = MDBoxLayout(orientation="vertical")
+                    other_tracker = MDBoxLayout(orientation="vertical")
+                    self.trigger_tracker = MDBoxLayout(orientation="vertical")
+                    self.boost_tracker = MDBoxLayout(orientation="vertical")
                     other_tracker.add_widget(self.trigger_tracker)
                     other_tracker.add_widget(self.boost_tracker)
                     item_tracker.add_widget(self.unit_tracker)
