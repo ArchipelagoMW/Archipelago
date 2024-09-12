@@ -133,7 +133,7 @@ def enforce_multiplayer_limits(world: JakAndDaxterWorld):
                  or options.global_orbsanity_bundle_size.value > GlobalOrbsanityBundleSize.multiplayer_maximum)):
         friendly_message += (f"  "
                              f"{options.global_orbsanity_bundle_size.display_name} must be no less than "
-                             f"{GlobalOrbsanityBundleSize.multiplayer_minimum} and no greater than"
+                             f"{GlobalOrbsanityBundleSize.multiplayer_minimum} and no greater than "
                              f"{GlobalOrbsanityBundleSize.multiplayer_maximum} (currently "
                              f"{options.global_orbsanity_bundle_size.value}).\n")
 
