@@ -7,11 +7,6 @@ from collections import deque
 
 assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
 
-from kivy.uix.image import AsyncImage
-from kivy.uix.relativelayout import RelativeLayout
-from kivymd.uix.behaviors import CommonElevationBehavior
-from kivymd.uix.divider import MDDivider
-
 if sys.platform == "win32":
     import ctypes
 
@@ -32,12 +27,14 @@ import Utils
 if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
+
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
-
+from kivy.uix.image import AsyncImage
+from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel

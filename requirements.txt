@@ -14,3 +14,4 @@ cython>=3.0.11
 cymem>=2.0.8
 orjson>=3.10.7
 typing_extensions>=4.12.2
+pyshortcuts>=1.9.1

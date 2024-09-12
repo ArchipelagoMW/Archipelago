@@ -21,6 +21,7 @@ import webbrowser
 from os.path import isfile
 from shutil import which
 from typing import Callable, Optional, Sequence, Tuple, Union
+from pyshortcuts import make_shortcut
 
 import Utils
 import settings
@@ -234,6 +235,15 @@ def launch(exe, in_terminal=False):
             return
     subprocess.Popen(exe)
 
+def create_shortcut(button, component: Component):
+    script = sys.argv[0]
+    wkdir = Utils.local_path()
+
+    script = f"{script} \"{component.display_name}\""
+    make_shortcut(script, name=f"Archipelago {component.display_name}", icon=local_path("data", "icon.ico"),
+                  startmenu=False, terminal=False, working_dir=wkdir)
+    button.menu.dismiss()
+
 
 refresh_components: Optional[Callable[[], None]] = None
 
@@ -327,12 +337,16 @@ def run_gui():
                                               text_color=self.theme_cls.primaryColor)
 
                 def open_menu(caller):
-                    menu_items = [
-                        {
-                            "text": "Add shortcut on desktop"
-                        }
-                    ]
-                    MDDropdownMenu(caller=caller, items=menu_items).open()
+                    caller.menu.open()
+
+                menu_items = [
+                    {
+                        "text": "Add shortcut on desktop",
+                        "leading_icon": "laptop",
+                        "on_release": lambda: create_shortcut(context_button, component)
+                    }
+                ]
+                context_button.menu = MDDropdownMenu(caller=context_button, items=menu_items)
                 context_button.bind(on_release=open_menu)
                 button_layout.add_widget(context_button)
 
