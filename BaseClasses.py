@@ -612,7 +612,8 @@ class MultiWorld():
             "full": set()
         }
         for player, world in self.worlds.items():
-            players[world.options.accessibility.current_key].add(player)
+            if player in self.player_ids:  # skip Groups
+                players[world.options.accessibility.current_key].add(player)
 
         beatable_fulfilled = False
 
