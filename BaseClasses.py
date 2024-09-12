@@ -335,6 +335,11 @@ class MultiWorld():
             for item_name, item_count in next(iter(common_item_count.values())).items():
                 for _ in range(item_count):
                     new_item = group["world"].create_item(item_name)
+
+                    class AdvancementTrue(new_item.__class__):
+                        advancement = True
+                    new_item.__class__ = AdvancementTrue
+
                     # mangle together all original classification bits
                     new_item.classification |= classifications[item_name]
                     new_itempool.append(new_item)
