@@ -336,6 +336,8 @@ class MultiWorld():
                 for _ in range(item_count):
                     new_item = group["world"].create_item(item_name)
 
+                   # Make sure this item is picked up even if it is not progression
+                    # (Monkeypatching a property is kind of hard, this is one of the only ways)
                     class AdvancementTrue(new_item.__class__):
                         advancement = True
                     new_item.__class__ = AdvancementTrue
