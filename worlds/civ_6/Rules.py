@@ -40,14 +40,18 @@ def has_required_items(state: CollectionState, prereqs: List[str], required_coun
             else:
                 if state.has(item, player):
                     count += 1
-
+                    # early out if we've already gotten enough
+                    if count >= required_count:
+                        return True
         for item, required_progressive_item_count in progressive_items.items():
             if state.has(item, player, required_progressive_item_count):
                 count += required_progressive_item_count
-        return count >= required_count
+                # early out if we've already gotten enough
+                if count >= required_count:
+                    return True
+        return False
     else:
-        total = state.count_from_list_unique(
+        return state.has_from_list_unique(
             [
-                get_item_by_civ_name(prereq, state.multiworld.worlds[player].item_table).name for prereq in prereqs
-            ], player)
-        return total >= required_count
+                get_item_by_civ_name(prereq, world.item_table).name for prereq in prereqs
+            ], player, required_count)

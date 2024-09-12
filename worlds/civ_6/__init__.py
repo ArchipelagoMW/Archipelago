@@ -1,13 +1,16 @@
 import math
 import os
-from typing import Any, Dict, Optional, Set
+from typing import Any, Dict, Set
 
-from .Data import get_boosts_data
+from worlds.generic.Rules import forbid_item
+
+
+from .Data import get_boosts_data, get_era_required_items_data
 
 from .Rules import create_boost_rules
 from .Container import CivVIContainer, generate_goody_hut_sql, generate_new_items, generate_setup_file, generate_update_boosts_sql
 from .Enum import CivVICheckType
-from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
+from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIItemData, FillerItemRarity, format_item_name, generate_item_table, CivVIItem, get_random_filler_by_rarity
 from .Locations import CivVILocation, CivVILocationData, EraType, generate_era_location_table, generate_flat_location_table
 from .Options import CivVIOptions
 from .Regions import create_regions
@@ -59,7 +62,6 @@ class CivVIWorld(World):
 
     item_table: Dict[str, CivVIItemData] = {}
     location_by_era: Dict[EraType, Dict[str, CivVILocationData]]
-
     required_client_version = (0, 4, 5)
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -93,6 +95,9 @@ class CivVIWorld(World):
         return CivVIItem(item, self.player, classification)
 
     def create_items(self) -> None:
+        data = get_era_required_items_data()
+        early_items = data[EraType.ERA_ANCIENT.value]
+        early_locations = [location for location in self.location_table.values() if location.era_type == EraType.ERA_ANCIENT.value]
         for item_name, data in self.item_table.items():
             # These item types are handled individually
             if data.item_type in [CivVICheckType.PROGRESSIVE_DISTRICT, CivVICheckType.ERA, CivVICheckType.GOODY]:
@@ -107,6 +112,16 @@ class CivVIWorld(World):
 
             self.multiworld.itempool += [self.create_item(
                 item_to_create)]
+            if item.civ_name in early_items:
+                self.multiworld.early_items[self.player][item_to_create] = 1
+            elif self.item_table[item_name].era in [EraType.ERA_ATOMIC, EraType.ERA_INFORMATION, EraType.ERA_FUTURE]:
+                for location in early_locations:
+                    found_location = None
+                    try:
+                        found_location = self.multiworld.get_location(location.name, self.player)
+                        forbid_item(found_location, item_to_create, self.player)
+                    except KeyError:
+                        pass
 
         # Era items
         if self.options.progression_style == "eras_and_districts":
@@ -115,6 +130,7 @@ class CivVIWorld(World):
                 if era.value == "ERA_ANCIENT":
                     continue
                 self.multiworld.itempool += [self.create_item(self.item_table.get("Progressive Era").name)]
+            self.multiworld.early_items[self.player]["Progressive Era"] = 2
 
         num_filler_items = 0
         # Goody items, create 10 by default if options are enabled

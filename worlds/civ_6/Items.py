@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Dict, Optional, TYPE_CHECKING, List
 from BaseClasses import Item, ItemClassification
 from .Data import get_era_required_items_data, get_existing_civics_data, get_existing_techs_data, get_goody_hut_rewards_data, get_progressive_districts_data
-from .Enum import CivVICheckType
+from .Enum import CivVICheckType, EraType
 from .ProgressiveDistricts import get_flat_progressive_districts
 if TYPE_CHECKING:
     from . import CivVIWorld
@@ -94,8 +94,9 @@ class CivVIItemData:
     item_type: CivVICheckType
     progression_name: Optional[str]
     civ_name: Optional[str]
+    era: Optional[EraType]
 
-    def __init__(self, name, civ_vi_id: int, cost: int, item_type: CivVICheckType, id_offset: int, classification: ItemClassification, progression_name: Optional[str], civ_name: Optional[str] = None):
+    def __init__(self, name, civ_vi_id: int, cost: int, item_type: CivVICheckType, id_offset: int, classification: ItemClassification, progression_name: Optional[str], civ_name: Optional[str] = None, era: Optional[EraType] = None):
         self.classification = classification
         self.civ_vi_id = civ_vi_id
         self.name = name
@@ -104,6 +105,7 @@ class CivVIItemData:
         self.item_type = item_type
         self.progression_name = progression_name
         self.civ_name = civ_name
+        self.era = era
 
 
 class CivVIItem(Item):
@@ -156,7 +158,8 @@ def _generate_tech_items(id_base: int, required_items: List[str], progressive_it
             id_offset=id_base,
             classification=classification,
             progression_name=progression_name,
-            civ_name=civ_name
+            civ_name=civ_name,
+            era=EraType(tech["EraType"])
         )
 
         tech_id += 1
@@ -190,7 +193,8 @@ def _generate_civics_items(id_base: int, required_items: List[str], progressive_
             id_offset=id_base,
             classification=classification,
             progression_name=progression_name,
-            civ_name=civ_name
+            civ_name=civ_name,
+            era=EraType(civic["EraType"])
         )
 
         civic_id += 1

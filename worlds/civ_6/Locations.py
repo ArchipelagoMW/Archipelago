@@ -180,7 +180,7 @@ def generate_era_location_table() -> Dict[EraType, Dict[str, CivVILocationData]]
 # Goody Huts, defaults to 10 goody huts as location checks (rarely will a player get more than this)
     for i in range(10):
         era_locations[EraType.ERA_ANCIENT.value]["GOODY_HUT_" + str(i + 1)] = CivVILocationData(
-            "GOODY_HUT_" + str(i + 1), 0, 0, id_base, EraType.ERA_ANCIENT, CivVICheckType.GOODY)
+            "GOODY_HUT_" + str(i + 1), 0, 0, id_base, EraType.ERA_ANCIENT.value, CivVICheckType.GOODY)
         id_base += 1
 # Boosts
     boosts = get_boosts_data()

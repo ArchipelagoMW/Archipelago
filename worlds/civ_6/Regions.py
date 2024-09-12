@@ -12,21 +12,15 @@ if TYPE_CHECKING:
     from Items import CivVIItemData
 
 
-def get_cumulative_prereqs_for_era(end_era: EraType, exclude_progressive_items: bool = True, item_table: Dict[str, 'CivVIItemData'] = None) -> List['CivVIItemData']:
-    """Gets the specific techs/civics that are required for the specified era as well as all previous eras"""
-    cumulative_prereqs = []
-    era_required_items = {}
-    era_required_items = get_era_required_items_data()
+def get_prereqs_for_era(end_era: EraType, exclude_progressive_items: bool = True, item_table: Dict[str, 'CivVIItemData'] = None) -> List['CivVIItemData']:
+    """Gets the specific techs/civics that are required for the specified era"""
+    era_required_items = get_era_required_items_data()[end_era.value].copy()
 
-    for era in EraType:
-        cumulative_prereqs += era_required_items[era.value]
-        if era == end_era:
-            break
     # If we are excluding progressive items, we need to remove them from the list of expected items (TECH_BRONZE_WORKING won't be here since it will be PROGRESSIVE_ENCAMPMENT)
     if exclude_progressive_items:
         flat_progressive_items = get_flat_progressive_districts()
         prereqs_without_progressive_items = []
-        for item in cumulative_prereqs:
+        for item in era_required_items:
             if item in flat_progressive_items:
                 continue
             else:
@@ -34,7 +28,7 @@ def get_cumulative_prereqs_for_era(end_era: EraType, exclude_progressive_items: 
 
         return [get_item_by_civ_name(prereq, item_table) for prereq in prereqs_without_progressive_items]
 
-    return [get_item_by_civ_name(prereq, item_table) for prereq in cumulative_prereqs]
+    return [get_item_by_civ_name(prereq, item_table) for prereq in era_required_items]
 
 
 def has_required_progressive_districts(state: CollectionState, era: EraType, player: int) -> bool:
@@ -43,13 +37,13 @@ def has_required_progressive_districts(state: CollectionState, era: EraType, pla
 
     item_table = state.multiworld.worlds[player].item_table
     # Verify we can still reach non progressive items
-    all_previous_items_no_progression = get_cumulative_prereqs_for_era(
+    all_previous_items_no_progression = get_prereqs_for_era(
         era, True, item_table)
     if not state.has_all([item.name for item in all_previous_items_no_progression], player):
         return False
 
     # Verify we have the correct amount of progressive items
-    all_previous_items = get_cumulative_prereqs_for_era(
+    all_previous_items = get_prereqs_for_era(
         era, False, item_table)
     required_counts: Dict[str, int] = {}
 
@@ -66,13 +60,13 @@ def has_required_progressive_districts(state: CollectionState, era: EraType, pla
 
 
 def has_required_progressive_eras(state: CollectionState, era: EraType, player: int) -> bool:
-    """Checks, for the given era, how many are required to proceed to the next era. Ancient = 1, Classical = 2, etc. Assumes 2 required for classical and starts from there so as to decrease odds of hard locking without the turns to get the items"""
+    """Checks, for the given era, how many are required to proceed to the next era. Ancient = 0, Classical = 1, etc."""
     if era == EraType.ERA_FUTURE or era == EraType.ERA_INFORMATION:
         return True
 
     eras = [e.value for e in EraType]
     era_index = eras.index(era.value)
-    return state.has(format_item_name("PROGRESSIVE_ERA"), player, era_index + 2)
+    return state.has(format_item_name("PROGRESSIVE_ERA"), player, era_index + 1)
 
 
 def has_required_items(state: CollectionState, era: EraType, world: 'CivVIWorld') -> bool:

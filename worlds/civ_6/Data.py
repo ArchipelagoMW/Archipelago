@@ -41,7 +41,7 @@ def get_boosts_data() -> List[CivVIBoostData]:
     return boosts
 
 
-def get_era_required_items_data():
+def get_era_required_items_data() -> List[str]:
     return _get_data("era_required_items")
 
 
