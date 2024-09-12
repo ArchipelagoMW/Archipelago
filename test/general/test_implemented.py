@@ -57,7 +57,8 @@ class TestImplemented(unittest.TestCase):
         """Tests that worlds using explicit indirect conditions produce identical spheres as when using implicit
         indirect conditions"""
         # Because the iteration order of blocked_connections in CollectionState.update_reachable_regions() is
-        # nondeterministic, this test may sometimes pass even when there are missing indirect conditions.
+        # nondeterministic, this test may sometimes pass with the same seed even when there are missing indirect
+        # conditions.
         for game_name, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type)
             world = multiworld.get_game_worlds(game_name)[0]
@@ -77,7 +78,7 @@ class TestImplemented(unittest.TestCase):
                 call_all(multiworld, "post_fill")
 
                 # Note: `multiworld.get_spheres()` iterates a set of locations, so the order that locations are checked
-                # is nondeterministic.
+                # is nondeterministic and may vary between runs with the same seed.
                 explicit_spheres = list(multiworld.get_spheres())
                 # Disable explicit indirect conditions and produce a second list of spheres.
                 world.explicit_indirect_conditions = False
