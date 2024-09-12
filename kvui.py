@@ -119,6 +119,45 @@ class ScrollBox(MDScrollView):
         self.bar_width = dp(12)
         self.scroll_type = ["bars"]
 
+#thanks kivymd
+class ToggleButton(MDButton):
+    state: typing.Literal["normal", "down"]
+
+    def __init__(self, *args, **kwargs):
+        super(ToggleButton, self).__init__(*args, **kwargs)
+        self.bind(state=self._update_bg)
+
+    def _do_press(self):
+        pass
+
+    def _do_release(self, *args) -> None:
+        if self.state == "down":
+            self.state = "normal"
+        else:
+            self.state = "down"
+
+    def _update_bg(self, _, state: str):
+        if self.theme_bg_color == "Primary":
+            self.theme_bg_color = "Custom"
+
+        if state == "down":
+            self.md_bg_color = self.theme_cls.primaryColor
+            for child in self.children:
+                if child.theme_text_color == "Primary":
+                    child.theme_text_color = "Custom"
+                if child.theme_icon_color == "Primary":
+                    child.theme_icon_color = "Custom"
+                child.text_color = self.theme_cls.onPrimaryColor
+                child.icon_color = self.theme_cls.onPrimaryColor
+        else:
+            self.md_bg_color = self.theme_cls.surfaceContainerLowestColor
+            for child in self.children:
+                if child.theme_text_color == "Primary":
+                    child.theme_text_color = "Custom"
+                if child.theme_icon_color == "Primary":
+                    child.theme_icon_color = "Custom"
+                child.text_color = self.theme_cls.primaryColor
+                child.icon_color = self.theme_cls.primaryColor
 
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
