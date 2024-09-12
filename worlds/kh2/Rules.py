@@ -362,7 +362,7 @@ class KH2FormRules(KH2Rules):
         # indirect condition.
         self.form_region_indirect_condition_regions = {
             RegionName.Final: {
-                self.get_location(location).parent_region for location in final_leveling_access
+                self.world.get_location(location).parent_region for location in final_leveling_access
             }
         }
 
