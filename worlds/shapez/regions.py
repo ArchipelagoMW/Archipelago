@@ -139,7 +139,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
         goal_region = regions["All Buildings Shapes"]
     goal_location = location_type(player, "Goal", None, goal_region,
                                   LocationProgressType.DEFAULT)
-    goal_location.place_locked_item(item_type("Goal", ItemClassification.progression, None, player))
+    goal_location.place_locked_item(item_type("Goal", ItemClassification.progression_skip_balancing, None, player))
     if goal == "efficiency_iii":
         add_rule(goal_location, lambda state: state.has("Big Belt Upgrade", player, 7))
     goal_region.locations.append(goal_location)
