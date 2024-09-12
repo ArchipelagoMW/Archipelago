@@ -288,7 +288,7 @@ class ShapezLiteWorld(ShapezWorld):
     item_type = ShapezLiteItem
     location_type = ShapezLiteLocation
     lite = True
-    base_id = 20000707
+    base_id = 20010707
     item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(all_locations_lite, base_id)}
 

@@ -228,22 +228,22 @@ achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter
                                     "Copy-Pasta", "I've seen that before ...", "Memories from the past",
                                     "I need trains", "A bit early?", "GPS"]
 
-all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
-                            + [f"Level {x}" for x in range(1, 1000)]
-                            + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 1001)]
-                            + list(shapesanity_simple)
-                            + list(shapesanity_1_4)
-                            + list(shapesanity_two_sided)
-                            + list(shapesanity_three_parts)
-                            + list(shapesanity_four_parts)
-                            + achievement_locations)
-all_locations.sort()
-
 all_locations_lite: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
                                  + [f"Level {x}" for x in range(1, 120)]
                                  + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 121)]
                                  + achievement_locations)
 all_locations_lite.sort()
+
+non_lite_locations: List[str] = ([f"Level {x}" for x in range(120, 1000)]
+                                 + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(121, 1001)]
+                                 + list(shapesanity_simple)
+                                 + list(shapesanity_1_4)
+                                 + list(shapesanity_two_sided)
+                                 + list(shapesanity_three_parts)
+                                 + list(shapesanity_four_parts))
+non_lite_locations.sort()
+
+all_locations: List[str] = all_locations_lite + non_lite_locations
 
 
 def addlevels(maxlevel: int, logictype: str,
