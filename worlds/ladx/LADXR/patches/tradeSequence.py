@@ -386,34 +386,17 @@ def patchVarious(rom, settings):
     rom.patch(0x36, 0x0948, 0x0950, "", fill_nop=True)
 
     # Boomerang trade guy
-    if settings.boomerang not in {'trade', 'gift'} or settings.overworld in {'normal', 'nodungeons'}:
+    # if settings.boomerang not in {'trade', 'gift'} or settings.overworld in {'normal', 'nodungeons'}:
+    if settings.tradequest:
         # Update magnifier checks
         rom.patch(0x19, 0x05EC, ASM("ld a, [wTradeSequenceItem]\ncp $0E\njp nz, $7E61"), ASM("ld a, [wTradeSequenceItem2]\nand $20\njp z, $7E61"))  # show the guy
         rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E\njr nz, $06"), ASM("ld a, [wTradeSequenceItem2]\nand $20\njr z, $06"))  # load the proper room layout
     else:
+        # Monkey bridge patch, always have the bridge there.
+        rom.patch(0x00, 0x333D, ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
         # Always have the boomerang trade guy enabled (magnifier not needed)
         rom.patch(0x19, 0x05EC, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # show the guy
         rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # load the proper room layout
-    rom.patch(0x19, 0x05F4, ASM("ld a, [wTradeSequenceItem2]\nand a"), ASM("xor a"), fill_nop=True)
-
-
-def unrequiredTradeSequence(rom):
-    # Monkey bridge patch, always have the bridge there.
-    rom.patch(0x00, 0x333D, ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
-    # Make the zora photo work without the magnifier
-    rom.patch(0x18, 0x09F3, ASM("""
-        ld   a, [$DB40]
-        cp   $0E
-        jp   nz, $7F08 ; ClearEntityStatusBank18
-    """), "", fill_nop=True)
-    rom.patch(0x03, 0x0B6D, ASM("""
-        ld   a, [$DB40]
-        cp   $0E
-        jp   nz, $3F8D ; UnloadEntity
-    """), "", fill_nop=True)
-    # Always have the boomerang trade guy enabled (magnifier not needed)
-    rom.patch(0x19, 0x05EC, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # show the guy
-    rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # load the proper room layout
     rom.patch(0x19, 0x05F4, ASM("ld a, [wTradeSequenceItem2]\nand a"), ASM("xor a"), fill_nop=True)
 
 

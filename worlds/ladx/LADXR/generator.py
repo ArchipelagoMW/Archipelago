@@ -178,10 +178,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     patches.songs.upgradeMarin(rom)
     patches.songs.upgradeManbo(rom)
     patches.songs.upgradeMamu(rom)
-    if world.ladxr_settings.tradequest:
-        patches.tradeSequence.patchTradeSequence(rom, world.ladxr_settings)
-    else:
-        patches.tradeSequence.unrequiredTradeSequence(rom)
+    patches.tradeSequence.patchTradeSequence(rom, world.ladxr_settings)
     patches.bowwow.fixBowwow(rom, everywhere=world.ladxr_settings.bowwow != 'normal')
     if world.ladxr_settings.bowwow != 'normal':
         patches.bowwow.bowwowMapPatches(rom)
