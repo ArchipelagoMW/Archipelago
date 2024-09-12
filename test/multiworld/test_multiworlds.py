@@ -55,7 +55,7 @@ class TestAllGamesMultiworld(MultiworldTestBase):
         all_worlds = list(AutoWorldRegister.world_types.values())
         self.multiworld = setup_multiworld(all_worlds, ())
         for world in self.multiworld.worlds.values():
-            world.options.accessibility.value = Accessibility.option_locations
+            world.options.accessibility.value = Accessibility.option_full
         self.assertSteps(gen_steps)
         with self.subTest("filling multiworld", seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
@@ -66,8 +66,8 @@ class TestAllGamesMultiworld(MultiworldTestBase):
 class TestTwoPlayerMulti(MultiworldTestBase):
     def test_two_player_single_game_fills(self) -> None:
         """Tests that a multiworld of two players for each registered game world can generate."""
-        for world in AutoWorldRegister.world_types.values():
-            self.multiworld = setup_multiworld([world, world], ())
+        for world_type in AutoWorldRegister.world_types.values():
+            self.multiworld = setup_multiworld([world_type, world_type], ())
             for world in self.multiworld.worlds.values():
                 world.options.accessibility.value = Accessibility.option_full
             self.assertSteps(gen_steps)
