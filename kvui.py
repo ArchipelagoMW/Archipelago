@@ -388,41 +388,16 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             for child in self.children:
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
-                    if self.index:  # skip header
-                        if key == "status":
-                            if self.hint["status"] == HintStatus.HINT_FOUND:
-                                return
-                            ctx = App.get_running_app().ctx
-                            if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
-                                # open a dropdown
-                                self.dropdown.open(self.ids["status"])
-                        else:
-                            if self.selected:
-                                self.parent.clear_selection()
-                            else:
-                                text = "".join(
-                                    (self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
-                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
-                                     if self.entrance_text != "Vanilla"
-                                     else "", ". (", self.status_text.lower(), ")"))
-                                temp = MarkupLabel(text).markup
-                                text = "".join(
-                                    part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                                Clipboard.copy(
-                                    escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
-                                return self.parent.select_with_touch(self.index, touch)
+                    if key == "status":
+                        parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
+                    else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    if key == parent.sort_key:
+                        # second click reverses order
+                        parent.reversed = not parent.reversed
                     else:
-                        if key == "status":
-                            parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
-                        else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
-                        if key == parent.sort_key:
-                            # second click reverses order
-                            parent.reversed = not parent.reversed
-                        else:
-                            parent.sort_key = key
-                            parent.reversed = False
-                        App.get_running_app().update_hints()
-                    return False
+                        parent.sort_key = key
+                        parent.reversed = False
+                    App.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
