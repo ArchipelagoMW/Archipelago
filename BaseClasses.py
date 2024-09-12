@@ -221,6 +221,10 @@ class MultiWorld():
 
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
+            if world_type.visibility == AutoWorld.Visibility.warning:
+                logging.warning(f"Player {player} is playing {world_type.game}, "
+                                f"which is currently considered to be unstable."
+                                f"Issues may occur as a result.")
             self.worlds[player] = world_type(self, player)
             options_dataclass: typing.Type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
