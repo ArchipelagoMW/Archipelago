@@ -129,7 +129,8 @@ SC2WOL_ITEM_ID_OFFSET = 1000
 SC2HOTS_ITEM_ID_OFFSET = SC2WOL_ITEM_ID_OFFSET + 1000
 SC2LOTV_ITEM_ID_OFFSET = SC2HOTS_ITEM_ID_OFFSET + 1000
 SC2_KEY_ITEM_ID_OFFSET = SC2LOTV_ITEM_ID_OFFSET + 1000
-SC2_KEY_ITEM_SECTION_SIZE = 1000 # Reserve this many IDs for missions, layouts, campaigns, and generic keys each
+# Reserve this many IDs for missions, layouts, campaigns, and generic keys each
+SC2_KEY_ITEM_SECTION_SIZE = 1000
 
 WEAPON_ARMOR_UPGRADE_MAX_LEVEL = 5
 
@@ -1906,48 +1907,49 @@ item_table = {
 }
 
 # Add keys to item table
-# Mission keys (1-999)
+# Mission keys (key offset + 0-999)
+# Mission IDs start at 1 so the item IDs are moved down a space
 mission_key_item_table = {
     item_names._TEMPLATE_MISSION_KEY.format(mission.mission_name):
-        ItemData(mission.id + SC2_KEY_ITEM_ID_OFFSET, FactionlessItemType.Nothing, 0, SC2Race.ANY,
-                 classification=ItemClassification.progression, quantity=0, origin={"key"})
+        ItemData(mission.id - 1 + SC2_KEY_ITEM_ID_OFFSET, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0)
     for mission in SC2Mission
 }
-# Numbered layout keys (1001 - 1999)
+# Numbered layout keys (key offset + 1000 - 1999)
 numbered_layout_key_item_table = {
     item_names._TEMPLATE_NUMBERED_LAYOUT_KEY.format(mission.id):
-        ItemData(mission.id + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE, FactionlessItemType.Nothing, 0, SC2Race.ANY,
-                 classification=ItemClassification.progression, quantity=0, origin={"key"})
+        ItemData(mission.id - 1 + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0)
     for mission in SC2Mission
 }
-# Numbered campaign keys (2001 - 2999)
+# Numbered campaign keys (key offset + 2000 - 2999)
 numbered_campaign_key_item_table = {
     item_names._TEMPLATE_NUMBERED_CAMPAIGN_KEY.format(mission.id):
-        ItemData(mission.id + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 2, FactionlessItemType.Nothing, 0, SC2Race.ANY,
-                 classification=ItemClassification.progression, quantity=0, origin={"key"})
+        ItemData(mission.id - 1 + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 2, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0)
     for mission in SC2Mission
 }
-# Flavor keys (3000 - 3499)
+# Flavor keys (key offset + 3000 - 3999)
 flavor_key_item_table = {
     item_names._TEMPLATE_FLAVOR_KEY.format(name):
         ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 3, FactionlessItemType.Nothing, 0, SC2Race.ANY,
-                 classification=ItemClassification.progression, quantity=0, origin={"key"})
+                 classification=ItemClassification.progression, quantity=0)
     for (i, name) in enumerate(item_names._flavor_key_names)
 }
-# Named layout keys (3500 - 3799)
+# Named layout keys (key offset + 4000 - 4999)
 campaign_to_layout_names = get_used_layout_names()
 named_layout_key_item_table = {
     item_names._TEMPLATE_NAMED_LAYOUT_KEY.format(layout_name, campaign.campaign_name):
-        ItemData(layout_start + i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 3 + 500, FactionlessItemType.Nothing, 0, SC2Race.ANY,
-                 classification=ItemClassification.progression, quantity=0, origin={"key"})
+        ItemData(layout_start + i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 4, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0)
     for (campaign, (layout_start, layout_names)) in campaign_to_layout_names.items() for (i, layout_name) in enumerate(layout_names)
 }
-# Named campaign keys (3800 - 3999)
+# Named campaign keys (key offset + 5000 - 5999)
 campaign_names = [campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL]
 named_campaign_key_item_table = {
     item_names._TEMPLATE_NAMED_CAMPAIGN_KEY.format(campaign_name):
-        ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 3 + 800, FactionlessItemType.Nothing, 0, SC2Race.ANY,
-                 classification=ItemClassification.progression, quantity=0, origin={"key"})
+        ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 5, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0)
     for (i, campaign_name) in enumerate(campaign_names)
 }
 key_item_table = {}

@@ -48,7 +48,7 @@ class MissionOrderNode(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_visual_requirement(self, searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, start_node: MissionOrderNode) -> Union[str, SC2MOGenMission]:
         raise NotImplementedError
     
     @abstractmethod
@@ -180,7 +180,7 @@ class SC2MissionOrder(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return []
     
-    def get_visual_requirement(self, _searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, _start_node: MissionOrderNode) -> Union[str, SC2MOGenMission]:
         return "All Missions"
 
     def get_key_name(self) -> str:
@@ -318,7 +318,7 @@ class SC2MissionOrder(MissionOrderNode):
                         mission.entry_rule.target_amount += 1
                         mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, mission.prev))
 
-    def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode, rule_id: int = -1) -> EntryRule:
+    def dict_to_entry_rule(self, data: Dict[str, Any], start_node: MissionOrderNode, rule_id: int = -1) -> EntryRule:
         if "items" in data:
             items: Dict[str, int] = data["items"]
             has_generic_key = False
@@ -333,17 +333,17 @@ class SC2MissionOrder(MissionOrderNode):
                     self.items_to_lock[item] = amount
             rule = ItemEntryRule(items)
             if has_generic_key:
-                self.keys_to_resolve.setdefault(searcher, []).append(rule)
+                self.keys_to_resolve.setdefault(start_node, []).append(rule)
             return rule
         if "rules" in data:
-            rules = [self.dict_to_entry_rule(subrule, searcher) for subrule in data["rules"]]
+            rules = [self.dict_to_entry_rule(subrule, start_node) for subrule in data["rules"]]
             return SubRuleEntryRule(rules, data["amount"], rule_id)
         if "scope" in data:
             objects: List[Tuple[MissionOrderNode, str]] = []
             for address in data["scope"]:
-                resolved = self.resolve_address(address, searcher)
+                resolved = self.resolve_address(address, start_node)
                 objects.append((resolved, address))
-            visual_reqs = [obj.get_visual_requirement(searcher) for (obj, _) in objects]
+            visual_reqs = [obj.get_visual_requirement(start_node) for (obj, _) in objects]
             if "amount" in data:
                 missions = [mission for (obj, _) in objects for mission in obj.get_missions() if not mission.option_empty]
                 if len(missions) == 0:
@@ -361,10 +361,10 @@ class SC2MissionOrder(MissionOrderNode):
                 missions.extend(exits)
             return BeatMissionsEntryRule(missions, visual_reqs)
 
-    def resolve_address(self, address: str, searcher: MissionOrderNode) -> MissionOrderNode:
+    def resolve_address(self, address: str, start_node: MissionOrderNode) -> MissionOrderNode:
         if address.startswith("../") or address == "..":
             # Relative address, starts from searching object
-            cursor = searcher
+            cursor = start_node
         else:
             # Absolute address, starts from the top
             cursor = self
@@ -384,7 +384,7 @@ class SC2MissionOrder(MissionOrderNode):
                 if len(result) > 1:
                     raise ValueError((f"Address \"{address_so_far}\" (from \"{address}\") found more than one {cursor.child_type_name()}s."))
                 cursor = result[0]
-            if cursor == searcher:
+            if cursor == start_node:
                 raise ValueError(
                     f"Address \"{address_so_far}\" (from \"{address}\") returned to original object. " + 
                     "This is not allowed to avoid circular requirements."
@@ -568,10 +568,10 @@ class SC2MOGenCampaign(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return self.exits
     
-    def get_visual_requirement(self, searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, start_node: MissionOrderNode) -> Union[str, SC2MOGenMission]:
         visual_name = self.get_visual_name()
         # Needs special handling for double-parent, which is valid for missions but errors for campaigns
-        first_parent = searcher.get_parent("", "")
+        first_parent = start_node.get_parent("", "")
         if (
             first_parent is self or (
                 first_parent.parent is not None and first_parent.get_parent("", "") is self
@@ -825,9 +825,9 @@ class SC2MOGenLayout(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return self.exits
     
-    def get_visual_requirement(self, searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, start_node: MissionOrderNode) -> Union[str, SC2MOGenMission]:
         visual_name = self.get_visual_name()
-        if searcher.get_parent("", "") is self and visual_name == "":
+        if start_node.get_parent("", "") is self and visual_name == "":
             return "this questline"
         return visual_name
     
@@ -933,7 +933,7 @@ class SC2MOGenMission(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return [self]
     
-    def get_visual_requirement(self, _searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, _start_node: MissionOrderNode) -> Union[str, SC2MOGenMission]:
         return self
     
     def get_key_name(self) -> str:

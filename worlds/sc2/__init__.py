@@ -151,7 +151,7 @@ class SC2World(World):
         flag_user_excluded_item_sets(self, item_list)
         flag_war_council_items(self, item_list)
         flag_and_add_resource_locations(self, item_list)
-        create_and_flag_mission_order_required_items(self, item_list)
+        flag_mission_order_required_items(self, item_list)
         pool: List[Item] = prune_item_pool(self, item_list)
         pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
 
@@ -211,6 +211,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     unexcluded_items = world.options.unexcluded_items
     locked_items = world.options.locked_items
     start_inventory = world.options.start_inventory
+    key_items = world.custom_mission_order.get_items_to_lock()
 
     def resolve_count(count: Optional[int], max_count: int) -> int:
         if count == 0:
@@ -228,6 +229,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         unexcluded_count = unexcluded_items.get(item_name)
         locked_count = locked_items.get(item_name)
         start_count: Optional[int] = start_inventory.get(item_name)
+        key_count = key_items.get(item_name, 0)
         # specifying 0 in the yaml means exclude / lock all
         # start_inventory doesn't allow specifying 0
         # not specifying means don't exclude/lock/start
@@ -258,7 +260,9 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
             logger.warning(f"Item {item_name} had excluded + locked + start amounts greater than maximum amount "
                 f"({excluded_count} + {locked_count} + {start_count} > {max_count}). Decreasing excluded amount.")
             excluded_count = max_count - start_count - locked_count
-        for index in range(max_count - excluded_count):
+        # Make sure the final count creates enough items to satisfy key requirements
+        final_count = max(max_count - excluded_count, key_count)
+        for index in range(final_count):
             result.append(FilterItem(item_name, item_data, index))
             if index < start_count:
                 result[-1].flags |= ItemFilterFlags.StartInventory
@@ -641,9 +645,8 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
                 world.locked_locations.append(location.name)
 
 
-def create_and_flag_mission_order_required_items(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Marks items that are necessary for item rules in the mission order and forces them to be progression,
-    and create extra items if the existing amount is insufficient."""
+def flag_mission_order_required_items(world: SC2World, item_list: List[FilterItem]) -> None:
+    """Marks items that are necessary for item rules in the mission order and forces them to be progression."""
     locks_required = world.custom_mission_order.get_items_to_lock()
     locks_done = {item: 0 for item in locks_required}
     for item in item_list:
@@ -651,14 +654,6 @@ def create_and_flag_mission_order_required_items(world: SC2World, item_list: Lis
             item.flags |= ItemFilterFlags.Necessary
             item.flags |= ItemFilterFlags.ForceProgression
             locks_done[item.name] += 1
-    # Create extra items if there's not enough in the pool already
-    for (item_name, amount) in locks_required.items():
-        done = locks_done[item_name]
-        for idx in range(amount - done):
-            new_item = FilterItem(item_name, items.item_table[item_name], done + idx)
-            new_item.flags |= ItemFilterFlags.Necessary
-            new_item.flags |= ItemFilterFlags.ForceProgression
-            item_list.append(new_item)
 
 
 def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:

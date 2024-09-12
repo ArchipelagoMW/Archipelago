@@ -295,14 +295,6 @@ def remove_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]],
             # Remove the first two mission changes that create the branching path
             mission_order[SC2Campaign.WOL.campaign_name]["Char"]["missions"] = mission_order[SC2Campaign.WOL.campaign_name]["Char"]["missions"][2:]
     if SC2Campaign.NCO in removed_counts:
-        # Update entry rules for Mission Pack 2 & 3
-        for idx in range(2):
-            this_layout = f"Mission Pack {idx + 2}"
-            prev_layout = f"Mission Pack {idx + 1}"
-            prev_last_index = mission_order[SC2Campaign.NCO.campaign_name][prev_layout]["size"] - 1
-            mission_order[SC2Campaign.NCO.campaign_name][this_layout]["entry_rules"][0] = {
-                "scope": [f"../{prev_layout}/{prev_last_index}"]
-            }
         # Remove the whole last layout if its size is 0
         if "Mission Pack 3" in removed_counts[SC2Campaign.NCO] and removed_counts[SC2Campaign.NCO]["Mission Pack 3"] == 3:
             mission_order[SC2Campaign.NCO.campaign_name].pop("Mission Pack 3")

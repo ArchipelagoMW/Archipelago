@@ -714,7 +714,6 @@ preset_lotv_epilogue = {
     }
 }
 
-# Entry rules in NCO point at specific missions since the columns don't have visible titles
 preset_nco = {
     "min_difficulty": "easy",
     "global": {
