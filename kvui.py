@@ -784,12 +784,15 @@ class HintLog(RecycleView):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
             self.scroll_y = 1.0
         data = []
+        ctx = App.get_running_app().ctx
         for hint in hints:
             if not hint.get("status"): # Allows connecting to old servers
                 hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
             hint_status_node = self.parser.handle_node({"type": "color",
                                                         "color": status_colors.get(hint["status"], "red"),
                                                         "text": status_names.get(hint["status"], "Unknown")})
+            if hint["status"] != HintStatus.HINT_FOUND and hint["receiving_player"] == ctx.slot:
+                hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
                 "item": {"text": self.parser.handle_node({
@@ -808,7 +811,7 @@ class HintLog(RecycleView):
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
                 "status": {
-                    "text": f"[u]{hint_status_node}[/u]",
+                    "text": hint_status_node,
                     "hint": hint,
                 },
             })
