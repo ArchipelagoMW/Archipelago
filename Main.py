@@ -290,6 +290,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         assert location.address not in locations_data[location.player], (
                             f"Locations with duplicate address. {location} and "
                             f"{locations_data[location.player][location.address]}")
+                        if location.item.player in multiworld.groups:
+                            location.item.code = multiworld.group_classifications[location.item.name]
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:

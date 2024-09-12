@@ -63,6 +63,7 @@ class MultiWorld():
     plando_connections: List
     worlds: Dict[int, "AutoWorld.World"]
     groups: Dict[int, Group]
+    group_classifications: Dict[str, int]
     regions: RegionManager
     itempool: List[Item]
     is_race: bool = False
@@ -327,7 +328,7 @@ class MultiWorld():
                             del (counters[player][item])
                 return counters, classifications
 
-            common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
+            common_item_count, self.group_classifications = find_common_pool(group["players"], group["item_pool"])
             if not common_item_count:
                 continue
 
@@ -336,7 +337,7 @@ class MultiWorld():
                 for _ in range(item_count):
                     new_item = group["world"].create_item(item_name)
                     # mangle together all original classification bits
-                    new_item.classification |= classifications[item_name]
+                    new_item.classification = ItemClassification.progression
                     new_itempool.append(new_item)
 
             region = Region("Menu", group_id, self, "ItemLink")
