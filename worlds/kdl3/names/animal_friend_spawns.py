@@ -1,3 +1,5 @@
+from typing import List
+
 grass_land_1_a1 = "Grass Land 1 - Animal 1"  # Nago
 grass_land_1_a2 = "Grass Land 1 - Animal 2"  # Rick
 grass_land_2_a1 = "Grass Land 2 - Animal 1"  # ChuChu
@@ -197,3 +199,12 @@ animal_friend_spawns = {
     iceberg_6_a5: "ChuChu Spawn",
     iceberg_6_a6: "Nago Spawn",
 }
+
+problematic_sets: List[List[str]] = [
+    # Animal groups that must be guaranteed unique. Potential for softlocks on future-ER if not.
+    [ripple_field_4_a1, ripple_field_4_a2, ripple_field_4_a3],
+    [sand_canyon_3_a1, sand_canyon_3_a2, sand_canyon_3_a3],
+    [cloudy_park_6_a1, cloudy_park_6_a2, cloudy_park_6_a3],
+    [iceberg_6_a1, iceberg_6_a2, iceberg_6_a3],
+    [iceberg_6_a4, iceberg_6_a5, iceberg_6_a6]
+]
