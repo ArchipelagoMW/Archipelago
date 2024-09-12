@@ -279,7 +279,10 @@ class WargrooveContext(CommonContext):
                         commander_group = CommanderGroup()
                         commander_buttons = []
                         for commander in commanders:
-                            commander_button = CommanderButton(MDButtonText(commander.name), group="commanders")
+                            commander_button = CommanderButton(MDButtonText(commander.name),
+                                                               background_normal=self.theme_cls.surfaceContainerLowColor,
+                                                               background_down=self.theme_cls.primaryColor,
+                                                               group="commanders")
                             if faction == "Starter":
                                 commander_button.disabled = False
                             commander_button.bind(on_press=lambda instance: self.ctx.set_commander(instance.text))
