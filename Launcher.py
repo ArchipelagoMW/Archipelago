@@ -21,7 +21,6 @@ import webbrowser
 from os.path import isfile
 from shutil import which
 from typing import Callable, Optional, Sequence, Tuple, Union
-from pyshortcuts import make_shortcut
 
 import Utils
 import settings
@@ -236,6 +235,7 @@ def launch(exe, in_terminal=False):
     subprocess.Popen(exe)
 
 def create_shortcut(button, component: Component):
+    from pyshortcuts import make_shortcut
     script = sys.argv[0]
     wkdir = Utils.local_path()
 
