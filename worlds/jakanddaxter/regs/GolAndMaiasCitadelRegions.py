@@ -2,7 +2,7 @@ from typing import List
 
 from BaseClasses import CollectionState
 from .RegionBase import JakAndDaxterRegion
-from .. import EnableOrbsanity, JakAndDaxterWorld
+from .. import EnableOrbsanity, JakAndDaxterWorld, CompletionCondition
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
@@ -57,8 +57,6 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
 
     final_boss = JakAndDaxterRegion("Final Boss", player, multiworld, level_name, 0)
 
-    final_door = JakAndDaxterRegion("Final Door", player, multiworld, level_name, 0)
-
     # Jump Dive required for a lot of buttons, prepare yourself.
     main_area.connect(robot_scaffolding, rule=lambda state:
                       state.has("Jump Dive", player) or state.has_all({"Roll", "Roll Jump"}, player))
@@ -101,9 +99,6 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
 
     final_boss.connect(rotating_tower)  # Take elevator back down.
 
-    # Final door. Need 100 power cells.
-    final_boss.connect(final_door, rule=lambda state: state.has("Power Cell", player, 100))
-
     multiworld.regions.append(main_area)
     multiworld.regions.append(robot_scaffolding)
     multiworld.regions.append(jump_pad_room)
@@ -111,7 +106,6 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
     multiworld.regions.append(bunny_room)
     multiworld.regions.append(rotating_tower)
     multiworld.regions.append(final_boss)
-    multiworld.regions.append(final_door)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -127,4 +121,13 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 
-    return [main_area, final_boss, final_door]
+    # Final door. Need 100 power cells.
+    if options.jak_completion_condition == CompletionCondition.option_open_100_cell_door:
+        final_door = JakAndDaxterRegion("Final Door", player, multiworld, level_name, 0)
+        final_boss.connect(final_door, rule=lambda state: state.has("Power Cell", player, 100))
+
+        multiworld.regions.append(final_door)
+
+        return [main_area, final_boss, final_door]
+    else:
+        return [main_area, final_boss, None]

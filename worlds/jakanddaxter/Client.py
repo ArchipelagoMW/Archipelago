@@ -160,10 +160,11 @@ class JakAndDaxterContext(CommonContext):
 
     async def json_to_game_text(self, args: dict):
         if "type" in args and args["type"] in {"ItemSend"}:
-            my_item_name = Optional[str]
-            my_item_finder = Optional[str]
-            their_item_name = Optional[str]
-            their_item_owner = Optional[str]
+            my_item_name: Optional[str] = None
+            my_item_finder: Optional[str] = None
+            their_item_name: Optional[str] = None
+            their_item_owner: Optional[str] = None
+
             item = args["item"]
             recipient = args["receiving"]
 

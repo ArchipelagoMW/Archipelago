@@ -29,7 +29,10 @@ class EnableOrbsanity(Choice):
 
 class GlobalOrbsanityBundleSize(Choice):
     """Set the orb bundle size for Global Orbsanity. This only applies if "Enable Orbsanity" is set to "Global."
-    There are 2000 orbs in the game, so your bundle size must be a factor of 2000."""
+    There are 2000 orbs in the game, so your bundle size must be a factor of 2000.
+
+    Multiplayer Minimum: 10
+    Multiplayer Maximum: 200"""
     display_name = "Global Orbsanity Bundle Size"
     option_1_orb = 1
     option_2_orbs = 2
@@ -58,7 +61,9 @@ class GlobalOrbsanityBundleSize(Choice):
 
 class PerLevelOrbsanityBundleSize(Choice):
     """Set the orb bundle size for Per Level Orbsanity. This only applies if "Enable Orbsanity" is set to "Per Level."
-    There are 50, 150, or 200 orbs per level, so your bundle size must be a factor of 50."""
+    There are 50, 150, or 200 orbs per level, so your bundle size must be a factor of 50.
+
+    Multiplayer Minimum: 10"""
     display_name = "Per Level Orbsanity Bundle Size"
     option_1_orb = 1
     option_2_orbs = 2
@@ -71,7 +76,10 @@ class PerLevelOrbsanityBundleSize(Choice):
 
 
 class FireCanyonCellCount(Range):
-    """Set the number of power cells you need to cross Fire Canyon."""
+    """Set the number of power cells you need to cross Fire Canyon.
+
+    Multiplayer Maximum: 30
+    Singleplayer Maximum: 34"""
     display_name = "Fire Canyon Cell Count"
     range_start = 0
     range_end = 100
@@ -81,7 +89,10 @@ class FireCanyonCellCount(Range):
 
 
 class MountainPassCellCount(Range):
-    """Set the number of power cells you need to reach Klaww and cross Mountain Pass."""
+    """Set the number of power cells you need to reach Klaww and cross Mountain Pass.
+
+    Multiplayer Maximum: 60
+    Singleplayer Maximum: 63"""
     display_name = "Mountain Pass Cell Count"
     range_start = 0
     range_end = 100
@@ -91,7 +102,10 @@ class MountainPassCellCount(Range):
 
 
 class LavaTubeCellCount(Range):
-    """Set the number of power cells you need to cross Lava Tube."""
+    """Set the number of power cells you need to cross Lava Tube.
+
+    Multiplayer Maximum: 90
+    Singleplayer Maximum: 99"""
     display_name = "Lava Tube Cell Count"
     range_start = 0
     range_end = 100
@@ -100,12 +114,14 @@ class LavaTubeCellCount(Range):
     default = 72
 
 
-# 222 is the maximum because there are 9 citizen trades and 2000 orbs to trade (2000/9 = 222).
+# 222 is the absolute maximum because there are 9 citizen trades and 2000 orbs to trade (2000/9 = 222).
 class CitizenOrbTradeAmount(Range):
     """Set the number of orbs you need to trade to ordinary citizens for a power cell (Mayor, Uncle, etc.).
 
     Along with Oracle Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000).
-    The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades)."""
+    The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades).
+
+    Multiplayer Maximum: 120"""
     display_name = "Citizen Orb Trade Amount"
     range_start = 0
     range_end = 222
@@ -113,12 +129,14 @@ class CitizenOrbTradeAmount(Range):
     default = 90
 
 
-# 333 is the maximum because there are 6 oracle trades and 2000 orbs to trade (2000/6 = 333).
+# 333 is the absolute maximum because there are 6 oracle trades and 2000 orbs to trade (2000/6 = 333).
 class OracleOrbTradeAmount(Range):
     """Set the number of orbs you need to trade to the Oracles for a power cell.
 
     Along with Citizen Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000).
-    The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades)."""
+    The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades).
+
+    Multiplayer Maximum: 150"""
     display_name = "Oracle Orb Trade Amount"
     range_start = 0
     range_end = 333
