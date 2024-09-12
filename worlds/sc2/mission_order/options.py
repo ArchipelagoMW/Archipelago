@@ -11,7 +11,7 @@ from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
 from ..items import item_table
 from ..item_groups import item_name_groups
-from .structs import Difficulty, LayoutType
+from .structs import Difficulty, LayoutType, GENERIC_KEY_NAME
 from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz
 from .presets_static import (
     static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy,
@@ -319,6 +319,9 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
         resolved["items"] = {}
         for item in resolved_items:
             if item not in item_table:
+                if item.casefold() == GENERIC_KEY_NAME:
+                    resolved["items"][item] = max(0, resolved_items[item])
+                    continue
                 raise ValueError(f"Item rule contains \"{item}\", which is not a valid item name.")
             amount = max(0, resolved_items[item])
             quantity = item_table[item].quantity

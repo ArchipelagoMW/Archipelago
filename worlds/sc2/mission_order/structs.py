@@ -7,6 +7,8 @@ import logging
 
 from BaseClasses import Region, Location, CollectionState, Entrance
 from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
+from ..items import named_layout_key_item_table, named_campaign_key_item_table
+from .. import item_names
 from .layout_types import LayoutType
 from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData, ItemEntryRule
 from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
@@ -14,6 +16,8 @@ from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
     from ..locations import LocationData
+
+GENERIC_KEY_NAME = "Key".casefold()
 
 class MissionOrderNode(ABC):
     parent: ReferenceType[MissionOrderNode]
@@ -44,7 +48,11 @@ class MissionOrderNode(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+        raise NotImplementedError
+    
+    @abstractmethod
+    def get_key_name(self) -> str:
         raise NotImplementedError
 
 class SC2MissionOrder(MissionOrderNode):
@@ -55,6 +63,7 @@ class SC2MissionOrder(MissionOrderNode):
     sorted_missions: Dict[Difficulty, List[SC2MOGenMission]]
     fixed_missions: List[SC2MOGenMission]
     items_to_lock: Dict[str, int]
+    keys_to_resolve: Dict[MissionOrderNode, List[ItemEntryRule]]
     mission_pools: SC2MOGenMissionPools
     goal_missions: List[SC2MOGenMission]
     max_depth: int
@@ -64,6 +73,7 @@ class SC2MissionOrder(MissionOrderNode):
         self.sorted_missions = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
         self.fixed_missions = []
         self.items_to_lock = {}
+        self.keys_to_resolve = {}
         self.mission_pools = mission_pools
         self.goal_missions = []
         self.parent = None
@@ -170,8 +180,11 @@ class SC2MissionOrder(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return []
     
-    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, _searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
         return "All Missions"
+
+    def get_key_name(self) -> str:
+        return super().get_key_name()
 
     def make_connections(self, world: World):
         names: Dict[str, int] = {}
@@ -308,13 +321,20 @@ class SC2MissionOrder(MissionOrderNode):
     def dict_to_entry_rule(self, data: Dict[str, Any], searcher: MissionOrderNode, rule_id: int = -1) -> EntryRule:
         if "items" in data:
             items: Dict[str, int] = data["items"]
+            has_generic_key = False
             for (item, amount) in items.items():
+                if item.casefold() == GENERIC_KEY_NAME:
+                    has_generic_key = True
+                    continue # Don't try to lock the generic key
                 if item in self.items_to_lock:
                     # Lock the greatest required amount of each item
                     self.items_to_lock[item] = max(self.items_to_lock[item, amount])
                 else:
                     self.items_to_lock[item] = amount
-            return ItemEntryRule(items)
+            rule = ItemEntryRule(items)
+            if has_generic_key:
+                self.keys_to_resolve.setdefault(searcher, []).append(rule)
+            return rule
         if "rules" in data:
             rules = [self.dict_to_entry_rule(subrule, searcher) for subrule in data["rules"]]
             return SubRuleEntryRule(rules, data["amount"], rule_id)
@@ -323,7 +343,7 @@ class SC2MissionOrder(MissionOrderNode):
             for address in data["scope"]:
                 resolved = self.resolve_address(address, searcher)
                 objects.append((resolved, address))
-            visual_reqs = [obj.get_visual_requirement() for (obj, _) in objects]
+            visual_reqs = [obj.get_visual_requirement(searcher) for (obj, _) in objects]
             if "amount" in data:
                 missions = [mission for (obj, _) in objects for mission in obj.get_missions() if not mission.option_empty]
                 if len(missions) == 0:
@@ -438,6 +458,27 @@ class SC2MissionOrder(MissionOrderNode):
 
         world.multiworld.regions += regions
 
+    def resolve_generic_keys(self):
+        layout_numbered_keys = 1
+        campaign_numbered_keys = 1
+        for (node, item_rules) in self.keys_to_resolve.items():
+            key_name = node.get_key_name()
+            # Generic keys in mission slots should always resolve to an existing key
+            # Layouts and campaigns may need to be switched for numbered keys
+            if isinstance(node, SC2MOGenLayout) and key_name not in named_layout_key_item_table:
+                key_name = item_names._TEMPLATE_NUMBERED_LAYOUT_KEY.format(layout_numbered_keys)
+                layout_numbered_keys += 1
+            elif isinstance(node, SC2MOGenCampaign) and key_name not in named_campaign_key_item_table:
+                key_name = item_names._TEMPLATE_NUMBERED_CAMPAIGN_KEY.format(campaign_numbered_keys)
+                campaign_numbered_keys += 1
+
+            for item_rule in item_rules:
+                item_rule.items_to_check = {
+                    key_name if item_name.casefold() == GENERIC_KEY_NAME else item_name: amount
+                    for (item_name, amount) in item_rule.items_to_check.items()
+                }
+                self.items_to_lock[key_name] = max(item_rule.items_to_check[key_name], self.items_to_lock.get(key_name, 0))
+
 class SC2MOGenCampaign(MissionOrderNode):
     option_name: str # name of this campaign
     option_display_name: List[str]
@@ -527,11 +568,23 @@ class SC2MOGenCampaign(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return self.exits
     
-    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
-        return self.get_visual_name()
+    def get_visual_requirement(self, searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+        visual_name = self.get_visual_name()
+        # Needs special handling for double-parent, which is valid for missions but errors for campaigns
+        first_parent = searcher.get_parent("", "")
+        if (
+            first_parent is self or (
+                first_parent.parent is not None and first_parent.get_parent("", "") is self
+            )
+        ) and visual_name == "":
+            return "this campaign"
+        return visual_name
     
     def get_visual_name(self) -> str:
         return self.display_name
+    
+    def get_key_name(self) -> str:
+        return item_names._TEMPLATE_NAMED_CAMPAIGN_KEY.format(self.get_visual_name())
 
     def get_slot_data(self) -> CampaignSlotData:
         if self.important_beat_event:
@@ -672,6 +725,8 @@ class SC2MOGenLayout(MissionOrderNode):
                     self.exits.remove(mission)
                 mission.option_exit = False
                 mission.option_goal = False
+                # Empty missions are also not allowed to cause secondary effects via entry rules (eg. create key items)
+                mission.option_entry_rules = []
             else:
                 all_empty = False
                 # Establish the following invariant:
@@ -770,11 +825,17 @@ class SC2MOGenLayout(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return self.exits
     
-    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
-        return self.get_visual_name()
+    def get_visual_requirement(self, searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
+        visual_name = self.get_visual_name()
+        if searcher.get_parent("", "") is self and visual_name == "":
+            return "this questline"
+        return visual_name
     
     def get_visual_name(self) -> str:
         return self.display_name
+    
+    def get_key_name(self) -> str:
+        return item_names._TEMPLATE_NAMED_LAYOUT_KEY.format(self.get_visual_name(), self.parent().get_visual_name())
 
     def get_slot_data(self) -> LayoutSlotData:
         mission_slots = [
@@ -872,8 +933,11 @@ class SC2MOGenMission(MissionOrderNode):
     def get_exits(self) -> List[SC2MOGenMission]:
         return [self]
     
-    def get_visual_requirement(self) -> Union[str, SC2MOGenMission]:
+    def get_visual_requirement(self, _searcher: MissionOrderNode) -> Union[str, SC2MOGenMission]:
         return self
+    
+    def get_key_name(self) -> str:
+        return item_names._TEMPLATE_MISSION_KEY.format(self.mission.mission_name)
     
     def make_connections(self, world: World, used_names: Dict[str, int]):
         player = world.player

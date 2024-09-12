@@ -164,6 +164,22 @@ class GridTwoStartPositions(Toggle):
     default = Toggle.option_false
 
 
+class KeyMode(Choice):
+    """
+    Optionally creates Key items that must be found in the multiworld to unlock parts of the mission order,
+    in addition to any regular requirements a mission may have.
+    Disabled: Don't create any keys.
+    Questlines: Create keys for questlines besides the starter ones, eg. "Colonist (Wings of Liberty) Questline Key".
+    Only works for Vanilla, Vanilla Shuffled, Mini Campaign, and Golden Path mission orders.
+    Missions: Create keys for missions besides the starter ones, eg. "Zero Hour Mission Key".
+    """
+    display_name = "Key Mode"
+    option_disabled = 0
+    option_questlines = 1
+    option_missions = 2
+    default = option_disabled
+
+
 class ColorChoice(Choice):
     option_white = 0
     option_red = 1
@@ -962,6 +978,7 @@ class Starcraft2Options(PerGameCommonOptions):
     mission_order: MissionOrder
     maximum_campaign_size: MaximumCampaignSize
     grid_two_start_positions: GridTwoStartPositions
+    key_mode: KeyMode
     player_color_terran_raynor: PlayerColorTerranRaynor
     player_color_protoss: PlayerColorProtoss
     player_color_zerg: PlayerColorZerg

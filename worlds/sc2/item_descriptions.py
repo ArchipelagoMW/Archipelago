@@ -3,7 +3,7 @@ Contains descriptions for Starcraft 2 items.
 """
 import inspect
 
-from . import item_names
+from . import item_names, items
 
 WEAPON_ARMOR_UPGRADE_NOTE = inspect.cleandoc("""
     Must be researched during the mission if the mission type isn't set to auto-unlock generic upgrades.
@@ -31,6 +31,8 @@ CLOAK_DESCRIPTION_TEMPLATE = "Allows {} to use the Cloak ability."
 DISPLAY_NAME_BROOD_LORD = "Brood Lord"
 DISPLAY_NAME_CLOAKED_ASSASSIN = "Dark Templar, Avenger, and Blood Hunter"
 DISPLAY_NAME_WORMS = "Nydus Worm and Omega Worm"
+
+GENERIC_KEY_DESC = "Unlocks a part of the mission order."
 
 resource_efficiency_cost_reduction = {
     item_names.REAPER:        (0, 50, 0),
@@ -973,3 +975,10 @@ item_descriptions = {
     item_names.KHALAI_INGENUITY: "Pylons, Photon Cannons, Monoliths, and Shield Batteries warp in near-instantly.",
     item_names.AMPLIFIED_ASSIMILATORS: "Assimilators produce Vespene gas 25% faster.",
 }
+
+# Key descriptions
+key_descriptions = {
+    key: GENERIC_KEY_DESC
+    for key in items.key_item_table.keys()
+}
+item_descriptions.update(key_descriptions)

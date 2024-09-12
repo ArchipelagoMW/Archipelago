@@ -151,7 +151,7 @@ class SC2World(World):
         flag_user_excluded_item_sets(self, item_list)
         flag_war_council_items(self, item_list)
         flag_and_add_resource_locations(self, item_list)
-        flag_mission_order_required_items(self, item_list)
+        create_and_flag_mission_order_required_items(self, item_list)
         pool: List[Item] = prune_item_pool(self, item_list)
         pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
 
@@ -641,8 +641,9 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
                 world.locked_locations.append(location.name)
 
 
-def flag_mission_order_required_items(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Marks items that are necessary for item rules in the mission order and forces them to be progression."""
+def create_and_flag_mission_order_required_items(world: SC2World, item_list: List[FilterItem]) -> None:
+    """Marks items that are necessary for item rules in the mission order and forces them to be progression,
+    and create extra items if the existing amount is insufficient."""
     locks_required = world.custom_mission_order.get_items_to_lock()
     locks_done = {item: 0 for item in locks_required}
     for item in item_list:
@@ -650,6 +651,14 @@ def flag_mission_order_required_items(world: SC2World, item_list: List[FilterIte
             item.flags |= ItemFilterFlags.Necessary
             item.flags |= ItemFilterFlags.ForceProgression
             locks_done[item.name] += 1
+    # Create extra items if there's not enough in the pool already
+    for (item_name, amount) in locks_required.items():
+        done = locks_done[item_name]
+        for idx in range(amount - done):
+            new_item = FilterItem(item_name, items.item_table[item_name], done + idx)
+            new_item.flags |= ItemFilterFlags.Necessary
+            new_item.flags |= ItemFilterFlags.ForceProgression
+            item_list.append(new_item)
 
 
 def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:

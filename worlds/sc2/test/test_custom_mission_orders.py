@@ -187,3 +187,30 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
       self.assertEqual(len(test_items_in_pool), 0)
       test_items_in_start_inventory = [item for item in self.multiworld.precollected_items[self.player] if item.name == test_item]
       self.assertEqual(len(test_items_in_start_inventory), 1)
+
+   def test_key_item_rule_creates_correct_item_amount(self):
+      # This is an item that normally only exists once
+      test_item = item_names.ZERGLING
+      test_amount = 3
+      world_options = {
+         'mission_order': 'custom',
+         'locked_items': { test_item: 1 }, # Make sure it is generated as normal
+         'custom_mission_order': {
+            'test': {
+               'type': 'column',
+               'size': 5, # Give the generator some space to place the keys
+               'max_difficulty': 'easy',
+               'mission_pool': ['zerg missions'], # Make sure the item isn't excluded by race selection
+               'missions': [{
+                  'index': 4,
+                  'entry_rules': [{
+                     'items': { test_item: test_amount } # Require more than the usual item amount
+                  }]
+               }]
+            }
+         }
+      }
+
+      self.generate_world(world_options)
+      test_items_in_pool = [item for item in self.multiworld.itempool if item.name == test_item]
+      self.assertEqual(len(test_items_in_pool), test_amount)

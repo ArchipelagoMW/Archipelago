@@ -831,9 +831,7 @@ class SC2Context(CommonContext):
                                                     name="Starcraft 2 Launch")
             return True
         else:
-            sc2_logger.info(
-                f"{lookup_id_to_mission[mission_id].mission_name} is not currently unlocked.  "
-                f"Use /unfinished or /available to see what is available.")
+            sc2_logger.info(f"{lookup_id_to_mission[mission_id].mission_name} is not currently unlocked.")
             return False
 
     def build_location_to_mission_mapping(self) -> None:

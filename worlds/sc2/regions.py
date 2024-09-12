@@ -5,7 +5,7 @@ from .mission_tables import SC2Mission, SC2Campaign, get_campaign_goal_priority,
 from .options import (
     get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns, static_mission_orders,
-    GridTwoStartPositions
+    GridTwoStartPositions, KeyMode
 )
 from .mission_order.options import CustomMissionOrder
 from .mission_order.structs import SC2MissionOrder, Difficulty
@@ -54,6 +54,9 @@ def create_mission_order(
     # Build the mission order
     mission_order.fill_missions(world, [], locations, location_cache) # TODO set locked missions
     mission_order.make_connections(world)
+
+    # Fill in Key requirements now that missions are placed
+    mission_order.resolve_generic_keys()
     
     return mission_order
 
@@ -159,6 +162,14 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
     else:
         missions = "vanilla_shuffled"
     
+    key_mode_option = get_option_value(world, "key_mode")
+    if key_mode_option == KeyMode.option_missions:
+        keys = "missions"
+    elif key_mode_option == KeyMode.option_questlines:
+        keys = "layouts"
+    else:
+        keys = "none"
+    
     if mission_order_type == MissionOrder.option_mini_campaign:
         prefix = "mini "
     else:
@@ -167,7 +178,8 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
     def mission_order_preset(name: str) -> Dict[str, str]:
         return {
             "preset": prefix + name,
-            "missions": missions
+            "missions": missions,
+            "keys": keys
         }
 
     if SC2Campaign.WOL in enabled_campaigns:
@@ -288,9 +300,9 @@ def remove_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]],
             this_layout = f"Mission Pack {idx + 2}"
             prev_layout = f"Mission Pack {idx + 1}"
             prev_last_index = mission_order[SC2Campaign.NCO.campaign_name][prev_layout]["size"] - 1
-            mission_order[SC2Campaign.NCO.campaign_name][this_layout]["entry_rules"] = [{
+            mission_order[SC2Campaign.NCO.campaign_name][this_layout]["entry_rules"][0] = {
                 "scope": [f"../{prev_layout}/{prev_last_index}"]
-            }]
+            }
         # Remove the whole last layout if its size is 0
         if "Mission Pack 3" in removed_counts[SC2Campaign.NCO] and removed_counts[SC2Campaign.NCO]["Mission Pack 3"] == 3:
             mission_order[SC2Campaign.NCO.campaign_name].pop("Mission Pack 3")
@@ -354,12 +366,21 @@ def make_grid(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
     }
     return mission_order
 
-def make_golden_path(size: int) -> Dict[str, Dict[str, Any]]:
+def make_golden_path(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
+    key_mode = get_option_value(world, "key_mode")
+    if key_mode == KeyMode.option_missions:
+        keys = "missions"
+    elif key_mode == KeyMode.option_questlines:
+        keys = "layouts"
+    else:
+        keys = "none"
+    
     mission_order = {
         "golden path": {
             "display_name": "",
             "preset": "golden path",
             "size": size,
+            "keys": keys,
         }
     }
     return mission_order
@@ -398,13 +419,28 @@ def make_hopscotch(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
 def create_dynamic_mission_order(world: 'SC2World', mission_order_type: int, mission_pools: SC2MOGenMissionPools) -> Dict[str, Dict[str, Any]]:
     num_missions = min(mission_pools.get_allowed_mission_count(), get_option_value(world, "maximum_campaign_size"))
     num_missions = max(2, num_missions)
-    if mission_order_type == MissionOrder.option_grid:
-        return make_grid(world, num_missions)
     if mission_order_type == MissionOrder.option_golden_path:
-        return make_golden_path(num_missions)
+        return make_golden_path(world, num_missions)
+    
+    if mission_order_type == MissionOrder.option_grid:
+        mission_order = make_grid(world, num_missions)
     elif mission_order_type == MissionOrder.option_gauntlet:
-        return make_gauntlet(num_missions)
+        mission_order = make_gauntlet(num_missions)
     elif mission_order_type == MissionOrder.option_blitz:
-        return make_blitz(num_missions)
+        mission_order = make_blitz(num_missions)
     elif mission_order_type == MissionOrder.option_hopscotch:
-        return make_hopscotch(world, num_missions)
+        mission_order = make_hopscotch(world, num_missions)
+    else:
+        raise ValueError("Received unknown Mission Order type")
+    
+    # Optionally add key requirements
+    # This only works for layout types that don't define their own entry rules (which is currently all of them)
+    # Golden Path handles Key Mode on its own
+    key_mode = get_option_value(world, "key_mode")
+    if key_mode == KeyMode.option_missions:
+        mission_order[list(mission_order.keys())[0]]["missions"] = [
+            { "index": "all", "entry_rules": [{ "items": { "Key": 1 }}] },
+            { "index": "entrances", "entry_rules": [] }
+        ]
+    
+    return mission_order
