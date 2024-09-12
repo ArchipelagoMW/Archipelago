@@ -4,7 +4,7 @@ from Options import OptionGroup, Choice, Range, Toggle, PerGameCommonOptions, St
 
 class IgnoreCleansing(Toggle):
     """
-    Makes the Cleansing not logically expected to traverse the water in Underground Waterway.
+    Removes the logical requirement for the Cleansing to go beyond the Underground Waterway entrance rooms. You may be required to brave the harmful water without it.
     """
     display_name = "Ignore Cleansing"
 
@@ -270,9 +270,10 @@ class CVCotMOptions(PerGameCommonOptions):
 
 
 cvcotm_option_groups = [
-    OptionGroup("gameplay tweaks", [
-        AutoRun, DSSPatch, AlwaysAllowSpeedDash, PlutoGriffinAirSpeed, BuffRangedFamiliars, BuffSubWeapons,
-        BuffShooterStrength, ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle,
-        DisableBattleArenaMPDrain, SkipDialogues, SkipTutorials, BattleArenaMusic, DeathLink
-    ])
+    OptionGroup("difficulty", [
+        BuffRangedFamiliars, BuffSubWeapons, BuffShooterStrength, ItemDropRandomization, IgnoreCleansing,
+        HalveDSSCardsPlaced, SubWeaponShuffle, EarlyDouble, DeathLink]),
+    OptionGroup("quality of life", [
+        AutoRun, DSSPatch, AlwaysAllowSpeedDash, PlutoGriffinAirSpeed, Countdown, DisableBattleArenaMPDrain,
+        SkipDialogues, SkipTutorials, BattleArenaMusic])
 ]
