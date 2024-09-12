@@ -30,3 +30,4 @@ def pytest_collection_modifyitems(session, config, items):
             items.remove(item)
             deselected.append(item)
     config.hook.pytest_deselected(items=deselected)
+    
