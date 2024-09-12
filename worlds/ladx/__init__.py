@@ -216,7 +216,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Master Stalfos' Message"))
+                    self.multiworld.itempool.append(self.create_item("Nothing"))
                 else:
                     item = self.create_item(item_name)
 
