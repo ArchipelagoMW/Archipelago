@@ -22,6 +22,7 @@ if TYPE_CHECKING:
 
 perf_logger = logging.getLogger("performance")
 
+disabled_worlds = [] # __file__ of the disabled world, used for blocking tests
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
@@ -82,12 +83,14 @@ class AutoWorldRegister(type):
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
-        new_class.hidden = dct.get("visibility", Visibility.visible) == Visibility.hidden
+        new_class.hidden = dct.get("visibility", Visibility.visible) in (Visibility.hidden, Visibility.warning)
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             if dct.get("visibility", Visibility.visible) != Visibility.disabled:
                 AutoWorldRegister.world_types[dct["game"]] = new_class
+            else:
+                disabled_worlds.append(sys.modules[new_class.__module__].__file__)
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
@@ -207,6 +210,9 @@ class Visibility(Enum):
     """The world will be visible/enabled"""
     hidden = enum.auto()
     """The world will be enabled, but hidden"""
+    warning = enum.auto()
+    """The world will be enabled, but hidden. 
+    Attempting to generate with this world will warn users, and tests will be skipped."""
     disabled = enum.auto()
     """The world will not be loaded at all"""
 

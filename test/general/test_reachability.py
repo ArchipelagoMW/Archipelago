@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import CollectionState
-from worlds.AutoWorld import AutoWorldRegister
+from worlds.AutoWorld import AutoWorldRegister, Visibility
 from . import setup_solo_multiworld
 
 
@@ -35,6 +35,8 @@ class TestBase(unittest.TestCase):
         """Ensure all state can reach everything and complete the game with the defined options"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
+            if world_type.visibility == Visibility.warning:
+                continue
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
                 excluded = multiworld.worlds[1].options.exclude_locations.value
@@ -58,6 +60,8 @@ class TestBase(unittest.TestCase):
     def test_default_empty_state_can_reach_something(self):
         """Ensure empty state can reach at least one location with the defined options"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
+            if world_type.visibility == Visibility.warning:
+                continue
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
                 state = CollectionState(multiworld)

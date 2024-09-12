@@ -1,6 +1,6 @@
 import unittest
 
-from worlds.AutoWorld import AutoWorldRegister
+from worlds.AutoWorld import AutoWorldRegister, Visibility
 from . import setup_solo_multiworld
 
 
@@ -10,6 +10,8 @@ class TestWorldMemory(unittest.TestCase):
         import gc
         import weakref
         for game_name, world_type in AutoWorldRegister.world_types.items():
+            if world_type.visibility == Visibility.warning:
+                continue
             with self.subTest("Game", game_name=game_name):
                 weak = weakref.ref(setup_solo_multiworld(world_type))
                 gc.collect()

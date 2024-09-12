@@ -2,7 +2,7 @@ import unittest
 
 from Fill import distribute_items_restrictive
 from NetUtils import encode
-from worlds.AutoWorld import AutoWorldRegister, call_all
+from worlds.AutoWorld import AutoWorldRegister, call_all, Visibility
 from worlds import failed_world_loads
 from . import setup_solo_multiworld
 
@@ -11,7 +11,7 @@ class TestImplemented(unittest.TestCase):
     def test_completion_condition(self):
         """Ensure a completion condition is set that has requirements."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if not world_type.hidden and game_name not in {"Sudoku"}:
+            if not world_type.visibility in (Visibility.hidden, Visibility.warning) and game_name not in {"Sudoku"}:
                 with self.subTest(game_name):
                     multiworld = setup_solo_multiworld(world_type)
                     self.assertFalse(multiworld.completion_condition[1](multiworld.state))
@@ -19,7 +19,7 @@ class TestImplemented(unittest.TestCase):
     def test_entrance_parents(self):
         """Tests that the parents of created Entrances match the exiting Region."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if not world_type.hidden:
+            if not world_type.visibility in (Visibility.hidden, Visibility.warning):
                 with self.subTest(game_name):
                     multiworld = setup_solo_multiworld(world_type)
                     for region in multiworld.regions:
@@ -29,7 +29,7 @@ class TestImplemented(unittest.TestCase):
     def test_stage_methods(self):
         """Tests that worlds don't try to implement certain steps that are only ever called as stage."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if not world_type.hidden:
+            if not world_type.visibility in (Visibility.hidden, Visibility.warning):
                 with self.subTest(game_name):
                     for method in ("assert_generate",):
                         self.assertFalse(hasattr(world_type, method),
@@ -38,6 +38,8 @@ class TestImplemented(unittest.TestCase):
     def test_slot_data(self):
         """Tests that if a world creates slot data, it's json serializable."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
+            if world_type.visibility == Visibility.warning:
+                continue
             # has an await for generate_output which isn't being called
             if game_name in {"Ocarina of Time", "Zillion"}:
                 continue
