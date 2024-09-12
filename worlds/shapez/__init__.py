@@ -1,5 +1,6 @@
 from typing import Any, List, Dict, Tuple, Mapping, Type
 
+from NetUtils import NetworkSlot
 from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
@@ -288,4 +289,9 @@ class ShapezLiteWorld(ShapezWorld):
     location_type = ShapezLiteLocation
     lite = True
     base_id = 20000707
+    item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(all_locations_lite, base_id)}
+
+    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+        slot: NetworkSlot = multidata["slot_info"][self.player]
+        multidata["slot_info"][self.player] = NetworkSlot(slot.name, "shapez", slot.type, slot.group_members)
