@@ -25,6 +25,17 @@ links_awakening_dungeon_names = [
 def meta_to_name(meta):
     return f"{meta.name} ({meta.area})"
 
+def get_location_name_groups():
+    ret = {}
+    for s, v in checkMetadataTable.items():
+        if s == "None":
+            continue
+        if v.area not in ret:
+            ret[v.area] = []
+        ret[v.area].append(meta_to_name(v))
+    return ret
+
+links_awakening_location_name_groups = get_location_name_groups()
 
 def get_locations_to_id():
     ret = {
