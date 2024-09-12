@@ -330,7 +330,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                             data)
 
         for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
-            name = str(status.name).replace("HINT_", "").replace("_", " ").title()
+            name = status_names[status]
             status_button = Button(text=name, size_hint_y=None, height=dp(50))
             status_button.status = status
             status_button.bind(on_release=set_value)
@@ -358,51 +358,46 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         """ Add selection on touch down """
         if super(HintLabel, self).on_touch_down(touch):
             return True
-        # alt: bool = touch.button == "right" or touch.is_double_tap
-        if self.collide_point(*touch.pos):
-            _parent = self.parent
-            if not self.index:  # clicked on header
-                _parent.clear_selection()
-            parent: HintLog = _parent.parent
+        if self.index:  # skip header
+            if self.collide_point(*touch.pos):
+                status_label = self.ids["status"]
+                if status_label.collide_point(*touch.pos):
+                    if self.hint["status"] == HintStatus.HINT_FOUND:
+                        return
+                    ctx = App.get_running_app().ctx
+                    if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
+                        # open a dropdown
+                        self.dropdown.open(self.ids["status"])
+                elif self.selected:
+                    self.parent.clear_selection()
+                else:
+                    text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                                    self.finding_text, "\'s World", (" at " + self.entrance_text)
+                                    if self.entrance_text != "Vanilla"
+                                    else "", ". (", self.status_text.lower(), ")"))
+                    temp = MarkupLabel(text).markup
+                    text = "".join(
+                        part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                    Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                    return self.parent.select_with_touch(self.index, touch)
+        else:
+            parent = self.parent
+            parent.clear_selection()
+            parent: HintLog = parent.parent
             # find correct column
             for child in self.children:
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
-                    if self.index:  # skip header
-                        if key == "status":
-                            if self.hint["status"] == HintStatus.HINT_FOUND:
-                                return
-                            ctx = App.get_running_app().ctx
-                            if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
-                                # open a dropdown
-                                self.dropdown.open(self.ids["status"])
-                        else:
-                            if self.selected:
-                                self.parent.clear_selection()
-                            else:
-                                text = "".join(
-                                    (self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
-                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
-                                     if self.entrance_text != "Vanilla"
-                                     else "", ". (", self.status_text.lower(), ")"))
-                                temp = MarkupLabel(text).markup
-                                text = "".join(
-                                    part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                                Clipboard.copy(
-                                    escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
-                                return self.parent.select_with_touch(self.index, touch)
+                    if key == "status":
+                        parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
+                    else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    if key == parent.sort_key:
+                        # second click reverses order
+                        parent.reversed = not parent.reversed
                     else:
-                        if key == "status":
-                            parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
-                        else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
-                        if key == parent.sort_key:
-                            # second click reverses order
-                            parent.reversed = not parent.reversed
-                        else:
-                            parent.sort_key = key
-                            parent.reversed = False
-                        App.get_running_app().update_hints()
-                    return False
+                        parent.sort_key = key
+                        parent.reversed = False
+                    App.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
