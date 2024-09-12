@@ -77,6 +77,7 @@ class EntityHuntPicker:
 
         return (
             self.player_logic.solvability_guaranteed(panel_hex)
+            and panel_hex not in self.player_logic.EXCLUDED_ENTITIES
             and not (
                 # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
                 # However, I don't think they should be hunt panels in this case.
@@ -144,7 +145,7 @@ class EntityHuntPicker:
 
         remaining_entities, remaining_entity_weights = [], []
         for area, eligible_entities in self.ELIGIBLE_ENTITIES_PER_AREA.items():
-            for panel in eligible_entities - self.HUNT_ENTITIES:
+            for panel in sorted(eligible_entities - self.HUNT_ENTITIES):
                 remaining_entities.append(panel)
                 remaining_entity_weights.append(allowance_per_area[area])
 

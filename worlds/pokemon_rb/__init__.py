@@ -296,7 +296,7 @@ class PokemonRedBlueWorld(World):
                     if attempt > 1:
                         for mon in poke_data.pokemon_data.keys():
                             state.collect(self.create_item(mon), True)
-                    state.sweep_for_events()
+                    state.sweep_for_advancements()
                     self.multiworld.random.shuffle(badges)
                     self.multiworld.random.shuffle(badgelocs)
                     badgelocs_copy = badgelocs.copy()
