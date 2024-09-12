@@ -11,15 +11,60 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Bentley\Bentley1.flac" />
+    <None Remove="Bentley\Bentley1.wav" />
+    <None Remove="Bentley\Bentley10.flac" />
+    <None Remove="Bentley\Bentley10.wav" />
+    <None Remove="Bentley\Bentley11.flac" />
+    <None Remove="Bentley\Bentley11.wav" />
+    <None Remove="Bentley\Bentley12.flac" />
+    <None Remove="Bentley\Bentley12.wav" />
+    <None Remove="Bentley\Bentley13.flac" />
+    <None Remove="Bentley\Bentley13.wav" />
+    <None Remove="Bentley\Bentley14.flac" />
+    <None Remove="Bentley\Bentley14.wav" />
+    <None Remove="Bentley\Bentley15.flac" />
+    <None Remove="Bentley\Bentley15.wav" />
+    <None Remove="Bentley\Bentley2.flac" />
+    <None Remove="Bentley\Bentley2.wav" />
+    <None Remove="Bentley\Bentley3.flac" />
+    <None Remove="Bentley\Bentley3.wav" />
+    <None Remove="Bentley\Bentley4.flac" />
+    <None Remove="Bentley\Bentley4.wav" />
+    <None Remove="Bentley\Bentley5.flac" />
+    <None Remove="Bentley\Bentley5.wav" />
+    <None Remove="Bentley\Bentley6.flac" />
+    <None Remove="Bentley\Bentley6.wav" />
+    <None Remove="Bentley\Bentley7.flac" />
+    <None Remove="Bentley\Bentley7.wav" />
+    <None Remove="Bentley\Bentley8.flac" />
+    <None Remove="Bentley\Bentley8.wav" />
+    <None Remove="Bentley\Bentley9.flac" />
+    <None Remove="Bentley\Bentley9.wav" />
     <None Remove="Resources\Locations.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Bentley\Bentley1.wav" />
+    <EmbeddedResource Include="Bentley\Bentley10.wav" />
+    <EmbeddedResource Include="Bentley\Bentley11.wav" />
+    <EmbeddedResource Include="Bentley\Bentley12.wav" />
+    <EmbeddedResource Include="Bentley\Bentley13.wav" />
+    <EmbeddedResource Include="Bentley\Bentley14.wav" />
+    <EmbeddedResource Include="Bentley\Bentley15.wav" />
+    <EmbeddedResource Include="Bentley\Bentley2.wav" />
+    <EmbeddedResource Include="Bentley\Bentley3.wav" />
+    <EmbeddedResource Include="Bentley\Bentley4.wav" />
+    <EmbeddedResource Include="Bentley\Bentley5.wav" />
+    <EmbeddedResource Include="Bentley\Bentley6.wav" />
+    <EmbeddedResource Include="Bentley\Bentley7.wav" />
+    <EmbeddedResource Include="Bentley\Bentley8.wav" />
+    <EmbeddedResource Include="Bentley\Bentley9.wav" />
     <EmbeddedResource Include="Resources\Locations.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Archipelago.Core" Version="0.0.11" />
+    <PackageReference Include="Archipelago.Core" Version="0.0.14" />
     <PackageReference Include="Archipelago.MultiClient.Net" Version="6.3.1" />
     <PackageReference Include="Archipelago.PCSX2" Version="0.0.5" />
   </ItemGroup>

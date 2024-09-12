@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0-windows7.0": {
-      "Archipelago.Core/0.0.11": {
+      "Archipelago.Core/0.0.14": {
         "type": "package",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.3.1",
@@ -79,14 +79,13 @@
     }
   },
   "libraries": {
-    "Archipelago.Core/0.0.11": {
-      "sha512": "GiZXuArBpMXdkE8a6fU1hFotsq6balGgbljYj7o4ts4hb78TmxzCBbqzZIOw/qGyRmxXG0q76GDf0qPVgnF2Iw==",
+    "Archipelago.Core/0.0.14": {
+      "sha512": "02ZUSZdB+FXu5DNRcKBOFLAklSNyQYTExNpNVl34MYbsFpxJIPejRm2v5zqlgDwpv4AgQCMbMyxlL3DgfPIp0w==",
       "type": "package",
-      "path": "archipelago.core/0.0.11",
+      "path": "archipelago.core/0.0.14",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
-        "archipelago.core.0.0.11.nupkg.sha512",
+        "archipelago.core.0.0.14.nupkg.sha512",
         "archipelago.core.nuspec",
         "lib/net8.0/Archipelago.Core.dll"
       ]
@@ -259,7 +258,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "Archipelago.Core >= 0.0.11",
+      "Archipelago.Core >= 0.0.14",
       "Archipelago.MultiClient.Net >= 6.3.1",
       "Archipelago.PCSX2 >= 0.0.5"
     ]
@@ -285,6 +284,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\fello\\Downloads": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.bepinex.dev/v3/index.json": {}
       },
@@ -311,7 +311,7 @@
         "dependencies": {
           "Archipelago.Core": {
             "target": "Package",
-            "version": "[0.0.11, )"
+            "version": "[0.0.14, )"
           },
           "Archipelago.MultiClient.Net": {
             "target": "Package",

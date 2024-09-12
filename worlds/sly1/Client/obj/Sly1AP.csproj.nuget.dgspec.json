@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Users\\fello\\Downloads": {},
           "https://api.nuget.org/v3/index.json": {},
           "https://nuget.bepinex.dev/v3/index.json": {}
         },
@@ -48,7 +49,7 @@
           "dependencies": {
             "Archipelago.Core": {
               "target": "Package",
-              "version": "[0.0.11, )"
+              "version": "[0.0.14, )"
             },
             "Archipelago.MultiClient.Net": {
               "target": "Package",
