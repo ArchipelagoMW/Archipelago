@@ -26,8 +26,7 @@ def pytest_collection_modifyitems(session, config, items):
     copy = items.copy()
     deselected = []
     for item in copy:
-        if any(item.path.is_relative_to(disabled) for disabled in disabled_tests):
+        if any(disabled in str(item.path) for disabled in disabled_tests):
             items.remove(item)
             deselected.append(item)
     config.hook.pytest_deselected(items=deselected)
-    
