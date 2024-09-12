@@ -330,7 +330,7 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
             elif quantity == 0:
                 final_amount = amount
             else:
-                final_amount = min(quantity, amount)
+                final_amount = amount
             resolved["items"][item] = final_amount
     return resolved
 
