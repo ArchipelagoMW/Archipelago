@@ -133,7 +133,6 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   there without using any hint points.
 * `exclude_locations` lets you define any locations that you don't want to do and prevents items classified as
   "progression" or "useful" from being placed on them.
-  from being placed on them.
 * `priority_locations` lets you define any locations that you want to do and forces a progression item into these
   locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
