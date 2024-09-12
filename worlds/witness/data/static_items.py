@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Set
 
 from BaseClasses import ItemClassification
 
@@ -7,11 +7,27 @@ from .item_definition_classes import DoorItemDefinition, ItemCategory, ItemData
 from .static_locations import ID_START
 
 ITEM_DATA: Dict[str, ItemData] = {}
-ITEM_GROUPS: Dict[str, List[str]] = {}
+ITEM_GROUPS: Dict[str, Set[str]] = {}
 
 # Useful items that are treated specially at generation time and should not be automatically added to the player's
 # item list during get_progression_items.
 _special_usefuls: List[str] = ["Puzzle Skip"]
+
+ALWAYS_GOOD_SYMBOL_ITEMS: Set[str] = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+
+MODE_SPECIFIC_GOOD_ITEMS: Dict[str, Set[str]] = {
+    "none": set(),
+    "sigma_normal": set(),
+    "sigma_expert": {"Triangles"},
+    "umbra_variety": {"Triangles"}
+}
+
+MODE_SPECIFIC_GOOD_DISCARD_ITEMS: Dict[str, Set[str]] = {
+    "none": {"Triangles"},
+    "sigma_normal": {"Triangles"},
+    "sigma_expert": {"Arrows"},
+    "umbra_variety": set()  # Variety Discards use both Arrows and Triangles, so neither of them are that useful alone
+}
 
 
 def populate_items() -> None:
@@ -22,13 +38,13 @@ def populate_items() -> None:
 
         if definition.category is ItemCategory.SYMBOL:
             classification = ItemClassification.progression
-            ITEM_GROUPS.setdefault("Symbols", []).append(item_name)
+            ITEM_GROUPS.setdefault("Symbols", set()).add(item_name)
         elif definition.category is ItemCategory.DOOR:
             classification = ItemClassification.progression
-            ITEM_GROUPS.setdefault("Doors", []).append(item_name)
+            ITEM_GROUPS.setdefault("Doors", set()).add(item_name)
         elif definition.category is ItemCategory.LASER:
             classification = ItemClassification.progression_skip_balancing
-            ITEM_GROUPS.setdefault("Lasers", []).append(item_name)
+            ITEM_GROUPS.setdefault("Lasers", set()).add(item_name)
         elif definition.category is ItemCategory.USEFUL:
             classification = ItemClassification.useful
         elif definition.category is ItemCategory.FILLER:
@@ -47,7 +63,7 @@ def populate_items() -> None:
 def get_item_to_door_mappings() -> Dict[int, List[int]]:
     output: Dict[int, List[int]] = {}
     for item_name, item_data in ITEM_DATA.items():
-        if not isinstance(item_data.definition, DoorItemDefinition):
+        if not isinstance(item_data.definition, DoorItemDefinition) or item_data.ap_code is None:
             continue
         output[item_data.ap_code] = [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
     return output
