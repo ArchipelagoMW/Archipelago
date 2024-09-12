@@ -4,7 +4,7 @@ from .items import cvcotm_item_info, MAJORS_CLASSIFICATIONS
 from .locations import cvcotm_location_info
 from .cvcotm_text import cvcotm_string_to_bytearray
 from .options import CompletionGoal, DeathLink, IronMaidenBehavior
-from .rom import ARCHIPELAGO_IDENTIFIER_START, AUTH_NUMBER_START, QUEUED_TEXT_STRING_START
+from .rom import ARCHIPELAGO_IDENTIFIER_START, ARCHIPELAGO_IDENTIFIER, AUTH_NUMBER_START, QUEUED_TEXT_STRING_START
 from .data import iname, lname
 
 from BaseClasses import ItemClassification
@@ -48,7 +48,8 @@ TEXT_ID_DSS_TUTORIAL = b"\x1D\x82"
 TEXT_ID_MULTIWORLD_MESSAGE = b"\xF2\x84"
 SOUND_ID_UNUSED_SIMON_FANFARE = b"\x04"
 SOUND_ID_MAIDEN_BREAKING = b"\x79"
-SOUND_ID_NATHAN_FREEZING = b"\x7A"
+# SOUND_ID_NATHAN_FREEZING = b"\x7A"
+SOUND_ID_BAD_CONFIG = b"\x2D\x01"
 SOUND_ID_DRACULA_CHARGE = b"\xAB\x01"
 SOUND_ID_MINOR_PICKUP = b"\xB3\x01"
 SOUND_ID_MAJOR_PICKUP = b"\xB4\x01"
@@ -113,7 +114,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                 logger.info("ERROR: You appear to be running an unpatched version of Castlevania: Circle of the Moon. "
                             "You need to generate a patch file and use it to create a patched ROM.")
                 return False
-            if game_names[1].decode("ascii") != "ARCHIPELAG03":
+            if game_names[1].decode("ascii") != ARCHIPELAGO_IDENTIFIER:
                 logger.info("ERROR: The patch file used to create this ROM is not compatible with "
                             "this client. Double check your client version against the version being "
                             "used by the generator.")
@@ -151,6 +152,8 @@ class CastlevaniaCotMClient(BizHawkClient):
             return
         if "tags" not in args:
             return
+        if ctx.slot is None:
+            return
         if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
             if "cause" in args["data"]:
                 cause = args["data"]["cause"]
@@ -169,7 +172,7 @@ class CastlevaniaCotMClient(BizHawkClient):
             self.death_causes += [cause]
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
+        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None or ctx.slot is None:
             return
 
         try:
@@ -299,7 +302,7 @@ class CastlevaniaCotMClient(BizHawkClient):
 
                 # Add the final death text and write the whole shebang.
                 death_writes += [(QUEUED_TEXT_STRING_START,
-                                  cvcotm_string_to_bytearray(death_text + "◊", "big middle", 0), "ROM")]
+                                  bytes(cvcotm_string_to_bytearray(death_text + "◊", "big middle", 0)), "ROM")]
                 await bizhawk.write(ctx.bizhawk_ctx, death_writes)
 
                 # Delete the oldest death cause that we just wrote and set currently_dead to True so the client doesn't
@@ -331,7 +334,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                 elif ctx.locations_info[loc].flags & MAJORS_CLASSIFICATIONS:
                     mssg_sfx_id = SOUND_ID_MAJOR_PICKUP
                 elif ctx.locations_info[loc].flags & ItemClassification.trap:
-                    mssg_sfx_id = SOUND_ID_NATHAN_FREEZING
+                    mssg_sfx_id = SOUND_ID_BAD_CONFIG
                 else:  # Filler
                     mssg_sfx_id = SOUND_ID_MINOR_PICKUP
 
@@ -352,9 +355,9 @@ class CastlevaniaCotMClient(BizHawkClient):
                 # Figure out what inventory array and offset from said array to increment based on what we are
                 # receiving.
                 flag_index = 0
-                flag_array = None
-                inv_array = None
-                inv_array_start = None
+                flag_array = b""
+                inv_array = []
+                inv_array_start = 0
                 text_id_2 = b"\x00\x00"
                 item_type = next_item.item & 0xFF00
                 inv_array_index = next_item.item & 0xFF
@@ -399,7 +402,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                     else:
                         received_text = cvcotm_string_to_bytearray(f"「{item_name}」 received from "
                                                                    f"「{player_name}」◊", "big middle", 0)
-                    text_write = [(QUEUED_TEXT_STRING_START, received_text, "ROM")]
+                    text_write = [(QUEUED_TEXT_STRING_START, bytes(received_text), "ROM")]
 
                     # If skip_tutorials is off, display the Item's tutorial for the second textbox (if it has one).
                     if not ctx.slot_data["skip_tutorials"] and cvcotm_item_info[item_name].tutorial_id is not None:
@@ -417,7 +420,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                 flag_guard = []
 
                 # If there's a value to increment in an inventory array, do so here after checking to see if we can.
-                if inv_array_start is not None:
+                if inv_array_start:
                     if inv_array[inv_array_index] + 1 > 0xFF:
                         # If it's a stat max up being received, manually give a refill of that item's stat.
                         # Normally, the game does this automatically by incrementing the number of that max up.
@@ -436,21 +439,22 @@ class CastlevaniaCotMClient(BizHawkClient):
                     else:
                         # If our received count of that item is not more than 255, increment it normally.
                         inv_address = inv_array_start + inv_array_index
-                        count_guard = [(inv_address, [inv_array[inv_array_index]], "EWRAM")]
-                        count_write = [(inv_address, [inv_array[inv_array_index] + 1], "EWRAM")]
+                        count_guard = [(inv_address, int.to_bytes(inv_array[inv_array_index], 1, "little"), "EWRAM")]
+                        count_write = [(inv_address, int.to_bytes(inv_array[inv_array_index] + 1, 1, "little"),
+                                        "EWRAM")]
 
                 # If there's a flag value to set, do so here.
                 if flag_index:
                     flag_bytearray_index = flag_index // 8
                     flag_address = FLAGS_ARRAY_START + flag_bytearray_index
-                    flag_guard = [(flag_address, [flag_array[flag_bytearray_index]], "EWRAM")]
-                    flag_write = [(flag_address, [flag_array[flag_bytearray_index] | (0x01 << (flag_index % 8))],
-                                   "EWRAM")]
+                    flag_guard = [(flag_address, int.to_bytes(flag_array[flag_bytearray_index], 1, "little"), "EWRAM")]
+                    flag_write = [(flag_address, int.to_bytes(flag_array[flag_bytearray_index] |
+                                                              (0x01 << (flag_index % 8)), 1, "little"), "EWRAM")]
 
                 await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                             [(QUEUED_TEXTBOX_1_ADDRESS, text_id_1, "EWRAM"),
                                              (QUEUED_TEXTBOX_2_ADDRESS, text_id_2, "EWRAM"),
-                                             (QUEUED_MSG_DELAY_TIMER_ADDRESS, [1], "EWRAM"),
+                                             (QUEUED_MSG_DELAY_TIMER_ADDRESS, b"\x01", "EWRAM"),
                                              (QUEUED_SOUND_ID_ADDRESS, mssg_sfx_id, "EWRAM")]
                                             + count_write + flag_write + text_write + refill_write,
                                             # Make sure the number of received items and number to overwrite are still

@@ -29,6 +29,7 @@ CVCOTM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console 
 # hash should be removed in addition. See the Game Page for more information about supported versions.
 
 ARCHIPELAGO_IDENTIFIER_START = 0x7FFF00
+ARCHIPELAGO_IDENTIFIER = "ARCHIPELAG03"
 AUTH_NUMBER_START = 0x7FFF10
 QUEUED_TEXT_STRING_START = 0x7CEB00
 MULTIWORLD_TEXTBOX_POINTERS_START = 0x671C10
@@ -58,7 +59,11 @@ class RomData:
         return bytes(self.file)
 
     def apply_ips(self, filename: str) -> None:
-        ips_file = bytearray(pkgutil.get_data(__name__, "data/ips/" + filename))
+        # Try loading the IPS file.
+        try:
+            ips_file = pkgutil.get_data(__name__, "data/ips/" + filename)
+        except IOError:
+            raise Exception(f"{filename} is not present in the ips folder. If it was removed, please replace it.")
 
         # Verify that the IPS patch is, indeed, an IPS patch.
         if ips_file[0:5].decode("ascii") != "PATCH":
@@ -108,6 +113,14 @@ class CVCotMPatchExtensions(APPatchExtension):
 
         rom_data = RomData(rom)
         options = json.loads(caller.get_file(options_file).decode("utf-8"))
+
+        # Check to see if the patch was generated on a compatible APWorld version.
+        if "compat_identifier" not in options:
+            raise Exception("Incompatible patch/APWorld version. Make sure the Circle of the Moon APWorlds of both you "
+                            "and the person who generated are matching (and preferably up-to-date).")
+        if options["compat_identifier"] != ARCHIPELAGO_IDENTIFIER:
+            raise Exception("Incompatible patch/APWorld version. Make sure the Circle of the Moon APWorlds of both you "
+                            "and the person who generated are matching (and preferably up-to-date).")
 
         # This patch allows placing DSS cards on pedestals, prevents them from timing out, and removes them from enemy
         # drop tables. Created by DevAnj originally as a standalone hack known as Card Mode, it has been modified for
@@ -296,7 +309,8 @@ class CVCotMPatchExtensions(APPatchExtension):
                                         0xF8, 0xFF, 0xF8, 0xFF, 0x04, 0x22, 0x45, 0x00,
                                         0xF8, 0xFF, 0xF8, 0xFF, 0x08, 0x22, 0x45, 0x00,
                                         0xF8, 0xFF, 0xF8, 0xFF, 0x0C, 0x22, 0x45, 0x00,
-                                        0xF8, 0xFF, 0xF8, 0xFF, 0x10, 0x32, 0x45, 0x00])
+                                        0xF8, 0xFF, 0xF8, 0xFF, 0x10, 0x22, 0x45, 0x00,
+                                        0xF8, 0xFF, 0xF8, 0xFF, 0x14, 0x32, 0x45, 0x00])
         # Enable changing the Magic Item appearance separately from what it really is.
         # Change these ldrh's to ldrb's to read only the high or low byte of the object list entry's parameter field.
         rom_data.write_bytes(0x9597A, [0xC1, 0x79])
@@ -529,7 +543,7 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
         patch.write_token(APTokenTypes.WRITE, offset, data)
 
     # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
-    patch.write_token(APTokenTypes.WRITE, ARCHIPELAGO_IDENTIFIER_START, "ARCHIPELAG03".encode("utf-8"))
+    patch.write_token(APTokenTypes.WRITE, ARCHIPELAGO_IDENTIFIER_START, ARCHIPELAGO_IDENTIFIER.encode("utf-8"))
     # Write the slot authentication
     patch.write_token(APTokenTypes.WRITE, AUTH_NUMBER_START, bytes(world.auth))
 
@@ -556,7 +570,8 @@ def patch_rom(world: "CVCotMWorld", patch: CVCotMProcedurePatch, offset_data: Di
         "nerf_roc_wing": world.options.nerf_roc_wing.value,
         "pluto_griffin_air_speed": world.options.pluto_griffin_air_speed.value,
         "battle_arena_music": world.options.battle_arena_music.value,
-        "seed": world.multiworld.seed
+        "seed": world.multiworld.seed,
+        "compat_identifier": ARCHIPELAGO_IDENTIFIER
     }
 
     patch.write_file("options.json", json.dumps(options_dict).encode('utf-8'))

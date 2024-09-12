@@ -83,6 +83,7 @@ classified:
 * "Filler": Just the six spheres, nothing extra.
 * "Useful": Blue plus sign in the top-right corner.
 * "Progression": Orange up arrow in the top-right corner.
+* "Progression" and "Useful": Orange up arrow in the top-right corner, blue plus sign in the bottom-right corner.
 * "Trap": Reports from the local residents of the remote Austrian village of \[REDACTED], Styria claim that they disguise themselves
 as Progression but with the important difference of \[DATA EXPUNGED]. Verification of these claims are currently pending...
 

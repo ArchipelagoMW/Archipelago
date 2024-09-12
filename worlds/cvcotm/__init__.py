@@ -125,7 +125,7 @@ class CVCotMWorld(World):
                             f"{self.required_last_keys}")
             self.options.required_last_keys.value = self.required_last_keys
 
-        # Place the Double in local_early_items if the Early Double setting is on.
+        # Place the Double in local_early_items if the Early Double option is on.
         if self.options.early_double:
             self.multiworld.local_early_items[self.player][iname.double] = 1
 

@@ -35,19 +35,23 @@ cvcotm_item_info: Dict[str, CVCotMItemData] = {
     iname.hp_max:         CVCotMItemData(0xE401, b"\x55\x81", ItemClassification.filler),
     iname.mp_max:         CVCotMItemData(0xE402, b"\x56\x81", ItemClassification.filler),
     iname.salamander:     CVCotMItemData(0xE600, b"\x1E\x82", ItemClassification.useful),
-    iname.serpent:        CVCotMItemData(0xE601, b"\x1F\x82", ItemClassification.progression),
+    iname.serpent:        CVCotMItemData(0xE601, b"\x1F\x82", ItemClassification.useful |
+                                         ItemClassification.progression),
     iname.mandragora:     CVCotMItemData(0xE602, b"\x20\x82", ItemClassification.useful),
     iname.golem:          CVCotMItemData(0xE603, b"\x21\x82", ItemClassification.useful),
-    iname.cockatrice:     CVCotMItemData(0xE604, b"\x22\x82", ItemClassification.progression),
+    iname.cockatrice:     CVCotMItemData(0xE604, b"\x22\x82", ItemClassification.useful |
+                                         ItemClassification.progression),
     iname.manticore:      CVCotMItemData(0xE605, b"\x23\x82", ItemClassification.useful),
     iname.griffin:        CVCotMItemData(0xE606, b"\x24\x82", ItemClassification.useful),
     iname.thunderbird:    CVCotMItemData(0xE607, b"\x25\x82", ItemClassification.useful),
     iname.unicorn:        CVCotMItemData(0xE608, b"\x26\x82", ItemClassification.useful),
     iname.black_dog:      CVCotMItemData(0xE609, b"\x27\x82", ItemClassification.useful),
-    iname.mercury:        CVCotMItemData(0xE60A, b"\x28\x82", ItemClassification.progression),
+    iname.mercury:        CVCotMItemData(0xE60A, b"\x28\x82", ItemClassification.useful |
+                                         ItemClassification.progression),
     iname.venus:          CVCotMItemData(0xE60B, b"\x29\x82", ItemClassification.useful),
     iname.jupiter:        CVCotMItemData(0xE60C, b"\x2A\x82", ItemClassification.useful),
-    iname.mars:           CVCotMItemData(0xE60D, b"\x2B\x82", ItemClassification.progression),
+    iname.mars:           CVCotMItemData(0xE60D, b"\x2B\x82", ItemClassification.useful |
+                                         ItemClassification.progression),
     iname.diana:          CVCotMItemData(0xE60E, b"\x2C\x82", ItemClassification.useful),
     iname.apollo:         CVCotMItemData(0xE60F, b"\x2D\x82", ItemClassification.useful),
     iname.neptune:        CVCotMItemData(0xE610, b"\x2E\x82", ItemClassification.useful),
@@ -55,13 +59,15 @@ cvcotm_item_info: Dict[str, CVCotMItemData] = {
     iname.uranus:         CVCotMItemData(0xE612, b"\x30\x82", ItemClassification.useful),
     iname.pluto:          CVCotMItemData(0xE613, b"\x31\x82", ItemClassification.useful),
     # Dash Boots
-    iname.double:         CVCotMItemData(0xE801, b"\x59\x81", ItemClassification.progression, b"\xF4\x84"),
+    iname.double:         CVCotMItemData(0xE801, b"\x59\x81", ItemClassification.useful |
+                                         ItemClassification.progression, b"\xF4\x84"),
     iname.tackle:         CVCotMItemData(0xE802, b"\x5A\x81", ItemClassification.progression, b"\xF5\x84"),
     iname.kick_boots:     CVCotMItemData(0xE803, b"\x5B\x81", ItemClassification.progression, b"\xF6\x84"),
     iname.heavy_ring:     CVCotMItemData(0xE804, b"\x5C\x81", ItemClassification.progression, b"\xF7\x84"),
     # Map
     iname.cleansing:      CVCotMItemData(0xE806, b"\x5D\x81", ItemClassification.progression, b"\xF8\x84"),
-    iname.roc_wing:       CVCotMItemData(0xE807, b"\x5E\x81", ItemClassification.progression, b"\xF9\x84"),
+    iname.roc_wing:       CVCotMItemData(0xE807, b"\x5E\x81", ItemClassification.useful |
+                                         ItemClassification.progression, b"\xF9\x84"),
     iname.last_key:       CVCotMItemData(0xE808, b"\x5F\x81", ItemClassification.progression_skip_balancing,
                                          b"\xFA\x84"),
     iname.ironmaidens:    CVCotMItemData(0xE809, b"\xF1\x84", ItemClassification.progression),
@@ -93,6 +99,7 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, 
     item_counts: Dict[ItemClassification, Dict[str, int]] = {
         ItemClassification.progression: {},
         ItemClassification.progression_skip_balancing: {},
+        ItemClassification.useful | ItemClassification.progression: {},
         ItemClassification.useful: {},
         ItemClassification.filler: {},
     }
@@ -180,6 +187,10 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, 
         # Classify the Cleansing as Useful instead of Progression if Ignore Cleansing is on.
         if item == iname.cleansing and world.options.ignore_cleansing:
             classification = ItemClassification.useful
+
+        # Classify the Kick Boots as Progression + Useful if Nerf Roc Wing is on.
+        if item == iname.kick_boots and world.options.nerf_roc_wing:
+            classification |= ItemClassification.useful
 
         item_counts[classification][item] = 1
         total_items += 1

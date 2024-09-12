@@ -58,7 +58,7 @@ other_game_item_appearances: Dict[str, Dict[str, OtherGameAppearancesInfo]] = {
                     "Max Aura": {"type": 0xE4,
                                  "appearance": 0x02},
                     "Max Sand": {"type": 0xE8,
-                                 "appearance": 0x0E}}
+                                 "appearance": 0x0F}}
 }
 
 # 0 = Holy water  22
@@ -485,11 +485,14 @@ def get_location_data(world: "CVCotMWorld", active_locations: Iterable[Location]
             type_byte = 0xE8
             subtype_byte = 0x0A
             # Decide which AP Item to use to represent the other game item.
-            if loc.item.advancement:
+            if loc.item.classification & ItemClassification.progression and \
+                    loc.item.classification & ItemClassification.useful:
+                appearance_byte = 0x0E  # Progression + Useful
+            elif loc.item.classification & ItemClassification.progression:
                 appearance_byte = 0x0C  # Progression
-            elif loc.item.classification == ItemClassification.useful:
+            elif loc.item.classification & ItemClassification.useful:
                 appearance_byte = 0x0B  # Useful
-            elif loc.item.classification == ItemClassification.trap:
+            elif loc.item.classification & ItemClassification.trap:
                 appearance_byte = 0x0D  # Trap
             else:
                 appearance_byte = 0x0A  # Filler
