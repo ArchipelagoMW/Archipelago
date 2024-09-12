@@ -58,7 +58,7 @@ from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsCarousel
-from kivymd.uix.button import MDButton, MDButtonText, MDButtonIcon
+from kivymd.uix.button import MDButton, MDButtonText, MDButtonIcon, MDIconButton
 from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.recycleview import MDRecycleView
 from kivymd.uix.textfield.textfield import MDTextField
@@ -90,6 +90,23 @@ class ImageIcon(MDButtonIcon, AsyncImage):
     def add_widget(self, widget, index=0, canvas=None):
         return super(MDIcon, self).add_widget(widget)
 
+class ImageButton(MDIconButton):
+    def __init__(self, **kwargs):
+        image_args = dict()
+        for kwarg in ("fit_mode", "image_size", "color", "source", "texture"):
+            val = kwargs.pop(kwarg, "None")
+            if val != "None":
+                image_args[kwarg.replace("image_", "")] = val
+        super().__init__()
+        self.image = AsyncImage(**image_args)
+        def set_center(button, center):
+            self.image.center_x = self.center_x
+            self.image.center_y = self.center_y
+        self.bind(center=set_center)
+        self.add_widget(self.image)
+
+    def add_widget(self, widget, index=0, canvas=None):
+        return super(MDIcon, self).add_widget(widget)
 
 class ScrollBox(MDScrollView):
     layout: MDBoxLayout
