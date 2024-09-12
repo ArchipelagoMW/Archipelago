@@ -1214,7 +1214,7 @@ class ItemClassification(IntFlag):
     Protects this item from being placed on excluded or unreachable locations.
     When combined with another flag like "progression", it means "an especially useful progression item". """
     trap = 0b0100
-    """ detrimental item """
+    """ Item that is detrimental in some way. """
     skip_balancing = 0b1000
     """ should technically never occur on its own
     Item that is logically relevant, but progression balancing should not touch.
