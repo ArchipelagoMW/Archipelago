@@ -105,8 +105,8 @@ class CivVIWorld(World):
 
             # If we're using progressive districts, we need to check if we need to create a different item instead
             item_to_create = item_name
+            item: CivVIItemData = self.item_table[item_name]
             if self.options.progression_style != "none":
-                item: CivVIItemData = self.item_table[item_name]
                 if item.progression_name:
                     item_to_create = self.item_table[item.progression_name].name
 

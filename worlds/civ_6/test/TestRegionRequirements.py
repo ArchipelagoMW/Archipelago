@@ -147,7 +147,6 @@ class TestProgressiveEraRequirements(CivVITestBase):
 
         # Classical era requires 2 progressive era items
         self.collect(progresive_era_item)
-        self.collect(progresive_era_item)
         accessible_eras += [EraType.ERA_CLASSICAL]
         check_eras_accessible(accessible_eras)
 
@@ -204,8 +203,6 @@ class TestProgressiveEraRequirementsWithBoostsanity(CivVITestBase):
         accessible_eras = [EraType.ERA_ANCIENT]
         check_eras_accessible(accessible_eras)
 
-        # Classical era requires 2 progressive era items
-        self.collect(progresive_era_item)
         self.collect(progresive_era_item)
         accessible_eras += [EraType.ERA_CLASSICAL]
         check_eras_accessible(accessible_eras)
