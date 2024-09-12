@@ -59,14 +59,10 @@ class BizHawkClientContext(CommonContext):
         self.bizhawk_ctx = BizHawkContext()
         self.watcher_timeout = 0.5
 
-    def run_gui(self):
-        from kvui import GameManager
-
-        class BizHawkManager(GameManager):
-            base_title = "Archipelago BizHawk Client"
-
-        self.ui = BizHawkManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = "Archipelago BizHawk Client"
+        return ui
 
     def on_package(self, cmd, args):
         if cmd == "Connected":

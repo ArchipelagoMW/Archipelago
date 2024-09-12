@@ -39,7 +39,7 @@ def create_itempool(world: "HatInTimeWorld") -> List[Item]:
                 continue
         else:
             if name == "Scooter Badge":
-                if world.options.CTRLogic is CTRLogic.option_scooter or get_difficulty(world) >= Difficulty.MODERATE:
+                if world.options.CTRLogic == CTRLogic.option_scooter or get_difficulty(world) >= Difficulty.MODERATE:
                     item_type = ItemClassification.progression
             elif name == "No Bonk Badge" and world.is_dw():
                 item_type = ItemClassification.progression
