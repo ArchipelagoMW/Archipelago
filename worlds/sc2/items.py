@@ -1916,14 +1916,14 @@ mission_key_item_table = {
 # Numbered layout keys (1001 - 1999)
 numbered_layout_key_item_table = {
     item_names._TEMPLATE_NUMBERED_LAYOUT_KEY.format(mission.id):
-        ItemData(mission.id + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 2, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+        ItemData(mission.id + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE, FactionlessItemType.Nothing, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0, origin={"key"})
     for mission in SC2Mission
 }
 # Numbered campaign keys (2001 - 2999)
 numbered_campaign_key_item_table = {
     item_names._TEMPLATE_NUMBERED_CAMPAIGN_KEY.format(mission.id):
-        ItemData(mission.id + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 4, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+        ItemData(mission.id + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 2, FactionlessItemType.Nothing, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0, origin={"key"})
     for mission in SC2Mission
 }
