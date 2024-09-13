@@ -812,15 +812,7 @@ def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dic
     return preset
 
 def _remove_key_rules(entry_rules: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    indices: List[int] = []
-    removed = 0
-    for (i, rule) in enumerate(entry_rules):
-        if "items" in rule and "Key" in rule["items"]:
-            indices.append(i)
-    for idx in indices:
-        entry_rules.pop(idx - removed)
-        removed += 1
-    return entry_rules
+    return [rule for rule in entry_rules if not ("items" in rule and "Key" in rule["items"])]
 
 def static_preset(preset: Dict[str, Any]) -> Callable[[Dict[str, Any]], Dict[str, Any]]:
     return lambda options: _build_static_preset(copy.deepcopy(preset), options)
