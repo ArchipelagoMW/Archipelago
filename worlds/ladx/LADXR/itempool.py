@@ -71,7 +71,6 @@ class ItemPool:
     def __init__(self, logic, settings, rnd):
         self.__pool = {}
         self.__setup(logic, settings)
-        self.__randomizeRupees(settings, rnd)
 
     def add(self, item, count=1):
         self.__pool[item] = self.__pool.get(item, 0) + count
@@ -256,23 +255,5 @@ class ItemPool:
         #     self.add(RUPEES_200, rupees50 // 5)
         #     self.remove(RUPEES_50, rupees50 // 5)
         
-    def __randomizeRupees(self, options, rnd):
-        # Remove rupees from the item pool and replace them with other items to create more variety
-        rupee_item = []
-        rupee_item_count = []
-        for k, v in self.__pool.items():
-            if k in {RUPEES_20, RUPEES_50} and v > 0:
-                rupee_item.append(k)
-                rupee_item_count.append(v)
-        rupee_chests = sum(v for k, v in self.__pool.items() if k.startswith("RUPEES_"))
-        for n in range(rupee_chests // 5):
-            new_item = rnd.choices((BOMB, SINGLE_ARROW, ARROWS_10, MAGIC_POWDER, MEDICINE), (10, 5, 10, 10, 1))[0]
-            while True:
-                remove_item = rnd.choices(rupee_item, rupee_item_count)[0]
-                if self.get(remove_item) > 0:
-                    break
-            self.add(new_item)
-            self.remove(remove_item)
-
     def toDict(self):
         return self.__pool.copy()
