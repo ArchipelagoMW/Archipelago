@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import bisect
 import dataclasses
 import sys
 import threading
@@ -15,6 +14,12 @@ import enum
 import typing
 
 from json import loads, dumps
+
+# TODO: get rid of python version check when < 3.10 is gone
+if sys.version_info.major == 3 and sys.version_info.minor < 10:
+    from Utils import bisect_right
+else:
+    from bisect import bisect_right
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
@@ -666,7 +671,7 @@ class SnesReader(typing.Generic[_T_Enum]):
         """
         address: int = read.value.address
         size: int = read.value.size
-        index = bisect.bisect(self._ranges, address, key=lambda r: r.location.address) - 1
+        index = bisect_right(self._ranges, address, key=lambda r: r.location.address) - 1
         assert index >= 0, f"{self._ranges=} {read.value=}"
         mem_read = self._ranges[index]
         sub_index = address - mem_read.location.address
