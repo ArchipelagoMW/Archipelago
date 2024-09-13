@@ -375,13 +375,12 @@ def run_gui():
                     self.button_layout.layout.add_widget(build_card(component))
 
         def build(self):
-            self.theme_cls.theme_style = "Dark"
-            self.theme_cls.primary_palette = "Green"
+            from kvui import KivyJSONtoTextParser
+            text_colors = KivyJSONtoTextParser.TextColors()
+            self.theme_cls.theme_style = getattr(text_colors, "theme_style", "Dark")
+            self.theme_cls.primary_palette = getattr(text_colors, "primary_palette", "Green")
             self.top_screen = MDFloatLayout()
             self.top_screen.md_bg_color = self.theme_cls.backgroundColor
-            #drawer_button = MDIconButton(icon="menu", theme_text_color="Custom", text_color=self.theme_cls.primaryColor)
-            #drawer_button.pos_hint = {"center_x": 0.05, "center_y": 0.95}
-            #self.screen.add_widget(drawer_button)
             self.grid = MDGridLayout(cols=2)
             self.navigation = MDGridLayout(cols=1, size_hint_x=0.25, width=dp(50))
             self.top_screen.add_widget(self.grid)
@@ -394,12 +393,7 @@ def run_gui():
             self.grid.spacing = 5
             self._refresh_components()
 
-            # handle navigation drawer
-            #menu = MDNavigationDrawerMenu(MDNavigationDrawerLabel(text="Components"))
-            #self.drawer = MDNavigationDrawer(menu, radius=(0, dp(16), dp(16), 0), drawer_type="modal")
-
-            #drawer_button.bind(on_release=toggle_drawer)
-            #self.drawer.menu = menu
+            # handle menu
             menu_icons = {
                 "Client": "controller",
                 "Tool": "desktop-classic",
