@@ -103,7 +103,11 @@ class TunicWorld(World):
                 self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
                 self.options.sword_progression.value = self.passthrough["sword_progression"]
                 self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
-                self.options.logic_rules.value = self.passthrough["logic_rules"]
+                try:
+                    self.options.logic_rules.value = self.passthrough["logic_rules"]
+                except KeyError:
+                    warning("The TUNIC APWorld that the multiworld was generated with is newer than the one in your"
+                                 "Archipelago installation. Consider updating your APWorld to a newer version.")
                 self.options.lanternless.value = self.passthrough["lanternless"]
                 self.options.maskless.value = self.passthrough["maskless"]
                 self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
