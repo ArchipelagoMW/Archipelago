@@ -33,7 +33,7 @@ Um arquivo YAML é a forma que você informa suas configurações do jogador par
 Olhe o [guia de configuração básica de um multiworld](/tutorial/Archipelago/setup/en) aqui no site do Archipelago para aprender mais.
 
 ### Onde eu consigo o YAML?
-Você pode usar o [pagina de configurações do jogador para Hollow Knight](/games/Hollow%20Knight/player-options) aqui no site  do Archipelago 
+Você pode usar a [página de configurações do jogador para Hollow Knight](/games/Hollow%20Knight/player-options) aqui no site do Archipelago 
 para gerar o YAML usando a interface gráfica.
 
 ### Entrando numa partida de Archipelago no Hollow Knight
