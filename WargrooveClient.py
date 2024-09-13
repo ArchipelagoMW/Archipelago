@@ -213,33 +213,33 @@ class WargrooveContext(CommonContext):
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager, HoverBehavior, ServerToolTip, ToggleButton
-        from kivy.lang import Builder
-        from kivymd.uix.button import MDButtonText
-        from kivymd.uix.boxlayout import MDBoxLayout
-        from kivymd.uix.label import MDLabel
+        from kvui import GameManager, HoverBehavior, ServerToolTip
         from kivymd.uix.tab import MDTabsItem, MDTabsItemText
+        from kivy.lang import Builder
+        from kivy.uix.togglebutton import ToggleButton
+        from kivy.uix.boxlayout import BoxLayout
+        from kivy.uix.label import Label
         import pkgutil
 
-        class TrackerLayout(MDBoxLayout):
+        class TrackerLayout(BoxLayout):
             pass
 
-        class CommanderSelect(MDBoxLayout):
+        class CommanderSelect(BoxLayout):
             pass
 
         class CommanderButton(ToggleButton):
             pass
 
-        class FactionBox(MDBoxLayout):
+        class FactionBox(BoxLayout):
             pass
 
-        class CommanderGroup(MDBoxLayout):
+        class CommanderGroup(BoxLayout):
             pass
 
-        class ItemTracker(MDBoxLayout):
+        class ItemTracker(BoxLayout):
             pass
 
-        class ItemLabel(MDLabel):
+        class ItemLabel(Label):
             pass
 
         class WargrooveManager(GameManager):
@@ -250,8 +250,8 @@ class WargrooveContext(CommonContext):
             base_title = "Archipelago Wargroove Client"
             ctx: WargrooveContext
             unit_tracker: ItemTracker
-            trigger_tracker: MDBoxLayout
-            boost_tracker: MDBoxLayout
+            trigger_tracker: BoxLayout
+            boost_tracker: BoxLayout
             commander_buttons: Dict[int, List[CommanderButton]]
             tracker_items = {
                 "Swordsman": ItemData(None, "Unit", False),
@@ -278,21 +278,21 @@ class WargrooveContext(CommonContext):
                         commander_group = CommanderGroup()
                         commander_buttons = []
                         for commander in commanders:
-                            commander_button = CommanderButton(MDButtonText(commander.name), group="commanders")
+                            commander_button = CommanderButton(text=commander.name, group="commanders")
                             if faction == "Starter":
                                 commander_button.disabled = False
                             commander_button.bind(on_press=lambda instance: self.ctx.set_commander(instance.text))
                             commander_buttons.append(commander_button)
                             commander_group.add_widget(commander_button)
                         self.commander_buttons[faction] = commander_buttons
-                        faction_box.add_widget(MDLabel(text=faction, size_hint_x=None, pos_hint={'left': 1}, size_hint_y=None, height=10))
+                        faction_box.add_widget(Label(text=faction, size_hint_x=None, pos_hint={'left': 1}, size_hint_y=None, height=10))
                         faction_box.add_widget(commander_group)
                         commander_select.add_widget(faction_box)
                     item_tracker = ItemTracker(padding=[0,20])
-                    self.unit_tracker = MDBoxLayout(orientation="vertical")
-                    other_tracker = MDBoxLayout(orientation="vertical")
-                    self.trigger_tracker = MDBoxLayout(orientation="vertical")
-                    self.boost_tracker = MDBoxLayout(orientation="vertical")
+                    self.unit_tracker = BoxLayout(orientation="vertical")
+                    other_tracker = BoxLayout(orientation="vertical")
+                    self.trigger_tracker = BoxLayout(orientation="vertical")
+                    self.boost_tracker = BoxLayout(orientation="vertical")
                     other_tracker.add_widget(self.trigger_tracker)
                     other_tracker.add_widget(self.boost_tracker)
                     item_tracker.add_widget(self.unit_tracker)
