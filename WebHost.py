@@ -1,3 +1,4 @@
+import argparse
 import os
 import multiprocessing
 import logging
@@ -31,6 +32,15 @@ def get_app() -> "Flask":
         import yaml
         app.config.from_file(configpath, yaml.safe_load)
         logging.info(f"Updated config from {configpath}")
+    # inside get_app() so it's usable in systems like gunicorn, which do not run WebHost.py, but import it.
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config_override', default=None,
+                        help="Path to yaml config file that overrules config.yaml.")
+    args = parser.parse_known_args()[0]
+    if args.config_override:
+        import yaml
+        app.config.from_file(os.path.abspath(args.config_override), yaml.safe_load)
+        logging.info(f"Updated config from {args.config_override}")
     if not app.config["HOST_ADDRESS"]:
         logging.info("Getting public IP, as HOST_ADDRESS is empty.")
         app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
@@ -58,6 +68,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             worlds[game] = world
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
+    shutil.rmtree(base_target_path, ignore_errors=True)
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
         target_path = os.path.join(base_target_path, game)
