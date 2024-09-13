@@ -8,8 +8,8 @@
 
 ## Instalando o mod Archipelago Mod usando Lumafly
 1. Abra o Lumafly e confirme que ele localizou sua pasta de instalação do hollow knight.
-2. Clique em "Install(instalar)" perto da opção "Archipelago" mod.
-   * Se quiser, instale também o "Archipelago Map Mod(mod do mapa do archipelago)" para usá-lo como rastreador dentro do jogo.
+2. Clique em "Install (instalar)" perto da opção "Archipelago" mod.
+   * Se quiser, instale também o "Archipelago Map Mod (mod do mapa do archipelago)" para usá-lo como rastreador dentro do jogo.
 3. Abra o jogo, tudo preparado!
 
 ### O que fazer se o Lumafly falha em encontrar a sua pasta de instalação
