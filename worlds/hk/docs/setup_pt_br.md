@@ -39,14 +39,14 @@ para gerar o YAML usando a interface gráfica.
 ### Entrando numa partida de Archipelago no Hollow Knight
 1. Começe o jogo depois de instalar todos os mods necessários.
 2. Crie um **novo jogo salvo.**
-3. Selecione o mode de jogo **Archipelago** do menu de seleção.
-4. Coloque as configurações corretas do ser servidor Archipelago.
-5. Aperte em  **Começar**. O jogo vai travar por uns segundos enquanto ele coloca todos itens.
+3. Selecione o modo de jogo **Archipelago** do menu de seleção.
+4. Coloque as configurações corretas do seu servidor Archipelago.
+5. Aperte em **Começar**. O jogo vai travar por uns segundos enquanto ele coloca todos itens.
 6. O jogo vai te colocar imediatamente numa partida randomizada. 
    * Se você está esperando uma contagem então espere ele cair antes de apertar começar.
    * Ou clique em começar e pause o jogo enquanto estiver nele.
    
 ## Dicas e outros comandos
-Enquanto jogar um multiworld, você pode interagir com o servidor usando vários comandos listado no
+Enquanto jogar um multiworld, você pode interagir com o servidor usando vários comandos listados no
 [Guia de comandos](/tutorial/Archipelago/commands/en). Você pode usar o cliente de texto do Archipelago para isso,
 que está incluido na ultima versão do [Archipelago software](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
