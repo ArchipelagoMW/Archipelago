@@ -50,7 +50,8 @@ class ItemFilterFlags(enum.IntFlag):
     ForceProgression = enum.auto()
     """Used to flag items that aren't classified as progression by default"""
     Necessary = enum.auto()
-    """Used to flag items that are never allowed to be culled"""
+    """Used to flag items that are never allowed to be culled.
+    This differs from `Locked` in that locked items may still be culled if there's space issues or in some circumstances when a parent item is culled."""
 
     Unremovable = Locked|StartInventory|Plando|Necessary
 
