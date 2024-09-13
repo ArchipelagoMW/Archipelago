@@ -7,8 +7,9 @@ from .rules import set_location_rules, set_region_rules, randomize_ability_unloc
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
 from .er_scripts import create_er_regions
-from .er_data import portal_mapping
-from .options import TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections
+from .er_data import portal_mapping, RegionInfo, tunic_er_regions
+from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -48,10 +49,12 @@ class TunicLocation(Location):
 
 
 class SeedGroup(TypedDict):
-    logic_rules: int  # logic rules value
+    laurels_zips: bool  # laurels_zips value
+    ice_grappling: int  # ice_grappling value
+    ladder_storage: int  # ls value
     laurels_at_10_fairies: bool  # laurels location value
     fixed_shop: bool  # fixed shop value
-    plando: TunicPlandoConnections  # consolidated of plando connections for the seed group
+    plando: TunicPlandoConnections  # consolidated plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -77,11 +80,20 @@ class TunicWorld(World):
     tunic_portal_pairs: Dict[str, str]
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
+    shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
+    er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
 
     def generate_early(self) -> None:
+        if self.options.logic_rules >= LogicRules.option_no_major_glitches:
+            self.options.laurels_zips.value = LaurelsZips.option_true
+            self.options.ice_grappling.value = IceGrappling.option_medium
+            if self.options.logic_rules.value == LogicRules.option_unrestricted:
+                self.options.ladder_storage.value = LadderStorage.option_medium
+
+        self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:
             for index, cxn in enumerate(self.options.plando_connections):
                 # making shops second to simplify other things later
@@ -97,22 +109,25 @@ class TunicWorld(World):
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
-                self.using_ut = True
-                self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.options.start_with_sword.value = self.passthrough["start_with_sword"]
-                self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
-                self.options.sword_progression.value = self.passthrough["sword_progression"]
-                self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
+                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                self.options.start_with_sword.value = passthrough["start_with_sword"]
+                self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
+                self.options.sword_progression.value = passthrough["sword_progression"]
+                self.options.ability_shuffling.value = passthrough["ability_shuffling"]
+                # this option is newer than 0.5.0, and so should be handled in some fashion
                 try:
-                    self.options.logic_rules.value = self.passthrough["logic_rules"]
+                    self.options.laurels_zips.value = passthrough["laurels_zips"]
+                    self.options.ice_grappling.value = passthrough["ice_grappling"]
+                    self.options.ladder_storage.value = passthrough["ladder_storage"]
+                    self.options.ladder_storage_without_items = passthrough["ladder_storage_without_items"]
                 except KeyError:
-                    warning("The TUNIC APWorld that the multiworld was generated with is newer than the one in your"
-                                 "Archipelago installation. Consider updating your APWorld to a newer version.")
-                self.options.lanternless.value = self.passthrough["lanternless"]
-                self.options.maskless.value = self.passthrough["maskless"]
-                self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
-                self.options.entrance_rando.value = self.passthrough["entrance_rando"]
-                self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
+                    warning("The TUNIC APWorld that the multiworld was generated with is newer than the one in "
+                            "your Archipelago installation. Consider updating your APWorld to a newer version.")
+                self.options.lanternless.value = passthrough["lanternless"]
+                self.options.maskless.value = passthrough["maskless"]
+                self.options.hexagon_quest.value = passthrough["hexagon_quest"]
+                self.options.entrance_rando.value = passthrough["entrance_rando"]
+                self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
             else:
@@ -130,19 +145,28 @@ class TunicWorld(World):
             group = tunic.options.entrance_rando.value
             # if this is the first world in the group, set the rules equal to its rules
             if group not in cls.seed_groups:
-                cls.seed_groups[group] = SeedGroup(logic_rules=tunic.options.logic_rules.value,
-                                                   laurels_at_10_fairies=tunic.options.laurels_location == 3,
-                                                   fixed_shop=bool(tunic.options.fixed_shop),
-                                                   plando=tunic.options.plando_connections)
+                cls.seed_groups[group] = \
+                    SeedGroup(laurels_zips=bool(tunic.options.laurels_zips),
+                              ice_grappling=tunic.options.ice_grappling.value,
+                              ladder_storage=tunic.options.ladder_storage.value,
+                              laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
+                              fixed_shop=bool(tunic.options.fixed_shop),
+                              plando=tunic.options.plando_connections)
                 continue
-                
+
+            # off is more restrictive
+            if not tunic.options.laurels_zips:
+                cls.seed_groups[group]["laurels_zips"] = False
             # lower value is more restrictive
-            if tunic.options.logic_rules.value < cls.seed_groups[group]["logic_rules"]:
-                cls.seed_groups[group]["logic_rules"] = tunic.options.logic_rules.value
+            if tunic.options.ice_grappling < cls.seed_groups[group]["ice_grappling"]:
+                cls.seed_groups[group]["ice_grappling"] = tunic.options.ice_grappling.value
+            # lower value is more restrictive
+            if tunic.options.ladder_storage.value < cls.seed_groups[group]["ladder_storage"]:
+                cls.seed_groups[group]["ladder_storage"] = tunic.options.ladder_storage.value
             # laurels at 10 fairies changes logic for secret gathering place placement
             if tunic.options.laurels_location == 3:
                 cls.seed_groups[group]["laurels_at_10_fairies"] = True
-            # fewer shops, one at windmill
+            # more restrictive, overrides the option for others in the same group, which is better than failing imo
             if tunic.options.fixed_shop:
                 cls.seed_groups[group]["fixed_shop"] = True
 
@@ -376,7 +400,10 @@ class TunicWorld(World):
             "ability_shuffling": self.options.ability_shuffling.value,
             "hexagon_quest": self.options.hexagon_quest.value,
             "fool_traps": self.options.fool_traps.value,
-            "logic_rules": self.options.logic_rules.value,
+            "laurels_zips": self.options.laurels_zips.value,
+            "ice_grappling": self.options.ice_grappling.value,
+            "ladder_storage": self.options.ladder_storage.value,
+            "ladder_storage_without_items": self.options.ladder_storage_without_items.value,
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
