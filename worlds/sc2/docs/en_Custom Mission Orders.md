@@ -152,10 +152,11 @@ Custom Mission Orders respect all the options that change which missions can app
 
 This means that if you want total control over available missions in your mission order via `mission_pool`s, you should enable all races and campaigns and leave your `excluded_missions` list empty, but you can also use these options to get rid of particular missions you never want and can then ignore those missions in your `mission_pool`s.
 
-There are, however, three options that are ignored by Custom Mission Orders:
+There are, however, several options that are ignored by Custom Mission Orders:
 - `mission_order`, because it has to be `custom` for your Custom Mission Order to apply
 - `maximum_campaign_size`, because you determine the size of the mission order via layout `size` attributes
 - `grid_two_start_positions`, which you can instead determine in individual layouts of the appropriate `type`s (see Grid and Hopscotch sections below)
+- `key_mode`, which you can still specify for presets (see Campaign Presets section), and can otherwise manually set up using Item entry rules
 
 ## Instructions for building a mission order
 
@@ -276,7 +277,65 @@ entry_rules:
   - rules: []
     amount: -1
 ```
-Note that Item rules take both a name and amount for each item (see the example below). In general this rule treats items like the `locked_items` option, but as a notable difference all items required for Item rules are marked as progression. If multiple Item rules require the same item, the largest required amount will be locked, **not** the sum of all amounts.
+Note that Item rules take both a name and amount for each item (see the example below). In general this rule treats items like the `locked_items` option, including that it will override `excluded_items`, but as a notable difference all items required for Item rules are marked as progression. If multiple Item rules require the same item, the largest required amount will be locked, **not** the sum of all amounts.
+
+Additionally, Item rules accept a special item:
+```yaml
+entry_rules:
+  - items:
+      Key: 1
+```
+This is a generic item that is converted to a key item for the specific scope it is under. Missions get Mission Keys, layouts get Questline Keys, and campaigns get Campaign Keys. If you want to know which specific key is created (for example to tie multiple unlocks to the same key), you can generate a test game and check in the client.
+
+You can also use one of the following key items for this purpose:
+<details>
+  <summary>Custom keys</summary>
+
+  - `Terran Key`
+  - `Zerg Key`
+  - `Protoss Key`
+  - `Raynor Key`
+  - `Tychus Key`
+  - `Swann Key`
+  - `Stetmann Key`
+  - `Hanson Key`
+  - `Nova Key`
+  - `Tosh Key`
+  - `Valerian Key`
+  - `Warfield Key`
+  - `Mengsk Key`
+  - `Han Key`
+  - `Horner Key`
+  - `Kerrigan Key`
+  - `Zagara Key`
+  - `Abathur Key`
+  - `Yagdra Key`
+  - `Kraith Key`
+  - `Slivan Key`
+  - `Zurvan Key`
+  - `Brakk Key`
+  - `Stukov Key`
+  - `Dehaka Key`
+  - `Niadra Key`
+  - `Izsha Key`
+  - `Artanis Key`
+  - `Zeratul Key`
+  - `Tassadar Key`
+  - `Karax Key`
+  - `Vorazun Key`
+  - `Alarak Key`
+  - `Fenix Key`
+  - `Urun Key`
+  - `Mohandar Key`
+  - `Selendis Key`
+  - `Rohana Key`
+  - `Reigel Key`
+  - `Davis Key`
+  - `Ji'nara Key`
+
+</details>
+
+These keys will never be used by the generator unless you specify them yourself.
 
 The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order.
 
@@ -305,7 +364,7 @@ Below are examples of the available entry rules:
         # To access the Some Missions layout,
         # you have to find or receive your Marine
         - items:
-          Marine: 1
+            Marine: 1
     
     Wings of Liberty:
       Mar Sara:
@@ -483,7 +542,8 @@ With all presets, you can override their layout options by defining the layouts 
   custom_mission_order:
     My Campaign:
       preset: wol + prophecy
-      missions: vanilla_shuffled
+      missions: random # Optional
+      keys: none # Optional
       Prophecy:
         mission_pool:
           - zerg missions
@@ -521,16 +581,22 @@ For these presets, the layout names used to override settings match the names sh
 - The Gauntlets in the Mini variants of the above are also named `Prophecy`, `Prologue` and `Epilogue`.
 - NCO and Mini NCO contain three columns each, named `Mission Pack 1`, `Mission Pack 2` and `Mission Pack 3`.
 
-All static presets accept a `missions` option, as shown in the example above. Possible values are:
-- `random`, which removes pre-defined `mission_pool` options from layouts and missions, meaning all missions will follow the pool defined in your campaign's `global` layout. This is the default if you don't define the `missions` option.
-- `vanilla_shuffled`, which will leave `mission_pool`s on layouts to shuffle vanilla missions within their respective campaigns.
-- `vanilla`, which will leave all missions as they are in the vanilla campaigns.
+All static presets accept these options, as shown in the example above:
+- `missions` with these possible values:
+  - `random` (default), which removes pre-defined `mission_pool` options from layouts and missions, meaning all missions will follow the pool defined in your campaign's `global` layout. This is the default if you don't define the `missions` option.
+  - `vanilla_shuffled`, which will leave `mission_pool`s on layouts to shuffle vanilla missions within their respective campaigns.
+  - `vanilla`, which will leave all missions as they are in the vanilla campaigns.
+- `keys` with these possible values:
+  - `none` (default), which does not add any Key Item rules to the preset.
+  - `layouts`, which adds Key Item rules to layouts besides the preset's left-most layout, in addition to their regular entry rules.
+  - `missions`, which adds Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules.
 
 ---
 ### Golden Path
 ```yaml
 preset: golden path
 size: # Required, no default, accepts positive numbers
+keys: none # Optional
 ```
 Golden Path aims to create a dynamically-sized campaign with branching paths to create a similar experience to the Wings of Liberty campaign. It accomplishes this by having a main column that requires an increasing number of missions to be beaten to advance, and a number of side columns that require progressing the main column to advance. The exit of a Golden Path campaign is the last mission of the main column.
 
@@ -540,6 +606,10 @@ The columns in a Golden Path get random names from a `display_name` list and hav
 
 Since the number of side columns depends on the number of missions, it is best to generate a test game for a given size to see how many columns are generated.
 
+Golden Path also accepts a `keys` option, which works like the same option for static presets, and accepts the following values:
+- `none` (default), which does not add any Key Item rules to the preset.
+- `layouts`, which adds Key Item rules to all side columns, in addition to their regular entry rules.
+- `missions`, which adds Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules.
 
 ## Layout Options
 

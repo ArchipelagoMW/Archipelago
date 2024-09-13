@@ -814,3 +814,21 @@ NOTHING           = "Nothing"
 
 # Deprecated
 PROGRESSIVE_ORBITAL_COMMAND         = "Progressive Orbital Command (Deprecated)"
+
+# Keys
+_TEMPLATE_MISSION_KEY            = "{} Mission Key"
+_TEMPLATE_NAMED_LAYOUT_KEY       = "{} ({}) Questline Key"
+_TEMPLATE_NUMBERED_LAYOUT_KEY    = "Questline Key #{}"
+_TEMPLATE_NAMED_CAMPAIGN_KEY     = "{} Campaign Key"
+_TEMPLATE_NUMBERED_CAMPAIGN_KEY  = "Campaign Key #{}"
+_TEMPLATE_FLAVOR_KEY             = "{} Key"
+
+# Names for flavor keys, feel free to add more, but add them to the Custom Mission Order docs too
+# These will never be randomly created by the generator
+_flavor_key_names = [
+    "Terran", "Zerg", "Protoss",
+    "Raynor", "Tychus", "Swann", "Stetmann", "Hanson", "Nova", "Tosh", "Valerian", "Warfield", "Mengsk", "Han", "Horner",
+    "Kerrigan", "Zagara", "Abathur", "Yagdra", "Kraith", "Slivan", "Zurvan", "Brakk", "Stukov", "Dehaka", "Niadra", "Izsha",
+    "Artanis", "Zeratul", "Tassadar", "Karax", "Vorazun", "Alarak", "Fenix", "Urun", "Mohandar", "Selendis", "Rohana",
+    "Reigel", "Davis", "Ji'nara"
+]

@@ -50,7 +50,8 @@ class ItemFilterFlags(enum.IntFlag):
     ForceProgression = enum.auto()
     """Used to flag items that aren't classified as progression by default"""
     Necessary = enum.auto()
-    """Used to flag items that are never allowed to be culled"""
+    """Used to flag items that are never allowed to be culled.
+    This differs from `Locked` in that locked items may still be culled if there's space issues or in some circumstances when a parent item is culled."""
 
     Unremovable = Locked|StartInventory|Plando|Necessary
 
@@ -211,6 +212,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     unexcluded_items = world.options.unexcluded_items
     locked_items = world.options.locked_items
     start_inventory = world.options.start_inventory
+    key_items = world.custom_mission_order.get_items_to_lock()
 
     def resolve_count(count: Optional[int], max_count: int) -> int:
         if count == 0:
@@ -228,6 +230,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         unexcluded_count = unexcluded_items.get(item_name)
         locked_count = locked_items.get(item_name)
         start_count: Optional[int] = start_inventory.get(item_name)
+        key_count = key_items.get(item_name, 0)
         # specifying 0 in the yaml means exclude / lock all
         # start_inventory doesn't allow specifying 0
         # not specifying means don't exclude/lock/start
@@ -258,7 +261,9 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
             logger.warning(f"Item {item_name} had excluded + locked + start amounts greater than maximum amount "
                 f"({excluded_count} + {locked_count} + {start_count} > {max_count}). Decreasing excluded amount.")
             excluded_count = max_count - start_count - locked_count
-        for index in range(max_count - excluded_count):
+        # Make sure the final count creates enough items to satisfy key requirements
+        final_count = max(max_count - excluded_count, key_count)
+        for index in range(final_count):
             result.append(FilterItem(item_name, item_data, index))
             if index < start_count:
                 result[-1].flags |= ItemFilterFlags.StartInventory

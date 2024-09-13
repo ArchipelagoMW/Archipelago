@@ -1,10 +1,18 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
 import copy
 
 def _required_option(option: str, options: Dict[str, Any]) -> Any:
+    """Returns the option value, or raises an error if the option is not present."""
     if option not in options:
         raise KeyError(f"Campaign preset is missing required option \"{option}\".")
     return options.pop(option)
+
+def _validate_option(option: str, options: Dict[str, str], default: str, valid_values: List[str]) -> str:
+    """Returns the option value if it is present and valid, the default if it is not present, or raises an error if it is present but not valid."""
+    result = options.pop(option, default)
+    if result not in valid_values:
+        raise ValueError(f"Preset option \"{option}\" received unknown value \"{result}\".")
+    return result
 
 def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
     chain_name_options = ['Mar Sara', 'Agria', 'Redstone', 'Meinhoff', 'Haven', 'Tarsonis', 'Valhalla', 'Char',
@@ -14,6 +22,7 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
                           'Azeroth', 'Crouton', 'Draenor', 'Sanctuary']
     
     size = max(_required_option("size", options), 2)
+    keys_option = _validate_option("keys", options, "none", ["none", "layouts", "missions"])
     min_chains = 2
     max_chains = 6
 
@@ -66,10 +75,14 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
         "unique_name": True,
         "missions": [],
     }
+    # Optionally add key requirement to layouts
+    if keys_option == "layouts":
+        layout_base["entry_rules"] = [{ "items": { "Key": 1 }}]
     preset = {
         str(chain): copy.deepcopy(layout_base) for chain in range(len(campaign.chain_lengths))
     }
     preset["0"]["exit"] = True
+    preset["0"].pop("entry_rules", [])
     for chain in range(len(campaign.chain_lengths)):
         length = campaign.chain_lengths[chain]
         padding = campaign.chain_padding[chain]
@@ -91,6 +104,10 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
                         "amount": campaign.required_missions[mission]
                     }]
                 })
+            # Optionally add key requirements except to the starter mission
+            if keys_option == "missions":
+                for slot in preset["0"]["missions"]:
+                    slot["entry_rules"].append({ "items": { "Key": 1 }})
         else:
             # Other paths get main path requirements
             for mission in range(length):
@@ -101,5 +118,10 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
                         "scope": f"../../0/{target}"
                     }]
                 })
+            # Optionally add key requirements
+            if keys_option == "missions":
+                for slot in preset[str(chain)]["missions"]:
+                    if "entry_rules" in slot:
+                        slot["entry_rules"].append({ "items": { "Key": 1 }})
     
     return preset
