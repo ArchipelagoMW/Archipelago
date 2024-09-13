@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import OptionGroup, Choice, Range, Toggle, PerGameCommonOptions, StartInventoryPool, DefaultOnToggle
+from Options import OptionGroup, Choice, Range, Toggle, PerGameCommonOptions, StartInventoryPool
 
 
 class IgnoreCleansing(Toggle):
@@ -147,11 +147,16 @@ class RequiredSkirmishes(Choice):
     default = 0
 
 
-class EarlyDouble(DefaultOnToggle):
+class EarlyEscapeItem(Choice):
     """
-    Ensures the Double will be placed somewhere within the Catacomb in your own game, accessible with nothing.
+    Ensures the chosen Catacomb escape item will be placed in a starting location within your own game, accessible with nothing.
     """
-    display_name = "Early Double"
+    display_name = "Early Escape Item"
+    option_none = 0
+    option_double = 1
+    option_roc_wing = 2
+    option_double_or_roc_wing = 3
+    default = 1
 
 
 class NerfRocWing(Toggle):
@@ -264,7 +269,7 @@ class CVCotMOptions(PerGameCommonOptions):
     skip_dialogues: SkipDialogues
     skip_tutorials: SkipTutorials
     nerf_roc_wing: NerfRocWing
-    early_double: EarlyDouble
+    early_escape_item: EarlyEscapeItem
     battle_arena_music: BattleArenaMusic
     death_link: DeathLink
 
@@ -272,7 +277,7 @@ class CVCotMOptions(PerGameCommonOptions):
 cvcotm_option_groups = [
     OptionGroup("difficulty", [
         BuffRangedFamiliars, BuffSubWeapons, BuffShooterStrength, ItemDropRandomization, IgnoreCleansing,
-        HalveDSSCardsPlaced, SubWeaponShuffle, EarlyDouble, DeathLink]),
+        HalveDSSCardsPlaced, SubWeaponShuffle, EarlyEscapeItem, DeathLink]),
     OptionGroup("quality of life", [
         AutoRun, DSSPatch, AlwaysAllowSpeedDash, PlutoGriffinAirSpeed, Countdown, DisableBattleArenaMPDrain,
         SkipDialogues, SkipTutorials, BattleArenaMusic])

@@ -10,7 +10,7 @@ from .items import CVCotMItem, FILLER_ITEM_NAMES, ACTION_CARDS, ATTRIBUTE_CARDS,
 from .locations import CVCotMLocation, get_location_names_to_ids, BASE_ID, get_named_locations_data, \
     get_location_name_groups
 from .options import cvcotm_option_groups, CVCotMOptions, SubWeaponShuffle, IronMaidenBehavior, RequiredSkirmishes, \
-    CompletionGoal
+    CompletionGoal, EarlyEscapeItem
 from .regions import get_region_info, get_all_region_names
 from .rules import CVCotMRules
 from .data import iname, lname
@@ -125,9 +125,13 @@ class CVCotMWorld(World):
                             f"{self.required_last_keys}")
             self.options.required_last_keys.value = self.required_last_keys
 
-        # Place the Double in local_early_items if the Early Double option is on.
-        if self.options.early_double:
+        # Place the Double or Roc Wing in local_early_items if the Early Escape option is being used.
+        if self.options.early_escape_item == EarlyEscapeItem.option_double:
             self.multiworld.local_early_items[self.player][iname.double] = 1
+        elif self.options.early_escape_item == EarlyEscapeItem.option_roc_wing:
+            self.multiworld.local_early_items[self.player][iname.roc_wing] = 1
+        elif self.options.early_escape_item == EarlyEscapeItem.option_double_or_roc_wing:
+            self.multiworld.local_early_items[self.player][self.random.choice([iname.double, iname.roc_wing])] = 1
 
     def create_regions(self) -> None:
         # Create every Region object.

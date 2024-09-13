@@ -3,8 +3,8 @@ from typing import Any, Dict
 from Options import Accessibility, ProgressionBalancing
 from .options import IgnoreCleansing, AutoRun, DSSPatch, AlwaysAllowSpeedDash, IronMaidenBehavior, BuffRangedFamiliars,\
     BuffSubWeapons, BuffShooterStrength, ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle,\
-    DisableBattleArenaMPDrain, RequiredSkirmishes, EarlyDouble, DeathLink, CompletionGoal, SkipDialogues, NerfRocWing,\
-    SkipTutorials, BattleArenaMusic, PlutoGriffinAirSpeed
+    DisableBattleArenaMPDrain, RequiredSkirmishes, EarlyEscapeItem, DeathLink, CompletionGoal, SkipDialogues,\
+    NerfRocWing, SkipTutorials, BattleArenaMusic, PlutoGriffinAirSpeed
 
 all_random_options = {
     "progression_balancing":         "random",
@@ -29,7 +29,7 @@ all_random_options = {
     "skip_dialogues":                "random",
     "skip_tutorials":                "random",
     "nerf_roc_wing":                 "random",
-    "early_double":                  "random",
+    "early_escape_item":             "random",
     "battle_arena_music":            "random",
     "death_link":                    DeathLink.option_off,
     "completion_goal":               "random",
@@ -58,7 +58,7 @@ beginner_mode_options = {
     "skip_dialogues":                SkipDialogues.option_false,
     "skip_tutorials":                SkipTutorials.option_false,
     "nerf_roc_wing":                 NerfRocWing.option_false,
-    "early_double":                  EarlyDouble.option_true,
+    "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
@@ -87,7 +87,7 @@ standard_competitive_options = {
     "skip_dialogues":                SkipDialogues.option_true,
     "skip_tutorials":                SkipTutorials.option_true,
     "nerf_roc_wing":                 NerfRocWing.option_false,
-    "early_double":                  EarlyDouble.option_true,
+    "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
@@ -116,7 +116,7 @@ randomania_2023_options = {
     "skip_dialogues":                SkipDialogues.option_false,
     "skip_tutorials":                SkipTutorials.option_false,
     "nerf_roc_wing":                 NerfRocWing.option_false,
-    "early_double":                  EarlyDouble.option_true,
+    "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
@@ -145,7 +145,7 @@ competitive_all_bosses_options = {
     "skip_dialogues":                SkipDialogues.option_true,
     "skip_tutorials":                SkipTutorials.option_true,
     "nerf_roc_wing":                 NerfRocWing.option_false,
-    "early_double":                  EarlyDouble.option_true,
+    "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
@@ -174,7 +174,7 @@ hardcore_mode_options = {
     "skip_dialogues":                SkipDialogues.option_false,
     "skip_tutorials":                SkipTutorials.option_false,
     "nerf_roc_wing":                 NerfRocWing.option_false,
-    "early_double":                  EarlyDouble.option_true,
+    "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
     "death_link":                    DeathLink.option_off,
     "completion_goal":               CompletionGoal.option_battle_arena_and_dracula,
