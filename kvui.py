@@ -90,6 +90,7 @@ class ImageIcon(MDButtonIcon, AsyncImage):
     def add_widget(self, widget, index=0, canvas=None):
         return super(MDIcon, self).add_widget(widget)
 
+
 class ImageButton(MDIconButton):
     def __init__(self, **kwargs):
         image_args = dict()
@@ -107,6 +108,7 @@ class ImageButton(MDIconButton):
 
     def add_widget(self, widget, index=0, canvas=None):
         return super(MDIcon, self).add_widget(widget)
+
 
 class ScrollBox(MDScrollView):
     layout: MDBoxLayout
@@ -582,7 +584,7 @@ class GameManager(MDApp):
         self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70),
                                           spacing=5, padding=(5, 10))
         # top part
-        server_label = ServerLabel()
+        server_label = ServerLabel(halign="center")
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
                                                       size_hint_y=None, role="medium",
@@ -595,7 +597,7 @@ class GameManager(MDApp):
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
         self.server_connect_button = MDButton(MDButtonText(text="Connect"), style="filled", size=(dp(100), dp(70)),
-                                              size_hint_x=None, size_hint_y=None, radius=5, pos_hint={"center_y": 0.5})
+                                              size_hint_x=None, size_hint_y=None, radius=5, pos_hint={"center_y": 0.55})
         self.server_connect_button.bind(on_press=self.connect_button_action)
         self.server_connect_button.height = self.server_connect_bar.height
         self.connect_layout.add_widget(self.server_connect_button)
@@ -635,7 +637,7 @@ class GameManager(MDApp):
         # bottom part
         bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70), spacing=5, padding=(5, 10))
         info_button = MDButton(MDButtonText(text="Command:"), radius=5, style="filled", size=(dp(100), dp(70)),
-                               size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.5})
+                               size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.575})
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
         self.textinput = CommandPromptTextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
