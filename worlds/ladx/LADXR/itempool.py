@@ -265,8 +265,6 @@ class ItemPool:
                 rupee_item.append(k)
                 rupee_item_count.append(v)
         rupee_chests = sum(v for k, v in self.__pool.items() if k.startswith("RUPEES_"))
-        if rupee_chests // 5 > sum(rupee_item_count):
-            rupee_chests = 5*sum(rupee_item_count)
         for n in range(rupee_chests // 5):
             new_item = rnd.choices((BOMB, SINGLE_ARROW, ARROWS_10, MAGIC_POWDER, MEDICINE), (10, 5, 10, 10, 1))[0]
             while True:
