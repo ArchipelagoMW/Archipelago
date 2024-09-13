@@ -229,7 +229,7 @@ def launch(exe, in_terminal=False):
                 subprocess.Popen([terminal, '-e', shlex.join(exe)])
                 return
         elif is_macos:
-            terminal = [which('open'), '-W', '-a', 'Terminal.MDApp']
+            terminal = [which('open'), '-W', '-a', 'Terminal.app']
             subprocess.Popen([*terminal, *exe])
             return
     subprocess.Popen(exe)
@@ -482,7 +482,7 @@ def run_component(component: Component, *args):
     elif component.script_name:
         subprocess.run([*get_exe(component.script_name), *args])
     else:
-        logging.warning(f"Component {component} does not MDAppear to be executable.")
+        logging.warning(f"Component {component} does not appear to be executable.")
 
 
 def main(args: Optional[Union[argparse.Namespace, dict]] = None):
