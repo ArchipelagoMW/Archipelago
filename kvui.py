@@ -571,8 +571,6 @@ class GameManager(MDApp):
             self.root.md_bg_color = self.theme_cls.backgroundColor
         super().on_start()
         Clock.schedule_once(on_start)
-        #self.tabs.add_widget(MDTabsItem(MDTabsItemText("TestTab")))
-        #self.tabs.carousel.add_widget(MDLabel(text="Label 1"))
 
     def build(self) -> Layout:
         self.theme_cls.theme_style = self.json_to_kivy_parser.theme_style
@@ -626,7 +624,6 @@ class GameManager(MDApp):
         hint_panel = MDTabsItem(MDTabsItemText(text="Hints"))
         self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
         self.tabs.carousel.add_widget(hint_panel.content)
-        #self.tabs.carousel.add_widget(MDLabel(text="TEST", halign="center"))
         self.tabs.add_widget(hint_panel)
 
         self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
@@ -737,7 +734,7 @@ class GameManager(MDApp):
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
             self.energy_link_label = MDLabel(text="Energy Link: Standby",
-                                           size_hint_x=None, width=150)
+                                           size_hint_x=None, width=150, halign="center")
             self.connect_layout.add_widget(self.energy_link_label)
 
     def set_new_energy_link_value(self):
@@ -776,7 +773,6 @@ class LogtoUI(logging.Handler):
 class UILog(MDRecycleView):
     messages: typing.ClassVar[int]  # comes from kv file
     adaptive_height = True
-
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
