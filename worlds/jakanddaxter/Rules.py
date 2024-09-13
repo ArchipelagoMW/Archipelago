@@ -175,8 +175,11 @@ def enforce_multiplayer_limits(world: JakAndDaxterWorld):
                              f"{options.oracle_orb_trade_amount.value}).\n")
 
     if friendly_message != "":
-        raise OptionError(f"{world.player_name}: Please adjust the following Options for a multiplayer game.\n"
-                          f"{friendly_message}")
+        raise OptionError(f"{world.player_name}: The options you have chosen may disrupt the multiworld. \n"
+                          f"Please adjust the following Options for a multiplayer game. \n"
+                          f"{friendly_message}"
+                          f"Or set 'enforce_friendly_options' in the seed generator's host.yaml to false. "
+                          f"(Use at your own risk!)")
 
 
 def enforce_singleplayer_limits(world: JakAndDaxterWorld):
@@ -202,10 +205,11 @@ def enforce_singleplayer_limits(world: JakAndDaxterWorld):
                              f"{options.lava_tube_cell_count.value}).\n")
 
     if friendly_message != "":
-        raise OptionError(f"The options you have chosen may result in seed generation failures."
-                          f"Please adjust the following Options for a singleplayer game.\n"
-                          f"{friendly_message} "
-                          f"Or set 'enforce_friendly_options' in host.yaml to false. (Use at your own risk!)")
+        raise OptionError(f"The options you have chosen may result in seed generation failures. \n"
+                          f"Please adjust the following Options for a singleplayer game. \n"
+                          f"{friendly_message}"
+                          f"Or set 'enforce_friendly_options' in your host.yaml to false. "
+                          f"(Use at your own risk!)")
 
 
 def verify_orb_trade_amounts(world: JakAndDaxterWorld):
