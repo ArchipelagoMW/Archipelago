@@ -1,7 +1,7 @@
 # Guia de configuração para Hollow Knight no Archipelago
 
 ## Programas obrigatórios
-* Baixe e extraia o Lumafly Mod Manager(gerenciador de mods Lumafly) do [Site Lumafly](https://themulhima.github.io/Lumafly/).
+* Baixe e extraia o Lumafly Mod Manager (gerenciador de mods Lumafly) do [Site Lumafly](https://themulhima.github.io/Lumafly/).
 * Uma cópia legal de Hollow Knight.
    * Versões Steam, Gog, e Xbox Game Pass do jogo são suportadas.
    * Windows, Mac, e Linux (incluindo Steam Deck) são suportados.
