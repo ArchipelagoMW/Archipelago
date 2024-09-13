@@ -4,7 +4,7 @@ import asyncio
 from kvui import GameManager, HoverBehavior, ServerToolTip
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.uix.tabbedpanel import TabbedPanelItem
+from kivymd.uix.tab import MDTabsItem, MDTabsItemText
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
 from kivy.uix.label import Label
@@ -97,12 +97,13 @@ class SC2Manager(GameManager):
     def build(self):
         container = super().build()
 
-        panel = TabbedPanelItem(text="Starcraft 2 Launcher")
+        panel = MDTabsItem(MDTabsItemText(text="Starcraft 2 Launcher"))
         panel.content = CampaignScroll()
         self.campaign_panel = MultiCampaignLayout()
         panel.content.add_widget(self.campaign_panel)
 
         self.tabs.add_widget(panel)
+        self.tabs.carousel.add_widget(panel.content)
 
         Clock.schedule_interval(self.build_mission_table, 0.5)
 
