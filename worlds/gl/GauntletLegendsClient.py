@@ -289,7 +289,7 @@ class GauntletLegendsContext(CommonContext):
                 b.iterate(0x3C)
                 count = 0
                 for obj in b.split:
-                    if obj[0] == 0xFF and obj[1] == 0xFF:
+                    if obj[1] == 0xFF:
                         count += 1
                 count -= self.extra_items
                 if count <= 0:
@@ -312,7 +312,7 @@ class GauntletLegendsContext(CommonContext):
                     )
                     b.iterate(0x3C)
                     for obj in b.split:
-                        if obj[0] == 0xFF and obj[1] == 0xFF:
+                        if obj[1] == 0xFF:
                             count += 1
                 self.extra_spawners += count
             while True:
@@ -327,7 +327,7 @@ class GauntletLegendsContext(CommonContext):
                 b.iterate(0x3C)
                 count = 0
                 for obj in b.split:
-                    if obj[0] == 0xFF and obj[1] == 0xFF:
+                    if obj[1] == 0xFF:
                         count += 1
                 count -= self.extra_chests
                 if count <= 0:
