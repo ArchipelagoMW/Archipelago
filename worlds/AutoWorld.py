@@ -480,6 +480,16 @@ class World(metaclass=AutoWorldRegister):
         group = cls(multiworld, new_player_id)
         group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
+        sorted_players = sorted(players)
+        # loop through player options and if all players have the same option, set the group's option to that
+        for option_key, option in PerGameCommonOptions.type_hints.items():
+            new_value = getattr(multiworld.worlds[sorted_players[0]].options, option_key).value
+            for player in sorted_players:
+                if getattr(multiworld.worlds[player].options, option_key).value != new_value:
+                    break
+            else:
+                # all players option value for this option matches
+                getattr(group.options, option_key).value = new_value
 
         return group
 
