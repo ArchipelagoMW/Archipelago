@@ -328,7 +328,7 @@ class SC2MissionOrder(MissionOrderNode):
                     continue # Don't try to lock the generic key
                 if item in self.items_to_lock:
                     # Lock the greatest required amount of each item
-                    self.items_to_lock[item] = max(self.items_to_lock[item, amount])
+                    self.items_to_lock[item] = max(self.items_to_lock[item], amount)
                 else:
                     self.items_to_lock[item] = amount
             rule = ItemEntryRule(items)
