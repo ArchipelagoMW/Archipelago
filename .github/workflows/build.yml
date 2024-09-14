@@ -36,10 +36,15 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/Ijwu/Enemizer/releases/download/${Env:ENEMIZER_VERSION}/win-x64.zip -OutFile enemizer.zip
           Expand-Archive -Path enemizer.zip -DestinationPath EnemizerCLI -Force
+          choco install innosetup --version=6.2.2 --allow-downgrade
       - name: Build
         run: |
           python -m pip install --upgrade pip
           python setup.py build_exe --yes
+          if ( $? -eq $false ) {
+            Write-Error "setup.py failed!"
+            exit 1
+          }
           $NAME="$(ls build | Select-String -Pattern 'exe')".Split('.',2)[1]
           $ZIP_NAME="Archipelago_$NAME.7z"
           echo "$NAME -> $ZIP_NAME"
@@ -49,12 +54,6 @@ jobs:
           Rename-Item "exe.$NAME" Archipelago
           7z a -mx=9 -mhe=on -ms "../dist/$ZIP_NAME" Archipelago
           Rename-Item Archipelago "exe.$NAME"  # inno_setup.iss expects the original name
-      - name: Store 7z
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.ZIP_NAME }}
-          path: dist/${{ env.ZIP_NAME }}
-          retention-days: 7  # keep for 7 days, should be enough
       - name: Build Setup
         run: |
           & "${env:ProgramFiles(x86)}\Inno Setup 6\iscc.exe" inno_setup.iss /DNO_SIGNTOOL
@@ -65,11 +64,38 @@ jobs:
           $contents = Get-ChildItem -Path setups/*.exe -Force -Recurse
           $SETUP_NAME=$contents[0].Name
           echo "SETUP_NAME=$SETUP_NAME" >> $Env:GITHUB_ENV
+      - name: Check build loads expected worlds
+        shell: bash
+        run: |
+          cd build/exe*
+          mv Players/Templates/meta.yaml .
+          ls -1 Players/Templates | sort > setup-player-templates.txt
+          rm -R Players/Templates
+          timeout 30 ./ArchipelagoLauncher "Generate Template Options" || true
+          ls -1 Players/Templates | sort > generated-player-templates.txt
+          cmp setup-player-templates.txt generated-player-templates.txt \
+            || diff setup-player-templates.txt generated-player-templates.txt
+          mv meta.yaml Players/Templates/
+      - name: Test Generate
+        shell: bash
+        run: |
+          cd build/exe*
+          cp Players/Templates/Clique.yaml Players/
+          timeout 30 ./ArchipelagoGenerate
+      - name: Store 7z
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: dist/${{ env.ZIP_NAME }}
+          compression-level: 0  # .7z is incompressible by zip
+          if-no-files-found: error
+          retention-days: 7  # keep for 7 days, should be enough
       - name: Store Setup
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.SETUP_NAME }}
           path: setups/${{ env.SETUP_NAME }}
+          if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
 
   build-ubuntu2004:
@@ -110,7 +136,7 @@ jobs:
           echo -e "setup.py dist output:\n `ls dist`"
           cd dist && export APPIMAGE_NAME="`ls *.AppImage`" && cd ..
           export TAR_NAME="${APPIMAGE_NAME%.AppImage}.tar.gz"
-          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -czvf ../dist/$TAR_NAME Archipelago && mv Archipelago "$DIR_NAME")
+          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -cv Archipelago | gzip -8 > ../dist/$TAR_NAME && mv Archipelago "$DIR_NAME")
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - copy code above to release.yml -
@@ -118,15 +144,36 @@ jobs:
         run: |
           source venv/bin/activate
           python setup.py build_exe --yes
+      - name: Check build loads expected worlds
+        shell: bash
+        run: |
+          cd build/exe*
+          mv Players/Templates/meta.yaml .
+          ls -1 Players/Templates | sort > setup-player-templates.txt
+          rm -R Players/Templates
+          timeout 30 ./ArchipelagoLauncher "Generate Template Options" || true
+          ls -1 Players/Templates | sort > generated-player-templates.txt
+          cmp setup-player-templates.txt generated-player-templates.txt \
+            || diff setup-player-templates.txt generated-player-templates.txt
+          mv meta.yaml Players/Templates/
+      - name: Test Generate
+        shell: bash
+        run: |
+          cd build/exe*
+          cp Players/Templates/Clique.yaml Players/
+          timeout 30 ./ArchipelagoGenerate
       - name: Store AppImage
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APPIMAGE_NAME }}
           path: dist/${{ env.APPIMAGE_NAME }}
+          if-no-files-found: error
           retention-days: 7
       - name: Store .tar.gz
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TAR_NAME }}
           path: dist/${{ env.TAR_NAME }}
+          compression-level: 0  # .gz is incompressible by zip
+          if-no-files-found: error
           retention-days: 7

@@ -173,6 +173,15 @@ class OOTWorld(World):
         "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Cojiro", "Odd Mushroom",
             "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
             "Eyeball Frog", "Eyedrops", "Claim Check"},
+        "Keys": {"Small Key (Bottom of the Well)", "Small Key (Fire Temple)", "Small Key (Forest Temple)",
+                 "Small Key (Ganons Castle)", "Small Key (Gerudo Training Ground)", "Small Key (Shadow Temple)",
+                 "Small Key (Spirit Temple)", "Small Key (Thieves Hideout)", "Small Key (Water Temple)",
+                 "Small Key Ring (Bottom of the Well)", "Small Key Ring (Fire Temple)",
+                 "Small Key Ring (Forest Temple)", "Small Key Ring (Ganons Castle)",
+                 "Small Key Ring (Gerudo Training Ground)", "Small Key Ring (Shadow Temple)",
+                 "Small Key Ring (Spirit Temple)", "Small Key Ring (Thieves Hideout)", "Small Key Ring (Water Temple)",
+                 "Boss Key (Fire Temple)", "Boss Key (Forest Temple)", "Boss Key (Ganons Castle)",
+                 "Boss Key (Shadow Temple)", "Boss Key (Spirit Temple)", "Boss Key (Water Temple)"},
     }
 
     location_name_groups = build_location_name_groups()
@@ -838,7 +847,7 @@ class OOTWorld(World):
         # Make sure to only kill actual internal events, not in-game "events"
         all_state = self.get_state_with_complete_itempool()
         all_locations = self.get_locations()
-        all_state.sweep_for_events(locations=all_locations)
+        all_state.sweep_for_advancements(locations=all_locations)
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
                        (loc.internal or loc.type == 'Drop') and loc.address is None and loc.locked and loc not in reachable]
@@ -866,7 +875,7 @@ class OOTWorld(World):
             state = base_state.copy()
             for item in self.get_pre_fill_items():
                 self.collect(state, item)
-            state.sweep_for_events(locations=self.get_locations())
+            state.sweep_for_advancements(locations=self.get_locations())
             return state
 
         # Prefill shops, songs, and dungeon items
@@ -878,7 +887,7 @@ class OOTWorld(World):
         state = CollectionState(self.multiworld)
         for item in self.itempool:
             self.collect(state, item)
-        state.sweep_for_events(locations=self.get_locations())
+        state.sweep_for_advancements(locations=self.get_locations())
 
         # Place dungeon items
         special_fill_types = ['GanonBossKey', 'BossKey', 'SmallKey', 'HideoutSmallKey', 'Map', 'Compass']
@@ -1173,10 +1182,35 @@ class OOTWorld(World):
 
     def fill_slot_data(self):
         self.collectible_flags_available.wait()
-        return {
+
+        slot_data = {
             'collectible_override_flags': self.collectible_override_flags,
             'collectible_flag_offsets': self.collectible_flag_offsets
         }
+        slot_data.update(self.options.as_dict(
+            "open_forest", "open_kakariko", "open_door_of_time", "zora_fountain", "gerudo_fortress",
+            "bridge", "bridge_stones", "bridge_medallions", "bridge_rewards", "bridge_tokens", "bridge_hearts",
+            "shuffle_ganon_bosskey", "ganon_bosskey_medallions", "ganon_bosskey_stones", "ganon_bosskey_rewards",
+            "ganon_bosskey_tokens", "ganon_bosskey_hearts", "trials",
+            "triforce_hunt", "triforce_goal", "extra_triforce_percentage",
+            "shopsanity", "shop_slots", "shopsanity_prices", "tokensanity",
+            "dungeon_shortcuts", "dungeon_shortcuts_list",
+            "mq_dungeons_mode", "mq_dungeons_list", "mq_dungeons_count",
+            "shuffle_interior_entrances", "shuffle_grotto_entrances", "shuffle_dungeon_entrances",
+            "shuffle_overworld_entrances", "shuffle_bosses", "key_rings", "key_rings_list", "enhance_map_compass",
+            "shuffle_mapcompass", "shuffle_smallkeys", "shuffle_hideoutkeys", "shuffle_bosskeys",
+            "logic_rules", "logic_no_night_tokens_without_suns_song", "logic_tricks",
+            "warp_songs", "shuffle_song_items","shuffle_medigoron_carpet_salesman", "shuffle_frog_song_rupees",
+            "shuffle_scrubs", "shuffle_child_trade", "shuffle_freestanding_items", "shuffle_pots", "shuffle_crates",
+            "shuffle_cows", "shuffle_beehives", "shuffle_kokiri_sword", "shuffle_ocarinas", "shuffle_gerudo_card",
+            "shuffle_beans", "starting_age", "bombchus_in_logic", "spawn_positions", "owl_drops",
+            "no_epona_race", "skip_some_minigame_phases", "complete_mask_quest", "free_scarecrow", "plant_beans",
+            "chicken_count", "big_poe_count", "fae_torch_count", "blue_fire_arrows",
+            "damage_multiplier", "deadly_bonks", "starting_tod", "junk_ice_traps",
+            "start_with_consumables", "adult_trade_start", "plando_connections"
+            )
+        )
+        return slot_data
 
 
     def modify_multidata(self, multidata: dict):
@@ -1354,7 +1388,7 @@ class OOTWorld(World):
             self.multiworld.worlds[item.player].collect(all_state, item)
         # If free_scarecrow give Scarecrow Song
         if self.free_scarecrow:
-            all_state.collect(self.create_item("Scarecrow Song"), event=True)
+            all_state.collect(self.create_item("Scarecrow Song"), prevent_sweep=True)
         all_state.stale[self.player] = True
 
         return all_state

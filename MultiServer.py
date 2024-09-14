@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import collections
+import contextlib
 import copy
 import datetime
 import functools
@@ -64,6 +65,21 @@ def pop_from_container(container, value):
 def update_dict(dictionary, entries):
     dictionary.update(entries)
     return dictionary
+
+
+def queue_gc():
+    import gc
+    from threading import Thread
+
+    gc_thread: typing.Optional[Thread] = getattr(queue_gc, "_thread", None)
+    def async_collect():
+        time.sleep(2)
+        setattr(queue_gc, "_thread", None)
+        gc.collect()
+    if not gc_thread:
+        gc_thread = Thread(target=async_collect)
+        setattr(queue_gc, "_thread", gc_thread)
+        gc_thread.start()
 
 
 # functions callable on storable data on the server by clients
@@ -176,7 +192,7 @@ class Context:
     location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
-    non_hintable_names: typing.Dict[str, typing.Set[str]]
+    non_hintable_names: typing.Dict[str, typing.AbstractSet[str]]
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
@@ -231,7 +247,7 @@ class Context:
         self.embedded_blacklist = {"host", "port"}
         self.client_ids: typing.Dict[typing.Tuple[int, int], datetime.datetime] = {}
         self.auto_save_interval = 60  # in seconds
-        self.auto_saver_thread = None
+        self.auto_saver_thread: typing.Optional[threading.Thread] = None
         self.save_dirty = False
         self.tags = ['AP']
         self.games: typing.Dict[int, str] = {}
@@ -267,6 +283,11 @@ class Context:
                                      worlds.AutoWorldRegister.world_types.items()}
         for world_name, world in worlds.AutoWorldRegister.world_types.items():
             self.non_hintable_names[world_name] = world.hint_blacklist
+
+        for game_package in self.gamespackage.values():
+            # remove groups from data sent to clients
+            del game_package["item_name_groups"]
+            del game_package["location_name_groups"]
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
@@ -545,6 +566,9 @@ class Context:
                         self.logger.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
                     else:
                         self.save_dirty = False
+                if not atexit_save:  # if atexit is used, that keeps a reference anyway
+                    queue_gc()
+
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
@@ -985,7 +1009,7 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                     collect_player(ctx, team, group, True)
 
 
-def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
+def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[typing.Tuple[int, int]]:
     return ctx.locations.get_remaining(ctx.location_checks, team, slot)
 
 
@@ -1197,6 +1221,10 @@ class CommonCommandProcessor(CommandProcessor):
             timer = int(seconds, 10)
         except ValueError:
             timer = 10
+        else:
+            if timer > 60 * 60:
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
+
         async_start(countdown(self.ctx, timer))
         return True
 
@@ -1344,10 +1372,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_remaining(self) -> bool:
         """List remaining items in your game, but not their location or recipient"""
         if self.ctx.remaining_mode == "enabled":
-            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
-            if remaining_item_ids:
-                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
-                                                            for item_id in remaining_item_ids))
+            rest_locations = get_remaining(self.ctx, self.client.team, self.client.slot)
+            if rest_locations:
+                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[slot]][item_id]
+                                                            for slot, item_id in rest_locations))
             else:
                 self.output("No remaining items found.")
             return True
@@ -1357,10 +1385,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
         else:  # is goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
-                if remaining_item_ids:
-                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.client.slot.game][item_id]
-                                                                for item_id in remaining_item_ids))
+                rest_locations = get_remaining(self.ctx, self.client.team, self.client.slot)
+                if rest_locations:
+                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[slot]][item_id]
+                                                                for slot, item_id in rest_locations))
                 else:
                     self.output("No remaining items found.")
                 return True
@@ -1926,8 +1954,6 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         self.ctx.server.ws_server.close()
-        if self.ctx.shutdown_task:
-            self.ctx.shutdown_task.cancel()
         self.ctx.exit_event.set()
         return True
 
@@ -2035,6 +2061,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
             item_name, usable, response = get_intended_text(item_name, names)
             if usable:
                 amount: int = int(amount)
+                if amount > 100:
+                    raise ValueError(f"{amount} is invalid. Maximum is 100.")
                 new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(int(amount))]
                 send_items_to(self.ctx, team, slot, *new_items)
 
@@ -2285,7 +2313,8 @@ def parse_args() -> argparse.Namespace:
 
 
 async def auto_shutdown(ctx, to_cancel=None):
-    await asyncio.sleep(ctx.auto_shutdown)
+    with contextlib.suppress(asyncio.TimeoutError):
+        await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
     def inactivity_shutdown():
         ctx.server.ws_server.close()
@@ -2305,7 +2334,8 @@ async def auto_shutdown(ctx, to_cancel=None):
             if seconds < 0:
                 inactivity_shutdown()
             else:
-                await asyncio.sleep(seconds)
+                with contextlib.suppress(asyncio.TimeoutError):
+                    await asyncio.wait_for(ctx.exit_event.wait(), seconds)
 
 
 def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLContext":
