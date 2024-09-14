@@ -60,30 +60,28 @@ class RetroSocket:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     async def write(self, message: str):
-        await asyncio.sleep(0.01)
-        self.socket.sendto(message.encode(), (self.host, self.port))
+        await asyncio.get_event_loop().sock_sendall(self.socket, message.encode())
 
     async def read(self, message) -> Optional[bytes]:
-        self.socket.sendto(message.encode(), (self.host, self.port))
+        await asyncio.get_event_loop().sock_sendall(self.socket, message.encode())
         response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
         data = response.decode().split(" ")
         b = b""
         for s in data[2:]:
             if "-1" in s:
                 logger.info("-1 response")
-                raise Exception("Client tried to read from an invalid address or could not successfully make a connection to Retroarch.")
+                raise Exception(
+                    "Client tried to read from an invalid address or could not successfully make a connection to Retroarch.")
             b += bytes.fromhex(s)
         return b
 
-    def status(self) -> bool:
+    async def status(self) -> bool:
         message = "GET_STATUS"
-        self.socket.sendto(message.encode(), (self.host, self.port))
+        await asyncio.get_event_loop().sock_sendall(self.socket, message.encode())
         try:
-            data, addr = self.socket.recvfrom(1000)
+            data = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 1000), timeout=2)
         except ConnectionResetError:
             raise Exception("Retroarch not detected. Please make sure your ROM is open in Retroarch.")
-        except Exception as e:
-            raise e
         return True
 
 
@@ -287,18 +285,14 @@ class GauntletLegendsContext(CommonContext):
                     ),
                 )
                 b.iterate(0x3C)
-                count = 0
-                for obj in b.split:
-                    if obj[1] == 0xFF:
-                        count += 1
-                count -= self.extra_items
+                count = sum(1 for obj in b.split if obj[1] == 0xFF) - self.extra_items
                 if count <= 0:
                     break
-                self.extra_items = count
+                self.extra_items += count
         else:
             spawner_count = len([spawner for spawner in spawners[(self.current_level[1] << 4) + (
-                self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)] if
-                                 self.difficulty >= spawner])
+                self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)]
+                if self.difficulty >= spawner])
             if self.extra_spawners == 0:
                 count = 0
                 for i in range((spawner_count + 99) // 100):
@@ -306,33 +300,44 @@ class GauntletLegendsContext(CommonContext):
                         await self.socket.read(
                             message_format(
                                 READ,
-                                f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)) + count, 100) * 0x3C}",
+                                f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)), 100) * 0x3C}",
                             ),
                         ),
                     )
                     b.iterate(0x3C)
-                    for obj in b.split:
-                        if obj[1] == 0xFF:
-                            count += 1
+                    count += sum(1 for obj in b.split if obj[1] == 0xFF)
+                self.extra_spawners += count
+                count = 0
+                if self.extra_spawners != 0:
+                    while True:
+                        b = RamChunk(
+                            await self.socket.read(
+                                message_format(
+                                    READ,
+                                    f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + spawner_count) * 0x3C), 'x')} {(self.extra_spawners + count) * 0x3C}",
+                                ),
+                            ),
+                        )
+                        b.iterate(0x3C)
+                        current_count = sum(1 for obj in b.split if obj[1] == 0xFF) - count
+                        if current_count <= 0:
+                            break
+                        count += current_count
                 self.extra_spawners += count
             while True:
                 b = RamChunk(
                     await self.socket.read(
                         message_format(
                             READ,
-                            f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')} {len(self.chest_locations) * 0x3C}",
+                            f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')} {(len(self.chest_locations) + self.extra_chests) * 0x3C}",
                         ),
                     ),
                 )
                 b.iterate(0x3C)
-                count = 0
-                for obj in b.split:
-                    if obj[1] == 0xFF:
-                        count += 1
-                count -= self.extra_chests
+                count = sum(1 for obj in b.split if obj[1] == 0xFF) - self.extra_chests
                 if count <= 0:
                     break
-                self.extra_chests = count
+                self.extra_chests += count
         for arr in b.split:
             _obj += [ObjectEntry(arr)]
         _obj = [obj for obj in _obj if obj.raw[1] != 0xFF]
