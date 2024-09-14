@@ -1587,7 +1587,7 @@ def download_latest_release_zip(
         file = tempdir + os.sep + f"{repo}.zip"
         with open(file, "wb") as fh:
             fh.write(r2.content)
-        sc2_logger.info(f"Successfully downloaded {repo}.zip.")
+        sc2_logger.info(f"Successfully downloaded {repo}.zip. Installing...")
         return file, latest_metadata
     else:
         sc2_logger.warning(f"Status code: {r2.status_code}")

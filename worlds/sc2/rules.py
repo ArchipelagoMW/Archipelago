@@ -1065,7 +1065,10 @@ class SC2Logic:
         )
 
     def protoss_heal(self, state: CollectionState) -> bool:
-        return state.has_any({item_names.CARRIER, item_names.SENTRY, item_names.SHIELD_BATTERY, item_names.RECONSTRUCTION_BEAM}, self.player)
+        return (
+            state.has_any((item_names.SENTRY, item_names.SHIELD_BATTERY, item_names.RECONSTRUCTION_BEAM), self.player)
+            or state.has_all((item_names.CARRIER, item_names.CARRIER_REPAIR_DRONES), self.player)
+        )
 
     def templars_charge_requirement(self, state: CollectionState) -> bool:
         return (
