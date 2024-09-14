@@ -3,11 +3,11 @@ from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Ra
 
 
 class ProgressionStyle(Choice):
-    """Determines what progressive items (if any) should be included.\n\n
-    Districts Only: Each tech/civic that would normally unlock a district or district building now has a logical progression. Example: TECH_BRONZE_WORKING is now PROGRESSIVE_ENCAMPMENT\n\n
+    """Determines what progressive items (if any) should be included.
+    Districts Only: Each tech/civic that would normally unlock a district or district building now has a logical progression. Example: TECH_BRONZE_WORKING is now PROGRESSIVE_ENCAMPMENT
     Eras and Districts: Players will be defeated if they play until the world era advances beyond the currently unlocked maximum era.
     A notification will be shown as the end of the era approaches letting the player know if they don't have enough progressive era items.
-    Unlocked eras can be seen in both the tech and civic trees. Includes all progressive districts.\n\n
+    Unlocked eras can be seen in both the tech and civic trees. Includes all progressive districts.
     None: No progressive items will be included. This means you can get district upgrades that won't be usable until the relevant district is unlocked.
     """
     display_name = "Progression Style"
@@ -42,10 +42,10 @@ class ResearchCostMultiplier(Choice):
 
 
 class PreHintItems(Choice):
-    """Controls if/what items in the tech/civics trees are pre-hinted for the multiworld.\n
-    All : All items in the tech & civics trees are pre-hinted.\n
-    Progression items: Only locations in the trees containing progression items are pre-hinted.\n
-    No Junk: pre-hint the progression and useful items.\n
+    """Controls if/what items in the tech/civics trees are pre-hinted for the multiworld.
+    All : All items in the tech & civics trees are pre-hinted.
+    Progression items: Only locations in the trees containing progression items are pre-hinted.
+    No Junk: pre-hint the progression and useful items.
     None: No items are pre-hinted.
     """
     display_name = "Tech/Civic Tree pre-hinted Items"
@@ -67,9 +67,9 @@ class InGameFlagProgressionItems(DefaultOnToggle):
 
 
 class DeathLinkEffect(Choice):
-    """What happens when a unit dies. Default is Unit Killed.\n
-    Faith, and Gold will be decreased by the amount specified in 'Death Link Effect Percent'. \n
-    Era score is decreased by 1.\n
+    """What happens when a unit dies. Default is Unit Killed.
+    Faith, and Gold will be decreased by the amount specified in 'Death Link Effect Percent'.
+    Era score is decreased by 1.
     Any will select any of these options any time a death link is received."""
     display_name = "Death Link Effect"
     option_unit_killed = 0
@@ -100,6 +100,6 @@ class CivVIOptions(PerGameCommonOptions):
     pre_hint_items: PreHintItems
     hide_item_names: HideItemNames
     advisor_show_progression_items: InGameFlagProgressionItems
+    death_link: DeathLink
     death_link_effect: DeathLinkEffect
     death_link_effect_percent: DeathLinkEffectPercent
-    death_link: DeathLink
