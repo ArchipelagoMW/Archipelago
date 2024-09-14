@@ -1,6 +1,9 @@
 import logging
 from dataclasses import dataclass
 from typing import Dict, Any
+
+from decimal import Decimal, ROUND_HALF_UP
+
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
                      PerGameCommonOptions, OptionGroup, Removed, Visibility)
 from .er_data import portal_mapping
@@ -427,13 +430,13 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
 
 def check_options(world: "TunicWorld"):
     options = world.options
-    if options.hexagon_quest:
-        hexagon_goal = options.hexagon_goal.value
-        if options.ability_shuffling and options.hexagon_quest_ability_type == "hexagons":
-            if hexagon_goal < 3:
-                logging.warning("TUNIC: Hexagon Quest goal is too low for Shuffled Abilities (Hexagons). Option will be switched to Pages.")
-                world.options.hexagon_quest_ability_type = "pages"
-            if hexagon_goal < 15 and options.keys_behind_bosses:
-                logging.warning("TUNIC: Hexagon Quest goal is too low for Shuffled Abilities (Hexagons) + Keys Behind Bosses. Keys Behind Bosses will be ignored during generation.")
-                world.options.keys_behind_bosses.value = 0
-
+    if options.hexagon_quest and options.ability_shuffling and options.hexagon_quest_ability_type == "hexagons":
+        total_hexes = min(
+                int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
+                    .to_integral_value(rounding=ROUND_HALF_UP)), 100)
+        min_hexes = 3
+        if options.keys_behind_bosses and not (options.entrance_rando or options.ice_grappling >= IceGrappling.option_medium):
+            min_hexes = 4
+        if total_hexes < min_hexes:
+            logging.warning("TUNIC: Not enough Gold Hexagons in item pool for Hexagon Ability Shuffle. Option will be switched to Pages.")
+            options.hexagon_quest_ability_type = "pages"
