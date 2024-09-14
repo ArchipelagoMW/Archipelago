@@ -53,10 +53,7 @@ def has_required_progressive_districts(state: CollectionState, era: EraType, pla
             if item.civ_name in value:
                 required_counts[key] += 1
 
-    for key, value in required_counts.items():
-        if not state.has(format_item_name(key), player, required_counts[key]):
-            return False
-    return True
+    return state.has_all_counts({format_item_name(key): value for key, value in required_counts.items()}, player)
 
 
 def has_required_progressive_eras(state: CollectionState, era: EraType, player: int) -> bool:
