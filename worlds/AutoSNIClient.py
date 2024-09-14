@@ -14,10 +14,6 @@ component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, fil
 components.append(component)
 
 
-class SNIException(Exception):
-    pass  # having this in the client itself has issues while it remains a top-level script
-
-
 def valid_patch_suffix(obj: object) -> TypeGuard[Union[str, Iterable[str]]]:
     """ make sure this is a valid value for the class variable `patch_suffix` """
 
@@ -67,7 +63,7 @@ class AutoSNIClientRegister(abc.ABCMeta):
             try:
                 if await handler.validate_rom(ctx):
                     return handler
-            except SNIException:
+            except Exception:
                 pass
         return None
 
