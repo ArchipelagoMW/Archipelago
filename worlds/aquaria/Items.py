@@ -382,9 +382,9 @@ four_gods_excludes = [ItemNames.ANEMONE, ItemNames.ARNASSI_STATUE, ItemNames.BIG
                       ItemNames.MITHALAS_BANNER, ItemNames.MITHALAS_POT, ItemNames.MUTANT_COSTUME, ItemNames.SEED_BAG,
                       ItemNames.KING_S_SKULL, ItemNames.SONG_PLANT_SPORE, ItemNames.STONE_HEAD, ItemNames.SUN_KEY,
                       ItemNames.GIRL_COSTUME, ItemNames.ODD_CONTAINER, ItemNames.TRIDENT, ItemNames.TURTLE_EGG,
-                      ItemNames.JELLY_EGG, ItemNames.URCHIN_COSTUME, ItemNames.BABY_WALKER, ItemNames.TRANSTURTLE_ABYSS,
-                      ItemNames.TRANSTURTLE_BODY, ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM,
-                      ItemNames.RAINBOW_MUSHROOM, ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE,
-                      ItemNames.LEAF_POULTICE, ItemNames.LEECHING_POULTICE, ItemNames.LEECHING_POULTICE,
+                      ItemNames.JELLY_EGG, ItemNames.URCHIN_COSTUME, ItemNames.BABY_WALKER,
+                      ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM, ItemNames.RAINBOW_MUSHROOM,
+                      ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE,
+                      ItemNames.LEECHING_POULTICE, ItemNames.LEECHING_POULTICE, ItemNames.ARCANE_POULTICE,
                       ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT,
-                      ItemNames.SEA_LOAF_X_2, ItemNames.ARCANE_POULTICE]
+                      ItemNames.SEA_LOAF_X_2]

@@ -803,6 +803,10 @@ class AquariaLocations:
         AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE: 698215,
     }
 
+    locations_final_boss_tube_transturtle_only = {
+        AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE: 698215,
+    }
+
     locations_final_boss = {
         AquariaLocationNames.FINAL_BOSS_AREA_BULB_IN_THE_BOSS_THIRD_FORM_ROOM: 698106,
     }

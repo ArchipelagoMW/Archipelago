@@ -97,6 +97,7 @@ class AquariaWorld(World):
     "Used to manage Regions"
 
     exclude: List[str]
+    "The items that should not be added to the multiworld item pool"
 
     def __init__(self, multiworld: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
@@ -153,9 +154,12 @@ class AquariaWorld(World):
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
-        local_exclude = []
         if self.options.objective.value == Objective.option_killing_the_four_gods:
-            local_exclude = four_gods_excludes[:]
+            self.exclude.extend(four_gods_excludes)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
+                                 ItemClassification.filler, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
+                                 ItemClassification.filler, precollected)
         if self.options.turtle_randomizer.value != TurtleRandomizer.option_none:
             if self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final and \
                self.options.objective.value != Objective.option_killing_the_four_gods:
@@ -187,13 +191,12 @@ class AquariaWorld(World):
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
                                  ItemClassification.progression, precollected)
         for name, data in item_table.items():
-            if name not in self.exclude:
-                for i in range(data.count):
-                    if name in local_exclude:
-                        local_exclude.remove(name)
-                    else:
-                        item = self.create_item(name)
-                        self.multiworld.itempool.append(item)
+            for i in range(data.count):
+                if name in self.exclude:
+                    self.exclude.remove(name)
+                else:
+                    item = self.create_item(name)
+                    self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
         """

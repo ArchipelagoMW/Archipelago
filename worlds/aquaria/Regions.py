@@ -459,8 +459,7 @@ class AquariaRegions:
         self.abyss_r = self.__add_region("Abyss right area",
                                          AquariaLocations.locations_abyss_r if add_locations else None)
         self.abyss_r_transturtle = self.__add_region("Abyss right area, transturtle",
-                                                     AquariaLocations.locations_abyss_r_transturtle
-                                                     if add_locations else None)
+                                                     AquariaLocations.locations_abyss_r_transturtle)
         self.abyss_r_whale = self.__add_region("Abyss right area, outside the whale",
                                                AquariaLocations.locations_abyss_r_whale if add_locations else None)
         self.ice_cave = self.__add_region("Ice Cavern",
@@ -514,7 +513,8 @@ class AquariaRegions:
         self.final_boss_loby = self.__add_region("The Body, before final boss", None)
         self.final_boss_tube = self.__add_region("The Body, final boss area turtle room",
                                                  AquariaLocations.locations_final_boss_tube
-                                                 if add_locations else None)
+                                                 if add_locations else
+                                                 AquariaLocations.locations_final_boss_tube_transturtle_only)
         self.final_boss = self.__add_region("The Body, final boss",
                                             AquariaLocations.locations_final_boss if add_locations else None)
         self.final_boss_end = self.__add_region("The Body, final boss area", None)
@@ -851,7 +851,7 @@ class AquariaRegions:
             self.__connect_one_way_regions(region_source, region_target,
                                            lambda state: state.has(item_target, self.player))
 
-    def _connect_transturtle_to_other(self, region: Region, ignore_bottom: bool) -> None:
+    def _connect_transturtle_to_other(self, region: Region) -> None:
         """Connect a single transturtle to all others"""
         self.__connect_transturtle(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT, region, self.veil_tl)
         self.__connect_transturtle(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT, region, self.veil_tr_l)
@@ -860,22 +860,20 @@ class AquariaRegions:
         self.__connect_transturtle(ItemNames.TRANSTURTLE_HOME_WATERS, region, self.home_water_transturtle)
         self.__connect_transturtle(ItemNames.TRANSTURTLE_SIMON_SAYS, region, self.simon)
         self.__connect_transturtle(ItemNames.TRANSTURTLE_ARNASSI_RUINS, region, self.arnassi_cave_transturtle)
-        if not ignore_bottom:
-            self.__connect_transturtle(ItemNames.TRANSTURTLE_ABYSS, region, self.abyss_r_transturtle)
-            self.__connect_transturtle(ItemNames.TRANSTURTLE_BODY, region, self.final_boss_tube)
+        self.__connect_transturtle(ItemNames.TRANSTURTLE_ABYSS, region, self.abyss_r_transturtle)
+        self.__connect_transturtle(ItemNames.TRANSTURTLE_BODY, region, self.final_boss_tube)
 
-    def __connect_transturtles(self, ignore_bottom: bool) -> None:
+    def __connect_transturtles(self) -> None:
         """Connect every transturtle with others"""
-        self._connect_transturtle_to_other(self.veil_tl, ignore_bottom)
-        self._connect_transturtle_to_other(self.veil_tr_l, ignore_bottom)
-        self._connect_transturtle_to_other(self.openwater_tr_turtle, ignore_bottom)
-        self._connect_transturtle_to_other(self.forest_bl, ignore_bottom)
-        self._connect_transturtle_to_other(self.home_water_transturtle, ignore_bottom)
-        self._connect_transturtle_to_other(self.simon, ignore_bottom)
-        self._connect_transturtle_to_other(self.arnassi_cave_transturtle, ignore_bottom)
-        if not ignore_bottom:
-            self._connect_transturtle_to_other(self.abyss_r_transturtle, ignore_bottom)
-            self._connect_transturtle_to_other(self.final_boss_tube, ignore_bottom)
+        self._connect_transturtle_to_other(self.veil_tl)
+        self._connect_transturtle_to_other(self.veil_tr_l)
+        self._connect_transturtle_to_other(self.openwater_tr_turtle)
+        self._connect_transturtle_to_other(self.forest_bl)
+        self._connect_transturtle_to_other(self.home_water_transturtle)
+        self._connect_transturtle_to_other(self.simon)
+        self._connect_transturtle_to_other(self.arnassi_cave_transturtle)
+        self._connect_transturtle_to_other(self.abyss_r_transturtle)
+        self._connect_transturtle_to_other(self.final_boss_tube)
 
 
     def connect_regions(self, options: AquariaOptions) -> None:
@@ -892,7 +890,7 @@ class AquariaRegions:
         self.__connect_body_regions()
         if options.objective.value == Objective.option_killing_the_four_gods:
             self.__connect_four_gods_end(options)
-        self.__connect_transturtles(options.objective.value == Objective.option_killing_the_four_gods)
+        self.__connect_transturtles()
 
     def __add_event_location(self, region: Region, name: str, event_name: str) -> None:
         """
@@ -982,11 +980,11 @@ class AquariaRegions:
                                   AquariaLocationNames.SUN_CRYSTAL,
                                   ItemNames.HAS_SUN_CRYSTAL)
         self.__add_event_big_bosses()
+        self.__add_event_location(self.sunken_city_boss,
+                                  AquariaLocationNames.SUNKEN_CITY_CLEARED,
+                                  ItemNames.BODY_TONGUE_CLEARED)
         if options.objective.value != Objective.option_killing_the_four_gods:
             self.__add_event_secrets()
-            self.__add_event_location(self.sunken_city_boss,
-                                      AquariaLocationNames.SUNKEN_CITY_CLEARED,
-                                      ItemNames.BODY_TONGUE_CLEARED)
             self.__add_event_location(self.final_boss_end, AquariaLocationNames.OBJECTIVE_COMPLETE,
                                       ItemNames.VICTORY)
         else:
