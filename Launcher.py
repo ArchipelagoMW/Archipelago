@@ -1,5 +1,5 @@
 """
-Archipelago launcher for bundled MDApp.
+Archipelago Launcher
 
 * if run with APBP as argument, launch corresponding client.
 * if run with executable as argument, run it passing argv[2:] as arguments
