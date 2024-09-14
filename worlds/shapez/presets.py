@@ -16,11 +16,11 @@ options_presets = {
     },
     "Maximum checks": {
         "goal": "even_fasterer",
-        "goal_amount": 1000,
+        "goal_amount": 500,
         "include_achievements": True,
         "exclude_softlock_achievements": False,
         "exclude_long_playtime_achievements": False,
-        "shapesanity_amount": 75800
+        "shapesanity_amount": 1000
     },
     "Restrictive start": {
         "goal": "vanilla",
@@ -41,41 +41,5 @@ options_presets = {
         "randomize_upgrade_logic": "hardcore",
         "include_achievements": False,
         "shapesanity_amount": 4
-    }
-}
-
-options_presets_lite = {
-    "Most vanilla": {
-        "goal": "vanilla",
-        "randomize_level_requirements": False,
-        "randomize_upgrade_requirements": False,
-        "early_balancer_tunnel_and_trash": "sphere_1",
-        "exclude_softlock_achievements": False,
-        "exclude_long_playtime_achievements": False
-    },
-    "Minimum checks": {
-        # Same as default
-    },
-    "Maximum checks": {
-        "goal": "even_fasterer",
-        "goal_amount": 120,
-        "exclude_softlock_achievements": False,
-        "exclude_long_playtime_achievements": False
-    },
-    "Restrictive start": {
-        "goal": "vanilla",
-        "randomize_level_requirements": True,
-        "randomize_upgrade_requirements": True,
-        "randomize_level_logic": "hardcore",
-        "randomize_upgrade_logic": "hardcore",
-        "early_balancer_tunnel_and_trash": "sphere_1"
-    },
-    "Quick game": {
-        "goal": "efficiency_iii",
-        "required_shapes_multiplier": 1,
-        "randomize_level_requirements": True,
-        "randomize_upgrade_requirements": True,
-        "randomize_level_logic": "hardcore",
-        "randomize_upgrade_logic": "hardcore"
     }
 }

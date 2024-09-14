@@ -41,9 +41,9 @@ empfohlen, eine Maschine zu bauen, die alles automatisch herstellt ("Make-Anythi
 
 ## Was ist eine Location / ein Check?
 
-- Level (minimum 1-25, bis zu 1000 je nach Spieler-Optionen, mit zusätzlichen Checks für Level 1 und 20)
-- Upgrades (minimum Stufen II-VIII (2-8), bis zu M (1000) je nach Spieler-Optionen)
-- Bestimmte Formen mindestens einmal ins Zentrum liefern ("Shapesanity", bis zu 75800)
+- Level (minimum 1-25, bis zu 499 je nach Spieler-Optionen, mit zusätzlichen Checks für Level 1 und 20)
+- Upgrades (minimum Stufen II-VIII (2-8), bis zu D (500) je nach Spieler-Optionen)
+- Bestimmte Formen mindestens einmal ins Zentrum liefern ("Shapesanity", bis zu 1000 zufällig gewählte Definitionen)
 - Errungenschaften (bis zu 45)
 
 ## Was passiert, wenn der Spieler ein Item erhält?

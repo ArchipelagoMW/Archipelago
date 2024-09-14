@@ -27,17 +27,7 @@ class GoalAmount(Range):
     display_name = "Goal amount"
     rich_text_doc = True
     range_start = 9
-    range_end = 1000
-    default = 27
-
-
-class GoalAmountLite(Range):
-    """Specify, what level or tier (when either MAM or even fasterer is chosen as goal) is required to reach the goal.
-    If MAM is set as the goal and this is set to less than 27, it will raise an OptionError."""
-    display_name = "Goal amount"
-    rich_text_doc = True
-    range_start = 9
-    range_end = 120
+    range_end = 500
     default = 27
 
 
@@ -191,12 +181,15 @@ class ExcludeProgressionUnreasonable(Toggle):
     default = True
 
 
+max_shapesanity = 1000
+
+
 class ShapesanityAmount(Range):
     """Amount of single-layer shapes that will be included as locations."""
     display_name = "Shapesanity amount"
     rich_text_doc = True
     range_start = 4
-    range_end = 75800
+    range_end = max_shapesanity
     default = 50
 
 
@@ -235,25 +228,5 @@ class ShapezOptions(PerGameCommonOptions):
     exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements
     exclude_progression_unreasonable: ExcludeProgressionUnreasonable
     shapesanity_amount: ShapesanityAmount
-    traps_percentage: TrapsProbability
-    split_inventory_draining_trap: SplitInventoryDrainingTrap
-
-
-@dataclass
-class ShapezLiteOptions(PerGameCommonOptions):
-    goal: Goal
-    goal_amount: GoalAmountLite
-    required_shapes_multiplier: RequiredShapesMultiplier
-    randomize_level_requirements: RandomizeLevelRequirements
-    randomize_upgrade_requirements: RandomizeUpgradeRequirements
-    randomize_level_logic: RandomizeLevelLogic
-    randomize_upgrade_logic: RandomizeUpgradeLogic
-    throughput_levels_ratio: ThroughputLevelsRatio
-    same_late_upgrade_requirements: SameLateUpgradeRequirements
-    early_balancer_tunnel_and_trash: EarlyBalancerTunnelAndTrash
-    lock_belt_and_extractor: LockBeltAndExtractor
-    exclude_softlock_achievements: ExcludeSoftlockAchievements
-    exclude_long_playtime_achievements: ExcludeLongPlaytimeAchievements
-    exclude_progression_unreasonable: ExcludeProgressionUnreasonable
     traps_percentage: TrapsProbability
     split_inventory_draining_trap: SplitInventoryDrainingTrap

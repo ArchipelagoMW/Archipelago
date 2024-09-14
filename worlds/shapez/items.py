@@ -198,7 +198,3 @@ item_descriptions = {
 
 class ShapezItem(Item):
     game = "shapez"
-
-
-class ShapezLiteItem(ShapezItem):
-    game = "shapez lite"
