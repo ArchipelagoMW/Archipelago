@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import dataclasses
 import sys
 import threading
 import time
@@ -14,12 +13,6 @@ import enum
 import typing
 
 from json import loads, dumps
-
-# TODO: get rid of python version check when < 3.10 is gone
-if sys.version_info.major == 3 and sys.version_info.minor < 10:
-    from Utils import bisect_right
-else:
-    from bisect import bisect_right
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
@@ -601,81 +594,6 @@ async def snes_flush_writes(ctx: SNIContext) -> None:
     # swap buffers
     ctx.snes_write_buffer, writes = [], ctx.snes_write_buffer
     await snes_write(ctx, writes)
-
-
-class Read(typing.NamedTuple):
-    """ snes memory read - address and size in bytes """
-    address: int
-    size: int
-
-
-@dataclasses.dataclass
-class _MemRead:
-    location: Read
-    data: bytes
-
-
-_T_Enum = typing.TypeVar("_T_Enum", bound=enum.Enum)
-
-
-class SnesReader(typing.Generic[_T_Enum]):
-    _ranges: typing.Sequence[_MemRead]
-    """ sorted by address """
-    _ctx: SNIContext
-
-    def __init__(self, reads: type[_T_Enum], ctx: SNIContext) -> None:
-        self._ranges = self._make_ranges(reads)
-        self._ctx = ctx
-
-    @staticmethod
-    def _make_ranges(reads: type[enum.Enum]) -> typing.Sequence[_MemRead]:
-
-        unprocessed_reads: typing.List[Read] = []
-        for e in reads:
-            assert isinstance(e.value, Read), f"{reads.__name__} {e=} {type(e.value)=}"
-            unprocessed_reads.append(e.value)
-        unprocessed_reads.sort()
-
-        ranges: typing.List[_MemRead] = []
-        for read in unprocessed_reads:
-            #                                      v  end of the previous range
-            if len(ranges) == 0 or read.address - (ranges[-1].location.address + ranges[-1].location.size) > 255:
-                ranges.append(_MemRead(read, bytes([0 for _ in range(read.size)])))
-            else:  # combine with previous range
-                chunk_address = ranges[-1].location.address
-                assert read.address >= chunk_address, "sort() didn't work? or something"
-                original_chunk_size = ranges[-1].location.size
-                new_size = max((read.address + read.size) - chunk_address,
-                               original_chunk_size)
-                ranges[-1] = _MemRead(Read(chunk_address, new_size), bytes([0 for _ in range(new_size)]))
-        logging.debug(f"{len(ranges)=} {max(r.location.size for r in ranges)=}")
-        return ranges
-
-    async def read(self) -> bool:
-        """ returns `True` if all the reads succeeded, `False` if any failed """
-        # To keep things better synced, we don't update any unless we read all successfully.
-        to_place: typing.List[typing.Tuple[_MemRead, bytes]] = []
-        for rr in self._ranges:
-            response = await snes_read(self._ctx, rr.location.address, rr.location.size)
-            if response is None:
-                return False
-            to_place.append((rr, response))
-        for rr, r in to_place:
-            rr.data = r
-        return True
-
-    def get(self, read: _T_Enum) -> bytes:
-        """
-        `read` should be called before this (and it should return `True`)
-        to make this data up-to-date and valid
-        """
-        address: int = read.value.address
-        size: int = read.value.size
-        index = bisect_right(self._ranges, address, key=lambda r: r.location.address) - 1
-        assert index >= 0, f"{self._ranges=} {read.value=}"
-        mem_read = self._ranges[index]
-        sub_index = address - mem_read.location.address
-        return mem_read.data[sub_index:sub_index + size]
 
 
 async def game_watcher(ctx: SNIContext) -> None:
