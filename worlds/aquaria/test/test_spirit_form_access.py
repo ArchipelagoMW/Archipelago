@@ -30,7 +30,6 @@ class SpiritFormAccessTest(AquariaTestBase):
             "Sunken City left area, Girl Costume",
             "Beating Mantis Shrimp Prime",
             "First secret",
-            "Arnassi Ruins, Arnassi Armor",
         ]
         items = [["Spirit form"]]
         self.assertAccessDependency(locations, items)

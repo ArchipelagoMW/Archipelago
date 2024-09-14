@@ -12,7 +12,8 @@ from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassi
 from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
 from .Items import item_table, item_prices, item_game_ids
 from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
-    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
+    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations, \
+    take_any_locations, sword_cave_locations
 from .Options import TlozOptions
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from .Rules import set_rules
@@ -87,6 +88,21 @@ class TLoZWorld(World):
         }
     }
 
+    location_name_groups = {
+        "Shops": set(shop_locations),
+        "Take Any": set(take_any_locations),
+        "Sword Caves": set(sword_cave_locations),
+        "Level 1": set(level_locations[0]),
+        "Level 2": set(level_locations[1]),
+        "Level 3": set(level_locations[2]),
+        "Level 4": set(level_locations[3]),
+        "Level 5": set(level_locations[4]),
+        "Level 6": set(level_locations[5]),
+        "Level 7": set(level_locations[6]),
+        "Level 8": set(level_locations[7]),
+        "Level 9": set(level_locations[8])
+    }
+
     for k, v in item_name_to_id.items():
         item_name_to_id[k] = v + base_id
 
@@ -94,8 +110,8 @@ class TLoZWorld(World):
         if v is not None:
             location_name_to_id[k] = v + base_id
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.generator_in_use = threading.Event()
         self.rom_name_available_event = threading.Event()
         self.levels = None
@@ -307,7 +323,7 @@ class TLoZWorld(World):
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:
             self.filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
-        return self.multiworld.random.choice(self.filler_items)
+        return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         if self.options.ExpandedPool:

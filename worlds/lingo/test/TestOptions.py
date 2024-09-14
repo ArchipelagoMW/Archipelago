@@ -3,7 +3,7 @@ from . import LingoTestBase
 
 class TestMultiShuffleOptions(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "progressive_orange_tower": "true",
         "shuffle_colors": "true",
         "shuffle_paintings": "true",
@@ -13,7 +13,7 @@ class TestMultiShuffleOptions(LingoTestBase):
 
 class TestPanelsanity(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "progressive_orange_tower": "true",
         "location_checks": "insanity",
         "shuffle_colors": "true"
@@ -22,7 +22,18 @@ class TestPanelsanity(LingoTestBase):
 
 class TestAllPanelHunt(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
+        "progressive_orange_tower": "true",
+        "shuffle_colors": "true",
+        "victory_condition": "level_2",
+        "level_2_requirement": "800",
+        "early_color_hallways": "true"
+    }
+
+
+class TestAllPanelHuntPanelsMode(LingoTestBase):
+    options = {
+        "shuffle_doors": "panels",
         "progressive_orange_tower": "true",
         "shuffle_colors": "true",
         "victory_condition": "level_2",
