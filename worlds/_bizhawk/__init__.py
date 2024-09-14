@@ -224,7 +224,7 @@ async def set_message_interval(ctx: BizHawkContext, value: float) -> None:
 
 
 async def guarded_read(ctx: BizHawkContext, read_list: typing.List[typing.Tuple[int, int, str]],
-                       guard_list: typing.List[typing.Tuple[int, typing.Iterable[int], str]]) -> typing.Optional[typing.List[bytes]]:
+                       guard_list: typing.List[typing.Tuple[int, typing.Sequence[int], str]]) -> typing.Optional[typing.List[bytes]]:
     """Reads an array of bytes at 1 or more addresses if and only if every byte in guard_list matches its expected
     value.
 
@@ -278,8 +278,8 @@ async def read(ctx: BizHawkContext, read_list: typing.List[typing.Tuple[int, int
     return await guarded_read(ctx, read_list, [])
 
 
-async def guarded_write(ctx: BizHawkContext, write_list: typing.List[typing.Tuple[int, typing.Iterable[int], str]],
-                        guard_list: typing.List[typing.Tuple[int, typing.Iterable[int], str]]) -> bool:
+async def guarded_write(ctx: BizHawkContext, write_list: typing.List[typing.Tuple[int, typing.Sequence[int], str]],
+                        guard_list: typing.List[typing.Tuple[int, typing.Sequence[int], str]]) -> bool:
     """Writes data to 1 or more addresses if and only if every byte in guard_list matches its expected value.
 
     Items in `write_list` should be organized `(address, value, domain)` where
@@ -316,7 +316,7 @@ async def guarded_write(ctx: BizHawkContext, write_list: typing.List[typing.Tupl
     return True
 
 
-async def write(ctx: BizHawkContext, write_list: typing.List[typing.Tuple[int, typing.Iterable[int], str]]) -> None:
+async def write(ctx: BizHawkContext, write_list: typing.List[typing.Tuple[int, typing.Sequence[int], str]]) -> None:
     """Writes data to 1 or more addresses.
 
     Items in write_list should be organized `(address, value, domain)` where
