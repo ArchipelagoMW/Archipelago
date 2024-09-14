@@ -202,7 +202,6 @@ class TunicWorld(World):
         if self.options.hexagon_quest:
             items_to_create[gold_hexagon] = min(
                 int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP)), 100)
-
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
@@ -236,11 +235,12 @@ class TunicWorld(World):
                     if items_to_create[gold_hexagon] > 0:
                         hex_item = self.create_item(gold_hexagon)
                         items_to_create[gold_hexagon] -= 1
+                        items_to_create[rgb_hexagon] = 0
                         self.get_location(location).place_locked_item(hex_item)
                 else:
                     hex_item = self.create_item(rgb_hexagon)
                     self.get_location(location).place_locked_item(hex_item)
-                    items_to_create[gold_hexagon] = 0
+                    items_to_create[rgb_hexagon] = 0
 
         # Filler items in the item pool
         available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
