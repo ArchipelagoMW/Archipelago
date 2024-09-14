@@ -768,7 +768,7 @@ VOID_RAY_PRISMATIC_RANGE                                = "Prismatic Range (Void
 DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard Core (Destroyer)"
 # Warp Ray
 DAWNBRINGER_SOLARITE_LENS                               = "Solarite Lens (Dawnbringer)"
-# Carrier
+CARRIER_REPAIR_DRONES                                   = "Repair Drones (Carrier)"
 SKYLORD_HYPERJUMP                                       = "Hyperjump (Skylord)"
 # Trireme
 TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempest)"
