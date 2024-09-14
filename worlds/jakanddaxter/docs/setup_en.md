@@ -29,16 +29,23 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Follow the installation process for the official OpenGOAL Launcher. See [here](https://opengoal.dev/docs/usage/installation).
     - You must set up a vanilla installation of Jak and Daxter before you can install mods for it.
 - Follow the setup process for adding mods to the OpenGOAL Launcher. See [here](https://jakmods.dev/).
-- Install the `ArchipelaGOAL` mod from the `Available Mods` list, then click on `ArchipelaGOAL` from the `Installed Mods` list.
-- **As a temporary measure, you may need to copy the extracted ISO data to the mod directory so the compiler will work properly.**
+- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
+- Click the Jak and Daxter logo on the left sidebar.
+- Click `Features` in the bottom right corner, then click `Mods`.
+- Under `Available Mods`, click `ArchipelaGOAL`. The mod should begin installing. When it is done, click `Continue` in the bottom right corner.
+- Once you are back in the mod menu, click on `ArchipelaGOAL` from the `Installed Mods` list.
+- **As a temporary measure, you need to copy the extracted ISO data to the mod directory so the compiler will work properly.**
     - If you have the NTSC version of the game, follow the `The Game Fails To Load The Title Screen` instructions below.
     - If you have the PAL version of the game, follow the `Special PAL Instructions` instructions **instead.**
-- **If you installed the OpenGOAL Launcher to a non-default directory, you must follow these steps.**
-    - While on the ArchipelaGOAL page, click `Advanced`, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
-    - In the File Explorer, go to the parent directory for `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Take note of this directory.
+- **If you installed the OpenGOAL Launcher to a non-default directory, you must now follow these steps.**
+    - Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
+    - Click the Jak and Daxter logo on the left sidebar.
+    - Click `Features` in the bottom right corner, then click `Mods`.
+    - Under `Installed Mods`, then click `ArchipelaGOAL`, then click `Advanced` in the bottom right corner, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
+    - In the File Explorer, go to the parent directory called `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Take note of this directory.
     - Run the Archipelago Launcher, then click on `Open host.yaml`. You should see a new text editor open that file.
     - Search for `jakanddaxter_options`, then find the `root_directory` entry underneath it. Paste the directory you noted earlier (the one containing gk.exe and goalc.exe) inside the double quotes. 
-      **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
+    - **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
 
 ```
 jakanddaxter_options:
@@ -60,9 +67,13 @@ jakanddaxter_options:
 
 If you are in the middle of an async game, and you do not want to update the mod, you do not need to do this step. The mod will only update when you tell it to.
 
-- Run the OpenGOAL Launcher, then click `Features`, then click `Mods`, then click on `ArchipelaGOAL` from the `Installed Mods` list.
+- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
+- Click the Jak and Daxter logo on the left sidebar.
+- Click `Features` in the bottom right corner, then click `Mods`.
+- Under `Available Mods`, click `ArchipelaGOAL`.
 - Click `Update` to download and install any new updates that have been released.
 - You can verify your version by clicking `Versions`. The version you are using will say `(Active)` next to it.
+- **After the update is installed, you must click `Advanced`, then click `Compile` to make the update take effect.**
 
 ## Starting a Game
 
@@ -94,19 +105,23 @@ If you are in the middle of an async game, and you do not want to update the mod
 
 ### The Game Fails To Load The Title Screen
 
-You may start the game via the Text Client, but it never loads in the title screen. Check the Compiler window and you may see an error like this.
+You may start the game via the Text Client, but it never loads in the title screen. Check the Compiler window and you may see red and yellow errors like this.
 
 ```
--- Compilation Error! -- 
-Input file iso_data/jak1/MUS/TWEAKVAL.MUS does not exist.
+-- Compilation Error! --
 ```
 
 If this happens, run the OpenGOAL Launcher. If you are using a PAL version of the game, you should skip these instructions and follow `Special PAL Instructions` below.
 
-- On the **vanilla** Jak and Daxter page, click `Advanced`, then click `Open Game Data Folder`. Copy the `iso_data` folder from this location.
-- Back in the OpenGOAL Launcher, click `Features`, then click `Mods`, then click `ArchipelaGOAL`, then click `Advanced`, then click `Open Game Data Folder` again.
-- Paste the `iso_data` folder you copied here.
-- Back on the ArchipelaGOAL page in the OpenGOAL Launcher, click `Advanced`, then click `Compile`.
+- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
+- Click the Jak and Daxter logo on the left sidebar, then click `Advanced`, then click `Open Game Data Folder`. Copy the `iso_data` folder from this directory.
+- Back in the OpenGOAL Launcher, click the Jak and Daxter logo on the left sidebar.
+- Click `Features` in the bottom right corner, then click `Mods`, then under `Available Mods`, click `ArchipelaGOAL`.
+- In the bottom right corner, click `Advanced`, then click `Open Game Data Folder`.
+- Paste the `iso_data` folder you copied earlier.
+- Back in the OpenGOAL Launcher, click the Jak and Daxter logo on the left sidebar.
+- Click `Features` in the bottom right corner, then click `Mods`, then under `Available Mods`, click `ArchipelaGOAL`.
+- In the bottom right corner, click `Advanced`, then click `Compile`.
 
 ### The Text Client Says "The <gk/goalc> process has died"
 
