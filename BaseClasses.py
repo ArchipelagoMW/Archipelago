@@ -228,7 +228,7 @@ class MultiWorld():
 
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
-            if world_type.visibility == AutoWorld.Visibility.warning:
+            if world_type.status == AutoWorld.Status.soft_disabled:
                 logging.warning(f"Player {player} is playing {world_type.game}, "
                                 f"which is currently considered to be unstable."
                                 f"Issues may occur as a result.")

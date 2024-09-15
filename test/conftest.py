@@ -1,5 +1,5 @@
 # Handle disabled worlds for pytest
-from worlds.AutoWorld import AutoWorldRegister, Visibility, disabled_worlds
+from worlds.AutoWorld import AutoWorldRegister, Status, disabled_worlds
 from worlds import failed_world_loads, world_sources
 from Utils import local_path
 from os.path import dirname, basename, join
@@ -7,7 +7,7 @@ from pytest import hookimpl
 disabled_tests = []
 
 for name, world in AutoWorldRegister.world_types.items():
-    if world.visibility not in (Visibility.visible, Visibility.hidden):
+    if world.status not in (Status.enabled, Status.hidden_enabled):
         disabled_tests.append(dirname(world.__file__))
 
 for world in disabled_worlds:

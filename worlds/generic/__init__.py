@@ -3,7 +3,7 @@ import logging
 
 from BaseClasses import Item, Tutorial, ItemClassification
 
-from ..AutoWorld import World, WebWorld, Visibility
+from ..AutoWorld import World, WebWorld, Status
 from NetUtils import SlotType
 
 
@@ -38,7 +38,7 @@ class GenericWorld(World):
         "Cheat Console": -1,
         "Server": -2
     }
-    visibility = Visibility.hidden
+    status = Status.hidden_enabled
     web = GenericWeb()
 
     def generate_early(self):

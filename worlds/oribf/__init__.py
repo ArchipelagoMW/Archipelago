@@ -1,6 +1,6 @@
 from typing import Set
 
-from worlds.AutoWorld import World, Visibility
+from worlds.AutoWorld import World, Status
 from .Items import item_table, default_pool
 from .Locations import lookup_name_to_id
 from .Rules import set_rules, location_rules
@@ -10,7 +10,7 @@ from BaseClasses import Region, Item, Location, Entrance, ItemClassification
 
 
 class OriBlindForest(World):
-    visibility = Visibility.disabled
+    status = Status.disabled
 
     game: str = "Ori and the Blind Forest"
 

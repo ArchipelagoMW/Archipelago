@@ -2,24 +2,22 @@ import unittest
 
 from BaseClasses import MultiWorld, PlandoOptions
 from Options import ItemLinks
-from worlds.AutoWorld import AutoWorldRegister, Visibility
+from worlds.AutoWorld import AutoWorldRegister, Status
 
 
 class TestOptions(unittest.TestCase):
     def test_options_have_doc_string(self):
         """Test that submitted options have their own specified docstring"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility not in (Visibility.hidden, Visibility.warning):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            if world_type.status != Status.hidden_enabled:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
-                    with self.subTest(game=gamename, option=option_key):
+                    with self.subTest(game=world_type.game, option=option_key):
                         self.assertTrue(option.__doc__)
 
     def test_options_are_not_set_by_world(self):
         """Test that options attribute is not already set"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility == Visibility.warning:
-                continue
-            with self.subTest(game=gamename):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            with self.subTest(game=world_type.game):
                 self.assertFalse(hasattr(world_type, "options"),
                                  f"Unexpected assignment to {world_type.__name__}.options!")
 

@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import CollectionState
-from worlds.AutoWorld import AutoWorldRegister, Visibility
+from worlds.AutoWorld import AutoWorldRegister, Status
 from . import setup_solo_multiworld
 
 
@@ -45,11 +45,9 @@ class TestBase(unittest.TestCase):
 
     def test_default_all_state_can_reach_everything(self):
         """Ensure all state can reach everything and complete the game with the defined options"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
-            if world_type.visibility == Visibility.warning:
-                continue
-            with self.subTest("Game", game=game_name):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            unreachable_regions = self.default_settings_unreachable_regions.get(world_type.game, set())
+            with self.subTest("Game", game=world_type.game):
                 multiworld = setup_solo_multiworld(world_type)
                 state = multiworld.get_all_state(False)
                 for location in multiworld.get_locations():
@@ -69,10 +67,8 @@ class TestBase(unittest.TestCase):
 
     def test_default_empty_state_can_reach_something(self):
         """Ensure empty state can reach at least one location with the defined options"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility == Visibility.warning:
-                continue
-            with self.subTest("Game", game=game_name):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            with self.subTest("Game", game=world_type.game):
                 multiworld = setup_solo_multiworld(world_type)
                 state = CollectionState(multiworld)
                 all_locations = multiworld.get_locations()

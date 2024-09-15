@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple, Type, Union
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from worlds import network_data_package
-from worlds.AutoWorld import World, call_all, Visibility
+from worlds.AutoWorld import World, call_all, Status
 
 gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
 
@@ -58,7 +58,7 @@ class TestWorld(World):
     game = f"Test Game"
     item_name_to_id = {}
     location_name_to_id = {}
-    visibility = Visibility.hidden
+    status = Status.hidden_enabled
 
 
 # add our test world to the data package, so we can test it later

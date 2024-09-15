@@ -41,8 +41,8 @@ def run_locations_benchmark():
             return t.dif
 
         def main(self):
-            for game in sorted(AutoWorld.AutoWorldRegister.world_types):
-                if AutoWorld.AutoWorldRegister.world_types[game].visibility == AutoWorld.Visibility.warning:
+            for world_type in sorted(AutoWorld.AutoWorldRegister.get_testable_world_types(), key=lambda w: w.game):
+                if world_type.status == AutoWorld.Status.soft_disabled:
                     continue
                 summary_data: typing.Dict[str, collections.Counter[str]] = {
                     "empty_state": collections.Counter(),
@@ -50,12 +50,12 @@ def run_locations_benchmark():
                 }
                 try:
                     multiworld = MultiWorld(1)
-                    multiworld.game[1] = game
+                    multiworld.game[1] = world_type.game
                     multiworld.player_name = {1: "Tester"}
                     multiworld.set_seed(0)
                     multiworld.state = CollectionState(multiworld)
                     args = argparse.Namespace()
-                    for name, option in AutoWorld.AutoWorldRegister.world_types[game].options_dataclass.type_hints.items():
+                    for name, option in world_type.options_dataclass.type_hints.items():
                         setattr(args, name, {
                             1: option.from_any(getattr(option, "default"))
                         })
@@ -63,7 +63,7 @@ def run_locations_benchmark():
 
                     gc.collect()
                     for step in self.gen_steps:
-                        with TimeIt(f"{game} step {step}", logger):
+                        with TimeIt(f"{world_type.game} step {step}", logger):
                             call_all(multiworld, step)
                             gc.collect()
 
@@ -82,7 +82,7 @@ def run_locations_benchmark():
                     total_empty_state = sum(summary_data["empty_state"].values())
                     total_all_state = sum(summary_data["all_state"].values())
 
-                    logger.info(f"{game} took {total_empty_state/len(locations):.4f} "
+                    logger.info(f"{world_type.game} took {total_empty_state/len(locations):.4f} "
                                 f"seconds per location in empty_state and {total_all_state/len(locations):.4f} "
                                 f"in all_state. (all times summed for {self.rule_iterations} runs.)")
                     logger.info(f"Top times in empty_state:\n"

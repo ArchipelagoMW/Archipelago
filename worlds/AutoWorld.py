@@ -6,6 +6,7 @@ import logging
 import pathlib
 import sys
 import time
+from collections.abc import Iterable
 from enum import Enum
 from random import Random
 from dataclasses import make_dataclass
@@ -38,6 +39,11 @@ class AutoWorldRegister(type):
             from settings import get_settings
             cls.__settings = get_settings()[cls.settings_key]
         return cls.__settings
+
+    @classmethod
+    def get_testable_world_types(cls) -> Iterable[Type[World]]:
+        return (world_type for world_type in cls.world_types.values()
+                if world_type.status != Status.soft_disabled)
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -83,11 +89,11 @@ class AutoWorldRegister(type):
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
-        new_class.hidden = dct.get("visibility", Visibility.visible) in (Visibility.hidden, Visibility.warning)
+        new_class.hidden = dct.get("status", Status.enabled) in (Status.hidden_enabled, Status.soft_disabled)
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
-            if dct.get("visibility", Visibility.visible) != Visibility.disabled:
+            if dct.get("status", Status.enabled) != Status.disabled:
                 AutoWorldRegister.world_types[dct["game"]] = new_class
             else:
                 disabled_worlds.append(sys.modules[new_class.__module__].__file__)
@@ -205,16 +211,19 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
             _timed_call(stage_callable, multiworld, *args)
 
 
-class Visibility(Enum):
-    visible = enum.auto()
-    """The world will be visible/enabled"""
-    hidden = enum.auto()
-    """The world will be enabled, but hidden"""
-    warning = enum.auto()
-    """The world will be enabled, but hidden. 
-    Attempting to generate with this world will warn users, and tests will be skipped."""
+class Status(Enum):
+    enabled = enum.auto()
+    """The world will be enabled and visible in all contexts."""
+    hidden_enabled = enum.auto()
+    """The world will be enabled, but hidden in some contexts such as the games page on the webhost."""
+    soft_disabled = enum.auto()
+    """
+    The world will be enabled, but hidden in some contexts such as the games page on the webhost. 
+    Tests for the world will be disabled, and attempting to generate with it will warn the user that it may be
+    unstable.
+    """
     disabled = enum.auto()
-    """The world will not be loaded at all"""
+    """The world will not be loaded at all."""
 
 
 class WebWorld(metaclass=WebWorldRegister):
@@ -267,7 +276,7 @@ class WebWorld(metaclass=WebWorldRegister):
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
-    visibility: ClassVar[Visibility] = Visibility.visible
+    status: ClassVar[Status] = Status.enabled
     """Whether the game will be visible to the generator and webhost"""
 
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions

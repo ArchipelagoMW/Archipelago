@@ -1,15 +1,13 @@
 import unittest
 from collections import Counter
-from worlds.AutoWorld import AutoWorldRegister, call_all, Visibility
+from worlds.AutoWorld import AutoWorldRegister, call_all, Status
 from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
     def test_create_duplicate_locations(self):
         """Tests that no two Locations share a name or ID."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility == Visibility.warning:
-                continue
+        for world_type in AutoWorldRegister.get_testable_world_types():
             multiworld = setup_solo_multiworld(world_type)
             locations = Counter(location.name for location in multiworld.get_locations())
             if locations:
@@ -24,10 +22,8 @@ class TestBase(unittest.TestCase):
 
     def test_locations_in_datapackage(self):
         """Tests that created locations not filled before fill starts exist in the datapackage."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility == Visibility.warning:
-                continue
-            with self.subTest("Game", game_name=game_name):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            with self.subTest("Game", game_name=world_type.game):
                 multiworld = setup_solo_multiworld(world_type)
                 locations = multiworld.get_unfilled_locations()  # do unfilled locations to avoid Events
                 for location in locations:
@@ -37,9 +33,8 @@ class TestBase(unittest.TestCase):
     def test_location_creation_steps(self):
         """Tests that Regions and Locations aren't created after `create_items`."""
         gen_steps = ("generate_early", "create_regions", "create_items")
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility == Visibility.warning:
-                continue
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            game_name = world_type.game
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
                 region_count = len(multiworld.get_regions())
@@ -65,10 +60,8 @@ class TestBase(unittest.TestCase):
     
     def test_location_group(self):
         """Test that all location name groups contain valid locations and don't share names."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility == Visibility.warning:
-                continue
-            with self.subTest(game_name, game_name=game_name):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            with self.subTest(world_type.game, game_name=world_type.game):
                 for group_name, locations in world_type.location_name_groups.items():
                     with self.subTest(group_name, group_name=group_name):
                         for location in locations:

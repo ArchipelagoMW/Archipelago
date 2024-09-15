@@ -3,7 +3,7 @@ import Utils
 import os
 
 import WebHost
-from worlds.AutoWorld import AutoWorldRegister, Visibility
+from worlds.AutoWorld import AutoWorldRegister, Status
 
 
 class TestDocs(unittest.TestCase):
@@ -13,8 +13,9 @@ class TestDocs(unittest.TestCase):
 
     def test_has_tutorial(self):
         games_with_tutorial = set(entry["gameTitle"] for entry in self.tutorials_data)
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility not in (Visibility.hidden, Visibility.warning):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            game_name = world_type.game
+            if world_type.status != Status.hidden_enabled:
                 with self.subTest(game_name):
                     try:
                         self.assertIn(game_name, games_with_tutorial)
@@ -28,8 +29,9 @@ class TestDocs(unittest.TestCase):
                                       f"Games with Tutorial: {games_with_tutorial}")
 
     def test_has_game_info(self):
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            if world_type.visibility not in (Visibility.hidden, Visibility.warning):
+        for world_type in AutoWorldRegister.get_testable_world_types():
+            game_name = world_type.game
+            if world_type.status != Status.hidden_enabled:
                 target_path = Utils.local_path("WebHostLib", "static", "generated", "docs", game_name)
                 for game_info_lang in world_type.web.game_info_languages:
                     with self.subTest(game_name):
