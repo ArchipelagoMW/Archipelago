@@ -97,9 +97,9 @@ def stats():
     pie = figure(title=f"Games Played in the Last 30 Days (Total: {total})", toolbar_location=None,
                  tools="hover", tooltips=[("Game:", "@games"), ("Played:", "@count")],
                  sizing_mode="scale_both", width=PLOT_WIDTH, height=500, x_range=(-0.5, 1.2))
-    pie.axis.enabled = False
-    pie.xgrid.enabled = False
-    pie.ygrid.enabled = False
+    pie.axis.visible = False
+    pie.xgrid.visible = False
+    pie.ygrid.visible = False
 
     data = {
         "games": [],
