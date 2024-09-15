@@ -26,11 +26,12 @@ from .Arrays import (
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
+from ..ffmq.Regions import offset
 
 READ = "READ_CORE_RAM"
 WRITE = "WRITE_CORE_RAM"
 INV_ADDR = 0xC5BF0
-OBJ_ADDR = 0xBC22C
+OBJ_ADDR = 0xBB5C0
 INV_UPDATE_ADDR = 0x56094
 INV_LAST_ADDR = 0x56084
 ACTIVE_POTION = 0xFD313
@@ -58,31 +59,33 @@ class RetroSocket:
         self.host = "localhost"
         self.port = 55355
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.socket.setblocking(False)
 
-    async def write(self, message: str):
-        await asyncio.get_event_loop().sock_sendall(self.socket, message.encode())
+    def send(self, message: str):
+        try:
+            self.socket.sendto(message.encode(), (self.host, self.port))
+        except Exception as e:
+            raise Exception("An error occurred while sending a message.")
 
-    async def read(self, message) -> Optional[bytes]:
-        await asyncio.get_event_loop().sock_sendall(self.socket, message.encode())
-        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
+
+    async def read(self, message: str) -> Optional[bytes]:
+        # Send the message
+        self.send(message)
+        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 30000), 1.0)
         data = response.decode().split(" ")
         b = b""
         for s in data[2:]:
             if "-1" in s:
                 logger.info("-1 response")
-                raise Exception(
-                    "Client tried to read from an invalid address or could not successfully make a connection to Retroarch.")
+                raise Exception("Client tried to read from an invalid address or ROM is not open.")
             b += bytes.fromhex(s)
         return b
 
-    async def status(self) -> bool:
+    async def status(self) -> str:
         message = "GET_STATUS"
-        await asyncio.get_event_loop().sock_sendall(self.socket, message.encode())
-        try:
-            data = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 1000), timeout=2)
-        except ConnectionResetError:
-            raise Exception("Retroarch not detected. Please make sure your ROM is open in Retroarch.")
-        return True
+        self.send(message)
+        data = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
+        return data.decode()
 
 
 class RamChunk:
@@ -152,7 +155,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         super().__init__(ctx)
 
     def _cmd_connected(self):
-        logger.info(f"Retroarch Status: {self.ctx.retro_connected}")
+        logger.info(f"Retroarch Connected Status: {self.ctx.retro_connected}")
 
     def _cmd_deathlink_toggle(self):
         self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
@@ -184,6 +187,7 @@ class GauntletLegendsContext(CommonContext):
         self.glslotdata = None
         self.crc32 = None
         self.socket = RetroSocket()
+        self.rom_loaded: bool = False
         self.locations_checked: List[int] = []
         self.inventory: List[List[InventoryEntry]] = []
         self.inventory_raw: List[RamChunk] = []
@@ -274,13 +278,20 @@ class GauntletLegendsContext(CommonContext):
     async def obj_read(self, mode=0):
         _obj = []
         b: RamChunk
+        if self.offset == -1:
+            b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} {0x40 * 0x3C}")))
+            b.iterate(0x3C)
+            for i, obj in enumerate(b.split):
+                if obj[1] != 0xFF:
+                    self.offset = i
+                    break
         if mode == 0:
             while True:
                 b = RamChunk(
                     await self.socket.read(
                         message_format(
                             READ,
-                            f"0x{format(OBJ_ADDR, 'x')} {(len(self.item_locations) + self.extra_items) * 0x3C}",
+                            f"0x{format(OBJ_ADDR + (self.offset * 0x3C), 'x')} {(len(self.item_locations) + self.extra_items) * 0x3C}",
                         ),
                     ),
                 )
@@ -300,7 +311,7 @@ class GauntletLegendsContext(CommonContext):
                         await self.socket.read(
                             message_format(
                                 READ,
-                                f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)), 100) * 0x3C}",
+                                f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.offset + self.extra_items + (i * 100)) * 0x3C), 'x')} {min((spawner_count - (100 * i)), 100) * 0x3C}",
                             ),
                         ),
                     )
@@ -314,7 +325,7 @@ class GauntletLegendsContext(CommonContext):
                             await self.socket.read(
                                 message_format(
                                     READ,
-                                    f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + spawner_count) * 0x3C), 'x')} {(self.extra_spawners + count) * 0x3C}",
+                                    f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.offset + self.extra_items + spawner_count) * 0x3C), 'x')} {(self.extra_spawners + count) * 0x3C}",
                                 ),
                             ),
                         )
@@ -329,7 +340,7 @@ class GauntletLegendsContext(CommonContext):
                     await self.socket.read(
                         message_format(
                             READ,
-                            f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')} {(len(self.chest_locations) + self.extra_chests) * 0x3C}",
+                            f"0x{format(OBJ_ADDR + ((len(self.item_locations) + self.offset + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')} {(len(self.chest_locations) + self.extra_chests) * 0x3C}",
                         ),
                     ),
                 )
@@ -400,7 +411,7 @@ class GauntletLegendsContext(CommonContext):
             for i, item in enumerate(self.inventory[player]):
                 if item.name is not None:
                     if "Potion" in item.name and item.count != 0:
-                        await self.socket.write(
+                        self.socket.send(
                             message_format(
                                 WRITE, param_format(ACTIVE_POTION + (0x1F0 * player), int.to_bytes(item.type[2] // 0x10, 1, "little")),
                             ),
@@ -435,15 +446,15 @@ class GauntletLegendsContext(CommonContext):
                         player),
                     )
 
-            await self.socket.write(
+            self.socket.send(
                 message_format(WRITE, param_format(INV_UPDATE_ADDR + (4 * player), int.to_bytes(self.inventory[player][-1].addr, 3, "little"))),
             )
-            await self.socket.write(
+            self.socket.send(
                 message_format(WRITE,
                                param_format(INV_LAST_ADDR + (4 * player), int.to_bytes(self.inventory[player][-1].addr + 0x10, 3, "little"))),
             )
 
-            await self.socket.write(f"{WRITE} 0x{format(0xC6BF0 + (4 * player), 'x')} 0x{format(self.inv_count(player), 'x')}")
+            self.socket.send(f"{WRITE} 0x{format(0xC6BF0 + (4 * player), 'x')} 0x{format(self.inv_count(player), 'x')}")
 
     # Add new item to inventory
     # Call refactor at the end to write it into ram correctly
@@ -469,7 +480,7 @@ class GauntletLegendsContext(CommonContext):
                 + int.to_bytes(item.n_addr, 3, "little")
                 + (int.to_bytes(0xE0) if item.n_addr != 0 else int.to_bytes(0x0))
         )
-        await self.socket.write(message_format(WRITE, param_format(item.addr, b)))
+        self.socket.send(message_format(WRITE, param_format(item.addr, b)))
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -493,11 +504,6 @@ class GauntletLegendsContext(CommonContext):
             self.glslotdata = args["slot_data"]
             self.players = self.glslotdata["players"]
             logger.info(f"Players set to {self.players}.")
-            if self.socket.status():
-                self.retro_connected = True
-                self.deathlink_enabled = self.glslotdata["death_link"]
-            else:
-                raise Exception("Retroarch not detected. Please open your patched ROM in Retroarch.")
         elif cmd == "Retrieved":
             if "keys" not in args:
                 logger.warning(f"invalid Retrieved packet to GLClient: {args}")
@@ -583,7 +589,7 @@ class GauntletLegendsContext(CommonContext):
         if self.glslotdata["instant_max"] == 1:
             scale_value = max_value
         # mountain_value = min(player_level // 10, 3)
-        await self.socket.write(
+        self.socket.send(
             message_format(WRITE, f"0x{format(PLAYER_COUNT, 'x')} 0x{format(min(players + scale_value, max_value), 'x')}"),
         )
         self.scaled = True
@@ -593,7 +599,7 @@ class GauntletLegendsContext(CommonContext):
         level = await self.read_level()
         if level in boss_level:
             for i in range(4):
-                await self.socket.write(
+                self.socket.send(
                     message_format(
                         WRITE,
                         param_format(
@@ -796,11 +802,11 @@ class GauntletLegendsContext(CommonContext):
         char = char[0]
         color = await self.socket.read(message_format(READ, f"0x{format(PLAYER_COLOR, 'x')} 1"))
         color = color[0]
-        await self.socket.write(message_format(WRITE, param_format(SOUND_ADDRESS, int.to_bytes(colors[color], 4, "little") + int.to_bytes(sounds[char], 4, "little") + int.to_bytes(0xBB, 4, "little"))))
-        await self.socket.write(message_format(WRITE, param_format(SOUND_START, int.to_bytes(0xE00AE718, 4, "little"))))
+        self.socket.send(message_format(WRITE, param_format(SOUND_ADDRESS, int.to_bytes(colors[color], 4, "little") + int.to_bytes(sounds[char], 4, "little") + int.to_bytes(0xBB, 4, "little"))))
+        self.socket.send(message_format(WRITE, param_format(SOUND_START, int.to_bytes(0xE00AE718, 4, "little"))))
         await asyncio.sleep(2)
-        await self.socket.write(message_format(WRITE, param_format(SOUND_START, int.to_bytes(0x0, 4, "little"))))
-        await self.socket.write(message_format(WRITE, param_format(PLAYER_KILL, int.to_bytes(0x7, 1, "little"))))
+        self.socket.send(message_format(WRITE, param_format(SOUND_START, int.to_bytes(0x0, 4, "little"))))
+        self.socket.send(message_format(WRITE, param_format(PLAYER_KILL, int.to_bytes(0x7, 1, "little"))))
 
     def run_gui(self):
         from kvui import GameManager
@@ -825,52 +831,52 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
     logger.info("Use /players to set the number of people playing locally. This is required for the client to function.")
     while not ctx.exit_event.is_set():
         if ctx.retro_connected:
-            cc_str: str = f"gl_cc_T{ctx.team}_P{ctx.slot}"
-            pl_str: str = f"gl_pl_T{ctx.team}_P{ctx.slot}"
             try:
+                if not ctx.rom_loaded:
+                    status = await ctx.socket.status()
+                    status = status.split(" ")
+                    if status[1] == "CONTENTLESS":
+                        logger.info("No ROM loaded, waiting...")
+                        await asyncio.sleep(1)
+                        continue
+                    else:
+                        ctx.rom_loaded = True
+                cc_str: str = f"gl_cc_T{ctx.team}_P{ctx.slot}"
+                pl_str: str = f"gl_pl_T{ctx.team}_P{ctx.slot}"
                 ctx.set_notify(cc_str)
                 if not ctx.auth:
-                    ctx.retro_connected = False
+                    await asyncio.sleep(1)
                     continue
-            except Exception:
-                logger.info(traceback.format_exc())
-            player_level = await ctx.player_level()
-            await ctx.send_msgs(
-                [
-                    {
-                        "cmd": "Set",
-                        "key": pl_str,
-                        "default": {},
-                        "want_reply": True,
-                        "operations": [
-                            {
-                                "operation": "replace",
-                                "value": player_level,
-                            },
-                        ],
-                    },
-                ],
-            )
-            if ctx.limbo:
-                try:
+                player_level = await ctx.player_level()
+                await ctx.send_msgs(
+                    [
+                        {
+                            "cmd": "Set",
+                            "key": pl_str,
+                            "default": {},
+                            "want_reply": True,
+                            "operations": [
+                                {
+                                    "operation": "replace",
+                                    "value": player_level,
+                                },
+                            ],
+                        },
+                    ],
+                )
+                if ctx.limbo:
                     limbo = await ctx.limbo_check(0x78)
                     if limbo:
                         ctx.limbo = False
-                        await asyncio.sleep(4)
+                        await asyncio.sleep(3)
                     else:
                         await asyncio.sleep(0.05)
                         continue
-                except Exception:
-                    logger.info(traceback.format_exc())
-            try:
                 await ctx.handle_items()
                 if ctx.deathlink_pending and ctx.deathlink_enabled:
                     ctx.deathlink_pending = False
                     await ctx.die()
-            except Exception:
-                logger.info(traceback.format_exc())
-            if not ctx.level_loading and not ctx.in_game:
-                try:
+                if not ctx.level_loading and not ctx.in_game:
                     if not ctx.in_portal:
                         ctx.in_portal = await ctx.portaling()
                     if ctx.in_portal and not ctx.init_refactor:
@@ -879,10 +885,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         await ctx.inv_refactor()
                         ctx.init_refactor = True
                     ctx.level_loading = await ctx.check_loading()
-                except Exception:
-                    logger.info(traceback.format_exc())
-            if ctx.level_loading:
-                try:
+                if ctx.level_loading:
                     ctx.in_portal = False
                     ctx.init_refactor = False
                     if not ctx.scaled:
@@ -890,36 +893,30 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         await asyncio.sleep(0.2)
                         await ctx.scale()
                     ctx.in_game = not await ctx.check_loading()
-                except Exception:
-                    logger.info(traceback.format_exc())
-                    await ctx.var_reset()
-            if ctx.in_game:
-                ctx.level_loading = False
-                try:
+                if ctx.in_game:
+                    ctx.level_loading = False
                     if not ctx.objects_loaded:
                         logger.info("Loading Objects...")
                         await ctx.load_objects(ctx)
                         await asyncio.sleep(1)
-                    if await ctx.level_status(ctx):
-                        try:
-                            await ctx.send_msgs(
-                                [
-                                    {
-                                        "cmd": "Set",
-                                        "key": cc_str,
-                                        "default": {},
-                                        "want_reply": True,
-                                        "operations": [
-                                            {
-                                                "operation": "replace",
-                                                "value": ctx.clear_counts,
-                                            },
-                                        ],
-                                    },
-                                ],
+                    status = await ctx.level_status(ctx)
+                    if status:
+                        await ctx.send_msgs(
+                                    [
+                                        {
+                                            "cmd": "Set",
+                                            "key": cc_str,
+                                            "default": {},
+                                            "want_reply": True,
+                                            "operations": [
+                                                {
+                                                    "operation": "replace",
+                                                    "value": ctx.clear_counts,
+                                                },
+                                            ],
+                                        },
+                                    ],
                             )
-                        except Exception:
-                            logger.info(traceback.format_exc())
                         ctx.limbo = True
                         await asyncio.sleep(0.05)
                         continue
@@ -932,12 +929,49 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     if not ctx.finished_game and bitwise:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
-                except Exception:
-                    logger.info(traceback.format_exc())
-            await asyncio.sleep(0.1)
+                await asyncio.sleep(0.1)
+            except TimeoutError:
+                logger.info("Connection Timed Out, Reconnecting")
+                await ctx.var_reset()
+                ctx.socket = RetroSocket()
+                ctx.retro_connected = False
+                await asyncio.sleep(2)
+            except ConnectionResetError:
+                logger.info("Connection Lost, Reconnecting")
+                await ctx.var_reset()
+                ctx.socket = RetroSocket()
+                ctx.retro_connected = False
+                await asyncio.sleep(2)
+            except Exception as e:
+                logger.error(f"Unknown Error Occurred: {e}")
+                logger.info(traceback.format_exc())
+                await ctx.var_reset()
+                ctx.socket = RetroSocket()
+                ctx.retro_connected = False
+                await asyncio.sleep(2)
         else:
-            await asyncio.sleep(1)
-            continue
+            try:
+                logger.info("Attempting to connect to Retroarch...")
+                status = await ctx.socket.status()
+                ctx.retro_connected = True
+                status = status.split(" ")
+                if status[1] == "CONTENTLESS":
+                    ctx.rom_loaded = False
+                await asyncio.sleep(2)
+                continue
+            except TimeoutError:
+                logger.info("Connection Timed Out, Trying Again")
+                await asyncio.sleep(2)
+                continue
+            except ConnectionRefusedError:
+                logger.info("Connection Refused, Trying Again")
+                await asyncio.sleep(2)
+                continue
+            except Exception as e:
+                logger.error(f"Unknown Error Occurred: {e}")
+                logger.info(traceback.format_exc())
+                await asyncio.sleep(2)
+                continue
 
 
 def launch():
