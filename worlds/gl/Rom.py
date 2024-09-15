@@ -142,7 +142,7 @@ class GLPatchExtension(APPatchExtension):
                     else:
                         data.items[j - data.items_replaced_by_obelisks][6:8] = [0x27, 0x4]
                 else:
-                    if "Obelisk" in items_by_id[item[0]].item_name:
+                    if "Obelisk" in items_by_id[item[0]].item_name and "Obelisk" not in location_name:
                         if chest_barrel(location_name):
                             slice_ = bytearray(data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][0:6])
                         else:
