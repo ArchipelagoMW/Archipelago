@@ -26,7 +26,6 @@ from .Arrays import (
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
-from ..ffmq.Regions import offset
 
 READ = "READ_CORE_RAM"
 WRITE = "WRITE_CORE_RAM"
