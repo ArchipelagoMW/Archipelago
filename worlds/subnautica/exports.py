@@ -63,7 +63,7 @@ if __name__ == "__main__":
         json.dump(payload, f)
 
     payload = {
-        #values of cannon_logic_control
+        # values of cannon_logic_control
         "1": [location_id for location_id, location_data
                 in location_table.items() if location_data.get("cannon_logic_control", 0) == 1],
         "2": [location_id for location_id, location_data
