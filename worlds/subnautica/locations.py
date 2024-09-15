@@ -12,10 +12,10 @@ class LocationDict(TypedDict, total=False):
     need_laser_cutter: bool
     position: Vector
     need_propulsion_cannon: bool
-    #cannon logic control is as follows:
-    #0 (default) produces no changes
-    #1 removes any propulsion cannon requirements, if set to 'no requirement'
-    #2 removes propulsion cannon and adds laser cutter as requirements, if set to 'no requirement'
+    # cannon logic control is as follows:
+    # 0 (default) produces no changes
+    # 1 removes any propulsion cannon requirements, if set to 'no requirement'
+    # 2 removes propulsion cannon and adds laser cutter as requirements, if set to 'no requirement'
     cannon_logic_control: int
     
 events: List[str] = [
