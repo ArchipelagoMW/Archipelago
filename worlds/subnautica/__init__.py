@@ -160,7 +160,7 @@ class SubnauticaWorld(World):
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.options.death_link.value,
             "free_samples": self.options.free_samples.value,
-            "propulsion_cannon_logic": self.options.propulsion_cannon_logic.current_key
+            "propulsion_cannon_logic": self.options.propulsion_cannon_logic.current_key,
         }
 
         return slot_data
