@@ -847,7 +847,7 @@ class OOTWorld(World):
         # Make sure to only kill actual internal events, not in-game "events"
         all_state = self.get_state_with_complete_itempool()
         all_locations = self.get_locations()
-        all_state.sweep_for_events(locations=all_locations)
+        all_state.sweep_for_advancements(locations=all_locations)
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
                        (loc.internal or loc.type == 'Drop') and loc.address is None and loc.locked and loc not in reachable]
@@ -875,7 +875,7 @@ class OOTWorld(World):
             state = base_state.copy()
             for item in self.get_pre_fill_items():
                 self.collect(state, item)
-            state.sweep_for_events(locations=self.get_locations())
+            state.sweep_for_advancements(locations=self.get_locations())
             return state
 
         # Prefill shops, songs, and dungeon items
@@ -887,7 +887,7 @@ class OOTWorld(World):
         state = CollectionState(self.multiworld)
         for item in self.itempool:
             self.collect(state, item)
-        state.sweep_for_events(locations=self.get_locations())
+        state.sweep_for_advancements(locations=self.get_locations())
 
         # Place dungeon items
         special_fill_types = ['GanonBossKey', 'BossKey', 'SmallKey', 'HideoutSmallKey', 'Map', 'Compass']
@@ -1388,7 +1388,7 @@ class OOTWorld(World):
             self.multiworld.worlds[item.player].collect(all_state, item)
         # If free_scarecrow give Scarecrow Song
         if self.free_scarecrow:
-            all_state.collect(self.create_item("Scarecrow Song"), event=True)
+            all_state.collect(self.create_item("Scarecrow Song"), prevent_sweep=True)
         all_state.stale[self.player] = True
 
         return all_state

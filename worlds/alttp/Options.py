@@ -728,7 +728,7 @@ class ALttPPlandoConnections(PlandoConnections):
     entrances = set([connection[0] for connection in (
         *default_connections, *default_dungeon_connections, *inverted_default_connections,
         *inverted_default_dungeon_connections)])
-    exits = set([connection[1] for connection in (
+    exits = set([connection[0] for connection in (
         *default_connections, *default_dungeon_connections, *inverted_default_connections,
         *inverted_default_dungeon_connections)])
 
