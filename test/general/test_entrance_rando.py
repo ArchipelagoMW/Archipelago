@@ -312,6 +312,27 @@ class TestRandomizeEntrances(unittest.TestCase):
         self.assertEqual([], [exit_ for region in multiworld.get_regions()
                               for exit_ in region.exits if not exit_.connected_region])
 
+    def test_restrictive_region_requirement_does_not_fail(self):
+        multiworld = generate_test_multiworld()
+        generate_disconnected_region_grid(multiworld, 2, 1)
+
+        region = Region("region4", 1, multiworld)
+        multiworld.regions.append(region)
+        generate_entrance_pair(multiworld.get_region("region0", 1), "_right2", ERTestGroups.RIGHT)
+        generate_entrance_pair(region, "_left", ERTestGroups.LEFT)
+
+        blocked_exits = ["region1_left", "region1_bottom",
+                         "region2_top", "region2_right",
+                         "region3_left", "region3_top"]
+        for exit_name in blocked_exits:
+            multiworld.get_entrance(exit_name, 1).access_rule = lambda state: state.can_reach_region("region4", 1)
+
+        result = randomize_entrances(multiworld.worlds[1], True, directionally_matched_group_lookup)
+        # verifying that we did in fact place region3 adjacent to region0 to unblock all the other connections
+        # (and implicitly, that ER didn't fail)
+        self.assertTrue(("region0_right", "region4_left") in result.pairings
+                        or ("region0_right2", "region4_left") in result.pairings)
+
     def test_fails_when_mismatched_entrance_and_exit_count(self):
         """tests that entrance randomization fast-fails if the input exit and entrance count do not match"""
         multiworld = generate_test_multiworld()
