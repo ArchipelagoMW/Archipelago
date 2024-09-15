@@ -519,7 +519,7 @@ def generate_early(self) -> None:
 
 ```python
 def create_regions(self) -> None:
-    # Add regions to the multiworld. "Menu" is the required starting point.
+    # Add regions to the multiworld. One of them must use the origin_region_name as its name ("Menu" by default).
     # Arguments to Region() are name, player, multiworld, and optionally hint_text
     menu_region = Region("Menu", self.player, self.multiworld)
     self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
