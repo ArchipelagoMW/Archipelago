@@ -4,8 +4,6 @@ from .. import options_presets, ShapezWorld
 
 class ShapezTestBase(WorldTestBase):
     game = "shapez"
-    world = ShapezWorld
-    player = 1
 
 
 class TestDefault(ShapezTestBase):
