@@ -42,8 +42,6 @@ def run_locations_benchmark():
 
         def main(self):
             for world_type in sorted(AutoWorld.AutoWorldRegister.get_testable_world_types(), key=lambda w: w.game):
-                if world_type.status == AutoWorld.Status.soft_disabled:
-                    continue
                 summary_data: typing.Dict[str, collections.Counter[str]] = {
                     "empty_state": collections.Counter(),
                     "all_state": collections.Counter(),
