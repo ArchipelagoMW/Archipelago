@@ -111,8 +111,27 @@ class _MemRead:
 _T_Enum = TypeVar("_T_Enum", bound=enum.Enum)
 
 
-class SnesReader(Generic[_T_Enum]):
+class SnesData(Generic[_T_Enum]):
     _ranges: Sequence[_MemRead]
+    """ sorted by address """
+
+    def __init__(self, ranges: Sequence[Tuple[Read, bytes]]) -> None:
+        self._ranges = []
+        for r, d in ranges:
+            self._ranges.append(_MemRead(r, d))
+
+    def get(self, read: _T_Enum) -> bytes:
+        address: int = read.value.address
+        size: int = read.value.size
+        index = bisect_right(self._ranges, address, key=lambda r: r.location.address) - 1
+        assert index >= 0, f"{self._ranges=} {read.value=}"
+        mem_read = self._ranges[index]
+        sub_index = address - mem_read.location.address
+        return mem_read.data[sub_index:sub_index + size]
+
+
+class SnesReader(Generic[_T_Enum]):
+    _ranges: Sequence[Read]
     """ sorted by address """
     _ctx: "SNIContext"
 
@@ -121,7 +140,7 @@ class SnesReader(Generic[_T_Enum]):
         self._ctx = ctx
 
     @staticmethod
-    def _make_ranges(reads: type[enum.Enum]) -> Sequence[_MemRead]:
+    def _make_ranges(reads: type[enum.Enum]) -> Sequence[Read]:
 
         unprocessed_reads: List[Read] = []
         for e in reads:
@@ -129,45 +148,33 @@ class SnesReader(Generic[_T_Enum]):
             unprocessed_reads.append(e.value)
         unprocessed_reads.sort()
 
-        ranges: List[_MemRead] = []
+        ranges: List[Read] = []
         for read in unprocessed_reads:
             #                                      v  end of the previous range
-            if len(ranges) == 0 or read.address - (ranges[-1].location.address + ranges[-1].location.size) > 255:
-                ranges.append(_MemRead(read, bytes([0 for _ in range(read.size)])))
+            if len(ranges) == 0 or read.address - (ranges[-1].address + ranges[-1].size) > 255:
+                ranges.append(read)
             else:  # combine with previous range
-                chunk_address = ranges[-1].location.address
+                chunk_address = ranges[-1].address
                 assert read.address >= chunk_address, "sort() didn't work? or something"
-                original_chunk_size = ranges[-1].location.size
+                original_chunk_size = ranges[-1].size
                 new_size = max((read.address + read.size) - chunk_address,
                                original_chunk_size)
-                ranges[-1] = _MemRead(Read(chunk_address, new_size), bytes([0 for _ in range(new_size)]))
-        logging.debug(f"{len(ranges)=} {max(r.location.size for r in ranges)=}")
+                ranges[-1] = Read(chunk_address, new_size)
+        logging.debug(f"{len(ranges)=} {max(r.size for r in ranges)=}")
         return ranges
 
-    async def read(self) -> bool:
-        """ returns `True` if all the reads succeeded, `False` if any failed """
+    async def read(self) -> Optional[SnesData[_T_Enum]]:
+        """
+        returns `None` if reading fails,
+        otherwise returns the data for the registered `Enum`
+        """
         from SNIClient import snes_read
 
         # To keep things better synced, we don't update any unless we read all successfully.
-        to_place: List[Tuple[_MemRead, bytes]] = []
-        for rr in self._ranges:
-            response = await snes_read(self._ctx, rr.location.address, rr.location.size)
+        reads: List[Tuple[Read, bytes]] = []
+        for r in self._ranges:
+            response = await snes_read(self._ctx, r.address, r.size)
             if response is None:
-                return False
-            to_place.append((rr, response))
-        for rr, r in to_place:
-            rr.data = r
-        return True
-
-    def get(self, read: _T_Enum) -> bytes:
-        """
-        `read` should be called before this (and it should return `True`)
-        to make this data up-to-date and valid
-        """
-        address: int = read.value.address
-        size: int = read.value.size
-        index = bisect_right(self._ranges, address, key=lambda r: r.location.address) - 1
-        assert index >= 0, f"{self._ranges=} {read.value=}"
-        mem_read = self._ranges[index]
-        sub_index = address - mem_read.location.address
-        return mem_read.data[sub_index:sub_index + size]
+                return None
+            reads.append((r, response))
+        return SnesData(reads)
