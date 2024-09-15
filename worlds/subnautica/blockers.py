@@ -11,7 +11,7 @@ class ProgressBlocker(TypedDict, total=False):
     region: str
 
 blocker_list = (
-    #upper Aurora blockers to spawn on strict propulsion cannon logic
+    # upper Aurora blockers to spawn on strict propulsion cannon logic
     {'position': {'x': 994.85, 'y': 29.54, 'z': 66.1},
      'rotation': {'x': 5.0, 'y': 78.714, 'z': 0.0},
      'region': 'AuroraUpper'},
