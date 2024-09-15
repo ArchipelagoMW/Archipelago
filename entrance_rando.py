@@ -178,7 +178,7 @@ class ERPlacementState:
         copied_state.blocked_connections[self.world.player].remove(source_exit)
         copied_state.blocked_connections[self.world.player].update(target_entrance.connected_region.exits)
         copied_state.update_reachable_regions(self.world.player)
-        copied_state.sweep_for_events()
+        copied_state.sweep_for_advancements()
         # test that at there are newly reachable randomized exits that are ACTUALLY reachable
         available_randomized_exits = copied_state.blocked_connections[self.world.player]
         for _exit in available_randomized_exits:
@@ -318,7 +318,7 @@ def randomize_entrances(
             entrance_lookup.remove(entrance)
         # propagate new connections
         er_state.collection_state.update_reachable_regions(world.player)
-        er_state.collection_state.sweep_for_events()
+        er_state.collection_state.sweep_for_advancements()
         if on_connect:
             on_connect(er_state, placed_exits)
 
