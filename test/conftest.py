@@ -19,7 +19,7 @@ for source in world_sources:
     if world_name in failed_world_loads:
         disabled_tests.append(source.resolved_path)
 
-print(disabled_tests)
+print(f"Skipping tests for disabled worlds at paths: {disabled_tests}")
 
 @hookimpl
 def pytest_collection_modifyitems(session, config, items):
