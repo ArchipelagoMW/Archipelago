@@ -196,7 +196,7 @@ class ShapezWorld(World):
         self.location_id_to_alias = {}
         for shapesanity_name in self.shapesanity_names:
             location_name = f"Shapesanity {self.shapesanity_names.index(shapesanity_name)+1}"
-            self.location_id_to_alias[self.location_name_to_id[location_name]] = f"{location_name}: {shapesanity_name}"
+            self.location_id_to_alias[self.location_name_to_id[location_name]] = shapesanity_name
         if self.options.include_achievements:
             self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
                                                            bool(self.options.exclude_long_playtime_achievements),
