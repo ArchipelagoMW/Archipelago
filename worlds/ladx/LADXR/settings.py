@@ -207,6 +207,8 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
 [Random] Randomizes overworld and dungeon music'
 [Disable] no music in the whole game""",
                 aesthetic=True),
+            Setting('openmabe', 'Archipelago', 'a', 'Open Mabe', default="",
+                description="""Swap east mabe rocks for bushes."""),
         ]
         self.__by_key = {s.key: s for s in self.__all}
 

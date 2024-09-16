@@ -25,3 +25,12 @@ def addBetaRoom(rom):
     re.store(rom)
 
     rom.room_sprite_data_indoor[0x0FC] = rom.room_sprite_data_indoor[0x1A1]
+
+
+def openMabe(rom):
+    # replaces rocks on east side of Mabe Village with bushes
+    re = RoomEditor(rom, 0x094)
+    re.changeObject(5, 1, 0x5C)
+    re.overlay[5 + 1 * 10] = 0x5C
+    re.overlay[5 + 2 * 10] = 0x5C
+    re.store(rom)

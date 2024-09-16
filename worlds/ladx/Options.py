@@ -501,6 +501,15 @@ class AdditionalWarpPoints(DefaultOffToggle):
     """
     display_name = "Additional Warp Points"
 
+
+class OpenMabe(DefaultOffToggle, LADXROption):
+    """
+    Replaces rock on the east side of Mabe Village with bushes, allowing access to Ukuku Prairie without Power Bracelet.
+    """
+    display_name = "Open Mabe"
+    ladxr_name = "openmabe"
+
+
 ladx_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -521,6 +530,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        OpenMabe,
         TrendyGame,
         NagMessages,
         BootsControls
@@ -579,3 +589,4 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    open_mabe: OpenMabe

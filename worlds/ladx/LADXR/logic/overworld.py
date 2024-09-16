@@ -140,7 +140,12 @@ class World:
         self._addEntrance("moblin_cave", graveyard, moblin_cave, None)
 
         # "Ukuku Prairie"
-        ukuku_prairie = Location().connect(mabe_village, POWER_BRACELET).connect(graveyard, POWER_BRACELET)
+        ukuku_prairie = Location()
+        if options.openmabe:
+            ukuku_prairie.connect(mabe_village, r.bush)
+        else:
+            ukuku_prairie.connect(mabe_village, POWER_BRACELET)
+        ukuku_prairie.connect(graveyard, POWER_BRACELET)
         ukuku_prairie.connect(Location().add(TradeSequenceItem(0x07B, TRADING_ITEM_STICK)), TRADING_ITEM_BANANAS)
         ukuku_prairie.connect(Location().add(TradeSequenceItem(0x087, TRADING_ITEM_HONEYCOMB)), TRADING_ITEM_STICK)
         self._addEntrance("prairie_left_phone", ukuku_prairie, None, None)
