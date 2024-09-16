@@ -8,7 +8,7 @@ import typing
 import bsdiff4
 
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
+from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld, CollectionState
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
@@ -173,6 +173,8 @@ class LinksAwakeningWorld(World):
         return Item(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
+        itempool = []
+
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         dungeon_item_types = {
@@ -216,7 +218,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Master Stalfos' Message"))
+                    itempool.append(self.create_item("Master Stalfos' Message"))
                 else:
                     item = self.create_item(item_name)
 
@@ -255,9 +257,9 @@ class LinksAwakeningWorld(World):
                                 self.prefill_own_dungeons.append(item)
                                 self.pre_fill_items.append(item)
                             else:
-                                self.multiworld.itempool.append(item)
+                                itempool.append(item)
                     else:
-                        self.multiworld.itempool.append(item)
+                        itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
 
@@ -280,21 +282,35 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        # For now, special case first item
-        FORCE_START_ITEM = True
-        if FORCE_START_ITEM:
-            self.force_start_item()
+        if self.multiworld.tarin_gifts_your_item[self.player]:
+            self.force_start_item(itempool)
 
-    def force_start_item(self):    
+        self.multiworld.itempool += itempool
+
+    def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
-            possible_start_items = [index for index, item in enumerate(self.multiworld.itempool)
-                if item.player == self.player 
-                    and item.item_data.ladxr_id in start_loc.ladxr_item.OPTIONS and not item.location]
-            if possible_start_items:
-                index = self.random.choice(possible_start_items)
-                start_item = self.multiworld.itempool.pop(index)
-                start_loc.place_locked_item(start_item)
+            """
+            Find an item that forces progression for the player
+            """
+            base_collection_state = CollectionState(self.multiworld)
+            base_collection_state.update_reachable_regions(self.player)
+            reachable_count = len(base_collection_state.reachable_regions[self.player])
+
+            def gives_progression(item):
+                collection_state = base_collection_state.copy()
+                collection_state.collect(item)
+                # Why isn't this needed?
+                # collection_state.update_reachable_regions(self.player)
+                return len(collection_state.reachable_regions[self.player]) > reachable_count
+            possible_start_items = [item for item in itempool if item.advancement]
+            self.random.shuffle(possible_start_items)
+
+            for item in possible_start_items:
+                if gives_progression(item):
+                    itempool.remove(item)
+                    start_loc.place_locked_item(item)
+                    return
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
