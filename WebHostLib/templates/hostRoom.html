@@ -63,6 +63,7 @@
           let url = '{{ url_for('display_log', room = room.id) }}';
           let bytesReceived = {{ log_len }};
           let updateLogTimeout;
+          let updateLogImmediately = false;
           let awaitingCommandResponse = false;
           let logger = document.getElementById("logger");
 
@@ -79,31 +80,36 @@
 
           async function updateLog() {
             try {
-              let res = await fetch(url, {
-                headers: {
-                  'Range': `bytes=${bytesReceived}-`,
+              if (!document.hidden) {
+                updateLogImmediately = false;
+                let res = await fetch(url, {
+                  headers: {
+                    'Range': `bytes=${bytesReceived}-`,
+                  }
+                });
+                if (res.ok) {
+                  let text = await res.text();
+                  if (text.length > 0) {
+                    awaitingCommandResponse = false;
+                    if (bytesReceived === 0 || res.status !== 206) {
+                      logger.innerHTML = '';
+                    }
+                    if (res.status !== 206) {
+                      bytesReceived = 0;
+                    } else {
+                      bytesReceived += new Blob([text]).size;
+                    }
+                    if (logger.innerHTML.endsWith('…')) {
+                      logger.innerHTML = logger.innerHTML.substring(0, logger.innerHTML.length - 1);
+                    }
+                    logger.appendChild(document.createTextNode(text));
+                    scrollToBottom(logger);
+                    let loader = document.getElementById("command-form").getElementsByClassName("loader")[0];
+                    loader.classList.remove("loading");
+                  }
                 }
-              });
-              if (res.ok) {
-                let text = await res.text();
-                if (text.length > 0) {
-                  awaitingCommandResponse = false;
-                  if (bytesReceived === 0 || res.status !== 206) {
-                    logger.innerHTML = '';
-                  }
-                  if (res.status !== 206) {
-                    bytesReceived = 0;
-                  } else {
-                    bytesReceived += new Blob([text]).size;
-                  }
-                  if (logger.innerHTML.endsWith('…')) {
-                    logger.innerHTML = logger.innerHTML.substring(0, logger.innerHTML.length - 1);
-                  }
-                  logger.appendChild(document.createTextNode(text));
-                  scrollToBottom(logger);
-                  let loader = document.getElementById("command-form").getElementsByClassName("loader")[0];
-                  loader.classList.remove("loading");
-                }
+              } else {
+                updateLogImmediately = true;
               }
             }
             finally {
@@ -150,6 +156,11 @@
           document.getElementById("command-form").addEventListener("submit", postForm);
           updateLogTimeout = window.setTimeout(updateLog, 1000);
           logger.scrollTop = logger.scrollHeight;
+          document.addEventListener("visibilitychange", () => {
+            if (!document.hidden && updateLogImmediately) {
+              updateLog();
+            }
+          })
         </script>
         {% endif %}
     </div>
