@@ -49,6 +49,7 @@
                         <label for="cmd"></label>
                         <input class="form-control" type="text" id="cmd" name="cmd"
                                placeholder="Server Command. /help to list them, list gets appended to log.">
+                        <span class="loader"></span>
                     </div>
                 </form>
                 <a href="{{ url_for("display_log", room=room.id) }}">
@@ -100,6 +101,8 @@
                   }
                   logger.appendChild(document.createTextNode(text));
                   scrollToBottom(logger);
+                  let loader = document.getElementById("command-form").getElementsByClassName("loader")[0];
+                  loader.classList.remove("loading");
                 }
               }
             }
@@ -125,13 +128,22 @@
             });
             ev.preventDefault(); // has to happen before first await
             form.reset();
-            let res = await req;
-            if (res.ok || res.type === 'opaqueredirect') {
-              awaitingCommandResponse = true;
-              window.clearTimeout(updateLogTimeout);
-              updateLogTimeout = window.setTimeout(updateLog, 100);
-            } else {
-              window.alert(res.statusText);
+            let loader = form.getElementsByClassName("loader")[0];
+            loader.classList.add("loading");
+            try {
+              let res = await req;
+              if (res.ok || res.type === 'opaqueredirect') {
+                awaitingCommandResponse = true;
+                window.clearTimeout(updateLogTimeout);
+                updateLogTimeout = window.setTimeout(updateLog, 100);
+              } else {
+                loader.classList.remove("loading");
+                window.alert(res.statusText);
+              }
+            } catch (e) {
+                console.error(e);
+                loader.classList.remove("loading");
+                window.alert(e.message);
             }
           }
 
