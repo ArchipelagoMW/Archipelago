@@ -35,9 +35,9 @@ def apply_window_defaults() -> List[str]:
         warnings.append(f"Invalid value for options.yaml key sc2_options.window_width: '{SC2World.settings.window_width}'. Expected a positive integer.")
         window_width = Starcraft2Settings.window_width
 
-    from kivy.config import Config
-    Config.set('graphics', 'width', str(window_width))
-    Config.set('graphics', 'height', str(window_height))
-    if SC2World.settings.window_maximized:
-        Config.set('graphics', 'window_state', 'maximized')
+    # from kivy.config import Config
+    # Config.set('graphics', 'width', str(window_width))
+    # Config.set('graphics', 'height', str(window_height))
+    # if SC2World.settings.window_maximized:
+    #     Config.set('graphics', 'window_state', 'maximized')
     return warnings
