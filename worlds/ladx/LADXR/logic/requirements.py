@@ -254,6 +254,7 @@ def isConsumable(item) -> bool:
 class RequirementsSettings:
     def __init__(self, options):
         self.bush = OR(SWORD, MAGIC_POWDER, MAGIC_ROD, POWER_BRACELET, BOOMERANG)
+        self.pit_bush = OR(SWORD, MAGIC_POWDER, MAGIC_ROD, BOOMERANG, BOMB) # unique
         self.attack = OR(SWORD, BOMB, BOW, MAGIC_ROD, BOOMERANG)
         self.attack_hookshot = OR(SWORD, BOMB, BOW, MAGIC_ROD, BOOMERANG, HOOKSHOT) # hinox, shrouded stalfos
         self.hit_switch = OR(SWORD, BOMB, BOW, MAGIC_ROD, BOOMERANG, HOOKSHOT) # hit switches in dungeons

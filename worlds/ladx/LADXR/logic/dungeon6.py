@@ -15,7 +15,7 @@ class Dungeon6:
         bracelet_chest = Location(dungeon=6).add(DungeonChest(0x1CE)).connect(entrance, AND(BOMB, FEATHER))
 
         # left side
-        Location(dungeon=6).add(DungeonChest(0x1C0)).connect(entrance, AND(POWER_BRACELET, r.attack_)) # 3 wizrobes raised blocks don't need to hit the switch
+        Location(dungeon=6).add(DungeonChest(0x1C0)).connect(entrance, AND(POWER_BRACELET, r.attack_wizrobe)) # 3 wizrobes raised blocks don't need to hit the switch
         left_side = Location(dungeon=6).add(DungeonChest(0x1B9)).add(DungeonChest(0x1B3)).connect(entrance, AND(POWER_BRACELET, OR(BOMB, BOOMERANG)))
         Location(dungeon=6).add(DroppedKey(0x1B4)).connect(left_side, OR(r.attack_wizrobe, BOW)) # 2 wizrobe drop key, allow bow as only 2
         top_left = Location(dungeon=6).add(DungeonChest(0x1B0)).connect(left_side, COUNT(POWER_BRACELET, 2)) # top left chest horseheads

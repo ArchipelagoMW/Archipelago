@@ -22,7 +22,7 @@ class Dungeon1:
         dungeon1_3_of_a_kind = Location(dungeon=1).add(DungeonChest(0x10A)).connect(dungeon1_right_side, OR(r.attack_hookshot_no_bomb, SHIELD)) # three of a kind, shield stops the suit from changing
         dungeon1_miniboss = Location(dungeon=1).connect(dungeon1_right_side, AND(r.miniboss_requirements[world_setup.miniboss_mapping[0]], FEATHER))
         dungeon1_boss = Location(dungeon=1).connect(dungeon1_miniboss, NIGHTMARE_KEY1)
-        Location(dungeon=1).add(HeartContainer(0x106), Instrument(0x102)).connect(dungeon1_boss, r.boss_requirements[world_setup.boss_mapping[0]])
+        boss = Location(dungeon=1).add(HeartContainer(0x106), Instrument(0x102)).connect(dungeon1_boss, r.boss_requirements[world_setup.boss_mapping[0]])
 
         if options.logic == 'hard' or options.logic == 'glitched' or options.logic == 'hell':
             stalfos_keese_room.connect(entrance, r.attack_hookshot_powder) # stalfos jump away when you press a button.
@@ -37,7 +37,6 @@ class Dungeon1:
             boss_key.connect(entrance, AND(r.damage_boost, FOUND(KEY1,3))) # damage boost off the hardhat to cross the pit
             
         self.entrance = entrance
-        self.final_room = boss
 
 
 class NoDungeon1:
