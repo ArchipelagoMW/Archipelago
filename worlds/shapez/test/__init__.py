@@ -96,7 +96,7 @@ class TestAllRelevantOptions4(ShapezTestBase):
 class TestAllRelevantOptions5(ShapezTestBase):
     options = {
         "goal": "mam",
-        "goal_amount": "random",
+        "goal_amount": "random-range-27-500",
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "quick_shuffled",
@@ -114,7 +114,7 @@ class TestAllRelevantOptions5(ShapezTestBase):
 class TestAllRelevantOptions6(ShapezTestBase):
     options = {
         "goal": "mam",
-        "goal_amount": "random",
+        "goal_amount": "random-range-27-500",
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "hardcore",

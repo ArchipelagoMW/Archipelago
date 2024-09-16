@@ -6,7 +6,7 @@ from .items import item_descriptions, item_table, ShapezItem, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
     big_upgrades, filler, trap, bundles
 from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
-    addshapesanity, addshapesanity_ut, color_to_needed_building, init_shapesanity_pool
+    addshapesanity, addshapesanity_ut, color_to_needed_building, init_shapesanity_pool, shapesanity_simple
 from .presets import options_presets
 from .options import ShapezOptions
 from worlds.AutoWorld import World, WebWorld
@@ -43,8 +43,8 @@ class ShapezWeb(WebWorld):
 class ShapezWorld(World):
     """
     shapez is an automation game about cutting, rotating, stacking, and painting shapes, that you extract from randomly
-    generated patches on an infinite canvas, without the need to manage your infinite resources or pay to build your
-    factories.
+    generated patches on an infinite canvas, without the need to manage your infinite resources or to pay for building
+    your factories.
     """
     game = "shapez"
     options_dataclass = ShapezOptions
@@ -70,15 +70,14 @@ class ShapezWorld(World):
 
     ut_active: bool = False
     passthrough: Dict[str, any] = {}
-    location_id_to_alias: Dict[int, str]
+    location_id_to_alias: Dict[int, str] = {}
 
-    def __init__(self, multiworld: MultiWorld, player: int):
-        super().__init__(multiworld, player)
-        self.location_id_to_alias = self.location_id_to_name.copy()
+    @classmethod
+    def stage_generate_early(cls, multiworld: MultiWorld) -> None:
+        if len(shapesanity_simple) == 0:
+            init_shapesanity_pool()
 
     def generate_early(self) -> None:
-        init_shapesanity_pool()
-
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "shapez" in self.multiworld.re_gen_passthrough:
                 self.ut_active = True
@@ -96,7 +95,8 @@ class ShapezWorld(World):
         # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
         # both goal amounts for "MAM" and "Even fasterer" are set in a single option.
         if self.options.goal == "mam" and self.options.goal_amount < 27:
-            raise OptionError("When setting goal to 1 ('mam'), goal_amount must be at least 27")
+            raise OptionError("When setting goal to 1 ('mam'), goal_amount must be at least 27 and not "
+                              + str(self.options.goal_amount.value))
 
         # Determines maxlevel and finaltier, which are needed for location and item generation
         if self.options.goal == "vanilla":
@@ -193,9 +193,10 @@ class ShapezWorld(World):
             self.shapesanity_names = []
             self.included_locations.update(addshapesanity(self.options.shapesanity_amount.value, self.random,
                                                           self.append_shapesanity))
+        self.location_id_to_alias = {}
         for shapesanity_name in self.shapesanity_names:
             location_name = f"Shapesanity {self.shapesanity_names.index(shapesanity_name)+1}"
-            self.location_id__alias[self.location_name_to_id[location_name]] = f"{location_name}: {shapesanity_name}"
+            self.location_id_to_alias[self.location_name_to_id[location_name]] = f"{location_name}: {shapesanity_name}"
         if self.options.include_achievements:
             self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
                                                            bool(self.options.exclude_long_playtime_achievements),
