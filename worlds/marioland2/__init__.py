@@ -113,6 +113,8 @@ class MarioLand2World(World):
 
         self.auto_scroll_levels[level_name_to_id["Mario's Castle"]] = 0
         unbeatable_scroll_levels = ["Tree Zone 3", "Macro Zone 2", "Space Zone 1", "Turtle Zone 2", "Pumpkin Zone 2"]
+        if not self.options.shuffle_midway_bells:
+            unbeatable_scroll_levels.append("Pumpkin Zone 1")
         for level, i in enumerate(self.auto_scroll_levels):
             if i == 1:
                 if self.options.auto_scroll_mode in ("global_cancel_item", "level_cancel_items"):
