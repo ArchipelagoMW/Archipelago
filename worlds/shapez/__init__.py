@@ -41,6 +41,11 @@ class ShapezWeb(WebWorld):
 
 
 class ShapezWorld(World):
+    """
+    shapez is an automation game about cutting, rotating, stacking, and painting shapes, that you extract from randomly
+    generated patches on an infinite canvas, without the need to manage your infinite resources or pay to build your
+    factories.
+    """
     game = "shapez"
     options_dataclass = ShapezOptions
     options: ShapezOptions
