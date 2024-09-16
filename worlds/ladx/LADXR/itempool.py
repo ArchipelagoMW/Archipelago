@@ -71,6 +71,7 @@ class ItemPool:
     def __init__(self, logic, settings, rnd):
         self.__pool = {}
         self.__setup(logic, settings)
+        # randomizeRupees is undesirable in Archipelago https://github.com/ArchipelagoMW/Archipelago/pull/3935
         # self.__randomizeRupees(settings, rnd)
 
     def add(self, item, count=1):
