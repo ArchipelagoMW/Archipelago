@@ -656,6 +656,7 @@ async def game_watcher(ctx: SNIContext) -> None:
             await ctx.client_handler.game_watcher(ctx)
         except Exception as ex:
             ctx.gui_error("Game Exception", ex)
+            snes_logger.exception(ex)
             await snes_disconnect(ctx)
 
 
