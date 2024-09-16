@@ -167,7 +167,7 @@
         {% endif %}
         <script>
           function updateInfo() {
-            let url = new URL(window.location.href); // until we have an API endpoint
+            let url = new URL(window.location.href);
             url.search = "?update";
             fetch(url)
               .then(res => {
