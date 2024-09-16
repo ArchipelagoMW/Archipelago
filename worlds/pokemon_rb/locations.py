@@ -788,6 +788,8 @@ location_data = [
 
     LocationData("Celadon Game Corner", "", "Game Corner", event=True),
     LocationData("Cinnabar Island", "", "Cinnabar Island", event=True),
+    LocationData("Cinnabar Lab", "", "Cinnabar Lab", event=True),
+    LocationData("Mt Moon B2F", "Mt Moon Fossils", "Mt Moon Fossils", event=True),
     LocationData("Celadon Department Store 4F", "Buy Poke Doll", "Buy Poke Doll", event=True),
     LocationData("Celadon Department Store 4F", "Buy Fire Stone", "Fire Stone", event=True, inclusion=not_stonesanity),
     LocationData("Celadon Department Store 4F", "Buy Water Stone", "Water Stone", event=True, inclusion=not_stonesanity),
