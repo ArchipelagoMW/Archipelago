@@ -53,7 +53,7 @@ A pop-up will show, which item(s) were received, with additional information on 
 ## What do the names of all these shapesanity locations mean?
 
 Here's a cheat sheet:
-![image](https://imgur.com/a/a2XCniX)
+![image](https://i.imgur.com/lbmY1rG.png)
 
 ## Can I use other mods alongside the AP client?
 

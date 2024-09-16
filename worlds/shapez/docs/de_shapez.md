@@ -53,7 +53,7 @@ Ein Pop-Up erscheint, das das/die erhaltene(n) Item(s) und eventuell weitere Inf
 ## Was bedeuten die Namen dieser ganzen Shapesanity Dinger?
 
 Hier ist ein Spicker für die Englischarbeit (bloß nicht dem Lehrer zeigen):
-![image](https://imgur.com/a/a2XCniX)
+![image](https://i.imgur.com/lbmY1rG.png)
 
 ## Kann ich auch weitere Mods neben dem AP Client installieren?
 
