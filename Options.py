@@ -973,7 +973,19 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                     if random.random() < float(text.get("percentage", 100)/100):
                         at = text.get("at", None)
                         if at is not None:
+                            if isinstance(at, dict):
+                                if at:
+                                    at = random.choices(list(at.keys()),
+                                                        weights=list(at.values()), k=1)[0]
+                                else:
+                                    raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                             given_text = text.get("text", [])
+                            if isinstance(given_text, dict):
+                                if not given_text:
+                                    given_text = []
+                                else:
+                                    given_text = random.choices(list(given_text.keys()),
+                                                                weights=list(given_text.values()), k=1)
                             if isinstance(given_text, str):
                                 given_text = [given_text]
                             texts.append(PlandoText(
@@ -981,6 +993,8 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                                 given_text,
                                 text.get("percentage", 100)
                             ))
+                        else:
+                            raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                 elif isinstance(text, PlandoText):
                     if random.random() < float(text.percentage/100):
                         texts.append(text)
@@ -1236,6 +1250,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
+        assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
             if option_name in type(self).type_hints:
@@ -1517,31 +1532,3 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)
-
-
-if __name__ == "__main__":
-
-    from worlds.alttp.Options import Logic
-    import argparse
-
-    map_shuffle = Toggle
-    compass_shuffle = Toggle
-    key_shuffle = Toggle
-    big_key_shuffle = Toggle
-    hints = Toggle
-    test = argparse.Namespace()
-    test.logic = Logic.from_text("no_logic")
-    test.map_shuffle = map_shuffle.from_text("ON")
-    test.hints = hints.from_text('OFF')
-    try:
-        test.logic = Logic.from_text("overworld_glitches_typo")
-    except KeyError as e:
-        print(e)
-    try:
-        test.logic_owg = Logic.from_text("owg")
-    except KeyError as e:
-        print(e)
-    if test.map_shuffle:
-        print("map_shuffle is on")
-    print(f"Hints are {bool(test.hints)}")
-    print(test)

@@ -295,7 +295,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         for item in received_items_of_this_type:
                             filter_match_count += len(received_items_of_this_type)
                             (ColouredMessage('  * ').item(item.item, self.ctx.slot, flags=item.flags)
-                                (" from ").location(item.location, self.ctx.slot)
+                                (" from ").location(item.location, item.player)
                                 (" by ").player(item.player)
                             ).send(self.ctx)
                     
