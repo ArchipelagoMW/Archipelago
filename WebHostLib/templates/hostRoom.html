@@ -19,28 +19,30 @@
 {% block body %}
     {% include 'header/grassHeader.html' %}
     <div id="host-room">
-        {% if room.owner == session["_id"] %}
-            Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
-            <br />
-        {% endif %}
-        {% if room.tracker %}
-            This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a>
-            and a <a href="{{ url_for("get_multiworld_sphere_tracker", tracker=room.tracker) }}">Sphere Tracker</a> enabled.
-            <br />
-        {% endif %}
-        The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
-        Should you wish to continue later,
-        anyone can simply refresh this page and the server will resume.<br>
-        {% if room.last_port == -1 %}
-            There was an error hosting this Room. Another attempt will be made on refreshing this page.
-            The most likely failure reason is that the multiworld is too old to be loaded now.
-        {% elif room.last_port %}
-            You can connect to this room by using <span class="interactive"
-            data-tooltip="This means address/ip is {{ config['HOST_ADDRESS'] }} and port is {{ room.last_port }}.">
-            '/connect {{ config['HOST_ADDRESS'] }}:{{ room.last_port }}'
-            </span>
-            in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
-        {% endif %}
+        <span id="host-room-info">
+            {% if room.owner == session["_id"] %}
+                Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
+                <br />
+            {% endif %}
+            {% if room.tracker %}
+                This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a>
+                and a <a href="{{ url_for("get_multiworld_sphere_tracker", tracker=room.tracker) }}">Sphere Tracker</a> enabled.
+                <br />
+            {% endif %}
+            The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
+            Should you wish to continue later,
+            anyone can simply refresh this page and the server will resume.<br>
+            {% if room.last_port == -1 %}
+                There was an error hosting this Room. Another attempt will be made on refreshing this page.
+                The most likely failure reason is that the multiworld is too old to be loaded now.
+            {% elif room.last_port %}
+                You can connect to this room by using <span class="interactive"
+                data-tooltip="This means address/ip is {{ config['HOST_ADDRESS'] }} and port is {{ room.last_port }}.">
+                '/connect {{ config['HOST_ADDRESS'] }}:{{ room.last_port }}'
+                </span>
+                in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
+            {% endif %}
+        </span>
         {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}
             <div style="display: flex; align-items: center;">
@@ -163,5 +165,33 @@
           })
         </script>
         {% endif %}
+        <script>
+          function updateInfo() {
+            let url = new URL(window.location.href); // until we have an API endpoint
+            url.search = "?update";
+            fetch(url)
+              .then(res => {
+                if (!res.ok) {
+                  throw new Error(`HTTP error ${res.status}`);
+                }
+                return res.text()
+              })
+              .then(text => new DOMParser().parseFromString(text, 'text/html'))
+              .then(newDocument => {
+                let el = newDocument.getElementById("host-room-info");
+                document.getElementById("host-room-info").innerHTML = el.innerHTML;
+            });
+          }
+
+          if (document.querySelector("meta[http-equiv='refresh']")) {
+            console.log("Refresh!");
+            window.addEventListener('load', function () {
+              for (let i=0; i<3; i++) {
+                window.setTimeout(updateInfo, Math.pow(2, i) * 2000); // 2, 4, 8s
+              }
+              window.stop(); // cancel meta refresh
+            })
+          }
+        </script>
     </div>
 {% endblock %}
