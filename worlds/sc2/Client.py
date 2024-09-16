@@ -22,7 +22,6 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from kvui import KivyJSONtoTextParser
 from . import ItemNames, Options
 from .ItemGroups import item_name_groups
 from .Options import (
