@@ -151,7 +151,14 @@ def host_room(room: UUID):
     with db_session:
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
-    def get_log(max_size: int = 1024000) -> str:
+    browser_tokens = "Mozilla", "Chrome", "Safari"
+    automated = ("update" in request.args
+                 or "Discordbot" in request.user_agent.string
+                 or not any(browser_token in request.user_agent.string for browser_token in browser_tokens))
+
+    def get_log(max_size: int = 0 if automated else 1024000) -> str:
+        if max_size == 0:
+            return "…"
         try:
             with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0
