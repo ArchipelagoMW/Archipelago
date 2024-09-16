@@ -10,7 +10,7 @@ class TestD6(LADXTestBase):
 
     def test_keylogic(self):
         keys = self.get_items_by_name(ItemName.KEY6)
-        self.collect_by_name([ItemName.FACE_KEY, ItemName.HOOKSHOT, ItemName.POWER_BRACELET, ItemName.BOMB, ItemName.FEATHER, ItemName.FLIPPERS])
+        self.collect_by_name([ItemName.FACE_KEY, ItemName.HOOKSHOT, ItemName.POWER_BRACELET, ItemName.BOMB, ItemName.PEGASUS_BOOTS, ItemName.FEATHER, ItemName.FLIPPERS])
         # Can reach an un-keylocked item in the dungeon
         self.assertTrue(self.can_reach_location("L2 Bracelet Chest (Face Shrine)"))
 
