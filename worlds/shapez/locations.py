@@ -527,7 +527,7 @@ def addshapesanity(amount: int, random: Random,
     shapes_list.remove((f"Uncolored Square", "Shapesanity Full Uncolored"))
     shapes_list.remove((f"Uncolored Windmill", "Shapesanity East Windmill Uncolored"))
     switched = 0
-    for counting in range(5, amount+1):
+    for counting in range(4, amount):
         if switched == 0 and (len(shapes_list) == 0 or counting == amount//2):
             shapes_list = list(shapesanity_1_4.items())
             switched = 1
