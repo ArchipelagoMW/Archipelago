@@ -2,6 +2,7 @@ from typing import Dict, Any, ClassVar, Tuple, Callable, Optional, Union, List
 from math import ceil
 import Utils
 import settings
+from Options import OptionGroup
 
 from Utils import local_path
 from BaseClasses import (Item,
@@ -9,7 +10,7 @@ from BaseClasses import (Item,
                          Tutorial,
                          CollectionState)
 from .GameID import jak1_id, jak1_name, jak1_max
-from .JakAndDaxterOptions import JakAndDaxterOptions, EnableOrbsanity, CompletionCondition
+from . import Options
 from .Locations import (JakAndDaxterLocation,
                         location_table,
                         cell_location_table,
@@ -74,6 +75,24 @@ class JakAndDaxterWebWorld(WebWorld):
 
     tutorials = [setup_en]
 
+    option_groups = [
+        OptionGroup("Orbsanity", [
+            Options.EnableOrbsanity,
+            Options.GlobalOrbsanityBundleSize,
+            Options.PerLevelOrbsanityBundleSize,
+        ]),
+        OptionGroup("Power Cell Counts", [
+            Options.EnableOrderedCellCounts,
+            Options.FireCanyonCellCount,
+            Options.MountainPassCellCount,
+            Options.LavaTubeCellCount,
+        ]),
+        OptionGroup("Orb Trade Counts", [
+            Options.CitizenOrbTradeAmount,
+            Options.OracleOrbTradeAmount,
+        ]),
+    ]
+
 
 class JakAndDaxterWorld(World):
     """
@@ -91,8 +110,8 @@ class JakAndDaxterWorld(World):
 
     # Options
     settings: ClassVar[JakAndDaxterSettings]
-    options_dataclass = JakAndDaxterOptions
-    options: JakAndDaxterOptions
+    options_dataclass = Options.JakAndDaxterOptions
+    options: Options.JakAndDaxterOptions
 
     # Web world
     web = JakAndDaxterWebWorld()
@@ -166,10 +185,10 @@ class JakAndDaxterWorld(World):
         verify_orb_trade_amounts(self)
 
         # Cache the orb bundle size and item name for quicker reference.
-        if self.options.enable_orbsanity == EnableOrbsanity.option_per_level:
+        if self.options.enable_orbsanity == Options.EnableOrbsanity.option_per_level:
             self.orb_bundle_size = self.options.level_orbsanity_bundle_size.value
             self.orb_bundle_item_name = orb_item_table[self.orb_bundle_size]
-        elif self.options.enable_orbsanity == EnableOrbsanity.option_global:
+        elif self.options.enable_orbsanity == Options.EnableOrbsanity.option_global:
             self.orb_bundle_size = self.options.global_orbsanity_bundle_size.value
             self.orb_bundle_item_name = orb_item_table[self.orb_bundle_size]
         else:
@@ -204,7 +223,7 @@ class JakAndDaxterWorld(World):
                 prog_count = max(self.power_cell_thresholds[:3])
                 non_prog_count = 101 - prog_count
 
-                if self.options.jak_completion_condition == CompletionCondition.option_open_100_cell_door:
+                if self.options.jak_completion_condition == Options.CompletionCondition.option_open_100_cell_door:
                     counts_and_classes.append((100, ItemClass.progression_skip_balancing))
                     counts_and_classes.append((1, ItemClass.filler))
                 else:
@@ -268,7 +287,7 @@ class JakAndDaxterWorld(World):
             # If it is OFF, don't add any orb bundles to the item pool, period.
             # If it is ON, don't add any orb bundles that don't match the chosen option.
             if (item_name in self.item_name_groups["Precursor Orbs"]
-                and (self.options.enable_orbsanity == EnableOrbsanity.option_off
+                and (self.options.enable_orbsanity == Options.EnableOrbsanity.option_off
                      or item_name != self.orb_bundle_item_name)):
                 continue
 

@@ -13,7 +13,7 @@ from pymem.exception import ProcessNotFound
 import Utils
 from NetUtils import ClientStatus
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled
-from .JakAndDaxterOptions import EnableOrbsanity
+from .Options import EnableOrbsanity
 
 from .GameID import jak1_name
 from .client.ReplClient import JakAndDaxterReplClient

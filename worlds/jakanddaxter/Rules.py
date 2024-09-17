@@ -2,15 +2,15 @@ import typing
 from BaseClasses import MultiWorld, CollectionState
 from Options import OptionError
 from . import JakAndDaxterWorld
-from .JakAndDaxterOptions import (JakAndDaxterOptions,
-                                  EnableOrbsanity,
-                                  GlobalOrbsanityBundleSize,
-                                  PerLevelOrbsanityBundleSize,
-                                  FireCanyonCellCount,
-                                  MountainPassCellCount,
-                                  LavaTubeCellCount,
-                                  CitizenOrbTradeAmount,
-                                  OracleOrbTradeAmount)
+from .Options import (JakAndDaxterOptions,
+                      EnableOrbsanity,
+                      GlobalOrbsanityBundleSize,
+                      PerLevelOrbsanityBundleSize,
+                      FireCanyonCellCount,
+                      MountainPassCellCount,
+                      LavaTubeCellCount,
+                      CitizenOrbTradeAmount,
+                      OracleOrbTradeAmount)
 from .locs import CellLocations as Cells
 from .Locations import location_table
 from .Levels import level_table

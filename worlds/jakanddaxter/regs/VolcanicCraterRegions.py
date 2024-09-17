@@ -1,7 +1,8 @@
 from typing import List
 
 from .RegionBase import JakAndDaxterRegion
-from .. import EnableOrbsanity, JakAndDaxterWorld
+from ..Options import EnableOrbsanity
+from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_reach_orbs_level
 from ..locs import ScoutLocations as Scouts
 

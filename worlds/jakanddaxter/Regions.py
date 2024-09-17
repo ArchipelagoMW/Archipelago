@@ -3,7 +3,7 @@ import typing
 from Options import OptionError
 from . import JakAndDaxterWorld
 from .Items import item_table
-from .JakAndDaxterOptions import EnableOrbsanity, CompletionCondition
+from .Options import EnableOrbsanity, CompletionCondition
 from .Rules import can_reach_orbs_global
 from .locs import CellLocations as Cells, ScoutLocations as Scouts
 from .regs import (GeyserRockRegions as GeyserRock,

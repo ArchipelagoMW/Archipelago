@@ -2,7 +2,8 @@ from typing import List
 
 from BaseClasses import CollectionState
 from .RegionBase import JakAndDaxterRegion
-from .. import EnableOrbsanity, JakAndDaxterWorld, CompletionCondition
+from ..Options import EnableOrbsanity, CompletionCondition
+from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
