@@ -37,7 +37,7 @@ weapons_to_name: Dict[int, str] = {
 minimum_weakness_requirement: Dict[int, int] = {
     0: 1,  # Mega Buster is free
     1: 14,  # 2 shots of Atomic Fire
-    2: 1,  # 14 shots of Air Shooter, although you likely hit more than one shot
+    2: 2,  # 14 shots of Air Shooter
     3: 4,  # 9 uses of Leaf Shield, 3 ends up 1 damage off
     4: 1,  # 56 uses of Bubble Lead
     5: 1,  # 224 uses of Quick Boomerang
