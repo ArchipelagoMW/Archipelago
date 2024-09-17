@@ -430,7 +430,7 @@ class Yugioh06World(World):
             "final_campaign_boss_campaign_opponents":
                 self.options.final_campaign_boss_campaign_opponents.value,
             "fourth_tier_5_campaign_boss_campaign_opponents":
-                self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
+                self.options.fourth_tier_5_campaign_boss_campaign_opponents.value,
             "third_tier_5_campaign_boss_campaign_opponents":
                 self.options.third_tier_5_campaign_boss_campaign_opponents.value,
             "number_of_challenges": self.options.number_of_challenges.value,
