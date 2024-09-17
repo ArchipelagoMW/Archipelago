@@ -502,13 +502,15 @@ class AdditionalWarpPoints(DefaultOffToggle):
     display_name = "Additional Warp Points"
 
 
-class TarinGiftsYourItem(DefaultOnToggle):
+class TarinsGift(Choice):
     """
-    Forces Tarin's gift to be one of your own items.
-    This is to ensure local progress is available at the start of the game.
+    [Local Progression] Forces Tarin's gift to be an item that immediately opens up local checks.
     Has little effect in single player games, and isn't always necessary with randomized entrances.
     """
-    display_name = "Tarin Gifts Your Item"
+    display_name = "Tarin's Gift"
+    option_local_progression = 0
+    option_any_item = 1
+    default = option_local_progression
 
 
 ladx_option_groups = [
@@ -531,7 +533,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
-        TarinGiftsYourItem,
+        TarinsGift,
         TrendyGame,
         NagMessages,
         BootsControls
@@ -590,4 +592,4 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
-    tarin_gifts_your_item: TarinGiftsYourItem
+    tarins_gift: TarinsGift

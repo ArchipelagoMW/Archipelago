@@ -24,7 +24,7 @@ from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
+from .Options import DungeonItemShuffle, ShuffleInstruments, TarinsGift, LinksAwakeningOptions, ladx_option_groups
 from .Rom import LADXDeltaPatch, get_base_rom_path
 
 DEVELOPER_MODE = False
@@ -282,7 +282,7 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        if self.multiworld.tarin_gifts_your_item[self.player]:
+        if self.options.tarins_gift == TarinsGift.option_local_progression:
             self.force_start_item(itempool)
 
         self.multiworld.itempool += itempool
