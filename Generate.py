@@ -60,6 +60,7 @@ def mystery_argparse():
     if args.yaml_output:
         from Utils import deprecate
         deprecate("yaml_output is deprecated. Use csv_output instead.")
+        args.csv_output = True
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
