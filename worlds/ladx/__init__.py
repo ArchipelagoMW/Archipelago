@@ -68,7 +68,7 @@ class LinksAwakeningWebWorld(WebWorld):
     )]
     theme = "dirt"
     option_groups = ladx_option_groups
-    options_presets = {
+    options_presets: typing.Dict[str, typing.Dict[str, typing.Any]] = {
         "Keysanity": {
             "shuffle_nightmare_keys": "any_world",
             "shuffle_small_keys": "any_world",

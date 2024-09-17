@@ -1,5 +1,5 @@
 from BaseClasses import Region, Entrance, Location, CollectionState
-
+import typing
 
 from .LADXR.checkMetadata import checkMetadataTable
 from .Common import *
@@ -25,14 +25,12 @@ links_awakening_dungeon_names = [
 def meta_to_name(meta):
     return f"{meta.name} ({meta.area})"
 
-def get_location_name_groups():
+def get_location_name_groups() -> typing.Dict[str, typing.Set[str]]:
     ret = {}
     for s, v in checkMetadataTable.items():
         if s == "None":
             continue
-        if v.area not in ret:
-            ret[v.area] = []
-        ret[v.area].append(meta_to_name(v))
+        ret.setdefault(v.area, set()).add(meta_to_name(v))
     return ret
 
 links_awakening_location_name_groups = get_location_name_groups()
