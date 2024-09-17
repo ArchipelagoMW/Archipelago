@@ -8,12 +8,17 @@ from .Hints import HintArea
 from .Items import oot_is_item_of_type
 from .LocationList import dungeon_song_locations
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
 from ..AutoWorld import LogicMixin
 
 
 class OOTLogic(LogicMixin):
+    def init_mixin(self, parent: MultiWorld):
+        # Separate stale state for OOTRegion.can_reach() to use because CollectionState.update_reachable_regions() sets
+        # `self.state[player] = False` for all players without updating OOT's age region accessibility.
+        self._oot_stale = {player: True for player, world in parent.worlds.items()
+                           if parent.worlds[player].game == "Ocarina of Time"}
 
     def _oot_has_stones(self, count, player): 
         return self.has_group("stones", player, count)
@@ -92,9 +97,9 @@ class OOTLogic(LogicMixin):
         return False
 
     # Store the age before calling this!
-    def _oot_update_age_reachable_regions(self, player): 
-        self.stale[player] = False
-        for age in ['child', 'adult']: 
+    def _oot_update_age_reachable_regions(self, player):
+        self._oot_stale[player] = False
+        for age in ['child', 'adult']:
             self.age[player] = age
             rrp = getattr(self, f'{age}_reachable_regions')[player]
             bc = getattr(self, f'{age}_blocked_connections')[player]
