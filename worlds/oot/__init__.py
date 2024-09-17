@@ -1301,6 +1301,7 @@ class OOTWorld(World):
     # the appropriate number of keys in the collection state when they are
     # picked up.
     def collect(self, state: CollectionState, item: OOTItem) -> bool:
+        state._oot_stale[self.player] = True
         if item.advancement and item.special and item.special.get('alias', False):
             alt_item_name, count = item.special.get('alias')
             state.prog_items[self.player][alt_item_name] += count
@@ -1313,8 +1314,12 @@ class OOTWorld(World):
             state.prog_items[self.player][alt_item_name] -= count
             if state.prog_items[self.player][alt_item_name] < 1:
                 del (state.prog_items[self.player][alt_item_name])
+            state._oot_stale[self.player] = True
             return True
-        return super().remove(state, item)
+        changed = super().remove(state, item)
+        if changed:
+            state._oot_stale[self.player] = True
+        return changed
 
 
     # Helper functions
@@ -1389,7 +1394,7 @@ class OOTWorld(World):
         # If free_scarecrow give Scarecrow Song
         if self.free_scarecrow:
             all_state.collect(self.create_item("Scarecrow Song"), prevent_sweep=True)
-        all_state.stale[self.player] = True
+        all_state._oot_stale[self.player] = True
 
         return all_state
 
