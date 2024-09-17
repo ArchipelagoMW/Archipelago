@@ -1139,7 +1139,7 @@ item_table = {
                  classification=ItemClassification.useful, origin={"ext"}),
     item_names.INFESTED_BANSHEE:
         ItemData(22 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 21, SC2Race.ZERG,
-                 classification=ItemClassification.useful, origin={"ext"}),
+                 classification=ItemClassification.progression, origin={"ext"}),
     item_names.INFESTED_LIBERATOR:
         ItemData(23 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 22, SC2Race.ZERG,
                  classification=ItemClassification.useful, origin={"ext"}),
@@ -1275,7 +1275,7 @@ item_table = {
                  origin={"ext"}),
     item_names.SWARM_HOST_RESOURCE_EFFICIENCY:
         ItemData(239 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 9, SC2Race.ZERG, parent_item=item_names.SWARM_HOST,
-                 origin={"ext"}),
+                 origin={"ext"}, classification=ItemClassification.progression),
     item_names.ULTRALISK_ANABOLIC_SYNTHESIS:
         ItemData(240 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 10, SC2Race.ZERG, parent_item=item_names.ULTRALISK,
                  origin={"bw"}, classification=ItemClassification.filler),
@@ -1579,7 +1579,7 @@ item_table = {
     # Zerg Mercs
     item_names.INFESTED_MEDICS: ItemData(600 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 0, SC2Race.ZERG, origin={"ext"}),
     item_names.INFESTED_SIEGE_BREAKERS: ItemData(601 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 1, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
-    item_names.INFESTED_DUSK_WINGS: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 2, SC2Race.ZERG, origin={"ext"}),
+    item_names.INFESTED_DUSK_WINGS: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 2, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.progression),
     item_names.DEVOURING_ONES: ItemData(603 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 3, SC2Race.ZERG, origin={"ext"}),
     item_names.HUNTER_KILLERS: ItemData(604 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 4, SC2Race.ZERG, origin={"ext"}),
     item_names.TORRASQUE_MERC: ItemData(605 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 5, SC2Race.ZERG, origin={"ext"}),

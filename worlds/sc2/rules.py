@@ -487,6 +487,63 @@ class SC2Logic:
                 and state.has_any({item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER, item_names.MISSILE_TURRET}, self.player)
             )
 
+    def all_in_z_requirement(self, state: CollectionState):
+        """
+        All-in (Zerg)
+        :param state:
+        :return:
+        """
+        beats_kerrigan = (
+                state.has_any({item_names.ZERGLING, item_names.MUTALISK, item_names.INFESTED_MARINE}, self.player)
+                or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_RESOURCE_EFFICIENCY}, self.player)
+                or self.morph_brood_lord(state)
+                or self.advanced_tactics
+        )
+        if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
+            # Ground
+            defense_rating = self.zerg_defense_rating(state, True, False)
+            if state.has_any({item_names.MUTALISK, item_names.INFESTED_BANSHEE, item_names.INFESTED_DUSK_WINGS}, self.player) or self.morph_brood_lord(state):
+                defense_rating += 2
+            return defense_rating >= 13 and beats_kerrigan
+        else:
+            # Air
+            defense_rating = self.zerg_defense_rating(state, True, True)
+            return (
+                    defense_rating >= 9 and beats_kerrigan
+                    and state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player)
+                    and state.has(item_names.SPORE_CRAWLER, self.player)
+            )
+
+    def all_in_p_requirement(self, state: CollectionState):
+        """
+        All-in (Protoss)
+        :param state:
+        :return:
+        """
+        beats_kerrigan = (
+                state.has_any({item_names.CENTURION, item_names.SENTINEL, item_names.SKIRMISHER,
+                               item_names.CARRIER, item_names.TRIREME, item_names.VANGUARD}, self.player)
+                or self.advanced_tactics
+        )
+        if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
+            # Ground
+            defense_rating = self.protoss_defense_rating(state, True)
+            if state.has_any({item_names.SKIRMISHER, item_names.DARK_TEMPLAR, item_names.TEMPEST, item_names.TRIREME}, self.player):
+                defense_rating += 2
+            return defense_rating >= 13 and beats_kerrigan
+        else:
+            # Air
+            defense_rating = self.protoss_defense_rating(state, True)
+            if state.has(item_names.KHAYDARIN_MONOLITH, self.player):
+                defense_rating += 2
+            return (
+                    defense_rating >= 9 and beats_kerrigan
+                    and self.protoss_anti_light_anti_air(state)
+                    and state.has_any(
+                {item_names.TEMPEST, item_names.SKYLORD, item_names.VOID_RAY},
+                self.player)
+            )
+
     # HotS
 
     def zerg_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
