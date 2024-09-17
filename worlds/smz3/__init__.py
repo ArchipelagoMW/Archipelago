@@ -19,11 +19,10 @@ from .TotalSMZ3.WorldState import WorldState
 from .TotalSMZ3.Region import IReward, IMedallionAccess
 from .TotalSMZ3.Text.Texts import openFile
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
-from .Client import SMZ3SNIClient
-from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
-from .ips import IPS_Patch
+from .Rom import SMZ3ProcedurePatch
 from .Options import SMZ3Options
-from Options import Accessibility, ItemsAccessibility
+from Options import ItemsAccessibility
+from .Client import SMZ3SNIClient
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -182,10 +181,6 @@ class SMZ3World(World):
                                 ItemType.CardLowerNorfairBoss,
                             }
         return itemType in progressionTypes
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        base_combined_rom = get_base_rom_bytes()
 
     def generate_early(self):
         self.config = Config()
@@ -444,10 +439,6 @@ class SMZ3World(World):
 
     def generate_output(self, output_directory: str):
         try:
-            base_combined_rom = get_base_rom_bytes()
-            basepatch = IPS_Patch.load(world_folder + "/data/zsm.ips")
-            base_combined_rom = basepatch.apply(base_combined_rom)
-
             patcher = TotalSMZ3Patch(self.smz3World,
                                      [world.smz3World for key, world in self.multiworld.worlds.items() if isinstance(world, SMZ3World) and hasattr(world, "smz3World")],
                                      self.multiworld.seed_name,
@@ -459,21 +450,13 @@ class SMZ3World(World):
             patches.update(self.apply_sm_custom_sprite())
             patches.update(self.apply_item_names())
             patches.update(self.apply_customization())
-            for addr, bytes in patches.items():
-                offset = 0
-                for byte in bytes:
-                    base_combined_rom[addr + offset] = byte
-                    offset += 1
 
-            outfilebase = self.multiworld.get_out_file_name_base(self.player)
+            patch = SMZ3ProcedurePatch(player=self.player, player_name=self.player_name)
+            patch.write_tokens(patches)
+            rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                      f"{patch.patch_file_ending}")
+            patch.write(rom_path)
 
-            filename = os.path.join(output_directory, f"{outfilebase}.sfc")
-            with open(filename, "wb") as binary_file:
-                binary_file.write(base_combined_rom)
-            patch = SMZ3DeltaPatch(os.path.splitext(filename)[0] + SMZ3DeltaPatch.patch_file_ending, player=self.player,
-                                   player_name=self.multiworld.player_name[self.player], patched_path=filename)
-            patch.write()
-            os.remove(filename)
             self.rom_name = bytearray(patcher.title, 'utf8')
         except:
             raise
