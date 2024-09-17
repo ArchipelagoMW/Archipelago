@@ -619,7 +619,7 @@ class LinksAwakeningContext(CommonContext):
                     await self.sync()
 
                 await self.client.wait_and_init_tracker()
-                
+
                 while True:
                     await self.client.main_tick(on_item_get, victory, deathlink)
                     await asyncio.sleep(0.1)
