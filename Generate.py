@@ -44,6 +44,8 @@ def mystery_argparse():
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default='info', help='Sets log level')
     parser.add_argument("--yaml_output", action="store_true",
+                        help="Output rolled player options. Deprecated. Use csv_output instead.")
+    parser.add_argument("--csv_output", action="store_true",
                         help="Output rolled player options to csv (made for async multiworld).")
     parser.add_argument("--plando", default=defaults.plando_options,
                         help="List of options that can be set manually. Can be combined, for example \"bosses, items\"")
@@ -55,6 +57,9 @@ def mystery_argparse():
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
+    if args.yaml_output:
+        from Utils import deprecate
+        deprecate("yaml_output is deprecated. Use csv_output instead.")
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
