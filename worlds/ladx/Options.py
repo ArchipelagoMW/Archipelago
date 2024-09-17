@@ -558,7 +558,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     # 'bowwow': Bowwow,
     # 'overworld': Overworld,
     link_palette: LinkPalette
-    warps: Warps,
+    warps: Warps
     trendy_game: TrendyGame
     gfxmod: GfxMod
     palette: Palette

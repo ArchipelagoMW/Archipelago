@@ -418,8 +418,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
-    if world.options.warps != Warps.options_vanilla:
-        patches.core.addWarpImprovements(rom, world.options.warps == Warps.options_improved_additional)
+    if world.options.warps != Warps.option_vanilla:
+        patches.core.addWarpImprovements(rom, world.options.warps == Warps.option_improved_additional)
 
     palette = world.options.palette
     if palette != Palette.option_normal:
