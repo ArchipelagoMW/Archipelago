@@ -336,6 +336,8 @@ class RequirementsSettings:
         }
 
         # Adjust for options
+        if options.hardmode == "ohko":
+            self.miniboss_requirements["ROLLING_BONES"] = OR(BOW, MAGIC_ROD, BOOMERANG, AND(FEATHER, self.attack_hookshot)) # should not deal with roller damage
         if options.logic == "casual":
             # In casual mode, remove the more complex kill methods
             self.bush.remove(MAGIC_POWDER)

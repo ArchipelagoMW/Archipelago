@@ -607,6 +607,8 @@ class World:
             lower_right_taltal.connect(below_right_taltal, OR(r.jesus_jump, r.jesus_rooster), one_way=True) # jesus jump/rooster to upper ledges, jump off, enter and exit s+q menu to regain pauses, then jesus jump 4 screens to staircase below damp cave
             below_right_taltal.connect(outside_swim_cave, r.jesus_rooster) # jesus rooster into the cave entrance after jumping down the ledge, can jesus jump back to the ladder 1 screen below
             outside_mambo.connect(below_right_taltal, OR(r.jesus_rooster, r.jesus_jump))  # jesus jump/rooster to mambo's cave entrance
+            if options.hardmode != "oracle": # don't take damage from drowning in water. Could get it with more health probably but standard 3 hearts is not enough
+                mambo.connect(inside_mambo, AND(OCARINA, r.bomb_trigger))  # while drowning, buffer a bomb and after it explodes, buffer another bomb out of the save and quit menu.
             outside_raft_house.connect(below_right_taltal, r.jesus_rooster, one_way=True) # jesus rooster from the ledge at raft to the staircase 1 screen south
             lower_right_taltal.connect(outside_multichest_left, r.jesus_rooster) # jesus rooster past staircase leading up the mountain 
             outside_rooster_house.connect(lower_right_taltal, r.jesus_rooster, one_way=True) # jesus rooster down to staircase below damp cave

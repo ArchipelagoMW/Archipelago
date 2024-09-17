@@ -13,6 +13,8 @@ class Dungeon8:
         entrance_left.add(DungeonChest(0x24D)) # zamboni room chest
         eye_magnet_chest = Location(dungeon=8).add(DungeonChest(0x25C)) # eye magnet chest bottom left below rolling bones
         eye_magnet_chest.connect(entrance_left, OR(BOW, MAGIC_ROD, BOOMERANG, AND(FEATHER, r.attack_hookshot))) # damageless roller should be default        
+        if options.hardmode != "ohko":
+            eye_magnet_chest.connect(entrance_left, r.attack_hookshot) # can take a hit
         vire_drop_key = Location(dungeon=8).add(DroppedKey(0x24C)).connect(entrance_left, r.attack_hookshot_no_bomb) # vire drop key
         sparks_chest = Location(dungeon=8).add(DungeonChest(0x255)).connect(entrance_left, OR(HOOKSHOT, FEATHER))  # chest before lvl1 miniboss
         Location(dungeon=8).add(DungeonChest(0x246)).connect(entrance_left, MAGIC_ROD)  # key chest that spawns after creating fire
