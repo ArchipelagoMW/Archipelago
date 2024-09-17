@@ -352,6 +352,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
             # Send game clear
             if not ctx.finished_game and game_clear:
+                ctx.finished_game = True
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL,
