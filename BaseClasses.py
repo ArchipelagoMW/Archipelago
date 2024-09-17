@@ -342,6 +342,8 @@ class MultiWorld():
             region = Region("Menu", group_id, self, "ItemLink")
             self.regions.append(region)
             locations = region.locations
+            # ensure that progression items are linked first, then non-progression
+            self.itempool.sort(key=lambda item: item.advancement)
             for item in self.itempool:
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:
@@ -1207,7 +1209,7 @@ class ItemClassification(IntFlag):
     filler = 0b0000  # aka trash, as in filler items like ammo, currency etc,
     progression = 0b0001  # Item that is logically relevant
     useful = 0b0010  # Item that is generally quite useful, but not required for anything logical
-    trap = 0b0100  # detrimental or entirely useless (nothing) item
+    trap = 0b0100  # detrimental item
     skip_balancing = 0b1000  # should technically never occur on its own
     # Item that is logically relevant, but progression balancing should not touch.
     # Typically currency or other counted items.
