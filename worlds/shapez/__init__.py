@@ -52,7 +52,6 @@ class ShapezWorld(World):
     topology_present = True
     web = ShapezWeb()
 
-    base_id = 20010707
     # Placeholder values in case something goes wrong
     location_count: int = 0
     level_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
@@ -65,9 +64,11 @@ class ShapezWorld(World):
     client_seed: int = 123
     shapesanity_names: List[str] = []
 
+    base_id = 20010707
     item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(all_locations, base_id)}
 
+    # Universal Tracker support
     ut_active: bool = False
     passthrough: Dict[str, any] = {}
     location_id_to_alias: Dict[int, str] = {}
@@ -278,10 +279,7 @@ class ShapezWorld(World):
             "randomize_upgrade_logic": self.options.randomize_upgrade_logic.current_key,
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
             "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value),
-            "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value),
-            "include_achievements": bool(self.options.include_achievements.value),
-            "exclude_softlock_achievements": bool(self.options.exclude_softlock_achievements),
-            "exclude_long_playtime_achievements": bool(self.options.exclude_long_playtime_achievements)
+            "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value)
         }
 
         return {**level_logic_data, **upgrade_logic_data, **option_data, **logic_type_random_data,
