@@ -1,10 +1,5 @@
-import typing
-
-from BaseClasses import CollectionState
-from . import JakAndDaxterTestBase
-from ..GameID import jak1_id
+from ..test import JakAndDaxterTestBase
 from ..Items import move_item_table
-from ..regs.RegionBase import JakAndDaxterRegion
 
 
 class MoveRandoTest(JakAndDaxterTestBase):

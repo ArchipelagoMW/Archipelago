@@ -1,7 +1,7 @@
 import typing
 
-from . import JakAndDaxterTestBase
-from .. import jak1_id
+from ..test import JakAndDaxterTestBase
+from ..GameID import jak1_id
 from ..regs.RegionBase import JakAndDaxterRegion
 from ..locs import (ScoutLocations as Scouts,
                     SpecialLocations as Specials)

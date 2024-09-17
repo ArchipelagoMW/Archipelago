@@ -1,4 +1,4 @@
-from . import JakAndDaxterTestBase
+from ..test import JakAndDaxterTestBase
 from ..Items import orb_item_table
 
 

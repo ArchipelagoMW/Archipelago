@@ -1,4 +1,4 @@
-from .. import JakAndDaxterWorld
+from worlds.jakanddaxter import JakAndDaxterWorld
 from ..GameID import jak1_name
 from test.bases import WorldTestBase
 
