@@ -61,20 +61,24 @@ class MLSSWorld(World):
 
     def generate_early(self) -> None:
         self.disabled_locations = []
-        if self.options.chuckle_beans == 0:
-            self.disabled_locations += [location.name for location in all_locations if "Digspot" in location.name]
-        if self.options.castle_skip:
-            self.disabled_locations += [location.name for location in all_locations if "Bowser" in location.name]
-        if self.options.chuckle_beans == 1:
-            self.disabled_locations = [location.name for location in all_locations if location.id in hidden]
         if self.options.skip_minecart:
             self.disabled_locations += [LocationName.HoohooMountainBaseMinecartCaveDigspot]
         if self.options.disable_surf:
             self.disabled_locations += [LocationName.SurfMinigame]
         if self.options.disable_harhalls_pants:
             self.disabled_locations += [LocationName.HarhallsPants]
+        if self.options.chuckle_beans == 0:
+            self.disabled_locations += [location.name for location in all_locations if "Digspot" in location.name
+                                        and location.name not in self.disabled_locations]
+        if self.options.chuckle_beans == 1:
+            self.disabled_locations = [location.name for location in all_locations if location.id in hidden
+                                       and location.name not in self.disabled_locations]
+        if self.options.castle_skip:
+            self.disabled_locations += [location.name for location in bowsers + bowsersMini
+                                        if location.name not in self.disabled_locations]
         if not self.options.coins:
-            self.disabled_locations += [location.name for location in all_locations if location in coins]
+            self.disabled_locations += [location.name for location in coins
+                                        if location.name not in self.disabled_locations]
 
     def create_regions(self) -> None:
         create_regions(self, self.disabled_locations)

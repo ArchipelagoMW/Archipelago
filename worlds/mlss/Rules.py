@@ -459,14 +459,58 @@ def set_rules(world: "MLSSWorld", excluded):
             )
 
     if world.options.randomize_bosses.value != 0:
+        if world.options.chuckle_beans != 0:
+            add_rule(
+                world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot1),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainPastHoohoorosDigspot),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomDigspot1),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainBelowSummitDigspot),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.HoohooMountainSummitDigspot),
+                lambda state: StateLogic.hammers(state, world.player)
+                              or StateLogic.fire(state, world.player)
+                              or StateLogic.thunder(state, world.player),
+            )
+            if world.options.chuckle_beans == 2:
+                add_rule(
+                    world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot2),
+                    lambda state: StateLogic.hammers(state, world.player)
+                                  or StateLogic.fire(state, world.player)
+                                  or StateLogic.thunder(state, world.player),
+                )
+                add_rule(
+                    world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomDigspot2),
+                    lambda state: StateLogic.hammers(state, world.player)
+                                  or StateLogic.fire(state, world.player)
+                                  or StateLogic.thunder(state, world.player),
+                )
         add_rule(
-            world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot1),
+            world.get_location(LocationName.HoohooVillageHammers),
             lambda state: StateLogic.hammers(state, world.player)
                           or StateLogic.fire(state, world.player)
                           or StateLogic.thunder(state, world.player),
         )
         add_rule(
-            world.get_location(LocationName.HoohooMountainHoohoorosRoomDigspot2),
+            world.get_location(LocationName.HoohooMountainPeasleysRose),
             lambda state: StateLogic.hammers(state, world.player)
                           or StateLogic.fire(state, world.player)
                           or StateLogic.thunder(state, world.player),
@@ -479,42 +523,6 @@ def set_rules(world: "MLSSWorld", excluded):
         )
         add_rule(
             world.get_location(LocationName.HoohooMountainHoohoorosRoomBlock2),
-            lambda state: StateLogic.hammers(state, world.player)
-                          or StateLogic.fire(state, world.player)
-                          or StateLogic.thunder(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.HoohooMountainPastHoohoorosDigspot),
-            lambda state: StateLogic.hammers(state, world.player)
-                          or StateLogic.fire(state, world.player)
-                          or StateLogic.thunder(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.HoohooMountainPastHoohoorosBlock1),
-            lambda state: StateLogic.hammers(state, world.player)
-                          or StateLogic.fire(state, world.player)
-                          or StateLogic.thunder(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.HoohooMountainPastHoohoorosBlock2),
-            lambda state: StateLogic.hammers(state, world.player)
-                          or StateLogic.fire(state, world.player)
-                          or StateLogic.thunder(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomBlock),
-            lambda state: StateLogic.hammers(state, world.player)
-                          or StateLogic.fire(state, world.player)
-                          or StateLogic.thunder(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomDigspot1),
-            lambda state: StateLogic.hammers(state, world.player)
-                          or StateLogic.fire(state, world.player)
-                          or StateLogic.thunder(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomDigspot2),
             lambda state: StateLogic.hammers(state, world.player)
                           or StateLogic.fire(state, world.player)
                           or StateLogic.thunder(state, world.player),
@@ -538,25 +546,19 @@ def set_rules(world: "MLSSWorld", excluded):
                           or StateLogic.thunder(state, world.player),
         )
         add_rule(
-            world.get_location(LocationName.HoohooMountainBelowSummitDigspot),
+            world.get_location(LocationName.HoohooMountainPastHoohoorosBlock1),
             lambda state: StateLogic.hammers(state, world.player)
                           or StateLogic.fire(state, world.player)
                           or StateLogic.thunder(state, world.player),
         )
         add_rule(
-            world.get_location(LocationName.HoohooMountainSummitDigspot),
+            world.get_location(LocationName.HoohooMountainPastHoohoorosBlock2),
             lambda state: StateLogic.hammers(state, world.player)
                           or StateLogic.fire(state, world.player)
                           or StateLogic.thunder(state, world.player),
         )
         add_rule(
-            world.get_location(LocationName.HoohooVillageHammers),
-            lambda state: StateLogic.hammers(state, world.player)
-                          or StateLogic.fire(state, world.player)
-                          or StateLogic.thunder(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.HoohooMountainPeasleysRose),
+            world.get_location(LocationName.HoohooMountainPastHoohoorosConnectorRoomBlock),
             lambda state: StateLogic.hammers(state, world.player)
                           or StateLogic.fire(state, world.player)
                           or StateLogic.thunder(state, world.player),

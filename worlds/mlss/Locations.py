@@ -1176,15 +1176,15 @@ all_locations: typing.List[LocationData] = (
     + fungitownBeanstar
     + fungitownBirdo
     + bowsers
+    + bowsersMini
     + jokesEntrance
     + jokesMain
     + postJokes
     + theater
     + oasis
     + gwarharMain
-    + bowsersMini
     + baseUltraRocks
     + coins
 )
 
-location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
+location_table: typing.Dict[str, int] = {location.name: location.id for location in all_locations}
