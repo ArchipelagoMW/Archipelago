@@ -612,9 +612,7 @@ class DarkSouls3World(World):
                 self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "Basin of Vows")
 
         # Define the access rules to some specific locations
-        if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
-            self._add_location_rule("HWL: Red Eye Orb - wall tower, miniboss",
-                                    "Lift Chamber Key")
+        self._add_location_rule("HWL: Red Eye Orb - wall tower, miniboss", "Lift Chamber Key")
         self._add_location_rule("ID: Bellowing Dragoncrest Ring - drop from B1 towards pit",
                                 "Jailbreaker's Key")
         self._add_location_rule("ID: Covetous Gold Serpent Ring - Siegward's cell", "Old Cell Key")
