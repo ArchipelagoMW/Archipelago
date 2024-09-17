@@ -545,7 +545,6 @@ ladx_option_groups = [
         Quickswap,
         HardMode,
         LowHpBeep,
-        NoFlash,
         BootsControls
     ]),
     OptionGroup("Experimental", [
@@ -605,4 +604,3 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     quickswap: Quickswap
     hard_mode: HardMode
     low_hp_beep: LowHpBeep
-    no_flash: NoFlash
