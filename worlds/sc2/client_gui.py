@@ -136,36 +136,19 @@ class SC2Manager(GameManager):
     first_mission = ""
     ctx: SC2Context
 
-    def __init__(self, ctx: SC2Context, startup_warnings: List[str]) -> None:
+    def __init__(self, ctx: SC2Context) -> None:
         super().__init__(ctx)
         self.json_to_kivy_parser = SC2JSONtoKivyParser(ctx)
-        self.startup_warnings = startup_warnings
         self.minimized = False
-        from kivy.core.window import Window
-        Window.bind(on_maximize=self.on_maximize)
-        Window.bind(on_minimize=self.on_minimize)
-        Window.bind(on_restore=self.on_restore)
 
     def on_start(self) -> None:
-        super().on_start()
-        for startup_warning in self.startup_warnings:
+        from . import gui_config
+        warnings, window_width, window_height = gui_config.get_window_defaults()
+        from kivy.core.window import Window
+        Window.size = window_width, window_height
+        for startup_warning in warnings:
             logging.getLogger("Starcraft2").warning(f"Startup WARNING: {startup_warning}")
 
-    def on_maximize(self, window) -> None:
-        SC2World.settings.window_maximized = True
-        force_settings_save_on_close()
-
-    def on_minimize(self, window) -> None:
-        self.minimized = True
-
-    def on_restore(self, window) -> None:
-        if self.minimized:
-            self.minimized = False
-        else:
-            # Restoring from maximized
-            SC2World.settings.window_maximized = False
-            force_settings_save_on_close()
-    
     def clear_tooltip(self) -> None:
         if self.ctx.current_tooltip:
             App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
@@ -479,8 +462,8 @@ class SC2Manager(GameManager):
             title += ""
         return title
 
-def start_gui(context: SC2Context, startup_warnings: List[str]):
-    context.ui = SC2Manager(context, startup_warnings)
+def start_gui(context: SC2Context):
+    context.ui = SC2Manager(context)
     context.ui_task = asyncio.create_task(context.ui.async_run(), name="UI")
     import pkgutil
     data = pkgutil.get_data(SC2World.__module__, "starcraft2.kv").decode()

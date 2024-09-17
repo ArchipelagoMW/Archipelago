@@ -4,23 +4,12 @@ Import this before importing client_gui.py to set window defaults from world set
 from .settings import Starcraft2Settings
 from typing import List
 
-def apply_window_defaults() -> List[str]:
+def get_window_defaults() -> List[str]:
     """
-    Set the kivy config keys from the sc2world user settings.
-    Returns a list of warnings to be printed once the GUI is started.
+    Gets the window size options from the sc2 settings.
+    Returns a list of warnings to be printed once the GUI is started, followed by the window width and height
     """
     from . import SC2World
-    # This is necessary to prevent kivy from failing because it got invalid command-line args,
-    # or from spamming the logs.
-    # Must happen before importing kivy.config
-    import os
-    import Utils
-    os.environ["KIVY_NO_CONSOLELOG"] = "1"
-    os.environ["KIVY_NO_FILELOG"] = "1"
-    os.environ["KIVY_NO_ARGS"] = "1"
-    os.environ["KIVY_LOG_ENABLE"] = "0"
-    if Utils.is_frozen():
-        os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
     # validate settings
     warnings: List[str] = []
@@ -35,9 +24,4 @@ def apply_window_defaults() -> List[str]:
         warnings.append(f"Invalid value for options.yaml key sc2_options.window_width: '{SC2World.settings.window_width}'. Expected a positive integer.")
         window_width = Starcraft2Settings.window_width
 
-    # from kivy.config import Config
-    # Config.set('graphics', 'width', str(window_width))
-    # Config.set('graphics', 'height', str(window_height))
-    # if SC2World.settings.window_maximized:
-    #     Config.set('graphics', 'window_state', 'maximized')
-    return warnings
+    return warnings, window_width, window_height
