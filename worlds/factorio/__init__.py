@@ -198,9 +198,18 @@ class Factorio(World):
                                                     want_progressives(self.multiworld.random))
 
         cost_sorted_locations = sorted(self.science_locations, key=lambda location: location.name)
-        special_index = {"automation": 0,
-                         "logistics": 1,
-                         "rocket-silo": -1}
+        special_index = {"rocket-silo": -1}
+        i = 0
+        priority_techs = []
+        priority_techs.append("automation")
+        priority_techs.append("logistics")
+        priority_techs.extend(base_technology_table["automation"].get_prior_technologies())
+        priority_techs.extend(base_technology_table["logistics"].get_prior_technologies())
+        for tech_name in priority_techs:
+            if tech_name not in special_index:
+                special_index[tech_name] = i
+                i += 1
+
         loc: FactorioScienceLocation
         if self.multiworld.tech_tree_information[player] == TechTreeInformation.option_full:
             # mark all locations as pre-hinted
@@ -236,7 +245,9 @@ class Factorio(World):
         for ingredient in self.multiworld.max_science_pack[self.player].get_allowed_packs():
             location = world.get_location(f"Automate {ingredient}", player)
 
-            if self.multiworld.recipe_ingredients[self.player]:
+            if self.multiworld.recipe_ingredients[self.player] == 1 or \
+                    (self.multiworld.recipe_ingredients[self.player] == 2 and ingredient != "automation-science-pack"):
+
                 custom_recipe = self.custom_recipes[ingredient]
 
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
@@ -325,7 +336,7 @@ class Factorio(World):
                           ingredients_offset: int = 0) -> Recipe:
         new_ingredients = {}
         liquids_used = 0
-        for _ in range(len(original.ingredients) + ingredients_offset):
+        for _ in range(min(len(original.ingredients) + ingredients_offset, len(pool))):
             new_ingredient = pool.pop()
             if new_ingredient in fluids:
                 while liquids_used == allow_liquids and new_ingredient in fluids:
@@ -346,8 +357,8 @@ class Factorio(World):
         pool: typing.List[str] = sorted(pool & valid_ingredients)
         # then sort with random data to shuffle
         self.multiworld.random.shuffle(pool)
-        target_raw = int(sum((count for ingredient, count in original.base_cost.items())) * factor)
-        target_energy = original.total_energy * factor
+        target_raw = int(sum((count for ingredient, count in original.base_cost().items())) * factor)
+        target_energy = original.total_energy() * factor
         target_num_ingredients = len(original.ingredients) + ingredients_offset
         remaining_raw = target_raw
         remaining_energy = target_energy
@@ -363,8 +374,8 @@ class Factorio(World):
             ingredient_raw = 0
             if ingredient in all_product_sources:
                 ingredient_recipe = min(all_product_sources[ingredient], key=lambda recipe: recipe.rel_cost)
-                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
-                ingredient_energy = ingredient_recipe.total_energy
+                ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost().items()))
+                ingredient_energy = ingredient_recipe.total_energy()
             else:
                 # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
                 ingredient_energy = 2
@@ -410,8 +421,8 @@ class Factorio(World):
             if not ingredient_recipe:
                 logging.warning(f"missing recipe for {ingredient}")
                 continue
-            ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost.items()))
-            ingredient_energy = ingredient_recipe.total_energy
+            ingredient_raw = sum((count for ingredient, count in ingredient_recipe.base_cost().items()))
+            ingredient_energy = ingredient_recipe.total_energy()
             num_raw = remaining_raw / ingredient_raw / remaining_num_ingredients
             num_energy = remaining_energy / ingredient_energy / remaining_num_ingredients
             num = int(min(num_raw, num_energy))
@@ -443,6 +454,13 @@ class Factorio(World):
         original_rocket_part = recipes["rocket-part"]
         science_pack_pools = get_science_pack_pools()
         valid_pool = sorted(science_pack_pools[self.multiworld.max_science_pack[self.player].get_max_pack()] & valid_ingredients)
+        if len(valid_pool) < 3 + ingredients_offset:
+            # bring in more ingredients from lower packs
+            keys = list(science_pack_pools.keys())
+            previous_pack = keys.index(self.multiworld.max_science_pack[self.player].get_max_pack())
+            previous_pool = sorted(science_pack_pools[keys[previous_pack - 1]] & valid_ingredients)
+            self.multiworld.random.shuffle(previous_pool)
+            valid_pool.extend(previous_pool[:3 + ingredients_offset - len(valid_pool)])
         self.multiworld.random.shuffle(valid_pool)
         self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
                                                      {valid_pool[x]: 10 for x in range(3 + ingredients_offset)},
@@ -452,6 +470,8 @@ class Factorio(World):
         if self.multiworld.recipe_ingredients[self.player]:
             valid_pool = []
             for pack in self.multiworld.max_science_pack[self.player].get_ordered_science_packs():
+                if pack == "automation-science-pack" and self.multiworld.recipe_ingredients[self.player] == 2:
+                    continue
                 valid_pool += sorted(science_pack_pools[pack])
                 self.multiworld.random.shuffle(valid_pool)
                 if pack in recipes:  # skips over space science pack
@@ -479,11 +499,15 @@ class Factorio(World):
                     ingredients_offset=ingredients_offset)
                 self.custom_recipes["satellite"] = new_recipe
         bridge = "ap-energy-bridge"
+        red_pool = science_pack_pools[self.multiworld.max_science_pack[self.player].get_ordered_science_packs()[0]]
+        if len(red_pool) < 6:
+            # Some mods (seablock) make an excessively cheap first science pack, so we move the bridge to the second pool instead
+            red_pool = science_pack_pools[self.multiworld.max_science_pack[self.player].get_ordered_science_packs()[1]]
         new_recipe = self.make_quick_recipe(
             Recipe(bridge, "crafting", {"replace_1": 1, "replace_2": 1, "replace_3": 1,
                                         "replace_4": 1, "replace_5": 1, "replace_6": 1},
                    {bridge: 1}, 10),
-            sorted(science_pack_pools[self.multiworld.max_science_pack[self.player].get_ordered_science_packs()[0]]),
+            sorted(red_pool),
             ingredients_offset=ingredients_offset)
         for ingredient_name in new_recipe.ingredients:
             new_recipe.ingredients[ingredient_name] = self.multiworld.random.randint(50, 500)
