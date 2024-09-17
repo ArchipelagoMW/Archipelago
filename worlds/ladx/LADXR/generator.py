@@ -216,11 +216,11 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         patches.hardMode.oneHitKO(rom)
     if world.ladxr_settings.superweapons:
         patches.weapons.patchSuperWeapons(rom)
-    if world.ladxr_settings.textmode == 'fast':
-        patches.aesthetics.fastText(rom)
-    if world.ladxr_settings.textmode == 'none':
-        patches.aesthetics.fastText(rom)
-        patches.aesthetics.noText(rom)
+    #if world.ladxr_settings.textmode == 'fast':
+    patches.aesthetics.fastText(rom)
+    # if world.ladxr_settings.textmode == 'none':
+    #   patches.aesthetics.fastText(rom)
+    #   patches.aesthetics.noText(rom)
     if not world.ladxr_settings.nagmessages:
         patches.aesthetics.removeNagMessages(rom)
     if world.ladxr_settings.lowhpbeep == 'slow':
