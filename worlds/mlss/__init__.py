@@ -4,7 +4,7 @@ import typing
 import settings
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from typing import List, Dict, Any
+from typing import Set, Dict, Any
 from .Locations import all_locations, location_table, bowsers, bowsersMini, hidden, coins
 from .Options import MLSSOptions
 from .Items import MLSSItem, itemList, item_frequencies, item_table
@@ -57,31 +57,26 @@ class MLSSWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 5, 0)
 
-    disabled_locations: List[str]
+    disabled_locations: Set[str] = set()
 
     def generate_early(self) -> None:
-        self.disabled_locations = []
         if self.options.skip_minecart:
-            self.disabled_locations += [LocationName.HoohooMountainBaseMinecartCaveDigspot]
+            self.disabled_locations.update([LocationName.HoohooMountainBaseMinecartCaveDigspot])
         if self.options.disable_surf:
-            self.disabled_locations += [LocationName.SurfMinigame]
+            self.disabled_locations.update([LocationName.SurfMinigame])
         if self.options.disable_harhalls_pants:
-            self.disabled_locations += [LocationName.HarhallsPants]
+            self.disabled_locations.update([LocationName.HarhallsPants])
         if self.options.chuckle_beans == 0:
-            self.disabled_locations += [location.name for location in all_locations if "Digspot" in location.name
-                                        and location.name not in self.disabled_locations]
+            self.disabled_locations.update([location.name for location in all_locations if "Digspot" in location.name])
         if self.options.chuckle_beans == 1:
-            self.disabled_locations = [location.name for location in all_locations if location.id in hidden
-                                       and location.name not in self.disabled_locations]
+            self.disabled_locations.update([location.name for location in all_locations if location.id in hidden])
         if self.options.castle_skip:
-            self.disabled_locations += [location.name for location in bowsers + bowsersMini
-                                        if location.name not in self.disabled_locations]
+            self.disabled_locations.update([location.name for location in bowsers + bowsersMini])
         if not self.options.coins:
-            self.disabled_locations += [location.name for location in coins
-                                        if location.name not in self.disabled_locations]
+            self.disabled_locations.update([location.name for location in coins])
 
     def create_regions(self) -> None:
-        create_regions(self, self.disabled_locations)
+        create_regions(self)
         connect_regions(self)
 
         item = self.create_item("Mushroom")

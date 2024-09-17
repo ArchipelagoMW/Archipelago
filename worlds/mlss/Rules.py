@@ -565,20 +565,21 @@ def set_rules(world: "MLSSWorld", excluded):
         )
 
     if not world.options.difficult_logic:
+        if world.options.chuckle_beans != 0:
+            add_rule(
+                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Digspot),
+                lambda state: StateLogic.canCrash(state, world.player),
+            )
+            add_rule(
+                world.get_location(LocationName.JokesEndNortheastOfBoilerRoom3Digspot),
+                lambda state: StateLogic.canCrash(state, world.player),
+            )
         add_rule(
             world.get_location(LocationName.JokesEndNortheastOfBoilerRoom1Block),
             lambda state: StateLogic.canCrash(state, world.player),
         )
         add_rule(
             world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Block1),
-            lambda state: StateLogic.canCrash(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom2Digspot),
-            lambda state: StateLogic.canCrash(state, world.player),
-        )
-        add_rule(
-            world.get_location(LocationName.JokesEndNortheastOfBoilerRoom3Digspot),
             lambda state: StateLogic.canCrash(state, world.player),
         )
         add_rule(
