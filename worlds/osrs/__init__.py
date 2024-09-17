@@ -33,6 +33,12 @@ class OSRSWeb(WebWorld):
 
 
 class OSRSWorld(World):
+    """
+    The best retro fantasy MMORPG on the planet. Old School is RuneScape but… older! This is the open world you know and love, but as it was in 2007.
+    The Randomizer takes the form of a Chunk-Restricted f2p Ironman that takes a brand new account up through defeating
+    the Green Dragon of Crandor and earning a spot in the fabled Champion's Guild!
+    """
+
     game = "Old School Runescape"
     options_dataclass = OSRSOptions
     options: OSRSOptions
@@ -56,8 +62,8 @@ class OSRSWorld(World):
 
     locations_by_category: typing.Dict[str, typing.List[LocationRow]]
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.region_name_to_data = {}
         self.location_name_to_data = {}
 
@@ -524,7 +530,9 @@ class OSRSWorld(World):
         return region
 
     def create_item(self, item_name: str) -> "Item":
-        item = [item for item in item_rows if item.name == item_name][0]
+        items = [item for item in item_rows if item.name == item_name]
+        assert len(items) > 0, f"No matching item found for name {item_name} for player {self.player_name}"
+        item = items[0]
         index = item_rows.index(item)
         return OSRSItem(item.name, item.progression, self.base_id + index, self.player)
 
@@ -633,7 +641,7 @@ class OSRSWorld(World):
             else:
                 return lambda state: can_tan(state) or (can_silver(state) and can_smelt_silver(state)) or \
                                      (can_gold(state) and can_smelt_gold(state))
-        if skill.lower() == "Cooking":
+        if skill.lower() == "cooking":
             if self.options.brutal_grinds or level < 15:
                 return lambda state: state.can_reach(RegionNames.Milk, "Region", self.player) or \
                                      state.can_reach(RegionNames.Egg, "Region", self.player) or \
