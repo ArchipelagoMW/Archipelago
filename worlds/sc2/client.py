@@ -806,10 +806,8 @@ class SC2Context(CommonContext):
         super(SC2Context, self).on_print_json(args)
 
     def run_gui(self) -> None:
-        from .gui_config import apply_window_defaults
-        warnings = apply_window_defaults()
         from .client_gui import start_gui
-        start_gui(self, warnings)
+        start_gui(self)
 
     async def shutdown(self) -> None:
         await super(SC2Context, self).shutdown()
