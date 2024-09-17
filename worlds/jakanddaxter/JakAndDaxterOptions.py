@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range
+from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle
 
 
 class EnableMoveRandomizer(Toggle):
@@ -114,6 +114,21 @@ class LavaTubeCellCount(Range):
     default = 72
 
 
+class EnableOrderedCellCounts(DefaultOnToggle):
+    """Enable to reorder the Cell Count options in ascending order. This is useful if you choose to randomize
+    those options.
+
+    For example, if Fire Canyon Cell Count, Mountain Pass Cell Count, and Lava Tube Cell Count are 60, 30, and 40
+    respectively, they will be reordered to 30, 40, and 60 respectively."""
+    display_name = "Enable Ordered Cell Counts"
+
+
+class RequirePunchForKlaww(DefaultOnToggle):
+    """Enable to force the Punch move to come before Klaww. Disabling this setting may require Jak to fight Klaww
+    and Gol and Maia by shooting yellow eco through his goggles. This only applies if "Enable Move Randomizer" is ON."""
+    display_name = "Require Punch For Klaww"
+
+
 # 222 is the absolute maximum because there are 9 citizen trades and 2000 orbs to trade (2000/9 = 222).
 class CitizenOrbTradeAmount(Range):
     """Set the number of orbs you need to trade to ordinary citizens for a power cell (Mayor, Uncle, etc.).
@@ -166,6 +181,8 @@ class JakAndDaxterOptions(PerGameCommonOptions):
     fire_canyon_cell_count: FireCanyonCellCount
     mountain_pass_cell_count: MountainPassCellCount
     lava_tube_cell_count: LavaTubeCellCount
+    enable_ordered_cell_counts: EnableOrderedCellCounts
+    require_punch_for_klaww: RequirePunchForKlaww
     citizen_orb_trade_amount: CitizenOrbTradeAmount
     oracle_orb_trade_amount: OracleOrbTradeAmount
     jak_completion_condition: CompletionCondition

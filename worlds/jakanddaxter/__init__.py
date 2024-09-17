@@ -129,6 +129,25 @@ class JakAndDaxterWorld(World):
 
     # Handles various options validation, rules enforcement, and caching of important information.
     def generate_early(self) -> None:
+
+        # Cache the power cell threshold values for quicker reference.
+        self.power_cell_thresholds = []
+        self.power_cell_thresholds.append(self.options.fire_canyon_cell_count.value)
+        self.power_cell_thresholds.append(self.options.mountain_pass_cell_count.value)
+        self.power_cell_thresholds.append(self.options.lava_tube_cell_count.value)
+        self.power_cell_thresholds.append(100)  # The 100 Power Cell Door.
+
+        # Order the thresholds ascending and set the options values to the new order.
+        # TODO - How does this affect region access rules and other things?
+        try:
+            if self.options.enable_ordered_cell_counts:
+                self.power_cell_thresholds.sort()
+                self.options.fire_canyon_cell_count.value = self.power_cell_thresholds[0]
+                self.options.mountain_pass_cell_count.value = self.power_cell_thresholds[1]
+                self.options.lava_tube_cell_count.value = self.power_cell_thresholds[2]
+        except IndexError:
+            pass  # Skip if not possible.
+
         # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
         # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
         enforce_friendly_options = Utils.get_settings()["jakanddaxter_options"]["enforce_friendly_options"]
@@ -157,13 +176,6 @@ class JakAndDaxterWorld(World):
             self.orb_bundle_size = 0
             self.orb_bundle_item_name = ""
 
-        # Cache the power cell threshold values for quicker reference.
-        self.power_cell_thresholds = []
-        self.power_cell_thresholds.append(self.options.fire_canyon_cell_count.value)
-        self.power_cell_thresholds.append(self.options.mountain_pass_cell_count.value)
-        self.power_cell_thresholds.append(self.options.lava_tube_cell_count.value)
-        self.power_cell_thresholds.append(100)  # The 100 Power Cell Door.
-
         # Options drive which trade rules to use, so they need to be setup before we create_regions.
         from .Rules import set_orb_trade_rule
         set_orb_trade_rule(self)
@@ -182,9 +194,9 @@ class JakAndDaxterWorld(World):
     def item_type_helper(self, item) -> List[Tuple[int, ItemClass]]:
         counts_and_classes: List[Tuple[int, ItemClass]] = []
 
-        # Make 101 Power Cells. Not all of them will be Progression, some will be Filler. We only want AP's Progression
-        # Fill routine to handle the amount of cells we need to reach the furthest possible region. Even for early
-        # completion goals, all areas in the game must be reachable or generation will fail. TODO - Enormous refactor.
+        # Make 101 Power Cells. We only want AP's Progression Fill routine to handle the amount of cells we need
+        # to reach the furthest possible region. Even for early completion goals, all areas in the game must be
+        # reachable or generation will fail. TODO - Option-driven region creation would be an enormous refactor.
         if item in range(jak1_id, jak1_id + Scouts.fly_offset):
 
             # If for some unholy reason we don't have the list of power cell thresholds, have a fallback plan.

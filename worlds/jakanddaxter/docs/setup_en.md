@@ -8,26 +8,10 @@
 
 At this time, this method of setup works on Windows only, but Linux support is a strong likelihood in the near future as OpenGOAL itself supports Linux.
 
-## Installation
-
-### Archipelago Launcher
-
-- Copy the `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
-    - Reminder: the default installation location for Archipelago is `C:\ProgramData\Archipelago`.
-- Run the Archipelago Launcher.
-- From the left-most list, click `Generate Template Options`.
-- Select `Jak and Daxter The Precursor Legacy.yaml`. 
-- In the text file that opens, enter the name you want and remember it for later.
-- Save this file in `Archipelago/players`. You can now close the file.
-- Back in the Archipelago Launcher, from the left-most list, click `Generate`. A window will appear to generate your seed and close itself.
-- If you plan to host the game yourself, from the left-most list, click `Host`.
-    - When asked to select your multiworld seed, navigate to `Archipelago/output` and select the zip file containing the seed you just generated.
-    - You can sort by Date Modified to make it easy to find.
-
-### OpenGOAL Launcher
+## Installation via OpenGOAL Launcher
 
 - Follow the installation process for the official OpenGOAL Launcher. See [here](https://opengoal.dev/docs/usage/installation).
-    - You must set up a vanilla installation of Jak and Daxter before you can install mods for it.
+    - **You must set up a vanilla installation of Jak and Daxter before you can install mods for it.**
 - Follow the setup process for adding mods to the OpenGOAL Launcher. See [here](https://jakmods.dev/).
 - Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
 - Click the Jak and Daxter logo on the left sidebar.
@@ -57,20 +41,14 @@ jakanddaxter_options:
   - Save the file and close it.
 - **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Jak and Daxter Client should handle everything for you (see below).
 
-## Updates and New Releases
- 
-### Archipelago Launcher
-
-- Copy the latest `jakanddaxter.apworld` file into your `Archipelago/custom_worlds` directory.
-
-### OpenGOAL Launcher
+## Updates and New Releases via OpenGOAL Launcher
 
 If you are in the middle of an async game, and you do not want to update the mod, you do not need to do this step. The mod will only update when you tell it to.
 
 - Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
 - Click the Jak and Daxter logo on the left sidebar.
 - Click `Features` in the bottom right corner, then click `Mods`.
-- Under `Available Mods`, click `ArchipelaGOAL`.
+- Under `Installed Mods`, click `ArchipelaGOAL`.
 - Click `Update` to download and install any new updates that have been released.
 - You can verify your version by clicking `Versions`. The version you are using will say `(Active)` next to it.
 - **After the update is installed, you must click `Advanced`, then click `Compile` to make the update take effect.**
@@ -111,16 +89,16 @@ You may start the game via the Text Client, but it never loads in the title scre
 -- Compilation Error! --
 ```
 
-If this happens, run the OpenGOAL Launcher. If you are using a PAL version of the game, you should skip these instructions and follow `Special PAL Instructions` below.
+If this happens, follow these instructions. If you are using a PAL version of the game, you should skip these instructions and follow `Special PAL Instructions` below.
 
 - Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
 - Click the Jak and Daxter logo on the left sidebar, then click `Advanced`, then click `Open Game Data Folder`. Copy the `iso_data` folder from this directory.
 - Back in the OpenGOAL Launcher, click the Jak and Daxter logo on the left sidebar.
-- Click `Features` in the bottom right corner, then click `Mods`, then under `Available Mods`, click `ArchipelaGOAL`.
+- Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
 - In the bottom right corner, click `Advanced`, then click `Open Game Data Folder`.
 - Paste the `iso_data` folder you copied earlier.
 - Back in the OpenGOAL Launcher, click the Jak and Daxter logo on the left sidebar.
-- Click `Features` in the bottom right corner, then click `Mods`, then under `Available Mods`, click `ArchipelaGOAL`.
+- Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
 - In the bottom right corner, click `Advanced`, then click `Compile`.
 
 ### The Text Client Says "The <gk/goalc> process has died"
@@ -133,7 +111,7 @@ If at any point the text client says `The <gk/goalc> process has died`, you will
 - Then enter the following commands into the text client to reconnect everything to the game.
     - `/repl connect`
     - `/memr connect`
-- Once these are done, you can enter `/repl status` and `/memr status` to verify.
+- Once these are done, you can enter `/repl status` and `/memr status` in the text client to verify.
 
 ### The Game Freezes On The Same Two Frames, But The Music Is Still Playing
 
