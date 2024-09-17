@@ -199,8 +199,6 @@ class BlasphemousWorld(World):
 
         self.multiworld.itempool += pool
 
-
-    def pre_fill(self):
         self.place_items_from_dict(unrandomized_dict)
 
         if self.options.thorn_shuffle == "vanilla":
