@@ -342,6 +342,8 @@ class MultiWorld():
             region = Region("Menu", group_id, self, "ItemLink")
             self.regions.append(region)
             locations = region.locations
+            # ensure that progression items are linked first, then non-progression
+            self.itempool.sort(key=lambda item: item.advancement)
             for item in self.itempool:
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:

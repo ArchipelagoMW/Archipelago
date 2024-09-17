@@ -475,28 +475,26 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         nonlocal lock_later
         lock_later.append(location)
 
+    single_player = multiworld.players == 1 and not multiworld.groups
+
     if prioritylocations:
         # "priority fill"
         fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
-                         single_player_placement=multiworld.players == 1, swap=False, on_place=mark_for_locking,
-                         name="Priority")
+                         single_player_placement=single_player, swap=False, on_place=mark_for_locking, name="Priority")
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
         # "advancement/progression fill"
         if panic_method == "swap":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
-                             swap=True,
-                             name="Progression", single_player_placement=multiworld.players == 1)
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=True,
+                             name="Progression", single_player_placement=single_player)
         elif panic_method == "raise":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
-                             swap=False,
-                             name="Progression", single_player_placement=multiworld.players == 1)
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+                             name="Progression", single_player_placement=single_player)
         elif panic_method == "start_inventory":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
-                             swap=False, allow_partial=True,
-                             name="Progression", single_player_placement=multiworld.players == 1)
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+                             allow_partial=True, name="Progression", single_player_placement=single_player)
             if progitempool:
                 for item in progitempool:
                     logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
