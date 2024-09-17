@@ -33,6 +33,12 @@ class OSRSWeb(WebWorld):
 
 
 class OSRSWorld(World):
+    """
+    The best retro fantasy MMORPG on the planet. Old School is RuneScape but… older! This is the open world you know and love, but as it was in 2007.
+    The Randomizer takes the form of a Chunk-Restricted f2p Ironman that takes a brand new account up through defeating
+    the Green Dragon of Crandor and earning a spot in the fabled Champion's Guild!
+    """
+
     game = "Old School Runescape"
     options_dataclass = OSRSOptions
     options: OSRSOptions
@@ -635,7 +641,7 @@ class OSRSWorld(World):
             else:
                 return lambda state: can_tan(state) or (can_silver(state) and can_smelt_silver(state)) or \
                                      (can_gold(state) and can_smelt_gold(state))
-        if skill.lower() == "Cooking":
+        if skill.lower() == "cooking":
             if self.options.brutal_grinds or level < 15:
                 return lambda state: state.can_reach(RegionNames.Milk, "Region", self.player) or \
                                      state.can_reach(RegionNames.Egg, "Region", self.player) or \
