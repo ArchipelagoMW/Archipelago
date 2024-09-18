@@ -115,7 +115,7 @@ class HexagonQuestAbilityUnlockType(Choice):
     Hexagons: A new ability is randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
     Pages: Abilities are unlocked by finding specific pages in the manual.
 
-    This option will default to Pages if the Hexagon Goal is fewer than 3, or fewer than 15 if Keys Behind Bosses is enabled.
+    This option will default to Pages if there aren't enough Gold Hexagons in the item pool.
     This option does nothing if Shuffled Abilities is not enabled.
     """
     internal_name = "hexagon_quest_ability_type"
@@ -344,8 +344,8 @@ def check_options(world: "TunicWorld"):
                 int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
                     .to_integral_value(rounding=ROUND_HALF_UP)), 100)
         min_hexes = 3
-        if options.keys_behind_bosses and not (options.entrance_rando or options.ice_grappling >= IceGrappling.option_medium):
-            min_hexes = 4
+        if options.keys_behind_bosses:
+            min_hexes = 15
         if total_hexes < min_hexes:
-            logging.warning("TUNIC: Not enough Gold Hexagons in item pool for Hexagon Ability Shuffle. Option will be switched to Pages.")
+            logging.warning("TUNIC: Not enough Gold Hexagons in the item pool for Hexagon Ability Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
             options.hexagon_quest_ability_type = "pages"

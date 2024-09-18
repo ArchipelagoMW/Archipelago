@@ -44,14 +44,13 @@ def randomize_ability_unlocks(world: "TunicWorld") -> Dict[str, int]:
 
     abilities = [prayer, holy_cross, icebolt]
     ability_requirement = [1, 1, 1]
-    if total_hexes > 4:
-        random.shuffle(abilities)
+    random.shuffle(abilities)
 
     if options.hexagon_quest.value and options.hexagon_quest_ability_type == "hexagons":
         hexagon_goal = options.hexagon_goal.value
         # Set ability unlocks to 25, 50, and 75% of goal amount
         ability_requirement = [hexagon_goal // 4, hexagon_goal // 2, hexagon_goal * 3 // 4]
-        if hexagon_goal == 3:
+        if any(req == 0 for req in ability_requirement):
             ability_requirement = [1, 2, 3]
 
     return dict(zip(abilities, ability_requirement))
