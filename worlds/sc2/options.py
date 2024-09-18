@@ -5,8 +5,9 @@ from Utils import is_iterable_except_str
 from Options import *
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list, \
-    campaign_mission_table, SC2Race, MissionFlag
+from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, \
+    get_missions_with_any_flags_in_list, \
+    campaign_mission_table, SC2Race, MissionFlag, lookup_short_name_to_mission_variants
 from .mission_groups import mission_groups, MissionGroupNames
 from .mission_order.options import CustomMissionOrder
 from . import item_names
@@ -806,7 +807,7 @@ class ExcludedMissions(Sc2MissionSet):
     Doesn't apply to vanilla mission order.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
-    valid_keys = {mission.mission_name for mission in SC2Mission}
+    valid_keys = lookup_name_to_mission.keys()
 
 
 class ExcludeVeryHardMissions(Choice):
@@ -1113,6 +1114,10 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     disabled_flags = get_disabled_flags(world)
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
+
+    for name in excluded_mission_names:
+        if name in lookup_short_name_to_mission_variants.keys():
+            excluded_missions.update(lookup_short_name_to_mission_variants[name])
 
     # Excluding Very Hard missions depending on options
     if world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true or (
