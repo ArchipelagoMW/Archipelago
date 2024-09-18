@@ -57,7 +57,7 @@ class MLSSWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 5, 0)
 
-    disabled_locations: Set[str] = set()
+    disabled_locations: Set[str]
 
     def generate_early(self) -> None:
         if self.options.skip_minecart:
