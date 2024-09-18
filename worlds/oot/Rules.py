@@ -10,7 +10,7 @@ from .LocationList import dungeon_song_locations
 
 from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
-from ..AutoWorld import LogicMixin
+from worlds.AutoWorld import LogicMixin
 
 
 class OOTLogic(LogicMixin):
@@ -132,17 +132,17 @@ class OOTLogic(LogicMixin):
 def set_rules(ootworld):
     logger = logging.getLogger('')
 
-    world = ootworld.multiworld
+    multiworld = ootworld.multiworld
     player = ootworld.player
 
     if ootworld.logic_rules != 'no_logic': 
         if ootworld.triforce_hunt: 
-            world.completion_condition[player] = lambda state: state.has('Triforce Piece', player, ootworld.triforce_goal)
+            multiworld.completion_condition[player] = lambda state: state.has('Triforce Piece', player, ootworld.triforce_goal)
         else: 
-            world.completion_condition[player] = lambda state: state.has('Triforce', player)
+            multiworld.completion_condition[player] = lambda state: state.has('Triforce', player)
 
     # ganon can only carry triforce
-    world.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce'
+    multiworld.get_location('Ganon', player).item_rule = lambda item: item.name == 'Triforce'
 
     # is_child = ootworld.parser.parse_rule('is_child')
     guarantee_hint = ootworld.parser.parse_rule('guarantee_hint')
@@ -156,22 +156,22 @@ def set_rules(ootworld):
     if (ootworld.dungeon_mq['Forest Temple'] and ootworld.shuffle_bosskeys == 'dungeon'
         and ootworld.shuffle_smallkeys == 'dungeon' and ootworld.tokensanity == 'off'):
         # First room chest needs to be a small key. Make sure the boss key isn't placed here.
-        location = world.get_location('Forest Temple MQ First Room Chest', player)
+        location = multiworld.get_location('Forest Temple MQ First Room Chest', player)
         forbid_item(location, 'Boss Key (Forest Temple)', ootworld.player)
 
     if ootworld.shuffle_song_items in {'song', 'dungeon'} and not ootworld.songs_as_items:
         # Sheik in Ice Cavern is the only song location in a dungeon; need to ensure that it cannot be anything else.
         # This is required if map/compass included, or any_dungeon shuffle.
-        location = world.get_location('Sheik in Ice Cavern', player)
+        location = multiworld.get_location('Sheik in Ice Cavern', player)
         add_item_rule(location, lambda item: oot_is_item_of_type(item, 'Song'))
 
     if ootworld.shuffle_child_trade == 'skip_child_zelda':
         # Song from Impa must be local
-        location = world.get_location('Song from Impa', player)
+        location = multiworld.get_location('Song from Impa', player)
         add_item_rule(location, lambda item: item.player == player)
 
     for name in ootworld.always_hints:
-        add_rule(world.get_location(name, player), guarantee_hint)
+        add_rule(multiworld.get_location(name, player), guarantee_hint)
 
     # TODO: re-add hints once they are working
     # if location.type == 'HintStone' and ootworld.hints == 'mask':
