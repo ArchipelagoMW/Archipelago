@@ -8,13 +8,13 @@ from . import api_endpoints, get_players
 from ..models import Room
 
 
-@api_endpoints.route('/room_status/<suuid:room>')
-def room_info(room: UUID) -> Dict[str, Any]:
-    room = Room.get(id=room)
+@api_endpoints.route('/room_status/<suuid:room_id>')
+def room_info(room_id: UUID) -> Dict[str, Any]:
+    room = Room.get(id=room_id)
     if room is None:
         return abort(404)
 
-    def supports_apdeltapatch(game: str):
+    def supports_apdeltapatch(game: str) -> bool:
         return game in worlds.Files.AutoPatchRegister.patch_types
 
     downloads = []
