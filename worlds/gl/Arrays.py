@@ -287,6 +287,35 @@ level_locations: Dict[int, List[LocationData]] = {
     0x113: infernal_fortress,
 }
 
+level_names: Dict[int, str] = {
+    0x11: "Castle Courtyard",
+    0x12: "Dungeon of Torment",
+    0x13: "Tower Armory",
+    0x14: "Castle Treasury",
+    0x15: "Chimera's Keep",
+    0x21: "Valley of Fire",
+    0x22: "Dagger Peak",
+    0x23: "Cliffs of Desolation",
+    0x24: "Lost Cave",
+    0x25: "Volcanic Cavern",
+    0x26: "Dragon's Lair",
+    0x71: "Poisoned Fields",
+    0x72: "Haunted Cemetery",
+    0x73: "Venomous Spire",
+    0x74: "Toxic Air Ship",
+    0x75: "Vat of the Plague Fiend",
+    0x81: "Gates of the Underworld",
+    0x91: "Arctic Docks",
+    0x92: "Frozen Camp",
+    0x93: "Crystal Mine",
+    0x94: "Erupting Fissure",
+    0x95: "Yeti's Cavern",
+    0xF1: "Desecrated Temple",
+    0x111: "Battle Trenches",
+    0x112: "Battle Towers",
+    0x113: "Infernal Fortress",
+}
+
 # Count of all spawners in a level
 # Used for obj_read address offset calculation
 # Vaules are spawner difficulty

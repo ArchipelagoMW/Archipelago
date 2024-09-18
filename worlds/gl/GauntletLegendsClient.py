@@ -1,4 +1,6 @@
 import asyncio
+import datetime
+import os
 import socket
 import traceback
 from typing import List, Optional
@@ -22,7 +24,7 @@ from .Arrays import (
     timers,
     sounds,
     colors,
-    vanilla,
+    vanilla, level_names,
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
@@ -278,6 +280,16 @@ class GauntletLegendsContext(CommonContext):
         _obj = []
         b: RamChunk
         if self.offset == -1:
+            log_arr = []
+            for i in range(5):
+                b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} {100}")))
+                b.iterate(0x3C)
+                log_arr += [b.split]
+            output_folder = 'logs'
+            output_file = os.path.join(output_folder, f"[{datetime.datetime.now()}] Gauntlet Legends RAMSTATE: {level_names[self.current_level[1] << 0xF + self.current_level[0]]}.txt")
+            with open(output_file, 'w') as f:
+                for arr in log_arr:
+                    f.write(" ".join(f"{byte:02x}" for byte in arr) + '\n')
             b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} {0x40 * 0x3C}")))
             b.iterate(0x3C)
             for i, obj in enumerate(b.split):
