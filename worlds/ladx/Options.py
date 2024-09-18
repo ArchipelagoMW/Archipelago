@@ -504,7 +504,7 @@ class AdditionalWarpPoints(DefaultOffToggle):
 
 class StabilizeItemPool(DefaultOffToggle):
     """
-    From vanilla quantities, the default behavior is to randomly swap some number of rupees for bombs, arrows, powder, and capacity upgrades. This disables that swapping, useful for plando.
+    By default, rupees in the item pool may be randomly swapped with bombs, arrows, powders, or capacity upgrades. This option disables that swapping, which is useful for plando.
     """
     display_name = "Stabilize Item Pool"
 
