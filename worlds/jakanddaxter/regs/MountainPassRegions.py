@@ -31,9 +31,15 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxte
     shortcut = JakAndDaxterRegion("Shortcut", player, multiworld, level_name, 0)
     shortcut.add_cell_locations([110])
 
-    main_area.connect(race)
+    # Of course, in order to make it to the race region, you must defeat Klaww. He's not optional.
+    # So we need to set up this inter-region rule as well (or make it free if the setting is off).
+    if world.options.require_punch_for_klaww:
+        main_area.connect(race, rule=lambda state: state.has("Punch", player))
+    else:
+        main_area.connect(race)
 
-    # You cannot go backwards from Klaww.
+    # You actually can go backwards from the race back to Klaww's area.
+    race.connect(main_area)
     race.connect(shortcut, rule=lambda state: state.has("Yellow Eco Switch", player))
 
     shortcut.connect(race)
