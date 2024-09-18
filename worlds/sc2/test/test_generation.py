@@ -537,6 +537,12 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
             'selected_races': options.SelectRaces.option_all,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
         }
         self.generate_world(world_options)
         missions = get_all_missions(self.world.custom_mission_order)
@@ -553,6 +559,12 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
             'selected_races': options.SelectRaces.option_all,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
         }
         self.generate_world(world_options)
         missions = get_all_missions(self.world.custom_mission_order)
