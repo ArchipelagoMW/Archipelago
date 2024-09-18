@@ -439,7 +439,6 @@ def check_options(world: "TunicWorld"):
         if options.keys_behind_bosses:
             min_hexes = 15
         if total_hexes < min_hexes:
-            logging.warning(f"TUNIC: Not enough Gold Hexagons in the item pool for Hexagon Ability Shuffle with the "
-                            f"selected options for player {world.player_name}. Ability Shuffle mode will be switched "
-                            f"to Pages.")
+            logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability "
+                            f"Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
             options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
