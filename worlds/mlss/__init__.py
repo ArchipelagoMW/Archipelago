@@ -60,6 +60,7 @@ class MLSSWorld(World):
     disabled_locations: Set[str]
 
     def generate_early(self) -> None:
+        self.disabled_locations = set()
         if self.options.skip_minecart:
             self.disabled_locations.update([LocationName.HoohooMountainBaseMinecartCaveDigspot])
         if self.options.disable_surf:
