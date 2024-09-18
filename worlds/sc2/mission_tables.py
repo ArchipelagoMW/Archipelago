@@ -297,13 +297,6 @@ for mission in SC2Mission:
         short_name = mission.mission_name[:mission.mission_name.find(' (')]
         lookup_name_to_mission[short_name] = mission
 
-lookup_short_name_to_mission_variants: Dict[str, Set[SC2Mission]] = {
-    mission.mission_name[:mission.mission_name.find(' (')]: {mission} for mission in SC2Mission if mission.flags & MissionFlag.HasRaceSwap
-}
-for mission in SC2Mission:
-    if mission.flags & MissionFlag.RaceSwap:
-        lookup_short_name_to_mission_variants[mission.mission_name[:mission.mission_name.find(' (')]].add(mission)
-
 lookup_id_to_campaign: Dict[int, SC2Campaign] = {
     campaign.id: campaign for campaign in SC2Campaign
 }
