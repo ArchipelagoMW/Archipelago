@@ -197,5 +197,4 @@ for mission in SC2Mission:
     if mission.flags & MissionFlag.HasRaceSwap:
         short_name = mission.mission_name[:mission.mission_name.find(' (')]
         mission_groups[short_name] = [mission_var.mission_name for mission_var in SC2Mission
-                                      if mission_var.flags & MissionFlag.HasRaceSwap|MissionFlag.RaceSwap
-                                      and short_name in mission_var.mission_name]
+                                      if short_name in mission_var.mission_name]
