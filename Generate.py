@@ -43,7 +43,7 @@ def mystery_argparse():
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default='info', help='Sets log level')
-    parser.add_argument("--yaml_output", action="store_true",
+    parser.add_argument("--csv_output", action="store_true",
                         help="Output rolled player options to csv (made for async multiworld).")
     parser.add_argument("--plando", default=defaults.plando_options,
                         help="List of options that can be set manually. Can be combined, for example \"bosses, items\"")
@@ -156,7 +156,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
     erargs.name = {}
-    erargs.yaml_output = args.yaml_output
+    erargs.csv_output = args.csv_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
