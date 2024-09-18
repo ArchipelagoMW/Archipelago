@@ -81,7 +81,7 @@
     "Information Plaque: (Ocean) Poseidon",
     "Information Plaque: (Ocean) Colossus of Rhodes",
     "Information Plaque: (Ocean) Poseidon's Temple",
-    "Information Plaque: (Underground Maze) Subterranean World",
+    "Information Plaque: (Underground Maze Staircase) Subterranean World",
     "Information Plaque: (Underground Maze) Dero",
     "Information Plaque: (Egypt) Tomb of the Ixupi",
     "Information Plaque: (Egypt) The Sphinx",
@@ -119,16 +119,6 @@
     "Outside": [
       "Puzzle Solved Gears",
       "Puzzle Solved Stone Henge",
-      "Ixupi Captured Water",
-      "Ixupi Captured Wax",
-      "Ixupi Captured Ash",
-      "Ixupi Captured Oil",
-      "Ixupi Captured Cloth",
-      "Ixupi Captured Wood",
-      "Ixupi Captured Crystal",
-      "Ixupi Captured Sand",
-      "Ixupi Captured Metal",
-      "Ixupi Captured Lightning",
       "Puzzle Solved Office Elevator",
       "Puzzle Solved Three Floor Elevator",
       "Puzzle Hint Found: Combo Lock in Mailbox",
@@ -182,7 +172,8 @@
       "Accessible: Storage: Transforming Mask"
     ],
     "Generator": [
-      "Final Riddle: Beth's Body Page 17"
+      "Final Riddle: Beth's Body Page 17",
+      "Ixupi Captured Lightning"
     ],
     "Theater Back Hallways": [
       "Puzzle Solved Clock Tower Door"
@@ -210,6 +201,7 @@
       "Information Plaque: (Ocean) Poseidon's Temple"
     ],
     "Maze Staircase": [
+      "Information Plaque: (Underground Maze Staircase) Subterranean World",
       "Puzzle Solved Maze Door"
     ],
     "Egypt": [
@@ -305,7 +297,6 @@
     ],
     "Tar River": [
       "Accessible: Storage: Tar River",
-      "Information Plaque: (Underground Maze) Subterranean World",
       "Information Plaque: (Underground Maze) Dero"
     ],
     "Theater": [
@@ -320,6 +311,33 @@
     "Skull Dial Bridge": [
       "Accessible: Storage: Skull Bridge",
       "Puzzle Solved Skull Dial Door"
+    ],
+    "Water Capture": [
+      "Ixupi Captured Water"
+    ],
+    "Wax Capture": [
+      "Ixupi Captured Wax"
+    ],
+    "Ash Capture": [
+      "Ixupi Captured Ash"
+    ],
+    "Oil Capture": [
+      "Ixupi Captured Oil"
+    ],
+    "Cloth Capture": [
+      "Ixupi Captured Cloth"
+    ],
+    "Wood Capture": [
+      "Ixupi Captured Wood"
+    ],
+    "Crystal Capture": [
+      "Ixupi Captured Crystal"
+    ],
+    "Sand Capture": [
+      "Ixupi Captured Sand"
+    ],
+    "Metal Capture": [
+      "Ixupi Captured Metal"
     ]
   }
-}   
+}
