@@ -7746,8 +7746,6 @@ grass_location_table: Dict[str, TunicLocationData] = {
         "Back of Swamp Laurels Area", "Back of Swamp Laurels Area"),
     "Swamp - Back of Swamp Laurels Area Grass swamp (994) (33.5, 8.0, 31.8)": TunicLocationData(
         "Back of Swamp Laurels Area", "Back of Swamp Laurels Area"),
-
-
 }
 
 grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + index for index, name in
