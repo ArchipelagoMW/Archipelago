@@ -358,49 +358,49 @@ class SC2CampaignGoal(NamedTuple):
 
 
 campaign_final_mission_locations: Dict[SC2Campaign, Optional[SC2CampaignGoal]] = {
-    SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
-    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
+    SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, f'{SC2Mission.ALL_IN.mission_name}: Victory'),
+    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, f'{SC2Mission.IN_UTTER_DARKNESS.mission_name}: Kills'),
     SC2Campaign.HOTS: None,
-    SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory"),
-    SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, "Salvation: Victory"),
+    SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, f'{SC2Mission.EVIL_AWOKEN.mission_name}: Victory'),
+    SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, f'{SC2Mission.SALVATION.mission_name}: Victory'),
     SC2Campaign.EPILOGUE: None,
-    SC2Campaign.NCO: SC2CampaignGoal(SC2Mission.END_GAME, "End Game: Victory"),
+    SC2Campaign.NCO: SC2CampaignGoal(SC2Mission.END_GAME, f'{SC2Mission.END_GAME.mission_name}: Victory'),
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
     SC2Campaign.WOL: {
-        SC2Mission.MAW_OF_THE_VOID: "Maw of the Void: Victory",
-        SC2Mission.ENGINE_OF_DESTRUCTION: "Engine of Destruction: Victory",
-        SC2Mission.SUPERNOVA: "Supernova: Victory",
-        SC2Mission.GATES_OF_HELL: "Gates of Hell: Victory",
-        SC2Mission.SHATTER_THE_SKY: "Shatter the Sky: Victory"
+        SC2Mission.MAW_OF_THE_VOID: f'{SC2Mission.MAW_OF_THE_VOID.mission_name}: Victory',
+        SC2Mission.ENGINE_OF_DESTRUCTION: f'{SC2Mission.ENGINE_OF_DESTRUCTION.mission_name}: Victory',
+        SC2Mission.SUPERNOVA: f'{SC2Mission.SUPERNOVA.mission_name}: Victory',
+        SC2Mission.GATES_OF_HELL: f'{SC2Mission.GATES_OF_HELL.mission_name}: Victory',
+        SC2Mission.SHATTER_THE_SKY: f'{SC2Mission.SHATTER_THE_SKY.mission_name}: Victory'
     },
     SC2Campaign.PROPHECY: None,
     SC2Campaign.HOTS: {
-        SC2Mission.THE_RECKONING: "The Reckoning: Victory",
-        SC2Mission.THE_CRUCIBLE: "The Crucible: Victory",
-        SC2Mission.HAND_OF_DARKNESS: "Hand of Darkness: Victory",
-        SC2Mission.PHANTOMS_OF_THE_VOID: "Phantoms of the Void: Victory",
-        SC2Mission.PLANETFALL: "Planetfall: Victory",
-        SC2Mission.DEATH_FROM_ABOVE: "Death From Above: Victory"
+        SC2Mission.THE_RECKONING: f'{SC2Mission.THE_RECKONING.mission_name}: Victory',
+        SC2Mission.THE_CRUCIBLE: f'{SC2Mission.THE_CRUCIBLE.mission_name}: Victory',
+        SC2Mission.HAND_OF_DARKNESS: f'{SC2Mission.HAND_OF_DARKNESS.mission_name}: Victory',
+        SC2Mission.PHANTOMS_OF_THE_VOID: f'{SC2Mission.PHANTOMS_OF_THE_VOID.mission_name}: Victory',
+        SC2Mission.PLANETFALL: f'{SC2Mission.PLANETFALL.mission_name}: Victory',
+        SC2Mission.DEATH_FROM_ABOVE: f'{SC2Mission.DEATH_FROM_ABOVE.mission_name}: Victory'
     },
     SC2Campaign.PROLOGUE: {
-        SC2Mission.GHOSTS_IN_THE_FOG: "Ghosts in the Fog: Victory"
+        SC2Mission.GHOSTS_IN_THE_FOG: f'{SC2Mission.GHOSTS_IN_THE_FOG.mission_name}: Victory'
     },
     SC2Campaign.LOTV: {
-        SC2Mission.THE_HOST: "The Host: Victory",
-        SC2Mission.TEMPLAR_S_CHARGE: "Templar's Charge: Victory"
+        SC2Mission.THE_HOST: f'{SC2Mission.THE_HOST.mission_name}: Victory',
+        SC2Mission.TEMPLAR_S_CHARGE: f'{SC2Mission.TEMPLAR_S_CHARGE.mission_name}: Victory'
     },
     SC2Campaign.EPILOGUE: {
-        SC2Mission.AMON_S_FALL: "Amon's Fall: Victory",
-        SC2Mission.INTO_THE_VOID: "Into the Void: Victory",
-        SC2Mission.THE_ESSENCE_OF_ETERNITY: "The Essence of Eternity: Victory",
+        SC2Mission.AMON_S_FALL: f'{SC2Mission.AMON_S_FALL.mission_name}: Victory',
+        SC2Mission.INTO_THE_VOID: f'{SC2Mission.INTO_THE_VOID.mission_name}: Victory',
+        SC2Mission.THE_ESSENCE_OF_ETERNITY: f'{SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name}: Victory',
     },
     SC2Campaign.NCO: {
-        SC2Mission.FLASHPOINT: "Flashpoint: Victory",
-        SC2Mission.DARK_SKIES: "Dark Skies: Victory",
-        SC2Mission.NIGHT_TERRORS: "Night Terrors: Victory",
-        SC2Mission.TROUBLE_IN_PARADISE: "Trouble In Paradise: Victory"
+        SC2Mission.FLASHPOINT: f'{SC2Mission.FLASHPOINT.mission_name}: Victory',
+        SC2Mission.DARK_SKIES: f'{SC2Mission.DARK_SKIES.mission_name}: Victory',
+        SC2Mission.NIGHT_TERRORS: f'{SC2Mission.NIGHT_TERRORS.mission_name}: Victory',
+        SC2Mission.TROUBLE_IN_PARADISE: f'{SC2Mission.TROUBLE_IN_PARADISE.mission_name}: Victory'
     }
 }
 
