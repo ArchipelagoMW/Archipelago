@@ -561,7 +561,7 @@ class TunicWorld(World):
             "sword_progression": self.options.sword_progression.value,
             "ability_shuffling": self.options.ability_shuffling.value,
             "hexagon_quest": self.options.hexagon_quest.value,
-            "hexagon_quest_ability_type": self.options.hexagon_quest_ability_type,
+            "hexagon_quest_ability_type": self.options.hexagon_quest_ability_type.value,
             "fool_traps": self.options.fool_traps.value,
             "laurels_zips": self.options.laurels_zips.value,
             "ice_grappling": self.options.ice_grappling.value,

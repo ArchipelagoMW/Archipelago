@@ -1,10 +1,9 @@
-from random import Random
 from typing import Dict, TYPE_CHECKING
 from decimal import Decimal, ROUND_HALF_UP
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
-from .options import TunicOptions, LadderStorage, IceGrappling, HexagonQuestAbilityUnlockType
+from .options import LadderStorage, IceGrappling, HexagonQuestAbilityUnlockType
 if TYPE_CHECKING:
     from . import TunicWorld
 

@@ -1,12 +1,14 @@
 import logging
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Dict, Any, TYPE_CHECKING
 
 from decimal import Decimal, ROUND_HALF_UP
 
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
                      PerGameCommonOptions, OptionGroup, Removed, Visibility)
 from .er_data import portal_mapping
+if TYPE_CHECKING:
+    from . import TunicWorld
 
 
 class SwordProgression(DefaultOnToggle):
@@ -112,10 +114,9 @@ class HexagonQuestAbilityUnlockType(Choice):
     """
     Determines how abilities are unlocked when playing Hexagon Quest with Shuffled Abilities enabled.
 
-    Hexagons: A new ability is randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
+    Hexagons: A new ability is randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount. Requires at least 3 Gold Hexagons in the item pool, or 15 if Keys Behind Bosses is enabled.
     Pages: Abilities are unlocked by finding specific pages in the manual.
 
-    This option will default to Pages if there aren't enough Gold Hexagons in the item pool.
     This option does nothing if Shuffled Abilities is not enabled.
     """
     internal_name = "hexagon_quest_ability_type"
@@ -439,4 +440,4 @@ def check_options(world: "TunicWorld"):
             min_hexes = 15
         if total_hexes < min_hexes:
             logging.warning("TUNIC: Not enough Gold Hexagons in the item pool for Hexagon Ability Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
-            options.hexagon_quest_ability_type = HexagonQuestAbilityUnlockType.option_pages
+            options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
