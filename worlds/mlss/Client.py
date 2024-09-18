@@ -189,7 +189,7 @@ class MLSSClient(BizHawkClient):
                 if backup_logo != "MLSSAP":
                     return
                 if flag_byte & mask != 0:
-                    if 0xDA0000 <= location < 0xE00000 and location not in self.local_events:
+                    if location >= 0xDA0000 and location not in self.local_events:
                         self.local_events += [location]
                         await ctx.send_msgs(
                             [

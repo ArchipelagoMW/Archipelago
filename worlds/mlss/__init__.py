@@ -89,7 +89,7 @@ class MLSSWorld(World):
         self.get_location(LocationName.PantsShopStartingFlag1).place_locked_item(item)
         item = self.create_item("Chuckle Bean")
         self.get_location(LocationName.PantsShopStartingFlag2).place_locked_item(item)
-        item = self.create_item("Victory")
+        item = MLSSItem("Victory", ItemClassification.progression, None, self.player)
         self.get_location("Cackletta's Soul").place_locked_item(item)
 
     def fill_slot_data(self) -> Dict[str, Any]:

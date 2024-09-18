@@ -4,9 +4,6 @@ from BaseClasses import Location
 
 
 class LocationData:
-    name: str = ""
-    id: int = 0x00
-
     def __init__(self, name, id_, itemType):
         self.name = name
         self.itemType = itemType
@@ -767,7 +764,7 @@ oasis: typing.List[LocationData] = [
 ]
 
 cacklettas_soul: typing.List[LocationData] = [
-    LocationData("Cackletta's Soul", 0xF00000, 0),
+    LocationData("Cackletta's Soul", None, 0),
 ]
 
 nonBlock = [
@@ -849,7 +846,6 @@ nonBlock = [
     (0x433D, 0x8, 0xDA0005),  # Beanstar
     (0x430F, 0x40, 0xDA0006),  # Jojora
     (0x433D, 0x10, 0xDA0007),  # Birdo
-    (0x4407, 0x40, 0xF00000),  # Cackletta
 ]
 
 roomException = {
