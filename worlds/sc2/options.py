@@ -806,7 +806,7 @@ class ExcludedMissions(Sc2MissionSet):
     Doesn't apply to vanilla mission order.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
-    valid_keys = lookup_name_to_mission.keys()
+    valid_keys = {mission.mission_name for mission in SC2Mission}
 
 
 class ExcludeVeryHardMissions(Choice):
