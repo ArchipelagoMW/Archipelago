@@ -281,7 +281,7 @@ class MusicChangeCondition(Choice):
 
 class HardMode(Choice, LADXROption):
     """
-    [Oracle] Less iframes and heath from drops. Bombs damage yourself. Water damages you without flippers. No piece of power or acorn.
+    [Oracle] Less iframes and health from drops. Bombs damage yourself. Water damages you without flippers. No piece of power or acorn.
     [Hero] Switch version hero mode, double damage, no heart/fairy drops.
     [One hit KO] You die on a single hit, always.
     """
