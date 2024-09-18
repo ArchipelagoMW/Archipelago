@@ -273,6 +273,7 @@ class TunicWorld(World):
         if self.options.hexagon_quest:
             items_to_create[gold_hexagon] = min(
                 int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP)), 100)
+
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
