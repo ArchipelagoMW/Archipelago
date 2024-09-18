@@ -13,7 +13,7 @@ from settings import get_settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
 from .Arrays import item_dict, level_address, level_header, level_locations, level_size
-from .Items import items_by_id
+from .Items import items_by_id, ItemData
 from .Locations import location_data, GLLocation
 
 if typing.TYPE_CHECKING:
@@ -120,7 +120,7 @@ class GLPatchExtension(APPatchExtension):
                     continue
                 if "Mirror" in location_name:
                     continue
-                if "Obelisk" in location_name and "Obelisk" not in items_by_id[item[0]].item_name:
+                if "Obelisk" in location_name and "Obelisk" not in items_by_id.get(item[0], ItemData(0, "", ItemClassification.filler)).item_name:
                     try:
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
                         data.items += [
