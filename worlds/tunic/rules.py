@@ -4,7 +4,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
-from .options import TunicOptions, LadderStorage, IceGrappling
+from .options import TunicOptions, LadderStorage, IceGrappling, HexagonQuestAbilityUnlockType
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -47,7 +47,7 @@ def randomize_ability_unlocks(world: "TunicWorld") -> Dict[str, int]:
     ability_requirement = [1, 1, 1]
     random.shuffle(abilities)
 
-    if options.hexagon_quest.value and options.hexagon_quest_ability_type == "hexagons":
+    if options.hexagon_quest.value and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
         hexagon_goal = options.hexagon_goal.value
         # Set ability unlocks to 25, 50, and 75% of goal amount
         ability_requirement = [hexagon_goal // 4, hexagon_goal // 2, hexagon_goal * 3 // 4]
@@ -62,7 +62,7 @@ def has_ability(ability: str, state: CollectionState, world: "TunicWorld") -> bo
     ability_unlocks = world.ability_unlocks
     if not options.ability_shuffling:
         return True
-    if options.hexagon_quest and options.hexagon_quest_ability_type == "hexagons":
+    if options.hexagon_quest and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
         return state.has(gold_hexagon, world.player, ability_unlocks[ability])
     return state.has(ability, world.player)
 
