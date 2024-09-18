@@ -1,4 +1,4 @@
-from typing import Any, List, Dict, Tuple, Mapping
+from typing import Any, List, Dict, Tuple, Mapping, Optional
 
 from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
@@ -179,8 +179,12 @@ class ShapezWorld(World):
     def append_shapesanity(self, name: str) -> None:
         self.shapesanity_names.append(name)
 
+    def add_alias(self, location_name: str, alias: str):
+        self.location_id_to_alias[self.location_name_to_id[location_name]] = alias
+
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
+        self.location_id_to_alias = {}
 
         # Create list of all included locations based on player options
         self.included_locations = {**addlevels(self.maxlevel, self.options.randomize_level_logic.current_key,
@@ -189,15 +193,11 @@ class ShapezWorld(World):
                                                  self.category_random_logic_amounts)}
         if self.ut_active:
             self.shapesanity_names = self.passthrough["shapesanity"]
-            self.included_locations.update(addshapesanity_ut(self.shapesanity_names))
+            self.included_locations.update(addshapesanity_ut(self.shapesanity_names, self.add_alias))
         else:
             self.shapesanity_names = []
             self.included_locations.update(addshapesanity(self.options.shapesanity_amount.value, self.random,
-                                                          self.append_shapesanity))
-        self.location_id_to_alias = {}
-        for shapesanity_name in self.shapesanity_names:
-            location_name = f"Shapesanity {self.shapesanity_names.index(shapesanity_name)+1}"
-            self.location_id_to_alias[self.location_name_to_id[location_name]] = shapesanity_name
+                                                          self.append_shapesanity, self.add_alias))
         if self.options.include_achievements:
             self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
                                                            bool(self.options.exclude_long_playtime_achievements),
@@ -206,7 +206,7 @@ class ShapezWorld(World):
                                                            self.options.randomize_upgrade_logic.current_key,
                                                            self.category_random_logic_amounts,
                                                            self.options.goal.current_key,
-                                                           self.included_locations))
+                                                           self.included_locations, self.add_alias))
 
         self.location_count = len(self.included_locations)
 

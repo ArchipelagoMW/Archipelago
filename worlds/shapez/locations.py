@@ -422,70 +422,66 @@ def addupgrades(finaltier: int, logictype: str,
 
 def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive: bool,
                     maxlevel: int, upgradelogictype: str, category_random_logic_amounts: Dict[str, int],
-                    goal: str, presentlocations: Dict[str, Tuple[str, LocationProgressType]]) \
-                    -> Dict[str, Tuple[str, LocationProgressType]]:
+                    goal: str, presentlocations: Dict[str, Tuple[str, LocationProgressType]],
+                    add_alias: Callable[[str,str],None]) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all achievement locations based on player options."""
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
 
-    locations["My eyes no longer hurt"] = ("Menu", LocationProgressType.DEFAULT)
-    locations["Painter"] = ("Painted Shape Achievements", LocationProgressType.DEFAULT)
-    locations["Cutter"] = ("Cut Shape Achievements", LocationProgressType.DEFAULT)
-    locations["Rotater"] = ("Rotated Shape Achievements", LocationProgressType.DEFAULT)
-    locations["Wait, they stack?"] = ("Stacked Shape Achievements", LocationProgressType.DEFAULT)
-    locations["Storage"] = ("Stored Shape Achievements", LocationProgressType.DEFAULT)
-    locations["The logo!"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["To the moon"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["It's piling up"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["I'll use it later"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["Efficiency 1"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["Preparing to launch"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["SpaceY"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["Stack overflow"] = ("Stacked Shape Achievements", LocationProgressType.DEFAULT)
-    locations["It's a mess"] = ("Main", LocationProgressType.DEFAULT)
-    locations["Even faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
-    locations["Get rid of them"] = ("Trashed Shape Achievements", LocationProgressType.DEFAULT)
-    locations["Getting into it"] = ("Menu", LocationProgressType.DEFAULT)
-    locations["Now it's easy"] = ("Blueprint Achievements", LocationProgressType.DEFAULT)
-    locations["Computer Guy"] = ("Wiring Achievements", LocationProgressType.DEFAULT)
-    locations["Efficiency 2"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["Branding specialist 1"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["Branding specialist 2"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["Perfectionist"] = ("Main", LocationProgressType.DEFAULT)
-    locations["The next dimension"] = ("Wiring Achievements", LocationProgressType.DEFAULT)
-    locations["Oops"] = ("Main", LocationProgressType.DEFAULT)
-    locations["Copy-Pasta"] = ("Blueprint Achievements", LocationProgressType.DEFAULT)
-    locations["I've seen that before ..."] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["Memories from the past"] = ("All Buildings Shapes", LocationProgressType.DEFAULT)
-    locations["I need trains"] = ("Main", LocationProgressType.DEFAULT)
-    locations["GPS"] = ("Menu", LocationProgressType.DEFAULT)
+    def f(name: str, region: str, alias: str, progress: LocationProgressType = LocationProgressType.DEFAULT):
+        locations[name] = (region, progress)
+        add_alias(name, alias)
+
+    f("My eyes no longer hurt", "Menu", "Activate dark mode")
+    f("Painter", "Painted Shape Achievements", "Paint a shape")
+    f("Cutter", "Cut Shape Achievements", "Cut a shape")
+    f("Rotater", "Rotated Shape Achievements", "Rotate a shape")
+    f("Wait, they stack?", "Stacked Shape Achievements", "Stack a shape")
+    f("Storage", "Stored Shape Achievements", "Store a shape in the storage")
+    f("The logo!", "All Buildings Shapes", "Produce the shapez.io logo")
+    f("To the moon", "All Buildings Shapes", "Produce the rocket shape")
+    f("It's piling up", "All Buildings Shapes", "100k blueprint shapes")
+    f("I'll use it later", "All Buildings Shapes", "1 million blueprint shapes")
+    f("Efficiency 1", "All Buildings Shapes", "25 blueprints shapes / second")
+    f("Preparing to launch", "All Buildings Shapes", "10 rocket shapes / second")
+    f("SpaceY", "All Buildings Shapes", "20 rocket shapes / second")
+
+    f("Stack overflow", "Stacked Shape Achievements", "4 layers shape")
+    f("It's a mess", "Main", "100 different shapes")
+    f("Even faster", "Upgrades with 5 Buildings", "All upgrades on tier 8")
+    f("Get rid of them", "Trashed Shape Achievements", "1000 shapes trashed")
+    f("Getting into it", "Menu", "1 hour")
+    f("Now it's easy", "Blueprint Achievements", "Place a blueprint")
+    f("Computer Guy", "Wiring Achievements", "Place 5,000 wires")
+    f("Efficiency 2", "All Buildings Shapes", "50 blueprints shapes / second")
+    f("Branding specialist 1", "All Buildings Shapes", "25 logo shapes / second")
+    f("Branding specialist 2", "All Buildings Shapes", "50 logo shapes / second")
+    f("Perfectionist", "Main", "Destroy more than 1000 objects at once")
+    f("The next dimension", "Wiring Achievements", "Open the wires layer")
+    f("Oops", "Main", "Deliver an irrelevant shape")
+    f("Copy-Pasta", "Blueprint Achievements", "Place a 1000 buildings blueprint")
+    f("I've seen that before ...", "All Buildings Shapes", "Produce RgRyRbRr")
+    f("Memories from the past", "All Buildings Shapes", "Produce WrRgWrRg:CwCrCwCr:SgSgSgSg")
+    f("I need trains", "Main", "Have a 500 tiles belt")
+    f("GPS", "Menu", "15 map markers")
     # Achievements that depend on upgrades
     if upgradelogictype == "linear":
-        locations["Faster"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
-    elif upgradelogictype == "category_random":
-        maxneededbuildings = max(category_random_logic_amounts["belt"], category_random_logic_amounts["miner"],
-                                 category_random_logic_amounts["processors"], category_random_logic_amounts["painting"])
-        if maxneededbuildings == 0:
-            locations["Faster"] = ("Main", LocationProgressType.DEFAULT)
-        elif maxneededbuildings == 1:
-            locations["Faster"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
-        else:
-            locations["Faster"] = (f"Upgrades with {maxneededbuildings} Buildings", LocationProgressType.DEFAULT)
+        f("Faster", "Upgrades with 3 Buildings", "All upgrades on tier 5")
     else:
-        locations["Faster"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
+        f("Faster", "Upgrades with 5 Buildings", "All upgrades on tier 5")
     # Achievements that depend on the level
-    locations["Wires"] = (presentlocations["Level 20"][0], LocationProgressType.DEFAULT)
+    f("Wires", presentlocations["Level 20"][0], "Complete level 20")
     if not goal == "vanilla":
-        locations["Freedom"] = (presentlocations["Level 26"][0], LocationProgressType.DEFAULT)
-        locations["MAM (Make Anything Machine)"] = ("MAM needed", LocationProgressType.DEFAULT)
+        f("Freedom", presentlocations["Level 26"][0], "Complete level 26")
+        f("MAM (Make Anything Machine)", "MAM needed", "Complete any level > 26 without modifications")
     if maxlevel >= 50:
-        locations["Can't stop"] = (presentlocations["Level 50"][0], LocationProgressType.DEFAULT)
+        f("Can't stop", presentlocations["Level 50"][0], "Reach level 50")
     elif not goal == "vanilla":
-        locations["Can't stop"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        f("Can't stop", "Levels with 5 Buildings", "Reach level 50")
     if maxlevel >= 100:
-        locations["Is this the end?"] = (presentlocations["Level 100"][0], LocationProgressType.DEFAULT)
+        f("Is this the end?", presentlocations["Level 100"][0], "Reach level 100")
     elif not goal == "vanilla":
-        locations["Is this the end?"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        f("Is this the end?", "Levels with 5 Buildings", "Reach level 100")
 
     if excludeprogressive:
         unreasonable_type = LocationProgressType.EXCLUDED
@@ -493,22 +489,23 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
         unreasonable_type = LocationProgressType.DEFAULT
 
     if not excludesoftlock:
-        locations["Speedrun Master"] = (presentlocations["Level 12"][0], unreasonable_type)
-        locations["Speedrun Novice"] = (presentlocations["Level 12"][0], unreasonable_type)
-        locations["Not an idle game"] = (presentlocations["Level 12"][0], unreasonable_type)
-        locations["It's so slow"] = (presentlocations["Level 12"][0], unreasonable_type)
-        locations["King of Inefficiency"] = (presentlocations["Level 14"][0], unreasonable_type)
-        locations["A bit early?"] = ("All Buildings Shapes", unreasonable_type)
+        f("Speedrun Master", presentlocations["Level 12"][0], "Complete level 12 in under 30 min", unreasonable_type)
+        f("Speedrun Novice", presentlocations["Level 12"][0], "Complete level 12 in under 60 min", unreasonable_type)
+        f("Not an idle game", presentlocations["Level 12"][0], "Complete level 12 in under 120 min", unreasonable_type)
+        f("It's so slow", presentlocations["Level 12"][0],
+          "Complete level 12 without upgrading belts", unreasonable_type)
+        f("King of Inefficiency", presentlocations["Level 14"][0], "No ccw rotator until level 14", unreasonable_type)
+        f("A bit early?", "All Buildings Shapes", "Produce logo shape before level 18", unreasonable_type)
 
     if not excludelong:
-        locations["It's been a long time"] = ("Menu", unreasonable_type)
-        locations["Addicted"] = ("Menu", unreasonable_type)
+        f("It's been a long time", "Menu", "10 hours")
+        f("Addicted", "Menu", "20 hours")
 
     return locations
 
 
-def addshapesanity(amount: int, random: Random,
-                   append_shapesanity: Callable[[str],None]) -> Dict[str, Tuple[str, LocationProgressType]]:
+def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[str],None],
+                   add_alias: Callable[[str,str],None]) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with a given number of random shapesanity locations."""
 
     included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
@@ -526,6 +523,10 @@ def addshapesanity(amount: int, random: Random,
     shapes_list.remove((f"Uncolored Star", "Shapesanity Full Uncolored"))
     shapes_list.remove((f"Uncolored Square", "Shapesanity Full Uncolored"))
     shapes_list.remove((f"Uncolored Windmill", "Shapesanity East Windmill Uncolored"))
+    add_alias("Shapesanity 1", "Uncolored Circle")
+    add_alias("Shapesanity 2", "Uncolored Star")
+    add_alias("Shapesanity 3", "Uncolored Square")
+    add_alias("Shapesanity 4", "Uncolored Windmill")
     switched = 0
     for counting in range(4, amount):
         if switched == 0 and (len(shapes_list) == 0 or counting == amount//2):
@@ -542,14 +543,16 @@ def addshapesanity(amount: int, random: Random,
             switched = 4
         x = random.randint(0, len(shapes_list)-1)
         next_shape = shapes_list.pop(x)
-        included_shapes[f"Shapesanity {counting}"] = (next_shape[1], LocationProgressType.DEFAULT)
+        included_shapes[f"Shapesanity {counting+1}"] = (next_shape[1], LocationProgressType.DEFAULT)
         append_shapesanity(next_shape[0])
+        add_alias(f"Shapesanity {counting+1}", next_shape[0])
 
     return included_shapes
 
 
-def addshapesanity_ut(shapesanity_names: List[str]) -> Dict[str, Tuple[str, LocationProgressType]]:
-    """Returns the same information as addshapesanity but will add specific values based on a UT rebuild"""
+def addshapesanity_ut(shapesanity_names: List[str], add_alias: Callable[[str,str],None]
+                      ) -> Dict[str, Tuple[str, LocationProgressType]]:
+    """Returns the same information as addshapesanity but will add specific values based on a UT rebuild."""
 
     included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
 
@@ -562,6 +565,7 @@ def addshapesanity_ut(shapesanity_names: List[str]) -> Dict[str, Tuple[str, Loca
         else:
             raise ValueError(f"Could not find shapesanity name {name}")
         included_shapes[f"Shapesanity {len(included_shapes)+1}"] = (next_shape, LocationProgressType.DEFAULT)
+        add_alias(f"Shapesanity {len(included_shapes)}", name)
     return included_shapes
 
 
