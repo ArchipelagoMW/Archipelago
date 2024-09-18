@@ -94,8 +94,8 @@ class MakeCommand(CLICommand):
             with open(output_filename + '.spoiler.public', 'w') as outfile:
                 outfile.write(build_output.public_spoiler)
 
-        with open(output_filename + '.spoiler.private', 'w') as outfile:
-            outfile.write(build_output.private_spoiler)
+        #with open(output_filename + '.spoiler.private', 'w') as outfile:
+        #    outfile.write(build_output.private_spoiler)
 
         #if args.metrics and report is not None:
         #    print(report.metrics)

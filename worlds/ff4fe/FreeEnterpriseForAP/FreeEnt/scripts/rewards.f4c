@@ -460,6 +460,11 @@ msfpatch {
         cmp #$04
         bcs $+ExternalReward
 
+        // mark slot as delivered
+        lda $_Rewards__CurrentSlot
+        ldx #$_Tracker__RewardSlotFlags
+        jsl $=Tracker__SetBit
+
         and #$02
         beq $+IsRegularItem
 
@@ -470,10 +475,6 @@ msfpatch {
         // key item reward that can be given as inventory item
         jsl $=Rewards__DeliverKeyItemSideEffects
 
-        // mark slot as delivered
-        lda $_Rewards__CurrentSlot
-        ldx #$_Tracker__RewardSlotFlags
-        jsl $=Tracker__SetBit
 
     %IsRegularItem:
         lda $_Rewards__CurrentValueLo

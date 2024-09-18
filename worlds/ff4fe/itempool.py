@@ -11,7 +11,8 @@ def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[s
     key_item_pool = create_key_item_pool(world)
     location_count = len(locations) - len(character_pool) - len(key_item_pool) - 33  # Objective Status locations hack
     if world.is_vanilla_game():
-        location_count -= 1
+        key_item_pool.append("Crystal")
+        location_count -= 2  # We're adding in the crystal manually, and we aren't using the Objective Reward location.
     if (world.options.HeroChallenge.current_key != "none"
             and not world.options.ForgeTheCrystal):
         location_count -= 1  # We're manually placing the Advance Weapon at Kokkol
@@ -23,7 +24,8 @@ def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[s
     result_pool.extend(character_pool)
     result_pool.extend(key_item_pool)
     result_pool.extend(world.random.choices([item.name for item in items.useful_items
-                                             if item.tier <= world.options.MaxTier.value],
+                                             if item.tier <= world.options.MaxTier.value
+                                             and not (item.name == "Adamant Armor" and world.options.NoAdamantArmors)],
                                             k=useful_count))
     result_pool.extend(world.random.choices([item.name for item in items.filler_items
                                              if item.tier >= world.options.MinTier.value],
@@ -33,17 +35,14 @@ def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[s
 
 def create_character_pool(world: World, chosen_character: str) -> List[str]:
     character_pool = []
-    allowed_characters = [character for character in world.options.AllowedCharacters.value if character != "None"]
-    if chosen_character != "None":
+    allowed_characters = sorted([character for character in world.options.AllowedCharacters.value if character != "None"])
+    if chosen_character != "None" and world.options.HeroChallenge.current_key != "none":
         if chosen_character in allowed_characters and len(allowed_characters) > 1:
             allowed_characters.remove(chosen_character)
-    if "None" in allowed_characters and len(allowed_characters) == 1:
-        allowed_characters = [character for character in items.characters if character != "None"]
     character_slots = 18 # All slots
     filled_character_slots = 0
-    if world.options.HeroChallenge.current_key != "none":
-        character_pool.append(chosen_character)
-        filled_character_slots += 1
+    character_pool.append(chosen_character)
+    filled_character_slots += 1
     if world.options.NoFreeCharacters:
         filled_character_slots += len(free_character_locations)
     if world.options.NoEarnedCharacters:
@@ -71,7 +70,11 @@ def get_chosen_character(world: World):
         else:
             chosen_character = option_value.capitalize()
     else:
-        chosen_character = world.random.choice(list(world.options.AllowedCharacters.value))
+        allowed_characters = world.options.AllowedCharacters.value - world.options.RestrictedCharacters.value - {"None"}
+        if len(allowed_characters) > 0:
+            chosen_character = world.random.choice(sorted(allowed_characters))
+        else:
+            chosen_character = world.random.choice(sorted(world.options.AllowedCharacters.value))
     return chosen_character
 
 

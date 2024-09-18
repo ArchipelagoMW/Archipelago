@@ -1,4 +1,5 @@
 import os
+import pkgutil
 
 from . import databases
 from .address import *
@@ -64,7 +65,7 @@ def apply(env):
 
         # apply script of the same name, if it exists
         script_filename = f'scripts/wacky/{wacky_challenge}.f4c'
-        if os.path.isfile(os.path.join(__file__, script_filename)):
+        if pkgutil.get_data(__name__, script_filename) is not None:
             env.add_file(script_filename)
 
         apply_func = globals().get(f'apply_{wacky_challenge}', None)
@@ -280,8 +281,8 @@ def apply_darts(env):
     env.add_substitution('wacky_fightcommandreplacement', '#$16')
 
 def apply_unstackable(env):
-    env.add_toggle('wacky_unstackable')
     env.add_toggle('wacky_initialize_axtor_hook')
+    env.add_toggle('wacky_unstackable')
 
 def apply_menarepigs(env):
     env.add_toggle('wacky_initialize_axtor_hook')

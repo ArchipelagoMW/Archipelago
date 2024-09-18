@@ -489,10 +489,16 @@ def apply(env):
         # assign key items
         if env.options.ap_data is not None:
             for slot in RewardSlot:
-                skip_list = [0x2D, 0x39, 0x3A, 0x5A, 0x5D, 0x5F, 0x60]
-                if slot < 0x20 or slot in skip_list:
+                skip_list = [0x5A, 0x5D, 0x5F, 0x60]
+                if slot == RewardSlot.feymarch_item:
+                    id = 0x13D
+                elif slot == RewardSlot.lunar_boss_4_item_1:
+                    id = 0x19F
+                elif slot == RewardSlot.lunar_boss_4_item_2:
+                    id = 0x1A0
+                elif slot < 0x20 or slot in skip_list:
                     continue  # not doing characters here
-                if slot >= 0x3C and slot <= 0x58:
+                elif slot >= 0x3C and slot <= 0x58:
                     id = treasure_dbview.find_one(
                         lambda t: t.map == CHEST_NUMBERS[slot][0] and
                                   t.index == CHEST_NUMBERS[slot][1]).flag
@@ -500,8 +506,11 @@ def apply(env):
                     id = slot + 0x200
                 if int(id) == 0x25B and env.options.flags.has('objective_mode_classicforge'):
                     continue
-                ap_item = env.options.ap_data[str(id)]
-                placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
+                try:
+                    ap_item = env.options.ap_data[str(id)]
+                    placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
+                except KeyError:
+                    placement = None
                 if placement is None:
                     reward = ItemReward("#item.Cure1")
                 else:

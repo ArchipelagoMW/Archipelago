@@ -137,7 +137,11 @@ class FF4FEWorld(World):
             overworld.locations.append(new_location)
 
     def create_item(self, item: str) -> FF4FEItem:
-        item_data: ItemData = [item_data for item_data in all_items if item_data.name == item].pop()
+        try:
+            item_data: ItemData = [item_data for item_data in all_items if item_data.name == item].pop()
+        except IndexError:
+            print(item)
+            raise IndexError
         return FF4FEItem(item, item_data.classification, self.item_name_to_id[item], self.player)
 
     def create_event(self, event: str) -> FF4FEItem:
@@ -145,16 +149,35 @@ class FF4FEWorld(World):
         return FF4FEItem(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
-        exclude = [item for item in self.multiworld.precollected_items[self.player] if item != "None"]
         item_pool_result = create_itempool(locations.all_locations, self)
         item_pool = item_pool_result[0]
         self.chosen_character = item_pool_result[1]
         chosen_character_placed = False
+
+        character_locations = locations.character_locations.copy()
+        character_locations.remove("Starting Character 1")
+        if self.options.ConquerTheGiant:
+            character_locations.remove("Giant of Bab-il Character")
+        if self.options.NoFreeCharacters:
+            for location in locations.free_character_locations:
+                character_locations.remove(location)
+                self.get_location(location).place_locked_item(self.create_item("None"))
+                item_pool.remove("None")
+        if self.options.NoEarnedCharacters:
+            for location in locations.earned_character_locations:
+                character_locations.remove(location)
+                self.get_location(location).place_locked_item(self.create_item("None"))
+                item_pool.remove("None")
+        self.multiworld.random.shuffle(character_locations)
+
         for item in map(self.create_item, item_pool):
             if item.name == self.chosen_character and not chosen_character_placed:
                 (self.get_location("Starting Character 1")
                  .place_locked_item(self.create_item(self.chosen_character)))
                 chosen_character_placed = True
+                continue
+            elif item.name in items.characters:
+                self.get_location(character_locations.pop()).place_locked_item(self.create_item(item.name))
                 continue
             if item.name == "Crystal":
                 if not self.is_vanilla_game():
@@ -191,6 +214,11 @@ class FF4FEWorld(World):
                         continue
                 add_item_rule(self.get_location(location.name),
                               lambda item: item.name not in items.characters)
+                if self.options.ItemPlacement.current_key == "major_minor_split" and location.major_slot == False:
+                    add_item_rule(self.get_location(location.name),
+                                  lambda item: (item.classification & ItemClassification.progression == 0) and item.name != "DkMatter")
+                else:
+                    print(location.name)
 
         if not self.options.AllowDuplicateCharacters and len(self.options.AllowedCharacters.value) > 1:
             add_item_rule(self.get_location("Starting Character 2"),
@@ -236,6 +264,7 @@ class FF4FEWorld(World):
                               lambda item: (item.classification & (ItemClassification.useful | ItemClassification.progression)) > 0)
             for i in range(len(FERules.location_tiers.keys())):
                 if (location.area in FERules.location_tiers[i]
+                        and self.options.ItemPlacement.current_key == "normal"
                         and location.name not in locations.character_locations
                         and not location.name.startswith("Objective")):
                     add_rule(self.get_location(location.name),
@@ -315,6 +344,10 @@ class FF4FEWorld(World):
         else:
             self.multiworld.completion_condition[self.player] = lambda state: state.has("All Objectives Cleared", self.player)
 
+    def post_fill(self) -> None:
+        unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
+        for location in unfilled_locations:
+            location.item = self.create_item(self.get_filler_item_name())
 
     def generate_output(self, output_directory: str) -> None:
         self.rom_name_text = f'4FE{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'

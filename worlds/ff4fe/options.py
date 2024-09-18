@@ -32,8 +32,20 @@ class AdditionalObjectives(Range):
 class ObjectiveReward(Choice):
     """The reward for clearing all objectives. Note that this is ignored when no objectives are set,
     and Forge the Crystal forces this to the Crystal setting"""
+    display_name = "Objective Reward"
     option_crystal = 0
     option_win = 1
+    default = 0
+
+class ItemPlacement(Choice):
+    """Where items can and will be placed.
+    Setting this to Full Shuffle will allow any items to be anywhere.
+    Setting this to Major Minor Split will force all non-major locations to never have progression.
+    In either case, major locations can only have useful or progression items.
+    Major locations are any non-treasure chest locations"""
+    display_name = "Item Placement"
+    option_full_shuffle = 0
+    option_major_minor_split = 1
     default = 0
 
 class NoFreeCharacters(Toggle):
@@ -152,6 +164,49 @@ class FreeShops(Toggle):
     """Everything must go!"""
     display_name = "Free Shops"
 
+class NoAdamantArmors(Toggle):
+    """Remove Adamant Armor from the item and shop pool."""
+    display_name = "No Adamant Armor"
+
+class WackyChallenge(Choice):
+    """Wacky challenges are not fair, balanced, stable, or even necessarily interesting.
+    They are, however, quite wacky. See FE documentation for more info."""
+    display_name = "Wacky Challenge"
+    option_none = 0
+    option_afflicted = 1
+    option_battle_scars = 2
+    option_the_bodyguard = 3
+    option_enemy_unknown = 4
+    option_ff4_the_musical = 5
+    option_fist_fight = 6
+    option_forward_is_the_new_back = 7
+    option_friendly_fire = 8
+    option_the_floor_is_made_of_lava = 9
+    option_gotta_go_fast = 10
+    option_holy_onomatopoeia_batman = 11
+    option_imaginary_numbers = 12
+    option_is_this_even_randomized = 13
+    option_kleptomania = 14
+    option_men_are_pigs = 15
+    option_misspelled = 16
+    option_a_much_bigger_magnet = 17
+    option_mystery_juice = 18
+    option_neat_freak = 19
+    option_night_mode = 20
+    option_omnidexterous = 21
+    option_payable_golbez = 22
+    option_save_us_big_chocobo = 23
+    option_six_legged_race = 24
+    option_the_sky_warriors = 25
+    option_something_worth_fighting_for = 26
+    option_the_tellah_maneuver = 27
+    option_three_point_system = 28
+    option_time_is_money = 29
+    option_unstackable = 30
+    option_world_championship_of_darts = 31
+    option_zombies = 32
+    option_random_challenge = 33
+
 class StarterKitOne(Choice):
     """FE Starter Kit 1"""
     display_name = "Starter Kit One"
@@ -256,6 +311,7 @@ class FF4FEOptions(PerGameCommonOptions):
     FindTheDarkMatter: FindTheDarkMatter
     AdditionalObjectives: AdditionalObjectives
     ObjectiveReward: ObjectiveReward
+    ItemPlacement: ItemPlacement
     NoFreeCharacters: NoFreeCharacters
     NoEarnedCharacters: NoEarnedCharacters
     HeroChallenge: HeroChallenge
@@ -275,6 +331,8 @@ class FF4FEOptions(PerGameCommonOptions):
     JunkTier: JunkTier
     ShopRandomization: ShopRandomization
     FreeShops: FreeShops
+    NoAdamantArmors: NoAdamantArmors
+    WackyChallenge: WackyChallenge
     StarterKitOne: StarterKitOne
     StarterKitTwo: StarterKitTwo
     StarterKitThree: StarterKitThree

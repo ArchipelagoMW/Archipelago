@@ -3,7 +3,7 @@ from . import FF4FEOptions
 
 def create_flags_from_options(options: FF4FEOptions):
     flags = (f"{build_objective_flags(options)} "
-             f"Kmain/summon/moon/unsafe "
+             f"Kmain/summon/moon/unsafe/miab "
              f"{build_pass_flags(options)} "
              f"{build_characters_flags(options)} "
              f"Twild/junk "
@@ -11,7 +11,7 @@ def create_flags_from_options(options: FF4FEOptions):
              f"Bstandard/alt:gauntlet/whichburn "
              f"Etoggle/keep:doors,behemoths "
              f"Gdupe/mp/warp/life/sylph/backrow "
-             f"-spoon "
+             f"{build_misc_flags(options)}"
              f"{build_starter_kit_flags(options)}")
     return flags
 
@@ -112,8 +112,11 @@ def build_encounters_flags(options: FF4FEOptions):
 def build_glitches_flags(options: FF4FEOptions):
     pass
 
-def build_other_flags(options: FF4FEOptions):
-    pass
+def build_misc_flags(options: FF4FEOptions):
+    spoon_flag = "-spoon"
+    adamant_flag = "-noadamants" if options.NoAdamantArmors else ""
+    wacky_flag = process_wacky_name(options.WackyChallenge.current_key)
+    return f"{spoon_flag} {adamant_flag} {wacky_flag}"
 
 def build_starter_kit_flags(options: FF4FEOptions):
     kit1 = process_kit_name(options.StarterKitOne.current_key)
@@ -147,3 +150,62 @@ def process_kit_name(kit: str):
         return "random"
     else:
         return kit
+
+def process_wacky_name(wacky: str):
+    wacky_flag = ""
+    if wacky == "none":
+        return wacky_flag
+    wacky_flag = "-wacky:"
+    if wacky == "battle_scars":
+        wacky_flag += "battlescars"
+    elif wacky == "the_bodyguard":
+        wacky_flag += "bodyguard"
+    elif wacky == "enemy_unknown":
+        wacky_flag += "enemyunknown"
+    elif wacky == "ff4_the_musical":
+        wacky_flag += "musical"
+    elif wacky == "fist_fight":
+        wacky_flag += "fistfight"
+    elif wacky == "the_floor_is_made_of_lava":
+        wacky_flag += "floorislava"
+    elif wacky == "forward_is_the_new_back":
+        wacky_flag += "forwardisback"
+    elif wacky == "friendly_fire":
+        wacky_flag += "friendlyfire"
+    elif wacky == "gotta_go_fast":
+        wacky_flag += "gottagofast"
+    elif wacky == "holy_onomatopoeia_batman":
+        wacky_flag += "batman"
+    elif wacky == "imaginary_numbers":
+        wacky_flag += "imaginarynumbers"
+    elif wacky == "is_this_even_randomized":
+        wacky_flag += "isthisrandomized"
+    elif wacky == "men_are_pigs":
+        wacky_flag += "menarepigs"
+    elif wacky == "a_much_bigger_magnet":
+        wacky_flag += "biggermagnet"
+    elif wacky == "mystery_juice":
+        wacky_flag += "mysteryjuice"
+    elif wacky == "neat_freak":
+        wacky_flag += "neatfreak"
+    elif wacky == "night_mode":
+        wacky_flag += "nightmode"
+    elif wacky == "payable_golbez":
+        wacky_flag += "payablegolbez"
+    elif wacky == "save_us_big_chocobo":
+        wacky_flag += "saveusbigchocobo"
+    elif wacky == "six_legged_race":
+        wacky_flag += "sixleggedrace"
+    elif wacky == "the_sky_warriors":
+        wacky_flag += "skywarriors"
+    elif wacky == "three_point_system":
+        wacky_flag += "3point"
+    elif wacky == "time_is_money":
+        wacky_flag += "timeismoney"
+    elif wacky == "world_championship_of_darts":
+        wacky_flag += "darts"
+    elif wacky == "random_challenge":
+        wacky_flag += "random"
+    else:
+        wacky_flag += wacky
+    return wacky_flag
