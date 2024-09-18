@@ -138,4 +138,3 @@ def level_scaling(multiworld):
                     sphere_objects[object].level = level_list_copy.pop(0)
     for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
         world.finished_level_scaling.set()
-        
