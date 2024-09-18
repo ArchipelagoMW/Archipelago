@@ -476,6 +476,7 @@ class LinksAwakeningContext(CommonContext):
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
         self.slot_data = {}
+
         if magpie:
             self.magpie_enabled = True
             self.magpie = MagpieBridge()
@@ -645,6 +646,7 @@ class LinksAwakeningContext(CommonContext):
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
                             await self.magpie.send_gps(self.client.gps_tracker)
+                            self.magpie.slot_data = self.slot_data
                         except Exception:
                             # Don't let magpie errors take out the client
                             pass
