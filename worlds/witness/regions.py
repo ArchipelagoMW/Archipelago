@@ -3,7 +3,7 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from collections import defaultdict
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple
 
 from BaseClasses import Entrance, Region
 
@@ -30,6 +30,8 @@ class WitnessPlayerRegions:
             self.reference_logic = static_witness_logic.sigma_normal
         elif difficulty == "sigma_expert":
             self.reference_logic = static_witness_logic.sigma_expert
+        elif difficulty == "umbra_variety":
+            self.reference_logic = static_witness_logic.umbra_variety
         else:
             self.reference_logic = static_witness_logic.vanilla
 
@@ -38,7 +40,7 @@ class WitnessPlayerRegions:
         self.created_region_names: Set[str] = set()
 
     @staticmethod
-    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> CollectionRule:
+    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
         from .rules import _meets_item_requirements
 
         """
@@ -79,7 +81,9 @@ class WitnessPlayerRegions:
             source_region
         )
 
-        connection.access_rule = self.make_lambda(final_requirement, world)
+        rule = self.make_lambda(final_requirement, world)
+        if rule is not None:
+            connection.access_rule = rule
 
         source_region.exits.append(connection)
         connection.connect(target_region)

@@ -49,7 +49,7 @@ def get_always_hint_items(world: "WitnessWorld") -> List[str]:
     wincon = world.options.victory_condition
 
     if discards and world.options.discard_symbol_hint == "always_hint":
-        if difficulty == "sigma_expert":
+        if difficulty == "sigma_expert" or difficulty == "umbra_variety":
             always.append("Arrows")
         else:
             always.append("Triangles")
@@ -199,7 +199,7 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
 def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> WitnessWordedHint:
     location_name = hint.location.name
     if hint.location.player != world.player:
-        location_name += " (" + world.player_name + ")"
+        location_name += " (" + world.multiworld.get_player_name(hint.location.player) + ")"
 
     item = hint.location.item
 
@@ -208,7 +208,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
         item_name = item.name
 
         if item.player != world.player:
-            item_name += " (" + world.player_name + ")"
+            item_name += " (" + world.multiworld.get_player_name(item.player) + ")"
 
     hint_text = ""
     area: Optional[str] = None

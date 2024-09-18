@@ -24,6 +24,21 @@ _impossible_items: Set[str] = {
     "Invisible Dots"
 }
 
+ALWAYS_GOOD_SYMBOL_ITEMS: Set[str] = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+
+MODE_SPECIFIC_GOOD_ITEMS: Dict[str, Set[str]] = {
+    "none": set(),
+    "sigma_normal": set(),
+    "sigma_expert": {"Triangles"},
+    "umbra_variety": {"Triangles"}
+}
+
+MODE_SPECIFIC_GOOD_DISCARD_ITEMS: Dict[str, Set[str]] = {
+    "none": {"Triangles"},
+    "sigma_normal": {"Triangles"},
+    "sigma_expert": {"Arrows"},
+    "umbra_variety": set()  # Variety Discards use both Arrows and Triangles, so neither of them are that useful alone
+}
 
 
 def populate_items() -> None:
