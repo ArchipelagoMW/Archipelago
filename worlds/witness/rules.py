@@ -214,7 +214,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
     """
 
-    direct_items = [rule for rule in requirement_option if isinstance(rule, tuple)]
+    direct_items = [rule for rule in requirement_option if isinstance(rule, SimpleItemRepresentation)]
     if not direct_items:
         return requirement_option
 
@@ -224,7 +224,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
 
     return [
         rule for rule in requirement_option
-        if not (isinstance(rule, tuple) and rule[1] < max_per_item[rule[0]])
+        if not (isinstance(rule, SimpleItemRepresentation) and rule[1] < max_per_item[rule[0]])
     ]
 
 
@@ -234,12 +234,6 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
     If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
     """
-    converted_sublist = []
-
-    for rule in requirement:
-        if not isinstance(rule, tuple):
-            converted_sublist.append(rule)
-            continue
 
     collection_rules = [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
     item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
