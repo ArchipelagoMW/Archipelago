@@ -522,6 +522,10 @@ class WitnessPlayerLogic:
         return postgame_adjustments
 
     def adjust_requirements_for_second_stage_symbols(self, world: "WitnessWorld") -> None:
+        progressive_dots = "Progressive Dots" in world.options.progressive_symbols
+        progressive_stars = "Progressive Stars" in world.options.progressive_symbols
+        progressive_symmetry = "Progressive Symmetry" in world.options.progressive_symbols
+
         for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
             if "items" not in requirement:
                 continue
@@ -531,10 +535,10 @@ class WitnessPlayerLogic:
                 new_requirement_options = set()
                 for requirement_option in requirement["items"]:
                     changed_requirement_option = set(requirement_option)
-                    if "Dots" in requirement_option:
+                    if not progressive_dots and "Dots" in requirement_option:
                         changed_requirement_option.remove("Dots")
                         changed_requirement_option.add("Sparse Dots")
-                    if "Stars" in requirement_option:
+                    if not progressive_stars and "Stars" in requirement_option:
                         changed_requirement_option.remove("Stars")
                         changed_requirement_option.add("Simple Stars")
                     new_requirement_options.add(frozenset(changed_requirement_option))
@@ -545,11 +549,11 @@ class WitnessPlayerLogic:
                 new_requirement_options = set()
                 for requirement_option in requirement["items"]:
                     changed_requirement_option = set(requirement_option)
-                    if "Full Dots" in requirement_option:
+                    if not progressive_dots and "Full Dots" in requirement_option:
                         changed_requirement_option.add("Dots")
-                    if "Stars + Same Colored Symbol" in requirement_option:
+                    if not progressive_stars and "Stars + Same Colored Symbol" in requirement_option:
                         changed_requirement_option.add("Stars")
-                    if "Colored Dots" in requirement_option:
+                    if not progressive_symmetry and "Colored Dots" in requirement_option:
                         changed_requirement_option.add("Symmetry")
                     new_requirement_options.add(frozenset(changed_requirement_option))
                 self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
