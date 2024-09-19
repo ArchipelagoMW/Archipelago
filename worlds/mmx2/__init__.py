@@ -236,7 +236,46 @@ class MMX2World(World):
                 if "Mega Man X2" in self.multiworld.re_gen_passthrough:
                     slot_data = self.multiworld.re_gen_passthrough["Mega Man X2"]
                     self.boss_weaknesses = slot_data["weakness_rules"]
+                    self.boss_weakness_strictness = slot_data["boss_weakness_strictness"]
+                    self.pickupsanity = slot_data["pickupsanity"]
+                    self.jammed_buster = slot_data["jammed_buster"]
+                    self.logic_boss_weakness = slot_data["logic_boss_weakness"]
+                    self.logic_helmet_checkpoints = slot_data["logic_helmet_checkpoints"]
+                    self.base_open = slot_data["base_open"]
+                    self.base_medal_count = slot_data["base_medal_count"]
+                    self.base_weapon_count = slot_data["base_weapon_count"]
+                    self.base_upgrade_count = slot_data["base_upgrade_count"]
+                    self.base_heart_tank_count = slot_data["base_heart_tank_count"]
+                    self.base_sub_tank_count = slot_data["base_sub_tank_count"]
+                    self.base_all_levels = slot_data["base_all_levels"]
+                    self.base_boss_rematch_count = slot_data["base_boss_rematch_count"]
+                    self.x_hunters_medal_count = slot_data["x_hunters_medal_count"]
+
         set_rules(self)
+
+
+    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+        local_weaknesses = {boss: entries for boss, entries in slot_data["weakness_rules"].items()}
+            
+        interpreted_slot_data = {
+            "weakness_rules": local_weaknesses,
+            "boss_weakness_strictness": slot_data["boss_weakness_strictness"],
+            "pickupsanity": slot_data["pickupsanity"],
+            "jammed_buster": slot_data["jammed_buster"],
+            "logic_boss_weakness": slot_data["logic_boss_weakness"],
+            "logic_helmet_checkpoints": slot_data["logic_helmet_checkpoints"],
+            "base_open": slot_data["base_open_text"],
+            "base_medal_count": slot_data["base_medal_count"],
+            "base_weapon_count": slot_data["base_weapon_count"],
+            "base_upgrade_count": slot_data["base_upgrade_count"],
+            "base_heart_tank_count": slot_data["base_heart_tank_count"],
+            "base_sub_tank_count": slot_data["base_sub_tank_count"],
+            "base_all_levels": slot_data["base_all_levels"],
+            "base_boss_rematch_count": slot_data["base_boss_rematch_count"],
+            "x_hunters_medal_count": slot_data["x_hunters_medal_count"],
+        }
+
+        return interpreted_slot_data
 
 
     def fill_slot_data(self):
@@ -249,26 +288,30 @@ class MMX2World(World):
         slot_data["jammed_buster"] = self.options.jammed_buster.value
         slot_data["shoryuken_in_pool"] = self.options.shoryuken_in_pool.value
         slot_data["energy_link"] = self.options.energy_link.value
+        slot_data["logic_boss_weakness"] = self.options.logic_boss_weakness.value
+        slot_data["logic_helmet_checkpoints"] = self.options.logic_helmet_checkpoints.value
         
         value = 0
-        base_open = self.options.base_open.value
-        if "Medals" in base_open:
+        if "Medals" in self.base_open:
             value |= 0x01
-        if "Weapons" in base_open:
+        if "Weapons" in self.base_open:
             value |= 0x02
-        if "Armor Upgrades" in base_open:
+        if "Armor Upgrades" in self.base_open:
             value |= 0x04
-        if "Heart Tanks" in base_open:
+        if "Heart Tanks" in self.base_open:
             value |= 0x08
-        if "Sub Tanks" in base_open:
+        if "Sub Tanks" in self.base_open:
             value |= 0x10
         slot_data["base_open"] = value
+        slot_data["base_open_text"] = self.base_open.copy()
         slot_data["base_medal_count"] = self.options.base_medal_count.value
         slot_data["base_weapon_count"] = self.options.base_weapon_count.value
         slot_data["base_upgrade_count"] = self.options.base_upgrade_count.value
         slot_data["base_heart_tank_count"] = self.options.base_heart_tank_count.value
         slot_data["base_sub_tank_count"] = self.options.base_sub_tank_count.value
         slot_data["base_all_levels"] = self.options.base_all_levels.value
+        slot_data["base_boss_rematch_count"] = self.options.base_boss_rematch_count.value
+        slot_data["x_hunters_medal_count"] = self.options.x_hunters_medal_count.value
         
         # Write boss weaknesses to slot_data (and for UT)
         slot_data["boss_weaknesses"] = {}
@@ -283,18 +326,27 @@ class MMX2World(World):
 
 
     def generate_early(self):
-        # Generate weaknesses
+        # Parse logic-relevant settings and save them elsewhere (needed for UT support)
+        self.boss_weakness_strictness = self.options.boss_weakness_strictness.value
+        self.pickupsanity = self.options.pickupsanity.value
+        self.jammed_buster = self.options.jammed_buster.value
+        self.logic_boss_weakness = self.options.logic_boss_weakness.value
+        self.logic_helmet_checkpoints = self.options.logic_helmet_checkpoints.value
+        self.base_open = self.options.base_open.value.copy()
+        self.base_medal_count = self.options.base_medal_count.value
+        self.base_weapon_count = self.options.base_weapon_count.value
+        self.base_upgrade_count = self.options.base_upgrade_count.value
+        self.base_heart_tank_count = self.options.base_heart_tank_count.value
+        self.base_sub_tank_count = self.options.base_sub_tank_count.value
+        self.base_all_levels = self.options.base_all_levels.value
+        self.base_boss_rematch_count = self.options.base_boss_rematch_count.value
+        self.x_hunters_medal_count = self.options.x_hunters_medal_count.value
+
+        # Generate weaknesses data
         self.boss_weakness_data = {}
         self.boss_weaknesses = {}
         handle_weaknesses(self)
 
-
-    def interpret_slot_data(self, slot_data):
-        local_weaknesses = dict()
-        for boss, entries in slot_data["weakness_rules"].items():
-            local_weaknesses[boss] = entries.copy()
-        return {"weakness_rules": local_weaknesses}
-    
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         spoiler_handle.write(f"\nMega Man X2 boss weaknesses for {self.multiworld.player_name[self.player]}:\n")

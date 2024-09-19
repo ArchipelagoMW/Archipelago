@@ -107,7 +107,6 @@ bosses = {
 def set_rules(world: MMX2World):
     player = world.player
     multiworld = world.multiworld
-    jammed_buster = world.options.jammed_buster.value
 
     multiworld.completion_condition[player] = lambda state: state.has(ItemName.victory, player)
 
@@ -130,25 +129,25 @@ def set_rules(world: MMX2World):
              lambda state: state.has(ItemName.stage_wire_sponge, player))
 
     # X-Hunter Base entrance rules
-    base_open = world.options.base_open.value
+    base_open = world.base_open
     entrance = multiworld.get_entrance(f"{RegionName.intro_stage} -> {RegionName.x_hunter_stage}", player)
 
     if len(base_open) == 0:
         set_rule(entrance, lambda state: state.has(ItemName.stage_x_hunter, player))
     else:
-        if "Medals" in base_open and world.options.base_medal_count.value > 0:
-            add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.options.base_medal_count.value))
-        if "Weapons" in base_open and world.options.base_weapon_count.value > 0:
-            add_rule(entrance, lambda state: state.has_group("Weapons", player, world.options.base_weapon_count.value))
-        if "Armor Upgrades" in base_open and world.options.base_upgrade_count.value > 0:
-            add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.options.base_upgrade_count.value))
-        if "Heart Tanks" in base_open and world.options.base_heart_tank_count.value > 0:
-            add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.options.base_heart_tank_count.value))
-        if "Sub Tanks" in base_open and world.options.base_sub_tank_count.value > 0:
-            add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.options.base_sub_tank_count.value))
+        if "Medals" in base_open and world.base_medal_count > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.maverick_medal, player, world.base_medal_count))
+        if "Weapons" in base_open and world.base_weapon_count > 0:
+            add_rule(entrance, lambda state: state.has_group("Weapons", player, world.base_weapon_count))
+        if "Armor Upgrades" in base_open and world.base_upgrade_count > 0:
+            add_rule(entrance, lambda state: state.has_group("Armor Upgrades", player, world.base_upgrade_count))
+        if "Heart Tanks" in base_open and world.base_heart_tank_count > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.heart_tank, player, world.base_heart_tank_count))
+        if "Sub Tanks" in base_open and world.base_sub_tank_count > 0:
+            add_rule(entrance, lambda state: state.has(ItemName.sub_tank, player, world.base_sub_tank_count))
 
     # X-Hunter Base rules
-    if world.options.base_all_levels.value:
+    if world.base_all_levels:
         set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage} -> {RegionName.x_hunter_stage_4}", player),
                  lambda state: (
                      state.has(EventName.x_hunter_stage_1_clear, player) and 
@@ -167,9 +166,9 @@ def set_rules(world: MMX2World):
                 lambda state: state.has(EventName.x_hunter_stage_4_clear, player))
         
     # Set Boss rematch rules
-    if world.options.base_boss_rematch_count.value > 0:
+    if world.base_boss_rematch_count > 0:
         set_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_4_lobby} -> {RegionName.x_hunter_stage_4_voice}", player),
-                lambda state: state.has(EventName.boss_rematch_clear, player, world.options.base_boss_rematch_count.value))
+                lambda state: state.has(EventName.boss_rematch_clear, player, world.base_boss_rematch_count))
     
     # X-Hunter base 2 entrance
         add_rule(multiworld.get_entrance(f"{RegionName.x_hunter_stage_2} -> {RegionName.x_hunter_stage_2_start}", player),
@@ -177,27 +176,28 @@ def set_rules(world: MMX2World):
                     state.has(ItemName.legs, player) or 
                     state.has(ItemName.crystal_hunter, player) or 
                     (
-                        state.has(ItemName.arms, player, jammed_buster + 1) and
+                        state.has(ItemName.arms, player, world.jammed_buster + 1) and
                         state.has(ItemName.speed_burner, player)
                     )
                 ))
 
     # X-Hunter arena entrance rules
+    print (world.x_hunters_medal_count)
     set_rule(multiworld.get_entrance(f"{RegionName.wheel_gator_mid} -> {RegionName.x_hunter_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count))
     set_rule(multiworld.get_entrance(f"{RegionName.bubble_crab_open} -> {RegionName.x_hunter_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count))
     set_rule(multiworld.get_entrance(f"{RegionName.flame_stag_volcano} -> {RegionName.x_hunter_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count))
     set_rule(multiworld.get_entrance(f"{RegionName.morph_moth_after_parasite_1} -> {RegionName.x_hunter_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count))
     set_rule(multiworld.get_entrance(f"{RegionName.magna_centipede_after_blade} -> {RegionName.x_hunter_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count))
     set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail_arena} -> {RegionName.x_hunter_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count))
     set_rule(multiworld.get_entrance(f"{RegionName.crystal_snail_arena} -> {RegionName.crystal_snail_after_arena}", player), 
              lambda state: 
-                state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value) and
+                state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count) and
                 (
                     state.can_reach_location(LocationName.agile_defeated, player) or 
                     state.can_reach_location(LocationName.serges_defeated, player) or 
@@ -206,31 +206,31 @@ def set_rules(world: MMX2World):
             )
     set_rule(multiworld.get_entrance(f"{RegionName.overdrive_ostrich_arena} -> {RegionName.x_hunter_arena}", player), 
              lambda state: (
-                    state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value) and
+                    state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count) and
                     state.has(ItemName.spin_wheel, player)
                 ))
     set_rule(multiworld.get_entrance(f"{RegionName.wire_sponge_elevator} -> {RegionName.x_hunter_arena}", player), 
-             lambda state: state.has(ItemName.maverick_medal, player, world.options.x_hunters_medal_count.value))
+             lambda state: state.has(ItemName.maverick_medal, player, world.x_hunters_medal_count))
     
     # Wheel Gator rules
     add_rule(multiworld.get_location(LocationName.wheel_gator_arms, player),
              lambda state: (
                 state.has(ItemName.legs, player) or 
                 (
-                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.arms, player, world.jammed_buster + 1) and
                     state.has(ItemName.speed_burner, player)
                 )
              ))
     add_rule(multiworld.get_location(LocationName.wheel_gator_heart_tank, player),
              lambda state: (
-                state.has(ItemName.arms, player, jammed_buster + 1) and
+                state.has(ItemName.arms, player, world.jammed_buster + 1) and
                 state.has(ItemName.speed_burner, player)
              ))
     
     # Bubble Crab rules
     add_rule(multiworld.get_location(LocationName.bubble_crab_sub_tank, player),
              lambda state: (
-                state.has(ItemName.arms, player, jammed_buster + 1) and
+                state.has(ItemName.arms, player, world.jammed_buster + 1) and
                 state.has(ItemName.bubble_splash, player)
              ))
     
@@ -243,14 +243,14 @@ def set_rules(world: MMX2World):
     # Magna Centipede rules
     add_rule(multiworld.get_location(LocationName.magna_centipede_heart_tank, player),
              lambda state: (
-                state.has(ItemName.arms, player, jammed_buster + 1) and
+                state.has(ItemName.arms, player, world.jammed_buster + 1) and
                 state.has(ItemName.speed_burner, player)
              ))
     add_rule(multiworld.get_location(LocationName.magna_centipede_sub_tank, player),
              lambda state: (
                 state.has(ItemName.legs, player) or 
                 (
-                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.arms, player, world.jammed_buster + 1) and
                     state.has(ItemName.speed_burner, player)
                 )
              ))
@@ -260,7 +260,7 @@ def set_rules(world: MMX2World):
              lambda state: (
                 state.has(ItemName.legs, player) or 
                 (
-                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.arms, player, world.jammed_buster + 1) and
                     state.has(ItemName.speed_burner, player)
                 )
              ))
@@ -273,21 +273,21 @@ def set_rules(world: MMX2World):
     add_rule(multiworld.get_location(LocationName.x_hunter_stage_3_shoryuken, player),
              lambda state: (
                 state.has(ItemName.legs, player) and
-                state.has(ItemName.arms, player, jammed_buster + 1) and
+                state.has(ItemName.arms, player, world.jammed_buster + 1) and
                 state.has(ItemName.speed_burner, player) and
                 state.has(ItemName.crystal_hunter, player)
              ))
 
     # Handle bosses weakness
-    if world.options.logic_boss_weakness.value or world.options.boss_weakness_strictness.value >= 2:
+    if world.logic_boss_weakness or world.boss_weakness_strictness >= 2:
         add_boss_weakness_logic(world)
 
     # Handle pickupsanity logic
-    if world.options.pickupsanity.value:
+    if world.pickupsanity:
         add_pickupsanity_logic(world)
 
     # Handle helmet logic
-    if world.options.logic_helmet_checkpoints.value:
+    if world.logic_helmet_checkpoints:
         add_helmet_logic(world)
 
 
@@ -302,12 +302,11 @@ def check_weaknesses(state: CollectionState, player: int, rulesets: list) -> boo
 def add_boss_weakness_logic(world: MMX2World):
     player = world.player
     multiworld = world.multiworld
-    jammed_buster = world.options.jammed_buster.value
 
     boss_dict = {}
     for boss, regions in bosses.items():
         boss_dict[boss] = regions.copy()
-        if boss in mavericks and world.options.base_boss_rematch_count.value == 0:
+        if boss in mavericks and world.base_boss_rematch_count == 0:
             boss_dict[boss].pop()
             boss_dict[boss].pop()
 
@@ -321,7 +320,7 @@ def add_boss_weakness_logic(world: MMX2World):
             weakness = weakness[0]
             ruleset = dict()
             if "Check Charge" in weakness[0]:
-                ruleset[ItemName.arms] = jammed_buster + int(weakness[0][-1:]) - 1
+                ruleset[ItemName.arms] = world.jammed_buster + int(weakness[0][-1:]) - 1
             else:
                 ruleset[weakness[0]] = 1
             if len(weakness) != 1:
@@ -341,7 +340,6 @@ def add_boss_weakness_logic(world: MMX2World):
 def add_pickupsanity_logic(world: MMX2World):
     player = world.player
     multiworld = world.multiworld
-    jammed_buster = world.options.jammed_buster.value
 
     # Bubble Crab
     add_rule(multiworld.get_location(LocationName.bubble_crab_1up, player),
@@ -350,10 +348,10 @@ def add_pickupsanity_logic(world: MMX2World):
              lambda state: (
                 state.has(ItemName.legs, player) or
                 (
-                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.arms, player, world.jammed_buster + 1) and
                     state.has(ItemName.speed_burner, player)
                 ) or (
-                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.arms, player, world.jammed_buster + 1) and
                     state.has(ItemName.bubble_splash, player)
                 )
              ))
@@ -376,7 +374,7 @@ def add_pickupsanity_logic(world: MMX2World):
     add_rule(multiworld.get_location(LocationName.x_hunter_stage_2_1up, player),
              lambda state: (
                 state.has(ItemName.legs, player) and
-                state.has(ItemName.arms, player, jammed_buster + 1) and
+                state.has(ItemName.arms, player, world.jammed_buster + 1) and
                 state.has(ItemName.speed_burner, player) and
                 state.has(ItemName.spin_wheel, player)
              ))
@@ -401,7 +399,7 @@ def add_pickupsanity_logic(world: MMX2World):
     add_rule(multiworld.get_location(LocationName.x_hunter_stage_3_1up_3, player),
              lambda state: (
                 state.has(ItemName.legs, player) and
-                state.has(ItemName.arms, player, jammed_buster + 1) and
+                state.has(ItemName.arms, player, world.jammed_buster + 1) and
                 state.has(ItemName.speed_burner, player) and
                 state.has(ItemName.crystal_hunter, player)
              ))
@@ -409,7 +407,7 @@ def add_pickupsanity_logic(world: MMX2World):
              lambda state: (
                 state.has(ItemName.legs, player) or
                 (
-                    state.has(ItemName.arms, player, jammed_buster + 1) and
+                    state.has(ItemName.arms, player, world.jammed_buster + 1) and
                     state.has(ItemName.speed_burner, player)
                 )
              ))
