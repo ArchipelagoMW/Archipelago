@@ -34,6 +34,8 @@ MMX2_SHORYUKEN          = WRAM_START + 0x01FB1
 MMX2_CAN_MOVE           = WRAM_START + 0x01F25
 MMX2_ON_RIDE_ARMOR      = WRAM_START + 0x00A54
 MMX2_ZERO_PARTS         = WRAM_START + 0x01FD6
+MMX2_GCRUSH             = WRAM_START + 0x01FCB
+MMX2_ITRACER            = WRAM_START + 0x01FCD
 
 MMX2_ENABLE_HEART_TANK      = MMX2_RAM + 0x00009
 MMX2_ENABLE_HP_REFILL       = MMX2_RAM + 0x0000D
@@ -913,7 +915,7 @@ class MMX2SNIClient(SNIClient):
             arsenal["heart_tanks"] = int.from_bytes(await snes_read(ctx, MMX2_HEART_TANKS, 0x1), "little")
             arsenal["sub_tanks"] = list(await snes_read(ctx, MMX2_SUB_TANK_ARRAY, 0x4))
             arsenal["unlocked_buster"] = int.from_bytes(await snes_read(ctx, MMX2_UNLOCKED_CHARGED_SHOT, 0x1), "little")
-            arsenal["weapons"] = list(await snes_read(ctx, MMX2_WEAPON_ARRAY, 0x10))
+            arsenal["weapons"] = list(await snes_read(ctx, MMX2_WEAPON_ARRAY, 0x14))
             arsenal["shoryuken"] = int.from_bytes(await snes_read(ctx, MMX2_SHORYUKEN, 0x1), "little")
             arsenal["levels"] = list(await snes_read(ctx, MMX2_UNLOCKED_LEVELS, 0x20))
             arsenal["base_access"] = int.from_bytes(await snes_read(ctx, MMX2_BASE_ACCESS, 0x1), "little")
@@ -928,7 +930,7 @@ class MMX2SNIClient(SNIClient):
                     arsenal["life_count"] = saved_arsenal["life_count"]
                 if saved_arsenal["max_hp"] > arsenal["max_hp"]:
                     arsenal["max_hp"] = saved_arsenal["max_hp"]
-                for i in range(0x10):
+                for i in range(0x14):
                     arsenal["weapons"][i] |= saved_arsenal["weapons"][i] & 0x40
                 for level in range(0x20):
                     arsenal["levels"][level] |= saved_arsenal["levels"][level]
