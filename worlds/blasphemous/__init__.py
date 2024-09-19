@@ -213,21 +213,6 @@ class BlasphemousWorld(World):
         if self.options.thorn_shuffle == "local_only":
             self.options.local_items.value.add("Thorn Upgrade")
 
-    def get_pre_fill_items(self):
-        pool = [self.create_item(item) for item in unrandomized_dict.values()]
-
-        if self.options.thorn_shuffle in ("vanilla", "local_only"):
-            pool.extend(self.create_item("Thorn Upgrade") for _ in thorn_set)
-
-        if self.options.start_wheel:
-            pool.append(self.create_item("The Young Mason's Wheel"))
-
-        if not self.options.skill_randomizer:
-            pool.extend(self.create_item(item) for item in skill_dict.values())
-
-        return pool
-
-
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
             self.get_location(loc).place_locked_item(self.create_item(name))
