@@ -533,8 +533,8 @@ class WitnessPlayerLogic:
         If they are not independent, we need to add the "Dots" requirement to every "Full Dots" panel,
         as well as the "Stars" requirement to every "Stars + Same Colored Symbol" panel.
 
-        Also, if Progressive Symmetry is off and independent symbols are on, the Symmetry Laser set is changed to not
-        require Symmetry.
+        Also, if Progressive Symmetry is off and independent symbols are off, a Symmetry requirement is added to the
+        Symmetry Laser sets.
         """
 
         progressive_dots = "Progressive Dots" in world.options.progressive_symbols
