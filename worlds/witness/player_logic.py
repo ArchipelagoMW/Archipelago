@@ -547,13 +547,13 @@ class WitnessPlayerLogic:
             for progressive_list in self.PROGRESSIVE_LISTS.values()
         )
 
-        for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
-            if "items" not in requirement:
-                continue
+        if world.options.second_stage_symbols_act_independently:
+            if full_dots_always_after_dots and stars2_always_after_stars1:
+                return
 
-            if world.options.second_stage_symbols_act_independently:
-                if full_dots_always_after_dots and stars2_always_after_stars1:
-                    return
+            for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
+                if "items" not in requirement:
+                    continue
 
                 # Replace Dots with Sparse Dots, and Stars with Simple Stars
                 new_requirement_options = set()
@@ -567,7 +567,8 @@ class WitnessPlayerLogic:
                         changed_requirement_option.add("Simple Stars")
                     new_requirement_options.add(frozenset(changed_requirement_option))
                 self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
-            else:
+        else:
+            for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
                 # Add Dots requirement to Full Dots panels, Stars requirement to Stars + Same Colored Symbol Panels,
                 # And Symmetry requirement to Colored Dots panels
                 new_requirement_options = set()
