@@ -47,12 +47,26 @@ class WitnessPlayerItems:
         self._logic: WitnessPlayerLogic = player_logic
         self._locations: WitnessPlayerLocations = player_locations
 
+        self.replacement_items = {}
+        # Make item aliases for "Sparse Dots" and "Simple Stars" if necessary
+        if world.options.second_stage_symbols_act_independently:
+            self.replacement_items["Dots"] = "Sparse Dots"
+            self.replacement_items["Stars"] = "Simple Stars"
+
+        assert all(
+            static_witness_items.ALL_ITEM_ALIASES.get(value, None) == key
+            for key, value in self.replacement_items.items()
+        ), "A replacement item was used without setting up the alias in static_witness_logic.ALL_ITEM_ALIASES"
+
+        # This is a more appropriate place for progressive item lists long term
+        self.progressive_item_lists = copy.deepcopy(self._logic.PROGRESSIVE_LISTS)
+
         # Duplicate the static item data, then make any player-specific adjustments to classification.
         self.item_data: Dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
 
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
-            name: data for (name, data) in self.item_data.items()
+            self.replacement_items.get(name, name): data for (name, data) in self.item_data.items()
             if ItemClassification.progression not in data.classification
             or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }

@@ -546,42 +546,29 @@ class WitnessPlayerLogic:
             "Stars" in progressive_list and "Stars + Same Colored Symbol" in progressive_list
             for progressive_list in self.PROGRESSIVE_LISTS.values()
         )
+        colored_dots_always_after_symmetry = any(
+            "Symmetry" in progressive_list and "Colored Dots" in progressive_list
+            for progressive_list in self.PROGRESSIVE_LISTS.values()
+        )
 
-        if world.options.second_stage_symbols_act_independently:
-            if full_dots_always_after_dots and stars2_always_after_stars1:
-                return
-
+        if not world.options.second_stage_symbols_act_independently:
             for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
                 if "items" not in requirement:
                     continue
 
-                # Replace Dots with Sparse Dots, and Stars with Simple Stars
-                new_requirement_options = set()
-                for requirement_option in requirement["items"]:
-                    changed_requirement_option = set(requirement_option)
-                    if not full_dots_always_after_dots and "Dots" in requirement_option:
-                        changed_requirement_option.remove("Dots")
-                        changed_requirement_option.add("Sparse Dots")
-                    if not stars2_always_after_stars1 and "Stars" in requirement_option:
-                        changed_requirement_option.remove("Stars")
-                        changed_requirement_option.add("Simple Stars")
-                    new_requirement_options.add(frozenset(changed_requirement_option))
-                self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
-        else:
-            for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
-                if "items" not in requirement:
-                    continue
+                if full_dots_always_after_dots and stars2_always_after_stars1 and colored_dots_always_after_symmetry:
+                    return
 
                 # Add Dots requirement to Full Dots panels, Stars requirement to Stars + Same Colored Symbol Panels,
                 # And Symmetry requirement to Colored Dots panels
                 new_requirement_options = set()
                 for requirement_option in requirement["items"]:
                     changed_requirement_option = set(requirement_option)
-                    if "Full Dots" in requirement_option:
+                    if not full_dots_always_after_dots and "Full Dots" in requirement_option:
                         changed_requirement_option.add("Dots")
-                    if "Stars + Same Colored Symbol" in requirement_option:
+                    if not stars2_always_after_stars1 and "Stars + Same Colored Symbol" in requirement_option:
                         changed_requirement_option.add("Stars")
-                    if "Colored Dots" in requirement_option:
+                    if not colored_dots_always_after_symmetry and "Colored Dots" in requirement_option:
                         changed_requirement_option.add("Symmetry")
                     new_requirement_options.add(frozenset(changed_requirement_option))
                 self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
