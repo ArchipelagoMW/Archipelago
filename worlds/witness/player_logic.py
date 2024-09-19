@@ -537,23 +537,34 @@ class WitnessPlayerLogic:
         Symmetry Laser sets.
         """
 
-        progressive_dots = "Progressive Dots" in world.options.progressive_symbols
-        progressive_stars = "Progressive Stars" in world.options.progressive_symbols
-        progressive_symmetry = "Progressive Symmetry" in world.options.progressive_symbols
+        # Sparse Dots and Simple Stars only need to be added if they are not progressive
+        full_dots_always_after_dots = any(
+            "Dots" in progressive_list and "Full Dots" in progressive_list
+            and progressive_list.index("Dots") < progressive_list.index("Full Dots")
+            for progressive_list in self.PROGRESSIVE_LISTS.values()
+        )
+        stars2_always_after_stars1 = any(
+            "Stars" in progressive_list and "Stars + Same Colored Symbol" in progressive_list
+            and progressive_list.index("Stars") < progressive_list.index("Stars + Same Colored Symbol")
+            for progressive_list in self.PROGRESSIVE_LISTS.values()
+        )
 
         for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
             if "items" not in requirement:
                 continue
 
             if world.options.second_stage_symbols_act_independently:
+                if full_dots_always_after_dots and stars2_always_after_stars1:
+                    return
+
                 # Replace Dots with Sparse Dots, and Stars with Simple Stars
                 new_requirement_options = set()
                 for requirement_option in requirement["items"]:
                     changed_requirement_option = set(requirement_option)
-                    if not progressive_dots and "Dots" in requirement_option:
+                    if not full_dots_always_after_dots and "Dots" in requirement_option:
                         changed_requirement_option.remove("Dots")
                         changed_requirement_option.add("Sparse Dots")
-                    if not progressive_stars and "Stars" in requirement_option:
+                    if not stars2_always_after_stars1 and "Stars" in requirement_option:
                         changed_requirement_option.remove("Stars")
                         changed_requirement_option.add("Simple Stars")
                     new_requirement_options.add(frozenset(changed_requirement_option))
@@ -564,11 +575,11 @@ class WitnessPlayerLogic:
                 new_requirement_options = set()
                 for requirement_option in requirement["items"]:
                     changed_requirement_option = set(requirement_option)
-                    if not progressive_dots and "Full Dots" in requirement_option:
+                    if "Full Dots" in requirement_option:
                         changed_requirement_option.add("Dots")
-                    if not progressive_stars and "Stars + Same Colored Symbol" in requirement_option:
+                    if "Stars + Same Colored Symbol" in requirement_option:
                         changed_requirement_option.add("Stars")
-                    if not progressive_symmetry and "Colored Dots" in requirement_option:
+                    if "Colored Dots" in requirement_option:
                         changed_requirement_option.add("Symmetry")
                     new_requirement_options.add(frozenset(changed_requirement_option))
                 self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
