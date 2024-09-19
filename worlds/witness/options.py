@@ -97,7 +97,7 @@ class SecondStageSymbolsActIndependently(OptionSet):
     - "Stars + Same Colored Symbol": "Stars + Same Colored Symbol" unlocks Stars + Same Colored Symbol panels even if you don't have "Stars". "Stars" is renamed to "Simlpe Stars".
     - "Colored Dots": Removes the Symmetry requirement from the Symmetry Laser panel sets so that Colored Dots can unlock something on their own.
 
-    Rotated Shapers always act like this. The option to make them dependent on Shapers may be added in the future.
+    Rotated Shapers always act like this. The ability to make them dependent on Shapers by omitting them from the set may be added in the future.
     """
 
     valid_keys = {
