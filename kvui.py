@@ -523,16 +523,13 @@ class ClientTabs(MDTabsPrimary):
         super().__init__(*args, MDDivider(size_hint_y=None, height=dp(4)), self.carousel, **kwargs)
         self.size_hint_y = 1
 
-    def add_widget(self, widget, *args, **kwargs):
-        super().add_widget(widget, args, kwargs)
-        self.on_size(self, self.size)
-
     def remove_tab(self, tab, content=None):
         if content is None:
             content = tab.content
         self.ids.container.remove_widget(tab)
         self.carousel.remove_widget(content)
         self.on_size(self, self.size)
+
 
 class GameManager(MDApp):
     logging_pairs = [
