@@ -119,6 +119,7 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
             "Progressive Symmetry"
         ]
 
+        # Only consider symbols that are actually in the pool
         symbols = [symbol for symbol in symbols if symbol in world.player_items.item_data]
 
         priority.update(world.random.sample(symbols, 5))
