@@ -1,5 +1,5 @@
 from test.bases import WorldTestBase
-from .. import options_presets, ShapezWorld
+from .. import options_presets
 
 
 class ShapezTestBase(WorldTestBase):

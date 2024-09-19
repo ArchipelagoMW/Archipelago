@@ -1,4 +1,4 @@
-from typing import Any, List, Dict, Tuple, Mapping, Optional
+from typing import Any, List, Dict, Tuple, Mapping
 
 from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
@@ -219,7 +219,7 @@ class ShapezWorld(World):
                                                              self.options.goal.current_key, menu_region))
 
         # Connect Menu to rest of regions
-        main_region = self.multiworld.get_region("Main", self.player)
+        main_region = self.get_region("Main")
         if self.options.lock_belt_and_extractor:
             menu_region.connect(main_region, "Belt and Extractor",
                                 lambda state: state.has_all(["Belt", "Extractor"], self.player))
