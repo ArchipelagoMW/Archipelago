@@ -67,6 +67,8 @@ class ProgressiveSymbols(OptionSet):
     """
     Make some symbols progressive, if they exist.
 
+    By default, includes the chains where the second item can't be used without the first.
+
     Progressive Dots: Dots -> Full Dots
     Progressive Symmetry: Symmetry -> Colored Dots
     Progressive Stars: Stars -> Stars + Same Colored Symbol
