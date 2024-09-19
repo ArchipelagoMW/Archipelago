@@ -522,6 +522,21 @@ class WitnessPlayerLogic:
         return postgame_adjustments
 
     def adjust_requirements_for_second_stage_symbols(self, world: "WitnessWorld") -> None:
+        """
+        When playing with non-progressive symbols,
+        there are some second-stage symbols that can't be used without the first-stage symbol.
+        However, there is a player option that makes these second stage symbols independent.
+
+        If they are independent, we rename "Dots" to "Sparse Dots" and "Stars" to "Simple Stars"
+        to drive home the separation of the respective items.
+
+        If they are not independent, we need to add the "Dots" requirement to every "Full Dots" panel,
+        as well as the "Stars" requirement to every "Stars + Same Colored Symbol" panel.
+
+        Also, if Progressive Symmetry is off and independent symbols are on, the Symmetry Laser set is changed to not
+        require Symmetry.
+        """
+
         progressive_dots = "Progressive Dots" in world.options.progressive_symbols
         progressive_stars = "Progressive Stars" in world.options.progressive_symbols
         progressive_symmetry = "Progressive Symmetry" in world.options.progressive_symbols
