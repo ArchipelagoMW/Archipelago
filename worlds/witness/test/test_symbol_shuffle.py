@@ -48,7 +48,7 @@ class TestProgressiveSymbols(WitnessTestBase):
 
         self.assert_quantities_in_itempool(expected_quantities)
 
-        with self.subTest(f"Verify that Dots panels need 1 copy of Progressive Dots and Full Dots panel need 2 copies"):
+        with self.subTest("Verify that Dots panels need 1 copy of Progressive Dots and Full Dots panel need 2 copies"):
             self.collect_all_but("Progressive Dots")
             progressive_dots = self.get_items_by_name("Progressive Dots")
             self.assertEqual(len(progressive_dots), 2)
@@ -108,16 +108,20 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
 
         self.assert_quantities_in_itempool(expected_quantities)
 
-        with self.subTest(f"Verify that Full Dots panels only need Full Dots"):
+        with self.subTest("Verify that Full Dots panels only need Full Dots"):
             self.collect_by_name("Black/White Squares")
             self.collect_by_name("Triangles")
             self.collect_by_name("Outside Tutorial Outpost Exit (Door)")
 
-            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+            self.assertFalse(
+                self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player)
+            )
             self.collect_by_name("Full Dots")
-            self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+            self.assertTrue(
+                self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player)
+            )
 
-        with self.subTest(f"Verify that Stars + Same Colored Symbol panels only need Stars + Same Colored Symbol"):
+        with self.subTest("Verify that Stars + Same Colored Symbol panels only need Stars + Same Colored Symbol"):
             self.collect_by_name("Eraser")
             self.collect_by_name("Quarry Entry 1 (Door)")
             self.collect_by_name("Quarry Entry 2 (Door)")
@@ -130,7 +134,7 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
                 self.multiworld.state.can_reach("Quarry Stoneworks Entry Left Panel", "Location", self.player)
             )
 
-        with self.subTest(f"Verify that non-symmetry Colored Dots panels only need Colored Dots"):
+        with self.subTest("Verify that non-symmetry Colored Dots panels only need Colored Dots"):
             self.collect_by_name("Symmetry Island Lower (Door)")
             self.collect_by_name("Symmetry Island Upper (Door)")
 
@@ -190,7 +194,9 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
             self.assertFalse(
                 self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
             self.collect_by_name("Dots")
-            self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+            self.assertTrue(
+                self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player)
+            )
 
         with self.subTest("Verify that Stars + Same Colored Symbol panels need Stars as well"):
             self.collect_by_name("Eraser")
