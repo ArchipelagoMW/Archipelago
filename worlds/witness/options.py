@@ -86,8 +86,10 @@ class ProgressiveSymbols(OptionSet):
         "Progressive Line-Counting Symbols"
     }
 
+    default = {"Progressive Dots", "Progressive Symmetry", "Progressive Stars"}
 
-class SecondStageSymbolsActIndependently(DefaultOnToggle):
+
+class SecondStageSymbolsActIndependently(Toggle):
     """
     Only relevant if Dots, Symmetry or Stars are not progressive.
 
