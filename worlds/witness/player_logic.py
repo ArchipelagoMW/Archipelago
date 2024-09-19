@@ -521,7 +521,7 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
-    def add_implicit_dependencies_to_requirements(self, world: "WitnessWorld", dependencies: Dict[str, str]):
+    def add_implicit_dependencies_to_requirements(self, dependencies: Dict[str, str]):
         if not dependencies:
             return
 
@@ -580,7 +580,7 @@ class WitnessPlayerLogic:
             if not colored_dots_always_after_symmetry:
                 implicit_dependencies["Colored Dots"] = "Symmetry"
 
-        self.add_implicit_dependencies_to_requirements(world, implicit_dependencies)
+        self.add_implicit_dependencies_to_requirements(implicit_dependencies)
 
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""

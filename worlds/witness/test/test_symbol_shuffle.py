@@ -1,7 +1,7 @@
 from ..test import WitnessMultiworldTestBase, WitnessTestBase
 
 
-class TestSymbols(WitnessTestBase):
+class TestProgressiveSymbols(WitnessTestBase):
     options = {
         "early_symbol_item": False,
         "puzzle_randomization": "umbra_variety",
@@ -45,10 +45,7 @@ class TestSymbols(WitnessTestBase):
             "Arrows": 0,
         }
 
-        for item, expected_quantity in expected_quantities.items():
-            with self.subTest(f"Verify that there are {expected_quantity} copies of {item} in the itempool."):
-                found_items = self.get_items_by_name(item)
-                self.assertEqual(len(found_items), expected_quantity)
+        self.assert_quantities_in_itempool(expected_quantities)
 
         with self.subTest(f"Verify that Dots panels need 1 copy of Progressive Dots and Full Dots panel need 2 copies"):
             self.collect_all_but("Progressive Dots")
@@ -56,22 +53,173 @@ class TestSymbols(WitnessTestBase):
             self.assertEqual(len(progressive_dots), 2)
 
             self.assertFalse(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
-            self.assertFalse(
-                self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
-            )
+            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
 
             self.collect(progressive_dots.pop())
 
             self.assertTrue(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
-            self.assertFalse(
-                self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
-            )
+            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
 
             self.collect(progressive_dots.pop())
 
             self.assertTrue(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
+            self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
+
+
+class TestIndependentSecondStageSymbols(WitnessTestBase):
+    options = {
+        "early_symbol_item": False,
+        "puzzle_randomization": "umbra_variety",
+        "progressive_symbols": {},
+        "second_stage_symbols_act_independently": {
+            "Full Dots",
+            "Stars + Same Colored Symbol",
+            "Colored Dots",
+        },
+        "shuffle_doors": "doors",
+    }
+
+    def test_independent_second_stage_symbols(self):
+        expected_quantities = {
+            "Progressive Dots": 0,
+            "Progressive Symmetry": 0,
+            "Progressive Stars": 0,
+            "Progressive Squares": 0,
+            "Progressive Shapers": 0,
+            "Progressive Line-Counting Symbols": 0,
+            "Dots": 0,
+            "Sparse Dots": 1,
+            "Full Dots": 1,
+            "Symmetry": 1,
+            "Colored Dots": 1,
+            "Stars": 0,
+            "Simple Stars": 1,
+            "Stars + Same Colored Symbol": 1,
+            "Black/White Squares": 1,
+            "Colored Squares": 1,
+            "Shapers": 1,
+            "Rotated Shapers": 1,
+            "Negative Shapers": 1,
+            "Triangles": 1,
+            "Arrows": 1,
+        }
+
+        self.assert_quantities_in_itempool(expected_quantities)
+
+        with self.subTest(f"Verify that Full Dots panels only need Full Dots"):
+            self.collect_by_name("Black/White Squares")
+            self.collect_by_name("Triangles")
+            self.collect_by_name("Outside Tutorial Outpost Exit (Door)")
+
+            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+            self.collect_by_name("Full Dots")
+            self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+
+        with self.subTest(f"Verify that Stars + Same Colored Symbol panels only need Stars + Same Colored Symbol"):
+            self.collect_by_name("Eraser")
+            self.collect_by_name("Quarry Entry 1 (Door)")
+            self.collect_by_name("Quarry Entry 2 (Door)")
+
+            self.assertFalse(
+                self.multiworld.state.can_reach("Quarry Stoneworks Entry Left Panel", "Location", self.player)
+            )
+            self.collect_by_name("Stars + Same Colored Symbol")
             self.assertTrue(
-                self.multiworld.state.can_reach("Outside Tutorial Outpost Entry Panel", "Location", self.player)
+                self.multiworld.state.can_reach("Quarry Stoneworks Entry Left Panel", "Location", self.player)
+            )
+
+        with self.subTest(f"Verify that non-symmetry Colored Dots panels only need Colored Dots"):
+            self.collect_by_name("Symmetry Island Lower (Door)")
+            self.collect_by_name("Symmetry Island Upper (Door)")
+
+            self.assertFalse(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.collect_by_name("Colored Dots")
+            self.assertTrue(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+
+class TestDependentSecondStageSymbols(WitnessTestBase):
+    options = {
+        "early_symbol_item": False,
+        "puzzle_randomization": "umbra_variety",
+        "progressive_symbols": {},
+        "second_stage_symbols_act_independently": {},
+        "shuffle_doors": "doors",
+    }
+
+    def test_independent_second_stage_symbols(self):
+        expected_quantities = {
+            "Progressive Dots": 0,
+            "Progressive Symmetry": 0,
+            "Progressive Stars": 0,
+            "Progressive Squares": 0,
+            "Progressive Shapers": 0,
+            "Progressive Line-Counting Symbols": 0,
+            "Dots": 1,
+            "Sparse Dots": 0,
+            "Full Dots": 1,
+            "Symmetry": 1,
+            "Colored Dots": 1,
+            "Stars": 1,
+            "Simple Stars": 0,
+            "Stars + Same Colored Symbol": 1,
+            "Black/White Squares": 1,
+            "Colored Squares": 1,
+            "Shapers": 1,
+            "Rotated Shapers": 1,
+            "Negative Shapers": 1,
+            "Triangles": 1,
+            "Arrows": 1,
+        }
+
+        self.assert_quantities_in_itempool(expected_quantities)
+
+        with self.subTest("Verify that Full Dots panels need Dots as well"):
+            self.collect_by_name("Black/White Squares")
+            self.collect_by_name("Triangles")
+            self.collect_by_name("Outside Tutorial Outpost Exit (Door)")
+
+            self.assertFalse(
+                self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+            self.collect_by_name("Full Dots")
+            self.assertFalse(
+                self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+            self.collect_by_name("Dots")
+            self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Outpost Exit Panel", "Location", self.player))
+
+        with self.subTest("Verify that Stars + Same Colored Symbol panels need Stars as well"):
+            self.collect_by_name("Eraser")
+            self.collect_by_name("Quarry Entry 1 (Door)")
+            self.collect_by_name("Quarry Entry 2 (Door)")
+
+            self.assertFalse(
+                self.multiworld.state.can_reach("Quarry Stoneworks Entry Left Panel", "Location", self.player)
+            )
+            self.collect_by_name("Stars + Same Colored Symbol")
+            self.assertFalse(
+                self.multiworld.state.can_reach("Quarry Stoneworks Entry Left Panel", "Location", self.player)
+            )
+            self.collect_by_name("Stars")
+            self.assertTrue(
+                self.multiworld.state.can_reach("Quarry Stoneworks Entry Left Panel", "Location", self.player)
+            )
+
+        with self.subTest("Verify that non-symmetry Colored Dots panels need Symmetry as well"):
+            self.collect_by_name("Symmetry Island Lower (Door)")
+            self.collect_by_name("Symmetry Island Upper (Door)")
+
+            self.assertFalse(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.collect_by_name("Colored Dots")
+            self.assertFalse(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.collect_by_name("Symmetry")
+            self.assertTrue(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
             )
 
 
