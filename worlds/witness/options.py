@@ -89,16 +89,20 @@ class ProgressiveSymbols(OptionSet):
     default = {"Progressive Dots", "Progressive Symmetry", "Progressive Stars"}
 
 
-class SecondStageSymbolsActIndependently(Toggle):
+class SecondStageSymbolsActIndependently(OptionSet):
     """
-    Only relevant if Dots, Symmetry or Stars are not progressive.
+    Only relevant if the respective items are not progressive, in which case there is no point.
 
-    If Dots are not progressive, this replaces "Dots" with "Sparse Dots", so that "Full Dots" can unlock Full Dots panels independently.
-    If Stars are not progressive, this replaces "Stars" with "Simple Stars", so that "Stars + Same Colored Symbol" can act independently.
-    Removes the Symmetry requirement from the Symmetry Laser panel sets so that Colored Dots can unlock something on their own.
+    - "Full Dots": "Full Dots" unlock Full Dots panels even if you don't have "Dots". "Dots" is renamed to "Sparse Dots".
+    - "Stars + Same Colored Symbol": "Stars + Same Colored Symbol" unlock Stars + Same Colored Symbol panels even if you don't have "Stars". "Stars" is renamed to "Simlpe Stars".
+    - "Colored Dots": Removes the Symmetry requirement from the Symmetry Laser panel sets so that Colored Dots can unlock something on their own.
     """
 
-    visibility = Visibility.template | Visibility.complex_ui
+    valid_keys = {
+        "Full Dots",
+        "Stars + Same Colored Symbol",
+        "Colored Dots",
+    }
 
 
 class ColoredDotsAreProgressiveDots(Toggle):

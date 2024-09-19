@@ -521,6 +521,23 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
+    def add_implicit_dependencies_to_requirements(self, world: "WitnessWorld", dependencies: Dict[str, str]):
+        if not dependencies:
+            return
+
+        for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
+            if "items" not in requirement:
+                continue
+
+            new_requirement_options = set()
+            for requirement_option in requirement["items"]:
+                changed_requirement_option = set(requirement_option)
+                for item1, item2 in dependencies.items():
+                    if item1 in requirement_option:
+                        changed_requirement_option.add(item2)
+                new_requirement_options.add(frozenset(changed_requirement_option))
+            self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
+
     def adjust_requirements_for_second_stage_symbols(self, world: "WitnessWorld") -> None:
         """
         When playing with non-progressive symbols,
@@ -537,41 +554,33 @@ class WitnessPlayerLogic:
         Symmetry Laser sets.
         """
 
-        # Sparse Dots and Simple Stars only need to be added if they are not progressive
-        full_dots_always_after_dots = any(
-            "Dots" in progressive_list and "Full Dots" in progressive_list
-            for progressive_list in self.PROGRESSIVE_LISTS.values()
-        )
-        stars2_always_after_stars1 = any(
-            "Stars" in progressive_list and "Stars + Same Colored Symbol" in progressive_list
-            for progressive_list in self.PROGRESSIVE_LISTS.values()
-        )
-        colored_dots_always_after_symmetry = any(
-            "Symmetry" in progressive_list and "Colored Dots" in progressive_list
-            for progressive_list in self.PROGRESSIVE_LISTS.values()
-        )
+        implicit_dependencies = {}
 
-        if not world.options.second_stage_symbols_act_independently:
-            for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
-                if "items" not in requirement:
-                    continue
+        if "Full Dots" not in world.options.second_stage_symbols_act_independently:
+            full_dots_always_after_dots = any(
+                "Dots" in progressive_list and "Full Dots" in progressive_list
+                for progressive_list in self.PROGRESSIVE_LISTS.values()
+            )
+            if not full_dots_always_after_dots:
+                implicit_dependencies["Full Dots"] = "Dots"
 
-                if full_dots_always_after_dots and stars2_always_after_stars1 and colored_dots_always_after_symmetry:
-                    return
+        if "Stars + Same Colored Symbol" not in world.options.second_stage_symbols_act_independently:
+            stars2_always_after_stars1 = any(
+                "Stars" in progressive_list and "Stars + Same Colored Symbol" in progressive_list
+                for progressive_list in self.PROGRESSIVE_LISTS.values()
+            )
+            if not stars2_always_after_stars1:
+                implicit_dependencies["Stars + Same Colored Symbol"] = "Stars"
 
-                # Add Dots requirement to Full Dots panels, Stars requirement to Stars + Same Colored Symbol Panels,
-                # And Symmetry requirement to Colored Dots panels
-                new_requirement_options = set()
-                for requirement_option in requirement["items"]:
-                    changed_requirement_option = set(requirement_option)
-                    if not full_dots_always_after_dots and "Full Dots" in requirement_option:
-                        changed_requirement_option.add("Dots")
-                    if not stars2_always_after_stars1 and "Stars + Same Colored Symbol" in requirement_option:
-                        changed_requirement_option.add("Stars")
-                    if not colored_dots_always_after_symmetry and "Colored Dots" in requirement_option:
-                        changed_requirement_option.add("Symmetry")
-                    new_requirement_options.add(frozenset(changed_requirement_option))
-                self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
+        if "Colored Dots" not in world.options.second_stage_symbols_act_independently:
+            colored_dots_always_after_symmetry = any(
+                "Symmetry" in progressive_list and "Colored Dots" in progressive_list
+                for progressive_list in self.PROGRESSIVE_LISTS.values()
+            )
+            if not colored_dots_always_after_symmetry:
+                implicit_dependencies["Colored Dots"] = "Symmetry"
+
+        self.add_implicit_dependencies_to_requirements(world, implicit_dependencies)
 
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""

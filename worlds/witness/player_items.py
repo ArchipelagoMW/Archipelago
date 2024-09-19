@@ -49,8 +49,9 @@ class WitnessPlayerItems:
 
         self.replacement_items = {}
         # Make item aliases for "Sparse Dots" and "Simple Stars" if necessary
-        if world.options.second_stage_symbols_act_independently:
+        if "Full Dots" in world.options.second_stage_symbols_act_independently:
             self.replacement_items["Dots"] = "Sparse Dots"
+        if "Stars + Same Colored Symbol" in world.options.second_stage_symbols_act_independently:
             self.replacement_items["Stars"] = "Simple Stars"
 
         assert all(
