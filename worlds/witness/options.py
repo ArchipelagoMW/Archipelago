@@ -93,8 +93,8 @@ class SecondStageSymbolsActIndependently(OptionSet):
     """
     Only relevant if the respective items are not progressive, in which case there is no point.
 
-    - "Full Dots": "Full Dots" unlock Full Dots panels even if you don't have "Dots". "Dots" is renamed to "Sparse Dots".
-    - "Stars + Same Colored Symbol": "Stars + Same Colored Symbol" unlock Stars + Same Colored Symbol panels even if you don't have "Stars". "Stars" is renamed to "Simlpe Stars".
+    - "Full Dots": "Full Dots" unlocks Full Dots panels even if you don't have "Dots". "Dots" is renamed to "Sparse Dots".
+    - "Stars + Same Colored Symbol": "Stars + Same Colored Symbol" unlocks Stars + Same Colored Symbol panels even if you don't have "Stars". "Stars" is renamed to "Simlpe Stars".
     - "Colored Dots": Removes the Symmetry requirement from the Symmetry Laser panel sets so that Colored Dots can unlock something on their own.
     """
 
