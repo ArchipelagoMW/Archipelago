@@ -540,12 +540,10 @@ class WitnessPlayerLogic:
         # Sparse Dots and Simple Stars only need to be added if they are not progressive
         full_dots_always_after_dots = any(
             "Dots" in progressive_list and "Full Dots" in progressive_list
-            and progressive_list.index("Dots") < progressive_list.index("Full Dots")
             for progressive_list in self.PROGRESSIVE_LISTS.values()
         )
         stars2_always_after_stars1 = any(
             "Stars" in progressive_list and "Stars + Same Colored Symbol" in progressive_list
-            and progressive_list.index("Stars") < progressive_list.index("Stars + Same Colored Symbol")
             for progressive_list in self.PROGRESSIVE_LISTS.values()
         )
 
