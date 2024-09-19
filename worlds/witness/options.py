@@ -87,7 +87,7 @@ class ProgressiveSymbols(OptionSet):
     default = {"Progressive Dots", "Progressive Symmetry", "Progressive Stars"}
 
 
-class ColoredDotsAreProgressiveDots(DefaultOnToggle):
+class ColoredDotsAreProgressiveDots(Toggle):
     """
     Put Colored Dots into the "Progressive Dots" group, after Dots.
     This removes Progressive Symmetry.
@@ -96,7 +96,7 @@ class ColoredDotsAreProgressiveDots(DefaultOnToggle):
     visibility = Visibility.template | Visibility.complex_ui
 
 
-class SoundDotsAreProgressiveDots(DefaultOnToggle):
+class SoundDotsAreProgressiveDots(Toggle):
     """
     Put Sound Dots into the "Progressive Dots" group, before Full Dots.
     """
