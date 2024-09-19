@@ -96,6 +96,8 @@ class SecondStageSymbolsActIndependently(OptionSet):
     - "Full Dots": "Full Dots" unlocks Full Dots panels even if you don't have "Dots". "Dots" is renamed to "Sparse Dots".
     - "Stars + Same Colored Symbol": "Stars + Same Colored Symbol" unlocks Stars + Same Colored Symbol panels even if you don't have "Stars". "Stars" is renamed to "Simlpe Stars".
     - "Colored Dots": Removes the Symmetry requirement from the Symmetry Laser panel sets so that Colored Dots can unlock something on their own.
+
+    Rotated Shapers always act like this. The option to make them dependent on Shapers may be added in the future.
     """
 
     valid_keys = {
@@ -103,6 +105,8 @@ class SecondStageSymbolsActIndependently(OptionSet):
         "Stars + Same Colored Symbol",
         "Colored Dots",
     }
+
+    visibility = Visibility.template | Visibility.complex_ui
 
 
 class ColoredDotsAreProgressiveDots(Toggle):
