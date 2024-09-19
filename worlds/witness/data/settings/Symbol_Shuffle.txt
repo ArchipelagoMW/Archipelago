@@ -1,6 +1,7 @@
 Items:
 Arrows
 Dots
+Sparse Dots
 Full Dots
 Sound Dots
 Symmetry
@@ -11,6 +12,7 @@ Shapers
 Rotated Shapers
 Negative Shapers
 Stars
+Simple Stars
 Stars + Same Colored Symbol
 Black/White Squares
 Colored Squares

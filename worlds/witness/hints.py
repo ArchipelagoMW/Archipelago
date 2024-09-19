@@ -46,6 +46,8 @@ def get_always_hint_items(world: "WitnessWorld") -> List[str]:
         "Boat",
         "Caves Shortcuts",
         "Progressive Dots",
+        "Dots",
+        "Sparse Dots",
     ]
 
     difficulty = world.options.puzzle_randomization
@@ -100,7 +102,11 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
     if world.options.shuffle_symbols:
         symbols = [
             "Progressive Dots",
+            "Dots",
+            "Sparse Dots",
             "Progressive Stars",
+            "Stars",
+            "Simple Stars",
             "Shapers",
             "Rotated Shapers",
             "Negative Shapers",
@@ -112,6 +118,8 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
             "Sound Dots",
             "Progressive Symmetry"
         ]
+
+        symbols = [symbol for symbol in symbols if symbol in world.player_items.item_data]
 
         priority.update(world.random.sample(symbols, 5))
 

@@ -4,6 +4,7 @@ Symbols:
 2 - Full Dots
 3 - Invisible Dots
 5 - Sound Dots
+7 - Sparse Dots
 10 - Symmetry
 20 - Triangles
 30 - Eraser
@@ -12,6 +13,7 @@ Symbols:
 50 - Negative Shapers
 60 - Stars
 61 - Stars + Same Colored Symbol
+67 - Simple Stars
 71 - Black/White Squares
 72 - Colored Squares
 80 - Arrows

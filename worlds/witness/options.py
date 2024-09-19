@@ -84,7 +84,17 @@ class ProgressiveSymbols(OptionSet):
         "Progressive Line-Counting Symbols"
     }
 
-    default = {"Progressive Dots", "Progressive Symmetry", "Progressive Stars"}
+
+class SecondStageSymbolsActIndependently(DefaultOnToggle):
+    """
+    Only relevant if Dots, Symmetry or Stars are not progressive.
+
+    If Dots are not progressive, this replaces "Dots" with "Sparse Dots", so that "Full Dots" can unlock Full Dots panels independently.
+    If Stars are not progressive, this replaces "Stars" with "Simple Stars", so that "Stars + Same Colored Symbol" can act independently.
+    Removes the Symmetry requirement from the Symmetry Laser panel sets so that Colored Dots can unlock something on their own.
+    """
+
+    visibility = Visibility.template | Visibility.complex_ui
 
 
 class ColoredDotsAreProgressiveDots(Toggle):
@@ -459,6 +469,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     progressive_symbols: ProgressiveSymbols
     colored_dots_are_progressive_dots: ColoredDotsAreProgressiveDots
     sound_dots_are_progressive_dots: SoundDotsAreProgressiveDots
+    second_stage_symbols_act_independently: SecondStageSymbolsActIndependently
     shuffle_doors: ShuffleDoors
     door_groupings: DoorGroupings
     shuffle_boat: ShuffleBoat

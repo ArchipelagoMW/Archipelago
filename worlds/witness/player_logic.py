@@ -521,6 +521,39 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
+    def adjust_requirements_for_second_stage_symbols(self, world: "WitnessWorld") -> None:
+        for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
+            if "items" not in requirement:
+                continue
+
+            if world.options.second_stage_symbols_act_independently:
+                # Replace Dots with Sparse Dots, and Stars with Simple Stars
+                new_requirement_options = set()
+                for requirement_option in requirement["items"]:
+                    changed_requirement_option = set(requirement_option)
+                    if "Dots" in requirement_option:
+                        changed_requirement_option.remove("Dots")
+                        changed_requirement_option.add("Sparse Dots")
+                    if "Stars" in requirement_option:
+                        changed_requirement_option.remove("Stars")
+                        changed_requirement_option.add("Simple Stars")
+                    new_requirement_options.add(frozenset(changed_requirement_option))
+                self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
+            else:
+                # Add Dots requirement to Full Dots panels, Stars requirement to Stars + Same Colored Symbol Panels,
+                # And Symmetry requirement to Colored Dots panels
+                new_requirement_options = set()
+                for requirement_option in requirement["items"]:
+                    changed_requirement_option = set(requirement_option)
+                    if "Full Dots" in requirement_option:
+                        changed_requirement_option.add("Dots")
+                    if "Stars + Same Colored Symbol" in requirement_option:
+                        changed_requirement_option.add("Stars")
+                    if "Colored Dots" in requirement_option:
+                        changed_requirement_option.add("Symmetry")
+                    new_requirement_options.add(frozenset(changed_requirement_option))
+                self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
+
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
@@ -590,6 +623,8 @@ class WitnessPlayerLogic:
                 if progressive_item in world.options.progressive_symbols
             }
         )
+
+        self.adjust_requirements_for_second_stage_symbols(world)
 
         if world.options.colored_dots_are_progressive_dots:
             if "Progressive Dots" in self.PROGRESSIVE_LISTS:
