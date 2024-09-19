@@ -3,7 +3,7 @@ from random import Random
 from typing import List, Tuple, Dict, Optional, Callable
 
 from BaseClasses import Location, LocationProgressType, Region
-from .options import max_shapesanity
+from .options import max_shapesanity, max_levels_and_upgrades
 
 location_description = {  # TODO give at least some locations a description
     "Level 1": "TODO",
@@ -173,8 +173,9 @@ achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter
                                     "I need trains", "A bit early?", "GPS"]
 
 all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
-                            + [f"Level {x}" for x in range(1, 500)]
-                            + [f"{cat} Upgrade Tier {roman(x)}" for cat in categories for x in range(2, 501)]
+                            + [f"Level {x}" for x in range(1, max_levels_and_upgrades)]
+                            + [f"{cat} Upgrade Tier {roman(x)}"
+                               for cat in categories for x in range(2, max_levels_and_upgrades+1)]
                             + achievement_locations
                             + [f"Shapesanity {x}" for x in range(1, max_shapesanity+1)])
 

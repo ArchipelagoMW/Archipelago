@@ -21,13 +21,16 @@ class Goal(Choice):
     default = 0
 
 
+max_levels_and_upgrades = 500
+
+
 class GoalAmount(Range):
     """Specify, what level or tier (when either MAM or even fasterer is chosen as goal) is required to reach the goal.
     If MAM is set as the goal and this is set to less than 27, it will raise an OptionError."""
     display_name = "Goal amount"
     rich_text_doc = True
     range_start = 9
-    range_end = 500
+    range_end = max_levels_and_upgrades
     default = 27
 
 
