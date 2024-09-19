@@ -2,8 +2,17 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility, \
-    T, OptionSet
+from Options import (
+    Choice,
+    DefaultOnToggle,
+    OptionDict,
+    OptionGroup,
+    OptionSet,
+    PerGameCommonOptions,
+    Range,
+    Toggle,
+    Visibility,
+)
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -75,7 +84,7 @@ class ProgressiveSymbols(OptionSet):
         "Progressive Line-Counting Symbols"
     }
 
-    default = { "Progressive Dots", "Progressive Symmetry", "Progressive Stars" }
+    default = {"Progressive Dots", "Progressive Symmetry", "Progressive Stars"}
 
 
 class ColoredDotsAreProgressiveDots(DefaultOnToggle):

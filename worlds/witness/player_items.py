@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set, cast, Tuple
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -53,9 +53,10 @@ class WitnessPlayerItems:
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
             name: data for (name, data) in self.item_data.items()
-            if data.classification not in
-               {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-               or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
+            if data.classification not in {
+                ItemClassification.progression, ItemClassification.progression_skip_balancing
+            }
+            or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
