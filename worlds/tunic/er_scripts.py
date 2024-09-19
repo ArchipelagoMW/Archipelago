@@ -1,6 +1,6 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
-from .locations import location_table, all_locations
+from .locations import all_locations
 from .er_data import (Portal, portal_mapping, traversal_requirements, DeadEnd, Direction, RegionInfo,
                       get_portal_outlet_region)
 from .er_rules import set_er_region_rules

@@ -1,7 +1,6 @@
 import logging
 from dataclasses import dataclass
 from typing import Dict, Any, TYPE_CHECKING
-
 from decimal import Decimal, ROUND_HALF_UP
 
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
