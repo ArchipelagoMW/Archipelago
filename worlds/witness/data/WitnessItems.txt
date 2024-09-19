@@ -2,7 +2,6 @@ Symbols:
 0 - Dots
 1 - Colored Dots
 2 - Full Dots
-3 - Invisible Dots
 5 - Sound Dots
 7 - Sparse Dots
 10 - Symmetry

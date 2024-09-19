@@ -1143,17 +1143,17 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Dots & Black/White Squares & Stars + Same Colored Symbol & Stars & Full Dots
 158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Shapers & Full Dots
 158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Rotated Shapers & Full Dots
-158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots & Invisible Dots
-158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Dots & Invisible Dots
-158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Dots & Invisible Dots
-158491 - 0x0008C (Right Upstairs Left Row 4) - 0x0008B - Dots & Invisible Dots
-158492 - 0x0008A (Right Upstairs Left Row 5) - 0x0008C - Dots & Invisible Dots
-158493 - 0x00089 (Right Upstairs Left Row 6) - 0x0008A - Dots & Invisible Dots
-158494 - 0x0006A (Right Upstairs Left Row 7) - 0x00089 - Dots & Invisible Dots
-158495 - 0x0006C (Right Upstairs Left Row 8) - 0x0006A - Dots & Invisible Dots
-158496 - 0x00027 (Right Upstairs Right Row 1) - True - Dots & Invisible Dots & Symmetry
-158497 - 0x00028 (Right Upstairs Right Row 2) - 0x00027 - Dots & Invisible Dots & Symmetry
-158498 - 0x00029 (Right Upstairs Right Row 3) - 0x00028 - Dots & Invisible Dots & Symmetry
+158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots
+158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Dots
+158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Dots
+158491 - 0x0008C (Right Upstairs Left Row 4) - 0x0008B - Dots
+158492 - 0x0008A (Right Upstairs Left Row 5) - 0x0008C - Dots
+158493 - 0x00089 (Right Upstairs Left Row 6) - 0x0008A - Dots
+158494 - 0x0006A (Right Upstairs Left Row 7) - 0x00089 - Dots
+158495 - 0x0006C (Right Upstairs Left Row 8) - 0x0006A - Dots
+158496 - 0x00027 (Right Upstairs Right Row 1) - True - Dots  & Symmetry
+158497 - 0x00028 (Right Upstairs Right Row 2) - 0x00027 - Dots  & Symmetry
+158498 - 0x00029 (Right Upstairs Right Row 3) - 0x00028 - Dots  & Symmetry
 158476 - 0x09DD5 (Lone Pillar) - True - Triangles
 Door - 0x019A5 (Pillar Door) - 0x09DD5
 158449 - 0x021D7 (Mountain Shortcut Panel) - True - Triangles & Stars + Same Colored Symbol
