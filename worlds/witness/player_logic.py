@@ -569,6 +569,9 @@ class WitnessPlayerLogic:
                 self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
         else:
             for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
+                if "items" not in requirement:
+                    continue
+
                 # Add Dots requirement to Full Dots panels, Stars requirement to Stars + Same Colored Symbol Panels,
                 # And Symmetry requirement to Colored Dots panels
                 new_requirement_options = set()
