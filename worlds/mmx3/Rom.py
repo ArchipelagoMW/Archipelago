@@ -1,11 +1,9 @@
 
 import Utils
 import hashlib
-import struct
 import os
 import io
 from pathlib import Path
-from pkgutil import get_data
 
 from typing import TYPE_CHECKING, Iterable
 
