@@ -43,6 +43,7 @@ class TestProgressiveSymbols(WitnessTestBase):
             "Negative Shapers": 0,
             "Triangles": 0,
             "Arrows": 0,
+            "Sound Dots": 1,
         }
 
         self.assert_quantities_in_itempool(expected_quantities)
@@ -102,6 +103,7 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
             "Negative Shapers": 1,
             "Triangles": 1,
             "Arrows": 1,
+            "Sound Dots": 1,
         }
 
         self.assert_quantities_in_itempool(expected_quantities)
@@ -172,6 +174,7 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
             "Negative Shapers": 1,
             "Triangles": 1,
             "Arrows": 1,
+            "Sound Dots": 1,
         }
 
         self.assert_quantities_in_itempool(expected_quantities)
@@ -221,6 +224,105 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
             self.assertTrue(
                 self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
             )
+
+
+class TestAlternateProgressiveDots(WitnessTestBase):
+    options = {
+        "early_symbol_item": False,
+        "puzzle_randomization": "umbra_variety",
+        "progressive_symbols": {
+            "Progressive Dots",
+            "Progressive Symmetry"
+        },
+        "second_stage_symbols_act_independently": {
+            "Full Dots",
+            "Stars + Same Colored Symbol",
+            "Colored Dots",
+        },
+        "colored_dots_are_progressive_dots": True,
+        "sound_dots_are_progressive_dots": True,
+        "shuffle_doors": "doors",
+    }
+
+    def test_independent_second_stage_symbols(self):
+        expected_quantities = {
+            "Progressive Dots": 4,
+            "Progressive Symmetry": 0,
+            "Progressive Stars": 0,
+            "Progressive Squares": 0,
+            "Progressive Shapers": 0,
+            "Progressive Line-Counting Symbols": 0,
+            "Dots": 0,
+            "Sparse Dots": 0,
+            "Full Dots": 0,
+            "Symmetry": 1,
+            "Colored Dots": 0,
+            "Stars": 0,
+            "Simple Stars": 1,
+            "Stars + Same Colored Symbol": 1,
+            "Black/White Squares": 1,
+            "Colored Squares": 1,
+            "Shapers": 1,
+            "Rotated Shapers": 1,
+            "Negative Shapers": 1,
+            "Triangles": 1,
+            "Arrows": 1,
+            "Sound Dots": 0,
+        }
+
+        self.assert_quantities_in_itempool(expected_quantities)
+
+        self.collect_all_but(["Progressive Dots", "Symmetry"])  # Skip Symmetry so we can also test a little quirk
+        progressive_dots = self.get_items_by_name("Progressive Dots")
+        self.assertEqual(len(progressive_dots), 4)
+
+        with self.subTest("Test that one copy of Progressive Dots unlocks Dots panels"):
+            self.assertFalse(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
+            self.assertFalse(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.assertFalse(self.multiworld.state.can_reach("Jungle Popup Wall 6", "Location", self.player))
+            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
+
+            self.collect(progressive_dots.pop())
+
+            self.assertTrue(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
+            self.assertFalse(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.assertFalse(self.multiworld.state.can_reach("Jungle Popup Wall 6", "Location", self.player))
+            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
+
+        with self.subTest("Test that two copies of Progressive Dots unlocks Colored Dots panels"):
+            self.collect(progressive_dots.pop())
+
+            self.assertTrue(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
+            # Also test here that these "Colored Dots" act independently from Symmetry like they are supposed to
+            self.assertTrue(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.assertFalse(self.multiworld.state.can_reach("Jungle Popup Wall 6", "Location", self.player))
+            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
+
+        with self.subTest("Test that three copies of Progressive Dots unlocks Sound Dots panels"):
+            self.collect(progressive_dots.pop())
+
+            self.assertTrue(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
+            self.assertTrue(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.assertTrue(self.multiworld.state.can_reach("Jungle Popup Wall 6", "Location", self.player))
+            self.assertFalse(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
+
+        with self.subTest("Test that four copies of Progressive Dots unlocks Full Dots panels"):
+            self.collect(progressive_dots.pop())
+
+            self.assertTrue(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
+            self.assertTrue(
+                self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
+            )
+            self.assertTrue(self.multiworld.state.can_reach("Jungle Popup Wall 6", "Location", self.player))
+            self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
 
 
 class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):

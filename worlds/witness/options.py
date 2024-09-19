@@ -91,7 +91,7 @@ class ProgressiveSymbols(OptionSet):
 
 class SecondStageSymbolsActIndependently(OptionSet):
     """
-    Only relevant if the respective items are not progressive, in which case there is no point.
+    Makes certain second stage symbols act independently of first stage symbols if they are not progressive.
 
     - "Full Dots": "Full Dots" unlocks Full Dots panels even if you don't have "Dots". "Dots" is renamed to "Sparse Dots".
     - "Stars + Same Colored Symbol": "Stars + Same Colored Symbol" unlocks Stars + Same Colored Symbol panels even if you don't have "Stars". "Stars" is renamed to "Simlpe Stars".
