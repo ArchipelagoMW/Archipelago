@@ -43,10 +43,10 @@ def mystery_argparse():
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default='info', help='Sets log level')
-    parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
-                        help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
-    parser.add_argument('--plando', default=defaults.plando_options,
-                        help='List of options that can be set manually. Can be combined, for example "bosses, items"')
+    parser.add_argument("--csv_output", action="store_true",
+                        help="Output rolled player options to csv (made for async multiworld).")
+    parser.add_argument("--plando", default=defaults.plando_options,
+                        help="List of options that can be set manually. Can be combined, for example \"bosses, items\"")
     parser.add_argument("--skip_prog_balancing", action="store_true",
                         help="Skip progression balancing step during generation.")
     parser.add_argument("--skip_output", action="store_true",
@@ -156,6 +156,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
     erargs.name = {}
+    erargs.csv_output = args.csv_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
@@ -215,28 +216,6 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
 
     if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
         raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
-
-    if args.yaml_output:
-        import yaml
-        important = {}
-        for option, player_settings in vars(erargs).items():
-            if type(player_settings) == dict:
-                if all(type(value) != list for value in player_settings.values()):
-                    if len(player_settings.values()) > 1:
-                        important[option] = {player: value for player, value in player_settings.items() if
-                                             player <= args.yaml_output}
-                    else:
-                        logging.debug(f"No player settings defined for option '{option}'")
-
-            else:
-                if player_settings != "":  # is not empty name
-                    important[option] = player_settings
-                else:
-                    logging.debug(f"No player settings defined for option '{option}'")
-        if args.outputpath:
-            os.makedirs(args.outputpath, exist_ok=True)
-        with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
-            yaml.dump(important, f)
 
     return erargs, seed
 
