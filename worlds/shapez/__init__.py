@@ -96,7 +96,8 @@ class ShapezWorld(World):
         # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
         # both goal amounts for "MAM" and "Even fasterer" are set in a single option.
         if self.options.goal == "mam" and self.options.goal_amount < 27:
-            raise OptionError("When setting goal to 1 ('mam'), goal_amount must be at least 27 and not "
+            raise OptionError(self.player_name
+                              + ": When setting goal to 1 ('mam'), goal_amount must be at least 27 and not "
                               + str(self.options.goal_amount.value))
 
         # Determines maxlevel and finaltier, which are needed for location and item generation
