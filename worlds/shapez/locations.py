@@ -1,3 +1,4 @@
+import itertools
 from random import Random
 from typing import List, Tuple, Dict, Optional, Callable
 
@@ -26,7 +27,10 @@ location_description = {  # TODO give at least some locations a description
 }
 
 categories = ["Belt", "Miner", "Processors", "Painting"]
+subshape_names = ["Circle", "Square", "Star", "Windmill"]
 color_names = ["Red", "Blue", "Green", "Yellow", "Purple", "Cyan", "White", "Uncolored"]
+short_subshapes = ["C", "R", "S", "W"]
+short_colors = ["b", "c", "g", "p", "r", "u", "w", "y"]
 
 translate: List[Tuple[int, str]] = [
     (1000, "M"),
@@ -80,114 +84,80 @@ def init_shapesanity_pool() -> None:
         shapesanity_simple[f"{color} Square"] = f"Shapesanity Full {color_region}"
         shapesanity_simple[f"{color} Star"] = f"Shapesanity Full {color_region}"
         shapesanity_simple[f"{color} Windmill"] = f"Shapesanity East Windmill {color_region}"
-    for shape in ["Circle", "Square", "Star", "Windmill"]:
+    for shape in subshape_names:
         for color in color_names:
             color_region = color_to_needed_building([color])
             shapesanity_simple[f"Half {color} {shape}"] = f"Shapesanity Half {color_region}"
             shapesanity_simple[f"{color} {shape} Piece"] = f"Shapesanity Piece {color_region}"
             shapesanity_simple[f"Cut Out {color} {shape}"] = f"Shapesanity Stitched {color_region}"
             shapesanity_simple[f"Cornered {color} {shape}"] = f"Shapesanity Stitched {color_region}"
+
     # one color && 4 shapes (including empty)
-    for first_color in ["r", "g", "b", "y", "p", "c"]:
-        for second_color in ["g", "b", "y", "p", "c", "w"]:
-            if not first_color == second_color:
-                for third_color in ["b", "y", "p", "c", "w", "u"]:
-                    if third_color not in [first_color, second_color]:
-                        for fourth_color in ["y", "p", "c", "w", "u"]:
-                            if fourth_color not in [first_color, second_color, third_color]:
-                                colors = [first_color, second_color, third_color, fourth_color]
-                                color_region = color_to_needed_building(colors)
-                                color_code = ''.join(sorted(colors))
-                                shapesanity_1_4[f"{color_code} Circle"] = f"Shapesanity Colorful Full {color_region}"
-                                shapesanity_1_4[f"{color_code} Square"] = f"Shapesanity Colorful Full {color_region}"
-                                shapesanity_1_4[f"{color_code} Star"] = f"Shapesanity Colorful Full {color_region}"
-                                shapesanity_1_4[f"{color_code} Windmill"] \
-                                    = f"Shapesanity Colorful East Windmill {color_region}"
-                        fourth_color = "-"
-                        colors = [first_color, second_color, third_color, fourth_color]
-                        for shape in ["Circle", "Square", "Windmill", "Star"]:
-                            shapesanity_1_4[f"{''.join(sorted(colors))} {shape}"] \
-                                = f"Shapesanity Stitched {color_to_needed_building(colors)}"
+    for first_color, second_color, third_color, fourth_color in itertools.combinations(short_colors+["-"], 4):
+        colors = [first_color, second_color, third_color, fourth_color]
+        color_region = color_to_needed_building(colors)
+        shape_regions = ["Stitched", "Stitched"] if fourth_color == "-" else ["Colorful Full", "Colorful East Windmill"]
+        color_code = ''.join(colors)
+        shapesanity_1_4[f"{color_code} Circle"] = f"Shapesanity {shape_regions[0]} {color_region}"
+        shapesanity_1_4[f"{color_code} Square"] = f"Shapesanity {shape_regions[0]} {color_region}"
+        shapesanity_1_4[f"{color_code} Star"] = f"Shapesanity {shape_regions[0]} {color_region}"
+        shapesanity_1_4[f"{color_code} Windmill"] = f"Shapesanity {shape_regions[1]} {color_region}"
+
     # one shape && 4 colors (including empty)
-    for color in color_names:
-        for first_shape in ["C", "R"]:
-            for second_shape in ["R", "W"]:
-                if not first_shape == second_shape:
-                    for third_shape in ["W", "S"]:
-                        if not third_shape == second_shape:
-                            for fourth_shape in ["S", "-"]:
-                                if not fourth_shape == third_shape:
-                                    shapes = [first_shape, second_shape, third_shape, fourth_shape]
-                                    shapesanity_1_4[f"{color} {''.join(sorted(shapes))}"] \
-                                        = f"Shapesanity Stitched {color_to_needed_building([color])}"
-    for first_shape in ["C", "R", "W", "S"]:
-        for second_shape in ["C", "R", "W", "S"]:
-            for first_color in ["r", "g", "b", "y", "p", "c", "w", "u"]:
-                for second_color in ["r", "g", "b", "y", "p", "c", "w", "u"]:
-                    first_combo = first_shape + first_color
-                    second_combo = second_shape + second_color
-                    if not first_combo == second_combo:
-                        # 2-sided shapes
-                        color_region = color_to_needed_building([first_color, second_color])
-                        ordered_combo = " ".join(sorted([first_combo, second_combo]))
-                        shape_regions = ((["East Windmill", "East Windmill", "Colorful Half"] if first_shape == "W"
-                                          else ["Colorful Full", "Colorful Full", "Colorful Half"])
-                                         if first_shape == second_shape else ["Stitched", "Half-Half", "Stitched"])
-                        shapesanity_two_sided[f"3-1 {first_combo} {second_combo}"] \
-                            = f"Shapesanity {shape_regions[0]} {color_region}"
-                        shapesanity_two_sided[f"Half-Half {ordered_combo}"] \
-                            = f"Shapesanity {shape_regions[1]} {color_region}"
-                        shapesanity_two_sided[f"Checkered {ordered_combo}"] \
-                            = f"Shapesanity {shape_regions[0]} {color_region}"
-                        shapesanity_two_sided[f"Adjacent Singles {ordered_combo}"] \
-                            = f"Shapesanity {shape_regions[2]} {color_region}"
-                        shapesanity_two_sided[f"Cornered Singles {ordered_combo}"] \
-                            = f"Shapesanity Stitched {color_region}"
-                        shapesanity_two_sided[f"Adjacent 2-1 {first_combo} {second_combo}"] \
-                            = f"Shapesanity Stitched {color_region}"
-                        shapesanity_two_sided[f"Cornered 2-1 {first_combo} {second_combo}"] \
-                            = f"Shapesanity Stitched {color_region}"
-                        for third_shape in ["C", "R", "W", "S"]:
-                            for third_color in ["r", "g", "b", "y", "p", "c", "w", "u"]:
-                                third_combo = third_shape + third_color
-                                if third_combo not in [first_combo, second_combo]:
-                                    # 3-part shapes
-                                    colors = [first_color, second_color, third_color]
-                                    color_region = color_to_needed_building(colors)
-                                    ordered_two = " ".join(sorted([second_combo, third_combo]))
-                                    if not (first_color == second_color == third_color or
-                                            first_shape == second_shape == third_shape):
-                                        ordered_all = " ".join(sorted([first_combo, second_combo, third_combo]))
-                                        shapesanity_three_parts[f"Singles {ordered_all}"] \
-                                            = f"Shapesanity Stitched {color_region}"
-                                    shape_regions = ["Stitched", "Stitched"] if not second_shape == third_shape \
-                                        else ((["East Windmill", "East Windmill"] if first_shape == "W"
-                                               else ["Colorful Full", "Colorful Full"])
-                                              if first_shape == second_shape else ["Colorful Half-Half", "Stitched"])
-                                    shapesanity_three_parts[f"Adjacent 2-1-1 {first_combo} {ordered_two}"] \
-                                        = f"Shapesanity {shape_regions[0]} {color_region}"
-                                    shapesanity_three_parts[f"Cornered 2-1-1 {first_combo} {ordered_two}"] \
-                                        = f"Shapesanity {shape_regions[1]} {color_region}"
-                                    # Now 4-part shapes
-                                    for fourth_shape in ["C", "R", "W", "S"]:
-                                        for fourth_color in ["r", "g", "b", "y", "p", "c", "w", "u"]:
-                                            fourth_combo = fourth_shape + fourth_color
-                                            if fourth_combo not in [first_combo, second_combo, third_combo]:
-                                                if not (first_color == second_color == third_color == fourth_color
-                                                        or first_shape == second_shape == third_shape == fourth_shape):
-                                                    colors = [first_color, second_color, third_color, fourth_color]
-                                                    color_region = color_to_needed_building(colors)
-                                                    ordered_all = " ".join(sorted([first_combo, second_combo,
-                                                                                   third_combo, fourth_combo]))
-                                                    if ((first_shape == second_shape and third_shape == fourth_shape)
-                                                        or (first_shape == third_shape and second_shape == fourth_shape)
-                                                        or (first_shape == fourth_shape
-                                                            and third_shape == second_shape)):
-                                                        shapesanity_four_parts[f"Singles {ordered_all}"] \
-                                                            = f"Shapesanity Colorful Half-Half {color_region}"
-                                                    else:
-                                                        shapesanity_four_parts[f"Singles {ordered_all}"] \
-                                                            = f"Shapesanity Stitched {color_region}"
+    for first_shape, second_shape, third_shape, fourth_shape in itertools.combinations(short_subshapes+["-"], 4):
+        for color in color_names:
+            shapesanity_1_4[f"{color} {''.join([first_shape, second_shape, third_shape, fourth_shape])}"] \
+                = f"Shapesanity Stitched {color_to_needed_building([color])}"
+
+    combos = [shape + color for shape in short_subshapes for color in short_colors]
+    for first_combo, second_combo in itertools.permutations(combos, 2):
+        # 2-sided shapes
+        color_region = color_to_needed_building([first_combo[1], second_combo[1]])
+        ordered_combo = " ".join(sorted([first_combo, second_combo]))
+        shape_regions = ((["East Windmill", "East Windmill", "Colorful Half"]
+                          if first_combo[0] == "W" else ["Colorful Full", "Colorful Full", "Colorful Half"])
+                         if first_combo[0] == second_combo[0] else ["Stitched", "Half-Half", "Stitched"])
+        shapesanity_two_sided[f"3-1 {first_combo} {second_combo}"] = f"Shapesanity {shape_regions[0]} {color_region}"
+        shapesanity_two_sided[f"Half-Half {ordered_combo}"] = f"Shapesanity {shape_regions[1]} {color_region}"
+        shapesanity_two_sided[f"Checkered {ordered_combo}"] = f"Shapesanity {shape_regions[0]} {color_region}"
+        shapesanity_two_sided[f"Adjacent Singles {ordered_combo}"] = f"Shapesanity {shape_regions[2]} {color_region}"
+        shapesanity_two_sided[f"Cornered Singles {ordered_combo}"] = f"Shapesanity Stitched {color_region}"
+        shapesanity_two_sided[f"Adjacent 2-1 {first_combo} {second_combo}"] = f"Shapesanity Stitched {color_region}"
+        shapesanity_two_sided[f"Cornered 2-1 {first_combo} {second_combo}"] = f"Shapesanity Stitched {color_region}"
+        for third_combo in combos:
+            if third_combo in [first_combo, second_combo]:
+                continue
+            # 3-part shapes
+            colors = [first_combo[1], second_combo[1], third_combo[1]]
+            color_region = color_to_needed_building(colors)
+            ordered_two = " ".join(sorted([second_combo, third_combo]))
+            if not (first_combo[1] == second_combo[1] == third_combo[1] or
+                    first_combo[0] == second_combo[0] == third_combo[0]):
+                ordered_all = " ".join(sorted([first_combo, second_combo, third_combo]))
+                shapesanity_three_parts[f"Singles {ordered_all}"] = f"Shapesanity Stitched {color_region}"
+            shape_regions = (["Stitched", "Stitched"] if not second_combo[0] == third_combo[0]
+                             else ((["East Windmill", "East Windmill"] if first_combo[0] == "W"
+                                    else ["Colorful Full", "Colorful Full"])
+                                   if first_combo[0] == second_combo[0] else ["Colorful Half-Half", "Stitched"]))
+            shapesanity_three_parts[f"Adjacent 2-1-1 {first_combo} {ordered_two}"] \
+                = f"Shapesanity {shape_regions[0]} {color_region}"
+            shapesanity_three_parts[f"Cornered 2-1-1 {first_combo} {ordered_two}"] \
+                = f"Shapesanity {shape_regions[1]} {color_region}"
+            for fourth_combo in combos:
+                if fourth_combo in [first_combo, second_combo, third_combo]:
+                    continue
+                if (first_combo[1] == second_combo[1] == third_combo[1] == fourth_combo[1] or
+                    first_combo[0] == second_combo[0] == third_combo[0] == fourth_combo[0]):
+                    continue
+                colors = [first_combo[1], second_combo[1], third_combo[1], fourth_combo[1]]
+                color_region = color_to_needed_building(colors)
+                ordered_all = " ".join(sorted([first_combo, second_combo, third_combo, fourth_combo]))
+                if ((first_combo[0] == second_combo[0] and third_combo[0] == fourth_combo[0]) or
+                    (first_combo[0] == third_combo[0] and second_combo[0] == fourth_combo[0]) or
+                    (first_combo[0] == fourth_combo[0] and third_combo[0] == second_combo[0])):
+                    shapesanity_four_parts[f"Singles {ordered_all}"] = f"Shapesanity Colorful Half-Half {color_region}"
+                else:
+                    shapesanity_four_parts[f"Singles {ordered_all}"] = f"Shapesanity Stitched {color_region}"
 
 
 achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter", "Rotater", "Wait, they stack?",
