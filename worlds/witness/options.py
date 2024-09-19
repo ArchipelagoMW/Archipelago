@@ -76,6 +76,7 @@ class ProgressiveSymbols(OptionSet):
     Progressive Shapers: Shapers -> Rotated Shapers -> Negative Shapers
     Progressive Line-Counting Symbols: Triangles -> Arrows
     """
+    display_name = "Progressive Symbols"
 
     valid_keys = {
         "Progressive Dots",
