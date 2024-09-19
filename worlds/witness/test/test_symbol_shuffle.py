@@ -8,7 +8,7 @@ class TestSymbols(WitnessTestBase):
 
     def test_progressive_symbols(self) -> None:
         """
-        Test that Dots & Full Dots are correctly replaced by 2x Progressive Dots,
+        Test that Full Dots are correctly replaced by 2x Progressive Dots,
         and test that Dots puzzles and Full Dots puzzles require 1 and 2 copies of this item respectively.
         """
 

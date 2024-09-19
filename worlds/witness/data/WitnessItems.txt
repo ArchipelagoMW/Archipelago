@@ -15,9 +15,12 @@ Symbols:
 71 - Black/White Squares
 72 - Colored Squares
 80 - Arrows
-200 - Progressive Dots - Dots,Full Dots
-210 - Progressive Symmetry - Symmetry,Colored Dots
-260 - Progressive Stars - Stars,Stars + Same Colored Symbol
+200 - Progressive Dots
+240 - Progressive Shapers
+210 - Progressive Symmetry
+260 - Progressive Stars
+270 - Progressive Squares
+280 - Progressive Line-Counting Symbols
 
 Useful:
 510 - Puzzle Skip

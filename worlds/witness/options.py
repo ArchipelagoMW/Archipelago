@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
+from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility, \
+    T, OptionSet
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -51,6 +52,47 @@ class ShuffleSymbols(DefaultOnToggle):
     If you turn this option off and don't turn on door shuffle or obelisk keys, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
     """
     display_name = "Shuffle Symbols"
+
+
+class ProgressiveSymbols(OptionSet):
+    """
+    Make some symbols progressive, if they exist.
+
+    Progressive Dots: Dots -> Full Dots
+    Progressive Symmetry: Symmetry -> Colored Dots
+    Progressive Stars: Stars -> Stars + Same Colored Symbol
+    Progressive Squares: Black/White Squares -> Colored Squares
+    Progressive Shapers: Shapers -> Rotated Shapers -> Negative Shapers
+    Progressive Line-Counting Symbols: Triangles -> Arrows
+    """
+
+    valid_keys = {
+        "Progressive Dots",
+        "Progressive Symmetry",
+        "Progressive Stars",
+        "Progressive Squares",
+        "Progressive Shapers",
+        "Progressive Line-Counting Symbols"
+    }
+
+    default = { "Progressive Dots", "Progressive Symmetry", "Progressive Stars" }
+
+
+class ColoredDotsAreProgressiveDots(DefaultOnToggle):
+    """
+    Put Colored Dots into the "Progressive Dots" group, after Dots.
+    This removes Progressive Symmetry.
+    """
+
+    visibility = Visibility.template | Visibility.complex_ui
+
+
+class SoundDotsAreProgressiveDots(DefaultOnToggle):
+    """
+    Put Sound Dots into the "Progressive Dots" group, before Full Dots.
+    """
+
+    visibility = Visibility.template | Visibility.complex_ui
 
 
 class ShuffleLasers(Choice):
@@ -405,6 +447,9 @@ class DeathLinkAmnesty(Range):
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
     shuffle_symbols: ShuffleSymbols
+    progressive_symbols: ProgressiveSymbols
+    colored_dots_are_progressive_dots: ColoredDotsAreProgressiveDots
+    sound_dots_are_progressive_dots: SoundDotsAreProgressiveDots
     shuffle_doors: ShuffleDoors
     door_groupings: DoorGroupings
     shuffle_boat: ShuffleBoat

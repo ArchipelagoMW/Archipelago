@@ -21,6 +21,7 @@ from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
+from .data.settings.progressive_items import PROGRESSIVE_SYMBOLS
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
     WitnessRule,
@@ -75,12 +76,11 @@ class WitnessPlayerLogic:
 
         self.UNREACHABLE_REGIONS: Set[str] = set()
 
-        self.THEORETICAL_ITEMS: Set[str] = set()
-        self.THEORETICAL_ITEMS_NO_MULTI: Set[str] = set()
-        self.MULTI_AMOUNTS: Dict[str, int] = defaultdict(lambda: 1)
-        self.MULTI_LISTS: Dict[str, List[str]] = {}
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI: Set[str] = set()
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+        self.THEORETICAL_BASE_ITEMS: Set[str] = set()
+        self.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT: Dict[str, Tuple[str, int]] = {}
+        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()  # No "progressive" conversion yet
+        self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
         self.STARTING_INVENTORY: Set[str] = set()
 
@@ -183,13 +183,13 @@ class WitnessPlayerLogic:
 
         # Remove any items that don't actually exist in the settings (e.g. Symbol Shuffle turned off)
         these_items = frozenset({
-            subset.intersection(self.THEORETICAL_ITEMS_NO_MULTI)
+            subset.intersection(self.THEORETICAL_BASE_ITEMS)
             for subset in these_items
         })
 
         # Update the list of "items that are actually being used by any entity"
         for subset in these_items:
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
+            self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(subset)
 
         # Handle door entities (door shuffle)
         if entity_hex in self.DOOR_ITEMS_BY_ID:
@@ -197,7 +197,7 @@ class WitnessPlayerLogic:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
             for dependent_item in door_items:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependent_item)
+                self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(dependent_item)
 
             these_items = logical_and_witness_rules([door_items, these_items])
 
@@ -294,15 +294,13 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
             item_name = line_split[0]
 
+            # Do not add progressive items, delete the individual items
+            assert not isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition)
+
             if item_name not in static_witness_items.ITEM_DATA:
                 raise RuntimeError(f'Item "{item_name}" does not exist.')
 
-            self.THEORETICAL_ITEMS.add(item_name)
-            if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_ITEMS_NO_MULTI.update(cast(ProgressiveItemDefinition,
-                                                            static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
-            else:
-                self.THEORETICAL_ITEMS_NO_MULTI.add(item_name)
+            self.THEORETICAL_BASE_ITEMS.add(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
@@ -314,13 +312,10 @@ class WitnessPlayerLogic:
         if adj_type == "Remove Items":
             item_name = line
 
-            self.THEORETICAL_ITEMS.discard(item_name)
-            if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_ITEMS_NO_MULTI.difference_update(
-                    cast(ProgressiveItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).child_item_names
-                )
-            else:
-                self.THEORETICAL_ITEMS_NO_MULTI.discard(item_name)
+            self.THEORETICAL_BASE_ITEMS.discard(item_name)
+
+            # Do not delete progressive items, delete the individual items
+            assert not isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
@@ -589,6 +584,28 @@ class WitnessPlayerLogic:
         if world.options.shuffle_symbols:
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
+        self.PROGRESSIVE_LISTS.update(
+            {
+                progressive_item: item_list.copy() for progressive_item, item_list in PROGRESSIVE_SYMBOLS.items()
+                if progressive_item in world.options.progressive_symbols
+            }
+        )
+
+        if world.options.colored_dots_are_progressive_dots:
+            if "Progressive Dots" in self.PROGRESSIVE_LISTS:
+                # Insert after Dots
+                dots_index = self.PROGRESSIVE_LISTS["Progressive Dots"].index("Dots")
+                self.PROGRESSIVE_LISTS["Progressive Dots"].insert(dots_index + 1, "Colored Dots")
+            if "Progressive Symmetry" in self.PROGRESSIVE_LISTS:
+                # Remove from Progressive Symmetry
+                self.PROGRESSIVE_LISTS["Progressive Symmetry"].remove("Colored Dots")
+
+        if world.options.sound_dots_are_progressive_dots:
+            if "Progressive Dots" in self.PROGRESSIVE_LISTS:
+                # Insert before Full Dots
+                full_dots_index = self.PROGRESSIVE_LISTS["Progressive Dots"].index("Full Dots")
+                self.PROGRESSIVE_LISTS["Progressive Dots"].insert(full_dots_index, "Sound Dots")
+
         if world.options.EP_difficulty == "normal":
             adjustment_linesets_in_order.append(get_ep_easy())
         elif world.options.EP_difficulty == "tedious":
@@ -843,7 +860,7 @@ class WitnessPlayerLogic:
         self.REQUIREMENTS_BY_HEX = {}
         self.USED_EVENT_NAMES_BY_HEX = defaultdict(list)
         self.CONNECTIONS_BY_REGION_NAME = {}
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
+        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME = set()
 
         # Make independent requirements for entities
         for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
@@ -868,18 +885,30 @@ class WitnessPlayerLogic:
         """
         Finalise which items are used in the world, and handle their progressive versions.
         """
-        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
-            if item not in self.THEORETICAL_ITEMS:
-                progressive_item_name = static_witness_logic.get_parent_progressive_item(item)
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
-                child_items = cast(ProgressiveItemDefinition,
-                                   static_witness_logic.ALL_ITEMS[progressive_item_name]).child_item_names
-                multi_list = [child_item for child_item in child_items
-                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
-                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
-                self.MULTI_LISTS[progressive_item_name] = multi_list
-            else:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+
+        # Filter non existent base items
+        self.PROGRESSIVE_LISTS = {
+            progressive_item: [
+                item for item in base_items if item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME
+            ]
+            for progressive_item, base_items in self.PROGRESSIVE_LISTS.items()
+        }
+
+        # Filter empty chains / chains with only one item (no point in having those)
+        self.PROGRESSIVE_LISTS = {
+            progressive_item: base_items for progressive_item, base_items in self.PROGRESSIVE_LISTS.items()
+            if len(base_items) >= 2  # No point in a single-item progressive chain
+        }
+
+        # Build PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME with the finalized progressive item replacements in mind
+        self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME = self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.copy()
+        for progressive_item, base_items in self.PROGRESSIVE_LISTS.items():
+            self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item)
+            self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME -= set(base_items)
+
+            # Also make a reverse lookup of base items to their progressive item & required count
+            for index, item in enumerate(base_items):
+                self.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT[item] = (progressive_item, index + 1)
 
     def solvability_guaranteed(self, entity_hex: str) -> bool:
         return not (

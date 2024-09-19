@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set, cast
+from typing import TYPE_CHECKING, Dict, List, Set, cast, Tuple
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -55,7 +55,7 @@ class WitnessPlayerItems:
             name: data for (name, data) in self.item_data.items()
             if data.classification not in
                {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-               or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+               or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
@@ -76,7 +76,7 @@ class WitnessPlayerItems:
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
-                num_progression = len(self._logic.MULTI_LISTS[item_name])
+                num_progression = len(self._logic.PROGRESSIVE_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
             else:
                 self._mandatory_items[item_name] = 1
@@ -212,7 +212,11 @@ class WitnessPlayerItems:
                 # Note: we need to reference the static table here rather than the player-specific one because the child
                 # items were removed from the pool when we pruned out all progression items not in the options.
                 output[cast(int, item.ap_code)] = [cast(int, static_witness_items.ITEM_DATA[child_item].ap_code)
-                                                   for child_item in item.definition.child_item_names]
+                                                   for child_item in self._logic.PROGRESSIVE_LISTS[item_name]]
         return output
 
-
+    def get_parent_progressive_item_and_count(self, item_name: str) -> Tuple[str, int]:
+        """
+        Returns the name of the item's progressive parent, if there is one, or the item's name if not.
+        """
+        return self._logic.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT.get(item_name, (item_name, 1))

@@ -54,11 +54,11 @@ Outside Tutorial Vault (Outside Tutorial):
 158651 - 0x03481 (Vault Box) - True - True
 
 Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial Outpost - 0x0A170:
-158011 - 0x0A171 (Outpost Entry Panel) - True - Dots & Full Dots
+158011 - 0x0A171 (Outpost Entry Panel) - True - Full Dots
 Door - 0x0A170 (Outpost Entry) - 0x0A171
 
 Outside Tutorial Outpost (Outside Tutorial) - Outside Tutorial - 0x04CA3:
-158012 - 0x04CA4 (Outpost Exit Panel) - True - Dots & Full Dots
+158012 - 0x04CA4 (Outpost Exit Panel) - True - Full Dots
 Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
 
@@ -285,7 +285,7 @@ Quarry Stoneworks Middle Floor (Quarry Stoneworks) - Quarry Stoneworks Lift - Tr
 158125 - 0x00E0C (Lower Row 1) - True - Dots & Eraser
 158126 - 0x01489 (Lower Row 2) - 0x00E0C - Dots & Eraser
 158127 - 0x0148A (Lower Row 3) - 0x01489 - Dots & Eraser
-158128 - 0x014D9 (Lower Row 4) - 0x0148A - Dots & Full Dots & Eraser
+158128 - 0x014D9 (Lower Row 4) - 0x0148A - Full Dots & Eraser
 158129 - 0x014E7 (Lower Row 5) - 0x014D9 - Dots
 158130 - 0x014E8 (Lower Row 6) - 0x014E7 - Dots & Eraser
 
@@ -535,11 +535,11 @@ Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
 158221 - 0x28AE3 (Vines) - 0x18590 - True
 158222 - 0x28938 (Apple Tree) - 0x28AE3 - True
 158223 - 0x079DF (Triple Exit) - 0x28938 - True
-158235 - 0x2899C (Wooden Roof Lower Row 1) - True - Rotated Shapers & Dots & Full Dots
-158236 - 0x28A33 (Wooden Roof Lower Row 2) - 0x2899C - Shapers & Rotated Shapers & Dots & Full Dots
-158237 - 0x28ABF (Wooden Roof Lower Row 3) - 0x28A33 - Shapers & Rotated Shapers & Dots & Full Dots
-158238 - 0x28AC0 (Wooden Roof Lower Row 4) - 0x28ABF - Rotated Shapers & Dots & Full Dots
-158239 - 0x28AC1 (Wooden Roof Lower Row 5) - 0x28AC0 - Rotated Shapers & Dots & Full Dots
+158235 - 0x2899C (Wooden Roof Lower Row 1) - True - Rotated Shapers & Full Dots
+158236 - 0x28A33 (Wooden Roof Lower Row 2) - 0x2899C - Shapers & Rotated Shapers & Full Dots
+158237 - 0x28ABF (Wooden Roof Lower Row 3) - 0x28A33 - Shapers & Rotated Shapers & Full Dots
+158238 - 0x28AC0 (Wooden Roof Lower Row 4) - 0x28ABF - Rotated Shapers & Full Dots
+158239 - 0x28AC1 (Wooden Roof Lower Row 5) - 0x28AC0 - Rotated Shapers & Full Dots
 Door - 0x034F5 (Wooden Roof Stairs) - 0x28AC1
 158225 - 0x28998 (RGB House Entry Panel) - True - Stars & Rotated Shapers
 Door - 0x28A61 (RGB House Entry) - 0x28998
@@ -1081,9 +1081,9 @@ Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB & 0x33961:
 158522 - 0x0383A (Right Pillar 1) - True - Stars
 158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots
-158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Full Dots
+158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Full Dots
 158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Dots & Symmetry
-158526 - 0x0383D (Left Pillar 1) - True - Dots & Full Dots
+158526 - 0x0383D (Left Pillar 1) - True - Full Dots
 158527 - 0x0383F (Left Pillar 2) - 0x0383D - Black/White Squares
 158528 - 0x03859 (Left Pillar 3) - 0x0383F - Shapers
 158529 - 0x339BB (Left Pillar 4) - 0x03859 - Black/White Squares & Stars & Symmetry
@@ -1138,11 +1138,11 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158480 - 0x289E7 (Third Wooden Beam) - True - Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Black/White Squares & Shapers
 158482 - 0x17FB9 (Left Upstairs Single) - True - Dots
-158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Dots & Full Dots
-158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Dots & Full Dots
-158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Dots & Full Dots
-158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Dots & Full Dots
-158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Dots & Full Dots
+158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Full Dots
+158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Full Dots
+158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Full Dots
+158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Full Dots
+158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Full Dots
 158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots & Invisible Dots
 158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Dots & Invisible Dots
 158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Dots & Invisible Dots
