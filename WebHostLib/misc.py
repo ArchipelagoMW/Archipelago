@@ -132,26 +132,41 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
     return "Access Denied", 403
 
 
-@app.route('/room/<suuid:room>', methods=['GET', 'POST'])
+@app.post("/room/<suuid:room>")
+def host_room_command(room: UUID):
+    room: Room = Room.get(id=room)
+    if room is None:
+        return abort(404)
+
+    if room.owner == session["_id"]:
+        cmd = request.form["cmd"]
+        if cmd:
+            Command(room=room, commandtext=cmd)
+            commit()
+    return redirect(url_for("host_room", room=room.id))
+
+
+@app.get("/room/<suuid:room>")
 def host_room(room: UUID):
     room: Room = Room.get(id=room)
     if room is None:
         return abort(404)
-    if request.method == "POST":
-        if room.owner == session["_id"]:
-            cmd = request.form["cmd"]
-            if cmd:
-                Command(room=room, commandtext=cmd)
-                commit()
-        return redirect(url_for("host_room", room=room.id))
 
     now = datetime.datetime.utcnow()
     # indicate that the page should reload to get the assigned port
-    should_refresh = not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3)
+    should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
+                      or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
     with db_session:
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
-    def get_log(max_size: int = 1024000) -> str:
+    browser_tokens = "Mozilla", "Chrome", "Safari"
+    automated = ("update" in request.args
+                 or "Discordbot" in request.user_agent.string
+                 or not any(browser_token in request.user_agent.string for browser_token in browser_tokens))
+
+    def get_log(max_size: int = 0 if automated else 1024000) -> str:
+        if max_size == 0:
+            return "…"
         try:
             with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0

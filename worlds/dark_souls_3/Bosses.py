@@ -63,6 +63,9 @@ all_bosses = [
     DS3BossInfo("Deacons of the Deep", 3500800, locations = {
         "CD: Soul of the Deacons of the Deep",
         "CD: Small Doll - boss drop",
+        "CD: Archdeacon White Crown - boss room after killing boss",
+        "CD: Archdeacon Holy Garb - boss room after killing boss",
+        "CD: Archdeacon Skirt - boss room after killing boss",
         "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
     DS3BossInfo("Abyss Watchers", 3300801, before_storm_ruler = True, locations = {
