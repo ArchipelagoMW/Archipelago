@@ -397,14 +397,14 @@ class WitnessWorld(World):
         if item.name in static_witness_items.ALL_ITEM_ALIASES:
             real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
             state.prog_items[self.player][real_item] += 1
-            return True
 
-        if item.name in self.player_items.progressive_item_lists:
+        elif item.name in self.player_items.progressive_item_lists:
             item_list = self.player_items.progressive_item_lists[item.name]
             index = state.prog_items[self.player][item.name] - 1
             if index < len(item_list):
                 state.prog_items[self.player][item_list[index]] += 1
-            return True
+
+        return True
 
     def remove(self, state: CollectionState, item: WitnessItem) -> bool:
         changed = super().remove(state, item)
@@ -415,14 +415,14 @@ class WitnessWorld(World):
         if item.name in static_witness_items.ALL_ITEM_ALIASES:
             real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
             state.prog_items[self.player][real_item] -= 1
-            return True
 
-        if item.name in self.player_items.progressive_item_lists:
+        elif item.name in self.player_items.progressive_item_lists:
             item_list = self.player_items.progressive_item_lists[item.name]
             index = state.prog_items[self.player][item.name]
             if index < len(item_list):
                 state.prog_items[self.player][item_list[index]] -= 1
-            return True
+
+        return True
 
     def get_filler_item_name(self) -> str:
         return "Speed Boost"
