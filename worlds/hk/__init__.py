@@ -544,6 +544,8 @@ class HKWorld(World):
 
         slot_data["grub_count"] = self.grub_count
 
+        slot_data["is_race"] = self.multiworld.is_race
+
         return slot_data
 
     def create_item(self, name: str) -> HKItem:
