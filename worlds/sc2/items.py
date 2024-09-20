@@ -42,6 +42,7 @@ class TerranItemType(ItemTypeEnum):
     Mercenary = "Mercenary", 12
     Nova_Gear = "Nova Gear", 13
     Progressive_2 = "Progressive Upgrade", 14
+    Unit_2 = "Unit", 15
 
 
 class ZergItemType(ItemTypeEnum):
@@ -217,6 +218,9 @@ item_table = {
                  classification=ItemClassification.progression, origin={"ext"}),
     item_names.SKY_FURY:
         ItemData(51 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 29, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, origin={"ext"}),
+    item_names.SHOCK_DIVISION:
+        ItemData(52 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit2, 0, SC2Race.TERRAN,
                  classification=ItemClassification.progression, origin={"ext"}),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed

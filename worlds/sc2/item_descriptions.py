@@ -157,6 +157,7 @@ item_descriptions = {
         Durable Royal Guard support flyer. Loaded with strong anti-capital air missiles. 
         Can switch into Assault Mode to attack ground units.
     """),
+    item_names.SHOCK_DIVISION: "Royal Guard Heavy tank. Long-range artillery in Siege Mode.",
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "vehicles"),

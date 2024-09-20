@@ -146,7 +146,8 @@ class SC2Logic:
                     item_names.PRIDE_OF_AUGUSTRGRAD,
                 ), self.player)
                 or (
-                    state.has_all((item_names.SIEGE_TANK, item_names.MEDIVAC), self.player)
+                    state.has(item_names.MEDIVAC, self.player)
+                    and state.has_any((item_names.SIEGE_TANK, item_names.SHOCK_DIVISION), self.player)
                     and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
                 )
             )
