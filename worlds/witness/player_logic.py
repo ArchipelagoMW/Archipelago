@@ -554,36 +554,18 @@ class WitnessPlayerLogic:
 
         Also, if Progressive Symmetry is off and independent symbols are off, a Symmetry requirement is added to the
         Symmetry Laser sets.
-
-        When symbols are progressive, we treat each stage as independent as an optimisation.
-        This can cause logical discrepancies if the player then plandos the second stage symbol.
         """
 
         implicit_dependencies = {}
 
         if "Full Dots" not in world.options.second_stage_symbols_act_independently:
-            full_dots_always_after_dots = any(
-                "Dots" in progressive_list and "Full Dots" in progressive_list
-                for progressive_item, progressive_list in self.ENABLED_PROGRESSIVE_LISTS.items()
-            )
-            if not full_dots_always_after_dots:
-                implicit_dependencies["Full Dots"] = "Dots"
+            implicit_dependencies["Full Dots"] = "Dots"
 
         if "Stars + Same Colored Symbol" not in world.options.second_stage_symbols_act_independently:
-            stars2_always_after_stars1 = any(
-                "Stars" in progressive_list and "Stars + Same Colored Symbol" in progressive_list
-                for progressive_list in self.ENABLED_PROGRESSIVE_LISTS.values()
-            )
-            if not stars2_always_after_stars1:
-                implicit_dependencies["Stars + Same Colored Symbol"] = "Stars"
+            implicit_dependencies["Stars + Same Colored Symbol"] = "Stars"
 
         if "Colored Dots" not in world.options.second_stage_symbols_act_independently:
-            colored_dots_always_after_symmetry = any(
-                "Symmetry" in progressive_list and "Colored Dots" in progressive_list
-                for progressive_list in self.ENABLED_PROGRESSIVE_LISTS.values()
-            )
-            if not colored_dots_always_after_symmetry:
-                implicit_dependencies["Colored Dots"] = "Symmetry"
+            implicit_dependencies["Colored Dots"] = "Symmetry"
 
         self.add_implicit_dependencies_to_requirements(implicit_dependencies)
 
