@@ -133,7 +133,11 @@ loadLoop2:
     ret
     """))
     
-    addr = 0x1000
-    data = pkgutil.get_data(__name__, "nyan.bin")    
-    rom.banks[0x3F][addr : addr + len(data)] = data
+    addr = 0x0400
+    cats = [f for f in pkgutil.get_data(__name__, "cats").splitlines() if f.endswith("Garfield.bin")]
+    data = pkgutil.get_data(__name__, f"cats/{random.choice(cats)}")
+    assert len(data) < 0x2400
+    rom.banks[0x3F][addr:addr + len(data)] = data
+
+
 
