@@ -21,7 +21,7 @@ Symbols:
 210 - Progressive Symmetry
 260 - Progressive Stars
 270 - Progressive Squares
-280 - Progressive Line-Counting Symbols
+280 - Progressive Discard Symbols
 
 Useful:
 510 - Puzzle Skip

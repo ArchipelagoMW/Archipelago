@@ -74,7 +74,7 @@ class ProgressiveSymbols(OptionSet):
     Progressive Stars: Stars -> Stars + Same Colored Symbol
     Progressive Squares: Black/White Squares -> Colored Squares
     Progressive Shapers: Shapers -> Rotated Shapers -> Negative Shapers
-    Progressive Line-Counting Symbols: Triangles -> Arrows
+    Progressive Discard Symbols: Triangles -> Arrows
     """
     display_name = "Progressive Symbols"
 
@@ -84,7 +84,7 @@ class ProgressiveSymbols(OptionSet):
         "Progressive Stars",
         "Progressive Squares",
         "Progressive Shapers",
-        "Progressive Line-Counting Symbols"
+        "Progressive Discard Symbols"
     }
 
     default = {"Progressive Dots", "Progressive Symmetry", "Progressive Stars"}

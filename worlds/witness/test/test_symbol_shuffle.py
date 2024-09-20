@@ -11,7 +11,7 @@ class TestProgressiveSymbols(WitnessTestBase):
             "Progressive Stars",
             "Progressive Squares",
             "Progressive Shapers",
-            "Progressive Line-Counting Symbols"
+            "Progressive Discard Symbols"
         }
     }
 
@@ -27,7 +27,7 @@ class TestProgressiveSymbols(WitnessTestBase):
             "Progressive Stars": 2,
             "Progressive Squares": 2,
             "Progressive Shapers": 3,
-            "Progressive Line-Counting Symbols": 2,
+            "Progressive Discard Symbols": 2,
             "Dots": 0,
             "Sparse Dots": 0,
             "Full Dots": 0,
@@ -87,7 +87,7 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
             "Progressive Stars": 0,
             "Progressive Squares": 0,
             "Progressive Shapers": 0,
-            "Progressive Line-Counting Symbols": 0,
+            "Progressive Discard Symbols": 0,
             "Dots": 0,
             "Sparse Dots": 1,
             "Full Dots": 1,
@@ -162,7 +162,7 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
             "Progressive Stars": 0,
             "Progressive Squares": 0,
             "Progressive Shapers": 0,
-            "Progressive Line-Counting Symbols": 0,
+            "Progressive Discard Symbols": 0,
             "Dots": 1,
             "Sparse Dots": 0,
             "Full Dots": 1,
@@ -257,7 +257,7 @@ class TestAlternateProgressiveDots(WitnessTestBase):
             "Progressive Stars": 0,
             "Progressive Squares": 0,
             "Progressive Shapers": 0,
-            "Progressive Line-Counting Symbols": 0,
+            "Progressive Discard Symbols": 0,
             "Dots": 0,
             "Sparse Dots": 0,
             "Full Dots": 0,

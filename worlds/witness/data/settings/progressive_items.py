@@ -4,5 +4,5 @@ PROGRESSIVE_SYMBOLS = {
     "Progressive Stars": ["Stars", "Stars + Same Colored Symbol"],
     "Progressive Shapers": ["Shapers", "Rotated Shapers", "Negative Shapers"],
     "Progressive Squares": ["Black/White Squares", "Colored Squares"],
-    "Progressive Line-Counting Symbols": ["Triangles", "Arrows"],
+    "Progressive Discard Symbols": ["Triangles", "Arrows"],
 }
