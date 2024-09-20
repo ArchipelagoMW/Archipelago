@@ -209,6 +209,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
         -> List[Union[CollectionRule, SimpleItemRepresentation]]:
     """
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
+    It is unclear how much this does after the recent rework the progressive items, but there is no reason to remove it.
     """
 
     direct_items = [rule for rule in requirement_option if isinstance(rule, SimpleItemRepresentation)]
@@ -243,7 +244,12 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
         item_rules_converted = [lambda state: state.has(item, player, count)]
     else:
         item_counts = {item_rule.item_name: item_rule.item_count for item_rule in item_rules}
-        item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
+
+        if all(item_count == 1 for item_count in item_counts.values()):
+            item_list = list(item_counts)
+            item_rules_converted = [lambda state: state.has_all(item_list, player)]
+        else:
+            item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
 
     return collection_rules + item_rules_converted
 
