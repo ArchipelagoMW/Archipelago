@@ -60,6 +60,7 @@ class WitnessPlayerItems:
         ), "A replacement item was used without setting up the alias in static_witness_logic.ALL_ITEM_ALIASES"
 
         self.all_progressive_item_lists = copy.deepcopy(self._logic.THEORETICAL_PROGRESSIVE_LISTS)
+        self.progressive_item_lists_in_use = copy.deepcopy(self._logic.PROGRESSIVE_LISTS_IN_USE)
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
         self.item_data: Dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
@@ -89,7 +90,7 @@ class WitnessPlayerItems:
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
-                num_progression = len(self._logic.THEORETICAL_PROGRESSIVE_LISTS[item_name])
+                num_progression = len(self.progressive_item_lists_in_use)
                 self._mandatory_items[item_name] = num_progression
             else:
                 self._mandatory_items[item_name] = 1
