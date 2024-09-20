@@ -935,7 +935,7 @@ class WitnessPlayerLogic:
         Finalise which items are used in the world, and handle their progressive versions.
         """
 
-        self.FINALIZED_PROGRESSIVE_ITEM_LISTS = self.THEORETICAL_PROGRESSIVE_LISTS.copy()
+        self.FINALIZED_PROGRESSIVE_ITEM_LISTS = self.ENABLED_PROGRESSIVE_LISTS.copy()
 
         # Filter non existent base items
         self.FINALIZED_PROGRESSIVE_ITEM_LISTS = {
