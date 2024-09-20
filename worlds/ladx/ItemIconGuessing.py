@@ -67,6 +67,7 @@ SYNONYMS = {
     'WAND': 'MAGIC_ROD',
 
     # PEGASUS_BOOTS
+    'BOOST': 'PEGASUS_BOOTS',
     'BOOT': 'PEGASUS_BOOTS',
     'GREAVES': 'PEGASUS_BOOTS',
     'RUN': 'PEGASUS_BOOTS',
@@ -96,6 +97,7 @@ SYNONYMS = {
     'BLAST': 'BOMB',
     'BOMBCHU': 'BOMB',
     'FIRECRACKER': 'BOMB',
+    'SURGE': 'BOMB',
     'TNT': 'BOMB',
 
     # SWORD
@@ -204,8 +206,6 @@ SYNONYMS = {
     # HEART_CONTAINER
     'TANK': 'HEART_CONTAINER',
 
-    # BAD_HEART_CONTAINER
-
     # TOADSTOOL
     'FUNGAL': 'TOADSTOOL',
     'FUNGUS': 'TOADSTOOL',
@@ -217,7 +217,12 @@ SYNONYMS = {
     'SEED': 'GUARDIAN_ACORN',
 
     # KEY
+    'DOOR': 'KEY',
+    'GATE': 'KEY',
     'KEY': 'KEY', # Without this, foreign keys show up as nightmare keys
+    'LOCK': 'KEY',
+    'PANEL': 'KEY',
+    'UNLOCK': 'KEY',
 
     # NIGHTMARE_KEY
 
@@ -366,7 +371,7 @@ PHRASES = {
     # Ocarina of Time
     'COJIRO': 'ROOSTER',
 
-    #SMZ3
+    # SMZ3
     'BYRNA': 'MAGIC_ROD',
     'SOMARIA': 'MAGIC_ROD',
 
@@ -375,6 +380,22 @@ PHRASES = {
 
     # Super Mario World
     'P-BALLOON': 'FEATHER',
+
+    # The Witness
+    'BONK': 'BOMB',
+    'BUNKER LASER': 'INSTRUMENT4',
+    'DESERT LASER': 'INSTRUMENT5',
+    'JUNGLE LASER': 'INSTRUMENT4',
+    'KEEP LASER': 'INSTRUMENT7',
+    'MONASTERY LASER': 'INSTRUMENT1',
+    'PUZZLE SKIP': 'GOLD_LEAF',
+    'QUARRY LASER': 'INSTRUMENT8',
+    'SHADOWS LASER': 'INSTRUMENT1',
+    'SLOWNESS': 'BOMB',
+    'SWAMP LASER': 'INSTRUMENT2',
+    'SYMMETRY LASER': 'INSTRUMENT6',
+    'TOWN LASER': 'INSTRUMENT3',
+    'TREEHOUSE LASER': 'INSTRUMENT2',
 
     # TUNIC
     "AURA'S GEM": 'SHIELD',  # card that enhances the shield
