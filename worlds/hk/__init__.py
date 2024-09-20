@@ -155,7 +155,7 @@ class HKWorld(World):
     game: str = "Hollow Knight"
     options_dataclass = HKOptions
     options: HKOptions
-    settings: ClassVar[HollowKnightSettings]
+    settings: typing.ClassVar[HollowKnightSettings]
 
     web = HKWeb()
 
