@@ -192,3 +192,9 @@ mission_groups[MissionGroupNames.PLANET_AIUR_MISSIONS] = [
     SC2Mission.THE_HOST.mission_name,
     SC2Mission.SALVATION.mission_name,
 ]
+
+for mission in SC2Mission:
+    if mission.flags & MissionFlag.HasRaceSwap:
+        short_name = mission.mission_name[:mission.mission_name.find(' (')]
+        mission_groups[short_name] = [mission_var.mission_name for mission_var in SC2Mission
+                                      if short_name in mission_var.mission_name]
