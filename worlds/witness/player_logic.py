@@ -80,7 +80,7 @@ class WitnessPlayerLogic:
         self.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT: Dict[str, Tuple[str, int]] = {}
         self.THEORETICAL_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.ENABLED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
-        self.FINALIZED_PROGRESSIVE_ITEM_LISTS: Dict[str, List[str]] = {}
+        self.FINALIZED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = {}
         self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()  # No "progressive" conversion yet
         self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
@@ -935,26 +935,26 @@ class WitnessPlayerLogic:
         Finalise which items are used in the world, and handle their progressive versions.
         """
 
-        self.FINALIZED_PROGRESSIVE_ITEM_LISTS = self.ENABLED_PROGRESSIVE_LISTS.copy()
+        self.FINALIZED_PROGRESSIVE_LISTS = self.ENABLED_PROGRESSIVE_LISTS.copy()
 
         # Filter non existent base items
-        self.FINALIZED_PROGRESSIVE_ITEM_LISTS = {
+        self.FINALIZED_PROGRESSIVE_LISTS = {
             progressive_item: [
                 item for item in base_items if item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME
             ]
-            for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_ITEM_LISTS.items()
+            for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_LISTS.items()
         }
 
         # Filter empty chains / chains with only one item (no point in having those)
-        self.FINALIZED_PROGRESSIVE_ITEM_LISTS = {
+        self.FINALIZED_PROGRESSIVE_LISTS = {
             progressive_item: base_items
-            for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_ITEM_LISTS.items()
+            for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_LISTS.items()
             if len(base_items) >= 2  # No point in a single-item progressive chain
         }
 
         # Build PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME with the finalized progressive item replacements in mind
         self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME = self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.copy()
-        for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_ITEM_LISTS.items():
+        for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_LISTS.items():
             self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item)
             self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME -= set(base_items)
 
