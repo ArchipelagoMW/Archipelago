@@ -250,7 +250,7 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
 
         # Sort the list by which item you are least likely to have (E.g. last stage of progressive item chains)
         sorted_item_list = sorted(
-            list(item_counts.keys()),
+            item_counts.keys(),
             key=lambda item_name: player_logic.PARENT_ITEM_COUNT_PER_BASE_ITEM.get(item_name, 1.5),
             reverse=True
             # 1.5 because you are less likely to have a single stage item than one copy of a 2-stage chain
@@ -271,8 +271,6 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
     """
     Converts a WitnessRule into a CollectionRule.
     """
-    player = world.player
-
     if requirements == frozenset({frozenset()}):
         return None
 
