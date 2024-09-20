@@ -379,7 +379,6 @@ class LinksAwakeningWorld(World):
             for item in ladxr_item_to_la_item_name.keys():
                 self.name_cache[item] = item
                 splits = item.split("_")
-                self.name_cache["".join(splits)] = item
                 for word in item.split("_"):
                     if word not in ItemIconGuessing.FORBIDDEN and not word.isnumeric():
                         self.name_cache[word] = item
@@ -400,10 +399,10 @@ class LinksAwakeningWorld(World):
                 return ItemIconGuessing.PHRASES[phrase]
         # pattern for breaking down camelCase, also separates out digits
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
-        possibles = pattern.sub(' ', other).upper().replace('_', ' ').split(" ")
-        rejoined = "".join(possibles)
-        if rejoined in self.name_cache:
-            return self.name_cache[rejoined]
+        possibles = pattern.sub(' ', other).upper()
+        for ch in "[]()_":
+            possibles = possibles.replace(ch, " ")
+        possibles = possibles.split()
         for name in possibles:
             if name in self.name_cache:
                 return self.name_cache[name]
