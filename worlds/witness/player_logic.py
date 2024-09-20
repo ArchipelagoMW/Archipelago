@@ -81,6 +81,7 @@ class WitnessPlayerLogic:
         self.THEORETICAL_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.ENABLED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.PROGRESSIVE_LISTS_IN_USE: Dict[str, List[str]] = {}
+        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = {}
         self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()  # No "progressive" conversion yet
         self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
@@ -955,6 +956,9 @@ class WitnessPlayerLogic:
         for progressive_item, base_items in self.PROGRESSIVE_LISTS_IN_USE.items():
             self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item)
             self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME -= set(base_items)
+
+            for i, base_item in enumerate(base_items):
+                self.PARENT_ITEM_COUNT_PER_BASE_ITEM[base_item] = i + 1
 
     def solvability_guaranteed(self, entity_hex: str) -> bool:
         return not (
