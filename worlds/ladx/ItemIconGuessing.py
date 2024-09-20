@@ -422,6 +422,7 @@ PHRASES = {
     'SYMMETRY LASER': 'INSTRUMENT6',
     'TOWN LASER': 'INSTRUMENT3',
     'TREEHOUSE LASER': 'INSTRUMENT2',
+    'WATER PUMPS': 'KEY',
 
     # TUNIC
     "AURA'S GEM": 'SHIELD',  # card that enhances the shield
