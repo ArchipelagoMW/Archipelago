@@ -257,10 +257,12 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
         )
 
         if all(item_count == 1 for item_count in item_counts.values()):
+            # If all counts are one, just use state.has_all
             item_rules_converted = [lambda state: state.has_all(sorted_item_list, player)]
         else:
+            # If any count is higher than 1, use state.has_all_counts
             sorted_item_counts = {item_name: item_counts[item_name] for item_name in sorted_item_list}
-            item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
+            item_rules_converted = [lambda state: state.has_all_counts(sorted_item_counts, player)]
 
     return collection_rules + item_rules_converted
 
