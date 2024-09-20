@@ -28,7 +28,7 @@ class HollowKnightSettings(Group):
     class DisableMapModSpoilers(Bool):
         """Disallows the APMapMod from showing spoiler placements."""
 
-    DisableMapModSpoilers: Union[DisableLocalSpoiler, bool] = False
+    disable_spoilers: typing.Union[DisableMapModSpoilers, bool] = False
 
 
 path_of_pain_locations = {
@@ -555,7 +555,7 @@ class HKWorld(World):
 
         slot_data["grub_count"] = self.grub_count
 
-        slot_data["is_race"] = int(self.settings.DisableMapModSpoilers or self.multiworld.is_race)
+        slot_data["is_race"] = int(self.settings.disable_spoilers or self.multiworld.is_race)
 
         return slot_data
 
