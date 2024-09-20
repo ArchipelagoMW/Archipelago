@@ -80,7 +80,7 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
         "shuffle_doors": "doors",
     }
 
-    def test_independent_second_stage_symbols(self):
+    def test_independent_second_stage_symbols(self) -> None:
         expected_quantities = {
             "Progressive Dots": 0,
             "Progressive Symmetry": 0,
@@ -155,7 +155,7 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
         "shuffle_doors": "doors",
     }
 
-    def test_independent_second_stage_symbols(self):
+    def test_independent_second_stage_symbols(self) -> None:
         expected_quantities = {
             "Progressive Dots": 0,
             "Progressive Symmetry": 0,
@@ -250,7 +250,7 @@ class TestAlternateProgressiveDots(WitnessTestBase):
         "shuffle_doors": "doors",
     }
 
-    def test_independent_second_stage_symbols(self):
+    def test_independent_second_stage_symbols(self) -> None:
         expected_quantities = {
             "Progressive Dots": 4,
             "Progressive Symmetry": 0,

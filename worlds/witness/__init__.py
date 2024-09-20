@@ -5,7 +5,7 @@ import dataclasses
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -388,7 +388,7 @@ class WitnessWorld(World):
 
         return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
-    def collect(self, state: CollectionState, item: WitnessItem) -> bool:
+    def collect(self, state: CollectionState, item: Item) -> bool:
         changed = super().collect(state, item)
 
         if not changed:
@@ -406,7 +406,7 @@ class WitnessWorld(World):
 
         return True
 
-    def remove(self, state: CollectionState, item: WitnessItem) -> bool:
+    def remove(self, state: CollectionState, item: Item) -> bool:
         changed = super().remove(state, item)
 
         if not changed:

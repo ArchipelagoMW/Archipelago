@@ -524,7 +524,7 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
-    def add_implicit_dependencies_to_requirements(self, dependencies: Dict[str, str]):
+    def add_implicit_dependencies_to_requirements(self, dependencies: Dict[str, str]) -> None:
         if not dependencies:
             return
 

@@ -224,8 +224,8 @@ class WitnessPlayerItems:
         """
         # int() is used here to cast for mypy, but also to crash if one of these items' IDs is None
         return {
-            int(static_witness_items.ITEM_DATA[progressive_item].ap_code): [
-                int(static_witness_items.ITEM_DATA[base_item].ap_code) for base_item in corresponding_base_items
+            cast(int, static_witness_items.ITEM_DATA[progressive_item].ap_code): [
+                cast(int, static_witness_items.ITEM_DATA[base_item].ap_code) for base_item in corresponding_base_items
             ]
             for progressive_item, corresponding_base_items in self.all_progressive_item_lists.items()
         }

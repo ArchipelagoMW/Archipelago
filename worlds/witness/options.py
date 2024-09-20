@@ -87,7 +87,7 @@ class ProgressiveSymbols(OptionSet):
         "Progressive Discard Symbols"
     }
 
-    default = {"Progressive Dots", "Progressive Symmetry", "Progressive Stars"}
+    default = frozenset({"Progressive Dots", "Progressive Symmetry", "Progressive Stars"})
 
 
 class SecondStageSymbolsActIndependently(OptionSet):
