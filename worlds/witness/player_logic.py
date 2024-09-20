@@ -78,7 +78,9 @@ class WitnessPlayerLogic:
 
         self.THEORETICAL_BASE_ITEMS: Set[str] = set()
         self.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT: Dict[str, Tuple[str, int]] = {}
-        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.THEORETICAL_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.ENABLED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.PROGRESSIVE_LISTS_IN_USE: Dict[str, List[str]] = {}
         self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()  # No "progressive" conversion yet
         self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
@@ -552,6 +554,9 @@ class WitnessPlayerLogic:
 
         Also, if Progressive Symmetry is off and independent symbols are off, a Symmetry requirement is added to the
         Symmetry Laser sets.
+
+        When symbols are progressive, we treat each stage as independent as an optimisation.
+        This can cause logical discrepancies if the player then plandos the second stage symbol.
         """
 
         implicit_dependencies = {}
@@ -559,7 +564,7 @@ class WitnessPlayerLogic:
         if "Full Dots" not in world.options.second_stage_symbols_act_independently:
             full_dots_always_after_dots = any(
                 "Dots" in progressive_list and "Full Dots" in progressive_list
-                for progressive_list in self.PROGRESSIVE_LISTS.values()
+                for progressive_item, progressive_list in self.ENABLED_PROGRESSIVE_LISTS.items()
             )
             if not full_dots_always_after_dots:
                 implicit_dependencies["Full Dots"] = "Dots"
@@ -567,7 +572,7 @@ class WitnessPlayerLogic:
         if "Stars + Same Colored Symbol" not in world.options.second_stage_symbols_act_independently:
             stars2_always_after_stars1 = any(
                 "Stars" in progressive_list and "Stars + Same Colored Symbol" in progressive_list
-                for progressive_list in self.PROGRESSIVE_LISTS.values()
+                for progressive_list in self.ENABLED_PROGRESSIVE_LISTS.values()
             )
             if not stars2_always_after_stars1:
                 implicit_dependencies["Stars + Same Colored Symbol"] = "Stars"
@@ -575,7 +580,7 @@ class WitnessPlayerLogic:
         if "Colored Dots" not in world.options.second_stage_symbols_act_independently:
             colored_dots_always_after_symmetry = any(
                 "Symmetry" in progressive_list and "Colored Dots" in progressive_list
-                for progressive_list in self.PROGRESSIVE_LISTS.values()
+                for progressive_list in self.ENABLED_PROGRESSIVE_LISTS.values()
             )
             if not colored_dots_always_after_symmetry:
                 implicit_dependencies["Colored Dots"] = "Symmetry"
@@ -645,29 +650,27 @@ class WitnessPlayerLogic:
         if world.options.shuffle_symbols:
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        self.PROGRESSIVE_LISTS.update(
-            {
-                progressive_item: item_list.copy() for progressive_item, item_list in PROGRESSIVE_SYMBOLS.items()
-                if progressive_item in world.options.progressive_symbols
-            }
-        )
+        self.THEORETICAL_PROGRESSIVE_LISTS = copy.deepcopy(PROGRESSIVE_SYMBOLS)
 
         self.adjust_requirements_for_second_stage_symbols(world)
 
         if world.options.colored_dots_are_progressive_dots:
-            if "Progressive Dots" in self.PROGRESSIVE_LISTS:
-                # Insert after Dots
-                dots_index = self.PROGRESSIVE_LISTS["Progressive Dots"].index("Dots")
-                self.PROGRESSIVE_LISTS["Progressive Dots"].insert(dots_index + 1, "Colored Dots")
-            if "Progressive Symmetry" in self.PROGRESSIVE_LISTS:
-                # Remove from Progressive Symmetry
-                self.PROGRESSIVE_LISTS["Progressive Symmetry"].remove("Colored Dots")
+            # Insert after Dots
+            dots_index = self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].index("Dots")
+            self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].insert(dots_index + 1, "Colored Dots")
+
+            # Remove from Progressive Symmetry
+            self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Symmetry"].remove("Colored Dots")
 
         if world.options.sound_dots_are_progressive_dots:
-            if "Progressive Dots" in self.PROGRESSIVE_LISTS:
-                # Insert before Full Dots
-                full_dots_index = self.PROGRESSIVE_LISTS["Progressive Dots"].index("Full Dots")
-                self.PROGRESSIVE_LISTS["Progressive Dots"].insert(full_dots_index, "Sound Dots")
+            # Insert before Full Dots
+            full_dots_index = self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].index("Full Dots")
+            self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].insert(full_dots_index, "Sound Dots")
+
+        self.ENABLED_PROGRESSIVE_LISTS = {
+            progressive_item: item_list for progressive_item, item_list in self.THEORETICAL_PROGRESSIVE_LISTS.items()
+            if progressive_item in world.options.progressive_symbols
+        }
 
         if world.options.EP_difficulty == "normal":
             adjustment_linesets_in_order.append(get_ep_easy())
@@ -949,29 +952,27 @@ class WitnessPlayerLogic:
         Finalise which items are used in the world, and handle their progressive versions.
         """
 
+        self.PROGRESSIVE_LISTS_IN_USE = self.THEORETICAL_PROGRESSIVE_LISTS.copy()
+
         # Filter non existent base items
-        self.PROGRESSIVE_LISTS = {
+        self.PROGRESSIVE_LISTS_IN_USE = {
             progressive_item: [
                 item for item in base_items if item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME
             ]
-            for progressive_item, base_items in self.PROGRESSIVE_LISTS.items()
+            for progressive_item, base_items in self.PROGRESSIVE_LISTS_IN_USE.items()
         }
 
         # Filter empty chains / chains with only one item (no point in having those)
-        self.PROGRESSIVE_LISTS = {
-            progressive_item: base_items for progressive_item, base_items in self.PROGRESSIVE_LISTS.items()
+        self.PROGRESSIVE_LISTS_IN_USE = {
+            progressive_item: base_items for progressive_item, base_items in self.PROGRESSIVE_LISTS_IN_USE.items()
             if len(base_items) >= 2  # No point in a single-item progressive chain
         }
 
         # Build PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME with the finalized progressive item replacements in mind
         self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME = self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.copy()
-        for progressive_item, base_items in self.PROGRESSIVE_LISTS.items():
+        for progressive_item, base_items in self.PROGRESSIVE_LISTS_IN_USE.items():
             self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item)
             self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME -= set(base_items)
-
-            # Also make a reverse lookup of base items to their progressive item & required count
-            for index, item in enumerate(base_items):
-                self.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT[item] = (progressive_item, index + 1)
 
     def solvability_guaranteed(self, entity_hex: str) -> bool:
         return not (

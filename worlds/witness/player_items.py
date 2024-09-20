@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
+from typing import TYPE_CHECKING, Dict, List, Set, cast
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -59,8 +59,7 @@ class WitnessPlayerItems:
             for key, value in self.replacement_items.items()
         ), "A replacement item was used without setting up the alias in static_witness_logic.ALL_ITEM_ALIASES"
 
-        # This is a more appropriate place for progressive item lists long term
-        self.progressive_item_lists = copy.deepcopy(self._logic.PROGRESSIVE_LISTS)
+        self.all_progressive_item_lists = copy.deepcopy(self._logic.THEORETICAL_PROGRESSIVE_LISTS)
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
         self.item_data: Dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
@@ -90,7 +89,7 @@ class WitnessPlayerItems:
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
-                num_progression = len(self._logic.PROGRESSIVE_LISTS[item_name])
+                num_progression = len(self._logic.THEORETICAL_PROGRESSIVE_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
             else:
                 self._mandatory_items[item_name] = 1
@@ -218,19 +217,14 @@ class WitnessPlayerItems:
             if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
         ]
 
-    def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
-        output: Dict[int, List[int]] = {}
-        for item_name, quantity in dict(self._mandatory_items.items()).items():
-            item = self.item_data[item_name]
-            if isinstance(item.definition, ProgressiveItemDefinition):
-                # Note: we need to reference the static table here rather than the player-specific one because the child
-                # items were removed from the pool when we pruned out all progression items not in the options.
-                output[cast(int, item.ap_code)] = [cast(int, static_witness_items.ITEM_DATA[child_item].ap_code)
-                                                   for child_item in self._logic.PROGRESSIVE_LISTS[item_name]]
-        return output
-
-    def get_parent_progressive_item_and_count(self, item_name: str) -> Tuple[str, int]:
+    def get_progressive_item_ids(self) -> Dict[int, List[int]]:
         """
-        Returns the name of the item's progressive parent, if there is one, or the item's name if not.
+        Returns a dict from progressive item IDs to the list of IDs of the base item that they unlock, in order.
         """
-        return self._logic.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT.get(item_name, (item_name, 1))
+        # int() is used here to cast for mypy, but also to crash if one of these items' IDs is None
+        return {
+            int(static_witness_items.ITEM_DATA[progressive_item].ap_code): [
+                int(static_witness_items.ITEM_DATA[base_item].ap_code) for base_item in corresponding_base_items
+            ]
+            for progressive_item, corresponding_base_items in self.all_progressive_item_lists
+        }

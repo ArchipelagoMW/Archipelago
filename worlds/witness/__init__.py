@@ -88,7 +88,7 @@ class WitnessWorld(World):
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
             "laser_ids_to_hints": self.laser_ids_to_hints,
-            "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
+            "progressive_item_lists": self.player_items.get_progressive_item_ids(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
             "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
@@ -398,8 +398,8 @@ class WitnessWorld(World):
             real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
             state.prog_items[self.player][real_item] += 1
 
-        elif item.name in self.player_items.progressive_item_lists:
-            item_list = self.player_items.progressive_item_lists[item.name]
+        elif item.name in self.player_items.all_progressive_item_lists:
+            item_list = self.player_items.all_progressive_item_lists[item.name]
             index = state.prog_items[self.player][item.name] - 1
             if index < len(item_list):
                 state.prog_items[self.player][item_list[index]] += 1
@@ -416,8 +416,8 @@ class WitnessWorld(World):
             real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
             state.prog_items[self.player][real_item] -= 1
 
-        elif item.name in self.player_items.progressive_item_lists:
-            item_list = self.player_items.progressive_item_lists[item.name]
+        elif item.name in self.player_items.all_progressive_item_lists:
+            item_list = self.player_items.all_progressive_item_lists[item.name]
             index = state.prog_items[self.player][item.name]
             if index < len(item_list):
                 state.prog_items[self.player][item_list[index]] -= 1
