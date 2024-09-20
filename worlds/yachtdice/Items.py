@@ -16,8 +16,6 @@ class YachtDiceItem(Item):
 
 
 item_table = {
-    # victory item, always placed manually at goal location
-    "Victory": ItemData(16871244000 - 1, ItemClassification.progression),
     "Dice": ItemData(16871244000, ItemClassification.progression),
     "Dice Fragment": ItemData(16871244001, ItemClassification.progression),
     "Roll": ItemData(16871244002, ItemClassification.progression),
