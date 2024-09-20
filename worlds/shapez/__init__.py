@@ -6,7 +6,7 @@ from .items import item_descriptions, item_table, ShapezItem, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
     big_upgrades, filler, trap, bundles
 from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
-    addshapesanity, addshapesanity_ut, color_to_needed_building, init_shapesanity_pool, shapesanity_simple
+    addshapesanity, addshapesanity_ut, shapesanity_simple, init_shapesanity_pool
 from .presets import options_presets
 from .options import ShapezOptions
 from worlds.AutoWorld import World, WebWorld

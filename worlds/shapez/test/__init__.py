@@ -1,9 +1,23 @@
 from test.bases import WorldTestBase
-from .. import options_presets
+from .. import options_presets, ShapezWorld
 
 
 class ShapezTestBase(WorldTestBase):
     game = "shapez"
+
+
+class TestShapesanityImport(ShapezTestBase):
+    world: ShapezWorld
+
+    def test_correct_import_of_shapesanity_pool(self):
+        names_length = len(self.world.shapesanity_names)
+        locations_length = len([0 for loc in self.multiworld.get_locations(self.player) if "Shapesanity" in loc.name])
+        self.assertEqual(names_length,
+                         locations_length,
+                         f"The amount of shapesanity names ({names_length}) does not match the amount of included " +
+                         f"shapesanity locations ({locations_length}).")
+        self.assertTrue("Uncolored Circle" in self.world.shapesanity_names,
+                        "Uncolored Circle is guaranteed but was not found in shapesanity_names.")
 
 
 class TestDefault(ShapezTestBase):

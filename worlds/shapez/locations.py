@@ -1,8 +1,5 @@
-import pkgutil
 from random import Random
 from typing import List, Tuple, Dict, Optional, Callable
-
-import orjson
 
 from BaseClasses import Location, LocationProgressType, Region
 from .options import max_shapesanity, max_levels_and_upgrades
@@ -57,31 +54,11 @@ def roman(num: int) -> str:
     return rom
 
 
-def color_to_needed_building(color_list: List[str]) -> str:
-    for next_color in color_list:
-        if next_color in ["Yellow", "Purple", "Cyan", "White", "y", "p", "c", "w"]:
-            return "Mixed"
-    for next_color in color_list:
-        if next_color not in ["Uncolored", "u"]:
-            return "Painted"
-    return "Uncolored"
-
-
 shapesanity_simple: Dict[str, str] = {}
 shapesanity_1_4: Dict[str, str] = {}
 shapesanity_two_sided: Dict[str, str] = {}
 shapesanity_three_parts: Dict[str, str] = {}
 shapesanity_four_parts: Dict[str, str] = {}
-
-
-def init_shapesanity_pool() -> None:
-    pool = orjson.loads(pkgutil.get_data(__name__, "data/shapesanity_pool.json"))
-    shapesanity_simple.update(pool["shapesanity_simple"])
-    shapesanity_1_4.update(pool["shapesanity_1_4"])
-    shapesanity_two_sided.update(pool["shapesanity_two_sided"])
-    shapesanity_three_parts.update(pool["shapesanity_three_parts"])
-    shapesanity_four_parts.update(pool["shapesanity_four_parts"])
-
 
 achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter", "Rotater", "Wait, they stack?",
                                     "Wires", "Storage", "Freedom", "The logo!", "To the moon", "It's piling up",
@@ -101,6 +78,15 @@ all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level
                                for cat in categories for x in range(2, max_levels_and_upgrades+1)]
                             + achievement_locations
                             + [f"Shapesanity {x}" for x in range(1, max_shapesanity+1)])
+
+
+def init_shapesanity_pool() -> None:
+    from .data import shapesanity_pool
+    shapesanity_simple.update(shapesanity_pool.shapesanity_simple)
+    shapesanity_1_4.update(shapesanity_pool.shapesanity_1_4)
+    shapesanity_two_sided.update(shapesanity_pool.shapesanity_two_sided)
+    shapesanity_three_parts.update(shapesanity_pool.shapesanity_three_parts)
+    shapesanity_four_parts.update(shapesanity_pool.shapesanity_four_parts)
 
 
 def addlevels(maxlevel: int, logictype: str,
@@ -451,8 +437,8 @@ def addshapesanity_ut(shapesanity_names: List[str], add_alias: Callable[[str,str
     included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
 
     for name in shapesanity_names:
-        for options in [shapesanity_simple, shapesanity_1_4, shapesanity_two_sided,
-                        shapesanity_three_parts, shapesanity_four_parts]:
+        for options in [shapesanity_simple, shapesanity_1_4, shapesanity_two_sided, shapesanity_three_parts,
+                        shapesanity_four_parts]:
             if name in options:
                 next_shape = options[name]
                 break
