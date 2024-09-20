@@ -1,6 +1,7 @@
 from ..assembler import ASM
 import os
 import pkgutil
+import random
 
 def updateEndScreen(rom):
     # Call our custom data loader in bank 3F
@@ -133,11 +134,8 @@ loadLoop2:
     ret
     """))
     
-    addr = 0x0400
-    cats = [f for f in pkgutil.get_data(__name__, "cats").splitlines() if f.endswith("Garfield.bin")]
+    addr = 0x1000
+    cats = [f for f in os.listdir(os.path.join(os.path.dirname(__file__), "cats")) if f.endswith(".bin")]
     data = pkgutil.get_data(__name__, f"cats/{random.choice(cats)}")
     assert len(data) < 0x2400
     rom.banks[0x3F][addr:addr + len(data)] = data
-
-
-
