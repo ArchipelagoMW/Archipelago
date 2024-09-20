@@ -596,27 +596,61 @@ class HKWorld(World):
             location.costs = costs.pop()
         return location
 
+    def edit_effects(self, state, item_name, player, add: bool):
+        for effect_name, effect_value in item_effects.get(item_name, {}).items():
+            if add:
+                state.prog_items[player][effect_name] += effect_value
+            else:
+                state.prog_items[player][effect_name] -= effect_value
+                if state.prog_items[player][effect_name] < 1:
+                    del state.prog_items[player][effect_name]
+
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
         if change:
-            for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                state.prog_items[item.player][effect_name] += effect_value
+            prog_items = state.prog_items[item.player]
             if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-                if state.prog_items[item.player].get('RIGHTDASH', 0) and \
-                        state.prog_items[item.player].get('LEFTDASH', 0):
-                    (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
-                        ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
+                # # reset dash effects to 0 and recalc
+                # prog_items['RIGHTDASH'] = 0
+                # prog_items['LEFTDASH'] = 0
+                # for _ in range(prog_items["Right_Mothwing_Cloak"]):
+                #     self.edit_effects(state, "Right_Mothwing_Cloak", item.player, add=True)
+                # for _ in range(prog_items["Left_Mothwing_Cloak"]):
+                #     self.edit_effects(state, "Left_Mothwing_Cloak", item.player, add=True)
+
+                # should just be able to add the new effect
+                self.edit_effects(state, item.name, item.player, add=True)
+
+                # if we have both cloaks keep them in step to account for shade cloak
+                if prog_items.get('RIGHTDASH', 0) and \
+                        prog_items.get('LEFTDASH', 0):
+                    (prog_items["RIGHTDASH"], prog_items["LEFTDASH"]) = \
+                        ([max(prog_items["RIGHTDASH"], prog_items["LEFTDASH"])] * 2)    
+            else:
+                self.edit_effects(state, item.name, item.player, add=True)
+
         return change
 
     def remove(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).remove(state, item)
-
         if change:
-            for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                if state.prog_items[item.player][effect_name] == effect_value:
-                    del state.prog_items[item.player][effect_name]
-                else:
-                    state.prog_items[item.player][effect_name] -= effect_value
+            prog_items = state.prog_items[item.player]
+            if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
+                # reset dash effects to 0 and recalc
+                prog_items['RIGHTDASH'] = 0
+                prog_items['LEFTDASH'] = 0
+                for _ in range(prog_items["Right_Mothwing_Cloak"]):
+                    self.edit_effects(state, "Right_Mothwing_Cloak", item.player, add=True)
+                for _ in range(prog_items["Left_Mothwing_Cloak"]):
+                    self.edit_effects(state, "Left_Mothwing_Cloak", item.player, add=True)
+
+                # if we have both cloaks keep them in step to account for shade cloak
+                if prog_items.get('RIGHTDASH', 0) and \
+                        prog_items.get('LEFTDASH', 0):
+                    (prog_items["RIGHTDASH"], prog_items["LEFTDASH"]) = \
+                        ([max(prog_items["RIGHTDASH"], prog_items["LEFTDASH"])] * 2)    
+            else:
+                self.edit_effects(state, item.name, item.player, add=False)
 
         return change
 
