@@ -1,8 +1,8 @@
-import itertools
-import json
-from pathlib import Path
+import pkgutil
 from random import Random
 from typing import List, Tuple, Dict, Optional, Callable
+
+import orjson
 
 from BaseClasses import Location, LocationProgressType, Region
 from .options import max_shapesanity, max_levels_and_upgrades
@@ -75,8 +75,7 @@ shapesanity_four_parts: Dict[str, str] = {}
 
 
 def init_shapesanity_pool() -> None:
-    with open((Path(__file__).parent / "data/shapesanity_pool.json").resolve()) as openfile:
-        pool = json.load(openfile)
+    pool = orjson.loads(pkgutil.get_data(__name__, "data/shapesanity_pool.json"))
     shapesanity_simple.update(pool["shapesanity_simple"])
     shapesanity_1_4.update(pool["shapesanity_1_4"])
     shapesanity_two_sided.update(pool["shapesanity_two_sided"])
