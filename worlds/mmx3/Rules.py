@@ -322,6 +322,28 @@ def set_rules(world: MMX3World):
                 )
              ))
     
+    # Handle helmet logic
+    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_underwater}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_before_boss}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino} -> {RegionName.tunnel_rhino_wall_jump}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino} -> {RegionName.tunnel_rhino_climbing}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger} -> {RegionName.neon_tiger_bit_byte}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger} -> {RegionName.neon_tiger_hill}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.blast_hornet} -> {RegionName.blast_hornet_outside}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
+    set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3} -> {RegionName.dr_doppler_lab_3_after_rematches}", player), 
+             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
+    
     # Handle bosses weakness
     if world.options.logic_boss_weakness.value or world.options.boss_weakness_strictness.value >= 2:
         add_boss_weakness_logic(world)
@@ -329,10 +351,6 @@ def set_rules(world: MMX3World):
     # Handle pickupsanity logic
     if world.options.pickupsanity.value:
         add_pickupsanity_logic(world)
-
-    # Handle helmet logic
-    if world.options.logic_helmet_checkpoints.value:
-        add_helmet_logic(world)
 
 
 def check_weaknesses(state: CollectionState, player: int, rulesets: list) -> bool:
@@ -424,28 +442,3 @@ def add_pickupsanity_logic(world: MMX3World):
              lambda state: state.has(ItemName.tornado_fang, player))
     set_rule(multiworld.get_location(LocationName.crush_crawfish_1up_2, player),
              lambda state: state.has(ItemName.tornado_fang, player))
-    
-def add_helmet_logic(world: MMX3World):
-    player = world.player
-    multiworld = world.multiworld
-
-    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_underwater}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    set_rule(multiworld.get_entrance(f"{RegionName.toxic_seahorse} -> {RegionName.toxic_seahorse_before_boss}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    
-    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino} -> {RegionName.tunnel_rhino_wall_jump}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    set_rule(multiworld.get_entrance(f"{RegionName.tunnel_rhino} -> {RegionName.tunnel_rhino_climbing}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    
-    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger} -> {RegionName.neon_tiger_bit_byte}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    set_rule(multiworld.get_entrance(f"{RegionName.neon_tiger} -> {RegionName.neon_tiger_hill}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    
-    set_rule(multiworld.get_entrance(f"{RegionName.blast_hornet} -> {RegionName.blast_hornet_outside}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))
-    
-    set_rule(multiworld.get_entrance(f"{RegionName.dr_doppler_lab_3} -> {RegionName.dr_doppler_lab_3_after_rematches}", player), 
-             lambda state: state.has(ItemName.third_armor_helmet, player, 1))

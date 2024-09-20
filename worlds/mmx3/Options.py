@@ -369,12 +369,6 @@ class PlandoWeaknesses(OptionDict):
     })
     default = {}
 
-class LogicHelmetCheckpoints(Toggle):
-    """
-    Makes the "Use Any Checkpoint" feature from the Helmet Upgrade be in logic
-    """
-    display_name = "Helmet Checkpoints In Logic"
-
 class VoltCatfishTweaks(OptionSet):
     """
     Behavior options for Volt Catfish. Everything can be stacked.
@@ -593,7 +587,6 @@ mmx3_option_groups = [
         DisableChargeFreeze,
         LongJumps,
         ZSaberInPool,
-        LogicHelmetCheckpoints,
     ]),
     OptionGroup("Boss Weakness Options", [
         BossWeaknessRando,
@@ -685,7 +678,6 @@ class MMX3Options(PerGameCommonOptions):
     byte_medal_count: ByteMedalCount
     logic_boss_weakness: LogicBossWeakness
     logic_vile_required: LogicRequireVileDefeatForDoppler
-    logic_helmet_checkpoints: LogicHelmetCheckpoints
     volt_catfish_tweaks: VoltCatfishTweaks
     player_palettes: SetPalettes
     palette_default: PaletteDefault

@@ -457,25 +457,23 @@ def connect_regions(world: World):
     
     connect(world, RegionName.dr_doppler_lab_4, RegionName.dr_doppler_lab_4_boss)
 
-    # Connect checkpoints
-    if world.options.logic_helmet_checkpoints.value:
-        # Connect Toxic Seahorse
-        connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_underwater)
-        connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_before_boss)
+    # Connect Toxic Seahorse checkpoints
+    connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_underwater)
+    connect(world, RegionName.toxic_seahorse, RegionName.toxic_seahorse_before_boss)
 
-        # Connect Tunnel Rhino
-        connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_wall_jump)
-        connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_climbing)
+    # Connect Tunnel Rhino checkpoints
+    connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_wall_jump)
+    connect(world, RegionName.tunnel_rhino, RegionName.tunnel_rhino_climbing)
 
-        # Connect Neon Tiger
-        connect(world, RegionName.neon_tiger, RegionName.neon_tiger_bit_byte)
-        connect(world, RegionName.neon_tiger, RegionName.neon_tiger_hill)
+    # Connect Neon Tiger checkpoints
+    connect(world, RegionName.neon_tiger, RegionName.neon_tiger_bit_byte)
+    connect(world, RegionName.neon_tiger, RegionName.neon_tiger_hill)
 
-        # Connect Blast Hornet
-        connect(world, RegionName.blast_hornet, RegionName.blast_hornet_outside)
-        
-        # Connect Dr. Doppler Lab levels
-        connect(world, RegionName.dr_doppler_lab_3, RegionName.dr_doppler_lab_3_after_rematches)
+    # Connect Blast Hornet checkpoints
+    connect(world, RegionName.blast_hornet, RegionName.blast_hornet_outside)
+    
+    # Connect Dr. Doppler Lab levels checkpoints
+    connect(world, RegionName.dr_doppler_lab_3, RegionName.dr_doppler_lab_3_after_rematches)
 
     
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
