@@ -45,7 +45,7 @@ translate: List[Tuple[int, str]] = [
 
 
 def roman(num: int) -> str:
-    """Converts positive integers into roman numbers."""
+    """Converts positive non-zero integers into roman numbers."""
     rom: str = ""
     for key, val in translate:
         while num >= key:
@@ -81,6 +81,7 @@ all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level
 
 
 def init_shapesanity_pool() -> None:
+    """Imports the pregenerated shapesanity pool."""
     from .data import shapesanity_pool
     shapesanity_simple.update(shapesanity_pool.shapesanity_simple)
     shapesanity_1_4.update(shapesanity_pool.shapesanity_1_4)
@@ -92,114 +93,80 @@ def init_shapesanity_pool() -> None:
 def addlevels(maxlevel: int, logictype: str,
               random_logic_phase_length: List[int]) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all level locations based on player options (maxlevel INCLUDED).
-    If shape requirements are not randomized, give logic type 0."""
+    If shape requirements are not randomized, the logic type is expected to be vanilla."""
 
     # Level 1 is always directly accessible
-    locations: Dict[str, Tuple[str, LocationProgressType]] = {"Level 1": ("Main", LocationProgressType.PRIORITY),
-                                                              "Level 1 Additional": (
-                                                              "Main", LocationProgressType.PRIORITY)}
+    locations: Dict[str, Tuple[str, LocationProgressType]] \
+        = {"Level 1": ("Main", LocationProgressType.PRIORITY),
+           "Level 1 Additional": ("Main", LocationProgressType.PRIORITY)}
+    level_regions = ["Main", "Levels with 1 Building", "Levels with 2 Buildings", "Levels with 3 Buildings",
+                     "Levels with 4 Buildings", "Levels with 5 Buildings"]
+
+    def f(name: str, region: str, progress: LocationProgressType = LocationProgressType.DEFAULT) -> None:
+        locations[name] = (region, progress)
 
     if logictype.startswith("vanilla"):
-        locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-        locations["Level 3"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-        locations["Level 4"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-        locations["Level 5"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 6"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 7"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 8"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 9"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 10"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
+        f("Level 20 Additional", "Levels with 5 Buildings")
+        f("Level 20 Additional 2", "Levels with 5 Buildings")
+        f("Level 2", "Levels with 1 Building")
+        f("Level 3", "Levels with 1 Building")
+        f("Level 4", "Levels with 1 Building")
+        f("Level 5", "Levels with 2 Buildings")
+        f("Level 6", "Levels with 2 Buildings")
+        f("Level 7", "Levels with 3 Buildings")
+        f("Level 8", "Levels with 3 Buildings")
+        f("Level 9", "Levels with 4 Buildings")
+        f("Level 10", "Levels with 4 Buildings")
         for x in range(11, maxlevel+1):
-            locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 5 Buildings")
 
     elif logictype.startswith("stretched"):
         phaselength = maxlevel//6
-        l20phase = 20//phaselength
-        if l20phase == 0:
-            locations["Level 20 Additional"] = ("Main", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Main", LocationProgressType.DEFAULT)
-        elif l20phase == 1:
-            locations["Level 20 Additional"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-        else:
-            locations["Level 20 Additional"] = (f"Levels with {min(l20phase, 5)} Buildings",
-                                                LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = (f"Levels with {min(l20phase, 5)} Buildings",
-                                                  LocationProgressType.DEFAULT)
+        f("Level 20 Additional", level_regions[20//phaselength])
+        f("Level 20 Additional 2", level_regions[20//phaselength])
         for x in range(2, phaselength):
-            locations[f"Level {x}"] = ("Main", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Main")
         for x in range(phaselength, phaselength*2):
-            locations[f"Level {x}"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 1 Building")
         for x in range(phaselength*2, phaselength*3):
-            locations[f"Level {x}"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 2 Buildings")
         for x in range(phaselength*3, phaselength*4):
-            locations[f"Level {x}"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 3 Buildings")
         for x in range(phaselength*4, phaselength*5):
-            locations[f"Level {x}"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 4 Buildings")
         for x in range(phaselength*5, maxlevel+1):
-            locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 5 Buildings")
 
     elif logictype.startswith("quick"):
-        locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-        locations["Level 3"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 4"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 5"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
+        f("Level 20 Additional", "Levels with 5 Buildings")
+        f("Level 20 Additional 2", "Levels with 5 Buildings")
+        f("Level 2", "Levels with 1 Building")
+        f("Level 3", "Levels with 2 Buildings")
+        f("Level 4", "Levels with 3 Buildings")
+        f("Level 5", "Levels with 4 Buildings")
         for x in range(6, maxlevel+1):
-            locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 5 Buildings")
 
     elif logictype.startswith("random_steps"):
-        nextlevel = 2
-        l20set = False
-        for _ in range(0, random_logic_phase_length[0]):
-            locations[f"Level {nextlevel}"] = ("Main", LocationProgressType.DEFAULT)
-            nextlevel += 1
-        if nextlevel > 20 and not l20set:
-            locations["Level 20 Additional"] = ("Main", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Main", LocationProgressType.DEFAULT)
-            l20set = True
-        for _ in range(0, random_logic_phase_length[1]):
-            locations[f"Level {nextlevel}"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-            nextlevel += 1
-        if nextlevel > 20 and not l20set:
-            locations["Level 20 Additional"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Levels with 1 Building", LocationProgressType.DEFAULT)
-            l20set = True
-        for _ in range(0, random_logic_phase_length[2]):
-            locations[f"Level {nextlevel}"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
-            nextlevel += 1
-        if nextlevel > 20 and not l20set:
-            locations["Level 20 Additional"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Levels with 2 Buildings", LocationProgressType.DEFAULT)
-            l20set = True
-        for _ in range(0, random_logic_phase_length[3]):
-            locations[f"Level {nextlevel}"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
-            nextlevel += 1
-        if nextlevel > 20 and not l20set:
-            locations["Level 20 Additional"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Levels with 3 Buildings", LocationProgressType.DEFAULT)
-            l20set = True
-        for _ in range(0, random_logic_phase_length[4]):
-            locations[f"Level {nextlevel}"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
-            nextlevel += 1
-        if nextlevel > 20 and not l20set:
-            locations["Level 20 Additional"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Levels with 4 Buildings", LocationProgressType.DEFAULT)
-            l20set = True
-        for x in range(nextlevel, maxlevel+1):
-            locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-        if not l20set:
-            locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-            locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        next_level = 2
+        for phase in range(5):
+            for x in range(random_logic_phase_length[phase]):
+                f(f"Level {next_level+x}", level_regions[phase])
+            next_level += random_logic_phase_length[phase]
+            if next_level > 20:
+                f("Level 20 Additional", level_regions[phase])
+                f("Level 20 Additional 2", level_regions[phase])
+        for x in range(next_level, maxlevel+1):
+            f(f"Level {x}", "Levels with 5 Buildings")
+        if next_level <= 20:
+            f("Level 20 Additional", "Levels with 5 Buildings")
+            f("Level 20 Additional 2", "Levels with 5 Buildings")
 
     else:  # logictype == hardcore
-        locations["Level 20 Additional"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
-        locations["Level 20 Additional 2"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+        f("Level 20 Additional", "Levels with 5 Buildings")
+        f("Level 20 Additional 2", "Levels with 5 Buildings")
         for x in range(2, maxlevel+1):
-            locations[f"Level {x}"] = ("Levels with 5 Buildings", LocationProgressType.DEFAULT)
+            f(f"Level {x}", "Levels with 5 Buildings")
 
     return locations
 
@@ -210,92 +177,73 @@ def addupgrades(finaltier: int, logictype: str,
     If shape requirements are not randomized, give logic type 0."""
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = {}
+    upgrade_regions = ["Main", "Upgrades with 1 Building", "Upgrades with 2 Buildings", "Upgrades with 3 Buildings",
+                       "Upgrades with 4 Buildings", "Upgrades with 5 Buildings"]
+
+    def f(name: str, region: str, progress: LocationProgressType = LocationProgressType.DEFAULT) -> None:
+        locations[name] = (region, progress)
 
     if logictype == "vanilla_like":
-        locations["Belt Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
-        locations["Miner Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
-        locations["Processors Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
-        locations["Painting Upgrade Tier II"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
-        locations["Belt Upgrade Tier III"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
-        locations["Miner Upgrade Tier III"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
-        locations["Processors Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
-        locations["Painting Upgrade Tier III"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
+        f("Belt Upgrade Tier II", "Main")
+        f("Miner Upgrade Tier II", "Main")
+        f("Processors Upgrade Tier II", "Main")
+        f("Painting Upgrade Tier II", "Upgrades with 3 Buildings")
+        f("Belt Upgrade Tier III", "Upgrades with 2 Buildings")
+        f("Miner Upgrade Tier III", "Upgrades with 2 Buildings")
+        f("Processors Upgrade Tier III", "Upgrades with 1 Building")
+        f("Painting Upgrade Tier III", "Upgrades with 3 Buildings")
         for x in range(4, finaltier+1):
+            tier = roman(x)
             for cat in categories:
-                locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                               LocationProgressType.DEFAULT)
+                f(f"{cat} Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+
     elif logictype == "linear":
         for cat in categories:
-            locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
-        for cat in categories:
-            locations[f"{cat} Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
-        for x in range(4, 7):
-            for cat in categories:
-                locations[f"{cat} Upgrade Tier {roman(x)}"] = (f"Upgrades with {x-2} Buildings",
-                                                               LocationProgressType.DEFAULT)
-        for x in range(7, finaltier+1):
-            for cat in categories:
-                locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                               LocationProgressType.DEFAULT)
+            for x in range(2, 7):
+                f(f"{cat} Upgrade Tier {roman(x)}", upgrade_regions[x-2])
+            for x in range(7, finaltier+1):
+                f(f"{cat} Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
 
     elif logictype == "category":
         for x in range(2, 5):
-            locations[f"Belt Upgrade Tier {roman(x)}"] = ("Main", LocationProgressType.DEFAULT)
+            tier = roman(x)
+            f(f"Belt Upgrade Tier {tier}", "Main")
+            f(f"Miner Upgrade Tier {tier}", "Main")
+            f(f"Painting Upgrade Tier {tier}", "Upgrades with 4 Buildings")
         for x in range(5, finaltier+1):
-            locations[f"Belt Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
-        for x in range(2, 5):
-            locations[f"Miner Upgrade Tier {roman(x)}"] = ("Main", LocationProgressType.DEFAULT)
-        for x in range(5, finaltier+1):
-            locations[f"Miner Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
-        locations["Processors Upgrade Tier II"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
-        locations["Processors Upgrade Tier III"] = ("Upgrades with 1 Building", LocationProgressType.DEFAULT)
-        locations["Processors Upgrade Tier IV"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
-        locations["Processors Upgrade Tier V"] = ("Upgrades with 2 Buildings", LocationProgressType.DEFAULT)
-        locations["Processors Upgrade Tier VI"] = ("Upgrades with 3 Buildings", LocationProgressType.DEFAULT)
+            tier = roman(x)
+            f(f"Belt Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+            f(f"Miner Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+            f(f"Painting Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+        f("Processors Upgrade Tier II", "Upgrades with 1 Building")
+        f("Processors Upgrade Tier III", "Upgrades with 1 Building")
+        f("Processors Upgrade Tier IV", "Upgrades with 2 Buildings")
+        f("Processors Upgrade Tier V", "Upgrades with 2 Buildings")
+        f("Processors Upgrade Tier VI", "Upgrades with 3 Buildings")
         for x in range(7, finaltier+1):
-            locations[f"Processors Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                                LocationProgressType.DEFAULT)
-        locations["Painting Upgrade Tier II"] = ("Upgrades with 4 Buildings", LocationProgressType.DEFAULT)
-        locations["Painting Upgrade Tier III"] = ("Upgrades with 4 Buildings", LocationProgressType.DEFAULT)
-        locations["Painting Upgrade Tier IV"] = ("Upgrades with 4 Buildings", LocationProgressType.DEFAULT)
-        for x in range(5, finaltier+1):
-            locations[f"Painting Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings", LocationProgressType.DEFAULT)
+            f(f"Processors Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
 
     elif logictype == "category_random":
-        regions = ["Main", "Upgrades with 1 Building", "Upgrades with 2 Buildings", "Upgrades with 3 Buildings",
-                   "Upgrades with 4 Buildings", "Upgrades with 5 Buildings"]
         for x in range(2, 5):
-            locations[f"Belt Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["belt"]],
-                                                          LocationProgressType.DEFAULT)
+            tier = roman(x)
+            f(f"Belt Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["belt"]])
+            f(f"Miner Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["miner"]])
+            f(f"Processors Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["processors"]])
+            f(f"Painting Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["painting"]])
         for x in range(5, finaltier+1):
-            locations[f"Belt Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                          LocationProgressType.DEFAULT)
-        for x in range(2, 5):
-            locations[f"Miner Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["miner"]],
-                                                           LocationProgressType.DEFAULT)
-        for x in range(5, finaltier+1):
-            locations[f"Miner Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                           LocationProgressType.DEFAULT)
-        for x in range(2, 5):
-            locations[f"Processors Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["processors"]],
-                                                                LocationProgressType.DEFAULT)
-        for x in range(5, finaltier+1):
-            locations[f"Processors Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                                LocationProgressType.DEFAULT)
-        for x in range(2, 5):
-            locations[f"Painting Upgrade Tier {roman(x)}"] = (regions[category_random_logic_amounts["painting"]],
-                                                              LocationProgressType.DEFAULT)
-        for x in range(5, finaltier+1):
-            locations[f"Painting Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                              LocationProgressType.DEFAULT)
+            tier = roman(x)
+            f(f"Belt Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+            f(f"Miner Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+            f(f"Processors Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+            f(f"Painting Upgrade Tier {tier}", "Upgrades with 5 Buildings")
 
     else:  # logictype == hardcore
         for cat in categories:
-            locations[f"{cat} Upgrade Tier II"] = ("Main", LocationProgressType.DEFAULT)
+            f(f"{cat} Upgrade Tier II", "Main")
         for x in range(3, finaltier+1):
+            tier = roman(x)
             for cat in categories:
-                locations[f"{cat} Upgrade Tier {roman(x)}"] = ("Upgrades with 5 Buildings",
-                                                               LocationProgressType.DEFAULT)
+                f(f"{cat} Upgrade Tier {tier}", "Upgrades with 5 Buildings")
 
     return locations
 
@@ -389,36 +337,33 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
     """Returns a dictionary with a given number of random shapesanity locations."""
 
     included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
-    shapes_list = list(shapesanity_simple.items())
+
+    def f(name: str, region: str, alias: str, progress: LocationProgressType = LocationProgressType.DEFAULT) -> None:
+        included_shapes[name] = (region, progress)
+        append_shapesanity(alias)
+        shapes_list.remove((alias, region))
+        add_alias(name, alias)
+
     # Always have at least 4 shapesanity checks because of sphere 1 usefulls + both hardcore logic
-    included_shapes[f"Shapesanity 1"] = ("Shapesanity Full Uncolored", LocationProgressType.DEFAULT)
-    included_shapes[f"Shapesanity 2"] = ("Shapesanity Full Uncolored", LocationProgressType.DEFAULT)
-    included_shapes[f"Shapesanity 3"] = ("Shapesanity Full Uncolored", LocationProgressType.DEFAULT)
-    included_shapes[f"Shapesanity 4"] = ("Shapesanity East Windmill Uncolored", LocationProgressType.DEFAULT)
-    append_shapesanity(f"Uncolored Circle")
-    append_shapesanity(f"Uncolored Star")
-    append_shapesanity(f"Uncolored Square")
-    append_shapesanity(f"Uncolored Windmill")
-    shapes_list.remove((f"Uncolored Circle", "Shapesanity Full Uncolored"))
-    shapes_list.remove((f"Uncolored Star", "Shapesanity Full Uncolored"))
-    shapes_list.remove((f"Uncolored Square", "Shapesanity Full Uncolored"))
-    shapes_list.remove((f"Uncolored Windmill", "Shapesanity East Windmill Uncolored"))
-    add_alias("Shapesanity 1", "Uncolored Circle")
-    add_alias("Shapesanity 2", "Uncolored Star")
-    add_alias("Shapesanity 3", "Uncolored Square")
-    add_alias("Shapesanity 4", "Uncolored Windmill")
+    shapes_list = list(shapesanity_simple.items())
+    f("Shapesanity 1", "Shapesanity Full Uncolored", "Uncolored Circle")
+    f("Shapesanity 2", "Shapesanity Full Uncolored", "Uncolored Square")
+    f("Shapesanity 3", "Shapesanity Full Uncolored", "Uncolored Star")
+    f("Shapesanity 4", "Shapesanity East Windmill Uncolored", "Uncolored Windmill")
+
+    # The pool switches dynamically depending on if either it's ratio or limit is reached
     switched = 0
     for counting in range(4, amount):
         if switched == 0 and (len(shapes_list) == 0 or counting == amount//2):
             shapes_list = list(shapesanity_1_4.items())
             switched = 1
-        if switched == 1 and (len(shapes_list) == 0 or counting == amount*7//12):
+        elif switched == 1 and (len(shapes_list) == 0 or counting == amount*7//12):
             shapes_list = list(shapesanity_two_sided.items())
             switched = 2
-        if switched == 2 and (len(shapes_list) == 0 or counting == amount*5//6):
+        elif switched == 2 and (len(shapes_list) == 0 or counting == amount*5//6):
             shapes_list = list(shapesanity_three_parts.items())
             switched = 3
-        if switched == 3 and (len(shapes_list) == 0 or counting == amount*11//12):
+        elif switched == 3 and (len(shapes_list) == 0 or counting == amount*11//12):
             shapes_list = list(shapesanity_four_parts.items())
             switched = 4
         x = random.randint(0, len(shapes_list)-1)

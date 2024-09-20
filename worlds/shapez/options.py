@@ -95,10 +95,10 @@ class RandomizeUpgradeLogic(Choice):
     and IV and onwards require all processing buildings.
     - **Linear:** Tier II requires nothing, III-VI require another random building each,
     and VII and onwards require all buildings.
-    - **Category:** Belt and miner upgrades require no building (up to tier IV), processors upgrades require the
-    cutter (all tiers), rotator (tier IV and onwards), and stacker (tier VI and onwards, and painting upgrades require
-    the cutter, rotator, stacker, painter (all tiers) and color mixer (tiers V and onwards). Tier VII and onwards will
-    always require all buildings.
+    - **Category:** Belt and miner upgrades require no building up to tier IV, but onwards all buildings, processors
+    upgrades require the cutter (all tiers), rotator (tier IV and onwards), and stacker (tier VI and onwards), and
+    painting upgrades require the cutter, rotator, stacker, painter (all tiers) and color mixer (tiers V and onwards).
+    Tier VII and onwards will always require all buildings.
     - **Category random:** Each upgrades category (up to tier IV) requires a random amount of buildings (in order),
     with one category always requiring no buildings. Tier V and onwards will always require all buildings.
     - **Hardcore:** All tiers (except each tier II) have completely random shape requirements. Expect early BKs."""

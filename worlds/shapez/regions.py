@@ -9,6 +9,7 @@ shapesanity_processing = ["Full", "Half", "Piece", "Stitched", "East Windmill", 
                           "Colorful East Windmill", "Colorful Half-Half", "Colorful Full", "Colorful Half"]
 
 all_regions = [
+    "Menu",
     "Main",
     "Levels with 1 Building",
     "Levels with 2 Buildings",
@@ -122,16 +123,16 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                           included_locations: Dict[str, Tuple[str, LocationProgressType]],
                           location_name_to_id: Dict[str, int], level_logic_buildings: List[str],
                           upgrade_logic_buildings: List[str], early_useful: str, goal: str,
-                          menu_region: Region) -> List[Region]:
+                          lock_belt_and_extractor: bool) -> List[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
     regions: Dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
-    regions["Menu"] = menu_region
 
     # Creates ShapezLocations for every included location and puts them into the correct region
     for name, data in included_locations.items():
         regions[data[0]].locations.append(ShapezLocation(player, name, location_name_to_id[name],
                                                          regions[data[0]], data[1]))
 
+    # Create goal event
     if goal in ["vanilla", "mam"]:
         goal_region = regions["Levels with 5 Buildings"]
     elif goal == "even_fasterer":
@@ -145,7 +146,14 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     goal_region.locations.append(goal_location)
     multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
-    # Create Entrances for regions
+    # Connect Menu to rest of regions
+    if lock_belt_and_extractor:
+        regions["Menu"].connect(regions["Main"], "Belt and Extractor",
+                                lambda state: state.has_all(["Belt", "Extractor"], player))
+    else:
+        regions["Menu"].connect(regions["Main"], "Not locked")
+
+    # Connect Main to achievement regions
     regions["Main"].connect(regions["Cut Shape Achievements"], "Cutter needed",
                             lambda state: has_cutter(state, player))
     regions["Main"].connect(regions["Rotated Shape Achievements"], "Rotator needed",
@@ -166,12 +174,12 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                                           has_painter(state, player) and has_mixer(state, player))
     regions["Main"].connect(regions["MAM needed"], "Building a MAM",
                             lambda state: can_build_mam(state, player))
-
     regions["Main"].connect(regions["All Buildings Shapes"], "All buildings needed",
                             lambda state: has_cutter(state, player) and has_rotator(state, player) and
                                           has_stacker(state, player) and has_painter(state, player) and
                                           has_mixer(state, player))
 
+    # Progressively connect level and upgrade regions
     regions["Main"].connect(regions["Levels with 1 Building"], "First level building needed",
                             lambda state: has_logic_list_building(state, player, level_logic_buildings, 0, False))
     regions["Levels with 1 Building"].connect(regions["Levels with 2 Buildings"], "Second level building needed",
@@ -207,6 +215,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                                                                                        upgrade_logic_buildings, 4,
                                                                                        early_useful == "5_buildings"))
 
+    # Connect Uncolored shapesanity regions to Main
     regions["Main"].connect(regions["Shapesanity Full Uncolored"], "Shapesanity always", lambda state: True)
     regions["Main"].connect(regions["Shapesanity Half Uncolored"], "Shapesanity cutting half",
                             lambda state: can_make_half_shape(state, player))
@@ -234,6 +243,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                                           (can_use_quad_painter(state, player) and
                                            can_make_half_shape(state, player)))
 
+    # Progressively connect colored shapesanity regions
     for processing in shapesanity_processing:
         regions[f"Shapesanity {processing} Uncolored"].connect(regions[f"Shapesanity {processing} Painted"],
                                                                f"Shapesanity {processing} painting",

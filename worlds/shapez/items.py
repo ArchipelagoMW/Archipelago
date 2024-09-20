@@ -2,6 +2,10 @@ from typing import Dict
 
 from BaseClasses import Item, ItemClassification
 
+# Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
+# would be unreasonably complicated and time-consuming.
+# Some buildings are not needed to complete the game, but are "logically needed" for the "MAM" achievement.
+
 buildings_processing = {
     "Cutter": ItemClassification.progression,
     "Rotator": ItemClassification.progression,
@@ -15,8 +19,6 @@ buildings_processing = {
     "Quad Painter": ItemClassification.progression
 }
 
-# Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
-# would be unreasonably complicated and time-consuming
 buildings_routing = {
     "Balancer": ItemClassification.progression,
     "Tunnel": ItemClassification.progression,
@@ -138,7 +140,6 @@ def filler(random: float) -> str:
 
 
 item_descriptions = {
-    # Items
     "Balancer": "A routing building, that can merge two belts into one, split a belt in two, " +
                 "or balance the items of two belts",
     "Tunnel": "A routing building consisting of two parts, that allows for gaps in belts",
@@ -173,9 +174,9 @@ item_descriptions = {
     "Big Processors Upgrade": "An upgrade, that adds 1 to the speed multiplier of cutters, rotators, and stackers",
     "Big Painting Upgrade": "An upgrade, that adds 1 to the speed multiplier of painters and color mixers",
     "Small Belt Upgrade": "An upgrade, that adds 0.1 to the speed multiplier of belts, distributors, and tunnels",
-    "Small Miner Upgrade": "An upgrade, that adds 1 to the speed multiplier of extractors",
-    "Small Processors Upgrade": "An upgrade, that adds 1 to the speed multiplier of cutters, rotators, and stackers",
-    "Small Painting Upgrade": "An upgrade, that adds 1 to the speed multiplier of painters and color mixers",
+    "Small Miner Upgrade": "An upgrade, that adds 0.1 to the speed multiplier of extractors",
+    "Small Processors Upgrade": "An upgrade, that adds 0.1 to the speed multiplier of cutters, rotators, and stackers",
+    "Small Painting Upgrade": "An upgrade, that adds 0.1 to the speed multiplier of painters and color mixers",
     "Blueprint Shapes Bundle": "A bundle with 1000 blueprint shapes, instantly delivered to the hub",
     "Level Shapes Bundle": "A bundle with some shapes needed for the current level, " +
                            "instantly delivered to the hub",
