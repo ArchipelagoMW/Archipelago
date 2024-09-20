@@ -156,10 +156,8 @@ class MMX3World(World):
             itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(2 + self.options.jammed_buster)]
         else:
-            if self.options.logic_helmet_checkpoints:
-                itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
-            else:
-                itempool += [self.create_item(ItemName.third_armor_helmet, ItemClassification.useful) for _ in range(2)]
+            itempool += [self.create_item(ItemName.third_armor_helmet, ItemClassification.useful)]
+            itempool += [self.create_item(ItemName.third_armor_helmet)]
             itempool += [self.create_item(ItemName.third_armor_body, ItemClassification.useful) for _ in range(2)]
             itempool += [self.create_item(ItemName.third_armor_arms, ItemClassification.useful)]
             itempool += [self.create_item(ItemName.third_armor_arms) for _ in range(1 + self.options.jammed_buster)]
@@ -266,7 +264,6 @@ class MMX3World(World):
             "jammed_buster",
             "zsaber_in_pool",
             "logic_boss_weakness",
-            "logic_helmet_checkpoints",
             "logic_vile_required",
             "doppler_medal_count",
             "doppler_weapon_count",
@@ -286,30 +283,32 @@ class MMX3World(World):
             "byte_medal_count",
         )
         value = 0
-        if "Medals" in  self.options.doppler_open:
+        if "Medals" in self.options.doppler_open:
             value |= 0x01
-        if "Weapons" in  self.options.doppler_open:
+        if "Weapons" in self.options.doppler_open:
             value |= 0x02
-        if "Armor Upgrades" in  self.options.doppler_open:
+        if "Armor Upgrades" in self.options.doppler_open:
             value |= 0x04
-        if "Heart Tanks" in  self.options.doppler_open:
+        if "Heart Tanks" in self.options.doppler_open:
             value |= 0x08
-        if "Sub Tanks" in  self.options.doppler_open:
+        if "Sub Tanks" in self.options.doppler_open:
             value |= 0x10
         slot_data["doppler_open"] = value
+        slot_data["doppler_open_set"] = self.options.doppler_open.value
 
         value = 0
-        if "Medals" in  self.options.vile_open:
+        if "Medals" in self.options.vile_open:
             value |= 0x01
-        if "Weapons" in  self.options.vile_open:
+        if "Weapons" in self.options.vile_open:
             value |= 0x02
-        if "Armor Upgrades" in  self.options.vile_open:
+        if "Armor Upgrades" in self.options.vile_open:
             value |= 0x04
-        if "Heart Tanks" in  self.options.vile_open:
+        if "Heart Tanks" in self.options.vile_open:
             value |= 0x08
-        if "Sub Tanks" in  self.options.vile_open:
+        if "Sub Tanks" in self.options.vile_open:
             value |= 0x10
         slot_data["vile_open"] = value
+        slot_data["vile_open_set"] = self.options.vile_open.value
 
         # Write boss weaknesses to slot_data (and for UT)
         slot_data["boss_weaknesses"] = {}
@@ -359,8 +358,7 @@ class MMX3World(World):
                 self.options.jammed_buster.value = passthrough["jammed_buster"]
                 self.options.logic_boss_weakness.value = passthrough["logic_boss_weakness"]
                 self.options.logic_vile_required.value = passthrough["logic_vile_required"]
-                self.options.logic_helmet_checkpoints.value = passthrough["logic_helmet_checkpoints"]
-                self.options.doppler_open.value = passthrough["doppler_open"]
+                self.options.doppler_open.value = passthrough["doppler_open_set"]
                 self.options.doppler_medal_count.value = passthrough["doppler_medal_count"]
                 self.options.doppler_weapon_count.value = passthrough["doppler_weapon_count"]
                 self.options.doppler_upgrade_count.value = passthrough["doppler_upgrade_count"]
@@ -369,7 +367,7 @@ class MMX3World(World):
                 self.options.doppler_all_labs.value = passthrough["doppler_all_labs"]
                 self.options.doppler_lab_2_boss.value = passthrough["doppler_lab_2_boss"]
                 self.options.doppler_lab_3_boss_rematch_count.value = passthrough["doppler_lab_3_boss_rematch_count"]
-                self.options.vile_open.value = passthrough["vile_open"]
+                self.options.vile_open.value = passthrough["vile_open_set"]
                 self.options.vile_medal_count.value = passthrough["vile_medal_count"]
                 self.options.vile_weapon_count.value = passthrough["vile_weapon_count"]
                 self.options.vile_upgrade_count.value = passthrough["vile_upgrade_count"]
