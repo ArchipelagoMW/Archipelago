@@ -531,7 +531,7 @@ class LinksAwakeningWorld(World):
             ]
 
             # use the default behaviour to grab options
-            slot_data = self.options.as_dict(*slot_options)
+            slot_data.update(self.options.as_dict(*slot_options))
 
             # for options which should not get the internal int value but the display name use the extra handling
             slot_data.update({
