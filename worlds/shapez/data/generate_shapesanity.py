@@ -116,5 +116,5 @@ if __name__ == "__main__":
         "shapesanity_three_parts": shapesanity_three_parts,
         "shapesanity_four_parts": shapesanity_four_parts
     }, indent=1)
-    with open("shapesanit_pool.json", "w") as outfile:
+    with open("shapesanity_pool.json", "w") as outfile:
         outfile.write(pool)

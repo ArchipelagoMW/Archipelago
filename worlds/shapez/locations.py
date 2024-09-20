@@ -1,5 +1,6 @@
 import itertools
 import json
+from pathlib import Path
 from random import Random
 from typing import List, Tuple, Dict, Optional, Callable
 
@@ -74,7 +75,7 @@ shapesanity_four_parts: Dict[str, str] = {}
 
 
 def init_shapesanity_pool() -> None:
-    with open("data/shapesanit_pool.json") as openfile:
+    with open((Path(__file__).parent / "data/shapesanity_pool.json").resolve()) as openfile:
         pool = json.load(openfile)
     shapesanity_simple.update(pool["shapesanity_simple"])
     shapesanity_1_4.update(pool["shapesanity_1_4"])
