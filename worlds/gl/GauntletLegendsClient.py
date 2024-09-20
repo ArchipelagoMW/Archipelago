@@ -68,19 +68,21 @@ class RetroSocket:
         except Exception as e:
             raise Exception("An error occurred while sending a message.")
 
-
     async def read(self, message: str) -> Optional[bytes]:
-        # Send the message
         self.send(message)
-        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 30000), 1.0)
-        data = response.decode().split(" ")
-        b = b""
-        for s in data[2:]:
-            if "-1" in s:
-                logger.info("-1 response")
-                raise Exception("Client tried to read from an invalid address or ROM is not open.")
-            b += bytes.fromhex(s)
-        return b
+        try:
+            response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 30000), 1.0)
+            data = response.decode().split(" ")
+            b = b""
+            for s in data[2:]:
+                if "-1" in s:
+                    logger.info("-1 response")
+                    raise Exception("Client tried to read from an invalid address or ROM is not open.")
+                b += bytes.fromhex(s)
+            return b
+        except asyncio.TimeoutError:
+            logger.error("Timeout while waiting for socket response")
+            return None
 
     async def status(self) -> str:
         message = "GET_STATUS"
@@ -184,17 +186,16 @@ class GauntletLegendsContext(CommonContext):
         self.difficulty: int = 0
         self.players: int = 1
         self.gl_sync_task = None
-        self.received_index: int = 0
         self.glslotdata = None
-        self.crc32 = None
         self.socket = RetroSocket()
         self.rom_loaded: bool = False
         self.locations_checked: List[int] = []
         self.inventory: List[List[InventoryEntry]] = []
         self.inventory_raw: List[RamChunk] = []
         self.item_objects: List[ObjectEntry] = []
-        self.obelisk_objects: List[ObjectEntry] = []
         self.chest_objects: List[ObjectEntry] = []
+        self.item_objects_init: List[ObjectEntry] = []
+        self.chest_objects_init: List[ObjectEntry] = []
         self.retro_connected: bool = False
         self.level_loading: bool = False
         self.in_game: bool = False
@@ -212,10 +213,11 @@ class GauntletLegendsContext(CommonContext):
         self.offset: int = -1
         self.clear_counts = None
         self.current_level: bytes = b""
+        self.logged: bool = False
+        self.output_file: str = ""
         self.movement: int = 0
         self.init_refactor: bool = False
         self.location_scouts: list[NetworkItem] = []
-        self.character_loaded: bool = False
 
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
@@ -277,19 +279,19 @@ class GauntletLegendsContext(CommonContext):
     # Objects are 0x3C bytes long
     # Modes: 0 = items, 1 = chests/barrels
     async def obj_read(self, mode=0):
-        _obj = []
+        _obj: List[ObjectEntry] = []
         b: RamChunk
         if self.offset == -1:
             log_arr = []
             for i in range(5):
-                b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} {100}")))
+                b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR + ((i * 100) * 0x3C), 'x')} {100 * 0x3C}")))
                 b.iterate(0x3C)
-                log_arr += [b.split]
+                log_arr += [arr for arr in b.split]
             output_folder = 'logs'
-            output_file = os.path.join(output_folder, f"[{datetime.datetime.now()}] Gauntlet Legends RAMSTATE: {level_names[self.current_level[1] << 0xF + self.current_level[0]]}.txt")
-            with open(output_file, 'w') as f:
-                for arr in log_arr:
-                    f.write(" ".join(f"{byte:02x}" for byte in arr) + '\n')
+            self.output_file = os.path.join(output_folder, f"({datetime.datetime.now().strftime('%Y-%m-%d - %I-%M-%S-%p')}) Gauntlet Legends RAMSTATE - {level_names[(self.current_level[1] << 4) + self.current_level[0]]}.txt")
+            with open(self.output_file, 'w') as f:
+                for i, arr in enumerate(log_arr):
+                    f.write(f"0x{format(OBJ_ADDR + (0x3C * i), 'x')}: " + " ".join(f"{int(byte):02x}" for byte in arr) + '\n')
             b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} {0x40 * 0x3C}")))
             b.iterate(0x3C)
             for i, obj in enumerate(b.split):
@@ -311,6 +313,10 @@ class GauntletLegendsContext(CommonContext):
                 if count <= 0:
                     break
                 self.extra_items += count
+            if not self.logged:
+                with open(self.output_file, 'a') as f:
+                    f.write(f"Item Address: 0x{format(OBJ_ADDR + (self.offset * 0x3C), 'x')}\n")
+                    f.write(f"Extra Items: {self.extra_items}\n")
         else:
             spawner_count = len([spawner for spawner in spawners[(self.current_level[1] << 4) + (
                 self.current_level[0] if self.current_level[1] != 1 else castle_id.index(self.current_level[0]) + 1)]
@@ -328,6 +334,10 @@ class GauntletLegendsContext(CommonContext):
                     )
                     b.iterate(0x3C)
                     count += sum(1 for obj in b.split if obj[1] == 0xFF)
+                    if not self.logged:
+                        with open(self.output_file, 'a') as f:
+                            f.write(f"Spawner Address {i + 1}: 0x{format(OBJ_ADDR + ((len(self.item_locations) + self.offset + self.extra_items + (i * 100)) * 0x3C), 'x')}\n")
+                            f.write(f"Count: {count}\n")
                 self.extra_spawners += count
                 count = 0
                 if self.extra_spawners != 0:
@@ -346,6 +356,9 @@ class GauntletLegendsContext(CommonContext):
                             break
                         count += current_count
                 self.extra_spawners += count
+                if not self.logged:
+                    with open(self.output_file, 'a') as f:
+                        f.write(f"Total Extra Spawners: {self.extra_spawners}\n")
             while True:
                 b = RamChunk(
                     await self.socket.read(
@@ -360,13 +373,24 @@ class GauntletLegendsContext(CommonContext):
                 if count <= 0:
                     break
                 self.extra_chests += count
+            if not self.logged:
+                with open(self.output_file, 'a') as f:
+                    f.write(
+                        f"Chest Address: 0x{format(OBJ_ADDR + ((len(self.item_locations) + self.offset + self.extra_items + self.extra_spawners + spawner_count) * 0x3C), 'x')}\n")
+                    f.write(f"Extra Chests: {self.extra_chests}\n")
+                    self.logged = True
         for arr in b.split:
             _obj += [ObjectEntry(arr)]
         _obj = [obj for obj in _obj if obj.raw[1] != 0xFF]
         if mode == 1:
             self.chest_objects = _obj[:len(self.chest_locations)]
+            if self.chest_objects_init == []:
+                self.chest_objects_init = self.chest_objects
         else:
             self.item_objects = _obj[:len(self.item_locations)]
+            if self.item_objects_init == []:
+                self.item_objects_init = self.item_objects
+
 
     # Update item count of an item.
     # If the item is new, add it to your inventory
@@ -499,22 +523,14 @@ class GauntletLegendsContext(CommonContext):
         await self.get_username()
         await self.send_connect()
 
-    async def connection_closed(self):
-        self.retro_connected = False
-        await self.var_reset()
-        await super(GauntletLegendsContext, self).connection_closed()
-
-    async def disconnect(self, allow_autoreconnect: bool = False):
-        self.retro_connected = False
-        await self.var_reset()
-        await super(GauntletLegendsContext, self).disconnect()
-
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.slot = args["slot"]
             self.glslotdata = args["slot_data"]
             self.players = self.glslotdata["players"]
+            self.var_reset()
             logger.info(f"Players set to {self.players}.")
+            logger.info("If this is incorrect, Use /players to set the number of people playing locally.")
         elif cmd == "Retrieved":
             if "keys" not in args:
                 logger.warning(f"invalid Retrieved packet to GLClient: {args}")
@@ -614,7 +630,7 @@ class GauntletLegendsContext(CommonContext):
                     message_format(
                         WRITE,
                         param_format(
-                            BOSS_ADDR, bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]]),
+                            BOSS_ADDR + (0x10 * i), bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]]),
                         ),
                     ),
                 )
@@ -660,6 +676,7 @@ class GauntletLegendsContext(CommonContext):
             if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
                and item.player == self.slot
         ]
+        logger.info(f"Obelisks: {len(self.obelisks)}")
         self.useful = [
             item
             for item in self.location_scouts
@@ -671,6 +688,7 @@ class GauntletLegendsContext(CommonContext):
         self.obelisk_locations = [
             location for location in raw_locations if location.id in [item.location for item in self.obelisks]
         ]
+        logger.info(f"Obelisk Locations: {len(self.obelisk_locations)}")
         self.item_locations = [
             location for location in raw_locations
             if ("Chest" not in location.name
@@ -678,9 +696,11 @@ class GauntletLegendsContext(CommonContext):
                 and location not in self.obelisk_locations
                 or location.id in [item.location for item in self.useful]
         ]
+        logger.info(f"Item Locations: {len(self.item_locations)}")
         self.chest_locations = [
             location for location in raw_locations
             if location not in self.obelisk_locations and location not in self.item_locations]
+        logger.info(f"Chest Locations: {len(self.chest_locations)}")
         max_value: int = self.glslotdata['max']
         logger.info(f"Items: {len(self.item_locations)} Chests: {len(self.chest_locations)} Obelisks: {len(self.obelisk_locations)}")
         logger.info(
@@ -691,11 +711,13 @@ class GauntletLegendsContext(CommonContext):
     # Sends locations out to server based on object lists read in obj_read()
     # Local obelisks and mirror shards have special cases
     async def location_loop(self) -> List[int]:
+        if not self.logged:
+            await asyncio.sleep(0.5)
         await self.obj_read()
         await self.obj_read(1)
         acquired = []
         for i, obj in enumerate(self.item_objects):
-            if obj.raw[24] != 0x0:
+            if int.from_bytes(obj.raw[8:12], "little") != int.from_bytes(self.item_objects_init[i].raw[8:12], "little"):
                 if self.item_locations[i].id not in self.locations_checked:
                     acquired += [self.item_locations[i].id]
         for j in range(len(self.obelisk_locations)):
@@ -703,16 +725,12 @@ class GauntletLegendsContext(CommonContext):
             if ob:
                 acquired += [self.obelisk_locations[j].id]
         for k, obj in enumerate(self.chest_objects):
-            if "Chest" in self.chest_locations[k].name:
-                if obj.raw[24] != 0x0:
-                    if self.chest_locations[k].id not in self.locations_checked:
-                        acquired += [self.chest_locations[k].id]
-            else:
-                if obj.raw[0x33] != 0:
-                    if self.chest_locations[k].id not in self.locations_checked:
-                        acquired += [self.chest_locations[k].id]
+            if int.from_bytes(obj.raw[8:12], "little") != int.from_bytes(self.chest_objects_init[k].raw[8:12], "little"):
+                if self.chest_locations[k].id not in self.locations_checked:
+                    acquired += [self.chest_locations[k].id]
         paused = await self.paused()
-        if paused:
+        dead = await self.dead()
+        if paused or dead:
             return []
         return acquired
 
@@ -776,12 +794,14 @@ class GauntletLegendsContext(CommonContext):
                     else:
                         if self.deathlink_enabled:
                             await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
-            await self.var_reset()
+            self.var_reset()
             return True
         return False
 
-    async def var_reset(self):
+    def var_reset(self):
         self.objects_loaded = False
+        self.logged = False
+        self.output_file = ""
         self.extra_items = 0
         self.extra_spawners = 0
         self.extra_chests = 0
@@ -839,7 +859,6 @@ async def _patch_and_run_game(patch_file: str):
 # Checks location status inside of levels
 async def gl_sync_task(ctx: GauntletLegendsContext):
     logger.info("Starting N64 connector...")
-    logger.info("Use /players to set the number of people playing locally. This is required for the client to function.")
     while not ctx.exit_event.is_set():
         if ctx.retro_connected:
             try:
@@ -848,9 +867,10 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     status = status.split(" ")
                     if status[1] == "CONTENTLESS":
                         logger.info("No ROM loaded, waiting...")
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(3)
                         continue
                     else:
+                        logger.info("ROM Loaded")
                         ctx.rom_loaded = True
                 cc_str: str = f"gl_cc_T{ctx.team}_P{ctx.slot}"
                 pl_str: str = f"gl_pl_T{ctx.team}_P{ctx.slot}"
@@ -943,20 +963,20 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 await asyncio.sleep(0.1)
             except TimeoutError:
                 logger.info("Connection Timed Out, Reconnecting")
-                await ctx.var_reset()
+                ctx.var_reset()
                 ctx.socket = RetroSocket()
                 ctx.retro_connected = False
                 await asyncio.sleep(2)
             except ConnectionResetError:
                 logger.info("Connection Lost, Reconnecting")
-                await ctx.var_reset()
+                ctx.var_reset()
                 ctx.socket = RetroSocket()
                 ctx.retro_connected = False
                 await asyncio.sleep(2)
             except Exception as e:
                 logger.error(f"Unknown Error Occurred: {e}")
                 logger.info(traceback.format_exc())
-                await ctx.var_reset()
+                ctx.var_reset()
                 ctx.socket = RetroSocket()
                 ctx.retro_connected = False
                 await asyncio.sleep(2)
@@ -968,7 +988,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 status = status.split(" ")
                 if status[1] == "CONTENTLESS":
                     ctx.rom_loaded = False
-                await asyncio.sleep(2)
+                logger.info("Connected to Retroarch")
                 continue
             except TimeoutError:
                 logger.info("Connection Timed Out, Trying Again")

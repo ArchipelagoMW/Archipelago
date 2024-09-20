@@ -139,6 +139,8 @@ class GLPatchExtension(APPatchExtension):
                         "Barrel" in location_name and "Barrel of Gold" not in location_name
                     ):
                         data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12:14] = [0x27, 0x4]
+                        if "Chest" in location_name:
+                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][9] = 0x1
                     else:
                         data.items[j - data.items_replaced_by_obelisks][6:8] = [0x27, 0x4]
                 else:
@@ -179,11 +181,9 @@ class GLPatchExtension(APPatchExtension):
                         data.chests_replaced_by_items += 1
                     else:
                         if chest_barrel(location_name):
-                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12] = item_dict[item[0]][0]
-                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][13] = item_dict[item[0]][1]
+                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12:13] = item_dict[item[0]]
                         else:
-                            data.items[j - data.items_replaced_by_obelisks][6] = item_dict[item[0]][0]
-                            data.items[j - data.items_replaced_by_obelisks][7] = item_dict[item[0]][1]
+                            data.items[j - data.items_replaced_by_obelisks][6:7] = item_dict[item[0]]
             uncompressed = level_data_reformat(data)
             compressed = zenc(uncompressed)
             stream.seek(level_header[i] + 4, 0)
