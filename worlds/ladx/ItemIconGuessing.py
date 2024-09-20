@@ -30,6 +30,33 @@ FORBIDDEN = [
     "POWER",    # POWER_BRACELET, PIECE_OF_POWER
     "SINGLE",   # SINGLE_ARROW
     "STONE",    # STONE_BEAK
+
+    "BEAK1",
+    "BEAK2",
+    "BEAK3",
+    "BEAK4",
+    "BEAK5",
+    "BEAK6",
+    "BEAK7",
+    "BEAK8",
+
+    "COMPASS1",
+    "COMPASS2",
+    "COMPASS3",
+    "COMPASS4",
+    "COMPASS5",
+    "COMPASS6",
+    "COMPASS7",
+    "COMPASS8",
+
+    "MAP1",
+    "MAP2",
+    "MAP3",
+    "MAP4",
+    "MAP5",
+    "MAP6",
+    "MAP7",
+    "MAP8",
 ]
 
 SYNONYMS = {
