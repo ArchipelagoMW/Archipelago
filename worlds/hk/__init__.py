@@ -21,6 +21,16 @@ from .Charms import names as charm_names
 from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, LogicMixin, WebWorld
 
+from settings import Group, Bool
+
+
+class HollowKnightSettings(Group):
+    class DisableMapModSpoilers(Bool):
+        """Disallows the APMapMod from showing spoiler placements."""
+
+    disable_spoilers: typing.Union[DisableMapModSpoilers, bool] = False
+
+
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
     "Lore_Tablet-Path_of_Pain_Entrance",
@@ -156,6 +166,7 @@ class HKWorld(World):
     game: str = "Hollow Knight"
     options_dataclass = HKOptions
     options: HKOptions
+    settings: typing.ClassVar[HollowKnightSettings]
 
     web = HKWeb()
 
@@ -554,6 +565,8 @@ class HKWorld(World):
         slot_data["notch_costs"] = self.charm_costs
 
         slot_data["grub_count"] = self.grub_count
+
+        slot_data["is_race"] = int(self.settings.disable_spoilers or self.multiworld.is_race)
 
         return slot_data
 
