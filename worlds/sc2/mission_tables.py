@@ -152,7 +152,7 @@ class SC2Mission(Enum):
     CONVICTION = 46, "Conviction", SC2Campaign.HOTS, "Dominion Space", SC2Race.ANY, MissionPools.MEDIUM, "ap_conviction", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsTerran
     PLANETFALL = 47, "Planetfall", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.AutoScroller|MissionFlag.VsTerran
     DEATH_FROM_ABOVE = 48, "Death From Above", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_death_from_above", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran
-    THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_the_reckoning", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.AiTerranAlly
+    THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.AiTerranAlly
 
     # Prologue
     DARK_WHISPERS = 50, "Dark Whispers", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsTZ
@@ -358,7 +358,7 @@ class SC2CampaignGoal(NamedTuple):
 campaign_final_mission_locations: Dict[SC2Campaign, Optional[SC2CampaignGoal]] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
     SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
-    SC2Campaign.HOTS: None,
+    SC2Campaign.HOTS: SC2CampaignGoal(SC2Mission.THE_RECKONING, "The Reckoning: Victory"),
     SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory"),
     SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, "Salvation: Victory"),
     SC2Campaign.EPILOGUE: None,
@@ -375,7 +375,6 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
     },
     SC2Campaign.PROPHECY: None,
     SC2Campaign.HOTS: {
-        SC2Mission.THE_RECKONING: "The Reckoning: Victory",
         SC2Mission.THE_CRUCIBLE: "The Crucible: Victory",
         SC2Mission.HAND_OF_DARKNESS: "Hand of Darkness: Victory",
         SC2Mission.PHANTOMS_OF_THE_VOID: "Phantoms of the Void: Victory",
