@@ -637,8 +637,15 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
     item_names.MECHANICAL_KNOW_HOW,
     item_names.MERCENARY_MUNITIONS,
 
+    item_names.KERRIGAN_APOCALYPSE,
+    item_names.KERRIGAN_DROP_PODS,
+    item_names.KERRIGAN_SPAWN_LEVIATHAN,
+
     item_names.REAVER_RESOURCE_EFFICIENCY,
     item_names.SOA_TIME_STOP,
     item_names.SOA_SOLAR_LANCE,
+    # Note: This is more an issue of having multiple ults at the same time, rather than solar bombardment in particular.
+    # Can be removed from the list if we get an SOA ult combined cooldown or energy cost on it.
+    item_names.SOA_SOLAR_BOMBARDMENT,
     item_names.MOTHERSHIP,
 ]
