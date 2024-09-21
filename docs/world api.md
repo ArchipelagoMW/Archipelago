@@ -732,7 +732,7 @@ def collect(self, state: CollectionState, item: Item) -> bool:
 def remove(self, state: CollectionState, item: Item) -> bool:
     change = super().remove(state, item)
     if change and item in COMBAT_ITEMS:
-        state.defeatable_enemies |= get_newly_locked_enemies(state)
+        state.defeatable_enemies -= get_newly_locked_enemies(state)
     return change
 ```
 
