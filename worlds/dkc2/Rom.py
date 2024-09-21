@@ -8,8 +8,8 @@ from pkgutil import get_data
 from worlds.AutoWorld import World
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
-HASH_US = 'a10071fa78554b57538d0b459e00d224'
-HASH_US_REV_1 = 'df1cc0c8c8c4b61e3b834cc03366611c'
+HASH_US = '98458530599b9dff8a7414a7f20b777a'
+HASH_US_REV_1 = 'd323e6bb4ccc85fd7b416f58350bc1a2'
 
 STARTING_ID = 0xBF0000
 
