@@ -947,7 +947,7 @@ item_descriptions = {
     item_names.DAWNBRINGER_SOLARITE_LENS: "Dawnbringer War Council upgrade. Dawnbringers gain +2 range.",
     item_names.CARRIER_REPAIR_DRONES: "Carrier War Council upgrade. Carriers gain 2 repair drones which heal nearby mechanical units.",
     item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map."),
-    # Trireme
+    item_names.TRIREME_SOLAR_BEAM: "Trireme War Council upgrade. Triremes gain an anti-air laser attack that deals more damage over time.",
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
     # Scout
     item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
