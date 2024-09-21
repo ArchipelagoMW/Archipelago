@@ -715,7 +715,7 @@ class MyGameState(LogicMixin):
         new_state.defeatable_enemies = {player: enemies.copy() for player, enemies in self.defeatable_enemies.items()}
 ```
 
-After doing this, you can now access `state.defeatable_enemies` from your access rules.
+After doing this, you can now access `state.defeatable_enemies[player]` from your access rules.
 
 Usually, doing this coincides with an override of `World.collect` and `World.remove`, where any time a relevant item is
 collected or removed, the custom state variable gets recalculated.
