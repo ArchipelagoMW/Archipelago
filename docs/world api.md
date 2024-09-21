@@ -736,17 +736,17 @@ def remove(self, state: CollectionState, item: Item) -> bool:
     return change
 ```
 
-Using LogicMixin can slow down your code by a lot if you don't use it intelligently.
+Using LogicMixin can slow down your code by a lot if you don't use it intelligently.  
 For example, you can make use of the fact that `collect` should only unlock things, and `remove` should only
 lock things.
-In our example, we have two different functions: `get_newly_unlocked_enemies` and `get_newly_locked_enemies`.
+In our example, we have two different functions: `get_newly_unlocked_enemies` and `get_newly_locked_enemies`.  
 `get_newly_unlocked_enemies` should only consider enemies that are *not already in the set*
-and check whether they were **unlocked**.
+and check whether they were **unlocked**.  
 `get_newly_locked_enemies` should only consider enemies that are *already in the set*
 and check whether they **became locked**.
 
 There are a multitude of other ways you can optimise LogicMixin. Some games use a `mygame_state_is_stale`
-variable that they simply initialize as True, and set to True in collect/remove.
+variable that they simply initialize as True, and set to True in collect/remove.  
 The calls to the actual recalculating functions are then moved to the start of the relevant access rules like this:
 
 ```python
