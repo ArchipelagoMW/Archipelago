@@ -811,7 +811,7 @@ class ExcludedMissions(Sc2MissionSet):
 
 class ExcludeVeryHardMissions(Choice):
     """
-    Excludes Very Hard missions outside of Epilogue campaign (All-In, Salvation, and all Epilogue missions are considered Very Hard).
+    Excludes Very Hard missions outside of Epilogue campaign (All-In, The Reckoning, Salvation, and all Epilogue missions are considered Very Hard).
     Doesn't apply to "Vanilla" mission order.
 
     Default: Not excluded for mission orders "Vanilla Shuffled" or "Grid" with Maximum Campaign Size >= 20,
