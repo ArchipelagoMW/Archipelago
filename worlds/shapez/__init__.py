@@ -129,6 +129,7 @@ class ShapezWorld(World):
         if self.options.randomize_level_requirements:
             self.level_logic_type = self.options.randomize_level_logic.current_key
             if self.level_logic_type.endswith("shuffled"):
+                self.level_logic = []
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)
@@ -152,6 +153,7 @@ class ShapezWorld(World):
             elif self.upgrade_logic_type == "category":
                 self.upgrade_logic = ["Cutter", "Rotator", "Stacker", "Painter", "Color Mixer"]
             else:
+                self.upgrade_logic = []
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)
