@@ -219,6 +219,9 @@ stage_bonus = {
 
 all_locations = {
     **stage_clears,
+    **stage_dk_coin,
+    **stage_kong,
+    **stage_bonus,
 }
 
 location_table = {}
