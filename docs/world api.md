@@ -697,7 +697,7 @@ is automatically extended by the mixin's members. These members should be prefix
 world since the namespace is shared with all other logic mixins.
 
 In general, a LogicMixin class should have at least one mutable variable that is tracking some custom state per player,
-as well as an `init_mixin` and a `copy_mixin` function so that this variable gets initialized and copied correctly when
+as well as `init_mixin` and `copy_mixin` functions so that this variable gets initialized and copied correctly when
 `CollectionState()` and `CollectionState.copy()` are called respectively.
 
 ```python
