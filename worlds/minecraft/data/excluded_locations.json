@@ -2,7 +2,6 @@
 	"hard": [
         "Very Very Frightening",
         "A Furious Cocktail",
-        "Two by Two",
         "Two Birds, One Arrow",
         "Arbalistic",
         "Monsters Hunted",
@@ -10,7 +9,6 @@
         "A Balanced Diet",
         "Uneasy Alliance",
         "Cover Me in Debris",
-        "A Complete Catalogue",
         "Surge Protector",
         "Sound of Music",
         "Star Trader",
@@ -19,6 +17,8 @@
     ],
     "unreasonable": [
         "How Did We Get Here?",
+	"A Complete Catalogue",
+	"Two by Two",
         "Adventuring Time"
     ],
     "ender_dragon": [
