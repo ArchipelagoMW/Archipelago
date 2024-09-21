@@ -1,7 +1,6 @@
 import typing
 from . import item_names, items
 from .mission_tables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
-from ..hk import item_table
 
 """
 Item name groups, given to Archipelago and used in YAMLs and /received filtering.
