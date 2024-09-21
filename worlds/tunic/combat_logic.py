@@ -1,5 +1,6 @@
 from typing import Dict, List, NamedTuple, Tuple, Optional
 from enum import IntEnum
+from collections import defaultdict
 from BaseClasses import CollectionState
 from .rules import has_sword, has_melee
 from worlds.AutoWorld import LogicMixin
@@ -408,10 +409,16 @@ def get_money_count(state: CollectionState, player: int) -> int:
 
 
 class TunicState(LogicMixin):
-    # the per-player need to reset the combat state when collecting a combat item
-    tunic_need_to_reset_combat_from_collect: Dict[int, bool] = {}
-    # the per-player need to reset the combat state when removing a combat item
-    tunic_need_to_reset_combat_from_remove: Dict[int, bool] = {}
-    # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
-    tunic_area_combat_state: Dict[int, Dict[str, int]] = {}
+    def __init__(self):
+        self.tunic_need_to_reset_combat_from_collect = {}
+        self.tunic_need_to_reset_combat_from_remove = {}
+        self.tunic_area_combat_state = {}
 
+    def init_mixin(self, _):
+        # the per-player need to reset the combat state when collecting a combat item
+        self.tunic_need_to_reset_combat_from_collect: Dict[int, bool] = defaultdict(lambda: False)
+        # the per-player need to reset the combat state when removing a combat item
+        self.tunic_need_to_reset_combat_from_remove: Dict[int, bool] = defaultdict(lambda: False)
+        # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
+        self.tunic_area_combat_state: Dict[int, Dict[str, int]] = (
+            defaultdict(lambda: defaultdict(lambda: CombatState.unchecked)))
