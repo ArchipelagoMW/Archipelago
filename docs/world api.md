@@ -720,7 +720,7 @@ After doing this, you can now access `state.defeatable_enemies[player]` from you
 Usually, doing this coincides with an override of `World.collect` and `World.remove`, where any time a relevant item is
 collected or removed, the custom state variable gets recalculated.
 
-```
+```python
 # __init__.py
 
 def collect(self, state: CollectionState, item: Item) -> bool:
