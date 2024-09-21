@@ -696,9 +696,61 @@ When importing a file that defines a class that inherits from `worlds.AutoWorld.
 is automatically extended by the mixin's members. These members should be prefixed with the name of the implementing
 world since the namespace is shared with all other logic mixins.
 
-Some uses could be to add additional variables to the state object, or to have a custom state machine that gets modified
-with the state.
-Please do this with caution and only when necessary.
+In general, a LogicMixin class should have at least one mutable variable that is tracking some custom state per player,
+as well as an `init_mixin` and a `copy_mixin` function so that this variable gets initialized and copied correctly when
+`CollectionState()` and `CollectionState.copy()` are called respectively.
+
+```python
+from BaseClasses import CollectionState, MultiWorld
+from worlds.AutoWorld import LogicMixin
+
+class MyGameState(LogicMixin):
+    defeatable_enemies: Dict[int, Set[str]]  # per player
+
+    def init_mixin(self, multiworld: MultiWorld) -> None:
+        self.defeatable_enemies = {}
+
+    def copy_mixin(self, new_state: CollectionState) -> CollectionState:
+        # Be careful to make a "deep enough" copy here!
+        new_state.defeatable_enemies = {player: enemies.copy() for player, enemies in self.defeatable_enemies.items()}
+```
+
+After doing this, you can now access `state.defeatable_enemies` from your access rules.
+
+Usually, doing this coincides with an override of `World.collect` and `World.remove`, where any time a relevant item is
+collected or removed, the custom state variable gets recalculated.
+
+```
+# __init__.py
+
+def collect(self, state: CollectionState, item: Item) -> bool:
+    change = super().collect(state, item)
+    if change and item in COMBAT_ITEMS:
+        state.defeatable_enemies |= get_newly_unlocked_enemies(state)
+    return change
+
+def remove(self, state: CollectionState, item: Item) -> bool:
+    change = super().remove(state, item)
+    if change and item in COMBAT_ITEMS:
+        state.defeatable_enemies |= get_newly_locked_enemies(state)
+    return change
+```
+
+Using LogicMixin can slow down your code by a lot if you don't use it intelligently.
+For example, ideally, you make use of the fact that `collect` should only unlock things, and `remove` should only
+lock things.
+In our example, we have two different functions: `get_newly_unlocked_enemies` and `get_newly_locked_enemies`.
+`get_newly_unlocked_enemies` should only consider enemies that are *not already in the set*
+and check whether they were **unlocked**.
+`get_newly_locked_enemies` should only consider enemies that are *already in the set*
+and check whether they **became locked**.
+
+There are a multitude of other ways you can optimise LogicMixin. Some games choose to have a `mygame_state_is_stale`
+variable that they simply set to True in collect/remove, and then only call the recalculating functions
+from any relevant access rules by checking `state.mygame_state_is_stale[player]` and setting it back to `False`.
+
+Only use LogicMixin if necessary. There are often other ways to achieve what it does, like making clever use of
+`state.prog_items`, or using event items, pseudo-regions etc.
 
 #### pre_fill
 
