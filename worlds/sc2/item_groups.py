@@ -182,7 +182,7 @@ item_name_groups[ItemGroupNames.TERRAN_ITEMS] = terran_items = [
 ]
 item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
     item_name for item_name, item_data in items.item_table.items()
-    if item_data.type in (items.TerranItemType.Unit, items.TerranItemType.Mercenary)
+    if item_data.type in (items.TerranItemType.Unit, items.TerranItemType.Unit_2, items.TerranItemType.Mercenary)
 ]
 item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrades = [
     item_name for item_name, item_data in items.item_table.items()
