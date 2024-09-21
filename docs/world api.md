@@ -758,7 +758,7 @@ def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
     return enemy in state.defeatable_enemies
 ```
 
-This can help quite significantly because it is possible for 0 local access rules to be called between two calls to
+This can help significantly because it is possible for 0 local access rules to be called between two calls to
 `collect`, so recalculating on every `collect` is very slow.
 
 Only use LogicMixin if necessary. There are often other ways to achieve what it does, like making clever use of
