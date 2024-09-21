@@ -745,9 +745,12 @@ and check whether they were **unlocked**.
 `get_newly_locked_enemies` should only consider enemies that are *already in the set*
 and check whether they **became locked**.
 
-There are a multitude of other ways you can optimise LogicMixin. Some games choose to have a `mygame_state_is_stale`
-variable that they simply set to True in collect/remove, and then only call the recalculating functions
-from any relevant access rules by checking `state.mygame_state_is_stale[player]` and setting it back to `False`.
+There are a multitude of other ways you can optimise LogicMixin. Some games use a `mygame_state_is_stale`
+variable that they simply set to True in collect/remove, and then call the recalculating functions
+from the actual relevant access rules only when state.mygame_state_is_stale[player] is True,
+after which they set it back to False.
+This can help quite significantly because it is possible for 0 local access rules to be called between two calls to
+`collect`, so recalculating on every `collect` is very slow.
 
 Only use LogicMixin if necessary. There are often other ways to achieve what it does, like making clever use of
 `state.prog_items`, or using event items, pseudo-regions etc.
