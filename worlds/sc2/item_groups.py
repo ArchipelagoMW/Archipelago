@@ -164,6 +164,7 @@ class ItemGroupNames:
     PURIFIER_UNITS = "Purifier"
 
     VANILLA_ITEMS = "Vanilla Items"
+    OVERPOWERED_ITEMS = "Overpowered Items"
 
     @classmethod
     def get_all_group_names(cls) -> typing.Set[str]:
@@ -627,4 +628,18 @@ item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
 item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type in (items.ProtossItemType.War_Council, items.ProtossItemType.War_Council_2)
+]
+
+item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
+    item_names.SIEGE_TANK_GRADUATING_RANGE,
+    item_names.SIEGE_TANK_RESOURCE_EFFICIENCY,
+    item_names.BATTLECRUISER_ATX_LASER_BATTERY,
+    item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
+    item_names.MECHANICAL_KNOW_HOW,
+    item_names.MERCENARY_MUNITIONS,
+
+    item_names.REAVER_RESOURCE_EFFICIENCY,
+    item_names.SOA_TIME_STOP,
+    item_names.SOA_SOLAR_LANCE,
+    item_names.MOTHERSHIP,
 ]
