@@ -545,6 +545,15 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
 
     # we want to start by making sure every region is accessible
     random_object.shuffle(two_plus)
+
+    # this is a backup in case we run into that rare direction pairing failure
+    # so that we don't have to redo the plando bit basically
+    backup_connected_regions = connected_regions.copy()
+    backup_portal_pairs = portal_pairs.copy()
+    backup_two_plus = two_plus.copy()
+    backup_two_plus_direction_tracker = two_plus_direction_tracker.copy()
+    direction_fail_count = 0
+
     portal1 = None
     portal2 = None
     previous_conn_num = 0
@@ -557,10 +566,28 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # should, hopefully, only ever occur if someone plandos connections poorly
         if previous_conn_num == len(connected_regions):
             fail_count += 1
-            if fail_count >= 500:
+            if fail_count > 500:
                 raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for errors. "
                                 f"Unconnected regions: {non_dead_end_regions - connected_regions}.\n"
                                 f"Unconnected portals: {[portal.name for portal in two_plus]}")
+            if (fail_count > 100 and world.options.entrance_layout == EntranceLayout.option_direction_pairs
+                    and not decoupled):
+                # in direction pairs, we may run into a case where we run out of pairable directions
+                # since we need to ensure the dead ends will have something to connect to
+                # so, this is basically just resetting entrance pairing
+                # seems to get triggered maybe 1 in 500 gens (when none of the trick logic is enabled)
+                portal_pairs = backup_portal_pairs.copy()
+                two_plus = two_plus2 = backup_two_plus.copy()
+                two_plus_direction_tracker = backup_two_plus_direction_tracker.copy()
+                random_object.shuffle(two_plus)
+                connected_regions = backup_connected_regions.copy()
+                direction_fail_count += 1
+                fail_count = 0
+
+                if direction_fail_count > 10:
+                    raise Exception(f"Failed to pair regions due to direction pairing issues for {player_name}. "
+                                    f"Unconnected regions: {non_dead_end_regions - connected_regions}.\n"
+                                    f"Unconnected portals: {[portal.name for portal in two_plus]}")
         else:
             fail_count = 0
         previous_conn_num = len(connected_regions)
@@ -601,6 +628,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                     continue
 
                 # if you have direction pairs, we need to make sure we don't run out of spots for problem portals
+                # this cuts down on using the failsafe significantly
                 if not decoupled and entrance_layout == EntranceLayout.option_direction_pairs:
                     should_continue = False
                     # these portals are weird since they're one-ways essentially
