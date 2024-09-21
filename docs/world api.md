@@ -747,7 +747,7 @@ and check whether they **became locked**.
 
 There are a multitude of other ways you can optimise LogicMixin. Some games use a `mygame_state_is_stale`
 variable that they simply initialize as True, and set to True in collect/remove.
-The calls to the actual recalculating functions are then moved to the start of the actual relevant access rules like this:
+The calls to the actual recalculating functions are then moved to the start of the relevant access rules like this:
 
 ```python
 def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
