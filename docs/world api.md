@@ -737,7 +737,7 @@ def remove(self, state: CollectionState, item: Item) -> bool:
 ```
 
 Using LogicMixin can slow down your code by a lot if you don't use it intelligently.
-For example, ideally, you make use of the fact that `collect` should only unlock things, and `remove` should only
+For example, you can make use of the fact that `collect` should only unlock things, and `remove` should only
 lock things.
 In our example, we have two different functions: `get_newly_unlocked_enemies` and `get_newly_locked_enemies`.
 `get_newly_unlocked_enemies` should only consider enemies that are *not already in the set*
