@@ -746,7 +746,7 @@ and check whether they were **unlocked**.
 and check whether they **became locked**.
 
 There are a multitude of other ways you can optimise LogicMixin. Some games use a `mygame_state_is_stale`
-variable that they simply initialize as True, and set to True in collect/remove.  
+variable that they simply set to True in collect/remove and `init_mixin`.  
 The calls to the actual recalculating functions are then moved to the start of the relevant access rules like this:
 
 ```python
