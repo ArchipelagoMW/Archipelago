@@ -746,9 +746,18 @@ and check whether they were **unlocked**.
 and check whether they **became locked**.
 
 There are a multitude of other ways you can optimise LogicMixin. Some games use a `mygame_state_is_stale`
-variable that they simply set to True in collect/remove, and then call the recalculating functions
-from the actual relevant access rules only when state.mygame_state_is_stale[player] is True,
-after which they set it back to False.
+variable that they simply initialize as True, and set to True in collect/remove.
+The calls to the actual recalculating functions are then moved to the start of the actual relevant access rules like this:
+
+```python
+def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
+    if state.custom_state_is_stale[player]:
+        state.defeatable_enemies = recalculate_defeatable_enemies(state)
+        state.custom_state_is_stale[player] = False
+
+    return enemy in state.defeatable_enemies
+```
+
 This can help quite significantly because it is possible for 0 local access rules to be called between two calls to
 `collect`, so recalculating on every `collect` is very slow.
 
