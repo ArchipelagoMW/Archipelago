@@ -502,13 +502,12 @@ regions:List[RegionDict] = [
      "episode":4,
      "connections":[
         {"target":"Perfect Hatred (E4M2) Blue","pro":False},
-        {"target":"Perfect Hatred (E4M2) Yellow","pro":False}]},
+        {"target":"Perfect Hatred (E4M2) Yellow","pro":False},
+        {"target":"Perfect Hatred (E4M2) Upper","pro":True}]},
     {"name":"Perfect Hatred (E4M2) Blue",
      "connects_to_hub":False,
      "episode":4,
-     "connections":[
-        {"target":"Perfect Hatred (E4M2) Main","pro":False},
-        {"target":"Perfect Hatred (E4M2) Cave","pro":False}]},
+     "connections":[{"target":"Perfect Hatred (E4M2) Upper","pro":False}]},
     {"name":"Perfect Hatred (E4M2) Yellow",
      "connects_to_hub":False,
      "episode":4,
@@ -518,7 +517,13 @@ regions:List[RegionDict] = [
     {"name":"Perfect Hatred (E4M2) Cave",
      "connects_to_hub":False,
      "episode":4,
-     "connections":[]},
+     "connections":[{"target":"Perfect Hatred (E4M2) Main","pro":False}]},
+    {"name":"Perfect Hatred (E4M2) Upper",
+     "connects_to_hub":False,
+     "episode":4,
+     "connections":[
+        {"target":"Perfect Hatred (E4M2) Cave","pro":False},
+        {"target":"Perfect Hatred (E4M2) Main","pro":False}]},
 
     # Sever the Wicked (E4M3)
     {"name":"Sever the Wicked (E4M3) Main",
