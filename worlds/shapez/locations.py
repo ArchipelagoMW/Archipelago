@@ -4,27 +4,6 @@ from typing import List, Tuple, Dict, Optional, Callable
 from BaseClasses import Location, LocationProgressType, Region
 from .options import max_shapesanity, max_levels_and_upgrades
 
-location_description = {  # TODO give at least some locations a description
-    "Level 1": "TODO",
-    "Level 1 Additional": "TODO",
-    "Level 20 Additional": "TODO",
-    "Level 20 Additional 2": "TODO",
-    "Level 26": "TODO",
-    "Level 1000": "TODO",
-    "Belt Upgrade Tier II": "TODO",
-    "Miner Upgrade Tier II": "TODO",
-    "Processors Upgrade Tier II": "TODO",
-    "Painting Upgrade Tier II": "TODO",
-    "Belt Upgrade Tier VIII": "TODO",
-    "Miner Upgrade Tier VIII": "TODO",
-    "Processors Upgrade Tier VIII": "TODO",
-    "Painting Upgrade Tier VIII": "TODO",
-    "Belt Upgrade Tier M": "TODO",
-    "Miner Upgrade Tier M": "TODO",
-    "Processors Upgrade Tier M": "TODO",
-    "Painting Upgrade Tier M": "TODO"
-}
-
 categories = ["Belt", "Miner", "Processors", "Painting"]
 
 translate: List[Tuple[int, str]] = [
@@ -53,6 +32,89 @@ def roman(num: int) -> str:
             num -= key
     return rom
 
+
+location_description = {  # TODO give at least some locations a description
+    "Level 1": "Levels are completed by delivering certain shapes in certain amounts to the hub. The required shape "
+               "and amount for the current level are always displayed on the hub.",
+    "Level 1 Additional": "In the vanilla game, levels 1 and 20 have unlock more than one building.",
+    "Level 20 Additional": "In the vanilla game, levels 1 and 20 have unlock more than one building.",
+    "Level 20 Additional 2": "In the vanilla game, levels 1 and 20 have unlock more than one building.",
+    "Level 26": "In the vanilla game, level 26 is the final level of the tutorial, unlocking freeplay.",
+    f"Level {max_levels_and_upgrades-1}": "This is the highest possible level that can contains an item, if your goal "
+                                          "is set to \"mam\"",
+    "Belt Upgrade Tier II": "Upgrades can be purchased by having certain shapes in certain amounts stored in your hub. "
+                            "This is the first upgrade in the belt, balancers, and tunnel category.",
+    "Miner Upgrade Tier II": "Upgrades can be purchased by having certain shapes in certain amounts stored in your "
+                             "hub. This is the first upgrade in the extractor category.",
+    "Processors Upgrade Tier II": "Upgrades can be purchased by having certain shapes in certain amounts stored in "
+                                  "your hub. This is the first upgrade in the cutter, rotators, and stacker category.",
+    "Painting Upgrade Tier II": "Upgrades can be purchased by having certain shapes in certain amounts stored in your "
+                                "hub. This is the first upgrade in the painters and color mixer category.",
+    "Belt Upgrade Tier VIII": "This is the final upgrade in the belt, balancers, and tunnel category, if your goal is "
+                              "**not** set to \"even_fasterer\".",
+    "Miner Upgrade Tier VIII": "This is the final upgrade in the extractor category, if your goal is **not** set to "
+                               "\"even_fasterer\".",
+    "Processors Upgrade Tier VIII": "This is the final upgrade in the cutter, rotators, and stacker category, if your "
+                                    "goal is **not** set to \"even_fasterer\".",
+    "Painting Upgrade Tier VIII": "This is the final upgrade in the painters and color mixer category, if your goal is "
+                                  "**not** set to \"even_fasterer\".",
+    f"Belt Upgrade Tier {roman(max_levels_and_upgrades)}": "This is the highest possible upgrade in the belt, "
+                                                           "balancers, and tunnel category, if your goal is set to "
+                                                           "\"even_fasterer\".",
+    f"Miner Upgrade Tier {roman(max_levels_and_upgrades)}": "This is the highest possible upgrade in the extractor "
+                                                            "category, if your goal is set to \"even_fasterer\".",
+    f"Processors Upgrade Tier {roman(max_levels_and_upgrades)}": "This is the highest possible upgrade in the cutter, "
+                                                                 "rotators, and stacker category, if your goal is set "
+                                                                 "to \"even_fasterer\".",
+    f"Painting Upgrade Tier {roman(max_levels_and_upgrades)}": "This is the highest possible upgrade in the painters "
+                                                               "and color mixer category, if your goal is set to "
+                                                               "\"even_fasterer\".",
+    "My eyes no longer hurt": "TODO",
+    "Painter": "TODO",
+    "Cutter": "TODO",
+    "Rotater": "TODO",
+    "Wait, they stack?": "TODO",
+    "Wires": "TODO",
+    "Storage": "TODO",
+    "Freedom": "TODO",
+    "The logo!": "TODO",
+    "To the moon": "TODO",
+    "It's piling up": "TODO",
+    "I'll use it later": "TODO",
+    "Efficiency 1": "TODO",
+    "Preparing to launch": "TODO",
+    "SpaceY": "TODO",
+    "Stack overflow": "TODO",
+    "It's a mess": "TODO",
+    "Faster": "TODO",
+    "Even faster": "TODO",
+    "Get rid of them": "TODO",
+    "It's been a long time": "TODO",
+    "Addicted": "TODO",
+    "Can't stop": "TODO",
+    "Is this the end?": "TODO",
+    "Getting into it": "TODO",
+    "Now it's easy": "TODO",
+    "Computer Guy": "TODO",
+    "Speedrun Master": "TODO",
+    "Speedrun Novice": "TODO",
+    "Not an idle game": "TODO",
+    "Efficiency 2": "TODO",
+    "Branding specialist 1": "TODO",
+    "Branding specialist 2": "TODO",
+    "King of Inefficiency": "TODO",
+    "It's so slow": "TODO",
+    "MAM (Make Anything Machine)": "TODO",
+    "Perfectionist": "TODO",
+    "The next dimension": "TODO",
+    "Oops": "TODO",
+    "Copy-Pasta": "TODO",
+    "I've seen that before ...": "TODO",
+    "Memories from the past": "TODO",
+    "I need trains": "TODO",
+    "A bit early?": "TODO",
+    "GPS": "TODO"
+}
 
 shapesanity_simple: Dict[str, str] = {}
 shapesanity_1_4: Dict[str, str] = {}
