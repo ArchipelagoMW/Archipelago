@@ -114,7 +114,9 @@ def set_region_rules(world: "TunicWorld") -> None:
         or can_ladder_storage(state, world)
     # using laurels or ls to get in is covered by the -> Eastern Vault Fortress rules
     world.get_entrance("Overworld -> Beneath the Vault").access_rule = \
-        lambda state: has_lantern(state, world) and has_ability(prayer, state, world)
+        lambda state: (has_lantern(state, world) and has_ability(prayer, state, world)
+                       # there's some boxes in the way
+                       and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand), player)))
     world.get_entrance("Ruined Atoll -> Library").access_rule = \
         lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
     world.get_entrance("Overworld -> Quarry").access_rule = \
@@ -296,9 +298,20 @@ def set_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Frog's Domain - Escape Chest"),
              lambda state: state.has_any({grapple, laurels}, player))
 
+    # Library Lab
+    set_rule(world.get_location("Library Lab - Page 1"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 2"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 3"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+
     # Eastern Vault Fortress
+    # yes, you can clear the leaves with dagger
+    # gun isn't included since it can only break one leaf pile at a time, and we don't check how much mana you have
+    # but really, I expect the player to just throw a bomb at them if they don't have melee
     set_rule(world.get_location("Fortress Leaf Piles - Secret Chest"),
-             lambda state: state.has(laurels, player))
+             lambda state: state.has(laurels, player) and (has_stick(state, player) or state.has(ice_dagger, player)))
     set_rule(world.get_location("Fortress Arena - Siege Engine/Vault Key Pickup"),
              lambda state: has_sword(state, player)
              and (has_ability(prayer, state, world)
