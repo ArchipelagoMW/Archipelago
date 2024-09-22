@@ -1,11 +1,9 @@
 from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule
+from .data.rooms import rooms, entrances
 from .Items import item_groups, yaml_item
-import pkgutil
-import yaml
 
-rooms = yaml.load(pkgutil.get_data(__name__, "data/rooms.yaml"), yaml.Loader)
-entrance_names = {entrance["id"]: entrance["name"] for entrance in yaml.load(pkgutil.get_data(__name__, "data/entrances.yaml"), yaml.Loader)}
+entrance_names = {entrance["id"]: entrance["name"] for entrance in entrances}
 
 object_id_table = {}
 object_type_table = {}
@@ -69,7 +67,7 @@ def create_regions(self):
             location_table else None, object["type"], object["access"],
             self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for object in
             room["game_objects"] if "Hero Chest" not in object["name"] and object["type"] not in ("BattlefieldGp",
-            "BattlefieldXp") and (object["type"] != "Box" or self.multiworld.brown_boxes[self.player] == "include") and
+            "BattlefieldXp") and (object["type"] != "Box" or self.options.brown_boxes == "include") and
             not (object["name"] == "Kaeli Companion" and not object["on_trigger"])], room["links"]))
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
@@ -91,15 +89,13 @@ def create_regions(self):
                     if "entrance" in link and link["entrance"] != -1:
                         spoiler = False
                         if link["entrance"] in crest_warps:
-                            if self.multiworld.crest_shuffle[self.player]:
+                            if self.options.crest_shuffle:
                                 spoiler = True
-                        elif self.multiworld.map_shuffle[self.player] == "everything":
+                        elif self.options.map_shuffle == "everything":
                             spoiler = True
-                        elif "Subregion" in region.name and self.multiworld.map_shuffle[self.player] not in ("dungeons",
-                                                                                                             "none"):
+                        elif "Subregion" in region.name and self.options.map_shuffle not in ("dungeons", "none"):
                             spoiler = True
-                        elif "Subregion" not in region.name and self.multiworld.map_shuffle[self.player] not in ("none",
-                                                                                                           "overworld"):
+                        elif "Subregion" not in region.name and self.options.map_shuffle not in ("none", "overworld"):
                             spoiler = True
 
                         if spoiler:
@@ -110,6 +106,7 @@ def create_regions(self):
                     region.exits.append(connection)
                     connection.connect(connect_room)
                     break
+
 
 non_dead_end_crest_rooms = [
     'Libra Temple', 'Aquaria Gemini Room', "GrenadeMan's Mobius Room", 'Fireburg Gemini Room',
@@ -140,7 +137,7 @@ def set_rules(self) -> None:
     add_rule(self.multiworld.get_location("Gidrah", self.player), hard_boss_logic)
     add_rule(self.multiworld.get_location("Dullahan", self.player), hard_boss_logic)
 
-    if self.multiworld.map_shuffle[self.player]:
+    if self.options.map_shuffle:
         for boss in ("Freezer Crab", "Ice Golem", "Jinn", "Medusa", "Dualhead Hydra"):
             loc = self.multiworld.get_location(boss, self.player)
             checked_regions = {loc.parent_region}
@@ -158,12 +155,12 @@ def set_rules(self) -> None:
                             return True
             check_foresta(loc.parent_region)
 
-    if self.multiworld.logic[self.player] == "friendly":
+    if self.options.logic == "friendly":
         process_rules(self.multiworld.get_entrance("Overworld - Ice Pyramid", self.player),
                       ["MagicMirror"])
         process_rules(self.multiworld.get_entrance("Overworld - Volcano", self.player),
                       ["Mask"])
-        if self.multiworld.map_shuffle[self.player] in ("none", "overworld"):
+        if self.options.map_shuffle in ("none", "overworld"):
             process_rules(self.multiworld.get_entrance("Overworld - Bone Dungeon", self.player),
                           ["Bomb"])
             process_rules(self.multiworld.get_entrance("Overworld - Wintry Cave", self.player),
@@ -185,8 +182,8 @@ def set_rules(self) -> None:
             process_rules(self.multiworld.get_entrance("Overworld - Mac Ship Doom", self.player),
                           ["DragonClaw", "CaptainCap"])
 
-    if self.multiworld.logic[self.player] == "expert":
-        if self.multiworld.map_shuffle[self.player] == "none" and not self.multiworld.crest_shuffle[self.player]:
+    if self.options.logic == "expert":
+        if self.options.map_shuffle == "none" and not self.options.crest_shuffle:
             inner_room = self.multiworld.get_region("Wintry Temple Inner Room", self.player)
             connection = Entrance(self.player, "Sealed Temple Exit Trick", inner_room)
             connection.connect(self.multiworld.get_region("Wintry Temple Outer Room", self.player))
@@ -198,14 +195,14 @@ def set_rules(self) -> None:
             if entrance.connected_region.name in non_dead_end_crest_rooms:
                 entrance.access_rule = lambda state: False
 
-    if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
-        logic_coins = [16, 24, 32, 32, 38][self.multiworld.shattered_sky_coin_quantity[self.player].value]
+    if self.options.sky_coin_mode == "shattered_sky_coin":
+        logic_coins = [16, 24, 32, 32, 38][self.options.shattered_sky_coin_quantity.value]
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has("Sky Fragment", self.player, logic_coins)
-    elif self.multiworld.sky_coin_mode[self.player] == "save_the_crystals":
+    elif self.options.sky_coin_mode == "save_the_crystals":
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has_all(["Flamerus Rex", "Dualhead Hydra", "Ice Golem", "Pazuzu"], self.player)
-    elif self.multiworld.sky_coin_mode[self.player] in ("standard", "start_with"):
+    elif self.options.sky_coin_mode in ("standard", "start_with"):
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has("Sky Coin", self.player)
 
@@ -213,24 +210,22 @@ def set_rules(self) -> None:
 def stage_set_rules(multiworld):
     # If there's no enemies, there's no repeatable income sources
     no_enemies_players = [player for player in multiworld.get_game_players("Final Fantasy Mystic Quest")
-                          if multiworld.enemies_density[player] == "none"]
+                          if multiworld.worlds[player].options.enemies_density == "none"]
     if (len([item for item in multiworld.itempool if item.classification in (ItemClassification.filler,
             ItemClassification.trap)]) > len([player for player in no_enemies_players if
-                                              multiworld.accessibility[player] == "minimal"]) * 3):
+                                              multiworld.worlds[player].options.accessibility == "minimal"]) * 3):
         for player in no_enemies_players:
             for location in vendor_locations:
-                if multiworld.accessibility[player] == "locations":
+                if multiworld.worlds[player].options.accessibility == "full":
                     multiworld.get_location(location, player).progress_type = LocationProgressType.EXCLUDED
                 else:
                     multiworld.get_location(location, player).access_rule = lambda state: False
     else:
         # There are not enough junk items to fill non-minimal players' vendors. Just set an item rule not allowing
-        # advancement items so that useful items can be placed
+        # advancement items so that useful items can be placed.
         for player in no_enemies_players:
             for location in vendor_locations:
                 multiworld.get_location(location, player).item_rule = lambda item: not item.advancement
-
-
 
 
 class FFMQLocation(Location):

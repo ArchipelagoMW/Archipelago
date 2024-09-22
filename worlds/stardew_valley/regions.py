@@ -538,7 +538,7 @@ def create_final_regions(world_options) -> List[RegionData]:
 def create_final_connections_and_regions(world_options) -> Tuple[Dict[str, ConnectionData], Dict[str, RegionData]]:
     regions_data: Dict[str, RegionData] = {region.name: region for region in create_final_regions(world_options)}
     connections = {connection.name: connection for connection in vanilla_connections}
-    connections = modify_connections_for_mods(connections, world_options.mods)
+    connections = modify_connections_for_mods(connections, sorted(world_options.mods.value))
     include_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_false
     return remove_ginger_island_regions_and_connections(regions_data, connections, include_island)
 
@@ -565,10 +565,8 @@ def remove_ginger_island_regions_and_connections(regions_by_name: Dict[str, Regi
     return connections, regions_by_name
 
 
-def modify_connections_for_mods(connections: Dict[str, ConnectionData], mods) -> Dict[str, ConnectionData]:
-    if mods is None:
-        return connections
-    for mod in mods.value:
+def modify_connections_for_mods(connections: Dict[str, ConnectionData], mods: Iterable) -> Dict[str, ConnectionData]:
+    for mod in mods:
         if mod not in ModDataList:
             continue
         if mod in vanilla_connections_to_remove_by_mod:

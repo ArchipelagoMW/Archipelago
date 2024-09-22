@@ -1,8 +1,8 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, \
-    StartInventoryPool, PlandoBosses, PlandoConnections, PlandoTexts, FreeText, Removed
+from Options import Choice, Range, DeathLink, DefaultOnToggle, FreeText, ItemsAccessibility, Option, \
+    PlandoBosses, PlandoConnections, PlandoTexts, Removed, StartInventoryPool, Toggle
 from .EntranceShuffle import default_connections, default_dungeon_connections, \
     inverted_default_connections, inverted_default_dungeon_connections
 from .Text import TextTable
@@ -728,7 +728,7 @@ class ALttPPlandoConnections(PlandoConnections):
     entrances = set([connection[0] for connection in (
         *default_connections, *default_dungeon_connections, *inverted_default_connections,
         *inverted_default_dungeon_connections)])
-    exits = set([connection[1] for connection in (
+    exits = set([connection[0] for connection in (
         *default_connections, *default_dungeon_connections, *inverted_default_connections,
         *inverted_default_dungeon_connections)])
 
@@ -743,6 +743,7 @@ class ALttPPlandoTexts(PlandoTexts):
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
+    "accessibility": ItemsAccessibility,
     "plando_connections": ALttPPlandoConnections,
     "plando_texts": ALttPPlandoTexts,
     "start_inventory_from_pool": StartInventoryPool,
