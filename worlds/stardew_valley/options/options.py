@@ -615,6 +615,20 @@ class Walnutsanity(OptionSet):
             return typing.cast(bool, self.value == other)
 
 
+class Moviesanity(Choice):
+    """Add checks for watching movies?
+    None: No movie checks
+    One: There is a check for watching a movie, regardless of which
+    All: Watching all individual movies are checks
+    """
+    internal_name = "moviesanity"
+    display_name = "Moviesanity"
+    default = 1
+    option_none = 0
+    option_one = 1
+    option_all = 2
+
+
 class NumberOfMovementBuffs(Range):
     """Number of movement speed buffs to the player that exist as items in the pool.
     Each movement speed buff is a +25% multiplier that stacks additively"""
