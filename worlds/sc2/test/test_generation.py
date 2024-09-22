@@ -529,3 +529,46 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         self.assertEqual(get_first_mission(self.world, self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
 
+    def test_excluding_mission_short_name_excludes_all_variants_of_mission(self):
+        world_options = {
+            'excluded_missions': [
+                mission_tables.SC2Mission.ZERO_HOUR.mission_name.split(" (")[0]
+            ],
+            'mission_order': options.MissionOrder.option_grid,
+            'selected_races': options.SelectRaces.option_all,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+        }
+        self.generate_world(world_options)
+        missions = get_all_missions(self.world.custom_mission_order)
+        self.assertTrue(missions)
+        self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR, missions)
+        self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR_Z, missions)
+        self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR_P, missions)
+
+    def test_excluding_mission_variant_excludes_just_that_variant(self):
+        world_options = {
+            'excluded_missions': [
+                mission_tables.SC2Mission.ZERO_HOUR.mission_name
+            ],
+            'mission_order': options.MissionOrder.option_grid,
+            'selected_races': options.SelectRaces.option_all,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+        }
+        self.generate_world(world_options)
+        missions = get_all_missions(self.world.custom_mission_order)
+        self.assertTrue(missions)
+        self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR, missions)
+        self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_Z, missions)
+        self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_P, missions)

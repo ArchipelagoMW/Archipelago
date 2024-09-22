@@ -146,7 +146,8 @@ class SC2Logic:
                     item_names.PRIDE_OF_AUGUSTRGRAD,
                 ), self.player)
                 or (
-                    state.has_all((item_names.SIEGE_TANK, item_names.MEDIVAC), self.player)
+                    state.has(item_names.MEDIVAC, self.player)
+                    and state.has_any((item_names.SIEGE_TANK, item_names.SHOCK_DIVISION), self.player)
                     and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
                 )
             )
@@ -853,6 +854,7 @@ class SC2Logic:
                 item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.CARRIER, item_names.SKYLORD,
                 item_names.SCOUT, item_names.DARK_ARCHON, item_names.MOTHERSHIP
             }, self.player)
+            or state.has_all({item_names.TRIREME, item_names.TRIREME_SOLAR_BEAM}, self.player)
             or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
             or state.has_all({item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER}, self.player)
             or self.advanced_tactics and state.has_any(

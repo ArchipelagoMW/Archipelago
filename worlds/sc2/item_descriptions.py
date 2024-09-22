@@ -45,8 +45,8 @@ resource_efficiency_cost_reduction = {
     item_names.WARHOUND:      (75, 0, 0),
     item_names.HERC:          (25, 25, 1),
     item_names.WRAITH:        (0, 50, 0),
-    item_names.GHOST:         (125, 75, 1),
-    item_names.SPECTRE:       (125, 75, 1),
+    item_names.GHOST:         (25, 25, 1),
+    item_names.SPECTRE:       (25, 25, 1),
     item_names.RAVEN:         (0, 50, 0),
     item_names.CYCLONE:       (25, 50, 1),
     item_names.WIDOW_MINE:    (0, 25, 1),
@@ -157,6 +157,7 @@ item_descriptions = {
         Durable Royal Guard support flyer. Loaded with strong anti-capital air missiles. 
         Can switch into Assault Mode to attack ground units.
     """),
+    item_names.SHOCK_DIVISION: "Royal Guard Heavy tank. Long-range artillery in Siege Mode.",
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "vehicles"),
@@ -513,7 +514,7 @@ item_descriptions = {
     item_names.MECHANICAL_KNOW_HOW: "Increases mechanical unit life by 20%.",
     item_names.MERCENARY_MUNITIONS: "Increases attack speed of all combat units by 15%.",
     item_names.FAST_DELIVERY: "Mercenary calldowns can be deployed right at the mission start.",
-    item_names.RAPID_REINFORCEMENT: "Halves cooldowns of mercenary calldowns.",
+    item_names.RAPID_REINFORCEMENT: "Reduces cooldowns of mercenary calldowns by 60s.",
     item_names.ZEALOT: "Powerful melee warrior. Can use the charge ability.",
     item_names.STALKER: "Ranged attack strider. Can use the Blink ability.",
     item_names.HIGH_TEMPLAR: "Potent psionic master. Can use the Feedback and Psionic Storm abilities. Can merge into an Archon.",
@@ -946,7 +947,7 @@ item_descriptions = {
     item_names.DAWNBRINGER_SOLARITE_LENS: "Dawnbringer War Council upgrade. Dawnbringers gain +2 range.",
     item_names.CARRIER_REPAIR_DRONES: "Carrier War Council upgrade. Carriers gain 2 repair drones which heal nearby mechanical units.",
     item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map."),
-    # Trireme
+    item_names.TRIREME_SOLAR_BEAM: "Trireme War Council upgrade. Triremes gain an anti-air laser attack that deals more damage over time.",
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
     # Scout
     item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",

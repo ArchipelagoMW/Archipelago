@@ -163,6 +163,7 @@ class ItemGroupNames:
     PURIFIER_UNITS = "Purifier"
 
     VANILLA_ITEMS = "Vanilla Items"
+    OVERPOWERED_ITEMS = "Overpowered Items"
 
     @classmethod
     def get_all_group_names(cls) -> typing.Set[str]:
@@ -180,7 +181,7 @@ item_name_groups[ItemGroupNames.TERRAN_ITEMS] = terran_items = [
 ]
 item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
     item_name for item_name, item_data in items.item_table.items()
-    if item_data.type in (items.TerranItemType.Unit, items.TerranItemType.Mercenary)
+    if item_data.type in (items.TerranItemType.Unit, items.TerranItemType.Unit_2, items.TerranItemType.Mercenary)
 ]
 item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrades = [
     item_name for item_name, item_data in items.item_table.items()
@@ -193,7 +194,7 @@ item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
 item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
     item_names.HELLION, item_names.VULTURE, item_names.GOLIATH, item_names.DIAMONDBACK,
     item_names.SIEGE_TANK, item_names.THOR, item_names.PREDATOR, item_names.WIDOW_MINE,
-    item_names.CYCLONE, item_names.WARHOUND,
+    item_names.CYCLONE, item_names.WARHOUND, item_names.SHOCK_DIVISION,
 ]
 item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.MEDIVAC, item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
@@ -375,7 +376,7 @@ item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressiv
     if item_data.type in (items.TerranItemType.Progressive, items.TerranItemType.Progressive_2)
 ]
 item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
-    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
+    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY, item_names.SHOCK_DIVISION,
 ]
 item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     wol_units
@@ -626,4 +627,25 @@ item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
 item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type in (items.ProtossItemType.War_Council, items.ProtossItemType.War_Council_2)
+]
+
+item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
+    item_names.SIEGE_TANK_GRADUATING_RANGE,
+    item_names.SIEGE_TANK_RESOURCE_EFFICIENCY,
+    item_names.BATTLECRUISER_ATX_LASER_BATTERY,
+    item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
+    item_names.MECHANICAL_KNOW_HOW,
+    item_names.MERCENARY_MUNITIONS,
+
+    item_names.KERRIGAN_APOCALYPSE,
+    item_names.KERRIGAN_DROP_PODS,
+    item_names.KERRIGAN_SPAWN_LEVIATHAN,
+
+    item_names.REAVER_RESOURCE_EFFICIENCY,
+    item_names.SOA_TIME_STOP,
+    item_names.SOA_SOLAR_LANCE,
+    # Note: This is more an issue of having multiple ults at the same time, rather than solar bombardment in particular.
+    # Can be removed from the list if we get an SOA ult combined cooldown or energy cost on it.
+    item_names.SOA_SOLAR_BOMBARDMENT,
+    item_names.MOTHERSHIP,
 ]

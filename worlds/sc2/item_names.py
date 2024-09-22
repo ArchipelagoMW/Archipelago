@@ -38,6 +38,7 @@ WARHOUND       = "Warhound"
 # Elites
 PRIDE_OF_AUGUSTRGRAD = "Pride of Augustgrad"
 SKY_FURY             = "Sky Fury"
+SHOCK_DIVISION       = "Shock Division"
 
 # Terran Buildings
 BUNKER                              = "Bunker"
@@ -770,7 +771,7 @@ DESTROYER_REFORGED_BLOODSHARD_CORE                      = "Reforged Bloodshard C
 DAWNBRINGER_SOLARITE_LENS                               = "Solarite Lens (Dawnbringer)"
 CARRIER_REPAIR_DRONES                                   = "Repair Drones (Carrier)"
 SKYLORD_HYPERJUMP                                       = "Hyperjump (Skylord)"
-# Trireme
+TRIREME_SOLAR_BEAM                                      = "Solar Beam (Trieme)"
 TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempest)"
 # Scout
 ARBITER_ABILITY_EFFICIENCY                              = "Ability Efficiency (Arbiter)"

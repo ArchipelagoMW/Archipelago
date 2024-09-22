@@ -42,6 +42,7 @@ class TerranItemType(ItemTypeEnum):
     Mercenary = "Mercenary", 12
     Nova_Gear = "Nova Gear", 13
     Progressive_2 = "Progressive Upgrade", 14
+    Unit_2 = "Unit", 15
 
 
 class ZergItemType(ItemTypeEnum):
@@ -217,6 +218,9 @@ item_table = {
                  classification=ItemClassification.progression, origin={"ext"}),
     item_names.SKY_FURY:
         ItemData(51 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 29, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, origin={"ext"}),
+    item_names.SHOCK_DIVISION:
+        ItemData(52 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 0, SC2Race.TERRAN,
                  classification=ItemClassification.progression, origin={"ext"}),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
@@ -1867,7 +1871,7 @@ item_table = {
     item_names.DAWNBRINGER_SOLARITE_LENS: ItemData(537 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 7, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.DAWNBRINGER),
     item_names.CARRIER_REPAIR_DRONES: ItemData(538 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 8, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.CARRIER),
     item_names.SKYLORD_HYPERJUMP: ItemData(539 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 9, SC2Race.PROTOSS, parent_item=item_names.SKYLORD),
-    # 540 reserved for Trireme
+    item_names.TRIREME_SOLAR_BEAM: ItemData(540 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 10, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.TRIREME),
     item_names.TEMPEST_DISINTEGRATION: ItemData(541 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 11, SC2Race.PROTOSS, parent_item=item_names.TEMPEST),
     # 542 reserved for Scout
     item_names.ARBITER_ABILITY_EFFICIENCY: ItemData(543 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 13, SC2Race.PROTOSS, parent_item=item_names.ARBITER),
