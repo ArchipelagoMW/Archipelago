@@ -90,6 +90,7 @@ class FactionlessItemType(ItemTypeEnum):
     Supply = "Supply", 2
     Nothing = "Nothing Group", 4
     Deprecated = "Deprecated", 5
+    Keys = "Keys", 6
 
 
 ItemType = Union[TerranItemType, ZergItemType, ProtossItemType, FactionlessItemType]
@@ -1928,28 +1929,28 @@ item_table = {
 # Mission IDs start at 1 so the item IDs are moved down a space
 mission_key_item_table = {
     item_names._TEMPLATE_MISSION_KEY.format(mission.mission_name):
-        ItemData(mission.id - 1 + SC2_KEY_ITEM_ID_OFFSET, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+        ItemData(mission.id - 1 + SC2_KEY_ITEM_ID_OFFSET, FactionlessItemType.Keys, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0)
     for mission in SC2Mission
 }
 # Numbered layout keys (key offset + 1000 - 1999)
 numbered_layout_key_item_table = {
-    item_names._TEMPLATE_NUMBERED_LAYOUT_KEY.format(mission.id):
-        ItemData(mission.id - 1 + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+    item_names._TEMPLATE_NUMBERED_LAYOUT_KEY.format(number + 1):
+        ItemData(number + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE, FactionlessItemType.Keys, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0)
-    for mission in SC2Mission
+    for number in range(len(SC2Mission))
 }
 # Numbered campaign keys (key offset + 2000 - 2999)
 numbered_campaign_key_item_table = {
-    item_names._TEMPLATE_NUMBERED_CAMPAIGN_KEY.format(mission.id):
-        ItemData(mission.id - 1 + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 2, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+    item_names._TEMPLATE_NUMBERED_CAMPAIGN_KEY.format(number + 1):
+        ItemData(number + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 2, FactionlessItemType.Keys, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0)
-    for mission in SC2Mission
+    for number in range(len(SC2Mission))
 }
 # Flavor keys (key offset + 3000 - 3999)
 flavor_key_item_table = {
     item_names._TEMPLATE_FLAVOR_KEY.format(name):
-        ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 3, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+        ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 3, FactionlessItemType.Keys, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0)
     for (i, name) in enumerate(item_names._flavor_key_names)
 }
@@ -1957,7 +1958,7 @@ flavor_key_item_table = {
 campaign_to_layout_names = get_used_layout_names()
 named_layout_key_item_table = {
     item_names._TEMPLATE_NAMED_LAYOUT_KEY.format(layout_name, campaign.campaign_name):
-        ItemData(layout_start + i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 4, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+        ItemData(layout_start + i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 4, FactionlessItemType.Keys, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0)
     for (campaign, (layout_start, layout_names)) in campaign_to_layout_names.items() for (i, layout_name) in enumerate(layout_names)
 }
@@ -1965,7 +1966,7 @@ named_layout_key_item_table = {
 campaign_names = [campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL]
 named_campaign_key_item_table = {
     item_names._TEMPLATE_NAMED_CAMPAIGN_KEY.format(campaign_name):
-        ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 5, FactionlessItemType.Nothing, 0, SC2Race.ANY,
+        ItemData(i + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 5, FactionlessItemType.Keys, 0, SC2Race.ANY,
                  classification=ItemClassification.progression, quantity=0)
     for (i, campaign_name) in enumerate(campaign_names)
 }
