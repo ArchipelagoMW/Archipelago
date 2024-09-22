@@ -521,8 +521,12 @@ class SC2Logic:
         :return:
         """
         beats_kerrigan = (
+                # cheap units with multiple small attacks, or anything with Feedback
                 state.has_any({item_names.CENTURION, item_names.SENTINEL, item_names.SKIRMISHER,
-                               item_names.CARRIER, item_names.TRIREME, item_names.VANGUARD}, self.player)
+                               item_names.HIGH_TEMPLAR}, self.player)
+                or state.has_all({item_names.SIGNIFIER, item_names.SIGNIFIER_FEEDBACK}, self.player)
+                or (self.protoss_can_merge_archon(state) and state.has(item_names.ARCHON_HIGH_ARCHON, self.player))
+                or (self.protoss_can_merge_dark_archon(state) and state.has(item_names.DARK_ARCHON_FEEDBACK, self.player))
                 or self.advanced_tactics
         )
         if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
@@ -1072,6 +1076,12 @@ class SC2Logic:
 
     def protoss_static_defense(self, state: CollectionState) -> bool:
         return state.has_any({item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH}, self.player)
+
+    def protoss_can_merge_archon(self, state: CollectionState) -> bool:
+        return state.has_any({item_names.HIGH_TEMPLAR, item_names.DARK_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT}, self.player)
+
+    def protoss_can_merge_dark_archon(self, state: CollectionState) -> bool:
+        return state.has(item_names.DARK_ARCHON, self.player) or state.has_all({item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD}, self.player)
 
     def last_stand_requirement(self, state: CollectionState) -> bool:
         return (
