@@ -377,4 +377,5 @@ class JakAndDaxterWorld(World):
                                     "lava_tube_cell_count",
                                     "citizen_orb_trade_amount",
                                     "oracle_orb_trade_amount",
-                                    "jak_completion_condition")
+                                    "jak_completion_condition",
+                                    "require_punch_for_klaww")
