@@ -751,9 +751,9 @@ The calls to the actual recalculating functions are then moved to the start of t
 
 ```python
 def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
-    if state.custom_state_is_stale[player]:
+    if state.mygame_state_is_stale[player]:
         state.defeatable_enemies = recalculate_defeatable_enemies(state)
-        state.custom_state_is_stale[player] = False
+        state.mygame_state_is_stale[player] = False
 
     return enemy in state.defeatable_enemies
 ```
