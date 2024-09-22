@@ -668,7 +668,7 @@ The following example shows ways to access and modify missions:
         # Available functions depend on the layout's type
         # In this case the function will return the indices 1 and 3
         # and then mark those two slots as empty
-        - index: rect(1, 0, 1, 1)
+        - index: rect(1, 0, 1, 2)
           empty: true
         # Indices can be a list of valid values
         # This takes all entrances as well as the mission at index 2
