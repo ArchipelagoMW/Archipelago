@@ -612,9 +612,7 @@ class DarkSouls3World(World):
                 self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "Basin of Vows")
 
         # Define the access rules to some specific locations
-        if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
-            self._add_location_rule("HWL: Red Eye Orb - wall tower, miniboss",
-                                    "Lift Chamber Key")
+        self._add_location_rule("HWL: Red Eye Orb - wall tower, miniboss", "Lift Chamber Key")
         self._add_location_rule("ID: Bellowing Dragoncrest Ring - drop from B1 towards pit",
                                 "Jailbreaker's Key")
         self._add_location_rule("ID: Covetous Gold Serpent Ring - Siegward's cell", "Old Cell Key")
@@ -1252,6 +1250,9 @@ class DarkSouls3World(World):
                 lambda item: not item.advancement
             )
 
+        # Prevent the player from prioritizing and "excluding" the same location
+        self.options.priority_locations.value -= allow_useful_locations
+
         if self.options.excluded_location_behavior == "allow_useful":
             self.options.exclude_locations.value.clear()
 
@@ -1292,10 +1293,10 @@ class DarkSouls3World(World):
         locations = location if isinstance(location, list) else [location]
         for location in locations:
             data = location_dictionary[location]
-            if data.dlc and not self.options.enable_dlc: return
-            if data.ngp and not self.options.enable_ngp: return
+            if data.dlc and not self.options.enable_dlc: continue
+            if data.ngp and not self.options.enable_ngp: continue
 
-            if not self._is_location_available(location): return
+            if not self._is_location_available(location): continue
             if isinstance(rule, str):
                 assert item_dictionary[rule].classification == ItemClassification.progression
                 rule = lambda state, item=rule: state.has(item, self.player)
@@ -1504,16 +1505,19 @@ class DarkSouls3World(World):
         # We include all the items the game knows about so that users can manually request items
         # that aren't randomized, and then we _also_ include all the items that are placed in
         # practice `item_dictionary.values()` doesn't include upgraded or infused weapons.
-        all_items = {
-            cast(DarkSouls3Item, location.item).data
+        items_by_name = {
+            location.item.name: cast(DarkSouls3Item, location.item).data
             for location in self.multiworld.get_filled_locations()
             # item.code None is used for events, which we want to skip
             if location.item.code is not None and location.item.player == self.player
-        }.union(item_dictionary.values())
+        }
+        for item in item_dictionary.values():
+            if item.name not in items_by_name:
+                items_by_name[item.name] = item
 
         ap_ids_to_ds3_ids: Dict[str, int] = {}
         item_counts: Dict[str, int] = {}
-        for item in all_items:
+        for item in items_by_name.values():
             if item.ap_code is None: continue
             if item.ds3_code: ap_ids_to_ds3_ids[str(item.ap_code)] = item.ds3_code
             if item.count != 1: item_counts[str(item.ap_code)] = item.count
