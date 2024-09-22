@@ -1315,6 +1315,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             print("Game Complete")
                             await self.ctx.send_msgs([{"cmd": 'StatusUpdate', "status": ClientStatus.CLIENT_GOAL}])
                             self.mission_completed = True
+                            self.ctx.finished_game = True
 
                     for x, completed in enumerate(self.boni):
                         if not completed and game_state & (1 << (x + 2)):
@@ -1330,6 +1331,13 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             location % VICTORY_MODULO for location in
             self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])
         ]
+        if self.mission_id in self.ctx.final_mission_ids and not self.ctx.finished_game:
+            mission_locations = self.ctx.locations_for_mission_id(self.mission_id)
+            mission_objectives = [location % VICTORY_MODULO for location in mission_locations]
+            if 0 not in mission_objectives:
+                # Goal isn't a regular location and the game haven't been goaled yet.
+                # Mark victory as uncollected so the goal can be sent back by the game
+                result.append(0)
         return result
 
     def missions_beaten_count(self):
