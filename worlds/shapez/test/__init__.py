@@ -1,15 +1,64 @@
 from test.bases import WorldTestBase
 from .. import options_presets, ShapezWorld
+from ..options import max_levels_and_upgrades
 
 
 class ShapezTestBase(WorldTestBase):
     game = "shapez"
-
-
-class TestShapesanityImport(ShapezTestBase):
     world: ShapezWorld
 
-    def test_correct_import_of_shapesanity_pool(self):
+    def test_location_count(self):
+        self.assertTrue(self.world.location_count > 0,
+                        f"location_count is {self.world.location_count} for some reason.")
+
+    def test_logic_lists(self):
+        logic_buildings = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+        for building in logic_buildings:
+            count = self.world.level_logic.count(building)
+            self.assertTrue(count == 1, f"{building} was found {count} times in level_logic.")
+            count = self.world.upgrade_logic.count(building)
+            self.assertTrue(count == 1, f"{building} was found {count} times in upgrade_logic.")
+        self.assertTrue(len(self.world.level_logic) == 5,
+                        f"level_logic contains {len(self.world.level_logic)} entries instead of the expected 5.")
+        self.assertTrue(len(self.world.upgrade_logic) == 5,
+                        f"upgrade_logic contains {len(self.world.upgrade_logic)} entries instead of the expected 5.")
+
+    def test_random_logic_phase_length(self):
+        self.assertTrue(len(self.world.random_logic_phase_length) == 5,
+                        f"random_logic_phase_length contains {len(self.world.random_logic_phase_length)} entries " +
+                        f"instead of the expected 5.")
+        self.assertTrue(sum(self.world.random_logic_phase_length) < self.world.maxlevel,
+                        f"The sum of all random phase lengths is greater than allowed: " +
+                        str(sum(self.world.random_logic_phase_length)))
+        for length in self.world.random_logic_phase_length:
+            self.assertTrue(length in range(self.world.maxlevel),
+                            f"Found an illegal value in random_logic_phase_length: {length}")
+
+    def test_category_random_logic_amounts(self):
+        self.assertTrue(len(self.world.category_random_logic_amounts) == 4,
+                        f"Found {len(self.world.category_random_logic_amounts)} instead of 4 keys in "
+                        f"category_random_logic_amounts.")
+        self.assertTrue(min(self.world.category_random_logic_amounts.values()) == 0,
+                        "Found a value less than or no 0 in category_random_logic_amounts.")
+        self.assertTrue(max(self.world.category_random_logic_amounts.values()) <= 5,
+                        "Found a value greater than 5 in category_random_logic_amounts.")
+
+    def test_maxlevel_and_finaltier(self):
+        self.assertTrue(self.world.maxlevel in range(25, max_levels_and_upgrades),
+                        f"Found an illegal value for maxlevel: {self.world.maxlevel}")
+        self.assertTrue(self.world.finaltier in range(8, max_levels_and_upgrades+1),
+                        f"Found an illegal value for finaltier: {self.world.finaltier}")
+
+    def test_included_locations(self):
+        self.assertTrue(len(self.world.included_locations) > 0, "Found no locations cached in included_locations.")
+        self.assertTrue("Level 1" in self.world.included_locations.keys(),
+                        "Could not find Level 1 (guraranteed location) cached in included_locations.")
+        self.assertTrue("Belt Upgrade Tier II" in self.world.included_locations.keys(),
+                        "Could not find Belt Upgrade Tier II (guraranteed location) cached in included_locations.")
+        self.assertTrue("Shapesanity 1" in self.world.included_locations.keys(),
+                        "Could not find Shapesanity 1 (guraranteed location) cached in included_locations.")
+
+    def test_shapesanity_names(self):
         names_length = len(self.world.shapesanity_names)
         locations_length = len([0 for loc in self.multiworld.get_locations(self.player) if "Shapesanity" in loc.name])
         self.assertEqual(names_length,
@@ -18,10 +67,6 @@ class TestShapesanityImport(ShapezTestBase):
                          f"shapesanity locations ({locations_length}).")
         self.assertTrue("Uncolored Circle" in self.world.shapesanity_names,
                         "Uncolored Circle is guaranteed but was not found in shapesanity_names.")
-
-
-class TestDefault(ShapezTestBase):
-    options = {}
 
 
 class TestMinimum(ShapezTestBase):
