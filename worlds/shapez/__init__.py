@@ -52,19 +52,18 @@ class ShapezWorld(World):
     topology_present = True
     web = ShapezWeb()
 
-    # Placeholder values in case something goes wrong
-    location_count: int = 0
-    level_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
-    upgrade_logic: List[str] = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
-    level_logic_type: str = "vanilla"
-    upgrade_logic_type: str = "vanilla_like"
-    random_logic_phase_length: List[int] = [1, 1, 1, 1, 1]
-    category_random_logic_amounts: Dict[str, int] = {"belt": 0, "miner": 1, "processors": 2, "painting": 3}
-    maxlevel: int = 25
-    finaltier: int = 8
-    included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
-    client_seed: int = 123
-    shapesanity_names: List[str] = []
+    location_count: int
+    level_logic: List[str]
+    upgrade_logic: List[str]
+    level_logic_type: str
+    upgrade_logic_type: str
+    random_logic_phase_length: List[int]
+    category_random_logic_amounts: Dict[str, int]
+    maxlevel: int
+    finaltier: int
+    included_locations: Dict[str, Tuple[str, LocationProgressType]]
+    client_seed: int
+    shapesanity_names: List[str]
 
     base_id = 20010707
     item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
@@ -168,6 +167,7 @@ class ShapezWorld(World):
             self.upgrade_logic = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
 
         # Determine lenghts of phases in level logic type "random"
+        self.random_logic_phase_length = [1, 1, 1, 1, 1]
         if self.level_logic_type.startswith("random_steps"):
             remaininglength = self.maxlevel - 1
             for phase in range(0, 5):
@@ -178,6 +178,7 @@ class ShapezWorld(World):
                 remaininglength -= self.random_logic_phase_length[phase]
 
         # Determine amount of needed buildings for each category in upgrade logic type "category_random"
+        self.category_random_logic_amounts = {"belt": 0, "miner": 1, "processors": 2, "painting": 3}
         if self.upgrade_logic_type == "category_random":
             cats = ["belt", "miner", "processors", "painting"]
             nextcat = self.random.choice(cats)
