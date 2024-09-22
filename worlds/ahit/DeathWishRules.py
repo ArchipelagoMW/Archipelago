@@ -430,7 +430,7 @@ hit_list = {
     # Bosses
     "Mafia Boss":       ["Down with the Mafia!", "Encore! Encore!", "Boss Rush"],
 
-    "Conductor":        ["Dead Bird Studio Basement", "Killing Two Birds", "Boss Rush"],
+    "Director":        ["Dead Bird Studio Basement", "Killing Two Birds", "Boss Rush"],
     "Toilet":           ["Toilet of Doom", "Boss Rush"],
 
     "Snatcher":         ["Your Contract has Expired", "Breaching the Contract", "Boss Rush",
@@ -454,7 +454,7 @@ triple_enemy_locations = [
 
 bosses = [
     "Mafia Boss",
-    "Conductor",
+    "Director",
     "Toilet",
     "Snatcher",
     "Toxic Flower",
