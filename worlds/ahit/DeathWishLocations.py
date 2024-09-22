@@ -155,7 +155,7 @@ def create_dw_regions(world: "HatInTimeWorld"):
     if not world.options.DWEnableBonus and world.options.DWAutoCompleteBonuses:
         for name in death_wishes:
             world.excluded_bonuses.append(name)
-    elif world.options.DWExcludeAnnoyingBonuses:
+    if world.options.DWExcludeAnnoyingBonuses and not world.options.DWAutoCompleteBonuses:
         for name in annoying_bonuses:
             world.excluded_bonuses.append(name)
 
