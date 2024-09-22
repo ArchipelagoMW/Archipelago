@@ -76,10 +76,10 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         if level == 0:
             return true_
 
-        if not self.content.features.skill_progression.is_progressive:
-            return self.logic.skill.can_earn_level(skill, level)
+        if self.content.features.skill_progression.is_progressive:
+            return self.logic.received(f"{skill} Level", level)
 
-        return self.logic.received(f"{skill} Level", level)
+        return self.logic.skill.can_earn_level(skill, level)
 
     def has_previous_level(self, skill: str, level: int) -> StardewRule:
         assert level > 0, f"There is no level before level 0."
