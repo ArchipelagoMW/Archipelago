@@ -764,7 +764,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
         and has_lantern(state, world)
         # there's some boxes in the way
-        and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand), player)))
+        and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand, laurels), player)))
     # on the reverse trip, you can lure an enemy over to break the boxes if needed
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Ladder Exit"],
