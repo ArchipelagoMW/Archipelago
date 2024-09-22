@@ -3011,6 +3011,96 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.protoss_repair_odin(state))
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 4009, LocationType.EXTRA),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5500, LocationType.VICTORY,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Close Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5501, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Northwest Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5502, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Southeast Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5503, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Southwest Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5504, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Leviathan", SC2_RACESWAP_LOC_ID_OFFSET + 5505, LocationType.VANILLA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "East Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5506, LocationType.EXTRA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "North Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5507, LocationType.EXTRA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Mid Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5508, LocationType.EXTRA,
+            logic.zerg_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5600, LocationType.VICTORY,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Close Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5601, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Northwest Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5602, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Southeast Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5603, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Southwest Coolant Tower", SC2_RACESWAP_LOC_ID_OFFSET + 5604, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Leviathan", SC2_RACESWAP_LOC_ID_OFFSET + 5605, LocationType.VANILLA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "East Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5606, LocationType.EXTRA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "North Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5607, LocationType.EXTRA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Mid Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5608, LocationType.EXTRA,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.ALL_IN_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5700, LocationType.VICTORY,
+            logic.all_in_z_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_Z.mission_name, "First Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5701, LocationType.EXTRA,
+            logic.all_in_z_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_Z.mission_name, "Second Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5702, LocationType.EXTRA,
+            logic.all_in_z_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_Z.mission_name, "Third Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5703, LocationType.EXTRA,
+            logic.all_in_z_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_Z.mission_name, "Fourth Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5704, LocationType.EXTRA,
+            logic.all_in_z_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_Z.mission_name, "Fifth Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5705, LocationType.EXTRA,
+            logic.all_in_z_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5800, LocationType.VICTORY,
+            logic.all_in_p_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_P.mission_name, "First Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5801, LocationType.EXTRA,
+            logic.all_in_p_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_P.mission_name, "Second Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5802, LocationType.EXTRA,
+            logic.all_in_p_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_P.mission_name, "Third Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5803, LocationType.EXTRA,
+            logic.all_in_p_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_P.mission_name, "Fourth Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5804, LocationType.EXTRA,
+            logic.all_in_p_requirement
+        ),
+        make_location_data(SC2Mission.ALL_IN_P.mission_name, "Fifth Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5805, LocationType.EXTRA,
+            logic.all_in_p_requirement
+        ),
     ]
 
     beat_events = []

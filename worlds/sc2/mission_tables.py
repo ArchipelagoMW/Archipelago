@@ -123,8 +123,8 @@ class SC2Mission(Enum):
     PIERCING_OF_THE_SHROUD = 21, "Piercing the Shroud", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.STARTER, "ap_piercing_the_shroud", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsAll
     GATES_OF_HELL = 26, "Gates of Hell", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_gates_of_hell", MissionFlag.Terran|MissionFlag.VsZerg
     BELLY_OF_THE_BEAST = 27, "Belly of the Beast", SC2Campaign.WOL, "Char", SC2Race.ANY, MissionPools.STARTER, "ap_belly_of_the_beast", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsZerg
-    SHATTER_THE_SKY = 28, "Shatter the Sky", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Terran|MissionFlag.VsZerg
-    ALL_IN = 29, "All-In", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_all_in", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsZerg
+    SHATTER_THE_SKY = 28, "Shatter the Sky (Terran)", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
+    ALL_IN = 29, "All-In (Terran)", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_all_in", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
 
     # Prophecy
     WHISPERS_OF_DOOM = 22, "Whispers of Doom", SC2Campaign.PROPHECY, "_1", SC2Race.ANY, MissionPools.STARTER, "ap_whispers_of_doom", MissionFlag.Protoss|MissionFlag.NoBuild|MissionFlag.VsZerg
@@ -235,8 +235,10 @@ class SC2Mission(Enum):
     # 132/133 - In Utter Darkness
     # 134/135 - Gates of Hell
     # 136/137 - Belly of the Beast
-    # 138/139 - Shatter the Sky
-    # 140/141 - All In
+    SHATTER_THE_SKY_Z = 138, "Shatter the Sky (Zerg)", SC2Campaign.WOL, "Char", SC2Race.ZERG, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    SHATTER_THE_SKY_P = 139, "Shatter the Sky (Protoss)", SC2Campaign.WOL, "Char", SC2Race.PROTOSS, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    ALL_IN_Z = 140, "All-In (Zerg)", SC2Campaign.WOL, "Char", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_all_in", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    ALL_IN_P = 141, "All-In (Protoss)", SC2Campaign.WOL, "Char", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_all_in", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 142/143 - Lab Rat
     # 144/145 - Back in the Saddle
     # 146/147 - Rendezvous
@@ -356,48 +358,48 @@ class SC2CampaignGoal(NamedTuple):
 
 
 campaign_final_mission_locations: Dict[SC2Campaign, Optional[SC2CampaignGoal]] = {
-    SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, "All-In: Victory"),
-    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, "In Utter Darkness: Kills"),
-    SC2Campaign.HOTS: SC2CampaignGoal(SC2Mission.THE_RECKONING, "The Reckoning: Victory"),
-    SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory"),
-    SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, "Salvation: Victory"),
+    SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, f'{SC2Mission.ALL_IN.mission_name}: Victory'),
+    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, f'{SC2Mission.IN_UTTER_DARKNESS.mission_name}: Kills'),
+    SC2Campaign.HOTS: SC2CampaignGoal(SC2Mission.THE_RECKONING, f'{SC2Mission.THE_RECKONING.mission_name}: Victory'),
+    SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, f'{SC2Mission.EVIL_AWOKEN.mission_name}: Victory'),
+    SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, f'{SC2Mission.SALVATION.mission_name}: Victory'),
     SC2Campaign.EPILOGUE: None,
-    SC2Campaign.NCO: SC2CampaignGoal(SC2Mission.END_GAME, "End Game: Victory"),
+    SC2Campaign.NCO: SC2CampaignGoal(SC2Mission.END_GAME, f'{SC2Mission.END_GAME.mission_name}: Victory'),
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
     SC2Campaign.WOL: {
-        SC2Mission.MAW_OF_THE_VOID: "Maw of the Void: Victory",
-        SC2Mission.ENGINE_OF_DESTRUCTION: "Engine of Destruction: Victory",
-        SC2Mission.SUPERNOVA: "Supernova: Victory",
-        SC2Mission.GATES_OF_HELL: "Gates of Hell: Victory",
-        SC2Mission.SHATTER_THE_SKY: "Shatter the Sky: Victory"
+        SC2Mission.MAW_OF_THE_VOID: f'{SC2Mission.MAW_OF_THE_VOID.mission_name}: Victory',
+        SC2Mission.ENGINE_OF_DESTRUCTION: f'{SC2Mission.ENGINE_OF_DESTRUCTION.mission_name}: Victory',
+        SC2Mission.SUPERNOVA: f'{SC2Mission.SUPERNOVA.mission_name}: Victory',
+        SC2Mission.GATES_OF_HELL: f'{SC2Mission.GATES_OF_HELL.mission_name}: Victory',
+        SC2Mission.SHATTER_THE_SKY: f'{SC2Mission.SHATTER_THE_SKY.mission_name}: Victory'
     },
     SC2Campaign.PROPHECY: None,
     SC2Campaign.HOTS: {
-        SC2Mission.THE_CRUCIBLE: "The Crucible: Victory",
-        SC2Mission.HAND_OF_DARKNESS: "Hand of Darkness: Victory",
-        SC2Mission.PHANTOMS_OF_THE_VOID: "Phantoms of the Void: Victory",
-        SC2Mission.PLANETFALL: "Planetfall: Victory",
-        SC2Mission.DEATH_FROM_ABOVE: "Death From Above: Victory"
+        SC2Mission.THE_CRUCIBLE: f'{SC2Mission.THE_CRUCIBLE.mission_name}: Victory',
+        SC2Mission.HAND_OF_DARKNESS: f'{SC2Mission.HAND_OF_DARKNESS.mission_name}: Victory',
+        SC2Mission.PHANTOMS_OF_THE_VOID: f'{SC2Mission.PHANTOMS_OF_THE_VOID.mission_name}: Victory',
+        SC2Mission.PLANETFALL: f'{SC2Mission.PLANETFALL.mission_name}: Victory',
+        SC2Mission.DEATH_FROM_ABOVE: f'{SC2Mission.DEATH_FROM_ABOVE.mission_name}: Victory'
     },
     SC2Campaign.PROLOGUE: {
-        SC2Mission.GHOSTS_IN_THE_FOG: "Ghosts in the Fog: Victory"
+        SC2Mission.GHOSTS_IN_THE_FOG: f'{SC2Mission.GHOSTS_IN_THE_FOG.mission_name}: Victory'
     },
     SC2Campaign.LOTV: {
-        SC2Mission.THE_HOST: "The Host: Victory",
-        SC2Mission.TEMPLAR_S_CHARGE: "Templar's Charge: Victory"
+        SC2Mission.THE_HOST: f'{SC2Mission.THE_HOST.mission_name}: Victory',
+        SC2Mission.TEMPLAR_S_CHARGE: f'{SC2Mission.TEMPLAR_S_CHARGE.mission_name}: Victory'
     },
     SC2Campaign.EPILOGUE: {
-        SC2Mission.AMON_S_FALL: "Amon's Fall: Victory",
-        SC2Mission.INTO_THE_VOID: "Into the Void: Victory",
-        SC2Mission.THE_ESSENCE_OF_ETERNITY: "The Essence of Eternity: Victory",
+        SC2Mission.AMON_S_FALL: f'{SC2Mission.AMON_S_FALL.mission_name}: Victory',
+        SC2Mission.INTO_THE_VOID: f'{SC2Mission.INTO_THE_VOID.mission_name}: Victory',
+        SC2Mission.THE_ESSENCE_OF_ETERNITY: f'{SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name}: Victory',
     },
     SC2Campaign.NCO: {
-        SC2Mission.FLASHPOINT: "Flashpoint: Victory",
-        SC2Mission.DARK_SKIES: "Dark Skies: Victory",
-        SC2Mission.NIGHT_TERRORS: "Night Terrors: Victory",
-        SC2Mission.TROUBLE_IN_PARADISE: "Trouble In Paradise: Victory"
+        SC2Mission.FLASHPOINT: f'{SC2Mission.FLASHPOINT.mission_name}: Victory',
+        SC2Mission.DARK_SKIES: f'{SC2Mission.DARK_SKIES.mission_name}: Victory',
+        SC2Mission.NIGHT_TERRORS: f'{SC2Mission.NIGHT_TERRORS.mission_name}: Victory',
+        SC2Mission.TROUBLE_IN_PARADISE: f'{SC2Mission.TROUBLE_IN_PARADISE.mission_name}: Victory'
     }
 }
 
