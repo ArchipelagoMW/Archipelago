@@ -705,17 +705,19 @@ from BaseClasses import CollectionState, MultiWorld
 from worlds.AutoWorld import LogicMixin
 
 class MyGameState(LogicMixin):
-    defeatable_enemies: Dict[int, Set[str]]  # per player
+    mygame_defeatable_enemies: Dict[int, Set[str]]  # per player
 
     def init_mixin(self, multiworld: MultiWorld) -> None:
-        self.defeatable_enemies = {}
+        self.mygame_defeatable_enemies = {}
 
     def copy_mixin(self, new_state: CollectionState) -> CollectionState:
         # Be careful to make a "deep enough" copy here!
-        new_state.defeatable_enemies = {player: enemies.copy() for player, enemies in self.defeatable_enemies.items()}
+        new_state.mygame_defeatable_enemies = {
+            player: enemies.copy() for player, enemies in self.mygame_defeatable_enemies.items()
+        }
 ```
 
-After doing this, you can now access `state.defeatable_enemies[player]` from your access rules.
+After doing this, you can now access `state.mygame_defeatable_enemies[player]` from your access rules.
 
 Usually, doing this coincides with an override of `World.collect` and `World.remove`, where any time a relevant item is
 collected or removed, the custom state variable gets recalculated.
@@ -726,13 +728,13 @@ collected or removed, the custom state variable gets recalculated.
 def collect(self, state: CollectionState, item: Item) -> bool:
     change = super().collect(state, item)
     if change and item in COMBAT_ITEMS:
-        state.defeatable_enemies |= get_newly_unlocked_enemies(state)
+        state.mygame_defeatable_enemies |= get_newly_unlocked_enemies(state)
     return change
 
 def remove(self, state: CollectionState, item: Item) -> bool:
     change = super().remove(state, item)
     if change and item in COMBAT_ITEMS:
-        state.defeatable_enemies -= get_newly_locked_enemies(state)
+        state.mygame_defeatable_enemies -= get_newly_locked_enemies(state)
     return change
 ```
 
@@ -752,10 +754,10 @@ The calls to the actual recalculating functions are then moved to the start of t
 ```python
 def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
     if state.mygame_state_is_stale[player]:
-        state.defeatable_enemies = recalculate_defeatable_enemies(state)
+        state.mygame_defeatable_enemies = recalculate_defeatable_enemies(state)
         state.mygame_state_is_stale[player] = False
 
-    return enemy in state.defeatable_enemies
+    return enemy in state.mygame_defeatable_enemies[player]
 ```
 
 This can help significantly because it is possible for 0 local access rules to be called between two calls to
