@@ -515,6 +515,7 @@ item_descriptions = {
     item_names.MERCENARY_MUNITIONS: "Increases attack speed of all combat units by 15%.",
     item_names.FAST_DELIVERY: "Mercenary calldowns can be deployed right at the mission start.",
     item_names.RAPID_REINFORCEMENT: "Reduces cooldowns of mercenary calldowns by 60s.",
+    item_names.FUSION_CORE_FUSION_REACTOR: "Fusion Cores increase the energy regeneration of nearby units by +1 energy per second.",
     item_names.ZEALOT: "Powerful melee warrior. Can use the charge ability.",
     item_names.STALKER: "Ranged attack strider. Can use the Blink ability.",
     item_names.HIGH_TEMPLAR: "Potent psionic master. Can use the Feedback and Psionic Storm abilities. Can merge into an Archon.",

@@ -949,15 +949,17 @@ item_table = {
     item_names.ADVANCED_OPTICS:
         ItemData(622 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 11, SC2Race.TERRAN),
     item_names.ROGUE_FORCES:
-        ItemData(623 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 12, SC2Race.TERRAN, origin={"ext"}),
+        ItemData(623 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 12, SC2Race.TERRAN),
     item_names.MECHANICAL_KNOW_HOW:
-        ItemData(624 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 13, SC2Race.TERRAN, origin={"ext"}),
+        ItemData(624 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 13, SC2Race.TERRAN),
     item_names.MERCENARY_MUNITIONS:
-        ItemData(625 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 14, SC2Race.TERRAN, origin={"ext"}),
+        ItemData(625 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 14, SC2Race.TERRAN),
     item_names.FAST_DELIVERY:
-        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 15, SC2Race.TERRAN, origin={"ext"}),
+        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 15, SC2Race.TERRAN),
     item_names.RAPID_REINFORCEMENT:
-        ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN, origin={"ext"}),
+        ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN),
+    item_names.FUSION_CORE_FUSION_REACTOR:
+        ItemData(628 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 17, SC2Race.TERRAN),
 
     # WoL Protoss
     item_names.ZEALOT:
