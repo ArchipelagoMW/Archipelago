@@ -347,6 +347,8 @@ class MultiWorld():
             for item in self.itempool:
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:
+                    if ItemClassification.progression not in item.classification:
+                        continue
                     loc = Location(group_id, f"Item Link: {item.name} -> {self.player_name[item.player]} {count}",
                         None, region)
                     loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
