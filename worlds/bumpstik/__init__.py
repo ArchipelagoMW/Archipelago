@@ -126,5 +126,6 @@ class BumpStikWorld(World):
             
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Booster Bumper", self.player, 5) and \
-            state.has("Treasure Bumper", self.player, 32)
+            state.has("Treasure Bumper", self.player, 32) and \
+            state.has("Hazard Bumper", self.player, 25)
 
