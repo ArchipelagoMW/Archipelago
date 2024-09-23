@@ -94,7 +94,7 @@ class Dungeon8:
             entrance.connect(bottomright_pot_chest, r.shaq_jump, one_way=True) # use NW zamboni staircase backwards, and get a naked shaq jump off the bottom wall in the bottom right corner to pass by the pot
             gibdos_drop_key.connect(upper_center, AND(FEATHER, SHIELD)) # lock gibdos into pits and crack the tile they stand on, then use shield to bump them into the pit
             medicine_chest.connect(upper_center, AND(r.pit_buffer_boots, HOOKSHOT)) # boots bonk + lava buffer to the bottom wall, then bonk onto the middle section
-            miniboss.connect(miniboss_entrance, AND(boots_bonk_2d_hell, r.miniboss_requirements[world_setup.miniboss_mapping[7]])) # get through 2d section with boots bonks
+            miniboss.connect(miniboss_entrance, AND(r.boots_bonk_2d_hell, r.miniboss_requirements[world_setup.miniboss_mapping[7]])) # get through 2d section with boots bonks
             top_left_stairs.connect(map_chest, AND(r.jesus_buffer, r.boots_bonk_2d_hell, MAGIC_ROD)) # boots bonk + lava buffer from map chest to entrance_up, then boots bonk through 2d section
             nightmare_key.connect(top_left_stairs, AND(r.boots_bonk_pit, SWORD, FOUND(KEY8, 7))) # use a boots bonk to cross the 2d section + the lava in cueball room
             bottom_right.connect(entrance_up, AND(POWER_BRACELET, r.jesus_buffer), one_way=True) # take staircase to NW zamboni room, boots bonk onto the lava and water buffer all the way down to push the zamboni

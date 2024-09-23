@@ -95,7 +95,7 @@ class World:
         self._addEntranceRequirementExit("forest_madbatter", None) # if exiting, you do not need bracelet
 
         forest_cave = Location("Forest Cave")
-        Location().add(Chest(0x2BD)).connect(forest_cave, SWORD)  # chest in forest cave on route to mushroom
+        forest_cave_crystal_chest = Location().add(Chest(0x2BD)).connect(forest_cave, SWORD)  # chest in forest cave on route to mushroom
         log_cave_heartpiece = Location().add(HeartPiece(0x2AB)).connect(forest_cave, POWER_BRACELET)  # piece of heart in the forest cave on route to the mushroom
         forest_toadstool = Location().add(Toadstool())
         self._addEntrance("toadstool_entrance", forest, forest_cave, None)
@@ -133,6 +133,7 @@ class World:
         self._addEntranceRequirementExit("d0", None) # if exiting, you do not need bracelet
         ghost_grave = Location().connect(forest, POWER_BRACELET)
         Location().add(Seashell(0x074)).connect(ghost_grave, AND(r.bush, SHOVEL))  # next to grave cave, digging spot
+        graveyard.connect(forest_heartpiece, OR(BOOMERANG, HOOKSHOT), one_way=True) # grab the heart piece surrounded by pits from the north
 
         graveyard_cave_left = Location()
         graveyard_cave_right = Location().connect(graveyard_cave_left, OR(FEATHER, ROOSTER))
@@ -195,6 +196,7 @@ class World:
         bay_madbatter_connector_exit = Location().connect(bay_madbatter_connector_entrance, FLIPPERS)
         bay_madbatter_connector_outside = Location()
         bay_madbatter = Location().connect(Location().add(MadBatter(0x1E0)), MAGIC_POWDER)
+        outside_bay_madbatter_entrance = Location()
         self._addEntrance("prairie_madbatter_connector_entrance", left_bay_area, bay_madbatter_connector_entrance, AND(OR(FEATHER, ROOSTER), OR(SWORD, MAGIC_ROD, BOOMERANG)))
         self._addEntranceRequirementExit("prairie_madbatter_connector_entrance", AND(OR(FEATHER, ROOSTER), r.bush)) # if exiting, you can pick up the bushes by normal means
         self._addEntrance("prairie_madbatter_connector_exit", bay_madbatter_connector_outside, bay_madbatter_connector_exit, None)
@@ -240,7 +242,8 @@ class World:
         castle_courtyard = Location()
         castle_frontdoor = Location().connect(castle_courtyard, r.bush)
         castle_frontdoor.connect(ukuku_prairie, "CASTLE_BUTTON") # the button in the castle connector allows access to the castle grounds in ER
-        self._addEntrance("castle_secret_entrance", next_to_castle, castle_secret_entrance_right, OR(BOMB, BOOMERANG, MAGIC_POWDER, MAGIC_ROD, SWORD))
+        self._addEntrance("castle_secret_entrance", next_to_castle, castle_secret_entrance_right, r.pit_bush)
+        self._addEntranceRequirementExit("castle_secret_entrance", None) # leaving doesn't require pit_bush
         self._addEntrance("castle_secret_exit", castle_courtyard, castle_secret_entrance_left, None)
 
         Location().add(HeartPiece(0x078)).connect(bay_water, FLIPPERS)  # in the moat of the castle
@@ -248,7 +251,7 @@ class World:
         Location().add(KeyLocation("CASTLE_BUTTON")).connect(castle_inside, None)
         castle_top_outside = Location()
         castle_top_inside = Location()
-        self._addEntrance("castle_main_entrance", castle_frontdoor, castle_inside, r.bush)
+        self._addEntrance("castle_main_entrance", castle_frontdoor, castle_inside, None)
         self._addEntrance("castle_upper_left", castle_top_outside, castle_inside, None)
         self._addEntrance("castle_upper_right", castle_top_outside, castle_top_inside, None)
         Location().add(GoldLeaf(0x05A)).connect(castle_courtyard, OR(SWORD, BOW, MAGIC_ROD))  # mad bomber, enemy hiding in the 6 holes
@@ -277,7 +280,8 @@ class World:
         animal_village.connect(ukuku_prairie, OR(HOOKSHOT, ROOSTER))
         animal_village_connector_left = Location()
         animal_village_connector_right = Location().connect(animal_village_connector_left, PEGASUS_BOOTS)
-        self._addEntrance("prairie_to_animal_connector", ukuku_prairie, animal_village_connector_left, OR(BOMB, BOOMERANG, MAGIC_POWDER, MAGIC_ROD, SWORD)) # passage under river blocked by bush
+        self._addEntrance("prairie_to_animal_connector", ukuku_prairie, animal_village_connector_left, r.pit_bush) # passage under river blocked by bush
+        self._addEntranceRequirementExit("prairie_to_animal_connector", None) # leaving doesn't require pit_bush
         self._addEntrance("animal_to_prairie_connector", animal_village, animal_village_connector_right, None)
         if options.owlstatues == "both" or options.owlstatues == "overworld":
             animal_village.add(OwlStatue(0x0DA))
@@ -352,11 +356,15 @@ class World:
         lower_right_taltal.connect(below_right_taltal, FLIPPERS, one_way=True)
 
         heartpiece_swim_cave = Location().connect(Location().add(HeartPiece(0x1F2)), FLIPPERS)
+        outside_swim_cave = Location()
+        below_right_taltal.connect(outside_swim_cave, FLIPPERS)
         self._addEntrance("heartpiece_swim_cave", below_right_taltal, heartpiece_swim_cave, FLIPPERS)  # cave next to level 4
         d4_entrance = Location().connect(below_right_taltal, FLIPPERS)
         lower_right_taltal.connect(d4_entrance, AND(ANGLER_KEY, "ANGLER_KEYHOLE"), one_way=True)
         self._addEntrance("d4", d4_entrance, None, ANGLER_KEY)
         self._addEntranceRequirementExit("d4", FLIPPERS) # if exiting, you can leave with flippers without opening the dungeon
+        outside_mambo = Location("Outside Manbo").connect(d4_entrance, FLIPPERS)
+        inside_mambo = Location("Manbo's Cave")
         mambo = Location().connect(Location().add(Song(0x2FD)), AND(OCARINA, FLIPPERS))  # Manbo's Mambo
         self._addEntrance("mambo", d4_entrance, mambo, FLIPPERS) 
 
@@ -392,10 +400,13 @@ class World:
 
         multichest_cave = Location()
         multichest_cave_secret = Location().connect(multichest_cave, BOMB)
+        multichest_cave.connect(multichest_cave_secret, BOMB, one_way=True)
         water_cave_hole = Location()  # Location with the hole that drops you onto the hearth piece under water
         if options.logic != "casual":
             water_cave_hole.connect(heartpiece_swim_cave, FLIPPERS, one_way=True)
+        outside_multichest_left = Location()
         multichest_outside = Location().add(Chest(0x01D))  # chest after multichest puzzle outside
+        lower_right_taltal.connect(outside_multichest_left, OR(FLIPPERS, ROOSTER))
         self._addEntrance("multichest_left", lower_right_taltal, multichest_cave, OR(FLIPPERS, ROOSTER))
         self._addEntrance("multichest_right", water_cave_hole, multichest_cave, None)
         self._addEntrance("multichest_top", multichest_outside, multichest_cave_secret, None)
@@ -470,6 +481,7 @@ class World:
             swamp_chest.connect(swamp, r.wall_clip)  # Clip past the flower
             self._addEntranceRequirement("d2", POWER_BRACELET) # clip the top wall to walk between the goponga flower and the wall
             self._addEntranceRequirement("d2", COUNT(SWORD, 2)) # use l2 sword spin to kill goponga flowers
+            self._addEntranceRequirementExit("d2", r.wall_clip)  # Clip out at d2 entrance door
             swamp.connect(writes_hut_outside, r.hookshot_over_pit, one_way=True) # hookshot the sign in front of writes hut
             graveyard_heartpiece.connect(graveyard_cave_right, FEATHER) # jump to the bottom right tile around the blocks
             graveyard_heartpiece.connect(graveyard_cave_right, AND(r.wall_clip, OR(HOOKSHOT, BOOMERANG))) # push bottom block, wall clip and hookshot/boomerang corner to grab item
@@ -501,6 +513,7 @@ class World:
             swamp.connect(forest_toadstool, r.pit_buffer_itemless, one_way=True) # villa buffer from top (swamp phonebooth area) to bottom (toadstool area)
             writes_hut_outside.connect(swamp, r.pit_buffer_itemless, one_way=True) # villa buffer from top (writes hut) to bottom (swamp phonebooth area) or damage boost
             graveyard.connect(forest_heartpiece, None, one_way=True) # villa buffer from top.
+            graveyard.connect(forest, None, one_way=True) # villa buffer from the top twice to get to the main forest area
             log_cave_heartpiece.connect(forest_cave, r.super_jump_feather) # super jump
             log_cave_heartpiece.connect(forest_cave, r.bomb_trigger) # bomb trigger
             graveyard_cave_left.connect(graveyard_heartpiece, r.bomb_trigger, one_way=True) # bomb trigger the heartpiece from the left side

@@ -53,8 +53,8 @@ class Dungeon5:
         if options.logic == 'glitched' or options.logic == 'hell':
             start_hookshot_chest.connect(entrance, r.pit_buffer) # 1 pit buffer to clip bottom wall and jump across the pits
             post_gohma.connect(area2, HOOKSHOT) # glitch through the blocks/pots with hookshot. Zoomerang can be used but has no logical implications because of 2d section requiring hookshot
-            north_bridge_chest.connect(north_of_crossroads, pit_buffer) # 1 pit buffer to clip bottom wall and jump across the pits
-            east_bridge_chest.connect(first_bridge_chest, pit_buffer) # 1 pit buffer to clip bottom wall and jump across the pits
+            north_bridge_chest.connect(north_of_crossroads, r.pit_buffer) # 1 pit buffer to clip bottom wall and jump across the pits
+            east_bridge_chest.connect(first_bridge_chest, r.pit_buffer) # 1 pit buffer to clip bottom wall and jump across the pits
             #after_stalfos.connect(staircase_before_boss, AND(r.text_clip, r.super_jump)) # use the keyblock to get a wall clip in right wall to perform a superjump over the pushable block
             after_stalfos.connect(staircase_before_boss, r.super_jump_boots) # charge a boots dash in bottom right corner to the right, jump before hitting the wall and use weapon to the left side before hitting the wall
          
