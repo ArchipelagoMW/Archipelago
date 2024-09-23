@@ -42,7 +42,7 @@ Then continue to `Using the Launcher`
       - Press `Apply Patches` to select patches to apply. Example patches include:
         - 60FPS: Improves frame rate.
         - Enhanced Moveset: Gives Mario new abilities. [Details here](https://github.com/TheGag96/sm64-port).
-        - Nonstop Mode Always Enabled: Makes it possible to fetch multiple stars in a level without exiting the level first.
+        - Nonstop Mode: Makes it possible to fetch multiple stars in a level without exiting the level first.
       - Press `Create Build`. This will take several minutes.
       - You can also use the Repository and Branch fields to build with different repos or branches if you want to build using a fork or development version of SM64AP.
 6. Press `Download Files` to prepare the build, afterwards `Create Build`.
