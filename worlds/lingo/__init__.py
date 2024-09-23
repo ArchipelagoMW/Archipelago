@@ -128,17 +128,21 @@ class LingoWorld(World):
                     pool.append(self.create_item("Puzzle Skip"))
 
             if traps:
-                total_weight = sum(self.options.trap_weights.values())
+                trap_weights = self.options.trap_weights.value.copy()
+                if self.options.speed_boost_mode:
+                    trap_weights["Slowness Trap"] = 0
+
+                total_weight = sum(trap_weights.values())
 
                 if total_weight == 0:
                     raise OptionError("Sum of trap weights must be at least one.")
 
                 trap_counts = {name: int(weight * traps / total_weight)
-                               for name, weight in self.options.trap_weights.items()}
+                               for name, weight in trap_weights.items()}
                 
                 trap_difference = traps - sum(trap_counts.values())
                 if trap_difference > 0:
-                    allowed_traps = [name for name in TRAP_ITEMS if self.options.trap_weights[name] > 0]
+                    allowed_traps = [name for name in TRAP_ITEMS if trap_weights[name] > 0]
                     for i in range(0, trap_difference):
                         trap_counts[allowed_traps[i % len(allowed_traps)]] += 1
 
@@ -171,7 +175,7 @@ class LingoWorld(World):
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
             "enable_pilgrimage", "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks",
             "early_color_hallways", "pilgrimage_allows_roof_access", "pilgrimage_allows_paintings", "shuffle_sunwarps",
-            "group_doors"
+            "group_doors", "speed_boost_mode"
         ]
 
         slot_data = {
@@ -188,5 +192,8 @@ class LingoWorld(World):
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
-        return self.random.choice(filler_list)
+        if self.options.speed_boost_mode:
+            return "Speed Boost"
+        else:
+            filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
+            return self.random.choice(filler_list)

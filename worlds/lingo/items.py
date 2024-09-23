@@ -85,6 +85,7 @@ def load_item_data():
         "The Feeling of Being Lost": ItemClassification.filler,
         "Wanderlust":                ItemClassification.filler,
         "Empty White Hallways":      ItemClassification.filler,
+        "Speed Boost":               ItemClassification.filler,
         **{trap_name: ItemClassification.trap for trap_name in TRAP_ITEMS},
         "Puzzle Skip":               ItemClassification.useful,
     }
