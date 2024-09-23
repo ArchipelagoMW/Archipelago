@@ -108,6 +108,7 @@ MECHANICAL_KNOW_HOW                   = "Mechanical Know-how (Terran)"
 MERCENARY_MUNITIONS                   = "Mercenary Munitions (Terran)"
 FAST_DELIVERY                         = "Fast Delivery (Terran/Zerg)"
 RAPID_REINFORCEMENT                   = "Rapid Reinforcement (Terran/Zerg)"
+FUSION_CORE_FUSION_REACTOR            = "Fusion Reactor (Fusion Core)"
 
 # Terran Unit Upgrades
 BANSHEE_HYPERFLIGHT_ROTORS                         = "Hyperflight Rotors (Banshee)"
