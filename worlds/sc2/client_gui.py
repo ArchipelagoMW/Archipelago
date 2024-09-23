@@ -158,13 +158,9 @@ class SC2Manager(GameManager):
     def build(self):
         container = super().build()
 
-        panel = TabbedPanelItem(text="Starcraft 2 Launcher")
-        panel.content = CampaignScroll()
-        self.campaign_scroll_panel = panel.content
+        panel = self.add_client_tab("Starcraft 2 Launcher", CampaignScroll())
         self.campaign_panel = MultiCampaignLayout()
         panel.content.add_widget(self.campaign_panel)
-
-        self.tabs.add_widget(panel)
 
         Clock.schedule_interval(self.build_mission_table, 0.5)
 
