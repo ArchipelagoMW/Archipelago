@@ -1005,6 +1005,9 @@ item_table = {
     item_names.VIKING_AESIR_TURBINES:
         ItemData(754 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 8, SC2Race.TERRAN,
                  parent_item=item_names.VIKING, origin={"ext"}),
+    item_names.MEDIVAC_RESOURCE_EFFICIENCY:
+        ItemData(755 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 9, SC2Race.TERRAN,
+                 parent_item=item_names.MEDIVAC, origin={"ext"}),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:

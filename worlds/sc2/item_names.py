@@ -215,6 +215,7 @@ MEDIVAC_RAPID_DEPLOYMENT_TUBE                      = "Rapid Deployment Tube (Med
 MEDIVAC_SCATTER_VEIL                               = "Scatter Veil (Medivac)"
 MEDIVAC_ADVANCED_CLOAKING_FIELD                    = "Advanced Cloaking Field (Medivac)"
 MEDIVAC_RAPID_REIGNITION_SYSTEMS                   = "Rapid Reignition Systems (Medivac)"
+MEDIVAC_RESOURCE_EFFICIENCY                        = "Resource Efficiency (Medivac)"
 MISSILE_TURRET_HELLSTORM_BATTERIES                 = "Hellstorm Batteries (Missile Turret)"
 MISSILE_TURRET_TITANIUM_HOUSING                    = "Titanium Housing (Missile Turret)"
 MISSILE_TURRET_RESOURCE_EFFICENCY                  = "Resource Efficiency (Missile Turret)"
