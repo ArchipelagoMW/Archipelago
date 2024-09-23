@@ -378,4 +378,4 @@ class JakAndDaxterWorld(World):
                                     "citizen_orb_trade_amount",
                                     "oracle_orb_trade_amount",
                                     "jak_completion_condition",
-                                    "require_punch_for_klaww")
+                                    "require_punch_for_klaww",)
