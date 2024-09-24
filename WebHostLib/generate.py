@@ -134,6 +134,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
                                                                        {"bosses", "items", "connections", "texts"}))
         erargs.skip_prog_balancing = False
         erargs.skip_output = False
+        erargs.csv_output = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
