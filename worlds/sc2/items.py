@@ -90,7 +90,7 @@ class FactionlessItemType(ItemTypeEnum):
     Supply = "Supply", 2
     Nothing = "Nothing Group", 4
     Deprecated = "Deprecated", 5
-    Keys = "Keys", 6
+    Keys = "Keys", -1
 
 
 ItemType = Union[TerranItemType, ZergItemType, ProtossItemType, FactionlessItemType]
