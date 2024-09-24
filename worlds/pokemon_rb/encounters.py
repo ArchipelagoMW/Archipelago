@@ -184,7 +184,7 @@ def process_pokemon_locations(self):
             if self.options.area_1_to_1_mapping and original_mon in zone_mapping[zone]:
                 mon = zone_mapping[zone][original_mon]
             else:
-                mon = randomize_pokemon(self, original_mon, mons_list,
+                mon = randomize_pokemon(self, original_mon, [m for m in mons_list if m not in zone_mapping[zone].values()],
                                         self.options.randomize_wild_pokemon.value, self.random)
             #
             while ("Pokemon Tower 6F" in slot.name and
