@@ -1,5 +1,48 @@
 # Custom Mission Orders for Starcraft 2
 
+<details>
+    <summary>Table of Contents</summary>
+
+- [Custom Mission Orders for Starcraft 2](#custom-mission-orders-for-starcraft-2)
+  - [What is this?](#what-is-this)
+  - [Basic structure](#basic-structure)
+  - [Interactions with other YAML options](#interactions-with-other-yaml-options)
+  - [Instructions for building a mission order](#instructions-for-building-a-mission-order)
+  - [Shared options](#shared-options)
+    - [Display Name](#display-name)
+    - [Unique name](#unique-name)
+    - [Goal](#goal)
+    - [Exit](#exit)
+    - [Entry rules](#entry-rules)
+    - [Difficulty](#difficulty)
+    - [Mission Pool](#mission-pool)
+  - [Campaign Options](#campaign-options)
+    - [Preset](#preset)
+  - [Campaign Presets](#campaign-presets)
+    - [Static Presets](#static-presets)
+      - [Preset Options](#preset-options)
+        - [Missions](#missions)
+        - [Keys](#keys)
+    - [Golden Path](#golden-path)
+  - [Layout Options](#layout-options)
+    - [Type](#type)
+    - [Size](#size)
+    - [Missions](#missions-1)
+  - [Mission Slot Options](#mission-slot-options)
+    - [Entrance](#entrance)
+    - [Empty](#empty)
+    - [Next](#next)
+  - [Layout Types](#layout-types)
+    - [Column](#column)
+    - [Grid](#grid)
+      - [Grid Index Functions](#grid-index-functions)
+        - [point(x, y)](#pointx-y)
+        - [rect(x, y, width, height)](#rectx-y-width-height)
+    - [Hopscotch](#hopscotch)
+    - [Gauntlet](#gauntlet)
+    - [Blitz](#blitz)
+</details>
+
 ## What is this?
 
 This is usage documentation for the `custom_mission_order` YAML option for Starcraft 2. You can enable Custom Mission Orders by setting `mission_order: custom` in your YAML.
@@ -581,15 +624,20 @@ For these presets, the layout names used to override settings match the names sh
 - The Gauntlets in the Mini variants of the above are also named `Prophecy`, `Prologue` and `Epilogue`.
 - NCO and Mini NCO contain three columns each, named `Mission Pack 1`, `Mission Pack 2` and `Mission Pack 3`.
 
+#### Preset Options
 All static presets accept these options, as shown in the example above:
-- `missions` with these possible values:
-  - `random` (default), which removes pre-defined `mission_pool` options from layouts and missions, meaning all missions will follow the pool defined in your campaign's `global` layout. This is the default if you don't define the `missions` option.
-  - `vanilla_shuffled`, which will leave `mission_pool`s on layouts to shuffle vanilla missions within their respective campaigns.
-  - `vanilla`, which will leave all missions as they are in the vanilla campaigns.
-- `keys` with these possible values:
-  - `none` (default), which does not add any Key Item rules to the preset.
-  - `layouts`, which adds Key Item rules to layouts besides the preset's left-most layout, in addition to their regular entry rules.
-  - `missions`, which adds Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules.
+
+##### Missions
+The `missions` option accepts these possible values:
+- `random` (default), which removes pre-defined `mission_pool` options from layouts and missions, meaning all missions will follow the pool defined in your campaign's `global` layout. This is the default if you don't define the `missions` option.
+- `vanilla_shuffled`, which will leave `mission_pool`s on layouts to shuffle vanilla missions within their respective campaigns.
+- `vanilla`, which will leave all missions as they are in the vanilla campaigns.
+
+##### Keys
+The `keys` option accepts these possible values:
+- `none` (default), which does not add any Key Item rules to the preset.
+- `layouts`, which adds Key Item rules to layouts besides the preset's left-most layout, in addition to their regular entry rules.
+- `missions`, which adds Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules.
 
 ---
 ### Golden Path
@@ -785,9 +833,14 @@ A `size: 25`, `width: 5` grid has the following indices:
 ```
 The top left corner (index `0`) is the default entrance. The bottom right corner (index `size - 1`) is the default exit.
 
+#### Grid Index Functions
 Grid supports the following index functions:
-- `point(x, y)` returns the index at the given zero-based X and Y coordinates. In the above example, `point(2, 4)` is index `22`.
-- `rect(x, y, width, height)` returns the indices within the rectangle defined by the starting point at the X and Y coordinates and the width and height arguments. In the above example, `rect(1, 2, 3, 2)` returns the indices `11, 12, 13, 16, 17, 18`.
+
+##### point(x, y)
+`point(x, y)` returns the index at the given zero-based X and Y coordinates. In the above example, `point(2, 4)` is index `22`.
+
+##### rect(x, y, width, height)
+`rect(x, y, width, height)` returns the indices within the rectangle defined by the starting point at the X and Y coordinates and the width and height arguments. In the above example, `rect(1, 2, 3, 2)` returns the indices `11, 12, 13, 16, 17, 18`.
 
 ---
 ### Hopscotch
