@@ -383,7 +383,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             "Purple", "Yellow", "Orange", "Green",
             "LightPink", "Violet", "LightGrey", "DarkGreen",
             "Brown", "LightGreen", "DarkGrey", "Pink",
-            "Rainbow", "Random", "Default"
+            "Rainbow", "Mengsk", "BrightLime", "Arcane", "Ember", "HotPink",
+            "Random", "Default"
         ]
         var_names = {
             'raynor': 'player_color_raynor',
@@ -414,7 +415,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 self.output(color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
                 return
             if color.lower() == "random":
-                color = random.choice(player_colors[:16])
+                color = random.choice(player_colors[:-2])
             self.ctx.__dict__[var_names[faction]] = match_colors.index(color.lower())
             self.ctx.pending_color_update = True
             self.output(f"Color for {faction} set to " + player_colors[self.ctx.__dict__[var_names[faction]]])
