@@ -1,3 +1,5 @@
+from .options import max_levels_and_upgrades, max_shapesanity
+
 options_presets = {
     "Most vanilla": {
         "goal": "vanilla",
@@ -16,11 +18,11 @@ options_presets = {
     },
     "Maximum checks": {
         "goal": "even_fasterer",
-        "goal_amount": 500,
+        "goal_amount": max_levels_and_upgrades,
         "include_achievements": True,
         "exclude_softlock_achievements": False,
         "exclude_long_playtime_achievements": False,
-        "shapesanity_amount": 1000
+        "shapesanity_amount": max_shapesanity
     },
     "Restrictive start": {
         "goal": "vanilla",

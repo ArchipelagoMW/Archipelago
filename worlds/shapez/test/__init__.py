@@ -108,7 +108,7 @@ class TestAllRelevantOptions1(ShapezTestBase):
         "exclude_softlock_achievements": False,
         "exclude_long_playtime_achievements": False,
         "exclude_progression_unreasonable": True,
-        "shapesanity_amount": 1000,
+        "shapesanity_amount": max_shapesanity,
         "traps_percentage": "random"
     }
 
@@ -116,7 +116,7 @@ class TestAllRelevantOptions1(ShapezTestBase):
 class TestAllRelevantOptions2(ShapezTestBase):
     options = {
         "goal": "mam",
-        "goal_amount": 500,
+        "goal_amount": max_levels_and_upgrades,
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "random_steps",
@@ -135,7 +135,7 @@ class TestAllRelevantOptions2(ShapezTestBase):
 class TestAllRelevantOptions3(ShapezTestBase):
     options = {
         "goal": "even_fasterer",
-        "goal_amount": 500,
+        "goal_amount": max_levels_and_upgrades,
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "vanilla_shuffled",

@@ -5,10 +5,10 @@ import orjson
 
 from Options import Range, Toggle, Choice, PerGameCommonOptions
 
-global_options = orjson.loads(pkgutil.get_data(__name__, "data/options.json"))
-max_levels_and_upgrades = global_options["max_levels_and_upgrades"]
-max_shapesanity = global_options["max_shapesanity"]
-del global_options
+datapackage_options = orjson.loads(pkgutil.get_data(__name__, "data/options.json"))
+max_levels_and_upgrades = datapackage_options["max_levels_and_upgrades"]
+max_shapesanity = datapackage_options["max_shapesanity"]
+del datapackage_options
 
 
 class Goal(Choice):
