@@ -194,8 +194,8 @@ class KH2WorldRules(KH2Rules):
             RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
             RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
 
+            #twtnw1 is actually the roxas fight region thus roxas requires 1 way to the dawn
             RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 2),
-            # These will be swapped and First Visit lock for twtnw is in development.
             # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
 
             RegionName.Ht:                 lambda state: self.ht_unlocked(state, 1),
