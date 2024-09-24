@@ -105,12 +105,11 @@ class SC2MOGenMissionPools:
     def pull_specific_mission(self, mission: SC2Mission) -> None:
         """Marks the given mission as present in the mission order."""
         # Remove the mission from the master list and whichever difficulty pool it is in
-        if mission.id in self.master_list:
-            self.master_list.remove(mission.id)
-            for diff in self.difficulty_pools:
-                if mission.id in self.difficulty_pools[diff]:
-                    self.difficulty_pools[diff].remove(mission.id)
-                    break
+        self.master_list.remove(mission.id)
+        for diff in self.difficulty_pools:
+            if mission.id in self.difficulty_pools[diff]:
+                self.difficulty_pools[diff].remove(mission.id)
+                break
         self._add_mission_stats(mission)
     
     def _add_mission_stats(self, mission: SC2Mission) -> None:
@@ -149,7 +148,7 @@ class SC2MOGenMissionPools:
                 if len(final_pool) > 0:
                     break
                 if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
-                    raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
+                    raise IndexError()
                 difficulty_offset += 1
         
         else:
@@ -164,7 +163,7 @@ class SC2MOGenMissionPools:
             while len(final_pool) == 0:
                 higher_difficulty = desired_difficulty + difficulty_offset
                 if higher_difficulty > Difficulty.VERY_HARD:
-                    raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
+                    raise IndexError()
                 final_pool = difficulty_pools[higher_difficulty]
                 difficulty_offset += 1
 
