@@ -205,6 +205,7 @@ def process_pokemon_locations(self):
             location.item.location = location
             locations.append(location)
             zone_mapping[zone][original_mon] = mon
+            zone_placed_mons[zone].append(mon)
 
         mons_to_add = []
         remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and
