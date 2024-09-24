@@ -159,6 +159,7 @@ class SC2Manager(GameManager):
         container = super().build()
 
         panel = self.add_client_tab("Starcraft 2 Launcher", CampaignScroll())
+        self.campaign_scroll_panel = panel.content
         self.campaign_panel = MultiCampaignLayout()
         panel.content.add_widget(self.campaign_panel)
 
