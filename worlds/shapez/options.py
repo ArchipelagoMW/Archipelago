@@ -1,6 +1,14 @@
+import pkgutil
 from dataclasses import dataclass
 
+import orjson
+
 from Options import Range, Toggle, Choice, PerGameCommonOptions
+
+global_options = orjson.loads(pkgutil.get_data(__name__, "data/options.json"))
+max_levels_and_upgrades = global_options["max_levels_and_upgrades"]
+max_shapesanity = global_options["max_shapesanity"]
+del global_options
 
 
 class Goal(Choice):
@@ -19,9 +27,6 @@ class Goal(Choice):
     option_even_fasterer = 2
     option_efficiency_iii = 3
     default = 0
-
-
-max_levels_and_upgrades = 500
 
 
 class GoalAmount(Range):
@@ -182,9 +187,6 @@ class ExcludeProgressionUnreasonable(Toggle):
     display_name = "Exclude progression items in softlock and long playtime achievements"
     rich_text_doc = True
     default = True
-
-
-max_shapesanity = 1000
 
 
 class ShapesanityAmount(Range):

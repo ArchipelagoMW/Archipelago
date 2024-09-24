@@ -1,6 +1,8 @@
+from unittest import TestCase
+
 from test.bases import WorldTestBase
 from .. import options_presets, ShapezWorld
-from ..options import max_levels_and_upgrades
+from ..options import max_levels_and_upgrades, max_shapesanity
 
 
 class ShapezTestBase(WorldTestBase):
@@ -67,6 +69,20 @@ class ShapezTestBase(WorldTestBase):
                          f"shapesanity locations ({locations_length}).")
         self.assertTrue("Uncolored Circle" in self.world.shapesanity_names,
                         "Uncolored Circle is guaranteed but was not found in shapesanity_names.")
+
+
+class TestGlobalOptionsImport(TestCase):
+
+    def test_global_options_import(self):
+        self.assertTrue(isinstance(max_levels_and_upgrades, int), f"The global option max_levels_and_upgrades is not " +
+                                                                  f"an integer, but instead a " +
+                                                                  f"{type(max_levels_and_upgrades)}.")
+        self.assertTrue(max_levels_and_upgrades >= 27, f"max_levels_and_upgrades must be at least 27, but is " +
+                                                       f"{max_levels_and_upgrades} instead.")
+        self.assertTrue(isinstance(max_shapesanity, int), f"The global option max_shapesanity is not an integer, but " +
+                                                          f"instead a {type(max_levels_and_upgrades)}.")
+        self.assertTrue(max_shapesanity >= 4, f"max_shapesanity must be at least 27, but is " +
+                                              f"{max_levels_and_upgrades} instead.")
 
 
 class TestMinimum(ShapezTestBase):
