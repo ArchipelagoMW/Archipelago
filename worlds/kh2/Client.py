@@ -6,7 +6,8 @@ import os
 import asyncio
 import json
 from pymem import pymem
-from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, SupportAbility_Table, ActionAbility_Table, all_weapon_slot
+from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
+    SupportAbility_Table, ActionAbility_Table, all_weapon_slot
 from .Names import ItemName
 from .WorldLocations import *
 
@@ -44,39 +45,39 @@ class KH2Context(CommonContext):
         self.sending = []
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
-            "itemIndex":  -1,
+            "itemIndex": -1,
             # back of soras invo is 0x25E2. Growth should be moved there
             #  Character: [back of invo, front of invo]
-            "SoraInvo":   [0x25D8, 0x2546],
+            "SoraInvo": [0x25D8, 0x2546],
             "DonaldInvo": [0x26F4, 0x2658],
-            "GoofyInvo":  [0x2808, 0x276C],
+            "GoofyInvo": [0x2808, 0x276C],
             "AmountInvo": {
-                "Ability":      {},
-                "Amount":       {
+                "Ability": {},
+                "Amount": {
                     "Bounty": 0,
                 },
-                "Growth":       {
-                    "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                "Growth": {
+                    "High Jump": 0, "Quick Run": 0, "Dodge Roll": 0,
                     "Aerial Dodge": 0, "Glide": 0
                 },
-                "Bitmask":      [],
-                "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                "Equipment":    [],
-                "Magic":        {
-                    "Fire Element":     0,
+                "Bitmask": [],
+                "Weapon": {"Sora": [], "Donald": [], "Goofy": []},
+                "Equipment": [],
+                "Magic": {
+                    "Fire Element": 0,
                     "Blizzard Element": 0,
-                    "Thunder Element":  0,
-                    "Cure Element":     0,
-                    "Magnet Element":   0,
-                    "Reflect Element":  0
+                    "Thunder Element": 0,
+                    "Cure Element": 0,
+                    "Magnet Element": 0,
+                    "Reflect Element": 0
                 },
                 "StatIncrease": {
-                    ItemName.MaxHPUp:         0,
-                    ItemName.MaxMPUp:         0,
-                    ItemName.DriveGaugeUp:    0,
-                    ItemName.ArmorSlotUp:     0,
+                    ItemName.MaxHPUp: 0,
+                    ItemName.MaxMPUp: 0,
+                    ItemName.DriveGaugeUp: 0,
+                    ItemName.ArmorSlotUp: 0,
                     ItemName.AccessorySlotUp: 0,
-                    ItemName.ItemSlotUp:      0,
+                    ItemName.ItemSlotUp: 0,
                 },
             },
         }
@@ -91,14 +92,14 @@ class KH2Context(CommonContext):
         self.final_xemnas = False
         self.worldid_to_locations = {
             #  1:   {},  # world of darkness (story cutscenes)
-            2:  TT_Checks,
+            2: TT_Checks,
             #  3:   {},  # destiny island doesn't have checks
-            4:  HB_Checks,
-            5:  BC_Checks,
-            6:  Oc_Checks,
-            7:  AG_Checks,
-            8:  LoD_Checks,
-            9:  HundredAcreChecks,
+            4: HB_Checks,
+            5: BC_Checks,
+            6: Oc_Checks,
+            7: AG_Checks,
+            8: LoD_Checks,
+            9: HundredAcreChecks,
             10: PL_Checks,
             11: Atlantica_Checks,
             12: DC_Checks,
@@ -143,7 +144,7 @@ class KH2Context(CommonContext):
         self.all_equipment = self.armor_set.union(self.accessories_set)
 
         self.Equipment_Anchor_Dict = {
-            "Armor":       [0x2504, 0x2506, 0x2508, 0x250A],
+            "Armor": [0x2504, 0x2506, 0x2508, 0x250A],
             "Accessories": [0x2514, 0x2516, 0x2518, 0x251A]
         }
 
@@ -161,11 +162,11 @@ class KH2Context(CommonContext):
 
         #  Growth:[level 1,level 4,slot]
         self.growth_values_dict = {
-            "High Jump":    [0x05E, 0x061, 0x25DA],
-            "Quick Run":    [0x62, 0x65, 0x25DC],
-            "Dodge Roll":   [0x234, 0x237, 0x25DE],
+            "High Jump": [0x05E, 0x061, 0x25DA],
+            "Quick Run": [0x62, 0x65, 0x25DC],
+            "Dodge Roll": [0x234, 0x237, 0x25DE],
             "Aerial Dodge": [0x66, 0x069, 0x25E0],
-            "Glide":        [0x6A, 0x6D, 0x25E2]
+            "Glide": [0x6A, 0x6D, 0x25E2]
         }
 
         self.ability_code_list = None
@@ -177,7 +178,8 @@ class KH2Context(CommonContext):
         self.base_accessory_slots = 1
         self.base_armor_slots = 1
         self.base_item_slots = 3
-        self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E, 0x2770, 0x2772]
+        self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E,
+                                    0x2770, 0x2772]
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -190,7 +192,7 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                    'w') as f:
+                      'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).connection_closed()
 
@@ -199,7 +201,7 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                    'w') as f:
+                      'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).disconnect()
 
@@ -213,7 +215,7 @@ class KH2Context(CommonContext):
     async def shutdown(self):
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                    'w') as f:
+                      'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).shutdown()
 
@@ -245,19 +247,19 @@ class KH2Context(CommonContext):
                 os.makedirs(self.game_communication_path)
             if not os.path.exists(self.game_communication_path + f"\kh2save2{self.kh2seedname}{self.auth}.json"):
                 self.kh2_seed_save = {
-                    "Levels":        {
-                        "SoraLevel":   0,
-                        "ValorLevel":  0,
+                    "Levels": {
+                        "SoraLevel": 0,
+                        "ValorLevel": 0,
                         "WisdomLevel": 0,
-                        "LimitLevel":  0,
+                        "LimitLevel": 0,
                         "MasterLevel": 0,
-                        "FinalLevel":  0,
+                        "FinalLevel": 0,
                         "SummonLevel": 0,
                     },
                     "SoldEquipment": [],
                 }
                 with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                        'wt') as f:
+                          'wt') as f:
                     pass
                 # self.locations_checked = set()
             elif os.path.exists(self.game_communication_path + f"\kh2save2{self.kh2seedname}{self.auth}.json"):
@@ -265,13 +267,13 @@ class KH2Context(CommonContext):
                     self.kh2_seed_save = json.load(f)
                     if self.kh2_seed_save is None:
                         self.kh2_seed_save = {
-                            "Levels":        {
-                                "SoraLevel":   0,
-                                "ValorLevel":  0,
+                            "Levels": {
+                                "SoraLevel": 0,
+                                "ValorLevel": 0,
                                 "WisdomLevel": 0,
-                                "LimitLevel":  0,
+                                "LimitLevel": 0,
                                 "MasterLevel": 0,
-                                "FinalLevel":  0,
+                                "FinalLevel": 0,
                                 "SummonLevel": 0,
                             },
                             "SoldEquipment": [],
@@ -280,6 +282,7 @@ class KH2Context(CommonContext):
             # self.serverconneced = True
 
         if cmd in {"Connected"}:
+            #todo: see why this is crashing the connection
             asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
             self.kh2slotdata = args['slot_data']
             # self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
@@ -292,39 +295,39 @@ class KH2Context(CommonContext):
             start_index = args["index"]
             if start_index == 0:
                 self.kh2_seed_save_cache = {
-                    "itemIndex":  -1,
+                    "itemIndex": -1,
                     # back of soras invo is 0x25E2. Growth should be moved there
                     #  Character: [back of invo, front of invo]
-                    "SoraInvo":   [0x25D8, 0x2546],
+                    "SoraInvo": [0x25D8, 0x2546],
                     "DonaldInvo": [0x26F4, 0x2658],
-                    "GoofyInvo":  [0x2808, 0x276C],
+                    "GoofyInvo": [0x2808, 0x276C],
                     "AmountInvo": {
-                        "Ability":      {},
-                        "Amount":       {
+                        "Ability": {},
+                        "Amount": {
                             "Bounty": 0,
                         },
-                        "Growth":       {
-                            "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                        "Growth": {
+                            "High Jump": 0, "Quick Run": 0, "Dodge Roll": 0,
                             "Aerial Dodge": 0, "Glide": 0
                         },
-                        "Bitmask":      [],
-                        "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                        "Equipment":    [],
-                        "Magic":        {
-                            "Fire Element":     0,
+                        "Bitmask": [],
+                        "Weapon": {"Sora": [], "Donald": [], "Goofy": []},
+                        "Equipment": [],
+                        "Magic": {
+                            "Fire Element": 0,
                             "Blizzard Element": 0,
-                            "Thunder Element":  0,
-                            "Cure Element":     0,
-                            "Magnet Element":   0,
-                            "Reflect Element":  0
+                            "Thunder Element": 0,
+                            "Cure Element": 0,
+                            "Magnet Element": 0,
+                            "Reflect Element": 0
                         },
                         "StatIncrease": {
-                            ItemName.MaxHPUp:         0,
-                            ItemName.MaxMPUp:         0,
-                            ItemName.DriveGaugeUp:    0,
-                            ItemName.ArmorSlotUp:     0,
+                            ItemName.MaxHPUp: 0,
+                            ItemName.MaxMPUp: 0,
+                            ItemName.DriveGaugeUp: 0,
+                            ItemName.ArmorSlotUp: 0,
                             ItemName.AccessorySlotUp: 0,
-                            ItemName.ItemSlotUp:      0,
+                            ItemName.ItemSlotUp: 0,
                         },
                     },
                 }
@@ -339,6 +342,7 @@ class KH2Context(CommonContext):
                 self.locations_checked |= new_locations
 
         if cmd in {"DataPackage"}:
+            # this is prob causing it
             self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
             self.lookup_id_to_location = {v: k for k, v in self.kh2_loc_name_to_id.items()}
             self.kh2_item_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"]
@@ -380,6 +384,7 @@ class KH2Context(CommonContext):
 
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                # TODO: make this pull from a file that is synched to a repo with the mem addresses
                 if self.kh2_game_version is None:
                     if self.kh2_read_string(0x09A9830, 4) == "KH2J":
                         self.kh2_game_version = "STEAM"
@@ -393,7 +398,9 @@ class KH2Context(CommonContext):
                         self.kh2_game_version = "EGS"
                     else:
                         self.kh2_game_version = None
-                        logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
+                        logger.info("Your game version does not match what the client requires. Check in the "
+                                    "kingdom-hearts-2-final-mix channel for more information on correcting the game "
+                                    "version.")
                 if self.kh2_game_version is not None:
                     logger.info(f"You are now auto-tracking. {self.kh2_game_version}")
                     self.kh2connected = True
@@ -409,10 +416,10 @@ class KH2Context(CommonContext):
         try:
             currentworldint = self.kh2_read_byte(self.Now)
             await self.send_msgs([{
-                "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
+                "cmd": "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
                 "default": 0, "want_reply": True, "operations": [{
                     "operation": "replace",
-                    "value":     currentworldint
+                    "value": currentworldint
                 }]
             }])
             if currentworldint in self.worldid_to_locations:
@@ -487,9 +494,11 @@ class KH2Context(CommonContext):
                 if locationName in self.chest_set:
                     if locationName in self.location_name_to_worlddata.keys():
                         locationData = self.location_name_to_worlddata[locationName]
-                        if self.kh2_read_byte(self.Save + locationData.addrObtained) & 0x1 << locationData.bitIndex == 0:
+                        if self.kh2_read_byte(
+                                self.Save + locationData.addrObtained) & 0x1 << locationData.bitIndex == 0:
                             roomData = self.kh2_read_byte(self.Save + locationData.addrObtained)
-                            self.kh2_write_byte(self.Save + locationData.addrObtained, roomData | 0x01 << locationData.bitIndex)
+                            self.kh2_write_byte(self.Save + locationData.addrObtained,
+                                                roomData | 0x01 << locationData.bitIndex)
 
         except Exception as e:
             if self.kh2connected:
@@ -499,12 +508,12 @@ class KH2Context(CommonContext):
 
     async def verifyLevel(self):
         for leveltype, anchor in {
-            "SoraLevel":   0x24FF,
-            "ValorLevel":  0x32F6,
+            "SoraLevel": 0x24FF,
+            "ValorLevel": 0x32F6,
             "WisdomLevel": 0x332E,
-            "LimitLevel":  0x3366,
+            "LimitLevel": 0x3366,
             "MasterLevel": 0x339E,
-            "FinalLevel":  0x33D6
+            "FinalLevel": 0x33D6
         }.items():
             if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
                 self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
@@ -529,7 +538,8 @@ class KH2Context(CommonContext):
                 if "PoptrackerVersion" in self.kh2slotdata:
                     if self.kh2slotdata["PoptrackerVersionCheck"] < 4.3:
                         if (itemname in self.sora_ability_set
-                            and len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < self.item_name_to_data[itemname].quantity) \
+                            and len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) <
+                            self.item_name_to_data[itemname].quantity) \
                                 and self.kh2_seed_save_cache["SoraInvo"][1] > 0x254C:
                             ability_slot = self.kh2_seed_save_cache["SoraInvo"][1]
                             self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
@@ -675,7 +685,8 @@ class KH2Context(CommonContext):
                 item_data = self.item_name_to_data[item_name]
                 # if the inventory slot for that keyblade is less than the amount they should have,
                 # and they are not in stt
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != 1 and self.kh2_read_byte(self.Save + 0x1CFF) != 13:
+                if self.kh2_read_byte(self.Save + item_data.memaddr) != 1 and self.kh2_read_byte(
+                        self.Save + 0x1CFF) != 13:
                     # Checking form anchors for the keyblade to remove extra keyblades
                     if self.kh2_read_short(self.Save + 0x24F0) == item_data.kh2id \
                             or self.kh2_read_short(self.Save + 0x32F4) == item_data.kh2id \
@@ -776,7 +787,8 @@ class KH2Context(CommonContext):
                 item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Magic"][item_name]
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(self.Shop) in {10, 8}:
+                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(
+                        self.Shop) in {10, 8}:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             for item_name in master_stat:
@@ -835,7 +847,8 @@ class KH2Context(CommonContext):
                 #    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             if "PoptrackerVersionCheck" in self.kh2slotdata:
-                if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
+                if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(
+                        self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
                     self.kh2_write_byte(self.Save + 0x3607, 1)
 
         except Exception as e:
@@ -847,7 +860,8 @@ class KH2Context(CommonContext):
 
 def finishedGame(ctx: KH2Context, message):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
-        if not ctx.final_xemnas and ctx.kh2_read_byte(ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
+        if not ctx.final_xemnas and ctx.kh2_read_byte(
+                ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
                 & 0x1 << all_world_locations[LocationName.FinalXemnas].bitIndex > 0:
             ctx.final_xemnas = True
     # three proofs
@@ -880,7 +894,8 @@ def finishedGame(ctx: KH2Context, message):
             for boss in ctx.kh2slotdata["hitlist"]:
                 if boss in message[0]["locations"]:
                     ctx.hitlist_bounties += 1
-        if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2_seed_save_cache["AmountInvo"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
+        if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2_seed_save_cache["AmountInvo"]["Amount"][
+            "Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
                 ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
@@ -944,7 +959,9 @@ async def kh2_watcher(ctx: KH2Context):
                                 ctx.kh2_game_version = "EGS"
                             else:
                                 ctx.kh2_game_version = None
-                                logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
+                                logger.info("Your game version does not match what the client requires. Check in the "
+                                            "kingdom-hearts-2-final-mix channel for more information on correcting the game "
+                                            "version.")
                         if ctx.kh2_game_version is not None:
                             logger.info(f"You are now auto-tracking {ctx.kh2_game_version}")
                             ctx.kh2connected = True
@@ -964,7 +981,7 @@ def launch():
             ctx.run_gui()
         ctx.run_cli()
         progression_watcher = asyncio.create_task(
-                kh2_watcher(ctx), name="KH2ProgressionWatcher")
+            kh2_watcher(ctx), name="KH2ProgressionWatcher")
 
         await ctx.exit_event.wait()
         ctx.server_address = None
