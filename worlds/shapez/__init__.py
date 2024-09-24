@@ -35,7 +35,15 @@ class ShapezWeb(WebWorld):
         "setup/de",
         ["BlastSlimey"]
     )
-    tutorials = [setup_en, setup_de]
+    datapackage_options = Tutorial(
+        "Changing datapackage options",
+        "3000 locations a too many or not enough? Here's how you can change that:",
+        "English",
+        "datapackage_options.md",
+        "datapackage/en",
+        ["BlastSlimey"]
+    )
+    tutorials = [setup_en, setup_de, datapackage_options]
     item_descriptions = item_descriptions
     # location_descriptions = location_description
 
