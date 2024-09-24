@@ -246,6 +246,11 @@ def patch_camp(data: LevelData) -> LevelData:
     data.stream.write(bytes([0xFE, 0x84, 0x0, 0x3D, 0xFF, 0xE0, 0xFF, 0xF0]))
     return data
 
+def patch_trenches(data: LevelData) -> LevelData:
+    data.stream.seek(0xD4, 0)
+    data.stream.write(bytes([0xFB, 0x29, 0x0, 0x82]))
+    return data
+
 
 # Zlib decompression with wbits set to -15
 def zdec(data):
@@ -283,6 +288,8 @@ def get_level_data(stream: io.BytesIO, size: int, level=0) -> (io.BytesIO, Level
         data = patch_docks(data)
     if level == 18:
         data = patch_camp(data)
+    if level == 23:
+        data = patch_trenches(data)
     data.header = data.stream.read(0x5C)
     data.stream.seek(0)
     data.item_addr = int.from_bytes(data.stream.read(4), "big")

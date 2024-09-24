@@ -384,11 +384,11 @@ class GauntletLegendsContext(CommonContext):
         _obj = [obj for obj in _obj if obj.raw[1] != 0xFF]
         if mode == 1:
             self.chest_objects = _obj[:len(self.chest_locations)]
-            if self.chest_objects_init == []:
+            if not self.chest_objects_init:
                 self.chest_objects_init = self.chest_objects
         else:
             self.item_objects = _obj[:len(self.item_locations)]
-            if self.item_objects_init == []:
+            if not self.item_objects_init:
                 self.item_objects_init = self.item_objects
 
 
@@ -811,6 +811,8 @@ class GauntletLegendsContext(CommonContext):
         self.chest_objects = []
         self.obelisk_locations = []
         self.obelisks = []
+        self.item_objects_init = []
+        self.chest_objects_init = []
         self.in_game = False
         self.level_loading = False
         self.scaled = False
