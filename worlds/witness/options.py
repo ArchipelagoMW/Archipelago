@@ -1,4 +1,3 @@
-import typing
 from dataclasses import dataclass
 
 from schema import And, Schema
@@ -7,12 +6,13 @@ from Options import (
     Choice,
     DefaultOnToggle,
     OptionDict,
+    OptionError,
     OptionGroup,
     OptionSet,
     PerGameCommonOptions,
     Range,
     Toggle,
-    Visibility, OptionError,
+    Visibility,
 )
 
 from .data import static_logic as static_witness_logic
