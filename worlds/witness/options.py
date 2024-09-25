@@ -1,3 +1,4 @@
+import typing
 from dataclasses import dataclass
 
 from schema import And, Schema
@@ -11,7 +12,7 @@ from Options import (
     PerGameCommonOptions,
     Range,
     Toggle,
-    Visibility,
+    Visibility, OptionError,
 )
 
 from .data import static_logic as static_witness_logic
@@ -298,6 +299,17 @@ class ElevatorsComeToYou(OptionSet):
 
     In the case of Bunker Elevator and Swamp Long Bridge, this will potentially give you early backwards access into Bunker and Swamp respectively.
     """
+
+    @classmethod
+    def from_text(cls, text: str):
+        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+            raise OptionError('elevators_come_to_you is an OptionSet now. The equivalent of "false" is {}')
+        if text.lower() in {"on", "1", "true", "yes"}:
+            raise OptionError(
+                f'elevators_come_to_you is an OptionSet now. The equivalent of "true" is {cls.valid_keys}'
+            )
+        return super().from_text(text)
+
     display_name = "Elevators come to you"
 
     valid_keys = frozenset({"Quarry Elevator", "Swamp Long Bridge", "Bunker Elevator"})
