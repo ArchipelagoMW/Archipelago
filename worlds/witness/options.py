@@ -300,6 +300,7 @@ class ElevatorsComeToYou(OptionSet):
     In the case of Bunker Elevator and Swamp Long Bridge, this will potentially give you early backwards access into Bunker and Swamp respectively.
     """
 
+    # Used to be a toggle
     @classmethod
     def from_text(cls, text: str):
         if text.lower() in {"off", "0", "false", "none", "null", "no"}:
