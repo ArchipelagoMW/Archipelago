@@ -764,7 +764,7 @@ This can help significantly because it is possible for 0 local access rules to b
 `collect`, so recalculating on every `collect` is very slow.
 
 Only use LogicMixin if necessary. There are often other ways to achieve what it does, like making clever use of
-`state.prog_items`, or using event items, pseudo-regions etc.
+`state.prog_items`, using event items, pseudo-regions, etc.
 
 #### pre_fill
 
