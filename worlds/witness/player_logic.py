@@ -640,7 +640,7 @@ class WitnessPlayerLogic:
                 "Requirement Changes:",
                 "0x035DE - 0x17E2B - True",  # Swamp Purple Sand Bottom EP
             ])
-        # if "Town Maze Rooftop Bridge" in worlds.options.elevators_come_to_you:
+        # if "Town Maze Rooftop Bridge" in world.options.elevators_come_to_you:
         #     adjustment_linesets_in_order.append([
         #         "New Connections:"
         #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
