@@ -720,7 +720,6 @@ class CollectionState():
             if new_region in reachable_regions:
                 blocked_connections.remove(connection)
             elif connection.can_reach(self):
-                assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
                 reachable_regions.add(new_region)
                 blocked_connections.remove(connection)
                 blocked_connections.update(new_region.exits)
@@ -946,6 +945,7 @@ class Entrance:
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
+        assert self.parent_region, f"called can_reach on an Entrance \"{self}\" with no parent_region"
         if self.parent_region.can_reach(state) and self.access_rule(state):
             if not self.hide_path and not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
@@ -1166,7 +1166,7 @@ class Location:
 
     def can_reach(self, state: CollectionState) -> bool:
         # Region.can_reach is just a cache lookup, so placing it first for faster abort on average
-        assert self.parent_region, "Can't reach location without region"
+        assert self.parent_region, f"called can_reach on a Location \"{self}\" with no parent_region"
         return self.parent_region.can_reach(state) and self.access_rule(state)
 
     def place_locked_item(self, item: Item):
