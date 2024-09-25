@@ -95,6 +95,13 @@ def get_metadata_file() -> str:
     return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Metadata.txt"
 
 
+def _remap_color_option(slot_data_version: int, color: int) -> int:
+    """Remap colour options for backwards compatibility with older slot data"""
+    if slot_data_version < 4 and color == ColorChoice.option_mengsk:
+        return ColorChoice.option_default
+    return color
+
+
 class ConfigurableOptionType(enum.Enum):
     INTEGER = enum.auto()
     ENUM = enum.auto()
@@ -614,6 +621,7 @@ class SC2Context(CommonContext):
                     }
                 
                 self.custom_mission_order = self.parse_mission_req_table(mission_req_table)
+                
             if self.slot_data_version >= 4:
                 self.custom_mission_order = [
                     CampaignSlotData(
@@ -647,11 +655,27 @@ class SC2Context(CommonContext):
             else:
                 self.final_mission_ids = args["slot_data"].get("final_mission_ids", [SC2Mission.ALL_IN.id])
                 self.final_locations = [get_location_id(mission_id, 0) for mission_id in self.final_mission_ids]
-            self.player_color_raynor = args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
-            self.player_color_zerg = args["slot_data"].get("player_color_zerg", ColorChoice.option_orange)
-            self.player_color_zerg_primal = args["slot_data"].get("player_color_zerg_primal", ColorChoice.option_purple)
-            self.player_color_protoss = args["slot_data"].get("player_color_protoss", ColorChoice.option_blue)
-            self.player_color_nova = args["slot_data"].get("player_color_nova", ColorChoice.option_dark_grey)
+
+            self.player_color_raynor = _remap_color_option(
+                self.slot_data_version,
+                args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
+            )
+            self.player_color_zerg = _remap_color_option(
+                self.slot_data_version,
+                args["slot_data"].get("player_color_zerg", ColorChoice.option_orange)
+            )
+            self.player_color_zerg_primal = _remap_color_option(
+                self.slot_data_version,
+                args["slot_data"].get("player_color_zerg_primal", ColorChoice.option_purple)
+            )
+            self.player_color_protoss = _remap_color_option(
+                self.slot_data_version,
+                args["slot_data"].get("player_color_protoss", ColorChoice.option_blue)
+            )
+            self.player_color_nova = _remap_color_option(
+                self.slot_data_version,
+                args["slot_data"].get("player_color_nova", ColorChoice.option_dark_grey)
+            )
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", GenericUpgradeMissions.default)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", GenericUpgradeResearch.option_vanilla)
