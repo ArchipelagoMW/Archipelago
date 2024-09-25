@@ -306,7 +306,7 @@ class ElevatorsComeToYou(OptionSet):
             raise OptionError('elevators_come_to_you is an OptionSet now. The equivalent of "false" is {}')
         if text.lower() in {"on", "1", "true", "yes"}:
             raise OptionError(
-                f'elevators_come_to_you is an OptionSet now. The equivalent of "true" is {cls.valid_keys}'
+                f'elevators_come_to_you is an OptionSet now. The equivalent of "true" is {set(cls.valid_keys)}'
             )
         return super().from_text(text)
 
