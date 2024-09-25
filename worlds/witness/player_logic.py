@@ -34,7 +34,6 @@ from .data.utils import (
     get_discard_exclusion_list,
     get_early_caves_list,
     get_early_caves_start_list,
-    get_elevators_come_to_you,
     get_entity_hunt,
     get_ep_all_individual,
     get_ep_easy,
@@ -641,6 +640,10 @@ class WitnessPlayerLogic:
                 "Requirement Changes:",
                 "0x035DE - 0x17E2B - True",  # Swamp Purple Sand Bottom EP
             ])
+        # if "Town Maze Rooftop Bridge" in worlds.options.elevators_come_to_you:
+        #     adjustment_linesets_in_order.append([
+        #         "New Connections:"
+        #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
 
         if world.options.victory_condition == "panel_hunt":
             adjustment_linesets_in_order.append(get_entity_hunt())
