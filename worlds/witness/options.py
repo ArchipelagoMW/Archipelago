@@ -291,8 +291,8 @@ class ElevatorsComeToYou(OptionSet):
     """
     display_name = "Elevators come to you"
 
-    valid_keys = {"Quarry Elevator", "Swamp Long Bridge", "Bunker Elevator"}
-    default = {"Quarry Elevator"}
+    valid_keys = frozenset({"Quarry Elevator", "Swamp Long Bridge", "Bunker Elevator"})
+    default = frozenset({"Quarry Elevator"})
 
 
 class TrapPercentage(Range):
