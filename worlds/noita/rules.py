@@ -68,7 +68,7 @@ def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
     return state.count("Orb", player) >= amount
 
 
-def forbid_items_at_locations(world: "NoitaWorld", shop_locations: Set[str], forbidden_items: Set[str]):
+def forbid_items_at_locations(world: "NoitaWorld", shop_locations: Set[str], forbidden_items: Set[str]) -> None:
     for shop_location in shop_locations:
         location = world.multiworld.get_location(shop_location, world.player)
         GenericRules.forbid_items_for_player(location, forbidden_items, world.player)
@@ -129,7 +129,7 @@ def holy_mountain_unlock_conditions(world: "NoitaWorld") -> None:
             )
 
 
-def biome_unlock_conditions(world: "NoitaWorld"):
+def biome_unlock_conditions(world: "NoitaWorld") -> None:
     lukki_entrances = world.multiworld.get_region("Lukki Lair", world.player).entrances
     magical_entrances = world.multiworld.get_region("Magical Temple", world.player).entrances
     wizard_entrances = world.multiworld.get_region("Wizards' Den", world.player).entrances

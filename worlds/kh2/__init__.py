@@ -422,7 +422,7 @@ class KH2World(World):
         keyblade_locations = [self.multiworld.get_location(location, self.player) for location in Keyblade_Slots.keys()]
         state = self.multiworld.get_all_state(False)
         keyblade_ability_pool_copy = self.keyblade_ability_pool.copy()
-        fill_restrictive(self.multiworld, state, keyblade_locations, keyblade_ability_pool_copy, True, True)
+        fill_restrictive(self.multiworld, state, keyblade_locations, keyblade_ability_pool_copy, True, True, allow_excluded=True)
 
     def starting_invo_verify(self):
         """
@@ -430,13 +430,13 @@ class KH2World(World):
         """
         for item, value in self.options.start_inventory.value.items():
             if item in ActionAbility_Table \
-                    or item in SupportAbility_Table or exclusion_item_table["StatUps"] \
+                    or item in SupportAbility_Table or item in exclusion_item_table["StatUps"] \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:
                     logging.info(
-                            f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}"
-                            f"Changing the amount to the max amount")
+                            f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}."
+                            f" Changing the amount to the max amount")
                     value = item_dictionary_table[item].quantity
                 self.item_quantity_dict[item] -= value
 

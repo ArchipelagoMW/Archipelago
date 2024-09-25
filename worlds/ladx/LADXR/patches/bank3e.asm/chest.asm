@@ -51,7 +51,7 @@ GiveItemFromChest:
     dw ChestBow          ; CHEST_BOW
     dw ChestWithItem     ; CHEST_HOOKSHOT
     dw ChestWithItem     ; CHEST_MAGIC_ROD
-    dw ChestWithItem     ; CHEST_PEGASUS_BOOTS
+    dw Boots             ; CHEST_PEGASUS_BOOTS
     dw ChestWithItem     ; CHEST_OCARINA
     dw ChestWithItem     ; CHEST_FEATHER
     dw ChestWithItem     ; CHEST_SHOVEL
@@ -273,6 +273,13 @@ ChestMagicPowder:
     ld   [$DB4C], a
     jp   ChestWithItem
 
+Boots:
+    ; We use DB6D to store which tunics we have available
+    ; ...and the boots
+    ld  a, [wCollectedTunics]
+    or  $04
+    ld  [wCollectedTunics], a
+    jp  ChestWithItem
 
 Flippers:
     ld   a, $01

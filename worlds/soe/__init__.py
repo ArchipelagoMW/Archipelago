@@ -176,7 +176,6 @@ class SoEWorld(World):
     options: SoEOptions
     settings: typing.ClassVar[SoESettings]
     topology_present = False
-    data_version = 5
     web = SoEWebWorld()
     required_client_version = (0, 4, 4)
 
@@ -189,6 +188,7 @@ class SoEWorld(World):
     connect_name: str
 
     _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
+    _fillers = sorted(item_name_groups["Ingredients"])
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.connect_name_available_event = threading.Event()
@@ -470,7 +470,7 @@ class SoEWorld(World):
             multidata["connect_names"][self.connect_name] = payload
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(self.item_name_groups["Ingredients"]))
+        return self.random.choice(self._fillers)
 
 
 class SoEItem(Item):
@@ -486,4 +486,3 @@ class SoELocation(Location):
         super().__init__(player, name, address, parent)
         # unconditional assignments favor a split dict, saving memory
         self.progress_type = LocationProgressType.EXCLUDED if exclude else LocationProgressType.DEFAULT
-        self.event = not address

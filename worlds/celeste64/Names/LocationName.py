@@ -29,3 +29,25 @@ strawberry_27 = "Distant Feather Cassette Strawberry"
 strawberry_28 = "Feather Arches Cassette Strawberry"
 strawberry_29 = "North-East Tower Cassette Strawberry"
 strawberry_30 = "Badeline Cassette Strawberry"
+
+# Friend Locations
+granny_1   = "Granny Conversation 1"
+granny_2   = "Granny Conversation 2"
+granny_3   = "Granny Conversation 3"
+theo_1     = "Theo Conversation 1"
+theo_2     = "Theo Conversation 2"
+theo_3     = "Theo Conversation 3"
+badeline_1 = "Badeline Conversation 1"
+badeline_2 = "Badeline Conversation 2"
+badeline_3 = "Badeline Conversation 3"
+
+# Sign Locations
+sign_1 = "Camera Sign"
+sign_2 = "Skid Jump Sign"
+sign_3 = "Dash Jump Sign"
+sign_4 = "Lonely Sign"
+sign_5 = "Credits Sign"
+
+# Car Locations
+car_1 = "Intro Car"
+car_2 = "Secret Car"

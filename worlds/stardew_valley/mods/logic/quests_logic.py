@@ -19,7 +19,7 @@ from ...strings.food_names import Meal, Beverage
 from ...strings.forageable_names import SVEForage
 from ...strings.material_names import Material
 from ...strings.metal_names import Ore, MetalBar
-from ...strings.monster_drop_names import Loot
+from ...strings.monster_drop_names import Loot, ModLoot
 from ...strings.monster_names import Monster
 from ...strings.quest_names import Quest, ModQuest
 from ...strings.region_names import Region, SVERegion, BoardingHouseRegion
@@ -86,7 +86,7 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
                                   self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
             ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(SVERegion.aurora_vineyard),
             ModQuest.MonsterCrops: self.logic.has_all(*(SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
-            ModQuest.VoidSoul: self.logic.has(SVEForage.void_soul) & self.logic.region.can_reach(Region.farm) &
+            ModQuest.VoidSoul: self.logic.has(ModLoot.void_soul) & self.logic.region.can_reach(Region.farm) &
                                self.logic.season.has_any_not_winter() & self.logic.region.can_reach(SVERegion.badlands_entrance) &
                                self.logic.relationship.has_hearts(NPC.krobus, 10) & self.logic.quest.can_complete_quest(ModQuest.MonsterCrops) &
                                self.logic.monster.can_kill_any((Monster.shadow_brute, Monster.shadow_shaman, Monster.shadow_sniper)),

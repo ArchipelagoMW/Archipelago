@@ -1,8 +1,9 @@
 """
 Application settings / host.yaml interface using type hints.
-This is different from player settings.
+This is different from player options.
 """
 
+import os
 import os.path
 import shutil
 import sys
@@ -11,7 +12,6 @@ import warnings
 from enum import IntEnum
 from threading import Lock
 from typing import cast, Any, BinaryIO, ClassVar, Dict, Iterator, List, Optional, TextIO, Tuple, Union, TypeVar
-import os
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -200,7 +200,7 @@ class Group:
     def _dump_value(cls, value: Any, f: TextIO, indent: str) -> None:
         """Write a single yaml line to f"""
         from Utils import dump, Dumper as BaseDumper
-        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper))
+        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper), width=2**31-1)
         assert yaml_line.count("\n") == 1, f"Unexpected input for yaml dumper: {value}"
         f.write(f"{indent}{yaml_line}")
 
@@ -643,17 +643,6 @@ class GeneratorOptions(Group):
         PLAYTHROUGH = 2
         FULL = 3
 
-    class GlitchTriforceRoom(IntEnum):
-        """
-        Glitch to Triforce room from Ganon
-        When disabled, you have to have a weapon that can hurt ganon (master sword or swordless/easy item functionality
-        + hammer) and have completed the goal required for killing ganon to be able to access the triforce room.
-        1 -> Enabled.
-        0 -> Disabled (except in no-logic)
-        """
-        OFF = 0
-        ON = 1
-
     class PlandoOptions(str):
         """
         List of options that can be plando'd. Can be combined, for example "bosses, items"
@@ -665,15 +654,23 @@ class GeneratorOptions(Group):
         OFF = 0
         ON = 1
 
+    class PanicMethod(str):
+        """
+        What to do if the current item placements appear unsolvable.
+        raise -> Raise an exception and abort.
+        swap -> Attempt to fix it by swapping prior placements around. (Default)
+        start_inventory -> Move remaining items to start_inventory, generate additional filler items to fill locations.
+        """
+
     enemizer_path: EnemizerPath = EnemizerPath("EnemizerCLI/EnemizerCLI.Core")  # + ".exe" is implied on Windows
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
     spoiler: Spoiler = Spoiler(3)
-    glitch_triforce_room: GlitchTriforceRoom = GlitchTriforceRoom(1)  # why is this here?
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
+    panic_method: PanicMethod = PanicMethod("swap")
 
 
 class SNIOptions(Group):
@@ -801,6 +798,7 @@ class Settings(Group):
             atexit.register(autosave)
 
     def save(self, location: Optional[str] = None) -> None:  # as above
+        from Utils import parse_yaml
         location = location or self._filename
         assert location, "No file specified"
         temp_location = location + ".tmp"  # not using tempfile to test expected file access
@@ -810,10 +808,18 @@ class Settings(Group):
         # can't use utf-8-sig because it breaks backward compat: pyyaml on Windows with bytes does not strip the BOM
         with open(temp_location, "w", encoding="utf-8") as f:
             self.dump(f)
-        # replace old with new
-        if os.path.exists(location):
+            f.flush()
+            if hasattr(os, "fsync"):
+                os.fsync(f.fileno())
+        # validate new file is valid yaml
+        with open(temp_location, encoding="utf-8") as f:
+            parse_yaml(f.read())
+        # replace old with new, try atomic operation first
+        try:
+            os.rename(temp_location, location)
+        except (OSError, FileExistsError):
             os.unlink(location)
-        os.rename(temp_location, location)
+            os.rename(temp_location, location)
         self._filename = location
 
     def dump(self, f: TextIO, level: int = 0) -> None:
@@ -835,7 +841,6 @@ def get_settings() -> Settings:
     with _lock:  # make sure we only have one instance
         res = getattr(get_settings, "_cache", None)
         if not res:
-            import os
             from Utils import user_path, local_path
             filenames = ("options.yaml", "host.yaml")
             locations: List[str] = []
