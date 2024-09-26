@@ -194,7 +194,7 @@ item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
 item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
     item_names.HELLION, item_names.VULTURE, item_names.GOLIATH, item_names.DIAMONDBACK,
     item_names.SIEGE_TANK, item_names.THOR, item_names.PREDATOR, item_names.WIDOW_MINE,
-    item_names.CYCLONE, item_names.WARHOUND, item_names.SHOCK_DIVISION,
+    item_names.CYCLONE, item_names.WARHOUND, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
 ]
 item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.MEDIVAC, item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
@@ -376,7 +376,7 @@ item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressiv
     if item_data.type in (items.TerranItemType.Progressive, items.TerranItemType.Progressive_2)
 ]
 item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
-    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY, item_names.SHOCK_DIVISION,
+    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
 ]
 item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     wol_units

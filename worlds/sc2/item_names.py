@@ -39,6 +39,7 @@ WARHOUND       = "Warhound"
 PRIDE_OF_AUGUSTRGRAD = "Pride of Augustgrad"
 SKY_FURY             = "Sky Fury"
 SHOCK_DIVISION       = "Shock Division"
+BLACKHAMMER          = "Blackhammer"
 
 # Terran Buildings
 BUNKER                              = "Bunker"
