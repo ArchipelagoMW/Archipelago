@@ -4,6 +4,7 @@ class Tool:
     hoe = "Hoe"
     watering_can = "Watering Can"
     trash_can = "Trash Can"
+    pan = "Pan"
     fishing_rod = "Fishing Rod"
     scythe = "Scythe"
     golden_scythe = "Golden Scythe"
