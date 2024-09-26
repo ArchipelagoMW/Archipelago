@@ -709,7 +709,7 @@ class MyGameState(LogicMixin):
 
     def init_mixin(self, multiworld: MultiWorld) -> None:
         # Initialize per player with the corresponding "nothing" value, such as 0 or an empty set.
-        # You can also use something like Collections.defaultdict(set)
+        # You can also use something like Collections.defaultdict
         self.mygame_defeatable_enemies = {
             player: set() for player in multiworld.get_game_players("My Game")
         }
