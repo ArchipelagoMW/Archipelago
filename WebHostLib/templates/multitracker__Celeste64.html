@@ -5,24 +5,25 @@
     <script type="application/ecmascript" src="{{ url_for("static", filename="assets/lttpMultiTracker.js") }}"></script>
 {% endblock %}
 
+{# Original icons located at https://github.com/PoryGone/Celeste-64-AP-Tracker/tree/main/images #}
 {# List all tracker-relevant icons. Format: (Name, Image URL) #}
 {% set icons = {
-    "Strawberry"            : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/strawberry.png?raw=true",
+    "Strawberry"            : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/strawberry.png?raw=true",
     
-    "Air Dash"              : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/AirDash.png?raw=true",
-    "Breakable Blocks"      : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Breakables_Filled.PNG?raw=true",
-    "Cassettes"             : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Cassettes_Filled.PNG?raw=true",
-    "Climb"                 : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Climb.png?raw=true",
-    "Coins"                 : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Coins_Filled.PNG?raw=true",
-    "Dash Refills"          : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Dash_Filled.png?raw=true",
-    "Double Dash Refills"   : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/DoubleDash_Filled.png?raw=true",
-    "Feathers"              : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Feather_Filled.png?raw=true",
-    "Ground Dash"           : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/GroundDash.png?raw=true",
-    "Skid Jump"             : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/SkidJump.png?raw=true",
-    "Springs"               : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Springs_Filled.png?raw=true",
-    "Traffic Blocks"        : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Traffic_Filled.png?raw=true",
+    "Air Dash"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/AirDash.png?raw=true",
+    "Breakable Blocks"      : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Breakables_Filled.PNG?raw=true",
+    "Cassettes"             : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Cassettes_Filled.PNG?raw=true",
+    "Climb"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Climb.png?raw=true",
+    "Coins"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Coins_Filled.PNG?raw=true",
+    "Dash Refills"          : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Dash_Filled.png?raw=true",
+    "Double Dash Refills"   : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/DoubleDash_Filled.png?raw=true",
+    "Feathers"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Feather_Filled.png?raw=true",
+    "Ground Dash"           : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/GroundDash.png?raw=true",
+    "Skid Jump"             : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/SkidJump.png?raw=true",
+    "Springs"               : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Springs_Filled.png?raw=true",
+    "Traffic Blocks"        : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Traffic_Filled.png?raw=true",
 
-    "IsCompleted"           : "https://github.com/PoryGone/Celeste-64-AP-Tracker/blob/main/images/items/Baddy.png?raw=true"
+    "IsCompleted"           : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Baddy.png?raw=true"
 } %}
 
 {% set inventory_order = [

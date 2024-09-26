@@ -4,16 +4,10 @@
     width: 440px;
     box-sizing: border-box;
     font-family: "Lexend Deca", Arial, Helvetica, sans-serif;
-    border: 2px solid black;
     border-radius: 4px;
     resize: both;
 
-    background-color: #000000;
     color: white;
-}
-
-.hidden {
-    display: none !important;
 }
 
 /** Inventory Grid ****************************************************************************************************/
@@ -22,6 +16,9 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     padding: 1rem;
     gap: 1rem;
+    
+    margin-left: 0.5rem;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0);
 }
 
 .inventory-grid .item {
@@ -82,6 +79,10 @@
 /** Regions List ******************************************************************************************************/
 .regions-list {
     padding: 1rem;
+    
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0);
 }
 
 .regions-list summary {
