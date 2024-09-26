@@ -682,7 +682,7 @@ def get_alttp_settings(romfile: str):
 
         if 'yes' in choice:
             import LttPAdjuster
-            from worlds.alttp.Rom import get_base_rom_path
+            from .Rom import get_base_rom_path
             last_settings.rom = romfile
             last_settings.baserom = get_base_rom_path()
             last_settings.world = None

@@ -303,6 +303,31 @@ generation (entrance randomization).
 An access rule is a function that returns `True` or `False` for a `Location` or `Entrance` based on the current `state`
 (items that have been collected).
 
+The two possible ways to make a [CollectionRule](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L10) are:
+- `def rule(state: CollectionState) -> bool:`
+- `lambda state: ... boolean expression ...`
+
+An access rule can be assigned through `set_rule(location, rule)`.
+
+Access rules usually check for one of two things.
+- Items that have been collected (e.g. `state.has("Sword", player)`)
+- Locations, Regions or Entrances that have been reached (e.g. `state.can_reach_region("Boss Room")`)
+
+Keep in mind that entrances and locations implicitly check for the accessibility of their parent region, so you do not need to check explicitly for it.
+
+#### An important note on Entrance access rules:
+When using `state.can_reach` within an entrance access condition, you must also use `multiworld.register_indirect_condition`.
+
+For efficiency reasons, every time reachable regions are searched, every entrance is only checked once in a somewhat non-deterministic order.
+This is fine when checking for items using `state.has`, because items do not change during a region sweep.
+However, `state.can_reach` checks for the very same thing we are updating: Regions.
+This can lead to non-deterministic behavior and, in the worst case, even generation failures.
+Even doing `state.can_reach_location` or `state.can_reach_entrance` is problematic, as these functions call `state.can_reach_region` on the respective parent region.
+
+**Therefore, it is considered unsafe to perform `state.can_reach` from within an access condition for an entrance**, unless you are checking for something that sits in the source region of the entrance.
+You can use `multiworld.register_indirect_condition(region, entrance)` to explicitly tell the generator that, when a given region becomes accessible, it is necessary to re-check a specific entrance.
+You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the relevant code and can reason why it will never lead to problems in your case.
+
 ### Item Rules
 
 An item rule is a function that returns `True` or `False` for a `Location` based on a single item. It can be used to
@@ -456,8 +481,9 @@ In addition, the following methods can be implemented and are called in this ord
   called to place player's regions and their locations into the MultiWorld's regions list.
   If it's hard to separate, this can be done during `generate_early` or `create_items` as well.
 * `create_items(self)`
-  called to place player's items into the MultiWorld's itempool. After this step all regions
-  and items have to be in the MultiWorld's regions and itempool, and these lists should not be modified afterward.
+  called to place player's items into the MultiWorld's itempool. By the end of this step all regions, locations and
+  items have to be in the MultiWorld's regions and itempool. You cannot add or remove items, locations, or regions
+  after this step. Locations cannot be moved to different regions after this step.
 * `set_rules(self)`
   called to set access and item rules on locations and entrances.
 * `generate_basic(self)`
@@ -629,7 +655,7 @@ def set_rules(self) -> None:
 
 Custom methods can be defined for your logic rules. The access rule that ultimately gets assigned to the Location or
 Entrance should be
-a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L9).
+a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L10).
 Typically, this is done by defining a lambda expression on demand at the relevant bit, typically calling other
 functions, but this can also be achieved by defining a method with the appropriate format and assigning it directly.
 For an example, see [The Messenger](/worlds/messenger/rules.py).

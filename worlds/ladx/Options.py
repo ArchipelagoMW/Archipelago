@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup
 from collections import defaultdict
 import Utils
 
@@ -52,6 +52,7 @@ class TextShuffle(DefaultOffToggle):
     [On] Shuffles all the text in the game
     [Off] (default) doesn't shuffle them.
     """
+    display_name = "Text Shuffle"
 
 
 class Rooster(DefaultOnToggle, LADXROption):
@@ -68,7 +69,8 @@ class Boomerang(Choice):
     [Normal] requires Magnifying Lens to get the boomerang.
     [Gift] The boomerang salesman will give you a random item, and the boomerang is shuffled.
     """
-
+    display_name = "Boomerang"
+    
     normal = 0
     gift = 1
     default = gift
@@ -113,6 +115,7 @@ class APTitleScreen(DefaultOnToggle):
 
 
 class BossShuffle(Choice):
+    display_name = "Boss Shuffle"
     none = 0
     shuffle = 1
     random = 2
@@ -120,6 +123,7 @@ class BossShuffle(Choice):
 
 
 class DungeonItemShuffle(Choice):
+    display_name = "Dungeon Item Shuffle"
     option_original_dungeon = 0
     option_own_dungeons = 1
     option_own_world = 2
@@ -291,6 +295,7 @@ class Bowwow(Choice):
     [Normal] BowWow is in the item pool, but can be logically expected as a damage source.
     [Swordless] The progressive swords are removed from the item pool.
     """
+    display_name = "BowWow"
     normal = 0
     swordless = 1
     default = normal
@@ -466,6 +471,7 @@ class Music(Choice, LADXROption):
     [Shuffled] Shuffled Music
     [Off] No music
     """
+    display_name = "Music"
     ladxr_name = "music"
     option_vanilla = 0
     option_shuffled = 1
@@ -485,6 +491,7 @@ class WarpImprovements(DefaultOffToggle):
     [On] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
     [Off] No change
     """
+    display_name = "Warp Improvements"
 
 
 class AdditionalWarpPoints(DefaultOffToggle):
@@ -492,7 +499,46 @@ class AdditionalWarpPoints(DefaultOffToggle):
     [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
     [Off] No change
     """
+    display_name = "Additional Warp Points"
 
+ladx_option_groups = [
+    OptionGroup("Goal Options", [
+        Goal,
+        InstrumentCount,
+    ]),
+    OptionGroup("Shuffles", [
+        ShuffleInstruments,
+        ShuffleNightmareKeys,
+        ShuffleSmallKeys,
+        ShuffleMaps,
+        ShuffleCompasses,
+        ShuffleStoneBeaks
+    ]),
+    OptionGroup("Warp Points", [
+        WarpImprovements,
+        AdditionalWarpPoints,
+    ]),
+    OptionGroup("Miscellaneous", [
+        TradeQuest,
+        Rooster,
+        TrendyGame,
+        NagMessages,
+        BootsControls
+    ]),
+    OptionGroup("Experimental", [
+        DungeonShuffle,
+        EntranceShuffle
+    ]),
+    OptionGroup("Visuals & Sound", [
+        LinkPalette,
+        Palette,
+        TextShuffle,
+        APTitleScreen,
+        GfxMod,
+        Music,
+        MusicChangeCondition
+    ])
+]
 
 @dataclass
 class LinksAwakeningOptions(PerGameCommonOptions):
