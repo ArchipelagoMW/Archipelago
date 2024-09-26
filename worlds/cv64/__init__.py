@@ -8,7 +8,7 @@ from BaseClasses import Item, Region, Tutorial, ItemClassification
 from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
 from .locations import CV64Location, get_location_info, verify_locations, get_location_names_to_ids, base_id
 from .entrances import verify_entrances, get_warp_entrances
-from .options import CV64Options, CharacterStages, DraculasCondition, SubWeaponShuffle
+from .options import CV64Options, cv64_option_groups, CharacterStages, DraculasCondition, SubWeaponShuffle
 from .stages import get_locations_from_stage, get_normal_stage_exits, vanilla_stage_order, \
     shuffle_stages, generate_warps, get_region_names
 from .regions import get_region_info
@@ -45,6 +45,8 @@ class CV64Web(WebWorld):
         ["Liquid Cat"]
     )]
 
+    option_groups = cv64_option_groups
+
 
 class CV64World(World):
     """
@@ -62,7 +64,6 @@ class CV64World(World):
     options: CV64Options
     settings: typing.ClassVar[CV64Settings]
     topology_present = True
-    data_version = 1
 
     item_name_to_id = get_item_names_to_ids()
     location_name_to_id = get_location_names_to_ids()

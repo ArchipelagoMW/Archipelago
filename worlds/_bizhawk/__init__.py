@@ -103,7 +103,7 @@ async def connect(ctx: BizHawkContext) -> bool:
             return True
         except (TimeoutError, ConnectionRefusedError):
             continue
-    
+
     # No ports worked
     ctx.streams = None
     ctx.connection_status = ConnectionStatus.NOT_CONNECTED

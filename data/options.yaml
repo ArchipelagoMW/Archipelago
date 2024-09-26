@@ -45,7 +45,10 @@ requires:
 {% endmacro %}
 
 {{ game }}:
-  {%- for option_key, option in options.items() %}
+  {%- for group_name, group_options in option_groups.items() %}
+  # {{ group_name }}
+
+  {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
     {%- if option.__doc__ %}
     # {{ option.__doc__
@@ -65,21 +68,22 @@ requires:
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
-    {{ sub_option_name }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
+    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
     {%- endfor -%}
 
     {%- if option.name_lookup[option.default] not in option.options %}
-    {{ option.default }}: 50
+    {{ yaml_dump(option.default) }}: 50
     {%- endif -%}
 
     {%- elif option.default is string %}
-    {{ option.default }}: 50
+    {{ yaml_dump(option.default) }}: 50
 
     {%- elif option.default is iterable and option.default is not mapping %}
     {{ option.default | list }}
 
     {%- else %}
-    {{ yaml_dump(option.default) | trim | indent(4, first=false) }}
+    {{ yaml_dump(option.default) | indent(4, first=false) }}
     {%- endif -%}
     {{ "\n" }}
+  {%- endfor %}
   {%- endfor %}

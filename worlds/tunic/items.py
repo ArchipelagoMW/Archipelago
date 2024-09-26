@@ -43,7 +43,7 @@ item_table: Dict[str, TunicItemData] = {
     "Magic Orb": TunicItemData(ItemClassification.progression, 1, 27),
     "Hero's Laurels": TunicItemData(ItemClassification.progression, 1, 28),
     "Lantern": TunicItemData(ItemClassification.progression, 1, 29),
-    "Gun": TunicItemData(ItemClassification.useful, 1, 30, "Weapons"),
+    "Gun": TunicItemData(ItemClassification.progression, 1, 30, "Weapons"),
     "Shield": TunicItemData(ItemClassification.useful, 1, 31),
     "Dath Stone": TunicItemData(ItemClassification.useful, 1, 32),
     "Hourglass": TunicItemData(ItemClassification.useful, 1, 33),
@@ -64,12 +64,12 @@ item_table: Dict[str, TunicItemData] = {
     "HP Offering": TunicItemData(ItemClassification.useful, 6, 48, "Offerings"),
     "MP Offering": TunicItemData(ItemClassification.useful, 3, 49, "Offerings"),
     "SP Offering": TunicItemData(ItemClassification.useful, 2, 50, "Offerings"),
-    "Hero Relic - ATT": TunicItemData(ItemClassification.useful, 1, 51, "Hero Relics"),
-    "Hero Relic - DEF": TunicItemData(ItemClassification.useful, 1, 52, "Hero Relics"),
-    "Hero Relic - HP": TunicItemData(ItemClassification.useful, 1, 53, "Hero Relics"),
-    "Hero Relic - MP": TunicItemData(ItemClassification.useful, 1, 54, "Hero Relics"),
-    "Hero Relic - POTION": TunicItemData(ItemClassification.useful, 1, 55, "Hero Relics"),
-    "Hero Relic - SP": TunicItemData(ItemClassification.useful, 1, 56, "Hero Relics"),
+    "Hero Relic - ATT": TunicItemData(ItemClassification.progression_skip_balancing, 1, 51, "Hero Relics"),
+    "Hero Relic - DEF": TunicItemData(ItemClassification.progression_skip_balancing, 1, 52, "Hero Relics"),
+    "Hero Relic - HP": TunicItemData(ItemClassification.progression_skip_balancing, 1, 53, "Hero Relics"),
+    "Hero Relic - MP": TunicItemData(ItemClassification.progression_skip_balancing, 1, 54, "Hero Relics"),
+    "Hero Relic - POTION": TunicItemData(ItemClassification.progression_skip_balancing, 1, 55, "Hero Relics"),
+    "Hero Relic - SP": TunicItemData(ItemClassification.progression_skip_balancing, 1, 56, "Hero Relics"),
     "Orange Peril Ring": TunicItemData(ItemClassification.useful, 1, 57, "Cards"),
     "Tincture": TunicItemData(ItemClassification.useful, 1, 58, "Cards"),
     "Scavenger Mask": TunicItemData(ItemClassification.progression, 1, 59, "Cards"),
@@ -143,7 +143,6 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 50-51": TunicItemData(ItemClassification.useful, 1, 127, "Pages"),
     "Pages 52-53 (Icebolt)": TunicItemData(ItemClassification.progression, 1, 128, "Pages"),
     "Pages 54-55": TunicItemData(ItemClassification.useful, 1, 129, "Pages"),
-    
     "Ladders near Weathervane": TunicItemData(ItemClassification.progression, 0, 130, "Ladders"),
     "Ladders near Overworld Checkpoint": TunicItemData(ItemClassification.progression, 0, 131, "Ladders"),
     "Ladders near Patrol Cave": TunicItemData(ItemClassification.progression, 0, 132, "Ladders"),
@@ -167,6 +166,7 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders in Swamp": TunicItemData(ItemClassification.progression, 0, 150, "Ladders"),
 }
 
+# items to be replaced by fool traps
 fool_tiers: List[List[str]] = [
     [],
     ["Money x1", "Money x10", "Money x15", "Money x16"],
@@ -174,6 +174,7 @@ fool_tiers: List[List[str]] = [
     ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"],
 ]
 
+# items we'll want the location of in slot data, for generating in-game hints
 slot_data_item_names = [
     "Stick",
     "Sword",
@@ -236,7 +237,10 @@ extra_groups: Dict[str, Set[str]] = {
     "Questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"},
     "Ladder to Atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint Ladders in Well, now it won't
     "Ladders to Bell": {"Ladders to West Bell"},
-    "Ladders to Well": {"Ladders in Well"},  # fuzzy matching decided ladders in well was ladders to west bell
+    "Ladders to Well": {"Ladders in Well"},  # fuzzy matching decided Ladders in Well was Ladders to West Bell
+    "Ladders in Atoll": {"Ladders in South Atoll"},
+    "Ladders in Ruined Atoll": {"Ladders in South Atoll"},
+    "Ladders in Town": {"Ladders in Overworld Town"},  # fuzzy matching decided this was Ladders in South Atoll
 }
 
 item_name_groups.update(extra_groups)

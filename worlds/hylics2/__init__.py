@@ -37,10 +37,6 @@ class Hylics2World(World):
     options_dataclass = Hylics2Options
     options: Hylics2Options
 
-    data_version = 3
-
-    start_location = "Waynehouse"
-
 
     def set_rules(self):
         Rules.set_rules(self)
@@ -55,19 +51,6 @@ class Hylics2World(World):
     def create_event(self, event: str):
         return Hylics2Item(event, ItemClassification.progression_skip_balancing, None, self.player)
 
-
-    # set random starting location if option is enabled
-    def generate_early(self):
-        if self.options.random_start:
-            i = self.random.randint(0, 3)
-            if i == 0:
-                self.start_location = "Waynehouse"
-            elif i == 1:
-                self.start_location = "Viewax's Edifice"
-            elif i == 2:
-                self.start_location = "TV Island"
-            elif i == 3:
-                self.start_location = "Shield Facility"
 
     def create_items(self):
         # create item pool
@@ -149,8 +132,8 @@ class Hylics2World(World):
         slot_data: Dict[str, Any] = {
             "party_shuffle": self.options.party_shuffle.value,
             "medallion_shuffle": self.options.medallion_shuffle.value,
-            "random_start" : self.options.random_start.value,
-            "start_location" : self.start_location,
+            "random_start": int(self.options.start_location != "waynehouse"),
+            "start_location" : self.options.start_location.current_option_name,
             "death_link": self.options.death_link.value
         }
         return slot_data
@@ -189,14 +172,14 @@ class Hylics2World(World):
                         # create entrance and connect it to parent and destination regions
                         ent = Entrance(self.player, f"{reg.name} {k}", reg)
                         reg.exits.append(ent)
-                        if k == "New Game" and self.options.random_start:
-                            if self.start_location == "Waynehouse":
+                        if k == "New Game":
+                            if self.options.start_location == "waynehouse":
                                 ent.connect(region_table[2])
-                            elif self.start_location == "Viewax's Edifice":
+                            elif self.options.start_location == "viewaxs_edifice":
                                 ent.connect(region_table[6])
-                            elif self.start_location == "TV Island":
+                            elif self.options.start_location == "tv_island":
                                 ent.connect(region_table[9])
-                            elif self.start_location == "Shield Facility":
+                            elif self.options.start_location == "shield_facility":
                                 ent.connect(region_table[11])
                         else:
                             for name, num in Exits.exit_lookup_table.items():

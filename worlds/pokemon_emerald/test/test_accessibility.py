@@ -59,6 +59,10 @@ class TestSurf(PokemonEmeraldTestBase):
         self.assertFalse(self.can_reach_entrance("REGION_ROUTE119/UPPER -> REGION_FORTREE_CITY/MAIN"))
         self.assertFalse(self.can_reach_entrance("MAP_FORTREE_CITY:3/MAP_FORTREE_CITY_MART:0"))
 
+        # Slateport Access
+        self.collect_by_name(["HM06 Rock Smash", "Dynamo Badge", "Mach Bike"])
+        self.assertFalse(self.can_reach_region("MAP_SLATEPORT_CITY_WATER_ENCOUNTERS"))
+
     def test_accessible_with_surf_only(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_PETALBURG_CITY_ETHER")))
@@ -70,6 +74,26 @@ class TestSurf(PokemonEmeraldTestBase):
         self.assertTrue(self.can_reach_entrance("REGION_ROUTE119/UPPER -> REGION_FORTREE_CITY/MAIN"))
         self.assertTrue(self.can_reach_entrance("MAP_FORTREE_CITY:3/MAP_FORTREE_CITY_MART:0"))
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_4")))
+        self.assertTrue(self.can_reach_region("MAP_SLATEPORT_CITY_WATER_ENCOUNTERS"))
+
+
+class TestModify118(PokemonEmeraldTestBase):
+    options = {
+        "modify_118": Toggle.option_true,
+        "bikes": Toggle.option_true,
+        "rods": Toggle.option_true
+    }
+
+    def test_inaccessible_with_nothing(self) -> None:
+        self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_GOOD_ROD")))
+
+    def test_inaccessible_with_only_surf(self) -> None:
+        self.collect_by_name(["HM03 Surf", "Balance Badge"])
+        self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_GOOD_ROD")))
+
+    def test_accessible_with_surf_and_acro_bike(self) -> None:
+        self.collect_by_name(["HM03 Surf", "Balance Badge", "Acro Bike"])
+        self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_GOOD_ROD")))
 
 
 class TestFreeFly(PokemonEmeraldTestBase):
@@ -93,6 +117,26 @@ class TestFreeFly(PokemonEmeraldTestBase):
     def test_sootopolis_gift_accessible_with_surf(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge", "HM02 Fly", "Feather Badge"])
         self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM_BRICK_BREAK")))
+
+
+class TestLilycoveFromEast(PokemonEmeraldTestBase):
+    options = {
+        "modify_118": Toggle.option_true,
+        "bikes": Toggle.option_true,
+        "free_fly_location": Toggle.option_true
+    }
+
+    def setUp(self) -> None:
+        super(PokemonEmeraldTestBase, self).setUp()
+
+        # Swap free fly to Mossdeep
+        free_fly_location = self.multiworld.get_location("FREE_FLY_LOCATION", 1)
+        free_fly_location.item = None
+        free_fly_location.place_locked_item(self.multiworld.worlds[1].create_event("EVENT_VISITED_MOSSDEEP_CITY"))
+
+    def test_lilycove_inaccessible_from_east(self) -> None:
+        self.collect_by_name(["HM03 Surf", "Balance Badge", "HM02 Fly", "Feather Badge"])
+        self.assertFalse(self.can_reach_region("REGION_LILYCOVE_CITY/MAIN"))
 
 
 class TestFerry(PokemonEmeraldTestBase):
