@@ -33,11 +33,8 @@ class EntranceLookup:
         def __iter__(self):
             return itertools.chain.from_iterable(self._lookup.values())
 
-        def __str__(self):
-            return str(self._lookup)
-
         def __repr__(self):
-            return self.__str__()
+            return str(self._lookup)
 
         def add(self, entrance: Entrance) -> None:
             self._lookup.setdefault(entrance.randomization_group, []).append(entrance)
