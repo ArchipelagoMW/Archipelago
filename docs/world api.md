@@ -708,7 +708,11 @@ class MyGameState(LogicMixin):
     mygame_defeatable_enemies: Dict[int, Set[str]]  # per player
 
     def init_mixin(self, multiworld: MultiWorld) -> None:
-        self.mygame_defeatable_enemies = {}
+        # Initialize per player with the corresponding "nothing" value, such as 0 or an empty set.
+        # You can also use something like Collections.defaultdict(set)
+        self.mygame_defeatable_enemies = {
+            player: set() for player in multiworld.get_game_players("My Game")
+        }
 
     def copy_mixin(self, new_state: CollectionState) -> CollectionState:
         # Be careful to make a "deep enough" copy here!
@@ -728,13 +732,13 @@ collected or removed, the custom state variable gets recalculated.
 def collect(self, state: CollectionState, item: Item) -> bool:
     change = super().collect(state, item)
     if change and item in COMBAT_ITEMS:
-        state.mygame_defeatable_enemies |= get_newly_unlocked_enemies(state)
+        state.mygame_defeatable_enemies[self.player] |= get_newly_unlocked_enemies(state)
     return change
 
 def remove(self, state: CollectionState, item: Item) -> bool:
     change = super().remove(state, item)
     if change and item in COMBAT_ITEMS:
-        state.mygame_defeatable_enemies -= get_newly_locked_enemies(state)
+        state.mygame_defeatable_enemies[self.player] -= get_newly_locked_enemies(state)
     return change
 ```
 
@@ -754,7 +758,7 @@ The calls to the actual recalculating functions are then moved to the start of t
 ```python
 def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
     if state.mygame_state_is_stale[player]:
-        state.mygame_defeatable_enemies = recalculate_defeatable_enemies(state)
+        state.mygame_defeatable_enemies[player] = recalculate_defeatable_enemies(state)
         state.mygame_state_is_stale[player] = False
 
     return enemy in state.mygame_defeatable_enemies[player]
