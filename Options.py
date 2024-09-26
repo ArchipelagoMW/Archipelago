@@ -8,16 +8,17 @@ import numbers
 import random
 import typing
 import enum
+from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 from typing_extensions import Self
 
-from Utils import get_fuzzy_results, is_iterable_except_str
+from Utils import get_fuzzy_results, is_iterable_except_str, output_path
 
 if typing.TYPE_CHECKING:
-    from BaseClasses import PlandoOptions
+    from BaseClasses import MultiWorld, PlandoOptions
     from worlds.AutoWorld import World
     import pathlib
 
@@ -973,7 +974,19 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                     if random.random() < float(text.get("percentage", 100)/100):
                         at = text.get("at", None)
                         if at is not None:
+                            if isinstance(at, dict):
+                                if at:
+                                    at = random.choices(list(at.keys()),
+                                                        weights=list(at.values()), k=1)[0]
+                                else:
+                                    raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                             given_text = text.get("text", [])
+                            if isinstance(given_text, dict):
+                                if not given_text:
+                                    given_text = []
+                                else:
+                                    given_text = random.choices(list(given_text.keys()),
+                                                                weights=list(given_text.values()), k=1)
                             if isinstance(given_text, str):
                                 given_text = [given_text]
                             texts.append(PlandoText(
@@ -981,6 +994,8 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                                 given_text,
                                 text.get("percentage", 100)
                             ))
+                        else:
+                            raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                 elif isinstance(text, PlandoText):
                     if random.random() < float(text.percentage/100):
                         texts.append(text)
@@ -1321,7 +1336,7 @@ class PriorityLocations(LocationSet):
 
 
 class DeathLink(Toggle):
-    """When you die, everyone dies. Of course the reverse is true too."""
+    """When you die, everyone who enabled death link dies. Of course, the reverse is true too."""
     display_name = "Death Link"
     rich_text_doc = True
 
@@ -1518,3 +1533,42 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)
+
+
+def dump_player_options(multiworld: MultiWorld) -> None:
+    from csv import DictWriter
+
+    game_players = defaultdict(list)
+    for player, game in multiworld.game.items():
+        game_players[game].append(player)
+    game_players = dict(sorted(game_players.items()))
+
+    output = []
+    per_game_option_names = [
+        getattr(option, "display_name", option_key)
+        for option_key, option in PerGameCommonOptions.type_hints.items()
+    ]
+    all_option_names = per_game_option_names.copy()
+    for game, players in game_players.items():
+        game_option_names = per_game_option_names.copy()
+        for player in players:
+            world = multiworld.worlds[player]
+            player_output = {
+                "Game": multiworld.game[player],
+                "Name": multiworld.get_player_name(player),
+            }
+            output.append(player_output)
+            for option_key, option in world.options_dataclass.type_hints.items():
+                if issubclass(Removed, option):
+                    continue
+                display_name = getattr(option, "display_name", option_key)
+                player_output[display_name] = getattr(world.options, option_key).current_option_name
+                if display_name not in game_option_names:
+                    all_option_names.append(display_name)
+                    game_option_names.append(display_name)
+
+    with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w", newline="") as file:
+        fields = ["Game", "Name", *all_option_names]
+        writer = DictWriter(file, fields)
+        writer.writeheader()
+        writer.writerows(output)
