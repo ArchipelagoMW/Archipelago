@@ -4,7 +4,7 @@ from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
-    big_upgrades, filler, trap, bundles
+    big_upgrades, filler, trap, bundles, belt_and_extractor
 from .locations import ShapezLocation, addlevels, all_locations, addupgrades, addachievements, location_description, \
     addshapesanity, addshapesanity_ut, shapesanity_simple, init_shapesanity_pool
 from .presets import options_presets
@@ -261,8 +261,11 @@ class ShapezWorld(World):
                                       + [self.create_item(name) for name in gameplay_unlocks.keys()]
                                       + [self.create_item(name) for name in big_upgrades for _ in range(7)])
 
-        if self.options.lock_belt_and_extractor:
-            included_items.extend([self.create_item("Belt"), self.create_item("Extractor")])
+        if not self.options.lock_belt_and_extractor:
+            for name in belt_and_extractor:
+                self.multiworld.push_precollected(self.create_item(name))
+        else:
+            included_items.extend([self.create_item(name) for name in belt_and_extractor.keys()])
 
         # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage/100
@@ -305,8 +308,7 @@ class ShapezWorld(World):
             "randomize_level_logic": self.level_logic_type,
             "randomize_upgrade_logic": self.upgrade_logic_type,
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
-            "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value),
-            "lock_belt_and_extractor": bool(self.options.lock_belt_and_extractor.value)
+            "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value)
         }
 
         return {**level_logic_data, **upgrade_logic_data, **option_data, **logic_type_random_data,

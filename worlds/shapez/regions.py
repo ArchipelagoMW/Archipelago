@@ -147,11 +147,8 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
     # Connect Menu to rest of regions
-    if lock_belt_and_extractor:
-        regions["Menu"].connect(regions["Main"], "Belt and Extractor",
-                                lambda state: state.has_all(["Belt", "Extractor"], player))
-    else:
-        regions["Menu"].connect(regions["Main"], "Not locked")
+    regions["Menu"].connect(regions["Main"], "Belt and Extractor",
+                            lambda state: state.has_all(["Belt", "Extractor"], player))
 
     # Connect Main to achievement regions
     regions["Main"].connect(regions["Cut Shape Achievements"], "Cutter needed",
