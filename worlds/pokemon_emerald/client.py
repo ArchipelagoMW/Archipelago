@@ -133,6 +133,7 @@ class PokemonEmeraldClient(BizHawkClient):
     latest_wonder_trade_reply: dict
     wonder_trade_cooldown: int
     wonder_trade_cooldown_timer: int
+    queued_received_trade: Optional[str]
 
     death_counter: Optional[int]
     previous_death_link: float
@@ -153,6 +154,7 @@ class PokemonEmeraldClient(BizHawkClient):
         self.previous_death_link = 0
         self.ignore_next_death_link = False
         self.current_map = None
+        self.queued_received_trade = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -350,6 +352,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
             # Send game clear
             if not ctx.finished_game and game_clear:
+                ctx.finished_game = True
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL,
@@ -548,22 +551,29 @@ class PokemonEmeraldClient(BizHawkClient):
                     (sb1_address + 0x37CC, [1], "System Bus"),
                 ])
             elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
-                # Game is waiting on receiving a trade. See if there are any available trades that were not
-                # sent by this player, and if so, try to receive one.
-                if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
+                # Game is waiting on receiving a trade.
+                if self.queued_received_trade is not None:
+                    # Client is holding a trade, ready to write it into the game
+                    success = await bizhawk.guarded_write(ctx.bizhawk_ctx, [
+                        (sb1_address + 0x377C, json_to_pokemon_data(self.queued_received_trade), "System Bus"),
+                    ], [guards["SAVE BLOCK 1"]])
+
+                    # Notify the player if it was written, otherwise hold it for the next loop
+                    if success:
+                        logger.info("Wonder trade received!")
+                        self.queued_received_trade = None
+
+                elif self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
+                    # See if there are any available trades that were not sent by this player. If so, try to receive one.
                     if any(item[0] != ctx.slot
                             for key, item in ctx.stored_data.get(f"pokemon_wonder_trades_{ctx.team}", {}).items()
                             if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
-                        received_trade = await self.wonder_trade_receive(ctx)
-                        if received_trade is None:
+                        self.queued_received_trade = await self.wonder_trade_receive(ctx)
+                        if self.queued_received_trade is None:
                             self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
                             self.wonder_trade_cooldown *= 2
                             self.wonder_trade_cooldown += random.randrange(0, 500)
                         else:
-                            await bizhawk.write(ctx.bizhawk_ctx, [
-                                (sb1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
-                            ])
-                            logger.info("Wonder trade received!")
                             self.wonder_trade_cooldown = 5000
 
                 else:
