@@ -77,9 +77,6 @@ Should your name or password have spaces, enclose it in quotes: `"YourPassword"`
 Should the connection fail (for example when using the wrong name or IP/Port combination) the game will inform you of that.
 Additionally, any time the game is not connected (for example when the connection is unstable) it will attempt to reconnect and display a status text.
 
-**Important:** You must start a new file for every new seed you play. Using `⭐x0` files is **not** sufficient.
-Failing to use a new file may make some locations unavailable. However, this can be fixed without losing any progress by exiting and starting a new file.
-
 ### Playing offline
 
 To play offline, first generate a seed on the game's options page.
@@ -129,18 +126,6 @@ To use this batch file,  double-click it. A window will open. Type the five-digi
 Once you provide those two bits of information, the game will open. 
 - If the game only says `Connecting`, try again. Double-check the port number and slot name; even a single typo will cause your connection to fail.
 
-### Addendum - Deleting old saves
-
-Loading an old Mario save alongside a new seed is a bad idea, as it can cause locked doors and castle secret stars to already be unlocked / obtained. You should avoid opening a save that says "Stars x 0" as opposed to one that simply says "New".
-
-You can manually delete these old saves in-game before starting a new game, but that can be tedious. With a small edit to the batch files, you can delete these old saves automatically. Just add the line `del %AppData%\sm64ex\*.bin` to the batch file, above the `start` command. For example, here is `offline.bat` with the additional line:
-
-`del %AppData%\sm64ex\*.bin`
-
-`start sm64.us.f3dex2e.exe --sm64ap_file %1`
-
-This extra line deletes any previous save data before opening the game. Don't worry about lost stars or checks - the AP server (or in the case of offline, the `.save` file) keeps track of your star count, unlocked keys/caps/cannons, and which locations have already been checked, so you won't have to redo them. At worst you'll have to rewatch the door unlocking animations, and catch the rabbit Mips twice for his first star again if you haven't yet collected the second one.
-
 ## Installation Troubleshooting
 
 Start the game from the command line to view helpful messages regarding SM64EX.
@@ -166,8 +151,9 @@ The Japanese Version should have no problem displaying these.
 
 ### Toad does not have an item for me.
 
-This happens when you load an existing file that had already received an item from that toad.
+This happens on older builds when you load an existing file that had already received an item from that toad.
 To resolve this, exit and start from a `NEW` file. The server will automatically restore your progress.
+Alternatively, updating your build will prevent this issue in the future.
 
 ### What happens if I lose connection?
 
