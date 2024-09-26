@@ -106,6 +106,16 @@ class BallTrapWeight(Range):
     range_end = 100
     default = 25
 
+class CluesanityBundleSize(Range):
+    """
+    Determines how many bottles you need to collect for each check.
+    Set to 0 to disable. Allows a range between 0 and 5.
+    """
+    display_name = "Cluesanity Bundle Size"
+    range_start = 0
+    range_end = 5
+    default = 0
+
 @dataclass
 class Sly1Options(PerGameCommonOptions):
     StartingEpisode:                StartingEpisode
@@ -117,9 +127,10 @@ class Sly1Options(PerGameCommonOptions):
     SpeedChangeTrapWeight:          SpeedChangeTrapWeight
     BentleyJumpscareTrapWeight:     BentleyJumpscareTrapWeight
     BallTrapWeight:                 BallTrapWeight
+    CluesanityBundleSize:           CluesanityBundleSize
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [StartingEpisode, IncludeHourglasses],
+    "General Options": [StartingEpisode, IncludeHourglasses, CluesanityBundleSize],
     "Exclude Minigames": [ExcludeMinigames],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
                      SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
@@ -130,5 +141,6 @@ slot_data_options: List[str] = {
     "StartingEpisode",
     "IncludeHourglasses",
     "AvoidEarlyBK",
-    "ExcludeMinigames"
+    "ExcludeMinigames",
+    "CluesanityBundleSize"
 }

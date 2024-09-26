@@ -1,6 +1,6 @@
 from BaseClasses import Region
 from .Types import Sly1Location
-from .Locations import location_table, is_valid_location, hourglass_locations
+from .Locations import location_table, is_valid_location
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

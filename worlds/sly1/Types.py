@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import NamedTuple, Optional
+from typing import Any, NamedTuple, Optional
 from BaseClasses import Location, Item, ItemClassification
 
 class Sly1Location(Location):
@@ -31,6 +31,11 @@ class LocData(NamedTuple):
     key_type: Optional[EpisodeType] = None
     key_requirement: Optional[int] = 0
     level_type: Optional[str] = None
+
+class LevelData(NamedTuple):
+    ap_code: Optional[int]
+    region: Optional[str]
+    bottle_amount: Optional[int]
 
 episode_type_to_name = {
     EpisodeType.TOT:      "Tide of Terror",

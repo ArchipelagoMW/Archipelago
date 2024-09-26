@@ -1,8 +1,6 @@
-import random
-
 from BaseClasses import Item, ItemClassification
-from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
-from .Locations import get_total_locations
+from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name
+from .Locations import  get_total_locations, get_bundle_amount_for_level
 from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -26,6 +24,13 @@ def create_itempool(world: "Sly1World") -> List[Item]:
         item_amount: int = item_table.get(name).count
     
         itempool += create_multiple_items(world, name, item_amount, item_type)
+    
+    # Create Bottle Bundles
+    if world.options.CluesanityBundleSize.value > 0:
+        for name, data in bottles.items():
+            bundle_amount = get_bundle_amount_for_level(world, name.rsplit(' ', 1)[0])
+            
+            itempool += create_multiple_items(world, name, bundle_amount, data.classification)
 
     victory = create_item(world, "Victory")
     world.multiworld.get_location("Beat Clockwerk", world.player).place_locked_item(victory)
@@ -82,7 +87,7 @@ def set_keys(starting_episode: str):
     starting_key = f'{starting_episode} Key'
     key = item_table[starting_key]
     updated_key = ItemData(key.ap_code, key.classification, key.count - 1)
-    item_table.update({starting_key: updated_key})
+    item_table.update({starting_key: updated_key})     
 
 sly_items = {
     # Progressive Moves
@@ -122,6 +127,31 @@ sly_episodes = {
     "Fire in the Sky": ItemData(10020024, ItemClassification.progression, 0),
 }
 
+bottles = {
+    "Stealthy Approach Bottle(s)":        ItemData(10020030, ItemClassification.progression, 0),
+    "Into the Machine Bottle(s)":         ItemData(10020031, ItemClassification.progression, 0),
+    "High Class Heist Bottle(s)":         ItemData(10020032, ItemClassification.progression, 0),
+    "Fire Down Below Bottle(s)":          ItemData(10020033, ItemClassification.progression, 0),
+    "Cunning Disguise Bottle(s)":         ItemData(10020034, ItemClassification.progression, 0),
+    "Gunboat Graveyard Bottle(s)":        ItemData(10020035, ItemClassification.progression, 0),
+
+    "Rocky Start Bottle(s)":              ItemData(10020036, ItemClassification.progression, 0),
+    "Boneyard Casino Bottle(s)":          ItemData(10020037, ItemClassification.progression, 0),
+    "Straight to the Top Bottle(s)":      ItemData(10020038, ItemClassification.progression, 0),
+    "Two to Tango Bottle(s)":             ItemData(10020039, ItemClassification.progression, 0),
+    "Back Alley Heist Bottle(s)":         ItemData(10020040, ItemClassification.progression, 0),
+
+    "Dread Swamp Path Bottle(s)":         ItemData(10020041, ItemClassification.progression, 0),
+    "Lair of the Beast Bottle(s)":        ItemData(10020042, ItemClassification.progression, 0),
+    "Grave Undertaking Bottle(s)":        ItemData(10020043, ItemClassification.progression, 0),
+    "Descent into Danger Bottle(s)":      ItemData(10020044, ItemClassification.progression, 0),
+
+    "Perilous Ascent Bottle(s)":          ItemData(10020045, ItemClassification.progression, 0),
+    "Flaming Temple of Flame Bottle(s)":  ItemData(10020046, ItemClassification.progression, 0),
+    "Unseen Foe Bottle(s)":               ItemData(10020047, ItemClassification.progression, 0),
+    "Duel by the Dragon Bottle(s)":       ItemData(10020048, ItemClassification.progression, 0)
+}
+
 junk_items = {
     # Junk
     "Charm": ItemData(10020019, ItemClassification.filler, 0),
@@ -143,7 +173,8 @@ junk_weights = {
 item_table = {
     **sly_items,
     **sly_episodes,
-    **junk_items
+    **junk_items,
+    **bottles
 }
 
 event_item_pairs: Dict[str, str] = {
