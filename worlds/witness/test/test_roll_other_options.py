@@ -19,7 +19,7 @@ class TestExpertNonRandomizedEPs(WitnessTestBase):
 class TestVanillaAutoElevatorsPanels(WitnessTestBase):
     options = {
         "puzzle_randomization": "none",
-        "elevators_come_to_you": True,
+        "elevators_come_to_you": {"Swamp Long Bridge", "Bunker Elevator"},  # Opposite of default
         "shuffle_doors": "panels",
         "victory_condition": "mountain_box_short",
         "early_caves": True,
