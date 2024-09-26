@@ -5,6 +5,7 @@
 - Added a Swedish translation of the setup guide.
 - The client communicates map transitions to any trackers connected to the slot.
 - Added the player's Normalize Encounter Rates option to slot data for trackers.
+- Made pokemon locations in the spoiler and hints more readable (`MAP_SKY_PILLAR_3F_WATER` -> `Sky Pillar 3F (Water)`).
 
 ### Fixes
 
