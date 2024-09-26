@@ -482,7 +482,9 @@
       Crossroads:
         door: Crossroads Entrance
       The Tenacious:
-        door: Tenacious Entrance
+        - door: Tenacious Entrance
+        - room: The Tenacious
+          door: Shortcut to Hub Room
       Near Far Area: True
       Hedge Maze:
         door: Shortcut to Hedge Maze
