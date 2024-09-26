@@ -52,8 +52,17 @@ class PokemonEmeraldWebWorld(WebWorld):
         "setup/es",
         ["nachocua"]
     )
+    
+    setup_sv = Tutorial(
+        "Multivärld Installations Guide",
+        "En guide för att kunna spela Pokémon Emerald med Archipelago.",
+        "Svenska",
+        "setup_sv.md",
+        "setup/sv",
+        ["Tsukino"]
+    )
 
-    tutorials = [setup_en, setup_es]
+    tutorials = [setup_en, setup_es, setup_sv]
 
 
 class PokemonEmeraldSettings(settings.Group):
@@ -702,6 +711,7 @@ class PokemonEmeraldWorld(World):
             "trainersanity",
             "modify_118",
             "death_link",
+            "normalize_encounter_rates",
         )
         slot_data["free_fly_location_id"] = self.free_fly_location_id
         slot_data["hm_requirements"] = self.hm_requirements

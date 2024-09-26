@@ -22,10 +22,9 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from worlds.sc2 import ItemNames
-from worlds.sc2.ItemGroups import item_name_groups, unlisted_item_name_groups
-from worlds.sc2 import Options
-from worlds.sc2.Options import (
+from . import ItemNames, Options
+from .ItemGroups import item_name_groups
+from .Options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
@@ -46,11 +45,12 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from worlds.sc2.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers, upgrade_numbers_all
-from worlds.sc2.Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
-from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
-    lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race, get_no_build_missions
-from worlds.sc2.Regions import MissionInfo
+from .Items import (lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers,
+                    upgrade_numbers_all)
+from .Locations import SC2WOL_LOC_ID_OFFSET, LocationType, SC2HOTS_LOC_ID_OFFSET
+from .MissionTables import (lookup_id_to_mission, SC2Campaign, lookup_name_to_mission,
+                            lookup_id_to_campaign, MissionConnection, SC2Mission, campaign_mission_table, SC2Race)
+from .Regions import MissionInfo
 
 import colorama
 from Options import Option
@@ -97,12 +97,12 @@ class ConfigurableOptionInfo(typing.NamedTuple):
 
 
 class ColouredMessage:
-    def __init__(self, text: str = '') -> None:
+    def __init__(self, text: str = '', *, keep_markup: bool = False) -> None:
         self.parts: typing.List[dict] = []
         if text:
-            self(text)
-    def __call__(self, text: str) -> 'ColouredMessage':
-        add_json_text(self.parts, text)
+            self(text, keep_markup=keep_markup)
+    def __call__(self, text: str, *, keep_markup: bool = False) -> 'ColouredMessage':
+        add_json_text(self.parts, text, keep_markup=keep_markup)
         return self
     def coloured(self, text: str, colour: str) -> 'ColouredMessage':
         add_json_text(self.parts, text, type="color", color=colour)
@@ -128,7 +128,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         # Note(mm): Bold/underline can help readability, but unfortunately the CommonClient does not filter bold tags from command-line output.
         # Regardless, using `on_print_json` to get formatted text in the GUI and output in the command-line and in the logs,
         # without having to branch code from CommonClient
-        self.ctx.on_print_json({"data": [{"text": text}]})
+        self.ctx.on_print_json({"data": [{"text": text, "keep_markup": True}]})
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
@@ -257,7 +257,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         print_faction_title()
                         has_printed_faction_title = True
                         (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
-                            (" from ").location(item.location, self.ctx.slot)
+                            (" from ").location(item.location, item.player)
                             (" by ").player(item.player)
                         ).send(self.ctx)
                 
@@ -278,7 +278,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         for item in received_items_of_this_type:
                             filter_match_count += len(received_items_of_this_type)
                             (ColouredMessage('  * ').item(item.item, self.ctx.slot, flags=item.flags)
-                                (" from ").location(item.location, self.ctx.slot)
+                                (" from ").location(item.location, item.player)
                                 (" by ").player(item.player)
                             ).send(self.ctx)
                     

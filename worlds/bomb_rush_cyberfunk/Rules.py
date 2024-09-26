@@ -1006,6 +1006,8 @@ def rules(brcworld):
         lambda state: mataan_challenge2(state, player, limit, glitched))
     set_rule(multiworld.get_location("Mataan: Score challenge reward", player),
         lambda state: mataan_challenge3(state, player))
+    set_rule(multiworld.get_location("Mataan: Coil joins the crew", player),
+        lambda state: mataan_deepest(state, player, limit, glitched))
     if photos:
         set_rule(multiworld.get_location("Mataan: Trash Polo", player),
             lambda state: camera(state, player))

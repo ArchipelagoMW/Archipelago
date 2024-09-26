@@ -1,7 +1,7 @@
-from typing import Dict, Set
+from typing import Dict, List
 
-structure_contents: Dict[str, Set] = {
-    "dragons_roar": {
+structure_contents: Dict[str, List[str]] = {
+    "dragons_roar": [
         "Luster Dragon",
         "Armed Dragon LV3",
         "Armed Dragon LV5",
@@ -14,9 +14,9 @@ structure_contents: Dict[str, Set] = {
         "Stamping Destruction",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon",
-    },
-    "zombie_madness": {
+        "Mystical Space Typhoon"
+    ],
+    "zombie_madness": [
         "Pyramid Turtle",
         "Regenerating Mummy",
         "Ryu Kokki",
@@ -26,9 +26,9 @@ structure_contents: Dict[str, Set] = {
         "Reload",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon",
-    },
-    "blazing_destruction": {
+        "Mystical Space Typhoon"
+    ],
+    "blazing_destruction": [
         "Inferno",
         "Solar Flare Dragon",
         "UFO Turtle",
@@ -38,9 +38,9 @@ structure_contents: Dict[str, Set] = {
         "Level Limit - Area B",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon",
-    },
-    "fury_from_the_deep": {
+        "Mystical Space Typhoon"
+    ],
+    "fury_from_the_deep": [
         "Mother Grizzly",
         "Water Beaters",
         "Gravity Bind",
@@ -48,9 +48,9 @@ structure_contents: Dict[str, Set] = {
         "Mobius the Frost Monarch",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon",
-    },
-    "warriors_triumph": {
+        "Mystical Space Typhoon"
+    ],
+    "warriors_triumph": [
         "Gearfried the Iron Knight",
         "D.D. Warrior Lady",
         "Marauding Captain",
@@ -60,9 +60,9 @@ structure_contents: Dict[str, Set] = {
         "Reload",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon",
-    },
-    "spellcasters_judgement": {
+        "Mystical Space Typhoon"
+    ],
+    "spellcasters_judgement": [
         "Dark Magician",
         "Apprentice Magician",
         "Breaker the Magical Warrior",
@@ -70,14 +70,18 @@ structure_contents: Dict[str, Set] = {
         "Skilled Dark Magician",
         "Tsukuyomi",
         "Magical Dimension",
-        "Mage PowerSpell-Counter Cards",
+        "Mage Power",
+        "Spell-Counter Cards",
         "Heavy Storm",
         "Dust Tornado",
-        "Mystical Space Typhoon",
-    },
-    "none": {},
+        "Mystical Space Typhoon"
+    ],
+    "none": [],
 }
 
 
 def get_deck_content_locations(deck: str) -> Dict[str, str]:
-    return {f"{deck} {i}": content for i, content in enumerate(structure_contents[deck])}
+    return {
+        f"{deck} {i}": content
+        for i, content in enumerate(structure_contents[deck], 1)
+    }
