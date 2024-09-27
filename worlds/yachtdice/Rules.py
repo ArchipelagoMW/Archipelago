@@ -20,7 +20,7 @@ from .YachtWeights import yacht_weights
 class Category:
     def __init__(self, name, quantity=1):
         self.name = name
-        self.quantity = quantity  # how many times you have the category
+        self.quantity = min(quantity, 20)  # how many times you have the category, limit to 20 to avoid int overflow
 
     # return mean score of a category
     def mean_score(self, num_dice, num_rolls):
