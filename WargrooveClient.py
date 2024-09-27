@@ -261,10 +261,7 @@ class WargrooveContext(CommonContext):
 
             def build(self):
                 container = super().build()
-                panel = MDTabsItem(MDTabsItemText(text="Wargroove"))
-                panel.content = self.build_tracker()
-                self.tabs.add_widget(panel)
-                self.tabs.carousel.add_widget(panel.content)
+                self.add_client_tab("Wargroove", self.build_tracker())
                 return container
 
             def build_tracker(self) -> TrackerLayout:

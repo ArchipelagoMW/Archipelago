@@ -628,10 +628,8 @@ class GameManager(MDApp):
                 self.tabs.carousel.add_widget(panel.content)
                 self.tabs.add_widget(panel)
 
-        hint_panel = MDTabsItem(MDTabsItemText(text="Hints"))
-        self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
-        self.tabs.carousel.add_widget(hint_panel.content)
-        self.tabs.add_widget(hint_panel)
+        hint_panel = self.add_client_tab("Hints", HintLog(self.json_to_kivy_parser))
+        self.log_panels["Hints"] = hint_panel.content
 
         self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
         self.main_area_container.add_widget(self.tabs)
@@ -663,6 +661,14 @@ class GameManager(MDApp):
         self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
 
         return self.container
+
+    def add_client_tab(self, title: str, content: Widget) -> Widget:
+        """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
+         Returns the new tab widget, with the provided content being placed on the tab as content."""
+        new_tab = TabbedPanelItem(text=title)
+        new_tab.content = content
+        self.tabs.add_widget(new_tab)
+        return new_tab
 
     def update_texts(self, dt):
         if hasattr(self.tabs.carousel.slides[0], "fix_heights"):
