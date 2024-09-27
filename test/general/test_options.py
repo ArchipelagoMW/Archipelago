@@ -59,3 +59,12 @@ class TestOptions(unittest.TestCase):
         item_links = {1: ItemLinks.from_any(item_link_group), 2: ItemLinks.from_any(item_link_group)}
         for link in item_links.values():
             self.assertEqual(link.value[0], item_link_group[0])
+
+    def test_pickle_dumps(self):
+        """Test options can be pickled into database for WebHost generation"""
+        import pickle
+        for gamename, world_type in AutoWorldRegister.world_types.items():
+            if not world_type.hidden:
+                for option_key, option in world_type.options_dataclass.type_hints.items():
+                    with self.subTest(game=gamename, option=option_key):
+                        pickle.dumps(option(option.default))
