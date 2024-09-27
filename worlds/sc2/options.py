@@ -198,7 +198,12 @@ class ColorChoice(Choice):
     option_dark_grey = 14
     option_pink = 15
     option_rainbow = 16
-    option_default = 17
+    option_mengsk = 17
+    option_bright_lime = 18
+    option_arcane = 19
+    option_ember = 20
+    option_hot_pink = 21
+    option_default = 22
     default = option_default
 
 
