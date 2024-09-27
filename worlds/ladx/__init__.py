@@ -4,6 +4,7 @@ import os
 import pkgutil
 import tempfile
 import typing
+import logging
 
 import bsdiff4
 
@@ -26,7 +27,7 @@ from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id,
                         links_awakening_location_name_groups)
-from .Options import DungeonItemShuffle, ShuffleInstruments, TarinsGift, LinksAwakeningOptions, ladx_option_groups
+from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
 from .Rom import LADXDeltaPatch, get_base_rom_path
 
 DEVELOPER_MODE = False
@@ -290,8 +291,9 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        if self.options.tarins_gift == TarinsGift.option_local_progression:
+        if self.options.tarins_gift != 'any_item':
             self.force_start_item(itempool)
+
 
         self.multiworld.itempool += itempool
 
@@ -299,26 +301,39 @@ class LinksAwakeningWorld(World):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
             """
-            Find an item that forces progression for the player
+            Find an item that forces progression or a bush breaker for the player, depending on settings.
             """
-            base_collection_state = CollectionState(self.multiworld)
-            base_collection_state.update_reachable_regions(self.player)
-            reachable_count = len(base_collection_state.reachable_regions[self.player])
+            if self.options.tarins_gift == 'local_progression':
+                base_collection_state = CollectionState(self.multiworld)
+                base_collection_state.update_reachable_regions(self.player)
+                reachable_count = len(base_collection_state.reachable_regions[self.player])
 
-            def gives_progression(item):
-                collection_state = base_collection_state.copy()
-                collection_state.collect(item)
-                # Why isn't this needed?
-                # collection_state.update_reachable_regions(self.player)
-                return len(collection_state.reachable_regions[self.player]) > reachable_count
-            possible_start_items = [item for item in itempool if item.advancement]
+            def is_possible_start_item(item):
+                return item.advancement and item.name not in self.options.non_local_items
+
+            def adheres_to_options(item):
+                if self.options.tarins_gift == 'local_progression':
+                    collection_state = base_collection_state.copy()
+                    collection_state.collect(item)
+                    return len(collection_state.reachable_regions[self.player]) > reachable_count
+                else: # bush breaker
+                    return item.name in self.item_name_groups['Bush Breakers']
+
+            possible_start_items = [item for item in itempool if is_possible_start_item(item)]
             self.random.shuffle(possible_start_items)
 
+            start_item = None
             for item in possible_start_items:
-                if gives_progression(item):
-                    itempool.remove(item)
-                    start_loc.place_locked_item(item)
-                    return
+                if adheres_to_options(item):
+                    start_item = item
+                    break
+
+            if start_item:
+                itempool.remove(start_item)
+                start_loc.place_locked_item(start_item)
+            else:
+                logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_key} available for Tarin's Gift.")
+
 
     def get_pre_fill_items(self):
         return self.pre_fill_items

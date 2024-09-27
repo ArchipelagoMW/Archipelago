@@ -509,7 +509,8 @@ class TarinsGift(Choice):
     """
     display_name = "Tarin's Gift"
     option_local_progression = 0
-    option_any_item = 1
+    option_bush_breaker = 1
+    option_any_item = 2
     default = option_local_progression
 
 
