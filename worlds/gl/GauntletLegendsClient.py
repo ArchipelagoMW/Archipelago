@@ -10,6 +10,7 @@ import Utils
 from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
+from Utils import user_path
 
 from .Arrays import (
     base_count,
@@ -287,9 +288,10 @@ class GauntletLegendsContext(CommonContext):
                 b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR + ((i * 100) * 0x3C), 'x')} {100 * 0x3C}")))
                 b.iterate(0x3C)
                 log_arr += [arr for arr in b.split]
-            output_folder = 'logs'
+            output_folder = user_path("logs")
+            os.makedirs(output_folder, exist_ok=True)
             self.output_file = os.path.join(output_folder, f"({datetime.datetime.now().strftime('%Y-%m-%d - %I-%M-%S-%p')}) Gauntlet Legends RAMSTATE - {level_names[(self.current_level[1] << 4) + self.current_level[0]]}.txt")
-            with open(self.output_file, 'w') as f:
+            with open(self.output_file, 'w+') as f:
                 for i, arr in enumerate(log_arr):
                     f.write(f"0x{format(OBJ_ADDR + (0x3C * i), 'x')}: " + " ".join(f"{int(byte):02x}" for byte in arr) + '\n')
             b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} {0x40 * 0x3C}")))
@@ -852,7 +854,7 @@ class GauntletLegendsContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-async def _patch_and_run_game(patch_file: str):
+async def _patch_game(patch_file: str):
     metadata, output_file = Patch.create_rom_file(patch_file)
 
 
@@ -1000,6 +1002,10 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 logger.info("Connection Refused, Trying Again")
                 await asyncio.sleep(2)
                 continue
+            except ConnectionResetError:
+                logger.info("Connection Lost, Trying Again")
+                await asyncio.sleep(2)
+                continue
             except Exception as e:
                 logger.error(f"Unknown Error Occurred: {e}")
                 logger.info(traceback.format_exc())
@@ -1015,7 +1021,7 @@ def launch():
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an APGL file")
         args = parser.parse_args()
         if args.patch_file:
-            await asyncio.create_task(_patch_and_run_game(args.patch_file))
+            await asyncio.create_task(_patch_game(args.patch_file))
         ctx = GauntletLegendsContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
