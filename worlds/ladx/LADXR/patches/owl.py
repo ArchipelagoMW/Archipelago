@@ -80,14 +80,26 @@ talking:
     ret  nz
 
     ; Give powder
-    ld   a, [$DB76]
+    ld   a, [$DB4C]
+    cp   $10
+    jr   nc, doNotGivePowder
+    ld   a, $10
     ld   [$DB4C], a
-    ; Give bombs
-    ld   a, [$DB77]
+doNotGivePowder:
+
+    ld   a, [$DB4D]
+    cp   $10
+    jr   nc, doNotGiveBombs
+    ld   a, $10
     ld   [$DB4D], a
-    ; Give arrows
-    ld   a, [$DB78]
+doNotGiveBombs:
+
+    ld   a, [$DB45]
+    cp   $10
+    jr   nc, doNotGiveArrows
+    ld   a, $10
     ld   [$DB45], a
+doNotGiveArrows:
 
     ld   a, $C1
     call $2385 ; open dialog
