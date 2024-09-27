@@ -83,8 +83,8 @@ class ItemName:
     RUPEES_200 = "200 Rupees"
     RUPEES_500 = "500 Rupees"
     SEASHELL = "Seashell"
-    MESSAGE = "Master Stalfos' Message"
-    GEL = "Gel"
+    MESSAGE = "Nothing"
+    GEL = "Zol Attack"
     BOOMERANG = "Boomerang"
     HEART_PIECE = "Heart Piece"
     BOWWOW = "BowWow"
@@ -422,7 +422,7 @@ links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
         "Blue Tunic",
     },
     "Bush Breakers": {
-        "Progressive Pwoer Bracelet",
+        "Progressive Power Bracelet",
         "Magic Rod",
         "Magic Powder",
         "Bomb",
