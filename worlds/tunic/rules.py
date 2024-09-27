@@ -114,7 +114,9 @@ def set_region_rules(world: "TunicWorld") -> None:
         or can_ladder_storage(state, world)
     # using laurels or ls to get in is covered by the -> Eastern Vault Fortress rules
     world.get_entrance("Overworld -> Beneath the Vault").access_rule = \
-        lambda state: has_lantern(state, world) and has_ability(prayer, state, world)
+        lambda state: (has_lantern(state, world) and has_ability(prayer, state, world)
+                       # there's some boxes in the way
+                       and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand), player)))
     world.get_entrance("Ruined Atoll -> Library").access_rule = \
         lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
     world.get_entrance("Overworld -> Quarry").access_rule = \
