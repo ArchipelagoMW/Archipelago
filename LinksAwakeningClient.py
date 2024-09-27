@@ -30,6 +30,7 @@ from worlds.ladx.Common import BASE_ID as LABaseID
 from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
+from worlds.ladx.Items import links_awakening_items
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
 from worlds.ladx.Tracker import LocationTracker, MagpieBridge
 
@@ -76,13 +77,17 @@ class LAClientConstants:
     # Unused
     # ROMWorldID = 0x0055
     # ROMConnectorVersion = 0x0056
+    wAddHealthBuffer = 0xDB93
+    wSubtractHealthBuffer = 0xDB94
     # RO: We should only act if this is higher then 6, as it indicates that the game is running normally
     wGameplayType = 0xDB95
+    wTradeSequenceItem = 0xDB40
+    wLinkHealth = 0xDB5A
+    wTradeSequenceItem2 = 0xDB7F
     # RO: Starts at 0, increases every time an item is received from the server and processed
     wLinkSyncSequenceNumber = 0xDDF6
     wLinkStatusBits = 0xDDF7          # RW:
     #      Bit0: wLinkGive* contains valid data, set from script cleared from ROM.
-    wLinkHealth = 0xDB5A
     wLinkGiveItem = 0xDDF8  # RW
     wLinkGiveItemFrom = 0xDDF9  # RW
     # All of these six bytes are unused, we can repurpose
@@ -301,8 +306,8 @@ class LinksAwakeningClient():
     tracker = None
     auth = None
     game_crc = None
-    pending_deathlink = False
-    deathlink_debounce = True
+    deathlink_status = None
+    slot = None
     recvd_checks = {}
     retroarch_address = None
     retroarch_port = None
@@ -365,7 +370,7 @@ class LinksAwakeningClient():
         self.item_tracker = ItemTracker(self.gameboy)
         self.gps_tracker = GpsTracker(self.gameboy)
 
-    async def recved_item_from_ap(self, item_id, from_player, next_index):
+    async def recved_item_from_ap(self, item_id, location, from_player, next_index):
         # Don't allow getting an item until you've got your first check
         if not self.tracker.has_start_item():
             return
@@ -386,10 +391,11 @@ class LinksAwakeningClient():
             from_player = 100
 
         next_index += 1
-        self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
-                                  item_id, from_player])
-        status |= 1
-        status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
+        if location <= 0 or from_player != self.slot: # items rom server or other slots
+            self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
+                                    item_id, from_player])
+            status |= 1
+            status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
 
     should_reset_auth = False
@@ -404,23 +410,69 @@ class LinksAwakeningClient():
     async def is_victory(self):
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
 
+    def fix_trade_items(self):
+        """
+        If we kill the player after they give up a trade item but before they
+        complete the related check, they are locked out of the check. This
+        looks at items collected and compares against locations checked to
+        give unused trade items back to the player.
+        """
+        logger.info('fixing trade items')
+        trade_items = (
+            { 'destination': '0x2A6-Trade', 'name': 'TRADING_ITEM_YOSHI_DOLL' },
+            { 'destination': '0x2B2-Trade', 'name': 'TRADING_ITEM_RIBBON' },
+            { 'destination': '0x2FE-Trade', 'name': 'TRADING_ITEM_DOG_FOOD' },
+            { 'destination': '0x07B-Trade', 'name': 'TRADING_ITEM_BANANAS' },
+            { 'destination': '0x087-Trade', 'name': 'TRADING_ITEM_STICK' },
+            { 'destination': '0x2D7-Trade', 'name': 'TRADING_ITEM_HONEYCOMB' },
+            { 'destination': '0x019-Trade', 'name': 'TRADING_ITEM_PINEAPPLE' },
+            { 'destination': '0x2D9-Trade', 'name': 'TRADING_ITEM_HIBISCUS' },
+            { 'destination': '0x2A8-Trade', 'name': 'TRADING_ITEM_LETTER' },
+            { 'destination': '0x0CD-Trade', 'name': 'TRADING_ITEM_BROOM' },
+            { 'destination': '0x2F5-Trade', 'name': 'TRADING_ITEM_FISHING_HOOK' },
+            { 'destination': '0x0C9-Trade', 'name': 'TRADING_ITEM_NECKLACE' },
+        )
+        trade1 = 0
+        trade2 = 0
+        for i, item in enumerate(trade_items):
+            item_id = [x.item_id for x in links_awakening_items if x.ladxr_id == item['name']][0] + LABaseID
+            got_item = [x for x in self.recvd_checks.values() if x.item == item_id]
+            if not got_item:
+                continue
+            checked_destination = [x for x in self.tracker.all_checks if x.value and x.id == item['destination']]
+            if checked_destination:
+                continue
+            if i <= 7: # trade items are tracked by bits across 2 addresses
+                trade1 += 2**i
+            else:
+                trade2 += 2**(i-8)
+        self.gameboy.write_memory(LAClientConstants.wTradeSequenceItem, [trade1])
+        self.gameboy.write_memory(LAClientConstants.wTradeSequenceItem2, [trade2])
+
     async def main_tick(self, item_get_cb, win_cb, deathlink_cb):
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
 
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
-        if self.deathlink_debounce and current_health != 0:
-            self.deathlink_debounce = False
-        elif not self.deathlink_debounce and current_health == 0:
-            # logger.info("YOU DIED.")
-            await deathlink_cb()
-            self.deathlink_debounce = True
+        health_to_remove = (await self.gameboy.read_memory_cache([LAClientConstants.wSubtractHealthBuffer]))[LAClientConstants.wSubtractHealthBuffer]
 
-        if self.pending_deathlink:
-            self.gameboy.write_memory(LAClientConstants.wLinkHealth, [0])
-            self.pending_deathlink = False
-            self.deathlink_debounce = True
+        if self.deathlink_status == 'pending':
+            self.gameboy.write_memory(LAClientConstants.wAddHealthBuffer, [0]) # Stop any health gain
+            self.gameboy.write_memory(LAClientConstants.wLinkHealth, [1]) #  Almost dead
+            self.gameboy.write_memory(LAClientConstants.wSubtractHealthBuffer, [1]) # Deal remaining health this way to trigger medicine
+            self.deathlink_status = 'in_progress'
+        elif self.deathlink_status == 'in_progress':
+            if not current_health: # Died from deathlink
+                self.deathlink_status = 'complete'
+                self.fix_trade_items()
+            elif not health_to_remove: # Survived deathlink (medicine)
+                self.deathlink_status = None
+        elif not self.deathlink_status and not current_health: # Died naturally
+            await deathlink_cb()
+            self.deathlink_status = 'complete'
+        elif self.deathlink_status == 'complete' and current_health:
+            self.deathlink_status = None
 
         if await self.is_victory():
             await win_cb()
@@ -430,7 +482,7 @@ class LinksAwakeningClient():
         # Play back one at a time
         if recv_index in self.recvd_checks:
             item = self.recvd_checks[recv_index]
-            await self.recved_item_from_ap(item.item, item.player, recv_index)
+            await self.recved_item_from_ap(item.item, item.location, item.player, recv_index)
 
 
 all_tasks = set()
@@ -460,7 +512,7 @@ class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
     game = "Links Awakening DX"
     command_processor = LinksAwakeningCommandProcessor
-    items_handling = 0b101
+    items_handling = 0b111
     want_slot_data = True
     la_task = None
     client = None
@@ -577,6 +629,7 @@ class LinksAwakeningContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
+            self.client.slot = self.slot
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
             if self.slot_data.get("death_link"):
