@@ -422,7 +422,7 @@ links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
         "Blue Tunic",
     },
     "Bush Breakers": {
-        "Progressive Pwoer Bracelet",
+        "Progressive Power Bracelet",
         "Magic Rod",
         "Magic Powder",
         "Bomb",
