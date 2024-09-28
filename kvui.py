@@ -665,9 +665,10 @@ class GameManager(MDApp):
     def add_client_tab(self, title: str, content: Widget) -> Widget:
         """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
          Returns the new tab widget, with the provided content being placed on the tab as content."""
-        new_tab = TabbedPanelItem(text=title)
+        new_tab = MDTabsItem(MDTabsItemText(text=title))
         new_tab.content = content
         self.tabs.add_widget(new_tab)
+        self.tabs.carousel.add_widget(new_tab.content)
         return new_tab
 
     def update_texts(self, dt):
