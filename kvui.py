@@ -5,6 +5,8 @@ import typing
 import re
 from collections import deque
 
+assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
+
 if sys.platform == "win32":
     import ctypes
 
@@ -534,9 +536,8 @@ class GameManager(App):
                 # show Archipelago tab if other logging is present
                 self.tabs.add_widget(panel)
 
-        hint_panel = TabbedPanelItem(text="Hints")
-        self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
-        self.tabs.add_widget(hint_panel)
+        hint_panel = self.add_client_tab("Hints", HintLog(self.json_to_kivy_parser))
+        self.log_panels["Hints"] = hint_panel.content
 
         if len(self.logging_pairs) == 1:
             self.tabs.default_tab_text = "Archipelago"
@@ -569,6 +570,14 @@ class GameManager(App):
         self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
 
         return self.container
+
+    def add_client_tab(self, title: str, content: Widget) -> Widget:
+        """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
+         Returns the new tab widget, with the provided content being placed on the tab as content."""
+        new_tab = TabbedPanelItem(text=title)
+        new_tab.content = content
+        self.tabs.add_widget(new_tab)
+        return new_tab
 
     def update_texts(self, dt):
         if hasattr(self.tabs.content.children[0], "fix_heights"):
