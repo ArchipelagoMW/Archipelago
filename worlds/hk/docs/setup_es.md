@@ -32,7 +32,7 @@ Nota: La carpeta necesaria para el funcionamiento tiene que tener la carpeta "Ho
 Puedes ver la [Guía basica de instalación del Multiworld](/tutorial/Archipelago/setup/en) aquí en el sitio de Archipelago para aprender acerca de por qué Archipelago usa archivos YAML y para que son.
 
 ### ¿Cómo consigo un YAML? 
-Puedes usar la [página de configuraciones para Hollow Knight](/games/Hollow%20Knight/player-settings) aquí en el sitio de Archipelago para generar un YAML usando una interfaz grafica.
+Puedes usar la [página de configuraciones para Hollow Knight](/games/Hollow%20Knight/player-options) aquí en el sitio de Archipelago para generar un YAML usando una interfaz grafica.
 
 ### Unirse a una partida de Archipelago en Hollow Knight
 1. Inicia el juego después de haber instalado todos los mods necesarios.
