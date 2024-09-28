@@ -302,6 +302,7 @@ class MessengerWorld(World):
                              else TRANSITIONS.index(RANDOMIZED_CONNECTIONS[transition.parent_region.name]),
                              TRANSITIONS.index(transition.connected_region.name)]
                             for transition in self.transitions],
+            "race": int(self.multiworld.is_race),
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
         return slot_data
