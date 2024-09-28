@@ -25,9 +25,11 @@
     font_size: dp(20)
     markup: True
 <SelectableLabel>:
+    base_color: (0.2, 0.2, 0.2, 1)
+    selected_color: (.0, 0.9, .1, .3)
     canvas.before:
         Color:
-            rgba: (.0, 0.9, .1, .3) if self.selected else (0.2, 0.2, 0.2, 1)
+            rgba: self.selected_color if self.selected else self.base_color
         Rectangle:
             size: self.size
             pos: self.pos
@@ -47,9 +49,11 @@
         orientation: 'vertical'
         spacing: dp(3)
 <HintLabel>:
+    base_color: (0.2, 0.2, 0.2, 1)
+    selected_color: (.0, 0.9, .1, .3)
     canvas.before:
         Color:
-            rgba: (.0, 0.9, .1, .3) if self.selected else (0.2, 0.2, 0.2, 1) if self.striped else (0.18, 0.18, 0.18, 1)
+            rgba: self.selected_color if self.selected else self.base_color
         Rectangle:
             size: self.size
             pos: self.pos
