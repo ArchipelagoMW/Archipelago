@@ -129,3 +129,11 @@ Another option is that your connection was interrupted.
 If you would still like to use release or collect, refer to [this section of the server commands page](https://archipelago.gg/tutorial/Archipelago/commands/en#collect/release).
 
 You may use the in-game console to execute the commands, if your slot has permissions to do so.
+
+### I am trying to configure my controller, but the menu keeps closing itself
+
+Steam Input will make your controller behave as a keyboard and mouse even while not playing any Steam games.
+
+To fix this, simply close Steam while playing Saving Princess.
+
+Another option is to disable Steam Input under `Steam -> Settings -> Controller -> External Gamepad Settings`
