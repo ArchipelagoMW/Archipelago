@@ -19,7 +19,10 @@ Some important terminology to understand when reading this doc and working with 
 * Entrances and exits - entrances are ways into your region, exits are ways out of the region. In code, they are both
   represented as `Entrance` objects. In this doc, the terms "entrances" and "exits" will be used in this sense; the
   `Entrance` class will always be referenced in a code block with an uppercase E.
-* Dead end - a region which can never give access to additional randomized transitions
+* Dead end - a connected group of regions which can never help ER progress. This means that it:
+  * Is not in any indirect conditions/access rules.
+  * Has no plando'd or otherwise preplaced progression items, including events.
+  * Has no randomized exits.
 * One way transition - a transition that, in the game, is not safe to reverse through (for example, in Hollow Knight,
   some transitions are inaccessible backwards in vanilla and would put you out of bounds). One way transitions are 
   paired together during randomization to prevent such unsafe game states. Most transitions are not one way.
@@ -71,6 +74,11 @@ done on the world side; calling the `randomize_entrances` function will do the r
 logic to generate a valid world layout by connecting the partially connected edges you've defined. After you have done
 that, your region graph might look something like the following diagram. Note how each randomizable entrance/exit pair
 (represented as a bidirectional arrow) is disconnected on one end.
+
+> [!WARNING]
+> It is highly recommended to use explicit indirect conditions when using Generic ER. Failure to do so may lead to an
+> increased failure rate if your dead end regions are required in logic rules as Generic ER would have no way to
+> determine they are required when performing randomization and treat them accordingly.
 
 ```mermaid
 %%{init: {"graph": {"defaultRenderer": "elk"}} }%%
@@ -403,8 +411,9 @@ from Menu, similar to fill. ER then proceeds in stages to complete the randomiza
 1. Attempt to connect all non-dead-end regions, prioritizing access to unseen regions so there will always be new exits
    to pair off.
 2. Attempt to connect all dead-end regions, so that all regions will be placed
-3. Attempt to connect any dangling edges with each other, so that all entrances will be paired
-4. Do one final pass over the dead ends in case the earlier stages gated logical access to them.
+3. Connect all remaining dangling edges now that all regions are placed.
+    1. Connect any other dead end entrances (e.g. second entrances to the same dead end regions).
+    2. Connect all remaining non-dead-ends amongst each other.
 
 The process for each connection will do the following:
 1. Select a randomizable exit of a reachable region which is a valid source transition.

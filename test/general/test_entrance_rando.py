@@ -325,7 +325,9 @@ class TestRandomizeEntrances(unittest.TestCase):
                          "region2_top", "region2_right",
                          "region3_left", "region3_top"]
         for exit_name in blocked_exits:
-            multiworld.get_entrance(exit_name, 1).access_rule = lambda state: state.can_reach_region("region4", 1)
+            blocked_exit = multiworld.get_entrance(exit_name, 1)
+            blocked_exit.access_rule = lambda state: state.can_reach_region("region4", 1)
+            multiworld.register_indirect_condition(region, blocked_exit)
 
         result = randomize_entrances(multiworld.worlds[1], True, directionally_matched_group_lookup)
         # verifying that we did in fact place region3 adjacent to region0 to unblock all the other connections

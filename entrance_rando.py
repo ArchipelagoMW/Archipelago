@@ -48,54 +48,68 @@ class EntranceLookup:
     dead_ends: GroupLookup
     others: GroupLookup
     _random: random.Random
-    _leads_to_exits_cache: Dict[Entrance, bool]
+    _expands_graph_cache: Dict[Entrance, bool]
     _coupled: bool
 
     def __init__(self, rng: random.Random, coupled: bool):
         self.dead_ends = EntranceLookup.GroupLookup()
         self.others = EntranceLookup.GroupLookup()
         self._random = rng
-        self._leads_to_exits_cache = {}
+        self._expands_graph_cache = {}
         self._coupled = coupled
 
-    def _can_lead_to_randomizable_exits(self, entrance: Entrance) -> bool:
+    def _can_expand_graph(self, entrance: Entrance) -> bool:
         """
-        Checks whether an entrance is able to lead to another randomizable exit
-        with some combination of items
+        Checks whether an entrance is able to expand the region graph, either by
+        providing access to randomizable exits or by granting access to items or
+        regions used in logic conditions.
 
         :param entrance: A randomizable (no parent) region entrance
         """
         # we've seen this, return cached result
-        if entrance in self._leads_to_exits_cache:
-            return self._leads_to_exits_cache[entrance]
+        if entrance in self._expands_graph_cache:
+            return self._expands_graph_cache[entrance]
 
         visited = set()
         q = deque()
         q.append(entrance.connected_region)
 
         while q:
-            region = q.popleft()
+            region: Region = q.popleft()
             visited.add(region)
 
+            # check if the region itself is progression
+            if region in region.multiworld.indirect_connections:
+                self._expands_graph_cache[entrance] = True
+                return True
+
+            # check if any placed locations are progression
+            for loc in region.locations:
+                if loc.advancement:
+                    self._expands_graph_cache[entrance] = True
+                    return True
+
+            # check if there is a randomized exit out (expands the graph directly) or else search any connected
+            # regions to see if they are/have progression
             for exit_ in region.exits:
                 # randomizable exits which are not reverse of the incoming entrance.
                 # uncoupled mode is an exception because in this case going back in the door you just came in could
                 # actually lead somewhere new
                 if not exit_.connected_region and (not self._coupled or exit_.name != entrance.name):
-                    self._leads_to_exits_cache[entrance] = True
+                    self._expands_graph_cache[entrance] = True
                     return True
                 elif exit_.connected_region and exit_.connected_region not in visited:
                     q.append(exit_.connected_region)
 
-        self._leads_to_exits_cache[entrance] = False
+        self._expands_graph_cache[entrance] = False
         return False
 
     def add(self, entrance: Entrance) -> None:
-        lookup = self.others if self._can_lead_to_randomizable_exits(entrance) else self.dead_ends
+        lookup = self.others if self._can_expand_graph(entrance) else self.dead_ends
         lookup.add(entrance)
 
     def remove(self, entrance: Entrance) -> None:
-        lookup = self.others if self._can_lead_to_randomizable_exits(entrance) else self.dead_ends
+        lookup = self.others if self._can_expand_graph(entrance) else self.dead_ends
         lookup.remove(entrance)
 
     def get_targets(
@@ -411,12 +425,15 @@ def randomize_entrances(
     while entrance_lookup.dead_ends:
         if not find_pairing(dead_end=True, require_new_exits=True):
             break
-    # stage 3 - connect any dangling entrances that remain
-    while entrance_lookup.others:
-        find_pairing(dead_end=False, require_new_exits=False)
-    # stage 4 - last chance for dead ends
+    # stage 3 - all the regions should be placed at this point. We now need to connect dangling edges
+    # stage 3a - get the rest of the dead ends (e.g. second entrances into already-visited regions)
+    #            doing this before the non-dead-ends is important to ensure there are enough connections to
+    #            go around
     while entrance_lookup.dead_ends:
         find_pairing(dead_end=True, require_new_exits=False)
+    # stage 3b - tie all the other loose ends connecting visited regions to each other
+    while entrance_lookup.others:
+        find_pairing(dead_end=False, require_new_exits=False)
 
     running_time = time.perf_counter() - start_time
     if running_time > 1.0:
