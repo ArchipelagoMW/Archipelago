@@ -9,12 +9,39 @@ import secrets
 import shutil
 import subprocess
 from tkinter import messagebox
-from typing import Any, Dict
+from typing import Any, Dict, Set
 import urllib
 
 import Utils
 from .Constants import *
 from . import SavingPrincessWorld
+
+files_to_clean: Set[str] = {
+    "D3DX9_43.dll",
+    "data.win",
+    "m_boss.ogg",
+    "m_brainos.ogg",
+    "m_coldarea.ogg",
+    "m_escape.ogg",
+    "m_hotarea.ogg",
+    "m_hsis_dark.ogg",
+    "m_hsis_power.ogg",
+    "m_introarea.ogg",
+    "m_malakhov.ogg",
+    "m_miniboss.ogg",
+    "m_ninja.ogg",
+    "m_purple.ogg",
+    "m_space_idle.ogg",
+    "m_stonearea.ogg",
+    "m_swamp.ogg",
+    "m_zzz.ogg",
+    "options.ini",
+    "Saving Princess v0_8.exe",
+    "splash.png",
+    "gm-apclientpp.dll",
+    "original_data.win",
+    "versions.json",
+}
 
 file_hashes: Dict[str, str] = {
     "D3DX9_43.dll": "86e39e9161c3d930d93822f1563c280d",
@@ -97,7 +124,7 @@ def update(target_asset: str, url: str) -> bool:
         raise RuntimeError(update_error)
     try:
         update_available = get_timestamp(newest_date) > get_timestamp(get_date(target_asset))
-        if update_available and messagebox.askyesnocancel(f"New version of {target_asset} found",
+        if update_available and messagebox.askyesnocancel(f"New {target_asset}",
                                                           "Would you like to install the new version now?"):
             if target_asset == DLL_NAME:
                 download_dll(release_url)
@@ -160,6 +187,12 @@ def install() -> None:
         logging.info("Extracting cab archive from exe.")
         with open("saving_princess.cab", "wb") as cab:
             cab.write(exe.read(cab_size))
+
+    # clean up files from previous installations
+    for file_name in files_to_clean:
+        if os.path.exists(file_name):
+            os.remove(file_name)
+
     logging.info("Extracting files from cab archive.")
     if Utils.is_windows:
         subprocess.run(["Extrac32", "/Y", "/E", "saving_princess.cab"])
@@ -173,9 +206,8 @@ def install() -> None:
             messagebox.showerror("Missing package!", f"Error: {error}")
             raise RuntimeError(error)
     os.remove("saving_princess.cab")  # delete the cab file
+
     shutil.copyfile("data.win", "original_data.win")  # and make a copy of data.win
-    if os.path.exists("versions.json"):
-        os.remove("versions.json")  # to force reinstall of the assets
     logging.info("Done!")
 
 
