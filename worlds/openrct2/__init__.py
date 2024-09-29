@@ -54,13 +54,12 @@ LauncherComponents.icon_paths['openrct2icon'] = local_path('data', 'openrct2icon
 def get_previous_region_from_OpenRCT2_location(location_number: int):
     if location_number <= 2:
         return "OpenRCT2_Level_0"
-    if location_number <= 2:
-        return "OpenRCT2_Level_0"
     if location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
         return "OpenRCT2_Level_1"
     divider = location_number - 6
     region = math.ceil(divider / 8) + 1
     return f"OpenRCT2_Level_{region}"
+
 class OpenRCT2World(World):
     """
     OpenRCT2 is a fan-made, open-source reimplementation of the classic simulation game. It faithfully preserves 
@@ -96,6 +95,10 @@ class OpenRCT2World(World):
     # Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next
     # section. We'll generate the unlock shop with the item locations and apply our logic to it. Prereqs can only be
     # items one level lower on the tree. We then will set rules in create_regions that reflect our table.
+
+    def get_filler_item_name(self):
+        filler_item = self.random.choice(item_info["filler_items"])
+        return filler_item
 
     def generate_early(self) -> None:
         self.rules = [self.options.difficult_guest_generation.value,
@@ -280,20 +283,11 @@ class OpenRCT2World(World):
                 #                                  self.player).entrances)
                 # print("Added rule: \nHave: " + str(
                 #     chosen_prereq) + "\nLocation: " + get_previous_region_from_OpenRCT2_location(location_number))
-            else:
+
+            else: # This is a category
                 add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                     self.player).entrances[0],
-                         # self.multiworld.get_location("OpenRCT2_" +
-                         # str(number), self.player).parent_region.entrances[0],
                          lambda state, selected_prereq=selected_item: state.has_group(selected_prereq, self.player))
-                # TODO: Check if every item in the category has a rule requirement,
-                #  and if so, force the rule to appear before the location
-                # if item_info[item].issubset(item_info["requires_height"]):
-                #     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
-                #     self.player).entrances[0],
-                #      lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
-                #     print("Added rule: \nHave: Allow High Construction\nLocation: " +
-                #     self.get_previous_region_from_OpenRCT2_location(location_number))
                 # print(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                 #                                  self.player).entrances)
                 # print("Added rule: \nHave: " + str(
@@ -396,9 +390,11 @@ class OpenRCT2World(World):
                         while not category_selected:
                             category = self.random.choice(item_info["ride_types"])
                             for ride in possible_prereqs:
-                                if ride in item_info[category]:
-                                    category_selected = True
+                                if ride not in item_info["requires_landscaping"]: # Too many parks are unpredictable with water access, especially if landscaping is disabled
+                                    if ride in item_info[category]: #Ensures that a category won't be selected if there's no unlocked rides in it
+                                        category_selected = True    #e.g. thrill rides won't be required if none can be unlocked at that point
                         set_openRCT2_rule("category", category, number)
+                        print("Added requirement for: " + category)
                         if category == "Roller Coasters" and any(item in possible_prereqs and item not in item_info["stat_exempt_roller_coasters"] for item in possible_prereqs):
                             excitement = 0
                             intensity = 0

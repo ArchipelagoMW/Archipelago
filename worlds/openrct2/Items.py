@@ -21,6 +21,13 @@ def set_openRCT2_items(world):
                  world.options.forbid_marketing_campaigns.value,
                  world.options.forbid_tree_removal.value]
 
+    locked = 2 # For clarity in the next if statement
+
+    if world.options.forbid_high_construction == locked:
+        for item in openRCT2_items:
+            if item in item_info["requires_height"]:
+                openRCT2_items.remove(item)
+
     if world.options.include_atm:
         if "Cash Machine" not in openRCT2_items:
             openRCT2_items.append("Cash Machine")

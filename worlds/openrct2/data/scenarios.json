@@ -450,5 +450,11 @@
         "micro_park",
         "gravity_gardens",
         "fungus_woods"
+    ],
+    "no_usable_water_in_park":[
+        "dynamite_dunes",
+        "pacific_pyramids",
+        "thunder_rock",
+        "canary_mines"
     ]
 }
