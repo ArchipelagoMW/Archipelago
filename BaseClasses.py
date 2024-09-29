@@ -751,7 +751,9 @@ class CollectionState():
                 if new_region in reachable_regions:
                     blocked_connections.remove(connection)
                 elif connection.can_reach(self):
-                    assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                    if self.allow_partial_entrances and not new_region:
+                        continue
+                    assert new_region, f"tried to search through an Entrance \"{connection}\" with no connected Region"
                     reachable_regions.add(new_region)
                     blocked_connections.remove(connection)
                     blocked_connections.update(new_region.exits)
