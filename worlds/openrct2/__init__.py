@@ -394,7 +394,7 @@ class OpenRCT2World(World):
                                     if ride in item_info[category]: #Ensures that a category won't be selected if there's no unlocked rides in it
                                         category_selected = True    #e.g. thrill rides won't be required if none can be unlocked at that point
                         set_openRCT2_rule("category", category, number)
-                        print("Added requirement for: " + category)
+                        # print("Added requirement for: " + category)
                         if category == "Roller Coasters" and any(item in possible_prereqs and item not in item_info["stat_exempt_roller_coasters"] for item in possible_prereqs):
                             excitement = 0
                             intensity = 0
