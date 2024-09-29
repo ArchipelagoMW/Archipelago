@@ -186,12 +186,11 @@ def launch() -> None:
     os.chdir(SavingPrincessWorld.settings.install_folder)
 
     # check that the mod installation is valid
-    valid_install = is_install_valid()
-    if not valid_install:
+    if not is_install_valid():
         if messagebox.askyesnocancel(f"Mod installation missing or corrupted!",
                                      "Would you like to reinstall now?"):
             install()
-        # if there is no mod installation, and we are not installing it, then there's not much to do
+        # if there is no mod installation, and we are not installing it, then there isn't much to do
         else:
             return
 
