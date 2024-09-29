@@ -206,11 +206,10 @@ def launch() -> None:
     # and try to launch the game
     if SavingPrincessWorld.settings.launch_game:
         logging.info("Launching game.")
-        if Utils.is_windows:
-            subprocess.run([os.path.join(os.path.curdir, "Saving Princess v0_8.exe")])
-        else:
-            if shutil.which("wine") is not None:
-                subprocess.run(["wine", os.path.join(os.path.curdir, "Saving Princess v0_8.exe")])
-            else:
-                messagebox.showerror("Missing package!",
-                                     "Could not find wine.\n\nPlease install wine or run the game manually.")
+        try:
+            subprocess.run(SavingPrincessWorld.settings.launch_command)
+        except FileNotFoundError:
+            error = ("Could not run the game!\n\n"
+                     "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
+            messagebox.showerror("Command error!", f"Error: {error}")
+            raise RuntimeError(error)

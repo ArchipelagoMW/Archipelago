@@ -1,8 +1,9 @@
 from typing import ClassVar, Dict, Any, Type, List, Union
 
+import Utils
 from BaseClasses import Tutorial, ItemClassification as ItemClass
-from Options import PerGameCommonOptions
-from settings import Group, FilePath, LocalFolderPath, Bool
+from Options import PerGameCommonOptions, OptionError
+from settings import Group, UserFilePath, LocalFolderPath, Bool
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import components, Component, launch_subprocess, Type as ComponentType
 from . import Options, Items, Locations
@@ -20,7 +21,7 @@ components.append(
 
 
 class SavingPrincessSettings(Group):
-    class GamePath(FilePath):
+    class GamePath(UserFilePath):
         """Path to the game executable from which files are extracted"""
         description = "the Saving Princess game executable"
         is_exe = True
@@ -33,10 +34,17 @@ class SavingPrincessSettings(Group):
     class LaunchGame(Bool):
         """Set this to false to never autostart the game"""
 
+    class LaunchCommand(str):
+        """
+        The console command that will be used to launch the game
+        The command will be executed with the installation folder as the current directory
+        """
 
     exe_path: GamePath = GamePath("Saving Princess.exe")
     install_folder: InstallFolder = InstallFolder("Saving Princess")
     launch_game: Union[LaunchGame, bool] = True
+    launch_command: LaunchCommand = LaunchCommand('"Saving Princess v0_8.exe"' if Utils.is_windows
+                                                  else 'wine "Saving Princess v0_8.exe"')
 
 
 class SavingPrincessWeb(WebWorld):
