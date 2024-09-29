@@ -27,7 +27,7 @@ The Expanded Pool option, which is enabled by default, adds a few more items and
 
 Some locations, such as boss kills, have no visual representation, but those that do will have the Archipelago icon.
 
-Once the item is picked up a textbox will inform you of the item that was found as well as the player that will be receiving it.
+Once the item is picked up, a textbox will inform you of the item that was found as well as the player that will be receiving it.
 
 These textboxes will have colored backgrounds and comments about the item category.
 For example, progression items will have a purple background and say "Looks plenty important!".

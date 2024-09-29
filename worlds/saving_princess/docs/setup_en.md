@@ -67,7 +67,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en).
 
 ### Where do I get a YAML file?
 
-You can customize your options by visiting the [Saving Princess Player Options Page](/games/Saving Princess/player-options).
+You can customize your options by visiting the [Saving Princess Player Options Page](/games/Saving%20Princess/player-options).
 
 ### Verifying your YAML file
 
@@ -79,7 +79,13 @@ validator page: [YAML Validation page](/check).
 ### Set up the connection details
 
 After launching the game, enter the Archipelago options menu through the in-game button with the Archipelago icon.
-From here, enter the different menus and type in the **server:port**, **slot**, as well as the **password**, if one is required.
+From here, enter the different menus and type in the following details in their respective fields:
+- **server:port** (e.g. `archipelago.gg:38281`)
+   * If hosting on the website, this detail will be shown in your created room.
+- **slot name** (e.g. `Player`)
+   * This is your player name, which you chose along with your player options.
+- **password** (e.g. `123456`)
+  * If the room does not have a password, it can be left empty.
 
 This configuration persists through launches and even updates.
 
@@ -107,13 +113,13 @@ You can tell it succeeded if the indicator regains its color.
 If the game is unable to reconnect, save and restart.
 
 Although you can keep playing while disconnected, you won't get any items until you reconnect, not even items found in your own game.
-Once reconnected, however, all of your progress should sync up.
+Once reconnected, however, all of your progress will sync up.
 
 ### I got an item, but it did not say who sent it to me
 
 Items sent to you by yourself do not list the sender.
 
-Additionally, if you get an item while already having the max for that item (for example, you have 9 ammo and you get sent a Clip Extension) or if the item is cheated in through server commands, no message will be shown at all.
+Additionally, if you get an item while already having the max for that item (for example, you have 9 ammo and get sent a Clip Extension) or if the item is cheated in through server commands, no message will be shown at all.
 
 ### I pressed the release/collect button, but nothing happened
 
