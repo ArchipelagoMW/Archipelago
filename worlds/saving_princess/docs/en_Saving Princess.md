@@ -38,7 +38,6 @@ When you receive an item, a textbox will show up.
 This textbox shows both which item you got and which player sent it to you.
 
 If you send an item to yourself, however, the sending player will be omitted.
-If the items are cheated in, no textbox will be displayed.
 
 ## Unique Local Commands
 

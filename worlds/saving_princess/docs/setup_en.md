@@ -119,7 +119,7 @@ Once reconnected, however, all of your progress will sync up.
 
 Items sent to you by yourself do not list the sender.
 
-Additionally, if you get an item while already having the max for that item (for example, you have 9 ammo and get sent a Clip Extension) or if the item is cheated in through server commands, no message will be shown at all.
+Additionally, if you get an item while already having the max for that item (for example, you have 9 ammo and get sent a Clip Extension), no message will be shown at all.
 
 ### I pressed the release/collect button, but nothing happened
 
