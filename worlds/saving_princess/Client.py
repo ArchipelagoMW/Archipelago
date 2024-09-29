@@ -1,17 +1,16 @@
+import bsdiff4
+from datetime import datetime
 import hashlib
 import json
 import logging
 import os
+import requests
 import secrets
 import shutil
 import subprocess
-from datetime import datetime
 from tkinter import messagebox
 from typing import Any, Dict
 import urllib
-
-import bsdiff4
-import requests
 
 import Utils
 from .Constants import *
@@ -181,7 +180,9 @@ def install() -> None:
 
 
 def launch() -> None:
-    """Check the mod installation, then launch it"""
+    """Check the mod installation, then launch the game"""
+    Utils.init_logging(CLIENT_NAME, exception_logger="Client")
+
     os.chdir(SavingPrincessWorld.settings.install_folder)
 
     # check that the mod installation is valid

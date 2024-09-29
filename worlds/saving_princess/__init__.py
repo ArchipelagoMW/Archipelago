@@ -15,7 +15,7 @@ def launch_client():
 
 
 components.append(
-    Component(f"{GAME_NAME} Client", CLIENT_NAME, func=launch_client, component_type=ComponentType.CLIENT)
+    Component(f"{GAME_NAME} Client", func=launch_client, component_type=ComponentType.CLIENT)
 )
 
 

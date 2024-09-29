@@ -9,15 +9,18 @@
 
 ### Automated Installation
 
+*These instructions have only been tested on Windows and Ubuntu.*
+
+Once everything is set up, it is recommended to continue launching the game through this method, as it will check for any updates to the mod and automatically apply them.
+
 1. Purchase and download [Saving Princess](https://brainos.itch.io/savingprincess)
 2. Download and install the latest [Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
-3. Launch `ArchipelagoLauncher` or `ArchipelagoSavingPrincessClient` from your Archipelago installation folder
-4. If you launched `ArchipelagoLauncher`, click on "Saving Princess Client"
+3. Launch `ArchipelagoLauncher` and click on "Saving Princess Client"
    * You will probably need to scroll down on the Clients column to see it
-5. Follow the prompts
+4. Follow the prompts
    * On Linux, you will need one of either Wine or 7z for the automated installation
 
-Once everything is set up, it is recommended to continue launching the game through this method, as it will check for any updates and automatically apply them.
+When launching the game, Windows machines will simply run the executable. For any other OS, the launcher defaults to trying to run the game through Wine. You can change this by modifying the `launch_command` in `options.yaml` or `host.yaml`, under the `saving_princess_settings` section.
 
 ### Manual Windows Installation
 
@@ -40,15 +43,17 @@ Steps:
 
 ### Manual Linux Installation
 
+*These instructions have only been tested on Ubuntu.*
+
 The game does run mostly well through Wine, so it is possible to play on Linux, although there are some minor sprite displacement and sound issues from time to time.
 
 You can follow the instructions for Windows with very few changes:
 
-* Using the p7zip package to decompress the file.
+* Using the `p7zip-full` package to decompress the file.
 ```
 7z e 'Saving Princess.exe'
 ```
-* And the bsdiff package for patching.
+* And the `bsdiff` package for patching.
 ```
 bspatch original_data.win data.win saving_princess_basepatch.bsdiff4
 ```
