@@ -59,6 +59,8 @@ class SavingPrincessWeb(WebWorld):
         ["LeonarthCG"]
     )
     tutorials = [setup_en]
+    options_presets = Options.presets
+    option_groups = Options.groups
 
 
 class SavingPrincessWorld(World):

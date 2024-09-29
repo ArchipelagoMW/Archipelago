@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from typing import Dict, Any
 
-from Options import PerGameCommonOptions, DeathLink, StartInventoryPool, Choice, DefaultOnToggle, Range, Toggle
+from Options import PerGameCommonOptions, DeathLink, StartInventoryPool, Choice, DefaultOnToggle, Range, Toggle, \
+    OptionGroup
 
 
 class ExpandedPool(DefaultOnToggle):
@@ -120,3 +122,62 @@ class SavingPrincessOptions(PerGameCommonOptions):
     # aesthetic options
     shake_intensity: ScreenShakeIntensity
     music_shuffle: MusicShuffle
+
+
+groups = [
+    OptionGroup("Generation Options", [
+        ExpandedPool,
+        TrapChance,
+    ]),
+    OptionGroup("Gameplay Options", [
+        DeathLink,
+        InstantSaving,
+        SprintAvailability,
+        CliffWeaponUpgrade,
+        AceWeaponUpgrade,
+        IFramesDuration,
+    ]),
+    OptionGroup("Aesthetic Options", [
+        ScreenShakeIntensity,
+        MusicShuffle,
+    ]),
+]
+
+presets = {
+    "Vanilla-like": {
+        "expanded_pool": False,
+        "trap_chance": 0,
+        "death_link": False,
+        "instant_saving": False,
+        "sprint_availability": SprintAvailability.option_never_available,
+        "cliff_weapon_upgrade": CliffWeaponUpgrade.option_vanilla,
+        "ace_weapon_upgrade": AceWeaponUpgrade.option_vanilla,
+        "iframes_duration": 100,
+        "shake_intensity": 100,
+        "music_shuffle": False,
+    },
+    "Easy": {
+        "expanded_pool": True,
+        "trap_chance": 0,
+        "death_link": False,
+        "instant_saving": True,
+        "sprint_availability": SprintAvailability.option_always_available,
+        "cliff_weapon_upgrade": CliffWeaponUpgrade.option_never_upgraded,
+        "ace_weapon_upgrade": AceWeaponUpgrade.option_always_upgraded,
+        "iframes_duration": 200,
+        "shake_intensity": 50,
+        "music_shuffle": False,
+    },
+    "Hard": {
+        "expanded_pool": True,
+        "trap_chance": 100,
+        "death_link": True,
+        "instant_saving": True,
+        "sprint_availability": SprintAvailability.option_never_available,
+        "cliff_weapon_upgrade": CliffWeaponUpgrade.option_always_upgraded,
+        "ace_weapon_upgrade": AceWeaponUpgrade.option_never_upgraded,
+        "iframes_duration": 50,
+        "shake_intensity": 100,
+        "music_shuffle": False,
+    }
+}
