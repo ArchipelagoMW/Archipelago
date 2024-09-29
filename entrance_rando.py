@@ -71,11 +71,11 @@ class EntranceLookup:
             return self._expands_graph_cache[entrance]
 
         visited = set()
-        q = deque()
+        q: deque[Region] = deque()
         q.append(entrance.connected_region)
 
         while q:
-            region: Region = q.popleft()
+            region = q.popleft()
             visited.add(region)
 
             # check if the region itself is progression
@@ -295,8 +295,8 @@ def randomize_entrances(
         coupled: bool,
         target_group_lookup: Dict[int, List[int]],
         preserve_group_order: bool = False,
-        er_targets: List[Entrance] = None,
-        exits: List[Entrance] = None,
+        er_targets: Optional[List[Entrance]] = None,
+        exits: Optional[List[Entrance]] = None,
         on_connect: Optional[Callable[[ERPlacementState, List[Entrance]], None]] = None
 ) -> ERPlacementState:
     """
