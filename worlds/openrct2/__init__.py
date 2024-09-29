@@ -440,8 +440,6 @@ class OpenRCT2World(World):
             while count < self.options.required_unique_rides.value:
                 self.unique_rides.append(eligible_rides[count])
                 count += 1
-            # self.unique_rides = [eligible_rides[i] for i in
-            #                     eligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
         # print("Here's the eligible rides:")
         # print(eligible_rides)
         # print("Here's what was chosen:")
