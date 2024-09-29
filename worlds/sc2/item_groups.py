@@ -189,7 +189,7 @@ item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrad
 ]
 item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
     item_names.MARINE, item_names.MEDIC, item_names.FIREBAT, item_names.MARAUDER,
-    item_names.REAPER, item_names.GHOST, item_names.SPECTRE, item_names.HERC,
+    item_names.REAPER, item_names.GHOST, item_names.SPECTRE, item_names.HERC, item_names.AEGIS_GUARD,
 ]
 item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
     item_names.HELLION, item_names.VULTURE, item_names.GOLIATH, item_names.DIAMONDBACK,
@@ -376,7 +376,9 @@ item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressiv
     if item_data.type in (items.TerranItemType.Progressive, items.TerranItemType.Progressive_2)
 ]
 item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
-    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
+    item_names.AEGIS_GUARD,
+    item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
+    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
 ]
 item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     wol_units

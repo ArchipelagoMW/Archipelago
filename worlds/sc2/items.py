@@ -226,6 +226,8 @@ item_table = {
     item_names.BLACKHAMMER:
         ItemData(53 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 1, SC2Race.TERRAN,
                  classification=ItemClassification.progression, origin={"ext"}),
+    item_names.AEGIS_GUARD:
+        ItemData(54 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 2, SC2Race.TERRAN),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
