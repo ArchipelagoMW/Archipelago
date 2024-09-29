@@ -601,7 +601,7 @@ class LinksAwakeningContext(CommonContext):
             self.won = True
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
-        self.client.pending_deathlink = True
+        self.client.deathlink_status = 'pending'
         super(LinksAwakeningContext, self).on_deathlink(data)
 
 
