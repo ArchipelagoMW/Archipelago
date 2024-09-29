@@ -546,10 +546,10 @@ class PokemonEmeraldClient(BizHawkClient):
                 # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
                 # and mark that the game is waiting on receiving a trade
                 Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
-                await bizhawk.write(ctx.bizhawk_ctx, [
+                await bizhawk.guarded_write(ctx.bizhawk_ctx, [
                     (sb1_address + 0x377C, bytes(0x50), "System Bus"),
                     (sb1_address + 0x37CC, [1], "System Bus"),
-                ])
+                ], [guards["SAVE BLOCK 1"]])
             elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
                 # Game is waiting on receiving a trade.
                 if self.queued_received_trade is not None:
