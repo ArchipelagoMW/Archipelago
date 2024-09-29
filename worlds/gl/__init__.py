@@ -143,10 +143,10 @@ class GauntletLegendsWorld(World):
         cshard = self.get_location("Chimera's Keep - Chimera Mirror Shard").item
         fshard = self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard").item
         shard_values = [
-            item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4],
+            item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
             item_dict[yshard.code] if yshard.player == self.player else [0x27, 0x4],
             item_dict[cshard.code] if cshard.player == self.player else [0x27, 0x4],
-            item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
+            item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4],
         ]
         characters = [
             self.options.unlock_character_one.value,
