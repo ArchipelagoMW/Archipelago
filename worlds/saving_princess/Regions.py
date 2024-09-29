@@ -68,7 +68,7 @@ region_dict: Dict[str, List[str]] = {
 
 
 def set_region_locations(region: Region, location_names: List[str], is_pool_expanded: bool):
-    location_pool = {**Locations.location_dict_base, **Locations.location_dict_event_base}
+    location_pool = {**Locations.location_dict_base, **Locations.location_dict_events}
     if is_pool_expanded:
         location_pool = {**Locations.location_dict_expanded, **Locations.location_dict_event_expanded}
     region.locations = [

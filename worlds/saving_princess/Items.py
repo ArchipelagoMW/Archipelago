@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, Tuple
 
 from BaseClasses import Item, ItemClassification as ItemClass
 
@@ -31,9 +31,7 @@ class ItemData:
             self.count_extra = count_extra
 
     def create_item(self, player: int):
-        index = list(item_dict.values()).index(self)
-        name = list(item_dict.keys())[index]
-        return SavingPrincessItem(name, self.item_class, self.code, player)
+        return SavingPrincessItem(item_data_names[self], self.item_class, self.code, player)
 
 
 item_dict_weapons: Dict[str, ItemData] = {
@@ -82,12 +80,12 @@ item_dict_traps: Dict[str, ItemData] = {
 }
 
 item_dict_events: Dict[str, ItemData] = {
-    EVENT_ITEM_GUARD_GONE: ItemData(ItemClass.progression, None),
-    EVENT_ITEM_CLIFF_GONE: ItemData(ItemClass.progression, None),
-    EVENT_ITEM_ACE_GONE: ItemData(ItemClass.progression, None),
-    EVENT_ITEM_SNAKE_GONE: ItemData(ItemClass.progression, None),
-    EVENT_ITEM_POWER_ON: ItemData(ItemClass.progression, None),
-    EVENT_ITEM_VICTORY: ItemData(ItemClass.progression, None),
+    EVENT_ITEM_GUARD_GONE: ItemData(ItemClass.progression),
+    EVENT_ITEM_CLIFF_GONE: ItemData(ItemClass.progression),
+    EVENT_ITEM_ACE_GONE: ItemData(ItemClass.progression),
+    EVENT_ITEM_SNAKE_GONE: ItemData(ItemClass.progression),
+    EVENT_ITEM_POWER_ON: ItemData(ItemClass.progression),
+    EVENT_ITEM_VICTORY: ItemData(ItemClass.progression),
 }
 
 item_dict: Dict[str, ItemData] = {
@@ -96,3 +94,5 @@ item_dict: Dict[str, ItemData] = {
     **item_dict_traps,
     **item_dict_events,
 }
+
+item_data_names: Dict[ItemData, str] = {value: key for key, value in item_dict.items()}

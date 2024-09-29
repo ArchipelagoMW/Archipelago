@@ -50,7 +50,7 @@ def set_date(target_asset: str, date: str) -> None:
             versions = json.load(versions_json)
             versions[target_asset] = date
     except (FileNotFoundError, KeyError, json.decoder.JSONDecodeError):
-        versions: json = {target_asset: date}
+        versions = {target_asset: date}
     with open("versions.json", "w") as versions_json:
         json.dump(versions, versions_json)
 

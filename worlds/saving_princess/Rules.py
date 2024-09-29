@@ -1,7 +1,9 @@
+from typing import TYPE_CHECKING
 from BaseClasses import CollectionState, Location, Entrance
 from worlds.generic.Rules import set_rule
-
 from .Constants import *
+if TYPE_CHECKING:
+    from . import SavingPrincessWorld
 
 
 def set_rules(world: "SavingPrincessWorld"):
@@ -21,8 +23,8 @@ def set_rules(world: "SavingPrincessWorld"):
     # guarantees that the player will have some upgrades before having to face the area bosses, except for cave
     def nice_check(state: CollectionState) -> bool:
         return (
-                state.has(ITEM_MAX_HEALTH, world.player, 1)
-                and state.has(ITEM_MAX_AMMO, world.player, 1)
+                state.has(ITEM_MAX_HEALTH, world.player)
+                and state.has(ITEM_MAX_AMMO, world.player)
                 and state.has(ITEM_RELOAD_SPEED, world.player, 2)
         )
 

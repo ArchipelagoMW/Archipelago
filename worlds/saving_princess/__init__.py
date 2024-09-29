@@ -65,8 +65,12 @@ class SavingPrincessWorld(World):
 
     topology_present = False
 
-    item_name_to_id = {key: value.code for key, value in Items.item_dict.items()}
-    location_name_to_id = {key: value.code for key, value in Locations.location_dict.items()}
+    item_name_to_id = {
+        key: value.code for key, value in (Items.item_dict.items() - Items.item_dict_events.items())
+    }
+    location_name_to_id = {
+        key: value.code for key, value in (Locations.location_dict.items() - Locations.location_dict_events.items())
+    }
 
     item_name_groups = {
         "Weapons": {key for key in Items.item_dict_weapons.keys()},
@@ -82,9 +86,11 @@ class SavingPrincessWorld(World):
     settings: ClassVar[SavingPrincessSettings]
 
     is_pool_expanded: bool = False
-    music_table: List[int] = [i for i in range(16)]
+    music_table: List[int] = list(range(16))
 
     def generate_early(self) -> None:
+        if not self.player_name.isascii():
+            raise OptionError(f"{self.player_name}'s name must be only ASCII.")
         self.is_pool_expanded = self.options.expanded_pool > 0
         if self.options.music_shuffle:
             self.random.shuffle(self.music_table)
@@ -138,19 +144,20 @@ class SavingPrincessWorld(World):
         # and return one of the names at random
         return self.random.choice(filler_list)
 
-    def fill_slot_data(self) -> Dict[str, Any]:
-        return {
-            "death_link": self.options.death_link.value,
-            "expanded_pool": self.options.expanded_pool.value,
-            "instant_saving": self.options.instant_saving.value,
-            "sprint_availability": self.options.sprint_availability.value,
-            "cliff_weapon_upgrade": self.options.cliff_weapon_upgrade.value,
-            "ace_weapon_upgrade": self.options.ace_weapon_upgrade.value,
-            "shake_intensity": self.options.shake_intensity.value,
-            "iframes_duration": self.options.iframes_duration.value,
-            "music_table": self.music_table,
-        }
-
     def set_rules(self):
         from .Rules import set_rules
         set_rules(self)
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data = self.options.as_dict(
+            "death_link",
+            "expanded_pool",
+            "instant_saving",
+            "sprint_availability",
+            "cliff_weapon_upgrade",
+            "ace_weapon_upgrade",
+            "shake_intensity",
+            "iframes_duration",
+        )
+        slot_data["music_table"] = self.music_table
+        return slot_data
