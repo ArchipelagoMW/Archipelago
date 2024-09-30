@@ -46,6 +46,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     multiworld.sprite_pool = args.sprite_pool.copy()
 
     multiworld.set_options(args)
+    if args.csv_output:
+        from Options import dump_player_options
+        dump_player_options(multiworld)
     multiworld.set_item_links()
     multiworld.state = CollectionState(multiworld)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, multiworld.seed)

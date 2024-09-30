@@ -131,7 +131,8 @@ class TestHostFakeRoom(TestBase):
             f.write(text)
 
         with self.app.app_context(), self.app.test_request_context():
-            response = self.client.get(url_for("host_room", room=self.room_id))
+            response = self.client.get(url_for("host_room", room=self.room_id),
+                                       headers={"User-Agent": "Mozilla/5.0"})
             response_text = response.get_data(True)
             self.assertEqual(response.status_code, 200)
             self.assertIn("href=\"/seed/", response_text)
