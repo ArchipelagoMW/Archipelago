@@ -374,13 +374,13 @@ class LinksAwakeningWorld(World):
 
     name_cache = {}
     # Tries to associate an icon from another game with an icon we have
-    def guess_icon_for_other_world(self, other):
+    def guess_icon_for_other_world(self, foreign_item):
         if not self.name_cache:
             for item in ladxr_item_to_la_item_name.keys():
                 self.name_cache[item] = item
                 splits = item.split("_")
                 for word in item.split("_"):
-                    if word not in ItemIconGuessing.FORBIDDEN and not word.isnumeric():
+                    if word not in ItemIconGuessing.BLOCKED_ASSOCIATIONS and not word.isnumeric():
                         self.name_cache[word] = item
             for name in ItemIconGuessing.SYNONYMS.values():
                 assert name in self.name_cache, name
@@ -393,13 +393,18 @@ class LinksAwakeningWorld(World):
                     pluralizations[ks] = self.name_cache[k]
             self.name_cache.update(pluralizations)
 
-        uppered = other.upper()
-        for phrase in ItemIconGuessing.PHRASES.keys():
+        uppered = foreign_item.name.upper()
+        foreign_game = self.multiworld.game[foreign_item.player]
+        phrases = ItemIconGuessing.PHRASES.copy()
+        if foreign_game in ItemIconGuessing.GAME_SPECIFIC_PHRASES:
+            phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
+
+        for phrase in phrases.keys():
             if phrase in uppered:
-                return ItemIconGuessing.PHRASES[phrase]
+                return phrases[phrase]
         # pattern for breaking down camelCase, also separates out digits
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
-        possibles = pattern.sub(' ', other).upper()
+        possibles = pattern.sub(' ', foreign_item.name).upper()
         for ch in "[]()_":
             possibles = possibles.replace(ch, " ")
         possibles = possibles.split()
@@ -429,7 +434,7 @@ class LinksAwakeningWorld(World):
                     # If the item name contains "sword", use a sword icon, etc
                     # Otherwise, use a cute letter as the icon
                     elif self.options.foreign_item_icons == 'guess_by_name':
-                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item.name)
+                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item)
                         loc.ladxr_item.custom_item_name = loc.item.name
 
                     else:

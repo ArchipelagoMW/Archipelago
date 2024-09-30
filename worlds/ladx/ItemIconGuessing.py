@@ -1,6 +1,4 @@
-# The forbidden list is used to break word associations when the item
-# it would match is not the ideal one.
-FORBIDDEN = [
+BLOCKED_ASSOCIATIONS = [
     # MAX_ARROWS_UPGRADE, MAX_BOMBS_UPGRADE, MAX_POWDER_UPGRADE
     # arrows and bombs will be matched to arrow and bomb respectively through pluralization
     "ARROWS",
@@ -59,6 +57,7 @@ FORBIDDEN = [
     "MAP8",
 ]
 
+# Single word synonyms for Link's Awakening items, for generic matching.
 SYNONYMS = {
     # POWER_BRACELET
     'ANKLET': 'POWER_BRACELET',
@@ -370,74 +369,96 @@ SYNONYMS = {
     # PIECE_OF_POWER
     'TRIANGLE': 'PIECE_OF_POWER',
     'POWER': 'PIECE_OF_POWER',
-    'STAR': 'PIECE_OF_POWER',
     'TRIFORCE': 'PIECE_OF_POWER',
 }
 
-# for multi-word matches and game specific matches
+# For generic multi-word matches.
 PHRASES = {
-    # Generic
     'BIG KEY': 'NIGHTMARE_KEY',
     'BOSS KEY': 'NIGHTMARE_KEY',
     'HEART PIECE': 'HEART_PIECE',
     'PIECE OF HEART': 'HEART_PIECE',
+}
 
-    # Final Fantasy 1
-    'OXYALE': 'MEDICINE',
-    'VORPAL': 'SWORD',
-    'XCALBER': 'SWORD',
+# All following will only be used to match items for the specific game.
+# Item names will be uppercased when comparing.
+# Can be multi-word.
+GAME_SPECIFIC_PHRASES = {
+    'Final Fantasy': {
+        'OXYALE': 'MEDICINE',
+        'VORPAL': 'SWORD',
+        'XCALBER': 'SWORD',
+    },
 
-    # The Legend of Zelda
-    'WATER OF LIFE': 'MEDICINE',
+    'The Legend of Zelda': {
+        'WATER OF LIFE': 'MEDICINE',
+    },
 
-    # Noita
-    'ALL-SEEING EYE': 'TRADING_ITEM_MAGNIFYING_GLASS',  # lets you find secrets
+    'Noita': {
+        'ALL-SEEING EYE': 'TRADING_ITEM_MAGNIFYING_GLASS',  # lets you find secrets
+    },
 
-    # Ocarina of Time
-    'COJIRO': 'ROOSTER',
+    'Ocarina of Time': {
+        'COJIRO': 'ROOSTER',
+    },
 
-    # SMZ3
-    'BYRNA': 'MAGIC_ROD',
-    'SOMARIA': 'MAGIC_ROD',
+    'SMZ3': {
+        'BYRNA': 'MAGIC_ROD',
+        'POWERBOMB': 'BOMB',
+        'SOMARIA': 'MAGIC_ROD',
+    },
 
-    # Sonic Adventure 2 Battle
-    'CHAOS EMERALD': 'PIECE_OF_POWER',
+    'Sonic Adventure 2 Battle': {
+        'CHAOS EMERALD': 'PIECE_OF_POWER',
+    },
 
-    # Super Mario World
-    'P-BALLOON': 'FEATHER',
+    'Super Mario 64': {
+        'POWER STAR': 'PIECE_OF_POWER',
+    },
 
-    # The Witness
-    'BONK': 'BOMB',
-    'BUNKER LASER': 'INSTRUMENT4',
-    'DESERT LASER': 'INSTRUMENT5',
-    'JUNGLE LASER': 'INSTRUMENT4',
-    'KEEP LASER': 'INSTRUMENT7',
-    'MONASTERY LASER': 'INSTRUMENT1',
-    'POWER SURGE': 'BOMB',
-    'PUZZLE SKIP': 'GOLD_LEAF',
-    'QUARRY LASER': 'INSTRUMENT8',
-    'SHADOWS LASER': 'INSTRUMENT1',
-    'SLOWNESS': 'BOMB',
-    'SWAMP LASER': 'INSTRUMENT2',
-    'SYMMETRY LASER': 'INSTRUMENT6',
-    'TOWN LASER': 'INSTRUMENT3',
-    'TREEHOUSE LASER': 'INSTRUMENT2',
-    'WATER PUMPS': 'KEY',
+    'Super Mario World': {
+        'P-BALLOON': 'FEATHER',
+    },
 
-    # TUNIC
-    "AURA'S GEM": 'SHIELD',  # card that enhances the shield
-    'DUSTY': 'TRADING_ITEM_BROOM',  # a broom
-    'HERO RELIC - HP': 'TRADING_ITEM_HIBISCUS',
-    'HERO RELIC - MP': 'TOADSTOOL',
-    'HERO RELIC - SP': 'FEATHER',
-    'HP BERRY': 'GUARDIAN_ACORN',
-    'HP OFFERING': 'TRADING_ITEM_HIBISCUS',  # a flower
-    'LUCKY CUP': 'HEART_CONTAINER',  # card with a heart on it
-    'INVERTED ASH': 'MEDICINE',  # card with a potion on it
-    'MAGIC ORB': 'HOOKSHOT',
-    'MP BERRY': 'GUARDIAN_ACORN',
-    'MP OFFERING': 'TOADSTOOL',  # a mushroom
-    'QUESTAGON': 'PIECE_OF_POWER',  # triforce piece equivalent
-    'SP OFFERING': 'FEATHER',  # a feather
-    'SPRING FALLS': 'TRADING_ITEM_HIBISCUS',  # a flower
+    'Super Metroid': {
+        'POWER BOMB': 'BOMB',
+    },
+
+    'The Witness': {
+        'BONK': 'BOMB',
+        'BUNKER LASER': 'INSTRUMENT4',
+        'DESERT LASER': 'INSTRUMENT5',
+        'JUNGLE LASER': 'INSTRUMENT4',
+        'KEEP LASER': 'INSTRUMENT7',
+        'MONASTERY LASER': 'INSTRUMENT1',
+        'POWER SURGE': 'BOMB',
+        'PUZZLE SKIP': 'GOLD_LEAF',
+        'QUARRY LASER': 'INSTRUMENT8',
+        'SHADOWS LASER': 'INSTRUMENT1',
+        'SHORTCUTS': 'KEY',
+        'SLOWNESS': 'BOMB',
+        'SWAMP LASER': 'INSTRUMENT2',
+        'SYMMETRY LASER': 'INSTRUMENT6',
+        'TOWN LASER': 'INSTRUMENT3',
+        'TREEHOUSE LASER': 'INSTRUMENT2',
+        'WATER PUMPS': 'KEY',
+    },
+
+    'TUNIC': {
+        "AURA'S GEM": 'SHIELD',  # card that enhances the shield
+        'DUSTY': 'TRADING_ITEM_BROOM',  # a broom
+        'HERO RELIC - HP': 'TRADING_ITEM_HIBISCUS',
+        'HERO RELIC - MP': 'TOADSTOOL',
+        'HERO RELIC - SP': 'FEATHER',
+        'HP BERRY': 'GUARDIAN_ACORN',
+        'HP OFFERING': 'TRADING_ITEM_HIBISCUS',  # a flower
+        'LUCKY CUP': 'HEART_CONTAINER',  # card with a heart on it
+        'INVERTED ASH': 'MEDICINE',  # card with a potion on it
+        'MAGIC ORB': 'HOOKSHOT',
+        'MP BERRY': 'GUARDIAN_ACORN',
+        'MP OFFERING': 'TOADSTOOL',  # a mushroom
+        'QUESTAGON': 'PIECE_OF_POWER',  # triforce piece equivalent
+        'SP OFFERING': 'FEATHER',  # a feather
+        'SPRING FALLS': 'TRADING_ITEM_HIBISCUS',  # a flower
+    },
 }
