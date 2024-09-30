@@ -201,6 +201,7 @@ class AquariaRegions:
     turtle_cave: Region
     turtle_cave_bubble: Region
     sun_temple_l: Region
+    sun_temple_l_entrance: Region
     sun_temple_r: Region
     sun_temple_boss_path: Region
     sun_temple_boss: Region
@@ -421,6 +422,7 @@ class AquariaRegions:
         """
         self.sun_temple_l = self.__add_region("Sun Temple left area",
                                               AquariaLocations.locations_sun_temple_l)
+        self.sun_temple_l_entrance = self.__add_region("Sun Temple left area entrance", None)
         self.sun_temple_r = self.__add_region("Sun Temple right area",
                                               AquariaLocations.locations_sun_temple_r)
         self.sun_temple_boss_path = self.__add_region("Sun Temple before boss area",
@@ -695,15 +697,17 @@ class AquariaRegions:
         self.__connect_regions(self.veil_tl, self.turtle_cave)
         self.__connect_regions(self.turtle_cave, self.turtle_cave_bubble)
         self.__connect_regions(self.veil_tr_r, self.sun_temple_r)
-        self.__connect_one_way_regions(self.sun_temple_r, self.sun_temple_l,
+
+
+
+        self.__connect_one_way_regions(self.sun_temple_r, self.sun_temple_l_entrance,
                                        lambda state: _has_bind_song(state, self.player) or
                                                      _has_light(state, self.player))
-        self.__connect_one_way_regions(self.sun_temple_l, self.sun_temple_r,
+        self.__connect_one_way_regions(self.sun_temple_l_entrance, self.sun_temple_r,
                                        lambda state: _has_light(state, self.player))
-        self.__connect_regions(self.sun_temple_l, self.veil_tr_l)
-        self.__connect_one_way_regions(self.sun_temple_l, self.sun_temple_boss_path,
-                                       lambda state: _has_light(state, self.player) or
-                                                     _has_sun_crystal(state, self.player))
+        self.__connect_regions(self.sun_temple_l_entrance, self.veil_tr_l)
+        self.__connect_regions(self.sun_temple_l, self.sun_temple_l_entrance)
+        self.__connect_one_way_regions(self.sun_temple_l, self.sun_temple_boss_path)
         self.__connect_one_way_regions(self.sun_temple_boss_path, self.sun_temple_l)
         self.__connect_regions(self.sun_temple_boss_path, self.sun_temple_boss,
                                lambda state: _has_energy_attack_item(state, self.player))
@@ -1001,6 +1005,12 @@ class AquariaRegions:
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_BOTTOM_RIGHT_AREA_ODD_CONTAINER, self.player),
             lambda state: _has_light(state, self.player))
+        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_l_entrance, self.sun_temple_l),
+                                              self.player), lambda state: _has_light(state, self.player) or
+                                                                          _has_sun_crystal(state, self.player))
+        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_boss_path, self.sun_temple_l),
+                                              self.player), lambda state: _has_light(state, self.player) or
+                                                                          _has_sun_crystal(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.abyss_r_transturtle, self.abyss_r),
                                               self.player),
                  lambda state: _has_light(state, self.player))
@@ -1012,14 +1022,12 @@ class AquariaRegions:
                  lambda state: _has_light(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.openwater_bl, self.abyss_l), self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_l, self.sun_temple_r),
+        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_l_entrance, self.sun_temple_r),
                                               self.player), lambda state: _has_light(state, self.player) or
                                                                           _has_sun_crystal(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_r, self.sun_temple_l),
+        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_r, self.sun_temple_l_entrance),
                                               self.player), lambda state: _has_light(state, self.player) or
                                                                           _has_sun_crystal(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.veil_tr_l, self.sun_temple_l), self.player),
-                 lambda state: _has_light(state, self.player) or _has_sun_crystal(state, self.player))
 
     def __adjusting_manual_rules(self) -> None:
         add_rule(self.multiworld.get_location(AquariaLocationNames.MITHALAS_CATHEDRAL_MITHALAN_DRESS, self.player),
@@ -1273,6 +1281,7 @@ class AquariaRegions:
         self.multiworld.regions.append(self.turtle_cave)
         self.multiworld.regions.append(self.turtle_cave_bubble)
         self.multiworld.regions.append(self.sun_temple_l)
+        self.multiworld.regions.append(self.sun_temple_l_entrance)
         self.multiworld.regions.append(self.sun_temple_r)
         self.multiworld.regions.append(self.sun_temple_boss_path)
         self.multiworld.regions.append(self.sun_temple_boss)

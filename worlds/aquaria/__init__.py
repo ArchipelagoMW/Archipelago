@@ -235,4 +235,6 @@ class AquariaWorld(World):
                 "unconfine_home_water_transturtle":
                     self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_transturtle
                     or self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_both,
+                "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
+                "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
                 }
