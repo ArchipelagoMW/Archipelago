@@ -90,16 +90,18 @@ class OSRSWorld(World):
 
         rnd = self.random
         starting_area = self.options.starting_area
+        
+        #UT specific override, if we are in normal gen, resolve starting area, we will get it from slot_data in UT
+        if not hasattr(self.multiworld, "generation_is_fake"): 
+            if starting_area.value == StartingArea.option_any_bank:
+                self.starting_area_item = rnd.choice(starting_area_dict)
+            elif starting_area.value < StartingArea.option_chunksanity:
+                self.starting_area_item = starting_area_dict[starting_area.value]
+            else:
+                self.starting_area_item = rnd.choice(chunksanity_starting_chunks)
 
-        if starting_area.value == StartingArea.option_any_bank:
-            self.starting_area_item = rnd.choice(starting_area_dict)
-        elif starting_area.value < StartingArea.option_chunksanity:
-            self.starting_area_item = starting_area_dict[starting_area.value]
-        else:
-            self.starting_area_item = rnd.choice(chunksanity_starting_chunks)
-
-        # Set Starting Chunk
-        self.multiworld.push_precollected(self.create_item(self.starting_area_item))
+            # Set Starting Chunk
+            self.multiworld.push_precollected(self.create_item(self.starting_area_item))
 
     """
     This function pulls from LogicCSVToPython so that it sends the correct tag of the repository to the client.
@@ -109,7 +111,22 @@ class OSRSWorld(World):
     def fill_slot_data(self):
         data = self.options.as_dict("brutal_grinds")
         data["data_csv_tag"] = data_csv_tag
+        data["starting_area"] = str(self.starting_area_item) #these aren't actually strings, they just play them on tv
         return data
+
+    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]) -> None:
+        if "starting_area" in slot_data:
+            self.starting_area_item = slot_data["starting_area"]
+            menu_region = self.multiworld.get_region("Menu",self.player)
+            menu_region.exits.clear() #prevent making extra exits if players just reconnect to a differnet slot
+            if self.starting_area_item in chunksanity_special_region_names:
+                starting_area_region = chunksanity_special_region_names[self.starting_area_item]
+            else:
+                starting_area_region = self.starting_area_item[6:]  # len("Area: ")
+            starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
+            starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
+            starting_entrance.connect(self.region_name_to_data[starting_area_region])
+
 
     def create_regions(self) -> None:
         """
@@ -128,13 +145,14 @@ class OSRSWorld(World):
 
         # Removes the word "Area: " from the item name to get the region it applies to.
         # I figured tacking "Area: " at the beginning would make it _easier_ to tell apart. Turns out it made it worse
-        if self.starting_area_item in chunksanity_special_region_names:
-            starting_area_region = chunksanity_special_region_names[self.starting_area_item]
-        else:
-            starting_area_region = self.starting_area_item[6:]  # len("Area: ")
-        starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
-        starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
-        starting_entrance.connect(self.region_name_to_data[starting_area_region])
+        if self.starting_area_item != "": #if area hasn't been set, then we shouldn't connect it
+            if self.starting_area_item in chunksanity_special_region_names:
+                starting_area_region = chunksanity_special_region_names[self.starting_area_item]
+            else:
+                starting_area_region = self.starting_area_item[6:]  # len("Area: ")
+            starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
+            starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
+            starting_entrance.connect(self.region_name_to_data[starting_area_region])
 
         # Create entrances between regions
         for region_row in region_rows:
