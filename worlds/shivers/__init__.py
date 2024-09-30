@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 from typing import Optional
 
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
@@ -164,7 +164,7 @@ class ShiversWorld(World):
         else:
             item_pool.append(self.create_item("Heal"))
 
-        def set_lobby_access_keys(items: dict[str, int]):
+        def set_lobby_access_keys(items: Dict[str, int]):
             if lobby_access_keys == 0:
                 items["Key for Underground Lake"] = 1
                 items["Key for Office Elevator"] = 1
