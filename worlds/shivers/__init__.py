@@ -236,7 +236,8 @@ class ShiversWorld(World):
 
         fill_restrictive(self.multiworld, state, storage_locs.copy(), storage_items, True, True)
 
-        self.storage_placements = {location.name: location.item.name.replace(" DUPE", "") for location in storage_locs}
+        self.storage_placements = {location.name.replace("Storage: ", ""): location.item.name.replace(" DUPE", "") for
+                                   location in storage_locs}
 
         for name, data in item_table.items():
             if data.type == ItemType.GOAL:
