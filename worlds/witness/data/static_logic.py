@@ -228,7 +228,6 @@ class StaticWitnessLogicObj:
 
 # Item data parsed from WitnessItems.txt
 ALL_ITEMS: Dict[str, ItemDefinition] = {}
-_progressive_lookup: Dict[str, str] = {}
 
 
 def parse_items() -> None:
@@ -262,20 +261,11 @@ def parse_items() -> None:
             # Read filler weights.
             weight = int(arguments[0]) if len(arguments) >= 1 else 1
             ALL_ITEMS[item_name] = WeightedItemDefinition(item_code, current_category, weight)
-        elif arguments:
+        elif item_name.startswith("Progressive"):
             # Progressive items.
-            ALL_ITEMS[item_name] = ProgressiveItemDefinition(item_code, current_category, arguments)
-            for child_item in arguments:
-                _progressive_lookup[child_item] = item_name
+            ALL_ITEMS[item_name] = ProgressiveItemDefinition(item_code, current_category)
         else:
             ALL_ITEMS[item_name] = ItemDefinition(item_code, current_category)
-
-
-def get_parent_progressive_item(item_name: str) -> str:
-    """
-    Returns the name of the item's progressive parent, if there is one, or the item's name if not.
-    """
-    return _progressive_lookup.get(item_name, item_name)
 
 
 @cache_argsless
