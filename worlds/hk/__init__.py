@@ -123,7 +123,7 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
 
 
 class HKWeb(WebWorld):
-    setup = Tutorial(
+    setup_en = Tutorial(
         "Mod Setup and Use Guide",
         "A guide to playing Hollow Knight with Archipelago.",
         "English",
@@ -131,17 +131,27 @@ class HKWeb(WebWorld):
         "setup/en",
         ["Ijwu"]
     )
+    
+    setup_pt_br  = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Português Brasileiro",
+        "setup_pt_br.md",
+        "setup/pt_br",
+        ["JoaoVictor-FA"]
+    )
+
 
     setup_es = Tutorial(
-        setup.tutorial_name,
-        setup.description,
+        setup_en.tutorial_name,
+        setup_en.description,
         "Español",
         "setup_es.md",
         "setup/es",
         ["JustCallMeGio"]
     )
 
-    tutorials = [setup, setup_es]
+    tutorials = [setup_en, setup_pt_br, setup_es]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
