@@ -762,7 +762,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Beneath the Vault Ladder Exit"].connect(
         connecting_region=regions["Beneath the Vault Main"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
-        and has_lantern(state, world))
+        and has_lantern(state, world)
+        # there's some boxes in the way
+        and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand, laurels), player)))
+    # on the reverse trip, you can lure an enemy over to break the boxes if needed
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Ladder Exit"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
@@ -1339,13 +1342,26 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Frog's Domain - Escape Chest"),
              lambda state: state.has_any({grapple, laurels}, player))
 
+    # Library Lab
+    set_rule(world.get_location("Library Lab - Page 1"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 2"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 3"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+
     # Eastern Vault Fortress
     set_rule(world.get_location("Fortress Arena - Hexagon Red"),
              lambda state: state.has(vault_key, player))
+    # yes, you can clear the leaves with dagger
+    # gun isn't included since it can only break one leaf pile at a time, and we don't check how much mana you have
+    # but really, I expect the player to just throw a bomb at them if they don't have melee
+    set_rule(world.get_location("Fortress Leaf Piles - Secret Chest"),
+             lambda state: has_stick(state, player) or state.has(ice_dagger, player))
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: state.has_group("Melee Weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
+             lambda state: has_stick(state, player) or state.has_any({laurels, fire_wand}, player))
 
     # Quarry
     set_rule(world.get_location("Quarry - [Central] Above Ladder Dash Chest"),
