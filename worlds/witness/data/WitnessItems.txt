@@ -56,6 +56,7 @@ Doors:
 1119 - Quarry Stoneworks Entry (Panel) - 0x01E5A,0x01E59
 1120 - Quarry Stoneworks Ramp Controls (Panel) - 0x03678,0x03676
 1122 - Quarry Stoneworks Lift Controls (Panel) - 0x03679,0x03675
+1123 - Quarry Stoneworks Stairs (Panel) - 0x03677
 1125 - Quarry Boathouse Ramp Height Control (Panel) - 0x03852
 1127 - Quarry Boathouse Ramp Horizontal Control (Panel) - 0x03858
 1129 - Quarry Boathouse Hook Control (Panel) - 0x275FA
@@ -84,6 +85,7 @@ Doors:
 1205 - Treehouse Laser House Door Timer (Panel) - 0x2700B,0x17CBC
 1208 - Treehouse Drawbridge (Panel) - 0x037FF
 1175 - Jungle Popup Wall (Panel) - 0x17CAB
+1178 - Jungle Monastery Garden Shortcut (Panel) - 0x17CAA
 1180 - Bunker Entry (Panel) - 0x17C2E
 1183 - Bunker Tinted Glass Door (Panel) - 0x0A099
 1186 - Bunker Elevator Control (Panel) - 0x0A079
@@ -94,12 +96,15 @@ Doors:
 1195 - Swamp Rotating Bridge (Panel) - 0x181F5
 1196 - Swamp Long Bridge (Panel) - 0x17E2B
 1197 - Swamp Maze Controls (Panel) - 0x17C0A,0x17E07
+1199 - Swamp Laser Shortcut (Panel) - 0x17C05
 1220 - Mountain Floor 1 Light Bridge (Panel) - 0x09E39
 1225 - Mountain Floor 2 Light Bridge Near (Panel) - 0x09E86
 1230 - Mountain Floor 2 Light Bridge Far (Panel) - 0x09ED8
 1235 - Mountain Floor 2 Elevator Control (Panel) - 0x09EEB
 1240 - Caves Entry (Panel) - 0x00FF8
 1242 - Caves Elevator Controls (Panel) - 0x335AB,0x335AC,0x3369D
+1243 - Caves Mountain Shortcut (Panel) - 0x021D7
+1244 - Caves Swamp Shortcut (Panel) - 0x17CF2
 1245 - Challenge Entry (Panel) - 0x0A16E
 1250 - Tunnels Entry (Panel) - 0x039B4
 1255 - Tunnels Town Shortcut (Panel) - 0x09E85
@@ -250,19 +255,20 @@ Doors:
 2101 - Outside Tutorial Outpost Panels - 0x0A171,0x04CA4
 2105 - Desert Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B,0x0C339,0x0A249,0x0A015,0x09FA0,0x09F86
 2110 - Quarry Outside Panels - 0x17C09,0x09E57,0x17CC4
-2115 - Quarry Stoneworks Panels - 0x01E5A,0x01E59,0x03678,0x03676,0x03679,0x03675
+2115 - Quarry Stoneworks Panels - 0x01E5A,0x01E59,0x03678,0x03676,0x03679,0x03675,0x03677
 2120 - Quarry Boathouse Panels - 0x03852,0x03858,0x275FA
 2122 - Keep Hedge Maze Panels - 0x00139,0x019DC,0x019E7,0x01A0F
 2125 - Monastery Panels - 0x09D9B,0x00C92,0x00B10
+2127 - Jungle Panels - 0x17CAB,0x17CAA
 2130 - Town Church & RGB House Panels - 0x28998,0x28A0D,0x334D8
 2135 - Town Maze Panels - 0x2896A,0x28A79
 2137 - Town Dockside House Panels - 0x0A0C8,0x09F98
 2140 - Windmill & Theater Panels - 0x17D02,0x00815,0x17F5F,0x17F89,0x0A168,0x33AB2
 2145 - Treehouse Panels - 0x0A182,0x0288C,0x02886,0x2700B,0x17CBC,0x037FF
 2150 - Bunker Panels - 0x34BC5,0x34BC6,0x0A079,0x0A099,0x17C2E
-2155 - Swamp Panels - 0x00609,0x18488,0x181F5,0x17E2B,0x17C0A,0x17E07,0x17C0D,0x0056E
+2155 - Swamp Panels - 0x00609,0x18488,0x181F5,0x17E2B,0x17C0A,0x17E07,0x17C0D,0x0056E,0x17C05
 2160 - Mountain Panels - 0x09ED8,0x09E86,0x09E39,0x09EEB
-2165 - Caves Panels - 0x3369D,0x00FF8,0x0A16E,0x335AB,0x335AC
+2165 - Caves Panels - 0x3369D,0x00FF8,0x0A16E,0x335AB,0x335AC,0x021D7,0x17CF2
 2170 - Tunnels Panels - 0x09E85,0x039B4
 
 2200 - Desert Obelisk Key - 0x0332B,0x03367,0x28B8A,0x037B6,0x037B2,0x000F7,0x3351D,0x0053C,0x00771,0x335C8,0x335C9,0x337F8,0x037BB,0x220E4,0x220E5,0x334B9,0x334BC,0x22106,0x0A14C,0x0A14D,0x00359

@@ -82,6 +82,7 @@ class WitnessPlayerLogic:
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI: Set[str] = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+        self.FORBIDDEN_DOORS: Set[str] = set()
         self.STARTING_INVENTORY: Set[str] = set()
 
         self.DIFFICULTY = world.options.puzzle_randomization
@@ -191,8 +192,9 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
-        # Handle door entities (door shuffle)
-        if entity_hex in self.DOOR_ITEMS_BY_ID:
+        # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
+        # Also, remove any original power requirements this entity might have had.
+        if entity_hex in self.DOOR_ITEMS_BY_ID and entity_hex not in self.FORBIDDEN_DOORS:
             # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
@@ -327,6 +329,10 @@ class WitnessPlayerLogic:
                 for entity_hex in entity_hexes:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
+
+        if adj_type == "Forbidden Doors":
+            entity_hex = line[:7]
+            self.FORBIDDEN_DOORS.add(entity_hex)
 
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
@@ -682,7 +688,7 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-        for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
+        for entity_id in self.COMPLETELY_DISABLED_ENTITIES | self.FORBIDDEN_DOORS:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
