@@ -136,7 +136,7 @@ class AquariaWorld(World):
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            item = AquariaItem(item_name, ItemClassification.useful, data.id, self.player)
+            item = AquariaItem(item_name, ItemClassification.progression, data.id, self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
