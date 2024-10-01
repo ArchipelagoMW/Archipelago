@@ -1,5 +1,6 @@
 from typing import Any, List, Dict, Tuple, Mapping
 
+from Fill import FillError
 from Options import OptionError
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
@@ -268,8 +269,13 @@ class ShapezWorld(World):
         if not self.options.lock_belt_and_extractor:
             for name in belt_and_extractor:
                 self.multiworld.push_precollected(self.create_item(name))
-        else:
+        else:  # This also requires self.options.include_achievements to be true
             included_items.extend([self.create_item(name) for name in belt_and_extractor.keys()])
+
+        # Give a detailed error message if there are already more items than available locations.
+        # At the moment, this won't happen, but it's better for debugging in case a future update breaks things.
+        if len(included_items) > self.location_count:
+            raise RuntimeError(self.player_name + ": There are more guaranteed items than available locations")
 
         # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage/100
