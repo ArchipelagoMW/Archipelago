@@ -14,7 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
-from .data.utils import get_audio_logs
+from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
 from .options import TheWitnessOptions, witness_option_groups
@@ -55,7 +55,7 @@ class WitnessWorld(World):
 
     item_name_to_id = {
         # ITEM_DATA doesn't have any event items in it
-        name: cast(int, data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
+        name: cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
     }
     location_name_to_id = static_witness_locations.ALL_LOCATIONS_TO_ID
     item_name_groups = static_witness_items.ITEM_GROUPS
@@ -336,7 +336,7 @@ class WitnessWorld(World):
             for item_name, hint in laser_hints.items():
                 item_def = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name])
                 self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
-                already_hinted_locations.add(cast(Location, hint.location))
+                already_hinted_locations.add(cast_not_none(hint.location))
 
         # Audio Log Hints
 
