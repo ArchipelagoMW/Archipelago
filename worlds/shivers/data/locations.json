@@ -54,7 +54,7 @@
     "Final Riddle: Norse God Stone Message",
     "Final Riddle: Beth's Body Page 17",
     "Final Riddle: Guillotine Dropped",
-    "Puzzle Hint Found: Combo Lock in Mailbox",
+    "Puzzle Hint Found: Mailbox",
     "Puzzle Hint Found: Orange Symbol",
     "Puzzle Hint Found: Silver Symbol",
     "Puzzle Hint Found: Green Symbol",
@@ -114,15 +114,18 @@
     "Puzzle Solved Bedroom Elevator",
     "Puzzle Solved Three Floor Elevator",
     "Ixupi Captured Lightning",
+    "Puzzle Solved Combination Lock",
+    "Puzzle Hint Found: Beth's Note",
     "Mystery Solved"
   ],
   "locations_by_region": {
     "Outside": [
+      "Puzzle Solved Gear Combination",
       "Puzzle Solved Gears",
       "Puzzle Solved Stone Henge",
       "Puzzle Solved Office Elevator",
       "Puzzle Solved Three Floor Elevator",
-      "Puzzle Hint Found: Combo Lock in Mailbox",
+      "Puzzle Hint Found: Mailbox",
       "Puzzle Hint Found: Orange Symbol",
       "Puzzle Hint Found: Silver Symbol",
       "Puzzle Hint Found: Green Symbol",
@@ -181,7 +184,8 @@
       "Final Riddle: Beth's Body Page 17"
     ],
     "Theater": [
-      "Storage: Theater"
+      "Storage: Theater",
+      "Puzzle Hint Found: Beth's Note"
     ],
     "Theater Back Hallway": [
       "Puzzle Solved Clock Tower Door"
@@ -256,7 +260,6 @@
       "Puzzle Solved Lyre",
       "Puzzle Solved Red Door",
       "Storage: Lyre",
-      "Final Riddle: Norse God Stone Message",
       "Information Plaque: (Gods) Fisherman's Canoe God",
       "Information Plaque: (Gods) Mayan Gods",
       "Information Plaque: (Gods) Thor",
@@ -264,6 +267,9 @@
       "Information Plaque: (Gods) Sumerian Bull God - An",
       "Information Plaque: (Gods) Sumerian Lyre",
       "Information Plaque: (Gods) Chuen"
+    ],
+    "Norse Stone": [
+      "Final Riddle: Norse God Stone Message"
     ],
     "Blue Maze": [
       "Puzzle Solved Fortune Teller Door"
@@ -279,11 +285,13 @@
     "UFO": [
       "Puzzle Solved UFO Symbols",
       "Storage: UFO",
-      "Final Riddle: Planets Aligned",
       "Information Plaque: (UFO) Coincidence or Extraterrestrial Visits?",
       "Information Plaque: (UFO) Planets",
       "Information Plaque: (UFO) Astronomical Construction",
       "Information Plaque: (UFO) Aliens"
+    ],
+    "Orrery": [
+      "Final Riddle: Planets Aligned"
     ],
     "Janitor Closet": [
       "Storage: Janitor Closet"

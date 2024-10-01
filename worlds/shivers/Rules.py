@@ -117,8 +117,10 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             "To Janitor Closet": lambda state: state.has("Key for Janitor Closet", player),
             "To Shaman From Burial": lambda state: state.has("Key for Shaman Room", player),
             "To Burial From Shaman": lambda state: state.has("Key for Shaman Room", player),
+            "To Norse Stone From Gods Room": lambda state: state.has("Aligned Planets", player),
             "To Inventions From UFO": lambda state: state.has("Key for UFO Room", player),
             "To UFO From Inventions": lambda state: state.has("Key for UFO Room", player),
+            "To Orrery From UFO": lambda state: state.has("Viewed Fortune", player),
             "To Torture From Inventions": lambda state: state.has("Key for Torture Room", player),
             "To Inventions From Torture": lambda state: state.has("Key for Torture Room", player),
             "To Torture": lambda state: state.has("Key for Puzzle Room", player),
@@ -162,14 +164,10 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             "Ixupi Captured Crystal": lambda state: crystal_capturable(state, player),
             "Ixupi Captured Sand": lambda state: sand_capturable(state, player),
             "Ixupi Captured Metal": lambda state: metal_capturable(state, player),
-            "Final Riddle: Planets Aligned": lambda state: state.can_reach_region("Fortune Teller", player),
-            "Final Riddle: Norse God Stone Message": lambda state: state.can_reach_region("Fortune Teller", player) and state.can_reach_region("UFO", player),
             "Puzzle Solved Skull Dial Door": lambda state: all_skull_dials_set(state, player),
-            "Jukebox": lambda state: state.can_reach_region("Clock Tower", player),
         },
         "puzzle_hints_required": {
             "Puzzle Solved Clock Tower Door": lambda state: state.can_reach_region("Three Floor Elevator", player),
-            "Jukebox": lambda state: state.can_reach_region("Anansi", player),
             "Puzzle Solved Shaman Drums": lambda state: state.can_reach_region("Clock Tower", player),
             "Puzzle Solved Red Door": lambda state: state.can_reach_region("Maintenance Tunnels", player),
             "Puzzle Solved UFO Symbols": lambda state: state.can_reach_region("Library", player),
@@ -212,10 +210,7 @@ def set_rules(world: "ShiversWorld") -> None:
         multiworld.get_region("Beth's Body", player),
         "To Beth's Body From Generator",
         lambda state: beths_body_available(state, world, player) and (
-            (state.can_reach_region("Fortune Teller", player) and
-             state.can_reach_region("UFO", player) and
-             state.can_reach_region("Gods Room", player) and
-             state.can_reach_region("Theater", player))
+            (state.has("Viewed Norse Stone", player) and state.can_reach_region("Theater", player))
             if world.options.puzzle_hints_required.value else True
         )
     )
@@ -233,6 +228,13 @@ def set_rules(world: "ShiversWorld") -> None:
     for location_name, rule in rules_lookup["locations_required"].items():
         multiworld.get_location(location_name, player).access_rule = rule
 
+        multiworld.get_location("Jukebox", player).access_rule = lambda state: (
+            state.can_reach_region("Clock Tower", player) and (
+                state.can_reach_region("Anansi", player)
+                if world.options.puzzle_hints_required.value else True
+            )
+        )
+
     # Set option location rules
     if world.options.puzzle_hints_required.value:
         for location_name, rule in rules_lookup["puzzle_hints_required"].items():
@@ -248,10 +250,12 @@ def set_rules(world: "ShiversWorld") -> None:
             world.get_entrance("To Clock Tower Staircase From Theater Back Hallway")
         )
 
-        multiworld.get_entrance("To Gods Room", player).access_rule = lambda state: state.can_reach_region(
+        multiworld.get_entrance("To Gods Room From Shaman", player).access_rule = lambda state: state.can_reach_region(
             "Clock Tower", player
         )
-        multiworld.register_indirect_condition(world.get_region("Clock Tower"), world.get_entrance("To Gods Room"))
+        multiworld.register_indirect_condition(
+            world.get_region("Clock Tower"), world.get_entrance("To Gods Room From Shaman")
+        )
 
         multiworld.get_entrance("To Anansi From Gods Room", player).access_rule = lambda state: state.can_reach_region(
             "Maintenance Tunnels", player
@@ -267,12 +271,12 @@ def set_rules(world: "ShiversWorld") -> None:
         )
 
         multiworld.register_indirect_condition(
-            world.get_region("Underground Lake"), world.get_entrance("To Guillotine From Torture")
-        )
-
-        multiworld.register_indirect_condition(
             world.get_region("Bedroom"), world.get_entrance("To Clock Chains From Clock Tower Staircase")
         )
+        multiworld.register_indirect_condition(
+            world.get_region("Theater"), world.get_entrance("To Beth's Body From Generator")
+        )
+
     if world.options.elevators_stay_solved.value:
         for location_name, rule in rules_lookup["elevators"].items():
             multiworld.get_location(location_name, player).access_rule = rule
@@ -281,12 +285,6 @@ def set_rules(world: "ShiversWorld") -> None:
             multiworld.get_location(location_name, player).access_rule = rule
 
     # Register indirect conditions
-    multiworld.register_indirect_condition(world.get_region("Burial"), world.get_entrance("To Slide Room"))
-    multiworld.register_indirect_condition(world.get_region("Egypt"), world.get_entrance("To Slide Room"))
-    multiworld.register_indirect_condition(world.get_region("Gods Room"), world.get_entrance("To Slide Room"))
-    multiworld.register_indirect_condition(world.get_region("Prehistoric"), world.get_entrance("To Slide Room"))
-    multiworld.register_indirect_condition(world.get_region("Tar River"), world.get_entrance("To Slide Room"))
-    multiworld.register_indirect_condition(world.get_region("Werewolf"), world.get_entrance("To Slide Room"))
     multiworld.register_indirect_condition(world.get_region("Prehistoric"), world.get_entrance("To Tar River From Lobby"))
 
     # forbid cloth in janitor closet and oil in tar river
