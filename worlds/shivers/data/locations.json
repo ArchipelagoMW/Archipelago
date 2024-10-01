@@ -19,7 +19,7 @@
     "Puzzle Solved Fortune Teller Door",
     "Puzzle Solved Alchemy",
     "Puzzle Solved UFO Symbols",
-    "Puzzle Solved Anansi Musicbox",
+    "Puzzle Solved Anansi Music Box",
     "Puzzle Solved Gallows",
     "Puzzle Solved Mastermind",
     "Puzzle Solved Marble Flipper",
@@ -131,7 +131,9 @@
       "Puzzle Hint Found: Tan Symbol"
     ],
     "Underground Lake": [
-      "Flashback Memory Obtained Windlenot's Ghost",
+      "Flashback Memory Obtained Windlenot's Ghost"
+    ],
+    "Windlenot's Body": [
       "Flashback Memory Obtained Egyptian Hieroglyphics Explained"
     ],
     "Office": [
@@ -293,10 +295,10 @@
       "Information Plaque: (Pegasus) Cyclops"
     ],
     "Anansi": [
-      "Puzzle Solved Anansi Musicbox",
+      "Puzzle Solved Anansi Music Box",
       "Flashback Memory Obtained Ancient Astrology",
       "Storage: Skeleton",
-      "Storage: Anansi Musicbox",
+      "Storage: Anansi Music Box",
       "Information Plaque: (Anansi) African Creation Myth",
       "Information Plaque: (Anansi) Apophis the Serpent",
       "Information Plaque: (Anansi) Death"

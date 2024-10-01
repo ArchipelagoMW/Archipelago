@@ -97,6 +97,7 @@ class ShiversWorld(World):
         self.create_event_location("Clock Chains", "Clock Chains", "Set Time")
         self.create_event_location("Clock Tower", "Jukebox", "Set Song")
         self.create_event_location("Beth's Body", "Beth's Body", "Viewed Page 17")
+        self.create_event_location("Windlenot's Body", "Windlenot's Body", "Viewed Egyptian Hieroglyphics Explained")
         self.create_event_location("Guillotine", "Guillotine", "Lost Your Head")
 
     def create_items(self) -> None:

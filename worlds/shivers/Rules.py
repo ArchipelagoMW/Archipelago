@@ -146,8 +146,8 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             )
         },
         "locations_required": {
-            "Puzzle Solved Anansi Musicbox": lambda state: state.has("Set Song", player),
-            "Storage: Anansi Musicbox": lambda state: state.has("Set Song", player),
+            "Puzzle Solved Anansi Music Box": lambda state: state.has("Set Song", player),
+            "Storage: Anansi Music Box": lambda state: state.has("Set Song", player),
             "Storage: Clock Tower": lambda state: state.has("Set Time", player),
             "Storage: Janitor Closet": lambda state: cloth_capturable(state, player),
             "Storage: Tar River": lambda state: oil_capturable(state, player),
@@ -169,12 +169,15 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
         },
         "puzzle_hints_required": {
             "Puzzle Solved Clock Tower Door": lambda state: state.can_reach_region("Three Floor Elevator", player),
+            "Jukebox": lambda state: state.can_reach_region("Anansi", player),
             "Puzzle Solved Shaman Drums": lambda state: state.can_reach_region("Clock Tower", player),
             "Puzzle Solved Red Door": lambda state: state.can_reach_region("Maintenance Tunnels", player),
             "Puzzle Solved UFO Symbols": lambda state: state.can_reach_region("Library", player),
+            "Storage: UFO": lambda state: state.can_reach_region("Library", player),
             "Puzzle Solved Maze Door": lambda state: state.can_reach_region("Projector Room", player),
-            "Puzzle Solved Theater Door": lambda state: state.can_reach_region("Underground Lake", player),
-            "Puzzle Solved Columns of RA": lambda state: state.can_reach_region("Underground Lake", player),
+            "Puzzle Solved Theater Door": lambda state: state.has("Viewed Egyptian Hieroglyphics Explained", player),
+            "Puzzle Solved Columns of RA": lambda state: state.has("Viewed Egyptian Hieroglyphics Explained", player),
+            "Puzzle Solved Atlantis": lambda state: state.can_reach_region("Office", player),
         },
         "elevators": {
             "Puzzle Solved Office Elevator": lambda state: (state.can_reach_region("Underground Lake", player) or state.can_reach_region("Office", player))
@@ -208,14 +211,21 @@ def set_rules(world: "ShiversWorld") -> None:
     multiworld.get_region("Generator", player).connect(
         multiworld.get_region("Beth's Body", player),
         "To Beth's Body From Generator",
-        lambda state: beths_body_available(state, world, player)
+        lambda state: beths_body_available(state, world, player) and (
+            (state.can_reach_region("Fortune Teller", player) and
+             state.can_reach_region("UFO", player) and
+             state.can_reach_region("Gods Room", player) and
+             state.can_reach_region("Theater", player))
+            if world.options.puzzle_hints_required.value else True
+        )
     )
 
     multiworld.get_region("Torture", player).connect(
         multiworld.get_region("Guillotine", player),
         "To Guillotine From Torture",
         lambda state: state.has("Viewed Page 17", player) and (
-            state.can_reach_region("Underground Lake", player) if world.options.puzzle_hints_required.value else True
+            state.has("Viewed Egyptian Hieroglyphics Explained", player)
+            if world.options.puzzle_hints_required.value else True
         )
     )
 
@@ -228,11 +238,8 @@ def set_rules(world: "ShiversWorld") -> None:
         for location_name, rule in rules_lookup["puzzle_hints_required"].items():
             multiworld.get_location(location_name, player).access_rule = rule
 
-        multiworld.get_entrance("To Theater From Lobby", player).access_rule = lambda state: state.can_reach_region(
-            "Underground Lake", player
-        )
-        multiworld.register_indirect_condition(
-            world.get_region("Underground Lake"), world.get_entrance("To Theater From Lobby")
+        multiworld.get_entrance("To Theater From Lobby", player).access_rule = lambda state: state.has(
+            "Viewed Egyptian Hieroglyphics Explained", player
         )
 
         multiworld.get_entrance("To Clock Tower Staircase From Theater Back Hallway", player).access_rule = lambda state: state.can_reach_region("Three Floor Elevator", player)
