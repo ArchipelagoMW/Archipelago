@@ -338,6 +338,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "seed_name": multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
+                    "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 

@@ -243,6 +243,8 @@ class ServerLabel(HovererableLabel):
                             f"\nYou currently have {ctx.hint_points} points."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
+                if ctx.stored_data and "race_mode" in ctx.stored_data:
+                    text += "\nRace mode is enabled." if ctx.stored_data["race_mode"] else "\nRace mode is disabled."
             else:
                 text += f"\nYou are not authenticated yet."
 
