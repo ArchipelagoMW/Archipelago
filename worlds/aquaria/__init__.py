@@ -131,12 +131,13 @@ class AquariaWorld(World):
 
         return result
 
-    def __pre_fill_item(self, item_name: str, location_name: str, precollected) -> None:
+    def __pre_fill_item(self, item_name: str, location_name: str, precollected,
+                        itemClassification: ItemClassification = ItemClassification.useful) -> None:
         """Pre-assign an item to a location"""
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            item = AquariaItem(item_name, ItemClassification.progression, data.id, self.player)
+            item = AquariaItem(item_name, itemClassification, data.id, self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
@@ -174,7 +175,7 @@ class AquariaWorld(World):
                                  precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
             self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE,
-                                 precollected)
+                                 precollected, ItemClassification.progression)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
                                  precollected)
         for name, data in item_table.items():
@@ -237,4 +238,6 @@ class AquariaWorld(World):
                     or self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_both,
                 "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
                 "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
+                "light_needed_to_get_to_dark_places": bool(self.options.light_needed_to_get_to_dark_places),
+                "turtle_randomizer": self.options.turtle_randomizer.value
                 }
