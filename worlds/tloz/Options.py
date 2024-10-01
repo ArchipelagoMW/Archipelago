@@ -1,5 +1,6 @@
 import typing
-from Options import Option, DefaultOnToggle, Choice
+from dataclasses import dataclass
+from Options import Option, DefaultOnToggle, Choice, PerGameCommonOptions
 
 
 class ExpandedPool(DefaultOnToggle):
@@ -32,9 +33,8 @@ class StartingPosition(Choice):
     option_dangerous = 2
     option_very_dangerous = 3
 
-
-tloz_options: typing.Dict[str, type(Option)] = {
-    "ExpandedPool": ExpandedPool,
-    "TriforceLocations": TriforceLocations,
-    "StartingPosition": StartingPosition
-}
+@dataclass
+class TlozOptions(PerGameCommonOptions):
+    ExpandedPool: ExpandedPool
+    TriforceLocations: TriforceLocations
+    StartingPosition: StartingPosition

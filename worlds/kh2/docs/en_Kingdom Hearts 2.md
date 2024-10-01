@@ -4,9 +4,9 @@
 
 This randomizer creates a more dynamic play experience by randomizing the locations of most items in Kingdom Hearts 2. Currently all items within Chests, Popups, Get Bonuses, Form Levels, and Sora's Levels are randomized. This allows abilities that Sora would normally have to be placed on Keyblades with random stats. Additionally, there are several options for ways to finish the game, allowing for different goals beyond beating the final boss.
 
-<h2 style="text-transform:none";>Where is the settings page</h2>
+<h2 style="text-transform:none";>Where is the options page</h2>
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
 
 <h2 style="text-transform:none";>What is randomized in this game?</h2>
@@ -16,6 +16,7 @@ The [player settings page for this game](../player-settings) contains all the op
 - Popups
 - Get Bonuses
 - Form Levels
+- Summon Levels
 - Sora's Levels
 - Keyblade Stats
 - Keyblade Abilities
@@ -23,7 +24,7 @@ The [player settings page for this game](../player-settings) contains all the op
 <h2 style="text-transform:none";>What Kingdom Hearts 2 items can appear in other players' worlds?</h2>
 
 
-Every item in the game except for party members' abilities.
+Every item in the game except for abilities on weapons.
 
 <h2 style="text-transform:none";>What is The Garden of Assemblage "GoA"?</h2>
 
@@ -63,6 +64,24 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 - Customize the amount and level of progressive movement (Growth Abilities) you start with.
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice.
 
+<h2 style="text-transform:none";>What are Lucky Emblems?</h2>
+Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem Hunt".<br>
+You can think of these as requiring X number of Proofs of Nonexistence to open the final door.
+
+<h2 style="text-transform:none";>What is Hitlist/Bounties?</h2>
+The Hitlist goal adds "bounty" items to select late-game fights and locations, and you need to collect X number of them to win.<br>
+The list of possible locations that can contain a bounty:
+
+- Each of the 13 Data Fights
+- Max level (7) for each Drive Form
+- Max level (7) of Summons
+- Last song of Atlantica
+- Sephiroth
+- Lingering Will
+- Starry Hill
+- Transport to Remembrance
+- Godess of Fate cup and Hades Paradox cup
+
 <h2 style="text-transform:none";>Quality of life:</h2>
 
 
@@ -71,6 +90,7 @@ With the help of Shananas, Num, and ZakTheRobot we have many QoL features such a
 
 - Faster Wardrobe.
 - Faster Water Jafar Chase.
+- Faster Bulky Vendors
 - Carpet Skip.
 - Start with Lion Dash.
 - Faster Urns.

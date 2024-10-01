@@ -7,21 +7,50 @@ import zipfile
 import zlib
 
 from io import BytesIO
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import request, flash, redirect, url_for, session, render_template, abort
 from markupsafe import Markup
 from pony.orm import commit, flush, select, rollback
 from pony.orm.core import TransactionIntegrityError
+import schema
 
 import MultiServer
 from NetUtils import SlotType
 from Utils import VersionException, __version__
+from worlds import GamesPackage
 from worlds.Files import AutoPatchRegister
+from worlds.AutoWorld import data_package_checksum
 from . import app
 from .models import Seed, Room, Slot, GameDataPackage
 
-banned_zip_contents = (".sfc", ".z64", ".n64", ".sms", ".gb")
+banned_extensions = (".sfc", ".z64", ".n64", ".nes", ".smc", ".sms", ".gb", ".gbc", ".gba")
+allowed_options_extensions = (".yaml", ".json", ".yml", ".txt", ".zip")
+allowed_generation_extensions = (".archipelago", ".zip")
+
+games_package_schema = schema.Schema({
+    "item_name_groups": {str: [str]},
+    "item_name_to_id": {str: int},
+    "location_name_groups": {str: [str]},
+    "location_name_to_id": {str: int},
+    schema.Optional("checksum"): str,
+    schema.Optional("version"): int,
+})
+
+
+def allowed_options(filename: str) -> bool:
+    return filename.endswith(allowed_options_extensions)
+
+
+def allowed_generation(filename: str) -> bool:
+    return filename.endswith(allowed_generation_extensions)
+
+
+def banned_file(filename: str) -> bool:
+    return filename.endswith(banned_extensions)
+
 
 def process_multidata(compressed_multidata, files={}):
+    game_data: GamesPackage
+
     decompressed_multidata = MultiServer.Context.decompress(compressed_multidata)
 
     slots: typing.Set[Slot] = set()
@@ -30,11 +59,20 @@ def process_multidata(compressed_multidata, files={}):
         game_data_packages: typing.List[GameDataPackage] = []
         for game, game_data in decompressed_multidata["datapackage"].items():
             if game_data.get("checksum"):
+                original_checksum = game_data.pop("checksum")
+                game_data = games_package_schema.validate(game_data)
+                game_data = {key: value for key, value in sorted(game_data.items())}
+                game_data["checksum"] = data_package_checksum(game_data)
+                if original_checksum != game_data["checksum"]:
+                    raise Exception(f"Original checksum {original_checksum} != "
+                                    f"calculated checksum {game_data['checksum']} "
+                                    f"for game {game}.")
+
                 game_data_package = GameDataPackage(checksum=game_data["checksum"],
                                                     data=pickle.dumps(game_data))
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
-                    "checksum": game_data["checksum"]
+                    "checksum": game_data["checksum"],
                 }
                 try:
                     commit()  # commit game data package
@@ -49,20 +87,21 @@ def process_multidata(compressed_multidata, files={}):
             if slot_info.type == SlotType.group:
                 continue
             slots.add(Slot(data=files.get(slot, None),
-                            player_name=slot_info.name,
-                            player_id=slot,
-                            game=slot_info.game))
+                           player_name=slot_info.name,
+                           player_id=slot,
+                           game=slot_info.game))
         flush()  # commit slots
 
     compressed_multidata = compressed_multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
     return slots, compressed_multidata
 
+
 def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, sid=None):
     if not owner:
         owner = session["_id"]
     infolist = zfile.infolist()
-    if all(file.filename.endswith((".yaml", ".yml")) or file.is_dir() for file in infolist):
-        flash(Markup("Error: Your .zip file only contains .yaml files. "
+    if all(allowed_options(file.filename) or file.is_dir() for file in infolist):
+        flash(Markup("Error: Your .zip file only contains options files. "
                      'Did you mean to <a href="/generate">generate a game</a>?'))
         return
 
@@ -73,7 +112,7 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
     # Load files.
     for file in infolist:
         handler = AutoPatchRegister.get_handler(file.filename)
-        if file.filename.endswith(banned_zip_contents):
+        if banned_file(file.filename):
             return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
                    "Your file was deleted."
 
@@ -136,35 +175,36 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         flash("No multidata was found in the zip file, which is required.")
 
 
-@app.route('/uploads', methods=['GET', 'POST'])
+@app.route("/uploads", methods=["GET", "POST"])
 def uploads():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
+    if request.method == "POST":
+        # check if the POST request has a file part.
+        if "file" not in request.files:
+            flash("No file part in POST request.")
         else:
-            file = request.files['file']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if file.filename == '':
-                flash('No selected file')
-            elif file and allowed_file(file.filename):
-                if zipfile.is_zipfile(file):
-                    with zipfile.ZipFile(file, 'r') as zfile:
+            uploaded_file = request.files["file"]
+            # If the user does not select file, the browser will still submit an empty string without a file name.
+            if uploaded_file.filename == "":
+                flash("No selected file.")
+            elif uploaded_file and allowed_generation(uploaded_file.filename):
+                if zipfile.is_zipfile(uploaded_file):
+                    with zipfile.ZipFile(uploaded_file, "r") as zfile:
                         try:
                             res = upload_zip_to_db(zfile)
                         except VersionException:
                             flash(f"Could not load multidata. Wrong Version detected.")
+                        except Exception as e:
+                            flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                         else:
-                            if type(res) == str:
+                            if res is str:
                                 return res
                             elif res:
                                 return redirect(url_for("view_seed", seed=res.id))
                 else:
-                    file.seek(0)  # offset from is_zipfile check
+                    uploaded_file.seek(0)  # offset from is_zipfile check
                     # noinspection PyBroadException
                     try:
-                        multidata = file.read()
+                        multidata = uploaded_file.read()
                         slots, multidata = process_multidata(multidata)
                     except Exception as e:
                         flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
@@ -184,5 +224,27 @@ def user_content():
     return render_template("userContent.html", rooms=rooms, seeds=seeds)
 
 
-def allowed_file(filename):
-    return filename.endswith(('.archipelago', ".zip"))
+@app.route("/disown_seed/<suuid:seed>", methods=["GET"])
+def disown_seed(seed):
+    seed = Seed.get(id=seed)
+    if not seed:
+        return abort(404)
+    if seed.owner !=  session["_id"]:
+        return abort(403)
+    
+    seed.owner = 0
+
+    return redirect(url_for("user_content"))
+
+
+@app.route("/disown_room/<suuid:room>", methods=["GET"])
+def disown_room(room):
+    room = Room.get(id=room)
+    if not room:
+        return abort(404)
+    if room.owner != session["_id"]:
+        return abort(403)
+
+    room.owner = 0
+
+    return redirect(url_for("user_content"))

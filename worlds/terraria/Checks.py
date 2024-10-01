@@ -177,6 +177,7 @@ def validate_conditions(
             if condition not in {
                 "npc",
                 "calamity",
+                "grindy",
                 "pickaxe",
                 "hammer",
                 "mech_boss",
@@ -221,62 +222,60 @@ def mark_progression(
             mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
 
 
-def read_data() -> (
-    Tuple[
-        # Goal to rule index that ends that goal's range and the locations required
-        List[Tuple[int, Set[str]]],
-        # Rules
-        List[
-            Tuple[
-                # Rule
-                str,
-                # Flag to flag arg
-                Dict[str, Union[str, int, None]],
-                # True = or, False = and, None = N/A
-                Union[bool, None],
-                # Conditions
-                List[
-                    Tuple[
-                        # True = positive, False = negative
-                        bool,
-                        # Condition type
-                        int,
-                        # Condition name or list (True = or, False = and, None = N/A) (list shares type with outer)
-                        Union[str, Tuple[Union[bool, None], List]],
-                        # Condition arg
-                        Union[str, int, None],
-                    ]
-                ],
-            ]
-        ],
-        # Rule to rule index
-        Dict[str, int],
-        # Label to rewards
-        Dict[str, List[str]],
-        # Reward to flags
-        Dict[str, Set[str]],
-        # Item name to ID
-        Dict[str, int],
-        # Location name to ID
-        Dict[str, int],
-        # NPCs
-        List[str],
-        # Pickaxe to pick power
-        Dict[str, int],
-        # Hammer to hammer power
-        Dict[str, int],
-        # Mechanical bosses
-        List[str],
-        # Calamity final bosses
-        List[str],
-        # Progression rules
-        Set[str],
-        # Armor to minion count,
-        Dict[str, int],
-        # Accessory to minion count,
-        Dict[str, int],
-    ]
-):
+def read_data() -> Tuple[
+    # Goal to rule index that ends that goal's range and the locations required
+    List[Tuple[int, Set[str]]],
+    # Rules
+    List[
+        Tuple[
+            # Rule
+            str,
+            # Flag to flag arg
+            Dict[str, Union[str, int, None]],
+            # True = or, False = and, None = N/A
+            Union[bool, None],
+            # Conditions
+            List[
+                Tuple[
+                    # True = positive, False = negative
+                    bool,
+                    # Condition type
+                    int,
+                    # Condition name or list (True = or, False = and, None = N/A) (list shares type with outer)
+                    Union[str, Tuple[Union[bool, None], List]],
+                    # Condition arg
+                    Union[str, int, None],
+                ]
+            ],
+        ]
+    ],
+    # Rule to rule index
+    Dict[str, int],
+    # Label to rewards
+    Dict[str, List[str]],
+    # Reward to flags
+    Dict[str, Set[str]],
+    # Item name to ID
+    Dict[str, int],
+    # Location name to ID
+    Dict[str, int],
+    # NPCs
+    List[str],
+    # Pickaxe to pick power
+    Dict[str, int],
+    # Hammer to hammer power
+    Dict[str, int],
+    # Mechanical bosses
+    List[str],
+    # Calamity final bosses
+    List[str],
+    # Progression rules
+    Set[str],
+    # Armor to minion count,
+    Dict[str, int],
+    # Accessory to minion count,
+    Dict[str, int],
+]:
     next_id = 0x7E0000
     item_name_to_id = {}
 

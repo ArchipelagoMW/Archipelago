@@ -2,9 +2,10 @@ import functools
 import logging
 from typing import Any, Dict, List
 
-from BaseClasses import Entrance, CollectionState, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import Entrance, CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from . import Items, Locations, Maps, Options, Regions, Rules
+from . import Items, Locations, Maps, Regions, Rules
+from .Options import DOOM1993Options
 
 logger = logging.getLogger("DOOM 1993")
 
@@ -37,10 +38,10 @@ class DOOM1993World(World):
     Developed by id Software, and originally released in 1993, DOOM pioneered and popularized the first-person shooter,
     setting a standard for all FPS games.
     """
-    option_definitions = Options.options
+    options_dataclass = DOOM1993Options
+    options: DOOM1993Options
     game = "DOOM 1993"
     web = DOOM1993Web()
-    data_version = 3
     required_client_version = (0, 3, 9)
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
@@ -54,6 +55,13 @@ class DOOM1993World(World):
         "Deimos Anomaly (E2M1)",
         "Hell Keep (E3M1)",
         "Hell Beneath (E4M1)"
+    ]
+
+    boss_level_for_espidoes: List[str] = [
+        "Phobos Anomaly (E1M8)",
+        "Tower of Babel (E2M8)",
+        "Dis (E3M8)",
+        "Unto the Cruel (E4M8)"
     ]
 
     # Item ratio that scales depending on episode count. These are the ratio for 3 episode.
@@ -71,25 +79,29 @@ class DOOM1993World(World):
         "Energy cell pack": 10
     }
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.included_episodes = [1, 1, 1, 0]
         self.location_count = 0
 
-        super().__init__(world, player)
+        super().__init__(multiworld, player)
 
     def get_episode_count(self):
         return functools.reduce(lambda count, episode: count + episode, self.included_episodes)
 
     def generate_early(self):
         # Cache which episodes are included
-        for i in range(4):
-            self.included_episodes[i] = getattr(self.multiworld, f"episode{i + 1}")[self.player].value
+        self.included_episodes[0] = self.options.episode1.value
+        self.included_episodes[1] = self.options.episode2.value
+        self.included_episodes[2] = self.options.episode3.value
+        self.included_episodes[3] = self.options.episode4.value
 
         # If no episodes selected, select Episode 1
         if self.get_episode_count() == 0:
             self.included_episodes[0] = 1
 
     def create_regions(self):
+        pro = self.options.pro.value
+
         # Main regions
         menu_region = Region("Menu", self.player, self.multiworld)
         hub_region = Region("Hub", self.player, self.multiworld)
@@ -116,8 +128,11 @@ class DOOM1993World(World):
 
             self.multiworld.regions.append(region)
 
-            for connection in region_dict["connections"]:
-                connections.append((region, connection))
+            for connection_dict in region_dict["connections"]:
+                # Check if it's a pro-only connection
+                if connection_dict["pro"] and not pro:
+                    continue
+                connections.append((region, connection_dict["target"]))
         
         # Connect main regions to Hub
         hub_region.add_exits(main_regions)
@@ -135,7 +150,11 @@ class DOOM1993World(World):
         self.location_count = len(self.multiworld.get_locations(self.player))
 
     def completion_rule(self, state: CollectionState):
-        for map_name in Maps.map_names:
+        goal_levels = Maps.map_names
+        if self.options.goal.value:
+            goal_levels = self.boss_level_for_espidoes
+
+        for map_name in goal_levels:
             if map_name + " - Exit" not in self.location_name_to_id:
                 continue
             
@@ -151,23 +170,25 @@ class DOOM1993World(World):
         return True
 
     def set_rules(self):
-        Rules.set_rules(self, self.included_episodes)
+        pro = self.options.pro.value
+        allow_death_logic = self.options.allow_death_logic.value
+
+        Rules.set_rules(self, self.included_episodes, pro)
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
 
         # Forbid progression items to locations that can be missed and can't be picked up. (e.g. One-time timed
         # platform) Unless the user allows for it.
-        if not getattr(self.multiworld, "allow_death_logic")[self.player].value:
+        if not allow_death_logic:
             for death_logic_location in Locations.death_logic_locations:
-                self.multiworld.exclude_locations[self.player].value.add(death_logic_location)
+                self.options.exclude_locations.value.add(death_logic_location)
     
     def create_item(self, name: str) -> DOOM1993Item:
         item_id: int = self.item_name_to_id[name]
         return DOOM1993Item(name, Items.item_table[item_id]["classification"], item_id, self.player)
 
     def create_items(self):
-        is_only_first_episode: bool = self.get_episode_count() == 1 and self.included_episodes[0]
         itempool: List[DOOM1993Item] = []
-        start_with_computer_area_maps: bool = getattr(self.multiworld, "start_with_computer_area_maps")[self.player].value
+        start_with_computer_area_maps: bool = self.options.start_with_computer_area_maps.value
 
         # Items
         for item_id, item in Items.item_table.items():
@@ -179,9 +200,6 @@ class DOOM1993World(World):
 
             if item["episode"] != -1 and not self.included_episodes[item["episode"] - 1]:
                 continue
-
-            if item["name"] in {"BFG9000", "Plasma Gun"} and is_only_first_episode:
-                continue  # Don't include those guns if only first episode
 
             count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
@@ -210,10 +228,12 @@ class DOOM1993World(World):
                 self.multiworld.push_precollected(self.create_item(self.starting_level_for_episode[i]))
         
         # Give Computer area maps if option selected
-        if getattr(self.multiworld, "start_with_computer_area_maps")[self.player].value:
+        if self.options.start_with_computer_area_maps.value:
             for item_id, item_dict in Items.item_table.items():
-                if item_dict["doom_type"] == DOOM_TYPE_COMPUTER_AREA_MAP:
-                    self.multiworld.push_precollected(self.create_item(item_dict["name"]))
+                item_episode = item_dict["episode"]
+                if item_episode > 0:
+                    if item_dict["doom_type"] == DOOM_TYPE_COMPUTER_AREA_MAP and self.included_episodes[item_episode - 1]:
+                        self.multiworld.push_precollected(self.create_item(item_dict["name"]))
 
         # Fill the rest starting with powerups, then fillers
         self.create_ratioed_items("Armor", itempool)
@@ -252,7 +272,7 @@ class DOOM1993World(World):
             itempool.append(self.create_item(item_name))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data = {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+        slot_data = self.options.as_dict("goal", "difficulty", "random_monsters", "random_pickups", "random_music", "flip_levels", "allow_death_logic", "pro", "start_with_computer_area_maps", "death_link", "reset_level_on_death", "episode1", "episode2", "episode3", "episode4")
 
         # E2M6 and E3M9 each have one way keydoor. You can enter, but required the keycard to get out.
         # We used to force place the keycard behind those doors. Limiting the randomness for those items. A change

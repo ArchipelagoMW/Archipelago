@@ -13,14 +13,14 @@ from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_con
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
-from .Options import alttp_options, smallkey_shuffle
+from .Options import alttp_options, small_key_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
 from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, Shop, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
+from .Shops import create_shops, Shop, push_shop_inventories, ShopType, price_rate_display, price_type_display_name
 from .SubClasses import ALttPItem, LTTPRegionType
 from worlds.AutoWorld import World, WebWorld, LogicMixin
 from .StateHelpers import can_buy_unlimited
@@ -42,7 +42,7 @@ class ALTTPSettings(settings.Group):
 
 class ALTTPWeb(WebWorld):
     setup_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago ALttP Software on your computer. This guide covers single-player, multiworld, and related software.",
         "English",
         "multiworld_en.md",
@@ -78,7 +78,7 @@ class ALTTPWeb(WebWorld):
     )
 
     msu = Tutorial(
-        "MSU-1 Setup Tutorial",
+        "MSU-1 Setup Guide",
         "A guide to setting up MSU-1, which allows for custom in-game music.",
         "English",
         "msu1_en.md",
@@ -105,7 +105,7 @@ class ALTTPWeb(WebWorld):
     )
 
     plando = Tutorial(
-        "Plando Tutorial",
+        "Plando Guide",
         "A guide to creating Multiworld Plandos with LTTP",
         "English",
         "plando_en.md",
@@ -195,7 +195,7 @@ class ALTTPWorld(World):
         "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganons Tower - Hope Room - Left",
                          "Ganons Tower - Hope Room - Right", "Ganons Tower - Tile Room",
                          "Ganons Tower - Compass Room - Top Left", "Ganons Tower - Compass Room - Top Right",
-                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Left",
+                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Right",
                          "Ganons Tower - DMs Room - Top Left", "Ganons Tower - DMs Room - Top Right",
                          "Ganons Tower - DMs Room - Bottom Left", "Ganons Tower - DMs Room - Bottom Right",
                          "Ganons Tower - Map Chest", "Ganons Tower - Firesnake Room",
@@ -213,7 +213,6 @@ class ALTTPWorld(World):
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
     location_name_to_id = lookup_name_to_id
 
-    data_version = 8
     required_client_version = (0, 4, 1)
     web = ALTTPWeb()
 
@@ -249,13 +248,36 @@ class ALTTPWorld(World):
     rom_name_available_event: threading.Event
     has_progressive_bows: bool
     dungeons: typing.Dict[str, Dungeon]
+    waterfall_fairy_bottle_fill: str
+    pyramid_fairy_bottle_fill: str
+    escape_assist: list
+
+    can_take_damage: bool = True
+    swamp_patch_required: bool = False
+    powder_patch_required: bool = False
+    ganon_at_pyramid: bool = True
+    ganonstower_vanilla: bool = True
+    fix_fake_world: bool = True
+
+    clock_mode: str = ""
+    treasure_hunt_required: int = 0
+    treasure_hunt_total: int = 0
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
+        self.pushed_shop_inventories = threading.Event()
         self.has_progressive_bows = False
         self.dungeons = {}
+        self.waterfall_fairy_bottle_fill = "Bottle"
+        self.pyramid_fairy_bottle_fill = "Bottle"
+        self.fix_trock_doors = None
+        self.fix_skullwoods_exit = None
+        self.fix_palaceofdarkness_exit = None
+        self.fix_trock_exit = None
+        self.required_medallions = ["Ether", "Quake"]
+        self.escape_assist = []
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -273,97 +295,121 @@ class ALTTPWorld(World):
     def generate_early(self):
 
         player = self.player
-        world = self.multiworld
+        multiworld = self.multiworld
 
-        if world.mode[player] == 'standard' \
-                and world.smallkey_shuffle[player] \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_start_with:
-            self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
+        self.fix_trock_doors = (multiworld.entrance_shuffle[player] != 'vanilla'
+                                or multiworld.mode[player] == 'inverted')
+        self.fix_skullwoods_exit = multiworld.entrance_shuffle[player] not in ['vanilla', 'simple', 'restricted',
+                                                                               'dungeons_simple']
+        self.fix_palaceofdarkness_exit = multiworld.entrance_shuffle[player] not in ['dungeons_simple', 'vanilla',
+                                                                                     'simple', 'restricted']
+        self.fix_trock_exit = multiworld.entrance_shuffle[player] not in ['vanilla', 'simple', 'restricted',
+                                                                          'dungeons_simple']
+
+        # fairy bottle fills
+        bottle_options = [
+            "Bottle (Red Potion)", "Bottle (Green Potion)", "Bottle (Blue Potion)",
+            "Bottle (Bee)", "Bottle (Good Bee)"
+        ]
+        if multiworld.item_pool[player] not in ["hard", "expert"]:
+            bottle_options.append("Bottle (Fairy)")
+        self.waterfall_fairy_bottle_fill = self.random.choice(bottle_options)
+        self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
+
+        if multiworld.mode[player] == 'standard':
+            if multiworld.small_key_shuffle[player]:
+                if (multiworld.small_key_shuffle[player] not in
+                   (small_key_shuffle.option_universal, small_key_shuffle.option_own_dungeons,
+                    small_key_shuffle.option_start_with)):
+                    self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
+                self.multiworld.local_items[self.player].value.add("Small Key (Hyrule Castle)")
+                self.multiworld.non_local_items[self.player].value.discard("Small Key (Hyrule Castle)")
+            if multiworld.big_key_shuffle[player]:
+                self.multiworld.local_items[self.player].value.add("Big Key (Hyrule Castle)")
+                self.multiworld.non_local_items[self.player].value.discard("Big Key (Hyrule Castle)")
 
         # system for sharing ER layouts
-        self.er_seed = str(world.random.randint(0, 2 ** 64))
+        self.er_seed = str(multiworld.random.randint(0, 2 ** 64))
 
-        if "-" in world.shuffle[player]:
-            shuffle, seed = world.shuffle[player].split("-", 1)
-            world.shuffle[player] = shuffle
+        if multiworld.entrance_shuffle[player] != "vanilla" and multiworld.entrance_shuffle_seed[player] != "random":
+            shuffle = multiworld.entrance_shuffle[player].current_key
             if shuffle == "vanilla":
                 self.er_seed = "vanilla"
-            elif seed.startswith("group-") or world.is_race:
-                self.er_seed = get_same_seed(world, (
-                    shuffle, seed, world.retro_caves[player], world.mode[player], world.logic[player]))
+            elif (not multiworld.entrance_shuffle_seed[player].value.isdigit()) or multiworld.is_race:
+                self.er_seed = get_same_seed(multiworld, (
+                    shuffle, multiworld.entrance_shuffle_seed[player].value, multiworld.retro_caves[player], multiworld.mode[player],
+                    multiworld.glitches_required[player]))
             else:  # not a race or group seed, use set seed as is.
-                self.er_seed = seed
-        elif world.shuffle[player] == "vanilla":
+                self.er_seed = int(multiworld.entrance_shuffle_seed[player].value)
+        elif multiworld.entrance_shuffle[player] == "vanilla":
             self.er_seed = "vanilla"
-        for dungeon_item in ["smallkey_shuffle", "bigkey_shuffle", "compass_shuffle", "map_shuffle"]:
-            option = getattr(world, dungeon_item)[player]
+
+        for dungeon_item in ["small_key_shuffle", "big_key_shuffle", "compass_shuffle", "map_shuffle"]:
+            option = getattr(multiworld, dungeon_item)[player]
             if option == "own_world":
-                world.local_items[player].value |= self.item_name_groups[option.item_name_group]
+                multiworld.local_items[player].value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
-                world.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
-                if world.mode[player] == "standard":
-                    world.non_local_items[player].value -= {"Small Key (Hyrule Castle)"}
+                multiworld.non_local_items[player].value |= self.item_name_groups[option.item_name_group]
+                if multiworld.mode[player] == "standard":
+                    multiworld.non_local_items[player].value -= {"Small Key (Hyrule Castle)"}
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
+                else:
+                    self.options.local_items.value |= self.dungeon_local_item_names
 
-        world.difficulty_requirements[player] = difficulties[world.difficulty[player]]
+        self.difficulty_requirements = difficulties[multiworld.item_pool[player].current_key]
 
         # enforce pre-defined local items.
-        if world.goal[player] in ["localtriforcehunt", "localganontriforcehunt"]:
-            world.local_items[player].value.add('Triforce Piece')
+        if multiworld.goal[player] in ["local_triforce_hunt", "local_ganon_triforce_hunt"]:
+            multiworld.local_items[player].value.add('Triforce Piece')
 
         # Not possible to place crystals outside boss prizes yet (might as well make it consistent with pendants too).
-        world.non_local_items[player].value -= item_name_groups['Pendants']
-        world.non_local_items[player].value -= item_name_groups['Crystals']
+        multiworld.non_local_items[player].value -= item_name_groups['Pendants']
+        multiworld.non_local_items[player].value -= item_name_groups['Crystals']
 
     create_dungeons = create_dungeons
 
     def create_regions(self):
         player = self.player
-        world = self.multiworld
+        multiworld = self.multiworld
 
-        world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
-                                                      world.triforce_pieces_required[player])
-
-        if world.mode[player] != 'inverted':
-            create_regions(world, player)
+        if multiworld.mode[player] != 'inverted':
+            create_regions(multiworld, player)
         else:
-            create_inverted_regions(world, player)
-        create_shops(world, player)
+            create_inverted_regions(multiworld, player)
+        create_shops(multiworld, player)
         self.create_dungeons()
 
-        if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
-                {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
-            world.fix_fake_world[player] = False
+        if (multiworld.glitches_required[player] not in ["no_glitches", "minor_glitches"] and
+                multiworld.entrance_shuffle[player] in [
+                    "vanilla", "dungeons_simple", "dungeons_full", "simple", "restricted", "full"]):
+            self.fix_fake_world = False
 
         # seeded entrance shuffle
-        old_random = world.random
-        world.random = random.Random(self.er_seed)
+        old_random = multiworld.random
+        multiworld.random = random.Random(self.er_seed)
 
-        if world.mode[player] != 'inverted':
-            link_entrances(world, player)
-            mark_light_world_regions(world, player)
+        if multiworld.mode[player] != 'inverted':
+            link_entrances(multiworld, player)
+            mark_light_world_regions(multiworld, player)
             for region_name, entrance_name in indirect_connections_not_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
+                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                                  multiworld.get_entrance(entrance_name, player))
         else:
-            link_inverted_entrances(world, player)
-            mark_dark_world_regions(world, player)
+            link_inverted_entrances(multiworld, player)
+            mark_dark_world_regions(multiworld, player)
             for region_name, entrance_name in indirect_connections_inverted.items():
-                world.register_indirect_condition(world.get_region(region_name, player),
-                                                  world.get_entrance(entrance_name, player))
+                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                                  multiworld.get_entrance(entrance_name, player))
 
-        world.random = old_random
-        plando_connect(world, player)
+        multiworld.random = old_random
+        plando_connect(multiworld, player)
 
         for region_name, entrance_name in indirect_connections.items():
-            world.register_indirect_condition(world.get_region(region_name, player),
-                                              world.get_entrance(entrance_name, player))
-
+            multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
+                                              multiworld.get_entrance(entrance_name, player))
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
@@ -407,15 +453,16 @@ class ALTTPWorld(World):
                 if 'Sword' in item_name:
                     if state.has('Golden Sword', item.player):
                         pass
-                    elif state.has('Tempered Sword', item.player) and self.multiworld.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 4:
+                    elif (state.has('Tempered Sword', item.player) and
+                          self.difficulty_requirements.progressive_sword_limit >= 4):
                         return 'Golden Sword'
-                    elif state.has('Master Sword', item.player) and self.multiworld.difficulty_requirements[
-                        item.player].progressive_sword_limit >= 3:
+                    elif (state.has('Master Sword', item.player) and
+                          self.difficulty_requirements.progressive_sword_limit >= 3):
                         return 'Tempered Sword'
-                    elif state.has('Fighter Sword', item.player) and self.multiworld.difficulty_requirements[item.player].progressive_sword_limit >= 2:
+                    elif (state.has('Fighter Sword', item.player) and
+                          self.difficulty_requirements.progressive_sword_limit >= 2):
                         return 'Master Sword'
-                    elif self.multiworld.difficulty_requirements[item.player].progressive_sword_limit >= 1:
+                    elif self.difficulty_requirements.progressive_sword_limit >= 1:
                         return 'Fighter Sword'
                 elif 'Glove' in item_name:
                     if state.has('Titans Mitts', item.player):
@@ -427,20 +474,22 @@ class ALTTPWorld(World):
                 elif 'Shield' in item_name:
                     if state.has('Mirror Shield', item.player):
                         return
-                    elif state.has('Red Shield', item.player) and self.multiworld.difficulty_requirements[item.player].progressive_shield_limit >= 3:
+                    elif (state.has('Red Shield', item.player) and
+                          self.difficulty_requirements.progressive_shield_limit >= 3):
                         return 'Mirror Shield'
-                    elif state.has('Blue Shield', item.player) and self.multiworld.difficulty_requirements[item.player].progressive_shield_limit >= 2:
+                    elif (state.has('Blue Shield', item.player) and
+                          self.difficulty_requirements.progressive_shield_limit >= 2):
                         return 'Red Shield'
-                    elif self.multiworld.difficulty_requirements[item.player].progressive_shield_limit >= 1:
+                    elif self.difficulty_requirements.progressive_shield_limit >= 1:
                         return 'Blue Shield'
                 elif 'Bow' in item_name:
                     if state.has('Silver Bow', item.player):
                         return
-                    elif state.has('Bow', item.player) and (self.multiworld.difficulty_requirements[item.player].progressive_bow_limit >= 2
-                                                            or self.multiworld.logic[item.player] == 'noglitches'
-                                                            or self.multiworld.swordless[item.player]): # modes where silver bow is always required for ganon
+                    elif state.has('Bow', item.player) and (self.difficulty_requirements.progressive_bow_limit >= 2
+                                                            or self.multiworld.glitches_required[self.player] == 'no_glitches'
+                                                            or self.multiworld.swordless[self.player]):  # modes where silver bow is always required for ganon
                         return 'Silver Bow'
-                    elif self.multiworld.difficulty_requirements[item.player].progressive_bow_limit >= 1:
+                    elif self.difficulty_requirements.progressive_bow_limit >= 1:
                         return 'Bow'
         elif item.advancement:
             return item_name
@@ -470,7 +519,8 @@ class ALTTPWorld(World):
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
                 world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
+                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True,
+                                 name="LttP Dungeon Prizes")
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
                                                 attempts - attempt)
@@ -480,9 +530,9 @@ class ALTTPWorld(World):
             break
         else:
             raise FillError('Unable to place dungeon prizes')
-        if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
-                world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
+        if world.mode[player] == 'standard' and world.small_key_shuffle[player] \
+                and world.small_key_shuffle[player] != small_key_shuffle.option_universal and \
+                world.small_key_shuffle[player] != small_key_shuffle.option_own_dungeons:
             world.local_early_items[player]["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
@@ -490,10 +540,9 @@ class ALTTPWorld(World):
         from .Dungeons import fill_dungeons_restrictive
         fill_dungeons_restrictive(world)
 
-
     @classmethod
-    def stage_post_fill(cls, world):
-        ShopSlotFill(world)
+    def stage_generate_output(cls, multiworld, output_directory):
+        push_shop_inventories(multiworld)
 
     @property
     def use_enemizer(self) -> bool:
@@ -507,6 +556,9 @@ class ALTTPWorld(World):
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld
         player = self.player
+
+        self.pushed_shop_inventories.wait()
+
         try:
             use_enemizer = self.use_enemizer
 
@@ -560,7 +612,7 @@ class ALTTPWorld(World):
     @classmethod
     def stage_extend_hint_information(cls, world, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                        world.shuffle[player] != "vanilla" or world.retro_caves[player]}
+                        world.entrance_shuffle[player] != "vanilla" or world.retro_caves[player]}
 
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
@@ -585,27 +637,26 @@ class ALTTPWorld(World):
 
         for player in checks_in_area:
             checks_in_area[player]["Total"] = 0
-
-        for location in multiworld.get_locations():
-            if location.game == cls.game and type(location.address) is int:
-                main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
-                if location.parent_region.dungeon:
-                    dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                   'Inverted Ganons Tower': 'Ganons Tower'} \
-                        .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                    checks_in_area[location.player][dungeonname].append(location.address)
-                elif location.parent_region.type == LTTPRegionType.LightWorld:
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif location.parent_region.type == LTTPRegionType.DarkWorld:
-                    checks_in_area[location.player]["Dark World"].append(location.address)
-                elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
-                    checks_in_area[location.player]["Light World"].append(location.address)
-                elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
-                    checks_in_area[location.player]["Dark World"].append(location.address)
-                else:
-                    assert False, "Unknown Location area."
-                # TODO: remove Total as it's duplicated data and breaks consistent typing
-                checks_in_area[location.player]["Total"] += 1
+            for location in multiworld.get_locations(player):
+                if location.game == cls.game and type(location.address) is int:
+                    main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
+                    if location.parent_region.dungeon:
+                        dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                       'Inverted Ganons Tower': 'Ganons Tower'} \
+                            .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                        checks_in_area[location.player][dungeonname].append(location.address)
+                    elif location.parent_region.type == LTTPRegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif location.parent_region.type == LTTPRegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
+                        checks_in_area[location.player]["Light World"].append(location.address)
+                    elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
+                        checks_in_area[location.player]["Dark World"].append(location.address)
+                    else:
+                        assert False, "Unknown Location area."
+                    # TODO: remove Total as it's duplicated data and breaks consistent typing
+                    checks_in_area[location.player]["Total"] += 1
 
         multidata["checks_in_area"].update(checks_in_area)
 
@@ -623,17 +674,18 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
-        for player in world.get_game_players("A Link to the Past"):
-            if not world.ganonstower_vanilla[player] or \
-                    world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
+        for player in multiworld.get_game_players("A Link to the Past"):
+            world = multiworld.worlds[player]
+            if not world.ganonstower_vanilla or \
+                    world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
                 pass
-            elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
-                trash_counts[player] = world.random.randint(world.crystals_needed_for_gt[player] * 2,
-                                                            world.crystals_needed_for_gt[player] * 4)
+            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or multiworld.players == 1):
+                trash_counts[player] = multiworld.random.randint(world.options.crystals_needed_for_gt * 2,
+                                                            world.options.crystals_needed_for_gt * 4)
             else:
-                trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
+                trash_counts[player] = multiworld.random.randint(0, world.options.crystals_needed_for_gt * 2)
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -643,14 +695,14 @@ class ALTTPWorld(World):
 
             for player, trash_count in trash_counts.items():
                 gtower_locations = locations_mapping[player]
-                world.random.shuffle(gtower_locations)
+                multiworld.random.shuffle(gtower_locations)
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     for index, item in enumerate(filleritempool):
                         if spot_to_fill.item_rule(item):
                             filleritempool.pop(index)  # remove from outer fill
-                            world.push_item(spot_to_fill, item, False)
+                            multiworld.push_item(spot_to_fill, item, False)
                             fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                             trash_count -= 1
                             break
@@ -663,43 +715,19 @@ class ALTTPWorld(World):
                 return variable
             return "Yes" if variable else "No"
 
-        spoiler_handle.write('Logic:                           %s\n' % self.multiworld.logic[self.player])
-        spoiler_handle.write('Dark Room Logic:                 %s\n' % self.multiworld.dark_room_logic[self.player])
-        spoiler_handle.write('Mode:                            %s\n' % self.multiworld.mode[self.player])
-        spoiler_handle.write('Goal:                            %s\n' % self.multiworld.goal[self.player])
-        if "triforce" in self.multiworld.goal[self.player]:  # triforce hunt
-            spoiler_handle.write("Pieces available for Triforce:   %s\n" %
-                          self.multiworld.triforce_pieces_available[self.player])
-            spoiler_handle.write("Pieces required for Triforce:    %s\n" %
-                          self.multiworld.triforce_pieces_required[self.player])
-        spoiler_handle.write('Difficulty:                      %s\n' % self.multiworld.difficulty[self.player])
-        spoiler_handle.write('Item Functionality:              %s\n' % self.multiworld.item_functionality[self.player])
-        spoiler_handle.write('Entrance Shuffle:                %s\n' % self.multiworld.shuffle[self.player])
-        if self.multiworld.shuffle[self.player] != "vanilla":
-            spoiler_handle.write('Entrance Shuffle Seed            %s\n' % self.er_seed)
-        spoiler_handle.write('Shop inventory shuffle:          %s\n' %
-                             bool_to_text("i" in self.multiworld.shop_shuffle[self.player]))
-        spoiler_handle.write('Shop price shuffle:              %s\n' %
-                             bool_to_text("p" in self.multiworld.shop_shuffle[self.player]))
-        spoiler_handle.write('Shop upgrade shuffle:            %s\n' %
-                             bool_to_text("u" in self.multiworld.shop_shuffle[self.player]))
-        spoiler_handle.write('New Shop inventory:              %s\n' %
-                             bool_to_text("g" in self.multiworld.shop_shuffle[self.player] or
-                                          "f" in self.multiworld.shop_shuffle[self.player]))
-        spoiler_handle.write('Custom Potion Shop:              %s\n' %
-                             bool_to_text("w" in self.multiworld.shop_shuffle[self.player]))
-        spoiler_handle.write('Enemy health:                    %s\n' % self.multiworld.enemy_health[self.player])
-        spoiler_handle.write('Enemy damage:                    %s\n' % self.multiworld.enemy_damage[self.player])
-        spoiler_handle.write('Prize shuffle                    %s\n' % self.multiworld.shuffle_prizes[self.player])
-
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        player_name = self.multiworld.get_player_name(self.player)
         spoiler_handle.write("\n\nMedallions:\n")
-        spoiler_handle.write(f"\nMisery Mire ({self.multiworld.get_player_name(self.player)}):"
-                             f" {self.multiworld.required_medallions[self.player][0]}")
+        spoiler_handle.write(f"\nMisery Mire ({player_name}):"
+                             f" {self.required_medallions[0]}")
         spoiler_handle.write(
-            f"\nTurtle Rock ({self.multiworld.get_player_name(self.player)}):"
-            f" {self.multiworld.required_medallions[self.player][1]}")
-
+            f"\nTurtle Rock ({player_name}):"
+            f" {self.required_medallions[1]}")
+        spoiler_handle.write("\n\nFairy Fountain Bottle Fill:\n")
+        spoiler_handle.write(f"\nPyramid Fairy ({player_name}):"
+                             f" {self.pyramid_fairy_bottle_fill}")
+        spoiler_handle.write(f"\nWaterfall Fairy ({player_name}):"
+                             f" {self.waterfall_fairy_bottle_fill}")
         if self.multiworld.boss_shuffle[self.player] != "none":
             def create_boss_map() -> typing.Dict:
                 boss_map = {
@@ -760,7 +788,7 @@ class ALTTPWorld(World):
                 if item["replacement"] is None:
                     continue
                 shop_data["item_{}".format(index)] +=\
-                    f", {item['replacement']} - {item['replacement_price']}" \
+                    f", {item['replacement']} - {item['replacement_price'] // price_rate_display.get(item['replacement_price_type'], 1)}" \
                     f" {price_type_display_name[item['replacement_price_type']]}"
 
             return shop_data
@@ -773,10 +801,7 @@ class ALTTPWorld(World):
                 item)))
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.goal[self.player] == "icerodhunt":
-            item = "Nothing"
-        else:
-            item = self.multiworld.random.choice(extras_list)
+        item = self.multiworld.random.choice(extras_list)
         return GetBeemizerItem(self.multiworld, self.player, item)
 
     def get_pre_fill_items(self):
@@ -796,20 +821,20 @@ class ALTTPWorld(World):
             # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
 
             slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
-                            "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
+                            "big_key_shuffle", "small_key_shuffle", "compass_shuffle", "map_shuffle",
                             "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
-                            "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle"]
+                            "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle", "bombless_start",
+                            "randomize_shop_inventories", "shuffle_shop_inventories", "shuffle_capacity_upgrades",
+                            "entrance_shuffle", "dark_room_logic", "goal", "mode",
+                            "triforce_pieces_mode", "triforce_pieces_percentage", "triforce_pieces_required",
+                            "triforce_pieces_available", "triforce_pieces_extra",
+            ]
 
             slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
 
             slot_data.update({
-                'mode': self.multiworld.mode[self.player],
-                'goal': self.multiworld.goal[self.player],
-                'dark_room_logic': self.multiworld.dark_room_logic[self.player],
-                'mm_medalion': self.multiworld.required_medallions[self.player][0],
-                'tr_medalion': self.multiworld.required_medallions[self.player][1],
-                'shop_shuffle': self.multiworld.shop_shuffle[self.player],
-                'entrance_shuffle': self.multiworld.shuffle[self.player],
+                'mm_medalion': self.required_medallions[0],
+                'tr_medalion': self.required_medallions[1],
                 }
             )
         return slot_data
@@ -826,8 +851,8 @@ def get_same_seed(world, seed_def: tuple) -> str:
 
 class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
-        if self.multiworld.logic[player] == 'nologic':
+        if self.multiworld.glitches_required[player] == 'no_logic':
             return True
-        if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if self.multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             return can_buy_unlimited(self, 'Small Key (Universal)', player)
-        return self.prog_items[item, player] >= count
+        return self.prog_items[player][item] >= count

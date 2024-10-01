@@ -1,51 +1,28 @@
 window.addEventListener('load', () => {
-  const gameHeaders = document.getElementsByClassName('collapse-toggle');
-  Array.from(gameHeaders).forEach((header) => {
-    const gameName = header.getAttribute('data-game');
-    header.addEventListener('click', () => {
-      const gameArrow = document.getElementById(`${gameName}-arrow`);
-      const gameInfo = document.getElementById(gameName);
-      if (gameInfo.classList.contains('collapsed')) {
-        gameArrow.innerText = '▼';
-        gameInfo.classList.remove('collapsed');
-      } else {
-        gameArrow.innerText = '▶';
-        gameInfo.classList.add('collapsed');
-      }
-    });
-  });
+  // Add toggle listener to all elements with .collapse-toggle
+  const toggleButtons = document.querySelectorAll('details');
 
   // Handle game filter input
   const gameSearch = document.getElementById('game-search');
   gameSearch.value = '';
-
   gameSearch.addEventListener('input', (evt) => {
     if (!evt.target.value.trim()) {
-      // If input is empty, display all collapsed games
-      return Array.from(gameHeaders).forEach((header) => {
+      // If input is empty, display all games as collapsed
+      return toggleButtons.forEach((header) => {
         header.style.display = null;
-        const gameName = header.getAttribute('data-game');
-        document.getElementById(`${gameName}-arrow`).innerText = '▶';
-        document.getElementById(gameName).classList.add('collapsed');
+        header.removeAttribute('open');
       });
     }
 
     // Loop over all the games
-    Array.from(gameHeaders).forEach((header) => {
-      const gameName = header.getAttribute('data-game');
-      const gameArrow = document.getElementById(`${gameName}-arrow`);
-      const gameInfo = document.getElementById(gameName);
-
+    toggleButtons.forEach((header) => {
       // If the game name includes the search string, display the game. If not, hide it
-      if (gameName.toLowerCase().includes(evt.target.value.toLowerCase())) {
+      if (header.getAttribute('data-game').toLowerCase().includes(evt.target.value.toLowerCase())) {
         header.style.display = null;
-        gameArrow.innerText = '▼';
-        gameInfo.classList.remove('collapsed');
+        header.setAttribute('open', '1');
       } else {
-        console.log(header);
         header.style.display = 'none';
-        gameArrow.innerText = '▶';
-        gameInfo.classList.add('collapsed');
+        header.removeAttribute('open');
       }
     });
   });
@@ -55,29 +32,13 @@ window.addEventListener('load', () => {
 });
 
 const expandAll = () => {
-  const gameHeaders = document.getElementsByClassName('collapse-toggle');
-  // Loop over all the games
-    Array.from(gameHeaders).forEach((header) => {
-      const gameName = header.getAttribute('data-game');
-      const gameArrow = document.getElementById(`${gameName}-arrow`);
-      const gameInfo = document.getElementById(gameName);
-
-      if (header.style.display === 'none') { return; }
-      gameArrow.innerText = '▼';
-      gameInfo.classList.remove('collapsed');
-    });
+  document.querySelectorAll('details').forEach((detail) => {
+    detail.setAttribute('open', '1');
+  });
 };
 
 const collapseAll = () => {
-  const gameHeaders = document.getElementsByClassName('collapse-toggle');
-  // Loop over all the games
-    Array.from(gameHeaders).forEach((header) => {
-      const gameName = header.getAttribute('data-game');
-      const gameArrow = document.getElementById(`${gameName}-arrow`);
-      const gameInfo = document.getElementById(gameName);
-
-      if (header.style.display === 'none') { return; }
-      gameArrow.innerText = '▶';
-      gameInfo.classList.add('collapsed');
-    });
+  document.querySelectorAll('details').forEach((detail) => {
+    detail.removeAttribute('open');
+  });
 };

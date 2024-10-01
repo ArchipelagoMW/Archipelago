@@ -1,22 +1,21 @@
 from __future__ import annotations
 
-import logging
-import copy
-import os
-import threading
 import base64
-import settings
+import copy
+import logging
+import threading
 import typing
 from typing import Any, Dict, Iterable, List, Set, TextIO, TypedDict
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, Tutorial
-from Fill import fill_restrictive
-from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
+import settings
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from Options import Accessibility
+from worlds.AutoWorld import AutoLogicRegister, WebWorld, World
+from worlds.generic.Rules import add_rule, set_rule
 
 logger = logging.getLogger("Super Metroid")
 
-from .Options import sm_options
+from .Options import SMOptions
 from .Client import SMSNIClient
 from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
 import Utils
@@ -97,11 +96,11 @@ class SMWorld(World):
      a wide range of options to randomize Item locations, required skills and even the connections 
      between the main Areas!
     """
-
     game: str = "Super Metroid"
     topology_present = True
-    data_version = 3
-    option_definitions = sm_options
+    options_dataclass = SMOptions
+    options: SMOptions
+      
     settings: typing.ClassVar[SMSettings]
 
     item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
@@ -113,15 +112,12 @@ class SMWorld(World):
     required_client_version = (0, 2, 6)
 
     itemManager: ItemManager
-    spheres = None
 
     Logic.factory('vanilla')
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
-        if SMWorld.spheres != None:
-            SMWorld.spheres = None
         super().__init__(world, player)
 
     @classmethod
@@ -134,27 +130,27 @@ class SMWorld(World):
         Logic.factory('vanilla')
 
         dummy_rom_file = Utils.user_path(SMSettings.RomFile.copy_to)  # actual rom set in generate_output
-        self.variaRando = VariaRandomizer(self.multiworld, dummy_rom_file, self.player)
+        self.variaRando = VariaRandomizer(self.options, dummy_rom_file, self.player)
         self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
-        self.multiworld.local_items[self.player].value.add('Nothing')
-        self.multiworld.local_items[self.player].value.add('No Energy')
+        self.options.local_items.value.add('Nothing')
+        self.options.local_items.value.add('No Energy')
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.multiworld.local_early_items[self.player]['Morph Ball'] = 1
 
-        self.remote_items = self.multiworld.remote_items[self.player]
+        self.remote_items = self.options.remote_items
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
-            self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
+            self.options.accessibility.value = Accessibility.option_minimal
             logger.warning(f"accessibility forced to 'minimal' for player {self.multiworld.get_player_name(self.player)} because of 'fun' settings")
     
     def create_items(self):
         itemPool = self.variaRando.container.itemPool
         self.startItems = [variaItem for item in self.multiworld.precollected_items[self.player] for variaItem in ItemManager.Items.values() if variaItem.Name == item.name]
-        if self.multiworld.start_inventory_removes_from_pool[self.player]:
+        if self.options.start_inventory_removes_from_pool:
             for item in self.startItems:
                 if (item in itemPool):
                     itemPool.remove(item)
@@ -295,7 +291,7 @@ class SMWorld(World):
         for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions:
             src_region = self.multiworld.get_region(src.Name, self.player)
             dest_region = self.multiworld.get_region(dest.Name, self.player)
-            if ((src.Name + "->" + dest.Name, self.player) not in self.multiworld._entrance_cache):
+            if src.Name + "->" + dest.Name not in self.multiworld.regions.entrance_cache[self.player]:
                 src_region.exits.append(Entrance(self.player, src.Name + "->" + dest.Name, src_region))
             srcDestEntrance = self.multiworld.get_entrance(src.Name + "->" + dest.Name, self.player)
             srcDestEntrance.connect(dest_region)
@@ -322,10 +318,10 @@ class SMWorld(World):
                       player=self.player)
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(0, 100) < self.multiworld.minor_qty[self.player].value:
-            power_bombs = self.multiworld.power_bomb_qty[self.player].value
-            missiles = self.multiworld.missile_qty[self.player].value
-            super_missiles = self.multiworld.super_qty[self.player].value
+        if self.multiworld.random.randint(0, 100) < self.options.minor_qty.value:
+            power_bombs = self.options.power_bomb_qty.value
+            missiles = self.options.missile_qty.value
+            super_missiles = self.options.super_qty.value
             roll = self.multiworld.random.randint(1, power_bombs + missiles + super_missiles)
             if roll <= power_bombs:
                 return "Power Bomb"
@@ -362,23 +358,35 @@ class SMWorld(World):
     def post_fill(self):
         def get_player_ItemLocation(progression_only: bool):
             return [
-                    ItemLocation(copy.copy(ItemManager.Items[
-                        itemLoc.item.type if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                        'ArchipelagoItem']),
-                        copy.copy(locationsDict[itemLoc.name] if itemLoc.game == self.game else
-                                    locationsDict[first_local_collected_loc.name]),
-                        itemLoc.item.player,
-                        True)
-                        for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player and (not progression_only or itemLoc.item.advancement)
-                    ]
-        
+                ItemLocation(
+                    copy.copy(
+                        ItemManager.Items[
+                            itemLoc.item.type
+                            if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items
+                            else 'ArchipelagoItem'
+                        ]
+                    ),
+                    copy.copy(
+                        locationsDict[itemLoc.name]
+                        if itemLoc.game == self.game
+                        else locationsDict[first_local_collected_loc.name]
+                    ),
+                    itemLoc.item.player,
+                    True
+                )
+                for itemLoc in spheres
+                if itemLoc.item.player == self.player and (not progression_only or itemLoc.item.advancement)
+            ]
+
         # Having a sorted itemLocs from collection order is required for escapeTrigger when Tourian is Disabled.
         # We cant use stage_post_fill for this as its called after worlds' post_fill.
         # get_spheres could be cached in multiworld?
         # Another possible solution would be to have a globally accessible list of items in the order in which the get placed in push_item
         # and use the inversed starting from the first progression item.
-        if (SMWorld.spheres == None):
-            SMWorld.spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sorted(sphere, key=lambda location: location.name)]
+        spheres: List[Location] = getattr(self.multiworld, "_sm_spheres", None)
+        if spheres is None:
+            spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sorted(sphere, key=lambda location: location.name)]
+            setattr(self.multiworld, "_sm_spheres", spheres)
 
         self.itemLocs = [
             ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
@@ -391,7 +399,7 @@ class SMWorld(World):
         escapeTrigger = None
         if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"]:
             #used to simulate received items
-            first_local_collected_loc = next(itemLoc for itemLoc in SMWorld.spheres if itemLoc.player == self.player)
+            first_local_collected_loc = next(itemLoc for itemLoc in spheres if itemLoc.player == self.player)
 
             playerItemsItemLocs = get_player_ItemLocation(False)
             playerProgItemsItemLocs = get_player_ItemLocation(True)
@@ -564,8 +572,8 @@ class SMWorld(World):
         multiWorldItems: List[ByteEdit] = []
         idx = 0
         vanillaItemTypesCount = 21
-        for itemLoc in self.multiworld.get_locations():
-            if itemLoc.player == self.player and "Boss" not in locationsDict[itemLoc.name].Class:
+        for itemLoc in self.multiworld.get_locations(self.player):
+            if "Boss" not in locationsDict[itemLoc.name].Class:
                 SMZ3NameToSMType = {
                     "ETank": "ETank", "Missile": "Missile", "Super": "Super", "PowerBomb": "PowerBomb", "Bombs": "Bomb",
                     "Charge": "Charge", "Ice": "Ice", "HiJump": "HiJump", "SpeedBooster": "SpeedBooster",
@@ -626,7 +634,7 @@ class SMWorld(World):
         deathLink: List[ByteEdit] = [{
             "sym": symbols["config_deathlink"],
             "offset": 0,
-            "values": [self.multiworld.death_link[self.player].value]
+            "values": [self.options.death_link.value]
         }]
         remoteItem: List[ByteEdit] = [{
             "sym": symbols["config_remote_items"],
@@ -852,10 +860,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.multiworld.is_race:
-            for option_name in self.option_definitions:
-                option = getattr(self.multiworld, option_name)[self.player]
-                slot_data[option_name] = option.value
-
+            slot_data = self.options.as_dict(*self.options_dataclass.type_hints)
             slot_data["Preset"] = { "Knows": {},
                                     "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
                                                  "bossesDifficulty": Settings.SettingsDict[self.player].bossesDifficulty,
@@ -880,14 +885,14 @@ class SMWorld(World):
         return slot_data
 
     def write_spoiler(self, spoiler_handle: TextIO):
-        if self.multiworld.area_randomization[self.player].value != 0:
+        if self.options.area_randomization.value != 0:
             spoiler_handle.write('\n\nArea Transitions:\n\n')
             spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.multiworld.get_player_name(self.player)}: '
                                                             if self.multiworld.players > 1 else '', src.Name,
                                                             '<=>',
                                                             dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if not src.Boss]))
 
-        if self.multiworld.boss_randomization[self.player].value != 0:
+        if self.options.boss_randomization.value != 0:
             spoiler_handle.write('\n\nBoss Transitions:\n\n')
             spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.multiworld.get_player_name(self.player)}: '
                                                             if self.multiworld.players > 1 else '', src.Name,

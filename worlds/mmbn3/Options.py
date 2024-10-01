@@ -1,4 +1,5 @@
-from Options import Choice, Range, DefaultOnToggle
+from dataclasses import dataclass
+from Options import Choice, Range, DefaultOnToggle, PerGameCommonOptions
 
 
 class ExtraRanks(Range):
@@ -41,8 +42,9 @@ class TradeQuestHinting(Choice):
     default = 2
 
 
-MMBN3Options = {
-    "extra_ranks": ExtraRanks,
-    "include_jobs": IncludeJobs,
-    "trade_quest_hinting": TradeQuestHinting,
-}
+@dataclass
+class MMBN3Options(PerGameCommonOptions):
+    extra_ranks: ExtraRanks
+    include_jobs: IncludeJobs
+    trade_quest_hinting: TradeQuestHinting
+    

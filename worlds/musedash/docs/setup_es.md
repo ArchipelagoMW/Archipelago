@@ -2,32 +2,33 @@
 
 ## Enlaces rápidos
 - [Página Principal](../../../../games/Muse%20Dash/info/en)
-- [Página de Configuraciones](../../../../games/Muse%20Dash/player-settings)
+- [Página de Configuraciones](../../../../games/Muse%20Dash/player-options)
 
 ## Software Requerido
 
 - Windows 8 o más reciente.
 - Muse Dash: [Disponible en Steam](https://store.steampowered.com/app/774171/Muse_Dash/)
-  - \[Opcional\] [Just as Planned] DLC: [tambien disponible on Steam](https://store.steampowered.com/app/1055810/Muse_Dash__Just_as_planned/)
+  - \[Opcional\] [Muse Plus] DLC: [tambien disponible on Steam](https://store.steampowered.com/app/2593750/Muse_Dash__Muse_Plus/)
 - Melon Loader: [GitHub](https://github.com/LavaGang/MelonLoader/releases/latest)
-  - .Net Framework 4.8 podría ser necesario para el instalador: [Descarga](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
-- .Net 6.0 (si aún no está instalado): [Descarga](https://dotnet.microsoft.com/en-us/download/dotnet/6.0#runtime-6.0.15)
+  - .Net Framework 4.8 podría ser necesario para el instalador: [Descarga](https://dotnet.microsoft.com/es-es/download/dotnet-framework/net48)
+- Entorno de ejecución de escritorio de .NET 6.0.XX (si aún no está instalado): [Descarga](https://dotnet.microsoft.com/es-es/download/dotnet/6.0)
 - Muse Dash Archipelago Mod: [GitHub](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest)
 
 ## Instalar el mod de Archipelago en Muse Dash
 
 1. Descarga [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest) y ejecutalo.
-2. Elije la pestaña "automated", haz clic en el botón "select" y busca tu `MuseDash.exe`. Luego haz clic en "install".
+2. Elije la pestaña "automated", haz clic en el botón "select" y busca tu `MuseDash.exe`.
   - Puedes encontrar la carpeta en Steam buscando el juego en tu biblioteca, haciendo clic derecho sobre el y elegir *Administrar→Ver archivos locales*.
   - Si haces clic en la barra superior que te indica la carpeta en la que estas, te dará la dirección de ésta para que puedas copiarla. Al pegar esa dirección en la ventana que **MelonLoader** abre, irá automaticamente a esa carpeta.
-3. Ejecuta el juego una vez, y espera hasta que aparezca la pantalla de inicio de Muse Dash antes de cerrarlo.
-4. Descarga la última version de [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) y extraelo en la nueva carpeta creada llamada `/Mods/`, localizada en la carpeta de instalación de Muse Dash.
+3. Desmarca "Latest" y selecciona v0.6.1. Luego haz clic en "install".
+4. Ejecuta el juego una vez, y espera hasta que aparezca la pantalla de inicio de Muse Dash antes de cerrarlo.
+5. Descarga la última version de [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) y extraelo en la nueva carpeta creada llamada `/Mods/`, localizada en la carpeta de instalación de Muse Dash.
   - Todos los archivos deben ir directamente en la carpeta `/Mods/`, y NO en una subcarpeta dentro de la carpeta `/Mods/`
 
 Si todo fue instalado correctamente, un botón aparecerá en la parte inferior derecha del juego una vez abierto, que te permitirá conectarte al servidor de Archipelago.
 
 ## Generar un juego MultiWorld
-1. Entra a la página de [configuraciones de jugador](/games/Muse%20Dash/player-settings) y configura las opciones del juego a tu gusto.
+1. Entra a la página de [configuraciones de jugador](/games/Muse%20Dash/player-options) y configura las opciones del juego a tu gusto.
 2. Genera tu archivo YAML y úsalo para generar un juego nuevo en el radomizer
   - (Instrucciones sobre como generar un juego en Archipelago disponibles en la [guía web de Archipelago en Inglés](/tutorial/Archipelago/setup/en))
 

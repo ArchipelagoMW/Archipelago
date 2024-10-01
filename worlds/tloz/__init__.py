@@ -12,8 +12,9 @@ from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassi
 from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
 from .Items import item_table, item_prices, item_game_ids
 from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
-    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
-from .Options import tloz_options
+    standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations, \
+    take_any_locations, sword_cave_locations
+from .Options import TlozOptions
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
@@ -45,7 +46,7 @@ class TLoZSettings(settings.Group):
 class TLoZWeb(WebWorld):
     theme = "stone"
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up The Legend of Zelda for Archipelago on your computer.",
         "English",
         "multiworld_en.md",
@@ -63,11 +64,11 @@ class TLoZWorld(World):
     This randomizer shuffles all the items in the game around, leading to a new adventure
     every time.
     """
-    option_definitions = tloz_options
+    options_dataclass = TlozOptions
+    options: TlozOptions
     settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
-    data_version = 1
     base_id = 7000
     web = TLoZWeb()
 
@@ -87,6 +88,21 @@ class TLoZWorld(World):
         }
     }
 
+    location_name_groups = {
+        "Shops": set(shop_locations),
+        "Take Any": set(take_any_locations),
+        "Sword Caves": set(sword_cave_locations),
+        "Level 1": set(level_locations[0]),
+        "Level 2": set(level_locations[1]),
+        "Level 3": set(level_locations[2]),
+        "Level 4": set(level_locations[3]),
+        "Level 5": set(level_locations[4]),
+        "Level 6": set(level_locations[5]),
+        "Level 7": set(level_locations[6]),
+        "Level 8": set(level_locations[7]),
+        "Level 9": set(level_locations[8])
+    }
+
     for k, v in item_name_to_id.items():
         item_name_to_id[k] = v + base_id
 
@@ -94,8 +110,8 @@ class TLoZWorld(World):
         if v is not None:
             location_name_to_id[k] = v + base_id
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.generator_in_use = threading.Event()
         self.rom_name_available_event = threading.Event()
         self.levels = None
@@ -115,7 +131,6 @@ class TLoZWorld(World):
 
     def create_location(self, name, id, parent, event=False):
         return_location = TLoZLocation(self.player, name, id, parent)
-        return_location.event = event
         return return_location
 
     def create_regions(self):
@@ -132,7 +147,7 @@ class TLoZWorld(World):
 
         for i, level in enumerate(level_locations):
             for location in level:
-                if self.multiworld.ExpandedPool[self.player] or "Drop" not in location:
+                if self.options.ExpandedPool or "Drop" not in location:
                     self.levels[i + 1].locations.append(
                         self.create_location(location, self.location_name_to_id[location], self.levels[i + 1]))
 
@@ -144,7 +159,7 @@ class TLoZWorld(World):
             self.levels[level].locations.append(boss_event)
 
         for location in major_locations:
-            if self.multiworld.ExpandedPool[self.player] or "Take Any" not in location:
+            if self.options.ExpandedPool or "Take Any" not in location:
                 overworld.locations.append(
                     self.create_location(location, self.location_name_to_id[location], overworld))
 
@@ -179,7 +194,7 @@ class TLoZWorld(World):
 
         self.multiworld.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
         add_rule(self.multiworld.get_location("Zelda", self.player),
-                 lambda state: ganon in state.locations_checked)
+                 lambda state: state.has("Triforce of Power", self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
 
     def apply_base_patch(self, rom):
@@ -200,15 +215,17 @@ class TLoZWorld(World):
         for i in range(0, 0x7F):
             item = rom_data[first_quest_dungeon_items_early + i]
             if item & 0b00100000:
-                rom_data[first_quest_dungeon_items_early + i] = item & 0b11011111
-                rom_data[first_quest_dungeon_items_early + i] = item | 0b01000000
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_early + i] = item
             if item & 0b00011111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
 
             item = rom_data[first_quest_dungeon_items_late + i]
             if item & 0b00100000:
-                rom_data[first_quest_dungeon_items_late + i] = item & 0b11011111
-                rom_data[first_quest_dungeon_items_late + i] = item | 0b01000000
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_late + i] = item
             if item & 0b00011111 == 0b00000011:
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
         return rom_data
@@ -258,11 +275,11 @@ class TLoZWorld(World):
             rom_data[location_id] = item_id
         
         # We shuffle the tiers of rupee caves. Caves that shared a value before still will.
-        secret_caves = self.multiworld.per_slot_randoms[self.player].sample(sorted(secret_money_ids), 3)
+        secret_caves = self.random.sample(sorted(secret_money_ids), 3)
         secret_cave_money_amounts = [20, 50, 100]
         for i, amount in enumerate(secret_cave_money_amounts):
             # Giving approximately double the money to keep grinding down
-            amount = amount * self.multiworld.per_slot_randoms[self.player].triangular(1.5, 2.5)
+            amount = amount * self.random.triangular(1.5, 2.5)
             secret_cave_money_amounts[i] = int(amount)
         for i, cave in enumerate(secret_caves):
             rom_data[secret_money_ids[cave]] = secret_cave_money_amounts[i]
@@ -306,10 +323,10 @@ class TLoZWorld(World):
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:
             self.filler_items = [item for item in item_table if item_table[item].classification == ItemClassification.filler]
-        return self.multiworld.random.choice(self.filler_items)
+        return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        if self.multiworld.ExpandedPool[self.player]:
+        if self.options.ExpandedPool:
             take_any_left = self.multiworld.get_location("Take Any Item Left", self.player).item
             take_any_middle = self.multiworld.get_location("Take Any Item Middle", self.player).item
             take_any_right = self.multiworld.get_location("Take Any Item Right", self.player).item

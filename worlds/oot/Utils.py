@@ -11,7 +11,7 @@ def data_path(*args):
     return os.path.join(os.path.dirname(__file__), 'data', *args)
 
 
-@lru_cache(maxsize=13)  # Cache Overworld.json and the 12 dungeons
+@lru_cache
 def read_json(file_path):
     json_string = ""
     with io.open(file_path, 'r') as file:

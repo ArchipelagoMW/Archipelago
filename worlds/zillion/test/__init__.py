@@ -1,6 +1,6 @@
 from typing import cast
-from test.TestBase import WorldTestBase
-from worlds.zillion import ZillionWorld
+from test.bases import WorldTestBase
+from .. import ZillionWorld
 
 
 class ZillionTestBase(WorldTestBase):

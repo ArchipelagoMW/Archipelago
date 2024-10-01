@@ -90,6 +90,8 @@ def download_slot_file(room_id, player_id: int):
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}.json"
         elif slot_data.game == "Kingdom Hearts 2":
             fname = f"AP_{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.zip"
+        elif slot_data.game == "Final Fantasy Mystic Quest":
+            fname = f"AP+{app.jinja_env.filters['suuid'](room_id)}_P{slot_data.player_id}_{slot_data.player_name}.apmq"
         else:
             return "Game download not supported."
         return send_file(io.BytesIO(slot_data.data), as_attachment=True, download_name=fname)
