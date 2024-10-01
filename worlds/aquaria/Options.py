@@ -136,7 +136,7 @@ class LightNeededToGetToDarkPlaces(DefaultOnToggle):
     display_name = "Light needed to get to dark places"
 
 
-class BindSongNeededToGetUnderRockBulb(Toggle):
+class BindSongNeededToGetUnderRockBulb(DefaultOnToggle):
     """
     Make sure that the bind song can be acquired before having to obtain sing bulbs under rocks.
     """
