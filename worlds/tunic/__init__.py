@@ -89,22 +89,25 @@ class TunicWorld(World):
     def generate_early(self) -> None:
         self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections:
+            def replace_connection(old_cxn: PlandoConnection, new_cxn: PlandoConnection, index: int) -> None:
+                self.options.plando_connections.value.remove(old_cxn)
+                self.options.plando_connections.value.insert(index, new_cxn)
+
             for index, cxn in enumerate(self.options.plando_connections):
-                # flip any that are pointing to exit to point to entrance so that I don't have to deal with it
-                if self.options.decoupled and cxn.direction == "exit":
-                    replacement = PlandoConnection(cxn.exit, cxn.entrance, "entrance", cxn.percentage)
-                    self.options.plando_connections.value.remove(cxn)
-                    self.options.plando_connections.value.insert(index, replacement)
+                replacement = None
+                if self.options.decoupled:
+                    # flip any that are pointing to exit to point to entrance so that I don't have to deal with it
+                    if cxn.direction == "exit":
+                        replacement = PlandoConnection(cxn.exit, cxn.entrance, "entrance", cxn.percentage)
+                    # if decoupled is on and you plando'd an entrance to itself but left the direction as both
+                    if cxn.direction == "both" and cxn.entrance == cxn.exit:
+                        replacement = PlandoConnection(cxn.entrance, cxn.exit, "entrance")
                 # if decoupled is off, just convert these to both
-                if not self.options.decoupled and cxn.direction != "both":
+                elif cxn.direction != "both":
                     replacement = PlandoConnection(cxn.entrance, cxn.exit, "both", cxn.percentage)
-                    self.options.plando_connections.value.remove(cxn)
-                    self.options.plando_connections.value.insert(index, replacement)
-                # if decoupled is on and you plando'd an entrance to itself but left the direction as both
-                if self.options.decoupled and cxn.direction == "both" and cxn.entrance == cxn.exit:
-                    replacement = PlandoConnection(cxn.entrance, cxn.exit, "entrance")
-                    self.options.plando_connections.value.remove(cxn)
-                    self.options.plando_connections.value.insert(index, replacement)
+
+                if replacement:
+                    replace_connection(cxn, replacement, index)
               
                 if (self.options.entrance_layout == EntranceLayout.option_direction_pairs
                         and not verify_plando_directions(cxn)):
