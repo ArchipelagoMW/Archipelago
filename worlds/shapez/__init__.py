@@ -115,6 +115,10 @@ class ShapezWorld(World):
                               + ": When setting goal to 1 ('mam'), goal_amount must be at least 27 and not "
                               + str(self.options.goal_amount.value))
 
+        # If lock_belt_and_extractor is true, the only sphere 1 locations will be achievements
+        if self.options.lock_belt_and_extractor and not self.options.include_achievements:
+            raise OptionError(self.player_name + ": Achievements must be included when belt and extractor are locked")
+
         # Determines maxlevel and finaltier, which are needed for location and item generation
         if self.options.goal == "vanilla":
             self.maxlevel = 25
