@@ -325,7 +325,6 @@ class CommonContext:
             "collect": "disabled",
             "remaining": "disabled",
         }
-        self.race_mode: int = 0
 
         # own state
         self.finished_game = False
@@ -455,7 +454,7 @@ class CommonContext:
         if kwargs:
             payload.update(kwargs)
         await self.send_msgs([payload])
-        await self.send_msgs([{"cmd": "Get", "keys": ["race_mode"]}])
+        await self.send_msgs([{"cmd": "Get", "keys": ["_read_race_mode"]}])
 
     async def console_input(self) -> str:
         if self.ui:

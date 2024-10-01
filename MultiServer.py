@@ -428,7 +428,7 @@ class Context:
 
         self.read_data = {}
         # there might be a better place to put this.
-        self.stored_data["race_mode"] = decoded_obj.get("race_mode", 0)
+        self.read_data["race_mode"] = lambda: decoded_obj.get("race_mode", 0)
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
