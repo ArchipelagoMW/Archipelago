@@ -31,7 +31,7 @@ Blackest Luxury Car|0-18|Default Music|True|3|6|8|
 Medicine of Sing|0-19|Default Music|False|3|6|8|
 irregulyze|0-20|Default Music|True|3|6|8|
 I don't care about Christmas though|0-47|Default Music|False|4|6|8|
-Imaginary World|0-21|Default Music|True|4|6|8|
+Imaginary World|0-21|Default Music|True|4|6|8|10
 Dysthymia|0-22|Default Music|True|4|7|9|
 From the New World|0-42|Default Music|False|2|5|7|
 NISEGAO|0-33|Default Music|True|4|7|9|
@@ -580,13 +580,13 @@ Hydra|77-2|Let's Rhythm Jam!|False|4|7|11|
 Pastel Lines|77-3|Let's Rhythm Jam!|False|3|6|9|
 LINK x LIN#S|77-4|Let's Rhythm Jam!|False|3|6|9|
 Arcade ViruZ|77-5|Let's Rhythm Jam!|False|6|8|11|
-Eve Avenir|78-0|Endless Pirouette|False|6|8|10|
-Silverstring|78-1|Endless Pirouette|False|5|7|10|
+Eve Avenir|78-0|Endless Pirouette|True|6|8|10|
+Silverstring|78-1|Endless Pirouette|True|5|7|10|
 Melusia|78-2|Endless Pirouette|False|5|7|10|11
-Devil's Castle|78-3|Endless Pirouette|False|4|7|10|
-Abatement|78-4|Endless Pirouette|False|6|8|10|11
+Devil's Castle|78-3|Endless Pirouette|True|4|7|10|
+Abatement|78-4|Endless Pirouette|True|6|8|10|11
 Azalea|78-5|Endless Pirouette|False|4|8|10|
-Brightly World|78-6|Endless Pirouette|False|6|8|10|
-We'll meet in every world ***|78-7|Endless Pirouette|False|7|9|11|
-Collapsar|78-8|Endless Pirouette|False|7|9|10|11
+Brightly World|78-6|Endless Pirouette|True|6|8|10|
+We'll meet in every world ***|78-7|Endless Pirouette|True|7|9|11|
+Collapsar|78-8|Endless Pirouette|True|7|9|10|11
 Parousia|78-9|Endless Pirouette|False|6|8|10|
