@@ -105,28 +105,14 @@ class TestBase(unittest.TestCase):
         multiworld.state.prog_items = empty_state.prog_items
 
     def testCollect_cloak_iterations(self):
-        # with self.subTest("Split Left Only"):
-        #     self.cloak_test(
-        #         ["Left_Mothwing_Cloak"],
-        #         ["Left_Mothwing_Cloak"],
-        #         {},
-        #     )
-
-        # with self.subTest("LRR - L"):
-        #     self.cloak_test(
-        #         ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak", "Right_Mothwing_Cloak"],
-        #         ["Left_Mothwing_Cloak"],
-        #         {"Right_Mothwing_Cloak": 2, "RIGHTDASH": 2},
-        #     )
-
-        # with self.subTest("RLL - R"):
-        #     self.cloak_test(
-        #         ["Right_Mothwing_Cloak", "Left_Mothwing_Cloak", "Left_Mothwing_Cloak"],
-        #         ["Right_Mothwing_Cloak"],
-        #         {"Left_Mothwing_Cloak": 2, "LEFTDASH": 2},
-        #     )
 
         # LLR
+        with self.subTest("LLR"):
+            self.cloak_test(
+                ["Left_Mothwing_Cloak", "Left_Mothwing_Cloak", "Right_Mothwing_Cloak"],
+                [],
+                {"Left_Mothwing_Cloak": 2, "LEFTDASH": 2, "Right_Mothwing_Cloak": 1, "RIGHTDASH": 2},
+            )
         with self.subTest("L - L"):
             self.cloak_test(
                 ["Left_Mothwing_Cloak"],
@@ -165,6 +151,12 @@ class TestBase(unittest.TestCase):
             )
 
         # LRL
+        with self.subTest("LRL"):
+            self.cloak_test(
+                ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak", "Left_Mothwing_Cloak"],
+                [],
+                {"Left_Mothwing_Cloak": 2, "LEFTDASH": 2, "Right_Mothwing_Cloak": 1, "RIGHTDASH": 2},
+            )
         with self.subTest("L - L"):
             self.cloak_test(
                 ["Left_Mothwing_Cloak"],
@@ -203,6 +195,12 @@ class TestBase(unittest.TestCase):
             )
 
         # RLL
+        with self.subTest("RLL"):
+            self.cloak_test(
+                ["Right_Mothwing_Cloak", "Left_Mothwing_Cloak", "Left_Mothwing_Cloak"],
+                [],
+                {"Left_Mothwing_Cloak": 2, "LEFTDASH": 2, "Right_Mothwing_Cloak": 1, "RIGHTDASH": 2},
+            )
         # with self.subTest("R - L"):
         #     self.cloak_test(
         #         ["Right_Mothwing_Cloak"],
@@ -241,6 +239,12 @@ class TestBase(unittest.TestCase):
             )
 
         # RRL
+        with self.subTest("RRL"):
+            self.cloak_test(
+                ["Right_Mothwing_Cloak", "Right_Mothwing_Cloak", "Left_Mothwing_Cloak"],
+                [],
+                {"Left_Mothwing_Cloak": 1, "LEFTDASH": 2, "Right_Mothwing_Cloak": 2, "RIGHTDASH": 2},
+            )
         # with self.subTest("R - L"):
         #     self.cloak_test(
         #         ["Right_Mothwing_Cloak"],
@@ -279,6 +283,12 @@ class TestBase(unittest.TestCase):
             )
 
         # RLR
+        with self.subTest("RLR"):
+            self.cloak_test(
+                ["Right_Mothwing_Cloak", "Left_Mothwing_Cloak", "Right_Mothwing_Cloak"],
+                [],
+                {"Left_Mothwing_Cloak": 1, "LEFTDASH": 2, "Right_Mothwing_Cloak": 2, "RIGHTDASH": 2},
+            )
         # with self.subTest("R - L"):
         #     self.cloak_test(
         #         ["Right_Mothwing_Cloak"],
@@ -317,6 +327,12 @@ class TestBase(unittest.TestCase):
             )
 
         # LRR
+        with self.subTest("LRR"):
+            self.cloak_test(
+                ["Left_Mothwing_Cloak", "Right_Mothwing_Cloak", "Right_Mothwing_Cloak"],
+                [],
+                {"Left_Mothwing_Cloak": 1, "LEFTDASH": 2, "Right_Mothwing_Cloak": 2, "RIGHTDASH": 2},
+            )
         with self.subTest("L - L"):
             self.cloak_test(
                 ["Left_Mothwing_Cloak"],
@@ -370,6 +386,11 @@ class TestBase(unittest.TestCase):
 
         # non-split
         with self.subTest("Bonus: non-split"):
+            self.cloak_test(
+                ["Mothwing_Cloak", "Shade_Cloak"],
+                [],
+                {"Mothwing_Cloak": 1, "Shade_Cloak": 1, "LEFTDASH": 2, "RIGHTDASH": 2},
+            )
             self.cloak_test(
                 ["Mothwing_Cloak", "Shade_Cloak"],
                 ["Mothwing_Cloak"],
