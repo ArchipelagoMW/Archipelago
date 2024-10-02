@@ -454,6 +454,7 @@ class CommonContext:
         if kwargs:
             payload.update(kwargs)
         await self.send_msgs([payload])
+        await self.send_msgs([{"cmd": "Get", "keys": ["_read_race_mode"]}])
 
     async def console_input(self) -> str:
         if self.ui:
