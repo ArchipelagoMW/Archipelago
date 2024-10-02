@@ -378,6 +378,46 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
+def handle_trigger_math(math_options: Union[dict, string], option_name: str, weights: dict):
+    options = copy.deepcopy(math_options)
+    if not isinstance(options, dict):
+        options = {str(options): 1}
+    new_dict = {}
+    for name, value in options.items():
+        value_list = []
+        if not isinstance(name, str):
+            raise Exception(f'Mathematical trigger malformed: {name} is not a string.')
+        split_name = name.split(" ")
+        if len(split_name) != 3:
+            raise Exception(f'Cannot perform arithmetic, wrong number of arguments: {math_options}')
+        if split_name[1] not in ['+', '-', '*', '/']:
+            raise Exception(f'Cannot perform arithmetic, unknown operator in option: {split_name[1]}')
+        for x in range(0, 2, 2):
+            if not split_name[x].isnumeric():
+                if split_name[x] in weights:
+                    weights[split_name[x]] = get_choice(split_name[x], weights)
+                    split_name[x] = str(weights[split_name[x]])
+                if not split_name[x].isnumeric():
+                    raise Exception(f'Cannot perform arithmetic, non-numeric value found for : {name.split(" ")[0]}')
+            if len(split_name[x].split(".")) > 1:
+                value_list[x] = float(split_name[x])
+            else:
+                value_list[x] = int(split_name[x])
+            if value_list[x] > 1_000_000 or value_list[x] < -1_000_000:
+                raise Exception(f'Arithmetic Option out of bounds: {value_list[0]}, {value_list[2]} must < 7 digits.')
+        value_list[1] = split_name[1]
+        if value_list[1] == '+':
+            new_dict.update({value_list[0] + value_list[2]: value})
+        elif value_list[1] == '-':
+            new_dict.update({value_list[0] - value_list[2]: value})
+        elif value_list[1] == '*':
+            new_dict.update({value_list[0] * value_list[2]: value})
+        else:
+            new_dict.update({value_list[0] / value_list[2]: value})
+        weights[option_name] = new_dict
+    return weights
+
+
 def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
@@ -400,6 +440,12 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                     currently_targeted_weights = weights
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
+                    for option_type, option_value in category_options.items():
+                        temp_name = option_type.rsplit("*", 1)
+                        if len(temp_name) == 2 and temp_name[1] == "":
+                            temp_name = temp_name[0]
+                            currently_targeted_weights = \
+                                handle_trigger_math(option_value, temp_name, currently_targeted_weights)
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
             valid_keys.add(key)
         except Exception as e:
