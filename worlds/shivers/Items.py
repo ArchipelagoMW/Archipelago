@@ -1,10 +1,8 @@
 import enum
-from datetime import datetime
 from typing import NamedTuple, Optional
 
-from dateutil.relativedelta import relativedelta
-
 from BaseClasses import Item, ItemClassification
+from . import Constants
 
 
 class ShiversItem(Item):
@@ -31,7 +29,6 @@ class ItemData(NamedTuple):
 
 
 SHIVERS_ITEM_ID_OFFSET = 27000
-years_since_sep_30_1980 = relativedelta(datetime.now(), datetime.fromisoformat("1980-09-30")).years
 
 item_table = {
     # Pot Pieces
@@ -189,7 +186,7 @@ item_table = {
     "Heal": ItemData(SHIVERS_ITEM_ID_OFFSET + 112, ItemType.FILLER, ItemClassification.filler),
 
     # Victory item
-    f"Mt. Pleasant Tribune: {years_since_sep_30_1980} year Old Mystery Solved!": ItemData(
+    f"Mt. Pleasant Tribune: {Constants.years_since_sep_30_1980} year Old Mystery Solved!": ItemData(
         SHIVERS_ITEM_ID_OFFSET + 113, ItemType.GOAL
     )
 }

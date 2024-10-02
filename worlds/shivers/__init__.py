@@ -46,7 +46,7 @@ class ShiversWorld(World):
         return ShiversItem(name, data.classification, data.code, self.player)
 
     def create_event_location(self, region_name: str, location_name: str, event_name: Optional[str] = None) -> None:
-        region = self.multiworld.get_region(region_name, self.player)
+        region = self.get_region(region_name)
         loc = ShiversLocation(self.player, location_name, None, region)
         if event_name is not None:
             loc.place_locked_item(ShiversItem(event_name, ItemClassification.progression, None, self.player))
@@ -65,8 +65,8 @@ class ShiversWorld(World):
 
         # Bind mandatory connections
         for entr_name, region_name in Constants.region_info["mandatory_connections"]:
-            e = self.multiworld.get_entrance(entr_name, self.player)
-            r = self.multiworld.get_region(region_name, self.player)
+            e = self.get_entrance(entr_name)
+            r = self.get_region(region_name)
             e.connect(r)
         
         # Locations
@@ -81,7 +81,7 @@ class ShiversWorld(World):
 
         # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
-            region = self.multiworld.get_region(region_name, self.player)
+            region = self.get_region(region_name)
             for loc_name in locations:
                 if loc_name not in removed_locations:
                     loc = ShiversLocation(self.player, loc_name, self.location_name_to_id.get(loc_name, None), region)
@@ -136,9 +136,9 @@ class ShiversWorld(World):
         item_pool += [self.create_item("Easier Lyre") for _ in range(9)]
 
         # Place library escape items. Choose a location to place the escape item
-        library_region = self.multiworld.get_region("Library", self.player)
+        library_region = self.get_region("Library")
         library_location = self.random.choice(
-            [loc for loc in library_region.locations if not loc.name.startswith("Storage:")]
+            [loc for loc in library_region.locations if not loc.name.startswith("Storage: ")]
         )
 
         # Roll for which escape items will be placed in the Library
@@ -153,7 +153,7 @@ class ShiversWorld(World):
             library_location.place_locked_item(self.create_item("Key for Three Floor Elevator"))
             library_location_2 = self.random.choice(
                 [loc for loc in library_region.locations if
-                 not loc.name.startswith("Storage:") and loc != library_location]
+                 not loc.name.startswith("Storage: ") and loc != library_location]
             )
             library_location_2.place_locked_item(self.create_item("Key for Egypt Room"))
             item_pool = [item for item in item_pool if
@@ -173,17 +173,22 @@ class ShiversWorld(World):
                 items["Key for Underground Lake"] = 1
                 items["Key for Office Elevator"] = 1
                 items["Key for Office"] = 1
-            elif lobby_access_keys == 1:
+            else:
                 items["Key for Front Door"] = 1
 
         # Lobby access:
         if self.options.lobby_access == 1:
             set_lobby_access_keys(self.multiworld.early_items[self.player])
-        if self.options.lobby_access == 2:
+        elif self.options.lobby_access == 2:
             set_lobby_access_keys(self.multiworld.local_early_items[self.player])
 
+        for name, data in item_table.items():
+            if data.type == ItemType.GOAL:
+                goal = self.create_item(name)
+                self.get_location("Mystery Solved").place_locked_item(goal)
+
         # Extra filler is random between Heals and Easier Lyre. Heals weighted 95%.
-        filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 24
+        filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 23
         item_pool += map(self.create_item, self.random.choices(
             ["Heal", "Easier Lyre"], weights=[95, 5], k=filler_needed
         ))
@@ -192,7 +197,7 @@ class ShiversWorld(World):
         if self.options.location_pot_pieces == "own_world":
             self.options.local_items.value |= {name for name, data in item_table.items() if
                                                data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
-        if self.options.location_pot_pieces == "different_world":
+        elif self.options.location_pot_pieces == "different_world":
             self.options.non_local_items.value |= {name for name, data in item_table.items() if
                                                    data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
 
@@ -206,7 +211,7 @@ class ShiversWorld(World):
         for locations in Constants.location_info["locations_by_region"].values():
             for loc_name in locations:
                 if loc_name.startswith("Storage: "):
-                    storage_locs.append(self.multiworld.get_location(loc_name, self.player))
+                    storage_locs.append(self.get_location(loc_name))
 
         # Pot pieces/Completed/Mixed:
         if self.options.full_pots == "pieces":
@@ -242,11 +247,6 @@ class ShiversWorld(World):
 
         self.storage_placements = {location.name.replace("Storage: ", ""): location.item.name.replace(" DUPE", "") for
                                    location in storage_locs}
-
-        for name, data in item_table.items():
-            if data.type == ItemType.GOAL:
-                goal = self.create_item(name)
-                self.get_location("Mystery Solved").place_locked_item(goal)
 
     def fill_slot_data(self) -> dict:
         return {

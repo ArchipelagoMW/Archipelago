@@ -1,11 +1,9 @@
 from collections.abc import Callable
-from datetime import datetime
 from typing import Dict, TYPE_CHECKING
-
-from dateutil.relativedelta import relativedelta
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import forbid_item
+from . import Constants
 
 if TYPE_CHECKING:
     from . import ShiversWorld
@@ -77,17 +75,18 @@ def first_nine_ixupi_capturable(state: CollectionState, player: int) -> bool:
 
 
 def all_skull_dials_set(state: CollectionState, player: int) -> bool:
-    return state.has("Set Skull Dial: Prehistoric", player) \
-        and state.has("Set Skull Dial: Tar River", player) \
-        and state.has("Set Skull Dial: Egypt", player) \
-        and state.has("Set Skull Dial: Burial", player) \
-        and state.has("Set Skull Dial: Gods Room", player) \
-        and state.has("Set Skull Dial: Werewolf", player)
+    return state.has_all([
+        "Set Skull Dial: Prehistoric",
+        "Set Skull Dial: Tar River",
+        "Set Skull Dial: Egypt",
+        "Set Skull Dial: Burial",
+        "Set Skull Dial: Gods Room",
+        "Set Skull Dial: Werewolf"
+    ], player)
 
 
 def completion_condition(state: CollectionState, player: int) -> bool:
-    years_since_sep_30_1980 = relativedelta(datetime.now(), datetime.fromisoformat("1980-09-30")).years
-    return state.has(f"Mt. Pleasant Tribune: {years_since_sep_30_1980} year Old Mystery Solved!", player)
+    return state.has(f"Mt. Pleasant Tribune: {Constants.years_since_sep_30_1980} year Old Mystery Solved!", player)
 
 
 def get_rules_lookup(world: "ShiversWorld", player: int):
@@ -198,16 +197,16 @@ def set_rules(world: "ShiversWorld") -> None:
     rules_lookup = get_rules_lookup(world, player)
     # Set required entrance rules
     for entrance_name, rule in rules_lookup["entrances"].items():
-        multiworld.get_entrance(entrance_name, player).access_rule = rule
+        world.get_entrance(entrance_name).access_rule = rule
 
-    multiworld.get_region("Clock Tower Staircase", player).connect(
-        multiworld.get_region("Clock Chains", player),
+    world.get_region("Clock Tower Staircase").connect(
+        world.get_region("Clock Chains"),
         "To Clock Chains From Clock Tower Staircase",
         lambda state: state.can_reach_region("Bedroom", player) if world.options.puzzle_hints_required.value else True
     )
 
-    multiworld.get_region("Generator", player).connect(
-        multiworld.get_region("Beth's Body", player),
+    world.get_region("Generator").connect(
+        world.get_region("Beth's Body"),
         "To Beth's Body From Generator",
         lambda state: beths_body_available(state, world, player) and (
             (state.has("Viewed Norse Stone", player) and state.can_reach_region("Theater", player))
@@ -215,8 +214,8 @@ def set_rules(world: "ShiversWorld") -> None:
         )
     )
 
-    multiworld.get_region("Torture", player).connect(
-        multiworld.get_region("Guillotine", player),
+    world.get_region("Torture").connect(
+        world.get_region("Guillotine"),
         "To Guillotine From Torture",
         lambda state: state.has("Viewed Page 17", player) and (
             state.has("Viewed Egyptian Hieroglyphics Explained", player)
@@ -226,9 +225,9 @@ def set_rules(world: "ShiversWorld") -> None:
 
     # Set required location rules
     for location_name, rule in rules_lookup["locations_required"].items():
-        multiworld.get_location(location_name, player).access_rule = rule
+        world.get_location(location_name).access_rule = rule
 
-        multiworld.get_location("Jukebox", player).access_rule = lambda state: (
+        world.get_location("Jukebox").access_rule = lambda state: (
             state.can_reach_region("Clock Tower", player) and (
                 state.can_reach_region("Anansi", player)
                 if world.options.puzzle_hints_required.value else True
@@ -238,33 +237,33 @@ def set_rules(world: "ShiversWorld") -> None:
     # Set option location rules
     if world.options.puzzle_hints_required.value:
         for location_name, rule in rules_lookup["puzzle_hints_required"].items():
-            multiworld.get_location(location_name, player).access_rule = rule
+            world.get_location(location_name).access_rule = rule
 
-        multiworld.get_entrance("To Theater From Lobby", player).access_rule = lambda state: state.has(
+        world.get_entrance("To Theater From Lobby").access_rule = lambda state: state.has(
             "Viewed Egyptian Hieroglyphics Explained", player
         )
 
-        multiworld.get_entrance("To Clock Tower Staircase From Theater Back Hallway", player).access_rule = lambda state: state.can_reach_region("Three Floor Elevator", player)
+        world.get_entrance("To Clock Tower Staircase From Theater Back Hallway").access_rule = lambda state: state.can_reach_region("Three Floor Elevator", player)
         multiworld.register_indirect_condition(
             world.get_region("Three Floor Elevator"),
             world.get_entrance("To Clock Tower Staircase From Theater Back Hallway")
         )
 
-        multiworld.get_entrance("To Gods Room From Shaman", player).access_rule = lambda state: state.can_reach_region(
+        world.get_entrance("To Gods Room From Shaman").access_rule = lambda state: state.can_reach_region(
             "Clock Tower", player
         )
         multiworld.register_indirect_condition(
             world.get_region("Clock Tower"), world.get_entrance("To Gods Room From Shaman")
         )
 
-        multiworld.get_entrance("To Anansi From Gods Room", player).access_rule = lambda state: state.can_reach_region(
+        world.get_entrance("To Anansi From Gods Room").access_rule = lambda state: state.can_reach_region(
             "Maintenance Tunnels", player
         )
         multiworld.register_indirect_condition(
             world.get_region("Maintenance Tunnels"), world.get_entrance("To Anansi From Gods Room")
         )
 
-        multiworld.get_entrance("To Maze From Maze Staircase", player).access_rule = lambda \
+        world.get_entrance("To Maze From Maze Staircase").access_rule = lambda \
             state: state.can_reach_region("Projector Room", player)
         multiworld.register_indirect_condition(
             world.get_region("Projector Room"), world.get_entrance("To Maze From Maze Staircase")
@@ -279,44 +278,44 @@ def set_rules(world: "ShiversWorld") -> None:
 
     if world.options.elevators_stay_solved.value:
         for location_name, rule in rules_lookup["elevators"].items():
-            multiworld.get_location(location_name, player).access_rule = rule
+            world.get_location(location_name).access_rule = rule
     if world.options.early_lightning.value:
         for location_name, rule in rules_lookup["lightning"].items():
-            multiworld.get_location(location_name, player).access_rule = rule
+            world.get_location(location_name).access_rule = rule
 
     # Register indirect conditions
     multiworld.register_indirect_condition(world.get_region("Prehistoric"), world.get_entrance("To Tar River From Lobby"))
 
     # forbid cloth in janitor closet and oil in tar river
-    forbid_item(multiworld.get_location("Storage: Janitor Closet", player), "Cloth Pot Bottom DUPE", player)
-    forbid_item(multiworld.get_location("Storage: Janitor Closet", player), "Cloth Pot Top DUPE", player)
-    forbid_item(multiworld.get_location("Storage: Janitor Closet", player), "Cloth Pot Complete DUPE", player)
-    forbid_item(multiworld.get_location("Storage: Tar River", player), "Oil Pot Bottom DUPE", player)
-    forbid_item(multiworld.get_location("Storage: Tar River", player), "Oil Pot Top DUPE", player)
-    forbid_item(multiworld.get_location("Storage: Tar River", player), "Oil Pot Complete DUPE", player)
+    forbid_item(world.get_location("Storage: Janitor Closet"), "Cloth Pot Bottom DUPE", player)
+    forbid_item(world.get_location("Storage: Janitor Closet"), "Cloth Pot Top DUPE", player)
+    forbid_item(world.get_location("Storage: Janitor Closet"), "Cloth Pot Complete DUPE", player)
+    forbid_item(world.get_location("Storage: Tar River"), "Oil Pot Bottom DUPE", player)
+    forbid_item(world.get_location("Storage: Tar River"), "Oil Pot Top DUPE", player)
+    forbid_item(world.get_location("Storage: Tar River"), "Oil Pot Complete DUPE", player)
 
     # Filler Item Forbids
-    forbid_item(multiworld.get_location("Puzzle Solved Lyre", player), "Easier Lyre", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Water", player), "Water Always Available in Lobby", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Library", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Anansi Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Shaman Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Ash", player), "Ash Always Available in Office", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Ash", player), "Ash Always Available in Burial Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Oil", player), "Oil Always Available in Prehistoric Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Cloth", player), "Cloth Always Available in Egypt", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Cloth", player), "Cloth Always Available in Burial Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Workshop", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Blue Maze", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Pegasus Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Gods Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Crystal", player), "Crystal Always Available in Lobby", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Crystal", player), "Crystal Always Available in Ocean", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Sand", player), "Sand Always Available in Plants Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Sand", player), "Sand Always Available in Ocean", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Projector Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Bedroom", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Prehistoric", player)
+    forbid_item(world.get_location("Puzzle Solved Lyre"), "Easier Lyre", player)
+    forbid_item(world.get_location("Ixupi Captured Water"), "Water Always Available in Lobby", player)
+    forbid_item(world.get_location("Ixupi Captured Wax"), "Wax Always Available in Library", player)
+    forbid_item(world.get_location("Ixupi Captured Wax"), "Wax Always Available in Anansi Room", player)
+    forbid_item(world.get_location("Ixupi Captured Wax"), "Wax Always Available in Shaman Room", player)
+    forbid_item(world.get_location("Ixupi Captured Ash"), "Ash Always Available in Office", player)
+    forbid_item(world.get_location("Ixupi Captured Ash"), "Ash Always Available in Burial Room", player)
+    forbid_item(world.get_location("Ixupi Captured Oil"), "Oil Always Available in Prehistoric Room", player)
+    forbid_item(world.get_location("Ixupi Captured Cloth"), "Cloth Always Available in Egypt", player)
+    forbid_item(world.get_location("Ixupi Captured Cloth"), "Cloth Always Available in Burial Room", player)
+    forbid_item(world.get_location("Ixupi Captured Wood"), "Wood Always Available in Workshop", player)
+    forbid_item(world.get_location("Ixupi Captured Wood"), "Wood Always Available in Blue Maze", player)
+    forbid_item(world.get_location("Ixupi Captured Wood"), "Wood Always Available in Pegasus Room", player)
+    forbid_item(world.get_location("Ixupi Captured Wood"), "Wood Always Available in Gods Room", player)
+    forbid_item(world.get_location("Ixupi Captured Crystal"), "Crystal Always Available in Lobby", player)
+    forbid_item(world.get_location("Ixupi Captured Crystal"), "Crystal Always Available in Ocean", player)
+    forbid_item(world.get_location("Ixupi Captured Sand"), "Sand Always Available in Plants Room", player)
+    forbid_item(world.get_location("Ixupi Captured Sand"), "Sand Always Available in Ocean", player)
+    forbid_item(world.get_location("Ixupi Captured Metal"), "Metal Always Available in Projector Room", player)
+    forbid_item(world.get_location("Ixupi Captured Metal"), "Metal Always Available in Bedroom", player)
+    forbid_item(world.get_location("Ixupi Captured Metal"), "Metal Always Available in Prehistoric", player)
 
     # Set completion condition
     multiworld.completion_condition[player] = lambda state: completion_condition(state, player)

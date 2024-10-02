@@ -31,7 +31,7 @@ class PuzzleHintsRequired(DefaultOnToggle):
     """
     If turned on puzzle hints/solutions will be available before the corresponding puzzle is required.
 
-    For example: The Red Door puzzle will be logically required only after access to the Beth's Address Book
+    For example: The Red Door puzzle will be logically required only after access to Beth's Address Book
     which gives you the solution.
 
     Turning this off allows for greater randomization.
