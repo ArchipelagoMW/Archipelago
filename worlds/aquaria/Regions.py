@@ -1016,18 +1016,10 @@ class AquariaRegions:
                  lambda state: _has_light(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.body_c, self.abyss_lb), self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.veil_tr_l_fp, self.octo_cave_t), self.player),
-                 lambda state: _has_light(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.openwater_br, self.abyss_r), self.player),
                  lambda state: _has_light(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.openwater_bl, self.abyss_l), self.player),
                  lambda state: _has_light(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_l_entrance, self.sun_temple_r),
-                                              self.player), lambda state: _has_light(state, self.player) or
-                                                                          _has_sun_crystal(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_r, self.sun_temple_l_entrance),
-                                              self.player), lambda state: _has_light(state, self.player) or
-                                                                          _has_sun_crystal(state, self.player))
 
     def __adjusting_manual_rules(self) -> None:
         add_rule(self.multiworld.get_location(AquariaLocationNames.MITHALAS_CATHEDRAL_MITHALAN_DRESS, self.player),
