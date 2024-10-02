@@ -423,13 +423,13 @@ class PokemonEmeraldClient(BizHawkClient):
                 (sb1_address + 0x4, 2, "System Bus"),  # Current map
                 (sb1_address + 0x1450 + (data.constants["FLAG_SYS_SHOAL_TIDE"] // 8), 1, "System Bus"),
             ],
-            [guards["SAVE BLOCK 1"]]
+            [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
         )
         if read_result is None:  # Save block moved
             return
 
         current_map = int.from_bytes(read_result[0], "big")
-        shoal_cave = int(read_result[0][0] & (1 << (data.constants["FLAG_SYS_SHOAL_TIDE"] % 8)) > 0)
+        shoal_cave = int(read_result[1][0] & (1 << (data.constants["FLAG_SYS_SHOAL_TIDE"] % 8)) > 0)
         if current_map != self.current_map:
             self.current_map = current_map
             await ctx.send_msgs([{
