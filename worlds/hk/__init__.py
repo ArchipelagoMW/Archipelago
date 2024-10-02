@@ -134,9 +134,7 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
 
 
 class HKWeb(WebWorld):
-  
     setup_en = Tutorial(
-
         "Mod Setup and Use Guide",
         "A guide to playing Hollow Knight with Archipelago.",
         "English",
@@ -153,7 +151,7 @@ class HKWeb(WebWorld):
         "setup/pt_br",
         ["JoaoVictor-FA"]
     )
-
+    
     setup_es = Tutorial(
         setup_en.tutorial_name,
         setup_en.description,
@@ -162,11 +160,10 @@ class HKWeb(WebWorld):
         "setup/es",
         ["JustCallMeGio"]
     )
-
+    
     tutorials = [setup_en, setup_pt_br, setup_es]
-
+    
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
-
 
 class HKWorld(World):
     """Beneath the fading town of Dirtmouth sleeps a vast, ancient kingdom. Many are drawn beneath the surface, 
