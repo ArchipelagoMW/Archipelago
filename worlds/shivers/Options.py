@@ -18,7 +18,7 @@ class LobbyAccess(Choice):
     Chooses how keys needed to reach the lobby are placed.
     - Normal: Keys are placed anywhere
     - Early: Keys are placed early 
-    - Local: Keys are placed locally
+    - Local: Keys are placed locally and early
     """
     display_name = "Lobby Access"
     option_normal = 0

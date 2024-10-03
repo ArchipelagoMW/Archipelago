@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing import Optional
+from typing import Dict, List, Optional
 
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from Fill import fill_restrictive
@@ -177,9 +176,9 @@ class ShiversWorld(World):
                 items["Key for Front Door"] = 1
 
         # Lobby access:
-        if self.options.lobby_access == 1:
+        if self.options.lobby_access == "early":
             set_lobby_access_keys(self.multiworld.early_items[self.player])
-        elif self.options.lobby_access == 2:
+        elif self.options.lobby_access == "local":
             set_lobby_access_keys(self.multiworld.local_early_items[self.player])
 
         for name, data in item_table.items():
