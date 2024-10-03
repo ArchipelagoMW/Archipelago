@@ -248,7 +248,8 @@ will all have the same ID. Name must not be numeric (must contain at least 1 let
 Other classifications include:
 
 * `filler`: a regular item or trash item
-* `useful`: generally quite useful, but not required for anything logical. Cannot be placed on excluded locations
+* `useful`: item that is especially useful. Cannot be placed on excluded or unreachable locations. When combined with
+another flag like "progression", it means "an especially useful progression item".
 * `trap`: negative impact on the player
 * `skip_balancing`: denotes that an item should not be moved to an earlier sphere for the purpose of balancing (to be
   combined with `progression`; see below)
