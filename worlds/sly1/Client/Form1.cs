@@ -26,12 +26,12 @@ namespace Sly1AP
         public static SlyKeys keys = new SlyKeys();
         public static int GameCompletion { get; set; } = 0;
         public static Random rnd = new Random();
+        public static int ClueBundles { get; set; } = 0;
         public Form1()
         {
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             ThreadPool.SetMinThreads(500, 500);
-            Console.WriteLine($"Sly 1 Archipelago Randomizer");
         }
         public async Task Loop()
         {
@@ -41,6 +41,10 @@ namespace Sly1AP
             {
                 UpdateValues();
                 CutsceneSkip();
+                if (ClueBundles > 0)
+                {
+                    Clues.BottleSync();
+                }
                 if (Memory.ReadInt(0x2027DC18) == 2721)
                 {
                     Memory.Write(0x2027D7AC, 1);
@@ -50,7 +54,7 @@ namespace Sly1AP
                     Thread.Sleep(1000);
                     if (Memory.ReadByte(0x202623C0) == 0)
                     {
-                        WriteLine("Lost connection to PCSX2.");
+                        WriteLine("Lost connection to PCSX2. Are you using 1.6.0?");
                         return;
                     }
                 }
@@ -89,6 +93,15 @@ namespace Sly1AP
             var locations = Helpers.GetLocations();
             await Client.Login(slotTextbox.Text, passwordTextbox.Text);
             Client.PopulateLocations(locations);
+            if (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
+            {
+                WriteLine("Load a save file, start a new game, or finish the prologue.");
+                while (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
+                {
+                    await Task.Delay(1000);
+                }
+            }
+            
             //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
             UpdateStart();
             ConfigureOptions(Client.Options);
@@ -109,6 +122,10 @@ namespace Sly1AP
                 if (item.Id >= 10020021 & item.Id <= 10020024)
                 {
                     UpdateLevels(item.Id);
+                }
+                if (item.Id >= 10020030 & item.Id <= 10020048)
+                {
+                    Clues.UpdateBottles(item.Id, ClueBundles);
                 }
             }
             foreach (var loc in NewLocations)
@@ -163,6 +180,10 @@ namespace Sly1AP
                 {
                     Client.SendGoalCompletion();
                 }
+                if (args.Item.Id >= 10020030 & args.Item.Id <= 10020048)
+                {
+                    Clues.UpdateBottles(args.Item.Id, ClueBundles);
+                }
             };
             await Loop();
             return true;
@@ -216,6 +237,10 @@ namespace Sly1AP
                     Memory.Write(0x2027CF14, keys.MzRubyStart);
                     Memory.Write(0x2027D360, keys.PandaKingStart);
                 }
+            }
+            if (options.ContainsKey("CluesanityBundleSize"))
+            {
+                ClueBundles = Convert.ToInt32(options["CluesanityBundleSize"]);
             }
         }
         //This probably looks like gore to actual programmers, but it works.
@@ -585,12 +610,12 @@ namespace Sly1AP
         private void CutsceneSkip()
         {
             //Dialogue Skipper
-            //uint Cutscene = Memory.ReadUInt(0x2027051C) + 536870912;
-            //uint Playing = Cutscene + 744;
-            //if (Memory.ReadUInt(Cutscene) != 0)
-            //{
+            uint Cutscene = Memory.ReadUInt(0x2027051C) + 536870912;
+            uint Playing = Cutscene + 744;
+            if (Memory.ReadUInt(Cutscene) != 0)
+            {
                 //Memory.Write(Playing, 0);
-            //}
+            }
 
             //Bentley Skipper
             if (Memory.ReadInt(0x20270458) == 2)
