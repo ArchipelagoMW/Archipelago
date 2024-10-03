@@ -231,7 +231,7 @@ class LightNeededToGetToDarkPlaces(Choice):
     default = 1
 
 
-class BindSongNeededToGetUnderRockBulb(Toggle):
+class BindSongNeededToGetUnderRockBulb(DefaultOnToggle):
     """
     Make sure that the bind song can be acquired before having to obtain sing bulbs under rocks.
     """

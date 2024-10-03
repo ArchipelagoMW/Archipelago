@@ -137,11 +137,6 @@ def _has_secrets(state: CollectionState, player: int) -> bool:
                           ItemNames.THIRD_SECRET_OBTAINED}, player)
 
 
-def _has_secrets(state: CollectionState, player: int) -> bool:
-    return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
-                          ItemNames.THIRD_SECRET_OBTAINED}, player)
-
-
 class AquariaRegions:
     """
     Class used to create regions of the Aquaria game
@@ -219,6 +214,7 @@ class AquariaRegions:
     turtle_cave: Region
     turtle_cave_bubble: Region
     sun_temple_l: Region
+    sun_temple_l_entrance: Region
     sun_temple_r: Region
     sun_temple_boss_path: Region
     sun_temple_boss: Region
@@ -440,6 +436,7 @@ class AquariaRegions:
         """
         self.sun_temple_l = self.__add_region("Sun Temple left area",
                                               AquariaLocations.locations_sun_temple_l)
+        self.sun_temple_l_entrance = self.__add_region("Sun Temple left area entrance", None)
         self.sun_temple_r = self.__add_region("Sun Temple right area",
                                               AquariaLocations.locations_sun_temple_r)
         self.sun_temple_boss_path = self.__add_region("Sun Temple before boss area",
@@ -477,7 +474,7 @@ class AquariaRegions:
                                        AquariaLocations.locations_whale if add_locations else None)
         self.first_secret = self.__add_region("First Secret area", None)
 
-    def __create_sunken_city(self, add_locations:bool) -> None:
+    def __create_sunken_city(self, add_locations: bool) -> None:
         """
         Create the `sunken_city_*` regions
         """
@@ -496,7 +493,7 @@ class AquariaRegions:
                                                   AquariaLocations.locations_sunken_city_boss
                                                   if add_locations else None)
 
-    def __create_body(self, add_locations:bool) -> None:
+    def __create_body(self, add_locations: bool) -> None:
         """
         Create the `body_*` and `final_boss* regions
         """
@@ -519,7 +516,8 @@ class AquariaRegions:
                                             AquariaLocations.locations_final_boss if add_locations else None)
         self.final_boss_end = self.__add_region("The Body, final boss area", None)
 
-    def get_entrance_name(self, from_region: Region, to_region: Region):
+    @staticmethod
+    def get_entrance_name(from_region: Region, to_region: Region):
         """
         Return the name of an entrance between `from_region` and `to_region`
         """
@@ -728,16 +726,14 @@ class AquariaRegions:
         self.__connect_regions(self.veil_tl, self.turtle_cave)
         self.__connect_regions(self.turtle_cave, self.turtle_cave_bubble)
         self.__connect_regions(self.veil_tr_r, self.sun_temple_r)
-        self.__connect_one_way_regions(self.sun_temple_r, self.sun_temple_l,
-                                       lambda state: _has_bind_song(state, self.player) or
+        self.__connect_one_way_regions(self.sun_temple_r, self.sun_temple_l_entrance,
+                                       lambda state: _has_sun_crystal(state, self.player) or
                                                      _has_light(state, self.player))
-        self.__connect_one_way_regions(self.sun_temple_l, self.sun_temple_r,
+        self.__connect_one_way_regions(self.sun_temple_l_entrance, self.sun_temple_r,
                                        lambda state: _has_light(state, self.player))
-        self.__connect_regions(self.sun_temple_l, self.veil_tr_l)
-        self.__connect_one_way_regions(self.sun_temple_l, self.sun_temple_boss_path,
-                                       lambda state: _has_light(state, self.player) or
-                                                     _has_sun_crystal(state, self.player))
-        self.__connect_one_way_regions(self.sun_temple_boss_path, self.sun_temple_l)
+        self.__connect_regions(self.sun_temple_l_entrance, self.veil_tr_l)
+        self.__connect_regions(self.sun_temple_l, self.sun_temple_l_entrance)
+        self.__connect_regions(self.sun_temple_l, self.sun_temple_boss_path)
         self.__connect_regions(self.sun_temple_boss_path, self.sun_temple_boss,
                                lambda state: _has_energy_attack_item(state, self.player))
         self.__connect_one_way_regions(self.sun_temple_boss, self.veil_tr_l)
@@ -836,14 +832,14 @@ class AquariaRegions:
         Connect an entrance for the four gods objective ending
         """
         if options.mini_bosses_to_beat > 6:
-            lVictoryLambda = lambda state: (_has_four_gods_beated(state, self.player) and
+            victory_lambda = lambda state: (_has_four_gods_beated(state, self.player) and
                                             _has_mini_bosses(state, self.player))
         elif options.big_bosses_to_beat > 0:
-            lVictoryLambda = lambda state: (_has_four_gods_beated(state, self.player) and
+            victory_lambda = lambda state: (_has_four_gods_beated(state, self.player) and
                                             _has_mini_bosses_four_gods(state, self.player))
         else:
-            lVictoryLambda = lambda state: _has_four_gods_beated(state, self.player)
-        self.__connect_one_way_regions(self.menu, self.four_gods_end, lVictoryLambda)
+            victory_lambda = lambda state: _has_four_gods_beated(state, self.player)
+        self.__connect_one_way_regions(self.menu, self.four_gods_end, victory_lambda)
 
     def __connect_transturtle(self, item_target: str, region_source: Region, region_target: Region) -> None:
         """Connect a single transturtle to another one"""
@@ -874,7 +870,6 @@ class AquariaRegions:
         self._connect_transturtle_to_other(self.arnassi_cave_transturtle)
         self._connect_transturtle_to_other(self.abyss_r_transturtle)
         self._connect_transturtle_to_other(self.final_boss_tube)
-
 
     def connect_regions(self, options: AquariaOptions) -> None:
         """
@@ -991,7 +986,6 @@ class AquariaRegions:
             self.__add_event_location(self.four_gods_end, AquariaLocationNames.OBJECTIVE_COMPLETE,
                                       ItemNames.VICTORY)
 
-
     def __adjusting_soup_rules(self) -> None:
         """
         Modify rules for location that need soup
@@ -1061,25 +1055,21 @@ class AquariaRegions:
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_BOTTOM_RIGHT_AREA_ODD_CONTAINER, self.player),
             lambda state: light_lambda(state, self.player))
+        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_l_entrance, self.sun_temple_l),
+                                              self.player), lambda state: _has_light(state, self.player) or
+                                                                          _has_sun_crystal(state, self.player))
+        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_boss_path, self.sun_temple_l),
+                                              self.player), lambda state: _has_light(state, self.player) or
+                                                                          _has_sun_crystal(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.abyss_r_transturtle, self.abyss_r),
                                               self.player),
                  lambda state: light_lambda(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.body_c, self.abyss_lb), self.player),
                  lambda state: light_lambda(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.veil_tr_l_fp, self.octo_cave_t), self.player),
-                 lambda state: light_lambda(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.openwater_br, self.abyss_r), self.player),
                  lambda state: light_lambda(state, self.player))
         add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.openwater_bl, self.abyss_l), self.player),
                  lambda state: light_lambda(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_l, self.sun_temple_r),
-                                              self.player), lambda state: light_lambda(state, self.player) or
-                                                                          _has_sun_crystal(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.sun_temple_r, self.sun_temple_l),
-                                              self.player), lambda state: light_lambda(state, self.player) or
-                                                                          _has_sun_crystal(state, self.player))
-        add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.veil_tr_l, self.sun_temple_l), self.player),
-                 lambda state: light_lambda(state, self.player) or _has_sun_crystal(state, self.player))
 
     def __adjusting_manual_rules(self, options: AquariaOptions) -> None:
         add_rule(self.multiworld.get_location(AquariaLocationNames.MITHALAS_CATHEDRAL_MITHALAN_DRESS, self.player),
@@ -1346,7 +1336,6 @@ class AquariaRegions:
             if options.no_progression_body:
                 self.__no_progression_body()
 
-
     def adjusting_rules(self, options: AquariaOptions) -> None:
         """
         Modify rules for single location or optional rules
@@ -1471,6 +1460,7 @@ class AquariaRegions:
         self.multiworld.regions.append(self.turtle_cave)
         self.multiworld.regions.append(self.turtle_cave_bubble)
         self.multiworld.regions.append(self.sun_temple_l)
+        self.multiworld.regions.append(self.sun_temple_l_entrance)
         self.multiworld.regions.append(self.sun_temple_r)
         self.multiworld.regions.append(self.sun_temple_boss_path)
         self.multiworld.regions.append(self.sun_temple_boss)

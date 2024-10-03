@@ -133,13 +133,13 @@ class AquariaWorld(World):
 
         return result
 
-    def __pre_fill_item(self, item_name: str, location_name: str, classification: ItemClassification,
-                        precollected) -> None:
+    def __pre_fill_item(self, item_name: str, location_name: str, precollected,
+                        itemClassification: ItemClassification = ItemClassification.useful) -> None:
         """Pre-assign an item to a location"""
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            item = AquariaItem(item_name, classification, data.id, self.player)
+            item = AquariaItem(item_name, itemClassification, data.id, self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
@@ -157,39 +157,34 @@ class AquariaWorld(World):
         if self.options.objective.value == Objective.option_killing_the_four_gods:
             self.exclude.extend(four_gods_excludes)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
-                                 ItemClassification.filler, precollected)
+                                 precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
-                                 ItemClassification.filler, precollected)
+                                 precollected)
         if self.options.turtle_randomizer.value != TurtleRandomizer.option_none:
             if self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final and \
                self.options.objective.value != Objective.option_killing_the_four_gods:
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
-                                     ItemClassification.progression, precollected)
+                                     precollected)
         else:
             self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_LEFT,
-                                 AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE,
-                                 ItemClassification.progression, precollected)
+                                 AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_TRANSTURTLE, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT,
-                                 AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE,
-                                 ItemClassification.progression, precollected)
+                                 AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS,
-                                 AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE,
-                                 ItemClassification.progression, precollected)
+                                 AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST,
-                                 AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE,
-                                 ItemClassification.progression, precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE,
-                                 ItemClassification.progression, precollected)
+                                 AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE, precollected)
             if self.options.objective.value != Objective.option_killing_the_four_gods:
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
-                                     ItemClassification.progression, precollected)
+                                     precollected)
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
-                                     ItemClassification.progression, precollected)
+                                     precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
             self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE,
-                                 ItemClassification.progression, precollected)
+                                 precollected, ItemClassification.progression)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
-                                 ItemClassification.progression, precollected)
+                                 precollected)
         for name, data in item_table.items():
             for i in range(data.count):
                 if name in self.exclude:
@@ -260,5 +255,9 @@ class AquariaWorld(World):
                 "unconfine_home_water_transturtle":
                     self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_transturtle
                     or self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_both,
-                "maximum_ingredient_amount": self.options.maximum_ingredient_amount.value
+                "maximum_ingredient_amount": self.options.maximum_ingredient_amount.value,
+                "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
+                "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
+                "light_needed_to_get_to_dark_places": bool(self.options.light_needed_to_get_to_dark_places),
+                "turtle_randomizer": self.options.turtle_randomizer.value
                 }

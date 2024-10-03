@@ -194,7 +194,9 @@ class MultiWorld():
         self.player_types[new_id] = NetUtils.SlotType.group
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         self.worlds[new_id] = world_type.create_group(self, new_id, players)
-        self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
+        self.worlds[new_id].collect_item = AutoWorld.World.collect_item.__get__(self.worlds[new_id])
+        self.worlds[new_id].collect = AutoWorld.World.collect.__get__(self.worlds[new_id])
+        self.worlds[new_id].remove = AutoWorld.World.remove.__get__(self.worlds[new_id])
         self.player_name[new_id] = name
 
         new_group = self.groups[new_id] = Group(name=name, game=game, players=players,
@@ -342,6 +344,8 @@ class MultiWorld():
             region = Region("Menu", group_id, self, "ItemLink")
             self.regions.append(region)
             locations = region.locations
+            # ensure that progression items are linked first, then non-progression
+            self.itempool.sort(key=lambda item: item.advancement)
             for item in self.itempool:
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:
@@ -718,7 +722,7 @@ class CollectionState():
             if new_region in reachable_regions:
                 blocked_connections.remove(connection)
             elif connection.can_reach(self):
-                assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
+                assert new_region, f"tried to search through an Entrance \"{connection}\" with no connected Region"
                 reachable_regions.add(new_region)
                 blocked_connections.remove(connection)
                 blocked_connections.update(new_region.exits)
@@ -944,6 +948,7 @@ class Entrance:
         self.player = player
 
     def can_reach(self, state: CollectionState) -> bool:
+        assert self.parent_region, f"called can_reach on an Entrance \"{self}\" with no parent_region"
         if self.parent_region.can_reach(state) and self.access_rule(state):
             if not self.hide_path and not self in state.path:
                 state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
@@ -1164,7 +1169,7 @@ class Location:
 
     def can_reach(self, state: CollectionState) -> bool:
         # Region.can_reach is just a cache lookup, so placing it first for faster abort on average
-        assert self.parent_region, "Can't reach location without region"
+        assert self.parent_region, f"called can_reach on a Location \"{self}\" with no parent_region"
         return self.parent_region.can_reach(state) and self.access_rule(state)
 
     def place_locked_item(self, item: Item):

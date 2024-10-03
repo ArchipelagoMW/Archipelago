@@ -7,13 +7,14 @@ Description: Unit test used to test accessibility of locations with and without 
 from . import AquariaTestBase
 from ..Items import ItemNames
 from ..Locations import AquariaLocationNames
-from ..Options import EarlyEnergyForm
+from ..Options import EarlyEnergyForm, TurtleRandomizer
 
 
 class EnergyFormDualFormAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the energy form and dual form (and Li)"""
     options = {
-        "early_energy_form": EarlyEnergyForm.option_off
+        "early_energy_form": EarlyEnergyForm.option_off,
+        "turtle_randomizer": TurtleRandomizer.option_all
     }
 
     def test_energy_form_or_dual_form_location(self) -> None:
