@@ -71,7 +71,7 @@ class TestTwoPlayerMulti(MultiworldTestBase):
             for world in self.multiworld.worlds.values():
                 world.options.accessibility.value = Accessibility.option_full
             self.assertSteps(gen_steps)
-        with self.subTest("filling multiworld", seed=self.multiworld.seed):
-            distribute_items_restrictive(self.multiworld)
-            call_all(self.multiworld, "post_fill")
-            self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
+            with self.subTest("filling multiworld", games=world_type.game, seed=self.multiworld.seed):
+                distribute_items_restrictive(self.multiworld)
+                call_all(self.multiworld, "post_fill")
+                self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
