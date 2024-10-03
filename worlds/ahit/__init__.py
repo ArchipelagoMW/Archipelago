@@ -1,15 +1,16 @@
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
 from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool, get_shop_trap_name, \
-    calculate_yarn_costs
+    calculate_yarn_costs, alps_hooks
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
     get_total_locations
-from .Rules import set_rules
+from .Rules import set_rules, has_paintings
 from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal, create_option_groups
-from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item
+from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item, Difficulty
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
 from worlds.AutoWorld import World, WebWorld, CollectionState
+from worlds.generic.Rules import add_rule
 from typing import List, Dict, TextIO
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from Utils import local_path
@@ -86,19 +87,27 @@ class HatInTimeWorld(World):
         if self.is_dw_only():
             return
 
-        # If our starting chapter is 4 and act rando isn't on, force hookshot into inventory
-        # If starting chapter is 3 and painting shuffle is enabled, and act rando isn't, give one free painting unlock
-        start_chapter: ChapterIndex = ChapterIndex(self.options.StartingChapter)
+        # Take care of some extremely restrictive starts in other chapters with act shuffle off
+        if not self.options.ActRandomizer:
+            start_chapter = self.options.StartingChapter
+            if start_chapter == ChapterIndex.ALPINE:
+                self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
+                if self.options.UmbrellaLogic:
+                    self.multiworld.push_precollected(self.create_item("Umbrella"))
 
-        if start_chapter == ChapterIndex.ALPINE or start_chapter == ChapterIndex.SUBCON:
-            if not self.options.ActRandomizer:
-                if start_chapter == ChapterIndex.ALPINE:
-                    self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
-                    if self.options.UmbrellaLogic:
-                        self.multiworld.push_precollected(self.create_item("Umbrella"))
-
-                if start_chapter == ChapterIndex.SUBCON and self.options.ShuffleSubconPaintings:
+                if self.options.ShuffleAlpineZiplines:
+                    ziplines = list(alps_hooks.keys())
+                    ziplines.remove("Zipline Unlock - The Twilight Bell Path")  # not enough checks from this one
+                    self.multiworld.push_precollected(self.create_item(self.random.choice(ziplines)))
+            elif start_chapter == ChapterIndex.SUBCON:
+                if self.options.ShuffleSubconPaintings:
                     self.multiworld.push_precollected(self.create_item("Progressive Painting Unlock"))
+            elif start_chapter == ChapterIndex.BIRDS:
+                if self.options.UmbrellaLogic:
+                    if self.options.LogicDifficulty < Difficulty.EXPERT:
+                        self.multiworld.push_precollected(self.create_item("Umbrella"))
+                elif self.options.LogicDifficulty < Difficulty.MODERATE:
+                    self.multiworld.push_precollected(self.create_item("Umbrella"))
 
     def create_regions(self):
         # noinspection PyClassVar
@@ -119,7 +128,10 @@ class HatInTimeWorld(World):
         # place vanilla contract locations if contract shuffle is off
         if not self.options.ShuffleActContracts:
             for name in contract_locations.keys():
-                self.multiworld.get_location(name, self.player).place_locked_item(create_item(self, name))
+                loc = self.get_location(name)
+                loc.place_locked_item(create_item(self, name))
+                if self.options.ShuffleSubconPaintings and loc.name != "Snatcher's Contract - The Subcon Well":
+                    add_rule(loc, lambda state: has_paintings(state, self, 1))
 
     def create_items(self):
         if self.has_yarn():
@@ -241,7 +253,8 @@ class HatInTimeWorld(World):
             else:
                 item_name = loc.item.name
 
-            shop_item_names.setdefault(str(loc.address), item_name)
+            shop_item_names.setdefault(str(loc.address),
+                                       f"{item_name} ({self.multiworld.get_player_name(loc.item.player)})")
 
         slot_data["ShopItemNames"] = shop_item_names
 
@@ -317,7 +330,7 @@ class HatInTimeWorld(World):
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         old_count: int = state.count(item.name, self.player)
-        change = super().collect(state, item)
+        change = super().remove(state, item)
         if change and old_count == 1:
             if "Stamp" in item.name:
                 if "2 Stamp" in item.name:

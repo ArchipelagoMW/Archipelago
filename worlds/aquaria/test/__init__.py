@@ -141,7 +141,7 @@ after_home_water_locations = [
     "Sun Temple, bulb at the top of the high dark room",
     "Sun Temple, Golden Gear",
     "Sun Temple, first bulb of the temple",
-    "Sun Temple, bulb on the left part",
+    "Sun Temple, bulb on the right part",
     "Sun Temple, bulb in the hidden room of the right part",
     "Sun Temple, Sun Key",
     "Sun Worm path, first path bulb",
