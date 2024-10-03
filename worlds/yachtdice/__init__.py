@@ -1,3 +1,4 @@
+import logging
 import math
 from typing import Dict
 
@@ -156,6 +157,19 @@ class YachtDiceWorld(World):
                 self.precollected.append(cats[categorylist[index]])
             else:
                 self.itempool.append(cats[categorylist[index]])
+
+        # Give warnings and change start_inventory if necessary.
+        gave_warning = False
+        for item_name, count in self.multiworld.worlds[self.player].options.start_inventory.value.items():
+            if item_name.startswith("Category") and count > 20:
+                count = 20
+                if not gave_warning:
+                    logging.warning(
+                        f"Yacht Dice warning: {item_name} appeared {count} times in the starting "
+                        f"inventory for player {self.player_name}. The limit is 20, so it will be "
+                        "set to 20. Additional similar warnings will not be shown."
+                    )
+                    gave_warning = True
 
         # Also start with one Roll and one Dice
         self.precollected.append("Dice")
@@ -468,7 +482,7 @@ class YachtDiceWorld(World):
         menu.exits.append(connection)
         connection.connect(board)
         self.multiworld.regions += [menu, board]
-        
+
     def get_filler_item_name(self) -> str:
         return "Good RNG"
 
