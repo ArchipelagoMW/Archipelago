@@ -159,17 +159,29 @@ class YachtDiceWorld(World):
                 self.itempool.append(cats[categorylist[index]])
 
         # Give warnings and change start_inventory if necessary.
-        gave_warning = False
-        for item_name, count in self.multiworld.worlds[self.player].options.start_inventory.value.items():
-            if item_name.startswith("Category") and count > 20:
-                count = 20
-                if not gave_warning:
-                    logging.warning(
-                        f"Yacht Dice warning: {item_name} appeared {count} times in the starting "
-                        f"inventory for player {self.player_name}. The limit is 20, so it will be "
-                        "set to 20. Additional similar warnings will not be shown."
-                    )
-                    gave_warning = True
+        gave_warning_more_than_20 = False
+        gave_warning_category_not_in_game = False
+        for item_name, count in list(self.options.start_inventory.value.items()):
+            if item_name.startswith("Category"):
+                if item_name not in self.possible_categories:
+                    if not gave_warning_category_not_in_game:
+                        logging.warning(
+                            f"Yacht Dice warning: {item_name} appears in the starting inventory for player "
+                            f"{self.player_name}. However, this category was not selected as one of the 16 "
+                            f"active categories in the game, so it will be removed from the start_inventory. "
+                            f"Additional similar warnings will not be shown."
+                        )
+                        gave_warning_category_not_in_game = True
+                    self.options.start_inventory.value.pop(item_name)  # Might as well remove
+                elif count > 20:
+                    if not gave_warning_more_than_20:
+                        logging.warning(
+                            f"Yacht Dice warning: {item_name} appears {count} times in the starting "
+                            f"inventory for player {self.player_name}. The limit is 20, so it will be "
+                            "set to 20. Additional similar warnings will not be shown."
+                        )
+                        gave_warning_more_than_20 = True
+                    self.options.start_inventory.value[item_name] = 20
 
         # Also start with one Roll and one Dice
         self.precollected.append("Dice")
