@@ -386,25 +386,26 @@ def handle_trigger_math(math_options: Union[dict, string], option_name: str, wei
     for name, value in options.items():
         value_list = []
         if not isinstance(name, str):
-            raise Exception(f'Mathematical trigger malformed: {name} is not a string.')
+            raise Exception(f"Mathematical trigger malformed: {name} is not a string.")
         split_name = name.split(" ")
         if len(split_name) != 3:
-            raise Exception(f'Cannot perform arithmetic, wrong number of arguments: {math_options}')
+            raise Exception(f"Cannot perform arithmetic, wrong number of arguments: {math_options}")
         if split_name[1] not in ['+', '-', '*', '/']:
-            raise Exception(f'Cannot perform arithmetic, unknown operator in option: {split_name[1]}')
-        for x in range(0, 2, 2):
+            raise Exception(f"Cannot perform arithmetic, unknown operator in option: {split_name[1]}")
+        for x in range(0, 3, 2):
             if not split_name[x].isnumeric():
                 if split_name[x] in weights:
                     weights[split_name[x]] = get_choice(split_name[x], weights)
                     split_name[x] = str(weights[split_name[x]])
                 if not split_name[x].isnumeric():
-                    raise Exception(f'Cannot perform arithmetic, non-numeric value found for : {name.split(" ")[0]}')
+                    raise Exception(f"Cannot perform arithmetic, non-numeric value found for {name.split(' ')[0]}")
             if len(split_name[x].split(".")) > 1:
                 value_list[x] = float(split_name[x])
             else:
                 value_list[x] = int(split_name[x])
-            if value_list[x] > 1_000_000 or value_list[x] < -1_000_000:
-                raise Exception(f'Arithmetic Option out of bounds: {value_list[0]}, {value_list[2]} must < 7 digits.')
+            if not (-1_000_000 < value_list[x] < 1_000_000):
+                raise Exception(f"Arithmetic Option out of bounds: "
+                                f"{value_list[0]}, {value_list[2]} must be between -1,000,000 and 1,000,000")
         value_list[1] = split_name[1]
         if value_list[1] == '+':
             new_dict.update({value_list[0] + value_list[2]: value})
@@ -413,7 +414,10 @@ def handle_trigger_math(math_options: Union[dict, string], option_name: str, wei
         elif value_list[1] == '*':
             new_dict.update({value_list[0] * value_list[2]: value})
         else:
-            new_dict.update({value_list[0] / value_list[2]: value})
+            if isinstance(value_list[0], float) or isinstance(value_list[2], float):
+                new_dict.update({value_list[0] / value_list[2]: value})
+            else:
+                new_dict.update({value_list[0] // value_list[2]: value})
         weights[option_name] = new_dict
     return weights
 
