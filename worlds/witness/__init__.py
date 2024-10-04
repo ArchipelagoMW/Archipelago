@@ -326,7 +326,7 @@ class WitnessWorld(World):
     @staticmethod
     def stage_post_fill(multiworld: MultiWorld):
         spheres = list(multiworld.get_spheres())  # We need these multiple times, so a generator won't do
-        fake_collection_state = CollectionState(multiworld)
+        fake_state = CollectionState(multiworld)
 
         # Make some very good progression items progression + useful.
         # This will prefer the first copy of the item by sphere.
@@ -343,11 +343,9 @@ class WitnessWorld(World):
         }
 
         # This dict is group player -> item name -> link-participating player -> how many copies were made prog-useful
-        itemlinked_items_that_were_made_proguseful = defaultdict(
-            lambda: defaultdict(lambda: Counter())
-        )
+        itemlinked_items_that_were_made_proguseful = defaultdict(set)
 
-        for sphere in spheres:
+        for sphere in multiworld.get_spheres():
             # If two copies of an item are in the same sphere, it is random-by-seed which copy is proguseful
             witness_items_in_this_sphere = sorted(
                 location.item for location in sphere
@@ -390,52 +388,41 @@ class WitnessWorld(World):
 
                 item.classification |= ItemClassification.useful
                 # Make sure that there isn't an item rule on this location banning useful / proguseful
-                if not item.location.can_fill(fake_collection_state, item, check_access=False):
+                if not item.location.can_fill(fake_state, item, check_access=False):
                     item.classification -= ItemClassification.useful
                     continue
 
-                # We have made the item proguseful.
-
+                # If this item is part of a group, try to add useful to the mangled link unlocked classification
                 if item.location.player in multiworld.groups:
-                    itemlinked_items_that_were_made_proguseful[item.location.player][item.name][item.player] += 1
+                    if item.name not in itemlinked_items_that_were_made_proguseful.get(item.location.player, {}):
+                        couldnt_make_useful = False
+
+                        all_link_unlocker_locations = multiworld.find_item_locations(item.name, item.location.player)
+
+                        original_classifications = {}
+
+                        for link_unlocker_location in all_link_unlocker_locations:
+                            link_unlocker = link_unlocker_location.item
+                            original_classifications[link_unlocker] = link_unlocker.classification
+                            link_unlocker.classification |= ItemClassification.useful
+
+                            # Make sure that there isn't an item rule on this location banning useful / proguseful
+                            if not link_unlocker_location.can_fill(fake_state, link_unlocker, check_access=False):
+                                couldnt_make_useful = True
+                                break
+
+                        if couldnt_make_useful:
+                            for link_unlocker, original_classification in original_classifications.items():
+                                link_unlocker.classification = original_classification
+                            # Also revert the item this originated from
+                            item.classification -= ItemClassification.useful
+                            continue
+
+                        itemlinked_items_that_were_made_proguseful[item.location.player].add(item.name)
 
                 for unlocked_item in unlocks:
                     progusefuls_for_this_player.discard(unlocked_item)
                 player_collected_items[item.name] += 1
-
-        # The items we made proguseful might have been parts of groups.
-        # We kept track of how many copies of an item were made proguseful per player.
-        # Now we need to iterate the spheres again, and make the link-unlockers proguseful too.
-        # The amount is given by the player who had the largest amount of copies of the item turned into proguseful.
-
-        group_items_that_need_to_be_proguseful = {
-            group_player: Counter({
-                item_name: max(item_counts_per_player.values())
-                for item_name, item_counts_per_player in item_counts.items()
-            })
-            for group_player, item_counts in itemlinked_items_that_were_made_proguseful.items()
-        }
-
-        for sphere in spheres:
-            items_from_relevant_group_players = sorted(
-                location.item for location in sphere
-                if location.item.player in group_items_that_need_to_be_proguseful
-            )
-            multiworld.random.shuffle(items_from_relevant_group_players)
-
-            for item in items_from_relevant_group_players:
-                if group_items_that_need_to_be_proguseful[item.player][item.name] == 0:
-                    continue
-
-                item.classification |= ItemClassification.useful
-                # Make sure that there isn't an item rule on this location banning useful / proguseful
-                if not item.location.can_fill(fake_collection_state, item, check_access=False):
-                    item.classification -= ItemClassification.useful
-                    continue
-
-                group_items_that_need_to_be_proguseful[item.player][item.name] -= 1
-
-
 
     def fill_slot_data(self) -> Dict[str, Any]:
         self.log_ids_to_hints: Dict[int, CompactHintData] = {}
