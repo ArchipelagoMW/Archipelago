@@ -143,12 +143,6 @@ class WitnessPlayerItems:
         """
         return self._mandatory_items.copy()
 
-    def get_proguseful_items(self) -> Set[str]:
-        """
-        Returns a set of progression items that are especially useful in this world.
-        """
-        return self._proguseful_items.copy()
-
     def get_filler_items(self, quantity: int) -> Dict[str, int]:
         """
         Generates a list of filler items of the given length.
