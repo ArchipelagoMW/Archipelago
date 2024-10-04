@@ -405,7 +405,8 @@ class WitnessWorld(World):
 
         # The items we made proguseful might have been parts of groups.
         # We kept track of how many copies of an item were made proguseful per player.
-        # Now we need to iterate the spheres again, and make the maximum of those amounts proguseful as well.
+        # Now we need to iterate the spheres again, and make the link-unlockers proguseful too.
+        # The amount is given by the player who had the largest amount of copies of the item turned into proguseful.
 
         group_items_that_need_to_be_proguseful = {
             group_player: Counter({
