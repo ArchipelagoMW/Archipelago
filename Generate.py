@@ -9,6 +9,7 @@ import string
 import sys
 import urllib.parse
 import urllib.request
+import re
 from collections import Counter
 from typing import Any, Dict, Tuple, Union
 from itertools import chain
@@ -378,7 +379,7 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def handle_trigger_math(math_options: Union[dict, string], option_name: str, weights: dict):
+def handle_trigger_math(math_options: Union[dict, str], option_name: str, weights: dict):
     options = copy.deepcopy(math_options)
     if not isinstance(options, dict):
         options = {str(options): 1}
@@ -386,39 +387,66 @@ def handle_trigger_math(math_options: Union[dict, string], option_name: str, wei
     for name, value in options.items():
         value_list = []
         if not isinstance(name, str):
-            raise Exception(f"Mathematical trigger malformed: {name} is not a string.")
-        split_name = name.split(" ")
-        if len(split_name) != 3:
-            raise Exception(f"Cannot perform arithmetic, wrong number of arguments: {math_options}")
-        if split_name[1] not in ['+', '-', '*', '/']:
-            raise Exception(f"Cannot perform arithmetic, unknown operator in option: {split_name[1]}")
-        for x in range(0, 3, 2):
-            if not split_name[x].isnumeric():
+            raise TypeError(f"Mathematical trigger malformed: {name} is not a string.")
+        temp_name = name.replace(" ", "")
+        # separate first value by matching non-operators at beginning of name.
+        hold_name = re.search(r"^-?[^+\-*/]+", name)
+        if hold_name is None:
+            raise ValueError(f"There is no first value in {name}")
+        split_name = [hold_name[0]]
+        temp_name = temp_name[len(split_name[0]):]
+        while len(temp_name) != 0:
+            # grab next operator/value pair
+            hold_name = re.search(r"^([+\-*/])(-?[^+\-*/]+)", temp_name)
+            if hold_name is None:
+                raise ValueError(f"{name} is malformed.")
+            split_name.append(hold_name.group(1))
+            split_name.append(hold_name.group(2))
+            temp_name = temp_name[len(hold_name[0]):]
+        if len(split_name) % 2 != 1 or len(split_name) < 1:
+            raise ValueError(f"Cannot perform arithmetic, wrong number of arguments: {math_options}")
+        for x in range(0, len(split_name), 2):
+            if re.search(r"[^0-9.\-]", split_name[x]):
                 if split_name[x] in weights:
                     weights[split_name[x]] = get_choice(split_name[x], weights)
                     split_name[x] = str(weights[split_name[x]])
-                if not split_name[x].isnumeric():
-                    raise Exception(f"Cannot perform arithmetic, non-numeric value found for {name.split(' ')[0]}")
-            if len(split_name[x].split(".")) > 1:
-                value_list[x] = float(split_name[x])
+                else:
+                    raise KeyError(f"{split_name[x]} in {name} has not been assigned a value in yaml")
+                if re.search(r"[^0-9.\-]", split_name[x]):
+                    raise ValueError(f"Cannot perform arithmetic, non-numeric value found for {split_name[x]}")
+            if re.search(r"-?[0-9]+\.[0-9]+", split_name[x]):
+                value_list.append(float(split_name[x]))
             else:
-                value_list[x] = int(split_name[x])
+                value_list.append(int(split_name[x]))
             if not (-1_000_000 < value_list[x] < 1_000_000):
-                raise Exception(f"Arithmetic Option out of bounds: "
-                                f"{value_list[0]}, {value_list[2]} must be between -1,000,000 and 1,000,000")
-        value_list[1] = split_name[1]
-        if value_list[1] == '+':
-            new_dict.update({value_list[0] + value_list[2]: value})
-        elif value_list[1] == '-':
-            new_dict.update({value_list[0] - value_list[2]: value})
-        elif value_list[1] == '*':
-            new_dict.update({value_list[0] * value_list[2]: value})
+                raise ValueError(f"Arithmetic Option out of bounds: "
+                                f"{value_list[0]}, {value_list[1]} must be between -1,000,000 and 1,000,000")
+            if len(split_name) - 1 > x:
+                value_list.append(split_name[x+1])
+        total = value_list[0]
+        if len(value_list) > 1:
+            for x in range(2, len(value_list), 2):
+                if not (-1_000_000 < total < 1_000_000):
+                    raise ValueError(
+                        f"Total value is outside range -1,000,000-1,000,000 before final operation complete.")
+                if value_list[x - 1] == '+':
+                    total += value_list[x]
+                elif value_list[x - 1] == '-':
+                    total -= value_list[x]
+                elif value_list[x - 1] == '*':
+                    total *= value_list[x]
+                else:
+                    if isinstance(total, float) or isinstance(value_list[x], float):
+                        total = total / value_list[x]
+                    else:
+                        total //= value_list[x]
+                if isinstance(total, float):
+                    total = round(total, 6)
+        if total in new_dict:
+            new_dict[total] += value
         else:
-            if isinstance(value_list[0], float) or isinstance(value_list[2], float):
-                new_dict.update({value_list[0] / value_list[2]: value})
-            else:
-                new_dict.update({value_list[0] // value_list[2]: value})
-        weights[option_name] = new_dict
+            new_dict.update({total: value})
+    weights[option_name] = new_dict
     return weights
 
 
@@ -445,11 +473,9 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                     if category_name:
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     for option_type, option_value in category_options.items():
-                        temp_name = option_type.rsplit("*", 1)
-                        if len(temp_name) == 2 and temp_name[1] == "":
-                            temp_name = temp_name[0]
+                        if option_type.endswith("*"):
                             currently_targeted_weights = \
-                                handle_trigger_math(option_value, temp_name, currently_targeted_weights)
+                                handle_trigger_math(option_value, option_type[:-1], currently_targeted_weights)
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
             valid_keys.add(key)
         except Exception as e:
