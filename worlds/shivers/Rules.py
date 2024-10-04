@@ -171,7 +171,7 @@ def get_rules_lookup(world: "ShiversWorld", player: int):
             "Puzzle Solved Red Door": lambda state: state.can_reach_region("Maintenance Tunnels", player),
             "Puzzle Solved UFO Symbols": lambda state: state.can_reach_region("Library", player),
             "Storage: UFO": lambda state: state.can_reach_region("Library", player),
-            "Puzzle Solved Maze Door": lambda state: state.can_reach_region("Projector Room", player),
+            "Puzzle Solved Maze Door": lambda state: state.has("Viewed Theater Movie", player),
             "Puzzle Solved Theater Door": lambda state: state.has("Viewed Egyptian Hieroglyphics Explained", player),
             "Puzzle Solved Columns of RA": lambda state: state.has("Viewed Egyptian Hieroglyphics Explained", player),
             "Puzzle Solved Atlantis": lambda state: state.can_reach_region("Office", player),
