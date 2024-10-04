@@ -294,6 +294,8 @@ class World(metaclass=AutoWorldRegister):
 
     origin_region_name: str = "Menu"
     """Name of the Region from which accessibility is tested."""
+    regions: "MultiWorld.RegionManager"
+    """Regions for this world instance. Regions should be added to this, and not override it."""
 
     explicit_indirect_conditions: bool = True
     """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
@@ -334,6 +336,8 @@ class World(metaclass=AutoWorldRegister):
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
         multiworld.per_slot_randoms[player] = self.random
+        from BaseClasses import MultiWorld
+        self.regions = MultiWorld.RegionManager()
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
@@ -528,13 +532,13 @@ class World(metaclass=AutoWorldRegister):
 
     # convenience methods
     def get_location(self, location_name: str) -> "Location":
-        return self.multiworld.get_location(location_name, self.player)
+        return self.regions.location_cache[location_name]
 
     def get_entrance(self, entrance_name: str) -> "Entrance":
-        return self.multiworld.get_entrance(entrance_name, self.player)
+        return self.regions.entrance_cache[entrance_name]
 
     def get_region(self, region_name: str) -> "Region":
-        return self.multiworld.get_region(region_name, self.player)
+        return self.regions.region_cache[region_name]
 
     @property
     def player_name(self) -> str:
