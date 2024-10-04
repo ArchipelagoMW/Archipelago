@@ -303,6 +303,7 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
     cleaned_weights = {}
     for option in new_weights:
         option_name = option.lstrip("+-")
+        option_name = option_name.rstrip("*")
         if option.startswith("+") and option_name in weights:
             cleaned_value = weights[option_name]
             new_value = new_weights[option]
@@ -379,7 +380,8 @@ def roll_linked_options(weights: dict) -> dict:
     return weights
 
 
-def handle_trigger_math(math_options: Union[dict, str], option_name: str, weights: dict):
+def handle_trigger_math(math_options: Union[dict, str], option_name: str, original_weights: dict):
+    weights = copy.deepcopy(original_weights)
     options = copy.deepcopy(math_options)
     if not isinstance(options, dict):
         options = {str(options): 1}
@@ -446,12 +448,12 @@ def handle_trigger_math(math_options: Union[dict, str], option_name: str, weight
             new_dict[total] += value
         else:
             new_dict.update({total: value})
-    weights[option_name] = new_dict
-    return weights
+    options = new_dict
+    return weights, options
 
 
-def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
-    weights = copy.deepcopy(weights)  # make sure we don't write back to other weights sets in same_settings
+def roll_triggers(old_weights: dict, triggers: list, valid_keys: set) -> dict:
+    weights = copy.deepcopy(old_weights)  # make sure we don't write back to other weights sets in same_settings
     weights["_Generator_Version"] = Utils.__version__
     for i, option_set in enumerate(triggers):
         try:
@@ -474,8 +476,9 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                         currently_targeted_weights = currently_targeted_weights[category_name]
                     for option_type, option_value in category_options.items():
                         if option_type.endswith("*"):
-                            currently_targeted_weights = \
+                            temp_weights, category_options[option_type] = \
                                 handle_trigger_math(option_value, option_type[:-1], currently_targeted_weights)
+                            currently_targeted_weights.update(temp_weights)
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
             valid_keys.add(key)
         except Exception as e:
