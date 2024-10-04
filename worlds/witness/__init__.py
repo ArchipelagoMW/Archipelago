@@ -325,7 +325,6 @@ class WitnessWorld(World):
 
     @staticmethod
     def stage_post_fill(multiworld: MultiWorld):
-        spheres = list(multiworld.get_spheres())  # We need these multiple times, so a generator won't do
         fake_state = CollectionState(multiworld)
 
         # Make some very good progression items progression + useful.
