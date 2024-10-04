@@ -10,7 +10,7 @@ from ..Locations import AquariaLocationNames
 from ..Options import UnconfineHomeWater, Objective
 
 
-class SunFormAccessTest(AquariaTestBase):
+class SunFormFourGodsAccessTest(AquariaTestBase):
     """Unit test used to test accessibility of locations with and without the sun form with the goal four gods"""
     options = {
         "unconfine_home_water": UnconfineHomeWater.option_via_energy_door,
@@ -20,14 +20,11 @@ class SunFormAccessTest(AquariaTestBase):
 
     def test_sun_form_location(self) -> None:
         """Test locations that require sun form with the goal four gods"""
-        pass # Tod
-        # locations = [
-        #     AquariaLocationNames.FIRST_SECRET,
-        #     AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
-        #     AquariaLocationNames.BEATING_OCTOPUS_PRIME,
-        #     AquariaLocationNames.BEATING_THE_GOLEM,
-        #     AquariaLocationNames.SUNKEN_CITY_CLEARED,
-        #     AquariaLocationNames.FIRST_SECRET
-        # ]
-        # items = [[ItemNames.SUN_FORM]]
-        # self.assertAccessDependency(locations, items)
+        locations = [
+            AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
+            AquariaLocationNames.BEATING_OCTOPUS_PRIME,
+            AquariaLocationNames.BEATING_THE_GOLEM,
+            AquariaLocationNames.SUNKEN_CITY_CLEARED
+        ]
+        items = [[ItemNames.SUN_FORM]]
+        self.assertAccessDependency(locations, items, True)

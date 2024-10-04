@@ -237,12 +237,7 @@ class AquariaWorld(World):
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarian_translate": bool(self.options.aquarian_translation.value),
                 "blind_goal": bool(self.options.blind_goal.value),
-                "secret_needed":
-                    self.options.objective.value == Objective.option_obtain_secrets_and_kill_the_creator,
-                "kill_creator_goal":
-                    self.options.objective.value == Objective.option_obtain_secrets_and_kill_the_creator or
-                    self.options.objective.value == Objective.option_kill_the_creator,
-                "four_gods_goal": self.options.objective.value == Objective.option_killing_the_four_gods,
+                "goal": self.options.objective.value,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
@@ -259,5 +254,15 @@ class AquariaWorld(World):
                 "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
                 "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
                 "light_needed_to_get_to_dark_places": bool(self.options.light_needed_to_get_to_dark_places),
-                "turtle_randomizer": self.options.turtle_randomizer.value
+                "turtle_randomizer": self.options.turtle_randomizer.value,
+                "no_progression_simon_says": bool(self.option.no_progression_simon_says),
+                "no_progression_kelp_forest": bool(self.option.no_progression_kelp_forest),
+                "no_progression_veil": bool(self.option.no_progression_veil),
+                "no_progression_mithalas": bool(self.option.no_progression_mithalas),
+                "no_progression_energy_temple": bool(self.option.no_progression_energy_temple),
+                "no_progression_arnassi_ruins": bool(self.option.no_progression_arnassi_ruins),
+                "no_progression_frozen_veil": bool(self.option.no_progression_frozen_veil),
+                "no_progression_abyss": bool(self.option.no_progression_abyss),
+                "no_progression_sunken_city": bool(self.option.no_progression_sunken_city),
+                "no_progression_body": bool(self.option.no_progression_body),
                 }

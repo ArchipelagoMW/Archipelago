@@ -240,7 +240,7 @@ class AquariaRegions:
     body_rt: Region
     body_rb: Region
     body_b: Region
-    final_boss_loby: Region
+    final_boss_lobby: Region
     final_boss_tube: Region
     final_boss: Region
     final_boss_end: Region
@@ -507,7 +507,7 @@ class AquariaRegions:
                                          AquariaLocations.locations_body_rb if add_locations else None)
         self.body_b = self.__add_region("The Body bottom area",
                                         AquariaLocations.locations_body_b if add_locations else None)
-        self.final_boss_loby = self.__add_region("The Body, before final boss", None)
+        self.final_boss_lobby = self.__add_region("The Body, before final boss", None)
         self.final_boss_tube = self.__add_region("The Body, final boss area turtle room",
                                                  AquariaLocations.locations_final_boss_tube
                                                  if add_locations else
@@ -816,11 +816,11 @@ class AquariaRegions:
         self.__connect_one_way_regions(self.body_rb, self.body_c)
         self.__connect_regions(self.body_c, self.body_b,
                                lambda state: _has_dual_form(state, self.player))
-        self.__connect_regions(self.body_b, self.final_boss_loby,
+        self.__connect_regions(self.body_b, self.final_boss_lobby,
                                lambda state: _has_dual_form(state, self.player))
-        self.__connect_regions(self.final_boss_loby, self.final_boss_tube,
+        self.__connect_regions(self.final_boss_lobby, self.final_boss_tube,
                                lambda state: _has_nature_form(state, self.player))
-        self.__connect_one_way_regions(self.final_boss_loby, self.final_boss,
+        self.__connect_one_way_regions(self.final_boss_lobby, self.final_boss,
                                        lambda state: _has_energy_form(state, self.player) and
                                                      _has_dual_form(state, self.player) and
                                                      _has_sun_form(state, self.player) and
@@ -1349,13 +1349,13 @@ class AquariaRegions:
             self.__adjusting_under_rock_location(options)
         if options.objective.value != Objective.option_killing_the_four_gods:
             if options.mini_bosses_to_beat.value > 0:
-                add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_loby, self.final_boss),
+                add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_lobby, self.final_boss),
                                                       self.player), lambda state: _has_mini_bosses(state, self.player))
             if options.big_bosses_to_beat.value > 0:
-                add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_loby, self.final_boss),
+                add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_lobby, self.final_boss),
                                                       self.player), lambda state: _has_big_bosses(state, self.player))
             if options.objective.value == options.objective.option_obtain_secrets_and_kill_the_creator:
-                add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_loby, self.final_boss),
+                add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_lobby, self.final_boss),
                                                       self.player), lambda state: _has_secrets(state, self.player))
         if (options.unconfine_home_water.value == UnconfineHomeWater.option_via_energy_door or
                 options.unconfine_home_water.value == UnconfineHomeWater.option_off):
@@ -1493,7 +1493,7 @@ class AquariaRegions:
         self.multiworld.regions.append(self.body_rt)
         self.multiworld.regions.append(self.body_rb)
         self.multiworld.regions.append(self.body_b)
-        self.multiworld.regions.append(self.final_boss_loby)
+        self.multiworld.regions.append(self.final_boss_lobby)
         self.multiworld.regions.append(self.final_boss_tube)
         self.multiworld.regions.append(self.final_boss)
         self.multiworld.regions.append(self.final_boss_end)
