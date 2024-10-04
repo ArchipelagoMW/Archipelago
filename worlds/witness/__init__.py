@@ -2,11 +2,10 @@
 Archipelago init file for The Witness
 """
 import dataclasses
-from collections import Counter, defaultdict
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -14,7 +13,7 @@ from worlds.AutoWorld import WebWorld, World
 from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
-from .data.item_definition_classes import DoorItemDefinition, ItemData, ProgressiveItemDefinition
+from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
@@ -322,107 +321,6 @@ class WitnessWorld(World):
             self.multiworld.itempool += new_items
             if self.player_items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
-
-    @staticmethod
-    def stage_post_fill(multiworld: MultiWorld):
-        fake_state = CollectionState(multiworld)
-
-        # Make some very good progression items progression + useful.
-        # This will prefer the first copy of the item by sphere.
-
-        progusefuls_per_witness_player = {
-            world.player: cast(WitnessWorld, world).player_items.get_proguseful_items()
-            for world in multiworld.get_game_worlds("The Witness")
-        }
-        changed_items_per_player = {player: Counter() for player in progusefuls_per_witness_player}
-
-        counts_as = {
-            "Caves Mountain Shortcut (Door)": {"Caves Shortcuts"},
-            "Caves Swamp Shortcut (Door)": {"Caves Shortcuts"},
-        }
-
-        # This dict is group player -> item name -> link-participating player -> how many copies were made prog-useful
-        itemlinked_items_that_were_made_proguseful = defaultdict(set)
-
-        for sphere in multiworld.get_spheres():
-            # If two copies of an item are in the same sphere, it is random-by-seed which copy is proguseful
-            witness_items_in_this_sphere = sorted(
-                location.item for location in sphere
-                if location.item.player in progusefuls_per_witness_player
-                and location.item.code is not None
-                and location.item.advancement
-            )
-            multiworld.random.shuffle(witness_items_in_this_sphere)
-
-            for item in witness_items_in_this_sphere:
-                progusefuls_for_this_player = progusefuls_per_witness_player[item.player]
-                player_collected_items = changed_items_per_player[item.player]
-
-                # We have to do some additional work for progressive items here.
-                # If only "Dots" is proguseful, then only the first copy of Progressive Dots will be made proguseful.
-                # If "Full Dots" is proguseful, then *both* copies will be made proguseful.
-                # Also, for Caves Shortcuts, if the individual doors exist, only the first copy should be proguseful.
-
-                # To facilitate these special behaviors, we keep track of what other items an item "contributes towards"
-                # to know whether to make it proguseful,
-                # but also which base item this particular copy "unlocks" to know when we can stop.
-
-                contributes_towards = {item.name}
-                unlocks = {item.name}
-
-                # Either of the individual Caves Shortcut Doors "counts" as unlocking Caves Shortcuts.
-                contributes_towards |= counts_as.get(item.name, set())
-                unlocks |= counts_as.get(item.name, set())
-
-                # Progressive items "contribute" towards every item in the chain, but only "unlock" the nth one.
-                item_definition = static_witness_logic.ALL_ITEMS[item.name]
-                if isinstance(item_definition, ProgressiveItemDefinition):
-                    contributes_towards |= set(item_definition.child_item_names)
-                    unlocks |= set(item_definition.child_item_names[:player_collected_items[item.name] + 1])
-
-                overlapping_items = contributes_towards & progusefuls_for_this_player
-
-                if not overlapping_items:
-                    continue
-
-                original_classification = item.classification
-                item.classification |= ItemClassification.useful
-                # Make sure that there isn't an item rule on this location banning useful / proguseful
-                if not item.location.can_fill(fake_state, item, check_access=False):
-                    item.classification = original_classification
-                    continue
-
-                # If this item is part of a group, try to add useful to the mangled link unlocked classification
-                if item.location.player in multiworld.groups:
-                    if item.name not in itemlinked_items_that_were_made_proguseful.get(item.location.player, {}):
-                        couldnt_make_group_items_useful = False
-
-                        all_link_unlocker_locations = multiworld.find_item_locations(item.name, item.location.player)
-
-                        original_classifications = {}
-
-                        for link_unlocker_location in all_link_unlocker_locations:
-                            link_unlocker = link_unlocker_location.item
-                            original_classifications[link_unlocker] = link_unlocker.classification
-                            link_unlocker.classification |= ItemClassification.useful
-
-                            # Make sure that there isn't an item rule on this location banning useful / proguseful
-                            if not link_unlocker_location.can_fill(fake_state, link_unlocker, check_access=False):
-                                couldnt_make_group_items_useful = True
-                                break
-
-                        if couldnt_make_group_items_useful:
-                            for link_unlocker, original_classification in original_classifications.items():
-                                link_unlocker.classification = original_classification
-                            # Also revert the item this originated from
-                            item.classification = original_classification
-                            continue
-
-                        itemlinked_items_that_were_made_proguseful[item.location.player].add(item.name)
-
-                for unlocked_item in unlocks:
-                    progusefuls_for_this_player.discard(unlocked_item)
-                player_collected_items[item.name] += 1
 
     def fill_slot_data(self) -> Dict[str, Any]:
         self.log_ids_to_hints: Dict[int, CompactHintData] = {}

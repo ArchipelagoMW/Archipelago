@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Dict, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
 
 from .data import static_items as static_witness_items
+from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
@@ -104,7 +105,7 @@ class WitnessPlayerItems:
         # Note: Some of these may need to be updated for the "independent symbols" PR.
         self._proguseful_items = {
             "Dots", "Stars", "Shapers", "Black/White Squares",
-            "Caves Shortcuts",
+            "Caves Shortcuts", "Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)",
             "Boat",
             "Town Obelisk Key",  # Most checks
             "Monastery Obelisk Key",  # Most sphere 1 checks, and also super dense ("Jackpot" vibes)
@@ -126,6 +127,15 @@ class WitnessPlayerItems:
             self._proguseful_items.discard("Stars")  # Stars are not that useful on their own.
         if self._world.options.puzzle_randomization == "umbra_variety":
             self._proguseful_items.add("Triangles")
+
+        # This needs to be improved when the improved independent&progressive symbols PR is merged
+        for item in list(self._proguseful_items):
+            self._proguseful_items.add(static_witness_logic.get_parent_progressive_item(item))
+
+        for item_name, item_data in self.item_data.items():
+            if item_name in self._proguseful_items:
+                item_data.classification |= ItemClassification.useful
+
 
     def get_mandatory_items(self) -> Dict[str, int]:
         """
