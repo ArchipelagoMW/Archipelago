@@ -335,7 +335,7 @@ class WitnessWorld(World):
             world.player: cast(WitnessWorld, world).player_items.get_proguseful_items()
             for world in multiworld.get_game_worlds("The Witness")
         }
-        progressives_per_player = {player: Counter() for player in progusefuls_per_witness_player}
+        collected_items_per_player = {player: Counter() for player in progusefuls_per_witness_player}
 
         counts_as = {
             "Caves Mountain Shortcut (Door)": {"Caves Shortcuts"},
@@ -359,7 +359,7 @@ class WitnessWorld(World):
 
             for item in witness_items_in_this_sphere:
                 progusefuls_for_this_player = progusefuls_per_witness_player[item.player]
-                player_collected_items = progressives_per_player[item.player]
+                player_collected_items = collected_items_per_player[item.player]
 
                 # We have to do some additional work for progressive items here.
                 # If only "Dots" is proguseful, then only the first copy of Progressive Dots will be made proguseful.
