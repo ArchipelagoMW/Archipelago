@@ -2,10 +2,11 @@
 Archipelago init file for The Witness
 """
 import dataclasses
+from collections import Counter, defaultdict
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial, MultiWorld, ItemClassification
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -13,7 +14,7 @@ from worlds.AutoWorld import WebWorld, World
 from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
-from .data.item_definition_classes import DoorItemDefinition, ItemData
+from .data.item_definition_classes import DoorItemDefinition, ItemData, ProgressiveItemDefinition
 from .data.utils import get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
@@ -321,6 +322,118 @@ class WitnessWorld(World):
             self.multiworld.itempool += new_items
             if self.player_items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
+
+    @staticmethod
+    def stage_post_fill(multiworld: MultiWorld):
+        spheres = list(multiworld.get_spheres())  # We need these multiple times, so a generator won't do
+        fake_collection_state = CollectionState(multiworld)
+
+        # Make some very good progression items progression + useful.
+        # This will prefer the first copy of the item by sphere.
+
+        progusefuls_per_witness_player = {
+            world.player: cast(WitnessWorld, world).player_items.get_proguseful_items()
+            for world in multiworld.get_game_worlds("The Witness")
+        }
+        progressives_per_player = {player: Counter() for player in progusefuls_per_witness_player}
+
+        counts_as = {
+            "Caves Mountain Shortcut (Door)": {"Caves Shortcuts"},
+            "Caves Swamp Shortcut (Door)": {"Caves Shortcuts"},
+        }
+
+        items_on_group_locations_that_were_made_proguseful_per_player = defaultdict(
+            lambda: defaultdict(lambda: Counter())
+        )
+
+        for sphere in spheres:
+            # If two copies of an item are in the same sphere, it is random-by-seed which copy is proguseful
+            witness_items_in_this_sphere = sorted(
+                location.item for location in sphere
+                if location.item.player in progusefuls_per_witness_player
+                and location.item.code is not None
+                and location.item.advancement
+            )
+            multiworld.random.shuffle(witness_items_in_this_sphere)
+
+            for item in witness_items_in_this_sphere:
+                progusefuls_for_this_player = progusefuls_per_witness_player[item.player]
+                player_collected_items = progressives_per_player[item.player]
+
+                # We have to do some additional work for progressive items here.
+                # If only "Dots" is proguseful, then only the first copy of Progressive Dots will be made proguseful.
+                # If "Full Dots" is proguseful, then *both* copies will be made proguseful.
+                # Also, for Caves Shortcuts, if the individual doors exist, only the first copy should be proguseful.
+
+                # To facilitate these special behaviors, we keep track of what other items an item "contributes towards"
+                # to know whether to make it proguseful,
+                # but also which base item this particular copy "unlocks" to know when we can stop.
+
+                contributes_towards = {item.name}
+                unlocks = {item.name}
+
+                # Either of the individual Caves Shortcut Doors "counts" as unlocking Caves Shortcuts.
+                contributes_towards |= counts_as.get(item.name, set())
+                unlocks |= counts_as.get(item.name, set())
+
+                # Progressive items "contribute" towards every item in the chain, but only "unlock" the nth one.
+                item_definition = static_witness_logic.ALL_ITEMS[item.name]
+                if isinstance(item_definition, ProgressiveItemDefinition):
+                    contributes_towards |= set(item_definition.child_item_names)
+                    unlocks |= set(item_definition.child_item_names[:player_collected_items[item.name] + 1])
+
+                overlapping_items = contributes_towards & progusefuls_for_this_player
+
+                if not overlapping_items:
+                    continue
+
+                item.classification |= ItemClassification.useful
+                # Make sure that there isn't an item rule on this location banning useful / proguseful
+                if not item.location.can_fill(fake_collection_state, item, check_access=False):
+                    item.classification -= ItemClassification.useful
+                    continue
+
+                # We have made the item proguseful.
+
+                if item.location.player in multiworld.groups:
+                    items_on_group_locations_that_were_made_proguseful_per_player[item.location.player][item.name][item.player] += 1
+
+                for unlocked_item in unlocks:
+                    progusefuls_for_this_player.discard(unlocked_item)
+                player_collected_items[item.name] += 1
+
+        # The items we made proguseful might have been parts of groups.
+        # We kept track of how many copies of an item were made proguseful per player.
+        # Now we need to iterate the spheres again, and make the maximum of those amounts proguseful as well.
+
+        group_items_that_need_to_be_proguseful = {
+            group_player: Counter({
+                item_name: max(item_counts_per_player.values())
+                for item_name, item_counts_per_player in item_counts.items()
+            })
+            for group_player, item_counts in items_on_group_locations_that_were_made_proguseful_per_player.items()
+        }
+
+        for sphere in spheres:
+            items_from_relevant_group_players = sorted(
+                location.item for location in sphere
+                if location.item.player in group_items_that_need_to_be_proguseful
+            )
+            multiworld.random.shuffle(items_from_relevant_group_players)
+
+            for item in items_from_relevant_group_players:
+                if group_items_that_need_to_be_proguseful[item.player][item.name] == 0:
+                    continue
+
+                item.classification |= ItemClassification.useful
+                # Make sure that there isn't an item rule on this location banning useful / proguseful
+                if not item.location.can_fill(fake_collection_state, item, check_access=False):
+                    item.classification -= ItemClassification.useful
+                    continue
+
+                group_items_that_need_to_be_proguseful[item.player][item.name] -= 1
+
+
 
     def fill_slot_data(self) -> Dict[str, Any]:
         self.log_ids_to_hints: Dict[int, CompactHintData] = {}

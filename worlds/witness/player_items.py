@@ -2,6 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
+from collections import Counter
 from typing import TYPE_CHECKING, Dict, List, Set, cast
 
 from BaseClasses import Item, ItemClassification, MultiWorld
@@ -100,11 +101,44 @@ class WitnessPlayerItems:
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
 
+        # Determine which items should be progression + useful, if they exist in some capacity.
+        # Note: Some of these may need to be updated for the "independent symbols" PR.
+        self._proguseful_items = {
+            "Dots", "Stars", "Shapers", "Black/White Squares",
+            "Caves Shortcuts",
+            "Boat",
+            "Town Obelisk Key",  # Most checks
+            "Monastery Obelisk Key",  # Most sphere 1 checks, and also super dense ("Jackpot" vibes)
+        }
+
+        if self._world.options.shuffle_discarded_panels:
+            # Discards only give a moderate amount of checks, but are very spread out and a lot of them are in sphere 1.
+            # Thus, you really want to have the discard-unlocking item as quickly as possible.
+
+            if self._world.options.puzzle_randomization in ("none", "sigma_normal"):
+                self._proguseful_items.add("Triangles")
+            elif self._world.options.puzzle_randomization == "sigma_expert":
+                self._proguseful_items.add("Arrows")
+            # Discards require two symbols in Variety, so the "sphere 1 unlocking power" of Arrows is not there.
+        if self._world.options.puzzle_randomization == "sigma_expert":
+            self._proguseful_items.add("Triangles")
+            self._proguseful_items.add("Full Dots")
+            self._proguseful_items.add("Stars + Same Colored Symbol")
+            self._proguseful_items.discard("Stars")  # Stars are not that useful on their own.
+        if self._world.options.puzzle_randomization == "umbra_variety":
+            self._proguseful_items.add("Triangles")
+
     def get_mandatory_items(self) -> Dict[str, int]:
         """
         Returns the list of items that must be in the pool for the game to successfully generate.
         """
         return self._mandatory_items.copy()
+
+    def get_proguseful_items(self) -> Set[str]:
+        """
+        Returns a set of progression items that are especially useful in this world.
+        """
+        return self._proguseful_items.copy()
 
     def get_filler_items(self, quantity: int) -> Dict[str, int]:
         """
