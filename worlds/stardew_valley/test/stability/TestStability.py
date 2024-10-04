@@ -24,8 +24,7 @@ class TestGenerationIsStable(SVTestCase):
         if self.skip_long_tests:
             raise unittest.SkipTest("Long tests disabled")
 
-        # seed = get_seed(33778671150797368040) # troubleshooting seed
-        seed = get_seed(74716545478307145559)
+        seed = get_seed()
 
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
@@ -54,3 +53,6 @@ class TestGenerationIsStable(SVTestCase):
             # We check that the actual rule has the same order to make sure it is evaluated in the same order,
             #  so performance tests are repeatable as much as possible.
             self.assertEqual(rule_a, rule_b, f"Location rule of {location_a} at index {i} is different between both executions. Seed={seed}")
+
+        for key, value in result_a["slot_data"].items():
+            self.assertEqual(value, result_b["slot_data"][key], f"Slot data {key} is different between both executions. Seed={seed}")
