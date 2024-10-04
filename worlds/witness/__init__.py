@@ -6,7 +6,7 @@ from collections import Counter, defaultdict
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial, MultiWorld, ItemClassification
+from BaseClasses import CollectionState, Entrance, ItemClassification, Location, MultiWorld, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -342,7 +342,8 @@ class WitnessWorld(World):
             "Caves Swamp Shortcut (Door)": {"Caves Shortcuts"},
         }
 
-        items_on_group_locations_that_were_made_proguseful_per_player = defaultdict(
+        # This dict is group player -> item name -> link-participating player -> how many copies were made prog-useful
+        itemlinked_items_that_were_made_proguseful = defaultdict(
             lambda: defaultdict(lambda: Counter())
         )
 
@@ -396,7 +397,7 @@ class WitnessWorld(World):
                 # We have made the item proguseful.
 
                 if item.location.player in multiworld.groups:
-                    items_on_group_locations_that_were_made_proguseful_per_player[item.location.player][item.name][item.player] += 1
+                    itemlinked_items_that_were_made_proguseful[item.location.player][item.name][item.player] += 1
 
                 for unlocked_item in unlocks:
                     progusefuls_for_this_player.discard(unlocked_item)
@@ -411,7 +412,7 @@ class WitnessWorld(World):
                 item_name: max(item_counts_per_player.values())
                 for item_name, item_counts_per_player in item_counts.items()
             })
-            for group_player, item_counts in items_on_group_locations_that_were_made_proguseful_per_player.items()
+            for group_player, item_counts in itemlinked_items_that_were_made_proguseful.items()
         }
 
         for sphere in spheres:
