@@ -16,26 +16,26 @@ cell_item_table = {
     0:  "Power Cell",
 }
 
-# Scout flies are interchangeable within their respective sets of 7. Notice the abbreviated level name after each item.
+# Scout flies are interchangeable within their respective sets of 7. Notice the level name after each item.
 # Also, notice that their Item ID equals their respective Power Cell's Location ID. This is necessary for
 # game<->archipelago communication.
 scout_item_table = {
-    95: "Scout Fly - GR",
-    75: "Scout Fly - SV",
-    7:  "Scout Fly - FJ",
-    20: "Scout Fly - SB",
-    28: "Scout Fly - MI",
-    68: "Scout Fly - FC",
-    76: "Scout Fly - RV",
-    57: "Scout Fly - PB",
-    49: "Scout Fly - LPC",
-    43: "Scout Fly - BS",
-    88: "Scout Fly - MP",
-    77: "Scout Fly - VC",
-    85: "Scout Fly - SC",
-    65: "Scout Fly - SM",
-    90: "Scout Fly - LT",
-    91: "Scout Fly - GMC",
+    95: "Scout Fly - Geyser Rock",
+    75: "Scout Fly - Sandover Village",
+    7:  "Scout Fly - Sentinel Beach",
+    20: "Scout Fly - Forbidden Jungle",
+    28: "Scout Fly - Misty Island",
+    68: "Scout Fly - Fire Canyon",
+    76: "Scout Fly - Rock Village",
+    57: "Scout Fly - Lost Precursor City",
+    49: "Scout Fly - Boggy Swamp",
+    43: "Scout Fly - Precursor Basin",
+    88: "Scout Fly - Mountain Pass",
+    77: "Scout Fly - Volcanic Crater",
+    85: "Scout Fly - Snowy Mountain",
+    65: "Scout Fly - Spider Cave",
+    90: "Scout Fly - Lava Tube",
+    91: "Scout Fly - Citadel",  # Had to shorten, it was >32 characters.
 }
 
 # Orbs are also generic and interchangeable.
