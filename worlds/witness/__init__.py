@@ -386,16 +386,17 @@ class WitnessWorld(World):
                 if not overlapping_items:
                     continue
 
+                original_classification = item.classification
                 item.classification |= ItemClassification.useful
                 # Make sure that there isn't an item rule on this location banning useful / proguseful
                 if not item.location.can_fill(fake_state, item, check_access=False):
-                    item.classification -= ItemClassification.useful
+                    item.classification = original_classification
                     continue
 
                 # If this item is part of a group, try to add useful to the mangled link unlocked classification
                 if item.location.player in multiworld.groups:
                     if item.name not in itemlinked_items_that_were_made_proguseful.get(item.location.player, {}):
-                        couldnt_make_useful = False
+                        couldnt_make_group_items_useful = False
 
                         all_link_unlocker_locations = multiworld.find_item_locations(item.name, item.location.player)
 
@@ -408,14 +409,14 @@ class WitnessWorld(World):
 
                             # Make sure that there isn't an item rule on this location banning useful / proguseful
                             if not link_unlocker_location.can_fill(fake_state, link_unlocker, check_access=False):
-                                couldnt_make_useful = True
+                                couldnt_make_group_items_useful = True
                                 break
 
-                        if couldnt_make_useful:
+                        if couldnt_make_group_items_useful:
                             for link_unlocker, original_classification in original_classifications.items():
                                 link_unlocker.classification = original_classification
                             # Also revert the item this originated from
-                            item.classification -= ItemClassification.useful
+                            item.classification = original_classification
                             continue
 
                         itemlinked_items_that_were_made_proguseful[item.location.player].add(item.name)
