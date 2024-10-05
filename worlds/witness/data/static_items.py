@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Dict, List, Set, cast
 
 from BaseClasses import ItemClassification
 
@@ -41,7 +41,19 @@ def populate_items() -> None:
             ITEM_GROUPS.setdefault("Symbols", set()).add(item_name)
         elif definition.category is ItemCategory.DOOR:
             classification = ItemClassification.progression
-            ITEM_GROUPS.setdefault("Doors", set()).add(item_name)
+
+            first_entity_hex = cast(DoorItemDefinition, definition).panel_id_hexes[0]
+            entity_type = static_witness_logic.ENTITIES_BY_HEX[first_entity_hex]["entityType"]
+
+            if entity_type == "Door":
+                ITEM_GROUPS.setdefault("Doors", set()).add(item_name)
+            elif entity_type == "Panel":
+                ITEM_GROUPS.setdefault("Panel Keys", set()).add(item_name)
+            elif entity_type in {"EP", "Obelisk Side", "Obelisk"}:
+                ITEM_GROUPS.setdefault("Obelisk Keys", set()).add(item_name)
+            else:
+                raise ValueError(f"Couldn't figure out what type of door item {definition} is.")
+
         elif definition.category is ItemCategory.LASER:
             classification = ItemClassification.progression_skip_balancing
             ITEM_GROUPS.setdefault("Lasers", set()).add(item_name)
