@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 from typing import Dict, Any
-from Options import Range, Toggle, DeathLink, Choice, StartInventoryPool, PerGameCommonOptions
+from Options import Range, Toggle, DeathLink, Choice, StartInventoryPool, PerGameCommonOptions,  OptionGroup
 
 # -----------------------Settings for Gameplay decisions ---------------
 
 class InitialWeapon(Choice):
     """
-    Chose your initial weapon. Note you are not be able to equip the sword in the weapon hub in WeaponSanity
+    Chooses your initial weapon. Note you are not be able to equip the sword in the weapon hub in WeaponSanity until
+    you unlock it.
     """
     display_name = "Weapon"
     option_Sword = 0
@@ -18,9 +19,9 @@ class InitialWeapon(Choice):
 
 class LocationSystem(Choice):
     """
-    Chose how the game gives you items. (1) RoomBased gives items on every new room completed. (2) ScoreBased
+    Chooses how the game gives you items. (1) RoomBased gives items on every new room completed. (2) ScoreBased
     gives items according to score obtained by clearing rooms (even repeated ones). (3) RoomWeaponBased gives
-    items on every new room completed with a new weapon (so more locations than the original room based system)
+    items on every new room completed with a new weapon (so more locations than the original room based system).
     """
     display_name = "Location System"
     option_room_based = 1
@@ -39,11 +40,11 @@ class ScoreRewardsAmount(Range):
     display_name = "ScoreRewardsAmount"
     range_start = 72
     range_end = 1000
-    default = 300
+    default = 150
 
 class KeepsakeSanity(Toggle):
     """
-    Shuffles NPCs' keepsakes into the item pool, eand makes each keepsake location a check. 
+    Shuffles NPCs' keepsakes into the item pool, and makes each keepsake location a check. 
     For simplicity this does not affects Hades and Persephone.
     """
     display_name = "KeepsakeSanity"
@@ -315,7 +316,7 @@ class PersonalLiabilityPactAmount(Range):
 
 class DarknessPackValue(Range):
     """
-    Choose the value(amount of darkness) of each darkness pack in the pool. 
+    Choose the value (amount of darkness) of each darkness pack in the pool. 
     If set to 0 Darkness will not appear in the pool.
     """
     display_name = "Darkness Pack Value"
@@ -537,6 +538,68 @@ class HadesOptions(PerGameCommonOptions):
     automatic_rooms_finish_on_hades_defeat: AutomaticRoomsFinishOnHadesDefeat
     death_link: DeathLink
 
+# ------------------------------ Options groups
+
+hades_option_groups = [
+    OptionGroup("Game Options", [
+        InitialWeapon,
+        LocationSystem,
+        ScoreRewardsAmount,
+        KeepsakeSanity,
+        WeaponSanity,
+        HiddenAspectSanity,
+        StoreSanity,
+        FateSanity,
+        DeathLink,
+    ]),
+    OptionGroup("Goal Options", [
+        HadesDefeatsNeeded,
+        WeaponsClearsNeeded,
+        KeepsakesNeeded,
+        FatesNeeded,
+    ]),
+    OptionGroup("Heat Options", [
+        HeatSystem,
+        HardLaborPactAmount,
+        LastingConsequencesPactAmount,
+        ConvenienceFeePactAmount,
+        JurySummonsPactAmount,
+        ExtremeMeasuresPactAmount,
+        CalisthenicsProgramPactAmount,
+        BenefitsPackagePactAmount,
+        MiddleManagementPactAmount,
+        UnderworldCustomsPactAmount,
+        ForcedOvertimePactAmount,
+        HeightenedSecurityPactAmount,
+        RoutineInspectionPactAmount,
+        DamageControlPactAmount,
+        ApprovalProcessPactAmount,
+        TightDeadlinePactAmount,
+        PersonalLiabilityPactAmount,
+    ]),
+    OptionGroup("Filler Options", [
+        DarknessPackValue,
+        KeysPackValue,
+        GemstonesPackValue,
+        DiamondsPackValue,
+        TitanBloodPackValue,
+        NectarPackValue,
+        AmbrosiaPackValue
+    ]),
+    OptionGroup("Helpers and Trap Options", [
+        FillerHelperPercentage,
+        MaxHealthHelperPercentage,
+        InitialMoneyHelperPercentage,
+        FillerTrapPercentage,
+    ]),
+    OptionGroup("Quality of Life Options", [
+        ReverseOrderExtremeMeasure,
+        IgnoreGreeceDeaths,
+        StoreGiveHints,
+        AutomaticRoomsFinishOnHadesDefeat
+    ]),
+]
+
 
 # ------------------------------ Presets
 
@@ -545,7 +608,7 @@ hades_option_presets: Dict[str, Dict[str, Any]] = {
         "score_rewards_amount": 100,
         "hidden_aspectsanity": False,
         "fatesanity": False,
-        "heat_system": "reverseheat",
+        "heat_system": "reverse_heat",
         "hard_labor_pact_amount": 2,
         "lasting_consequences_pact_amount": 1,
         "convenience_fee_pact_amount": 1,
@@ -579,7 +642,7 @@ hades_option_presets: Dict[str, Dict[str, Any]] = {
         "score_rewards_amount": 100,
         "hidden_aspectsanity": True,
         "fatesanity": False,
-        "heat_system": "reverseheat",
+        "heat_system": "reverse_heat",
         "hard_labor_pact_amount": 3,
         "lasting_consequences_pact_amount": 2,
         "convenience_fee_pact_amount": 1,
@@ -611,7 +674,7 @@ hades_option_presets: Dict[str, Dict[str, Any]] = {
         "score_rewards_amount": 100,
         "hidden_aspectsanity": True,
         "fatesanity": True,
-        "heat_system": "reverseheat",
+        "heat_system": "reverse_heat",
         "hard_labor_pact_amount": 5,
         "lasting_consequences_pact_amount": 4,
         "convenience_fee_pact_amount": 2,
