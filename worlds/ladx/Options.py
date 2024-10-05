@@ -344,14 +344,12 @@ class Quickswap(Choice, LADXROption):
 class TextMode(Choice, LADXROption):
     """
     [Fast] Makes text appear twice as fast
-    [No-Text] Removes all text from the game
     """
     display_name = "Text Mode"
     ladxr_name = "textmode"
     option_default = 0
     option_fast = 1
-    option_none = 2
-    default = option_default
+    default = option_fast
     visibility = Visibility.none
 
 
