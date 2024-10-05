@@ -291,7 +291,7 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        if self.options.tarins_gift != 'any_item':
+        if self.options.tarins_gift != "any_item":
             self.force_start_item(itempool)
 
 
@@ -303,7 +303,7 @@ class LinksAwakeningWorld(World):
             """
             Find an item that forces progression or a bush breaker for the player, depending on settings.
             """
-            if self.options.tarins_gift == 'local_progression':
+            if self.options.tarins_gift == "local_progression":
                 base_collection_state = CollectionState(self.multiworld)
                 base_collection_state.update_reachable_regions(self.player)
                 reachable_count = len(base_collection_state.reachable_regions[self.player])
@@ -312,27 +312,23 @@ class LinksAwakeningWorld(World):
                 return item.advancement and item.name not in self.options.non_local_items
 
             def adheres_to_options(item):
-                if self.options.tarins_gift == 'local_progression':
+                if self.options.tarins_gift == "local_progression":
                     collection_state = base_collection_state.copy()
                     collection_state.collect(item)
                     return len(collection_state.reachable_regions[self.player]) > reachable_count
-                else: # bush breaker
-                    return item.name in self.item_name_groups['Bush Breakers']
+                # bush breaker
+                return item.name in self.item_name_groups["Bush Breakers"]
 
             possible_start_items = [item for item in itempool if is_possible_start_item(item)]
             self.random.shuffle(possible_start_items)
 
-            start_item = None
-            for item in possible_start_items:
-                if adheres_to_options(item):
-                    start_item = item
-                    break
+            start_item = next((item for item in possible_start_items if adheres_to_options(item)), None)
 
             if start_item:
                 itempool.remove(start_item)
                 start_loc.place_locked_item(start_item)
             else:
-                logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_key} available for Tarin's Gift.")
+                logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
 
 
     def get_pre_fill_items(self):

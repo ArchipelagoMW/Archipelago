@@ -506,6 +506,8 @@ class TarinsGift(Choice):
     """
     [Local Progression] Forces Tarin's gift to be an item that immediately opens up local checks.
     Has little effect in single player games, and isn't always necessary with randomized entrances.
+    [Bush Breaker] Forces Tarin's gift to be an item that can destroy bushes.
+    [Any Item] Tarin's gift can be any item for any world
     """
     display_name = "Tarin's Gift"
     option_local_progression = 0
