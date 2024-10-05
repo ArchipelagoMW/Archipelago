@@ -306,7 +306,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     def create_item(self, item: str) -> StardewItem:
         created_item = self.world.create_item(item)
-        if created_item.classification == ItemClassification.progression:
+        if created_item.classification & ItemClassification.progression:
             self.multiworld.worlds[self.player].total_progression_items -= 1
         return created_item
 
