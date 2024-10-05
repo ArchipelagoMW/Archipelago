@@ -526,6 +526,7 @@ class PokemonRedBlueWorld(World):
         # This cuts down on time spent calculating the spoiler playthrough.
         found_mons = set()
         for sphere in multiworld.get_spheres():
+            mon_locations_in_sphere = {}
             for location in sphere:
                 if (location.game == "Pokemon Red and Blue" and (location.item.name in poke_data.pokemon_data.keys()
                                                                  or "Static " in location.item.name)
@@ -534,7 +535,15 @@ class PokemonRedBlueWorld(World):
                     if key in found_mons:
                         location.item.classification = ItemClassification.useful
                     else:
-                        found_mons.add(key)
+                        mon_locations_in_sphere.setdefault(key, []).append(location)
+            for key, mon_locations in mon_locations_in_sphere.items():
+                found_mons.add(key)
+                if len(mon_locations) > 1:
+                    # Sort for deterministic results.
+                    mon_locations.sort()
+                    # Convert all but the first to useful classification.
+                    for location in mon_locations[1:]:
+                        location.item.classification = ItemClassification.useful
 
     def create_regions(self):
         if (self.options.old_man == "vanilla" or
