@@ -154,15 +154,15 @@ class HadesWorld(World):
         boon_helpers_needed = helper_fillers_needed-health_helpers_needed - money_helpers_needed
 
         for amount in range(0, health_helpers_needed):
-            item = HadesItem("MaxHealthHelper", self.player)
+            item = HadesItem("Max Health Helper", self.player)
             pool.append(item)
 
         for amount in range(0, min(money_helpers_needed, helper_fillers_needed - health_helpers_needed)):
-            item = HadesItem("InitialMoneyHelper", self.player)
+            item = HadesItem("Initial Money Helper", self.player)
             pool.append(item)
 
         for amount in range(0, max(boon_helpers_needed, 0)):
-            item = HadesItem("BoonBoostHelper", self.player)
+            item = HadesItem("Boon Boost Helper", self.player)
             pool.append(item)
 
         index = 0
@@ -177,17 +177,17 @@ class HadesWorld(World):
         self.multiworld.itempool += pool
 
     def should_ignore_weapon(self, name):
-        if self.options.initial_weapon == "Sword" and name == "SwordWeaponUnlockItem":
+        if self.options.initial_weapon == "Sword" and name == "Sword Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == "Bow" and name == "BowWeaponUnlockItem":
+        if self.options.initial_weapon == "Bow" and name == "Bow Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == "Spear" and name == "SpearWeaponUnlockItem":
+        if self.options.initial_weapon == "Spear" and name == "Spear Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == "Shield" and name == "ShieldWeaponUnlockItem":
+        if self.options.initial_weapon == "Shield" and name == "Shield Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == "Fist" and name == "FistWeaponUnlockItem":
+        if self.options.initial_weapon == "Fist" and name == "Fist Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == "Gun" and name == "GunWeaponUnlockItem":
+        if self.options.initial_weapon == "Gun" and name == "Gun Weapon Unlock Item":
             return True
         return False
 

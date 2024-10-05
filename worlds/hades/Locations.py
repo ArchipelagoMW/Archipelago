@@ -33,157 +33,157 @@ location_table_styx_late = {
 }
 
 location_keepsakes = {
-    "CerberusKeepsake": max_number_room_checks + 1,
-    "AchillesKeepsake": max_number_room_checks + 2,
-    "NyxKeepsake": max_number_room_checks + 3,
-    "ThanatosKeepsake": max_number_room_checks + 4,
-    "CharonKeepsake": max_number_room_checks + 5,
-    "HypnosKeepsake": max_number_room_checks + 6,
-    "MegaeraKeepsake": max_number_room_checks + 7,
-    "OrpheusKeepsake": max_number_room_checks + 8,
-    "DusaKeepsake": max_number_room_checks + 9,
-    "SkellyKeepsake": max_number_room_checks + 10,
-    "ZeusKeepsake": max_number_room_checks + 11,
-    "PoseidonKeepsake": max_number_room_checks + 12,
-    "AthenaKeepsake": max_number_room_checks + 13,
-    "AphroditeKeepsake": max_number_room_checks + 14,
-    "AresKeepsake": max_number_room_checks + 15,
-    "ArtemisKeepsake": max_number_room_checks + 16,
-    "DionysusKeepsake": max_number_room_checks + 17,
-    "HermesKeepsake": max_number_room_checks + 18,
-    "DemeterKeepsake": max_number_room_checks + 19,
-    "ChaosKeepsake": max_number_room_checks + 20,
-    "SisyphusKeepsake": max_number_room_checks + 21,
-    "EurydiceKeepsake": max_number_room_checks + 22,
-    "PatroclusKeepsake": max_number_room_checks + 23,
+    "Cerberus Keepsake": max_number_room_checks + 1,
+    "Achilles Keepsake": max_number_room_checks + 2,
+    "Nyx Keepsake": max_number_room_checks + 3,
+    "Thanatos Keepsake": max_number_room_checks + 4,
+    "Charon Keepsake": max_number_room_checks + 5,
+    "Hypnos Keepsake": max_number_room_checks + 6,
+    "Megaera Keepsake": max_number_room_checks + 7,
+    "Orpheus Keepsake": max_number_room_checks + 8,
+    "Dusa Keepsake": max_number_room_checks + 9,
+    "Skelly Keepsake": max_number_room_checks + 10,
+    "Zeus Keepsake": max_number_room_checks + 11,
+    "Poseidon Keepsake": max_number_room_checks + 12,
+    "Athena Keepsake": max_number_room_checks + 13,
+    "Aphrodite Keepsake": max_number_room_checks + 14,
+    "Ares Keepsake": max_number_room_checks + 15,
+    "Artemis Keepsake": max_number_room_checks + 16,
+    "Dionysus Keepsake": max_number_room_checks + 17,
+    "Hermes Keepsake": max_number_room_checks + 18,
+    "Demeter Keepsake": max_number_room_checks + 19,
+    "Chaos Keepsake": max_number_room_checks + 20,
+    "Sisyphus Keepsake": max_number_room_checks + 21,
+    "Eurydice Keepsake": max_number_room_checks + 22,
+    "Patroclus Keepsake": max_number_room_checks + 23,
 }
 
 location_weapons = {
-    "SwordWeaponUnlockLocation": max_number_room_checks + 25,
-    "BowWeaponUnlockLocation": max_number_room_checks + 26,
-    "SpearWeaponUnlockLocation": max_number_room_checks + 27,
-    "ShieldWeaponUnlockLocation": max_number_room_checks + 28,
-    "FistWeaponUnlockLocation": max_number_room_checks + 29,
-    "GunWeaponUnlockLocation": max_number_room_checks + 30,
+    "Sword Weapon Unlock Location": max_number_room_checks + 25,
+    "Bow Weapon Unlock Location": max_number_room_checks + 26,
+    "Spear Weapon Unlock Location": max_number_room_checks + 27,
+    "Shield Weapon Unlock Location": max_number_room_checks + 28,
+    "Fist Weapon Unlock Location": max_number_room_checks + 29,
+    "Gun Weapon Unlock Location": max_number_room_checks + 30,
 }
 
 
 location_store_gemstones = {
-    "FountainUpgrade1Location": max_number_room_checks + 31,
-    "FountainUpgrade2Location": max_number_room_checks + 32,
-    "FountainTartarusLocation": max_number_room_checks + 33,
-    "FountainAsphodelLocation": max_number_room_checks + 34,
-    "FountainElysiumLocation": max_number_room_checks + 35,
-    "UrnsOfWealth1Location": max_number_room_checks + 36,
-    "UrnsOfWealth2Location": max_number_room_checks + 37,
-    "UrnsOfWealth3Location": max_number_room_checks + 38,
-    "InfernalTrove1Location": max_number_room_checks + 39,
-    "InfernalTrove2Location": max_number_room_checks + 40,
-    "InfernalTrove3Location": max_number_room_checks + 41,
-    "KeepsakeCollectionLocation": max_number_room_checks + 42,
+    "Fountain Upgrade1 Location": max_number_room_checks + 31,
+    "Fountain Upgrade2 Location": max_number_room_checks + 32,
+    "Fountain Tartarus Location": max_number_room_checks + 33,
+    "Fountain Asphodel Location": max_number_room_checks + 34,
+    "Fountain Elysium Location": max_number_room_checks + 35,
+    "Urns Of Wealth1 Location": max_number_room_checks + 36,
+    "Urns Of Wealth2 Location": max_number_room_checks + 37,
+    "Urns Of Wealth3 Location": max_number_room_checks + 38,
+    "Infernal Trove1 Location": max_number_room_checks + 39,
+    "Infernal Trove2 Location": max_number_room_checks + 40,
+    "Infernal Trove3 Location": max_number_room_checks + 41,
+    "Keepsake Collection Location": max_number_room_checks + 42,
 }
 
 location_store_diamonds = {
-    "DeluxeContractorDeskLocation": max_number_room_checks + 44,
-    "VanquishersKeepLocation": max_number_room_checks + 45,
-    "FishingRodLocation": max_number_room_checks + 46,
-    "CourtMusicianSentenceLocation": max_number_room_checks + 47,
-    "CourtMusicianStandLocation": max_number_room_checks + 48,
-    "PitchBlackDarknessLocation": max_number_room_checks + 49,
-    "FatedKeysLocation": max_number_room_checks + 50,
-    "BrilliantGemstonesLocation": max_number_room_checks + 51,
-    "VintageNectarLocation": max_number_room_checks + 52,
-    "DarkerThirstLocation": max_number_room_checks + 53,
+    "Deluxe Contractor Desk Location": max_number_room_checks + 44,
+    "Vanquishers Keep Location": max_number_room_checks + 45,
+    "Fishing Rod Location": max_number_room_checks + 46,
+    "Court Musician Sentence Location": max_number_room_checks + 47,
+    "Court Musician Stand Location": max_number_room_checks + 48,
+    "Pitch Black Darkness Location": max_number_room_checks + 49,
+    "Fated Keys Location": max_number_room_checks + 50,
+    "Brilliant Gemstones Location": max_number_room_checks + 51,
+    "Vintage Nectar Location": max_number_room_checks + 52,
+    "Darker Thirst Location": max_number_room_checks + 53,
 }
 
 location_table_fates = {
-    "IsThereNoEscape?": max_number_room_checks + 54,
-    "DistantRelatives": max_number_room_checks + 55,
-    "ChthonicColleagues": max_number_room_checks + 56,
-    "TheReluctantMusician": max_number_room_checks + 57,
-    "GoddessOfWisdom": max_number_room_checks + 58,
-    "GodOfTheHeavens": max_number_room_checks + 59,
-    "GodOfTheSea": max_number_room_checks + 60,
-    "GoddessOfLove": max_number_room_checks + 61,
-    "GodOfWar": max_number_room_checks + 62,
-    "GoddessOfTheHunt": max_number_room_checks + 63,
-    "GodOfWine": max_number_room_checks + 64,
-    "GodOfSwiftness": max_number_room_checks + 65,
-    "GoddessOfSeasons": max_number_room_checks + 66,
-    "PowerWithoutEqual": max_number_room_checks + 67,
-    "DivinePairings": max_number_room_checks + 68,
-    "PrimordialBoons": max_number_room_checks + 69,
-    "PrimordialBanes": max_number_room_checks + 70,
-    "InfernalArms": max_number_room_checks + 71,
-    "TheStygianBlade": max_number_room_checks + 72,
-    "TheHeartSeekingBow": max_number_room_checks + 73,
-    "TheShieldOfChaos": max_number_room_checks + 74,
-    "TheEternalSpear": max_number_room_checks + 75,
-    "TheTwinFists": max_number_room_checks + 76,
-    "TheAdamantRail": max_number_room_checks + 77,
-    "MasterOfArms": max_number_room_checks + 78,
-    "AViolentPast": max_number_room_checks + 79,
-    "HarshConditions": max_number_room_checks + 80,
-    "SlashedBenefits": max_number_room_checks + 81,
-    "WantonRansacking": max_number_room_checks + 82,
-    "ASimpleJob": max_number_room_checks + 83,
-    "ChthonicKnowledge": max_number_room_checks + 84,
-    "CustomerLoyalty": max_number_room_checks + 85,
-    "DarkReflections": max_number_room_checks + 86,
-    "CloseAtHeart": max_number_room_checks + 87,
-    "DenizensOfTheDeep": max_number_room_checks + 88,
-    "TheUselessTrinket": max_number_room_checks + 89,
+    "Is There No Escape?": max_number_room_checks + 54,
+    "Distant Relatives": max_number_room_checks + 55,
+    "Chthonic Colleagues": max_number_room_checks + 56,
+    "The Reluctant Musician": max_number_room_checks + 57,
+    "Goddess Of Wisdom": max_number_room_checks + 58,
+    "God Of The Heavens": max_number_room_checks + 59,
+    "God Of The Sea": max_number_room_checks + 60,
+    "Goddess Of Love": max_number_room_checks + 61,
+    "God Of War": max_number_room_checks + 62,
+    "Goddess Of The Hunt": max_number_room_checks + 63,
+    "God Of Wine": max_number_room_checks + 64,
+    "God Of Swiftness": max_number_room_checks + 65,
+    "Goddess Of Seasons": max_number_room_checks + 66,
+    "Power Without Equal": max_number_room_checks + 67,
+    "Divine Pairings": max_number_room_checks + 68,
+    "Primordial Boons": max_number_room_checks + 69,
+    "Primordial Banes": max_number_room_checks + 70,
+    "Infernal Arms": max_number_room_checks + 71,
+    "The Stygian Blade": max_number_room_checks + 72,
+    "The Heart Seeking Bow": max_number_room_checks + 73,
+    "The Shield Of Chaos": max_number_room_checks + 74,
+    "The Eternal Spear": max_number_room_checks + 75,
+    "The Twin Fists": max_number_room_checks + 76,
+    "The Adamant Rail": max_number_room_checks + 77,
+    "Master Of Arms": max_number_room_checks + 78,
+    "A Violent Past": max_number_room_checks + 79,
+    "Harsh Conditions": max_number_room_checks + 80,
+    "Slashed Benefits": max_number_room_checks + 81,
+    "Wanton Ransacking": max_number_room_checks + 82,
+    "A Simple Job": max_number_room_checks + 83,
+    "Chthonic Knowledge": max_number_room_checks + 84,
+    "Customer Loyalty": max_number_room_checks + 85,
+    "Dark Reflections": max_number_room_checks + 86,
+    "Close At Heart": max_number_room_checks + 87,
+    "Denizens Of TheDeep": max_number_room_checks + 88,
+    "The Useless Trinket": max_number_room_checks + 89,
 }
 
 
 location_table_fates_events = {
-    "IsThereNoEscape?Event": None,
-    "DistantRelativesEvent": None,
-    "ChthonicColleaguesEvent": None,
-    "TheReluctantMusicianEvent": None,
-    "GoddessOfWisdomEvent": None,
-    "GodOfTheHeavensEvent": None,
-    "GodOfTheSeaEvent": None,
-    "GoddessOfLoveEvent": None,
-    "GodOfWarEvent": None,
-    "GoddessOfTheHuntEvent": None,
-    "GodOfWineEvent": None,
-    "GodOfSwiftnessEvent": None,
-    "GoddessOfSeasonsEvent": None,
-    "PowerWithoutEqualEvent": None,
-    "DivinePairingsEvent": None,
-    "PrimordialBoonsEvent": None,
-    "PrimordialBanesEvent": None,
-    "InfernalArmsEvent": None,
-    "TheStygianBladeEvent": None,
-    "TheHeartSeekingBowEvent": None,
-    "TheShieldOfChaosEvent": None,
-    "TheEternalSpearEvent": None,
-    "TheTwinFistsEvent": None,
-    "TheAdamantRailEvent": None,
-    "MasterOfArmsEvent": None,
-    "AViolentPastEvent": None,
-    "HarshConditionsEvent": None,
-    "SlashedBenefitsEvent": None,
-    "WantonRansackingEvent": None,
-    "ASimpleJobEvent": None,
-    "ChthonicKnowledgeEvent": None,
-    "CustomerLoyaltyEvent": None,
-    "DarkReflectionsEvent": None,
-    "CloseAtHeartEvent": None,
-    "DenizensOfTheDeepEvent": None,
-    "TheUselessTrinketEvent": None,
+    "Is There NoEscape? Event": None,
+    "Distant Relatives Event": None,
+    "Chthonic Colleagues Event": None,
+    "The Reluctant Musician Event": None,
+    "Goddess Of Wisdom Event": None,
+    "God Of The Heavens Event": None,
+    "God Of The Sea Event": None,
+    "Goddess Of Love Event": None,
+    "God Of War Event": None,
+    "Goddess Of The Hunt Event": None,
+    "God Of Wine Event": None,
+    "God Of Swiftness Event": None,
+    "Goddess Of Seasons Event": None,
+    "Power Without Equal Event": None,
+    "Divine Pairings Event": None,
+    "Primordial Boons Event": None,
+    "Primordial Banes Event": None,
+    "Infernal Arms Event": None,
+    "The Stygian Blade Event": None,
+    "The Heart Seeking Bow Event": None,
+    "The Shield Of Chaos Event": None,
+    "The Eternal Spear Event": None,
+    "The Twin Fists Event": None,
+    "The Adamant Rail Event": None,
+    "Master Of Arms Event": None,
+    "A Violent Past Event": None,
+    "Harsh Conditions Event": None,
+    "Slashed Benefits Event": None,
+    "Wanton Ransacking Event": None,
+    "A Simple Job Event": None,
+    "Chthonic Knowledge Event": None,
+    "Customer Loyalty Event": None,
+    "Dark Reflections Event": None,
+    "Close At Heart Event": None,
+    "Denizens Of The Deep Event": None,
+    "The Useless Trinket Event": None,
 }
 
 # ----------------------
 
 location_weapons_subfixes = [
-    "SwordWeapon",
-    "SpearWeapon",
-    "ShieldWeapon",
-    "BowWeapon",
-    "FistWeapon",
-    "GunWeapon",
+    "Sword Weapon",
+    "Spear Weapon",
+    "Shield Weapon",
+    "Bow Weapon",
+    "Fist Weapon",
+    "Gun Weapon",
 ]
 
 # ---------------------
@@ -272,17 +272,17 @@ def setup_location_table_with_settings(options):
 
 
 def should_ignore_weapon_location(weaponLocation, options):
-    if options.initial_weapon.value == 0 and weaponLocation == "SwordWeaponUnlockLocation":
+    if options.initial_weapon.value == 0 and weaponLocation == "Sword Weapon Unlock Location":
         return True
-    if options.initial_weapon.value == 1 and weaponLocation == "BowWeaponUnlockLocation":
+    if options.initial_weapon.value == 1 and weaponLocation == "Bow Weapon Unlock Location":
         return True
-    if options.initial_weapon.value == 2 and weaponLocation == "SpearWeaponUnlockLocation":
+    if options.initial_weapon.value == 2 and weaponLocation == "Spear Weapon Unlock Location":
         return True
-    if options.initial_weapon.value == 3 and weaponLocation == "ShieldWeaponUnlockLocation":
+    if options.initial_weapon.value == 3 and weaponLocation == "Shield Weapon Unlock Location":
         return True
-    if options.initial_weapon.value == 4 and weaponLocation == "FistWeaponUnlockLocation":
+    if options.initial_weapon.value == 4 and weaponLocation == "Fist Weapon Unlock Location":
         return True
-    if options.initial_weapon.value == 5 and weaponLocation == "GunWeaponUnlockLocation":
+    if options.initial_weapon.value == 5 and weaponLocation == "Gun Weapon Unlock Location":
         return True
     return False
 
@@ -296,26 +296,26 @@ def give_default_location_table():
         stringInt = i + 1
         if stringInt < 10:
             stringInt = "0"+str(stringInt);
-        location_table_tartarus["ClearRoom"+str(stringInt)] = hades_base_location_id + i
+        location_table_tartarus["Clear Room "+str(stringInt)] = hades_base_location_id + i
         
     # Repopulate asphodel table, rooms from 14 to 23
     global location_table_asphodel
     for i in range(13, 23):
-        location_table_asphodel["ClearRoom"+str(i + 1)] = hades_base_location_id + i
+        location_table_asphodel["Clear Room "+str(i + 1)] = hades_base_location_id + i
     
     # Repopulate elysium table, rooms from 24 to 35
     global location_table_elysium
     for i in range(23, 35):
-        location_table_elysium["ClearRoom"+str(i + 1)] = hades_base_location_id + i
+        location_table_elysium["Clear Room "+str(i + 1)] = hades_base_location_id + i
     
     # Repopulate styx table, rooms from 35 to 72. Split into early and late
     global location_table_styx 
     for i in range(35, 60):
-        location_table_styx["ClearRoom"+str(i + 1)] = hades_base_location_id + i
+        location_table_styx["Clear Room "+str(i + 1)] = hades_base_location_id + i
         
     global location_table_styx_late
     for i in range(60, 72):
-        location_table_styx_late["ClearRoom"+str(i + 1)] = hades_base_location_id + i
+        location_table_styx_late["Clear Room "+str(i + 1)] = hades_base_location_id + i
     
     location_table = {
         **location_table_tartarus, 
@@ -337,35 +337,35 @@ def give_score_location_table(locations):
         stringInt = str(i + 1)
         while len(stringInt) < 4:
             stringInt = "0" + str(stringInt)
-        location_table_tartarus["ClearScore"+str(stringInt)] = hades_base_location_id + i + 72
+        location_table_tartarus["Clear Score "+str(stringInt)] = hades_base_location_id + i + 72
 
     global location_table_asphodel
     for i in range(locations_first_region, locations_first_region + 2 * fraction_location):
         stringInt = str(i + 1)
         while len(stringInt) < 4:
             stringInt = "0" + str(stringInt)
-        location_table_asphodel["ClearScore"+stringInt] = hades_base_location_id + i + 72
+        location_table_asphodel["Clear Score "+stringInt] = hades_base_location_id + i + 72
         
     global location_table_elysium
     for i in range(locations_first_region+2*fraction_location, locations_first_region + 4 * fraction_location):
         stringInt = str(i + 1)
         while len(stringInt) < 4:
             stringInt = "0" + str(stringInt)
-        location_table_elysium["ClearScore"+stringInt] = hades_base_location_id + i + 72
+        location_table_elysium["Clear Score "+stringInt] = hades_base_location_id + i + 72
     
     global location_table_styx
     for i in range(locations_first_region+4*fraction_location, locations_first_region + 6 * fraction_location):
         stringInt = str(i + 1)
         while len(stringInt) < 4:
             stringInt = "0" + str(stringInt)
-        location_table_styx["ClearScore"+stringInt] = hades_base_location_id + i + 72
+        location_table_styx["Clear Score "+stringInt] = hades_base_location_id + i + 72
         
     global location_table_styx_late
     for i in range(locations_first_region+6*fraction_location, locations):
         stringInt = str(i + 1)
         while len(stringInt) < 4:
             stringInt = "0" + str(stringInt)
-        location_table_styx_late["ClearScore"+stringInt] = hades_base_location_id + i + 72
+        location_table_styx_late["Clear Score "+stringInt] = hades_base_location_id + i + 72
 
     location_table = {
         **location_table_tartarus, 
@@ -388,29 +388,29 @@ def give_weapon_based_locations():
             stringInt = i + 1
             if stringInt < 10:
                 stringInt = "0" + str(stringInt)
-            weapon_locations["ClearRoom" + str(stringInt) + weaponSubfix] = hades_base_location_id + 1073 + i \
+            weapon_locations["Clear Room " + str(stringInt) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
         weapon_locations["Beat Meg"+weaponSubfix] = None
 
         for i in range(13, 23):
-            weapon_locations["ClearRoom"+str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i \
+            weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
     
         weapon_locations["Beat Lernie"+weaponSubfix] = None
 
         for i in range(23, 35):
-            weapon_locations["ClearRoom" + str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i \
+            weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
         weapon_locations["Beat Bros"+weaponSubfix] = None    
 
         for i in range(35, 60):
-            weapon_locations["ClearRoom" + str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i \
+            weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
         
         weapon_locations["Beat Hades" + weaponSubfix] = None
 
         for i in range(60, 72):
-            weapon_locations["ClearRoom" + str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i \
+            weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
             
         subfixCounter += 1
