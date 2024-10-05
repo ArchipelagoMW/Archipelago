@@ -65,7 +65,7 @@ from .locations.keyLocation import KeyLocation
 
 from BaseClasses import ItemClassification
 from ..Locations import LinksAwakeningLocation
-from ..Options import TrendyGame, Palette, MusicChangeCondition, BootsControls, OpenMabe
+from ..Options import TrendyGame, Palette, MusicChangeCondition, BootsControls
 
 if TYPE_CHECKING:
     from .. import LinksAwakeningWorld
@@ -153,7 +153,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
     patches.maptweaks.tweakMap(rom)
-    if world.options.open_mabe:
+    if world.options.overworld == "open_mabe":
         patches.maptweaks.openMabe(rom)
     patches.chest.fixChests(rom)
     patches.shop.fixShop(rom)
