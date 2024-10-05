@@ -89,7 +89,7 @@ location_names: Dict[str, str] = {
     "RESCUED_CHERUB_15": "DC: Top of elevator Child of Moonlight",
     "Lady[D01Z05S22]":   "DC: Lady of the Six Sorrows, from MD",
     "QI75":              "DC: Chalice room",
-    "Sword[D01Z05S24]":  "DC: Mea culpa altar",
+    "Sword[D01Z05S24]":  "DC: Mea Culpa altar",
     "CO44":              "DC: Elevator shaft ledge",
     "RESCUED_CHERUB_22": "DC: Elevator shaft Child of Moonlight",
     "Lady[D01Z05S26]":   "DC: Lady of the Six Sorrows, elevator shaft",
