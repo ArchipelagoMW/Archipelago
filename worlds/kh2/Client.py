@@ -110,6 +110,7 @@ class KH2Context(CommonContext):
             18: TWTNW_Checks,
             #  255: {},  # starting screen
         }
+        self.last_world_int = -1
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         # self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
@@ -408,13 +409,15 @@ class KH2Context(CommonContext):
     async def checkWorldLocations(self):
         try:
             currentworldint = self.kh2_read_byte(self.Now)
-            await self.send_msgs([{
-                "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
-                "default": 0, "want_reply": True, "operations": [{
-                    "operation": "replace",
-                    "value":     currentworldint
-                }]
-            }])
+            if self.last_world_int != currentworldint:
+                self.last_world_int = currentworldint
+                await self.send_msgs([{
+                    "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
+                    "default": 0, "want_reply": True, "operations": [{
+                        "operation": "replace",
+                        "value":     currentworldint
+                    }]
+                }])
             if currentworldint in self.worldid_to_locations:
                 curworldid = self.worldid_to_locations[currentworldint]
                 for location, data in curworldid.items():
