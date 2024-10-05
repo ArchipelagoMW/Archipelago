@@ -8,6 +8,7 @@ from .mission_tables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_t
 from . import item_names
 from .mission_order.presets_static import get_used_layout_names
 from worlds.AutoWorld import World
+from ..ror2.items import classification
 
 if TYPE_CHECKING:
     from . import SC2World
@@ -228,6 +229,9 @@ item_table = {
                  classification=ItemClassification.progression, origin={"ext"}),
     item_names.AEGIS_GUARD:
         ItemData(54 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 2, SC2Race.TERRAN),
+    item_names.EMPERORS_SHADOW:
+        ItemData(55 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 3, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
@@ -1013,6 +1017,9 @@ item_table = {
     item_names.MEDIVAC_RESOURCE_EFFICIENCY:
         ItemData(755 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 9, SC2Race.TERRAN,
                  parent_item=item_names.MEDIVAC, origin={"ext"}),
+    item_names.EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES:
+        ItemData(756 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 10, SC2Race.TERRAN,
+                 parent_item=item_names.EMPERORS_SHADOW),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:

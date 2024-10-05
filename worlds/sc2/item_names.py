@@ -41,6 +41,7 @@ SKY_FURY             = "Sky Fury"
 SHOCK_DIVISION       = "Shock Division"
 BLACKHAMMER          = "Blackhammer"
 AEGIS_GUARD          = "Aegis Guard"
+EMPERORS_SHADOW      = "Emperor's Shadow"
 
 # Terran Buildings
 BUNKER                              = "Bunker"
@@ -149,6 +150,7 @@ DIAMONDBACK_RESOURCE_EFFICIENCY                    = "Resource Efficiency (Diamo
 DIAMONDBACK_SHAPED_HULL                            = "Shaped Hull (Diamondback)"
 DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL     = "Progressive Tri-Lithium Power Cell (Diamondback)"
 DIAMONDBACK_ION_THRUSTERS                          = "Ion Thrusters (Diamondback)"
+EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES        = "Sovereign Tactical Missiles (Emperor's Shadow)"
 FIREBAT_INCINERATOR_GAUNTLETS                      = "Incinerator Gauntlets (Firebat)"
 FIREBAT_JUGGERNAUT_PLATING                         = "Juggernaut Plating (Firebat)"
 FIREBAT_RESOURCE_EFFICIENCY                        = "Resource Efficiency (Firebat)"
