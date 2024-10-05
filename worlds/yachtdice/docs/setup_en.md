@@ -10,6 +10,6 @@ Open the Yacht Dice website. There are two options:
 - Download the latest release from [Yacht Dice Release](https://github.com/spinerak/ArchipelagoYachtDice/releases/latest) and unzip the Website.zip. Then open index.html in your browser.
 
 Press Archipelago, and after logging in, you are good to go. The website has a built-in client, where you can chat and send commands.    
-The website also have an "offline" play option to try out the game without having to generate a game first.
+Both options also have a "Solo play" mode to try out the game without having to generate a game first.
 
 For more information on generating Archipelago games and connecting to servers, please see the [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en).
