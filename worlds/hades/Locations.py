@@ -21,8 +21,8 @@ location_table_asphodel = {
     "Beat Lernie": None,
 }
 
-global location_table_elyseum
-location_table_elyseum = {
+global location_table_elysium
+location_table_elysium = {
     "Beat Bros": None,
 }
 
@@ -219,8 +219,8 @@ def clear_tables():
         "Beat Lernie": None,
     }
 
-    global location_table_elyseum
-    location_table_elyseum = {
+    global location_table_elysium
+    location_table_elysium = {
         "Beat Bros": None,
     }
 
@@ -303,10 +303,10 @@ def give_default_location_table():
     for i in range(13,23):
         location_table_asphodel["ClearRoom"+str(i+1)]=hades_base_location_id+i
     
-    #Repopulate elyseum table, rooms from 24 to 35
-    global location_table_elyseum
+    #Repopulate elysium table, rooms from 24 to 35
+    global location_table_elysium
     for i in range(23,35):
-        location_table_elyseum["ClearRoom"+str(i+1)]=hades_base_location_id+i
+        location_table_elysium["ClearRoom"+str(i+1)]=hades_base_location_id+i
     
     #Repopulate styx table, rooms from 35 to 72. Split into early and late
     global location_table_styx 
@@ -320,7 +320,7 @@ def give_default_location_table():
     location_table = {
         **location_table_tartarus, 
         **location_table_asphodel,
-        **location_table_elyseum,
+        **location_table_elysium,
         **location_table_styx,
         **location_table_styx_late,
     }
@@ -345,12 +345,12 @@ def give_score_location_table(locations):
             stringInt = "0"+str(stringInt);
         location_table_asphodel["ClearScore"+stringInt]=hades_base_location_id+i+72 
         
-    global location_table_elyseum
+    global location_table_elysium
     for i in range(locations_first_region+2*fraction_location, locations_first_region+4*fraction_location):
         stringInt=str(i+1);
         while (len(stringInt)<4):
             stringInt = "0"+str(stringInt);
-        location_table_elyseum["ClearScore"+stringInt]=hades_base_location_id+i+72 
+        location_table_elysium["ClearScore"+stringInt]=hades_base_location_id+i+72 
     
     global location_table_styx
     for i in range(locations_first_region+4*fraction_location, locations_first_region+6*fraction_location):
@@ -369,7 +369,7 @@ def give_score_location_table(locations):
     location_table = {
         **location_table_tartarus, 
         **location_table_asphodel,
-        **location_table_elyseum,
+        **location_table_elysium,
         **location_table_styx,
         **location_table_styx_late,
     }

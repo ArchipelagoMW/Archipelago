@@ -147,7 +147,7 @@ def set_rules(world: "HadesWorld", player: int, number_items: int, location_tabl
                     state._total_heat_level(player, min(number_items/2,20), options) and \
                     state._has_enough_routine_inspection(player,total_routine_inspection-1, options) and  \
                     state._has_enough_weapons(player, options, 3))
-        set_rule(world.get_entrance("Exit Elyseum", player), lambda state: state.has("BrosVictory", player) and  \
+        set_rule(world.get_entrance("Exit Elysium", player), lambda state: state.has("BrosVictory", player) and  \
                     state._total_heat_level(player, min(number_items*3/4,30), options) and  \
                     state._has_enough_routine_inspection(player,total_routine_inspection, options) and  \
                     state._has_enough_weapons(player, options, 5))
@@ -388,7 +388,7 @@ def set_weapon_region_rules(world: "HadesWorld", player: int, number_items: int,
             state._total_heat_level(player, min(number_items/2,20), options) and \
             state._has_enough_routine_inspection(player,total_routine_inspection-1, options) and \
             state._has_enough_weapons(player, options, 3))
-    set_rule(world.get_entrance("Exit Elyseum"+weaponSubfix, player), lambda state: \
+    set_rule(world.get_entrance("Exit Elysium"+weaponSubfix, player), lambda state: \
             state.has("BrosVictory"+weaponSubfix, player)  and \
             state._total_heat_level(player, min(number_items*3/4,30), options) and \
             state._has_enough_routine_inspection(player,total_routine_inspection, options) and \

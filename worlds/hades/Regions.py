@@ -5,7 +5,7 @@ def create_main_weapon_regions(ctx, weaponSubfix, subfixCounter, location_databa
     
     tartarus = {}
     asphodel = {}
-    elyseum = {}
+    elysium = {}
     styx = {}
     styx_late = {}
     
@@ -22,8 +22,8 @@ def create_main_weapon_regions(ctx, weaponSubfix, subfixCounter, location_databa
     asphodel["Beat Lernie"+weaponSubfix] = None
 
     for i in range(23,35):
-        elyseum["ClearRoom"+str(i+1)+weaponSubfix]=hades_base_location_id+1073+i+subfixCounter*73
-    elyseum["Beat Bros"+weaponSubfix] = None    
+        elysium["ClearRoom"+str(i+1)+weaponSubfix]=hades_base_location_id+1073+i+subfixCounter*73
+    elysium["Beat Bros"+weaponSubfix] = None    
 
     for i in range(35,60):
         styx["ClearRoom"+str(i+1)+weaponSubfix]=hades_base_location_id+1073+i+subfixCounter*73
@@ -38,8 +38,8 @@ def create_main_weapon_regions(ctx, weaponSubfix, subfixCounter, location_databa
                               [location for location in tartarus], ["Exit Tartarus"+weaponSubfix, "DieT"+weaponSubfix]),
                 create_region(ctx.multiworld, ctx.player, location_database, "Asphodel"+weaponSubfix, 
                               [location for location in asphodel], ["Exit Asphodel"+weaponSubfix, "DieA"+weaponSubfix]),
-                create_region(ctx.multiworld, ctx.player, location_database, "Elyseum"+weaponSubfix, 
-                              [location for location in elyseum], ["Exit Elyseum"+weaponSubfix, "DieE"+weaponSubfix]),
+                create_region(ctx.multiworld, ctx.player, location_database, "Elysium"+weaponSubfix, 
+                              [location for location in elysium], ["Exit Elysium"+weaponSubfix, "DieE"+weaponSubfix]),
                 create_region(ctx.multiworld, ctx.player, location_database, "Styx"+weaponSubfix,
                                [location for location in styx], ["DieS"+weaponSubfix, "Late Chambers"+weaponSubfix]),
                 create_region(ctx.multiworld, ctx.player, location_database, "StyxLate"+weaponSubfix, 
@@ -48,14 +48,14 @@ def create_main_weapon_regions(ctx, weaponSubfix, subfixCounter, location_databa
     
     tartarus = {}
     asphodel = {}
-    elyseum = {}
+    elysium = {}
     styx = {}
     styx_late = {}
 
 
 def create_regions(ctx, location_database):
     from . import create_region
-    from .Locations import location_table_tartarus, location_table_asphodel, location_table_elyseum, \
+    from .Locations import location_table_tartarus, location_table_asphodel, location_table_elysium, \
         location_table_styx, location_table_styx_late, location_keepsakes, location_weapons, \
         should_ignore_weapon_location, location_store_gemstones, location_store_diamonds, \
         location_table_fates, location_table_fates_events, location_weapons_subfixes
@@ -91,8 +91,8 @@ def create_regions(ctx, location_database):
                         [location for location in location_table_tartarus], ["Exit Tartarus", "DieT"]),
             create_region(ctx.multiworld, ctx.player, location_database, "Asphodel", 
                         [location for location in location_table_asphodel], ["Exit Asphodel", "DieA"]),
-            create_region(ctx.multiworld, ctx.player, location_database, "Elyseum", 
-                        [location for location in location_table_elyseum], ["Exit Elyseum", "DieE"]),
+            create_region(ctx.multiworld, ctx.player, location_database, "Elysium", 
+                        [location for location in location_table_elysium], ["Exit Elysium", "DieE"]),
             create_region(ctx.multiworld, ctx.player, location_database, "Styx", 
                         [location for location in location_table_styx], ["DieS", "Late Chambers"]),
             create_region(ctx.multiworld, ctx.player, location_database, "StyxLate",
@@ -144,8 +144,8 @@ def create_regions(ctx, location_database):
             ctx.multiworld.get_entrance("Exit Tartarus"+weaponSubfix, ctx.player).connect(
                 ctx.multiworld.get_region("Asphodel"+weaponSubfix, ctx.player))
             ctx.multiworld.get_entrance("Exit Asphodel"+weaponSubfix, ctx.player).connect(
-                ctx.multiworld.get_region("Elyseum"+weaponSubfix, ctx.player))
-            ctx.multiworld.get_entrance("Exit Elyseum"+weaponSubfix, ctx.player).connect(
+                ctx.multiworld.get_region("Elysium"+weaponSubfix, ctx.player))
+            ctx.multiworld.get_entrance("Exit Elysium"+weaponSubfix, ctx.player).connect(
                 ctx.multiworld.get_region("Styx"+weaponSubfix, ctx.player))
             ctx.multiworld.get_entrance("Late Chambers"+weaponSubfix, ctx.player).connect(
                 ctx.multiworld.get_region("StyxLate"+weaponSubfix, ctx.player))
@@ -164,8 +164,8 @@ def create_regions(ctx, location_database):
         ctx.multiworld.get_entrance("Exit Tartarus", ctx.player).connect(
             ctx.multiworld.get_region("Asphodel", ctx.player))
         ctx.multiworld.get_entrance("Exit Asphodel", ctx.player).connect(
-            ctx.multiworld.get_region("Elyseum", ctx.player))
-        ctx.multiworld.get_entrance("Exit Elyseum", ctx.player).connect(
+            ctx.multiworld.get_region("Elysium", ctx.player))
+        ctx.multiworld.get_entrance("Exit Elysium", ctx.player).connect(
             ctx.multiworld.get_region("Styx", ctx.player))
         ctx.multiworld.get_entrance("Late Chambers", ctx.player).connect(
             ctx.multiworld.get_region("StyxLate", ctx.player))
