@@ -101,7 +101,18 @@ class KH2World(World):
             if ability in self.goofy_ability_dict and self.goofy_ability_dict[ability] >= 1:
                 self.goofy_ability_dict[ability] -= 1
 
-        slot_data = self.options.as_dict("Goal", "FinalXemnas", "LuckyEmblemsRequired", "BountyRequired")
+        slot_data = self.options.as_dict(
+            "Goal", 
+            "FinalXemnas", 
+            "LuckyEmblemsRequired", 
+            "BountyRequired",
+            "FightLogic",
+            "FinalFormLogic",
+            "AutoFormLogic",
+            "LevelDepth",
+            "DonaldGoofyStatsanity",
+            "CorSkipToggle"
+        )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
             "PoptrackerVersionCheck": 4.3,
