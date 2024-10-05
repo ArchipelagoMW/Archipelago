@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class HadesLogic(LogicMixin):
     def _total_heat_level(self, player:int, amount: int, options) -> bool:
-        if not options.heat_system == "reverseheat":
+        if not options.heat_system == "reverse_heat":
             return True
         count=0
         for key in item_table_pacts.keys():
@@ -22,7 +22,7 @@ class HadesLogic(LogicMixin):
         return self.count(item, player)>=amount
 
     def _has_enough_routine_inspection(self, player: int, amount: int, options) -> bool:
-        if not options.heat_system == "reverseheat":
+        if not options.heat_system == "reverse_heat":
             return True
         return self._has_enough_of_item(player, amount, "RoutineInspectionPactLevel")
     
@@ -38,17 +38,17 @@ class HadesLogic(LogicMixin):
         if not options.weaponsanity:
             return True
         count = 0
-        if (self._has_weapon("SwordWeapon", player, options)):
+        if self._has_weapon("SwordWeapon", player, options):
             count += 1
-        if (self._has_weapon("BowWeapon", player, options)):
+        if self._has_weapon("BowWeapon", player, options):
             count += 1
-        if (self._has_weapon("SpearWeapon", player, options)):
+        if self._has_weapon("SpearWeapon", player, options):
             count += 1
-        if (self._has_weapon("ShieldWeapon", player, options)):
+        if self._has_weapon("ShieldWeapon", player, options):
             count += 1
-        if (self._has_weapon("FistWeapon", player, options)):
+        if self._has_weapon("FistWeapon", player, options):
             count += 1
-        if (self._has_weapon("GunWeapon", player, options)):
+        if self._has_weapon("GunWeapon", player, options):
             count += 1
         return count >= amount
     
@@ -67,17 +67,17 @@ class HadesLogic(LogicMixin):
     def _has_weapon(self, weaponSubfix, player:int, option) -> bool:
         if not option.weaponsanity:
             return True
-        if (weaponSubfix == "SwordWeapon"):
+        if weaponSubfix == "SwordWeapon":
             return ((option.initial_weapon == "Sword") or (self.has("SwordWeaponUnlockItem", player)))
-        if (weaponSubfix == "BowWeapon"):
+        if weaponSubfix == "BowWeapon":
             return ((option.initial_weapon == "Bow") or (self.has("BowWeaponUnlockItem", player)))
-        if (weaponSubfix == "SpearWeapon"):
+        if weaponSubfix == "SpearWeapon":
             return ((option.initial_weapon == "Spear") or (self.has("SpearWeaponUnlockItem", player)))
-        if (weaponSubfix == "ShieldWeapon"):
+        if weaponSubfix == "ShieldWeapon":
             return ((option.initial_weapon == "Shield") or (self.has("ShieldWeaponUnlockItem", player)))
-        if (weaponSubfix == "FistWeapon"):
+        if weaponSubfix == "FistWeapon":
             return ((option.initial_weapon == "Fist") or (self.has("FistWeaponUnlockItem", player)))
-        if (weaponSubfix == "GunWeapon"):
+        if weaponSubfix == "GunWeapon":
             return ((option.initial_weapon == "Gun") or (self.has("GunWeaponUnlockItem", player)))
 
     def _can_get_victory(self, player: int, options) -> bool:
@@ -93,7 +93,7 @@ class HadesLogic(LogicMixin):
         return can_win
     
     def _has_defeated_boss(self, bossVictory,player:int, options) -> bool:
-        if options.location_system == "roomweaponbased":
+        if options.location_system == "room_weapon_based":
             counter=0
             counter += self.count(bossVictory+"SwordWeapon", player)
             counter += self.count(bossVictory+"SpearWeapon", player)
@@ -106,7 +106,7 @@ class HadesLogic(LogicMixin):
            return self.has(bossVictory, player)
 
     def _enough_weapons_victories(self,player:int, options, amount: int) -> bool:
-        if options.location_system == "roomweaponbased":
+        if options.location_system == "room_weapon_based":
             counter=0
             counter += self.count("HadesVictory"+"SwordWeapon", player)
             counter += self.count("HadesVictory"+"SpearWeapon", player)
@@ -124,7 +124,7 @@ def set_rules(world: "HadesWorld", player: int, number_items: int, location_tabl
     # Set up some logic in areas to avoid having all heats "stack up" as batch in other games.
     total_routine_inspection = int(options.routine_inspection_pact_amount.value)
 
-    if (options.location_system == "roomweaponbased"):
+    if options.location_system == "room_weapon_based":
         set_weapon_region_rules(world, player, number_items, location_table, options, 
                                 "SwordWeapon", total_routine_inspection);
         set_weapon_region_rules(world, player, number_items, location_table, options, 
@@ -399,7 +399,7 @@ def set_weapon_region_rules(world: "HadesWorld", player: int, number_items: int,
     
 
 def forbid_important_items_on_late_styx(world: "HadesWorld", player: int, options):
-    if options.location_system == "roomweaponbased":
+    if options.location_system == "room_weapon_based":
         for weaponString in location_weapons_subfixes:
                 late_styx_region = world.get_region("StyxLate"+weaponString, player)
                 for location in late_styx_region.locations:

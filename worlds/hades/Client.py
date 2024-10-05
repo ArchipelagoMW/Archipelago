@@ -143,7 +143,7 @@ class HadesContext(CommonContext):
                 collect_locations_cache = ""
                 for location in args["checked_locations"]:
                     collect_locations_cache += self.location_names.lookup_in_slot(location) + "-"
-                if (len(collect_locations_cache) > 0):
+                if len(collect_locations_cache) > 0:
                     collect_locations_cache = collect_locations_cache[:-1]
                     subsume.Send(styx_scribe_send_prefix + "Locations collected:" + collect_locations_cache)
 
@@ -155,7 +155,7 @@ class HadesContext(CommonContext):
             msg =  f"Received {', '.join([self.item_names.lookup_in_slot(item.item) for item in args['items']])}"
             # We ignore sending the package to hades if just connected, 
             #since the game is not ready for it (and will request it itself later)
-            if (self.is_receiving_items_from_connect_package):
+            if self.is_receiving_items_from_connect_package:
                 return;
             self.send_items()
 
@@ -193,7 +193,7 @@ class HadesContext(CommonContext):
 
 
     async def check_connection_and_send_items_and_request_starting_info(self, message):
-        if (self.check_for_connection()):
+        if self.check_for_connection():
             self.is_receiving_items_from_connect_package = False
             await self.send_items_and_request_starting_info(message)
 
@@ -282,12 +282,12 @@ class HadesContext(CommonContext):
     # ----------------- Hints from game section starts --------------------------------
 
     async def send_location_hint_to_server(self, message):
-        if (self.hades_slot_data["store_give_hints"] == 0):
+        if self.hades_slot_data["store_give_hints"] == 0:
             return;
         split_array = message.split("-")
         request = []
         for location in split_array:
-            if (len(location)>0):
+            if len(location)>0:
                 request.append(self.location_name_to_id[location])
         asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": request, "create_as_hint": 2}]))
 
@@ -330,7 +330,7 @@ class HadesContext(CommonContext):
         hasEnoughWeapons = self.hades_slot_data["weapons_clears_needed"] <= int(counters[1])
         hasEnoughKeepsakes = self.hades_slot_data["keepsakes_needed"] <= int(counters[2])
         hasEnoughFates = self.hades_slot_data["fates_needed"] <= int(counters[3])
-        if (hasEnoughRuns and hasEnoughWeapons and hasEnoughKeepsakes and hasEnoughFates):
+        if hasEnoughRuns and hasEnoughWeapons and hasEnoughKeepsakes and hasEnoughFates:
             asyncio.create_task(self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]))
             self.finished_game = True
 
@@ -338,7 +338,7 @@ class HadesContext(CommonContext):
 
     # ------------ game connection QoL handling
     def check_for_connection(self):
-        if (self.is_connected == False):
+        if self.is_connected == False:
             subsume.Send(styx_scribe_send_prefix + "Connection Error")
             return False
         return True

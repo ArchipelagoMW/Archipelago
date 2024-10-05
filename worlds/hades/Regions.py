@@ -11,7 +11,7 @@ def create_main_weapon_regions(ctx, weaponSubfix, subfixCounter, location_databa
     
     for i in range(13):
         stringInt=i+1;
-        if (stringInt<10):
+        if stringInt<10:
             stringInt = "0"+str(stringInt);
         tartarus["ClearRoom"+str(stringInt)+weaponSubfix] = hades_base_location_id+1073+i+subfixCounter*73
     tartarus["Beat Meg"+weaponSubfix] = None
@@ -77,7 +77,7 @@ def create_regions(ctx, location_database):
 
     ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "Menu", None, ["Menu"])]    
 
-    if ctx.options.location_system == "roomweaponbased":
+    if ctx.options.location_system == "room_weapon_based":
         #do as below but per weapons
         subfixCounter = 0
         for weaponSubfix in location_weapons_subfixes:
@@ -114,7 +114,7 @@ def create_regions(ctx, location_database):
     if ctx.options.weaponsanity:
         weaponChecks = {}
         for weaponLocation, weaponData in location_weapons.items():
-            if (not should_ignore_weapon_location(weaponLocation, ctx.options)):
+            if not should_ignore_weapon_location(weaponLocation, ctx.options):
                 weaponChecks.update({weaponLocation : weaponData})
         ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "WeaponsLocations", 
                                                 [location for location in weaponChecks], ["ExitWeaponCache"])]
@@ -137,7 +137,7 @@ def create_regions(ctx, location_database):
 
     # link up regions
     ctx.multiworld.get_entrance("Menu", ctx.player).connect(ctx.multiworld.get_region("Underworld", ctx.player))
-    if ctx.options.location_system == "roomweaponbased":
+    if ctx.options.location_system == "room_weapon_based":
         for weaponSubfix in location_weapons_subfixes:
             ctx.multiworld.get_entrance("Zags room"+weaponSubfix, ctx.player).connect(
                 ctx.multiworld.get_region("Tartarus"+weaponSubfix, ctx.player))

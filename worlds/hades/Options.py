@@ -23,9 +23,9 @@ class LocationSystem(Choice):
     items on every new room completed with a new weapon (so more locations than the original room based system)
     """
     display_name = "Location System"
-    option_roombased = 1
-    option_scorebased = 2
-    option_roomweaponbased = 3
+    option_room_based = 1
+    option_score_based = 2
+    option_room_weapon_based = 3
     default = 1
     
 
@@ -144,9 +144,9 @@ class HeatSystem(Choice):
     (then the following options related to pacts do nothing).
     """
     display_name = "Heat System"
-    option_reverseheat = 1
-    option_minimalheat = 2
-    option_vanilllaheat = 3
+    option_reverse_heat = 1
+    option_minimal_heat = 2
+    option_vanillla_heat = 3
     default = 1
 
 

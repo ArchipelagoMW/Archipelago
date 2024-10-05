@@ -243,28 +243,28 @@ def setup_location_table_with_settings(options):
  
     total_table.update(location_table_fates_events)
     
-    if (options.keepsakesanity.value == 1):
+    if options.keepsakesanity.value == 1:
         total_table.update(location_keepsakes)
      
-    if (options.weaponsanity.value == 1):
+    if options.weaponsanity.value == 1:
         for weaponLocation, weaponData in location_weapons.items():
-            if (not should_ignore_weapon_location(weaponLocation, options)):
+            if not should_ignore_weapon_location(weaponLocation, options):
                 total_table.update({weaponLocation : weaponData})
                 
-    if (options.storesanity.value==1):
+    if options.storesanity.value==1:
         total_table.update(location_store_gemstones)
         total_table.update(location_store_diamonds)
 
-    if (options.location_system.value==1):
+    if options.location_system.value==1:
         result = give_default_location_table()
         total_table.update(result)
-    elif (options.location_system.value==2):
+    elif options.location_system.value==2:
         levels = options.score_rewards_amount.value
         total_table.update(give_score_location_table(levels))
-    elif (options.location_system.value==3):
+    elif options.location_system.value==3:
         total_table.update(give_weapon_based_locations())
     
-    if (options.fatesanity==1):
+    if options.fatesanity==1:
         total_table.update(location_table_fates)
     
     return total_table
@@ -272,17 +272,17 @@ def setup_location_table_with_settings(options):
 #-----------------------------------------------
 
 def should_ignore_weapon_location(weaponLocation, options):
-    if (options.initial_weapon.value == 0 and weaponLocation == "SwordWeaponUnlockLocation"):
+    if options.initial_weapon.value == 0 and weaponLocation == "SwordWeaponUnlockLocation":
         return True
-    if (options.initial_weapon.value == 1 and weaponLocation == "BowWeaponUnlockLocation"):
+    if options.initial_weapon.value == 1 and weaponLocation == "BowWeaponUnlockLocation":
         return True
-    if (options.initial_weapon.value == 2 and weaponLocation == "SpearWeaponUnlockLocation"):
+    if options.initial_weapon.value == 2 and weaponLocation == "SpearWeaponUnlockLocation":
         return True
-    if (options.initial_weapon.value == 3 and weaponLocation == "ShieldWeaponUnlockLocation"):
+    if options.initial_weapon.value == 3 and weaponLocation == "ShieldWeaponUnlockLocation":
         return True
-    if (options.initial_weapon.value == 4 and weaponLocation == "FistWeaponUnlockLocation"):
+    if options.initial_weapon.value == 4 and weaponLocation == "FistWeaponUnlockLocation":
         return True
-    if (options.initial_weapon.value == 5 and weaponLocation == "GunWeaponUnlockLocation"):
+    if options.initial_weapon.value == 5 and weaponLocation == "GunWeaponUnlockLocation":
         return True
     return False
 
@@ -294,7 +294,7 @@ def give_default_location_table():
     global location_table_tartarus 
     for i in range(13):
         stringInt=i+1;
-        if (stringInt<10):
+        if stringInt<10:
             stringInt = "0"+str(stringInt);
         location_table_tartarus["ClearRoom"+str(stringInt)] = hades_base_location_id+i
         
@@ -385,7 +385,7 @@ def give_weapon_based_locations():
     
         for i in range(13):
             stringInt=i+1;
-            if (stringInt<10):
+            if stringInt<10:
                 stringInt = "0"+str(stringInt);
             weapon_locations["ClearRoom"+str(stringInt)+weaponSubfix] = hades_base_location_id+1073+i+subfixCounter*73
         weapon_locations["Beat Meg"+weaponSubfix] = None

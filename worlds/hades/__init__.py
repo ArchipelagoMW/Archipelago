@@ -77,7 +77,7 @@ class HadesWorld(World):
         item_pool_pacts = create_pact_pool_amount(self.options)
 
         # Fill pact items
-        if (self.options.heat_system == "reverseheat"):
+        if self.options.heat_system == "reverse_heat":
             for name, data in item_table_pacts.items():
                 for amount in range(item_pool_pacts.get(name, 1)):
                     item = HadesItem(name, self.player)
@@ -92,7 +92,7 @@ class HadesWorld(World):
         # Fill weapons items
         if self.options.weaponsanity:
             for name, data in item_table_weapons.items():
-                if (self.should_ignore_weapon(name)):
+                if self.should_ignore_weapon(name):
                     continue
                 item = HadesItem(name, self.player)
                 pool.append(item)
@@ -128,7 +128,7 @@ class HadesWorld(World):
         index = 0
         total_fillers_needed = len(local_location_table)-len(pool)-len(location_table_fates_events)
         
-        if (self.options.location_system.value == "roomweaponbased"):
+        if self.options.location_system.value == "room_weapon_based":
             #Substract the 4 bosses for each of the 6 weapons = 24
             total_fillers_needed = total_fillers_needed - 24
         else:
@@ -179,17 +179,17 @@ class HadesWorld(World):
         self.multiworld.itempool += pool
 
     def should_ignore_weapon(self, name):
-        if (self.options.initial_weapon == "Sword" and name == "SwordWeaponUnlockItem"):
+        if self.options.initial_weapon == "Sword" and name == "SwordWeaponUnlockItem":
             return True
-        if (self.options.initial_weapon == "Bow" and name == "BowWeaponUnlockItem"):
+        if self.options.initial_weapon == "Bow" and name == "BowWeaponUnlockItem":
             return True
-        if (self.options.initial_weapon == "Spear" and name == "SpearWeaponUnlockItem"):
+        if self.options.initial_weapon == "Spear" and name == "SpearWeaponUnlockItem":
             return True
-        if (self.options.initial_weapon == "Shield" and name == "ShieldWeaponUnlockItem"):
+        if self.options.initial_weapon == "Shield" and name == "ShieldWeaponUnlockItem":
             return True
-        if (self.options.initial_weapon == "Fist" and name == "FistWeaponUnlockItem"):
+        if self.options.initial_weapon == "Fist" and name == "FistWeaponUnlockItem":
             return True
-        if (self.options.initial_weapon == "Gun" and name == "GunWeaponUnlockItem"):
+        if self.options.initial_weapon == "Gun" and name == "GunWeaponUnlockItem":
             return True
         return False
 
