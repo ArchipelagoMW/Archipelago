@@ -413,7 +413,7 @@ class KH2Context(CommonContext):
                 self.last_world_int = currentworldint
                 await self.send_msgs([{
                     "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
-                    "default": 0, "want_reply": True, "operations": [{
+                    "default": 0, "want_reply": False, "operations": [{
                         "operation": "replace",
                         "value":     currentworldint
                     }]
