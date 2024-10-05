@@ -848,7 +848,7 @@ class KH2Context(CommonContext):
             logger.info("line 840")
 
 
-def finishedGame(ctx: KH2Context, message):
+def finishedGame(ctx: KH2Context):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
         if not ctx.final_xemnas and ctx.kh2_read_byte(ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
                 & 0x1 << all_world_locations[LocationName.FinalXemnas].bitIndex > 0:
@@ -880,8 +880,9 @@ def finishedGame(ctx: KH2Context, message):
     elif ctx.kh2slotdata['Goal'] == 2:
         # for backwards compat
         if "hitlist" in ctx.kh2slotdata:
+            locations = ctx.sending
             for boss in ctx.kh2slotdata["hitlist"]:
-                if boss in message[0]["locations"]:
+                if boss in locations:
                     ctx.hitlist_bounties += 1
         if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2_seed_save_cache["AmountInvo"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
@@ -922,11 +923,12 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.verifyChests())
                 await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.verifyLevel())
-                message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
-                if finishedGame(ctx, message) and not ctx.kh2_finished_game:
+                if finishedGame(ctx) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.kh2_finished_game = True
-                await ctx.send_msgs(message)
+                if ctx.sending:
+                    message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
+                    await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
