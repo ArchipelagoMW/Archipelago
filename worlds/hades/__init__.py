@@ -1,14 +1,13 @@
-from re import I
 import string
 import typing
 import settings
-from dataclasses import dataclass, fields
 
-from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import Entrance, Item, MultiWorld, Region, Tutorial
 from .Items import event_item_pairs_weapon_mode, item_table, item_table_pacts, HadesItem, event_item_pairs, \
-      create_pact_pool_amount, create_filler_pool_options, item_table_keepsake, item_table_weapons, \
-        item_table_store, item_table_hidden_aspects, create_trap_pool, item_name_groups
-from .Locations import setup_location_table_with_settings, give_all_locations_table, HadesLocation, location_table_fates_events, location_name_groups
+    create_pact_pool_amount, create_filler_pool_options, item_table_keepsake, item_table_weapons, \
+    item_table_store, item_table_hidden_aspects, create_trap_pool, item_name_groups
+from .Locations import setup_location_table_with_settings, give_all_locations_table, HadesLocation, \
+    location_table_fates_events, location_name_groups
 from .Options import hades_option_presets, hades_option_groups, HadesOptions
 from .Regions import create_regions
 from .Rules import set_rules
@@ -46,6 +45,7 @@ class HadesWeb(WebWorld):
     options_presets = hades_option_presets
 
     option_groups = hades_option_groups
+
 
 class HadesWorld(World):
     """
@@ -120,7 +120,6 @@ class HadesWorld(World):
                 event_item = HadesItem(item, self.player)
                 self.multiworld.get_location(
                     event, self.player).place_locked_item(event_item)
-                
 
         # create the pack of filler options
         filler_options = create_filler_pool_options(self.options)
@@ -128,54 +127,52 @@ class HadesWorld(World):
         # Fill filler items uniformly. Maybe later we can tweak this.
         index = 0
         total_fillers_needed = len(local_location_table)-len(pool)-len(location_table_fates_events)
-        
         if self.options.location_system.value == "room_weapon_based":
-            #Substract the 4 bosses for each of the 6 weapons = 24
+            # Substract the 4 bosses for each of the 6 weapons = 24
             total_fillers_needed = total_fillers_needed - 24
         else:
-            #Substract the 4 bosses
+            # Substract the 4 bosses
             total_fillers_needed = total_fillers_needed - 4
 
         helper_percentage = self.options.filler_helper_percentage
-        helper_fillers_needed = int(total_fillers_needed*helper_percentage/100)
+        helper_fillers_needed = int(total_fillers_needed * helper_percentage / 100)
 
-        trap_percentage = min(self.options.filler_trap_percentage, 100-helper_percentage)
-        trap_fillers_needed = int(total_fillers_needed*trap_percentage/100)
+        trap_percentage = min(self.options.filler_trap_percentage, 100 - helper_percentage)
+        trap_fillers_needed = int(total_fillers_needed * trap_percentage / 100)
         trap_pool = create_trap_pool()
 
-        fillers_needed = total_fillers_needed-trap_fillers_needed-helper_fillers_needed
+        fillers_needed = total_fillers_needed-trap_fillers_needed - helper_fillers_needed
         for amount in range(0, fillers_needed):
             item_name = filler_options[index]
             item = HadesItem(item_name, self.player)
             pool.append(item)
-            index = (index+1) % len(filler_options)
+            index = (index + 1) % len(filler_options)
 
-        #Fill helpers
-        health_helpers_needed = int(helper_fillers_needed*self.options.max_health_helper_percentage/100)
-        money_helpers_needed = int(helper_fillers_needed*self.options.initial_money_helper_percentage/100)
-        boon_helpers_needed = helper_fillers_needed-health_helpers_needed-money_helpers_needed
+        # Fill helpers
+        health_helpers_needed = int(helper_fillers_needed * self.options.max_health_helper_percentage / 100)
+        money_helpers_needed = int(helper_fillers_needed * self.options.initial_money_helper_percentage / 100)
+        boon_helpers_needed = helper_fillers_needed-health_helpers_needed - money_helpers_needed
 
         for amount in range(0, health_helpers_needed):
             item = HadesItem("MaxHealthHelper", self.player)
             pool.append(item)
 
-        for amount in range(0, min(money_helpers_needed, helper_fillers_needed-health_helpers_needed)):
+        for amount in range(0, min(money_helpers_needed, helper_fillers_needed - health_helpers_needed)):
             item = HadesItem("InitialMoneyHelper", self.player)
             pool.append(item)
 
-        helpers_available = max(boon_helpers_needed,0)
-        for amount in range(0, max(boon_helpers_needed,0)):
+        for amount in range(0, max(boon_helpers_needed, 0)):
             item = HadesItem("BoonBoostHelper", self.player)
             pool.append(item)
 
         index = 0
 
-        #Fill traps
-        for amount in range(0,trap_fillers_needed):
+        # Fill traps
+        for amount in range(0, trap_fillers_needed):
             item_name = trap_pool[index]
             item = HadesItem(item_name, self.player)
             pool.append(item)
-            index = (index+1) % len(trap_pool)
+            index = (index + 1) % len(trap_pool)
             
         self.multiworld.itempool += pool
 

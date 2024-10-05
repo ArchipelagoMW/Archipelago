@@ -5,6 +5,7 @@ from Options import Range, Toggle, DeathLink, Choice, StartInventoryPool, PerGam
 
 # -----------------------Settings for Gameplay decisions ---------------
 
+
 class InitialWeapon(Choice):
     """
     Chooses your initial weapon. Note you are not be able to equip the sword in the weapon hub in WeaponSanity until
@@ -18,6 +19,7 @@ class InitialWeapon(Choice):
     option_Fist = 4
     option_Gun = 5
 
+
 class LocationSystem(Choice):
     """
     Chooses how the game gives you items. (1) RoomBased gives items on every new room completed. (2) ScoreBased
@@ -29,19 +31,20 @@ class LocationSystem(Choice):
     option_score_based = 2
     option_room_weapon_based = 3
     default = 1
-    
+
 
 class ScoreRewardsAmount(Range):
     """
-    When using score based system, this sets how many checks are available based on the score. 
-    Each room in hades gives "its depth" in score when completed, and each new check needs one more 
-    point to be unlocked (so check 10 needs 10 points, which can be obtained, for example, 
+    When using score based system, this sets how many checks are available based on the score.
+    Each room in hades gives "its depth" in score when completed, and each new check needs one more
+    point to be unlocked (so check 10 needs 10 points, which can be obtained, for example,
     by completing rooms 5 and 6)
     """
     display_name = "ScoreRewardsAmount"
     range_start = 72
     range_end = 1000
     default = 150
+
 
 class KeepsakeSanity(DefaultOnToggle):
     """
@@ -50,20 +53,23 @@ class KeepsakeSanity(DefaultOnToggle):
     """
     display_name = "KeepsakeSanity"
     
+
 class WeaponSanity(DefaultOnToggle):
     """
-    Shuffles weapons (except your initial weapon) into the item pool, and makes obtaining 
-    each weapon at the House Contractor's shop a check. 
+    Shuffles weapons (except your initial weapon) into the item pool, and makes obtaining
+    each weapon at the House Contractor's shop a check.
     Need to be sent the weapon item to gain the skill to equip them.
     """
     display_name = "WeaponSanity"
     
+
 class HiddenAspectSanity(DefaultOnToggle):
     """
     Shuffles weapon aspects into the item pool, and makes obtaining each aspect a check 
     (which needs to be unlocked before being able to be bought).
     """
     display_name = "HiddenAspectSanity"
+
 
 class StoreSanity(DefaultOnToggle):
     """
@@ -72,6 +78,7 @@ class StoreSanity(DefaultOnToggle):
     """
     display_name = "StoreSanity"
     
+
 class FateSanity(DefaultOnToggle):
     """
     Shuffles most rewards from the Fated List of Prophecies into the item pool, 
@@ -80,8 +87,8 @@ class FateSanity(DefaultOnToggle):
     """
     display_name = "FateSanity"
 
-
 # -------------------- Endgame settings
+
 
 class HadesDefeatsNeeded(Range):
     """
@@ -92,6 +99,7 @@ class HadesDefeatsNeeded(Range):
     range_end = 20
     default = 1
 
+
 class WeaponsClearsNeeded(Range):
     """
     How many different weapons clears are needed to win the world.
@@ -101,6 +109,7 @@ class WeaponsClearsNeeded(Range):
     range_end = 6
     default = 1
     
+
 class KeepsakesNeeded(Range):
     """
     How many different keepsake unlocks are needed to win the world.
@@ -109,6 +118,7 @@ class KeepsakesNeeded(Range):
     range_start = 0
     range_end = 23
     default = 0
+
 
 class FatesNeeded(Range):
     """
@@ -146,6 +156,7 @@ class HardLaborPactAmount(Range):
     range_end = 5
     default = 3
 
+
 class LastingConsequencesPactAmount(Range):
     """
     Choose the amount of Lasting Consequences pacts in the pool.
@@ -154,6 +165,7 @@ class LastingConsequencesPactAmount(Range):
     range_start = 0
     range_end = 4
     default = 2
+
 
 class ConvenienceFeePactAmount(Range):
     """
@@ -164,6 +176,7 @@ class ConvenienceFeePactAmount(Range):
     range_end = 2
     default = 1
 
+
 class JurySummonsPactAmount(Range):
     """
     Choose the amount of Jury Summons pacts in the pool.
@@ -172,6 +185,7 @@ class JurySummonsPactAmount(Range):
     range_start = 0
     range_end = 3
     default = 2
+
 
 class ExtremeMeasuresPactAmount(Range):
     """
@@ -182,6 +196,7 @@ class ExtremeMeasuresPactAmount(Range):
     range_end = 4
     default = 2
 
+
 class CalisthenicsProgramPactAmount(Range):
     """
     Choose the amount of Calisthenics Program pacts in the pool.
@@ -190,6 +205,7 @@ class CalisthenicsProgramPactAmount(Range):
     range_start = 0
     range_end = 2
     default = 1
+
 
 class BenefitsPackagePactAmount(Range):
     """
@@ -200,6 +216,7 @@ class BenefitsPackagePactAmount(Range):
     range_end = 2
     default = 1
 
+
 class MiddleManagementPactAmount(Range):
     """
     Choose the amount of Middle Management pacts in the pool.
@@ -208,6 +225,7 @@ class MiddleManagementPactAmount(Range):
     range_start = 0
     range_end = 1
     default = 1
+
 
 class UnderworldCustomsPactAmount(Range):
     """
@@ -218,6 +236,7 @@ class UnderworldCustomsPactAmount(Range):
     range_end = 1
     default = 1
 
+
 class ForcedOvertimePactAmount(Range):
     """
     Choose the amount of Forced Overtime pacts in the pool.
@@ -226,6 +245,7 @@ class ForcedOvertimePactAmount(Range):
     range_start = 0
     range_end = 2
     default = 1
+
 
 class HeightenedSecurityPactAmount(Range):
     """
@@ -236,6 +256,7 @@ class HeightenedSecurityPactAmount(Range):
     range_end = 1
     default = 1
 
+
 class RoutineInspectionPactAmount(Range):
     """
     Choose the amount of Routine Inspection pacts in the pool.
@@ -244,6 +265,7 @@ class RoutineInspectionPactAmount(Range):
     range_start = 0
     range_end = 4
     default = 3
+
 
 class DamageControlPactAmount(Range):
     """
@@ -254,6 +276,7 @@ class DamageControlPactAmount(Range):
     range_end = 2
     default = 1
 
+
 class ApprovalProcessPactAmount(Range):
     """
     Choose the amount of Approval Process pacts in the pool.
@@ -263,6 +286,7 @@ class ApprovalProcessPactAmount(Range):
     range_end = 2
     default = 1
 
+
 class TightDeadlinePactAmount(Range):
     """
     Choose the amount of Tight Deadline pacts in the pool.
@@ -271,6 +295,7 @@ class TightDeadlinePactAmount(Range):
     range_start = 0
     range_end = 3
     default = 2
+
 
 class PersonalLiabilityPactAmount(Range):
     """
@@ -294,6 +319,7 @@ class DarknessPackValue(Range):
     range_end = 10000
     default = 1000
 
+
 class KeysPackValue(Range):
     """
     Choose the value(amount of Keys) of each Keys pack in the pool.
@@ -303,6 +329,7 @@ class KeysPackValue(Range):
     range_start = 0
     range_end = 500
     default = 20
+
 
 class GemstonesPackValue(Range):
     """
@@ -314,6 +341,7 @@ class GemstonesPackValue(Range):
     range_end = 2500
     default = 100
 
+
 class DiamondsPackValue(Range):
     """
     Choose the value(amount of diamonds) of each diamond pack in the pool. 
@@ -323,6 +351,7 @@ class DiamondsPackValue(Range):
     range_start = 0
     range_end = 100
     default = 15
+
 
 class TitanBloodPackValue(Range):
     """
@@ -334,6 +363,7 @@ class TitanBloodPackValue(Range):
     range_end = 50
     default = 3
 
+
 class NectarPackValue(Range):
     """
     Choose the value(amount of Nectar) of each Nectar pack in the pool. 
@@ -343,6 +373,7 @@ class NectarPackValue(Range):
     range_start = 0
     range_end = 50
     default = 3
+
 
 class AmbrosiaPackValue(Range):
     """
@@ -356,6 +387,7 @@ class AmbrosiaPackValue(Range):
 
 # -----------------------Settings for Helpers -------------------------
 
+
 class FillerHelperPercentage(Range):
     """
     Choose the percentage of filler items in the pool that will be to helpers instead. 
@@ -366,6 +398,7 @@ class FillerHelperPercentage(Range):
     range_end = 100
     default = 0
 
+
 class MaxHealthHelperPercentage(Range):
     """
     Choose the percentage of helper items that will boost your max health.
@@ -374,6 +407,7 @@ class MaxHealthHelperPercentage(Range):
     range_start = 0
     range_end = 100
     default = 35
+
 
 class InitialMoneyHelperPercentage(Range):
     """
@@ -389,6 +423,7 @@ class InitialMoneyHelperPercentage(Range):
 
 # -----------------------Settings for Trap -------------------------
 
+
 class FillerTrapPercentage(Range):
     """
     Choose the percentage of filler items in the pool that will be traps instead. 
@@ -401,6 +436,7 @@ class FillerTrapPercentage(Range):
 
 # -----------------------Settings for QoL -------------------------
 
+
 class ReverseOrderExtremeMeasure(DefaultOnToggle):
     """
     When true the order in which extreme meassures applied is reverse 
@@ -409,11 +445,13 @@ class ReverseOrderExtremeMeasure(DefaultOnToggle):
     """
     display_name = "Reverse Order Extreme Measure"
 
+
 class IgnoreGreeceDeaths(DefaultOnToggle):
     """
     If deaths on Greece are ignored for deathlink. Leave off for the memes.
     """
     display_name = "Ignore Greece Deaths"
+
 
 class StoreGiveHints(DefaultOnToggle):
     """
@@ -421,6 +459,7 @@ class StoreGiveHints(DefaultOnToggle):
     should give a hint for it on the multiworld.
     """
     display_name = "Store Give Hints"
+
 
 class AutomaticRoomsFinishOnHadesDefeat(Toggle):
     """
@@ -444,7 +483,7 @@ class HadesOptions(PerGameCommonOptions):
     hidden_aspectsanity: HiddenAspectSanity
     storesanity: StoreSanity
     fatesanity: FateSanity
-    hades_defeats_needed : HadesDefeatsNeeded
+    hades_defeats_needed: HadesDefeatsNeeded
     weapons_clears_needed: WeaponsClearsNeeded
     keepsakes_needed: KeepsakesNeeded
     fates_needed: FatesNeeded
@@ -483,6 +522,7 @@ class HadesOptions(PerGameCommonOptions):
     death_link: DeathLink
 
 # ------------------------------ Options groups
+
 
 hades_option_groups = [
     OptionGroup("Game Options", [

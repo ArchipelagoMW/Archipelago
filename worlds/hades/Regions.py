@@ -10,40 +10,45 @@ def create_main_weapon_regions(ctx, weaponSubfix, subfixCounter, location_databa
     styx_late = {}
     
     for i in range(13):
-        stringInt=i+1;
-        if stringInt<10:
-            stringInt = "0"+str(stringInt);
-        tartarus["ClearRoom"+str(stringInt)+weaponSubfix] = hades_base_location_id+1073+i+subfixCounter*73
-    tartarus["Beat Meg"+weaponSubfix] = None
+        stringInt = i + 1
+        if stringInt < 10:
+            stringInt = "0" + str(stringInt)
+        tartarus["ClearRoom" + str(stringInt) + weaponSubfix] = hades_base_location_id + 1073 + i + 73 * subfixCounter
+    tartarus["Beat Meg" + weaponSubfix] = None
 
-    for i in range(13,23):
-        asphodel["ClearRoom"+str(i+1)+weaponSubfix]=hades_base_location_id+1073+i+subfixCounter*73
+    for i in range(13, 23):
+        asphodel["ClearRoom" + str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i + 73 * subfixCounter
     
-    asphodel["Beat Lernie"+weaponSubfix] = None
+    asphodel["Beat Lernie" + weaponSubfix] = None
 
-    for i in range(23,35):
-        elysium["ClearRoom"+str(i+1)+weaponSubfix]=hades_base_location_id+1073+i+subfixCounter*73
-    elysium["Beat Bros"+weaponSubfix] = None    
+    for i in range(23, 35):
+        elysium["ClearRoom" + str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i + 73 * subfixCounter
+    elysium["Beat Bros" + weaponSubfix] = None
 
-    for i in range(35,60):
-        styx["ClearRoom"+str(i+1)+weaponSubfix]=hades_base_location_id+1073+i+subfixCounter*73
+    for i in range(35, 60):
+        styx["ClearRoom" + str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i + 73 * subfixCounter
         
-    styx["Beat Hades"+weaponSubfix] = None
+    styx["Beat Hades" + weaponSubfix] = None
 
-    for i in range(60,72):
-        styx_late["ClearRoom"+str(i+1)+weaponSubfix]=hades_base_location_id+1073+i+subfixCounter*73
+    for i in range(60, 72):
+        styx_late["ClearRoom" + str(i + 1) + weaponSubfix] = hades_base_location_id + 1073 + i + 73 * subfixCounter
     
     ctx.multiworld.regions += [
-                create_region(ctx.multiworld, ctx.player, location_database, "Tartarus"+weaponSubfix, 
-                              [location for location in tartarus], ["Exit Tartarus"+weaponSubfix, "DieT"+weaponSubfix]),
-                create_region(ctx.multiworld, ctx.player, location_database, "Asphodel"+weaponSubfix, 
-                              [location for location in asphodel], ["Exit Asphodel"+weaponSubfix, "DieA"+weaponSubfix]),
-                create_region(ctx.multiworld, ctx.player, location_database, "Elysium"+weaponSubfix, 
-                              [location for location in elysium], ["Exit Elysium"+weaponSubfix, "DieE"+weaponSubfix]),
-                create_region(ctx.multiworld, ctx.player, location_database, "Styx"+weaponSubfix,
-                               [location for location in styx], ["DieS"+weaponSubfix, "Late Chambers"+weaponSubfix]),
-                create_region(ctx.multiworld, ctx.player, location_database, "StyxLate"+weaponSubfix, 
-                              [location for location in styx_late], ["DieSL"+weaponSubfix]),
+                create_region(ctx.multiworld, ctx.player, location_database, "Tartarus" + weaponSubfix,
+                              [location for location in tartarus], 
+                              ["Exit Tartarus" + weaponSubfix, "DieT" + weaponSubfix]),
+                create_region(ctx.multiworld, ctx.player, location_database, "Asphodel" + weaponSubfix,
+                              [location for location in asphodel], 
+                              ["Exit Asphodel" + weaponSubfix, "DieA" + weaponSubfix]),
+                create_region(ctx.multiworld, ctx.player, location_database, "Elysium" + weaponSubfix, 
+                              [location for location in elysium], 
+                              ["Exit Elysium" + weaponSubfix, "DieE" + weaponSubfix]),
+                create_region(ctx.multiworld, ctx.player, location_database, "Styx" + weaponSubfix,
+                              [location for location in styx], 
+                              ["DieS" + weaponSubfix, "Late Chambers" + weaponSubfix]),
+                create_region(ctx.multiworld, ctx.player, location_database, "StyxLate" + weaponSubfix, 
+                              [location for location in styx_late],
+                              ["DieSL" + weaponSubfix]),
             ]
     
     tartarus = {}
@@ -60,7 +65,7 @@ def create_regions(ctx, location_database):
         should_ignore_weapon_location, location_store_gemstones, location_store_diamonds, \
         location_table_fates, location_table_fates_events, location_weapons_subfixes
 
-    #create correct underworld exit
+    # create correct underworld exit
     underworldExits = []
     if ctx.options.keepsakesanity:
         underworldExits += ["NPCS"]
@@ -72,13 +77,13 @@ def create_regions(ctx, location_database):
         underworldExits += ["Store Gemstones Entrance"]
         underworldExits += ["Store Diamonds Entrance"]
     
-    #Add fates list for achievement logic and fatesanity if needed
+    # Add fates list for achievement logic and fatesanity if needed
     underworldExits += ["Fated Lists"]
 
     ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "Menu", None, ["Menu"])]    
 
     if ctx.options.location_system == "room_weapon_based":
-        #do as below but per weapons
+        # do as below but per weapons
         subfixCounter = 0
         for weaponSubfix in location_weapons_subfixes:
             underworldExits += ["Zags room"+weaponSubfix]
@@ -88,52 +93,46 @@ def create_regions(ctx, location_database):
         underworldExits += ["Zags room"]
         ctx.multiworld.regions += [
             create_region(ctx.multiworld, ctx.player, location_database, "Tartarus", 
-                        [location for location in location_table_tartarus], ["Exit Tartarus", "DieT"]),
+                          [location for location in location_table_tartarus], ["Exit Tartarus", "DieT"]),
             create_region(ctx.multiworld, ctx.player, location_database, "Asphodel", 
-                        [location for location in location_table_asphodel], ["Exit Asphodel", "DieA"]),
+                          [location for location in location_table_asphodel], ["Exit Asphodel", "DieA"]),
             create_region(ctx.multiworld, ctx.player, location_database, "Elysium", 
-                        [location for location in location_table_elysium], ["Exit Elysium", "DieE"]),
+                          [location for location in location_table_elysium], ["Exit Elysium", "DieE"]),
             create_region(ctx.multiworld, ctx.player, location_database, "Styx", 
-                        [location for location in location_table_styx], ["DieS", "Late Chambers"]),
+                          [location for location in location_table_styx], ["DieS", "Late Chambers"]),
             create_region(ctx.multiworld, ctx.player, location_database, "StyxLate",
-                        [location for location in location_table_styx_late], ["DieSL"]),
+                          [location for location in location_table_styx_late], ["DieSL"]),
         ]
 
-    ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, 
+    ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database,
                                              "Underworld", None, underworldExits)]
 
-    #here we set locations that depend on options
+    # here we set locations that depend on options
     if ctx.options.keepsakesanity:
-        ctx.multiworld.regions += [create_region(ctx.multiworld,
-                                                ctx.player, 
-                                                location_database,
-                                                "KeepsakesLocations", 
-                                                [location for location in location_keepsakes], 
-                                                ["ExitNPCS"])] 
+        ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "KeepsakesLocations", 
+                                                 [location for location in location_keepsakes], ["ExitNPCS"])] 
     
     if ctx.options.weaponsanity:
         weaponChecks = {}
         for weaponLocation, weaponData in location_weapons.items():
             if not should_ignore_weapon_location(weaponLocation, ctx.options):
-                weaponChecks.update({weaponLocation : weaponData})
+                weaponChecks.update({weaponLocation: weaponData})
         ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "WeaponsLocations", 
-                                                [location for location in weaponChecks], ["ExitWeaponCache"])]
+                                                 [location for location in weaponChecks], ["ExitWeaponCache"])]
         
     if ctx.options.storesanity:
         ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "StoreGemstones", 
-                                                [location for location in location_store_gemstones], ["ExitGemStore"])] 
-        ctx.multiworld.regions += [create_region(ctx.multiworld, 
-                                                ctx.player, location_database, 
-                                                "StoreDiamonds", 
-                                                [location for location in location_store_diamonds], 
-                                                ["ExitDiamondStore"])] 
+                                                 [location for location in location_store_gemstones], ["ExitGemStore"])] 
+        ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, 
+                                                 "StoreDiamonds", 
+                                                 [location for location in location_store_diamonds], 
+                                                 ["ExitDiamondStore"])] 
     
     fates_location = location_table_fates_events.copy()
     if ctx.options.fatesanity:
         fates_location.update(location_table_fates)
     ctx.multiworld.regions += [create_region(ctx.multiworld, ctx.player, location_database, "FatedList", 
                                              [location for location in fates_location], ["ExitFatedList"])] 
-
 
     # link up regions
     ctx.multiworld.get_entrance("Menu", ctx.player).connect(ctx.multiworld.get_region("Underworld", ctx.player))
@@ -175,7 +174,7 @@ def create_regions(ctx, location_database):
         ctx.multiworld.get_entrance("DieS", ctx.player).connect(ctx.multiworld.get_region("Underworld", ctx.player))
         ctx.multiworld.get_entrance("DieSL", ctx.player).connect(ctx.multiworld.get_region("Underworld", ctx.player))
 
-    #here we connect locations that depend on options
+    # here we connect locations that depend on options
     if ctx.options.keepsakesanity:
         ctx.multiworld.get_entrance("NPCS", ctx.player).connect(
             ctx.multiworld.get_region("KeepsakesLocations", ctx.player))
@@ -198,7 +197,6 @@ def create_regions(ctx, location_database):
         ctx.multiworld.get_entrance("ExitDiamondStore", ctx.player).connect(
             ctx.multiworld.get_region("Underworld", ctx.player))
         
-    
     ctx.multiworld.get_entrance("Fated Lists", ctx.player).connect(
         ctx.multiworld.get_region("FatedList", ctx.player))
     ctx.multiworld.get_entrance("ExitFatedList", ctx.player).connect(

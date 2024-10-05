@@ -14,21 +14,21 @@ hades_base_item_id = 666100
 
 item_table_pacts: Dict[str, ItemData] = {  
     "HardLaborPactLevel": ItemData(hades_base_item_id, True),
-    "LastingConsequencesPactLevel": ItemData(hades_base_item_id+1, True),
-    "ConvenienceFeePactLevel": ItemData(hades_base_item_id+2, True),
-    "JurySummonsPactLevel": ItemData(hades_base_item_id+3, True),
-    "ExtremeMeasuresPactLevel": ItemData(hades_base_item_id+4, True),
-    "CalisthenicsProgramPactLevel": ItemData(hades_base_item_id+5, True),
-    "BenefitsPackagePactLevel": ItemData(hades_base_item_id+6, True),
-    "MiddleManagementPactLevel": ItemData(hades_base_item_id+7, True),
-    "UnderworldCustomsPactLevel": ItemData(hades_base_item_id+8, True),
-    "ForcedOvertimePactLevel": ItemData(hades_base_item_id+9, True),
-    "HeightenedSecurityPactLevel": ItemData(hades_base_item_id+10, True),
-    "RoutineInspectionPactLevel": ItemData(hades_base_item_id+11, True),
-    "DamageControlPactLevel": ItemData(hades_base_item_id+12, True),
-    "ApprovalProcessPactLevel": ItemData(hades_base_item_id+13, True),
-    "TightDeadlinePactLevel": ItemData(hades_base_item_id+14, True),
-    "PersonalLiabilityPactLevel": ItemData(hades_base_item_id+15, True),  
+    "LastingConsequencesPactLevel": ItemData(hades_base_item_id + 1, True),
+    "ConvenienceFeePactLevel": ItemData(hades_base_item_id + 2, True),
+    "JurySummonsPactLevel": ItemData(hades_base_item_id + 3, True),
+    "ExtremeMeasuresPactLevel": ItemData(hades_base_item_id + 4, True),
+    "CalisthenicsProgramPactLevel": ItemData(hades_base_item_id + 5, True),
+    "BenefitsPackagePactLevel": ItemData(hades_base_item_id + 6, True),
+    "MiddleManagementPactLevel": ItemData(hades_base_item_id + 7, True),
+    "UnderworldCustomsPactLevel": ItemData(hades_base_item_id + 8, True),
+    "ForcedOvertimePactLevel": ItemData(hades_base_item_id + 9, True),
+    "HeightenedSecurityPactLevel": ItemData(hades_base_item_id + 10, True),
+    "RoutineInspectionPactLevel": ItemData(hades_base_item_id + 11, True),
+    "DamageControlPactLevel": ItemData(hades_base_item_id + 12, True),
+    "ApprovalProcessPactLevel": ItemData(hades_base_item_id + 13, True),
+    "TightDeadlinePactLevel": ItemData(hades_base_item_id + 14, True),
+    "PersonalLiabilityPactLevel": ItemData(hades_base_item_id + 15, True),
 }
 
 items_table_event: Dict[str, ItemData] = {
@@ -38,13 +38,13 @@ items_table_event: Dict[str, ItemData] = {
     "HadesVictory": ItemData(None, True, True),
     "HadesVictorySwordWeapon": ItemData(None, True, True),
     "MegVictorySwordWeapon": ItemData(None, True, True),
-    "LernieVictorySwordWeapon" : ItemData(None, True, True),
+    "LernieVictorySwordWeapon": ItemData(None, True, True),
     "BrosVictorySwordWeapon": ItemData(None, True, True),
     "HadesVictoryBowWeapon": ItemData(None, True, True),
     "MegVictoryBowWeapon": ItemData(None, True, True),
     "LernieVictoryBowWeapon": ItemData(None, True, True),
-    "BrosVictoryBowWeapon" : ItemData(None, True, True),
-    "HadesVictorySpearWeapon" : ItemData(None, True, True),
+    "BrosVictoryBowWeapon": ItemData(None, True, True),
+    "HadesVictorySpearWeapon": ItemData(None, True, True),
     "MegVictorySpearWeapon": ItemData(None, True, True),
     "LernieVictorySpearWeapon": ItemData(None, True, True),
     "BrosVictorySpearWeapon": ItemData(None, True, True),
@@ -62,7 +62,7 @@ items_table_event: Dict[str, ItemData] = {
     "BrosVictoryGunWeapon": ItemData(None, True, True),
 }
 
-items_table_fates_completion: Dict[str,ItemData] = {
+items_table_fates_completion: Dict[str, ItemData] = {
     "IsThereNoEscape?EventItem": ItemData(None, True, True),
     "DistantRelativesEventItem": ItemData(None, True, True),
     "ChthonicColleaguesEventItem": ItemData(None, True, True),
@@ -102,94 +102,95 @@ items_table_fates_completion: Dict[str,ItemData] = {
 }
 
 item_table_filler: Dict[str, ItemData] = {
-    "Darkness": ItemData(hades_base_item_id+16, False),
-    "Keys": ItemData(hades_base_item_id+17, False),
-    "Gemstones": ItemData(hades_base_item_id+18, False),
-    "Diamonds": ItemData(hades_base_item_id+19, False),
-    "TitanBlood": ItemData(hades_base_item_id+20, False),
-    "Nectar": ItemData(hades_base_item_id+21, False),
-    "Ambrosia": ItemData(hades_base_item_id+22, False)
+    "Darkness": ItemData(hades_base_item_id + 16, False),
+    "Keys": ItemData(hades_base_item_id + 17, False),
+    "Gemstones": ItemData(hades_base_item_id + 18, False),
+    "Diamonds": ItemData(hades_base_item_id + 19, False),
+    "TitanBlood": ItemData(hades_base_item_id + 20, False),
+    "Nectar": ItemData(hades_base_item_id + 21, False),
+    "Ambrosia": ItemData(hades_base_item_id + 22, False)
 }
 
-item_table_keepsake: Dict[str, ItemData] ={
-    "CerberusKeepsake": ItemData(hades_base_item_id+23, True),
-    "AchillesKeepsake": ItemData(hades_base_item_id+24, True),
-    "NyxKeepsake": ItemData(hades_base_item_id+25, True),
-    "ThanatosKeepsake": ItemData(hades_base_item_id+26, True),
-    "CharonKeepsake": ItemData(hades_base_item_id+27, True),
-    "HypnosKeepsake": ItemData(hades_base_item_id+28, True),
-    "MegaeraKeepsake": ItemData(hades_base_item_id+29, True),
-    "OrpheusKeepsake": ItemData(hades_base_item_id+30, True),
-    "DusaKeepsake": ItemData(hades_base_item_id+31, True),
-    "SkellyKeepsake": ItemData(hades_base_item_id+32, True),
-    "ZeusKeepsake": ItemData(hades_base_item_id+33, True),
-    "PoseidonKeepsake": ItemData(hades_base_item_id+34, True),
-    "AthenaKeepsake": ItemData(hades_base_item_id+35, True),
-    "AphroditeKeepsake": ItemData(hades_base_item_id+36, True),
-    "AresKeepsake": ItemData(hades_base_item_id+37, True),
-    "ArtemisKeepsake": ItemData(hades_base_item_id+38, True),
-    "DionysusKeepsake": ItemData(hades_base_item_id+39, True),
-    "HermesKeepsake": ItemData(hades_base_item_id+40, True),
-    "DemeterKeepsake": ItemData(hades_base_item_id+41, True),
-    "ChaosKeepsake": ItemData(hades_base_item_id+42, True),
-    "SisyphusKeepsake": ItemData(hades_base_item_id+43, True),
-    "EurydiceKeepsake": ItemData(hades_base_item_id+44, True),
-    "PatroclusKeepsake": ItemData(hades_base_item_id+45, True),
+item_table_keepsake: Dict[str, ItemData] = {
+    "CerberusKeepsake": ItemData(hades_base_item_id + 23, True),
+    "AchillesKeepsake": ItemData(hades_base_item_id + 24, True),
+    "NyxKeepsake": ItemData(hades_base_item_id + 25, True),
+    "ThanatosKeepsake": ItemData(hades_base_item_id + 26, True),
+    "CharonKeepsake": ItemData(hades_base_item_id + 27, True),
+    "HypnosKeepsake": ItemData(hades_base_item_id + 28, True),
+    "MegaeraKeepsake": ItemData(hades_base_item_id + 29, True),
+    "OrpheusKeepsake": ItemData(hades_base_item_id + 30, True),
+    "DusaKeepsake": ItemData(hades_base_item_id + 31, True),
+    "SkellyKeepsake": ItemData(hades_base_item_id + 32, True),
+    "ZeusKeepsake": ItemData(hades_base_item_id + 33, True),
+    "PoseidonKeepsake": ItemData(hades_base_item_id + 34, True),
+    "AthenaKeepsake": ItemData(hades_base_item_id + 35, True),
+    "AphroditeKeepsake": ItemData(hades_base_item_id + 36, True),
+    "AresKeepsake": ItemData(hades_base_item_id + 37, True),
+    "ArtemisKeepsake": ItemData(hades_base_item_id + 38, True),
+    "DionysusKeepsake": ItemData(hades_base_item_id + 39, True),
+    "HermesKeepsake": ItemData(hades_base_item_id + 40, True),
+    "DemeterKeepsake": ItemData(hades_base_item_id + 41, True),
+    "ChaosKeepsake": ItemData(hades_base_item_id + 42, True),
+    "SisyphusKeepsake": ItemData(hades_base_item_id + 43, True),
+    "EurydiceKeepsake": ItemData(hades_base_item_id + 44, True),
+    "PatroclusKeepsake": ItemData(hades_base_item_id + 45, True),
 }
 
-item_table_weapons: Dict[str, ItemData] ={
-    "SwordWeaponUnlockItem": ItemData(hades_base_item_id+46, True),
-    "BowWeaponUnlockItem": ItemData(hades_base_item_id+47, True),
-    "SpearWeaponUnlockItem": ItemData(hades_base_item_id+48, True),
-    "ShieldWeaponUnlockItem": ItemData(hades_base_item_id+49, True),
-    "FistWeaponUnlockItem": ItemData(hades_base_item_id+50, True),
-    "GunWeaponUnlockItem": ItemData(hades_base_item_id+51, True),
+item_table_weapons: Dict[str, ItemData] = {
+    "SwordWeaponUnlockItem": ItemData(hades_base_item_id + 46, True),
+    "BowWeaponUnlockItem": ItemData(hades_base_item_id + 47, True),
+    "SpearWeaponUnlockItem": ItemData(hades_base_item_id + 48, True),
+    "ShieldWeaponUnlockItem": ItemData(hades_base_item_id + 49, True),
+    "FistWeaponUnlockItem": ItemData(hades_base_item_id + 50, True),
+    "GunWeaponUnlockItem": ItemData(hades_base_item_id + 51, True),
 }
 
-item_table_store: Dict[str, ItemData] ={
-    "FountainUpgrade1Item": ItemData(hades_base_item_id+52, True),
-    "FountainUpgrade2Item": ItemData(hades_base_item_id+53, True),
-    "FountainTartarusItem": ItemData(hades_base_item_id+54, True),
-    "FountainAsphodelItem": ItemData(hades_base_item_id+55, True),
-    "FountainElysiumItem": ItemData(hades_base_item_id+56, True),
-    "UrnsOfWealth1Item": ItemData(hades_base_item_id+57, True),
-    "UrnsOfWealth2Item": ItemData(hades_base_item_id+58, True),
-    "UrnsOfWealth3Item": ItemData(hades_base_item_id+59, True),
-    "InfernalTrove1Item": ItemData(hades_base_item_id+60, True),
-    "InfernalTrove2Item": ItemData(hades_base_item_id+61, True),
-    "InfernalTrove3Item": ItemData(hades_base_item_id+62, True),
-    "KeepsakeCollectionItem": ItemData(hades_base_item_id+63, True),
-    "DeluxeContractorDeskItem": ItemData(hades_base_item_id+64, True),
-    "VanquishersKeepItem": ItemData(hades_base_item_id+65, True),
-    "FishingRodItem": ItemData(hades_base_item_id+66, True),
-    "CourtMusicianSentenceItem": ItemData(hades_base_item_id+67, True),
-    "CourtMusicianStandItem": ItemData(hades_base_item_id+68, True),
-    "PitchBlackDarknessItem": ItemData(hades_base_item_id+69, True),
-    "FatedKeysItem": ItemData(hades_base_item_id+70, True),
-    "BrilliantGemstonesItem": ItemData(hades_base_item_id+71, True),
-    "VintageNectarItem": ItemData(hades_base_item_id+72, True),
-    "DarkerThirstItem": ItemData(hades_base_item_id+73, True),
+item_table_store: Dict[str, ItemData] = {
+    "FountainUpgrade1Item": ItemData(hades_base_item_id + 52, True),
+    "FountainUpgrade2Item": ItemData(hades_base_item_id + 53, True),
+    "FountainTartarusItem": ItemData(hades_base_item_id + 54, True),
+    "FountainAsphodelItem": ItemData(hades_base_item_id + 55, True),
+    "FountainElysiumItem": ItemData(hades_base_item_id + 56, True),
+    "UrnsOfWealth1Item": ItemData(hades_base_item_id + 57, True),
+    "UrnsOfWealth2Item": ItemData(hades_base_item_id + 58, True),
+    "UrnsOfWealth3Item": ItemData(hades_base_item_id + 59, True),
+    "InfernalTrove1Item": ItemData(hades_base_item_id + 60, True),
+    "InfernalTrove2Item": ItemData(hades_base_item_id + 61, True),
+    "InfernalTrove3Item": ItemData(hades_base_item_id + 62, True),
+    "KeepsakeCollectionItem": ItemData(hades_base_item_id + 63, True),
+    "DeluxeContractorDeskItem": ItemData(hades_base_item_id + 64, True),
+    "VanquishersKeepItem": ItemData(hades_base_item_id + 65, True),
+    "FishingRodItem": ItemData(hades_base_item_id + 66, True),
+    "CourtMusicianSentenceItem": ItemData(hades_base_item_id + 67, True),
+    "CourtMusicianStandItem": ItemData(hades_base_item_id + 68, True),
+    "PitchBlackDarknessItem": ItemData(hades_base_item_id + 69, True),
+    "FatedKeysItem": ItemData(hades_base_item_id + 70, True),
+    "BrilliantGemstonesItem": ItemData(hades_base_item_id + 71, True),
+    "VintageNectarItem": ItemData(hades_base_item_id + 72, True),
+    "DarkerThirstItem": ItemData(hades_base_item_id + 73, True),
 }
 
-item_table_hidden_aspects : Dict[str, ItemData] ={
-    "SwordHiddenAspect" : ItemData(hades_base_item_id+74, True),
-    "BowHiddenAspect": ItemData(hades_base_item_id+75, True),
-    "SpearHiddenAspect": ItemData(hades_base_item_id+76, True),
-    "ShieldHiddenAspect": ItemData(hades_base_item_id+77, True),
-    "FistHiddenAspect": ItemData(hades_base_item_id+78, True),
-    "GunHiddenAspect": ItemData(hades_base_item_id+79, True)
+item_table_hidden_aspects: Dict[str, ItemData] = {
+    "SwordHiddenAspect": ItemData(hades_base_item_id + 74, True),
+    "BowHiddenAspect": ItemData(hades_base_item_id + 75, True),
+    "SpearHiddenAspect": ItemData(hades_base_item_id + 76, True),
+    "ShieldHiddenAspect": ItemData(hades_base_item_id + 77, True),
+    "FistHiddenAspect": ItemData(hades_base_item_id + 78, True),
+    "GunHiddenAspect": ItemData(hades_base_item_id + 79, True)
 }
 
-item_table_traps : Dict[str, ItemData] ={
-    "MoneyPunishment" : ItemData(hades_base_item_id+80, False, False, True),
-    "HealthPunishment": ItemData(hades_base_item_id+81, False, False, True),
+item_table_traps: Dict[str, ItemData] = {
+    "MoneyPunishment": ItemData(hades_base_item_id + 80, False, False, True),
+    "HealthPunishment": ItemData(hades_base_item_id + 81, False, False, True),
 }
 
-item_table_helpers : Dict[str, ItemData] ={
-    "MaxHealthHelper" : ItemData(hades_base_item_id+82, False, False, False),
-    "BoonBoostHelper" : ItemData(hades_base_item_id+83, False, False, False),
-    "InitialMoneyHelper" : ItemData(hades_base_item_id+84, False, False, False),
+item_table_helpers: Dict[str, ItemData] = {
+    "MaxHealthHelper": ItemData(hades_base_item_id + 82, False, False, False),
+    "BoonBoostHelper": ItemData(hades_base_item_id + 83, False, False, False),
+    "InitialMoneyHelper": ItemData(hades_base_item_id + 84, False, False, False),
 }
+
 
 def create_filler_pool_options(options):
     item_filler_options = []
@@ -210,6 +211,7 @@ def create_filler_pool_options(options):
     if not item_filler_options:
         item_filler_options.append("Darkness")
     return item_filler_options
+
 
 def create_trap_pool():
     return [trap for trap in item_table_traps.keys()]
@@ -344,7 +346,6 @@ event_item_pairs_weapon_mode: Dict[str, str] = {
 }
 
 
-
 item_table = {
     **item_table_pacts,
     **items_table_event,
@@ -358,12 +359,12 @@ item_table = {
     **item_table_helpers,
 }
 
-group_pacts = {"pacts":item_table_pacts.keys()}
-group_fillers = {"fillers":item_table_filler.keys()}
-group_contractor = {"contractor":item_table_store.keys()}
-group_weapons = {"weapons":item_table_weapons.keys()}
-group_aspects = {"aspects":item_table_hidden_aspects.keys()}
-group_keepsakes = {"keepsakes":item_table_keepsake.keys()}
+group_pacts = {"pacts": item_table_pacts.keys()}
+group_fillers = {"fillers": item_table_filler.keys()}
+group_contractor = {"contractor": item_table_store.keys()}
+group_weapons = {"weapons": item_table_weapons.keys()}
+group_aspects = {"aspects": item_table_hidden_aspects.keys()}
+group_keepsakes = {"keepsakes": item_table_keepsake.keys()}
 
 item_name_groups = {
     **group_pacts,
@@ -373,6 +374,7 @@ item_name_groups = {
     **group_aspects,
     **group_keepsakes,
 }
+
 
 class HadesItem(Item):
     game = "Hades"
