@@ -15,6 +15,7 @@ import math
 import operator
 import pickle
 import random
+import shlex
 import threading
 import time
 import typing
@@ -65,6 +66,21 @@ def pop_from_container(container, value):
 def update_dict(dictionary, entries):
     dictionary.update(entries)
     return dictionary
+
+
+def queue_gc():
+    import gc
+    from threading import Thread
+
+    gc_thread: typing.Optional[Thread] = getattr(queue_gc, "_thread", None)
+    def async_collect():
+        time.sleep(2)
+        setattr(queue_gc, "_thread", None)
+        gc.collect()
+    if not gc_thread:
+        gc_thread = Thread(target=async_collect)
+        setattr(queue_gc, "_thread", gc_thread)
+        gc_thread.start()
 
 
 # functions callable on storable data on the server by clients
@@ -412,6 +428,8 @@ class Context:
               use_embedded_server_options: bool):
 
         self.read_data = {}
+        # there might be a better place to put this.
+        self.read_data["race_mode"] = lambda: decoded_obj.get("race_mode", 0)
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
@@ -551,6 +569,9 @@ class Context:
                         self.logger.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
                     else:
                         self.save_dirty = False
+                if not atexit_save:  # if atexit is used, that keeps a reference anyway
+                    queue_gc()
+
             self.auto_saver_thread = threading.Thread(target=save_regularly, daemon=True)
             self.auto_saver_thread.start()
 
@@ -991,7 +1012,7 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                     collect_player(ctx, team, group, True)
 
 
-def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
+def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[typing.Tuple[int, int]]:
     return ctx.locations.get_remaining(ctx.location_checks, team, slot)
 
 
@@ -1132,7 +1153,7 @@ class CommandProcessor(metaclass=CommandMeta):
         if not raw:
             return
         try:
-            command = raw.split()
+            command = shlex.split(raw, comments=False)
             basecommand = command[0]
             if basecommand[0] == self.marker:
                 method = self.commands.get(basecommand[1:].lower(), None)
@@ -1203,6 +1224,10 @@ class CommonCommandProcessor(CommandProcessor):
             timer = int(seconds, 10)
         except ValueError:
             timer = 10
+        else:
+            if timer > 60 * 60:
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
+
         async_start(countdown(self.ctx, timer))
         return True
 
@@ -1350,10 +1375,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def _cmd_remaining(self) -> bool:
         """List remaining items in your game, but not their location or recipient"""
         if self.ctx.remaining_mode == "enabled":
-            remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
-            if remaining_item_ids:
-                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[self.client.slot]][item_id]
-                                                            for item_id in remaining_item_ids))
+            rest_locations = get_remaining(self.ctx, self.client.team, self.client.slot)
+            if rest_locations:
+                self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[slot]][item_id]
+                                                            for slot, item_id in rest_locations))
             else:
                 self.output("No remaining items found.")
             return True
@@ -1363,10 +1388,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
         else:  # is goal
             if self.ctx.client_game_state[self.client.team, self.client.slot] == ClientStatus.CLIENT_GOAL:
-                remaining_item_ids = get_remaining(self.ctx, self.client.team, self.client.slot)
-                if remaining_item_ids:
-                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[self.client.slot]][item_id]
-                                                                for item_id in remaining_item_ids))
+                rest_locations = get_remaining(self.ctx, self.client.team, self.client.slot)
+                if rest_locations:
+                    self.output("Remaining items: " + ", ".join(self.ctx.item_names[self.ctx.games[slot]][item_id]
+                                                                for slot, item_id in rest_locations))
                 else:
                     self.output("No remaining items found.")
                 return True
@@ -2039,6 +2064,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
             item_name, usable, response = get_intended_text(item_name, names)
             if usable:
                 amount: int = int(amount)
+                if amount > 100:
+                    raise ValueError(f"{amount} is invalid. Maximum is 100.")
                 new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(int(amount))]
                 send_items_to(self.ctx, team, slot, *new_items)
 
