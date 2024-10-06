@@ -3,7 +3,7 @@ import logging
 import pathlib
 import weakref
 from enum import Enum, auto
-from typing import Optional, Callable, List, Iterable, Tuple
+from typing import Optional, Callable, List, Iterable, Tuple, Union
 
 from Utils import local_path, open_filename
 
@@ -26,13 +26,13 @@ class Component:
     cli: bool
     func: Optional[Callable]
     file_identifier: Optional[Callable[[str], bool]]
-    game_name: Optional[str]
+    game_name: Union[str, List[str]]
     supports_uri: Optional[bool]
 
-    def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
-                 cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
-                 func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False):
+    def __init__(self, display_name: str, game_name: Union[str, List[str]], script_name: Optional[str] = None,
+                 frozen_name: Optional[str] = None, cli: bool = False, icon: str = 'icon',
+                 component_type: Optional[Type] = None, func: Optional[Callable] = None,
+                 file_identifier: Optional[Callable[[str], bool]] = None, supports_uri: Optional[bool] = False):
         self.display_name = display_name
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
@@ -165,39 +165,39 @@ def install_apworld(apworld_path: str = "") -> None:
 
 components: List[Component] = [
     # Launcher
-    Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
+    Component('Launcher', "Archipelago", 'Launcher', component_type=Type.HIDDEN),
     # Core
-    Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
+    Component('Host', "Archipelago", 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
-    Component('Generate', 'Generate', cli=True),
-    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
-    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
-    Component('Links Awakening DX Client', 'LinksAwakeningClient',
+    Component('Generate', "Archipelago", 'Generate', cli=True),
+    Component("Install APWorld", "Archipelago", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
+    Component('Text Client', "Archipelago", 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
+    Component('Links Awakening DX Client', "Links Awakening DX", 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
-    Component('LttP Adjuster', 'LttPAdjuster'),
+    Component('LttP Adjuster', "A Link to the Past", 'LttPAdjuster'),
     # Minecraft
-    Component('Minecraft Client', 'MinecraftClient', icon='mcicon', cli=True,
+    Component('Minecraft Client', "Minecraft", 'MinecraftClient', icon='mcicon', cli=True,
               file_identifier=SuffixIdentifier('.apmc')),
     # Ocarina of Time
-    Component('OoT Client', 'OoTClient',
+    Component('OoT Client', "Ocarina of Time", 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
-    Component('OoT Adjuster', 'OoTAdjuster'),
+    Component('OoT Adjuster', "Ocarina of Time", 'OoTAdjuster'),
     # FF1
-    Component('FF1 Client', 'FF1Client'),
+    Component('FF1 Client', "Final Fantasy", 'FF1Client'),
     # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
+    Component('Zelda 1 Client', "The Legend of Zelda", 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
-    Component('ChecksFinder Client', 'ChecksFinderClient'),
+    Component('ChecksFinder Client', "ChecksFinder", 'ChecksFinderClient'),
     # Starcraft 2
-    Component('Starcraft 2 Client', 'Starcraft2Client'),
+    Component('Starcraft 2 Client', "Starcraft 2", 'Starcraft2Client'),
     # Wargroove
-    Component('Wargroove Client', 'WargrooveClient'),
+    Component('Wargroove Client', "Wargroove", 'WargrooveClient'),
     # Zillion
-    Component('Zillion Client', 'ZillionClient',
+    Component('Zillion Client', "Zillion", 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
 
-    #MegaMan Battle Network 3
-    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
+    # MegaMan Battle Network 3
+    Component('MMBN3 Client', "MegaMan Battle Network 3", 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
 ]
 
 

@@ -31,7 +31,7 @@ from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, SuffixIdentifier
 
 # Adventure
-components.append(Component('Adventure Client', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
+components.append(Component('Adventure Client', 'Adventure', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
 
 
 class AdventureSettings(settings.Group):
