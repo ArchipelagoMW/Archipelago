@@ -12,16 +12,18 @@ from .Options import hades_option_presets, hades_option_groups, HadesOptions
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-
+from worlds.LauncherComponents import icon_paths, Component, components, Type, launch_subprocess
+from Utils import local_path
 
 def launch_client():
     from .Client import launch
     launch_subprocess(launch, "HadesClient")
 
 
+icon_paths['hades_icon'] = local_path('data', 'hades_icon.png')
+
 components.append(Component("Hades Client", "HadesClient",
-                  func=launch_client, component_type=Type.CLIENT))
+                  func=launch_client, component_type=Type.CLIENT, icon='hades_icon'))
 
 
 class HadesSettings(settings.Group):
