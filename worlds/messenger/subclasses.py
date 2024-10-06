@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Region
 from .regions import LOCATIONS, MEGA_SHARDS
@@ -10,14 +10,14 @@ if TYPE_CHECKING:
 
 
 class MessengerEntrance(Entrance):
-    world: Optional["MessengerWorld"] = None
+    world: "MessengerWorld | None" = None
 
 
 class MessengerRegion(Region):
     parent: str
     entrance_type = MessengerEntrance
 
-    def __init__(self, name: str, world: "MessengerWorld", parent: Optional[str] = None) -> None:
+    def __init__(self, name: str, world: "MessengerWorld", parent: str | None = None) -> None:
         super().__init__(name, world.player, world.multiworld)
         self.parent = parent
         locations = []
@@ -48,7 +48,7 @@ class MessengerRegion(Region):
 class MessengerLocation(Location):
     game = "The Messenger"
 
-    def __init__(self, player: int, name: str, loc_id: Optional[int], parent: MessengerRegion) -> None:
+    def __init__(self, player: int, name: str, loc_id: int | None, parent: MessengerRegion) -> None:
         super().__init__(player, name, loc_id, parent)
         if loc_id is None:
             if name == "Rescue Phantom":
@@ -59,7 +59,7 @@ class MessengerLocation(Location):
 class MessengerShopLocation(MessengerLocation):
     @cached_property
     def cost(self) -> int:
-        name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
+        name = self.name.removeprefix("The Shop - ")
         world = self.parent_region.multiworld.worlds[self.player]
         shop_data = SHOP_ITEMS[name]
         if shop_data.prerequisite:
