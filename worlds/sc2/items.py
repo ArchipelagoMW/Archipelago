@@ -214,6 +214,9 @@ item_table = {
     item_names.WARHOUND:
         ItemData(23 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 27, SC2Race.TERRAN,
                  classification=ItemClassification.progression, origin={"ext"}),
+    item_names.DOMINION_TROOPER:
+        ItemData(24 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 4, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     # Elites
     item_names.PRIDE_OF_AUGUSTRGRAD:
         ItemData(50 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 28, SC2Race.TERRAN,
@@ -1020,6 +1023,21 @@ item_table = {
     item_names.EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES:
         ItemData(756 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 10, SC2Race.TERRAN,
                  parent_item=item_names.EMPERORS_SHADOW),
+    item_names.DOMINION_TROOPER_B2_HIGH_CAL_LMG:
+        ItemData(757 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 11, SC2Race.TERRAN,
+                 parent_item=item_names.DOMINION_TROOPER),
+    item_names.DOMINION_TROOPER_HAILSTORM_LAUNCHER:
+        ItemData(758 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 12, SC2Race.TERRAN,
+                 parent_item=item_names.DOMINION_TROOPER),
+    item_names.DOMINION_TROOPER_CPO7_SALAMANDER_FLAMETHROWER:
+        ItemData(759 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 13, SC2Race.TERRAN,
+                 parent_item=item_names.DOMINION_TROOPER),
+    item_names.DOMINION_TROOPER_ADVANCED_ALLOYS:
+        ItemData(760 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 14, SC2Race.TERRAN,
+                 parent_item=item_names.DOMINION_TROOPER),
+    item_names.DOMINION_TROOPER_OPTIMIZED_LOGISTICS:
+        ItemData(761 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 15, SC2Race.TERRAN,
+                 parent_item=item_names.DOMINION_TROOPER, classification=ItemClassification.filler),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:

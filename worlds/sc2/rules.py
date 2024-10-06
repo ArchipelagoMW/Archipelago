@@ -40,7 +40,10 @@ class SC2Logic:
         :return:
         """
         return (
-                state.has_any({item_names.MARINE, item_names.FIREBAT, item_names.MARAUDER, item_names.REAPER, item_names.HELLION}, self.player)
+                state.has_any({
+                    item_names.MARINE, item_names.DOMINION_TROOPER, item_names.FIREBAT, item_names.MARAUDER,
+                    item_names.REAPER, item_names.HELLION
+                }, self.player)
                 or (self.advanced_tactics and state.has_any({item_names.GOLIATH, item_names.DIAMONDBACK, item_names.VIKING, item_names.BANSHEE}, self.player))
         )
 
@@ -75,7 +78,7 @@ class SC2Logic:
         """
         return (
             state.has(item_names.GOLIATH, self.player)
-            or state.has(item_names.MARINE, self.player) and self.terran_bio_heal(state)
+            or state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER}, self.player) and self.terran_bio_heal(state)
             or self.advanced_tactics and state.has(item_names.CYCLONE, self.player)
         )
 
@@ -122,7 +125,7 @@ class SC2Logic:
             and self.terran_competent_ground_to_air(state)
         ) or (
             self.advanced_tactics
-            and state.has_any({item_names.MARINE, item_names.VULTURE}, self.player)
+            and state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.VULTURE}, self.player)
             and self.terran_air_anti_air(state)
         )
 
@@ -137,7 +140,7 @@ class SC2Logic:
                 item_names.MISSILE_TURRET, item_names.THOR, item_names.WAR_PIGS, item_names.SPARTAN_COMPANY,
                 item_names.HELS_ANGELS, item_names.BATTLECRUISER, item_names.MARINE, item_names.WRAITH,
                 item_names.VALKYRIE, item_names.CYCLONE, item_names.WINGED_NIGHTMARES, item_names.BRYNHILDS,
-                item_names.SKY_FURY,
+                item_names.SKY_FURY, item_names.DOMINION_TROOPER
             ), self.player)
             or self.terran_competent_anti_air(state)
             or self.advanced_tactics and (
@@ -163,7 +166,7 @@ class SC2Logic:
         """
         defense_score = sum((tvx_defense_ratings[item] for item in tvx_defense_ratings if state.has(item, self.player)))
         # Manned Bunker
-        if state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player) and state.has(item_names.BUNKER, self.player):
+        if state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player) and state.has(item_names.BUNKER, self.player):
             defense_score += 3
         elif zerg_enemy and state.has(item_names.FIREBAT, self.player) and state.has(item_names.BUNKER, self.player):
             defense_score += 2
@@ -200,7 +203,7 @@ class SC2Logic:
         """
         return (
             (
-                (state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player) and self.terran_bio_heal(state))
+                (state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player) and self.terran_bio_heal(state))
                 or state.has_any({item_names.THOR, item_names.BANSHEE, item_names.SIEGE_TANK}, self.player)
                 or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
             )
@@ -469,7 +472,7 @@ class SC2Logic:
         :return:
         """
         beats_kerrigan = (
-            state.has_any({item_names.MARINE, item_names.BANSHEE, item_names.GHOST}, self.player)
+            state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.BANSHEE, item_names.GHOST}, self.player)
             or state.has_all({item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY}, self.player)
             or self.advanced_tactics
         )
@@ -1036,7 +1039,7 @@ class SC2Logic:
                 or state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.SIEGE_TANK}, self.player)
                 or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
                 or (state.has_any({item_names.IMMORTAL, item_names.STALWART}, self.player)
-                    and state.has_any({item_names.MARINE, item_names.MARAUDER}, self.player)
+                    and state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player)
                     and self.terran_bio_heal(state)
                 )
             )
@@ -1313,7 +1316,7 @@ class SC2Logic:
                 self.advanced_tactics
                 and state.has(item_names.MEDIVAC, self.player)
                 and state.has_any({
-                    item_names.MARINE, item_names.MARAUDER, item_names.VULTURE, item_names.HELLION, item_names.GOLIATH
+                    item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER, item_names.VULTURE, item_names.HELLION, item_names.GOLIATH
                 }, self.player)
             )
         )

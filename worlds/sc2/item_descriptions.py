@@ -153,6 +153,9 @@ item_descriptions = {
     item_names.WARHOUND: inspect.cleandoc("""
         Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
     """),
+    item_names.DOMINION_TROOPER: inspect.cleandoc("""
+        General-purpose infantry. Can be outfitted with weapons for different combat situations.
+    """),
     item_names.PRIDE_OF_AUGUSTRGRAD: "Powerful Royal Guard warship.",
     item_names.SKY_FURY: inspect.cleandoc("""
         Durable Royal Guard support flyer. Loaded with strong anti-capital air missiles. 
@@ -472,6 +475,11 @@ item_descriptions = {
     item_names.VIKING_AESIR_TURBINES: "Increases Viking movement speed by 55%.",
     item_names.MEDIVAC_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.MEDIVAC),
     item_names.EMPERORS_SHADOW_SOVEREIGN_TACTICAL_MISSILES: "Tactical Missile Strikes no longer need to be channeled.",
+    item_names.DOMINION_TROOPER_B2_HIGH_CAL_LMG: "Allows the Troopers to arm with a more powerful weapon, effective against all unit types.",
+    item_names.DOMINION_TROOPER_HAILSTORM_LAUNCHER: "Allows the Troopers to arm with a more powerful weapon, especially effective against armored air units.",
+    item_names.DOMINION_TROOPER_CPO7_SALAMANDER_FLAMETHROWER: "Allows the Troopers to arm with a more powerful weapon, especially effective against light ground units.",
+    item_names.DOMINION_TROOPER_ADVANCED_ALLOYS: "Dominion Trooper advanced weapons are dropped on ground on death to be able to be picked up by an another Dominion Trooper.",
+    item_names.DOMINION_TROOPER_OPTIMIZED_LOGISTICS: "Increases Dominion Trooper training speed.",
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
     item_names.SENSOR_TOWER: "Reveals locations of enemy units at long range.",

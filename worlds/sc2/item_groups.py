@@ -190,7 +190,7 @@ item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrad
 item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
     item_names.MARINE, item_names.MEDIC, item_names.FIREBAT, item_names.MARAUDER,
     item_names.REAPER, item_names.GHOST, item_names.SPECTRE, item_names.HERC, item_names.AEGIS_GUARD,
-    item_names.EMPERORS_SHADOW,
+    item_names.EMPERORS_SHADOW, item_names.DOMINION_TROOPER,
 ]
 item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
     item_names.HELLION, item_names.VULTURE, item_names.GOLIATH, item_names.DIAMONDBACK,
