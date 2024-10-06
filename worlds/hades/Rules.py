@@ -68,17 +68,17 @@ class HadesLogic(LogicMixin):
         if not option.weaponsanity:
             return True
         if weaponSubfix == "Sword Weapon":
-            return ((option.initial_weapon == "Sword") or (self.has("Sword Weapon Unlock Item", player)))
+            return ((option.initial_weapon == 0) or (self.has("Sword Weapon Unlock Item", player)))
         if weaponSubfix == "Bow Weapon":
-            return ((option.initial_weapon == "Bow") or (self.has("Bow Weapon Unlock Item", player)))
+            return ((option.initial_weapon == 1) or (self.has("Bow Weapon Unlock Item", player)))
         if weaponSubfix == "Spear Weapon":
-            return ((option.initial_weapon == "Spear") or (self.has("Spear Weapon Unlock Item", player)))
+            return ((option.initial_weapon == 2) or (self.has("Spear Weapon Unlock Item", player)))
         if weaponSubfix == "Shield Weapon":
-            return ((option.initial_weapon == "Shield") or (self.has("Shield Weapon Unlock Item", player)))
+            return ((option.initial_weapon == 3) or (self.has("Shield Weapon Unlock Item", player)))
         if weaponSubfix == "Fist Weapon":
-            return ((option.initial_weapon == "Fist") or (self.has("Fist Weapon Unlock Item", player)))
+            return ((option.initial_weapon == 4) or (self.has("Fist Weapon Unlock Item", player)))
         if weaponSubfix == "Gun Weapon":
-            return ((option.initial_weapon == "Gun") or (self.has("Gun Weapon Unlock Item", player)))
+            return ((option.initial_weapon == 5) or (self.has("Gun Weapon Unlock Item", player)))
 
     def _can_get_victory(self, player: int, options) -> bool:
         can_win = self._has_defeated_boss("Hades Victory", player, options)
@@ -218,7 +218,7 @@ def set_store_rules(world: "HadesWorld", player: int, location_table, options):
             state._has_defeated_boss("Lernie Victory", player, options))
     
     #Urns
-    set_rule(world.get_location("Urns OfWealth1 Location", player), lambda state:  \
+    set_rule(world.get_location("Urns Of Wealth1 Location", player), lambda state:  \
              state.has("Fountain Tartarus Item", player))
     set_rule(world.get_location("Urns Of Wealth2 Location", player), lambda state: state._has_enough_urns(player,1))
     set_rule(world.get_location("Urns Of Wealth3 Location", player), lambda state: state._has_enough_urns(player,2))
@@ -296,22 +296,22 @@ def set_fates_rules(world: "HadesWorld", player: int, location_table, options, s
             state._has_enough_weapons(player, options, 6))
     set_rule(world.get_location("Master Of Arms" + subfix, player), lambda state:  \
             state._has_enough_weapons(player, options, 6) and  \
-            state._has_defeated_boss("HadesVictory", player, options))
+            state._has_defeated_boss("Hades Victory", player, options))
    
     #rules that depend on weaponsanity:
     if options.weaponsanity:
         set_rule(world.get_location("The Stygian Blade" + subfix, player), lambda state: \
-                state.has("Sword Weapon Unlock Item", player) or options.initial_weapon == "Sword")
+                state.has("Sword Weapon Unlock Item", player) or options.initial_weapon == 0)
         set_rule(world.get_location("The Heart Seeking Bow" + subfix, player), lambda state: \
-                state.has("Bow Weapon Unlock Item", player) or options.initial_weapon == "Bow")
+                state.has("Bow Weapon Unlock Item", player) or options.initial_weapon == 1)
         set_rule(world.get_location("The Eternal Spear" + subfix, player), lambda state: \
-                state.has("Spear Weapon Unlock Item", player) or options.initial_weapon == "Spear")
+                state.has("Spear Weapon Unlock Item", player) or options.initial_weapon == 2)
         set_rule(world.get_location("The Shield Of Chaos" + subfix, player), lambda state: \
-                state.has("Shield Weapon Unlock Item", player) or options.initial_weapon == "Shield")
+                state.has("Shield Weapon Unlock Item", player) or options.initial_weapon == 3)
         set_rule(world.get_location("The Twin Fists" + subfix, player), lambda state: \
-                state.has("Fist Weapon Unlock Item", player) or options.initial_weapon == "Fist")
+                state.has("Fist Weapon Unlock Item", player) or options.initial_weapon == 4)
         set_rule(world.get_location("The Adamant Rail" + subfix, player), lambda state: \
-                state.has("Gun Weapon Unlock Item", player) or options.initial_weapon == "Gun")
+                state.has("Gun Weapon Unlock Item", player) or options.initial_weapon == 5)
         
     if options.keepsakesanity:
         set_rule(world.get_location("Close At Heart" + subfix, player), lambda state: \
@@ -321,7 +321,7 @@ def set_fates_rules(world: "HadesWorld", player: int, location_table, options, s
                 state.has("Athena Keepsake", player))
         set_rule(world.get_location("God Of The Heavens" + subfix, player), lambda state: \
                 state.has("Zeus Keepsake", player))
-        set_rule(world.get_location("God Of TheSea" + subfix, player), lambda state: \
+        set_rule(world.get_location("God Of The Sea" + subfix, player), lambda state: \
                 state.has("Poseidon Keepsake", player))
         set_rule(world.get_location("Goddess Of Love" + subfix, player), lambda state: \
                 state.has("Aphrodite Keepsake", player))

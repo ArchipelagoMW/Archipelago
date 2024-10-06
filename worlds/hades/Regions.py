@@ -174,7 +174,7 @@ def create_regions(ctx, location_database):
             ctx.multiworld.get_region("Styx Late", ctx.player))
         ctx.multiworld.get_entrance("Die Tartarus", ctx.player).connect(
             ctx.multiworld.get_region("Underworld", ctx.player))
-        ctx.multiworld.get_entrance("Die Ashodel", ctx.player).connect(
+        ctx.multiworld.get_entrance("Die Asphodel", ctx.player).connect(
             ctx.multiworld.get_region("Underworld", ctx.player))    
         ctx.multiworld.get_entrance("Die Elysium", ctx.player).connect(
             ctx.multiworld.get_region("Underworld", ctx.player))

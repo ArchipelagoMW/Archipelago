@@ -48,7 +48,7 @@ class HadesContext(CommonContext):
     deathlink_enabled = False
     is_connected = False
     is_receiving_items_from_connect_package = False
-    polycosmos_version = "0.12"
+    polycosmos_version = "pre-0.13"
     compact_setting_string = ""
 
     def __init__(self, server_address, password):

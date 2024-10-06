@@ -240,10 +240,10 @@ def create_pact_pool_amount(options) -> Dict[str, int]:
 
 
 event_item_pairs: Dict[str, str] = {
-    "Beat Hades": "HadesVictory",
-    "Beat Meg": "MegVictory",
-    "Beat Lernie": "LernieVictory",
-    "Beat Bros": "BrosVictory",
+    "Beat Hades": "Hades Victory",
+    "Beat Meg": "Meg Victory",
+    "Beat Lernie": "Lernie Victory",
+    "Beat Bros": "Bros Victory",
     "Is There No Escape? Event": "Is There No Escape? Event Item",
     "Distant Relatives Event": "Distant Relatives Event Item",
     "Chthonic Colleagues Event": "Chthonic Colleagues Event Item",

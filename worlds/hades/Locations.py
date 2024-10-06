@@ -131,13 +131,13 @@ location_table_fates = {
     "Customer Loyalty": max_number_room_checks + 85,
     "Dark Reflections": max_number_room_checks + 86,
     "Close At Heart": max_number_room_checks + 87,
-    "Denizens Of TheDeep": max_number_room_checks + 88,
+    "Denizens Of The Deep": max_number_room_checks + 88,
     "The Useless Trinket": max_number_room_checks + 89,
 }
 
 
 location_table_fates_events = {
-    "Is There NoEscape? Event": None,
+    "Is There No Escape? Event": None,
     "Distant Relatives Event": None,
     "Chthonic Colleagues Event": None,
     "The Reluctant Musician Event": None,
