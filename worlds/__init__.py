@@ -73,7 +73,12 @@ class WorldSource:
                 else:  # TODO: remove with 3.8 support
                     mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0])
 
-                mod.__package__ = f"worlds.{mod.__package__}"
+                if mod.__package__ is not None:
+                    mod.__package__ = f"worlds.{mod.__package__}"
+                else:
+                    # load_module does not populate package, we'll have to assume mod.__name__ is correct here
+                    # probably safe to remove with 3.8 support
+                    mod.__package__ = f"worlds.{mod.__name__}"
                 mod.__name__ = f"worlds.{mod.__name__}"
                 sys.modules[mod.__name__] = mod
                 with warnings.catch_warnings():
@@ -128,3 +133,4 @@ from .AutoWorld import AutoWorldRegister
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
+

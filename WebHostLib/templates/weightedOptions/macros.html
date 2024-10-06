@@ -19,7 +19,7 @@
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
                     {% if option.default != 'random' %}
-                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name else None) }}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
                     {% else %}
                         {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
                     {% endif %}
@@ -41,7 +41,7 @@
             The following values have special meanings, and may fall outside the normal range.
             <ul>
                 {% for name, value in option.special_range_names.items() %}
-                    <li>{{ value }}: {{ name }}</li>
+                    <li>{{ value }}: {{ name|replace("_", " ")|title }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -97,7 +97,7 @@
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
                     {% if option.default != 'random' %}
-                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name else None) }}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
                     {% else %}
                         {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
                     {% endif %}
@@ -138,7 +138,7 @@
                     id="{{ option_name }}-{{ key }}"
                     name="{{ option_name }}||{{ key }}"
                     value="1"
-                    checked="{{ "checked" if key in option.default else "" }}"
+                    {{ "checked" if key in option.default }}
                 />
                 <label for="{{ option_name }}-{{ key }}">
                     {{ key }}

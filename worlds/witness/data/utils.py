@@ -1,7 +1,9 @@
 from math import floor
 from pkgutil import get_data
-from random import random
-from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple
+from random import Random
+from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
+
+T = TypeVar("T")
 
 # A WitnessRule is just an or-chain of and-conditions.
 # It represents the set of all options that could fulfill this requirement.
@@ -11,9 +13,14 @@ from typing import Any, Collection, Dict, FrozenSet, Iterable, List, Set, Tuple
 WitnessRule = FrozenSet[FrozenSet[str]]
 
 
-def weighted_sample(world_random: random, population: List, weights: List[float], k: int) -> List:
+def cast_not_none(value: Optional[T]) -> T:
+    assert value is not None
+    return value
+
+
+def weighted_sample(world_random: Random, population: List[T], weights: List[float], k: int) -> List[T]:
     positions = range(len(population))
-    indices = []
+    indices: List[int] = []
     while True:
         needed = k - len(indices)
         if not needed:
@@ -82,13 +89,13 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
     region_obj = {
         "name": region_name,
         "shortName": region_name_simple,
-        "entities": list(),
-        "physical_entities": list(),
+        "entities": [],
+        "physical_entities": [],
     }
     return region_obj, options
 
 
-def parse_lambda(lambda_string) -> WitnessRule:
+def parse_lambda(lambda_string: str) -> WitnessRule:
     """
     Turns a lambda String literal like this: a | b & c
     into a set of sets like this: {{a}, {b, c}}
@@ -97,18 +104,18 @@ def parse_lambda(lambda_string) -> WitnessRule:
     if lambda_string == "True":
         return frozenset([frozenset()])
     split_ands = set(lambda_string.split(" | "))
-    lambda_set = frozenset({frozenset(a.split(" & ")) for a in split_ands})
-
-    return lambda_set
+    return frozenset({frozenset(a.split(" & ")) for a in split_ands})
 
 
-_adjustment_file_cache = dict()
+_adjustment_file_cache = {}
 
 
 def get_adjustment_file(adjustment_file: str) -> List[str]:
     if adjustment_file not in _adjustment_file_cache:
-        data = get_data(__name__, adjustment_file).decode("utf-8")
-        _adjustment_file_cache[adjustment_file] = [line.strip() for line in data.split("\n")]
+        data = get_data(__name__, adjustment_file)
+        if data is None:
+            raise FileNotFoundError(f"Could not find {adjustment_file}")
+        _adjustment_file_cache[adjustment_file] = [line.strip() for line in data.decode("utf-8").split("\n")]
 
     return _adjustment_file_cache[adjustment_file]
 
@@ -201,12 +208,20 @@ def get_elevators_come_to_you() -> List[str]:
     return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
 
 
+def get_entity_hunt() -> List[str]:
+    return get_adjustment_file("settings/Entity_Hunt.txt")
+
+
 def get_sigma_normal_logic() -> List[str]:
     return get_adjustment_file("WitnessLogic.txt")
 
 
 def get_sigma_expert_logic() -> List[str]:
     return get_adjustment_file("WitnessLogicExpert.txt")
+
+
+def get_umbra_variety_logic() -> List[str]:
+    return get_adjustment_file("WitnessLogicVariety.txt")
 
 
 def get_vanilla_logic() -> List[str]:
@@ -237,7 +252,7 @@ def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRu
     A logical formula might look like this: {{a, b}, {c, d}}, which would mean "a & b | c & d".
     These can be easily and-ed by just using the boolean distributive law: (a | b) & c = a & c | a & b.
     """
-    current_overall_requirement = frozenset({frozenset()})
+    current_overall_requirement: FrozenSet[FrozenSet[str]] = frozenset({frozenset()})
 
     for next_dnf_requirement in witness_rules:
         new_requirement: Set[FrozenSet[str]] = set()
