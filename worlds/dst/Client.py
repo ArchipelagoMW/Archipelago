@@ -248,9 +248,9 @@ class DSTContext(CommonContext):
                 await self.send_msgs([{"cmd": "LocationChecks", "locations": self.locations_checked}])
 
             elif eventtype == "Hint": #I think this should be deterministic enough for races, does not account for manual hints
-                random.seed(self.seed_name + str(self.slot))
                 if len(self.missing_locations):
                     valid = list(self.missing_locations.difference(self.locations_scouted))
+                    random.seed(self.seed_name + str(self.slot) + str(len(valid)))
                     valid.sort()
                     if len(valid):
                         hint = random.choice(valid)
