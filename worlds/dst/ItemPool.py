@@ -16,6 +16,10 @@ class DSTItemPool:
         "Before generating, decide what items go in itempool categories"
         options:DSTOptions = world.options
         self.nonfiller_itempool = list()
+        self.filler_items = list()
+        self.trap_items = list()
+        self.seasontrap_items = list()
+        self.locked_items_local_id = set()
         start_inventory:FrozenSet = frozenset(options.start_inventory.value.keys())
         nonshuffled:FrozenSet = frozenset() # TODO: Support for nonshuffled options
         for name, item in item_data_table.items():
