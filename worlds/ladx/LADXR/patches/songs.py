@@ -72,6 +72,10 @@ def upgradeMarin(rom):
         rst  8
     """), fill_nop=True)
 
+    # Load marin singing even if you have the marin date
+    rom.patch(0x03, 0x0A91, ASM("jp nz, $3F8D"), "", fill_nop=True)
+    rom.patch(0x05, 0x0E6E, ASM("jp nz, $7B4B"), "", fill_nop=True)
+
 
 def upgradeManbo(rom):
     # Instead of checking if we have the song, check if we have a specific room flag set

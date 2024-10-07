@@ -61,9 +61,9 @@ class World:
         self._addEntrance("banana_seller", sword_beach, banana_seller, r.bush)
         boomerang_cave = Location("Boomerang Cave")
         if options.boomerang == 'trade':
-            Location().add(BoomerangGuy()).connect(boomerang_cave, OR(BOOMERANG, HOOKSHOT, MAGIC_ROD, PEGASUS_BOOTS, FEATHER, SHOVEL))
+            Location().add(BoomerangGuy()).connect(boomerang_cave, AND(r.shuffled_magnifier), OR(BOOMERANG, HOOKSHOT, MAGIC_ROD, PEGASUS_BOOTS, FEATHER, SHOVEL))
         elif options.boomerang == 'gift':
-            Location().add(BoomerangGuy()).connect(boomerang_cave, None)
+            Location().add(BoomerangGuy()).connect(boomerang_cave, r.shuffled_magnifier)
         self._addEntrance("boomerang_cave", sword_beach, boomerang_cave, BOMB)
         self._addEntranceRequirementExit("boomerang_cave", None) # if exiting, you do not need bombs
 
@@ -167,7 +167,9 @@ class World:
         prairie_island_seashell = Location().add(Seashell(0x0A6)).connect(ukuku_prairie, AND(FLIPPERS, r.bush))  # next to lv3
         Location().add(Seashell(0x08B)).connect(ukuku_prairie, r.bush)  # next to seashell house
         Location().add(Seashell(0x0A4)).connect(ukuku_prairie, PEGASUS_BOOTS)  # smash into tree next to phonehouse
-        self._addEntrance("castle_jump_cave", ukuku_prairie, Location().add(Chest(0x1FD)), OR(AND(FEATHER, PEGASUS_BOOTS), ROOSTER)) # left of the castle, 5 holes turned into 3
+        self._addEntrance("castle_jump_cave", ukuku_prairie, Location().add(Chest(0x1FD)), ROOSTER)
+        if not options.rooster:
+            self._addEntranceRequirement("castle_jump_cave", AND(FEATHER, PEGASUS_BOOTS)) # left of the castle, 5 holes turned into 3
         Location().add(Seashell(0x0B9)).connect(ukuku_prairie, POWER_BRACELET)  # under the rock
 
         left_bay_area = Location()
@@ -379,7 +381,9 @@ class World:
         self._addEntrance("rooster_house", outside_rooster_house, None, None)
         bird_cave = Location()
         bird_key = Location().add(BirdKey())
-        bird_cave.connect(bird_key, OR(AND(FEATHER, COUNT(POWER_BRACELET, 2)), ROOSTER))
+        bird_cave.connect(bird_key, ROOSTER)
+        if not options.rooster:
+            bird_cave.connect(bird_key, AND(FEATHER, COUNT(POWER_BRACELET, 2))) # elephant statue added
         if options.logic != "casual":
             bird_cave.connect(lower_right_taltal, None, one_way=True)  # Drop in a hole at bird cave
         self._addEntrance("bird_cave", outside_rooster_house, bird_cave, None)
@@ -476,9 +480,10 @@ class World:
             castle_inside.connect(kanalet_chain_trooper, BOOMERANG, one_way=True) # kill the ball and chain trooper from the left side, then use boomerang to grab the dropped item
             animal_village_bombcave_heartpiece.connect(animal_village_bombcave, AND(PEGASUS_BOOTS, FEATHER)) # jump across horizontal 4 gap to heart piece
             desert_lanmola.connect(desert, BOMB) # use bombs to kill lanmola
-            
+
             d6_connector_left.connect(d6_connector_right, AND(OR(FLIPPERS, PEGASUS_BOOTS), FEATHER))  # jump the gap in underground passage to d6 left side to skip hookshot
-            bird_key.connect(bird_cave, COUNT(POWER_BRACELET, 2))  # corner walk past the one pit on the left side to get to the elephant statue
+            if not options.rooster:
+                bird_key.connect(bird_cave, COUNT(POWER_BRACELET, 2))  # corner walk past the one pit on the left side to get to the elephant statue
             fire_cave_bottom.connect(fire_cave_top, PEGASUS_BOOTS, one_way=True) # flame skip
 
         if options.logic == 'glitched' or options.logic == 'hell':
