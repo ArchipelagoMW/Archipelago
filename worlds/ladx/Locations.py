@@ -26,12 +26,36 @@ def meta_to_name(meta):
     return f"{meta.name} ({meta.area})"
 
 def get_location_name_groups() -> typing.Dict[str, typing.Set[str]]:
-    ret = {}
+    groups = {
+        "Instrument Pedestals": {
+            "Full Moon Cello (Tail Cave)",
+            "Conch Horn (Bottle Grotto)",
+            "Sea Lily's Bell (Key Cavern)",
+            "Surf Harp (Angler's Tunnel)",
+            "Wind Marimba (Catfish's Maw)",
+            "Coral Triangle (Face Shrine)",
+            "Organ of Evening Calm (Eagle's Tower)",
+            "Thunder Drum (Turtle Rock)",
+        },
+        "Boss Rewards": {
+            "Moldorm Heart Container (Tail Cave)",
+            "Genie Heart Container (Bottle Grotto)",
+            "Slime Eye Heart Container (Key Cavern)",
+            "Angler Fish Heart Container (Angler's Tunnel)",
+            "Slime Eel Heart Container (Catfish's Maw)",
+            "Facade Heart Container (Face Shrine)",
+            "Evil Eagle Heart Container (Eagle's Tower)",
+            "Hot Head Heart Container (Turtle Rock)",
+            "Tunic Fairy Item 1 (Color Dungeon)",
+            "Tunic Fairy Item 2 (Color Dungeon)",
+        },
+    }
+    # Add region groups
     for s, v in checkMetadataTable.items():
         if s == "None":
             continue
-        ret.setdefault(v.area, set()).add(meta_to_name(v))
-    return ret
+        groups.setdefault(v.area, set()).add(meta_to_name(v))
+    return groups
 
 links_awakening_location_name_groups = get_location_name_groups()
 
