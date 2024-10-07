@@ -423,7 +423,7 @@ class GauntletLegendsContext(CommonContext):
                         item.count = count
                     elif "Health" in name:
                         max_health = await self.item_from_name("Max", player)
-                        item.count = min(max(item.count + count, 0), max_health.count)
+                        item.count = min(max(item.count + count, 1), max_health.count)
                     elif "Runestone" in name or "Mirror" in name or "Obelisk" in name:
                         item.count |= count
                     else:
@@ -966,20 +966,17 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 await asyncio.sleep(0.1)
             except TimeoutError:
                 logger.info("Connection Timed Out, Reconnecting")
-                ctx.var_reset()
                 ctx.socket = RetroSocket()
                 ctx.retro_connected = False
                 await asyncio.sleep(2)
             except ConnectionResetError:
                 logger.info("Connection Lost, Reconnecting")
-                ctx.var_reset()
                 ctx.socket = RetroSocket()
                 ctx.retro_connected = False
                 await asyncio.sleep(2)
             except Exception as e:
                 logger.error(f"Unknown Error Occurred: {e}")
                 logger.info(traceback.format_exc())
-                ctx.var_reset()
                 ctx.socket = RetroSocket()
                 ctx.retro_connected = False
                 await asyncio.sleep(2)
