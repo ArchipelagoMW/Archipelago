@@ -1,7 +1,5 @@
 ==Tutorial (Inside)==
 
-Menu (Menu) - Entry - True:
-
 Entry (Entry):
 
 Tutorial First Hallway (Tutorial First Hallway) - Entry - True - Tutorial First Hallway Room - 0x00064:

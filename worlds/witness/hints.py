@@ -250,8 +250,11 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
             elif group_type == "Group":
                 location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
             elif group_type == "Region":
-                if chosen_group == "Menu":
-                    location_name = f"a location near the start of {player_name}'s game (\"Menu\" region)"
+                origin_region_name = world.multiworld.worlds[hint.location.player].origin_region_name
+                if chosen_group == origin_region_name:
+                    location_name = (
+                        f"a location in the origin region of {player_name}'s world (\"{origin_region_name}\" region)"
+                    )
                 else:
                     location_name = f"a location in {player_name}'s \"{chosen_group}\" region"
 

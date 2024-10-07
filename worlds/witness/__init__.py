@@ -50,6 +50,8 @@ class WitnessWorld(World):
     topology_present = False
     web = WitnessWebWorld()
 
+    origin_region_name = "Entry"
+
     options_dataclass = TheWitnessOptions
     options: TheWitnessOptions
 
