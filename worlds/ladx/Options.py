@@ -501,6 +501,14 @@ class AdditionalWarpPoints(DefaultOffToggle):
     """
     display_name = "Additional Warp Points"
 
+
+class StabilizeItemPool(DefaultOffToggle):
+    """
+    By default, rupees in the item pool may be randomly swapped with bombs, arrows, powders, or capacity upgrades. This option disables that swapping, which is useful for plando.
+    """
+    display_name = "Stabilize Item Pool"
+
+
 ladx_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -523,6 +531,7 @@ ladx_option_groups = [
         Rooster,
         TrendyGame,
         NagMessages,
+        StabilizeItemPool,
         BootsControls
     ]),
     OptionGroup("Experimental", [
@@ -579,3 +588,4 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    stabilize_item_pool: StabilizeItemPool
