@@ -748,7 +748,7 @@ def generate_output(self, output_directory: str) -> None:
 
 ### Slot Data
 
-If a game client (including other clients, trackers, etc.) needs to know information about the generated seed, a 
+If a client or tracker needs to know information about the generated seed, a 
 preferred method of transferring the data is through the slot data. This is filled with the `fill_slot_data` method of 
 your world by returning a `dict` with `str` keys that can be serialized with json.
 However, in order to not waste resources, it should be limited to data that is absolutely necessary, be it for the 
