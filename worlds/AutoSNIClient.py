@@ -60,8 +60,11 @@ class AutoSNIClientRegister(abc.ABCMeta):
     @staticmethod
     async def get_handler(ctx: SNIContext) -> Optional[SNIClient]:
         for _game, handler in AutoSNIClientRegister.game_handlers.items():
-            if await handler.validate_rom(ctx):
-                return handler
+            try:
+                if await handler.validate_rom(ctx):
+                    return handler
+            except Exception:
+                pass
         return None
 
 
