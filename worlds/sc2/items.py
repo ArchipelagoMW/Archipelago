@@ -1025,13 +1025,13 @@ item_table = {
                  parent_item=item_names.EMPERORS_SHADOW),
     item_names.DOMINION_TROOPER_B2_HIGH_CAL_LMG:
         ItemData(757 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 11, SC2Race.TERRAN,
-                 parent_item=item_names.DOMINION_TROOPER),
+                 parent_item=item_names.DOMINION_TROOPER, important_for_filtering=True),
     item_names.DOMINION_TROOPER_HAILSTORM_LAUNCHER:
         ItemData(758 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 12, SC2Race.TERRAN,
-                 parent_item=item_names.DOMINION_TROOPER),
+                 parent_item=item_names.DOMINION_TROOPER, important_for_filtering=True),
     item_names.DOMINION_TROOPER_CPO7_SALAMANDER_FLAMETHROWER:
         ItemData(759 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 13, SC2Race.TERRAN,
-                 parent_item=item_names.DOMINION_TROOPER),
+                 parent_item=item_names.DOMINION_TROOPER, important_for_filtering=True),
     item_names.DOMINION_TROOPER_ADVANCED_ALLOYS:
         ItemData(760 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 14, SC2Race.TERRAN,
                  parent_item=item_names.DOMINION_TROOPER),

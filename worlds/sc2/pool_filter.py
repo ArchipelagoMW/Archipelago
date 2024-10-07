@@ -274,6 +274,15 @@ class ValidInventory:
             inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
             unused_items = [item_name for item_name in unused_items if item_name !=item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
             locked_items = [item for item in locked_items if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+        # No weapon upgrades for Dominion Trooper -> drop weapon is useless
+        if not {
+            item_names.DOMINION_TROOPER_B2_HIGH_CAL_LMG,
+            item_names.DOMINION_TROOPER_HAILSTORM_LAUNCHER,
+            item_names.DOMINION_TROOPER_CPO7_SALAMANDER_FLAMETHROWER
+        } & logical_inventory_set:
+            inventory = [item for item in inventory if item.name != item_names.DOMINION_TROOPER_ADVANCED_ALLOYS]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.DOMINION_TROOPER_ADVANCED_ALLOYS]
+            locked_items = [item for item in locked_items if item.name != item_names.DOMINION_TROOPER_ADVANCED_ALLOYS]
 
         # HotS
         # Baneling without sources => remove Baneling and upgrades
