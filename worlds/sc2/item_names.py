@@ -43,6 +43,7 @@ SHOCK_DIVISION       = "Shock Division"
 BLACKHAMMER          = "Blackhammer"
 AEGIS_GUARD          = "Aegis Guard"
 EMPERORS_SHADOW      = "Emperor's Shadow"
+SON_OF_KORHAL        = "Son Of Korhal"
 
 # Terran Buildings
 BUNKER                              = "Bunker"
