@@ -532,13 +532,13 @@ class World(metaclass=AutoWorldRegister):
 
     # convenience methods
     def get_location(self, location_name: str) -> "Location":
-        return self.regions.location_cache[location_name]
+        return self.regions.get_location(location_name)
 
     def get_entrance(self, entrance_name: str) -> "Entrance":
-        return self.regions.entrance_cache[entrance_name]
+        return self.regions.get_entrance(entrance_name)
 
     def get_region(self, region_name: str) -> "Region":
-        return self.regions.region_cache[region_name]
+        return self.regions.get_region(region_name)
 
     @property
     def player_name(self) -> str:
