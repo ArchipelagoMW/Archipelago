@@ -684,6 +684,20 @@ class Range(NumericOption):
                 return cls.from_any(cls.default)
             else:  # "false"
                 return cls(0)
+        elif (text[0] == "-" and not text[1:].isnumeric()) \
+                or not text.isnumeric():
+            # Handle conditionally acceptable values here rather than in the f-string
+            default = ""
+            truefalse = ""
+            if hasattr(cls, "default"):
+                default = ", default"
+                if cls.range_start == 0 and cls.default != 0:
+                    truefalse = ", \"true\", \"false\""
+            raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
+                            f"<int>{default}, high, low{truefalse}, "
+                            f"random, random-high, random-middle, random-low, "
+                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
+                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>")
         return cls(int(text))
 
     @classmethod
