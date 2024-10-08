@@ -55,6 +55,52 @@ class HasNameAndPlayer(Protocol):
     player: int
 
 
+class RegionManager(typing.Generic[_T_Reg, _T_Ent, _T_Loc]):
+    region_cache: Union[Dict[int, Dict[str, Region]], Dict[str, Region]]
+    entrance_cache: Union[Dict[int, Dict[str, Entrance]], Dict[str, Entrance]]
+    location_cache: Union[Dict[int, Dict[str, Location]], Dict[str, Location]]
+    multiworld: "MultiWorld"
+
+    def __init__(self, multiworld: "Multiworld" = None):
+        # players is no longer needed. The multiworld is passed in here so we can reference the worlds' caches
+        # while they continue to use multiworld.regions
+        # TODO remove later
+        self.multiworld = multiworld
+        self.region_cache = {}
+        self.entrance_cache = {}
+        self.location_cache = {}
+
+    def __iadd__(self, other: Iterable[Region]):
+        self.extend(other)
+        return self
+
+    def append(self, region: Region):
+        # TODO
+        if self.multiworld is not None:
+            region_cache = self.multiworld.worlds[region.player].regions.region_cache
+        else:
+            region_cache = self.region_cache
+        assert region.name not in region_cache, f"{region.name} already exists in region cache."
+        region_cache[region.name] = region
+
+    def extend(self, regions: Iterable[Region]):
+        # TODO
+        if self.multiworld is not None:
+            region_cache = self.multiworld.worlds[regions[0].player].regions.region_cache
+        else:
+            region_cache = self.region_cache
+        for region in regions:
+            assert region.name not in region_cache, f"{region.name} already exists in region cache."
+            region_cache[region.name] = region
+
+    def __iter__(self) -> Iterator[Region]:
+        for regions in self.region_cache.values():
+            yield from regions.values()
+
+    def __len__(self):
+        return sum(len(regions) for regions in self.region_cache.values())
+
+
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
@@ -97,51 +143,6 @@ class MultiWorld():
         def __getitem__(self, player) -> bool:
             return self.rule(player)
 
-    class RegionManager:
-        region_cache: Union[Dict[int, Dict[str, Region]], Dict[str, Region]]
-        entrance_cache: Union[Dict[int, Dict[str, Entrance]], Dict[str, Entrance]]
-        location_cache: Union[Dict[int, Dict[str, Location]], Dict[str, Location]]
-        multiworld: "MultiWorld"
-
-        def __init__(self, multiworld: "Multiworld" = None):
-            # players is no longer needed. The multiworld is passed in here so we can reference the worlds' caches
-            # while they continue to use multiworld.regions
-            # TODO remove later
-            self.multiworld = multiworld
-            self.region_cache = {}
-            self.entrance_cache = {}
-            self.location_cache = {}
-
-        def __iadd__(self, other: Iterable[Region]):
-            self.extend(other)
-            return self
-
-        def append(self, region: Region):
-            # TODO
-            if self.multiworld is not None:
-                region_cache = self.multiworld.worlds[region.player].regions.region_cache
-            else:
-                region_cache = self.region_cache
-            assert region.name not in region_cache, f"{region.name} already exists in region cache."
-            region_cache[region.name] = region
-
-        def extend(self, regions: Iterable[Region]):
-            # TODO
-            if self.multiworld is not None:
-                region_cache = self.multiworld.worlds[regions[0].player].regions.region_cache
-            else:
-                region_cache = self.region_cache
-            for region in regions:
-                assert region.name not in region_cache, f"{region.name} already exists in region cache."
-                region_cache[region.name] = region
-
-        def __iter__(self) -> Iterator[Region]:
-            for regions in self.region_cache.values():
-                yield from regions.values()
-
-        def __len__(self):
-            return sum(len(regions) for regions in self.region_cache.values())
-
     def __init__(self, players: int):
         # world-local random state is saved for multiple generations running concurrently
         self.random = ThreadBarrierProxy(random.Random())
@@ -149,7 +150,7 @@ class MultiWorld():
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.algorithm = 'balanced'
         self.groups = {}
-        self.regions = self.RegionManager(self)
+        self.regions = RegionManager(self)
         self.shops = []
         self.itempool = []
         self.seed = None
@@ -988,9 +989,9 @@ class Region:
     entrance_type: ClassVar[Type[Entrance]] = Entrance
 
     class Register(MutableSequence):
-        region_manager: MultiWorld.RegionManager
+        region_manager: RegionManager
 
-        def __init__(self, region_manager: MultiWorld.RegionManager):
+        def __init__(self, region_manager: RegionManager):
             self._list = []
             self.region_manager = region_manager
 

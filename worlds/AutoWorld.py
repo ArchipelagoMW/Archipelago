@@ -14,7 +14,7 @@ from Options import item_and_loc_options, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
+    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance, RegionManager
     from . import GamesPackage
     from settings import Group
 
@@ -294,7 +294,7 @@ class World(metaclass=AutoWorldRegister):
 
     origin_region_name: str = "Menu"
     """Name of the Region from which accessibility is tested."""
-    regions: "MultiWorld.RegionManager"
+    regions: "RegionManager"
     """Regions for this world instance. Regions should be added to this, and not override it."""
 
     explicit_indirect_conditions: bool = True
@@ -336,8 +336,8 @@ class World(metaclass=AutoWorldRegister):
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
         multiworld.per_slot_randoms[player] = self.random
-        from BaseClasses import MultiWorld
-        self.regions = MultiWorld.RegionManager()
+        from BaseClasses import RegionManager
+        self.regions = RegionManager()
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
