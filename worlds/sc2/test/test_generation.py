@@ -56,6 +56,11 @@ class TestItemFiltering(Sc2SetupTestBase):
                 item_groups.ItemGroupNames.STARPORT_UNITS: 0,
                 item_names.WARHOUND: 0,
                 item_names.VULTURE: 0,
+                item_names.WIDOW_MINE: 0,
+                item_names.THOR: 0,
+                item_names.GHOST: 0,
+                item_names.SPECTRE: 0,
+                item_groups.ItemGroupNames.MENGSK_UNITS: 0,
             },
             'unexcluded_items': {
                 item_names.NOVA_PLASMA_RIFLE: 1,      # Necessary to pass logic
