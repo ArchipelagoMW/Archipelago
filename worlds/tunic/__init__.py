@@ -83,6 +83,9 @@ class TunicWorld(World):
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
+    using_ut: bool  # so we can check if we're using UT only once
+    passthrough: Dict[str, Any]
+
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
@@ -111,10 +114,15 @@ class TunicWorld(World):
                 self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
                 self.options.sword_progression.value = passthrough["sword_progression"]
                 self.options.ability_shuffling.value = passthrough["ability_shuffling"]
-                self.options.laurels_zips.value = passthrough["laurels_zips"]
-                self.options.ice_grappling.value = passthrough["ice_grappling"]
-                self.options.ladder_storage.value = passthrough["ladder_storage"]
-                self.options.ladder_storage_without_items = passthrough["ladder_storage_without_items"]
+                # this option is newer than 0.5.0, and so should be handled in some fashion
+                try:
+                    self.options.laurels_zips.value = passthrough["laurels_zips"]
+                    self.options.ice_grappling.value = passthrough["ice_grappling"]
+                    self.options.ladder_storage.value = passthrough["ladder_storage"]
+                    self.options.ladder_storage_without_items = passthrough["ladder_storage_without_items"]
+                except KeyError:
+                    warning("The TUNIC APWorld that the multiworld was generated with is newer than the one in "
+                            "your Archipelago installation. Consider updating your APWorld to a newer version.")
                 self.options.lanternless.value = passthrough["lanternless"]
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
@@ -122,6 +130,10 @@ class TunicWorld(World):
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+            else:
+                self.using_ut = False
+        else:
+            self.using_ut = False
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -299,12 +311,10 @@ class TunicWorld(World):
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
 
         # stuff for universal tracker support, can be ignored for standard gen
-        if hasattr(self.multiworld, "re_gen_passthrough"):
-            if "TUNIC" in self.multiworld.re_gen_passthrough:
-                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
-                self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
-                self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
+        if self.using_ut:
+            self.ability_unlocks["Pages 24-25 (Prayer)"] = self.passthrough["Hexagon Quest Prayer"]
+            self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
+            self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
 
         # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
         if self.options.entrance_rando or self.options.shuffle_ladders:
