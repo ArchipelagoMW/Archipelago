@@ -1000,6 +1000,10 @@ item_descriptions = {
     item_names.OPTIMIZED_ORDNANCE: "Increases the attack speed of Protoss defensive structures by 25%.",
     item_names.KHALAI_INGENUITY: "Pylons, Photon Cannons, Monoliths, and Shield Batteries warp in near-instantly.",
     item_names.AMPLIFIED_ASSIMILATORS: "Assimilators produce Vespene gas 25% faster.",
+    item_names.PROGRESSIVE_WARP_RELOCATE: inspect.cleandoc("""
+        Level 1: Protoss structures can be moved anywhere within pylon power after a brief delay. Max 3 charges, shared globally.
+        Level 2: No longer consumes or requires charges.
+    """),
 }
 
 # Key descriptions

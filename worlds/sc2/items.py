@@ -1960,6 +1960,9 @@ item_table = {
         ItemData(811 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 11, SC2Race.PROTOSS, origin={"ext"}),
     item_names.AMPLIFIED_ASSIMILATORS:
         ItemData(812 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 12, SC2Race.PROTOSS, origin={"ext"}),
+    item_names.PROGRESSIVE_WARP_RELOCATE:
+        ItemData(813 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Progressive, 1, SC2Race.PROTOSS, origin={"ext"}, quantity=2,
+                 classification=ItemClassification.progression),
 }
 
 # Add keys to item table
