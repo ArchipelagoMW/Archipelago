@@ -93,6 +93,7 @@ class SA2BWorld(World):
             "MinigameTrapDifficulty": self.options.minigame_trap_difficulty.value,
             "RingLoss": self.options.ring_loss.value,
             "RingLink": self.options.ring_link.value,
+            "TrapLink": self.options.trap_link.value,
             "RequiredRank": self.options.required_rank.value,
             "ChaoKeys": self.options.keysanity.value,
             "Whistlesanity": self.options.whistlesanity.value,

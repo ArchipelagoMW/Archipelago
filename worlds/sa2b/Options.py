@@ -960,6 +960,13 @@ class RingLink(Toggle):
     display_name = "Ring Link"
 
 
+class TrapLink(Toggle):
+    """
+    Whether your received traps are linked to other players
+    """
+    display_name = "Trap Link"
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -1314,4 +1321,5 @@ class SA2BOptions(PerGameCommonOptions):
     cannons_core_mission_5: CannonsCoreMission5
 
     ring_link: RingLink
+    trap_link: TrapLink
     death_link: DeathLink
