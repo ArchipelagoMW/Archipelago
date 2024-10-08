@@ -273,11 +273,13 @@ class PinballTrapWeight(BaseTrapWeight):
 class MinigameTrapDifficulty(Choice):
     """
     How difficult any Minigame-style traps are
+    Chaos causes the difficulty to be random per-minigame
     """
     display_name = "Minigame Trap Difficulty"
     option_easy = 0
     option_medium = 1
     option_hard = 2
+    option_chaos = 3
     default = 1
 
 
