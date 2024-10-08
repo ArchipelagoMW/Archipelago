@@ -1026,3 +1026,23 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+def get_all_causes(ex: Exception) -> str:
+    """Return a string describing the recursive causes of this exception.
+    
+    For example:
+        
+    ```
+    Exception: Invalid value 'bad'.
+     Which caused: Options.OptionError: Error generating option
+      Which caused: ValueError: File bad.yaml is invalid.
+    ```
+    """
+    cause = ex
+    causes = [str(ex)]
+    while cause := cause.__cause__:
+        causes.append(str(cause))
+    top = causes[-1]
+    others = '\n'.join(f"{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
+    return f"Exception: {top}\n{others}"
