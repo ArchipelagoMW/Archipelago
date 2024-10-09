@@ -5,10 +5,12 @@
 
 ### Features:
 - Missions can now be enabled and disabled per-character, instead of just per-style
+- Minigame Difficulty can now be set to "Chaos", which selects a new difficulty randomly per-trap received
 
 ### Quality of Life:
 - Gate Stages and Mission Orders are now displayed in the spoiler log
 - Moved SA2B to the new Options system
+- Error Messages are more obvious
 
 ### Bug Fixes:
 - Added missing `Dry Lagoon - 12 Animals` location
@@ -16,7 +18,7 @@
 - Fix Chao World Entrance Shuffle causing inaccessible Neutral Garden
 - Fix pressing the 'B' button to take you to the proper location in Chao World Entrance Shuffle
 - Prevent Chao Karate progress icon overflow
-- Prevent changing Chao Timescale while paused
+- Prevent changing Chao Timescale while paused or while a Minigame is active
 - Logic Fixes:
 	- `Lost Colony - Hidden 1` (Standard Logic) now requires `Eggman - Jet Engine`
 	- `Mad Space - Gold Beetle` (Standard Logic) now only requires `Rouge - Iron Boots`
