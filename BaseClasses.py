@@ -61,12 +61,12 @@ _T_Loc = typing.TypeVar("_T_Loc", bound="Location")
 
 
 class RegionManager(typing.Generic[_T_Reg, _T_Ent, _T_Loc]):
-    region_cache: Dict[str, Region]
-    entrance_cache: Dict[str, Entrance]
-    location_cache: Dict[str, Location]
+    region_cache: Dict[str, _T_Reg]
+    entrance_cache: Dict[str, _T_Ent]
+    location_cache: Dict[str, _T_Loc]
     multiworld: "MultiWorld"
 
-    def __init__(self, multiworld: "Multiworld" = None):
+    def __init__(self, multiworld: "MultiWorld" = None):
         # players is no longer needed. The multiworld is passed in here so we can reference the worlds' caches
         # while they continue to use multiworld.regions
         # TODO remove later
