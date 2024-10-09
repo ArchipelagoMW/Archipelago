@@ -88,8 +88,13 @@ event($45)  //Antlion battle
     player bow head
     pause 4
     player wave in
+    // %if ap_antlion_item%
+    music #DummyFanfare
+    message #ap_reward_slot.antlion_item
+    // %else%
     [#B #Text_LoadRewardNameFromSlot #reward_slot.antlion_item 0]
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.antlion_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.antlion_item]
 

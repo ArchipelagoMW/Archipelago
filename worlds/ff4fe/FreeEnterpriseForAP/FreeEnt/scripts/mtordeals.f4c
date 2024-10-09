@@ -305,9 +305,14 @@ event($62)  //Cecil's transformation, Tellah remembering
         p #MirrorParty face up
     }
 
+    // %if ap_ordeals_item%
+    music #DummyFanfare
+    message #ap_reward_slot.ordeals_item
+    // %else%
     [#B #Text_LoadRewardNameFromSlot #reward_slot.ordeals_item 0]
     sound #GetItem
     message #msg.fe_Received
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.ordeals_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.ordeals_item]
 

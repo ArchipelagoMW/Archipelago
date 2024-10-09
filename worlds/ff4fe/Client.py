@@ -243,13 +243,16 @@ class FF4FEClient(SNIClient):
                     ctx.location_names[item_received.location]))
                 return
         if item_received.player == ctx.slot and item_received.location >= 0:
+            if item_received_name in items.sellable_item_names and item_received.location >= 0:
+                if item_received_game_data.tier <= junk_tier_data[0]:
+                    snes_logger.info(f"{item_received_name} automatically converted to GP per junk settings.")
             if "Monster in a Box" not in item_received_location_name:
                 self.increment_items_received(ctx, items_received_amount)
                 return
         if item_received_name in items.sellable_item_names and item_received.location >= 0:
             if item_received_game_data.tier <= junk_tier_data[0]:
                 time_is_money = False if time_is_money_data[0] != 0 else True
-                item_price = min(item_received_game_data.price // 2, 63500 if not time_is_money else 0)
+                item_price = min(item_received_game_data.price // 2, 127000 if not time_is_money else 0)
                 current_gp_data = await snes_read(ctx, Rom.gp_byte_location, Rom.gp_byte_size)
                 if current_gp_data is None:
                     return
@@ -293,6 +296,13 @@ class FF4FEClient(SNIClient):
 
     async def check_victory(self, ctx):
         from SNIClient import snes_buffered_write, snes_read
+        for sentinel in Rom.sentinel_addresses: # Defend against RAM initialized to 0xFF everywhere.
+            sentinel_data = await snes_read(ctx, sentinel, 1)
+            if sentinel_data is None:
+                return
+            sentinel_value = sentinel_data[0]
+            if sentinel_value == 0xFF:
+                return
         victory_data = await snes_read(ctx, Rom.victory_byte_location, 1)
         if victory_data is None:
             return
@@ -322,6 +332,7 @@ class FF4FEClient(SNIClient):
                         return
                     hook_received_value = key_item_received_data[0]
                     hook_received_value = hook_received_value | flag_bit
+                    hook_received_value = hook_received_value & Rom.airship_flyable_flag[1]
                     snes_buffered_write(ctx, flag_byte, bytes([hook_received_value]))
                 elif key_items_flag_byte is None:
                     flag_bit = Rom.special_flag_key_items[key_item][1]

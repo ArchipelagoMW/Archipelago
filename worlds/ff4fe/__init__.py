@@ -27,7 +27,7 @@ class FF4FEWebWorld(WebWorld):
 
 class FF4FESettings(settings.Group):
     class RomFile(settings.UserFilePath):
-        """File name of the MLSS US rom"""
+        """File name of the FF4 USA 1.1 US rom"""
 
         copy_to = "Final Fantasy II (USA) (Rev A).sfc"
         description = "FFII SNES 1.1 ROM File"
@@ -214,11 +214,10 @@ class FF4FEWorld(World):
                         continue
                 add_item_rule(self.get_location(location.name),
                               lambda item: item.name not in items.characters)
-                if self.options.ItemPlacement.current_key == "major_minor_split" and location.major_slot == False:
+                if (self.options.ItemPlacement.current_key == "major_minor_split" and not location.major_slot
+                        and location.name not in self.options.priority_locations):
                     add_item_rule(self.get_location(location.name),
-                                  lambda item: (item.classification & ItemClassification.progression == 0) and item.name != "DkMatter")
-                else:
-                    print(location.name)
+                                  lambda item: (item.classification & ItemClassification.progression == 0) or item.name == "DkMatter")
 
         if not self.options.AllowDuplicateCharacters and len(self.options.AllowedCharacters.value) > 1:
             add_item_rule(self.get_location("Starting Character 2"),
@@ -390,12 +389,16 @@ class FF4FEWorld(World):
                 item_data = [item for item in all_items if item.name == location.item.name].pop()
                 placement_dict[location_data.fe_id] = {
                     "location_data": location_data.to_json(),
-                    "item_data": item_data.to_json()
+                    "item_data": item_data.to_json(),
+                    "item_name": item_data.name,
+                    "player_name": self.multiworld.player_name[location.item.player]
                 }
             else:
                 placement_dict[location_data.fe_id] = {
                     "location_data": location_data.to_json(),
-                    "item_data": ItemData.create_ap_item().to_json()
+                    "item_data": ItemData.create_ap_item().to_json(),
+                    "item_name": location.item.name,
+                    "player_name": self.multiworld.player_name[location.item.player]
                 }
         return placement_dict
 

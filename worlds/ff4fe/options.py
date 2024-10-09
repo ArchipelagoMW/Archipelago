@@ -46,6 +46,7 @@ class ItemPlacement(Choice):
     display_name = "Item Placement"
     option_full_shuffle = 0
     option_major_minor_split = 1
+    option_majors_only = 2
     default = 0
 
 class NoFreeCharacters(Toggle):

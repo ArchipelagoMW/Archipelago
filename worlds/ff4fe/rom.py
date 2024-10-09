@@ -56,6 +56,8 @@ special_flag_key_items = {
     "Legend Sword": (0xF5128C, 0b00100000)
 }
 
+airship_flyable_flag = (0xF51286, 0b11111011)
+
 def get_base_rom_as_bytes() -> bytes:
     with open(get_settings().ff4fe_options.rom_file, "rb") as infile:
         base_rom_bytes = bytes(Utils.read_snes_rom(infile))

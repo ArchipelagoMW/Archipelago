@@ -11,8 +11,7 @@ def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[s
     key_item_pool = create_key_item_pool(world)
     location_count = len(locations) - len(character_pool) - len(key_item_pool) - 33  # Objective Status locations hack
     if world.is_vanilla_game():
-        key_item_pool.append("Crystal")
-        location_count -= 2  # We're adding in the crystal manually, and we aren't using the Objective Reward location.
+        location_count -= 1  # We aren't using the Objective Reward location.
     if (world.options.HeroChallenge.current_key != "none"
             and not world.options.ForgeTheCrystal):
         location_count -= 1  # We're manually placing the Advance Weapon at Kokkol

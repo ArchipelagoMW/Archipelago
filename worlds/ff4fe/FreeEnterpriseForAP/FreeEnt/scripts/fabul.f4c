@@ -136,10 +136,13 @@ event($48)  //Fabul battle
     p #FabulKing face left
     pause 4
     map message 1  // take this
+    // %if ap_fabul_item%
+    music #DummyFanfare
+    message #ap_reward_slot.fabul_item
+    // %else%
     [#B #Text_LoadRewardNameFromSlot #reward_slot.fabul_item 0]
-    sound #GetItem
-    message #msg.fe_Received
-
+    message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.fabul_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.fabul_item]
 

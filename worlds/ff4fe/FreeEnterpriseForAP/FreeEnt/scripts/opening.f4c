@@ -90,9 +90,13 @@ event($10)  //Opening events
     }
     pause 2
     message $1D  // From the king
+    // %if ap_starting_item%
+    message #ap_reward_slot.starting_item
+    // %else%
     [#B #Text_LoadRewardNameFromSlot #reward_slot.starting_item 0]
-    sound #GetItem
     message #msg.fe_Received
+    // %end%
+    sound #GetItem
     [#B #Objectives_TickRewardSlot #reward_slot.starting_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.starting_item]
 

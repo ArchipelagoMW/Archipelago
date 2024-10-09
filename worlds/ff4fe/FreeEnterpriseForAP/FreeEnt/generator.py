@@ -156,6 +156,7 @@ F4C_FILES = '''
     scripts/extra_item_descriptions.f4c
     scripts/stats.f4c
     scripts/level_up_summary.f4c
+    scripts/treasure_ap.f4c
     scripts/treasure_discard.f4c
     scripts/config_init.f4c
     scripts/shadow_party.f4c
@@ -556,6 +557,9 @@ def build(romfile, options, force_recompile=False):
     env = Environment(options, __file__)
 
     formatted_flags = (env.options.flags.to_string(pretty=True, wrap_width=68).replace('\n', '\n            '))
+
+    from .text_banks import text_pointer_list
+    env.meta["text_pointers"] = text_pointer_list
 
     env.spoilers.add_raw(
         f"VERSION:    {env.options.get_version_str()}",

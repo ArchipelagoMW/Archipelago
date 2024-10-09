@@ -56,8 +56,9 @@ filler_items = [item for item in all_items if item.classification == ItemClassif
 # 0x46,#item.fe_CustomWeapon,,,,,,D,,,,,yes,,yes,
 all_items.append(ItemData("Advance Weapon", ItemClassification.useful, 8, 0x46, 100000))
 
-
-sellable_item_names = [item.name for item in [*useful_items, *filler_items]]
+useful_item_names = [item.name for item in [*useful_items]]
+filler_item_names = [item.name for item in [*filler_items]]
+sellable_item_names = [item for item in [*useful_item_names, *filler_item_names]]
 
 character_data = [
     ("Cecil", 0x01),
@@ -127,7 +128,10 @@ key_items_tracker_ids = {k: i for i, k in enumerate(key_items_tracker_order)}
 
 item_name_groups = {
     "characters": [*characters],
-    "key_items": [*key_items_tracker_order]
+    "key_items": [*key_items_tracker_order],
+    "non_key_items": [*sellable_item_names],
+    "filler_items": [*filler_item_names],
+    "useful_items": [*useful_item_names]
 }
 
 

@@ -513,8 +513,15 @@ def apply(env):
                     placement = None
                 if placement is None:
                     reward = ItemReward("#item.Cure1")
+                    env.add_toggle(f"ap_{slot.name}")
                 else:
                     reward = ItemReward(placement.const)
+                script_text = env.meta["text_pointers"].pop()
+                bank = int(script_text[10], 16)
+                pointer = script_text[20:24]
+                pointer = pointer[1:] if pointer[3] != ")" else pointer[1:3]
+                env.add_script(f"consts(ap_reward_slot) {{${pointer} {slot.name}}} ")
+                env.add_script(f'{script_text} {{Found {ap_item["player_name"]}\'s \n{ap_item["item_name"]}. }}')
                 rewards_assignment[slot] = reward
             found_valid_assignment = True
         elif env.options.flags.has('key_items_vanilla'):
