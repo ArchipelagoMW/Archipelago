@@ -1265,7 +1265,7 @@ class OOTWorld(World):
                 if entrance.name in hint_entrances:
                     return entrance
             if region.dungeon is not None:
-                for r in region.dungeon._regions:
+                for r in region.dungeon.regions:
                     for e in r.entrances:
                         if e.name in hint_entrances:
                             return e
