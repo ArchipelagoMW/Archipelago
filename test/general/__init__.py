@@ -1,6 +1,8 @@
 from argparse import Namespace
 from typing import List, Optional, Tuple, Type, Union
 
+from tornado.gen import multi
+
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from worlds import network_data_package
 from worlds.AutoWorld import World, call_all
@@ -73,7 +75,7 @@ def generate_test_multiworld(players: int = 1) -> MultiWorld:
     :return: The generated test multiworld
     """
     multiworld = setup_multiworld([TestWorld] * players, seed=0)
-    multiworld.regions += [Region("Menu", player_id + 1, multiworld) for player_id in range(players)]
+    multiworld.regions += [Region("Menu", player_id, multiworld) for player_id in multiworld.player_ids]
 
     return multiworld
 

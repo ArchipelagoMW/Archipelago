@@ -1928,7 +1928,7 @@ def create_regions(world):
                 lambda state: logic.can_fly(state, world, player) and state.has("Town Map", player), one_way=True,
                 name="Town Map Fly Location")
 
-    cache = multiworld.regions.entrance_cache[world.player].copy()
+    cache = world.regions.entrance_cache.copy()
     if world.options.badgesanity or world.options.door_shuffle in ("off", "simple"):
         badges = None
         badge_locs = None

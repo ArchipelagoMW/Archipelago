@@ -92,7 +92,7 @@ class AquariaWorld(World):
     options: AquariaOptions
     "Every options of the world"
 
-    regions: AquariaRegions
+    _regions: AquariaRegions
     "Used to manage Regions"
 
     exclude: List[str]
@@ -100,7 +100,7 @@ class AquariaWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
         super(AquariaWorld, self).__init__(multiworld, player)
-        self.regions = AquariaRegions(multiworld, player)
+        self._regions = AquariaRegions(multiworld, player)
         self.ingredients_substitution = []
         self.exclude = []
 
@@ -108,9 +108,9 @@ class AquariaWorld(World):
         """
         Create every Region in `regions`
         """
-        self.regions.add_regions_to_world()
-        self.regions.connect_regions()
-        self.regions.add_event_locations()
+        self._regions.add_regions_to_world()
+        self._regions.connect_regions()
+        self._regions.add_event_locations()
 
     def create_item(self, name: str) -> AquariaItem:
         """
@@ -177,7 +177,7 @@ class AquariaWorld(World):
         Launched when the Multiworld generator is ready to generate rules
         """
 
-        self.regions.adjusting_rules(self.options)
+        self._regions.adjusting_rules(self.options)
         self.multiworld.completion_condition[self.player] = lambda \
             state: state.has("Victory", self.player)
 
