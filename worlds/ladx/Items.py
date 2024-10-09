@@ -325,7 +325,6 @@ links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
         "Slime Key",
     },
     "Nightmare Keys": {
-        "Nightmare Key",
         "Nightmare Key (Angler's Tunnel)",
         "Nightmare Key (Bottle Grotto)",
         "Nightmare Key (Catfish's Maw)",
@@ -337,7 +336,6 @@ links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
         "Nightmare Key (Turtle Rock)",
     },
     "Small Keys": {
-        "Key",
         "Small Key (Angler's Tunnel)",
         "Small Key (Bottle Grotto)",
         "Small Key (Catfish's Maw)",
@@ -349,7 +347,6 @@ links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
         "Small Key (Turtle Rock)",
     },
     "Compasses": {
-        "Compass",
         "Compass (Angler's Tunnel)",
         "Compass (Bottle Grotto)",
         "Compass (Catfish's Maw)",
@@ -361,7 +358,6 @@ links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
         "Compass (Turtle Rock)",
     },
     "Maps": {
-        "Map",
         "Dungeon Map (Angler's Tunnel)",
         "Dungeon Map (Bottle Grotto)",
         "Dungeon Map (Catfish's Maw)",
@@ -373,7 +369,6 @@ links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
         "Dungeon Map (Turtle Rock)",
     },
     "Stone Beaks": {
-        "Stone Beak",
         "Stone Beak (Angler's Tunnel)",
         "Stone Beak (Bottle Grotto)",
         "Stone Beak (Catfish's Maw)",
