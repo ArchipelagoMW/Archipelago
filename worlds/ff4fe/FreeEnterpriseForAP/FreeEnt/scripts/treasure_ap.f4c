@@ -48,9 +48,9 @@ msfpatch {
 		sta $063E
 		bra $+Finish
     %HiBank:
-        lda $108080
+        lda $108000, x
 		sta $063D
-		lda $108081
+		lda $108001, x
 		sta $063E
 	%Finish:
 		ldx $063D
