@@ -89,12 +89,12 @@ class RegionManager(typing.Generic[_T_Reg, _T_Ent, _T_Loc]):
         region_cache[region.name] = region
 
     def extend(self, regions: Iterable[Region]):
-        # TODO
-        if self.multiworld is not None:
-            region_cache = self.multiworld.worlds[regions[0].player].regions.region_cache
-        else:
-            region_cache = self.region_cache
         for region in regions:
+            # TODO
+            if self.multiworld is not None:
+                region_cache = self.multiworld.worlds[region.player].regions.region_cache
+            else:
+                region_cache = self.region_cache
             assert region.name not in region_cache, f"{region.name} already exists in region cache."
             region_cache[region.name] = region
 

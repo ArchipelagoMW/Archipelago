@@ -2,6 +2,7 @@ import unittest
 from typing import Callable, Dict, Optional
 
 from BaseClasses import CollectionState, MultiWorld, Region
+from test.general import TestWorld, setup_solo_multiworld
 
 
 class TestHelpers(unittest.TestCase):
@@ -9,10 +10,7 @@ class TestHelpers(unittest.TestCase):
     player: int = 1
 
     def setUp(self) -> None:
-        self.multiworld = MultiWorld(self.player)
-        self.multiworld.game[self.player] = "helper_test_game"
-        self.multiworld.player_name = {1: "Tester"}
-        self.multiworld.set_seed()
+        self.multiworld = setup_solo_multiworld(TestWorld, ())
 
     def test_region_helpers(self) -> None:
         """Tests `Region.add_locations()` and `Region.add_exits()` have correct behavior"""
