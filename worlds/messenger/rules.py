@@ -220,6 +220,8 @@ class MessengerRules:
         }
 
         self.location_rules = {
+            # hq
+            "Money Wrench": self.can_shop,
             # ninja village
             "Ninja Village Seal - Tree House":
                 self.has_dart,
