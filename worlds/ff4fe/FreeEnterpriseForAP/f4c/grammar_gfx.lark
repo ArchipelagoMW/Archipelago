@@ -1,0 +1,12 @@
+chr_block_params : rom_address [format_specifier]
+
+!format_specifier : "1bit"
+                  | "2bit"
+                  | "3bit"
+                  | "4bit"
+
+pal_block_params : rom_address
+
+pal_block_body : rgb+
+
+rgb : value value value

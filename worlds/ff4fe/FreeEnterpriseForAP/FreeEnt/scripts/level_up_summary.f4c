@@ -1,0 +1,117 @@
+// hook into level up loop start to initialize counts for party member
+msfpatch {
+    .def LevelUpSummary_LevelCount  $7e2610
+    .def LevelUpSummary_SpellCount  $7e2611
+    .def LevelUpSummary_SpellList   $7e2612
+
+    LevelUpSummary_Init:
+        stz $_LevelUpSummary_LevelCount
+        stz $_LevelUpSummary_SpellCount
+        
+        // do displaced instructions and return
+        ldx $98
+        lda $405f,x
+        jml $03eefc
+
+    .addr $03eef7
+        jml $=LevelUpSummary_Init
+}
+
+
+// track levels gained and spells learned instead of displaying
+// messages up front
+msfpatch {
+    .addr $03efc3
+        inc $_LevelUpSummary_LevelCount
+
+        tdc
+        tax
+        stx $af
+    LevelUpSummary_Accumulate_SpellLoopStart:
+        ldx $af
+        lda $291c,x
+        cmp #$ff
+        beq $+LevelUpSummary_Accumulate_Done
+        // %if wacky_misspelled%
+        jsl $=Wacky__Misspell
+        // %end%
+        pha
+        lda $_LevelUpSummary_SpellCount
+        tax
+        pla
+        sta $_LevelUpSummary_SpellList,x
+        inc $_LevelUpSummary_SpellCount
+        inc $af
+        bra $-LevelUpSummary_Accumulate_SpellLoopStart
+    LevelUpSummary_Accumulate_Done:
+        jml $03efee
+}
+
+// borrow another alert message to use for "gained X levels"
+text(alert message $07) {[next]2 gained [next]1 levels.}
+
+// table at rom address 0B7D74 (bus 16FD74) is a series of bytes,
+// 00 or 01, such that 16FD74,x = 00 if the message displays
+// for a fixed time interval, or 01 if the message stays visible
+// until user input. Set the message we used above to wait
+// for input (like the usual level-up message)
+patch($B7D7B) { 01 }
+
+// hook into code after level up loops are done
+// for a character and display messages as necessary
+msfpatch {
+    LevelUpSummary_Messages:
+        lda $_LevelUpSummary_LevelCount
+        bne $03
+        jmp $_LevelUpSummary_Messages_Done
+        cmp #$01
+        beq $+LevelUpSummary_Messages_SingleLevel
+
+        sta $359d  // pass level count parameter
+        stz $359e
+        stz $359f
+
+        lda #$07
+        sta $34ca
+        bra $+LevelUpSummary_Messages_ShowLevelMessage
+    LevelUpSummary_Messages_SingleLevel:
+        lda #$21
+        sta $34ca
+    LevelUpSummary_Messages_ShowLevelMessage:
+        // pass party slot parameter
+        lda $98
+        sta $359a
+
+        lda #$05
+        jsl $028003
+
+        lda #$23
+        sta $34ca
+
+        tdc
+        tax
+    LevelUpSummary_Messages_SpellLoopStart:
+        lda $_LevelUpSummary_SpellCount
+        beq $+LevelUpSummary_Messages_Done
+        lda $_LevelUpSummary_SpellList,x
+        sta $359a
+        lda #$05
+        phx
+        jsl $028003
+        plx
+        dec $_LevelUpSummary_SpellCount
+        inx
+        bra $-LevelUpSummary_Messages_SpellLoopStart
+
+    LevelUpSummary_Messages_Done:
+        // perform displaced instructions and return
+        rep #$20
+        .mx 0x00
+        clc
+        lda $a6
+        jml $03eff6
+        .mx 0x20
+
+    .addr $03eff1
+        jml $=LevelUpSummary_Messages
+}

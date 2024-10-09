@@ -1,0 +1,399 @@
+
+patch($21f800 bus) {
+// %objective ids%
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+// %end%
+}
+patch($21f820 bus) {
+// %objective thresholds%
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+// %end%
+}
+patch($21f0f9 bus) {
+// %objective required count%
+    00
+// %end%
+}
+patch($21f0fc bus) {
+// %objective count%
+    00
+// %end%
+}
+
+event($08)
+{
+    // if objectives not enabled/already completed, do nothing
+    [#B #If #AllObjectivesComplete 0] {
+        [#B #Return]
+    }
+
+    // display messages for staged completed objectives
+    [#B #ObjectivesImpl_ShowStagedCompletionMessages]
+
+    // apply staged progress
+    [#B #ObjectivesImpl_ApplyStaged]
+
+    // if we have already previously completed enough objectives,
+    // just return
+    [#B #If #Flag #flag.fe_CompletedEnoughObjectives]
+    {
+        [#B #Return]
+    }
+
+    // if enough objectives are now complete, win game/award crystal
+    [#B #If #EnoughObjectivesComplete 0] {
+        set #fe_CompletedEnoughObjectives
+
+        // %flag objective_zeromus on%
+        [#B #SaveMusic]
+        sound #Crystal
+        message #msg.fe_EnoughObjectivesCompleteCrystal
+
+        sound #HealingPot
+        vfx #HealingPot
+        sound $7e
+        batch 8 {
+            screen flash
+        }
+        pause 4
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.fixed_crystal 0]
+        music #None
+        message #msg.fe_ReceivedFanfare
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.fixed_crystal]
+        [#B #RestoreMusic]
+        // %end%
+
+        // %flag objective_zeromus off%
+        player face down
+        player wave out
+        [#B #Ending_SaveEndgameTime]
+        music #LongFanfare
+        message #msg.fe_EnoughObjectivesCompleteWin
+        pause 80
+        [#B #GotoEvent $1C]
+        // %end%
+    }
+
+    [#B #Return]
+}
+
+text(bank 1 message $111) {
+  - Objective Complete -
+
+[name $e0]
+[name $e1]
+}
+
+text(bank 1 message $112) {
+
+ {% completion objective count text : All objectives %} complete!
+}
+
+text(bank 1 message $113) {
+     CONGRATULATIONS!
+
+ {% completion objective count text : All objectives %} complete!
+[pause 80][next]
+}
+
+//----------------------------------------------------------------
+
+msfpatch
+{
+    .def  Objectives__RequiredCount  $21f0f9
+    .def  Objectives__Count          $21f0fc
+    .def  Objectives__IDs            $21f800
+    .def  Objectives__Thresholds     $21f820
+    .def  Objectives__Progress       $7e1520
+    .def  Objectives__Staging        $7072e0
+    .def  Objectives__BossSlotMap    $21f840
+    .def  Objectives__MaxCount       0x20
+
+    .def  Objectives__ProcessEventID  $08
+}
+
+msfpatch
+{
+    EvEx__If_ObjectivesEnabled:
+        lda $=Objectives__Count
+        beq $+NotEnabled
+        jmp $_EvEx__If_Success
+    %NotEnabled:
+        jmp $_EvEx__If_Fail
+}
+
+msfpatch
+{
+    // NOTE: this condition passes if the objective is not found
+    EvEx__If_ObjectiveComplete:
+        lda $=Objectives__Count
+        bne $+ObjectivesEnabled
+        jmp $_EvEx__If_Success
+
+    %ObjectivesEnabled:
+        ldx #$0000
+    %CheckLoop:
+        lda $=Objectives__IDs,x
+        cmp $_EvEx__If_Param
+        beq $+Found
+        inx
+        cpx #$_Objectives__MaxCount
+        bcc $-CheckLoop
+
+    %Found:
+        lda $=Objectives__Thresholds,x
+        cmp $_Objectives__Progress,x
+        bcc $+Passed
+        beq $+Passed
+        jmp $_EvEx__If_Fail
+    %Passed:
+        jmp $_EvEx__If_Success
+}
+
+msfpatch 
+{
+    EvEx__If_AllObjectivesComplete:
+        jsr $_CountCompleted
+        cmp $=Objectives__Count
+        bcc $+Failed
+        jmp $_EvEx__If_Success
+    %Failed:
+        jmp $_EvEx__If_Fail
+
+    EvEx__If_EnoughObjectivesComplete:
+        jsr $_CountCompleted
+        cmp $=Objectives__RequiredCount
+        bcc $-Failed
+        jmp $_EvEx__If_Success
+
+    %CountCompleted:
+        stz $1670
+        ldx #$0000
+    %CheckLoop:
+        lda $=Objectives__IDs,x
+        beq $+Next
+        lda $=Objectives__Thresholds,x
+        cmp $_Objectives__Progress,x
+        bcc $+IsComplete
+        beq $+IsComplete
+        bra $+Next
+    %IsComplete:
+        inc $1670
+    %Next:
+        inx
+        cpx #$_Objectives__MaxCount
+        bcc $-CheckLoop
+        
+        lda $1670
+        rts
+}
+
+msfpatch
+{
+    Objectives__InitStagedProgress:
+        ldx #$0000
+        lda #$00
+    %InitLoop:
+        sta $=Objectives__Staging,x
+        inx
+        cpx #$_Objectives__MaxCount
+        bcc $-InitLoop
+
+        rtl
+
+    EvEx__Objectives_ResetStaged:
+        jsl $=Objectives__InitStagedProgress
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    // params: A = objective ID
+    Objectives__StageProgress:
+        sta $1670
+        ldx #$0000
+    %FindLoop:
+        lda $=Objectives__IDs,x
+        cmp $1670
+        beq $+FoundObjective
+        inx
+        cpx #$_Objectives__MaxCount
+        bcc $-FindLoop
+        rtl
+
+    %FoundObjective:
+        // don't do anything if objective has already been completed
+        lda $=Objectives__Staging,x
+        clc
+        adc $_Objectives__Progress,x
+        cmp $=Objectives__Thresholds,x
+        bcs $+AlreadyComplete
+
+        lda $=Objectives__Staging,x
+        inc a
+        sta $=Objectives__Staging,x
+    %AlreadyComplete:
+        rtl
+}
+
+msfpatch
+{
+    EvEx__Objectives_Tick:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        jsl $=Objectives__StageProgress
+
+    EvEx__ObjectivesImpl_DoEvent:
+        lda #$.Objectives__ProcessEventID
+        jmp $_EvEx__GoSubEvent_Impl
+}
+
+msfpatch {
+    EvEx__Objectives_TickBossSlot:
+        jsr $_EvEx__ReadParameters_1
+        lda #$00
+        xba
+        lda $_EvEx__Param1
+        tax
+        lda $=Objectives__BossSlotMap,x
+        jsl $=Objectives__StageProgress
+        jmp $_EvEx__ObjectivesImpl_DoEvent
+}
+
+msfpatch {
+    EvEx__Objectives_TickRewardSlot:
+        // currently only implemented for characters!
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        jsl $=Rewards__GetFromSlot
+        stx $_EvEx__Param2
+        lda $_EvEx__Param3
+        cmp #$04
+        beq $+IsAxtor
+        jmp $_EvEx__End
+
+    %IsAxtor:
+        lda $_EvEx__Param2
+        jsr $_Lookup_AxtorToActor
+        // conveniently, actor number = find character objective
+        jsl $=Objectives__StageProgress
+        jmp $_EvEx__ObjectivesImpl_DoEvent        
+}
+
+msfpatch
+{
+    EvEx__ObjectivesImpl_ApplyStaged:
+        ldx #$0000
+    %ApplyLoop:
+        lda $=Objectives__IDs,x
+        beq $+ApplyLoopNext
+
+        lda $=Objectives__Staging,x
+        clc
+        adc $_Objectives__Progress,x
+        sta $_Objectives__Progress,x
+
+    %ApplyLoopNext:
+        lda #$00
+        sta $=Objectives__Staging,x
+        inx
+        cpx #$_Objectives__MaxCount
+        bcc $-ApplyLoop
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__ObjectivesImpl_ShowStagedCompletionMessages:
+        stz $1680
+        stz $1681
+    %CheckLoop:
+        ldx $1680
+        lda $=Objectives__IDs,x
+        beq $+Next
+        lda $=Objectives__Thresholds,x
+        sta $1682
+        lda $_Objectives__Progress,x
+        cmp $1682
+        bcs $+Next
+        sta $1683
+        lda $=Objectives__Staging,x
+        clc
+        adc $1683
+        cmp $1682
+        bcc $+Next
+
+        jsr $_ShowText
+
+    %Next:
+        inc $1680
+        lda $1680
+        cmp #$.Objectives__MaxCount
+        bcc $-CheckLoop
+
+        jmp $_EvEx__End
+
+    %ShowText:
+        // objective is cleared
+        txa
+        jsl $=TextBuffer__LoadObjectiveNameForIndex
+
+        // play sound and display text box
+        lda #$24
+        jsr $_Util__PlaySFX
+        
+        lda #$11  // [hardcoded] : refers to message $111
+
+    DisplayBank1HiMessage:  // insert label here since this chunk makes a nice utility section
+        sta $b2
+        
+        ldx #$b1e1
+        jsl $=Bank00LongCallX
+        ldx #$b0d1
+        jsl $=Bank00LongCallX
+        ldx #$b164
+        jsl $=Bank00LongCallX
+        rts    
+}
+
+
+msfpatch {
+    EvEx__Objectives_ListInDialog:
+        stz $1680
+        stz $1681
+        stz $1682
+    %Loop:
+        ldx $1680
+        lda $=Objectives__IDs,x
+        beq $+Next
+        txa
+        jsl $=TextBuffer__LoadObjectiveNameForIndex
+
+        inc $1682
+        lda $1682
+        sta $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input1
+        stz $_Util__NumberToText_Input2
+        lda #$ff
+        sta $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+        lda $_Util__NumberToText_Output6
+        sta $=TextBuffer__Buffer2
+        lda $_Util__NumberToText_Output7
+        sta $7e2541  // [hardcoded] : TextBuffer__Buffer2 + 1
+        lda #$00
+        sta $7e2542  // [hardcoded] : TextBuffer__Buffer2 + 2
+
+        lda #$10  // [hardcoded]
+        jsr $_DisplayBank1HiMessage
+    %Next:
+        inc $1680
+        lda $1680
+        cmp #$.Objectives__MaxCount
+        bcc $-Loop
+
+        jmp $_EvEx__End
+
+
+}

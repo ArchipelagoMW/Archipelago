@@ -1,0 +1,608 @@
+//-------------------------------------------------------
+// remove fire wall events at start
+
+// need to remove some placements rather than deactivate NPCs,
+// since we will need the NPCs for other uses
+placement($84 2) { npc #BaronDancerDress  position 0 0 }
+placement($84 3) { npc #BaronDancerDress  position 0 0 }
+placement($84 4) { npc #BaronDancerDress  position 0 0 }
+placement($84 5) { npc #BaronDancerDress  position 0 0 }
+placement($84 6) { npc #BaronDancerDress  position 0 0 }
+placement($84 7) { npc #BaronDancerDress  position 0 0 }
+placement($84 8) { npc #BaronDancerDress  position 0 0 }
+
+trigger(#MountOrdeals1F 5)
+{
+    delete
+}
+
+mapgrid($84 11 28) { 09 }
+
+
+//-------------------------------------------------------
+// Tellah joining
+
+placement($85 2)  //#MountOrdeals2F
+{
+    // %tellah2_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+event($60)  //Meeting Tellah on Mt. Ordeals
+{
+    consts(placement) {
+        0   Palom1
+        1   Porom1
+        2   Tellah1
+    }
+    // autodetected map #MountOrdeals2F
+    p #Tellah1 toggle visible
+    p #Tellah1 move down
+    batch 3 {
+        p #Tellah1 move left
+    }
+    p #Tellah1 face up
+    pause 4
+    player move up
+    p #Tellah1 face down
+    pause 4
+    p #Tellah1 move down
+    player move up
+    player move up
+    p #Tellah1 toggle visible
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.ordeals_character 0]
+    sound #GetItem
+    message #msg.fe_Joined
+    [#B #Objectives_TickRewardSlot #reward_slot.ordeals_character]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.ordeals_character]
+
+    set #TellahRejoined
+}
+
+//-------------------------------------------------------
+// delete "hiss" triggers
+
+trigger(#MountOrdealsSummit 1) { delete }
+mapgrid($87 15 23) { 09 }
+
+trigger(#MountOrdealsSummit 2) { delete }
+trigger(#MountOrdealsSummit 3) { delete }
+mapgrid($87 16 16) { 09 09 }
+
+//-------------------------------------------------------
+// Milon battles
+
+placement($87 0)  { 
+    npc #fe_DynamicNPC 
+    // %milon_slot sprite main palette%
+    // %end%
+}
+placement($87 1)  { 
+    npc #fe_DynamicNPC 
+    // %milonz_slot sprite main palette%
+    // %end%
+}
+
+event($61)  //First Milon battle
+{
+    consts(placement) {
+        0   HoodedMonster1_A
+    }
+    // autodetected map #MountOrdealsSummit
+    music #None
+    sound #Glow
+    toggle tint $59
+    music #Zot
+    batch 6 {
+        screen flash
+    }
+    batch 11 {
+        p #HoodedMonster1_A toggle visible
+    }
+    toggle tint $00
+    pause 8
+    p #HoodedMonster1_A toggle visible
+    [#B #Rando_BossBattle #rando.milon_slot]
+    [#B #Objectives_TickBossSlot #rando.milon_slot]
+    [#B #Rando_PostBossBattle #rando.milon_slot]
+    music #Mountain
+    set #DefeatedMilon1
+}
+
+event($63)  //Second Milon battle
+{
+    consts(placement) {
+        1   HoodedMonster1_B
+    }
+    // autodetected map #MountOrdealsSummit
+    [#B #LoadExtraNPCPalette #rando.milonz_slot]
+
+    toggle music fade
+    toggle tint $49
+    toggle tint $00
+    p #HoodedMonster1_B toggle visible
+    [#B #Rando_BossBattle #rando.milonz_slot]
+    player face right
+    music #None
+    [#B #Objectives_TickBossSlot #rando.milonz_slot]
+    [#B #Rando_PostBossBattle #rando.milonz_slot]
+    pause 8
+    player toggle turning
+    p #HoodedMonster1_B face up
+    batch 1 {
+        player face down
+        p #HoodedMonster1_B move down
+    }
+    sound #Quake
+    toggle screen shake
+    pause 8
+    sound #Falling
+    batch 8 {
+        p #HoodedMonster1_B move down
+    }
+    p #HoodedMonster1_B toggle visible
+    toggle screen shake
+    player toggle turning
+    pause 8
+    music #Mountain fade in
+    set #DefeatedMilon2
+}
+
+//------------------------------------------------------
+// Summit events
+
+// add placements for other party members
+placement ($87 2) { npc #fe_DynamicNPC  position 6 10  walking off  intangible  face down  turning off  marching off  speed 2 }
+placement ($87 3) { npc #fe_DynamicNPC  position 6 10  walking off  intangible  face down  turning off  marching off  speed 2 }
+placement ($87 4) { npc #fe_DynamicNPC  position 6 10  walking off  intangible  face down  turning off  marching off  speed 2 }
+placement ($87 5) { npc #fe_DynamicNPC  position 6 10  walking off  intangible  face down  turning off  marching off  speed 2 }
+
+// turn sword into sparkle
+placement($15 0) {
+    npc #Sparkle1
+    marching on
+}
+
+// turn Tellah1 placement into our party leader mirror
+placement($15 6) {
+    npc #fe_PartyLeader
+    position 5 0
+}
+
+npc(#DarkKnightCecil1)
+{
+    default inactive
+    sprite
+        // %mirrorcecil_slot sprite main%
+        #DKCecil
+        // %end%
+}
+
+placement($15 7) {
+    // %mirrorcecil_slot sprite main palette%
+    // %end%
+
+    position 5 4  // for ending vignette purposes
+    face down
+}
+
+// solo battle indicator is patched out in solo_battle.f4c
+
+event($62)  //Cecil's transformation, Tellah remembering
+{
+    // autodetected map #MountOrdealsSummit
+    
+    // %flag hero_challenge on%
+    party leader $01  // happily, vanilla party leader function looks for actor, so we can look for axtor 1
+    // %end%
+    player face up
+    music #None
+    // %flag hero_challenge on%
+    [#B #ReloadPlacementSprite 2]
+    [#B #ReloadPlacementSprite 3]
+    [#B #ReloadPlacementSprite 4]
+    [#B #ReloadPlacementSprite 5]
+    // %end%
+    pause 2
+    music #LunarPath
+    toggle tint $99
+
+    // %flag hero_challenge on%
+    consts(placement) {
+        2  PartyMember1
+        3  PartyMember2
+        4  PartyMember3
+        5  PartyMember4
+    }
+    batch 1 {
+        player face down
+        p #PartyMember4 toggle visible
+    }
+    batch 1 {
+        p #PartyMember4 move down
+        p #PartyMember3 toggle visible
+    }
+    batch 1 {
+        p #PartyMember4 move down
+        p #PartyMember3 move down
+        p #PartyMember2 toggle visible
+    }
+    batch 1 {
+        p #PartyMember4 face up
+        p #PartyMember3 move right
+        p #PartyMember2 move down
+        p #PartyMember1 toggle visible
+    }
+    batch 1 {
+        p #PartyMember3 face up
+        p #PartyMember2 move left
+        p #PartyMember1 move down
+    }
+    batch 1 {
+        p #PartyMember2 face up
+        p #PartyMember1 face up
+    }
+    pause 12
+    player face up
+    pause 4
+    // %end%
+
+
+    screen blur
+    batch 4 {
+        screen flash
+    }
+
+    player move up    
+
+    player invisible
+
+    clear #Temp
+
+    // %flag hero_challenge off%
+    [#B #If #Character #character.Cecil] {
+        [#B #PartyLeaderCharacter #character.Cecil]
+    }
+    // %end%
+
+    [#B #If #PartyLeaderHasJob #job.DKCecil] {
+        set #Temp
+    }
+
+    consts(placement) {
+        0   LegendarySword
+        6   MirrorParty
+        7   DarkKnightCecil1
+        8   PaladinCecil1
+    }
+    load map #MountOrdealsMirrorRoom at 5 9 
+    player visible
+    batch {
+        player face up
+        p #MirrorParty toggle visible
+    }
+
+    toggle tint $00
+    pause 16
+    batch 2 {
+        player move up
+        p #MirrorParty move down
+        p #DarkKnightCecil1 move up
+    }
+    p #DarkKnightCecil1 face down
+    pause 8
+
+    p #LegendarySword toggle visible
+    batch 7 {
+        p #LegendarySword move down
+    }
+    pause 2
+    batch {
+        p #LegendarySword toggle visible
+        player face down
+        p #MirrorParty face up
+    }
+
+    // %if ap_ordeals_item%
+    music #DummyFanfare
+    message #ap_reward_slot.ordeals_item
+    // %else%
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.ordeals_item 0]
+    sound #GetItem
+    message #msg.fe_Received
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.ordeals_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.ordeals_item]
+
+    // flag set moved up here because PaladinizeCecil requires it (kludgey)
+    set #CecilBecamePaladin
+
+    [#B #If #Flag #flag.Temp] {
+        batch 1 {
+            player wave in
+            p #MirrorParty face up
+        }
+    }
+
+    [#B #Rando_PaladinizeCecil]
+
+    [#B #If #Flag #flag.Temp] {
+        toggle tint $99
+
+        [#B #Rando_LoadWackySprite 2 1]
+        sound #HealingPot
+        vfx #HealingPot
+        pause 4
+        sound #Crystal
+        batch 24 {
+            screen flash
+        }
+        [#B #PartyLeaderCecil]
+        pause 8
+        toggle tint $00
+    }
+    pause 12
+    batch 16 {
+        screen flash
+    }
+    music #None
+    sound #BlackMagic
+
+    [#B #If #not_Flag #flag.Temp] {
+        p #MirrorParty face down
+        batch 6 {
+            p #MirrorParty toggle visible
+            p #DarkKnightCecil1 toggle visible
+        }
+    }
+
+    batch 1 {
+        p #MirrorParty toggle visible
+        p #DarkKnightCecil1 toggle visible
+    }
+
+    batch 3 {
+        p #MirrorParty move down
+        p #DarkKnightCecil1 move down
+    }
+    batch 1 {
+        player face up
+    }
+    pause 4
+    clear status 
+    restore hp
+    restore mp
+    player toggle turning
+    player move up
+    batch 1 {
+        player move up
+        p #DarkKnightCecil1 move up
+        p #MirrorParty move up
+    }
+    player toggle turning
+    music #LunarSubterrane
+    // %flag hero_challenge on%
+    set #fe_HeroSoloBattle
+    // %end%
+    [#B #Rando_BossBattle #rando.mirrorcecil_slot]
+    clear #fe_HeroSoloBattle
+
+    music #None
+    [#B #Objectives_TickBossSlot #rando.mirrorcecil_slot]
+    [#B #Rando_PostBossBattle #rando.mirrorcecil_slot]
+    pause 16
+    toggle tint $E9
+    toggle tint $00
+    toggle tint $C9
+    toggle tint $00
+    toggle tint $A9
+    toggle tint $00
+    toggle tint $89
+    toggle tint $00
+    toggle tint $69
+    toggle tint $00
+    toggle tint $49
+    toggle tint $00
+    toggle tint $29
+    sound #Crystal
+    batch 30 {
+        screen flash
+    }
+    batch 15 {
+        p #DarkKnightCecil1 toggle visible
+        p #PaladinCecil1 toggle visible
+    }
+    toggle tint $00
+    music #LongFanfare
+    [#B #If #Flag #flag.Temp] {
+        message $CD   // "[Cecil] became a Paladin![pause 80]"
+    }
+    [#B #If #not_Flag #flag.Temp] {
+        message $CC   // "[Cecil] became a Paladin, wherever![pause 80]"
+        batch 9 {
+            p #PaladinCecil1 toggle visible
+            p #MirrorParty toggle visible
+        }
+    }
+
+    music #LunarPath
+    pause 4
+    batch 2 {
+        player move down
+        p #MirrorParty move up
+        p #PaladinCecil1 move up
+    }
+    pause 4
+
+    [#B #Text_LoadSpellName 0 #spell.Meteo]
+    [#B #If #Character #character.Tellah] {
+        message $CF   // Tellah remembers
+        pause 4
+        message $1B4   // learned meteo
+    }
+    [#B #If #not_Character #character.Tellah] {
+        message $CE   // Tellah remembers, wherever
+        pause 4
+        message $1B5   // learned meteo, wherever
+    }
+
+    [#B #RememberizeTellah]
+
+    give spell #TellahWhite #Hold
+    give spell #TellahWhite #Mute
+    give spell #TellahWhite #Slow
+    give spell #TellahWhite #Fast
+    give spell #TellahWhite #Bersk
+    give spell #TellahWhite #Wall
+    give spell #TellahWhite #Peep
+    give spell #TellahWhite #Cure1
+    give spell #TellahWhite #Cure3
+    give spell #TellahWhite #Cure4
+    give spell #TellahWhite #Life2
+    give spell #TellahWhite #Size
+    give spell #TellahWhite #Sight
+    give spell #TellahWhite #Float
+    [#B #Rando_CheckFlag #randoflag.japanese_spells]
+    [#B #If #Flag #flag.Result] {
+        give spell #TellahWhite #Armor
+        give spell #TellahWhite #Shell
+        give spell #TellahWhite #Dspel
+    }
+    give spell #TellahBlack #Toad
+    give spell #TellahBlack #Piggy
+    give spell #TellahBlack #Warp
+    give spell #TellahBlack #Venom
+    give spell #TellahBlack #Fire2
+    give spell #TellahBlack #Fire3
+    give spell #TellahBlack #Ice2
+    give spell #TellahBlack #Ice3
+    give spell #TellahBlack #Lit2
+    give spell #TellahBlack #Lit3
+    give spell #TellahBlack #Virus
+    give spell #TellahBlack #Weak
+    give spell #TellahBlack #Sleep
+    give spell #TellahBlack #Stone
+    give spell #TellahBlack #Drain
+    give spell #TellahBlack #Meteo
+
+    toggle music fade
+
+    batch 4 {
+        player move down
+        p #MirrorParty move up
+        p #PaladinCecil1 move up
+    }
+
+    clear status 
+    restore hp
+    restore mp
+
+    load map #MountOrdealsSummit at 6 10 facing down
+    player face down
+    [#B #Objectives_Tick #objective.quest_ordeals]
+    music #Mountain
+}
+
+// %flag characters_no_duplicates on%
+text(bank 1 message $CD) {
+[Cecil] became a Paladin!
+}
+
+text(bank 1 message $CC) {
+[Cecil] became a Paladin,
+wherever he is!
+}
+
+text(bank 1 message $CF) {
+[Tellah] recalled all the
+spells he had forgotten.
+}
+
+text(bank 1 message $CE) {
+[Tellah] recalled all the
+spells he had forgotten,
+wherever he is.
+}
+
+text(bank 1 message $1B4) {
+[Tellah] learned [name $e0][music $29][pause 40]
+}
+
+text(bank 1 message $1B5) {
+[Tellah] learned [name $e0],
+wherever he is![music $29][pause 40]
+}
+// %end%
+
+// %flag characters_no_duplicates off%
+text(bank 1 message $CD) {
+All [Cecil]s became
+Paladins!
+}
+
+text(bank 1 message $CC) {
+All [Cecil]s became
+Paladins, wherever they
+are!
+}
+
+text(bank 1 message $CF) {
+All [Tellah]s recalled the
+spells they have 
+forgotten.
+}
+
+text(bank 1 message $CE) {
+All [Tellah]s recalled the
+spells they have
+forgotten, wherever they
+are.
+}
+
+text(bank 1 message $1B4) {
+All [Tellah]s learned
+[name $e0]![music $29][pause 40]
+}
+
+text(bank 1 message $1B5) {
+All [Tellah]s learned
+[name $e0], wherever they are!
+[music $29][pause 40]
+}
+// %end%
+
+// Edit messages from Dark Knight Cecil fight
+ai_script($9E)
+{
+    use command #DarkWave
+    
+    use command #DarkWave
+    
+    use command #DarkWave
+    
+    // %free boss%
+    message $20   // "Justice is not the only"
+    message $21   // "right in this world."
+    message $22   // "Some day, you will see."
+    target self
+    use #Enemy_Vanish
+    // %end%
+}
+
+ai_script($9F)
+{
+    use command #DarkWave
+    wait
+    use command #DarkWave
+    // %free boss%
+    message $1F   // "you must not fight now!"
+    // %end%
+    condition 0
+}
+
+text(battle message $1F) {
+You must not fight now!
+}
+

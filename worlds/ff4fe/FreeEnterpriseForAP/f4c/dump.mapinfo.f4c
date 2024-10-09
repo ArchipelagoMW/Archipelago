@@ -1,0 +1,6982 @@
+map(#BaronTown)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $00
+    tileset $04
+    placement group $00
+    border tile $00
+    palette $04
+    npc palettes $00 $01
+    music #Town
+    background $22 translucent direction right speed 1
+    name index $24   // Town of Baron
+    // treasure index 0
+}
+
+map(#Mist)
+{
+    battle background $00 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $01
+    tileset $04
+    placement group $01
+    border tile $15
+    palette $04
+    npc palettes $00 $09
+    music #Town
+    background $22 translucent direction left speed 1
+    name index $28   // Village Mist
+    // treasure index 7
+}
+
+map(#Kaipo)
+{
+    battle background $00 alternate
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $02
+    tileset $04
+    placement group $02
+    border tile $36
+    palette $04
+    npc palettes $00 $05
+    music #Town
+    background $22 translucent direction up speed 1
+    name index $2A   // Kaipo
+    // treasure index 10
+}
+
+map(#Mysidia)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $03
+    tileset $04
+    placement group $03
+    border tile $00
+    palette $04
+    npc palettes $00 $01
+    music #Mysidia
+    background $22 translucent direction down speed 1
+    name index $38   // Mysidia
+    // treasure index 11
+}
+
+map(#Silvera)
+{
+    battle background $00 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $04
+    tileset $04
+    placement group $04
+    border tile $00
+    palette $19
+    npc palettes $00 $06
+    music #Town
+    background $22 direction up speed 0
+    name index $3D   // Silvera
+    // treasure index 11
+}
+
+map(#ToroiaTown)
+{
+    battle background $00 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $05
+    tileset $04
+    placement group $05
+    border tile $15
+    palette $04
+    npc palettes $00 $01
+    music #Town
+    background $22 translucent direction right speed 1
+    name index $41   // Town of Toroia
+    // treasure index 14
+}
+
+map(#Agart)
+{
+    battle background $00 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $06
+    tileset $04
+    placement group $06
+    border tile $00
+    palette $18
+    npc palettes $00 $01
+    music #Town
+    background $22 translucent direction right speed 1
+    name index $44   // Agart
+    // treasure index 18
+}
+
+map(#ToroiaInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $07
+    tileset $05
+    placement group $07
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 19
+}
+
+map(#ToroiaWeapon)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $08
+    tileset $05
+    placement group $08
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 19
+}
+
+map(#ToroiaArmor)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $09
+    tileset $05
+    placement group $09
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $12   // Armor Shop
+    // treasure index 19
+}
+
+map(#ToroiaItem)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0A
+    tileset $05
+    placement group $0A
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $13   // Item Shop
+    // treasure index 19
+}
+
+map(#BaronInn)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $0B
+    tileset $05
+    placement group $0B
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 19
+}
+
+map(#BaronEquipment)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $0C
+    tileset $05
+    placement group $0C
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 23
+}
+
+map(#CidHouse)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $0D
+    tileset $05
+    placement group $0D
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $A5
+    // treasure index 25
+}
+
+map(#RosaHouse)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $0E
+    tileset $05
+    placement group $0E
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $A6
+    // treasure index 25
+}
+
+map(#RydiaHouse)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0F
+    tileset $05
+    placement group $0F
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $A9
+    // treasure index 27
+}
+
+map(#KaipoInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $10
+    tileset $05
+    placement group $10
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 31
+}
+
+map(#KaipoCafe)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $11
+    tileset $05
+    placement group $11
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $14   // Cafe
+    // treasure index 31
+}
+
+map(#KaipoHospital)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $12
+    tileset $05
+    placement group $12
+    border tile $00
+    palette $05
+    npc palettes $00 $05
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 31
+}
+
+map(#MysidiaCafe)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $13
+    tileset $05
+    placement group $13
+    border tile $00
+    palette $05
+    npc palettes $00 $05
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    name index $14   // Cafe
+    // treasure index 31
+}
+
+map(#MysidiaInn)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $14
+    tileset $05
+    placement group $14
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 31
+}
+
+map(#MountOrdealsMirrorRoom)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $15
+    tileset $07
+    placement group $15
+    border tile $72
+    palette $07
+    npc palettes $00 $01
+    music #None
+    background $6D translucent scroll both direction up speed 2
+    name index $80
+    // treasure index 31
+}
+
+map(#HouseOfWishes)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $16
+    tileset $05
+    placement group $16
+    border tile $00
+    palette $05
+    npc palettes $00 $09
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    name index $39   // House of Wishes
+    // treasure index 31
+}
+
+map(#RoomOfWishes)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $17
+    tileset $06
+    placement group $17
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Prelude
+    background $23 scroll both direction up speed 2
+    name index $3B   // Room of Wishes
+    // treasure index 31
+}
+
+map(#ToroiaCafe)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $18
+    tileset $05
+    placement group $18
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $14   // Cafe
+    // treasure index 31
+}
+
+map(#ToroiaCafeUpstairs)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $19
+    tileset $05
+    placement group $19
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 31
+}
+
+map(#ToroiaDancers)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1A
+    tileset $06
+    placement group $1A
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $56   // Saloon KING
+    // treasure index 31
+}
+
+map($1B)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1B
+    tileset $06
+    placement group $1B
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #LongWayToGo
+    background $23 scroll both direction up speed 2
+    name index $42   // D
+    // treasure index 31
+}
+
+map(#ToroiaStable)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1C
+    tileset $05
+    placement group $1C
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $43   // Black Chocobo Farm
+    // treasure index 31
+}
+
+map(#ToroiaStableDownstairs)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1D
+    tileset $05
+    placement group $1D
+    border tile $00
+    palette $05
+    npc palettes $00 $08
+    music #ChocoboForest
+    background $23 scroll both direction up speed 2
+    name index $43   // Black Chocobo Farm
+    // treasure index 31
+}
+
+map(#AstroTower)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1E
+    tileset $05
+    placement group $1E
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $45   // Astro Tower
+    // treasure index 31
+}
+
+map(#AstroTowerObservatory)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1F
+    tileset $05
+    placement group $5E
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $46   // Observatory
+    // treasure index 31
+}
+
+map(#AgartInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $20
+    tileset $05
+    placement group $20
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 31
+}
+
+map(#BlackChocoboForest)
+{
+    battle background $00 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $21
+    tileset $04
+    placement group $21
+    border tile $15
+    palette $04
+    npc palettes $02 $08
+    music #ChocoboForest
+    background $22 direction left speed 0
+    name index $1A   // Chocobo's Village
+    // treasure index 31
+}
+
+map(#TownWaterBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $22
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $22 direction up speed 0
+    name index $22   // Black Magic Class
+    // treasure index 34
+}
+
+map(#CastleFloorBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $23
+    tileset $06
+    placement group $00
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #None
+    background $23 direction up speed 0
+    name index $23   // Room
+    // treasure index 34
+}
+
+map(#BaronCastle)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $24
+    tileset $03
+    placement group $24
+    border tile $02
+    palette $03
+    npc palettes $00 $01
+    music #Baron
+    background $6B translucent direction right speed 1
+    name index $20   // Baron
+    // treasure index 34
+}
+
+map(#Damcyan)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $25
+    tileset $03
+    placement group $25
+    border tile $09
+    palette $03
+    npc palettes $00 $01
+    music #Eblan
+    background $29 scroll both direction up speed 2
+    name index $2D   // Damcyan
+    // treasure index 34
+}
+
+map(#Fabul)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $26
+    tileset $03
+    placement group $26
+    border tile $4D
+    palette $03
+    npc palettes $00 $09
+    music #Fabul
+    background $6B direction right speed 1
+    name index $33   // Fabul
+    // treasure index 34
+}
+
+map(#ToroiaCastle)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $27
+    tileset $03
+    placement group $27
+    border tile $4D
+    palette $03
+    npc palettes $00 $06
+    music #Toroia
+    background $6B translucent direction right speed 1
+    name index $40   // Toroian Castle
+    // treasure index 34
+}
+
+map(#Eblan)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $28
+    tileset $03
+    placement group $28
+    border tile $09
+    palette $03
+    npc palettes $00 $01
+    music #Eblan
+    background $29 scroll both direction up speed 2
+    name index $48   // Eblan
+    // treasure index 34
+}
+
+map(#DesertBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $29
+    tileset $03
+    placement group $29
+    border tile $00
+    palette $03
+    npc palettes $00 $00
+    music #None
+    background $29 direction up speed 0
+    name index $29   // D
+    // treasure index 34
+}
+
+map(#BaronCastleLobby)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2A
+    tileset $06
+    placement group $2A
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 34
+}
+
+map(#BaronCastleOuterCourt)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2B
+    tileset $06
+    placement group $2B
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 37
+}
+
+map(#BaronCastleThroneRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2C
+    tileset $06
+    placement group $2C
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $16   // King's Room
+    // treasure index 37
+}
+
+map(#BaronCastleWestHall)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2D
+    tileset $06
+    placement group $2D
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 37
+}
+
+map(#BaronCastleEastHall)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2E
+    tileset $06
+    placement group $2E
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 37
+}
+
+map(#BaronCastlePrisonEntrance)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2F
+    tileset $06
+    placement group $2F
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 43
+}
+
+map(#BaronCastlePrison)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $30
+    tileset $06
+    placement group $30
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $17   // Dungeon
+    // treasure index 43
+}
+
+map(#BaronCastleSoldiersQuarters)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $31
+    tileset $06
+    placement group $31
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 43
+}
+
+map(#BaronCastleWestTower1F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $32
+    tileset $06
+    placement group $32
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 43
+}
+
+map(#BaronCastleWestTower2F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $33
+    tileset $06
+    placement group $33
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 43
+}
+
+map(#BaronCastleCecilRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $34
+    tileset $06
+    placement group $34
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $23   // Room
+    // treasure index 43
+}
+
+map(#BaronCastleEastTower1F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $35
+    tileset $06
+    placement group $35
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 43
+}
+
+map(#BaronCastleEastTower2F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $36
+    tileset $06
+    placement group $36
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 47
+}
+
+map(#BaronCastleEastTower3F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $37
+    tileset $06
+    placement group $37
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 49
+}
+
+map(#BaronCastleEastTowerB1)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $38
+    tileset $06
+    placement group $38
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 54
+}
+
+map(#BaronCastleOdinRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $39
+    tileset $06
+    placement group $39
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 55
+}
+
+map(#SewerEntrance)
+{
+    battle background $04 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $3A
+    tileset $0E
+    placement group $3A
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $37   // Old Water-way
+    // treasure index 55
+}
+
+map(#SewerB3)
+{
+    battle background $04 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $3B
+    tileset $0E
+    placement group $3B
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $0A   // B3F
+    // treasure index 58
+}
+
+map(#SewerB1)
+{
+    battle background $04 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $3C
+    tileset $0E
+    placement group $3C
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 61
+}
+
+map(#SewerSaveRoom)
+{
+    battle background $04 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $3D
+    tileset $0E
+    placement group $3D
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 61
+}
+
+map(#SewerB2)
+{
+    battle background $04 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $3E
+    tileset $0E
+    placement group $3E
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 62
+}
+
+map(#Damcyan1F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3F
+    tileset $06
+    placement group $3F
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 63
+}
+
+map(#Damcyan2F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $40
+    tileset $06
+    placement group $40
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 63
+}
+
+map(#Damcyan3F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $41
+    tileset $06
+    placement group $41
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 64
+}
+
+map(#DamcyanTreasuryEntrance)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $42
+    tileset $06
+    placement group $42
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $2E   // Basement
+    // treasure index 64
+}
+
+map(#DamcyanTreasuryDownstairs)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $43
+    tileset $06
+    placement group $43
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 67
+}
+
+map(#RoomToSewer)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $44
+    tileset $05
+    placement group $44
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 76
+}
+
+map(#AgartWeapon)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $08
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $45
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 77
+}
+
+map(#AgartArmor)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $09
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $46
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $12   // Armor Shop
+    // treasure index 77
+}
+
+map(#FabulLobby)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $47
+    tileset $06
+    placement group $47
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 77
+}
+
+map(#FabulSecondFloor)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $48
+    tileset $06
+    placement group $48
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 77
+}
+
+map(#FabulThroneRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $49
+    tileset $06
+    placement group $49
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $16   // King's Room
+    // treasure index 77
+}
+
+map(#FabulCrystalRoom)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $4A
+    tileset $07
+    placement group $4A
+    border tile $72
+    palette $07
+    npc palettes $00 $04
+    music #Prelude
+    background $AF scroll both direction up speed 2
+    name index $18   // Crystal Room
+    // treasure index 81
+}
+
+map(#FabulEquipment)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $4B
+    tileset $06
+    placement group $4B
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $1B   // Weapons/Armors
+    // treasure index 81
+}
+
+map(#FabulInn)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $4C
+    tileset $06
+    placement group $4C
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 81
+}
+
+map(#FabulEastTower1F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $4D
+    tileset $06
+    placement group $4D
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $1D   // Right Tower
+    // treasure index 81
+}
+
+map(#FabulEastTower2F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $4E
+    tileset $06
+    placement group $4E
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 81
+}
+
+map(#FabulKingRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $4F
+    tileset $06
+    placement group $4F
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 82
+}
+
+map(#FabulWestTower1F)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $50
+    tileset $06
+    placement group $50
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $1C   // Left Tower
+    // treasure index 83
+}
+
+map(#FabulHospital)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $51
+    tileset $06
+    placement group $51
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 87
+}
+
+map(#FabulYangRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $52
+    tileset $06
+    placement group $52
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 87
+}
+
+map(#FieldOutsideMist)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $53
+    tileset $04
+    placement group $53
+    border tile $15
+    palette $04
+    npc palettes $00 $01
+    music #None
+    background $23 direction up speed 0
+    name index $80
+    // treasure index 87
+}
+
+map(#WateryPassSaveRoom)
+{
+    battle background $04 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $54
+    tileset $0E
+    placement group $54
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 87
+}
+
+map(#ToroiaCastleLobby)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $55
+    tileset $06
+    placement group $55
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 87
+}
+
+map(#ToroiaCastleClericRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $56
+    tileset $06
+    placement group $56
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 87
+}
+
+map(#ToroiaCastleCrystalRoom)
+{
+    battle background $0E 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $4A
+    // ! this map's grid ID does not match its map ID
+    tileset $07
+    placement group $57
+    border tile $72
+    palette $07
+    npc palettes $00 $01
+    music #Prelude
+    background $AF scroll both direction up speed 2
+    name index $18   // Crystal Room
+    // treasure index 87
+}
+
+map(#ToroiaCastleHospital)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $58
+    tileset $06
+    placement group $23
+    border tile $00
+    palette $06
+    npc palettes $00 $05
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $80
+    // treasure index 87
+}
+
+map(#ToroiaCastleStairs)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $59
+    tileset $06
+    placement group $59
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 87
+}
+
+map(#ToroiaCastleHall)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5A
+    tileset $06
+    placement group $5A
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 87
+}
+
+map(#ToroiaCastlePotRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5B
+    tileset $06
+    placement group $5B
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 87
+}
+
+map(#ToroiaCastleChestRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5C
+    tileset $06
+    placement group $5C
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 88
+}
+
+map(#ToroiaCastleTreasury)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5D
+    tileset $06
+    placement group $5D
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Toroia
+    background $23 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 96
+}
+
+map(#Eblan1F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5E
+    tileset $06
+    placement group $5E
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 114
+}
+
+map(#Eblan2F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5F
+    tileset $06
+    placement group $5F
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 115
+}
+
+map(#EblanThroneRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $60
+    tileset $06
+    placement group $60
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $16   // King's Room
+    // treasure index 120
+}
+
+map(#EblanWestTower1F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $61
+    tileset $06
+    placement group $61
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $1C   // Left Tower
+    // treasure index 120
+}
+
+map(#EblanWestTower2F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $62
+    tileset $06
+    placement group $62
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 122
+}
+
+map(#EblanEastTower1F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $63
+    tileset $06
+    placement group $63
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $1D   // Right Tower
+    // treasure index 126
+}
+
+map(#EblanEastTower2F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $64
+    tileset $06
+    placement group $64
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 128
+}
+
+map(#EblanBasement)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $65
+    tileset $06
+    placement group $65
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    name index $52   // Basement
+    // treasure index 133
+}
+
+map(#BaronCastleBlackMagicSchool)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $66
+    tileset $06
+    placement group $66
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $22   // Black Magic Class
+    // treasure index 136
+}
+
+map(#BaronCastleWhiteMagicSchool)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $66
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $67
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $21   // White Magic Class
+    // treasure index 136
+}
+
+map(#DesertBG2)
+{
+    battle background $09 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $29
+    // ! this map's grid ID does not match its map ID
+    tileset $03
+    placement group $68
+    border tile $3D
+    palette $03
+    npc palettes $00 $01
+    music #Sad
+    background $29 scroll both direction up speed 2
+    name index $3E   // D
+    // treasure index 136
+}
+
+map(#TrainingRoom)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $66
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $69
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $1F   // Training Room
+    // treasure index 136
+}
+
+map(#Waterfall)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $6A
+    tileset $0E
+    placement group $6A
+    border tile $5B
+    palette $0E
+    npc palettes $00 $05
+    music $44
+    background $6A scroll both direction up speed 2
+    name index $6A   // D
+    // treasure index 136
+}
+
+map(#CastleWaterBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $6B
+    tileset $03
+    placement group $00
+    border tile $18
+    palette $03
+    npc palettes $00 $00
+    music #None
+    background $6B direction up speed 0
+    name index $6B   // D
+    // treasure index 136
+}
+
+map(#MistCave)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $6C
+    tileset $0E
+    placement group $6C
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7D translucent direction left speed 1
+    name index $27   // Misty Cave
+    // treasure index 136
+}
+
+map(#MirrorRoomBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $6D
+    tileset $07
+    placement group $6D
+    border tile $7F
+    palette $07
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $80
+    // treasure index 140
+}
+
+map(#WateryPassBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $6E
+    tileset $0E
+    placement group $6E
+    border tile $6E
+    palette $0E
+    npc palettes $00 $00
+    music #None
+    background $6E direction up speed 0
+    name index $6E   // D
+    // treasure index 140
+}
+
+map(#WateryPass1F)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $6F
+    tileset $0E
+    placement group $6F
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $2B   // Watery Pass-South
+    // treasure index 140
+    // bit75 true
+}
+
+map(#WateryPass2F)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $70
+    tileset $0E
+    placement group $70
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 145
+    // bit75 true
+}
+
+map(#WateryPass3F)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $71
+    tileset $0E
+    placement group $71
+    border tile $6D
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $0A   // B3F
+    // treasure index 148
+    // bit75 true
+}
+
+map(#WateryPass4F)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $72
+    tileset $0E
+    placement group $72
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 150
+    // bit75 true
+}
+
+map(#WateryPass5F)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $73
+    tileset $0E
+    placement group $73
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $6E scroll both direction up speed 1
+    name index $26   // Watery Pass-North
+    // treasure index 152
+}
+
+map(#WaterfallEntrance)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $74
+    tileset $0E
+    placement group $74
+    border tile $6E
+    palette $0E
+    npc palettes $00 $05
+    music $44
+    background $7C translucent scroll both direction up speed 2
+    name index $2C   // Waterfalls
+    // treasure index 156
+    // bit75 true
+}
+
+map(#Waterfall1F)
+{
+    battle background $04 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $75
+    tileset $0E
+    placement group $75
+    border tile $6D
+    palette $0E
+    npc palettes $00 $05
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 156
+    // bit75 true
+}
+
+map(#Waterfall2F)
+{
+    battle background $04 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $76
+    tileset $0E
+    placement group $76
+    border tile $6E
+    palette $0E
+    npc palettes $00 $05
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $25   // Lake
+    // treasure index 158
+    // bit75 true
+}
+
+map(#AntlionCave1F)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $77
+    tileset $0E
+    placement group $77
+    border tile $6E
+    palette $10
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $2F   // Antlion B1F
+    // treasure index 160
+}
+
+map(#AntlionCave2F)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $78
+    tileset $0E
+    placement group $78
+    border tile $6E
+    palette $10
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 166
+}
+
+map(#AntlionCaveNest)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $79
+    tileset $0E
+    placement group $79
+    border tile $6E
+    palette $10
+    npc palettes $00 $08
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $30   // Antlion's Nest
+    // treasure index 169
+}
+
+map(#AntlionCaveSaveRoom)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7A
+    tileset $0E
+    placement group $7A
+    border tile $6E
+    palette $10
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 169
+}
+
+map(#AntlionCaveTreasureRoom)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7B
+    tileset $0E
+    placement group $7B
+    border tile $6E
+    palette $10
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 172
+}
+
+map(#BlackBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $7C
+    tileset $06
+    placement group $7C
+    border tile $00
+    palette $06
+    npc palettes $00 $00
+    music #None
+    background $7C direction up speed 0
+    name index $7C
+    // treasure index 173
+}
+
+map(#MistBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $7D
+    tileset $0E
+    placement group $7D
+    border tile $59
+    palette $0E
+    npc palettes $00 $00
+    music #None
+    background $7D direction up speed 0
+    name index $7D
+    // treasure index 173
+}
+
+map(#MountHobsWest)
+{
+    battle background $02 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7E
+    tileset $0D
+    placement group $7E
+    border tile $09
+    palette $0D
+    npc palettes $00 $05
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    name index $31   // Mt.Hobs-West
+    // treasure index 173
+}
+
+map(#MountHobsSummit)
+{
+    battle background $02 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7F
+    tileset $0D
+    placement group $7F
+    border tile $73
+    palette $0D
+    npc palettes $00 $01
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    name index $32   // Summit
+    // treasure index 173
+}
+
+map(#MountHobsEast)
+{
+    battle background $02 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $80
+    tileset $0D
+    placement group $80
+    border tile $31
+    palette $0D
+    npc palettes $00 $01
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    name index $34   // Mt.Hobs-East
+    // treasure index 174
+}
+
+map(#MountHobsSave)
+{
+    battle background $02 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $81
+    tileset $0D
+    placement group $81
+    border tile $73
+    palette $0D
+    npc palettes $00 $01
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    name index $80
+    // treasure index 174
+}
+
+map(#MountainBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $82
+    tileset $0D
+    placement group $82
+    border tile $79
+    palette $0D
+    npc palettes $00 $00
+    music #None
+    background $82 direction up speed 0
+    name index $02   // 3F
+    // treasure index 178
+}
+
+map(#WateryPassWaterfallRoom)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $83
+    tileset $0E
+    placement group $83
+    border tile $6E
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $1E   // ?
+    // treasure index 178
+    // bit75 true
+}
+
+map(#MountOrdeals1F)
+{
+    battle background $02 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $84
+    tileset $0D
+    placement group $84
+    border tile $09
+    palette $0D
+    npc palettes $00 $05
+    music #Mountain
+    background $84 scroll both direction up speed 2
+    name index $3C   // Mt.Ordeals
+    // treasure index 181
+}
+
+map(#MountOrdeals2F)
+{
+    battle background $02 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $85
+    tileset $0D
+    placement group $85
+    border tile $73
+    palette $0D
+    npc palettes $00 $01
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    name index $50   // Mt.Ordeals-3rd station
+    // treasure index 183
+}
+
+map(#MountOrdeals3F)
+{
+    battle background $02 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $86
+    tileset $0D
+    placement group $86
+    border tile $73
+    palette $0D
+    npc palettes $00 $01
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    name index $51   // Mt.Ordeals-7th station
+    // treasure index 183
+}
+
+map(#MountOrdealsSummit)
+{
+    battle background $02 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $87
+    tileset $0D
+    placement group $87
+    border tile $73
+    palette $0D
+    npc palettes $00 $01
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    name index $32   // Summit
+    // treasure index 185
+}
+
+map(#MysidiaCrystalRoom)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $88
+    tileset $07
+    placement group $88
+    border tile $72
+    palette $07
+    npc palettes $00 $04
+    music #Prelude
+    background $AF scroll both direction up speed 2
+    name index $18   // Crystal Room
+    // treasure index 185
+}
+
+map(#MysidiaSerpentRoad)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $89
+    tileset $06
+    placement group $89
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    name index $3A   // Serpent Road
+    // treasure index 185
+}
+
+map(#BaronCastleAntechamber)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $8A
+    tileset $06
+    placement group $8A
+    border tile $00
+    palette $06
+    npc palettes $00 $07
+    music #Baron
+    background $8A scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 185
+}
+
+map(#AgartWell)
+{
+    battle background $00 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $8B
+    tileset $04
+    placement group $8B
+    border tile $00
+    palette $18
+    npc palettes $00 $01
+    music #Town
+    background $22 direction right speed 1
+    name index $80
+    // treasure index 185
+}
+
+map(#CaveMagnes1F)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $8C
+    tileset $02
+    placement group $8C
+    border tile $6A
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $47   // Cave Magnes
+    // treasure index 185
+}
+
+map(#CaveMagnes2F)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $8D
+    tileset $02
+    placement group $8D
+    border tile $09
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 187
+}
+
+map(#CaveMagnesPitTreasureRoom)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $8E
+    tileset $02
+    placement group $8E
+    border tile $09
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $80
+    // treasure index 188
+}
+
+map(#CaveMagnes3F)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $8F
+    tileset $02
+    placement group $8F
+    border tile $6A
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $0A   // B3F
+    // treasure index 190
+}
+
+map(#CaveMagnesTorchTreasureRoom)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $90
+    tileset $02
+    placement group $90
+    border tile $09
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $80
+    // treasure index 190
+}
+
+map(#CaveMagnes4F)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $91
+    tileset $02
+    placement group $91
+    border tile $09
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $80
+    // treasure index 193
+}
+
+map(#CaveMagnesSaveRoom)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $92
+    tileset $02
+    placement group $92
+    border tile $09
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $80
+    // treasure index 194
+}
+
+map(#CaveMagnes5F)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $93
+    tileset $02
+    placement group $93
+    border tile $6A
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $0B   // B4F
+    // treasure index 194
+}
+
+map(#CaveMagnesCrystalRoom)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic enabled
+    grid $4A
+    // ! this map's grid ID does not match its map ID
+    tileset $07
+    placement group $94
+    border tile $72
+    palette $07
+    npc palettes $00 $04
+    music #Sad2
+    background $AF scroll both direction up speed 2
+    name index $18   // Crystal Room
+    // treasure index 195
+}
+
+map(#CaveMagnesBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic enabled
+    grid $95
+    tileset $02
+    placement group $95
+    border tile $66
+    palette $02
+    npc palettes $00 $00
+    music #None
+    background $95 scroll both direction up speed 2
+    name index $80
+    // treasure index 195
+}
+
+map(#WateryPassCamp)
+{
+    battle background $04 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $96
+    tileset $0E
+    placement group $96
+    border tile $01
+    palette $0E
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $15   // Camp
+    // treasure index 195
+}
+
+map(#BaronSerpentRoad)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $97
+    tileset $06
+    placement group $97
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $3A   // Serpent Road
+    // treasure index 195
+}
+
+map(#Zot1F)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $98
+    tileset $0A
+    placement group $98
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Zot
+    background $9B scroll both direction up speed 2
+    name index $4B   // Tower of Zot
+    // treasure index 195
+}
+
+map(#Zot2F)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $99
+    tileset $0A
+    placement group $99
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Zot
+    background $9B scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 196
+}
+
+map(#Zot3F)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $9A
+    tileset $0A
+    placement group $9A
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Zot
+    background $9B scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 197
+}
+
+map(#Black)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $9B
+    tileset $06
+    placement group $9B
+    border tile $2F
+    palette $06
+    npc palettes $00 $01
+    music #None
+    background $9B direction up speed 0
+    name index $80
+    // treasure index 197
+}
+
+map(#Zot4F)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $9C
+    tileset $0A
+    placement group $9C
+    border tile $2F
+    palette $0A
+    npc palettes $00 $09
+    music #Zot
+    background $9B scroll both direction up speed 2
+    name index $03   // 4F
+    // treasure index 197
+}
+
+map(#Zot5F)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $9D
+    tileset $0A
+    placement group $9D
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Zot
+    background $9B scroll both direction up speed 2
+    name index $04   // 5F
+    // treasure index 197
+}
+
+map(#Zot6F)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $9E
+    tileset $0A
+    placement group $9E
+    border tile $2F
+    palette $0A
+    npc palettes $00 $05
+    music #Zot
+    background $9B scroll both direction up speed 2
+    name index $05   // 6F
+    // treasure index 201
+}
+
+map(#ZotCommandCenter)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $9F
+    tileset $0A
+    placement group $9F
+    border tile $2F
+    palette $0A
+    npc palettes $00 $07
+    music #Zot
+    background $9B scroll both direction up speed 2
+    name index $06   // 7F
+    // treasure index 201
+}
+
+map(#AdamantGrotto)
+{
+    battle background $04 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $A0
+    tileset $0E
+    placement group $A0
+    border tile $6E
+    palette $10
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $5B   // Grotto Adamant
+    // treasure index 201
+}
+
+map(#CaveMagnesSaveRoom2)
+{
+    battle background $08 
+    warp enabled
+    exit enabled
+    magnetic enabled
+    grid $92
+    // ! this map's grid ID does not match its map ID
+    tileset $02
+    placement group $92
+    border tile $09
+    palette $02
+    npc palettes $00 $01
+    music #Cave
+    background $95 scroll both direction up speed 2
+    name index $80
+    // treasure index 201
+}
+
+map(#ZotSaveRoom)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $A6
+    // ! this map's grid ID does not match its map ID
+    tileset $08
+    placement group $A2
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Zot
+    background $7C scroll both direction up speed 2
+    name index $80
+    // treasure index 201
+}
+
+map(#CidAirship)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $A3
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #None
+    background $DB scroll both direction up speed 2
+    name index $54   // Enterprise
+    // treasure index 201
+}
+
+map(#TwinsAirship)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $A4
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #None
+    background $DB scroll both direction up speed 2
+    name index $54   // Enterprise
+    // treasure index 201
+}
+
+map(#EdwardAirship)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $A5
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #None
+    background $DB scroll both direction up speed 2
+    name index $54   // Enterprise
+    // treasure index 201
+}
+
+map(#BabilSaveRoom2)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $A6
+    tileset $08
+    placement group $A6
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $7C scroll both direction up speed 2
+    name index $80
+    // treasure index 201
+}
+
+map(#BabilB1)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $A7
+    tileset $0A
+    placement group $A7
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $9B scroll both direction up speed 2
+    name index $4A   // Tower of Bab-il 1F
+    // treasure index 203
+}
+
+map(#BabilB2)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $A8
+    tileset $0A
+    placement group $A8
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $9B scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 205
+}
+
+map(#BabilB3)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $A9
+    tileset $0A
+    placement group $A9
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $9B scroll both direction up speed 2
+    name index $0A   // B3F
+    // treasure index 206
+}
+
+map(#BabilB4)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $AA
+    tileset $0A
+    placement group $AA
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $9B scroll both direction up speed 2
+    name index $0B   // B4F
+    // treasure index 207
+}
+
+map(#BabilCrystalRoom)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $AB
+    tileset $07
+    placement group $AB
+    border tile $72
+    palette $07
+    npc palettes $00 $04
+    music #Prelude
+    background $AF scroll both direction up speed 2
+    name index $18   // Crystal Room
+    // treasure index 208
+}
+
+map(#BabilB5)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $AC
+    tileset $0A
+    placement group $AC
+    border tile $2F
+    palette $0A
+    npc palettes $00 $03
+    music #Babil
+    background $9B scroll both direction up speed 2
+    name index $0C   // B5F
+    // treasure index 208
+}
+
+map(#FallingBG)
+{
+    battle background $04 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $AD
+    tileset $0E
+    placement group $AD
+    border tile $1E
+    palette $0E
+    npc palettes $00 $01
+    music #None
+    background $AE direction up speed 3
+    name index $80
+    // treasure index 209
+}
+
+map(#UndergroundTunnelBG)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $AE
+    tileset $0A
+    placement group $AE
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $9B scroll both direction up speed 2
+    name index $0E   // B7F
+    // treasure index 212
+}
+
+map(#CrystalRoomBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $AF
+    tileset $07
+    placement group $AF
+    border tile $72
+    palette $07
+    npc palettes $00 $00
+    music #None
+    background $AF direction up speed 0
+    name index $2F   // Antlion B1F
+    // treasure index 214
+}
+
+map(#EndingCecilRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $B0
+    tileset $06
+    placement group $5D
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #None
+    background $FF direction up speed 0
+    name index $30   // Antlion's Nest
+    // treasure index 214
+}
+
+map(#TrainingRoomMain)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $B1
+    tileset $05
+    placement group $2A
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $1F   // Training Room
+    // treasure index 214
+}
+
+map(#TrainingRoomUpstairs)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $B2
+    tileset $05
+    placement group $2B
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $01   // 2F
+    // treasure index 214
+}
+
+map($B3)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $B3
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $FF direction up speed 0
+    name index $33   // Fabul
+    // treasure index 214
+}
+
+map($B4)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $B4
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $FF direction up speed 0
+    name index $34   // Mt.Hobs-East
+    // treasure index 214
+}
+
+map(#GiantMouth)
+{
+    battle background $0C alternate
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $B5
+    tileset $0B
+    placement group $B5
+    border tile $7E
+    palette $0B
+    npc palettes $00 $01
+    music #Giant
+    background $BE scroll both direction up speed 1
+    name index $4C   // Mouth
+    // treasure index 214
+}
+
+map(#GiantNeck)
+{
+    battle background $0C alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $B6
+    tileset $0B
+    placement group $B6
+    border tile $7E
+    palette $0B
+    npc palettes $00 $01
+    music #Giant
+    background $BE scroll both direction up speed 1
+    name index $72   // Neck
+    // treasure index 214
+}
+
+map(#GiantChest)
+{
+    battle background $0C alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $B7
+    tileset $0B
+    placement group $B7
+    border tile $7E
+    palette $0B
+    npc palettes $00 $01
+    music #Giant
+    background $BE scroll both direction up speed 1
+    name index $73   // Chest
+    // treasure index 214
+}
+
+map($B8)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $B8
+    tileset $0B
+    placement group $B8
+    border tile $73
+    palette $0B
+    npc palettes $00 $00
+    music #None
+    background $BE scroll both direction up speed 1
+    name index $38   // Mysidia
+    // treasure index 219
+}
+
+map(#GiantStomach)
+{
+    battle background $0C alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $B9
+    tileset $0B
+    placement group $B9
+    border tile $7E
+    palette $0B
+    npc palettes $00 $01
+    music #Giant
+    background $BE scroll both direction up speed 1
+    name index $74   // Stomach
+    // treasure index 219
+}
+
+map(#GiantPassage)
+{
+    battle background $0C alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $BA
+    tileset $0B
+    placement group $BA
+    border tile $7E
+    palette $0B
+    npc palettes $00 $01
+    music #Giant
+    background $BE scroll both direction up speed 1
+    name index $75   // Passage
+    // treasure index 221
+}
+
+map($BB)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $BB
+    tileset $00
+    placement group $BB
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $BB scroll both direction up speed 1
+    name index $80
+    // treasure index 222
+}
+
+map(#GiantLung)
+{
+    battle background $0C alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $BC
+    tileset $0B
+    placement group $BC
+    border tile $7E
+    palette $0B
+    npc palettes $00 $05
+    music #Giant
+    background $BE scroll both direction up speed 1
+    name index $76   // Lung
+    // treasure index 222
+}
+
+map(#GiantCPU)
+{
+    battle background $0C alternate
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $BD
+    tileset $0B
+    placement group $BD
+    border tile $7E
+    palette $0B
+    npc palettes $00 $01
+    music #Giant
+    background $BD scroll both direction up speed 2
+    name index $77   // CPU
+    // treasure index 222
+}
+
+map(#GiantBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $BE
+    tileset $0B
+    placement group $BE
+    border tile $72
+    palette $0B
+    npc palettes $00 $00
+    music #None
+    background $BE scroll both direction up speed 2
+    name index $3E   // D
+    // treasure index 222
+}
+
+map($BF)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $BF
+    tileset $00
+    placement group $BF
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $BF direction up speed 0
+    name index $80
+    // treasure index 222
+}
+
+map(#SoldierAirship)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C0
+    tileset $00
+    placement group $C0
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #Opening
+    background $DB direction up speed 2
+    name index $80
+    // treasure index 222
+}
+
+map(#FabulPort)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C1
+    tileset $0F
+    placement group $C1
+    border tile $48
+    palette $00
+    npc palettes $00 $01
+    music #Cid
+    background $DC scroll both direction up speed 2
+    name index $35   // Port of Fabul
+    // treasure index 222
+}
+
+map(#Boat)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C1
+    // ! this map's grid ID does not match its map ID
+    tileset $0F
+    placement group $C2
+    border tile $48
+    palette $00
+    npc palettes $00 $05
+    music #Overworld
+    background $C2 direction up speed 1
+    name index $36   // D
+    // treasure index 222
+}
+
+map(#DockedAirship)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    tileset $00
+    placement group $C3
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #Baron
+    background $DF scroll both direction up speed 2
+    name index $54   // Enterprise
+    // treasure index 222
+}
+
+map(#JoinedAirships)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C4
+    tileset $00
+    placement group $C4
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #None
+    background $DB scroll both direction up speed 2
+    name index $80
+    // treasure index 222
+}
+
+map(#EmptyAirship)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C5
+    tileset $00
+    placement group $C5
+    border tile $7F
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $DB direction up speed 0
+    name index $53   // D
+    // treasure index 222
+}
+
+map(#UnderworldAirship)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $D6
+    border tile $6C
+    palette $1E
+    npc palettes $00 $01
+    music #Underworld
+    background $C6 direction up speed 3
+    name index $54   // Enterprise
+    // treasure index 222
+}
+
+map(#CaveEblanEntrance)
+{
+    battle background $04 alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $C7
+    tileset $0E
+    placement group $C7
+    border tile $6E
+    palette $11
+    npc palettes $00 $01
+    music #Cave
+    background $7C translucent scroll both direction up speed 2
+    name index $49   // Cave Eblana
+    // treasure index 222
+}
+
+map(#CaveEblanSettlement)
+{
+    battle background $04 alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $C8
+    tileset $0E
+    placement group $C8
+    border tile $6E
+    palette $11
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 225
+}
+
+map(#CaveEblanPass)
+{
+    battle background $04 alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $C9
+    tileset $0E
+    placement group $C9
+    border tile $6E
+    palette $11
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $4F   // Pass to Bab-il
+    // treasure index 225
+}
+
+map(#CaveEblanExit)
+{
+    battle background $04 alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $CA
+    tileset $0E
+    placement group $CA
+    border tile $6E
+    palette $11
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 237
+}
+
+map(#CaveEblanInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $CB
+    tileset $06
+    placement group $CB
+    border tile $00
+    palette $16
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 241
+}
+
+map(#CaveEblanEquipment)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $CC
+    tileset $06
+    placement group $CC
+    border tile $00
+    palette $16
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $1B   // Weapons/Armors
+    // treasure index 241
+}
+
+map(#CaveEblanSaveRoom)
+{
+    battle background $04 alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3D
+    // ! this map's grid ID does not match its map ID
+    tileset $0E
+    placement group $CD
+    border tile $6E
+    palette $11
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 241
+}
+
+map(#CaveEblanHospital)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $CE
+    tileset $06
+    placement group $CE
+    border tile $00
+    palette $16
+    npc palettes $00 $01
+    music #Cave
+    background $23 scroll both direction up speed 2
+    name index $80
+    // treasure index 242
+}
+
+map(#FabulChocoboForest)
+{
+    battle background $01 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $CF
+    tileset $04
+    placement group $CF
+    border tile $15
+    palette $04
+    npc palettes $02 $08
+    music #ChocoboForest
+    background $22 direction up speed 0
+    name index $19   // Chocobo's Forest
+    // treasure index 244
+}
+
+map(#EmptyAirship2)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $D0
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #Airship
+    background $DB scroll both direction up speed 1
+    name index $60   // Sylvan Cave
+    // treasure index 245
+}
+
+map(#MountOrdealsChocoboForest)
+{
+    battle background $01 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $CF
+    // ! this map's grid ID does not match its map ID
+    tileset $04
+    placement group $CF
+    border tile $15
+    palette $04
+    npc palettes $02 $08
+    music #ChocoboForest
+    background $22 direction up speed 0
+    name index $19   // Chocobo's Forest
+    // treasure index 245
+}
+
+map(#BaronChocoboForest)
+{
+    battle background $01 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $CF
+    // ! this map's grid ID does not match its map ID
+    tileset $04
+    placement group $5F
+    border tile $15
+    palette $04
+    npc palettes $02 $08
+    music #ChocoboForest
+    background $22 direction up speed 0
+    underground npcs
+    name index $19   // Chocobo's Forest
+    // treasure index 246
+}
+
+map(#TroiaChocoboForest)
+{
+    battle background $01 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $CF
+    // ! this map's grid ID does not match its map ID
+    tileset $04
+    placement group $CF
+    border tile $15
+    palette $04
+    npc palettes $02 $08
+    music #ChocoboForest
+    background $22 direction up speed 0
+    name index $19   // Chocobo's Forest
+    // treasure index 247
+}
+
+map(#IslandChocoboForest)
+{
+    battle background $01 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $CF
+    // ! this map's grid ID does not match its map ID
+    tileset $04
+    placement group $CF
+    border tile $15
+    palette $04
+    npc palettes $02 $08
+    music #ChocoboForest
+    background $22 direction up speed 0
+    name index $19   // Chocobo's Forest
+    // treasure index 248
+}
+
+map(#BaronEmptyThroneRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2C
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $D5
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    name index $16   // King's Room
+    // treasure index 249
+}
+
+map(#EmptyAirshipBlack)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $D6
+    border tile $7F
+    palette $00
+    npc palettes $00 $01
+    music #Underworld
+    background $D6 scroll both direction up speed 2
+    name index $54   // Enterprise
+    // treasure index 249
+}
+
+map(#EmptyAirship3)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $D6
+    border tile $6C
+    palette $00
+    npc palettes $00 $01
+    music #None
+    background $DB direction up speed 0
+    name index $54   // Enterprise
+    // treasure index 249
+}
+
+map(#EmptyAirshipUnderground)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $D6
+    border tile $6C
+    palette $1E
+    npc palettes $00 $01
+    music #None
+    background $C6 direction up speed 0
+    name index $54   // Enterprise
+    // treasure index 249
+}
+
+map(#EmptyAirshipBlack2)
+{
+    battle background $06 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $C3
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $D6
+    border tile $7F
+    palette $1E
+    npc palettes $00 $01
+    music #None
+    background $D6 scroll both direction up speed 0
+    name index $54   // Enterprise
+    // treasure index 249
+}
+
+map(#TowerOfWishesFinalBattle)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $17
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $22
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Prelude
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $3B   // Room of Wishes
+    // treasure index 249
+}
+
+map(#AirshipBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $DB
+    tileset $00
+    placement group $DB
+    border tile $42
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $DB direction up speed 0
+    name index $5B   // Grotto Adamant
+    // treasure index 249
+}
+
+map(#LargeDock)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $DC
+    tileset $00
+    placement group $DC
+    border tile $30
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $DC direction up speed 0
+    name index $5C   // Dwarf Base
+    // treasure index 249
+}
+
+map($DD)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $DD
+    tileset $00
+    placement group $DD
+    border tile $7F
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $DD direction up speed 0
+    name index $5D   // Super Cannon
+    // treasure index 249
+}
+
+map($DE)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $DE
+    tileset $00
+    placement group $DE
+    border tile $7F
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $DE direction up speed 0
+    name index $5E   // Cave Bahamut
+    // treasure index 249
+}
+
+map(#SmallDock)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $DF
+    tileset $00
+    placement group $DF
+    border tile $7F
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $DF direction up speed 0
+    name index $5F   // Lunar's Lair
+    // treasure index 249
+}
+
+map(#MistInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $07
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E0
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 249
+}
+
+map(#MistWeapon)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $08
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E1
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 249
+}
+
+map(#MistArmor)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $09
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E2
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $12   // Armor Shop
+    // treasure index 249
+}
+
+map(#KaipoWeapon)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $08
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E3
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 249
+}
+
+map(#KaipoArmor)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $09
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E4
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $12   // Armor Shop
+    // treasure index 249
+}
+
+map(#MysidiaWeapon)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $08
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E5
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 249
+}
+
+map(#MysidiaArmor)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $09
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E6
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    name index $12   // Armor Shop
+    // treasure index 249
+}
+
+map(#MysidiaItem)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $0A
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E7
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    name index $13   // Item Shop
+    // treasure index 249
+}
+
+map(#SilveraInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $07
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E8
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 249
+}
+
+map(#SilveraWeapons)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $08
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $E9
+    border tile $00
+    palette $05
+    npc palettes $00 $06
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 249
+}
+
+map(#SilveraArmor)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $09
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $EA
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $12   // Armor Shop
+    // treasure index 249
+}
+
+map(#SilveraItems)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0A
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $EB
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $13   // Item Shop
+    // treasure index 249
+}
+
+map(#BaronTownItems)
+{
+    battle background $03 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $0A
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $EC
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    name index $13   // Item Shop
+    // treasure index 249
+}
+
+map(#EndingTowerOfWishes)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $16
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $00
+    border tile $00
+    palette $05
+    npc palettes $00 $09
+    music #Mysidia
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $39   // House of Wishes
+    // treasure index 249
+}
+
+map(#EndingPalom)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $31
+    // ! this map's grid ID does not match its map ID
+    tileset $04
+    placement group $0C
+    border tile $15
+    palette $04
+    npc palettes $00 $01
+    music #None
+    background $35 translucent direction down speed 1
+    underground npcs
+    underground map grid
+    name index $80
+    // treasure index 249
+}
+
+map(#EndingEblan)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $60
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $14
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $16   // King's Room
+    // treasure index 249
+}
+
+map(#EndingLeviathan)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $40
+    // ! this map's grid ID does not match its map ID
+    tileset $09
+    placement group $15
+    border tile $09
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $40 scroll both direction up speed 2
+    underground npcs
+    underground map grid
+    name index $80
+    // treasure index 249
+}
+
+map(#EndingDamcyan)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $41
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $16
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Eblan
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $02   // 3F
+    // treasure index 249
+}
+
+map(#EndingDwarfCastle)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $07
+    // ! this map's grid ID does not match its map ID
+    tileset $03
+    placement group $17
+    border tile $3D
+    palette $15
+    npc palettes $00 $01
+    music #Dwarf
+    background $1C direction right speed 1
+    underground npcs
+    underground map grid
+    name index $4D   // Castle of Dwarves
+    // treasure index 249
+}
+
+map(#EndingMountOrdeals)
+{
+    battle background $02 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $86
+    // ! this map's grid ID does not match its map ID
+    tileset $0D
+    placement group $18
+    border tile $73
+    palette $0D
+    npc palettes $00 $08
+    music #Mountain
+    background $82 scroll both direction up speed 1
+    underground npcs
+    name index $32   // Summit
+    // treasure index 249
+}
+
+map(#EndingAstroTower)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $1F
+    // ! this map's grid ID does not match its map ID
+    tileset $05
+    placement group $19
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #Town
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $46   // Observatory
+    // treasure index 249
+}
+
+map(#EndingCecilRoom2)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $B0
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $1C
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $23   // Room
+    // treasure index 249
+}
+
+map(#EndingBaronThroneRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2C
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $1D
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Baron
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $16   // King's Room
+    // treasure index 249
+}
+
+map(#EndingFabulThroneRoom)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $49
+    // ! this map's grid ID does not match its map ID
+    tileset $06
+    placement group $1E
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Fabul
+    background $23 scroll both direction up speed 2
+    underground npcs
+    name index $16   // King's Room
+    // treasure index 249
+}
+
+map($F8)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $F8
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $78   // Cave of Lunarians
+    // treasure index 249
+}
+
+map($F9)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $F9
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $79
+    // treasure index 249
+}
+
+map($FA)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $F4
+    // ! this map's grid ID does not match its map ID
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $74   // Stomach
+    // treasure index 249
+}
+
+map(#Overworld)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $FB
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $7B
+    // treasure index 249
+}
+
+map(#Underworld)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $FC
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $7C
+    // treasure index 249
+}
+
+map(#Moon)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $FD
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $7D
+    // treasure index 249
+}
+
+map(#CurrentMap)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $FE
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $7E
+    // treasure index 249
+}
+
+map($FF)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $FF
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $00 direction up speed 0
+    name index $7F
+    // treasure index 249
+}
+
+map(#SmithyHouse)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $00
+    tileset $04
+    placement group $1F
+    border tile $36
+    palette $13
+    npc palettes $00 $01
+    music #Town
+    background $135 scroll both direction up speed 2
+    name index $57   // Kokkol, the Smith's
+    // treasure index 0
+}
+
+map(#Tomra)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $01
+    tileset $04
+    placement group $01
+    border tile $36
+    palette $13
+    npc palettes $00 $01
+    music #Town
+    background $135 translucent direction left speed 1
+    name index $58   // Tomra
+    // treasure index 0
+}
+
+map(#SmithyHouseMainFloor)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $02
+    tileset $05
+    placement group $02
+    border tile $00
+    palette $1A
+    npc palettes $00 $01
+    music #Town
+    background $134 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 0
+}
+
+map(#SmithyRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $03
+    tileset $05
+    placement group $03
+    border tile $00
+    palette $1A
+    npc palettes $00 $01
+    music #Town
+    background $134 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 3
+}
+
+map(#TomraInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $04
+    tileset $05
+    placement group $04
+    border tile $00
+    palette $1A
+    npc palettes $00 $01
+    music #Town
+    background $134 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 4
+}
+
+map(#TomraEquipment)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $05
+    tileset $05
+    placement group $05
+    border tile $00
+    palette $1A
+    npc palettes $00 $01
+    music #Town
+    background $134 scroll both direction up speed 2
+    name index $1B   // Weapons/Armors
+    // treasure index 4
+}
+
+map(#TomraTreasury)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $06
+    tileset $05
+    placement group $06
+    border tile $00
+    palette $1A
+    npc palettes $00 $01
+    music #Town
+    background $134 scroll both direction up speed 2
+    name index $80
+    // treasure index 4
+}
+
+map(#DwarfCastle)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $07
+    tileset $03
+    placement group $07
+    border tile $3D
+    palette $15
+    npc palettes $00 $01
+    music #Dwarf
+    background $11C direction right speed 1
+    name index $4D   // Castle of Dwarves
+    // treasure index 10
+}
+
+map(#DwarfCastleLobby)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $08
+    tileset $06
+    placement group $08
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $00   // 1F
+    // treasure index 10
+}
+
+map(#DwarfCastleThroneRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $09
+    tileset $06
+    placement group $09
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $16   // King's Room
+    // treasure index 10
+}
+
+map(#DwarfCastleFatChocobo)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0A
+    tileset $06
+    placement group $0A
+    border tile $00
+    palette $17
+    npc palettes $00 $02
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 10
+}
+
+map(#DwarfCastleTunnel)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0B
+    tileset $06
+    placement group $0B
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 13
+}
+
+map(#CrystalRoomBG2)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $0C
+    tileset $07
+    placement group $0C
+    border tile $00
+    palette $07
+    npc palettes $00 $00
+    music #Prelude
+    background $00 direction up speed 0
+    name index $18   // Crystal Room
+    // treasure index 16
+}
+
+map(#DwarfCastleCrystalRoom)
+{
+    battle background $0E 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0D
+    tileset $07
+    placement group $0D
+    border tile $72
+    palette $07
+    npc palettes $00 $04
+    music #Prelude
+    background $10C scroll both direction up speed 2
+    name index $18   // Crystal Room
+    // treasure index 16
+}
+
+map(#DwarfCastleEquipment)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0E
+    tileset $06
+    placement group $0E
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 16
+}
+
+map(#DwarfCastleBasement)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $0F
+    tileset $06
+    placement group $0F
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $5C   // Dwarf Base
+    // treasure index 16
+}
+
+map(#DwarfCastleEastTower1F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $10
+    tileset $06
+    placement group $10
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $1D   // Right Tower
+    // treasure index 16
+}
+
+map(#DwarfCastleInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $11
+    tileset $06
+    placement group $11
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 17
+}
+
+map(#DwarfCastleHospital)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $12
+    tileset $06
+    placement group $12
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $80
+    // treasure index 18
+}
+
+map(#DwarfCastleWestTower1F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $13
+    tileset $06
+    placement group $13
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $1C   // Left Tower
+    // treasure index 18
+}
+
+map(#BabilSaveRoom)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $14
+    tileset $08
+    placement group $1F
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $80
+    // treasure index 18
+}
+
+map(#BabilIcebrandRoom)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $15
+    tileset $0A
+    placement group $1F
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $80
+    // treasure index 18
+}
+
+map(#BabilBlizzardRoom)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $15
+    // ! this map's grid ID does not match its map ID
+    tileset $0A
+    placement group $1F
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $80
+    // treasure index 19
+}
+
+map(#BabilIceShieldRoom)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $15
+    // ! this map's grid ID does not match its map ID
+    tileset $0A
+    placement group $1F
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $80
+    // treasure index 20
+}
+
+map(#BabilIceMailRoom)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $15
+    // ! this map's grid ID does not match its map ID
+    tileset $0A
+    placement group $1F
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $80
+    // treasure index 21
+}
+
+map(#DwarfCastleEastTower3F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $19
+    tileset $06
+    placement group $1F
+    border tile $7D
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $04   // 5F
+    // treasure index 22
+}
+
+map(#DwarfCastleWestTower3F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1A
+    tileset $06
+    placement group $1A
+    border tile $7D
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $04   // 5F
+    // treasure index 26
+}
+
+map(#DwarfCastleTower2F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $1B
+    tileset $06
+    placement group $1B
+    border tile $7D
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $03   // 4F
+    // treasure index 30
+}
+
+map(#DwarfCastleBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $1C
+    tileset $03
+    placement group $00
+    border tile $3D
+    palette $03
+    npc palettes $00 $00
+    music #None
+    background $11C direction up speed 0
+    name index $1C   // Left Tower
+    // treasure index 32
+}
+
+map(#BabilFloorLugae)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $28
+    // ! this map's grid ID does not match its map ID
+    tileset $0A
+    placement group $28
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $6B   // D
+    // treasure index 32
+}
+
+map(#BabilFloorIceMail)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $27
+    // ! this map's grid ID does not match its map ID
+    tileset $0A
+    placement group $27
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $06   // 7F
+    // treasure index 33
+}
+
+map(#BabilFloorAirship)
+{
+    battle background $0C 
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $26
+    // ! this map's grid ID does not match its map ID
+    tileset $0A
+    placement group $26
+    border tile $2F
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $05   // 6F
+    // treasure index 34
+}
+
+map(#DwarfCastleCafe)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $20
+    tileset $06
+    placement group $20
+    border tile $00
+    palette $17
+    npc palettes $00 $01
+    music #Dwarf
+    background $134 scroll both direction up speed 2
+    name index $6C   // Cafe HOWDY!
+    // treasure index 35
+}
+
+map(#Babil1F)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $21
+    tileset $0A
+    placement group $21
+    border tile $6E
+    palette $0A
+    npc palettes $00 $06
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $4A   // Tower of Bab-il 1F
+    // treasure index 35
+}
+
+map(#Babil2F)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $22
+    tileset $0A
+    placement group $1F
+    border tile $7E
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 38
+}
+
+map(#Babil3F)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $23
+    tileset $0A
+    placement group $1F
+    border tile $7E
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 39
+}
+
+map(#Babil4F)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $24
+    tileset $0A
+    placement group $24
+    border tile $7E
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $03   // 4F
+    // treasure index 42
+}
+
+map(#Babil5F)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $25
+    tileset $0A
+    placement group $25
+    border tile $7E
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $04   // 5F
+    // treasure index 44
+}
+
+map(#BabilFloorAirship2)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $26
+    tileset $0A
+    placement group $26
+    border tile $7E
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $05   // 6F
+    // treasure index 46
+}
+
+map(#BabilFloorIceMail2)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $27
+    tileset $0A
+    placement group $27
+    border tile $7E
+    palette $0A
+    npc palettes $00 $01
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $06   // 7F
+    // treasure index 47
+}
+
+map(#BabilFloorLugae2)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $28
+    tileset $0A
+    placement group $28
+    border tile $7E
+    palette $0A
+    npc palettes $00 $03
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $07   // 8F
+    // treasure index 48
+}
+
+map($129)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $29
+    tileset $06
+    placement group $29
+    border tile $00
+    palette $06
+    npc palettes $00 $03
+    music #Cid
+    background $134 scroll both direction up speed 2
+    name index $42   // D
+    // treasure index 49
+}
+
+map($12A)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $2A
+    tileset $06
+    placement group $2A
+    border tile $00
+    palette $06
+    npc palettes $00 $01
+    music #Prelude
+    background $134 scroll both direction up speed 2
+    name index $6D   // D
+    // treasure index 49
+    // bits81to86 $01
+}
+
+map($12B)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $2B
+    tileset $05
+    placement group $2B
+    border tile $00
+    palette $05
+    npc palettes $00 $01
+    music #LongWayToGo
+    background $134 scroll both direction up speed 2
+    name index $6E   // D
+    // treasure index 49
+}
+
+map(#BigWhale)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2C
+    tileset $08
+    placement group $2C
+    border tile $2F
+    palette $08
+    npc palettes $00 $07
+    music #BigWhale
+    background $130 scroll both direction up speed 2
+    name index $55   // The Big Whale
+    // treasure index 49
+}
+
+map(#BabilCannon)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2D
+    tileset $0A
+    placement group $2D
+    border tile $2F
+    palette $0A
+    npc palettes $00 $09
+    music #Babil
+    background $130 scroll both direction up speed 2
+    name index $5D   // Super Cannon
+    // treasure index 49
+}
+
+map(#DwarfTank)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2E
+    tileset $08
+    placement group $2E
+    border tile $2F
+    palette $08
+    npc palettes $00 $01
+    music #Dwarf
+    background $130 scroll both direction up speed 2
+    name index $80
+    // treasure index 49
+}
+
+map(#BigWhale2)
+{
+    battle background $0C 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $2C
+    // ! this map's grid ID does not match its map ID
+    tileset $08
+    placement group $2F
+    border tile $2F
+    palette $08
+    npc palettes $00 $02
+    music #BigWhale
+    background $130 scroll both direction up speed 2
+    name index $55   // The Big Whale
+    // treasure index 49
+}
+
+map(#BabilBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $30
+    tileset $0A
+    placement group $00
+    border tile $7E
+    palette $0A
+    npc palettes $00 $00
+    music #None
+    background $130 direction up speed 0
+    name index $30   // Antlion's Nest
+    // treasure index 49
+}
+
+map(#EndingPalom2)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $31
+    tileset $04
+    placement group $00
+    border tile $15
+    palette $04
+    npc palettes $00 $01
+    music #None
+    background $135 translucent direction down speed 1
+    name index $80
+    // treasure index 49
+}
+
+map(#TomraItem)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $32
+    tileset $05
+    placement group $32
+    border tile $00
+    palette $1A
+    npc palettes $00 $00
+    music #Town
+    background $134 scroll both direction up speed 2
+    name index $13   // Item Shop
+    // treasure index 49
+}
+
+map(#TowerOfWishesAfterGiant)
+{
+    battle background $03 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $33
+    tileset $06
+    placement group $33
+    border tile $7D
+    palette $06
+    npc palettes $00 $01
+    music #Prelude
+    background $134 scroll both direction up speed 2
+    name index $3B   // Room of Wishes
+    // treasure index 49
+}
+
+map(#CastleFloorBG2)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $34
+    tileset $05
+    placement group $00
+    border tile $01
+    palette $05
+    npc palettes $00 $00
+    music #None
+    background $134 direction up speed 0
+    name index $34   // Mt.Hobs-East
+    // treasure index 49
+}
+
+map(#TownWaterBG2)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $35
+    tileset $04
+    placement group $00
+    border tile $65
+    palette $04
+    npc palettes $00 $00
+    music #None
+    background $135 direction up speed 0
+    name index $35   // Port of Fabul
+    // treasure index 49
+}
+
+map(#CaveOfSummons1F)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $36
+    tileset $09
+    placement group $36
+    border tile $09
+    palette $09
+    npc palettes $00 $00
+    music #Cave
+    background $137 translucent scroll both direction up speed 1
+    name index $59   // Land of Monsters
+    // treasure index 49
+}
+
+map(#CaveOfSummons2F)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $37
+    tileset $09
+    placement group $37
+    border tile $09
+    palette $09
+    npc palettes $00 $00
+    music #Cave
+    background $138 translucent scroll both direction up speed 1
+    name index $09   // B2F
+    // treasure index 52
+}
+
+map(#CaveOfSummons3F)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $38
+    tileset $09
+    placement group $38
+    border tile $09
+    palette $09
+    npc palettes $00 $00
+    music #Cave
+    background $13A translucent scroll both direction up speed 1
+    name index $0A   // B3F
+    // treasure index 54
+}
+
+map(#SylvanCaveBG)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $00
+    // ! this map's grid ID does not match its map ID
+    tileset $09
+    placement group $00
+    border tile $23
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $13A translucent scroll both direction up speed 1
+    name index $0B   // B4F
+    // treasure index 60
+}
+
+map(#Feymarch1F)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3A
+    tileset $09
+    placement group $3A
+    border tile $1D
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $13C translucent scroll both direction up speed 1
+    name index $0B   // B4F
+    // treasure index 61
+}
+
+map(#FeymarchTreasury)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3B
+    tileset $09
+    placement group $3B
+    border tile $1D
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $13B scroll both direction up speed 2
+    name index $80
+    // treasure index 66
+}
+
+map(#Feymarch2F)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3C
+    tileset $09
+    placement group $3C
+    border tile $1D
+    palette $09
+    npc palettes $00 $02
+    music #Feymarch
+    background $13B scroll both direction up speed 1
+    name index $6F   // Town of Monsters
+    // treasure index 70
+}
+
+map(#FeymarchSaveRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3D
+    tileset $09
+    placement group $3D
+    border tile $09
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $13D scroll both direction up speed 2
+    name index $80
+    // treasure index 70
+}
+
+map(#FeymarchLibrary1F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3E
+    tileset $09
+    placement group $3E
+    border tile $09
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $13E scroll both direction up speed 2
+    name index $70   // Library
+    // treasure index 72
+}
+
+map(#FeymarchLibrary2F)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $3F
+    tileset $09
+    placement group $3F
+    border tile $09
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $13F scroll both direction up speed 2
+    name index $80
+    // treasure index 72
+}
+
+map(#FeymarchLeviathanRoom)
+{
+    battle background $0B 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $40
+    tileset $09
+    placement group $40
+    border tile $09
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $140 scroll both direction up speed 2
+    name index $80
+    // treasure index 72
+}
+
+map(#FeymarchWeapon)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $41
+    tileset $09
+    placement group $41
+    border tile $09
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $141 scroll both direction up speed 2
+    name index $11   // Weapon Shop
+    // treasure index 72
+}
+
+map(#FeymarchArmor)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $42
+    tileset $09
+    placement group $42
+    border tile $09
+    palette $09
+    npc palettes $00 $01
+    music #Feymarch
+    background $142 scroll both direction up speed 2
+    name index $12   // Armor Shop
+    // treasure index 72
+}
+
+map(#FeymarchInn)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $43
+    tileset $09
+    placement group $43
+    border tile $09
+    palette $09
+    npc palettes $00 $02
+    music #Feymarch
+    background $143 scroll both direction up speed 2
+    name index $10   // Inn
+    // treasure index 72
+}
+
+map(#SealedCaveEntrance)
+{
+    battle background $08 alternate
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $44
+    tileset $02
+    placement group $44
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $5A   // Sealed Cave
+    // treasure index 72
+}
+
+map(#SylvanCave1F)
+{
+    battle background $0B alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $45
+    tileset $09
+    placement group $45
+    border tile $09
+    palette $0F
+    npc palettes $00 $00
+    music #Feymarch
+    background $139 scroll both direction up speed 2
+    name index $60   // Sylvan Cave
+    // treasure index 72
+}
+
+map(#SylvanCave2F)
+{
+    battle background $0B alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $46
+    tileset $09
+    placement group $46
+    border tile $09
+    palette $0F
+    npc palettes $00 $00
+    music #Feymarch
+    background $139 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 82
+}
+
+map(#SylvanCave3F)
+{
+    battle background $0B alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $47
+    tileset $09
+    placement group $47
+    border tile $09
+    palette $0F
+    npc palettes $00 $00
+    music #Feymarch
+    background $139 scroll both direction up speed 2
+    name index $0A   // B3F
+    // treasure index 92
+}
+
+map(#SylvanCaveTreasury)
+{
+    battle background $0B alternate
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $48
+    tileset $09
+    placement group $48
+    border tile $09
+    palette $0F
+    npc palettes $00 $00
+    music #Feymarch
+    background $148 scroll both direction up speed 2
+    name index $80
+    // treasure index 96
+}
+
+map(#SylvanCaveYangRoom)
+{
+    battle background $03 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $49
+    tileset $09
+    placement group $49
+    border tile $09
+    palette $0F
+    npc palettes $00 $01
+    music #Feymarch
+    background $148 scroll both direction up speed 2
+    name index $80
+    // treasure index 102
+}
+
+map(#SealedCave1F)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $4A
+    tileset $02
+    placement group $4A
+    border tile $6A
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $08   // B1F
+    // treasure index 104
+}
+
+map(#SealedCaveRoomKatanaEther)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $4B
+    tileset $02
+    placement group $4B
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 105
+}
+
+map(#SealedCave2F)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $4C
+    tileset $02
+    placement group $4C
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 107
+}
+
+map(#SealedCave3F)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $4D
+    tileset $02
+    placement group $4D
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 109
+}
+
+map(#SealedCaveRoomKatanaNinjaHat)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $4E
+    tileset $02
+    placement group $4E
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 111
+}
+
+map(#SealedCaveRoomNinjaStarElixir)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $4F
+    tileset $02
+    placement group $4F
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 113
+}
+
+map(#SealedCaveRoomLightSword)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $50
+    tileset $02
+    placement group $50
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 116
+}
+
+map(#SealedCave4F)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $51
+    tileset $02
+    placement group $51
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 117
+}
+
+map(#SealedCave5F)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $52
+    tileset $02
+    placement group $52
+    border tile $6A
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $0A   // B3F
+    // treasure index 118
+}
+
+map(#SealedCave6F)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $53
+    tileset $02
+    placement group $53
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 119
+}
+
+map(#SealedCaveRoomBoxes)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $54
+    tileset $02
+    placement group $54
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 121
+}
+
+map(#SealedCave7F)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $55
+    tileset $02
+    placement group $55
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $0B   // B4F
+    // treasure index 123
+}
+
+map(#SealedCaveSaveRoom)
+{
+    battle background $08 alternate
+    warp enabled
+    exit disabled
+    magnetic disabled
+    grid $56
+    tileset $02
+    placement group $56
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 125
+}
+
+map(#SealedCaveDemonWallRoom)
+{
+    battle background $08 alternate
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $57
+    tileset $02
+    placement group $57
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $0C   // B5F
+    // treasure index 125
+}
+
+map(#SealedCaveEmptyRoom)
+{
+    battle background $08 alternate
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $58
+    tileset $02
+    placement group $58
+    border tile $09
+    palette $12
+    npc palettes $00 $07
+    music #Cave
+    background $159 scroll both direction up speed 2
+    name index $80
+    // treasure index 125
+}
+
+map(#SealedCaveCrystalRoom)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $0D
+    // ! this map's grid ID does not match its map ID
+    tileset $07
+    placement group $59
+    border tile $72
+    palette $07
+    npc palettes $00 $04
+    music #Prelude
+    background $10C scroll both direction up speed 2
+    name index $18   // Crystal Room
+    // treasure index 125
+}
+
+map(#Bahamut1F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5A
+    tileset $0C
+    placement group $5A
+    border tile $0C
+    palette $0C
+    npc palettes $00 $00
+    music #Feymarch
+    background $162 scroll both direction up speed 2
+    name index $5E   // Cave Bahamut
+    // treasure index 125
+}
+
+map(#Bahamut2F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5B
+    tileset $0C
+    placement group $5B
+    border tile $0C
+    palette $0C
+    npc palettes $00 $00
+    music #Feymarch
+    background $162 scroll both direction up speed 2
+    name index $09   // B2F
+    // treasure index 127
+}
+
+map(#BahamutFloor)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $5C
+    tileset $0C
+    placement group $5C
+    border tile $0C
+    palette $0C
+    npc palettes $00 $03
+    music #Feymarch
+    background $162 scroll both direction up speed 2
+    name index $0A   // B3F
+    // treasure index 129
+}
+
+map($15D)
+{
+    battle background $0D 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $5D
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $1FF direction up speed 0
+    name index $5D   // Super Cannon
+    // treasure index 129
+}
+
+map($15E)
+{
+    battle background $0D 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $5E
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $1FF direction up speed 0
+    name index $5E   // Cave Bahamut
+    // treasure index 129
+}
+
+map($15F)
+{
+    battle background $0D 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $5F
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $1FF direction up speed 0
+    name index $5F   // Lunar's Lair
+    // treasure index 129
+}
+
+map(#LunarPalaceLobby)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $60
+    tileset $07
+    placement group $60
+    border tile $72
+    palette $14
+    npc palettes $00 $01
+    music #Prelude
+    background $166 scroll both direction up speed 2
+    name index $5F   // Lunar's Lair
+    // treasure index 129
+}
+
+map(#LunarPalaceCrystalRoom)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $61
+    tileset $07
+    placement group $61
+    border tile $72
+    palette $14
+    npc palettes $00 $04
+    music #Prelude
+    background $166 scroll both direction up speed 2
+    name index $01   // 2F
+    // treasure index 131
+}
+
+map(#LunarBG)
+{
+    battle background $03 
+    warp disabled
+    exit enabled
+    magnetic disabled
+    grid $62
+    tileset $07
+    placement group $62
+    border tile $72
+    palette $14
+    npc palettes $00 $01
+    music #Prelude
+    background $10C scroll both direction up speed 2
+    name index $02   // 3F
+    // treasure index 131
+}
+
+map(#LunarPassage1)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $63
+    tileset $0C
+    placement group $63
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarPath
+    background $162 scroll both direction up speed 2
+    name index $69   // Lunar Path
+    // treasure index 131
+}
+
+map(#LunarPassage2)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $64
+    tileset $0C
+    placement group $64
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarPath
+    background $162 scroll both direction up speed 2
+    name index $69   // Lunar Path
+    // treasure index 134
+}
+
+map(#Hummingway)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $65
+    tileset $0C
+    placement group $65
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #Town
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 134
+}
+
+map(#LunarLairBG)
+{
+    battle background $0D 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $66
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $1FF direction up speed 0
+    name index $66   // Lunar Subterrane B6
+    // treasure index 134
+}
+
+map(#LunarSubterran1F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $67
+    tileset $0C
+    placement group $67
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $61   // Lunar Subterrane B1
+    // treasure index 134
+}
+
+map(#LunarSubterran2F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $68
+    tileset $0C
+    placement group $68
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $62   // Lunar Subterrane B2
+    // treasure index 135
+}
+
+map(#LunarSubterran3F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $69
+    tileset $0C
+    placement group $69
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $63   // Lunar Subterrane B3
+    // treasure index 138
+}
+
+map(#LunarSubterran4F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $6A
+    tileset $0C
+    placement group $6A
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $64   // Lunar Subterrane B4
+    // treasure index 142
+}
+
+map(#LunarSubterran5F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $6B
+    tileset $0C
+    placement group $6B
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $65   // Lunar Subterrane B5
+    // treasure index 144
+}
+
+map(#LunarSubterran6F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $6C
+    tileset $0C
+    placement group $6C
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $66   // Lunar Subterrane B6
+    // treasure index 150
+}
+
+map(#LunarSubterran7F)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $6D
+    tileset $0C
+    placement group $6D
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $67   // Lunar Subterrane B7
+    // treasure index 154
+}
+
+map(#LunarCore1F)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $6E
+    tileset $01
+    placement group $6E
+    border tile $79
+    palette $0C
+    npc palettes $00 $01
+    music #Giant
+    background $17D scroll both direction up speed 1
+    name index $80
+    // treasure index 154
+}
+
+map(#LunarCore2F)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $6F
+    tileset $01
+    placement group $6F
+    border tile $79
+    palette $0C
+    npc palettes $00 $01
+    music #Giant
+    background $17D scroll both direction up speed 1
+    name index $80
+    // treasure index 156
+}
+
+map(#LunarCore3F)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $70
+    tileset $01
+    placement group $70
+    border tile $79
+    palette $0C
+    npc palettes $00 $01
+    music #Giant
+    background $17D scroll both direction up speed 1
+    name index $80
+    // treasure index 158
+}
+
+map(#LunarCore4F)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $71
+    tileset $01
+    placement group $71
+    border tile $79
+    palette $0C
+    npc palettes $00 $01
+    music #Giant
+    background $17D scroll both direction up speed 1
+    name index $80
+    // treasure index 160
+}
+
+map(#LunarCoreZemusRoom)
+{
+    battle background $0E 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $72
+    tileset $01
+    placement group $72
+    border tile $79
+    palette $0C
+    npc palettes $00 $01
+    music #Giant
+    background $17D scroll both direction up speed 1
+    name index $80
+    // treasure index 160
+}
+
+map(#LunarSubterranRoomElixir)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $73
+    tileset $0C
+    placement group $73
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 160
+}
+
+map(#LunarSubterranTunnelCure3)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $74
+    tileset $0C
+    placement group $74
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 161
+}
+
+map(#LunarSubterranTunnelProtectRing)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $75
+    tileset $0C
+    placement group $75
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 163
+}
+
+map(#LunarSubterranTunnelWhiteRobe)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $76
+    tileset $0C
+    placement group $76
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 164
+}
+
+map(#LunarSubterranPinkpuff)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $77
+    tileset $0C
+    placement group $77
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 165
+}
+
+map(#LunarSubterranSaveRoom1)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $78
+    tileset $0C
+    placement group $78
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 166
+}
+
+map(#LunarSubterranTunnelMinerva)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $79
+    tileset $0C
+    placement group $79
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 166
+}
+
+map(#LunarSubterranRoomHolyLance)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7A
+    tileset $0C
+    placement group $7A
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 167
+}
+
+map(#LunarSubterranSaveRoom2)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7B
+    tileset $0C
+    placement group $7B
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 168
+}
+
+map(#LunarSubterranRoomRibbons)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7C
+    tileset $0C
+    placement group $7C
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 168
+}
+
+map(#LunarCoreBG)
+{
+    battle background $00 
+    warp disabled
+    exit disabled
+    magnetic disabled
+    grid $7D
+    tileset $00
+    placement group $00
+    border tile $00
+    palette $00
+    npc palettes $00 $00
+    music #None
+    background $17D direction up speed 0
+    name index $80
+    // treasure index 170
+}
+
+map($17E)
+{
+    battle background $0D 
+    warp enabled
+    exit enabled
+    magnetic disabled
+    grid $7E
+    tileset $0C
+    placement group $7E
+    border tile $0C
+    palette $0C
+    npc palettes $00 $01
+    music #LunarSubterrane
+    background $162 scroll both direction up speed 2
+    name index $80
+    // treasure index 170
+}

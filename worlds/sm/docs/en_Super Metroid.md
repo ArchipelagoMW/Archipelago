@@ -23,8 +23,7 @@ certain items to your own world.
 
 ## What does another world's item look like in Super Metroid?
 
-Two unique item sprites have been added to the game to represent items belonging to another world. Progression items have
-a small up arrow on the sprite and non-progression don't.
+A unique item sprite has been added to the game to represent items belonging to another world.
 
 ## When the player receives an item, what happens?
 

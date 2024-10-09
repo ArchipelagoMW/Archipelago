@@ -1,0 +1,2111 @@
+tileset($00) // Airship
+{
+    $00 { is layer 1 }
+    $01 { is layer 1 }
+    $02 { is layer 1 }
+    $03 { is layer 1 }
+    $04 { is layer 1 }
+    $05 { is layer 1 }
+    $06 { is layer 1 }
+    $07 { is layer 1 }
+    $08 { is layer 1 }
+    $09 { is layer 1 }
+    $0A { is layer 1 }
+    $0B { is layer 1 }
+    $0C { is layer 1 }
+    $0D { is layer 1 }
+    $0E { is layer 1 }
+    $0F { is layer 1 }
+    $10 { is layer 1 }
+    $11 { is layer 1 }
+    $12 { is layer 1 }
+    $13 { is layer 1 }
+    $14 { is layer 1 }
+    $15 { is layer 1 }
+    $16 { is layer 1 }
+    $17 { is layer 1 }
+    $18 { is layer 1 }
+    $19 { is layer 1 }
+    $1A { is layer 1 }
+    $1B { is layer 1 }
+    $1C { is layer 1 }
+    $1D { is layer 1 }
+    $1E { is layer 1 }
+    $1F { is layer 1 }
+    $20 { is layer 1 }
+    $21 { is layer 1 }
+    $22 { is layer 1 }
+    $23 { is layer 1 }
+    $24 { is layer 1 }
+    $25 { is layer 1 }
+    $26 { is layer 1 }
+    $27 { is layer 1 }
+    $28 { is layer 1 }
+    $29 { is layer 1 }
+    $2A { is layer 1 }
+    $2B { is layer 1 }
+    $2C { is layer 1 }
+    $2D { is layer 1 }
+    $2E { is layer 1 }
+    $2F { is layer 1 }
+    $30 { is layer 1 }
+    $31 { is layer 1 }
+    $32 { is layer 1 }
+    $33 { is layer 1 }
+    $34 { is layer 1 }
+    $35 { is layer 1 }
+    $36 { is layer 1 }
+    $37 { is layer 1 }
+    $38 { is layer 1 }
+    $39 { is layer 1 }
+    $3A { is layer 1 }
+    $3B { is layer 1 }
+    $3C { is layer 1 }
+    $3D { is layer 1 }
+    $3E { is layer 1 }
+    $3F { is layer 1 }
+    $40 { is layer 1 }
+    $41 { is layer 1 }
+    $42 { is layer 1 }
+    $43 { is layer 1 }
+    $44 { is layer 1 }
+    $45 { is layer 1 }
+    $46 { is layer 1 }
+    $47 { is layer 1 }
+    $48 { is layer 1 }
+    $49 { is layer 1 }
+    $4A { is layer 1 }
+    $4B { is layer 1 }
+    $4C { is layer 1 }
+    $4D { is layer 1 }
+    $4E { is layer 1 }
+    $4F { is layer 1 }
+    $50 { is layer 1 }
+    $51 { is layer 1 }
+    $52 { is layer 1 }
+    $53 { is layer 1 }
+    $54 { is layer 1 }
+    $55 { is layer 1 }
+    $56 { is layer 1 }
+    $57 { is layer 1 }
+    $58 { is layer 1 }
+    $59 { is layer 1 }
+    $5A { is layer 1 }
+    $5B { is layer 1 }
+    $5C { is layer 1 }
+    $5D { is layer 1 }
+    $5E { is layer 1 }
+    $5F { is layer 1 }
+    $60 { is layer 1 }
+    $61 { is layer 1 }
+    $62 { is layer 1 }
+    $63 { is layer 1 }
+    $64 { is layer 1 }
+    $65 { is layer 1 }
+    $66 { is layer 1 }
+    $67 { is layer 1 }
+    $68 { is layer 1 }
+    $69 { is layer 1 }
+    $6A { is layer 1 }
+    $6B { is layer 1 }
+    $6C { is layer 1 }
+    $6D { is layer 1 }
+    $6E { is layer 1 }
+    $6F { is layer 1 }
+    $70 { is layer 1 }
+    $71 { is layer 1 }
+    $72 { is layer 1 }
+    $73 { is layer 1 }
+    $74 { is layer 1 }
+    $75 { is layer 1 }
+    $76 { is layer 1 }
+    $77 { is layer 1 }
+    $78 { is layer 1 }
+    $79 { is layer 1 }
+    $7A { is layer 1 }
+    $7B { is layer 1 }
+    $7C { is layer 1 }
+    $7D { is layer 1 }
+    $7E { is layer 1 }
+    $7F { is layer 1 }
+}
+
+tileset($01) // Lunar Core
+{
+    $00 {  }
+    $01 {  }
+    $02 {  }
+    $03 {  }
+    $04 {  }
+    $05 {  }
+    $06 {  }
+    $07 {  }
+    $08 {  }
+    $09 {  }
+    $0A {  }
+    $0B {  }
+    $0C {  }
+    $0D {  }
+    $0E {  }
+    $0F {  }
+    $10 {  }
+    $11 {  }
+    $12 {  }
+    $13 {  }
+    $14 {  }
+    $15 {  }
+    $16 {  }
+    $17 { is layer 1, has encounters }
+    $18 {  }
+    $19 {  }
+    $1A {  }
+    $1B {  }
+    $1C {  }
+    $1D {  }
+    $1E {  }
+    $1F {  }
+    $20 {  }
+    $21 {  }
+    $22 {  }
+    $23 {  }
+    $24 {  }
+    $25 {  }
+    $26 { is layer 1, has encounters }
+    $27 { is layer 1, has encounters }
+    $28 {  }
+    $29 {  }
+    $2A {  }
+    $2B {  }
+    $2C {  }
+    $2D {  }
+    $2E {  }
+    $2F {  }
+    $30 {  }
+    $31 {  }
+    $32 {  }
+    $33 {  }
+    $34 {  }
+    $35 {  }
+    $36 {  }
+    $37 {  }
+    $38 {  }
+    $39 {  }
+    $3A { is layer 1, has encounters }
+    $3B { is layer 1, has encounters }
+    $3C { is layer 1, has encounters }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 {  }
+    $41 {  }
+    $42 {  }
+    $43 {  }
+    $44 { is layer 1, has encounters }
+    $45 { is layer 1, has encounters }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 { is walk behind }
+    $49 { is walk behind }
+    $4A { is walk behind }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is walk behind }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 { is walk behind }
+    $51 { is walk behind }
+    $52 {  }
+    $53 {  }
+    $54 { is walk behind }
+    $55 { is layer 1, has encounters }
+    $56 { is layer 1, has encounters }
+    $57 {  }
+    $58 { is layer 1, has encounters }
+    $59 { is layer 1, has encounters }
+    $5A { is walk behind }
+    $5B { is walk behind }
+    $5C { is walk behind }
+    $5D {  }
+    $5E {  }
+    $5F { is layer 1, is layer 2, is trigger }
+    $60 { is layer 1, is layer 2, is warp }
+    $61 { is walk behind }
+    $62 { is walk behind }
+    $63 { is walk behind }
+    $64 { is layer 1, is layer 2, is trigger }
+    $65 { is layer 1, is layer 2, is warp }
+    $66 { is layer 1, is layer 2, is trigger }
+    $67 { is layer 1, is layer 2, is warp }
+    $68 {  }
+    $69 {  }
+    $6A {  }
+    $6B {  }
+    $6C {  }
+    $6D {  }
+    $6E {  }
+    $6F {  }
+    $70 {  }
+    $71 {  }
+    $72 {  }
+    $73 {  }
+    $74 {  }
+    $75 {  }
+    $76 {  }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 {  }
+    $7A {  }
+    $7B {  }
+    $7C { is layer 1 }
+    $7D {  }
+    $7E { is layer 1, is layer 2, is trigger }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($02) // Sealed Cave
+{
+    $00 { is walk behind }
+    $01 { is walk behind }
+    $02 { is walk behind }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is walk behind }
+    $07 { is walk behind }
+    $08 { is walk behind }
+    $09 { is walk behind }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is walk behind }
+    $0E { is walk behind }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is walk behind }
+    $12 { is walk behind }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is walk behind }
+    $18 { is walk behind }
+    $19 { is walk behind }
+    $1A { is walk behind }
+    $1B { is layer 1, has encounters }
+    $1C { is layer 1, has encounters }
+    $1D { is layer 1, has encounters }
+    $1E { is layer 1, has encounters }
+    $1F { is walk behind }
+    $20 { is layer 1, has encounters }
+    $21 { is walk behind }
+    $22 { is layer 1, has encounters }
+    $23 { is walk behind }
+    $24 { is walk behind }
+    $25 { is walk behind }
+    $26 { is layer 1, has encounters }
+    $27 { is layer 1, has encounters }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is layer 1, has encounters }
+    $2D { is walk behind }
+    $2E { is layer 1, has encounters }
+    $2F { is layer 1, has encounters }
+    $30 { is layer 1, has encounters }
+    $31 { is layer 1, has encounters }
+    $32 { is layer 1, has encounters }
+    $33 { is walk behind }
+    $34 { is layer 1, is layer 2 }
+    $35 { is walk behind }
+    $36 { is layer 1, has encounters }
+    $37 { is layer 1, has encounters }
+    $38 { is layer 1, has encounters }
+    $39 {  }
+    $3A {  }
+    $3B {  }
+    $3C {  }
+    $3D { is layer 1, is bridge layer, is walk behind, has encounters }
+    $3E { is layer 1, is bridge layer, is walk behind, has encounters }
+    $3F { is layer 1, is bridge layer, is walk behind, has encounters }
+    $40 { is layer 1, has encounters }
+    $41 { is layer 1, has encounters }
+    $42 { is layer 1, has encounters }
+    $43 { is walk behind }
+    $44 { is walk behind }
+    $45 { is layer 1, has encounters }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 { is layer 1, has encounters }
+    $49 { is layer 1, has encounters }
+    $4A { is layer 1, has encounters }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is layer 1, has encounters }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 { is layer 1, has encounters }
+    $51 { is layer 1, has encounters }
+    $52 { is layer 1, has encounters }
+    $53 { is walk behind }
+    $54 { is walk behind }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is layer 1, has encounters }
+    $58 { is walk behind }
+    $59 { is walk behind }
+    $5A { is walk behind }
+    $5B { is layer 1, has encounters }
+    $5C { is walk behind }
+    $5D { is walk behind }
+    $5E { is layer 1, has encounters }
+    $5F { is walk behind }
+    $60 { is walk behind }
+    $61 { is walk behind }
+    $62 { is walk behind }
+    $63 { is walk behind }
+    $64 { is walk behind }
+    $65 { is walk behind }
+    $66 { is layer 1, is layer 2, is trigger }
+    $67 {  }
+    $68 { is layer 1, is layer 2, is trigger }
+    $69 { is walk behind }
+    $6A {  }
+    $6B { is walk behind }
+    $6C { is layer 1, is layer 2, is trigger }
+    $6D { is walk behind }
+    $6E { is layer 1 }
+    $6F { is layer 1, is layer 2, is trigger }
+    $70 { is layer 1, is layer 2, is trigger }
+    $71 { is layer 1, is layer 2, is warp }
+    $72 { is layer 1, is layer 2, is trigger }
+    $73 { is layer 1, has encounters }
+    $74 { is layer 1, has encounters }
+    $75 { is walk behind }
+    $76 { is layer 1, is layer 2, is warp }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 {  }
+    $7A {  }
+    $7B { is layer 1, is layer 2, is trigger }
+    $7C { is layer 1, is layer 2, is warp }
+    $7D { is layer 1, is layer 2, is trigger }
+    $7E { is layer 1, is layer 2, is warp }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($03) // Castle Exterior
+{
+    $00 { is layer 1, is layer 2, is trigger }
+    $01 { is layer 1, is bridge layer, is walk behind }
+    $02 { is layer 1 }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is walk behind }
+    $07 { is layer 1, is layer 2, is walk behind }
+    $08 { is walk behind }
+    $09 { is layer 1 }
+    $0A { is layer 1, is layer 2 }
+    $0B { is layer 1, is layer 2 }
+    $0C { is layer 1, is layer 2 }
+    $0D { is walk behind }
+    $0E { is walk behind }
+    $0F { is walk behind }
+    $10 { is layer 1 }
+    $11 { is layer 1 }
+    $12 { is layer 2, is bottom half }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is layer 1, is layer 2 }
+    $18 {  }
+    $19 { is layer 2, is bottom half }
+    $1A { is layer 1, is layer 2 }
+    $1B { is layer 1, is layer 2 }
+    $1C { is layer 1, is layer 2 }
+    $1D { is walk behind }
+    $1E { is layer 1 }
+    $1F { is walk behind }
+    $20 { is layer 2, is bottom half }
+    $21 { is layer 2, is bottom half }
+    $22 { is layer 2, is bottom half }
+    $23 { is walk behind }
+    $24 { is walk behind }
+    $25 { is walk behind }
+    $26 { is walk behind }
+    $27 { is layer 1 }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is walk behind }
+    $30 { is walk behind }
+    $31 { is walk behind }
+    $32 { is layer 1, is layer 2 }
+    $33 { is layer 1, is layer 2 }
+    $34 { is walk behind }
+    $35 { is walk behind }
+    $36 { is walk behind }
+    $37 { is walk behind }
+    $38 { is walk behind }
+    $39 { is walk behind }
+    $3A { is walk behind }
+    $3B { is walk behind }
+    $3C { is walk behind }
+    $3D { is layer 1 }
+    $3E { is layer 2, is bottom half, is trigger }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is walk behind }
+    $42 { is walk behind }
+    $43 { is walk behind }
+    $44 { is layer 1, is layer 2 }
+    $45 { is walk behind }
+    $46 { is layer 1, is layer 2 }
+    $47 { is layer 1, is layer 2 }
+    $48 { is walk behind }
+    $49 { is walk behind }
+    $4A { is walk behind }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is walk behind }
+    $4E { is layer 1, is layer 2, is walk behind }
+    $4F { is layer 1, is layer 2 }
+    $50 { is walk behind }
+    $51 { is walk behind }
+    $52 { is walk behind }
+    $53 { is walk behind }
+    $54 { is walk behind }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 { is walk behind }
+    $59 { is walk behind }
+    $5A { is walk behind }
+    $5B { is walk behind }
+    $5C { is layer 1, is layer 2, is walk behind }
+    $5D { is walk behind }
+    $5E { is walk behind }
+    $5F { is walk behind }
+    $60 { is walk behind }
+    $61 { is walk behind }
+    $62 { is walk behind }
+    $63 { is walk behind }
+    $64 { is layer 1, is layer 2 }
+    $65 { is layer 1, is layer 2 }
+    $66 { is layer 1, is layer 2 }
+    $67 { is layer 1, is layer 2 }
+    $68 { is walk behind }
+    $69 { is walk behind }
+    $6A { is walk behind }
+    $6B { is layer 1, is layer 2 }
+    $6C { is walk behind }
+    $6D { is walk behind }
+    $6E { is walk behind }
+    $6F { is layer 1, is layer 2 }
+    $70 { is layer 1, is layer 2, is trigger }
+    $71 { is layer 1, is layer 2, is warp }
+    $72 { is layer 2, is walk behind, is bottom half }
+    $73 { is layer 1, is layer 2, is warp }
+    $74 { is layer 1, is layer 2, is warp }
+    $75 { is layer 1, is layer 2, is trigger }
+    $76 { is layer 1, is layer 2, is walk behind }
+    $77 { is walk behind }
+    $78 { is layer 2, is walk behind, is bottom half }
+    $79 { is layer 2, is walk behind, is bottom half }
+    $7A { is walk behind }
+    $7B { is layer 1, is layer 2, is trigger }
+    $7C { is layer 1, is layer 2, is warp }
+    $7D { is walk behind }
+    $7E { is layer 1, is layer 2, is walk behind }
+    $7F { is walk behind }
+}
+
+tileset($04) // Town
+{
+    $00 { is layer 1 }
+    $01 { is layer 1 }
+    $02 { is layer 1 }
+    $03 { is walk behind }
+    $04 { is layer 1 }
+    $05 { is layer 1 }
+    $06 { is layer 1 }
+    $07 { is layer 1, is layer 2 }
+    $08 { is walk behind }
+    $09 { is walk behind }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is layer 1, is bridge layer, is walk behind }
+    $0E { is layer 1, is bridge layer, is walk behind }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is layer 2, is walk behind, is bottom half }
+    $12 { is walk behind }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is walk behind }
+    $18 { is walk behind }
+    $19 { is walk behind }
+    $1A { is walk behind }
+    $1B { is layer 1, is bottom half }
+    $1C { is layer 1, is bottom half }
+    $1D { is layer 1, is bottom half }
+    $1E { is layer 1, is bottom half }
+    $1F { is layer 1, is bottom half }
+    $20 { is walk behind }
+    $21 { is layer 2 }
+    $22 { is walk behind }
+    $23 { is walk behind }
+    $24 { is layer 2, is bottom half }
+    $25 { is layer 2, is bottom half }
+    $26 { is layer 2, is bottom half }
+    $27 { is walk behind }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is layer 2, is bottom half }
+    $2D { is layer 2, is bottom half }
+    $2E { is layer 2, is bottom half }
+    $2F { is layer 1, is layer 2 }
+    $30 { is layer 2, is bottom half }
+    $31 { is layer 2, is bottom half }
+    $32 { is layer 2, is bottom half }
+    $33 { is layer 2, is walk behind }
+    $34 { is layer 2, is walk behind }
+    $35 {  }
+    $36 { is layer 1 }
+    $37 { is walk behind }
+    $38 { is layer 2, is walk behind }
+    $39 { is layer 2, is bottom half }
+    $3A { is layer 2, is bottom half }
+    $3B { is walk behind }
+    $3C { is walk behind }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is walk behind }
+    $42 { is walk behind }
+    $43 { is walk behind }
+    $44 { is walk behind }
+    $45 { is walk behind }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 { is walk behind }
+    $49 { is walk behind }
+    $4A { is walk behind }
+    $4B { is layer 2, is walk behind, is bottom half }
+    $4C { is layer 2, is walk behind, is bottom half }
+    $4D { is layer 1, is layer 2, is walk behind }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 { is walk behind }
+    $51 { is layer 1, is layer 2, is walk behind }
+    $52 { is walk behind }
+    $53 { is layer 1, is layer 2, is walk behind }
+    $54 { is layer 1, is layer 2, is walk behind }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 { is walk behind }
+    $59 { is walk behind }
+    $5A { is layer 1 }
+    $5B { is layer 1 }
+    $5C { is layer 1 }
+    $5D { is walk behind }
+    $5E { is walk behind }
+    $5F { is walk behind }
+    $60 { is walk behind }
+    $61 { is walk behind }
+    $62 { is layer 2, is walk behind, is bottom half }
+    $63 { is layer 2, is walk behind, is bottom half }
+    $64 { is layer 1, is layer 2, is walk behind }
+    $65 { is walk behind }
+    $66 { is walk behind }
+    $67 { is walk behind }
+    $68 { is walk behind }
+    $69 { is walk behind }
+    $6A { is walk behind }
+    $6B { is walk behind }
+    $6C {  }
+    $6D { is layer 1, is layer 2, is walk behind }
+    $6E { is layer 2 }
+    $6F { is layer 1, is layer 2 }
+    $70 { is layer 1, is closed door, is trigger }
+    $71 { is layer 1, is layer 2, is closed door, is trigger }
+    $72 { is layer 1, is layer 2, is warp }
+    $73 { is layer 1, is layer 2, is warp }
+    $74 { is layer 1, is layer 2, is walk behind }
+    $75 { is layer 1, is layer 2, is trigger }
+    $76 { is layer 1, is layer 2, is warp }
+    $77 { is layer 1 }
+    $78 {  }
+    $79 { is trigger }
+    $7A { is trigger }
+    $7B { is trigger }
+    $7C { is layer 1, is layer 2, is trigger }
+    $7D { is layer 1, is layer 2, is trigger }
+    $7E { is layer 1, is layer 2, is warp }
+    $7F {  }
+}
+
+tileset($05) // House
+{
+    $00 { is walk behind }
+    $01 { is layer 1 }
+    $02 { is layer 1 }
+    $03 { is layer 1 }
+    $04 { is layer 1 }
+    $05 { is layer 1 }
+    $06 { is layer 1 }
+    $07 { is walk behind }
+    $08 { is layer 1 }
+    $09 { is layer 1 }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is walk behind }
+    $0E { is walk behind }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is talkover }
+    $12 { is talkover }
+    $13 { is layer 1 }
+    $14 { is talkover }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is walk behind }
+    $18 { is talkover }
+    $19 { is talkover }
+    $1A { is talkover }
+    $1B { is talkover }
+    $1C { is talkover }
+    $1D { is talkover }
+    $1E { is walk behind }
+    $1F { is walk behind }
+    $20 { is layer 1 }
+    $21 { is layer 1 }
+    $22 { is layer 1 }
+    $23 { is layer 1 }
+    $24 { is walk behind }
+    $25 { is walk behind }
+    $26 { is walk behind }
+    $27 { is walk behind }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is layer 1 }
+    $30 { is walk behind }
+    $31 { is walk behind }
+    $32 { is walk behind }
+    $33 { is walk behind }
+    $34 { is layer 1 }
+    $35 { is layer 1 }
+    $36 { is layer 1 }
+    $37 { is layer 1 }
+    $38 { is layer 1 }
+    $39 { is layer 1 }
+    $3A { is layer 1 }
+    $3B { is layer 1 }
+    $3C { is layer 1 }
+    $3D { is layer 1, is layer 2, is trigger }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is walk behind }
+    $42 { is walk behind }
+    $43 { is walk behind }
+    $44 { is walk behind }
+    $45 { is walk behind }
+    $46 { is layer 1 }
+    $47 { is walk behind }
+    $48 { is walk behind }
+    $49 { is layer 1, is layer 2, is walk behind }
+    $4A { is walk behind }
+    $4B { is walk behind }
+    $4C { is layer 1 }
+    $4D { is walk behind }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 { is walk behind }
+    $51 { is walk behind }
+    $52 { is walk behind }
+    $53 {  }
+    $54 { is layer 1 }
+    $55 {  }
+    $56 {  }
+    $57 {  }
+    $58 {  }
+    $59 { is walk behind }
+    $5A { is walk behind }
+    $5B { is walk behind }
+    $5C { is walk behind }
+    $5D {  }
+    $5E { is layer 1 }
+    $5F { is layer 1, is layer 2, is walk behind }
+    $60 { is walk behind }
+    $61 { is walk behind }
+    $62 { is walk behind }
+    $63 { is walk behind }
+    $64 { is layer 1 }
+    $65 { is walk behind }
+    $66 { is layer 1 }
+    $67 { is walk behind }
+    $68 { is layer 1, is layer 2, is trigger }
+    $69 { is layer 1, is layer 2, is warp }
+    $6A { is layer 1, is layer 2, is trigger }
+    $6B { is layer 1, is layer 2, is warp }
+    $6C { is walk behind }
+    $6D { is walk behind }
+    $6E {  }
+    $6F { is layer 1, is layer 2 }
+    $70 { is layer 1, is layer 2, is closed door, is trigger }
+    $71 { is layer 1, is layer 2, is closed door, is warp }
+    $72 { is layer 1, is layer 2, is trigger }
+    $73 { is layer 1, is layer 2, is warp }
+    $74 { is layer 1, is layer 2, is trigger }
+    $75 { is layer 1, is layer 2, is warp }
+    $76 { is layer 1, is layer 2, is trigger }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is trigger }
+    $7A { is trigger }
+    $7B {  }
+    $7C { is layer 1, is layer 2, is trigger }
+    $7D { is layer 1, is layer 2, is warp }
+    $7E { is layer 1 }
+    $7F {  }
+}
+
+tileset($06) // Castle Interior
+{
+    $00 { is walk behind }
+    $01 { is layer 1, has encounters }
+    $02 { is layer 1 }
+    $03 { is layer 1 }
+    $04 { is layer 1 }
+    $05 { is layer 1 }
+    $06 { is layer 1 }
+    $07 { is walk behind }
+    $08 { is layer 1 }
+    $09 { is layer 1 }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is walk behind }
+    $0E { is walk behind }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is talkover }
+    $12 { is talkover }
+    $13 { is layer 1 }
+    $14 { is talkover }
+    $15 { is walk behind }
+    $16 { is layer 1, is layer 2, is trigger }
+    $17 { is walk behind }
+    $18 { is talkover }
+    $19 { is talkover }
+    $1A { is talkover }
+    $1B { is talkover }
+    $1C { is talkover }
+    $1D { is talkover }
+    $1E { is walk behind }
+    $1F { is walk behind }
+    $20 { is layer 1 }
+    $21 { is layer 1 }
+    $22 { is layer 1 }
+    $23 { is layer 1 }
+    $24 { is layer 1 }
+    $25 { is layer 1 }
+    $26 { is layer 1 }
+    $27 { is layer 1, is layer 2, is trigger }
+    $28 { is walk behind }
+    $29 { is layer 1 }
+    $2A { is layer 1, is layer 2, is trigger }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is layer 1 }
+    $30 { is walk behind }
+    $31 { is walk behind }
+    $32 { is walk behind }
+    $33 { is walk behind }
+    $34 { is walk behind }
+    $35 { is walk behind }
+    $36 { is walk behind }
+    $37 { is walk behind }
+    $38 { is walk behind }
+    $39 { is walk behind }
+    $3A { is layer 1 }
+    $3B { is walk behind }
+    $3C { is layer 1 }
+    $3D { is layer 1, is layer 2, is trigger }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is walk behind }
+    $42 { is walk behind }
+    $43 { is walk behind }
+    $44 { is walk behind }
+    $45 { is layer 1 }
+    $46 { is layer 1 }
+    $47 { is walk behind }
+    $48 { is walk behind }
+    $49 { is walk behind }
+    $4A {  }
+    $4B { is layer 1 }
+    $4C {  }
+    $4D { is talkover }
+    $4E { is layer 1 }
+    $4F { is walk behind }
+    $50 { is walk behind }
+    $51 { is walk behind }
+    $52 { is walk behind }
+    $53 { is layer 1 }
+    $54 { is layer 1 }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 { is layer 1 }
+    $59 { is layer 1 }
+    $5A { is layer 1 }
+    $5B { is layer 1 }
+    $5C { is walk behind }
+    $5D { is layer 1 }
+    $5E { is layer 1 }
+    $5F { is layer 1, is layer 2, is walk behind }
+    $60 { is walk behind }
+    $61 { is walk behind }
+    $62 { is walk behind }
+    $63 { is walk behind }
+    $64 { is layer 1 }
+    $65 { is walk behind }
+    $66 { is layer 1 }
+    $67 { is walk behind }
+    $68 { is layer 1, is layer 2, is trigger }
+    $69 { is layer 1, is layer 2, is warp }
+    $6A { is layer 1, is layer 2, is trigger }
+    $6B { is layer 1, is layer 2, is warp }
+    $6C { is walk behind }
+    $6D { is walk behind }
+    $6E { is layer 1, is layer 2, is warp }
+    $6F { is layer 1, is layer 2 }
+    $70 { is layer 1, is layer 2, is closed door, is trigger }
+    $71 { is layer 1, is layer 2, is closed door, is warp }
+    $72 { is layer 1, is layer 2, is trigger }
+    $73 { is layer 1, is layer 2, is warp }
+    $74 { is layer 1, is layer 2, is trigger }
+    $75 { is layer 1, is layer 2, is warp }
+    $76 { is layer 1, is layer 2, is trigger }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is trigger }
+    $7A { is trigger }
+    $7B { is layer 1, is layer 2, is trigger }
+    $7C { is layer 1, is layer 2, is warp }
+    $7D { is walk behind }
+    $7E { is layer 1, is layer 2, is trigger }
+    $7F { is walk behind }
+}
+
+tileset($07) // Crystal Room
+{
+    $00 { is walk behind }
+    $01 { is walk behind }
+    $02 { is walk behind }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is walk behind }
+    $07 { is walk behind }
+    $08 { is walk behind }
+    $09 { is layer 1 }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is walk behind }
+    $0E { is walk behind }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is walk behind }
+    $12 { is walk behind }
+    $13 { is layer 1 }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is layer 1 }
+    $17 { is layer 1 }
+    $18 { is walk behind }
+    $19 { is layer 1 }
+    $1A { is layer 1 }
+    $1B { is layer 1 }
+    $1C { is walk behind }
+    $1D { is walk behind }
+    $1E { is walk behind }
+    $1F { is walk behind }
+    $20 { is walk behind }
+    $21 { is layer 1 }
+    $22 { is layer 1 }
+    $23 { is layer 1 }
+    $24 { is walk behind }
+    $25 { is walk behind }
+    $26 { is walk behind }
+    $27 { is walk behind }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is walk behind }
+    $30 { is layer 1 }
+    $31 { is layer 1 }
+    $32 { is layer 1 }
+    $33 { is walk behind }
+    $34 { is layer 1 }
+    $35 { is layer 1 }
+    $36 { is walk behind }
+    $37 { is layer 1 }
+    $38 { is layer 1 }
+    $39 { is walk behind }
+    $3A { is layer 1 }
+    $3B { is walk behind }
+    $3C { is walk behind }
+    $3D { is walk behind }
+    $3E { is layer 1 }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is layer 1 }
+    $42 { is walk behind }
+    $43 { is layer 1 }
+    $44 { is layer 1 }
+    $45 { is layer 1 }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 { is walk behind }
+    $49 { is layer 1 }
+    $4A { is walk behind }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is walk behind }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 { is walk behind }
+    $51 { is layer 1, is layer 2 }
+    $52 { is walk behind }
+    $53 { is walk behind }
+    $54 { is walk behind }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 { is layer 1 }
+    $59 { is layer 1, is layer 2 }
+    $5A { is layer 1 }
+    $5B { is walk behind }
+    $5C { is walk behind }
+    $5D { is walk behind }
+    $5E { is walk behind }
+    $5F { is walk behind }
+    $60 { is walk behind }
+    $61 { is walk behind }
+    $62 { is layer 1 }
+    $63 { is layer 1 }
+    $64 { is layer 1 }
+    $65 { is layer 1 }
+    $66 { is layer 1 }
+    $67 { is layer 1 }
+    $68 { is walk behind }
+    $69 { is layer 1, is layer 2, is trigger }
+    $6A { is layer 1, is layer 2, is trigger }
+    $6B { is layer 1, is layer 2, is warp }
+    $6C { is layer 1, is layer 2, is warp }
+    $6D { is layer 1, is layer 2, is warp }
+    $6E { is layer 1, is layer 2, is trigger }
+    $6F { is layer 1, is layer 2 }
+    $70 { is layer 1, is layer 2, is trigger }
+    $71 { is layer 1, is layer 2, is warp }
+    $72 { is walk behind }
+    $73 { is layer 1, is layer 2, is walk behind }
+    $74 { is layer 1, is layer 2, is walk behind }
+    $75 { is layer 1, is layer 2, is trigger }
+    $76 { is walk behind }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is layer 1 }
+    $7A { is layer 1, is layer 2, is trigger }
+    $7B { is layer 1 }
+    $7C { is layer 1, is layer 2 }
+    $7D {  }
+    $7E {  }
+    $7F { is layer 1 }
+}
+
+tileset($08) // Lunar Whale
+{
+    $00 {  }
+    $01 {  }
+    $02 {  }
+    $03 {  }
+    $04 {  }
+    $05 {  }
+    $06 { is layer 1 }
+    $07 {  }
+    $08 {  }
+    $09 {  }
+    $0A {  }
+    $0B {  }
+    $0C {  }
+    $0D {  }
+    $0E { is layer 1 }
+    $0F {  }
+    $10 {  }
+    $11 {  }
+    $12 {  }
+    $13 {  }
+    $14 {  }
+    $15 {  }
+    $16 {  }
+    $17 {  }
+    $18 {  }
+    $19 {  }
+    $1A {  }
+    $1B {  }
+    $1C {  }
+    $1D {  }
+    $1E {  }
+    $1F {  }
+    $20 {  }
+    $21 {  }
+    $22 { is walk behind }
+    $23 {  }
+    $24 {  }
+    $25 {  }
+    $26 {  }
+    $27 {  }
+    $28 {  }
+    $29 {  }
+    $2A {  }
+    $2B {  }
+    $2C {  }
+    $2D {  }
+    $2E {  }
+    $2F {  }
+    $30 {  }
+    $31 {  }
+    $32 {  }
+    $33 {  }
+    $34 {  }
+    $35 { is layer 1, is layer 2, is trigger }
+    $36 {  }
+    $37 {  }
+    $38 {  }
+    $39 {  }
+    $3A {  }
+    $3B {  }
+    $3C {  }
+    $3D {  }
+    $3E {  }
+    $3F {  }
+    $40 {  }
+    $41 {  }
+    $42 { is layer 1 }
+    $43 {  }
+    $44 { is layer 1 }
+    $45 { is layer 1 }
+    $46 {  }
+    $47 {  }
+    $48 {  }
+    $49 {  }
+    $4A {  }
+    $4B {  }
+    $4C { is walk behind }
+    $4D {  }
+    $4E {  }
+    $4F {  }
+    $50 {  }
+    $51 {  }
+    $52 {  }
+    $53 {  }
+    $54 {  }
+    $55 {  }
+    $56 {  }
+    $57 {  }
+    $58 {  }
+    $59 {  }
+    $5A {  }
+    $5B { is layer 1 }
+    $5C { is layer 1 }
+    $5D {  }
+    $5E {  }
+    $5F {  }
+    $60 { is layer 1 }
+    $61 { is layer 1 }
+    $62 {  }
+    $63 { is layer 1, is layer 2, is trigger }
+    $64 { is layer 1 }
+    $65 {  }
+    $66 {  }
+    $67 { is layer 1 }
+    $68 { is layer 1 }
+    $69 { is layer 1 }
+    $6A { is layer 1 }
+    $6B { is layer 1 }
+    $6C { is layer 1 }
+    $6D { is layer 1 }
+    $6E { is layer 1 }
+    $6F { is layer 1 }
+    $70 { is walk behind }
+    $71 { is walk behind }
+    $72 { is walk behind }
+    $73 { is layer 1, is layer 2, is warp }
+    $74 { is layer 1, is layer 2, is warp }
+    $75 {  }
+    $76 {  }
+    $77 {  }
+    $78 {  }
+    $79 {  }
+    $7A { is layer 1 }
+    $7B { is layer 1 }
+    $7C {  }
+    $7D { is layer 1 }
+    $7E { is layer 1, is layer 2, is save point }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($09) // Feymarch
+{
+    $00 { is walk behind }
+    $01 { is walk behind }
+    $02 { is walk behind }
+    $03 { is walk behind }
+    $04 { is layer 1, is layer 2, has encounters }
+    $05 { is layer 1, is layer 2, has encounters }
+    $06 { is layer 1, is layer 2, has encounters }
+    $07 { is walk behind }
+    $08 { is walk behind }
+    $09 { is walk behind }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D {  }
+    $0E { is layer 1 }
+    $0F { is layer 1 }
+    $10 { is walk behind }
+    $11 { is walk behind }
+    $12 { is walk behind }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is walk behind }
+    $18 { is walk behind }
+    $19 { is walk behind }
+    $1A { is walk behind }
+    $1B { is walk behind }
+    $1C { is walk behind }
+    $1D { is layer 1 }
+    $1E { is walk behind }
+    $1F { is talkover }
+    $20 { is walk behind }
+    $21 { is walk behind }
+    $22 { is walk behind }
+    $23 { is layer 1 }
+    $24 { is walk behind }
+    $25 { is layer 1, is layer 2, is trigger }
+    $26 { is layer 1, is layer 2, is warp }
+    $27 { is walk behind }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is layer 1 }
+    $30 { is walk behind }
+    $31 { is walk behind }
+    $32 { is walk behind }
+    $33 { is walk behind }
+    $34 { is walk behind }
+    $35 { is walk behind }
+    $36 { is layer 1 }
+    $37 { is layer 1 }
+    $38 { is walk behind }
+    $39 { is layer 1 }
+    $3A { is walk behind }
+    $3B { is walk behind }
+    $3C { is walk behind }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is walk behind }
+    $42 { is walk behind }
+    $43 { is talkover }
+    $44 { is talkover }
+    $45 { is talkover }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 { is walk behind }
+    $49 { is walk behind }
+    $4A { is walk behind }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is walk behind }
+    $4E { is talkover }
+    $4F { is layer 1 }
+    $50 { is walk behind }
+    $51 { is layer 1 }
+    $52 { is walk behind }
+    $53 { is layer 1, is layer 2, is walk behind }
+    $54 { is layer 1, is layer 2, is walk behind }
+    $55 { is layer 1, is layer 2, is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 { is walk behind }
+    $59 { is layer 1, is layer 2 }
+    $5A { is walk behind }
+    $5B { is walk behind }
+    $5C { is walk behind }
+    $5D { is layer 1, is layer 2, is trigger }
+    $5E { is layer 1, is layer 2, is trigger }
+    $5F {  }
+    $60 { is layer 1, is layer 2, is trigger }
+    $61 { is layer 1, is layer 2, is warp }
+    $62 { is walk behind }
+    $63 { is layer 1 }
+    $64 { is layer 1 }
+    $65 { is walk behind }
+    $66 { is layer 1 }
+    $67 { is walk behind }
+    $68 { is layer 1, is layer 2, is trigger }
+    $69 { is walk behind }
+    $6A { is walk behind }
+    $6B { is walk behind }
+    $6C { is walk behind }
+    $6D { is walk behind }
+    $6E { is walk behind }
+    $6F { is layer 1, is layer 2 }
+    $70 { is layer 1, is layer 2, is trigger }
+    $71 { is layer 1, is layer 2, is warp }
+    $72 { is layer 1, is layer 2, is trigger }
+    $73 { is layer 1, is layer 2, is warp }
+    $74 { is layer 1, is layer 2, is trigger }
+    $75 { is layer 1, is layer 2, is warp }
+    $76 { is layer 1, is layer 2, is trigger }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is layer 1, is layer 2, is trigger }
+    $7A { is layer 1, is layer 2, is warp }
+    $7B { is walk behind }
+    $7C { is walk behind }
+    $7D { is layer 1, has encounters }
+    $7E { is layer 1, has encounters }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($0A) // Tower
+{
+    $00 { is walk behind }
+    $01 { is walk behind }
+    $02 { is walk behind }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is walk behind }
+    $07 { is walk behind }
+    $08 { is walk behind }
+    $09 { is walk behind }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is walk behind }
+    $0E { is layer 1, has encounters }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is walk behind }
+    $12 { is walk behind }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is walk behind }
+    $18 { is walk behind }
+    $19 { is walk behind }
+    $1A { is walk behind }
+    $1B { is walk behind }
+    $1C { is walk behind }
+    $1D { is walk behind }
+    $1E { is walk behind }
+    $1F { is walk behind }
+    $20 { is walk behind }
+    $21 { is layer 1, has encounters }
+    $22 { is walk behind }
+    $23 { is walk behind }
+    $24 { is walk behind }
+    $25 { is walk behind }
+    $26 { is walk behind }
+    $27 { is walk behind }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is walk behind }
+    $30 { is walk behind }
+    $31 { is walk behind }
+    $32 { is walk behind }
+    $33 { is walk behind }
+    $34 { is walk behind }
+    $35 { is walk behind }
+    $36 { is walk behind }
+    $37 { is walk behind }
+    $38 { is walk behind }
+    $39 { is walk behind }
+    $3A { is walk behind }
+    $3B { is walk behind }
+    $3C { is walk behind }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is walk behind }
+    $42 { is walk behind }
+    $43 { is layer 1 }
+    $44 { is layer 1 }
+    $45 { is layer 1 }
+    $46 { is layer 1 }
+    $47 { is walk behind }
+    $48 { is walk behind }
+    $49 { is walk behind }
+    $4A { is walk behind }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is walk behind }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 { is walk behind }
+    $51 { is walk behind }
+    $52 { is walk behind }
+    $53 { is walk behind }
+    $54 { is walk behind }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 { is walk behind }
+    $59 { is walk behind }
+    $5A { is walk behind }
+    $5B { is layer 1, has encounters }
+    $5C { is layer 1, has encounters }
+    $5D { is walk behind }
+    $5E { is walk behind }
+    $5F { is walk behind }
+    $60 { is layer 1, has encounters }
+    $61 { is layer 1, has encounters }
+    $62 { is walk behind }
+    $63 { is walk behind }
+    $64 { is layer 1, has encounters }
+    $65 { is layer 1, has encounters }
+    $66 { is layer 1, has encounters }
+    $67 { is layer 1, has encounters }
+    $68 { is layer 1, has encounters }
+    $69 { is walk behind }
+    $6A { is walk behind }
+    $6B {  }
+    $6C {  }
+    $6D {  }
+    $6E {  }
+    $6F { is layer 1 }
+    $70 { is layer 1, is layer 2, is trigger }
+    $71 { is layer 1, is layer 2, is warp }
+    $72 { is walk behind }
+    $73 { is walk behind }
+    $74 { is layer 1, is layer 2, is warp }
+    $75 {  }
+    $76 {  }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is layer 1, is layer 2, is trigger }
+    $7A { is layer 1, is layer 2, is trigger }
+    $7B { is walk behind }
+    $7C { is walk behind }
+    $7D { is layer 1, has encounters }
+    $7E {  }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($0B) // Giant
+{
+    $00 { is walk behind }
+    $01 { is walk behind }
+    $02 { is walk behind }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is walk behind }
+    $07 { is walk behind }
+    $08 { is walk behind }
+    $09 {  }
+    $0A {  }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is walk behind }
+    $0E { is layer 1, has encounters }
+    $0F { is walk behind }
+    $10 {  }
+    $11 {  }
+    $12 {  }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is walk behind }
+    $18 {  }
+    $19 {  }
+    $1A {  }
+    $1B { is walk behind }
+    $1C { is walk behind }
+    $1D { is walk behind }
+    $1E { is walk behind }
+    $1F { is walk behind }
+    $20 { is walk behind }
+    $21 { is layer 1, has encounters }
+    $22 { is walk behind }
+    $23 { is walk behind }
+    $24 { is walk behind }
+    $25 { is walk behind }
+    $26 { is walk behind }
+    $27 { is walk behind }
+    $28 {  }
+    $29 {  }
+    $2A {  }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is walk behind }
+    $30 {  }
+    $31 {  }
+    $32 {  }
+    $33 {  }
+    $34 {  }
+    $35 { is walk behind }
+    $36 { is walk behind }
+    $37 { is walk behind }
+    $38 {  }
+    $39 {  }
+    $3A {  }
+    $3B { is walk behind }
+    $3C { is walk behind }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is walk behind }
+    $41 { is walk behind }
+    $42 { is walk behind }
+    $43 { is walk behind }
+    $44 { is walk behind }
+    $45 { is walk behind }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 {  }
+    $49 {  }
+    $4A {  }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is walk behind }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 {  }
+    $51 {  }
+    $52 {  }
+    $53 { is walk behind }
+    $54 { is walk behind }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 {  }
+    $59 {  }
+    $5A {  }
+    $5B { is walk behind }
+    $5C { is walk behind }
+    $5D { is layer 1, is layer 2, is trigger }
+    $5E { is layer 1, has encounters }
+    $5F { is layer 1, has encounters }
+    $60 {  }
+    $61 {  }
+    $62 {  }
+    $63 {  }
+    $64 {  }
+    $65 {  }
+    $66 {  }
+    $67 {  }
+    $68 {  }
+    $69 {  }
+    $6A {  }
+    $6B { is walk behind }
+    $6C { is walk behind }
+    $6D { is walk behind }
+    $6E { is walk behind }
+    $6F { is walk behind }
+    $70 { is walk behind }
+    $71 {  }
+    $72 { is layer 1, is layer 2, is trigger }
+    $73 { is layer 1, is layer 2, is trigger }
+    $74 { is layer 1, is layer 2 }
+    $75 {  }
+    $76 {  }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is walk behind }
+    $7A { is walk behind }
+    $7B { is walk behind }
+    $7C { is walk behind }
+    $7D { is walk behind }
+    $7E {  }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($0C) // Lunar Subterrane
+{
+    $00 { is layer 1, has encounters }
+    $01 { is layer 1, has encounters }
+    $02 { is layer 1, has encounters }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is layer 1, is layer 2, is walk behind }
+    $07 { is walk behind }
+    $08 { is layer 1, has encounters }
+    $09 { is layer 1, has encounters }
+    $0A { is layer 1, has encounters }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D { is walk behind }
+    $0E { is layer 1, has encounters }
+    $0F { is walk behind }
+    $10 { is layer 1, has encounters }
+    $11 { is layer 1, has encounters }
+    $12 { is layer 1, has encounters }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is layer 1, has encounters }
+    $17 { is layer 1, is layer 2, has encounters }
+    $18 { is walk behind }
+    $19 { is walk behind }
+    $1A { is walk behind }
+    $1B { is walk behind }
+    $1C { is walk behind }
+    $1D { is walk behind }
+    $1E { is walk behind }
+    $1F { is layer 1 }
+    $20 { is walk behind }
+    $21 { is walk behind }
+    $22 { is walk behind }
+    $23 { is walk behind }
+    $24 { is walk behind }
+    $25 { is walk behind }
+    $26 {  }
+    $27 { is layer 1, is layer 2, has encounters }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is walk behind }
+    $30 { is layer 1, has encounters }
+    $31 { is layer 1, has encounters }
+    $32 { is layer 1, has encounters }
+    $33 { is layer 1, has encounters }
+    $34 { is layer 1, has encounters }
+    $35 { is layer 1, has encounters }
+    $36 { is walk behind }
+    $37 { is walk behind }
+    $38 { is walk behind }
+    $39 { is walk behind }
+    $3A { is layer 1, is layer 2, has encounters }
+    $3B { is layer 1, is layer 2, has encounters }
+    $3C { is layer 1, has encounters }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is layer 1, has encounters }
+    $41 { is layer 1, has encounters }
+    $42 { is layer 1, has encounters }
+    $43 { is layer 1, has encounters }
+    $44 { is layer 1, has encounters }
+    $45 { is walk behind }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 {  }
+    $49 {  }
+    $4A {  }
+    $4B {  }
+    $4C {  }
+    $4D { is walk behind }
+    $4E { is walk behind }
+    $4F { is layer 1, is layer 2, is trigger }
+    $50 {  }
+    $51 {  }
+    $52 {  }
+    $53 {  }
+    $54 { is walk behind }
+    $55 {  }
+    $56 {  }
+    $57 {  }
+    $58 {  }
+    $59 {  }
+    $5A {  }
+    $5B {  }
+    $5C {  }
+    $5D { is layer 1, is layer 2, is trigger }
+    $5E { is layer 1, is layer 2, is trigger }
+    $5F { is layer 1, is layer 2, is trigger }
+    $60 { is layer 1, is layer 2, is warp }
+    $61 { is layer 1, has encounters }
+    $62 { is layer 1, has encounters }
+    $63 { is layer 1, has encounters }
+    $64 { is layer 1, is layer 2, is trigger }
+    $65 { is layer 1, is layer 2, is warp }
+    $66 { is layer 1, is layer 2, is trigger }
+    $67 { is layer 1, is layer 2, is warp }
+    $68 { is walk behind }
+    $69 { is walk behind }
+    $6A { is walk behind }
+    $6B { is layer 1, is layer 2, is trigger }
+    $6C { is layer 1, is layer 2, is warp }
+    $6D {  }
+    $6E { is layer 1, has encounters }
+    $6F { is layer 1, has encounters }
+    $70 {  }
+    $71 {  }
+    $72 { is layer 1, is layer 2, is trigger }
+    $73 { is layer 1, is layer 2, is warp }
+    $74 { is layer 1, is layer 2, is trigger }
+    $75 { is layer 1, is layer 2, is warp }
+    $76 { is layer 1, is layer 2, is warp }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is layer 1 }
+    $7A { is layer 1 }
+    $7B {  }
+    $7C {  }
+    $7D { is layer 1 }
+    $7E { is walk behind }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($0D) // Mountain
+{
+    $00 { is layer 1, has encounters }
+    $01 { is layer 1, has encounters }
+    $02 { is layer 1, has encounters }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 {  }
+    $06 {  }
+    $07 {  }
+    $08 { is layer 1, has encounters }
+    $09 { is layer 1, has encounters }
+    $0A { is layer 1, has encounters }
+    $0B { is walk behind }
+    $0C { is walk behind }
+    $0D {  }
+    $0E {  }
+    $0F {  }
+    $10 { is walk behind }
+    $11 { is walk behind }
+    $12 { is walk behind }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 {  }
+    $16 {  }
+    $17 {  }
+    $18 { is walk behind }
+    $19 { is walk behind }
+    $1A { is walk behind }
+    $1B { is walk behind }
+    $1C { is walk behind }
+    $1D {  }
+    $1E {  }
+    $1F {  }
+    $20 { is walk behind }
+    $21 { is walk behind }
+    $22 { is walk behind }
+    $23 { is layer 1, is layer 2, has encounters }
+    $24 { is layer 1, is layer 2, has encounters }
+    $25 {  }
+    $26 {  }
+    $27 {  }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is layer 1, is layer 2, has encounters }
+    $2C { is layer 1, is layer 2, has encounters }
+    $2D {  }
+    $2E {  }
+    $2F {  }
+    $30 { is layer 1, is layer 2, is trigger }
+    $31 { is layer 2, has encounters }
+    $32 { is layer 2, has encounters }
+    $33 { is layer 1, is layer 2, has encounters }
+    $34 { is layer 1, is layer 2, has encounters }
+    $35 { is layer 1, has encounters }
+    $36 { is layer 1, has encounters }
+    $37 { is layer 1, has encounters }
+    $38 {  }
+    $39 {  }
+    $3A {  }
+    $3B {  }
+    $3C {  }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is layer 1, has encounters }
+    $40 {  }
+    $41 {  }
+    $42 { is walk behind }
+    $43 {  }
+    $44 {  }
+    $45 { is walk behind }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 {  }
+    $49 {  }
+    $4A {  }
+    $4B { is walk behind }
+    $4C {  }
+    $4D { is walk behind }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 {  }
+    $51 {  }
+    $52 {  }
+    $53 { is layer 1, has encounters }
+    $54 {  }
+    $55 {  }
+    $56 {  }
+    $57 {  }
+    $58 {  }
+    $59 {  }
+    $5A {  }
+    $5B {  }
+    $5C {  }
+    $5D {  }
+    $5E {  }
+    $5F {  }
+    $60 {  }
+    $61 {  }
+    $62 {  }
+    $63 {  }
+    $64 { is walk behind }
+    $65 { is layer 1, has encounters }
+    $66 { is layer 1, has encounters }
+    $67 { is walk behind }
+    $68 { is layer 1, has encounters }
+    $69 {  }
+    $6A { is walk behind }
+    $6B { is walk behind }
+    $6C { is layer 1, is bridge layer, is walk behind }
+    $6D { is layer 1, is bridge layer, is walk behind }
+    $6E { is walk behind }
+    $6F { is layer 1, is layer 2, is trigger }
+    $70 { is layer 1, is layer 2, is trigger }
+    $71 { is layer 1, is layer 2, is warp }
+    $72 { is layer 1, has encounters }
+    $73 {  }
+    $74 { is layer 1 }
+    $75 { is walk behind }
+    $76 { is layer 1 }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 {  }
+    $7A { is walk behind }
+    $7B { is walk behind }
+    $7C {  }
+    $7D {  }
+    $7E { is walk behind }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($0E) // Cave
+{
+    $00 { is layer 2, is bottom half, is talkover, is trigger }
+    $01 { is layer 1, has encounters }
+    $02 { is layer 1, is bridge layer, is walk behind, has encounters }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is layer 1, has encounters }
+    $07 { is walk behind }
+    $08 { is walk behind }
+    $09 { is walk behind }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is layer 1, has encounters }
+    $0D { is walk behind }
+    $0E { is layer 1, has encounters }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is walk behind }
+    $12 { is walk behind }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is walk behind }
+    $16 { is walk behind }
+    $17 { is layer 1, has encounters }
+    $18 { is layer 1, has encounters }
+    $19 { is layer 1, has encounters }
+    $1A { is layer 1, has encounters }
+    $1B { is walk behind }
+    $1C { is walk behind }
+    $1D { is walk behind }
+    $1E {  }
+    $1F { is walk behind }
+    $20 { is layer 1, has encounters }
+    $21 { is layer 1, is layer 2, has encounters }
+    $22 { is layer 1, has encounters }
+    $23 { is walk behind }
+    $24 { is layer 2, is bottom half, is talkover, has encounters }
+    $25 { is walk behind }
+    $26 { is walk behind }
+    $27 { is walk behind }
+    $28 { is walk behind }
+    $29 { is walk behind }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is layer 1, has encounters }
+    $2E { is layer 1, has encounters }
+    $2F { is walk behind }
+    $30 { is walk behind }
+    $31 { is walk behind }
+    $32 { is walk behind }
+    $33 { is layer 1, is layer 2, has encounters }
+    $34 { is layer 1, is layer 2, has encounters }
+    $35 { is layer 1, is layer 2, has encounters }
+    $36 { is layer 2, has encounters }
+    $37 { is layer 1, is layer 2, is trigger }
+    $38 { is layer 1, is bridge layer, is walk behind, has encounters }
+    $39 { is walk behind }
+    $3A { is walk behind }
+    $3B { is layer 2, has encounters }
+    $3C { is layer 2, has encounters }
+    $3D { is layer 2, has encounters }
+    $3E { is layer 2, has encounters }
+    $3F { is walk behind }
+    $40 {  }
+    $41 {  }
+    $42 {  }
+    $43 {  }
+    $44 {  }
+    $45 {  }
+    $46 {  }
+    $47 {  }
+    $48 {  }
+    $49 {  }
+    $4A {  }
+    $4B {  }
+    $4C {  }
+    $4D {  }
+    $4E { is layer 1, has encounters }
+    $4F { is layer 1, has encounters }
+    $50 { is walk behind }
+    $51 { is layer 1, is layer 2, is walk behind, has encounters }
+    $52 { is layer 1, is layer 2, is walk behind, has encounters }
+    $53 { is layer 1, is layer 2, is walk behind, has encounters }
+    $54 { is layer 2, has encounters }
+    $55 { is layer 1, has encounters }
+    $56 { is layer 2, has encounters }
+    $57 { is layer 2, has encounters }
+    $58 { is walk behind }
+    $59 { is layer 2, has encounters }
+    $5A { is layer 2, has encounters }
+    $5B { is layer 1, is layer 2, is walk behind }
+    $5C { is layer 1, is layer 2, is walk behind, is warp }
+    $5D { is layer 2, is bottom half, is talkover, has encounters }
+    $5E { is layer 1, has encounters }
+    $5F { is layer 1, has encounters }
+    $60 { is walk behind }
+    $61 { is walk behind }
+    $62 { is walk behind }
+    $63 { is layer 2, has encounters }
+    $64 { is walk behind }
+    $65 { is walk behind }
+    $66 { is layer 2, has encounters }
+    $67 { is walk behind }
+    $68 { is walk behind }
+    $69 { is layer 2, has encounters }
+    $6A { is walk behind }
+    $6B { is walk behind }
+    $6C {  }
+    $6D { is layer 2, is bottom half, is talkover, has encounters }
+    $6E { is walk behind }
+    $6F { is layer 1, is layer 2 }
+    $70 { is layer 1, is layer 2, is trigger }
+    $71 { is layer 1, is layer 2, is warp }
+    $72 { is layer 1, is layer 2, is trigger }
+    $73 { is layer 1, is layer 2, is trigger }
+    $74 { is walk behind }
+    $75 { is walk behind }
+    $76 { is walk behind }
+    $77 { is trigger }
+    $78 { is trigger }
+    $79 { is layer 2, is walk behind, is trigger }
+    $7A { is layer 1, is layer 2, is warp }
+    $7B { is layer 1, is layer 2, is warp }
+    $7C { is layer 2, has encounters }
+    $7D { is layer 2, has encounters }
+    $7E { is walk behind }
+    $7F { is layer 1, is layer 2, is save point }
+}
+
+tileset($0F) // Ship
+{
+    $00 { is walk behind }
+    $01 { is walk behind }
+    $02 { is layer 1 }
+    $03 { is walk behind }
+    $04 { is walk behind }
+    $05 { is walk behind }
+    $06 { is layer 1 }
+    $07 { is walk behind }
+    $08 { is walk behind }
+    $09 { is layer 1 }
+    $0A { is walk behind }
+    $0B { is walk behind }
+    $0C { is layer 1 }
+    $0D { is walk behind }
+    $0E { is walk behind }
+    $0F { is walk behind }
+    $10 { is walk behind }
+    $11 { is layer 1 }
+    $12 { is walk behind }
+    $13 { is walk behind }
+    $14 { is walk behind }
+    $15 { is layer 1 }
+    $16 { is walk behind }
+    $17 { is walk behind }
+    $18 { is walk behind }
+    $19 { is layer 1 }
+    $1A { is walk behind }
+    $1B { is walk behind }
+    $1C { is walk behind }
+    $1D { is walk behind }
+    $1E { is walk behind }
+    $1F { is walk behind }
+    $20 { is walk behind }
+    $21 { is layer 1 }
+    $22 { is layer 1 }
+    $23 { is layer 1 }
+    $24 { is layer 1 }
+    $25 { is layer 1 }
+    $26 { is walk behind }
+    $27 { is walk behind }
+    $28 { is layer 1 }
+    $29 { is layer 1 }
+    $2A { is walk behind }
+    $2B { is walk behind }
+    $2C { is walk behind }
+    $2D { is walk behind }
+    $2E { is walk behind }
+    $2F { is walk behind }
+    $30 { is layer 1 }
+    $31 { is layer 1 }
+    $32 { is layer 1 }
+    $33 { is layer 1 }
+    $34 { is layer 1 }
+    $35 { is layer 1 }
+    $36 { is walk behind }
+    $37 { is walk behind }
+    $38 { is walk behind }
+    $39 { is walk behind }
+    $3A { is walk behind }
+    $3B { is walk behind }
+    $3C { is walk behind }
+    $3D { is walk behind }
+    $3E { is walk behind }
+    $3F { is walk behind }
+    $40 { is layer 1 }
+    $41 { is layer 1 }
+    $42 { is layer 1 }
+    $43 { is layer 1 }
+    $44 { is walk behind }
+    $45 { is walk behind }
+    $46 { is walk behind }
+    $47 { is walk behind }
+    $48 { is layer 1 }
+    $49 { is layer 1 }
+    $4A { is walk behind }
+    $4B { is walk behind }
+    $4C { is walk behind }
+    $4D { is layer 1 }
+    $4E { is walk behind }
+    $4F { is walk behind }
+    $50 { is layer 1 }
+    $51 { is walk behind }
+    $52 { is layer 1 }
+    $53 { is walk behind }
+    $54 { is layer 1 }
+    $55 { is walk behind }
+    $56 { is walk behind }
+    $57 { is walk behind }
+    $58 { is walk behind }
+    $59 { is walk behind }
+    $5A { is walk behind }
+    $5B { is walk behind }
+    $5C { is walk behind }
+    $5D { is walk behind }
+    $5E { is walk behind }
+    $5F { is layer 1 }
+    $60 { is walk behind }
+    $61 { is layer 1 }
+    $62 { is walk behind }
+    $63 { is layer 1 }
+    $64 { is layer 1 }
+    $65 { is layer 1 }
+    $66 { is layer 1 }
+    $67 { is layer 1 }
+    $68 { is layer 1 }
+    $69 { is layer 1 }
+    $6A { is layer 1 }
+    $6B { is layer 1 }
+    $6C { is layer 1 }
+    $6D { is layer 1 }
+    $6E { is layer 1 }
+    $6F { is layer 1 }
+    $70 { is layer 1 }
+    $71 { is layer 1 }
+    $72 { is walk behind }
+    $73 { is walk behind }
+    $74 { is layer 1 }
+    $75 { is layer 1 }
+    $76 { is walk behind }
+    $77 { is walk behind }
+    $78 { is walk behind }
+    $79 { is walk behind }
+    $7A { is walk behind }
+    $7B { is walk behind }
+    $7C { is layer 1 }
+    $7D { is layer 1 }
+    $7E { is layer 1 }
+    $7F {  }
+}

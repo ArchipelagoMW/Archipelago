@@ -1,0 +1,103 @@
+// set spell name on Cocka
+text(spell name #Cocka) {[callmagic]Cocka}
+text(spell name #CockatriceEffect) {Cocka}
+
+// change other call orb items to teach the 5 major summons
+
+// %flag vintage off%
+text(item name #Sylph) {[callmagic]Sylph}
+text(item name #Odin)  {[callmagic]Odin}
+text(item name #Levia) {[callmagic]Levia}
+text(item name #Asura) {[callmagic]Asura}
+text(item name #Baham) {[callmagic]Baham}
+// %end%
+
+// %flag vintage on%
+text(item name #Sylph) {[callmagic]SLPH}
+text(item name #Odin)  {[callmagic]ODIN}
+text(item name #Levia) {[callmagic]LEVI}
+text(item name #Asura) {[callmagic]ASUR}
+text(item name #Baham) {[callmagic]BAHA}
+// %end%
+
+
+// call orb prices set in items.f4c
+
+
+// patch pointer table for item functions so that
+// old DwarfBread (now Sylph) points to orbs code
+patch($0A684) { 6F A8 }
+
+// patch call orbs to grant correct spells
+patch($01a892 bus) { AB }
+
+// revise call orb code to work with expanded character system
+msfpatch {
+    // alter search loop to check jobs
+    .addr $01a876
+        jml $=CallOrb__LoopPatch
+
+    .new
+    CallOrb__LoopPatch:
+        lda $0001,x
+        and #$0f
+        cmp #$02  // CRydia job
+        beq $+FoundRydia
+        cmp #$0b  // ARydia job
+        beq $+FoundRydia
+        jml $01a87e  // return to code for next loop iteration
+
+    %FoundRydia:
+        // we don't draw the char name anymore so let's just
+        // jump ahead to where we give the spell
+        jml $01a88d
+
+    .addr $01a895
+        ldy #$0004
+        jsl $=CharEx__GiveSpell
+        lda $45 // get the spell code back, as is expected at this point
+        jmp $01a8b6
+}
+
+// Alter call orb text box
+patch($01de1d bus) { 05 }  // reduce window height
+patch($01de1e bus) { 9A 02 } // change text position
+patch($01de20 bus) { 4D }  // small L to capital L
+patch($01a8cf bus) { 1A }  // change spell name position
+patch($01a8c5 bus) { EA EA EA EA EA } // remove name drawing code
+
+
+// remove old call orbs from drop tables
+droptable($38) {
+    mythic #Cure2
+}
+
+droptable($3A) {
+    mythic #Cure1
+}
+
+droptable($3B) {
+    mythic #Cure1
+}
+
+// Turn Smut into DwarfBread
+text(item name #Smut) {[$15]EagleEye}
+// Smut->EagleEye price set in items.f4c
+patch($01a680 bus) { 49 A8 } // update function pointer on Smut to point to DwarfBread
+
+
+// write custom handler for EagleEye
+msfpatch {
+    SmutEagleEye__Handler:
+        lda $1a04   // displaced logic check
+        and #$40    //   ...
+        bne $04
+        jml $01a827 // return to "failed to use item" condition
+
+        lda #$05    // hardcode effect value for DwarfBread
+        jml $01a856 // return to original code after effect value calculation
+
+    .addr $01a849
+        jml $=SmutEagleEye__Handler
+}
+

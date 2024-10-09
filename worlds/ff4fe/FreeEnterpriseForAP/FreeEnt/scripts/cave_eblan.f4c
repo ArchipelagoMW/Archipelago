@@ -1,0 +1,152 @@
+npc(#Rubicant2) {
+    sprite
+        // %rubicant_slot sprite main%
+        #sprite.Rubicant
+        // %end%
+}
+
+placement($CA 2)  //#CaveEblanExit
+{
+    // %rubicant_slot alt2 sprite main palette%
+    // %end%
+}
+
+npc(#fe_CaveEblanEdge) {
+    // %edge_slot sprite%
+    sprite #dyn.AxEdge
+    // %end%
+    default active
+    eventcall {}
+}
+
+// exchange placement numbers of Edge and
+// flames so that flames shows on top
+placement($CA 7) {
+    npc #fe_CaveEblanEdge
+    position 22 6
+    walking off
+    tangible
+    face up
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+placement($CA 3)
+{
+    npc #RubicantFlames
+    position 22 5
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 3
+}
+
+event($9A)  //Edge joining, Rubicant battle
+{
+    consts(placement) {
+        2   Rubicant2
+        7   Edge1
+        3   FireMagic
+    }
+    // autodetected map #CaveEblanExit
+    player face left
+    music #None
+    pause 4
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+        sound #Fire
+        p #FireMagic toggle visible
+        p #FireMagic move down
+        pause 8
+        p #Edge1 lie down
+        pause 2
+        p #FireMagic toggle visible
+        p #FireMagic move up
+        pause 4
+        sound #Glow
+        toggle tint $D7
+        pause 4
+        sound #Fire
+        batch 11 {
+            p #Rubicant2 toggle visible
+            p #FireMagic toggle visible
+        }
+        batch 8 {
+            p #FireMagic move up
+        }
+        p #FireMagic toggle visible
+        deactivate #Rubicant2
+        toggle tint $00
+        pause 2
+        p #Edge1 bow head
+        pause 4
+        p #Edge1 face down
+        pause 2
+        p #Edge1 move up
+        pause 2
+        p #Edge1 bow head
+        pause 2
+        p #Edge1 lie down
+        pause 6
+        player move left
+        player move left
+        player move up
+        player move up
+        pause 4
+        sound #WhiteMagic
+        toggle tint $97
+        sound #Cure
+        batch 10 {
+            screen flash
+        }
+        p #Edge1 face down
+        music #Cid fade in
+        toggle tint $00
+        pause 4
+        p #Edge1 face down
+        pause 3
+        p #Edge1 spin
+        p #Edge1 face down
+        p #Edge1 wave in
+        pause 3
+        p #Edge1 move down
+        p #Edge1 toggle visible
+
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.cave_eblan_character 0]
+        message #msg.fe_JoinedFanfare
+        [#B #Objectives_TickRewardSlot #reward_slot.cave_eblan_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.cave_eblan_character]
+        player face up
+    }
+
+    [#B #If #not_Flag #flag.Temp] {
+        pause 8
+        p #Rubicant2 face left
+        pause 4
+        p #Rubicant2 face right
+        pause 4
+        p #Rubicant2 face up
+        pause 2
+        batch 8 {
+            p #Rubicant2 move up
+            p #FireMagic move up
+            p #Edge1 move up
+        }
+        p #Rubicant2 toggle visible
+        deactivate #Rubicant2
+    }
+
+    deactivate #FallenSoldier6
+    deactivate #FallenSoldier5
+    deactivate #fe_CaveEblanEdge
+    set #EdgeJoined
+    music #Cave
+}
+

@@ -1,0 +1,1167 @@
+// alternate pregame screen that shows up when starting a game with
+// no save data. Doesn't display slots, but displays flag information
+// and allows access to Custom menu.
+
+msfpatch {
+    .def Pregame__ShowPregameMenuIndicator $7070fd
+}
+
+// assign an unused input code to L button so that
+// it can be used in menus
+patch ($14fe9a bus) { 20 00 }
+
+
+msfpatch {
+    // hook into Load Game screen code to detect special condition
+    .addr $01961f
+        jml $=PregameScreen__Start
+
+    .new
+    PregameScreen__Start:
+        // execute MenuKit equivalent of displaced command
+        jsr $_MK_PushOAM
+
+        jsr $_FirstLaunch__Check
+        bcs $+FirstLoad
+
+        // if not first startup, check the indicator
+        lda $=Pregame__ShowPregameMenuIndicator
+        bne $+ShowPregameMenu
+
+        // defer to normal load game screen
+        lda $1a3c  // displaced instruction
+        jml $019625
+
+    %FirstLoad:
+        // set pregame menu display indicator
+        lda #$01
+        sta $=Pregame__ShowPregameMenuIndicator
+
+        jsr $_FirstLaunch__SetLaunched
+
+    %ShowPregameMenu:
+        // setup our new replacement menu
+
+        // disable BG1 to start
+        lda #$1e
+        sta $00212c
+
+        // init cursor
+        stz $1a3c
+
+        // initialize game start data
+        lda #$00
+        ldx #$9785
+        jsr $_MK_DoLongCallX
+
+    %ReloadTopMenu:
+        // load party sprites
+        ldx #$8da2
+        jsr $_MK_DoLongCallX
+
+        // draw New Game window
+        jsr $_MK_SetBG2
+        ldy #$dbda
+        ldx #$80d9
+        jsr $_MK_DoLongCallX
+        ldy #$dbde
+        ldx #$8301
+        jsr $_MK_DoLongCallX
+
+        // draw collapsed side menu
+        ldx #$0024
+        stx $2b
+        ldx #$020c
+        stx $2d
+        stz $2f
+        jsr $_MK_DrawWindow
+        ldx #$00ae
+        ldy #$_CustomText
+        lda #$20
+        jsr $_MK_DrawText
+
+        // draw expanded side menu
+        jsr $_MK_SetBG1
+
+        ldx #$0024
+        stx $2b
+        ldx #$050c
+        stx $2d
+        stz $2f
+        jsr $_MK_DrawWindow
+        ldx #$00ae
+        ldy #$_CustomText
+        lda #$20
+        jsr $_MK_DrawText
+        ldx #$012e
+        ldy #$_NamesText
+        lda #$20
+        jsr $_MK_DrawText
+
+        jsr $_MK_SetBG2
+
+        // draw bottom info window
+        ldx #$0640
+        stx $2b
+        ldx #$011e
+        stx $2d
+        stz $2f
+        jsr $_MK_DrawWindow
+
+        // hack: set palettes on version line
+        ldx #$0000
+        lda #$08
+    %VersionLinePaletteLoopStart:
+        sta $ac83,x
+        inx
+        inx
+        cpx #$003c
+        bcc $-VersionLinePaletteLoopStart
+
+        // draw checksum
+        jsr $_Util__LoadChecksumTiles
+        lda $1670
+        sta $acae
+        lda $1671
+        sta $acb2
+        lda $1672
+        sta $acb6
+        lda $1673
+        sta $acba
+
+        // draw version
+        ldx #$0682
+        ldy #$d800  // [hardcoded]
+        lda #$02
+        sta $2f
+        lda #$21
+        jsr $_MK_DrawText
+
+        jsr $_PregameScreen__InitFlagText
+        jsr $_PregameScreen__DrawFlagText
+
+        jsr $_MK_PushAllBGs
+        jsr $_MK_UpdateScrollValues
+
+        // setup custom palettes
+        stz $a0ca
+        stz $a0cb
+        jsr $_MK_PushCGRAM
+
+        // set sprites according to initially selected item
+        lda $1a3c
+        beq $+StartOnNewGame
+
+        cmp #$01
+        beq $+StartOnCustom
+
+        bra $+StartOnNames
+
+    %StartOnNewGame:
+        ldx #$98cf
+        jsr $_MK_DoLongCallX
+        jmp $_FadeIn
+
+    %StartOnCustom:
+        ldx #$0ea5
+        jsr $_MK_UpdateCursor
+        jmp $_FadeIn
+
+    %StartOnNames:
+        ldx #$1ea5
+        jsr $_MK_UpdateCursor
+        jmp $_FadeIn
+
+        // do a manual fade in since the normal fade in routine
+        // has been hacked by the fast menus patch
+    %FadeIn:
+        stz $88
+    %FadeInLoop:
+        ldx #$818a
+        jsr $_MK_DoLongCallX
+        ldx #$82b6
+        jsr $_MK_DoLongCallX
+        inc $88
+        lda $88
+        cmp #$10
+        bcc $-FadeInLoop
+        dec $88
+
+    %MenuLoop:
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushCGRAM
+        jsr $_MK_PushBG4
+        jsr $_MK_UpdateScrollValues
+
+        // sprites on
+        jsr $_GetEnabledLayers
+        ora #$10
+        sta $00212c
+
+        // tick counters (game ticks and RNG seed)
+        inc $16a7
+        inc $0fff
+
+        jsr $_MK_WaitForInput
+
+        // check for confirm button press
+        lda $00
+        and #$80
+        beq $+InputCheck
+
+        lda $1a3c
+        beq $+NewGameSelected
+        cmp #$01
+        beq $+CustomSelected
+        cmp #$02
+        beq $+NamesSelected
+        jmp $_InputCheck
+
+    %NewGameSelected:
+        lda #$00
+        sta $=Pregame__ShowPregameMenuIndicator
+        jml $019648
+
+    %CustomSelected:
+        jmp $_DoCustomMenu
+
+    %NamesSelected:
+        jmp $_DoNamesMenu
+
+    %InputCheck:
+        lda $1a3c
+        bne $+SkipScrollCheck
+
+        lda $00
+        bit #$20
+        bne $+ScrollPageUp
+        bit #$10
+        bne $+ScrollPageDown
+        lda $01
+        bit #$08
+        bne $+ScrollLineUp
+        bit #$04
+        beq $+SkipScrollCheck
+    %ScrollLineDown:
+        jsr $_PregameScreen__FlagTextLineDown
+        jmp $_InputCheckDone
+    %ScrollLineUp:
+        jsr $_PregameScreen__FlagTextLineUp
+        jmp $_InputCheckDone
+    %ScrollPageDown:
+        jsr $_PregameScreen__FlagTextPageDown
+        jmp $_InputCheckDone
+    %ScrollPageUp:
+        jsr $_PregameScreen__FlagTextPageUp
+        jmp $_InputCheckDone
+
+    %SkipScrollCheck:
+        // check for arrow press
+        lda $01
+        bit #$0f
+        beq $+InputCheckDone
+
+        // sprites off
+        jsr $_GetEnabledLayers
+        sta $00212c
+
+        lda $01
+        bit #$01
+        bne $+HighlightCustom
+
+        bit #$02
+        bne $+HighlightNewGame
+
+        // don't move if New Game highlighted
+        lda $1a3c
+        beq $+HighlightNewGame
+
+        cmp #$01
+        beq $+HighlightNames
+        bra $+HighlightCustom
+
+    %HighlightNewGame:
+        stz $1a3c
+
+        // redraw party sprites
+        ldx #$98cf
+        jsr $_MK_DoLongCallX
+        jmp $_InputCheckDone
+
+    %HighlightCustom:
+        lda #$01
+        sta $1a3c
+
+        // point cursor to custom
+        ldx #$8d6c
+        jsr $_MK_DoLongCallX  // clear OAM data
+        ldx #$0ea5
+        jsr $_MK_UpdateCursor
+        jmp $_InputCheckDone
+
+    %HighlightNames:
+        lda #$02
+        sta $1a3c
+
+        // point cursor to custom
+        ldx #$8d6c
+        jsr $_MK_DoLongCallX  // clear OAM data
+        ldx #$1ea5
+        jsr $_MK_UpdateCursor
+        jmp $_InputCheckDone
+
+    %InputCheckDone:
+        jmp $_MenuLoop
+
+    %DoCustomMenu:
+        // largely a copy of $01d128 area
+        jsr $_MK_FadeOut
+        
+        jsr $_MK_ClearAllBGs
+        jsr $_MK_PushAllBGs
+
+        lda #$13
+        sta $00212c
+        ldx #$4040
+        stx $1d
+        ldx #$fe89
+        stx $1f
+        lda #$1e
+        sta $0121
+        ldx #$0020
+        stx $0122
+        jsr $_MK_DMA
+        jsr $_MK_InitializeCursor
+        jsr $_MK_PushOAM
+        jsl $14fd00
+
+        // custom menu main routine
+        ldx #$d176
+        jsr $_MK_DoLongCallX  
+
+        // save custom data to global SRAM
+
+        // set the "have custom" flag by copying ROM checksum
+        // and applying transformation
+        lda $00ffde
+        ora #$80
+        sta $707100  // [hardcoded]
+        lda $00ffdf
+        and #$fe
+        sta $707101  // [hardcoded]
+
+        ldx #$0000
+    %SaveCustomLoop:
+        lda $16a9,x
+        sta $707102,x   // [hardcoded]
+        inx
+        cpx #$0016
+        bcc $-SaveCustomLoop
+
+        jsr $_MK_FadeOut
+
+    PregameScreen__ReturnFromSubmenu:
+        jsr $_MK_ClearAllBGs
+        jsr $_MK_PushAllBGs
+
+        // reset OAM data
+        ldx #$8d6c
+        jsr $_MK_DoLongCallX
+        jsr $_MK_PushOAM
+
+        jmp $_ReloadTopMenu
+
+    %DoNamesMenu:
+        jsr $_MK_FadeOut
+        jsr $_PregameNames__Start
+        jmp $_PregameScreen__ReturnFromSubmenu
+
+
+    %CustomText: "Custom" [[ 00 ]]
+    %NamesText:  "Names"  [[ 00 ]]
+
+    %GetEnabledLayers:
+        lda $1a3c
+        beq $+GetEnabledLayers_MenuClosed
+        lda #$0f
+        rts
+
+    %GetEnabledLayers_MenuClosed:
+        lda #$0e
+        rts
+}
+
+patch($21d800 bus) {
+    // %version_encoded%
+    // %end%
+    00
+}
+
+patch($238000 bus) {
+    // %pregame_screen_text%
+    // %end%
+}
+
+//-----------------------------------------------------------
+msfpatch {
+    .def PregameScreen__FlagTextLength       $7e1692
+    .def PregameScreen__FlagTextCurLine      $7e1694
+    .def PregameScreen__FlagTextMaxLine      $7e1696
+
+    .def FlagText__LineCount  $238000
+    .def FlagText__Length     $238002
+
+    PregameScreen__InitFlagText:
+        rep #$20
+        .mx 0x00
+
+        stz $_PregameScreen__FlagTextCurLine
+
+        lda #$ffd4
+        sta $99  // BG4 vertical scroll
+
+        lda $=FlagText__LineCount
+        sec
+        sbc #$0010
+        bcs $+NoUnderflow
+        lda #$0000
+    %NoUnderflow:
+        sta $_PregameScreen__FlagTextMaxLine
+
+        lda $=FlagText__Length
+        sta $_PregameScreen__FlagTextLength  // store in absolute-addressable location for easier comparison
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // initialize BG4 palette
+        ldx #$0000
+        lda #$04
+    %PaletteLoop:
+        sta $c601,x
+        inx
+        inx
+        cpx #$1000
+        bcc $-PaletteLoop
+
+        rts
+
+    PregameScreen__DrawFlagText:
+        rep #$20
+        .mx 0x00
+        lda $_PregameScreen__FlagTextCurLine
+        sec
+        sbc #$0008  // start copying from a few lines before "top" line
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        asl a
+        and #$0fff
+        tay
+
+        lda #$0580
+        sta $1680
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+    %TextCopyLoop:
+        cpx $_PregameScreen__FlagTextLength
+        bcc $+ReadCharacter
+        lda #$ff
+        bra $+HaveCharacter
+    %ReadCharacter:
+        lda $238010,x  // [hardcoded]
+    %HaveCharacter:
+        sta $c600,y
+        //lda #$04
+        //sta $c601,y
+
+        inx
+        iny
+        iny
+        cpy #$1000
+        bcc $+NoYOverflow
+        ldy #$0000
+    %NoYOverflow:
+        dec $1680
+        bne $-TextCopyLoop
+        dec $1681
+        bne $-TextCopyLoop
+
+        rts
+}
+
+msfpatch {
+    PregameScreen__FlagTextPageUp:
+        rep #$20
+        .mx 0x00
+        ldy #$0014
+    %Loop:
+        lda $_PregameScreen__FlagTextCurLine
+        beq $+Done
+        dec $_PregameScreen__FlagTextCurLine
+        lda $99
+        sec
+        sbc #$0008
+        sta $99
+
+        dey
+        bne $-Loop
+    %Done:
+
+        // don't need to sep #$20, jumping to sub that sets it
+        jmp $_PregameScreen__DrawFlagText
+}
+
+msfpatch {
+    PregameScreen__FlagTextPageDown:
+        rep #$20
+        .mx 0x00
+        ldy #$0014
+    %Loop:
+        lda $_PregameScreen__FlagTextCurLine
+        cmp $_PregameScreen__FlagTextMaxLine
+        bcs $+Done
+        inc $_PregameScreen__FlagTextCurLine
+        lda $99
+        clc
+        adc #$0008
+        sta $99
+
+        dey
+        bne $-Loop
+    %Done:
+
+        // don't need to sep #$20, jumping to sub that sets it
+        jmp $_PregameScreen__DrawFlagText
+}
+
+msfpatch {
+    PregameScreen__FlagTextLineUp:
+        lda #$02
+        sta $1682
+    %LineStart:
+        ldx $_PregameScreen__FlagTextCurLine
+        beq $+Done
+        
+        rep #$20
+        .mx 0x00
+        dec $_PregameScreen__FlagTextCurLine
+
+        lda $99
+        sec
+        sbc #$0008
+        sta $99
+
+        jsr $_PregameScreen__DrawFlagText
+        .mx 0x20  // previous subroutine call ends with sep #$20
+
+        jsr $_MK_VBlank_PushBG4
+        jsr $_MK_UpdateScrollValues
+        dec $1682
+        bne $-LineStart
+    %Done:
+        jsr $_MK_UpdateGamepad
+        lda $03
+        and #$08
+        bne $-PregameScreen__FlagTextLineUp
+        
+        rts
+}
+
+msfpatch {
+    PregameScreen__FlagTextLineDown:
+        lda #$02
+        sta $1682
+
+    %LineStart:
+        ldx $_PregameScreen__FlagTextCurLine
+        cpx $_PregameScreen__FlagTextMaxLine
+        bcs $+Done
+
+        rep #$20
+        .mx 0x00        
+        inc $_PregameScreen__FlagTextCurLine        
+
+        lda $99
+        clc
+        adc #$0008
+        sta $99
+
+        jsr $_PregameScreen__DrawFlagText
+        .mx 0x20  // previous subroutine call ends with sep #$20
+
+        jsr $_MK_VBlank_PushBG4
+        jsr $_MK_UpdateScrollValues
+        dec $1682
+        bne $-LineStart
+    %Done:
+        jsr $_MK_UpdateGamepad
+        lda $03
+        and #$04
+        bne $-PregameScreen__FlagTextLineDown
+
+        rts
+}
+
+//-----------------------------------------------------------
+
+msfpatch {
+    PregameNames__Start:
+        stz $1a3d   // cursor X
+        stz $1a3e   // cursor Y
+
+        jsr $_PregameNames__Setup
+
+        jsr $_MK_FadeIn
+        jsr $_PregameNames__CharacterMenu
+        jsr $_MK_FadeOut
+        rts
+
+    PregameNames__Setup:
+        // setup emulates setup of original name
+        // menu but customized for us
+        ldx #$8c7f
+        jsr $_MK_DoLongCallX
+
+        jsr $_MK_SetBG4
+        jsr $_MK_ClearAllBGs
+        jsr $_MK_InitializeCursor
+
+        // draw top "Who's Name" window
+        ldx #$000c
+        stx $2b
+        ldx #$0217
+        stx $2d
+        lda #$00
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        ldx #$008e
+        ldy #$_Text_WhosName
+        lda #$20
+        jsr $_MK_DrawText
+
+
+        jsr $_PregameNames__DrawCharacterMenu
+
+        jsr $_MK_PushAllBGs
+
+        // load Namingway portrait
+        ldx #$bbb6
+        jsr $_MK_DoLongCallX
+
+        jsr $_MK_PushOAM
+        jsr $_MK_PushCGRAM
+
+        rts
+
+    %Text_WhosName: "Who's name?" [[ 00 ]]
+}
+
+msfpatch {
+    PregameNames__DrawCharacterMenu:
+        // load standing character graphics
+        ldx #$4b00
+        stx $011d
+        ldx #$f000
+        stx $011f
+        lda #$22
+        sta $0121
+        ldx #$0900
+        stx $0122
+        jsr $_MK_DMA
+
+        // draw character select window
+        jsr $_MK_SetBG2
+        ldx #$0182
+        stx $2b
+        ldx #$0f1c
+        stx $2d
+        lda #$00
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        // draw bottom option window
+        ldx #$05c2
+        stx $2b
+        ldx #$011c
+        stx $2d
+        lda #$00
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        ldx #$0604
+        ldy #$_TagOptionText
+        lda #$20
+        jsr $_MK_DrawText
+
+        jsr $_PregameNames__DrawTagOptionSetting
+
+        // load sprites for party characters
+        ldx #$0000
+    %CopyCharacterSpritesLoopStart:
+        lda $=PregameNames__CharacterSprites,x
+        sta $0320,x
+        inx
+        cpx #$0120
+        bcc $-CopyCharacterSpritesLoopStart
+
+        // copy grayscale palette
+        ldx #$0000
+    %CopyCharacterGrayscalePaletteLoopStart:
+        lda $0ecb00,x
+        sta $7ea180,x
+        inx
+        cpx #$0020
+        bcc $-CopyCharacterGrayscalePaletteLoopStart
+
+        // draw names
+        ldx #$0000
+        stz $1682  // init job pointer
+
+        lda #$00
+        xba
+
+    %DrawNameJobLoopStart:
+        phx
+        lda $1682
+        asl a
+        tax
+        lda $=NameAddresses,x
+        sta $1683
+        inx
+        lda $=NameAddresses,x
+        sta $1684
+        ldy $1683
+        plx
+
+        lda #$06
+        sta $1683
+    %CopyNameLoopStart:
+        lda $=CharEx__GlobalNames,x
+        sta $a600,y
+        inx
+        iny
+        iny
+        dec $1683
+        bne $-CopyNameLoopStart
+
+        inc $1682
+        lda $1682
+        cmp #$0c
+        bcc $-DrawNameJobLoopStart
+
+
+        // all done!
+        rts
+
+    .def PregameNames__CharacterSprites  $21d880
+
+    %NameAddresses: [[
+        08 02 08 03 08 04 08 05 1C 02 1C 03 1C 04 1C 05 30 02 30 03 30 04 30 05
+    ]]
+
+    %TagOptionText: "Name distinguishers:" [[ 00 ]]
+}
+
+msfpatch {
+    .def PregameNames__TagSetting   $7070f0
+
+    PregameNames__DrawTagOptionSetting:
+        lda $=PregameNames__TagSetting
+        beq $+Off
+        cmp #$01
+        beq $+On
+
+        ldy #$_SillyText
+        bra $+DrawText
+
+    %Off:
+        ldy #$_OffText
+        bra $+DrawText
+
+    %On:
+        ldy #$_OnText
+
+    %DrawText:
+        ldx #$062e
+        lda #$20
+        jsr $_MK_DrawText
+        rts
+
+    %OnText:    "On   " [[ 00 ]]
+    %OffText:   "Off  " [[ 00 ]]
+    %SillyText: "Silly" [[ 00 ]]
+}
+
+msfpatch {
+    PregameNames__CharacterMenu:
+
+        jsr $_HighlightSelectedCharacter
+        jsr $_UpdateCursor
+
+    %MenuLoop:
+        jsr $_MK_WaitForInput
+
+        lda $00
+        and #$80
+        bne $+ConfirmPressed
+
+        lda $01
+        bit #$80  // check for back button
+        beq $01
+        rts
+
+        bit #$0f
+        beq $+NoArrowPressed
+
+        jsr $_UnhighlightSelectedCharacter
+
+        lda $01
+        bit #$08
+        bne $+UpPressed
+        bit #$04
+        bne $+DownPressed
+        bit #$02
+        bne $+LeftPressed
+        bit #$01
+        bne $+RightPressed
+    %NoArrowPressed:
+        jmp $_MenuLoop
+
+    %ConfirmPressed:
+        lda $1a3e
+        cmp #$04
+        beq $+BottomRowSelected
+
+        jmp $_RenameSelectedCharacter
+
+    %BottomRowSelected:
+    %BottomRowIncremented:
+        lda $=PregameNames__TagSetting
+        inc a
+        cmp #$03
+        bcc $02
+        lda #$00
+        sta $=PregameNames__TagSetting
+        jmp $_AfterBottomRowChanged
+
+    %BottomRowDecremented:
+        lda $=PregameNames__TagSetting
+        dec a
+        bpl $02
+        lda #$02
+        sta $=PregameNames__TagSetting
+        jmp $_AfterBottomRowChanged        
+
+    %UpPressed:
+        lda $1a3e
+        dec a
+        bpl $02
+        lda #$04
+        sta $1a3e
+        jmp $_AfterArrowPressed
+
+    %DownPressed:
+        lda $1a3e
+        inc a
+        cmp #$05
+        bcc $02
+        lda #$00
+        sta $1a3e
+        jmp $_AfterArrowPressed
+
+    %LeftPressed:
+        lda $1a3e
+        cmp #$04
+        beq $-BottomRowDecremented
+
+        lda $1a3d
+        dec a
+        bpl $02
+        lda #$02
+        sta $1a3d
+        jmp $_AfterArrowPressed
+
+    %RightPressed:
+        lda $1a3e
+        cmp #$04
+        beq $-BottomRowIncremented
+        
+        lda $1a3d
+        inc a
+        cmp #$03
+        bcc $02
+        lda #$00
+        sta $1a3d
+        jmp $_AfterArrowPressed
+
+    %AfterArrowPressed:
+        jsr $_HighlightSelectedCharacter
+        jsr $_UpdateCursor
+        jmp $_MenuLoop
+
+    %AfterBottomRowChanged:
+        jsr $_PregameNames__DrawTagOptionSetting
+        jsr $_MK_VBlank
+        jsr $_MK_PushBG2
+        jmp $_MenuLoop
+
+
+    %UpdateCursor:
+        lda #$00
+        xba
+        lda $1a3e
+        tay
+
+        cmp #$04
+        beq $+CursorOnLastRow
+
+        lda $1a3d
+        tax
+        bra $+HaveCursorCoordinates
+    %CursorOnLastRow:
+        ldx #$0000
+
+    %HaveCursorCoordinates:
+        rep #$20
+        .mx 0x00
+        lda #$3e00
+        clc
+
+    %UpdateCursorXLoop:
+        cpx #$0000
+        beq $+UpdateCursorYLoop
+        clc
+        adc #$0050
+        dex
+        bra $-UpdateCursorXLoop
+
+    %UpdateCursorYLoop:
+        cpy #$0000
+        beq $+UpdateCursorDone
+        clc
+        adc #$2000
+        dey
+        bra $-UpdateCursorYLoop
+
+    %UpdateCursorDone:
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        jsr $_MK_UpdateCursor
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushCGRAM
+
+        rts
+
+    %GetSelectedCharacterIndex:
+        lda $1a3d
+        asl a
+        asl a
+        clc
+        adc $1a3e
+        rts
+
+    %GetSelectedCharacterJob:
+        jsr $_GetSelectedCharacterIndex
+        // convert char number to job number by accounting for gaps with ARydia and PCecil
+        cmp #$09
+        bcc $01
+        inc a
+        cmp #$0b
+        bcc $01
+        inc a
+        rts        
+
+    %GetSelectedCharacterOAMOffset:
+        jsr $_GetSelectedCharacterIndex
+        sta $1680
+        // calculate job * 0x18
+        asl a
+        asl a
+        asl a
+        sta $1681
+        stz $1682
+        asl a
+        clc
+        adc $1681
+        sta $1681
+        lda $1682
+        adc #$00
+        sta $1682
+        ldx $1681
+        rts
+
+    %UnhighlightSelectedCharacter:
+        lda $1a3e
+        cmp #$04
+        bne $01
+        rts
+        jsr $_GetSelectedCharacterOAMOffset
+        ldy #$0000
+    %UnhighlightLoopStart:
+        lda $0323,x
+        and #$f1
+        ora #$08
+        sta $0323,x
+        inx
+        inx
+        inx
+        inx
+        iny
+        cpy #$0006
+        bcc $-UnhighlightLoopStart
+        rts
+
+    %HighlightSelectedCharacter:
+        lda $1a3e
+        cmp #$04
+        bne $01
+        rts
+        jsr $_GetSelectedCharacterOAMOffset
+        ldy #$0000
+    %HighlightLoopStart:
+        lda $0323,x
+        and #$f1
+        ora #$0a
+        sta $0323,x
+        inx
+        inx
+        inx
+        inx
+        iny
+        cpy #$0006
+        bcc $-HighlightLoopStart
+
+        // load character palette
+        jsr $_GetSelectedCharacterJob
+
+        // get job number * 0x20
+        sta $1682
+        stz $1681
+        lsr $1682
+        ror $1681
+        lsr $1682
+        ror $1681
+        lsr $1682
+        ror $1681
+        ldx $1681
+
+        // copy palette
+        ldy #$0000
+    %HighlightCopyPaletteLoopStart:
+        lda $1cfd00,x
+        sta $a1a0,y
+        inx
+        iny
+        cpy #$0020
+        bcc $-HighlightCopyPaletteLoopStart
+
+        rts
+
+    %RenameSelectedCharacter:
+        jsr $_GetSelectedCharacterIndex
+        asl a
+        sta $1680
+        asl a
+        clc
+        adc $1680
+        sta $1680
+        stz $1681
+        ldx $1680
+
+        phx
+        ldy #$0000
+    %CopyToNamingwayBufferLoopStart:
+        lda $=CharEx__GlobalNames,x
+        sta $1b0a,y
+        inx
+        iny
+        cpy #$0006
+        bcc $-CopyToNamingwayBufferLoopStart
+
+        jsr $_MK_FadeOut
+
+        jsr $_MK_VBlank
+        // Hijack portrait CHR loading code
+        jsr $_GetSelectedCharacterJob
+        sta $1680 // remember for copying palette
+        sta $1bc0
+        stz $1bbf
+        stz $0145   // indicate slot 0
+        stz $0146
+
+        ldx #$92c9
+        jsl $=HackMKLongCall
+
+        // Copy portrait palette
+        lda #$00
+        xba
+        lda $1680
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        ldy #$0000
+    %CopyPortraitPaletteLoop:
+        lda $0d86d0,x
+        sta $a160,y
+        inx
+        iny
+        cpy #$0010
+        bcc $-CopyPortraitPaletteLoop
+
+        // Namingway main routine
+        stz $1b49    // force to use "dummied" Namingway menu
+        stz $1b18    // force to use portrait slot 0
+        ldx #$9b67
+        jsr $_MK_DoLongCallX
+
+        ldy #$0000
+        plx
+    %CopyFromNamingwayBufferLoopStart:
+        lda $1b0a,y
+        sta $=CharEx__GlobalNames,x
+        inx
+        iny
+        cpy #$0006
+        bcc $-CopyFromNamingwayBufferLoopStart
+
+        jsr $_PregameNames__Setup
+        jsr $_UpdateCursor
+        jsr $_HighlightSelectedCharacter
+        jsr $_MK_PushOAM
+        jsr $_MK_PushCGRAM
+        jsr $_MK_FadeIn
+
+        jmp $_MenuLoop
+
+    %HackMKLongCall:
+        // MEGAHACK: the routine we want to hijack has an extra
+        //  PLA instruction at the end, so here we are also
+        //  hijacking MK_LongCall's mechanisms but with a
+        //  garbage byte injected onto the stack for the routine
+        //  to pop
+
+        // currently top of stack is long return address for HackMKLongCall
+        stx $0ffb
+        pea $fffe
+        pha  // garbage byte to be popped by routine
+        jml $=MK_LongCall_InternalJumpPoint
+}
+
+// patch dummied name menu to start on ABC instead of END
+patch($019c01 bus) { 00 }
+
+// patch dummied name menu to skip portrait loading
+patch($019b70 bus) { EA EA EA }

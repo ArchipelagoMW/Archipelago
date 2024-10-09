@@ -1,0 +1,190 @@
+// new mute code
+// idea: when loading songs under mute mode, load 00 00
+//   for all channel pointers
+
+msfpatch {
+    .def Mute__ScoreCounter  $7e1671
+
+    .addr $048178
+        jml $=Mute__Start
+
+    .new
+    Mute__Start:
+        // replicate original check to see if music is already playing
+        lda $01
+        cmp $05
+        bne $+SongChanged
+        jml $04817e
+
+    %SongChanged:
+        sta $05
+
+        // always play songs on the whitelist
+
+        cmp #$12  // Harp song
+        beq $+AllowSong
+
+        cmp #$3e  // Sound effect songs
+        bcs $+AllowSong
+
+        // block other songs if the mute setting is on, or if MSU-1 is enabled
+        lda $=MSU1__Enabled
+        bne $+TryPlayMSU1
+        lda $_MusicSetting
+        bne $+BlockSong
+
+    %AllowSong:
+        jsr $_MSU1__Stop
+        lda #$00
+        jmp $_Apply
+
+    %BlockSong:
+        lda #$01
+        jmp $_Apply
+
+    %TryPlayMSU1:
+        jsr $_MSU1__Play
+        bcc $-AllowSong
+        lda #$01 // mute original music if MSU1 track plays
+
+    %Apply:
+        // execute command on engine to set the mute mode
+        sta $2141
+        lda #$fe
+        sta $2140
+    %ApplyCheck:
+        cmp $2140
+        bne $-ApplyCheck
+
+        stz $2140
+        stz $2141
+        stz $2142
+        stz $2143
+
+        // return to original code
+        lda $05
+        jml $048183
+}
+
+msfpatch {
+    .def  MSU1__Enabled  $7070f1
+
+    MSU1__Detect:
+        lda $002002
+        cmp #$53    // 'S'
+        bne $+NotSupported   // Stop checking if it's wrong
+        lda $002003
+        cmp #$2D    // '-'
+        bne $+NotSupported
+        lda $002004
+        cmp #$4D    // 'M'
+        bne $+NotSupported
+        lda $002005
+        cmp #$53    // 'S'
+        bne $+NotSupported
+        lda $002006
+        cmp #$55    // 'U'
+        bne $+NotSupported
+        lda $002007
+        cmp #$31    // '1'
+        bne $+NotSupported
+
+        lda #$01
+        sta $=MSU1__Enabled
+        rts
+
+    %NotSupported:
+        lda #$00
+        sta $=MSU1__Enabled
+        rts
+}
+
+msfpatch {
+    // this sub returns with carry set if the
+    // song is played successfully, otherwise
+    // carry is clear.
+    MSU1__Play:
+        lda $=MSU1__Enabled
+        bne $+IsEnabled
+        clc
+        rts
+
+    %IsEnabled:
+        lda $05
+        bne $+IsSong
+        // song 0 = stop
+        jmp $_MSU1__Stop
+
+    %IsSong:
+        lda #$ff
+        sta $002006    // MSU-1 volume
+        lda $05
+        sta $002004    // MSU-1 track number LSB
+        lda #$00
+        sta $002005    // MSU-1 track number MSB
+
+        // check to see if track is missing
+        lda $002000
+        and #$08
+        beq $+TrackFound
+
+        // track not found
+        jmp $_MSU1__Stop
+
+    %TrackFound:
+        jsr $_MSU1__CheckLoop
+
+        rol a          // rotate carry bit into 0x02 position
+        and #$01       //  ...
+        asl a          //  ...
+        ora #$01       // set "play" bit
+        sta $002007    // MSU-1 control
+
+        sec
+        rts
+}
+
+msfpatch {
+    MSU1__CheckLoop:
+        cmp #$03  // DummyFanfare
+        beq $+NoLoop
+        cmp #$10  // Sleep
+        beq $+NoLoop
+        cmp #$1f  // Surprise
+        beq $+NoLoop
+        cmp #$26  // Dancing
+        beq $+NoLoop
+        cmp #$29  // CharacterJoined
+        beq $+NoLoop
+        cmp #$2a  // CharacterDied
+        beq $+NoLoop
+        cmp #$2f  // LongFanfare
+        beq $+NoLoop
+        cmp #$35  // Ending1
+        beq $+NoLoop
+        cmp #$36  // Ending2
+        beq $+NoLoop
+        cmp #$37  // Ending3
+        beq $+NoLoop
+
+        sec
+        rts
+
+    %NoLoop:
+        clc
+        rts
+}  
+
+msfpatch {
+    // this sub always returns with carry clear,
+    // in order to support the return values
+    // promised by MSU1__Play.
+    MSU1__Stop:
+        lda $=MSU1__Enabled
+        beq $+Abort
+        lda #$00
+        sta $002007    // MSU-1 control
+    %Abort:
+        clc
+        rts
+}

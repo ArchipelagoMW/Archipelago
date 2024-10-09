@@ -1,0 +1,57 @@
+msfpatch {
+    .def   Stats_KeyItems       $7e1578
+    .def   Stats_Characters     $7e1579
+    .def   Stats_Treasures      $7e157a
+    .def   Stats_TreasuresHigh  $7e157b
+    .def   Stats_Bosses         $7e157c
+    .def   Stats_EndTime        $7e157d
+    .def   Stats_EndTime1       $7e157e
+    .def   Stats_EndTime2       $7e157f
+    .def   Stats_EndTime3       $7e1580
+
+    .def   Stats_EverCompleted  $7070f2
+}
+
+
+// calculation routines
+msfpatch {
+    Stats_Calculate:
+        // count treasures
+        ldx #$0000
+        ldy #$0000
+    
+    Stats_Calculate_CountTreasure_LoopStart:
+        lda #$01
+    Stats_Calculate_CountTreasure_SubLoopStart:
+        bit $12a0,x
+        beq $+Stats_Calculate_CountTreasure_SubLoopNext
+        iny
+    Stats_Calculate_CountTreasure_SubLoopNext:
+        asl a
+        bcc $-Stats_Calculate_CountTreasure_SubLoopStart
+    Stats_Calculate_CountTreasure_LoopNext:
+        inx
+        cpx #$0040
+        bcc $-Stats_Calculate_CountTreasure_LoopStart
+
+        // save counted value
+        sty $_Stats_Treasures
+
+        // finished
+        rts
+
+
+    Stats_SaveTime:
+        // save game time
+        lda $16a3
+        sta $_Stats_EndTime
+        lda $16a4
+        sta $_Stats_EndTime1
+        lda $16a5
+        sta $_Stats_EndTime2
+        lda $16a6
+        sta $_Stats_EndTime3
+        rts    
+}
+
+

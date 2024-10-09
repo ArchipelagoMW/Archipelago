@@ -1,0 +1,1469 @@
+msfpatch {
+    JoinFullPartyMenu__Start:
+        // call menu transition function
+        lda #$00
+        ldy #$87ea
+        jsl $=LongCall
+
+        // new party member for consideration is loaded in shadow party work area
+        lda $1140
+        and #$1f
+        sta $1a00
+        jsr $_JoinFullPartyMenu__Main
+
+        lda $1a01   // contains result of menu:
+                    // bit 0 = 0 if dismissing new member, 1 if dismissing party member
+                    // bit 1 = 1 iff we need to show item receive menu
+        bit #$02
+        beq $+JoinFullPartyMenu__AfterItemMenu
+
+        jsr $018020   // go to received item menu -- params already populated by prev menu
+    
+    JoinFullPartyMenu__AfterItemMenu:
+        // finished menus
+        lda #$00
+        ldy #$87f3
+        jsl $=LongCall
+
+        rts
+}
+
+msfpatch {
+    .def JoinFullPartyMenu__PartyFullIndicator  $7e1697
+
+    //---------------------------------------------------------
+    JoinFullPartyMenu__Main:
+        // clear B accumulator out of paranoia
+        lda #$00
+        xba
+
+        jsr $_MK_Setup
+        jsr $_MK_ClearAllBGs
+        jsr $_MK_InitializeCursor
+        jsr $_MK_SetBG2
+
+        // Precalculate if party is full
+        stz $_JoinFullPartyMenu__PartyFullIndicator
+        jsr $_Util__GetPartySize
+        cmp $=MaxPartySize
+        bcc $+PartyNotFull
+
+        inc $_JoinFullPartyMenu__PartyFullIndicator
+    %PartyNotFull:
+
+        jsr $_JoinFullPartyMenu__LoadSprites
+        jsr $_JoinFullPartyMenu__DrawTopWindow
+
+        lda #$05
+        sta $1b48
+
+        lda $_JoinFullPartyMenu__PartyFullIndicator 
+        beq $+InitForPartyNotFull
+    %InitForPartyFull:
+        ldx #$7222
+        jsr $_MK_UpdateCursor
+        bra $+InitDone
+    %InitForPartyNotFull:
+        lda #$01
+        sta $5a
+        jsr $_JoinFullPartyMenu__UpdatePalettes
+        lda #$c0
+        sta $1a01
+        jsr $_JoinFullPartyMenu__Confirm_Setup
+
+    %InitDone:
+        jsr $_MK_VBlank_PushBG2
+        jsr $_MK_PushOAM
+        jsr $_MK_PushCGRAM
+
+        jsr $_MK_FadeIn        
+
+        lda $_JoinFullPartyMenu__PartyFullIndicator
+        bne $+MainLoop_Full
+
+        ldx #$0040
+        %DelayLoop_NonFull:
+            jsr $_MK_VBlank
+            dex
+            bne $-DelayLoop_NonFull
+
+        lda #$80
+        sta $1a01
+        jsr $_JoinFullPartyMenu__Confirm_DefaultYes
+        lda $1b49
+        sta $1a01
+        
+        jsr $_MK_FadeOut
+        jsr $_MK_Teardown
+        rts
+
+        %MainLoop_Full:
+            jsr $_JoinFullPartyMenu__CharacterSelect
+
+            // %flag hero_challenge on%
+            jsr $_JoinFullPartyMenu__GetSelectedAxtor
+            cmp #$01
+            bne $+HeroNotSelected
+
+            // play error sound
+            lda #$12
+            sta $1e00
+            jsl $048004
+            bra $-MainLoop_Full
+            
+        %HeroNotSelected:
+            // %end%
+            
+            jsr $_JoinFullPartyMenu__Confirm
+            lda $1b49
+            beq $-MainLoop_Full
+
+            jsr $_JoinFullPartyMenu__ConfirmUnequip
+            lda $1b49
+            cmp #$02
+            beq $-MainLoop_Full
+
+        jsr $_JoinFullPartyMenu__Left
+
+        stz $0ffa
+        lda $1b49
+        bne $+ChoseUnequip
+
+        // didn't choose to unequip, BUT we need to check for the
+        // Legend sword and take it anyway if it's there
+        stz $1805
+        stz $1806
+        stz $1807
+
+        lda #$19
+        cmp $1808  // right hand
+        beq $+FoundLegendRH
+        stz $1808
+        stz $1809
+    %FoundLegendRH:
+        cmp $180a  // left hand
+        beq $+FoundLegendLH
+        stz $180a
+        stz $180b
+    %FoundLegendLH:
+    %ChoseUnequip:
+        // the Unequip routine is set up to only unequip the slots that
+        // haven't been blanked in the $1805-180B area
+        jsr $_JoinFullPartyMenu__Unequip
+
+        jsr $_JoinFullPartyMenu__Dismiss
+
+        jsr $_MK_FadeOut
+
+        // stuff return value
+        // - part 1: set to 0 if dismissed new member, 1 if dismissed party member
+        stz $1a01
+        lda $1b48
+        cmp #$05
+        beq $03
+        inc $1a01
+
+        // - part 2: set bit 1 if we need to show the item dialog
+        lda $0ffa
+        asl a
+        ora $1a01
+        sta $1a01
+
+        jsr $_MK_Teardown
+        rts
+}
+
+msfpatch {
+    //---------------------------------------------------------
+    JoinFullPartyMenu__CharacterSelect:
+        stz $00
+        stz $01
+        stz $5a
+
+        stz $1680  // stores if we should redraw bottom windows
+        inc $1680
+
+        jsr $_JoinFullPartyMenu__UpdatePalettes
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushCGRAM
+    %LoopStart:
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_UpdateGamepadWithSound
+    %CheckRightArrow:
+        lda $01
+        and #$01
+        beq $+CheckLeftArrow
+        inc $1680
+    %DoRightArrow:
+        inc $1b48
+        lda $1b48
+        cmp #$06
+        bcc $+ValidateRightArrow
+        stz $1b48
+    %ValidateRightArrow:
+        jsr $_JoinFullPartyMenu__GetSelectedAxtor
+        beq $-DoRightArrow
+    %CheckLeftArrow:
+        lda $01
+        and #$02
+        beq $+CheckAButton
+        inc $1680
+    %DoLeftArrow:
+        dec $1b48
+        lda $1b48
+        bpl $+ValidateLeftArrow
+        lda #$05
+        sta $1b48
+    %ValidateLeftArrow:
+        jsr $_JoinFullPartyMenu__GetSelectedAxtor
+        beq $-DoLeftArrow
+    %CheckAButton:
+        lda $00
+        and #$80
+        beq $+UpdateCursor
+        rts
+    %UpdateCursor:
+        lda $1b48
+        cmp #$05
+        bne $+InParty
+        ldx #$7222
+        jmp $_Commit
+    %InParty:
+        asl a
+        asl a
+        asl a
+        sta $3d
+        asl a
+        clc
+        adc $3d
+        adc #$52
+        sta $3d
+        lda #$72
+        sta $3e
+        ldx $3d
+    %Commit:
+        jsr $_MK_UpdateCursor
+
+        lda $1680
+        beq $+SkipStatsRedraw
+
+        jsr $_MK_SetBG1
+        jsr $_JoinFullPartyMenu__DrawStatsWindow
+        jsr $_MK_VBlank_PushBG1
+        stz $1680
+
+    %SkipStatsRedraw:
+        jmp $_LoopStart
+
+}
+
+msfpatch {
+    //---------------------------------------------------------
+    JoinFullPartyMenu__DrawStatsWindow:
+        // draw name/stats window
+        ldx #$04d2
+        stx $2b
+        ldx #$040c
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        ldx #$0514
+        jsr $_JoinFullPartyMenu__GetSelectedAxtor
+        jsr $_JoinFullPartyMenu__DrawName
+
+        // find offset to selected slot
+        lda $1b48
+        xba
+        rep #$20
+        .mx 0x00
+        and #$ff00
+        lsr a
+        lsr a
+        sta $1682
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // draw level
+        ldx $1682
+        lda $1002,x
+        sta $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input1
+        stz $_Util__NumberToText_Input2
+        stz $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+
+        ldx #$574d   // "LV"
+        stx $1678
+
+        lda #$7e
+        ldx #$0524
+        ldy #$1678
+        jsr $_MK_DrawText
+
+        // draw HP
+        lda #$20
+        ldy #$_StatsWindow_HPText
+        ldx #$0594
+        jsr $_MK_DrawText
+
+        ldy $1682
+        ldx $1007,y
+        stx $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input2
+        stz $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+
+        lda #$7e
+        ldy #$1678
+        ldx #$059a
+        jsr $_MK_DrawText
+
+        ldy $1682
+        ldx $1009,y
+        stx $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input2
+        stz $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+
+        lda #$7e
+        ldy #$1678
+        ldx #$05a4
+        jsr $_MK_DrawText
+
+        // draw MP
+        // %if ~wacky_omit_mp%
+        lda #$20
+        ldy #$_StatsWindow_MPText
+        ldx #$05d4
+        jsr $_MK_DrawText
+
+        ldy $1682
+        ldx $100b,y
+        stx $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input2
+        stz $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+
+        lda #$7e
+        ldy #$1678
+        ldx #$05da
+        jsr $_MK_DrawText
+
+        ldy $1682
+        ldx $100d,y
+        stx $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input2
+        stz $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+
+        lda #$7e
+        ldy #$1678
+        ldx #$05e4
+        jsr $_MK_DrawText
+        // %end%
+
+        rts
+
+    %StatsWindow_HPText: "HP ..../...." [[ 00 ]]
+    %StatsWindow_MPText: "MP  .../ ..." [[ 00 ]]
+}
+
+msfpatch {
+    JoinFullPartyMenu__Confirm_Setup:
+        lda #$01
+        sta $5a
+        jsr $_JoinFullPartyMenu__UpdatePalettes
+
+        jsr $_MK_ClearSetBG1
+        jsr $_JoinFullPartyMenu__DrawConfirmWindow
+        jsr $_MK_VBlank_PushBG1
+        jsr $_MK_PushCGRAM
+        rts
+
+    //---------------------------------------------------------
+    JoinFullPartyMenu__Confirm_DefaultYes:
+        stz $1b49
+        inc $1b49
+        bra $+ConfirmCommon
+    JoinFullPartyMenu__Confirm:
+        stz $1b49
+    %ConfirmCommon:
+        stz $00
+        stz $01
+
+        jsr $_JoinFullPartyMenu__Confirm_Setup
+
+        %LoopStart:
+            jsr $_MK_VBlank_PushOAM
+            jsr $_MK_UpdateGamepadWithSound
+            lda $01
+            and #$03
+            beq $+UpdateCursor
+            lda $1b49
+            eor #$01
+            sta $1b49
+        %UpdateCursor:
+            ldx #$ae90  // no cursor position
+            lda $1b49
+            beq $03
+            ldx #$ae50  // yes cursor position
+            jsr $_MK_UpdateCursor
+
+            lda $_JoinFullPartyMenu__PartyFullIndicator
+            beq $+CheckAButton
+        %CheckCancelButton:
+            lda $01
+            and #$80
+            beq $+CheckAButton
+            stz $1b49
+            bra $+LoopEnd
+        %CheckAButton:
+            lda $00
+            and #$80
+            beq $-LoopStart
+
+        %LoopEnd:
+            jsr $_MK_ClearSetBG1
+            ldx #$f0ff
+            jsr $_MK_UpdateCursor
+            jsr $_MK_VBlank_PushBG1
+            jsr $_MK_PushOAM
+            rts
+}
+
+msfpatch {
+    //---------------------------------------------------------
+    JoinFullPartyMenu__ConfirmUnequip:
+        lda #$01
+        sta $1b49
+        stz $00
+        stz $01
+
+        jsr $_JoinFullPartyMenu__LoadEquipment
+
+        jsr $_MK_ClearSetBG1
+        jsr $_JoinFullPartyMenu__DrawUnequipWindow
+        jsr $_MK_VBlank_PushBG1
+
+        JoinFullPartyMenu__ConfirmUnequip_LoopStart:
+            jsr $_MK_VBlank_PushOAM
+            jsr $_MK_UpdateGamepadWithSound
+            lda $01
+            and #$03
+            beq $+JoinFullPartyMenu__ConfirmUnequip_UpdateCursor
+            lda $1b49
+            eor #$01
+            sta $1b49
+        JoinFullPartyMenu__ConfirmUnequip_UpdateCursor:
+            ldx #$b6c0  // no cursor position
+            lda $1b49
+            beq $03
+            ldx #$b680  // yes cursor position
+            jsr $_MK_UpdateCursor
+
+        JoinFullPartyMenu__ConfirmUnequip_CheckBButton:
+            lda $01
+            and #$80
+            beq $+JoinFullPartyMenu__ConfirmUnequip_CheckAButton
+            lda #$02
+            sta $1b49
+            jmp $_JoinFullPartyMenu__ConfirmUnequip_LoopEnd
+        JoinFullPartyMenu__ConfirmUnequip_CheckAButton:
+            lda $00
+            and #$80
+            bne $+JoinFullPartyMenu__ConfirmUnequip_LoopEnd
+            jmp $_JoinFullPartyMenu__ConfirmUnequip_LoopStart
+
+        JoinFullPartyMenu__ConfirmUnequip_LoopEnd:
+            jsr $_MK_ClearSetBG1
+            ldx #$f0ff
+            jsr $_MK_UpdateCursor
+            jsr $_MK_VBlank_PushBG1
+            jsr $_MK_PushOAM
+            rts
+
+    //---------------------------------------------------------
+    JoinFullPartyMenu__Left:
+        stz $00
+        stz $01
+
+        lda #$02
+        sta $5a
+        jsr $_JoinFullPartyMenu__UpdatePalettes
+
+        jsr $_MK_ClearSetBG2
+        jsr $_JoinFullPartyMenu__DrawDepartedWindow
+
+        jsr $_MK_VBlank_PushBG2
+        jsr $_MK_PushCGRAM
+
+        // Play Flee sound effect
+        lda #$21
+        sta $1e01
+        lda #$02
+        sta $1e00
+        lda #$80
+        sta $1e02
+        lda #$ff
+        sta $1e03
+        jsr $048004
+
+        jsr $_MK_WaitForInput
+        rts
+}
+
+msfpatch {
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__LoadSprites:
+        // zero out pose data which could be dirty
+        // from a previous menu's equipment info
+        ldx #$0000
+        lda #$00
+    %BlankPoseDataLoop:
+        sta $1b4b,x
+        inx
+        cpx #$000a
+        bcc $-BlankPoseDataLoop
+
+        // also zero out the "pose toggle" byte
+        stz $1a75
+
+        jsr $_MK_LoadPartySprites
+        jsr $_MK_LoadPartySpritePalettes
+
+        ldx #$6860
+        jsr $_MK_UpdatePartySprites
+
+        // lookup incoming character's fashion code
+        lda #$00
+        xba
+        lda $1140
+        and #$1f
+        tax
+        lda $=Fashion__LookupTable,x
+        sta $_Fashion__Memo
+
+        // load the incoming character's sprites
+        lda $1141
+        and #$0f
+        sta $1a01       // save job number for quick reference later
+
+        rep #$20
+        .mx 0x00
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        phx             // save a copy of the offset for later when loading the palette
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+    JoinFullPartyMenu__LoadSprites_JobOK:
+        // set up DMA transfer (largely copied from 01:8dd8)
+        lda $1a01
+        asl a
+        asl a
+        asl a
+        xba
+        
+        rep #$20
+        .mx 0x00
+        clc
+        adc #$8000
+        sta $1f
+        lda #$0600
+        sta $22
+        lda #$5700      // different: hardcode destination address to after existing party slots
+        sta $1d
+        sep #$20
+        .mx 0x20
+
+        // set source bank according to fashion code
+        lda $_Fashion__Memo
+        beq $+RegularBank
+
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        bra $+HaveBank
+
+    %RegularBank:
+        lda #$1a
+    %HaveBank:
+        sta $21
+
+        jsr $_MK_VBlank
+        jsr $_MK_DMA
+
+        // next: load the incoming character's palette
+
+        plx  // get back offset that we used earlier
+        ldy #$0000
+
+        JoinFullPartyMenu__LoadSprites_PaletteLoop:
+            jsr $_JoinFullPartyMenu__PaletteLookup
+            sta $a140,y     // write directly to our CGRAM buffer instead of the FE28 area
+            inx
+            iny
+            cpy #$0020
+            bne $-JoinFullPartyMenu__LoadSprites_PaletteLoop
+
+        // setup sprite data
+        ldx #$0000
+        JoinFullPartyMenu__LoadSprites_SpriteLoop:
+            lda $=JoinFullPartyMenu__IncomingSpriteData,x
+            sta $0480,x
+            inx
+            cpx #$0018
+            bne $-JoinFullPartyMenu__LoadSprites_SpriteLoop
+
+        rts
+
+    JoinFullPartyMenu__IncomingSpriteData:
+        [[ 
+            30 68 71 45 38 68 70 45
+            30 70 73 45 38 70 72 45
+            30 78 75 45 38 78 74 45
+        ]]
+}
+
+msfpatch {
+    JoinFullPartyMenu__PaletteLookup:
+        lda $_Fashion__Memo
+        beq $+NormalPalette
+
+        phb
+        dec a
+        clc
+        adc #$.Fashion__Bank1
+        pha
+        plb
+        lda $_Fashion__PaletteDataOffset,x
+        plb
+        rts
+
+    %NormalPalette:
+        lda $1cfd00,x
+        rts
+}
+
+msfpatch {
+    //---------------------------------------------------------
+
+    // $5a = 0 -> all normal
+    //       1 -> all dimmed except selected
+    //       2 -> all black except selected
+    JoinFullPartyMenu__UpdatePalettes:
+        lda #$00
+        xba
+        stz $5b
+
+        JoinFullPartyMenu__UpdatePalettes_LoopStart:
+            lda $5b
+            cmp #$05
+            bcc $+JoinFullPartyMenu__UpdatePalettes_GetJobFromSlot
+
+            // hardcode slot offset and output offset
+            ldx #$0140
+            ldy #$a140
+            jmp $_JoinFullPartyMenu__UpdatePalettes_HaveOffsets
+        JoinFullPartyMenu__UpdatePalettes_GetJobFromSlot:
+            rep #$20
+            .mx 0x00
+            and #$00ff
+            asl a
+            asl a
+            asl a
+            asl a
+            asl a
+            tay
+            asl a
+            tax
+
+            tya
+            clc
+            adc #$a160
+            tay
+
+            lda #$0000
+
+            sep #$20
+            .mx 0x20
+
+        JoinFullPartyMenu__UpdatePalettes_HaveOffsets:
+            // get fashion code first
+            phx
+            lda $1000,x
+            and #$1f
+            tax
+            lda $=Fashion__LookupTable,x
+            sta $_Fashion__Memo
+            plx
+
+            lda $1001,x
+            and #$0f
+
+        JoinFullPartyMenu__CopyPalette:
+            // A = job
+            rep #$20
+            .mx 0x00
+            and #$00ff
+            asl a
+            asl a
+            asl a
+            asl a
+            asl a
+            tax
+            lda #$0000
+            sep #$20
+            .mx 0x20
+
+            // X = job * 0x20
+            lda #$20
+            sta $5c
+
+            JoinFullPartyMenu__CopyPalette_LoopStart:
+                lda $5a
+                beq $+JoinFullPartyMenu__CopyPalette_NormalPalette
+
+                lda $5b
+                cmp $1b48
+                beq $+JoinFullPartyMenu__CopyPalette_NormalPalette
+
+                lda $5a
+                cmp #$01
+                beq $+JoinFullPartyMenu__CopyPalette_DimmedPalette
+
+                lda #$00
+                sta $0000,y
+                bra $+JoinFullPartyMenu__CopyPalette_Continue
+
+            JoinFullPartyMenu__CopyPalette_DimmedPalette:
+                // do load two colors and apply transform
+                jsr $_JoinFullPartyMenu__PaletteLookup
+                xba
+                inx
+                jsr $_JoinFullPartyMenu__PaletteLookup
+                xba
+
+                rep #$20
+                .mx 0x00
+                and #$7bde   // this is 0x111101111011110
+                clc
+                lsr a
+                sta $0000,y
+                lda #$0000
+                sep #$20
+                .mx 0x20
+                iny
+                dec $5c
+                bra $+JoinFullPartyMenu__CopyPalette_Continue
+
+            JoinFullPartyMenu__CopyPalette_NormalPalette:
+                jsr $_JoinFullPartyMenu__PaletteLookup
+                sta $0000,y
+
+            JoinFullPartyMenu__CopyPalette_Continue:
+                iny
+                inx
+                dec $5c
+                bne $-JoinFullPartyMenu__CopyPalette_LoopStart
+
+            inc $5b
+            lda $5b
+            cmp #$06
+            beq $03
+            jmp $_JoinFullPartyMenu__UpdatePalettes_LoopStart
+
+        rts            
+
+
+
+    //---------------------------------------------------------
+    JoinFullPartyMenu__GetSelectedAxtor:
+        lda $1b48
+        cmp #$05
+        bne $+JoinFullPartyMenu__GetSelectedAxtor_FromParty
+        lda #$00
+        xba
+        lda $1a00
+        rts
+    JoinFullPartyMenu__GetSelectedAxtor_FromParty:
+        phx
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        lda $1000,x
+        plx
+        and #$1f // do this statement last so side effects are available afterward
+        rts
+
+
+
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__DrawTopWindow:
+        ldx #$0082
+        stx $2b
+        ldx #$051c
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        lda #$00
+        xba
+
+        lda $1a00  // get axtor number to look up name
+        ldx #$0106
+        jsr $_JoinFullPartyMenu__DrawName
+
+        lda #$20
+        // X is already where we want to keep drawing
+        ldy #$_JoinFullPartyMenu__TopText1
+        jsr $_MK_DrawText
+
+        lda $_JoinFullPartyMenu__PartyFullIndicator
+        beq $+PartyNotFull
+        ldy #$_JoinFullPartyMenu__TopText2
+        bra $+HaveLine2
+    %PartyNotFull:
+        ldy #$_JoinFullPartyMenu__TopText2Alt
+    %HaveLine2:
+        lda #$20
+        ldx #$0186
+        jsr $_MK_DrawText
+
+        rts
+
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__TopText1:      " wants to join the"      [[ 00 ]]
+    JoinFullPartyMenu__TopText2:      "party. Who will leave?"  [[ 00 ]]
+    JoinFullPartyMenu__TopText2Alt:   "party, PERMANENTLY."     [[ 00 ]]
+
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__DrawName:
+        phx
+
+        // A = axtor number = name index
+
+        asl a
+        sta $18
+        asl a
+        clc
+        adc $18
+        sta $18
+        stz $19             // $18 = name index * 6
+
+        plx
+
+        rep #$20
+        .mx 0x00
+        txa
+        adc $29
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        ldy $18
+        stz $1a
+
+    JoinFullPartyMenu__DrawName_LoopStart:
+        lda $1180,y  // names live here after character expansion
+        cmp #$ff
+        beq $+JoinFullPartyMenu__DrawName_LoopEnd
+        sta $0000,x
+        iny
+        inx
+        inx
+        inc $1a
+        inc $1a
+        lda $1a
+        cmp #$0c
+        bne $-JoinFullPartyMenu__DrawName_LoopStart
+
+    JoinFullPartyMenu__DrawName_LoopEnd:
+        rep #$20
+        .mx 0x00
+        txa
+        sec
+        sbc $29
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        rts
+
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__DrawItemName:
+        phy  // save Y as a courtesy
+
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        sta $18
+        asl a
+        asl a
+        asl a
+        clc
+        adc $18
+        sta $18         // $18 = item name * 9
+        
+        txa
+        adc $29
+        tay
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        stz $07
+        ldx $18
+        JoinFullPartyMenu__DrawItemName_Loop:
+            lda $0f8000,x
+            cmp #$ff
+            beq $+JoinFullPartyMenu__DrawItemName_LoopEnd
+            sta $0000,y
+            inx
+            iny
+            iny
+            inc $07
+            lda $07
+            cmp #$09
+            bne $-JoinFullPartyMenu__DrawItemName_Loop
+        JoinFullPartyMenu__DrawItemName_LoopEnd:
+
+        // restore X to original value + (2 * chars drawn)
+        rep #$20
+        .mx 0x00
+        tya
+        sec
+        sbc $29
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        ply  // restore Y as a courtesy
+        rts
+
+}
+
+msfpatch {
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__DrawConfirmWindow:
+        ldx #$044c
+        stx $2b
+        ldx #$0612
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        lda $1a01
+        bit #$80
+        bne $+DrawJoinMessage
+
+    %DrawDismissMessage:
+        lda #$20
+        ldx #$04d0
+        ldy #$_DismissText1
+        jsr $_MK_DrawText
+        jsr $_JoinFullPartyMenu__GetSelectedAxtor
+        jsr $_JoinFullPartyMenu__DrawName
+        lda #$20
+        ldy #$_DismissText2
+        jsr $_MK_DrawText
+        jmp $_MessageDone
+
+    %DrawJoinMessage:
+        lda #$20
+        ldx #$04d0
+        ldy #$_CommitText_Join
+        jsr $_MK_DrawText
+
+    %MessageDone:
+        lda $1a01
+        bit #$40
+        bne $+SkipYesNo
+
+        lda #$20
+        ldx #$0598
+        ldy #$_JoinFullPartyMenu__TextYes
+        jsr $_MK_DrawText
+
+        lda #$20
+        ldx #$05A8
+        ldy #$_JoinFullPartyMenu__TextNo
+        jsr $_MK_DrawText
+
+    %SkipYesNo:
+        rts
+
+    JoinFullPartyMenu__TextYes:  "Yes"            [[ 00 ]]
+    JoinFullPartyMenu__TextNo:   "No"             [[ 00 ]]
+
+    %DismissText1:               "Dismiss "       [[ 00 ]]
+    %DismissText2:               "?"              [[ 00 ]]
+    %CommitText_Join:            "Let them join?" [[ 00 ]]
+}
+
+
+msfpatch {
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__DrawUnequipWindow:
+        // equipment window
+        ldx #$0442
+        stx $2b
+        ldx #$0509
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        // right hand
+        lda $1808
+        ldx #$0484
+        jsr $_JoinFullPartyMenu__DrawItemName
+
+        // left hand
+        lda $180a
+        ldx #$04c4
+        jsr $_JoinFullPartyMenu__DrawItemName
+
+        // helmet
+        lda $1805
+        ldx #$0504
+        jsr $_JoinFullPartyMenu__DrawItemName
+
+        // armor
+        lda $1806
+        ldx #$0544
+        jsr $_JoinFullPartyMenu__DrawItemName
+
+        // gauntlet
+        lda $1807
+        ldx #$0584
+        jsr $_JoinFullPartyMenu__DrawItemName
+
+        // prompt window
+        ldx #$045a
+        stx $2b
+        ldx #$0710
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        lda #$20
+        ldx #$04de
+        ldy #$_JoinFullPartyMenu__UnequipText1
+        jsr $_MK_DrawText
+
+        jsr $_JoinFullPartyMenu__GetSelectedAxtor
+        jsr $_JoinFullPartyMenu__DrawName
+
+        lda #$20
+        ldy #$_JoinFullPartyMenu__UnequipText2
+        jsr $_MK_DrawText
+
+        lda #$20
+        ldx #$051e
+        ldy #$_JoinFullPartyMenu__UnequipText3
+        jsr $_MK_DrawText
+
+        lda #$20
+        ldx #$05e4
+        ldy #$_JoinFullPartyMenu__TextYes
+        jsr $_MK_DrawText
+
+        lda #$20
+        ldx #$05f4
+        ldy #$_JoinFullPartyMenu__TextNo
+        jsr $_MK_DrawText
+
+        rts
+
+    JoinFullPartyMenu__UnequipText1:   "Take " [[ 00 ]]
+    JoinFullPartyMenu__UnequipText2:   "'s" [[ 00 ]]
+    JoinFullPartyMenu__UnequipText3:   "equipment?" [[ 00 ]]
+
+    //---------------------------------------------------------
+
+    JoinFullPartyMenu__DrawDepartedWindow:
+        ldx #$0082
+        stx $2b
+        ldx #$051c
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+
+        lda #$00
+        xba
+        jsr $_JoinFullPartyMenu__GetSelectedAxtor
+        ldx #$0156
+        jsr $_JoinFullPartyMenu__DrawName
+
+        cpx #$0162
+        bcc $+JoinFullPartyMenu__DrawDepartedWindow_AfterName
+
+        //redraw a bit to the left to recenter
+        jsr $_JoinFullPartyMenu__GetSelectedAxtor
+        ldx #$0154
+        jsr $_JoinFullPartyMenu__DrawName
+
+    JoinFullPartyMenu__DrawDepartedWindow_AfterName:
+        lda #$20
+        // X is already where we want to keep drawing
+        ldy #$_JoinFullPartyMenu__DepartedText
+        jsr $_MK_DrawText
+
+        rts
+
+    JoinFullPartyMenu__DepartedText:   " left." [[ 00 ]]
+    JoinFullPartyMenu__TookLegendText: "Took [lightsword]Legend."
+
+    //---------------------------------------------------------
+    JoinFullPartyMenu__LoadEquipment:
+        lda #$00
+        xba
+        lda $1b48
+        cmp #$05
+        beq $+JoinFullPartyMenu__LoadEquipment_FromNewMember
+        jmp $_JoinFullPartyMenu__LoadEquipment_FromPartyMember
+
+    JoinFullPartyMenu__LoadEquipment_FromNewMember:
+        lda #$ff
+        sta $1804
+        ldy #$0000
+
+    JoinFullPartyMenu__LoadEquipment_FromShadowParty_LoopStart:
+        lda $1170,y
+        sta $1805,y
+        iny
+        cpy #$0007
+        bne $-JoinFullPartyMenu__LoadEquipment_FromShadowParty_LoopStart
+        rts
+
+    JoinFullPartyMenu__LoadEquipment_FromPartyMember:
+        // A contains selected party slot
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda #$ff
+        sta $1804
+        ldy #$0000
+    JoinFullPartyMenu__LoadEquipment_FromPartyMember_LoopStart:
+        lda $1030,x
+        sta $1805,y
+        inx
+        iny
+        cpy #$0007
+        bne $-JoinFullPartyMenu__LoadEquipment_FromPartyMember_LoopStart
+        rts
+
+    //---------------------------------------------------------
+    JoinFullPartyMenu__Unequip:
+        lda #$00
+        xba
+        lda $1b48
+
+        // A contains selected party slot, or 5 = new party member,
+        // Either way the math works out to empty the correct equipment
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        ldy #$0000
+    JoinFullPartyMenu__Unequip_PartyMember_LoopStart:
+        lda $1805,y
+        beq $+NotTakingSlot
+        stz $1030,x
+    %NotTakingSlot:
+        inx
+        iny
+        cpy #$0007
+        bne $-JoinFullPartyMenu__Unequip_PartyMember_LoopStart
+
+    JoinFullPartyMenu__Unequip_CheckInventorySpace:
+        // count required empty slots and store in $5b
+        stz $5b
+        ldy #$0000
+        JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop:
+            cpy #$0004  // skip the right-hand quantity slot
+            beq $+JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop_Next
+            lda $1805,y
+            beq $+JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop_Next
+            cmp #$60
+            bne $+JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop_Add
+            lda #$00
+            sta $1805,y
+            bra $+JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop_Next
+        JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop_Add:
+            inc $5b
+        JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop_Next:
+            iny
+            cpy #$0006  // skip the last field, which is left-hand quantity
+            bne $-JoinFullPartyMenu__Unequip_CheckInventorySpace_CountLoop
+
+        lda $5b
+        bne $01
+        // if there are no actual items to unequip, then just return
+        rts
+
+        // scan inventory and count empty slots
+        ldx #$0000
+        ldy #$0000
+        JoinFullPartyMenu__Unequip_CheckInventorySpace_InventoryLoop:
+            lda $1440,x
+            bne $+JoinFullPartyMenu__Unequip_CheckInventorySpace_InventoryLoop_Next
+            stx $18        // $1b4b usually stores pose data, but meh.
+            lda $18        // Have to store by way of $18 because there
+            sta $1b4b,y    // is no indexed stx instruction
+            lda $19
+            sta $1b4c,y
+            iny
+            iny
+            dec $5b
+            lda $5b
+            beq $+JoinFullPartyMenu__Unequip_SufficientSpace
+        JoinFullPartyMenu__Unequip_CheckInventorySpace_InventoryLoop_Next:
+            inx
+            inx
+            cpx #$0060
+            bne $-JoinFullPartyMenu__Unequip_CheckInventorySpace_InventoryLoop
+            jmp $_JoinFullPartyMenu__Unequip_InsufficientSpace
+
+    JoinFullPartyMenu__Unequip_SufficientSpace:
+        stz $5b
+        ldy #$0000
+        JoinFullPartyMenu__Unequip_DeliverLoop:
+            lda $1805,y
+            beq $+JoinFullPartyMenu__Unequip_DeliverLoop_Next
+            pha
+            lda $5b
+            asl a
+            phy
+            tay
+            ldx $1b4b,y
+            ply
+            pla
+            sta $1440,x
+            lda #$01
+            cpy #$0003
+            bcc $03 // skip over quantity load if looking at helm/armor/gauntlet
+            lda $1806,y
+            sta $1441,x
+            inc $5b
+        JoinFullPartyMenu__Unequip_DeliverLoop_Next:
+            cpy #$0003
+            bcc $01
+            iny
+            iny
+            cpy #$0007
+            bne $-JoinFullPartyMenu__Unequip_DeliverLoop
+
+        stz $1804
+        stz $1805
+        stz $1806
+        stz $1807
+        stz $1808
+        stz $1809
+        stz $180A
+        stz $180B
+
+        stz $0ffa
+        rts
+
+    JoinFullPartyMenu__Unequip_InsufficientSpace:
+        // $1804-180B already contain codes we need for the
+        // give item menu, so just set flag
+        lda #$01
+        sta $0ffa
+        rts
+
+    //---------------------------------------------------------
+    JoinFullPartyMenu__Dismiss:
+        lda $1b48
+        cmp #$05
+        beq $+JoinFullPartyMenu__Dismiss_NewMember
+        jmp $_JoinFullPartyMenu__Dismiss_PartyMember
+    
+    JoinFullPartyMenu__Dismiss_NewMember:
+        jsr $_CharEx__PushShadowPartySlot
+        rts
+
+    JoinFullPartyMenu__Dismiss_PartyMember:
+        // A = slot
+        jsr $_CharEx__PushPartySlotToShadowParty
+
+        // remove character from party
+        lda $1b48
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tay
+        lda #$0000
+        sep #$20
+        .mx 0x20        
+
+        // A = 0
+        sta $1000,y
+
+        // and we're done, I think :S
+        rts
+}
+
+// Data for dimmed job palettes
+patch($218a00 bus) 
+{
+    C0 00 00 00 EF 3D 0F 15 EC 00 C6 34 A5 28 0F 00 
+    CE 01 29 3D AF 01 4E 01 CA 00 0A 00 84 20 42 18 
+    C0 00 00 00 EF 3D 2F 19 EB 08 00 29 60 35 0C 00 
+    07 00 C4 3D 0C 3D A8 34 4E 01 C0 20 AF 01 60 14 
+    C0 00 00 00 EF 3D 4F 19 0C 15 00 3C A5 15 6F 34 
+    E0 00 EB 31 EF 21 8F 01 CA 00 0A 20 00 3D 21 0D 
+    C0 00 00 00 EF 3D 6F 1D 0C 11 0D 20 08 3D AF 3C 
+    80 3D 6B 3D AF 01 84 34 4E 01 CA 00 08 2C 05 20 
+    C0 00 00 00 EF 3D 4F 1D EC 10 60 01 AF 01 0F 00 
+    00 3D EF 1D E0 01 24 00 4E 01 CA 00 66 00 0C 00 
+    C0 00 00 00 EF 3D 4F 19 EB 10 02 09 A7 04 8F 18 
+    00 28 4D 10 2B 15 8D 01 0A 29 67 1D 67 1C E9 0C 
+    C0 00 00 00 EF 3D EF 10 AB 00 4E 01 0A 00 0F 00 
+    07 00 EF 09 6B 2D AF 01 CF 00 C6 3C C6 18 00 2C 
+    C0 00 00 00 EF 3D 0F 15 AD 0C A0 01 67 00 0E 00 
+    00 34 EF 1D AF 01 4E 01 AF 00 EB 00 A9 00 E0 00 
+    C0 00 00 00 EF 3D 2F 1D EC 10 0C 00 67 00 6F 00 
+    80 3C EF 01 E0 01 8F 01 2C 01 CA 00 88 00 60 01 
+    C0 00 00 00 EF 3D 0F 19 AD 0C 6B 1D 29 3D 8F 10 
+    40 01 AF 01 0B 00 EF 25 8C 3D A5 0C 00 38 C6 30 
+    C0 00 00 00 EF 3D 0E 01 AB 00 80 2C 2A 00 8E 00 
+    08 3D AF 01 4E 01 CB 00 89 00 47 00 00 3D 00 20 
+    C0 00 00 00 EF 3D 4F 19 0C 15 00 01 84 11 6F 34 
+    00 3C 21 05 E7 1D EF 01 2C 01 0C 28 4F 3D C0 00 
+    C0 00 00 00 EF 3D 2C 19 CA 0C 80 2C C6 18 0F 00 
+    84 10 AF 01 EA 00 4A 3D 4A 29 E7 2C A5 3C A7 00 
+    C0 00 00 00 EF 3D 6F 19 0C 0D 87 34 47 3D 0F 28 
+    60 01 EA 3C C3 2C 89 3D 05 35 ED 3D 24 28 01 1C 
+    C0 00 00 00 EF 3D A0 01 0F 15 EC 00 0D 00 0A 00 
+    AF 01 4E 01 CA 00 A0 3D 20 3D C0 34 80 2C 00 1C 
+    C0 00 00 00 EF 3D 4F 19 EC 0C 08 0C CF 28 0B 18 
+    80 2C EF 2D EF 01 8C 01 29 01 AA 04 87 34 24 28    
+}
+
+// alter the item-received menu to respond to our
+// special data format
+msfpatch {
+    .addr 0x01d45d
+        jmp $=GetItemMenu__Hook
+}
+
+msfpatch {
+    GetItemMenu__Hook:
+        // displaced code from source
+        stx $1bb3
+        stx $1bb5
+        stx $1bb7
+
+        // check for special format
+        lda $1804
+        cmp #$ff
+        beq $+GetItemMenu__RightHand
+        // otherwise, return to original
+        jml $01d466
+
+    GetItemMenu__RightHand:
+        ldy #$0000
+        lda $1808
+        beq $+GetItemMenu__LeftHand
+        sta $ff28,y
+        lda $1809
+        sta $ff29,y
+        iny
+        iny
+    GetItemMenu__LeftHand:
+        lda $180a
+        beq $+GetItemMenu__Others
+        sta $ff28,y
+        lda $180b
+        sta $ff29,y
+        iny
+        iny
+    GetItemMenu__Others:
+        ldx #$0000
+        GetItemMenu__Others_Loop:
+            lda $1805,x
+            beq $+GetItemMenu__Others_LoopNext
+            sta $ff28,y
+            lda #$01
+            sta $ff29,y
+            iny
+            iny
+        GetItemMenu__Others_LoopNext:
+            inx
+            cpx #$0003
+            bne $-GetItemMenu__Others_Loop
+
+    lda #$00
+    GetItemMenu__ClearLoop:
+        cpy #$0010
+        beq $+GetItemMenu__Done
+        sta $ff28,y
+        iny
+        bra $-GetItemMenu__ClearLoop
+
+    GetItemMenu__Done:
+        // jump back to original code after item init
+        jml $01d49d
+}

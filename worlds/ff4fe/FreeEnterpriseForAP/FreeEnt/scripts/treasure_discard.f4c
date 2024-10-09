@@ -1,0 +1,265 @@
+// patch received messages
+
+text(bank 1 message $01) {
+Found [item]!
+
+
+                 R:Discard
+}
+
+text(bank 1 message $0C) {
+Discarded.
+}
+
+
+patch($00972c bus) { 01 } // make pots use same message as treasures
+
+
+// make all treasures display "empty" message, not just chests
+msfpatch {
+    .addr $0097c4
+        jmp $97cf
+}
+
+
+msfpatch {
+    .def  TreasureDiscard__Flags0  $7e158c
+    .def  TreasureDiscard__Flags1  $7e158d
+    .def  TreasureDiscard__Flags2  $7e158e
+
+    TreasureDiscard__LoadOffsets:
+        // largely a copy of $009924
+        lda $08fc   // get absolute treasure number
+        sec
+        sbc $0fe7   // subtract mapinfo's treasure offset
+        pha
+        lsr a
+        lsr a
+        lsr a
+        tax
+        pla
+        and #$07
+        inc a
+        phy
+        tay
+
+        lda #$01
+    TreasureDiscard__LoadOffsets_LoopStart:
+        dey
+        beq $+TreasureDiscard__LoadOffsets_LoopEnd
+        asl a
+        bra $-TreasureDiscard__LoadOffsets_LoopStart
+
+    TreasureDiscard__LoadOffsets_LoopEnd:
+        ply
+        rts
+}
+
+
+// hook into test for empty chest and also check if
+// treasure was thrown back
+msfpatch {
+    .addr $0096f0
+        jml $=TreasureDiscard__EmptyChestCheck
+}
+
+msfpatch {
+    TreasureDiscard__EmptyChestCheck:
+        cmp #$00
+        beq $+TreasureDiscard__EmptyChestCheck_NotEmpty
+
+    TreasureDiscard__EmptyChestCheck_IsEmpty:
+        // check for discarded flag
+        jsr $_TreasureDiscard__LoadOffsets
+        and $_TreasureDiscard__Flags0,x
+        bne $-TreasureDiscard__EmptyChestCheck_NotEmpty
+        // flag check fail = box is truly empty
+        jml $0097c4
+
+    TreasureDiscard__EmptyChestCheck_NotEmpty:
+        // clear discard flag
+        jsr $_TreasureDiscard__LoadOffsets
+        eor #$ff
+        and $_TreasureDiscard__Flags0,x
+        sta $_TreasureDiscard__Flags0,x
+
+        // resume normal flow
+        jml $0096f7
+
+}
+
+// hook into post message display, check for R
+// button, and if so do the Discard behavior
+msfpatch {
+    .addr $00978e
+        jml $=TreasureDiscard__CheckActivation
+}
+
+msfpatch {
+    TreasureDiscard__CheckActivation:
+        // check if item is empty, we never give empty
+        lda $08fb
+        beq $+TreasureDiscard__CheckActivation_DontGiveItem
+
+        jsr $_TreasureDiscard__CheckDiscardable
+        bcc $+TreasureDiscard__CheckActivation_KeepItem
+
+        // check for R button
+        lda $02
+        and #$10
+        beq $+TreasureDiscard__CheckActivation_KeepItem
+
+        // R pressed, do discard
+        jsr $_TreasureDiscard__LoadOffsets
+        ora $_TreasureDiscard__Flags0,x
+        sta $_TreasureDiscard__Flags0,x
+
+        // play sound
+        lda #$25
+        sta $1e01
+        lda #$80
+        sta $1e02
+        lda #$ff
+        sta $1e03
+        lda #$02
+        sta $1e00
+        jsr $048004
+
+    TreasureDiscard__CheckActivation_DontGiveItem:
+        phy
+
+        // need to do long calls to execute displaced subroutines
+        lda #$00
+        ldy #$b164          // close window
+        jsl $=LongCall
+
+        ply
+
+        // clear R button trigger flag so player char doesn't toggle
+        lda $02
+        and #$ef
+        sta $02
+
+        jml $009794
+
+    TreasureDiscard__CheckActivation_KeepItem:
+        phy
+
+        // need to do long calls to execute displaced subroutines
+        lda #$00
+        ldy #$b164          // close window
+        jsl $=LongCall
+
+        lda #$00
+        ldy #$9818          // give item
+        jsl $=LongCall
+
+        // %if wacky_post_treasure_hook%
+        jsl $=Wacky__PostTreasureHook
+        // %end%
+
+        ply
+        jml $009794 // rts
+}
+
+
+// reset flags on map load (need to patch natural transitions and event load map transitions)
+// >>> event transitions are actually handled in the map transition extensions done in map_transitions.f4c
+
+// do exiting-indoor-map transition hooks:
+msfpatch {
+    TreasureDiscard__TeleportTileHook:
+        stz $_TreasureDiscard__Flags0
+        stz $_TreasureDiscard__Flags1
+        stz $_TreasureDiscard__Flags2
+        // do displaced and return
+        lda $158302,x
+        jml $009a73
+    
+    .addr $009a6f
+        jml $=TreasureDiscard__TeleportTileHook
+}
+
+msfpatch {
+    TreasureDiscard__ReturnTileHook:
+        stz $_TreasureDiscard__Flags0
+        stz $_TreasureDiscard__Flags1
+        stz $_TreasureDiscard__Flags2
+
+        ldx $172c
+        
+        // %flag glitch_allow_64 off%
+        beq $+No64__WarpStackEmpty
+        // %end%
+
+        // do displaced and return
+        dex
+        jml $008188
+
+    No64__WarpStackEmpty:
+        stz $172e
+        stz $172f
+        stz $1730
+        jml $00818d
+
+    .addr $008184
+        jml $=TreasureDiscard__ReturnTileHook
+}
+
+
+// code to support extra kinds of chest contents
+msfpatch {
+    .addr $009742
+        jml $=TreasureContentExtensions
+}
+
+msfpatch {
+    TreasureContentExtensions:
+        bne $+NotEmpty
+
+        lda $09
+        bpl $+ZeroGP
+
+        // replace message with "Empty!"
+        lda #$04
+        sta $b2
+        jmp $_Done
+
+    %ZeroGP:
+        lda #$01  // GP message is #$02, but this will be incremented later at 00:9795
+        sta $b2
+        jmp $_Done
+
+    %NotEmpty:
+        // change the message displayed if the contents can't be discarded
+        jsr $_TreasureDiscard__CheckDiscardable
+        bcs $+Done
+
+        lda #$16
+        sta $b2
+
+    %Done:
+        // perform displaced instructions and return
+        lda $09
+        and #$40
+        jml $009746
+}
+
+msfpatch {
+    TreasureDiscard__CheckDiscardable:
+        // TODO: figure out mess of why Hook has to be "sellable"
+        //       (see randomizer_keyitems.f4c)
+        cmp #$fc  // hook
+        beq $+NotDiscardable
+
+        jsl $=Shop__UnsellableItemCheck
+        bcs $+NotDiscardable
+
+    %Discardable:
+        sec
+        rts
+
+    %NotDiscardable:
+        clc
+        rts
+}

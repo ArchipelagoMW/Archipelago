@@ -1,0 +1,2864 @@
+spell($01)  // #Hold
+{
+    casting time 1
+    target $05
+    param $00   // 0
+    hit 85
+    boss True
+    effect $07
+    damage True
+    element $0D
+    impact False
+    mp cost 5
+    ignore wall False
+}
+
+spell($02)  // #Mute
+{
+    casting time 2
+    target $07
+    param $00   // 0
+    hit 90
+    boss True
+    effect $06
+    damage True
+    element $12
+    impact False
+    mp cost 6
+    ignore wall False
+}
+
+spell($03)  // #Charm
+{
+    casting time 1
+    target $05
+    param $00   // 0
+    hit 65
+    boss True
+    effect $06
+    damage True
+    element $0B
+    impact False
+    mp cost 10
+    ignore wall False
+}
+
+spell($04)  // #Blink
+{
+    casting time 0
+    target $01
+    param $00   // 0
+    hit 50
+    boss False
+    effect $08
+    damage False
+    element $0B
+    impact False
+    mp cost 8
+    ignore wall False
+}
+
+spell($05)  // #Armor
+{
+    casting time 0
+    target $03
+    param $01   // 1
+    hit 66
+    boss False
+    effect $0D
+    damage True
+    element $00
+    impact False
+    mp cost 9
+    ignore wall False
+}
+
+spell($06)  // #Shell
+{
+    casting time 0
+    target $03
+    param $01   // 1
+    hit 66
+    boss False
+    effect $0E
+    damage True
+    element $00
+    impact False
+    mp cost 10
+    ignore wall False
+}
+
+spell($07)  // #Slow
+{
+    casting time 1
+    target $07
+    param $08   // 8
+    hit 70
+    boss False
+    effect $0F
+    damage False
+    element $00
+    impact False
+    mp cost 14
+    ignore wall False
+}
+
+spell($08)  // #Fast
+{
+    casting time 1
+    target $01
+    param $FD   // 253 / -3
+    hit 50
+    boss False
+    effect $0F
+    damage False
+    element $00
+    impact False
+    mp cost 25
+    ignore wall False
+}
+
+spell($09)  // #Bersk
+{
+    casting time 1
+    target $01
+    param $00   // 0
+    hit 50
+    boss True
+    effect $06
+    damage False
+    element $0A
+    impact False
+    mp cost 18
+    ignore wall False
+}
+
+spell($0A)  // #Wall
+{
+    casting time 0
+    target $01
+    param $00   // 0
+    hit 75
+    boss False
+    effect $09
+    damage False
+    element $0D
+    impact False
+    mp cost 30
+    ignore wall False
+}
+
+spell($0B)  // #White
+{
+    casting time 3
+    target $05
+    param $55   // 85
+    hit 99
+    boss False
+    effect $01
+    damage False
+    element $05
+    impact True
+    mp cost 46
+    ignore wall False
+}
+
+spell($0C)  // #Dspel
+{
+    casting time 1
+    target $05
+    param $00   // 0
+    hit 70
+    boss True
+    effect $10
+    damage False
+    element $00
+    impact False
+    mp cost 12
+    ignore wall False
+}
+
+spell($0D)  // #Peep
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 99
+    boss True
+    effect $12
+    damage False
+    element $00
+    impact False
+    mp cost 1
+    ignore wall True
+}
+
+spell($0E)  // #Cure1
+{
+    casting time 1
+    target $03
+    param $04   // 4
+    hit 100
+    boss False
+    effect $02
+    damage False
+    element $00
+    impact False
+    mp cost 3
+    ignore wall False
+}
+
+spell($0F)  // #Cure2
+{
+    casting time 1
+    target $03
+    param $0C   // 12
+    hit 100
+    boss False
+    effect $02
+    damage False
+    element $00
+    impact False
+    mp cost 9
+    ignore wall False
+}
+
+spell($10)  // #Cure3
+{
+    casting time 1
+    target $03
+    param $24   // 36
+    hit 100
+    boss False
+    effect $02
+    damage False
+    element $00
+    impact False
+    mp cost 18
+    ignore wall False
+}
+
+spell($11)  // #Cure4
+{
+    casting time 0
+    target $03
+    param $48   // 72
+    hit 100
+    boss False
+    effect $02
+    damage False
+    element $00
+    impact False
+    mp cost 40
+    ignore wall False
+}
+
+spell($12)  // #Heal
+{
+    casting time 2
+    target $01
+    param $00   // 0
+    hit 80
+    boss False
+    effect $0B
+    damage False
+    element $00
+    impact False
+    mp cost 20
+    ignore wall False
+}
+
+spell($13)  // #Life1
+{
+    casting time 0
+    target $01
+    param $00   // 0
+    hit 75
+    boss True
+    effect $0A
+    damage True
+    element $00
+    impact False
+    mp cost 8
+    ignore wall False
+}
+
+spell($14)  // #Life2
+{
+    casting time 2
+    target $01
+    param $00   // 0
+    hit 80
+    boss True
+    effect $0A
+    damage True
+    element $00
+    impact False
+    mp cost 52
+    ignore wall False
+}
+
+spell($15)  // #Size
+{
+    casting time 4
+    target $07
+    param $00   // 0
+    hit 50
+    boss True
+    effect $0C
+    damage True
+    element $14
+    impact False
+    mp cost 6
+    ignore wall False
+}
+
+spell($16)  // #Exit
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $13
+    damage False
+    element $00
+    impact False
+    mp cost 10
+    ignore wall True
+}
+
+spell($17)  // #Sight
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7F
+    damage False
+    element $00
+    impact False
+    mp cost 2
+    ignore wall False
+}
+
+spell($18)  // #Float
+{
+    casting time 1
+    target $02
+    param $00   // 0
+    hit 100
+    boss False
+    effect $06
+    damage False
+    element $0E
+    impact False
+    mp cost 8
+    ignore wall False
+}
+
+spell($19)  // #Toad
+{
+    casting time 3
+    target $07
+    param $00   // 0
+    hit 50
+    boss True
+    effect $0C
+    damage True
+    element $15
+    impact False
+    mp cost 7
+    ignore wall False
+}
+
+spell($1A)  // #Piggy
+{
+    casting time 6
+    target $07
+    param $00   // 0
+    hit 10
+    boss True
+    effect $0C
+    damage True
+    element $13
+    impact False
+    mp cost 1
+    ignore wall False
+}
+
+spell($1B)  // #Warp
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $7F
+    damage False
+    element $00
+    impact False
+    mp cost 4
+    ignore wall False
+}
+
+spell($1C)  // #Venom
+{
+    casting time 1
+    target $07
+    param $00   // 0
+    hit 90
+    boss True
+    effect $17
+    damage False
+    element $10
+    impact True
+    mp cost 2
+    ignore wall False
+}
+
+spell($1D)  // #Fire1
+{
+    casting time 1
+    target $07
+    param $04   // 4
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 5
+    ignore wall False
+}
+
+spell($1E)  // #Fire2
+{
+    casting time 3
+    target $07
+    param $10   // 16
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 15
+    ignore wall False
+}
+
+spell($1F)  // #Fire3
+{
+    casting time 4
+    target $07
+    param $40   // 64
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 30
+    ignore wall False
+}
+
+spell($20)  // #Ice1
+{
+    casting time 1
+    target $07
+    param $04   // 4
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $02
+    impact True
+    mp cost 5
+    ignore wall False
+}
+
+spell($21)  // #Ice2
+{
+    casting time 3
+    target $07
+    param $10   // 16
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $02
+    impact True
+    mp cost 15
+    ignore wall False
+}
+
+spell($22)  // #Ice3
+{
+    casting time 4
+    target $07
+    param $40   // 64
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $02
+    impact True
+    mp cost 30
+    ignore wall False
+}
+
+spell($23)  // #Lit1
+{
+    casting time 1
+    target $07
+    param $04   // 4
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $03
+    impact True
+    mp cost 5
+    ignore wall False
+}
+
+spell($24)  // #Lit2
+{
+    casting time 3
+    target $07
+    param $10   // 16
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $03
+    impact True
+    mp cost 15
+    ignore wall False
+}
+
+spell($25)  // #Lit3
+{
+    casting time 4
+    target $07
+    param $40   // 64
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $03
+    impact True
+    mp cost 30
+    ignore wall False
+}
+
+spell($26)  // #Virus
+{
+    casting time 0
+    target $07
+    param $20   // 32
+    hit 100
+    boss False
+    effect $01
+    damage False
+    element $00
+    impact True
+    mp cost 20
+    ignore wall False
+}
+
+spell($27)  // #Weak
+{
+    casting time 2
+    target $05
+    param $00   // 0
+    hit 75
+    boss True
+    effect $03
+    damage True
+    element $00
+    impact True
+    mp cost 25
+    ignore wall False
+}
+
+spell($28)  // #Quake
+{
+    casting time 2
+    target $06
+    param $32   // 50
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 30
+    ignore wall True
+}
+
+spell($29)  // #Sleep
+{
+    casting time 3
+    target $07
+    param $00   // 0
+    hit 50
+    boss True
+    effect $07
+    damage True
+    element $0C
+    impact False
+    mp cost 12
+    ignore wall False
+}
+
+spell($2A)  // #Stone
+{
+    casting time 2
+    target $07
+    param $00   // 0
+    hit 30
+    boss True
+    effect $06
+    damage True
+    element $16
+    impact False
+    mp cost 15
+    ignore wall False
+}
+
+spell($2B)  // #Fatal
+{
+    casting time 5
+    target $05
+    param $00   // 0
+    hit 60
+    boss True
+    effect $06
+    damage True
+    element $17
+    impact False
+    mp cost 35
+    ignore wall False
+}
+
+spell($2C)  // #Stop
+{
+    casting time 2
+    target $05
+    param $0A   // 10
+    hit 80
+    boss True
+    effect $11
+    damage True
+    element $15
+    impact False
+    mp cost 15
+    ignore wall False
+}
+
+spell($2D)  // #Drain
+{
+    casting time 3
+    target $05
+    param $05   // 5
+    hit 100
+    boss False
+    effect $04
+    damage False
+    element $07
+    impact True
+    mp cost 18
+    ignore wall False
+}
+
+spell($2E)  // #Psych
+{
+    casting time 5
+    target $05
+    param $04   // 4
+    hit 100
+    boss False
+    effect $05
+    damage False
+    element $07
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($2F)  // #Meteo
+{
+    casting time 10
+    target $06
+    param $C8   // 200 / -56
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $05
+    impact False
+    mp cost 99
+    ignore wall True
+}
+
+spell($30)  // #Nuke
+{
+    casting time 0
+    target $05
+    param $64   // 100
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact True
+    mp cost 50
+    ignore wall False
+}
+
+spell($31)  // #Imp
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 1
+    ignore wall True
+}
+
+spell($32)  // #Bomb
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 10
+    ignore wall True
+}
+
+spell($33)  // #Cocka
+{
+    casting time 2
+    target $05
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 15
+    ignore wall True
+}
+
+spell($34)  // #Mage
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 18
+    ignore wall True
+}
+
+spell($35)  // #Chocb
+{
+    casting time 3
+    target $05
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 7
+    ignore wall True
+}
+
+spell($36)  // #Shiva
+{
+    casting time 4
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 30
+    ignore wall True
+}
+
+spell($37)  // #Indra
+{
+    casting time 4
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 30
+    ignore wall True
+}
+
+spell($38)  // #Jinn
+{
+    casting time 4
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 30
+    ignore wall True
+}
+
+spell($39)  // #Titan
+{
+    casting time 5
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 40
+    ignore wall True
+}
+
+spell($3A)  // #Mist
+{
+    casting time 3
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 20
+    ignore wall True
+}
+
+spell($3B)  // #Sylph
+{
+    casting time 1
+    target $05
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 25
+    ignore wall True
+}
+
+spell($3C)  // #Odin
+{
+    casting time 2
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 45
+    ignore wall True
+}
+
+spell($3D)  // #Levia
+{
+    casting time 3
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 50
+    ignore wall True
+}
+
+spell($3E)  // #Asura
+{
+    casting time 1
+    target $02
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 50
+    ignore wall True
+}
+
+spell($3F)  // #Baham
+{
+    casting time 3
+    target $06
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 60
+    ignore wall True
+}
+
+spell($40)  // #Comet
+{
+    casting time 0
+    target $06
+    param $14   // 20
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 20
+    ignore wall True
+}
+
+spell($41)  // #Flare
+{
+    casting time 0
+    target $05
+    param $1E   // 30
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 10
+    ignore wall False
+}
+
+spell($42)  // #Flame
+{
+    casting time 2
+    target $06
+    param $14   // 20
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 15
+    ignore wall True
+}
+
+spell($43)  // #Flood
+{
+    casting time 2
+    target $06
+    param $1E   // 30
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $02
+    impact True
+    mp cost 20
+    ignore wall True
+}
+
+spell($44)  // #Blitz
+{
+    casting time 2
+    target $06
+    param $28   // 40
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $03
+    impact True
+    mp cost 25
+    ignore wall True
+}
+
+spell($45)  // #Smoke
+{
+    casting time 0
+    target $02
+    param $00   // 0
+    hit 100
+    boss False
+    effect $13
+    damage False
+    element $00
+    impact False
+    mp cost 10
+    ignore wall True
+}
+
+spell($46)  // #Pin
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 75
+    boss True
+    effect $07
+    damage True
+    element $0D
+    impact False
+    mp cost 5
+    ignore wall False
+}
+
+spell($47)  // #Image
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 99
+    boss False
+    effect $08
+    damage True
+    element $00
+    impact False
+    mp cost 6
+    ignore wall True
+}
+
+spell($48)  // $48
+{
+    casting time 0
+    target $05
+    param $07   // 7
+    hit 90
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($49)  // $49
+{
+    casting time 0
+    target $02
+    param $03   // 3
+    hit 100
+    boss False
+    effect $02
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($4A)  // $4A
+{
+    casting time 0
+    target $01
+    param $00   // 0
+    hit 75
+    boss False
+    effect $0B
+    damage True
+    element $19
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($4B)  // $4B
+{
+    casting time 0
+    target $01
+    param $00   // 0
+    hit 75
+    boss False
+    effect $0B
+    damage True
+    element $21
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($4C)  // $4C
+{
+    casting time 0
+    target $05
+    param $0A   // 10
+    hit 90
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($4D)  // #ImpEffect
+{
+    casting time 0
+    target $04
+    param $01   // 1
+    hit 50
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 1
+    ignore wall True
+}
+
+spell($4E)  // #BombEffect
+{
+    casting time 0
+    target $04
+    param $01   // 1
+    hit 100
+    boss False
+    effect $14
+    damage True
+    element $00
+    impact True
+    mp cost 10
+    ignore wall True
+}
+
+spell($4F)  // #CockatriceEffect
+{
+    casting time 0
+    target $04
+    param $00   // 0
+    hit 50
+    boss True
+    effect $18
+    damage False
+    element $16
+    impact False
+    mp cost 15
+    ignore wall True
+}
+
+spell($50)  // #MageEffect
+{
+    casting time 0
+    target $04
+    param $0C   // 12
+    hit 100
+    boss True
+    effect $19
+    damage False
+    element $0D
+    impact False
+    mp cost 18
+    ignore wall True
+}
+
+spell($51)  // #ChocoboEffect
+{
+    casting time 0
+    target $04
+    param $05   // 5
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 7
+    ignore wall True
+}
+
+spell($52)  // #ShivaEffect
+{
+    casting time 0
+    target $06
+    param $0A   // 10
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $02
+    impact False
+    mp cost 30
+    ignore wall True
+}
+
+spell($53)  // #IndraEffect
+{
+    casting time 0
+    target $06
+    param $0A   // 10
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $03
+    impact False
+    mp cost 30
+    ignore wall True
+}
+
+spell($54)  // #JinnEffect
+{
+    casting time 0
+    target $06
+    param $0A   // 10
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $01
+    impact False
+    mp cost 30
+    ignore wall True
+}
+
+spell($55)  // #TitanEffect
+{
+    casting time 0
+    target $06
+    param $14   // 20
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 40
+    ignore wall True
+}
+
+spell($56)  // #MistEffect
+{
+    casting time 0
+    target $06
+    param $01   // 1
+    hit 100
+    boss False
+    effect $14
+    damage True
+    element $00
+    impact False
+    mp cost 20
+    ignore wall True
+}
+
+spell($57)  // #SylphEffect
+{
+    casting time 0
+    target $04
+    param $0F   // 15
+    hit 100
+    boss False
+    effect $1A
+    damage False
+    element $00
+    impact False
+    mp cost 25
+    ignore wall True
+}
+
+spell($58)  // #OdinEffect
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 0
+    boss True
+    effect $1B
+    damage False
+    element $00
+    impact False
+    mp cost 45
+    ignore wall True
+}
+
+spell($59)  // #LeviatanEffect
+{
+    casting time 0
+    target $06
+    param $23   // 35
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact True
+    mp cost 50
+    ignore wall True
+}
+
+spell($5A)  // #AsuraEffect1
+{
+    casting time 0
+    target $02
+    param $14   // 20
+    hit 100
+    boss False
+    effect $02
+    damage False
+    element $00
+    impact False
+    mp cost 50
+    ignore wall True
+}
+
+spell($5B)  // #AsuraEffect2
+{
+    casting time 0
+    target $02
+    param $1E   // 30
+    hit 100
+    boss False
+    effect $02
+    damage False
+    element $00
+    impact False
+    mp cost 50
+    ignore wall True
+}
+
+spell($5C)  // #AsuraEffect3
+{
+    casting time 0
+    target $02
+    param $00   // 0
+    hit 100
+    boss True
+    effect $0A
+    damage True
+    element $00
+    impact False
+    mp cost 50
+    ignore wall True
+}
+
+spell($5D)  // #BahamutEffect
+{
+    casting time 0
+    target $06
+    param $3C   // 60
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 60
+    ignore wall True
+}
+
+spell($5E)  // #WMeteo
+{
+    casting time 0
+    target $06
+    param $C8   // 200 / -56
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $05
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($5F)  // $5F
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($60)  // $60
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($61)  // #Enemy_Gaze
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $20
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($62)  // #Enemy_Bluster
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $21
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($63)  // #Enemy_Slap
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $22
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($64)  // #Enemy_Powder
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $11
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($65)  // #Enemy_Glance
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $0B
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($66)  // #Enemy_Charm
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $0B
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($67)  // #Enemy_Tongue
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $07
+    damage False
+    element $0C
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($68)  // #Enemy_Curse
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $0F
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($69)  // #Enemy_Ray
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $1F
+    damage False
+    element $16
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($6A)  // #Enemy_Count
+{
+    casting time 0
+    target $05
+    param $0A   // 10
+    hit 100
+    boss True
+    effect $1D
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($6B)  // #Enemy_Beak
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $16
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($6C)  // #Enemy_Petrify
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $1F
+    damage False
+    element $16
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($6D)  // #Enemy_Blast
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $23
+    damage False
+    element $0D
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($6E)  // #Enemy_Hug
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $24
+    damage False
+    element $16
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($6F)  // #Enemy_Breath
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $38
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($70)  // #Enemy_Whisper
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $0C
+    damage False
+    element $13
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($71)  // #Enemy_Entangle
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $07
+    damage False
+    element $0D
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($72)  // #Enemy_WeakEnemy
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $03
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($73)  // #Enemy_Disrupt
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 100
+    boss False
+    effect $2A
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($74)  // #Enemy_ColdMist
+{
+    casting time 0
+    target $06
+    param $02   // 2
+    hit 100
+    boss True
+    effect $00
+    damage False
+    element $02
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($75)  // #Enemy_Explode
+{
+    casting time 0
+    target $06
+    param $08   // 8
+    hit 100
+    boss True
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($76)  // #Enemy_DullSong
+{
+    casting time 0
+    target $06
+    param $08   // 8
+    hit 100
+    boss True
+    effect $0F
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($77)  // #Enemy_HoldGas
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $0D
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($78)  // #Enemy_Gas
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $07
+    damage False
+    element $0C
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($79)  // #Enemy_Poison
+{
+    casting time 0
+    target $06
+    param $02   // 2
+    hit 100
+    boss True
+    effect $17
+    damage False
+    element $10
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($7A)  // #Enemy_Maser
+{
+    casting time 0
+    target $05
+    param $0A   // 10
+    hit 100
+    boss True
+    effect $1E
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($7B)  // #Enemy_Vanish
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss False
+    effect $06
+    damage False
+    element $17
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($7C)  // #Enemy_Demolish
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $17
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($7D)  // #Enemy_BlkHole
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 100
+    boss False
+    effect $2A
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($7E)  // #Enemy_Dancing
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $0A
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($7F)  // #Enemy_Disrupt2
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss False
+    effect $06
+    damage False
+    element $17
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($80)  // #Enemy_Storm
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 100
+    boss True
+    effect $03
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($81)  // #Enemy_Magnet
+{
+    casting time 0
+    target $05
+    param $32   // 50
+    hit 100
+    boss True
+    effect $11
+    damage False
+    element $15
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($82)  // #Enemy_Reaction
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $26
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($83)  // #Enemy_Hatch
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $34
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($84)  // #Enemy_Remedy
+{
+    casting time 0
+    target $01
+    param $00   // 0
+    hit 100
+    boss False
+    effect $27
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($85)  // #Enemy_Absorb
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $2C
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($86)  // #Enemy_Heal
+{
+    casting time 0
+    target $02
+    param $00   // 0
+    hit 0
+    boss False
+    effect $0B
+    damage False
+    element $18
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($87)  // #Enemy_BigBang
+{
+    casting time 0
+    target $06
+    param $32   // 50
+    hit 100
+    boss True
+    effect $01
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($88)  // #Enemy_Vampire
+{
+    casting time 0
+    target $05
+    param $06   // 6
+    hit 100
+    boss False
+    effect $01
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($89)  // #Enemy_Digest
+{
+    casting time 0
+    target $05
+    param $0F   // 15
+    hit 100
+    boss False
+    effect $01
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall False
+}
+
+spell($8A)  // #Enemy_Pollen
+{
+    casting time 0
+    target $06
+    param $03   // 3
+    hit 100
+    boss True
+    effect $01
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($8B)  // #Enemy_Crush
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $06
+    damage False
+    element $17
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($8C)  // #Enemy_Alert
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $29
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($8D)  // #Enemy_Call
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $29
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($8E)  // #CommandEnemy
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $2D
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($8F)  // #Enemy_Vanish2
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $30
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($90)  // #Enemy_Search
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss False
+    effect $33
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($91)  // #Enemy_Fission
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 100
+    boss False
+    effect $25
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($92)  // #Enemy_Retreat
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $06
+    damage False
+    element $17
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($93)  // #Enemy_Heal2
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 100
+    boss False
+    effect $0B
+    damage False
+    element $33
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($94)  // #Enemy_Beam
+{
+    casting time 0
+    target $05
+    param $0A   // 10
+    hit 100
+    boss False
+    effect $1E
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($95)  // #Enemy_Globe199
+{
+    casting time 0
+    target $05
+    param $FF   // 255 / -1
+    hit 100
+    boss True
+    effect $00
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($96)  // #Enemy_Fire
+{
+    casting time 0
+    target $06
+    param $05   // 5
+    hit 100
+    boss False
+    effect $1E
+    damage False
+    element $01
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($97)  // #Enemy_Blaze
+{
+    casting time 0
+    target $06
+    param $04   // 4
+    hit 100
+    boss False
+    effect $1E
+    damage False
+    element $02
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($98)  // #Enemy_Blitz
+{
+    casting time 0
+    target $05
+    param $02   // 2
+    hit 100
+    boss False
+    effect $1E
+    damage False
+    element $03
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($99)  // #Enemy_Thunder
+{
+    casting time 0
+    target $06
+    param $04   // 4
+    hit 100
+    boss False
+    effect $1E
+    damage False
+    element $03
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($9A)  // #Enemy_DBreath
+{
+    casting time 0
+    target $06
+    param $04   // 4
+    hit 100
+    boss False
+    effect $1E
+    damage False
+    element $01
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($9B)  // #Enemy_BigWave
+{
+    casting time 0
+    target $06
+    param $04   // 4
+    hit 100
+    boss False
+    effect $1E
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($9C)  // #Enemy_Blizzard
+{
+    casting time 0
+    target $06
+    param $19   // 25
+    hit 100
+    boss False
+    effect $14
+    damage False
+    element $02
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($9D)  // #Enemy_Wave
+{
+    casting time 0
+    target $06
+    param $19   // 25
+    hit 100
+    boss False
+    effect $14
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($9E)  // #Enemy_Tornado
+{
+    casting time 0
+    target $06
+    param $14   // 20
+    hit 100
+    boss False
+    effect $14
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($9F)  // #Enemy_Laser
+{
+    casting time 0
+    target $05
+    param $05   // 5
+    hit 100
+    boss True
+    effect $14
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($A0)  // #Enemy_Explode2
+{
+    casting time 0
+    target $05
+    param $01   // 1
+    hit 100
+    boss False
+    effect $25
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($A1)  // #Enemy_Quake
+{
+    casting time 0
+    target $06
+    param $14   // 20
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($A2)  // #Enemy_Emission
+{
+    casting time 0
+    target $06
+    param $05   // 5
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($A3)  // #Enemy_HeatRay
+{
+    casting time 0
+    target $06
+    param $0F   // 15
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($A4)  // #Enemy_Glare
+{
+    casting time 0
+    target $05
+    param $5A   // 90
+    hit 100
+    boss True
+    effect $00
+    damage False
+    element $01
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($A5)  // #Enemy_Odin
+{
+    casting time 0
+    target $06
+    param $28   // 40
+    hit 100
+    boss True
+    effect $00
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($A6)  // #Enemy_MegaNuke
+{
+    casting time 0
+    target $06
+    param $FF   // 255 / -1
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall False
+}
+
+spell($A7)  // #Enemy_Needle
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $2B
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($A8)  // #Enemy_Counter
+{
+    casting time 0
+    target $05
+    param $00   // 0
+    hit 100
+    boss True
+    effect $2B
+    damage False
+    element $00
+    impact True
+    mp cost 0
+    ignore wall True
+}
+
+spell($A9)  // #InvincibleOn
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $2E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($AA)  // #InvincibleOff
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $2F
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($AB)  // #Enemy_Recover
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $30
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($AC)  // #Enemy_Remedy2
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $30
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($AD)  // #Transform3
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $31
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($AE)  // #EndBattle
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $32
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($AF)  // $AF
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B0)  // #SummonMistDragon
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $35
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B1)  // #ReturnRydia
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B2)  // $B2
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B3)  // #GhostAnna
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B4)  // #GhostEdwardTellah
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B5)  // #GhostPalomPorom
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B6)  // #GhostYangCid
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B7)  // #GhostFusoyaGolbez
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B8)  // #GhostDisappear
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($B9)  // $B9
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($BA)  // #GhostRevive
+{
+    casting time 1
+    target $06
+    param $00   // 0
+    hit 100
+    boss False
+    effect $0A
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($BB)  // #ZeromusShake2
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 0
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($BC)  // #Unsure_KillShadow
+{
+    casting time 0
+    target $02
+    param $14   // 20
+    hit 100
+    boss False
+    effect $00
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($BD)  // $BD
+{
+    casting time 1
+    target $06
+    param $F8   // 248 / -8
+    hit 100
+    boss False
+    effect $0F
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($BE)  // #GhostHeal
+{
+    casting time 0
+    target $06
+    param $00   // 0
+    hit 100
+    boss False
+    effect $16
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}
+
+spell($BF)  // #GhostFlash
+{
+    casting time 0
+    target $00
+    param $00   // 0
+    hit 100
+    boss False
+    effect $7E
+    damage False
+    element $00
+    impact False
+    mp cost 0
+    ignore wall True
+}

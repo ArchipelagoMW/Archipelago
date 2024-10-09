@@ -1,0 +1,75 @@
+// Change location where shop manifests are loaded from
+// to 21:8000
+patch($01c497 bus) { 00 81 }
+patch($01c49e bus) { 21 }
+
+// Change location where shop types are loaded from
+patch($00e366 bus) { 00 80 21 }
+
+// Define new shop types
+patch($218000 bus) {
+// %shop_types%
+// %end%
+}
+
+// Define new shop manifests
+patch($218100 bus) {
+// %compiled_shops%
+// %end%
+}
+
+// Recode appropriate events to branch to correct shop manifest
+event($26)  //Bring up Baron item shop
+{
+    [#B #If #Map #map.BaronTownItems]   { shop $13 }
+    [#B #If #Map #map.KaipoInn]         { shop $20 }
+    [#B #If #Map #map.FabulInn]         { shop $21 }
+    [#B #If #Map #map.ToroiaItem]       { shop $22 }
+    [#B #If #Map #map.AgartInn]         { shop $23 }
+}
+
+event($CE)  //Bring up Tomra item shop
+{
+    [#B #If #Map #map.TomraItem]        { shop $1E }
+    [#B #If #Map #map.DwarfCastleInn]   { shop $24 }
+    [#B #If #Map #map.FeymarchInn]      { shop $25 }
+}
+
+// patch manifest loading code to support shop IDs >= 0x20
+// without overflowing the A accumulator (mostly just
+// reordering instructions that were there)
+msfpatch {
+    .addr 0x01c48b
+    rep #$20
+    .mx 0x00
+    lda $1a00
+    and #$00ff
+    asl a
+    asl a
+    asl a
+}
+
+
+// support for empty shops -- basically just don't navigate into buy list
+msfpatch {
+    .addr $01c456
+        jml $=EmptyShopCheck
+}
+
+msfpatch {
+    EmptyShopCheck:
+        // check for A button as normal
+        lda $00
+        and #$80
+        bne $04
+        jml $01c465 // return to normal flow
+
+        // check if shop is empty
+        lda $1b55
+        bne $04
+        jml $01c465 // return to normal flow as if A not pressed
+
+        // shop is not empty, return to normal success case
+        jsl $=ExtraItemDescriptions__BuyMenuUpdate  // but first also do this!
+        jml $01c45c
+}

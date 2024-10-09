@@ -1,0 +1,15 @@
+// Change sell prices to be 1/4 of purchase price
+
+msfpatch {
+    .addr $01c95e
+        jsl $=SellQuarter__LowPrices
+
+    .new
+    SellQuarter__LowPrices:
+        adc $43
+        lsr a    // halve the result an additional time
+        sta $5a
+        rtl
+}
+
+patch($01c96c bus) { 7D }
