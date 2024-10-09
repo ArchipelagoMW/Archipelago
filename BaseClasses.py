@@ -446,7 +446,7 @@ class MultiWorld():
     def world_name_lookup(self):
         return {self.player_name[player_id]: player_id for player_id in self.player_ids}
 
-    def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
+    def get_regions(self, player: Optional[int] = None) -> Iterable[Region]:
         if player is not None:
             return self.worlds[player].regions.get_regions()
         return Utils.RepeatableChain(tuple(self.worlds[player].regions.get_regions()
