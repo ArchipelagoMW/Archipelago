@@ -4,7 +4,11 @@
 
 - Le jeu Aquaria original (trouvable sur la majorité des sites de ventes de jeux vidéo en ligne)
 - Le client Randomizer d'Aquaria [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases)
+
+## Logiciels optionnels
+
 - De manière optionnel, pour pouvoir envoyer des [commandes](/tutorial/Archipelago/commands/en) comme `!hint`: utilisez le client texte de [la version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest), pour utiliser avec [PopTracker](https://github.com/black-sliver/PopTracker/releases/latest)
 
 ## Procédures d'installation et d'exécution
 
@@ -116,3 +120,15 @@ pour vous assurer que votre fichier est exécutable:
 ```bash
 chmod +x aquaria_randomizer
 ```
+
+## Suivi automatique
+
+Aquaria permet un suivi complètement automatique des cartes du jeu dans le tracker.
+
+1. Téléchargez [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest) et [PopTracker](https://github.com/black-sliver/PopTracker/releases/latest).
+2. Mettre le paquet du tracker dans le sous-répertoire /packs/ du répertoire d'installation de PopTracker.
+3. Démarrez PopTracker, and chargez le paquet d'Aquaria.
+4. Pour activer le suivi automatique, appuyez sur le symbole "AP" dans le haut de la fenêtre.
+5. Entrez l'adresse du serveur Archipelago (le serveur que votre client s'est connecté), votre nom de connexion et le mot de passe (si un mot de passe est nécessaire).
+
+Le logiciel vous indiquera si une mise à jour du paquet est disponible.
