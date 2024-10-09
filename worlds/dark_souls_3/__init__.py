@@ -295,7 +295,7 @@ class DarkSouls3World(World):
             new_region.locations.append(new_location)
 
         self.multiworld.regions.append(new_region)
-        self.created_regions.add(new_region)
+        self.created_regions.add(region_name)
         return new_region
 
     def create_items(self) -> None:
