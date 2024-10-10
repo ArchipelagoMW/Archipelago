@@ -1,79 +1,97 @@
-from typing import Dict, NamedTuple, Set
+from typing import NamedTuple, Dict, Set, Optional
 
-from BaseClasses import ItemClassification, Item
+from BaseClasses import Item
+from BaseClasses import ItemClassification as IC
+
+
+class LMItemData(NamedTuple):
+    type: str
+    code: Optional[int]
+    classification: IC
+    quantity: int = 1
+    item_id: Optional[int] = None  # potentially use when we figure out how to receive items in game
 
 
 class LMItem(Item):
-    game = "Luigi's Mansion"
+    game: str = "Luigi's Mansion"
+
+    def __init__(self, name: str, player: int, data: LMItemData, force_nonprogress: bool):
+        adjusted_classification = IC.filler if force_nonprogress else data.classification
+        super(LMItem, self).__init__(name, adjusted_classification, LMItem.get_apid(data.code), player)
+
+        self.type = data.type
+        self.item_id = data.item_id
+
+    @staticmethod
+    def get_apid(code: int):
+        base_id: int = 8500
+        return base_id + code if code is not None else None
 
 
-class ItemData(NamedTuple):
-    group: str
-    code: int
-    classification: ItemClassification
-    count: int = 1
-
-
-item_table: Dict[str, ItemData] = {
-    "Heart Key": ItemData('Suite Key', 8500, ItemClassification.progression),
-    "Club Key": ItemData('Suite Key', 8501, ItemClassification.progression),
-    "Diamond Key": ItemData('Suite Key', 8502, ItemClassification.progression),
-    "Spade Key": ItemData('Suite Key', 8503, ItemClassification.progression),
-    # 'Parlor Key':          ItemData('Door Key',   8504,), Left here in case I can play with starting location
-    "Anteroom Key": ItemData('Door Key', 8505, ItemClassification.progression),
-    # 'Wardrobe Key':        ItemData('Door Key',   8506), does not actually exist
-    "Front Hallway Key": ItemData('Door Key', 8507, ItemClassification.progression),
-    "Master Bedroom Key": ItemData('Door Key', 8508, ItemClassification.progression),
-    "Nursery Key": ItemData('Door Key', 8509, ItemClassification.progression),
-    "Twins Bedroom Key": ItemData('Door Key', 8510, ItemClassification.progression),
-    "Ballroom Key": ItemData('Door Key', 8511, ItemClassification.progression),
-    "Storage Room Key": ItemData('Door Key', 8512, ItemClassification.progression),
-    "Fortune Teller Key": ItemData('Door Key', 8513, ItemClassification.progression),
-    "Laundry Key": ItemData('Door Key', 8514, ItemClassification.progression),
-    "2F Stairwell Key": ItemData('Door Key', 8515, ItemClassification.progression),
-    "Conservatory Key": ItemData('Door Key', 8516, ItemClassification.progression),
-    "Dining Room Key": ItemData('Door Key', 8517, ItemClassification.progression),
-    "Rec Room Key": ItemData('Door Key', 8518, ItemClassification.progression),
-    "Billiards Key": ItemData('Door Key', 8519, ItemClassification.progression),
-    "Safari Key": ItemData('Door Key', 8520, ItemClassification.progression),
-    "Balcony Key": ItemData('Door Key', 8521, ItemClassification.progression),
-    "Breaker Key": ItemData('Door Key', 8522, ItemClassification.progression),
-    "Cellar Key": ItemData('Door Key', 8523, ItemClassification.progression),
-    "Clockwork Key": ItemData('Door Key', 8524, ItemClassification.progression),
-    "Armory Key": ItemData('Door Key', 8525, ItemClassification.progression),
-    "Sitting Room Key": ItemData('Door Key', 8526, ItemClassification.progression),
-    "Pipe Room Key": ItemData('Door Key', 8527, ItemClassification.progression),
-    "Cold Storage Key": ItemData('Door Key', 8528, ItemClassification.progression),
-    "Art Studio Key": ItemData('Door Key', 8529, ItemClassification.progression),
-    "Fire Element Medal": ItemData('Medal', 8530, ItemClassification.progression),
-    "Water Element Medal": ItemData('Medal', 8531, ItemClassification.progression),
-    "Ice Element Medal": ItemData('Medal', 8532, ItemClassification.progression),
-    "Mario's Glove": ItemData('Mario Item', 8533, ItemClassification.progression),
-    "Mario's Hat": ItemData('Mario Item', 8534, ItemClassification.progression),
-    "Mario's Letter": ItemData('Mario Item', 8535, ItemClassification.progression),
-    "Mario's Star": ItemData('Mario Item', 8536, ItemClassification.progression),
-    "Mario's Shoe": ItemData('Mario Item', 8537, ItemClassification.progression),
-    "Boo": ItemData('Boo Item', 8538, ItemClassification.progression, count=35),
-    "Boo Radar": ItemData('Upgrade', 8539, ItemClassification.progression),
+item_table: dict[str, LMItemData] = {
+    "Heart Key":           LMItemData('Suite Key',  0, IC.progression),
+    "Club Key":            LMItemData('Suite Key',  1, IC.progression),
+    "Diamond Key":         LMItemData('Suite Key',  2, IC.progression),
+    "Spade Key":           LMItemData('Suite Key',  3, IC.progression),
+    # 'Parlor Key':          LMItemData('Door Key',   04,), Left here in case I can play with starting location
+    "Anteroom Key":        LMItemData('Door Key',   5, IC.progression),
+    # 'Wardrobe Key':        LMItemData('Door Key',   06), does not actually exist
+    "Front Hallway Key":   LMItemData('Door Key',   7, IC.progression),
+    "Master Bedroom Key":  LMItemData('Door Key',   8, IC.progression),
+    "Nursery Key":         LMItemData('Door Key',   9, IC.progression),
+    "Twins Bedroom Key":   LMItemData('Door Key',   10, IC.progression),
+    "Ballroom Key":        LMItemData('Door Key',   11, IC.progression),
+    "Storage Room Key":    LMItemData('Door Key',   12, IC.progression),
+    "Fortune Teller Key":  LMItemData('Door Key',   13, IC.progression),
+    "Laundry Key":         LMItemData('Door Key',   14, IC.progression),
+    "2F Stairwell Key":    LMItemData('Door Key',   15, IC.progression),
+    "Conservatory Key":    LMItemData('Door Key',   16, IC.progression),
+    "Dining Room Key":     LMItemData('Door Key',   17, IC.progression),
+    "Rec Room Key":        LMItemData('Door Key',   18, IC.progression),
+    "Billiards Key":       LMItemData('Door Key',   19, IC.progression),
+    "Safari Key":          LMItemData('Door Key',   20, IC.progression),
+    "Balcony Key":         LMItemData('Door Key',   21, IC.progression),
+    "Breaker Key":         LMItemData('Door Key',   22, IC.progression),
+    "Cellar Key":          LMItemData('Door Key',   23, IC.progression),
+    "Clockwork Key":       LMItemData('Door Key',   24, IC.progression),
+    "Armory Key":          LMItemData('Door Key',   25, IC.progression),
+    "Sitting Room Key":    LMItemData('Door Key',   26, IC.progression),
+    "Pipe Room Key":       LMItemData('Door Key',   27, IC.progression),
+    "Cold Storage Key":    LMItemData('Door Key',   28, IC.progression),
+    "Art Studio Key":      LMItemData('Door Key',   29, IC.progression),
+    "Fire Element Medal":  LMItemData('Medal',      30, IC.progression),
+    "Water Element Medal": LMItemData('Medal',      31, IC.progression),
+    "Ice Element Medal":   LMItemData('Medal',      32, IC.progression),
+    "Mario's Glove":       LMItemData('Mario Item', 33, IC.progression),
+    "Mario's Hat":         LMItemData('Mario Item', 34, IC.progression),
+    "Mario's Letter":      LMItemData('Mario Item', 35, IC.progression),
+    "Mario's Star":        LMItemData('Mario Item', 36, IC.progression),
+    "Mario's Shoe":        LMItemData('Mario Item', 37, IC.progression),
+    "Boo":                 LMItemData('Boo Item',   38, IC.progression, 35),
+    "Boo Radar":           LMItemData('Upgrade',    39, IC.progression),
     # does the Boo release cutscene trigger the butler, or is it acquiring the boo radar?
-    "Poltergust 4000": ItemData('Upgrade', 8540, ItemClassification.useful),
-    "Treasure Bundle": ItemData('Filler', 8541, ItemClassification.filler),
-    "Poison Mushroom": ItemData('Trap', 8542, ItemClassification.trap),
-    "Ghost": ItemData('Trap', 8543, ItemClassification.trap),
-    "Nothing": ItemData('Filler', 8544, ItemClassification.filler),
-    "Small Heart": ItemData('Filler', 8546, ItemClassification.filler),
-    "Medium Heart": ItemData('Filler', 8547, ItemClassification.filler),
-    "Large Heart": ItemData('Filler', 8548, ItemClassification.filler)
+    "Poltergust 4000":     LMItemData('Upgrade',    40, IC.useful),
+    "Treasure Bundle":     LMItemData('Filler',     41, IC.filler),
+    "Poison Mushroom":     LMItemData('Trap',       42, IC.trap),
+    "Ghost":               LMItemData('Trap',       43, IC.trap),
+    "Nothing":             LMItemData('Filler',     44, IC.filler),
+    "Small Heart":         LMItemData('Filler',     46, IC.filler),
+    "Medium Heart":        LMItemData('Filler',     47, IC.filler),
+    "Large Heart":         LMItemData('Filler',     48, IC.filler)
 }
 
-filler_items: Dict[str, ItemData] = {
-    "Treasure Bundle": ItemData('Filler', 8549, ItemClassification.filler),
-    "Poison Mushroom": ItemData('Trap', 8550, ItemClassification.trap),
-    "Ghost": ItemData('Trap', 8551, ItemClassification.trap),
-    "Nothing": ItemData('Filler', 8552, ItemClassification.filler),
-    "Small Heart": ItemData('Filler', 8553, ItemClassification.filler),
-    "Medium Heart": ItemData('Filler', 8554, ItemClassification.filler),
-    "Large Heart": ItemData('Filler', 8555, ItemClassification.filler)
+filler_items: Dict[str, LMItemData] = {
+    "Treasure Bundle": LMItemData('Filler', 49, IC.filler),
+    "Poison Mushroom": LMItemData('Trap', 50, IC.trap),
+    "Ghost": LMItemData('Trap', 51, IC.trap),
+    "Nothing": LMItemData('Filler', 52, IC.filler),
+    "Small Heart": LMItemData('Filler', 53, IC.filler),
+    "Medium Heart": LMItemData('Filler', 54, IC.filler),
+    "Large Heart": LMItemData('Filler', 55, IC.filler)
+}
+
+LOOKUP_ID_TO_NAME: dict[int, str] = {
+    LMItem.get_apid(data.code): item for item, data in item_table.items() if data.code is not None
 }
 
 
@@ -81,6 +99,6 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
 
     for name, data in item_table.items():
-        categories.setdefault(data.group, set()).add(name)
+        categories.setdefault(data.type, set()).add(name)
 
     return categories
