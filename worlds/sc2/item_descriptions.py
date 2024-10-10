@@ -953,7 +953,7 @@ item_descriptions = {
     item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 38% faster.",
     item_names.VANGUARD_FUSION_MORTARS: "Vanguard War Council upgrade. Vanguards deal +7 damage to armored targets per attack.",
     item_names.ANNIHILATOR_AERIAL_TRACKING: "Annihilator War Council upgrade. The Annihilator's Shadow Cannon ability can now target air units.",
-    item_names.STALWART_ARC_INDUCERS: "Stalwart War Council upgrade. Stalwarts now damage up to 3 additional units when attacking.",
+    item_names.STALWART_ARC_INDUCERS: "Stalwart War Council upgrade. Stalwarts damage up to 3 additional units when attacking.",
     item_names.COLOSSUS_FIRE_LANCE: "Colossus War Council upgrade. Colossi set the ground on fire with their attacks, dealing damage to enemies over time.",
     item_names.WRATHWALKER_AERIAL_TRACKING: "Wrathwalker War Council upgrade. Wrathwalkers can now target air units.",
     item_names.REAVER_KHALAI_REPLICATORS: "Reaver War Council upgrade. Reaver Scarabs no longer cost minerals.",
