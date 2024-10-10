@@ -166,6 +166,7 @@ item_descriptions = {
     item_names.AEGIS_GUARD: "Royal Guard heavy assault infantry.",
     item_names.EMPERORS_SHADOW: "Royal Guard specialist. Can use Pyrokinetic Immolation and EMP Blast abilities. Can call down Tactical missiles.",
     item_names.SON_OF_KORHAL: "Royal Guard general-purpose indantry.",
+    item_names.BULWARK_COMPANY: "Royal Guard heavy-fire support unit.",
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "vehicles"),

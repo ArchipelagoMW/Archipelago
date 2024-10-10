@@ -196,6 +196,7 @@ item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
     item_names.HELLION, item_names.VULTURE, item_names.GOLIATH, item_names.DIAMONDBACK,
     item_names.SIEGE_TANK, item_names.THOR, item_names.PREDATOR, item_names.WIDOW_MINE,
     item_names.CYCLONE, item_names.WARHOUND, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
+    item_names.BULWARK_COMPANY,
 ]
 item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.MEDIVAC, item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,

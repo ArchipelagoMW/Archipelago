@@ -44,6 +44,7 @@ BLACKHAMMER          = "Blackhammer"
 AEGIS_GUARD          = "Aegis Guard"
 EMPERORS_SHADOW      = "Emperor's Shadow"
 SON_OF_KORHAL        = "Son Of Korhal"
+BULWARK_COMPANY      = "Bulwark Company"
 
 # Terran Buildings
 BUNKER                              = "Bunker"

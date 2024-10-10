@@ -140,7 +140,7 @@ class SC2Logic:
                 item_names.MISSILE_TURRET, item_names.THOR, item_names.WAR_PIGS, item_names.SPARTAN_COMPANY,
                 item_names.HELS_ANGELS, item_names.BATTLECRUISER, item_names.MARINE, item_names.WRAITH,
                 item_names.VALKYRIE, item_names.CYCLONE, item_names.WINGED_NIGHTMARES, item_names.BRYNHILDS,
-                item_names.SKY_FURY, item_names.DOMINION_TROOPER, item_names.SON_OF_KORHAL,
+                item_names.SKY_FURY, item_names.DOMINION_TROOPER, item_names.SON_OF_KORHAL, item_names.BULWARK_COMPANY
             ), self.player)
             or self.terran_competent_anti_air(state)
             or self.advanced_tactics and (
