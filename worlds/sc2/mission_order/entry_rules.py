@@ -201,13 +201,15 @@ class CountMissionsRuleData(RuleData):
         accessible_rules: Set[int], seen_rules: Set[int]
     ) -> bool:
         # Count rules are accessible if enough of their missions are beaten and accessible
-        return self.amount <= sum(
-            all(
-                rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
-                for rule in mission_id_to_entry_rules[mission_id]
-            )
-            for mission_id in beaten_missions.intersection(self.mission_ids)
-        )
+        # return self.amount <= sum(
+        #     all(
+        #         rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
+        #         for rule in mission_id_to_entry_rules[mission_id]
+        #     )
+        #     for mission_id in beaten_missions.intersection(self.mission_ids)
+        # )
+        # Temp hotfix as the missions that have this rule themselves aren't counted in the client against this rule
+        return self.amount <= len(beaten_missions.intersection(self.mission_ids))
 
 class SubRuleEntryRule(EntryRule):
     rule_id: int
