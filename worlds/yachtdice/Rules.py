@@ -99,7 +99,7 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 
     if tup in yachtdice_cache[player]:
         return yachtdice_cache[player][tup]
-    
+
     # sort categories because for the step multiplier, you will want low-scoring categories first
     # to avoid errors with order changing when obtaining rolls, we order assuming 4 rolls
     categories.sort(key=lambda category: category.mean_score(num_dice, 4))
