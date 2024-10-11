@@ -70,7 +70,7 @@ class RuleData(ABC):
     def is_accessible(
         self, beaten_missions: Set[int], received_items: Dict[int, int],
         mission_id_to_entry_rules: Dict[int, MissionEntryRules],
-        accessible_rules: Set[int], seen_rules: Set[int]
+        accessible_rules: Set[int], seen_rules: List[int]
     ) -> bool:
         return False
 
@@ -121,7 +121,7 @@ class BeatMissionsRuleData(RuleData):
     def is_accessible(
         self, beaten_missions: Set[int], received_items: Dict[int, int],
         mission_id_to_entry_rules: Dict[int, MissionEntryRules],
-        accessible_rules: Set[int], seen_rules: Set[int]
+        accessible_rules: Set[int], seen_rules: List[int]
     ) -> bool:
         # Beat rules are accessible if all their missions are beaten and accessible
         if not beaten_missions.issuperset(self.mission_ids):
@@ -182,7 +182,9 @@ class CountMissionsRuleData(RuleData):
             req = self.visual_reqs[0]
             req_str = missions[req].mission_name if type(req) == int else req
             if self.amount == 1:
-                return f"Beat {req_str}"
+                if type(req) == int:
+                    return f"Beat {req_str}"
+                return f"Beat any mission from {req_str}"
             return f"Beat {amount} missions from {req_str}"
         if self.amount == 1:
             tooltip = f"Beat any mission from:\n{indent}- "
@@ -198,18 +200,16 @@ class CountMissionsRuleData(RuleData):
     def is_accessible(
         self, beaten_missions: Set[int], received_items: Dict[int, int],
         mission_id_to_entry_rules: Dict[int, MissionEntryRules],
-        accessible_rules: Set[int], seen_rules: Set[int]
+        accessible_rules: Set[int], seen_rules: List[int]
     ) -> bool:
         # Count rules are accessible if enough of their missions are beaten and accessible
-        # return self.amount <= sum(
-        #     all(
-        #         rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
-        #         for rule in mission_id_to_entry_rules[mission_id]
-        #     )
-        #     for mission_id in beaten_missions.intersection(self.mission_ids)
-        # )
-        # Temp hotfix as the missions that have this rule themselves aren't counted in the client against this rule
-        return self.amount <= len(beaten_missions.intersection(self.mission_ids))
+        return self.amount <= sum(
+            all(
+                rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
+                for rule in mission_id_to_entry_rules[mission_id]
+            )
+            for mission_id in beaten_missions.intersection(self.mission_ids)
+        )
 
 class SubRuleEntryRule(EntryRule):
     rule_id: int
@@ -281,11 +281,16 @@ class SubRuleRuleData(RuleData):
                     **{field: value for field, value in rule_data.items()}
                 )
             sub_rules.append(rule)
-        return SubRuleRuleData(
+        rule = SubRuleRuleData(
             rule_id,
             sub_rules,
             amount
         )
+        # Add an accessibility buffer for top level rules
+        # This is an optimization to make recalculations of large mission orders feel smoother
+        if rule.rule_id >= 0:
+            rule.buffer_accessible = False
+        return rule
     
     @staticmethod
     def empty() -> SubRuleRuleData:
@@ -311,26 +316,30 @@ class SubRuleRuleData(RuleData):
     def is_accessible(
         self, beaten_missions: Set[int], received_items: Dict[int, int],
         mission_id_to_entry_rules: Dict[int, MissionEntryRules],
-        accessible_rules: Set[int], seen_rules: Set[int]
+        accessible_rules: Set[int], seen_rules: List[int]
     ) -> bool:
         # Early exit check for top-level entry rules
         if self.rule_id >= 0:
-            if self.rule_id in accessible_rules:
+            if self.buffer_accessible or self.rule_id in accessible_rules:
                 return True
             # Never consider rules discovered via recursion to be accessible
             # (unless they succeeded, in which case they will be in accessible_rules)
             if self.rule_id in seen_rules:
                 return False
-            seen_rules.add(self.rule_id)
+            seen_rules.append(self.rule_id)
         # Sub-rule rules are accessible if enough of their child rules are accessible
-        if self.amount <= sum(
+        success = self.amount <= sum(
             rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
             for rule in self.sub_rules
-        ):
-            if self.rule_id >= 0:
+        )
+        if self.rule_id >= 0:
+            if success:
                 accessible_rules.add(self.rule_id)
-            return True
-        return False
+                self.buffer_accessible = True
+            # Rules that failed in the middle of calculating another rule
+            # should be allowed to try again at a later point
+            seen_rules.remove(self.rule_id)
+        return success
 
 class ItemEntryRule(EntryRule):
     items_to_check: Dict[str, int]
@@ -377,7 +386,7 @@ class ItemRuleData(RuleData):
     def is_accessible(
         self, beaten_missions: Set[int], received_items: Dict[int, int],
         mission_id_to_entry_rules: Dict[int, MissionEntryRules],
-        accessible_rules: Set[int], seen_rules: Set[int]
+        accessible_rules: Set[int], seen_rules: List[int]
     ) -> bool:
         return all(
             item in received_items and received_items[item] >= amount
