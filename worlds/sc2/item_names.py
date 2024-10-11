@@ -824,7 +824,7 @@ ENHANCED_TARGETING          = "Enhanced Targeting (Protoss)"
 OPTIMIZED_ORDNANCE          = "Optimized Ordnance (Protoss)"
 KHALAI_INGENUITY            = "Khalai Ingenuity (Protoss)"
 AMPLIFIED_ASSIMILATORS      = "Amplified Assimilators (Protoss)"
-PROGRESSIVE_WARP_RELOCATE   = "Warp Relocate (Protoss)"
+PROGRESSIVE_WARP_RELOCATE   = "Progressive Warp Relocate (Protoss)"
 
 # Filler items
 STARTING_MINERALS = "Additional Starting Minerals"
