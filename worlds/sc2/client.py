@@ -1426,16 +1426,16 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
     accessible_rules: typing.Set[int] = set()
     for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
         available_layouts[campaign_idx] = []
-        if campaign.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
+        if campaign.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, []):
             available_campaigns.append(campaign_idx)
             for layout_idx, layout in enumerate(campaign.layouts):
-                if layout.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
+                if layout.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, []):
                     available_layouts[campaign_idx].append(layout_idx)
                     for column in layout.missions:
                         for mission in column:
                             if mission.mission_id == -1:
                                 continue
-                            if mission.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
+                            if mission.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, []):
                                 available_missions.append(mission.mission_id)
 
     return available_missions, available_layouts, available_campaigns
