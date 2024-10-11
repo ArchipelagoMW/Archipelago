@@ -15,11 +15,13 @@
 ### Bug Fixes:
 - Added missing `Dry Lagoon - 12 Animals` location
 - Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
+- Prevent the Chao Garden from resetting your life count
 - Fix Chao World Entrance Shuffle causing inaccessible Neutral Garden
 - Fix pressing the 'B' button to take you to the proper location in Chao World Entrance Shuffle
 - Prevent Chao Karate progress icon overflow
 - Prevent changing Chao Timescale while paused or while a Minigame is active
 - Logic Fixes:
+	- `Crazy Gadget - Hidden 1` (Standard Logic) now requires `Sonic - Bounce Bracelet` instead of `Sonic - Light Shoes`
 	- `Lost Colony - Hidden 1` (Standard Logic) now requires `Eggman - Jet Engine`
 	- `Mad Space - Gold Beetle` (Standard Logic) now only requires `Rouge - Iron Boots`
 	- `Cosmic Wall - Gold Beetle` (Standard and Hard Logic) now only requires `Eggman - Jet Engine`
