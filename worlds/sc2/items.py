@@ -243,6 +243,9 @@ item_table = {
     item_names.BULWARK_COMPANY:
         ItemData(57 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 6, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
+    item_names.FIELD_RESPONSE_THETA:
+        ItemData(58 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 7, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),

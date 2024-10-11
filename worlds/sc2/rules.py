@@ -339,7 +339,7 @@ class SC2Logic:
         :return:
         """
         return (
-            state.has_any({item_names.MEDIC, item_names.MEDIVAC}, self.player)
+            state.has_any({item_names.MEDIC, item_names.MEDIVAC, item_names.FIELD_RESPONSE_THETA}, self.player)
             or (self.advanced_tactics
                 and state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
             )

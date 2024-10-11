@@ -45,6 +45,7 @@ AEGIS_GUARD          = "Aegis Guard"
 EMPERORS_SHADOW      = "Emperor's Shadow"
 SON_OF_KORHAL        = "Son Of Korhal"
 BULWARK_COMPANY      = "Bulwark Company"
+FIELD_RESPONSE_THETA = "Field Response Theta"
 
 # Terran Buildings
 BUNKER                              = "Bunker"
