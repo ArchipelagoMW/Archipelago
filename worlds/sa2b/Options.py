@@ -207,6 +207,13 @@ class LiteratureTrapWeight(BaseTrapWeight):
     display_name = "Literature Trap Weight"
 
 
+class ControllerDriftTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which causes your control sticks to drift
+    """
+    display_name = "Controller Drift Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -1126,6 +1133,7 @@ sa2b_option_groups = [
         CutsceneTrapWeight,
         ReverseTrapWeight,
         LiteratureTrapWeight,
+        ControllerDriftTrapWeight,
     ]),
     OptionGroup("Minigames", [
         PongTrapWeight,
@@ -1258,6 +1266,7 @@ class SA2BOptions(PerGameCommonOptions):
     cutscene_trap_weight: CutsceneTrapWeight
     reverse_trap_weight: ReverseTrapWeight
     literature_trap_weight: LiteratureTrapWeight
+    controller_drift_trap_weight: ControllerDriftTrapWeight
     pong_trap_weight: PongTrapWeight
     platformer_trap_weight: PlatformerTrapWeight
     fishing_trap_weight: FishingTrapWeight

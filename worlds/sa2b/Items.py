@@ -72,18 +72,19 @@ junk_table = {
 }
 
 trap_table = {
-    ItemName.omochao_trap:    ItemData(0xFF0030, False, True),
-    ItemName.timestop_trap:   ItemData(0xFF0031, False, True),
-    ItemName.confuse_trap:    ItemData(0xFF0032, False, True),
-    ItemName.tiny_trap:       ItemData(0xFF0033, False, True),
-    ItemName.gravity_trap:    ItemData(0xFF0034, False, True),
-    ItemName.exposition_trap: ItemData(0xFF0035, False, True),
-    #ItemName.darkness_trap:   ItemData(0xFF0036, False, True),
-    ItemName.ice_trap:        ItemData(0xFF0037, False, True),
-    ItemName.slow_trap:       ItemData(0xFF0038, False, True),
-    ItemName.cutscene_trap:   ItemData(0xFF0039, False, True),
-    ItemName.reverse_trap:    ItemData(0xFF003A, False, True),
-    ItemName.literature_trap: ItemData(0xFF003B, False, True),
+    ItemName.omochao_trap:          ItemData(0xFF0030, False, True),
+    ItemName.timestop_trap:         ItemData(0xFF0031, False, True),
+    ItemName.confuse_trap:          ItemData(0xFF0032, False, True),
+    ItemName.tiny_trap:             ItemData(0xFF0033, False, True),
+    ItemName.gravity_trap:          ItemData(0xFF0034, False, True),
+    ItemName.exposition_trap:       ItemData(0xFF0035, False, True),
+    #ItemName.darkness_trap:         ItemData(0xFF0036, False, True),
+    ItemName.ice_trap:              ItemData(0xFF0037, False, True),
+    ItemName.slow_trap:             ItemData(0xFF0038, False, True),
+    ItemName.cutscene_trap:         ItemData(0xFF0039, False, True),
+    ItemName.reverse_trap:          ItemData(0xFF003A, False, True),
+    ItemName.literature_trap:       ItemData(0xFF003B, False, True),
+    ItemName.controller_drift_trap: ItemData(0xFF003C, False, True),
 }
 
 minigame_trap_table = {
