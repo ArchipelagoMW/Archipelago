@@ -118,6 +118,7 @@ class TestItems(unittest.TestCase):
         non_progressive_single_entity_groups: List[items.ItemTypeEnum] = [
             # Terran
             items.TerranItemType.Unit,
+            items.TerranItemType.Unit_2,
             items.TerranItemType.Mercenary,
             items.TerranItemType.Armory_1,
             items.TerranItemType.Armory_2,
