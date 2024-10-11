@@ -1,5 +1,6 @@
 from typing import Dict
 
+from BaseClasses import CollectionState
 from . import MessengerTestBase
 from ..shop import SHOP_ITEMS, FIGURINES
 
@@ -89,3 +90,15 @@ class PlandoTest(MessengerTestBase):
 
                 self.assertTrue(loc in FIGURINES)
         self.assertEqual(len(figures), len(FIGURINES))
+
+        max_cost_state = CollectionState(self.multiworld)
+        self.assertFalse(self.world.get_location("Money Wrench").can_reach(max_cost_state))
+        prog_shards = []
+        for item in self.multiworld.itempool:
+            if "Time Shard " in item.name:
+                value = int(item.name.strip("Time Shard ()"))
+                if value >= 100:
+                    prog_shards.append(item)
+        for shard in prog_shards:
+            max_cost_state.collect(shard, True)
+        self.assertTrue(self.world.get_location("Money Wrench").can_reach(max_cost_state))
