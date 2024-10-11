@@ -322,7 +322,10 @@ class SC2Logic:
         """
         return (
             state.has(item_names.SCIENCE_VESSEL, self.player)
-            or state.has_all({item_names.MEDIC, item_names.MEDIC_ADAPTIVE_MEDPACKS}, self.player)
+            or (
+                    state.has_any({item_names.MEDIC, item_names.FIELD_RESPONSE_THETA}, self.player)
+                    and state.has(item_names.MEDIC_ADAPTIVE_MEDPACKS, self.player)
+            )
             or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3
             or (self.advanced_tactics
                 and (
