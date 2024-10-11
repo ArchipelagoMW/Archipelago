@@ -1153,7 +1153,10 @@ class CommandProcessor(metaclass=CommandMeta):
         if not raw:
             return
         try:
-            command = shlex.split(raw, comments=False)
+            try:
+                command = shlex.split(raw, comments=False)
+            except ValueError:  # most likely: "ValueError: No closing quotation"
+                command = raw.split()
             basecommand = command[0]
             if basecommand[0] == self.marker:
                 method = self.commands.get(basecommand[1:].lower(), None)
