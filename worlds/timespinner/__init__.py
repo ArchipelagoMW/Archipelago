@@ -261,9 +261,9 @@ class TimespinnerWorld(World):
             excluded_items.add('Mysterious Warp Beacon')
 
         if not self.options.prism_break:
-            excluded_items.add('LaserAccessA')
-            excluded_items.add('LaserAccessI')
-            excluded_items.add('LaserAccessM')
+            excluded_items.add('Laser Access A')
+            excluded_items.add('Laser Access I')
+            excluded_items.add('Laser Access M')
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in self.item_name_groups['UseItem']:
