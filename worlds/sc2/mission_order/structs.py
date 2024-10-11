@@ -405,10 +405,9 @@ class SC2MissionOrder(MissionOrderNode):
             # Remove set mission from locked missions
             locked_ids = [locked for locked in locked_ids if locked != mission_id]
             mission = lookup_id_to_mission[mission_id]
-            try:
-                self.mission_pools.pull_specific_mission(mission)
-            except KeyError:
+            if mission in self.mission_pools.get_used_missions():
                 raise ValueError(f"Mission slot at address \"{mission_slot.get_address_to_mission()}\" tried to plando an already plando'd mission.")
+            self.mission_pools.pull_specific_mission(mission)
             mission_slot.set_mission(world, mission, locations_per_region, location_cache)
             regions.append(mission_slot.region)
 

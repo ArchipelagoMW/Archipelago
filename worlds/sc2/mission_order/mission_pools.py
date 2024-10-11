@@ -105,11 +105,12 @@ class SC2MOGenMissionPools:
     def pull_specific_mission(self, mission: SC2Mission) -> None:
         """Marks the given mission as present in the mission order."""
         # Remove the mission from the master list and whichever difficulty pool it is in
-        self.master_list.remove(mission.id)
-        for diff in self.difficulty_pools:
-            if mission.id in self.difficulty_pools[diff]:
-                self.difficulty_pools[diff].remove(mission.id)
-                break
+        if mission.id in self.master_list:
+            self.master_list.remove(mission.id)
+            for diff in self.difficulty_pools:
+                if mission.id in self.difficulty_pools[diff]:
+                    self.difficulty_pools[diff].remove(mission.id)
+                    break
         self._add_mission_stats(mission)
     
     def _add_mission_stats(self, mission: SC2Mission) -> None:
