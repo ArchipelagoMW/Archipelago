@@ -363,9 +363,9 @@ class ValidInventory:
         if not {item_names.CARRIER, item_names.TRIREME} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Carrier/Trireme)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Trireme)")]
-        if not {item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.STALWART} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator/Stalwart)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator/Stalwart)")]
+        if not {item_names.IMMORTAL, item_names.ANNIHILATOR} & logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator)")]
+            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator)")]
         if not {item_names.DARK_TEMPLAR, item_names.AVENGER, item_names.BLOOD_HUNTER} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
             unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Templar/Avenger/Blood Hunter)")]

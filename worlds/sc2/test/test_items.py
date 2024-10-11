@@ -146,6 +146,7 @@ class TestItems(unittest.TestCase):
             items.ProtossItemType.Forge_1,
             items.ProtossItemType.Forge_2,
             items.ProtossItemType.Forge_3,
+            items.ProtossItemType.Forge_4,
             items.ProtossItemType.Solarite_Core,
             items.ProtossItemType.Spear_Of_Adun
         ]
