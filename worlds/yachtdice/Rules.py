@@ -99,6 +99,10 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
 
     if tup in yachtdice_cache[player]:
         return yachtdice_cache[player][tup]
+    
+    # sort categories because for the step multiplier, you will want low-scoring categories first
+    # to avoid errors with order changing when obtaining rolls, we order assuming 4 rolls
+    categories.sort(key=lambda category: category.mean_score(num_dice, 4))
 
     # function to add two discrete distribution.
     # defaultdict is a dict where you don't need to check if an id is present, you can just use += (lot faster)
@@ -162,8 +166,8 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         cat_mult = 2 ** (category.quantity - 1)
 
         # for higher difficulties, the simulation gets multiple tries for categories.
-        max_tries = max(0, len(categories) // (2 * diff_divide) - 1)
-        mults = [(1 + fixed_mult + step_mult * ii) * cat_mult for ii in range(max_tries + 1)]
+        max_tries = j // diff_divide
+        mults = [(1 + fixed_mult + step_mult * ii) * cat_mult for ii in range(max(0, j - max_tries), j + 1)]
         dist = max_dist(dist, mults)
 
         total_dist = add_distributions(total_dist, dist)
