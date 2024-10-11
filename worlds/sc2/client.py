@@ -1424,13 +1424,26 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
         received_items[network_item.item] += 1
 
     accessible_rules: typing.Set[int] = set()
+    # Determine accessibility from top to bottom to avoid a recursion problem from
+    # missions trying to access layouts & campaigns appearing later than themselves
+    # Campaigns
     for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
         available_layouts[campaign_idx] = []
         if campaign.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
             available_campaigns.append(campaign_idx)
+    
+    # Layouts
+    for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
+        if campaign_idx in available_campaigns:
             for layout_idx, layout in enumerate(campaign.layouts):
                 if layout.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, set()):
                     available_layouts[campaign_idx].append(layout_idx)
+    
+    # Missions
+    for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
+        if campaign_idx in available_campaigns:
+            for layout_idx, layout in enumerate(campaign.layouts):
+                if layout_idx in available_layouts[campaign_idx]:
                     for column in layout.missions:
                         for mission in column:
                             if mission.mission_id == -1:
