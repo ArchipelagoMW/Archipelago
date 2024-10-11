@@ -114,8 +114,6 @@ high_victory_checks_levels = [
                 ["Barge", "Landing Event", "Golem"], player)
         }
     ),
-]
-low_victory_checks_levels = [
     Wargroove2Level(
         name="Spire Fire",
         file_name="Spire_Fire.json",
@@ -270,18 +268,6 @@ low_victory_checks_levels = [
         has_ocean=False
     ),
     Wargroove2Level(
-        name="Wagon Freeway",
-        file_name="Wagon_Freeway.json",
-        location_rules={
-            "Wagon Freeway: Victory": lambda state, player: lambda state=state: state.has_all(
-                ["Wagon", "Spearman"], player),
-            "Wagon Freeway: All Mine Now": lambda state, player: lambda state=state: True,
-            "Wagon Freeway: Pigeon Carrier": lambda state, player: lambda state=state:
-            state.has("Air Trooper", player),
-        },
-        has_ocean=False
-    ),
-    Wargroove2Level(
         name="Kraken Strait",
         file_name="Kraken_Strait.json",
         location_rules={
@@ -420,6 +406,19 @@ low_victory_checks_levels = [
         }
     ),
     Wargroove2Level(
+        name="Bridge Brigade",
+        file_name="Bridge_Brigade.json",
+        location_rules={
+            "Bridge Brigade: Victory": lambda state, player: lambda state=state: state.has_all(
+                ["Warship", "Spearman"], player),
+            "Bridge Brigade: From the Depths": lambda state, player: lambda
+                state=state: state.has("Kraken", player),
+            "Bridge Brigade: Back to the Depths": lambda state, player: lambda state=state:
+            state.has_all(["Warship", "Spearman", "Kraken"], player),
+        },
+        has_ocean=False
+    ),
+    Wargroove2Level(
         name="Grand Theft Village",
         file_name="Grand_Theft_Village.json",
         location_rules={
@@ -432,15 +431,14 @@ low_victory_checks_levels = [
         has_ocean=False
     ),
     Wargroove2Level(
-        name="Bridge Brigade",
-        file_name="Bridge_Brigade.json",
+        name="Wagon Freeway",
+        file_name="Wagon_Freeway.json",
         location_rules={
-            "Bridge Brigade: Victory": lambda state, player: lambda state=state: state.has_all(
-                ["Warship", "Spearman"], player),
-            "Bridge Brigade: From the Depths": lambda state, player: lambda
-                state=state: state.has("Kraken", player),
-            "Bridge Brigade: Back to the Depths": lambda state, player: lambda state=state:
-            state.has_all(["Warship", "Spearman", "Kraken"], player),
+            "Wagon Freeway: Victory": lambda state, player: lambda state=state: state.has_all(
+                ["Wagon", "Spearman"], player),
+            "Wagon Freeway: All Mine Now": lambda state, player: lambda state=state: True,
+            "Wagon Freeway: Pigeon Carrier": lambda state, player: lambda state=state:
+            state.has("Air Trooper", player),
         },
         has_ocean=False
     ),
@@ -480,6 +478,54 @@ final_levels = [
         location_rules={"Dementia Castle: Victory":
                             lambda state, player: lambda state=state: state.has_all(
                                 ["Merfolk", "Mage", "Golem", "Harpy"], player)}
+    ),
+]
+
+low_victory_checks_levels = [
+
+    Wargroove2Level(
+        name="Swimming at the Docks",
+        file_name="Swimming_at_the_Docks.json",
+        location_rules={
+            "Swimming at the Docks: Victory": lambda state, player: lambda state=state: True,
+            "Swimming at the Docks: Dogs Counter Knights": lambda state, player: lambda
+                state=state: True,
+            "Swimming at the Docks: Kayaking": lambda state, player: lambda
+                state=state: state.has("River Boat", player),
+        }
+    ),
+    Wargroove2Level(
+        name="Ancient Discoveries",
+        file_name="Ancient_Discoveries.json",
+        location_rules={
+            "Ancient Discoveries: Victory": lambda state, player: lambda state=state: True,
+            "Ancient Discoveries: So many Choices": lambda state, player: lambda
+                state=state: True,
+            "Ancient Discoveries: Height Advantage": lambda state, player: lambda
+                state=state: state.has("Golem", player),
+        }
+    ),
+    Wargroove2Level(
+        name="Observation Isle",
+        file_name="Observation_Isle.json",
+        location_rules={
+            "Observation Isle: Victory": lambda state, player: lambda state=state: True,
+            "Observation Isle: Become the Watcher": lambda state, player: lambda
+                state=state: True,
+            "Observation Isle: Execute the Watcher": lambda state, player: lambda
+                state=state: state.has("Walls Event", player),
+        }
+    ),
+    Wargroove2Level(
+        name="Majestic Mountain",
+        file_name="Majestic_Mountain.json",
+        location_rules={
+            "Majestic Mountain: Victory": lambda state, player: lambda state=state: True,
+            "Majestic Mountain: Mountain Climbing": lambda state, player: lambda
+                state=state: True,
+            "Majestic Mountain: Legend of the Mountains": lambda state, player: lambda
+                state=state: state.has("Air Trooper", player),
+        }
     ),
 ]
 
