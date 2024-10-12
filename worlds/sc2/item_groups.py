@@ -203,6 +203,7 @@ item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.MEDIVAC, item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
     item_names.BATTLECRUISER, item_names.HERCULES, item_names.SCIENCE_VESSEL, item_names.RAVEN,
     item_names.LIBERATOR, item_names.VALKYRIE, item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
+    item_names.EMPERORS_GUARDIAN,
 ]
 item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
     item_name for item_name, item_data in items.item_table.items()
