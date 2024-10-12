@@ -168,6 +168,10 @@ item_descriptions = {
     item_names.SON_OF_KORHAL: "Royal Guard general-purpose indantry.",
     item_names.BULWARK_COMPANY: "Royal Guard heavy-fire support unit.",
     item_names.FIELD_RESPONSE_THETA: "Royal Guard support trooper. Heals nearby biological units.",
+    item_names.EMPERORS_GUARDIAN: inspect.cleandoc("""
+        Royal Guard artillery fighter. Loaded with missiles that deal area damage to enemy air targets. 
+        Can switch into Defender Mode to provide siege support.
+    """),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: GENERIC_UPGRADE_TEMPLATE.format("armor", TERRAN, "infantry"),
     item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: GENERIC_UPGRADE_TEMPLATE.format("damage", TERRAN, "vehicles"),
