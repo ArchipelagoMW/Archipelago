@@ -348,42 +348,15 @@ async def run_game(ctx: JakAndDaxterContext):
             ctx.on_log_error(logger, msg)
             return
 
-        # IMPORTANT: Before we check the existence of the next piece, we must ask "Are you a developer?"
-        # The OpenGOAL Compiler checks the existence of the "data" folder to determine if you're running from source
-        # or from a built package. As a developer, your repository folder itself IS the data folder and the Compiler
-        # knows this. You would have created your "iso_data" folder here as well, so we can skip the "iso_data" check.
-        # HOWEVER, for everyone who is NOT a developer, we must ensure that they copied the "iso_data" folder INTO
-        # the "data" folder per the setup instructions.
-        data_path = os.path.join(root_path, "data")
-        if os.path.exists(data_path):
-
-            # NOW double-check the existence of the iso_data folder under <root directory>/data. This is necessary
-            # for the compiler to compile the game correctly.
-            # TODO - If the GOALC compiler is updated to take the iso_data folder as a runtime argument,
-            #  we may be able to remove this step.
-            iso_data_path = os.path.join(root_path, "data", "iso_data")
-            if not os.path.exists(iso_data_path):
-                msg = (f"The iso_data folder could not be found in the ArchipelaGOAL data directory.\n"
-                       f"Please follow these steps:\n"
-                       f"   Run the OpenGOAL Launcher, click Jak and Daxter > Advanced > Open Game Data Folder.\n"
-                       f"   Copy the iso_data folder from this location.\n"
-                       f"   Click Jak and Daxter > Features > Mods > ArchipelaGOAL > Advanced > Open Game Data Folder.\n"
-                       f"   Paste the iso_data folder in this location.\n"
-                       f"   Click Advanced > Compile. When this is done, click Continue.\n"
-                       f"   Close all launchers, games, clients, and console windows, then restart Archipelago.\n"
-                       f"(See Setup Guide for more details.)")
-                ctx.on_log_error(logger, msg)
-                return
-
         # Now we can FINALLY attempt to start the programs.
         if not gk_running:
-            # Per-mod saves and settings are stored in a spot that is a little unusual to get to. We have to .. out of
-            # ArchipelaGOAL root folder, then traverse down to _settings/archipelagoal. Then we normalize this path
-            # and pass it in as an argument to gk. This folder will be created if it does not exist.
+            # Per-mod saves and settings are stored outside the ArchipelaGOAL root folder, so we
+            # have to traverse a relative path, normalize it, and pass it in as an argument to gk.
+            # This folder will be created if it does not exist.
             config_relative_path = "../_settings/archipelagoal"
             config_path = os.path.normpath(
                 os.path.join(
-                    os.path.normpath(root_path),
+                    root_path,
                     os.path.normpath(config_relative_path)))
 
             # The game freezes if text is inadvertently selected in the stdout/stderr data streams. Let's pipe those
@@ -400,10 +373,42 @@ async def run_game(ctx: JakAndDaxterContext):
                     creationflags=subprocess.CREATE_NO_WINDOW)
 
         if not goalc_running:
+            # For the OpenGOAL Compiler, the existence of the "data" subfolder indicates you are running it from
+            # a built package. This subfolder is treated as its proj_path.
+            proj_path = os.path.join(root_path, "data")
+            if os.path.exists(proj_path):
+
+                # Traversing out to get the "iso_data" path automates away an oft-forgotten manual step of mod updates.
+                # Every update required the user to copy the iso_data folder from the active jak1 directory to the mod
+                # directory. Passing in this argument allows users to skip that step of installs/updates.
+                iso_relative_path = "../../../../../active/jak1/data/iso_data"
+                iso_path = os.path.normpath(
+                    os.path.join(
+                        root_path,
+                        os.path.normpath(iso_relative_path)))
+
+                if os.path.exists(iso_path):
+                    goalc_args = [goalc_path, "--game", "jak1", "--proj-path", proj_path, "--iso-path", iso_path]
+                else:
+                    parent_path = os.path.normpath(os.path.join(iso_path, ".."))
+                    msg = (f"The iso_data folder could not be found in {parent_path}.\n"
+                           f"Please follow these steps:\n"
+                           f"   Run the OpenGOAL Launcher, click Jak and Daxter > Advanced > Open Game Data Folder.\n"
+                           f"   Go to the topmost folder of OpenGOAL, search for \"iso_data\", and copy that folder.\n"
+                           f"   Go to the location at the top of this error message, and paste \"iso_data\" there.\n"
+                           f"   Close all launchers, games, clients, and console windows, then restart Archipelago.\n"
+                           f"(See Setup Guide for more details.)")
+                    ctx.on_log_error(logger, msg)
+                    return
+
+            # The non-existence of the "data" subfolder indicates you are running it from source, as a developer.
+            # The compiler will traverse upward to find the project path on its own. It will also assume your
+            # "iso_data" folder is at the root of your repository. Therefore, we don't need those additional arguments.
+            else:
+                goalc_args = [goalc_path, "--game", "jak1"]
+
             # This needs to be a new console. The REPL console cannot share a window with any other process.
-            goalc_process = subprocess.Popen(
-                [goalc_path, "--game", "jak1"],
-                creationflags=subprocess.CREATE_NEW_CONSOLE)
+            goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
 
     except AttributeError as e:
         ctx.on_log_error(logger, f"Host.yaml does not contain {e.args[0]}, unable to locate game executables.")
