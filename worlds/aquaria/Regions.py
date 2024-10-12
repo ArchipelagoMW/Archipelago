@@ -1070,6 +1070,10 @@ class AquariaRegions:
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.THE_BODY_CENTER_AREA_BREAKING_LI_S_CAGE, self.player),
             lambda state: _has_tongue_cleared(state, self.player))
+        add_rule(self.multiworld.get_location(
+                    AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_BULB_IN_THE_SMALL_PATH_BEFORE_MITHALAS,
+                    self.player), lambda state: _has_bind_song(state, self.player)
+        )
 
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location(AquariaLocationNames.ENERGY_TEMPLE_BOSS_AREA_FALLEN_GOD_TOOTH,
