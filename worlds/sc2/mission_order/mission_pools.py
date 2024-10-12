@@ -149,7 +149,7 @@ class SC2MOGenMissionPools:
                 if len(final_pool) > 0:
                     break
                 if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
-                    raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
+                    raise IndexError()
                 difficulty_offset += 1
         
         else:
@@ -164,7 +164,7 @@ class SC2MOGenMissionPools:
             while len(final_pool) == 0:
                 higher_difficulty = desired_difficulty + difficulty_offset
                 if higher_difficulty > Difficulty.VERY_HARD:
-                    raise Exception(f"Slot in layout \"{slot.parent().get_visual_requirement()}\" ran out of possible missions to place.")
+                    raise IndexError()
                 final_pool = difficulty_pools[higher_difficulty]
                 difficulty_offset += 1
 

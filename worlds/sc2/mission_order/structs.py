@@ -405,6 +405,8 @@ class SC2MissionOrder(MissionOrderNode):
             # Remove set mission from locked missions
             locked_ids = [locked for locked in locked_ids if locked != mission_id]
             mission = lookup_id_to_mission[mission_id]
+            if mission in self.mission_pools.get_used_missions():
+                raise ValueError(f"Mission slot at address \"{mission_slot.get_address_to_mission()}\" tried to plando an already plando'd mission.")
             self.mission_pools.pull_specific_mission(mission)
             mission_slot.set_mission(world, mission, locations_per_region, location_cache)
             regions.append(mission_slot.region)
@@ -445,16 +447,30 @@ class SC2MissionOrder(MissionOrderNode):
 
         # Pick goal missions first with stricter difficulty matching, and starting with harder goals
         for goal_slot in sorted_goals:
-            mission = self.mission_pools.pull_random_mission(world, goal_slot, prefer_close_difficulty=True)
-            goal_slot.set_mission(world, mission, locations_per_region, location_cache)
-            regions.append(goal_slot.region)
-            all_slots.remove(goal_slot)
+            try:
+                mission = self.mission_pools.pull_random_mission(world, goal_slot, prefer_close_difficulty=True)
+                goal_slot.set_mission(world, mission, locations_per_region, location_cache)
+                regions.append(goal_slot.region)
+                all_slots.remove(goal_slot)
+            except IndexError:
+                raise IndexError(
+                    f"Slot at address \"{goal_slot.get_address_to_mission()}\" ran out of possible missions to place "
+                    f"with {len(all_slots)} empty slots remaining."
+                )
 
         # Pick random missions
+        remaining_count = len(all_slots)
         for mission_slot in all_slots:
-            mission = self.mission_pools.pull_random_mission(world, mission_slot)
-            mission_slot.set_mission(world, mission, locations_per_region, location_cache)
-            regions.append(mission_slot.region)
+            try:
+                mission = self.mission_pools.pull_random_mission(world, mission_slot)
+                mission_slot.set_mission(world, mission, locations_per_region, location_cache)
+                regions.append(mission_slot.region)
+                remaining_count -= 1
+            except IndexError:
+                raise IndexError(
+                    f"Slot at address \"{goal_slot.get_address_to_mission()}\" ran out of possible missions to place "
+                    f"with {remaining_count} empty slots remaining."
+                )
 
         world.multiworld.regions += regions
 
@@ -938,6 +954,14 @@ class SC2MOGenMission(MissionOrderNode):
     
     def get_key_name(self) -> str:
         return item_names._TEMPLATE_MISSION_KEY.format(self.mission.mission_name)
+    
+    def get_address_to_mission(self) -> str:
+        layout = self.parent()
+        index = layout.missions.index(self)
+        campaign = layout.parent()
+        if campaign.option_single_layout_campaign:
+            return f"{layout.option_name}/{index}"
+        return f"{campaign.option_name}/{layout.option_name}/{index}"
     
     def make_connections(self, world: World, used_names: Dict[str, int]):
         player = world.player
