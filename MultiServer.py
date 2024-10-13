@@ -268,7 +268,6 @@ class Context:
         self.all_location_and_group_names = {}
         self.item_names = collections.defaultdict(
             lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})'))
-        item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
         self.location_names = collections.defaultdict(
             lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})'))
         self.non_hintable_names = collections.defaultdict(frozenset)
