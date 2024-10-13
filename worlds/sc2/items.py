@@ -1598,6 +1598,8 @@ item_table = {
         ItemData(370 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 27, SC2Race.ZERG, parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
     item_names.INFESTED_SIEGE_TANK_SEISMIC_SONAR:
         ItemData(371 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 28, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS:
+        ItemData(372 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 29, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
