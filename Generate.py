@@ -481,20 +481,13 @@ def infix_to_postfix(infix: Sequence[AllTokens]) -> Sequence[PostfixTokens]:
     return postfix
 
 
-def eval_postfix(postfix: Sequence[PostfixTokens], root: dict, record: ChoiceRecord) -> float:
+def eval_postfix(postfix: Sequence[PostfixTokens], name_resolver: Callable[[str], float]) -> float:
     operand_stack: List[float] = []
     for token in postfix:
         if isinstance(token, NumberToken):
             operand_stack.append(token.val)
         elif isinstance(token, NameToken):
-            if token.val in root:
-                if token.val in record.check_values():
-                    operand_stack.append(record.check_values()[token.val])
-                else:
-                    operand_stack.append(get_choice(token.val, root, record=record))
-                    record.update_value(token.val, operand_stack[-1])
-            else:
-                raise KeyError(f"{token.val} in {postfix} has not been assigned a value in yaml")
+            operand_stack.append(name_resolver(token.val))
         else:
             assert isinstance(assert_type(token, BinOpToken), BinOpToken), f"{token=}"
             if len(operand_stack) < 2:
@@ -506,7 +499,6 @@ def eval_postfix(postfix: Sequence[PostfixTokens], root: dict, record: ChoiceRec
             operand_stack.append(_bops[token.val](a, b))
     if len(operand_stack) != 1:
         raise ValueError(f"invalid {postfix=}")
-    record.update_value(record.pop_name(), operand_stack[0])
     return operand_stack[0]
 
 
@@ -536,7 +528,21 @@ def get_choice(option, root, value=None, sub_group=None, record: ChoiceRecord = 
     if isinstance(temp_result, str) and option not in record.check_values():
         if temp_result.startswith("$(") and temp_result.endswith(")"):
             record.add_name(option)
-            temp_result = eval_postfix(infix_to_postfix(parse_tokens(temp_result[2:-1])), root, record)
+
+            def name_resolver(name: str) -> float:
+                if name in root:
+                    named_value = record.check_values().get(name)
+                    if named_value is None:
+                        named_value = get_choice(name, root, record=record)
+                        if not isinstance(named_value, (float, int)):
+                            raise ValueError(f"{name=} used in math is not a number: {named_value=}")
+                        record.update_value(name, named_value)
+                    return named_value
+                else:
+                    raise KeyError(f"{name} in {temp_result} has not been assigned a value in yaml")
+
+            temp_result = eval_postfix(infix_to_postfix(parse_tokens(temp_result[2:-1])), name_resolver)
+            record.update_value(record.pop_name(), temp_result)
         elif temp_result.startswith("random"):
             temp_result = record.get_random(option, root, temp_result)
     else:
