@@ -59,6 +59,7 @@ class ZergItemType(ItemTypeEnum):
     Mutation_3 = "Mutation", 11
     Mutation_4 = "Mutation", 12
     Progressive = "Progressive Upgrade", 13
+    Mutation_5 = "Mutation", 14
 
 
 class ProtossItemType(ItemTypeEnum):
@@ -1600,6 +1601,8 @@ item_table = {
         ItemData(371 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 28, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
     item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS:
         ItemData(372 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 29, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
+    item_names.INFESTED_SIEGE_TANK_BALANCED_ROOTS:
+        ItemData(373 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 0, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),

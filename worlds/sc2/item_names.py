@@ -513,6 +513,7 @@ INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS = "Progressive Automated Mitos
 INFESTED_SIEGE_TANK_ACIDIC_ENZYMES                = "Acidic Enzymes (Infested Siege Tank)"
 INFESTED_SIEGE_TANK_DEEP_TUNNEL                   = "Deep Tunnel (Infested Siege Tank)"
 INFESTED_SIEGE_TANK_SEISMIC_SONAR                 = "Seismic Sonar (Infested Siege Tank)"
+INFESTED_SIEGE_TANK_BALANCED_ROOTS                = "Balanced Roots (Infested Siege Tank)"
 INFESTED_DIAMONDBACK_SATURATED_CULTURES           = "Saturated Cultures (Infested Diamondback)"
 INFESTED_DIAMONDBACK_CAUSTIC_MUCUS                = "Caustic Mucus (Infested Diamondback)"
 INFESTED_BANSHEE_BRACED_EXOSKELETON               = "Braced Exoskeleton (Infested Banshee)"
