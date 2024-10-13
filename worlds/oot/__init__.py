@@ -186,7 +186,7 @@ class OOTWorld(World):
                  "Boss Key (Shadow Temple)", "Boss Key (Spirit Temple)", "Boss Key (Water Temple)"},
 
         # aliases
-        "Longshot": {"Progressive Hookshot"},  # fuzzy hinting though Longshot was Slingshot
+        "Longshot": {"Progressive Hookshot"},  # fuzzy hinting thought Longshot was Slingshot
         "Hookshot": {"Progressive Hookshot"},  # for consistency, mostly
     }
 
