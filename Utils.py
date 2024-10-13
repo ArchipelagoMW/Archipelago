@@ -423,7 +423,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
-        if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
+        if module == "worlds.generic" and name == "PlandoItem":
             if not self.generic_properties_module:
                 self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
@@ -435,6 +435,8 @@ class RestrictedUnpickler(pickle.Unpickler):
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
             if issubclass(obj, self.options_module.Option):
+                return obj
+            elif issubclass(obj, self.options_module.PlandoConnection):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
