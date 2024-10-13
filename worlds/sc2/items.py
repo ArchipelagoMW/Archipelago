@@ -1049,6 +1049,9 @@ item_table = {
                  parent_item=item_names.DOMINION_TROOPER, classification=ItemClassification.filler),
     item_names.SCV_CONSTRUCTION_JUMP_JETS:
         ItemData(762 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 16, SC2Race.TERRAN),
+    item_names.WIDOW_MINE_DEMOLITION_ARMAMENTS:
+        ItemData(763 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 17, SC2Race.TERRAN,
+                 parent_item=item_names.WIDOW_MINE, origin={"ext"}),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:

@@ -319,6 +319,7 @@ WARHOUND_RESOURCE_EFFICIENCY                       = "Resource Efficiency (Warho
 WARHOUND_REINFORCED_PLATING                        = "Reinforced Plating (Warhound)"
 WIDOW_MINE_BLACK_MARKET_LAUNCHERS                  = "Black Market Launchers (Widow Mine)"
 WIDOW_MINE_CONCEALMENT                             = "Concealment (Widow Mine)"
+WIDOW_MINE_DEMOLITION_ARMAMENTS                    = "Demolition Armaments (Widow Mine)"
 WIDOW_MINE_DRILLING_CLAWS                          = "Drilling Claws (Widow Mine)"
 WIDOW_MINE_EXECUTIONER_MISSILES                    = "Executioner Missiles (Widow Mine)"
 WIDOW_MINE_RESOURCE_EFFICIENCY                     = "Resource Efficiency (Widow Mine)"
