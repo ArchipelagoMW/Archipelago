@@ -501,6 +501,8 @@ def eval_postfix(postfix: Sequence[PostfixTokens], root: dict, record: ChoiceRec
                 raise ValueError(f"invalid {postfix=}")
             b = operand_stack.pop()
             a = operand_stack.pop()
+            if not -1000000 < a < 1000000 or not -1000000 < b < 1000000:
+                raise ValueError(f"Performing math on value outside of valid range: [-1_000_000, 1_000_000]")
             operand_stack.append(_bops[token.val](a, b))
     if len(operand_stack) != 1:
         raise ValueError(f"invalid {postfix=}")
