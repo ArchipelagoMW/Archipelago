@@ -340,7 +340,7 @@ _bops: Mapping[BinOp, Callable[[Union[float, int], Union[float,int]], Union[floa
     "+": lambda a, b: a + b,
     "-": lambda a, b: a - b,
     "*": lambda a, b: a * b,
-    "/": lambda a, b: a / b if isinstance(a, float) or isinstance(b, float) else a // b,
+    "/": lambda a, b: a / b,
 }
 """ binary operators """
 
@@ -494,8 +494,6 @@ def eval_postfix(postfix: Sequence[PostfixTokens], name_resolver: Callable[[str]
                 raise ValueError(f"invalid {postfix=}")
             b = operand_stack.pop()
             a = operand_stack.pop()
-            if not -1000000 < a < 1000000 or not -1000000 < b < 1000000:
-                raise ValueError(f"Performing math on value outside of valid range: [-1_000_000, 1_000_000]")
             operand_stack.append(_bops[token.val](a, b))
     if len(operand_stack) != 1:
         raise ValueError(f"invalid {postfix=}")
@@ -543,6 +541,10 @@ def get_choice(option, root, value=None, sub_group=None, record: ChoiceRecord = 
 
             temp_result = eval_postfix(infix_to_postfix(parse_tokens(temp_result[2:-1])), name_resolver)
             record.update_value(record.pop_name(), temp_result)
+            if record.type_hint is not None and option in record.type_hint:
+                if type(record.type_hint[option].default) is int:
+                    temp_result = int(temp_result)
+                    record.update_value(option, temp_result)
         elif temp_result.startswith("random"):
             temp_result = record.get_random(option, root, temp_result)
     else:
@@ -690,16 +692,16 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
     return weights
 
 
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions, type_hints = None, ):
     try:
         if option_key in game_weights:
-            if not option[option_key].supports_weighting:
-                player_option = option[option_key].from_any(game_weights[option_key])
+            if not option.supports_weighting:
+                player_option = option.from_any(game_weights[option_key])
             else:
-                player_option = option[option_key].from_any(get_choice(option_key, game_weights,
-                                                            record=ChoiceRecord([], {}, option)))
+                player_option = option.from_any(get_choice(option_key, game_weights,
+                                                record=ChoiceRecord([], {}, type_hints)))
         else:
-            player_option = option[option_key].from_any(option[option_key].default)  # call the from_any here to support default "random"
+            player_option = option.from_any(option.default)  # call the from_any here to support default "random"
         setattr(ret, option_key, player_option)
     except Exception as e:
         raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
@@ -767,7 +769,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
     for option_key, option in world_type.options_dataclass.type_hints.items():
-        handle_option(ret, game_weights, option_key, world_type.options_dataclass.type_hints, plando_options)
+        handle_option(ret, game_weights, option_key, option, plando_options, world_type.options_dataclass.type_hints)
         valid_keys.add(option_key)
     for option_key in game_weights:
         if option_key in {"triggers", *valid_keys}:

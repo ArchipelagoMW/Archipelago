@@ -159,9 +159,7 @@ Options taking a choice of a number can also use a variety of `random` options t
 
 By placing "$(...)" around a value you can perform mathematical operation on the value you wrote, and text will be
   resolved to the value of the option matching that text. random/random-range can NOT be placed directly inside the $(),
-  it must be placed on a referenced option. If an option is meant to be a whole number, do not use numbers with 
-  decimals in the value (for example, in Super Mario 64, `amount_of_stars: "$(mips1_cost * 10.0)"` if `mips1_cost: 9`,
-  9 * 10.0 = 90.0, amount_of_stars is supposed to be a whole number and will fail because of the `.`
+  it must be placed on a referenced option. 
 
   If you want to use a random value this way, you may either reference a default option that is set to random(-range-),
   or create your own option for random-range-, but only specific/weighted values or random-range will work with custom
