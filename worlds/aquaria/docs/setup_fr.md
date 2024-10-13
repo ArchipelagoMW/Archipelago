@@ -122,14 +122,14 @@ pour vous assurer que votre fichier est exécutable:
 chmod +x aquaria_randomizer
 ```
 
-## Suivi automatique
+# Tracking automatique
 
-Aquaria permet un suivi complètement automatique des cartes du jeu dans le tracker.
+Aquaria a un tracker complet qui supporte le tracking automatique.
 
 1. Téléchargez [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest) et [PopTracker](https://github.com/black-sliver/PopTracker/releases/latest).
-2. Mettre le fichier du tracker dans le sous-répertoire /packs/ du répertoire d'installation de PopTracker.
-3. Démarrez PopTracker, and chargez le paquet d'Aquaria.
-4. Pour activer le suivi automatique, appuyez sur le symbole "AP" dans le haut de la fenêtre.
-5. Entrez l'adresse du serveur Archipelago (le serveur que votre client s'est connecté), votre nom de connexion et le mot de passe (si un mot de passe est nécessaire).
+2. Mettre le fichier compressé du tracker dans le sous-répertoire /packs/ du répertoire d'installation de PopTracker.
+3. Lancez PopTracker, et ouvrez le pack d'Aquaria.
+4. Pour activer le tracking automatique, cliquez sur le symbole "AP" dans le haut de la fenêtre.
+5. Entrez l'adresse du serveur Archipelago (le serveur auquel vous avez connecté le client), le nom de votre slot, et le mot de passe (si un mot de passe est nécessaire).
 
-Le logiciel vous indiquera si une mise à jour du paquet est disponible.
+Le logiciel vous indiquera si une mise à jour du pack est disponible.
