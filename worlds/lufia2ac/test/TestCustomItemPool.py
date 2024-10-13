@@ -53,5 +53,5 @@ class TestVerifyItemName(L2ACTestBase):
                                "Item The car blade from option CustomItemPool\\(The car blade: 2\\) is not a "
                                "valid item name from Lufia II Ancient Cave\\. Did you mean 'Dekar blade'",
                                lambda: handle_option(Namespace(game="Lufia II Ancient Cave", name="Player"),
-                                                     self.options, "custom_item_pool", {"custom_item_pool": CustomItemPool},
+                                                     self.options, "custom_item_pool", CustomItemPool,
                                                      PlandoOptions(0)))
