@@ -725,6 +725,7 @@ item_descriptions = {
     """),
     item_names.INFESTED_SIEGE_TANK_ACIDIC_ENZYMES: "Infested Siege Tanks deal an additional 15 damage to armored units and structures in both modes.",
     item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL: _ability_desc("Infested Siege Tanks", "Deep Tunnel", "allows them to burrow to any visible location on the map covered in creep"),
+    item_names.INFESTED_SIEGE_TANK_SEISMIC_SONAR: "Infested Siege Tank Tentacle weapon gains +1 range.  Volatile Burst weapon gains +3 range.",
     item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES: "Infested Diamondbacks leave behind a trail of acid when moving that deals 20 damage per second to enemy units.",
     item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS: "Reduces the cooldown of the Infested Diamondback's Fungal Snare by 15 seconds.",
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON: "Infested Banshees gain +100 life.",
