@@ -122,7 +122,7 @@ pour vous assurer que votre fichier est exécutable:
 chmod +x aquaria_randomizer
 ```
 
-# Tracking automatique
+## Tracking automatique
 
 Aquaria a un tracker complet qui supporte le tracking automatique.
 
