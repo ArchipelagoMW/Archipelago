@@ -184,6 +184,10 @@ class OOTWorld(World):
                  "Small Key Ring (Spirit Temple)", "Small Key Ring (Thieves Hideout)", "Small Key Ring (Water Temple)",
                  "Boss Key (Fire Temple)", "Boss Key (Forest Temple)", "Boss Key (Ganons Castle)",
                  "Boss Key (Shadow Temple)", "Boss Key (Spirit Temple)", "Boss Key (Water Temple)"},
+
+        # aliases
+        "Longshot": {"Progressive Hookshot"},  # fuzzy hinting thought Longshot was Slingshot
+        "Hookshot": {"Progressive Hookshot"},  # for consistency, mostly
     }
 
     location_name_groups = build_location_name_groups()
