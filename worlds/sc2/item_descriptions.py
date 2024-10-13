@@ -190,6 +190,7 @@ item_descriptions = {
     item_names.MISSILE_TURRET_HELLSTORM_BATTERIES: "The Missile Turret unleashes an additional flurry of missiles with each attack.",
     item_names.SCV_ADVANCED_CONSTRUCTION: "Multiple SCVs can construct a structure, reducing its construction time.",
     item_names.SCV_DUAL_FUSION_WELDERS: "SCVs repair twice as fast.",
+    item_names.SCV_CONSTRUCTION_JUMP_JETS: "Allows SCVs to jump up and down cliffs.",
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM: inspect.cleandoc("""
         Level 1: While on low health, Terran structures are repaired to half health instead of burning down.
         Level 2: Terran structures are repaired to full health instead of half health.

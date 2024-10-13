@@ -271,6 +271,7 @@ SCIENCE_VESSEL_TACTICAL_JUMP                       = "Tactical Jump (Science Ves
 SCV_ADVANCED_CONSTRUCTION                          = "Advanced Construction (SCV)"
 SCV_DUAL_FUSION_WELDERS                            = "Dual-Fusion Welders (SCV)"
 SCV_HOSTILE_ENVIRONMENT_ADAPTATION                 = "Hostile Environment Adaptation (SCV)"
+SCV_CONSTRUCTION_JUMP_JETS                         = "Construction Jump Jets (SCV)"
 SIEGE_TANK_ADVANCED_SIEGE_TECH                     = "Advanced Siege Tech (Siege Tank)"
 SIEGE_TANK_GRADUATING_RANGE                        = "Graduating Range (Siege Tank)"
 SIEGE_TANK_INTERNAL_TECH_MODULE                    = "Internal Tech Module (Siege Tank)"

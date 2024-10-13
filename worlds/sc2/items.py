@@ -1047,6 +1047,8 @@ item_table = {
     item_names.DOMINION_TROOPER_OPTIMIZED_LOGISTICS:
         ItemData(761 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 15, SC2Race.TERRAN,
                  parent_item=item_names.DOMINION_TROOPER, classification=ItemClassification.filler),
+    item_names.SCV_CONSTRUCTION_JUMP_JETS:
+        ItemData(762 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 16, SC2Race.TERRAN),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:
@@ -2157,6 +2159,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     # General Terran upgrades without any dependencies
     item_names.SCV_ADVANCED_CONSTRUCTION,
     item_names.SCV_DUAL_FUSION_WELDERS,
+    item_names.SCV_CONSTRUCTION_JUMP_JETS,
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
     item_names.PROGRESSIVE_ORBITAL_COMMAND,
     item_names.ULTRA_CAPACITORS,
