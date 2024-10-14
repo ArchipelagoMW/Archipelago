@@ -133,28 +133,6 @@ def set_rules(world: "MM2World") -> None:
                         # Wily Machine needs all three weaknesses present, so allow
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
-            # handle special cases
-            for boss in range(14):
-                for weapon in (1, 3, 6, 8):
-                    if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
-                            not any(world.weapon_damage[i][boss] > 0 for i in range(1, 8) if i != weapon)):
-                        # Weapon does not have enough possible ammo to kill the boss, raise the damage
-                        if boss == 9:
-                            if weapon != 3:
-                                # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
-                                world.weapon_damage[weapon][boss] = 0
-                                weakness = world.random.choice((2, 3, 4, 5, 7, 8))
-                                world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                        elif boss == 11:
-                            if weapon == 1:
-                                # Atomic Fire cannot be Boobeam Trap's only weakness
-                                world.weapon_damage[weapon][boss] = 0
-                                weakness = world.random.choice((2, 3, 4, 5, 6, 7, 8))
-                                world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                        else:
-                            world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
-            starting = world.options.starting_robot_master.value
-            world.weapon_damage[0][starting] = 1
 
         for p_boss in world.options.plando_weakness:
             for p_weapon in world.options.plando_weakness[p_boss]:
@@ -167,6 +145,28 @@ def set_rules(world: "MM2World") -> None:
                     world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
                 world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
                     = world.options.plando_weakness[p_boss][p_weapon]
+
+        # handle special cases
+        for boss in range(14):
+            for weapon in (1, 3, 6, 8):
+                if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
+                        not any(world.weapon_damage[i][boss] > minimum_weakness_requirement[weapon]
+                                for i in range(9) if i != weapon)):
+                    # Weapon does not have enough possible ammo to kill the boss, raise the damage
+                    if boss == 9:
+                        if weapon in (1, 6):
+                            # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
+                            world.weapon_damage[weapon][boss] = 0
+                            weakness = world.random.choice((2, 3, 4, 5, 7, 8))
+                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                    elif boss == 11:
+                        if weapon == 1:
+                            # Atomic Fire cannot be Boobeam Trap's only weakness
+                            world.weapon_damage[weapon][boss] = 0
+                            weakness = world.random.choice((2, 3, 4, 5, 6, 7, 8))
+                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                    else:
+                        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
 
         if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
             world.weapon_damage[0][world.options.starting_robot_master.value] = weapon_damage[0][world.options.starting_robot_master.value]
