@@ -29,3 +29,5 @@ class TestStartInventoryMeadowLands(WorldAssertMixin, SVTestBase):
         self.assertEqual(items["Progressive Coop"], 2)
         self.assertIn("Progressive Coop", start_items)
         self.assertEqual(start_items["Progressive Coop"], 1)
+
+# TODO test Meadowlands and Coop in BuildingVanilla

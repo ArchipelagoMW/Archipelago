@@ -52,6 +52,7 @@ class StardewContent:
 @dataclass(frozen=True)
 class StardewFeatures:
     booksanity: booksanity.BooksanityFeature
+    building_progression: building_progression.BuildingProgressionFeature
     cropsanity: cropsanity.CropsanityFeature
     fishsanity: fishsanity.FishsanityFeature
     friendsanity: friendsanity.FriendsanityFeature
