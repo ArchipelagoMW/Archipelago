@@ -2,10 +2,11 @@ from typing import Dict, Set
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from BaseClasses import ItemClassification
 from .Options import DSTOptions
 from . import Regions, Rules, ItemPool, Constants
 from .Locations import location_data_table, location_name_to_id
-from .Items import item_data_table, item_name_to_id
+from .Items import item_data_table, item_name_to_id, DSTItem
 
 from BaseClasses import Item, Tutorial
 
@@ -100,7 +101,17 @@ class DSTWorld(World):
         self.dst_itempool.decide_itempools(self)
 
     def create_item(self, name: str) -> Item:
-        return self.dst_itempool.create_item(self, name)
+        itemtype = (
+            ItemClassification.progression if self.dst_itempool and name in self.dst_itempool.progression_items
+            else item_data_table[name].type if name in item_name_to_id 
+            else ItemClassification.progression
+        )
+        return DSTItem(
+            name, 
+            itemtype, 
+            item_data_table[name].code if name in item_name_to_id else None, 
+            self.player
+        )
     
     def create_items(self) -> None:
         self.dst_itempool.create_items(self)
