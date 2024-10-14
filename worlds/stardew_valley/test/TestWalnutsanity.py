@@ -66,7 +66,6 @@ class TestWalnutsanityPuzzles(SVTestBase):
     def test_field_office_locations_require_professor_snail(self):
         location_names = ["Complete Large Animal Collection", "Complete Snake Collection", "Complete Mummified Frog Collection",
                           "Complete Mummified Bat Collection", "Purple Flowers Island Survey", "Purple Starfish Island Survey", ]
-        locations = [location for location in self.multiworld.get_locations() if location.name in location_names]
         self.collect("Island Obelisk")
         self.collect("Island North Turtle")
         self.collect("Island West Turtle")
@@ -80,11 +79,11 @@ class TestWalnutsanityPuzzles(SVTestBase):
         self.collect("Progressive Sword", 5)
         self.collect("Combat Level", 10)
         self.collect("Mining Level", 10)
-        for location in locations:
-            self.assert_reach_location_false(location, self.multiworld.state)
+        for location in location_names:
+            self.assert_location_cannot_be_reached(location)
         self.collect("Open Professor Snail Cave")
-        for location in locations:
-            self.assert_reach_location_true(location, self.multiworld.state)
+        for location in location_names:
+            self.assert_location_can_be_reached(location)
 
 
 class TestWalnutsanityBushes(SVTestBase):
