@@ -1581,7 +1581,7 @@ item_table = {
         ItemData(361 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 18, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
     item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES:
         ItemData(362 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 19, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
-    item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS:
+    item_names.INFESTED_DIAMONDBACK_VIOLENT_ENZYMES:
         ItemData(363 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 20, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON:
         ItemData(364 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 21, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
@@ -1603,6 +1603,11 @@ item_table = {
         ItemData(372 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 29, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
     item_names.INFESTED_SIEGE_TANK_BALANCED_ROOTS:
         ItemData(373 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 0, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE:
+        ItemData(374 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 2, SC2Race.ZERG,
+                 parent_item=item_names.INFESTED_DIAMONDBACK, quantity=2, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW:
+        ItemData(375 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 1, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
