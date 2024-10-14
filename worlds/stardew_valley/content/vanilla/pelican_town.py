@@ -1,8 +1,8 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
-from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource, CompoundSource
+from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
@@ -229,10 +229,10 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.mapping_cave_systems: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            CompoundSource(sources=(
-                GenericSource(regions=(Region.adventurer_guild_bedroom,)),
-                ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),
-            ))),
+            ShopSource(money_price=20000,
+                       shop_region=LogicRegion.bookseller_3,
+                       other_requirements=(RegionRequirement(Region.adventurer_guild_bedroom),)),
+        ),
         Book.monster_compendium: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             CustomRuleSource(create_rule=lambda logic: logic.monster.can_kill_many(Generic.any)),
