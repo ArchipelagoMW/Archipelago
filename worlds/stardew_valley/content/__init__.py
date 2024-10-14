@@ -128,7 +128,7 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
 
 def choose_building_progression(building_option: options.BuildingProgression,
                                 farm_type_option: options.FarmType) -> building_progression.BuildingProgressionFeature:
-    starting_buildings = {Building.farm_house}
+    starting_buildings = {Building.farm_house, Building.shipping_bin}
 
     if farm_type_option == options.FarmType.option_meadowlands:
         starting_buildings.add(Building.coop)
@@ -149,6 +149,8 @@ def choose_building_progression(building_option: options.BuildingProgression,
             starting_buildings=starting_buildings,
             price_multiplier=1 / 5,
         )
+
+    starting_buildings.remove(Building.shipping_bin)
 
     if building_option == options.BuildingProgression.option_progressive:
         return building_progression.BuildingProgressionProgressive(
