@@ -15,7 +15,7 @@ from .data.item_definition_classes import (
     ProgressiveItemDefinition,
     WeightedItemDefinition,
 )
-from .data.utils import build_weighted_int_list
+from .data.utils import build_weighted_int_list, cast_not_none
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -200,7 +200,7 @@ class WitnessPlayerItems:
         """
         return [
             # data.ap_code is guaranteed for a symbol definition
-            cast(int, data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
+            cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
             if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
         ]
 
@@ -211,8 +211,8 @@ class WitnessPlayerItems:
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
                 # items were removed from the pool when we pruned out all progression items not in the options.
-                output[cast(int, item.ap_code)] = [cast(int, static_witness_items.ITEM_DATA[child_item].ap_code)
-                                                   for child_item in item.definition.child_item_names]
+                output[cast_not_none(item.ap_code)] = [cast_not_none(static_witness_items.ITEM_DATA[child_item].ap_code)
+                                                       for child_item in item.definition.child_item_names]
         return output
 
 
