@@ -21,7 +21,7 @@ def make_golden_path(options: Dict[str, Any]) -> Dict[str, Any]:
                           'Antiga', 'Braxis', 'Chau Sara', 'Moria', 'Tyrador', 'Xil', 'Zhakul',
                           'Azeroth', 'Crouton', 'Draenor', 'Sanctuary']
     
-    size = max(_required_option("size", options), 2)
+    size = max(_required_option("size", options), 4)
     keys_option = _validate_option("keys", options, "none", ["none", "layouts", "missions"])
     min_chains = 2
     max_chains = 6
