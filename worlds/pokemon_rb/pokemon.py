@@ -345,10 +345,21 @@ def process_pokemon_data(self):
     self.learnsets = learnsets
 
 
+def rebuild_hm_mons_cache(world):
+    # Build a cache of which Pokémon can learn certain HMs
+    hm_mons_cache = {hm: [] for hm in poke_data.hm_moves}
+    for i, hm in enumerate(poke_data.hm_moves):
+        flag = i + 2  # same as can_learn_hm
+        for mon, data in world.local_poke_data.items():
+            if data["tms"][6] & flag:
+                hm_mons_cache[hm].append(mon)
+
+    world.local_hm_mons_cache = hm_mons_cache
+
+
 def verify_hm_moves(multiworld, world, player):
     def intervene(move, test_state):
-        move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
-        viable_mons = [mon for mon in world.local_poke_data if world.local_poke_data[mon]["tms"][6] & move_bit]
+        viable_mons = world.local_hm_mons_cache[move]
         if world.options.randomize_wild_pokemon and viable_mons:
             accessible_slots = [loc for loc in multiworld.get_reachable_locations(test_state, player) if
                                 loc.type == "Wild Encounter"]
@@ -427,6 +438,7 @@ def verify_hm_moves(multiworld, world, player):
             if intervene_move == last_intervene:
                 raise Exception(f"Caught in infinite loop attempting to ensure {intervene_move} is available to player {player}")
             intervene(intervene_move, test_state)
+            rebuild_hm_mons_cache(world)
             last_intervene = intervene_move
         else:
             break
