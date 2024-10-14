@@ -739,7 +739,7 @@ item_descriptions = {
     item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS: "Infested Banshees gain +2 range while cloacked.",
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL: "Infested Liberators instantly transform into a cloud of microscopic organisms while attacking, reducing the damage they take by 85%.",
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
-    item_names.FRIGHTFUL_FLESHWELDER: "Reduces infested mechnical unit resource cost by 30%.",
+    item_names.ZERG_EXCAVATING_CLAWS: "Increases movement speed of Spore and Spine Crawlers, especially off creep.  Also increases root speed.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",

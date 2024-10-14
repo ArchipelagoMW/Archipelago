@@ -583,7 +583,7 @@ TWIN_DRONES                      = "Twin Drones (Zerg)"
 MALIGNANT_CREEP                  = "Malignant Creep (Zerg)"
 VESPENE_EFFICIENCY               = "Vespene Efficiency (Zerg)"
 ZERG_CREEP_STOMACH               = "Creep Stomach (Zerg)"
-FRIGHTFUL_FLESHWELDER            = "Frightful Fleshwelder (Zerg)"
+ZERG_EXCAVATING_CLAWS            = "Excavating Claws (Zerg)"
 
 # Kerrigan Levels
 KERRIGAN_LEVELS_1  = "1 Kerrigan Level"
