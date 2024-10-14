@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, Iterable, Set, Any, Mapping, Type, Tuple, Union
 
-from .feature import booksanity, cropsanity, fishsanity, friendsanity, skill_progression
+from .feature import booksanity, cropsanity, fishsanity, friendsanity, skill_progression, building_progression
 from ..data.building import Building
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag
