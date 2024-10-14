@@ -9,7 +9,7 @@ import random
 from NetUtils import ClientStatus
 from CommonClient import CommonContext, get_base_parser
 from Utils import async_start
-from .Constants import LOCATION_RESEARCH_RANGE, VERSION
+from .Constants import LOCATION_BOSS_RANGE, LOCATION_RESEARCH_RANGE, VERSION
 
 class DSTInvalidRequest(Exception):
     pass
@@ -94,7 +94,10 @@ class DSTContext(CommonContext):
         # Scout research locations
         async_start(self.send_msgs([{
             "cmd": "LocationScouts",
-            "locations": [id for id in self.missing_locations if (id >= LOCATION_RESEARCH_RANGE["start"] and id <= LOCATION_RESEARCH_RANGE["end"])],
+            "locations": [id for id in self.missing_locations 
+                if (id >= LOCATION_RESEARCH_RANGE["start"] and id <= LOCATION_RESEARCH_RANGE["end"])
+                or (id >= LOCATION_BOSS_RANGE["start"] and id <= LOCATION_BOSS_RANGE["end"])
+            ],
         }]))
 
     def send_hints_to_dst(self):
@@ -104,8 +107,11 @@ class DSTContext(CommonContext):
             self.dst_handler.enqueue({
                 "datatype": "HintInfo",
                 "item": hint["item"],
+                "itemname": self.item_names.lookup_in_slot(hint["item"], hint["receiving_player"]),
+                "location": hint["location"],
                 "locationname": self.location_names.lookup_in_slot(hint["location"], hint["finding_player"]),
                 "findingname": self.player_names[hint["finding_player"]],
+                "receivingname": self.player_names[hint["receiving_player"]],
             }, False)
 
     def on_dst_handler_connected(self):

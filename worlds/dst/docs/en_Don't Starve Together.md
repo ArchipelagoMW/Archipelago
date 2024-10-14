@@ -13,7 +13,7 @@ or when another player in your multiworld finds one of your items.
 The generator will ensure progression logic to be able to reach your goal, which you have 3 difficulties to choose from:
 - Easy: Ensure items useful for your survival such as weapons, armor, lighting, seasonal gear, and base structures.
 - Advanced: Expects you to know the game well and to survive seasons under-equipped.
-- Expert: Expects you to be a pro and survive in riskier conditions, such as entering the ruins without light, etc.
+- Expert: Expects you to be a pro and survive in riskier conditions, such as entering the ruins with nothing but a torch, etc.
 
 ## When the player receives an item, what happens?
 
@@ -42,7 +42,7 @@ When near a crafting station, you will see "Interdimensional Research" items wit
 what the item is and its recipient. However 95% of the the time a trap item will have a randomly generated name, so keep an eye
 out for fakes!
 
-Items can also appear as blueprint, called "Interdimensional Blueprint", which can then be activated to award your check.
+Items can also appear as blueprint labelled with its containing item and recipient, which can then be activated to award your check.
 
 In most other cases you won't see the physical item in-game but you will receive a chat notification when you find an item.
 
@@ -52,7 +52,7 @@ The player is able to choose their victory condition in their config file:
 - Survival: The player must live for a target number of days. This is based on the survivor's time alive and not the world age.
 Being a ghost will not progress your timer.
 - Bosses: The player can choose which bosses they need to defeat in order to meet their victory condition. You can choose
-between defeating any one of your selected bosses, or all of them. Boss and location checks that happen to be part of your progression 
+between defeating any one of a selection of bosses, or all of them. Boss and location checks that happen to be part of your progression 
 path will be prioritized for having progression items.
 
 ## What are location checks in Don't Starve Together?
@@ -67,9 +67,12 @@ or whether to only count meat or veggie meals.
 - Crabby Hermit: Progressing through Crabby Hermit's quests unlocks Archipelago items you can exchange for empty bottles.
 - Various Milestones: Such as finding Pig King, Chester, Hutch, or places you would find rare blueprints.
 
-## What world settings should be used when generating your world in Don't Starve Together?
+Additionally, you can control how much of the game is randomized, with the cave_regions and ocean_regions options in the yaml to toggle Caves and
+Oceans respectively.
 
-Currently the randomizer is designed to work for worlds with caves.
+## Can this work with a world without caves?
+
+As of Version 1.2, worlds without caves are supported. Make sure in your yaml that cave_regions is set to none, and that your goal is not set to a cave boss.
 
 ## What happens if I choose Survival or Wilderness as my server playstyle or otherwise regenerate my world?
 

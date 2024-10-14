@@ -1,11 +1,13 @@
+from typing import Dict, Set
+
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from .Options import DSTOptions, Goal
+from .Options import DSTOptions
 from . import Regions, Rules, ItemPool, Constants
-from .Locations import location_name_to_id
-from .Items import item_data_table, item_name_to_id, DSTItem
+from .Locations import location_data_table, location_name_to_id
+from .Items import item_data_table, item_name_to_id
 
-from BaseClasses import Item, Tutorial, ItemClassification
+from BaseClasses import Item, Tutorial
 
 def launch_client():
     from .Client import launch
@@ -47,25 +49,58 @@ class DSTWorld(World):
 
     def generate_early(self):
         self.dst_itempool = ItemPool.DSTItemPool()
-        if self.options.goal.value == Goal.option_bosses_any or self.options.goal.value == Goal.option_bosses_all:
-            if not len(self.options.required_bosses.value):
-                # You didn't choose a boss... Selecting one at random!
-                self.options.required_bosses.value.add(self.multiworld.random.choice(self.options.required_bosses.valid_keys))
+        _IS_BOSS_GOAL = self.options.goal.value == self.options.goal.option_bosses_any or self.options.goal.value == self.options.goal.option_bosses_all
+
+        # Warn shuffling starting recipes with creature locations disabled and nothing in start inventory
+        if self.options.shuffle_starting_recipes.value and not self.options.creature_locations.value and not len(self.options.start_inventory):
+            print(f"{self.multiworld.get_player_name(self.player)} (Don't Starve Together): Warning! Shuffle Starting Recipes without Creature Locations. "\
+                "Player will potentially have no reachable checks in Sphere 1!"
+            )
+        
+        # Get regions bosses are in
+        _regions = set()
+        if _IS_BOSS_GOAL:
+            for bossname in self.options.required_bosses.value:
+                _regions.add(Constants.BOSS_REGIONS.get(bossname,""))
+
+        # Set auto regions
+        if self.options.cave_regions.value == self.options.cave_regions.option_auto:
+            self.options.cave_regions.value = self.options.cave_regions.option_none
+            if _IS_BOSS_GOAL:
+                if "ruins" in _regions:
+                    self.options.cave_regions.value = self.options.cave_regions.option_full
+                elif "cave" in _regions:
+                    self.options.cave_regions.value = self.options.cave_regions.option_light
+        
+        if self.options.ocean_regions.value == self.options.ocean_regions.option_auto:
+            self.options.ocean_regions.value = self.options.ocean_regions.option_none
+            if _IS_BOSS_GOAL:
+                if "moonstorm" in _regions:
+                    self.options.ocean_regions.value = self.options.ocean_regions.option_full
+                elif "ocean" in _regions:
+                    self.options.ocean_regions.value = self.options.ocean_regions.option_light
+
+        # Auto set logic options
+        ADVANCED_PLAYER_BIAS = self.options.skill_level.current_key != "easy"
+        EXPERT_PLAYER_BIAS = self.options.skill_level.current_key == "expert"
+        if self.options.lighting_logic.current_key == "auto":
+            self.options.lighting_logic.value = 0 if EXPERT_PLAYER_BIAS else 2
+        if self.options.weapon_logic.current_key == "auto":
+            self.options.weapon_logic.value = 0 if EXPERT_PLAYER_BIAS else 2
+        if self.options.season_gear_logic.current_key == "auto":
+            self.options.season_gear_logic.value = 0 if ADVANCED_PLAYER_BIAS else 2
+        if self.options.base_making_logic.current_key == "auto":
+            self.options.base_making_logic.value = 0 if EXPERT_PLAYER_BIAS else 2
+        if self.options.backpack_logic.current_key == "auto":
+            self.options.backpack_logic.value = 0 if EXPERT_PLAYER_BIAS else 2
+        if self.options.healing_logic.current_key == "auto":
+            self.options.healing_logic.value = 0 if ADVANCED_PLAYER_BIAS else 2
+
+        # Create itempools
         self.dst_itempool.decide_itempools(self)
 
     def create_item(self, name: str) -> Item:
-        craft_with_locked_items = True # TODO: Replace with option when available
-        itemtype = (
-            ItemClassification.progression if (not craft_with_locked_items and "progression_recipes" in item_data_table[name].tags)
-            else item_data_table[name].type if name in item_name_to_id 
-            else ItemClassification.progression
-        )
-        return DSTItem(
-            name, 
-            itemtype, 
-            item_data_table[name].code if name in item_name_to_id else None, 
-            self.player
-        )
+        return self.dst_itempool.create_item(self, name)
     
     def create_items(self) -> None:
         self.dst_itempool.create_items(self)
@@ -75,8 +110,34 @@ class DSTWorld(World):
 
     def create_regions(self):
         Regions.create_regions(self.multiworld, self.player, self.options, self.dst_itempool)
+        Rules.set_rules(self, self.dst_itempool) # create_items needs rules set first
 
-    set_rules = Rules.set_rules
+    def set_rules(self) -> None:
+        pass
+
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+        # Add crafting stations to hint information
+        def get_station_from_tags(tags: Set[str]) -> str:
+            return (
+                "Science Machine" if "science" in tags and "tier_1" in tags
+                else "Alchemy Engine" if "science" in tags and "tier_2" in tags
+                else "Prestihatitor" if "magic" in tags and "tier_1" in tags
+                else "Shadow Manipulator" if "magic" in tags and "tier_2" in tags
+                else "Think Tank" if "seafaring" in tags
+                else "Celestial Orb" if "celestial" in tags and "tier_1" in tags
+                else "Celestial Altar" if "celestial" in tags and "tier_2" in tags
+                else "Broken Pseudoscience Station" if "ancient" in tags and "tier_1" in tags
+                else "Ancient Pseudoscience Station" if "ancient" in tags and "tier_2" in tags
+                else "Crabby Hermit" if "hermitcrab" in tags
+                else "Vanilla"
+            )
+        hint_information:Dict[int, str] = {}
+        for data in location_data_table.values():
+            if "research" in data.tags:
+                hint_information[data.address] = get_station_from_tags(data.tags)
+            elif "cooking" in data.tags:
+                hint_information[data.address] = "Portable Crock Pot" if "warly" in data.tags else "Crock Pot"
+        hint_data[self.player] = hint_information
 
     def fill_slot_data(self):
         slot_data = {

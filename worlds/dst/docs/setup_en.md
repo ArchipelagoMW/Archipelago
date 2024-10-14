@@ -8,10 +8,10 @@
 - [Archipelago Randomizer Steam Workshop mod for Don't Starve Together](https://steamcommunity.com/sharedfiles/filedetails/?id=3218471273)
 
 ## Installation
-- Install Archipelago
-- Add dontstarvetogether.apworld to lib/worlds folder of your Archipelago install
+- Install Archipelago.
+- Add dontstarvetogether.apworld to custom_worlds folder of your Archipelago install, or double click the .apworld to do so automatically.
 - Follow Archipelago's basic tutorial on how to generate a game. https://archipelago.gg/tutorial/Archipelago/setup/en
 - Open the Archipelago launcher and run the Don't Starve Together client. Connect to the Archipelago server.
 - Start Don't Starve Together and choose Host Game.
-- Create or select your world. Enable caves, as of currently the randomizer only supports worlds with caves. In the Mods tab, enable the Archipelago Randomizer mod.
+- Create or select your world. Enable caves if your goal or enabled regions includes caves. In the Mods tab, enable the Archipelago Randomizer mod.
 - Start your game. Once you load in and select your character, the client should automatically connect to DST and you can start playing!
