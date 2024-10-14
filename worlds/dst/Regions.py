@@ -145,8 +145,9 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
 
    # Create regions
    for region_name in REGION_DATA_TABLE.keys():
-      new_region = Region(region_name, player, multiworld)
-      multiworld.regions.append(new_region)
+      if region_name in REGION_WHITELIST:
+         new_region = Region(region_name, player, multiworld)
+         multiworld.regions.append(new_region)
       
    # Create locations and entrances.
    for region_name, region_data in REGION_DATA_TABLE.items():
@@ -160,9 +161,10 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       }, DSTLocation)
       if region_data.connecting_regions:
          for exit_name in region_data.connecting_regions:
-            entrance = Entrance(player, exit_name, region)
-            entrance.connect(multiworld.get_region(exit_name, player))
-            region.exits.append(entrance)
+            if exit_name in REGION_WHITELIST:
+               entrance = Entrance(player, exit_name, region)
+               entrance.connect(multiworld.get_region(exit_name, player))
+               region.exits.append(entrance)
 
    # Fill boss locations with "Boss Defeat" items
    EXISTING_LOCATIONS = [location.name for location in multiworld.get_locations(player)]
