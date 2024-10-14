@@ -215,5 +215,5 @@ class AquariaWorld(World):
                 "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
                 "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
                 "light_needed_to_get_to_dark_places": bool(self.options.light_needed_to_get_to_dark_places),
-                "turtle_randomizer": self.options.turtle_randomizer.value
+                "turtle_randomizer": self.options.turtle_randomizer.value,
                 }
