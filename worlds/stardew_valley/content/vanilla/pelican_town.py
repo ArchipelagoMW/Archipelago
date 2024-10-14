@@ -1,10 +1,12 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
+from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.book_names import Book
+from ...strings.building_names import Building as BuildingNames
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
 from ...strings.food_names import Beverage, Meal
@@ -385,5 +387,40 @@ pelican_town = ContentPack(
         villagers_data.vincent,
         villagers_data.willy,
         villagers_data.wizard,
+    ),
+    farm_buildings=(
+        Building(
+            BuildingNames.coop,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=4000,
+                    items_price=((300, Material.wood), (100, Material.stone))
+                ),
+                # TODO add source for meadowslands farm
+            ),
+        ),
+        Building(
+            BuildingNames.big_coop,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=10_000,
+                    items_price=((400, Material.wood), (150, Material.stone))
+                ),
+            ),
+            upgrade_from=BuildingNames.coop,
+        ),
+        Building(
+            BuildingNames.deluxe_coop,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=20_000,
+                    items_price=((500, Material.wood), (200, Material.stone))
+                ),
+            ),
+            upgrade_from=BuildingNames.big_coop,
+        ),
     )
 )

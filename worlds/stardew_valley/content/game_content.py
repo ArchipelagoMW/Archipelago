@@ -21,6 +21,7 @@ class StardewContent:
     game_items: Dict[str, GameItem] = field(default_factory=dict)
     fishes: Dict[str, FishItem] = field(default_factory=dict)
     villagers: Dict[str, Villager] = field(default_factory=dict)
+    farm_buildings: Dict[str, Building] = field(default_factory=dict)
     skills: Dict[str, Skill] = field(default_factory=dict)
     quests: Dict[str, Any] = field(default_factory=dict)
 
