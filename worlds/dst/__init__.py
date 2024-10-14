@@ -102,7 +102,7 @@ class DSTWorld(World):
 
     def create_item(self, name: str) -> Item:
         itemtype = (
-            ItemClassification.progression if self.dst_itempool and name in self.dst_itempool.progression_items
+            ItemClassification.progression if hasattr(self, "dst_itempool") and name in self.dst_itempool.progression_items
             else item_data_table[name].type if name in item_name_to_id 
             else ItemClassification.progression
         )
