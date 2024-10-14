@@ -727,7 +727,7 @@ item_descriptions = {
     item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL: _ability_desc("Infested Siege Tanks", "Deep Tunnel", "allows them to burrow to any visible location on the map covered in creep"),
     item_names.INFESTED_SIEGE_TANK_SEISMIC_SONAR: "Infested Siege Tank Tentacle weapon gains +1 range.  Volatile Burst weapon gains +3 range.",
     item_names.INFESTED_SIEGE_TANK_BALANCED_ROOTS: "Allows Infested Siege Tank to attack while moving with its Tentacle weapon.",
-    item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES: "Infested Diamondbacks leave behind a trail of acid when moving that deals 12 damage per second to enemy units.",
+    item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS: "Infested Diamondbacks leave behind a trail of acid when moving that deals 12 damage per second to enemy units.",
     item_names.INFESTED_DIAMONDBACK_VIOLENT_ENZYMES: "Infested Diamondbacks deal an additional +8 damage.",
     item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW: "Infested Diamondbacks gain +2 weapon range. Fungal Snare gains +2 range.",
     item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE:  inspect.cleandoc("""

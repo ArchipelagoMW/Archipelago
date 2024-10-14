@@ -1579,7 +1579,7 @@ item_table = {
         ItemData(360 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 17, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
     item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL:
         ItemData(361 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 18, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
-    item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES:
+    item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS:
         ItemData(362 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 19, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
     item_names.INFESTED_DIAMONDBACK_VIOLENT_ENZYMES:
         ItemData(363 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 20, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
