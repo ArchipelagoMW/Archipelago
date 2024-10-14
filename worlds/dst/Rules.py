@@ -1,5 +1,4 @@
-from typing import Dict, Set, Optional
-from collections.abc import Callable
+from typing import Dict, Set, Optional, Callable
 
 from BaseClasses import CollectionState, ItemClassification, Item
 from worlds.generic.Rules import exclusion_rules, set_rule, add_rule, add_item_rule, forbid_item
@@ -1031,16 +1030,16 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         return state.has(late_game_survival.event, player)
 
     rules_lookup: Dict[str, Dict[str, Callable[[CollectionState], bool]]] = {
-        "regions": {
-            REGION.CAVE: lambda state: REGION.CAVE in REGION_WHITELIST and state.has(mining.event, player), # Will mostly be used as a test
-            REGION.ARCHIVE: lambda state: REGION.ARCHIVE in REGION_WHITELIST,
-            REGION.RUINS: lambda state: REGION.RUINS in REGION_WHITELIST,
-            REGION.OCEAN: lambda state: REGION.OCEAN in REGION_WHITELIST,
-            REGION.MOONQUAY: lambda state: REGION.MOONQUAY in REGION_WHITELIST,
-            REGION.MOONSTORM: lambda state: REGION.MOONSTORM in REGION_WHITELIST,
-            REGION.DUALREGION: lambda state: REGION.OCEAN in REGION_WHITELIST or REGION.CAVE in REGION_WHITELIST,
-            REGION.BOTHREGIONS: lambda state: REGION.OCEAN in REGION_WHITELIST and REGION.CAVE in REGION_WHITELIST,
-        },
+        # "regions": {
+        #     REGION.CAVE: lambda state: REGION.CAVE in REGION_WHITELIST and state.has(mining.event, player), # Will mostly be used as a test
+        #     REGION.ARCHIVE: lambda state: REGION.ARCHIVE in REGION_WHITELIST,
+        #     REGION.RUINS: lambda state: REGION.RUINS in REGION_WHITELIST,
+        #     REGION.OCEAN: lambda state: REGION.OCEAN in REGION_WHITELIST,
+        #     REGION.MOONQUAY: lambda state: REGION.MOONQUAY in REGION_WHITELIST,
+        #     REGION.MOONSTORM: lambda state: REGION.MOONSTORM in REGION_WHITELIST,
+        #     REGION.DUALREGION: lambda state: REGION.OCEAN in REGION_WHITELIST or REGION.CAVE in REGION_WHITELIST,
+        #     REGION.BOTHREGIONS: lambda state: REGION.OCEAN in REGION_WHITELIST and REGION.CAVE in REGION_WHITELIST,
+        # },
         "location_rules": {
             # Tasks
             "Distilled Knowledge (Yellow)": archive_exploration.rule,
@@ -1492,7 +1491,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
     # Set location rules
     for location_name, rule in rules_lookup["location_rules"].items():
-        assert_rule(rule, multiworld)
+        #assert_rule(rule, multiworld) # DEBUG
         if location_name in EXISTING_LOCATIONS:
             location = multiworld.get_location(location_name, player)
             required = False
@@ -1584,11 +1583,11 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         ):
             add_item_rule(multiworld.get_location(location_name, player), NO_ADVANCEMENT_ITEM)
 
-    # Set region rules
-    for region_name, rule in rules_lookup["regions"].items():
-        region = multiworld.get_region(region_name, player)
-        for entrance in region.entrances:
-            set_rule(entrance, rule)
+    # # Set region rules
+    # for region_name, rule in rules_lookup["regions"].items():
+    #     region = multiworld.get_region(region_name, player)
+    #     for entrance in region.entrances:
+    #         set_rule(entrance, rule)
 
    # Decide win conditions
     victory_events:Set = set()
