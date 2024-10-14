@@ -2,6 +2,7 @@ import csv
 import enum
 import logging
 from dataclasses import dataclass, field
+from functools import reduce
 from pathlib import Path
 from random import Random
 from typing import Dict, List, Protocol, Union, Set, Optional
@@ -134,7 +135,7 @@ def load_item_csv():
         item_reader = csv.DictReader(file)
         for item in item_reader:
             id = int(item["id"]) if item["id"] else None
-            classification = ItemClassification[item["classification"]]
+            classification = reduce((lambda a, b: a | b), {ItemClassification[str_classification] for str_classification in item["classification"].split(",")})
             groups = {Group[group] for group in item["groups"].split(",") if group}
             mod_name = str(item["mod_name"]) if item["mod_name"] else None
             items.append(ItemData(id, item["name"], classification, mod_name, groups))
