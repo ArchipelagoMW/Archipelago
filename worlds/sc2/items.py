@@ -8,7 +8,7 @@ from .mission_tables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_t
 from . import item_names
 from .mission_order.presets_static import get_used_layout_names
 from worlds.AutoWorld import World
-from ..ror2.items import classification
+
 
 if TYPE_CHECKING:
     from . import SC2World
