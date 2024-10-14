@@ -159,7 +159,7 @@ class CountMissionsEntryRule(EntryRule):
     
     def to_slot_data(self) -> RuleData:
         resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
-        mission_ids = [mission.mission.id for mission in self.missions_to_count]
+        mission_ids = [mission.mission.id for mission in sorted(self.missions_to_count, key = lambda mission: mission.min_depth)]
         return CountMissionsRuleData(
             mission_ids,
             self.target_amount,
@@ -203,13 +203,19 @@ class CountMissionsRuleData(RuleData):
         accessible_rules: Set[int], seen_rules: List[int]
     ) -> bool:
         # Count rules are accessible if enough of their missions are beaten and accessible
-        return self.amount <= sum(
-            all(
-                rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
-                for rule in mission_id_to_entry_rules[mission_id]
-            )
-            for mission_id in beaten_missions.intersection(self.mission_ids)
-        )
+        accessible_count = 0
+        success = accessible_count >= self.amount
+        if self.amount > 0:
+            for mission_id in [mission_id for mission_id in self.mission_ids if mission_id in beaten_missions]:
+                if all(
+                    rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
+                    for rule in mission_id_to_entry_rules[mission_id]
+                ):
+                    accessible_count += 1
+                    if accessible_count >= self.amount:
+                        success = True
+                        break
+        return success
 
 class SubRuleEntryRule(EntryRule):
     rule_id: int
@@ -327,11 +333,18 @@ class SubRuleRuleData(RuleData):
             if self.rule_id in seen_rules:
                 return False
             seen_rules.append(self.rule_id)
+        
         # Sub-rule rules are accessible if enough of their child rules are accessible
-        success = self.amount <= sum(
-            rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules)
-            for rule in self.sub_rules
-        )
+        accessible_count = 0
+        success = accessible_count >= self.amount
+        if self.amount > 0:
+            for rule in self.sub_rules:
+                if rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules):
+                    accessible_count += 1
+                    if accessible_count >= self.amount:
+                        success = True
+                        break
+        
         if self.rule_id >= 0:
             if success:
                 accessible_rules.add(self.rule_id)
