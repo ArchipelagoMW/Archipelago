@@ -14,6 +14,7 @@ class Building:
     stable = "Stable"
     well = "Well"
     shipping_bin = "Shipping Bin"
+    farm_house = "Farm House"
     kitchen = "Kitchen"
     kids_room = "Kids Room"
     cellar = "Cellar"
