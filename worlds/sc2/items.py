@@ -1608,6 +1608,14 @@ item_table = {
                  parent_item=item_names.INFESTED_DIAMONDBACK, quantity=2, origin={"ext"}),
     item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW:
         ItemData(375 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 1, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK:
+        ItemData(376 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 2, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK:
+        ItemData(377 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 3, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE:
+        ItemData(378 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 4, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR:
+        ItemData(379 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 5, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR, origin={"ext"}),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),

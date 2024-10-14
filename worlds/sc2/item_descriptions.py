@@ -70,6 +70,12 @@ resource_efficiency_cost_reduction = {
     item_names.DESTROYER:     (50, 25, 1),
     DISPLAY_NAME_WORMS:       (50, 75, 0),
 
+    #Frightful Fleshwelder
+    item_names.INFESTED_SIEGE_TANK:   (25, 25, 0),
+    item_names.INFESTED_DIAMONDBACK:  (50, 0, 0),
+    item_names.INFESTED_BANSHEE:      (25, 0, 0),
+    item_names.INFESTED_LIBERATOR:    (25, 25, 0),
+
     # War Council
     item_names.CENTURION:     (0, 50, 0),
     item_names.SENTINEL:      (60, 0, 1),
@@ -739,6 +745,10 @@ item_descriptions = {
     item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS: "Infested Banshees gain +2 range while cloacked.",
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL: "Infested Liberators instantly transform into a cloud of microscopic organisms while attacking, reducing the damage they take by 85%.",
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK: _get_resource_efficiency_desc(item_names.INFESTED_SIEGE_TANK),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK: _get_resource_efficiency_desc(item_names.INFESTED_DIAMONDBACK),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE: _get_resource_efficiency_desc(item_names.INFESTED_BANSHEE),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR: _get_resource_efficiency_desc(item_names.INFESTED_LIBERATOR),
     item_names.ZERG_EXCAVATING_CLAWS: "Increases movement speed of Spore and Spine Crawlers, especially off creep.  Also increases root speed.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
