@@ -212,4 +212,8 @@ class AquariaWorld(World):
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
                 "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
                 "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
+                "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
+                "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
+                "light_needed_to_get_to_dark_places": bool(self.options.light_needed_to_get_to_dark_places),
+                "turtle_randomizer": self.options.turtle_randomizer.value,
                 }
