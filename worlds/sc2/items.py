@@ -1,17 +1,12 @@
 from typing import *
 
-from BaseClasses import Item, ItemClassification, MultiWorld
+from BaseClasses import Item, ItemClassification
 import typing
 import enum
 
-from .mission_tables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
+from .mission_tables import SC2Mission, SC2Race, SC2Campaign
 from . import item_names
 from .mission_order.presets_static import get_used_layout_names
-from worlds.AutoWorld import World
-from ..ror2.items import classification
-
-if TYPE_CHECKING:
-    from . import SC2World
 
 
 class ItemTypeEnum(enum.Enum):
