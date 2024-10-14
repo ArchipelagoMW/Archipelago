@@ -108,8 +108,8 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
     # defaultdict is a dict where you don't need to check if an id is present, you can just use += (lot faster)
     def add_distributions(dist1, dist2):
         combined_dist = defaultdict(float)
-        for val1, prob1 in dist1.items():
-            for val2, prob2 in dist2.items():
+        for val2, prob2 in dist2.items():
+            for val1, prob1 in dist1.items():
                 combined_dist[val1 + val2] += prob1 * prob2
         return dict(combined_dist)
 
