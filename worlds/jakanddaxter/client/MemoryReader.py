@@ -28,7 +28,7 @@ sizeof_float = 4
 # *****************************************************************************
 # **** This number must match (-> *ap-info-jak1* version) in ap-struct.gc! ****
 # *****************************************************************************
-expected_memory_version = 2
+expected_memory_version = 3
 
 
 # IMPORTANT: OpenGOAL memory structures are particular about the alignment, in memory, of member elements according to
@@ -225,7 +225,15 @@ class JakAndDaxterMemoryReader:
             try:
                 self.gk_process.read_bool(self.gk_process.base_address)  # Ping to see if it's alive.
             except (ProcessError, MemoryReadError, WinAPIError):
-                self.log_error(logger, "The gk process has died. Restart the game and run \"/memr connect\" again.")
+                msg = (f"Error reading game memory! (Did the game crash?)\n"
+                       f"Please close all open windows and reopen the Jak and Daxter Client "
+                       f"from the Archipelago Launcher.\n"
+                       f"If the game and compiler do not restart automatically, please follow these steps:\n"
+                       f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
+                       f"   Then click Advanced > Play in Debug Mode.\n"
+                       f"   Then click Advanced > Open REPL.\n"
+                       f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
+                self.log_error(logger, msg)
                 self.connected = False
         else:
             return
@@ -264,7 +272,7 @@ class JakAndDaxterMemoryReader:
             self.gk_process = pymem.Pymem("gk.exe")  # The GOAL Kernel
             logger.debug("Found the gk process: " + str(self.gk_process.process_id))
         except ProcessNotFound:
-            self.log_error(logger, "Could not find the gk process.")
+            self.log_error(logger, "Could not find the game process.")
             self.connected = False
             return
 
@@ -305,7 +313,7 @@ class JakAndDaxterMemoryReader:
                    f"   Click Update (if one is available).\n"
                    f"   Click Advanced > Compile. When this is done, click Continue.\n"
                    f"   Click Versions and verify the latest version is marked 'Active'.\n"
-                   f"   Close all launchers, games, clients, and Powershell windows, then restart Archipelago.")
+                   f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
             self.log_error(logger, msg)
             self.connected = False
 
@@ -404,7 +412,7 @@ class JakAndDaxterMemoryReader:
                             bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(level, bundle, bundle_size))
                             if bundle_ap_id not in self.location_outbox:
                                 self.location_outbox.append(bundle_ap_id)
-                                logger.debug("Checked orb bundle: " + str(bundle_ap_id))
+                                logger.debug(f"Checked orb bundle: L{level} {bundle}")
 
             # Global Orbsanity option. Index 16 refers to all orbs found regardless of level.
             if orbsanity_option == 2:
@@ -418,7 +426,7 @@ class JakAndDaxterMemoryReader:
                         bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(16, bundle, bundle_size))
                         if bundle_ap_id not in self.location_outbox:
                             self.location_outbox.append(bundle_ap_id)
-                            logger.debug("Checked orb bundle: " + str(bundle_ap_id))
+                            logger.debug(f"Checked orb bundle: G {bundle}")
 
             completed = self.read_goal_address(completed_offset, sizeof_uint8)
             if completed > 0 and not self.finished_game:
@@ -426,7 +434,15 @@ class JakAndDaxterMemoryReader:
                 self.log_success(logger, "Congratulations! You finished the game!")
 
         except (ProcessError, MemoryReadError, WinAPIError):
-            self.log_error(logger, "The gk process has died. Restart the game and run \"/memr connect\" again.")
+            msg = (f"Error reading game memory! (Did the game crash?)\n"
+                   f"Please close all open windows and reopen the Jak and Daxter Client "
+                   f"from the Archipelago Launcher.\n"
+                   f"If the game and compiler do not restart automatically, please follow these steps:\n"
+                   f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
+                   f"   Then click Advanced > Play in Debug Mode.\n"
+                   f"   Then click Advanced > Open REPL.\n"
+                   f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
+            self.log_error(logger, msg)
             self.connected = False
 
         return self.location_outbox

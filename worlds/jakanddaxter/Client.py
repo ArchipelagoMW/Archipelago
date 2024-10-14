@@ -302,7 +302,7 @@ class JakAndDaxterContext(CommonContext):
 async def run_game(ctx: JakAndDaxterContext):
 
     # These may already be running. If they are not running, try to start them.
-    # TODO - Support other OS's. cmd for some reason does not work with goalc. Pymem is Windows-only.
+    # TODO - Support other OS's. Pymem is Windows-only.
     gk_running = False
     try:
         pymem.Pymem("gk.exe")  # The GOAL Kernel
@@ -370,7 +370,7 @@ async def run_game(ctx: JakAndDaxterContext):
                        f"   Click Jak and Daxter > Features > Mods > ArchipelaGOAL > Advanced > Open Game Data Folder.\n"
                        f"   Paste the iso_data folder in this location.\n"
                        f"   Click Advanced > Compile. When this is done, click Continue.\n"
-                       f"   Close all launchers, games, clients, and Powershell windows, then restart Archipelago.\n"
+                       f"   Close all launchers, games, clients, and console windows, then restart Archipelago.\n"
                        f"(See Setup Guide for more details.)")
                 ctx.on_log_error(logger, msg)
                 return
@@ -386,20 +386,24 @@ async def run_game(ctx: JakAndDaxterContext):
                     os.path.normpath(root_path),
                     os.path.normpath(config_relative_path)))
 
-            # Prefixing ampersand and wrapping in quotes is necessary for paths with spaces in them.
-            gk_process = subprocess.Popen(
-                ["powershell.exe",
-                 f"& \"{gk_path}\"",
-                 f"--config-path \"{config_path}\"",
-                 "--game jak1",
-                 "--", "-v", "-boot", "-fakeiso", "-debug"],
-                creationflags=subprocess.CREATE_NEW_CONSOLE)  # These need to be new consoles for stability.
+            # The game freezes if text is inadvertently selected in the stdout/stderr data streams. Let's pipe those
+            # streams to a file, and let's not clutter the screen with another console window.
+            log_path = os.path.join(Utils.user_path("logs"), "JakAndDaxterGame.txt")
+            log_path = os.path.normpath(log_path)
+            with open(log_path, "w") as log_file:
+                gk_process = subprocess.Popen(
+                    [gk_path, "--game", "jak1",
+                     "--config-path", config_path,
+                     "--", "-v", "-boot", "-fakeiso", "-debug"],
+                    stdout=log_file,
+                    stderr=log_file,
+                    creationflags=subprocess.CREATE_NO_WINDOW)
 
         if not goalc_running:
-            # Prefixing ampersand and wrapping goalc_path in quotes is necessary for paths with spaces in them.
+            # This needs to be a new console. The REPL console cannot share a window with any other process.
             goalc_process = subprocess.Popen(
-                ["powershell.exe", f"& \"{goalc_path}\"", "--game jak1"],
-                creationflags=subprocess.CREATE_NEW_CONSOLE)  # These need to be new consoles for stability.
+                [goalc_path, "--game", "jak1"],
+                creationflags=subprocess.CREATE_NEW_CONSOLE)
 
     except AttributeError as e:
         ctx.on_log_error(logger, f"Host.yaml does not contain {e.args[0]}, unable to locate game executables.")

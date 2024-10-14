@@ -87,13 +87,28 @@ class JakAndDaxterReplClient:
             try:
                 self.gk_process.read_bool(self.gk_process.base_address)  # Ping to see if it's alive.
             except ProcessError:
-                self.log_error(logger, "The gk process has died. Restart the game and run \"/repl connect\" again.")
+                msg = (f"Error reading game memory! (Did the game crash?)\n"
+                       f"Please close all open windows and reopen the Jak and Daxter Client "
+                       f"from the Archipelago Launcher.\n"
+                       f"If the game and compiler do not restart automatically, please follow these steps:\n"
+                       f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
+                       f"   Then click Advanced > Play in Debug Mode.\n"
+                       f"   Then click Advanced > Open REPL.\n"
+                       f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
+                self.log_error(logger, msg)
                 self.connected = False
             try:
                 self.goalc_process.read_bool(self.goalc_process.base_address)  # Ping to see if it's alive.
             except ProcessError:
-                self.log_error(logger,
-                               "The goalc process has died. Restart the compiler and run \"/repl connect\" again.")
+                msg = (f"Error sending data to compiler! (Did the compiler crash?)\n"
+                       f"Please close all open windows and reopen the Jak and Daxter Client "
+                       f"from the Archipelago Launcher.\n"
+                       f"If the game and compiler do not restart automatically, please follow these steps:\n"
+                       f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
+                       f"   Then click Advanced > Play in Debug Mode.\n"
+                       f"   Then click Advanced > Open REPL.\n"
+                       f"   Then close and reopen the Jak and Daxter Client from the Archipelago Launcher.")
+                self.log_error(logger, msg)
                 self.connected = False
         else:
             return
@@ -139,14 +154,14 @@ class JakAndDaxterReplClient:
             self.gk_process = pymem.Pymem("gk.exe")  # The GOAL Kernel
             logger.debug("Found the gk process: " + str(self.gk_process.process_id))
         except ProcessNotFound:
-            self.log_error(logger, "Could not find the gk process.")
+            self.log_error(logger, "Could not find the game process.")
             return
 
         try:
             self.goalc_process = pymem.Pymem("goalc.exe")  # The GOAL Compiler and REPL
             logger.debug("Found the goalc process: " + str(self.goalc_process.process_id))
         except ProcessNotFound:
-            self.log_error(logger, "Could not find the goalc process.")
+            self.log_error(logger, "Could not find the compiler process.")
             return
 
         try:
@@ -244,22 +259,16 @@ class JakAndDaxterReplClient:
         self.json_message_queue.put(JsonMessageData(my_item_name, my_item_finder, their_item_name, their_item_owner))
 
     # OpenGOAL can handle both its own string datatype and C-like character pointers (charp).
-    # So for the game to constantly display this information in the HUD, we have to write it
-    # to a memory address as a char*.
     async def write_game_text(self, data: JsonMessageData):
-        logger.debug(f"Sending info to in-game display!")
+        logger.debug(f"Sending info to the in-game messenger!")
         body = ""
-        if data.my_item_name:
-            body += (f" (charp<-string (-> *ap-info-jak1* my-item-name)"
-                     f" {self.sanitize_game_text(data.my_item_name)})")
-        if data.my_item_finder:
-            body += (f" (charp<-string (-> *ap-info-jak1* my-item-finder)"
+        if data.my_item_name and data.my_item_finder:
+            body += (f" (append-messages (-> *ap-messenger* 0) \'recv "
+                     f" {self.sanitize_game_text(data.my_item_name)} "
                      f" {self.sanitize_game_text(data.my_item_finder)})")
-        if data.their_item_name:
-            body += (f" (charp<-string (-> *ap-info-jak1* their-item-name)"
-                     f" {self.sanitize_game_text(data.their_item_name)})")
-        if data.their_item_owner:
-            body += (f" (charp<-string (-> *ap-info-jak1* their-item-owner)"
+        if data.their_item_name and data.their_item_owner:
+            body += (f" (append-messages (-> *ap-messenger* 0) \'sent "
+                     f" {self.sanitize_game_text(data.their_item_name)} "
                      f" {self.sanitize_game_text(data.their_item_owner)})")
         await self.send_form(f"(begin {body} (none))", print_ok=False)
 
