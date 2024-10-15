@@ -1,6 +1,6 @@
-from typing import Dict
+from dataclasses import dataclass
 
-from Options import Toggle, Range, Option
+from Options import Toggle, Range, Option, PerGameCommonOptions
 
 
 # Will look into feasibility of options later.
@@ -42,7 +42,7 @@ class Plants(Toggle):
     display_name = "Plantsanity"
 
 
-class Interactables(Toggle):
+class Knocksanity(Toggle):
     """Adds every interactable, such a dressers and light fixtures, to the location pool"""
     display_name = "Interactables"
 
@@ -97,19 +97,19 @@ class Enemizer(Toggle):
     display_name = "Enemizer"
 
 
-luigimansion_options: Dict[str, Option] = {
-    "StartWithBetterVacuum": StartWithBetterVacuum,
-    "StartWithBooRadar": StartWithBooRadar,
-    "StartHiddenMansion": StartHiddenMansion,
-    "SpeedySpirits": SpeedySpirits,
-    "Toadsanity": Toadsanity,
-    "Plantsanity": Plants,
-    "Interactables": Interactables,
-    "MarioItems": MarioItems,
-    "WashroomBooCount": WashroomBooCount,
-    "BalconyBooCount": BalconyBooCount,
-    "FinalBooCount": FinalBooCount,
-    "Boosanity": Boosanity,
-    "PortraitGhosts": PortraitGhosts,
-    "Enemizer": Enemizer
-}
+@dataclass
+class LMOptions(PerGameCommonOptions):
+    good_vacuum: StartWithBetterVacuum
+    boo_radar: StartWithBooRadar
+    hidden_mansion: StartHiddenMansion
+    speedy_spirits: SpeedySpirits
+    toadsanity: Toadsanity
+    plantsanity: Plants
+    knocksanity: Knocksanity
+    mario_items: MarioItems
+    washroom_boo_count: WashroomBooCount
+    balcony_boo_count: BalconyBooCount
+    final_boo_count: FinalBooCount
+    boosanity: Boosanity
+    portrait_ghosts: PortraitGhosts
+    enemizer: Enemizer
