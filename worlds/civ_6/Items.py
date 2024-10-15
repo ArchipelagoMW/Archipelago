@@ -57,7 +57,7 @@ class FillerItemRarity(Enum):
 
 FILLER_DISTRIBUTION: Dict[FillerItemRarity, float] = {
     FillerItemRarity.RARE: 0.025,
-    FillerItemRarity.UNCOMMON: .2,
+    FillerItemRarity.UNCOMMON: 0.2,
     FillerItemRarity.COMMON: 0.775,
 }
 
@@ -113,7 +113,7 @@ class CivVIItem(Item):
     civ_vi_id: int
     item_type: CivVICheckType
 
-    def __init__(self, item: CivVIItemData, player: int, classification: ItemClassification = None):
+    def __init__(self, item: CivVIItemData, player: int, classification: Optional[ItemClassification] = None):
         super().__init__(item.name, classification or item.classification, item.code, player)
         self.civ_vi_id = item.civ_vi_id
         self.item_type = item.item_type
@@ -271,21 +271,21 @@ def generate_item_table() -> Dict[str, CivVIItemData]:
 
     progressive_items = get_flat_progressive_districts()
 
-    item_table = {}
+    item_table: Dict[str, CivVIItemData] = {}
 
     def get_id_base():
         return len(item_table.keys())
 
-    item_table = {**item_table, **_generate_tech_items(get_id_base(), required_items, progressive_items)}
-    item_table = {**item_table, **_generate_civics_items(get_id_base(), required_items, progressive_items)}
-    item_table = {**item_table, **_generate_progressive_district_items(get_id_base())}
-    item_table = {**item_table, **_generate_progressive_era_items(get_id_base())}
-    item_table = {**item_table, **_generate_goody_hut_items(get_id_base())}
+    item_table.update(**_generate_tech_items(get_id_base(), required_items, progressive_items))
+    item_table.update(**_generate_civics_items(get_id_base(), required_items, progressive_items))
+    item_table.update(**_generate_progressive_district_items(get_id_base()))
+    item_table.update(**_generate_progressive_era_items(get_id_base()))
+    item_table.update(**_generate_goody_hut_items(get_id_base()))
 
     return item_table
 
 
-def get_items_by_type(item_type: CivVICheckType, item_table: Dict[str, CivVIItemData]) -> Dict[str, CivVIItemData]:
+def get_items_by_type(item_type: CivVICheckType, item_table: Dict[str, CivVIItemData]) -> List[CivVIItemData]:
     """
     Returns a list of items that match the given item type
     """
@@ -297,4 +297,4 @@ def get_random_filler_by_rarity(world: 'CivVIWorld', rarity: FillerItemRarity) -
     Returns a random filler item by rarity
     """
     items = [item for item in get_filler_item_data().values() if item.rarity == rarity]
-    return items[world.random.randint(0, len(items) - 1)]
+    return world.random.choice(items)

@@ -98,9 +98,9 @@ class CivVIWorld(World):
         data = get_era_required_items_data()
         early_items = data[EraType.ERA_ANCIENT.value]
         early_locations = [location for location in self.location_table.values() if location.era_type == EraType.ERA_ANCIENT.value]
-        for item_name, data in self.item_table.items():
+        for item_name, item_data in self.item_table.items():
             # These item types are handled individually
-            if data.item_type in [CivVICheckType.PROGRESSIVE_DISTRICT, CivVICheckType.ERA, CivVICheckType.GOODY]:
+            if item_data.item_type in [CivVICheckType.PROGRESSIVE_DISTRICT, CivVICheckType.ERA, CivVICheckType.GOODY]:
                 continue
 
             # If we're using progressive districts, we need to check if we need to create a different item instead
@@ -118,7 +118,7 @@ class CivVIWorld(World):
                 for location in early_locations:
                     found_location = None
                     try:
-                        found_location = self.multiworld.get_location(location.name, self.player)
+                        found_location = self.get_location(location.name)
                         forbid_item(found_location, item_to_create, self.player)
                     except KeyError:
                         pass
@@ -167,7 +167,7 @@ class CivVIWorld(World):
             if location_data.location_type != CivVICheckType.CIVIC and location_data.location_type != CivVICheckType.TECH:
                 continue
 
-            location: CivVILocation = self.multiworld.get_location(location_name, self.player)
+            location: CivVILocation = self.get_location(location_name)
 
             if not location.item or not show_flags.get(location.item.classification, False):
                 continue

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, StartInventory, StartInventoryPool, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, StartInventoryPool, Toggle
 
 
 class ProgressionStyle(Choice):
@@ -18,12 +18,12 @@ class ProgressionStyle(Choice):
 
 
 class ShuffleGoodyHuts(DefaultOnToggle):
-    """Shuffles the goody hut rewards. Goody huts will only contain junk items and location checks are received sequentially (GOODY_HUT_1, GOODY_HUT_2, etc)."""
+    """Shuffles the goody hut rewards. Goody huts will only contain junk items and location checks are received sequentially (GOODY_HUT_1, GOODY_HUT_2, etc.)."""
     display_name = "Shuffle Goody Hut Rewards"
 
 
 class BoostSanity(Toggle):
-    """Boosts for Civics/Techs are location checks. Boosts can now be triggered even if the item has already been researched. If it is dependent upon a unit that is now obsolete, you can click toggle on/off the relevant tech in the tech tree."""
+    """Boosts for Civics/Techs are location checks. Boosts can now be triggered even if the item has already been researched. If it is dependent upon a unit that is now obsolete, you can click to toggle on/off the relevant tech in the tech tree."""
     display_name = "Boostsanity"
 
 
@@ -33,7 +33,7 @@ class ExcludeMissableBoosts(Toggle):
 
 
 class ResearchCostMultiplier(Choice):
-    """Multiplier for research cost of techs and civics, higher values make research more expensive. Cheap = 0.5x, Expensive = 1.5x. Default is 1. """
+    """Multiplier for research cost of techs and civics, higher values make research more expensive. Cheap = 0.5x, Expensive = 1.5x."""
     display_name = "Tech/Civic Cost Multiplier"
     option_cheap = 0.5
     option_default = 1
@@ -43,9 +43,9 @@ class ResearchCostMultiplier(Choice):
 
 class PreHintItems(Choice):
     """Controls if/what items in the tech/civics trees are pre-hinted for the multiworld.
-    All : All items in the tech & civics trees are pre-hinted.
+    All: All items in the tech & civics trees are pre-hinted.
     Progression items: Only locations in the trees containing progression items are pre-hinted.
-    No Junk: pre-hint the progression and useful items.
+    No Junk: Pre-hint the progression and useful items.
     None: No items are pre-hinted.
     """
     display_name = "Tech/Civic Tree pre-hinted Items"
@@ -62,12 +62,12 @@ class HideItemNames(Toggle):
 
 
 class InGameFlagProgressionItems(DefaultOnToggle):
-    """If enabled, an advisor icon will be added to any location that contains a progression item"""
+    """If enabled, an advisor icon will be added to any location that contains a progression item."""
     display_name = "Advisor Indicates Progression Items"
 
 
 class DeathLinkEffect(Choice):
-    """What happens when a unit dies. Default is Unit Killed.
+    """What happens when a unit dies.
     Faith, and Gold will be decreased by the amount specified in 'Death Link Effect Percent'.
     Era score is decreased by 1.
     Any will select any of these options any time a death link is received."""
@@ -82,7 +82,7 @@ class DeathLinkEffect(Choice):
 
 
 class DeathLinkEffectPercent(Range):
-    """The percentage of the effect that will be applied. Only applicable for Gold and Faith effects. Default is 20%"""
+    """The percentage of the effect that will be applied. Only applicable for Gold and Faith effects."""
     display_name = "Death Link Effect Percent"
     default = 20
     range_start = 1

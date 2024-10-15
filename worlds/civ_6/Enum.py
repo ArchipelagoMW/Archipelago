@@ -1,4 +1,6 @@
 from enum import Enum
+
+
 class EraType(Enum):
     ERA_ANCIENT = "ERA_ANCIENT"
     ERA_CLASSICAL = "ERA_CLASSICAL"
@@ -9,6 +11,7 @@ class EraType(Enum):
     ERA_ATOMIC = "ERA_ATOMIC"
     ERA_INFORMATION = "ERA_INFORMATION"
     ERA_FUTURE = "ERA_FUTURE"
+
 
 class CivVICheckType(Enum):
     TECH = "TECH"
