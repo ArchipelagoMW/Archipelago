@@ -183,7 +183,8 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.first_slash_guild, [SVEEntrance.first_slash_guild_to_hallway], is_ginger_island=True),
     RegionData(SVERegion.first_slash_hallway, [SVEEntrance.first_slash_hallway_to_room], is_ginger_island=True),
     RegionData(SVERegion.first_slash_spare_room, is_ginger_island=True),
-    RegionData(SVERegion.highlands_outside, [SVEEntrance.highlands_to_lance, SVEEntrance.highlands_to_cave], is_ginger_island=True),
+    RegionData(SVERegion.highlands_outside, [SVEEntrance.highlands_to_lance, SVEEntrance.highlands_to_cave, SVEEntrance.highlands_to_pond], is_ginger_island=True),
+    RegionData(SVERegion.highlands_pond, is_ginger_island=True),
     RegionData(SVERegion.highlands_cavern, [SVEEntrance.to_dwarf_prison], is_ginger_island=True),
     RegionData(SVERegion.dwarf_prison, is_ginger_island=True),
     RegionData(SVERegion.lances_house, [SVEEntrance.lance_to_ladder], is_ginger_island=True),
@@ -276,6 +277,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.sprite_spring_to_cave, SVERegion.sprite_spring_cave, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.fish_shop_to_willy_bedroom, SVERegion.willy_bedroom, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.museum_to_gunther_bedroom, SVERegion.gunther_bedroom, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.highlands_to_pond, SVERegion.highlands_pond),
 ]
 
 alecto_regions = [

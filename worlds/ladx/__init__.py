@@ -98,9 +98,12 @@ class LinksAwakeningWorld(World):
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
-    #item_name_groups = {
-    #    "weapons": {"sword", "lance"}
-    #}
+    item_name_groups = {
+        "Instruments": {
+            "Full Moon Cello", "Conch Horn", "Sea Lily's Bell", "Surf Harp",
+            "Wind Marimba", "Coral Triangle", "Organ of Evening Calm", "Thunder Drum"
+        },
+    }
 
     prefill_dungeon_items = None
 
@@ -213,7 +216,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Master Stalfos' Message"))
+                    self.multiworld.itempool.append(self.create_item("Nothing"))
                 else:
                     item = self.create_item(item_name)
 
@@ -509,3 +512,34 @@ class LinksAwakeningWorld(World):
         if change and item.name in self.rupees:
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
+
+    def get_filler_item_name(self) -> str:
+        return "Nothing"
+
+    def fill_slot_data(self):
+        slot_data = {}
+
+        if not self.multiworld.is_race:
+            # all of these option are NOT used by the LADX- or Text-Client.
+            # they are used by Magpie tracker (https://github.com/kbranch/Magpie/wiki/Autotracker-API)
+            # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
+
+            slot_options = ["instrument_count"]
+
+            slot_options_display_name = [
+                "goal", "logic", "tradequest", "rooster",
+                "experimental_dungeon_shuffle", "experimental_entrance_shuffle", "trendy_game", "gfxmod",
+                "shuffle_nightmare_keys", "shuffle_small_keys", "shuffle_maps",
+                "shuffle_compasses", "shuffle_stone_beaks", "shuffle_instruments", "nag_messages"
+            ]
+
+            # use the default behaviour to grab options
+            slot_data = self.options.as_dict(*slot_options)
+
+            # for options which should not get the internal int value but the display name use the extra handling
+            slot_data.update({
+                option: value.current_key
+                for option, value in dataclasses.asdict(self.options).items() if option in slot_options_display_name
+            })
+
+        return slot_data

@@ -6,7 +6,7 @@ from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item, ItemClassification
+from BaseClasses import MultiWorld, CollectionState, PlandoOptions, get_seed, Location, Item, ItemClassification
 from Options import VerifyKeys
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
@@ -85,7 +85,7 @@ def allsanity_no_mods_6_x_x():
         options.QuestLocations.internal_name: 56,
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
-        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.TrapItems.internal_name: options.TrapItems.option_nightmare,
@@ -256,17 +256,21 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             return False
         return super().run_default_tests
 
-    def collect_lots_of_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
-        required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * 0.25))
+    def collect_lots_of_money(self, percent: float = 0.25):
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
+        real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
+        required_prog_items = int(round(real_total_prog_items * percent))
         for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
+        self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
 
     def collect_all_the_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), event=False)
-        required_prog_items = int(round(self.multiworld.worlds[self.player].total_progression_items * 0.95))
+        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
+        real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
+        required_prog_items = int(round(real_total_prog_items * 0.95))
         for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
+        self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
 
     def collect_everything(self):
         non_event_items = [item for item in self.multiworld.get_items() if item.code]
@@ -305,6 +309,12 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         if created_item.classification == ItemClassification.progression:
             self.multiworld.worlds[self.player].total_progression_items -= 1
         return created_item
+
+    def remove_one_by_name(self, item: str) -> None:
+        self.remove(self.create_item(item))
+
+    def reset_collection_state(self):
+        self.multiworld.state = self.original_state.copy()
 
 
 pre_generated_worlds = {}
@@ -365,7 +375,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
 
         if issubclass(option, VerifyKeys):
             # Values should already be verified, but just in case...
-            option.verify_keys(value.value)
+            value.verify(StardewValleyWorld, "Tester", PlandoOptions.bosses)
 
         setattr(args, name, {1: value})
     multiworld.set_options(args)
@@ -441,6 +451,16 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
     for i in range(1, len(test_options) + 1):
         multiworld.game[i] = StardewValleyWorld.game
         multiworld.player_name.update({i: f"Tester{i}"})
+    args = create_args(test_options)
+    multiworld.set_options(args)
+
+    for step in gen_steps:
+        call_all(multiworld, step)
+
+    return multiworld
+
+
+def create_args(test_options):
     args = Namespace()
     for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
         options = {}
@@ -449,9 +469,4 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
             value = option(player_options[name]) if name in player_options else option.from_any(option.default)
             options.update({i: value})
         setattr(args, name, options)
-    multiworld.set_options(args)
-
-    for step in gen_steps:
-        call_all(multiworld, step)
-
-    return multiworld
+    return args

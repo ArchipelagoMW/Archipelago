@@ -12,7 +12,12 @@ from worlds.generic.Rules import add_item_rule
 
 
 class FillError(RuntimeError):
-    pass
+    def __init__(self, *args: typing.Union[str, typing.Any], **kwargs) -> None:
+        if "multiworld" in kwargs and isinstance(args[0], str):
+            placements = (args[0] + f"\nAll Placements:\n" +
+                          f"{[(loc, loc.item) for loc in kwargs['multiworld'].get_filled_locations()]}")
+            args = (placements, *args[1:])
+        super().__init__(*args)
 
 
 def _log_fill_progress(name: str, placed: int, total_items: int) -> None:
@@ -24,7 +29,7 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
     new_state = base_state.copy()
     for item in itempool:
         new_state.collect(item, True)
-    new_state.sweep_for_events(locations=locations)
+    new_state.sweep_for_advancements(locations=locations)
     return new_state
 
 
@@ -212,7 +217,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                             f"Unfilled locations:\n"
                             f"{', '.join(str(location) for location in locations)}\n"
                             f"Already placed {len(placements)}:\n"
-                            f"{', '.join(str(place) for place in placements)}")
+                            f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     item_pool.extend(unplaced_items)
 
@@ -299,7 +304,7 @@ def remaining_fill(multiworld: MultiWorld,
                             f"Unfilled locations:\n"
                             f"{', '.join(str(location) for location in locations)}\n"
                             f"Already placed {len(placements)}:\n"
-                            f"{', '.join(str(place) for place in placements)}")
+                            f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     itempool.extend(unplaced_items)
 
@@ -324,8 +329,8 @@ def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, lo
             pool.append(location.item)
             state.remove(location.item)
             location.item = None
-            if location in state.events:
-                state.events.remove(location)
+            if location in state.advancements:
+                state.advancements.remove(location)
             locations.append(location)
     if pool and locations:
         locations.sort(key=lambda loc: loc.progress_type != LocationProgressType.PRIORITY)
@@ -358,7 +363,7 @@ def distribute_early_items(multiworld: MultiWorld,
         early_priority_locations: typing.List[Location] = []
         loc_indexes_to_remove: typing.Set[int] = set()
         base_state = multiworld.state.copy()
-        base_state.sweep_for_events(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
+        base_state.sweep_for_advancements(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
         for i, loc in enumerate(fill_locations):
             if loc.can_reach(base_state):
                 if loc.progress_type == LocationProgressType.PRIORITY:
@@ -470,28 +475,26 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         nonlocal lock_later
         lock_later.append(location)
 
+    single_player = multiworld.players == 1 and not multiworld.groups
+
     if prioritylocations:
         # "priority fill"
         fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
-                         single_player_placement=multiworld.players == 1, swap=False, on_place=mark_for_locking,
-                         name="Priority")
+                         single_player_placement=single_player, swap=False, on_place=mark_for_locking, name="Priority")
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
     if progitempool:
         # "advancement/progression fill"
         if panic_method == "swap":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
-                             swap=True,
-                             name="Progression", single_player_placement=multiworld.players == 1)
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=True,
+                             name="Progression", single_player_placement=single_player)
         elif panic_method == "raise":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
-                             swap=False,
-                             name="Progression", single_player_placement=multiworld.players == 1)
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+                             name="Progression", single_player_placement=single_player)
         elif panic_method == "start_inventory":
-            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool,
-                             swap=False, allow_partial=True,
-                             name="Progression", single_player_placement=multiworld.players == 1)
+            fill_restrictive(multiworld, multiworld.state, defaultlocations, progitempool, swap=False,
+                             allow_partial=True, name="Progression", single_player_placement=single_player)
             if progitempool:
                 for item in progitempool:
                     logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
@@ -506,7 +509,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
-                f"There are {len(progitempool)} more progression items than there are available locations."
+                f"There are {len(progitempool)} more progression items than there are available locations.",
+                multiworld=multiworld,
             )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
 
@@ -523,7 +527,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. "
-            f"There are {len(excludedlocations)} more excluded locations than filler or trap items."
+            f"There are {len(excludedlocations)} more excluded locations than filler or trap items.",
+            multiworld=multiworld,
         )
 
     restitempool = filleritempool + usefulitempool
@@ -551,7 +556,7 @@ def flood_items(multiworld: MultiWorld) -> None:
     progress_done = False
 
     # sweep once to pick up preplaced items
-    multiworld.state.sweep_for_events()
+    multiworld.state.sweep_for_advancements()
 
     # fill multiworld from top of itempool while we can
     while not progress_done:
@@ -589,7 +594,7 @@ def flood_items(multiworld: MultiWorld) -> None:
             if candidate_item_to_place is not None:
                 item_to_place = candidate_item_to_place
             else:
-                raise FillError('No more progress items left to place.')
+                raise FillError('No more progress items left to place.', multiworld=multiworld)
 
         # find item to replace with progress item
         location_list = multiworld.get_reachable_locations()
@@ -646,7 +651,6 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
 
         def get_sphere_locations(sphere_state: CollectionState,
                                  locations: typing.Set[Location]) -> typing.Set[Location]:
-            sphere_state.sweep_for_events(key_only=True, locations=locations)
             return {loc for loc in locations if sphere_state.can_reach(loc)}
 
         def item_percentage(player: int, num: int) -> float:
@@ -740,7 +744,7 @@ def balance_multiworld_progression(multiworld: MultiWorld) -> None:
                             ), items_to_test):
                                 reducing_state.collect(location.item, True, location)
 
-                            reducing_state.sweep_for_events(locations=locations_to_test)
+                            reducing_state.sweep_for_advancements(locations=locations_to_test)
 
                             if multiworld.has_beaten_game(balancing_state):
                                 if not multiworld.has_beaten_game(reducing_state):
@@ -823,7 +827,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
             warn(warning, force)
 
     swept_state = multiworld.state.copy()
-    swept_state.sweep_for_events()
+    swept_state.sweep_for_advancements()
     reachable = frozenset(multiworld.get_reachable_locations(swept_state))
     early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
     non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
