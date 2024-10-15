@@ -411,10 +411,7 @@ def parse_tokens(s: str) -> Sequence[AllTokens]:
                 while j < len(s) and (s[j].isdigit() or s[j] == "."):
                     j += 1
                 val_str = s[i:j]
-                if len(val_str.split(".")) > 1:
-                    val = float(val_str)
-                else:
-                    val = int(val_str)
+                val = float(val_str)
                 tokens.append(NumberToken(val))
                 i += len(val_str)
                 state = "end"
@@ -500,11 +497,9 @@ def eval_postfix(postfix: Sequence[PostfixTokens], name_resolver: Callable[[str]
     return operand_stack[0]
 
 
-def get_choice(option, root, value=None, sub_group=None, record: ChoiceRecord = ChoiceRecord(None, None, None)) -> Any:
-    if record.check_values() is None:
-        record.value_init()
-    if record.check_names() is None:
-        record.name_init()
+def get_choice(option, root, value=None, sub_group=None, record: ChoiceRecord = None) -> Any:
+    if record is None:
+        record = ChoiceRecord()
     if option in record.check_names():
         raise RuntimeError(f"Recursive variable: value {option}'s value references to itself")
     if sub_group is not None:
