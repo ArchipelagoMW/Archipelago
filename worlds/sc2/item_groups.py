@@ -108,6 +108,7 @@ class ItemGroupNames:
     TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES = "Terran Original Progressive Upgrades"
     """Progressive items where level 1 appeared in WoL"""
     MENGSK_UNITS = "Mengsk Units"
+    TERRAN_VETERANCY_UNITS= "Terran Veterancy Units"
 
     ZERG_ITEMS = "Zerg Items"
     ZERG_UNITS = "Zerg Units"
@@ -203,7 +204,7 @@ item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.MEDIVAC, item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
     item_names.BATTLECRUISER, item_names.HERCULES, item_names.SCIENCE_VESSEL, item_names.RAVEN,
     item_names.LIBERATOR, item_names.VALKYRIE, item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
-    item_names.EMPERORS_GUARDIAN,
+    item_names.EMPERORS_GUARDIAN, item_names.NIGHT_HAWK,
 ]
 item_name_groups[ItemGroupNames.TERRAN_BUILDINGS] = terran_buildings = [
     item_name for item_name, item_data in items.item_table.items()
@@ -244,6 +245,17 @@ item_name_groups[ItemGroupNames.WOL_BUILDINGS] = wol_buildings = [
     item_names.BUNKER, item_names.SENSOR_TOWER, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_SCANNER_SWEEP,
     item_names.PERDITION_TURRET, item_names.PLANETARY_FORTRESS,
     item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER,
+]
+item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
+    item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW,
+    item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
+    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
+    item_names.DOMINION_TROOPER,
+]
+item_name_groups[ItemGroupNames.TERRAN_VETERANCY_UNITS] = [
+    item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
+    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY, item_names.SON_OF_KORHAL, item_names.FIELD_RESPONSE_THETA,
+    item_names.BULWARK_COMPANY, item_names.NIGHT_HAWK, item_names.EMPERORS_GUARDIAN,
 ]
 
 # Terran Upgrades
@@ -378,12 +390,6 @@ item_name_groups[ItemGroupNames.NCO_MIN_PROGRESSIVE_ITEMS] = nco_units + nco_bas
 item_name_groups[ItemGroupNames.TERRAN_PROGRESSIVE_UPGRADES] = terran_progressive_items = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type in (items.TerranItemType.Progressive, items.TerranItemType.Progressive_2)
-]
-item_name_groups[ItemGroupNames.MENGSK_UNITS] = [
-    item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW,
-    item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
-    item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
-    item_names.DOMINION_TROOPER,
 ]
 item_name_groups[ItemGroupNames.WOL_ITEMS] = vanilla_wol_items = (
     wol_units

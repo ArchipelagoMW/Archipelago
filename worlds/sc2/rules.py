@@ -147,7 +147,7 @@ class SC2Logic:
                 state.has_any((
                     item_names.GHOST, item_names.SPECTRE, item_names.WIDOW_MINE, item_names.LIBERATOR,
                     item_names.PRIDE_OF_AUGUSTRGRAD, item_names.BLACKHAMMER, item_names.EMPERORS_SHADOW,
-                    item_names.EMPERORS_GUARDIAN,
+                    item_names.EMPERORS_GUARDIAN, item_names.NIGHT_HAWK,
                 ), self.player)
                 or (
                     state.has(item_names.MEDIVAC, self.player)

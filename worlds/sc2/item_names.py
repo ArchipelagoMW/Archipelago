@@ -47,6 +47,7 @@ SON_OF_KORHAL        = "Son Of Korhal"
 BULWARK_COMPANY      = "Bulwark Company"
 FIELD_RESPONSE_THETA = "Field Response Theta"
 EMPERORS_GUARDIAN    = "Emperor's Guardian"
+NIGHT_HAWK           = "Night Hawk"
 
 # Terran Buildings
 BUNKER                              = "Bunker"
