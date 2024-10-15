@@ -268,6 +268,7 @@ Additional arguments added to the [Set](#Set) package that triggered this [SetRe
 These packets are sent purely from client to server. They are not accepted by clients.
 
 * [Connect](#Connect)
+* [ConnectUpdate](#ConnectUpdate)
 * [Sync](#Sync)
 * [LocationChecks](#LocationChecks)
 * [LocationScouts](#LocationScouts)
