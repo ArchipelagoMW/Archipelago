@@ -101,6 +101,19 @@ class DSTItemPool:
         for _ in range(options.extra_damage_against_bosses.value):
             self.nonfiller_itempool.append("Extra Damage Against Bosses")
     
+    def create_item(self, world:World, name: str) -> DSTItem:
+        itemtype = (
+            IC.progression if name in self.progression_items
+            else item_data_table[name].type if name in item_name_to_id 
+            else IC.progression
+        )
+        return DSTItem(
+            name, 
+            itemtype, 
+            item_data_table[name].code if name in item_name_to_id else None, 
+            world.player
+        )
+
     def create_items(self, world: World) -> None:
         item_pool: List[DSTItem] = []
 

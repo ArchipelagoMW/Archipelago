@@ -2,11 +2,10 @@ from typing import Dict, Set
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from BaseClasses import ItemClassification
 from .Options import DSTOptions
 from . import Regions, Rules, ItemPool, Constants
 from .Locations import location_data_table, location_name_to_id
-from .Items import item_data_table, item_name_to_id, DSTItem
+from .Items import item_data_table, item_name_to_id
 
 from BaseClasses import Item, Tutorial
 
@@ -48,8 +47,11 @@ class DSTWorld(World):
 
     dst_itempool: ItemPool.DSTItemPool
 
-    def generate_early(self):
+    def __init__(self, multiworld, player):
         self.dst_itempool = ItemPool.DSTItemPool()
+        super().__init__(multiworld, player)
+
+    def generate_early(self):
         _IS_BOSS_GOAL = self.options.goal.value == self.options.goal.option_bosses_any or self.options.goal.value == self.options.goal.option_bosses_all
 
         # Warn shuffling starting recipes with creature locations disabled and nothing in start inventory
@@ -101,17 +103,7 @@ class DSTWorld(World):
         self.dst_itempool.decide_itempools(self)
 
     def create_item(self, name: str) -> Item:
-        itemtype = (
-            ItemClassification.progression if hasattr(self, "dst_itempool") and name in self.dst_itempool.progression_items
-            else item_data_table[name].type if name in item_name_to_id 
-            else ItemClassification.progression
-        )
-        return DSTItem(
-            name, 
-            itemtype, 
-            item_data_table[name].code if name in item_name_to_id else None, 
-            self.player
-        )
+        return self.dst_itempool.create_item(self, name)
     
     def create_items(self) -> None:
         self.dst_itempool.create_items(self)
