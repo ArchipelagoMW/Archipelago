@@ -130,12 +130,13 @@ class AquariaWorld(World):
 
         return result
 
-    def __pre_fill_item(self, item_name: str, location_name: str, precollected) -> None:
+    def __pre_fill_item(self, item_name: str, location_name: str, precollected,
+                        itemClassification: ItemClassification = ItemClassification.useful) -> None:
         """Pre-assign an item to a location"""
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            item = AquariaItem(item_name, ItemClassification.useful, data.id, self.player)
+            item = AquariaItem(item_name, itemClassification, data.id, self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
@@ -164,7 +165,8 @@ class AquariaWorld(World):
             self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Final Boss", "Final Boss area, Transturtle", precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
-            self.__pre_fill_item("Transturtle Simon Says", "Arnassi Ruins, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Simon Says", "Arnassi Ruins, Transturtle", precollected,
+                                 ItemClassification.progression)
             self.__pre_fill_item("Transturtle Arnassi Ruins", "Simon Says area, Transturtle", precollected)
         for name, data in item_table.items():
             if name not in self.exclude:
