@@ -809,6 +809,16 @@ class CollectionState():
             if yield_each_sweep:
                 yield
 
+    @typing.overload
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, *,
+                               yield_each_sweep: typing.Literal[True],
+                               checked_locations: Optional[Set[Location]] = None) -> Iterator[None]: ...
+
+    @typing.overload
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None,
+                               yield_each_sweep: typing.Literal[False] = False,
+                               checked_locations: Optional[Set[Location]] = None) -> None: ...
+
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
                                checked_locations: Optional[Set[Location]] = None) -> Optional[Iterator[None]]:
         """
