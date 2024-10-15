@@ -69,13 +69,12 @@ class ChoiceRecord:
                     raise Exception(f"Invalid weighting in random-range-x-min-max, "
                                     f"x must be low, medium, or high. It is: {value[2]}")
         else:
-            raise ValueError(f"Random is not defined for {object}")
+            raise ValueError(f"Random is not defined for {option}")
         if hasattr(temp_result, "name_lookup"):
             if temp_result.name_lookup != {}:
                 temp_result = temp_result.current_key
             else:
                 temp_result = temp_result.value
-        self.values.update({option: temp_result})
         return temp_result
 
     def name_init(self):
@@ -509,7 +508,7 @@ def get_choice(option, root, value=None, sub_group=None, record: ChoiceRecord = 
     if option not in choice_group:
         temp_result = value
     elif type(choice_group[option]) is list:
-        temp_result = random.choices(root[option])[0]
+        temp_result = random.choices(choice_group[option])[0]
     elif type(choice_group[option]) is not dict:
         temp_result = choice_group[option]
     elif not choice_group[option]:
@@ -535,15 +534,25 @@ def get_choice(option, root, value=None, sub_group=None, record: ChoiceRecord = 
                     raise KeyError(f"{name} in {temp_result} has not been assigned a value in yaml")
 
             temp_result = eval_postfix(infix_to_postfix(parse_tokens(temp_result[2:-1])), name_resolver)
-            record.update_value(record.pop_name(), temp_result)
+            if sub_group is None:
+                record.update_value(record.pop_name(), temp_result)
+            else:
+                sub_group.update({option: temp_result})
             if record.type_hint is not None and option in record.type_hint:
                 if type(record.type_hint[option].default) is int:
                     temp_result = int(temp_result)
                     record.update_value(option, temp_result)
         elif temp_result.startswith("random"):
-            temp_result = record.get_random(option, root, temp_result)
+            temp_result = record.get_random(option, choice_group, temp_result)
+            if sub_group is None:
+                record.update_value(option, temp_result)
+            else:
+                sub_group.update({option: temp_result})
     else:
-        record.update_value(option, temp_result)
+        if sub_group is None:
+            record.update_value(option, temp_result)
+        else:
+            sub_group.update({option: temp_result})
     if len(record.check_names()) == 0:
         root.update(record.check_values())
     return temp_result
@@ -671,7 +680,8 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
                 logging.warning(f'Specified option name {option_set["option_name"]} did not '
                                 f'match with a root option. '
                                 f'This is probably in error.')
-            trigger_result = get_choice("option_result", currently_targeted_weights, sub_group=option_set, record=ChoiceRecord([],{}, type_hints))
+            trigger_result = get_choice("option_result", currently_targeted_weights, sub_group=option_set,
+                                        record=ChoiceRecord([],{}, type_hints))
             result = get_choice(key, currently_targeted_weights, record=ChoiceRecord([],{}, type_hints))
             currently_targeted_weights[key] = result
             if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
