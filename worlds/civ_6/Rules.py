@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable, List, Dict
+from typing import TYPE_CHECKING, List, Dict
 from BaseClasses import CollectionState
 from .Items import get_item_by_civ_name
 from .Data import get_boosts_data
@@ -17,7 +17,7 @@ def create_boost_rules(world: 'CivVIWorld'):
     boost_locations = [location for location in world.location_table.values() if location.location_type == CivVICheckType.BOOST]
     for location in boost_locations:
         boost_data = next((boost for boost in boost_data_list if boost.Type == location.name), None)
-        world_location = world.multiworld.get_location(location.name, world.player)
+        world_location = world.get_location(location.name)
         forbid_item(world_location, "Progressive Era", world.player)
         if not boost_data or boost_data.PrereqRequiredCount == 0:
             continue

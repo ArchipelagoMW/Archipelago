@@ -75,8 +75,7 @@ def generate_new_items(world: 'CivVIWorld') -> str:
     """
     Generates the XML for the new techs/civics as well as the blockers used to prevent players from researching their own items
     """
-    locations: List[CivVILocation] = world.multiworld.get_locations(
-        world.player)
+    locations: List[CivVILocation] = world.multiworld.get_filled_locations(world.player)
     techs = [location for location in locations if location.location_type ==
              CivVICheckType.TECH]
     civics = [location for location in locations if location.location_type ==

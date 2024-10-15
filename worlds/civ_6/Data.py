@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import json
 import os
 import pkgutil
-from typing import List
+from typing import Dict, List
 
 
 _cache = {}
@@ -18,7 +18,7 @@ def _get_data(key: str):
 
 
 @dataclass
-class CivVIBoostData():
+class CivVIBoostData:
     Type: str
     EraType: str
     Prereq: List[str]
@@ -41,7 +41,7 @@ def get_boosts_data() -> List[CivVIBoostData]:
     return boosts
 
 
-def get_era_required_items_data() -> List[str]:
+def get_era_required_items_data() -> Dict[str, List[str]]:
     return _get_data("era_required_items")
 
 

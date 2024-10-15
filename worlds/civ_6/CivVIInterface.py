@@ -1,6 +1,6 @@
 from enum import Enum
 from logging import Logger
-from typing import List
+from typing import List, Optional
 
 from .Items import CivVIItemData
 from .TunerClient import TunerClient, TunerConnectionException, TunerTimeoutException
@@ -15,7 +15,7 @@ class ConnectionState(Enum):
 class CivVIInterface:
     logger: Logger
     tuner: TunerClient
-    last_error: str = None
+    last_error: Optional[str] = None
 
     def __init__(self, logger: Logger):
         self.logger = logger

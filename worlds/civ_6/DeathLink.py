@@ -68,7 +68,7 @@ async def handle_check_deathlink(ctx: CommonContext):
                     f"was tired of sitting in BK and decided to fight a {result} instead",
                     f"purposely lost to a {result} as a cry for help",
                     f"is wanting to remind everyone that they are here to have fun and not to win",
-                    f"is reconisdering their pursuit of a domination victory",
+                    f"is reconsidering their pursuit of a domination victory",
                     f"had their plans toppled by a {result}",
                     ]
         player = ctx.player_names[ctx.slot]

@@ -2,7 +2,7 @@ import asyncio
 import logging
 import os
 import traceback
-from typing import Dict, List
+from typing import Dict, List, Optional
 import zipfile
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
@@ -13,7 +13,7 @@ import Utils
 from .CivVIInterface import CivVIInterface, ConnectionState
 from .Enum import CivVICheckType
 from .Items import CivVIItemData, generate_item_table, get_item_by_civ_name
-from .Locations import generate_era_location_table
+from .Locations import CivVILocationData, generate_era_location_table
 from .TunerClient import TunerErrorException, TunerTimeoutException
 
 
@@ -51,8 +51,8 @@ class CivVIContext(CommonContext):
     items_handling = 0b111
     tuner_sync_task = None
     game_interface: CivVIInterface
-    location_name_to_civ_location = {}
-    location_name_to_id = {}
+    location_name_to_civ_location: Dict[str, CivVILocationData] = {}
+    location_name_to_id: Dict[str, int] = {}
     item_id_to_civ_item: Dict[int, CivVIItemData] = {}
     item_table: Dict[str, CivVIItemData] = {}
     processing_multiple_items = False
@@ -118,7 +118,7 @@ class CivVIContext(CommonContext):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
-            base_title = "Archipelago Civlization VI Client"
+            base_title = "Archipelago Civilization VI Client"
 
         self.ui = CivVIManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
@@ -153,7 +153,7 @@ async def tuner_sync_task(ctx: CivVIContext):
             continue
         else:
             try:
-                if ctx.processing_multiple_items == True:
+                if ctx.processing_multiple_items:
                     await asyncio.sleep(3)
                 else:
                     state = await ctx.game_interface.is_in_game()
@@ -201,7 +201,7 @@ async def handle_checked_location(ctx: CivVIContext):
     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checked_location_ids}])
 
 
-async def handle_receive_items(ctx: CivVIContext, last_received_index_override: int = None):
+async def handle_receive_items(ctx: CivVIContext, last_received_index_override: Optional[int] = None):
     try:
         last_received_index = last_received_index_override or await ctx.game_interface.get_last_received_index()
         if len(ctx.items_received) - last_received_index > 1:

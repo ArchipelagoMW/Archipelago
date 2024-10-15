@@ -9,7 +9,7 @@ CIV_VI_AP_LOCATION_ID_BASE = 5041000
 
 # Locs that should have progression items (keypoint techs/civics, ~1 per era)
 PRIORITY_LOCATIONS = [
-    "TECH_ANCEINT_09",
+    "TECH_ANCIENT_09",
     "TECH_CLASSICAL_15",
     "TECH_MEDIEVAL_20",
     "TECH_RENAISSANCE_33",
@@ -52,7 +52,7 @@ EXCLUDED_LOCATIONS = [
 ]
 
 
-class CivVILocationData():
+class CivVILocationData:
     game: str = "Civilization VI"
     name: str
     cost: int
@@ -61,7 +61,7 @@ class CivVILocationData():
     code: int
     era_type: EraType
     location_type: CivVICheckType
-    pre_reqs: List[str]
+    pre_reqs: Optional[List[str]]
 
     def __init__(self, name: str, cost: int, uiTreeRow: int, id: int, era_type: EraType, location_type: CivVICheckType, pre_reqs: Optional[List[str]] = None):
         self.name = name
