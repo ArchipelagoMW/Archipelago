@@ -52,6 +52,9 @@ def mystery_argparse():
     parser.add_argument("--skip_output", action="store_true",
                         help="Skips generation assertion and output stages and skips multidata and spoiler output. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--spoiler_only", action="store_true",
+                        help="Skips generation assertion and multidata, outputting only a spoiler log. "
+                             "Intended for debugging and testing purposes.")
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
@@ -106,6 +109,11 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
             raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
+
+    if not args.skip_output and args.spoiler == 0 and args.spoiler_only:
+        logging.info(f"Inferring --spoiler_only and --spoiler=0 to mean --skip_output")
+        args.skip_output = True
+
     player_id = 1
     player_files = {}
     for file in os.scandir(args.player_files_path):
@@ -155,6 +163,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
+    erargs.spoiler_only = args.spoiler_only
     erargs.name = {}
     erargs.csv_output = args.csv_output
 
