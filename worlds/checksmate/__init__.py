@@ -542,6 +542,9 @@ class CMWorld(World):
     def get_excluded_items(self) -> Dict[str, int]:
         excluded_items: Dict[str, int] = {}
 
+        if self.options.goal.value == self.options.goal.option_super:
+            item = create_item_with_correct_settings(self.player, "Super-Size Me")
+            self.multiworld.push_precollected(item)
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in excluded_items:
                 excluded_items[item.name] = 0
