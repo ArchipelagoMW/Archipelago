@@ -18,7 +18,7 @@ class ProgressionStyle(Choice):
 
 
 class ShuffleGoodyHuts(DefaultOnToggle):
-    """Shuffles the goody hut rewards. Goody huts will only contain junk items and location checks are received sequentially (GOODY_HUT_1, GOODY_HUT_2, etc.)."""
+    """Shuffles the goody hut rewards. Goody huts will only contain junk items and locations are checked sequentially (First goody hut gives GOODY_HUT_1, second gives GOODY_HUT_2...)."""
     display_name = "Shuffle Goody Hut Rewards"
 
 
@@ -27,13 +27,12 @@ class BoostSanity(Toggle):
     display_name = "Boostsanity"
 
 
-class ResearchCostMultiplier(Choice):
-    """Multiplier for research cost of techs and civics, higher values make research more expensive. Cheap = 0.5x, Expensive = 1.5x."""
+class ResearchCostMultiplier(Range):
+    """Multiplier for research cost of techs and civics, higher values make research more expensive."""
     display_name = "Tech/Civic Cost Multiplier"
-    option_cheap = 0.5
-    option_default = 1
-    option_expensive = 1.5
-    default = 1
+    range_start = 1
+    range_end = 100
+    default = 50
 
 
 class PreHintItems(Choice):
