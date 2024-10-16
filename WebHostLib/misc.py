@@ -77,7 +77,7 @@ def faq(lang: str):
     return render_template(
         "markdown_document.html",
         title="Frequently Asked Questions",
-        html_from_markdown=markdown.markdown(document,  extensions=['mdx_truly_sane_lists']),
+        html_from_markdown=markdown.markdown(document,  extensions=["mdx_truly_sane_lists", "mdx_breakless_lists"]),
     )
 
 
@@ -90,7 +90,7 @@ def glossary(lang: str):
     return render_template(
         "markdown_document.html",
         title="Glossary",
-        html_from_markdown=markdown.markdown(document,  extensions=['mdx_truly_sane_lists']),
+        html_from_markdown=markdown.markdown(document,  extensions=["mdx_truly_sane_lists", "mdx_breakless_lists"]),
     )
 
 
