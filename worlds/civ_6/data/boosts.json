@@ -376,10 +376,7 @@
   {
     "Type": "BOOST_TECH_COMBINED_ARMS",
     "EraType": "ERA_ATOMIC",
-    "Prereq": [
-      "CIVIC_MOBILIZATION",
-      "CIVIC_NATIONALISM"
-    ],
+    "Prereq": ["CIVIC_MOBILIZATION", "CIVIC_NATIONALISM"],
     "PrereqRequiredCount": 2,
     "Classification": "DEFAULT"
   },
