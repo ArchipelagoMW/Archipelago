@@ -45,6 +45,7 @@ class CivVIInterface:
             if "attempt to index a nil valuestack traceback" in str(e) \
                     or ".. is not supported for string .. nilstack traceback" in str(e):
                 return ConnectionState.IN_MENU
+        return ConnectionState.DISCONNECTED
 
     def print_connection_error(self, error: str) -> None:
         if error != self.last_error:

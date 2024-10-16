@@ -290,9 +290,9 @@ def main(connect=None, password=None, name=None):
         ctx = CivVIContext(connect, password, args.apcivvi_file)
 
         if args.apcivvi_file:
-            parent_dir = os.path.dirname(args.apcivvi_file)
-            target_name = os.path.basename(args.apcivvi_file).replace(".apcivvi", "-MOD-FILES")
-            target_path = os.path.join(parent_dir, target_name)
+            parent_dir: str = os.path.dirname(args.apcivvi_file)
+            target_name: str = os.path.basename(args.apcivvi_file).replace(".apcivvi", "-MOD-FILES")
+            target_path: str = os.path.join(parent_dir, target_name)
             if not os.path.exists(target_path):
                 os.makedirs(target_path, exist_ok=True)
                 logger.info("Extracting mod files to %s", target_path)

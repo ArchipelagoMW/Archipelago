@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Optional, TYPE_CHECKING, List
+from typing import Dict, Optional, TYPE_CHECKING, List, Union
 from BaseClasses import Item, ItemClassification
 from .Data import get_era_required_items_data, get_existing_civics_data, get_existing_techs_data, get_goody_hut_rewards_data, get_progressive_districts_data
 from .Enum import CivVICheckType, EraType
@@ -86,7 +86,7 @@ def get_filler_item_data() -> Dict[str, FillerItemData]:
 
 
 class CivVIItemData:
-    civ_vi_id: int
+    civ_vi_id: Union[int, str]
     classification: ItemClassification
     name: str
     code: int
