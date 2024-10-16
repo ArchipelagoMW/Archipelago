@@ -20,7 +20,7 @@ A short period after receiving an item, you will get a notification indicating y
 
 ## FAQs
 - Do I need the DLC to play this?
-    - Yes, you need both Rise & Fall and Gathering Storm. If there is enough interest, then I can eventually add support for Archipelago runs that don't require both expansions.
+    - Yes, you need both Rise & Fall and Gathering Storm.
 - Does this work with Multiplayer?
     - It does not and, despite my best efforts, probably won't until there's a new way for external programs to be able to interact with the game.
 - Does my mod that reskins Barbarians as various Pro Wrestlers work with this?
@@ -34,7 +34,7 @@ Solution: You can now go in to the tech tree, click "Toggle Archipelago Tree" to
     - Heavens no, my fellow Archipelago appreciator. When configuring your Archipelago options for Civilization on the options page, there are several choices available for you to fine tune the way you'd like to be punished for the follies of your friends. These include: Having a random unit destroyed, losing a percentage of gold or faith, or even losing a point on your era score. If you can't make up your mind, you can elect to have any of them be selected every time a death link is sent your way.
     In the event you lose one of your units in combat (this means captured units don't count), then you will send a death link event to the rest of your friends.
 
-- I enabled `progressive districts` but I have no idea techs/civics what items are locked behind progression now!
+- I enabled `progressive districts` but I have no idea what tech or civic a progressive district unlocks for me!
     - Any technology or civic that grants you a new building in a district (or grants you the district itself) is now locked behind a progressive item. For example, `PROGRESSIVE_CAMPUS` would give you these items in the following order:
           1. `TECH_WRITING`
           2. `TECH_EDUCATION`
