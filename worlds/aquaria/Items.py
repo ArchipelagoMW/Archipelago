@@ -241,7 +241,7 @@ item_table = {
     ItemNames.BIG_SEED: ItemData(698002, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_big_seed
     ItemNames.GLOWING_SEED: ItemData(698003, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_bio_seed
     ItemNames.BLACK_PEARL: ItemData(698004, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_blackpearl
-    ItemNames.BABY_BLASTER: ItemData(698005, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_blaster
+    ItemNames.BABY_BLASTER: ItemData(698005, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_blaster
     ItemNames.CRAB_ARMOR: ItemData(698006, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_crab_costume
     ItemNames.BABY_DUMBO: ItemData(698007, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_dumbo
     ItemNames.TOOTH: ItemData(698008, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_energy_boss
@@ -257,8 +257,8 @@ item_table = {
     ItemNames.MITHALAS_BANNER: ItemData(698018, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_banner
     ItemNames.MITHALAS_POT: ItemData(698019, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mithalas_pot
     ItemNames.MUTANT_COSTUME: ItemData(698020, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_mutant_costume
-    ItemNames.BABY_NAUTILUS: ItemData(698021, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_nautilus
-    ItemNames.BABY_PIRANHA: ItemData(698022, 1, ItemType.NORMAL, ItemGroup.UTILITY),  # collectible_piranha
+    ItemNames.BABY_NAUTILUS: ItemData(698021, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_nautilus
+    ItemNames.BABY_PIRANHA: ItemData(698022, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_piranha
     ItemNames.ARNASSI_ARMOR: ItemData(698023, 1, ItemType.PROGRESSION, ItemGroup.UTILITY),  # collectible_seahorse_costume
     ItemNames.SEED_BAG: ItemData(698024, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_seed_bag
     ItemNames.KING_S_SKULL: ItemData(698025, 1, ItemType.JUNK, ItemGroup.COLLECTIBLE),  # collectible_skull
