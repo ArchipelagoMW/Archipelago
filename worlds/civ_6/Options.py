@@ -4,11 +4,15 @@ from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Ra
 
 class ProgressionStyle(Choice):
     """Determines what progressive items (if any) should be included.
-    Districts Only: Each tech/civic that would normally unlock a district or district building now has a logical progression. Example: TECH_BRONZE_WORKING is now PROGRESSIVE_ENCAMPMENT
-    Eras and Districts: Players will be defeated if they play until the world era advances beyond the currently unlocked maximum era.
-    A notification will be shown as the end of the era approaches letting the player know if they don't have enough progressive era items.
+    Districts Only: Each tech/civic that would normally unlock a district or building now has a logical progression.
+    Example: TECH_BRONZE_WORKING is now PROGRESSIVE_ENCAMPMENT
+    Eras and Districts: Players will be defeated if they play until the world era advances beyond the currently unlocked
+    maximum era.
+    A notification will be shown as the end of the era approaches letting the player know if they don't have enough
+    progressive era items.
     Unlocked eras can be seen in both the tech and civic trees. Includes all progressive districts.
-    None: No progressive items will be included. This means you can get district upgrades that won't be usable until the relevant district is unlocked.
+    None: No progressive items will be included. This means you can get district upgrades that won't be usable until the
+    relevant district is unlocked.
     """
     display_name = "Progression Style"
     option_districts_only = 0
@@ -18,12 +22,15 @@ class ProgressionStyle(Choice):
 
 
 class ShuffleGoodyHuts(DefaultOnToggle):
-    """Shuffles the goody hut rewards. Goody huts will only contain junk items and locations are checked sequentially (First goody hut gives GOODY_HUT_1, second gives GOODY_HUT_2...)."""
+    """Shuffles the goody hut rewards. Goody huts will only contain junk items and locations are checked sequentially
+    (First goody hut gives GOODY_HUT_1, second gives GOODY_HUT_2, etc.)."""
     display_name = "Shuffle Goody Hut Rewards"
 
 
 class BoostSanity(Toggle):
-    """Boosts for Civics/Techs are location checks. Boosts can now be triggered even if the item has already been researched. If it is dependent upon a unit that is now obsolete, you can click to toggle on/off the relevant tech in the tech tree."""
+    """Boosts for Civics/Techs are location checks. Boosts can now be triggered even if the item has already been
+    researched. If it is dependent upon a unit that is now obsolete, you can click to toggle on/off the relevant tech in
+    the tech tree."""
     display_name = "Boostsanity"
 
 
@@ -51,7 +58,8 @@ class PreHintItems(Choice):
 
 
 class HideItemNames(Toggle):
-    """Each Tech and Civic Location will have a title of 'Unrevealed' until its prereqs have been researched. Note that hints will still be precollected if that option is enabled."""
+    """Each Tech and Civic Location will have a title of 'Unrevealed' until its prereqs have been researched. Note that
+    hints will still be precollected if that option is enabled."""
     display_name = "Hide Item Names"
 
 
@@ -62,9 +70,13 @@ class InGameFlagProgressionItems(DefaultOnToggle):
 
 class DeathLinkEffect(Choice):
     """What happens when a unit dies.
-    Faith, and Gold will be decreased by the amount specified in 'Death Link Effect Percent'.
-    Era score is decreased by 1.
-    Any will select any of these options any time a death link is received."""
+    Unit Killed: A random unit will be killed when a death link is received.
+    Faith: Faith will be decreased by the amount specified in 'Death Link Effect Percent'.
+    Gold: Gold will be decreased by the amount specified in 'Death Link Effect Percent'.
+    Era Score: Era score is decreased by 1.
+    Any: Selects from any of these options whenever a death link is received.
+    Any Except Era Score: Selects from any of these options except for Era Score whenever a death link is received.
+    """
     display_name = "Death Link Effect"
     option_unit_killed = 0
     option_era_score = 1
