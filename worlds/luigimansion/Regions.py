@@ -4,6 +4,7 @@ from BaseClasses import MultiWorld, Entrance
 from worlds.generic.Rules import add_rule
 from worlds.luigimansion import LMWorld
 
+
 def set_ghost_type(multiworld: MultiWorld, ghost_list: dict):
     for region_name in ghost_list:
         ghost_type = multiworld.random.choice(["Fire", "Water", "Ice", "No Element"])
