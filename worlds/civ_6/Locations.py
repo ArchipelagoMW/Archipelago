@@ -1,7 +1,7 @@
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Union
 from BaseClasses import Location, LocationProgressType, Region
 
-from .Data import get_boosts_data, get_new_civic_prereqs_data, get_new_civics_data, get_new_tech_prereqs_data, get_new_techs_data
+from .Data import CivicPrereqData, TechPrereqData, get_boosts_data, get_new_civics_data, get_new_techs_data
 
 from .Enum import CivVICheckType, EraType
 
@@ -29,18 +29,17 @@ class CivVILocationData:
     uiTreeRow: int
     civ_id: int
     code: int
-    era_type: EraType
+    era_type: str
     location_type: CivVICheckType
-    pre_reqs: Optional[List[str]]
+    pre_reqs: Optional[List[Union[CivicPrereqData, TechPrereqData]]]
 
-    def __init__(self, name: str, cost: int, uiTreeRow: int, id: int, era_type: EraType, location_type: CivVICheckType, pre_reqs: Optional[List[str]] = None):
+    def __init__(self, name: str, cost: int, uiTreeRow: int, id: int, era_type: str, location_type: CivVICheckType):
         self.name = name
         self.cost = cost
         self.uiTreeRow = uiTreeRow
         self.civ_id = id
         self.code = id + CIV_VI_AP_LOCATION_ID_BASE
         self.era_type = era_type
-        self.pre_reqs = pre_reqs
         self.location_type = location_type
 
 
@@ -84,14 +83,14 @@ def generate_flat_location_table() -> Dict[str, CivVILocationData]:
     }
     """
     era_locations = generate_era_location_table()
-    flat_locations = {}
-    for era_type, locations in era_locations.items():
+    flat_locations: Dict[str, CivVILocationData] = {}
+    for _era_type, locations in era_locations.items():
         for location_id, location_data in locations.items():
             flat_locations[location_id] = location_data
     return flat_locations
 
 
-def generate_era_location_table() -> Dict[EraType, Dict[str, CivVILocationData]]:
+def generate_era_location_table() -> Dict[str, Dict[str, CivVILocationData]]:
     """
     Uses the data from existing_tech.json to generate a location table in the following format:
     {
@@ -103,10 +102,9 @@ def generate_era_location_table() -> Dict[EraType, Dict[str, CivVILocationData]]
       ...
     }
     """
-    new_tech_prereqs = get_new_tech_prereqs_data()
 
     new_techs = get_new_techs_data()
-    era_locations = {}
+    era_locations: Dict[str, Dict[str, CivVILocationData]] = {}
     id_base = 0
 # Techs
     for data in new_techs:
@@ -114,24 +112,18 @@ def generate_era_location_table() -> Dict[EraType, Dict[str, CivVILocationData]]
         if era_type not in era_locations:
             era_locations[era_type] = {}
 
-        prereq_data = [
-            item for item in new_tech_prereqs if item["Technology"] == data["Type"]]
-
         era_locations[era_type][data["Type"]] = CivVILocationData(
-            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.TECH, prereq_data)
+            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.TECH)
         id_base += 1
 # Civics
-    new_civic_prereqs = get_new_civic_prereqs_data()
     new_civics = get_new_civics_data()
 
     for data in new_civics:
         era_type = data["EraType"]
         if era_type not in era_locations:
             era_locations[era_type] = {}
-        prereq_data = [
-            item for item in new_civic_prereqs if item["Civic"] == data["Type"]]
         era_locations[era_type][data["Type"]] = CivVILocationData(
-            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.CIVIC, prereq_data)
+            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.CIVIC)
         id_base += 1
 
 # Eras
@@ -154,7 +146,7 @@ def generate_era_location_table() -> Dict[EraType, Dict[str, CivVILocationData]]
     boosts = get_boosts_data()
     for boost in boosts:
         location = CivVILocationData(
-            boost.Type, 0, 0, id_base, boost.EraType, CivVICheckType.BOOST, pre_reqs=boost.Prereq)
+            boost.Type, 0, 0, id_base, boost.EraType, CivVICheckType.BOOST)
         era_locations[boost.EraType][boost.Type] = location
         id_base += 1
 

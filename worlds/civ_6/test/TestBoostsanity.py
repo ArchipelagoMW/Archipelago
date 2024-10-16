@@ -21,7 +21,7 @@ class TestBoostsanityIncluded(CivVITestBase):
         locations = self.multiworld.get_locations(self.player)
         found_locations = 0
         for location in locations:
-            if "BOOST" in location.name != -1:
+            if "BOOST" in location.name:
                 found_locations += 1
         num_boost_locations = len(get_boosts_data())
         self.assertEqual(found_locations, num_boost_locations)
@@ -45,6 +45,6 @@ class TestBoostsanityExcluded(CivVITestBase):
         locations = self.multiworld.get_locations(self.player)
         found_locations = 0
         for location in locations:
-            if "BOOST" in location.name != -1:
+            if "BOOST" in location.name:
                 found_locations += 1
         self.assertEqual(found_locations, 0)

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, Dict, List, Optional
-from BaseClasses import CollectionState, LocationProgressType, Region
+from BaseClasses import CollectionState, Region
 from .Data import get_era_required_items_data, get_progressive_districts_data
 from .Items import CivVIItemData, format_item_name, get_item_by_civ_name
-from .Enum import CivVICheckType, EraType
+from .Enum import EraType
 from .Locations import CivVILocation
 from .ProgressiveDistricts import get_flat_progressive_districts
 from .Options import CivVIOptions
@@ -11,14 +11,14 @@ if TYPE_CHECKING:
     from . import CivVIWorld
 
 
-def get_prereqs_for_era(end_era: EraType, exclude_progressive_items: bool = True, item_table: Optional[Dict[str, CivVIItemData]] = None) -> List[CivVIItemData]:
+def get_prereqs_for_era(end_era: EraType, exclude_progressive_items: bool, item_table: Dict[str, CivVIItemData]) -> List[CivVIItemData]:
     """Gets the specific techs/civics that are required for the specified era"""
     era_required_items = get_era_required_items_data()[end_era.value].copy()
 
     # If we are excluding progressive items, we need to remove them from the list of expected items (TECH_BRONZE_WORKING won't be here since it will be PROGRESSIVE_ENCAMPMENT)
     if exclude_progressive_items:
         flat_progressive_items = get_flat_progressive_districts()
-        prereqs_without_progressive_items = []
+        prereqs_without_progressive_items: List[str] = []
         for item in era_required_items:
             if item in flat_progressive_items:
                 continue
@@ -95,8 +95,8 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
     regions: List[Region] = []
     for era in EraType:
         era_region = Region(era.value, player, world.multiworld)
-        era_locations = {location.name: location.code for key,
-                         location in world.location_by_era[era.value].items()}
+        era_locations: Dict[str, Optional[int]] = {location.name: location.code for _key,
+                                                   location in world.location_by_era[era.value].items()}
 
         if not has_progressive_eras:
             era_locations = {key: value for key, value in era_locations.items() if key.split("_")[0] != "ERA"}

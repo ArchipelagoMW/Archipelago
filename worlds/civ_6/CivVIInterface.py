@@ -91,7 +91,7 @@ class CivVIInterface:
         result = await self.tuner.send_game_command(command)
         return int(result)
 
-    async def send_notification(self, item: CivVIItemData, sender="someone") -> None:
+    async def send_notification(self, item: CivVIItemData, sender: str = "someone") -> None:
         command = f"GameCore.NotificationManager:SendNotification(GameCore.NotificationTypes.USER_DEFINED_2, \"{item.name} Received\", \"You have received {item.name} from \" .. \"{sender}\", 0, {item.civ_vi_id})"
         await self.tuner.send_command(command)
 

@@ -1,4 +1,4 @@
-from typing import List
+from typing import Callable, List
 
 from BaseClasses import CollectionState
 from ..Data import get_era_required_items_data
@@ -22,7 +22,7 @@ def collect_items_for_era_progressive(test: CivVITestBase, era: EraType) -> None
     test.collect_by_name(items)
 
 
-def verify_eras_accessible(test: CivVITestBase, state: CollectionState, collect_func):
+def verify_eras_accessible(test: CivVITestBase, state: CollectionState, collect_func: Callable[[CivVITestBase, EraType], None]) -> None:
     """Collect for an era, then check if the next era is accessible and the one after that is not"""
     for era in EraType:
         if era == EraType.ERA_ANCIENT:

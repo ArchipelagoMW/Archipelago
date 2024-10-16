@@ -42,7 +42,7 @@ class TestGoodyHutsExcluded(CivVITestBase):
     def test_goody_huts_are_not_included(self) -> None:
         self.world_setup()
         self.world.generate_early()
-        distribute_items_restrictive
+        distribute_items_restrictive(self.multiworld)
         found_goody_huts = 0
         for location in self.multiworld.get_locations(self.player):
             if location.name.startswith("GOODY_HUT_"):
@@ -65,7 +65,7 @@ class TestFillerItemsIncludedByRarity(CivVITestBase):
     def test_filler_items_are_included_by_rarity(self) -> None:
         self.world_setup()
         self.world.generate_early()
-        distribute_items_restrictive
+        distribute_items_restrictive(self.multiworld)
         rarity_counts: Dict[FillerItemRarity, int] = {
             FillerItemRarity.COMMON: 0,
             FillerItemRarity.UNCOMMON: 0,
@@ -103,7 +103,7 @@ class TestFillerItemsIncludedByRarityWithoutBoostsanity(CivVITestBase):
     def test_filler_items_are_included_by_rarity_without_boostsanity(self) -> None:
         self.world_setup()
         self.world.generate_early()
-        distribute_items_restrictive
+        distribute_items_restrictive(self.multiworld)
         rarity_counts: Dict[FillerItemRarity, int] = {
             FillerItemRarity.COMMON: 0,
             FillerItemRarity.UNCOMMON: 0,

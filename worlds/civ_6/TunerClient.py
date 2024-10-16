@@ -1,6 +1,7 @@
 import asyncio
 from logging import Logger
 import socket
+from typing import Any
 
 ADDRESS = "127.0.0.1"
 PORT = 4318
@@ -9,7 +10,7 @@ CLIENT_PREFIX = "APSTART:"
 CLIENT_POSTFIX = ":APEND"
 
 
-def decode_mixed_string(data):
+def decode_mixed_string(data: bytes) -> str:
     return "".join(chr(b) if 32 <= b < 127 else "?" for b in data)
 
 
@@ -33,7 +34,7 @@ class TunerClient:
     """Interfaces with Civilization via the tuner socket"""
     logger: Logger
 
-    def __init__(self, logger):
+    def __init__(self, logger: Logger):
         self.logger = logger
 
     def __parse_response(self, response: str) -> str:
@@ -99,6 +100,6 @@ class TunerClient:
         finally:
             sock.close()
 
-    async def async_recv(self, sock, timeout=2.0, size=4096):
+    async def async_recv(self, sock: Any, timeout: float = 2.0, size: int = 4096):
         response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(sock, size), timeout)
         return response

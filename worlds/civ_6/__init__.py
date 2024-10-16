@@ -11,16 +11,16 @@ from .Data import get_boosts_data, get_era_required_items_data
 from .Rules import create_boost_rules
 from .Container import CivVIContainer, generate_goody_hut_sql, generate_new_items, generate_setup_file, generate_update_boosts_sql
 from .Enum import CivVICheckType
-from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIItemData, FillerItemRarity, format_item_name, generate_item_table, CivVIItem, get_random_filler_by_rarity
+from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
 from .Locations import EXCLUDED_LOCATIONS, CivVILocation, CivVILocationData, EraType, generate_era_location_table, generate_flat_location_table
 from .Options import CivVIOptions
 from .Regions import create_regions
 from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess  # type: ignore
 
 
-def run_client(*args):
+def run_client(*args: Any):
     print("Running Civ6 Client")
     from .Civ6Client import main  # lazy import
     launch_subprocess(main, name="Civ6Client")
@@ -52,7 +52,7 @@ class CivVIWorld(World):
     game = "Civilization VI"
     topology_present = False
     options_dataclass = CivVIOptions
-    options: CivVIOptions
+    options: CivVIOptions  # type: ignore
 
     web = CivVIWeb()
 
@@ -62,7 +62,7 @@ class CivVIWorld(World):
         location.name: location.code for location in generate_flat_location_table().values()}
 
     item_table: Dict[str, CivVIItemData] = {}
-    location_by_era: Dict[EraType, Dict[str, CivVILocationData]]
+    location_by_era: Dict[str, Dict[str, CivVILocationData]]
     required_client_version = (0, 4, 5)
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -137,7 +137,11 @@ class CivVIWorld(World):
             for era in EraType:
                 if era.value == "ERA_ANCIENT":
                     continue
-                self.multiworld.itempool += [self.create_item(self.item_table.get("Progressive Era").name)]
+                progressive_era_item = self.item_table.get("Progressive Era")
+                if progressive_era_item:
+                    self.multiworld.itempool += [self.create_item(progressive_era_item.name)]
+                else:
+                    logging.error("Progressive Era item not found in item_table.")
             self.multiworld.early_items[self.player]["Progressive Era"] = 2
 
         num_filler_items = 0
@@ -175,7 +179,7 @@ class CivVIWorld(World):
             if location_data.location_type != CivVICheckType.CIVIC and location_data.location_type != CivVICheckType.TECH:
                 continue
 
-            location: CivVILocation = self.get_location(location_name)
+            location: CivVILocation = self.get_location(location_name)  # type: ignore
 
             if not location.item or not show_flags.get(location.item.classification, False):
                 continue

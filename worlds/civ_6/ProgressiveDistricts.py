@@ -8,7 +8,7 @@ def get_flat_progressive_districts() -> Dict[str, str]:
     Key is the item name ("TECH_WRITING") and the value is the associated progressive
     item ("PROGRESSIVE_CAMPUS")"""
     progressive_districts = get_progressive_districts_data()
-    flat_progressive_techs = {}
+    flat_progressive_techs: Dict[str, str] = {}
     for key, value in progressive_districts.items():
         for item in value:
             flat_progressive_techs[item] = key

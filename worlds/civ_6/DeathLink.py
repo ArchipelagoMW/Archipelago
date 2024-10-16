@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 DEATH_LINK_EFFECTS = ["Gold", "Faith", "Era Score", "Unit Killed"]
 
 
-async def handle_receive_deathlink(ctx: 'CivVIContext', message):
+async def handle_receive_deathlink(ctx: 'CivVIContext', message: str):
     """Resolves the effects of a deathlink received from the multiworld based on the options selected by the player"""
     chosen_effect = ctx.slot_data["death_link_effect"]
     effect: str = "Gold"
@@ -73,6 +73,8 @@ async def handle_check_deathlink(ctx: 'CivVIContext'):
                     f"is reconsidering their pursuit of a domination victory",
                     f"had their plans toppled by a {result}",
                     ]
-        player = ctx.player_names[ctx.slot]
-        message = random.choice(messages)
-        await ctx.send_death(f"{player} {message}")
+
+        if ctx.slot is not None:
+            player = ctx.player_names[ctx.slot]
+            message = random.choice(messages)
+            await ctx.send_death(f"{player} {message}")

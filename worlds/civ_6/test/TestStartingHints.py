@@ -5,7 +5,7 @@ from . import CivVITestBase
 
 
 class TestStartingHints(CivVITestBase):
-    run_default_tests = False
+    run_default_tests = False  # type: ignore
     auto_construct = False
     options = {
         "progressive_eras": "true",
@@ -28,7 +28,7 @@ class TestStartingHints(CivVITestBase):
 
 
 class TestOnlyProgressionItemsHinted(CivVITestBase):
-    run_default_tests = False
+    run_default_tests = False  # type: ignore
     auto_construct = False
     options = {
         "progressive_eras": "true",
@@ -46,11 +46,14 @@ class TestOnlyProgressionItemsHinted(CivVITestBase):
         self.assertTrue(len(start_location_hints) > 0)
         for hint in start_location_hints:
             location_data = self.world.get_location(hint)
-            self.assertTrue(location_data.item.classification == ItemClassification.progression)
+            if location_data.item:
+                self.assertTrue(location_data.item.classification == ItemClassification.progression)
+            else:
+                self.assertTrue(False, "Location has no item")
 
 
 class TestNoJunkItemsHinted(CivVITestBase):
-    run_default_tests = False
+    run_default_tests = False  # type: ignore
     auto_construct = False
     options = {
         "progressive_eras": "true",
@@ -68,11 +71,14 @@ class TestNoJunkItemsHinted(CivVITestBase):
         self.assertTrue(len(start_location_hints) > 0)
         for hint in start_location_hints:
             location_data = self.world.get_location(hint)
-            self.assertTrue(location_data.item.classification == ItemClassification.progression or location_data.item.classification == ItemClassification.useful)
+            if location_data.item:
+                self.assertTrue(location_data.item.classification == ItemClassification.progression or location_data.item.classification == ItemClassification.useful)
+            else:
+                self.assertTrue(False, "Location has no item")
 
 
 class TestNoItemsHinted(CivVITestBase):
-    run_default_tests = False
+    run_default_tests = False  # type: ignore
     auto_construct = False
     options = {
         "progressive_eras": "true",

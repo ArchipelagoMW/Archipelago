@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import os
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Dict, List, Optional
 import zipfile
 from BaseClasses import ItemClassification, Location
 from worlds.Files import APContainer
@@ -30,10 +30,10 @@ class CivVIContainer(APContainer):
     """
     Responsible for generating the dynamic mod files for the Civ VI multiworld
     """
-    game: str = "Civilization VI"
+    game: Optional[str] = "Civilization VI"
 
-    def __init__(self, patch_data: dict, base_path: str, output_directory: str,
-                 player=None, player_name: str = "", server: str = ""):
+    def __init__(self, patch_data: Dict[str, str], base_path: str, output_directory: str,
+                 player: Optional[int] = None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
         container_path = os.path.join(output_directory, base_path + ".apcivvi")
@@ -45,7 +45,7 @@ class CivVIContainer(APContainer):
         super().write_contents(opened_zipfile)
 
 
-def get_cost(world, location: CivVILocationData) -> int:
+def get_cost(world: 'CivVIWorld', location: CivVILocationData) -> int:
     """
     Returns the cost of the item based on the game options
     """
@@ -55,7 +55,7 @@ def get_cost(world, location: CivVILocationData) -> int:
     return int(world.location_table[location.name].cost * multiplier)
 
 
-def get_formatted_player_name(world, player) -> str:
+def get_formatted_player_name(world: 'CivVIWorld', player: int) -> str:
     """
     Returns the name of the player in the world
     """
@@ -66,7 +66,7 @@ def get_formatted_player_name(world, player) -> str:
 
 
 def get_advisor_type(world: 'CivVIWorld', location: Location) -> str:
-    if world.options.advisor_show_progression_items and location.item.classification == ItemClassification.progression:
+    if world.options.advisor_show_progression_items and location.item and location.item.classification == ItemClassification.progression:
         return "ADVISOR_PROGRESSIVE"
     else:
         return "ADVISOR_GENERIC"
@@ -76,7 +76,8 @@ def generate_new_items(world: 'CivVIWorld') -> str:
     """
     Generates the XML for the new techs/civics as well as the blockers used to prevent players from researching their own items
     """
-    locations: List[CivVILocation] = world.multiworld.get_filled_locations(world.player)
+    raw_locations = world.multiworld.get_filled_locations(world.player)
+    locations: List[CivVILocation] = [location for location in raw_locations if isinstance(location, CivVILocation)]
     techs = [location for location in locations if location.location_type ==
              CivVICheckType.TECH]
     civics = [location for location in locations if location.location_type ==
@@ -118,7 +119,7 @@ def generate_new_items(world: 'CivVIWorld') -> str:
                 f'Description="{location.name}" '
                 f'AdvisorType="{get_advisor_type(world, location)}"'
                 f'/>{nl}'
-                for location in techs])}
+                for location in techs if location.item])}
   </Technologies>
   <TechnologyPrereqs>
   {"".join([f'{tab}<Row Technology="{location.name}" PrereqTech="TECH_BLOCKER" />{nl}' for location in boost_techs])}
@@ -134,7 +135,7 @@ def generate_new_items(world: 'CivVIWorld') -> str:
                     f'Description="{location.name}" '
                     f'AdvisorType="{get_advisor_type(world, location)}"'
                     f'/>{nl}'
-                    for location in civics])}
+                    for location in civics if location.item])}
   </Civics>
   <CivicPrereqs>
   {"".join([f'{tab}<Row Civic="{location.name}" PrereqCivic="CIVIC_BLOCKER" />{nl}' for location in boost_civics])}
@@ -152,7 +153,7 @@ def generate_new_items(world: 'CivVIWorld') -> str:
     """
 
 
-def generate_setup_file(world) -> str:
+def generate_setup_file(world: 'CivVIWorld') -> str:
     """
     Generates the Lua for the setup file. This sets initial variables and state that affect gameplay around Progressive Eras
     """
@@ -177,7 +178,7 @@ def generate_setup_file(world) -> str:
     return setup
 
 
-def generate_goody_hut_sql(world) -> str:
+def generate_goody_hut_sql(world: 'CivVIWorld') -> str:
     """
     Generates the SQL for the goody huts or an empty string if they are disabled since the mod expects the file to be there
     """
@@ -213,7 +214,7 @@ WHERE GoodyHut NOT IN ('METEOR_GOODIES', 'GOODYHUT_SAILOR_WONDROUS', 'DUMMY_GOOD
         return "-- Goody Huts are disabled, no changes needed"
 
 
-def generate_update_boosts_sql(world) -> str:
+def generate_update_boosts_sql(world: 'CivVIWorld') -> str:
     """
     Generates the SQL for existing boosts in boostsanity or an empty string if they are disabled since the mod expects the file to be there
     """

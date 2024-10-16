@@ -2,7 +2,7 @@ import asyncio
 import logging
 import os
 import traceback
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import zipfile
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
@@ -49,7 +49,7 @@ class CivVIContext(CommonContext):
     command_processor = CivVICommandProcessor
     game = "Civilization VI"
     items_handling = 0b111
-    tuner_sync_task = None
+    tuner_sync_task: Optional[asyncio.Task[None]] = None
     game_interface: CivVIInterface
     location_name_to_civ_location: Dict[str, CivVILocationData] = {}
     location_name_to_id: Dict[str, int] = {}
@@ -59,6 +59,7 @@ class CivVIContext(CommonContext):
     received_death_link = False
     death_link_message = ""
     death_link_enabled = False
+    slot_data: Dict[str, Any]
 
     death_link_just_changed = False
     # Used to prevent the deathlink from triggering when someone re enables it
@@ -69,21 +70,21 @@ class CivVIContext(CommonContext):
         item.name: item.code for item in generate_item_table().values()}
     connection_state = ConnectionState.DISCONNECTED
 
-    def __init__(self, server_address, password, apcivvi_file=None):
+    def __init__(self, server_address: Optional[str], password: Optional[str], apcivvi_file: Optional[str] = None):
         super().__init__(server_address, password)
-        self.slot_data = {}
+        self.slot_data: Dict[str, Any] = {}
         self.game_interface = CivVIInterface(logger)
         location_by_era = generate_era_location_table()
         self.item_table = generate_item_table()
         self.apcivvi_file = apcivvi_file
 
         # Get tables formatted in a way that is easier to use here
-        for era, locations in location_by_era.items():
-            for item_name, location in locations.items():
+        for _era, locations in location_by_era.items():
+            for _item_name, location in locations.items():
                 self.location_name_to_id[location.name] = location.code
                 self.location_name_to_civ_location[location.name] = location
 
-        for item_name, item in self.item_table.items():
+        for _item_name, item in self.item_table.items():
             self.item_id_to_civ_item[item.code] = item
 
     async def resync(self):
@@ -124,7 +125,7 @@ class CivVIContext(CommonContext):
         self.ui = CivVIManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    def on_package(self, cmd: str, args: dict):
+    def on_package(self, cmd: str, args: Dict[str, Any]):
         if cmd == "Connected":
             self.slot_data = args["slot_data"]
             if "death_link" in args["slot_data"]:
@@ -133,7 +134,7 @@ class CivVIContext(CommonContext):
                     bool(args["slot_data"]["death_link"])))
 
 
-def update_connection_status(ctx: CivVIContext, status):
+def update_connection_status(ctx: CivVIContext, status: ConnectionState):
     if ctx.connection_state == status:
         return
     elif status == ConnectionState.IN_GAME:
@@ -216,7 +217,7 @@ async def handle_receive_items(ctx: CivVIContext, last_received_index_override: 
             item: CivVIItemData = ctx.item_id_to_civ_item[network_item.item]
             item_to_send: CivVIItemData = ctx.item_id_to_civ_item[network_item.item]
             if index > last_received_index:
-                if item.item_type == CivVICheckType.PROGRESSIVE_DISTRICT:
+                if item.item_type == CivVICheckType.PROGRESSIVE_DISTRICT and item.civ_name:
                     # if the item is progressive, then check how far in that progression type we are and send the appropriate item
                     count = sum(
                         1 for count_item in progressive_districts if count_item.civ_name == item.civ_name)
@@ -234,7 +235,7 @@ async def handle_receive_items(ctx: CivVIContext, last_received_index_override: 
                 if item.item_type == CivVICheckType.ERA:
                     count = len(progressive_eras) + 1
                     await ctx.game_interface.give_item_to_player(item_to_send, sender, count)
-                elif item.item_type == CivVICheckType.GOODY:
+                elif item.item_type == CivVICheckType.GOODY and item_to_send.civ_name:
                     item_to_send.civ_vi_id = item_to_send.civ_name
                     await ctx.game_interface.give_item_to_player(item_to_send, sender)
                 else:
@@ -280,10 +281,10 @@ async def _handle_game_ready(ctx: CivVIContext):
         await asyncio.sleep(3)
 
 
-def main(connect=None, password=None, name=None):
+def main(connect: Optional[str] = None, password: Optional[str] = None, name: Optional[str] = None):
     Utils.init_logging("Civilization VI Client")
 
-    async def _main(connect, password, name):
+    async def _main(connect: Optional[str], password: Optional[str], name: Optional[str]):
         parser = get_base_parser()
         parser.add_argument("apcivvi_file", default="", type=str, nargs="?", help="Path to apcivvi file")
         args = parser.parse_args()
