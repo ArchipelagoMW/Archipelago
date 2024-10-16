@@ -266,7 +266,7 @@ def _generate_goody_hut_items(id_base: int) -> Dict[str, CivVIItemData]:
 def generate_item_table() -> Dict[str, CivVIItemData]:
     era_required_items = get_era_required_items_data()
     required_items: List[str] = []
-    for _key, value in era_required_items.items():
+    for value in era_required_items.values():
         required_items += value
 
     progressive_items = get_flat_progressive_districts()

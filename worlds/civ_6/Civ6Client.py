@@ -79,12 +79,12 @@ class CivVIContext(CommonContext):
         self.apcivvi_file = apcivvi_file
 
         # Get tables formatted in a way that is easier to use here
-        for _era, locations in location_by_era.items():
-            for _item_name, location in locations.items():
+        for locations in location_by_era.values():
+            for location in locations.values():
                 self.location_name_to_id[location.name] = location.code
                 self.location_name_to_civ_location[location.name] = location
 
-        for _item_name, item in self.item_table.items():
+        for item in self.item_table.values():
             self.item_id_to_civ_item[item.code] = item
 
     async def resync(self):

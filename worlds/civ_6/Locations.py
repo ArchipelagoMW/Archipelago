@@ -82,7 +82,7 @@ def generate_flat_location_table() -> Dict[str, CivVILocationData]:
     """
     era_locations = generate_era_location_table()
     flat_locations: Dict[str, CivVILocationData] = {}
-    for _era_type, locations in era_locations.items():
+    for locations in era_locations.values():
         for location_id, location_data in locations.items():
             flat_locations[location_id] = location_data
     return flat_locations
