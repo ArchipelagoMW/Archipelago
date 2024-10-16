@@ -76,13 +76,6 @@ class CivVIWorld(World):
             for __, location in locations.items():
                 self.location_table[location.name] = location
 
-    def generate_early(self) -> None:
-        for location in self.location_table.values():
-            name = location.name
-            if name in EXCLUDED_LOCATIONS and name in self.options.priority_locations.value:
-                self.options.priority_locations.value.remove(name)
-                logging.warning(f"Excluded location {name} is in priority locations, removing.")
-
     def get_filler_item_name(self) -> str:
         return get_random_filler_by_rarity(self, FillerItemRarity.COMMON).name
 

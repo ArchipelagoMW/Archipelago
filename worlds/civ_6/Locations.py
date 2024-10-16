@@ -62,8 +62,6 @@ class CivVILocation(Location):
 
         if self.name in EXCLUDED_LOCATIONS:
             self.progress_type = LocationProgressType.EXCLUDED
-        else:
-            self.progress_type = LocationProgressType.DEFAULT
 
         if self.location_type == CivVICheckType.BOOST:
             boost_data_list = get_boosts_data()
