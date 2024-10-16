@@ -13,7 +13,6 @@ from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items
 from .Locations import *
 from .Options import LMOptions
 from .Regions import *
-from .Rules import set_rules
 
 
 def run_client():
@@ -87,8 +86,6 @@ class LMWorld(World):
     }
 
     def __init__(self, *args, **kwargs):
-        super(LMWorld, self).__init__(*args, **kwargs)
-
         self.itempool: list[LMItem] = []
         self.pre_fill_items: list[LMItem] = []
 
@@ -101,6 +98,7 @@ class LMWorld(World):
         # self.required_boss_item_locations: list[str] = []
         # self.required_dungeons: list[str] = []
         # self.banned_dungeons: list[str] = []
+        super(LMWorld, self).__init__(*args, **kwargs)
 
     # def _get_access_rule(self, region):
     #   snake_case_region = region.lower().replace("'", "").replace(" ", "_")
