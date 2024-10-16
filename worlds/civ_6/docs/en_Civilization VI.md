@@ -30,14 +30,14 @@ A short period after receiving an item, you will get a notification indicating y
 - "Oh no! I received the Machinery tech and now instead of getting an Archer next turn, I have to wait an additional 10 turns to get a Crossbowman!"
     - Vanilla prevents you from building units of the same class from an earlier tech level after you have researched a later variant. For example, this could be problematic if someone unlocks Crossbowmen for you right out the gate since you won't be able to make Archers (which have a much lower production cost).
 Solution: You can now go in to the tech tree, click "Toggle Archipelago Tree" to view your unlocked techs, and then can click any tech you have unlocked to toggle whether it is currently active or not.
-- "How does DeathLink work? Am I going to have to start a new game every time one of my friends dies??"
+- "How does DeathLink work? Am I going to have to start a new game every time one of my friends dies?"
     - Heavens no, my fellow Archipelago appreciator. When configuring your Archipelago options for Civilization on the options page, there are several choices available for you to fine tune the way you'd like to be punished for the follies of your friends. These include: Having a random unit destroyed, losing a percentage of gold or faith, or even losing a point on your era score. If you can't make up your mind, you can elect to have any of them be selected every time a death link is sent your way.
     In the event you lose one of your units in combat (this means captured units don't count), then you will send a death link event to the rest of your friends.
 
 - I enabled `progressive districts` but I have no idea techs/civics what items are locked behind progression now!
-    - Any technology or civic that grants you a new building in a district (or grants you the district itself) is now locked behind a progressive item. For example, `PROGRESSIVE_CAMPUS` would give you these items in the following order:  
-          1. `TECH_WRITING`  
-          2. `TECH_EDUCATION`  
+    - Any technology or civic that grants you a new building in a district (or grants you the district itself) is now locked behind a progressive item. For example, `PROGRESSIVE_CAMPUS` would give you these items in the following order:
+          1. `TECH_WRITING`
+          2. `TECH_EDUCATION`
           3. `TECH_CHEMISTRY`
     - If you want to see the details around each item, you can review [this file](https://github.com/hesto2/civilization_vi_apworld/blob/main/data/progressive_districts.json).
 
@@ -48,7 +48,7 @@ Boosts have logic associated with them in order to verify you can always reach t
 ### Boostsanity FAQs
 - Someone sent me a tech/civic, and I'm worried I won't be able to boost it anymore!
     - Fear not! Through a lot of wizardry 🧙‍♂️ you can boost civics/techs that have already been received. Additionally, the UI has been updated to show you whether they have been boosted or not after receiving them.
-- I need to kill a unit with a slinger/archer/musketman or some other obsolete unit I can't build anymore, how can I do this??
+- I need to kill a unit with a slinger/archer/musketman or some other obsolete unit I can't build anymore, how can I do this?
     - Don't forget you can go into the Tech Tree and click on a Vanilla tech you've received in order to toggle it on/off. This is necessary in order to pursue some of the boosts if you receive techs in certain orders.
 - Something happened, and I'm not able to unlock the boost due to game rules!
     - A few scenarios you may worry about: "Found a religion", "Make an alliance with another player", "Develop an alliance to level 2", "Build a wonder from X Era", to name a few. Any boost that is "miss-able" has been flagged as an "Excluded" location and will not ever receive a progression item. For a list of how each boost is flagged, take a look [here](https://github.com/hesto2/civilization_vi_apworld/blob/main/data/boosts.json).

@@ -71,6 +71,7 @@ class CivVIContext(CommonContext):
 
     def __init__(self, server_address, password, apcivvi_file=None):
         super().__init__(server_address, password)
+        self.slot_data = {}
         self.game_interface = CivVIInterface(logger)
         location_by_era = generate_era_location_table()
         self.item_table = generate_item_table()
