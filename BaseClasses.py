@@ -1383,7 +1383,7 @@ class Spoiler:
             logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
             multiworld.precollected_items[item.player].remove(item)
             multiworld.state.remove(item)
-            if not multiworld.can_beat_game():
+            if not multiworld.can_beat_game(multiworld.state, required_locations):
                 multiworld.push_precollected(item)
             else:
                 removed_precollected.append(item)
