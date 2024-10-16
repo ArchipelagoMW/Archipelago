@@ -11,7 +11,7 @@ from .Rules import create_boost_rules
 from .Container import CivVIContainer, generate_goody_hut_sql, generate_new_items, generate_setup_file, generate_update_boosts_sql
 from .Enum import CivVICheckType
 from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIItemData, FillerItemRarity, format_item_name, generate_item_table, CivVIItem, get_random_filler_by_rarity
-from .Locations import CivVILocation, CivVILocationData, EraType, generate_era_location_table, generate_flat_location_table
+from .Locations import EXCLUDED_LOCATIONS, PRIORITY_LOCATIONS, CivVILocation, CivVILocationData, EraType, generate_era_location_table, generate_flat_location_table
 from .Options import CivVIOptions
 from .Regions import create_regions
 from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial
@@ -71,9 +71,17 @@ class CivVIWorld(World):
         self.location_table: Dict[str, CivVILocationData] = {}
         self.item_table = generate_item_table()
 
-        for _era, locations in self.location_by_era.items():
-            for _item_name, location in locations.items():
+        for _, locations in self.location_by_era.items():
+            for __, location in locations.items():
                 self.location_table[location.name] = location
+
+    def generate_early(self) -> None:
+        for location in self.location_table.values():
+            name = location.name
+            if name in EXCLUDED_LOCATIONS:
+                self.options.exclude_locations.value.add(name)
+            if name in PRIORITY_LOCATIONS:
+                self.options.priority_locations.value.add(name)
 
     def get_filler_item_name(self) -> str:
         return get_random_filler_by_rarity(self, FillerItemRarity.COMMON).name

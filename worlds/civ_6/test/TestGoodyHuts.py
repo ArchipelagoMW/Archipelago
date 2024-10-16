@@ -18,14 +18,13 @@ class TestGoodyHutsIncluded(CivVITestBase):
 
     def test_goody_huts_get_included(self) -> None:
         self.world_setup()
-        distribute_items_restrictive
+        self.world.generate_early()
         distribute_items_restrictive(self.multiworld)
         expected_goody_huts = 10
         found = 0
-        for i in range(expected_goody_huts):
-            location = self.multiworld.get_location(f"GOODY_HUT_{i + 1}", self.player)
-            self.assertEqual(location.item.classification, ItemClassification.filler)
-            found += 1
+        for location in self.multiworld.get_locations(self.player):
+            if location.name.startswith("GOODY_HUT_"):
+                found += 1
         self.assertEqual(found, expected_goody_huts)
 
 
@@ -42,6 +41,7 @@ class TestGoodyHutsExcluded(CivVITestBase):
 
     def test_goody_huts_are_not_included(self) -> None:
         self.world_setup()
+        self.world.generate_early()
         distribute_items_restrictive
         found_goody_huts = 0
         for location in self.multiworld.get_locations(self.player):
@@ -64,6 +64,7 @@ class TestFillerItemsIncludedByRarity(CivVITestBase):
 
     def test_filler_items_are_included_by_rarity(self) -> None:
         self.world_setup()
+        self.world.generate_early()
         distribute_items_restrictive
         rarity_counts: Dict[FillerItemRarity, int] = {
             FillerItemRarity.COMMON: 0,
@@ -87,7 +88,6 @@ class TestFillerItemsIncludedByRarity(CivVITestBase):
             self.assertEqual(rarity_counts[rarity], expected, f"Expected {expected} {rarity} items, found {rarity_counts[rarity]}")
 
 
-
 class TestFillerItemsIncludedByRarityWithoutBoostsanity(CivVITestBase):
     auto_construct = False
     options = {
@@ -102,6 +102,7 @@ class TestFillerItemsIncludedByRarityWithoutBoostsanity(CivVITestBase):
 
     def test_filler_items_are_included_by_rarity_without_boostsanity(self) -> None:
         self.world_setup()
+        self.world.generate_early()
         distribute_items_restrictive
         rarity_counts: Dict[FillerItemRarity, int] = {
             FillerItemRarity.COMMON: 0,

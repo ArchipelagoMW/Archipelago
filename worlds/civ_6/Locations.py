@@ -91,12 +91,12 @@ class CivVILocation(Location):
         elif name.split("_")[0] == "BOOST":
             self.location_type = CivVICheckType.BOOST
 
-        if self.name in PRIORITY_LOCATIONS:
-            self.progress_type = LocationProgressType.PRIORITY
-        elif self.name in EXCLUDED_LOCATIONS:
-            self.progress_type = LocationProgressType.EXCLUDED
-        else:
-            self.progress_type = LocationProgressType.DEFAULT
+        # if self.name in PRIORITY_LOCATIONS:
+        #     self.progress_type = LocationProgressType.PRIORITY
+        # elif self.name in EXCLUDED_LOCATIONS:
+        #     self.progress_type = LocationProgressType.EXCLUDED
+        # else:
+        self.progress_type = LocationProgressType.DEFAULT
 
         if self.location_type == CivVICheckType.BOOST:
             boost_data_list = get_boosts_data()
