@@ -438,7 +438,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Courtyard Female Statue": LMLocationData("Courtyard", 332, "Furniture", 273, []),
     "Courtyard R Lamppost": LMLocationData("Courtyard", 333, "Furniture", 275, []),
     "Courtyard L Lamppost": LMLocationData("Courtyard", 334, "Furniture", 276, []),
-    "Well Lantern": LMLocationData("Well", 335, "Furniture", 42, []),
+    "Well Lantern": LMLocationData("The Well", 335, "Furniture", 42, []),
     "Rec Room Weight Station": LMLocationData("Rec Room", 336, "Furniture", 109, []),
     "Rec Room Drawer": LMLocationData("Rec Room", 337, "Furniture", 198, []),
     "Rec Room Front Bicycle": LMLocationData("Rec Room", 338, "Furniture", 107, []),
