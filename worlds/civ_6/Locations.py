@@ -7,37 +7,7 @@ from .Enum import CivVICheckType, EraType
 
 CIV_VI_AP_LOCATION_ID_BASE = 5041000
 
-# Locs that should have progression items (keypoint techs/civics, ~1 per era)
-PRIORITY_LOCATIONS = [
-    "TECH_ANCIENT_09",
-    "TECH_CLASSICAL_15",
-    "TECH_MEDIEVAL_20",
-    "TECH_RENAISSANCE_33",
-    "TECH_INDUSTRIAL_35",
-    "TECH_MODERN_47",
-    "TECH_ATOMIC_51",
-    "TECH_INFORMATION_59",
-
-    "CIVIC_ANCIENT_04",
-    "CIVIC_CLASSICAL_08",
-    "CIVIC_MEDIEVAL_19",
-    "CIVIC_RENAISSANCE_26",
-    "CIVIC_INDUSTRIAL_33",
-    "CIVIC_MODERN_39",
-    "CIVIC_ATOMIC_46",
-    "CIVIC_INFORMATION_48",
-
-    "ERA_CLASSICAL",
-    "ERA_MEDIEVAL",
-    "ERA_RENAISSANCE",
-    "ERA_INDUSTRIAL",
-    "ERA_MODERN",
-    "ERA_ATOMIC",
-    "ERA_INFORMATION",
-    "ERA_FUTURE"
-]
-
-# Locs that should not have progression items (future techs/civics)
+# Locs that should not have progression items
 EXCLUDED_LOCATIONS = [
     "GOODY_HUT_1",
     "GOODY_HUT_2",
@@ -91,12 +61,10 @@ class CivVILocation(Location):
         elif name.split("_")[0] == "BOOST":
             self.location_type = CivVICheckType.BOOST
 
-        # if self.name in PRIORITY_LOCATIONS:
-        #     self.progress_type = LocationProgressType.PRIORITY
-        # elif self.name in EXCLUDED_LOCATIONS:
-        #     self.progress_type = LocationProgressType.EXCLUDED
-        # else:
-        self.progress_type = LocationProgressType.DEFAULT
+        if self.name in EXCLUDED_LOCATIONS:
+            self.progress_type = LocationProgressType.EXCLUDED
+        else:
+            self.progress_type = LocationProgressType.DEFAULT
 
         if self.location_type == CivVICheckType.BOOST:
             boost_data_list = get_boosts_data()

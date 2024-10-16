@@ -32,7 +32,7 @@
     "EraType": "ERA_ANCIENT",
     "Prereq": [],
     "PrereqRequiredCount": 0,
-    "Classification": "PRIORITY"
+    "Classification": "DEFAULT"
   },
   {
     "Type": "BOOST_TECH_MASONRY",
