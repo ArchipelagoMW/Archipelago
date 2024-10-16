@@ -74,8 +74,11 @@ def faq(lang: str):
     import markdown
     with open(os.path.join(app.static_folder, "assets", "faq", secure_filename(lang)+".md")) as f:
         document = f.read()
-    return render_template("markdown_document.html",
-                           title="Frequently Asked Questions", html_from_markdown=markdown.markdown(document))
+    return render_template(
+        "markdown_document.html",
+        title="Frequently Asked Questions",
+        html_from_markdown=markdown.markdown(document,  extensions=['mdx_truly_sane_lists']),
+    )
 
 
 @app.route('/glossary/<string:lang>/')
@@ -84,8 +87,11 @@ def glossary(lang: str):
     import markdown
     with open(os.path.join(app.static_folder, "assets", "glossary", secure_filename(lang)+".md")) as f:
         document = f.read()
-    return render_template("markdown_document.html",
-                           title="Glossary", html_from_markdown=markdown.markdown(document))
+    return render_template(
+        "markdown_document.html",
+        title="Glossary",
+        html_from_markdown=markdown.markdown(document,  extensions=['mdx_truly_sane_lists']),
+    )
 
 
 @app.route('/seed/<suuid:seed>')
