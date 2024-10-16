@@ -50,8 +50,8 @@ def get_cost(world: 'CivVIWorld', location: CivVILocationData) -> int:
     Returns the cost of the item based on the game options
     """
     options: CivVIOptions = world.options
-    # Research cost is between 1 and 100 where 50 equals the default cost
-    multiplier = options.research_cost_multiplier / 50
+    # Research cost is between 50 and 150 where 100 equals the default cost
+    multiplier = options.research_cost_multiplier / 100
     return int(world.location_table[location.name].cost * multiplier)
 
 

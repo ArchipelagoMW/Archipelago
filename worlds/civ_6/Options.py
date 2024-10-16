@@ -37,9 +37,9 @@ class BoostSanity(Toggle):
 class ResearchCostMultiplier(Range):
     """Multiplier for research cost of techs and civics, higher values make research more expensive."""
     display_name = "Tech/Civic Cost Multiplier"
-    range_start = 1
-    range_end = 100
-    default = 50
+    range_start = 50
+    range_end = 150
+    default = 100
 
 
 class PreHintItems(Choice):
