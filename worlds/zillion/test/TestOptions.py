@@ -1,6 +1,6 @@
 from . import ZillionTestBase
 
-from worlds.zillion.options import ZillionJumpLevels, ZillionGunLevels, ZillionOptions, validate
+from ..options import ZillionJumpLevels, ZillionGunLevels, ZillionOptions, validate
 from zilliandomizer.options import VBLR_CHOICES
 
 

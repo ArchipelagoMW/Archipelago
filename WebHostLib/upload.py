@@ -7,7 +7,7 @@ import zipfile
 import zlib
 
 from io import BytesIO
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import request, flash, redirect, url_for, session, render_template, abort
 from markupsafe import Markup
 from pony.orm import commit, flush, select, rollback
 from pony.orm.core import TransactionIntegrityError
@@ -63,12 +63,13 @@ def process_multidata(compressed_multidata, files={}):
                 game_data = games_package_schema.validate(game_data)
                 game_data = {key: value for key, value in sorted(game_data.items())}
                 game_data["checksum"] = data_package_checksum(game_data)
-                game_data_package = GameDataPackage(checksum=game_data["checksum"],
-                                                    data=pickle.dumps(game_data))
                 if original_checksum != game_data["checksum"]:
                     raise Exception(f"Original checksum {original_checksum} != "
                                     f"calculated checksum {game_data['checksum']} "
                                     f"for game {game}.")
+
+                game_data_package = GameDataPackage(checksum=game_data["checksum"],
+                                                    data=pickle.dumps(game_data))
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
                     "checksum": game_data["checksum"],
@@ -192,6 +193,8 @@ def uploads():
                             res = upload_zip_to_db(zfile)
                         except VersionException:
                             flash(f"Could not load multidata. Wrong Version detected.")
+                        except Exception as e:
+                            flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                         else:
                             if res is str:
                                 return res
@@ -219,3 +222,29 @@ def user_content():
     rooms = select(room for room in Room if room.owner == session["_id"])
     seeds = select(seed for seed in Seed if seed.owner == session["_id"])
     return render_template("userContent.html", rooms=rooms, seeds=seeds)
+
+
+@app.route("/disown_seed/<suuid:seed>", methods=["GET"])
+def disown_seed(seed):
+    seed = Seed.get(id=seed)
+    if not seed:
+        return abort(404)
+    if seed.owner !=  session["_id"]:
+        return abort(403)
+    
+    seed.owner = 0
+
+    return redirect(url_for("user_content"))
+
+
+@app.route("/disown_room/<suuid:room>", methods=["GET"])
+def disown_room(room):
+    room = Room.get(id=room)
+    if not room:
+        return abort(404)
+    if room.owner != session["_id"]:
+        return abort(403)
+
+    room.owner = 0
+
+    return redirect(url_for("user_content"))
