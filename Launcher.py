@@ -35,7 +35,9 @@ from Utils import is_frozen, user_path, local_path, init_logging, open_filename,
 
 
 def open_host_yaml():
-    file = settings.get_settings().filename
+    s = settings.get_settings()
+    file = s.filename
+    s.save()
     assert file, "host.yaml missing"
     if is_linux:
         exe = which('sensible-editor') or which('gedit') or \
