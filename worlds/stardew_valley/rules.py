@@ -20,7 +20,7 @@ from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, Walnutsanity
-from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
+from .options import ToolProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
@@ -72,7 +72,7 @@ def set_rules(world):
     set_tool_rules(logic, multiworld, player, world_options)
     set_skills_rules(logic, multiworld, player, world_content)
     set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
-    set_building_rules(logic, multiworld, player, world_options)
+    set_building_rules(logic, multiworld, player, world_options, world_content)
     set_cropsanity_rules(logic, multiworld, player, world_content)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
     set_special_order_rules(all_location_names, logic, multiworld, player, world_options)
@@ -131,8 +131,8 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: Stard
         MultiWorldRules.set_rule(tool_upgrade_location, logic.tool.has_tool(tool, previous))
 
 
-def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if not world_options.building_progression & BuildingProgression.option_progressive:
+def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions, world_content: StardewContent):
+    if not world_content.features.building_progression.is_progressive:
         return
 
     for building in locations.locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:

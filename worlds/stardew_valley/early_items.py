@@ -23,9 +23,9 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     add_seasonal_candidates(early_candidates, options)
 
-    if options.building_progression & stardew_options.BuildingProgression.option_progressive:
+    if content.features.building_progression.is_progressive:
         early_forced.append(Building.shipping_bin)
-        if options.farm_type != stardew_options.FarmType.option_meadowlands:
+        if Building.coop not in content.features.building_progression.starting_buildings:
             early_candidates.append("Progressive Coop")
         early_candidates.append("Progressive Barn")
 

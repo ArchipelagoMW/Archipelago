@@ -15,7 +15,7 @@ from .data.game_item import ItemTag
 from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
 from .strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
@@ -229,7 +229,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_tools(item_factory, options, content, items)
     create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, items)
-    create_carpenter_buildings(item_factory, options, items)
+    create_carpenter_buildings(item_factory, options, content, items)
     items.append(item_factory("Railroad Boulder Removed"))
     items.append(item_factory(CommunityUpgrade.fruit_bats))
     items.append(item_factory(CommunityUpgrade.mushroom_boxes))
@@ -363,10 +363,11 @@ def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewVa
         items.append(item_factory("Woods Obelisk"))
 
 
-def create_carpenter_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    building_option = options.building_progression
-    if not building_option & BuildingProgression.option_progressive:
+def create_carpenter_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
+    building_progression = content.features.building_progression
+    if not building_progression.is_progressive:
         return
+
     items.append(item_factory("Progressive Coop"))
     items.append(item_factory("Progressive Coop"))
     items.append(item_factory("Progressive Coop"))
@@ -385,6 +386,7 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, options: Starde
     items.append(item_factory("Progressive House"))
     items.append(item_factory("Progressive House"))
     items.append(item_factory("Progressive House"))
+    
     if ModNames.tractor in options.mods:
         items.append(item_factory("Tractor Garage"))
 
