@@ -176,11 +176,11 @@ class CivVIWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
-            "progression_style": self.options.progression_style,
-            "death_link": self.options.death_link,
-            "research_cost_multiplier": self.options.research_cost_multiplier,
-            "death_link_effect": self.options.death_link_effect,
-            "death_link_effect_percent": self.options.death_link_effect_percent,
+            "progression_style": self.options.progression_style.value,
+            "death_link": self.options.death_link.value,
+            "research_cost_multiplier": self.options.research_cost_multiplier.value,
+            "death_link_effect": self.options.death_link_effect.value,
+            "death_link_effect_percent": self.options.death_link_effect_percent.value,
 
         }
 
