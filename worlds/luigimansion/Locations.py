@@ -109,7 +109,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, []),
     "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33,
                                                ["Fire Element Medal"]),
-    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Breaker Key"]),
+    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Breaker Key", "Blackout"]),
 
 
 

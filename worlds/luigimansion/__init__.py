@@ -387,6 +387,7 @@ class LMWorld(World):
             for location, data in BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
+                add_rule(entry, lambda state: state.has("Boo Radar", self.player))
                 if entry.access is not False:
                     if entry.code == 675:
                         add_rule(entry, lambda state: state.has_group("Medal", self.player))
@@ -403,7 +404,8 @@ class LMWorld(World):
                 entry.address = None
                 entry.code = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
-                if entry.access is not False:
+                add_rule(entry, lambda state: state.has("Boo Radar", self.player))
+                if entry.access:
                     if entry.code == 675:
                         add_rule(entry, lambda state: state.has_group("Medal", self.player))
                     elif entry.code == 679:
