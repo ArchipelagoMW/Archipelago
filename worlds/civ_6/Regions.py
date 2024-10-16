@@ -153,15 +153,3 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
 
     world.multiworld.completion_condition[player] = lambda state: state.can_reach(
         EraType.ERA_FUTURE.value, "Region", player)
-
-    if world.options.boostsanity and not world.options.exclude_missable_boosts:
-        _update_boost_locations_to_include_missable(world)
-
-
-def _update_boost_locations_to_include_missable(world: 'CivVIWorld'):
-    """If the player has exclude missable boosts disabled, set them all to default if they are excluded"""
-    for loc_data in world.location_table.values():
-        if loc_data.location_type == CivVICheckType.BOOST:
-            location = world.get_location(loc_data.name)
-            if location.progress_type == LocationProgressType.EXCLUDED:
-                location.progress_type = LocationProgressType.DEFAULT

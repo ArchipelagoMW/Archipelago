@@ -27,11 +27,6 @@ class BoostSanity(Toggle):
     display_name = "Boostsanity"
 
 
-class ExcludeMissableBoosts(Toggle):
-    """If Boostsanity is enabled, this will prevent any boosts that are 'missable' from having progression items. Disabling this will potentially require multiple playthroughs to complete the seed."""
-    display_name = "Exclude Missable Boosts"
-
-
 class ResearchCostMultiplier(Choice):
     """Multiplier for research cost of techs and civics, higher values make research more expensive. Cheap = 0.5x, Expensive = 1.5x."""
     display_name = "Tech/Civic Cost Multiplier"
@@ -95,7 +90,6 @@ class CivVIOptions(PerGameCommonOptions):
     progression_style: ProgressionStyle
     shuffle_goody_hut_rewards: ShuffleGoodyHuts
     boostsanity: BoostSanity
-    exclude_missable_boosts: ExcludeMissableBoosts
     research_cost_multiplier: ResearchCostMultiplier
     pre_hint_items: PreHintItems
     hide_item_names: HideItemNames
