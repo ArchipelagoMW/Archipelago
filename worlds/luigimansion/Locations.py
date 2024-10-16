@@ -10,11 +10,13 @@ class LMLocationData(NamedTuple):
     jmpentry: int  # entry number on the jmp table it belongs to
     access: List[str]  # items required to access location, many special cases
     locked_item: Optional[str] = None
-    address: Optional[int] = None  # fill in once we discover how to check in DME for chest opening/knocking(?)
+    address: Optional[int] = None  # TODO: fill in once we discover how to check in DME for chest opening/knocking(?)
 
 
 class LMLocation(Location):
     game: str = "Luigi's Mansion"
+    access: []
+    locked_item: Optional[str]
 
     def __init__(self, player: int, name: str, parent: Region, data: LMLocationData):
         address = None if data.code is None else LMLocation.get_apid(data.code)
@@ -25,6 +27,8 @@ class LMLocation(Location):
         self.type = data.type
         self.jmpentry = data.jmpentry
         self.address = self.address
+        self.access = data.access
+        self.locked_item = data.locked_item
 
     @staticmethod
     def get_apid(code: int):
@@ -37,22 +41,22 @@ class LMLocation(Location):
 # Furnichest item contents are modified in furnitureinfo and are always included
 # Furniture item contents are modified in furnitureinfo but are only included with Knocksanity active
 # Plant item contents are modified in furnitureinfo but are only included when Plantsanity is active
-# BGhosts (DBSpeedy) are Blue Ghosts - item contents are modified in enemytable (teidenenemyinfo) but are only included when SpeedySpirits option is active
-# GSpeedy (DGSpeedy) Are Gold Mice - item contents are modified in enemytable (teidenenemyinfo) but are only included when SpeedySpirits option is active
+# BGhosts (DBSpeedy) are Blue Ghosts - item contents are modified in
+# enemytable (teidenenemyinfo) but are only included when SpeedySpirits option is active
+# GSpeedy (DGSpeedy) Are Gold # Mice - item contents are modified in
+# unknown (unknown) but are only included when SpeedySpirits option is active
 # Portrait item contents are modified in characterinfo but are only included when PortraitGhosts option is active
 # Toad item contents are unable to be modifeid without further study, included here for future developments
-# Boo item contents are unable to be modified without further study, included here for future developments. All require Boo Radar
-LOCATION_TABLE: Dict[str, LMLocationData] = {
+# Boo item contents are unable to be modified without further study, included here for future developments. All
+# require Boo Radar
+BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Base Chests / Locations
     "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]),
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furnichest", 233, []),
-    "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2,
-                                                 ["Mario's Shoe", "Mario's Glove", "Mario's Star",
-                                                  "Mario's Letter",
-                                                  "Mario's Cap"]),
+    "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
     # keyinfo event, need to look into the possibility of changing.
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Furnichest", 4,
                                              ["Fire Element Medal"]),
@@ -107,7 +111,33 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
                                                ["Fire Element Medal"]),
     "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Breaker Key"]),
 
-    # Ghost Affected Clear Chests. Rules applied to region entrances
+
+
+    # Game Event Locations
+    "Diamond Door":     LMLocationData("Balcony", None, "Event", 0, ["Diamond Key"], "Blackout"),
+    "Storage Room Cage": LMLocationData("Storage Room", None, "Event", 0, [], "Boo Release"),
+    # LMLocationData('Nursery', 'Chauncey',  None),
+    # LMLocationData('Graveyard', 'Bogmire',  None),
+    "Boolossus Boo 1":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 2":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 3":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 4":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 5":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 6":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 7":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 8":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 9":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 10": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 11": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 12": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 13": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 14": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "Boolossus Boo 15": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
+    "King Boo":         LMLocationData("Secret Altar", None, "Event", 0, [], "Mario's Painting", ),
+}
+
+# Ghost Affected Clear Chests. Rules applied to region entrances
+ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Furnichest", 5, []),  # keyinfo event
     "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, []),
     "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, []),
@@ -124,32 +154,10 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
     "Armory Clear Chest": LMLocationData("Armory", 63, "Chest", 27, []),
     "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35,
                                             ["Ice Element Medal"]),
+}
 
-    # Game Event Locations
-    "Diamond Door": LMLocationData("Balcony", None, "Event", 0,
-                                   ["Diamond Key"], "Blackout"),
-    "Storage Room Cage": LMLocationData("Storage Room", None, "Event", 0, [],
-                                        "Boo Release"),
-    # LMLocationData('Nursery', 'Chauncey',  None),
-    # LMLocationData('Graveyard', 'Bogmire',  None),
-    "Boolossus Boo 1": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 2": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 3": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 4": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 5": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 6": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 7": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 8": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 9": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 10": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 11": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 12": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 13": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 14": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "Boolossus Boo 15": LMLocationData("Balcony", None, "Event", 0, [], "Boo"),
-    "King Boo": LMLocationData("Secret Altar", None, "Event", 0, [], "Mario's Painting", ),
-
-    # Adds all waterable plants as locations
+# Adds all waterable plants as locations
+PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Balcony Plant 1": LMLocationData("Wardrobe Balcony", 65, "Plant", 473, ["Water Element Medal"]),
     "Wardrobe Balcony Plant 2": LMLocationData("Wardrobe Balcony", 66, "Plant", 474, ["Water Element Medal"]),
     "Wardrobe Balcony Plant 3": LMLocationData("Wardrobe Balcony", 67, "Plant", 475, ["Water Element Medal"]),
@@ -180,8 +188,10 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
     #                rule=lambda state: state.has("Water Element Medal", player)),   Doesn't exist???
     "Sitting Room Plant": LMLocationData("Sitting Room", 91, "Plant", 409, ["Water Element Medal"]),
     "Guest Room Plant": LMLocationData("Guest Room", 92, "Plant", 417, ["Water Element Medal"]),
+}
 
-    # Adds the myriad shakable objects as locations
+# Adds the myriad shakable objects as locations
+FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Foyer Dresser": LMLocationData("Foyer", 93, "Furniture", 207, []),
     "Heart Door Lamp": LMLocationData("Foyer", 94, "Furniture", 270, []),
     "Foyer Chandelier": LMLocationData("Foyer", 95, "Furniture", 101, []),
@@ -604,15 +614,15 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
     # These 6 doors are in characterinfo
     "Clockwork Room Tiny Door 6": LMLocationData("Clockwork Room", 504, "Furniture", 113, []),
     # These 6 doors are in characterinfo
-    "Roof Pillar 1":  LMLocationData("Roof", 505, "Furniture", 717, []),
-    "Roof Pillar 2":  LMLocationData("Roof", 506, "Furniture", 718, []),
-    "Roof Pillar 3":  LMLocationData("Roof", 507, "Furniture", 719, []),
-    "Roof Pillar 4":  LMLocationData("Roof", 508, "Furniture", 720, []),
-    "Roof Pillar 5":  LMLocationData("Roof", 509, "Furniture", 721, []),
-    "Roof Pillar 6":  LMLocationData("Roof", 510, "Furniture", 722, []),
-    "Roof Pillar 7":  LMLocationData("Roof", 511, "Furniture", 723, []),
-    "Roof Pillar 8":  LMLocationData("Roof", 512, "Furniture", 724, []),
-    "Roof Pillar 9":  LMLocationData("Roof", 513, "Furniture", 725, []),
+    "Roof Pillar 1": LMLocationData("Roof", 505, "Furniture", 717, []),
+    "Roof Pillar 2": LMLocationData("Roof", 506, "Furniture", 718, []),
+    "Roof Pillar 3": LMLocationData("Roof", 507, "Furniture", 719, []),
+    "Roof Pillar 4": LMLocationData("Roof", 508, "Furniture", 720, []),
+    "Roof Pillar 5": LMLocationData("Roof", 509, "Furniture", 721, []),
+    "Roof Pillar 6": LMLocationData("Roof", 510, "Furniture", 722, []),
+    "Roof Pillar 7": LMLocationData("Roof", 511, "Furniture", 723, []),
+    "Roof Pillar 8": LMLocationData("Roof", 512, "Furniture", 724, []),
+    "Roof Pillar 9": LMLocationData("Roof", 513, "Furniture", 725, []),
     "Roof Pillar 10": LMLocationData("Roof", 514, "Furniture", 726, []),
     "Roof Pillar 11": LMLocationData("Roof", 515, "Furniture", 727, []),
     "Roof Pillar 12": LMLocationData("Roof", 516, "Furniture", 728, []),
@@ -625,24 +635,24 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
     "Armory Armor Suit 7": LMLocationData("Armory", 523, "Furniture", 648, []),
     "Armory Armor Suit 8": LMLocationData("Armory", 524, "Furniture", 649, []),
     "Armory Armor Suit 9": LMLocationData("Armory", 525, "Furniture", 650, []),
-    "Armory Light":        LMLocationData("Armory", 526, "Furniture", 636, []),
-    "Armory Wall Shield":  LMLocationData("Armory", 527, "Furniture", 637, []),
-    "Armory Crates 1":     LMLocationData("Armory", 528, "Furniture", 638, []),
-    "Armory Crates 2":     LMLocationData("Armory", 529, "Furniture", 639, []),
-    "Armory Crates 3":     LMLocationData("Armory", 530, "Furniture", 640, []),
-    "Armory Crates 4":     LMLocationData("Armory", 531, "Furniture", 641, []),
-    "Ceramics Studio Chair":    LMLocationData("Ceramics Studio", 532, "Furniture", 659, []),
-    "Ceramics Studio Light":    LMLocationData("Ceramics Studio", 533, "Furniture", 657, []),
+    "Armory Light": LMLocationData("Armory", 526, "Furniture", 636, []),
+    "Armory Wall Shield": LMLocationData("Armory", 527, "Furniture", 637, []),
+    "Armory Crates 1": LMLocationData("Armory", 528, "Furniture", 638, []),
+    "Armory Crates 2": LMLocationData("Armory", 529, "Furniture", 639, []),
+    "Armory Crates 3": LMLocationData("Armory", 530, "Furniture", 640, []),
+    "Armory Crates 4": LMLocationData("Armory", 531, "Furniture", 641, []),
+    "Ceramics Studio Chair": LMLocationData("Ceramics Studio", 532, "Furniture", 659, []),
+    "Ceramics Studio Light": LMLocationData("Ceramics Studio", 533, "Furniture", 657, []),
     "Ceramics Studio Ice Vase": LMLocationData("Ceramics Studio", 534, "Furniture", 658, []),
     # "Ceramics Studio Table":          LMLocationData("Ceramics Studio", 535, "Furniture", , []),
-    "Ceramics Studio Boxes 1":  LMLocationData("Ceramics Studio", 536, "Furniture", 664, []),
-    "Ceramics Studio Boxes 2":  LMLocationData("Ceramics Studio", 537, "Furniture", 665, []),
-    "Ceramics Studio Boxes 3":  LMLocationData("Ceramics Studio", 538, "Furniture", 670, []),
-    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 1', 8538),
-    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 2', 8539),
-    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 3', 8540),
-    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 4', 8541),
-    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 5', 8542),
+    "Ceramics Studio Boxes 1": LMLocationData("Ceramics Studio", 536, "Furniture", 664, []),
+    "Ceramics Studio Boxes 2": LMLocationData("Ceramics Studio", 537, "Furniture", 665, []),
+    "Ceramics Studio Boxes 3": LMLocationData("Ceramics Studio", 538, "Furniture", 670, []),
+    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 1', 539),
+    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 2', 540),
+    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 3', 541),
+    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 4', 542),
+    #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 5', 543),
     "Ceramics Studio Vase 1": LMLocationData("Ceramics Studio", 544, "Furniture", 660, []),
     "Ceramics Studio Vase 2": LMLocationData("Ceramics Studio", 545, "Furniture", 661, []),
     "Ceramics Studio Vase 3": LMLocationData("Ceramics Studio", 546, "Furniture", 662, []),
@@ -676,11 +686,11 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
     "Sitting Room Chair": LMLocationData("Sitting Room", 574, "Furniture", 414, []),
     "Sitting Room Table": LMLocationData("Sitting Room", 575, "Furniture", 412, []),
     "Sitting Room Picture": LMLocationData("Sitting Room", 576, "Furniture", 411, []),
-    "Guest Room Chair": LMLocationData("Guest Room", 577, "Furniture", 422, []),
-    "Guest Room Bed": LMLocationData("Guest Room", 578, "Furniture", 420, []),
-    "Guest Room Vanity": LMLocationData("Guest Room", 579, "Furniture", 421, []),
-    "Guest Room End Table": LMLocationData("Guest Room", 580, "Furniture", 497, []),
-    "Guest Room Painting": LMLocationData("Guest Room", 581, "Furniture", 418, []),
+    "Guest Room Chair": LMLocationData("Guest Room", 577, "Furniture", 422, ["Water Element Medal"]),
+    "Guest Room Bed": LMLocationData("Guest Room", 578, "Furniture", 420, ["Water Element Medal"]),
+    "Guest Room Vanity": LMLocationData("Guest Room", 579, "Furniture", 421, ["Water Element Medal"]),
+    "Guest Room End Table": LMLocationData("Guest Room", 580, "Furniture", 497, ["Water Element Medal"]),
+    "Guest Room Painting": LMLocationData("Guest Room", 581, "Furniture", 418, ["Water Element Medal"]),
     #        LMLocationData('Guest Room', 'Guest Room Doll 1', 582),
     #        LMLocationData('Guest Room', 'Guest Room Doll 2', 583),
     "Cold Storage Barrel 1": LMLocationData("Cold Storage", 584, "Furniture", 24, []),
@@ -716,60 +726,65 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
     "Secret Altar L Chandelier": LMLocationData("Secret Altar", 614, "Furniture", 39, []),
     "Secret Altar L Candles": LMLocationData("Secret Altar", 615, "Furniture", 36, []),
     "Secret Altar R Candles": LMLocationData("Secret Altar", 616, "Furniture", 37, []),
+}
+
+TOAD_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Adds Toads as locations
-
-    "Foyer Toad": LMLocationData("Foyer", 617, "Toad", 0, []),
+    "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", 0, []),
     "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", 0, []),
-    "1F Washroom Toad": LMLocationData("1F Washroom", 619, "Toad", 0, []),
-    "Courtyard Toad": LMLocationData("Courtyard", 620, "Toad", 0, []),
+    "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", 0, []),
+    "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", 0, []),
+}
 
-    # Adds Portrait Ghosts as locations
-    "Neville, the Bookish Father": LMLocationData("Study", 621, "Portrait", 70, []),
-    "Lydia, the Mirror-Gazing Mother": LMLocationData("Master Bedroom", 622, "Portrait", 71, []),
-    "Chauncey, the Spoiled Baby":       LMLocationData("Nursery", 623, "Portrait", 77, []), # Bosses do not have entries in map2
-    "Henry and Orville, the Twin Brothers": LMLocationData("Twins' Room", 624, "Portrait", 79, []),
+# Adds Portrait Ghosts as locations
+PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
+    "Neville, the Bookish Father":          LMLocationData("Study", 621, "Portrait", 70, []),
+    "Lydia, the Mirror-Gazing Mother":      LMLocationData("Master Bedroom", 622, "Portrait", 71, []),
+    "Chauncey, the Spoiled Baby":           LMLocationData("Nursery", 623, "Portrait", 77, []),
+    # Bosses do not have entries in map2
+    "Henry and Orville, the Twin Brothers": LMLocationData("Twins' Room", 624, "Portrait", 79, ["Special"]),
     # cannot give to ghost actors you capture, as they do not have a table entry
     # Twins Access rule=lambda state: state.has_group("Medal", player)), this means any medal will make the twin in logic
-    "The Floating Whirlindas": LMLocationData("Ballroom", 625, "Portrait", 34, []),
-    "Shivers, the Wandering Butler": LMLocationData("Butler's Room", 626, "Portrait", 29,
+    "The Floating Whirlindas":              LMLocationData("Ballroom", 625, "Portrait", 34, []),
+    "Shivers, the Wandering Butler":        LMLocationData("Butler's Room", 626, "Portrait", 29,
                                                     ["Fire Element Medal", "Boo Release"]),
-    "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31,
-                                                                  ["Mario's Shoe", "Mario's Glove", "Mario's Star",
-                                                                   # Goign to compare these using state.has_group and a player set value of how many of these before Clairvoya triggers
-                                                                   "Mario's Letter",
-                                                                   "Mario's Cap"]),
+    "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31, ["Special"]),
     "Melody Pianissima, the Beautiful Pianist": LMLocationData("Conservatory", 628, "Portrait", 24, []),
-    "Mr. Luggs, the Glutton": LMLocationData("Dining Room", 629, "Portrait", 27, ["Fire Element Medal"]),
-    "Spooky, the Guard Dog": LMLocationData("Boneyard", 630, "Portrait", 23, ["Water Element Medal"]),
-    "Bogmire, the Cemetary Shadow":        LMLocationData("Graveyard", 631, "Portrait", 0, []), # Bosses do not have entries in map2
-    "Biff Atlas, the Bodybuilder": LMLocationData("Rec Room", 632, "Portrait", 32, []),
-    "Slim Bankshot, the Lonely Poolshark": LMLocationData("Billiards Room", 633, "Portrait", 26, []),
-    "Miss Petunia, the Bathing Beauty": LMLocationData("2F Bathroom", 634, "Portrait", 83, ["Ice Element Medal"]),
-    "Nana, the Scarf-Knitting Granny": LMLocationData("Nana's Room", 635, "Portrait", 76, []),
-    "Sue Pea, the Dozing Girl": LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"]),
+    "Mr. Luggs, the Glutton":               LMLocationData("Dining Room", 629, "Portrait", 27, ["Fire Element Medal"]),
+    "Spooky, the Guard Dog":                LMLocationData("Boneyard", 630, "Portrait", 23, ["Water Element Medal"]),
+    "Bogmire, the Cemetary Shadow":         LMLocationData("Graveyard", 631, "Portrait", 0, []),
+    # Bosses do not have entries in map2
+    "Biff Atlas, the Bodybuilder":          LMLocationData("Rec Room", 632, "Portrait", 32, []),
+    "Slim Bankshot, the Lonely Poolshark":  LMLocationData("Billiards Room", 633, "Portrait", 26, []),
+    "Miss Petunia, the Bathing Beauty":     LMLocationData("2F Bathroom", 634, "Portrait", 83, ["Ice Element Medal"]),
+    "Nana, the Scarf-Knitting Granny":      LMLocationData("Nana's Room", 635, "Portrait", 76, []),
+    "Sue Pea, the Dozing Girl":             LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"]),
     "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"]),
-    "Boolossus, the Jumbo Ghost":        LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"]), # Bosses not in map2
-    "Jarvis, the Jar Collector":        LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"]), # Not in characterinfo
-    "Clockwork Soldiers, the Toy Platoon": LMLocationData("Clockwork Room", 640, "Portrait", 115, []),
+    "Boolossus, the Jumbo Ghost":           LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"]),
+    # Bosses not in map2
+    "Jarvis, the Jar Collector":            LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"]),
+    # Not in characterinfo
+    "Clockwork Soldiers, the Toy Platoon":  LMLocationData("Clockwork Room", 640, "Portrait", 115, []),
     "Vincent van Gore, the Starving Artist": LMLocationData("Artist's Studio", 641, "Portrait", 107, []),
-    "Sir Weston, the Chilly Climber": LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"]),
-
-    # Adds Blue Ghosts and Gold Mice as locations
-    "Wardrobe Speedy Spirit":       LMLocationData("Wardrobe", 643, "BSpeedy", 128, []),
-    "Study Speedy Spirit":          LMLocationData("Study", 644, "BSpeedy", 113, []),
-    "Nursery Speedy Spirit":        LMLocationData("Nursery", 645, "DBSpeedy", 148, ["Blackout"]),
-    "Storage Room Speedy Spirit":   LMLocationData("Storage Room", 646, "BSpeedy", 58, []),
-    "Hidden Room Speedy Spirit":    LMLocationData("Hidden Room", 647, "DBSpeedy", 72, ["Blackout"]),
-    "Conservatory Speedy Spirit":   LMLocationData("Conservatory", 648, "DBSpeedy", 113, ["Blackout"]),
-    "Dining Room Speedy Spirit":    LMLocationData("Dining Room", 649, "BSpeedy", 60, []),
-    "Kitchen Speedy Spirit":        LMLocationData("Kitchen", 650, "BSpeedy", 66, []),
-    "Rec Room Speedy Spirit":       LMLocationData("Rec Room", 651, "BSpeedy", 67, []),
-    "Nana's Room Speedy Spirit":    LMLocationData("Nana's Room", 652, "BSpeedy", 115, []),
+    "Sir Weston, the Chilly Climber":       LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"]),
+}
+# Adds Blue Ghosts and Gold Mice as locations
+SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
+    "Wardrobe Speedy Spirit": LMLocationData("Wardrobe", 643, "BSpeedy", 128, []),
+    "Study Speedy Spirit": LMLocationData("Study", 644, "BSpeedy", 113, []),
+    "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "DBSpeedy", 148, ["Blackout"]),
+    "Storage Room Speedy Spirit": LMLocationData("Storage Room", 646, "BSpeedy", 58, []),
+    "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "DBSpeedy", 72, ["Blackout"]),
+    "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "DBSpeedy", 113, ["Blackout"]),
+    "Dining Room Speedy Spirit": LMLocationData("Dining Room", 649, "BSpeedy", 60, []),
+    "Kitchen Speedy Spirit": LMLocationData("Kitchen", 650, "BSpeedy", 66, []),
+    "Rec Room Speedy Spirit": LMLocationData("Rec Room", 651, "BSpeedy", 67, []),
+    "Nana's Room Speedy Spirit": LMLocationData("Nana's Room", 652, "BSpeedy", 115, []),
     "Billiards Room Speedy Spirit": LMLocationData("Billiards Room", 653, "BSpeedy", 59, []),
-    "Twins' Room Speedy Spirit":    LMLocationData("Twins' Room", 655, "BSpeedy", 114, []),
-    "Breaker Room Speedy Spirit":   LMLocationData("Breaker Room", 656, "BSpeedy", 7, []),
-    "Cellar Speedy Spirit":         LMLocationData("Cellar", 657, "BSpeedy", 6, []),
-    "Sealed Room Speedy Spirit":    LMLocationData("Sealed Room", 658, "BSpeedy", 125, []),
+    "Twins' Room Speedy Spirit": LMLocationData("Twins' Room", 655, "BSpeedy", 114, []),
+    "Breaker Room Speedy Spirit": LMLocationData("Breaker Room", 656, "BSpeedy", 7, []),
+    "Cellar Speedy Spirit": LMLocationData("Cellar", 657, "BSpeedy", 6, []),
+    "Sealed Room Speedy Spirit": LMLocationData("Sealed Room", 658, "BSpeedy", 125, []),
     # Gold Mice Locations
     #        LMLocationData('Study', 'Study Cheese Gold Mouse', 659),
     #        LMLocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Cheese Gold Mouse', 660),
@@ -781,50 +796,51 @@ LOCATION_TABLE: Dict[str, LMLocationData] = {
     #        LMLocationData('Tea Room', 'Tea Room Chance Gold Mouse', 666),
     #        LMLocationData('2F Rear Hallway', '2F Rear Hallway Chance Gold Mouse', 667),
     #        LMLocationData('Sealed Room', 'Sealed Room Chance Gold Mouse', 668)
-
-    # Boo Locations
-    "Parlor Boo":                   LMLocationData("Parlor", 669, "Boo", 19, []),
-    "Anteroom Boo":                 LMLocationData("Anteroom", 670, "Boo", 21, []),
-    "Wardrobe Boo":                 LMLocationData("Wardrobe", 671, "Boo", 20, []),
-    "Study Boo":                    LMLocationData("Study", 672, "Boo", 18, []),
-    "Master Bedroom Boo":           LMLocationData("Master Bedroom", 673, "Boo", 17, []),
-    "Nursery Boo":                  LMLocationData("Nursery", 674, "Boo", 13, []),
-    "Twins' Room Boo":              LMLocationData("Twins' Room", 675, "Boo", 14, []), # Requires state.has_group "Medal", 1
-    "Laundry Room Boo":             LMLocationData("Laundry Room", 676, "Boo", 4, []),
-    "Butler's Room Boo":            LMLocationData("Butler's Room", 677, "Boo", 0, ["Fire Element Medal", "Boo Release"]),
-    "Hidden Room Boo":              LMLocationData("Hidden Room", 678, "Boo", 1, []),
-    "Fortune-Teller's Room Boo":    LMLocationData("Fortune-Teller's Room", 679, "Boo", 2, []),
-    "Mirror Room Boo":              LMLocationData("Mirror Room", 680, "Boo", 3, []),
-    "Ballroom Boo":                 LMLocationData("Ballroom", 681, "Boo", 7, []),
-    "Storage Room Boo":             LMLocationData("Storage Room", 682, "Boo", 10, []),
-    "Dining Room Boo":              LMLocationData("Dining Room", 683, "Boo", 6, ["Fire Element Medal"]),
-    "Kitchen Boo":                  LMLocationData("Kitchen", 684, "Boo", 5, []),
-    "Conservatory Boo":             LMLocationData("Conservatory", 685, "Boo", 11, []),
-    "Rec Room Boo":                 LMLocationData("Rec Room", 686, "Boo", 12, []),
-    "Billiards Room Boo":           LMLocationData("Billiards Room", 687, "Boo", 8, []),
-    "Projection Room Boo":          LMLocationData("Projection Room", 688, "Boo", 9, []),
-    "Tea Room Boo":                 LMLocationData("Tea Room", 689, "Boo", 24, []),
-    "Nana's Room Boo":              LMLocationData("Nana's Room", 690, "Boo", 23, []),
-    "Siting Room Boo":              LMLocationData("Sitting Room", 691, "Boo", 15, ["Fire Element Medal", "Water Element Medal"]),
-    "Guest Room Boo":               LMLocationData("Guest Room", 692, "Boo", 16, []),
-    "Safari Room Boo":              LMLocationData("Safari Room", 693, "Boo", 27, []),
-    "Artist's Studio Boo":          LMLocationData("Artist's Studio", 694, "Boo", 30, []),
-    "Armory Boo":                   LMLocationData("Armory", 695, "Boo", 25, []),
-    "Ceramics Studio Boo":          LMLocationData("Ceramics Studio", 696, "Boo", 28, ["Ice Element Medal"]),
-    "Telephone Room Boo":           LMLocationData("Telephone Room", 697, "Boo", 26, []),
-    "Clockwork Room Boo":           LMLocationData("Clockwork Room", 698, "Boo", 29, []),
-    "Astral Hall Boo":              LMLocationData("Astral Hall", 699, "Boo", 22, ["Fire Element Medal"]),
-    "Breaker Room Boo":             LMLocationData("Breaker Room", 700, "Boo", 34, ["Blackout"]),
-    "Cellar Boo":                   LMLocationData("Cellar", 701, "Boo", 32, []),
-    "Pipe Room Boo":                LMLocationData("Pipe Room", 702, "Boo", 33, []),
-    "Cold Storage Boo":             LMLocationData("Cold Storage", 703, "Boo", 31, []),
+}
+# Boo Locations
+BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
+    "Parlor Boo": LMLocationData("Parlor", 669, "Boo", 19, []),
+    "Anteroom Boo": LMLocationData("Anteroom", 670, "Boo", 21, []),
+    "Wardrobe Boo": LMLocationData("Wardrobe", 671, "Boo", 20, []),
+    "Study Boo": LMLocationData("Study", 672, "Boo", 18, []),
+    "Master Bedroom Boo": LMLocationData("Master Bedroom", 673, "Boo", 17, []),
+    "Nursery Boo": LMLocationData("Nursery", 674, "Boo", 13, []),
+    "Twins' Room Boo": LMLocationData("Twins' Room", 675, "Boo", 14, ["Special"]),  # Requires state.has_group "Medal", 1
+    "Laundry Room Boo": LMLocationData("Laundry Room", 676, "Boo", 4, []),
+    "Butler's Room Boo": LMLocationData("Butler's Room", 677, "Boo", 0, ["Fire Element Medal", "Boo Release"]),
+    "Hidden Room Boo": LMLocationData("Hidden Room", 678, "Boo", 1, []),
+    "Fortune-Teller's Room Boo": LMLocationData("Fortune-Teller's Room", 679, "Boo", 2, ["Special"]),
+    "Mirror Room Boo": LMLocationData("Mirror Room", 680, "Boo", 3, []),
+    "Ballroom Boo": LMLocationData("Ballroom", 681, "Boo", 7, []),
+    "Storage Room Boo": LMLocationData("Storage Room", 682, "Boo", 10, []),
+    "Dining Room Boo": LMLocationData("Dining Room", 683, "Boo", 6, ["Fire Element Medal"]),
+    "Kitchen Boo": LMLocationData("Kitchen", 684, "Boo", 5, []),
+    "Conservatory Boo": LMLocationData("Conservatory", 685, "Boo", 11, []),
+    "Rec Room Boo": LMLocationData("Rec Room", 686, "Boo", 12, []),
+    "Billiards Room Boo": LMLocationData("Billiards Room", 687, "Boo", 8, []),
+    "Projection Room Boo": LMLocationData("Projection Room", 688, "Boo", 9, []),
+    "Tea Room Boo": LMLocationData("Tea Room", 689, "Boo", 24, []),
+    "Nana's Room Boo": LMLocationData("Nana's Room", 690, "Boo", 23, []),
+    "Siting Room Boo": LMLocationData("Sitting Room", 691, "Boo", 15, ["Fire Element Medal", "Water Element Medal"]),
+    "Guest Room Boo": LMLocationData("Guest Room", 692, "Boo", 16, []),
+    "Safari Room Boo": LMLocationData("Safari Room", 693, "Boo", 27, []),
+    "Artist's Studio Boo": LMLocationData("Artist's Studio", 694, "Boo", 30, []),
+    "Armory Boo": LMLocationData("Armory", 695, "Boo", 25, []),
+    "Ceramics Studio Boo": LMLocationData("Ceramics Studio", 696, "Boo", 28, ["Ice Element Medal"]),
+    "Telephone Room Boo": LMLocationData("Telephone Room", 697, "Boo", 26, []),
+    "Clockwork Room Boo": LMLocationData("Clockwork Room", 698, "Boo", 29, []),
+    "Astral Hall Boo": LMLocationData("Astral Hall", 699, "Boo", 22, ["Fire Element Medal"]),
+    "Breaker Room Boo": LMLocationData("Breaker Room", 700, "Boo", 34, ["Blackout"]),
+    "Cellar Boo": LMLocationData("Cellar", 701, "Boo", 32, []),
+    "Pipe Room Boo": LMLocationData("Pipe Room", 702, "Boo", 33, []),
+    "Cold Storage Boo": LMLocationData("Cold Storage", 703, "Boo", 31, []),
 }
 
-
-def split_location_name_by_zone(location_name: str) -> tuple[str, str]:
-    if " - " in location_name:
-        zone_name, specific_location_name = location_name.split(" - ", 1)
-    else:
-        zone_name = specific_location_name = location_name
-
-    return zone_name, specific_location_name
+ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
+                      **ENEMIZER_LOCATION_TABLE,
+                      **PLANT_LOCATION_TABLE,
+                      **FURNITURE_LOCATION_TABLE,
+                      **TOAD_LOCATION_TABLE,
+                      **SPEEDY_LOCATION_TABLE,
+                      **BOO_LOCATION_TABLE,
+                      **PORTRAIT_LOCATION_TABLE}

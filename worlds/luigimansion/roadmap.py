@@ -1,6 +1,7 @@
 
 # import
 
+# Poltergust Hunt - start with all keys but no vacuum. You have to find the vacuum before you can gets Boos to beat the game
 # Need to extract and modify jmp tables to assign items spawns
 # For furnitureinfo items  (interactables & plants), specify entry number in itemappeartable to spawn object. Will need to expand itemappeartable to include other items
 # the above does include some base checks
