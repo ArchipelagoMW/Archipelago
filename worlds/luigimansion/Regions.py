@@ -2,7 +2,6 @@ from typing import Optional, Callable
 
 from BaseClasses import MultiWorld, Entrance
 from worlds.generic.Rules import add_rule
-#from worlds.luigimansion import LMWorld
 
 
 def set_ghost_type(multiworld: MultiWorld, ghost_list: dict):
@@ -136,9 +135,11 @@ def connect_regions(multiworld: MultiWorld, player: int):
 
 REGION_LIST = [
     "Parlor",
+    "Foyer",
     "2F Front Hallway",
     "1F Hallway",
     "Anteroom",
+    "The Well",
     "Wardrobe",
     "Wardrobe Balcony",
     "Study",
@@ -153,8 +154,7 @@ REGION_LIST = [
     "1F Washroom",
     "1F Bathroom",
     "Conservatory",
-    "Billiards Rooms",
-    "2F Stairwell",
+    "Billiards Room",
     "Basement Stairwell",
     "Well",
     "Projection Room",
@@ -165,10 +165,9 @@ REGION_LIST = [
     "Hidden Room",
     "Storage Room",
     "Mirror Room",
-    "Rec Room to 2F Stairwell",
-    "Rec Room to Courtyard",
-    "Courtyard to Rec Room",
-    "2F Stairwell to Rec Room"
+    "Rec Room",
+    "Courtyard",
+    "2F Stairwell",
     "Cellar",
     "Breaker Room",
     "Basement Hallway",
@@ -187,7 +186,7 @@ REGION_LIST = [
     "Guest Room",
     "Safari Room",
     "3F Right Hallway",
-    "3f Left Hallway",
+    "3F Left Hallway",
     "Artist's Studio",
     "Balcony",
     "Armory",

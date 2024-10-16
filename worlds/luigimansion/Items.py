@@ -20,7 +20,7 @@ class LMItem(Item):
         super(LMItem, self).__init__(name, adjusted_classification, LMItem.get_apid(data.code), player)
 
         self.type = data.type
-        self.item_id = data.item_id
+        self.item_id = data.code
 
     @staticmethod
     def get_apid(code: int):

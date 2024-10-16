@@ -49,7 +49,7 @@ class LMWorld(World):
     before he can move in. Wait! Is that Mario?
     """
 
-    game: "Luigi's Mansion"
+    game: ClassVar[str] = "Luigi's Mansion"
     options_dataclass = LMOptions
     options: LMOptions
 
@@ -62,7 +62,7 @@ class LMWorld(World):
     }
 
     item_name_groups = get_item_names_per_category()
-
+    required_client_version = (0, 5, 1)
     web = LMWeb()
     ghost_affected_regions = {
         "Anteroom": "No Element",
@@ -433,8 +433,10 @@ class LMWorld(World):
         self.multiworld.regions.append(menu_region)
 
         # Add all randomizable regions
-        for region in REGION_LIST:
-            self.multiworld.regions.append(Region(region, self.player, self.multiworld))
+        for region_name in REGION_LIST:
+            if region_name in self.multiworld.regions.region_cache[self.player]:
+                continue
+            self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
@@ -459,7 +461,7 @@ class LMWorld(World):
 
         self._set_optional_locations()
 
-        connect_regions(self, self.player)
+        connect_regions(self.multiworld, self.player)
 
     def create_item(self, item: str) -> LMItem:
         # TODO: calculate nonprogress items dynamically
