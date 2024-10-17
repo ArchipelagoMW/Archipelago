@@ -84,16 +84,19 @@ def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
 
 
 def can_hold_arrows(state: CollectionState, player: int, quantity: int):
-    if quantity == 0:
-        return True
-    if state.has("Arrow Upgrade (70)", player):
-        arrows = 70
+    if state.multiworld.worlds[player].options.shuffle_capacity_upgrades:
+        if quantity == 0:
+            return True
+        if state.has("Arrow Upgrade (70)", player):
+            arrows = 70
+        else:
+            arrows = (30 + (state.count("Arrow Upgrade (+5)", player) * 5)
+                      + (state.count("Arrow Upgrade (+10)", player) * 10))
+            # Arrow Upgrade (+5) beyond the 6th gives +10
+            arrows += max(0, ((state.count("Arrow Upgrade (+5)", player) - 6) * 10))
+        return min(70, arrows) >= quantity
     else:
-        arrows = (30 + (state.count("Arrow Upgrade (+5)", player) * 5)
-                  + (state.count("Arrow Upgrade (+10)", player) * 10))
-        # Arrow Upgrade (+5) beyond the 6th gives +10
-        arrows += max(0, ((state.count("Arrow Upgrade (+5)", player) - 6) * 10))
-    return min(70, arrows) >= quantity
+        return quantity <= 30 or state.has("Capacity Upgrade Shop", player)
 
 
 def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> bool:
