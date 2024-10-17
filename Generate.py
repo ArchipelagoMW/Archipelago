@@ -490,8 +490,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         if option_key in {"triggers", *valid_keys}:
             continue
         logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
-    if PlandoOptions.items in plando_options:
-        ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights)
 
