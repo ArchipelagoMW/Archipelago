@@ -1029,7 +1029,7 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
-def handle_url_arg(args: "argparse.Namespace", parser: "Optional[argparse.parser]" = None) -> "argparse.Namespace":
+def handle_url_arg(args: "argparse.Namespace", parser: "typing.Optional[argparse.parser]" = None) -> "argparse.Namespace":
     # handle if text client is launched using the "archipelago://name:pass@host:port" url from webhost
     if args.url:
         url = urllib.parse.urlparse(args.url)
