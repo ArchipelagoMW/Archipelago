@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
@@ -167,7 +166,7 @@ class ShopPrices(Range):
     default = 100
 
 
-def planned_price(location: str) -> Dict[Optional, Or]:
+def planned_price(location: str) -> dict[Optional, Or]:
     return {
         Optional(location): Or(
             And(int, lambda n: n >= 0),

@@ -18,8 +18,7 @@ import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from typing_extensions import TypeGuard
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -46,7 +45,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.5.1"
+__version__ = "0.6.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
