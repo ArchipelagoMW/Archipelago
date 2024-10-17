@@ -274,6 +274,12 @@ class TunicWorld(World):
                 if items_to_create[page] > 0:
                     tunic_items.append(self.create_item(page, ItemClassification.useful))
                     items_to_create[page] = 0
+        # if ice grapple logic is on, probably really want icebolt
+        elif self.options.ice_grappling:
+            page = "Pages 52-53 (Icebolt)"
+            if items_to_create[page] > 0:
+                tunic_items.append(self.create_item(page, ItemClassification.progression | ItemClassification.useful))
+                items_to_create[page] = 0
 
         if self.options.maskless:
             tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
