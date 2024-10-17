@@ -6,7 +6,8 @@ from typing import List
 from .Options import GSTLAOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
-from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, pre_fillitems, create_item
+from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, pre_fillitems, create_item, \
+    AP_PLACEHOLDER_ITEM
 from .Locations import GSTLALocation, all_locations, location_name_to_id, LocationType, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
@@ -105,7 +106,7 @@ class GSTLAWorld(World):
 
                 ap_item = location.item
 
-                item_data = item_table[ap_item.name]
+                item_data = item_table.get(ap_item.name, AP_PLACEHOLDER_ITEM)
                 if item_data.type == ItemType.Djinn:
                     rom.write_djinn(location_data, item_data)
                 else:

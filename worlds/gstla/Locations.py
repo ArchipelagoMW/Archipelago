@@ -13,7 +13,7 @@ class LocationType(str, Enum):
    Trade = "Trade"
 
 
-def always_on(multiworld, player):
+def always_on(multiworld: MultiWorld, player: int) -> bool:
     return True
 
 class LocationData(NamedTuple):
@@ -507,7 +507,10 @@ events = [
     LocationData(None, LocationName.Lemurian_Ship_Engine, [0], 0, ItemName.Ship, LocationType.Event, True)
 ]
 
-def create_loctype_to_datamapping():
+def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
+    """Creates a dictionary mapping LocationType to a list of all locations
+    of that type
+    """
     types: Dict[str, List[LocationData]] = {}
     for idx, data in enumerate(all_locations):
         if data.loc_type not in types:
@@ -516,6 +519,7 @@ def create_loctype_to_datamapping():
     return types
 
 
-all_locations: List[LocationData] = test_locations + djinn_locations + psyenergy_locations + summon_tablets + events
+# all_locations: List[LocationData] = test_locations + djinn_locations + psyenergy_locations + summon_tablets + events
+all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events
 location_name_to_id: Dict[str, LocationData] = {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()

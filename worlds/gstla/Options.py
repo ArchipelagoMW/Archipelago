@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, SpecialRange
+from Options import Choice, NamedRange
 
 class StartWithShip(Choice):
     display_name = "Start with ship"
@@ -23,7 +23,7 @@ class SuperBosses(Choice):
     option_allincluded = 2
     default = 0
 
-class DjinnLogic(SpecialRange):
+class DjinnLogic(NamedRange):
     display_name = "Djinn Logic"
     range_start = 0
     range_end = 100

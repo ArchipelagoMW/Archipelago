@@ -44,8 +44,9 @@ class DjinItemData(ItemData):
     stats_addr: int
     stats: List[int]
 
-    def __new__(cls, ap_id, itemName, progression, addr, gstla_id, element, stats_addr, stats):
-        self = super(ItemData, cls).__new__(cls, (ap_id, itemName, progression, addr, ItemType.Djinn, gstla_id, 1))
+    def __new__(cls, ap_id: int, item_name: str, progression: ItemClassification, addr: int, gstla_id: int,
+                element: ElementType, stats_addr: int, stats: List[int]):
+        self = super(ItemData, cls).__new__(cls, (ap_id, item_name, progression, addr, ItemType.Djinn, gstla_id, 1))
         self.element = element
         self.stats_addr = stats_addr
         self.stats = stats
@@ -54,13 +55,18 @@ class DjinItemData(ItemData):
 class EventItemData(ItemData):
     location: str
 
-    def __new__(cls, location, name):
+    def __new__(cls, location: str, name: str):
         self = super(ItemData, cls).__new__(cls, (0, name, ItemClassification.progression, 0, ItemType.Event, 0, 0 ))
         self.location = location
         return self
 
 class GSTLAItem(Item):
+    """The GSTLA version of an AP item
+    """
     game: str = "Golden Sun The Lost Age"
+
+# This item isn't used by the game normally, so we're going to use it as a placeholder for now
+AP_PLACEHOLDER_ITEM = ItemData(None, ItemName.Rainbow_Ring, ItemClassification.filler, -1, ItemType.Ring, 412)
 
 summon_list: List[ItemData] = [
     ItemData(400, ItemName.Moloch, ItemClassification.useful, 3859, ItemType.Psyenergy, 3859, 132),
@@ -409,11 +415,26 @@ pre_fillitems: List[Item] = []
 
 
 def create_item(name: str, player :int) -> "Item":
+    """Creates a GSTLAItem from data populated in this file
+
+    Parameters:
+        name (str): The AP name of the item
+        player (int): The AP player to create the item for.
+    Returns:
+        The newly created item
+    """
     item = item_table[name]
     return GSTLAItem(item.itemName, item.progression, item.ap_id, player)
 
 
 def create_events(multiworld: MultiWorld, player: int):
+    """Creates all the event items and populates their vanilla locations with them.
+    If the option to begin with the starter ship was selected this will be granted to the player
+
+    Parameters:
+        multiworld: The multiworld instance to populate
+        player: The player to populate for
+    """
     for event in events:
         event_item = create_item(event.itemName, player)
 
@@ -425,6 +446,11 @@ def create_events(multiworld: MultiWorld, player: int):
         event_location.place_locked_item(event_item)
 
 def create_items(multiworld: MultiWorld, player: int):
+    """Creates all the items for GSTLA that need to be shuffled into the multiworld, and
+    adds them to the multiworld's item pool.
+
+    Djinn are an exception and are added to a pre_fillitems array exported by this module
+    """
     if multiworld.starter_ship[player] == 2:
         ap_location = multiworld.get_location(LocationName.Gabomba_Statue_Black_Crystal, player)
         ap_item = create_item(ItemName.Black_Crystal, player)
