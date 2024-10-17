@@ -1029,7 +1029,7 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
-def handle_url_arg(args: "argparse.Namespace") -> "argparse.Namespace":
+def handle_url_arg(args: "argparse.Namespace", parser: "Optional[argparse.parser]" = None) -> "argparse.Namespace":
     # handle if text client is launched using the "archipelago://name:pass@host:port" url from webhost
     if args.url:
         url = urllib.parse.urlparse(args.url)
@@ -1040,6 +1040,8 @@ def handle_url_arg(args: "argparse.Namespace") -> "argparse.Namespace":
             if url.password:
                 args.password = urllib.parse.unquote(url.password)
         else:
+            if not parser:
+                parser = get_base_parser()
             parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
     return args
 
