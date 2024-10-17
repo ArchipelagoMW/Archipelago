@@ -1,5 +1,5 @@
 import math
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, List, Union
 
 from BaseClasses import Item, ItemClassification
 
@@ -14,7 +14,7 @@ class CMItemData(NamedTuple):
     quantity: float = 1  # maximum, not guaranteed
     material: int = 0  # pawns=100, minor=300, major=500, queen=900
     # for each given parent item, the maximum number of child items which may be present
-    parents: list[list[str, int]] = []
+    parents: List[List[Union[str, int]]] = []
 
 
 item_table = {

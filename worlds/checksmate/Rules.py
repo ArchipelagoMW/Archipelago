@@ -1,5 +1,7 @@
 from math import ceil
 
+from typing import List, Dict
+
 from BaseClasses import MultiWorld, CollectionState, Item
 from . import progression_items
 from . import Locations
@@ -23,7 +25,7 @@ def has_pin(state: CollectionState, player: int) -> bool:
 
 # @cache does not work due to "MultiWorld object was not de-allocated"
 # TODO: @cache_self1 is very close but needs a 'self' object
-def num_items_in_pool(itempool: list[Item], player_and_item: (int, str)):
+def num_items_in_pool(itempool: List[Item], player_and_item: (int, str)):
     return len([item for item in itempool if item.player == player_and_item[0] and item.name == player_and_item[1]])
 
 
@@ -39,7 +41,7 @@ def count_enemy_pawns(state: CollectionState, player: int) -> int:
     # return sum(1 if x.startswith("Enemy Pawn") else 0 for x in owned_item_ids)
 
 
-enemy_locations_to_items: dict[str, str] = {
+enemy_locations_to_items: Dict[str, str] = {
     "Capture Pawn A": "Enemy Pawn A",
     "Capture Pawn B": "Enemy Pawn B",
     "Capture Pawn C": "Enemy Pawn C",

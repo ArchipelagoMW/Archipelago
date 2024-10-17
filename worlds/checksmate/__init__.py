@@ -2,7 +2,7 @@ import logging
 import math
 from collections import Counter
 from enum import Enum
-from typing import List, Dict, ClassVar, Callable, Type
+from typing import List, Dict, ClassVar, Callable, Type, Union
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions
@@ -206,7 +206,7 @@ class CMWorld(World):
         self.items_used[self.player]["Super-Size Me"] = 1
 
         # add items player really wants
-        yaml_locked_items: dict[str, int] = self.options.locked_items.value
+        yaml_locked_items: Dict[str, int] = self.options.locked_items.value
         locked_items = dict(yaml_locked_items)
         # ensure locked items have enough parents
         player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
@@ -354,7 +354,7 @@ class CMWorld(World):
 
         self.multiworld.itempool += items
 
-    def consume_item(self, chosen_item: str, locked_items: dict[str, int]):
+    def consume_item(self, chosen_item: str, locked_items: Dict[str, int]):
         if chosen_item not in self.items_used[self.player]:
             self.items_used[self.player][chosen_item] = 0
         self.items_used[self.player][chosen_item] += 1
@@ -376,9 +376,9 @@ class CMWorld(World):
                       material: int,
                       min_material: float,
                       max_material: float,
-                      items: list[CMItem],
-                      my_progression_items: list[str | CMItemData],
-                      locked_items: dict[str, int]) -> bool:
+                      items: List[CMItem],
+                      my_progression_items: List[Union[str, CMItemData]],
+                      locked_items: Dict[str, int]) -> bool:
         if chosen_item == "Progressive Major To Queen" and "Progressive Major Piece" not in my_progression_items:
             # TODO: there is a better way, probably next step is a "one strike" mechanism
             return True
@@ -407,7 +407,7 @@ class CMWorld(World):
                 item_table["Progressive Pawn"].material * necessary_chessmen) > max_material
 
     # if this piece was added, it might add more than its own material to the locked pool
-    def lockable_material_value(self, chosen_item: str, items: list[CMItem], locked_items: dict[str, int]):
+    def lockable_material_value(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
         material = progression_items[chosen_item].material
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return material
@@ -416,7 +416,7 @@ class CMWorld(World):
         return material
 
     # ensures the Castling location is reachable
-    def lock_new_items(self, chosen_item: str, items: list[CMItem], locked_items: dict[str, int]):
+    def lock_new_items(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return
         if chosen_item == "Progressive Major To Queen":
@@ -425,7 +425,7 @@ class CMWorld(World):
                     locked_items["Progressive Major Piece"] = 0
                 locked_items["Progressive Major Piece"] += 1
 
-    def unupgraded_majors_in_pool(self, items: list[CMItem], locked_items: dict[str, int]) -> int:
+    def unupgraded_majors_in_pool(self, items: List[CMItem], locked_items: Dict[str, int]) -> int:
         total_majors = len([item for item in items if item.name == "Progressive Major Piece"]) + len(
             [item for item in locked_items if item == "Progressive Major Piece"])
         total_upgrades = len([item for item in items if item.name == "Progressive Major To Queen"]) + len(
@@ -471,7 +471,7 @@ class CMWorld(World):
             victory_item = create_item_with_correct_settings(self.player, "Victory")
             self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
-    def fewest_parents(self, parents: list[list[str, int]]):
+    def fewest_parents(self, parents: List[List[Union[str, int]]]):
         # TODO: this concept doesn't work if a parent can have multiple children and another can't, e.g. forwardness
         return min([self.items_used[self.player].get(item[0], 0) for item in parents])
 
@@ -670,17 +670,17 @@ def get_limit_multiplier_for_item(item_dictionary: Dict[str, int]) -> Callable[[
     return lambda item_name: item_dictionary[item_name]
 
 
-def get_parents(chosen_item: str) -> list[list[str, int]]:
+def get_parents(chosen_item: str) -> List[List[Union[str, int]]]:
     return item_table[chosen_item].parents
 
 
-def get_children(chosen_item: str) -> list[str]:
+def get_children(chosen_item: str) -> List[str]:
     return [item for item in item_table
             if item_table[item].parents is not None and chosen_item in map(
             lambda x: x[0], item_table[item].parents)]
 
 
-def chessmen_count(items: list[CMItem], pocket_limit: int) -> int:
+def chessmen_count(items: List[CMItem], pocket_limit: int) -> int:
     pocket_amount = (0 if pocket_limit <= 0 else
                      math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
     chessmen_amount = len([item for item in items if item.name in item_name_groups["Chessmen"]])
