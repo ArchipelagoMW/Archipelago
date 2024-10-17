@@ -1,0 +1,7 @@
+Items:
+Desert Obelisk Key
+Monastery Obelisk Key
+Treehouse Obelisk Key
+Mountainside Obelisk Key
+Quarry Obelisk Key
+Town Obelisk Key

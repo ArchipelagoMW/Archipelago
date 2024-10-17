@@ -11,15 +11,17 @@ def removeOwlEvents(rom):
             re.removeEntities(0x41)
             re.store(rom)
     # Clear texts used by the owl. Potentially reused somewhere o else.
-    rom.texts[0x0D9] = b'\xff'  # used by boomerang
     # 1 Used by empty chest (master stalfos message)
     # 8 unused (0x0C0-0x0C7)
     # 1 used by bowwow in chest
     # 1 used by item for other player message
     # 2 used by arrow chest messages
     # 2 used by tunics
-    for idx in range(0x0BE, 0x0CE):
-        rom.texts[idx] = b'\xff'
+    
+    # Undoing this, we use it for text shuffle now
+    #rom.texts[0x0D9] = b'\xff'  # used by boomerang
+    # for idx in range(0x0BE, 0x0CE):
+    #     rom.texts[idx] = b'\xff'
 
 
     # Patch the owl entity into a ghost to allow refill of powder/bombs/arrows
@@ -79,23 +81,23 @@ talking:
 
     ; Give powder
     ld   a, [$DB4C]
-    cp   $10
+    cp   $20
     jr   nc, doNotGivePowder
-    ld   a, $10
+    ld   a, $20
     ld   [$DB4C], a
 doNotGivePowder:
 
     ld   a, [$DB4D]
-    cp   $10
+    cp   $30
     jr   nc, doNotGiveBombs
-    ld   a, $10
+    ld   a, $30
     ld   [$DB4D], a
 doNotGiveBombs:
 
     ld   a, [$DB45]
-    cp   $10
+    cp   $30
     jr   nc, doNotGiveArrows
-    ld   a, $10
+    ld   a, $30
     ld   [$DB45], a
 doNotGiveArrows:
 

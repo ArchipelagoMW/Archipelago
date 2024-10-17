@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 from enum import IntEnum
 from typing import TypedDict
-from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet
+from Options import DefaultOnToggle, PerGameCommonOptions, Toggle, Range, Choice, OptionSet
 from .Overcooked2Levels import Overcooked2Dlc
 
 class LocationBalancingMode(IntEnum):
@@ -167,32 +168,30 @@ class StarThresholdScale(Range):
     default = 35
 
 
-overcooked_options = {
+@dataclass
+class OC2Options(PerGameCommonOptions):
     # generator options
-    "location_balancing": LocationBalancing,
-    "ramp_tricks": RampTricks,
-
+    location_balancing: LocationBalancing
+    ramp_tricks: RampTricks
+    
     # deathlink
-    "deathlink": DeathLink,
-
+    deathlink: DeathLink
+    
     # randomization options
-    "shuffle_level_order": ShuffleLevelOrder,
-    "include_dlcs": DLCOptionSet,
-    "include_horde_levels": IncludeHordeLevels,
-    "prep_levels": PrepLevels,
-    "kevin_levels": KevinLevels,
-
+    shuffle_level_order: ShuffleLevelOrder
+    include_dlcs: DLCOptionSet
+    include_horde_levels: IncludeHordeLevels
+    prep_levels: PrepLevels
+    kevin_levels: KevinLevels
+    
     # quality of life options
-    "fix_bugs": FixBugs,
-    "shorter_level_duration": ShorterLevelDuration,
-    "short_horde_levels": ShortHordeLevels,
-    "always_preserve_cooking_progress": AlwaysPreserveCookingProgress,
-    "always_serve_oldest_order": AlwaysServeOldestOrder,
-    "display_leaderboard_scores": DisplayLeaderboardScores,
-
+    fix_bugs: FixBugs
+    shorter_level_duration: ShorterLevelDuration
+    short_horde_levels: ShortHordeLevels
+    always_preserve_cooking_progress: AlwaysPreserveCookingProgress
+    always_serve_oldest_order: AlwaysServeOldestOrder
+    display_leaderboard_scores: DisplayLeaderboardScores
+    
     # difficulty settings
-    "stars_to_win": StarsToWin,
-    "star_threshold_scale": StarThresholdScale,
-}
-
-OC2Options = TypedDict("OC2Options", {option.__name__: option for option in overcooked_options.values()})
+    stars_to_win: StarsToWin
+    star_threshold_scale: StarThresholdScale

@@ -1,11 +1,11 @@
 # Adventure
 
-## Where is the settings page?
-The [player settings page for Adventure](../player-settings) contains all the options you need to configure and export a config file.
+## Where is the options page?
+The [player options page for Adventure](../player-options) contains all the options you need to configure and export a config file.
 
 ## What does randomization do to this game?
 Adventure items may be distributed into additional locations not possible in the vanilla Adventure randomizer.  All
-Adventure items are added to the multiworld item pool.  Depending on the settings, dragon locations may be randomized,
+Adventure items are added to the multiworld item pool.  Depending on the `dragon_rando_type` value, dragon locations may be randomized,
 slaying dragons may award items, difficulty switches may require items to unlock, and limited use 'freeincarnates'
 can allow reincarnation without resurrecting dragons.  Dragon speeds may also be randomized, and items may exist
 to reduce their speeds.
@@ -15,7 +15,7 @@ Same as vanilla; Find the Enchanted Chalice and return it to the Yellow Castle
 
 ## Which items can be in another player's world?
 All three keys, the chalice, the sword, the magnet, and the bridge can be found in another player's world.  Depending on
-settings, dragon slowdowns, difficulty switch unlocks, and freeincarnates may also be found.
+options, dragon slowdowns, difficulty switch unlocks, and freeincarnates may also be found.
 
 ## What is considered a location check in Adventure?
 Most areas in Adventure have one or more locations which can contain an Adventure item or an Archipelago item.
@@ -41,7 +41,7 @@ A message is shown in the client log.  While empty handed, the player can press 
 order they were received.  Once an item is retrieved this way, it cannot be retrieved again until pressing select to 
 return to the 'GO' screen or doing a hard reset, either one of which will reset all items to their original positions.
 
-## What are recommended settings to tweak for beginners to the rando?
+## What are recommended options to tweak for beginners to the rando?
 Setting difficulty_switch_a and lowering the dragons' speeds makes the dragons easier to avoid.  Adding Chalice to 
 local_items guarantees you'll visit at least one of the interesting castles, as it can only be placed in a castle or
 the credits room.

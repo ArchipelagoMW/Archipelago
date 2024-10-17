@@ -1,7 +1,7 @@
 # Bumper Stickers
 
-## Where is the settings page?
-The [player settings page for Bumper Stickers](../player-settings) contains all the options you need to configure and export a config file.
+## Where is the options page?
+The [player options page for Bumper Stickers](../player-options) contains all the options you need to configure and export a config file.
 
 ## What does randomization do to this game?
 Playing this in Archipelago is a very different experience from Classic mode. You start with a very small board and a set of tasks. Completing those tasks will give you a larger board and more, harder tasks. In addition, special types of bumpers exist that must be cleared in order to progress.

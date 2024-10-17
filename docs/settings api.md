@@ -1,7 +1,7 @@
 # Archipelago Settings API
 
 The settings API describes how to use installation-wide config and let the user configure them, like paths, etc. using
-host.yaml. For the player settings / player yamls see [options api.md](options api.md).
+host.yaml. For the player options / player yamls see [options api.md](options api.md).
 
 The settings API replaces `Utils.get_options()` and `Utils.get_default_options()`
 as well as the predefined `host.yaml` in the repository.
@@ -120,6 +120,10 @@ class MySettings(settings.Group):
 Path to a single file. Automatically resolves as user_path:
 Source folder or AP install path on Windows. ~/Archipelago for the AppImage.
 Will open a file browser if the file is missing when in GUI mode.
+
+If the file is used in the world's `generate_output`, make sure to add a `stage_assert_generate` that checks if the
+file is available, otherwise generation may fail at the very end.
+See also [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#generation).
 
 #### class method validate(cls, path: str)
 

@@ -8,14 +8,15 @@
     cursor: unset;
 }
 
-#games h1{
+#games h1, #games details summary.h1{
     font-size: 60px;
     cursor: unset;
 }
 
-#games h2{
+#games h2, #games details summary.h2{
     color: #93dcff;
     margin-bottom: 2px;
+    text-transform: none;
 }
 
 #games a{
@@ -30,4 +31,14 @@
 #games p{
     line-height: 25px;
     margin-bottom: 7px;
+}
+
+#games .page-controls{
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.25rem;
+}
+
+#games .page-controls button{
+    margin-left: 0.5rem;
 }

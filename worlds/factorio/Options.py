@@ -1,10 +1,13 @@
 from __future__ import annotations
-import typing
-import datetime
 
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool
+from dataclasses import dataclass
+import datetime
+import typing
+
 from schema import Schema, Optional, And, Or
+
+from Options import Choice, OptionDict, OptionSet, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
+    StartInventoryPool, PerGameCommonOptions
 
 # schema helpers
 FloatRange = lambda low, high: And(Or(int, float), lambda f: low <= f <= high)
@@ -146,8 +149,8 @@ class TechTreeLayout(Choice):
 
 class TechTreeInformation(Choice):
     """How much information should be displayed in the tech tree.
-    None: No indication what a research unlocks
-    Advancement: Indicators which researches unlock items that are considered logical advancements
+    None: No indication of what a research unlocks.
+    Advancement: Indicates if a research unlocks an item that is considered logical advancement, but not who it is for.
     Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command.
     """
     display_name = "Technology Tree Information"
@@ -207,11 +210,10 @@ class RecipeIngredientsOffset(Range):
     range_end = 5
 
 
-class FactorioStartItems(ItemDict):
+class FactorioStartItems(OptionDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
-    verify_item_name = False
-    default = {"burner-mining-drill": 19, "stone-furnace": 19}
+    default = {"burner-mining-drill": 4, "stone-furnace": 4,  "raw-fish": 50}
 
 
 class FactorioFreeSampleBlacklist(OptionSet):
@@ -390,8 +392,8 @@ class FactorioWorldGen(OptionDict):
     def __init__(self, value: typing.Dict[str, typing.Any]):
         advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
         self.value = {
-            "basic": {key: value[key] for key in value.keys() - advanced},
-            "advanced": {key: value[key] for key in value.keys() & advanced}
+            "basic": {k: v for k, v in value.items() if k not in advanced},
+            "advanced": {k: v for k, v in value.items() if k in advanced}
         }
 
         # verify min_values <= max_values
@@ -423,50 +425,37 @@ class EnergyLink(Toggle):
     display_name = "EnergyLink"
 
 
-factorio_options: typing.Dict[str, type(Option)] = {
-    "max_science_pack": MaxSciencePack,
-    "goal": Goal,
-    "tech_tree_layout": TechTreeLayout,
-    "min_tech_cost": MinTechCost,
-    "max_tech_cost": MaxTechCost,
-    "tech_cost_distribution": TechCostDistribution,
-    "tech_cost_mix": TechCostMix,
-    "ramping_tech_costs": RampingTechCosts,
-    "silo": Silo,
-    "satellite": Satellite,
-    "free_samples": FreeSamples,
-    "tech_tree_information": TechTreeInformation,
-    "starting_items": FactorioStartItems,
-    "free_sample_blacklist": FactorioFreeSampleBlacklist,
-    "free_sample_whitelist": FactorioFreeSampleWhitelist,
-    "recipe_time": RecipeTime,
-    "recipe_ingredients": RecipeIngredients,
-    "recipe_ingredients_offset": RecipeIngredientsOffset,
-    "imported_blueprints": ImportedBlueprint,
-    "world_gen": FactorioWorldGen,
-    "progressive": Progressive,
-    "teleport_traps": TeleportTrapCount,
-    "grenade_traps": GrenadeTrapCount,
-    "cluster_grenade_traps": ClusterGrenadeTrapCount,
-    "artillery_traps": ArtilleryTrapCount,
-    "atomic_rocket_traps": AtomicRocketTrapCount,
-    "attack_traps": AttackTrapCount,
-    "evolution_traps": EvolutionTrapCount,
-    "evolution_trap_increase": EvolutionTrapIncrease,
-    "death_link": DeathLink,
-    "energy_link": EnergyLink,
-    "start_inventory_from_pool": StartInventoryPool,
-}
-
-# spoilers below. If you spoil it for yourself, please at least don't spoil it for anyone else.
-if datetime.datetime.today().month == 4:
-
-    class ChunkShuffle(Toggle):
-        """Entrance Randomizer."""
-        display_name = "Chunk Shuffle"
-
-
-    if datetime.datetime.today().day > 1:
-        ChunkShuffle.__doc__ += """
-        2023 April Fool's option. Shuffles chunk border transitions."""
-    factorio_options["chunk_shuffle"] = ChunkShuffle
+@dataclass
+class FactorioOptions(PerGameCommonOptions):
+    max_science_pack: MaxSciencePack
+    goal: Goal
+    tech_tree_layout: TechTreeLayout
+    min_tech_cost: MinTechCost
+    max_tech_cost: MaxTechCost
+    tech_cost_distribution: TechCostDistribution
+    tech_cost_mix: TechCostMix
+    ramping_tech_costs: RampingTechCosts
+    silo: Silo
+    satellite: Satellite
+    free_samples: FreeSamples
+    tech_tree_information: TechTreeInformation
+    starting_items: FactorioStartItems
+    free_sample_blacklist: FactorioFreeSampleBlacklist
+    free_sample_whitelist: FactorioFreeSampleWhitelist
+    recipe_time: RecipeTime
+    recipe_ingredients: RecipeIngredients
+    recipe_ingredients_offset: RecipeIngredientsOffset
+    imported_blueprints: ImportedBlueprint
+    world_gen: FactorioWorldGen
+    progressive: Progressive
+    teleport_traps: TeleportTrapCount
+    grenade_traps: GrenadeTrapCount
+    cluster_grenade_traps: ClusterGrenadeTrapCount
+    artillery_traps: ArtilleryTrapCount
+    atomic_rocket_traps: AtomicRocketTrapCount
+    attack_traps: AttackTrapCount
+    evolution_traps: EvolutionTrapCount
+    evolution_trap_increase: EvolutionTrapIncrease
+    death_link: DeathLink
+    energy_link: EnergyLink
+    start_inventory_from_pool: StartInventoryPool

@@ -2,6 +2,7 @@ from itertools import chain
 import logging
 
 from worlds.generic.Rules import set_rule, add_rule
+from BaseClasses import CollectionState
 
 from .Hints import get_hint_area, HintAreaNotFound
 from .Regions import TimeOfDay
@@ -25,12 +26,12 @@ def set_all_entrances_data(world, player):
                 return_entrance.data['index'] = 0x7FFF
 
 
-def assume_entrance_pool(entrance_pool, ootworld):
+def assume_entrance_pool(entrance_pool, ootworld, pool_type):
     assumed_pool = []
     for entrance in entrance_pool:
-        assumed_forward = entrance.assume_reachable()
+        assumed_forward = entrance.assume_reachable(pool_type)
         if entrance.reverse != None and not ootworld.decouple_entrances:
-            assumed_return = entrance.reverse.assume_reachable()
+            assumed_return = entrance.reverse.assume_reachable(pool_type)
             if not (ootworld.mix_entrance_pools != 'off' and (ootworld.shuffle_overworld_entrances or ootworld.shuffle_special_interior_entrances)):
                 if (entrance.type in ('Dungeon', 'Grotto', 'Grave') and entrance.reverse.name != 'Spirit Temple Lobby -> Desert Colossus From Spirit Lobby') or \
                    (entrance.type == 'Interior' and ootworld.shuffle_special_interior_entrances):
@@ -41,15 +42,15 @@ def assume_entrance_pool(entrance_pool, ootworld):
     return assumed_pool
 
 
-def build_one_way_targets(world, types_to_include, exclude=(), target_region_names=()):
+def build_one_way_targets(world, pool, types_to_include, exclude=(), target_region_names=()):
     one_way_entrances = []
     for pool_type in types_to_include:
         one_way_entrances += world.get_shufflable_entrances(type=pool_type)
     valid_one_way_entrances = list(filter(lambda entrance: entrance.name not in exclude, one_way_entrances))
     if target_region_names:
-        return [entrance.get_new_target() for entrance in valid_one_way_entrances
+        return [entrance.get_new_target(pool) for entrance in valid_one_way_entrances
                 if entrance.connected_region.name in target_region_names]
-    return [entrance.get_new_target() for entrance in valid_one_way_entrances]
+    return [entrance.get_new_target(pool) for entrance in valid_one_way_entrances]
 
 
 #   Abbreviations
@@ -423,14 +424,14 @@ multi_interior_regions = {
 }
 
 interior_entrance_bias = {
-    'Kakariko Village -> Kak Potion Shop Front': 4,
-    'Kak Backyard -> Kak Potion Shop Back': 4,
-    'Kakariko Village -> Kak Impas House': 3,
-    'Kak Impas Ledge -> Kak Impas House Back': 3,
-    'Goron City -> GC Shop': 2,
-    'Zoras Domain -> ZD Shop': 2,
+    'ToT Entrance -> Temple of Time': 4,
+    'Kakariko Village -> Kak Potion Shop Front': 3,
+    'Kak Backyard -> Kak Potion Shop Back': 3,
+    'Kakariko Village -> Kak Impas House': 2,
+    'Kak Impas Ledge -> Kak Impas House Back': 2,
     'Market Entrance -> Market Guard House': 2,
-    'ToT Entrance -> Temple of Time': 1,
+    'Goron City -> GC Shop': 1,
+    'Zoras Domain -> ZD Shop': 1,
 }
 
 
@@ -439,15 +440,16 @@ class EntranceShuffleError(Exception):
 
 
 def shuffle_random_entrances(ootworld):
-    world = ootworld.multiworld
+    multiworld = ootworld.multiworld
     player = ootworld.player
 
     # Gather locations to keep reachable for validation
-    all_state = world.get_all_state(use_cache=True)
-    locations_to_ensure_reachable = {loc for loc in world.get_reachable_locations(all_state, player) if not (loc.type == 'Drop' or (loc.type == 'Event' and 'Subrule' in loc.name))}
+    all_state = ootworld.get_state_with_complete_itempool()
+    all_state.sweep_for_advancements(locations=ootworld.get_locations())
+    locations_to_ensure_reachable = {loc for loc in multiworld.get_reachable_locations(all_state, player) if not (loc.type == 'Drop' or (loc.type == 'Event' and 'Subrule' in loc.name))}
 
     # Set entrance data for all entrances
-    set_all_entrances_data(world, player)
+    set_all_entrances_data(multiworld, player)
 
     # Determine entrance pools based on settings
     one_way_entrance_pools = {}
@@ -523,12 +525,12 @@ def shuffle_random_entrances(ootworld):
     for pool_type, entrance_pool in one_way_entrance_pools.items():
         if pool_type == 'OwlDrop':
             valid_target_types = ('WarpSong', 'OwlDrop', 'Overworld', 'Extra')
-            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types, exclude=['Prelude of Light Warp -> Temple of Time'])
+            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, pool_type, valid_target_types, exclude=['Prelude of Light Warp -> Temple of Time'])
             for target in one_way_target_entrance_pools[pool_type]:
                 set_rule(target, lambda state: state._oot_reach_as_age(target.parent_region, 'child', player))
         elif pool_type in {'Spawn', 'WarpSong'}: 
             valid_target_types = ('Spawn', 'WarpSong', 'OwlDrop', 'Overworld', 'Interior', 'SpecialInterior', 'Extra')
-            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, valid_target_types)
+            one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, pool_type, valid_target_types)
         # Ensure that the last entrance doesn't assume the rest of the targets are reachable
         for target in one_way_target_entrance_pools[pool_type]:
             add_rule(target, (lambda entrances=entrance_pool: (lambda state: any(entrance.connected_region == None for entrance in entrances)))())
@@ -538,20 +540,17 @@ def shuffle_random_entrances(ootworld):
 
     target_entrance_pools = {}
     for pool_type, entrance_pool in entrance_pools.items():
-        target_entrance_pools[pool_type] = assume_entrance_pool(entrance_pool, ootworld)
+        target_entrance_pools[pool_type] = assume_entrance_pool(entrance_pool, ootworld, pool_type)
 
     # Build all_state and none_state
     all_state = ootworld.get_state_with_complete_itempool()
-    none_state = all_state.copy()
-    for item_tuple in none_state.prog_items:
-        if item_tuple[1] == player:
-            none_state.prog_items[item_tuple] = 0
+    none_state = CollectionState(ootworld.multiworld)
 
     # Plando entrances
-    if world.plando_connections[player]:
+    if ootworld.options.plando_connections:
         rollbacks = []
         all_targets = {**one_way_target_entrance_pools, **target_entrance_pools}
-        for conn in world.plando_connections[player]:
+        for conn in ootworld.options.plando_connections:
             try:
                 entrance = ootworld.get_entrance(conn.entrance)
                 exit = ootworld.get_entrance(conn.exit)
@@ -628,8 +627,8 @@ def shuffle_random_entrances(ootworld):
             logging.getLogger('').error(f'Root Exit: {exit} -> {exit.connected_region}')
         logging.getLogger('').error(f'Root has too many entrances left after shuffling entrances')
     # Game is beatable
-    new_all_state = world.get_all_state(use_cache=False)
-    if not world.has_beaten_game(new_all_state, player):
+    new_all_state = ootworld.get_state_with_complete_itempool()
+    if not multiworld.has_beaten_game(new_all_state, player):
         raise EntranceShuffleError('Cannot beat game')
     # Validate world
     validate_world(ootworld, None, locations_to_ensure_reachable, all_state, none_state)
@@ -676,7 +675,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     all_state, none_state, one_way_entrance_pools, one_way_target_entrance_pools):
 
     avail_pool = list(chain.from_iterable(one_way_entrance_pools[t] for t in allowed_types if t in one_way_entrance_pools))
-    ootworld.multiworld.random.shuffle(avail_pool)
+    ootworld.random.shuffle(avail_pool)
 
     for entrance in avail_pool:
         if entrance.replaces:
@@ -700,7 +699,7 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
     raise EntranceShuffleError(f'Unable to place priority one-way entrance for {priority_name} in world {ootworld.player}')
 
 
-def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=20):
+def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=10):
     
     restrictive_entrances, soft_entrances = split_entrances_by_requirements(ootworld, entrance_pool, target_entrances)
 
@@ -726,11 +725,11 @@ def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, 
     raise EntranceShuffleError(f'Entrance placement attempt count exceeded for world {ootworld.player}')
 
 def shuffle_entrances(ootworld, pool_type, entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state):
-    ootworld.multiworld.random.shuffle(entrances)
+    ootworld.random.shuffle(entrances)
     for entrance in entrances:
         if entrance.connected_region != None:
             continue
-        ootworld.multiworld.random.shuffle(target_entrances)
+        ootworld.random.shuffle(target_entrances)
         # Here we deliberately introduce bias by prioritizing certain interiors, i.e. the ones most likely to cause problems.
         # success rate over randomization
         if pool_type in {'InteriorSoft', 'MixedSoft'}:
@@ -745,7 +744,6 @@ def shuffle_entrances(ootworld, pool_type, entrances, target_entrances, rollback
 
 
 def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entrances):
-    world = ootworld.multiworld
     player = ootworld.player
 
     # Disconnect all root assumed entrances and save original connections
@@ -755,7 +753,7 @@ def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entran
         if entrance.connected_region:
             original_connected_regions[entrance] = entrance.disconnect()
 
-    all_state = world.get_all_state(use_cache=False)
+    all_state = ootworld.get_state_with_complete_itempool()
 
     restrictive_entrances = []
     soft_entrances = []
@@ -787,18 +785,18 @@ def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entran
 # TODO: improve this function
 def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all_state_orig, none_state_orig):
 
-    world = ootworld.multiworld
+    multiworld = ootworld.multiworld
     player = ootworld.player
 
     all_state = all_state_orig.copy()
     none_state = none_state_orig.copy()
 
-    all_state.sweep_for_events()
-    none_state.sweep_for_events()
+    all_state.sweep_for_advancements(locations=ootworld.get_locations())
+    none_state.sweep_for_advancements(locations=ootworld.get_locations())
 
     if ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions:
         time_travel_state = none_state.copy()
-        time_travel_state.collect(ootworld.create_item('Time Travel'), event=True)
+        time_travel_state.collect(ootworld.create_item('Time Travel'), prevent_sweep=True)
         time_travel_state._oot_update_age_reachable_regions(player)
 
     # Unless entrances are decoupled, we don't want the player to end up through certain entrances as the wrong age
@@ -830,8 +828,8 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
     if ootworld.shuffle_interior_entrances and (ootworld.misc_hints or ootworld.hints != 'none') and \
         (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
         # Ensure Kak Potion Shop entrances are in the same hint area so there is no ambiguity as to which entrance is used for hints
-        potion_front = get_entrance_replacing(world.get_region('Kak Potion Shop Front', player), 'Kakariko Village -> Kak Potion Shop Front', player)
-        potion_back = get_entrance_replacing(world.get_region('Kak Potion Shop Back', player), 'Kak Backyard -> Kak Potion Shop Back', player)
+        potion_front = get_entrance_replacing(multiworld.get_region('Kak Potion Shop Front', player), 'Kakariko Village -> Kak Potion Shop Front', player)
+        potion_back = get_entrance_replacing(multiworld.get_region('Kak Potion Shop Back', player), 'Kak Backyard -> Kak Potion Shop Back', player)
         if potion_front is not None and potion_back is not None and not same_hint_area(potion_front, potion_back):
             raise EntranceShuffleError('Kak Potion Shop entrances are not in the same hint area')
         elif (potion_front and not potion_back) or (not potion_front and potion_back):
@@ -842,8 +840,8 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
 
         # When cows are shuffled, ensure the same thing for Impa's House, since the cow is reachable from both sides
         if ootworld.shuffle_cows:
-            impas_front = get_entrance_replacing(world.get_region('Kak Impas House', player), 'Kakariko Village -> Kak Impas House', player)
-            impas_back = get_entrance_replacing(world.get_region('Kak Impas House Back', player), 'Kak Impas Ledge -> Kak Impas House Back', player)
+            impas_front = get_entrance_replacing(multiworld.get_region('Kak Impas House', player), 'Kakariko Village -> Kak Impas House', player)
+            impas_back = get_entrance_replacing(multiworld.get_region('Kak Impas House Back', player), 'Kak Impas Ledge -> Kak Impas House Back', player)
             if impas_front is not None and impas_back is not None and not same_hint_area(impas_front, impas_back):
                 raise EntranceShuffleError('Kak Impas House entrances are not in the same hint area')
             elif (impas_front and not impas_back) or (not impas_front and impas_back):
@@ -863,25 +861,25 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                 any(region for region in time_travel_state.adult_reachable_regions[player] if region.time_passes)):
             raise EntranceShuffleError('Time passing is not guaranteed as both ages')
 
-        if ootworld.starting_age == 'child' and (world.get_region('Temple of Time', player) not in time_travel_state.adult_reachable_regions[player]):
+        if ootworld.starting_age == 'child' and (multiworld.get_region('Temple of Time', player) not in time_travel_state.adult_reachable_regions[player]):
             raise EntranceShuffleError('Path to ToT as adult not guaranteed')
-        if ootworld.starting_age == 'adult' and (world.get_region('Temple of Time', player) not in time_travel_state.child_reachable_regions[player]):
+        if ootworld.starting_age == 'adult' and (multiworld.get_region('Temple of Time', player) not in time_travel_state.child_reachable_regions[player]):
             raise EntranceShuffleError('Path to ToT as child not guaranteed')
 
     if (ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances) and \
         (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior', 'Overworld', 'Spawn', 'WarpSong', 'OwlDrop']):
         # Ensure big poe shop is always reachable as adult
-        if world.get_region('Market Guard House', player) not in time_travel_state.adult_reachable_regions[player]:
+        if multiworld.get_region('Market Guard House', player) not in time_travel_state.adult_reachable_regions[player]:
             raise EntranceShuffleError('Big Poe Shop access not guaranteed as adult')
         if ootworld.shopsanity == 'off':
             # Ensure that Goron and Zora shops are accessible as adult
-            if world.get_region('GC Shop', player) not in all_state.adult_reachable_regions[player]:
+            if multiworld.get_region('GC Shop', player) not in all_state.adult_reachable_regions[player]:
                 raise EntranceShuffleError('Goron City Shop not accessible as adult')
-            if world.get_region('ZD Shop', player) not in all_state.adult_reachable_regions[player]:
+            if multiworld.get_region('ZD Shop', player) not in all_state.adult_reachable_regions[player]:
                 raise EntranceShuffleError('Zora\'s Domain Shop not accessible as adult')
         if ootworld.open_forest == 'closed':
             # Ensure that Kokiri Shop is reachable as child with no items
-            if world.get_region('KF Kokiri Shop', player) not in none_state.child_reachable_regions[player]:
+            if multiworld.get_region('KF Kokiri Shop', player) not in none_state.child_reachable_regions[player]:
                 raise EntranceShuffleError('Kokiri Forest Shop not accessible as child in closed forest')
 
 

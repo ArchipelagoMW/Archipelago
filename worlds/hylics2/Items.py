@@ -98,7 +98,7 @@ item_table: Dict[int, ItemDict] = {
              'count': 4,
              'name': 'MULTI-JUICE'},
     200651: {'classification': ItemClassification.filler,
-             'count': 1,
+             'count': 3,
              'name': 'MULTI STEM CELL'},
     200652: {'classification': ItemClassification.filler,
              'count': 6,

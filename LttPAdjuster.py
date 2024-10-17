@@ -14,7 +14,7 @@ import tkinter as tk
 from argparse import Namespace
 from concurrent.futures import as_completed, ThreadPoolExecutor
 from glob import glob
-from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, Radiobutton, LEFT, X, TOP, LabelFrame, \
+from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, Radiobutton, LEFT, X, BOTH, TOP, LabelFrame, \
     IntVar, Checkbutton, E, W, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
 from tkinter.constants import DISABLED, NORMAL
 from urllib.parse import urlparse
@@ -25,11 +25,12 @@ ModuleUpdate.update()
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
 from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
-    get_adjuster_settings, tkinter_center_window, init_logging
+    get_adjuster_settings, get_adjuster_settings_no_defaults, tkinter_center_window, init_logging
 
 
 GAME_ALTTP = "A Link to the Past"
-
+WINDOW_MIN_HEIGHT = 525
+WINDOW_MIN_WIDTH = 425
 
 class AdjusterWorld(object):
     def __init__(self, sprite_pool):
@@ -43,6 +44,47 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
 
+# See argparse.BooleanOptionalAction
+class BooleanOptionalActionWithDisable(argparse.Action):
+    def __init__(self,
+                 option_strings,
+                 dest,
+                 default=None,
+                 type=None,
+                 choices=None,
+                 required=False,
+                 help=None,
+                 metavar=None):
+
+        _option_strings = []
+        for option_string in option_strings:
+            _option_strings.append(option_string)
+
+            if option_string.startswith('--'):
+                option_string = '--disable' + option_string[2:]
+                _option_strings.append(option_string)
+
+        if help is not None and default is not None:
+            help += " (default: %(default)s)"
+
+        super().__init__(
+            option_strings=_option_strings,
+            dest=dest,
+            nargs=0,
+            default=default,
+            type=type,
+            choices=choices,
+            required=required,
+            help=help,
+            metavar=metavar)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if option_string in self.option_strings:
+            setattr(namespace, self.dest, not option_string.startswith('--disable'))
+
+    def format_usage(self):
+        return ' | '.join(self.option_strings)
+
 
 def get_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
@@ -52,6 +94,8 @@ def get_argparser() -> argparse.ArgumentParser:
                         help='Path to an ALttP Japan(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?',
                         choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
+    parser.add_argument('--auto_apply', default='ask',
+                        choices=['ask', 'always', 'never'], help='Whether or not to apply settings automatically in the future.')
     parser.add_argument('--menuspeed', default='normal', const='normal', nargs='?',
                         choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
                         help='''\
@@ -61,7 +105,7 @@ def get_argparser() -> argparse.ArgumentParser:
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--deathlink', help='Enable DeathLink system.', action='store_true')
     parser.add_argument('--allowcollect', help='Allow collection of other player items', action='store_true')
-    parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
+    parser.add_argument('--music', default=True, help='Enables/Disables game music.', action=BooleanOptionalActionWithDisable)
     parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
                         choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
                         help='''\
@@ -104,21 +148,23 @@ def get_argparser() -> argparse.ArgumentParser:
                              Alternatively, can be a ALttP Rom patched with a Link
                              sprite that will be extracted.
                              ''')
+    parser.add_argument('--sprite_pool', nargs='+', default=[], help='''
+                             A list of sprites to pull from.
+                        ''')
     parser.add_argument('--oof', help='''\
                              Path to a sound effect to replace Link's "oof" sound.
                              Needs to be in a .brr format and have a length of no
                              more than 2673 bytes, created from a 16-bit signed PCM
                              .wav at 12khz. https://github.com/boldowa/snesbrr
                              ''')
-    parser.add_argument('--names', default='', type=str)
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     return parser
 
 
 def main():
     parser = get_argparser()
-    args = parser.parse_args()
-    args.music = not args.disablemusic
+    args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_ALTTP))
+    
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
         args.loglevel]
@@ -197,16 +243,17 @@ def adjustGUI():
     from argparse import Namespace
     from Utils import __version__ as MWVersion
     adjustWindow = Tk()
+    adjustWindow.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
     adjustWindow.wm_title("Archipelago %s LttP Adjuster" % MWVersion)
     set_icon(adjustWindow)
 
     rom_options_frame, rom_vars, set_sprite = get_rom_options_frame(adjustWindow)
 
-    bottomFrame2 = Frame(adjustWindow)
+    bottomFrame2 = Frame(adjustWindow, padx=8, pady=2)
 
     romFrame, romVar = get_rom_frame(adjustWindow)
 
-    romDialogFrame = Frame(adjustWindow)
+    romDialogFrame = Frame(adjustWindow, padx=8, pady=2)
     baseRomLabel2 = Label(romDialogFrame, text='Rom to adjust')
     romVar2 = StringVar()
     romEntry2 = Entry(romDialogFrame, textvariable=romVar2)
@@ -216,9 +263,9 @@ def adjustGUI():
         romVar2.set(rom)
 
     romSelectButton2 = Button(romDialogFrame, text='Select Rom', command=RomSelect2)
-    romDialogFrame.pack(side=TOP, expand=True, fill=X)
-    baseRomLabel2.pack(side=LEFT)
-    romEntry2.pack(side=LEFT, expand=True, fill=X)
+    romDialogFrame.pack(side=TOP, expand=False, fill=X)
+    baseRomLabel2.pack(side=LEFT, expand=False, fill=X, padx=(0, 8))
+    romEntry2.pack(side=LEFT, expand=True, fill=BOTH, pady=1)
     romSelectButton2.pack(side=LEFT)
 
     def adjustRom():
@@ -286,12 +333,11 @@ def adjustGUI():
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
-    rom_options_frame.pack(side=TOP)
+    rom_options_frame.pack(side=TOP, padx=8, pady=8, fill=BOTH, expand=True)
     adjustButton.pack(side=LEFT, padx=(5,5))
 
     saveButton = Button(bottomFrame2, text='Save Settings', command=saveGUISettings)
     saveButton.pack(side=LEFT, padx=(5,5))
-
     bottomFrame2.pack(side=TOP, pady=(5,5))
 
     tkinter_center_window(adjustWindow)
@@ -530,11 +576,8 @@ class AttachTooltip(object):
 
 def get_rom_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
-    if not adjuster_settings:
-        adjuster_settings = Namespace()
-        adjuster_settings.baserom = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
 
-    romFrame = Frame(parent)
+    romFrame = Frame(parent, padx=8, pady=8)
     baseRomLabel = Label(romFrame, text='LttP Base Rom: ')
     romVar = StringVar(value=adjuster_settings.baserom)
     romEntry = Entry(romFrame, textvariable=romVar)
@@ -554,45 +597,19 @@ def get_rom_frame(parent=None):
     romSelectButton = Button(romFrame, text='Select Rom', command=RomSelect)
 
     baseRomLabel.pack(side=LEFT)
-    romEntry.pack(side=LEFT, expand=True, fill=X)
+    romEntry.pack(side=LEFT, expand=True, fill=BOTH, pady=1)
     romSelectButton.pack(side=LEFT)
-    romFrame.pack(side=TOP, expand=True, fill=X)
+    romFrame.pack(side=TOP, fill=X)
 
     return romFrame, romVar
 
-
 def get_rom_options_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
-    defaults = {
-        "auto_apply": 'ask',
-        "music": True,
-        "reduceflashing": True,
-        "deathlink": False,
-        "sprite": None,
-        "oof": None,
-        "quickswap": True,
-        "menuspeed": 'normal',
-        "heartcolor": 'red',
-        "heartbeep": 'normal',
-        "ow_palettes": 'default',
-        "uw_palettes": 'default',
-        "hud_palettes": 'default',
-        "sword_palettes": 'default',
-        "shield_palettes": 'default',
-        "sprite_pool": [],
-        "allowcollect": False,
-    }
-    if not adjuster_settings:
-        adjuster_settings = Namespace()
-    for key, defaultvalue in defaults.items():
-        if not hasattr(adjuster_settings, key):
-            setattr(adjuster_settings, key, defaultvalue)
 
-    romOptionsFrame = LabelFrame(parent, text="Rom options")
-    romOptionsFrame.columnconfigure(0, weight=1)
-    romOptionsFrame.columnconfigure(1, weight=1)
+    romOptionsFrame = LabelFrame(parent, text="Rom options", padx=8, pady=8)
+
     for i in range(5):
-        romOptionsFrame.rowconfigure(i, weight=1)
+        romOptionsFrame.rowconfigure(i, weight=0, pad=4)
     vars = Namespace()
 
     vars.MusicVar = IntVar()
@@ -643,7 +660,7 @@ def get_rom_options_frame(parent=None):
     spriteSelectButton = Button(spriteDialogFrame, text='...', command=SpriteSelect)
 
     baseSpriteLabel.pack(side=LEFT)
-    spriteEntry.pack(side=LEFT)
+    spriteEntry.pack(side=LEFT, expand=True, fill=X)
     spriteSelectButton.pack(side=LEFT)
 
     oofDialogFrame = Frame(romOptionsFrame)
@@ -987,6 +1004,7 @@ class SpriteSelector():
                 self.add_to_sprite_pool(sprite)
 
     def icon_section(self, frame_label, path, no_results_label):
+        os.makedirs(path, exist_ok=True)
         frame = LabelFrame(self.window, labelwidget=frame_label, padx=5, pady=5)
         frame.pack(side=TOP, fill=X)
 

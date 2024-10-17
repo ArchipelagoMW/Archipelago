@@ -5,11 +5,11 @@ from ..generic.Rules import set_rule
 
 class SpireLogic(LogicMixin):
     def _spire_has_relics(self, player: int, amount: int) -> bool:
-        count: int = self.item_count("Relic", player) + self.item_count("Boss Relic", player)
+        count: int = self.count("Relic", player) + self.count("Boss Relic", player)
         return count >= amount
 
     def _spire_has_cards(self, player: int, amount: int) -> bool:
-        count = self.item_count("Card Draw", player) + self.item_count("Rare Card Draw", player)
+        count = self.count("Card Draw", player) + self.count("Rare Card Draw", player)
         return count >= amount
 
 

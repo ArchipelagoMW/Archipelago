@@ -43,13 +43,13 @@
 
 
 local socket = require("socket")
-local udp = socket.socket.udp()
+udp = socket.socket.udp()
 require('common')
 
 udp:setsockname('127.0.0.1', 55355)
 udp:settimeout(0)
 
-while true do
+function on_vblank()
     -- Attempt to lessen the CPU load by only polling the UDP socket every x frames.
     -- x = 10 is entirely arbitrary, very little thought went into it.
     -- We could try to make use of client.get_approx_framerate() here, but the values returned
@@ -112,6 +112,7 @@ while true do
             for _, v in ipairs(mem) do
                 hex_string = hex_string .. string.format("%02X ", v)
             end
+
             hex_string = hex_string:sub(1, -2) -- Hang head in shame, remove last " "
             local reply = string.format("%s %02x %s\n", command, address, hex_string)
             udp:sendto(reply, msg_or_ip, port_or_nil)
@@ -135,6 +136,10 @@ while true do
             udp:sendto(reply, msg_or_ip, port_or_nil)
         end
     end
+end
 
-    emu.frameadvance()
+event.onmemoryexecute(on_vblank, 0x40, "ap_connector_vblank")
+
+while true do
+    emu.yield()
 end

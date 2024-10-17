@@ -113,6 +113,9 @@ class WargrooveContext(CommonContext):
     async def connection_closed(self):
         await super(WargrooveContext, self).connection_closed()
         self.remove_communication_files()
+        self.checked_locations.clear()
+        self.server_locations.clear()
+        self.finished_game = False
 
     @property
     def endpoints(self):
@@ -124,6 +127,9 @@ class WargrooveContext(CommonContext):
     async def shutdown(self):
         await super(WargrooveContext, self).shutdown()
         self.remove_communication_files()
+        self.checked_locations.clear()
+        self.server_locations.clear()
+        self.finished_game = False
 
     def remove_communication_files(self):
         for root, dirs, files in os.walk(self.game_communication_path):
@@ -170,7 +176,7 @@ class WargrooveContext(CommonContext):
                 if not os.path.isfile(path):
                     open(path, 'w').close()
                     # Announcing commander unlocks
-                    item_name = self.item_names[network_item.item]
+                    item_name = self.item_names.lookup_in_game(network_item.item)
                     if item_name in faction_table.keys():
                         for commander in faction_table[item_name]:
                             logger.info(f"{commander.name} has been unlocked!")
@@ -191,7 +197,7 @@ class WargrooveContext(CommonContext):
                     open(print_path, 'w').close()
                     with open(print_path, 'w') as f:
                         f.write("Received " +
-                                self.item_names[network_item.item] +
+                                self.item_names.lookup_in_game(network_item.item) +
                                 " from " +
                                 self.player_names[network_item.player])
                         f.close()
@@ -261,9 +267,7 @@ class WargrooveContext(CommonContext):
 
             def build(self):
                 container = super().build()
-                panel = TabbedPanelItem(text="Wargroove")
-                panel.content = self.build_tracker()
-                self.tabs.add_widget(panel)
+                self.add_client_tab("Wargroove", self.build_tracker())
                 return container
 
             def build_tracker(self) -> TrackerLayout:
@@ -336,7 +340,7 @@ class WargrooveContext(CommonContext):
             faction_items = 0
             faction_item_names = [faction + ' Commanders' for faction in faction_table.keys()]
             for network_item in self.items_received:
-                if self.item_names[network_item.item] in faction_item_names:
+                if self.item_names.lookup_in_game(network_item.item) in faction_item_names:
                     faction_items += 1
             starting_groove = (faction_items - 1) * self.starting_groove_multiplier
             # Must be an integer larger than 0
@@ -402,8 +406,10 @@ async def game_watcher(ctx: WargrooveContext):
                 if file.find("send") > -1:
                     st = file.split("send", -1)[1]
                     sending = sending+[(int(st))]
+                    os.remove(os.path.join(ctx.game_communication_path, file))
                 if file.find("victory") > -1:
                     victory = True
+                    os.remove(os.path.join(ctx.game_communication_path, file))
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)

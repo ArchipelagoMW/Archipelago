@@ -29,7 +29,7 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) h
 about why Archipelago uses YAML files and what they're for.
 
 ### Where do I get a YAML?
-You can use the [game settings page](/games/Risk%20of%20Rain%202/player-settings) here on the Archipelago 
+You can use the [game options page](/games/Risk%20of%20Rain%202/player-options) here on the Archipelago 
 website to generate a YAML using a graphical interface.
 
 
@@ -56,3 +56,14 @@ You can talk to other in the multiworld chat using the RoR2 chat. All other mult
 remote commands list in the [commands guide](/tutorial/Archipelago/commands/en) work as well in the RoR2 chat. You can 
 also optionally connect to the multiworld using the text client, which can be found in the 
 [main Archipelago installation](https://github.com/ArchipelagoMW/Archipelago/releases).
+
+### In-Game Commands
+These commands are to be used in-game by using ``Ctrl + Alt + ` `` and then typing the following:
+ - `archipelago_connect <url> <port> <slot> [password]` example: "archipelago_connect archipelago.gg 38281 SlotName".
+ - `archipelago_deathlink true/false` Toggle deathlink.
+ - `archipelago_disconnect` Disconnect from AP.
+ - `archipelago_final_stage_death true/false` Toggle final stage death.
+
+Explore Mode only
+ - `archipelago_show_unlocked_stages` Show which stages have been received.
+ - `archipelago_highlight_satellite true/false` This will highlight the satellite to make it easier to see (Default false).
