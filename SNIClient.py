@@ -541,7 +541,7 @@ async def snes_read(ctx: SNIContext, address: int, size: int) -> typing.Optional
                 break
 
         if len(data) != size:
-            snes_logger.error('Error reading %s, requested %d bytes, received %d' % (hex(address), size, len(data)))
+            snes_logger.error("Error reading %s, requested %d bytes, received %d" % (hex(address), size, len(data)))
             if len(data):
                 snes_logger.error(str(data))
                 snes_logger.warning('Communication Failure with SNI')
@@ -633,7 +633,10 @@ async def game_watcher(ctx: SNIContext) -> None:
         if not ctx.client_handler:
             continue
 
-        rom_validated = await ctx.client_handler.validate_rom(ctx)
+        try:
+            rom_validated = await ctx.client_handler.validate_rom(ctx)
+        except Exception:
+            rom_validated = False
 
         if not rom_validated or (ctx.auth and ctx.auth != ctx.rom):
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
@@ -649,7 +652,12 @@ async def game_watcher(ctx: SNIContext) -> None:
 
         perf_counter = time.perf_counter()
 
-        await ctx.client_handler.game_watcher(ctx)
+        try:
+            await ctx.client_handler.game_watcher(ctx)
+        except Exception as ex:
+            ctx.gui_error("Game Exception", ex)
+            snes_logger.exception(ex)
+            await snes_disconnect(ctx)
 
 
 async def run_game(romfile: str) -> None:
