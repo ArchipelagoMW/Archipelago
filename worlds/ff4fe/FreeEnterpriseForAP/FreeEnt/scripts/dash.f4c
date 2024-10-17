@@ -1,0 +1,259 @@
+msfpatch {
+        .def Var_Dashing $7e0ffa
+
+        .mx 0x20
+
+    Indoor__FrameStart:
+        jsr $=Indoor__SprintShoes
+        
+        // Original code and return
+        jsr $=Indoor__Original_MapFrameCall
+        rtl
+        
+        // ---------------------------------------------------------------------------
+        
+        .mx 0x20
+
+    Indoor__SprintShoes:
+        // Original code for comparing end of step
+        lda $06ac
+        tax
+        lda $067b
+        and $aaf0,x
+        bne $+Indoor__SprintShoes_Exit
+        
+        // Are we outdoor?
+        lda $1700
+        cmp #$03
+        bne $+Indoor__SprintShoes_Outdoor
+
+        // Are we in a cutscene?
+        lda $06b1
+        bne $+Indoor__SprintShoes_Exit
+
+        // Sprint when pressing Y
+    Indoor__SprintShoes_Impl:        
+        lda $0109
+        asl a
+        asl a
+        lda #$00
+        rol a
+
+        // use stereo/mono config setting as autodash setting
+        eor $16b6
+
+        // %if wacky_sprint%
+            pha
+            beq $02
+            lda #$03
+            sta $06ac
+            pla
+        // %else%
+            sta $06ac
+        // %end%
+        sta $=Var_Dashing
+        stz $067b
+        
+    Indoor__SprintShoes_Exit:
+        // Return
+        rtl
+        
+    Indoor__SprintShoes_Outdoor:
+        // Are we in a behicle?
+        lda $1704
+        bne $+Indoor__SprintShoes_Vehicle
+        
+        bra $-Indoor__SprintShoes_Impl
+        
+        // ---------------------------------------------------------------------------
+        
+        .mx 0x20
+
+    Indoor__FixDashAnimation:
+        //lda $=Var_Dashing
+        lda $06ac
+        beq $+Indoor__FixDashAnimation_Skip
+
+        lda $7b
+        // %if wacky_sprint%
+            and #$01
+            asl a
+            asl a
+            asl a
+        // %else%
+            and #$04
+            asl a
+        // %end%
+        
+        // Return
+        rtl
+
+    Indoor__FixDashAnimation_Skip:
+        // Original code
+        lda $7b
+        and #$08
+
+        // Return
+        rtl
+        
+    // ---------------------------------------------------------------------------
+
+    Indoor__SprintShoes_Vehicle:        
+        lda $0109
+        and #$40
+        beq $+Indoor__SprintShoes_VehicleNormal
+
+        lda #$02
+        sta $06ac
+        sta $=Var_Dashing
+        stz $067b
+        rtl
+
+    Indoor__SprintShoes_VehicleNormal:
+        lda $1704   // get current vehicle
+        tax
+        lda $00830c,x  // get vehicle speed
+        sta $06ac
+        lda #$00
+        sta $=Var_Dashing
+        stz $067b
+        rtl
+
+    Indoor__StartCutsceneNpc:
+        // Original code
+        lda    $139c01,x
+        bra    $+Indoor__StartCutscene
+
+    Indoor__StartCutsceneTile:
+        // Original code
+        lda    $12f461,x
+
+    Indoor__StartCutscene:
+        pha
+        beq    $+Indoor__StartCutscene_skip
+
+        // Reset dash
+        lda    $=Var_Dashing
+        beq    $+Indoor__StartCutscene_skip
+
+        lda    #$00
+        sta    $06ac
+        sta    $=Var_Dashing
+
+    Indoor__StartCutscene_skip:
+        pla
+        // Return
+        rtl
+}
+
+// properly restore walking speed after landing vehicles
+msfpatch {
+    Dash__RestoreSpeedAfterVehicle:
+        stz $7b  // displaced
+        jml $=Indoor__SprintShoes_Impl  // use RTL from this call
+
+    .addr $009ef7  // yellow chocobo
+        jsl $=Dash__RestoreSpeedAfterVehicle
+
+    .addr $009f1d  // black chocobo
+        jsl $=Dash__RestoreSpeedAfterVehicle
+
+    .addr $009fd9  // hovercraft
+        jsl $=Dash__RestoreSpeedAfterVehicle
+
+    .addr $00a494  // enterprise
+        jsl $=Dash__RestoreSpeedAfterVehicle
+
+    .addr $00a594  // falcon
+        jsl $=Dash__RestoreSpeedAfterVehicle
+}
+
+msfpatch {
+
+    // Map frame start
+    .addr   $80b4
+    jsr $=Indoor__FrameStart
+    .def    Indoor__Original_MapFrameCall   $15ca23
+
+    // Patch increasing animation speed
+    .addr   $15b246
+    jsr $=Indoor__FixDashAnimation
+    .addr   $15b237
+    jsr $=Indoor__FixDashAnimation
+
+    // this pair handles outdoor dashing
+    .addr   $15b34d
+    jsr $=Indoor__FixDashAnimation
+    .addr   $15b35c
+    jsr $=Indoor__FixDashAnimation
+
+
+    // Patch start cutscene
+    .addr    $00f033
+    jsr    $=Indoor__StartCutsceneTile
+    .addr    $00f0e4
+    jsr    $=Indoor__StartCutsceneNpc
+    
+}
+
+// fix the mosaic getting stuck when dashing while poisoned
+//patch($009188 bus) { 04 }  // this version just lessens the degree of the poison effect
+
+// this version makes the mosaic effect faster while
+// dashing, but maybe has some side effects I haven't seen
+// (caused by disabling mosaic-enabled bits in the register 
+// when the effect is off, when in original code they just
+// stay on with a degree of 0)
+msfpatch {
+    Dash_PoisonMosaicFix:
+        lda $=Var_Dashing
+        beq $+Dash_PoisonMosaicFix_Normal
+
+        lda $7b
+        and #$06
+        asl a
+        asl a
+        asl a
+        bra $+HaveValue
+
+    Dash_PoisonMosaicFix_Normal:
+        lda $7b
+        and #$0c
+        asl a
+        asl a
+    
+    %HaveValue:
+        pha
+        lda $_FlashSetting
+        bne $+FlashOff
+
+        // flash on
+        pla
+        ora #$03
+        rtl
+
+    %FlashOff:
+        pla
+        ora #$00 // for lag invariance
+        rtl
+
+    .addr $009187
+        beq $04
+        jsl $=Dash_PoisonMosaicFix
+}
+
+
+//---------------------------------------------------------
+// Change "Sound: Stereo Mono" on config screen to dash setting
+patch($0DDA9) {
+    45 5C 6E 63 FF
+}
+
+patch($0DDB1) {
+    4E 5C 69 70 5C 67 FF 42 70 6F 6A
+}
+
+// Make sound always be in stereo
+patch($01d3a4 bus) { 00 }
+
+

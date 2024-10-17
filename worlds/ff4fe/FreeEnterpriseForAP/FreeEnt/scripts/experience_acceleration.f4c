@@ -1,0 +1,201 @@
+msfpatch {
+    .addr $03ee23
+        jsl $=ExperienceAcceleration_Init
+}
+
+msfpatch {
+    ExperienceAcceleration_Init:
+        // %flag experience_not_for_random_encounters on%
+        // check for boss gauntlet bit flag -> in a boss fight
+        lda $129f
+        and #$20
+        bne $+InBossBattle
+
+        lda $7e06c6  // check if fighting MIAB battle
+        bne $+InBossBattle
+
+        // not in boss battle; EXP is zero
+        stz $3591
+        stz $3592
+        stz $3593
+
+        // ugly: pop return stack
+        pla pla pla
+
+        jml $03ee3b // return to code case that handles 0 EXP
+
+    %InBossBattle:
+        // %end%
+
+        // %flag experience_split on%
+        jsl $13ff5f  // do division as requested by original command
+        // %end%
+
+        // %flag experience_split off%
+        // load full EXP amount from battle
+        // rather than dividing by party member
+        lda $3591
+        sta $ad
+        lda $3592
+        sta $ae
+        lda $3593
+        sta $af
+        // %end%
+
+        // %flag experience_no_key_item_bonus off%
+        // check for key item bonus
+        lda $=Stats_KeyItems
+        cmp #$0a
+        bcc $+ExperienceAcceleration_CalculateMedianLevel
+
+        clc
+        rol $ad
+        rol $ae
+        rol $af
+        bcc $+ExperienceAcceleration_CalculateMedianLevel
+        lda #$ff
+        sta $ad
+        sta $ae
+        sta $af
+        // %end%
+
+    ExperienceAcceleration_CalculateMedianLevel:
+        // I am sincerely hoping at this point that
+        // I can take a dump on enemy battle record data:
+        // 7e2630-7e2636 : enemy 7 slot, battle equipment
+        stz $2636 // will store number of party members
+        ldx #$0000
+        ldy #$0000
+    ExperienceAcceleration_CalculateMedianLevel_LoopStart:
+        lda $1000,x
+        and #$1f
+        beq $+ExperienceAcceleration_CalculateMedianLevel_LoopNext
+        lda $1002,x
+        sta $2630,y
+        inc $2636
+        iny
+    ExperienceAcceleration_CalculateMedianLevel_LoopNext:
+        rep #$20
+        .mx 0x00
+        txa
+        clc
+        adc #$0040
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        cpx #$0140
+        bne $-ExperienceAcceleration_CalculateMedianLevel_LoopStart
+
+        // if we have less than 5 party members this bonus does
+        // not apply
+        lda $2636
+        cmp #$05
+        bcs $+ExperienceAcceleration_CalculateMedianLevel_Sort
+        stz $2635
+        jmp $_ExperienceAcceleration_InitDone
+
+    ExperienceAcceleration_CalculateMedianLevel_Sort:
+        ldx #$0000
+    ExperienceAcceleration_CalculateMedianLevel_SortLoopStart:
+        txa
+        tay
+        iny
+    ExperienceAcceleration_CalculateMedianLevel_SortInnerLoopStart:
+        lda $2630,y
+        cmp $2630,x
+        bcs $+ExperienceAcceleration_CalculateMedianLevel_SortInnerLoopNext
+        pha
+        lda $2630,x
+        sta $2630,y
+        pla
+        sta $2630,x
+    ExperienceAcceleration_CalculateMedianLevel_SortInnerLoopNext:
+        iny
+        tya
+        cmp $2636
+        bne $-ExperienceAcceleration_CalculateMedianLevel_SortInnerLoopStart
+
+        inx
+        txa
+        inc a
+        cmp $2636
+        bne $-ExperienceAcceleration_CalculateMedianLevel_SortLoopStart
+
+        // actually get the median and save it
+        lda $2636
+        lsr a
+        tax
+        lda $2630,x
+        sta $2635       // this is where our median is stored
+
+    ExperienceAcceleration_InitDone:
+        rtl
+}
+
+msfpatch {
+    .addr $03ee9f
+        jml $=ExperienceAcceleration_Individual
+}
+
+msfpatch {
+    ExperienceAcceleration_Individual:
+        // copy exp amount value
+        lda $3591
+        sta $ad
+        lda $3592
+        sta $ae
+        lda $3593
+        sta $af
+
+        // %flag experience_no_boost on%
+        jmp $_ExperienceAcceleration_Individual_Bypass
+        // %end%
+
+        // check for level under median
+        lda $1002,x
+        clc
+        adc #$04
+        cmp $2635
+        bcs $03
+        jsr $_ExperienceAcceleration_Individual_ApplySingleBonus
+
+        // perform actual EXP addition (copy of original code at $03ee9f
+        // except using copy of EXP value at $ad-af)
+    ExperienceAcceleration_Individual_Bypass:
+        clc
+        lda $1037,x
+        adc $ad
+        sta $1037,x
+        lda $1038,x
+        adc $ae
+        sta $1038,x
+        lda $1039,x
+        adc $af
+        sta $1039,x
+
+        // return
+        jml $03eebb
+
+    ExperienceAcceleration_Individual_ApplySingleBonus:
+        clc
+        lda $ad
+        adc $3591
+        sta $ad
+        lda $ae
+        adc $3592
+        sta $ae
+        lda $af
+        adc $3593
+        sta $af
+
+        bcs $01
+        rts
+
+        // cap at max value if overflowed
+        lda #$ff
+        sta $ad
+        sta $ae
+        sta $af
+        rts
+}

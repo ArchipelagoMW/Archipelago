@@ -1,0 +1,63 @@
+// give 1 GP per frame
+msfpatch {
+    .addr $01818A
+        jml $=TimeIsMoney__MenuScreens
+
+    .new
+    TimeIsMoney__MenuScreens:
+        pha // displaced
+        inc $16a0
+        bne $+DoneOverflow
+        inc $16a1
+        bne $+DoneOverflow
+        inc $16a2
+        bne $+DoneOverflow
+
+        lda #$ff
+        sta $1a60
+        sta $1a61
+        sta $1a62
+    
+    %DoneOverflow:
+        inc $16a3 // displaced
+        jml $01818e
+}
+
+msfpatch {
+    .addr $00923b
+        jsl $=TimeIsMoney__MapAndBattleScreens
+        nop nop
+
+    .addr $03f7cd
+        jsl $=TimeIsMoney__MapAndBattleScreens
+        nop nop
+
+    .new
+    TimeIsMoney__MapAndBattleScreens:
+        inc $16a0
+        bne $+DoneOverflow
+        inc $16a1
+        bne $+DoneOverflow
+        inc $16a2
+        bne $+DoneOverflow
+
+        lda #$ff
+        sta $1a60
+        sta $1a61
+        sta $1a62
+    
+    %DoneOverflow:
+        inc $16a3 // displaced
+        lda $16a3 // displaced
+        rtl
+}
+
+// no GP earned from enemies
+msfpatch {
+    .addr $03ecc7
+        lda #$00
+        nop nop
+    .addr $03ecd1
+        lda #$00
+        nop nop
+}

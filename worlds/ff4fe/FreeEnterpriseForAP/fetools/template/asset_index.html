@@ -1,0 +1,197 @@
+<html>
+    <head>
+        <title>{{ title }}</title>
+
+        <style type="text/css">
+            body {
+                font-family: monospace;
+                padding-bottom: 20em;
+            }
+
+            table {
+            }
+
+            tbody tr:hover {
+                background-color: #bbf;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            th {
+                text-align: left;
+                cursor: pointer;
+                border-bottom: 1px dotted #aaa;
+            }
+
+            th, td {
+                padding-right: 1em;
+            }
+
+            td {
+                position: relative;
+            }
+
+            button {
+                cursor: pointer;
+            }
+
+            td.cell_id {
+                font-size: 50%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>{{ title }} ({{ asset_count }})</h1>
+
+        <div>
+            <a href="new">Create new asset</a>
+        </div>
+
+        <hr>
+
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sort('id');">id</th>
+                    {% for column in columns %}
+                    <th onclick="sort('{{ column }}');">{{ column }}</th>
+                    {% endfor %}
+                    <th onclick="sort('created');">created</th>
+                    <th onclick="sort('modified');">modified</th>
+                    <!-- <th colspan="{{ table_actions|length }}">quick actions</th> -->
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+
+        <a href="download_all_assets" download="assets.zip">Download all assets</a>
+
+        <hr>
+
+        {% for action in global_actions %}
+        <div>
+            <button type="button" onclick="doAction('{{action.slug}}');">{{ action.title }}</button>
+        </div>
+        {% endfor %}
+
+        <script>
+            {% autoescape false %}
+            const ASSETS = {{ assets_json }};
+            {% endautoescape %}
+
+            var sortColumn = 'modified';
+            var sortAscending = false;
+            var mouseoverHandler = null;
+
+            function sort(column)
+            {
+                if (column === sortColumn)
+                {
+                    sortAscending = !sortAscending;
+                }
+                else
+                {
+                    sortColumn = column;
+                    sortAscending = !(column == 'created' || column == 'modified');
+                }
+                refreshTable();
+            }
+
+            function setMouseoverHandler(handler)
+            {
+                mouseoverHandler = handler;
+            }
+
+            function refreshTable()
+            {
+                let tableBody = document.getElementById("tableBody");
+                while (tableBody.rows.length > 0)
+                {
+                    tableBody.deleteRow(0);
+                }
+
+                let sortedAssets = [...ASSETS];
+                sortedAssets.sort((a, b) => {
+                    let valA = a[sortColumn];
+                    let valB = b[sortColumn];
+
+                    if (typeof(valA) === "string") valA = valA.toLowerCase();
+                    if (typeof(valB) === "string") valB = valB.toLowerCase();
+
+                    if (valA < valB) return (sortAscending ? -1 : 1);
+                    if (valB < valA) return (sortAscending ? 1 : -1);
+                    return 0;
+                });
+
+                sortedAssets.forEach((asset) => {
+                    let row = tableBody.insertRow();
+
+                    row.onclick = () => {
+                        window.location = `edit?assetId=${asset.id}`;
+                    }
+
+                    if (mouseoverHandler !== null)
+                    {
+                        row.onmouseover = () => mouseoverHandler(asset.id, row);
+                    }
+
+                    let columns = ['id',
+                        {% for column in columns %}
+                        '{{ column }}',
+                        {% endfor %}
+                        'created', 'modified'
+                        ];
+
+                    columns.forEach((column) => {
+                        let cell = document.createElement('td');
+                        cell.className = `cell_${column}`;
+                        if (column == 'created' || column == 'modified')
+                        {
+                            let d = new Date(0);
+                            d.setUTCSeconds(asset[column]);
+                            cell.innerText = d.toLocaleString();
+                        }
+                        else
+                        {
+                            cell.innerText = asset[column];
+                        }
+                        row.appendChild(cell);
+                    });
+
+                    let cell = null;
+                    let button = null;
+                    {% for action in table_actions %}
+                    cell = document.createElement('td');
+                    button = document.createElement('button');
+                    button.innerText = "{{ action.title }}";
+                    button.onclick = (e) => { e.stopPropagation(); doAction("{{ action.slug }}", asset.id); };
+                    cell.appendChild(button);
+                    row.appendChild(cell);
+                    {% endfor %}
+
+                    cell = document.createElement('td');
+                    cell.onclick = (e) => { e.stopPropagation(); }
+                    let downloadLink = document.createElement("a");
+                    downloadLink.href = `download_raw_asset?assetId=${ asset.id }`;
+                    downloadLink.download = `${ asset.id }.asset`;
+                    downloadLink.innerText = "Download asset";
+                    cell.appendChild(downloadLink);
+                    row.appendChild(cell);
+                });
+            }
+
+            window.onload = () => {
+                refreshTable();
+            }
+        </script>
+
+        <script src="/static/assetActions.js"></script>
+
+        {% for script in scripts %}
+        <script src="/static/{{ script }}"></script>
+        {% endfor %}
+
+    </body>
+</html>

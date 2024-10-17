@@ -1,0 +1,273 @@
+// hook into the code that triggers event calls from NPCs to store
+// the placement number for us to use
+
+msfpatch {
+    .def NpcText__PlacementNumber $7e1589
+
+    NpcText__StorePlacement:
+        // simulate displaced instructions
+        cmp #$fff
+        bne $04
+        jml $00b79b
+
+        pha
+        and #$7f
+        sta $_NpcText__PlacementNumber
+        pla
+
+        jml $00b795
+
+    .addr $00b791
+        jml $=NpcText__StorePlacement
+}
+
+// hook into code that displays message from event, and teach it to recognize:
+// message number 0x8N means "display map message (placement number + N)"
+msfpatch {
+    NpcText__CheckSpecialCode:
+        tax
+        lda $0a49,x
+        bmi $01         // check for top bit, return if not set
+        rtl
+
+        // is special code, do special sauce
+        phx
+        ldx #$0000
+    NpcText__SpecialCode_LoopStart:
+        lda $21d700,x
+        cmp #$ff
+        beq $+NpcText__SpecialCode_PlacementNotFound
+        cmp $1702
+        bne $+NpcText__SpecialCode_LoopNext
+        lda $21d701,x
+        cmp $1701
+        bne $+NpcText__SpecialCode_LoopNext
+        lda $21d702,x
+        cmp $_NpcText__PlacementNumber
+        beq $+NpcText__SpecialCode_PlacementFound
+    NpcText__SpecialCode_LoopNext:
+        inx
+        inx
+        inx
+        inx
+        jmp $_NpcText__SpecialCode_LoopStart
+
+    NpcText__SpecialCode_PlacementFound:
+        lda $21d703,x
+        plx
+        rtl
+
+    NpcText__SpecialCode_PlacementNotFound:
+        lda #$00
+        plx
+        rtl
+
+    .addr $00ef3c
+        jsr $=NpcText__CheckSpecialCode
+}
+
+//----------------------------------------------------------------------------------------
+// consolidate all Mist NPCs into MistMan so that the others are always available
+// for other towns
+
+npc(#MistFarmAgartEblanMan) { default active }
+npc(#MistToroiaCafeMan) { default active }
+npc(#MistDamcyanFabulToroiaAgartOldMan) { default active }
+
+placement($01 0) { npc #MistMan }
+placement($01 1) { npc #MistMan }
+placement($01 2) { npc #MistMan }
+placement($01 3) { npc #MistMan }
+
+npc(#MistMan) {
+    sprite #fe_DynamicSprite
+    eventcall {
+        $01 // show first mesage
+        messages:
+            $80 // lookup table
+    }
+}
+
+//----------------------------------------------------------------------------------------
+// consolidate all Baron Castle Soldiers into soldier 6
+// so the other soldiers can always be visible where needed elsewhere
+
+// CastleBaronSoldier1
+placement($24 5) { npc #CastleBaronSoldier6 }  //#BaronCastle
+placement($2A 3) { npc #CastleBaronSoldier6 }  //#BaronCastleLobby
+placement($2B 4) { npc #CastleBaronSoldier6 }  //#BaronCastleOuterCourt
+placement($30 0) { npc #CastleBaronSoldier6 }  //#BaronCastlePrison
+placement($31 0) { npc #CastleBaronSoldier6 }  //#BaronCastleSoldiersQuarters
+
+// CastleBaronSoldier2
+placement($24 6) { npc #CastleBaronSoldier6 }  //#BaronCastle
+placement($2A 1) { npc #CastleBaronSoldier6 }  //#BaronCastleLobby
+placement($31 1) { npc #CastleBaronSoldier6 }  //#BaronCastleSoldiersQuarters
+
+// CastleBaronSoldier3
+placement($2A 2) { npc #CastleBaronSoldier6 }  //#BaronCastleLobby
+placement($2B 5) { npc #CastleBaronSoldier6 }  //#BaronCastleOuterCourt
+placement($31 2) { npc #CastleBaronSoldier6 }  //#BaronCastleSoldiersQuarters
+
+// CastleBaronSoldier4
+placement($2B 1) { npc #CastleBaronSoldier6 }  //#BaronCastleOuterCourt
+placement($31 3) { npc #CastleBaronSoldier6 }  //#BaronCastleSoldiersQuarters
+
+// special data table to lookup messages to display by placement number
+patch($21d700 bus) {
+    ##map.Mist                         00 00
+    ##map.Mist                         01 01
+    ##map.Mist                         02 02
+    ##map.Mist                         03 03
+
+    ##map.BaronCastle                  05 01
+    ##map.BaronCastleLobby             03 01
+    ##map.BaronCastleOuterCourt        04 01
+    ##map.BaronCastlePrison            00 01
+    ##map.BaronCastleSoldiersQuarters  00 01
+
+    ##map.BaronCastle                  06 03
+    ##map.BaronCastleLobby             01 03
+    ##map.BaronCastleSoldiersQuarters  01 03
+
+    ##map.BaronCastleLobby             02 05
+    ##map.BaronCastleOuterCourt        05 05
+    ##map.BaronCastleSoldiersQuarters  02 05
+
+    ##map.BaronCastleOuterCourt        01 07
+    ##map.BaronCastleSoldiersQuarters  03 07
+
+    ##map.BaronCastleOuterCourt        02 09
+    ##map.BaronCastleSoldiersQuarters  04 09
+
+    // FabulMonk1
+    ##map.Fabul                        04 00
+    ##map.Fabul                        05 01
+    ##map.Fabul                        06 02
+    ##map.Fabul                        07 03
+    ##map.FabulLobby                   02 00
+    ##map.FabulLobby                   03 01
+    ##map.FabulSecondFloor             02 00
+    ##map.FabulSecondFloor             03 01
+
+    // BlackChocoboFarm
+    ##map.ToroiaStableDownstairs       03 03
+    ##map.ToroiaStableDownstairs       04 03
+    ##map.ToroiaStableDownstairs       05 03
+    ##map.ToroiaStableDownstairs       06 03
+    ##map.ToroiaStableDownstairs       07 03
+    ##map.ToroiaStableDownstairs       08 03
+    ##map.ToroiaStableDownstairs       09 03
+
+    // #BaronGuard
+    ##map.BaronCastleOuterCourt        07 0B
+    ##map.BaronCastleThroneRoom        01 0A
+    ##map.BaronCastleThroneRoom        02 0B
+
+    // #FabulMonk3
+    ##map.FabulEastTower1F             01 00
+    ##map.FabulEastTower1F             02 01
+
+    // #FabulKarateFighter1
+    ##map.FabulHospital                01 02
+    ##map.FabulHospital                03 04
+
+    // #FabulKarateFighter2
+    ##map.FabulHospital                02 03
+    ##map.FabulHospital                04 05
+
+    FF FF FF FF
+}
+
+// NPCs that need special sauce
+npc(#CastleBaronSoldier6)       { eventcall { $01 messages: $80 } }
+npc(#FabulMonk1)                { eventcall { $01 messages: $80 } }
+npc(#BlackChocoboFarm)          { eventcall { $01 messages: $80 } }
+npc(#BaronGuard)                { eventcall { $01 messages: $80 } }
+npc(#FabulMonk3)                { eventcall { $01 messages: $80 } }
+npc(#FabulKarateFighter1)       { eventcall { $01 messages: $80 } }
+npc(#FabulKarateFighter2)       { eventcall { $01 messages: $80 } }
+
+//----------------------------------------------------------------------------------------
+// redefine NPC event calls to point to current text messages
+
+npc(#CastleBaronSoldier1)       { eventcall { $01 messages: $01 } }
+npc(#CastleBaronSoldier2)       { eventcall { $01 messages: $03 } }
+npc(#CastleBaronSoldier3)       { eventcall { $01 messages: $05 } }
+npc(#CastleBaronSoldier4)       { eventcall { $01 messages: $07 } }
+npc(#BaronMan)                  { eventcall { $01 messages: $02 } }
+npc(#BaronOldMan)               { eventcall { $01 messages: $05 } }
+npc(#BaronToroiaWoman)          { eventcall { $01 messages: $08 } }
+npc(#BaronBoy)                  { eventcall { $01 messages: $0B } }
+npc(#BaronDancer)               { eventcall { $D6 messages: $10 $10 $10 } }
+npc(#MysidiaBlackMageFrog)      { eventcall { $01 messages: $03 } }
+npc(#MysidiaWhiteMage1)         { eventcall { $01 messages: $06 } }
+npc(#MysidiaBlackMage1)         { eventcall { $01 messages: $09 } }
+npc(#MysidiaWhiteMage2)         { eventcall { $01 messages: $0C } }
+npc(#MysidiaBlackMage2)         { eventcall { $01 messages: $0F } }
+npc(#MysidiaWhiteMage3)         { eventcall { $01 messages: $12 } }
+npc(#MysidiaBlackMagePoison)    { eventcall { $01 messages: $0C } }
+npc(#BaronInnGirl)              { eventcall { $01 messages: $09 } }
+npc(#BaronInnMan)               { eventcall { $01 messages: $05 } }
+npc(#BaronInnWoman)             { eventcall { $01 messages: $08 } }
+npc(#CidDaughter)               { eventcall { $01 messages: $07 } }
+npc(#RosaMom)                   { eventcall { $01 messages: $02 } }
+npc(#KaipoSickhouseOldWoman)    { eventcall { $01 messages: $01 } }
+npc(#KaipoSickhouseOldMan)      { eventcall { $01 messages: $05 } }
+npc(#FallenSoldier3)            { eventcall { $01 messages: $01 } }
+npc(#MysidiaBlackMagePraying1)  { eventcall { $01 messages: $05 } }
+npc(#MysidiaWhiteMagePraying1)  { eventcall { $01 messages: $06 } }
+npc(#MysidiaElder)              { eventcall { $01 messages: $07 } }
+npc(#BaronSoldier1)             { eventcall { $01 messages: $06 } }
+npc(#BaronSoldier2)             { eventcall { $01 messages: $07 } }
+npc(#Engineer1)                 { eventcall { $01 messages: $0F } }
+npc(#Engineer2)                 { eventcall { $01 messages: $12 } }
+npc(#CastleBaronCaptain)        { eventcall { $01 messages: $0F } }
+npc(#FabulMan)                  { eventcall { $01 messages: $01 } }
+npc(#FabulWoman1)               { eventcall { $01 messages: $03 } }
+npc(#FabulBoy)                  { eventcall { $01 messages: $05 } }
+npc(#FabulKing)                 { eventcall { $01 messages: $02 } }
+npc(#FabulWhiteMage)            { eventcall { $01 messages: $01 } }
+npc(#FabulOldWoman)             { eventcall { $01 messages: $04 } }
+npc(#CastleToroiaCleric1)       { eventcall { $01 messages: $04 } }
+npc(#CastleToroiaCleric2)       { eventcall { $01 messages: $07 } }
+npc(#CastleToroiaCleric3)       { eventcall { $01 messages: $0A } }
+npc(#CastleToroiaCleric4)       { eventcall { $01 messages: $0D } }
+npc(#CastleToroiaCleric5)       { eventcall { $01 messages: $10 } }
+npc(#CastleToroiaCleric6)       { eventcall { $01 messages: $13 } }
+npc(#CastleToroiaCleric7)       { eventcall { $01 messages: $16 } }
+npc(#CastleToroiaCleric8)       { eventcall { $01 messages: $19 } }
+npc(#CastleBaronBlackMage1)     { eventcall { $01 messages: $03 } }
+npc(#CastleBaronBlackMage2)     { eventcall { $01 messages: $01 } }
+npc(#CastleBaronBlackMage3)     { eventcall { $01 messages: $04 } }
+npc(#CastleBaronWhiteMage1)     { eventcall { $01 messages: $05 } }
+npc(#CastleBaronWhiteMage2)     { eventcall { $01 messages: $03 } }
+npc(#CastleBaronWhiteMage3)     { eventcall { $01 messages: $01 } }
+npc(#CaveEblanaSoldier4)        { eventcall { $01 messages: $08 } }
+npc(#CaveEblanaSoldier5)        { eventcall { $01 messages: $09 } }
+npc(#CaveEblanaOldMan)          { eventcall { $01 messages: $0A } }
+npc(#Dwarf28)                   { eventcall { $01 messages: $02 } }
+npc(#Dwarf29)                   { eventcall { $01 messages: $03 } }
+npc(#KingGiott1)                { eventcall { $01 messages: $0A } }
+npc(#Luca1)                     { eventcall { $01 messages: $10 } }
+npc(#Dwarf20)                   { eventcall { $01 messages: $0C } }
+npc(#Dwarf19)                   { eventcall { $01 messages: $0D } }
+npc(#Dwarf21)                   { eventcall { $01 messages: $0E } }
+npc(#Dwarf22)                   { eventcall { $01 messages: $0F } }
+npc(#Dwarf14)                   { eventcall { $01 messages: $0A } }
+npc(#Dwarf15)                   { eventcall { $01 messages: $09 } }
+npc(#Sylph2)                    { eventcall { $01 messages: $0F } }
+npc(#Sylph3)                    { eventcall { $01 messages: $10 } }
+npc(#Sylph4)                    { eventcall { $01 messages: $11 } }
+npc(#Sylph5)                    { eventcall { $01 messages: $12 } }
+npc(#Boy1)                      { eventcall { $01 messages: $02 } }
+npc(#Girl1)                     { eventcall { $01 messages: $03 } }
+npc(#Crystal3)                  { eventcall { $01 messages: $08 } }
+npc(#Crystal4)                  { eventcall { $01 messages: $09 } }
+npc(#Crystal5)                  { eventcall { $01 messages: $0A } }
+npc(#Crystal6)                  { eventcall { $01 messages: $0B } }
+npc(#Crystal7)                  { eventcall { $01 messages: $0C } }
+npc(#Crystal8)                  { eventcall { $01 messages: $0D } }
+npc(#Crystal9)                  { eventcall { $01 messages: $0E } }
+npc(#Crystal10)                 { eventcall { $01 messages: $0F } }
+

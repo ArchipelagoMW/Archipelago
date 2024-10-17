@@ -1,0 +1,22 @@
+hints {
+    event $1B map #BaronCastleThroneRoom
+    event $1D map #BaronCastle
+    event $1F map #BaronTown
+    event $20 map #BaronTown
+    event $21 map #BaronInn
+    event $3A map #KaipoHospital
+    event $3B map #WateryPass1F
+    event $42 map #Overworld
+    event $5E map #HouseOfWishes
+    event $64 map #HouseOfWishes
+    event $66 map #Overworld
+    event $83 map #Overworld
+    event $AF map #SealedCaveCrystalRoom
+    event $C6 map #Overworld
+    event $C9 map #FeymarchLeviathanRoom
+    event $CA map #FeymarchLeviathanRoom
+    event $D1 map #BaronTown
+    event $D6 map #BaronTown
+    // event $FA map ???  -- Tower key
+    event $FA map #Babil5F
+}

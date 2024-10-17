@@ -1,0 +1,10 @@
+pillow
+cherrypy
+jinja2
+pymongo
+chardet
+requests
+markdown
+javascripthon
+pyaes
+

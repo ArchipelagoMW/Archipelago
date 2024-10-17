@@ -1,0 +1,110 @@
+placement($76 0)  //#Waterfall2F
+{
+    npc #fe_DynamicNPC
+    // %octomamm_slot sprite up palette%
+    // %end%
+}
+
+placement($76 1)  //#Waterfall2F
+{
+    npc #fe_DynamicNPC
+    // %octomamm_slot sprite left palette%
+    // %end%
+}
+
+placement($76 2)  //#Waterfall2F
+{
+    npc #fe_DynamicNPC
+    // %octomamm_slot sprite down palette%
+    // %end%
+}
+
+placement($76 3)  //#Waterfall2F
+{
+    npc #fe_DynamicNPC
+    // %octomamm_slot sprite right palette%
+    // %end%
+}
+
+
+event($3D)  //Octomamm battle
+{
+    consts(placement) {
+        0   OctomammTentacles
+        1   Octomamm_A
+        2   Octomamm_B
+        3   Octomamm_C
+        4   WaterSplash_A
+        5   WaterSplash_B
+        6   WaterSplash_C
+        7   WaterSplash_D
+    }
+    // autodetected map #Waterfall2F
+    music #None
+    sound #Quake
+    toggle screen shake
+
+    sound #Splash
+    p #WaterSplash_B toggle visible
+    pause 2
+    batch 1 {
+        p #WaterSplash_B toggle visible
+        p #Octomamm_A toggle visible
+    }
+    p #Octomamm_A move right
+    player face left
+
+    sound #Splash
+    p #WaterSplash_C toggle visible
+    pause 2
+    batch 1 {
+        p #WaterSplash_C toggle visible
+        p #Octomamm_B toggle visible
+    }
+    p #Octomamm_B move up
+    player face down
+
+    sound #Splash
+    p #WaterSplash_D toggle visible
+    pause 2
+    batch 1 {
+        p #WaterSplash_D toggle visible
+        p #Octomamm_C toggle visible
+    }
+    p #Octomamm_C move left
+    player face right
+
+    sound #Splash
+    p #WaterSplash_A toggle visible
+    pause 2
+    batch 1 {
+        p #WaterSplash_A toggle visible
+        p #OctomammTentacles toggle visible
+    }
+    player face up
+
+    pause 4
+    toggle screen shake
+
+    batch 1 {
+        p #Octomamm_C toggle visible
+        p #Octomamm_B toggle visible
+        p #Octomamm_A toggle visible
+        p #OctomammTentacles toggle visible
+    }
+    [#B #Rando_BossBattle #rando.octomamm_slot]
+    set #DefeatedOctomamm
+    [#B #Objectives_TickBossSlot #rando.octomamm_slot]
+    [#B #Rando_PostBossBattle #rando.octomamm_slot]
+    [#B #Objectives_Tick #objective.quest_waterfall]
+    music #Cave
+}
+
+// Erase Tellah speech from fight
+ai_script($89)
+{
+    set sprite $0A
+    speed + 4
+    condition + 1
+    pass
+}

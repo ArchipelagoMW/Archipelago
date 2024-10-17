@@ -1,0 +1,54 @@
+// item duplication removal patch adapted from code by Crow
+
+msfpatch {
+    RemoveItemDuplication_PostBattle:
+        tdc
+        ldx #$0000
+
+    %LoopStart:
+        // check right hand and zero qty if empty
+        lda $1033,x
+        bne $03
+        stz $1034,x
+        cmp #$60  // "no armor"
+        bne $03
+        stz $1034,x
+
+        // check left hand and zero qty if empty
+        lda $1035,x
+        bne $03
+        stz $1036,x
+        cmp #$60  // "no armor"
+        bne $03
+        stz $1036,x
+
+        rep #$20
+        .mx 0x00
+        txa
+        clc
+        adc #$0040
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        cpx #$0140
+        bne $-LoopStart
+
+        rtl
+}
+
+
+// fix item duplication glitch in treasure menu
+msfpatch {
+    // hook into stacking code in treasure menu and also
+    // zero out the treasure slot item type 
+    RemoveItemDuplication_TreasureMenuHook:
+        stz $ff28,x
+        stz $ff29,x
+        jml $01d7c0  // original code just branches anyway
+
+    .addr $01d7a9
+        jml $=RemoveItemDuplication_TreasureMenuHook
+
+}

@@ -1,0 +1,256 @@
+// unfortunately, this routine is called by GiveAxtor,
+// which uses up all the scratch space, and this routine
+// also relies on Util__Divide, which uses all the
+// util scratch space, so we're going to borrow a random
+// chunk of battle memory as our scratch space
+
+msfpatch {
+    // parameters:
+    //   A is perturbation code
+    //   Y is offset from $1180 the name to alter
+    SillyNames__Start:
+        phb
+
+        pha
+
+        lda #$7e
+        pha
+        plb
+
+        pla
+        sta $2400       // remember perturbation code
+        stz $2401
+        sty $2402       // remember pointer to name
+        stz $2404       // name loop counter
+        stz $2405
+
+        // determine order of characters in name to perturb
+        stz $2410       // always start with first character
+        ldx $2402
+        inx
+        ldy #$0001
+        // find first whitespace last letter and make that second character
+    %FindLastLetterLoop:
+        lda $1180,x  // [hardcoded]
+        cmp #$ff
+        beq $+FoundSpace
+        cpy #$0005
+        beq $+FoundLastLetter
+        inx
+        iny
+        bra $-FindLastLetterLoop
+    %FoundSpace:
+    %FoundLastLetter:
+        tya
+        sta $2411
+
+        // if name length >= 3, use second letter, else add another letter
+        cpy #$0002
+        bcc $+UseNextSpace
+        lda #$01
+        bra $+HaveThirdPosition
+    %UseNextSpace:
+        ina
+    %HaveThirdPosition:
+        sta $2412
+        // that's enough perturbations for a whole lot of names now
+        stz $2413
+        stz $2414
+        stz $2415
+
+
+
+        ldx $2400
+        stx $2440       // init perturbation running value
+
+    %PerturbLoopStart:
+        ldx $2440
+        bne $03
+        jmp $_Done
+
+        // lookup position of letter to change
+        ldx $2404
+        lda $2410,x
+        ldx $2402
+
+    %PositionLookupLoop:
+        cmp #$00
+        beq $+AtPositionLookup
+        dec a
+        inx
+        bra $-PositionLookupLoop
+    %AtPositionLookup:
+        stx $2406
+
+        lda $1180,x  // [hardcoded]
+
+        // treat space as lower case vowel i
+        cmp #$ff
+        bne $05
+        lda #$74
+        jmp $_HaveTile
+
+        // j -> g
+        cmp #$65
+        bne $05
+        lda #$62
+        jmp $_HaveTile
+
+        // q -> k
+        cmp #$6c
+        bne $05
+        lda #$66
+        jmp $_HaveTile
+
+        // h -> v
+        cmp #$63
+        bne $05
+        lda #$71
+        jmp $_HaveTile
+
+        // w -> f
+        cmp #$72
+        bne $05
+        lda #$61
+        jmp $_HaveTile
+
+        // Y -> W (Y removed to avoid Cid -> slur problem)
+        cmp #$5a
+        bne $05
+        lda #$58
+        jmp $_HaveTile
+
+    %HaveTile:
+        ldx #$_SillyNames__ConsonantsUpper
+        jsr $_SillyNames__PerturbWithList
+        bcs $+PerturbComplete
+
+        ldx #$_SillyNames__VowelsUpper
+        jsr $_SillyNames__PerturbWithList
+        bcs $+PerturbComplete
+
+        ldx #$_SillyNames__ConsonantsLower
+        jsr $_SillyNames__PerturbWithList
+        bcs $+PerturbComplete
+
+        ldx #$_SillyNames__VowelsLower
+        jsr $_SillyNames__PerturbWithList
+        bcs $+PerturbComplete
+
+        ldx #$_SillyNames__Digits
+        jsr $_SillyNames__PerturbWithList
+        bcs $+PerturbComplete
+
+        ldx #$_SillyNames__Punctuation
+        jsr $_SillyNames__PerturbWithList
+        bcs $+PerturbComplete
+
+        // somehow this is an invalid character name,
+        // so you just get a letter from 0x40 to 0x7F
+        lda $2440
+        and #$3f
+        lsr $2440
+        lsr $2440
+        lsr $2440
+        lsr $2440
+        lsr $2440
+        lsr $2440
+
+    %PerturbComplete:
+        ldy $2406
+        sta $1180,y  // [hardcoded]
+
+        inc $2404
+        lda $2404
+        cmp #$06
+        bcs $+Done
+        jmp $_PerturbLoopStart
+
+    %Done:
+        plb
+        rts
+}
+
+msfpatch {
+    .def  SillyNames__ConsonantsUpper  $21d810
+    .def  SillyNames__ConsonantsLower  $21d830
+    .def  SillyNames__VowelsUpper      $21d850
+    .def  SillyNames__VowelsLower      $21d858
+    .def  SillyNames__Digits           $21d860
+    .def  SillyNames__Punctuation      $21d870
+
+    // param: X is address (lower 16 bits) of list to use,
+    //        $2440 is amount to perturb
+    //        A is value to perturb
+    // returns: if tile in given list, carry is set and returns new tile
+    //          otherwise, carry clear and returns original tile
+    SillyNames__PerturbWithList:
+        sta $2480
+        stx $2481
+
+        lda $210000,x  // get list size
+        sta $2483
+        stz $2484
+
+        // first find tile in list
+        inx
+        ldy #$0000
+    %FindLoop:
+        lda $210000,x
+        cmp $2480
+        beq $+Found
+        inx
+        iny
+        cpy $2483
+        bcc $-FindLoop
+
+        // tile not found
+        lda $2480
+        clc
+        rts
+
+    %Found:
+        sty $2485  // remember list position of found tile
+
+        // process perturbation value
+        ldy $2440  // get value
+        sty $_Util__Divide_Dividend0
+        stz $_Util__Divide_Dividend2
+        ldy $2483  // list size
+        sty $_Util__Divide_Divisor0
+        phx
+        jsr $_Util__Divide
+        plx
+
+        // new perturbation value = quotient
+        ldy $_Util__Divide_Quotient0
+        sty $2440
+
+        // amount to cycle = remainder of division
+        lda $_Util__Divide_Remainder0
+        beq $+DoneCycling
+        ldy $2485 // get list position
+    %CycleLoop:
+        iny
+        inx
+        cpy $2483 // list size
+        bcc $+NoOverflow
+        ldy #$0000
+        ldx $2481
+        inx
+    %NoOverflow:
+        dec a
+        bne $-CycleLoop
+
+    %DoneCycling:
+        lda $210000,x
+        sec
+        rts
+}
+
+msfpatch {
+    SillyNames__IsLowercaseVowel:
+        cmp #$5c  // "a"
+
+
+}

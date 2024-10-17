@@ -1,0 +1,19 @@
+msfpatch {
+    FixEdwardGhostCommand:
+        // at this point A still contains command number
+        cmp #$ff
+        beq $+FixEdwardGhostCommand_Return
+
+        // this command is a valid command, proceed with 
+        // displaced instructions to enable it
+        lda $3302,x
+        and #$7f
+        sta $3302,x
+
+    FixEdwardGhostCommand_Return:
+        jml $03e8e0
+
+    .addr $03e8d8
+        jml $=FixEdwardGhostCommand
+}
+

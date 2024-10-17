@@ -1,0 +1,77 @@
+msfpatch {
+    Wacky__InitializeAxtorHook:
+        // max out HP
+        lda #$0f
+        sta $1147
+        sta $1149
+        lda #$27
+        sta $1148
+        sta $114a
+        rtl
+}
+
+msfpatch {
+    Wacky__PostBattleHook:
+        // BAND-AID: if a level-up occurs in battle, this function
+        //  will run twice. Use a flag to make sure we don't do so
+        lda $_Wacky__RAM
+        beq $+FirstTime
+        rtl
+    
+    %FirstTime:
+        inc $_Wacky__RAM
+
+        // do not apply effects after "no gameover" battles
+        lda $38e5
+        and #$02
+        beq $+BattleScarsAllowed
+        rtl
+
+    %BattleScarsAllowed:
+        ldx #$0000
+        rep #$20
+        .mx 0x00
+    %LoopStart:
+        lda $1000,x
+        and #$00ff
+        beq $+LoopNext
+        // reduce maximum HP to current HP, or 1/4 current max HP, whichever is higher
+        lda $1009,x
+        lsr a
+        lsr a
+        cmp $1007,x
+        bcs $+CheckMinimum
+        lda $1007,x
+    %CheckMinimum:
+        cmp #$0000
+        bne $+Apply
+        inc a
+    %Apply:
+        sta $1009,x
+    %LoopNext:
+        txa
+        clc
+        adc #$0040
+        tax
+        cmp #$0140
+        bcc $-LoopStart
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        rtl
+}
+
+msfpatch {
+    // Make sure to clear "already ran battle scars" when battle starts
+    .addr $03809D
+        jsl $=Wacky__BattleScars_PreBattle
+
+    .new
+    Wacky__BattleScars_PreBattle:
+        stz $_Wacky__RAM
+        // displaced
+        ldx #$007f
+        tdc
+        rtl
+}

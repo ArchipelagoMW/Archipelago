@@ -1,0 +1,429 @@
+// Support functions for all challenges requiring statuses
+// to be enforced on party members. Those challenges
+// should implement the Wacky__StatusEnforcement_Calculate
+// procedure, which given the input values, should write
+// the status bits to enforce to the output bytes and RTL.
+// (Note that the delegate must preserve the X value upon
+// return for safety.)
+//
+// Using this file requires the 'wacky_initialize_axtor_hook'
+// toggle to be enabled.
+
+msfpatch {
+    .def Wacky__StatusEnforcement_InputAxtor   $7e1660
+    .def Wacky__StatusEnforcement_InputJob     $7e1661
+    .def Wacky__StatusEnforcement_OutputByte0  $7e1662
+    .def Wacky__StatusEnforcement_OutputByte1  $7e1663
+    .def Wacky__StatusEnforcement_OutputByte2  $7e1664
+    .def Wacky__StatusEnforcement_OutputByte3  $7e1665
+    .def Wacky__StatusEnforcement_InputSlot    $7e1666
+
+    .def Wacky__StatusEnforcement_WorkRAM      $7e1667
+}
+
+msfpatch {
+    .addr $03B1C0
+        jsl $=Wacky__StatusEnforcement_Battle
+    
+    .new
+    Wacky__StatusEnforcement_Battle:
+        tay // displaced
+        lda $A9
+        cmp #$05
+        bcs $+Bypass  // skip if updating a monster
+
+        // %if wacky_status_enforcement_uses_slot%
+            sta $_Wacky__StatusEnforcement_InputSlot
+        // %end%
+        // %if wacky_status_enforcement_uses_axtor%
+            lda $2000,x
+            and #$1f
+            sta $_Wacky__StatusEnforcement_InputAxtor
+        // %end%
+        // %if wacky_status_enforcement_uses_job%
+            lda $2001,x
+            and #$0f
+            sta $_Wacky__StatusEnforcement_InputJob
+        // %end%
+        
+        // %if wacky_status_enforcement_uses_battle_context%
+            jsl $=Wacky__StatusEnforcement_Calculate_Battle
+        // %else%
+            jsl $=Wacky__StatusEnforcement_Calculate
+        // %end%
+
+        lda $_Wacky__StatusEnforcement_OutputByte0
+        beq $+Byte1
+        ora $338e,y
+        sta $338e,y
+    %Byte1:
+        lda $_Wacky__StatusEnforcement_OutputByte1
+        beq $+Byte2
+        ora $338f,y
+        sta $338f,y
+    %Byte2:
+        lda $_Wacky__StatusEnforcement_OutputByte2
+        beq $+Byte3
+        ora $3390,y
+        sta $3390,y
+    %Byte3:
+        lda $_Wacky__StatusEnforcement_OutputByte3
+        ora $3391,y
+        sta $3391,y
+
+    %Bypass:
+        lda $338e,y // displaced
+        rtl
+}
+
+// preserve status on battle status initialization
+msfpatch {
+    .addr $03893f
+        jsl $=Wacky__StatusEnforcement_BattleInit
+        // move existing code down
+        jsr $962f
+        jsr $95d8
+        // most autobattle mechanisms moved into BattleInit above
+        lda $388b
+        nop nop nop nop
+
+    .new
+    Wacky__StatusEnforcement_BattleInit:
+        stz $a9
+        ldx #$2000
+        stx $80
+    %LoopStart:
+        // %if wacky_status_enforcement_uses_slot%
+            lda $a9
+            sta $_Wacky__StatusEnforcement_InputSlot
+        // %end%
+        ldy #$0000
+        lda ($80),y
+        and #$1f
+        bne $+AxtorExists
+        jmp $_LoopNext
+    %AxtorExists:
+        // %if wacky_status_enforcement_uses_axtor%            
+            sta $_Wacky__StatusEnforcement_InputAxtor
+        // %end%
+        // %if wacky_status_enforcement_uses_job%
+            iny
+            lda ($80),y
+            and #$0f
+            sta $_Wacky__StatusEnforcement_InputJob
+        // %end%
+
+        // %if wacky_status_enforcement_uses_battleinit_context%
+            jsl $=Wacky__StatusEnforcement_Calculate_BattleInit
+        // %else%
+            jsl $=Wacky__StatusEnforcement_Calculate
+        // %end%
+
+        ldy #$0003
+        lda ($80),y
+        ora $_Wacky__StatusEnforcement_OutputByte0
+        sta ($80),y
+        iny
+        lda ($80),y
+        and #$40
+        ora $_Wacky__StatusEnforcement_OutputByte1
+        sta ($80),y
+        iny
+        lda ($80),y
+        and #$82
+        ora $_Wacky__StatusEnforcement_OutputByte2
+        sta ($80),y
+        iny
+        lda ($80),y
+        and #$01
+        ora $_Wacky__StatusEnforcement_OutputByte3
+        sta ($80),y
+
+    %LoopNext:
+        lda $80
+        clc
+        adc #$80
+        sta $80
+        lda $81
+        adc #$00
+        sta $81
+
+        inc $a9
+        lda $a9
+        cmp #$05
+        bcs $+Done
+        jmp $_LoopStart
+    
+    %Done:
+        // do deferred autobattle stuff
+        lda $29a2
+        sta $38e5
+        and #$20
+        sta $388b
+        rtl
+}
+
+// set status on axtor init
+msfpatch {
+    Wacky__InitializeAxtorHook:
+        lda $1140
+        and #$1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+        lda $1141
+        and #$0f
+        sta $_Wacky__StatusEnforcement_InputJob
+        jsl $=Wacky__StatusEnforcement_Calculate
+
+        lda $_Wacky__StatusEnforcement_OutputByte0
+        sta $1143
+
+        lda $_Wacky__StatusEnforcement_OutputByte1
+        sta $1144
+
+        lda $_Wacky__StatusEnforcement_OutputByte2
+        sta $1145
+
+        lda $_Wacky__StatusEnforcement_OutputByte3
+        sta $1146
+    %Bypass:
+        rtl
+}
+
+// enforce status on selective healing item use
+msfpatch {
+    .addr $01a786
+        jsl $=Wacky__StatusEnforcement_SelectiveHealingItemHook
+
+    .new
+    Wacky__StatusEnforcement_SelectiveHealingItemHook:
+        .mx 0x00
+        and $1EFEC3,x   // displaced
+        pha
+        lda ($60)
+        and #$0f1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+
+        php
+        sep #$20
+        jsl $=Wacky__StatusEnforcement_Calculate
+        plp
+        pla
+        ora $_Wacky__StatusEnforcement_OutputByte0
+        rtl
+    %Bypass:
+        pla
+        rtl
+}
+
+// enforce status on heal potion use
+msfpatch {
+    .addr $01a6d0
+        jml $=Wacky__StatusEnforcement_HealPotionHook
+    
+    .new
+    Wacky__StatusEnforcement_HealPotionHook:
+        phy
+        ldy #$0000
+        lda ($60),y
+        and #$1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+        iny
+        lda ($60),y
+        and #$0f
+        sta $_Wacky__StatusEnforcement_InputJob
+        ply
+        jsl $=Wacky__StatusEnforcement_Calculate
+        lda $_Wacky__StatusEnforcement_OutputByte0
+        sta ($60),y
+        iny
+        lda ($60),y
+        and #$7f
+        ora $_Wacky__StatusEnforcement_OutputByte1
+        jml $01a6d9
+}
+
+// enforce status when casting Heal spell in menu
+msfpatch {
+    .addr $01b866
+        jsl $=Wacky__StatusEnforcement_HealSpell
+        nop nop
+    
+    .new
+    Wacky__StatusEnforcement_HealSpell:
+        .mx 0x00
+        and #$7c80  // displaced
+        pha
+        lda $0000,x
+        and #$0f1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+
+        php
+        sep #$20
+        jsl $=Wacky__StatusEnforcement_Calculate
+        plp
+        pla
+        ora $_Wacky__StatusEnforcement_OutputByte0
+        sta $0003,x
+        rtl
+}
+
+// enforce status when casting status spells in menu
+msfpatch {
+    .addr $01B94F
+        jsl $=Wacky__StatusEnforcement_StatusSpell
+
+    .new
+    Wacky__StatusEnforcement_StatusSpell:
+        ora ($4e),y
+
+        pha
+
+        phy
+        ldy #$0000
+        lda ($4e),y
+        and #$1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+        iny
+        lda ($4e),y
+        and #$0f
+        sta $_Wacky__StatusEnforcement_InputJob
+        ply
+
+        jsl $=Wacky__StatusEnforcement_Calculate
+
+        pla
+        dey
+        dey
+        dey
+        ora $_Wacky__StatusEnforcement_OutputByte0,y
+        iny
+        iny
+        iny
+        sta ($4e),y
+        rtl
+}
+
+// enforce status after event command "toggle status"
+msfpatch {
+    .addr $00e912
+        jsl $=Wacky__StatusEnforcement_ToggleStatusCommand
+        nop
+    
+    .new
+    Wacky__StatusEnforcement_ToggleStatusCommand:
+        lda $1000,x
+        and #$1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+        lda $1001,x
+        and #$0f
+        sta $_Wacky__StatusEnforcement_InputJob
+        jsl $=Wacky__StatusEnforcement_Calculate
+
+        lda $1003,x
+        eor $06
+        ora $_Wacky__StatusEnforcement_OutputByte0
+        rtl
+}
+
+// enforce status after event command "clear status"
+msfpatch {
+    .addr $00e931
+        jsl $=Wacky__StatusEnforcement_ClearStatusCommand
+        nop
+    
+    .new
+    Wacky__StatusEnforcement_ClearStatusCommand:
+        lda $1000,x
+        and #$1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+        lda $1001,x
+        and #$0f
+        sta $_Wacky__StatusEnforcement_InputJob
+        jsl $=Wacky__StatusEnforcement_Calculate
+
+        lda $1003,x
+        and $06
+        ora $_Wacky__StatusEnforcement_OutputByte0
+        rtl
+}
+
+// enforce status after float-clearing on map transition
+msfpatch {
+    .addr $0085de
+        jsl $=Wacky__StatusEnforcement_ClearFloat
+        nop
+    
+    .new
+    Wacky__StatusEnforcement_ClearFloat:
+        lda $1000,x
+        and #$1f
+        sta $_Wacky__StatusEnforcement_InputAxtor
+        lda $1001,x
+        and #$0f
+        sta $_Wacky__StatusEnforcement_InputJob
+        jsl $=Wacky__StatusEnforcement_Calculate
+
+        lda $1004,x
+        and #$bf
+        ora $_Wacky__StatusEnforcement_OutputByte1
+        rtl
+}
+
+
+//----------------------------------------------------
+// LEGACY VERSION of battle init:
+//
+// // preserve status on battle status initialization
+// msfpatch {
+//     .addr $03954c
+//         jml $=Wacky__StatusEnforcement_BattleInit
+// 
+//     .new
+//     Wacky__StatusEnforcement_BattleInit:
+//         // %if wacky_status_enforcement_uses_slot%
+//             lda $a9
+//             sta $_Wacky__StatusEnforcement_InputSlot
+//         // %end%
+//         ldy #$0000
+//         // %if wacky_status_enforcement_uses_axtor%
+//             lda ($80),y
+//             and #$1f
+//             sta $_Wacky__StatusEnforcement_InputAxtor
+//         // %end%
+//         iny
+//         // %if wacky_status_enforcement_uses_job%
+//             lda ($80),y
+//             and #$0f
+//             sta $_Wacky__StatusEnforcement_InputJob
+//         // %end%
+// 
+//         // %if wacky_status_enforcement_uses_battleinit_context%
+//             jsl $=Wacky__StatusEnforcement_Calculate_BattleInit
+//         // %elif wacky_status_enforcement_uses_battle_context%
+//             jsl $=Wacky__StatusEnforcement_Calculate_Battle
+//         // %else%
+//             jsl $=Wacky__StatusEnforcement_Calculate
+//         // %end%
+// 
+//         ldy #$0003
+//         lda ($80),y
+//         ora $_Wacky__StatusEnforcement_OutputByte0
+//         sta ($80),y
+//         iny
+//         lda ($80),y
+//         and #$40
+//         ora $_Wacky__StatusEnforcement_OutputByte1
+//         sta ($80),y
+//         iny
+//         lda ($80),y
+//         and #$82
+//         ora $_Wacky__StatusEnforcement_OutputByte2
+//         sta ($80),y
+//         iny
+//         lda ($80),y
+//         and #$01
+//         ora $_Wacky__StatusEnforcement_OutputByte3
+//         sta ($80),y
+// 
+//         jml $039563
+// }

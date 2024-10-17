@@ -1,0 +1,9 @@
+// alter some instances of "can't run" bit checks in battle code
+// by changing branch codes
+
+patch($03a0b2 bus) { 80 }  // BNE -> BRA
+
+// looks like we don't need this one?
+// patch($03b425 bus) { 80 }  // BNE -> BRA
+
+patch($03d984 bus) { 80 }  // BNE -> BRA

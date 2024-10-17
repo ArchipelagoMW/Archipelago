@@ -1,0 +1,12 @@
+text_block_parameters   : "bank" number "message" value     -> bank_text
+                        | "map" map_value "message" value   -> map_text
+                        | "battle" "message" number         -> battle_text
+                        | "alert" "message" number          -> alert_text
+                        | "monster" "name" number           -> monster_name_text
+                        | "command" "name" command_value    -> command_name_text
+                        | "map" "name" number               -> map_name_text
+                        | "item" "name" item_value          -> item_name_text
+                        | "spell" "name" spell_value        -> spell_name_text
+                        | "status" number                   -> status_text
+                        | "credits"                         -> credits_text
+                        | rom_address                       -> custom_text

@@ -1,0 +1,123 @@
+// auto pass some yang checks
+patch ($039B0F bus) { EA EA }
+
+// erase all starting gear
+actor(#DKCecil)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Kain1)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#CRydia)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Tellah1)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Edward)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Rosa1)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Yang1)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Palom)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Porom)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Tellah2)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#PCecil)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Tellah3)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Yang2)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Cid)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Kain2)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Rosa2)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#ARydia)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Edge)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Fusoya)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
+
+actor(#Kain3)
+{
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+}
