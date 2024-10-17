@@ -3,6 +3,7 @@ from io import BytesIO
 
 IMPORTANT_HEADER_BYTE_LENGTH = 12
 
+
 class JMPFieldHeader:
     __field_name = ""
     __field_hash = 0
@@ -23,9 +24,9 @@ class JMPFieldHeader:
             struct.unpack(">I I H B B", header_bytes.read(IMPORTANT_HEADER_BYTE_LENGTH)))
         match data_type:
             case 0:
-                self.__field_data_type="Int"
+                self.__field_data_type = "Int"
             case 1:
-                self.__field_data_type="Str"
+                self.__field_data_type = "Str"
             case 2:
                 self.__field_data_type = "Flt"
             case _:

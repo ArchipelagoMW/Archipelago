@@ -6,9 +6,9 @@ from Options import Toggle, Range, Option, PerGameCommonOptions
 # Will look into feasibility of options later.
 
 
-class StartWithBetterVacuum(Toggle):
-    """Start with Poltergust 4000"""
-    display_name = "Better Vacuum"
+# class StartWithBetterVacuum(Toggle):
+#     """Start with Poltergust 4000"""
+#     display_name = "Better Vacuum"
 
 
 # These might end up being the same
@@ -99,7 +99,7 @@ class Enemizer(Toggle):
 
 @dataclass
 class LMOptions(PerGameCommonOptions):
-    good_vacuum: StartWithBetterVacuum
+    # good_vacuum: StartWithBetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
     speedy_spirits: SpeedySpirits

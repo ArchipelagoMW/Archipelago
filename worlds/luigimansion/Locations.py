@@ -62,7 +62,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
                                              ["Fire Element Medal"]),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furnichest", 187, []),
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
-                                         ["Fire Element Medal"]),
+                                         ["Fire Element Medal", "Boo Release"]),
     "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furnichest", 243, []),
     "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furnichest", 241, []),
     "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furnichest", 242, []),

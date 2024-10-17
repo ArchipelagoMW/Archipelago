@@ -416,6 +416,7 @@ class LMWorld(World):
                 region.locations.append(entry)
 
     def generate_early(self):
+        self.options.enemizer = False  # TODO Remove this line once enemizer is working
         if self.options.enemizer:
             set_ghost_type(self.multiworld, self.ghost_affected_regions)
 
@@ -424,10 +425,10 @@ class LMWorld(World):
             self.options.start_inventory.value["Boo Radar"] = (
                     self.options.start_inventory.value.get("Boo Radar", 0) + 1
             )
-        if self.options.good_vacuum:
-            self.options.start_inventory.value["Poltergust 4000"] = (
-                    self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
-            )
+        # if self.options.good_vacuum:
+        #     self.options.start_inventory.value["Poltergust 4000"] = (
+        #             self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
+        #     )
 
     def create_regions(self):
         # "Menu" is the required starting point
@@ -450,7 +451,8 @@ class LMWorld(World):
                 elif entry.code == 25:
                     add_rule(entry, lambda state: state.has_group("Medal", self.player))
                 else:
-                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                    for item in entry.access:
+                        add_rule(entry, lambda state: state.has(item, self.player))
             if entry.code is None:
                 entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
             region.locations.append(entry)

@@ -12,6 +12,7 @@ FIELD_DATA_BYTE_LENGTH = 12
 INTEGER_BYTE_LENGTH = 4
 STRING_BYTE_LENGTH = 32
 
+
 # Strips the un-necessary padding / bytes that are not a part of the core string.
 def byte_string_strip(bytes_input: bytes):
     result = []
@@ -22,6 +23,7 @@ def byte_string_strip(bytes_input: bytes):
         result.append(chr(single_byte))
 
     return ''.join(result)
+
 
 # Encodes a provided string to UTF-8 format. Adds padding until the expected length is reached.
 # If provided string is longer than expected length, raise an exception
@@ -35,6 +37,7 @@ def string_to_bytes(user_string: str, encoded_byte_length: int):
                         str(encoded_byte_length) + "', which will not be accepted by the info file.")
 
     return encoded_string
+
 
 class JMPInfoFile:
     __info_file_entry = None
@@ -53,10 +56,10 @@ class JMPInfoFile:
         # RARC files can have multiple sub-file entries / fragments associated with it.
         # This project cares about the JMP File Info entries, which will only work if they exist
         self.__info_file_entry = next((info_files for info_files in main_rarc_file.file_entries if
-                                info_files.name == name_of_info_file), None)
+                                       info_files.name == name_of_info_file), None)
 
         if self.__info_file_entry is None:
-            raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RAC file.")
+            raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RARC file.")
 
         with open('data\\names.json', 'r') as file:
             json_data = json.load(file)
@@ -84,7 +87,8 @@ class JMPInfoFile:
 
         # As mentioned before, these extra header bytes describe each field, taking up 12 bytes each.
         # (see more details in JMP_Field_Header.py)
-        self.__extra_header_bytes = io.BytesIO(info_field_data.read(self.__header_byte_length-IMPORTANT_HEADER_BYTE_LENGTH))
+        self.__extra_header_bytes = io.BytesIO(
+            info_field_data.read(self.__header_byte_length - IMPORTANT_HEADER_BYTE_LENGTH))
 
         # This will get the header field data for each field defined.
         self.__info_file_headers = []
@@ -106,7 +110,8 @@ class JMPInfoFile:
         #    strings, they are not required to get the data. Strings will automatically strip padding and null chars.
         self.info_file_field_entries = []
 
-        for data_line in range(self.__header_byte_length, len(info_field_data.getvalue()), self.__data_line_byte_length):
+        for data_line in range(self.__header_byte_length, len(info_field_data.getvalue()),
+                               self.__data_line_byte_length):
             current_line = io.BytesIO(info_field_data.read(self.__data_line_byte_length))
 
             # Some info files have random @ signs as their file terminator.
@@ -145,17 +150,16 @@ class JMPInfoFile:
               str(self.__field_count) + "; Header Byte Length: " + str(self.__header_byte_length) +
               "; Single Data Line Byte Length: " + str(self.__data_line_byte_length))
 
-
     # Using the original BytesIO stream, we will write back to the original data as needed.
     # This allows us to ensure the important data bits are unchanged.
     def get_updated_info_file_bytes(self):
         for index, data_line in enumerate(self.info_file_field_entries):
-            data_field_offset = self.__header_byte_length+(index*self.__data_line_byte_length)
+            data_field_offset = self.__header_byte_length + (index * self.__data_line_byte_length)
 
             for jmp_header in self.__info_file_headers:
                 # Set the data stream in the starting bit right position.
                 # Stream starts at the current line starting point + Starting Bit offset
-                self.__original_data_bytes.seek(data_field_offset+jmp_header.get_field_start_bit)
+                self.__original_data_bytes.seek(data_field_offset + jmp_header.get_field_start_bit)
 
                 match jmp_header.get_field_type:
                     case "Int":
