@@ -11,6 +11,7 @@ def launch_client() -> None:
 LauncherComponents.components.append(
     LauncherComponents.Component(
         "Zork Grand Inquisitor Client",
+        "Zork Grand Inquisitor",
         func=launch_client,
         component_type=LauncherComponents.Type.CLIENT
     )
