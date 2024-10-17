@@ -1,5 +1,6 @@
-from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions, Range
 from dataclasses import dataclass
+
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 
 class IxupiCapturesNeeded(Range):
@@ -11,12 +12,13 @@ class IxupiCapturesNeeded(Range):
     range_end = 10
     default = 10
 
+
 class LobbyAccess(Choice):
     """
     Chooses how keys needed to reach the lobby are placed.
     - Normal: Keys are placed anywhere
     - Early: Keys are placed early 
-    - Local: Keys are placed locally
+    - Local: Keys are placed locally and early
     """
     display_name = "Lobby Access"
     option_normal = 0
@@ -24,15 +26,18 @@ class LobbyAccess(Choice):
     option_local = 2
     default = 1
 
+
 class PuzzleHintsRequired(DefaultOnToggle):
     """
     If turned on puzzle hints/solutions will be available before the corresponding puzzle is required.
 
-    For example: The Red Door puzzle will be logically required only after access to the Beth's Address Book which gives you the solution.
+    For example: The Red Door puzzle will be logically required only after obtaining access to Beth's Address Book
+    which gives you the solution.
 
     Turning this off allows for greater randomization.
     """
     display_name = "Puzzle Hints Required"
+
 
 class InformationPlaques(Toggle):
     """
@@ -41,11 +46,13 @@ class InformationPlaques(Toggle):
     """
     display_name = "Include Information Plaques"
 
+
 class FrontDoorUsable(Toggle):
     """
     Adds a key to unlock the front door of the museum.
     """
     display_name = "Front Door Usable"
+
 
 class ElevatorsStaySolved(DefaultOnToggle):
     """
@@ -54,11 +61,14 @@ class ElevatorsStaySolved(DefaultOnToggle):
     """
     display_name = "Elevators Stay Solved"
 
+
 class EarlyBeth(DefaultOnToggle):
     """
-    Beth's body is open at the start of the game. This allows any pot piece to be placed in the slide and early checks on the second half of the final riddle.
+    Beth's body is open at the start of the game.
+    This allows any pot piece to be placed in the slide and early checks on the second half of the final riddle.
     """
     display_name = "Early Beth"
+
 
 class EarlyLightning(Toggle):
     """
@@ -66,6 +76,7 @@ class EarlyLightning(Toggle):
     (1 Location)
     """
     display_name = "Early Lightning"
+
 
 class LocationPotPieces(Choice):
     """
@@ -78,6 +89,8 @@ class LocationPotPieces(Choice):
     option_own_world = 0
     option_different_world = 1
     option_any_world = 2
+    default = 2
+
 
 class FullPots(Choice):
     """
