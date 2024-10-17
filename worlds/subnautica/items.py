@@ -145,6 +145,9 @@ item_table: Dict[int, ItemData] = {
 items_by_type: Dict[ItemType, List[int]] = {item_type: [] for item_type in ItemType}
 for item_id, item_data in item_table.items():
     items_by_type[item_data.type].append(item_id)
+item_names_by_type: Dict[ItemType, List[str]] = {
+    item_type: sorted(item_table[item_id].name for item_id in item_ids) for item_type, item_ids in items_by_type.items()
+}
 
 group_items: Dict[int, Set[int]] = {
     35100: {35025, 35047, 35048, 35056, 35057, 35058, 35059, 35060, 35061, 35062, 35063, 35064, 35065, 35067, 35068,

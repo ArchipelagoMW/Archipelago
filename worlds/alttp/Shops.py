@@ -9,9 +9,9 @@ from worlds.generic.Rules import add_rule
 
 from BaseClasses import CollectionState
 from .SubClasses import ALttPLocation
-from .EntranceShuffle import door_addresses
+
 from .Items import item_name_groups
-from .Options import small_key_shuffle, RandomizeShopInventories
+
 from .StateHelpers import has_hearts, can_use_bombs, can_hold_arrows
 
 logger = logging.getLogger("Shops")
@@ -66,6 +66,7 @@ class Shop:
         return 0
 
     def get_bytes(self) -> List[int]:
+        from .EntranceShuffle import door_addresses
         # [id][roomID-low][roomID-high][doorID][zero][shop_config][shopkeeper_config][sram_index]
         entrances = self.region.entrances
         config = self.item_count
@@ -176,9 +177,12 @@ def push_shop_inventories(multiworld):
                 get_price(multiworld, location.shop.inventory[location.shop_slot], location.player,
                           location.shop_price_type)[1])
 
+    for world in multiworld.get_game_worlds("A Link to the Past"):
+        world.pushed_shop_inventories.set()
+
 
 def create_shops(multiworld, player: int):
-
+    from .Options import RandomizeShopInventories
     player_shop_table = shop_table.copy()
     if multiworld.include_witch_hut[player]:
         player_shop_table["Potion Shop"] = player_shop_table["Potion Shop"]._replace(locked=False)
@@ -301,6 +305,7 @@ shop_generation_types = {
 
 
 def set_up_shops(multiworld, player: int):
+    from .Options import small_key_shuffle
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
     if multiworld.retro_bow[player]:
@@ -423,7 +428,7 @@ def get_price_modifier(item):
 
 def get_price(multiworld, item, player: int, price_type=None):
     """Converts a raw Rupee price into a special price type"""
-
+    from .Options import small_key_shuffle
     if price_type:
         price_types = [price_type]
     else:
@@ -450,16 +455,16 @@ def get_price(multiworld, item, player: int, price_type=None):
         price = item["price"]
         if multiworld.randomize_shop_prices[player]:
             adjust = 2 if price < 100 else 5
-            price = int((price / adjust) * (0.5 + multiworld.random.random() * 1.5)) * adjust
-        multiworld.random.shuffle(price_types)
+            price = int((price / adjust) * (0.5 + multiworld.per_slot_randoms[player].random() * 1.5)) * adjust
+        multiworld.per_slot_randoms[player].shuffle(price_types)
         for p_type in price_types:
             if any(x in item['item'] for x in price_blacklist[p_type]):
                 continue
             return p_type, price_chart[p_type](price, diff)
     else:
         # This is an AP location and the price will be adjusted after an item is shuffled into it
-        p_type = multiworld.random.choice(price_types)
-        return p_type, price_chart[p_type](min(int(multiworld.random.randint(8, 56)
+        p_type = multiworld.per_slot_randoms[player].choice(price_types)
+        return p_type, price_chart[p_type](min(int(multiworld.per_slot_randoms[player].randint(8, 56)
                                            * multiworld.shop_price_modifier[player] / 100) * 5, 9999), diff)
 
 

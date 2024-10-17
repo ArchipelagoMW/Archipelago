@@ -3,12 +3,10 @@ from . import LingoTestBase
 
 class TestComplexProgressiveHallwayRoom(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "doors"
     }
 
     def test_item(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -56,12 +54,11 @@ class TestComplexProgressiveHallwayRoom(LingoTestBase):
 
 class TestSimpleHallwayRoom(LingoTestBase):
     options = {
-        "shuffle_doors": "simple"
+        "shuffle_doors": "doors",
+        "group_doors": "true",
     }
 
     def test_item(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -85,13 +82,11 @@ class TestSimpleHallwayRoom(LingoTestBase):
 
 class TestProgressiveArtGallery(LingoTestBase):
     options = {
-        "shuffle_doors": "complex",
+        "shuffle_doors": "doors",
         "shuffle_colors": "false",
     }
 
     def test_item(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))

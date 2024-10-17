@@ -1,9 +1,9 @@
 # Rogue Legacy (PC)
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains most of the options you need to 
-configure and export a config file. Some settings can only be made in YAML, but an explanation can be found in the
+The [player options page for this game](../player-options) contains most of the options you need to 
+configure and export a config file. Some options can only be made in YAML, but an explanation can be found in the
 [template yaml here](../../../static/generated/configs/Rogue%20Legacy.yaml).
 
 ## What does randomization do to this game?

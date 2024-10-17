@@ -2,6 +2,10 @@ import os
 import logging
 import sys
 import typing
+import re
+from collections import deque
+
+assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
 
 if sys.platform == "win32":
     import ctypes
@@ -38,11 +42,13 @@ from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.metrics import dp
+from kivy.effects.scroll import ScrollEffect
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
 from kivy.uix.textinput import TextInput
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 from kivy.uix.boxlayout import BoxLayout
@@ -61,7 +67,7 @@ from kivy.uix.popup import Popup
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
-from Utils import async_start
+from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
     import CommonClient
@@ -69,6 +75,8 @@ if typing.TYPE_CHECKING:
     context_type = CommonClient.CommonContext
 else:
     context_type = object
+
+remove_between_brackets = re.compile(r"\[.*?]")
 
 
 # I was surprised to find this didn't already exist in kivy :(
@@ -116,6 +124,19 @@ class ToolTip(Label):
 
 class ServerToolTip(ToolTip):
     pass
+
+
+class ScrollBox(ScrollView):
+    layout: BoxLayout
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.layout = BoxLayout(size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter("height"))
+        self.add_widget(self.layout)
+        self.effect_cls = ScrollEffect
+        self.bar_width = dp(12)
+        self.scroll_type = ["content", "bars"]
 
 
 class HovererableLabel(HoverBehavior, Label):
@@ -222,6 +243,9 @@ class ServerLabel(HovererableLabel):
                             f"\nYou currently have {ctx.hint_points} points."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
+                if ctx.stored_data and "_read_race_mode" in ctx.stored_data:
+                    text += "\nRace mode is enabled." \
+                        if ctx.stored_data["_read_race_mode"] else "\nRace mode is disabled."
             else:
                 text += f"\nYou are not authenticated yet."
 
@@ -267,16 +291,10 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                 cmdinput = App.get_running_app().textinput
-                if not cmdinput.text and " did you mean " in text:
-                    for question in ("Didn't find something that closely matches, did you mean ",
-                                     "Too many close matches, did you mean "):
-                        if text.startswith(question):
-                            name = Utils.get_text_between(text, question,
-                                                          "? (")
-                            cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
-                            break
-                elif not cmdinput.text and text.startswith("Missing: "):
-                    cmdinput.text = text.replace("Missing: ", "!hint_location ")
+                if not cmdinput.text:
+                    input_text = get_input_text_from_response(text, App.get_running_app().last_autofillable_command)
+                    if input_text is not None:
+                        cmdinput.text = input_text
 
                 Clipboard.copy(text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                 return self.parent.select_with_touch(self.index, touch)
@@ -290,7 +308,6 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
     index = None
-    no_select = []
 
     def __init__(self):
         super(HintLabel, self).__init__()
@@ -308,9 +325,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
-        if "select" in data and not data["select"] and index not in self.no_select:
-            self.no_select.append(index)
-        self.striped = data["striped"]
+        self.striped = data.get("striped", False)
         self.receiving_text = data["receiving"]["text"]
         self.item_text = data["item"]["text"]
         self.finding_text = data["finding"]["text"]
@@ -324,24 +339,44 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         """ Add selection on touch down """
         if super(HintLabel, self).on_touch_down(touch):
             return True
-        if self.index not in self.no_select:
+        if self.index:  # skip header
             if self.collide_point(*touch.pos):
                 if self.selected:
                     self.parent.clear_selection()
                 else:
-                    text = "".join([self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                    text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
                                     if self.entrance_text != "Vanilla"
-                                    else "", ". (", self.found_text.lower(), ")"])
+                                    else "", ". (", self.found_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
                     text = "".join(
                         part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                     Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                     return self.parent.select_with_touch(self.index, touch)
+        else:
+            parent = self.parent
+            parent.clear_selection()
+            parent: HintLog = parent.parent
+            # find correct column
+            for child in self.children:
+                if child.collide_point(*touch.pos):
+                    key = child.sort_key
+                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    if key == parent.sort_key:
+                        # second click reverses order
+                        parent.reversed = not parent.reversed
+                    else:
+                        parent.sort_key = key
+                        parent.reversed = False
+                    break
+            else:
+                logging.warning("Did not find clicked header for sorting.")
+
+            App.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
-        if self.index not in self.no_select:
+        if self.index:
             self.selected = is_selected
 
 
@@ -349,6 +384,57 @@ class ConnectBarTextInput(TextInput):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
+
+
+def is_command_input(string: str) -> bool:
+    return len(string) > 0 and string[0] in "/!"
+
+
+class CommandPromptTextInput(TextInput):
+    MAXIMUM_HISTORY_MESSAGES = 50
+
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self._command_history_index = -1
+        self._command_history: typing.Deque[str] = deque(maxlen=CommandPromptTextInput.MAXIMUM_HISTORY_MESSAGES)
+    
+    def update_history(self, new_entry: str) -> None:
+        self._command_history_index = -1
+        if is_command_input(new_entry):
+            self._command_history.appendleft(new_entry)
+
+    def keyboard_on_key_down(
+        self,
+        window,
+        keycode: typing.Tuple[int, str],
+        text: typing.Optional[str],
+        modifiers: typing.List[str]
+    ) -> bool:
+        """
+        :param window: The kivy window object
+        :param keycode: A tuple of (keycode, keyname). Keynames are always lowercase
+        :param text: The text printed by this key, not accounting for modifiers, or `None` if no text.
+                     Seems to pretty naively interpret the keycode as unicode, so numlock can return odd characters.
+        :param modifiers: A list of string modifiers, like `ctrl` or `numlock`
+        """
+        if keycode[1] == 'up':
+            self._change_to_history_text_if_available(self._command_history_index + 1)
+            return True
+        if keycode[1] == 'down':
+            self._change_to_history_text_if_available(self._command_history_index - 1)
+            return True
+        return super().keyboard_on_key_down(window, keycode, text, modifiers)
+    
+    def _change_to_history_text_if_available(self, new_index: int) -> None:
+        if new_index < -1:
+            return
+        if new_index >= len(self._command_history):
+            return
+        self._command_history_index = new_index
+        if new_index == -1:
+            self.text = ""
+            return
+        self.text = self._command_history[self._command_history_index]
 
 
 class MessageBox(Popup):
@@ -386,7 +472,7 @@ class GameManager(App):
         self.commandprocessor = ctx.command_processor(ctx)
         self.icon = r"data/icon.png"
         self.json_to_kivy_parser = KivyJSONtoTextParser(ctx)
-        self.log_panels = {}
+        self.log_panels: typing.Dict[str, Widget] = {}
 
         # keep track of last used command to autofill on click
         self.last_autofillable_command = "hint"
@@ -453,9 +539,8 @@ class GameManager(App):
                 # show Archipelago tab if other logging is present
                 self.tabs.add_widget(panel)
 
-        hint_panel = TabbedPanelItem(text="Hints")
-        self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
-        self.tabs.add_widget(hint_panel)
+        hint_panel = self.add_client_tab("Hints", HintLog(self.json_to_kivy_parser))
+        self.log_panels["Hints"] = hint_panel.content
 
         if len(self.logging_pairs) == 1:
             self.tabs.default_tab_text = "Archipelago"
@@ -470,7 +555,7 @@ class GameManager(App):
         info_button = Button(size=(dp(100), dp(30)), text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = TextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
+        self.textinput = CommandPromptTextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
@@ -488,6 +573,14 @@ class GameManager(App):
         self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
 
         return self.container
+
+    def add_client_tab(self, title: str, content: Widget) -> Widget:
+        """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
+         Returns the new tab widget, with the provided content being placed on the tab as content."""
+        new_tab = TabbedPanelItem(text=title)
+        new_tab.content = content
+        self.tabs.add_widget(new_tab)
+        return new_tab
 
     def update_texts(self, dt):
         if hasattr(self.tabs.content.children[0], "fix_heights"):
@@ -514,8 +607,9 @@ class GameManager(App):
                                              "!help for server commands.")
 
     def connect_button_action(self, button):
+        self.ctx.username = None
+        self.ctx.password = None
         if self.ctx.server:
-            self.ctx.username = None
             async_start(self.ctx.disconnect())
         else:
             async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
@@ -528,14 +622,18 @@ class GameManager(App):
 
         self.ctx.exit_event.set()
 
-    def on_message(self, textinput: TextInput):
+    def on_message(self, textinput: CommandPromptTextInput):
         try:
             input_text = textinput.text.strip()
             textinput.text = ""
+            textinput.update_history(input_text)
 
             if self.ctx.input_requests > 0:
                 self.ctx.input_requests -= 1
                 self.ctx.input_queue.put_nowait(input_text)
+            elif is_command_input(input_text):
+                self.ctx.on_ui_command(input_text)
+                self.commandprocessor(input_text)
             elif input_text:
                 self.commandprocessor(input_text)
 
@@ -633,8 +731,10 @@ class HintLog(RecycleView):
         "entrance": {"text": "[u]Entrance[/u]"},
         "found": {"text": "[u]Status[/u]"},
         "striped": True,
-        "select": False,
     }
+
+    sort_key: str = ""
+    reversed: bool = False
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
@@ -642,16 +742,22 @@ class HintLog(RecycleView):
         self.parser = parser
 
     def refresh_hints(self, hints):
-        self.data = [self.header]
-        striped = False
+        data = []
         for hint in hints:
-            self.data.append({
-                "striped": striped,
+            data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
-                "item": {"text": self.parser.handle_node(
-                    {"type": "item_id", "text": hint["item"], "flags": hint["item_flags"]})},
+                "item": {"text": self.parser.handle_node({
+                    "type": "item_id",
+                    "text": hint["item"],
+                    "flags": hint["item_flags"],
+                    "player": hint["receiving_player"],
+                })},
                 "finding": {"text": self.parser.handle_node({"type": "player_id", "text": hint["finding_player"]})},
-                "location": {"text": self.parser.handle_node({"type": "location_id", "text": hint["location"]})},
+                "location": {"text": self.parser.handle_node({
+                    "type": "location_id",
+                    "text": hint["location"],
+                    "player": hint["finding_player"],
+                })},
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
@@ -659,7 +765,22 @@ class HintLog(RecycleView):
                     "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
                                                      "text": "Found" if hint["found"] else "Not Found"})},
             })
-            striped = not striped
+
+        data.sort(key=self.hint_sorter, reverse=self.reversed)
+        for i in range(0, len(data), 2):
+            data[i]["striped"] = True
+        data.insert(0, self.header)
+        self.data = data
+
+    @staticmethod
+    def hint_sorter(element: dict) -> str:
+        return ""
+
+    def fix_heights(self):
+        """Workaround fix for divergent texture and layout heights"""
+        for element in self.children[0].children:
+            max_height = max(child.texture_size[1] for child in element.children)
+            element.height = max_height
 
 
 class E(ExceptionHandler):
@@ -690,15 +811,17 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 
     def _handle_item_name(self, node: JSONMessagePart):
         flags = node.get("flags", 0)
+        item_types = []
         if flags & 0b001:  # advancement
-            itemtype = "progression"
-        elif flags & 0b010:  # useful
-            itemtype = "useful"
-        elif flags & 0b100:  # trap
-            itemtype = "trap"
-        else:
-            itemtype = "normal"
-        node.setdefault("refs", []).append("Item Class: " + itemtype)
+            item_types.append("progression")
+        if flags & 0b010:  # useful
+            item_types.append("useful")
+        if flags & 0b100:  # trap
+            item_types.append("trap")
+        if not item_types:
+            item_types.append("normal")
+
+        node.setdefault("refs", []).append("Item Class: " + ", ".join(item_types))
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
 
     def _handle_player_id(self, node: JSONMessagePart):
@@ -708,8 +831,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
             text = f"Game: {slot_info.game}<br>" \
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
-                text += f"<br>Members:<br> " + \
-                        "<br> ".join(self.ctx.player_names[player] for player in slot_info.group_members)
+                text += f"<br>Members:<br> " + "<br> ".join(
+                    escape_markup(self.ctx.player_names[player])
+                    for player in slot_info.group_members
+                )
             node.setdefault("refs", []).append(text)
         return super(KivyJSONtoTextParser, self)._handle_player_id(node)
 
@@ -724,6 +849,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         return self._handle_text(node)
 
     def _handle_text(self, node: JSONMessagePart):
+        # All other text goes through _handle_color, and we don't want to escape markup twice,
+        # or mess up text that already has intentional markup applied to it
+        if node.get("type", "text") == "text":
+            node["text"] = escape_markup(node["text"])
         for ref in node.get("refs", []):
             node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
             self.ref_count += 1

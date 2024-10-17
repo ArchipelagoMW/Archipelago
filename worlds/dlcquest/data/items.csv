@@ -27,8 +27,8 @@ id,name,classification,groups
 25,Canadian Dialog Pack,filler,"DLC,Freemium"
 26,DLC NPC Pack,progression,"DLC,Freemium"
 27,Cut Content Pack,progression,"DLC,Freemium"
-28,Name Change Pack,progression,"DLC,Freemium"
-29,Pickaxe,progression,"Item,Freemium"
+28,Name Change Pack,progression,"DLC,Freemium,Trap"
+29,Pickaxe,progression,"Deprecated"
 30,Season Pass,progression,"DLC,Freemium"
 31,High Definition Next Gen Pack,filler,"DLC,Freemium"
 32,Increased HP Pack,useful,"DLC,Freemium"
@@ -36,9 +36,9 @@ id,name,classification,groups
 34,Big Sword Pack,progression,"DLC,Freemium"
 35,Really Big Sword Pack,progression,"DLC,Freemium"
 36,Unfathomable Sword Pack,progression,"DLC,Freemium"
-37,Gun,progression,"Item,DLCQuest"
-38,Sword,progression,"Item,DLCQuest"
-39,Wooden Sword,progression,"Item,Freemium"
+37,Gun,progression,"Deprecated"
+38,Sword,progression,"Deprecated"
+39,Wooden Sword,progression,"Deprecated"
 40,Box of Various Supplies,progression,"Item,Freemium"
 41,Humble Indie Bindle,progression,"Item,Freemium"
 42,DLC Quest: Coin Bundle,progression,"Coin,DLCQuest"
@@ -46,3 +46,7 @@ id,name,classification,groups
 44,Zombie Sheep,trap,Trap
 45,Temporary Spike,trap,Trap
 46,Loading Screen,trap,Trap
+48,DLC Quest: Progressive Weapon,progression,"Item,Twice,DLCQuest"
+49,Live Freemium or Die: Progressive Weapon,progression,"Item,Twice,Freemium"
+50,DLC Quest: Coin Piece,progression,"Piece,DLCQuest"
+51,Live Freemium or Die: Coin Piece,progression,"Piece,Freemium"

@@ -61,4 +61,4 @@ gameplay differences at the bottom.
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [Undertale Player Settings Page](/games/Undertale/player-settings)
+You can customize your options by visiting the [Undertale Player Options Page](/games/Undertale/player-options)

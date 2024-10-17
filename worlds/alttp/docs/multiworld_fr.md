@@ -60,15 +60,16 @@ peuvent avoir différentes options.
 
 ### Où est-ce que j'obtiens un fichier YAML ?
 
-La page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings) vous permet de configurer vos
+La page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-options) vous permet de configurer vos
 paramètres personnels et de les exporter vers un fichier YAML.
 
 ### Configuration avancée du fichier YAML
 
 Une version plus avancée du fichier YAML peut être créée en utilisant la page
-des [paramètres de pondération](/weighted-settings), qui vous permet de configurer jusqu'à trois préréglages. Cette page
-a de nombreuses options qui sont essentiellement représentées avec des curseurs glissants. Cela vous permet de choisir
-quelles sont les chances qu'une certaine option apparaisse par rapport aux autres disponibles dans une même catégorie.
+des [paramètres de pondération](/games/A Link to the Past/weighted-options), qui vous permet de configurer jusqu'à
+trois préréglages. Cette page a de nombreuses options qui sont essentiellement représentées avec des curseurs
+glissants. Cela vous permet de choisir quelles sont les chances qu'une certaine option apparaisse par rapport aux
+autres disponibles dans une même catégorie.
 
 Par exemple, imaginez que le générateur crée un seau étiqueté "Mélange des cartes", et qu'il place un morceau de papier
 pour chaque sous-option. Imaginez également que la valeur pour "On" est 20 et la valeur pour "Off" est 40.
@@ -87,7 +88,7 @@ Si vous voulez valider votre fichier YAML pour être sûr qu'il fonctionne, vous
 
 ## Générer une partie pour un joueur
 
-1. Aller sur la page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-settings), configurez vos options,
+1. Aller sur la page [Génération de partie](/games/A%20Link%20to%20the%20Past/player-options), configurez vos options,
    et cliquez sur le bouton "Generate Game".
 2. Il vous sera alors présenté une page d'informations sur la seed, où vous pourrez télécharger votre patch.
 3. Double-cliquez sur le patch et l'émulateur devrait se lancer automatiquement avec la seed. Etant donné que le client

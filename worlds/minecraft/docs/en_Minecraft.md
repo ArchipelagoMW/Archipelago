@@ -1,8 +1,8 @@
 # Minecraft
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -11,9 +11,9 @@ Some recipes are locked from being able to be crafted and shuffled into the item
 structures appear in each dimension. Crafting recipes are re-learned when they are received from other players as item
 checks, and occasionally when completing your own achievements. See below for which recipes are shuffled.
 
-## What is considered a location check in minecraft?
+## What is considered a location check in Minecraft?
 
-Location checks in are completed when the player completes various Minecraft achievements. Opening the advancements menu
+Location checks are completed when the player completes various Minecraft achievements. Opening the advancements menu
 in-game by pressing "L" will display outstanding achievements.
 
 ## When the player receives an item, what happens?
@@ -24,7 +24,7 @@ inventory directly.
 ## What is the victory condition?
 
 Victory is achieved when the player kills the Ender Dragon, enters the portal in The End, and completes the credits
-sequence either by skipping it or watching hit play out.
+sequence either by skipping it or watching it play out.
 
 ## Which recipes are locked?
 
@@ -64,12 +64,15 @@ sequence either by skipping it or watching hit play out.
         * Diamond Axe
 * Progessive Tools
     * Tier I
+        * Stone Pickaxe
         * Stone Shovel
         * Stone Hoe
     * Tier II
+        * Iron Pickaxe
         * Iron Shovel
         * Iron Hoe
     * Tier III
+        * Diamond Pickaxe
         * Diamond Shovel
         * Diamond Hoe
         * Netherite Ingot

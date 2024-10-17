@@ -1,8 +1,11 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
-    FreeText
+from Options import Choice, Range, DeathLink, DefaultOnToggle, FreeText, ItemsAccessibility, Option, \
+    PlandoBosses, PlandoConnections, PlandoTexts, Removed, StartInventoryPool, Toggle
+from .EntranceShuffle import default_connections, default_dungeon_connections, \
+    inverted_default_connections, inverted_default_dungeon_connections
+from .Text import TextTable
 
 
 class GlitchesRequired(Choice):
@@ -43,8 +46,7 @@ class Goal(Choice):
     Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
     Local Triforce Hunt: Collect Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
     Ganon Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then kill Ganon
-    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon
-    Ice Rod Hunt: You start with everything except Ice Rod. Find the Ice rod, then kill Trinexx at Turtle rock."""
+    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon"""
     display_name = "Goal"
     default = 0
     option_ganon = 0
@@ -154,10 +156,10 @@ class OpenPyramid(Choice):
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
-            return world.goal[player] in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
+            return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
         elif self.value == self.option_auto:
-            return world.goal[player] in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
-            and (world.entrance_shuffle[player] in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
+            return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
+            and (world.entrance_shuffle[player].current_key in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
                  world.shuffle_ganon)
         elif self.value == self.option_open:
             return True
@@ -211,11 +213,10 @@ class map_shuffle(DungeonItem):
     display_name = "Map Shuffle"
 
 
-class key_drop_shuffle(Toggle):
+class key_drop_shuffle(DefaultOnToggle):
     """Shuffle keys found in pots and dropped from killed enemies,
     respects the small key and big key shuffle options."""
     display_name = "Key Drop Shuffle"
-
 
 
 class DungeonCounters(Choice):
@@ -485,7 +486,7 @@ class LTTPBosses(PlandoBosses):
 
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
-        from worlds.alttp.Bosses import can_place_boss
+        from .Bosses import can_place_boss
         level = ''
         words = location.split(" ")
         if words[-1] in ("top", "middle", "bottom"):
@@ -718,13 +719,33 @@ class BeemizerTrapChance(BeemizerRange):
     display_name = "Beemizer Trap Chance"
 
 
-class AllowCollect(Toggle):
-    """Allows for !collect / co-op to auto-open chests containing items for other players.
-    Off by default, because it currently crashes on real hardware."""
+class AllowCollect(DefaultOnToggle):
+    """Allows for !collect / co-op to auto-open chests containing items for other players."""
     display_name = "Allow Collection of checks for other players"
 
 
+class ALttPPlandoConnections(PlandoConnections):
+    entrances = set([connection[0] for connection in (
+        *default_connections, *default_dungeon_connections, *inverted_default_connections,
+        *inverted_default_dungeon_connections)])
+    exits = set([connection[0] for connection in (
+        *default_connections, *default_dungeon_connections, *inverted_default_connections,
+        *inverted_default_dungeon_connections)])
+
+
+class ALttPPlandoTexts(PlandoTexts):
+    """Text plando. Format is:
+    - text: 'This is your text'
+      at: text_key
+      percentage: 100
+    Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
+    valid_keys = TextTable.valid_keys
+
+
 alttp_options: typing.Dict[str, type(Option)] = {
+    "accessibility": ItemsAccessibility,
+    "plando_connections": ALttPPlandoConnections,
+    "plando_texts": ALttPPlandoTexts,
     "start_inventory_from_pool": StartInventoryPool,
     "goal": Goal,
     "mode": Mode,
@@ -798,4 +819,9 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
+
+    # removed:
+    "goals": Removed,
+    "smallkey_shuffle": Removed,
+    "bigkey_shuffle": Removed,
 }

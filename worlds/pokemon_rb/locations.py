@@ -5,46 +5,48 @@ from . import poke_data
 loc_id_start = 172000000
 
 
-def trainersanity(multiworld, player):
-    return multiworld.trainersanity[player]
-
-
-def dexsanity(multiworld, player):
-    include = multiworld.worlds[player].dexsanity_table.pop(0)
-    multiworld.worlds[player].dexsanity_table.append(include)
+def trainersanity(world, player):
+    include = world.trainersanity_table.pop(0)
+    world.trainersanity_table.append(include)
     return include
 
 
-def hidden_items(multiworld, player):
-    return multiworld.randomize_hidden_items[player]
+def dexsanity(world, player):
+    include = world.dexsanity_table.pop(0)
+    world.dexsanity_table.append(include)
+    return include
 
 
-def hidden_moon_stones(multiworld, player):
-    return multiworld.randomize_hidden_items[player] or multiworld.stonesanity[player]
+def hidden_items(world, player):
+    return world.options.randomize_hidden_items
 
 
-def tea(multiworld, player):
-    return multiworld.tea[player]
+def hidden_moon_stones(world, player):
+    return world.options.randomize_hidden_items or world.options.stonesanity
 
 
-def extra_key_items(multiworld, player):
-    return multiworld.extra_key_items[player]
+def tea(world, player):
+    return world.options.tea
 
 
-def always_on(multiworld, player):
+def extra_key_items(world, player):
+    return world.options.extra_key_items
+
+
+def always_on(world, player):
     return True
 
 
-def prizesanity(multiworld, player):
-    return multiworld.prizesanity[player]
+def prizesanity(world, player):
+    return world.options.prizesanity
 
 
-def split_card_key(multiworld, player):
-    return multiworld.split_card_key[player].value > 0
+def split_card_key(world, player):
+    return world.options.split_card_key.value > 0
 
 
-def not_stonesanity(multiworld, player):
-    return not multiworld.stonesanity[player]
+def not_stonesanity(world, player):
+    return not world.options.stonesanity
 
 
 class LocationData:
@@ -175,7 +177,7 @@ location_data = [
     LocationData("Route 2-SE", "South Item", "Moon Stone", rom_addresses["Missable_Route_2_Item_1"],
                  Missable(25)),
     LocationData("Route 2-SE", "North Item", "HP Up", rom_addresses["Missable_Route_2_Item_2"], Missable(26)),
-    LocationData("Route 4-E", "Item", "TM04 Whirlwind", rom_addresses["Missable_Route_4_Item"], Missable(27)),
+    LocationData("Route 4-C", "Item", "TM04 Whirlwind", rom_addresses["Missable_Route_4_Item"], Missable(27)),
     LocationData("Route 9", "Item", "TM30 Teleport", rom_addresses["Missable_Route_9_Item"], Missable(28)),
     LocationData("Route 12-N", "Island Item", "TM16 Pay Day", rom_addresses["Missable_Route_12_Item_1"], Missable(30)),
     LocationData("Route 12-Grass", "Item Behind Cuttable Tree", "Iron", rom_addresses["Missable_Route_12_Item_2"], Missable(31)),
@@ -395,7 +397,7 @@ location_data = [
     LocationData("Silph Co 5F", "Hidden Item Pot Plant", "Elixir", rom_addresses['Hidden_Item_Silph_Co_5F'], Hidden(18), inclusion=hidden_items),
     LocationData("Silph Co 9F-SW", "Hidden Item Nurse Bed", "Max Potion", rom_addresses['Hidden_Item_Silph_Co_9F'], Hidden(19), inclusion=hidden_items),
     LocationData("Saffron Copycat's House 2F", "Hidden Item Desk", "Nugget", rom_addresses['Hidden_Item_Copycats_House'], Hidden(20), inclusion=hidden_items),
-    LocationData("Cerulean Cave 1F-NW", "Hidden Item Center Rocks", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_Cave_1F'], Hidden(21), inclusion=hidden_items),
+    LocationData("Cerulean Cave 1F-SW", "Hidden Item Center Rocks", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_Cave_1F'], Hidden(21), inclusion=hidden_items),
     LocationData("Cerulean Cave B1F-E", "Hidden Item Northeast Rocks", "Ultra Ball", rom_addresses['Hidden_Item_Cerulean_Cave_B1F'], Hidden(22), inclusion=hidden_items),
     LocationData("Power Plant", "Hidden Item Central Dead End", "Max Elixir", rom_addresses['Hidden_Item_Power_Plant_1'], Hidden(23), inclusion=hidden_items),
     LocationData("Power Plant", "Hidden Item Before Zapdos", "PP Up", rom_addresses['Hidden_Item_Power_Plant_2'], Hidden(24), inclusion=hidden_items),
@@ -427,7 +429,7 @@ location_data = [
     LocationData("Seafoam Islands B3F", "Hidden Item Rock", "Max Elixir", rom_addresses['Hidden_Item_Seafoam_Islands_B3F'], Hidden(50), inclusion=hidden_items),
     LocationData("Vermilion City", "Hidden Item In Water Near Fan Club", "Max Ether", rom_addresses['Hidden_Item_Vermilion_City'], Hidden(51), inclusion=hidden_items),
     LocationData("Cerulean City-Badge House Backyard", "Hidden Item Gym Badge Guy's Backyard", "Rare Candy", rom_addresses['Hidden_Item_Cerulean_City'], Hidden(52), inclusion=hidden_items),
-    LocationData("Route 4-E", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
+    LocationData("Route 4-C", "Hidden Item Plateau East Of Mt Moon", "Great Ball", rom_addresses['Hidden_Item_Route_4'], Hidden(53), inclusion=hidden_items),
 
 
     LocationData("Oak's Lab", "Oak's Parcel Reward", "Pokedex", rom_addresses["Event_Pokedex"], EventFlag(0x38)),
@@ -636,7 +638,7 @@ location_data = [
     LocationData("Rock Tunnel B1F-W", "PokeManiac 3", None, rom_addresses["Trainersanity_EVENT_BEAT_ROCK_TUNNEL_2_TRAINER_2_ITEM"], EventFlag(11), inclusion=trainersanity),
     LocationData("Route 10-N", "Jr. Trainer F 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_10_TRAINER_3_ITEM"], EventFlag(308), inclusion=trainersanity),
     LocationData("Route 10-C", "PokeManiac 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_10_TRAINER_0_ITEM"], EventFlag(311), inclusion=trainersanity),
-    LocationData("Route 10-S", "J.r Trainer F 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_10_TRAINER_5_ITEM"], EventFlag(306), inclusion=trainersanity),
+    LocationData("Route 10-S", "Jr. Trainer F 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_10_TRAINER_5_ITEM"], EventFlag(306), inclusion=trainersanity),
     LocationData("Route 10-S", "Hiker 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_10_TRAINER_1_ITEM"], EventFlag(310), inclusion=trainersanity),
     LocationData("Route 10-S", "Hiker 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_10_TRAINER_4_ITEM"], EventFlag(307), inclusion=trainersanity),
     LocationData("Route 10-S", "PokeManiac 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_10_TRAINER_2_ITEM"], EventFlag(309), inclusion=trainersanity),
@@ -786,6 +788,8 @@ location_data = [
 
     LocationData("Celadon Game Corner", "", "Game Corner", event=True),
     LocationData("Cinnabar Island", "", "Cinnabar Island", event=True),
+    LocationData("Cinnabar Lab", "", "Cinnabar Lab", event=True),
+    LocationData("Mt Moon B2F", "Mt Moon Fossils", "Mt Moon Fossils", event=True),
     LocationData("Celadon Department Store 4F", "Buy Poke Doll", "Buy Poke Doll", event=True),
     LocationData("Celadon Department Store 4F", "Buy Fire Stone", "Fire Stone", event=True, inclusion=not_stonesanity),
     LocationData("Celadon Department Store 4F", "Buy Water Stone", "Water Stone", event=True, inclusion=not_stonesanity),
@@ -1036,25 +1040,25 @@ location_data = [
                  type="Wild Encounter", level=12),
     LocationData("Mt Moon B2F-Wild", "Wild Pokemon - 10", "Clefairy", rom_addresses["Wild_MtMoonB2F"] + 19, None,
                  event=True, type="Wild Encounter", level=12),
-    LocationData("Route 4-Grass", "Wild Pokemon - 1", "Rattata", rom_addresses["Wild_Route4"] + 1, None, event=True,
+    LocationData("Route 4-E", "Wild Pokemon - 1", "Rattata", rom_addresses["Wild_Route4"] + 1, None, event=True,
                  type="Wild Encounter", level=10),
-    LocationData("Route 4-Grass", "Wild Pokemon - 2", "Spearow", rom_addresses["Wild_Route4"] + 3, None, event=True,
+    LocationData("Route 4-E", "Wild Pokemon - 2", "Spearow", rom_addresses["Wild_Route4"] + 3, None, event=True,
                  type="Wild Encounter", level=10),
-    LocationData("Route 4-Grass", "Wild Pokemon - 3", "Rattata", rom_addresses["Wild_Route4"] + 5, None, event=True,
+    LocationData("Route 4-E", "Wild Pokemon - 3", "Rattata", rom_addresses["Wild_Route4"] + 5, None, event=True,
                  type="Wild Encounter", level=8),
-    LocationData("Route 4-Grass", "Wild Pokemon - 4", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 7, None,
+    LocationData("Route 4-E", "Wild Pokemon - 4", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 7, None,
                  event=True, type="Wild Encounter", level=6),
-    LocationData("Route 4-Grass", "Wild Pokemon - 5", "Spearow", rom_addresses["Wild_Route4"] + 9, None, event=True,
+    LocationData("Route 4-E", "Wild Pokemon - 5", "Spearow", rom_addresses["Wild_Route4"] + 9, None, event=True,
                  type="Wild Encounter", level=8),
-    LocationData("Route 4-Grass", "Wild Pokemon - 6", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 11, None,
+    LocationData("Route 4-E", "Wild Pokemon - 6", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 11, None,
                  event=True, type="Wild Encounter", level=10),
-    LocationData("Route 4-Grass", "Wild Pokemon - 7", "Rattata", rom_addresses["Wild_Route4"] + 13, None, event=True,
+    LocationData("Route 4-E", "Wild Pokemon - 7", "Rattata", rom_addresses["Wild_Route4"] + 13, None, event=True,
                  type="Wild Encounter", level=12),
-    LocationData("Route 4-Grass", "Wild Pokemon - 8", "Spearow", rom_addresses["Wild_Route4"] + 15, None, event=True,
+    LocationData("Route 4-E", "Wild Pokemon - 8", "Spearow", rom_addresses["Wild_Route4"] + 15, None, event=True,
                  type="Wild Encounter", level=12),
-    LocationData("Route 4-Grass", "Wild Pokemon - 9", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 17, None,
+    LocationData("Route 4-E", "Wild Pokemon - 9", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 17, None,
                  event=True, type="Wild Encounter", level=8),
-    LocationData("Route 4-Grass", "Wild Pokemon - 10", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 19, None,
+    LocationData("Route 4-E", "Wild Pokemon - 10", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route4"] + 19, None,
                  event=True, type="Wild Encounter", level=12),
     LocationData("Route 24", "Wild Pokemon - 1", ["Weedle", "Caterpie"], rom_addresses["Wild_Route24"] + 1, None,
                  event=True, type="Wild Encounter", level=7),

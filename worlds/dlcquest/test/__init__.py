@@ -37,8 +37,7 @@ def setup_dlc_quest_solo_multiworld(test_options=None, seed=None, _cache: Dict[F
     if frozen_options in _cache:
         return _cache[frozen_options]
 
-    multiworld = setup_base_solo_multiworld(DLCqworld, ())
-    multiworld.set_seed(seed)
+    multiworld = setup_base_solo_multiworld(DLCqworld, (), seed=seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
     for name, option in DLCqworld.options_dataclass.type_hints.items():

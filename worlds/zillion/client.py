@@ -1,5 +1,7 @@
 import asyncio
 import base64
+import io
+import pkgutil
 import platform
 from typing import Any, ClassVar, Coroutine, Dict, List, Optional, Protocol, Tuple, cast
 
@@ -10,14 +12,13 @@ from Utils import async_start
 
 import colorama
 
-from zilliandomizer.zri.memory import Memory
+from zilliandomizer.zri.memory import Memory, RescueInfo
 from zilliandomizer.zri import events
 from zilliandomizer.utils.loc_name_maps import id_to_loc
 from zilliandomizer.options import Chars
-from zilliandomizer.patch import RescueInfo
 
 from .id_maps import loc_name_to_id, make_id_to_others
-from .config import base_id, zillion_map
+from .config import base_id
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):
@@ -138,7 +139,9 @@ class ZillionContext(CommonContext):
         from kvui import GameManager
         from kivy.core.text import Label as CoreLabel
         from kivy.graphics import Ellipse, Color, Rectangle
+        from kivy.graphics.texture import Texture
         from kivy.uix.layout import Layout
+        from kivy.uix.image import CoreImage
         from kivy.uix.widget import Widget
 
         class ZillionManager(GameManager):
@@ -150,11 +153,20 @@ class ZillionContext(CommonContext):
             class MapPanel(Widget):
                 MAP_WIDTH: ClassVar[int] = 281
 
-                _number_textures: List[Any] = []
+                map_background: CoreImage
+                _number_textures: List[Texture] = []
                 rooms: List[List[int]] = []
 
                 def __init__(self, **kwargs: Any) -> None:
                     super().__init__(**kwargs)
+
+                    FILE_NAME = "empty-zillion-map-row-col-labels-281.png"
+                    image_file_data = pkgutil.get_data(__name__, FILE_NAME)
+                    if not image_file_data:
+                        raise FileNotFoundError(f"{__name__=} {FILE_NAME=}")
+                    data = io.BytesIO(image_file_data)
+                    self.map_background = CoreImage(data, ext="png")
+                    assert self.map_background.texture.size[0] == ZillionManager.MapPanel.MAP_WIDTH
 
                     self.rooms = [[0 for _ in range(8)] for _ in range(16)]
 
@@ -176,10 +188,9 @@ class ZillionContext(CommonContext):
 
                     with self.canvas:
                         Color(1, 1, 1, 1)
-                        Rectangle(source=zillion_map,
+                        Rectangle(texture=self.map_background.texture,
                                   pos=self.pos,
-                                  size=(ZillionManager.MapPanel.MAP_WIDTH,
-                                        int(ZillionManager.MapPanel.MAP_WIDTH * 1.456)))  # aspect ratio of that image
+                                  size=self.map_background.texture.size)
                         for y in range(16):
                             for x in range(8):
                                 num = self.rooms[15 - y][x]
@@ -194,7 +205,7 @@ class ZillionContext(CommonContext):
 
             def build(self) -> Layout:
                 container = super().build()
-                self.map_widget = ZillionManager.MapPanel(size_hint_x=None, width=0)
+                self.map_widget = ZillionManager.MapPanel(size_hint_x=None, width=ZillionManager.MapPanel.MAP_WIDTH)
                 self.main_area_container.add_widget(self.map_widget)
                 return container
 
@@ -220,20 +231,20 @@ class ZillionContext(CommonContext):
         if cmd == "Connected":
             logger.info("logged in to Archipelago server")
             if "slot_data" not in args:
-                logger.warn("`Connected` packet missing `slot_data`")
+                logger.warning("`Connected` packet missing `slot_data`")
                 return
             slot_data = args["slot_data"]
 
             if "start_char" not in slot_data:
-                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `start_char`")
+                logger.warning("invalid Zillion `Connected` packet, `slot_data` missing `start_char`")
                 return
             self.start_char = slot_data['start_char']
             if self.start_char not in {"Apple", "Champ", "JJ"}:
-                logger.warn("invalid Zillion `Connected` packet, "
-                            f"`slot_data` `start_char` has invalid value: {self.start_char}")
+                logger.warning("invalid Zillion `Connected` packet, "
+                               f"`slot_data` `start_char` has invalid value: {self.start_char}")
 
             if "rescues" not in slot_data:
-                logger.warn("invalid Zillion `Connected` packet, `slot_data` missing `rescues`")
+                logger.warning("invalid Zillion `Connected` packet, `slot_data` missing `rescues`")
                 return
             rescues = slot_data["rescues"]
             self.rescues = {}
@@ -261,8 +272,8 @@ class ZillionContext(CommonContext):
                 self.loc_mem_to_id[mem] = id_
 
             if len(self.loc_mem_to_id) != 394:
-                logger.warn("invalid Zillion `Connected` packet, "
-                            f"`slot_data` missing locations in `loc_mem_to_id` - len {len(self.loc_mem_to_id)}")
+                logger.warning("invalid Zillion `Connected` packet, "
+                               f"`slot_data` missing locations in `loc_mem_to_id` - len {len(self.loc_mem_to_id)}")
 
             self.got_slot_data.set()
 
@@ -336,6 +347,11 @@ class ZillionContext(CommonContext):
                         "operations": [{"operation": "replace", "value": doors_b64}]
                     }
                     async_start(self.send_msgs([payload]))
+            elif isinstance(event_from_game, events.MapEventFromGame):
+                row = event_from_game.map_index // 8
+                col = event_from_game.map_index % 8
+                room_name = f"({chr(row + 64)}-{col + 1})"
+                logger.info(f"You are at {room_name}")
             else:
                 logger.warning(f"WARNING: unhandled event from game {event_from_game}")
 
