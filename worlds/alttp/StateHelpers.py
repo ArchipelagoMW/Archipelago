@@ -95,8 +95,7 @@ def can_hold_arrows(state: CollectionState, player: int, quantity: int):
             # Arrow Upgrade (+5) beyond the 6th gives +10
             arrows += max(0, ((state.count("Arrow Upgrade (+5)", player) - 6) * 10))
         return min(70, arrows) >= quantity
-    else:
-        return quantity <= 30 or state.has("Capacity Upgrade Shop", player)
+    return quantity <= 30 or state.has("Capacity Upgrade Shop", player)
 
 
 def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> bool:
