@@ -59,6 +59,8 @@ class CivVILocation(Location):
             self.location_type = CivVICheckType.GOODY
         elif name.split("_")[0] == "BOOST":
             self.location_type = CivVICheckType.BOOST
+        else:
+            self.location_type = CivVICheckType.EVENT
 
         if self.name in EXCLUDED_LOCATIONS:
             self.progress_type = LocationProgressType.EXCLUDED

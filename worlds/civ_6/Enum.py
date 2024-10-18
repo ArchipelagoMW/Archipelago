@@ -20,3 +20,4 @@ class CivVICheckType(Enum):
     ERA = "ERA"
     GOODY = "GOODY"
     BOOST = "BOOST"
+    EVENT = "EVENT"

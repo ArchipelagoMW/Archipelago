@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List, Optional
 from BaseClasses import CollectionState, Region
+from ..generic.Rules import set_rule
 from .Data import get_era_required_items_data, get_progressive_districts_data
 from .Items import CivVIItemData, format_item_name, get_item_by_civ_name
 from .Enum import EraType
@@ -144,10 +145,17 @@ def create_regions(world: 'CivVIWorld'):
             state, EraType.ERA_ATOMIC, world)
     )
 
-    world.get_region(EraType.ERA_INFORMATION.value).connect(
+    future_era = world.get_region(EraType.ERA_INFORMATION.value)
+    future_era.connect(
         world.get_region(EraType.ERA_FUTURE.value), None, lambda state: has_required_items(
             state, EraType.ERA_INFORMATION, world)
     )
 
-    world.multiworld.completion_condition[world.player] = lambda state: state.can_reach(
-        EraType.ERA_FUTURE.value, "Region", world.player)
+    victory = CivVILocation(world.player, "Complete a victory type", None, future_era)
+    victory.place_locked_item(world.create_event("Victory"))
+    future_era.locations.append(victory)
+
+    set_rule(victory, lambda state: state.can_reach(
+        EraType.ERA_FUTURE.value, "Region", world.player))
+
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
