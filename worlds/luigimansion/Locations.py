@@ -52,18 +52,11 @@ class LMLocation(Location):
 # require Boo Radar
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Base Chests / Locations
-    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]),
-    "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
-    "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
-    "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
+    "Luigi's Courage": LMLocationData("Parlor", 708, "Furnichest", 0, []), # Give item during/after E. Gadd cutscene
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furnichest", 233, []),
-    "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
-    # keyinfo event, need to look into the possibility of changing.
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Furnichest", 4,
                                              ["Fire Element Medal"]),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furnichest", 187, []),
-    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
-                                         ["Fire Element Medal", "Boo Release"]),
     "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furnichest", 243, []),
     "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furnichest", 241, []),
     "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furnichest", 242, []),
@@ -71,23 +64,9 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 13, "Furnichest", 244, []),
     "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 14, "Furnichest", 246, []),
     "Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furnichest", 247, []),
-    "Conservatory Clear Chest": LMLocationData("Conservatory", 16, "Chest", 12, []),
-    "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6,
-                                              ["Fire Element Medal"]),
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furnichest", 106, []),
-    "Rec Room Clear Chest": LMLocationData("Rec Room", 19, "Chest", 13, []),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furnichest", 19, []),
-    "The Well Key": LMLocationData("The Well", 21, "Furnichest", 0, []),  # keyinfo event
-    "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24,
-                                              ["Ice Element Medal"]),
-    "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
     "Observatory Mario Star": LMLocationData("Observatory", 24, "Furnichest", 0, []),  # special event, unknown location
-    "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, []),  # requires any kind of element medal
-    "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, []),
-    "Balcony Room Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,
-                                               ["Ice Element Medal"]),
-    "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30,
-                                                  ["Ice Element Medal"]),
     "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furnichest", 532, []),
     "Sealed Room NE Shelf Chest": LMLocationData("Sealed Room", 30, "Furnichest", 534, []),
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furnichest", 531, []),
@@ -105,12 +84,6 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furnichest", 680, []),
     "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furnichest", 681, []),
     "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furnichest", 682, []),
-    "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17,
-                                             ["Water Element Medal"]),
-    "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, []),
-    "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33,
-                                               ["Fire Element Medal"]),
-    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Breaker Key", "Blackout"]),
 
 
 
@@ -135,6 +108,37 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Boolossus Boo 14": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
     "Boolossus Boo 15": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
     "King Boo":         LMLocationData("Secret Altar", None, "Event", 0, [], "Mario's Painting", ),
+}
+
+CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
+    "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17,
+                                             ["Water Element Medal"]),
+    "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, []),
+    "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33,
+                                               ["Fire Element Medal"]),
+    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Breaker Key", "Blackout"]),
+    "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, []),  # requires any kind of element medal
+    "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, []),
+    "Balcony Room Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,
+                                               ["Ice Element Medal"]),
+    "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30,
+                                                  ["Ice Element Medal"]),
+    "The Well Key": LMLocationData("The Well", 21, "Furnichest", 0, []),  # keyinfo event
+    "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24,
+                                              ["Ice Element Medal"]),
+    "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
+    "Rec Room Clear Chest": LMLocationData("Rec Room", 19, "Chest", 13, []),
+    "Conservatory Clear Chest": LMLocationData("Conservatory", 16, "Chest", 12, []),
+    "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6,
+                                              ["Fire Element Medal"]),
+    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
+                                         ["Fire Element Medal", "Boo Release"]),
+    "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
+    # keyinfo event, need to look into the possibility of changing.
+    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]),
+    "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
+    "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
+    "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, [])
 }
 
 # Ghost Affected Clear Chests. Rules applied to region entrances
@@ -840,6 +844,7 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
 MACGUFFIN_GOAL_LOCATION = {"Repair Mario": LMLocationData("Foyer", None, "Event", 0, [], "Mario's Painting")}
 
 ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
+                      **CLEAR_LOCATION_TABLE,
                       **ENEMIZER_LOCATION_TABLE,
                       **PLANT_LOCATION_TABLE,
                       **FURNITURE_LOCATION_TABLE,

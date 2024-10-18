@@ -463,13 +463,8 @@ class LMWorld(World):
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
             if len(entry.access) != 0:
-                if entry.code == 5:
-                    add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
-                elif entry.code == 25:
-                    add_rule(entry, lambda state: state.has_group("Medal", self.player))
-                else:
-                    for item in entry.access:
-                        add_rule(entry, lambda state: state.has(item, self.player))
+                for item in entry.access:
+                    add_rule(entry, lambda state: state.has(item, self.player))
             if entry.code is None:
                 entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
             region.locations.append(entry)
@@ -477,8 +472,19 @@ class LMWorld(World):
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
             if len(entry.access) != 0:
-                for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                for item in entry.access:
+                    add_rule(entry, lambda state: state.has(item, self.player))
             region.locations.append(entry)
+        for location, data in CLEAR_LOCATION_TABLE.items():
+            region = self.multiworld.get_region(data.region, self.player)
+            entry = LMLocation(self.player, location, region, data)
+            if entry.code == 5:
+                add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
+            elif entry.code == 25:
+                add_rule(entry, lambda state: state.has_group("Medal", self.player))
+            else:
+                for item in entry.access:
+                    add_rule(entry, lambda state: state.has(item, self.player))
         self._set_optional_locations()
         connect_regions(self.multiworld, self.player)
 
