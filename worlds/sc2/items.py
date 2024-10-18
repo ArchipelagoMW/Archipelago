@@ -59,6 +59,7 @@ class ZergItemType(ItemTypeEnum):
     Mutation_3 = "Mutation", 11
     Mutation_4 = "Mutation", 12
     Progressive = "Progressive Upgrade", 13
+    Mutation_5 = "Mutation", 14
 
 
 class ProtossItemType(ItemTypeEnum):
@@ -1050,6 +1051,11 @@ item_table = {
     item_names.DOMINION_TROOPER_OPTIMIZED_LOGISTICS:
         ItemData(761 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 15, SC2Race.TERRAN,
                  parent_item=item_names.DOMINION_TROOPER, classification=ItemClassification.filler),
+    item_names.SCV_CONSTRUCTION_JUMP_JETS:
+        ItemData(762 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 16, SC2Race.TERRAN),
+    item_names.WIDOW_MINE_DEMOLITION_ARMAMENTS:
+        ItemData(763 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 17, SC2Race.TERRAN,
+                 parent_item=item_names.WIDOW_MINE, origin={"ext"}),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:
@@ -1576,9 +1582,9 @@ item_table = {
         ItemData(360 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 17, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
     item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL:
         ItemData(361 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 18, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
-    item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES:
-        ItemData(362 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 19, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
     item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS:
+        ItemData(362 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 19, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK_VIOLENT_ENZYMES:
         ItemData(363 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 20, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON:
         ItemData(364 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 21, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
@@ -1588,6 +1594,31 @@ item_table = {
         ItemData(366 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 23, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR, origin={"ext"}),
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION:
         ItemData(367 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 24, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR, origin={"ext"}),
+    item_names.GUARDIAN_PROPELLANT_SACS:
+        ItemData(368 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 25, SC2Race.ZERG, parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
+    item_names.GUARDIAN_EXPLOSIVE_SPORES:
+        ItemData(369 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 26, SC2Race.ZERG, parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
+    item_names.GUARDIAN_PRIMORDIAL_FURY:
+        ItemData(370 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 27, SC2Race.ZERG, parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
+    item_names.INFESTED_SIEGE_TANK_SEISMIC_SONAR:
+        ItemData(371 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 28, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS:
+        ItemData(372 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 29, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
+    item_names.INFESTED_SIEGE_TANK_BALANCED_ROOTS:
+        ItemData(373 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 0, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE:
+        ItemData(374 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 2, SC2Race.ZERG,
+                 parent_item=item_names.INFESTED_DIAMONDBACK, quantity=2, origin={"ext"}),
+    item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW:
+        ItemData(375 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 1, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK:
+        ItemData(376 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 2, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK:
+        ItemData(377 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 3, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE:
+        ItemData(378 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 4, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE, origin={"ext"}),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR:
+        ItemData(379 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 5, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR, origin={"ext"}),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
@@ -1642,7 +1673,7 @@ item_table = {
     item_names.OVERLORD_GENERATE_CREEP: ItemData(701 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 7, SC2Race.ZERG, origin={"ext"}),
     item_names.OVERLORD_ANTENNAE: ItemData(702 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 8, SC2Race.ZERG, origin={"ext"}, classification=ItemClassification.filler),
     item_names.OVERLORD_PNEUMATIZED_CARAPACE: ItemData(703 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 9, SC2Race.ZERG, origin={"ext"}),
-    item_names.FRIGHTFUL_FLESHWELDER: ItemData(704 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 11, SC2Race.ZERG, origin={"ext"}),
+    item_names.ZERG_EXCAVATING_CLAWS: ItemData(704 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 11, SC2Race.ZERG, origin={"ext"}),
 
     # Morphs
     item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG, origin={"bw"}),
@@ -2154,6 +2185,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     # General Terran upgrades without any dependencies
     item_names.SCV_ADVANCED_CONSTRUCTION,
     item_names.SCV_DUAL_FUSION_WELDERS,
+    item_names.SCV_CONSTRUCTION_JUMP_JETS,
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
     item_names.PROGRESSIVE_ORBITAL_COMMAND,
     item_names.ULTRA_CAPACITORS,

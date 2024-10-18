@@ -70,6 +70,12 @@ resource_efficiency_cost_reduction = {
     item_names.DESTROYER:     (50, 25, 1),
     DISPLAY_NAME_WORMS:       (50, 75, 0),
 
+    #Frightful Fleshwelder
+    item_names.INFESTED_SIEGE_TANK:   (0, 25, 0),
+    item_names.INFESTED_DIAMONDBACK:  (50, 0, 0),
+    item_names.INFESTED_BANSHEE:      (25, 0, 0),
+    item_names.INFESTED_LIBERATOR:    (0, 25, 0),
+
     # War Council
     item_names.CENTURION:     (0, 50, 0),
     item_names.SENTINEL:      (60, 0, 1),
@@ -191,6 +197,7 @@ item_descriptions = {
     item_names.MISSILE_TURRET_HELLSTORM_BATTERIES: "The Missile Turret unleashes an additional flurry of missiles with each attack.",
     item_names.SCV_ADVANCED_CONSTRUCTION: "Multiple SCVs can construct a structure, reducing its construction time.",
     item_names.SCV_DUAL_FUSION_WELDERS: "SCVs repair twice as fast.",
+    item_names.SCV_CONSTRUCTION_JUMP_JETS: "Allows SCVs to jump up and down cliffs.",
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM: inspect.cleandoc("""
         Level 1: While on low health, Terran structures are repaired to half health instead of burning down.
         Level 2: Terran structures are repaired to full health instead of half health.
@@ -380,6 +387,7 @@ item_descriptions = {
     item_names.LIBERATOR_RAID_ARTILLERY: "Allows Liberators to attack structures while in Defender Mode.",
     item_names.WIDOW_MINE_DRILLING_CLAWS: "Allows Widow Mines to burrow and unburrow faster.",
     item_names.WIDOW_MINE_CONCEALMENT: "Burrowed Widow Mines are no longer revealed when the Sentinel Missile is on cooldown.",
+    item_names.WIDOW_MINE_DEMOLITION_ARMAMENTS: "Allows Widow Mines to attack and damage structures.",
     item_names.MEDIVAC_ADVANCED_CLOAKING_FIELD: "Medivacs are permanently cloaked.",
     item_names.WRAITH_TRIGGER_OVERRIDE: "Wraith attack speed increases by 10% with each attack, up to a maximum of 100%.",
     item_names.WRAITH_INTERNAL_TECH_MODULE: INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE.format("Wraiths", "Starport"),
@@ -659,6 +667,9 @@ item_descriptions = {
     item_names.GUARDIAN_PROLONGED_DISPERSION: "Guardians gain +3 range.",
     item_names.GUARDIAN_PRIMAL_ADAPTATION: "Allows Guardians to attack air units with a decreased attack damage.",
     item_names.GUARDIAN_SORONAN_ACID: "Guardians deal increased damage to ground targets.",
+    item_names.GUARDIAN_PROPELLANT_SACS: "Guardians gain increased movement speed.",
+    item_names.GUARDIAN_EXPLOSIVE_SPORES: "Allows Guardians to launch an explosive spore at ground targets, dealing damage and knocking them back in an area.",
+    item_names.GUARDIAN_PRIMORDIAL_FURY: "Guardians gain increasing attack speed as they attack.",
     item_names.IMPALER_ADAPTIVE_TALONS: "Impalers burrow faster.",
     item_names.IMPALER_SECRETION_GLANDS: "Impalers generate creep while standing still or burrowed.",
     item_names.IMPALER_HARDENED_TENTACLE_SPINES: "Impalers deal increased damage.",
@@ -721,13 +732,25 @@ item_descriptions = {
     """),
     item_names.INFESTED_SIEGE_TANK_ACIDIC_ENZYMES: "Infested Siege Tanks deal an additional 15 damage to armored units and structures in both modes.",
     item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL: _ability_desc("Infested Siege Tanks", "Deep Tunnel", "allows them to burrow to any visible location on the map covered in creep"),
-    item_names.INFESTED_DIAMONDBACK_SATURATED_CULTURES: "Infested Diamondbacks leave behind a trail of acid when moving that deals 20 damage per second to enemy units.",
-    item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS: "Reduces the cooldown of the Infested Diamondback's Fungal Snare by 15 seconds.",
+    item_names.INFESTED_SIEGE_TANK_SEISMIC_SONAR: "Infested Siege Tank Tentacle weapon gains +1 range.  Volatile Burst weapon gains +3 range.",
+    item_names.INFESTED_SIEGE_TANK_BALANCED_ROOTS: "Allows Infested Siege Tank to attack while moving with its Tentacle weapon.",
+    item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS: "Infested Diamondbacks leave behind a trail of acid when moving that deals 12 damage per second to enemy units.",
+    item_names.INFESTED_DIAMONDBACK_VIOLENT_ENZYMES: "Infested Diamondbacks deal an additional +8 damage.",
+    item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW: "Infested Diamondbacks gain +2 weapon range. Fungal Snare gains +2 range.",
+    item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE:  inspect.cleandoc("""
+        Level 1: Infested Diamondbacks gain the Fungal Snare ability, allowing them to temporary ground flying units.
+        Level 2: Infested Diamondback Fungal Snare ability cooldown reduced by 15 seconds.
+    """),
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON: "Infested Banshees gain +100 life.",
     item_names.INFESTED_BANSHEE_RAPID_HIBERNATION: "Infested Banshees regenerate 20 life and energy per second while burrowed.",
+    item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS: "Infested Banshees gain +2 range while cloacked.",
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL: "Infested Liberators instantly transform into a cloud of microscopic organisms while attacking, reducing the damage they take by 85%.",
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
-    item_names.FRIGHTFUL_FLESHWELDER: "Reduces infested mechnical unit resource cost by 30%.",
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK: _get_resource_efficiency_desc(item_names.INFESTED_SIEGE_TANK),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK: _get_resource_efficiency_desc(item_names.INFESTED_DIAMONDBACK),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE: _get_resource_efficiency_desc(item_names.INFESTED_BANSHEE),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR: _get_resource_efficiency_desc(item_names.INFESTED_LIBERATOR),
+    item_names.ZERG_EXCAVATING_CLAWS: "Increases movement speed of Spore and Spine Crawlers, especially off creep.  Also increases root speed.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",
