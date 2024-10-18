@@ -29,6 +29,7 @@ class LMLocation(Location):
         self.address = self.address
         self.access = data.access
         self.locked_item = data.locked_item
+        self.access_rule = lambda state: True
 
     @staticmethod
     def get_apid(code: int):

@@ -343,7 +343,7 @@ class LMWorld(World):
             for location, data in PLANT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.access is not False:
+                if len(entry.access) != 0:
                     # if entry.code == 70:     # Placed here for eventual Huge Flower Support
                     #    add_rule(entry,
                     #             lambda state: state.has("Progressive Flower", self.player, 4))
@@ -354,28 +354,28 @@ class LMWorld(World):
             for location, data in FURNITURE_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.access is not False:
+                if len(entry.access) != 0:
                     for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
                 region.locations.append(entry)
         if self.options.speedy_spirits:
             for location, data in SPEEDY_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.access is not False:
+                if len(entry.access) != 0:
                     for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
                 region.locations.append(entry)
         if self.options.toadsanity:
             for location, data in TOAD_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.access is not False:
+                if len(entry.access) != 0:
                     for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
                 region.locations.append(entry)
         if self.options.portrait_ghosts:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.access is not False:
+                if len(entry.access) != 0:
                     if entry.code == 624:
                         add_rule(entry, lambda state: state.has_group("Medal", self.player))
                     elif entry.code == 627:
@@ -389,7 +389,7 @@ class LMWorld(World):
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player))
-                if entry.access is not False:
+                if len(entry.access) != 0:
                     if entry.code == 675:
                         add_rule(entry, lambda state: state.has_group("Medal", self.player))
                     elif entry.code == 679:
@@ -406,7 +406,7 @@ class LMWorld(World):
                 entry.code = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player))
-                if entry.access:
+                if len(entry.access) != 0:
                     if entry.code == 675:
                         add_rule(entry, lambda state: state.has_group("Medal", self.player))
                     elif entry.code == 679:
@@ -462,7 +462,7 @@ class LMWorld(World):
         for location, data in BASE_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
-            if entry.access is not False:
+            if len(entry.access) != 0:
                 if entry.code == 5:
                     add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
                 elif entry.code == 25:
@@ -471,22 +471,14 @@ class LMWorld(World):
                     for item in entry.access:
                         add_rule(entry, lambda state: state.has(item, self.player))
             if entry.code is None:
-                if entry.name == "King Boo" and self.options.goal == 2:
-                    continue
-                else:
-                    entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
+                entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
             region.locations.append(entry)
         for location, data in ENEMIZER_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
-            if entry.access is not False:
+            if len(entry.access) != 0:
                 for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
             region.locations.append(entry)
-        if self.options.goal == 2:
-            region = self.multiworld.get_region("Foyer", self.player)
-            entry = LMLocation(self.player, "Repair Mario", region, LMLocationData("Foyer", None, "Event", 0, [], "Mario's Painting"))
-            entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
-            add_rule(entry, lambda state: state.has_group("Mario Piece", self.player, self.options.mario_pieces))
         self._set_optional_locations()
         connect_regions(self.multiworld, self.player)
 
@@ -494,15 +486,15 @@ class LMWorld(World):
         # TODO: calculate nonprogress items dynamically
         set_non_progress = False
 
-        if self.options.goal == 1:
-            if item in ITEM_TABLE:
-                if item == "Gold Diamond":
+        if item in ALL_ITEMS_TABLE:
+            if item == "Gold Diamond":
+                if self.options.goal == 1:
                     return LMItem(item, self.player, ITEM_TABLE[item], False)
                 else:
                     return LMItem(item, self.player, ITEM_TABLE[item], True)
-        else:
-            if item in ALL_ITEMS_TABLE:
-                return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
+            else:
+                if item in ALL_ITEMS_TABLE:
+                    return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
     def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
@@ -596,15 +588,9 @@ class LMWorld(World):
             for _ in range(35):
                 exclude += ["Boo"]
         for item, data in ITEM_TABLE.items():
-            if item == "Piece of Mario":
-                if self.options.goal == 2:
-                    copies_to_place = self.options.mario_pieces
-                    for _ in range(copies_to_place):
-                        self.itempool.append(self.create_item(item))
-            else:
-                copies_to_place = data.quantity - exclude.count(item)
-                for _ in range(copies_to_place):
-                    self.itempool.append(self.create_item(item))
+            copies_to_place = data.quantity - exclude.count(item)
+            for _ in range(copies_to_place):
+                self.itempool.append(self.create_item(item))
         # Calculate the number of additional filler items to create to fill all locations
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
         n_items = len(self.pre_fill_items) + len(self.itempool)

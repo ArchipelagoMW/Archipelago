@@ -112,7 +112,6 @@ class Goal(Choice):
     display_name = "Goal"
     option_king_boo = 0
     option_rank_requirement = 1
-    option_mario_pieces = 2
     default = 0
 
 
