@@ -22,12 +22,7 @@ class TestProgressiveSymbols(WitnessTestBase):
         """
 
         expected_quantities = {
-            "Progressive Dots": 2,
-            "Progressive Symmetry": 2,
-            "Progressive Stars": 2,
-            "Progressive Squares": 2,
-            "Progressive Shapers": 3,
-            "Progressive Discard Symbols": 2,
+            # Individual items that are replaced by progressive items
             "Dots": 0,
             "Sparse Dots": 0,
             "Full Dots": 0,
@@ -43,6 +38,16 @@ class TestProgressiveSymbols(WitnessTestBase):
             "Negative Shapers": 0,
             "Triangles": 0,
             "Arrows": 0,
+
+            # Progressive items
+            "Progressive Dots": 2,
+            "Progressive Symmetry": 2,
+            "Progressive Stars": 2,
+            "Progressive Squares": 2,
+            "Progressive Shapers": 3,
+            "Progressive Discard Symbols": 2,
+
+            # Individual items that still exist because they aren't a part of any progressive chain
             "Sound Dots": 1,
         }
 
@@ -82,19 +87,24 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
 
     def test_independent_second_stage_symbols(self) -> None:
         expected_quantities = {
+            # Progressive items shouldn't exist
             "Progressive Dots": 0,
             "Progressive Symmetry": 0,
             "Progressive Stars": 0,
             "Progressive Squares": 0,
             "Progressive Shapers": 0,
             "Progressive Discard Symbols": 0,
+
+            # Dots and Stars are replaced by Spare Dots and Simple Stars
             "Dots": 0,
+            "Stars": 0,
             "Sparse Dots": 1,
+            "Simple Stars": 1,
+
+            # None of the symbols are progressive, so they should all exist
             "Full Dots": 1,
             "Symmetry": 1,
             "Colored Dots": 1,
-            "Stars": 0,
-            "Simple Stars": 1,
             "Stars + Same Colored Symbol": 1,
             "Black/White Squares": 1,
             "Colored Squares": 1,
@@ -155,21 +165,26 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
         "shuffle_doors": "doors",
     }
 
-    def test_independent_second_stage_symbols(self) -> None:
+    def test_dependent_second_stage_symbols(self) -> None:
         expected_quantities = {
+            # Progressive items shouldn't exist
             "Progressive Dots": 0,
             "Progressive Symmetry": 0,
             "Progressive Stars": 0,
             "Progressive Squares": 0,
             "Progressive Shapers": 0,
             "Progressive Discard Symbols": 0,
+
+            # Dots and Stars are NOT replaced by Sparse Dots and Simple Stars
             "Dots": 1,
+            "Stars": 1,
             "Sparse Dots": 0,
+            "Simple Stars": 0,
+
+            # None of the symbols are progressive, so they should all exist
             "Full Dots": 1,
             "Symmetry": 1,
             "Colored Dots": 1,
-            "Stars": 1,
-            "Simple Stars": 0,
             "Stars + Same Colored Symbol": 1,
             "Black/White Squares": 1,
             "Colored Squares": 1,
@@ -250,21 +265,29 @@ class TestAlternateProgressiveDots(WitnessTestBase):
         "shuffle_doors": "doors",
     }
 
-    def test_independent_second_stage_symbols(self) -> None:
+    def test_alternate_progressive_dots(self) -> None:
         expected_quantities = {
+            # Progressive Dots chain now has 4 members
             "Progressive Dots": 4,
+
+            # Dots items don't exist because Progressive Dots is on. This now includes Colored Dots and Sound Dots as well
+            "Dots": 0,
+            "Sparse Dots": 0,
+            "Colored Dots": 0,
+            "Sound Dots": 0,
+            "Full Dots": 0,
+
+            # Progressive Symmetry no longer exists, because Colored Dots is part of the Progressive Dots chain instead
             "Progressive Symmetry": 0,
+
+            # Other Progressive Symbols don't exist
             "Progressive Stars": 0,
             "Progressive Squares": 0,
             "Progressive Shapers": 0,
             "Progressive Discard Symbols": 0,
-            "Dots": 0,
-            "Sparse Dots": 0,
-            "Full Dots": 0,
+
+            # Other standalone items exist, because they are not progressive
             "Symmetry": 1,
-            "Colored Dots": 0,
-            "Stars": 0,
-            "Simple Stars": 1,
             "Stars + Same Colored Symbol": 1,
             "Black/White Squares": 1,
             "Colored Squares": 1,
@@ -273,7 +296,10 @@ class TestAlternateProgressiveDots(WitnessTestBase):
             "Negative Shapers": 1,
             "Triangles": 1,
             "Arrows": 1,
-            "Sound Dots": 0,
+
+            # This test is set to have independent symbols, so Simple Stars exist instead of Stars
+            "Stars": 0,
+            "Simple Stars": 1,
         }
 
         self.assert_quantities_in_itempool(expected_quantities)
