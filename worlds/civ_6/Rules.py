@@ -31,19 +31,17 @@ def has_required_items(state: CollectionState, prereqs: List[str], required_coun
     if has_progressive_items:
         count = 0
         items = [get_item_by_civ_name(item, world.item_table).name for item in convert_items_to_have_progression(prereqs)]
-        progressive_items: Dict[str, int] = {}
+        collected_progressive_items: Dict[str, int] = {}
         for item in items:
             if "Progressive" in item:
-                if not progressive_items.get(item):
-                    progressive_items[item] = 0
-                progressive_items[item] += 1
+                collected_progressive_items[item] = collected_progressive_items.get(item, 0) + 1
             else:
                 if state.has(item, player):
                     count += 1
                     # early out if we've already gotten enough
                     if count >= required_count:
                         return True
-        for item, required_progressive_item_count in progressive_items.items():
+        for item, required_progressive_item_count in collected_progressive_items.items():
             if state.has(item, player, required_progressive_item_count):
                 count += required_progressive_item_count
                 # early out if we've already gotten enough

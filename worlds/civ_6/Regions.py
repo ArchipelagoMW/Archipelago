@@ -5,7 +5,6 @@ from .Items import CivVIItemData, format_item_name, get_item_by_civ_name
 from .Enum import EraType
 from .Locations import CivVILocation
 from .ProgressiveDistricts import get_flat_progressive_districts
-from .Options import CivVIOptions
 
 if TYPE_CHECKING:
     from . import CivVIWorld
@@ -22,8 +21,7 @@ def get_prereqs_for_era(end_era: EraType, exclude_progressive_items: bool, item_
         for item in era_required_items:
             if item in flat_progressive_items:
                 continue
-            else:
-                prereqs_without_progressive_items.append(item)
+            prereqs_without_progressive_items.append(item)
 
         return [get_item_by_civ_name(prereq, item_table) for prereq in prereqs_without_progressive_items]
 
@@ -36,9 +34,9 @@ def has_required_progressive_districts(state: CollectionState, era: EraType, pla
 
     item_table = state.multiworld.worlds[player].item_table
     # Verify we can still reach non progressive items
-    all_previous_items_no_progression = get_prereqs_for_era(
+    all_previous_items_no_progressives = get_prereqs_for_era(
         era, True, item_table)
-    if not state.has_all([item.name for item in all_previous_items_no_progression], player):
+    if not state.has_all([item.name for item in all_previous_items_no_progressives], player):
         return False
 
     # Verify we have the correct amount of progressive items
@@ -79,22 +77,20 @@ def has_required_items(state: CollectionState, era: EraType, world: 'CivVIWorld'
     if not required_items:
         return False
 
-    required_eras = has_required_progressive_eras(state, era, player) if has_progressive_eras else True
-
-    return required_items and required_eras
+    return not has_progressive_eras or has_required_progressive_eras(state, era, player)
 
 
-def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
-    menu = Region("Menu", player, world.multiworld)
+def create_regions(world: 'CivVIWorld'):
+    menu = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu)
 
-    has_progressive_eras = options.progression_style == "eras_and_districts"
-    has_goody_huts = options.shuffle_goody_hut_rewards
-    has_boosts = options.boostsanity
+    has_progressive_eras = world.options.progression_style == "eras_and_districts"
+    has_goody_huts = world.options.shuffle_goody_hut_rewards
+    has_boosts = world.options.boostsanity
 
     regions: List[Region] = []
     for era in EraType:
-        era_region = Region(era.value, player, world.multiworld)
+        era_region = Region(era.value, world.player, world.multiworld)
         era_locations: Dict[str, Optional[int]] = {location.name: location.code for _key,
                                                    location in world.location_by_era[era.value].items()}
 
@@ -149,7 +145,9 @@ def create_regions(world: 'CivVIWorld', options: CivVIOptions, player: int):
     )
 
     world.get_region(EraType.ERA_INFORMATION.value).connect(
-        world.get_region(EraType.ERA_FUTURE.value), None, lambda state: has_required_items(state, EraType.ERA_INFORMATION, world))
+        world.get_region(EraType.ERA_FUTURE.value), None, lambda state: has_required_items(
+            state, EraType.ERA_INFORMATION, world)
+    )
 
-    world.multiworld.completion_condition[player] = lambda state: state.can_reach(
-        EraType.ERA_FUTURE.value, "Region", player)
+    world.multiworld.completion_condition[world.player] = lambda state: state.can_reach(
+        EraType.ERA_FUTURE.value, "Region", world.player)

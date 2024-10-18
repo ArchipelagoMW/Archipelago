@@ -52,9 +52,9 @@ class CivVIInterface:
             self.last_error = error
             self.logger.info(error)
 
-    async def give_item_to_player(self, item: CivVIItemData, sender: str = "", amount: int = 1) -> None:
-        if isinstance(item.civ_vi_id, str):
-            item_id = f'"{item.civ_vi_id}"'
+    async def give_item_to_player(self, item: CivVIItemData, sender: str = "", amount: int = 1, game_id_override: Optional[str] = None) -> None:
+        if game_id_override:
+            item_id = f'"{game_id_override}"'
         else:
             item_id = item.civ_vi_id
 

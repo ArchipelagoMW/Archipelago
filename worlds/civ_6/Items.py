@@ -1,11 +1,14 @@
 from enum import Enum
-from typing import Dict, Optional, TYPE_CHECKING, List, Union
+from typing import Dict, Optional, TYPE_CHECKING, List
 from BaseClasses import Item, ItemClassification
 from .Data import GoodyHutRewardData, get_era_required_items_data, get_existing_civics_data, get_existing_techs_data, get_goody_hut_rewards_data, get_progressive_districts_data
 from .Enum import CivVICheckType, EraType
 from .ProgressiveDistricts import get_flat_progressive_districts
 if TYPE_CHECKING:
     from . import CivVIWorld
+
+_items_by_civ_name: Dict[str, 'CivVIItemData'] = {}
+
 CIV_VI_AP_ITEM_ID_BASE = 5041000
 
 NON_PROGRESSION_DISTRICTS = [
@@ -86,7 +89,7 @@ def get_filler_item_data() -> Dict[str, FillerItemData]:
 
 
 class CivVIItemData:
-    civ_vi_id: Union[int, str]
+    civ_vi_id: int
     classification: ItemClassification
     name: str
     code: int
@@ -110,7 +113,7 @@ class CivVIItemData:
 
 class CivVIItem(Item):
     game: str = "Civilization VI"
-    civ_vi_id: Union[int, str]
+    civ_vi_id: int
     item_type: CivVICheckType
 
     def __init__(self, item: CivVIItemData, player: int, classification: Optional[ItemClassification] = None):
@@ -126,11 +129,14 @@ def format_item_name(name: str) -> str:
 
 def get_item_by_civ_name(item_name: str, item_table: Dict[str, 'CivVIItemData']) -> 'CivVIItemData':
     """Gets the names of the items in the item_table"""
-    for item in item_table.values():
-        if item_name == item.civ_name:
-            return item
+    global _items_by_civ_name
+    if not _items_by_civ_name:
+        _items_by_civ_name = {item.civ_name: item for item in item_table.values() if item.civ_name}
 
-    raise Exception(f"Item {item_name} not found in item_table")
+    item = _items_by_civ_name.get(item_name, None)
+    if not item:
+        raise Exception(f"Item {item_name} not found in item_table")
+    return item
 
 
 def _generate_tech_items(id_base: int, required_items: List[str], progressive_items: Dict[str, str]) -> Dict[str, CivVIItemData]:
@@ -207,9 +213,9 @@ def _generate_progressive_district_items(id_base: int) -> Dict[str, CivVIItemDat
     progressive_id_base = 0
     progressive_items = get_progressive_districts_data()
     for item_name in progressive_items.keys():
-        progression = ItemClassification.progression
+        classification = ItemClassification.progression
         if item_name in NON_PROGRESSION_DISTRICTS:
-            progression = ItemClassification.useful
+            classification = ItemClassification.useful
         name = format_item_name(item_name)
         progressive_table[name] = CivVIItemData(
             name=name,
@@ -217,7 +223,7 @@ def _generate_progressive_district_items(id_base: int) -> Dict[str, CivVIItemDat
             cost=0,
             item_type=CivVICheckType.PROGRESSIVE_DISTRICT,
             id_offset=id_base,
-            classification=progression,
+            classification=classification,
             progression_name=None,
             civ_name=item_name
         )

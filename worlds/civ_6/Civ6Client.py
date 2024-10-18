@@ -236,8 +236,7 @@ async def handle_receive_items(ctx: CivVIContext, last_received_index_override: 
                     count = len(progressive_eras) + 1
                     await ctx.game_interface.give_item_to_player(item_to_send, sender, count)
                 elif item.item_type == CivVICheckType.GOODY and item_to_send.civ_name:
-                    item_to_send.civ_vi_id = item_to_send.civ_name
-                    await ctx.game_interface.give_item_to_player(item_to_send, sender)
+                    await ctx.game_interface.give_item_to_player(item_to_send, sender, game_id_override=item_to_send.civ_name)
                 else:
                     await ctx.game_interface.give_item_to_player(item_to_send, sender)
                 await asyncio.sleep(0.02)

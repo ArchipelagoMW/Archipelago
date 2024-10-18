@@ -1,13 +1,12 @@
 from dataclasses import dataclass
 import os
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional, cast
 import zipfile
-from BaseClasses import ItemClassification, Location
+from BaseClasses import Location
 from worlds.Files import APContainer
 
 from .Enum import CivVICheckType
 from .Locations import CivVILocation, CivVILocationData
-from .Options import CivVIOptions
 
 if TYPE_CHECKING:
     from worlds.civ_6 import CivVIWorld
@@ -49,9 +48,8 @@ def get_cost(world: 'CivVIWorld', location: CivVILocationData) -> int:
     """
     Returns the cost of the item based on the game options
     """
-    options: CivVIOptions = world.options
     # Research cost is between 50 and 150 where 100 equals the default cost
-    multiplier = options.research_cost_multiplier / 100
+    multiplier = world.options.research_cost_multiplier / 100
     return int(world.location_table[location.name].cost * multiplier)
 
 
@@ -61,23 +59,20 @@ def get_formatted_player_name(world: 'CivVIWorld', player: int) -> str:
     """
     if player != world.player:
         return f"{world.multiworld.player_name[player]}{apo}s"
-    else:
-        return "Your"
+    return "Your"
 
 
 def get_advisor_type(world: 'CivVIWorld', location: Location) -> str:
-    if world.options.advisor_show_progression_items and location.item and location.item.classification == ItemClassification.progression:
+    if world.options.advisor_show_progression_items and location.item and location.item.advancement:
         return "ADVISOR_PROGRESSIVE"
-    else:
-        return "ADVISOR_GENERIC"
+    return "ADVISOR_GENERIC"
 
 
 def generate_new_items(world: 'CivVIWorld') -> str:
     """
     Generates the XML for the new techs/civics as well as the blockers used to prevent players from researching their own items
     """
-    raw_locations = world.multiworld.get_filled_locations(world.player)
-    locations: List[CivVILocation] = [location for location in raw_locations if isinstance(location, CivVILocation)]
+    locations: List[CivVILocation] = cast(List[CivVILocation], world.multiworld.get_filled_locations(world.player))
     techs = [location for location in locations if location.location_type ==
              CivVICheckType.TECH]
     civics = [location for location in locations if location.location_type ==
@@ -86,17 +81,11 @@ def generate_new_items(world: 'CivVIWorld') -> str:
     boost_techs = []
     boost_civics = []
 
-    hidden_techs = []
-    hidden_civics = []
     if world.options.boostsanity:
         boost_techs = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "TECH"]
         boost_civics = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "CIVIC"]
         techs += boost_techs
         civics += boost_civics
-
-    if world.options.hide_item_names:
-        hidden_techs = [tech.name for tech in techs]
-        hidden_civics = [civic.name for civic in civics]
 
     return f"""<?xml version="1.0" encoding="utf-8"?>
 <GameInfo>
@@ -142,11 +131,11 @@ def generate_new_items(world: 'CivVIWorld') -> str:
   </CivicPrereqs>
 
   <Civics_XP2>
-    {"".join([f'{tab}<Row CivicType="{location}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in hidden_civics])}
+    {"".join([f'{tab}<Row CivicType="{location}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in civics if world.options.hide_item_names])}
   </Civics_XP2>
 
   <Technologies_XP2>
-    {"".join([f'{tab}<Row TechnologyType="{location}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in hidden_techs])}
+    {"".join([f'{tab}<Row TechnologyType="{location}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in techs if world.options.hide_item_names])}
   </Technologies_XP2>
 
 </GameInfo>
@@ -210,8 +199,7 @@ SET ModifierID = ModifierID||'_AI'
 WHERE GoodyHut NOT IN ('METEOR_GOODIES', 'GOODYHUT_SAILOR_WONDROUS', 'DUMMY_GOODY_BUILDIER') AND Weight > 0;
 
       """
-    else:
-        return "-- Goody Huts are disabled, no changes needed"
+    return "-- Goody Huts are disabled, no changes needed"
 
 
 def generate_update_boosts_sql(world: 'CivVIWorld') -> str:
@@ -228,5 +216,4 @@ UPDATE Boosts
 SET CivicType = 'BOOST_' || CivicType
 WHERE CivicType IS NOT NULL AND CivicType NOT IN ('CIVIC_CORPORATE_LIBERTARIANISM', 'CIVIC_DIGITAL_DEMOCRACY', 'CIVIC_SYNTHETIC_TECHNOCRACY', 'CIVIC_NEAR_FUTURE_GOVERNANCE');
         """
-    else:
-        return "-- Boostsanity is disabled, no changes needed"
+    return "-- Boostsanity is disabled, no changes needed"

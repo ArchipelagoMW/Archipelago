@@ -65,7 +65,7 @@ async def handle_check_deathlink(ctx: 'CivVIContext'):
                     f"now understands the importance of not fighting a {result}",
                     f"let a {result} get the better of them",
                     f"allowed a {result} to show them the error of their ways",
-                    f"heard the tragedy of Darth Plageuis the Wise from a {result}",
+                    f"heard the tragedy of Darth Plagueis the Wise from a {result}",
                     f"refused to join a {result} in their quest for power",
                     f"was tired of sitting in BK and decided to fight a {result} instead",
                     f"purposely lost to a {result} as a cry for help",

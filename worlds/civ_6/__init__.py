@@ -81,7 +81,7 @@ class CivVIWorld(World):
         return get_random_filler_by_rarity(self, FillerItemRarity.COMMON).name
 
     def create_regions(self) -> None:
-        create_regions(self, self.options, self.player)
+        create_regions(self)
 
     def set_rules(self) -> None:
         if self.options.boostsanity:
@@ -147,16 +147,12 @@ class CivVIWorld(World):
             num_filler_items += len(get_boosts_data())
 
         filler_count = {rarity: math.ceil(FILLER_DISTRIBUTION[rarity] * num_filler_items) for rarity in FillerItemRarity.__reversed__()}
-        min_count = 1
-        # Add filler items by rarity
-        total_created = 0
-        for rarity, count in filler_count.items():
-            for _ in range(max(min_count, count)):
-                if total_created >= num_filler_items:
-                    break
-                self.multiworld.itempool += [self.create_item(
-                    get_random_filler_by_rarity(self, rarity).name)]
-                total_created += 1
+        filler_count[FillerItemRarity.COMMON] -= sum(filler_count.values()) - num_filler_items
+        self.multiworld.itempool += [
+            self.create_item(get_random_filler_by_rarity(self, rarity).name)
+            for rarity, count in filler_count.items()
+            for _ in range(count)
+        ]
 
     def post_fill(self) -> None:
         if self.options.pre_hint_items == "none":
