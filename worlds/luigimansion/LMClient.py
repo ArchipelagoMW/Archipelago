@@ -10,74 +10,74 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import ClientStatus, NetworkItem
 
 from .Items import ITEM_TABLE, LOOKUP_ID_TO_NAME
-from .Locations import LOCATION_TABLE, TWWLocation, TWWLocationType
+from .Locations import ALL_LOCATION_TABLE, LMLocation, LMLocationType
 
 CONNECTION_REFUSED_GAME_STATUS = (
-    "Dolphin failed to connect. Please load a randomized ROM for TWW. Trying again in 5 seconds..."
+    "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
 )
 CONNECTION_REFUSED_SAVE_STATUS = (
     "Dolphin failed to connect. Please load into the save file. Trying again in 5 seconds..."
 )
-CONNECTION_LOST_STATUS = "Dolphin connection was lost. Please restart your emulator and make sure TWW is running."
+CONNECTION_LOST_STATUS = "Dolphin connection was lost. Please restart your emulator and make sure LM is running."
 CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
 CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 
 
-# This address is used to check/set the player's health for DeathLink.
-CURR_HEALTH_ADDR = 0x803C4C0A
+# This address is used to check/set the player's health for DeathLink. TODO CORRECT FOR LM
+# CURR_HEALTH_ADDR = 0x803C4C0A
+#
+# # These addresses are used for the Moblin's Letter check.
+# LETTER_BASE_ADDR = 0x803C4C8E
+# LETTER_OWND_ADDR = 0x803C4C98
+#
+# # These addresses are used to check flags for locations.
+# CHARTS_BITFLD_ADDR = 0x803C4CFC
+# CHESTS_BITFLD_ADDR = 0x803C5380
+# SWITCHES_BITFLD_ADDR = 0x803C5384
+# PICKUPS_BITFLD_ADDR = 0x803C5394
+# SEA_ALT_BITFLD_ADDR = 0x803C4FAC
+#
+# # The expected index for the next item that should be received. Uses event bits 0x60 and 0x61
+# EXPECTED_INDEX_ADDR = 0x803C528C
+#
+# # These bytes contain the bits whether the player has received the reward for finding a particular Tingle statue.
+# TINGLE_STATUE_1_ADDR = 0x803C523E  # 0x40 is the bit for Dragon Tingle statue
+# TINGLE_STATUE_2_ADDR = 0x803C5249  # 0x0F are the bits for the remaining Tingle statues
+#
+# # These addresses contain the current high score for the Bird-Man Contest.
+# # `FCP_SCORE_LO_ADDR` is are the lower eight bits of the score, `FCP_SCORE_HI_ADDR` are the higher eight bits
+# FCP_SCORE_LO_ADDR = 0x803C52D3
+# FCP_SCORE_HI_ADDR = 0x803C52D4
+#
+# # This address contains the current stage ID.
+# CURR_STAGE_ID_ADDR = 0x803C53A4
+#
+# # This address is used to check the stage name to verify the player is in-game before sending items.
+# CURR_STAGE_NAME_ADDR = 0x803C9D3C
+#
+# # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
+# # 0xFF represents no item. The array is read and cleared every frame.
+# GIVE_ITEM_ARRAY_ADDR = 0x803FE868
+#
+# # This is the address that holds the player's slot name.
+# # This way, the player does not have to manually authenticate their slot name.
+# SLOT_NAME_ADDR = 0x803FE88C
 
-# These addresses are used for the Moblin's Letter check.
-LETTER_BASE_ADDR = 0x803C4C8E
-LETTER_OWND_ADDR = 0x803C4C98
 
-# These addresses are used to check flags for locations.
-CHARTS_BITFLD_ADDR = 0x803C4CFC
-CHESTS_BITFLD_ADDR = 0x803C5380
-SWITCHES_BITFLD_ADDR = 0x803C5384
-PICKUPS_BITFLD_ADDR = 0x803C5394
-SEA_ALT_BITFLD_ADDR = 0x803C4FAC
-
-# The expected index for the next item that should be received. Uses event bits 0x60 and 0x61
-EXPECTED_INDEX_ADDR = 0x803C528C
-
-# These bytes contain the bits whether the player has received the reward for finding a particular Tingle statue.
-TINGLE_STATUE_1_ADDR = 0x803C523E  # 0x40 is the bit for Dragon Tingle statue
-TINGLE_STATUE_2_ADDR = 0x803C5249  # 0x0F are the bits for the remaining Tingle statues
-
-# These addresses contain the current high score for the Bird-Man Contest.
-# `FCP_SCORE_LO_ADDR` is are the lower eight bits of the score, `FCP_SCORE_HI_ADDR` are the higher eight bits
-FCP_SCORE_LO_ADDR = 0x803C52D3
-FCP_SCORE_HI_ADDR = 0x803C52D4
-
-# This address contains the current stage ID.
-CURR_STAGE_ID_ADDR = 0x803C53A4
-
-# This address is used to check the stage name to verify the player is in-game before sending items.
-CURR_STAGE_NAME_ADDR = 0x803C9D3C
-
-# This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
-# 0xFF represents no item. The array is read and cleared every frame.
-GIVE_ITEM_ARRAY_ADDR = 0x803FE868
-
-# This is the address that holds the player's slot name.
-# This way, the player does not have to manually authenticate their slot name.
-SLOT_NAME_ADDR = 0x803FE88C
-
-
-class TWWCommandProcessor(ClientCommandProcessor):
+class LMCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
         super().__init__(ctx)
 
     def _cmd_dolphin(self):
         """Prints the current Dolphin status to the client."""
-        if isinstance(self.ctx, TWWContext):
+        if isinstance(self.ctx, LMContext):
             logger.info(f"Dolphin Status: {self.ctx.dolphin_status}")
 
 
-class TWWContext(CommonContext):
-    command_processor = TWWCommandProcessor
-    game = "The Wind Waker"
-    items_handling = 0b111
+class LMContext(CommonContext):
+    command_processor = LMCommandProcessor
+    game = "Luigi's Mansion"
+    items_handling = 0b111 #TODO CORRECT FOR LM
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -114,7 +114,7 @@ class TWWContext(CommonContext):
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(TWWContext, self).server_auth(password_requested)
+            await super(LMContext, self).server_auth(password_requested)
         if not self.auth:
             if self.awaiting_rom:
                 return
@@ -126,11 +126,11 @@ class TWWContext(CommonContext):
     def run_gui(self):
         from kvui import GameManager
 
-        class TWWManager(GameManager):
+        class LMManager(GameManager):
             logging_pairs = [("Client", "Archipelago")]
-            base_title = "Archipelago The Wind Waker Client"
+            base_title = "Archipelago Luigi's Mansion Client"
 
-        self.ui = TWWManager(self)
+        self.ui = LMManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
@@ -145,8 +145,8 @@ def write_short(console_address: int, value: int):
 def read_string(console_address: int, strlen: int):
     return dolphin_memory_engine.read_bytes(console_address, strlen).decode().strip("\0")
 
-
-def _give_death(ctx: TWWContext):
+#TODO CORRECT FOR LM
+def _give_death(ctx: LMContext):
     if (
         ctx.slot
         and dolphin_memory_engine.is_hooked()
@@ -156,8 +156,8 @@ def _give_death(ctx: TWWContext):
         ctx.has_send_death = True
         write_short(CURR_HEALTH_ADDR, 0)
 
-
-def _give_item(ctx: TWWContext, item_name: str) -> bool:
+# TODO CORRECT FOR LM
+def _give_item(ctx: LMContext, item_name: str) -> bool:
     if not check_ingame() or dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) == 0xFF:
         return False
 
@@ -173,8 +173,8 @@ def _give_item(ctx: TWWContext, item_name: str) -> bool:
     # Unable to place the item in the array, so return `False`
     return False
 
-
-async def give_items(ctx: TWWContext):
+# TODO CORRECT FOR LM
+async def give_items(ctx: LMContext):
     if check_ingame() and dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) != 0xFF:
         # Read the expected index of the player, which is the index of the latest item they've received
         expected_idx = read_short(EXPECTED_INDEX_ADDR)
@@ -190,8 +190,8 @@ async def give_items(ctx: TWWContext):
                 # Increment the expected index
                 write_short(EXPECTED_INDEX_ADDR, idx + 1)
 
-
-async def check_locations(ctx: TWWContext):
+# TODO CORRECT FOR LM
+async def check_locations(ctx: LMContext):
     # We check which locations are currently checked on the current stage
     curr_stage_id = dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR)
 
@@ -202,11 +202,11 @@ async def check_locations(ctx: TWWContext):
     switches_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(SWITCHES_BITFLD_ADDR, 10))
     pickups_bitfield = dolphin_memory_engine.read_word(PICKUPS_BITFLD_ADDR)
 
-    for location, data in LOCATION_TABLE.items():
+    for location, data in ALL_LOCATION_TABLE.items():
         checked = False
 
-        # Special-case checks
-        if data.type == TWWLocationType.SPECL:
+        # Special-case checks TODO CORRECT FOR LM
+        if data.type == LMLocationType.SPECL:
             # The flag for "Windfall Island - Maggie - Delivery Reward" is still unknown.
             # However, as a temporary workaround, we can just check if the player had Moblin's letter at some point,
             # but it's no longer in their Delivery Bag
@@ -239,29 +239,29 @@ async def check_locations(ctx: TWWContext):
                 )
                 checked = high_score > 250
 
-        # Regular checks
+        # TODO Change from WW flag system 
         elif data.stage_id == curr_stage_id:
             match data.type:
-                case TWWLocationType.CHART:
+                case LMLocationType.CHART:
                     checked = (charts_bitfield >> data.bit) & 1
-                case TWWLocationType.BOCTO:
+                case LMLocationType.BOCTO:
                     checked = (read_short(data.address) >> data.bit) & 1
-                case TWWLocationType.CHEST:
+                case LMLocationType.CHEST:
                     checked = (chests_bitfield >> data.bit) & 1
-                case TWWLocationType.SWTCH:
+                case LMLocationType.SWTCH:
                     checked = (switches_bitfield >> data.bit) & 1
-                case TWWLocationType.PCKUP:
+                case LMLocationType.PCKUP:
                     checked = (pickups_bitfield >> data.bit) & 1
-                case TWWLocationType.EVENT:
+                case LMLocationType.EVENT:
                     checked = (dolphin_memory_engine.read_byte(data.address) >> data.bit) & 1
 
         # Sea (Alt) chests
         elif curr_stage_id == 0x0 and data.stage_id == 0x1:
-            assert data.type == TWWLocationType.CHEST
+            assert data.type == LMLocationType.CHEST
             checked = (sea_alt_bitfield >> data.bit) & 1
 
         if checked:
-            location_id = TWWLocation.get_apid(data.code)
+            location_id = LMLocation.get_apid(data.code)
             if location_id:
                 ctx.locations_checked.add(location_id)
             else:
@@ -274,13 +274,13 @@ async def check_locations(ctx: TWWContext):
     if locations_checked:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
-
+#TODO CORRECT FOR LM
 async def check_alive():
     cur_health = read_short(CURR_HEALTH_ADDR)
     return cur_health > 0
 
-
-async def check_death(ctx: TWWContext):
+#TODO CORRECT FOR LM
+async def check_death(ctx: LMContext):
     if check_ingame():
         cur_health = read_short(CURR_HEALTH_ADDR)
         if cur_health <= 0:
@@ -295,7 +295,7 @@ def check_ingame():
     return read_string(CURR_STAGE_NAME_ADDR, 8) not in ["", "sea_T", "Name"]
 
 
-async def dolphin_sync_task(ctx: TWWContext):
+async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
     while not ctx.exit_event.is_set():
         try:
@@ -352,7 +352,7 @@ def main(connect=None, password=None):
     Utils.init_logging("The Wind Waker Client")
 
     async def _main(connect, password):
-        ctx = TWWContext(connect, password)
+        ctx = LMContext(connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
             ctx.run_gui()

@@ -414,6 +414,21 @@ class LMWorld(World):
                     else:
                         for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
                 region.locations.append(entry)
+        if self.options.goal == 1:
+            rankcalc = 0
+            if self.options.rank_requirement < 3:
+                rankcalc = 1
+            elif self.options.rank_requirement == 3:
+                rankcalc = 2
+            elif 3 < self.options.rank_requirement < 5:
+                rankcalc = 3
+            elif self.options.rank_requirement == 6:
+                rankcalc = 4
+            else:
+                rankcalc = 5
+            loc = self.multiworld.get_location("King Boo", self.player)
+            add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc))
+
 
     def generate_early(self):
         self.options.enemizer = False  # TODO Remove this line once enemizer is working
@@ -454,7 +469,10 @@ class LMWorld(World):
                     for item in entry.access:
                         add_rule(entry, lambda state: state.has(item, self.player))
             if entry.code is None:
-                entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
+                if entry.name == "King Boo" and self.options.goal == 2:
+                    continue
+                else:
+                    entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
             region.locations.append(entry)
         for location, data in ENEMIZER_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
@@ -462,17 +480,27 @@ class LMWorld(World):
             if entry.access is not False:
                 for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
             region.locations.append(entry)
-
+        if self.options.goal == 2:
+            region = self.multiworld.get_region("Foyer", self.player)
+            entry = LMLocation(self.player, "Repair Mario", region, LMLocationData("Foyer", None, "Event", 0, [], "Mario's Painting"))
+            entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
+            add_rule(entry, lambda state: state.has_group("Mario Piece", self.player, self.options.mario_pieces))
         self._set_optional_locations()
-
         connect_regions(self.multiworld, self.player)
 
     def create_item(self, item: str) -> LMItem:
         # TODO: calculate nonprogress items dynamically
         set_non_progress = False
 
-        if item in ITEM_TABLE:
-            return LMItem(item, self.player, ITEM_TABLE[item], set_non_progress)
+        if self.options.goal == 1:
+            if item in ITEM_TABLE:
+                if item == "Gold Diamond":
+                    return LMItem(item, self.player, ITEM_TABLE[item], False)
+                else:
+                    return LMItem(item, self.player, ITEM_TABLE[item], True)
+        else:
+            if item in ITEM_TABLE:
+                return LMItem(item, self.player, ITEM_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
     def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
@@ -563,18 +591,20 @@ class LMWorld(World):
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
         if not self.options.boosanity:
-            for item, data in ITEM_TABLE.items():
-                if item == "Boo":
-                    continue
+            for _ in range(35):
+                exclude += ["Boo"]
+        if not self.options.goal == 2:
+            exclude += ["Piece of Mario"]
+        for item, data in ITEM_TABLE.items():
+            if self.options.goal == 2:
+                if item == "Piece of Mario":
+                    copies_to_place = self.options.mario_pieces
+                    for _ in range(copies_to_place):
+                        self.itempool.append(self.create_item(item))
+            else:
                 copies_to_place = data.quantity - exclude.count(item)
                 for _ in range(copies_to_place):
                     self.itempool.append(self.create_item(item))
-        else:
-            for item, data in ITEM_TABLE.items():
-                copies_to_place = data.quantity - exclude.count(item)
-                for _ in range(copies_to_place):
-                    self.itempool.append(self.create_item(item))
-
         # Calculate the number of additional filler items to create to fill all locations
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
         n_items = len(self.pre_fill_items) + len(self.itempool)

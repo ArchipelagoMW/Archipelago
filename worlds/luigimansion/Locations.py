@@ -836,6 +836,8 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Cold Storage Boo": LMLocationData("Cold Storage", 703, "Boo", 31, []),
 }
 
+MACGUFFIN_GOAL_LOCATION = {"Repair Mario": LMLocationData("Foyer", None, "Event", 0, [], "Mario's Painting")}
+
 ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
                       **ENEMIZER_LOCATION_TABLE,
                       **PLANT_LOCATION_TABLE,

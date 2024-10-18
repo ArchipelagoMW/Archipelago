@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, Option, PerGameCommonOptions
+from Options import Toggle, Range, Option, PerGameCommonOptions, Choice
 
 
 # Will look into feasibility of options later.
@@ -97,19 +97,60 @@ class Enemizer(Toggle):
     display_name = "Enemizer"
 
 
+class Goal(Choice):
+    """
+    Determines when victory is achieved in your playthrough.
+
+    King Boo: Defeat King Boo in the Secret Altar
+    Rank Requirement: Gather enough money to reach the specified rank before beating King Boo *experimental
+    Mario Pieces: Mario's Painting has been torn apart. Recover all the pieces to restore the painting and get your brother back!
+    """
+    display_name = "Goal"
+    option_king_boo = 0
+    option_rank_requirement = 1
+    option_mario_pieces = 2
+    default = 0
+
+
+class RankRequirement(Choice):
+    """
+    If Rank Requirement is chosen as goal, choose the required rank (H to A) with A being the highest
+    """
+    display_name = "Rank Requirement"
+    option_rank_h = 0
+    option_rank_g = 1
+    option_rank_f = 2
+    option_rank_e = 3
+    option_rank_d = 4
+    option_rank_c = 5
+    option_rank_b = 6
+    option_rank_a = 7
+
+class MarioPieces(Range):
+    """
+    If Mario Pieces is chosen as goal, set the number of pieces his painting is torn into
+    """
+    display_name = "Pieces of Mario"
+    range_start = 1
+    range_end = 10
+    default = 5
+
 @dataclass
 class LMOptions(PerGameCommonOptions):
+    goal: Goal
+    mario_pieces: MarioPieces
+    rank_requirement: RankRequirement
     # good_vacuum: StartWithBetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
-    speedy_spirits: SpeedySpirits
-    toadsanity: Toadsanity
     plantsanity: Plants
     knocksanity: Knocksanity
+    boosanity: Boosanity
+    portrait_ghosts: PortraitGhosts
+    speedy_spirits: SpeedySpirits
+    toadsanity: Toadsanity
     mario_items: MarioItems
     washroom_boo_count: WashroomBooCount
     balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
-    boosanity: Boosanity
-    portrait_ghosts: PortraitGhosts
     enemizer: Enemizer

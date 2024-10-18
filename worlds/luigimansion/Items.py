@@ -69,7 +69,6 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Mario's Shoe":        LMItemData("Mario Item", 37, IC.progression),
     "Boo":                 LMItemData("Boo Item",   38, IC.progression, 35),
     "Boo Radar":           LMItemData("Upgrade",    39, IC.progression),
-    # TODO: does the Boo release cutscene trigger the butler, or is it acquiring the boo radar?
     "Poltergust 4000":     LMItemData("Upgrade",    40, IC.useful),
     "Money Bundle":        LMItemData("Filler",     41, IC.filler),
     "Poison Mushroom":     LMItemData("Trap",       42, IC.trap),
@@ -77,7 +76,9 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Nothing":             LMItemData("Filler",     44, IC.filler),
     "Small Heart":         LMItemData("Filler",     46, IC.filler),
     "Medium Heart":        LMItemData("Filler",     47, IC.filler),
-    "Large Heart":         LMItemData("Filler",     48, IC.filler)
+    "Large Heart":         LMItemData("Filler",     48, IC.filler),
+    "Gold Diamond":        LMItemData("Filler",     49, IC.progression, 5),
+    "Piece of Mario":      LMItemData("Mario Piece", 50, IC.progression)
 }
 
 filler_items: Dict[str, LMItemData] = {

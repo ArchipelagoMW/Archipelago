@@ -12,9 +12,11 @@ from gclib.rarc import RARC
 from gclib.yaz0_yay0 import Yay0
 
 RANDOMIZER_NAME = "Luigis Mansion"
-CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494 # Based on the USA version of Luigi's Mansion
+CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
+
 
 class InvalidCleanISOError(Exception): pass
+
 
 class LuigisMansionRandomizer:
 
@@ -44,7 +46,8 @@ class LuigisMansionRandomizer:
 
         # Convert everything back to bytes after making necessary changes, then get updated rarc file.
         item_info_table_data_updated = item_info_table_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'iteminfotable', item_info_table_data_updated)
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'iteminfotable',
+                                                        item_info_table_data_updated)
 
         # Repeat for itemappeartable, treasuretable, furnitureinfo, characterinfo, eventinfo, and observerinfo
 
@@ -107,25 +110,28 @@ class LuigisMansionRandomizer:
             game_id = fs.try_read_str(f, 0, 6)
         print("Magic: " + str(magic) + "; Game ID: " + str(game_id))
         if magic == "CISO":
-            raise InvalidCleanISOError("The provided ISO is in CISO format. The %s randomizer only supports ISOs in ISO format." % RANDOMIZER_NAME)
+            raise InvalidCleanISOError(
+                "The provided ISO is in CISO format. The %s randomizer only supports ISOs in ISO format." % RANDOMIZER_NAME)
         if game_id != "GLME01":
             if game_id and game_id.startswith("GLM"):
-                raise InvalidCleanISOError("Invalid version of %s. Only the North American version is supported by this randomizer." % RANDOMIZER_NAME)
+                raise InvalidCleanISOError(
+                    "Invalid version of %s. Only the North American version is supported by this randomizer." % RANDOMIZER_NAME)
             else:
-                raise InvalidCleanISOError("Invalid game given as the vanilla ISO. You must specify a %s ISO (North American version)." % RANDOMIZER_NAME)
+                raise InvalidCleanISOError(
+                    "Invalid game given as the vanilla ISO. You must specify a %s ISO (North American version)." % RANDOMIZER_NAME)
 
     # Verify the MD5 hash matches the expectation of a USA-based ISO.
     # Based on some similar code from (MIT License): https://github.com/LagoLunatic/wwrando
     def verify_correct_clean_iso_md5(self, clean_iso_path):
         md5 = hashlib.md5()
-    
+
         with open(clean_iso_path, "rb") as f:
             while True:
-                chunk = f.read(1024*1024)
+                chunk = f.read(1024 * 1024)
                 if not chunk:
                     break
                 md5.update(chunk)
-    
+
         integer_md5 = int(md5.hexdigest(), 16)
         if integer_md5 != CLEAN_LUIGIS_MANSION_ISO_MD5:
             raise InvalidCleanISOError(
@@ -147,7 +153,7 @@ class LuigisMansionRandomizer:
     def get_arc(self, arc_path):
         arc_path = arc_path.replace("\\", "/")
         data = self.gcm.read_file_data(arc_path)
-        arc = RARC(data) # Automatically decompresses Yay0
+        arc = RARC(data)  # Automatically decompresses Yay0
         arc.read()
         return arc
 
@@ -166,5 +172,7 @@ class LuigisMansionRandomizer:
 
         return main_rarc_file
 
+
 if __name__ == '__main__':
-    unpacked_iso = LuigisMansionRandomizer("D:\\ROMs\\GameCube\\Luigis Mansion (USA).iso", "D:\\ROMs\\GameCube\\", False)
+    unpacked_iso = LuigisMansionRandomizer("D:\\ROMs\\GameCube\\Luigis Mansion (USA).iso", "D:\\ROMs\\GameCube\\",
+                                           False)
