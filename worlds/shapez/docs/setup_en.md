@@ -10,15 +10,15 @@
 ## Required Software
 
 - An installable, up-to-date PC version of shapez ([Steam](https://store.steampowered.com/app/1318690/shapez/)).
-- The shapezipelago mod from the [GitHub page](https://github.com/BlastSlimey/shapezipelago/releases) or the 
-[mod.io page](https://mod.io/g/shapez/m/shapezipelago).
+- The shapezipelago mod from the [mod.io page](https://mod.io/g/shapez/m/shapezipelago).
 
 ## Optional Software
 
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     * (Only for the TextClient)
     * (If you want, you can use the built-in console as a read-only text client by launching the game 
-  with the "-dev" parameter)
+  with the `-dev` parameter)
+- Universal Tracker (check UT's `#future-game-design` thread in the discord server for instructions)
 
 ## Installation
 
