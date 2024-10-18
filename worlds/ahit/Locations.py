@@ -878,7 +878,7 @@ snatcher_coins = {
                                                dlc_flags=HatDLC.death_wish),
 
     "Snatcher Coin - Top of HQ (DW: BTH)": LocData(0, "Beat the Heat", snatcher_coin="Snatcher Coin - Top of HQ",
-                                                   dlc_flags=HatDLC.death_wish),
+                                                   hit_type=HitType.umbrella, dlc_flags=HatDLC.death_wish),
 
     "Snatcher Coin - Top of Tower": LocData(0, "Mafia Town Area (HUMT)", snatcher_coin="Snatcher Coin - Top of Tower",
                                             dlc_flags=HatDLC.death_wish),
