@@ -216,7 +216,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Master Stalfos' Message"))
+                    self.multiworld.itempool.append(self.create_item("Nothing"))
                 else:
                     item = self.create_item(item_name)
 
@@ -512,6 +512,9 @@ class LinksAwakeningWorld(World):
         if change and item.name in self.rupees:
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
+
+    def get_filler_item_name(self) -> str:
+        return "Nothing"
 
     def fill_slot_data(self):
         slot_data = {}

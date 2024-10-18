@@ -15,7 +15,7 @@ from .data.item_definition_classes import (
     ProgressiveItemDefinition,
     WeightedItemDefinition,
 )
-from .data.utils import build_weighted_int_list
+from .data.utils import build_weighted_int_list, cast_not_none
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -214,7 +214,7 @@ class WitnessPlayerItems:
         """
         return [
             # data.ap_code is guaranteed for a symbol definition
-            cast(int, data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
+            cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
             if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
         ]
 
@@ -222,10 +222,9 @@ class WitnessPlayerItems:
         """
         Returns a dict from progressive item IDs to the list of IDs of the base item that they unlock, in order.
         """
-        # int() is used here to cast for mypy, but also to crash if one of these items' IDs is None
         return {
-            cast(int, static_witness_items.ITEM_DATA[progressive_item].ap_code): [
-                cast(int, static_witness_items.ITEM_DATA[base_item].ap_code) for base_item in corresponding_base_items
+            cast_not_none(static_witness_items.ITEM_DATA[progressive_item].ap_code): [
+                cast_not_none(static_witness_items.ITEM_DATA[base_item].ap_code) for base_item in corresponding_base_items
             ]
             for progressive_item, corresponding_base_items in self.all_progressive_item_lists.items()
         }
