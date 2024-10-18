@@ -1,9 +1,8 @@
 import typing
 
 from enum import Enum
+from .utils import Constants
 
-DUEL_WINS_OFFSET: int = 0x03E30A
-DUELIST_UNLOCK_OFFSET: int = 0x03E64E
 
 class Duelist(Enum):
 
@@ -12,7 +11,7 @@ class Duelist(Enum):
         self._name: str = _name
         self.bitflag: int = bitflag
         self.is_yami_yugi: bool = is_yami_yugi
-        self.wins_address: int = DUEL_WINS_OFFSET + (self.id - 1) * 2
+        self.wins_address: int = Constants.DUEL_WINS_OFFSET + (self.id - 1) * 2
     
     def __str__(self):
         return self._name
