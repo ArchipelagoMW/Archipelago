@@ -20,3 +20,10 @@ def convert_items_to_have_progression(items: List[str]):
     they have one. ["TECH_MINING", "TECH_WRITING"] -> ["TECH_MINING", "PROGRESSIVE_CAMPUS]"""
     flat_progressive_techs = get_flat_progressive_districts()
     return [flat_progressive_techs.get(item, item) for item in items]
+
+
+def convert_item_to_have_progression(item: str):
+    """ converts an items to instead be its associated progressive item if
+    it has one. "TECH_WRITING" ->  "PROGRESSIVE_CAMPUS"""
+    flat_progressive_techs = get_flat_progressive_districts()
+    return flat_progressive_techs.get(item, item)

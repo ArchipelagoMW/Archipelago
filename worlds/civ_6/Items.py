@@ -111,6 +111,10 @@ class CivVIItemData:
         self.era = era
 
 
+class CivVIEvent(Item):
+    game: str = "Civilization VI"
+
+
 class CivVIItem(Item):
     game: str = "Civilization VI"
     civ_vi_id: int

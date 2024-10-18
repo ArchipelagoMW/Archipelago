@@ -1,9 +1,9 @@
-from typing import TYPE_CHECKING, List, Dict
+from typing import TYPE_CHECKING, List
 from BaseClasses import CollectionState
 from .Items import get_item_by_civ_name
-from .Data import get_boosts_data
+from .Data import get_boosts_data, get_progressive_districts_data
 from .Enum import CivVICheckType
-from .ProgressiveDistricts import convert_items_to_have_progression
+from .ProgressiveDistricts import convert_item_to_have_progression
 
 from worlds.generic.Rules import forbid_item, set_rule
 
@@ -15,41 +15,35 @@ if TYPE_CHECKING:
 def create_boost_rules(world: 'CivVIWorld'):
     boost_data_list = get_boosts_data()
     boost_locations = [location for location in world.location_table.values() if location.location_type == CivVICheckType.BOOST]
+    required_items_func = has_required_items_progressive if world.options.progression_style != "none" else has_required_items_non_progressive
     for location in boost_locations:
         boost_data = next((boost for boost in boost_data_list if boost.Type == location.name), None)
         world_location = world.get_location(location.name)
         forbid_item(world_location, "Progressive Era", world.player)
-        if not boost_data or boost_data.PrereqRequiredCount == 0:
-            continue
-
-        set_rule(world_location, lambda state, prereqs=boost_data.Prereq, required_count=boost_data.PrereqRequiredCount: has_required_items(state, prereqs, required_count, world))
+        if boost_data and boost_data.PrereqRequiredCount > 0:
+            set_rule(world_location, lambda state, prereqs=boost_data.Prereq, required_count=boost_data.PrereqRequiredCount: required_items_func(state, prereqs, required_count, world))
 
 
-def has_required_items(state: CollectionState, prereqs: List[str], required_count: int, world: 'CivVIWorld') -> bool:
+def has_required_items_progressive(state: CollectionState, prereqs: List[str], required_count: int, world: 'CivVIWorld') -> bool:
+    collected_count = 0
+    for item in prereqs:
+        progressive_item_name = convert_item_to_have_progression(item)
+        ap_item_name = get_item_by_civ_name(progressive_item_name, world.item_table).name
+        if "PROGRESSIVE" in progressive_item_name:
+            progression_amount = get_progressive_districts_data()[progressive_item_name].index(item) + 1
+            if state.has(ap_item_name, world.player, progression_amount):
+                collected_count += 1
+        elif state.has(ap_item_name, world.player):
+            collected_count += 1
+        # early out if we've already gotten enough
+        if collected_count >= required_count:
+            return True
+    return False
+
+
+def has_required_items_non_progressive(state: CollectionState, prereqs: List[str], required_count: int, world: 'CivVIWorld') -> bool:
     player = world.player
-    has_progressive_items = world.options.progression_style != "none"
-    if has_progressive_items:
-        count = 0
-        items = [get_item_by_civ_name(item, world.item_table).name for item in convert_items_to_have_progression(prereqs)]
-        collected_progressive_items: Dict[str, int] = {}
-        for item in items:
-            if "Progressive" in item:
-                collected_progressive_items[item] = collected_progressive_items.get(item, 0) + 1
-            else:
-                if state.has(item, player):
-                    count += 1
-                    # early out if we've already gotten enough
-                    if count >= required_count:
-                        return True
-        for item, required_progressive_item_count in collected_progressive_items.items():
-            if state.has(item, player, required_progressive_item_count):
-                count += required_progressive_item_count
-                # early out if we've already gotten enough
-                if count >= required_count:
-                    return True
-        return False
-    else:
-        return state.has_from_list_unique(
-            [
-                get_item_by_civ_name(prereq, world.item_table).name for prereq in prereqs
-            ], player, required_count)
+    return state.has_from_list_unique(
+        [
+            get_item_by_civ_name(prereq, world.item_table).name for prereq in prereqs
+        ], player, required_count)

@@ -1,4 +1,3 @@
-import logging
 import math
 import os
 from typing import Any, Dict, Set
@@ -11,7 +10,7 @@ from .Data import get_boosts_data, get_era_required_items_data
 from .Rules import create_boost_rules
 from .Container import CivVIContainer, generate_goody_hut_sql, generate_new_items, generate_setup_file, generate_update_boosts_sql
 from .Enum import CivVICheckType
-from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
+from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIEvent, CivVIItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
 from .Locations import CivVILocation, CivVILocationData, EraType, generate_era_location_table, generate_flat_location_table
 from .Options import CivVIOptions
 from .Regions import create_regions
@@ -66,7 +65,7 @@ class CivVIWorld(World):
     required_client_version = (0, 4, 5)
     location_table: Dict[str, CivVILocationData]
 
-    def __init__(self, multiworld: "MultiWorld", player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.location_by_era = generate_era_location_table()
 
@@ -86,6 +85,9 @@ class CivVIWorld(World):
     def set_rules(self) -> None:
         if self.options.boostsanity:
             create_boost_rules(self)
+
+    def create_event(self, event: str):
+        return CivVIEvent(event, ItemClassification.progression, None, self.player)
 
     def create_item(self, name: str) -> Item:
         item: CivVIItemData = self.item_table[name]
@@ -132,10 +134,9 @@ class CivVIWorld(World):
                 if era.value == "ERA_ANCIENT":
                     continue
                 progressive_era_item = self.item_table.get("Progressive Era")
-                if progressive_era_item:
-                    self.multiworld.itempool += [self.create_item(progressive_era_item.name)]
-                else:
-                    logging.error("Progressive Era item not found in item_table.")
+                assert progressive_era_item is not None
+                self.multiworld.itempool += [self.create_item(progressive_era_item.name)]
+
             self.multiworld.early_items[self.player]["Progressive Era"] = 2
 
         num_filler_items = 0
@@ -177,14 +178,13 @@ class CivVIWorld(World):
             start_location_hints.add(location_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return {
-            "progression_style": self.options.progression_style.value,
-            "death_link": self.options.death_link.value,
-            "research_cost_multiplier": self.options.research_cost_multiplier.value,
-            "death_link_effect": self.options.death_link_effect.value,
-            "death_link_effect_percent": self.options.death_link_effect_percent.value,
-
-        }
+        return self.options.as_dict(
+            "progression_style",
+            "death_link",
+            "research_cost_multiplier",
+            "death_link_effect",
+            "death_link_effect_percent",
+        )
 
     def generate_output(self, output_directory: str):
         mod_name = self.multiworld.get_out_file_name_base(self.player)
