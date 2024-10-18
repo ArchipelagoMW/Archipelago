@@ -343,6 +343,7 @@ def create_enemy_events(world: "HatInTimeWorld"):
 
 def set_enemy_rules(world: "HatInTimeWorld"):
     no_tourist = "Camera Tourist" in world.excluded_dws or "Camera Tourist" in world.excluded_bonuses
+    difficulty: Difficulty = Difficulty(world.options.LogicDifficulty)
 
     for enemy, regions in hit_list.items():
         if no_tourist and enemy in bosses:
@@ -371,6 +372,14 @@ def set_enemy_rules(world: "HatInTimeWorld"):
                              state.has("Zipline Unlock - The Birdhouse Path", world.player)
                              or state.has("Zipline Unlock - The Lava Cake Path", world.player)
                              or state.has("Zipline Unlock - The Windmill Path", world.player))
+
+            elif enemy == "Toilet":
+                if area == "Toilet of Doom":
+                    # The boss firewall is in the way and can only be skipped on Expert logic using a cherry hover.
+                    add_rule(event, lambda state: has_paintings(state, world, 1, allow_skip=difficulty == Difficulty.EXPERT))
+                    if difficulty < Difficulty.HARD:
+                        # Hard logic and above can cross the boss arena gap with a cherry bridge.
+                        add_rule(event, lambda state: can_use_hookshot(state, world))
 
             elif enemy == "Director":
                 if area == "Dead Bird Studio Basement":
