@@ -323,7 +323,7 @@ ahit_locations = {
     "Alpine Skyline - The Twilight Path": LocData(2000334434, "Alpine Skyline Area", required_hats=[HatType.DWELLER]),
     "Alpine Skyline - The Twilight Bell: Wide Purple Platform": LocData(2000336478, "The Twilight Bell"),
     "Alpine Skyline - The Twilight Bell: Ice Platform": LocData(2000335826, "The Twilight Bell"),
-    "Alpine Skyline - Goat Outpost Horn": LocData(2000334760, "Alpine Skyline Area"),
+    "Alpine Skyline - Goat Outpost Horn": LocData(2000334760, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - Windy Passage": LocData(2000334776, "Alpine Skyline Area (TIHS)", hookshot=True),
     "Alpine Skyline - The Windmill: Inside Pon Cluster": LocData(2000336395, "The Windmill"),
     "Alpine Skyline - The Windmill: Entrance": LocData(2000335783, "The Windmill"),
