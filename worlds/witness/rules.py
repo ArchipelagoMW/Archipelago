@@ -201,10 +201,7 @@ def _has_item(item: str, world: "WitnessWorld",
     if item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
 
-    prog_item = static_witness_logic.get_parent_progressive_item(item)
-    needed_amount = player_logic.MULTI_AMOUNTS[item]
-
-    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(prog_item, needed_amount)
+    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(item, 1)
     return simple_rule
 
 
@@ -212,6 +209,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
         -> List[Union[CollectionRule, SimpleItemRepresentation]]:
     """
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
+    It is unclear how much this does after the recent rework the progressive items, but there is no reason to remove it.
     """
 
     direct_items = [rule for rule in requirement_option if isinstance(rule, SimpleItemRepresentation)]
@@ -229,11 +227,14 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
 
 
 def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleItemRepresentation]],
-                               player: int) -> List[CollectionRule]:
+                               world: "WitnessWorld") -> List[CollectionRule]:
     """
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
     If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
     """
+
+    player_logic = world.player_logic
+    player = world.player
 
     collection_rules = [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
     item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
@@ -246,7 +247,22 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
         item_rules_converted = [lambda state: state.has(item, player, count)]
     else:
         item_counts = {item_rule.item_name: item_rule.item_count for item_rule in item_rules}
-        item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
+
+        # Sort the list by which item you are least likely to have (E.g. last stage of progressive item chains)
+        sorted_item_list = sorted(
+            item_counts.keys(),
+            key=lambda item_name: player_logic.PARENT_ITEM_COUNT_PER_BASE_ITEM.get(item_name, 1.5),
+            reverse=True
+            # 1.5 because you are less likely to have a single stage item than one copy of a 2-stage chain
+        )
+
+        if all(item_count == 1 for item_count in item_counts.values()):
+            # If all counts are one, just use state.has_all
+            item_rules_converted = [lambda state: state.has_all(sorted_item_list, player)]
+        else:
+            # If any count is higher than 1, use state.has_all_counts
+            sorted_item_counts = {item_name: item_counts[item_name] for item_name in sorted_item_list}
+            item_rules_converted = [lambda state: state.has_all_counts(sorted_item_counts, player)]
 
     return collection_rules + item_rules_converted
 
@@ -255,8 +271,6 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
     """
     Converts a WitnessRule into a CollectionRule.
     """
-    player = world.player
-
     if requirements == frozenset({frozenset()}):
         return None
 
@@ -267,7 +281,7 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
 
     optimized_rule_conversion = [optimize_requirement_option(sublist) for sublist in rule_conversion]
 
-    fully_converted_rules = [convert_requirement_option(sublist, player) for sublist in optimized_rule_conversion]
+    fully_converted_rules = [convert_requirement_option(sublist, world) for sublist in optimized_rule_conversion]
 
     if len(fully_converted_rules) == 1:
         if len(fully_converted_rules[0]) == 1:

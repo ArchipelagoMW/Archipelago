@@ -47,15 +47,29 @@ class WitnessPlayerItems:
         self._logic: WitnessPlayerLogic = player_logic
         self._locations: WitnessPlayerLocations = player_locations
 
+        self.replacement_items = {}
+        # Make item aliases for "Sparse Dots" and "Simple Stars" if necessary
+        if "Full Dots" in world.options.second_stage_symbols_act_independently:
+            self.replacement_items["Dots"] = "Sparse Dots"
+        if "Stars + Same Colored Symbol" in world.options.second_stage_symbols_act_independently:
+            self.replacement_items["Stars"] = "Simple Stars"
+
+        assert all(
+            static_witness_items.ALL_ITEM_ALIASES.get(value, None) == key
+            for key, value in self.replacement_items.items()
+        ), "A replacement item was used without setting up the alias in static_witness_logic.ALL_ITEM_ALIASES"
+
+        self.all_progressive_item_lists = copy.deepcopy(self._logic.THEORETICAL_PROGRESSIVE_LISTS)
+        self.progressive_item_lists_in_use = copy.deepcopy(self._logic.FINALIZED_PROGRESSIVE_LISTS)
+
         # Duplicate the static item data, then make any player-specific adjustments to classification.
         self.item_data: Dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
 
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
-            name: data for (name, data) in self.item_data.items()
-            if data.classification not in
-               {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-               or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+            self.replacement_items.get(name, name): data for (name, data) in self.item_data.items()
+            if ItemClassification.progression not in data.classification
+            or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
@@ -72,11 +86,11 @@ class WitnessPlayerItems:
         # Add progression items to the mandatory item list.
         progression_dict = {
             name: data for (name, data) in self.item_data.items()
-            if data.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            if ItemClassification.progression in data.classification
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
-                num_progression = len(self._logic.MULTI_LISTS[item_name])
+                num_progression = len(self.progressive_item_lists_in_use[item_name])
                 self._mandatory_items[item_name] = num_progression
             else:
                 self._mandatory_items[item_name] = 1
@@ -204,15 +218,13 @@ class WitnessPlayerItems:
             if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
         ]
 
-    def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
-        output: Dict[int, List[int]] = {}
-        for item_name, quantity in dict(self._mandatory_items.items()).items():
-            item = self.item_data[item_name]
-            if isinstance(item.definition, ProgressiveItemDefinition):
-                # Note: we need to reference the static table here rather than the player-specific one because the child
-                # items were removed from the pool when we pruned out all progression items not in the options.
-                output[cast_not_none(item.ap_code)] = [cast_not_none(static_witness_items.ITEM_DATA[child_item].ap_code)
-                                                       for child_item in item.definition.child_item_names]
-        return output
-
-
+    def get_progressive_item_ids(self) -> Dict[int, List[int]]:
+        """
+        Returns a dict from progressive item IDs to the list of IDs of the base item that they unlock, in order.
+        """
+        return {
+            cast_not_none(static_witness_items.ITEM_DATA[progressive_item].ap_code): [
+                cast_not_none(static_witness_items.ITEM_DATA[base_item].ap_code) for base_item in corresponding_base_items
+            ]
+            for progressive_item, corresponding_base_items in self.all_progressive_item_lists.items()
+        }
