@@ -117,6 +117,11 @@ LEGENDARY_NAMES = {k.lower(): v for k, v in {
 DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES.values()}
 CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for name in LEGENDARY_NAMES.values()}
 
+SHOAL_CAVE_MAPS = tuple(data.constants[map_name] for map_name in [
+    "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+])
+
 
 class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
@@ -414,13 +419,17 @@ class PokemonEmeraldClient(BizHawkClient):
 
         read_result = await bizhawk.guarded_read(
             ctx.bizhawk_ctx,
-            [(sb1_address + 0x4, 2, "System Bus")],
-            [guards["SAVE BLOCK 1"]]
+            [
+                (sb1_address + 0x4, 2, "System Bus"),  # Current map
+                (sb1_address + 0x1450 + (data.constants["FLAG_SYS_SHOAL_TIDE"] // 8), 1, "System Bus"),
+            ],
+            [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
         )
         if read_result is None:  # Save block moved
             return
 
         current_map = int.from_bytes(read_result[0], "big")
+        shoal_cave = int(read_result[1][0] & (1 << (data.constants["FLAG_SYS_SHOAL_TIDE"] % 8)) > 0)
         if current_map != self.current_map:
             self.current_map = current_map
             await ctx.send_msgs([{
@@ -429,6 +438,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 "data": {
                     "type": "MapUpdate",
                     "mapId": current_map,
+                    **({"tide": shoal_cave} if current_map in SHOAL_CAVE_MAPS else {}),
                 },
             }])
 

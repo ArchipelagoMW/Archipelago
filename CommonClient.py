@@ -355,6 +355,8 @@ class CommonContext:
 
         self.item_names = self.NameLookupDict(self, "item")
         self.location_names = self.NameLookupDict(self, "location")
+        self.versions = {}
+        self.checksums = {}
 
         self.jsontotextparser = JSONtoTextParser(self)
         self.rawjsontotextparser = RawJSONtoTextParser(self)
@@ -571,26 +573,34 @@ class CommonContext:
                 needed_updates.add(game)
                 continue
 
-            local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
-            local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
-            # no action required if local version is new enough
-            if (not remote_checksum and (remote_version > local_version or remote_version == 0)) \
-                    or remote_checksum != local_checksum:
-                cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
-                cache_version: int = cached_game.get("version", 0)
-                cache_checksum: typing.Optional[str] = cached_game.get("checksum")
-                # download remote version if cache is not new enough
-                if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
-                        or remote_checksum != cache_checksum:
-                    needed_updates.add(game)
+            cached_version: int = self.versions.get(game, 0)
+            cached_checksum: typing.Optional[str] = self.checksums.get(game)
+            # no action required if cached version is new enough
+            if (not remote_checksum and (remote_version > cached_version or remote_version == 0)) \
+                    or remote_checksum != cached_checksum:
+                local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
+                local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
+                if ((remote_checksum or remote_version <= local_version and remote_version != 0)
+                        and remote_checksum == local_checksum):
+                    self.update_game(network_data_package["games"][game], game)
                 else:
-                    self.update_game(cached_game, game)
+                    cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
+                    cache_version: int = cached_game.get("version", 0)
+                    cache_checksum: typing.Optional[str] = cached_game.get("checksum")
+                    # download remote version if cache is not new enough
+                    if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
+                            or remote_checksum != cache_checksum:
+                        needed_updates.add(game)
+                    else:
+                        self.update_game(cached_game, game)
         if needed_updates:
             await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
 
     def update_game(self, game_package: dict, game: str):
         self.item_names.update_game(game, game_package["item_name_to_id"])
         self.location_names.update_game(game, game_package["location_name_to_id"])
+        self.versions[game] = game_package.get("version", 0)
+        self.checksums[game] = game_package.get("checksum")
 
     def update_data_package(self, data_package: dict):
         for game, game_data in data_package["games"].items():
