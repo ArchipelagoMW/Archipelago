@@ -1,5 +1,6 @@
 import os
 from dataclasses import fields
+from itertools import count
 from typing import Dict, ClassVar
 
 import yaml
@@ -9,7 +10,7 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
-from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items
+from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
 from .Options import LMOptions
 from .Regions import *
@@ -431,7 +432,6 @@ class LMWorld(World):
 
 
     def generate_early(self):
-        self.options.enemizer = False  # TODO Remove this line once enemizer is working
         if self.options.enemizer:
             set_ghost_type(self.multiworld, self.ghost_affected_regions)
 
@@ -440,6 +440,8 @@ class LMWorld(World):
             self.options.start_inventory.value["Boo Radar"] = (
                     self.options.start_inventory.value.get("Boo Radar", 0) + 1
             )
+        if not self.options.knocksanity:
+            self.multiworld.push_precollected(self.create_item("Heart Key"))
         # if self.options.good_vacuum:
         #     self.options.start_inventory.value["Poltergust 4000"] = (
         #             self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
@@ -499,8 +501,8 @@ class LMWorld(World):
                 else:
                     return LMItem(item, self.player, ITEM_TABLE[item], True)
         else:
-            if item in ITEM_TABLE:
-                return LMItem(item, self.player, ITEM_TABLE[item], set_non_progress)
+            if item in ALL_ITEMS_TABLE:
+                return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
     def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
@@ -593,11 +595,9 @@ class LMWorld(World):
         if not self.options.boosanity:
             for _ in range(35):
                 exclude += ["Boo"]
-        if not self.options.goal == 2:
-            exclude += ["Piece of Mario"]
         for item, data in ITEM_TABLE.items():
-            if self.options.goal == 2:
-                if item == "Piece of Mario":
+            if item == "Piece of Mario":
+                if self.options.goal == 2:
                     copies_to_place = self.options.mario_pieces
                     for _ in range(copies_to_place):
                         self.itempool.append(self.create_item(item))

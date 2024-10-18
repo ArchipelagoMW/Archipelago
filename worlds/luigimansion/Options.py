@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, Option, PerGameCommonOptions, Choice
+from Options import Toggle, Range, Option, PerGameCommonOptions, Choice, StartInventoryPool
 
 
 # Will look into feasibility of options later.
@@ -43,7 +43,11 @@ class Plants(Toggle):
 
 
 class Knocksanity(Toggle):
-    """Adds every interactable, such a dressers and light fixtures, to the location pool"""
+    """
+    Adds every interactable, such a dressers and light fixtures, to the location pool
+
+    Due to generation issues, if this is off, you will be given the Heart Key at the start of the game.
+    """
     display_name = "Interactables"
 
 
@@ -154,3 +158,4 @@ class LMOptions(PerGameCommonOptions):
     balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
     enemizer: Enemizer
+    start_inventory_from_pool: StartInventoryPool
