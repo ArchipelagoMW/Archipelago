@@ -95,7 +95,7 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
             "Progressive Shapers": 0,
             "Progressive Discard Symbols": 0,
 
-            # Dots and Stars are replaced by Spare Dots and Simple Stars
+            # Dots and Stars are replaced by Sparse Dots and Simple Stars
             "Dots": 0,
             "Stars": 0,
             "Sparse Dots": 1,
