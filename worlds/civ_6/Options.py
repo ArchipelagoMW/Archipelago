@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, StartInventoryPool, Toggle
 
 
 class ProgressionStyle(Choice):
@@ -68,23 +68,16 @@ class InGameFlagProgressionItems(DefaultOnToggle):
     display_name = "Advisor Indicates Progression Items"
 
 
-class DeathLinkEffect(Choice):
+class DeathLinkEffect(OptionSet):
     """What happens when a unit dies.
     Unit Killed: A random unit will be killed when a death link is received.
     Faith: Faith will be decreased by the amount specified in 'Death Link Effect Percent'.
     Gold: Gold will be decreased by the amount specified in 'Death Link Effect Percent'.
     Era Score: Era score is decreased by 1.
-    Any: Selects from any of these options whenever a death link is received.
-    Any Except Era Score: Selects from any of these options except for Era Score whenever a death link is received.
     """
     display_name = "Death Link Effect"
-    option_unit_killed = 0
-    option_era_score = 1
-    option_gold = 2
-    option_faith = 3
-    option_any = 4
-    option_any_except_era_score = 5
-    default = option_unit_killed
+    valid_keys = ["Unit Killed", "Faith", "Gold", "Era Score"]  # type: ignore
+    default = {"Unit Killed"}
 
 
 class DeathLinkEffectPercent(Range):
