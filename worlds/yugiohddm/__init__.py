@@ -72,6 +72,7 @@ class YGODDMWorld(World):
             duelist_location: DuelistLocation = DuelistLocation(free_duel_region, self.player, duelist)
             set_rule(duelist_location, (lambda state, d=duelist_location:
                                         d.duelist in self.get_available_duelists(state)))
+            free_duel_region.locations.append(duelist_location)
         
         self.multiworld.completion_condition[self.player] = lambda state: state.has(
             Constants.VICTORY_ITEM_NAME, self.player
