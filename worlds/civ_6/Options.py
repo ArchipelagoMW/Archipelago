@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+from .Enum import CivVIHintClassification
 
 
 class ProgressionStyle(Choice):
@@ -42,19 +43,10 @@ class ResearchCostMultiplier(Range):
     default = 100
 
 
-class PreHintItems(Choice):
-    """Controls if/what items in the tech/civics trees are pre-hinted for the multiworld.
-    All: All items in the tech & civics trees are pre-hinted.
-    Progression items: Only locations in the trees containing progression items are pre-hinted.
-    No Junk: Pre-hint the progression and useful items.
-    None: No items are pre-hinted.
-    """
+class PreHintItems(OptionSet):
+    """Controls if/what items in the tech/civics trees are pre-hinted for the multiworld."""
     display_name = "Tech/Civic Tree pre-hinted Items"
-    option_all = 0
-    option_progression_items = 1
-    option_no_junk = 2
-    option_none = 3
-    default = option_progression_items
+    valid_keys = [classificaiton.value for classificaiton in CivVIHintClassification]  # type: ignore
 
 
 class HideItemNames(Toggle):

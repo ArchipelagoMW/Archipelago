@@ -9,11 +9,8 @@ class TestGoodyHutsIncluded(CivVITestBase):
     auto_construct = False
     options = {
         "progressive_eras": "true",
-        "death_link": "true",
-        "death_link_effect": "unit_killed",
         "progressive_districts": "true",
         "shuffle_goody_hut_rewards": "true",
-        "pre_hint_items": "all",
     }
 
     def test_goody_huts_get_included(self) -> None:
@@ -32,11 +29,8 @@ class TestGoodyHutsExcluded(CivVITestBase):
     auto_construct = False
     options = {
         "progressive_eras": "true",
-        "death_link": "true",
-        "death_link_effect": "unit_killed",
         "progressive_districts": "true",
         "shuffle_goody_hut_rewards": "false",
-        "pre_hint_items": "all",
     }
 
     def test_goody_huts_are_not_included(self) -> None:
@@ -54,11 +48,8 @@ class TestFillerItemsIncludedByRarity(CivVITestBase):
     auto_construct = False
     options = {
         "progressive_eras": "true",
-        "death_link": "true",
-        "death_link_effect": "unit_killed",
         "progressive_districts": "true",
         "shuffle_goody_hut_rewards": "true",
-        "pre_hint_items": "all",
         "boostsanity": "true"
     }
 
@@ -92,11 +83,8 @@ class TestFillerItemsIncludedByRarityWithoutBoostsanity(CivVITestBase):
     auto_construct = False
     options = {
         "progressive_eras": "true",
-        "death_link": "true",
-        "death_link_effect": "unit_killed",
         "progressive_districts": "true",
         "shuffle_goody_hut_rewards": "true",
-        "pre_hint_items": "all",
         "boostsanity": "false"
     }
 

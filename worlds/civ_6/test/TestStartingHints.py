@@ -12,7 +12,7 @@ class TestStartingHints(CivVITestBase):
         "death_link": "true",
         "death_link_effect": "unit_killed",
         "progressive_districts": "true",
-        "pre_hint_items": "all",
+        "pre_hint_items": {"Progression", "Useful", "Filler"},
     }
 
     def test_all_tech_civic_items_are_hinted_default(self) -> None:
@@ -35,7 +35,7 @@ class TestOnlyProgressionItemsHinted(CivVITestBase):
         "death_link": "true",
         "death_link_effect": "unit_killed",
         "progressive_districts": "true",
-        "pre_hint_items": "progression_items",
+        "pre_hint_items": {"Progression"},
     }
 
     def test_only_progression_items_are_hinted(self) -> None:
@@ -60,7 +60,7 @@ class TestNoJunkItemsHinted(CivVITestBase):
         "death_link": "true",
         "death_link_effect": "unit_killed",
         "progressive_districts": "true",
-        "pre_hint_items": "no_junk",
+        "pre_hint_items": {"Progression", "Useful"},
     }
 
     def test_no_junk_items_are_hinted(self) -> None:
@@ -85,7 +85,7 @@ class TestNoItemsHinted(CivVITestBase):
         "death_link": "true",
         "death_link_effect": "unit_killed",
         "progressive_districts": "true",
-        "pre_hint_items": "none",
+        "pre_hint_items": {},
     }
 
     def test_no_items_are_hinted(self) -> None:

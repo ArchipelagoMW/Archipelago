@@ -9,7 +9,7 @@ from .Data import get_boosts_data, get_era_required_items_data, get_goody_hut_re
 
 from .Rules import create_boost_rules
 from .Container import CivVIContainer, generate_goody_hut_sql, generate_new_items, generate_setup_file, generate_update_boosts_sql
-from .Enum import CivVICheckType
+from .Enum import CivVICheckType, CivVIHintClassification
 from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIEvent, CivVIItemData, FillerItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
 from .Locations import CivVILocation, CivVILocationData, EraType, generate_era_location_table, generate_flat_location_table
 from .Options import CivVIOptions
@@ -159,26 +159,19 @@ class CivVIWorld(World):
         ]
 
     def post_fill(self) -> None:
-        if self.options.pre_hint_items == "none":
+        if not len(self.options.pre_hint_items.value):
             return
 
-        show_flags = {
-            ItemClassification.progression: self.options.pre_hint_items != "none",
-            ItemClassification.useful: self.options.pre_hint_items == "no_junk" or self.options.pre_hint_items == "all",
-            ItemClassification.filler: self.options.pre_hint_items == "all",
-        }
-
         start_location_hints: Set[str] = self.options.start_location_hints.value
+        valid_flags = [CivVIHintClassification(flag).to_item_classification() for flag in self.options.pre_hint_items.value]
         for location_name, location_data in self.location_table.items():
             if location_data.location_type != CivVICheckType.CIVIC and location_data.location_type != CivVICheckType.TECH:
                 continue
 
             location: CivVILocation = self.get_location(location_name)  # type: ignore
 
-            if not location.item or not show_flags.get(location.item.classification, False):
-                continue
-
-            start_location_hints.add(location_name)
+            if location.item and any(flag in location.item.classification for flag in valid_flags):
+                start_location_hints.add(location_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.options.as_dict(

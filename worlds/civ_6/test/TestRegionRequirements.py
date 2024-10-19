@@ -51,10 +51,7 @@ def verify_eras_accessible(test: CivVITestBase, state: CollectionState, collect_
 
 class TestNonProgressiveRegionRequirements(CivVITestBase):
     options = {
-        "pre_hint_items": "all",
         "progression_style": "none",
-        "death_link": "false",
-        "death_link_effect": "unit_killed",
         "boostsanity": "false",
     }
 
@@ -65,10 +62,7 @@ class TestNonProgressiveRegionRequirements(CivVITestBase):
 
 class TestNonProgressiveRegionRequirementsWithBoostsanity(CivVITestBase):
     options = {
-        "pre_hint_items": "all",
         "progression_style": "none",
-        "death_link": "false",
-        "death_link_effect": "unit_killed",
         "boostsanity": "true",
     }
 
@@ -79,10 +73,7 @@ class TestNonProgressiveRegionRequirementsWithBoostsanity(CivVITestBase):
 
 class TestProgressiveDistrictRequirementsWithBoostsanity(CivVITestBase):
     options = {
-        "pre_hint_items": "all",
         "progression_style": "districts_only",
-        "death_link": "false",
-        "death_link_effect": "unit_killed",
         "boostsanity": "true",
     }
 
@@ -93,10 +84,7 @@ class TestProgressiveDistrictRequirementsWithBoostsanity(CivVITestBase):
 
 class TestProgressiveDistrictRequirements(CivVITestBase):
     options = {
-        "pre_hint_items": "all",
         "progression_style": "districts_only",
-        "death_link": "false",
-        "death_link_effect": "unit_killed",
         "boostsanity": "false",
     }
 
@@ -114,10 +102,7 @@ class TestProgressiveDistrictRequirements(CivVITestBase):
 
 class TestProgressiveEraRequirements(CivVITestBase):
     options = {
-        "pre_hint_items": "all",
         "progression_style": "eras_and_districts",
-        "death_link": "false",
-        "death_link_effect": "unit_killed"
     }
 
     def test_eras_are_accessible_with_progressive_eras(self) -> None:
@@ -171,10 +156,7 @@ class TestProgressiveEraRequirements(CivVITestBase):
 
 class TestProgressiveEraRequirementsWithBoostsanity(CivVITestBase):
     options = {
-        "pre_hint_items": "all",
         "progression_style": "eras_and_districts",
-        "death_link": "false",
-        "death_link_effect": "unit_killed",
         "boostsanity": "true",
     }
 
