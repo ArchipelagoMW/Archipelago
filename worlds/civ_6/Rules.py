@@ -3,7 +3,7 @@ from BaseClasses import CollectionState
 from .Items import get_item_by_civ_name
 from .Data import get_boosts_data, get_progressive_districts_data
 from .Enum import CivVICheckType
-from .ProgressiveDistricts import convert_item_to_have_progression
+from .ProgressiveDistricts import convert_item_to_progressive_item
 
 from worlds.generic.Rules import forbid_item, set_rule
 
@@ -27,7 +27,7 @@ def create_boost_rules(world: 'CivVIWorld'):
 def has_required_items_progressive(state: CollectionState, prereqs: List[str], required_count: int, world: 'CivVIWorld') -> bool:
     collected_count = 0
     for item in prereqs:
-        progressive_item_name = convert_item_to_have_progression(item)
+        progressive_item_name = convert_item_to_progressive_item(item)
         ap_item_name = get_item_by_civ_name(progressive_item_name, world.item_table).name
         if "PROGRESSIVE" in progressive_item_name:
             progression_amount = get_progressive_districts_data()[progressive_item_name].index(item) + 1

@@ -77,7 +77,7 @@ class DeathLinkEffect(OptionSet):
     """
     display_name = "Death Link Effect"
     valid_keys = ["Unit Killed", "Faith", "Gold", "Era Score"]  # type: ignore
-    default = {"Unit Killed"}
+    default = frozenset({"Unit Killed"})
 
 
 class DeathLinkEffectPercent(Range):

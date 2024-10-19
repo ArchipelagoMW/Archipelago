@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List, Optional
 from BaseClasses import CollectionState, Region
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 from .Data import get_era_required_items_data, get_progressive_districts_data
 from .Items import CivVIItemData, format_item_name, get_item_by_civ_name
 from .Enum import EraType
@@ -75,10 +75,7 @@ def has_required_items(state: CollectionState, era: EraType, world: 'CivVIWorld'
         era_required_items = [get_item_by_civ_name(item, world.item_table).name for item in get_era_required_items_data()[era.value]]
         required_items = state.has_all(era_required_items, player)
 
-    if not required_items:
-        return False
-
-    return not has_progressive_eras or has_required_progressive_eras(state, era, player)
+    return required_items and (not has_progressive_eras or has_required_progressive_eras(state, era, player))
 
 
 def create_regions(world: 'CivVIWorld'):

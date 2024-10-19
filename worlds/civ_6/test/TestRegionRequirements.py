@@ -3,7 +3,7 @@ from typing import Callable, List
 from BaseClasses import CollectionState
 from ..Data import get_era_required_items_data
 from ..Enum import EraType
-from ..ProgressiveDistricts import convert_items_to_have_progression
+from ..ProgressiveDistricts import convert_items_to_progressive_items
 from ..Items import get_item_by_civ_name
 from . import CivVITestBase
 
@@ -16,7 +16,7 @@ def collect_items_for_era(test: CivVITestBase, era: EraType) -> None:
 
 def collect_items_for_era_progressive(test: CivVITestBase, era: EraType) -> None:
     era_progression_items = get_era_required_items_data()
-    progressive_items = convert_items_to_have_progression(
+    progressive_items = convert_items_to_progressive_items(
         era_progression_items[era.value])
     items = [get_item_by_civ_name(item, test.world.item_table).name for item in progressive_items]
     test.collect_by_name(items)

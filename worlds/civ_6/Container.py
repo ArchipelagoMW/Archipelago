@@ -9,7 +9,7 @@ from .Enum import CivVICheckType
 from .Locations import CivVILocation, CivVILocationData
 
 if TYPE_CHECKING:
-    from worlds.civ_6 import CivVIWorld
+    from . import CivVIWorld
 
 
 # Python fstrings don't allow backslashes, so we use this workaround

@@ -77,17 +77,6 @@ class FillerItemData:
         self.civ_name = data["Type"]
 
 
-def get_filler_item_data() -> Dict[str, FillerItemData]:
-    """
-    Returns a dictionary of filler items with their data
-    """
-    goody_huts = get_goody_hut_rewards_data()
-    # Create a FillerItemData object for each item
-    cached_filler_items = {item["Name"]: FillerItemData(item) for item in goody_huts}
-
-    return cached_filler_items
-
-
 class CivVIItemData:
     civ_vi_id: int
     classification: ItemClassification
@@ -255,7 +244,7 @@ def _generate_progressive_era_items(id_base: int) -> Dict[str, CivVIItemData]:
 
 def _generate_goody_hut_items(id_base: int) -> Dict[str, CivVIItemData]:
     # Generate goody hut items
-    goody_huts = get_filler_item_data()
+    goody_huts = {item["Name"]: FillerItemData(item) for item in get_goody_hut_rewards_data()}
     goody_table: Dict[str, CivVIItemData] = {}
     goody_base = 0
     for value in goody_huts.values():
@@ -306,5 +295,5 @@ def get_random_filler_by_rarity(world: 'CivVIWorld', rarity: FillerItemRarity) -
     """
     Returns a random filler item by rarity
     """
-    items = [item for item in get_filler_item_data().values() if item.rarity == rarity]
+    items = [item for item in world.filler_data.values() if item.rarity == rarity]
     return world.random.choice(items)
