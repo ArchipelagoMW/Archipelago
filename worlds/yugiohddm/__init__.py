@@ -9,10 +9,10 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import CollectionState, Region, Tutorial, LocationProgressType
 from worlds.generic.Rules import set_rule
 
-from .client import YGODDMClient
+#from .client import YGODDMClient
 from .utils import Constants
 from .items import YGODDMItem, item_name_to_item_id, create_item as fabricate_item, create_victory_event
-from .locations import YGODDMLocation, CardLocation, DuelistLocation, location_name_to_id
+from .locations import YGODDMLocation, DuelistLocation, location_name_to_id as location_map
 from .dice import Dice, all_dice
 from .options import YGODDMOptions, DuelistRematches
 from .duelists import Duelist, all_duelists
@@ -43,6 +43,9 @@ class YGODDMWorld(World):
 
     #duelist_unlock_order: typing.List[typing.Tuple[Duelist, ...]]
     duelist_unlock_order: typing.List[Duelist]
+
+    location_name_to_id = location_map
+    item_name_to_id = item_name_to_item_id
     
     def get_available_duelists(self, state: CollectionState) -> typing.List[Duelist]:
         available_duelists: typing.List[Duelist]
