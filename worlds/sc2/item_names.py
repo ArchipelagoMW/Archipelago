@@ -48,6 +48,7 @@ BULWARK_COMPANY      = "Bulwark Company"
 FIELD_RESPONSE_THETA = "Field Response Theta"
 EMPERORS_GUARDIAN    = "Emperor's Guardian"
 NIGHT_HAWK           = "Night Hawk"
+NIGHT_WOLF           = "Night Wolf"
 
 # Terran Buildings
 BUNKER                              = "Bunker"

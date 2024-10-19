@@ -248,6 +248,8 @@ item_table = {
     item_names.NIGHT_HAWK:
         ItemData(60 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 9, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
+    item_names.NIGHT_WOLF:
+        ItemData(61 +SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 10, SC2Race.TERRAN),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
