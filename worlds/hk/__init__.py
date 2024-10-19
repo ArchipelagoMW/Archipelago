@@ -21,6 +21,16 @@ from .Charms import names as charm_names
 from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, LogicMixin, WebWorld
 
+from settings import Group, Bool
+
+
+class HollowKnightSettings(Group):
+    class DisableMapModSpoilers(Bool):
+        """Disallows the APMapMod from showing spoiler placements."""
+
+    disable_spoilers: typing.Union[DisableMapModSpoilers, bool] = False
+
+
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
     "Lore_Tablet-Path_of_Pain_Entrance",
@@ -124,14 +134,25 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
 
 
 class HKWeb(WebWorld):
-    tutorials = [Tutorial(
+    setup_en  = Tutorial(
         "Mod Setup and Use Guide",
         "A guide to playing Hollow Knight with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Ijwu"]
-    )]
+    )
+
+    setup_pt_br  = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Português Brasileiro",
+        "setup_pt_br.md",
+        "setup/pt_br",
+        ["JoaoVictor-FA"]
+    )
+
+    tutorials = [setup_en, setup_pt_br]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
@@ -145,6 +166,7 @@ class HKWorld(World):
     game: str = "Hollow Knight"
     options_dataclass = HKOptions
     options: HKOptions
+    settings: typing.ClassVar[HollowKnightSettings]
 
     web = HKWeb()
 
@@ -544,6 +566,8 @@ class HKWorld(World):
 
         slot_data["grub_count"] = self.grub_count
 
+        slot_data["is_race"] = int(self.settings.disable_spoilers or self.multiworld.is_race)
+
         return slot_data
 
     def create_item(self, name: str) -> HKItem:
@@ -601,11 +625,11 @@ class HKWorld(World):
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[item.player][effect_name] += effect_value
-        if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-            if state.prog_items[item.player].get('RIGHTDASH', 0) and \
-                    state.prog_items[item.player].get('LEFTDASH', 0):
-                (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
-                    ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
+            if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
+                if state.prog_items[item.player].get('RIGHTDASH', 0) and \
+                        state.prog_items[item.player].get('LEFTDASH', 0):
+                    (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
+                        ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:
