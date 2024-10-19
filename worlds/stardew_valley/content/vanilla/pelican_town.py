@@ -5,6 +5,7 @@ from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
+from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
 from ...strings.crop_names import Fruit
@@ -14,6 +15,7 @@ from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
 from ...strings.material_names import Material
+from ...strings.metal_names import MetalBar
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
@@ -390,6 +392,38 @@ pelican_town = ContentPack(
     ),
     farm_buildings=(
         Building(
+            BuildingNames.barn,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=6000,
+                    items_price=((350, Material.wood), (150, Material.stone))
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.big_barn,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=12_000,
+                    items_price=((450, Material.wood), (200, Material.stone))
+                ),
+            ),
+            upgrade_from=BuildingNames.barn,
+        ),
+        Building(
+            BuildingNames.deluxe_barn,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=25_000,
+                    items_price=((550, Material.wood), (300, Material.stone))
+                ),
+            ),
+            upgrade_from=BuildingNames.big_barn,
+        ),
+        Building(
             BuildingNames.coop,
             sources=(
                 ShopSource(
@@ -421,6 +455,108 @@ pelican_town = ContentPack(
                 ),
             ),
             upgrade_from=BuildingNames.big_coop,
+        ),
+        Building(
+            BuildingNames.fish_pond,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=5000,
+                    items_price=((200, Material.stone), (5, WaterItem.seaweed), (5, WaterItem.green_algae))
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.mill,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=2500,
+                    items_price=((50, Material.stone), (150, Material.wood), (4, ArtisanGood.cloth))
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.shed,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=15_000,
+                    items_price=((300, Material.wood),)
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.big_shed,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=20_000,
+                    items_price=((550, Material.wood), (300, Material.stone))
+                ),
+            ),
+            upgrade_from=BuildingNames.shed,
+        ),
+        Building(
+            BuildingNames.silo,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=100,
+                    items_price=((100, Material.stone), (10, Material.clay), (5, MetalBar.copper))
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.slime_hutch,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=10_000,
+                    items_price=((500, Material.stone), (10, MetalBar.quartz), (1, MetalBar.iridium))
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.stable,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=10_000,
+                    items_price=((100, Material.hardwood), (5, MetalBar.iron))
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.well,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=1000,
+                    items_price=((75, Material.stone),)
+                ),
+            ),
+        ),
+        Building(
+            # TODO check with kaito if it's really worth to have the shipping bin here, since it's built automatically
+            BuildingNames.shipping_bin,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=250,
+                    items_price=((150, Material.wood),)
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.pet_bowl,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=5000,
+                    items_price=((25, Material.hardwood),)
+                ),
+            ),
         ),
     )
 )

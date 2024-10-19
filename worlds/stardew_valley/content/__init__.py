@@ -128,8 +128,9 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
 
 def choose_building_progression(building_option: options.BuildingProgression,
                                 farm_type_option: options.FarmType) -> building_progression.BuildingProgressionFeature:
-    starting_buildings = {Building.farm_house, Building.shipping_bin}
+    starting_buildings = {Building.farm_house, Building.pet_bowl, Building.shipping_bin}
 
+    # TODO or should this be handled by the content pack? A meadowlands content pack would have a permanent source of coop, if that make sense
     if farm_type_option == options.FarmType.option_meadowlands:
         starting_buildings.add(Building.coop)
 
