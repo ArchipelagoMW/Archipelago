@@ -18,7 +18,7 @@ from .options import YGODDMOptions, DuelistRematches
 from .duelists import Duelist, all_duelists
 from .version import __version__
 
-class FMWeb(WebWorld):
+class YGODDMWeb(WebWorld):
     theme = "dirt"
 
     setup_en = Tutorial(
@@ -32,14 +32,14 @@ class FMWeb(WebWorld):
 
     tutorials = [setup_en]
 
-class FMWorld(World):
+class YGODDMWorld(World):
     """Yu-Gi-Oh! Dungeon Dice Monsters is a Game Boy Advance dice-based tactics game based on an original board game
     featured in the Yu-Gi-Oh! storyline."""
     game: str = Constants.GAME_NAME
     options_dataclass = YGODDMOptions
     options: YGODDMOptions
     required_client_version = (0, 5, 0)
-    web = FMWeb()
+    web = YGODDMWeb()
 
     #duelist_unlock_order: typing.List[typing.Tuple[Duelist, ...]]
     duelist_unlock_order: typing.List[Duelist]
@@ -87,6 +87,6 @@ class FMWorld(World):
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
             Constants.GENERATED_WITH_KEY: __version__,
-            Constants.DUELIST_UNLOCK_ORDER_KEY: self.duelist_unlock_order
-            #Constants.GAME_OPTIONS_KEY: self.options.serialize()
+            Constants.DUELIST_UNLOCK_ORDER_KEY: self.duelist_unlock_order,
+            Constants.GAME_OPTIONS_KEY: self.options.serialize()
         }
