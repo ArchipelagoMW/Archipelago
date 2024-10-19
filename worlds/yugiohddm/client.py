@@ -9,6 +9,7 @@ from worlds._bizhawk.client import BizHawkClient
 from .utils import Constants
 from .locations import get_location_id_for_duelist
 from .duelists import Duelist, all_duelists, name_to_duelist
+from .version import __version__
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -49,6 +50,8 @@ class YGODDMClient(BizHawkClient):
         ctx.items_handling = 0b111 # Has this been set correctly? A little confusion
         ctx.want_slot_data = True
         ctx.watcher_timeout = 0.125
+        logger.info(f"YGO Dungeon Dice Monsters Client v{__version__}.")
+        # Add updates section to logger info
         return True
 
 async def read_dice_collection(self, ctx: "BizHawkClientContext") -> bytes:
