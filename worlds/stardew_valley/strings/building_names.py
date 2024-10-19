@@ -18,6 +18,7 @@ class Building:
     kitchen = "Kitchen"
     kids_room = "Kids Room"
     cellar = "Cellar"
+    pet_bowl = "Pet Bowl"
 
 
 class ModBuilding:
