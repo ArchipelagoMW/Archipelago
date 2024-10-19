@@ -1,57 +1,15 @@
 """
 Classes and functions related to AP locations for Pokemon Emerald
 """
-from typing import TYPE_CHECKING, Dict, Optional, FrozenSet, Iterable
+from typing import TYPE_CHECKING, Dict, Optional, Set
 
 from BaseClasses import Location, Region
 
-from .data import BASE_OFFSET, NATIONAL_ID_TO_SPECIES_ID, POKEDEX_OFFSET, data
+from .data import BASE_OFFSET, NATIONAL_ID_TO_SPECIES_ID, POKEDEX_OFFSET, LocationCategory, data
 from .items import offset_item_value
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
-
-
-LOCATION_GROUPS = {
-    "Badges": {
-        "Rustboro Gym - Stone Badge",
-        "Dewford Gym - Knuckle Badge",
-        "Mauville Gym - Dynamo Badge",
-        "Lavaridge Gym - Heat Badge",
-        "Petalburg Gym - Balance Badge",
-        "Fortree Gym - Feather Badge",
-        "Mossdeep Gym - Mind Badge",
-        "Sootopolis Gym - Rain Badge",
-    },
-    "Gym TMs": {
-        "Rustboro Gym - TM39 from Roxanne",
-        "Dewford Gym - TM08 from Brawly",
-        "Mauville Gym - TM34 from Wattson",
-        "Lavaridge Gym - TM50 from Flannery",
-        "Petalburg Gym - TM42 from Norman",
-        "Fortree Gym - TM40 from Winona",
-        "Mossdeep Gym - TM04 from Tate and Liza",
-        "Sootopolis Gym - TM03 from Juan",
-    },
-    "Trick House": {
-        "Trick House Puzzle 1 - Item",
-        "Trick House Puzzle 2 - Item 1",
-        "Trick House Puzzle 2 - Item 2",
-        "Trick House Puzzle 3 - Item 1",
-        "Trick House Puzzle 3 - Item 2",
-        "Trick House Puzzle 4 - Item",
-        "Trick House Puzzle 6 - Item",
-        "Trick House Puzzle 7 - Item",
-        "Trick House Puzzle 8 - Item",
-        "Trick House Puzzle 1 - Reward",
-        "Trick House Puzzle 2 - Reward",
-        "Trick House Puzzle 3 - Reward",
-        "Trick House Puzzle 4 - Reward",
-        "Trick House Puzzle 5 - Reward",
-        "Trick House Puzzle 6 - Reward",
-        "Trick House Puzzle 7 - Reward",
-    }
-}
 
 
 VISITED_EVENT_NAME_TO_ID = {
@@ -80,7 +38,7 @@ class PokemonEmeraldLocation(Location):
     game: str = "Pokemon Emerald"
     item_address: Optional[int]
     default_item_code: Optional[int]
-    tags: FrozenSet[str]
+    key: Optional[str]
 
     def __init__(
             self,
@@ -88,13 +46,13 @@ class PokemonEmeraldLocation(Location):
             name: str,
             address: Optional[int],
             parent: Optional[Region] = None,
+            key: Optional[str] = None,
             item_address: Optional[int] = None,
-            default_item_value: Optional[int] = None,
-            tags: FrozenSet[str] = frozenset()) -> None:
+            default_item_value: Optional[int] = None) -> None:
         super().__init__(player, name, address, parent)
         self.default_item_code = None if default_item_value is None else offset_item_value(default_item_value)
         self.item_address = item_address
-        self.tags = tags
+        self.key = key
 
 
 def offset_flag(flag: int) -> int:
@@ -115,16 +73,14 @@ def reverse_offset_flag(location_id: int) -> int:
     return location_id - BASE_OFFSET
 
 
-def create_locations_with_tags(world: "PokemonEmeraldWorld", regions: Dict[str, Region], tags: Iterable[str]) -> None:
+def create_locations_by_category(world: "PokemonEmeraldWorld", regions: Dict[str, Region], categories: Set[LocationCategory]) -> None:
     """
     Iterates through region data and adds locations to the multiworld if
     those locations include any of the provided tags.
     """
-    tags = set(tags)
-
     for region_name, region_data in data.regions.items():
         region = regions[region_name]
-        filtered_locations = [loc for loc in region_data.locations if len(tags & data.locations[loc].tags) > 0]
+        filtered_locations = [loc for loc in region_data.locations if data.locations[loc].category in categories]
 
         for location_name in filtered_locations:
             location_data = data.locations[location_name]
@@ -144,9 +100,9 @@ def create_locations_with_tags(world: "PokemonEmeraldWorld", regions: Dict[str, 
                 location_data.label,
                 location_id,
                 region,
+                location_name,
                 location_data.address,
-                location_data.default_item,
-                location_data.tags
+                location_data.default_item
             )
             region.locations.append(location)
 
