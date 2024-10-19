@@ -84,6 +84,11 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furnichest", 680, []),
     "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furnichest", 681, []),
     "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furnichest", 682, []),
+    # Adds Toads as locations
+    "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", 0, []),
+    "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", 0, []),
+    "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", 0, []),
+    "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", 0, []),
 
 
 
@@ -733,14 +738,6 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Secret Altar R Candles": LMLocationData("Secret Altar", 616, "Furniture", 37, []),
 }
 
-TOAD_LOCATION_TABLE: dict[str, LMLocationData] = {
-    # Adds Toads as locations
-    "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", 0, []),
-    "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", 0, []),
-    "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", 0, []),
-    "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", 0, []),
-}
-
 # Adds Portrait Ghosts as locations
 PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Neville, the Bookish Father":          LMLocationData("Study", 621, "Portrait", 70, []),
@@ -848,7 +845,6 @@ ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
                       **ENEMIZER_LOCATION_TABLE,
                       **PLANT_LOCATION_TABLE,
                       **FURNITURE_LOCATION_TABLE,
-                      **TOAD_LOCATION_TABLE,
                       **SPEEDY_LOCATION_TABLE,
                       **BOO_LOCATION_TABLE,
                       **PORTRAIT_LOCATION_TABLE}

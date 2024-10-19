@@ -6,9 +6,13 @@ from Options import Toggle, Range, Option, PerGameCommonOptions, Choice, StartIn
 # Will look into feasibility of options later.
 
 
-# class StartWithBetterVacuum(Toggle):
-#     """Start with Poltergust 4000"""
-#     display_name = "Better Vacuum"
+class BetterVacuum(Choice):
+    """Choose whether to include the Poltergust 4000"""
+    display_name = "Poltergust 4000"
+    option_start_with = 0
+    option_include = 1
+    option_exclude = 2
+    default = 1
 
 
 # These might end up being the same
@@ -31,11 +35,6 @@ class StartWithBooRadar(Toggle):
 #   "Keys wil open different doors than normal, and doors may require elements instead of keys"
 #   display_name = "Door Randomization"
 # Heavy logic editing required
-
-class Toadsanity(Toggle):
-    """Adds Toads to location pool"""
-    display_name = "Toadsanity"
-
 
 class Plants(Toggle):
     """Adds all plants to location pool"""
@@ -129,21 +128,12 @@ class RankRequirement(Choice):
     option_rank_b = 6
     option_rank_a = 7
 
-class MarioPieces(Range):
-    """
-    If Mario Pieces is chosen as goal, set the number of pieces his painting is torn into
-    """
-    display_name = "Pieces of Mario"
-    range_start = 1
-    range_end = 10
-    default = 5
 
 @dataclass
 class LMOptions(PerGameCommonOptions):
     goal: Goal
-    mario_pieces: MarioPieces
     rank_requirement: RankRequirement
-    # good_vacuum: StartWithBetterVacuum
+    good_vacuum: BetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
     plantsanity: Plants
@@ -151,7 +141,6 @@ class LMOptions(PerGameCommonOptions):
     boosanity: Boosanity
     portrait_ghosts: PortraitGhosts
     speedy_spirits: SpeedySpirits
-    toadsanity: Toadsanity
     mario_items: MarioItems
     washroom_boo_count: WashroomBooCount
     balcony_boo_count: BalconyBooCount

@@ -364,13 +364,6 @@ class LMWorld(World):
                 if len(entry.access) != 0:
                     for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
                 region.locations.append(entry)
-        if self.options.toadsanity:
-            for location, data in TOAD_LOCATION_TABLE.items():
-                region = self.multiworld.get_region(data.region, self.player)
-                entry = LMLocation(self.player, location, region, data)
-                if len(entry.access) != 0:
-                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
-                region.locations.append(entry)
         if self.options.portrait_ghosts:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
@@ -442,10 +435,11 @@ class LMWorld(World):
             )
         if not self.options.knocksanity:
             self.multiworld.push_precollected(self.create_item("Heart Key"))
-        # if self.options.good_vacuum:
-        #     self.options.start_inventory.value["Poltergust 4000"] = (
-        #             self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
-        #     )
+
+        if self.options.good_vacuum == 0:
+             self.options.start_inventory.value["Poltergust 4000"] = (
+                     self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
+             )
 
     def create_regions(self):
         # "Menu" is the required starting point
@@ -593,6 +587,8 @@ class LMWorld(World):
         if not self.options.boosanity:
             for _ in range(35):
                 exclude += ["Boo"]
+        if self.options.good_vacuum == 2:
+            exclude += ["Poltergust 4000"]
         for item, data in ITEM_TABLE.items():
             copies_to_place = data.quantity - exclude.count(item)
             for _ in range(copies_to_place):
