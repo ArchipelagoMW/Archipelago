@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict, Union
-from BaseClasses import Location, LocationProgressType, Region
+from BaseClasses import Location, Region
 
 from .Data import CivicPrereqData, TechPrereqData, get_boosts_data, get_new_civics_data, get_new_techs_data
 
@@ -8,7 +8,7 @@ from .Enum import CivVICheckType, EraType
 CIV_VI_AP_LOCATION_ID_BASE = 5041000
 
 # Locs that should not have progression items
-EXCLUDED_LOCATIONS = [
+GOODY_HUT_LOCATION_NAMES = [
     "GOODY_HUT_1",
     "GOODY_HUT_2",
     "GOODY_HUT_3",
@@ -61,15 +61,6 @@ class CivVILocation(Location):
             self.location_type = CivVICheckType.BOOST
         else:
             self.location_type = CivVICheckType.EVENT
-
-        if self.name in EXCLUDED_LOCATIONS:
-            self.progress_type = LocationProgressType.EXCLUDED
-
-        if self.location_type == CivVICheckType.BOOST:
-            boost_data_list = get_boosts_data()
-            boost_data = next((boost for boost in boost_data_list if boost.Type == name), None)
-            if boost_data and boost_data.Classification == "EXCLUDED":
-                self.progress_type = LocationProgressType.EXCLUDED
 
 
 def generate_flat_location_table() -> Dict[str, CivVILocationData]:

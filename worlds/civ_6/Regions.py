@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING, Dict, List, Optional
-from BaseClasses import CollectionState, Region
+from typing import TYPE_CHECKING, Dict, List, Optional, Set
+from BaseClasses import CollectionState, LocationProgressType, Region
 from worlds.generic.Rules import set_rule
-from .Data import get_era_required_items_data, get_progressive_districts_data
+from .Data import get_boosts_data, get_era_required_items_data, get_progressive_districts_data
 from .Items import CivVIItemData, format_item_name, get_item_by_civ_name
 from .Enum import EraType
-from .Locations import CivVILocation
+from .Locations import GOODY_HUT_LOCATION_NAMES, CivVILocation
 from .ProgressiveDistricts import get_flat_progressive_districts
 
 if TYPE_CHECKING:
@@ -156,3 +156,20 @@ def create_regions(world: 'CivVIWorld'):
         EraType.ERA_FUTURE.value, "Region", world.player))
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+    exclude_necessary_locations(world)
+
+
+def exclude_necessary_locations(world: 'CivVIWorld'):
+    forced_excluded_location_names: Set[str] = set()
+
+    if world.options.shuffle_goody_hut_rewards:
+        forced_excluded_location_names.update(GOODY_HUT_LOCATION_NAMES)
+
+    if world.options.boostsanity:
+        boost_data_list = get_boosts_data()
+        excluded_boosts = {boost_data.Type for boost_data in boost_data_list if boost_data.Classification == "EXCLUDED"}
+        forced_excluded_location_names.update(excluded_boosts)
+
+    for location_name in forced_excluded_location_names:
+        location = world.get_location(location_name)
+        location.progress_type = LocationProgressType.EXCLUDED

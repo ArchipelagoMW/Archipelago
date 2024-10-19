@@ -34,7 +34,7 @@ components.append(
 class CivVIWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up Civlization VI for MultiWorld.",
+        "A guide to setting up Civilization VI for MultiWorld.",
         "English",
         "setup_en.md",
         "setup/en",
