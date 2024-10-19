@@ -661,6 +661,7 @@ async def game_watcher(ctx: SNIContext) -> None:
             snes_logger.error(f"An error occurred, see logs for details: {e}")
             text_file_logger = logging.getLogger()
             text_file_logger.exception(e)
+            await snes_disconnect(ctx)
 
 
 async def run_game(romfile: str) -> None:
