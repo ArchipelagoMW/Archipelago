@@ -110,6 +110,7 @@ class TunicWorld(World):
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
                 passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                self.passthrough = passthrough
                 self.options.start_with_sword.value = passthrough["start_with_sword"]
                 self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
                 self.options.sword_progression.value = passthrough["sword_progression"]
