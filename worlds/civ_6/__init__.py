@@ -159,7 +159,7 @@ class CivVIWorld(World):
         ]
 
     def post_fill(self) -> None:
-        if not len(self.options.pre_hint_items.value):
+        if not self.options.pre_hint_items.value:
             return
 
         start_location_hints: Set[str] = self.options.start_location_hints.value
