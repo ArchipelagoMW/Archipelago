@@ -9,7 +9,7 @@ Instala el juego en steam o EGS y luego los siguientes mods:
 - [StyxScribe sin REPL](https://github.com/NaixGames/StyxScribeWithoutREPL).
 - [Polycosmos](https://github.com/Naix99/Polycosmos/tree/main/Polycosmos)
 
-Pon hades.apworld en un tu carpeta de mundo (en tu carpeta de instalacion de archipelago, deberia ser lib\worlds).
+Pon hades.apworld en un tu carpeta de custom_worlds (en tu carpeta de instalacion de archipelago).
 
 ## Configurando tu YAML
 

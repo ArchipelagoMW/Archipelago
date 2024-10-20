@@ -416,7 +416,7 @@ class InitialMoneyHelperPercentage(Range):
     What percentage remains from this and the MaxHealthHelpers will give you items that boost the 
     rarity of the boons obtained in runs.
     """
-    display_name = "Max Health Helper Percentage"
+    display_name = "Initial Money Helper Percentage"
     range_start = 0
     range_end = 100
     default = 35
