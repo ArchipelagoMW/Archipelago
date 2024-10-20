@@ -9,10 +9,10 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, check_options)
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, check_options,
+                      get_hexagons_in_pool)
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
-from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
 
@@ -197,11 +197,8 @@ class TunicWorld(World):
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
         # Calculate number of hexagons in item pool
-        hexagon_goal = self.options.hexagon_goal
-        extra_hexagons = self.options.extra_hexagon_percentage
         if self.options.hexagon_quest:
-            items_to_create[gold_hexagon] = min(
-                int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP)), 100)
+            items_to_create[gold_hexagon] = get_hexagons_in_pool(self)
 
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
