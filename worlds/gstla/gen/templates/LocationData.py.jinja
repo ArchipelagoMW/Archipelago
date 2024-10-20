@@ -49,6 +49,7 @@ psyenergy_locations = [
     {% endfor %}
 ]
 
+{#
 events = [
     LocationData(0x778, None, LocationName.Mars_Lighthouse_Doom_Dragon, [0], 0, ItemName.Victory, LocationType.Event, True),
     LocationData(0x8AB, None, LocationName.Alhafra_Briggs, [0], 0, ItemName.Briggs_defeated, LocationType.Event, True),
@@ -63,6 +64,13 @@ events = [
     LocationData(0xA21, None, LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst, [0], 0, ItemName.Jupiter_Beacon_Lit, LocationType.Event, True),
     LocationData(0xA4B, None, LocationName.Mars_Lighthouse_Flame_Dragons, [0], 0, ItemName.Flamedragons_defeated, LocationType.Event, True),
     LocationData(0x8DE, None, LocationName.Lemurian_Ship_Engine, [0], 0, ItemName.Ship, LocationType.Event, True)
+]
+#}
+
+events = [
+    {% for event in events -%}
+    LocationData({{event.flag}}, {{event.event_id}}, 0, 0, {{event.event_id}}, LocationType.Event, True), # {{event.location_name}} {{event.item_name}}
+    {% endfor %}
 ]
 
 the_rest = [
@@ -83,7 +91,7 @@ def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
         types[data.loc_type].append(data)
     return types
 
-all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events
+all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
 location_name_to_data: Dict[str, LocationData] = {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
 location_id_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
 location_flag_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}

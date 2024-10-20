@@ -21,11 +21,13 @@ class DjinnItemData(ItemData):
         self.element = element
 
 class EventItemData(ItemData):
+    flag: int
     location: str
 
-    def __new__(cls, location: str, name: str):
-        self = super(ItemData, cls).__new__(cls, (0, name, ItemClassification.progression, 0, ItemType.Event, 0))
+    def __new__(cls, event_id: int, flag: int, location: str, name: str):
+        self = super(ItemData, cls).__new__(cls, (event_id, name, ItemClassification.progression, 0, ItemType.Event, 0))
         self.location = location
+        self.flag = flag
         return self
 
 summon_list: List[ItemData] = [
@@ -529,7 +531,18 @@ remainder: List[ItemData] = [
     
 ]
 
-
+events: List[EventItemData] = [
+    EventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon Fight", "Victory"),
+    EventItemData(5002, 2219, "Alhafra Briggs", "Briggs defeated"),
+    EventItemData(5003, 2431, "Alhafra Prison Briggs", "Briggs escaped"),
+    EventItemData(5005, 2542, "Gaia Rock - Serpent Fight", "Serpent defeated"),
+    EventItemData(5006, 2269, "Sea of Time - Poseidon fight", "Poseidon defeated"),
+    EventItemData(5007, 2367, "Lemurian Ship - Aqua Hydra fight", "Aqua Hydra defeated"),
+    EventItemData(5009, 2593, "Jupiter_Lighthouse Aeri - Agatio and Karst fight", "Jupiter Beacon Lit"),
+    EventItemData(5010, 2635, "Mars Lighthouse - Flame Dragons fight", "Flame Dragons - defeated"),
+    EventItemData(5011, 2270, "Lemurian Ship - Engine Room", "Ship"),
+    
+]
 
 all_items: List[ItemData] = remainder + djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}

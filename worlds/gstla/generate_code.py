@@ -379,7 +379,6 @@ def generate_item_data(env: Environment, data: GameData):
         # unique_items = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.flags & ItemFlags.Rare]
         # gear = [{'item': x, 'name': names[x.id] } for x in data.raw_item_data if x.item_type.is_gear()]
         remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.id != 0 and x.item_type != ItemType.PsyenergyItem]
-
         # for item in data.raw_item_data:
         #     if item.flags & ItemFlags.Important:
         #         SPECIAL_PROGRESSIONS.setdefault(item.id, 'progression')
@@ -394,7 +393,8 @@ def generate_item_data(env: Environment, data: GameData):
             # unique_items=unique_items,
             # gear=gear,
             remainder=remainder,
-            progression=SPECIAL_PROGRESSIONS
+            progression=SPECIAL_PROGRESSIONS,
+            events=data.events.values()
         ))
 
 def generate_location_data(env: Environment, data: GameData):
@@ -429,7 +429,8 @@ def generate_location_data(env: Environment, data: GameData):
             psyenergy_locations=psy_locs,
             djinn_locations=djinn_locs,
             other_locations=remainder,
-            loc_type_lookup=loc_type_lookup
+            events=data.events.values(),
+            loc_type_lookup=loc_type_lookup,
         ))
 
 

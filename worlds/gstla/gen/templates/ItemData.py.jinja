@@ -19,11 +19,13 @@ class DjinnItemData(ItemData):
         self.element = element
 
 class EventItemData(ItemData):
+    flag: int
     location: str
 
-    def __new__(cls, location: str, name: str):
-        self = super(ItemData, cls).__new__(cls, (0, name, ItemClassification.progression, 0, ItemType.Event, 0{#, 0 #}))
+    def __new__(cls, event_id: int, flag: int, location: str, name: str):
+        self = super(ItemData, cls).__new__(cls, (event_id, name, ItemClassification.progression, 0, ItemType.Event, 0{#, 0 #}))
         self.location = location
+        self.flag = flag
         return self
 
 summon_list: List[ItemData] = [
@@ -69,14 +71,11 @@ remainder: List[ItemData] = [
     {% endfor %}
 ]
 
-{#
-TODO: implement
 events: List[EventItemData] = [
-    {% for event in events %}
-    EventItemData(event.loc_name, event.name),
+    {% for event in events -%}
+    EventItemData({{event.event_id}}, {{event.flag}}, "{{event.location_name}}", "{{event.item_name}}"),
     {% endfor %}
 ]
-#}
 
 all_items: List[ItemData] = remainder + djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events{# + unique_items + gear#}
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}

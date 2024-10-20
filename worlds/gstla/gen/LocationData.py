@@ -137,20 +137,19 @@ psyenergy_locations = [
     
 ]
 
+
+
 events = [
-    LocationData(0x778, None, LocationName.Mars_Lighthouse_Doom_Dragon, [0], 0, ItemName.Victory, LocationType.Event, True),
-    LocationData(0x8AB, None, LocationName.Alhafra_Briggs, [0], 0, ItemName.Briggs_defeated, LocationType.Event, True),
-    LocationData(0x97F, None, LocationName.Alhafra_Prison_Briggs, [0], 0, ItemName.Briggs_escaped, LocationType.Event, True),
-    LocationData(0x8FF, None, LocationName.Gabombo_Statue, [0], 0, ItemName.Gabombo_Statue_Completed, LocationType.Event, True),
-    LocationData(0x9EE, None, LocationName.Gaia_Rock_Serpent, [0], 0, ItemName.Serpent_defeated, LocationType.Event, True),
-    # TODO: the emo tracker doesn't track this, so not sure what this is supposed to be?
-    # TODO: is the flag 0x8DD?
-    LocationData(0x8DD, None, LocationName.SeaOfTime_Poseidon, [0], 0, ItemName.Poseidon_defeated, LocationType.Event,True),
-    LocationData(0x93F, None, LocationName.Lemurian_Ship_Aqua_Hydra, [0], 0, ItemName.Aqua_Hydra_defeated, LocationType.Event, True),
-    LocationData(0x94D, None, LocationName.Shaman_Village_Moapa, [0], 0, ItemName.Moapa_defeated, LocationType.Event, True),
-    LocationData(0xA21, None, LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst, [0], 0, ItemName.Jupiter_Beacon_Lit, LocationType.Event, True),
-    LocationData(0xA4B, None, LocationName.Mars_Lighthouse_Flame_Dragons, [0], 0, ItemName.Flamedragons_defeated, LocationType.Event, True),
-    LocationData(0x8DE, None, LocationName.Lemurian_Ship_Engine, [0], 0, ItemName.Ship, LocationType.Event, True)
+    LocationData(1912, 5001, 0, 0, 5001, LocationType.Event, True), # Mars Lighthouse - Doom Dragon Fight Victory
+    LocationData(2219, 5002, 0, 0, 5002, LocationType.Event, True), # Alhafra Briggs Briggs defeated
+    LocationData(2431, 5003, 0, 0, 5003, LocationType.Event, True), # Alhafra Prison Briggs Briggs escaped
+    LocationData(2542, 5005, 0, 0, 5005, LocationType.Event, True), # Gaia Rock - Serpent Fight Serpent defeated
+    LocationData(2269, 5006, 0, 0, 5006, LocationType.Event, True), # Sea of Time - Poseidon fight Poseidon defeated
+    LocationData(2367, 5007, 0, 0, 5007, LocationType.Event, True), # Lemurian Ship - Aqua Hydra fight Aqua Hydra defeated
+    LocationData(2593, 5009, 0, 0, 5009, LocationType.Event, True), # Jupiter_Lighthouse Aeri - Agatio and Karst fight Jupiter Beacon Lit
+    LocationData(2635, 5010, 0, 0, 5010, LocationType.Event, True), # Mars Lighthouse - Flame Dragons fight Flame Dragons - defeated
+    LocationData(2270, 5011, 0, 0, 5011, LocationType.Event, True), # Lemurian Ship - Engine Room Ship
+    
 ]
 
 the_rest = [
@@ -461,7 +460,7 @@ def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
         types[data.loc_type].append(data)
     return types
 
-all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events
+all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
 location_name_to_data: Dict[str, LocationData] = {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
 location_id_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
 location_flag_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
