@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import re
+
 import ModuleUpdate
 
 ModuleUpdate.update()
@@ -6,16 +10,42 @@ import os
 import asyncio
 import json
 from pymem import pymem
-from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, SupportAbility_Table, ActionAbility_Table, all_weapon_slot
+from .Items import item_dictionary_table, exclusion_item_table, CheckDupingItems, SupportAbility_Table, ActionAbility_Table
+from .Locations import all_locations, exclusion_table, all_weapon_slot
 from .Names import ItemName
 from .WorldLocations import *
 
-from NetUtils import ClientStatus
-from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
+from NetUtils import ClientStatus, NetworkItem
+from CommonClient import ClientCommandProcessor, gui_enabled, logger, get_base_parser, CommonContext, server_loop
+
+
+class KH2CommandProcessor(ClientCommandProcessor):
+    ctx: KH2Context
+
+    def _cmd_deathlink(self):
+        """Toggles Deathlink"""
+        if self.ctx.deathlink_toggle:
+            # self.ctx.tags.add("DeathLink")
+            self.ctx.deathlink_toggle = False
+            self.output(f"Death Link turned off")
+        else:
+            self.ctx.deathlink_toggle = True
+            self.output(f"Death Link turned on")
+
+    def _cmd_add_to_blacklist(self, player_name: str = ""):
+        """Adds player to deathlink blacklist"""
+        if player_name not in self.ctx.deathlink_blacklist:
+            self.ctx.deathlink_blacklist.append(player_name)
+
+    def _cmd_remove_from_blacklist(self, player_name: str = ""):
+        """Removes player from the deathlink blacklist"""
+        if player_name in self.ctx.deathlink_blacklist:
+            self.ctx.deathlink_blacklist.remove(player_name)
 
 
 class KH2Context(CommonContext):
     # command_processor: int = KH2CommandProcessor
+    command_processor = KH2CommandProcessor
     game = "Kingdom Hearts 2"
     items_handling = 0b111  # Indicates you get items sent from other worlds.
 
@@ -30,7 +60,7 @@ class KH2Context(CommonContext):
         self.growthlevel = None
         self.kh2connected = False
         self.kh2_finished_game = False
-        self.serverconneced = False
+        self.serverconnected = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
         self.kh2_loc_name_to_id = None
@@ -40,6 +70,8 @@ class KH2Context(CommonContext):
         self.sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
                                   dic.items()}
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
+
+        self.slot_name = None
 
         self.sending = []
         # list used to keep track of locations+items player has. Used for disoneccting
@@ -114,7 +146,7 @@ class KH2Context(CommonContext):
         # self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
         # self.inBattle = 0x2A0EAC4 + 0x40
-        # self.onDeath = 0xAB9078
+        self.onDeath = 0xAB9078
         # PC Address anchors
         # self.Now = 0x0714DB8 old address
         # epic addresses
@@ -162,32 +194,109 @@ class KH2Context(CommonContext):
         #  Growth:[level 1,level 4,slot]
         self.growth_values_dict = {
             "High Jump":    [0x05E, 0x061, 0x25DA],
-            "Quick Run":    [0x62, 0x65, 0x25DC],
+            "Quick Run":    [0x62, 0x65,   0x25DC],
             "Dodge Roll":   [0x234, 0x237, 0x25DE],
-            "Aerial Dodge": [0x66, 0x069, 0x25E0],
-            "Glide":        [0x6A, 0x6D, 0x25E2]
+            "Aerial Dodge": [0x66, 0x069,  0x25E0],
+            "Glide":        [0x6A, 0x6D,   0x25E2]
         }
 
         self.ability_code_list = None
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
-
         self.base_hp = 20
         self.base_mp = 100
         self.base_drive = 5
         self.base_accessory_slots = 1
         self.base_armor_slots = 1
         self.base_item_slots = 3
+        self.is_dead_flag = False
+        self.deathlink_flag = False
+        self.deathlink_toggle = False
+        self.deathlink_blacklist = []
         self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E, 0x2770, 0x2772]
+        self.game_over = 0x68863A + 0x56454E
+        # special characters for printing in game
+        # A dictionary of all the special characters, which
+        # are hard to convert through a mathematical formula.
+        self.special_dict = {
+            ' ':  0x01,
+            '\n': 0x02,
+            '-':  0x54,
+            '!':  0x48,
+            '?':  0x49,
+            '%':  0x4A,
+            '/':  0x4B,
+            '.':  0x4F,
+            ',':  0x50,
+            ';':  0x51,
+            ':':  0x52,
+            '\'': 0x57,
+            '(':  0x5A,
+            ')':  0x5B,
+            '[':  0x62,
+            ']':  0x63,
+            'à':  0xB7,
+            'á':  0xB8,
+            'â':  0xB9,
+            'ä':  0xBA,
+            'è':  0xBB,
+            'é':  0xBC,
+            'ê':  0xBD,
+            'ë':  0xBE,
+            'ì':  0xBF,
+            'í':  0xC0,
+            'î':  0xC1,
+            'ï':  0xC2,
+            'ñ':  0xC3,
+            'ò':  0xC4,
+            'ó':  0xC5,
+            'ô':  0xC6,
+            'ö':  0xC7,
+            'ù':  0xC8,
+            'ú':  0xC9,
+            'û':  0xCA,
+            'ü':  0xCB,
+            'ç':  0xE8,
+            'À':  0xD0,
+            'Á':  0xD1,
+            'Â':  0xD2,
+            'Ä':  0xD3,
+            'È':  0xD4,
+            'É':  0xD5,
+            'Ê':  0xD6,
+            'Ë':  0xD7,
+            'Ì':  0xD8,
+            'Í':  0xD9,
+            'Î':  0xDA,
+            'Ï':  0xDB,
+            'Ñ':  0xDC,
+            'Ò':  0xDD,
+            'Ó':  0xDE,
+            'Ô':  0xDF,
+            'Ö':  0xE0,
+            'Ù':  0xE1,
+            'Ú':  0xE2,
+            'Û':  0xE3,
+            'Ü':  0xE4,
+            '¡':  0xE5,
+            '¿':  0xE6,
+            'Ç':  0xE7
+        }
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
         await self.get_username()
-        await self.send_connect()
+        if self.slot_name not in {None, self.auth}:
+            logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot {self.slot_name}")
+            self.serverconnected = False
+            asyncio.create_task(super(KH2Context, self).shutdown())
+        else:
+            await self.send_connect()
+
 
     async def connection_closed(self):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
                     'w') as f:
@@ -196,7 +305,7 @@ class KH2Context(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
                     'w') as f:
@@ -225,6 +334,9 @@ class KH2Context(CommonContext):
 
     def kh2_write_byte(self, address, value):
         return self.kh2.write_bytes(self.kh2.base_address + address, value.to_bytes(1, 'big'), 1)
+
+    def kh2_write_bytes(self, address, value):
+        return self.kh2.write_bytes(self.kh2.base_address + address, bytes(value), len(value))
 
     def kh2_read_byte(self, address):
         return int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + address, 1), "big")
@@ -328,7 +440,7 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
-            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
+            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconnected:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
                     asyncio.create_task(self.give_item(item.item, item.location))
@@ -337,6 +449,28 @@ class KH2Context(CommonContext):
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
                 self.locations_checked |= new_locations
+
+        if cmd in {"PrintJSON"}:
+            # shamelessly stolen from kh1
+            if args["type"] == "ItemSend":
+                item = args["item"]
+                networkItem = NetworkItem(*item)
+                recieverID = args["receiving"]
+                senderID = networkItem.player
+                locationID = networkItem.location
+                if recieverID != self.slot and senderID == self.slot:
+                    self.kh2_write_bytes(0x840000, bytes([0] * 32))
+                    self.kh2_write_bytes(0x840020, bytes([0] * 32))
+
+                    itemName = self.item_names[networkItem.item]
+                    itemCategory = networkItem.flags
+                    recieverName = self.player_names[recieverID]
+
+                    itemKHSCII = self.to_khscii(itemName)
+                    playerKHSCII = self.to_khscii(recieverName)
+
+                    self.kh2_write_bytes(0x840000, itemKHSCII)
+                    self.kh2_write_bytes(0x840020, playerKHSCII)
 
         if cmd in {"DataPackage"}:
             self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
@@ -402,7 +536,8 @@ class KH2Context(CommonContext):
                 if self.kh2connected:
                     self.kh2connected = False
                 logger.info("Game is not open.")
-            self.serverconneced = True
+            self.slot_name = self.auth
+            self.serverconnected = True
             asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
     async def checkWorldLocations(self):
@@ -508,6 +643,18 @@ class KH2Context(CommonContext):
         }.items():
             if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
                 self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
+
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+        """Gets dispatched when a new DeathLink is triggered by another linked player."""
+        if data["source"] not in self.deathlink_blacklist:
+            self.last_death_link = max(data["time"], self.last_death_link)
+            text = data.get("cause", "")
+            if text:
+                logger.info(f"DeathLink: {text}")
+            else:
+                logger.info(f"DeathLink: Received from {data['source']}")
+            # kills sora by setting flag for the lua to read
+            self.kh2_write_int(0x820510, 69)
 
     async def give_item(self, item, location):
         try:
@@ -624,10 +771,12 @@ class KH2Context(CommonContext):
                 itemdata = self.item_name_to_data[itemName]
                 amount = self.kh2_read_byte(self.Save + itemdata.memaddr)
                 sellable_dict[itemName] = amount
+
             while (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
                 journal = self.kh2_read_short(self.Journal)
                 shop = self.kh2_read_short(self.Shop)
                 await asyncio.sleep(0.5)
+
             for item, amount in sellable_dict.items():
                 itemdata = self.item_name_to_data[item]
                 afterShop = self.kh2_read_byte(self.Save + itemdata.memaddr)
@@ -835,7 +984,7 @@ class KH2Context(CommonContext):
                 #    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             if "PoptrackerVersionCheck" in self.kh2slotdata:
-                if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
+                if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) <= 0:  # telling the goa they are on version 4.3
                     self.kh2_write_byte(self.Save + 0x3607, 1)
 
         except Exception as e:
@@ -843,6 +992,58 @@ class KH2Context(CommonContext):
                 self.kh2connected = False
             logger.info(e)
             logger.info("line 840")
+
+    async def is_dead(self):
+        # if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
+        if self.deathlink_toggle and self.kh2_read_int(0x2AE5750) != 0 and self.kh2_read_int(self.game_over) == 0 and self.kh2_read_byte(0x820500) == 0:
+            self.kh2_write_int(0x820500, 69)
+            await self.send_death(death_text="Sora Died")
+
+    def to_khscii(self, input):
+        # credit to TopazTK for this.
+        out_list = []
+        char_count = 0
+        # Throughout the text, do:
+        while char_count < len(input):
+            char = input[char_count]
+            # Simple character conversion through mathematics.
+            if 'a' <= char <= 'z':
+                out_list.append(ord(char) + 0x39)
+                char_count += 1
+            elif 'A' <= char <= 'Z':
+                out_list.append(ord(char) - 0x13)
+                char_count += 1
+            elif '0' <= char <= '9':
+                out_list.append(ord(char) + 0x60)
+                char_count += 1
+            # If it hits a "{", we will know it's a command, not a character.
+            elif char == '{':
+                # A command is 6 characters long, in the format of "{0xTT}",
+                # with the "TT" being the 2-digit encode for that command.
+                command = input[char_count:char_count + 6]
+                if re.match(r'^{0x[a-fA-F0-9][a-fA-F0-9]}$', command):
+                    value = command[1:5]
+                    out_list.append(int(value, 16))
+                    char_count += 6
+            # Should it be anything we do not know, we look through
+            # the special dictionary.
+            else:
+                if char in self.special_dict:
+                    out_list.append(self.special_dict[char])
+                else:
+                    out_list.append(0x01)
+                char_count += 1
+                if char_count >= 24:
+                    break
+
+        # When the list ends, we add a terminator and return the string.
+
+        if len(input) >= 24:
+            for _ in range(3):
+                out_list.append(0x2E)
+
+        out_list.append(0x00)
+        return out_list
 
 
 def finishedGame(ctx: KH2Context, message):
@@ -911,23 +1112,26 @@ def finishedGame(ctx: KH2Context, message):
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
         try:
-            if ctx.kh2connected and ctx.serverconneced:
+            if ctx.kh2connected and ctx.serverconnected:
                 ctx.sending = []
-                await asyncio.create_task(ctx.checkWorldLocations())
-                await asyncio.create_task(ctx.checkLevels())
-                await asyncio.create_task(ctx.checkSlots())
-                await asyncio.create_task(ctx.verifyChests())
-                await asyncio.create_task(ctx.verifyItems())
-                await asyncio.create_task(ctx.verifyLevel())
+                await ctx.checkWorldLocations()
+                await ctx.checkLevels()
+                await ctx.checkSlots()
+                await ctx.verifyChests()
+                await ctx.verifyItems()
+                await ctx.verifyLevel()
+                await ctx.is_dead()
+                if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
+                    await ctx.update_death_link(ctx.deathlink_toggle)
                 message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                 if finishedGame(ctx, message) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.kh2_finished_game = True
                 await ctx.send_msgs(message)
-            elif not ctx.kh2connected and ctx.serverconneced:
+            elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
-                while not ctx.kh2connected and ctx.serverconneced:
+                while not ctx.kh2connected and ctx.serverconnected:
                     await asyncio.sleep(15)
                     ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                     if ctx.kh2 is not None:
