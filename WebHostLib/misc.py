@@ -18,6 +18,14 @@ def get_world_theme(game_name: str):
     return 'grass'
 
 
+def render_markdown(path: str) -> str:
+    import markdown
+
+    with open(path) as f:
+        document = f.read()
+    return markdown.markdown(document,  extensions=["mdx_breakless_lists"])
+
+
 @app.before_request
 def register_session():
     session.permanent = True  # technically 31 days after the last visit
@@ -65,14 +73,6 @@ def games():
         if not world.hidden:
             worlds[game] = world
     return render_template("supportedGames.html", worlds=worlds)
-
-
-def render_markdown(path: str) -> str:
-    import markdown
-
-    with open(path) as f:
-        document = f.read()
-    return markdown.markdown(document,  extensions=["mdx_breakless_lists"])
 
 
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
