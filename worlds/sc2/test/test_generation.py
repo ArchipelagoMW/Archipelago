@@ -61,6 +61,7 @@ class TestItemFiltering(Sc2SetupTestBase):
                 item_names.GHOST: 0,
                 item_names.SPECTRE: 0,
                 item_groups.ItemGroupNames.MENGSK_UNITS: 0,
+                item_groups.ItemGroupNames.TERRAN_VETERANCY_UNITS: 0,
             },
             'unexcluded_items': {
                 item_names.NOVA_PLASMA_RIFLE: 1,      # Necessary to pass logic
