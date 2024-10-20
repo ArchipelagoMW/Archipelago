@@ -2698,7 +2698,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SMASH_AND_GRAB_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1500, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and ((adv_tactics and logic.zerg_basic_anti_air(state))
+                and ((adv_tactics and logic.zerg_basic_kerriganless_anti_air(state))
                     or logic.zerg_competent_anti_air(state)
                 ))
         ),
@@ -2840,7 +2840,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3300, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_great_train_robbery_train_stopper(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_basic_kerriganless_anti_air(state))
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "North Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3301, LocationType.VANILLA),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Mid Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3302, LocationType.VANILLA),
@@ -2855,12 +2855,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             lambda state: (
                 (adv_tactics or logic.zerg_common_unit(state))
                 and logic.zerg_great_train_robbery_train_stopper(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_basic_kerriganless_anti_air(state))
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 3311, LocationType.CHALLENGE,
             lambda state:(
                 logic.zerg_great_train_robbery_train_stopper(state)
-                and logic.zerg_basic_anti_air(state)),
+                and logic.zerg_basic_kerriganless_anti_air(state)),
             flags=LocationFlag.PREVENTATIVE
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "2 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3312, LocationType.EXTRA,
@@ -2869,12 +2869,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "4 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3313, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_great_train_robbery_train_stopper(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_basic_kerriganless_anti_air(state))
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "6 Trains Destroyed", SC2_RACESWAP_LOC_ID_OFFSET + 3314, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_great_train_robbery_train_stopper(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_basic_kerriganless_anti_air(state))
         ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3400, LocationType.VICTORY,
             lambda state: (
@@ -2918,7 +2918,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3500, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and (adv_tactics or logic.zerg_basic_anti_air(state)))
+                and (adv_tactics or logic.zerg_basic_kerriganless_anti_air(state)))
         ),
         make_location_data(SC2Mission.CUTTHROAT_Z.mission_name, "Mira Han", SC2_RACESWAP_LOC_ID_OFFSET + 3501, LocationType.EXTRA,
             logic.zerg_common_unit
