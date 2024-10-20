@@ -1,3 +1,4 @@
+from typing import Dict
 from enum import Enum
 class ItemName(str, Enum):
     {% for type in types -%}
@@ -8,16 +9,41 @@ class ItemName(str, Enum):
     {% endif -%}
     {% endfor -%}
 
-    {% endfor -%}
+    {% endfor %}
+
+    #Summons
+    {% for summon in summons -%}
+    {{summon.name}}="{{summon.name}}"
+    {% endfor %}
+
     # Psyenergy
     {% for name in psyenergies-%}
     {{name.py_name}} = "{{name.str_name}}"
     {% endfor -%}
+
     # Djinn
     {% for name in djinn-%}
     {{name.py_name}} = "{{name.str_name}}"
     {% endfor -%}
+
     # Events
     {% for name in events-%}
     {{name.py_name}} = "{{name.str_name}}"
-    {% endfor -%}
+    {% endfor %}
+
+
+item_id_by_name: Dict[int, ItemName] = {
+    "???": 0,
+    {% for d in name_list -%}
+    "{{d['name']}}": {{d['id']}},
+    {% endfor %}
+}
+
+name_by_item_id: Dict[ItemName, int] = {
+    {% for d in name_list -%}
+    {{d['id']}}: "{{d['name']}}",
+    {% endfor %}
+}
+
+assert len(ItemName.__members__) + 1 == len(item_id_by_name), \
+    "Members: %d, Dict: %d" % (len(ItemName.__members__), len(item_id_by_name))

@@ -1,8 +1,6 @@
-from typing import Callable, List, Optional
-from BaseClasses import MultiWorld, Entrance, CollectionState
-from . import ItemType
+from typing import List
+from BaseClasses import MultiWorld
 from .Names.RegionName import RegionName
-from .Names.ItemName import ItemName
 from .Names.EntranceName import EntranceName
 
 

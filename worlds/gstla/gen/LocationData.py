@@ -3,17 +3,17 @@
 from typing import Callable, List, Dict, NamedTuple, Optional
 from enum import Enum
 from BaseClasses import Location, MultiWorld
-from ItemNames import ItemName
-from worlds.gstla.Locations import LocationType
-from LocationNames import LocationName
+from .ItemNames import ItemName
+#from worlds.gstla.Locations import LocationType
+from .LocationNames import LocationName, loc_names_by_id
 
-#class LocationType(str, Enum):
-#   Item = "Item"
-#   Event = "Event"
-#   Djinn = "Djinn"
-#   Psyenergy = "Psyenergy"
-#   Hidden = "Hidden"
-#   Trade = "Trade"
+class LocationType(str, Enum):
+   Item = "Item"
+   Event = "Event"
+   Djinn = "Djinn"
+   Psyenergy = "Psyenergy"
+   Hidden = "Hidden"
+   Trade = "Trade"
 
 
 def always_on(multiworld: MultiWorld, player: int) -> bool:
@@ -34,78 +34,78 @@ class GSTLALocation(Location):
     game: str = "Golden Sun The Lost Age"
 
 djinn_locations = [
-LocationData(48, 0, 16384000, 128, 0, LocationType.Djinn), # Flint
-LocationData(49, 1, 16384002, 128, 1, LocationType.Djinn), # Granite
-LocationData(50, 2, 16384004, 128, 2, LocationType.Djinn), # Quartz
-LocationData(51, 3, 16384006, 128, 3, LocationType.Djinn), # Vine
-LocationData(52, 4, 16384008, 128, 4, LocationType.Djinn), # Sap
-LocationData(53, 5, 16384010, 128, 5, LocationType.Djinn), # Ground
-LocationData(54, 6, 16384012, 128, 6, LocationType.Djinn), # Bane
-LocationData(55, 7, 16384014, 128, 7, LocationType.Djinn), # Echo
-LocationData(56, 8, 16384016, 128, 8, LocationType.Djinn), # Iron
-LocationData(57, 9, 16384018, 128, 9, LocationType.Djinn), # Steel
-LocationData(58, 10, 16384020, 128, 10, LocationType.Djinn), # Mud
-LocationData(59, 11, 16384022, 128, 11, LocationType.Djinn), # Flower
-LocationData(60, 12, 16384024, 128, 12, LocationType.Djinn), # Meld
-LocationData(61, 13, 16384026, 128, 13, LocationType.Djinn), # Petra
-LocationData(62, 14, 16384028, 128, 14, LocationType.Djinn), # Salt
-LocationData(63, 15, 16384030, 128, 15, LocationType.Djinn), # Geode
-LocationData(64, 16, 16384032, 128, 16, LocationType.Djinn), # Mold
-LocationData(65, 17, 16384034, 128, 17, LocationType.Djinn), # Crystal
-LocationData(64, 0, 16384036, 128, 0, LocationType.Djinn), # Fizz
-LocationData(65, 1, 16384038, 128, 1, LocationType.Djinn), # Sleet
-LocationData(66, 2, 16384040, 128, 2, LocationType.Djinn), # Mist
-LocationData(67, 3, 16384042, 128, 3, LocationType.Djinn), # Spritz
-LocationData(68, 4, 16384044, 128, 4, LocationType.Djinn), # Hail
-LocationData(69, 5, 16384046, 128, 5, LocationType.Djinn), # Tonic
-LocationData(70, 6, 16384048, 128, 6, LocationType.Djinn), # Dew
-LocationData(71, 7, 16384050, 128, 7, LocationType.Djinn), # Fog
-LocationData(72, 8, 16384052, 128, 8, LocationType.Djinn), # Sour
-LocationData(73, 9, 16384054, 128, 9, LocationType.Djinn), # Spring
-LocationData(74, 10, 16384056, 128, 10, LocationType.Djinn), # Shade
-LocationData(75, 11, 16384058, 128, 11, LocationType.Djinn), # Chill
-LocationData(76, 12, 16384060, 128, 12, LocationType.Djinn), # Steam
-LocationData(77, 13, 16384062, 128, 13, LocationType.Djinn), # Rime
-LocationData(78, 14, 16384064, 128, 14, LocationType.Djinn), # Gel
-LocationData(79, 15, 16384066, 128, 15, LocationType.Djinn), # Eddy
-LocationData(80, 16, 16384068, 128, 16, LocationType.Djinn), # Balm
-LocationData(81, 17, 16384070, 128, 17, LocationType.Djinn), # Serac
-LocationData(80, 0, 16384072, 128, 0, LocationType.Djinn), # Forge
-LocationData(81, 1, 16384074, 128, 1, LocationType.Djinn), # Fever
-LocationData(82, 2, 16384076, 128, 2, LocationType.Djinn), # Corona
-LocationData(83, 3, 16384078, 128, 3, LocationType.Djinn), # Scorch
-LocationData(84, 4, 16384080, 128, 4, LocationType.Djinn), # Ember
-LocationData(85, 5, 16384082, 128, 5, LocationType.Djinn), # Flash
-LocationData(86, 6, 16384084, 128, 6, LocationType.Djinn), # Torch
-LocationData(87, 7, 16384086, 128, 7, LocationType.Djinn), # Cannon
-LocationData(88, 8, 16384088, 128, 8, LocationType.Djinn), # Spark
-LocationData(89, 9, 16384090, 128, 9, LocationType.Djinn), # Kindle
-LocationData(90, 10, 16384092, 128, 10, LocationType.Djinn), # Char
-LocationData(91, 11, 16384094, 128, 11, LocationType.Djinn), # Coal
-LocationData(92, 12, 16384096, 128, 12, LocationType.Djinn), # Reflux
-LocationData(93, 13, 16384098, 128, 13, LocationType.Djinn), # Core
-LocationData(94, 14, 16384100, 128, 14, LocationType.Djinn), # Tinder
-LocationData(95, 15, 16384102, 128, 15, LocationType.Djinn), # Shine
-LocationData(96, 16, 16384104, 128, 16, LocationType.Djinn), # Fury
-LocationData(97, 17, 16384106, 128, 17, LocationType.Djinn), # Fugue
-LocationData(96, 0, 16384108, 128, 0, LocationType.Djinn), # Gust
-LocationData(97, 1, 16384110, 128, 1, LocationType.Djinn), # Breeze
-LocationData(98, 2, 16384112, 128, 2, LocationType.Djinn), # Zephyr
-LocationData(99, 3, 16384114, 128, 3, LocationType.Djinn), # Smog
-LocationData(100, 4, 16384116, 128, 4, LocationType.Djinn), # Kite
-LocationData(101, 5, 16384118, 128, 5, LocationType.Djinn), # Squall
-LocationData(102, 6, 16384120, 128, 6, LocationType.Djinn), # Luff
-LocationData(103, 7, 16384122, 128, 7, LocationType.Djinn), # Breath
-LocationData(104, 8, 16384124, 128, 8, LocationType.Djinn), # Blitz
-LocationData(105, 9, 16384126, 128, 9, LocationType.Djinn), # Ether
-LocationData(106, 10, 16384128, 128, 10, LocationType.Djinn), # Waft
-LocationData(107, 11, 16384130, 128, 11, LocationType.Djinn), # Haze
-LocationData(108, 12, 16384132, 128, 12, LocationType.Djinn), # Wheeze
-LocationData(109, 13, 16384134, 128, 13, LocationType.Djinn), # Aroma
-LocationData(110, 14, 16384136, 128, 14, LocationType.Djinn), # Whorl
-LocationData(111, 15, 16384138, 128, 15, LocationType.Djinn), # Gasp
-LocationData(112, 16, 16384140, 128, 16, LocationType.Djinn), # Lull
-LocationData(113, 17, 16384142, 128, 17, LocationType.Djinn), # Gale
+LocationData(48, 16384000, 16384000, 128, 0, LocationType.Djinn), # Flint
+LocationData(49, 16384002, 16384002, 128, 1, LocationType.Djinn), # Granite
+LocationData(50, 16384004, 16384004, 128, 2, LocationType.Djinn), # Quartz
+LocationData(51, 16384006, 16384006, 128, 3, LocationType.Djinn), # Vine
+LocationData(52, 16384008, 16384008, 128, 4, LocationType.Djinn), # Sap
+LocationData(53, 16384010, 16384010, 128, 5, LocationType.Djinn), # Ground
+LocationData(54, 16384012, 16384012, 128, 6, LocationType.Djinn), # Bane
+LocationData(55, 16384014, 16384014, 128, 7, LocationType.Djinn), # Echo
+LocationData(56, 16384016, 16384016, 128, 8, LocationType.Djinn), # Iron
+LocationData(57, 16384018, 16384018, 128, 9, LocationType.Djinn), # Steel
+LocationData(58, 16384020, 16384020, 128, 10, LocationType.Djinn), # Mud
+LocationData(59, 16384022, 16384022, 128, 11, LocationType.Djinn), # Flower
+LocationData(60, 16384024, 16384024, 128, 12, LocationType.Djinn), # Meld
+LocationData(61, 16384026, 16384026, 128, 13, LocationType.Djinn), # Petra
+LocationData(62, 16384028, 16384028, 128, 14, LocationType.Djinn), # Salt
+LocationData(63, 16384030, 16384030, 128, 15, LocationType.Djinn), # Geode
+LocationData(64, 16384032, 16384032, 128, 16, LocationType.Djinn), # Mold
+LocationData(65, 16384034, 16384034, 128, 17, LocationType.Djinn), # Crystal
+LocationData(66, 16384036, 16384036, 128, 0, LocationType.Djinn), # Fizz
+LocationData(67, 16384038, 16384038, 128, 1, LocationType.Djinn), # Sleet
+LocationData(68, 16384040, 16384040, 128, 2, LocationType.Djinn), # Mist
+LocationData(69, 16384042, 16384042, 128, 3, LocationType.Djinn), # Spritz
+LocationData(70, 16384044, 16384044, 128, 4, LocationType.Djinn), # Hail
+LocationData(71, 16384046, 16384046, 128, 5, LocationType.Djinn), # Tonic
+LocationData(72, 16384048, 16384048, 128, 6, LocationType.Djinn), # Dew
+LocationData(73, 16384050, 16384050, 128, 7, LocationType.Djinn), # Fog
+LocationData(74, 16384052, 16384052, 128, 8, LocationType.Djinn), # Sour
+LocationData(75, 16384054, 16384054, 128, 9, LocationType.Djinn), # Spring
+LocationData(76, 16384056, 16384056, 128, 10, LocationType.Djinn), # Shade
+LocationData(77, 16384058, 16384058, 128, 11, LocationType.Djinn), # Chill
+LocationData(78, 16384060, 16384060, 128, 12, LocationType.Djinn), # Steam
+LocationData(79, 16384062, 16384062, 128, 13, LocationType.Djinn), # Rime
+LocationData(80, 16384064, 16384064, 128, 14, LocationType.Djinn), # Gel
+LocationData(81, 16384066, 16384066, 128, 15, LocationType.Djinn), # Eddy
+LocationData(82, 16384068, 16384068, 128, 16, LocationType.Djinn), # Balm
+LocationData(83, 16384070, 16384070, 128, 17, LocationType.Djinn), # Serac
+LocationData(84, 16384072, 16384072, 128, 0, LocationType.Djinn), # Forge
+LocationData(85, 16384074, 16384074, 128, 1, LocationType.Djinn), # Fever
+LocationData(86, 16384076, 16384076, 128, 2, LocationType.Djinn), # Corona
+LocationData(87, 16384078, 16384078, 128, 3, LocationType.Djinn), # Scorch
+LocationData(88, 16384080, 16384080, 128, 4, LocationType.Djinn), # Ember
+LocationData(89, 16384082, 16384082, 128, 5, LocationType.Djinn), # Flash
+LocationData(90, 16384084, 16384084, 128, 6, LocationType.Djinn), # Torch
+LocationData(91, 16384086, 16384086, 128, 7, LocationType.Djinn), # Cannon
+LocationData(92, 16384088, 16384088, 128, 8, LocationType.Djinn), # Spark
+LocationData(93, 16384090, 16384090, 128, 9, LocationType.Djinn), # Kindle
+LocationData(94, 16384092, 16384092, 128, 10, LocationType.Djinn), # Char
+LocationData(95, 16384094, 16384094, 128, 11, LocationType.Djinn), # Coal
+LocationData(96, 16384096, 16384096, 128, 12, LocationType.Djinn), # Reflux
+LocationData(97, 16384098, 16384098, 128, 13, LocationType.Djinn), # Core
+LocationData(98, 16384100, 16384100, 128, 14, LocationType.Djinn), # Tinder
+LocationData(99, 16384102, 16384102, 128, 15, LocationType.Djinn), # Shine
+LocationData(100, 16384104, 16384104, 128, 16, LocationType.Djinn), # Fury
+LocationData(101, 16384106, 16384106, 128, 17, LocationType.Djinn), # Fugue
+LocationData(102, 16384108, 16384108, 128, 0, LocationType.Djinn), # Gust
+LocationData(103, 16384110, 16384110, 128, 1, LocationType.Djinn), # Breeze
+LocationData(104, 16384112, 16384112, 128, 2, LocationType.Djinn), # Zephyr
+LocationData(105, 16384114, 16384114, 128, 3, LocationType.Djinn), # Smog
+LocationData(106, 16384116, 16384116, 128, 4, LocationType.Djinn), # Kite
+LocationData(107, 16384118, 16384118, 128, 5, LocationType.Djinn), # Squall
+LocationData(108, 16384120, 16384120, 128, 6, LocationType.Djinn), # Luff
+LocationData(109, 16384122, 16384122, 128, 7, LocationType.Djinn), # Breath
+LocationData(110, 16384124, 16384124, 128, 8, LocationType.Djinn), # Blitz
+LocationData(111, 16384126, 16384126, 128, 9, LocationType.Djinn), # Ether
+LocationData(112, 16384128, 16384128, 128, 10, LocationType.Djinn), # Waft
+LocationData(113, 16384130, 16384130, 128, 11, LocationType.Djinn), # Haze
+LocationData(114, 16384132, 16384132, 128, 12, LocationType.Djinn), # Wheeze
+LocationData(115, 16384134, 16384134, 128, 13, LocationType.Djinn), # Aroma
+LocationData(116, 16384136, 16384136, 128, 14, LocationType.Djinn), # Whorl
+LocationData(117, 16384138, 16384138, 128, 15, LocationType.Djinn), # Gasp
+LocationData(118, 16384140, 16384140, 128, 16, LocationType.Djinn), # Lull
+LocationData(119, 16384142, 16384142, 128, 17, LocationType.Djinn), # Gale
 
 ]
 
@@ -143,9 +143,11 @@ events = [
     LocationData(1912, 5001, 0, 0, 5001, LocationType.Event, True), # Mars Lighthouse - Doom Dragon Fight Victory
     LocationData(2219, 5002, 0, 0, 5002, LocationType.Event, True), # Alhafra Briggs Briggs defeated
     LocationData(2431, 5003, 0, 0, 5003, LocationType.Event, True), # Alhafra Prison Briggs Briggs escaped
+    LocationData(2303, 5004, 0, 0, 5004, LocationType.Event, True), # Gabomba Statue Gabomba Statue Completed
     LocationData(2542, 5005, 0, 0, 5005, LocationType.Event, True), # Gaia Rock - Serpent Fight Serpent defeated
     LocationData(2269, 5006, 0, 0, 5006, LocationType.Event, True), # Sea of Time - Poseidon fight Poseidon defeated
     LocationData(2367, 5007, 0, 0, 5007, LocationType.Event, True), # Lemurian Ship - Aqua Hydra fight Aqua Hydra defeated
+    LocationData(2381, 5008, 0, 0, 5008, LocationType.Event, True), # Shaman Village - Moapa fight Moapa defeated
     LocationData(2593, 5009, 0, 0, 5009, LocationType.Event, True), # Jupiter_Lighthouse Aeri - Agatio and Karst fight Jupiter Beacon Lit
     LocationData(2635, 5010, 0, 0, 5010, LocationType.Event, True), # Mars Lighthouse - Flame Dragons fight Flame Dragons - defeated
     LocationData(2270, 5011, 0, 0, 5011, LocationType.Event, True), # Lemurian Ship - Engine Room Ship
@@ -461,7 +463,7 @@ def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
     return types
 
 all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
-location_name_to_data: Dict[str, LocationData] = {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
+location_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.id]: location for location in all_locations if location.loc_type != LocationType.Event}
 location_id_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
-location_flag_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
+#location_flag_to_data: Dict[int, LocationData] = {location.flag: location for location in all_locations if location.loc_type != LocationType.Event}
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()

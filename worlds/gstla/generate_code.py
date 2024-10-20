@@ -1,7 +1,5 @@
 import os
-import json
 from collections import defaultdict
-from types import SimpleNamespace
 from typing import TextIO, Dict
 
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -45,75 +43,6 @@ SPECIAL_LOCATIONS = {
     '0x106',  # 'Frost Jewel']
 }
 
-
-# Events and sea
-EXTRA_NAMES = [
-    {
-        'key': 'WesternSea_RustySword',
-        'value': 'WesternSea - RustySword'
-    },
-    {
-        'key': 'WesternSea_RustySword_Two',
-        'value': 'WesternSea - RustySword - Two'
-    },
-    {
-        'key': 'EasternSea_RustyAxe',
-        'value': 'EasternSea - RustyAxe'
-    },
-    {
-        'key': 'EasternSea_RustyMace',
-        'value': 'EasternSea - RustyMace'
-    },
-    {
-        'key': 'WesternSea_RustyStaff',
-        'value': 'WesternSea - RustyStaff'
-    },
-    {
-        'key': 'Mars_Lighthouse_Doom_Dragon',
-        'value': 'Mars Lighthouse - Doom Dragon Fight'
-    },
-    {
-        'key': 'Gabombo_Statue',
-        'value': 'Gabombo Statue'
-    },
-    {
-        'key': 'Alhafra_Briggs',
-        'value': 'Alhafra Briggs'
-    },
-    {
-        'key': 'Alhafra_Prison_Briggs',
-        'value': 'Alhafra Prison Briggs'
-    },
-    {
-        'key': 'Gaia_Rock_Serpent',
-        'value': 'Gaia Rock - Serpent Fight'
-    },
-    {
-        'key': 'SeaOfTime_Poseidon',
-        'value': 'Sea Of Time - Poseidon fight'
-    },
-    {
-        'key': 'Lemurian_Ship_Aqua_Hydra',
-        'value': 'Lemurian Ship - Aqua Hydra fight'
-    },
-    {
-        'key': 'Lemurian_Ship_Engine',
-        'value': 'Lemurian Ship - Engine Room'
-    },
-    {
-        'key': 'Shaman_Village_Moapa',
-        'value': 'Shaman Village - Moapa fight'
-    },
-    {
-        'key': 'Jupiter_Lighthouse_Aeri_Agatio_and_Karst',
-        'value': 'Jupiter_Lighthouse Aeri - Agatio and Karst fight'
-    },
-    {
-        'key': 'Mars_Lighthouse_Flame_Dragons',
-        'value': 'Mars Lighthouse - Flame Dragons fight'
-    }
-]
-
 SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
     # NOTE: using strings here, because importing ItemClassification from BaseClasses will cause a circular import
 65:'progression',#    ItemName.Shamans_Rod
@@ -133,7 +62,8 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 326:'progression',#    ItemName.Trident
 244:'progression',#    ItemName.Blue_Key
 243:'progression',#    ItemName.Red_Key
-222:'progression',#    ItemName.Mars_Star
+222:'progression',#    ItemName.Mythril_Bag_Mars
+247:'progression',#    ItemName.Mars_Star
 459:'progression',#    ItemName.Ruin_Key
 443:     'useful',#     ItemName.Mysterious_Card
 444:     'useful',#    ItemName.Trainers_Whip
@@ -226,18 +156,6 @@ def main():
 
 def generate_location_names(env: Environment, data: GameData):
     template = env.get_template('LocationNames.py.jinja')
-    # with open(os.path.join(SCRIPT_DIR, 'data', 'item_locations.json'), 'r') as loc_file:
-    #     location_data = json.load(loc_file)
-    # with open(os.path.join(SCRIPT_DIR, 'data', 'djinn.json'), 'r') as djinn_file:
-    #     djinn_data = json.load(djinn_file, object_hook=lambda d: SimpleNamespace(**d))
-    # by_id = dict()
-    # for flag, locations in location_data.items():
-    #     for loc in locations:
-    #         if flag in SPECIAL_LOCATIONS and not loc['isKeyItem']:
-    #             continue
-    #         loc['flag'] = flag
-    #         by_id[loc['id']] = loc
-    # {y['id']: y for x in location_data.values() for y in x}
     hidden_items = []
     key_items = []
     summon_tablets = []
@@ -248,6 +166,7 @@ def generate_location_names(env: Environment, data: GameData):
     fire_djinn = []
     air_djinn = []
     events = []
+    name_list = []
 
     for djinn in data.raw_djinn_data:
         # d = {'key': djinn.name, 'value': djinn.name}
@@ -259,66 +178,13 @@ def generate_location_names(env: Environment, data: GameData):
             fire_djinn.append(djinn)
         elif djinn.element == ElementType.Air:
             air_djinn.append(djinn)
+        name_list.append({'name': djinn.name, 'id': djinn.ap_id})
     for event in data.events.values():
-        events.append(data.location_names[event.flag])
-    # names = dict()
-    #
-    # num_words = {
-    #     1: 'One',
-    #     2: 'Two',
-    #     3: 'Three',
-    #     4: 'Four',
-    #     5: 'Five',
-    #     6: 'Six',
-    #     7: 'Seven',
-    #     8: 'Eight',
-    #     9: 'Nine',
-    #     10: 'Ten'
-    # }
-
-    # for y in by_id.values():
-    #     map_name = y['mapName'].replace(' ', '_').replace("'", '')
-    #     item_name = y['vanillaName'].replace(' ', '_').replace("'", '').replace('???', 'Empty')
-    #     key = map_name + '_' + item_name
-    #     value = map_name + ' - ' + item_name
-    #     count = names.get(key, 0)
-    #     count += 1
-    #     names[key] = count
-    #     if count > 1:
-    #         word = num_words[count]
-    #         key = map_name + '_' + item_name + '_' + word
-    #         value = map_name + ' - ' + item_name + ' ' + word
-    #     d = {
-    #         'key': key,
-    #         'value': value
-    #     }
-    #     if y['isSummon']:
-    #         summon_tablets.append(d)
-    #     elif y['isKeyItem']:
-    #         key_items.append(d)
-    #     elif y['isMajorItem']:
-    #         major_items.append(d)
-    #     elif y['isHidden']:
-    #         hidden_items.append(d)
-    #     else:
-    #         remainder.append(d)
+        events.append(data.location_names[event.event_id])
+        name_list.append({'name': event.location_name, 'id': event.event_id})
     for loc_datum in data.raw_location_data:
         loc_name = data.location_names[loc_datum.flag]
-        # map_name = y['mapName'].replace(' ', '_').replace("'", '')
-        # item_name = y['vanillaName'].replace(' ', '_').replace("'", '').replace('???', 'Empty')
-        # key = map_name + '_' + item_name
-        # value = map_name + ' - ' + item_name
-        # count = names.get(key, 0)
-        # count += 1
-        # names[key] = count
-        # if count > 1:
-        #     word = num_words[count]
-        #     key = map_name + '_' + item_name + '_' + word
-        #     value = map_name + ' - ' + item_name + ' ' + word
-        # d = {
-        #     'key': key,
-        #     'value': value
-        # }
+        name_list.append({'name': loc_name.str_name, 'id': loc_datum.id})
         if loc_datum.is_summon:
             summon_tablets.append(loc_name)
         elif loc_datum.is_key_item:
@@ -329,15 +195,14 @@ def generate_location_names(env: Environment, data: GameData):
             hidden_items.append(loc_name)
         else:
             remainder.append(loc_name)
-    # TODO: need to add these locations somehow
-    # remainder += EXTRA_NAMES
     with open(os.path.join(SCRIPT_DIR, 'gen', 'LocationNames.py'), 'w') as outfile:
         write_warning(outfile)
         outfile.write(template.render(hiddenItems=hidden_items, keyItems=key_items,
                                       summonTablets=summon_tablets, majorItems=major_items,
                                       remainder=remainder, earthDjinn=earth_djinn,
                                       waterDjinn=water_djinn, fireDjinn=fire_djinn,
-                                      airDjinn=air_djinn, events=events))
+                                      airDjinn=air_djinn, events=events,
+                                      name_list=name_list))
 
 def generate_item_names(env: Environment, data: GameData):
     template = env.get_template('ItemNames.py.jinja')
@@ -350,11 +215,16 @@ def generate_item_names(env: Environment, data: GameData):
                 'name': data.item_names[item.id]
             } for item in data.raw_item_data
         }
+        name_list = [{'name': data.item_names[x.id].str_name, 'id': x.id} for x in data.raw_item_data]
+        summons = [x for x in data.raw_summon_data]
+        name_list += [{'name': x.name, 'id': x.id} for x in summons]
         events = [data.item_names[event.event_id] for event in data.events.values()]
-        # TODO: add once Items.py is part of being generated
-        # for djinn in data.raw_djinn_data:
-        #     name_dict[djinn.id] = {'item': djinn, 'name': ItemName(djinn.id, djinn.name, djinn.name)}
+        name_list += [{'name': data.item_names[x.id].str_name, 'id': x.id} for x in events]
+        name_list += [{'name': d.name, 'id': d.ap_id} for d in data.raw_djinn_data]
+        name_list += [{'name': p.name, 'id': p.id} for p in data.raw_psy_data]
         outfile.write(template.render(
+            name_list=name_list,
+            summons=summons,
             items=name_dict.values(),
             psyenergies=[data.item_names[x.id] for x in data.raw_psy_data],
             djinn=[data.item_names[x.ap_id] for x in data.raw_djinn_data],
@@ -367,23 +237,12 @@ def generate_item_data(env: Environment, data: GameData):
     with open(os.path.join(SCRIPT_DIR, 'gen', 'ItemData.py'), 'w') as outfile:
         write_warning(outfile)
         names = data.item_names
+
         summons = [x for x in data.raw_summon_data]
         psyenergies = [x for x in data.raw_psy_data]
         psyitems = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type == ItemType.PsyenergyItem]
         djinns = [x for x in data.raw_djinn_data]
-        # item_counts = defaultdict(lambda: 0)
-        # for loc in data.raw_location_data:
-        #     item_id = loc.vanilla_contents
-        #     item_counts[item_id] += 1
-        # print(item_counts)
-        # unique_items = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.flags & ItemFlags.Rare]
-        # gear = [{'item': x, 'name': names[x.id] } for x in data.raw_item_data if x.item_type.is_gear()]
         remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.id != 0 and x.item_type != ItemType.PsyenergyItem]
-        # for item in data.raw_item_data:
-        #     if item.flags & ItemFlags.Important:
-        #         SPECIAL_PROGRESSIONS.setdefault(item.id, 'progression')
-        #     elif item.flags & ItemFlags.Rare:
-        #         SPECIAL_PROGRESSIONS.setdefault(item.id, 'useful')
 
         outfile.write(template.render(
             summons=summons,
@@ -401,7 +260,6 @@ def generate_location_data(env: Environment, data: GameData):
     template = env.get_template('LocationData.py.jinja')
     with open(os.path.join(SCRIPT_DIR, 'gen', 'LocationData.py'), 'w') as outfile:
         write_warning(outfile)
-        names = data.location_names
         loc_data = data.raw_location_data
         psy_ids = {psy.id for psy in data.raw_psy_data}
         djinn_locs = data.raw_djinn_data

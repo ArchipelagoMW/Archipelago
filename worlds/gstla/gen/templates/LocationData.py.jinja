@@ -1,17 +1,17 @@
 from typing import Callable, List, Dict, NamedTuple, Optional
 from enum import Enum
 from BaseClasses import Location, MultiWorld
-from ItemNames import ItemName
-from worlds.gstla.Locations import LocationType
-from LocationNames import LocationName
+from .ItemNames import ItemName
+#from worlds.gstla.Locations import LocationType
+from .LocationNames import LocationName, loc_names_by_id
 
-#class LocationType(str, Enum):
-#   Item = "Item"
-#   Event = "Event"
-#   Djinn = "Djinn"
-#   Psyenergy = "Psyenergy"
-#   Hidden = "Hidden"
-#   Trade = "Trade"
+class LocationType(str, Enum):
+   Item = "Item"
+   Event = "Event"
+   Djinn = "Djinn"
+   Psyenergy = "Psyenergy"
+   Hidden = "Hidden"
+   Trade = "Trade"
 
 
 def always_on(multiworld: MultiWorld, player: int) -> bool:
@@ -33,7 +33,7 @@ class GSTLALocation(Location):
 
 djinn_locations = [
 {% for djinn in djinn_locations -%}
-    LocationData({{djinn.vanilla_flag}}, {{djinn.id}}, {{djinn.addr}}, 128, {{djinn.id}}, LocationType.Djinn), # {{djinn.name}}
+    LocationData({{djinn.vanilla_flag}}, {{djinn.addr}}, {{djinn.addr}}, 128, {{djinn.id}}, LocationType.Djinn), # {{djinn.name}}
 {% endfor %}
 ]
 
@@ -54,7 +54,7 @@ events = [
     LocationData(0x778, None, LocationName.Mars_Lighthouse_Doom_Dragon, [0], 0, ItemName.Victory, LocationType.Event, True),
     LocationData(0x8AB, None, LocationName.Alhafra_Briggs, [0], 0, ItemName.Briggs_defeated, LocationType.Event, True),
     LocationData(0x97F, None, LocationName.Alhafra_Prison_Briggs, [0], 0, ItemName.Briggs_escaped, LocationType.Event, True),
-    LocationData(0x8FF, None, LocationName.Gabombo_Statue, [0], 0, ItemName.Gabombo_Statue_Completed, LocationType.Event, True),
+    LocationData(0x8FF, None, LocationName.Gabomba_Statue, [0], 0, ItemName.Gabomba_Statue_Completed, LocationType.Event, True),
     LocationData(0x9EE, None, LocationName.Gaia_Rock_Serpent, [0], 0, ItemName.Serpent_defeated, LocationType.Event, True),
     # TODO: the emo tracker doesn't track this, so not sure what this is supposed to be?
     # TODO: is the flag 0x8DD?
@@ -92,7 +92,7 @@ def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
     return types
 
 all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
-location_name_to_data: Dict[str, LocationData] = {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
+location_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.id]: location for location in all_locations if location.loc_type != LocationType.Event}
 location_id_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
-location_flag_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
+#location_flag_to_data: Dict[int, LocationData] = {location.flag: location for location in all_locations if location.loc_type != LocationType.Event}
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()

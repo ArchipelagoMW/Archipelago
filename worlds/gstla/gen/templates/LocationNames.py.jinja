@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Dict
 class LocationName(str, Enum):
     ##hiddenItems
     {% for name in hiddenItems -%}
@@ -45,3 +46,17 @@ class LocationName(str, Enum):
     {% for name in airDjinn -%}
         {{name.name}} = "{{name.name}}"
     {% endfor %}
+
+ids_by_loc_name: Dict[LocationName, int] = {
+    {% for d in name_list -%}
+    "{{d['name']}}": {{d['id']}},
+    {% endfor %}
+}
+
+loc_names_by_id: Dict[int, LocationName] = {
+    {% for d in name_list -%}
+    {{d['id']}}: "{{d['name']}}",
+    {% endfor %}
+}
+
+assert len(LocationName.__members__) == len(ids_by_loc_name)

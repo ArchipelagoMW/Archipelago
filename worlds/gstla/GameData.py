@@ -114,6 +114,7 @@ class ItemDatum(NamedTuple):
     addr: int
     item_type: ItemType
     flags: ItemFlags
+    use_effect: int = 0
     # TODO: event type is a property of locations, not of items
     # event_type: int
 
@@ -129,6 +130,8 @@ class DjinnDatum(NamedTuple):
     element: ElementType
     name: str
     addr: int
+    stats_addr: int
+    stats: List[int]
     vanilla_flag: int
     item_type: ItemType = ItemType.Djinn
 
@@ -146,6 +149,7 @@ class PsyDatum(NamedTuple):
     item_type: ItemType = ItemType.Psyenergy
 
 class LocationName(NamedTuple):
+    id: int
     flag: int
     py_name: str
     str_name: str
@@ -156,7 +160,7 @@ class LocationName(NamedTuple):
         val = loc.vanilla_name + suffix
         py_name = key.replace(' ', '_').replace("'", '')
         str_name = val.replace(' ', '_').replace("'", '').replace('???', 'Empty')
-        return LocationName(loc.flag, py_name + '_' + str_name, py_name + ' - ' + str_name)
+        return LocationName(loc.id, loc.flag, py_name + '_' + str_name, py_name + ' - ' + str_name)
 
 class ItemName(NamedTuple):
     id: int
@@ -232,7 +236,8 @@ class GameData:
                           item['name'],
                           item['addr'],
                           ItemType(item['itemType']),
-                          ItemFlags(item['flags']))
+                          ItemFlags(item['flags']),
+                          item['useEffect'])
             )
 
     def _load_djinn(self):
@@ -249,7 +254,9 @@ class GameData:
                     djinn['vanillaName'],
                     djinn['addr'],
                     # From emo tracker pack
-                    0x30 + (djinn['vanillaElement'] * 16) + djinn['vanillaId'],
+                    djinn['statAddr'],
+                    djinn['stats'],
+                    0x30 + (djinn['vanillaElement'] * 18) + djinn['vanillaId'],
                 )
             )
         for djinn in self.raw_djinn_data:
@@ -272,8 +279,8 @@ class GameData:
             names[loc_name.py_name] = count
             if count > 1:
                 loc_name = LocationName.from_loc_data(loc, ' ' + num_words[count])
-            assert loc_name.flag not in self.location_names, "Flag: %s, Name: %s" % (hex(loc_name.flag), loc_name.str_name)
-            self.location_names[loc_name.flag] = loc_name
+            assert loc_name.id not in self.location_names, "Id: %s, Name: %s" % (hex(loc_name.flag), loc_name.str_name)
+            self.location_names[loc_name.id] = loc_name
 
     def _setup_item_names(self):
         # self.item_names = {}
@@ -293,7 +300,7 @@ class GameData:
         self.raw_psy_data += [
             PsyDatum(3596, 'Growth', 3596),
             PsyDatum(3662, 'Whirlwind', 3662),
-            PsyDatum(3722, 'Patch', 3722),
+            PsyDatum(3722, 'Parch', 3722),
             PsyDatum(3723, 'Sand', 3723),
             PsyDatum(3725, 'Mind Read', 3725),
             PsyDatum(3728, 'Reveal', 3728),
@@ -309,22 +316,20 @@ class GameData:
             EventDatum(event_offset + 1, 0x778, "Mars Lighthouse - Doom Dragon Fight", "Victory" ),
             EventDatum(event_offset + 2, 0x8AB, "Alhafra Briggs", "Briggs defeated" ),
             EventDatum(event_offset + 3, 0x97F, "Alhafra Prison Briggs", "Briggs escaped" ),
-            # Covered by the black crystal location
-            # EventDatum(event_offset + 4, 0x8FF, "Gabombo Statue", "Gabombo Statue Completed" ),
+            EventDatum(event_offset + 4, 0x8FF, "Gabomba Statue", "Gabomba Statue Completed" ),
             EventDatum(event_offset + 5, 0x9EE, "Gaia Rock - Serpent Fight", "Serpent defeated" ),
             # TODO: the emo tracker doesn't track this, so not sure what this is supposed to be?
             # TODO: is the flag 0x8DD?
             EventDatum(event_offset + 6, 0x8DD, "Sea of Time - Poseidon fight", "Poseidon defeated"),
             EventDatum(event_offset + 7, 0x93F, "Lemurian Ship - Aqua Hydra fight", "Aqua Hydra defeated"),
-            # The Moapa fight is covered by the Hover Jade location
-            # EventDatum(event_offset + 8, 0x94D, "Shaman Village - Moapa fight", "Moapa defeated" ),
+            EventDatum(event_offset + 8, 0x94D, "Shaman Village - Moapa fight", "Moapa defeated" ),
             EventDatum(event_offset + 9, 0xA21, "Jupiter_Lighthouse Aeri - Agatio and Karst fight", "Jupiter Beacon Lit"),
             EventDatum(event_offset + 10, 0xA4B, "Mars Lighthouse - Flame Dragons fight", "Flame Dragons - defeated"),
             EventDatum(event_offset + 11, 0x8DE, "Lemurian Ship - Engine Room", "Ship")
         ]
         self.events = {e.event_id: e for e in events}
         for event in self.events.values():
-            self.location_names[event.flag] = LocationName(event.flag, event.location_name.replace(' ', '_').replace('-', '').replace('__', '_'), event.location_name)
+            self.location_names[event.event_id] = LocationName(event.event_id, event.flag, event.location_name.replace(' ', '_').replace('-', '').replace('__', '_'), event.location_name)
         for event in self.events.values():
             self.item_names[event.event_id] = ItemName(event.event_id, event.item_name.replace('-', '').replace(' ', '_').replace('__', '_'), event.item_name)
 

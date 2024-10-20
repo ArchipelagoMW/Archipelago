@@ -1,7 +1,33 @@
+from enum import Enum, IntEnum
 from typing import List, NamedTuple, Dict, Optional
 from worlds.gstla.GameData import ElementType, ItemType
 from BaseClasses import ItemClassification
 
+{#
+class ElementType(IntEnum):
+   Earth = 0
+   Water = 1
+   Fire = 2
+   Air = 3
+
+class ItemType(str, Enum):
+   KeyItem = "key"
+   Class = "class"
+   Consumable = "consumables"
+   Trade = "trade"
+   Forgeable = "forgeable"
+   Weapon = "weapon"
+   Armor = "armor"
+   Helm = "helm"
+   Shield = "shield"
+   Psyenergy = "psyenergy"
+   PsyenergyItem = "psyenergy_item"
+   Shirt = "shirt"
+   Boots = "boots"
+   Ring = "ring"
+   Djinn = "djinn"
+   Event = "event"
+#}
 class ItemData(NamedTuple):
     id: int
     name: str
@@ -13,10 +39,15 @@ class ItemData(NamedTuple):
 
 class DjinnItemData(ItemData):
     element: ElementType
+    stats_addr: int
+    stats: List[int]
 
-    def __new__(cls, id, name: str, addr: int, element: ElementType):
+    def __new__(cls, id: int, name: str, addr: int, element: ElementType, stats_addr: int, stats: List[int]):
         self = super(ItemData, cls).__new__(cls, (id, name, ItemClassification.progression_skip_balancing, addr, ItemType.Djinn))
         self.element = element
+        self.stats_addr = stats_addr
+        self.stats = stats
+        return self
 
 class EventItemData(ItemData):
     flag: int
@@ -42,13 +73,13 @@ psyenergy_list: List[ItemData] = [
 
 psyenergy_as_item_list: List[ItemData] = [
     {% for psyitem in psyitems -%}
-    ItemData({{psyitem.item.id}}, '{{psyitem.name.str_name}}', ItemClassification.progression, {{psyitem.item.addr}}, ItemType.PsyenergyItem{#, {{psyitem.item.event_type}}#}),
+    ItemData({{psyitem.item.use_effect}} + 0xE00, '{{psyitem.name.str_name}}', ItemClassification.progression, {{psyitem.item.addr}}, ItemType.PsyenergyItem{#, {{psyitem.item.event_type}}#}),
     {% endfor %}
 ]
 
 djinn_items: List[ItemData] = [
     {% for djinn in djinns -%}
-    DjinnItemData({{djinn.id}}, '{{djinn.name}}', {{djinn.addr}}, ElementType({{djinn.element}})),
+    DjinnItemData({{djinn.id}}, '{{djinn.name}}', {{djinn.addr}}, ElementType({{djinn.element}}), {{djinn.stats_addr}}, {{djinn.stats}}),
     {% endfor %}
 ]
 

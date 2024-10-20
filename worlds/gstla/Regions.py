@@ -1,9 +1,8 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 from BaseClasses import MultiWorld, Region, Entrance
-from worlds.gstla.Locations import GSTLALocation, location_name_to_id, LocationType
+from worlds.gstla.Locations import GSTLALocation, location_name_to_id
 from .gen.LocationNames import LocationName
-from . import ItemType
-# from .Names.LocationName import LocationName
+from .gen.LocationData import LocationType
 from .Names.RegionName import RegionName
 from .Names.EntranceName import EntranceName
 
@@ -27,17 +26,29 @@ class EntranceData:
 
 def create_region(multiworld: MultiWorld, player: int, regionData: EntranceData):
     region = Region(regionData.name, player, multiworld)
+    gs_locations: Dict[str, Optional[int]] = dict()
     for location in regionData.locations:
-        location_data = location_name_to_id.get(location, None)
-
-        if location_data is None:
-            loc = GSTLALocation(player, location, None, region)
+        # location_data = location_name_to_id.get(location, None)
+        # if location == LocationName.Daila_Psy_Crystal:
+        #     print(location_data)
+        # if location_data is None:
+        #     loc = GSTLALocation(player, location, None, region)
+        # else:
+        location_data = location_name_to_id[location]
+        if multiworld.hidden_items[player] == 2 and location_data.loc_type == LocationType.Hidden:
+            continue
+        # loc = GSTLALocation(player, location, location_data.id, region)
+        if location_data.loc_type == LocationType.Djinn:
+            loc = GSTLALocation.create_djinn_location(player, location, location_data, region)
+        elif location_data.loc_type == LocationType.Event:
+            loc = GSTLALocation.create_event_location(player, location, location_data, region)
         else:
-            if multiworld.hidden_items[player] == 2 and location_data.loc_type == LocationType.Hidden:
-                continue
-            loc = GSTLALocation(player, location, location_data.id, region)
-
+            loc = GSTLALocation(player, location, location_data, region)
+        # gs_locations.append(loc)
+        # print(type(region.locations))
         region.locations.append(loc)
+        # region.locations.insert(loc)
+    region.add_locations(gs_locations)
 
     for regionExit in regionData.exits:
         region.create_exit(regionExit)
@@ -314,8 +325,7 @@ regions: Dict[str, EntranceData] = {
         LocationName.Gabomba_Statue_Mimic,
         LocationName.Gabomba_Statue_Elixir,
         LocationName.Gabomba_Statue_Bone_Armlet,
-        # Covered by black crystal?
-        # LocationName.Gabombo_Statue,
+        LocationName.Gabomba_Statue,
         LocationName.Steel
     ],
     [
@@ -628,8 +638,7 @@ regions: Dict[str, EntranceData] = {
         LocationName.Shaman_Village_Lucky_Medal,
         LocationName.Shaman_Village_Lucky_Pepper,
         LocationName.Shaman_Village_Weasels_Claw,
-        # covered by hover jade?
-        # LocationName.Shaman_Village_Moapa,
+        LocationName.Shaman_Village_Moapa_fight,
         LocationName.Shaman_Village_Hover_Jade,
         LocationName.Aroma,
         LocationName.Gasp
