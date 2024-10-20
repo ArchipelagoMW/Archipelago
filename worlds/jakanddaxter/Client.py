@@ -350,9 +350,9 @@ async def run_game(ctx: JakAndDaxterContext):
 
         # Now we can FINALLY attempt to start the programs.
         if not gk_running:
-            # Per-mod saves and settings are stored outside the ArchipelaGOAL root folder, so we
-            # have to traverse a relative path, normalize it, and pass it in as an argument to gk.
-            # This folder will be created if it does not exist.
+            # Per-mod saves and settings are stored outside the ArchipelaGOAL root folder, so we have to traverse
+            # a relative path, normalize it, and pass it in as an argument to gk. This folder will be created if
+            # it does not exist.
             config_relative_path = "../_settings/archipelagoal"
             config_path = os.path.normpath(
                 os.path.join(
@@ -378,24 +378,36 @@ async def run_game(ctx: JakAndDaxterContext):
             proj_path = os.path.join(root_path, "data")
             if os.path.exists(proj_path):
 
-                # Traversing out to get the "iso_data" path automates away an oft-forgotten manual step of mod updates.
-                # Every update required the user to copy the iso_data folder from the active jak1 directory to the mod
-                # directory. Passing in this argument allows users to skip that step of installs/updates.
-                iso_relative_path = "../../../../../active/jak1/data/iso_data"
-                iso_path = os.path.normpath(
-                    os.path.join(
-                        root_path,
-                        os.path.normpath(iso_relative_path)))
+                # Look for "iso_data" path to automate away an oft-forgotten manual step of mod updates.
+                # All relative paths should start from root_path.
+                goalc_args = []
+                possible_relative_paths = {
+                    "../../../../../active/jak1/data/iso_data",
+                    "./data/iso_data",
+                }
 
-                if os.path.exists(iso_path):
-                    goalc_args = [goalc_path, "--game", "jak1", "--proj-path", proj_path, "--iso-path", iso_path]
-                else:
-                    parent_path = os.path.normpath(os.path.join(iso_path, ".."))
-                    msg = (f"The iso_data folder could not be found in {parent_path}.\n"
+                for iso_relative_path in possible_relative_paths:
+                    iso_path = os.path.normpath(
+                        os.path.join(
+                            root_path,
+                            os.path.normpath(iso_relative_path)))
+
+                    if os.path.exists(iso_path):
+                        goalc_args = [goalc_path, "--game", "jak1", "--proj-path", proj_path, "--iso-path", iso_path]
+                        logger.debug(f"iso_data folder found: {iso_path}")
+                        break
+                    else:
+                        logger.debug(f"iso_data folder not found, continuing: {iso_path}")
+
+                if not goalc_args:
+                    msg = (f"The iso_data folder could not be found.\n"
                            f"Please follow these steps:\n"
                            f"   Run the OpenGOAL Launcher, click Jak and Daxter > Advanced > Open Game Data Folder.\n"
-                           f"   Go to the topmost folder of OpenGOAL, search for \"iso_data\", and copy that folder.\n"
-                           f"   Go to the location at the top of this error message, and paste \"iso_data\" there.\n"
+                           f"   Copy the iso_data folder from this location.\n"
+                           f"   Click Jak and Daxter > Features > Mods > ArchipelaGOAL > Advanced > "
+                           f"Open Game Data Folder.\n"
+                           f"   Paste the iso_data folder in this location.\n"
+                           f"   Click Advanced > Compile. When this is done, click Continue.\n"
                            f"   Close all launchers, games, clients, and console windows, then restart Archipelago.\n"
                            f"(See Setup Guide for more details.)")
                     ctx.on_log_error(logger, msg)
@@ -403,7 +415,7 @@ async def run_game(ctx: JakAndDaxterContext):
 
             # The non-existence of the "data" subfolder indicates you are running it from source, as a developer.
             # The compiler will traverse upward to find the project path on its own. It will also assume your
-            # "iso_data" folder is at the root of your repository. Therefore, we don't need those additional arguments.
+            # "iso_data" folder is at the root of your repository. Therefore, we don't need any of those arguments.
             else:
                 goalc_args = [goalc_path, "--game", "jak1"]
 
