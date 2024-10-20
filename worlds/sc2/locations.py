@@ -2062,13 +2062,13 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.the_escape_requirement
         ),
         make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 200, LocationType.VICTORY,
-            logic.sudden_strike_can_reach_objectives
+            logic.sudden_strike_requirement
         ),
         make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Research Center", SC2NCO_LOC_ID_OFFSET + 201, LocationType.VANILLA,
             logic.sudden_strike_can_reach_objectives
         ),
         make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Weaponry Labs", SC2NCO_LOC_ID_OFFSET + 202, LocationType.VANILLA,
-            logic.sudden_strike_requirement
+            logic.sudden_strike_can_reach_objectives
         ),
         make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Brutalisk", SC2NCO_LOC_ID_OFFSET + 203, LocationType.EXTRA,
             logic.sudden_strike_requirement
