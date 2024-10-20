@@ -114,17 +114,24 @@ class Duelist(Enum):
     ANDREA = (88, "Andrea", 1 << 95)
 
 all_duelists: typing.List[Duelist] = [d for d in Duelist]
+all_duelists_test: typing.List[typing.Tuple[Duelist, ...]] = [(Duelist.YAMI_YUGI, Duelist.YUGI_MOTO)]
     
 def get_duelist_defeat_location_name(duelist: Duelist) -> str:
     return f"{duelist} defeated"
 
 ids_to_duelists: typing.Dict[int, Duelist] = {duelist.id: duelist for duelist in Duelist}
 
+#def map_duelists_to_ids(
+#    duelists: typing.Iterable[typing.Tuple[Duelist, ...]]
+#) -> typing.Tuple[typing.Tuple[int, ...], ...]:
+#    """Converts tuples of Duelist objects to ids to send in the slot data."""
+#    return tuple(tuple(duelist.id for duelist in t) for t in duelists)
 def map_duelists_to_ids(
-    duelists: typing.Iterable[typing.Tuple[Duelist, ...]]
-) -> typing.Tuple[typing.Tuple[int, ...], ...]:
+    duelists: typing.List[Duelist]
+) -> typing.Tuple[int, ...]:
     """Converts tuples of Duelist objects to ids to send in the slot data."""
-    return tuple(tuple(duelist.id for duelist in t) for t in duelists)
+    return tuple(duelist.id for duelist in duelists)
+
 
 
 def map_ids_to_duelists(

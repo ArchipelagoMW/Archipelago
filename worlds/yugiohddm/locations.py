@@ -51,4 +51,6 @@ duelist_location_name_to_id: typing.Dict[str, int] = {}
 for duelist in Duelist:
     duelist_location_name_to_id[get_location_name_for_duelist(duelist)] = get_location_id_for_duelist(duelist)
 
-location_name_to_id: typing.Dict[str, int] = {**dice_location_name_to_id, **duelist_location_name_to_id}
+# Not until we have dice locations as checks
+#location_name_to_id: typing.Dict[str, int] = {**dice_location_name_to_id, **duelist_location_name_to_id}
+location_name_to_id: typing.Dict[str, int] = {**duelist_location_name_to_id}

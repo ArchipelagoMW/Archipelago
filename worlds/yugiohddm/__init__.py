@@ -9,13 +9,13 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import CollectionState, Region, Tutorial, LocationProgressType
 from worlds.generic.Rules import set_rule
 
-#from .client import YGODDMClient
+from .client import YGODDMClient
 from .utils import Constants
 from .items import YGODDMItem, item_name_to_item_id, create_item as fabricate_item, create_victory_event
 from .locations import YGODDMLocation, DuelistLocation, location_name_to_id as location_map
 from .dice import Dice, all_dice
 from .options import YGODDMOptions, DuelistRematches
-from .duelists import Duelist, all_duelists
+from .duelists import Duelist, all_duelists, map_duelists_to_ids
 from .version import __version__
 
 class YGODDMWeb(WebWorld):
@@ -48,10 +48,11 @@ class YGODDMWorld(World):
     item_name_to_id = item_name_to_item_id
     
     def get_available_duelists(self, state: CollectionState) -> typing.List[Duelist]:
-        available_duelists: typing.List[Duelist]
-        for d in all_duelists:
-            if state.has(d.name, self.player):
-                available_duelists.append(d)
+        available_duelists: typing.List[Duelist] = [Duelist.YUGI_MOTO]
+        for d in self.duelist_unlock_order:
+            if (d is not Duelist.YUGI_MOTO):
+                if state.has(d.name, self.player):
+                    available_duelists.append(d)
         return available_duelists
 
     def generate_early(self) -> None:
@@ -68,11 +69,13 @@ class YGODDMWorld(World):
         # Add duelist locations
         # Hold a reference to these to set locked items and victory event
 
-        for duelist in Duelist:
-            duelist_location: DuelistLocation = DuelistLocation(free_duel_region, self.player, duelist)
-            set_rule(duelist_location, (lambda state, d=duelist_location:
-                                        d.duelist in self.get_available_duelists(state)))
-            free_duel_region.locations.append(duelist_location)
+        for duelist in self.duelist_unlock_order:
+            if duelist is Duelist.YUGI_MOTO:
+                duelist_location: DuelistLocation = DuelistLocation(free_duel_region, self.player, duelist)
+                set_rule(duelist_location, (lambda state, d=duelist_location:
+                                            d.duelist in self.get_available_duelists(state)))
+                free_duel_region.locations.append(duelist_location)
+            
         
         self.multiworld.completion_condition[self.player] = lambda state: state.has(
             Constants.VICTORY_ITEM_NAME, self.player
@@ -80,7 +83,14 @@ class YGODDMWorld(World):
 
         itempool: typing.List[YGODDMItem] = []
         for duelist in self.duelist_unlock_order:
-            itempool.append(self.create_item(duelist.name))
+            if duelist is Duelist.YAMI_YUGI:
+                itempool.append(self.create_item(duelist.name))
+
+        # Set Yami Yugi's item to game victory
+        yami_yugi_location: DuelistLocation = DuelistLocation(free_duel_region, self.player, Duelist.YAMI_YUGI)
+        yami_yugi_location.place_locked_item(create_victory_event(self.player))
+        free_duel_region.locations.append(yami_yugi_location)
+        
 
         self.multiworld.itempool.extend(itempool)
 
@@ -91,6 +101,6 @@ class YGODDMWorld(World):
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
             Constants.GENERATED_WITH_KEY: __version__,
-            Constants.DUELIST_UNLOCK_ORDER_KEY: self.duelist_unlock_order,
+            Constants.DUELIST_UNLOCK_ORDER_KEY: map_duelists_to_ids(self.duelist_unlock_order),
             Constants.GAME_OPTIONS_KEY: self.options.serialize()
         }
