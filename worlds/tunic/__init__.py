@@ -1,4 +1,3 @@
-import logging
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
