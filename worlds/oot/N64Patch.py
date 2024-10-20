@@ -1,5 +1,4 @@
 import struct
-import random
 import io
 import array
 import zlib
@@ -88,7 +87,7 @@ def write_block_section(start, key_skip, in_data, patch_data, is_continue):
 # xor_range is the range the XOR key will read from. This range is not
 # too important, but I tried to choose from a section that didn't really
 # have big gaps of 0s which we want to avoid.
-def create_patch_file(rom, xor_range=(0x00B8AD30, 0x00F029A0)):
+def create_patch_file(rom, rand, xor_range=(0x00B8AD30, 0x00F029A0)):
     dma_start, dma_end = rom.get_dma_table_range()
 
     # add header
@@ -100,7 +99,7 @@ def create_patch_file(rom, xor_range=(0x00B8AD30, 0x00F029A0)):
 
     # get random xor key. This range is chosen because it generally
     # doesn't have many sections of 0s
-    xor_address = random.Random().randint(*xor_range)
+    xor_address = rand.randint(*xor_range)
     patch_data.append_int32(xor_address)
 
     new_buffer = copy.copy(rom.original.buffer)
