@@ -5,7 +5,7 @@ import dataclasses
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -88,7 +88,7 @@ class WitnessWorld(World):
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
             "laser_ids_to_hints": self.laser_ids_to_hints,
-            "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
+            "progressive_item_lists": self.player_items.get_progressive_item_ids(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
             "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
@@ -387,6 +387,42 @@ class WitnessWorld(World):
             item_data = static_witness_items.ITEM_DATA[item_name]
 
         return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        changed = super().collect(state, item)
+
+        if not changed:
+            return False
+
+        if item.name in static_witness_items.ALL_ITEM_ALIASES:
+            real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
+            state.prog_items[self.player][real_item] += 1
+
+        elif item.name in self.player_items.all_progressive_item_lists:
+            item_list = self.player_items.all_progressive_item_lists[item.name]
+            index = state.prog_items[self.player][item.name] - 1
+            if index < len(item_list):
+                state.prog_items[self.player][item_list[index]] += 1
+
+        return True
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        changed = super().remove(state, item)
+
+        if not changed:
+            return False
+
+        if item.name in static_witness_items.ALL_ITEM_ALIASES:
+            real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
+            state.prog_items[self.player][real_item] -= 1
+
+        elif item.name in self.player_items.all_progressive_item_lists:
+            item_list = self.player_items.all_progressive_item_lists[item.name]
+            index = state.prog_items[self.player][item.name]
+            if index < len(item_list):
+                state.prog_items[self.player][item_list[index]] -= 1
+
+        return True
 
     def get_filler_item_name(self) -> str:
         return "Speed Boost"
