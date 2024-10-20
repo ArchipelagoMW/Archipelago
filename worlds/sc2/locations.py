@@ -2772,7 +2772,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2500, LocationType.VICTORY,
             lambda state: (
                 adv_tactics
-                or logic.zerg_basic_anti_air(state)
+                or logic.zerg_basic_kerriganless_anti_air(state)
                     and (logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)))
         ),
         make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Tosh's Miners", SC2_RACESWAP_LOC_ID_OFFSET + 2501, LocationType.VANILLA),
@@ -2789,12 +2789,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Southeast Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2506, LocationType.EXTRA,
             lambda state: (
                 adv_tactics
-                or logic.zerg_basic_anti_air(state)
+                or logic.zerg_basic_kerriganless_anti_air(state)
                     and (logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)))
         ),
         make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "East Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2507, LocationType.CHALLENGE,
             lambda state: (
-                logic.zerg_basic_anti_air(state)
+                logic.zerg_basic_kerriganless_anti_air(state)
                 and (adv_tactics
                     or logic.zerg_common_unit(state)
                     or state.has(item_names.HUNTERLING, player)))
