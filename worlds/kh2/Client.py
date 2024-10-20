@@ -5,6 +5,7 @@ ModuleUpdate.update()
 import os
 import asyncio
 import json
+import requests
 from pymem import pymem
 from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot
@@ -45,44 +46,45 @@ class KH2Context(CommonContext):
         self.sending = []
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
-            "itemIndex": -1,
+            "itemIndex":  -1,
             # back of soras invo is 0x25E2. Growth should be moved there
             #  Character: [back of invo, front of invo]
-            "SoraInvo": [0x25D8, 0x2546],
+            "SoraInvo":   [0x25D8, 0x2546],
             "DonaldInvo": [0x26F4, 0x2658],
-            "GoofyInvo": [0x2808, 0x276C],
+            "GoofyInvo":  [0x2808, 0x276C],
             "AmountInvo": {
-                "Ability": {},
-                "Amount": {
+                "Ability":      {},
+                "Amount":       {
                     "Bounty": 0,
                 },
-                "Growth": {
-                    "High Jump": 0, "Quick Run": 0, "Dodge Roll": 0,
+                "Growth":       {
+                    "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
                     "Aerial Dodge": 0, "Glide": 0
                 },
-                "Bitmask": [],
-                "Weapon": {"Sora": [], "Donald": [], "Goofy": []},
-                "Equipment": [],
-                "Magic": {
-                    "Fire Element": 0,
+                "Bitmask":      [],
+                "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+                "Equipment":    [],
+                "Magic":        {
+                    "Fire Element":     0,
                     "Blizzard Element": 0,
-                    "Thunder Element": 0,
-                    "Cure Element": 0,
-                    "Magnet Element": 0,
-                    "Reflect Element": 0
+                    "Thunder Element":  0,
+                    "Cure Element":     0,
+                    "Magnet Element":   0,
+                    "Reflect Element":  0
                 },
                 "StatIncrease": {
-                    ItemName.MaxHPUp: 0,
-                    ItemName.MaxMPUp: 0,
-                    ItemName.DriveGaugeUp: 0,
-                    ItemName.ArmorSlotUp: 0,
+                    ItemName.MaxHPUp:         0,
+                    ItemName.MaxMPUp:         0,
+                    ItemName.DriveGaugeUp:    0,
+                    ItemName.ArmorSlotUp:     0,
                     ItemName.AccessorySlotUp: 0,
-                    ItemName.ItemSlotUp: 0,
+                    ItemName.ItemSlotUp:      0,
                 },
             },
         }
         self.kh2seedname = None
         self.kh2slotdata = None
+        self.mem_json = None
         self.itemamount = {}
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
@@ -92,14 +94,14 @@ class KH2Context(CommonContext):
         self.final_xemnas = False
         self.worldid_to_locations = {
             #  1:   {},  # world of darkness (story cutscenes)
-            2: TT_Checks,
+            2:  TT_Checks,
             #  3:   {},  # destiny island doesn't have checks
-            4: HB_Checks,
-            5: BC_Checks,
-            6: Oc_Checks,
-            7: AG_Checks,
-            8: LoD_Checks,
-            9: HundredAcreChecks,
+            4:  HB_Checks,
+            5:  BC_Checks,
+            6:  Oc_Checks,
+            7:  AG_Checks,
+            8:  LoD_Checks,
+            9:  HundredAcreChecks,
             10: PL_Checks,
             11: Atlantica_Checks,
             12: DC_Checks,
@@ -144,7 +146,7 @@ class KH2Context(CommonContext):
         self.all_equipment = self.armor_set.union(self.accessories_set)
 
         self.Equipment_Anchor_Dict = {
-            "Armor": [0x2504, 0x2506, 0x2508, 0x250A],
+            "Armor":       [0x2504, 0x2506, 0x2508, 0x250A],
             "Accessories": [0x2514, 0x2516, 0x2518, 0x251A]
         }
 
@@ -162,11 +164,11 @@ class KH2Context(CommonContext):
 
         #  Growth:[level 1,level 4,slot]
         self.growth_values_dict = {
-            "High Jump": [0x05E, 0x061, 0x25DA],
-            "Quick Run": [0x62, 0x65, 0x25DC],
-            "Dodge Roll": [0x234, 0x237, 0x25DE],
+            "High Jump":    [0x05E, 0x061, 0x25DA],
+            "Quick Run":    [0x62, 0x65, 0x25DC],
+            "Dodge Roll":   [0x234, 0x237, 0x25DE],
             "Aerial Dodge": [0x66, 0x069, 0x25E0],
-            "Glide": [0x6A, 0x6D, 0x25E2]
+            "Glide":        [0x6A, 0x6D, 0x25E2]
         }
 
         self.ability_code_list = None
@@ -192,7 +194,7 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                      'w') as f:
+                    'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).connection_closed()
 
@@ -201,7 +203,7 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                      'w') as f:
+                    'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).disconnect()
 
@@ -215,7 +217,7 @@ class KH2Context(CommonContext):
     async def shutdown(self):
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                      'w') as f:
+                    'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).shutdown()
 
@@ -247,19 +249,19 @@ class KH2Context(CommonContext):
                 os.makedirs(self.game_communication_path)
             if not os.path.exists(self.game_communication_path + f"\kh2save2{self.kh2seedname}{self.auth}.json"):
                 self.kh2_seed_save = {
-                    "Levels": {
-                        "SoraLevel": 0,
-                        "ValorLevel": 0,
+                    "Levels":        {
+                        "SoraLevel":   0,
+                        "ValorLevel":  0,
                         "WisdomLevel": 0,
-                        "LimitLevel": 0,
+                        "LimitLevel":  0,
                         "MasterLevel": 0,
-                        "FinalLevel": 0,
+                        "FinalLevel":  0,
                         "SummonLevel": 0,
                     },
                     "SoldEquipment": [],
                 }
                 with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
-                          'wt') as f:
+                        'wt') as f:
                     pass
                 # self.locations_checked = set()
             elif os.path.exists(self.game_communication_path + f"\kh2save2{self.kh2seedname}{self.auth}.json"):
@@ -267,13 +269,13 @@ class KH2Context(CommonContext):
                     self.kh2_seed_save = json.load(f)
                     if self.kh2_seed_save is None:
                         self.kh2_seed_save = {
-                            "Levels": {
-                                "SoraLevel": 0,
-                                "ValorLevel": 0,
+                            "Levels":        {
+                                "SoraLevel":   0,
+                                "ValorLevel":  0,
                                 "WisdomLevel": 0,
-                                "LimitLevel": 0,
+                                "LimitLevel":  0,
                                 "MasterLevel": 0,
-                                "FinalLevel": 0,
+                                "FinalLevel":  0,
                                 "SummonLevel": 0,
                             },
                             "SoldEquipment": [],
@@ -282,7 +284,6 @@ class KH2Context(CommonContext):
             # self.serverconneced = True
 
         if cmd in {"Connected"}:
-            #todo: see why this is crashing the connection
             asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
             self.kh2slotdata = args['slot_data']
             # self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
@@ -295,39 +296,39 @@ class KH2Context(CommonContext):
             start_index = args["index"]
             if start_index == 0:
                 self.kh2_seed_save_cache = {
-                    "itemIndex": -1,
+                    "itemIndex":  -1,
                     # back of soras invo is 0x25E2. Growth should be moved there
                     #  Character: [back of invo, front of invo]
-                    "SoraInvo": [0x25D8, 0x2546],
+                    "SoraInvo":   [0x25D8, 0x2546],
                     "DonaldInvo": [0x26F4, 0x2658],
-                    "GoofyInvo": [0x2808, 0x276C],
+                    "GoofyInvo":  [0x2808, 0x276C],
                     "AmountInvo": {
-                        "Ability": {},
-                        "Amount": {
+                        "Ability":      {},
+                        "Amount":       {
                             "Bounty": 0,
                         },
-                        "Growth": {
-                            "High Jump": 0, "Quick Run": 0, "Dodge Roll": 0,
+                        "Growth":       {
+                            "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
                             "Aerial Dodge": 0, "Glide": 0
                         },
-                        "Bitmask": [],
-                        "Weapon": {"Sora": [], "Donald": [], "Goofy": []},
-                        "Equipment": [],
-                        "Magic": {
-                            "Fire Element": 0,
+                        "Bitmask":      [],
+                        "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+                        "Equipment":    [],
+                        "Magic":        {
+                            "Fire Element":     0,
                             "Blizzard Element": 0,
-                            "Thunder Element": 0,
-                            "Cure Element": 0,
-                            "Magnet Element": 0,
-                            "Reflect Element": 0
+                            "Thunder Element":  0,
+                            "Cure Element":     0,
+                            "Magnet Element":   0,
+                            "Reflect Element":  0
                         },
                         "StatIncrease": {
-                            ItemName.MaxHPUp: 0,
-                            ItemName.MaxMPUp: 0,
-                            ItemName.DriveGaugeUp: 0,
-                            ItemName.ArmorSlotUp: 0,
+                            ItemName.MaxHPUp:         0,
+                            ItemName.MaxMPUp:         0,
+                            ItemName.DriveGaugeUp:    0,
+                            ItemName.ArmorSlotUp:     0,
                             ItemName.AccessorySlotUp: 0,
-                            ItemName.ItemSlotUp: 0,
+                            ItemName.ItemSlotUp:      0,
                         },
                     },
                 }
@@ -342,84 +343,69 @@ class KH2Context(CommonContext):
                 self.locations_checked |= new_locations
 
         if cmd in {"DataPackage"}:
-            # this is prob causing it
-            self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
-            self.lookup_id_to_location = {v: k for k, v in self.kh2_loc_name_to_id.items()}
-            self.kh2_item_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"]
-            self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
-            self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
+            if "Kingdom Hearts 2" in args["data"]["games"]:
+                self.data_package_kh2_cache(args)
 
-            if "keyblade_abilities" in self.kh2slotdata.keys():
-                sora_ability_dict = self.kh2slotdata["KeybladeAbilities"]
-                # sora ability to slot
-                # itemid:[slots that are available for that item]
-                for k, v in sora_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.sora_ability_to_slot.keys():
-                            self.sora_ability_to_slot[k] = []
-                        for _ in range(sora_ability_dict[k]):
-                            self.sora_ability_to_slot[k].append(self.kh2_seed_save_cache["SoraInvo"][0])
-                            self.kh2_seed_save_cache["SoraInvo"][0] -= 2
-                donald_ability_dict = self.kh2slotdata["StaffAbilities"]
-                for k, v in donald_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.donald_ability_to_slot.keys():
-                            self.donald_ability_to_slot[k] = []
-                        for _ in range(donald_ability_dict[k]):
-                            self.donald_ability_to_slot[k].append(self.kh2_seed_save_cache["DonaldInvo"][0])
-                            self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
-                goofy_ability_dict = self.kh2slotdata["ShieldAbilities"]
-                for k, v in goofy_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.goofy_ability_to_slot.keys():
-                            self.goofy_ability_to_slot[k] = []
-                        for _ in range(goofy_ability_dict[k]):
-                            self.goofy_ability_to_slot[k].append(self.kh2_seed_save_cache["GoofyInvo"][0])
-                            self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
+    def data_package_kh2_cache(self, args):
+        self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
+        self.lookup_id_to_location = {v: k for k, v in self.kh2_loc_name_to_id.items()}
+        self.kh2_item_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"]
+        self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
+        self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
-            all_weapon_location_id = []
-            for weapon_location in all_weapon_slot:
-                all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
-            self.all_weapon_location_id = set(all_weapon_location_id)
+        if "keyblade_abilities" in self.kh2slotdata.keys():
+            sora_ability_dict = self.kh2slotdata["KeybladeAbilities"]
+            # sora ability to slot
+            # itemid:[slots that are available for that item]
+            for k, v in sora_ability_dict.items():
+                if v >= 1:
+                    if k not in self.sora_ability_to_slot.keys():
+                        self.sora_ability_to_slot[k] = []
+                    for _ in range(sora_ability_dict[k]):
+                        self.sora_ability_to_slot[k].append(self.kh2_seed_save_cache["SoraInvo"][0])
+                        self.kh2_seed_save_cache["SoraInvo"][0] -= 2
+            donald_ability_dict = self.kh2slotdata["StaffAbilities"]
+            for k, v in donald_ability_dict.items():
+                if v >= 1:
+                    if k not in self.donald_ability_to_slot.keys():
+                        self.donald_ability_to_slot[k] = []
+                    for _ in range(donald_ability_dict[k]):
+                        self.donald_ability_to_slot[k].append(self.kh2_seed_save_cache["DonaldInvo"][0])
+                        self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
+            goofy_ability_dict = self.kh2slotdata["ShieldAbilities"]
+            for k, v in goofy_ability_dict.items():
+                if v >= 1:
+                    if k not in self.goofy_ability_to_slot.keys():
+                        self.goofy_ability_to_slot[k] = []
+                    for _ in range(goofy_ability_dict[k]):
+                        self.goofy_ability_to_slot[k].append(self.kh2_seed_save_cache["GoofyInvo"][0])
+                        self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
 
-            try:
-                self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                # TODO: make this pull from a file that is synched to a repo with the mem addresses
-                if self.kh2_game_version is None:
-                    if self.kh2_read_string(0x09A9830, 4) == "KH2J":
-                        self.kh2_game_version = "STEAM"
-                        self.Now = 0x0717008
-                        self.Save = 0x09A9830
-                        self.Slot1 = 0x2A23518
-                        self.Journal = 0x7434E0
-                        self.Shop = 0x7435D0
+        all_weapon_location_id = []
+        for weapon_location in all_weapon_slot:
+            all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
+        self.all_weapon_location_id = set(all_weapon_location_id)
 
-                    elif self.kh2_read_string(0x09A92F0, 4) == "KH2J":
-                        self.kh2_game_version = "EGS"
-                    else:
-                        self.kh2_game_version = None
-                        logger.info("Your game version does not match what the client requires. Check in the "
-                                    "kingdom-hearts-2-final-mix channel for more information on correcting the game "
-                                    "version.")
-                if self.kh2_game_version is not None:
-                    logger.info(f"You are now auto-tracking. {self.kh2_game_version}")
-                    self.kh2connected = True
+        try:
+            self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+            self.get_addresses()
 
-            except Exception as e:
-                if self.kh2connected:
-                    self.kh2connected = False
-                logger.info("Game is not open.")
-            self.serverconneced = True
-            asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
+        except Exception as e:
+            if self.kh2connected:
+                self.kh2connected = False
+            logger.info("Game is not open.")
+        self.serverconneced = True
+
+        asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
     async def checkWorldLocations(self):
         try:
             currentworldint = self.kh2_read_byte(self.Now)
             await self.send_msgs([{
-                "cmd": "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
+                "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
                 "default": 0, "want_reply": True, "operations": [{
                     "operation": "replace",
-                    "value": currentworldint
+                    "value":     currentworldint
                 }]
             }])
             if currentworldint in self.worldid_to_locations:
@@ -450,7 +436,6 @@ class KH2Context(CommonContext):
                 0: ["ValorLevel", ValorLevels], 1: ["WisdomLevel", WisdomLevels], 2: ["LimitLevel", LimitLevels],
                 3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels], 5: ["SummonLevel", SummonLevels]
             }
-            # TODO: remove formDict[i][0] in self.kh2_seed_save_cache["Levels"].keys() after 4.3
             for i in range(6):
                 for location, data in formDict[i][1].items():
                     formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
@@ -508,12 +493,12 @@ class KH2Context(CommonContext):
 
     async def verifyLevel(self):
         for leveltype, anchor in {
-            "SoraLevel": 0x24FF,
-            "ValorLevel": 0x32F6,
+            "SoraLevel":   0x24FF,
+            "ValorLevel":  0x32F6,
             "WisdomLevel": 0x332E,
-            "LimitLevel": 0x3366,
+            "LimitLevel":  0x3366,
             "MasterLevel": 0x339E,
-            "FinalLevel": 0x33D6
+            "FinalLevel":  0x33D6
         }.items():
             if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
                 self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
@@ -857,6 +842,52 @@ class KH2Context(CommonContext):
             logger.info(e)
             logger.info("line 840")
 
+    def get_addresses(self):
+        if not self.kh2connected and self.kh2 is not None:
+            if self.kh2_game_version is None:
+
+                if self.kh2_read_string(0x09A9830, 4) == "KH2J":
+                    self.kh2_game_version = "STEAM"
+                    self.Now = 0x0717008
+                    self.Save = 0x09A9830
+                    self.Slot1 = 0x2A23518
+                    self.Journal = 0x7434E0
+                    self.Shop = 0x7435D0
+                elif self.kh2_read_string(0x09A92F0, 4) == "KH2J":
+                    self.kh2_game_version = "EGS"
+                else:
+                    if self.game_communication_path:
+                        logger.info("Game Version is not 0.9. Checking with most up to date addresses of github. If file is not found will be downloading datafiles. This might take a moment")
+                        #if mem addresses file is found then check version and if old get new one
+                        if not os.path.exists(self.game_communication_path + f"\kh2memaddresses.json"):
+                            mem_resp = requests.get("https://raw.githubusercontent.com/JaredWeakStrike/KH2APMemoryValues/master/kh2memaddresses.json")
+                            if mem_resp.status_code == 200:
+                                self.mem_json = json.loads(mem_resp.content)
+                                with open(os.path.join(self.game_communication_path, f"kh2memaddresses.json"),
+                                        'w') as f:
+                                    f.write(json.dumps(self.mem_json, indent=4))
+                        else:
+                            with open(self.game_communication_path + f"\kh2memaddresses.json", 'r') as f:
+                                self.mem_json = json.load(f)
+                        for key, value in self.mem_json.items():
+
+                            if self.kh2_read_string(eval(self.mem_json[key][0]["GameVersionCheck"]), 4) == "KH2J":
+                                self.Now = eval(self.mem_json[key][0]["Now"])
+                                self.Save=eval(self.mem_json[key][0]["Save"])
+                                self.Now = eval(self.mem_json[key][0]["Slot1"])
+                                self.Now = eval(self.mem_json[key][0]["Journal"])
+                                self.Now = eval(self.mem_json[key][0]["Shop"])
+                                self.kh2_game_version = self.mem_json[key][0]["GameVersionCheck"]
+
+            if self.kh2_game_version is not None:
+                logger.info(f"You are now auto-tracking {self.kh2_game_version}")
+                self.kh2connected = True
+            else:
+                logger.info("Your game version does not match what the client requires. Check in the "
+                            "kingdom-hearts-2-final-mix channel for more information on correcting the game "
+                            "version.")
+                self.kh2connected = False
+
 
 def finishedGame(ctx: KH2Context, message):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
@@ -945,26 +976,7 @@ async def kh2_watcher(ctx: KH2Context):
                 while not ctx.kh2connected and ctx.serverconneced:
                     await asyncio.sleep(15)
                     ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                    if ctx.kh2 is not None:
-                        if ctx.kh2_game_version is None:
-                            if ctx.kh2_read_string(0x09A9830, 4) == "KH2J":
-                                ctx.kh2_game_version = "STEAM"
-                                ctx.Now = 0x0717008
-                                ctx.Save = 0x09A9830
-                                ctx.Slot1 = 0x2A23518
-                                ctx.Journal = 0x7434E0
-                                ctx.Shop = 0x7435D0
-
-                            elif ctx.kh2_read_string(0x09A92F0, 4) == "KH2J":
-                                ctx.kh2_game_version = "EGS"
-                            else:
-                                ctx.kh2_game_version = None
-                                logger.info("Your game version does not match what the client requires. Check in the "
-                                            "kingdom-hearts-2-final-mix channel for more information on correcting the game "
-                                            "version.")
-                        if ctx.kh2_game_version is not None:
-                            logger.info(f"You are now auto-tracking {ctx.kh2_game_version}")
-                            ctx.kh2connected = True
+                    ctx.get_addresses()
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False
@@ -981,7 +993,7 @@ def launch():
             ctx.run_gui()
         ctx.run_cli()
         progression_watcher = asyncio.create_task(
-            kh2_watcher(ctx), name="KH2ProgressionWatcher")
+                kh2_watcher(ctx), name="KH2ProgressionWatcher")
 
         await ctx.exit_event.wait()
         ctx.server_address = None
