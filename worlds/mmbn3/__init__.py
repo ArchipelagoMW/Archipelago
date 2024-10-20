@@ -9,14 +9,14 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, 
 from worlds.AutoWorld import WebWorld, World
 
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
-from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
+from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType, item_groups
 from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
-    always_excluded_locations, jobs
+    secret_locations, jobs, location_groups
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
-from worlds.generic.Rules import add_item_rule
+from worlds.generic.Rules import add_item_rule, add_rule
 
 
 class MMBN3Settings(settings.Group):
@@ -57,11 +57,16 @@ class MMBN3World(World):
     settings: typing.ClassVar[MMBN3Settings]
     topology_present = False
 
+    data_version = 2
+
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     
     excluded_locations: typing.List[str]
     item_frequencies: typing.Dict[str, int]
+
+    location_name_groups = location_groups
+    item_name_groups = item_groups
 
     web = MMBN3Web()
 
@@ -74,10 +79,11 @@ class MMBN3World(World):
         if self.options.extra_ranks > 0:
             self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.options.extra_ranks
 
+        self.excluded_locations = []
+        if not self.options.include_secret:
+            self.excluded_locations = secret_locations
         if not self.options.include_jobs:
-            self.excluded_locations = always_excluded_locations + [job.name for job in jobs]
-        else:
-            self.excluded_locations = always_excluded_locations
+            self.excluded_locations = self.excluded_locations + [job.name for job in jobs]
 
     def create_regions(self) -> None:
         """
@@ -198,19 +204,35 @@ class MMBN3World(World):
 
         # Set WWW ID requirements
         def has_www_id(state): return state.has(ItemName.WWW_ID, self.player)
-        self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player).access_rule = has_www_id
-        self.multiworld.get_location(LocationName.SciLab_1_WWW_BMD, self.player).access_rule = has_www_id
-        self.multiworld.get_location(LocationName.Yoka_1_WWW_BMD, self.player).access_rule = has_www_id
-        self.multiworld.get_location(LocationName.Undernet_1_WWW_BMD, self.player).access_rule = has_www_id
+        add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), has_www_id)
+        add_rule(self.multiworld.get_location(LocationName.SciLab_1_WWW_BMD, self.player), has_www_id)
+        add_rule(self.multiworld.get_location(LocationName.Yoka_1_WWW_BMD, self.player), has_www_id)
+        add_rule(self.multiworld.get_location(LocationName.Undernet_1_WWW_BMD, self.player), has_www_id)
 
         # Set Press Program requirements
         def has_press(state): return state.has(ItemName.Press, self.player)
-        self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Yoka_2_Upper_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Beach_2_East_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Hades_South_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Secret_3_BugFrag_BMD, self.player).access_rule = has_press
-        self.multiworld.get_location(LocationName.Secret_3_Island_BMD, self.player).access_rule = has_press
+        add_rule(self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Yoka_2_Upper_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Beach_2_East_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Hades_South_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Secret_3_BugFrag_BMD, self.player), has_press)
+        add_rule(self.multiworld.get_location(LocationName.Secret_3_Island_BMD, self.player), has_press)
+
+        # Set Purple Mystery Data Unlocker access
+        def can_unlock(state): return state.can_reach(RegionName.SciLab_Overworld, "Region", self.player) or \
+            state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player) or \
+            state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player) or \
+            state.has(ItemName.Unlocker, self.player, 8) # There are 8 PMDs that aren't in one of the above areas
+        add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Beach_1_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Undernet_7_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Mayls_HP_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.SciLab_Dads_Computer_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Zoo_Panda_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Beach_DNN_Security_Panel_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Beach_DNN_Main_Console_PMD, self.player), can_unlock)
+        add_rule(self.multiworld.get_location(LocationName.Tamakos_HP_PMD, self.player), can_unlock)
 
         # Set Job additional area access
         self.multiworld.get_location(LocationName.Please_deliver_this, self.player).access_rule = \
@@ -390,6 +412,11 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.Numberman_Code_31, self.player).access_rule =\
             lambda state: self.explore_score(state) > 10
 
+        #miscellaneous locations with extra requirements
+        add_rule(self.multiworld.get_location(LocationName.Comedian, self.player),
+                 lambda state: state.has(ItemName.Humor, self.player))
+        add_rule(self.multiworld.get_location(LocationName.Villain, self.player),
+                 lambda state: state.has(ItemName.BlckMnd, self.player))
         def not_undernet(item): return item.code != item_table[ItemName.Progressive_Undernet_Rank].code or item.player != self.player
         self.multiworld.get_location(LocationName.WWW_1_Central_BMD, self.player).item_rule = not_undernet
         self.multiworld.get_location(LocationName.WWW_1_East_BMD, self.player).item_rule = not_undernet
