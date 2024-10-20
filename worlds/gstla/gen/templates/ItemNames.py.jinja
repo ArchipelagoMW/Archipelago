@@ -1,0 +1,23 @@
+from enum import Enum
+class ItemName(str, Enum):
+    {% for type in types -%}
+    # {{type.name}}
+    {% for item in items -%}
+    {%- if item.item.item_type == type -%}
+    {{item.name.py_name}} = "{{item.name.str_name}}"
+    {% endif -%}
+    {% endfor -%}
+
+    {% endfor -%}
+    # Psyenergy
+    {% for name in psyenergies-%}
+    {{name.py_name}} = "{{name.str_name}}"
+    {% endfor -%}
+    # Djinn
+    {% for name in djinn-%}
+    {{name.py_name}} = "{{name.str_name}}"
+    {% endfor -%}
+    # Events
+    {% for name in events-%}
+    {{name.py_name}} = "{{name.str_name}}"
+    {% endfor -%}

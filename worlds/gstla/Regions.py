@@ -1,8 +1,9 @@
 from typing import List, Dict
 from BaseClasses import MultiWorld, Region, Entrance
 from worlds.gstla.Locations import GSTLALocation, location_name_to_id, LocationType
+from .gen.LocationNames import LocationName
 from . import ItemType
-from .Names.LocationName import LocationName
+# from .Names.LocationName import LocationName
 from .Names.RegionName import RegionName
 from .Names.EntranceName import EntranceName
 
@@ -253,8 +254,8 @@ regions: Dict[str, EntranceData] = {
         LocationName.Airs_Rock_Smoke_Bomb,
         LocationName.Airs_Rock_Storm_Brand,
         LocationName.Airs_Rock_Vial,
-        LocationName.Airs_Rock_VialTwo,
-        LocationName.Airs_Rock_VialThree,
+        LocationName.Airs_Rock_Vial_Two,
+        LocationName.Airs_Rock_Vial_Three,
         LocationName.Airs_Rock_Flora,
         LocationName.Airs_Rock_Reveal
     ]),
@@ -313,7 +314,8 @@ regions: Dict[str, EntranceData] = {
         LocationName.Gabomba_Statue_Mimic,
         LocationName.Gabomba_Statue_Elixir,
         LocationName.Gabomba_Statue_Bone_Armlet,
-        LocationName.Gabombo_Statue,
+        # Covered by black crystal?
+        # LocationName.Gabombo_Statue,
         LocationName.Steel
     ],
     [
@@ -332,12 +334,12 @@ regions: Dict[str, EntranceData] = {
         LocationName.Lemurian_Ship_Oil_Drop,
         LocationName.Lemurian_Ship_Antidote,
         LocationName.Lemurian_Ship_Mist_Potion,
-        LocationName.Lemurian_Ship_Aqua_Hydra,
+        LocationName.Lemurian_Ship_Aqua_Hydra_fight,
     ]),
     RegionName.EasternSea: EntranceData(RegionName.EasternSea,
     [
-        LocationName.EasternSea_RustyAxe,
-        LocationName.EasternSea_RustyMace
+        LocationName.Overworld_Rusty_Axe,
+        LocationName.Overworld_Rusty_Mace,
     ],
     [
         EntranceName.EasternSeaToAlhafra,
@@ -441,7 +443,7 @@ regions: Dict[str, EntranceData] = {
         LocationName.Gaia_Rock_Rusty_Mace,
         LocationName.Gaia_Rock_Cloud_Brand,
         LocationName.Gaia_Rock_Dancing_Idol,
-        LocationName.Gaia_Rock_Serpent,
+        LocationName.Gaia_Rock_Serpent_Fight,
         LocationName.Gaia_Rock_Sand
     ]),
     RegionName.TreasureIsland: EntranceData(RegionName.TreasureIsland,
@@ -564,7 +566,7 @@ regions: Dict[str, EntranceData] = {
     ]),
     RegionName.SeaOfTime: EntranceData(RegionName.SeaOfTime,
     [
-        LocationName.SeaOfTime_Poseidon
+        LocationName.Sea_of_Time_Poseidon_fight,
     ],
     [
         EntranceName.SeaOfTimeToLemuria
@@ -583,9 +585,9 @@ regions: Dict[str, EntranceData] = {
     ]),
     RegionName.WesternSea: EntranceData(RegionName.WesternSea,
     [
-        LocationName.WesternSea_RustySword,
-        LocationName.WesternSea_RustySword_Two,
-        LocationName.WesternSea_RustyStaff
+        LocationName.Overworld_Rusty_Sword,
+        LocationName.Overworld_Rusty_Sword_Two,
+        LocationName.Overworld_Rusty_Staff,
     ],
     [
         EntranceName.WesternSeaToSouthWestAttekaIslet,
@@ -626,7 +628,8 @@ regions: Dict[str, EntranceData] = {
         LocationName.Shaman_Village_Lucky_Medal,
         LocationName.Shaman_Village_Lucky_Pepper,
         LocationName.Shaman_Village_Weasels_Claw,
-        LocationName.Shaman_Village_Moapa,
+        # covered by hover jade?
+        # LocationName.Shaman_Village_Moapa,
         LocationName.Shaman_Village_Hover_Jade,
         LocationName.Aroma,
         LocationName.Gasp
@@ -669,7 +672,7 @@ regions: Dict[str, EntranceData] = {
         LocationName.Jupiter_Lighthouse_Red_Key,
         LocationName.Jupiter_Lighthouse_Water_of_Life,
         LocationName.Whorl,
-        LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst
+        LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst_fight
     ]),
     RegionName.Reunion: EntranceData(RegionName.Reunion,
     [
@@ -770,7 +773,7 @@ regions: Dict[str, EntranceData] = {
         LocationName.Mars_Lighthouse_Mimic,
         LocationName.Mars_Lighthouse_Orihalcon,
         LocationName.Mars_Lighthouse_Valkyrie_Mail,
-        LocationName.Mars_Lighthouse_Flame_Dragons,
+        LocationName.Mars_Lighthouse_Flame_Dragons_fight,
         LocationName.Mars_Lighthouse_Teleport_Lapis,
         LocationName.Balm,
     ],
@@ -782,6 +785,6 @@ regions: Dict[str, EntranceData] = {
         LocationName.Fugue,
         LocationName.Mars_Lighthouse_Alastors_Hood,
         LocationName.Mars_Lighthouse_Psy_Crystal,
-        LocationName.Mars_Lighthouse_Doom_Dragon
+        LocationName.Mars_Lighthouse_Doom_Dragon_Fight,
     ])
 }
