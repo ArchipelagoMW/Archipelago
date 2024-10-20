@@ -38,17 +38,28 @@ def start_playing():
     return render_template(f"startPlaying.html")
 
 
-# Game Info Pages
 @app.route('/games/<string:game>/info/<string:lang>')
 @cache.cached()
 def game_info(game, lang):
-    return render_template('gameInfo.html', game=game, lang=lang, theme=get_world_theme(game))
+    """Game Info Pages"""
+    game = secure_filename(game)
+    lang = secure_filename(lang)
+    document = render_markdown(os.path.join(
+        app.static_folder, "generated", "docs",
+        game, f"{lang}_{game}.md"
+    ))
+    return render_template(
+        "markdown_document.html",
+        title=f"{game} Guide",
+        html_from_markdown=document,
+        theme=get_world_theme(game),
+    )
 
 
-# List of supported games
 @app.route('/games')
 @cache.cached()
 def games():
+    """List of supported games"""
     worlds = {}
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
@@ -56,10 +67,30 @@ def games():
     return render_template("supportedGames.html", worlds=worlds)
 
 
+def render_markdown(path: str) -> str:
+    import markdown
+
+    with open(path) as f:
+        document = f.read()
+    return markdown.markdown(document,  extensions=["mdx_breakless_lists"])
+
+
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 @cache.cached()
-def tutorial(game, file, lang):
-    return render_template("tutorial.html", game=game, file=file, lang=lang, theme=get_world_theme(game))
+def tutorial(game: str, file: str, lang: str):
+    game = secure_filename(game)
+    file = secure_filename(file)
+    lang = secure_filename(lang)
+    document = render_markdown(os.path.join(
+        app.static_folder, "generated", "docs",
+        game, f"{file}_{lang}.md"
+    ))
+    return render_template(
+        "markdown_document.html",
+        title=f"{game} Guide",
+        html_from_markdown=document,
+        theme=get_world_theme(game),
+    )
 
 
 @app.route('/tutorial/')
@@ -71,26 +102,22 @@ def tutorial_landing():
 @app.route('/faq/<string:lang>/')
 @cache.cached()
 def faq(lang: str):
-    import markdown
-    with open(os.path.join(app.static_folder, "assets", "faq", secure_filename(lang)+".md")) as f:
-        document = f.read()
+    document = render_markdown(os.path.join(app.static_folder, "assets", "faq", secure_filename(lang)+".md"))
     return render_template(
         "markdown_document.html",
         title="Frequently Asked Questions",
-        html_from_markdown=markdown.markdown(document,  extensions=["mdx_breakless_lists"]),
+        html_from_markdown=document,
     )
 
 
 @app.route('/glossary/<string:lang>/')
 @cache.cached()
 def glossary(lang: str):
-    import markdown
-    with open(os.path.join(app.static_folder, "assets", "glossary", secure_filename(lang)+".md")) as f:
-        document = f.read()
+    document = render_markdown(os.path.join(app.static_folder, "assets", "glossary", secure_filename(lang)+".md"))
     return render_template(
         "markdown_document.html",
         title="Glossary",
-        html_from_markdown=markdown.markdown(document,  extensions=["mdx_breakless_lists"]),
+        html_from_markdown=document,
     )
 
 
