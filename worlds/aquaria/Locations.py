@@ -233,7 +233,7 @@ class AquariaLocationNames:
     SUN_TEMPLE_BULB_AT_THE_TOP_OF_THE_HIGH_DARK_ROOM = "Sun Temple, bulb at the top of the high dark room"
     SUN_TEMPLE_GOLDEN_GEAR = "Sun Temple, Golden Gear"
     SUN_TEMPLE_FIRST_BULB_OF_THE_TEMPLE = "Sun Temple, first bulb of the temple"
-    SUN_TEMPLE_BULB_ON_THE_RIGHT_PART = "Sun Temple, bulb on the right part"
+    SUN_TEMPLE_BULB_ON_THE_RIGHT_PART = "Sun Temple, bulb in the right part"
     SUN_TEMPLE_BULB_IN_THE_HIDDEN_ROOM_OF_THE_RIGHT_PART = "Sun Temple, bulb in the hidden room of the right part"
     SUN_TEMPLE_SUN_KEY = "Sun Temple, Sun Key"
     SUN_TEMPLE_BOSS_PATH_FIRST_PATH_BULB = "Sun Temple boss path, first path bulb"

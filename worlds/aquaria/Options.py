@@ -115,6 +115,7 @@ class Objective(Choice):
     option_kill_the_creator = 0
     option_obtain_secrets_and_kill_the_creator = 1
     option_killing_the_four_gods = 2
+    option_gods_and_creator = 3
     default = 0
 
 
@@ -248,7 +249,7 @@ class BlindGoal(Toggle):
 
 class InfiniteHotSoup(DefaultOnToggle):
     """
-    As soon as a hot soup is received, the user will never run out of those dishes.
+    As soon as a hot soup is received, the user will never run out of this dish.
     This option is recommended if using Ingredient randomization since Hot soup ingredients can be hard to get.
     """
     display_name = "Infinite Hot Soup"

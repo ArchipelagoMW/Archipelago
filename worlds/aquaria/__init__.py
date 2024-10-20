@@ -154,15 +154,17 @@ class AquariaWorld(World):
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
-        if self.options.objective.value == Objective.option_killing_the_four_gods:
+        if (self.options.objective.value == Objective.option_killing_the_four_gods or
+                self.options.objective.value == Objective.option_gods_and_creator):
             self.exclude.extend(four_gods_excludes)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
                                  precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
                                  precollected)
         if self.options.turtle_randomizer.value != TurtleRandomizer.option_none:
-            if self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final and \
-               self.options.objective.value != Objective.option_killing_the_four_gods:
+            if (self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final and
+                    self.options.objective.value != Objective.option_killing_the_four_gods and
+                    self.options.objective.value != Objective.option_gods_and_creator):
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
                                      precollected)
         else:
@@ -175,7 +177,8 @@ class AquariaWorld(World):
             self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST,
                                  AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE, precollected)
-            if self.options.objective.value != Objective.option_killing_the_four_gods:
+            if (self.options.objective.value != Objective.option_killing_the_four_gods and
+                    self.options.objective.value != Objective.option_gods_and_creator):
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
                                      precollected)
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,

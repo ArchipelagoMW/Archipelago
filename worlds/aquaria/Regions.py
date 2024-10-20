@@ -883,7 +883,8 @@ class AquariaRegions:
         self.__connect_abyss_regions()
         self.__connect_sunken_city_regions()
         self.__connect_body_regions()
-        if options.objective.value == Objective.option_killing_the_four_gods:
+        if (options.objective.value == Objective.option_killing_the_four_gods or
+                options.objective.value == Objective.option_gods_and_creator):
             self.__connect_four_gods_end(options)
         self.__connect_transturtles()
 
@@ -978,12 +979,13 @@ class AquariaRegions:
         self.__add_event_location(self.sunken_city_boss,
                                   AquariaLocationNames.SUNKEN_CITY_CLEARED,
                                   ItemNames.BODY_TONGUE_CLEARED)
-        if options.objective.value != Objective.option_killing_the_four_gods:
-            self.__add_event_secrets()
-            self.__add_event_location(self.final_boss_end, AquariaLocationNames.OBJECTIVE_COMPLETE,
+        if (options.objective.value == Objective.option_killing_the_four_gods or
+                options.objective.value == Objective.option_gods_and_creator):
+            self.__add_event_location(self.four_gods_end, AquariaLocationNames.OBJECTIVE_COMPLETE,
                                       ItemNames.VICTORY)
         else:
-            self.__add_event_location(self.four_gods_end, AquariaLocationNames.OBJECTIVE_COMPLETE,
+            self.__add_event_secrets()
+            self.__add_event_location(self.final_boss_end, AquariaLocationNames.OBJECTIVE_COMPLETE,
                                       ItemNames.VICTORY)
 
     def __adjusting_soup_rules(self) -> None:
@@ -1038,7 +1040,8 @@ class AquariaRegions:
         add_rule(self.multiworld.get_location(
             AquariaLocationNames.THE_VEIL_TOP_LEFT_AREA_BULB_UNDER_THE_ROCK_IN_THE_TOP_RIGHT_PATH,
             self.player), lambda state: _has_bind_song(state, self.player))
-        if options.objective.value != Objective.option_killing_the_four_gods:
+        if (options.objective.value != Objective.option_killing_the_four_gods and
+            options.objective.value != Objective.option_gods_and_creator):
             add_rule(self.multiworld.get_location(
                     AquariaLocationNames.ABYSS_RIGHT_AREA_BULB_BEHIND_THE_ROCK_IN_THE_WHALE_ROOM,
                     self.player), lambda state: _has_bind_song(state, self.player))
@@ -1114,7 +1117,8 @@ class AquariaRegions:
         ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG, self.player),
                  lambda state: _has_beast_form(state, self.player))
-        if options.objective.value != Objective.option_killing_the_four_gods:
+        if (options.objective.value != Objective.option_killing_the_four_gods and
+            options.objective.value != Objective.option_gods_and_creator):
             add_rule(self.multiworld.get_location(AquariaLocationNames.ABYSS_LEFT_AREA_BULB_IN_THE_BOTTOM_FISH_PASS,
                                                   self.player),
                      lambda state: _has_fish_form(state, self.player))
@@ -1175,7 +1179,8 @@ class AquariaRegions:
         self.multiworld.get_location(AquariaLocationNames.ARNASSI_RUINS_ARNASSI_ARMOR,
                                      self.player).item_rule = \
             lambda item: item.classification != ItemClassification.progression
-        if options.objective.value != Objective.option_killing_the_four_gods:
+        if (options.objective.value != Objective.option_killing_the_four_gods and
+            options.objective.value != Objective.option_gods_and_creator):
             self.multiworld.get_location(AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
                                          self.player).item_rule = \
                 lambda item: item.classification != ItemClassification.progression
@@ -1326,7 +1331,8 @@ class AquariaRegions:
             self.__no_progression_energy_temple()
         if options.no_progression_arnassi_ruins:
             self.__no_progression_arnassi_ruins(options)
-        if options.objective.value != Objective.option_killing_the_four_gods:
+        if (options.objective.value != Objective.option_killing_the_four_gods and
+            options.objective.value != Objective.option_gods_and_creator):
             if options.no_progression_frozen_veil:
                 self.__no_progression_frozen_veil()
             if options.no_progression_abyss:
@@ -1347,7 +1353,8 @@ class AquariaRegions:
             self.__adjusting_light_in_dark_place_rules(options.light_needed_to_get_to_dark_places)
         if options.bind_song_needed_to_get_under_rock_bulb:
             self.__adjusting_under_rock_location(options)
-        if options.objective.value != Objective.option_killing_the_four_gods:
+        if (options.objective.value != Objective.option_killing_the_four_gods and
+            options.objective.value != Objective.option_gods_and_creator):
             if options.mini_bosses_to_beat.value > 0:
                 add_rule(self.multiworld.get_entrance(self.get_entrance_name(self.final_boss_lobby, self.final_boss),
                                                       self.player), lambda state: _has_mini_bosses(state, self.player))
@@ -1509,7 +1516,8 @@ class AquariaRegions:
         self.__add_veil_regions_to_world()
         self.__add_abyss_regions_to_world()
         self.__add_body_regions_to_world()
-        if options.objective.value == Objective.option_killing_the_four_gods:
+        if (options.objective.value == Objective.option_killing_the_four_gods or
+            options.objective.value == Objective.option_gods_and_creator):
             self.multiworld.regions.append(self.four_gods_end)
 
     def __init__(self, multiworld: MultiWorld, player: int, options: AquariaOptions):
@@ -1525,8 +1533,12 @@ class AquariaRegions:
         self.__create_forest()
         self.__create_veil()
         self.__create_sun_temple()
-        self.__create_abyss(options.objective.value != Objective.option_killing_the_four_gods)
-        self.__create_sunken_city(options.objective.value != Objective.option_killing_the_four_gods)
-        self.__create_body(options.objective.value != Objective.option_killing_the_four_gods)
-        if options.objective.value == Objective.option_killing_the_four_gods:
+        self.__create_abyss(options.objective.value != Objective.option_killing_the_four_gods and
+                            options.objective.value != Objective.option_gods_and_creator)
+        self.__create_sunken_city(options.objective.value != Objective.option_killing_the_four_gods and
+                            options.objective.value != Objective.option_gods_and_creator)
+        self.__create_body(options.objective.value != Objective.option_killing_the_four_gods and
+                            options.objective.value != Objective.option_gods_and_creator)
+        if (options.objective.value == Objective.option_killing_the_four_gods or
+            options.objective.value == Objective.option_gods_and_creator):
             self.four_gods_end = self.__add_region("Four gods ending", None)
