@@ -77,6 +77,12 @@ class TestItemFiltering(Sc2SetupTestBase):
                 item_names.BATTLECRUISER: 0,
                 item_names.SCIENCE_VESSEL: 0,
             },
+            # Terran-only
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_epilogue_missions': False,
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
