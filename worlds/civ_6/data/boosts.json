@@ -649,7 +649,7 @@
     "Type": "BOOST_CIVIC_THEOLOGY",
     "EraType": "ERA_CLASSICAL",
     "Prereq": ["TECH_ASTROLOGY"],
-    "PrereqRequiredCount": 0,
+    "PrereqRequiredCount": 1,
     "Classification": "EXCLUDED"
   },
   {

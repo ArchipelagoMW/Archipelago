@@ -53,7 +53,7 @@ Boosts have logic associated with them in order to verify you can always reach t
 - Something happened, and I'm not able to unlock the boost due to game rules!
     - A few scenarios you may worry about: "Found a religion", "Make an alliance with another player", "Develop an alliance to level 2", "Build a wonder from X Era", to name a few. Any boost that is "miss-able" has been flagged as an "Excluded" location and will not ever receive a progression item. For a list of how each boost is flagged, take a look [here](https://github.com/hesto2/civilization_vi_apworld/blob/main/data/boosts.json).
 - I'm worried that my `PROGRESSIVE_ERA` item is going to be stuck in a boost I won't have time to complete before my maximum unlocked era ends!
-    - Due to the unpredictable timing of boosts and unlocking them, this could lead to a hard lock in certain scenarios. As a result, `PROGRESSIVE_ERA` items will never be located at a boost check.
+    - The unpredictable timing of boosts and unlocking them can occasionally lead to scenarios where you'll have to first encounter a locked era defeat and then load a previous save. To help reduce the frequency of this, local `PROGRESSIVE_ERA` items will never be located at a boost check.
 - There's too many boosts, how will I know which one's I should focus on?!
     - In order to give a little more focus to all the boosts rather than just arbitrarily picking them at random, items in both of the vanilla trees will now have an advisor icon on them if its associated boost contains a progression item.
 
