@@ -2769,6 +2769,74 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     or logic.protoss_competent_anti_air(state)
                 ))
         ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2500, LocationType.VICTORY,
+            lambda state: (
+                adv_tactics
+                or logic.zerg_basic_kerriganless_anti_air(state)
+                    and (logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)))
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Tosh's Miners", SC2_RACESWAP_LOC_ID_OFFSET + 2501, LocationType.VANILLA),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 2502, LocationType.VANILLA,
+            lambda state: adv_tactics or logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "North Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2503, LocationType.EXTRA),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Middle Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2504, LocationType.EXTRA,
+            lambda state: adv_tactics or logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Southwest Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2505, LocationType.EXTRA,
+            lambda state: adv_tactics or logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Southeast Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2506, LocationType.EXTRA,
+            lambda state: (
+                adv_tactics
+                or logic.zerg_basic_kerriganless_anti_air(state)
+                    and (logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)))
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "East Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2507, LocationType.CHALLENGE,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and (adv_tactics
+                    or logic.zerg_common_unit(state)
+                    or state.has(item_names.HUNTERLING, player)))
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Zerg Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 2508, LocationType.CHALLENGE,
+            lambda state: (
+                logic.zerg_competent_anti_air(state)
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2600, LocationType.VICTORY,
+            lambda state: (
+                adv_tactics
+                or logic.protoss_basic_anti_air(state) and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "Tosh's Miners", SC2_RACESWAP_LOC_ID_OFFSET + 2601, LocationType.VANILLA),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 2602, LocationType.VANILLA,
+            lambda state: adv_tactics or logic.protoss_common_unit(state)
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "North Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2603, LocationType.EXTRA),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "Middle Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2604, LocationType.EXTRA,
+            lambda state: adv_tactics or logic.protoss_common_unit(state)
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "Southwest Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2605, LocationType.EXTRA,
+            lambda state: adv_tactics or logic.protoss_common_unit(state)
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "Southeast Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2606, LocationType.EXTRA,
+            lambda state: (
+                adv_tactics
+                or logic.protoss_basic_anti_air(state)
+                    and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "East Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2607, LocationType.CHALLENGE,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and (adv_tactics
+                    or logic.protoss_common_unit(state)))
+        ),
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "Zerg Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 2608, LocationType.CHALLENGE,
+            lambda state: (
+                logic.protoss_competent_anti_air(state)
+                and (logic.protoss_common_unit(state)))
+        ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3300, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_great_train_robbery_train_stopper(state)
