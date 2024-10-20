@@ -1,0 +1,391 @@
+event($A2)  //Falling to the Underground
+{
+    player face up
+    music #None
+    message $141   // "[Cecil]:A pitfall!?[pause 12][next]"
+    sound #HeavyDoor
+    consts(placement) {
+    }
+    load map #Black at 16 16 facing down
+    player face down
+    music $43
+    toggle run
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    toggle run
+    load map #BabilFloorLugae at 6 4 facing down
+    toggle run
+    music #None
+    batch 5 {
+        player move down
+    }
+    toggle run
+    sound #HeavyDoor
+    pause 8
+    player face left
+    pause 3
+    player face down
+    pause 3
+    player face right
+    pause 3
+    player face down
+    pause 3
+    music #Babil
+}
+
+text(bank 1 message $141) {
+[name $f0]:A pitfall!?
+}
+
+//-----------------------------------------------
+// add a way back up
+
+npc(#fe_BabilClimb) {
+    sprite #Sparkle
+    default active
+    eventcall {
+        $13
+    }
+}
+
+placement($128 2)   // was Rosa, turn into jump point
+{
+    npc #fe_BabilClimb
+    position 3 8
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($AB 7)    // Crystal room placement for party member to pop back up
+{
+    npc #fe_PartyLeader
+    position 16 20
+    walking off
+    intangible
+    face down
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+event($13)  //Jumping to overworld
+{
+    confirm message $142   // Jump back up?
+    toggle music fade
+    load map #Black at 16 16 facing down
+    player face down
+    sound #Jump
+    toggle run
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    toggle run
+    player invisible
+    consts(placement) {
+        7  PartyLeader
+    }
+    load map #BabilCrystalRoom at 16 21 facing down
+    pause 4
+    sound #Hop
+    batch {
+        p #PartyLeader toggle visible
+        p #PartyLeader spin jump
+    }
+    p #PartyLeader move down
+    player visible
+    p #PartyLeader toggle visible
+    music #Prelude
+cancel:
+}
+
+text(bank 1 message $142) {
+Jump back up to the
+overworld?[next]
+}
+
+//--------------------------------------------
+// Acquiring falcon
+
+event($A5)  //Finding the Falcon
+{
+    player face up
+    consts(placement) {
+        3   Edge1_A
+        4   Rosa1
+        5   Kain1
+        6   AdultRydia1
+    }
+    load map #DockedAirship at 25 8 facing left
+    pause 4
+    player move left
+    player move left
+    player move down
+    player move down
+    batch 9 {
+        player move left
+    }
+    player move down
+    player move down
+    player move down
+    player move left
+    player move left
+    player move down
+    pause 4
+    player wave in
+    pause 8
+    player face down
+    music #None
+    [#B #Objectives_Tick #objective.quest_falcon]
+    sound #Earthquake
+    pause 24
+    sound $5E
+    toggle screen shake
+    pause 32
+
+    // Falcon comes reinforced and with the drill
+    set #ReinforcedFalcon
+    set #Drill
+
+    music #None
+    load map $1FC at 48 16 on falcon
+    sound #None
+    toggle screen shake
+    music #Airship
+    set #FoundFalcon
+
+    activate #fe_FalconDoorBlock
+}
+
+npc(#fe_FalconDoorBlock) {
+    sprite #Transparent
+    default inactive
+    eventcall {
+        $27  // map message 0
+    }
+}
+
+text(map #BabilFloorAirship message 0) {
+It doesn't open.
+}
+
+placement($126 0)
+{
+    npc #fe_FalconDoorBlock
+    position 9 21
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching off
+    speed 2
+}
+
+//--------------------------------------
+// Remove the part of the drilling-to-surface event that 
+// activates the blocking soldier in Cave Eblan
+
+event($C6)  //Drilling to the surface
+{
+    // hinted map #Overworld
+    toggle music fade
+    vfx #AgartMountainExplosion
+    sound #None
+    music #None
+    music #Airship
+    set #UnderworldOpen
+}
+

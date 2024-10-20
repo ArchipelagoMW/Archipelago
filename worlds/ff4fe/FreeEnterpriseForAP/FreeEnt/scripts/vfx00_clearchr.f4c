@@ -1,0 +1,29 @@
+// Rewrite VFX 0 to do nothing but clear out tilemap VRAM
+msfpatch {
+    .addr 0x00d81b
+
+    sei
+
+    lda #$80
+    sta $2100
+
+    lda #$80
+    sta $2115
+    ldx #$0000
+
+Vfx0_Loop:
+    stx $2116
+    stz $2118
+    stz $2119
+    inx
+    cpx #$4000
+    bne $-Vfx0_Loop
+
+    // set screen brightness up
+    lda #$0f
+    sta $2100
+
+    // end subroutine early
+    cli
+    jmp $e0d3
+}

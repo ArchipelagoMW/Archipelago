@@ -1,0 +1,40 @@
+// hook into check that fails Life1 on undead targets,
+// and make it also apply to enemies with 0 vit
+
+msfpatch {
+    .addr $03d678
+        jml $=RemoveLifeGlitch
+
+    .new
+    RemoveLifeGlitch:
+        // check if vitality is 0
+        lda $2716
+        bne $+Success
+
+        // only vit-based life effects should fail;
+        // check which effect is being used (copies
+        // the checks around 03:d6c5)
+        lda $352a
+        bne $-Fail
+
+        lda $26d2
+        cmp #$14
+        beq $+Success
+        cmp #$ab
+        beq $+Success
+        cmp #$ac
+        beq $+Success
+
+        bra $-Fail
+
+    %Success:
+        // perform displaced instructions to remove swoon
+        // and poison
+        lda $2703
+        and #$7e
+        sta $2703
+        jml $03d67d
+
+    %Fail:
+        jml $03d5b2     // this is where lifing a dead undead fails
+}

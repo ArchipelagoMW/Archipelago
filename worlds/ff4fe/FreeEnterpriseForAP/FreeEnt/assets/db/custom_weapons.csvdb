@@ -1,0 +1,26 @@
+id,name,spoilername,disabled,equip,use,attack,accuracy,metallic,throwable,longrange,twohanded,bow,arrow,str,vit,agi,wis,wil,elements,cast,spellpower,dragons,robots,reptiles,spirits,giants,slimes,mages,undead,anim0,anim1,anim2,anim3,proxy
+0x101,[lightsword]Caliburn,Caliburn,,pcecil,,1,99,y,y,,,,,,,,,,,,,,,,,,,,,0x20,0x04,0x04,0x01,#item.CrystalSword
+0x102,[lightsword]Flan,Flan Sword,,pcecil,,60,99,y,,,,,,,,,,,,,,,,,,,y,,,0x1F,0x04,0x04,0x01,#item.CrystalSword
+0x103,[lightsword]Bringer,Lightbringer,,pcecil,,255,99,y,,y,,,,15,15,15,,,holy,White,2,,,,y,,,,y,0x1F,0x04,0x04,0x01,#item.CrystalSword
+0x104,[sword]Piggy,Piggy Stick,,"pcecil,kain",,150,99,,,,,,,,,,,,piggy,,,,,,,,,,,0x21,0x04,0x00,0x01,#item.Ancient
+0x105,[spear]Abel,Abel's Lance,,kain,,230,85,y,,,,,,15,15,15,,,"lightning,air",Weak,8,,,,,,,,,0x1A,0x02,0x04,0x01,#item.WhiteSpear
+0x106,[axe]Gigant,Gigant Axe,,"pcecil,kain,cid",,200,75,y,,,y,,,15,,,,,poison,,,,,,,,,,,0x1E,0x07,0x00,0x01,#item.RuneAxe
+0x107,[bow]Perseus,Perseus Bow,,rosa,,110,85,,,y,,y,,,,,,15,air,,,,,,,,,,,0x1C,0x17,0x08,0x04,#item.ArtemisBow
+0x108,[arrow]Perseus,Perseus Arrow,,rosa,,95,0,,,y,,,y,,,,,,charm,,,,,,,y,,,,0x1F,0x17,0x08,0x05,#item.ArtemisArrow
+0x109,[whip]Mist,Mist Whip,,"crydia,arydia",,100,75,,,y,,,,,,,15,,"holy,paralyze",,,,,,,,,,,0x24,0x13,0x02,0x0A,#item.DragonWhip
+0x10A,[knife]Triton,Triton's Dagger,,"palom,fusoya",,62,90,y,y,,,,,,,,15,,,Flood,8,,,,,,,,,0x24,0x03,0x00,0x01,#item.Dancing
+0x10B,[katana]Sasuke,Sasuke's Katana,,edge,,95,99,y,y,,,,,,10,10,,,,,,,,,,,,,,0x1A,0x06,0x03,0x01,#item.Masamune
+0x10C,[katana]Mutsuno,Mutsunokami,,edge,,100,99,y,y,,,,,10,,,,10,,Blink,8,,,,,,,,,0x24,0x06,0x03,0x01,#item.Masamune
+0x10D,[shuriken]Scrap,Scrap Metal,,,edge,4,99,y,y,,,,,,,,,,air,,,,,,,,,,,0x24,0x0B,0x12,0x06,#item.Shuriken
+0x10E,[boomerang]Sunrise,Rising Sun,,edge,,85,95,,,y,,,,,,10,,,air,,,,,,,,,,,0x1A,0x0F,0x11,0x08,#item.FullMoon
+0x10F,[claw]Tiger,Tiger Fangs,,yang,,0,90,,,,,,,,10,10,,,paralyze,,,,,,,,,,,0x1D,0x16,0x0E,0x03,#item.CatClaw
+0x110,[claw]Dragon,Dragon Claw,,yang,,0,90,,,,,,,10,,,,10,holy,,,y,,,,,,,,0x1B,0x16,0x0E,0x03,#item.CatClaw
+0x111,[claw]Godhand,Godhand,,yang,,0,90,,,,,,,15,15,15,,,holy,,,,,,,,,,,0x24,0x16,0x0E,0x03,#item.CatClaw
+0x112,[wrench]Thor,Thor's Hammer,,cid,,190,80,y,,,y,,,15,,,,,lightning,Blitz,8,,y,,,,,,,0x24,0x09,0x0E,0x0B,#item.EarthHammer
+0x113,[wrench]Fiery,Fiery Hammer,,cid,,241,85,,,,y,,,15,15,,15,15,fire,Nuke,4,,y,,,,,,,0x18,0x09,0x0E,0x0B,#item.EarthHammer
+0x114,[rod]Asura,Asura's Rod,,"palom,tellah",,75,75,,,,,,,,,,15,15,holy,White,2,,,,,,,,,0x1C,0x00,0x0A,0x02,#item.StardustRod
+0x115,[staff]Seraphim,Seraphim's Mace,,"porom,fusoya",,50,70,,,,,,,,,,,15,,Heal,8,,,,,,,,,0x1B,0x01,0x0A,0x02,#item.Silence
+0x116,[staff]Nirvana,Nirvana,,"porom,tellah",,80,90,,,,,,,,15,,,15,,Wall,8,,,,,,,,,0x21,0x01,0x0A,0x02,#item.Silence
+0x117,[harp]Apollo,Apollo's Harp,,edward,,98,80,,,y,y,,,15,,15,,15,fire,,,y,,,,,,,,0x20,0x0A,0x13,0x09,#item.CharmHarp
+0x118,[harp]Requiem,Requiem Harp,,edward,,130,85,,,y,y,,,-5,-5,-5,-5,-5,,,,,,,,,,,,0x1F,0x0A,0x13,0x09,#item.CharmHarp
+0x119,[harp]Loki,Loki's Lute,,edward,,150,99,,,y,y,,,15,15,15,,,,,,y,y,y,y,y,,y,y,0x1F,0x0A,0x13,0x09,#item.CharmHarp

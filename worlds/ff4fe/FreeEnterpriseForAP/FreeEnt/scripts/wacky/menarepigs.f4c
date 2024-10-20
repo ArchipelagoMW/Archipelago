@@ -1,0 +1,25 @@
+msfpatch {
+    Wacky__StatusEnforcement_Calculate:
+        // Wacky RAM should be init'ed to 0 so hopefully
+        // we don't need the following lines
+        //   stz $_Wacky__StatusEnforcement_OutputByte1
+        //   stz $_Wacky__StatusEnforcement_OutputByte2
+        //   stz $_Wacky__StatusEnforcement_OutputByte3
+
+        lda $_Wacky__StatusEnforcement_InputJob
+        cmp #$02  // CRydia
+        beq $+Bypass
+        cmp #$05  // Rosa
+        beq $+Bypass
+        cmp #$08  // Porom
+        beq $+Bypass        
+        cmp #$0B  // ARydia
+        beq $+Bypass
+        
+        lda #$08
+        sta $_Wacky__StatusEnforcement_OutputByte0
+        rtl
+    %Bypass:
+        stz $_Wacky__StatusEnforcement_OutputByte0
+        rtl
+}

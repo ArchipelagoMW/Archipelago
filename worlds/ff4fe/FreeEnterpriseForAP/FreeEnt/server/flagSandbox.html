@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <script src="script/flagspec.js"></script>
+    <script src="script/flagset.js"></script>
+</head>
+
+<body>
+    <input type="text" id="input">
+    <br>
+    <input type="button" value="Load" onclick="loadFlagString();">
+    <hr>
+    <p>
+        Version: <span id="version"></span>
+    </p>
+    <p>
+        String: <span id="string"></span>
+    </p>
+    <p>
+        Binary: <span id="binary"></span>
+    </p>
+    <p>
+        Flag list: <span id="flagList"></span>
+    </p>
+
+    <script>
+        function loadFlagString()
+        {
+            var flagSet = new FlagSet(document.getElementById('input').value);
+
+            document.getElementById('version').innerHTML = flagSet.getVersionString();
+
+            document.getElementById('string').innerHTML = flagSet.getString();
+
+            document.getElementById('binary').innerHTML = flagSet.getBinary();
+
+            document.getElementById('flagList').innerHTML = flagSet.getFlagList().join('<br>');
+        };
+    </script>
+</body>
+
+</html>

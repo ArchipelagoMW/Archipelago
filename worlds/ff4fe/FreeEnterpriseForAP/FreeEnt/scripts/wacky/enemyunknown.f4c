@@ -1,0 +1,247 @@
+// never draw enemy quantity
+msfpatch {
+    .addr $02A798
+        nop nop
+}
+
+// skip drawing all monsters except for Z
+msfpatch {
+    .addr $028D4C
+        jml $=Wacky__EnemyUnknown_SkipDraw
+
+    .new
+    Wacky__EnemyUnknown_SkipDraw:
+        tax
+        lda $29b1,x
+        cmp #$c9
+        bne $+NotZeromus
+        jml $028d50
+    %NotZeromus:
+        // bypass draw code entirely
+        jml $028d9a
+}
+
+text (monster name $00) {        }
+text (monster name $01) {        }
+text (monster name $02) {        }
+text (monster name $03) {        }
+text (monster name $04) {        }
+text (monster name $05) {        }
+text (monster name $06) {        }
+text (monster name $07) {        }
+text (monster name $08) {        }
+text (monster name $09) {        }
+text (monster name $0A) {        }
+text (monster name $0B) {        }
+text (monster name $0C) {        }
+text (monster name $0D) {        }
+text (monster name $0E) {        }
+text (monster name $0F) {        }
+text (monster name $10) {        }
+text (monster name $11) {        }
+text (monster name $12) {        }
+text (monster name $13) {        }
+text (monster name $14) {        }
+text (monster name $15) {        }
+text (monster name $16) {        }
+text (monster name $17) {        }
+text (monster name $18) {        }
+text (monster name $19) {        }
+text (monster name $1A) {        }
+text (monster name $1B) {        }
+text (monster name $1C) {        }
+text (monster name $1D) {        }
+text (monster name $1E) {        }
+text (monster name $1F) {        }
+text (monster name $20) {        }
+text (monster name $21) {        }
+text (monster name $22) {        }
+text (monster name $23) {        }
+text (monster name $24) {        }
+text (monster name $25) {        }
+text (monster name $26) {        }
+text (monster name $27) {        }
+text (monster name $28) {        }
+text (monster name $29) {        }
+text (monster name $2A) {        }
+text (monster name $2B) {        }
+text (monster name $2C) {        }
+text (monster name $2D) {        }
+text (monster name $2E) {        }
+text (monster name $2F) {        }
+text (monster name $30) {        }
+text (monster name $31) {        }
+text (monster name $32) {        }
+text (monster name $33) {        }
+text (monster name $34) {        }
+text (monster name $35) {        }
+text (monster name $36) {        }
+text (monster name $37) {        }
+text (monster name $38) {        }
+text (monster name $39) {        }
+text (monster name $3A) {        }
+text (monster name $3B) {        }
+text (monster name $3C) {        }
+text (monster name $3D) {        }
+text (monster name $3E) {        }
+text (monster name $3F) {        }
+text (monster name $40) {        }
+text (monster name $41) {        }
+text (monster name $42) {        }
+text (monster name $43) {        }
+text (monster name $44) {        }
+text (monster name $45) {        }
+text (monster name $46) {        }
+text (monster name $47) {        }
+text (monster name $48) {        }
+text (monster name $49) {        }
+text (monster name $4A) {        }
+text (monster name $4B) {        }
+text (monster name $4C) {        }
+text (monster name $4D) {        }
+text (monster name $4E) {        }
+text (monster name $4F) {        }
+text (monster name $50) {        }
+text (monster name $51) {        }
+text (monster name $52) {        }
+text (monster name $53) {        }
+text (monster name $54) {        }
+text (monster name $55) {        }
+text (monster name $56) {        }
+text (monster name $57) {        }
+text (monster name $58) {        }
+text (monster name $59) {        }
+text (monster name $5A) {        }
+text (monster name $5B) {        }
+text (monster name $5C) {        }
+text (monster name $5D) {        }
+text (monster name $5E) {        }
+text (monster name $5F) {        }
+text (monster name $60) {        }
+text (monster name $61) {        }
+text (monster name $62) {        }
+text (monster name $63) {        }
+text (monster name $64) {        }
+text (monster name $65) {        }
+text (monster name $66) {        }
+text (monster name $67) {        }
+text (monster name $68) {        }
+text (monster name $69) {        }
+text (monster name $6A) {        }
+text (monster name $6B) {        }
+text (monster name $6C) {        }
+text (monster name $6D) {        }
+text (monster name $6E) {        }
+text (monster name $6F) {        }
+text (monster name $70) {        }
+text (monster name $71) {        }
+text (monster name $72) {        }
+text (monster name $73) {        }
+text (monster name $74) {        }
+text (monster name $75) {        }
+text (monster name $76) {        }
+text (monster name $77) {        }
+text (monster name $78) {        }
+text (monster name $79) {        }
+text (monster name $7A) {        }
+text (monster name $7B) {        }
+text (monster name $7C) {        }
+text (monster name $7D) {        }
+text (monster name $7E) {        }
+text (monster name $7F) {        }
+text (monster name $80) {        }
+text (monster name $81) {        }
+text (monster name $82) {        }
+text (monster name $83) {        }
+text (monster name $84) {        }
+text (monster name $85) {        }
+text (monster name $86) {        }
+text (monster name $87) {        }
+text (monster name $88) {        }
+text (monster name $89) {        }
+text (monster name $8A) {        }
+text (monster name $8B) {        }
+text (monster name $8C) {        }
+text (monster name $8D) {        }
+text (monster name $8E) {        }
+text (monster name $8F) {        }
+text (monster name $90) {        }
+text (monster name $91) {        }
+text (monster name $92) {        }
+text (monster name $93) {        }
+text (monster name $94) {        }
+text (monster name $95) {        }
+text (monster name $96) {        }
+text (monster name $97) {        }
+text (monster name $98) {        }
+text (monster name $99) {        }
+text (monster name $9A) {        }
+text (monster name $9B) {        }
+text (monster name $9C) {        }
+text (monster name $9D) {        }
+text (monster name $9E) {        }
+text (monster name $9F) {        }
+text (monster name $A0) {        }
+text (monster name $A1) {        }
+text (monster name $A2) {        }
+text (monster name $A3) {        }
+text (monster name $A4) {        }
+text (monster name $A5) {        }
+text (monster name $A6) {        }
+text (monster name $A7) {        }
+text (monster name $A8) {        }
+text (monster name $A9) {        }
+text (monster name $AA) {        }
+text (monster name $AB) {        }
+text (monster name $AC) {        }
+text (monster name $AD) {        }
+text (monster name $AE) {        }
+text (monster name $AF) {        }
+text (monster name $B0) {        }
+text (monster name $B1) {        }
+text (monster name $B2) {        }
+text (monster name $B3) {        }
+text (monster name $B4) {        }
+text (monster name $B5) {        }
+text (monster name $B6) {        }
+text (monster name $B7) {        }
+text (monster name $B8) {        }
+text (monster name $B9) {        }
+text (monster name $BA) {        }
+text (monster name $BB) {        }
+text (monster name $BC) {        }
+text (monster name $BD) {        }
+text (monster name $BE) {        }
+text (monster name $BF) {        }
+text (monster name $C0) {        }
+text (monster name $C1) {        }
+text (monster name $C2) {        }
+text (monster name $C3) {        }
+text (monster name $C4) {        }
+text (monster name $C5) {        }
+text (monster name $C6) {        }
+text (monster name $C7) {        }
+text (monster name $C8) {        }
+// monster $C9 is Zeromus
+// monster $CA is Zeromus' name extension
+text (monster name $CB) {        }
+text (monster name $CC) {        }
+text (monster name $CD) {        }
+text (monster name $CE) {        }
+text (monster name $CF) {        }
+text (monster name $D0) {        }
+text (monster name $D1) {        }
+text (monster name $D2) {        }
+text (monster name $D3) {        }
+text (monster name $D4) {        }
+text (monster name $D5) {        }
+text (monster name $D6) {        }
+text (monster name $D7) {        }
+text (monster name $D8) {        }
+text (monster name $D9) {        }
+text (monster name $DA) {        }
+text (monster name $DB) {        }
+text (monster name $DC) {        }
+text (monster name $DD) {        }
+text (monster name $DE) {        }
+text (monster name $DF) {        }

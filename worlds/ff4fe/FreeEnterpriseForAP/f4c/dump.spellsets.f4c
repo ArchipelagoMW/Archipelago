@@ -1,0 +1,245 @@
+spellset(#PCecil) {
+    initial {
+        #Cure1
+    }
+    learned {
+        3  #Sight
+        8  #Peep
+        15  #Cure2
+        19  #Exit
+        24  #Heal
+    }
+}
+
+spellset($01) {
+    initial {
+    }
+    learned {
+    }
+}
+
+spellset(#RydiaWhite) {
+    initial {
+    }
+    learned {
+        3  #Cure1
+        4  #Sight
+        7  #Hold
+    }
+}
+
+spellset(#RydiaBlack) {
+    initial {
+    }
+    learned {
+        2  #Ice1
+        5  #Lit1
+        8  #Sleep
+        10  #Venom
+        12  #Warp
+        13  #Toad
+        15  #Stop
+        20  #Piggy
+        26  #Virus
+        31  #Psych
+        35  #Drain
+        38  #Ice3
+        40  #Fire3
+        42  #Lit3
+        44  #Quake
+        46  #Stone
+        48  #Weak
+        49  #Fatal
+        50  #Nuke
+        60  #Meteo
+    }
+}
+
+spellset(#RydiaCall) {
+    initial {
+        #Chocb
+    }
+    learned {
+    }
+}
+
+spellset(#TellahWhite) {
+    initial {
+        #Cure2
+        #Charm
+        #Blink
+        #Heal
+        #Life1
+        #Exit
+    }
+    learned {
+    }
+}
+
+spellset(#TellahBlack) {
+    initial {
+        #Fire1
+        #Ice1
+        #Lit1
+        #Stop
+        #Psych
+    }
+    learned {
+    }
+}
+
+spellset(#Rosa) {
+    initial {
+        #Cure1
+        #Hold
+        #Peep
+        #Slow
+        #Sight
+    }
+    learned {
+        11  #Life1
+        13  #Cure2
+        15  #Mute
+        18  #Heal
+        20  #Bersk
+        23  #Blink
+        24  #Charm
+        28  #Cure3
+        29  #Size
+        30  #Fast
+        32  #Float
+        34  #Wall
+        38  #Cure4
+        42  #Life2
+        48  #White
+    }
+}
+
+spellset(#Palom) {
+    initial {
+        #Fire1
+        #Ice1
+        #Lit1
+        #Sleep
+        #Venom
+    }
+    learned {
+        11  #Ice2
+        11  #Piggy
+        12  #Fire2
+        13  #Lit2
+        14  #Stop
+        19  #Virus
+        22  #Toad
+        23  #Quake
+        26  #Drain
+        29  #Warp
+        32  #Ice3
+        33  #Fire3
+        34  #Lit3
+        36  #Stone
+        40  #Psych
+        46  #Fatal
+        48  #Weak
+        50  #Meteo
+        52  #Nuke
+    }
+}
+
+spellset(#Porom) {
+    initial {
+        #Cure1
+        #Hold
+        #Peep
+        #Slow
+        #Sight
+    }
+    learned {
+        11  #Life1
+        13  #Cure2
+        15  #Mute
+        18  #Bersk
+        19  #Exit
+        20  #Heal
+        23  #Blink
+        25  #Charm
+        31  #Size
+        33  #Cure3
+        38  #Fast
+        40  #Float
+        44  #Wall
+        48  #Cure4
+        52  #White
+        56  #Life2
+    }
+}
+
+spellset(#FusoyaWhite) {
+    initial {
+        #Hold
+        #Mute
+        #Charm
+        #Blink
+        #Slow
+        #Fast
+        #Bersk
+        #Wall
+        #White
+        #Peep
+        #Cure1
+        #Cure2
+        #Cure3
+        #Cure4
+        #Heal
+        #Life1
+        #Life2
+        #Size
+        #Exit
+        #Sight
+        #Float
+    }
+    learned {
+    }
+}
+
+spellset(#FusoyaBlack) {
+    initial {
+        #Toad
+        #Piggy
+        #Warp
+        #Venom
+        #Fire1
+        #Fire2
+        #Fire3
+        #Ice1
+        #Ice2
+        #Ice3
+        #Lit1
+        #Lit2
+        #Lit3
+        #Virus
+        #Weak
+        #Quake
+        #Sleep
+        #Stone
+        #Fatal
+        #Stop
+        #Drain
+        #Psych
+        #Meteo
+        #Nuke
+    }
+    learned {
+    }
+}
+
+spellset(#Edge) {
+    initial {
+        #Flame
+    }
+    learned {
+        27  #Pin
+        33  #Smoke
+        38  #Image
+    }
+}

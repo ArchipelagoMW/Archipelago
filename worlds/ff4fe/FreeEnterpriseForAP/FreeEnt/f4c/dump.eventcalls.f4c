@@ -1,0 +1,649 @@
+eventcall($01)
+{
+    $0B   //Open a door
+}
+
+eventcall($02)
+{
+    $00   //(no event)
+}
+
+eventcall($03)
+{
+    if #CecilBecamePaladin, not #DefeatedBaigan:
+        $1A   //Baigan battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($04)
+{
+    if not #RosaGreetedCecil:
+        $14   //Rosa greeting Cecil
+    else:
+        $00   //(no event)
+}
+
+eventcall($05)
+{
+    if not #PrologueComplete:
+        $15   //Cecil sleeping, Prologue
+    else:
+        $68   //Resting for free in Castle Baron
+}
+
+eventcall($06)
+{
+    if not #CecilBecamePaladin:
+        $1C   //Devil's Road is sealed
+    else:
+        $1E   //Devil's Road to Mysidia
+}
+
+eventcall($07)
+{
+    if #TwinsStone:
+        $00   //(no event)
+    else:
+        $17   //Sealed with unknown power
+}
+
+eventcall($08)
+{
+    if not #LearnedOdin, #EnteredFeymarch:
+        $19   //Odin battle
+    if not #FindingOdinBeforeFeymarch:
+        $18   //Finding Odin before Feymarch
+    else:
+        $00   //(no event)
+}
+
+eventcall($09)
+{
+    if not #DefeatedMistDragon:
+        $27   //Map message 0
+    else:
+        $00   //(no event)
+}
+
+eventcall($0A)
+{
+    if not #DefeatedMistDragon:
+        $28   //Map message 1
+    else:
+        $00   //(no event)
+}
+
+eventcall($0B)
+{
+    if not #DefeatedMistDragon:
+        $2F   //Mist Dragon battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($0C)
+{
+    if not #MistComplete:
+        $30   //Mist events
+    else:
+        $00   //(no event)
+}
+
+eventcall($0D)
+{
+    if not #ChildRydiaJoined:
+        $39   //Kaipo Events, Rydia Joining
+    else:
+        $00   //(no event)
+}
+
+eventcall($0E)
+{
+    if not #DefeatedOctomamm:
+        $3C   //Watery Cave Waterfall events
+    else:
+        $3E   //The current is too strong for us to get in!
+}
+
+eventcall($0F)
+{
+    if not #DefeatedOctomamm:
+        $3D   //Octomamm battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($10)
+{
+    if not #DamcyanBombed:
+        $42   //Red Wings bombing Damcyan
+    else:
+        $00   //(no event)
+}
+
+eventcall($11)
+{
+    if not #TellahFightsEdward:
+        $43   //Tellah fighting Edward, Edward joining
+    else:
+        $00   //(no event)
+}
+
+eventcall($12)
+{
+    if not #DefeatedAntlion:
+        $45   //Antlion battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($13)
+{
+    if #RosaHealed, not #RydiaLearnedFire:
+        $46   //Rydia melting Mt. Hobs ice, learning Fire
+    else:
+        $00   //(no event)
+}
+
+eventcall($14)
+{
+    if not #DefeatedMomBomb:
+        $47   //Yang joining, Mombomb battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($15)
+{
+    if not #FabulBattle:
+        $48   //Fabul battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($16)
+{
+    if #CidGreetedCecil:
+        $00   //(no event)
+    else:
+        $11   //Cid greeting Cecil
+}
+
+eventcall($17)
+{
+    if not #CampedInWateryPass:
+        $31   //Watery Cave camping
+    else:
+        $00   //(no event)
+}
+
+eventcall($18)
+{
+    $0B   //Open a door
+}
+
+eventcall($19)
+{
+    if #FabulBattle, not #SpokeAboutRescuingRosa:
+        $52   //Discussion about rescuing Rosa
+    else:
+        $00   //(no event)
+}
+
+eventcall($1A)
+{
+    if #TwinsJoined, not #PalomExtinguishedFire:
+        $5F   //Mt. Ordeals fire put out by Palom
+    else:
+        $00   //(no event)
+}
+
+eventcall($1B)
+{
+    if not #TellahRejoined:
+        $60   //Meeting Tellah on Mt. Ordeals
+    else:
+        $00   //(no event)
+}
+
+eventcall($1C)
+{
+    if not #DefeatedMilon1:
+        $27   //Map message 0
+    else:
+        $00   //(no event)
+}
+
+eventcall($1D)
+{
+    if not #DefeatedMilon1:
+        $28   //Map message 1
+    else:
+        $00   //(no event)
+}
+
+eventcall($1E)
+{
+    if not #DefeatedMilon1:
+        $61   //First Milon battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($1F)
+{
+    if not #CecilBecamePaladin:
+        $62   //Cecil's transformation, Tellah remembering
+    else:
+        $00   //(no event)
+}
+
+eventcall($20)
+{
+    $65   //Devil's Road to Baron
+}
+
+eventcall($21)
+{
+    if not #DefeatedMilon2:
+        $63   //Second Milon battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($22)
+{
+    if #TwinsStone:
+        $6B   //Load map 8A at position 17, 06, 00
+    else:
+        $69   //Load map 8A at position 07, 06, 00
+}
+
+eventcall($23)
+{
+    if #TwinsStone:
+        $6C   //Load map 8A at position 97, 03, 00
+    else:
+        $6A   //Load map 8A at position 87, 03, 00
+}
+
+eventcall($24)
+{
+    if not #GotTwinharp, not #EdwardAfterDarkElf:
+        $71   //Meeting Edward in Toroia, receiving TwinHarp
+    if #GotEarthCrystal, not #EdwardAfterDarkElf, not #ZotEndAndDrill:
+        $72   //Edward in Toroia after defeating the Dark Elf
+    else:
+        $00   //(no event)
+}
+
+eventcall($25)
+{
+    if not #ExitedWateryPass:
+        $F2   //Watery Pass - North exiting message
+    else:
+        $00   //(no event)
+}
+
+eventcall($26)
+{
+    if not #FoughtMagusSisters:
+        $79   //Magus Sisters battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($27)
+{
+    if not #ZotEndAndDrill:
+        $7A   //Top of Tower of Zot events
+    else:
+        $00   //(no event)
+}
+
+eventcall($28)
+{
+    if #KainRegainedSenses:
+        $7C   //Valvalis battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($29)
+{
+    if not #RosaSick:
+        $51   //Rosa getting captured
+    else:
+        $00   //(no event)
+}
+
+eventcall($2A)
+{
+    if not #EnteredMagnes:
+        $7F   //Magnus Cave entering message
+    else:
+        $00   //(no event)
+}
+
+eventcall($2B)
+{
+    if #SpokeAboutRescuingRosa, not #LeviathanAttacked:
+        $83   //Depart Fabul, Leviathan Attack
+    else:
+        $00   //(no event)
+}
+
+eventcall($2C)
+{
+    if not #SpokeToToroiaClericsAfterCrystal, #GotEarthCrystal:
+        $4A   //Toroia Clerics after Earth Crystal
+    else:
+        $00   //(no event)
+}
+
+eventcall($2D)
+{
+    if not #KainRegainedSenses, not #EnteredZot, #SpokeToToroiaClericsAfterCrystal:
+        $66   //Entering the Tower of Zot first time
+    if not #KainRegainedSenses, #EnteredZot, #SpokeToToroiaClericsAfterCrystal:
+        $8D   //Entering the Tower of Zot subsequent times
+    else:
+        $00   //(no event)
+}
+
+eventcall($2E)
+{
+    if #CecilFoughtYang:
+        $93   //Load Old Waterway map B1F
+    else:
+        $00   //(no event)
+}
+
+eventcall($2F)
+{
+    if not #RydiaRejoined, not #FirstVisitToUnderworld:
+        $8B   //Entering the Underworld in the airship events
+    else:
+        $00   //(no event)
+}
+
+eventcall($30)
+{
+    if #KainStoleDarkCrystal2, not #Drill:
+        $C5   //Talking to Giott, attaching the airship drill
+    if #FoundFalcon, not #SpokeToGiottAfterBabil:
+        $A6   //Obtaining the Luca Key
+    if not #RydiaRejoined:
+        $8C   //Meeting Giott, Calbrena battle, rejoining Rydia
+    else:
+        $00   //(no event)
+}
+
+eventcall($31)
+{
+    $8E   //Exiting the Tower of Zot
+}
+
+eventcall($32)
+{
+    $67   //Resting for free in Fabul
+}
+
+eventcall($33)
+{
+    if not #LugaeBattle:
+        $94   //Dr. Lugae battles
+    else:
+        $00   //(no event)
+}
+
+eventcall($34)
+{
+    if not #YangDestroyedCannon:
+        $95   //Super Cannon destruction, Yang leaves
+    else:
+        $00   //(no event)
+}
+
+eventcall($35)
+{
+    if #YangDestroyedCannon, not #ReinforcedEnterprise:
+        $96   //Jump from Tower of Bab-il, airship escape
+    else:
+        $00   //(no event)
+}
+
+eventcall($36)
+{
+    if not #ReinforcedEnterprise:
+        $FE   //Two explosions at right side of screen
+    else:
+        $00   //(no event)
+}
+
+eventcall($37)
+{
+    if not #EdgeJoined:
+        $9A   //Edge joining, Rubicant battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($38)
+{
+    $9B   //Ninja into Bab-il
+}
+
+eventcall($39)
+{
+    $A0   //Ninja out of Bab-il
+}
+
+eventcall($3A)
+{
+    if not #FoughtEdgeParents:
+        $A1   //Fighting Edge's parents
+    else:
+        $00   //(no event)
+}
+
+eventcall($3B)
+{
+    $A2   //Falling to the Underground
+}
+
+eventcall($3C)
+{
+    if #CPUBattle:
+        $F5   //Load Room of Wishes, Yang/Cid/Edward, play 'Long Way to Go'
+    else:
+        $F4   //Load Room of Wishes, play 'Long Way to Go'
+}
+
+eventcall($3D)
+{
+    $F6   //Load Mysidia Crystal Room, play 'The Prelude'
+}
+
+eventcall($3E)
+{
+    $A5   //Finding the Falcon
+}
+
+eventcall($3F)
+{
+    if #FoundFalcon, not #ReinforcedFalcon:
+        $A7   //Cid meeting Edge, adding the heat shield to the Falcon
+    else:
+        $00   //(no event)
+}
+
+eventcall($40)
+{
+    if not #EnteredFeymarch:
+        $A9   //Feymarch entrance
+    else:
+        $00   //(no event)
+}
+
+eventcall($41)
+{
+    $B0   //Climbing ropes down
+}
+
+eventcall($42)
+{
+    $B1   //Climbing ropes up
+}
+
+eventcall($43)
+{
+    $B5   //Climbing ropes down, spinning, moving up
+}
+
+eventcall($44)
+{
+    $B3   //Climbing ropes down, jumping sideways/nothing
+}
+
+eventcall($45)
+{
+    $B4   //Climbing ropes up, jumping sideways/nothing
+}
+
+eventcall($46)
+{
+    $B5   //Climbing ropes down, spinning, moving up
+}
+
+eventcall($47)
+{
+    if #GotDarkCrystal, not #DemonWallBattle:
+        $AA   //Demon Wall battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($48)
+{
+    if #GotDarkCrystal, not #KainStoleDarkCrystal2:
+        $B6   //Kain stealing the Dark Crystal and leaving
+    else:
+        $00   //(no event)
+}
+
+eventcall($49)
+{
+    if #Drill, not #BigWhaleSurfaced:
+        $9E   //Big Whale surfacing
+    else:
+        $00   //(no event)
+}
+
+eventcall($4A)
+{
+    if not #FusoyaJoined:
+        $D0   //Meeting FuSoYa and having him join
+    else:
+        $00   //(no event)
+}
+
+eventcall($4B)
+{
+    $7D   //HP restoring pot
+}
+
+eventcall($4C)
+{
+    $7E   //MP restoring pot
+}
+
+eventcall($4D)
+{
+    if #CPUBattle:
+        $DD   //Entering the Lunar Subterrane
+    else:
+        $DC   //'Sealed with unknown power'
+}
+
+eventcall($4E)
+{
+    if #FusoyaJoined, not #CPUBattle:
+        $9D   //Returning from the moon to Giant of Bab-il
+    else:
+        $00   //(no event)
+}
+
+eventcall($4F)
+{
+    if not #FourFiendsBattle:
+        $ED   //Element Fiends battle
+    else:
+        $00   //(no event)
+}
+
+eventcall($50)
+{
+    if not #GotRibbons:
+        $FC   //Obtaining the Ribbon
+    else:
+        $00   //(no event)
+}
+
+eventcall($51)
+{
+    $E6   //Giant of Bab-il CPU battle
+}
+
+eventcall($52)
+{
+    $E4   //Load Big Whale interior
+}
+
+eventcall($53)
+{
+    $EB   //Resting for free
+}
+
+eventcall($54)
+{
+    $E8   //Load Big Whale interior, activate Baron Black Chocobo
+}
+
+eventcall($55)
+{
+    $E7   //Zeromus Battle, Ending Events
+}
+
+eventcall($56)
+{
+    if not #BehemothBattle51:
+        $04   //Behemoth battle 51
+    else:
+        $00   //(no event)
+}
+
+eventcall($57)
+{
+    if not #BehemothBattle52:
+        $05   //Behemoth battle 52
+    else:
+        $00   //(no event)
+}
+
+eventcall($58)
+{
+    if #KainStoleDarkCrystal2:
+        $00   //(no event)
+    else:
+        $06   //Entering Tower of Bab-il
+}
+
+eventcall($59)
+{
+    if not #BehemothBattle50:
+        $F3   //Behemoth battle 50
+    else:
+        $00   //(no event)
+}

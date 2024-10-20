@@ -1,0 +1,94 @@
+msfpatch {
+    .def MusicSetting     $7e16b3
+    .def FlashSetting     $7e16b4
+    .def EncounterSetting $7e16b5
+}
+
+msfpatch {
+    SetConfigDefaults:
+        lda #$00
+        sta $16ae     // confirm button = A
+
+        sta $16ac     // battle speed = 1
+        sta $16ad     // battle message speed = 1
+
+        inc a
+        sta $16af     // cancel button = B
+        sta $16b1     // L button is also confirm?
+        sta $16b6     // dash = auto
+        sta $_FlashSetting // flash fx disabled
+
+        // %encounter default off%
+        sta $_EncounterSetting
+        // %end%
+
+        inc a
+        sta $16b0     // menu button = X
+
+        rts
+}
+
+msfpatch {
+    .addr $019b50
+        jml $=ConfigInit
+
+    .new
+    ConfigInit:
+        // [awkward] need a place to init objective staging
+        // area on New Game, do it here for now
+        jsl $=Objectives__InitStagedProgress
+
+        // check if we have global config data, if so use that
+        lda $00ffde
+        ora #$80
+        cmp $707100 // [hardcoded]
+        bne $+UseDefaults
+
+        lda $00ffdf
+        and #$fe
+        cmp $707101 // [hardcoded]
+        bne $+UseDefaults
+
+        // sentinel value matched, copy custom from global SRAM
+        ldx #$0000
+    %CopyLoop:
+        lda $707102,x  // [hardcoded]
+        sta $16a9,x
+        inx
+        cpx #$0016
+        bcc $-CopyLoop
+
+    %Return:
+        jml $019b66
+
+    %UseDefaults:
+        jsr $_SetConfigDefaults
+        jmp $_Return
+
+}
+
+
+// patch starting plot flag values to set encounters to off
+// when using encounter toggle
+
+// %encounter default off%
+patch($9724e) { 01 }
+// %end%
+
+
+
+// apply starting treasure flags
+msfpatch {
+    .addr $0082e6
+        jml $=TreasureFlagsInit
+
+    .new
+    TreasureFlagsInit:
+    %LoopStart:
+        lda $21d9a0,x   // [hardcoded]
+        sta $12a0,x
+        inx
+        cpx #$0040
+        bcc $-LoopStart
+        jml $0082ef
+}

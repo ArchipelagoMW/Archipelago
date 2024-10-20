@@ -1,0 +1,15 @@
+msfpatch {
+    RemoveMPUnderflow_DisplacedInstructions:
+        // instructions displaced from $01b51d
+        lda $1b83
+        asl a
+        adc $1b83
+        rtl
+
+    .addr $01b51d
+        jsr $b402  // inject a call to update MP cost of highlighted spell
+                   // normally this would be $b3fd but that aborts out if
+                   // cursor is no longer on the spell list, which it isn't
+                   // by this point
+        jsl $=RemoveMPUnderflow_DisplacedInstructions
+}

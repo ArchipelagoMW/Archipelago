@@ -1,0 +1,162 @@
+<html>
+    <head>
+        <title>Play Free Enterprise</title>
+        <link href="/static/make_react.css" rel="stylesheet">
+        {% if production %}
+            <script src="/script/react.production.min.js"></script>
+            <script src="/script/react-dom.production.min.js"></script>
+        {% else %}
+            <script src="/script/react.development.js"></script>
+            <script src="/script/react-dom.development.js"></script>
+        {% endif %}
+        <script src="/script/uispec.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <div id="spine">
+            {% if beta_changelog %}
+            <div id="betaChangelog" class="shadow" onclick="toggleBetaChangelog();">
+                <div>{{ version }} BETA CHANGELOG (click to show/hide)</div>
+                <div id="betaChangelogContent" style="display: none;">{{ beta_changelog }}</div>
+            </div>
+            <script>
+                function toggleBetaChangelog()
+                {
+                    let elem = document.getElementById("betaChangelogContent");
+                    if (elem)
+                    {
+                        elem.style.display = (elem.style.display == 'block' ? 'none' : 'block');
+                    }
+                }
+            </script>
+            {% else %}
+            <div id="version" class="shadow">Current version : {{ version }}</div>
+            {% endif %}
+
+            <div id="initializationContainer" class="shadow">
+            </div>
+
+            <div id="flagEditor">
+            </div>
+
+            <div class="metaSection" onclick="showMetaConfigurations();">
+                <div class="sectionTitle">METACONFIGURATIONS <span id="metaconfigClickToShow">(click to show)</span></div>
+                <div id="metaconfigContent" style="display:none">
+                    <div class="sectionDescription">
+                        Metaconfigurations are settings outside the scope of flags. Setting
+                        any of the following options will result in a uniquely-seeded randomization;
+                        re-running the randomizer again later will create a different seed.
+                    </div>
+                    <div class="metaSettingsSection">
+                        <div class="metaSetting">
+                            <input type="checkbox" name="meta_hideFlags" id="meta_hideFlags">
+                            <label for="meta_hideFlags">Hide flags</label>
+                        </div>
+                    </div>
+                    <div class="metaSettingsSection">
+                        <div class="metaSetting">
+                            <input type="checkbox" name="meta_testSettings" id="meta_testSettings" onchange="toggleTestSettingsVisibility();">
+                            <label for="meta_testSettings">Test settings</label>
+                        </div>
+                        <div id="testSettings" style="display: none;">
+                            {% include 'test_settings.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="summary" class="shadow">
+                <div id="summaryInfo">
+                    <div class="label">Flags:</div>
+                    <div id="flagStringContainer">
+                        <div id="flagLogicLogDisplay">
+                        </div>
+                        <div id="flagStringRow">
+                            <div id="flagStringDisplay"></div>
+                            <div id="flagStringCopyButton" class="centerer" onclick="handleCopyButtonClick();"><span>&#x2398;</span></div>
+                        </div>
+                        <div id="binaryFlagStringDisplay"></div>
+                    </div>
+                    <div class="label">Seed:</div>
+                    <input type="text" id="seedInput" placeholder="(optional; up to 10 letters or numbers)" maxlength="10" value="{{ initial_seed }}">
+                </div>
+
+                <div id="generateButtonContainer" class="centerer">
+                    <!-- <div id="generateButton" onclick="generate();">Generate</div> -->
+                </div>
+            </div>
+        </div>
+
+        <div id="appContainer">
+        </div>
+
+        <form id="generator-form" method="POST" action="/generate" target="_blank" style="display:none;">
+            <input id="generator-flags" name="flags" type="hidden">
+            <input id="generator-seed" name="seed" type="hidden">
+            <input id="generator-metaconfig" name="metaconfig" type="hidden">
+        </form>
+
+        <textarea id="copysource" style="display: none; height: 0; width: 0; position: fixed; bottom: 0; right: 0;"></textarea>
+
+        <script>
+            function handleCopyButtonClick()
+            {
+                var textArea = document.getElementById("copysource");
+                textArea.style.display = 'block';
+                textArea.value = document.getElementById("flagStringDisplay").innerText;
+                textArea.select();
+                document.execCommand('copy');
+                textArea.style.display = 'none';
+            }
+
+            function generate()
+            {
+                document.getElementById("generator-flags").value = document.getElementById("flagStringDisplay").innerText;
+                document.getElementById("generator-seed").value = document.getElementById("seedInput").value.trim();
+                document.getElementById("generator-metaconfig").value = JSON.stringify(getMetaconfig());
+                document.getElementById("generator-form").submit();
+            }
+
+            function showMetaConfigurations()
+            {
+                document.getElementById("metaconfigClickToShow").style.display = 'none';
+                document.getElementById("metaconfigContent").style.display = 'block';
+            }
+
+            function getMetaconfig()
+            {
+                let metaconfig = {};
+
+                if (document.getElementById("meta_hideFlags").checked)
+                {
+                    metaconfig['hide_flags'] = true;
+                }
+
+                if (document.getElementById("meta_testSettings").checked)
+                {
+                    metaconfig['test_settings'] = getTestSettings();
+                }
+
+                return metaconfig;
+            }
+
+            function toggleTestSettingsVisibility()
+            {
+                let elem = document.getElementById("testSettings");
+                elem.style.display = (document.getElementById("meta_testSettings").checked ? "block" : "none");
+            }
+
+
+            {% if initial_flags %}
+            var DEFAULT_FLAGS = "{{ initial_flags }}";
+            {% else %}
+            var DEFAULT_FLAGS = "";
+            {% endif %}
+        </script>
+
+        <script src="/script/make_react.js" type="module"></script>
+    </body>
+</html>

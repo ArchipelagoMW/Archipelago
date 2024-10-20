@@ -1,0 +1,668 @@
+consts(flag) {
+    $FD     InBossGauntlet
+    $FE     Result
+}
+
+msfpatch {
+    //--------------------------------------------------------------
+    EvEx__Rando_PaladinizeCecil:
+        // iterate over all known axtor codes, update corresponding
+        // axtors in shadow party
+        ldx #$0001
+
+    %LoopStart:
+        lda $1240,x
+        cmp #$01
+        bne $+LoopNext
+
+        // check if corresponding shadow party slot is occupied
+        phx
+        rep #$20
+        .mx 0x00
+        txa
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        lda $=CharEx__ShadowPartyAddr,x
+        plx
+        beq $+LoopNext
+
+        // reinitialize axtor (this will also update its reference
+        // actor code and push it to shadow party)
+        phx
+        txa
+        jsr $_CharEx__InitializeAxtor
+        plx
+
+    %LoopNext:
+        inx
+        cpx #$_CharEx__MaxAxtors
+        bcc $-LoopStart
+
+        // next, need to search party and remove/readd Cecil axtors
+        ldx #$0000
+    %PartyLoopStart:
+        lda $1000,x
+        beq $+PartyLoopNext
+        lda $1001,x
+        and #$0f
+        bne $+PartyLoopNext
+
+        // slot is full of DkCecil
+        lda #$01
+        sta $1627 // [hardcoded] permajoin-bypass flag
+        lda $1000,x
+        and #$1f        // get axtor code
+        stz $1000,x     // blank the party slot
+        phx
+        jsl $=CharEx__GiveAxtor  // re-add Cecil, now as Paladin
+        plx
+        stz $1627 // [hardcoded] permajoin-bypass flag
+    %PartyLoopNext:
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-PartyLoopStart
+
+        // all done I hope?
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    //--------------------------------------------------------------
+    EvEx__Rando_CheckCharacterAltVersion:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+
+        // convert given axtor code to actor code
+        jsr $_Lookup_AxtorToActor
+
+        // check for special-case characters
+        cmp #$01
+        beq $+EvEx__Rando_CheckCharacterAltVersion_Cecil
+        cmp #$03
+        beq $+EvEx__Rando_CheckCharacterAltVersion_Rydia
+        jmp $_EvEx__Rando_CheckFail
+
+    EvEx__Rando_CheckCharacterAltVersion_Cecil:
+        // check for CecilBecamePaladin plot flag
+        lda $1281
+        and #$08
+        beq $+EvEx__Rando_CheckFail
+        jmp $_EvEx__Rando_CheckSuccess
+
+    EvEx__Rando_CheckCharacterAltVersion_Rydia:
+        // check for RydiaRejoined plot flag
+        lda $1280
+        and #$80
+        beq $+EvEx__Rando_CheckFail
+        jmp $_EvEx__Rando_CheckSuccess
+
+    EvEx__Rando_CheckFail:
+        lda $129f
+        and #$bf
+        sta $129f
+        jmp $_EvEx__End
+
+    EvEx__Rando_CheckSuccess:
+        lda $129f
+        ora #$40
+        sta $129f
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    .def AltGauntlet__Indicator   $7e1628
+    .def BossBypassFlag__Addr         $7e128e
+    .def BossBypassFlag__Bit          $04
+    .def BossBypassFlag__AntiBit      $FB
+    //--------------------------------------------------------------
+    EvEx__Rando_BossBattle:
+        jsr $_EvEx__ReadParameters_1
+
+        // check if we are mid-gauntlet
+        lda $129f
+        and #$20
+        beq $+StartGauntlet
+        jmp $_NextGauntlet
+
+    %StartGauntlet:
+        // %if wacky_boss_skip_hook%
+            lda $_EvEx__Param1
+            jsl $=Wacky__BossSkipHook
+            bcc $+DoBoss
+
+            lda #$.BossBypassFlag__Bit
+            ora $_BossBypassFlag__Addr
+            sta $_BossBypassFlag__Addr
+        %DoBoss:    
+        // %end%
+
+        // set gauntlet flag
+        lda #$20
+        ora $129f
+        sta $129f
+
+        stz $_AltGauntlet__Indicator
+
+        // set initial battle index
+        ldx #$0000
+        stx $_EvEx__Param3
+
+        // check if we need to play gauntlet music
+        lda $_EvEx__Param1
+        tax
+        lda $=BossFormations__Music,x
+        cmp #$ff
+        beq $+NextGauntlet
+
+        // play music
+        sta $1e01
+        lda #$01
+        sta $1e00
+        jsr $048004
+
+    %NextGauntlet:
+        // load next formation
+        lda $_EvEx__Param1
+
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        adc $_EvEx__Param3
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda $=BossFormations__TablePlus1,x
+        cmp #$ff
+        beq $+EndGauntlet
+
+        // check for alt gauntlet/other special sentinel values
+        cmp #$fe
+        bne $+ContinueNextFormation
+
+        // alt gauntlet; set special sentinel value and advance formation
+        lda $=BossFormations__Table,x
+        ora #$03  // set "is alt gauntlet active" and "is not final battle" bits
+        sta $_AltGauntlet__Indicator
+        inc $_EvEx__Param3
+        inc $_EvEx__Param3
+        inx
+        inx
+        lda $=BossFormations__TablePlus1,x
+    %ContinueNextFormation:
+        // set up the next gauntlet battle formation number
+        sta $1801
+        lda $=BossFormations__Table,x
+        sta $1800
+
+        // alt gauntlet: check if in final battle of formation, if so update sentinel
+        lda $=BossFormations__TablePlus3,x
+        cmp #$ff
+        bne $+IsNotFinalBattle
+        lda $_AltGauntlet__Indicator
+        and #$fd  // switch off "not final battle" bit
+        sta $_AltGauntlet__Indicator
+
+    %IsNotFinalBattle:
+        // special behavior: activate Rydia's dead mom if we
+        // fight the actual mist dragon
+        ldx $1800
+        cpx #$00de
+        bne $03
+        jsr $_KillRydiasMom
+
+        // advance gauntlet index
+        inc $_EvEx__Param3
+        inc $_EvEx__Param3
+
+        // %if force_boss_bypass%
+            jmp $_NextGauntlet
+        // %elif allow_boss_bypass%
+            lda $_BossBypassFlag__Addr
+            bit #$.BossBypassFlag__Bit
+            beq $+DoBattle
+            jmp $_NextGauntlet
+          %DoBattle:
+        // %end%
+
+        // rewind event script pointer to repeat this command
+        rep #$20
+        .mx 0x00
+        lda $09d3
+        sec
+        sbc #$0003
+        sta $09d3
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // pop event return address and defer to original fight handler
+        pla
+        pla
+        pla
+        jml $00e3a1
+
+    %KillRydiasMom:
+        // hardcoded offsets to activate Rydia's mom NPC (0xC8)
+        lda #$01
+        ora $12f9
+        sta $12f9
+        rts
+
+
+    %EndGauntlet:
+        // clear the mid-gauntlet flag
+        lda #$df
+        and $129f
+        sta $129f
+
+        stz $_AltGauntlet__Indicator
+
+        // clear the boss bypass flag
+        lda #$.BossBypassFlag__AntiBit
+        and $_BossBypassFlag__Addr
+        sta $_BossBypassFlag__Addr
+
+        // increase stats counter
+        inc $_Stats_Bosses
+
+    %EndGauntlet_Return:
+        // return from event having done nothing
+        jmp $_EvEx__End
+}
+
+//--------------------------------------------------------------
+msfpatch {
+    EvEx__Rando_CheckFlag:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        tax
+        lda $21f0d0,x
+        beq $03
+        jmp $_EvEx__Rando_CheckSuccess
+        jmp $_EvEx__Rando_CheckFail
+}
+
+//--------------------------------------------------------------
+msfpatch {
+    EvEx__Rando_PostBossBattle:
+        jsr $_EvEx__ReadParameters_1
+
+        // check for Fusoya challenge
+        lda $=RandoFlag_vanilla_fusoya
+        beq $03
+        jmp $_Return
+
+        // remember previous level
+        lda $=FusoyaChallenge__Credits
+        sta $_EvEx__Param2
+
+        jsr $_FusoyaChallenge__AdvanceLevel2
+        
+        // check if Fusoya is in party
+        lda #$0d
+        jsr $_Util__FindJobInParty
+        cmp #$ff
+        bne $03
+        // Fusoya not in party
+        jmp $_Return
+
+        // check if challenge already complete
+        lda $_EvEx__Param2
+        cmp #$.FusoyaChallenge__MaxCredits
+        bcs $+Return
+
+        // check if final stage completed
+        inc a
+        cmp #$.FusoyaChallenge__MaxCredits
+        beq $+Fusoya2JustCompleted
+
+        // check if learned any spells
+        lda $=FusoyaChallenge__LearnedSpell1
+        cmp #$ff
+        bne $03
+        // learned no new spells
+        jmp $_Return
+
+        // load "learned spells" message
+        lda #$03
+        sta $b2
+
+        jsr $_LoadLearnedSpellNames
+
+        jmp $_Fusoya2DisplayMessage
+
+    %Fusoya2JustCompleted:
+        // check if learned any spells
+        lda $=FusoyaChallenge__LearnedSpell1
+        cmp #$ff
+        bne $+Fusoya2JustCompletedWithSpells
+        // load "full power" message
+        lda #$05
+        sta $b2
+        jmp $_Fusoya2DisplayMessage
+
+    %Fusoya2JustCompletedWithSpells:
+        jsr $_LoadLearnedSpellNames
+
+        // load "learned spells + full power" message
+        lda #$04
+        sta $b2
+        jmp $_Fusoya2DisplayMessage
+
+    %Fusoya2DisplayMessage:
+        // Play sound
+        lda #$24
+        jsr $_Util__PlaySFX
+
+        // pull rtl address and defer to bank 1 high message handler
+        pla
+        pla
+        pla
+        jml $00ef64
+
+    %Return:
+        // return having done nothing
+        jmp $_EvEx__End
+
+    %LoadLearnedSpellNames:
+        // load learned spell names into text buffers
+        lda $=FusoyaChallenge__LearnedSpell1
+        // %if wacky_misspelled%
+          jsl $=Wacky__Misspell
+        // %end%
+        ldx #$0000
+        jsl $=TextBuffer__LoadSpellName
+        lda $=FusoyaChallenge__LearnedSpell2
+        // %if wacky_misspelled%
+          jsl $=Wacky__Misspell
+        // %end%
+        ldx #$0001
+        jsl $=TextBuffer__LoadSpellName
+        lda $=FusoyaChallenge__LearnedSpell3
+        // %if wacky_misspelled%
+          jsl $=Wacky__Misspell
+        // %end%
+        ldx #$0002
+        jsl $=TextBuffer__LoadSpellName
+        rts
+}
+
+
+// need to patch battle logic to respect upper formation byte in boss gauntlets
+msfpatch {
+    RandoBossBattle__PreserveUpperBit:
+        // check for gauntlet flag
+        lda $129f
+        and #$20
+        bne $+RandoBossBattle__PreserveUpperBit_InGauntlet
+
+        // do displaced logic
+        lda $1701
+        beq $02
+        lda #$01
+        sta $1801
+
+    RandoBossBattle__PreserveUpperBit_InGauntlet:
+        // return to original code
+        jml $008aa1
+
+
+
+
+    .addr $008a97
+        jml $=RandoBossBattle__PreserveUpperBit
+}
+
+
+// patch battle launch code to not substitute in moon AI bit for gauntlet
+msfpatch {
+    RandoBossBattle__AvoidMoonBit:
+        // check for gauntlet flag
+        lda $129f
+        and #$20
+        bne $+RandoBossBattle__AvoidMoonBit_InGauntlet
+
+        // do displaced logic
+        lda $1801
+        ora #$80
+        sta $1801
+
+    RandoBossBattle__AvoidMoonBit_InGauntlet:
+        // return to original code after stuff that touches $1801
+        jml $008775
+
+
+
+    .addr $00876d
+        jml $=RandoBossBattle__AvoidMoonBit
+}
+
+
+//--------------------------------------------------------------
+msfpatch {
+    EvEx__Rando_RetrieveCharacter:
+        // get placement number and translate to offset
+        lda #$00
+        xba
+        lda $=NpcText__PlacementNumber  // see npc_text.f4c
+        tax
+
+        // check which map we're on and read from appropriate list
+        lda $1702
+        cmp #$17   // room of wishes
+        beq $+InRoomOfWishes
+
+        lda $=CharacterRetrieval__CrystalRoomAxtors,x
+        bra $+DoRetrieval
+
+    %InRoomOfWishes:
+        lda $=CharacterRetrieval__TowerAxtors,x
+
+    %DoRetrieval:
+        jsl $=CharEx__GiveAxtor
+
+        // update visibility for all placements in map
+        stz $_EvEx__Param1
+        lda $1702
+        cmp #$17 // room of wishes
+        beq $+InRoomOfWishes_VisibilityUpdate
+
+        ldx #$_CharacterRetrieval__CrystalRoomAxtors
+        bra $+VisibilityUpdateLoop
+
+    %InRoomOfWishes_VisibilityUpdate:
+        ldx #$_CharacterRetrieval__TowerAxtors
+
+    %VisibilityUpdateLoop:
+        lda $200000,x  // [hardcoded]
+        beq $+VisibilityUpdateLoopNext
+    
+        phx
+        jsr $_CharEx__LoadShadowPartySlotAddrX
+        lda $700000,x  // [hardcoded]
+        plx
+        cmp #$00
+        beq $+Hide
+
+        // show placement
+        lda $_EvEx__Param1
+        phx
+        jsr $_EvEx__Placement_LoadFromA
+        jsr $_EvEx__Placement_SetVisibleImpl
+        plx
+        bra $+VisibilityUpdateLoopNext
+
+    %Hide:
+        lda $_EvEx__Param1
+        phx
+        jsr $_EvEx__Placement_LoadFromA
+        jsr $_EvEx__Placement_SetInvisibleImpl
+        plx
+
+    %VisibilityUpdateLoopNext:
+        inx
+        inc $_EvEx__Param1
+        lda $_EvEx__Param1
+        cmp #$0c
+        bcc $-VisibilityUpdateLoop
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Rando_LoadWackySprite:
+        jsr $_EvEx__ReadParameters_2
+
+        // First param indicates which wacky sprite to load
+        lda $_EvEx__Param1
+        asl a
+        asl a
+        sta $1680
+        stz $1681
+
+        // load the sprite palette
+        ldx $1680
+        lda $21f742,x  // [hardcoded]
+        sta $1682
+        lda $21f743,x  // [hardcoded]
+        sta $1683
+
+        // if palette is FF FF, then no wacky sprite has been
+        // assigned, so just abort
+        and $1682
+        cmp #$ff
+        bne $+Continue
+
+        jmp $_EvEx__End
+    %Continue:
+        // copy palette to memory
+        ldx $1682
+        ldy #$0000
+    %PaletteCopyLoop:
+        lda $0d0000,x
+        sta $0e5b,y
+        inx
+        iny
+        cpy #$0010
+        bcc $-PaletteCopyLoop
+
+        // load the sprite CHR data (top 2 tiles)
+        lda #$1b
+        sta $49
+
+        ldx $1680
+        lda $21f740,x  // [hardcoded]
+        sta $4a
+        lda $21f741,x  // [hardcoded]
+        sta $4b
+
+        lda $_EvEx__Param2
+        bne $+HealingPotTopTiles
+
+    %PackageTopTiles:
+        ldx #$5c40
+        stx $4c
+        ldx #$0020
+        stx $4e
+        jsr $_Util__WaitVBlank
+        jsl $15b000
+
+        jmp $_BottomTiles
+
+    %HealingPotTopTiles:
+        ldx #$5c00
+        stx $4c
+        ldx #$0020
+        stx $4e
+        jsr $_Util__WaitVBlank
+        jsl $15b000
+
+        ldx #$5c20
+        stx $4c
+        ldx #$0020
+        stx $4e
+        jsr $_Util__WaitVBlank
+        jsl $15b000
+
+    %BottomTiles:
+        // bottom 2 tiles
+        lda $4a
+        clc
+        adc #$30
+        sta $4a
+        lda $4b
+        adc #$00
+        sta $4b
+
+        lda $_EvEx__Param2
+        bne $+HealingPotBottomTiles
+
+    %PackageBottomTiles:
+        ldx #$5d40
+        stx $4c
+        ldx #$0020
+        stx $4e
+        jsr $_Util__WaitVBlank
+        jsl $15b000
+
+        jmp $_EvEx__End
+
+    %HealingPotBottomTiles:
+        ldx #$5d00
+        stx $4c
+        ldx #$0020
+        stx $4e
+        jsr $_Util__WaitVBlank
+        jsl $15b000
+
+        ldx #$5d20
+        stx $4c
+        ldx #$0020
+        stx $4e
+        jsr $_Util__WaitVBlank
+        jsl $15b000
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Rando_LoadAxtorFashionCode:
+        jsr $_EvEx__ReadParameters_1
+        beq $+ClearCode
+
+        lda #$00
+
+        // %flag vanilla_fashion off%
+        xba
+        lda $_EvEx__Param1
+        tax
+        lda $=Fashion__LookupTable,x
+        // %end%
+
+    %ClearCode:
+        sta $_Fashion__PreloadedCode
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Rando_InitAxtorName:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        jsr $_CharEx__SimplifyAxtorCode
+        jsr $_CharEx__InitializeAxtorName
+        jmp $_EvEx__End
+}

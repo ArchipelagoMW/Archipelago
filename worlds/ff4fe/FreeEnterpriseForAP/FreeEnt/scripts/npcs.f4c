@@ -1,0 +1,152 @@
+
+npc(#FallenSoldier1) { default active }
+npc(#SleepingBubble1) { default inactive }
+
+npc(#RydiaMom) { default inactive }
+
+
+// NPC reassignments
+consts(npc) {
+    $20    fe_WateryPassTellah     // CastleBaronBlackMage4
+    $25    fe_KingFabulThroneRoom  // CecilMaid
+    $62    fe_Odin                 // Edward1                 
+    $63    fe_GiantExit            // EdwardHarp1
+    $77    fe_ZotValet             // SheilaWaving
+    $7C    fe_DynamicNPC           // CaptainUnused
+    $7E    fe_CaveEblanEdge        // ChocoboUnused
+    $86    fe_None                 // BaronDancerDress
+    $92    fe_PartyLeader          // OldManUnused
+    $96    fe_BaronYang            // SoldierUnused
+    $A5    fe_TwinHarp             // MistBombUnused
+
+    $F2    fe_WackyNPCOverworld    // AirshipDwarf
+    $FC    fe_KaipoInnPig          // Fusoya1
+    $FE    fe_ShadowParty          // MysidiaWhiteMagePraying2
+
+    $1EE   fe_FeymarchChest        // unused
+    $1EF   fe_BabilClimb           // unused
+    $1F0   fe_PartyLeaderU         // unused
+    $1F1   fe_FalconDoorBlock      // unused
+    $1F2   fe_GiantValet           // unused
+    $1F3   fe_BigWhaleEngineer     // unused
+
+    $1F4   fe_PartyMember1U        // unused
+    $1F5   fe_PartyMember2U        // unused
+    $1F6   fe_PartyMember3U        // unused
+    $1F7   fe_PartyMember4U        // unused
+    $1F8   fe_PartyMember5U        // unused
+
+    $1F9   fe_DwarfCastleCrystal   // unused
+
+    $1FA   fe_Ribbon1Chest         // unused
+    $1FB   fe_Ribbon2Chest         // unused
+
+    $17C   fe_DynamicNPCU          // Dancer2
+    
+    $17D   fe_Fusocobo             // Midget
+    $17E   fe_FusocoboWhite        // HoodedMonster9
+    $17F   fe_FusocoboFight        // Namingway3
+    $180   fe_ElderPraying         // Man2
+    $181   fe_BlackMagePraying     // Scholar1
+    $182   fe_WhiteMagePraying     // Boy2
+}
+
+// Sprite reassignments
+consts(sprite) {
+    //$67    fe_ClosedChest
+    //$68    fe_OpenChest
+    $fe    fe_DynamicSprite
+}
+
+
+npc(#fe_PartyLeader) {
+    sprite $8f
+    default inactive
+    eventcall {}
+}
+
+npc(#fe_PartyLeaderU) {
+    sprite $8f
+    default inactive
+    eventcall {}
+}
+
+npc(#fe_PartyMember1U) {  sprite $80  default inactive  eventcall{}  }
+npc(#fe_PartyMember2U) {  sprite $81  default inactive  eventcall{}  }
+npc(#fe_PartyMember3U) {  sprite $82  default inactive  eventcall{}  }
+npc(#fe_PartyMember4U) {  sprite $83  default inactive  eventcall{}  }
+npc(#fe_PartyMember5U) {  sprite $84  default inactive  eventcall{}  }
+
+
+// character NPC tweaks for placement interchangeability
+npc(#Tellah1) {
+    default inactive
+}
+npc(#Cid1) {
+    default inactive
+}
+
+// updated sprite graphics
+
+/*
+// closed chest
+patch($dfe60) {
+    FF FF 9B FF 92 F6 DF BB F6 9B FF 9B D6 B2 FF 80 FF 9B 9B 92 9B D6 9B 80 
+    FF FF D9 FF 11 37 BD 9B 77 D9 BF 99 35 13 FD 03 FF D9 D9 51 99 75 D9 01
+    FF FF FF 82 FF BF E7 A5 EA AB FF BF 80 FF FF FF FF C3 BF BD B6 BF 80 FF 
+    FF FF FD 43 FD FF E5 A7 55 D7 FD FF 01 FF FF FF FF 61 FD BD 6D FD 01 FF    
+}
+
+// open chest
+patch($dfec0) {
+    FF FF 9B FF D6 B2 FF 9B FF 80 FF FF FF FF BF FF FF 9B 9B D6 80 FF FF BF 
+    FF FF D9 FF 35 13 BF 99 FF 01 FF FF FF FF FD FF FF D9 D9 75 01 FF FF FD 
+    FF FF FF 82 FF BF E7 A5 EA AB FF BF 80 FF FF FF FF C3 BF BD B6 BF 80 FF 
+    FF FF FD 43 FD FF E5 A7 55 D7 FD FF 01 FF FF FF FF 61 FD BD 6D FD 01 FF
+}
+*/
+
+// Take a firehose to all lingering instances of Edward1
+placement($12 4) { npc #fe_None }  //#KaipoHospital
+placement($26 2) { npc #fe_None }  //#Fabul
+// placement($41 2)  //#Damcyan3F   -> overwritten to be dynamic NPC in damcyan.f4c
+placement($47 1) { npc #fe_None }  //#FabulLobby
+placement($48 1) { npc #fe_None }  //#FabulSecondFloor
+placement($49 2) { npc #fe_None }  //#FabulThroneRoom
+placement($49 7) { npc #fe_None }  //#FabulThroneRoom
+placement($4A 8) { npc #fe_None }  //#FabulCrystalRoom
+placement($4C 3) { npc #fe_None }  //#FabulInn
+placement($4F 3) { npc #fe_None }  //#FabulKingRoom
+// placement($79 0)  //#AntlionCaveNest -> overwritten to be party leader in antlion.f4c
+// placement($7E 10)  //#MountHobsWest  -> overwritten for hobs anim cutscenes
+placement($7F 8) { npc #fe_None }  //#MountHobsSummit
+placement($C1 3) { npc #fe_None }  //#FabulPort
+placement($C2 1) { npc #fe_None }  //#Boat
+
+
+// delete some placements because placements are overflowing
+// map #DwarfTank
+placement($12E 0) { delete } 
+placement($12E 1) { delete } 
+placement($12E 2) { delete } 
+placement($12E 3) { delete } 
+placement($12E 4) { delete } 
+placement($12E 5) { delete } 
+placement($12E 6) { delete } 
+placement($12E 7) { delete } 
+placement($12E 8) { delete } 
+
+//#TowerOfWishesFinalBattle
+placement($122 0) { delete }
+placement($122 1) { delete }
+placement($122 2) { delete }
+placement($122 3) { delete }
+placement($122 4) { delete }
+placement($122 5) { delete }
+placement($122 6) { delete }
+placement($122 7) { delete }
+placement($122 8) { delete }
+placement($122 9) { delete }
+placement($122 10) { delete }
+placement($122 11) { delete }
+

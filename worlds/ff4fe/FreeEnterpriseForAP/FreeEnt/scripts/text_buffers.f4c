@@ -1,0 +1,328 @@
+// Process for using text buffers:
+//   - Call one of the Text_Load* functions to load the name buffer. By convention
+//     the first parameter is the ID of the buffer to load.
+//   - In a text box, name codes $E0 to $EF refer to buffers 0 to F accordingly
+//
+// Note that text buffers live in the battle memory area and will not survive
+// entering/leaving battle
+//
+// A text buffer consists of up to 15 char bytes, plus a null terminator
+
+msfpatch {
+    // function input params
+    .def  TextBuffer__TargetBuffer  $7e1670
+    .def  TextBuffer__SourceAddrLo  $7e1671
+    .def  TextBuffer__SourceAddrHi  $7e1672
+    .def  TextBuffer__SourceBank    $7e1673
+    .def  TextBuffer__MaxLength     $7e1674
+
+    // globals
+    .def  TextBuffer__BufferRootAddr $7e2500
+    .def  TextBuffer__Buffer0        $7e2500
+    .def  TextBuffer__Buffer1        $7e2520
+    .def  TextBuffer__Buffer2        $7e2540
+
+    // local vars
+    .def  TextBuffer__Counter       $7e1675
+
+    TextBuffer__Load:
+        // init write pointer
+        lda #$00
+        xba
+        lda $_TextBuffer__TargetBuffer
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+
+        // init read pointer
+        ldy $_TextBuffer__SourceAddrLo
+
+        // init counters
+        stz $_TextBuffer__Counter
+
+        // set read bank
+        phb
+        lda $_TextBuffer__SourceBank
+        pha
+        plb
+
+        // skip initial [0x15] chars
+    %LeadingSpaceLoop:
+        lda $0000,y
+        cmp #$15
+        bne $+LeadingSpaceLoopEnd
+        iny
+        dec $_TextBuffer__MaxLength
+        bne $-LeadingSpaceLoop
+    %LeadingSpaceLoopEnd:
+
+        // copy maxlength characters to buffer
+    %CopyLoop:
+        lda $_TextBuffer__Counter
+        cmp $_TextBuffer__MaxLength
+        beq $+CopyDone
+        inc $_TextBuffer__Counter
+
+        lda $0000,y
+        sta $=TextBuffer__BufferRootAddr,x
+        iny
+        inx
+        bra $-CopyLoop
+
+    %CopyDone:
+        // write null terminator
+        lda #$00
+        sta $=TextBuffer__BufferRootAddr,x
+
+        // write null terminators over trailing spaces
+    %TrailingSpaceLoop:
+        lda $_TextBuffer__Counter
+        beq $+TrailingSpaceLoopEnd
+        dex
+        dec $_TextBuffer__Counter
+        lda $=TextBuffer__BufferRootAddr,x
+        cmp #$ff
+        bne $+TrailingSpaceLoopEnd
+        lda #$00
+        sta $=TextBuffer__BufferRootAddr,x
+        bra $-TrailingSpaceLoop
+    %TrailingSpaceLoopEnd:
+
+        // we're done!
+        plb
+        rtl
+}
+
+msfpatch {
+    // param: A = item code, X = target buffer number
+    // (returns long)
+    TextBuffer__LoadItemName:
+        stx $_TextBuffer__TargetBuffer
+
+        // get item code * 9
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        sta $_TextBuffer__SourceAddrLo
+        asl a
+        asl a
+        asl a
+        clc
+        adc $_TextBuffer__SourceAddrLo
+        ora #$8000
+        sta $_TextBuffer__SourceAddrLo
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda #$0f
+        sta $_TextBuffer__SourceBank
+        lda #$09
+        sta $_TextBuffer__MaxLength
+
+        jml $=TextBuffer__Load
+}
+
+msfpatch {
+    // param: A = axtor code, X = target buffer number
+    // (returns long)
+    TextBuffer__LoadAxtorName:
+        phx
+
+        // these functions might use the dead-end range,
+        // so avoid using any of those values until after
+        // doing these calls
+        jsr $_CharEx__SimplifyAxtorCode
+        pha
+        jsr $_CharEx__InitializeAxtorName
+        pla
+
+        plx
+        stx $_TextBuffer__TargetBuffer
+
+        // get axtor code * 6
+        stz $_TextBuffer__SourceAddrHi
+        asl a
+        sta $_TextBuffer__SourceAddrLo
+        asl a
+        clc
+        adc $_TextBuffer__SourceAddrLo
+        adc #$80
+        sta $_TextBuffer__SourceAddrLo
+        lda $_TextBuffer__SourceAddrHi
+        adc #$11
+        sta $_TextBuffer__SourceAddrHi
+
+        lda #$7e
+        sta $_TextBuffer__SourceBank
+        lda #$06
+        sta $_TextBuffer__MaxLength
+
+        jml $=TextBuffer__Load
+}
+
+
+msfpatch {
+    // param: A = spell number, X = target buffer number
+    // (returns long)
+    TextBuffer__LoadSpellName:
+        stx $_TextBuffer__TargetBuffer
+
+        // %if wacky_spell_filter_hook%
+          jsl $=Wacky__SpellFilterHook
+          bcs $+CanLearn
+          jmp $_BlankName
+        %CanLearn:
+        // %end%
+
+        cmp #$48
+        bcs $+LongName
+
+        // short name
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        sta $_TextBuffer__SourceAddrLo
+        asl a
+        clc
+        adc $_TextBuffer__SourceAddrLo
+        adc #$8900
+        sta $_TextBuffer__SourceAddrLo
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda #$06
+        sta $_TextBuffer__MaxLength
+
+        jmp $_Finalize
+
+    %LongName:
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        clc
+        adc #$8ab0
+        sta $_TextBuffer__SourceAddrLo
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda #$08
+        sta $_TextBuffer__MaxLength
+
+    %Finalize:
+        lda #$0f
+        sta $_TextBuffer__SourceBank
+        jml $=TextBuffer__Load
+
+    %BlankName:
+        lda #$^BlankSpellNameData
+        sta $_TextBuffer__SourceBank
+        ldy #$_BlankSpellNameData
+        sty $_TextBuffer__SourceAddrLo
+        lda #$06
+        sta $_TextBuffer__MaxLength
+        jml $=TextBuffer__Load
+        
+    %BlankSpellNameData:
+        "______"
+}
+
+msfpatch {
+    // param: A = index to objective ID
+    TextBuffer__LoadObjectiveNameForIndex:
+        // get pointer to objective text
+        xba
+        rep #$20
+        .mx 0x00
+        and #$ff00
+        lsr a
+        lsr a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        phb
+        lda #$7e   // [hardcoded]
+        pha
+        plb
+
+        // get line lengths
+        lda $23c000,x   // [hardcoded]
+        sta $1670
+        lsr a
+        sta $1671
+        lda $23c020,x   // [hardcoded]
+        sta $1672
+        lsr a
+        sta $1673
+
+        lda #$0d
+        sec
+        sbc $1671
+        sta $1671
+
+        lda #$0d
+        sec
+        sbc $1673
+        sta $1673
+
+        inx
+        stx $1674
+
+        // line 1
+        ldy #$0000
+    %Line1PrepadLoop:
+        dec $1671
+        bmi $+Line1CopyLoop
+        lda #$ff
+        sta $_TextBuffer__Buffer0,y
+        iny
+        bra $-Line1PrepadLoop
+    %Line1CopyLoop:
+        dec $1670
+        bmi $+Line1Done
+        lda $23c000,x   // [hardcoded]
+        sta $_TextBuffer__Buffer0,y
+        inx
+        iny
+        bra $-Line1CopyLoop
+    %Line1Done:
+        lda #$00
+        sta $_TextBuffer__Buffer0,y
+
+        // line 2
+        ldx $1674
+        ldy #$0000
+    %Line2PrepadLoop:
+        dec $1673
+        bmi $+Line2CopyLoop
+        lda #$ff
+        sta $_TextBuffer__Buffer1,y
+        iny
+        bra $-Line2PrepadLoop
+    %Line2CopyLoop:
+        dec $1672
+        bmi $+Line2Done
+        lda $23c020,x   // [hardcoded]
+        sta $_TextBuffer__Buffer1,y
+        inx
+        iny
+        bra $-Line2CopyLoop
+    %Line2Done:
+        lda #$00
+        sta $_TextBuffer__Buffer1,y
+
+        plb
+        rtl
+
+}

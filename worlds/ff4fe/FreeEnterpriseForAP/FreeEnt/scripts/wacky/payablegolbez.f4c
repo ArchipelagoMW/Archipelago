@@ -1,0 +1,103 @@
+event(#event.fe_WackyEvent)
+{
+    message #msg.fe_WackyDialogue
+}
+
+
+text(bank 1 message #msg.fe_WackyDialogue) {
+Bribe the boss for
+[amount]GP?[next]
+}
+
+msfpatch {
+    Wacky__BossSkipHook:
+        // A contains slot of boss to consider
+        xba
+        lda #$00
+        xba
+        asl a
+        asl a
+        tax
+        // Read cost of bribe and store for display
+        lda $=Wacky__ROMData,x
+        sta $_Wacky__RAM
+        sta $08f8
+        lda $=(Wacky__ROMData+1),x
+        sta $_(Wacky__RAM+1)
+        sta $08f9
+        lda $=(Wacky__ROMData+2),x
+        sta $_(Wacky__RAM+2)
+        sta $08fa
+
+        // Display bribe prompt (based on inn code)
+        lda #$4b // [hardcoded] wacky dialogue
+        sta $b2
+        ldx #$b1e1
+        jsl $=Bank00LongCallX
+        ldx #$b0d1
+        jsl $=Bank00LongCallX
+        ldx #$eaa5
+        jsl $=Bank00LongCallX
+        jsl $15c32a
+        ldx #$AAF8
+        jsl $=Bank00LongCallX
+        ldx #$ABC7
+        jsl $=Bank00LongCallX
+        ldx #$AB9E
+        jsl $=Bank00LongCallX
+        ldx #$B164
+        jsl $=Bank00LongCallX
+        ldx #$8F1E
+        jsl $=Bank00LongCallX
+        ldx #$B51B
+        jsl $=Bank00LongCallX
+        lda $db
+        beq $+DoBribe
+        clc
+        rtl
+
+    %DoBribe:
+        // deduct GP and check if enough
+        lda $16a0
+        sec
+        sbc $_Wacky__RAM
+        sta $30
+        lda $16a1
+        sbc $_(Wacky__RAM+1)
+        sta $31
+        lda $16a2
+        sbc $_(Wacky__RAM+2)
+        sta $32
+        bcs $+EnoughGP
+
+        // show not enough GP message
+        lda #$19
+        sta $b2
+        ldx #$b1c8
+        jsl $=Bank00LongCallX
+        ldx #$b0d1
+        jsl $=Bank00LongCallX
+        ldx #$b164
+        jsl $=Bank00LongCallX
+        ldx #$b51b
+        jsl $=Bank00LongCallX
+        clc
+        rtl
+
+    %EnoughGP:
+        // update GP count
+        lda $30
+        sta $16a0
+        lda $31
+        sta $16a1
+        lda $32
+        sta $16a2
+
+        // play cash sfx
+        lda #$2b
+        jsr $_Util__PlaySFX
+
+        // bypass
+        sec
+        rtl
+}

@@ -1,0 +1,504 @@
+// Instead of hooking into the VBlank routine every single
+// iteration, which kind of scares me, I'm going to hijack
+// individual ones as needed
+
+msfpatch {
+    .def VBlankHijack__CommandCode   $7e1a00
+
+    VBlankHijack__WaitForVBlank:
+        // this is an exact copy of 00:8f0f
+        lda #$01
+        sta $7d
+        lda $7d
+        bne $fc
+        jsr $15c23d
+        inc $7d
+        rts
+
+    VBlankHijack__Setup:
+        jsr $_VBlankHijack__WaitForVBlank
+
+        ldx #$_VBlankHijack__Main
+        stx $0201
+        lda #$20   // assuming this is in bank 20
+        sta $0203
+        rts
+
+    VBlankHijack__Main:
+        // init like real routine (ref: 009085)
+        php
+        rep #$20
+        .mx 0x00
+        pha
+        phx
+        phy
+        phb
+        phd
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        lda $4210
+        lda $4210
+        stz $420b
+        stz $420c
+        ldx #$0600
+        phx
+        pld
+        lda #$00
+        pha
+        plb
+        stz $7f
+
+        // restore normal VBlank handler
+        lda #$85
+        sta $000201
+        lda #$90
+        sta $000202
+        lda #$00
+        sta $000203
+
+        // do the crazy stuff we need to do
+        lda $=VBlankHijack__CommandCode
+        cmp #$01
+        bne $03
+        jmp $_VBlankHijack__DrawMiniWindow
+
+    VBlankHijack__Return:
+        // return to original handler code after the init stuff we copied
+        jml $0090a9
+}
+
+msfpatch {
+    VBlankHijack__DrawMiniWindow:
+        // DMA transfer window frame tilemap
+        lda #$80    // VRAM increment mode
+        sta $2115
+        stz $420b   // init DMA
+        lda #$18    // write to VRAM
+        sta $4301
+        lda #$01    // channel 0
+        sta $4300
+        ldx #$2920  // target VRAM is 0x5040 (5000 is BG3, 40 is row 2)
+        stx $2116
+        ldx #$_VBlankHijack__MiniWindowTilemap
+        stx $4302
+        lda #$20    // src bank
+        sta $4304
+        ldx #$00c0  // copy length
+        stx $4305
+        lda #$01    // commit DMA
+        sta $420b
+
+        // DMA transfer item name
+        stz $420b
+        lda #$01
+        sta $4300
+        ldx #$294B
+        stx $2116
+        ldx #$0774  // we're using the map name area at $0774
+        stx $4302
+        lda #$00
+        sta $4304
+        ldx #$0012
+        stx $4305
+        lda #$01
+        sta $420b
+
+        // set scroll slightly to center the box
+        lda #$04
+        sta $2111
+        stz $2111
+
+        jmp $_VBlankHijack__Return
+
+
+    VBlankHijack__MiniWindowTilemap:
+        [[
+        00 20 00 20 00 20 00 20 00 20 00 20 00 20 00 20
+        00 20 00 20 1B A0 1C A0 1C A0 1C A0 1C A0 1C A0 
+        1C A0 1C A0 1C A0 1C A0 1D A0 00 20 00 20 00 20
+        00 20 00 20 00 20 00 20 00 20 00 20 00 20 00 20
+        00 20 00 20 00 20 00 20 00 20 00 20 00 20 00 20
+        00 20 00 20 19 20 FF 20 FF 20 FF 20 FF 20 FF 20 
+        FF 20 FF 20 FF 20 FF 20 1A 20 00 20 00 20 00 20
+        00 20 00 20 00 20 00 20 00 20 00 20 00 20 00 20
+        00 20 00 20 00 20 00 20 00 20 00 20 00 20 00 20
+        00 20 00 20 1B 20 1C 20 1C 20 1C 20 1C 20 1C 20
+        1C 20 1C 20 1C 20 1C 20 1D 20 00 20 00 20 00 20
+        00 20 00 20 00 20 00 20 00 20 00 20 00 20 00 20
+        ]]
+
+}
+
+msfpatch {
+    .def Ending_VignetteTotal           $7e2300
+    .def Ending_VignetteCounter         $7e2302           
+    .def Ending_VignetteDuration0       $7e2304
+    .def Ending_VignetteDuration1       $7e2305
+    .def Ending_VignetteDuration2       $7e2306
+    .def Ending_VignetteDuration3       $7e2307
+    .def Ending_VignetteNextTime0       $7e2308
+    .def Ending_VignetteNextTime1       $7e2309
+    .def Ending_VignetteNextTime2       $7e230A
+    .def Ending_VignetteNextTime3       $7e230B
+    .def Ending_VignetteList            $7e2310
+
+    .def Ending_VignetteMapData_MapLo   $21d000
+    .def Ending_VignetteMapData_MapHi   $21d001
+    .def Ending_VignetteMapData_X       $21d002
+    .def Ending_VignetteMapData_Y       $21d003
+    .def Ending_RandomizedVignetteOrder $21d200
+}
+
+msfpatch {
+    EvEx__Ending_InitVignetteLoop:
+        // scan through randomized vignette order
+        // and build list of reward slots that should
+        // be in the vignettes
+        ldx #$0000
+        stx $1680
+        stx $1682
+    %BuildListLoop:
+        ldx $1680
+        lda $=Ending_RandomizedVignetteOrder,x
+        sta $1686
+        beq $+BuildListDone
+
+        jsl $=Rewards__GetFromSlot
+        stx $1684
+        lda $1685
+        and #$02
+        beq $+NotKeyItem
+
+        lda $1686
+        ldx $1682
+        sta $=Ending_VignetteList,x
+        inc $1682
+
+    %NotKeyItem:
+        inc $1680
+        bra $-BuildListLoop
+
+    %BuildListDone:
+        lda #$00
+        ldx $1682
+        sta $=Ending_VignetteList,x
+        sta $=Ending_VignetteCounter
+        lda $1682
+        sta $=Ending_VignetteTotal
+
+        // calculate timing:
+        // first calculate number of frames per vignette
+        ldx #$2b00   // number of frames for total duration of vignettes
+        stx $_Util__Divide_Dividend0
+        stz $_Util__Divide_Dividend2
+        lda $=Ending_VignetteTotal
+        sta $_Util__Divide_Divisor0
+        stz $_Util__Divide_Divisor1
+        jsr $_Util__Divide
+
+        // second, convert result into frames + seconds
+        ldx $_Util__Divide_Quotient0
+        stx $_Util__Divide_Dividend0
+        lda $_Util__Divide_Quotient2
+        sta $_Util__Divide_Dividend2
+        ldx #$003c
+        stx $_Util__Divide_Divisor0
+        jsr $_Util__Divide
+
+        lda $_Util__Divide_Remainder0
+        sta $=Ending_VignetteDuration0
+        lda $_Util__Divide_Quotient0
+        sta $=Ending_VignetteDuration1
+        lda $_Util__Divide_Quotient1
+        sta $=Ending_VignetteDuration2
+        lda $_Util__Divide_Quotient2
+        sta $=Ending_VignetteDuration3
+
+        // wipe the game clock to reuse for our vignette timing
+        ldx #$0000
+        stx $16a3
+        stx $16a5
+
+        // set time of first vignette rollover
+        lda $=Ending_VignetteDuration0
+        sta $1680
+        lda $=Ending_VignetteDuration1
+        sta $1681
+        lda $=Ending_VignetteDuration2
+        sta $1682
+        lda $=Ending_VignetteDuration3
+        // subtract 10 frames to account for not needing a fadein time to start
+        lda $1680
+        cmp #$0a
+        bcc $+FramesUnderflow
+        sec
+        sbc #$0a
+        sta $1680
+        bra $+UnderflowsDone
+    %FramesUnderflow:
+        clc
+        adc #$14
+        sta $1680
+        dec $1681
+        lda $1681
+        cmp #$ff
+        bne $+UnderflowsDone
+        dec $1682
+        lda $1682
+        cmp #$ff
+        bne $+UnderflowsDone
+        lda $1683
+        beq $+UnderflowsDone
+        dec $1683
+    %UnderflowsDone:
+        lda $1680
+        sta $=Ending_VignetteNextTime0
+        lda $1681
+        sta $=Ending_VignetteNextTime1
+        lda $1682
+        sta $=Ending_VignetteNextTime2
+        lda $1683
+        sta $=Ending_VignetteNextTime3
+
+        jmp $_EvEx__End
+}
+
+
+msfpatch {
+    EvEx__Ending_CheckVignettesDone:
+        lda $=Ending_VignetteCounter
+        sta $1680
+        stz $1681
+        ldx $1680
+        lda $=Ending_VignetteList,x
+        beq $+IsDone
+
+        // borrow randomizer's check flag routines
+        jmp $_EvEx__Rando_CheckFail
+
+    %IsDone:
+        jmp $_EvEx__Rando_CheckSuccess
+}
+
+msfpatch {
+    EvEx__Ending_LoadVignetteMap:
+        lda $=Ending_VignetteCounter
+        sta $1680
+        stz $1681
+        ldx $1680
+        lda $=Ending_VignetteList,x
+
+        // get map info for reward slot
+        sta $=Rewards__CurrentSlot
+        sta $1680
+        clc
+        asl $1680
+        rol $1681
+        clc
+        asl $1680
+        rol $1681
+        ldx $1680
+
+        // stuff map parameters into a forged "load map" event command
+        lda $=Ending_VignetteMapData_MapLo,x
+        sta $09d6
+
+        lda $=Ending_VignetteMapData_X,x
+        sta $09d7
+
+        lda $=Ending_VignetteMapData_Y,x
+        clc
+        adc #$0b        // offset for "scrolling" into position
+        sta $09d8
+
+        lda #$20        // "no transition" flag
+        sta $09d9
+        lda $=Ending_VignetteMapData_MapHi,x
+        beq $+NotUnderworld
+        lda #$A0        // underworld & "no transition" flags
+        sta $09d9
+    %NotUnderworld:
+        // pull event extension return address
+        pla
+        pla
+        pla
+
+        // init vars expected by load map command
+        ldx #$0000
+        stz $b3
+
+        // jump to load map handler
+        jml $00edb1
+}
+
+msfpatch {
+    EvEx__Ending_DrawVignetteWindow:
+        lda $=Ending_VignetteCounter
+        sta $1680
+        stz $1681
+        ldx $1680
+
+        lda $=Ending_VignetteList,x
+        ldx #$0000
+        jsl $=Rewards__LoadNameFromSlot
+
+        // transfer text data to $0774 (map name area)
+        ldy #$0000
+    %BlankTextLoop:
+        lda #$ff
+        sta $0774,y
+        lda #$20
+        sta $0775,y
+        iny
+        iny
+        cpy #$0012
+        bcc $-BlankTextLoop
+
+        ldy #$0000
+        ldx #$0000
+    %CopyTextLoop:
+        lda $=TextBuffer__BufferRootAddr,x
+        beq $+CopyTextDone
+        sta $0774,y
+        inx
+        iny
+        iny
+        cpy #$0012
+        bcc $-CopyTextLoop
+    %CopyTextDone:
+
+        // finalize: write command code and setup hijack
+        lda #$01
+        sta $_VBlankHijack__CommandCode
+        
+        jsr $_VBlankHijack__Setup
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Ending_NextVignette:
+        // wait until it's time for next vignette
+    %WaitLoop:
+        lda $=Ending_VignetteNextTime3
+        cmp $16a6
+        bcc $+DoneWaiting
+        bne $+StillWaiting
+        lda $=Ending_VignetteNextTime2
+        cmp $16a5
+        bcc $+DoneWaiting
+        bne $+StillWaiting
+        lda $=Ending_VignetteNextTime1
+        cmp $16a4
+        bcc $+DoneWaiting
+        bne $+StillWaiting
+        lda $=Ending_VignetteNextTime0
+        cmp $16a3
+        bcc $+DoneWaiting
+
+    %StillWaiting:
+        // wait for VBlank, update map and loop
+        ldx #$8f0f
+        stx $_Bank00LongCallAddr
+        jsl $=Bank00LongCall
+
+        jsl $15b1e0
+
+        ldx #$b8b0
+        stx $_Bank00LongCallAddr
+        jsl $=Bank00LongCall
+
+        jmp $_WaitLoop
+
+
+    %DoneWaiting:
+        // update the next vignette time
+        lda $=Ending_VignetteNextTime0
+        sta $1680
+        lda $=Ending_VignetteNextTime1
+        sta $1681
+        lda $=Ending_VignetteNextTime2
+        sta $1682
+        lda $=Ending_VignetteNextTime3
+        sta $1683
+        lda $=Ending_VignetteDuration0
+        clc
+        adc $1680
+        sta $1680
+        cmp #$3c
+        bcc $+OverflowsDone0
+        sec
+        sbc #$3c
+        sta $1680
+        inc $1681
+        bne $+OverflowsDone0
+        inc $1682
+        bne $+OverflowsDone0
+        inc $1683
+    %OverflowsDone0:
+        lda $=Ending_VignetteDuration1
+        clc
+        adc $1681
+        sta $1681
+        bcc $+OverflowsDone1
+        inc $1682
+        bne $+OverflowsDone1
+        inc $1683
+    %OverflowsDone1:
+        lda $=Ending_VignetteDuration2
+        clc
+        adc $1682
+        sta $1682
+        bcc $+OverflowsDone2
+        inc $1683
+    %OverflowsDone2:
+        lda $=Ending_VignetteDuration2
+        clc
+        adc $1683
+        bcc $+OverflowsDone3
+        lda #$ff
+    %OverflowsDone3:
+        sta $1683
+
+        lda $1680
+        sta $=Ending_VignetteNextTime0
+        lda $1681
+        sta $=Ending_VignetteNextTime1
+        lda $1682
+        sta $=Ending_VignetteNextTime2
+        lda $1683
+        sta $=Ending_VignetteNextTime3        
+
+        // finally, increment the vignette counter
+        lda $=Ending_VignetteCounter
+        inc a
+        sta $=Ending_VignetteCounter
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Ending_FinalizeStats:
+        // %debug enable%
+        jsr $_Stats_SaveTime
+        // %end%
+
+        // set ROM-wide flag for "game has ever been completed"
+        lda #$01
+        sta $=Stats_EverCompleted
+
+        // add 1 to the final character counter to account
+        // for initial character
+        inc $_Stats_Characters
+
+        jsr $_Stats_Calculate
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Ending_SaveEndgameTime:
+        jsr $_Stats_SaveTime
+        jmp $_EvEx__End
+}
+
+
