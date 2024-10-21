@@ -31,11 +31,11 @@ option_docstrings = {
     "RandomizeDreamers": "Allow for Dreamers to be randomized into the item pool and opens their locations for "
                          "randomization.",
     "RandomizeSkills": "Allow for Skills, such as Mantis Claw or Shade Soul, to be randomized into the item pool. "
-                       "Also opens their locations\n    for receiving randomized items.",
+                       "Also opens their locations for receiving randomized items.",
     "RandomizeFocus": "Removes the ability to focus and randomizes it into the item pool.",
     "RandomizeSwim": "Removes the ability to swim in water and randomizes it into the item pool.",
     "RandomizeCharms": "Allow for Charms to be randomized into the item pool and open their locations for "
-                       "randomization. Includes Charms\n    sold in shops.",
+                       "randomization. Includes Charms sold in shops.",
     "RandomizeKeys": "Allow for Keys to be randomized into the item pool. Includes those sold in shops.",
     "RandomizeMaskShards": "Allow for Mask Shard to be randomized into the item pool and open their locations for"
                            " randomization.",
