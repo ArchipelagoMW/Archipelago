@@ -2837,6 +2837,108 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 logic.protoss_competent_anti_air(state)
                 and (logic.protoss_common_unit(state)))
         ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2700, LocationType.VICTORY,
+            logic.welcome_to_the_jungle_z_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Close Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2701, LocationType.VANILLA),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "West Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2702, LocationType.VANILLA,
+            logic.welcome_to_the_jungle_z_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "North-East Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2703, LocationType.VANILLA,
+            logic.welcome_to_the_jungle_z_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Middle Base", SC2_RACESWAP_LOC_ID_OFFSET + 2704, LocationType.EXTRA,
+            logic.welcome_to_the_jungle_z_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 2705, LocationType.MASTERY,
+            lambda state: (
+                logic.welcome_to_the_jungle_z_requirement(state)
+                and logic.zerg_competent_anti_air(state)
+                and logic.zerg_big_monsters(state))
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "No Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2706, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_z_requirement(state)
+                and logic.zerg_competent_anti_air(state)
+                and logic.zerg_big_monsters(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Up to 1 Terrazine Node Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2707, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_z_requirement(state)
+                and logic.zerg_competent_anti_air(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Up to 2 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2708, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_z_requirement(state)
+                and logic.zerg_competent_anti_air(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Up to 3 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2709, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_z_requirement(state)
+                and logic.zerg_competent_anti_air(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Up to 4 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2710, LocationType.EXTRA,
+            logic.welcome_to_the_jungle_z_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Up to 5 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2711, LocationType.EXTRA,
+            logic.welcome_to_the_jungle_z_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2800, LocationType.VICTORY,
+            logic.welcome_to_the_jungle_p_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Close Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2801, LocationType.VANILLA),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "West Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2802, LocationType.VANILLA,
+            logic.welcome_to_the_jungle_p_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "North-East Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2803, LocationType.VANILLA,
+            logic.welcome_to_the_jungle_p_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Middle Base", SC2_RACESWAP_LOC_ID_OFFSET + 2804, LocationType.EXTRA,
+            logic.welcome_to_the_jungle_p_requirement
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 2805, LocationType.MASTERY,
+            lambda state: (
+                logic.welcome_to_the_jungle_p_requirement(state)
+                and logic.protoss_competent_comp(state))
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "No Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2806, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_p_requirement(state)
+                and logic.protoss_competent_comp(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Up to 1 Terrazine Node Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2807, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_p_requirement(state)
+                and logic.protoss_competent_comp(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Up to 2 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2808, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_p_requirement(state)
+                and logic.protoss_basic_splash(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Up to 3 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2809, LocationType.CHALLENGE,
+            lambda state: (
+                logic.welcome_to_the_jungle_p_requirement(state)
+                and logic.protoss_basic_splash(state)),
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Up to 4 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2810, LocationType.EXTRA,
+            logic.welcome_to_the_jungle_p_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Up to 5 Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2811, LocationType.EXTRA,
+            logic.welcome_to_the_jungle_p_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3300, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_great_train_robbery_train_stopper(state)

@@ -129,6 +129,35 @@ class SC2Logic:
             and self.terran_air_anti_air(state)
         )
 
+    def welcome_to_the_jungle_z_requirement(self, state: CollectionState) -> bool:
+        """
+        Welcome to the Jungle requirements - able to deal with Scouts, Void Rays, Zealots and Stalkers
+        :param state:
+        :return:
+        """
+        return (
+                self.zerg_competent_comp(state) and state.has_any({item_names.HYDRALISK, item_names.MUTALISK}, self.player)
+        ) or (
+            self.advanced_tactics
+            and self.zerg_common_unit(state)
+            and (state.has_any({item_names.MUTALISK, item_names.INFESTOR}, self.player)
+                 or (self.morph_devourer(state) and state.has_any({item_names.HYDRALISK, item_names.SWARM_QUEEN}, self.player))
+                 or (self.morph_viper(state) and state.has(item_names.VIPER_PARASITIC_BOMB, self.player))
+                 )
+        )
+
+    def welcome_to_the_jungle_p_requirement(self, state: CollectionState) -> bool:
+        """
+        Welcome to the Jungle requirements - able to deal with Scouts, Void Rays, Zealots and Stalkers
+        :param state:
+        :return:
+        """
+        return self.protoss_common_unit_anti_armor_air(state) \
+            or (
+            self.advanced_tactics
+            and self.protoss_common_unit_basic_aa(state)
+        )
+
     def terran_basic_anti_air(self, state: CollectionState) -> bool:
         """
         Basic AA to deal with few air units
@@ -643,6 +672,12 @@ class SC2Logic:
             (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled)
             and state.has(item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, self.player)
         )
+
+    def morph_guardian(self, state: CollectionState) -> bool:
+        return (
+            (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled)
+            and state.has(item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, self.player)
+        )
     
     def morph_viper(self, state: CollectionState) -> bool:
         return (
@@ -677,6 +712,10 @@ class SC2Logic:
             and state.has(item_names.ROACH_PRIMAL_IGNITER_ASPECT, self.player)
         )
 
+    def morph_tyrannozor(self, state: CollectionState) -> bool:
+        return state.has(item_names.ULTRALISK_TYRANNOZOR_ASPECT, self.player) and \
+            (state.has(item_names.ULTRALISK, self.player) or self.morphling_enabled)
+
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         advanced = self.advanced_tactics
         core_unit = state.has_any({item_names.ROACH, item_names.ABERRATION, item_names.ZERGLING}, self.player)
@@ -710,6 +749,15 @@ class SC2Logic:
 
     def spread_creep(self, state: CollectionState) -> bool:
         return self.advanced_tactics or state.has_any({item_names.SWARM_QUEEN, item_names.OVERLORD_OVERSEER_ASPECT}, self.player)
+
+    def zerg_big_monsters(self, state: CollectionState) -> bool:
+        """
+        Durable units with some capacity for damage
+        :param state:
+        :return:
+        """
+        return self.morph_tyrannozor(state) or state.has_any({item_names.ABERRATION, item_names.ULTRALISK}, self.player) \
+            or (self.spread_creep(state) and state.has(item_names.INFESTED_BUNKER, self.player))
     
     def zerg_competent_defense(self, state: CollectionState) -> bool:
         return (
@@ -838,7 +886,6 @@ class SC2Logic:
         Ability to handle defensive missions
         :param state:
         :param zerg_enemy:
-        :param air_enemy:
         :return:
         """
         defense_score = sum((pvx_defense_ratings[item] for item in pvx_defense_ratings if state.has(item, self.player)))

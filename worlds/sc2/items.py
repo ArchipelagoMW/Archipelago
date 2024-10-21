@@ -1400,7 +1400,8 @@ item_table = {
                  parent_item=item_names.ROACH_RAVAGER_ASPECT, origin={"ext"}),
     item_names.VIPER_PARASITIC_BOMB:
         ItemData(259 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 29, SC2Race.ZERG,
-                 parent_item=item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
+                 parent_item=item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"},
+                 classification=ItemClassification.progression),
     item_names.VIPER_PARALYTIC_BARBS:
         ItemData(260 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 0, SC2Race.ZERG,
                  parent_item=item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
