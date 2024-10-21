@@ -113,7 +113,7 @@ class SC2Mission(Enum):
     SUPERNOVA = 11, "Supernova", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.HARD, "ap_supernova", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsProtoss
     MAW_OF_THE_VOID = 12, "Maw of the Void", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.HARD, "ap_maw_of_the_void", MissionFlag.Terran|MissionFlag.VsProtoss
     DEVILS_PLAYGROUND = 13, "Devil's Playground (Terran)", SC2Campaign.WOL, "Covert", SC2Race.TERRAN, MissionPools.EASY, "ap_devils_playground", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
-    WELCOME_TO_THE_JUNGLE = 14, "Welcome to the Jungle", SC2Campaign.WOL, "Covert", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_welcome_to_the_jungle", MissionFlag.Terran|MissionFlag.VsProtoss
+    WELCOME_TO_THE_JUNGLE = 14, "Welcome to the Jungle (Terran)", SC2Campaign.WOL, "Covert", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_welcome_to_the_jungle", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     BREAKOUT = 15, "Breakout", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_breakout", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
     GHOST_OF_A_CHANCE = 16, "Ghost of a Chance", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_ghost_of_a_chance", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
     THE_GREAT_TRAIN_ROBBERY = 17, "The Great Train Robbery (Terran)", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_great_train_robbery", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
@@ -218,7 +218,8 @@ class SC2Mission(Enum):
     # 106/107 - Maw of the Void
     DEVILS_PLAYGROUND_Z = 108, "Devil's Playground (Zerg)", SC2Campaign.WOL, "Covert", SC2Race.ZERG, MissionPools.EASY, "ap_devils_playground", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
     DEVILS_PLAYGROUND_P = 109, "Devil's Playground (Protoss)", SC2Campaign.WOL, "Covert", SC2Race.PROTOSS, MissionPools.EASY, "ap_devils_playground", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
-    # 110/111 - Welcome to the Jungle
+    WELCOME_TO_THE_JUNGLE_Z = 110, "Welcome to the Jungle (Zerg)", SC2Campaign.WOL, "Covert", SC2Race.ZERG, MissionPools.MEDIUM, "ap_welcome_to_the_jungle", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap
+    WELCOME_TO_THE_JUNGLE_P = 111, "Welcome to the Jungle (Protoss)", SC2Campaign.WOL, "Covert", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_welcome_to_the_jungle", MissionFlag.Protoss|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     # 112/113 - Breakout
     # 114/115 - Ghost of a Chance
     THE_GREAT_TRAIN_ROBBERY_Z = 116, "The Great Train Robbery (Zerg)", SC2Campaign.WOL, "Rebellion", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_great_train_robbery", MissionFlag.Zerg|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.RaceSwap

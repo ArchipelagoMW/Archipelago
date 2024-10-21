@@ -1400,7 +1400,8 @@ item_table = {
                  parent_item=item_names.ROACH_RAVAGER_ASPECT, origin={"ext"}),
     item_names.VIPER_PARASITIC_BOMB:
         ItemData(259 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 29, SC2Race.ZERG,
-                 parent_item=item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
+                 parent_item=item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"},
+                 classification=ItemClassification.progression),
     item_names.VIPER_PARALYTIC_BARBS:
         ItemData(260 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 0, SC2Race.ZERG,
                  parent_item=item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
@@ -1914,7 +1915,7 @@ item_table = {
     item_names.SCOUT_RESOURCE_EFFICIENCY: ItemData(379 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 19, SC2Race.PROTOSS, parent_item=item_names.SCOUT),
     item_names.IMMORTAL_ANNIHILATOR_DISRUPTOR_DISPERSION: ItemData(380 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 20, SC2Race.PROTOSS),
     item_names.DISRUPTOR_CLOAKING_MODULE: ItemData(381 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 21, SC2Race.PROTOSS, classification=ItemClassification.filler, parent_item=item_names.DISRUPTOR),
-    item_names.DISRUPTOR_PERFECTED_POWER:  ItemData(382 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 22, SC2Race.PROTOSS, parent_item=item_names.DISRUPTOR),
+    item_names.DISRUPTOR_PERFECTED_POWER:  ItemData(382 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 22, SC2Race.PROTOSS, parent_item=item_names.DISRUPTOR, classification=ItemClassification.progression),
     item_names.DISRUPTOR_RESTRAINED_DESTRUCTION: ItemData(383 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 23, SC2Race.PROTOSS, classification=ItemClassification.filler, parent_item=item_names.DISRUPTOR),
     item_names.TEMPEST_INTERPLANETARY_RANGE: ItemData(384 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 24, SC2Race.PROTOSS, parent_item=item_names.TEMPEST),
     item_names.DAWNBRINGER_ANTI_SURFACE_COUNTERMEASURES: ItemData(385 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 25, SC2Race.PROTOSS, parent_item=item_names.DAWNBRINGER),
