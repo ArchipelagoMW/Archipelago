@@ -134,7 +134,9 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
 
 
 class HKWeb(WebWorld):
-    setup_en  = Tutorial(
+    rich_text_options_doc = True
+
+    setup_en = Tutorial(
         "Mod Setup and Use Guide",
         "A guide to playing Hollow Knight with Archipelago.",
         "English",
@@ -143,7 +145,7 @@ class HKWeb(WebWorld):
         ["Ijwu"]
     )
 
-    setup_pt_br  = Tutorial(
+    setup_pt_br = Tutorial(
         setup_en.tutorial_name,
         setup_en.description,
         "Português Brasileiro",
