@@ -404,7 +404,7 @@ class PokemonRedBlueWorld(World):
 
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
-        all_state = self.multiworld.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False, False)
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
         for location in evolutions_region.locations.copy():
             if not all_state.can_reach(location, player=self.player):
@@ -460,7 +460,7 @@ class PokemonRedBlueWorld(World):
 
         self.local_locs = locs
 
-        all_state = self.multiworld.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False, False)
 
         reachable_mons = set()
         for mon in poke_data.pokemon_data:
@@ -519,6 +519,12 @@ class PokemonRedBlueWorld(World):
                             break
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
+
+    def get_pre_fill_items(self) -> typing.List["Item"]:
+        pool = [self.create_item(mon) for mon in poke_data.pokemon_data]
+        return pool
+
+
 
     @classmethod
     def stage_post_fill(cls, multiworld):
