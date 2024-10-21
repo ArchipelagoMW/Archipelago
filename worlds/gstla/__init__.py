@@ -17,6 +17,7 @@ from .gen.ItemNames import ItemName, item_id_by_name
 from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
 from .Rom import get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch
+from .BizClient import GSTLAClient
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess, SuffixIdentifier
 
 
