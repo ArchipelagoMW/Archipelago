@@ -30,6 +30,8 @@ class LocalRom:
         self.rom_data = bytearray(get_patched_rom_bytes(file))
         self.item_event_types = {AP_PLACEHOLDER_ITEM.id: 128}
         for loc in all_locations:
+            # if loc.vanilla_contents in self.item_event_types:
+            #     assert self.item_event_types[loc.vanilla_contents] == loc.event_type, loc
             self.item_event_types[loc.vanilla_contents] = loc.event_type
 
 
@@ -92,6 +94,7 @@ class LocalRom:
         #         self.rom_data[addr + 7] = contents >> 8
         # for loc_address in location.addresses:
         addr = location.addresses
+        assert addr > 0, "location: %d, item: %d" % (location.id, item.id)
         contents = item.id
         event_type = self.fix_event_type(location, item)
         event_type = self.show_item_settings(item, event_type, True)
@@ -108,6 +111,7 @@ class LocalRom:
     def write_djinn(self, location, djinn):
         # loc_address = location.addresses[0]
         loc_address = location.addresses
+        print("Writing Djinn (%d,%d) to Location %s", (djinn.id, djinn.element, location.id))
 
         # self.rom_data[loc_address] = djinn.gstla_id
         self.rom_data[loc_address] = djinn.id

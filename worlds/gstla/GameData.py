@@ -256,7 +256,7 @@ class GameData:
                     # From emo tracker pack
                     djinn['statAddr'],
                     djinn['stats'],
-                    0x30 + (djinn['vanillaElement'] * 18) + djinn['vanillaId'],
+                    0x30 + (djinn['vanillaElement'] * 20) + djinn['vanillaId'],
                 )
             )
         for djinn in self.raw_djinn_data:

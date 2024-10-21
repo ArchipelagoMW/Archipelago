@@ -112,7 +112,7 @@ class GSTLAWorld(World):
             for location in region.locations:
                 location_data = location_name_to_id.get(location.name, None)
 
-                if location_data is None:
+                if location_data is None or location_data.loc_type == LocationType.Event:
                     continue
                 ap_item = location.item
                 # print(ap_item)
