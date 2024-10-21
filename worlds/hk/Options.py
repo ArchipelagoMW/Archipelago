@@ -52,14 +52,14 @@ option_docstrings = {
     "RandomizeRelics": "Randomize Relics (King's Idol, et al.) into the item pool and open their locations for"
                        " randomization.",
     "RandomizeWhisperingRoots": "Randomize the essence rewards from Whispering Roots into the item pool. Whispering "
-                                "Roots will now grant a randomized\n    item when completed. This can be previewed by "
+                                "Roots will now grant a randomized item when completed. This can be previewed by "
                                 "standing on the root.",
     "RandomizeBossEssence": "Randomize boss essence drops, such as those for defeating Warrior Dreams, into the item "
-                            "pool and open their locations\n    for randomization.",
+                            "pool and open their locations for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
     "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
-                     " and buy an item\n    that is randomized into that location as well.",
+                     " and buy an item that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
                       "on the stag station bell/toll.",
     "RandomizeLifebloodCocoons": "Randomize Lifeblood Cocoon grants into the item pool and open their locations"
@@ -67,7 +67,7 @@ option_docstrings = {
     "RandomizeGrimmkinFlames": "Randomize Grimmkin Flames into the item pool and open their locations for "
                                "randomization.",
     "RandomizeJournalEntries": "Randomize the Hunter's Journal as well as the findable journal entries into the item "
-                               "pool, and open their locations\n    for randomization. Does not include journal entries "
+                               "pool, and open their locations for randomization. Does not include journal entries "
                                "gained by killing enemies.",
     "RandomizeNail": "Removes the ability to swing the nail left, right and up, and shuffles these into the item pool.",
     "RandomizeGeoRocks": "Randomize Geo Rock rewards into the item pool and open their locations for randomization.",
@@ -77,7 +77,7 @@ option_docstrings = {
     "RandomizeLoreTablets": "Randomize Lore items into the itempool, one per Lore Tablet, and place randomized item "
                             "grants on the tablets themselves.\n    You must still read the tablet to get the item.",
     "PreciseMovement": "Places skips into logic which require extremely precise player movement, possibly without "
-                       "movement skills such as\n    dash or hook.",
+                       "movement skills such as dash or claw.",
     "ProficientCombat": "Places skips into logic which require proficient combat, possibly with limited items.",
     "BackgroundObjectPogos": "Places skips into logic for locations which are reachable via pogoing off of "
                              "background objects.",
