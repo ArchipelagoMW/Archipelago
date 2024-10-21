@@ -1203,6 +1203,9 @@ item_table = {
     item_names.INFESTED_LIBERATOR:
         ItemData(23 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 22, SC2Race.ZERG,
                  classification=ItemClassification.useful, origin={"ext"}),
+    item_names.INFESTED_MISSILE_TURRET:
+        ItemData(24 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 23, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"ext"}),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, origin={"hots"}),
@@ -1510,6 +1513,12 @@ item_table = {
                  origin={"ext"}),
     item_names.INFESTED_BUNKER_ENGORGED_BUNKERS:
         ItemData(297 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 7, SC2Race.ZERG, parent_item=item_names.INFESTED_BUNKER,
+                 origin={"ext"}),
+    item_names.INFESTED_MISSILE_TURRET_BIOELECTRIC_PAYLOAD:
+        ItemData(298 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 6, SC2Race.ZERG, parent_item=item_names.INFESTED_MISSILE_TURRET,
+                 origin={"ext"}),
+    item_names.INFESTED_MISSILE_TURRET_ACID_SPORE_VENTS:
+        ItemData(299 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 7, SC2Race.ZERG, parent_item=item_names.INFESTED_MISSILE_TURRET,
                  origin={"ext"}),
 
     item_names.ZERGLING_RAPTOR_STRAIN:
@@ -2311,6 +2320,7 @@ zvx_defense_ratings = {
 zvx_air_defense_ratings = {
     item_names.SPORE_CRAWLER: 2,
     # w/ Twin Drones: 1
+    item_names.INFESTED_MISSILE_TURRET: 2,
 }
 pvx_defense_ratings = {
     item_names.PHOTON_CANNON: 2,

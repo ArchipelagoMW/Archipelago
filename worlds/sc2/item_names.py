@@ -374,11 +374,12 @@ INFESTED_BANSHEE     = "Infested Banshee"
 INFESTED_LIBERATOR   = "Infested Liberator"
 
 # Zerg Buildings
-SPORE_CRAWLER   = "Spore Crawler"
-SPINE_CRAWLER   = "Spine Crawler"
-INFESTED_BUNKER = "Infested Bunker"
-NYDUS_WORM      = "Nydus Worm"
-OMEGA_WORM      = "Omega Worm"
+SPORE_CRAWLER           = "Spore Crawler"
+SPINE_CRAWLER           = "Spine Crawler"
+INFESTED_BUNKER         = "Infested Bunker"
+INFESTED_MISSILE_TURRET = "Infested Missile Turret"
+NYDUS_WORM              = "Nydus Worm"
+OMEGA_WORM              = "Omega Worm"
 
 # Zerg Weapon / Armor Upgrades
 ZERG_UPGRADE_PREFIX = "Progressive Zerg"
@@ -529,6 +530,8 @@ FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK         = "Frightful Fleshwelder (Infe
 FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK        = "Frightful Fleshwelder (Infested Diamondback)"
 FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE            = "Frightful Fleshwelder (Infested Banshee)"
 FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR          = "Frightful Fleshwelder (Infested Liberator)"
+INFESTED_MISSILE_TURRET_BIOELECTRIC_PAYLOAD       = "Bioelectric Payload (Infested Missile Turret)"
+INFESTED_MISSILE_TURRET_ACID_SPORE_VENTS          = "Acid Spore Vents (Infested Missile Turret)"
 
 # Zerg Strains
 ZERGLING_RAPTOR_STRAIN     = "Raptor Strain (Zergling)"
