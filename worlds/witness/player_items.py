@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set, cast
+from typing import TYPE_CHECKING, Dict, List, cast
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -148,39 +148,105 @@ class WitnessPlayerItems:
 
         return output
 
-    def get_early_items(self) -> List[str]:
+    def get_early_items(self, existing_items: List[WitnessItem]) -> Dict[str, List[str]]:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
-        output: Set[str] = set()
-        if self._world.options.shuffle_symbols:
-            discards_on = self._world.options.shuffle_discarded_panels
-            mode = self._world.options.puzzle_randomization.current_key
+        output: Dict[str, List[str]] = {}
 
-            output = static_witness_items.ALWAYS_GOOD_SYMBOL_ITEMS | static_witness_items.MODE_SPECIFIC_GOOD_ITEMS[mode]
-            if discards_on:
-                output |= static_witness_items.MODE_SPECIFIC_GOOD_DISCARD_ITEMS[mode]
+        existing_items_lookup = {existing_item.name for existing_item in existing_items}
 
-        # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
-        #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
-        #   regardless of whether or not they actually wind up being manually placed.
-        for plando_setting in self._multiworld.plando_items[self._player_id]:
-            if plando_setting.get("from_pool", True):
-                for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
-                    if isinstance(plando_setting[item_setting_key], str):
-                        output -= {plando_setting[item_setting_key]}
-                    elif isinstance(plando_setting[item_setting_key], dict):
-                        output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
-                    else:
-                        # Assume this is some other kind of iterable.
-                        for inner_item in plando_setting[item_setting_key]:
-                            if isinstance(inner_item, str):
-                                output -= {inner_item}
-                            elif isinstance(inner_item, dict):
-                                output -= {item for item, weight in inner_item.items() if weight}
+        if self._world.options.shuffle_symbols and "Symbol" in self._world.options.early_good_items.value:
+            good_symbols = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
 
-        # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted(output)
+            if self._world.options.shuffle_discarded_panels:
+                if self._world.options.puzzle_randomization == "sigma_expert":
+                    good_symbols.append("Arrows")
+                else:
+                    good_symbols.append("Triangles")
+
+            # Replace progressive items with their parents.
+            good_symbols = [
+                static_witness_logic.get_parent_progressive_item(item) for item in good_symbols
+            ]
+
+            output["Symbol"] = [symbol for symbol in good_symbols if symbol in existing_items_lookup]
+
+        if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
+            good_doors = [
+                "Desert Doors & Elevator", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
+                "Shadows Lower Doors", "Tunnels Doors",
+
+                "Keep Tower Shortcut (Door)", "Shadows Timed Door", "Tunnels Town Shortcut (Door)",
+
+                "Desert Panels", "Keep Hedge Maze Panels",
+
+                "Shadows Door Timer (Panel)", "Keep Hedge Maze 1 (Panel)", "Town Maze Stairs (Panel)",
+            ]
+
+            if self._world.options.shuffle_vault_boxes:
+                good_doors.append("Windmill & Theater Doors")
+                if not self._world.options.shuffle_symbols:
+                    good_doors += [
+                        "Windmill & Theater Panels",
+
+                        "Windmill & Theater Control Panels",
+                    ]
+
+            if self._world.options.shuffle_doors == "doors":
+                good_doors.append("Desert Light Room Entry (Door)")
+
+            if not self._world.options.shuffle_symbols:
+                good_doors += [
+                    "Bunker Doors", "Swamp Doors", "Glass Factory Doors", "Town Doors",
+
+                    "Bunker Entry (Door)", "Glass Factory Entry (Door)", "Symmetry Island Lower (Door)",
+
+                    "Bunker Panels", "Swamp Panels", "Quarry Outside Panels", "Glass Factory Panels"
+
+                    "Glass Factory Entry (Panel)",
+                ]
+
+                if self._world.options.shuffle_vault_boxes:
+                    good_doors += [
+                        "Windmill & Theater Panels",
+
+                        "Windmill & Theater Control Panels",
+                    ]
+
+            existing_doors = [door for door in good_doors if door in existing_items_lookup]
+
+            # On some options combinations with doors, there just aren't a lot of doors that unlock much early.
+            # In this case, we add some doors that aren't great, but are at least guaranteed to unlock 1 location.
+
+            fallback_doors = [
+                "Swamp Laser Shortcut (Door)",  # Always Swamp Laser
+                "Town Maze Panels",  # Always Town Maze Panel
+                "Town Doors",  # Always Town Church Lattice
+                "Town Church Entry (Door)",  # ditto
+                "Town Tower Doors",  # Always Town Laser
+            ]
+
+            while len(existing_doors) < 4 and fallback_doors:
+                fallback_door = fallback_doors.pop()
+                if fallback_door in existing_items_lookup:
+                    existing_doors.append(fallback_door)
+
+            output["Door"] = existing_doors
+
+        if "Obelisk Key" in self._world.options.early_good_items.value:
+            obelisk_keys = [
+                "Desert Obelisk Key", "Town Obelisk Key", "Quarry Obelisk Key",
+                "Treehouse Obelisk Key", "Monastery Obelisk Key", "Mountainside Obelisk Key"
+            ]
+            output["Obelisk Key"] = [key for key in obelisk_keys if key in existing_items_lookup]
+
+        assert all(item in self._world.item_names for sublist in output.values() for item in sublist), (
+            [item for sublist in output.values() for item in sublist if item not in self._world.item_names]
+        )
+
+        # Cull empty lists
+        return {item_type: item_list for item_type, item_list in output.items() if item_list}
 
     def get_door_ids_in_pool(self) -> List[int]:
         """
