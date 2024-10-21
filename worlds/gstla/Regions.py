@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import MultiWorld, Region
 from worlds.gstla.Locations import GSTLALocation, location_name_to_id
 from .gen.LocationNames import LocationName
 from .gen.LocationData import LocationType
@@ -24,33 +24,23 @@ class EntranceData:
         self.exits = _exits
 
 
-def create_region(multiworld: MultiWorld, player: int, regionData: EntranceData):
-    region = Region(regionData.name, player, multiworld)
+def create_region(multiworld: MultiWorld, player: int, region_data: EntranceData):
+    region = Region(region_data.name, player, multiworld)
     gs_locations: Dict[str, Optional[int]] = dict()
-    for location in regionData.locations:
-        # location_data = location_name_to_id.get(location, None)
-        # if location == LocationName.Daila_Psy_Crystal:
-        #     print(location_data)
-        # if location_data is None:
-        #     loc = GSTLALocation(player, location, None, region)
-        # else:
+    for location in region_data.locations:
         location_data = location_name_to_id[location]
         if multiworld.hidden_items[player] == 2 and location_data.loc_type == LocationType.Hidden:
             continue
-        # loc = GSTLALocation(player, location, location_data.id, region)
         if location_data.loc_type == LocationType.Djinn:
             loc = GSTLALocation.create_djinn_location(player, location, location_data, region)
         elif location_data.loc_type == LocationType.Event:
             loc = GSTLALocation.create_event_location(player, location, location_data, region)
         else:
             loc = GSTLALocation(player, location, location_data, region)
-        # gs_locations.append(loc)
-        # print(type(region.locations))
         region.locations.append(loc)
-        # region.locations.insert(loc)
     region.add_locations(gs_locations)
 
-    for regionExit in regionData.exits:
+    for regionExit in region_data.exits:
         region.create_exit(regionExit)
 
     multiworld.regions.append(region)

@@ -5,7 +5,6 @@ from typing import Dict, List, TYPE_CHECKING
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write
 from . import LocationName, loc_names_by_id
-from .GameData import ElementType
 from .gen.LocationData import all_locations
 
 if TYPE_CHECKING:
@@ -13,7 +12,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger("Client")
 
-# TODO: verify?
 FLAG_START = 0x40
 DJINN_FLAG_OFFSET = 0x30 >> 3
 DJINN_FLAG_LOCATION = (FLAG_START + DJINN_FLAG_OFFSET, 0x0A, "EWRAM")

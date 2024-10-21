@@ -1,16 +1,13 @@
-from BaseClasses import ItemClassification
 from worlds.Files import APDeltaPatch
-from typing import List
 
 import Utils
 import os
 import hashlib
 import bsdiff4
 
-from . import AP_PLACEHOLDER_ITEM
-from .Names.ItemName import ItemName
-from .gen.ItemData import items_by_id
-from .gen.LocationData import all_locations
+from . import AP_PLACEHOLDER_ITEM, GSTLAItem
+from .gen.ItemData import ItemData
+from .gen.LocationData import all_locations, GSTLALocation, LocationData
 
 #from .lz10 import gba_decompress, gba_compress
 
@@ -20,7 +17,7 @@ from .gen.LocationData import all_locations
 
 #from .Items import ItemType
 
-CHECKSUM_BLUE = "8efe8b2aaed97149e897570cd123ff6e"
+CHECKSUM_GSTLA = "8efe8b2aaed97149e897570cd123ff6e"
 
 class LocalRom:
     def __init__(self, file, name=None):
@@ -76,44 +73,28 @@ class LocalRom:
         with open(out_path, "wb") as rom:
             rom.write(self.rom_data)
 
-    def write_item(self, location, item):
-        #loc_address = location.addresses[0]
-        # for loc_address in location.addresses:
-        #     addr = loc_address
-        #     contents = item.gstla_id
-        #     event_type = self.fix_event_type(location, item)
-        #     event_type = self.show_item_settings(item, event_type, True)
-        #
-        #     if addr >= 0xFA0000:
-        #         self.rom_data[addr] = contents & 0xFF
-        #         self.rom_data[addr + 1] = contents >> 8
-        #     else:
-        #         self.rom_data[addr] = event_type & 0xFF
-        #         self.rom_data[addr + 1] = event_type >> 8
-        #         self.rom_data[addr + 6] = contents & 0xFF
-        #         self.rom_data[addr + 7] = contents >> 8
-        # for loc_address in location.addresses:
-        addr = location.addresses
-        assert addr > 0, "location: %d, item: %d" % (location.id, item.id)
-        contents = item.id
-        event_type = self.fix_event_type(location, item)
-        event_type = self.show_item_settings(item, event_type, True)
+    def write_item(self, location: LocationData, item: ItemData):
+        assert location is not None
+        assert item is not None
+        for loc_address in location.addresses:
+            addr = loc_address
+            assert addr > 0, "location: %d, item: %d" % (location.id, item.id)
+            contents = item.id
+            event_type = self.fix_event_type(location, item)
+            event_type = self.show_item_settings(item, event_type, True)
 
-        if addr >= 0xFA0000:
-            self.rom_data[addr] = contents & 0xFF
-            self.rom_data[addr + 1] = contents >> 8
-        else:
-            self.rom_data[addr] = event_type & 0xFF
-            self.rom_data[addr + 1] = event_type >> 8
-            self.rom_data[addr + 6] = contents & 0xFF
-            self.rom_data[addr + 7] = contents >> 8
+            if addr >= 0xFA0000:
+                self.rom_data[addr] = contents & 0xFF
+                self.rom_data[addr + 1] = contents >> 8
+            else:
+                self.rom_data[addr] = event_type & 0xFF
+                self.rom_data[addr + 1] = event_type >> 8
+                self.rom_data[addr + 6] = contents & 0xFF
+                self.rom_data[addr + 7] = contents >> 8
 
     def write_djinn(self, location, djinn):
-        # loc_address = location.addresses[0]
-        loc_address = location.addresses
-        print("Writing Djinn (%d,%d) to Location %s", (djinn.id, djinn.element, location.id))
+        loc_address = location.addresses[0]
 
-        # self.rom_data[loc_address] = djinn.gstla_id
         self.rom_data[loc_address] = djinn.id
         self.rom_data[loc_address + 1] = djinn.element
 
@@ -121,10 +102,8 @@ class LocalRom:
             self.rom_data[djinn.stats_addr + idx] = value
 
     def fix_event_type(self, location, item):
-        # event_type = item.event_type
         event_type = self.item_event_types[item.id]
         contents = item.id
-        # contents = item.event_type
         vanilla_event_type = location.event_type
 
         if vanilla_event_type < 0x80 and event_type != 0x81:
@@ -163,7 +142,7 @@ class LocalRom:
 
 
 class GSTLADeltaPatch(APDeltaPatch):
-    hash = CHECKSUM_BLUE
+    hash = CHECKSUM_GSTLA
     game = "Golden Sun: The Lost Age"
     patch_file_ending = ".apgstla"
     result_file_ending = ".gba"
@@ -195,8 +174,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         hexdigest = basemd5.hexdigest()
-        if CHECKSUM_BLUE != hexdigest:
-            raise Exception('Supplied Base Rom does not match US GBA Blue Version.'
+        if CHECKSUM_GSTLA != hexdigest:
+            raise Exception('Supplied Base Rom does not match UE GBA Golden Sun TLA Version.'
                             'Please provide the correct ROM version')
 
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes

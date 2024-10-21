@@ -1,5 +1,6 @@
 import json
 import os
+from collections import defaultdict
 from enum import Enum, IntFlag, auto, IntEnum
 from typing import NamedTuple, List, Dict
 
@@ -61,7 +62,7 @@ class LocationDatum(NamedTuple):
     is_key_item: bool
     is_major_item: bool
     is_hidden: bool
-    addr: int
+    addr: List[int]
     event_type: int
     location_id: int
     id: int
@@ -206,7 +207,6 @@ class GameData:
         self.location_names: Dict[int, LocationName] = dict()
         self.item_names: Dict[int, ItemName] = dict()
         self.events: Dict[int, EventDatum] = dict()
-        # self.event_items: Dict[int, ItemDatum] = dict()
         self._load_locations()
         self._load_items()
         self._load_djinn()
@@ -220,10 +220,14 @@ class GameData:
         with open(os.path.join(SCRIPT_DIR, 'data', 'item_locations.json'), 'r') as loc_file:
             location_data = json.load(loc_file)
         for flag, locs in location_data.items():
+            # The extra locations are variations on the same map.  We mostly don't care for the client,
+            # but the rom generator currently does care, since it will need to place the same item on all
+            # variations of the map
             loc = locs[0]
+            addr = [x['addr'] for x in locs]
             self.raw_location_data.append(
                 LocationDatum(int(flag, 16), loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
-                              loc['isMajorItem'], loc['isHidden'], loc['addr'], loc['eventType'],
+                              loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'], loc['mapName'])
             )
 
@@ -245,7 +249,6 @@ class GameData:
             djinn_data = json.load(djinn_file)
         for djinn in djinn_data:
             # Largest vanilla item id is 460
-            # ap_id = 1000 + (100 * djinn['vanillaElement']) + djinn['vanillaId']
             self.raw_djinn_data.append(
                 DjinnDatum(
                     djinn['addr'],
@@ -256,6 +259,8 @@ class GameData:
                     # From emo tracker pack
                     djinn['statAddr'],
                     djinn['stats'],
+                    # 0x30 is the start of the djinn flags; the game has flag slots for 20 djinn
+                    # per element, even though there's only 18 per element, so some flags are just unused
                     0x30 + (djinn['vanillaElement'] * 20) + djinn['vanillaId'],
                 )
             )
@@ -271,11 +276,10 @@ class GameData:
                 )
 
     def _setup_location_names(self):
-        names: Dict[str, int] = dict()
+        names: defaultdict[str, int] = defaultdict(lambda: 0)
         for loc in self.raw_location_data:
             loc_name = LocationName.from_loc_data(loc)
-            count = names.get(loc_name.py_name, 0)
-            count += 1
+            count = names[loc_name.py_name] + 1
             names[loc_name.py_name] = count
             if count > 1:
                 loc_name = LocationName.from_loc_data(loc, ' ' + num_words[count])
@@ -283,16 +287,11 @@ class GameData:
             self.location_names[loc_name.id] = loc_name
 
     def _setup_item_names(self):
-        # self.item_names = {}
-        names: Dict[str, int] = dict()
         for item in self.raw_item_data:
             if item.id in SPECIAL_NAMES:
                 item_name = SPECIAL_NAMES[item.id]
             else:
                 item_name = ItemName.from_item_data(item)
-            # count = names.get(item_name.py_name, 0)
-            # if count > 1:
-            #     item_name = ItemName.from_item_data(item, ' ' + num_words[count])
             assert item_name.id not in self.item_names
             self.item_names[item_name.id] = item_name
 
@@ -332,9 +331,3 @@ class GameData:
             self.location_names[event.event_id] = LocationName(event.event_id, event.flag, event.location_name.replace(' ', '_').replace('-', '').replace('__', '_'), event.location_name)
         for event in self.events.values():
             self.item_names[event.event_id] = ItemName(event.event_id, event.item_name.replace('-', '').replace(' ', '_').replace('__', '_'), event.item_name)
-
-if __name__ == '__main__':
-    data = GameData()
-    for item in data.item_names.values():
-        print(item)
-

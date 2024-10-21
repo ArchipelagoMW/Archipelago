@@ -1,9 +1,7 @@
 from typing import Callable, List, Dict, NamedTuple, Optional
 from enum import Enum
 from BaseClasses import Location, MultiWorld
-from .ItemNames import ItemName
-#from worlds.gstla.Locations import LocationType
-from .LocationNames import LocationName, loc_names_by_id
+from .LocationNames import loc_names_by_id
 
 class LocationType(str, Enum):
    Item = "Item"
@@ -13,27 +11,25 @@ class LocationType(str, Enum):
    Hidden = "Hidden"
    Trade = "Trade"
 
-
 def always_on(multiworld: MultiWorld, player: int) -> bool:
     return True
 
 class LocationData(NamedTuple):
     flag: int
     id: Optional[int]
-    addresses: int
+    addresses: List[int]
     event_type: int
     vanilla_contents: int
     loc_type: LocationType = LocationType.Item
     event: bool = False
     included: Callable[[MultiWorld, int], bool] = always_on
 
-
 class GSTLALocation(Location):
     game: str = "Golden Sun The Lost Age"
 
 djinn_locations = [
 {% for djinn in djinn_locations -%}
-    LocationData({{djinn.vanilla_flag}}, {{djinn.addr}}, {{djinn.addr}}, 128, {{djinn.id}}, LocationType.Djinn), # {{djinn.name}}
+    LocationData({{djinn.vanilla_flag}}, {{djinn.addr}}, [{{djinn.addr}}], 128, {{djinn.id}}, LocationType.Djinn), # {{djinn.name}}
 {% endfor %}
 ]
 
@@ -49,27 +45,9 @@ psyenergy_locations = [
     {% endfor %}
 ]
 
-{#
-events = [
-    LocationData(0x778, None, LocationName.Mars_Lighthouse_Doom_Dragon, [0], 0, ItemName.Victory, LocationType.Event, True),
-    LocationData(0x8AB, None, LocationName.Alhafra_Briggs, [0], 0, ItemName.Briggs_defeated, LocationType.Event, True),
-    LocationData(0x97F, None, LocationName.Alhafra_Prison_Briggs, [0], 0, ItemName.Briggs_escaped, LocationType.Event, True),
-    LocationData(0x8FF, None, LocationName.Gabomba_Statue, [0], 0, ItemName.Gabomba_Statue_Completed, LocationType.Event, True),
-    LocationData(0x9EE, None, LocationName.Gaia_Rock_Serpent, [0], 0, ItemName.Serpent_defeated, LocationType.Event, True),
-    # TODO: the emo tracker doesn't track this, so not sure what this is supposed to be?
-    # TODO: is the flag 0x8DD?
-    LocationData(0x8DD, None, LocationName.SeaOfTime_Poseidon, [0], 0, ItemName.Poseidon_defeated, LocationType.Event,True),
-    LocationData(0x93F, None, LocationName.Lemurian_Ship_Aqua_Hydra, [0], 0, ItemName.Aqua_Hydra_defeated, LocationType.Event, True),
-    LocationData(0x94D, None, LocationName.Shaman_Village_Moapa, [0], 0, ItemName.Moapa_defeated, LocationType.Event, True),
-    LocationData(0xA21, None, LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst, [0], 0, ItemName.Jupiter_Beacon_Lit, LocationType.Event, True),
-    LocationData(0xA4B, None, LocationName.Mars_Lighthouse_Flame_Dragons, [0], 0, ItemName.Flamedragons_defeated, LocationType.Event, True),
-    LocationData(0x8DE, None, LocationName.Lemurian_Ship_Engine, [0], 0, ItemName.Ship, LocationType.Event, True)
-]
-#}
-
 events = [
     {% for event in events -%}
-    LocationData({{event.flag}}, {{event.event_id}}, 0, 0, {{event.event_id}}, LocationType.Event, True), # {{event.location_name}} {{event.item_name}}
+    LocationData({{event.flag}}, {{event.event_id}}, [0], 0, {{event.event_id}}, LocationType.Event, True), # {{event.location_name}} {{event.item_name}}
     {% endfor %}
 ]
 
@@ -94,5 +72,4 @@ def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
 all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
 location_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.id]: location for location in all_locations if location.loc_type != LocationType.Event}
 location_id_to_data: Dict[int, LocationData] = {location.id: location for location in all_locations if location.loc_type != LocationType.Event}
-#location_flag_to_data: Dict[int, LocationData] = {location.flag: location for location in all_locations if location.loc_type != LocationType.Event}
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()

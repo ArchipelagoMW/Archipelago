@@ -1,10 +1,10 @@
 import os
 from collections import defaultdict
-from typing import TextIO, Dict
+from typing import TextIO
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from GameData import GameData, ElementType, ItemType, ItemFlags
+from GameData import GameData, ElementType, ItemType
 
 SCRIPT_DIR = os.path.join(os.path.dirname(__file__))
 
