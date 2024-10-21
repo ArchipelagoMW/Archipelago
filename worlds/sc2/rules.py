@@ -152,10 +152,13 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return self.protoss_common_unit_anti_armor_air(state) \
+        return self.protoss_common_unit and self.protoss_competent_anti_air(state) \
             or (
             self.advanced_tactics
-            and self.protoss_common_unit_basic_aa(state)
+            and self.protoss_common_unit_anti_light_air(state)
+            and (self.protoss_anti_armor_anti_air(state)
+                 or state.has_any({item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT}, self.player)
+                 or state.has_all({item_names.DISRUPTOR, item_names.DISRUPTOR_PERFECTED_POWER}, self.player))
         )
 
     def terran_basic_anti_air(self, state: CollectionState) -> bool:
