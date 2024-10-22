@@ -7,9 +7,12 @@ import warnings
 import zipimport
 import time
 import dataclasses
-from typing import Dict, List, TypedDict
+import zipfile
+import json
+import platform
+from typing import Dict, List, TypedDict, Tuple, Any
 
-from Utils import local_path, user_path
+from Utils import local_path, user_path, version_tuple, tuplize_version
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -61,17 +64,45 @@ class WorldSource:
             return os.path.join(local_folder, self.path)
         return self.path
 
+    def check_manifest(self, manifest: Dict[str, Any]) -> None:
+        if "min_generator_version" in manifest:
+            min_ver = tuplize_version(manifest["min_generator_version"])
+            if min_ver > version_tuple:
+                raise Exception(f"World \"{manifest['game']}\" requires generator version {min_ver.as_simple_string()}"
+                                f" or higher, however generator is of version {version_tuple.as_simple_string()}")
+        if "max_generator_version" in manifest:
+            max_ver = tuplize_version(manifest["max_generator_version"])
+            if max_ver < version_tuple:
+                raise Exception(f"World \"{manifest['game']}\" requires generator version {max_ver.as_simple_string()}"
+                                f" or lower, however generator is of version {version_tuple.as_simple_string()}")
+        if "arch" in manifest:
+            if manifest["arch"] != "any" and manifest["arch"] != platform.machine():
+                raise Exception(f"World \"{manifest['game']}\" is intended for architecture {manifest['arch']}, "
+                                f"however system is of architecture {platform.machine}")
+        if "os" in manifest:
+            if manifest["os"] != "any" and manifest["os"] != platform.system():
+                raise Exception(f"World \"{manifest['game']}\" is intended for os {manifest['os']}, "
+                                f"however system is of os {platform.system}")
+        if "pyversion" in manifest:
+            if manifest["pyversion"] != "any" and manifest["pyversion"] != f"{sys.version_info[0]}.{sys.version_info[1]}":
+                raise Exception(f"World \"{manifest['game']}\" is intended for Python version {manifest['pyversion']}, "
+                                f"however Python version {sys.version_info[0]}.{sys.version_info[1]} is being used.")
+
     def load(self) -> bool:
         try:
             start = time.perf_counter()
             if self.is_zip:
+                with zipfile.ZipFile(self.resolved_path) as zf:
+                    if zipfile.Path(zf, os.path.join(self.path, "metadata.json")).exists():
+                        manifest = json.loads(zf.read(os.path.join(self.path, "metadata.json")))
+                        self.check_manifest(manifest)
                 importer = zipimport.zipimporter(self.resolved_path)
                 if hasattr(importer, "find_spec"):  # new in Python 3.10
-                    spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
+                    spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0].split('-', 1)[0])
                     assert spec, f"{self.path} is not a loadable module"
                     mod = importlib.util.module_from_spec(spec)
                 else:  # TODO: remove with 3.8 support
-                    mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0])
+                    mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0].split('-', 1)[0])
 
                 if mod.__package__ is not None:
                     mod.__package__ = f"worlds.{mod.__package__}"
@@ -87,6 +118,8 @@ class WorldSource:
                     if hasattr(importer, "exec_module"):
                         importer.exec_module(mod)
             else:
+                if os.path.exists(os.path.join(self.resolved_path, "metadata.json")):
+                    self.check_manifest(json.load(open(os.path.join(self.resolved_path, "metadata.json"), "r")))
                 importlib.import_module(f".{self.path}", "worlds")
             self.time_taken = time.perf_counter()-start
             return True
