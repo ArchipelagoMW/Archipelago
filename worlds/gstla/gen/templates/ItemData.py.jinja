@@ -1,0 +1,113 @@
+from enum import Enum, IntEnum
+from typing import List, NamedTuple, Dict, Optional
+from worlds.gstla.GameData import ElementType, ItemType
+from BaseClasses import ItemClassification
+
+{#
+class ElementType(IntEnum):
+   Earth = 0
+   Water = 1
+   Fire = 2
+   Air = 3
+
+class ItemType(str, Enum):
+   KeyItem = "key"
+   Class = "class"
+   Consumable = "consumables"
+   Trade = "trade"
+   Forgeable = "forgeable"
+   Weapon = "weapon"
+   Armor = "armor"
+   Helm = "helm"
+   Shield = "shield"
+   Psyenergy = "psyenergy"
+   PsyenergyItem = "psyenergy_item"
+   Shirt = "shirt"
+   Boots = "boots"
+   Ring = "ring"
+   Djinn = "djinn"
+   Event = "event"
+#}
+class ItemData(NamedTuple):
+    id: int
+    name: str
+    progression: ItemClassification
+    addr: int
+    type: ItemType
+    # TODO: The event type is really a property of the locations, not of the items
+    # event_type:int = 131
+
+class DjinnItemData(ItemData):
+    element: ElementType
+    stats_addr: int
+    stats: List[int]
+
+    def __new__(cls, id: int, name: str, addr: int, element: ElementType, stats_addr: int, stats: List[int]):
+        self = super(ItemData, cls).__new__(cls, (id, name, ItemClassification.progression_skip_balancing, addr, ItemType.Djinn))
+        self.element = element
+        self.stats_addr = stats_addr
+        self.stats = stats
+        return self
+
+class EventItemData(ItemData):
+    flag: int
+    location: str
+
+    def __new__(cls, event_id: int, flag: int, location: str, name: str):
+        self = super(ItemData, cls).__new__(cls, (event_id, name, ItemClassification.progression, 0, ItemType.Event, 0{#, 0 #}))
+        self.location = location
+        self.flag = flag
+        return self
+
+summon_list: List[ItemData] = [
+    {% for summon in summons -%}
+    ItemData({{summon.id}}, '{{summon.name}}', ItemClassification.useful, {{summon.addr}}, ItemType.Psyenergy{#, 132#}),
+    {% endfor %}
+]
+
+psyenergy_list: List[ItemData] = [
+    {% for psyenergy in psyenergies -%}
+    ItemData({{psyenergy.id}}, "{{psyenergy.name}}", ItemClassification.progression, {{psyenergy.addr}}, ItemType.Psyenergy{#, {{psyenergy.event_type}}#}),
+    {% endfor %}
+]
+
+psyenergy_as_item_list: List[ItemData] = [
+    {% for psyitem in psyitems -%}
+    ItemData({{psyitem.item.use_effect}} + 0xE00, '{{psyitem.name.str_name}}', ItemClassification.progression, {{psyitem.item.addr}}, ItemType.PsyenergyItem{#, {{psyitem.item.event_type}}#}),
+    {% endfor %}
+]
+
+djinn_items: List[ItemData] = [
+    {% for djinn in djinns -%}
+    DjinnItemData({{djinn.id}}, '{{djinn.name}}', {{djinn.addr}}, ElementType({{djinn.element}}), {{djinn.stats_addr}}, {{djinn.stats}}),
+    {% endfor %}
+]
+
+{#
+unique_items: List[ItemData] = [
+    {% for item in unique_items -%}
+    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}{#, {{item.event_type}}#}{#),
+    {% endfor %}
+]
+
+gear: List[ItemData] = [
+    {% for item in gear -%}
+    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}{#, {{item.event_type}}#}{#),
+    {% endfor %}
+]
+#}
+remainder: List[ItemData] = [
+    {% for item in remainder -%}
+    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}{#, {{item.event_type}}#}),
+    {% endfor %}
+]
+
+events: List[EventItemData] = [
+    {% for event in events -%}
+    EventItemData({{event.event_id}}, {{event.flag}}, "{{event.location_name}}", "{{event.item_name}}"),
+    {% endfor %}
+]
+
+all_items: List[ItemData] = remainder + djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events{# + unique_items + gear#}
+item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
+items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}

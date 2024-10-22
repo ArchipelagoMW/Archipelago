@@ -1,0 +1,62 @@
+from enum import Enum
+from typing import Dict
+class LocationName(str, Enum):
+    ##hiddenItems
+    {% for name in hiddenItems -%}
+        {{name.py_name}} = "{{name.str_name}}"
+    {% endfor %}
+
+    ##keyItems
+    {% for name in keyItems -%}
+        {{name.py_name}} = "{{name.str_name}}"
+    {% endfor %}
+
+    ##summonTablets
+    {% for name in summonTablets -%}
+        {{name.py_name}} = "{{name.str_name}}"
+    {% endfor %}
+
+    ##majorItems
+    {% for name in majorItems -%}
+        {{name.py_name}} = "{{name.str_name}}"
+    {% endfor %}
+
+    ##events
+    {% for event in events-%}
+        {{event.py_name}} = "{{event.str_name}}"
+    {% endfor %}
+
+    ##remainder
+    {% for name in remainder -%}
+        {{name.py_name}} = "{{name.str_name}}"
+    {% endfor %}
+
+    {% for name in earthDjinn -%}
+        {{name.name}} = "{{name.name}}"
+    {% endfor %}
+
+    {% for name in waterDjinn -%}
+        {{name.name}} = "{{name.name}}"
+    {% endfor %}
+
+    {% for name in fireDjinn -%}
+        {{name.name}} = "{{name.name}}"
+    {% endfor %}
+
+    {% for name in airDjinn -%}
+        {{name.name}} = "{{name.name}}"
+    {% endfor %}
+
+ids_by_loc_name: Dict[LocationName, int] = {
+    {% for d in name_list -%}
+    "{{d['name']}}": {{d['id']}},
+    {% endfor %}
+}
+
+loc_names_by_id: Dict[int, LocationName] = {
+    {% for d in name_list -%}
+    {{d['id']}}: "{{d['name']}}",
+    {% endfor %}
+}
+
+assert len(LocationName.__members__) == len(ids_by_loc_name)
