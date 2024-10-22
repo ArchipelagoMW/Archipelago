@@ -3,7 +3,7 @@ import typing
 from BaseClasses import Location, Region, LocationProgressType, Item
 from .dice import Dice, all_dice
 from .utils import Constants
-from .duelists import Duelist, get_duelist_defeat_location_name
+from .duelists import Duelist, get_duelist_defeat_location_name, ids_to_duelists
 
 def get_location_name_for_dice(dice: Dice) -> str:
     return f"{dice.name}"
@@ -19,6 +19,11 @@ def get_location_name_for_duelist(duelist: Duelist) -> str:
 
 def get_location_id_for_duelist(duelist: Duelist) -> int:
     return Constants.DUELIST_UNLOCK_OFFSET + duelist.id
+
+def duelist_from_location_id(location_id: int) -> Duelist:
+    print ("duelist from location id")
+    print (ids_to_duelists[location_id - Constants.DUELIST_UNLOCK_OFFSET])
+    return ids_to_duelists[location_id - Constants.DUELIST_UNLOCK_OFFSET]
 
 class YGODDMLocation(Location):
     game: str

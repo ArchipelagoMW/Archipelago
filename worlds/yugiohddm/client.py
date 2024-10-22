@@ -6,7 +6,7 @@ from random import Random
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from .utils import Constants
-from .locations import get_location_id_for_duelist
+from .locations import get_location_id_for_duelist, duelist_from_location_id
 from .duelists import Duelist, all_duelists, name_to_duelist
 from .version import __version__
 
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 COMBINED_WRAM: typing.Final[str] = "Combined WRAM"
 
-def get_wins_from_bytes(b: bytes) -> typing.Tuple[int, int]:
+def get_wins_from_bytes(b: bytes) -> int:
     return int.from_bytes(b, "little")
 
 class YGODDMClient(BizHawkClient):
@@ -68,17 +68,20 @@ class YGODDMClient(BizHawkClient):
             }])
             ctx.finished_game = True
 
+        if ctx.slot_data is not None:
             # in YGO FM this is a version mismatch check between user vs generated world
-            #if ctx.slot_data is not None:
 
             # Unlock duelists based on who has been received
 
             for item in ctx.items_received:
+                print(item.item)
                 await bizhawk.write(ctx.bizhawk_ctx, [(
                     Constants.DUELIST_UNLOCK_OFFSET,
-                    name_to_duelist(item.name).bitflag,
+                    #name_to_duelist[item.item].bitflag,
+                    [duelist_from_location_id(item.item).bitflag],
                     COMBINED_WRAM
                 )])
+
 
             # Read number of wins over each duelist for 'duelist defeated' locations
 
@@ -87,17 +90,32 @@ class YGODDMClient(BizHawkClient):
             ]
             wins_bytes: typing.List[bytes] = await bizhawk.read(ctx.bizhawk_ctx, read_list)
             duelists_to_wins: typing.Dict[Duelist, int] = {
-                d: get_wins_from_bytes(w)[0] for d, w in zip(all_duelists, wins_bytes)
+                d: get_wins_from_bytes(w) for d, w in zip(all_duelists, wins_bytes)
             }
             new_local_check_locations: typing.Set[int] = set([
                 get_location_id_for_duelist(key) for key, value in duelists_to_wins.items() if value != 0
             ])
+
+            #print("Win Mem check")
+            #for duelist, wins in duelists_to_wins.items():
+            #    if duelist is Duelist.YUGI_MOTO:
+            #        print("Yugi Moto Wins")
+            #        print (wins)
+
+            #    print(all_duelists[i].name)
+            #    print(all_duelists[i].wins_address)
+            #    print(read_list[i])
+            #    print(wins_bytes[i])
+            #    print(new_local_check_locations)
+
+
 
             # Here YGO FM does a check for card checks then does a union of the two sets
 
             if new_local_check_locations != self.local_checked_locations:
                 self.local_checked_locations = new_local_check_locations
                 if new_local_check_locations is not None:
+                    print ("send check!")
                     await ctx.send_msgs([{
                         "cmd": "LocationChecks",
                         "locations": list(new_local_check_locations)
