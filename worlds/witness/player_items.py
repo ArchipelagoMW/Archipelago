@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Dict, List, cast
 from BaseClasses import Item, ItemClassification, MultiWorld
 
 from .data import static_items as static_witness_items
+from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
