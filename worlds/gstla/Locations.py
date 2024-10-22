@@ -16,6 +16,7 @@ class GSTLALocation(Location):
 
     def __init__(self, player: int, name: str, location: LocationData, region: Region):
         super(GSTLALocation, self).__init__(player, name, location.flag, region)
+        # TODO: locations ids cannot be flags, since for us multiple locations can have the same flag
         self.location_data = location
 
     @staticmethod
