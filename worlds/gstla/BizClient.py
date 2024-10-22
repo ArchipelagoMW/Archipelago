@@ -54,7 +54,7 @@ class GSTLAClient(BizHawkClient):
     def __init__(self):
         super().__init__()
         for loc in all_locations:
-            self.flag_map[loc.flag].add(loc.id)
+            self.flag_map[loc.flag].add(loc.ap_id)
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
         # TODO: implement

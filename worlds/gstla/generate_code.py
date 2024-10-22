@@ -184,7 +184,7 @@ def generate_location_names(env: Environment, data: GameData):
         name_list.append({'name': event.location_name, 'id': event.event_id})
     for loc_datum in data.raw_location_data:
         loc_name = data.location_names[loc_datum.flag]
-        name_list.append({'name': loc_name.str_name, 'id': loc_datum.id})
+        name_list.append({'name': loc_name.str_name, 'id': loc_datum.addr[0]})
         if loc_datum.is_summon:
             summon_tablets.append(loc_name)
         elif loc_datum.is_key_item:
@@ -242,7 +242,7 @@ def generate_item_data(env: Environment, data: GameData):
         psyenergies = [x for x in data.raw_psy_data]
         psyitems = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type == ItemType.PsyenergyItem]
         djinns = [x for x in data.raw_djinn_data]
-        remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.id != 0 and x.item_type != ItemType.PsyenergyItem]
+        remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type != ItemType.PsyenergyItem]
 
         outfile.write(template.render(
             summons=summons,

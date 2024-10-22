@@ -5,6 +5,7 @@ from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
 from .gen.ItemData import (ItemData, events, all_items as all_gen_items,
                            djinn_items)
+from .gen.LocationData import LocationType
 from .GameData import ItemType
 
 class GSTLAItem(Item):
@@ -76,8 +77,9 @@ def create_items(multiworld: MultiWorld, player: int):
     # item population based on player configured options.
     for loc in all_locations:
         # TODO: COINS CAUSE ISSUES
-        if loc.vanilla_contents > 0x8000:
+        if loc.vanilla_contents > 0x8000 or loc.loc_type == LocationType.Djinn:
             continue
+        print(loc)
         vanilla_item = items_by_id[loc.vanilla_contents]
         if multiworld.starter_ship[player] == 2 and vanilla_item.name == ItemName.Black_Crystal:
             continue

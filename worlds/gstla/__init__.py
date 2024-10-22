@@ -82,7 +82,7 @@ class GSTLAWorld(World):
         locs = []
 
         for loc in location_type_to_data[LocationType.Djinn]:
-            locs.append(self.multiworld.get_location(loc_names_by_id[loc.id], self.player))
+            locs.append(self.multiworld.get_location(loc_names_by_id[loc.ap_id], self.player))
 
         djinnList = self.get_prefill_items()
         assert len(locs) == len(djinnList), "Djinn Locations: %d, Djinn: %d" % (len(locs), len(djinnList))

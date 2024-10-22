@@ -17,14 +17,16 @@ class ItemData(NamedTuple):
 
 class DjinnItemData(ItemData):
     element: ElementType
+    vanilla_id: int
     stats_addr: int
     stats: List[int]
 
     def __new__(cls, id: int, name: str, addr: int, element: ElementType, stats_addr: int, stats: List[int]):
-        self = super(ItemData, cls).__new__(cls, (id, name, ItemClassification.progression_skip_balancing, addr, ItemType.Djinn))
+        self = super(ItemData, cls).__new__(cls, (addr, name, ItemClassification.progression_skip_balancing, addr, ItemType.Djinn))
         self.element = element
         self.stats_addr = stats_addr
         self.stats = stats
+        self.vanilla_id = id
         return self
 
 class EventItemData(ItemData):
@@ -180,6 +182,7 @@ djinn_items: List[ItemData] = [
 
 
 remainder: List[ItemData] = [
+    ItemData(0, "Empty", ItemClassification.filler, 729956, ItemType.Consumable),
     ItemData(1, "Long Sword", ItemClassification.filler, 730000, ItemType.Weapon),
     ItemData(2, "Broad Sword", ItemClassification.filler, 730044, ItemType.Weapon),
     ItemData(3, "Claymore", ItemClassification.filler, 730088, ItemType.Weapon),
