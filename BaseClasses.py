@@ -1265,6 +1265,10 @@ class Item:
         return ItemClassification.trap in self.classification
 
     @property
+    def filler(self) -> bool:
+        return not self.classification
+
+    @property
     def flags(self) -> int:
         return self.classification.as_flag()
 
