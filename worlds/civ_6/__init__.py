@@ -5,12 +5,12 @@ from typing import Any, Dict, Set
 from worlds.generic.Rules import forbid_item
 
 
-from .Data import get_boosts_data, get_era_required_items_data, get_goody_hut_rewards_data
+from .Data import get_boosts_data, get_era_required_items_data
 
 from .Rules import create_boost_rules
 from .Container import CivVIContainer, generate_goody_hut_sql, generate_new_items, generate_setup_file, generate_update_boosts_sql
 from .Enum import CivVICheckType, CivVIHintClassification
-from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIEvent, CivVIItemData, FillerItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
+from .Items import BOOSTSANITY_PROGRESSION_ITEMS, FILLER_DISTRIBUTION, CivVIEvent, CivVIItemData, FillerItemRarity, generate_item_table, CivVIItem, get_random_filler_by_rarity
 from .Locations import CivVILocation, CivVILocationData, EraType, generate_era_location_table, generate_flat_location_table
 from .Options import CivVIOptions
 from .Regions import create_regions
@@ -64,7 +64,6 @@ class CivVIWorld(World):
     location_by_era: Dict[str, Dict[str, CivVILocationData]]
     required_client_version = (0, 4, 5)
     location_table: Dict[str, CivVILocationData]
-    filler_data: Dict[str, FillerItemData]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -76,8 +75,6 @@ class CivVIWorld(World):
         for locations in self.location_by_era.values():
             for location in locations.values():
                 self.location_table[location.name] = location
-
-        self.filler_data = {item["Name"]: FillerItemData(item) for item in get_goody_hut_rewards_data()}
 
     def get_filler_item_name(self) -> str:
         return get_random_filler_by_rarity(self, FillerItemRarity.COMMON).name

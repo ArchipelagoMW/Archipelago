@@ -77,6 +77,9 @@ class FillerItemData:
         self.civ_name = data["Type"]
 
 
+filler_data: Dict[str, FillerItemData] = {item["Name"]: FillerItemData(item) for item in get_goody_hut_rewards_data()}
+
+
 class CivVIItemData:
     civ_vi_id: int
     classification: ItemClassification
@@ -295,5 +298,5 @@ def get_random_filler_by_rarity(world: 'CivVIWorld', rarity: FillerItemRarity) -
     """
     Returns a random filler item by rarity
     """
-    items = [item for item in world.filler_data.values() if item.rarity == rarity]
+    items = [item for item in filler_data.values() if item.rarity == rarity]
     return world.random.choice(items)

@@ -1,7 +1,7 @@
 from typing import Dict
 from BaseClasses import ItemClassification
 from Fill import distribute_items_restrictive
-from ..Items import FillerItemRarity
+from ..Items import FillerItemRarity, filler_data
 from . import CivVITestBase
 
 
@@ -65,7 +65,7 @@ class TestFillerItemsIncludedByRarity(CivVITestBase):
         total_filler_items = 0
         for item in self.multiworld.itempool:
             if item.classification == ItemClassification.filler:
-                rarity = self.world.filler_data[item.name].rarity
+                rarity = filler_data[item.name].rarity
                 rarity_counts[rarity] += 1
                 total_filler_items += 1
 
@@ -100,7 +100,7 @@ class TestFillerItemsIncludedByRarityWithoutBoostsanity(CivVITestBase):
         total_filler_items = 0
         for item in self.multiworld.itempool:
             if item.classification == ItemClassification.filler:
-                rarity = self.world.filler_data[item.name].rarity
+                rarity = filler_data[item.name].rarity
                 rarity_counts[rarity] += 1
                 total_filler_items += 1
 
