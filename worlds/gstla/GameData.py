@@ -5,40 +5,6 @@ from enum import Enum, IntFlag, auto, IntEnum
 from typing import NamedTuple, List, Dict
 
 SCRIPT_DIR = os.path.join(os.path.dirname(__file__))
-SPECIAL_LOCATIONS = {
-    '0x84A',  # "Lash Pebble"
-    '0x878',  # "Pound Cube"
-    '0x88C',  # "Scoop Gem"
-    '0x918',  # "Cyclone Chip"
-    '0x94D',  # "Hover Jade"
-    '0xA3A',  # "Mars Star"
-    '0x8FF',  # "Black Crystal"
-    '0x978',  # "Trident"
-    '0xAA2',  # "Pretty Stone"
-    '0xAA4',  # "Red Cloth"
-    '0xAA3',  # "Milk"
-    '0xAA1',  # "Li'l Turtle"
-    # Don't currently care about large bread; see GS TLA randomizer
-    # 0x901,# "Large Bread"
-    '0xA20',  # "Sea God's Tear"
-    '0x9F9',  # "Magma Ball"
-    '0x8D4',  # "Reveal"
-    '0x9AE',  # "Parch"
-    '0x9BA',  # "Sand"
-    '0x9FA',  # "Blaze"
-    '0x90B',  # "Eclipse"
-    '0x945',  # "Center Prong"
-    '0x1',  # "Shaman's Rod"
-    '0x2',  # "Mind Read"
-    '0x3',  # "Whirlwind"
-    '0x4',  # "Growth"
-    '0x101',  # "Carry Stone"
-    '0x102',  # "Lifting Gem"
-    '0x103',  # 'Orb of Force'
-    '0x104',  # 'Catch Beads'
-    '0x105',  # 'Douse Drop'
-    '0x106',  # 'Frost Jewel']
-}
 
 num_words = {
     1: 'One',
