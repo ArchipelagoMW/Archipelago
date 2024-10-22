@@ -7,6 +7,8 @@ import logging
 import random
 import secrets
 import typing  # this can go away when Python 3.8 support is dropped
+import threading
+import time
 from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
@@ -96,6 +98,42 @@ class MultiWorld():
 
         def __getitem__(self, player) -> bool:
             return self.rule(player)
+
+    class Observer(threading.Thread):
+        current_function: str
+        entered: float
+        shutdown: bool = False
+
+        def __init__(self):
+            self.current_function = ""
+            self.entered = 0.0
+            super().__init__(name="Observer", daemon=True)
+
+        def __call__(self, function: typing.Callable, entered: float):
+            # use str of function to avoid having a reference to a bound method
+            self.current_function = str(function)
+            self.entered = entered
+            return self
+
+        def __enter__(self):
+            assert self.current_function, "Entered Observer Context without current method."
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            self.current_function = ""
+
+        def run(self):
+            while not self.shutdown:
+                time.sleep(1)
+                if self.current_function:
+                    now = time.perf_counter()
+                    elapsed = now - self.entered
+                    if elapsed > 60:
+                        logging.info(f"Generation stalling in {self.current_function}, "
+                                     f"running since {elapsed:.0f} seconds ago.")
+                        self.current_function = ""
+
+    observer = Observer()
+    observer.start()
 
     class RegionManager:
         region_cache: Dict[int, Dict[str, Region]]
