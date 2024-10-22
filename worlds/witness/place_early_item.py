@@ -1,5 +1,5 @@
 from logging import debug, error
-from typing import TYPE_CHECKING, Dict, List, Set
+from typing import TYPE_CHECKING, Dict, List, Set, Tuple
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType
 
@@ -72,7 +72,8 @@ def grab_own_items_from_itempool(world: "WitnessWorld", itempool: List[Item], id
     return found_early_items
 
 
-def place_items_onto_locations(world: "WitnessWorld", items: List[Item], locations: List[Location]):
+def place_items_onto_locations(world: "WitnessWorld", items: List[Item],
+                               locations: List[Location]) -> Tuple[List[Item], List[Item]]:
     fake_state = CollectionState(world.multiworld)
 
     placed_items = []
