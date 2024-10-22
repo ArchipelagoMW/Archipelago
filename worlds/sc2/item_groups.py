@@ -123,6 +123,7 @@ class ItemGroupNames:
     HOTS_GLOBAL_UPGRADES = "HotS Global Upgrades"
     HOTS_MORPHS = "HotS Morphs"
     KERRIGAN_ABILITIES = "Kerrigan Abilities"
+    KERRIGAN_HOTS_ABILITIES = "Kerrigan HotS Abilities"
     KERRIGAN_PASSIVES = "Kerrigan Passives"
     KERRIGAN_TIER_1 = "Kerrigan Tier 1"
     KERRIGAN_TIER_2 = "Kerrigan Tier 2"
@@ -453,27 +454,33 @@ item_name_groups[ItemGroupNames.KERRIGAN_PASSIVES] = kerrigan_passives = [
     item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_CHAIN_REACTION,
     item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY, item_names.KERRIGAN_ABILITY_EFFICIENCY,
 ]
-item_name_groups[ItemGroupNames.KERRIGAN_TIER_1] = [
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_1] = kerrigan_tier_1 = [
     item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_LEAPING_STRIKE
 ]
-item_name_groups[ItemGroupNames.KERRIGAN_TIER_2] = [
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_2] = kerrigan_tier_2= [
     item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_PSIONIC_SHIFT
 ]
-item_name_groups[ItemGroupNames.KERRIGAN_TIER_3] = [
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_3] = kerrigan_tier_3 = [
     item_names.TWIN_DRONES, item_names.AUTOMATED_EXTRACTORS, item_names.ZERGLING_RECONSTITUTION
 ]
-item_name_groups[ItemGroupNames.KERRIGAN_TIER_4] = [
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_4] = kerrigan_tier_4 = [
     item_names.KERRIGAN_MEND, item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_WILD_MUTATION
 ]
-item_name_groups[ItemGroupNames.KERRIGAN_TIER_5] = [
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_5] = kerrigan_tier_5 = [
     item_names.MALIGNANT_CREEP, item_names.VESPENE_EFFICIENCY, item_names.OVERLORD_IMPROVED_OVERLORDS
 ]
-item_name_groups[ItemGroupNames.KERRIGAN_TIER_6] = [
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_6] = kerrigan_tier_6 = [
     item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY, item_names.KERRIGAN_ABILITY_EFFICIENCY
 ]
-item_name_groups[ItemGroupNames.KERRIGAN_TIER_7] = [
+item_name_groups[ItemGroupNames.KERRIGAN_TIER_7] = kerrigan_tier_7 = [
     item_names.KERRIGAN_APOCALYPSE, item_names.KERRIGAN_SPAWN_LEVIATHAN, item_names.KERRIGAN_DROP_PODS
 ]
+item_name_groups[ItemGroupNames.KERRIGAN_HOTS_ABILITIES] = kerrigan_hots_abilities = [
+    ability for tiers in [
+        kerrigan_tier_1, kerrigan_tier_2, kerrigan_tier_4, kerrigan_tier_6, kerrigan_tier_7
+    ] for ability in tiers
+]
+
 item_name_groups[ItemGroupNames.OVERLORD_UPGRADES] = [
     item_names.OVERLORD_ANTENNAE,
     item_names.OVERLORD_VENTRAL_SACS,
@@ -507,7 +514,7 @@ item_name_groups[ItemGroupNames.HOTS_GLOBAL_UPGRADES] = hots_global_upgrades = [
 item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
     hots_units
     + hots_buildings
-    + kerrigan_abilities
+    + kerrigan_hots_abilities
     + hots_mutations
     + hots_strains
     + hots_global_upgrades

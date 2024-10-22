@@ -792,6 +792,8 @@ item_descriptions = {
     item_names.KERRIGAN_SPAWN_LEVIATHAN: "Kerrigan summons a mightly flying Leviathan with timed life. Deals massive damage and has energy-based abilities.",
     item_names.KERRIGAN_DROP_PODS: "Kerrigan drops Primal Zerg forces with timed life to the battlefield.",
     item_names.KERRIGAN_PRIMAL_FORM: "Kerrigan takes on her Primal Zerg form and gains greatly increased energy regeneration.",
+    item_names.KERRIGAN_ASSIMIlATION_AURA: "Causes all nearby enemies to drop resources when killed.",
+    item_names.KERRIGAN_IMMOBILIZATION_WAVE: "Deals 100 damage to enemies around a large area and stuns them for 10 seconds.",
     item_names.KERRIGAN_LEVELS_10: "Gives Kerrigan +10 Levels.",
     item_names.KERRIGAN_LEVELS_9: "Gives Kerrigan +9 Levels.",
     item_names.KERRIGAN_LEVELS_8: "Gives Kerrigan +8 Levels.",

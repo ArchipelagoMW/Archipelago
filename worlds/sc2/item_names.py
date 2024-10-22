@@ -583,6 +583,8 @@ KERRIGAN_ABILITY_EFFICIENCY      = "Ability Efficiency (Kerrigan Passive)"
 KERRIGAN_APOCALYPSE              = "Apocalypse (Kerrigan Ability)"
 KERRIGAN_SPAWN_LEVIATHAN         = "Spawn Leviathan (Kerrigan Ability)"
 KERRIGAN_DROP_PODS               = "Drop-Pods (Kerrigan Ability)"
+KERRIGAN_ASSIMIlATION_AURA       = "Assimilation Aura (Kerrigan Ability)"
+KERRIGAN_IMMOBILIZATION_WAVE     = "Immobilization Wave (Kerrigan Ability)"
 KERRIGAN_PRIMAL_FORM             = "Primal Form (Kerrigan)"
 
 # Misc Upgrades
