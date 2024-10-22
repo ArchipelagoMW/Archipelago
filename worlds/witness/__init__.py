@@ -18,6 +18,7 @@ from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
 from .options import TheWitnessOptions, witness_option_groups
+from .place_early_item import place_early_items
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
@@ -336,110 +337,9 @@ class WitnessWorld(World):
             if self.player_items.item_data[item_name].local_only:
                 self.options.local_items.value.add(item_name)
 
-    def find_good_items_from_itempool(self, itempool: List[Item],
-                                      eligible_locations: List[Location]) -> List[Tuple[Location, Item]]:
-        early_items = self.player_items.get_early_items(self.own_itempool)
-
-        if not early_items:
-            return []
-
-        for item_list in early_items.values():
-            self.random.shuffle(item_list)
-
-        state = CollectionState(self.multiworld)
-
-        placements = []
-        found_early_items: List[Item] = []
-
-        while any(early_items.values()) and eligible_locations:
-            next_findable_items_dict = {item_list.pop(): item_type for item_type, item_list in early_items.items()}
-            next_findable_items = {self.item_name_to_id[item_name] for item_name in next_findable_items_dict}
-
-            found_early_items = []
-
-            def keep_or_take_out(item: Item) -> bool:
-                if (
-                    item.code not in next_findable_items
-                    or not any(location.can_fill(state, item, check_access=False) for location in eligible_locations)
-                ):
-                    return True  # Keep
-                next_findable_items.remove(item.code)
-                found_early_items.append(item)
-                return False  # Take out
-
-            local_player = self.player
-            itempool[:] = [item for item in itempool if item.player != local_player or keep_or_take_out(item)]
-
-            # Bring them back into Symbol -> Door -> Obelisk Key order
-            # The intent is that the Symbol is always on Tutorial Gate Open / generally that the order is predictable
-            correct_order = {item_name: i for i, item_name in enumerate(next_findable_items_dict)}
-            found_early_items.sort(key=lambda item: correct_order[item.name])
-
-            for item in found_early_items:
-                location = next(
-                    (location for location in eligible_locations if location.can_fill(state, item, check_access=False)),
-                    None,
-                )
-                if location is not None:
-                    placements.append((location, item))
-                    eligible_locations.remove(location)
-                    del early_items[next_findable_items_dict[item.name]]
-                else:
-                    itempool.append(item)  # Put item back if it can't be placed anywhere
-
-        if early_items:
-            if not eligible_locations:
-                error(f'Could not find a suitable location for "early good items" of types {list(early_items)} in '
-                      f"{self.player_name}'s world. They are excluded or already contain plandoed items.\n")
-            else:
-                error(f"Could not find any \"early good item\" of types {list(early_items)} in {self.player_name}'s"
-                      f" world, they were all plandoed elsewhere.")
-
-        return placements
-
     def fill_hook(self, progitempool: List[Item], _: List[Item], _2: List[Item],
                   fill_locations: List[Location]) -> None:
-        if not self.options.early_good_items.value:
-            return
-
-        # Pick an early item to put on Tutorial Gate Open.
-        # Done after plando to avoid conflicting with it.
-        # Done in fill_hook because multiworld itempool manipulation is not allowed in pre_fill.
-
-        tutorial_checks_in_order = [
-            "Tutorial Gate Open",
-            "Tutorial Back Left",
-            "Tutorial Back Right",
-            "Tutorial Front Left",
-            "Tutorial First Hallway Straight",
-            "Tutorial First Hallway Bend",
-            "Tutorial Patio Floor",  # Don't think this can ever happen, but why not classify as many as possible
-            "Tutorial First Hallway EP",
-            "Tutorial Cloud EP",
-            "Tutorial Patio Flowers EP",
-        ]
-
-        available_locations = [
-            self.get_location(location_name) for location_name in tutorial_checks_in_order
-            if location_name in self.reachable_early_locations
-        ]
-
-        available_locations += sorted(
-            (
-                self.get_location(location_name) for location_name in self.reachable_early_locations
-                if location_name not in tutorial_checks_in_order
-            ),
-            key=lambda location_object: static_witness_logic.ENTITIES_BY_NAME[location_object.name]["processing_order"]
-        )
-
-        available_locations = [location for location in available_locations if not location.item]
-
-        early_good_item_placements = self.find_good_items_from_itempool(progitempool, available_locations)
-
-        for location, item in early_good_item_placements:
-            debug(f"Placing early good item {item} on early location {location}.")
-            location.place_locked_item(item)
-            fill_locations.remove(location)
+        place_early_items(self, progitempool, fill_locations)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         self.log_ids_to_hints: Dict[int, CompactHintData] = {}
