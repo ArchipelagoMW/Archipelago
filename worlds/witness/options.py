@@ -2,7 +2,18 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
+from Options import (
+    Choice,
+    DefaultOnToggle,
+    OptionDict,
+    OptionError,
+    OptionGroup,
+    OptionSet,
+    PerGameCommonOptions,
+    Range,
+    Toggle,
+    Visibility,
+)
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
@@ -284,12 +295,31 @@ class ChallengeLasers(Range):
     default = 11
 
 
-class ElevatorsComeToYou(Toggle):
+class ElevatorsComeToYou(OptionSet):
     """
-    If on, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
-    This does actually affect logic as it allows unintended backwards / early access into these areas.
+    In vanilla, some bridges/elevators come to you if you walk up to them when they are not currently there.
+    However, there are some that don't. Notably, this prevents Quarry Elevator from being a logical access method into Quarry, because you can send it away without riding ot and then permanently be locked out of using it.
+
+    This option allows you to change specific elevators/bridges to "come to you" as well.
+
+    In the case of Bunker Elevator and Swamp Long Bridge, this will potentially give you early backwards access into Bunker and Swamp respectively.
     """
-    display_name = "All Bridges & Elevators come to you"
+
+    # Used to be a toggle
+    @classmethod
+    def from_text(cls, text: str):
+        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+            raise OptionError('elevators_come_to_you is an OptionSet now. The equivalent of "false" is {}')
+        if text.lower() in {"on", "1", "true", "yes"}:
+            raise OptionError(
+                f'elevators_come_to_you is an OptionSet now. The equivalent of "true" is {set(cls.valid_keys)}'
+            )
+        return super().from_text(text)
+
+    display_name = "Elevators come to you"
+
+    valid_keys = frozenset({"Quarry Elevator", "Swamp Long Bridge", "Bunker Elevator"})
+    default = frozenset({"Quarry Elevator"})
 
 
 class TrapPercentage(Range):
