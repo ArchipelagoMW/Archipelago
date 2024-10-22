@@ -300,6 +300,51 @@ class MultiWorld():
         """Called to link together items in the itempool related to the registered item link groups."""
         from worlds import AutoWorld
 
+        def patch_collect_and_remove(group_world: AutoWorld.World, linked_items: Dict[str, List[List[Item]]]):
+            """
+            Monkeypatch a group world's collect() and remove() to also collect/remove the appropriate linked items.
+            """
+            old_collect = group_world.collect
+            old_remove = group_world.remove
+
+            # When the nth item belonging to the group is collected into/removed from state, also collect/remove the
+            # items in the nth list of linked items.
+
+            def item_link_collect(state: CollectionState, item: Item) -> bool:
+                # Imitate a super().collect() call.
+                change = old_collect(state, item)
+                if change:
+                    item_name = item.name
+                    if item_name in linked_items:
+                        linked_items_for_name: List[List[Item]] = linked_items[item_name]
+                        new_count = state.prog_items[group_world.player][item_name]
+                        index = new_count - 1
+                        # Safety check in-case the world is made to collect/remove more than are expected to exist.
+                        if 0 <= index < len(linked_items_for_name):
+                            items_to_collect = linked_items_for_name[index]
+                            for linked_item in items_to_collect:
+                                state.collect(linked_item, True)
+                return change
+
+            def item_link_remove(state: CollectionState, item: Item) -> bool:
+                # Imitate a super().remove() call.
+                change = old_remove(state, item)
+                if change:
+                    item_name = item.name
+                    if item_name in linked_items:
+                        linked_items_for_name: List[List[Item]] = linked_items[item_name]
+                        new_count = state.prog_items[group_world.player][item_name]
+                        index = new_count
+                        # Safety check in-case the world is made to collect/remove more than are expected to exist.
+                        if 0 <= index < len(linked_items_for_name):
+                            items_to_remove = linked_items_for_name[index]
+                            for linked_item in items_to_remove:
+                                state.remove(linked_item)
+                return change
+
+            group_world.collect = item_link_collect
+            group_world.remove = item_link_remove
+
         for group_id, group in self.groups.items():
             def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
                 Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
@@ -341,25 +386,28 @@ class MultiWorld():
                     new_item.classification |= classifications[item_name]
                     new_itempool.append(new_item)
 
-            region = Region("Menu", group_id, self, "ItemLink")
-            self.regions.append(region)
-            locations = region.locations
+            # The common item counts are the same for each player to start with, so get the counts for the first player.
+            first_player_counts = next(iter(common_item_count.values()))
+            linked_items: Dict[str, List[List[Item]]] = {item_name: [[] for _ in range(item_count)]
+                                                         for item_name, item_count in first_player_counts.items()}
+
             # ensure that progression items are linked first, then non-progression
             self.itempool.sort(key=lambda item: item.advancement)
             for item in self.itempool:
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:
-                    loc = Location(group_id, f"Item Link: {item.name} -> {self.player_name[item.player]} {count}",
-                        None, region)
-                    loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
-                        state.has(item_name, group_id_, count_)
+                    if item.advancement:
+                        linked_items_tuple = linked_items[item.name]
+                        index = len(linked_items_tuple) - count
+                        linked_items_for_count = linked_items_tuple[index]
+                        linked_items_for_count.append(item)
 
-                    locations.append(loc)
-                    loc.place_locked_item(item)
                     common_item_count[item.player][item.name] -= 1
                 else:
                     new_itempool.append(item)
 
+            # Patch collect() and remove() to also collect/remove the linked items.
+            patch_collect_and_remove(group["world"], linked_items)
             itemcount = len(self.itempool)
             self.itempool = new_itempool
 
