@@ -1,7 +1,8 @@
 from logging import debug, error
-from typing import TYPE_CHECKING, List, Dict, Set
+from typing import TYPE_CHECKING, Dict, List, Set
 
-from BaseClasses import Item, Location, CollectionState, LocationProgressType
+from BaseClasses import CollectionState, Item, Location, LocationProgressType
+
 from .data import static_logic as static_witness_logic
 
 if TYPE_CHECKING:
@@ -92,7 +93,7 @@ def place_items_onto_locations(world: "WitnessWorld", items: List[Item], locatio
     return placed_items, unplaced_items
 
 
-def place_early_items(world: "WitnessWorld", fill_hook_progitempool: List[Item], fill_hook_locations: List[Location]):
+def place_early_items(world: "WitnessWorld", prog_itempool: List[Item], fill_locations: List[Location]) -> None:
     if not world.options.early_good_items.value:
         return
 
@@ -102,7 +103,7 @@ def place_early_items(world: "WitnessWorld", fill_hook_progitempool: List[Item],
     eligible_early_items_by_type = get_eligible_items_by_type_in_random_order(world)
 
     if not eligible_early_items_by_type:
-        return []
+        return
 
     while any(eligible_early_items_by_type.values()) and eligible_early_locations:
         # Get one item of each type
@@ -114,7 +115,7 @@ def place_early_items(world: "WitnessWorld", fill_hook_progitempool: List[Item],
         # Get their IDs as a set
         next_findable_item_ids = {world.item_name_to_id[item_name] for item_name in next_findable_items_dict}
 
-        found_early_items = grab_own_items_from_itempool(world, fill_hook_progitempool, next_findable_item_ids)
+        found_early_items = grab_own_items_from_itempool(world, prog_itempool, next_findable_item_ids)
 
         # Bring them back into Symbol -> Door -> Obelisk Key order
         # The intent is that the Symbol is always on Tutorial Gate Open / generally that the order is predictable
@@ -128,7 +129,7 @@ def place_early_items(world: "WitnessWorld", fill_hook_progitempool: List[Item],
             debug(f"Placed early good item {item} on early location {item.location}.")
             # Item type is satisfied
             del eligible_early_items_by_type[next_findable_items_dict[item.name]]
-            fill_hook_locations.remove(item.location)
+            fill_locations.remove(item.location)
         for item in unplaced_items:
             debug(f"Could not find a suitable placemenet for item {item}.")
 

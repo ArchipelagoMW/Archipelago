@@ -2,8 +2,8 @@
 Archipelago init file for The Witness
 """
 import dataclasses
-from logging import debug, error, info, warning
-from typing import Any, Dict, List, Optional, Tuple, cast
+from logging import error, info, warning
+from typing import Any, Dict, List, Optional, cast
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
 
