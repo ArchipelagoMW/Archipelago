@@ -162,15 +162,24 @@ class CivVIWorld(World):
         if not self.options.pre_hint_items.value:
             return
 
+        def is_hintable_filler_item(item: Item) -> bool:
+            return item.classification == 0 and CivVIHintClassification.FILLER.value in self.options.pre_hint_items.value
+
         start_location_hints: Set[str] = self.options.start_location_hints.value
-        valid_flags = [CivVIHintClassification(flag).to_item_classification() for flag in self.options.pre_hint_items.value]
+        non_filler_flags = [
+            CivVIHintClassification(flag).to_item_classification()
+            for flag in self.options.pre_hint_items.value
+            if flag != CivVIHintClassification.FILLER.value
+        ]
         for location_name, location_data in self.location_table.items():
             if location_data.location_type != CivVICheckType.CIVIC and location_data.location_type != CivVICheckType.TECH:
                 continue
 
             location: CivVILocation = self.get_location(location_name)  # type: ignore
 
-            if location.item and any(flag in location.item.classification for flag in valid_flags):
+            if location.item and (
+                is_hintable_filler_item(location.item) or any(flag in location.item.classification for flag in non_filler_flags)
+            ):
                 start_location_hints.add(location_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:

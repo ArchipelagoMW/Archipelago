@@ -46,7 +46,11 @@ class ResearchCostMultiplier(Range):
 
 
 class PreHintItems(OptionSet):
-    """Controls if/what items in the tech/civics trees are pre-hinted for the multiworld."""
+    """Controls what items from the tech/civics trees are pre-hinted for the multiworld.
+    **Progression**: Include Progression items in hints
+    **Useful**: Include Useful items in hints
+    **Filler**: Include Filler items in hints
+    """
     display_name = "Tech/Civic Tree pre-hinted Items"
     valid_keys = [classificaiton.value for classificaiton in CivVIHintClassification]  # type: ignore
 
