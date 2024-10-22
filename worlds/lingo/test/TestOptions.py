@@ -60,3 +60,10 @@ class TestShuffleSunwarpsAccess(LingoTestBase):
         "shuffle_sunwarps": "true",
         "sunwarp_access": "individual"
     }
+
+
+class TestSpeedBoostMode(LingoTestBase):
+    options = {
+        "location_checks": "insanity",
+        "speed_boost_mode": "true",
+    }
