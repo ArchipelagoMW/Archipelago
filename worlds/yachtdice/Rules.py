@@ -101,14 +101,15 @@ def dice_simulation_strings(categories, num_dice, num_rolls, fixed_mult, step_mu
         return yachtdice_cache[player][tup]
 
     # sort categories because for the step multiplier, you will want low-scoring categories first
-    categories.sort(key=lambda category: category.mean_score(num_dice, num_rolls))
+    # to avoid errors with order changing when obtaining rolls, we order assuming 4 rolls
+    categories.sort(key=lambda category: category.mean_score(num_dice, 4))
 
     # function to add two discrete distribution.
     # defaultdict is a dict where you don't need to check if an id is present, you can just use += (lot faster)
     def add_distributions(dist1, dist2):
         combined_dist = defaultdict(float)
-        for val1, prob1 in dist1.items():
-            for val2, prob2 in dist2.items():
+        for val2, prob2 in dist2.items():
+            for val1, prob1 in dist1.items():
                 combined_dist[val1 + val2] += prob1 * prob2
         return dict(combined_dist)
 
