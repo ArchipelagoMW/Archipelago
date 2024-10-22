@@ -116,9 +116,10 @@ def place_early_items(world: "WitnessWorld", prog_itempool: List[Item], fill_loc
         # Get their IDs as a set
         next_findable_item_ids = {world.item_name_to_id[item_name] for item_name in next_findable_items_dict}
 
+        # Grab items from itempool
         found_early_items = grab_own_items_from_itempool(world, prog_itempool, next_findable_item_ids)
 
-        # Bring them back into Symbol -> Door -> Obelisk Key order
+        # Bring found items back into Symbol -> Door -> Obelisk Key order
         # The intent is that the Symbol is always on Tutorial Gate Open / generally that the order is predictable
         correct_order = {item_name: i for i, item_name in enumerate(next_findable_items_dict)}
         found_early_items.sort(key=lambda item: correct_order[item.name])
