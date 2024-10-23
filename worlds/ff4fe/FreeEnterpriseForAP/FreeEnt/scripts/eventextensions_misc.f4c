@@ -1,0 +1,898 @@
+msfpatch {
+    EvEx__EndEvent:
+        ldx #$6dff
+        stx $09d3       // change event pointer to point to very last byte of event space... this SHOULD be 0xFF
+        jmp $_EvEx__End
+
+    EvEx__GotoEvent:
+        jsr $_EvEx__ReadParameters_1
+        lda $09d7
+        rep #$20
+        .mx 0x00
+        asl a
+        tax
+        lda $128000,x
+        tay
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        sty $09d3
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__AgeRydia:
+        // step 1: iterate over known actor map and convert 03 -> 11
+        ldx #$0001
+    %ActorLoopStart:
+        lda $1240,x
+        cmp #$03
+        bne $+ActorLoopNext
+        lda #$11
+        sta $1240,x
+    %ActorLoopNext:
+        inx
+        cpx #$_CharEx__MaxAxtors
+        bcc $-ActorLoopStart
+
+        // step 2: iterate over party and convert jobs 02 -> 0B
+        ldx #$0000
+    %PartyLoopStart:
+        lda $1000,x
+        beq $+PartyLoopNext
+        lda $1001,x
+        and #$0f
+        cmp #$02
+        bne $+PartyLoopNext
+        lda $1001,x
+        and #$f0
+        ora #$0b
+        sta $1001,x
+    %PartyLoopNext:
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-PartyLoopStart
+
+        // step 3: iterate over shadow party and convert jobs 02 -> 0B
+        ldx #$0000
+    %ShadowLoopStart:
+        lda $=CharEx__ShadowPartyAddr,x
+        beq $+ShadowLoopNext
+        inx
+        lda $=CharEx__ShadowPartyAddr,x
+        dex
+        and #$0f
+        cmp #$02
+        bne $+ShadowLoopNext
+        inx
+        lda $=CharEx__ShadowPartyAddr,x
+        and #$f0
+        ora #$0b
+        sta $=CharEx__ShadowPartyAddr,x
+        dex
+    %ShadowLoopNext:
+        jsr $_Util__XPlus40
+        cpx #$0600
+        bcc $-ShadowLoopStart
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    // iterate over known axtor codes and convert
+    // basic Tellah to rememberized Tellah
+    EvEx__RememberizeTellah:
+        ldx #$0001
+    EvEx__RememberizeTellah_LoopStart:
+        lda $1240,x
+        cmp #$04
+        bne $+EvEx__RememberizeTellah_LoopNext
+        lda #$0c
+        sta $1240,x
+    EvEx__RememberizeTellah_LoopNext:
+        inx
+        cpx #$_CharEx__MaxAxtors
+        bcc $-EvEx__RememberizeTellah_LoopStart
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__Placement_LoadParam:
+        jsr $_EvEx__ReadParameters_1
+        lda $09d7   // param contains placement number
+    EvEx__Placement_LoadFromA:
+        sta $ae     // remember for later
+        tay
+        lda #$00
+    EvEx__Placement_LoadParam_LoopStart:
+        cpy #$0000
+        beq $+EvEx__Placement_LoadParam_LoopEnd
+        dey
+        clc
+        adc #$0f
+        jmp $_EvEx__Placement_LoadParam_LoopStart
+    EvEx__Placement_LoadParam_LoopEnd:
+        tax
+        // this code happens with regular placement commands soooo
+        stx $0a47
+        lda #$40
+        sta $0908,x
+        rts
+
+    EvEx__Placement_VisibleCommon:
+        // original code from toggle visible
+        stz $0902,x
+        lda $0906,x
+        sta $3e
+        stz $3d
+        lsr $3e
+        ror $3d
+        lsr $3e
+        ror $3d
+        lsr $3e
+        ror $3d
+        lda $3d
+        clc
+        adc $0904,x
+        sta $3d
+        lda $ae  // unlike original code, $ae directly contains placement number here
+        clc
+        adc #$80
+        sta $06
+        rts
+
+    EvEx__Placement_SetVisibleImpl:
+        jsr $_EvEx__Placement_VisibleCommon
+        // original code from setting visible
+        lda #$01
+        sta $090b,x
+        phx
+        ldx $3d
+        lda $06
+        sta $7f4c00,x
+        plx
+        stz $08ff,x
+        rts
+
+    EvEx__Placement_SetInvisibleImpl:
+        jsr $_EvEx__Placement_VisibleCommon
+        // original code from setting invisible
+        stz $090b,x
+        phx
+        ldx $3d
+        lda $7f4c00,x
+        cmp $06
+        bne $06
+        lda #$00
+        sta $7f4c00,x
+        plx
+        stz $08ff,x
+        rts
+
+    EvEx__PlacementSetVisible:
+        jsr $_EvEx__Placement_LoadParam
+        jsr $_EvEx__Placement_SetVisibleImpl
+        jmp $_EvEx__End
+
+    EvEx__PlacementSetInvisible:
+        jsr $_EvEx__Placement_LoadParam
+        jsr $_EvEx__Placement_SetInvisibleImpl
+        jmp $_EvEx__End
+
+
+    EvEx__PutEnterprise:
+        jsr $_EvEx__ReadParameters_2
+        ldx $_EvEx__Param1
+        stx $171d
+        stz $171f  // hardcode: put on overworld
+        jmp $_EvEx__End
+
+    EvEx__PartyLeaderCecil:
+        ldx #$0000
+        ldy #$0000
+    EvEx__PartyLeaderCecil_LoopStart:
+        lda $1000,x
+        and #$1f
+        beq $+EvEx__PartyLeaderCecil_LoopNext
+        lda $1001,x
+        and #$0f
+        beq $+EvEx__PartyLeaderCecil_FoundCecil
+        cmp #$09
+        beq $+EvEx__PartyLeaderCecil_FoundCecil
+    EvEx__PartyLeaderCecil_LoopNext:
+        jsr $_EvEx__XPlus40
+        iny
+        cpx #$0140
+        bne $-EvEx__PartyLeaderCecil_LoopStart
+        jmp $_EvEx__End
+    EvEx__PartyLeaderCecil_FoundCecil:
+        tya
+        sta $1703
+        lda #$01
+        sta $cc
+        jmp $_EvEx__End
+
+    EvEx__PartyLeaderCharacter:
+        jsr $_EvEx__ReadParameters_1
+        ldy #$0000
+        lda $_EvEx__Param1
+        tax
+        lda $2189C0,x
+        sta $3d
+        ldx #$0000
+    EvEx__PartyLeaderCharacter_LoopStart:
+        lda $1000,y
+        beq $+EvEx__PartyLeaderCharacter_LoopNext
+        lda $1001,y
+        and #$0f
+        cmp $_EvEx__Param1
+        bne $03
+        jmp $_EvEx__PartyLeaderCharacter_Found
+        cmp $3d
+        bne $03
+        jmp $_EvEx__PartyLeaderCharacter_Found
+
+    EvEx__PartyLeaderCharacter_LoopNext:
+        inx
+        jsr $_EvEx__YPlus40
+        cpy #$0140
+        bne $-EvEx__PartyLeaderCharacter_LoopStart
+
+        // did not find character, do nothing
+        jmp $_EvEx__End
+
+    EvEx__PartyLeaderCharacter_Found:
+        txa
+        sta $1703
+        lda #$01
+        sta $cc
+        jmp $_EvEx__End
+
+
+    EvEx__LoadNPCOffsets:
+        jsr $_EvEx__ReadParameters_2
+        lda $_EvEx__Param1
+        
+        // following code largely taken from original activate/deactivate NPC command
+        pha
+        lsr a
+        lsr a
+        lsr a
+        sta $3d
+        stz $3e
+
+        lda $_EvEx__Param2
+        beq $+EvEx__LoadNPCOffsets_IsOverworld
+
+        // add 0x20 for underworld NPCs
+        lda $3d
+        clc
+        adc #$20
+        sta $3d
+    EvEx__LoadNPCOffsets_IsOverworld:
+        pla
+        and #$07
+        tay
+
+        // also do the part where it loads the correct bitmask in A
+        lda #$01
+    EvEx__LoadNPCOffsets_LoopStart:
+        cpy #$0000
+        beq $+EvEx__LoadNPCOffsets_LoopEnd
+        asl a
+        dey
+        bra $-EvEx__LoadNPCOffsets_LoopStart
+    EvEx__LoadNPCOffsets_LoopEnd:
+        ldx $3d
+        rts
+
+    EvEx__ActivateNPC:
+        jsr $_EvEx__LoadNPCOffsets
+
+        ora $0012e0,x
+        sta $0012e0,x
+        jmp $_EvEx__End
+
+    EvEx__DeactivateNPC:
+        jsr $_EvEx__LoadNPCOffsets
+        eor #$FF
+        and $0012e0,x
+        sta $0012e0,x
+        jmp $_EvEx__End
+
+
+    EvEx__ClearShadowPartySlot:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        sta $=ShadowParty__Address,x
+        jmp $_EvEx__End
+
+
+    EvEx__SaveVehiclesFromMist:
+        ldx #$0000
+        ldy #$0000
+    EvEx__SaveVehiclesFromMist_LoopStart:
+        // check if player has vehicle
+        lda $1718,x
+        beq $+EvEx__SaveVehiclesFromMist_LoopNext
+        // check if vehicle is on overworld
+        lda $171b,x
+        bne $+EvEx__SaveVehiclesFromMist_LoopNext
+        // check if vehicle is in affected area
+        lda $171a,x
+        cmp #$77
+        bne $+EvEx__SaveVehiclesFromMist_LoopNext
+        lda $1719,x
+        cmp #$62
+        bcc $+EvEx__SaveVehiclesFromMist_LoopNext
+        cmp #$66
+        bcs $+EvEx__SaveVehiclesFromMist_LoopNext
+
+        // vehicle needs to be relocated
+        tya
+        clc
+        adc #$72
+        sta $171a,x
+        lda #$68
+        sta $1719,x
+
+    EvEx__SaveVehiclesFromMist_LoopNext:
+        inx
+        inx
+        inx
+        inx
+        iny
+        cpy #$0004
+        bcc $-EvEx__SaveVehiclesFromMist_LoopStart
+
+        jmp $_EvEx__End
+
+
+    EvEx__LoadExtraNPCPalette:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        jsr $_ExtraNPCPalettes__Load    // from extra_npc_palettes.f4c
+        jmp $_EvEx__End
+
+    EvEx__ResetNPCPalette:
+        jsr $_ExtraNPCPalettes__ResetToMapDefault    // from extra_npc_palettes.f4c
+        jmp $_EvEx__End
+
+
+    EvEx__DebugBuff:
+        ldx #$0000
+    EvEx__DebugBuff_LoopStart:
+        lda #$0f
+        sta $1007,x
+        sta $1009,x
+        lda #$27
+        sta $1008,x
+        sta $100a,x
+        lda #$e7
+        sta $100b,x
+        sta $100d,x
+        lda #$03
+        sta $100c,x
+        sta $100e,x
+        lda #$63
+        sta $100f,x
+        //sta $1010,x  // this is agility, actually makes testing kind of a pain
+        sta $1011,x
+        sta $1012,x
+        sta $1013,x
+
+        jsr $_EvEx__XPlus40
+        cpx #$0140
+        bcc $-EvEx__DebugBuff_LoopStart
+        
+        jmp $_EvEx__End        
+
+
+    EvEx__PlacementSetVisibleByPartyLeader:
+        // given an offset parameter, this sets placement number (offset + X)
+        // to visible, where X is the index of the current party leader slot
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        clc
+        adc $1703
+
+        jsr $_EvEx__Placement_LoadFromA
+        jsr $_EvEx__Placement_VisibleCommon
+        // original code from setting visible
+        lda #$01
+        sta $090b,x
+        phx
+        ldx $3d
+        lda $06
+        sta $7f4c00,x
+        plx
+        stz $08ff,x
+        jmp $_EvEx__End
+
+
+    EvEx__ReloadPlacementSprite:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+
+        sta $ae
+
+        asl a
+        asl a
+        asl a
+        asl a
+        sec
+        sbc $ae  
+        sta $af    // $af = A * 0xF
+        stz $b0
+
+        // get NPC number and palette from placement info
+        ldx $09d1
+        stx $09cf
+        lda $ae
+        asl a
+        asl a
+        clc
+        adc $09cf
+        sta $09cf
+        lda $09d0
+        adc #$00
+        sta $09d0
+
+        ldx $09cf
+        lda $138300,x
+        sta $_EvEx__Param2
+        lda $138303,x
+        sta $_EvEx__Param3
+
+        // wait for VBlank
+        lda #$01
+        sta $7d
+        lda $7d
+        bne $fc
+
+        // reload NPC sprite by deferring to bank 0 function
+        lda $_EvEx__Param2
+        sta $3d
+        lda #$00
+        ldy #$c0b9      // skip first instruction of func because
+        jsl $=LongCall  //   we can't pass A through LongCall
+
+        // set the palette accordingly (largely copied from 00:bf2a)
+        ldy $af
+        lda $06   // prev function sets this to NPC sprite number
+        cmp #$0e
+        bcs $+EvEx__ReloadPlacementSprite_IsNormalPalette
+        tax
+        lda $15b2fa,x
+        sta $090d,y
+        jmp $_EvEx__End
+
+    EvEx__ReloadPlacementSprite_IsNormalPalette:
+        lda $_EvEx__Param3
+        and #$0c
+        lsr a
+        lsr a
+        clc
+        adc #$04
+        sta $090d,y
+        jmp $_EvEx__End
+
+
+    EvEx__SetPlacementSpeed:
+        //params: placement number, speed (0-3)
+        jsr $_EvEx__ReadParameters_2
+        lda $_EvEx__Param1
+
+        sta $ae
+        asl a
+        asl a
+        asl a
+        asl a
+        sec
+        sbc $ae  
+        sta $af    // $af = A * 0xF
+        stz $b0
+        
+        ldy $af
+        lda $_EvEx__Param2
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        sta $_EvEx__Param2
+        
+        lda $0901,y
+        and #$3f
+        ora $_EvEx__Param2
+        sta $0901,y
+
+        jmp $_EvEx__End      
+
+
+
+    EvEx__GiveFloat:
+        lda #$40
+        ora $1004
+        sta $1004  
+        lda #$40
+        ora $1044
+        sta $1044  
+        lda #$40
+        ora $1084
+        sta $1084  
+        lda #$40
+        ora $10c4
+        sta $10c4  
+        lda #$40
+        ora $1104
+        sta $1104  
+        jmp $_EvEx__End
+
+
+    EvEx__ClearParty:
+        stz $1000
+        stz $1040
+        stz $1080
+        stz $10c0
+        stz $1100
+        jmp $_EvEx__End
+}
+
+
+msfpatch {
+    EvEx__DebugFillShadowParty:
+        stz $_EvEx__Param1
+        inc $_EvEx__Param1
+
+    %LoopStart:
+        lda $_EvEx__Param1
+        jsr $_Lookup_AxtorToActor
+        beq $+LoopNext
+
+        ldx #$0000
+    %PartyCheckLoopStart:
+        lda $1000,x
+        and #$1f
+        cmp $_EvEx__Param1
+        beq $+LoopNext
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-PartyCheckLoopStart
+
+        lda $_EvEx__Param1
+        jsr $_CharEx__InitializeAxtor
+        jsr $_CharEx__PushShadowPartySlot
+
+    %LoopNext:
+        inc $_EvEx__Param1
+        lda $_EvEx__Param1
+        cmp #$.CharEx__MaxAxtors
+        bcc $-LoopStart
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__GoSubEvent:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+
+    EvEx__GoSubEvent_Impl:
+        // save current event pointer
+        ldx $09d3
+        stx $1615   // [hardcoded]
+
+        // load event pointer for new event
+        stz $1681
+        asl a
+        rol $1681
+        sta $1680
+
+        ldx $1680
+        lda $128000,x
+        sta $09d3
+        lda $128001,x
+        sta $09d4
+
+        jmp $_EvEx__End
+
+    EvEx__Return:
+        // Restore event pointer
+        ldx $1615   // [hardcoded]
+        stx $09d3
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    // params: palette number, palette slot
+    EvEx__LoadNPCPalette:
+        jsr $_EvEx__ReadParameters_2
+
+        // get source offset : palette number * 16 (8 color palettes)
+        rep #$20
+        .mx 0x00
+        lda $_EvEx__Param1
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+
+        // get target offset : palette slot * 32
+        lda $_EvEx__Param2
+        and #$00ff
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tay
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda #$10
+        sta $1680
+    %CopyLoopStart:
+        lda $0d8000,x
+        sta $0ddb,y
+
+        inx
+        iny
+        dec $1680
+        bne $-CopyLoopStart
+
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__TestMode_Startup:
+        // %test_setting open%
+        // set underworld open and hook plot flags
+        lda $1286
+        ora #$41
+        sta $1286
+
+        // set hovercraft data
+        lda #$01
+        sta $1718
+        stz $171b
+        ldx #$a064
+        stx $1719
+
+        // set big whale data
+        lda #$01
+        sta $1724
+        stz $1727
+        ldx #$9f64
+        stx $1725
+        // %end%
+
+        // %test_setting gp%
+        // starting max GP
+        lda #$7f
+        sta $16a0
+        lda #$96
+        sta $16a1
+        lda #$98
+        sta $16a2
+        // %end%
+
+        // %test_setting items%
+        // prefill inventory with agility-altering equipment
+        // and utility items
+        ldx #$0000
+        ldy #$0000
+    %Loop:
+        lda $=TestItems,x
+        beq $+Done
+        sta $1444,y
+        lda #$50
+        sta $1445,y
+        iny
+        iny
+        inx
+        bra $-Loop
+    %Done:
+        // prefill Fat Chocobo inventory
+        ldx #$0000
+        lda #$b0
+        sta $_EvEx__Param1
+    %FatLoop:
+        lda $_EvEx__Param1
+        cmp #$ed
+        bcs $+FatDone
+        sta $1340,x
+        lda #$50
+        sta $1341,x
+        inx
+        inx
+    %Skip:
+        inc $_EvEx__Param1
+        jmp $_FatLoop
+    %FatDone:
+        // %end%
+
+        jmp $_EvEx__End
+        
+
+    %TestItems: [[
+        ED // Whistle
+        04 // Charm Claw
+        06 // CatClaw
+        18 // Black Sword
+        1F // Drain Sword
+        4C // Avenger
+        29 // Drain Spear
+        2F // Murasame
+        30 // Masamune
+        31 // Assassin Dagger
+        36 // Flame Whip
+        37 // Dragon Whip
+        39 // Dwarf Axe
+        53 // Artemis Bow
+        5F // Artemis Arrows
+        7F // Ninja Hat
+        9A // Adamant Armor
+        95 // Heroine Robe
+        9B // Ninja Armor
+        AC // Crystal Ring
+        AF // Cursed Ring
+        DF // AuApple
+        DF // AuApple
+        DF // AuApple
+        DF // AuApple
+        DF // AuApple
+        E1 // SomaDrop
+        E1 // SomaDrop
+        E1 // SomaDrop
+        E1 // SomaDrop
+        E1 // SomaDrop
+        00 ]]
+
+}
+
+msfpatch {
+    EvEx__SaveMusic:
+        lda $1e05
+        sta $1586 // [hardcoded]
+        jmp $_EvEx__End
+
+    EvEx__RestoreMusic:
+        lda $1586
+        sta $1e01
+        lda #$01
+        sta $1e00
+        jsl $048004
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__TakeAll:
+        jsr $_EvEx__ReadParameters_1
+        ldx #$0000
+    %Loop:
+        lda $1440,x
+        cmp $_EvEx__Param1
+        bne $+Next
+        stz $1440,x
+        stz $1441,x
+    %Next:
+        inx
+        inx
+        cpx #$0060
+        bcc $-Loop
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    EvEx__TintOff:
+        lda $81
+        bne $+DoTintOff
+        jmp $_EvEx__End
+
+    %DoTintOff:
+        // pop return address
+        pla
+        pla
+        pla
+
+        // defer to "off" case of tint
+        jml $00e741
+}
+
+msfpatch {
+    .def StarterKit__Data        $21dd00
+    .def StarterKit__MaxLength   $005c
+
+    EvEx__GiveStarterKit:
+        ldx #$0000
+        ldy #$0000
+
+    %LoopStart:
+        lda $=StarterKit__Data,x
+        cmp #$ff
+        beq $+Done
+
+    %EmptySlotLoop:
+        cpy #$0060
+        bcs $+Done
+
+        lda $1440,y
+        beq $+FoundEmptySlot
+        iny
+        iny
+        bra $-EmptySlotLoop
+
+    %FoundEmptySlot:
+        lda $=StarterKit__Data,x
+        cmp #$fe
+        beq $+GiveGP
+        sta $1440,y
+        inx
+        lda $=StarterKit__Data,x
+        sta $1441,y
+        inx
+        iny
+        iny
+    %NextItem:
+        cpx #$_StarterKit__MaxLength
+        bcc $-LoopStart
+
+    %Done:
+        // %if wacky_neatfreak%
+            // fill half of inventory with Sort x99
+            ldx #$0030
+            %NeatFreakLoopStart:
+                lda $1440,x
+                bne $+NeatFreakLoopNext
+                lda #$fe
+                sta $1440,x
+                lda #$63
+                sta $1441,x
+            %NeatFreakLoopNext:
+                inx
+                inx
+                cpx #$0060
+                bcc $-NeatFreakLoopStart
+        // %end%
+
+        jmp $_EvEx__End
+
+    %GiveGP:
+        inx
+        lda $=StarterKit__Data,x
+        sta $30
+        inx
+        lda $=StarterKit__Data,x
+        sta $31
+        inx
+        lda $=StarterKit__Data,x
+        sta $32
+
+        phx
+        ldx #$97dd  // use bank 00's subroutine to give GP
+        jsl $=Bank00LongCallX
+        plx
+
+        inx
+        bra $-NextItem
+}

@@ -1,0 +1,15 @@
+npc(#TrainingRoomSoldierOutside)
+{
+    sprite #Namingway
+    eventcall {
+        $F8
+    }
+}
+
+event($F8) {
+    message #msg.fe_WackyChallengeIntro
+    message #msg.fe_WackyChallengeTitle
+    // %if wacky_challenge_show_detail%
+    message #msg.fe_WackyChallengeDetail
+    // %end%
+}

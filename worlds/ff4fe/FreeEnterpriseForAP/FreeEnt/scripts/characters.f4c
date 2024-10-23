@@ -1,0 +1,259 @@
+// file for general character changes needed to support FreeEnterprise.
+
+//------------------------------------------------------------------
+// Adjust actors to use hybrid load where needed.
+//  Default shadow party slots: Kain, Tellah, Rosa, Yang, Rydia
+
+actor(#DKCecil)
+{
+    // %cecil actor%
+    // %end%
+}
+
+actor(#PCecil)
+{
+    // %pcecil actor%
+    // %end%
+
+// %flag characters_nekkie off%
+    // Paladin Cecil does not get to start with the Legend sword, it's given in event
+    right hand #SilverStaff
+// %end%
+}
+
+actor(#Kain1)
+{
+    // %kain actor%
+    load from slot $11
+    save to slot 0
+    // %end%
+}
+
+actor(#Kain2)
+{
+    // %kain actor%
+    load from slot $11
+    save to slot 0
+    // %end%
+}
+
+actor(#Kain3)
+{
+    // %kain actor%
+    load from slot $11
+    save to slot 0    
+    // %end%
+}
+
+actor(#Tellah1)
+{
+    // %tellah actor%
+    load from slot $23
+    save to slot 1
+    // %end%
+}
+
+actor(#Tellah2)
+{
+    // %tellah actor%
+    load from slot $23
+    save to slot 1
+    // %end%
+}
+
+actor(#Tellah3)
+{
+    // %tellah actor%
+    load from slot $23
+    save to slot 1
+    // %end%
+
+// %flag characters_nekkie off%
+    // need to set starting gear in case Tellah joins after Ordeals
+    right hand #Staff 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #LeatherArmor
+    arms #NoWeapon    
+// %end%
+}
+
+actor(#Rosa1)
+{
+    // %rosa actor%
+    load from slot $35
+    save to slot 2
+    // %end%
+}
+
+actor(#Rosa2)
+{
+    // %rosa actor%
+    load from slot $35
+    save to slot 2
+    // %end%
+}
+
+actor(#Yang1)
+{
+    // %yang actor%
+    load from slot $46
+    save to slot 3
+    // %end%
+}
+
+actor(#Yang2)
+{
+    // %yang actor%
+    load from slot $46
+    save to slot 3
+    // %end%
+}
+
+actor(#CRydia)
+{
+    // %rydia actor%
+    load from slot $52
+    save to slot 4
+    // %end%
+}
+
+actor(#ARydia)
+{
+    // %rydia actor%
+    load from slot $52
+    save to slot 4
+    // %end%
+}
+
+actor(#Cid)
+{
+    // %cid actor%
+    discard    // normally saves to a slot
+    // %end%
+}
+
+actor(#Fusoya)
+{
+    // %fusoya actor%
+    discard    // normally saves to a slot
+    // %end%
+}
+
+actor(#Edward)
+{
+    // %edward actor%
+    // %end%
+}
+
+actor(#Palom)
+{
+    // %palom actor%
+    // %end%
+}
+
+actor(#Porom)
+{
+    // %porom actor%
+    // %end%
+}
+
+actor(#Edge)
+{
+    // %edge actor%
+    // %end%
+}
+
+
+
+// name code lookup table
+
+patch($218c00 bus) {
+    FF
+    // %name_codes%
+    00 01 02 03 04 05 06 07 08 03 00 03 06 09 01 05 02 0A 0B 01
+    // %end%
+}
+
+// set Cecil/Rydia NPCs to use dynamic sprites
+npc(#KainNormal)  // there is no generic "Cecil" NPC by default, obviously, so we use KainNormal
+{
+    sprite $90
+    default inactive
+}
+
+npc(#PaladinCecil2) { sprite $90 }
+
+npc(#ChildRydia)  { sprite $91 }
+npc(#AdultRydia1) { sprite $91 }
+npc(#AdultRydia2) { sprite $91 }
+npc(#AdultRydia3) { sprite $91 }
+npc(#AdultRydia4) { sprite $91 }
+
+// set the NPCs we use for cutscenes to all default inactive
+npc(#PaladinCecil2)     { default inactive }
+npc(#Edward2)           { default inactive }
+npc(#Palom2)            { default inactive }
+npc(#Porom2)            { default inactive }
+npc(#Cid1)              { default inactive }
+
+
+consts(character) {
+    $00     Cecil
+    $01     Kain
+    $02     Rydia
+    $03     Tellah
+    $04     Edward
+    $05     Rosa
+    $06     Yang
+    $07     Palom
+    $08     Porom
+    
+    $0A     Cid
+   
+    $0C     Edge
+    $0D     Fusoya
+}
+
+// Actor family data (a map of actor -> family ID number(s). 
+// Use job = family ID number for convenience.)
+patch($218980 bus) {
+    /* DKCecil */   #job.DKCecil    #job.PCecil
+    /* Kain1 */     #job.Kain       FF
+    /* CRydia */    #job.CRydia     #job.ARydia
+    /* Tellah1 */   #job.Tellah     FF
+    /* Edward */    #job.Edward     FF
+    /* Rosa1 */     #job.Rosa       FF
+    /* Yang1 */     #job.Yang       FF
+    /* Palom */     #job.Palom      FF
+    /* Porom */     #job.Porom      FF
+    /* Tellah2 */   #job.Tellah     FF
+    /* PCecil */    #job.DKCecil    #job.PCecil
+    /* Tellah3 */   #job.Tellah     FF
+    /* Yang2 */     #job.Yang       FF
+    /* Cid */       #job.Cid        FF
+    /* Kain2 */     #job.Kain       FF
+    /* Rosa2 */     #job.Rosa       FF
+    /* ARydia */    #job.CRydia     #job.ARydia
+    /* Edge */      #job.Edge       FF
+    /* Fusoya */    #job.Fusoya     FF
+    /* Kain3 */     #job.Kain       FF
+}
+
+// Character data (a map of job -> alternate job numbers). 
+patch($2189C0 bus) {
+    #job.PCecil
+    FF
+    #job.ARydia
+    FF
+    FF
+    FF
+    FF
+    FF
+    FF
+    #job.DKCecil
+    FF
+    FF
+    FF
+    FF
+}

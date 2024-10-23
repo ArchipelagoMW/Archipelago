@@ -1,0 +1,285 @@
+// %if flags: ~vintage%
+
+patch ($14df80 bus) {
+    EE 30 00 18 00 00 00 00 00 00 00 00 00 00 00 00
+    EE 30 00 10 07 5D 42 44 00 38 00 24 00 1C 00 18
+    EE 30 00 10 07 5D 42 44 00 38 00 24 00 1C 00 18
+    EE 30 00 10 86 18 00 38 00 2C 00 28 00 20 00 04
+    EE 30 00 14 A7 44 45 38 03 30 00 00 00 00 00 04
+    EE 30 00 10 00 38 00 34 00 24 00 20 AC 00 08 08
+    EE 30 00 18 E4 7C 81 70 20 64 00 60 00 50 03 30
+    EE 30 00 10 07 5D 42 44 00 2C 00 24 00 20 00 18
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 41 09 C0 08 20 08 00 08 00 24 49 00 00 18
+    00 00 C0 08 CE 65 29 55 A6 3C 01 2C 00 0C 00 24
+    00 00 C0 08 EF 7D 4C 4D 87 30 01 24 00 10 00 28
+    00 00 EF 7D 89 7D E1 7C 80 7C 00 68 00 5C 00 1C
+    00 00 C0 08 4C 4D 87 30 03 18 00 1C 00 0C 00 20
+    00 00 EF 71 4A 5D C6 4C 00 34 00 28 00 20 00 18
+    00 00 A9 6D 25 5D 80 48 00 38 00 30 00 0C 00 1C
+}
+patch ($14ea00 bus) {
+    00 00 CE 65 4C 51 A8 38 04 2C 00 24 00 18 00 10
+    00 00 00 15 A0 14 00 18 00 18 00 24 03 20 00 18
+    00 00 A0 14 EF 7D 4A 5D C6 4C 00 34 00 0C 00 28
+    00 00 A0 14 EF 7D 4A 5D C6 4C 00 34 00 18 00 28
+    00 00 EF 7D 89 7D E1 7C 80 7C 00 68 00 5C 00 1C
+    00 00 A0 14 4C 4D 87 30 03 18 00 1C 00 0C 00 20
+    00 00 EF 71 4A 5D C6 4C 00 34 00 28 00 20 00 18
+    00 00 CF 28 4D 1C 0A 18 06 14 02 10 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 41 09 C0 08 20 08 00 08 00 24 49 00 00 18
+    00 00 C0 08 CE 65 29 55 A6 3C 01 2C 00 0C 00 24
+    00 00 C0 08 EF 7D 4C 4D 87 30 01 24 00 10 00 28
+    00 00 EF 7D 89 7D E1 7C 80 7C 00 68 00 5C 00 1C
+    00 00 C0 08 4C 4D 87 30 03 18 00 1C 00 0C 00 20
+    00 00 EF 71 4A 5D C6 4C 00 34 00 28 00 20 00 18
+    00 00 45 7D C0 7C 60 7C 00 64 00 58 00 14 00 00
+}
+patch ($14e480 bus) {
+    E0 00 F7 7E B5 69 97 5E B3 3D AE 48 75 1E 00 00
+    63 2C 69 49 E6 40 62 30 00 24 00 1C 00 10 00 08
+    E0 00 00 0D 20 00 25 10 03 0C 01 08 00 00 00 08
+    E0 00 83 7D A0 00 40 00 00 00 00 00 00 0D 00 00
+    E0 00 2B 76 A0 00 40 00 00 00 C8 69 00 0D AF 76
+    E0 00 2B 76 C8 69 AF 76 6D 7E 8F 7A F7 7E AF 7E
+    00 00 D5 7E B0 7A 2E 6E 4C 76 6D 7A 8E 7E D0 7E
+    E0 00 6F 4D 88 30 10 00 0A 00 B5 6E 15 00 00 04
+}
+patch ($148900 bus) {
+    00 00 AF 3D 6E 35 AB 20 03 0C 00 08 00 04 00 04
+    00 00 00 00 10 72 4A 51 84 3C 00 2C 00 18 00 08
+    00 00 2B 00 00 00 C6 29 85 21 21 11 40 08 00 04
+    00 08 00 08 00 04 00 04 00 00 80 08 0C 00 E0 00
+    00 00 49 7E C2 79 20 79 60 6C 00 64 00 3C 00 24
+    AF 3D 86 34 23 28 00 1C 00 1C A0 09 C0 00 00 00
+    00 00 F2 49 CF 61 6B 51 A5 38 00 28 00 10 C1 5C
+    60 50 00 44 90 10 0C 00 C8 01 20 01 00 00 00 00
+}
+patch ($0fd200 bus) {
+    00 00 00 08 00 00 23 71 C0 68 60 5C EF 7D 87 79
+    00 30 20 08 00 08 00 00 A8 48 66 40 24 38 87 79
+}
+patch ($0fd320 bus) {
+    00 30 4D 49 EA 40 66 30 03 20 EF 7D C9 7D 86 7D
+    00 30 6E 4D EA 3C 66 2C 03 20 89 2C 47 24 05 1C
+    00 30 EF 7D 86 7D E1 74 20 6C 00 58 66 40 24 38
+    00 30 A8 48 87 44 45 3C C0 68 60 5C EF 7D 87 79
+}
+patch ($0fd240 bus) {
+    00 00 73 7E 2D 7E EB 79 A9 75 85 7D 01 7D 80 7C
+    00 00 85 7D E5 48 62 40 73 7E 00 30 00 24 00 1C
+}
+// %end%
+
+////////// msfpatch {
+//////////     NightMode__IsOutdoorMap:
+//////////         lda $1700
+//////////         cmp #$03
+//////////         bne $+Normal
+//////////         lda $1701
+//////////         bne $+Normal
+//////////         lda $1702
+//////////         cmp #$07  // maps 00-06 are towns
+//////////         bcc $+IsOutdoors
+//////////         cmp #$8b
+//////////         beq $+IsOutdoors  // Agart Well
+//////////         cmp #$24  // maps 24-28 are castles outdoors
+//////////         bcc $+Normal
+//////////         cmp #$29
+//////////         bcs $+Normal
+//////////     %IsOutdoors:
+//////////         sec
+//////////         rtl
+//////////     %Normal:
+//////////         clc
+//////////         rtl
+////////// }
+////////// 
+////////// // set night tint on overworld outdoor maps
+////////// msfpatch {
+//////////     .addr $0084b4
+//////////         jml $=NightMode
+////////// 
+//////////     .new
+//////////     NightMode:
+//////////         stz $_Wacky__RAM
+//////////         lda $81  // displaced
+//////////         bne $+ApplyExistingTint
+////////// 
+//////////         jsl $=NightMode__IsOutdoorMap
+//////////         bcc $+Normal
+//////////     %IsOutdoors:
+//////////         inc $_Wacky__RAM
+//////////         // apply custom night mode tint
+//////////         stz $212d
+//////////         lda #$83
+//////////         sta $2131
+//////////         lda #$73
+//////////         sta $2132
+//////////         jml $0084ea
+//////////     %Normal:
+//////////         jml $0084b8
+////////// 
+//////////     %ApplyExistingTint:
+//////////         jml $0084d9
+////////// }
+////////// 
+////////// msfpatch {
+//////////     .addr $008820
+//////////         jsl $=NightMode__SetTintAfterMenu
+////////// 
+//////////     .new
+//////////     NightMode__SetTintAfterMenu:
+//////////         jsl $15C8E5 // displaced
+////////// 
+//////////         lda $_Wacky__RAM
+//////////         beq $+Normal
+//////////     %IsOutdoors:
+//////////         // apply custom night mode tint
+//////////         stz $212d
+//////////         lda #$83
+//////////         sta $2131
+//////////         lda #$73
+//////////         sta $2132
+//////////     %Normal:
+//////////         rtl
+////////// }
+////////// 
+////////// msfpatch {
+//////////     .addr $00902a
+//////////         jsl $=NightMode__ExitTransitionFix
+//////////         nop
+////////// 
+//////////     .new
+//////////     NightMode__ExitTransitionFix:
+//////////         lda $_Wacky__RAM
+//////////         beq $+Normal
+//////////         lda #$00
+//////////         bra $+Apply
+//////////     %Normal:
+//////////         lda #$01
+//////////     %Apply:
+//////////         sta $212d
+//////////         stz $_Wacky__RAM
+//////////         rtl
+////////// }
+////////// 
+////////// msfpatch {
+//////////     .addr $0084c8
+//////////         jsl $=NightMode__FixNormalColorInit
+//////////         nop
+////////// 
+//////////     .new
+//////////     NightMode__FixNormalColorInit:
+//////////         lda #$43
+//////////         sta $2131
+//////////         lda #$e0
+//////////         sta $2132
+//////////         rtl
+////////// }
+
+//--------------------------------------------------
+// crickets
+/* DISABLE: this is just silence, need sound $7F as well for crickets
+map (#BaronTown) { music $45 }
+map (#Mist) { music $45 }
+map (#Kaipo) { music $45 }
+map (#Mysidia) { music $45 }
+map (#Silvera) { music $45 }
+map (#ToroiaTown) { music $45 }
+map (#Agart) { music $45 }
+map (#AgartWell) { music $45 }
+map (#BaronCastle) { music $45 }
+map (#Damcyan) { music $45 }
+map (#Fabul) { music $45 }
+map (#ToroiaCastle) { music $45 }
+map (#Eblan) { music $45 }
+*/
+
+//--------------------------------------------------
+// setup shop-door-blocking NPCs
+
+npc(#fe_WackyNPCOverworld)
+{
+    sprite #Transparent
+    default active
+    eventcall {
+        #event.fe_WackyEvent
+    }
+}
+
+event(#event.fe_WackyEvent)
+{
+    message #msg.fe_WackyDialogue
+}
+
+text(bank 1 message #msg.fe_WackyDialogue) {
+Closed for the night.
+}
+
+// Baron Town
+placement ($00 2) { position 9 26  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($00 3) { npc #fe_None }
+placement ($00 5) { npc #fe_None }
+placement ($00 6) { npc #fe_None }
+placement ($00 7) { npc #fe_None }
+
+// Mist
+placement ($01 0) { position 14 25  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($01 1) { position 16 25  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($01 2) { npc #fe_None }
+placement ($01 3) { npc #fe_None }
+
+// Kaipo
+placement ($02 0) { position 23 23  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($02 1) { position  9 18  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($02 2) { npc #fe_None }
+placement ($02 4) { npc #fe_None }
+placement ($02 5) { npc #fe_None }
+placement ($02 6) { npc #fe_None }
+
+// Mysidia
+placement ($03 0) { position  7 23  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($03 1) { position  9 23  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($03 2) { position 27 26  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($03 3) { npc #fe_None }
+placement ($03 4) { npc #fe_None }
+placement ($03 5) { npc #fe_None }
+placement ($03 6) { npc #fe_None }
+placement ($03 7) { npc #fe_None }
+placement ($03 8) { npc #fe_None }
+
+// Silvera
+placement ($04 0) { position 12 13  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($04 1) { position 16 13  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($04 2) { position  5 14  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($04 3) { npc #fe_None }
+placement ($04 4) { npc #fe_None }
+
+// Toroia Town
+placement ($05 0) { position  5 22  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($05 1) { position  8 24  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($05 2) { position 17 17  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($05 3) { npc #fe_None }
+placement ($05 4) { npc #fe_None }
+placement ($05 5) { npc #fe_None }
+placement ($05 6) { npc #fe_None }
+placement ($05 7) { npc #fe_None }
+
+// Agart
+placement ($06 1) { position 23 8  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($06 2) { position 25 8  npc #fe_WackyNPCOverworld  walking off  tangible }
+placement ($06 3) { npc #fe_None }
+placement ($06 4) { npc #fe_None }
+placement ($06 5) { npc #fe_None }
+placement ($06 6) { npc #fe_None }
+placement ($06 7) { npc #fe_None }
+
+// Fabul Castle
+placement ($47 0) { position 17 7  npc #fe_WackyNPCOverworld  walking off  tangible }
+
+// Remove indoor shopkeepers
+placement($10 1) { npc #fe_None } // item shop in Kaipo Inn
+placement($4C 1) { npc #fe_None } // item shop in Fabul Inn
+placement($20 9) { npc #fe_None } // item shop in Agart Inn

@@ -1,0 +1,447 @@
+droptable($00) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($01) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure2
+}
+
+droptable($02) {
+    common #Heal
+    uncommon #Heal
+    rare #Heal
+    mythic #Tent
+}
+
+droptable($03) {
+    common #Heal
+    uncommon #Heal
+    rare #Heal
+    mythic #Heal
+}
+
+droptable($04) {
+    common #Heal
+    uncommon #Heal
+    rare #Heal
+    mythic #Heal
+}
+
+droptable($05) {
+    common #FireArrow
+    uncommon #FireArrow
+    rare #FireArrow
+    mythic #FireArrow
+}
+
+droptable($06) {
+    common #IceArrow
+    uncommon #IceArrow
+    rare #IceArrow
+    mythic #IceArrow
+}
+
+droptable($07) {
+    common #LitArrow
+    uncommon #LitArrow
+    rare #LitArrow
+    mythic #LitArrow
+}
+
+droptable($08) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($09) {
+    common #PoisonArrow
+    uncommon #PoisonArrow
+    rare #PoisonArrow
+    mythic #PoisonArrow
+}
+
+droptable($0A) {
+    common #Ether1
+    uncommon #Ether1
+    rare #Ether1
+    mythic #Ether1
+}
+
+droptable($0B) {
+    common #Cure2
+    uncommon #Ether1
+    rare #Ether1
+    mythic #Ether1
+}
+
+droptable($0C) {
+    common #SilverShield
+    uncommon #SilverHammer
+    rare #Cure2
+    mythic #Cure3
+}
+
+droptable($0D) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($0E) {
+    common #Heal
+    uncommon #Heal
+    rare #Heal
+    mythic #Heal
+}
+
+droptable($0F) {
+    common #Cure2
+    uncommon #Cure3
+    rare #Elixir
+    mythic #Glass
+}
+
+droptable($10) {
+    common #Cure1
+    uncommon #Cure2
+    rare #Cure2
+    mythic #Cure2
+}
+
+droptable($11) {
+    common #Cure1
+    uncommon #Cure2
+    rare #Heal
+    mythic #Heal
+}
+
+droptable($12) {
+    common #LeatherHat
+    uncommon #Cure2
+    rare #Cabin
+    mythic #Cabin
+}
+
+droptable($13) {
+    common #Cap
+    uncommon #LeatherArmor
+    rare #Cure2
+    mythic #Cure2
+}
+
+droptable($14) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cursed
+}
+
+droptable($15) {
+    common #Tent
+    uncommon #Cabin
+    rare #Cabin
+    mythic #Cabin
+}
+
+droptable($16) {
+    common #CharmHarp
+    uncommon #RubyRing
+    rare #CharmArrow
+    mythic #CharmArrow
+}
+
+droptable($17) {
+    common #FlameSpear
+    uncommon #FireBrand
+    rare #FireShield
+    mythic #FireArmor
+}
+
+droptable($18) {
+    common #Tent
+    uncommon #Tent
+    rare #Tent
+    mythic #Tent
+}
+
+droptable($19) {
+    common #Cabin
+    uncommon #Ogre
+    rare #PoisonAxe
+    mythic #RuneAxe
+}
+
+droptable($1A) {
+    common #Cure2
+    uncommon #Cure2
+    rare #Cure2
+    mythic #Cure2
+}
+
+droptable($1B) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($1C) {
+    common #Ether1
+    uncommon #Ether1
+    rare #Ether1
+    mythic #Ether1
+}
+
+droptable($1D) {
+    common #Cure2
+    uncommon #Cure3
+    rare #MedusaArrow
+    mythic #MedusaArrow
+}
+
+droptable($1E) {
+    common #SilverDagger
+    uncommon #SilverShield
+    rare #SilverArmor
+    mythic #SilverSword
+}
+
+droptable($1F) {
+    common #Heal
+    uncommon #SamuraiArrow
+    rare #SamuraiArrow
+    mythic #SamuraiArrow
+}
+
+droptable($20) {
+    common #Cure2
+    uncommon #Headband
+    rare #Strength
+    mythic #Zeus
+}
+
+droptable($21) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($22) {
+    common #Cure
+    uncommon #Rune
+    rare #Silence
+    mythic #Silence
+}
+
+droptable($23) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($24) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($25) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($26) {
+    common #Rod
+    uncommon #SilverRing
+    rare #Ether1
+    mythic #Ether2
+}
+
+droptable($27) {
+    common #Ether1
+    uncommon #Ether1
+    rare #Ether1
+    mythic #Lilith
+}
+
+droptable($28) {
+    common #Ether2
+    uncommon #Elixir
+    rare #NinjaStar
+    mythic #Pink
+}
+
+droptable($29) {
+    common #ArtemisArrow
+    uncommon #ArtemisArrow
+    rare #Heroine
+    mythic #ArtemisBow
+}
+
+droptable($2A) {
+    common #EarthHammer
+    uncommon #Zeus
+    rare #Zeus
+    mythic #Zeus
+}
+
+droptable($2B) {
+    common #Ether1
+    uncommon #Ether2
+    rare #Elixir
+    mythic #Protect
+}
+
+droptable($2C) {
+    common #Cure2
+    uncommon #Shuriken
+    rare #DragonWhip
+    mythic #DragoonSpear
+}
+
+droptable($2D) {
+    common #Murasame
+    uncommon #Murasame
+    rare #Murasame
+    mythic #Murasame
+}
+
+droptable($2E) {
+    common #FireBomb
+    uncommon #DragoonGauntlet
+    rare #DragoonSpear
+    mythic #CrystalRing
+}
+
+droptable($2F) {
+    common #Headband
+    uncommon #Strength
+    rare #PowerRobe
+    mythic #Avenger
+}
+
+droptable($30) {
+    common #Heal
+    uncommon #Ether2
+    rare #Life
+    mythic #Ribbon
+}
+
+droptable($31) {
+    common #Heal
+    uncommon #Heal
+    rare #Heal
+    mythic #Heal
+}
+
+droptable($32) {
+    common #Cure2
+    uncommon #Cure2
+    rare #Cure2
+    mythic #Cure2
+}
+
+droptable($33) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cursed
+}
+
+droptable($34) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($35) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure2
+    mythic #Cure2
+}
+
+droptable($36) {
+    common #Cure2
+    uncommon #Cure2
+    rare #CatClaw
+    mythic #CatClaw
+}
+
+droptable($37) {
+    common #MedusaArrow
+    uncommon #MedusaArrow
+    rare #MedusaArrow
+    mythic #MedusaSword
+}
+
+droptable($38) {
+    common #Cure1
+    uncommon #Tent
+    rare #Cure2
+    mythic #Imp
+}
+
+droptable($39) {
+    common #Life
+    uncommon #Life
+    rare #Life
+    mythic #Life
+}
+
+droptable($3A) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #BombSummon
+}
+
+droptable($3B) {
+    common #Cure2
+    uncommon #Cure2
+    rare #Cure2
+    mythic #Mage
+}
+
+droptable($3C) {
+    common #Tower
+    uncommon #Tower
+    rare #Tower
+    mythic #Tower
+}
+
+droptable($3D) {
+    common #Cure1
+    uncommon #Cure1
+    rare #Cure1
+    mythic #Cure1
+}
+
+droptable($3E) {
+    common #Life
+    uncommon #Life
+    rare #Life
+    mythic #Life
+}
+
+droptable($3F) {
+    common #Elixir
+    uncommon #Elixir
+    rare #Elixir
+    mythic #Elixir
+}

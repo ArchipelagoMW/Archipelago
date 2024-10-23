@@ -1,0 +1,71 @@
+// set everyone's MP to 3
+msfpatch {
+    Wacky__InitializeAxtorHook:
+        lda #$03
+        sta $114b
+        sta $114d
+        stz $114c
+        stz $114e
+        rtl
+}
+
+// prevent MP increase on level up
+msfpatch {
+    .addr $03f079
+        jmp $f08a
+}
+
+// Scale down Psych power in battle
+msfpatch {
+    .addr $03D4A2
+        jsl $=Wacky__ThreeWishes_ScalePsych
+    
+    .new
+    Wacky__ThreeWishes_ScalePsych:
+        ldx #$0001
+        stx $a2
+        stx $a4
+        rtl
+}
+
+
+// Scale down MP gain items in battle
+msfpatch {
+    .addr $03D9FF
+        jsl $=Wacky__ThreeWishes_ScaleMPGain
+        nop
+    
+    .new
+    Wacky__ThreeWishes_ScaleMPGain:
+        .mx 0x00
+        lda $a4
+        stz $a4
+        cmp #$0050
+        bcc $+Restore1
+        inc $a4
+    %Restore1:
+        inc $a4
+        lda $a4
+        clc
+        adc $270b
+        rtl
+}
+
+// In menu screen, Ether1 -> 1 MP, Ether2 -> 2 MP
+msfpatch {
+    .addr $01A635
+        jml $=Wacky__ThreeWishes_ScaleEtherInMenu
+
+    .new
+    Wacky__ThreeWishes_ScaleEtherInMenu:
+        lda $45
+        stz $45
+        cmp #$50
+        bcc $+Restore1
+        inc $45
+    %Restore1:
+        inc $45
+        // displaced
+        ldy #$000b
+        jml $01a61c
+}

@@ -1,0 +1,288 @@
+shop($00)
+{
+    #Rod
+    #Staff
+    #ShortBow
+    #IronArrow
+}
+
+shop($01)
+{
+    #FireClaw
+    #IceClaw
+    #ThunderClaw
+    #BlackHelm
+    #BlackArmor
+    #BlackGauntlet
+}
+
+shop($02)
+{
+    #IceRod
+    #FlameRod
+    #Cure
+    #CrossBow
+    #WhiteArrow
+}
+
+shop($03)
+{
+    #ThunderRod
+    #Cure
+    #FireClaw
+    #IceClaw
+    #ThunderClaw
+}
+
+shop($04)
+{
+    #Wooden
+    #GreatBow
+    #FireArrow
+    #IceArrow
+    #LitArrow
+}
+
+shop($05)
+{
+    #SilverStaff
+    #SilverDagger
+    #SilverHammer
+    #SilverSword
+}
+
+shop($06)
+{
+    #Dwarf
+    #GreatBow
+    #DarknessArrow
+    #FireBrand
+    #FlameSpear
+}
+
+shop($07)
+{
+    #PowerStaff
+    #IceBrand
+    #BlizzardSpear
+    #Short
+    #Boomrang
+    #Archer
+    #PoisonArrow
+}
+
+shop($08)
+{
+    #Middle
+    #Chain
+    #Ogre
+    #Archer
+    #MuteArrow
+}
+
+shop($09)
+{
+    #Shuriken
+    #NinjaStar
+    #SamuraiArrow
+}
+
+shop($0A)
+{
+    #Cap
+    #Cloth
+    #LeatherArmor
+    #IronRing
+}
+
+shop($0B)
+{
+    #GaeaHat
+    #GaeaArmor
+    #SilverRing
+    #PaladinShield
+    #PaladinHelm
+    #PaladinArmor
+    #PaladinGauntlet
+}
+
+shop($0C)
+{
+    #Headband
+    #Karate
+    #SilverRing
+}
+
+shop($0D)
+{
+    #Cap
+    #LeatherHat
+    #Cloth
+    #LeatherArmor
+    #RubyRing
+}
+
+shop($0E)
+{
+    #SilverShield
+    #SilverHelm
+    #SilverArmor
+    #SilverGauntlet
+}
+
+shop($0F)
+{
+    #FireShield
+    #FireArmor
+    #WizardHat
+    #WizardArmor
+    #Rune
+}
+
+shop($10)
+{
+    #IceShield
+    #IceArmor
+    #BlackRobe
+}
+
+shop($11)
+{
+    #DiamondShield
+    #DiamondHelm
+    #DiamondArmor
+    #DiamondGauntlet
+    #Tiara
+    #DiamondRing
+}
+
+shop($12)
+{
+    #Cure2
+    #Life
+    #Ether1
+    #Ether2
+    #Elixir
+    #Cabin
+    #Whistle
+}
+
+shop($13)
+{
+    #Cure1
+    #Life
+    #Tent
+    #Carrot
+    #Heal
+    #Ether1
+}
+
+shop($14)
+{
+    #Cure1
+    #Cure2
+    #Life
+    #Tent
+    #Cabin
+    #Heal
+    #Ether1
+}
+
+shop($15)
+{
+    #Heal
+}
+
+shop($16)
+{
+    #Whip
+    #Dancing
+}
+
+shop($17)
+{
+    #Bard
+}
+
+shop($18)
+{
+    #Life
+    #Cure1
+    #Cure2
+    #Tent
+    #Cabin
+    #Carrot
+    #Heal
+    #Ether1
+}
+
+shop($19)
+{
+    #Cure2
+    #Life
+    #Tent
+    #Carrot
+    #Heal
+    #Ether1
+}
+
+shop($1A)
+{
+    #Rod
+    #Staff
+    #Spear
+    #Boomrang
+    #ShortBow
+    #CrossBow
+    #IronArrow
+    #WhiteArrow
+}
+
+shop($1B)
+{
+    #IronShield
+    #IronHelm
+    #IronArmor
+    #IronGauntlet
+    #IronRing
+}
+
+shop($1C)
+{
+    #Whip
+    #Chain
+    #Blitz
+    #Long
+    #CharmRod
+    #Lunar
+    #CharmArrow
+}
+
+shop($1D)
+{
+    #Aegis
+    #Sorcerer
+}
+
+shop($1E)
+{
+    #Life
+    #Cure1
+    #Cure2
+    #Tent
+    #Cabin
+    #Carrot
+    #Heal
+    #Ether1
+}
+
+shop($1F)
+{
+    #Pass
+}
+
+shop($20)
+{
+    #Shuriken
+    #NinjaStar
+}

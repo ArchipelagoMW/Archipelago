@@ -1,0 +1,62 @@
+// patch attack power calculation code to not
+// overflow
+msfpatch {
+    .addr $039d0c
+        jml $=PatchAttackOverflow__Normal
+
+    .addr $039cb9
+        jml $=PatchAttackOverflow__TwoHanded
+
+    .new
+    PatchAttackOverflow__Normal:
+        adc $a9
+        bcs $+Overflow
+        adc $aa
+        bcs $+Overflow
+    %Return:
+        jml $039d13
+
+    %Overflow:
+        lda #$ff
+        bra $-Return
+
+    PatchAttackOverflow__TwoHanded:
+        adc $a9
+        bcs $-Overflow
+        adc $aa
+        bcs $-Overflow
+        adc $28a8
+        bcs $-Overflow
+        adc $a9
+        bcs $-Overflow
+        adc $aa
+        bcs $-Overflow
+        bra $-Return
+}
+
+msfpatch {
+    .addr $039cdb
+        jml $=PatchAttackOverflow__BowAndArrow
+
+    .new
+    PatchAttackOverflow__BowAndArrow:
+        bcs $+Overflow
+        adc $aa
+        bcs $+Overflow
+    %Return:
+        sta $bf
+        jml $039cdf
+
+    %Overflow:
+        lda #$ff
+        bra $-Return
+}
+
+/* 
+compiled extension code:
+
+65 A9 B0 08 65 AA B0 04 5C 13 9D 03 A9 FF 80 F8 
+65 A9 B0 F8 65 AA B0 F4 6D A8 28 B0 EF 65 A9 B0 EB 65 AA B0 E7 80 E1 
+B0 0A 65 AA B0 06 85 BF 5C DF 9C 03 A9 FF 80 F6
+*/
+

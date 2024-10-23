@@ -1,0 +1,58 @@
+// 3:2 formation -> 5 in front formation
+// 2:3 formation -> 5 in back formation
+
+// change portrait locations
+patch ($1efe0a bus) {
+    10 60 10 10 10 b0 10 38 10 88
+    18 60 18 10 18 b0 18 38 18 88
+}
+
+patch ($1efea9 bus) {
+    58 68 58 18 58 b8 58 40 58 90
+    60 68 60 18 60 b8 60 40 60 90    
+}
+
+// change shop menu sprite positions
+// (only change needed X positions so it doesn't
+//  conflict with Y position changes from shop menu
+//  done to make room for item info box)
+patch ($019216 bus) { 00 }
+patch ($019218 bus) { 00 }
+patch ($019220 bus) { 18 }
+patch ($019222 bus) { 18 }
+
+// change battle init to set back row bits correctly
+msfpatch {
+    .addr $0395F8
+        and #$7f
+    .addr $039600
+        and #$7F
+    .addr $039621
+        ora #$80
+    .addr $039629
+        ora #$80
+}
+
+// change battle formation data
+patch ($16fd1f bus)
+{
+    D0 D0 D0 D0 D0
+    E0 E0 E0 E0 E0    
+}
+patch ($16fcf8 bus)
+{
+    10 10 10 10 10
+    08 08 08 08 08
+}
+patch ($16fcee bus)
+{
+    10 10 10 10 10
+    18 18 18 18 18
+}
+
+// Detail text
+text(bank 1 message $11A) {
+Note that, for this
+challenge, the back row
+glitch is disabled.
+}

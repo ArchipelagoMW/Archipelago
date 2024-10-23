@@ -1,0 +1,2093 @@
+ai_condition($00) { $FF $FF $FF $FF }
+ai_condition($01) { self status #Charm }
+ai_condition($02) { alone }
+ai_condition($03) { all monsters same type as self }
+ai_condition($04) { damaged }
+ai_condition($05) { $09 $00 $00 $00 }
+ai_condition($06) { anyone (character) uses #Fight }
+ai_condition($07) { anyone (character) uses magic }
+ai_condition($08) { anyone (character) uses #Fire magic }
+ai_condition($09) { anyone (character) uses #Ice magic }
+ai_condition($0A) { anyone (character) uses #Lit magic }
+ai_condition($0B) { character uses magic }
+ai_condition($0C) { character uses #Fire magic }
+ai_condition($0D) { character uses #Ice magic }
+ai_condition($0E) { character uses #Lit magic }
+ai_condition($0F) { anyone (character) uses #Holy magic }
+ai_condition($10) { condition flag 0 }
+ai_condition($11) { condition flag 1 }
+ai_condition($12) { condition flag 2 }
+ai_condition($13) { condition flag 3 }
+ai_condition($14) { condition flag 4 }
+ai_condition($15) { condition flag 5 }
+ai_condition($16) { condition flag 6 }
+ai_condition($17) { condition flag 7 }
+ai_condition($18) { condition flag 8 }
+ai_condition($19) { condition flag 9 }
+ai_condition($1A) { condition flag 10 }
+ai_condition($1B) { condition flag 11 }
+ai_condition($1C) { condition flag 12 }
+ai_condition($1D) { condition flag 13 }
+ai_condition($1E) { condition flag 14 }
+ai_condition($1F) { condition flag 16 }
+ai_condition($20) { reaction flag 0 }
+ai_condition($21) { reaction flag 1 }
+ai_condition($22) { reaction flag 2 }
+ai_condition($23) { reaction flag 3 }
+ai_condition($24) { formation $F7 }
+ai_condition($25) { formation $FC }
+ai_condition($26) { formation $FD }
+ai_condition($27) { formation $1A1 }
+ai_condition($28) { anyone (type 0 monster) uses magic }
+ai_condition($29) { anyone (actor #Edward) uses #Fight }
+ai_condition($2A) { anyone (actor #PCecil) uses #Fight }
+ai_condition($2B) { anyone (character) uses jump }
+ai_condition($2C) { character uses #Holy magic }
+ai_condition($2D) { actor #DKCecil status #Critical }
+ai_condition($2E) { self status #Egg }
+ai_condition($2F) { monster $A7 dead  // Baigan   }
+ai_condition($30) { monster $AD dead  // Sandy    }
+ai_condition($31) { monster $AE dead  // Cindy    }
+ai_condition($32) { monster $AF dead  // Mindy    }
+ai_condition($33) { anyone (type 1 monster) uses #Fight }
+ai_condition($34) { actor #PCecil dead }
+ai_condition($35) { anyone (actor #PCecil) uses #Dark magic }
+ai_condition($36) { formation $1C3 }
+ai_condition($37) { anyone (character) uses $E0 }
+ai_condition($38) { actor #PCecil dead }
+ai_condition($39) { actor #ARydia dead }
+ai_condition($3A) { actor #Kain2 dead }
+ai_condition($3B) { actor #Rosa2 dead }
+ai_condition($3C) { all character status #Count }
+ai_condition($3D) { anyone (character) uses #Dark magic }
+ai_condition($3E) { anyone (actor #Fusoya) uses #Holy magic }
+ai_condition($3F) { anyone (character) uses #Call }
+ai_condition($40) { self hp below index $00 /* 10000 */ }
+ai_condition($41) { self hp below index $01 /* 1000 */ }
+ai_condition($42) { self hp below index $02 /* 700 */ }
+ai_condition($43) { self hp below index $03 /* 20000 */ }
+ai_condition($44) { self hp below index $04 /* 100 */ }
+ai_condition($45) { self hp below index $05 /* 19000 */ }
+ai_condition($46) { self hp below index $06 /* 700 */ }
+ai_condition($47) { self hp below index $07 /* 40000 */ }
+ai_condition($48) { self hp below index $08 /* 11000 */ }
+ai_condition($49) { self hp below index $09 /* 27000 */ }
+ai_condition($4A) { self hp below index $0A /* 1000 */ }
+ai_condition($4B) { self hp below index $0B /* 16000 */ }
+ai_condition($4C) { anyone (all other monster) uses magic }
+ai_condition($4D) { actor #Edge dead }
+ai_condition($4E) { self status #Wall }
+ai_condition($4F) { self hp below index $0C /* 12000 */ }
+ai_condition($50) { $FF $FF $FF $FF }
+ai_condition($51) { $FF $FF $FF $FF }
+ai_condition($52) { $FF $FF $FF $FF }
+ai_condition($53) { $FF $FF $FF $FF }
+ai_condition($54) { $FF $FF $FF $FF }
+ai_condition($55) { $FF $FF $FF $FF }
+ai_condition($56) { $FF $FF $FF $FF }
+ai_condition($57) { $FF $FF $FF $FF }
+ai_condition($58) { $FF $FF $FF $FF }
+ai_condition($59) { $FF $FF $FF $FF }
+ai_condition($5A) { $FF $FF $FF $FF }
+ai_condition($5B) { $FF $FF $FF $FF }
+ai_condition($5C) { $FF $FF $FF $FF }
+ai_condition($5D) { $FF $FF $FF $FF }
+ai_condition($5E) { $FF $FF $FF $FF }
+ai_condition($5F) { $FF $FF $FF $FF }
+ai_condition($60) { $FF $FF $FF $FF }
+ai_condition($61) { $FF $FF $FF $FF }
+ai_condition($62) { $FF $FF $FF $FF }
+ai_condition($63) { $FF $FF $FF $FF }
+ai_condition($64) { $FF $FF $FF $FF }
+ai_condition($65) { $FF $FF $FF $FF }
+ai_condition($66) { $FF $FF $FF $FF }
+ai_condition($67) { $FF $FF $FF $FF }
+ai_condition($68) { $FF $FF $FF $FF }
+ai_condition($69) { $FF $FF $FF $FF }
+ai_condition($6A) { $FF $FF $FF $FF }
+ai_condition($6B) { $FF $FF $FF $FF }
+ai_condition($6C) { $FF $FF $FF $FF }
+ai_condition($6D) { $FF $FF $FF $FF }
+ai_condition($6E) { $FF $FF $FF $FF }
+ai_condition($6F) { $FF $FF $FF $FF }
+ai_condition($70) { $FF $FF $FF $FF }
+ai_condition($71) { $FF $FF $FF $FF }
+ai_condition($72) { $FF $FF $FF $FF }
+ai_condition($73) { $FF $FF $FF $FF }
+ai_condition($74) { $FF $FF $FF $FF }
+ai_condition($75) { $FF $FF $FF $FF }
+ai_condition($76) { $FF $FF $FF $FF }
+ai_condition($77) { $FF $FF $FF $FF }
+ai_condition($78) { $FF $FF $FF $FF }
+ai_condition($79) { $FF $FF $FF $FF }
+ai_condition($7A) { $FF $FF $FF $FF }
+ai_condition($7B) { $FF $FF $FF $FF }
+ai_condition($7C) { $FF $FF $FF $FF }
+ai_condition($7D) { $FF $FF $FF $FF }
+ai_condition($7E) { $FF $FF $FF $FF }
+ai_condition($7F) { $FF $FF $FF $FF }
+
+ai_condition_set($00) {
+    $00  // $FF $FF $FF $FF
+}
+
+ai_condition_set($01) {
+    $01  // self status #Charm
+}
+
+ai_condition_set($02) {
+    $02  // alone
+}
+
+ai_condition_set($03) {
+    $03  // all monsters same type as self
+}
+
+ai_condition_set($04) {
+    $04  // damaged
+}
+
+ai_condition_set($05) {
+    $05  // $09 $00 $00 $00
+}
+
+ai_condition_set($06) {
+    $06  // anyone (character) uses #Fight
+}
+
+ai_condition_set($07) {
+    $07  // anyone (character) uses magic
+}
+
+ai_condition_set($08) {
+    $08  // anyone (character) uses #Fire magic
+}
+
+ai_condition_set($09) {
+    $09  // anyone (character) uses #Ice magic
+}
+
+ai_condition_set($0A) {
+    $0A  // anyone (character) uses #Lit magic
+}
+
+ai_condition_set($0B) {
+    $0B  // character uses magic
+}
+
+ai_condition_set($0C) {
+    $0C  // character uses #Fire magic
+}
+
+ai_condition_set($0D) {
+    $0D  // character uses #Ice magic
+}
+
+ai_condition_set($0E) {
+    $0E  // character uses #Lit magic
+}
+
+ai_condition_set($0F) {
+    $0F  // anyone (character) uses #Holy magic
+}
+
+ai_condition_set($10) {
+    $10  // condition flag 0
+}
+
+ai_condition_set($11) {
+    $11  // condition flag 1
+}
+
+ai_condition_set($12) {
+    $12  // condition flag 2
+}
+
+ai_condition_set($13) {
+    $13  // condition flag 3
+}
+
+ai_condition_set($14) {
+    $14  // condition flag 4
+}
+
+ai_condition_set($15) {
+    $15  // condition flag 5
+}
+
+ai_condition_set($16) {
+    $10  // condition flag 0
+    $06  // anyone (character) uses #Fight
+}
+
+ai_condition_set($17) {
+    $41  // self hp below index $01 /* 1000 */
+    $04  // damaged
+}
+
+ai_condition_set($18) {
+    $13  // condition flag 3
+    $04  // damaged
+    $4B  // self hp below index $0B /* 16000 */
+}
+
+ai_condition_set($19) {
+    $4E  // self status #Wall
+}
+
+ai_condition_set($1A) {
+    $38  // actor #PCecil dead
+    $08  // anyone (character) uses #Fire magic
+}
+
+ai_condition_set($1B) {
+    $39  // actor #ARydia dead
+    $08  // anyone (character) uses #Fire magic
+}
+
+ai_condition_set($1C) {
+    $3A  // actor #Kain2 dead
+    $08  // anyone (character) uses #Fire magic
+}
+
+ai_condition_set($1D) {
+    $3B  // actor #Rosa2 dead
+    $08  // anyone (character) uses #Fire magic
+}
+
+ai_condition_set($1E) {
+    $4D  // actor #Edge dead
+    $08  // anyone (character) uses #Fire magic
+}
+
+ai_condition_set($1F) {
+    $1F  // condition flag 16
+}
+
+ai_condition_set($20) {
+    $06  // anyone (character) uses #Fight
+    $02  // alone
+}
+
+ai_condition_set($21) {
+    $04  // damaged
+    $02  // alone
+}
+
+ai_condition_set($22) {
+    $03  // all monsters same type as self
+    $07  // anyone (character) uses magic
+}
+
+ai_condition_set($23) {
+    $07  // anyone (character) uses magic
+    $02  // alone
+}
+
+ai_condition_set($24) {
+    $28  // anyone (type 0 monster) uses magic
+}
+
+ai_condition_set($25) {
+    $24  // formation $F7
+}
+
+ai_condition_set($26) {
+    $36  // formation $1C3
+}
+
+ai_condition_set($27) {
+    $3C  // all character status #Count
+}
+
+ai_condition_set($28) {
+    $06  // anyone (character) uses #Fight
+    $11  // condition flag 1
+}
+
+ai_condition_set($29) {
+    $04  // damaged
+    $12  // condition flag 2
+}
+
+ai_condition_set($2A) {
+    $04  // damaged
+    $14  // condition flag 4
+}
+
+ai_condition_set($2B) {
+    $04  // damaged
+    $16  // condition flag 6
+}
+
+ai_condition_set($2C) {
+    $04  // damaged
+    $18  // condition flag 8
+}
+
+ai_condition_set($2D) {
+    $04  // damaged
+    $1A  // condition flag 10
+}
+
+ai_condition_set($2E) {
+    $04  // damaged
+    $1C  // condition flag 12
+}
+
+ai_condition_set($2F) {
+    $04  // damaged
+    $1E  // condition flag 14
+}
+
+ai_condition_set($30) {
+    $29  // anyone (actor #Edward) uses #Fight
+}
+
+ai_condition_set($31) {
+    $11  // condition flag 1
+    $06  // anyone (character) uses #Fight
+}
+
+ai_condition_set($32) {
+    $12  // condition flag 2
+    $06  // anyone (character) uses #Fight
+}
+
+ai_condition_set($33) {
+    $13  // condition flag 3
+    $06  // anyone (character) uses #Fight
+}
+
+ai_condition_set($34) {
+    $11  // condition flag 1
+    $04  // damaged
+}
+
+ai_condition_set($35) {
+    $12  // condition flag 2
+    $04  // damaged
+}
+
+ai_condition_set($36) {
+    $40  // self hp below index $00 /* 10000 */
+}
+
+ai_condition_set($37) {
+    $41  // self hp below index $01 /* 1000 */
+}
+
+ai_condition_set($38) {
+    $2F  // monster $A7 dead  // Baigan  
+}
+
+ai_condition_set($39) {
+    $21  // reaction flag 1
+    $0A  // anyone (character) uses #Lit magic
+}
+
+ai_condition_set($3A) {
+    $42  // self hp below index $02 /* 700 */
+    $04  // damaged
+}
+
+ai_condition_set($3B) {
+    $25  // formation $FC
+}
+
+ai_condition_set($3C) {
+    $43  // self hp below index $03 /* 20000 */
+    $04  // damaged
+}
+
+ai_condition_set($3D) {
+    $30  // monster $AD dead  // Sandy   
+}
+
+ai_condition_set($3E) {
+    $31  // monster $AE dead  // Cindy   
+}
+
+ai_condition_set($3F) {
+    $32  // monster $AF dead  // Mindy   
+}
+
+ai_condition_set($40) {
+    $11  // condition flag 1
+    $2B  // anyone (character) uses jump
+}
+
+ai_condition_set($41) {
+    $11  // condition flag 1
+    $06  // anyone (character) uses #Fight
+}
+
+ai_condition_set($42) {
+    $11  // condition flag 1
+    $07  // anyone (character) uses magic
+}
+
+ai_condition_set($43) {
+    $11  // condition flag 1
+    $2A  // anyone (actor #PCecil) uses #Fight
+}
+
+ai_condition_set($44) {
+    $44  // self hp below index $04 /* 100 */
+    $04  // damaged
+}
+
+ai_condition_set($45) {
+    $26  // formation $FD
+}
+
+ai_condition_set($46) {
+    $26  // formation $FD
+    $08  // anyone (character) uses #Fire magic
+}
+
+ai_condition_set($47) {
+    $11  // condition flag 1
+    $09  // anyone (character) uses #Ice magic
+}
+
+ai_condition_set($48) {
+    $4A  // self hp below index $0A /* 1000 */
+    $06  // anyone (character) uses #Fight
+}
+
+ai_condition_set($49) {
+    $33  // anyone (type 1 monster) uses #Fight
+}
+
+ai_condition_set($4A) {
+    $11  // condition flag 1
+    $0A  // anyone (character) uses #Lit magic
+}
+
+ai_condition_set($4B) {
+    $2D  // actor #DKCecil status #Critical
+}
+
+ai_condition_set($4C) {
+    $11  // condition flag 1
+    $02  // alone
+}
+
+ai_condition_set($4D) {
+    $45  // self hp below index $05 /* 19000 */
+    $04  // damaged
+}
+
+ai_condition_set($4E) {
+    $10  // condition flag 0
+    $04  // damaged
+}
+
+ai_condition_set($4F) {
+    $11  // condition flag 1
+    $04  // damaged
+}
+
+ai_condition_set($50) {
+    $12  // condition flag 2
+    $04  // damaged
+}
+
+ai_condition_set($51) {
+    $3F  // anyone (character) uses #Call
+}
+
+ai_condition_set($52) {
+    $37  // anyone (character) uses $E0
+    $11  // condition flag 1
+}
+
+ai_condition_set($53) {
+    $3E  // anyone (actor #Fusoya) uses #Holy magic
+}
+
+ai_condition_set($54) {
+    $46  // self hp below index $06 /* 700 */
+    $04  // damaged
+    $10  // condition flag 0
+}
+
+ai_condition_set($55) {
+    $2E  // self status #Egg
+}
+
+ai_condition_set($56) {
+    $2E  // self status #Egg
+    $04  // damaged
+}
+
+ai_condition_set($57) {
+    $10  // condition flag 0
+    $47  // self hp below index $07 /* 40000 */
+    $04  // damaged
+}
+
+ai_condition_set($58) {
+    $11  // condition flag 1
+    $48  // self hp below index $08 /* 11000 */
+    $04  // damaged
+}
+
+ai_condition_set($59) {
+    $12  // condition flag 2
+    $49  // self hp below index $09 /* 27000 */
+    $04  // damaged
+}
+
+ai_condition_set($5A) {
+    $02  // alone
+    $0F  // anyone (character) uses #Holy magic
+}
+
+ai_condition_set($5B) {
+    $07  // anyone (character) uses magic
+    $11  // condition flag 1
+}
+
+ai_condition_set($5C) {
+    $2B  // anyone (character) uses jump
+}
+
+ai_condition_set($5D) {
+    $3F  // anyone (character) uses #Call
+    $13  // condition flag 3
+}
+
+ai_condition_set($5E) {
+    $35  // anyone (actor #PCecil) uses #Dark magic
+    $12  // condition flag 2
+}
+
+ai_condition_set($5F) {
+    $3D  // anyone (character) uses #Dark magic
+}
+
+ai_condition_set($60) {
+    $00  // $FF $FF $FF $FF
+}
+
+ai_condition_set($61) {
+    $14  // condition flag 4
+    $04  // damaged
+    $4F  // self hp below index $0C /* 12000 */
+}
+
+// used by: Imp     , Sand Man, EvilShel, Zombie  , Pike    , Mad Toad, Jelly   , Cream   , WaterHag, Weeper  , Dark Imp, Turtle  , Imp Cap., Slime   , Piranha , Ghoul   , Revenant, CaveNaga, ElecFish, Guard   , Grudger , Naga    , Ogre    , SwordMan, Centaur , FangShel, Screamer, Warrior , Armadilo, EpeeGirl, BladeMan, HugeNaga, Tortoise, Carapace, Ironback, Stoneman, Mad Ogre, FlameMan, Grenade , Tofu    , Pudding , Ironman , MacGiant, Juclyote, Horseman, Staleman, Procyote, FloatEye, Raven   , Dummy   , Egg     
+aigroup($00) {
+    condition set $55 : script $00  // self status #Egg
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Bomb    , GrayBomb, Balloon 
+aigroup($01) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $03  // $FF $FF $FF $FF
+}
+
+// used by: GrayBomb
+aigroup($02) {
+    condition set $08 : script $04  // anyone (character) uses #Fire magic
+}
+
+// used by: Balloon 
+aigroup($03) {
+    condition set $09 : script $04  // anyone (character) uses #Ice magic
+}
+
+// used by: Grenade 
+aigroup($04) {
+    condition set $0A : script $05  // anyone (character) uses #Lit magic
+    condition set $08 : script $04  // anyone (character) uses #Fire magic
+}
+
+aigroup($05) {
+    condition set $08 : script $05  // anyone (character) uses #Fire magic
+    condition set $0A : script $04  // anyone (character) uses #Lit magic
+}
+
+// used by: Basilisk
+aigroup($06) {
+    condition set $01 : script $06  // self status #Charm
+    condition set $00 : script $07  // $FF $FF $FF $FF
+}
+
+// used by: BlackLiz
+aigroup($07) {
+    condition set $55 : script $00  // self status #Egg
+    condition set $01 : script $06  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: BlackLiz
+aigroup($08) {
+    condition set $56 : script $58  // self status #Egg, damaged
+    condition set $06 : script $08  // anyone (character) uses #Fight
+}
+
+// used by: Ice Liz 
+aigroup($09) {
+    condition set $01 : script $09  // self status #Charm
+    condition set $00 : script $07  // $FF $FF $FF $FF
+}
+
+// used by: Ice Liz 
+aigroup($0A) {
+    condition set $07 : script $0B  // anyone (character) uses magic
+}
+
+// used by: Eagle   , Roc Baby
+aigroup($0B) {
+    condition set $01 : script $0C  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Cocktric
+aigroup($0C) {
+    condition set $01 : script $0C  // self status #Charm
+    condition set $23 : script $0D  // anyone (character) uses magic, alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Roc Baby
+aigroup($0D) {
+    condition set $07 : script $0D  // anyone (character) uses magic
+}
+
+// used by: FloatEye
+aigroup($0E) {
+    condition set $01 : script $0E  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Red Eye 
+aigroup($0F) {
+    condition set $01 : script $0E  // self status #Charm
+    condition set $00 : script $0F  // $FF $FF $FF $FF
+}
+
+aigroup($10) {
+    condition set $01 : script $10  // self status #Charm
+    condition set $00 : script $11  // $FF $FF $FF $FF
+}
+
+// used by: Spirit  , Soul    
+aigroup($11) {
+    condition set $01 : script $12  // self status #Charm
+    condition set $0D : script $00  // character uses #Ice magic
+    condition set $00 : script $13  // $FF $FF $FF $FF
+}
+
+// used by: Ghost   
+aigroup($12) {
+    condition set $01 : script $14  // self status #Charm
+    condition set $0D : script $00  // character uses #Ice magic
+    condition set $00 : script $15  // $FF $FF $FF $FF
+}
+
+// used by: Cave Bat, GiantBat, Were Bat
+aigroup($13) {
+    condition set $01 : script $16  // self status #Charm
+    condition set $00 : script $17  // $FF $FF $FF $FF
+}
+
+// used by: Treant  
+aigroup($14) {
+    condition set $01 : script $0C  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Treant  
+aigroup($15) {
+    condition set $20 : script $19  // anyone (character) uses #Fight, alone
+}
+
+// used by: DarkTree
+aigroup($16) {
+    condition set $01 : script $1A  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: DarkTree
+aigroup($17) {
+    condition set $07 : script $1B  // anyone (character) uses magic
+}
+
+// used by: SwordRat
+aigroup($18) {
+    condition set $01 : script $1C  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: SwordRat, Needler , StingRat
+aigroup($19) {
+    condition set $06 : script $1D  // anyone (character) uses #Fight
+}
+
+// used by: Needler 
+aigroup($1A) {
+    condition set $01 : script $1C  // self status #Charm
+    condition set $02 : script $1D  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: StingRat
+aigroup($1B) {
+    condition set $01 : script $1C  // self status #Charm
+    condition set $03 : script $1D  // all monsters same type as self
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: TinyMage
+aigroup($1C) {
+    condition set $01 : script $1E  // self status #Charm
+    condition set $00 : script $1F  // $FF $FF $FF $FF
+}
+
+// used by: TinyMage
+aigroup($1D) {
+    condition set $07 : script $20  // anyone (character) uses magic
+    condition set $06 : script $21  // anyone (character) uses #Fight
+}
+
+// used by: SandMoth, GlomWing
+aigroup($1E) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $03 : script $22  // all monsters same type as self
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: RockMoth
+aigroup($1F) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $22  // $FF $FF $FF $FF
+}
+
+// used by: Sandpede
+aigroup($20) {
+    condition set $01 : script $24  // self status #Charm
+    condition set $02 : script $25  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Centpede
+aigroup($21) {
+    condition set $01 : script $24  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Centpede
+aigroup($22) {
+    condition set $21 : script $26  // damaged, alone
+}
+
+// used by: Arachne 
+aigroup($23) {
+    condition set $01 : script $24  // self status #Charm
+    condition set $00 : script $26  // $FF $FF $FF $FF
+}
+
+// used by: Arachne 
+aigroup($24) {
+    condition set $07 : script $01  // anyone (character) uses magic
+}
+
+// used by: Talantla
+aigroup($25) {
+    condition set $01 : script $26  // self status #Charm
+    condition set $00 : script $25  // $FF $FF $FF $FF
+}
+
+// used by: SandWorm
+aigroup($26) {
+    condition set $01 : script $28  // self status #Charm
+    condition set $02 : script $29  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: AquaWorm
+aigroup($27) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $03 : script $01  // all monsters same type as self
+    condition set $00 : script $2B  // $FF $FF $FF $FF
+}
+
+// used by: Red Worm
+aigroup($28) {
+    condition set $55 : script $00  // self status #Egg
+    condition set $01 : script $2C  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Red Worm
+aigroup($29) {
+    condition set $56 : script $58  // self status #Egg, damaged
+    condition set $04 : script $2D  // damaged
+}
+
+// used by: Gargoyle
+aigroup($2A) {
+    condition set $01 : script $2E  // self status #Charm
+    condition set $00 : script $2F  // $FF $FF $FF $FF
+}
+
+// used by: Hooligan
+aigroup($2B) {
+    condition set $01 : script $2E  // self status #Charm
+    condition set $0B : script $30  // character uses magic
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: CaveToad
+aigroup($2C) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $02 : script $31  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Mad Toad
+aigroup($2D) {
+    condition set $04 : script $31  // damaged
+}
+
+// used by: TrapRose, Cannibal
+aigroup($2E) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $03 : script $32  // all monsters same type as self
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Larva   
+aigroup($2F) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $03 : script $01  // all monsters same type as self
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Larva   
+aigroup($30) {
+    condition set $07 : script $20  // anyone (character) uses magic
+}
+
+// used by: RocLarva, Crawler 
+aigroup($31) {
+    condition set $01 : script $5D  // self status #Charm
+    condition set $03 : script $01  // all monsters same type as self
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: RocLarva, Crawler 
+aigroup($32) {
+    condition set $07 : script $20  // anyone (character) uses magic
+    condition set $06 : script $35  // anyone (character) uses #Fight
+}
+
+// used by: Skelton , Red Bone
+aigroup($33) {
+    condition set $02 : script $36  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Skull   
+aigroup($34) {
+    condition set $02 : script $37  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Raven   , Roc     
+aigroup($35) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $6F  // $FF $FF $FF $FF
+}
+
+// used by: WaterBug, HugeCell
+aigroup($36) {
+    condition set $01 : script $2C  // self status #Charm
+    condition set $00 : script $39  // $FF $FF $FF $FF
+}
+
+// used by: WaterBug
+aigroup($37) {
+    condition set $07 : script $3A  // anyone (character) uses magic
+}
+
+// used by: HugeCell
+aigroup($38) {
+    condition set $06 : script $3A  // anyone (character) uses #Fight
+}
+
+// used by: MoonCell
+aigroup($39) {
+    condition set $01 : script $2C  // self status #Charm
+    condition set $0B : script $01  // character uses magic
+    condition set $00 : script $39  // $FF $FF $FF $FF
+}
+
+// used by: MoonCell
+aigroup($3A) {
+    condition set $04 : script $3A  // damaged
+}
+
+// used by: VampGirl
+aigroup($3B) {
+    condition set $01 : script $16  // self status #Charm
+    condition set $03 : script $2D  // all monsters same type as self
+    condition set $00 : script $3D  // $FF $FF $FF $FF
+}
+
+// used by: VampLady
+aigroup($3C) {
+    condition set $01 : script $16  // self status #Charm
+    condition set $03 : script $2D  // all monsters same type as self
+    condition set $00 : script $3E  // $FF $FF $FF $FF
+}
+
+// used by: D.Bone  
+aigroup($3D) {
+    condition set $00 : script $09  // $FF $FF $FF $FF
+}
+
+// used by: D.Bone  
+aigroup($3E) {
+    condition set $08 : script $0A  // anyone (character) uses #Fire magic
+}
+
+// used by: Guard   
+aigroup($3F) {
+    condition set $07 : script $43  // anyone (character) uses magic
+    condition set $06 : script $44  // anyone (character) uses #Fight
+}
+
+// used by: BladeMan
+aigroup($40) {
+    condition set $07 : script $45  // anyone (character) uses magic
+    condition set $06 : script $46  // anyone (character) uses #Fight
+}
+
+// used by: Lamia   
+aigroup($41) {
+    condition set $55 : script $00  // self status #Egg
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Lilith  
+aigroup($42) {
+    condition set $01 : script $47  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Lilith  
+aigroup($43) {
+    condition set $06 : script $48  // anyone (character) uses #Fight
+}
+
+// used by: Q.Lamia 
+aigroup($44) {
+    condition set $01 : script $49  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Q.Lamia 
+aigroup($45) {
+    condition set $06 : script $01  // anyone (character) uses #Fight
+    condition set $07 : script $47  // anyone (character) uses magic
+}
+
+// used by: Hydra   , Python  
+aigroup($46) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $4A  // $FF $FF $FF $FF
+}
+
+// used by: Mage    
+aigroup($47) {
+    condition set $01 : script $4B  // self status #Charm
+    condition set $03 : script $4C  // all monsters same type as self
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: CaveNaga
+aigroup($48) {
+    condition set $07 : script $35  // anyone (character) uses magic
+}
+
+// used by: Naga    
+aigroup($49) {
+    condition set $07 : script $4D  // anyone (character) uses magic
+}
+
+// used by: HugeNaga
+aigroup($4A) {
+    condition set $56 : script $58  // self status #Egg, damaged
+    condition set $07 : script $4E  // anyone (character) uses magic
+}
+
+// used by: Panther 
+aigroup($4B) {
+    condition set $01 : script $4F  // self status #Charm
+    condition set $02 : script $50  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: BlackCat
+aigroup($4C) {
+    condition set $01 : script $4F  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: BlackCat
+aigroup($4D) {
+    condition set $04 : script $50  // damaged
+}
+
+// used by: CPU     
+aigroup($4E) {
+    condition set $02 : script $F3  // alone
+    condition set $19 : script $00  // self status #Wall
+    condition set $00 : script $F2  // $FF $FF $FF $FF
+}
+
+// used by: SwordMan, Warrior 
+aigroup($4F) {
+    condition set $20 : script $51  // anyone (character) uses #Fight, alone
+    condition set $23 : script $52  // anyone (character) uses magic, alone
+}
+
+// used by: EpeeGirl, D.Machin
+aigroup($50) {
+    condition set $04 : script $01  // damaged
+}
+
+// used by: Kary    
+aigroup($51) {
+    condition set $01 : script $04  // self status #Charm
+    condition set $03 : script $05  // all monsters same type as self
+    condition set $00 : script $03  // $FF $FF $FF $FF
+}
+
+// used by: Medusa  
+aigroup($52) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $02 : script $01  // alone
+    condition set $00 : script $53  // $FF $FF $FF $FF
+}
+
+// used by: Gorgon  
+aigroup($53) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $02 : script $53  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Dummy   
+aigroup($54) {
+    condition set $01 : script $54  // self status #Charm
+    condition set $00 : script $55  // $FF $FF $FF $FF
+}
+
+// used by: Gremlin , Fiend   
+aigroup($55) {
+    condition set $01 : script $54  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Gremlin 
+aigroup($56) {
+    condition set $07 : script $56  // anyone (character) uses magic
+}
+
+// used by: Fiend   
+aigroup($57) {
+    condition set $04 : script $56  // damaged
+}
+
+// used by: Chimera 
+aigroup($58) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $02 : script $57  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Mantcore
+aigroup($59) {
+    condition set $01 : script $57  // self status #Charm
+    condition set $00 : script $F8  // $FF $FF $FF $FF
+}
+
+// used by: FlameDog
+aigroup($5A) {
+    condition set $01 : script $3F  // self status #Charm
+    condition set $26 : script $7A  // formation $1C3
+    condition set $02 : script $40  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: IceBeast
+aigroup($5B) {
+    condition set $01 : script $59  // self status #Charm
+    condition set $03 : script $5A  // all monsters same type as self
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: TinyToad
+aigroup($5C) {
+    condition set $01 : script $5B  // self status #Charm
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: TinyToad
+aigroup($5D) {
+    condition set $24 : script $31  // anyone (type 0 monster) uses magic
+}
+
+// used by: Marion  
+aigroup($5E) {
+    condition set $01 : script $0E  // self status #Charm
+    condition set $02 : script $5C  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Sorcerer
+aigroup($5F) {
+    condition set $01 : script $5D  // self status #Charm
+    condition set $02 : script $5C  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Conjurer
+aigroup($60) {
+    condition set $01 : script $5E  // self status #Charm
+    condition set $02 : script $5C  // alone
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Puppet  
+aigroup($61) {
+    condition set $01 : script $1B  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Puppet  
+aigroup($62) {
+    condition set $08 : script $5F  // anyone (character) uses #Fire magic
+    condition set $09 : script $60  // anyone (character) uses #Ice magic
+    condition set $0A : script $36  // anyone (character) uses #Lit magic
+}
+
+// used by: EvilDoll
+aigroup($63) {
+    condition set $01 : script $45  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: EvilDoll
+aigroup($64) {
+    condition set $08 : script $77  // anyone (character) uses #Fire magic
+    condition set $09 : script $0B  // anyone (character) uses #Ice magic
+    condition set $0A : script $37  // anyone (character) uses #Lit magic
+}
+
+// used by: Beamer  
+aigroup($65) {
+    condition set $0E : script $62  // character uses #Lit magic
+    condition set $00 : script $63  // $FF $FF $FF $FF
+}
+
+// used by: Plague  
+aigroup($66) {
+    condition set $27 : script $37  // all character status #Count
+    condition set $00 : script $36  // $FF $FF $FF $FF
+}
+
+// used by: Witch   
+aigroup($67) {
+    condition set $01 : script $66  // self status #Charm
+    condition set $03 : script $01  // all monsters same type as self
+    condition set $00 : script $67  // $FF $FF $FF $FF
+}
+
+// used by: ToadLady
+aigroup($68) {
+    condition set $01 : script $44  // self status #Charm
+    condition set $02 : script $68  // alone
+    condition set $00 : script $69  // $FF $FF $FF $FF
+}
+
+// used by: Warlock 
+aigroup($69) {
+    condition set $01 : script $01  // self status #Charm
+    condition set $02 : script $02  // alone
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: RedGiant
+aigroup($6A) {
+    condition set $00 : script $06  // $FF $FF $FF $FF
+}
+
+// used by: RedGiant
+aigroup($6B) {
+    condition set $51 : script $08  // anyone (character) uses #Call
+    condition set $07 : script $07  // anyone (character) uses magic
+}
+
+// used by: Green D.
+aigroup($6C) {
+    condition set $55 : script $00  // self status #Egg
+    condition set $01 : script $6F  // self status #Charm
+    condition set $00 : script $70  // $FF $FF $FF $FF
+}
+
+// used by: Yellow D
+aigroup($6D) {
+    condition set $55 : script $00  // self status #Egg
+    condition set $01 : script $6F  // self status #Charm
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Yellow D
+aigroup($6E) {
+    condition set $56 : script $58  // self status #Egg, damaged
+    condition set $04 : script $42  // damaged
+}
+
+// used by: Last Arm
+aigroup($6F) {
+    condition set $00 : script $71  // $FF $FF $FF $FF
+}
+
+// used by: Alert   , Searcher
+aigroup($70) {
+    condition set $02 : script $72  // alone
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Alert   , Searcher
+aigroup($71) {
+    condition set $21 : script $73  // damaged, alone
+    condition set $04 : script $63  // damaged
+}
+
+// used by: Molbol  
+aigroup($72) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $74  // $FF $FF $FF $FF
+}
+
+// used by: Ging-Ryu
+aigroup($73) {
+    condition set $01 : script $0C  // self status #Charm
+    condition set $00 : script $0B  // $FF $FF $FF $FF
+}
+
+// used by: Ging-Ryu
+aigroup($74) {
+    condition set $51 : script $0D  // anyone (character) uses #Call
+}
+
+// used by: Clapper 
+aigroup($75) {
+    condition set $00 : script $76  // $FF $FF $FF $FF
+}
+
+// used by: Machine 
+aigroup($76) {
+    condition set $0E : script $02  // character uses #Lit magic
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+aigroup($77) {
+    condition set $0E : script $78  // character uses #Lit magic
+    condition set $00 : script $79  // $FF $FF $FF $FF
+}
+
+// used by: MacGiant
+aigroup($78) {
+    condition set $0A : script $7B  // anyone (character) uses #Lit magic
+}
+
+// used by: Blue D. 
+aigroup($79) {
+    condition set $01 : script $0F  // self status #Charm
+    condition set $00 : script $0E  // $FF $FF $FF $FF
+}
+
+// used by: Blue D. 
+aigroup($7A) {
+    condition set $08 : script $10  // anyone (character) uses #Fire magic
+}
+
+// used by: D.Fossil
+aigroup($7B) {
+    condition set $00 : script $14  // $FF $FF $FF $FF
+}
+
+// used by: D.Fossil
+aigroup($7C) {
+    condition set $51 : script $15  // anyone (character) uses #Call
+}
+
+// used by: PinkPuff
+aigroup($7D) {
+    condition set $11 : script $50  // condition flag 1
+    condition set $00 : script $24  // $FF $FF $FF $FF
+}
+
+// used by: D.Machin
+aigroup($7E) {
+    condition set $01 : script $04  // self status #Charm
+    condition set $00 : script $40  // $FF $FF $FF $FF
+}
+
+// used by: EvilWall
+aigroup($7F) {
+    condition set $07 : script $D2  // anyone (character) uses magic
+}
+
+// used by: Officer 
+aigroup($80) {
+    condition set $02 : script $2C  // alone
+    condition set $00 : script $3B  // $FF $FF $FF $FF
+}
+
+// used by: General 
+aigroup($81) {
+    condition set $02 : script $2C  // alone
+    condition set $00 : script $61  // $FF $FF $FF $FF
+}
+
+// used by: Soldier , Fighter 
+aigroup($82) {
+    condition set $25 : script $01  // formation $F7
+    condition set $03 : script $02  // all monsters same type as self
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Soldier , Fighter 
+aigroup($83) {
+    condition set $24 : script $01  // anyone (type 0 monster) uses magic
+}
+
+// used by: Aligator, Crocdile
+aigroup($84) {
+    condition set $01 : script $02  // self status #Charm
+    condition set $00 : script $6F  // $FF $FF $FF $FF
+}
+
+// used by: FatalEye
+aigroup($85) {
+    condition set $27 : script $13  // all character status #Count
+    condition set $01 : script $12  // self status #Charm
+    condition set $00 : script $11  // $FF $FF $FF $FF
+}
+
+// used by: D.Mist  
+aigroup($86) {
+    condition set $00 : script $80  // $FF $FF $FF $FF
+}
+
+// used by: D.Mist  
+aigroup($87) {
+    condition set $28 : script $81  // anyone (character) uses #Fight, condition flag 1
+}
+
+// used by: Girl    
+aigroup($88) {
+    condition set $00 : script $82  // $FF $FF $FF $FF
+}
+
+// used by: Titan   
+aigroup($89) {
+    condition set $00 : script $83  // $FF $FF $FF $FF
+}
+
+// used by: Octomamm
+aigroup($8A) {
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Octomamm
+aigroup($8B) {
+    condition set $29 : script $84  // damaged, condition flag 2
+    condition set $2A : script $85  // damaged, condition flag 4
+    condition set $2B : script $86  // damaged, condition flag 6
+    condition set $2C : script $87  // damaged, condition flag 8
+    condition set $2D : script $88  // damaged, condition flag 10
+    condition set $2E : script $89  // damaged, condition flag 12
+    condition set $2F : script $8A  // damaged, condition flag 14
+    condition set $04 : script $8B  // damaged
+}
+
+// used by: Bard    
+aigroup($8C) {
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Bard    
+aigroup($8D) {
+    condition set $33 : script $92  // condition flag 3, anyone (character) uses #Fight
+    condition set $32 : script $91  // condition flag 2, anyone (character) uses #Fight
+    condition set $31 : script $90  // condition flag 1, anyone (character) uses #Fight
+    condition set $06 : script $8F  // anyone (character) uses #Fight
+}
+
+// used by: WaterHag
+aigroup($8E) {
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: WaterHag
+aigroup($8F) {
+    condition set $35 : script $95  // condition flag 2, damaged
+    condition set $34 : script $94  // condition flag 1, damaged
+    condition set $04 : script $93  // damaged
+}
+
+// used by: MomBomb 
+aigroup($90) {
+    condition set $11 : script $96  // condition flag 1
+    condition set $36 : script $97  // self hp below index $00 /* 10000 */
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Milon   
+aigroup($91) {
+    condition set $02 : script $99  // alone
+    condition set $00 : script $98  // $FF $FF $FF $FF
+}
+
+// used by: Milon   
+aigroup($92) {
+    condition set $37 : script $9A  // self hp below index $01 /* 1000 */
+    condition set $04 : script $36  // damaged
+}
+
+// used by: Ghast   
+aigroup($93) {
+    condition set $03 : script $01  // all monsters same type as self
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Ghast   
+aigroup($94) {
+    condition set $24 : script $9B  // anyone (type 0 monster) uses magic
+}
+
+// used by: Milon Z.
+aigroup($95) {
+    condition set $11 : script $01  // condition flag 1
+    condition set $00 : script $9C  // $FF $FF $FF $FF
+}
+
+aigroup($96) {
+    condition set $08 : script $9D  // anyone (character) uses #Fire magic
+}
+
+// used by: D.Knight
+aigroup($97) {
+    condition set $11 : script $9F  // condition flag 1
+    condition set $00 : script $9E  // $FF $FF $FF $FF
+}
+
+// used by: D.Knight
+aigroup($98) {
+    condition set $06 : script $8D  // anyone (character) uses #Fight
+}
+
+// used by: Left Arm
+aigroup($99) {
+    condition set $38 : script $04  // monster $A7 dead  // Baigan  
+    condition set $00 : script $A0  // $FF $FF $FF $FF
+}
+
+// used by: RightArm
+aigroup($9A) {
+    condition set $38 : script $04  // monster $A7 dead  // Baigan  
+    condition set $00 : script $A1  // $FF $FF $FF $FF
+}
+
+// used by: Baigan  
+aigroup($9B) {
+    condition set $02 : script $A3  // alone
+    condition set $00 : script $A2  // $FF $FF $FF $FF
+}
+
+// used by: Baigan  
+aigroup($9C) {
+    condition set $07 : script $A4  // anyone (character) uses magic
+}
+
+// used by: Kainazzo
+aigroup($9D) {
+    condition set $12 : script $A6  // condition flag 2
+    condition set $11 : script $A5  // condition flag 1
+    condition set $00 : script $A7  // $FF $FF $FF $FF
+}
+
+// used by: Kainazzo
+aigroup($9E) {
+    condition set $3A : script $A9  // self hp below index $02 /* 700 */, damaged
+    condition set $39 : script $A8  // reaction flag 1, anyone (character) uses #Lit magic
+}
+
+// used by: Dark Elf
+aigroup($9F) {
+    condition set $3B : script $AB  // formation $FC
+    condition set $00 : script $AA  // $FF $FF $FF $FF
+}
+
+// used by: Dark Elf
+aigroup($A0) {
+    condition set $00 : script $AC  // $FF $FF $FF $FF
+}
+
+// used by: Dark Elf
+aigroup($A1) {
+    condition set $3C : script $AD  // self hp below index $03 /* 20000 */, damaged
+}
+
+// used by: Dark Elf
+aigroup($A2) {
+    condition set $00 : script $AE  // $FF $FF $FF $FF
+}
+
+// used by: Sandy   
+aigroup($A3) {
+    condition set $3E : script $B0  // monster $AE dead  // Cindy   
+    condition set $00 : script $AF  // $FF $FF $FF $FF
+}
+
+// used by: Mindy   
+aigroup($A4) {
+    condition set $3E : script $B2  // monster $AE dead  // Cindy   
+    condition set $00 : script $B1  // $FF $FF $FF $FF
+}
+
+// used by: Cindy   
+aigroup($A5) {
+    condition set $02 : script $B4  // alone
+    condition set $3D : script $B4  // monster $AD dead  // Sandy   
+    condition set $3F : script $B4  // monster $AF dead  // Mindy   
+    condition set $00 : script $B3  // $FF $FF $FF $FF
+}
+
+// used by: Valvalis
+aigroup($A6) {
+    condition set $12 : script $B6  // condition flag 2
+    condition set $11 : script $B5  // condition flag 1
+    condition set $00 : script $B7  // $FF $FF $FF $FF
+}
+
+// used by: Valvalis
+aigroup($A7) {
+    condition set $40 : script $B8  // condition flag 1, anyone (character) uses jump
+    condition set $41 : script $B9  // condition flag 1, anyone (character) uses #Fight
+    condition set $42 : script $B9  // condition flag 1, anyone (character) uses magic
+}
+
+// used by: Karate  
+aigroup($A8) {
+    condition set $00 : script $BA  // $FF $FF $FF $FF
+}
+
+// used by: Karate  
+aigroup($A9) {
+    condition set $43 : script $BB  // condition flag 1, anyone (actor #PCecil) uses #Fight
+}
+
+// used by: Calbrena
+aigroup($AA) {
+    condition set $00 : script $F4  // $FF $FF $FF $FF
+}
+
+// used by: Calbrena
+aigroup($AB) {
+    condition set $44 : script $BC  // self hp below index $04 /* 100 */, damaged
+    condition set $08 : script $40  // anyone (character) uses #Fire magic
+    condition set $09 : script $2B  // anyone (character) uses #Ice magic
+    condition set $0A : script $42  // anyone (character) uses #Lit magic
+}
+
+// used by: Cal     
+aigroup($AC) {
+    condition set $03 : script $BD  // all monsters same type as self
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Cal     
+aigroup($AD) {
+    condition set $06 : script $01  // anyone (character) uses #Fight
+}
+
+// used by: Brena   
+aigroup($AE) {
+    condition set $03 : script $BD  // all monsters same type as self
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Brena   
+aigroup($AF) {
+    condition set $06 : script $01  // anyone (character) uses #Fight
+}
+
+// used by: Green D.
+aigroup($B0) {
+    condition set $56 : script $58  // self status #Egg, damaged
+}
+
+// used by: Lamia   
+aigroup($B1) {
+    condition set $56 : script $58  // self status #Egg, damaged
+    condition set $06 : script $47  // anyone (character) uses #Fight
+}
+
+// used by: D. Lunar
+aigroup($B2) {
+    condition set $11 : script $2C  // condition flag 1
+    condition set $00 : script $2B  // $FF $FF $FF $FF
+}
+
+// used by: D. Lunar
+aigroup($B3) {
+    condition set $51 : script $2F  // anyone (character) uses #Call
+    condition set $16 : script $2D  // condition flag 0, anyone (character) uses #Fight
+    condition set $02 : script $2E  // alone
+}
+
+// used by: Rubicant
+aigroup($B4) {
+    condition set $45 : script $00  // formation $FD
+    condition set $11 : script $F5  // condition flag 1
+    condition set $00 : script $BF  // $FF $FF $FF $FF
+}
+
+// used by: Rubicant
+aigroup($B5) {
+    condition set $46 : script $BE  // formation $FD, anyone (character) uses #Fire magic
+    condition set $48 : script $C2  // self hp below index $0A /* 1000 */, anyone (character) uses #Fight
+    condition set $06 : script $C1  // anyone (character) uses #Fight
+    condition set $1A : script $C0  // actor #PCecil dead, anyone (character) uses #Fire magic
+    condition set $1B : script $C0  // actor #ARydia dead, anyone (character) uses #Fire magic
+    condition set $1C : script $C0  // actor #Kain2 dead, anyone (character) uses #Fire magic
+    condition set $1D : script $C0  // actor #Rosa2 dead, anyone (character) uses #Fire magic
+    condition set $1E : script $C0  // actor #Edge dead, anyone (character) uses #Fire magic
+}
+
+// used by: K.Eblan 
+aigroup($B6) {
+    condition set $00 : script $C3  // $FF $FF $FF $FF
+}
+
+// used by: Q.Eblan 
+aigroup($B7) {
+    condition set $02 : script $C4  // alone
+    condition set $11 : script $00  // condition flag 1
+    condition set $00 : script $5F  // $FF $FF $FF $FF
+}
+
+// used by: Q.Eblan 
+aigroup($B8) {
+    condition set $24 : script $C5  // anyone (type 0 monster) uses magic
+}
+
+// used by: Dr.Lugae
+aigroup($B9) {
+    condition set $02 : script $C8  // alone
+    condition set $12 : script $C7  // condition flag 2
+    condition set $11 : script $00  // condition flag 1
+    condition set $00 : script $C6  // $FF $FF $FF $FF
+}
+
+// used by: Dr.Lugae
+aigroup($BA) {
+    condition set $49 : script $C9  // anyone (type 1 monster) uses #Fight
+}
+
+// used by: Balnab  
+aigroup($BB) {
+    condition set $02 : script $CA  // alone
+    condition set $12 : script $01  // condition flag 2
+    condition set $11 : script $CB  // condition flag 1
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Balnab-Z
+aigroup($BC) {
+    condition set $00 : script $CC  // $FF $FF $FF $FF
+}
+
+// used by: Dr.Lugae
+aigroup($BD) {
+    condition set $11 : script $CE  // condition flag 1
+    condition set $00 : script $CD  // $FF $FF $FF $FF
+}
+
+// used by: Dr.Lugae
+aigroup($BE) {
+    condition set $04 : script $CF  // damaged
+}
+
+// used by: EvilWall
+aigroup($BF) {
+    condition set $1F : script $D0  // condition flag 16
+    condition set $00 : script $D1  // $FF $FF $FF $FF
+}
+
+// used by: Odin    
+aigroup($C0) {
+    condition set $00 : script $D3  // $FF $FF $FF $FF
+}
+
+// used by: Odin    
+aigroup($C1) {
+    condition set $4A : script $D4  // condition flag 1, anyone (character) uses #Lit magic
+}
+
+// used by: Leviatan
+aigroup($C2) {
+    condition set $11 : script $D6  // condition flag 1
+    condition set $00 : script $D5  // $FF $FF $FF $FF
+}
+
+// used by: Behemoth
+aigroup($C3) {
+    condition set $5A : script $1E  // alone, anyone (character) uses #Holy magic
+    condition set $04 : script $1D  // damaged
+    condition set $07 : script $1D  // anyone (character) uses magic
+}
+
+// used by: Bahamut 
+aigroup($C4) {
+    condition set $00 : script $51  // $FF $FF $FF $FF
+}
+
+// used by: Bahamut 
+aigroup($C5) {
+    condition set $5B : script $52  // anyone (character) uses magic, condition flag 1
+}
+
+// used by: Dragoon 
+aigroup($C6) {
+    condition set $4B : script $DB  // actor #DKCecil status #Critical
+    condition set $11 : script $DA  // condition flag 1
+    condition set $00 : script $D9  // $FF $FF $FF $FF
+}
+
+// used by: Golbez  
+aigroup($C7) {
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Golbez  
+aigroup($C8) {
+    condition set $08 : script $DC  // anyone (character) uses #Fire magic
+    condition set $09 : script $DD  // anyone (character) uses #Ice magic
+    condition set $0F : script $DE  // anyone (character) uses #Holy magic
+}
+
+// used by: Golbez  
+aigroup($C9) {
+    condition set $12 : script $E2  // condition flag 2
+    condition set $4C : script $E1  // condition flag 1, alone
+    condition set $11 : script $E0  // condition flag 1
+    condition set $00 : script $DF  // $FF $FF $FF $FF
+}
+
+// used by: Golbez  
+aigroup($CA) {
+    condition set $4D : script $E3  // self hp below index $05 /* 19000 */, damaged
+}
+
+// used by: Shadow  
+aigroup($CB) {
+    condition set $00 : script $E4  // $FF $FF $FF $FF
+}
+
+// used by: Asura   
+aigroup($CC) {
+    condition set $12 : script $E7  // condition flag 2
+    condition set $11 : script $E6  // condition flag 1
+    condition set $00 : script $E5  // $FF $FF $FF $FF
+}
+
+// used by: Asura   
+aigroup($CD) {
+    condition set $50 : script $EA  // condition flag 2, damaged
+    condition set $4F : script $E9  // condition flag 1, damaged
+    condition set $4E : script $E8  // condition flag 0, damaged
+}
+
+// used by: Elements
+aigroup($CE) {
+    condition set $11 : script $ED  // condition flag 1
+    condition set $00 : script $EB  // $FF $FF $FF $FF
+}
+
+// used by: Elements
+aigroup($CF) {
+    condition set $58 : script $EE  // condition flag 1, self hp below index $08 /* 11000 */, damaged
+    condition set $57 : script $EC  // condition flag 0, self hp below index $07 /* 40000 */, damaged
+}
+
+// used by: Elements
+aigroup($D0) {
+    condition set $13 : script $F1  // condition flag 3
+    condition set $00 : script $EF  // $FF $FF $FF $FF
+}
+
+// used by: Elements
+aigroup($D1) {
+    condition set $59 : script $F0  // condition flag 2, self hp below index $09 /* 27000 */, damaged
+}
+
+// used by: Defender
+aigroup($D2) {
+    condition set $00 : script $D7  // $FF $FF $FF $FF
+}
+
+// used by: Attacker
+aigroup($D3) {
+    condition set $00 : script $D6  // $FF $FF $FF $FF
+}
+
+// used by: Zemus   
+aigroup($D4) {
+    condition set $00 : script $41  // $FF $FF $FF $FF
+}
+
+// used by: Zemus   
+aigroup($D5) {
+    condition set $52 : script $43  // anyone (character) uses $E0, condition flag 1
+    condition set $0F : script $42  // anyone (character) uses #Holy magic
+}
+
+// used by: Zeromus 
+aigroup($D6) {
+    condition set $00 : script $41  // $FF $FF $FF $FF
+}
+
+// used by: Zeromus 
+aigroup($D7) {
+    condition set $53 : script $44  // anyone (actor #Fusoya) uses #Holy magic
+    condition set $5F : script $45  // anyone (character) uses #Dark magic
+}
+
+// used by: TrapDoor
+aigroup($D8) {
+    condition set $00 : script $33  // $FF $FF $FF $FF
+}
+
+// used by: TrapDoor
+aigroup($D9) {
+    condition set $54 : script $34  // self hp below index $06 /* 700 */, damaged, condition flag 0
+}
+
+// used by: Dummy   
+aigroup($DA) {
+    condition set $00 : script $18  // $FF $FF $FF $FF
+}
+
+// used by: Dummy   
+aigroup($DB) {
+    condition set $00 : script $3C  // $FF $FF $FF $FF
+}
+
+// used by: Antlion 
+aigroup($DC) {
+    condition set $00 : script $01  // $FF $FF $FF $FF
+}
+
+// used by: Antlion 
+aigroup($DD) {
+    condition set $06 : script $8E  // anyone (character) uses #Fight
+}
+
+// used by: Zeromus 
+aigroup($DE) {
+    condition set $12 : script $49  // condition flag 2
+    condition set $11 : script $48  // condition flag 1
+    condition set $00 : script $47  // $FF $FF $FF $FF
+}
+
+// used by: Zeromus 
+aigroup($DF) {
+    condition set $5E : script $4A  // anyone (actor #PCecil) uses #Dark magic, condition flag 2
+    condition set $04 : script $46  // damaged
+}
+
+// used by: Zeromus 
+aigroup($E0) {
+    condition set $15 : script $57  // condition flag 5
+    condition set $14 : script $55  // condition flag 4
+    condition set $13 : script $4C  // condition flag 3
+    condition set $00 : script $4B  // $FF $FF $FF $FF
+}
+
+// used by: Zeromus 
+aigroup($E1) {
+    condition set $61 : script $56  // condition flag 4, damaged, self hp below index $0C /* 12000 */
+    condition set $18 : script $54  // condition flag 3, damaged, self hp below index $0B /* 16000 */
+    condition set $5D : script $4E  // anyone (character) uses #Call, condition flag 3
+    condition set $51 : script $58  // anyone (character) uses #Call
+    condition set $0F : script $4F  // anyone (character) uses #Holy magic
+    condition set $07 : script $4D  // anyone (character) uses magic
+}
+
+// used by: King-Ryu
+aigroup($E2) {
+    condition set $01 : script $17  // self status #Charm
+    condition set $00 : script $16  // $FF $FF $FF $FF
+}
+
+// used by: King-Ryu
+aigroup($E3) {
+    condition set $04 : script $18  // damaged
+}
+
+// used by: Red D.  
+aigroup($E4) {
+    condition set $01 : script $1A  // self status #Charm
+    condition set $02 : script $1B  // alone
+    condition set $00 : script $19  // $FF $FF $FF $FF
+}
+
+aigroup($E5) {
+    condition set $51 : script $1C  // anyone (character) uses #Call
+}
+
+// used by: EvilMask
+aigroup($E6) {
+    condition set $11 : script $20  // condition flag 1
+    condition set $00 : script $1F  // $FF $FF $FF $FF
+}
+
+aigroup($E7) {
+    script $00
+}
+
+// used by: Tricker 
+aigroup($E8) {
+    condition set $12 : script $22  // condition flag 2
+    condition set $00 : script $21  // $FF $FF $FF $FF
+}
+
+// used by: Tricker 
+aigroup($E9) {
+    condition set $0A : script $23  // anyone (character) uses #Lit magic
+}
+
+// used by: Wyvern  
+aigroup($EA) {
+    condition set $19 : script $26  // self status #Wall
+    condition set $11 : script $3D  // condition flag 1
+    condition set $00 : script $25  // $FF $FF $FF $FF
+}
+
+// used by: Wyvern  
+aigroup($EB) {
+    condition set $51 : script $27  // anyone (character) uses #Call
+}
+
+// used by: Ogopogo 
+aigroup($EC) {
+    condition set $00 : script $28  // $FF $FF $FF $FF
+}
+
+// used by: Ogopogo 
+aigroup($ED) {
+    condition set $0A : script $29  // anyone (character) uses #Lit magic
+    condition set $51 : script $2A  // anyone (character) uses #Call
+    condition set $07 : script $2A  // anyone (character) uses magic
+}
+
+// used by: Pale Dim
+aigroup($EE) {
+    condition set $00 : script $30  // $FF $FF $FF $FF
+}
+
+// used by: Pale Dim
+aigroup($EF) {
+    condition set $51 : script $31  // anyone (character) uses #Call
+    condition set $06 : script $32  // anyone (character) uses #Fight
+    condition set $08 : script $33  // anyone (character) uses #Fire magic
+    condition set $09 : script $34  // anyone (character) uses #Ice magic
+    condition set $0A : script $35  // anyone (character) uses #Lit magic
+}
+
+// used by: Mind    
+aigroup($F0) {
+    condition set $00 : script $38  // $FF $FF $FF $FF
+}
+
+// used by: Mind    
+aigroup($F1) {
+    condition set $06 : script $39  // anyone (character) uses #Fight
+    condition set $0F : script $3A  // anyone (character) uses #Holy magic
+}
+
+// used by: Breath  
+aigroup($F2) {
+    condition set $00 : script $3B  // $FF $FF $FF $FF
+}
+
+// used by: Breath  
+aigroup($F3) {
+    condition set $07 : script $3C  // anyone (character) uses magic
+}
+
+aigroup($F4) {
+    condition set $61 : script $40  // condition flag 4, damaged, self hp below index $0C /* 12000 */
+    condition set $00 : script $3F  // $FF $FF $FF $FF
+}
+
+// used by: Behemoth
+aigroup($F5) {
+    condition set $00 : script $53  // $FF $FF $FF $FF
+}
+
+// used by: Dummy   
+aigroup($F6) {
+    condition set $06 : script $F9  // anyone (character) uses #Fight
+}
+
+// used by: Dummy   
+aigroup($F7) {
+    condition set $00 : script $FA  // $FF $FF $FF $FF
+}
+
+// used by: Dummy   
+aigroup($F8) {
+    condition set $00 : script $00  // $FF $FF $FF $FF
+}
+
+// used by: Dummy   
+aigroup($F9) {
+    condition set $00 : script $FB  // $FF $FF $FF $FF
+}
+
+// used by: Dummy   
+aigroup($FA) {
+    condition set $00 : script $FC  // $FF $FF $FF $FF
+}
+
+// used by: Last Arm
+aigroup($FB) {
+    condition set $17 : script $7C  // self hp below index $01 /* 1000 */, damaged
+}
+
+// used by: Dummy   
+aigroup($FC) {
+    condition set $04 : script $FD  // damaged
+}
+
+// used by: Dummy   
+aigroup($FD) {
+    condition set $00 : script $7D  // $FF $FF $FF $FF
+}

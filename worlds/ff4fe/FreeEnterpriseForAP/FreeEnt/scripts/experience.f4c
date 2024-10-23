@@ -1,0 +1,7 @@
+
+// don't give experience to shadow party
+
+// theoretically, I can just early-out from the
+// routine that checks who gets experience,
+// before we get to the shadow party...
+patch($03edfc bus) { 05 }
