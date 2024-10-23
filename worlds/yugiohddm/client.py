@@ -6,7 +6,7 @@ from random import Random
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from .utils import Constants
-from .locations import get_location_id_for_duelist, duelist_from_location_id
+from .locations import get_location_id_for_duelist, duelist_from_location_id, is_duelist_location_id
 from .duelists import Duelist, all_duelists, name_to_duelist
 from .version import __version__
 
@@ -73,12 +73,15 @@ class YGODDMClient(BizHawkClient):
 
             # Unlock duelists based on who has been received
 
+            unlocked_duelist_bitflags: int = 0
             for item in ctx.items_received:
-                print(item.item)
+                if is_duelist_location_id(item.item):
+                    unlocked_duelist_bitflags |= duelist_from_location_id(item.item).bitflag
+
+            if unlocked_duelist_bitflags != 0:
                 await bizhawk.write(ctx.bizhawk_ctx, [(
                     Constants.DUELIST_UNLOCK_OFFSET,
-                    #name_to_duelist[item.item].bitflag,
-                    [duelist_from_location_id(item.item).bitflag],
+                    [unlocked_duelist_bitflags],
                     COMBINED_WRAM
                 )])
 

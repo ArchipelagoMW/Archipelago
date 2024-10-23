@@ -21,9 +21,11 @@ def get_location_id_for_duelist(duelist: Duelist) -> int:
     return Constants.DUELIST_UNLOCK_OFFSET + duelist.id
 
 def duelist_from_location_id(location_id: int) -> Duelist:
-    print ("duelist from location id")
-    print (ids_to_duelists[location_id - Constants.DUELIST_UNLOCK_OFFSET])
     return ids_to_duelists[location_id - Constants.DUELIST_UNLOCK_OFFSET]
+
+def is_duelist_location_id(location_id: int) -> bool:
+    # validate's input of duelist_from_location_id
+    return (location_id - Constants.DUELIST_UNLOCK_OFFSET) in ids_to_duelists
 
 class YGODDMLocation(Location):
     game: str
