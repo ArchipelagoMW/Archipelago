@@ -1266,7 +1266,7 @@ class Item:
 
     @property
     def filler(self) -> bool:
-        return not self.classification
+        return not (self.advancement or self.useful or self.trap)
 
     @property
     def flags(self) -> int:
