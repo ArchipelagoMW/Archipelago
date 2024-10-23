@@ -331,7 +331,7 @@ chocolate_shop = [
     LocationData(LocationName.Chocolate_Shop_32, 0xb3110d, 0x20001c3, 0x01, 0x73F8FC, 181, [0]),
 ]
 
-secret_locations = [
+secret_locations = {
     LocationName.Secret_1_Northwest_BMD,
     LocationName.Secret_1_Northeast_BMD,
     LocationName.Secret_1_South_BMD,
@@ -342,7 +342,7 @@ secret_locations = [
     LocationName.Secret_3_BugFrag_BMD,
     LocationName.Secret_3_South_BMD,
     LocationName.Serenade
-]
+}
 
 location_groups: typing.Dict[str, typing.Set[str]] = {
     "BMDs": [loc.name for loc in bmds],
