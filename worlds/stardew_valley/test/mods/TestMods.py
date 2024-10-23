@@ -14,7 +14,8 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
         for mod in options.Mods.valid_keys:
-            with self.solo_world_sub_test(f"Mod: {mod}", {options.Mods: mod}) as (multi_world, _):
+            world_options = {options.Mods: mod, options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false}
+            with self.solo_world_sub_test(f"Mod: {mod}", world_options) as (multi_world, _):
                 self.assert_basic_checks(multi_world)
                 self.assert_stray_mod_items(mod, multi_world)
 
@@ -22,8 +23,9 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
         for option in options.EntranceRandomization.options:
             for mod in options.Mods.valid_keys:
                 world_options = {
-                    options.EntranceRandomization.internal_name: options.EntranceRandomization.options[option],
-                    options.Mods: mod
+                    options.EntranceRandomization: options.EntranceRandomization.options[option],
+                    options.Mods: mod,
+                    options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
                 }
                 with self.solo_world_sub_test(f"entrance_randomization: {option}, Mod: {mod}", world_options) as (multi_world, _):
                     self.assert_basic_checks(multi_world)
