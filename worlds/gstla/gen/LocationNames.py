@@ -133,6 +133,13 @@ class LocationName(str, Enum):
     Contigo_Catch_Beads = "Contigo - Catch_Beads"
     Kibombo_Douse_Drop = "Kibombo - Douse_Drop"
     Kibombo_Frost_Jewel = "Kibombo - Frost_Jewel"
+    Contigo_Isaac = "Contigo - Isaac"
+    Contigo_Garet = "Contigo - Garet"
+    Contigo_Ivan = "Contigo - Ivan"
+    Contigo_Mia = "Contigo - Mia"
+    Idejima_Jenna = "Idejima - Jenna"
+    Idejima_Sheba = "Idejima - Sheba"
+    Kibombo_Piers = "Kibombo - Piers"
     
 
     ##summonTablets
@@ -820,6 +827,13 @@ ids_by_loc_name: Dict[LocationName, int] = {
     "Contigo - Catch_Beads": 16384216,
     "Kibombo - Douse_Drop": 16384218,
     "Kibombo - Frost_Jewel": 16384220,
+    "Contigo - Isaac": 16384384,
+    "Contigo - Garet": 16384386,
+    "Contigo - Ivan": 16384388,
+    "Contigo - Mia": 16384390,
+    "Idejima - Jenna": 16384392,
+    "Idejima - Sheba": 16384394,
+    "Kibombo - Piers": 16384396,
     
 }
 
@@ -1219,6 +1233,13 @@ loc_names_by_id: Dict[int, LocationName] = {
     16384216: "Contigo - Catch_Beads",
     16384218: "Kibombo - Douse_Drop",
     16384220: "Kibombo - Frost_Jewel",
+    16384384: "Contigo - Isaac",
+    16384386: "Contigo - Garet",
+    16384388: "Contigo - Ivan",
+    16384390: "Contigo - Mia",
+    16384392: "Idejima - Jenna",
+    16384394: "Idejima - Sheba",
+    16384396: "Kibombo - Piers",
     
 }
 

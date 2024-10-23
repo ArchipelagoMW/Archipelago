@@ -5,7 +5,6 @@ from typing import List, NamedTuple, Dict, Optional
 from worlds.gstla.GameData import ElementType, ItemType
 from BaseClasses import ItemClassification
 
-
 class ItemData(NamedTuple):
     id: int
     name: str
@@ -556,6 +555,17 @@ events: List[EventItemData] = [
     
 ]
 
-all_items: List[ItemData] = remainder + djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events
+characters: List[ItemData] = [
+    ItemData(3328, "Isaac", ItemClassification.progression, 16384384, ItemType.Character),
+    ItemData(3329, "Garet", ItemClassification.progression, 16384386, ItemType.Character),
+    ItemData(3330, "Ivan", ItemClassification.progression, 16384388, ItemType.Character),
+    ItemData(3331, "Mia", ItemClassification.progression, 16384390, ItemType.Character),
+    ItemData(3332, "Jenna", ItemClassification.progression, 16384392, ItemType.Character),
+    ItemData(3333, "Sheba", ItemClassification.progression, 16384394, ItemType.Character),
+    ItemData(3334, "Piers", ItemClassification.progression, 16384396, ItemType.Character),
+    
+]
+
+all_items: List[ItemData] = remainder + djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters 
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}

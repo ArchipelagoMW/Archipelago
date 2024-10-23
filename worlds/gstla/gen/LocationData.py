@@ -12,6 +12,7 @@ class LocationType(str, Enum):
    Psyenergy = "Psyenergy"
    Hidden = "Hidden"
    Trade = "Trade"
+   Character = "Character"
 
 def always_on(multiworld: MultiWorld, player: int) -> bool:
     return True
@@ -399,7 +400,7 @@ the_rest = [
     LocationData(3703, 3703, 994536, [994536], 129, 7, LocationType.Item), # Magma Rock Mimic
     LocationData(4085, 4085, 994548, [994548], 131, 435, LocationType.Hidden), # Loho Mythril Silver
     LocationData(4086, 4086, 994556, [994556], 131, 434, LocationType.Item), # Loho Golem Core
-    LocationData(4087, 4087, 994564, [994564], 131, 434, LocationType.Hidden), # Loho Golem Core
+    LocationData(4087, 4087, 994564, [994564], 131, 434, LocationType.Item), # Loho Golem Core
     LocationData(4088, 4088, 994572, [994572], 3, 241, LocationType.Hidden), # Loho Crystal Powder
     LocationData(4089, 4089, 994584, [994584], 131, 436, LocationType.Item), # Prox Dark Matter
     LocationData(4090, 4090, 994592, [994592], 2, 192, LocationType.Hidden), # Prox Cookie
@@ -442,6 +443,13 @@ the_rest = [
     LocationData(260, 260, 16384216, [16384216], 128, 3732, LocationType.Item), # Contigo Catch Beads
     LocationData(261, 261, 16384218, [16384218], 128, 3617, LocationType.Item), # Kibombo Douse Drop
     LocationData(262, 262, 16384220, [16384220], 128, 3608, LocationType.Item), # Kibombo Frost Jewel
+    LocationData(3328, 3328, 16384384, [16384384], 132, 3328, LocationType.Character), # Contigo Isaac
+    LocationData(3329, 3329, 16384386, [16384386], 132, 3329, LocationType.Character), # Contigo Garet
+    LocationData(3330, 3330, 16384388, [16384388], 132, 3330, LocationType.Character), # Contigo Ivan
+    LocationData(3331, 3331, 16384390, [16384390], 132, 3331, LocationType.Character), # Contigo Mia
+    LocationData(3333, 3333, 16384392, [16384392], 132, 3333, LocationType.Character), # Idejima Jenna
+    LocationData(3334, 3334, 16384394, [16384394], 132, 3334, LocationType.Character), # Idejima Sheba
+    LocationData(3335, 3335, 16384396, [16384396], 132, 3335, LocationType.Character), # Kibombo Piers
     
 ]
 

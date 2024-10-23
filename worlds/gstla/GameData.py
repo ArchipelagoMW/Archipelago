@@ -58,10 +58,7 @@ class ItemType(int, Enum):
     Psyenergy = 12
     Djinn = 13
     Event = 14
-
-    def is_gear(self):
-        return self == 1 or self == 2 or self == 3 or self == 4 or self == 5 or \
-                self == 8 or self == 9
+    Character = 15
 
 class ItemFlags(IntFlag):
     NONE = 0
@@ -114,6 +111,13 @@ class PsyDatum(NamedTuple):
     name: str
     addr: int
     item_type: ItemType = ItemType.Psyenergy
+
+class CharacterDatum(NamedTuple):
+    id: int
+    name: str
+    flag: int
+    addr: int
+    item_type: ItemType = ItemType.Character
 
 class LocationName(NamedTuple):
     id: int
@@ -170,6 +174,7 @@ class GameData:
         self.raw_djinn_data: List[DjinnDatum] = []
         self.raw_summon_data: List[SummonDatum] = []
         self.raw_psy_data: List[PsyDatum] = []
+        self.raw_character_data: List[CharacterDatum] = []
         self.location_names: Dict[int, LocationName] = dict()
         self.item_names: Dict[int, ItemName] = dict()
         self.events: Dict[int, EventDatum] = dict()
@@ -181,6 +186,7 @@ class GameData:
         self._setup_location_names()
         self._setup_item_names()
         self._setup_psy_energies()
+        self._setup_characters()
 
     def _load_locations(self):
         with open(os.path.join(SCRIPT_DIR, 'data', 'item_locations.json'), 'r') as loc_file:
@@ -273,6 +279,19 @@ class GameData:
         ]
         for d in self.raw_psy_data:
             self.item_names[d.id] = ItemName(d.id, d.name.replace(' ', '_'), d.name)
+
+    def _setup_characters(self):
+        self.raw_character_data += [
+            CharacterDatum(3328, "Isaac", 3328, 16384384),
+            CharacterDatum(3329, "Garet", 3329, 16384386),
+            CharacterDatum(3330, "Ivan", 3330, 16384388),
+            CharacterDatum(3331, "Mia", 3331, 16384390),
+            CharacterDatum(3332, "Jenna", 3332, 16384392),
+            CharacterDatum(3333, "Sheba", 3333, 16384394),
+            CharacterDatum(3334, "Piers", 3334, 16384396),
+        ]
+        for c in self.raw_character_data:
+            self.item_names[c.id] = ItemName(c.id, c.name, c.name)
 
     def _setup_events(self):
         # Just some offset to avoid colliding with anything else; needs to avoid any location or item ids in AP

@@ -188,6 +188,7 @@ def generate_item_names(env: Environment, data: GameData):
         name_list += [{'name': data.item_names[x.id].str_name, 'id': x.id} for x in events]
         name_list += [{'name': d.name, 'id': d.ap_id} for d in data.raw_djinn_data]
         name_list += [{'name': p.name, 'id': p.id} for p in data.raw_psy_data]
+        name_list += [{'name': c.name, 'id': c.id} for c in data.raw_character_data]
         outfile.write(template.render(
             name_list=name_list,
             summons=summons,
@@ -209,12 +210,13 @@ def generate_item_data(env: Environment, data: GameData):
         psyitems = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type == ItemType.PsyenergyItem]
         djinns = [x for x in data.raw_djinn_data]
         remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type != ItemType.PsyenergyItem]
-
+        characters = [c for c in data.raw_character_data]
         outfile.write(template.render(
             summons=summons,
             psyenergies=psyenergies,
             psyitems=psyitems,
             djinns=djinns,
+            characters=characters,
             # unique_items=unique_items,
             # gear=gear,
             remainder=remainder,
@@ -244,6 +246,13 @@ def generate_location_data(env: Environment, data: GameData):
             2724: 'Trade', #Red Cloth
             2723: 'Trade', #Milk
             2721: 'Trade', #Li'l Turtle
+            3328: 'Character', # Contigo Isaac
+            3329: 'Character', # Contigo Garet
+            3330: 'Character', # Contigo Ivan
+            3331: 'Character', # Contigo Mia
+            3333: 'Character', # Idejima Jenna
+            3334: 'Character', # Idejima Sheba
+            3335: 'Character', # Kibombo Piers
         })
         for loc in remainder:
             if loc.is_hidden:
