@@ -9,10 +9,10 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, check_options,
+                      get_hexagons_in_pool)
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
-from decimal import Decimal, ROUND_HALF_UP
 from settings import Group, Bool
 
 
@@ -84,6 +84,8 @@ class TunicWorld(World):
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
     def generate_early(self) -> None:
+        check_options(self)
+
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
             self.options.ice_grappling.value = IceGrappling.option_medium
@@ -118,6 +120,7 @@ class TunicWorld(World):
                 self.options.lanternless.value = passthrough["lanternless"]
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
+                self.options.hexagon_quest_ability_type.value = passthrough["hexagon_quest_ability_type"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
@@ -188,11 +191,14 @@ class TunicWorld(World):
         return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-
         tunic_items: List[TunicItem] = []
         self.slot_data_items = []
 
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
+
+        # Calculate number of hexagons in item pool
+        if self.options.hexagon_quest:
+            items_to_create[gold_hexagon] = get_hexagons_in_pool(self)
 
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
@@ -218,11 +224,21 @@ class TunicWorld(World):
             items_to_create["Hero's Laurels"] = 0
 
         if self.options.keys_behind_bosses:
-            for rgb_hexagon, location in hexagon_locations.items():
-                hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
-                self.get_location(location).place_locked_item(hex_item)
-                items_to_create[rgb_hexagon] = 0
-            items_to_create[gold_hexagon] -= 3
+            rgb_hexagons = list(hexagon_locations.keys())
+            # shuffle these in case not all are placed in hex quest
+            self.random.shuffle(rgb_hexagons)
+            for rgb_hexagon in rgb_hexagons:
+                location = hexagon_locations[rgb_hexagon]
+                if self.options.hexagon_quest:
+                    if items_to_create[gold_hexagon] > 0:
+                        hex_item = self.create_item(gold_hexagon)
+                        items_to_create[gold_hexagon] -= 1
+                        items_to_create[rgb_hexagon] = 0
+                        self.get_location(location).place_locked_item(hex_item)
+                else:
+                    hex_item = self.create_item(rgb_hexagon)
+                    self.get_location(location).place_locked_item(hex_item)
+                    items_to_create[rgb_hexagon] = 0
 
         # Filler items in the item pool
         available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
@@ -250,13 +266,11 @@ class TunicWorld(World):
             remove_filler(ladder_count)
 
         if self.options.hexagon_quest:
-            # Calculate number of hexagons in item pool
-            hexagon_goal = self.options.hexagon_goal
-            extra_hexagons = self.options.extra_hexagon_percentage
-            items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
-
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
+                if replaced_item in item_name_groups["Abilities"] and self.options.ability_shuffling \
+                        and self.options.hexagon_quest_ability_type == "pages":
+                    continue
                 filler_name = self.get_filler_item_name()
                 items_to_create[filler_name] += items_to_create[replaced_item]
                 if items_to_create[filler_name] >= 1 and filler_name not in available_filler:
@@ -302,7 +316,7 @@ class TunicWorld(World):
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
-        self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
+        self.ability_unlocks = randomize_ability_unlocks(self)
 
         # stuff for universal tracker support, can be ignored for standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -395,6 +409,7 @@ class TunicWorld(World):
             "sword_progression": self.options.sword_progression.value,
             "ability_shuffling": self.options.ability_shuffling.value,
             "hexagon_quest": self.options.hexagon_quest.value,
+            "hexagon_quest_ability_type": self.options.hexagon_quest_ability_type.value,
             "fool_traps": self.options.fool_traps.value,
             "laurels_zips": self.options.laurels_zips.value,
             "ice_grappling": self.options.ice_grappling.value,
