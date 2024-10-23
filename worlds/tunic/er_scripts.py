@@ -22,10 +22,19 @@ class TunicERLocation(Location):
 
 def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
-    for region_name, region_data in world.er_regions.items():
-        regions[region_name] = Region(region_name, world.player, world.multiworld)
 
     if world.options.entrance_rando:
+        for region_name, region_data in world.er_regions.items():
+            # if fewer shops is off, zig skip is not made
+            if region_name == "Zig Skip Exit":
+                # need to check if there's a seed group for this first
+                if world.options.entrance_rando.value not in EntranceRando.options.values():
+                    if not world.seed_groups[world.options.entrance_rando.value]["fixed_shop"]:
+                        continue
+                elif not world.options.fixed_shop:
+                    continue
+            regions[region_name] = Region(region_name, world.player, world.multiworld)
+
         portal_pairs = pair_portals(world, regions)
 
         # output the entrances to the spoiler log here for convenience
@@ -33,7 +42,14 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         for portal1, portal2 in sorted_portal_pairs.items():
             world.multiworld.spoiler.set_entrance(portal1, portal2, "both", world.player)
     else:
+        for region_name, region_data in world.er_regions.items():
+            # filter out regions that are inaccessible in non-er
+            if region_name not in ["Zig Skip Exit", "Purgatory"]:
+                regions[region_name] = Region(region_name, world.player, world.multiworld)
+
         portal_pairs = vanilla_portals(world, regions)
+
+    create_randomized_entrances(portal_pairs, regions)
 
     set_er_region_rules(world, regions, portal_pairs)
 
@@ -41,8 +57,6 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         region = regions[location_table[location_name].er_region]
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
-    
-    create_randomized_entrances(portal_pairs, regions)
 
     for region in regions.values():
         world.multiworld.regions.append(region)
@@ -70,7 +84,7 @@ tunic_events: Dict[str, str] = {
     "Quarry Connector Fuse": "Quarry Connector",
     "Quarry Fuse": "Quarry Entry",
     "Ziggurat Fuse": "Rooted Ziggurat Lower Back",
-    "West Garden Fuse": "West Garden",
+    "West Garden Fuse": "West Garden South Checkpoint",
     "Library Fuse": "Library Lab",
     "Place Questagons": "Sealed Temple",
 }
@@ -108,7 +122,8 @@ def create_shop_region(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     # we don't want the zig skip exit for vanilla portals, since it shouldn't be considered for logic here
-    portal_map = [portal for portal in portal_mapping if portal.name != "Ziggurat Lower Falling Entrance"]
+    portal_map = [portal for portal in portal_mapping if portal.name not in
+                  ["Ziggurat Lower Falling Entrance", "Purgatory Bottom Exit", "Purgatory Top Exit"]]
 
     while portal_map:
         portal1 = portal_map[0]
@@ -120,9 +135,6 @@ def vanilla_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Por
             portal2 = Portal(name=f"Shop Portal {world.shop_num}", region=f"Shop {world.shop_num}",
                              destination="Previous Region", tag="_")
             create_shop_region(world, regions)
-
-        elif portal2_sdt == "Purgatory, Purgatory_bottom":
-            portal2_sdt = "Purgatory, Purgatory_top"
 
         for portal in portal_map:
             if portal.scene_destination() == portal2_sdt:
@@ -414,6 +426,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                             cr.add(portal.region)
                             if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels, logic_tricks):
                                 continue
+                        # if not waterfall_plando, then we just want to pair secret gathering place now
                         elif portal.region != "Secret Gathering Place":
                             continue
                     portal2 = portal
