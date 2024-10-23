@@ -157,13 +157,8 @@ class MMBN3World(World):
                     self.multiworld.register_indirect_condition(self.get_region(RegionName.SciLab_Overworld), entrance)
                 if connection == RegionName.Beach_Cyberworld:
                     entrance.access_rule = lambda state: state.has(ItemName.CBeacPas, self.player) and\
-<<<<<<< HEAD
                         state.can_reach_region(RegionName.Yoka_Overworld, self.player)
-
-=======
-                        state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
                     self.multiworld.register_indirect_condition(self.get_region(RegionName.Yoka_Overworld), entrance)
->>>>>>> main
                 if connection == RegionName.Undernet:
                     entrance.access_rule = lambda state: self.explore_score(state) > 8 and\
                         state.has(ItemName.Press, self.player)
