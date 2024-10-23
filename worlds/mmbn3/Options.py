@@ -21,6 +21,7 @@ class IncludeJobs(DefaultOnToggle):
     """
     display_name = "Include Jobs"
 
+
 class IncludeSecretArea(Toggle):
     """
     Whether the Secret Area (including Serenade) can contain progression items.

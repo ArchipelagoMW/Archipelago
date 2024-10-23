@@ -85,7 +85,7 @@ keyItemList: typing.List[ItemData] = [
 ]
 
 subChipList: typing.List[ItemData] = [
-    ItemData(0xB31018, ItemName.Unlocker, ItemClassification.useful, ItemType.SubChip,  117),
+    ItemData(0xB31018, ItemName.Unlocker, ItemClassification.progression, ItemType.SubChip,  117),
     ItemData(0xB31019, ItemName.Untrap,   ItemClassification.filler, ItemType.SubChip,  115),
     ItemData(0xB3101A, ItemName.LockEnmy, ItemClassification.filler, ItemType.SubChip,  116),
     ItemData(0xB3101B, ItemName.MiniEnrg, ItemClassification.filler, ItemType.SubChip,  112),

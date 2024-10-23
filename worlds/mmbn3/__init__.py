@@ -19,7 +19,7 @@ from .Names.LocationName import LocationName
 from worlds.generic.Rules import add_item_rule, add_rule
 
 
-class MMBN3Settings(settings.Group): 
+class MMBN3Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the MMBN3 Blue US rom"""
         copy_to = "Mega Man Battle Network 3 - Blue Version (USA).gba"
@@ -61,7 +61,7 @@ class MMBN3World(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     
-    excluded_locations: typing.List[str]
+    excluded_locations: typing.Set[str]
     item_frequencies: typing.Dict[str, int]
 
     location_name_groups = location_groups
@@ -78,7 +78,7 @@ class MMBN3World(World):
         if self.options.extra_ranks > 0:
             self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.options.extra_ranks
 
-        self.excluded_locations = []
+        self.excluded_locations = set()
         if not self.options.include_secret:
             self.excluded_locations += secret_locations
         if not self.options.include_jobs:
