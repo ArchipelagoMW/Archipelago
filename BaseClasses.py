@@ -396,6 +396,10 @@ class MultiWorld():
             for item in self.itempool:
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:
+                    # Only linked advancement items are relevant to logic, so non-advancement copies do not need to be
+                    # appended to a list within `linked_items`. This avoids attempting to collect non-advancement items
+                    # when a group item is collected, which slightly increases performance when some of the linked items
+                    # are advancement and some are not.
                     if item.advancement:
                         linked_items_tuple = linked_items[item.name]
                         index = len(linked_items_tuple) - count
