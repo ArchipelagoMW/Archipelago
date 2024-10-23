@@ -19,7 +19,7 @@ from .Names.LocationName import LocationName
 from worlds.generic.Rules import add_item_rule, add_rule
 
 
-class MMBN3Settings(settings.Group):
+class MMBN3Settings(settings.Group): 
     class RomFile(settings.UserFilePath):
         """File name of the MMBN3 Blue US rom"""
         copy_to = "Mega Man Battle Network 3 - Blue Version (USA).gba"
@@ -123,17 +123,17 @@ class MMBN3World(World):
                 if connection == RegionName.SciLab_Cyberworld:
                     entrance.access_rule = lambda state: \
                         state.has(ItemName.CSciPas, self.player) or \
-                        state.can_reach(RegionName.SciLab_Overworld, "Region", self.player)
+                        state.can_reach_region(RegionName.SciLab_Overworld, self.player)
                 if connection == RegionName.Yoka_Cyberworld:
                     entrance.access_rule = lambda state: \
                         state.has(ItemName.CYokaPas, self.player) or \
                         (
-                            state.can_reach(RegionName.SciLab_Overworld, "Region", self.player) and
+                            state.can_reach_region(RegionName.SciLab_Overworld, self.player) and
                             state.has(ItemName.Press, self.player)
                         )
                 if connection == RegionName.Beach_Cyberworld:
                     entrance.access_rule = lambda state: state.has(ItemName.CBeacPas, self.player) and\
-                        state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
+                        state.can_reach_region(RegionName.Yoka_Overworld, self.player)
 
                 if connection == RegionName.Undernet:
                     entrance.access_rule = lambda state: self.explore_score(state) > 8 and\
@@ -192,9 +192,9 @@ class MMBN3World(World):
         add_rule(self.multiworld.get_location(LocationName.Secret_3_Island_BMD, self.player), has_press)
 
         # Set Purple Mystery Data Unlocker access
-        def can_unlock(state): return state.can_reach(RegionName.SciLab_Overworld, "Region", self.player) or \
-            state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player) or \
-            state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player) or \
+        def can_unlock(state): return state.can_reach_region(RegionName.SciLab_Overworld, self.player) or \
+            state.can_reach_region(RegionName.SciLab_Cyberworld, self.player) or \
+            state.can_reach_region(RegionName.Yoka_Cyberworld, self.player) or \
             state.has(ItemName.Unlocker, self.player, 8) # There are 8 PMDs that aren't in one of the above areas
         add_rule(self.multiworld.get_location(LocationName.ACDC_1_PMD, self.player), can_unlock)
         add_rule(self.multiworld.get_location(LocationName.Yoka_1_PMD, self.player), can_unlock)
@@ -210,105 +210,105 @@ class MMBN3World(World):
         # Set Job additional area access
         self.multiworld.get_location(LocationName.Please_deliver_this, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.ACDC_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.ACDC_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.ACDC_Overworld, self.player) and \
+                state.can_reach_region(RegionName.ACDC_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.My_Navi_is_sick, self.player).access_rule =\
             lambda state: \
                 state.has(ItemName.Recov30_star, self.player)
         self.multiworld.get_location(LocationName.Help_me_with_my_son, self.player).access_rule =\
             lambda state:\
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.ACDC_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player) and \
+                state.can_reach_region(RegionName.ACDC_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.Transmission_error, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player)
         self.multiworld.get_location(LocationName.Chip_Prices, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.ACDC_Cyberworld, "Region", self.player) and \
-                state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.ACDC_Cyberworld, self.player) and \
+                state.can_reach_region(RegionName.SciLab_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.Im_broke, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player) and \
+                state.can_reach_region(RegionName.Yoka_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.Rare_chips_for_cheap, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.ACDC_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.ACDC_Overworld, self.player)
         self.multiworld.get_location(LocationName.Be_my_boyfriend, self.player).access_rule =\
             lambda state: \
-                state.can_reach(RegionName.Beach_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.Beach_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.Will_you_deliver, self.player).access_rule=\
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.ACDC_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player) and \
+                state.can_reach_region(RegionName.Beach_Overworld, self.player) and \
+                state.can_reach_region(RegionName.ACDC_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.Somebody_please_help, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.ACDC_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.ACDC_Overworld, self.player)
         self.multiworld.get_location(LocationName.Looking_for_condor, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.ACDC_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player) and \
+                state.can_reach_region(RegionName.Beach_Overworld, self.player) and \
+                state.can_reach_region(RegionName.ACDC_Overworld, self.player)
         self.multiworld.get_location(LocationName.Help_with_rehab, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Beach_Overworld, self.player)
         self.multiworld.get_location(LocationName.Old_Master, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.ACDC_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.ACDC_Overworld, self.player) and \
+                state.can_reach_region(RegionName.Beach_Overworld, self.player)
         self.multiworld.get_location(LocationName.Catching_gang_members, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player) and \
+                state.can_reach_region(RegionName.Yoka_Cyberworld, self.player) and \
                 state.has(ItemName.Press, self.player)
         self.multiworld.get_location(LocationName.Please_adopt_a_virus, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.SciLab_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.Legendary_Tomes, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.Undernet, "Region", self.player) and \
-                state.can_reach(RegionName.Deep_Undernet, "Region", self.player) and \
+                state.can_reach_region(RegionName.Beach_Overworld, self.player) and \
+                state.can_reach_region(RegionName.Undernet, self.player) and \
+                state.can_reach_region(RegionName.Deep_Undernet, self.player) and \
                 state.has_all({ItemName.Press, ItemName.Magnum1_A}, self.player)
         self.multiworld.get_location(LocationName.Legendary_Tomes_Treasure, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.ACDC_Overworld, "Region", self.player) and \
-                state.can_reach(LocationName.Legendary_Tomes, "Location", self.player)
+                state.can_reach_region(RegionName.ACDC_Overworld, self.player) and \
+                state.can_reach_location(LocationName.Legendary_Tomes, self.player)
         self.multiworld.get_location(LocationName.Hide_and_seek_First_Child, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player)
         self.multiworld.get_location(LocationName.Hide_and_seek_Second_Child, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player)
         self.multiworld.get_location(LocationName.Hide_and_seek_Third_Child, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player)
         self.multiworld.get_location(LocationName.Hide_and_seek_Fourth_Child, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player)
         self.multiworld.get_location(LocationName.Hide_and_seek_Completion, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player)
         self.multiworld.get_location(LocationName.Finding_the_blue_Navi, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Undernet, "Region", self.player)
+                state.can_reach_region(RegionName.Undernet, self.player)
         self.multiworld.get_location(LocationName.Give_your_support, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player)
+                state.can_reach_region(RegionName.Beach_Overworld, self.player)
         self.multiworld.get_location(LocationName.Stamp_collecting, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.ACDC_Cyberworld, "Region", self.player) and \
-                state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player) and \
-                state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player) and \
-                state.can_reach(RegionName.Beach_Cyberworld, "Region", self.player)
+                state.can_reach_region(RegionName.Beach_Overworld, self.player) and \
+                state.can_reach_region(RegionName.ACDC_Cyberworld, self.player) and \
+                state.can_reach_region(RegionName.SciLab_Cyberworld, self.player) and \
+                state.can_reach_region(RegionName.Yoka_Cyberworld, self.player) and \
+                state.can_reach_region(RegionName.Beach_Cyberworld, self.player)
         self.multiworld.get_location(LocationName.Help_with_a_will, self.player).access_rule = \
             lambda state: \
-                state.can_reach(RegionName.ACDC_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.ACDC_Cyberworld, "Region", self.player) and \
-                state.can_reach(RegionName.Yoka_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player) and \
-                state.can_reach(RegionName.Beach_Overworld, "Region", self.player) and \
-                state.can_reach(RegionName.Undernet, "Region", self.player)
+                state.can_reach_region(RegionName.ACDC_Overworld, self.player) and \
+                state.can_reach_region(RegionName.ACDC_Cyberworld, self.player) and \
+                state.can_reach_region(RegionName.Yoka_Overworld, self.player) and \
+                state.can_reach_region(RegionName.Yoka_Cyberworld, self.player) and \
+                state.can_reach_region(RegionName.Beach_Overworld, self.player) and \
+                state.can_reach_region(RegionName.Undernet, self.player)
 
         # Set Trade quests
         self.multiworld.get_location(LocationName.ACDC_SonicWav_W_Trade, self.player).access_rule =\
@@ -500,24 +500,24 @@ class MMBN3World(World):
         Determine roughly how much of the game you can explore to make certain checks not restrict much movement
         """
         score = 0
-        if state.can_reach(RegionName.WWW_Island, "Region", self.player):
+        if state.can_reach_region(RegionName.WWW_Island, self.player):
             return 999
-        if state.can_reach(RegionName.SciLab_Overworld, "Region", self.player):
+        if state.can_reach_region(RegionName.SciLab_Overworld, self.player):
             score += 3
-        if state.can_reach(RegionName.SciLab_Cyberworld, "Region", self.player):
+        if state.can_reach_region(RegionName.SciLab_Cyberworld, self.player):
             score += 1
-        if state.can_reach(RegionName.Yoka_Overworld, "Region", self.player):
+        if state.can_reach_region(RegionName.Yoka_Overworld, self.player):
             score += 2
-        if state.can_reach(RegionName.Yoka_Cyberworld, "Region", self.player):
+        if state.can_reach_region(RegionName.Yoka_Cyberworld, self.player):
             score += 1
-        if state.can_reach(RegionName.Beach_Overworld, "Region", self.player):
+        if state.can_reach_region(RegionName.Beach_Overworld, self.player):
             score += 3
-        if state.can_reach(RegionName.Beach_Cyberworld, "Region", self.player):
+        if state.can_reach_region(RegionName.Beach_Cyberworld, self.player):
             score += 1
-        if state.can_reach(RegionName.Undernet, "Region", self.player):
+        if state.can_reach_region(RegionName.Undernet, self.player):
             score += 2
-        if state.can_reach(RegionName.Deep_Undernet, "Region", self.player):
+        if state.can_reach_region(RegionName.Deep_Undernet, self.player):
             score += 1
-        if state.can_reach(RegionName.Secret_Area, "Region", self.player):
+        if state.can_reach_region(RegionName.Secret_Area, self.player):
             score += 1
         return score
