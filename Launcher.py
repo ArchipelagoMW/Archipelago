@@ -101,12 +101,12 @@ def update_settings():
 
 components.extend([
     # Functions
-    Component("Open host.yaml", func=open_host_yaml),
-    Component("Open Patch", func=open_patch),
-    Component("Generate Template Options", func=generate_yamls),
-    Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
-    Component("Browse Files", func=browse_files),
+    Component("Open host.yaml", "Archipelago", func=open_host_yaml),
+    Component("Open Patch", "Archipelago", func=open_patch),
+    Component("Generate Template Options", "Archipelago", func=generate_yamls),
+    Component("Discord Server", "Archipelago", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
+    Component("Unrated/18+ Discord Server", "Archipelago", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Browse Files", "Archipelago", func=browse_files),
 ])
 
 
@@ -121,8 +121,9 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
         game = "Archipelago"
     for component in components:
-        if component.supports_uri and component.game_name == game:
-            client_component = component
+        if component.supports_uri:
+            if component.game_name == game or (isinstance(component.game_name, list) and game in component.game_name):
+                client_component = component
         elif component.display_name == "Text Client":
             text_client_component = component
 
