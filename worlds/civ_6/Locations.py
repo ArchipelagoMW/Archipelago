@@ -49,15 +49,16 @@ class CivVILocation(Location):
 
     def __init__(self, player: int, name: str = "", address: Optional[int] = None, parent: Optional[Region] = None):
         super().__init__(player, name, address, parent)
-        if name.split("_")[0] == "TECH":
+        category = name.split("_")[0]
+        if category == "TECH":
             self.location_type = CivVICheckType.TECH
-        elif name.split("_")[0] == "CIVIC":
+        elif category == "CIVIC":
             self.location_type = CivVICheckType.CIVIC
-        elif name.split("_")[0] == "ERA":
+        elif category == "ERA":
             self.location_type = CivVICheckType.ERA
-        elif name.split("_")[0] == "GOODY":
+        elif category == "GOODY":
             self.location_type = CivVICheckType.GOODY
-        elif name.split("_")[0] == "BOOST":
+        elif category == "BOOST":
             self.location_type = CivVICheckType.BOOST
         else:
             self.location_type = CivVICheckType.EVENT

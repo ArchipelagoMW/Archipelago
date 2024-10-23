@@ -209,9 +209,7 @@ def _generate_progressive_district_items(id_base: int) -> Dict[str, CivVIItemDat
     progressive_id_base = 0
     progressive_items = get_progressive_districts_data()
     for item_name in progressive_items.keys():
-        classification = ItemClassification.progression
-        if item_name in NON_PROGRESSION_DISTRICTS:
-            classification = ItemClassification.useful
+        classification = ItemClassification.useful if item_name in NON_PROGRESSION_DISTRICTS else ItemClassification.progression
         name = format_item_name(item_name)
         progressive_table[name] = CivVIItemData(
             name=name,

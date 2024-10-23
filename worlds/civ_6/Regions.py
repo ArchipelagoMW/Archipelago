@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List, Optional, Set
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Union
 from BaseClasses import CollectionState, LocationProgressType, Region
 from worlds.generic.Rules import set_rule
 from .Data import get_boosts_data, get_era_required_items_data, get_progressive_districts_data
@@ -82,22 +82,21 @@ def create_regions(world: 'CivVIWorld'):
     menu = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu)
 
-    has_progressive_eras = world.options.progression_style == "eras_and_districts"
-    has_goody_huts = world.options.shuffle_goody_hut_rewards
-    has_boosts = world.options.boostsanity
+    optional_location_inclusions: Dict[str, Union[bool, int]] = {
+        "ERA": world.options.progression_style == world.options.progression_style.option_eras_and_districts,
+        "GOODY": world.options.shuffle_goody_hut_rewards.value,
+        "BOOST": world.options.boostsanity.value
+    }
 
     regions: List[Region] = []
     for era in EraType:
         era_region = Region(era.value, world.player, world.multiworld)
-        era_locations: Dict[str, Optional[int]] = {location.name: location.code for _key,
-                                                   location in world.location_by_era[era.value].items()}
+        era_locations: Dict[str, Optional[int]] = {}
 
-        if not has_progressive_eras:
-            era_locations = {key: value for key, value in era_locations.items() if key.split("_")[0] != "ERA"}
-        if not has_goody_huts:
-            era_locations = {key: value for key, value in era_locations.items() if key.split("_")[0] != "GOODY"}
-        if not has_boosts:
-            era_locations = {key: value for key, value in era_locations.items() if key.split("_")[0] != "BOOST"}
+        for key, location in world.location_by_era[era.value].items():
+            category = key.split("_")[0]
+            if optional_location_inclusions.get(category, True):
+                era_locations[location.name] = location.code
 
         era_region.add_locations(era_locations, CivVILocation)
 
