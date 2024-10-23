@@ -501,6 +501,21 @@ class AdditionalWarpPoints(DefaultOffToggle):
     """
     display_name = "Additional Warp Points"
 
+
+class TarinsGift(Choice):
+    """
+    [Local Progression] Forces Tarin's gift to be an item that immediately opens up local checks.
+    Has little effect in single player games, and isn't always necessary with randomized entrances.
+    [Bush Breaker] Forces Tarin's gift to be an item that can destroy bushes.
+    [Any Item] Tarin's gift can be any item for any world
+    """
+    display_name = "Tarin's Gift"
+    option_local_progression = 0
+    option_bush_breaker = 1
+    option_any_item = 2
+    default = option_local_progression
+
+
 ladx_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -521,6 +536,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        TarinsGift,
         TrendyGame,
         NagMessages,
         BootsControls
@@ -579,3 +595,4 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    tarins_gift: TarinsGift
