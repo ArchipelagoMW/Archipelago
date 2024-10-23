@@ -92,5 +92,6 @@ characters: List[ItemData] = [
 ]
 
 all_items: List[ItemData] = remainder + djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters {# + unique_items + gear#}
+assert len(all_items) == len({x.id for x in all_items})
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}

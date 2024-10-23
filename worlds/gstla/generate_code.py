@@ -196,6 +196,7 @@ def generate_item_names(env: Environment, data: GameData):
             psyenergies=[data.item_names[x.id] for x in data.raw_psy_data],
             djinn=[data.item_names[x.ap_id] for x in data.raw_djinn_data],
             events=events,
+            characters=[data.item_names[c.id] for c in data.raw_character_data],
             types=[x for x in ItemType if x < ItemType.Psyenergy]))
 
 def generate_item_data(env: Environment, data: GameData):

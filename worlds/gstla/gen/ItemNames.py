@@ -517,6 +517,15 @@ class ItemName(str, Enum):
     Ship = "Ship"
     
 
+    # Characters
+    Isaac = "Isaac"
+    Garet = "Garet"
+    Ivan = "Ivan"
+    Mia = "Mia"
+    Jenna = "Jenna"
+    Sheba = "Sheba"
+    Piers = "Piers"
+    
 
 item_id_by_name: Dict[int, ItemName] = {
     "???": 0,
