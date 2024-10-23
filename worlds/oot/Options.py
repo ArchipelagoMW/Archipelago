@@ -1,7 +1,7 @@
 import typing
 import random
 from dataclasses import dataclass
-from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, OptionSet, DeathLink, PlandoConnections, \
+from Options import Option, DefaultOnToggle, Toggle, Range, OptionSet, DeathLink, PlandoConnections, \
     PerGameCommonOptions, OptionGroup
 from .EntranceShuffle import entrance_shuffle_table
 from .LogicTricks import normalized_name_tricks
@@ -1272,7 +1272,7 @@ sfx_options: typing.Dict[str, type(Option)] = {
 }
 
 
-class LogicTricks(OptionList):
+class LogicTricks(OptionSet):
     """Set various tricks for logic in Ocarina of Time. 
     Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
     A full list of supported tricks can be found at:
