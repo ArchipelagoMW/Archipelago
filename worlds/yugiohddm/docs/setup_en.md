@@ -26,8 +26,7 @@ clear it.
 
 ## Generating a Game
 
-1. Create your options file (YAML). After installing the `ygoddm.apworld` file, you can generate a template within the Archipelago Launcher by clicking `Generate Template Settings`. The YGO DDM world was created with Archipelago 0.5.1, for use with Archipelago 0.5.0
-use the provided YAML in the release instead of generating your own.
+1. Create your options file (YAML). After installing the `ygoddm.apworld` file, you can generate a template within the Archipelago Launcher by clicking `Generate Template Settings`.
 2. Follow the general Archipelago instructions for [generating a game](https://archipelago.gg/tutorial/Archipelago/setup/en#generating-a-game).
 3. Open `ArchipelagoLauncher.exe`
 4. Select "BizHawk Client" in the right-side column. On your first time opening BizHawk Client, you will also be asked to
