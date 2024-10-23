@@ -379,15 +379,15 @@ class MultiWorld():
                 continue
 
             new_itempool: List[Item] = []
-            for item_name, item_count in next(iter(common_item_count.values())).items():
+            # The common item counts are the same for each player to start with, so get the counts for the first player.
+            first_player_counts: Dict[str, int] = next(iter(common_item_count.values()))
+            for item_name, item_count in first_player_counts.items():
                 for _ in range(item_count):
                     new_item = group["world"].create_item(item_name)
                     # mangle together all original classification bits
                     new_item.classification |= classifications[item_name]
                     new_itempool.append(new_item)
 
-            # The common item counts are the same for each player to start with, so get the counts for the first player.
-            first_player_counts: Dict[str, int] = next(iter(common_item_count.values()))
             linked_items: Dict[str, List[List[Item]]] = {item_name: [[] for _ in range(item_count)]
                                                          for item_name, item_count in first_player_counts.items()}
 
