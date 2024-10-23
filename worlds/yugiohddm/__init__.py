@@ -1,3 +1,5 @@
+# Credit to sg4e and the YuGiOh Forbidden Memories apworld for being the basis of this project
+
 import typing
 import warnings
 
@@ -10,7 +12,7 @@ from .utils import Constants
 from .items import YGODDMItem, item_name_to_item_id, create_item as fabricate_item, create_victory_event
 from .locations import YGODDMLocation, DuelistLocation, location_name_to_id as location_map
 from .dice import Dice, all_dice
-from .options import YGODDMOptions, DuelistRematches
+from .options import YGODDMOptions#, DuelistRematches
 from .duelists import Duelist, all_duelists, map_duelists_to_ids
 from .version import __version__
 
@@ -37,7 +39,6 @@ class YGODDMWorld(World):
     required_client_version = (0, 5, 0)
     web = YGODDMWeb()
 
-    #duelist_unlock_order: typing.List[typing.Tuple[Duelist, ...]]
     duelist_unlock_order: typing.List[Duelist]
 
     location_name_to_id = location_map
