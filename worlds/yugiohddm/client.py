@@ -71,18 +71,33 @@ class YGODDMClient(BizHawkClient):
         if ctx.slot_data is not None:
             # in YGO FM this is a version mismatch check between user vs generated world
 
-            # Unlock duelists based on who has been received
+            # Unlock Duelists
 
-            unlocked_duelist_bitflags: int = 0
+            unlocked_duelist_bitflags: typing.List[int] = [0,0,0,0,0,0,0,0,0,0,0,0]
+            duelist_bitflag: int = 0
+            duelist_bitflag_index: int
+
+            # Unlock initially unlocked duelists
+
+            # Only handles Yugi Moto for now
+            unlocked_duelist_bitflags[0] |= Duelist.YUGI_MOTO.bitflag
+
+
+            # Unlock duelists based on who has been received
+            
             for item in ctx.items_received:
                 if is_duelist_location_id(item.item):
-                    unlocked_duelist_bitflags |= duelist_from_location_id(item.item).bitflag
-                    print (unlocked_duelist_bitflags)
+                    duelist_bitflag = duelist_from_location_id(item.item).bitflag
+                    duelist_bitflag_index = 0
+                    while duelist_bitflag >= 256:
+                        duelist_bitflag = duelist_bitflag >> 8
+                        duelist_bitflag_index = duelist_bitflag_index + 1
+                    unlocked_duelist_bitflags[duelist_bitflag_index] |= duelist_bitflag
 
             if unlocked_duelist_bitflags != 0:
                 await bizhawk.write(ctx.bizhawk_ctx, [(
                     Constants.DUELIST_UNLOCK_OFFSET,
-                    [unlocked_duelist_bitflags],
+                    unlocked_duelist_bitflags,
                     COMBINED_WRAM
                 )])
 
