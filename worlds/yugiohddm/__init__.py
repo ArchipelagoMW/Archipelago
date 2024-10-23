@@ -5,10 +5,6 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import CollectionState, Region, Tutorial, LocationProgressType
 from worlds.generic.Rules import set_rule
 
-from worlds.AutoWorld import World, WebWorld
-from BaseClasses import CollectionState, Region, Tutorial, LocationProgressType
-from worlds.generic.Rules import set_rule
-
 from .client import YGODDMClient
 from .utils import Constants
 from .items import YGODDMItem, item_name_to_item_id, create_item as fabricate_item, create_victory_event
@@ -70,7 +66,7 @@ class YGODDMWorld(World):
         # Hold a reference to these to set locked items and victory event
 
         for duelist in self.duelist_unlock_order:
-            if duelist is Duelist.YUGI_MOTO:
+            if duelist is not Duelist.YAMI_YUGI:
                 duelist_location: DuelistLocation = DuelistLocation(free_duel_region, self.player, duelist)
                 set_rule(duelist_location, (lambda state, d=duelist_location:
                                             d.duelist in self.get_available_duelists(state)))
@@ -83,7 +79,7 @@ class YGODDMWorld(World):
 
         itempool: typing.List[YGODDMItem] = []
         for duelist in self.duelist_unlock_order:
-            if duelist is Duelist.YAMI_YUGI:
+            if duelist is not Duelist.YUGI_MOTO and duelist is not Duelist.YAMI_YUGI:
                 itempool.append(self.create_item(duelist.name))
 
         # Set Yami Yugi's item to game victory

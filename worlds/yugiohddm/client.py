@@ -77,6 +77,7 @@ class YGODDMClient(BizHawkClient):
             for item in ctx.items_received:
                 if is_duelist_location_id(item.item):
                     unlocked_duelist_bitflags |= duelist_from_location_id(item.item).bitflag
+                    print (unlocked_duelist_bitflags)
 
             if unlocked_duelist_bitflags != 0:
                 await bizhawk.write(ctx.bizhawk_ctx, [(
