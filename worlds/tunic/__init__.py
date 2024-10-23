@@ -109,26 +109,25 @@ class TunicWorld(World):
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
-                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.passthrough = passthrough
-                self.options.start_with_sword.value = passthrough["start_with_sword"]
-                self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
-                self.options.sword_progression.value = passthrough["sword_progression"]
-                self.options.ability_shuffling.value = passthrough["ability_shuffling"]
+                self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                self.options.start_with_sword.value = self.passthrough["start_with_sword"]
+                self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
+                self.options.sword_progression.value = self.passthrough["sword_progression"]
+                self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
                 # this option is newer than 0.5.0, and so should be handled in some fashion
                 try:
-                    self.options.laurels_zips.value = passthrough["laurels_zips"]
-                    self.options.ice_grappling.value = passthrough["ice_grappling"]
-                    self.options.ladder_storage.value = passthrough["ladder_storage"]
-                    self.options.ladder_storage_without_items = passthrough["ladder_storage_without_items"]
+                    self.options.laurels_zips.value = self.passthrough["laurels_zips"]
+                    self.options.ice_grappling.value = self.passthrough["ice_grappling"]
+                    self.options.ladder_storage.value = self.passthrough["ladder_storage"]
+                    self.options.ladder_storage_without_items = self.passthrough["ladder_storage_without_items"]
                 except KeyError:
                     warning("The TUNIC APWorld that the multiworld was generated with is newer than the one in "
                             "your Archipelago installation. Consider updating your APWorld to a newer version.")
-                self.options.lanternless.value = passthrough["lanternless"]
-                self.options.maskless.value = passthrough["maskless"]
-                self.options.hexagon_quest.value = passthrough["hexagon_quest"]
-                self.options.entrance_rando.value = passthrough["entrance_rando"]
-                self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
+                self.options.lanternless.value = self.passthrough["lanternless"]
+                self.options.maskless.value = self.passthrough["maskless"]
+                self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
+                self.options.entrance_rando.value = self.passthrough["entrance_rando"]
+                self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
             else:
