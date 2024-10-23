@@ -9,7 +9,7 @@ BizHawk support.
 - Yu-Gi-Oh! Dungeon Dice Monsters .GBA rom.
 - Make sure to launch a "New Game" for each seed you play.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later. Other emulators are not supported.
-- The latest `ygoddm.apworld` file. You can find this on the [Releases page](https://github.com/sg4e/Archipelago/releases/latest). Put this in your `Archipelago/lib/worlds` folder.
+- The latest `ygoddm.apworld` file. You can find this on the [Releases page](https://github.com/JustinMarshall98/Archipelago/releases/latest). Put this in your `Archipelago/lib/worlds` folder.
 
 ### Configuring BizHawk
 
