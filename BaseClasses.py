@@ -448,7 +448,17 @@ class MultiWorld():
                      player not in self.groups and self.game[player] == game_name)
 
     def get_name_string_for_object(self, obj: HasNameAndPlayer) -> str:
-        return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_name(obj.player)})'
+        if self.players == 1:
+            return obj.name
+
+        player = obj.player
+        if player in self.groups:
+            # Include all the players in the group.
+            group_players = self.groups[player]["players"]
+            group_players_str = ", ".join(map(self.get_player_name, group_players))
+            return f"{obj.name} ({self.get_player_name(player)} ({group_players_str}))"
+        else:
+            return obj.name if self.players == 1 else f'{obj.name} ({self.get_player_name(player)})'
 
     def get_player_name(self, player: int) -> str:
         return self.player_name[player]
