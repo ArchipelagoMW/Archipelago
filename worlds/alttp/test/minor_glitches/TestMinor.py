@@ -13,12 +13,11 @@ class TestMinor(TestBase, LTTPTestBase):
         self.world_setup()
         self.multiworld.glitches_required[1] = GlitchesRequired.from_any("minor_glitches")
         self.multiworld.bombless_start[1].value = True
-        self.multiworld.shuffle_capacity_upgrades[1].value = True
-        self.multiworld.difficulty_requirements[1] = difficulties['normal']
+        self.multiworld.shuffle_capacity_upgrades[1].value = 2
+        self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
         self.world.er_seed = 0
         self.world.create_regions()
         self.world.create_items()
-        self.multiworld.required_medallions[1] = ['Ether', 'Quake']
         self.multiworld.itempool.extend(get_dungeon_item_pool(self.multiworld))
         self.multiworld.itempool.extend(item_factory(
             ['Green Pendant', 'Red Pendant', 'Blue Pendant', 'Beat Agahnim 1', 'Beat Agahnim 2', 'Crystal 1',

@@ -15,7 +15,7 @@ def underworld_glitch_connections(world, player):
     specrock.exits.append(kikiskip)
     mire.exits.extend([mire_to_hera, mire_to_swamp])
 
-    if world.fix_fake_world[player]: 
+    if world.worlds[player].fix_fake_world:
         kikiskip.connect(world.get_entrance('Palace of Darkness Exit', player).connected_region)
         mire_to_hera.connect(world.get_entrance('Tower of Hera Exit', player).connected_region)
         mire_to_swamp.connect(world.get_entrance('Swamp Palace Exit', player).connected_region)
@@ -38,8 +38,8 @@ def fake_pearl_state(state, player):
 # Sets the rules on where we can actually go using this clip.
 # Behavior differs based on what type of ER shuffle we're playing. 
 def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, dungeon_exit: str): 
-    fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
-    fix_fake_worlds = world.fix_fake_world[player]
+    fix_dungeon_exits = world.worlds[player].fix_palaceofdarkness_exit
+    fix_fake_worlds = world.worlds[player].fix_fake_world
 
     dungeon_entrance = [r for r in world.get_region(dungeon_region, player).entrances if r.name != clip.name][0]
     if not fix_dungeon_exits: # vanilla, simple, restricted, dungeons_simple; should never have fake worlds fix
@@ -52,7 +52,7 @@ def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, du
             add_rule(clip, lambda state: state.has('Cape', player) or has_beam_sword(state, player) or state.has('Beat Agahnim 1', player)) # kill/bypass barrier
         # Then we set a restriction on exiting the dungeon, so you can't leave unless you got in normally. 
         add_rule(world.get_entrance(dungeon_exit, player), lambda state: dungeon_entrance.can_reach(state))
-    elif not fix_fake_worlds: # full, dungeons_full; fixed dungeon exits, but no fake worlds fix
+    elif not fix_fake_worlds:  # full, dungeons_full; fixed dungeon exits, but no fake worlds fix
         # Entry requires the entrance's requirements plus a fake pearl, but you don't gain logical access to the surrounding region. 
         add_rule(clip, lambda state: dungeon_entrance.access_rule(fake_pearl_state(state, player)))
         # exiting restriction
@@ -62,9 +62,6 @@ def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, du
 
 
 def underworld_glitches_rules(world, player): 
-    fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
-    fix_fake_worlds = world.fix_fake_world[player]
-
     # Ice Palace Entrance Clip
     # This is the easiest one since it's a simple internal clip.
     # Need to also add melting to freezor chest since it's otherwise assumed.
@@ -92,7 +89,7 @@ def underworld_glitches_rules(world, player):
     # Build the rule for SP moat. 
     # We need to be able to s+q to old man, then go to either Mire or Hera at either Hera or GT. 
     # First we require a certain type of entrance shuffle, then build the rule from its pieces. 
-    if not world.swamp_patch_required[player]:
+    if not world.worlds[player].swamp_patch_required:
         if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
             rule_map = {
                 'Misery Mire (Entrance)': (lambda state: True),

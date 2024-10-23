@@ -23,7 +23,7 @@
 
 .markdown a{}
 
-.markdown h1{
+.markdown h1, .markdown details summary.h1{
     font-size: 52px;
     font-weight: normal;
     font-family: LondrinaSolid-Regular, sans-serif;
@@ -33,7 +33,7 @@
     text-shadow: 1px 1px 4px #000000;
 }
 
-.markdown h2{
+.markdown h2, .markdown details summary.h2{
     font-size: 38px;
     font-weight: normal;
     font-family: LondrinaSolid-Light, sans-serif;
@@ -45,7 +45,7 @@
     text-shadow: 1px 1px 2px #000000;
 }
 
-.markdown h3{
+.markdown h3, .markdown details summary.h3{
     font-size: 26px;
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
@@ -55,7 +55,7 @@
     margin-bottom: 0.5rem;
 }
 
-.markdown h4{
+.markdown h4, .markdown details summary.h4{
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 24px;
@@ -63,21 +63,21 @@
     margin-bottom: 24px;
 }
 
-.markdown h5{
+.markdown h5, .markdown details summary.h5{
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 22px;
     cursor: pointer;
 }
 
-.markdown h6{
+.markdown h6, .markdown details summary.h6{
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 20px;
     cursor: pointer;;
 }
 
-.markdown h4, .markdown h5,.markdown h6{
+.markdown h4, .markdown h5, .markdown h6{
     margin-bottom: 0.5rem;
 }
 

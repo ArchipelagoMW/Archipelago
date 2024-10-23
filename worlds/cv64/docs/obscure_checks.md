@@ -27,7 +27,7 @@ in vanilla, contains 5 checks in rando.
 #### Bat archway rock
 After the broken bridge containing the invisible pathway to the Special1 in vanilla, this rock is off to the side in front
 of the gate frame with a swarm of bats that come at you, before the Werewolf's territory. Contains 4 checks. If you are new
-to speedrunning the vanilla game and haven't yet learned the RNG manip strats, this is a guranteed spot to find a PowerUp at.
+to speedrunning the vanilla game and haven't yet learned the RNG manip strats, this is a guaranteed spot to find a PowerUp at.
 
 
 

@@ -8,7 +8,7 @@ from ...mods.mod_data import ModNames
 from ...stardew_rule import StardewRule, False_
 from ...strings.ap_names.skill_level_names import ModSkillLevel
 from ...strings.region_names import MagicRegion
-from ...strings.spells import MagicSpell
+from ...strings.spells import MagicSpell, all_spells
 
 
 class MagicLogicMixin(BaseLogicMixin):
@@ -27,7 +27,8 @@ class MagicLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin, HasLogicM
     def can_use_altar(self) -> StardewRule:
         if ModNames.magic not in self.options.mods:
             return False_()
-        return self.logic.region.can_reach(MagicRegion.altar)
+        spell_rule = False_()
+        return self.logic.region.can_reach(MagicRegion.altar) & self.logic.received_any(*all_spells)
 
     def has_any_spell(self) -> StardewRule:
         if ModNames.magic not in self.options.mods:

@@ -177,7 +177,7 @@ Doors:
 1774 - Bunker Elevator Room Entry (Door) - 0x0A08D
 1777 - Swamp Entry (Door) - 0x00C1C
 1780 - Swamp Between Bridges First Door - 0x184B7
-1783 - Swamp Platform Shortcut Door - 0x38AE6
+1783 - Swamp Platform Shortcut (Door) - 0x38AE6
 1786 - Swamp Cyan Water Pump (Door) - 0x04B7F
 1789 - Swamp Between Bridges Second Door - 0x18507
 1792 - Swamp Red Water Pump (Door) - 0x183F2
@@ -201,7 +201,7 @@ Doors:
 1849 - Caves Pillar Door - 0x019A5
 1855 - Caves Swamp Shortcut (Door) - 0x2D859
 1858 - Challenge Entry (Door) - 0x0A19A
-1861 - Challenge Tunnels Entry (Door) - 0x0348A
+1861 - Tunnels Entry (Door) - 0x0348A
 1864 - Tunnels Theater Shortcut (Door) - 0x27739
 1867 - Tunnels Desert Shortcut (Door) - 0x27263
 1870 - Tunnels Town Shortcut (Door) - 0x09E87
