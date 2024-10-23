@@ -401,9 +401,12 @@ class MultiWorld():
                     # when a group item is collected, which slightly increases performance when some of the linked items
                     # are advancement and some are not.
                     if item.advancement:
-                        linked_items_tuple = linked_items[item.name]
-                        index = len(linked_items_tuple) - count
-                        linked_items_for_count = linked_items_tuple[index]
+                        linked_items_for_name = linked_items[item.name]
+                        # Put the first item found for `item.player` with name `item.name` in the first list and put the
+                        # second item found in the second list etc. This way, the earlier lists get filled with one item
+                        # per player first.
+                        index = len(linked_items_for_name) - count
+                        linked_items_for_count = linked_items_for_name[index]
                         linked_items_for_count.append(item)
 
                     common_item_count[item.player][item.name] -= 1
