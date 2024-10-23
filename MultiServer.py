@@ -15,6 +15,7 @@ import math
 import operator
 import pickle
 import random
+import shlex
 import threading
 import time
 import typing
@@ -184,11 +185,9 @@ class Context:
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
-    item_names: typing.Dict[str, typing.Dict[int, str]] = (
-        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')))
+    item_names: typing.Dict[str, typing.Dict[int, str]]
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
-    location_names: typing.Dict[str, typing.Dict[int, str]] = (
-        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')))
+    location_names: typing.Dict[str, typing.Dict[int, str]]
     location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
@@ -196,7 +195,6 @@ class Context:
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
-
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
@@ -268,6 +266,10 @@ class Context:
         self.location_name_groups = {}
         self.all_item_and_group_names = {}
         self.all_location_and_group_names = {}
+        self.item_names = collections.defaultdict(
+            lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})'))
+        self.location_names = collections.defaultdict(
+            lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})'))
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
@@ -427,6 +429,8 @@ class Context:
               use_embedded_server_options: bool):
 
         self.read_data = {}
+        # there might be a better place to put this.
+        self.read_data["race_mode"] = lambda: decoded_obj.get("race_mode", 0)
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
@@ -1150,7 +1154,10 @@ class CommandProcessor(metaclass=CommandMeta):
         if not raw:
             return
         try:
-            command = raw.split()
+            try:
+                command = shlex.split(raw, comments=False)
+            except ValueError:  # most likely: "ValueError: No closing quotation"
+                command = raw.split()
             basecommand = command[0]
             if basecommand[0] == self.marker:
                 method = self.commands.get(basecommand[1:].lower(), None)
