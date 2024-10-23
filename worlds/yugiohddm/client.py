@@ -59,6 +59,18 @@ class YGODDMClient(BizHawkClient):
         return (await bizhawk.read(
             ctx.bizhawk_ctx, [(Constants.DICE_COLLECTION_OFFSET, 124, COMBINED_WRAM)]
         ))[0]
+    
+    async def read_duelist_collection(self, ctx: "BizHawkClientContext") -> typing.List[int]:
+        byte_list_duelists: typing.List[bytes] = []
+        for duelist_unlock_byte in range(12):
+            byte_list_duelists.append((await bizhawk.read(
+            ctx.bizhawk_ctx, [(Constants.DUELIST_UNLOCK_OFFSET + duelist_unlock_byte, 1, COMBINED_WRAM)]
+        ))[0])
+        int_list_duelists: typing.List[int] = []
+        for byte in byte_list_duelists:
+            int_list_duelists.append(int.from_bytes(byte))
+        return int_list_duelists
+
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if not ctx.finished_game and any(item.item == Constants.VICTORY_ITEM_ID for item in ctx.items_received):
@@ -70,37 +82,6 @@ class YGODDMClient(BizHawkClient):
 
         if ctx.slot_data is not None:
             # in YGO FM this is a version mismatch check between user vs generated world
-
-            # Unlock Duelists
-
-            unlocked_duelist_bitflags: typing.List[int] = [0,0,0,0,0,0,0,0,0,0,0,0]
-            duelist_bitflag: int = 0
-            duelist_bitflag_index: int
-
-            # Unlock initially unlocked duelists
-
-            # Only handles Yugi Moto for now
-            unlocked_duelist_bitflags[0] |= Duelist.YUGI_MOTO.bitflag
-
-
-            # Unlock duelists based on who has been received
-            
-            for item in ctx.items_received:
-                if is_duelist_location_id(item.item):
-                    duelist_bitflag = duelist_from_location_id(item.item).bitflag
-                    duelist_bitflag_index = 0
-                    while duelist_bitflag >= 256:
-                        duelist_bitflag = duelist_bitflag >> 8
-                        duelist_bitflag_index = duelist_bitflag_index + 1
-                    unlocked_duelist_bitflags[duelist_bitflag_index] |= duelist_bitflag
-
-            if unlocked_duelist_bitflags != 0:
-                await bizhawk.write(ctx.bizhawk_ctx, [(
-                    Constants.DUELIST_UNLOCK_OFFSET,
-                    unlocked_duelist_bitflags,
-                    COMBINED_WRAM
-                )])
-
 
             # Read number of wins over each duelist for 'duelist defeated' locations
 
@@ -115,19 +96,44 @@ class YGODDMClient(BizHawkClient):
                 get_location_id_for_duelist(key) for key, value in duelists_to_wins.items() if value != 0
             ])
 
-            #print("Win Mem check")
-            #for duelist, wins in duelists_to_wins.items():
-            #    if duelist is Duelist.YUGI_MOTO:
-            #        print("Yugi Moto Wins")
-            #        print (wins)
+            # Unlock Duelists
 
-            #    print(all_duelists[i].name)
-            #    print(all_duelists[i].wins_address)
-            #    print(read_list[i])
-            #    print(wins_bytes[i])
-            #    print(new_local_check_locations)
+            unlocked_duelist_bitflags: typing.List[int] = await self.read_duelist_collection(ctx)
+            duelist_bitflag: int = 0
+            duelist_bitflag_index: int
+            duelist_count: int = 0
+
+            # Unlock initially unlocked duelists
+
+            # Only handles Yugi Moto for now
+            unlocked_duelist_bitflags[0] |= Duelist.YUGI_MOTO.bitflag
 
 
+            # Unlock duelists based on who has been received
+            
+            for item in ctx.items_received:
+                if is_duelist_location_id(item.item):
+                    duelist_count = duelist_count + 1
+                    duelist_bitflag = duelist_from_location_id(item.item).bitflag
+                    duelist_bitflag_index = 0
+                    while duelist_bitflag >= 256:
+                        duelist_bitflag = duelist_bitflag >> 8
+                        duelist_bitflag_index = duelist_bitflag_index + 1
+                    unlocked_duelist_bitflags[duelist_bitflag_index] |= duelist_bitflag
+            
+            # Check for Yami Yugi unlock based on number of duelists defeated
+            # (Looking for 91 duelists being defeated at least once before yami unlock)
+            if len(new_local_check_locations) >= 91:
+                unlocked_duelist_bitflags[0] |= Duelist.YAMI_YUGI.bitflag
+
+            await bizhawk.write(ctx.bizhawk_ctx, [(
+                Constants.DUELIST_UNLOCK_OFFSET,
+                unlocked_duelist_bitflags,
+                COMBINED_WRAM
+            )])
+
+
+            
 
             # Here YGO FM does a check for card checks then does a union of the two sets
 

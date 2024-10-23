@@ -5,7 +5,7 @@
 
 You will play the game entirely in Free Duel mode. You will start with the defined number of duelists unlocked (set in your YAML),
 defeating each duelist for the first time will unlock a check. Over time you will unlock more duelists as those checks are found
-by players in the multiworld. Once all duelists other than Yami Yugi are unlocked he will be unlocked as well.
+by players in the multiworld. Once all duelists other than Yami Yugi are beaten once, he will be unlocked.
 
 ## What is the goal of Yu-Gi-Oh! Dungeon Dice Monsters when randomized?
 
