@@ -58,7 +58,6 @@ from . import hints
 
 from .patches import bank34
 from .utils import formatText
-from ..Options import TrendyGame, Palette
 from .roomEditor import RoomEditor, Object
 from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
@@ -154,6 +153,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
     patches.maptweaks.tweakMap(rom)
+    if world.options.overworld == "open_mabe":
+        patches.maptweaks.openMabe(rom)
     patches.chest.fixChests(rom)
     patches.shop.fixShop(rom)
     patches.rooster.patchRooster(rom)
