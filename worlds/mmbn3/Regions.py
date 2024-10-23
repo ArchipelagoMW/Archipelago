@@ -351,6 +351,6 @@ regions = [
                     LocationName.Secret_3_Island_BMD,
                     LocationName.Secret_3_South_BMD,
                     LocationName.Secret_3_BugFrag_BMD,
-                   LocationName.Serenade
+                    LocationName.Serenade
                 ])
 ]
