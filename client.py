@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional
 import Utils
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
+from worlds._bizhawk.client import BizHawkClient
 
 from .data import Passage, encode_str, get_symbol
 from .locations import get_level_locations, location_name_to_id, location_table
@@ -137,7 +138,7 @@ class DeathLinkCtx:
         return repr(self)
 
 
-class WL4Client(bizhawk.client.BizHawkClient):
+class WL4Client(BizHawkClient):
     game = 'Wario Land 4'
     system = 'GBA'
     patch_suffix = '.apwl4'
