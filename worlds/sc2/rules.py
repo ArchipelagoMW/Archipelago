@@ -35,9 +35,60 @@ class SC2Logic:
         # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
         return state.has_group("Missions", self.player, 0)
 
+    # Needs to react on how many missions actually got generated
     def total_mission_count(self):
         return 1 if (self.world is None or not hasattr(self.world, 'custom_mission_order')) \
             else self.world.custom_mission_order.get_mission_count()
+
+    # Unit classes in world, these are set properly into the world after the item culling is done
+    # Therefore need to get from the world
+    def world_has_barracks_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_barracks_unit
+
+    def world_has_factory_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_factory_unit
+
+    def world_has_starport_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_starport_unit
+
+    def world_has_zerg_melee_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_zerg_melee_unit
+
+    def world_has_zerg_ranged_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_zerg_ranged_unit
+
+    def world_has_zerg_air_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_zerg_air_unit
+
+    def world_has_protoss_ground_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_protoss_ground_unit
+
+    def world_has_protoss_air_unit(self):
+        if self.world is None:
+            return False
+        else:
+            return self.world.has_protoss_air_unit
 
     def weapon_armor_upgrade_count(self, upgrade_item: str, state: CollectionState) -> int:
         assert upgrade_item in upgrade_bundle_inverted_lookup.keys()
@@ -72,19 +123,19 @@ class SC2Logic:
         :return:
         """
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
-        if self.has_barracks_unit:
+        if self.world_has_barracks_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, state)
             )
-        if self.has_factory_unit:
+        if self.world_has_factory_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR, state)
             )
-        if self.has_starport_unit:
+        if self.world_has_starport_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state),
@@ -759,19 +810,19 @@ class SC2Logic:
 
     def zerg_army_weapon_armor_upgrade_count(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
-        if self.has_zerg_melee_unit:
+        if self.world_has_zerg_melee_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MELEE_ATTACK, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
             )
-        if self.has_zerg_ranged_unit:
+        if self.world_has_zerg_ranged_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
             )
-        if self.has_zerg_air_unit:
+        if self.world_has_zerg_air_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_ATTACK, state),
@@ -1028,19 +1079,19 @@ class SC2Logic:
     # LotV
     def protoss_army_weapon_armor_upgrade_count(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL + 1 # +1 for Quatro
-        if self.has_protoss_ground_unit:
+        if self.world_has_protoss_ground_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_GROUND_WEAPON, state),
                 self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_GROUND_ARMOR, state)
             )
-        if self.has_protoss_air_unit:
+        if self.world_has_protoss_air_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_AIR_WEAPON, state),
                 self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_AIR_ARMOR, state)
             )
-        if self.has_protoss_ground_unit or self.has_protoss_air_unit:
+        if self.world_has_protoss_ground_unit() or self.world_has_protoss_air_unit():
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_SHIELDS, state),
@@ -1767,24 +1818,6 @@ class SC2Logic:
         self.enabled_campaigns = get_enabled_campaigns(world)
         self.mission_order = get_option_value(world, "mission_order")
         self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
-        if world is None:
-            self.has_barracks_unit = False
-            self.has_factory_unit = False
-            self.has_starport_unit = False
-            self.has_zerg_melee_unit = False
-            self.has_zerg_ranged_unit = False
-            self.has_zerg_air_unit = False
-            self.has_protoss_ground_unit = False
-            self.has_protoss_air_unit = False
-        else:
-            self.has_barracks_unit = world.has_barracks_unit
-            self.has_factory_unit = world.has_factory_unit
-            self.has_starport_unit = world.has_starport_unit
-            self.has_zerg_melee_unit = world.has_zerg_melee_unit
-            self.has_zerg_ranged_unit = world.has_zerg_ranged_unit
-            self.has_zerg_air_unit = world.has_zerg_air_unit
-            self.has_protoss_ground_unit = world.has_protoss_ground_unit
-            self.has_protoss_air_unit = world.has_protoss_air_unit
 
 def get_basic_units(world: 'SC2World', race: SC2Race) -> Set[str]:
     logic_level = get_option_value(world, 'required_tactics')
