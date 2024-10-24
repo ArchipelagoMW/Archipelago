@@ -1,5 +1,6 @@
 import typing
 from . import item_names, items
+from .item_names import DAWNBRINGER
 from .mission_tables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
 
 """
@@ -416,6 +417,30 @@ item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
     if item_data.type in (items.ZergItemType.Unit, items.ZergItemType.Mercenary, items.ZergItemType.Morph)
         and item_name not in zerg_buildings
 ]
+# For W/A upgrades
+zerg_ground_units = [
+    item_names.ZERGLING, item_names.SWARM_QUEEN, item_names.ROACH, item_names.HYDRALISK, item_names.ABERRATION,
+    item_names.SWARM_HOST, item_names.INFESTOR, item_names.ULTRALISK, item_names.ZERGLING_BANELING_ASPECT,
+    item_names.HYDRALISK_LURKER_ASPECT, item_names.HYDRALISK_IMPALER_ASPECT, item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+    item_names.ROACH_RAVAGER_ASPECT, item_names.DEFILER, item_names.ROACH_PRIMAL_IGNITER_ASPECT,
+    item_names.INFESTED_MARINE, item_names.INFESTED_BUNKER, item_names.INFESTED_DIAMONDBACK,
+    item_names.INFESTED_SIEGE_TANK,
+]
+zerg_melee_wa = [
+    item_names.ZERGLING, item_names.ABERRATION, item_names.ULTRALISK, item_names.ZERGLING_BANELING_ASPECT,
+    item_names.ULTRALISK_TYRANNOZOR_ASPECT, item_names.INFESTED_BUNKER,
+]
+zerg_ranged_wa = [
+    item_names.SWARM_QUEEN, item_names.ROACH, item_names.HYDRALISK, item_names.SWARM_HOST,
+    item_names.HYDRALISK_LURKER_ASPECT, item_names.HYDRALISK_IMPALER_ASPECT, item_names.ULTRALISK_TYRANNOZOR_ASPECT,
+    item_names.ROACH_RAVAGER_ASPECT, item_names.ROACH_PRIMAL_IGNITER_ASPECT, item_names.INFESTED_MARINE,
+    item_names.INFESTED_BUNKER, item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_SIEGE_TANK,
+]
+zerg_air_units = [
+    item_names.MUTALISK, item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT,
+    item_names.CORRUPTOR, item_names.BROOD_QUEEN, item_names.SCOURGE, item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT,
+    item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, item_names.INFESTED_BANSHEE, item_names.INFESTED_LIBERATOR,
+]
 item_name_groups[ItemGroupNames.ZERG_GENERIC_UPGRADES] = zerg_generic_upgrades = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type == items.ZergItemType.Upgrade
@@ -546,6 +571,25 @@ item_name_groups[ItemGroupNames.PROTOSS_ITEMS] = protoss_items = [
 item_name_groups[ItemGroupNames.PROTOSS_UNITS] = protoss_units = [
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type in (items.ProtossItemType.Unit, items.ProtossItemType.Unit_2)
+]
+protoss_ground_wa = [
+    item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL, item_names.SUPPLICANT,
+    item_names.SENTRY, item_names.ENERGIZER,
+    item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER, item_names.DRAGOON, item_names.ADEPT,
+    item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT,
+    item_names.DARK_TEMPLAR, item_names.BLOOD_HUNTER, item_names.AVENGER,
+    item_names.DARK_ARCHON,
+    item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.VANGUARD, item_names.STALWART,
+    item_names.COLOSSUS, item_names.WRATHWALKER,
+    item_names.REAVER,
+]
+protoss_air_wa = [
+    item_names.WARP_PRISM_PHASE_BLASTER,
+    item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.SKIRMISHER,
+    item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names, DAWNBRINGER,
+    item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
+    item_names.SCOUT, item_names.TEMPEST, item_names.MOTHERSHIP,
+    item_names.ARBITER, item_names.ORACLE,
 ]
 item_name_groups[ItemGroupNames.PROTOSS_GENERIC_UPGRADES] = protoss_generic_upgrades = [
     item_name for item_name, item_data in items.item_table.items()

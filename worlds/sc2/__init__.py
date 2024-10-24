@@ -118,6 +118,14 @@ class SC2World(World):
     final_missions: List[int]
     required_client_version = 0, 4, 5
     custom_mission_order: SC2MissionOrder
+    has_barracks_unit: bool = True
+    has_factory_unit: bool = True
+    has_starport_unit: bool = True
+    has_zerg_melee_unit: bool = True
+    has_zerg_ranged_unit: bool = True
+    has_zerg_air_unit: bool = True
+    has_protoss_ground_unit: bool = True
+    has_protoss_air_unit: bool = True
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(SC2World, self).__init__(multiworld, player)
@@ -159,6 +167,26 @@ class SC2World(World):
         push_precollected_items_to_multiworld(self, item_list)
 
         self.multiworld.itempool += pool
+
+        # Tell the logic which unit classes are used for required W/A upgrades
+        used_item_names: Set[str] = {item.name for item in item_list}
+        used_item_names = used_item_names.union(item.name for item in self.multiworld.itempool if item.player == self.player)
+        if used_item_names.isdisjoint(item_groups.barracks_units):
+            self.has_barracks_unit = False
+        if used_item_names.isdisjoint(item_groups.factory_units):
+            self.has_factory_unit = False
+        if used_item_names.isdisjoint(item_groups.starport_units):
+            self.has_starport_unit = False
+        if used_item_names.isdisjoint(item_groups.zerg_melee_wa):
+            self.has_zerg_melee_unit = False
+        if used_item_names.isdisjoint(item_groups.zerg_ranged_wa):
+            self.has_zerg_ranged_unit = False
+        if used_item_names.isdisjoint(item_groups.zerg_air_units):
+            self.has_zerg_air_unit = False
+        if used_item_names.isdisjoint(item_groups.protoss_ground_wa):
+            self.has_protoss_ground_unit = False
+        if used_item_names.isdisjoint(item_groups.protoss_air_wa):
+            self.has_protoss_air_unit = False
 
     def set_rules(self) -> None:
         if self.options.required_tactics == RequiredTactics.option_no_logic:
