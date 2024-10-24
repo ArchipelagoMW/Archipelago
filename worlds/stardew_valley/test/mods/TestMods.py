@@ -3,7 +3,7 @@ import random
 from BaseClasses import get_seed
 from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, complete_options_with_default, solo_multiworld
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification
+from ... import items, Group, ItemClassification, create_content
 from ... import options
 from ...items import items_by_group
 from ...options import SkillProgression, Walnutsanity
@@ -128,12 +128,13 @@ class TestModEntranceRando(SVTestCase):
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
                 options.Mods.internal_name: frozenset(options.Mods.valid_keys)
             })
+            content = create_content(sv_options)
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(option=option, flag=flag, seed=seed):
                 final_connections, final_regions = create_final_connections_and_regions(sv_options)
 
-                _, randomized_connections = randomize_connections(rand, sv_options, final_regions, final_connections)
+                _, randomized_connections = randomize_connections(rand, sv_options, content, final_regions, final_connections)
 
                 for connection_name in final_connections:
                     connection = final_connections[connection_name]
