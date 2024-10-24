@@ -319,7 +319,7 @@ class StardewValleyWorld(World):
         if override_classification is None:
             override_classification = item.classification
 
-        if override_classification == ItemClassification.progression:
+        if override_classification & ItemClassification.progression:
             self.total_progression_items += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
 
