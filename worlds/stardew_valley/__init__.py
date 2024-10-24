@@ -4,7 +4,9 @@ from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
+from Utils import local_path
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import launch_subprocess, components, Component, icon_paths, Type
 from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
@@ -34,6 +36,7 @@ STARDEW_VALLEY = "Stardew Valley"
 UNIVERSAL_TRACKER_SEED_PROPERTY = "ut_seed"
 
 client_version = 0
+TRACKER_ENABLED = False
 
 
 class StardewLocation(Location):
@@ -59,6 +62,22 @@ class StardewWebWorld(WebWorld):
             "setup/en",
             ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
         )]
+
+
+if TRACKER_ENABLED:
+    def launch_client():
+        from .client import launch
+        launch_subprocess(launch, name="Stardew Valley Tracker")
+
+
+    components.append(Component(
+        "Stardew Valley Tracker",
+        func=launch_client,
+        component_type=Type.CLIENT,
+        icon='stardew'
+    ))
+
+    icon_paths['stardew'] = local_path('data', 'stardew.png')
 
 
 class StardewValleyWorld(World):
