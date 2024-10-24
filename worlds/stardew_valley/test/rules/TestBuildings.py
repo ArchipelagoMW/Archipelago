@@ -23,10 +23,6 @@ class TestBuildingLogic(SVTestBase):
         self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
                          f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
-        self.multiworld.state.collect(self.create_item("Can Construct Buildings"), prevent_sweep=True)
-        self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
-
         self.multiworld.state.collect(self.create_item("Progressive Coop"), prevent_sweep=False)
         self.assertTrue(big_coop_blueprint_rule(self.multiworld.state),
                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
@@ -35,7 +31,6 @@ class TestBuildingLogic(SVTestBase):
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
         self.collect_lots_of_money()
-        self.multiworld.state.collect(self.create_item("Can Construct Buildings"), prevent_sweep=True)
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
         self.multiworld.state.collect(self.create_item("Progressive Coop"), prevent_sweep=True)
@@ -50,10 +45,6 @@ class TestBuildingLogic(SVTestBase):
                          f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
         self.collect_lots_of_money()
-        self.assertFalse(big_shed_rule(self.multiworld.state),
-                         f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
-
-        self.multiworld.state.collect(self.create_item("Can Construct Buildings"), prevent_sweep=True)
         self.assertFalse(big_shed_rule(self.multiworld.state),
                          f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
