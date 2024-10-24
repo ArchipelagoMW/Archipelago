@@ -1,6 +1,5 @@
 import typing
 from . import item_names, items
-from .item_names import DAWNBRINGER
 from .mission_tables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
 
 """
@@ -586,7 +585,7 @@ protoss_ground_wa = [
 protoss_air_wa = [
     item_names.WARP_PRISM_PHASE_BLASTER,
     item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.SKIRMISHER,
-    item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names, DAWNBRINGER,
+    item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER,
     item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
     item_names.SCOUT, item_names.TEMPEST, item_names.MOTHERSHIP,
     item_names.ARBITER, item_names.ORACLE,
