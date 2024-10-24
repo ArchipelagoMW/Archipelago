@@ -206,14 +206,9 @@ class StardewValleyWorld(World):
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
 
     def setup_player_events(self):
-        self.setup_construction_events()
         self.setup_quest_events()
         self.setup_action_events()
         self.setup_logic_events()
-
-    def setup_construction_events(self):
-        can_construct_buildings = LocationData(None, RegionName.carpenter, Event.can_construct_buildings)
-        self.create_event_location(can_construct_buildings, True_(), Event.can_construct_buildings)
 
     def setup_quest_events(self):
         start_dark_talisman_quest = LocationData(None, RegionName.railroad, Event.start_dark_talisman_quest)
