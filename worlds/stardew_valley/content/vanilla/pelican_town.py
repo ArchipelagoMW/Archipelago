@@ -558,5 +558,34 @@ pelican_town = ContentPack(
                 ),
             ),
         ),
+        Building(
+            BuildingNames.kitchen,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=10_000,
+                    items_price=((450, Material.wood),)
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.kids_room,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=65_000,
+                    items_price=((100, Material.hardwood),)
+                ),
+            ),
+        ),
+        Building(
+            BuildingNames.cellar,
+            sources=(
+                ShopSource(
+                    shop_region=Region.carpenter,
+                    money_price=100_000,
+                ),
+            ),
+        ),
     )
 )

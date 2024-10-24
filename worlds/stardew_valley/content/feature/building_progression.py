@@ -30,6 +30,10 @@ def to_progressive_item(building: str) -> Tuple[str, int]:
     return building, 1
 
 
+def to_location_name(building: str) -> str:
+    return f"{building} Blueprint"
+
+
 @dataclass(frozen=True)
 class BuildingProgressionFeature(ABC):
     is_progressive: ClassVar[bool]
@@ -38,6 +42,8 @@ class BuildingProgressionFeature(ABC):
 
     to_progressive_item = staticmethod(to_progressive_item)
     progressive_house = progressive_house
+
+    to_location_name = staticmethod(to_location_name)
 
 
 class BuildingProgressionVanilla(BuildingProgressionFeature):

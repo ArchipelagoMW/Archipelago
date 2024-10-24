@@ -25,16 +25,16 @@ class TestBaseItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = {item.name for item in self.multiworld.itempool} | {item.name for item in self.multiworld.precollected_items[self.player]}
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
-        items_to_ignore = [event.name for event in items.events]
-        items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
-        items_to_ignore.extend(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
-        items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
-        items_to_ignore.append("The Gateway Gazette")
+        items_to_ignore = {event.name for event in items.events}
+        items_to_ignore.update(item.name for item in items.all_items if item.mod_name is not None)
+        items_to_ignore.update(deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED])
+        items_to_ignore.update(season.name for season in items.items_by_group[Group.SEASON])
+        items_to_ignore.update(weapon.name for weapon in items.items_by_group[Group.WEAPON])
+        items_to_ignore.update(baby.name for baby in items.items_by_group[Group.BABY])
+        items_to_ignore.update(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
+        items_to_ignore.add("The Gateway Gazette")
         progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
