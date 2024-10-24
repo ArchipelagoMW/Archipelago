@@ -1,3 +1,4 @@
+import typing
 from typing import Union
 
 from Utils import cache_self1
@@ -13,6 +14,11 @@ from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region, LogicRegion
+
+if typing.TYPE_CHECKING:
+    from .shipping_logic import ShippingLogicMixin
+
+    assert ShippingLogicMixin
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
