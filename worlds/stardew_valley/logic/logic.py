@@ -358,7 +358,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             self.registry.item_rules[recipe] = obtention_rule | crafting_rule
 
         self.building.initialize_rules()
-        self.building.update_rules(self.mod.building.get_modded_building_rules())
 
         self.quest.initialize_rules()
         self.quest.update_rules(self.mod.quest.get_modded_quest_rules())

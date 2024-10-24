@@ -131,15 +131,19 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: Stard
         MultiWorldRules.set_rule(tool_upgrade_location, logic.tool.has_tool(tool, previous))
 
 
-def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions, world_content: StardewContent):
-    if not world_content.features.building_progression.is_progressive:
+def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions, content: StardewContent):
+    building_progression = content.features.building_progression
+    if not building_progression.is_progressive:
         return
 
-    for building in locations.locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
-        if building.mod_name is not None and building.mod_name not in world_options.mods:
+    for building in content.farm_buildings.values():
+        if building.name in building_progression.starting_buildings:
             continue
-        MultiWorldRules.set_rule(multiworld.get_location(building.name, player),
-                                 logic.registry.building_rules[building.name.replace(" Blueprint", "")])
+
+        location_name = building_progression.to_location_name(building.name)
+
+        MultiWorldRules.set_rule(multiworld.get_location(location_name, player),
+                                 logic.source.has_access_to_any(building.sources))
 
 
 def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):

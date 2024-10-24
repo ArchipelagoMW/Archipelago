@@ -229,7 +229,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_tools(item_factory, options, content, items)
     create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, items)
-    create_carpenter_buildings(item_factory, options, content, items)
+    create_carpenter_buildings(item_factory, content, items)
     items.append(item_factory("Railroad Boulder Removed"))
     items.append(item_factory(CommunityUpgrade.fruit_bats))
     items.append(item_factory(CommunityUpgrade.mushroom_boxes))
@@ -363,32 +363,14 @@ def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewVa
         items.append(item_factory("Woods Obelisk"))
 
 
-def create_carpenter_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
+def create_carpenter_buildings(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
     building_progression = content.features.building_progression
     if not building_progression.is_progressive:
         return
 
-    items.append(item_factory("Progressive Coop"))
-    items.append(item_factory("Progressive Coop"))
-    items.append(item_factory("Progressive Coop"))
-    items.append(item_factory("Progressive Barn"))
-    items.append(item_factory("Progressive Barn"))
-    items.append(item_factory("Progressive Barn"))
-    items.append(item_factory("Well"))
-    items.append(item_factory("Silo"))
-    items.append(item_factory("Mill"))
-    items.append(item_factory("Progressive Shed"))
-    items.append(item_factory("Progressive Shed", ItemClassification.useful))
-    items.append(item_factory("Fish Pond"))
-    items.append(item_factory("Stable"))
-    items.append(item_factory("Slime Hutch"))
-    items.append(item_factory("Shipping Bin"))
-    items.append(item_factory("Progressive House"))
-    items.append(item_factory("Progressive House"))
-    items.append(item_factory("Progressive House"))
-    
-    if ModNames.tractor in options.mods:
-        items.append(item_factory("Tractor Garage"))
+    for building in content.farm_buildings.values():
+        item_name, _ = building_progression.to_progressive_item(building.name)
+        items.append(item_factory(item_name))
 
 
 def create_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
