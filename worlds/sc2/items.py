@@ -2409,7 +2409,7 @@ upgrade_bundle_inverted_lookup: Dict[str, List[str]] = dict()
 for key, values in upgrade_bundles.items():
     for value in values:
         if upgrade_bundle_inverted_lookup.get(value) is None:
-            upgrade_bundle_inverted_lookup[key] = list()
+            upgrade_bundle_inverted_lookup[value] = list()
         if (value != item_names.PROGRESSIVE_PROTOSS_SHIELDS
                 or key not in [
                     item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE,
@@ -2417,7 +2417,7 @@ for key, values in upgrade_bundles.items():
                 ]
         ):
             # Shield handling is trickier as it's max of Ground/Air group, not their sum
-            upgrade_bundle_inverted_lookup[key].append(value)
+            upgrade_bundle_inverted_lookup[value].append(key)
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in get_full_item_list().items() if
                                             data.code}

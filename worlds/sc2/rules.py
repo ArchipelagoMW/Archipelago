@@ -1763,7 +1763,8 @@ class SC2Logic:
         self.enabled_campaigns = get_enabled_campaigns(world)
         self.mission_order = get_option_value(world, "mission_order")
         self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
-        self.total_mission_count = 1 if world is None else world.custom_mission_order.get_mission_count()
+        self.total_mission_count = 1 if (world is None or not hasattr(world, 'custom_mission_order')) \
+            else world.custom_mission_order.get_mission_count()
         if world is None:
             self.has_barracks_unit = False
             self.has_factory_unit = False
