@@ -160,6 +160,33 @@ class TestDefaultOptions(SVPerformanceTestCase):
         self.performance_test_multiworld(multiworld_options)
 
 
+class TestVanillaBuildingEntranceRando(SVPerformanceTestCase):
+    acceptable_time_per_player = 2
+    options = default_6_x_x()
+    results = []
+
+    def test_solo(self):
+        number_players = 1
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    def test_duo(self):
+        number_players = 2
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    def test_5_player(self):
+        number_players = 5
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+    @unittest.skip
+    def test_10_player(self):
+        number_players = 10
+        multiworld_options = [self.options] * number_players
+        self.performance_test_multiworld(multiworld_options)
+
+
 class TestMinLocationMaxItems(SVPerformanceTestCase):
     acceptable_time_per_player = 0.3
     options = minimal_locations_maximal_items()
