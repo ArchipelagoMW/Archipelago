@@ -15,7 +15,7 @@ class GSTLALocation(Location):
     location_data: LocationData
 
     def __init__(self, player: int, name: str, location: LocationData, region: Region):
-        super(GSTLALocation, self).__init__(player, name, location.flag, region)
+        super(GSTLALocation, self).__init__(player, name, location.ap_id, region)
         # TODO: locations ids cannot be flags, since for us multiple locations can have the same flag
         self.location_data = location
 
@@ -44,5 +44,5 @@ def create_loctype_to_datamapping() -> Dict[LocationType, List[LocationData]]:
 
 
 all_locations: List[LocationData] = all_gen_locations
-location_name_to_id: Dict[str, LocationData] = {loc_names_by_id[location.id]: location for location in all_locations}
+location_name_to_id: Dict[str, LocationData] = {loc_names_by_id[location.ap_id]: location for location in all_locations}
 location_type_to_data: Dict[LocationType, List[LocationData]] = create_loctype_to_datamapping()

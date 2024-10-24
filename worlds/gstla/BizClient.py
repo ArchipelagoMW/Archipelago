@@ -20,16 +20,27 @@ class _MemDomain(str, Enum):
     ROM = 'ROM'
 
 class _DataLocations(IntEnum):
-    IN_GAME = (0, 0x428, 0x2, 0x0, _MemDomain.EWRAM)
-    DJINN_FLAGS = (1,FLAG_START + (0x30 >> 3), 0x0A, 0x30, _MemDomain.EWRAM)
+    IN_GAME = (0x428, 0x2, 0x0, _MemDomain.EWRAM)
+    DJINN_FLAGS = (FLAG_START + (0x30 >> 3), 0x0A, 0x30, _MemDomain.EWRAM)
     # TODO: we haven't agreed on an address, but this location should have
     # is two bytes enough?
-    AP_ITEM_SLOT = (2,0x96, 0x2, 0x0, _MemDomain.EWRAM)
+    AP_ITEM_SLOT = (0x96, 0x2, 0x0, _MemDomain.EWRAM)
     # two unused bytes in save data
-    AP_ITEMS_RECEIVED = (3,0xA72, 0x2, 0x0, _MemDomain.EWRAM)
-    TREASURE_F_FLAGS = (4, FLAG_START + (0xF00 >> 3), 0x20, 0xF00, _MemDomain.EWRAM)
+    AP_ITEMS_RECEIVED = (0xA72, 0x2, 0x0, _MemDomain.EWRAM)
+    #TODO: This... didn't work LOL
+    # INITIAL_INVENTORY = (FLAG_START + 0x0, 0x1, 0x0, _MemDomain.EWRAM)
+    SUMMONS = (FLAG_START + (0x10 >> 3), 0x2, 0x10, _MemDomain.EWRAM)
+    TREASURE_8_FLAGS = (FLAG_START + (0x800 >> 3), 0x20, 0x800, _MemDomain.EWRAM)
+    TREASURE_9_FLAGS = (FLAG_START + (0x900 >> 3), 0x20, 0x900, _MemDomain.EWRAM)
+    TREASURE_A_FLAGS = (FLAG_START + (0xA00 >> 3), 0x20, 0xA00, _MemDomain.EWRAM)
+    TREASURE_B_FLAGS = (FLAG_START + (0xB00 >> 3), 0x20, 0xB00, _MemDomain.EWRAM)
+    TREASURE_C_FLAGS = (FLAG_START + (0xC00 >> 3), 0x20, 0xC00, _MemDomain.EWRAM)
+    TREASURE_D_FLAGS = (FLAG_START + (0xD00 >> 3), 0x20, 0xD00, _MemDomain.EWRAM)
+    TREASURE_E_FLAGS = (FLAG_START + (0xE00 >> 3), 0x20, 0xE00, _MemDomain.EWRAM)
+    TREASURE_F_FLAGS = (FLAG_START + (0xF00 >> 3), 0x20, 0xF00, _MemDomain.EWRAM)
 
-    def __new__(cls, value: int, addr: int, length: int, initial_flag: int, domain: _MemDomain):
+    def __new__(cls, addr: int, length: int, initial_flag: int, domain: _MemDomain):
+        value = len(cls.__members__)
         obj = int.__new__(cls, value)
         obj._value_ = value
         obj.addr = addr
@@ -54,7 +65,7 @@ class GSTLAClient(BizHawkClient):
     def __init__(self):
         super().__init__()
         for loc in all_locations:
-            self.flag_map[loc.flag].add(loc.id)
+            self.flag_map[loc.flag].add(loc.ap_id)
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
         # TODO: implement
@@ -98,6 +109,26 @@ class GSTLAClient(BizHawkClient):
                     assert locs is not None, "Got null locations for flag: %s" % hex(shuffled_flag)
                     self.temp_locs |= locs
                 part_int >>= 1
+
+    def _check_common_flags(self, data_loc: _DataLocations, data: List[bytes]):
+        flag_bytes = data[data_loc]
+        initial_flag = data_loc.initial_flag
+        # logger.debug("Checking flags for %s" % data_loc.name)
+        itr_step = 0x2 if data_loc.length > 0x1 else 0x1
+        for i in range(0, _DataLocations.TREASURE_F_FLAGS.length, itr_step):
+            part = flag_bytes[i:i+itr_step]
+            part_int = int.from_bytes(part, 'little')
+            for bit in range(itr_step * 8):
+                if part_int & 1 > 0:
+                    flag = i * 8 + bit + initial_flag
+                    locs = self.flag_map.get(flag, None)
+                    # logger.debug("flag found: %s, locs: %s", hex(flag), locs)
+                    if locs is None:
+                        # Not a flag we care about
+                        return
+                    self.temp_locs |= locs
+                part_int >>= 1
+        # logger.debug(self.temp_locs)
 
     def _check_treasure_flags(self, data: List[bytes]):
         flag_bytes = data[_DataLocations.TREASURE_F_FLAGS]
@@ -152,7 +183,10 @@ class GSTLAClient(BizHawkClient):
         await self._load_djinn(ctx)
 
         self._check_djinn_flags(result)
-        self._check_treasure_flags(result)
+        self._check_common_flags(_DataLocations.SUMMONS, result)
+        for i in range(_DataLocations.TREASURE_8_FLAGS, _DataLocations.TREASURE_F_FLAGS.value + 1):
+            self._check_common_flags(_DataLocations(i), result)
+        # self._check_common_flags(_DataLocations.INITIAL_INVENTORY, result)
 
         await self._receive_items(ctx, result)
 

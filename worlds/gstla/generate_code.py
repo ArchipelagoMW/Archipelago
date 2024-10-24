@@ -8,40 +8,6 @@ from GameData import GameData, ElementType, ItemType
 
 SCRIPT_DIR = os.path.join(os.path.dirname(__file__))
 
-SPECIAL_LOCATIONS = {
-    '0x84A',  # "Lash Pebble"
-    '0x878',  # "Pound Cube"
-    '0x88C',  # "Scoop Gem"
-    '0x918',  # "Cyclone Chip"
-    '0x94D',  # "Hover Jade"
-    '0xA3A',  # "Mars Star"
-    '0x8FF',  # "Black Crystal"
-    '0x978',  # "Trident"
-    '0xAA2',  # "Pretty Stone"
-    '0xAA4',  # "Red Cloth"
-    '0xAA3',  # "Milk"
-    '0xAA1',  # "Li'l Turtle"
-    # Don't currently care about large bread; see GS TLA randomizer
-    # 0x901,# "Large Bread"
-    '0xA20',  # "Sea God's Tear"
-    '0x9F9',  # "Magma Ball"
-    '0x8D4',  # "Reveal"
-    '0x9AE',  # "Parch"
-    '0x9BA',  # "Sand"
-    '0x9FA',  # "Blaze"
-    '0x90B',  # "Eclipse"
-    '0x945',  # "Center Prong"
-    '0x1',  # "Shaman's Rod"
-    '0x2',  # "Mind Read"
-    '0x3',  # "Whirlwind"
-    '0x4',  # "Growth"
-    '0x101',  # "Carry Stone"
-    '0x102',  # "Lifting Gem"
-    '0x103',  # 'Orb of Force'
-    '0x104',  # 'Catch Beads'
-    '0x105',  # 'Douse Drop'
-    '0x106',  # 'Frost Jewel']
-}
 
 SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
     # NOTE: using strings here, because importing ItemClassification from BaseClasses will cause a circular import
@@ -184,7 +150,7 @@ def generate_location_names(env: Environment, data: GameData):
         name_list.append({'name': event.location_name, 'id': event.event_id})
     for loc_datum in data.raw_location_data:
         loc_name = data.location_names[loc_datum.flag]
-        name_list.append({'name': loc_name.str_name, 'id': loc_datum.id})
+        name_list.append({'name': loc_name.str_name, 'id': loc_datum.addr[0]})
         if loc_datum.is_summon:
             summon_tablets.append(loc_name)
         elif loc_datum.is_key_item:
@@ -222,6 +188,7 @@ def generate_item_names(env: Environment, data: GameData):
         name_list += [{'name': data.item_names[x.id].str_name, 'id': x.id} for x in events]
         name_list += [{'name': d.name, 'id': d.ap_id} for d in data.raw_djinn_data]
         name_list += [{'name': p.name, 'id': p.id} for p in data.raw_psy_data]
+        name_list += [{'name': c.name, 'id': c.id} for c in data.raw_character_data]
         outfile.write(template.render(
             name_list=name_list,
             summons=summons,
@@ -229,6 +196,7 @@ def generate_item_names(env: Environment, data: GameData):
             psyenergies=[data.item_names[x.id] for x in data.raw_psy_data],
             djinn=[data.item_names[x.ap_id] for x in data.raw_djinn_data],
             events=events,
+            characters=[data.item_names[c.id] for c in data.raw_character_data],
             types=[x for x in ItemType if x < ItemType.Psyenergy]))
 
 def generate_item_data(env: Environment, data: GameData):
@@ -242,13 +210,14 @@ def generate_item_data(env: Environment, data: GameData):
         psyenergies = [x for x in data.raw_psy_data]
         psyitems = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type == ItemType.PsyenergyItem]
         djinns = [x for x in data.raw_djinn_data]
-        remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.id != 0 and x.item_type != ItemType.PsyenergyItem]
-
+        remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type != ItemType.PsyenergyItem]
+        characters = [c for c in data.raw_character_data]
         outfile.write(template.render(
             summons=summons,
             psyenergies=psyenergies,
             psyitems=psyitems,
             djinns=djinns,
+            characters=characters,
             # unique_items=unique_items,
             # gear=gear,
             remainder=remainder,
@@ -278,6 +247,13 @@ def generate_location_data(env: Environment, data: GameData):
             2724: 'Trade', #Red Cloth
             2723: 'Trade', #Milk
             2721: 'Trade', #Li'l Turtle
+            3328: 'Character', # Contigo Isaac
+            3329: 'Character', # Contigo Garet
+            3330: 'Character', # Contigo Ivan
+            3331: 'Character', # Contigo Mia
+            3333: 'Character', # Idejima Jenna
+            3334: 'Character', # Idejima Sheba
+            3335: 'Character', # Kibombo Piers
         })
         for loc in remainder:
             if loc.is_hidden:

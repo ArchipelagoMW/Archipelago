@@ -31,6 +31,10 @@ class ItemName(str, Enum):
     {{name.py_name}} = "{{name.str_name}}"
     {% endfor %}
 
+    # Characters
+    {% for name in characters-%}
+    {{name.py_name}} = "{{name.str_name}}"
+    {% endfor %}
 
 item_id_by_name: Dict[int, ItemName] = {
     "???": 0,

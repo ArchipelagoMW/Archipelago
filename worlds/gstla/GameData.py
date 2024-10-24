@@ -5,40 +5,6 @@ from enum import Enum, IntFlag, auto, IntEnum
 from typing import NamedTuple, List, Dict
 
 SCRIPT_DIR = os.path.join(os.path.dirname(__file__))
-SPECIAL_LOCATIONS = {
-    '0x84A',  # "Lash Pebble"
-    '0x878',  # "Pound Cube"
-    '0x88C',  # "Scoop Gem"
-    '0x918',  # "Cyclone Chip"
-    '0x94D',  # "Hover Jade"
-    '0xA3A',  # "Mars Star"
-    '0x8FF',  # "Black Crystal"
-    '0x978',  # "Trident"
-    '0xAA2',  # "Pretty Stone"
-    '0xAA4',  # "Red Cloth"
-    '0xAA3',  # "Milk"
-    '0xAA1',  # "Li'l Turtle"
-    # Don't currently care about large bread; see GS TLA randomizer
-    # 0x901,# "Large Bread"
-    '0xA20',  # "Sea God's Tear"
-    '0x9F9',  # "Magma Ball"
-    '0x8D4',  # "Reveal"
-    '0x9AE',  # "Parch"
-    '0x9BA',  # "Sand"
-    '0x9FA',  # "Blaze"
-    '0x90B',  # "Eclipse"
-    '0x945',  # "Center Prong"
-    '0x1',  # "Shaman's Rod"
-    '0x2',  # "Mind Read"
-    '0x3',  # "Whirlwind"
-    '0x4',  # "Growth"
-    '0x101',  # "Carry Stone"
-    '0x102',  # "Lifting Gem"
-    '0x103',  # 'Orb of Force'
-    '0x104',  # 'Catch Beads'
-    '0x105',  # 'Douse Drop'
-    '0x106',  # 'Frost Jewel']
-}
 
 num_words = {
     1: 'One',
@@ -92,10 +58,7 @@ class ItemType(int, Enum):
     Psyenergy = 12
     Djinn = 13
     Event = 14
-
-    def is_gear(self):
-        return self == 1 or self == 2 or self == 3 or self == 4 or self == 5 or \
-                self == 8 or self == 9
+    Character = 15
 
 class ItemFlags(IntFlag):
     NONE = 0
@@ -148,6 +111,13 @@ class PsyDatum(NamedTuple):
     name: str
     addr: int
     item_type: ItemType = ItemType.Psyenergy
+
+class CharacterDatum(NamedTuple):
+    id: int
+    name: str
+    flag: int
+    addr: int
+    item_type: ItemType = ItemType.Character
 
 class LocationName(NamedTuple):
     id: int
@@ -204,6 +174,7 @@ class GameData:
         self.raw_djinn_data: List[DjinnDatum] = []
         self.raw_summon_data: List[SummonDatum] = []
         self.raw_psy_data: List[PsyDatum] = []
+        self.raw_character_data: List[CharacterDatum] = []
         self.location_names: Dict[int, LocationName] = dict()
         self.item_names: Dict[int, ItemName] = dict()
         self.events: Dict[int, EventDatum] = dict()
@@ -215,6 +186,7 @@ class GameData:
         self._setup_location_names()
         self._setup_item_names()
         self._setup_psy_energies()
+        self._setup_characters()
 
     def _load_locations(self):
         with open(os.path.join(SCRIPT_DIR, 'data', 'item_locations.json'), 'r') as loc_file:
@@ -307,6 +279,19 @@ class GameData:
         ]
         for d in self.raw_psy_data:
             self.item_names[d.id] = ItemName(d.id, d.name.replace(' ', '_'), d.name)
+
+    def _setup_characters(self):
+        self.raw_character_data += [
+            CharacterDatum(3328, "Isaac", 3328, 16384384),
+            CharacterDatum(3329, "Garet", 3329, 16384386),
+            CharacterDatum(3330, "Ivan", 3330, 16384388),
+            CharacterDatum(3331, "Mia", 3331, 16384390),
+            CharacterDatum(3332, "Jenna", 3332, 16384392),
+            CharacterDatum(3333, "Sheba", 3333, 16384394),
+            CharacterDatum(3334, "Piers", 3334, 16384396),
+        ]
+        for c in self.raw_character_data:
+            self.item_names[c.id] = ItemName(c.id, c.name, c.name)
 
     def _setup_events(self):
         # Just some offset to avoid colliding with anything else; needs to avoid any location or item ids in AP

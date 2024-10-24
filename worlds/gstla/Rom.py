@@ -95,7 +95,7 @@ class LocalRom:
     def write_djinn(self, location, djinn):
         loc_address = location.addresses[0]
 
-        self.rom_data[loc_address] = djinn.id
+        self.rom_data[loc_address] = djinn.vanilla_id
         self.rom_data[loc_address + 1] = djinn.element
 
         for idx, value in enumerate(djinn.stats):

@@ -784,7 +784,7 @@ def set_access_rules(multiworld, player):
 
     if multiworld.hidden_items[player] == 0:
         for loc in location_type_to_data[LocationType.Hidden]:
-            add_rule(multiworld.get_location(loc_names_by_id[loc.id], player),
+            add_rule(multiworld.get_location(loc_names_by_id[loc.ap_id], player),
                  lambda state: state.has(ItemName.Reveal, player))
 
 
@@ -795,4 +795,4 @@ def set_item_rules(multiworld, player):
     djinn: Set[str] = {item.name for item in all_items if item.type == ItemType.Djinn}
 
     for loc in location_type_to_data[LocationType.Djinn]:
-        add_item_rule(multiworld.get_location(loc_names_by_id[loc.id], player), lambda item: item.player == player and item.name in djinn)
+        add_item_rule(multiworld.get_location(loc_names_by_id[loc.ap_id], player), lambda item: item.player == player and item.name in djinn)
