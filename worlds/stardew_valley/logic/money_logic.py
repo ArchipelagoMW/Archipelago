@@ -11,7 +11,6 @@ from .time_logic import TimeLogicMixin
 from ..data.shop import ShopSource
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
-from ..strings.ap_names.event_names import Event
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region, LogicRegion
 
@@ -26,7 +25,7 @@ class MoneyLogicMixin(BaseLogicMixin):
 
 
 class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, SeasonLogicMixin,
-GrindLogicMixin]]):
+GrindLogicMixin, 'ShippingLogicMixin']]):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
@@ -37,7 +36,7 @@ GrindLogicMixin]]):
         willy_rule = self.logic.region.can_reach_all((Region.fish_shop, LogicRegion.fishing))
         clint_rule = self.logic.region.can_reach_all((Region.blacksmith, Region.mines_floor_5))
         robin_rule = self.logic.region.can_reach_all((Region.carpenter, Region.secret_woods))
-        shipping_rule = self.logic.received(Event.can_ship_items)
+        shipping_rule = self.logic.shipping.can_use_shipping_bin
 
         if amount < 2000:
             selling_any_rule = pierre_rule | willy_rule | clint_rule | robin_rule | shipping_rule
@@ -50,7 +49,7 @@ GrindLogicMixin]]):
         if amount < 10000:
             return shipping_rule
 
-        seed_rules = self.logic.received(Event.can_shop_at_pierre)
+        seed_rules = self.logic.region.can_reach(Region.pierre_store)
         if amount < 40000:
             return shipping_rule & seed_rules
 
