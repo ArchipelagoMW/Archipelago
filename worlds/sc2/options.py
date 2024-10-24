@@ -357,7 +357,7 @@ class GenericUpgradeMissions(Range):
     If set to 0, upgrades are instead added to the item pool and must be found to be used."""
     display_name = "Generic Upgrade Missions"
     range_start = 0
-    range_end = 100
+    range_end = 25 # Higher values lead to fails often
     default = 0
 
 

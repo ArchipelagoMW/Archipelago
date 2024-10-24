@@ -35,6 +35,10 @@ class SC2Logic:
         # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
         return state.has_group("Missions", self.player, 0)
 
+    def total_mission_count(self):
+        return 1 if (self.world is None or not hasattr(self.world, 'custom_mission_order')) \
+            else self.world.custom_mission_order.get_mission_count()
+
     def weapon_armor_upgrade_count(self, upgrade_item: str, state: CollectionState) -> int:
         assert upgrade_item in upgrade_bundle_inverted_lookup.keys()
         count: int = 0
@@ -44,8 +48,8 @@ class SC2Logic:
                 return WEAPON_ARMOR_UPGRADE_MAX_LEVEL
             else:
                 count += floor(
-                    100 / self.generic_upgrade_missions
-                    * state.count_group("Missions", self.player) / self.total_mission_count
+                    (100 / self.generic_upgrade_missions)
+                    * (state.count_group("Missions", self.player) / self.total_mission_count())
                 )
         count += state.count(upgrade_item, self.player)
         count += state.count_from_list(upgrade_bundle_inverted_lookup[upgrade_item], self.player)
@@ -1763,8 +1767,6 @@ class SC2Logic:
         self.enabled_campaigns = get_enabled_campaigns(world)
         self.mission_order = get_option_value(world, "mission_order")
         self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
-        self.total_mission_count = 1 if (world is None or not hasattr(world, 'custom_mission_order')) \
-            else world.custom_mission_order.get_mission_count()
         if world is None:
             self.has_barracks_unit = False
             self.has_factory_unit = False
