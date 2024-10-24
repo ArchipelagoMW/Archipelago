@@ -17,14 +17,14 @@ class ExtraRanks(Range):
 
 class IncludeJobs(DefaultOnToggle):
     """
-    Whether Jobs can contain progression items.
+    Whether Jobs can contain progression or useful items.
     """
     display_name = "Include Jobs"
 
 
 class IncludeSecretArea(Toggle):
     """
-    Whether the Secret Area (including Serenade) can contain progression items.
+    Whether the Secret Area (including Serenade) can contain progression or useful items.
     """
     display_name = "Include Secret Area"
 

@@ -345,11 +345,11 @@ secret_locations = {
 }
 
 location_groups: typing.Dict[str, typing.Set[str]] = {
-    "BMDs": [loc.name for loc in bmds],
-    "PMDs": [loc.name for loc in pmds],
-    "Jobs": [loc.name for loc in jobs],
-    "Number Trader": [loc.name for loc in number_traders],
-    "Bugfrag Trader": [loc.name for loc in chocolate_shop],
+    "BMDs": {loc.name for loc in bmds},
+    "PMDs": {loc.name for loc in pmds},
+    "Jobs": {loc.name for loc in jobs},
+    "Number Trader": {loc.name for loc in number_traders},
+    "Bugfrag Trader": {loc.name for loc in chocolate_shop},
     "Secret Area": {LocationName.Secret_1_Northwest_BMD, LocationName.Secret_1_Northeast_BMD,
                     LocationName.Secret_1_South_BMD, LocationName.Secret_2_Upper_BMD, LocationName.Secret_2_Lower_BMD,
                     LocationName.Secret_2_Island_BMD, LocationName.Secret_3_Island_BMD,

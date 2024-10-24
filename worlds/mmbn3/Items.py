@@ -345,12 +345,12 @@ item_frequencies: typing.Dict[str, int] = {
 }
 
 item_groups: typing.Dict[str, typing.Set[str]] = {
-    "Key Items": [loc.itemName for loc in keyItemList],
-    "Subchips": [loc.itemName for loc in subChipList],
-    "Programs": [loc.itemName for loc in programList],
-    "BattleChips": [loc.itemName for loc in chipList],
-    "Zenny": [loc.itemName for loc in zennyList],
-    "BugFrags": [loc.itemName for loc in bugFragList],
+    "Key Items": {loc.itemName for loc in keyItemList},
+    "Subchips": {loc.itemName for loc in subChipList},
+    "Programs": {loc.itemName for loc in programList},
+    "BattleChips": {loc.itemName for loc in chipList},
+    "Zenny": {loc.itemName for loc in zennyList},
+    "BugFrags": {loc.itemName for loc in bugFragList},
     "Navi Chips": {
         ItemName.Roll_R, ItemName.RollV2_R, ItemName.RollV3_R, ItemName.GutsMan_G, ItemName.GutsManV2_G,
         ItemName.GutsManV3_G, ItemName.ProtoMan_B, ItemName.ProtoManV2_B, ItemName.ProtoManV3_B, ItemName.FlashMan_F,
