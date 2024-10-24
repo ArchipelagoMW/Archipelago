@@ -27,7 +27,6 @@ from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.ap_names.ap_option_names import OptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
-from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
@@ -251,7 +250,8 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_mutant_bug_lair,
-                      (logic.received(Event.start_dark_talisman_quest) & logic.relationship.can_meet(NPC.krobus)) | logic.mod.magic.can_blink())
+                      (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(
+                          NPC.krobus)) | logic.mod.magic.can_blink())
     set_entrance_rule(multiworld, player, Entrance.enter_casino, logic.quest.has_club_card())
 
     set_bedroom_entrance_rules(logic, multiworld, player, world_options)

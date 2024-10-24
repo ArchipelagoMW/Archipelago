@@ -206,13 +206,8 @@ class StardewValleyWorld(World):
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
 
     def setup_player_events(self):
-        self.setup_quest_events()
         self.setup_action_events()
         self.setup_logic_events()
-
-    def setup_quest_events(self):
-        start_dark_talisman_quest = LocationData(None, RegionName.railroad, Event.start_dark_talisman_quest)
-        self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key(), Event.start_dark_talisman_quest)
 
     def setup_action_events(self):
         spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)

@@ -8,7 +8,6 @@ def event(name: str):
 
 class Event:
     victory = event("Victory")
-    start_dark_talisman_quest = event("Start Dark Talisman Quest")
     spring_farming = event("Spring Farming")
     summer_farming = event("Summer Farming")
     fall_farming = event("Fall Farming")
