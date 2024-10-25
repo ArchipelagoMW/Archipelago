@@ -83,6 +83,15 @@ class YGODDMWorld(World):
             if duelist is not Duelist.YUGI_MOTO and duelist is not Duelist.YAMI_YUGI:
                 itempool.append(self.create_item(duelist.name))
 
+        # Add random Dice items from the pool to fill in empty locations
+        filler_slots: int = len(free_duel_region.locations) - len(itempool)
+        reward_dice: typing.List[Dice] = [dice for dice in all_dice]
+        while len(reward_dice) < filler_slots:
+            reward_dice += reward_dice
+        self.random.shuffle(reward_dice)
+
+        itempool += [self.create_item(dice.name) for dice in reward_dice][:filler_slots]
+
         # Set Yami Yugi's item to game victory
         yami_yugi_location: DuelistLocation = DuelistLocation(free_duel_region, self.player, Duelist.YAMI_YUGI)
         yami_yugi_location.place_locked_item(create_victory_event(self.player))
