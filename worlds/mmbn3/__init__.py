@@ -82,7 +82,7 @@ class MMBN3World(World):
         if not self.options.include_secret:
             self.excluded_locations |= secret_locations
         if not self.options.include_jobs:
-            self.excluded_locations |= [job.name for job in jobs]
+            self.excluded_locations |= {job.name for job in jobs}
 
     def create_regions(self) -> None:
         """
