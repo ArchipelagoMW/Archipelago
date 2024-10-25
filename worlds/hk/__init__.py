@@ -511,9 +511,12 @@ class HKWorld(World):
                 if grub.location and grub.location.player in group_lookup.keys():
                     # will count the item linked grub instead
                     pass
-                else:
+                elif player in group_lookup:
                     for real_player in group_lookup[player]:
                         grub_count_per_player[real_player] += 1
+                else:
+                    # for worlds not linking grubs but in a group
+                    grub_count_per_player[player] += 1
 
             for player, count in grub_count_per_player.items():
                 multiworld.worlds[player].grub_count = count
