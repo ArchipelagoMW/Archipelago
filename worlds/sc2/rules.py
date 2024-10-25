@@ -2,10 +2,6 @@ from math import floor
 from typing import TYPE_CHECKING, Set
 
 from BaseClasses import  CollectionState
-from .item_groups import item_name_groups
-from .item_names import PROGRESSIVE_TERRAN_SHIP_WEAPON, PROGRESSIVE_PROTOSS_WEAPON_UPGRADE, \
-    PROGRESSIVE_PROTOSS_GROUND_WEAPON, PROGRESSIVE_PROTOSS_GROUND_ARMOR, PROGRESSIVE_PROTOSS_AIR_WEAPON, \
-    PROGRESSIVE_PROTOSS_AIR_ARMOR, PROGRESSIVE_PROTOSS_SHIELDS
 from .options import (
     get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap,
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence,
@@ -73,8 +69,9 @@ class SC2Logic:
         assert upgrade_item in upgrade_bundle_inverted_lookup.keys()
         count: int = 0
         if self.generic_upgrade_missions > 0:
-            if not self.is_item_placement(state):
+            if (not self.is_item_placement(state)) or self.logic_level == RequiredTactics.option_no_logic:
                 # Item pool filtering, W/A upgrades aren't items
+                # No Logic: Don't care about W/A in this case
                 return WEAPON_ARMOR_UPGRADE_MAX_LEVEL
             else:
                 count += floor(
@@ -166,7 +163,7 @@ class SC2Logic:
             or (
                     self.advanced_tactics
                     and state.has_any({item_names.WRAITH, item_names.VALKYRIE, item_names.BATTLECRUISER}, self.player)
-                    and self.weapon_armor_upgrade_count(PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
+                    and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
             )
         )
 
@@ -1053,19 +1050,19 @@ class SC2Logic:
         if self.world_has_protoss_ground_unit():
             count = min(
                 count,
-                self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_GROUND_WEAPON, state),
-                self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_GROUND_ARMOR, state)
+                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, state),
+                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR, state)
             )
         if self.world_has_protoss_air_unit():
             count = min(
                 count,
-                self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_AIR_WEAPON, state),
-                self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_AIR_ARMOR, state)
+                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, state),
+                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, state)
             )
         if self.world_has_protoss_ground_unit() or self.world_has_protoss_air_unit():
             count = min(
                 count,
-                self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_SHIELDS, state),
+                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_SHIELDS, state),
             )
         return count
 
