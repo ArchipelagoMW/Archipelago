@@ -6,13 +6,14 @@ from typing import *
 from math import floor, ceil
 from dataclasses import dataclass
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
+from Fill import fill_restrictive, FillError
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from . import item_names
 from .items import (
     StarcraftItem, filler_items, get_full_item_list, ProtossItemType,
     ItemData, kerrigan_actives, kerrigan_passives,
-    not_balanced_starting_units,
+    not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
 from . import items
 from . import item_groups
@@ -33,6 +34,8 @@ from .mission_tables import (
 )
 from .regions import create_mission_order
 from .mission_order.structs import SC2MissionOrder
+from ..stardew_valley import true_
+from ..v6 import location_table
 
 logger = logging.getLogger("Starcraft 2")
 
@@ -118,6 +121,14 @@ class SC2World(World):
     final_missions: List[int]
     required_client_version = 0, 4, 5
     custom_mission_order: SC2MissionOrder
+    has_barracks_unit: bool = True
+    has_factory_unit: bool = True
+    has_starport_unit: bool = True
+    has_zerg_melee_unit: bool = True
+    has_zerg_ranged_unit: bool = True
+    has_zerg_air_unit: bool = True
+    has_protoss_ground_unit: bool = True
+    has_protoss_air_unit: bool = True
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(SC2World, self).__init__(multiworld, player)
@@ -160,6 +171,26 @@ class SC2World(World):
 
         self.multiworld.itempool += pool
 
+        # Tell the logic which unit classes are used for required W/A upgrades
+        used_item_names: Set[str] = {item.name for item in item_list}
+        used_item_names = used_item_names.union(item.name for item in self.multiworld.itempool if item.player == self.player)
+        if used_item_names.isdisjoint(item_groups.barracks_wa_group):
+            self.has_barracks_unit = False
+        if used_item_names.isdisjoint(item_groups.factory_wa_group):
+            self.has_factory_unit = False
+        if used_item_names.isdisjoint(item_groups.starport_wa_group):
+            self.has_starport_unit = False
+        if used_item_names.isdisjoint(item_groups.zerg_melee_wa):
+            self.has_zerg_melee_unit = False
+        if used_item_names.isdisjoint(item_groups.zerg_ranged_wa):
+            self.has_zerg_ranged_unit = False
+        if used_item_names.isdisjoint(item_groups.zerg_air_units):
+            self.has_zerg_air_unit = False
+        if used_item_names.isdisjoint(item_groups.protoss_ground_wa):
+            self.has_protoss_ground_unit = False
+        if used_item_names.isdisjoint(item_groups.protoss_air_wa):
+            self.has_protoss_air_unit = False
+
     def set_rules(self) -> None:
         if self.options.required_tactics == RequiredTactics.option_no_logic:
             # Forcing completed goal and minimal accessibility on no logic
@@ -191,6 +222,30 @@ class SC2World(World):
         if SC2Campaign.HOTS not in enabled_campaigns:
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
         return slot_data
+
+    def pre_fill(self) -> None:
+        if self.options.generic_upgrade_missions > 0\
+                and self.options.required_tactics != options.RequiredTactics.option_no_logic:
+            # Attempt to resolve situation when the option is too high for the mission order rolled
+            # TODO: Attempt to resolve Kerrigan levels too
+            weapon_armor_item_names = [
+                item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
+                item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
+                item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE
+            ]
+            for attempt in range(0, WEAPON_ARMOR_UPGRADE_MAX_LEVEL):
+                all_state: CollectionState = self.multiworld.get_all_state(False)
+                location_failed = False
+                for location in self.location_cache:
+                    if not (all_state.can_reach_location(location.name, self.player)
+                            and all_state.can_reach_region(location.parent_region.name, self.player)):
+                        location_failed = True
+                        break
+                if location_failed:
+                    for item_name in weapon_armor_item_names:
+                        item = self.multiworld.create_item(item_name, self.player)
+                        self.multiworld.push_precollected(item)
+
 
 
 def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]):

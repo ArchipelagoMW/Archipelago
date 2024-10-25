@@ -584,3 +584,198 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR, missions)
         self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_Z, missions)
         self.assertIn(mission_tables.SC2Mission.ZERO_HOUR_P, missions)
+
+    def test_weapon_armor_upgrades(self):
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_vanilla,
+            'starter_unit': options.StarterUnit.option_off,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'start_inventory': {
+                item_names.GOLIATH: 1 # Don't fail with early item placement
+            },
+            'generic_upgrade_items': options.GenericUpgradeItems.option_individual_items,
+            # Disable locations in order to cause item culling
+            'vanilla_locations': options.VanillaLocations.option_disabled,
+            'extra_locations': options.ExtraLocations.option_disabled,
+            'challenge_locations': options.ChallengeLocations.option_disabled,
+            'mastery_locations': options.MasteryLocations.option_disabled,
+            'speedrun_locations': options.SpeedrunLocations.option_disabled,
+            'preventative_locations': options.PreventativeLocations.option_disabled,
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        itempool = [item.name for item in self.multiworld.itempool]
+        world_items = starting_inventory + itempool
+        vehicle_weapon_items = [x for x in world_items if x == item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON]
+
+        # Under standard tactics you need to place L3 upgrades for available unit classes
+        self.assertGreaterEqual(len(vehicle_weapon_items), 3)
+
+    def test_weapon_armor_upgrades_with_bundles(self):
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_vanilla,
+            'starter_unit': options.StarterUnit.option_off,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'start_inventory': {
+                item_names.GOLIATH: 1 # Don't fail with early item placement
+            },
+            'generic_upgrade_items': options.GenericUpgradeItems.option_bundle_unit_class,
+            # Disable locations in order to cause item culling
+            'vanilla_locations': options.VanillaLocations.option_disabled,
+            'extra_locations': options.ExtraLocations.option_disabled,
+            'challenge_locations': options.ChallengeLocations.option_disabled,
+            'mastery_locations': options.MasteryLocations.option_disabled,
+            'speedrun_locations': options.SpeedrunLocations.option_disabled,
+            'preventative_locations': options.PreventativeLocations.option_disabled,
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        itempool = [item.name for item in self.multiworld.itempool]
+        world_items = starting_inventory + itempool
+        vehicle_upgrade_items = [x for x in world_items if x == item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE]
+
+        # Under standard tactics you need to place L3 upgrades for available unit classes
+        self.assertGreaterEqual(len(vehicle_upgrade_items), 3)
+
+    def test_weapon_armor_upgrades_all_in_air(self):
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_vanilla,
+            'starter_unit': options.StarterUnit.option_off,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'all_in_map': options.AllInMap.option_air, # All-in air forces an air unit
+            'start_inventory': {
+                item_names.GOLIATH: 1 # Don't fail with early item placement
+            },
+            'generic_upgrade_items': options.GenericUpgradeItems.option_individual_items,
+            # Disable locations in order to cause item culling
+            'vanilla_locations': options.VanillaLocations.option_disabled,
+            'extra_locations': options.ExtraLocations.option_disabled,
+            'challenge_locations': options.ChallengeLocations.option_disabled,
+            'mastery_locations': options.MasteryLocations.option_disabled,
+            'speedrun_locations': options.SpeedrunLocations.option_disabled,
+            'preventative_locations': options.PreventativeLocations.option_disabled,
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        itempool = [item.name for item in self.multiworld.itempool]
+        world_items = starting_inventory + itempool
+        vehicle_weapon_items = [x for x in world_items if x == item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON]
+        ship_weapon_items = [x for x in world_items if x == item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON]
+
+        # Under standard tactics you need to place L3 upgrades for available unit classes
+        self.assertGreaterEqual(len(vehicle_weapon_items), 3)
+        self.assertGreaterEqual(len(ship_weapon_items), 3)
+
+    def test_weapon_armor_upgrades_generic_upgrade_missions(self):
+        """
+        Tests the case when there aren't enough missions in order to get required weapon/armor upgrades
+        for logic requirements.
+        :return:
+        """
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_vanilla,
+            'required_tactics': options.RequiredTactics.option_standard,
+            'starter_unit': options.StarterUnit.option_off,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'all_in_map': options.AllInMap.option_air, # All-in air forces an air unit
+            'start_inventory': {
+                item_names.GOLIATH: 1 # Don't fail with early item placement
+            },
+            'generic_upgrade_items': options.GenericUpgradeItems.option_individual_items,
+            'generic_upgrade_missions': 100, # Fallback happens by putting weapon/armor upgrades into starting inventory
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        upgrade_items = [x for x in starting_inventory if x == item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE]
+
+        # Under standard tactics you need to place L3 upgrades for available unit classes
+        self.assertEqual(len(upgrade_items), 3)
+
+    def test_weapon_armor_upgrades_generic_upgrade_missions_no_logic(self):
+        """
+        Tests the case when there aren't enough missions in order to get required weapon/armor upgrades
+        for logic requirements.
+
+        Except the case above it's No Logic, thus the fallback won't take place.
+        :return:
+        """
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_vanilla,
+            'required_tactics': options.RequiredTactics.option_no_logic,
+            'starter_unit': options.StarterUnit.option_off,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'all_in_map': options.AllInMap.option_air, # All-in air forces an air unit
+            'start_inventory': {
+                item_names.GOLIATH: 1 # Don't fail with early item placement
+            },
+            'generic_upgrade_items': options.GenericUpgradeItems.option_individual_items,
+            'generic_upgrade_missions': 100, # Fallback happens by putting weapon/armor upgrades into starting inventory
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        upgrade_items = [x for x in starting_inventory if x == item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE]
+
+        # No logic won't take the fallback to trigger
+        self.assertEqual(len(upgrade_items), 0)
+
+    def test_weapon_armor_upgrades_generic_upgrade_missions_no_countermeasure_needed(self):
+        world_options = {
+            # Vanilla WoL with all missions
+            'mission_order': options.MissionOrder.option_vanilla,
+            'required_tactics': options.RequiredTactics.option_standard,
+            'starter_unit': options.StarterUnit.option_off,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'enable_nco_missions': False,
+            'all_in_map': options.AllInMap.option_air, # All-in air forces an air unit
+            'start_inventory': {
+                item_names.GOLIATH: 1 # Don't fail with early item placement
+            },
+            'generic_upgrade_items': options.GenericUpgradeItems.option_individual_items,
+            'generic_upgrade_missions': 1, # Weapon / Armor upgrades should be available almost instantly
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        upgrade_items = [x for x in starting_inventory if x == item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE]
+
+        # No additional starting inventory item placement is needed
+        self.assertEqual(len(upgrade_items), 0)

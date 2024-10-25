@@ -351,13 +351,18 @@ class RequiredTactics(Choice):
 
 
 class GenericUpgradeMissions(Range):
-    """Determines the percentage of missions in the mission order that must be completed before
+    """
+    Determines the percentage of missions in the mission order that must be completed before
     level 1 of all weapon and armor upgrades is unlocked.  Level 2 upgrades require double the amount of missions,
     and level 3 requires triple the amount.  The required amounts are always rounded down.
-    If set to 0, upgrades are instead added to the item pool and must be found to be used."""
+    If set to 0, upgrades are instead added to the item pool and must be found to be used.
+
+    If the mission order is unable to be beaten by this value (if above 0), the generator will place additional
+    weapon / armor upgrades into start inventory
+    """
     display_name = "Generic Upgrade Missions"
     range_start = 0
-    range_end = 100
+    range_end = 100 # Higher values lead to fails often
     default = 0
 
 

@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING
+from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING, Iterable
 from BaseClasses import  Item, Location
 from .items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
     upgrade_item_types,
@@ -49,6 +49,9 @@ class ValidInventory:
 
     def count(self, item: str, player: int) -> int:
         return len([inventory_item for inventory_item in self.logical_inventory if inventory_item == item])
+
+    def count_from_list(self, items: Iterable[str], player: int) -> int:
+        return sum(self.count(item_name, player) for item_name in items)
 
     def has_units_per_structure(self) -> bool:
         return len(BARRACKS_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \

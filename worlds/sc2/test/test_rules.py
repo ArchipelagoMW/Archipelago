@@ -2,7 +2,7 @@ import itertools
 from dataclasses import fields
 from random import Random
 import unittest
-from typing import List, Set
+from typing import List, Set, Iterable
 
 from BaseClasses import ItemClassification, MultiWorld
 from Options import *  # Mandatory
@@ -52,11 +52,23 @@ class TestInventory:
         else:
             return random_value
 
+    def count_from_list(self, items: Iterable[str], player: int) -> int:
+        return sum(self.count(item_name, player) for item_name in items)
+
 
 class TestWorld:
     """
     Mock world to simulate different player options for logic rules
     """
+    has_barracks_unit: bool = True
+    has_factory_unit: bool = True
+    has_starport_unit: bool = True
+    has_zerg_melee_unit: bool = True
+    has_zerg_ranged_unit: bool = True
+    has_zerg_air_unit: bool = True
+    has_protoss_ground_unit: bool = True
+    has_protoss_air_unit: bool = True
+
     def __init__(self):
         defaults = dict()
         for field in fields(options.Starcraft2Options):
