@@ -129,8 +129,8 @@ psyenergy_locations = [
     LocationData(2478, 2478, 16384192, [16384192], 132, 3722, LocationType.Psyenergy), # Parch
     LocationData(2490, 2490, 16384194, [16384194], 132, 3723, LocationType.Psyenergy), # Sand
     LocationData(2554, 2554, 16384196, [16384196], 132, 3738, LocationType.Psyenergy), # Blaze
-    LocationData(2, 2, 16384204, [16384204], 132, 3725, LocationType.Psyenergy), # Mind Read
-    LocationData(3, 3, 16384206, [16384206], 132, 3662, LocationType.Psyenergy), # Whirlwind
+    LocationData(6, 2, 16384204, [16384204], 132, 3725, LocationType.Psyenergy), # Mind Read
+    LocationData(6, 3, 16384206, [16384206], 132, 3662, LocationType.Psyenergy), # Whirlwind
     LocationData(4, 4, 16384208, [16384208], 132, 3596, LocationType.Psyenergy), # Growth
     
 ]
@@ -436,13 +436,13 @@ the_rest = [
     LocationData(2721, 2721, 16384182, [16384182], 128, 455, LocationType.Trade), # W Indra Islet Li'l Turtle
     LocationData(2592, 2592, 16384186, [16384186], 128, 458, LocationType.Item), # Daila Sea God's Tear
     LocationData(2553, 2553, 16384188, [16384188], 128, 460, LocationType.Item), # Magma Rock Magma Ball
-    LocationData(1, 1, 16384202, [16384202], 128, 65, LocationType.Item), # Idejima Shaman's Rod
-    LocationData(257, 257, 16384210, [16384210], 128, 3731, LocationType.Item), # Contigo Carry Stone
-    LocationData(258, 258, 16384212, [16384212], 128, 3727, LocationType.Item), # Contigo Lifting Gem
-    LocationData(259, 259, 16384214, [16384214], 128, 3726, LocationType.Item), # Contigo Orb of Force
-    LocationData(260, 260, 16384216, [16384216], 128, 3732, LocationType.Item), # Contigo Catch Beads
-    LocationData(261, 261, 16384218, [16384218], 128, 3617, LocationType.Item), # Kibombo Douse Drop
-    LocationData(262, 262, 16384220, [16384220], 128, 3608, LocationType.Item), # Kibombo Frost Jewel
+    LocationData(4, 1, 16384202, [16384202], 128, 65, LocationType.Item), # Idejima Shaman's Rod
+    LocationData(3, 257, 16384210, [16384210], 128, 3731, LocationType.Item), # Contigo Carry Stone
+    LocationData(2, 258, 16384212, [16384212], 128, 3727, LocationType.Item), # Contigo Lifting Gem
+    LocationData(1, 259, 16384214, [16384214], 128, 3726, LocationType.Item), # Contigo Orb of Force
+    LocationData(0, 260, 16384216, [16384216], 128, 3732, LocationType.Item), # Contigo Catch Beads
+    LocationData(7, 261, 16384218, [16384218], 128, 3617, LocationType.Item), # Kibombo Douse Drop
+    LocationData(7, 262, 16384220, [16384220], 128, 3608, LocationType.Item), # Kibombo Frost Jewel
     LocationData(3328, 3328, 16384384, [16384384], 132, 3328, LocationType.Character), # Contigo Isaac
     LocationData(3329, 3329, 16384386, [16384386], 132, 3329, LocationType.Character), # Contigo Garet
     LocationData(3330, 3330, 16384388, [16384388], 132, 3330, LocationType.Character), # Contigo Ivan

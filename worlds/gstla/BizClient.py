@@ -28,7 +28,7 @@ class _DataLocations(IntEnum):
     # two unused bytes in save data
     AP_ITEMS_RECEIVED = (0xA72, 0x2, 0x0, _MemDomain.EWRAM)
     #TODO: This... didn't work LOL
-    # INITIAL_INVENTORY = (FLAG_START + 0x0, 0x1, 0x0, _MemDomain.EWRAM)
+    INITIAL_INVENTORY = (FLAG_START + 0x0, 0x1, 0x0, _MemDomain.EWRAM)
     SUMMONS = (FLAG_START + (0x10 >> 3), 0x2, 0x10, _MemDomain.EWRAM)
     TREASURE_8_FLAGS = (FLAG_START + (0x800 >> 3), 0x20, 0x800, _MemDomain.EWRAM)
     TREASURE_9_FLAGS = (FLAG_START + (0x900 >> 3), 0x20, 0x900, _MemDomain.EWRAM)
@@ -115,40 +115,21 @@ class GSTLAClient(BizHawkClient):
         initial_flag = data_loc.initial_flag
         # logger.debug("Checking flags for %s" % data_loc.name)
         itr_step = 0x2 if data_loc.length > 0x1 else 0x1
-        for i in range(0, _DataLocations.TREASURE_F_FLAGS.length, itr_step):
+        for i in range(0, data_loc.length, itr_step):
             part = flag_bytes[i:i+itr_step]
             part_int = int.from_bytes(part, 'little')
+            # logger.debug("Data found: %s", hex(part_int))
+            # logger.debug("Bytes: %s", part)
             for bit in range(itr_step * 8):
+                # logger.debug("int %d", part_int)
                 if part_int & 1 > 0:
                     flag = i * 8 + bit + initial_flag
                     locs = self.flag_map.get(flag, None)
                     # logger.debug("flag found: %s, locs: %s", hex(flag), locs)
-                    if locs is None:
-                        # Not a flag we care about
-                        return
-                    self.temp_locs |= locs
+                    if locs is not None:
+                        self.temp_locs |= locs
                 part_int >>= 1
         # logger.debug(self.temp_locs)
-
-    def _check_treasure_flags(self, data: List[bytes]):
-        flag_bytes = data[_DataLocations.TREASURE_F_FLAGS]
-        # TODO: vet this logic, may not work if we don't start on a byte boundary
-        treasure_start = _DataLocations.TREASURE_F_FLAGS.initial_flag
-        logger.debug("Treasure Start: %d", treasure_start)
-        for i in range(0, _DataLocations.TREASURE_F_FLAGS.length, 2):
-            part = flag_bytes[i:i+2]
-            part_int = int.from_bytes(part, 'little')
-            for bit in range(16):
-                if part_int & 1 > 0:
-                    flag = i * 8 + bit + treasure_start
-                    locs = self.flag_map.get(flag, None)
-                    logger.debug("flag found: %s, locs: %s", hex(flag), locs)
-                    if locs is None:
-                        # Not a flag we care about
-                        return
-                    self.temp_locs |= locs
-                part_int >>= 1
-        logger.debug(self.temp_locs)
 
 
     async def _receive_items(self, ctx: 'BizHawkClientContext', data: List[bytes]):
@@ -186,7 +167,7 @@ class GSTLAClient(BizHawkClient):
         self._check_common_flags(_DataLocations.SUMMONS, result)
         for i in range(_DataLocations.TREASURE_8_FLAGS, _DataLocations.TREASURE_F_FLAGS.value + 1):
             self._check_common_flags(_DataLocations(i), result)
-        # self._check_common_flags(_DataLocations.INITIAL_INVENTORY, result)
+        self._check_common_flags(_DataLocations.INITIAL_INVENTORY, result)
 
         await self._receive_items(ctx, result)
 
