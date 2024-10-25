@@ -94,7 +94,7 @@ def download_SNI():
     platform_name = platform.system().lower()
     machine_name = platform.machine().lower()
     # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
-    machine_name = "amd64" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
+    machine_name = "universal" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
     with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
         data = json.load(request)
     files = data["assets"]
@@ -105,11 +105,13 @@ def download_SNI():
         download_url: str = file["browser_download_url"]
         machine_match = download_url.rsplit("-", 1)[1].split(".", 1)[0] == machine_name
         if platform_name in download_url and machine_match:
+            source_url = download_url
             # prefer "many" builds
             if "many" in download_url:
-                source_url = download_url
                 break
-            source_url = download_url
+            # prefer the correct windows or windows7 build
+            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+                break
 
     if source_url and source_url.endswith(".zip"):
         with urllib.request.urlopen(source_url) as download:
