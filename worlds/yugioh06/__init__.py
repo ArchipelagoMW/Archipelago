@@ -1,6 +1,6 @@
 import os
 import pkgutil
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Set
 
 import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
@@ -24,9 +24,7 @@ from .items import (
     tier_4_opponents,
     tier_5_opponents,
 )
-from .items import (
-    challenges as challenges,
-)
+from .items import challenges as challenges
 from .locations import (
     Bonuses,
     Campaign_Opponents,
