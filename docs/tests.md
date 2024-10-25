@@ -97,4 +97,4 @@ If configured, you can also find the 'Archipelago Unittests' as an option in the
 next to the run and debug buttons.
 
 #### Running Tests without Pycharm
-Run `pip install pytest pytest-subtests`, then use your IDE to run tests or `run pytest` from the source folder.
+Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
