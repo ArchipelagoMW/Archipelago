@@ -267,16 +267,12 @@ def addupgrades(finaltier: int, logictype: str,
                 f(f"{cat} Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
 
     elif logictype == "category":
-        for x in range(2, 5):
-            tier = roman(x)
-            f(f"Belt Upgrade Tier {tier}", "Main")
-            f(f"Miner Upgrade Tier {tier}", "Main")
-            f(f"Painting Upgrade Tier {tier}", "Upgrades with 4 Buildings")
-        for x in range(5, finaltier+1):
-            tier = roman(x)
-            f(f"Belt Upgrade Tier {tier}", "Upgrades with 5 Buildings")
-            f(f"Miner Upgrade Tier {tier}", "Upgrades with 5 Buildings")
-            f(f"Painting Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+        for x in range(2, 6):
+            f(f"Belt Upgrade Tier {roman(x)}", "Main")
+            f(f"Miner Upgrade Tier {roman(x)}", "Main")
+        for x in range(6, finaltier + 1):
+            f(f"Belt Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
+            f(f"Miner Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
         f("Processors Upgrade Tier II", "Upgrades with 1 Building")
         f("Processors Upgrade Tier III", "Upgrades with 1 Building")
         f("Processors Upgrade Tier IV", "Upgrades with 2 Buildings")
@@ -284,15 +280,19 @@ def addupgrades(finaltier: int, logictype: str,
         f("Processors Upgrade Tier VI", "Upgrades with 3 Buildings")
         for x in range(7, finaltier+1):
             f(f"Processors Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
+        for x in range(2, 5):
+            f(f"Painting Upgrade Tier {roman(x)}", "Upgrades with 4 Buildings")
+        for x in range(5, finaltier+1):
+            f(f"Painting Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
 
     elif logictype == "category_random":
-        for x in range(2, 5):
+        for x in range(2, 6):
             tier = roman(x)
             f(f"Belt Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["belt"]])
             f(f"Miner Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["miner"]])
             f(f"Processors Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["processors"]])
             f(f"Painting Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["painting"]])
-        for x in range(5, finaltier+1):
+        for x in range(6, finaltier+1):
             tier = roman(x)
             f(f"Belt Upgrade Tier {tier}", "Upgrades with 5 Buildings")
             f(f"Miner Upgrade Tier {tier}", "Upgrades with 5 Buildings")
