@@ -174,11 +174,11 @@ class SC2World(World):
         # Tell the logic which unit classes are used for required W/A upgrades
         used_item_names: Set[str] = {item.name for item in item_list}
         used_item_names = used_item_names.union(item.name for item in self.multiworld.itempool if item.player == self.player)
-        if used_item_names.isdisjoint(item_groups.barracks_units):
+        if used_item_names.isdisjoint(item_groups.barracks_wa_group):
             self.has_barracks_unit = False
-        if used_item_names.isdisjoint(item_groups.factory_units):
+        if used_item_names.isdisjoint(item_groups.factory_wa_group):
             self.has_factory_unit = False
-        if used_item_names.isdisjoint(item_groups.starport_units):
+        if used_item_names.isdisjoint(item_groups.starport_wa_group):
             self.has_starport_unit = False
         if used_item_names.isdisjoint(item_groups.zerg_melee_wa):
             self.has_zerg_melee_unit = False

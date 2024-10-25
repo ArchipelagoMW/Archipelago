@@ -189,17 +189,29 @@ item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrad
     item_name for item_name, item_data in items.item_table.items()
     if item_data.type == items.TerranItemType.Upgrade
 ]
-item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = [
-    item_names.MARINE, item_names.MEDIC, item_names.FIREBAT, item_names.MARAUDER,
+barracks_wa_group = [
+    item_names.MARINE, item_names.FIREBAT, item_names.MARAUDER,
     item_names.REAPER, item_names.GHOST, item_names.SPECTRE, item_names.HERC, item_names.AEGIS_GUARD,
     item_names.EMPERORS_SHADOW, item_names.DOMINION_TROOPER, item_names.SON_OF_KORHAL,
-    item_names.FIELD_RESPONSE_THETA,
 ]
-item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = [
+item_name_groups[ItemGroupNames.BARRACKS_UNITS] = barracks_units = (barracks_wa_group + [
+    item_names.MEDIC,
+    item_names.FIELD_RESPONSE_THETA,
+])
+factory_wa_group = [
     item_names.HELLION, item_names.VULTURE, item_names.GOLIATH, item_names.DIAMONDBACK,
-    item_names.SIEGE_TANK, item_names.THOR, item_names.PREDATOR, item_names.WIDOW_MINE,
+    item_names.SIEGE_TANK, item_names.THOR, item_names.PREDATOR,
     item_names.CYCLONE, item_names.WARHOUND, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
     item_names.BULWARK_COMPANY,
+]
+item_name_groups[ItemGroupNames.FACTORY_UNITS] = factory_units = (factory_wa_group + [
+    item_names.WIDOW_MINE,
+])
+starport_wa_group = [
+    item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
+    item_names.BATTLECRUISER, item_names.RAVEN_HUNTER_SEEKER_WEAPON,
+    item_names.LIBERATOR, item_names.VALKYRIE, item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY,
+    item_names.EMPERORS_GUARDIAN, item_names.NIGHT_HAWK, item_names.NIGHT_WOLF,
 ]
 item_name_groups[ItemGroupNames.STARPORT_UNITS] = starport_units = [
     item_names.MEDIVAC, item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
