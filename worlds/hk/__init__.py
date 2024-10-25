@@ -515,7 +515,7 @@ class HKWorld(World):
                     for real_player in group_lookup[player]:
                         grub_count_per_player[real_player] += 1
                 else:
-                    # for worlds not linking grubs but in a group
+                    # for non-linked grubs
                     grub_count_per_player[player] += 1
 
             for player, count in grub_count_per_player.items():
