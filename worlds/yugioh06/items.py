@@ -183,6 +183,35 @@ tier_1_opponents: List[str] = [
     "Campaign Tier 1 Column 5",
 ]
 
+tier_2_opponents: List[str] = [
+    "Campaign Tier 2 Column 1",
+    "Campaign Tier 2 Column 2",
+    "Campaign Tier 2 Column 3",
+    "Campaign Tier 2 Column 4",
+    "Campaign Tier 2 Column 5",
+]
+
+tier_3_opponents: List[str] = [
+    "Campaign Tier 3 Column 1",
+    "Campaign Tier 3 Column 2",
+    "Campaign Tier 3 Column 3",
+    "Campaign Tier 3 Column 4",
+    "Campaign Tier 3 Column 5",
+]
+
+tier_4_opponents: List[str] = [
+    "Campaign Tier 4 Column 1",
+    "Campaign Tier 4 Column 2",
+    "Campaign Tier 4 Column 3",
+    "Campaign Tier 4 Column 4",
+    "Campaign Tier 4 Column 5",
+]
+
+tier_5_opponents: List[str] = [
+    "Campaign Tier 5 Column 1",
+    "Campaign Tier 5 Column 2",
+]
+
 Banlist_Items: List[str] = [
     "No Banlist",
     "Banlist September 2003",
