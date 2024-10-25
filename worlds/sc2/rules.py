@@ -43,52 +43,31 @@ class SC2Logic:
     # Unit classes in world, these are set properly into the world after the item culling is done
     # Therefore need to get from the world
     def world_has_barracks_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_barracks_unit
+        return self.world is not None and self.world.has_barracks_unit
 
     def world_has_factory_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_factory_unit
+        return self.world is not None and self.world.has_factory_unit
 
     def world_has_starport_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_starport_unit
+        return self.world is not None and self.world.has_starport_unit
 
     def world_has_zerg_melee_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_zerg_melee_unit
+        return self.world is not None and self.world.has_zerg_melee_unit
 
     def world_has_zerg_ranged_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_zerg_ranged_unit
+        return self.world is not None and self.world.has_zerg_ranged_unit
 
     def world_has_zerg_air_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_zerg_air_unit
+        return self.world is not None and self.world.has_zerg_air_unit
 
     def world_has_protoss_ground_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_protoss_ground_unit
+        return self.world is not None and self.world.has_protoss_ground_unit
 
     def world_has_protoss_air_unit(self):
-        if self.world is None:
-            return False
-        else:
-            return self.world.has_protoss_air_unit
+        return self.world is not None and self.world.has_protoss_air_unit
+
+    def get_very_hard_required_upgrade_level(self):
+        return 2 if self.advanced_tactics else 3
 
     def weapon_armor_upgrade_count(self, upgrade_item: str, state: CollectionState) -> int:
         assert upgrade_item in upgrade_bundle_inverted_lookup.keys()
@@ -116,7 +95,7 @@ class SC2Logic:
             count += 1
         return count
 
-    def terran_army_weapon_armor_upgrade_count(self, state: CollectionState) -> int:
+    def terran_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         """
         Minimum W/A upgrade level for unit classes present in the world
         :param state:
@@ -143,12 +122,8 @@ class SC2Logic:
             )
         return count
 
-    def terran_very_hard_mission_weapon_armor_upgrades(self, state: CollectionState) -> bool:
-        upgrade_level = self.terran_army_weapon_armor_upgrade_count(state)
-        return (
-                upgrade_level >= 3
-                or self.advanced_tactics and upgrade_level >= 2
-        )
+    def terran_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
+        return self.terran_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
 
     # WoL
     def terran_common_unit(self, state: CollectionState) -> bool:
@@ -267,13 +242,13 @@ class SC2Logic:
         return (
                 self.zerg_competent_comp(state) and state.has_any({item_names.HYDRALISK, item_names.MUTALISK}, self.player)
         ) or (
-            self.advanced_tactics
-            and self.zerg_common_unit(state)
-            and (state.has_any({item_names.MUTALISK, item_names.INFESTOR}, self.player)
+                self.advanced_tactics
+                and self.zerg_common_unit(state)
+                and (state.has_any({item_names.MUTALISK, item_names.INFESTOR}, self.player)
                  or (self.morph_devourer(state) and state.has_any({item_names.HYDRALISK, item_names.SWARM_QUEEN}, self.player))
                  or (self.morph_viper(state) and state.has(item_names.VIPER_PARASITIC_BOMB, self.player))
                  )
-            and self.zerg_army_weapon_armor_upgrade_count(state) >= 1
+                and self.zerg_army_weapon_armor_upgrade_min_level(state) >= 1
         )
 
     def welcome_to_the_jungle_p_requirement(self, state: CollectionState) -> bool:
@@ -460,7 +435,7 @@ class SC2Logic:
                 or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
             ) and self.terran_competent_anti_air(state)
             or self.terran_competent_comp(state) and self.terran_air_anti_air(state)
-        ) and self.terran_army_weapon_armor_upgrade_count(state) >= 2
+        ) and self.terran_army_weapon_armor_upgrade_min_level(state) >= 2
 
     def marine_medic_upgrade(self, state: CollectionState) -> bool:
         """
@@ -550,7 +525,7 @@ class SC2Logic:
                     or state.has_all({item_names.BANSHEE, item_names.BANSHEE_SHOCKWAVE_MISSILE_BATTERY}, self.player)
                 )
             )
-        ) and self.terran_very_hard_mission_weapon_armor_upgrades(state)
+        ) and self.terran_very_hard_mission_weapon_armor_level(state)
 
     def terran_mobile_detector(self, state: CollectionState) -> bool:
         return state.has_any({item_names.RAVEN, item_names.SCIENCE_VESSEL, item_names.COMMAND_CENTER_SCANNER_SWEEP}, self.player)
@@ -659,7 +634,7 @@ class SC2Logic:
         :param state:
         :return:
         """
-        if not self.terran_very_hard_mission_weapon_armor_upgrades(state):
+        if not self.terran_very_hard_mission_weapon_armor_level(state):
             return False
         beats_kerrigan = (
             state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.BANSHEE, item_names.GHOST}, self.player)
@@ -687,7 +662,7 @@ class SC2Logic:
         :param state:
         :return:
         """
-        if not self.zerg_very_hard_mission_weapon_armor_upgrades(state):
+        if not self.zerg_very_hard_mission_weapon_armor_level(state):
             return False
         beats_kerrigan = (
                 state.has_any({item_names.ZERGLING, item_names.MUTALISK, item_names.INFESTED_MARINE}, self.player)
@@ -716,7 +691,7 @@ class SC2Logic:
         :param state:
         :return:
         """
-        if not self.protoss_very_hard_mission_weapon_armor_upgrades(state):
+        if not self.protoss_very_hard_mission_weapon_armor_level(state):
             return False
         beats_kerrigan = (
                 # cheap units with multiple small attacks, or anything with Feedback
@@ -808,7 +783,7 @@ class SC2Logic:
             defense_score += 2
         return defense_score
 
-    def zerg_army_weapon_armor_upgrade_count(self, state: CollectionState) -> int:
+    def zerg_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
         if self.world_has_zerg_melee_unit():
             count = min(
@@ -830,12 +805,8 @@ class SC2Logic:
             )
         return count
 
-    def zerg_very_hard_mission_weapon_armor_upgrades(self, state: CollectionState) -> bool:
-        upgrade_levels = self.zerg_army_weapon_armor_upgrade_count(state)
-        return (
-                upgrade_levels >= 3
-                or self.advanced_tactics and upgrade_levels >= 2
-        )
+    def zerg_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
+        return self.zerg_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
 
     def zerg_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_zerg_units, self.player)
@@ -907,7 +878,7 @@ class SC2Logic:
             (state.has(item_names.ULTRALISK, self.player) or self.morphling_enabled)
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
-        if self.zerg_army_weapon_armor_upgrade_count(state) < 2:
+        if self.zerg_army_weapon_armor_upgrade_min_level(state) < 2:
             return False
         advanced = self.advanced_tactics
         core_unit = state.has_any({item_names.ROACH, item_names.ABERRATION, item_names.ZERGLING}, self.player)
@@ -1066,18 +1037,18 @@ class SC2Logic:
                 and (self.zerg_competent_anti_air(state)
                     or self.terran_competent_anti_air(state)
                 )
-                and self.terran_very_hard_mission_weapon_armor_upgrades(state)
-                and self.zerg_very_hard_mission_weapon_armor_upgrades(state)
+                and self.terran_very_hard_mission_weapon_armor_level(state)
+                and self.zerg_very_hard_mission_weapon_armor_level(state)
             )
         else:
             return (
                     self.zerg_competent_comp(state)
                     and self.zerg_competent_anti_air(state)
-                    and self.zerg_very_hard_mission_weapon_armor_upgrades(state)
+                    and self.zerg_very_hard_mission_weapon_armor_level(state)
             )
 
     # LotV
-    def protoss_army_weapon_armor_upgrade_count(self, state: CollectionState) -> int:
+    def protoss_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL + 1 # +1 for Quatro
         if self.world_has_protoss_ground_unit():
             count = min(
@@ -1098,14 +1069,8 @@ class SC2Logic:
             )
         return count
 
-    def protoss_very_hard_mission_weapon_armor_upgrades(self, state: CollectionState) -> bool:
-        upgrade_level = self.protoss_army_weapon_armor_upgrade_count(state)
-        return (
-                upgrade_level >= 3
-                or self.advanced_tactics and upgrade_level >= 2
-        )
-
-
+    def protoss_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
+        return self.protoss_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
 
     def protoss_defense_rating(self, state: CollectionState, zerg_enemy: bool) -> int:
         """
@@ -1378,11 +1343,11 @@ class SC2Logic:
 
     def protoss_competent_comp(self, state: CollectionState) -> bool:
         return (
-            self.protoss_common_unit(state)
-            and self.protoss_competent_anti_air(state)
-            and self.protoss_hybrid_counter(state)
-            and self.protoss_basic_splash(state)
-            and self.protoss_army_weapon_armor_upgrade_count(state) >= 2
+                self.protoss_common_unit(state)
+                and self.protoss_competent_anti_air(state)
+                and self.protoss_hybrid_counter(state)
+                and self.protoss_basic_splash(state)
+                and self.protoss_army_weapon_armor_upgrade_min_level(state) >= 2
         )
 
     def steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
@@ -1418,7 +1383,7 @@ class SC2Logic:
             (
                     self.protoss_fleet(state)
                     and self.protoss_static_defense(state)
-                    and self.protoss_army_weapon_armor_upgrade_count(state) >= 2
+                    and self.protoss_army_weapon_armor_upgrade_min_level(state) >= 2
             )
             or (
                 self.protoss_competent_comp(state)
@@ -1433,14 +1398,14 @@ class SC2Logic:
                     self.protoss_fleet(state),
                     self.protoss_static_defense(state)
                 ].count(True) >= 2
-        ) and self.protoss_very_hard_mission_weapon_armor_upgrades(state)
+        ) and self.protoss_very_hard_mission_weapon_armor_level(state)
 
     def into_the_void_requirement(self, state: CollectionState) -> bool:
-        if not self.protoss_very_hard_mission_weapon_armor_upgrades(state):
+        if not self.protoss_very_hard_mission_weapon_armor_level(state):
             return False
         if self.take_over_ai_allies and not (
-            self.terran_very_hard_mission_weapon_armor_upgrades(state)
-            and self.zerg_very_hard_mission_weapon_armor_upgrades(state)
+            self.terran_very_hard_mission_weapon_armor_level(state)
+            and self.zerg_very_hard_mission_weapon_armor_level(state)
         ):
             return False
         return (self.protoss_competent_comp(state)
@@ -1456,11 +1421,11 @@ class SC2Logic:
         )
 
     def essence_of_eternity_requirement(self, state: CollectionState) -> bool:
-        if not self.terran_very_hard_mission_weapon_armor_upgrades(state):
+        if not self.terran_very_hard_mission_weapon_armor_level(state):
             return False
         if self.take_over_ai_allies and not (
-                self.protoss_very_hard_mission_weapon_armor_upgrades(state)
-                and self.zerg_very_hard_mission_weapon_armor_upgrades(state)
+                self.protoss_very_hard_mission_weapon_armor_level(state)
+                and self.zerg_very_hard_mission_weapon_armor_level(state)
         ):
             return False
         defense_score = self.terran_defense_rating(state, False, True)
@@ -1483,11 +1448,11 @@ class SC2Logic:
         )
 
     def amons_fall_requirement(self, state: CollectionState) -> bool:
-        if not self.zerg_very_hard_mission_weapon_armor_upgrades(state):
+        if not self.zerg_very_hard_mission_weapon_armor_level(state):
             return False
         if self.take_over_ai_allies and not (
-                self.terran_very_hard_mission_weapon_armor_upgrades(state)
-                and self.protoss_very_hard_mission_weapon_armor_upgrades(state)
+                self.terran_very_hard_mission_weapon_armor_level(state)
+                and self.protoss_very_hard_mission_weapon_armor_level(state)
         ):
             return False
         if self.take_over_ai_allies:
@@ -1680,9 +1645,9 @@ class SC2Logic:
 
     def night_terrors_requirement(self, state: CollectionState) -> bool:
         return (
-            self.terran_common_unit(state)
-            and self.terran_competent_anti_air(state)
-            and (
+                self.terran_common_unit(state)
+                and self.terran_competent_anti_air(state)
+                and (
                 # These can handle the waves of infested, even volatile ones
                 state.has(item_names.SIEGE_TANK, self.player)
                 or state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
@@ -1707,15 +1672,15 @@ class SC2Logic:
                     )
                 )
             )
-            and self.terran_army_weapon_armor_upgrade_count(state) >= 2
+                and self.terran_army_weapon_armor_upgrade_min_level(state) >= 2
         )
 
     def flashpoint_far_requirement(self, state: CollectionState) -> bool:
         return (
-            self.terran_competent_comp(state)
-            and self.terran_mobile_detector(state)
-            and self.terran_defense_rating(state, True, False) >= 6
-            and self.terran_army_weapon_armor_upgrade_count(state) >= 2
+                self.terran_competent_comp(state)
+                and self.terran_mobile_detector(state)
+                and self.terran_defense_rating(state, True, False) >= 6
+                and self.terran_army_weapon_armor_upgrade_min_level(state) >= 2
         )
 
     def enemy_shadow_tripwires_tool(self, state: CollectionState) -> bool:
@@ -1791,7 +1756,7 @@ class SC2Logic:
                     and state.has_all({item_names.RAVEN, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
                 )
             )
-            and self.terran_very_hard_mission_weapon_armor_upgrades(state)
+            and self.terran_very_hard_mission_weapon_armor_level(state)
         )
 
     def __init__(self, world: 'SC2World'):
