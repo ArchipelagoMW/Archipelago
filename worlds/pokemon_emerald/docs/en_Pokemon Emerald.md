@@ -30,6 +30,7 @@ randomizer. Here are some of the more important ones:
 - The Wally catching tutorial is skipped
 - All text is instant and, with an option, can be automatically progressed by holding A
 - When a Repel runs out, you will be prompted to use another
+- Trainers no longer ask to register you for rematches after a battle
 - Many more minor improvements…
 
 ## Where is my starting inventory?
