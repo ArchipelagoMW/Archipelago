@@ -1600,6 +1600,8 @@ item_table = {
     item_names.OVERLORD_PNEUMATIZED_CARAPACE: ItemData(703 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 9, SC2Race.ZERG),
     item_names.ZERG_EXCAVATING_CLAWS: ItemData(704 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 11, SC2Race.ZERG),
     item_names.ZERG_CREEP_STOMACH: ItemData(705 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 10, SC2Race.ZERG),
+    item_names.HIVE_CLUSTER_MATURATION: ItemData(706 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 12, SC2Race.ZERG),
+    item_names.MACROSCOPIC_RECUPERATION: ItemData(707 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 13, SC2Race.ZERG),
 
     # Morphs
     item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG),
