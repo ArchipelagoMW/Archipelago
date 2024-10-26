@@ -278,23 +278,23 @@ class GSTLAWorld(World):
             write_me |= RandoOptions.OmitAnemos.bit_flag
             debug_file.write(RandoOptions.OmitAnemos.name + '\n')
 
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # Equip not a thing
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # Djinn/Summon
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # Char Stat/Enemy Psy Shuffle
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # Psy/Qol
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         #Ship/Skips
@@ -306,28 +306,28 @@ class GSTLAWorld(World):
             write_me |= RandoOptions.ShipUnlock.bit_flag
             debug_file.write(RandoOptions.ShipUnlock.name + '\n')
 
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # More QoL
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # Scale Exp/Coins
         write_me = 0b00010001
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # More QoL
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # Speedstuffs
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # Misc
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
     def create_item(self, name: str) -> "Item":
