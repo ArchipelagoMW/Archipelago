@@ -5,7 +5,6 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple
 
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write
-from . import LocationName, loc_names_by_id
 from .gen.LocationData import all_locations
 
 if TYPE_CHECKING:
@@ -52,6 +51,7 @@ class _DataLocations(IntEnum):
     def to_request(self) -> Tuple[int, int, _MemDomain]:
         return self.addr, self.length, self.domain
 
+
 class GSTLAClient(BizHawkClient):
     game = 'Golden Sun The Lost Age'
     system = 'GBA'
@@ -68,9 +68,13 @@ class GSTLAClient(BizHawkClient):
             self.flag_map[loc.flag].add(loc.ap_id)
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
-        # TODO: implement
+        game_name = await read(ctx.bizhawk_ctx, [(0xA0, 0x12, _MemDomain.ROM)])
+        game_name = game_name[0].decode('ascii')
+        logger.debug("Game loaded: %s", game_name)
+        if game_name != 'GOLDEN_SUN_BAGFE01':
+            return False
         ctx.game = self.game
-        # TODO: need to verify that the ROM is the correct one somehow
+        # TODO: would like to verify that the ROM is the correct one somehow
         # Possibly verify the seed; would also be nice to have the slot name encoded
         # in the rom somewhere, though not necessary
         ctx.items_handling = 0b001
