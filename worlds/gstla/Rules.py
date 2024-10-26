@@ -123,65 +123,124 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Isaac, player))
     
     #Character djinn
-    add_rule(multiworld.get_location(LocationName.Spring, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 2)
-    add_rule(multiworld.get_location(LocationName.Shade, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 2)
+    if multiworld.character_shuffle[player] == 2:
+        add_rule(multiworld.get_location(LocationName.Spring, player),
+                lambda state: state.has(ItemName.Piers, player))
+        add_rule(multiworld.get_location(LocationName.Shade, player),
+                lambda state: state.has(ItemName.Piers, player))
 
-    add_rule(multiworld.get_location(LocationName.Flint, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 3)
-    add_rule(multiworld.get_location(LocationName.Forge, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 3)  
-    add_rule(multiworld.get_location(LocationName.Gust, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 3)
+        add_rule(multiworld.get_location(LocationName.Flint, player),
+                lambda state: state.has(ItemName.Isaac, player))
+        add_rule(multiworld.get_location(LocationName.Forge, player),
+                lambda state: state.has(ItemName.Isaac, player))  
+        add_rule(multiworld.get_location(LocationName.Gust, player),
+                lambda state: state.has(ItemName.Isaac, player))
+        add_rule(multiworld.get_location(LocationName.Granite, player),
+                lambda state: state.has(ItemName.Isaac, player))
+        add_rule(multiworld.get_location(LocationName.Fizz, player),
+                lambda state: state.has(ItemName.Isaac, player))
+        add_rule(multiworld.get_location(LocationName.Fever, player),
+                lambda state: state.has(ItemName.Isaac, player))
+        
+        add_rule(multiworld.get_location(LocationName.Breeze, player),
+                lambda state: state.has(ItemName.Garet, player))
+        add_rule(multiworld.get_location(LocationName.Sleet, player),
+                lambda state: state.has(ItemName.Garet, player))
+        add_rule(multiworld.get_location(LocationName.Quartz, player),
+                lambda state: state.has(ItemName.Garet, player))
+        add_rule(multiworld.get_location(LocationName.Mist, player),
+                lambda state: state.has(ItemName.Garet, player))
+        add_rule(multiworld.get_location(LocationName.Corona, player),
+                lambda state: state.has(ItemName.Garet, player))
+        add_rule(multiworld.get_location(LocationName.Zephyr, player),
+                lambda state: state.has(ItemName.Garet, player))
+        
+        add_rule(multiworld.get_location(LocationName.Vine, player),
+                lambda state: state.has(ItemName.Ivan, player))
+        add_rule(multiworld.get_location(LocationName.Spritz, player),
+                lambda state: state.has(ItemName.Ivan, player))
+        add_rule(multiworld.get_location(LocationName.Scorch, player),
+                lambda state: state.has(ItemName.Ivan, player))
+        add_rule(multiworld.get_location(LocationName.Smog, player),
+                lambda state: state.has(ItemName.Ivan, player))
+        add_rule(multiworld.get_location(LocationName.Sap, player),
+                lambda state: state.has(ItemName.Ivan, player))
+        add_rule(multiworld.get_location(LocationName.Hail, player),
+                lambda state: state.has(ItemName.Ivan, player))
+        
+
+        add_rule(multiworld.get_location(LocationName.Ember, player),
+                lambda state: state.has(ItemName.Mia, player))
+        add_rule(multiworld.get_location(LocationName.Kite, player),
+                lambda state: state.has(ItemName.Mia, player))
+        add_rule(multiworld.get_location(LocationName.Ground, player),
+                lambda state: state.has(ItemName.Mia, player))
+        add_rule(multiworld.get_location(LocationName.Tonic, player),
+                lambda state: state.has(ItemName.Mia, player))
+        add_rule(multiworld.get_location(LocationName.Flash, player),
+                lambda state: state.has(ItemName.Mia, player))
+        add_rule(multiworld.get_location(LocationName.Squall, player),
+                lambda state: state.has(ItemName.Mia, player))
+    else:
+        add_rule(multiworld.get_location(LocationName.Spring, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 2)
+        add_rule(multiworld.get_location(LocationName.Shade, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 2)
+
+        add_rule(multiworld.get_location(LocationName.Flint, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 3)
+        add_rule(multiworld.get_location(LocationName.Forge, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 3)  
+        add_rule(multiworld.get_location(LocationName.Gust, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 3)
 
 
-    add_rule(multiworld.get_location(LocationName.Granite, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-    add_rule(multiworld.get_location(LocationName.Fizz, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-    add_rule(multiworld.get_location(LocationName.Fever, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-    add_rule(multiworld.get_location(LocationName.Breeze, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-    
-    add_rule(multiworld.get_location(LocationName.Sleet, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-    add_rule(multiworld.get_location(LocationName.Quartz, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-    add_rule(multiworld.get_location(LocationName.Mist, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-    add_rule(multiworld.get_location(LocationName.Corona, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-    add_rule(multiworld.get_location(LocationName.Zephyr, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-    
-    add_rule(multiworld.get_location(LocationName.Vine, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-    add_rule(multiworld.get_location(LocationName.Spritz, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-    add_rule(multiworld.get_location(LocationName.Scorch, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-    add_rule(multiworld.get_location(LocationName.Smog, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-    add_rule(multiworld.get_location(LocationName.Sap, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-    add_rule(multiworld.get_location(LocationName.Hail, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-    
+        add_rule(multiworld.get_location(LocationName.Granite, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+        add_rule(multiworld.get_location(LocationName.Fizz, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+        add_rule(multiworld.get_location(LocationName.Fever, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+        add_rule(multiworld.get_location(LocationName.Breeze, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+        
+        add_rule(multiworld.get_location(LocationName.Sleet, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+        add_rule(multiworld.get_location(LocationName.Quartz, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+        add_rule(multiworld.get_location(LocationName.Mist, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+        add_rule(multiworld.get_location(LocationName.Corona, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+        add_rule(multiworld.get_location(LocationName.Zephyr, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+        
+        add_rule(multiworld.get_location(LocationName.Vine, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+        add_rule(multiworld.get_location(LocationName.Spritz, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+        add_rule(multiworld.get_location(LocationName.Scorch, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+        add_rule(multiworld.get_location(LocationName.Smog, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+        add_rule(multiworld.get_location(LocationName.Sap, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+        add_rule(multiworld.get_location(LocationName.Hail, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+        
 
-    add_rule(multiworld.get_location(LocationName.Ember, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-    add_rule(multiworld.get_location(LocationName.Kite, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-    add_rule(multiworld.get_location(LocationName.Ground, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-    add_rule(multiworld.get_location(LocationName.Tonic, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-    add_rule(multiworld.get_location(LocationName.Flash, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-    add_rule(multiworld.get_location(LocationName.Squall, player),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+        add_rule(multiworld.get_location(LocationName.Ember, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+        add_rule(multiworld.get_location(LocationName.Kite, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+        add_rule(multiworld.get_location(LocationName.Ground, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+        add_rule(multiworld.get_location(LocationName.Tonic, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+        add_rule(multiworld.get_location(LocationName.Flash, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+        add_rule(multiworld.get_location(LocationName.Squall, player),
+                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
 
 
     #Daila
