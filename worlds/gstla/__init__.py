@@ -48,23 +48,23 @@ class GSTLAWorld(World):
     }
 
     def generate_early(self) -> None:
-        self.multiworld.non_local_items[self.player].value -= self.item_name_groups[ItemType.Djinn.name]
+        self.options.non_local_items.value -= self.item_name_groups[ItemType.Djinn.name]
 
-        if self.multiworld.starter_ship[self.player] == 0:
-            self.multiworld.start_inventory[self.player].value[ ItemName.Ship ] = 1
+        if self.options.starter_ship == 0:
+            self.options.start_inventory.value[ ItemName.Ship ] = 1
 
     def create_regions(self) -> None:
-        create_regions(self.multiworld, self.player)
+        create_regions(self)
         create_connections(self.multiworld, self.player)
 
     def create_items(self) -> None:
-        create_events(self.multiworld, self.player)
-        create_items(self.multiworld, self.player)
+        create_events(self)
+        create_items(self, self.player)
 
     def set_rules(self) -> None:
-        set_entrance_rules(self.multiworld, self.player)
-        set_item_rules(self.multiworld, self.player)
-        set_access_rules(self.multiworld, self.player)
+        set_entrance_rules(self)
+        set_item_rules(self)
+        set_access_rules(self)
 
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has(ItemName.Victory, self.player)
