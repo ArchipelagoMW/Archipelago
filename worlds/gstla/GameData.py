@@ -191,14 +191,30 @@ class GameData:
     def _load_locations(self):
         with open(os.path.join(SCRIPT_DIR, 'data', 'item_locations.json'), 'r') as loc_file:
             location_data = json.load(loc_file)
+        # A few locations use different flags than stated in the item_locations.json file
+        # E.g. character starting inventories
+        flag_overwrites = {
+            16384202: 0x4, # Shaman's Rod -> Felix
+            16384204: 0x6, # Mind Read -> Sheba
+            16384206: 0x6, # Whirlwind -> Sheba
+            16384208: 0x4, # Growth -> Felix
+            16384210: 0x3, # Carry Stone -> Mia
+            16384212: 0x2, # Lifting Gem -> Ivan
+            16384214: 0x1, # Orb of Force -> Garet
+            16384216: 0x0, # Catch Beads -> Isaac
+            16384218: 0x7, # Douse Drop -> Piers
+            16384220: 0x7,  # Frost Jewel -> Piers
+
+        }
         for flag, locs in location_data.items():
             # The extra locations are variations on the same map.  We mostly don't care for the client,
             # but the rom generator currently does care, since it will need to place the same item on all
             # variations of the map
             loc = locs[0]
             addr = [x['addr'] for x in locs]
+            mapped_flag = flag_overwrites.get(addr[0], int(flag, 16))
             self.raw_location_data.append(
-                LocationDatum(int(flag, 16), loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
+                LocationDatum(mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'], loc['mapName'])
             )
@@ -255,7 +271,7 @@ class GameData:
             names[loc_name.py_name] = count
             if count > 1:
                 loc_name = LocationName.from_loc_data(loc, ' ' + num_words[count])
-            assert loc_name.id not in self.location_names, "Id: %s, Name: %s" % (hex(loc_name.flag), loc_name.str_name)
+            assert loc_name.id not in self.location_names, "Id: %s, Name: %s" % (hex(loc_name.id), loc_name.str_name)
             self.location_names[loc_name.id] = loc_name
 
     def _setup_item_names(self):

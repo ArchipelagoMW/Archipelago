@@ -149,7 +149,7 @@ def generate_location_names(env: Environment, data: GameData):
         events.append(data.location_names[event.event_id])
         name_list.append({'name': event.location_name, 'id': event.event_id})
     for loc_datum in data.raw_location_data:
-        loc_name = data.location_names[loc_datum.flag]
+        loc_name = data.location_names[loc_datum.id]
         name_list.append({'name': loc_name.str_name, 'id': loc_datum.addr[0]})
         if loc_datum.is_summon:
             summon_tablets.append(loc_name)
