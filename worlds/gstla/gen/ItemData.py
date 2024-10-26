@@ -28,6 +28,9 @@ class DjinnItemData(ItemData):
         self.vanilla_id = id
         return self
 
+    def get_rando_flag(self):
+        return 0x30 + self.element * 20 + self.vanilla_id
+
 class EventItemData(ItemData):
     flag: int
     location: str

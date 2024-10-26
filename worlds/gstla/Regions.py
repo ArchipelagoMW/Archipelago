@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, TYPE_CHECKING
 from BaseClasses import MultiWorld, Region
 from worlds.gstla.Locations import GSTLALocation, location_name_to_id
 from .gen.LocationNames import LocationName
@@ -6,6 +6,8 @@ from .gen.LocationData import LocationType
 from .Names.RegionName import RegionName
 from .Names.EntranceName import EntranceName
 
+if TYPE_CHECKING:
+    from . import GSTLAWorld
 
 class EntranceData:
     name: str
@@ -24,45 +26,45 @@ class EntranceData:
         self.exits = _exits
 
 
-def create_region(multiworld: MultiWorld, player: int, region_data: EntranceData):
-    region = Region(region_data.name, player, multiworld)
+def create_region(world: 'GSTLAWorld', region_data: EntranceData):
+    region = Region(region_data.name, world.player, world.multiworld)
     gs_locations: Dict[str, Optional[int]] = dict()
     for location in region_data.locations:
         location_data = location_name_to_id[location]
-        if multiworld.hidden_items[player] == 2 and location_data.loc_type == LocationType.Hidden:
+        if world.options.hidden_items == 2 and location_data.loc_type == LocationType.Hidden:
             continue
         if location_data.loc_type == LocationType.Djinn:
-            loc = GSTLALocation.create_djinn_location(player, location, location_data, region)
+            loc = GSTLALocation.create_djinn_location(world.player, location, location_data, region)
         elif location_data.loc_type == LocationType.Event:
-            loc = GSTLALocation.create_event_location(player, location, location_data, region)
+            loc = GSTLALocation.create_event_location(world.player, location, location_data, region)
         else:
-            loc = GSTLALocation(player, location, location_data, region)
+            loc = GSTLALocation(world.player, location, location_data, region)
         region.locations.append(loc)
     region.add_locations(gs_locations)
 
     for regionExit in region_data.exits:
         region.create_exit(regionExit)
 
-    multiworld.regions.append(region)
+    world.multiworld.regions.append(region)
 
 
-def create_regions(multiworld: MultiWorld, player: int):
-    if multiworld.super_bosses[player] > 0:
+def create_regions(world: 'GSTLAWorld'):
+    if world.options.super_bosses > 0:
         regions[RegionName.YampiDesertCave].locations.append(LocationName.Yampi_Desert_Cave_Daedalus)
         regions[RegionName.IsletCave].locations.append(LocationName.Islet_Cave_Catastrophe)
         regions[RegionName.TreasureIsland_PostReunion].locations.append(LocationName.Treasure_Isle_Azul)
 
-    if multiworld.super_bosses[player] > 1:
+    if world.options.super_bosses > 1:
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Orihalcon)
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Iris)
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Charon)
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Dark_Matter)
 
-    if multiworld.starter_ship[player] > 0:
+    if world.options.starter_ship > 0:
         regions[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine)
 
     for region in regions.values():
-        create_region(multiworld, player, region)
+        create_region(world, region)
 
 
 regions: Dict[str, EntranceData] = {

@@ -3,6 +3,7 @@ import logging
 from enum import IntEnum, Enum
 from typing import Dict, List, TYPE_CHECKING, Set, Tuple
 
+from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write
 from .gen.LocationData import all_locations
@@ -37,6 +38,7 @@ class _DataLocations(IntEnum):
     TREASURE_D_FLAGS = (FLAG_START + (0xD00 >> 3), 0x20, 0xD00, _MemDomain.EWRAM)
     TREASURE_E_FLAGS = (FLAG_START + (0xE00 >> 3), 0x20, 0xE00, _MemDomain.EWRAM)
     TREASURE_F_FLAGS = (FLAG_START + (0xF00 >> 3), 0x20, 0xF00, _MemDomain.EWRAM)
+    DOOM_DRAGON = (FLAG_START + (0x778 >> 3), 0x1, 0x778, _MemDomain.EWRAM)
 
     def __new__(cls, addr: int, length: int, initial_flag: int, domain: _MemDomain):
         value = len(cls.__members__)
@@ -161,6 +163,8 @@ class GSTLAClient(BizHawkClient):
             return
         result = await read(ctx.bizhawk_ctx, [data_loc.to_request() for data_loc in _DataLocations])
         if not self._is_in_game(result):
+            # TODO: if the player goes back into the save file should we reset some things?
+            self.local_locations = set()
             logger.debug("Not in game...")
             return
 
@@ -180,3 +184,8 @@ class GSTLAClient(BizHawkClient):
                 self.local_locations = self.temp_locs
                 logger.debug("Sending locations to AP: %s", self.local_locations)
                 await ctx.send_msgs([{ "cmd": "LocationChecks", "locations": list(self.local_locations) }])
+
+        victory_check = result[_DataLocations.DOOM_DRAGON]
+        if victory_check[0] & 1 > 0 and not ctx.finished_game:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True

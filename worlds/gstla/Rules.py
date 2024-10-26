@@ -1,5 +1,7 @@
 import math
 
+from typing_extensions import TYPE_CHECKING
+
 from worlds.generic.Rules import add_rule, add_item_rule
 from typing import Set
 from .Items import ItemType, all_items
@@ -11,8 +13,12 @@ from .gen.LocationData import LocationType
 from BaseClasses import MultiWorld
 from .gen.LocationNames import LocationName, loc_names_by_id
 
+if TYPE_CHECKING:
+    from . import GSTLAWorld
 
-def set_entrance_rules(multiworld: MultiWorld, player: int):
+def set_entrance_rules(world: 'GSTLAWorld'):
+    multiworld = world.multiworld
+    player = world.player
     add_rule(multiworld.get_entrance(EntranceName.DailaToShrineOfTheSeaGod, player),
              lambda state: state.has(ItemName.Lash_Pebble, player))
 
@@ -100,7 +106,9 @@ def set_entrance_rules(multiworld: MultiWorld, player: int):
     add_rule(multiworld.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated, player),
             lambda state: state.has(ItemName.Flame_Dragons_defeated, player) and state.has(ItemName.Mythril_Bag_Mars, player))
 
-def set_access_rules(multiworld, player):
+def set_access_rules(world: 'GSTLAWorld'):
+    multiworld = world.multiworld
+    player = world.player
     #Character locations
     add_rule(multiworld.get_location(LocationName.Idejima_Mind_Read, player),
              lambda state: state.has(ItemName.Sheba, player))
@@ -123,7 +131,7 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Isaac, player))
     
     #Character djinn
-    if multiworld.character_shuffle[player] == 2:
+    if world.options.character_shuffle == 2:
         add_rule(multiworld.get_location(LocationName.Spring, player),
                 lambda state: state.has(ItemName.Piers, player))
         add_rule(multiworld.get_location(LocationName.Shade, player),
@@ -419,7 +427,7 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Reveal, player) and state.has(ItemName.Frost_Jewel, player))
 
     #Lemurian Ship
-    if multiworld.starter_ship[player] > 0:
+    if world.options.starter_ship > 0:
         add_rule(multiworld.get_location(LocationName.Lemurian_Ship_Engine_Room, player),
                         lambda state: state.has(ItemName.Aqua_Hydra_defeated, player))
         add_rule(multiworld.get_location(LocationName.Lemurian_Ship_Aqua_Hydra_fight, player), lambda state: state.has(ItemName.Black_Crystal, player))
@@ -824,8 +832,8 @@ def set_access_rules(multiworld, player):
                            state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Carry_Stone, player) and state.has(ItemName.Sand, player))
 
     #djinn logic
-    if multiworld.djinn_logic[player] > 0:
-        djinn_percentage = multiworld.djinn_logic[player] / 100
+    if world.options.djinn_logic > 0:
+        djinn_percentage = world.options.djinn_logic / 100
 
         add_rule(multiworld.get_location(LocationName.Yampi_Desert_Scoop_Gem, player),
                  lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(3 * djinn_percentage))
@@ -860,7 +868,7 @@ def set_access_rules(multiworld, player):
                  lambda state: state.has(ItemName.Whirlwind, player))
 
     #Optional Super Boss content
-    if multiworld.super_bosses[player] > 0:
+    if world.options.super_bosses > 0:
         add_rule(multiworld.get_location(LocationName.Yampi_Desert_Cave_Daedalus, player),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.count_group(ItemType.Djinn, player) >= 64)
 
@@ -871,7 +879,7 @@ def set_access_rules(multiworld, player):
         add_rule(multiworld.get_location(LocationName.Treasure_Isle_Azul, player), lambda state: state.count_group(ItemType.Djinn, player) >= 64)
 
 
-    if multiworld.super_bosses[player] > 1:
+    if world.options.super_bosses > 1:
         #Anemos Inner Sanctum
         add_rule(multiworld.get_location(LocationName.Anemos_Inner_Sanctum_Iris, player),
              lambda state: state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
@@ -881,7 +889,7 @@ def set_access_rules(multiworld, player):
 
 
     #Hidden Items
-    if multiworld.hidden_items[player] < 2:
+    if world.options.hidden_items < 2:
         add_rule(multiworld.get_location(LocationName.Alhafra_Lucky_Medal, player),
                  lambda state: state.has(ItemName.Briggs_defeated, player))
 
@@ -916,7 +924,7 @@ def set_access_rules(multiworld, player):
         add_rule(multiworld.get_location(LocationName.Shaman_Village_Lucky_Pepper, player),
                  lambda state: state.has(ItemName.Moapa_defeated, player))
 
-    if multiworld.hidden_items[player] == 0:
+    if world.options.hidden_items == 0:
         for loc in location_type_to_data[LocationType.Hidden]:
             add_rule(multiworld.get_location(loc_names_by_id[loc.ap_id], player),
                  lambda state: state.has(ItemName.Reveal, player))
@@ -925,7 +933,9 @@ def set_access_rules(multiworld, player):
 
 
 
-def set_item_rules(multiworld, player):
+def set_item_rules(world: 'GSTLAWorld'):
+    multiworld = world.multiworld
+    player = world.player
     djinn: Set[str] = {item.name for item in all_items if item.type == ItemType.Djinn}
 
     for loc in location_type_to_data[LocationType.Djinn]:
@@ -1004,8 +1014,10 @@ def set_item_rules(multiworld, player):
     add_item_rule(multiworld.get_location(LocationName.Gabomba_Catacombs_Tomegathericon, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
     #TODO: This location is also not allowed to have a mimic
     add_item_rule(multiworld.get_location(LocationName.Gabomba_Statue_Black_Crystal, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    
     #TODO: This location is not allowed to have a mimic
-    add_item_rule(multiworld.get_location(LocationName.Lemurian_Ship_Mist_Potion, player), lambda item: item.player != player)
+    #add_item_rule(multiworld.get_location(LocationName.Lemurian_Ship_Mist_Potion, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+
     #TODO: This location is also not allowed to have a mimic
     add_item_rule(multiworld.get_location(LocationName.Mars_Lighthouse_Mars_Star, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
 

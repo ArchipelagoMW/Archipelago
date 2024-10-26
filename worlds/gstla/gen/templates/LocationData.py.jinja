@@ -16,6 +16,7 @@ def always_on(multiworld: MultiWorld, player: int) -> bool:
     return True
 
 class LocationData(NamedTuple):
+    rando_flag: int
     flag: int
     id: Optional[int]
     ap_id: int
@@ -31,31 +32,31 @@ class GSTLALocation(Location):
 
 djinn_locations = [
 {% for djinn in djinn_locations -%}
-    LocationData({{djinn.vanilla_flag}}, {{djinn.addr}}, {{djinn.addr}}, [{{djinn.addr}}], 128, {{djinn.id}}, LocationType.Djinn), # {{djinn.name}}
+    LocationData({{djinn.vanilla_flag}}, {{djinn.vanilla_flag}}, {{djinn.addr}}, {{djinn.addr}}, [{{djinn.addr}}], 128, {{djinn.id}}, LocationType.Djinn), # {{djinn.name}}
 {% endfor %}
 ]
 
 summon_tablets = [
     {% for summon in summon_locations -%}
-    LocationData({{summon.flag}}, {{summon.id}}, {{summon.addr[0]}}, {{summon.addr}}, {{summon.event_type}}, {{summon.vanilla_contents}}, LocationType.Item), #{{summon.vanilla_name}}
+    LocationData({{summon.flag}}, {{summon.flag}}, {{summon.id}}, {{summon.addr[0]}}, {{summon.addr}}, {{summon.event_type}}, {{summon.vanilla_contents}}, LocationType.Item), #{{summon.vanilla_name}}
     {% endfor %}
 ]
 
 psyenergy_locations = [
     {% for psy in psyenergy_locations -%}
-    LocationData({{psy.flag}}, {{psy.id}}, {{psy.addr[0]}}, {{psy.addr}}, {{psy.event_type}}, {{psy.vanilla_contents}}, LocationType.Psyenergy), # {{psy.vanilla_name}}
+    LocationData({{psy.rando_flag}}, {{psy.flag}}, {{psy.id}}, {{psy.addr[0]}}, {{psy.addr}}, {{psy.event_type}}, {{psy.vanilla_contents}}, LocationType.Psyenergy), # {{psy.vanilla_name}}
     {% endfor %}
 ]
 
 events = [
     {% for event in events -%}
-    LocationData({{event.flag}}, {{event.event_id}}, {{event.event_id}}, [0], 0, {{event.event_id}}, LocationType.Event, True), # {{event.location_name}} {{event.item_name}}
+    LocationData({{event.flag}}, {{event.flag}}, {{event.event_id}}, {{event.event_id}}, [0], 0, {{event.event_id}}, LocationType.Event, True), # {{event.location_name}} {{event.item_name}}
     {% endfor %}
 ]
 
 the_rest = [
     {% for loc in other_locations -%}
-    LocationData({{loc.flag}}, {{loc.id}}, {{loc.addr[0]}}, {{loc.addr}}, {{loc.event_type}}, {{loc.vanilla_contents}}, LocationType.{{ loc_type_lookup[loc.id] }}), # {{loc.map_name}} {{loc.vanilla_name}}
+    LocationData({{loc.rando_flag}}, {{loc.flag}}, {{loc.id}}, {{loc.addr[0]}}, {{loc.addr}}, {{loc.event_type}}, {{loc.vanilla_contents}}, LocationType.{{ loc_type_lookup[loc.id] }}), # {{loc.map_name}} {{loc.vanilla_name}}
     {% endfor %}
 ]
 

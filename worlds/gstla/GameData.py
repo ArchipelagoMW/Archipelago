@@ -21,6 +21,7 @@ num_words = {
 
 
 class LocationDatum(NamedTuple):
+    rando_flag: int
     flag: int
     mapId: int
     locked: bool
@@ -140,12 +141,19 @@ class ItemName(NamedTuple):
 
     @classmethod
     def from_item_data(cls, item: ItemDatum, suffix = ''):
-        key = item.name + suffix
-        val = item.name + suffix
         ret = ItemName(item.id,
-                        key.replace(' ', '_').replace("'", '').replace('???', 'Empty'),
-                        val.replace('???', 'Empty'))
+                        ItemName.setup_py_name(item.name, suffix),
+                        ItemName.setup_str_name(item.name,suffix))
         return ret
+
+    @staticmethod
+    def setup_py_name(name: str, suffix=''):
+        return (name + suffix).replace(' ', '_').replace("'", '').replace('???', 'Empty')
+
+    @staticmethod
+    def setup_str_name(name: str, suffix = ''):
+        return (name + suffix).replace('???', 'Empty')
+
 
 SPECIAL_NAMES = {
     419: ItemName(419, 'Rusty_Sword_CorsairsEdge',"Rusty Sword - Corsair's Edge"),
@@ -212,9 +220,10 @@ class GameData:
             # variations of the map
             loc = locs[0]
             addr = [x['addr'] for x in locs]
-            mapped_flag = flag_overwrites.get(addr[0], int(flag, 16))
+            rando_flag = int(flag, 16)
+            mapped_flag = flag_overwrites.get(addr[0], rando_flag)
             self.raw_location_data.append(
-                LocationDatum(mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
+                LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'], loc['mapName'])
             )
@@ -223,11 +232,12 @@ class GameData:
         with open(os.path.join(SCRIPT_DIR, 'data', 'items.json'), 'r') as item_file:
             item_data = json.load(item_file)
         for item in item_data.values():
+            item_type = ItemType(item['itemType'])
             self.raw_item_data.append(
-                ItemDatum(item['id'],
+                ItemDatum(item['id'] if item_type != ItemType.PsyenergyItem else item['useEffect'] + 0xE00,
                           item['name'],
                           item['addr'],
-                          ItemType(item['itemType']),
+                          item_type,
                           ItemFlags(item['flags']),
                           item['useEffect'])
             )
@@ -276,8 +286,9 @@ class GameData:
 
     def _setup_item_names(self):
         for item in self.raw_item_data:
-            if item.id in SPECIAL_NAMES:
-                item_name = SPECIAL_NAMES[item.id]
+            item_id = item.id
+            if item_id in SPECIAL_NAMES:
+                item_name = SPECIAL_NAMES[item_id]
             else:
                 item_name = ItemName.from_item_data(item)
             assert item_name.id not in self.item_names
