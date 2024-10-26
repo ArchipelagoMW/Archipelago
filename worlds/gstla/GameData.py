@@ -21,6 +21,7 @@ num_words = {
 
 
 class LocationDatum(NamedTuple):
+    rando_flag: int
     flag: int
     mapId: int
     locked: bool
@@ -212,9 +213,10 @@ class GameData:
             # variations of the map
             loc = locs[0]
             addr = [x['addr'] for x in locs]
-            mapped_flag = flag_overwrites.get(addr[0], int(flag, 16))
+            rando_flag = int(flag, 16)
+            mapped_flag = flag_overwrites.get(addr[0], rando_flag)
             self.raw_location_data.append(
-                LocationDatum(mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
+                LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'], loc['mapName'])
             )

@@ -21,6 +21,7 @@ class GSTLAItem(Item):
 # This item isn't used by the game normally, so we're going to use it as a placeholder for now
 # TODO: add placeholder
 AP_PLACEHOLDER_ITEM = ItemData(412, ItemName.Rainbow_Ring, ItemClassification.filler, -1, ItemType.Ring)
+# AP_PLACEHOLDER_ITEM = ItemData(0xA00, "AP Placeholder", ItemClassification.filler, -1, ItemType.Ring)
 
 all_items = all_gen_items
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
