@@ -1,95 +1,120 @@
-from typing import Dict
+from typing import Dict, Callable
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification as IClass
+
+
+def is_mam_achievement_included(goal: str, achievements: bool, early_useful: str) -> IClass:
+    return IClass.progression if achievements and (not goal == "vanilla") else IClass.useful
+
+
+def is_achievements_included(goal: str, achievements: bool, early_useful: str) -> IClass:
+    return IClass.progression if achievements else IClass.useful
+
+
+def is_goal_efficiency_iii(goal: str, achievements: bool, early_useful: str) -> IClass:
+    return IClass.progression if goal == "efficiency_iii" else IClass.useful
+
+
+def always_progression(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.progression
+
+
+def always_useful(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.useful
+
+
+def always_filler(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.filler
+
+
+def always_trap(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.trap
+
 
 # Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
 # would be unreasonably complicated and time-consuming.
 # Some buildings are not needed to complete the game, but are "logically needed" for the "MAM" achievement.
 
-buildings_processing = {
-    "Cutter": ItemClassification.progression,
-    "Rotator": ItemClassification.progression,
-    "Painter": ItemClassification.progression,
-    "Rotator (CCW)": ItemClassification.progression,
-    "Color Mixer": ItemClassification.progression,
-    "Stacker": ItemClassification.progression,
-    "Quad Cutter": ItemClassification.progression,
-    "Double Painter": ItemClassification.progression,
-    "Rotator (180°)": ItemClassification.useful,
-    "Quad Painter": ItemClassification.progression
+buildings_processing: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Cutter": always_progression,
+    "Rotator": always_progression,
+    "Painter": always_progression,
+    "Rotator (CCW)": always_progression,
+    "Color Mixer": always_progression,
+    "Stacker": always_progression,
+    "Quad Cutter": always_progression,
+    "Double Painter": always_progression,
+    "Rotator (180°)": always_progression,
+    "Quad Painter": always_progression
 }
 
-buildings_routing = {
-    "Balancer": ItemClassification.progression,
-    "Tunnel": ItemClassification.progression,
-    "Compact Merger": ItemClassification.progression,
-    "Tunnel Tier II": ItemClassification.progression,
-    "Compact Splitter": ItemClassification.progression
+buildings_routing: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Balancer": always_progression,
+    "Tunnel": always_progression,
+    "Compact Merger": is_mam_achievement_included,
+    "Tunnel Tier II": is_mam_achievement_included,
+    "Compact Splitter": is_mam_achievement_included
 }
 
-buildings_other = {
-    "Trash": ItemClassification.progression,
-    "Chaining Extractor": ItemClassification.useful
+buildings_other: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Trash": always_progression,
+    "Chaining Extractor": always_useful
 }
 
-buildings_top_row = {
-    "Belt Reader": ItemClassification.progression,
-    "Storage": ItemClassification.progression,
-    "Switch": ItemClassification.progression,
-    "Item Filter": ItemClassification.progression,
-    "Display": ItemClassification.useful
+buildings_top_row: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Belt Reader": is_mam_achievement_included,
+    "Storage": is_achievements_included,
+    "Switch": always_progression,
+    "Item Filter": is_mam_achievement_included,
+    "Display": always_useful
 }
 
-buildings_wires = {
-    "Wires": ItemClassification.progression,
-    "Constant Signal": ItemClassification.useful,
-    "Logic Gates": ItemClassification.progression,
-    "Virtual Processing": ItemClassification.progression
+buildings_wires: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Wires": always_progression,
+    "Constant Signal": always_progression,
+    "Logic Gates": is_mam_achievement_included,
+    "Virtual Processing": is_mam_achievement_included
 }
 
-gameplay_unlocks = {
-    "Blueprints": ItemClassification.progression
+gameplay_unlocks: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Blueprints": is_achievements_included
 }
 
-upgrades = {
-    "Big Belt Upgrade": ItemClassification.progression,
-    "Big Miner Upgrade": ItemClassification.useful,
-    "Big Processors Upgrade": ItemClassification.useful,
-    "Big Painting Upgrade": ItemClassification.useful,
-    "Small Belt Upgrade": ItemClassification.filler,
-    "Small Miner Upgrade": ItemClassification.filler,
-    "Small Processors Upgrade": ItemClassification.filler,
-    "Small Painting Upgrade": ItemClassification.filler
+upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Big Belt Upgrade": is_goal_efficiency_iii,
+    "Big Miner Upgrade": always_useful,
+    "Big Processors Upgrade": always_useful,
+    "Big Painting Upgrade": always_useful,
+    "Small Belt Upgrade": always_filler,
+    "Small Miner Upgrade": always_filler,
+    "Small Processors Upgrade": always_filler,
+    "Small Painting Upgrade": always_filler
 }
 
-bundles = {
-    "Blueprint Shapes Bundle": ItemClassification.filler,
-    "Level Shapes Bundle": ItemClassification.filler,
-    "Upgrade Shapes Bundle": ItemClassification.filler
+bundles: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Blueprint Shapes Bundle": always_filler,
+    "Level Shapes Bundle": always_filler,
+    "Upgrade Shapes Bundle": always_filler
 }
 
-standard_traps = {
-    "Locked Building Trap": ItemClassification.trap,
-    "Throttled Building Trap": ItemClassification.trap,
-    "Malfunctioning Trap": ItemClassification.trap
+standard_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Locked Building Trap": always_trap,
+    "Throttled Building Trap": always_trap,
+    "Malfunctioning Trap": always_trap
 }
 
-random_draining_trap = {
-    "Inventory Draining Trap": ItemClassification.trap
+random_draining_trap: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Inventory Draining Trap": always_trap
 }
 
-split_draining_traps = {
-    "Blueprint Shapes Draining Trap": ItemClassification.trap,
-    "Level Shapes Draining Trap": ItemClassification.trap,
-    "Upgrade Shapes Draining Trap": ItemClassification.trap
+split_draining_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Blueprint Shapes Draining Trap": always_trap,
+    "Level Shapes Draining Trap": always_trap,
+    "Upgrade Shapes Draining Trap": always_trap
 }
 
-belt_and_extractor = {
-    "Belt": ItemClassification.progression,
-    "Extractor": ItemClassification.progression
+belt_and_extractor: Dict[str, Callable[[str, bool, str], IClass]] = {
+    "Belt": always_progression,
+    "Extractor": always_progression
 }
 
-item_table: Dict[str, ItemClassification] = {
+item_table: Dict[str, Callable[[str, bool, str], IClass]] = {
     **buildings_processing,
     **buildings_routing,
     **buildings_other,

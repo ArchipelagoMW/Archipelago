@@ -249,4 +249,4 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                                                              f"Shapesanity {processing} mixing",
                                                              lambda state: has_mixer(state, player))
 
-    return list(regions.values())
+    return [region for region in regions.values() if len(region.locations) or region.name == "Menu"]
