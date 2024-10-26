@@ -83,6 +83,8 @@ class TunicWorld(World):
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
+    item_link_checked_locs: List[Location]  # so we don't make hints for the same spot more than once
+
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
@@ -387,6 +389,22 @@ class TunicWorld(World):
                 if hint_text:
                     hint_data[self.player][location.address] = hint_text
 
+    def get_real_location(self, location: Location) -> Location:
+        # if it's not in a group, it's not in an item link
+        if location.player not in self.multiworld.groups or not location.item:
+            return location
+
+        # can only find all instances of an item
+        possible_locations = self.multiworld.find_item_locations(location.item.name, self.player, True)
+        for link_loc in possible_locations:
+            if link_loc not in self.item_link_checked_locs:
+                self.item_link_checked_locs.append(link_loc)
+                return link_loc
+        else:
+            warning(f"TUNIC: Failed to parse item location for in-game hints for {self.player_name}. "
+                    f"Using a potentially incorrect location name instead.")
+            return location
+
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "seed": self.random.randint(0, 2147483647),
@@ -412,12 +430,14 @@ class TunicWorld(World):
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
         }
 
+        self.item_link_checked_locs = []
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
             if tunic_item.name not in slot_data:
                 slot_data[tunic_item.name] = []
             if tunic_item.name == gold_hexagon and len(slot_data[gold_hexagon]) >= 6:
                 continue
-            slot_data[tunic_item.name].extend([tunic_item.location.name, tunic_item.location.player])
+            item_location = self.get_real_location(tunic_item.location)
+            slot_data[tunic_item.name].extend([item_location.name, item_location.player])
 
         for start_item in self.options.start_inventory_from_pool:
             if start_item in slot_data_item_names:
@@ -436,7 +456,8 @@ class TunicWorld(World):
                     if item in slot_data_item_names:
                         slot_data[item] = []
                         for item_location in self.multiworld.find_item_locations(item, self.player):
-                            slot_data[item].extend([item_location.name, item_location.player])
+                            item_loc = self.get_real_location(item_location)
+                            slot_data[item].extend([item_loc.name, item_loc.player])
 
         return slot_data
 
