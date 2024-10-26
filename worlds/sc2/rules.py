@@ -817,7 +817,7 @@ class SC2Logic:
         )
 
     def zerg_basic_anti_air(self, state: CollectionState) -> bool:
-        return self.zerg_basic_kerriganless_anti_air(state) or self.kerrigan_unit_available in kerrigan_unit_available
+        return self.zerg_basic_kerriganless_anti_air(state) or self.kerrigan_unit_available
 
     def zerg_basic_kerriganless_anti_air(self, state: CollectionState) -> bool:
         return (
