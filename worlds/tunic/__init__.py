@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
@@ -83,7 +83,7 @@ class TunicWorld(World):
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
-    item_link_checked_locs: List[Location]  # so we don't make hints for the same spot more than once
+    item_link_checked_locs: Set[Location]  # so we don't make hints for the same spot more than once
 
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
@@ -398,7 +398,7 @@ class TunicWorld(World):
         possible_locations = self.multiworld.find_item_locations(location.item.name, self.player, True)
         for link_loc in possible_locations:
             if link_loc not in self.item_link_checked_locs:
-                self.item_link_checked_locs.append(link_loc)
+                self.item_link_checked_locs.add(link_loc)
                 return link_loc
         else:
             warning(f"TUNIC: Failed to parse item location for in-game hints for {self.player_name}. "
@@ -430,7 +430,7 @@ class TunicWorld(World):
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
         }
 
-        self.item_link_checked_locs = []
+        self.item_link_checked_locs = set()
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
             if tunic_item.name not in slot_data:
                 slot_data[tunic_item.name] = []
