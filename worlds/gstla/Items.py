@@ -28,6 +28,10 @@ item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}
 pre_fillitems: List[Item] = []
 
+coin_items: {int: ItemData} = {}
+
+# def _get_coin_item(id: int)
+
 
 def create_item(name: str, player :int) -> "Item":
     """Creates a GSTLAItem from data populated in this file

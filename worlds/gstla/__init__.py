@@ -142,7 +142,7 @@ class GSTLAWorld(World):
 
     def _generate_rando_file(self, output_directory: str):
         with open(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}_debug.txt"),'w') as debug_file:
-            with open(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gstalrando"),'wb') as rando_file:
+            with open(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gstlarando"),'wb') as rando_file:
                 rando_file.write(0x1.to_bytes(length=1,byteorder='little'))
                 debug_file.write("Version: 1\n")
 
@@ -198,7 +198,6 @@ class GSTLAWorld(World):
                     item_data = item_table[loc.item.name]
                     location_data = location_name_to_id[loc.name]
                     rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
-                    print(item_data.id)
                     rando_file.write(item_data.get_rando_flag().to_bytes(length=2,byteorder='little'))
                     loc_name = loc_names_by_id[location_data.ap_id]
                     debug_file.write(f"Djinn(Location): {loc_name}\nDjinn(Location) Flag: {hex(location_data.rando_flag)}\nDjinn(Item): {item_data.name}\nDjinn(Item) Flag: {hex(item_data.get_rando_flag())}\n\n")
