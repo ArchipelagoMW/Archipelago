@@ -2,10 +2,12 @@ import typing
 
 from typing import TYPE_CHECKING
 from NetUtils import ClientStatus
+from collections import Counter
 from random import Random
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from .utils import Constants
+from .items import is_dice_item, convert_item_id_to_dice_id
 from .locations import get_location_id_for_duelist, duelist_from_location_id, is_duelist_location_id
 from .duelists import Duelist, all_duelists, name_to_duelist
 from .version import __version__
@@ -132,10 +134,34 @@ class YGODDMClient(BizHawkClient):
                 COMBINED_WRAM
             )])
 
+            # Give out received Dice
+            last_dice_received_count: int = int.from_bytes(
+                (await bizhawk.read(ctx.bizhawk_ctx, [(Constants.RECEIVED_DICE_COUNT_OFFSET, 1, COMBINED_WRAM)]))[0]
+            )
+            received_items: typing.List[int] = [
+                item.item for item in ctx.items_received
+            ]
+            received_dice_ids: typing.List[int] = [id for id in received_items if is_dice_item(id)]
 
-            
+            if (len(received_dice_ids) > last_dice_received_count):
+                new_received_dice_ids: typing.List[int] = received_dice_ids[last_dice_received_count:]
+                new_dice_ids: typing.List[int] = [convert_item_id_to_dice_id(i) for i in new_received_dice_ids]
+                # Check if valid Dice id?
 
-            # Here YGO FM does a check for card checks then does a union of the two sets
+                dice_collection_memory: bytes = await self.read_dice_collection(ctx)
+                for dice_id, count in Counter(new_dice_ids).items():
+                    await bizhawk.write(ctx.bizhawk_ctx, [(
+                        Constants.DICE_COLLECTION_OFFSET + dice_id - 1,
+                        (dice_collection_memory[dice_id - 1] + count).to_bytes(1, "little"),
+                        COMBINED_WRAM
+                    )])
+
+                await bizhawk.write(ctx.bizhawk_ctx, [(
+                        Constants.RECEIVED_DICE_COUNT_OFFSET,
+                        len(received_dice_ids).to_bytes(1, "little"),
+                        COMBINED_WRAM
+                    )])
+
 
             if new_local_check_locations != self.local_checked_locations:
                 self.local_checked_locations = new_local_check_locations
