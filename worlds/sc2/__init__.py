@@ -5,7 +5,7 @@ import logging
 from typing import *
 from math import floor, ceil
 from dataclasses import dataclass
-from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
+from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState, Region
 from Fill import fill_restrictive, FillError
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
@@ -19,6 +19,7 @@ from . import items
 from . import item_groups
 from . import location_groups
 from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations
+from .mission_order.layout_types import LayoutType, Gauntlet
 from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
@@ -30,7 +31,7 @@ from .rules import get_basic_units
 from . import settings
 from .pool_filter import filter_items
 from .mission_tables import (
-    SC2Campaign, SC2Mission, SC2Race, MissionFlag
+    SC2Campaign, SC2Mission, SC2Race, MissionFlag, lookup_name_to_mission, lookup_id_to_mission
 )
 from .regions import create_mission_order
 from .mission_order.structs import SC2MissionOrder
@@ -246,6 +247,56 @@ class SC2World(World):
                         item = self.multiworld.create_item(item_name, self.player)
                         self.multiworld.push_precollected(item)
 
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+        """
+        Generate information to hints where each mission is actually located in the mission order
+        :param hint_data:
+        :return:
+        """
+        hint_data[self.player] = {}
+        for campaign in self.custom_mission_order.campaigns:
+            for layout in campaign.layouts:
+                columns = layout.layout_type.get_visual_layout()
+                is_single_row_layout = max([len(column) for column in columns]) == 1
+                for column_index, column in enumerate(columns):
+                    for row_index, layout_mission in enumerate(column):
+                        slot = layout.missions[layout_mission]
+                        if hasattr(slot, "mission") and slot.mission is not None:
+                            mission = slot.mission
+                            campaign_name = campaign.get_visual_name()
+                            layout_name = layout.get_visual_name()
+                            if isinstance(layout.layout_type, Gauntlet):
+                                # Linearize Gauntlet
+                                column_name = str(
+                                    layout_mission + 1
+                                    if layout_mission >= 0
+                                    else layout.layout_type.size + layout_mission + 1
+                                )
+                                row_name = ""
+                            else:
+                                column_name = "" if len(columns) == 1 else _get_column_display(column_index, is_single_row_layout)
+                                row_name = "" if is_single_row_layout else str(1 + row_index)
+                            mission_position_name: str = campaign_name + " " + layout_name + " " + column_name + row_name
+                            mission_position_name = mission_position_name.strip().replace("  ", " ")
+                            if mission_position_name != "":
+                                for location in self.get_region(mission.mission_name).get_locations():
+                                    if location.address is not None:
+                                        hint_data[self.player][location.address] = mission_position_name
+
+
+def _get_column_display(index, single_row_layout):
+    """
+    Helper function to display column name
+    :param index:
+    :param single_row_layout:
+    :return:
+    """
+    if single_row_layout:
+        return str(index + 1)
+    else:
+        # Convert column name to a letter, from Z continue with AA and so on
+        f = lambda x: "" if x == 0 else f((x - 1) // 26) + chr((x - 1) % 26 + ord("A"))
+        return f(index + 1)
 
 
 def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]):
