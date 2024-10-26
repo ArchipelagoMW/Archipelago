@@ -755,6 +755,8 @@ item_descriptions = {
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE: _get_resource_efficiency_desc(item_names.INFESTED_BANSHEE),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR: _get_resource_efficiency_desc(item_names.INFESTED_LIBERATOR),
     item_names.ZERG_EXCAVATING_CLAWS: "Increases movement speed of uprooted Zerg structures, especially off creep. Also increases root speed.",
+    item_names.HIVE_CLUSTER_MATURATION: "Lairs are replaced with Hives, and Hatcheries can now upgrade directly to Hives at the Lair's original cost.",
+    item_names.MACROSCOPIC_RECUPERATION: "Zerg structures regenerate health rapidly while on creep and out of combat. Does not apply to uprooted structures, or structures with the Mechanical tag.",
     item_names.ZERGLING_RAPTOR_STRAIN: "Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2.",
     item_names.ZERGLING_SWARMLING_STRAIN: "Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost.",
     item_names.ROACH_VILE_STRAIN: "Roach attacks will slow the movement and attack speed of enemies.",
