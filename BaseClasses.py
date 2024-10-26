@@ -341,7 +341,7 @@ class MultiWorld():
                     new_item.classification |= classifications[item_name]
                     new_itempool.append(new_item)
 
-            region = Region("Menu", group_id, self, "ItemLink")
+            region = Region(group["world"].origin_region_name, group_id, self, "ItemLink")
             self.regions.append(region)
             locations = region.locations
             # ensure that progression items are linked first, then non-progression
