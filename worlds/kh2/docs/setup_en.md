@@ -83,9 +83,9 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
 
 Have any questions on what's in logic? This spreadsheet made by Bulcon has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1nNi8ohEs1fv-sDQQRaP45o6NoRcMlLJsGckBonweDMY/edit?usp=sharing)
 
-Alternatively you can use the Kingdom Hearts 2 Poptracker Pack that is based off of the logic sheet above and does all the work for you.
+Alternatively you can use the Kingdom Hearts 2 PopTracker Pack that is based off of the logic sheet above and does all the work for you.
 
-<h3 style="text-transform:none";>Poptracker Pack</h3>
+<h3 style="text-transform:none";>PopTracker Pack</h3>
 
 1. Download [Kingdom Hearts 2 AP Tracker](https://github.com/palex00/kh2-ap-tracker/releases/latest/) and
 [PopTracker](https://github.com/black-sliver/PopTracker/releases).
