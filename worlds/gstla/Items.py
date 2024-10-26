@@ -30,7 +30,14 @@ pre_fillitems: List[Item] = []
 
 coin_items: {int: ItemData} = {}
 
-# def _get_coin_item(id: int)
+def _get_coin_item(id: int):
+    assert id > 0x8000
+    if id not in coin_items:
+        # TODO: is consumable the right item type?
+        coin_item = ItemData(id, f"{id-0x8000} Coins", ItemClassification.filler, 0, ItemType.Consumable)
+        coin_items[id] = coin_item
+        return coin_item
+    return coin_items[id]
 
 
 def create_item(name: str, player :int) -> "Item":
@@ -83,9 +90,10 @@ def create_items(multiworld: MultiWorld, player: int):
     # item population based on player configured options.
     for loc in all_locations:
         # TODO: COINS CAUSE ISSUES
-        if loc.vanilla_contents > 0x8000 or loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:
+        if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:
             continue
-        vanilla_item = items_by_id[loc.vanilla_contents]
+        # Coins do funny business
+        vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
         if multiworld.starter_ship[player] == 2 and vanilla_item.name == ItemName.Black_Crystal:
             continue
         if vanilla_item.type == ItemType.Event or vanilla_item.type == ItemType.Djinn:
@@ -112,14 +120,21 @@ def create_items(multiworld: MultiWorld, player: int):
         pre_fillitems.append(ap_item)
         sum_locations -= 1
 
-    #
     # for item in gear + summon_list:
     #     ap_item = create_item(item.itemName, player)
     #     multiworld.itempool.append(ap_item)
     #     sum_locations -= 1
     #
-    # for item in multiworld.random.choices(population=test_items, k=sum_locations):
-        # ap_item = create_item(item.itemName, player)
-        # multiworld.itempool.append(ap_item)
+    # TODO: come up with better filler pool
+    filler_pool = [x for x in all_items if x.id in {
+        180, # Herb
+        181, # Nut
+        182, # Vial
+        187, # Antidote
+        188, # Elixir
+    }]
+    for item in multiworld.random.choices(population=filler_pool, k=sum_locations):
+        ap_item = create_item_direct(item, player)
+        multiworld.itempool.append(ap_item)
 
 
