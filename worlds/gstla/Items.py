@@ -25,7 +25,7 @@ AP_PLACEHOLDER_ITEM = ItemData(412, ItemName.Rainbow_Ring, ItemClassification.fi
 all_items = all_gen_items
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}
-pre_fillitems: List[Item] = []
+pre_fillitems: Dict[str, List[Item]] = {ItemType.Djinn.name: [], ItemType.Character.name: [] }
 
 
 def create_item(name: str, player :int) -> "Item":
@@ -104,7 +104,12 @@ def create_items(multiworld: MultiWorld, player: int):
     for item in djinn_items:
         # ap_item = create_item(item.name, player)
         ap_item = create_item_direct(item, player)
-        pre_fillitems.append(ap_item)
+        pre_fillitems[ItemType.Djinn.name].append(ap_item)
+        sum_locations -= 1
+
+    for character in character_items:
+        ap_item = create_item_direct(character, player)
+        pre_fillitems[ItemType.Character.name].append(ap_item)
         sum_locations -= 1
 
     #

@@ -4,6 +4,7 @@ from worlds.generic.Rules import add_rule, add_item_rule
 from typing import Set
 from .Items import ItemType, all_items
 from .gen.ItemNames import ItemName
+from .gen.ItemData import summon_list, characters
 from .Names.EntranceName import EntranceName
 from .Locations import location_type_to_data
 from .gen.LocationData import LocationType
@@ -100,6 +101,89 @@ def set_entrance_rules(multiworld: MultiWorld, player: int):
             lambda state: state.has(ItemName.Flame_Dragons_defeated, player) and state.has(ItemName.Mythril_Bag_Mars, player))
 
 def set_access_rules(multiworld, player):
+    #Character locations
+    add_rule(multiworld.get_location(LocationName.Idejima_Mind_Read, player),
+             lambda state: state.has(ItemName.Sheba, player))
+    add_rule(multiworld.get_location(LocationName.Idejima_Whirlwind, player),
+             lambda state: state.has(ItemName.Sheba, player))
+
+    add_rule(multiworld.get_location(LocationName.Kibombo_Douse_Drop, player),
+             lambda state: state.has(ItemName.Piers, player))
+    add_rule(multiworld.get_location(LocationName.Kibombo_Frost_Jewel, player),
+             lambda state: state.has(ItemName.Piers, player))
+    
+    
+    add_rule(multiworld.get_location(LocationName.Contigo_Carry_Stone, player),
+             lambda state: state.has(ItemName.Mia, player))
+    add_rule(multiworld.get_location(LocationName.Contigo_Lifting_Gem, player),
+             lambda state: state.has(ItemName.Ivan, player))
+    add_rule(multiworld.get_location(LocationName.Contigo_Orb_of_Force, player),
+             lambda state: state.has(ItemName.Garet, player))
+    add_rule(multiworld.get_location(LocationName.Contigo_Catch_Beads, player),
+             lambda state: state.has(ItemName.Isaac, player))
+    
+    #Character djinn
+    add_rule(multiworld.get_location(LocationName.Spring, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2)
+    add_rule(multiworld.get_location(LocationName.Shade, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2)
+
+    add_rule(multiworld.get_location(LocationName.Flint, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3)
+    add_rule(multiworld.get_location(LocationName.Forge, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3)  
+    add_rule(multiworld.get_location(LocationName.Gust, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3)
+
+
+    add_rule(multiworld.get_location(LocationName.Granite, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+    add_rule(multiworld.get_location(LocationName.Fizz, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+    add_rule(multiworld.get_location(LocationName.Fever, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+    add_rule(multiworld.get_location(LocationName.Breeze, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+    
+    add_rule(multiworld.get_location(LocationName.Sleet, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(multiworld.get_location(LocationName.Quartz, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(multiworld.get_location(LocationName.Mist, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(multiworld.get_location(LocationName.Corona, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(multiworld.get_location(LocationName.Zephyr, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    
+    add_rule(multiworld.get_location(LocationName.Vine, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(multiworld.get_location(LocationName.Spritz, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(multiworld.get_location(LocationName.Scorch, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(multiworld.get_location(LocationName.Smog, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(multiworld.get_location(LocationName.Sap, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(multiworld.get_location(LocationName.Hail, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    
+
+    add_rule(multiworld.get_location(LocationName.Ember, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(multiworld.get_location(LocationName.Kite, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(multiworld.get_location(LocationName.Ground, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(multiworld.get_location(LocationName.Tonic, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(multiworld.get_location(LocationName.Flash, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(multiworld.get_location(LocationName.Squall, player),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+
+
     #Daila
     add_rule(multiworld.get_location(LocationName.Daila_Sea_Gods_Tear, player),
              lambda state: state.has(ItemName.Frost_Jewel, player))
@@ -257,16 +341,7 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Growth, player))
 
     #Kibombo
-    add_rule(multiworld.get_location(LocationName.Kibombo_Douse_Drop, player),
-             lambda state: state.has(ItemName.Lash_Pebble, player))
-
-    add_rule(multiworld.get_location(LocationName.Kibombo_Frost_Jewel, player),
-             lambda state: state.has(ItemName.Lash_Pebble, player))
-
-    add_rule(multiworld.get_location(LocationName.Spring, player),
-             lambda state: state.has(ItemName.Lash_Pebble, player))
-
-    add_rule(multiworld.get_location(LocationName.Shade, player),
+    add_rule(multiworld.get_location(LocationName.Kibombo_Piers, player),
              lambda state: state.has(ItemName.Lash_Pebble, player))
 
 
@@ -772,9 +847,9 @@ def set_access_rules(multiworld, player):
                  lambda state: state.has(ItemName.Frost_Jewel, player) and (
                              state.has(ItemName.Grindstone, player) or state.has(ItemName.Poseidon_defeated, player)))
 
-        add_rule(multiworld.get_location(LocationName.Shaman_Village_Elixir, player),
+        add_rule(multiworld.get_location(LocationName.Shaman_Village_Elixir_Two, player),
                  lambda state: state.has(ItemName.Shamans_Rod, player) and state.has(ItemName.Hover_Jade,
-                               player) and state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Reveal, player))
+                               player) and state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Reveal, player))
 
         add_rule(multiworld.get_location(LocationName.Shaman_Village_Lucky_Medal, player),
                  lambda state: state.has(ItemName.Moapa_defeated, player))
@@ -796,3 +871,90 @@ def set_item_rules(multiworld, player):
 
     for loc in location_type_to_data[LocationType.Djinn]:
         add_item_rule(multiworld.get_location(loc_names_by_id[loc.ap_id], player), lambda item: item.player == player and item.name in djinn)
+
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Airs_Rock_Reveal, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Aqua_Rock_Parch, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Magma_Rock_Magma_Ball, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Magma_Rock_Blaze, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Gaia_Rock_Sand, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Gaia_Rock_Dancing_Idol, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Dehkan_Plateau_Pound_Cube, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))   
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Kandorean_Temple_Lash_Pebble, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Madra_Cyclone_Chip, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Shaman_Village_Hover_Jade, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Yampi_Desert_Scoop_Gem, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Champa_Trident, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+
+    character_names = [character.name for character in characters]
+    summon_names = [summon.name for summon in summon_list]
+
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Carry_Stone, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Lifting_Gem, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Orb_of_Force, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Catch_Beads, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
+    add_item_rule(multiworld.get_location(LocationName.Idejima_Shamans_Rod, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
+    add_item_rule(multiworld.get_location(LocationName.Idejima_Growth, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
+    add_item_rule(multiworld.get_location(LocationName.Idejima_Whirlwind, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
+    add_item_rule(multiworld.get_location(LocationName.Idejima_Mind_Read, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
+    add_item_rule(multiworld.get_location(LocationName.Kibombo_Douse_Drop, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
+    add_item_rule(multiworld.get_location(LocationName.Kibombo_Frost_Jewel, player), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
+
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Isaac, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Garet, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Ivan, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Contigo_Mia, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Idejima_Jenna, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Idejima_Sheba, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Kibombo_Piers, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+
+
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Daila_Sea_Gods_Tear, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Gabomba_Catacombs_Tomegathericon, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Gabomba_Statue_Black_Crystal, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Lemurian_Ship_Mist_Potion, player), lambda item: item.player != player)
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.Mars_Lighthouse_Mars_Star, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.E_Tundaria_Islet_Pretty_Stone, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.N_Osenia_Islet_Milk, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.SE_Angara_Islet_Red_Cloth, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    #TODO: This location is also not allowed to have a mimic
+    add_item_rule(multiworld.get_location(LocationName.W_Indra_Islet_Lil_Turtle, player), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
