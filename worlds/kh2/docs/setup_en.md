@@ -79,7 +79,7 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
 - Run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
 - Make sure to save in a different save slot when playing in an async or disconnecting from the server to play a different seed
 
-<h2 style="text-transform:none";>Poptracker Autotracking & Logic Sheet</h2>
+<h2 style="text-transform:none";>Logic Sheet & PopTracker Autotracking</h2>
 
 Have any questions on what's in logic? This spreadsheet made by Bulcon has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1nNi8ohEs1fv-sDQQRaP45o6NoRcMlLJsGckBonweDMY/edit?usp=sharing)
 
