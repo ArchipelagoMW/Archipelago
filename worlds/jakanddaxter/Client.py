@@ -379,11 +379,11 @@ async def run_game(ctx: JakAndDaxterContext):
             if os.path.exists(proj_path):
 
                 # Look for "iso_data" path to automate away an oft-forgotten manual step of mod updates.
-                # All relative paths should start from root_path.
+                # All relative paths should start from root_path and end with "jak1".
                 goalc_args = []
                 possible_relative_paths = {
-                    "../../../../../active/jak1/data/iso_data",
-                    "./data/iso_data",
+                    "../../../../../active/jak1/data/iso_data/jak1",
+                    "./data/iso_data/jak1",
                 }
 
                 for iso_relative_path in possible_relative_paths:
