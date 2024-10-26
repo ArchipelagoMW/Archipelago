@@ -1101,6 +1101,8 @@ sa2b_option_groups = [
         Beetlesanity,
         Omosanity,
         Animalsanity,
+        ItemBoxsanity,
+        Bigsanity,
         KartRaceChecks,
     ]),
     OptionGroup("Chao", [
