@@ -1025,9 +1025,9 @@ item_id_by_name: Dict[int, ItemName] = {
     "Garet": 3329,
     "Ivan": 3330,
     "Mia": 3331,
-    "Jenna": 3332,
-    "Sheba": 3333,
-    "Piers": 3334,
+    "Jenna": 3333,
+    "Sheba": 3334,
+    "Piers": 3335,
     
 }
 
@@ -1528,9 +1528,9 @@ name_by_item_id: Dict[ItemName, int] = {
     3329: "Garet",
     3330: "Ivan",
     3331: "Mia",
-    3332: "Jenna",
-    3333: "Sheba",
-    3334: "Piers",
+    3333: "Jenna",
+    3334: "Sheba",
+    3335: "Piers",
     
 }
 
