@@ -752,7 +752,7 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
         import tkinter.filedialog
     except Exception as e:
         logging.error('Could not load tkinter, which is likely not installed. '
-                      f'This attempt was made because open_filename was used for "{title}".')
+                      f'This attempt was made because open_directory was used for "{title}".')
         raise e
     else:
         if is_macos and is_kivy_running():
