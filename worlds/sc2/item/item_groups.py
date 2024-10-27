@@ -427,8 +427,9 @@ item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [
 item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
     item_name for item_name, item_data in item_tables.item_table.items()
     if item_data.type in (
-    item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Morph)
-        and item_name not in zerg_buildings
+        item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Morph
+    )
+       and item_name not in zerg_buildings
 ]
 # For W/A upgrades
 zerg_ground_units = [

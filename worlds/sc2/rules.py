@@ -145,9 +145,16 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return (state.has_any({item_names.VIKING, item_names.WRAITH, item_names.BANSHEE, item_names.BATTLECRUISER}, self.player) or self.advanced_tactics
-                and state.has_any({item_names.HERCULES, item_names.MEDIVAC}, self.player) and self.terran_common_unit(state)
+        return (
+                state.has_any({
+                    item_names.VIKING, item_names.WRAITH, item_names.BANSHEE, item_names.BATTLECRUISER
+                }, self.player)
+                or (
+                        self.advanced_tactics
+                        and state.has_any({item_names.HERCULES, item_names.MEDIVAC}, self.player)
+                        and self.terran_common_unit(state)
                 )
+        )
 
     def terran_air_anti_air(self, state: CollectionState) -> bool:
         """

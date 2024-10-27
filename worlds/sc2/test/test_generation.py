@@ -4,7 +4,7 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import mission_groups, mission_tables, options, locations
+from .. import mission_groups, mission_tables, options, locations, SC2Mission
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_first_mission
 
@@ -794,11 +794,11 @@ class TestItemFiltering(Sc2SetupTestBase):
                         'missions': [
                             {
                                 'index': 0,
-                                'mission_pool': ['Liberation Day']
+                                'mission_pool': [SC2Mission.LIBERATION_DAY.mission_name]
                             },
                             {
                                 'index': 1,
-                                'mission_pool': ['Supreme']
+                                'mission_pool': [SC2Mission.SUPREME.mission_name]
                             },
                         ]
                     }

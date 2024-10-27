@@ -38,5 +38,5 @@ class StarcraftItem(Item):
     filter_flags: ItemFilterFlags = ItemFilterFlags.Available
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int, filter_flags: ItemFilterFlags = ItemFilterFlags.Available):
-        Item.__init__(self, name, classification, code, player)
+        super().__init__(name, classification, code, player)
         self.filter_flags = filter_flags

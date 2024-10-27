@@ -93,7 +93,7 @@ class ValidInventory:
             return True
 
         # Process Excluded items, validate if the item can get actually excluded
-        excluded_items: List[StarcraftItem] = [stacrcraft_item for stacrcraft_item in inventory if ItemFilterFlags.Excluded in stacrcraft_item.filter_flags]
+        excluded_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if ItemFilterFlags.Excluded in starcraft_item.filter_flags]
         self.world.random.shuffle(excluded_items)
         for excluded_item in excluded_items:
             logical_inventory_copy = copy.copy(self.logical_inventory)
@@ -164,7 +164,7 @@ class ValidInventory:
             known_parents = [item for item in known_items if item in parent_items]
             for parent in known_parents:
                 child_items = self.item_children[parent]
-                removable_upgrades = [stacrcraft_item for stacrcraft_item in inventory if stacrcraft_item in child_items]
+                removable_upgrades = [starcraft_item for starcraft_item in inventory if starcraft_item in child_items]
                 locked_upgrade_count = sum(1 if item in child_items else 0 for item in known_items)
                 self.world.random.shuffle(removable_upgrades)
                 while len(removable_upgrades) > 0 and locked_upgrade_count < minimum_upgrades:
@@ -182,16 +182,16 @@ class ValidInventory:
             raise Exception(f"Too many items excluded - couldn't satisfy access rules for the following locations:\n{failed_locations}")
 
         # Optionally locking generic items
-        generic_items: List[StarcraftItem] = [stacrcraft_item for stacrcraft_item in inventory if stacrcraft_item.name in second_pass_placeable_items]
+        generic_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if starcraft_item.name in second_pass_placeable_items]
         reserved_generic_percent = get_option_value(self.world, "ensure_generic_items") / 100
         reserved_generic_amount = int(len(generic_items) * reserved_generic_percent)
         removable_generic_items = []
         self.world.random.shuffle(generic_items)
-        for stacrcraft_item in generic_items[:reserved_generic_amount]:
-            locked_items.append(copy_item(stacrcraft_item))
-            inventory.remove(stacrcraft_item)
-            if stacrcraft_item.name not in self.logical_inventory:
-                removable_generic_items.append(stacrcraft_item)
+        for starcraft_item in generic_items[:reserved_generic_amount]:
+            locked_items.append(copy_item(starcraft_item))
+            inventory.remove(starcraft_item)
+            if starcraft_item.name not in self.logical_inventory:
+                removable_generic_items.append(starcraft_item)
 
         # Main cull process
         unused_items: List[str] = []  # Reusable items for the second pass
