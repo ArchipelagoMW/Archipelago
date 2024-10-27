@@ -256,6 +256,8 @@ class GSTLAWorld(World):
         write_me = 0
 
         # Misc
+        if self.options.character_shuffle < 2:
+            write_me |= RandoOptions.ShufflePCs
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
