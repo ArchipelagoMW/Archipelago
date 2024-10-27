@@ -213,11 +213,17 @@ class ReportsInPool(Range):
     range_start = 0
     range_end = 13
 
-class RandomizeKeybladeStats(DefaultOnToggle):
+class KeybladeStats(Choice):
     """
     Determines whether Keyblade stats should be randomized.
+    Randomize: Randomly generates STR and MP bonuses for each keyblade between the defined minimums and maximums
+    Shuffle: Shuffles the stats of the vanilla keyblade amongst each other.
+    Vanilla: Keyblade stats are unchanged.
     """
-    display_name = "Randomize Keyblade Stats"
+    display_name = "Keyblade Stats"
+    option_randomize = 0
+    option_shuffle = 1
+    option_vanilla = 2
 
 class KeybladeMinStrength(Range):
     """
@@ -281,7 +287,7 @@ class ForceStatsOnLevels(NamedRange):
 
 class BadStartingWeapons(Toggle):
     """
-    Forces Kingdom Key, Dream Sword, Dream Shield, and Dream Staff to have bad stats.
+    Forces Kingdom Key, Dream Sword, Dream Shield, and Dream Staff to have vanilla stats.
     """
     display_name = "Bad Starting Weapons"
 
@@ -378,7 +384,7 @@ class KH1Options(PerGameCommonOptions):
     vanilla_emblem_pieces: VanillaEmblemPieces
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
-    randomize_keyblade_stats: RandomizeKeybladeStats
+    keyblade_stats: KeybladeStats
     bad_starting_weapons: BadStartingWeapons
     keyblade_min_str: KeybladeMinStrength
     keyblade_max_str: KeybladeMaxStrength
@@ -425,7 +431,7 @@ kh1_option_groups = [
     ]),
     OptionGroup("Keyblades", [
         KeybladesUnlockChests,
-        RandomizeKeybladeStats,
+        KeybladeStats,
         BadStartingWeapons,
         KeybladeMaxStrength,
         KeybladeMinStrength,

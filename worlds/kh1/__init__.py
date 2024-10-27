@@ -11,6 +11,30 @@ from .Rules import set_rules
 from .Presets import kh1_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
+VANILLA_KEYBLADE_STATS = [
+    "3,0",
+    "1,0",
+    "1,0",
+    "1,0",
+    "0,0",
+    "5,0",
+    "6,0",
+    "6,1",
+    "7,0",
+    "8,1",
+    "5,0",
+    "4,2",
+    "9,-1",
+    "10,0",
+    "10,1",
+    "7,2",
+    "13,0",
+    "9,1",
+    "11,-1",
+    "3,3",
+    "8,-2",
+    "14,2"
+    ]
 
 def launch_client():
     from .Client import launch
@@ -199,7 +223,13 @@ class KH1World(World):
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "atlantica": bool(self.options.atlantica),
                     "goal": str(self.options.goal.current_key)}
-        if self.options.randomize_keyblade_stats:
+        
+        # Handle shuffling keyblade stats
+        if self.options.keyblade_stats != "vanilla":
+            # Create keyblade stat array from vanilla
+            keyblade_stats = VANILLA_KEYBLADE_STATS.copy()
+            
+            # Fix any minimum and max values from settings
             min_str_bonus = min(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
             max_str_bonus = max(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
             self.options.keyblade_min_str.value = min_str_bonus
@@ -208,15 +238,29 @@ class KH1World(World):
             max_mp_bonus = max(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
             self.options.keyblade_min_mp.value = min_mp_bonus
             self.options.keyblade_max_mp.value = max_mp_bonus
+            
+            # Create initial slot data string
             slot_data["keyblade_stats"] = ""
-            for i in range(22):
-                if i < 4 and self.options.bad_starting_weapons:
-                    slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + "1,0,"
-                else:
+            
+            # Handle bad starting weapons setting
+            if self.options.bad_starting_weapons:
+                keyblade_stats = keyblade_stats[4:]
+                slot_data["keyblade_stats"] = "3,0,1,0,1,0,1,0,"
+            
+            # Handle random keyblade stats
+            if self.options.keyblade_stats == "randomize":
+                for i in range(len(keyblade_stats)):
                     str_bonus = int(self.random.randint(min_str_bonus, max_str_bonus))
                     mp_bonus = int(self.random.randint(min_mp_bonus, max_mp_bonus))
-                    slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + str(str_bonus) + "," + str(mp_bonus) + ","
+                    keyblade_stats[i] = str(str_bonus) + "," + str(mp_bonus)
+            elif self.options.keyblade_stats == "shuffle":
+                self.random.shuffle(keyblade_stats)
+            
+            # Complete slot data string
+            for i in range(len(keyblade_stats)):
+                slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + keyblade_stats[i] + ","
             slot_data["keyblade_stats"] = slot_data["keyblade_stats"][:-1]
+
         if self.options.donald_death_link:
             slot_data["donalddl"] = ""
         if self.options.goofy_death_link:

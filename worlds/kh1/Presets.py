@@ -30,7 +30,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": False,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
@@ -73,7 +73,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": False,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
@@ -116,7 +116,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": True,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": True,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
@@ -158,7 +158,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 5,
         
         "keyblades_unlock_chests": False,
-        "randomize_keyblade_stats": True,
+        "keyblade_stats": KeybladeStats.option_randomize,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
