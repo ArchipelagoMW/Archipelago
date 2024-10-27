@@ -27,7 +27,6 @@ class _DataLocations(IntEnum):
     AP_ITEM_SLOT = (0x96, 0x2, 0x0, _MemDomain.EWRAM)
     # two unused bytes in save data
     AP_ITEMS_RECEIVED = (0xA72, 0x2, 0x0, _MemDomain.EWRAM)
-    #TODO: This... didn't work LOL
     INITIAL_INVENTORY = (FLAG_START + 0x0, 0x1, 0x0, _MemDomain.EWRAM)
     SUMMONS = (FLAG_START + (0x10 >> 3), 0x2, 0x10, _MemDomain.EWRAM)
     TREASURE_8_FLAGS = (FLAG_START + (0x800 >> 3), 0x20, 0x800, _MemDomain.EWRAM)
@@ -111,7 +110,7 @@ class GSTLAClient(BizHawkClient):
                     flag = i * 8 + bit
                     shuffled_flag = self.djinn_ram_to_rom[flag + _DataLocations.DJINN_FLAGS.initial_flag]
                     locs = self.flag_map.get(shuffled_flag, None)
-                    logger.debug("orig_flag: %s, shuffle flag: %s, locs: %s", hex(flag), hex(shuffled_flag), locs)
+                    # logger.debug("orig_flag: %s, shuffle flag: %s, locs: %s", hex(flag), hex(shuffled_flag), locs)
                     assert locs is not None, "Got null locations for flag: %s" % hex(shuffled_flag)
                     self.temp_locs |= locs
                 part_int >>= 1
