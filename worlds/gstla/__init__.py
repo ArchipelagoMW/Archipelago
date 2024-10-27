@@ -91,7 +91,11 @@ class GSTLAWorld(World):
                     # TODO: need to fill with something else
                     continue
 
-                item_data = item_table.get(ap_item.name, AP_PLACEHOLDER_ITEM)
+                if ap_item.player != self.player:
+                    item_data = AP_PLACEHOLDER_ITEM
+                else:
+                    item_data = item_table[ap_item.name]
+
                 if item_data.type == ItemType.Djinn:
                     rom.write_djinn(location_data, item_data)
                 else:
@@ -144,7 +148,11 @@ class GSTLAWorld(World):
                             # TODO: need to fill with something else
                             continue
 
-                        item_data = item_table.get(ap_item.name, AP_PLACEHOLDER_ITEM)
+                        if ap_item.player != self.player:
+                            item_data = AP_PLACEHOLDER_ITEM
+                        else:
+                            item_data = item_table[ap_item.name]
+
                         if item_data.type == ItemType.Djinn:
                             djinn_locs.append(location)
                         else:

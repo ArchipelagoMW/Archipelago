@@ -431,6 +431,9 @@ class LocationName(str, Enum):
     Gale = "Gale"
     
 
+    def __str__(self):
+        return self._value_
+
 ids_by_loc_name: Dict[LocationName, int] = {
     "Flint": 16384000,
     "Granite": 16384002,

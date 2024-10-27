@@ -67,6 +67,25 @@ class ItemName(str, Enum):
     Sea_Gods_Tear = "Sea God's Tear"
     Ruin_Key = "Ruin Key"
     Magma_Ball = "Magma Ball"
+    Coins_3 = "Coins 3"
+    Coins_12 = "Coins 12"
+    Coins_15 = "Coins 15"
+    Coins_315 = "Coins 315"
+    Coins_32 = "Coins 32"
+    Coins_123 = "Coins 123"
+    Coins_777 = "Coins 777"
+    Coins_82 = "Coins 82"
+    Coins_666 = "Coins 666"
+    Coins_18 = "Coins 18"
+    Coins_16 = "Coins 16"
+    Coins_182 = "Coins 182"
+    Coins_210 = "Coins 210"
+    Coins_365 = "Coins 365"
+    Coins_166 = "Coins 166"
+    Coins_161 = "Coins 161"
+    Coins_911 = "Coins 911"
+    Coins_306 = "Coins 306"
+    Coins_383 = "Coins 383"
     # Weapon
     Long_Sword = "Long Sword"
     Broad_Sword = "Broad Sword"
@@ -902,6 +921,25 @@ item_id_by_name: Dict[int, ItemName] = {
     "Sea God's Tear": 458,
     "Ruin Key": 459,
     "Magma Ball": 460,
+    "Coins 3": 32771,
+    "Coins 12": 32780,
+    "Coins 15": 32783,
+    "Coins 315": 33083,
+    "Coins 32": 32800,
+    "Coins 123": 32891,
+    "Coins 777": 33545,
+    "Coins 82": 32850,
+    "Coins 666": 33434,
+    "Coins 18": 32786,
+    "Coins 16": 32784,
+    "Coins 182": 32950,
+    "Coins 210": 32978,
+    "Coins 365": 33133,
+    "Coins 166": 32934,
+    "Coins 161": 32929,
+    "Coins 911": 33679,
+    "Coins 306": 33074,
+    "Coins 383": 33151,
     "Venus": 3840,
     "Mercury": 3841,
     "Mars": 3842,
@@ -1405,6 +1443,25 @@ name_by_item_id: Dict[ItemName, int] = {
     458: "Sea God's Tear",
     459: "Ruin Key",
     460: "Magma Ball",
+    32771: "Coins 3",
+    32780: "Coins 12",
+    32783: "Coins 15",
+    33083: "Coins 315",
+    32800: "Coins 32",
+    32891: "Coins 123",
+    33545: "Coins 777",
+    32850: "Coins 82",
+    33434: "Coins 666",
+    32786: "Coins 18",
+    32784: "Coins 16",
+    32950: "Coins 182",
+    32978: "Coins 210",
+    33133: "Coins 365",
+    32934: "Coins 166",
+    32929: "Coins 161",
+    33679: "Coins 911",
+    33074: "Coins 306",
+    33151: "Coins 383",
     3840: "Venus",
     3841: "Mercury",
     3842: "Mars",

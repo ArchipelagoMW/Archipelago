@@ -39,6 +39,9 @@ def _get_coin_item(id: int):
         # TODO: is consumable the right item type?
         coin_item = ItemData(id, f"{id-0x8000} Coins", ItemClassification.filler, 0, ItemType.Consumable)
         coin_items[id] = coin_item
+        assert coin_item.name not in item_table
+        item_table[coin_item.name] = coin_item
+        print(coin_item.name)
         return coin_item
     return coin_items[id]
 
@@ -87,7 +90,8 @@ def create_items(world: 'GSTLAWorld', player: int):
         if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:
             continue
         # Coins do funny business
-        vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
+        # vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
+        vanilla_item = items_by_id[loc.vanilla_contents]
 
         #if vanilla ship logic than this should be Gabomba Statue Black Crystal location
         if world.options.starter_ship == 2 and vanilla_item.name == ItemName.Black_Crystal:

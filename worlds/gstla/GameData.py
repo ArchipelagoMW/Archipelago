@@ -241,6 +241,13 @@ class GameData:
                           ItemFlags(item['flags']),
                           item['useEffect'])
             )
+        coins = dict()
+        for loc in self.raw_location_data:
+            if loc.vanilla_contents > 0x8000:
+                # TODO: get the name in a better way?
+                coins[loc.vanilla_contents] = ItemDatum(loc.vanilla_contents, f"Coins {loc.vanilla_contents-0x8000}", loc.addr[0], ItemType.Consumable, ItemFlags(0))
+        for coin in coins.values():
+            self.raw_item_data.append(coin)
 
     def _load_djinn(self):
         with open(os.path.join(SCRIPT_DIR, 'data', 'djinn.json'), 'r') as djinn_file:
@@ -291,7 +298,7 @@ class GameData:
                 item_name = SPECIAL_NAMES[item_id]
             else:
                 item_name = ItemName.from_item_data(item)
-            assert item_name.id not in self.item_names
+            assert item_name.id not in self.item_names, (item_name.id, item_name.str_name)
             self.item_names[item_name.id] = item_name
 
     def _setup_psy_energies(self):

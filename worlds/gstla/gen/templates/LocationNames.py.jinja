@@ -47,6 +47,9 @@ class LocationName(str, Enum):
         {{name.name}} = "{{name.name}}"
     {% endfor %}
 
+    def __str__(self):
+        return self._value_
+
 ids_by_loc_name: Dict[LocationName, int] = {
     {% for d in name_list -%}
     "{{d['name']}}": {{d['id']}},
