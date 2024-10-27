@@ -431,7 +431,7 @@ class Count(BaseStardewRule):
         return len(self.rules)
 
     def __repr__(self):
-        return f"Received {self.count} {repr(self.rules)}"
+        return f"Received {self.count} [{', '.join(f'{value}x {repr(rule)}' for rule, value in self.counter.items())}]"
 
 
 @dataclass(frozen=True)

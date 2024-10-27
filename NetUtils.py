@@ -79,6 +79,7 @@ class NetworkItem(typing.NamedTuple):
     item: int
     location: int
     player: int
+    """ Sending player, except in LocationInfo (from LocationScouts), where it is the receiving player. """
     flags: int = 0
 
 
@@ -272,7 +273,8 @@ class RawJSONtoTextParser(JSONtoTextParser):
 
 color_codes = {'reset': 0, 'bold': 1, 'underline': 4, 'black': 30, 'red': 31, 'green': 32, 'yellow': 33, 'blue': 34,
                'magenta': 35, 'cyan': 36, 'white': 37, 'black_bg': 40, 'red_bg': 41, 'green_bg': 42, 'yellow_bg': 43,
-               'blue_bg': 44, 'magenta_bg': 45, 'cyan_bg': 46, 'white_bg': 47}
+               'blue_bg': 44, 'magenta_bg': 45, 'cyan_bg': 46, 'white_bg': 47,
+               'plum': 35, 'slateblue': 34, 'salmon': 31,}  # convert ui colors to terminal colors
 
 
 def color_code(*args):
@@ -397,12 +399,12 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
                 location_id not in checked]
 
     def get_remaining(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
-                      ) -> typing.List[int]:
+                      ) -> typing.List[typing.Tuple[int, int]]:
         checked = state[team, slot]
         player_locations = self[slot]
-        return sorted([player_locations[location_id][0] for
-                       location_id in player_locations if
-                       location_id not in checked])
+        return sorted([(player_locations[location_id][1], player_locations[location_id][0]) for
+                        location_id in player_locations if
+                        location_id not in checked])
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub
