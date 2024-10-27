@@ -121,6 +121,20 @@ class HiddenItems(Choice):
     option_excluded = 2
     default = 0
 
+class CharacterShuffle(Choice):
+    display_name = "Character Shuffle"
+    option_anywhere = 0
+    option_vanilla_shuffled = 1
+    option_vanilla = 2
+    default = 1
+
+class DjinnShuffle(Choice):
+    display_name = "Djinn Shuffle"
+    #option_anywhere = 0, not supported yet
+    option_vanilla_shuffled = 1
+    option_vanilla = 2
+    default = 1
+
 class SuperBosses(Choice):
     display_name = "Super Bosses"
     option_excludeoptionalbosses = 0
@@ -144,5 +158,7 @@ GSTLAOptions = {
     "starter_ship": StartWithShip,
     "hidden_items": HiddenItems,
     "super_bosses": SuperBosses,
-    "djinn_logic": DjinnLogic
+    "djinn_logic": DjinnLogic,
+    "djinn_shuffle": DjinnShuffle,
+    "character_shuffle": CharacterShuffle
 }

@@ -1,12 +1,12 @@
 from worlds.AutoWorld import WebWorld, World
 import os
 
-from typing import List, TextIO, BinaryIO
+from typing import List, TextIO, BinaryIO, Dict
 
 from .Options import GSTLAOptions, RandoOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
-from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, pre_fillitems, create_item, \
+from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
     AP_PLACEHOLDER_ITEM, items_by_id
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
@@ -44,11 +44,15 @@ class GSTLAWorld(World):
     web = GSTLAWeb()
 
     item_name_groups = {
-        ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn}
+        ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
+        ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character}
     }
 
     def generate_early(self) -> None:
         self.options.non_local_items.value -= self.item_name_groups[ItemType.Djinn.name]
+
+        if self.options.character_shuffle > 0:
+            self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]
 
         if self.options.starter_ship == 0:
             self.options.start_inventory.value[ ItemName.Ship ] = 1
@@ -72,32 +76,8 @@ class GSTLAWorld(World):
     def generate_basic(self):
         pass
 
-    def get_prefill_items(self) -> List["Item"]:
-        return pre_fillitems
-
     def pre_fill(self) -> None:
-        from Fill import fill_restrictive, FillError
-        all_state = self.multiworld.get_all_state(use_cache=False)
-        locs = []
-
-        for loc in location_type_to_data[LocationType.Djinn]:
-            locs.append(self.multiworld.get_location(loc_names_by_id[loc.ap_id], self.player))
-
-        djinnList = self.get_prefill_items()
-        assert len(locs) == len(djinnList), "Djinn Locations: %d, Djinn: %d" % (len(locs), len(djinnList))
-        self.multiworld.random.shuffle(locs)
-        self.multiworld.random.shuffle(djinnList)
-
-        for ap_item in djinnList:
-            all_state.remove(ap_item)
-        # print(len(locs))
-        # print(locs)
-        # for loc_name in LocationName:
-        #     try:
-        #         self.multiworld.get_location(loc_name, self.player)
-        #     except:
-        #         print("Failed to find location in multiworld: " + loc_name)
-        fill_restrictive(self.multiworld, all_state, locs, djinnList, True, True)
+        pass
 
     def generate_output(self, output_directory: str):
         self._generate_rando_file(output_directory)
@@ -112,7 +92,7 @@ class GSTLAWorld(World):
             for location in region.locations:
                 location_data = location_name_to_id.get(location.name, None)
 
-                if location_data is None or location_data.loc_type == LocationType.Event:
+                if location_data is None or location_data.loc_type == LocationType.Event or location_data.loc_type == LocationType.Character:
                     continue
                 ap_item = location.item
                 # print(ap_item)
@@ -264,7 +244,7 @@ class GSTLAWorld(World):
         write_me = 0
 
         # Equip Defense/start levels
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # More QoL
@@ -280,7 +260,7 @@ class GSTLAWorld(World):
         write_me = 0
 
         # Placeholder in case we need more flags
-        rando_file.write(write_me.to_bytes(length=4))
+        rando_file.write(write_me.to_bytes(length=4, byteorder='big'))
 
     def create_item(self, name: str) -> "Item":
         return create_item(name, self.player)
