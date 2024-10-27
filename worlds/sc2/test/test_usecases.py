@@ -3,7 +3,8 @@ Unit tests for yaml usecases we want to support
 """
 
 from .test_base import Sc2SetupTestBase
-from .. import get_all_missions, item_groups, item_names, item_tables, mission_tables, options
+from .. import get_all_missions, mission_tables, options
+from ..item import item_groups, item_tables, item_names
 from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
 
 

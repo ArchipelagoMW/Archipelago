@@ -4,9 +4,10 @@ from random import Random
 import unittest
 from typing import List, Set, Iterable
 
-from BaseClasses import ItemClassification, MultiWorld
+from BaseClasses import ItemClassification
 from Options import *  # Mandatory
-from worlds.sc2 import item_tables, options, locations
+from worlds.sc2 import options, locations
+from worlds.sc2.item import item_tables
 
 
 class TestInventory:

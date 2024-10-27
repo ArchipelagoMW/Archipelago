@@ -7,7 +7,6 @@ from NetUtils import JSONMessagePart
 from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.uix.tabbedpanel import TabbedPanelItem
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
 from kivy.uix.label import Label
@@ -16,8 +15,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
 
-from worlds.sc2.client import SC2Context, calc_unfinished_nodes, force_settings_save_on_close
-from worlds.sc2.item_descriptions import item_descriptions
+from worlds.sc2.client import SC2Context, calc_unfinished_nodes
+from worlds.sc2.item.item_descriptions import item_descriptions
 from worlds.sc2.mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race
 from worlds.sc2.locations import LocationType, lookup_location_id_to_type, lookup_location_id_to_flags

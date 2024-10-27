@@ -1,23 +1,19 @@
 from dataclasses import fields
-import enum
 import logging
 
 from typing import *
 from math import floor, ceil
-from dataclasses import dataclass
-from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState, Region
+from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
-from . import item_names
-from .item_tables import (
+from .item.item_tables import (
     filler_items, get_full_item_list, ProtossItemType,
     ItemData, kerrigan_actives, kerrigan_passives,
-    not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL, ItemType, ZergItemType,
+    not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL, ZergItemType,
 )
-from . import items
-from . import item_groups
+from . import item
 from . import location_groups
-from .items import FilterItem, ItemFilterFlags, StarcraftItem
+from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables
 from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations
 from .mission_order.layout_types import LayoutType, Gauntlet
 from .options import (
@@ -402,9 +398,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
                 item.flags |= ItemFilterFlags.Removed
         if (not protoss_build_missions
             and item.data.type in (
-                item_tables.ProtossItemType.Unit,
-                item_tables.ProtossItemType.Unit_2,
-                item_tables.ProtossItemType.Building,
+                        item_tables.ProtossItemType.Unit,
+                        item_tables.ProtossItemType.Unit_2,
+                        item_tables.ProtossItemType.Building,
             )
         ):
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
@@ -412,9 +408,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_true
                 or item.name not in (
-                    item_names.IMMORTAL, item_names.ANNIHILATOR,
-                    item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
-                    item_names.SENTRY, item_names.HIGH_TEMPLAR,
+                            item_names.IMMORTAL, item_names.ANNIHILATOR,
+                            item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
+                            item_names.SENTRY, item_names.HIGH_TEMPLAR,
                 )
             ):
                 item.flags |= ItemFilterFlags.Removed
@@ -531,8 +527,8 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
     terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in  mission.flags for mission in missions)
     for item in item_list:
         if item.name in (
-            item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
-            item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR,
+                item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
+                item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR,
         ) and terran_nobuild_missions:
             item.flags |= ItemFilterFlags.AllowedOrphan
 
@@ -585,7 +581,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
             # Special case - you don't have a logicless location but need an AA
             basic_units = basic_units.difference(
                 {item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL, item_names.BLOOD_HUNTER,
-                    item_names.AVENGER, item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.VANGUARD})
+                 item_names.AVENGER, item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.VANGUARD})
         if first_mission == SC2Mission.SUDDEN_STRIKE:
             # Special case - cliffjumpers
             basic_units = {item_names.REAPER, item_names.GOLIATH, item_names.SIEGE_TANK, item_names.VIKING, item_names.BANSHEE}

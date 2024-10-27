@@ -1,6 +1,6 @@
 import typing
-from . import item_names, items, item_tables
-from .mission_tables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
+from worlds.sc2.item import item_tables, item_names
+from worlds.sc2.mission_tables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
 
 """
 Item name groups, given to Archipelago and used in YAMLs and /received filtering.
@@ -42,7 +42,7 @@ unlisted_item_name_groups = {
 bracketless_duplicates: typing.Set[str]
 # This is a list of names in ItemNames with bracketed parts removed, for internal use
 _shortened_names = [(name[:name.find(' (')] if '(' in name else name)
-      for name in [item_names.__dict__[name] for name in item_names.__dir__() if not name.startswith('_')]]
+                    for name in [item_names.__dict__[name] for name in item_names.__dir__() if not name.startswith('_')]]
 # Remove the first instance of every short-name from the full item list
 bracketless_duplicates = set(_shortened_names)
 for name in bracketless_duplicates:
@@ -183,7 +183,8 @@ item_name_groups[ItemGroupNames.TERRAN_ITEMS] = terran_items = [
 ]
 item_name_groups[ItemGroupNames.TERRAN_UNITS] = terran_units = [
     item_name for item_name, item_data in item_tables.item_table.items()
-    if item_data.type in (item_tables.TerranItemType.Unit, item_tables.TerranItemType.Unit_2, item_tables.TerranItemType.Mercenary)
+    if item_data.type in (
+    item_tables.TerranItemType.Unit, item_tables.TerranItemType.Unit_2, item_tables.TerranItemType.Mercenary)
 ]
 item_name_groups[ItemGroupNames.TERRAN_GENERIC_UPGRADES] = terran_generic_upgrades = [
     item_name for item_name, item_data in item_tables.item_table.items()
@@ -238,7 +239,7 @@ item_name_groups[ItemGroupNames.NCO_BUILDINGS] = nco_buildings = [
 ]
 item_name_groups[ItemGroupNames.NOVA_EQUIPMENT] = nova_equipment = [
     *[item_name for item_name, item_data in item_tables.item_table.items()
-        if item_data.type == item_tables.TerranItemType.Nova_Gear],
+      if item_data.type == item_tables.TerranItemType.Nova_Gear],
     item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE,
 ]
 item_name_groups[ItemGroupNames.WOL_UNITS] = wol_units = [
@@ -425,7 +426,8 @@ item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [
     item_names.OMEGA_WORM]
 item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
     item_name for item_name, item_data in item_tables.item_table.items()
-    if item_data.type in (item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Morph)
+    if item_data.type in (
+    item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Morph)
         and item_name not in zerg_buildings
 ]
 # For W/A upgrades

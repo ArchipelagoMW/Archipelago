@@ -7,14 +7,13 @@ from .options import (
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence,
     get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
 )
-from .item_tables import (
+from worlds.sc2.item.item_tables import (
     tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings,
     kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings,
-    pvz_defense_ratings, no_logic_basic_units, advanced_basic_units, basic_units, upgrade_bundles,
-    upgrade_bundle_inverted_lookup, WEAPON_ARMOR_UPGRADE_MAX_LEVEL
+    pvz_defense_ratings, no_logic_basic_units, advanced_basic_units, basic_units, upgrade_bundle_inverted_lookup, WEAPON_ARMOR_UPGRADE_MAX_LEVEL
 )
 from .mission_tables import SC2Race, SC2Campaign
-from . import item_names, item_groups
+from .item import item_groups, item_names
 
 if TYPE_CHECKING:
     from . import SC2World
@@ -148,7 +147,7 @@ class SC2Logic:
         """
         return (state.has_any({item_names.VIKING, item_names.WRAITH, item_names.BANSHEE, item_names.BATTLECRUISER}, self.player) or self.advanced_tactics
                 and state.has_any({item_names.HERCULES, item_names.MEDIVAC}, self.player) and self.terran_common_unit(state)
-        )
+                )
 
     def terran_air_anti_air(self, state: CollectionState) -> bool:
         """
@@ -284,9 +283,9 @@ class SC2Logic:
                     item_names.EMPERORS_GUARDIAN, item_names.NIGHT_HAWK,
                 ), self.player)
                 or (
-                    state.has(item_names.MEDIVAC, self.player)
-                    and state.has_any((item_names.SIEGE_TANK, item_names.SHOCK_DIVISION), self.player)
-                    and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
+                        state.has(item_names.MEDIVAC, self.player)
+                        and state.has_any((item_names.SIEGE_TANK, item_names.SHOCK_DIVISION), self.player)
+                        and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
                 )
             )
         )
@@ -301,7 +300,8 @@ class SC2Logic:
         """
         defense_score = sum((tvx_defense_ratings[item] for item in tvx_defense_ratings if state.has(item, self.player)))
         # Manned Bunker
-        if state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player) and state.has(item_names.BUNKER, self.player):
+        if state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player) and state.has(
+                item_names.BUNKER, self.player):
             defense_score += 3
         elif zerg_enemy and state.has(item_names.FIREBAT, self.player) and state.has(item_names.BUNKER, self.player):
             defense_score += 2
@@ -351,8 +351,8 @@ class SC2Logic:
             state.has(item_names.BATTLECRUISER, self.player)
             and self.terran_common_unit(state)
             and (
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
-                or state.has(item_names.BATTLECRUISER_ATX_LASER_BATTERY, self.player)
+                    self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
+                    or state.has(item_names.BATTLECRUISER_ATX_LASER_BATTERY, self.player)
             )
         )
 
@@ -446,7 +446,7 @@ class SC2Logic:
             }, self.player)
             or (state.count(item_names.MARINE_PROGRESSIVE_STIMPACK, self.player) >= 2
                 and state.has_group("Missions", self.player, 1)
-            )
+                )
         )
 
     def terran_survives_rip_field(self, state: CollectionState) -> bool:
@@ -475,16 +475,16 @@ class SC2Logic:
         :return:
         """
         return (
-            state.has(item_names.SCIENCE_VESSEL, self.player)
-            or (
+                state.has(item_names.SCIENCE_VESSEL, self.player)
+                or (
                     state.has_any({item_names.MEDIC, item_names.FIELD_RESPONSE_THETA}, self.player)
                     and state.has(item_names.MEDIC_ADAPTIVE_MEDPACKS, self.player)
             )
-            or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3
-            or (self.advanced_tactics
+                or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3
+                or (self.advanced_tactics
                 and (
-                    state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
-                    or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2
+                            state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
+                            or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2
                 )
             )
         )
@@ -549,8 +549,8 @@ class SC2Logic:
             and (
                     self.terran_air_anti_air(state)
                     or (
-                        state.has_any({item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player)
-                        and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
+                            state.has_any({item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player)
+                            and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
                     )
                 )
             and self.terran_defense_rating(state, True) >= 3
@@ -930,7 +930,7 @@ class SC2Logic:
                 ) or (
                     self.advanced_tactics
                     and (self.morph_viper(state)
-                        or state.has(item_names.SPINE_CRAWLER, self.player))
+                         or state.has(item_names.SPINE_CRAWLER, self.player))
                 )
             )
         )
@@ -966,9 +966,9 @@ class SC2Logic:
         # Two non-ultimate abilities
         count = 0
         for item in (
-            item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_HEROIC_FORTITUDE,
-            item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
-            item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY
+                item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_HEROIC_FORTITUDE,
+                item_names.KERRIGAN_CHAIN_REACTION, item_names.KERRIGAN_CRUSHING_GRIP, item_names.KERRIGAN_PSIONIC_SHIFT,
+                item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_INFEST_BROODLINGS, item_names.KERRIGAN_FURY
         ):
             if state.has(item, self.player):
                 count += 1

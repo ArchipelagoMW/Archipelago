@@ -1,7 +1,6 @@
 import unittest
 
-from .. import item_tables
-from .. import item_descriptions
+from ..item import item_descriptions, item_tables
 
 
 class TestItemDescriptions(unittest.TestCase):

@@ -4,8 +4,7 @@ Unit tests for custom mission orders
 
 from .test_base import Sc2SetupTestBase
 from .. import MissionFlag
-from .. import item_names
-from .. import item_tables
+from ..item import item_tables, item_names
 from BaseClasses import ItemClassification
 
 class TestCustomMissionOrders(Sc2SetupTestBase):

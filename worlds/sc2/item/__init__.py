@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from BaseClasses import Item, ItemClassification
-from worlds.sc2.item_tables import ItemData
+from worlds.sc2.item.item_tables import ItemData
 
 
 class ItemFilterFlags(enum.IntFlag):

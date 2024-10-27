@@ -1,7 +1,6 @@
-from dataclasses import dataclass, fields, Field
+from dataclasses import fields, Field
 from typing import *
 
-from Utils import is_iterable_except_str
 from Options import *
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
@@ -9,7 +8,7 @@ from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, Mis
     campaign_mission_table, SC2Race, MissionFlag
 from .mission_groups import mission_groups, MissionGroupNames
 from .mission_order.options import CustomMissionOrder
-from . import item_names
+from .item import item_names
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -770,7 +769,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
-                from . import item_groups
+                from .item import item_groups
                 picks = get_fuzzy_results(
                     item_name,
                     list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),

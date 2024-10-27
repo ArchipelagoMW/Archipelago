@@ -1,7 +1,8 @@
 import unittest
 from typing import Set, Dict, List
 
-from .. import mission_tables, options, item_tables
+from .. import mission_tables, options
+from ..item import item_tables
 
 
 class TestOptions(unittest.TestCase):

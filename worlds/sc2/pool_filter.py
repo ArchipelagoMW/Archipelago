@@ -2,11 +2,10 @@ import copy
 from typing import Callable, Dict, List, Set, Union, Tuple, TYPE_CHECKING, Iterable
 
 from BaseClasses import Item, Location
-from . import item_groups, item_names
-from .item_tables import (
+from worlds.sc2.item.item_tables import (
     get_full_item_list, spider_mine_sources, second_pass_placeable_items,
 )
-from .items import StarcraftItem, ItemFilterFlags
+from .item import StarcraftItem, ItemFilterFlags, item_groups, item_names
 from .options import get_option_value, EnableMorphling, RequiredTactics
 
 if TYPE_CHECKING:
@@ -272,11 +271,14 @@ class ValidInventory:
                     item_names.TERRAN_INFANTRY_UPGRADE_PREFIX)
                         or item_name == item_names.ORBITAL_STRIKE)]
         if not FACTORY_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
+            inventory = [item for item in inventory if not item.name.startswith(
+                item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
+                item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
         if not STARPORT_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
+                item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
         if not {item_names.MEDIVAC, item_names.HERCULES} & logical_inventory_set:
             inventory = [item for item in inventory if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
@@ -301,7 +303,7 @@ class ValidInventory:
         if not {item_names.COMMAND_CENTER_SCANNER_SWEEP, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_EXTRA_SUPPLIES} & logical_inventory_set:
             # No orbital Command Spells
             inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
-            unused_items = [item_name for item_name in unused_items if item_name !=item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
             locked_items = [item for item in locked_items if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
         # No weapon upgrades for Dominion Trooper -> drop weapon is useless
         if not {
@@ -336,8 +338,10 @@ class ValidInventory:
             unused_items = [item_name for item_name in unused_items if item_name != item_names.BANELING_RAPID_METAMORPH]
         if not {item_names.MUTALISK, item_names.CORRUPTOR, item_names.SCOURGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
-            locked_items = [item for item in locked_items if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
+            locked_items = [item for item in locked_items if not item.name.startswith(
+                item_names.ZERG_FLYER_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
+                item_names.ZERG_FLYER_UPGRADE_PREFIX)]
         # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in and morphling is unavailable
         if not {item_names.MUTALISK, item_names.CORRUPTOR} & logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]

@@ -1,6 +1,6 @@
 import enum
-from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any, TYPE_CHECKING
-from . import item_names
+from typing import List, Tuple, Optional, Callable, NamedTuple, Set, TYPE_CHECKING
+from .item import item_names
 from .options import (get_option_value, RequiredTactics,
     LocationInclusion, KerriganPresence,
 )
@@ -574,14 +574,14 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             lambda state: (
                 logic.terran_basic_anti_air(state)
                 and (adv_tactics
-                    or logic.terran_common_unit(state)
-                    or state.has(item_names.REAPER, player)))
+                     or logic.terran_common_unit(state)
+                     or state.has(item_names.REAPER, player)))
         ),
         make_location_data(SC2Mission.DEVILS_PLAYGROUND.mission_name, "Zerg Cleared", SC2WOL_LOC_ID_OFFSET + 1308, LocationType.CHALLENGE,
             lambda state: (
                 logic.terran_competent_anti_air(state)
                 and (logic.terran_common_unit(state)
-                    or state.has(item_names.REAPER, player)))
+                     or state.has(item_names.REAPER, player)))
         ),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
             logic.welcome_to_the_jungle_requirement
@@ -2796,8 +2796,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             lambda state: (
                 logic.zerg_basic_kerriganless_anti_air(state)
                 and (adv_tactics
-                    or logic.zerg_common_unit(state)
-                    or state.has(item_names.HUNTERLING, player)))
+                     or logic.zerg_common_unit(state)
+                     or state.has(item_names.HUNTERLING, player)))
         ),
         make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Zerg Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 2508, LocationType.CHALLENGE,
             lambda state: (

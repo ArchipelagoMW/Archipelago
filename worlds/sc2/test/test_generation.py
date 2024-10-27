@@ -4,7 +4,8 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import item_groups, item_names, mission_groups, mission_tables, options, locations, item_tables
+from .. import mission_groups, mission_tables, options, locations
+from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_first_mission
 
 
