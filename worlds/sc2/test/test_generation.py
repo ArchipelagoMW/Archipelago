@@ -779,3 +779,39 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         # No additional starting inventory item placement is needed
         self.assertEqual(len(upgrade_items), 0)
+
+
+    def test_locking_required_items(self):
+        world_options = {
+            'mission_order': options.MissionOrder.option_custom,
+            'custom_mission_order': {
+                'campaign': {
+                    'goal': True,
+                    'layout': {
+                        'type': 'column',
+                        'size': 2,
+                        'missions': [
+                            {
+                                'index': 0,
+                                'mission_pool': ['Liberation Day']
+                            },
+                            {
+                                'index': 1,
+                                'mission_pool': ['Supreme']
+                            },
+                        ]
+                    }
+                }
+            },
+            'grant_story_levels': options.GrantStoryLevels.option_additive,
+            'excluded_items': [
+                item_names.KERRIGAN_LEAPING_STRIKE,
+                item_names.KERRIGAN_MEND,
+            ]
+        }
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+
+        # These items will be in the pool despite exclusions
+        self.assertIn(item_names.KERRIGAN_LEAPING_STRIKE, itempool)
+        self.assertIn(item_names.KERRIGAN_MEND, itempool)
