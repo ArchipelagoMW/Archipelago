@@ -347,7 +347,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
                 result[-1].flags |= ItemFilterFlags.Locked
             if item_name in world.options.non_local_items:
                 result[-1].flags |= ItemFilterFlags.NonLocal
-            if index >= max(max_count - excluded_count, key_count - 1):
+            if index >= max(max_count - excluded_count, key_count):
                 result[-1].flags |= ItemFilterFlags.Excluded
     return result
 
