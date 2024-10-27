@@ -1,5 +1,7 @@
+from dataclasses import dataclass
 from enum import IntEnum, auto
-from Options import Choice, NamedRange
+from Options import Choice, NamedRange, PerGameCommonOptions
+
 
 class RandoOptions(IntEnum):
     ItemShufAll   =  0b11000000
@@ -154,11 +156,11 @@ class DjinnLogic(NamedRange):
         "none": 0
     }
 
-GSTLAOptions = {
-    "starter_ship": StartWithShip,
-    "hidden_items": HiddenItems,
-    "super_bosses": SuperBosses,
-    "djinn_logic": DjinnLogic,
-    "djinn_shuffle": DjinnShuffle,
-    "character_shuffle": CharacterShuffle
-}
+@dataclass
+class GSTLAOptions(PerGameCommonOptions):
+    starter_ship: StartWithShip
+    hidden_items: HiddenItems
+    super_bosses: SuperBosses
+    djinn_logic: DjinnLogic
+    djinn_shuffle: DjinnShuffle
+    character_shuffle: CharacterShuffle

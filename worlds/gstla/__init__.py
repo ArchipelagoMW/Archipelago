@@ -1,8 +1,10 @@
 from __future__ import annotations
+
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 import os
 
-from typing import List, TextIO, BinaryIO, Dict
+from typing import List, TextIO, BinaryIO, Dict, ClassVar, Type
 
 from .Options import GSTLAOptions, RandoOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
@@ -25,7 +27,8 @@ class GSTLAWeb(WebWorld):
 
 class GSTLAWorld(World):
     game = "Golden Sun The Lost Age"
-    option_definitions = GSTLAOptions
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = GSTLAOptions
+    options: GSTLAOptions
     data_version = 1
     items_ids_populated = set()
     location_flags_populated = set()
