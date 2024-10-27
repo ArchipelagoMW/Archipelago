@@ -201,7 +201,7 @@ class ShapezWorld(World):
 
     def create_item(self, name: str) -> Item:
         return ShapezItem(name, item_table[name](self.options.goal.current_key,
-                                                 bool(self.options.include_achievements.value),
+                                                 bool(self.options.include_achievements),
                                                  self.options.early_balancer_tunnel_and_trash.current_key),
                           self.item_name_to_id[name], self.player)
 
@@ -256,7 +256,7 @@ class ShapezWorld(World):
                                                              self.level_logic, self.upgrade_logic,
                                                              self.options.early_balancer_tunnel_and_trash.current_key,
                                                              self.options.goal.current_key,
-                                                             bool(self.options.lock_belt_and_extractor.value)))
+                                                             bool(self.options.lock_belt_and_extractor)))
 
     def create_items(self) -> None:
         # Include guaranteed items (game mechanic unlocks and 7x4 big upgrades)
@@ -281,7 +281,7 @@ class ShapezWorld(World):
 
         # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage/100
-        split_draining = bool(self.options.split_inventory_draining_trap.value)
+        split_draining = bool(self.options.split_inventory_draining_trap)
         # Fill remaining locations with fillers
         for x in range(self.location_count - len(included_items)):
             if self.random.random() < traps_probability:
@@ -315,12 +315,13 @@ class ShapezWorld(World):
             "maxlevel": self.maxlevel,
             "finaltier": self.finaltier,
             "required_shapes_multiplier": self.options.required_shapes_multiplier.value,
-            "randomize_level_requirements": bool(self.options.randomize_level_requirements.value),
-            "randomize_upgrade_requirements": bool(self.options.randomize_upgrade_requirements.value),
+            "allow_floating_layers": bool(self.options.allow_floating_layers),
+            "randomize_level_requirements": bool(self.options.randomize_level_requirements),
+            "randomize_upgrade_requirements": bool(self.options.randomize_upgrade_requirements),
             "randomize_level_logic": self.level_logic_type,
             "randomize_upgrade_logic": self.upgrade_logic_type,
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
-            "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements.value)
+            "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements)
         }
 
         return {**level_logic_data, **upgrade_logic_data, **option_data, **logic_type_random_data,

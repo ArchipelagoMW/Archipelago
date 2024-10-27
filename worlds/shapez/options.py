@@ -50,6 +50,14 @@ class RequiredShapesMultiplier(Range):
     default = 10
 
 
+class AllowFloatingLayers(Toggle):
+    """Toggle whether shape requirements are allowed to have floating layers (like the logo or the rocket shape).
+    However, be aware that floating shapes make MAMs much more complex."""
+    display_name = "Allow floating layers"
+    rich_text_doc = True
+    default = False
+
+
 class RandomizeLevelRequirements(Toggle):
     """Randomize the required shapes to complete levels."""
     display_name = "Randomize level requirements"
@@ -221,6 +229,7 @@ class ShapezOptions(PerGameCommonOptions):
     goal: Goal
     goal_amount: GoalAmount
     required_shapes_multiplier: RequiredShapesMultiplier
+    allow_floating_layers: AllowFloatingLayers
     randomize_level_requirements: RandomizeLevelRequirements
     randomize_upgrade_requirements: RandomizeUpgradeRequirements
     randomize_level_logic: RandomizeLevelLogic
