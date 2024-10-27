@@ -196,13 +196,14 @@
 {% macro OptionTitle(option_name, option) %}
     <label for="{{ option_name }}">
         {{ option.display_name|default(option_name) }}:
+        {% set rich_text = option.rich_text_doc or (option.rich_text_doc is none and world.web.rich_text_options_doc) %}
         <span
             class="interactive tooltip-container"
-            {% if not (option.rich_text_doc | default(world.web.rich_text_options_doc, true)) %}
+            {% if not rich_text %}
               data-tooltip="{{(option.__doc__ | default("Please document me!"))|replace('\n    ', '\n')|escape|trim}}"
             {% endif %}>
           (?)
-          {% if option.rich_text_doc | default(world.web.rich_text_options_doc, true) %}
+          {% if rich_text %}
             <div class="tooltip">
               {{ option.__doc__ | default("**Please document me!**") | rst_to_html | safe }}
             </div>
