@@ -524,7 +524,7 @@ item_table = {
                  parent_item=item_names.HERC),
     item_names.REAPER_RESOURCE_EFFICIENCY:
         ItemData(287 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 18, SC2Race.TERRAN,
-                 classification=ItemClassification.progression, parent_item=item_names.REAPER, ),
+                 classification=ItemClassification.progression, parent_item=item_names.REAPER),
     item_names.REAPER_KINETIC_FOAM:
         ItemData(288 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 19, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=item_names.REAPER),
