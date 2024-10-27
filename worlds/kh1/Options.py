@@ -117,9 +117,9 @@ class Goal(Choice):
     
     Sephiroth: Defeat Sephiroth
     Unknown: Defeat Unknown
-    Postcards: Turn in all 10 postcards in Traverse Town
+    Postcards: Turn in an amount of postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
-    Puppies: Rescue and return all 99 puppies in Traverse Town
+    Puppies: Rescue and return an amount puppies in Traverse Town
     Final Rest: Open the chest in End of the World Final Rest
     """
     display_name = "Goal"
@@ -154,6 +154,25 @@ class FinalRestDoor(Choice):
     option_puppies = 1
     option_postcards = 2
     option_superbosses = 3
+
+class RequiredPostcards(Range):
+    """
+    If your goal is set to "Postcards", defines how many postcards are needed to achieve victory.
+    """
+    display_name = "Required Postcards"
+    default = 10
+    range_start = 1
+    range_end = 10
+
+class RequiredPuppies(Range):
+    """
+    If your goal is set to "Puppies", defines how many puppies are needed to achieve victory.
+    Note: The required puppies will round down to the nearest amount of puppies that is a location.
+    """
+    display_name = "Required Puppies"
+    default = 99
+    range_start = 10
+    range_end = 99
 
 class Puppies(Choice):
     """
@@ -369,6 +388,8 @@ class KH1Options(PerGameCommonOptions):
     required_reports_eotw: RequiredReportsEotW
     required_reports_door: RequiredReportsDoor
     reports_in_pool: ReportsInPool
+    required_postcards: RequiredPostcards
+    required_puppies: RequiredPuppies
     super_bosses: SuperBosses
     atlantica: Atlantica
     hundred_acre_wood: HundredAcreWood
@@ -409,6 +430,8 @@ kh1_option_groups = [
         RequiredReportsDoor,
         RequiredReportsEotW,
         ReportsInPool,
+        RequiredPostcards,
+        RequiredPuppies,
     ]),
     OptionGroup("Locations", [
         SuperBosses,

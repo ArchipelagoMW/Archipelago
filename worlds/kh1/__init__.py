@@ -194,15 +194,29 @@ class KH1World(World):
         self.multiworld.itempool += item_pool
 
     def place_predetermined_items(self) -> None:
-        goal_dict = {
-            "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
-            "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
-            "postcards":       "Traverse Town Mail Postcard 10 Event",
-            "final_ansem":     "Final Ansem",
-            "puppies":         "Traverse Town Piano Room Return 99 Puppies Reward 2",
-            "final_rest":      "End of the World Final Rest Chest"
-        }
-        self.get_location(goal_dict[self.options.goal.current_key]).place_locked_item(self.create_item("Victory"))
+        if self.options.goal.current_key not in ["puppies", "postcards"]:
+            goal_dict = {
+                "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
+                "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
+                "final_ansem":     "Final Ansem",
+                "final_rest":      "End of the World Final Rest Chest"
+            }
+            goal_location_name = goal_dict[self.options.goal.current_key]
+        elif self.options.goal.current_key == "postcards":
+            lpad_number = str(self.options.required_postcards).rjust(2, "0")
+            goal_location_name = "Traverse Town Mail Postcard " + lpad_number + " Event"
+        elif self.options.goal.current_key == "puppies":
+            if self.options.required_puppies == 99:
+                goal_location_name = "Traverse Town Piano Room Return 99 Puppies Reward 2"
+            else:
+                required_puppies = (self.options.required_puppies // 10) * 10
+                self.options.required_puppies.value = required_puppies
+                if required_puppies == 50:
+                    goal_location_name = "Traverse Town Piano Room Return 50 Puppies Reward 2"
+                else:
+                    goal_location_name = "Traverse Town Piano Room Return " + str(required_puppies) + " Puppies"
+        self.get_location(goal_location_name).place_locked_item(self.create_item("Victory"))
+                
         if self.options.vanilla_emblem_pieces:
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)").place_locked_item(self.create_item("Emblem Piece (Flame)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)").place_locked_item(self.create_item("Emblem Piece (Statue)"))
@@ -271,6 +285,8 @@ class KH1World(World):
             slot_data["chestsunlocked"] = ""
         if self.options.interact_in_battle:
             slot_data["interactinbattle"] = ""
+        slot_data["required_postcards"] = self.options.required_postcards.value
+        slot_data["required_puppies"] = self.options.required_puppies.value
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:
