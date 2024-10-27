@@ -313,9 +313,10 @@ class GameData:
             CharacterDatum(3329, "Garet", 3329, 16384386),
             CharacterDatum(3330, "Ivan", 3330, 16384388),
             CharacterDatum(3331, "Mia", 3331, 16384390),
-            CharacterDatum(3332, "Jenna", 3332, 16384392),
-            CharacterDatum(3333, "Sheba", 3333, 16384394),
-            CharacterDatum(3334, "Piers", 3334, 16384396),
+            # Felix is 3332, but we don't do nutin with him
+            CharacterDatum(3333, "Jenna", 3333, 16384392),
+            CharacterDatum(3334, "Sheba", 3334, 16384394),
+            CharacterDatum(3335, "Piers", 3335, 16384396),
         ]
         for c in self.raw_character_data:
             self.item_names[c.id] = ItemName(c.id, c.name, c.name)

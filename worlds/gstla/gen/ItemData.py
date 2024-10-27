@@ -563,9 +563,9 @@ characters: List[ItemData] = [
     ItemData(3329, "Garet", ItemClassification.progression, 16384386, ItemType.Character),
     ItemData(3330, "Ivan", ItemClassification.progression, 16384388, ItemType.Character),
     ItemData(3331, "Mia", ItemClassification.progression, 16384390, ItemType.Character),
-    ItemData(3332, "Jenna", ItemClassification.progression, 16384392, ItemType.Character),
-    ItemData(3333, "Sheba", ItemClassification.progression, 16384394, ItemType.Character),
-    ItemData(3334, "Piers", ItemClassification.progression, 16384396, ItemType.Character),
+    ItemData(3333, "Jenna", ItemClassification.progression, 16384392, ItemType.Character),
+    ItemData(3334, "Sheba", ItemClassification.progression, 16384394, ItemType.Character),
+    ItemData(3335, "Piers", ItemClassification.progression, 16384396, ItemType.Character),
     
 ]
 
