@@ -92,7 +92,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         #if vanilla ship logic than this should be Gabomba Statue Black Crystal location
         if world.options.starter_ship == 2 and vanilla_item.name == ItemName.Black_Crystal:
             ap_item = create_item_direct(vanilla_item, player)
-            ap_location = world.multiworld.get_location(loc_names_by_id[loc.ap_id], player)
+            ap_location = world.get_location(loc_names_by_id[loc.ap_id])
             ap_location.place_locked_item(ap_item)
             sum_locations -= 1
             continue
@@ -125,7 +125,7 @@ def create_items(world: 'GSTLAWorld', player: int):
     for item in sorted_item_list:
         ap_item = create_item_direct(item, player)
         location = sorted_loc_list.pop(0)
-        ap_loc = world.multiworld.get_location(loc_names_by_id[location.ap_id], player)
+        ap_loc = world.get_location(loc_names_by_id[location.ap_id])
         ap_loc.place_locked_item(ap_item)
         sum_locations -= 1
 
@@ -145,7 +145,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         # Vanilla
         if world.options.character_shuffle > 0:
             location = sorted_loc_list.pop(0)
-            ap_loc = world.multiworld.get_location(loc_names_by_id[location.ap_id], player)
+            ap_loc = world.get_location(loc_names_by_id[location.ap_id])
 
             ap_loc.place_locked_item(ap_item)
 
@@ -155,7 +155,7 @@ def create_items(world: 'GSTLAWorld', player: int):
             location_name = loc_names_by_id[location.ap_id]
             if location_name == LocationName.Idejima_Jenna:
                 if not first_char_locked:  
-                    ap_location = world.multiworld.get_location(loc_names_by_id[location.ap_id], player)
+                    ap_location = world.get_location(loc_names_by_id[location.ap_id])
                     ap_location.place_locked_item(ap_item)
                     first_char_locked = True
                     continue
