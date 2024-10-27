@@ -244,7 +244,7 @@ class GSTLAWorld(World):
         write_me = 0
 
         # Equip Defense/start levels
-        rando_file.write(write_me.to_bytes(length=1))
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
         # More QoL
@@ -260,7 +260,7 @@ class GSTLAWorld(World):
         write_me = 0
 
         # Placeholder in case we need more flags
-        rando_file.write(write_me.to_bytes(length=4))
+        rando_file.write(write_me.to_bytes(length=4, byteorder='big'))
 
     def create_item(self, name: str) -> "Item":
         return create_item(name, self.player)
