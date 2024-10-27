@@ -4,7 +4,7 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import item_groups, item_names, items, mission_groups, mission_tables, options, locations, item_tables
+from .. import item_groups, item_names, mission_groups, mission_tables, options, locations, item_tables
 from .. import get_all_missions, get_first_mission
 
 
@@ -279,7 +279,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
-        self.assertTrue(items)
+        self.assertTrue(world_items)
         occurrences: Dict[str, int] = {}
         for item_name, _ in world_items:
             if item_name in item_groups.terran_progressive_items:
@@ -299,7 +299,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
-        self.assertTrue(items)
+        self.assertTrue(world_items)
         for item_name, item_data in world_items:
             if item_data.quantity == 0:
                 continue

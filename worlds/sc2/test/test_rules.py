@@ -6,7 +6,7 @@ from typing import List, Set, Iterable
 
 from BaseClasses import ItemClassification, MultiWorld
 from Options import *  # Mandatory
-from worlds.sc2 import items, options, locations
+from worlds.sc2 import item_tables, options, locations
 
 
 class TestInventory:
@@ -18,7 +18,7 @@ class TestInventory:
         self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
 
     def is_item_progression(self, item: str) -> bool:
-        return items.get_full_item_list()[item].classification in self.progression_types
+        return item_tables.get_full_item_list()[item].classification in self.progression_types
 
     def random_boolean(self):
         return self.random.choice([True, False])

@@ -5,7 +5,7 @@ Unit tests for custom mission orders
 from .test_base import Sc2SetupTestBase
 from .. import MissionFlag
 from .. import item_names
-from .. import items
+from .. import item_tables
 from BaseClasses import ItemClassification
 
 class TestCustomMissionOrders(Sc2SetupTestBase):
@@ -126,7 +126,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
          }
       }
 
-      self.assertNotEqual(items.item_table[test_item].classification, ItemClassification.progression, f"Test item {test_item} won't change classification")
+      self.assertNotEqual(item_tables.item_table[test_item].classification, ItemClassification.progression, f"Test item {test_item} won't change classification")
 
       self.generate_world(world_options)
       test_items_in_pool = [item for item in self.multiworld.itempool if item.name == test_item]
