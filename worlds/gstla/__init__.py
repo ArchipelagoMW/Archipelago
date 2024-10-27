@@ -263,6 +263,10 @@ class GSTLAWorld(World):
         rando_file.write(write_me.to_bytes(length=1))
         write_me = 0
 
+        # Equip Defense/start levels
+        rando_file.write(write_me.to_bytes(length=1))
+        write_me = 0
+
         # More QoL
         rando_file.write(write_me.to_bytes(length=1))
         write_me = 0
@@ -274,6 +278,9 @@ class GSTLAWorld(World):
         # Misc
         rando_file.write(write_me.to_bytes(length=1))
         write_me = 0
+
+        # Placeholder in case we need more flags
+        rando_file.write(write_me.to_bytes(length=4))
 
     def create_item(self, name: str) -> "Item":
         return create_item(name, self.player)
