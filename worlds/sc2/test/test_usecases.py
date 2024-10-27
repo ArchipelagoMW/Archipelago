@@ -230,7 +230,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_epilogue_missions': True,
             'mission_order': options.MissionOrder.option_grid,
             'excluded_missions': [
-                "The Infinite Cycle"
+                SC2Mission.THE_INFINITE_CYCLE.mission_name
             ]
         }
         self.generate_world(world_options)
