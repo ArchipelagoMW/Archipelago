@@ -3,7 +3,7 @@ Contains descriptions for Starcraft 2 items.
 """
 import inspect
 
-from . import item_names, items
+from worlds.sc2.item import item_tables, item_names
 
 WEAPON_ARMOR_UPGRADE_NOTE = inspect.cleandoc("""
     Must be researched during the mission if the mission type isn't set to auto-unlock generic upgrades.
@@ -751,7 +751,8 @@ item_descriptions = {
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL: "Infested Liberators instantly transform into a cloud of microscopic organisms while attacking, reducing the damage they take by 85%.",
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK: _get_resource_efficiency_desc(item_names.INFESTED_SIEGE_TANK),
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK: _get_resource_efficiency_desc(item_names.INFESTED_DIAMONDBACK),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK: _get_resource_efficiency_desc(
+        item_names.INFESTED_DIAMONDBACK),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE: _get_resource_efficiency_desc(item_names.INFESTED_BANSHEE),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR: _get_resource_efficiency_desc(item_names.INFESTED_LIBERATOR),
     item_names.ZERG_EXCAVATING_CLAWS: "Increases movement speed of uprooted Zerg structures, especially off creep. Also increases root speed.",
@@ -969,8 +970,10 @@ item_descriptions = {
     item_names.ZEALOT_SENTINEL_CENTURION_LEG_ENHANCEMENTS: "Zealots, Sentinels, and Centurions gain increased movement speed.",
     item_names.ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY: "Zealots, Sentinels, and Centurions gain +30 maximum shields.",
     item_names.ZEALOT_WHIRLWIND: "Zealot War Council upgrade. Gives Zealots the whirlwind ability, dealing damage in an area over 3 seconds.",
-    item_names.CENTURION_RESOURCE_EFFICIENCY: "Centurion War Council upgrade. " + _get_resource_efficiency_desc(item_names.CENTURION),
-    item_names.SENTINEL_RESOURCE_EFFICIENCY: "Sentinel War Council upgrade. " + _get_resource_efficiency_desc(item_names.SENTINEL),
+    item_names.CENTURION_RESOURCE_EFFICIENCY: "Centurion War Council upgrade. " + _get_resource_efficiency_desc(
+        item_names.CENTURION),
+    item_names.SENTINEL_RESOURCE_EFFICIENCY: "Sentinel War Council upgrade. " + _get_resource_efficiency_desc(
+        item_names.SENTINEL),
     item_names.STALKER_PHASE_REACTOR: "Stalker War Council upgrade. Stalkers restore 80 shields over 5 seconds after they Blink.",
     item_names.DRAGOON_PHALANX_SUIT: "Dragoon War Council upgrade. Dragoons gain +1 range, move slightly faster, and can form tighter formations.",
     item_names.INSTIGATOR_RESOURCE_EFFICIENCY: f"Instigator War Council upgrade. {_get_resource_efficiency_desc(item_names.INSTIGATOR)}",
@@ -1051,6 +1054,6 @@ item_descriptions = {
 # Key descriptions
 key_descriptions = {
     key: GENERIC_KEY_DESC
-    for key in items.key_item_table.keys()
+    for key in item_tables.key_item_table.keys()
 }
 item_descriptions.update(key_descriptions)

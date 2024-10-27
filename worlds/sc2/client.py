@@ -23,8 +23,8 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from . import item_names
-from .item_groups import item_name_groups, unlisted_item_name_groups
+from worlds.sc2.item import item_names
+from worlds.sc2.item.item_groups import item_name_groups, unlisted_item_name_groups
 from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
@@ -52,7 +52,7 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from .items import (
+from worlds.sc2.item.item_tables import (
     lookup_id_to_name, get_full_item_list, ItemData,
     race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
@@ -931,8 +931,8 @@ API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_name)
     for item_name, item_data in get_full_item_list().items()
     if item_data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2)
-        and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
-        and item_name != item_names.OBSERVER_INDUCE_SCOPOPHOBIA
+       and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
+       and item_name != item_names.OBSERVER_INDUCE_SCOPOPHOBIA
 }
 
 

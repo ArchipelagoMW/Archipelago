@@ -1,10 +1,12 @@
-from typing import Callable, Dict, List, Set, Union, Tuple, Optional, TYPE_CHECKING, Iterable
-from BaseClasses import  Item, Location
-from .items import (get_full_item_list, spider_mine_sources, second_pass_placeable_items,
-    upgrade_item_types,
+import copy
+from typing import Callable, Dict, List, Set, Union, Tuple, TYPE_CHECKING, Iterable
+
+from BaseClasses import Item, Location
+from worlds.sc2.item.item_tables import (
+    get_full_item_list, spider_mine_sources, second_pass_placeable_items,
 )
+from .item import StarcraftItem, ItemFilterFlags, item_groups, item_names
 from .options import get_option_value, EnableMorphling, RequiredTactics
-from . import item_groups, item_names
 
 if TYPE_CHECKING:
     from . import SC2World
@@ -18,16 +20,16 @@ STARPORT_UNITS = set(item_groups.starport_units)
 INF_TERRAN_UNITS = set(item_groups.infterr_units)
 
 
-def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> List[Item]:
-    item_name = parent_item.name if isinstance(parent_item, Item) else parent_item
+def get_item_upgrades(inventory: List[StarcraftItem], parent_item: Union[Item, str]) -> List[StarcraftItem]:
+    item_name = parent_item.name if isinstance(parent_item, StarcraftItem) else parent_item
     return [
         inv_item for inv_item in inventory
         if get_full_item_list()[inv_item.name].parent_item == item_name
     ]
 
 
-def copy_item(item: Item):
-    return Item(item.name, item.classification, item.code, item.player)
+def copy_item(item: StarcraftItem) -> StarcraftItem:
+    return StarcraftItem(item.name, item.classification, item.code, item.player, item.filter_flags)
 
 
 class ValidInventory:
@@ -60,9 +62,9 @@ class ValidInventory:
 
     def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[Item]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
-        inventory: List[Item] = list(self.item_pool)
-        locked_items: List[Item] = list(self.locked_items)
-        necessary_items: List[Item] = list(self.necessary_items)
+        inventory: List[StarcraftItem] = list(self.item_pool)
+        locked_items: List[StarcraftItem] = list(self.locked_items)
+        necessary_items: List[StarcraftItem] = list(self.necessary_items)
         enable_morphling = self.world.options.enable_morphling == EnableMorphling.option_true
         item_list = get_full_item_list()
         self.logical_inventory = [
@@ -71,10 +73,10 @@ class ValidInventory:
         ]
         requirements = mission_requirements
         parent_items = self.item_children.keys()
-        parent_lookup = {child: parent for parent, children in self.item_children.items() for child in children}
+        parent_lookup: Dict[StarcraftItem, StarcraftItem] = {child: parent for parent, children in self.item_children.items() for child in children}
         minimum_upgrades = get_option_value(self.world, "min_number_of_upgrades")
 
-        def attempt_removal(item: Item) -> bool:
+        def attempt_removal(item: StarcraftItem) -> bool:
             removed_item = inventory.pop(inventory.index(item))
             # Only run logic checks when removing logic items
             if item.name in self.logical_inventory:
@@ -89,6 +91,29 @@ class ValidInventory:
                     locked_items.append(removed_item)
                     return False
             return True
+
+        # Process Excluded items, validate if the item can get actually excluded
+        excluded_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if ItemFilterFlags.Excluded in starcraft_item.filter_flags]
+        self.world.random.shuffle(excluded_items)
+        for excluded_item in excluded_items:
+            logical_inventory_copy = copy.copy(self.logical_inventory)
+            if (
+                    excluded_item in inventory
+                    and attempt_removal(excluded_item)
+                    and excluded_item in parent_items
+            ):
+                for child in self.item_children[excluded_item]:
+                    if (
+                            child in inventory
+                            and not attempt_removal(child)
+                            and ItemFilterFlags.AllowedOrphan not in child.filter_flags
+                    ):
+                        if excluded_item.name in logical_inventory_copy:
+                            self.logical_inventory.append(excluded_item.name)
+                            if excluded_item not in self.logical_inventory:
+                                self.logical_inventory.append(excluded_item.name)
+                            if not excluded_item in locked_items:
+                                self.locked_items.append(excluded_item)
 
         # Limit the maximum number of upgrades
         maxNbUpgrade = get_option_value(self.world, "max_number_of_upgrades")
@@ -139,7 +164,7 @@ class ValidInventory:
             known_parents = [item for item in known_items if item in parent_items]
             for parent in known_parents:
                 child_items = self.item_children[parent]
-                removable_upgrades = [item for item in inventory if item in child_items]
+                removable_upgrades = [starcraft_item for starcraft_item in inventory if starcraft_item in child_items]
                 locked_upgrade_count = sum(1 if item in child_items else 0 for item in known_items)
                 self.world.random.shuffle(removable_upgrades)
                 while len(removable_upgrades) > 0 and locked_upgrade_count < minimum_upgrades:
@@ -157,16 +182,16 @@ class ValidInventory:
             raise Exception(f"Too many items excluded - couldn't satisfy access rules for the following locations:\n{failed_locations}")
 
         # Optionally locking generic items
-        generic_items = [item for item in inventory if item.name in second_pass_placeable_items]
+        generic_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if starcraft_item.name in second_pass_placeable_items]
         reserved_generic_percent = get_option_value(self.world, "ensure_generic_items") / 100
         reserved_generic_amount = int(len(generic_items) * reserved_generic_percent)
         removable_generic_items = []
         self.world.random.shuffle(generic_items)
-        for item in generic_items[:reserved_generic_amount]:
-            locked_items.append(copy_item(item))
-            inventory.remove(item)
-            if item.name not in self.logical_inventory:
-                removable_generic_items.append(item)
+        for starcraft_item in generic_items[:reserved_generic_amount]:
+            locked_items.append(copy_item(starcraft_item))
+            inventory.remove(starcraft_item)
+            if starcraft_item.name not in self.logical_inventory:
+                removable_generic_items.append(starcraft_item)
 
         # Main cull process
         unused_items: List[str] = []  # Reusable items for the second pass
@@ -180,12 +205,12 @@ class ValidInventory:
                 # If there still isn't enough space, push locked items into start inventory
                 self.world.random.shuffle(locked_items)
                 while len(locked_items) > 0 and len(locked_items) + len(necessary_items) > inventory_size:
-                    item: Item = locked_items.pop()
+                    item: StarcraftItem = locked_items.pop()
                     self.multiworld.push_precollected(item)
                 # If locked items weren't enough either, push necessary items into start inventory too
                 self.world.random.shuffle(necessary_items)
                 while len(necessary_items) > inventory_size:
-                    item: Item = necessary_items.pop()
+                    item: StarcraftItem = necessary_items.pop()
                     self.multiworld.push_precollected(item)
                 break
             # Select random item from removable items
@@ -246,11 +271,14 @@ class ValidInventory:
                     item_names.TERRAN_INFANTRY_UPGRADE_PREFIX)
                         or item_name == item_names.ORBITAL_STRIKE)]
         if not FACTORY_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
+            inventory = [item for item in inventory if not item.name.startswith(
+                item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
+                item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
         if not STARPORT_UNITS & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
+                item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
         if not {item_names.MEDIVAC, item_names.HERCULES} & logical_inventory_set:
             inventory = [item for item in inventory if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
@@ -275,7 +303,7 @@ class ValidInventory:
         if not {item_names.COMMAND_CENTER_SCANNER_SWEEP, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_EXTRA_SUPPLIES} & logical_inventory_set:
             # No orbital Command Spells
             inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
-            unused_items = [item_name for item_name in unused_items if item_name !=item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
+            unused_items = [item_name for item_name in unused_items if item_name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
             locked_items = [item for item in locked_items if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
         # No weapon upgrades for Dominion Trooper -> drop weapon is useless
         if not {
@@ -310,8 +338,10 @@ class ValidInventory:
             unused_items = [item_name for item_name in unused_items if item_name != item_names.BANELING_RAPID_METAMORPH]
         if not {item_names.MUTALISK, item_names.CORRUPTOR, item_names.SCOURGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
-            locked_items = [item for item in locked_items if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
+            locked_items = [item for item in locked_items if not item.name.startswith(
+                item_names.ZERG_FLYER_UPGRADE_PREFIX)]
+            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
+                item_names.ZERG_FLYER_UPGRADE_PREFIX)]
         # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in and morphling is unavailable
         if not {item_names.MUTALISK, item_names.CORRUPTOR} & logical_inventory_set and not enable_morphling:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
@@ -407,12 +437,18 @@ class ValidInventory:
         inventory += necessary_items
 
         # Replacing empty space with generically useful items
-        replacement_items = [item for item in self.item_pool
-                             if (item not in inventory
-                                 and item not in self.locked_items
-                                 and (
-                                     item.name in second_pass_placeable_items
-                                     or item.name in unused_items))]
+        replacement_items = [
+            item for item in self.item_pool
+            if (
+                    item not in inventory
+                    and item not in self.locked_items
+                    and item not in excluded_items
+                    and (
+                            item.name in second_pass_placeable_items
+                            or item.name in unused_items
+                    )
+            )
+        ]
         self.world.random.shuffle(replacement_items)
         while len(inventory) < inventory_size and len(replacement_items) > 0:
             item = replacement_items.pop()
@@ -421,7 +457,7 @@ class ValidInventory:
         return inventory
 
     def __init__(self, world: 'SC2World',
-                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item], necessary_items: List[Item]
+                 item_pool: List[StarcraftItem], existing_items: List[StarcraftItem], locked_items: List[StarcraftItem], necessary_items: List[StarcraftItem]
     ):
         self.multiworld = world.multiworld
         self.player = world.player
@@ -431,33 +467,18 @@ class ValidInventory:
         self.necessary_items = necessary_items[:]
         self.existing_items = existing_items
         # Initial filter of item pool
-        self.item_pool = []
-        item_quantities: dict[str, int] = dict()
+        self.item_pool = item_pool
         # Inventory restrictiveness based on number of missions with checks
         mission_count = world.custom_mission_order.get_mission_count()
         self.min_units_per_structure = int(mission_count / 7)
-        min_upgrades = 1 if mission_count < 10 else 2
-        for item in item_pool:
-            item_info = get_full_item_list()[item.name]
-            if item_info.type in upgrade_item_types:
-                # Locking upgrades based on mission duration
-                if item.name not in item_quantities:
-                    item_quantities[item.name] = 0
-                item_quantities[item.name] += 1
-                if item_quantities[item.name] <= min_upgrades:
-                    self.locked_items.append(item)
-                else:
-                    self.item_pool.append(item)
-            else:
-                self.item_pool.append(item)
-        self.item_children: Dict[Item, List[Item]] = dict()
+        self.item_children: Dict[StarcraftItem, List[StarcraftItem]] = dict()
         for item in self.item_pool + locked_items + existing_items:
             if item.name in UPGRADABLE_ITEMS:
                 self.item_children[item] = get_item_upgrades(self.item_pool, item)
 
 
 def filter_items(world: 'SC2World', location_cache: List[Location],
-                 item_pool: List[Item], existing_items: List[Item], locked_items: List[Item], necessary_items: List[Item]) -> List[Item]:
+                 item_pool: List[StarcraftItem], existing_items: List[StarcraftItem], locked_items: List[StarcraftItem], necessary_items: List[StarcraftItem]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
     The returned inventory must be capable of logically accessing every location in the world.

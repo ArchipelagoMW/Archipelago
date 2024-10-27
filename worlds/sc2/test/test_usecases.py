@@ -3,7 +3,8 @@ Unit tests for yaml usecases we want to support
 """
 
 from .test_base import Sc2SetupTestBase
-from .. import get_all_missions, item_groups, item_names, items, mission_tables, options
+from .. import get_all_missions, mission_tables, options
+from ..item import item_groups, item_tables, item_names
 from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
 
 
@@ -153,7 +154,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         for mission in missions:
             self.assertIn(mission.campaign, (mission_tables.SC2Campaign.PROLOGUE, mission_tables.SC2Campaign.PROPHECY))
         for item_name in world_item_names:
-            self.assertIn(items.item_table[item_name].race, (mission_tables.SC2Race.ANY, mission_tables.SC2Race.PROTOSS))
+            self.assertIn(item_tables.item_table[item_name].race, (mission_tables.SC2Race.ANY, mission_tables.SC2Race.PROTOSS))
 
     def test_resource_filler_items_may_be_put_in_start_inventory(self) -> None:
         NUM_RESOURCE_ITEMS = 10
@@ -187,7 +188,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
         for item_name in world_item_names:
-            self.assertNotEqual(items.item_table[item_name].race, mission_tables.SC2Race.PROTOSS, f"{item_name} is a PROTOSS item!")
+            self.assertNotEqual(item_tables.item_table[item_name].race, mission_tables.SC2Race.PROTOSS, f"{item_name} is a PROTOSS item!")
         for region in world_regions:
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign, 
                              (mission_tables.SC2Campaign.LOTV, mission_tables.SC2Campaign.PROPHECY, mission_tables.SC2Campaign.PROLOGUE),
@@ -210,7 +211,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
         for item_name in world_item_names:
-            self.assertNotEqual(items.item_table[item_name].race, mission_tables.SC2Race.TERRAN,
+            self.assertNotEqual(item_tables.item_table[item_name].race, mission_tables.SC2Race.TERRAN,
                                 f"{item_name} is a TERRAN item!")
         for region in world_regions:
             self.assertNotIn(mission_tables.lookup_name_to_mission[region].campaign,
@@ -228,13 +229,16 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_lotv_missions': True,
             'enable_epilogue_missions': True,
             'mission_order': options.MissionOrder.option_grid,
+            'excluded_missions': [
+                SC2Mission.THE_INFINITE_CYCLE.mission_name
+            ]
         }
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         world_regions = [region.name for region in self.multiworld.regions]
         world_regions.remove('Menu')
         for item_name in world_item_names:
-            self.assertNotEqual(items.item_table[item_name].race, mission_tables.SC2Race.ZERG,
+            self.assertNotEqual(item_tables.item_table[item_name].race, mission_tables.SC2Race.ZERG,
                                 f"{item_name} is a ZERG item!")
         # have to manually exclude the only non-zerg HotS mission...
         for region in filter(lambda region: region != "With Friends Like These", world_regions):

@@ -9,8 +9,8 @@ import copy
 
 from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
-from ..items import item_table
-from ..item_groups import item_name_groups
+from ..item.item_tables import item_table
+from ..item.item_groups import item_name_groups
 from .structs import Difficulty, LayoutType, GENERIC_KEY_NAME
 from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz
 from .presets_static import (

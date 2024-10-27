@@ -1,12 +1,12 @@
 from typing import *
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import ItemClassification
 import typing
 import enum
 
-from .mission_tables import SC2Mission, SC2Race, SC2Campaign
-from . import item_names
-from .mission_order.presets_static import get_used_layout_names
+from ..mission_tables import SC2Mission, SC2Race, SC2Campaign
+from ..item import item_names
+from ..mission_order.presets_static import get_used_layout_names
 
 
 class ItemTypeEnum(enum.Enum):
@@ -115,10 +115,6 @@ class ItemData(typing.NamedTuple):
         return self.important_for_filtering \
             or self.classification == ItemClassification.progression \
             or self.classification == ItemClassification.progression_skip_balancing
-
-
-class StarcraftItem(Item):
-    game: str = "Starcraft 2"
 
 
 def get_full_item_list():
@@ -251,19 +247,19 @@ item_table = {
         ItemData(61 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 10, SC2Race.TERRAN),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
-    item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: ItemData(102 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 4, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: ItemData(103 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 8, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: ItemData(104 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 12, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON: ItemData(105 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 16, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR: ItemData(106 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 20, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR: ItemData(102 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 4, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON: ItemData(103 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 8, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR: ItemData(104 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 12, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON: ItemData(105 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 16, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR: ItemData(106 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 20, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
     # Bundles
-    item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: ItemData(107 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: ItemData(108 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE: ItemData(109 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE: ItemData(110 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE: ItemData(111 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE: ItemData(112 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: ItemData(107 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: ItemData(108 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE: ItemData(109 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE: ItemData(110 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE: ItemData(111 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE: ItemData(112 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, -1, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
 
     # Unit and structure upgrades
     item_names.BUNKER_PROJECTILE_ACCELERATOR:
@@ -528,7 +524,7 @@ item_table = {
                  parent_item=item_names.HERC),
     item_names.REAPER_RESOURCE_EFFICIENCY:
         ItemData(287 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 18, SC2Race.TERRAN,
-                 classification=ItemClassification.progression, parent_item=item_names.REAPER,),
+                 classification=ItemClassification.progression, parent_item=item_names.REAPER),
     item_names.REAPER_KINETIC_FOAM:
         ItemData(288 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 19, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=item_names.REAPER),
@@ -1200,17 +1196,17 @@ item_table = {
         ItemData(24 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 23, SC2Race.ZERG,
                  classification=ItemClassification.progression),
 
-    item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE: ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 8, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_FLYER_ATTACK: ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 12, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE: ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 16, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE: ItemData(102 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 8, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_FLYER_ATTACK: ItemData(103 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 12, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE: ItemData(104 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 16, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
     # Bundles
-    item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE: ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE: ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE: ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE: ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE: ItemData(105 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE: ItemData(106 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE: ItemData(107 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE: ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, -1, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
 
     item_names.ZERGLING_HARDENED_CARAPACE:
         ItemData(200 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 0, SC2Race.ZERG, parent_item=item_names.ZERGLING),
@@ -1722,17 +1718,17 @@ item_table = {
                  classification=ItemClassification.progression),
 
     # Protoss Upgrades
-    item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 0, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR: ItemData(101 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 4, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_SHIELDS: ItemData(102 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 8, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON: ItemData(103 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 12, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR: ItemData(104 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 16, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON: ItemData(100 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 0, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR: ItemData(101 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 4, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_SHIELDS: ItemData(102 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 8, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON: ItemData(103 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 12, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR: ItemData(104 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, 16, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
     # Bundles
-    item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: ItemData(105 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: ItemData(106 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: ItemData(107 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE: ItemData(108 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
-    item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression , quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: ItemData(105 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: ItemData(106 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE: ItemData(107 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE: ItemData(108 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Upgrade, -1, SC2Race.PROTOSS, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
 
     # Protoss Buildings
     item_names.PHOTON_CANNON: ItemData(200 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Building, 0, SC2Race.PROTOSS, classification=ItemClassification.progression),
