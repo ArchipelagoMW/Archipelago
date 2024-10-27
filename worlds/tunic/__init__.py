@@ -440,7 +440,7 @@ class TunicWorld(World):
                     for group in self.multiworld.get_player_groups(tunic.player):
                         self.item_link_locations.setdefault(group, {})
                 for location in self.multiworld.get_locations():
-                    if location.item.player in self.item_link_locations.keys():
+                    if location.item and location.item.player in self.item_link_locations.keys():
                         (self.item_link_locations[location.item.player].setdefault(location.item.name, [])
                          .append((location.player, location.name)))
 
