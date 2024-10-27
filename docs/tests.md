@@ -87,14 +87,14 @@ testing portions of your code that can be tested without relying on a multiworld
 #### Using Pycharm
 
 In PyCharm, running all tests can be done by right-clicking the root test directory and selecting Run 'Archipelago Unittests'. 
-If you do not have pytest installed, you may get import failures. To solve this, edit the run configuration, 
+Unless you configured PyCharm to use pytest as a test runner, you may get import failures. To solve this, edit the run configuration, 
 and set the working directory to the Archipelago directory which contains all the project files. 
 
 If you only want to run your world's defined tests, repeat the steps for the test directory within your world.
 Your working directory should be the directory of your world in the worlds directory and the script should be the 
 tests folder within your world.
 
-If configured, you can also find the 'Archipelago Unittests' as an option in the dropdown at the top of the window
+You can also find the 'Archipelago Unittests' as an option in the dropdown at the top of the window
 next to the run and debug buttons.
 
 #### Running Tests without Pycharm
