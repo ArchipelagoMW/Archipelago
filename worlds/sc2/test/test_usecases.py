@@ -228,6 +228,9 @@ class TestSupportedUseCases(Sc2SetupTestBase):
             'enable_lotv_missions': True,
             'enable_epilogue_missions': True,
             'mission_order': options.MissionOrder.option_grid,
+            'excluded_missions': [
+                "The Infinite Cycle"
+            ]
         }
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]

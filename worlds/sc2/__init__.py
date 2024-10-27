@@ -445,7 +445,11 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     kerrigan_build_missions = [mission for mission in kerrigan_missions if MissionFlag.NoBuild not in mission.flags]
     nova_missions = [mission for mission in missions if MissionFlag.Nova in mission.flags]
 
-    kerrigan_is_present = len(kerrigan_missions) > 0 and world.options.kerrigan_presence == KerriganPresence.option_vanilla
+    kerrigan_is_present = (
+            len(kerrigan_missions) > 0
+            and world.options.kerrigan_presence == KerriganPresence.option_vanilla
+            and SC2Campaign.HOTS in options.get_enabled_campaigns(world) # TODO: Kerrigan available all Zerg/Everywhere
+    )
 
     # TvZ build missions -- check flags Terran and VsZerg are true and NoBuild is false
     tvz_build_mask = MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.NoBuild
@@ -498,6 +502,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         # Remove Kerrigan abilities if there's no kerrigan
         if item.data.type == item_tables.ZergItemType.Ability:
             if not kerrigan_is_present:
+                # TODO: Kerrigan presence Zerg/Everywhere
                 item.flags |= ItemFilterFlags.Removed
             elif world.options.grant_story_tech and not kerrigan_build_missions:
                 item.flags |= ItemFilterFlags.Removed
