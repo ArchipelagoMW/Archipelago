@@ -331,7 +331,8 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 factorio_queue.task_done()
 
                 if not ctx.rcon_client and "Starting RCON interface at IP ADDR:" in msg:
-                    ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password)
+                    ctx.rcon_client = factorio_rcon.RCONClient("localhost", rcon_port, rcon_password,
+                                                               timeout=5)
                     if not ctx.server:
                         logger.info("Established bridge to Factorio Server. "
                                     "Ready to connect to Archipelago via /connect")
@@ -405,8 +406,7 @@ async def get_info(ctx: FactorioContext, rcon_client: factorio_rcon.RCONClient):
     info = json.loads(rcon_client.send_command("/ap-rcon-info"))
     ctx.auth = info["slot_name"]
     ctx.seed_name = info["seed_name"]
-    # 0.2.0 addition, not present earlier
-    death_link = bool(info.get("death_link", False))
+    death_link = info["death_link"]
     ctx.energy_link_increment = info.get("energy_link", 0)
     logger.debug(f"Energy Link Increment: {ctx.energy_link_increment}")
     if ctx.energy_link_increment and ctx.ui:

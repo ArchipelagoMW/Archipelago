@@ -284,8 +284,6 @@ class FactorioWorldGen(OptionDict):
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: typing.Dict[str, typing.Dict[str, typing.Any]]
     default = {
-        "terrain_segmentation": 0.5,
-        "water": 1.5,
         "autoplace_controls": {
             "coal": {"frequency": 1, "size": 3, "richness": 6},
             "copper-ore": {"frequency": 1, "size": 3, "richness": 6},
@@ -336,8 +334,6 @@ class FactorioWorldGen(OptionDict):
     }
     schema = Schema({
         "basic": {
-            Optional("terrain_segmentation"): FloatRange(0.166, 6),
-            Optional("water"): FloatRange(0.166, 6),
             Optional("autoplace_controls"): {
                 str: {
                     "frequency": FloatRange(0, 6),

@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-import orjson
 import logging
-import os
-import string
+import functools
 import pkgutil
+import string
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
+
+import orjson
 
 import Utils
 from . import Options
@@ -32,8 +33,23 @@ items_future = pool.submit(load_json_data, "items")
 tech_table: Dict[str, int] = {}
 technology_table: Dict[str, Technology] = {}
 
+start_unlocked_recipes = {
+    "offshore-pump",
+    "boiler",
+    "steam-engine",
+    "automation-science-pack",
+    "inserter",
+    "small-electric-pole",
+    "copper-cable",
+    "lab",
+    "electronic-circuit",
+    "electric-mining-drill",
+    "pipe",
+    "pipe-to-ground",
+}
 
-def always(state):
+
+def always(state) -> bool:
     return True
 
 
@@ -55,12 +71,15 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
 
     def __init__(self, name: str, ingredients: Set[str], factorio_id: int, progressive: Tuple[str] = (),
-                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None):
+                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None, trigger: Dict[str, Any] = None):
         self.name = name
         self.factorio_id = factorio_id
         self.ingredients = ingredients
         self.progressive = progressive
         self.has_modifier = has_modifier
+        if not trigger:
+            trigger = {}
+        self.trigger = trigger
         if unlocks:
             self.unlocks = unlocks
         else:
@@ -95,15 +114,20 @@ class CustomTechnology(Technology):
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
         ingredients = origin.ingredients & allowed_packs
         military_allowed = "military-science-pack" in allowed_packs \
-                           and ((ingredients & {"chemical-science-pack", "production-science-pack", "utility-science-pack"})
+                           and ((ingredients & {"chemical-science-pack",
+                                                "production-science-pack",
+                                                "utility-science-pack"})
                                 or origin.name == "rocket-silo")
         self.player = player
         if origin.name not in world.special_nodes:
             if military_allowed:
                 ingredients.add("military-science-pack")
             ingredients = list(ingredients)
-            ingredients.sort()  # deterministic sample
-            ingredients = world.random.sample(ingredients, world.random.randint(1, len(ingredients)))
+            if ingredients:
+                ingredients.sort()  # deterministic sample
+                ingredients = set(world.random.sample(ingredients, world.random.randint(1, len(ingredients))))
+            else:
+                ingredients = set()
         elif origin.name == "rocket-silo" and military_allowed:
             ingredients.add("military-science-pack")
         super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
@@ -149,19 +173,22 @@ class Recipe(FactorioElement):
         ingredients = sum(self.ingredients.values())
         return min(ingredients / amount for product, amount in self.products.items())
 
-    @property
+    @functools.cached_property
     def base_cost(self) -> Dict[str, int]:
         ingredients = Counter()
-        for ingredient, cost in self.ingredients.items():
-            if ingredient in all_product_sources:
-                for recipe in all_product_sources[ingredient]:
-                    if recipe.ingredients:
-                        ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
-                                            recipe.base_cost.items()})
-                    else:
-                        ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
-            else:
-                ingredients[ingredient] += cost
+        try:
+            for ingredient, cost in self.ingredients.items():
+                if ingredient in all_product_sources:
+                    for recipe in all_product_sources[ingredient]:
+                        if recipe.ingredients:
+                            ingredients.update({name: amount * cost / recipe.products[ingredient] for name, amount in
+                                                recipe.base_cost.items()})
+                        else:
+                            ingredients[ingredient] += recipe.energy * cost / recipe.products[ingredient]
+                else:
+                    ingredients[ingredient] += cost
+        except RecursionError as e:
+            raise Exception(f"Infinite recursion in ingredients of {self}.") from e
         return ingredients
 
     @property
@@ -193,7 +220,9 @@ recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 for technology_name, data in sorted(techs_future.result().items()):
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients, factorio_tech_id,
-                            has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]))
+                            has_modifier=data["has_modifier"],
+                            unlocks=set(data["unlocks"]) - start_unlocked_recipes,
+                            trigger=data.get("trigger", None))
     factorio_tech_id += 1
     tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
@@ -226,11 +255,12 @@ for recipe_name, recipe_data in raw_recipes.items():
     recipes[recipe_name] = recipe
     if set(recipe.products).isdisjoint(
             # prevents loop recipes like uranium centrifuging
-            set(recipe.ingredients)) and ("empty-barrel" not in recipe.products or recipe.name == "empty-barrel") and \
+            set(recipe.ingredients)) and ("barrel" not in recipe.products or recipe.name == "barrel") and \
             not recipe_name.endswith("-reprocessing"):
         for product_name in recipe.products:
             all_product_sources.setdefault(product_name, set()).add(recipe)
 
+assert all(recipe_name in raw_recipes for recipe_name in start_unlocked_recipes), "Unknown Recipe defined."
 
 machines: Dict[str, Machine] = {}
 
@@ -382,15 +412,15 @@ progressive_rows["progressive-processing"] = (
     "uranium-processing", "kovarex-enrichment-process", "nuclear-fuel-reprocessing")
 progressive_rows["progressive-rocketry"] = ("rocketry", "explosive-rocketry", "atomic-bomb")
 progressive_rows["progressive-vehicle"] = ("automobilism", "tank", "spidertron")
-progressive_rows["progressive-train-network"] = ("railway", "fluid-wagon",
-                                                 "automated-rail-transportation", "rail-signals")
+progressive_rows["progressive-fluid-handling"] = ("fluid-handling", "fluid-wagon")
+progressive_rows["progressive-train-network"] = ("railway", "automated-rail-transportation")
 progressive_rows["progressive-engine"] = ("engine", "electric-engine")
 progressive_rows["progressive-armor"] = ("heavy-armor", "modular-armor", "power-armor", "power-armor-mk2")
 progressive_rows["progressive-personal-battery"] = ("battery-equipment", "battery-mk2-equipment")
 progressive_rows["progressive-energy-shield"] = ("energy-shield-equipment", "energy-shield-mk2-equipment")
 progressive_rows["progressive-wall"] = ("stone-wall", "gate")
 progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer")
-progressive_rows["progressive-inserter"] = ("fast-inserter", "stack-inserter")
+progressive_rows["progressive-inserter"] = ("fast-inserter", "bulk-inserter")
 progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
 progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
 progressive_rows["progressive-personal-roboport-equipment"] = ("personal-roboport-equipment",
@@ -402,7 +432,7 @@ sorted_rows = sorted(progressive_rows)
 source_target_mapping: Dict[str, str] = {
     "progressive-braking-force": "progressive-train-network",
     "progressive-inserter-capacity-bonus": "progressive-inserter",
-    "progressive-refined-flammables": "progressive-flamethrower"
+    "progressive-refined-flammables": "progressive-flamethrower",
 }
 
 for source, target in source_target_mapping.items():
@@ -416,12 +446,14 @@ progressive_technology_table: Dict[str, Technology] = {}
 
 for root in sorted_rows:
     progressive = progressive_rows[root]
-    assert all(tech in tech_table for tech in progressive), "declared a progressive technology without base technology"
+    assert all(tech in tech_table for tech in progressive), \
+        (f"Declared a progressive technology ({root}) without base technology. "
+         f"Missing: f{tuple(tech for tech in progressive if tech not in tech_table)}")
     factorio_tech_id += 1
     progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_tech_id,
-                                        progressive,
+                                        tuple(progressive),
                                         has_modifier=any(technology_table[tech].has_modifier for tech in progressive),
-                                        unlocks=any(technology_table[tech].unlocks for tech in progressive))
+                                        unlocks=any(technology_table[tech].unlocks for tech in progressive),)
     progressive_tech_table[root] = progressive_technology.factorio_id
     progressive_technology_table[root] = progressive_technology
 

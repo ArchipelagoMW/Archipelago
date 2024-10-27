@@ -5,7 +5,7 @@ import logging
 import settings
 import typing
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.generic import Rules
@@ -321,9 +321,11 @@ class Factorio(World):
 
     def make_quick_recipe(self, original: Recipe, pool: list, allow_liquids: int = 2,
                           ingredients_offset: int = 0) -> Recipe:
+        count: int = len(original.ingredients) + ingredients_offset
+        assert len(pool) >= count, f"Can't pick {count} many items from pool {pool}."
         new_ingredients = {}
         liquids_used = 0
-        for _ in range(len(original.ingredients) + ingredients_offset):
+        for _ in range(count):
             new_ingredient = pool.pop()
             if new_ingredient in fluids:
                 while liquids_used == allow_liquids and new_ingredient in fluids:
@@ -440,7 +442,9 @@ class Factorio(World):
         ingredients_offset = self.options.recipe_ingredients_offset
         original_rocket_part = recipes["rocket-part"]
         science_pack_pools = get_science_pack_pools()
-        valid_pool = sorted(science_pack_pools[self.options.max_science_pack.get_max_pack()] & valid_ingredients)
+        valid_pool = sorted(science_pack_pools[self.options.max_science_pack.get_max_pack()]
+                            & valid_ingredients
+                            - fluids)
         self.random.shuffle(valid_pool)
         self.custom_recipes = {"rocket-part": Recipe("rocket-part", original_rocket_part.category,
                                                      {valid_pool[x]: 10 for x in range(3 + ingredients_offset)},

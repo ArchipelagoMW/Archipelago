@@ -35,9 +35,10 @@ base_info = {
     "author": "Berserker",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
-        "base >= 1.1.0",
+        "base >= 2.0.11",
+        "! space-age",
         "? science-not-invited",
         "? factory-levels"
     ]
