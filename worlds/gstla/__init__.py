@@ -6,7 +6,7 @@ from typing import List, TextIO, BinaryIO, Dict
 from .Options import GSTLAOptions, RandoOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
-from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, pre_fillitems, create_item, \
+from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
     AP_PLACEHOLDER_ITEM, items_by_id
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
@@ -80,7 +80,6 @@ class GSTLAWorld(World):
         pass
 
     def generate_output(self, output_directory: str):
-        return
         self._generate_rando_file(output_directory)
         rom = LocalRom(get_base_rom_path())
         world = self.multiworld
@@ -93,7 +92,7 @@ class GSTLAWorld(World):
             for location in region.locations:
                 location_data = location_name_to_id.get(location.name, None)
 
-                if location_data is None or location_data.loc_type == LocationType.Event:
+                if location_data is None or location_data.loc_type == LocationType.Event or location_data.loc_type == LocationType.Character:
                     continue
                 ap_item = location.item
                 # print(ap_item)

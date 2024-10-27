@@ -63,7 +63,7 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 384:'useful', # Thorn_Crown
 266:'useful', # Unicorn_Ring
 300:'useful', # Disk_Axe
-242:'useful', # Bone_Armlet
+370:'useful', # Bone_Armlet
 259:'useful', # Turtle_Boots
 291:'useful', # Mist_Sabre
 343:'useful', # Festival_Coat
@@ -90,7 +90,6 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 193:'useful', #Apple
 190:'useful', #Mist_Potion
 194:'useful', #Hard_Nut
-193:'useful', #Apple
 191:'useful', #Power_Bread
 183:'useful', #Potion
 192:'useful', #Cookie

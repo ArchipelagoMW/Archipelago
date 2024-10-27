@@ -29,7 +29,6 @@ AP_PLACEHOLDER_ITEM = ItemData(412, ItemName.Rainbow_Ring, ItemClassification.fi
 all_items = all_gen_items
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}
-pre_fillitems: Dict[str, List[Item]] = {ItemType.Djinn.name: [], ItemType.Character.name: [] }
 
 coin_items: {int: ItemData} = {}
 
@@ -71,7 +70,7 @@ def create_events(world: 'GSTLAWorld'):
         event_item = create_item(event.name, world.player)
 
         if event.location == LocationName.Lemurian_Ship_Engine_Room and world.options.starter_ship == 0:
-            world.multiworld.push_precollected(event_item)
+            #world.multiworld.push_precollected(event_item)
             continue
 
         event_location = world.get_location(event.location)
@@ -80,14 +79,7 @@ def create_events(world: 'GSTLAWorld'):
 def create_items(world: 'GSTLAWorld', player: int):
     """Creates all the items for GSTLA that need to be shuffled into the multiworld, and
     adds them to the multiworld's item pool.
-
-    Djinn are an exception and are added to a pre_fillitems array exported by this module
     """
-    if world.options.starter_ship == 2:
-        ap_location = world.get_location(LocationName.Gabomba_Statue_Black_Crystal)
-        ap_item = create_item(ItemName.Black_Crystal, player)
-        ap_location.place_locked_item(ap_item)
-
     sum_locations = len(world.multiworld.get_unfilled_locations(player))
     # TODO: this is a temporary measure; we may want to add lots of features around
     # item population based on player configured options.
@@ -96,7 +88,13 @@ def create_items(world: 'GSTLAWorld', player: int):
             continue
         # Coins do funny business
         vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
+
+        #if vanilla ship logic than this should be Gabomba Statue Black Crystal location
         if world.options.starter_ship == 2 and vanilla_item.name == ItemName.Black_Crystal:
+            ap_item = create_item_direct(vanilla_item, player)
+            ap_location = world.multiworld.get_location(loc_names_by_id[loc.ap_id], player)
+            ap_location.place_locked_item(ap_item)
+            sum_locations -= 1
             continue
         if vanilla_item.type == ItemType.Event or vanilla_item.type == ItemType.Djinn:
             continue
