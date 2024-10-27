@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from collections import defaultdict
 from typing import TextIO
@@ -172,7 +174,7 @@ def generate_location_names(env: Environment, data: GameData):
 def generate_item_names(env: Environment, data: GameData):
     template = env.get_template('ItemNames.py.jinja')
 
-    with (open(os.path.join(SCRIPT_DIR, 'gen', 'ItemNames.py'), 'w') as outfile):
+    with open(os.path.join(SCRIPT_DIR, 'gen', 'ItemNames.py'), 'w') as outfile:
         write_warning(outfile)
         name_dict = {
             item.id: {
