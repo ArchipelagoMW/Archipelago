@@ -126,6 +126,14 @@ class CharacterShuffle(Choice):
     option_anywhere = 0
     option_vanilla_shuffled = 1
     option_vanilla = 2
+    default = 1
+
+class DjinnShuffle(Choice):
+    display_name = "Djinn Shuffle"
+    #option_anywhere = 0, not supported yet
+    option_vanilla_shuffled = 1
+    option_vanilla = 2
+    default = 1
 
 class SuperBosses(Choice):
     display_name = "Super Bosses"
@@ -151,5 +159,6 @@ GSTLAOptions = {
     "hidden_items": HiddenItems,
     "super_bosses": SuperBosses,
     "djinn_logic": DjinnLogic,
+    "djinn_shuffle": DjinnShuffle,
     "character_shuffle": CharacterShuffle
 }

@@ -76,85 +76,11 @@ class GSTLAWorld(World):
     def generate_basic(self):
         pass
 
-    def get_prefill_items(self) -> Dict[str, List["Item"]]:
-        return pre_fillitems
-
     def pre_fill(self) -> None:
-        from Fill import fill_restrictive, FillError
-        all_state = self.multiworld.get_all_state(use_cache=False)
-        locs = []
-
-        for loc in location_type_to_data[LocationType.Djinn]:
-            locs.append(self.multiworld.get_location(loc_names_by_id[loc.ap_id], self.player))
-
-        prefill_items_collection = self.get_prefill_items()
-        prefill_items = prefill_items_collection[ItemType.Djinn.name]
-        assert len(locs) == len(prefill_items), "Djinn Locations: %d, Djinn: %d" % (len(locs), len(prefill_items))
-        self.multiworld.random.shuffle(locs)
-        self.multiworld.random.shuffle(prefill_items)
-
-        for ap_item in prefill_items:
-            all_state.remove(ap_item)
-        # print(len(locs))
-        # print(locs)
-        # for loc_name in LocationName:
-        #     try:
-        #         self.multiworld.get_location(loc_name, self.player)
-        #     except:
-        #         print("Failed to find location in multiworld: " + loc_name)
-        fill_restrictive(self.multiworld, all_state, locs, prefill_items, True, True)
-
-
-        prefill_items = prefill_items_collection[ItemType.Character.name]
-        for ap_item in prefill_items:
-            all_state.remove(ap_item)
-
-        if self.options.character_shuffle == 2:
-            for character in prefill_items:
-                if character.name == ItemName.Jenna:
-                    vanilla_location = self.multiworld.get_location(LocationName.Idejima_Jenna, self.player)
-                if character.name == ItemName.Sheba:
-                    vanilla_location = self.multiworld.get_location(LocationName.Idejima_Sheba, self.player)
-                if character.name == ItemName.Piers:
-                    vanilla_location = self.multiworld.get_location(LocationName.Kibombo_Piers, self.player)
-                if character.name == ItemName.Isaac:
-                    vanilla_location = self.multiworld.get_location(LocationName.Contigo_Isaac, self.player)
-                if character.name == ItemName.Garet:
-                    vanilla_location = self.multiworld.get_location(LocationName.Contigo_Garet, self.player)
-                if character.name == ItemName.Ivan:
-                    vanilla_location = self.multiworld.get_location(LocationName.Contigo_Ivan, self.player)
-                if character.name == ItemName.Mia:
-                    vanilla_location = self.multiworld.get_location(LocationName.Contigo_Mia, self.player)
-
-                vanilla_location.place_locked_item(character)
-
-        else:   
-            locs = []
-
-            for loc in location_type_to_data[LocationType.Character]:
-                loc_name = loc_names_by_id[loc.ap_id]
-                ap_location = self.multiworld.get_location(loc_name, self.player)
-                if loc_name == LocationName.Idejima_Jenna:
-                    character = self.random.choice(prefill_items)
-                    ap_location.place_locked_item(character)
-                    prefill_items.remove(character)
-                else:
-                    locs.append(ap_location)
-
-            if self.options.character_shuffle == 1:
-                for ap_item in prefill_items:
-                    all_state.remove(ap_item)
-
-                assert len(locs) == len(prefill_items), "Character Locations: %d, Djinn: %d" % (len(locs), len(prefill_items))
-                fill_restrictive(self.multiworld, all_state, locs, prefill_items, True, True)
-            else:
-                for item in prefill_items:
-                    self.multiworld.itempool.append(item)
-
-
-
+        pass
 
     def generate_output(self, output_directory: str):
+        return
         self._generate_rando_file(output_directory)
         rom = LocalRom(get_base_rom_path())
         world = self.multiworld

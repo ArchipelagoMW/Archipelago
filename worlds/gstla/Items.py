@@ -1,9 +1,9 @@
 from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import Item, ItemClassification, MultiWorld
 from .gen.LocationNames import loc_names_by_id
-from .Locations import all_locations
-from .Names.ItemName import ItemName
-from .Names.LocationName import LocationName
+from .gen.LocationData import all_locations
+from .gen.ItemNames import ItemName
+from .gen.LocationNames import LocationName
 from .gen.ItemData import (ItemData, events, all_items as all_gen_items,
                            djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
@@ -70,7 +70,7 @@ def create_events(world: 'GSTLAWorld'):
     for event in events:
         event_item = create_item(event.name, world.player)
 
-        if event.location == LocationName.Lemurian_Ship_Engine and world.options.starter_ship == 0:
+        if event.location == LocationName.Lemurian_Ship_Engine_Room and world.options.starter_ship == 0:
             world.multiworld.push_precollected(event_item)
             continue
 
@@ -116,16 +116,54 @@ def create_items(world: 'GSTLAWorld', player: int):
     #     multiworld.itempool.append(ap_item)
     #     sum_locations -= 1
     #
-    for item in djinn_items:
-        # ap_item = create_item(item.name, player)
+
+    sorted_item_list = sorted(djinn_items, key = lambda item: item.id)
+    sorted_loc_list = sorted(location_type_to_data[LocationType.Djinn], key = lambda location: location.id)
+    
+    if world.options.djinn_shuffle < 2:
+        world.random.shuffle(sorted_item_list)
+        world.random.shuffle(sorted_loc_list)
+
+    for item in sorted_item_list:
         ap_item = create_item_direct(item, player)
-        pre_fillitems[ItemType.Djinn.name].append(ap_item)
+        location = sorted_loc_list.pop(0)
+        ap_loc = world.multiworld.get_location(loc_names_by_id[location.ap_id], player)
+        ap_loc.place_locked_item(ap_item)
         sum_locations -= 1
 
-    for character in character_items:
+
+    sorted_item_list = sorted(character_items, key = lambda item: item.id)
+    sorted_loc_list = sorted(location_type_to_data[LocationType.Character], key = lambda location: location.id)
+    first_char_locked = False
+
+    if world.options.character_shuffle < 2:
+        world.random.shuffle(sorted_item_list)
+        world.random.shuffle(sorted_loc_list)
+
+    for character in sorted_item_list:
         ap_item = create_item_direct(character, player)
-        pre_fillitems[ItemType.Character.name].append(ap_item)
         sum_locations -= 1
+    
+        # Vanilla
+        if world.options.character_shuffle > 0:
+            location = sorted_loc_list.pop(0)
+            ap_loc = world.multiworld.get_location(loc_names_by_id[location.ap_id], player)
+
+            ap_loc.place_locked_item(ap_item)
+
+        else: 
+            #guarentee Jenna slot is a character to avoid issues with learning required psynery
+            location = sorted_loc_list.pop(0)
+            location_name = loc_names_by_id[location.ap_id]
+            if location_name == LocationName.Idejima_Jenna:
+                if not first_char_locked:  
+                    ap_location = world.multiworld.get_location(loc_names_by_id[location.ap_id], player)
+                    ap_location.place_locked_item(ap_item)
+                    first_char_locked = True
+                    continue
+
+            else: #Anywhere
+                world.multiworld.itempool.append(ap_item)
 
     # for item in gear + summon_list:
     #     ap_item = create_item(item.itemName, player)
