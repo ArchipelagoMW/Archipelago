@@ -211,8 +211,10 @@ class MaximumEssencePrice(MinimumEssencePrice):
 
 
 class MinimumEggPrice(Range):
-    """The minimum rancid egg price in the range of prices that an item should cost from Jiji.
-    Only takes effect if the EggSlotShops option is greater than 0."""
+    """
+    | The minimum rancid egg price in the range of prices that an item should cost from Jiji.
+    | Only takes effect if the EggSlotShops option is greater than 0.
+    """
     display_name = "Minimum Egg Price"
     range_start = 1
     range_end = 20
@@ -220,8 +222,10 @@ class MinimumEggPrice(Range):
 
 
 class MaximumEggPrice(MinimumEggPrice):
-    """The maximum rancid egg price in the range of prices that an item should cost from Jiji.
-    Only takes effect if the EggSlotShops option is greater than 0."""
+    """
+    | The maximum rancid egg price in the range of prices that an item should cost from Jiji.
+    | Only takes effect if the EggSlotShops option is greater than 0.
+    """
     display_name = "Maximum Egg Price"
     default = 10
 
@@ -259,11 +263,13 @@ class MaximumGeoPrice(Range):
 
 
 class RandomCharmCosts(NamedRange):
-    """Total Notch Cost of all Charms together. Vanilla sums to 90.
-    This value is distributed among all charms in a random fashion.
-    Special Cases:
-    Set to -1 or vanilla for vanilla costs.
-    Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
+    """
+    | Total Notch Cost of all Charms together. Vanilla sums to 90.
+    | This value is distributed among all charms in a random fashion.
+    | Special Cases:
+    | Set to -1 or vanilla for vanilla costs.
+    | Set to -2 or shuffle to shuffle around the vanilla costs to different charms.
+    """
 
     display_name = "Randomize Charm Notch Costs"
     range_start = 0
@@ -410,8 +416,10 @@ class Goal(Choice):
 
 
 class GrubHuntGoal(NamedRange):
-    """The amount of grubs required to finish Grub Hunt.
-    On 'All' any grubs from item links replacements etc. will be counted"""
+    """
+    | The amount of grubs required to finish Grub Hunt.
+    | On 'All' any grubs from item links replacements etc. will be counted
+    """
     display_name = "Grub Hunt Goal"
     range_start = 1
     range_end = 46
@@ -421,7 +429,7 @@ class GrubHuntGoal(NamedRange):
 
 class WhitePalace(Choice):
     """
-    Whether or not to include White Palace or not.  Note: Even if excluded, the King Fragment check may still be
+    Whether or not to include White Palace or not. Note: Even if excluded, the King Fragment check may still be
     required if charms are vanilla.
     """
     display_name = "White Palace"
@@ -448,14 +456,15 @@ class AddUnshuffledLocations(Toggle):
 
 
 class DeathLinkShade(Choice):
-    """Sets whether to create a shade when you are killed by a DeathLink and how to handle your existing shade, if any.
-
-    vanilla: DeathLink deaths function like any other death and overrides your existing shade (including geo), if any.
-    shadeless: DeathLink deaths do not spawn shades. Your existing shade (including geo), if any, is untouched.
-    shade: DeathLink deaths spawn a shade if you do not have an existing shade. Otherwise, it acts like shadeless.
-
-    * This option has no effect if DeathLink is disabled.
-    ** Self-death shade behavior is not changed; if a self-death normally creates a shade in vanilla, it will override
+    """
+    | Sets whether to create a shade when you are killed by a DeathLink and how to handle your existing shade, if any.
+    |
+    | vanilla: DeathLink deaths function like any other death and overrides your existing shade (including geo), if any.
+    | shadeless: DeathLink deaths do not spawn shades. Your existing shade (including geo), if any, is untouched.
+    | shade: DeathLink deaths spawn a shade if you do not have an existing shade. Otherwise, it acts like shadeless.
+    |
+    |  This option has no effect if DeathLink is disabled.
+    | * Self-death shade behavior is not changed; if a self-death normally creates a shade in vanilla, it will override
         your existing shade, if any.
     """
     option_vanilla = 0
@@ -466,11 +475,12 @@ class DeathLinkShade(Choice):
 
 
 class DeathLinkBreaksFragileCharms(Toggle):
-    """Sets if fragile charms break when you are killed by a DeathLink.
-
-    * This option has no effect if DeathLink is disabled.
-    ** Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla, it
-        will continue to do so.
+    """
+    | Sets if fragile charms break when you are killed by a DeathLink.
+    |
+    | This option has no effect if DeathLink is disabled.
+    | * Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla,
+        it will continue to do so.
     """
     display_name = "Deathlink Breaks Fragile Charms"
 
@@ -484,11 +494,12 @@ class StartingGeo(Range):
 
 
 class CostSanity(Choice):
-    """If enabled, most locations with costs (like stag stations) will have randomly determined costs.
-    If set to shopsonly, CostSanity will only apply to shops (including Grubfather, Seer and Egg Shop).
-    If set to notshops, CostSanity will only apply to non-shops (e.g. Stag stations and Cornifer locations)
-
-    These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
+    """
+    | If enabled, most locations with costs (like stag stations) will have randomly determined costs.
+    | If set to shopsonly, CostSanity will only apply to shops (including Grubfather, Seer and Egg Shop).
+    | If set to notshops, CostSanity will only apply to non-shops (e.g. Stag stations and Cornifer locations)
+    |
+    | These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
     """
     option_off = 0
     alias_no = 0
