@@ -3,7 +3,7 @@ Contains descriptions for Starcraft 2 items.
 """
 import inspect
 
-from . import item_names, items
+from . import item_names, item_tables
 
 WEAPON_ARMOR_UPGRADE_NOTE = inspect.cleandoc("""
     Must be researched during the mission if the mission type isn't set to auto-unlock generic upgrades.
@@ -1051,6 +1051,6 @@ item_descriptions = {
 # Key descriptions
 key_descriptions = {
     key: GENERIC_KEY_DESC
-    for key in items.key_item_table.keys()
+    for key in item_tables.key_item_table.keys()
 }
 item_descriptions.update(key_descriptions)
