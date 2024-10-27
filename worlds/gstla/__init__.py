@@ -1,3 +1,4 @@
+from __future__ import annotations
 from worlds.AutoWorld import WebWorld, World
 import os
 
@@ -18,16 +19,6 @@ from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
 from .Rom import get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch
 from .BizClient import GSTLAClient
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess, SuffixIdentifier
-
-
-# TODO: point at BHC
-# def launch_client():
-#     from .Client import launch
-#     launch_subprocess(launch, name="GSTLAClient")
-
-
-# components.append(Component("Golden Sun The Lost Age Client", "GSTLAClient", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apgstla")))
 
 class GSTLAWeb(WebWorld):
     theme = "jungle"
