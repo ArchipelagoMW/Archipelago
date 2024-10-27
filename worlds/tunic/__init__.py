@@ -404,18 +404,6 @@ class TunicWorld(World):
                     f"Using a potentially incorrect location name instead.")
             return location.name, location.player
 
-    @classmethod
-    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str = "") -> None:
-        tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
-        # figure out our groups and the items in them
-        for tunic in tunic_worlds:
-            for group in multiworld.get_player_groups(tunic.player):
-                cls.item_link_locations.setdefault(group, {})
-        for location in multiworld.get_locations():
-            if location.item.player in cls.item_link_locations.keys():
-                cls.item_link_locations[location.item.player].setdefault(location.item.name, [])
-                cls.item_link_locations[location.item.player][location.item.name].append((location.player, location.name))
-
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "seed": self.random.randint(0, 2147483647),
@@ -441,12 +429,28 @@ class TunicWorld(World):
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
         }
 
+        # this would be in a stage if there was an appropriate stage for it
+        if not self.item_link_locations:
+            tunic_worlds: Tuple[TunicWorld] = self.multiworld.get_game_worlds("TUNIC")
+            # figure out our groups and the items in them
+            for tunic in tunic_worlds:
+                for group in self.multiworld.get_player_groups(tunic.player):
+                    self.item_link_locations.setdefault(group, {})
+            for location in self.multiworld.get_locations():
+                if location.item.player in self.item_link_locations.keys():
+                    self.item_link_locations[location.item.player].setdefault(location.item.name, [])
+                    self.item_link_locations[location.item.player][location.item.name].append((location.player, location.name))
+
+        # if item links are on, set up the player's personal item link locations, so we can pop them as needed
         self.player_item_link_locations = {}
-        for group, item_links in self.item_link_locations.items():
-            if group in self.multiworld.get_player_groups(self.player):
-                for item_name, locs in item_links.items():
-                    self.player_item_link_locations[item_name] = [self.multiworld.get_location(location_name, player)
-                                                                  for player, location_name in locs]
+        groups = self.multiworld.get_player_groups(self.player)
+        if groups:
+            for group, item_links in self.item_link_locations.items():
+                if group in groups:
+                    for item_name, locs in item_links.items():
+                        self.player_item_link_locations[item_name] = [self.multiworld.get_location(location_name, player)
+                                                                      for player, location_name in locs]
+
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
             if tunic_item.name not in slot_data:
                 slot_data[tunic_item.name] = []
