@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from ..mission_tables import SC2Mission
-from ..items import item_table
+from ..item_tables import item_table
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:

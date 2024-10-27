@@ -4,7 +4,7 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import item_groups, item_names, items, mission_groups, mission_tables, options, locations
+from .. import item_groups, item_names, items, mission_groups, mission_tables, options, locations, item_tables
 from .. import get_all_missions, get_first_mission
 
 
@@ -136,11 +136,11 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         for item_name, item_data in world_items:
-            self.assertNotIn(item_data.type, items.ProtossItemType)
-            self.assertNotIn(item_data.type, items.ZergItemType)
-            self.assertNotEqual(item_data.type, items.TerranItemType.Nova_Gear)
+            self.assertNotIn(item_data.type, item_tables.ProtossItemType)
+            self.assertNotIn(item_data.type, item_tables.ZergItemType)
+            self.assertNotEqual(item_data.type, item_tables.TerranItemType.Nova_Gear)
             self.assertNotEqual(item_name, item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE)
 
     def test_starter_unit_populates_start_inventory(self):
@@ -171,9 +171,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         for item_name, item_data in world_items:
-            self.assertNotIn(item_data.type, items.TerranItemType, f"Item '{item_name}' included when all terran missions are excluded")
+            self.assertNotIn(item_data.type, item_tables.TerranItemType, f"Item '{item_name}' included when all terran missions are excluded")
 
     def test_excluding_all_terran_build_missions_excludes_all_terran_units(self) -> None:
         world_options = {
@@ -187,11 +187,11 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         for item_name, item_data in world_items:
-            self.assertNotEqual(item_data.type, items.TerranItemType.Unit, f"Item '{item_name}' included when all terran build missions are excluded")
-            self.assertNotEqual(item_data.type, items.TerranItemType.Mercenary, f"Item '{item_name}' included when all terran build missions are excluded")
-            self.assertNotEqual(item_data.type, items.TerranItemType.Building, f"Item '{item_name}' included when all terran build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.TerranItemType.Unit, f"Item '{item_name}' included when all terran build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.TerranItemType.Mercenary, f"Item '{item_name}' included when all terran build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.TerranItemType.Building, f"Item '{item_name}' included when all terran build missions are excluded")
 
     def test_excluding_all_zerg_and_kerrigan_missions_excludes_all_zerg_items(self) -> None:
         world_options = {
@@ -204,9 +204,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         for item_name, item_data in world_items:
-            self.assertNotIn(item_data.type, items.ZergItemType, f"Item '{item_name}' included when all zerg missions are excluded")
+            self.assertNotIn(item_data.type, item_tables.ZergItemType, f"Item '{item_name}' included when all zerg missions are excluded")
 
     def test_excluding_all_zerg_build_missions_excludes_zerg_units(self) -> None:
         world_options = {
@@ -222,10 +222,10 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         for item_name, item_data in world_items:
-            self.assertNotEqual(item_data.type, items.ZergItemType.Unit, f"Item '{item_name}' included when all zerg build missions are excluded")
-            self.assertNotEqual(item_data.type, items.ZergItemType.Mercenary, f"Item '{item_name}' included when all zerg build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.ZergItemType.Unit, f"Item '{item_name}' included when all zerg build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.ZergItemType.Mercenary, f"Item '{item_name}' included when all zerg build missions are excluded")
 
     def test_excluding_all_protoss_missions_excludes_all_protoss_items(self) -> None:
         world_options = {
@@ -240,9 +240,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         for item_name, item_data in world_items:
-            self.assertNotIn(item_data.type, items.ProtossItemType, f"Item '{item_name}' included when all protoss missions are excluded")
+            self.assertNotIn(item_data.type, item_tables.ProtossItemType, f"Item '{item_name}' included when all protoss missions are excluded")
 
     def test_excluding_all_protoss_build_missions_excludes_protoss_units(self) -> None:
         world_options = {
@@ -259,11 +259,11 @@ class TestItemFiltering(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         for item_name, item_data in world_items:
-            self.assertNotEqual(item_data.type, items.ProtossItemType.Unit, f"Item '{item_name}' included when all protoss build missions are excluded")
-            self.assertNotEqual(item_data.type, items.ProtossItemType.Unit_2, f"Item '{item_name}' included when all protoss build missions are excluded")
-            self.assertNotEqual(item_data.type, items.ProtossItemType.Building, f"Item '{item_name}' included when all protoss build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.ProtossItemType.Unit, f"Item '{item_name}' included when all protoss build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.ProtossItemType.Unit_2, f"Item '{item_name}' included when all protoss build missions are excluded")
+            self.assertNotEqual(item_data.type, item_tables.ProtossItemType.Building, f"Item '{item_name}' included when all protoss build missions are excluded")
 
     def test_vanilla_items_only_excludes_terran_progressives(self) -> None:
         world_options = {
@@ -278,7 +278,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'vanilla_items_only': True,
         }
         self.generate_world(world_options)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         self.assertTrue(items)
         occurrences: Dict[str, int] = {}
         for item_name, _ in world_items:
@@ -298,7 +298,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'vanilla_items_only': True,
         }
         self.generate_world(world_options)
-        world_items = [(item.name, items.item_table[item.name]) for item in self.multiworld.itempool]
+        world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         self.assertTrue(items)
         for item_name, item_data in world_items:
             if item_data.quantity == 0:
@@ -367,7 +367,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
         self.assertTrue(itempool)
-        soa_items_in_pool = [item_name for item_name in itempool if items.item_table[item_name].type == items.ProtossItemType.Spear_Of_Adun]
+        soa_items_in_pool = [item_name for item_name in itempool if item_tables.item_table[item_name].type == item_tables.ProtossItemType.Spear_Of_Adun]
         self.assertGreater(len(soa_items_in_pool), 5)
 
     def test_lotv_only_doesnt_include_kerrigan_items_with_grant_story_tech(self) -> None:

@@ -6,18 +6,18 @@ from typing import *
 from math import floor, ceil
 from dataclasses import dataclass
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState, Region
-from Fill import fill_restrictive, FillError
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from . import item_names
-from .items import (
-    StarcraftItem, filler_items, get_full_item_list, ProtossItemType,
+from .item_tables import (
+    filler_items, get_full_item_list, ProtossItemType,
     ItemData, kerrigan_actives, kerrigan_passives,
-    not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
+    not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL, ItemType, ZergItemType,
 )
 from . import items
 from . import item_groups
 from . import location_groups
+from .items import FilterItem, ItemFilterFlags, StarcraftItem
 from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations
 from .mission_order.layout_types import LayoutType, Gauntlet
 from .options import (
@@ -35,38 +35,8 @@ from .mission_tables import (
 )
 from .regions import create_mission_order
 from .mission_order.structs import SC2MissionOrder
-from ..stardew_valley import true_
-from ..v6 import location_table
 
 logger = logging.getLogger("Starcraft 2")
-
-
-class ItemFilterFlags(enum.IntFlag):
-    Available = 0
-    Locked = enum.auto()
-    StartInventory = enum.auto()
-    NonLocal = enum.auto()
-    Removed = enum.auto()
-    Plando = enum.auto()
-    Excluded = enum.auto()
-    AllowedOrphan = enum.auto()
-    """Used to flag items that shouldn't be filtered out with their parents"""
-    ForceProgression = enum.auto()
-    """Used to flag items that aren't classified as progression by default"""
-    Necessary = enum.auto()
-    """Used to flag items that are never allowed to be culled.
-    This differs from `Locked` in that locked items may still be culled if there's space issues or in some circumstances when a parent item is culled."""
-
-    Unremovable = Locked|StartInventory|Plando|Necessary
-
-
-@dataclass
-class FilterItem:
-    name: str
-    data: ItemData
-    index: int = 0
-    flags: ItemFilterFlags = ItemFilterFlags.Available
-
 
 class Starcraft2WebWorld(WebWorld):
     setup_en = Tutorial(
@@ -330,7 +300,7 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         return min(count, max_count)
 
     result: List[FilterItem] = []
-    for item_name, item_data in items.item_table.items():
+    for item_name, item_data in item_tables.item_table.items():
         max_count = item_data.quantity
         excluded_count = excluded_items.get(item_name)
         unexcluded_count = unexcluded_items.get(item_name)
@@ -401,35 +371,38 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
 
     for item in item_list:
         # Catch-all for all of a faction's items
-        if (not terran_missions and item.data.race == SC2Race.TERRAN):
-            item.flags |= ItemFilterFlags.Excluded
-            continue
-        if (not zerg_missions and item.data.race == SC2Race.ZERG):
-            item.flags |= ItemFilterFlags.Excluded
-            continue
-        if (not protoss_missions and item.data.race == SC2Race.PROTOSS):
+        if not terran_missions and item.data.race == SC2Race.TERRAN:
+            if item.name not in item_groups.nova_equipment:
+                item.flags |= ItemFilterFlags.Removed
+                continue
+        if not zerg_missions and item.data.race == SC2Race.ZERG:
+            if item.data.type != item_tables.ZergItemType.Ability \
+                    and item.data.type != ZergItemType.Level:
+                item.flags |= ItemFilterFlags.Removed
+                continue
+        if not protoss_missions and item.data.race == SC2Race.PROTOSS:
             if item.name not in item_groups.soa_items:
-                item.flags |= ItemFilterFlags.Excluded
+                item.flags |= ItemFilterFlags.Removed
             continue
         
         # Faction units
         if (not terran_build_missions
-            and item.data.type in (items.TerranItemType.Unit, items.TerranItemType.Building, items.TerranItemType.Mercenary)
+            and item.data.type in (item_tables.TerranItemType.Unit, item_tables.TerranItemType.Building, item_tables.TerranItemType.Mercenary)
         ):
-            item.flags |= ItemFilterFlags.Excluded
+            item.flags |= ItemFilterFlags.Removed
         if (not zerg_build_missions
-            and item.data.type in (items.ZergItemType.Unit, items.ZergItemType.Mercenary, items.ZergItemType.Evolution_Pit)
+            and item.data.type in (item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Evolution_Pit)
         ):
             if (SC2Mission.ENEMY_WITHIN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_true
                 or item.name not in (item_names.ZERGLING, item_names.ROACH, item_names.HYDRALISK, item_names.INFESTOR)
             ):
-                item.flags |= ItemFilterFlags.Excluded
+                item.flags |= ItemFilterFlags.Removed
         if (not protoss_build_missions
             and item.data.type in (
-                items.ProtossItemType.Unit,
-                items.ProtossItemType.Unit_2,
-                items.ProtossItemType.Building,
+                item_tables.ProtossItemType.Unit,
+                item_tables.ProtossItemType.Unit_2,
+                item_tables.ProtossItemType.Building,
             )
         ):
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
@@ -442,24 +415,24 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
                     item_names.SENTRY, item_names.HIGH_TEMPLAR,
                 )
             ):
-                item.flags |= ItemFilterFlags.Excluded
+                item.flags |= ItemFilterFlags.Removed
         
         # Faction +attack/armour upgrades
-        if (item.data.type == items.TerranItemType.Upgrade
+        if (item.data.type == item_tables.TerranItemType.Upgrade
             and not terran_build_missions
             and not auto_upgrades_in_nobuilds
         ):
-            item.flags |= ItemFilterFlags.Excluded
-        if (item.data.type == items.ZergItemType.Upgrade
+            item.flags |= ItemFilterFlags.Removed
+        if (item.data.type == item_tables.ZergItemType.Upgrade
             and not zerg_build_missions
             and not auto_upgrades_in_nobuilds
         ):
-            item.flags |= ItemFilterFlags.Excluded
-        if (item.data.type == items.ProtossItemType.Upgrade
+            item.flags |= ItemFilterFlags.Removed
+        if (item.data.type == item_tables.ProtossItemType.Upgrade
             and not protoss_build_missions
             and not auto_upgrades_in_nobuilds
         ):
-            item.flags |= ItemFilterFlags.Excluded
+            item.flags |= ItemFilterFlags.Removed
 
 
 def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem]) -> None:
@@ -513,35 +486,35 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     for item in item_list:
         # Filter Nova equipment if you never get Nova
         if not nova_missions and (item.name in item_groups.nova_equipment):
-            item.flags |= ItemFilterFlags.Excluded
+            item.flags |= ItemFilterFlags.Removed
         
         # Todo(mm): How should no-build only / grant_story_tech affect excluding Kerrigan items?
         # Exclude Primal form based on Kerrigan presence or primal form option
-        if (item.data.type == items.ZergItemType.Primal_Form
+        if (item.data.type == item_tables.ZergItemType.Primal_Form
             and ((not kerrigan_is_present) or world.options.kerrigan_primal_status != KerriganPrimalStatus.option_item)
         ):
-            item.flags |= ItemFilterFlags.Excluded
+            item.flags |= ItemFilterFlags.Removed
         
         # Remove Kerrigan abilities if there's no kerrigan
-        if item.data.type == items.ZergItemType.Ability:
+        if item.data.type == item_tables.ZergItemType.Ability:
             if not kerrigan_is_present:
-                item.flags |= ItemFilterFlags.Excluded
+                item.flags |= ItemFilterFlags.Removed
             elif world.options.grant_story_tech and not kerrigan_build_missions:
-                item.flags |= ItemFilterFlags.Excluded
+                item.flags |= ItemFilterFlags.Removed
         
         # Remove Spear of Adun if it's off
-        if item.name in items.spear_of_adun_calldowns and not soa_presence:
-            item.flags |= ItemFilterFlags.Excluded
+        if item.name in item_tables.spear_of_adun_calldowns and not soa_presence:
+            item.flags |= ItemFilterFlags.Removed
 
         # Remove Spear of Adun passives
-        if item.name in items.spear_of_adun_castable_passives and not soa_passive_presence:
-            item.flags |= ItemFilterFlags.Excluded
+        if item.name in item_tables.spear_of_adun_castable_passives and not soa_passive_presence:
+            item.flags |= ItemFilterFlags.Removed
         
         # Remove Psi Disrupter and Hive Mind Emulator if you never play a build TvZ
         if (item.name in (item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER)
             and not tvz_build_missions
         ):
-            item.flags |= ItemFilterFlags.Excluded
+            item.flags |= ItemFilterFlags.Removed
     return
 
 
@@ -594,7 +567,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
 
     if first_race != SC2Race.ANY:
         possible_starter_items = {
-            item.name: item for item in item_list if (ItemFilterFlags.Plando|ItemFilterFlags.Excluded) & item.flags == 0
+            item.name: item for item in item_list if (ItemFilterFlags.Plando|ItemFilterFlags.Excluded|ItemFilterFlags.Removed) & item.flags == 0
         }
 
         # The race of the early unit has been chosen
@@ -627,7 +600,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
                 item for item in basic_unit_options
                 if item.name not in nco_support_items
                 or nco_support_items[item.name] in possible_starter_items
-                and ((ItemFilterFlags.Plando|ItemFilterFlags.Excluded) & possible_starter_items[nco_support_items[item.name]].flags) == 0
+                and ((ItemFilterFlags.Plando|ItemFilterFlags.Excluded|ItemFilterFlags.Removed) & possible_starter_items[nco_support_items[item.name]].flags) == 0
             ]
         if not basic_unit_options:
             raise Exception("Early Unit: At least one basic unit must be included")
@@ -693,9 +666,9 @@ def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> N
     include_upgrades = world.options.generic_upgrade_missions == 0
     upgrade_items: GenericUpgradeItems = world.options.generic_upgrade_items
     for item in item_list:
-        if item.data.type in items.upgrade_item_types:
+        if item.data.type in item_tables.upgrade_item_types:
             if not include_upgrades or (item.name not in upgrade_included_names[upgrade_items]):
-                item.flags |= ItemFilterFlags.Excluded
+                item.flags |= ItemFilterFlags.Removed
 
 
 def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
@@ -766,7 +739,7 @@ def flag_mission_order_required_items(world: SC2World, item_list: List[FilterIte
 def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:
     """Prunes the item pool size to be less than the number of available locations"""
 
-    item_list = [item for item in item_list if ItemFilterFlags.Unremovable & item.flags or ItemFilterFlags.Excluded not in item.flags]
+    item_list = [item for item in item_list if ItemFilterFlags.Unremovable & item.flags or ItemFilterFlags.Removed not in item.flags]
     num_items = len(item_list)
     last_num_items = -1
     while num_items != last_num_items:
@@ -777,12 +750,12 @@ def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Item]:
         last_num_items = num_items
         num_items = len(item_list)
 
-    pool: List[Item] = []
-    locked_items: List[Item] = []
-    existing_items: List[Item] = []
-    necessary_items: List[Item] = []
+    pool: List[StarcraftItem] = []
+    locked_items: List[StarcraftItem] = []
+    existing_items: List[StarcraftItem] = []
+    necessary_items: List[StarcraftItem] = []
     for item in item_list:
-        ap_item = create_item_with_correct_settings(world.player, item.name)
+        ap_item = create_item_with_correct_settings(world.player, item.name, item.flags)
         if ItemFilterFlags.ForceProgression in item.flags:
             ap_item.classification = ItemClassification.progression
         if ItemFilterFlags.StartInventory in item.flags:
@@ -827,10 +800,10 @@ def get_all_missions(mission_order: SC2MissionOrder) -> List[SC2Mission]:
     return mission_order.get_used_missions()
 
 
-def create_item_with_correct_settings(player: int, name: str) -> Item:
-    data = items.item_table[name]
+def create_item_with_correct_settings(player: int, name: str, filter_flags: ItemFilterFlags = ItemFilterFlags.Available) -> StarcraftItem:
+    data = item_tables.item_table[name]
 
-    item = Item(name, data.classification, data.code, player)
+    item = StarcraftItem(name, data.classification, data.code, player, filter_flags)
 
     return item
 

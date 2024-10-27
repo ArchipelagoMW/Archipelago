@@ -7,7 +7,7 @@ import logging
 
 from BaseClasses import Region, Location, CollectionState, Entrance
 from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
-from ..items import named_layout_key_item_table, named_campaign_key_item_table
+from ..item_tables import named_layout_key_item_table, named_campaign_key_item_table
 from .. import item_names
 from .layout_types import LayoutType
 from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData, ItemEntryRule

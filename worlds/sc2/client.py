@@ -52,7 +52,7 @@ from worlds._sc2common import bot
 from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
-from .items import (
+from .item_tables import (
     lookup_id_to_name, get_full_item_list, ItemData,
     race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
