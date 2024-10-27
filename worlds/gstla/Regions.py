@@ -61,7 +61,7 @@ def create_regions(world: 'GSTLAWorld'):
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Dark_Matter)
 
     if world.options.starter_ship > 0:
-        regions[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine)
+        regions[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine_Room)
 
     for region in regions.values():
         create_region(world, region)
@@ -74,7 +74,41 @@ regions: Dict[str, EntranceData] = {
         LocationName.Idejima_Mind_Read,
         LocationName.Idejima_Whirlwind,
         LocationName.Idejima_Growth,
-        LocationName.Idejima_Shamans_Rod
+        LocationName.Idejima_Shamans_Rod,
+        LocationName.Idejima_Jenna,
+        LocationName.Idejima_Sheba,
+        LocationName.Kibombo_Douse_Drop,
+        LocationName.Kibombo_Frost_Jewel,
+        LocationName.Spring,
+        LocationName.Shade,
+        LocationName.Contigo_Carry_Stone,
+        LocationName.Contigo_Lifting_Gem,
+        LocationName.Contigo_Orb_of_Force,
+        LocationName.Contigo_Catch_Beads,
+        LocationName.Flint,
+        LocationName.Granite,
+        LocationName.Quartz,
+        LocationName.Vine,
+        LocationName.Sap,
+        LocationName.Ground,
+        LocationName.Fizz,
+        LocationName.Sleet,
+        LocationName.Mist,
+        LocationName.Spritz,
+        LocationName.Hail,
+        LocationName.Tonic,
+        LocationName.Forge,
+        LocationName.Fever,
+        LocationName.Corona,
+        LocationName.Scorch,
+        LocationName.Ember,
+        LocationName.Flash,
+        LocationName.Gust,
+        LocationName.Breeze,
+        LocationName.Zephyr,
+        LocationName.Smog,
+        LocationName.Kite,
+        LocationName.Squall
     ],
     [
         EntranceName.IdejimaToDaila
@@ -303,10 +337,7 @@ regions: Dict[str, EntranceData] = {
         LocationName.Kibombo_Lucky_Medal,
         LocationName.Kibombo_Lucky_Pepper,
         LocationName.Kibombo_Nut,
-        LocationName.Kibombo_Douse_Drop,
-        LocationName.Kibombo_Frost_Jewel,
-        LocationName.Spring,
-        LocationName.Shade
+        LocationName.Kibombo_Piers
     ],
     [
         EntranceName.KibomboToGabombaStatue,
@@ -625,6 +656,7 @@ regions: Dict[str, EntranceData] = {
     RegionName.ShamanVillage: EntranceData(RegionName.ShamanVillage,
     [
         LocationName.Shaman_Village_Elixir,
+        LocationName.Shaman_Village_Elixir_Two,
         LocationName.Shaman_Village_Spirit_Gloves,
         LocationName.Shaman_Village_Hard_Nut,
         LocationName.Shaman_Village_Lucky_Medal,
@@ -677,34 +709,10 @@ regions: Dict[str, EntranceData] = {
     ]),
     RegionName.Reunion: EntranceData(RegionName.Reunion,
     [
-        LocationName.Contigo_Carry_Stone,
-        LocationName.Contigo_Lifting_Gem,
-        LocationName.Contigo_Orb_of_Force,
-        LocationName.Contigo_Catch_Beads,
-        LocationName.Flint,
-        LocationName.Granite,
-        LocationName.Quartz,
-        LocationName.Vine,
-        LocationName.Sap,
-        LocationName.Ground,
-        LocationName.Fizz,
-        LocationName.Sleet,
-        LocationName.Mist,
-        LocationName.Spritz,
-        LocationName.Hail,
-        LocationName.Tonic,
-        LocationName.Forge,
-        LocationName.Fever,
-        LocationName.Corona,
-        LocationName.Scorch,
-        LocationName.Ember,
-        LocationName.Flash,
-        LocationName.Gust,
-        LocationName.Breeze,
-        LocationName.Zephyr,
-        LocationName.Smog,
-        LocationName.Kite,
-        LocationName.Squall,
+        LocationName.Contigo_Isaac,
+        LocationName.Contigo_Garet,
+        LocationName.Contigo_Ivan,
+        LocationName.Contigo_Mia
     ]),
     RegionName.AttekaCavern: EntranceData(RegionName.AttekaCavern,
     [
