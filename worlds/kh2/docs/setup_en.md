@@ -36,9 +36,15 @@ When you generate a game you will see a download link for a KH2 .zip seed on the
 Make sure the seed is on the top of the list (Highest Priority)<br>
 After Installing the seed click `Mod Loader -> Build/Build and Run`. Every slot is a unique mod to install and will be needed be repatched for different slots/rooms.
 
+<h2 style="text-transform:none";>Optional Software:</h2>
+
+- [Kingdom Hearts 2 AP Tracker](https://github.com/palex00/kh2-ap-tracker/releases/latest/), for use with
+[PopTracker](https://github.com/black-sliver/PopTracker/releases)
+
 <h2 style="text-transform:none";>What the Mod Manager Should Look Like.</h2>
 
 ![image](https://i.imgur.com/Si4oZ8w.png)
+
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
 
@@ -73,9 +79,23 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
 - Run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
 - Make sure to save in a different save slot when playing in an async or disconnecting from the server to play a different seed
 
-<h2 style="text-transform:none";>Logic Sheet</h2>
+<h2 style="text-transform:none";>Logic Sheet & PopTracker Autotracking</h2>
 
 Have any questions on what's in logic? This spreadsheet made by Bulcon has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1nNi8ohEs1fv-sDQQRaP45o6NoRcMlLJsGckBonweDMY/edit?usp=sharing)
+
+Alternatively you can use the Kingdom Hearts 2 PopTracker Pack that is based off of the logic sheet above and does all the work for you.
+
+<h3 style="text-transform:none";>PopTracker Pack</h3>
+
+1. Download [Kingdom Hearts 2 AP Tracker](https://github.com/palex00/kh2-ap-tracker/releases/latest/) and
+[PopTracker](https://github.com/black-sliver/PopTracker/releases).
+2. Put the tracker pack into packs/ in your PopTracker install.
+3. Open PopTracker, and load the Kingdom Hearts 2 pack.
+4. For autotracking, click on the "AP" symbol at the top.
+5. Enter the Archipelago server address (the one you connected your client to), slot name, and password.
+
+This pack will handle logic, received items, checked locations and autotabbing for you!
+
 
 <h2 style="text-transform:none";>F.A.Q.</h2>
 
