@@ -755,9 +755,9 @@ and check whether they were **unlocked**.
 and check whether they **became locked**.
 
 Another impactful way to optimise LogicMixin is to use caching.  
-Your custom state variables don't actually need to be recalculated on every collect / remove, because there are often
-multiple calls to `collect` / `remove` between access rule calls. Thus, it would be much more efficient to hold off
-on recaculating until the an actual access rule call happens.  
+Your custom state variables don't actually need to be recalculated on every `collect` / `remove`, because there are
+often multiple calls to `collect` / `remove` between access rule calls. Thus, it would be much more efficient to hold
+off on recaculating until the an actual access rule call happens.  
 A common way to realize this is to define a `mygame_state_is_stale` variable that is set to True in `collect`, `remove`,
 and `init_mixin`. The calls to the actual recalculating functions are then moved to the start of the relevant
 access rules like this:
