@@ -13,6 +13,7 @@ def allow_djinn(_, item: 'GSTLAItem') -> bool:
 class GSTLALocation(Location):
     game: str = "Golden Sun The Lost Age"
     location_data: LocationData
+    item: 'GSTLAItem'
 
     def __init__(self, player: int, name: str, location: LocationData, region: Region):
         super(GSTLALocation, self).__init__(player, name, location.ap_id, region)

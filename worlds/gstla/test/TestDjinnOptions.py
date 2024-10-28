@@ -12,7 +12,7 @@ class TestDjinnOptions(GSTestBase):
             self.assertEqual(LocationType.Djinn, djinn.loc_type)
             name = loc_names_by_id[djinn.ap_id]
             ap_loc = world.get_location(name)
-            ap_item: GSTLAItem = cast(GSTLAItem, ap_loc.item)
+            ap_item = ap_loc.item
             self.assertEqual(ItemType.Djinn, ap_item.item_data.type)
 
 class TestVanillaDjinn(GSTestBase):
