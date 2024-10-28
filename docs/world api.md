@@ -703,7 +703,7 @@ defeat with your current items.
 There could be dozens of weapons, armor pieces, or consumables that each improve your ability to defeat
 specific enemies to varying degrees. It would be useful to be able to keep track of "defeatable enemies" as a state variable,
 and have this variable be recalculated as necessary based on newly collected/removed items.
-This is the capability of LogicMixin: Adding custom variables to state that get recalculated "as necessary".
+This is the capability of LogicMixin: Adding custom variables to state that get recalculated as necessary.
 
 In general, a LogicMixin class should have at least one mutable variable that is tracking some custom state per player,
 as well as `init_mixin` and `copy_mixin` functions so that this variable gets initialized and copied correctly when
