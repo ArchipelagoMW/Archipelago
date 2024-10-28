@@ -254,7 +254,7 @@ def run_gui():
         _client_layout: Optional[ScrollBox] = None
 
         def __init__(self, ctx=None):
-            self.title = self.base_title
+            self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             super().__init__()
