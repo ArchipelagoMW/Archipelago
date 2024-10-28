@@ -11,6 +11,8 @@
 - Fixed a rare issue where receiving a wonder trade could partially corrupt the save data, preventing the player from
 receiving new items.
 - Fixed the client spamming the "goal complete" status update to the server instead of sending it once.
+- Fixed the `trainer_party_blacklist` option checking for the existence of the "_Legendaries" shortcut in the
+`starter_blacklist` option instead of itself.
 - Fixed a logic issue where the "Mauville City - Coin Case from Lady in House" location only required a Harbor Mail if
 the player randomized NPC gifts.
 - The Dig tutor has its compatibility percentage raised to 50% if the player's TM/tutor compatibility is set lower.
