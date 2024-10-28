@@ -979,7 +979,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             lambda state: adv_tactics or logic.zerg_common_unit(state)
         ),
         make_location_data(SC2Mission.LAB_RAT.mission_name, "Win In Under 10 Minutes", SC2HOTS_LOC_ID_OFFSET + 108, LocationType.CHALLENGE,
-            lambda state: adv_tactics or logic.zerg_common_unit(state),
+            logic.zerg_common_unit,
             flags=LocationFlag.SPEEDRUN
         ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
@@ -3271,6 +3271,50 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.ALL_IN_P.mission_name, "Fifth Kerrigan Attack", SC2_RACESWAP_LOC_ID_OFFSET + 5805, LocationType.EXTRA,
             logic.all_in_p_requirement
         ),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5900, LocationType.VICTORY,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "Gather Minerals", SC2_RACESWAP_LOC_ID_OFFSET + 5901, LocationType.VANILLA),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "South Marine Group", SC2_RACESWAP_LOC_ID_OFFSET + 5902, LocationType.VANILLA,
+                           lambda state: adv_tactics or logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "East Marine Group", SC2_RACESWAP_LOC_ID_OFFSET + 5903, LocationType.VANILLA,
+                           lambda state: adv_tactics or logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "West Marine Group", SC2_RACESWAP_LOC_ID_OFFSET + 5904, LocationType.VANILLA,
+                           lambda state: adv_tactics or logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 5905, LocationType.EXTRA),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "Supply Depot", SC2_RACESWAP_LOC_ID_OFFSET + 5906, LocationType.EXTRA),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "Gas Turrets", SC2_RACESWAP_LOC_ID_OFFSET + 5907, LocationType.EXTRA,
+                           lambda state: adv_tactics or logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_T.mission_name, "Win In Under 10 Minutes", SC2_RACESWAP_LOC_ID_OFFSET + 5908, LocationType.CHALLENGE,
+                           lambda state: logic.terran_common_unit(state) and logic.terran_early_tech(state),
+                           flags=LocationFlag.SPEEDRUN
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6000, LocationType.VICTORY,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "Gather Minerals", SC2_RACESWAP_LOC_ID_OFFSET + 6001, LocationType.VANILLA),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "South Zealot Group", SC2_RACESWAP_LOC_ID_OFFSET + 6002, LocationType.VANILLA,
+                           lambda state: adv_tactics or logic.protoss_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "East Zealot Group", SC2_RACESWAP_LOC_ID_OFFSET + 6003, LocationType.VANILLA,
+                           lambda state: adv_tactics or logic.protoss_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "West Zealot Group", SC2_RACESWAP_LOC_ID_OFFSET + 6004, LocationType.VANILLA,
+                           lambda state: adv_tactics or logic.protoss_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 6005, LocationType.EXTRA),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 6006, LocationType.EXTRA),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "Gas Turrets", SC2_RACESWAP_LOC_ID_OFFSET + 6007, LocationType.EXTRA,
+                           lambda state: adv_tactics or logic.protoss_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.LAB_RAT_P.mission_name, "Win In Under 10 Minutes", SC2_RACESWAP_LOC_ID_OFFSET + 6008, LocationType.CHALLENGE,
+                           lambda state: adv_tactics or logic.protoss_common_unit(state),
+                           flags=LocationFlag.SPEEDRUN
+                           ),
     ]
 
     beat_events = []

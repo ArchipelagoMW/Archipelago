@@ -26,7 +26,7 @@ class MissionFlag(IntFlag):
     NoBuild       = auto()
     Defense       = auto()
     AutoScroller  = auto()  # The mission is won by waiting out a timer or victory is gated behind a timer
-    Countdown     = auto()  # Overall, the the mission must be beaten before a loss timer counts down
+    Countdown     = auto()  # Overall, the mission must be beaten before a loss timer counts down
     Kerrigan      = auto()  # The player controls Kerrigan in the mission
     VanillaSoa    = auto()  # The player controls the Spear of Adun in the vanilla version of the mission
     Nova          = auto()  # The player controls NCO Nova in the mission
@@ -133,7 +133,7 @@ class SC2Mission(Enum):
     IN_UTTER_DARKNESS = 25, "In Utter Darkness", SC2Campaign.PROPHECY, "_4", SC2Race.PROTOSS, MissionPools.HARD, "ap_in_utter_darkness", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.VsZerg
 
     # Heart of the Swarm
-    LAB_RAT = 30, "Lab Rat", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.STARTER, "ap_lab_rat", MissionFlag.Zerg|MissionFlag.VsTerran
+    LAB_RAT = 30, "Lab Rat (Zerg)", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.STARTER, "ap_lab_rat", MissionFlag.Zerg|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     BACK_IN_THE_SADDLE = 31, "Back in the Saddle", SC2Campaign.HOTS, "Umoja", SC2Race.ANY, MissionPools.STARTER, "ap_back_in_the_saddle", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsTZ
     RENDEZVOUS = 32, "Rendezvous", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.EASY, "ap_rendezvous", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.AutoScroller|MissionFlag.VsTerran
     HARVEST_OF_SCREAMS = 33, "Harvest of Screams", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_harvest_of_screams", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsProtoss
@@ -241,7 +241,8 @@ class SC2Mission(Enum):
     SHATTER_THE_SKY_P = 139, "Shatter the Sky (Protoss)", SC2Campaign.WOL, "Char", SC2Race.PROTOSS, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
     ALL_IN_Z = 140, "All-In (Zerg)", SC2Campaign.WOL, "Char", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_all_in", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     ALL_IN_P = 141, "All-In (Protoss)", SC2Campaign.WOL, "Char", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_all_in", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
-    # 142/143 - Lab Rat
+    LAB_RAT_T = 142, "Lab Rat (Terran)", SC2Campaign.HOTS, "Umoja", SC2Race.TERRAN, MissionPools.STARTER, "ap_lab_rat", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.RaceSwap
+    LAB_RAT_P = 143, "Lab Rat (Protoss)", SC2Campaign.HOTS, "Umoja", SC2Race.PROTOSS, MissionPools.STARTER, "ap_lab_rat", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.RaceSwap
     # 144/145 - Back in the Saddle
     # 146/147 - Rendezvous
     # 148/149 - Harvest of Screams
