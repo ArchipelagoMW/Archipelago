@@ -751,7 +751,7 @@ def remove(self, state: CollectionState, item: Item) -> bool:
     return change
 ```
 
-Using LogicMixin can slow down your code by a lot if you don't use it intelligently. This is because `collect`
+Using LogicMixin can greatly slow down your code if you don't use it intelligently. This is because `collect`
 and `remove` are called very frequently during fill. If your `collect` & `remove` cause a heavy calculation
 every time, your code might end up being *slower* than just doing calculations in your access rules.
 
