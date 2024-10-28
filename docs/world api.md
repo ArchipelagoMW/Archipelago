@@ -700,7 +700,7 @@ LogicMixin is handy when your logic is more complex than one-to-one location-ite
 A game in which "The red key opens the red door" can just express this relationship through a one-line access rule.  
 But now, consider a game with a heavy focus on combat, where the main logical consideration is which enemies you can
 defeat with your current items.  
-There could be dozens of weapons, armor pieces or consumables that each improve your ability to defeat
+There could be dozens of weapons, armor pieces, or consumables that each improve your ability to defeat
 specific enemies to varying degrees. It would be useful to be able to track "defeatable enemies" as a state variable,
 and have this variable be recalculated "when necessary" based on newly collected / removed items.  
 This is the capability of LogicMixin: Adding custom variables to state that get recalculated "as necessary".
