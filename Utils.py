@@ -31,6 +31,7 @@ if typing.TYPE_CHECKING:
     import tkinter
     import pathlib
     from BaseClasses import Region
+    import multiprocessing
 
 
 def tuplize_version(version: str) -> Version:
@@ -664,6 +665,19 @@ def get_input_text_from_response(text: str, command: str) -> typing.Optional[str
     return None
 
 
+def is_kivy_running() -> bool:
+    if "kivy" in sys.modules:
+        from kivy.app import App
+        return App.get_running_app() is not None
+    return False
+
+
+def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_filename(*args))
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
@@ -693,6 +707,13 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -700,6 +721,12 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
+
+
+def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_directory(*args))
 
 
 def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
@@ -725,9 +752,16 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
         import tkinter.filedialog
     except Exception as e:
         logging.error('Could not load tkinter, which is likely not installed. '
-                      f'This attempt was made because open_filename was used for "{title}".')
+                      f'This attempt was made because open_directory was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_directory, args=(res, title, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -739,12 +773,6 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 def messagebox(title: str, text: str, error: bool = False) -> None:
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
-    def is_kivy_running():
-        if "kivy" in sys.modules:
-            from kivy.app import App
-            return App.get_running_app() is not None
-        return False
 
     if is_kivy_running():
         from kvui import MessageBox
