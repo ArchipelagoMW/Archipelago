@@ -3315,6 +3315,68 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            lambda state: adv_tactics or logic.protoss_common_unit(state),
                            flags=LocationFlag.SPEEDRUN
                            ),
+        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6300, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Right Group", SC2_RACESWAP_LOC_ID_OFFSET + 6301, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Center Group", SC2_RACESWAP_LOC_ID_OFFSET + 6302, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Left Group", SC2_RACESWAP_LOC_ID_OFFSET + 6303, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Hold Out Finished", SC2_RACESWAP_LOC_ID_OFFSET + 6304, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_T.mission_name, "Kill All Before Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 6305, LocationType.MASTERY,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state)
+                                   and logic.terran_competent_anti_air(state)),
+                           flags=LocationFlag.SPEEDRUN
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6400, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Right Group", SC2_RACESWAP_LOC_ID_OFFSET + 6401, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Center Group", SC2_RACESWAP_LOC_ID_OFFSET + 6402, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Left Group", SC2_RACESWAP_LOC_ID_OFFSET + 6403, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Hold Out Finished", SC2_RACESWAP_LOC_ID_OFFSET + 6404, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.RENDEZVOUS_P.mission_name, "Kill All Before Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 6405, LocationType.MASTERY,
+                           lambda state: (
+                                   logic.protoss_competent_comp(state)),
+                           flags=LocationFlag.SPEEDRUN
+                           ),
     ]
 
     beat_events = []

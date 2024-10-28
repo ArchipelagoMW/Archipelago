@@ -135,7 +135,7 @@ class SC2Mission(Enum):
     # Heart of the Swarm
     LAB_RAT = 30, "Lab Rat (Zerg)", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.STARTER, "ap_lab_rat", MissionFlag.Zerg|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     BACK_IN_THE_SADDLE = 31, "Back in the Saddle", SC2Campaign.HOTS, "Umoja", SC2Race.ANY, MissionPools.STARTER, "ap_back_in_the_saddle", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsTZ
-    RENDEZVOUS = 32, "Rendezvous", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.EASY, "ap_rendezvous", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.AutoScroller|MissionFlag.VsTerran
+    RENDEZVOUS = 32, "Rendezvous (Zerg)", SC2Campaign.HOTS, "Umoja", SC2Race.ZERG, MissionPools.EASY, "ap_rendezvous", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     HARVEST_OF_SCREAMS = 33, "Harvest of Screams", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_harvest_of_screams", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsProtoss
     SHOOT_THE_MESSENGER = 34, "Shoot the Messenger", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_shoot_the_messenger", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.TimedDefense|MissionFlag.Countdown|MissionFlag.VsProtoss
     ENEMY_WITHIN = 35, "Enemy Within", SC2Campaign.HOTS, "Kaldir", SC2Race.ANY, MissionPools.EASY, "ap_enemy_within", MissionFlag.Zerg|MissionFlag.NoBuild|MissionFlag.VsProtoss
@@ -244,23 +244,25 @@ class SC2Mission(Enum):
     LAB_RAT_T = 142, "Lab Rat (Terran)", SC2Campaign.HOTS, "Umoja", SC2Race.TERRAN, MissionPools.STARTER, "ap_lab_rat", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.RaceSwap
     LAB_RAT_P = 143, "Lab Rat (Protoss)", SC2Campaign.HOTS, "Umoja", SC2Race.PROTOSS, MissionPools.STARTER, "ap_lab_rat", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.RaceSwap
     # 144/145 - Back in the Saddle
-    # 146/147 - Rendezvous
+    RENDEZVOUS_T = 146, "Rendezvous (Terran)", SC2Campaign.HOTS, "Umoja", SC2Race.TERRAN, MissionPools.EASY, "ap_rendezvous", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.RaceSwap
+    RENDEZVOUS_P = 147, "Rendezvous (Protoss)", SC2Campaign.HOTS, "Umoja", SC2Race.PROTOSS, MissionPools.EASY, "ap_rendezvous", MissionFlag.Protoss|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.RaceSwap
     # 148/149 - Harvest of Screams
     # 150/151 - Shoot the Messenger
     # 152/153 - Enemy Within
-    # 154/155 - Fire in the Sky
-    # 156/157 - Old Soldiers
-    # 158/159 - Waking the Ancient
-    # 160/161 - The Crucible
-    # 162/163 - Supreme
-    # 164/165 - Infested
-    # 166/167 - Hand of Darkness
-    # 168/169 - Phantoms of the Void
-    # 170/171 - With Friends Like These
-    # 172/173 - Conviction
-    # 174/175 - Planetfall
-    # 176/177 - Death From Above
-    # 178/179 - The Reckoning
+    # 154/155 - Domination
+    # 156/157 - Fire in the Sky
+    # 158/159 - Old Soldiers
+    # 160/161 - Waking the Ancient
+    # 162/163 - The Crucible
+    # 164/165 - Supreme
+    # 166/167 - Infested
+    # 168/169 - Hand of Darkness
+    # 170/171 - Phantoms of the Void
+    # 172/173 - With Friends Like These
+    # 174/175 - Conviction
+    # 176/177 - Planetfall
+    # 178/179 - Death From Above
+    # 180/181 - The Reckoning
 
 
 class MissionConnection:
