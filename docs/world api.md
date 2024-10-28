@@ -696,6 +696,15 @@ When importing a file that defines a class that inherits from `worlds.AutoWorld.
 is automatically extended by the mixin's members. These members should be prefixed with the name of the implementing
 world since the namespace is shared with all other logic mixins.
 
+LogicMixin is handy when your logic is described better by an abstraction layer than specific location-item relationships.  
+A game in which "The red key opens the red door" can just express this relationship directly through a one-line access rule.  
+On the other hand, in a game with a heavy focus on combat, the main logical consideration might be which enemies you can defeat
+with your items.  
+There could be dozens of weapons, armor pieces or consumables that each improve your ability to defeat
+specific enemies to varying degrees. It would be useful to be able to track "defeatable enemies" as a state variable,
+and have this variable be recalculated "when necessary" based on newly collected / removed items.  
+This is the capability of LogicMixin: Adding custom variables to state that get recalculated "as necessary".
+
 In general, a LogicMixin class should have at least one mutable variable that is tracking some custom state per player,
 as well as `init_mixin` and `copy_mixin` functions so that this variable gets initialized and copied correctly when
 `CollectionState()` and `CollectionState.copy()` are called respectively.
