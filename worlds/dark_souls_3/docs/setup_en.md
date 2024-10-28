@@ -18,7 +18,8 @@ installation folder.
 Version 3.0.0 of the randomizer _only_ supports the latest version of _Dark Souls III_, 1.15.2. This
 is the latest version, so you don't need to do any downpatching! However, if you've already
 downpatched your game to use an older version of the randomizer, you'll need to reinstall the latest
-version before using this version.
+version before using this version. You should also delete the `dinput8.dll` file if you still have
+one from an older randomizer version.
 
 ### One-Time Setup
 
