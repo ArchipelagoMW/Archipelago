@@ -732,8 +732,8 @@ class MyGameState(LogicMixin):
 
 After doing this, you can now access `state.mygame_defeatable_enemies[player]` from your access rules.
 
-Usually, doing this coincides with an override of `World.collect` and `World.remove`, where any time a relevant item is
-collected or removed, the custom state variable gets recalculated.
+Usually, doing this coincides with an override of `World.collect` and `World.remove`, where the custom state variable 
+gets recalculated when a relevant item is collected or removed.
 
 ```python
 # __init__.py
