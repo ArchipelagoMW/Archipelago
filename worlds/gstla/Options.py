@@ -102,7 +102,7 @@ class RandoOptions(IntEnum):
     AnemosRand   =   0b00000100
     ShufflePCs   =   0b00000010
 
-    def __new__(cls, bit_flag):
+    def __new__(cls, bit_flag: int):
         value = len(cls.__members__)
         obj = int.__new__(cls, value)
         obj._value_ = value
@@ -115,6 +115,7 @@ class StartWithShip(Choice):
     option_shipisclosed = 1
     option_vanilla = 2
     default = 0
+
 
 class HiddenItems(Choice):
     display_name = "Hidden items"

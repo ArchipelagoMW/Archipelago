@@ -118,71 +118,76 @@ class GSTLAWorld(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
+    def _generate_rando_data(self, rando_file: BinaryIO, debug_file: TextIO):
+        rando_file.write(0x1.to_bytes(length=1, byteorder='little'))
+        debug_file.write("Version: 1\n")
+
+        rando_file.write(self.multiworld.seed.to_bytes(length=16, byteorder='little'))
+        debug_file.write(f"Seed: {self.multiworld.seed}\n")
+
+        self._write_options_for_rando(rando_file, debug_file)
+
+        # rando_file.write((0).to_bytes(length=16, byteorder='little'))
+        # debug_file.write("no settings (TBD)\n")
+
+        rando_file.write(f"{self.player_name}\n".encode('ascii'))
+        debug_file.write(f"Slot Name {self.player_name.encode('ascii')}\n")
+
+        # locations = [x for x in all_locations if x.loc_type not in {LocationType.Event, LocationType.Djinn}]
+
+        djinn_locs: List[GSTLALocation] = []
+        index = 0
+        for region in self.multiworld.get_regions(self.player):
+            for location in region.locations:
+                location_data = location_name_to_id.get(location.name, None)
+
+                if location_data is None or location_data.loc_type == LocationType.Event:
+                    continue
+                ap_item = location.item
+                # print(ap_item)
+                if ap_item is None:
+                    # TODO: need to fill with something else
+                    continue
+
+                if ap_item.player != self.player:
+                    item_data = AP_PLACEHOLDER_ITEM
+                else:
+                    item_data = item_table[ap_item.name]
+
+                if item_data.type == ItemType.Djinn:
+                    djinn_locs.append(location)
+                else:
+                    # rom.write_item(location_data, item_data)
+                    # TODO: cleanup
+                    item_id = 0xA00 if item_data.id == 412 else item_data.id
+                    rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
+                    rando_file.write(item_id.to_bytes(length=2, byteorder='little'))
+                    debug_file.write(
+                        f"{index} \n\tLocation: {location.name.value} \n\tLocation Flag: {hex(location_data.rando_flag)} \n\tItem: {location.item.name} \n\tItem ID: {item_id}\n\n")
+                index += 1
+                # debug_file.write()
+                # TODO: Questions
+                # Rando flags for summon tablets
+                # Rando flags for psyenergy items
+                # Rando flags for characters
+                # Rando flags for djinn
+
+        rando_file.write(0xFFFFFFFF.to_bytes(length=4, byteorder='little'))
+        debug_file.write("0xFFFFFFFF\n")
+
+        for loc in djinn_locs:
+            item_data = item_table[loc.item.name]
+            location_data = location_name_to_id[loc.name]
+            rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
+            rando_file.write(item_data.get_rando_flag().to_bytes(length=2, byteorder='little'))
+            loc_name = loc_names_by_id[location_data.ap_id]
+            debug_file.write(
+                f"Djinn(Location): {loc_name}\nDjinn(Location) Flag: {hex(location_data.rando_flag)}\nDjinn(Item): {item_data.name}\nDjinn(Item) Flag: {hex(item_data.get_rando_flag())}\n\n")
+
     def _generate_rando_file(self, output_directory: str):
         with open(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}_debug.txt"),'w') as debug_file:
             with open(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gstlarando"),'wb') as rando_file:
-                rando_file.write(0x1.to_bytes(length=1,byteorder='little'))
-                debug_file.write("Version: 1\n")
-
-                rando_file.write(self.multiworld.seed.to_bytes(length=16,byteorder='little'))
-                debug_file.write(f"Seed: {self.multiworld.seed}\n")
-
-                self._write_options_for_rando(rando_file, debug_file)
-
-                # rando_file.write((0).to_bytes(length=16, byteorder='little'))
-                # debug_file.write("no settings (TBD)\n")
-
-                rando_file.write(f"{self.player_name}\n".encode('ascii'))
-                debug_file.write(f"Slot Name {self.player_name.encode('ascii')}\n")
-
-                # locations = [x for x in all_locations if x.loc_type not in {LocationType.Event, LocationType.Djinn}]
-
-                djinn_locs: List[GSTLALocation] = []
-                index = 0
-                for region in self.multiworld.get_regions(self.player):
-                    for location in region.locations:
-                        location_data = location_name_to_id.get(location.name, None)
-
-                        if location_data is None or location_data.loc_type == LocationType.Event:
-                            continue
-                        ap_item = location.item
-                        # print(ap_item)
-                        if ap_item is None:
-                            # TODO: need to fill with something else
-                            continue
-
-                        if ap_item.player != self.player:
-                            item_data = AP_PLACEHOLDER_ITEM
-                        else:
-                            item_data = item_table[ap_item.name]
-
-                        if item_data.type == ItemType.Djinn:
-                            djinn_locs.append(location)
-                        else:
-                            # rom.write_item(location_data, item_data)
-                            # TODO: cleanup
-                            item_id = 0xA00 if item_data.id == 412 else item_data.id
-                            rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
-                            rando_file.write(item_id.to_bytes(length=2, byteorder='little'))
-                            debug_file.write(f"{index} \n\tLocation: {location.name.value} \n\tLocation Flag: {hex(location_data.rando_flag)} \n\tItem: {location.item.name} \n\tItem ID: {item_id}\n\n")
-                        index += 1
-                        # debug_file.write()
-                        #TODO: Questions
-                        # Rando flags for summon tablets
-                        # Rando flags for psyenergy items
-                        # Rando flags for characters
-                        # Rando flags for djinn
-
-                rando_file.write(0xFFFFFFFF.to_bytes(length=4, byteorder='little'))
-                debug_file.write("0xFFFFFFFF\n")
-
-                for loc in djinn_locs:
-                    item_data = item_table[loc.item.name]
-                    location_data = location_name_to_id[loc.name]
-                    rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
-                    rando_file.write(item_data.get_rando_flag().to_bytes(length=2,byteorder='little'))
-                    loc_name = loc_names_by_id[location_data.ap_id]
-                    debug_file.write(f"Djinn(Location): {loc_name}\nDjinn(Location) Flag: {hex(location_data.rando_flag)}\nDjinn(Item): {item_data.name}\nDjinn(Item) Flag: {hex(item_data.get_rando_flag())}\n\n")
+                self._generate_rando_data(rando_file, debug_file)
 
 
     def _write_options_for_rando(self, rando_file: BinaryIO, debug_file: TextIO):
