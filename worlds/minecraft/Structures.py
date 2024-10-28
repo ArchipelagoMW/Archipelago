@@ -29,7 +29,7 @@ def shuffle_structures(self: "MinecraftWorld") -> None:
 
     # Connect plando structures first
     if self.options.plando_connections:
-        for conn in self.plando_connections:
+        for conn in self.options.plando_connections:
             set_pair(conn.entrance, conn.exit)
 
     # The algorithm tries to place the most restrictive structures first. This algorithm always works on the
