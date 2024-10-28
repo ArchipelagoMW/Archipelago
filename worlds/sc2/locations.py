@@ -1029,7 +1029,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 400, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "First Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 401, LocationType.VANILLA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "North Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 402, LocationType.VANILLA,
@@ -1050,7 +1050,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Southwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 407, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS.mission_name, "Nafash", SC2HOTS_LOC_ID_OFFSET + 408, LocationType.EXTRA,
             lambda state: (
@@ -1065,12 +1065,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 500, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "East Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 501, LocationType.VANILLA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Center Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 502, LocationType.VANILLA,
             lambda state: logic.zerg_common_unit(state) or adv_tactics
@@ -1078,12 +1078,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "West Stasis Chamber", SC2HOTS_LOC_ID_OFFSET + 503, LocationType.VANILLA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Destroy 4 Shuttles", SC2HOTS_LOC_ID_OFFSET + 504, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_common_unit(state)
-                and logic.zerg_basic_anti_air(state))
+                and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "Frozen Expansion", SC2HOTS_LOC_ID_OFFSET + 505, LocationType.EXTRA,
             logic.zerg_common_unit
@@ -3376,6 +3376,78 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            lambda state: (
                                    logic.protoss_competent_comp(state)),
                            flags=LocationFlag.SPEEDRUN
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6500, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "First Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6501, LocationType.VANILLA),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "North Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6502, LocationType.VANILLA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "West Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6503, LocationType.VANILLA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Lost Brood", SC2_RACESWAP_LOC_ID_OFFSET + 6504, LocationType.EXTRA),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6505, LocationType.EXTRA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Northwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6506, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Southwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6507, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Nafash", SC2_RACESWAP_LOC_ID_OFFSET + 6508, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "20 Unfrozen Structures", SC2_RACESWAP_LOC_ID_OFFSET + 6509, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6600, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "First Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6601, LocationType.VANILLA),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "North Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6602, LocationType.VANILLA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "West Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6603, LocationType.VANILLA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Lost Brood", SC2_RACESWAP_LOC_ID_OFFSET + 6604, LocationType.EXTRA),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6605, LocationType.EXTRA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Northwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6606, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Southwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6607, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Nafash", SC2_RACESWAP_LOC_ID_OFFSET + 6608, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "20 Unfrozen Structures", SC2_RACESWAP_LOC_ID_OFFSET + 6609, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
                            ),
     ]
 
