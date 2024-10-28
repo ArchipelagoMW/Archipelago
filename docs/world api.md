@@ -698,7 +698,7 @@ world since the namespace is shared with all other logic mixins.
 
 LogicMixin is handy when your logic is more complex than one-to-one location-item relationships.  
 A game in which "The red key opens the red door" can just express this relationship directly through a one-line access rule.  
-Instead, consider a game with a heavy focus on combat, where the main logical consideration might be which enemies
+But now, consider a game with a heavy focus on combat, where the main logical consideration might be which enemies
 you can defeat with your items.  
 There could be dozens of weapons, armor pieces or consumables that each improve your ability to defeat
 specific enemies to varying degrees. It would be useful to be able to track "defeatable enemies" as a state variable,
