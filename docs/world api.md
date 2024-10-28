@@ -742,18 +742,25 @@ def remove(self, state: CollectionState, item: Item) -> bool:
     return change
 ```
 
-Using LogicMixin can slow down your code by a lot if you don't use it intelligently.  
-For example, you can make use of the fact that `collect` should only unlock things, and `remove` should only
-lock things.
+Using LogicMixin can slow down your code by a lot if you don't use it intelligently. This is because `collect`
+and `remove` are called very frequently during fill. If your `collect` & `remove` cause a heavy calculation
+every time, your code might end up being *slower* than just doing calculations in your access rules.
+
+One way to optimise recalculations is to make use of the fact that `collect` should only unlock things,
+and `remove` should only lock things.  
 In our example, we have two different functions: `get_newly_unlocked_enemies` and `get_newly_locked_enemies`.  
 `get_newly_unlocked_enemies` should only consider enemies that are *not already in the set*
 and check whether they were **unlocked**.  
 `get_newly_locked_enemies` should only consider enemies that are *already in the set*
 and check whether they **became locked**.
 
-There are a multitude of other ways you can optimise LogicMixin. Some games use a `mygame_state_is_stale`
-variable that they simply set to True in `collect`, `remove`, and `init_mixin`.  
-The calls to the actual recalculating functions are then moved to the start of the relevant access rules like this:
+Another impactful way to optimise LogicMixin is to use caching.  
+Your custom state variables don't actually need to be recalculated on every collect / remove, because there are often
+multiple calls to `collect` / `remove` between access rule calls. Thus, it would be much more efficient to hold off
+on recaculating until the an actual access rule call happens.  
+A common way to realize this is to define a `mygame_state_is_stale` variable that is set to True in `collect`, `remove`,
+and `init_mixin`. The calls to the actual recalculating functions are then moved to the start of the relevant
+access rules like this:
 
 ```python
 def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
@@ -763,9 +770,6 @@ def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
 
     return enemy in state.mygame_defeatable_enemies[player]
 ```
-
-This can help significantly because it is possible for 0 local access rules to be called between two calls to
-`collect`, so recalculating on every `collect` is very slow.
 
 Only use LogicMixin if necessary. There are often other ways to achieve what it does, like making clever use of
 `state.prog_items`, using event items, pseudo-regions, etc.
