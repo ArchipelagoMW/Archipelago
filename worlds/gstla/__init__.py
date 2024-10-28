@@ -4,7 +4,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 import os
 
-from typing import List, TextIO, BinaryIO, Dict, ClassVar, Type
+from typing import List, TextIO, BinaryIO, Dict, ClassVar, Type, cast
 
 from .Options import GSTLAOptions, RandoOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
@@ -269,3 +269,5 @@ class GSTLAWorld(World):
     def create_item(self, name: str) -> "Item":
         return create_item(name, self.player)
 
+    def get_location(self, location_name: str) -> GSTLALocation:
+        return cast(GSTLALocation, super().get_location(location_name))
