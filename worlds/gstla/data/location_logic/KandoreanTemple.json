@@ -1,0 +1,1 @@
+{"Access": [], "Treasure": [{"Addr": "0x84a", "Reqs": [["Whirlwind"]], "Restriction": ["no-empty", "no-mimic"]}, {"Addr": "0xe70", "Reqs": [["Whirlwind"]]}, {"Addr": "0xf06", "Reqs": [["Whirlwind"]]}], "Djinn": [{"Addr": "0x4b", "Reqs": [["Whirlwind", "Lash Pebble"]]}], "Special": []}

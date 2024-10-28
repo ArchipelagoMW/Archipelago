@@ -1,0 +1,1 @@
+{"Access": [["GondowanAccess"], ["Ship"]], "Treasure": [{"Addr": "0xf49", "Reqs": [["Lash Pebble"], ["GabombaCleared"]]}, {"Addr": "0xf4a", "Reqs": [["Lash Pebble"], ["GabombaCleared"]]}, {"Addr": "0xf4b", "Reqs": []}, {"Addr": "0xf4c", "Reqs": [["Lash Pebble"], ["GabombaCleared"]]}], "Djinn": [{"Addr": "0x76", "Reqs": [["Frost Jewel", "Growth"]]}], "Special": []}

@@ -1,0 +1,1 @@
+{"Access": [], "Treasure": [{"Addr": "0x918", "Reqs": [["GabombaCleared"]], "Restriction": ["no-empty", "no-mimic"]}, {"Addr": "0xf0c", "Reqs": []}, {"Addr": "0xf0d", "Reqs": []}, {"Addr": "0xf0e", "Reqs": []}, {"Addr": "0xf0f", "Reqs": []}, {"Addr": "0xf10", "Reqs": []}, {"Addr": "0xf11", "Reqs": []}], "Djinn": [{"Addr": "0x62", "Reqs": [["Healing Fungus"]]}], "Special": []}

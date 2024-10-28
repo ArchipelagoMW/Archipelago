@@ -1,0 +1,1 @@
+{"Access": [["GabombaCleared"]], "Treasure": [{"Addr": "0xf53", "Reqs": [["Cyclone Chip"]]}, {"Addr": "0xf93", "Reqs": [["Cyclone Chip", "Reveal", "Frost Jewel"]], "Restriction": ["no-empty", "no-mimic"]}], "Djinn": [{"Addr": "0x3a", "Reqs": [["Cyclone Chip"]]}], "Special": []}
