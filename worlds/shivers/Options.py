@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import (
+    Choice, DefaultOnToggle, ItemDict, ItemSet, LocationSet, OptionGroup, PerGameCommonOptions, Range, Toggle,
+)
+from worlds.shivers import ItemType, item_table
+from worlds.shivers.Constants import location_info
 
 
 class IxupiCapturesNeeded(Range):
@@ -120,6 +124,61 @@ class PuzzleCollectBehavior(Choice):
     default = 1
 
 
+# Need to override the default options to remove the goal items and goal locations so that they do not show on web.
+valid_item_keys = [name for name, data in item_table.items() if data.type != ItemType.GOAL and data.code is not None]
+valid_location_keys = [name for name in location_info["all_locations"] if name != "Mystery Solved"]
+
+
+class LocalItems(ItemSet):
+    """Forces these items to be in their native world."""
+    display_name = "Local Items"
+    rich_text_doc = True
+    valid_keys = valid_item_keys
+
+
+class NonLocalItems(ItemSet):
+    """Forces these items to be outside their native world."""
+    display_name = "Non-local Items"
+    rich_text_doc = True
+    valid_keys = valid_item_keys
+
+
+class StartInventory(ItemDict):
+    """Start with these items."""
+    verify_item_name = True
+    display_name = "Start Inventory"
+    rich_text_doc = True
+    valid_keys = valid_item_keys
+
+
+class StartHints(ItemSet):
+    """Start with these item's locations prefilled into the ``!hint`` command."""
+    display_name = "Start Hints"
+    rich_text_doc = True
+    valid_keys = valid_item_keys
+
+
+class StartLocationHints(LocationSet):
+    """Start with these locations and their item prefilled into the ``!hint`` command."""
+    display_name = "Start Location Hints"
+    rich_text_doc = True
+    valid_keys = valid_location_keys
+
+
+class ExcludeLocations(LocationSet):
+    """Prevent these locations from having an important item."""
+    display_name = "Excluded Locations"
+    rich_text_doc = True
+    valid_keys = valid_location_keys
+
+
+class PriorityLocations(LocationSet):
+    """Prevent these locations from having an unimportant item."""
+    display_name = "Priority Locations"
+    rich_text_doc = True
+    valid_keys = valid_location_keys
+
+
 @dataclass
 class ShiversOptions(PerGameCommonOptions):
     ixupi_captures_needed: IxupiCapturesNeeded
@@ -133,3 +192,23 @@ class ShiversOptions(PerGameCommonOptions):
     location_pot_pieces: LocationPotPieces
     full_pots: FullPots
     puzzle_collect_behavior: PuzzleCollectBehavior
+    local_items: LocalItems
+    non_local_items: NonLocalItems
+    start_inventory: StartInventory
+    start_hints: StartHints
+    start_location_hints: StartLocationHints
+    exclude_locations: ExcludeLocations
+    priority_locations: PriorityLocations
+
+
+shivers_option_groups = [
+    OptionGroup("Item & Location Options", [
+        LocalItems,
+        NonLocalItems,
+        StartInventory,
+        StartHints,
+        StartLocationHints,
+        ExcludeLocations,
+        PriorityLocations
+    ], True),
+]

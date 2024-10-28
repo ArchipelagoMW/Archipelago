@@ -30,6 +30,14 @@ class ItemData(NamedTuple):
 
 SHIVERS_ITEM_ID_OFFSET = 27000
 
+# To allow for an item with a name that changes over time (once a year)
+# while keeping the id unique we can generate a small range of them.
+goal_items = {
+    f"Mt. Pleasant Tribune: {Constants.years_since_sep_30_1980 + year_offset} year Old Mystery Solved!": ItemData(
+        SHIVERS_ITEM_ID_OFFSET + 100 + Constants.years_since_sep_30_1980 + year_offset, ItemType.GOAL
+    ) for year_offset in range(-1, 2)
+}
+
 item_table = {
     # Pot Pieces
     "Water Pot Bottom": ItemData(SHIVERS_ITEM_ID_OFFSET + 0, ItemType.POT),
@@ -121,7 +129,7 @@ item_table = {
     "Metal Pot Complete DUPE": ItemData(None, ItemType.POT_COMPELTE_DUPLICATE),
 
     # Filler
-    "Empty": ItemData(SHIVERS_ITEM_ID_OFFSET + 90, ItemType.FILLER, ItemClassification.filler),
+    "Empty": ItemData(None, ItemType.FILLER, ItemClassification.filler),
     "Easier Lyre": ItemData(SHIVERS_ITEM_ID_OFFSET + 91, ItemType.FILLER, ItemClassification.useful),
     "Water Always Available in Lobby": ItemData(
         SHIVERS_ITEM_ID_OFFSET + 92, ItemType.IXUPI_AVAILABILITY, ItemClassification.filler
@@ -185,8 +193,6 @@ item_table = {
     ),
     "Heal": ItemData(SHIVERS_ITEM_ID_OFFSET + 112, ItemType.FILLER, ItemClassification.filler),
 
-    # Victory item
-    f"Mt. Pleasant Tribune: {Constants.years_since_sep_30_1980} year Old Mystery Solved!": ItemData(
-        SHIVERS_ITEM_ID_OFFSET + 113, ItemType.GOAL
-    )
+    # Goal items
+    **goal_items
 }

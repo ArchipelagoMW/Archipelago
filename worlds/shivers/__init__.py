@@ -5,7 +5,7 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from . import Constants, Rules
 from .Items import ItemType, SHIVERS_ITEM_ID_OFFSET, ShiversItem, item_table
-from .Options import ShiversOptions
+from .Options import ShiversOptions, shivers_option_groups
 from .Rules import set_rules
 
 
@@ -18,6 +18,7 @@ class ShiversWeb(WebWorld):
         "setup/en",
         ["GodlFire", "Mathx2"]
     )]
+    option_groups = shivers_option_groups
 
 
 class ShiversWorld(World):
@@ -181,8 +182,9 @@ class ShiversWorld(World):
         elif self.options.lobby_access == "local":
             set_lobby_access_keys(self.multiworld.local_early_items[self.player])
 
+        goal_item_code = SHIVERS_ITEM_ID_OFFSET + 100 + Constants.years_since_sep_30_1980
         for name, data in item_table.items():
-            if data.type == ItemType.GOAL:
+            if data.type == ItemType.GOAL and data.code == goal_item_code:
                 goal = self.create_item(name)
                 self.get_location("Mystery Solved").place_locked_item(goal)
 
