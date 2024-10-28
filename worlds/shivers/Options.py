@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from Options import (
     Choice, DefaultOnToggle, ItemDict, ItemSet, LocationSet, OptionGroup, PerGameCommonOptions, Range, Toggle,
 )
-from worlds.shivers import ItemType, item_table
-from worlds.shivers.Constants import location_info
+from . import ItemType, item_table
+from .Constants import location_info
 
 
 class IxupiCapturesNeeded(Range):
