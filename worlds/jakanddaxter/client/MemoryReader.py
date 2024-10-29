@@ -28,7 +28,7 @@ sizeof_float = 4
 # *****************************************************************************
 # **** This number must match (-> *ap-info-jak1* version) in ap-struct.gc! ****
 # *****************************************************************************
-expected_memory_version = 3
+expected_memory_version = 4
 
 
 # IMPORTANT: OpenGOAL memory structures are particular about the alignment, in memory, of member elements according to
