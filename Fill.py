@@ -18,15 +18,12 @@ class FillError(RuntimeError):
 
 
 class FillLogger():
-    """
-        FillLogger class variables:
-        min_size -- minimum number of items we care about reporting
-        min_time -- minimum time (in seconds) between reports (used in dynamic logging only)
-        step     -- number of items between reports (used in fixed logging only)
-    """
     min_size: int = 1000
+    """ min_size -- minimum number of items we care about reporting """
     min_time: float = 0.25
+    """ min_time -- minimum time (in seconds) between reports (for dynamic logging) """
     step: int = 1000
+    """ step -- minimum number of items between reports (for fixed logging) """
     is_debug: bool = False
 
     def __init__(self, total_items: int):
