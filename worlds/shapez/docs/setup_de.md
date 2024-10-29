@@ -40,7 +40,7 @@ wählen können!
 Du kannst auf der [shapez-Spieler-Optionen-Seite](/games/shapez/player-options) eine YAML-Datei generieren oder ein 
 Template herunterladen.
 
-##Einer MultiWorld beitreten
+## Einer MultiWorld beitreten
 
 1. Öffne das Spiel.
 2. Gib im Hauptmenü den Slot-Namen, die Adresse, den Port und das Passwort (optional) in die dafür vorgesehene Box ein.
