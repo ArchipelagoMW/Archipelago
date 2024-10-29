@@ -244,7 +244,7 @@ class GameData:
                 LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'],
-                              loc['mapName'], restriction_map.get(addr[0],0))
+                              loc['mapName'], restriction_dict[loc['id']])
             )
 
 

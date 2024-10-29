@@ -45,7 +45,7 @@ djinn_locations = [
 
 summon_tablets = [
     {% for summon in summon_locations -%}
-    LocationData({{summon.flag}}, {{summon.flag}}, {{summon.id}}, {{summon.addr[0]}}, {{summon.addr}}, {{summon.event_type}}, {{summon.vanilla_contents}},  LocationType.Item, LocationRestriction({{summon.restrictions}}),), #{{summon.vanilla_name}}
+    LocationData({{summon.flag}}, {{summon.flag}}, {{summon.id}}, {{summon.addr[0]}}, {{summon.addr}}, {{summon.event_type}}, {{summon.vanilla_contents}},  LocationType.Item, LocationRestriction({{summon.restrictions}})), #{{summon.vanilla_name}}
     {% endfor %}
 ]
 

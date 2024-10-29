@@ -116,30 +116,30 @@ LocationData(125, 125, 16384142, 16384142, [16384142], 128, 17, LocationType.Dji
 ]
 
 summon_tablets = [
-    LocationData(19, 19, 19, 992068, [992068], 132, 3859,  LocationType.Item, LocationRestriction(0),), #Moloch
-    LocationData(24, 24, 24, 992212, [992212], 132, 3864,  LocationType.Item, LocationRestriction(0),), #Daedalus
-    LocationData(18, 18, 18, 992632, [992632], 132, 3858,  LocationType.Item, LocationRestriction(0),), #Flora
-    LocationData(20, 20, 20, 993424, [993424], 132, 3860,  LocationType.Item, LocationRestriction(0),), #Ulysses
-    LocationData(25, 25, 25, 994300, [994300], 132, 3865,  LocationType.Item, LocationRestriction(0),), #Azul
-    LocationData(16, 16, 16, 994844, [994844], 132, 3856,  LocationType.Item, LocationRestriction(0),), #Zagan
-    LocationData(17, 17, 17, 994856, [994856], 132, 3857,  LocationType.Item, LocationRestriction(0),), #Megaera
-    LocationData(21, 21, 21, 994868, [994868], 132, 3861,  LocationType.Item, LocationRestriction(0),), #Haures
-    LocationData(23, 23, 23, 994880, [994880], 132, 3863,  LocationType.Item, LocationRestriction(0),), #Coatlicue
-    LocationData(26, 26, 26, 994892, [994892], 132, 3866,  LocationType.Item, LocationRestriction(0),), #Catastrophe
-    LocationData(27, 27, 27, 994904, [994904], 132, 3867,  LocationType.Item, LocationRestriction(0),), #Charon
-    LocationData(28, 28, 28, 994916, [994916], 132, 3868,  LocationType.Item, LocationRestriction(0),), #Iris
-    LocationData(2315, 2315, 2315, 16384198, [16384198], 132, 3862,  LocationType.Item, LocationRestriction(0),), #Eclipse
+    LocationData(19, 19, 19, 992068, [992068], 132, 3859,  LocationType.Item, LocationRestriction(0)), #Moloch
+    LocationData(24, 24, 24, 992212, [992212], 132, 3864,  LocationType.Item, LocationRestriction(0)), #Daedalus
+    LocationData(18, 18, 18, 992632, [992632], 132, 3858,  LocationType.Item, LocationRestriction(0)), #Flora
+    LocationData(20, 20, 20, 993424, [993424], 132, 3860,  LocationType.Item, LocationRestriction(0)), #Ulysses
+    LocationData(25, 25, 25, 994300, [994300], 132, 3865,  LocationType.Item, LocationRestriction(0)), #Azul
+    LocationData(16, 16, 16, 994844, [994844], 132, 3856,  LocationType.Item, LocationRestriction(0)), #Zagan
+    LocationData(17, 17, 17, 994856, [994856], 132, 3857,  LocationType.Item, LocationRestriction(0)), #Megaera
+    LocationData(21, 21, 21, 994868, [994868], 132, 3861,  LocationType.Item, LocationRestriction(0)), #Haures
+    LocationData(23, 23, 23, 994880, [994880], 132, 3863,  LocationType.Item, LocationRestriction(0)), #Coatlicue
+    LocationData(26, 26, 26, 994892, [994892], 132, 3866,  LocationType.Item, LocationRestriction(0)), #Catastrophe
+    LocationData(27, 27, 27, 994904, [994904], 132, 3867,  LocationType.Item, LocationRestriction(0)), #Charon
+    LocationData(28, 28, 28, 994916, [994916], 132, 3868,  LocationType.Item, LocationRestriction(0)), #Iris
+    LocationData(2315, 2315, 2315, 16384198, [16384198], 132, 3862,  LocationType.Item, LocationRestriction(0)), #Eclipse
     
 ]
 
 psyenergy_locations = [
-    LocationData(2260, 2260, 2260, 16384190, [16384190], 132, 3728, LocationType.Psyenergy), LocationRestriction(0), # Reveal
-    LocationData(2478, 2478, 2478, 16384192, [16384192], 132, 3722, LocationType.Psyenergy), LocationRestriction(0), # Parch
-    LocationData(2490, 2490, 2490, 16384194, [16384194], 132, 3723, LocationType.Psyenergy), LocationRestriction(0), # Sand
-    LocationData(2554, 2554, 2554, 16384196, [16384196], 132, 3738, LocationType.Psyenergy), LocationRestriction(0), # Blaze
-    LocationData(2, 6, 2, 16384204, [16384204], 132, 3725, LocationType.Psyenergy), LocationRestriction(0), # Mind Read
-    LocationData(3, 6, 3, 16384206, [16384206], 132, 3662, LocationType.Psyenergy), LocationRestriction(0), # Whirlwind
-    LocationData(4, 4, 4, 16384208, [16384208], 132, 3596, LocationType.Psyenergy), LocationRestriction(0), # Growth
+    LocationData(2260, 2260, 2260, 16384190, [16384190], 132, 3728, LocationType.Psyenergy), LocationRestriction(3), # Reveal
+    LocationData(2478, 2478, 2478, 16384192, [16384192], 132, 3722, LocationType.Psyenergy), LocationRestriction(3), # Parch
+    LocationData(2490, 2490, 2490, 16384194, [16384194], 132, 3723, LocationType.Psyenergy), LocationRestriction(3), # Sand
+    LocationData(2554, 2554, 2554, 16384196, [16384196], 132, 3738, LocationType.Psyenergy), LocationRestriction(3), # Blaze
+    LocationData(2, 6, 2, 16384204, [16384204], 132, 3725, LocationType.Psyenergy), LocationRestriction(4), # Mind Read
+    LocationData(3, 6, 3, 16384206, [16384206], 132, 3662, LocationType.Psyenergy), LocationRestriction(4), # Whirlwind
+    LocationData(4, 4, 4, 16384208, [16384208], 132, 3596, LocationType.Psyenergy), LocationRestriction(4), # Growth
     
 ]
 
@@ -175,7 +175,7 @@ the_rest = [
     LocationData(3851, 3851, 3851, 991928, [991928], 128, 181, LocationType.Item), LocationRestriction(0), # Dehkan Plateau Nut
     LocationData(3852, 3852, 3852, 991940, [991940], 128, 383, LocationType.Item), LocationRestriction(0), # Madra Nurse's Cap
     LocationData(3853, 3853, 3853, 991948, [991948], 13, 187, LocationType.Hidden), LocationRestriction(0), # Madra Antidote
-    LocationData(2328, 2328, 2328, 16384166, [16384166, 991956], 128, 3721, LocationType.Item), LocationRestriction(0), # Madra Cyclone Chip
+    LocationData(2328, 2328, 2328, 16384166, [16384166, 991956], 128, 3721, LocationType.Item), LocationRestriction(3), # Madra Cyclone Chip
     LocationData(3854, 3854, 3854, 991968, [991968], 3, 226, LocationType.Hidden), LocationRestriction(0), # Madra Smoke Bomb
     LocationData(3855, 3855, 3855, 991976, [991976], 13, 32783, LocationType.Hidden), LocationRestriction(0), # Madra 15 coins
     LocationData(3856, 3856, 3856, 991984, [991984], 2, 227, LocationType.Hidden), LocationRestriction(0), # Madra Sleep Bomb
@@ -254,11 +254,11 @@ the_rest = [
     LocationData(3698, 3698, 3698, 992852, [992852], 129, 2, LocationType.Item), LocationRestriction(0), # Gabomba Statue Mimic
     LocationData(3922, 3922, 3922, 992864, [992864], 128, 188, LocationType.Item), LocationRestriction(0), # Gabomba Statue Elixir
     LocationData(3923, 3923, 3923, 992876, [992876], 131, 195, LocationType.Hidden), LocationRestriction(0), # Gabomba Catacombs Mint
-    LocationData(3987, 3987, 3987, 992888, [992888], 131, 445, LocationType.Item), LocationRestriction(0), # Gabomba Catacombs Tomegathericon
+    LocationData(3987, 3987, 3987, 992888, [992888], 131, 445, LocationType.Item), LocationRestriction(3), # Gabomba Catacombs Tomegathericon
     LocationData(3924, 3924, 3924, 992900, [992900], 128, 183, LocationType.Item), LocationRestriction(0), # Lemurian Ship Potion
     LocationData(3925, 3925, 3925, 992908, [992908], 3, 188, LocationType.Hidden), LocationRestriction(0), # Lemurian Ship Elixir
     LocationData(3926, 3926, 3926, 992916, [992916], 13, 187, LocationType.Hidden), LocationRestriction(0), # Lemurian Ship Antidote
-    LocationData(3928, 3928, 3928, 992928, [992928], 128, 190, LocationType.Item), LocationRestriction(0), # Lemurian Ship Mist Potion
+    LocationData(3928, 3928, 3928, 992928, [992928], 128, 190, LocationType.Item), LocationRestriction(2), # Lemurian Ship Mist Potion
     LocationData(3927, 3927, 3927, 992936, [992936, 992944], 3, 238, LocationType.Hidden), LocationRestriction(0), # Lemurian Ship Oil Drop
     LocationData(3929, 3929, 3929, 992968, [992968], 128, 426, LocationType.Item), LocationRestriction(0), # Shrine of the Sea God Rusty Staff
     LocationData(2247, 2247, 2247, 992980, [992980], 131, 439, LocationType.Item), LocationRestriction(0), # Shrine of the Sea God Right Prong
@@ -303,7 +303,7 @@ the_rest = [
     LocationData(4005, 4005, 4005, 993412, [993412], 13, 343, LocationType.Hidden), LocationRestriction(0), # Izumo Festival Coat
     LocationData(4006, 4006, 4006, 993432, [993432], 128, 334, LocationType.Item), LocationRestriction(0), # Izumo Phantasmal Mail
     LocationData(3955, 3955, 3955, 993444, [993444], 128, 181, LocationType.Item), LocationRestriction(0), # Gaia Rock Nut
-    LocationData(3956, 3956, 3956, 993456, [993456], 131, 451, LocationType.Item), LocationRestriction(0), # Gaia Rock Dancing Idol
+    LocationData(3956, 3956, 3956, 993456, [993456], 131, 451, LocationType.Item), LocationRestriction(3), # Gaia Rock Dancing Idol
     LocationData(3957, 3957, 3957, 993464, [993464], 128, 193, LocationType.Item), LocationRestriction(0), # Gaia Rock Apple
     LocationData(3700, 3700, 3700, 993476, [993476], 129, 4, LocationType.Item), LocationRestriction(0), # Gaia Rock Mimic
     LocationData(3958, 3958, 3958, 993484, [993484], 128, 423, LocationType.Item), LocationRestriction(0), # Gaia Rock Rusty Mace
@@ -431,33 +431,33 @@ the_rest = [
     LocationData(3677, 3677, 3677, 994944, [994944], 133, 419, LocationType.Hidden), LocationRestriction(0), # Overworld Rusty Sword
     LocationData(3678, 3678, 3678, 994952, [994952], 133, 427, LocationType.Hidden), LocationRestriction(0), # Overworld Rusty Staff
     LocationData(3679, 3679, 3679, 994960, [994960], 133, 420, LocationType.Hidden), LocationRestriction(0), # Overworld Rusty Sword
-    LocationData(2122, 2122, 2122, 16384160, [16384160], 128, 3717, LocationType.Item), LocationRestriction(0), # Kandorean Temple Lash Pebble
-    LocationData(2168, 2168, 2168, 16384162, [16384162], 128, 3718, LocationType.Item), LocationRestriction(0), # Dehkan Plateau Pound Cube
-    LocationData(2188, 2188, 2188, 16384164, [16384164], 128, 3720, LocationType.Item), LocationRestriction(0), # Yampi Desert Scoop Gem
-    LocationData(2381, 2381, 2381, 16384168, [16384168], 128, 3737, LocationType.Item), LocationRestriction(0), # Shaman Village Hover Jade
-    LocationData(2618, 2618, 2618, 16384170, [16384170], 128, 222, LocationType.Item), LocationRestriction(0), # Mars Lighthouse Mars Star
-    LocationData(2303, 2303, 2303, 16384172, [16384172], 128, 242, LocationType.Item), LocationRestriction(0), # Gabomba Statue Black Crystal
-    LocationData(2424, 2424, 2424, 16384174, [16384174], 128, 326, LocationType.Item), LocationRestriction(0), # Champa Trident
-    LocationData(2722, 2722, 2722, 16384176, [16384176], 128, 452, LocationType.Trade), LocationRestriction(0), # E Tundaria Islet Pretty Stone
-    LocationData(2724, 2724, 2724, 16384178, [16384178], 128, 453, LocationType.Trade), LocationRestriction(0), # SE Angara Islet Red Cloth
-    LocationData(2723, 2723, 2723, 16384180, [16384180], 128, 454, LocationType.Trade), LocationRestriction(0), # N Osenia Islet Milk
-    LocationData(2721, 2721, 2721, 16384182, [16384182], 128, 455, LocationType.Trade), LocationRestriction(0), # W Indra Islet Li'l Turtle
-    LocationData(2592, 2592, 2592, 16384186, [16384186], 128, 458, LocationType.Item), LocationRestriction(0), # Daila Sea God's Tear
-    LocationData(2553, 2553, 2553, 16384188, [16384188], 128, 460, LocationType.Item), LocationRestriction(0), # Magma Rock Magma Ball
-    LocationData(1, 4, 1, 16384202, [16384202], 128, 65, LocationType.Item), LocationRestriction(0), # Idejima Shaman's Rod
-    LocationData(257, 3, 257, 16384210, [16384210], 128, 3731, LocationType.Item), LocationRestriction(0), # Contigo Carry Stone
-    LocationData(258, 2, 258, 16384212, [16384212], 128, 3727, LocationType.Item), LocationRestriction(0), # Contigo Lifting Gem
-    LocationData(259, 1, 259, 16384214, [16384214], 128, 3726, LocationType.Item), LocationRestriction(0), # Contigo Orb of Force
-    LocationData(260, 0, 260, 16384216, [16384216], 128, 3732, LocationType.Item), LocationRestriction(0), # Contigo Catch Beads
-    LocationData(261, 7, 261, 16384218, [16384218], 128, 3617, LocationType.Item), LocationRestriction(0), # Kibombo Douse Drop
-    LocationData(262, 7, 262, 16384220, [16384220], 128, 3608, LocationType.Item), LocationRestriction(0), # Kibombo Frost Jewel
-    LocationData(3328, 3328, 3328, 16384384, [16384384], 132, 3328, LocationType.Character), LocationRestriction(0), # Contigo Isaac
-    LocationData(3329, 3329, 3329, 16384386, [16384386], 132, 3329, LocationType.Character), LocationRestriction(0), # Contigo Garet
-    LocationData(3330, 3330, 3330, 16384388, [16384388], 132, 3330, LocationType.Character), LocationRestriction(0), # Contigo Ivan
-    LocationData(3331, 3331, 3331, 16384390, [16384390], 132, 3331, LocationType.Character), LocationRestriction(0), # Contigo Mia
-    LocationData(3333, 3333, 3333, 16384392, [16384392], 132, 3333, LocationType.Character), LocationRestriction(0), # Idejima Jenna
-    LocationData(3334, 3334, 3334, 16384394, [16384394], 132, 3334, LocationType.Character), LocationRestriction(0), # Idejima Sheba
-    LocationData(3335, 3335, 3335, 16384396, [16384396], 132, 3335, LocationType.Character), LocationRestriction(0), # Kibombo Piers
+    LocationData(2122, 2122, 2122, 16384160, [16384160], 128, 3717, LocationType.Item), LocationRestriction(3), # Kandorean Temple Lash Pebble
+    LocationData(2168, 2168, 2168, 16384162, [16384162], 128, 3718, LocationType.Item), LocationRestriction(3), # Dehkan Plateau Pound Cube
+    LocationData(2188, 2188, 2188, 16384164, [16384164], 128, 3720, LocationType.Item), LocationRestriction(3), # Yampi Desert Scoop Gem
+    LocationData(2381, 2381, 2381, 16384168, [16384168], 128, 3737, LocationType.Item), LocationRestriction(3), # Shaman Village Hover Jade
+    LocationData(2618, 2618, 2618, 16384170, [16384170], 128, 222, LocationType.Item), LocationRestriction(3), # Mars Lighthouse Mars Star
+    LocationData(2303, 2303, 2303, 16384172, [16384172], 128, 242, LocationType.Item), LocationRestriction(3), # Gabomba Statue Black Crystal
+    LocationData(2424, 2424, 2424, 16384174, [16384174], 128, 326, LocationType.Item), LocationRestriction(3), # Champa Trident
+    LocationData(2722, 2722, 2722, 16384176, [16384176], 128, 452, LocationType.Trade), LocationRestriction(3), # E Tundaria Islet Pretty Stone
+    LocationData(2724, 2724, 2724, 16384178, [16384178], 128, 453, LocationType.Trade), LocationRestriction(3), # SE Angara Islet Red Cloth
+    LocationData(2723, 2723, 2723, 16384180, [16384180], 128, 454, LocationType.Trade), LocationRestriction(3), # N Osenia Islet Milk
+    LocationData(2721, 2721, 2721, 16384182, [16384182], 128, 455, LocationType.Trade), LocationRestriction(3), # W Indra Islet Li'l Turtle
+    LocationData(2592, 2592, 2592, 16384186, [16384186], 128, 458, LocationType.Item), LocationRestriction(3), # Daila Sea God's Tear
+    LocationData(2553, 2553, 2553, 16384188, [16384188], 128, 460, LocationType.Item), LocationRestriction(3), # Magma Rock Magma Ball
+    LocationData(1, 4, 1, 16384202, [16384202], 128, 65, LocationType.Item), LocationRestriction(4), # Idejima Shaman's Rod
+    LocationData(257, 3, 257, 16384210, [16384210], 128, 3731, LocationType.Item), LocationRestriction(6), # Contigo Carry Stone
+    LocationData(258, 2, 258, 16384212, [16384212], 128, 3727, LocationType.Item), LocationRestriction(6), # Contigo Lifting Gem
+    LocationData(259, 1, 259, 16384214, [16384214], 128, 3726, LocationType.Item), LocationRestriction(6), # Contigo Orb of Force
+    LocationData(260, 0, 260, 16384216, [16384216], 128, 3732, LocationType.Item), LocationRestriction(6), # Contigo Catch Beads
+    LocationData(261, 7, 261, 16384218, [16384218], 128, 3617, LocationType.Item), LocationRestriction(4), # Kibombo Douse Drop
+    LocationData(262, 7, 262, 16384220, [16384220], 128, 3608, LocationType.Item), LocationRestriction(4), # Kibombo Frost Jewel
+    LocationData(3328, 3328, 3328, 16384384, [16384384], 132, 3328, LocationType.Character), LocationRestriction(3), # Contigo Isaac
+    LocationData(3329, 3329, 3329, 16384386, [16384386], 132, 3329, LocationType.Character), LocationRestriction(3), # Contigo Garet
+    LocationData(3330, 3330, 3330, 16384388, [16384388], 132, 3330, LocationType.Character), LocationRestriction(3), # Contigo Ivan
+    LocationData(3331, 3331, 3331, 16384390, [16384390], 132, 3331, LocationType.Character), LocationRestriction(3), # Contigo Mia
+    LocationData(3333, 3333, 3333, 16384392, [16384392], 132, 3333, LocationType.Character), LocationRestriction(3), # Idejima Jenna
+    LocationData(3334, 3334, 3334, 16384394, [16384394], 132, 3334, LocationType.Character), LocationRestriction(3), # Idejima Sheba
+    LocationData(3335, 3335, 3335, 16384396, [16384396], 132, 3335, LocationType.Character), LocationRestriction(3), # Kibombo Piers
     
 ]
 
