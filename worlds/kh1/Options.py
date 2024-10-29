@@ -117,7 +117,7 @@ class Goal(Choice):
     
     Sephiroth: Defeat Sephiroth
     Unknown: Defeat Unknown
-    Postcards: Turn in an amount of postcards in Traverse Town
+    Postcards: Turn in a number of postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
     Puppies: Rescue and return an amount of puppies in Traverse Town
     Final Rest: Open the chest in End of the World Final Rest
