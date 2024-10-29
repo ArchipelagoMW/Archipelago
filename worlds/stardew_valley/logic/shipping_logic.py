@@ -48,7 +48,7 @@ class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, Buil
 
     def can_ship_everything_in_slot(self, all_location_names_in_slot: List[str]) -> StardewRule:
         if self.options.shipsanity == Shipsanity.option_none:
-            return self.can_ship_everything()
+            return self.logic.shipping.can_ship_everything()
 
         rules = [self.logic.building.has_building(Building.shipping_bin)]
 
