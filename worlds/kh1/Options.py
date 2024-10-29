@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import NamedRange, Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool, OptionGroup
+from Options import NamedRange, Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool, OptionGroup, Removed
 
 class StrengthIncrease(Range):
     """
@@ -119,7 +119,7 @@ class Goal(Choice):
     Unknown: Defeat Unknown
     Postcards: Turn in a number of postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
-    Puppies: Rescue and return an amount of puppies in Traverse Town
+    Puppies: Rescue and return a number of puppies in Traverse Town
     Final Rest: Open the chest in End of the World Final Rest
     """
     display_name = "Goal"
@@ -428,6 +428,9 @@ class KH1Options(PerGameCommonOptions):
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
     start_inventory_from_pool: StartInventoryPool
+
+    # removed
+    randomize_keyblade_stats: Removed
 
 kh1_option_groups = [
     OptionGroup("Goal", [
