@@ -2,7 +2,6 @@ from collections import deque, Counter
 from contextlib import redirect_stdout
 import functools
 import settings
-import threading
 import typing
 from typing import Any, Dict, List, Set, Tuple, Optional, Union
 import os
