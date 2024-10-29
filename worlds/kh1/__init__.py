@@ -206,15 +206,10 @@ class KH1World(World):
             lpad_number = str(self.options.required_postcards).rjust(2, "0")
             goal_location_name = "Traverse Town Mail Postcard " + lpad_number + " Event"
         elif self.options.goal.current_key == "puppies":
-            if self.options.required_puppies == 99:
-                goal_location_name = "Traverse Town Piano Room Return 99 Puppies Reward 2"
-            else:
-                required_puppies = (self.options.required_puppies // 10) * 10
-                self.options.required_puppies.value = required_puppies
-                if required_puppies == 50:
-                    goal_location_name = "Traverse Town Piano Room Return 50 Puppies Reward 2"
-                else:
-                    goal_location_name = "Traverse Town Piano Room Return " + str(required_puppies) + " Puppies"
+            required_puppies = self.options.required_puppies.value
+            goal_location_name = "Traverse Town Piano Room Return " + str(required_puppies) + " Puppies"
+            if required_puppies == 50 or required_puppies == 99:
+                goal_location_name = goal_location_name + " Reward 2"
         self.get_location(goal_location_name).place_locked_item(self.create_item("Victory"))
                 
         if self.options.vanilla_emblem_pieces:

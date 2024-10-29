@@ -164,15 +164,22 @@ class RequiredPostcards(Range):
     range_start = 1
     range_end = 10
 
-class RequiredPuppies(Range):
+class RequiredPuppies(Choice):
     """
     If your goal is set to "Puppies", defines how many puppies are needed to achieve victory.
-    Note: The required puppies will round down to the nearest amount of puppies that is a location.
     """
     display_name = "Required Puppies"
     default = 99
-    range_start = 10
-    range_end = 99
+    option_10 = 10
+    option_20 = 20
+    option_30 = 30
+    option_40 = 40
+    option_50 = 50
+    option_60 = 60
+    option_70 = 70
+    option_80 = 80
+    option_90 = 90
+    option_99 = 99
 
 class Puppies(Choice):
     """
