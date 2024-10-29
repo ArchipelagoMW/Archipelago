@@ -113,15 +113,15 @@ class WL4World(World):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
             self.options.local_items.value.update(self.item_name_groups['Golden Treasure'])
         if self.options.required_jewels > self.options.pool_jewels:
-            logging.warn(f'{self.player_name} has Required Jewels set to '
-                         f'{self.options.required_jewels.value} but Pool Jewels set to '
-                         f'{self.options.pool_jewels.value}. Setting Pool Jewels to '
-                         f'{self.options.required_jewels.value}')
+            logging.warning(f'{self.player_name} has Required Jewels set to '
+                            f'{self.options.required_jewels.value} but Pool Jewels set to '
+                            f'{self.options.pool_jewels.value}. Setting Pool Jewels to '
+                            f'{self.options.required_jewels.value}')
             self.options.pool_jewels = PoolJewels(self.options.required_jewels.value)
         if self.options.required_jewels >= 1 and self.options.golden_jewels == 0:
-            logging.warn(f'{self.player_name} has Required Jewels set to at least 1 but '
-                         f'Golden Jewels set to {self.options.golden_jewels}. Setting Golden '
-                         'Jewels to 1.')
+            logging.warning(f'{self.player_name} has Required Jewels set to at least 1 but '
+                            f'Golden Jewels set to {self.options.golden_jewels}. Setting Golden '
+                            'Jewels to 1.')
             self.options.golden_jewels = GoldenJewels(1)
 
         if self.options.required_jewels == 4 and self.options.difficulty != Difficulty.option_normal:
