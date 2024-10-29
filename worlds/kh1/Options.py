@@ -119,7 +119,7 @@ class Goal(Choice):
     Unknown: Defeat Unknown
     Postcards: Turn in an amount of postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
-    Puppies: Rescue and return an amount puppies in Traverse Town
+    Puppies: Rescue and return an amount of puppies in Traverse Town
     Final Rest: Open the chest in End of the World Final Rest
     """
     display_name = "Goal"
