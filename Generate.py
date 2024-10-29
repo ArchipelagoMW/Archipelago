@@ -123,6 +123,9 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     for filename, yaml_data in weights_cache.items():
         if filename not in {args.meta_file_path, args.weights_file_path}:
             for yaml in yaml_data:
+                if yaml is None:
+                    logging.warning(f"Ignoring empty yaml block in {filename}")
+                    continue
                 logging.info(f"P{player_id} Weights: {filename} >> "
                              f"{get_choice('description', yaml, 'No description specified')}")
                 player_files[player_id] = filename
