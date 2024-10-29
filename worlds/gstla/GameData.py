@@ -36,6 +36,7 @@ class LocationDatum(NamedTuple):
     vanilla_contents: int
     vanilla_name: str
     map_name: str
+    restrictions: int
 
 class EventDatum(NamedTuple):
     event_id: int
@@ -214,6 +215,23 @@ class GameData:
             16384220: 0x7,  # Frost Jewel -> Piers
 
         }
+        restriction_map = {'no-empty': 1, 'no-mimic': 2, 'no-summon': 4}
+        restriction_dict: defaultdict[int, int] = defaultdict(lambda: 0)
+        for loc_logic_file in os.listdir(os.path.join(SCRIPT_DIR, 'data', 'location_logic')):
+            assert loc_logic_file.endswith('.json')
+            with open(os.path.join(SCRIPT_DIR, 'data', 'location_logic', loc_logic_file), 'r') as data_file:
+                data = json.load(data_file)
+
+            treasure_data = data['Treasure']
+            for datum in treasure_data:
+                if 'Restriction' not in datum:
+                    continue
+                restrictions = datum['Restriction']
+                addr = int(datum['Addr'], 16)
+                assert addr not in restriction_dict
+                for restriction in restrictions:
+                    restriction_dict[addr] += restriction_map[restriction]
+
         for flag, locs in location_data.items():
             # The extra locations are variations on the same map.  We mostly don't care for the client,
             # but the rom generator currently does care, since it will need to place the same item on all
@@ -225,8 +243,10 @@ class GameData:
             self.raw_location_data.append(
                 LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
-                              loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'], loc['mapName'])
+                              loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'],
+                              loc['mapName'], restriction_map.get(addr[0],0))
             )
+
 
     def _load_items(self):
         with open(os.path.join(SCRIPT_DIR, 'data', 'items.json'), 'r') as item_file:
