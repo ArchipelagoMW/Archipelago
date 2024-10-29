@@ -1376,7 +1376,14 @@ class DarkSouls3World(World):
         items, later spheres get higher-level ones. Within a sphere, items in DS3 are distributed in
         region order, and then the best items in a sphere go into the multiworld.
         """
-        ds3_worlds = cast(List[DarkSouls3World], multiworld.get_game_worlds(cls.game))
+        ds3_worlds = [world for world in cast(List[DarkSouls3World], multiworld.get_game_worlds(cls.game)) if
+                      world.options.smooth_upgrade_items
+                      or world.options.smooth_soul_items
+                      or world.options.smooth_upgraded_weapons]
+        if not ds3_worlds:
+            # No worlds need item smoothing.
+            return
+
         spheres_per_player: Dict[int, List[List[Location]]] = {world.player: [] for world in ds3_worlds}
         for sphere in multiworld.get_spheres():
             locations_per_item_player: Dict[int, List[Location]] = {player: [] for player in spheres_per_player.keys()}
