@@ -96,6 +96,8 @@ class TestGenerateMain(unittest.TestCase):
 class TestGenerateWeights(TestGenerateMain):
     """Tests Generate.py using a weighted file to generate for multiple players."""
 
+    # this test will probably break if something in generation is changed that affects the seed before the weights get processed
+    # can be fixed by changing the expected_results dict
     generate_dir = TestGenerateMain.generate_dir
     run_dir = TestGenerateMain.run_dir
     abs_input_dir = Path(__file__).parent / "data" / "weights"
