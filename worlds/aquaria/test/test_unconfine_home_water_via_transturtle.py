@@ -4,7 +4,7 @@ Date: Fri, 03 May 2024 14:07:35 +0000
 Description: Unit test used to test accessibility of region with the unconfined home water option via transturtle
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
 
 
 class UnconfineHomeWaterTransturtleAccessTest(AquariaTestBase):
@@ -17,4 +17,4 @@ class UnconfineHomeWaterTransturtleAccessTest(AquariaTestBase):
     def test_unconfine_home_water_transturtle_location(self) -> None:
         """Test locations accessible with unconfined home water via transportation turtle"""
         self.assertTrue(self.can_reach_region("Home Water, turtle room"), "Cannot reach Home Water, turtle room")
-        self.assertFalse(self.can_reach_region("Open water top left area"), "Can reach Open water top left area")
+        self.assertFalse(self.can_reach_region("Open Water top left area"), "Can reach Open Water top left area")

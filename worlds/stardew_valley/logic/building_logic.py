@@ -15,6 +15,8 @@ from ..strings.fish_names import WaterItem
 from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar
 
+has_group = "building"
+
 
 class BuildingLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
@@ -42,7 +44,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
             Building.well: self.logic.money.can_spend(1000) & self.logic.has(Material.stone),
             Building.shipping_bin: self.logic.money.can_spend(250) & self.logic.has(Material.wood),
             Building.kitchen: self.logic.money.can_spend(10000) & self.logic.has(Material.wood) & self.logic.building.has_house(0),
-            Building.kids_room: self.logic.money.can_spend(50000) & self.logic.has(Material.hardwood) & self.logic.building.has_house(1),
+            Building.kids_room: self.logic.money.can_spend(65000) & self.logic.has(Material.hardwood) & self.logic.building.has_house(1),
             Building.cellar: self.logic.money.can_spend(100000) & self.logic.building.has_house(2),
             # @formatter:on
         })
@@ -60,7 +62,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
 
         carpenter_rule = self.logic.received(Event.can_construct_buildings)
         if not self.options.building_progression & BuildingProgression.option_progressive:
-            return Has(building, self.registry.building_rules) & carpenter_rule
+            return Has(building, self.registry.building_rules, has_group) & carpenter_rule
 
         count = 1
         if building in [Building.coop, Building.barn, Building.shed]:
@@ -86,10 +88,10 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
             return carpenter_rule & self.logic.received(f"Progressive House", upgrade_level)
 
         if upgrade_level == 1:
-            return carpenter_rule & Has(Building.kitchen, self.registry.building_rules)
+            return carpenter_rule & Has(Building.kitchen, self.registry.building_rules, has_group)
 
         if upgrade_level == 2:
-            return carpenter_rule & Has(Building.kids_room, self.registry.building_rules)
+            return carpenter_rule & Has(Building.kids_room, self.registry.building_rules, has_group)
 
         # if upgrade_level == 3:
-        return carpenter_rule & Has(Building.cellar, self.registry.building_rules)
+        return carpenter_rule & Has(Building.cellar, self.registry.building_rules, has_group)

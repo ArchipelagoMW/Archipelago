@@ -105,7 +105,6 @@ item_table = {
 non_key_items = {
     "Butterscotch Pie": 1,
     "500G": 2,
-    "1000G": 2,
     "Face Steak": 1,
     "Snowman Piece": 1,
     "Instant Noodles": 1,
@@ -147,6 +146,7 @@ plot_items = {
 key_items = {
     "Complete Skeleton": 1,
     "Fish": 1,
+    "1000G": 2,
     "DT Extractor": 1,
     "Mettaton Plush": 1,
     "Punch Card": 3,

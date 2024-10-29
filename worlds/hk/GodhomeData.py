@@ -9,7 +9,7 @@ def set_godhome_rules(hk_world, hk_set_rule):
     fn = partial(hk_set_rule, hk_world)
 
     required_events = {
-        "Godhome_Flower_Quest": lambda state: state.count('Defeated_Pantheon_5', player) and state.count('Room_Mansion[left1]', player) and state.count('Fungus3_49[right1]', player),
+        "Godhome_Flower_Quest": lambda state: state.count('Defeated_Pantheon_5', player) and state.count('Room_Mansion[left1]', player) and state.count('Fungus3_49[right1]', player) and state.has('Godtuner', player),
 
         "Defeated_Pantheon_5": lambda state: state.has('GG_Atrium_Roof', player) and state.has('WINGS', player) and (state.has('LEFTCLAW', player) or state.has('RIGHTCLAW', player)) and ((state.has('Defeated_Pantheon_1', player) and state.has('Defeated_Pantheon_2', player) and state.has('Defeated_Pantheon_3', player) and state.has('Defeated_Pantheon_4', player) and state.has('COMBAT[Radiance]', player))),
         "GG_Atrium_Roof": lambda state: state.has('GG_Atrium', player) and state.has('Hit_Pantheon_5_Unlock_Orb', player) and state.has('LEFTCLAW', player),

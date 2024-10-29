@@ -31,6 +31,7 @@ if typing.TYPE_CHECKING:
     import tkinter
     import pathlib
     from BaseClasses import Region
+    import multiprocessing
 
 
 def tuplize_version(version: str) -> Version:
@@ -46,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.6"
+__version__ = "0.5.1"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -423,7 +424,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
-        if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
+        if module == "worlds.generic" and name == "PlandoItem":
             if not self.generic_properties_module:
                 self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
@@ -434,7 +435,7 @@ class RestrictedUnpickler(pickle.Unpickler):
             else:
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
-            if issubclass(obj, self.options_module.Option):
+            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -457,6 +458,15 @@ class ByValue:
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
+
+    def __init__(self,
+                 default_factory: typing.Callable[[Any], Any] = None,
+                 seq: typing.Union[typing.Mapping, typing.Iterable, None] = None,
+                 **kwargs):
+        if seq is not None:
+            super().__init__(default_factory, seq, **kwargs)
+        else:
+            super().__init__(default_factory, **kwargs)
 
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
@@ -544,6 +554,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         f"Archipelago ({__version__}) logging initialized"
         f" on {platform.platform()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        f"{' (frozen)' if is_frozen() else ''}"
     )
 
 
@@ -619,6 +630,54 @@ def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit:
     )
 
 
+def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
+    picks = get_fuzzy_results(input_text, possible_answers, limit=2)
+    if len(picks) > 1:
+        dif = picks[0][1] - picks[1][1]
+        if picks[0][1] == 100:
+            return picks[0][0], True, "Perfect Match"
+        elif picks[0][1] < 75:
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+        elif dif > 5:
+            return picks[0][0], True, "Close Match"
+        else:
+            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+    else:
+        if picks[0][1] > 90:
+            return picks[0][0], True, "Only Option Match"
+        else:
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+
+
+def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    if "did you mean " in text:
+        for question in ("Didn't find something that closely matches",
+                         "Too many close matches"):
+            if text.startswith(question):
+                name = get_text_between(text, "did you mean '",
+                                        "'? (")
+                return f"!{command} {name}"
+    elif text.startswith("Missing: "):
+        return text.replace("Missing: ", "!hint_location ")
+    return None
+
+
+def is_kivy_running() -> bool:
+    if "kivy" in sys.modules:
+        from kivy.app import App
+        return App.get_running_app() is not None
+    return False
+
+
+def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_filename(*args))
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
@@ -648,6 +707,13 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -655,6 +721,12 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
+
+
+def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_directory(*args))
 
 
 def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
@@ -680,9 +752,16 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
         import tkinter.filedialog
     except Exception as e:
         logging.error('Could not load tkinter, which is likely not installed. '
-                      f'This attempt was made because open_filename was used for "{title}".')
+                      f'This attempt was made because open_directory was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_directory, args=(res, title, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -694,12 +773,6 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 def messagebox(title: str, text: str, error: bool = False) -> None:
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
-    def is_kivy_running():
-        if "kivy" in sys.modules:
-            from kivy.app import App
-            return App.get_running_app() is not None
-        return False
 
     if is_kivy_running():
         from kvui import MessageBox
