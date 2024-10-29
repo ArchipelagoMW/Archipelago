@@ -45,4 +45,10 @@ You can generate a yaml or download a template by visiting the
 3. Click "Connect".
    - To disconnect, just press this button again.
    - The status of your connection is shown right next to the button.
-4. Create a new game or load the already created save file.
+4. Create a new game.
+
+After creating the save file and returning to the main menu, opening the save file again will automatically reconnect. 
+
+### The MultiWorld changed its port/address, how do I reconnect correctly with my existing save file? 
+
+Repeat steps 1-3 and open the existing save file. This will also overwrite the saved connection details, so you will only have to do this once. 
