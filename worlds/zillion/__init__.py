@@ -118,8 +118,6 @@ class ZillionWorld(World):
     """
     my_locations: List[ZillionLocation] = []
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
-    slot_data_ready: threading.Event
-    """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
     logic_cache: Union[ZillionLogicCache, None] = None
 
     def __init__(self, world: MultiWorld, player: int):
@@ -127,7 +125,6 @@ class ZillionWorld(World):
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()
-        self.slot_data_ready = threading.Event()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
@@ -365,12 +362,7 @@ class ZillionWorld(World):
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use multiworld.random here.
         If you need any last-second randomization, use self.random instead."""
-        try:
-            gen_data = self.finalize_item_locations()
-        except BaseException:
-            raise
-        finally:
-            self.slot_data_ready.set()
+        gen_data = self.finalize_item_locations()
 
         out_file_base = self.multiworld.get_out_file_name_base(self.player)
 
@@ -393,7 +385,6 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        self.slot_data_ready.wait()
         assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
         game = self.zz_system.get_game()
         return get_slot_info(game.regions, game.char_order[0], game.loc_name_2_pretty)
