@@ -119,22 +119,21 @@ class TestGenerateWeights(TestGenerateMain):
         user_path_backup = user_path.cached_path
         user_path.cached_path = local_path()
         try:
-            sys.argv = [sys.argv[0], "--seed", "1", "--outputpath", self.output_tempdir.name]
-            multiworld = Generate.main()
+            sys.argv = [sys.argv[0], "--seed", "1"]
+            namespace, seed = Generate.main()
         finally:
             user_path.cached_path = user_path_backup
 
         # there's likely a better way to do this, but hardcode the results from seed 1 to ensure they're always this
         expected_results = {
-            "accessibility": [1, 1, 0, 2, 2],
+            "accessibility": [0, 2, 0, 2, 2],
             "progression_balancing": [0, 50, 99, 0, 50],
         }
 
+        self.assertEqual(seed, 1)
         for option_name, results in expected_results.items():
             for player, result in enumerate(results, 1):
                 self.assertEqual(
-                    result, getattr(multiworld.worlds[player].options, option_name).value,
+                    result, getattr(namespace, option_name)[player].value,
                     "Generated results from weights file did not match expected value."
                 )
-
-        self.assertOutput(self.output_tempdir.name)
