@@ -138,7 +138,7 @@ class test_ignore_others(linkedTestHK, WorldTestBase):
         return args
 
 
-class test_ignore_others(linkedTestHK, WorldTestBase):
+class test_replacement_only_linked(linkedTestHK, WorldTestBase):
     options = {
         "RandomizeGrubs": True,
         "GrubHuntGoal": "all",
@@ -163,4 +163,3 @@ class test_ignore_others(linkedTestHK, WorldTestBase):
                     }])
                 })
         return args
-
