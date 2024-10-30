@@ -5,7 +5,7 @@ import typing
 from collections import Counter, deque
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
-from Options import Accessibility, PlandoItem
+from Options import Accessibility
 
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import add_item_rule
@@ -817,13 +817,13 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked:
 
 def distribute_planned(multiworld: MultiWorld) -> None:
     def warn(warning: str, force: typing.Union[bool, str]) -> None:
-        if force in [True, "fail", "failure", "none", False, "warn", "warning"]:
+        if isinstance(force, bool):
             logging.warning(f"{warning}")
         else:
             logging.debug(f"{warning}")
 
     def failed(warning: str, force: typing.Union[bool, str]) -> None:
-        if force in [True, "fail", "failure"]:
+        if force is True:
             raise Exception(warning)
         else:
             warn(warning, force)
@@ -841,18 +841,19 @@ def distribute_planned(multiworld: MultiWorld) -> None:
 
     world_name_lookup = multiworld.world_name_lookup
 
-    block_value = typing.Union[typing.List[str], typing.Dict[str, typing.Any]]
     plando_blocks: typing.List[typing.Dict[str, typing.Any]] = []
     player_ids = set(multiworld.player_ids)
     for player in player_ids:
         for block in multiworld.worlds[player].options.plando_items:
             new_block: typing.Dict[str, typing.Any] = {"player": player}
             if not isinstance(block.from_pool, bool):
-                from_pool_type = type(block.from_pool)
-                raise Exception(f"Plando 'from_pool' has to be boolean, not {from_pool_type} for player {player}.")
+                raise Exception(f"Plando 'from_pool' has to be boolean, not {type(block.from_pool)} for player {player}.")
             new_block["from_pool"] = block.from_pool
             new_block["force"] = block.force
             target_world = block.world
+
+            if not (isinstance(block.force, bool) or block.force == "silent"):
+                raise Exception(f"Plando `force` has to be boolean or `silent`, not {block.force} for player {player}")
 
             if target_world is False or multiworld.players == 1:  # target own world
                 worlds: typing.Set[int] = {player}
@@ -883,7 +884,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 worlds = {world_name_lookup[target_world]}
             new_block["world"] = worlds
 
-            items: block_value = block.items
+            items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]] = block.items
             if isinstance(items, dict):
                 item_list: typing.List[str] = []
                 for key, value in items.items():
@@ -895,10 +896,17 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 items = [items]
             new_block["items"] = items
 
-            locations: block_value = block.locations
+            locations: typing.List[str] = block.locations
             if isinstance(locations, str):
                 locations = [locations]
+            elif not isinstance(locations, list):
+                raise Exception(f"Plando 'locations' has to be a list, not {type(locations)} for player {player}.")
 
+            locations_from_groups: typing.List[str] = []
+            for target_player in worlds:
+                for group in multiworld.worlds[target_player].location_name_groups:
+                    if group in locations:
+                        locations_from_groups.extend(multiworld.worlds[target_player].location_name_groups[group])
             if "early_locations" in locations:
                 locations.remove("early_locations")
                 for target_player in worlds:
@@ -907,10 +915,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 locations.remove("non_early_locations")
                 for target_player in worlds:
                     locations += non_early_locations[target_player]
-            for target_player in worlds:
-                for group in multiworld.worlds[target_player].location_name_groups:
-                    if group in locations:
-                        locations.extend(multiworld.worlds[target_player].location_name_groups[group])
+            locations += locations_from_groups
 
             new_block["locations"] = list(dict.fromkeys(locations))
 

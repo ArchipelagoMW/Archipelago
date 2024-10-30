@@ -23,6 +23,12 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+def roll_percentage(percentage: typing.Union[int, float]) -> bool:
+    """Roll a percentage chance.
+    percentage is expected to be in range [0, 100]"""
+    return random.random() < (float(percentage) / 100)
+
+
 class OptionError(ValueError):
     pass
 
@@ -971,7 +977,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
         if isinstance(data, typing.Iterable):
             for text in data:
                 if isinstance(text, typing.Mapping):
-                    if random.random() < float(text.get("percentage", 100)/100):
+                    if roll_percentage(text.get("percentage", 100)):
                         at = text.get("at", None)
                         if at is not None:
                             if isinstance(at, dict):
@@ -997,7 +1003,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                         else:
                             raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                 elif isinstance(text, PlandoText):
-                    if random.random() < float(text.percentage/100):
+                    if roll_percentage(text.percentage):
                         texts.append(text)
                 else:
                     raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
@@ -1121,7 +1127,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
         for connection in data:
             if isinstance(connection, typing.Mapping):
                 percentage = connection.get("percentage", 100)
-                if random.random() < float(percentage / 100):
+                if roll_percentage(percentage):
                     entrance = connection.get("entrance", None)
                     if is_iterable_except_str(entrance):
                         entrance = random.choice(sorted(entrance))
@@ -1139,7 +1145,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
                         percentage
                     ))
             elif isinstance(connection, PlandoConnection):
-                if random.random() < float(connection.percentage / 100):
+                if roll_percentage(connection.percentage):
                     value.append(connection)
             else:
                 raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
@@ -1411,7 +1417,7 @@ class ItemLinks(OptionList):
 
 class PlandoItem(typing.NamedTuple):
     items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]]
-    locations: typing.Optional[typing.List[str]]
+    locations: typing.List[str]
     world: typing.Union[int, str, bool, None, typing.Iterable[str], typing.Set[int]] = False
     from_pool: bool = True
     force: typing.Union[bool, typing.Literal["silent"]] = "silent"
@@ -1438,17 +1444,19 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
         for item in data:
             if isinstance(item, typing.Mapping):
                 percentage = item.get("percentage", 100)
-                if random.random() < float(percentage / 100):
+                if not isinstance(percentage, int):
+                    raise Exception(f"Plando `percentage` has to be int, not {type(percentage)}.")
+                if roll_percentage(percentage):
                     count = item.get("count", False)
                     items = item.get("items", [])
                     if not items:
-                        items = item.get("item", None)  # explcitly throw an error here if not present
+                        items = item.get("item", None)  # explicitly throw an error here if not present
                         if not items:
                             raise Exception("You must specify at least one item to place items with plando.")
                         items = [items]
                     locations = item.get("locations", [])
                     if not locations:
-                        locations = item.get("location", None)
+                        locations = item.get("location", [])
                         if locations:
                             locations = [locations]
                     world = item.get("world", False)
@@ -1456,7 +1464,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                     force = item.get("force", "silent")
                     value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage))
             elif isinstance(item, PlandoItem):
-                if random.random() < float(item.percentage / 100):
+                if roll_percentage(item.percentage):
                     value.append(item)
             else:
                 raise Exception(f"Cannot create plando item from non-Dict type, got {type(item)}.")
