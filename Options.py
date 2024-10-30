@@ -15,7 +15,6 @@ from dataclasses import dataclass
 from schema import And, Optional, Or, Schema
 from typing_extensions import Self
 
-from Generate import roll_percentage
 from Utils import get_fuzzy_results, is_iterable_except_str, output_path
 
 if typing.TYPE_CHECKING:
@@ -23,6 +22,11 @@ if typing.TYPE_CHECKING:
     from worlds.AutoWorld import World
     import pathlib
 
+def roll_percentage(percentage: typing.Union[int, float]) -> bool:
+    """Roll a percentage chance.
+    percentage is expected to be in range [0, 100]"""
+    # Copied from Generate.py
+    return random.random() < (float(percentage) / 100)
 
 class OptionError(ValueError):
     pass
