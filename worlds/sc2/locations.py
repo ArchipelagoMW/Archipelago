@@ -3549,6 +3549,64 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "East Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 6812, LocationType.CHALLENGE,
                            logic.protoss_competent_comp
                            ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7100, LocationType.VICTORY,
+                           lambda state: logic.terran_common_unit(state) and logic.terran_basic_anti_air(state)
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Center Infested Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7101, LocationType.VANILLA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "North Infested Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7102, LocationType.VANILLA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Repel Zagara", SC2_RACESWAP_LOC_ID_OFFSET + 7103, LocationType.EXTRA),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Close Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 7104, LocationType.EXTRA),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "South Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 7105, LocationType.EXTRA,
+                           lambda state: adv_tactics or logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Southwest Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 7106, LocationType.EXTRA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Southeast Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 7107, LocationType.EXTRA,
+                           lambda state: logic.terran_common_unit(state) and logic.terran_basic_anti_air(state)
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "North Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 7108, LocationType.EXTRA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Northeast Bunker", SC2_RACESWAP_LOC_ID_OFFSET + 7109, LocationType.EXTRA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_T.mission_name, "Win Without 100 Eggs", SC2_RACESWAP_LOC_ID_OFFSET + 7110, LocationType.CHALLENGE,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7200, LocationType.VICTORY,
+                           logic.protoss_common_unit_basic_aa
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Center Infested Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7201, LocationType.VANILLA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "North Infested Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7202, LocationType.VANILLA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Repel Zagara", SC2_RACESWAP_LOC_ID_OFFSET + 7203, LocationType.EXTRA),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Close Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7204, LocationType.EXTRA),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "South Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7205, LocationType.EXTRA,
+                           lambda state: adv_tactics or logic.protoss_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Southwest Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7206, LocationType.EXTRA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Southeast Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7207, LocationType.EXTRA,
+                           logic.protoss_common_unit_basic_aa
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "North Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7208, LocationType.EXTRA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Northeast Supplicants", SC2_RACESWAP_LOC_ID_OFFSET + 7209, LocationType.EXTRA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.DOMINATION_P.mission_name, "Win Without 100 Eggs", SC2_RACESWAP_LOC_ID_OFFSET + 7210, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []

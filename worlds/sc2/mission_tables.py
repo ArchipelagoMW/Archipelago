@@ -139,7 +139,7 @@ class SC2Mission(Enum):
     HARVEST_OF_SCREAMS = 33, "Harvest of Screams (Zerg)", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_harvest_of_screams", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     SHOOT_THE_MESSENGER = 34, "Shoot the Messenger (Zerg)", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_shoot_the_messenger", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.TimedDefense|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     ENEMY_WITHIN = 35, "Enemy Within", SC2Campaign.HOTS, "Kaldir", SC2Race.ANY, MissionPools.EASY, "ap_enemy_within", MissionFlag.Zerg|MissionFlag.NoBuild|MissionFlag.VsProtoss
-    DOMINATION = 36, "Domination", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.EASY, "ap_domination", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsZerg
+    DOMINATION = 36, "Domination (Zerg)", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.EASY, "ap_domination", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     FIRE_IN_THE_SKY = 37, "Fire in the Sky", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_fire_in_the_sky", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsTerran
     OLD_SOLDIERS = 38, "Old Soldiers", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_old_soldiers", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran
     WAKING_THE_ANCIENT = 39, "Waking the Ancient", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_waking_the_ancient", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsZerg
@@ -251,7 +251,8 @@ class SC2Mission(Enum):
     SHOOT_THE_MESSENGER_T = 150, "Shoot the Messenger (Terran)", SC2Campaign.HOTS, "Kaldir", SC2Race.TERRAN, MissionPools.EASY, "ap_shoot_the_messenger", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     SHOOT_THE_MESSENGER_P = 151, "Shoot the Messenger (Protoss)", SC2Campaign.HOTS, "Kaldir", SC2Race.PROTOSS, MissionPools.EASY, "ap_shoot_the_messenger", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     # 152/153 - Enemy Within
-    # 154/155 - Domination
+    DOMINATION_T = 154, "Domination (Terran)", SC2Campaign.HOTS, "Char", SC2Race.TERRAN, MissionPools.EASY, "ap_domination", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    DOMINATION_P = 155, "Domination (Protoss)", SC2Campaign.HOTS, "Char", SC2Race.PROTOSS, MissionPools.EASY, "ap_domination", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 156/157 - Fire in the Sky
     # 158/159 - Old Soldiers
     # 160/161 - Waking the Ancient
