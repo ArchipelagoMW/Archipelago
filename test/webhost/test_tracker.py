@@ -37,8 +37,9 @@ class TestTracker(TestBase):
             with db_session:
                 # store game datapackage(s)
                 for game, game_data in multidata["datapackage"].items():
-                    GameDataPackage(checksum=game_data["checksum"],
-                                    data=pickle.dumps(game_data))
+                    if not GameDataPackage.get(checksum=game_data["checksum"]):
+                        GameDataPackage(checksum=game_data["checksum"],
+                                        data=pickle.dumps(game_data))
                 # create an empty seed and a room from it
                 seed = Seed(multidata=self.data, owner=session["_id"])
                 room = Room(seed=seed, owner=session["_id"], tracker=self.tracker_uuid)
