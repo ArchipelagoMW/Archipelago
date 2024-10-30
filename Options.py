@@ -22,11 +22,13 @@ if typing.TYPE_CHECKING:
     from worlds.AutoWorld import World
     import pathlib
 
+
 def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
     # Copied from Generate.py
     return random.random() < (float(percentage) / 100)
+
 
 class OptionError(ValueError):
     pass
