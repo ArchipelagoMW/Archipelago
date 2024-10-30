@@ -390,24 +390,24 @@ def give_weapon_based_locations():
                 stringInt = "0" + str(stringInt)
             weapon_locations["Clear Room " + str(stringInt) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
-        weapon_locations["Beat Meg"+weaponSubfix] = None
+        weapon_locations["Beat Meg "+weaponSubfix] = None
 
         for i in range(13, 23):
             weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
     
-        weapon_locations["Beat Lernie"+weaponSubfix] = None
+        weapon_locations["Beat Lernie "+weaponSubfix] = None
 
         for i in range(23, 35):
             weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
-        weapon_locations["Beat Bros"+weaponSubfix] = None    
+        weapon_locations["Beat Bros "+weaponSubfix] = None    
 
         for i in range(35, 60):
             weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter
         
-        weapon_locations["Beat Hades" + weaponSubfix] = None
+        weapon_locations["Beat Hades " + weaponSubfix] = None
 
         for i in range(60, 72):
             weapon_locations["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \

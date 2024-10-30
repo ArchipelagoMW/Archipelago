@@ -153,7 +153,7 @@ def create_regions(ctx, location_database):
             ctx.multiworld.get_entrance("Late Chambers "+weaponSubfix, ctx.player).connect(
                 ctx.multiworld.get_region("Styx Late "+weaponSubfix, ctx.player))
             ctx.multiworld.get_entrance("Die Tartarus "+weaponSubfix, ctx.player).connect(
-                ctx.multiworld.get_region("Underworld ", ctx.player))
+                ctx.multiworld.get_region("Underworld", ctx.player))
             ctx.multiworld.get_entrance("Die Asphodel "+weaponSubfix, ctx.player).connect(
                 ctx.multiworld.get_region("Underworld", ctx.player))    
             ctx.multiworld.get_entrance("Die Elysium "+weaponSubfix, ctx.player).connect(

@@ -112,7 +112,7 @@ class HadesWorld(World):
                 pool.append(item)
 
         # Pair up our event locations with our event items
-        if self.options.location_system == "roomweaponbased":
+        if self.options.location_system == "room_weapon_based":
             for event, item in event_item_pairs_weapon_mode.items():
                 event_item = HadesItem(item, self.player)
                 self.multiworld.get_location(
@@ -129,7 +129,7 @@ class HadesWorld(World):
         # Fill filler items uniformly. Maybe later we can tweak this.
         index = 0
         total_fillers_needed = len(local_location_table)-len(pool)-len(location_table_fates_events)
-        if self.options.location_system.value == "room_weapon_based":
+        if self.options.location_system == "room_weapon_based":
             # Substract the 4 bosses for each of the 6 weapons = 24
             total_fillers_needed = total_fillers_needed - 24
         else:
@@ -179,17 +179,17 @@ class HadesWorld(World):
         self.multiworld.itempool += pool
 
     def should_ignore_weapon(self, name):
-        if self.options.initial_weapon == 0 and name == "Sword Weapon Unlock Item":
+        if self.options.initial_weapon.value == 0 and name == "Sword Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == 1 and name == "Bow Weapon Unlock Item":
+        if self.options.initial_weapon.value == 1 and name == "Bow Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == 2 and name == "Spear Weapon Unlock Item":
+        if self.options.initial_weapon.value == 2 and name == "Spear Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == 3 and name == "Shield Weapon Unlock Item":
+        if self.options.initial_weapon.value == 3 and name == "Shield Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == 4 and name == "Fist Weapon Unlock Item":
+        if self.options.initial_weapon.value == 4 and name == "Fist Weapon Unlock Item":
             return True
-        if self.options.initial_weapon == 5 and name == "Gun Weapon Unlock Item":
+        if self.options.initial_weapon.value == 5 and name == "Gun Weapon Unlock Item":
             return True
         return False
 

@@ -108,12 +108,12 @@ class HadesLogic(LogicMixin):
     def _enough_weapons_victories(self, player: int, options, amount: int) -> bool:
         if options.location_system == "room_weapon_based":
             counter = 0
-            counter += self.count("Hades Victory" + " SwordWeapon", player)
-            counter += self.count("Hades Victory" + " SpearWeapon", player)
-            counter += self.count("Hades Victory" + " BowWeapon", player)
-            counter += self.count("Hades Victory" + " ShieldWeapon", player)
-            counter += self.count("Hades Victory" + " FistWeapon", player)
-            counter += self.count("Hades Victory" + " GunWeapon", player)
+            counter += self.count("Hades Victory" + " Sword Weapon", player)
+            counter += self.count("Hades Victory" + " Spear Weapon", player)
+            counter += self.count("Hades Victory" + " Bow Weapon", player)
+            counter += self.count("Hades Victory" + " Shield Weapon", player)
+            counter += self.count("Hades Victory" + " Fist Weapon", player)
+            counter += self.count("Hades Victory" + " Gun Weapon", player)
             return counter >= amount
         else:
             return self.has("Hades Victory", player) and self._has_enough_weapons(player, options, amount)
