@@ -29,7 +29,11 @@ class LocalRom:
         for loc in all_locations:
             # if loc.vanilla_contents in self.item_event_types:
             #     assert self.item_event_types[loc.vanilla_contents] == loc.event_type, loc
-            self.item_event_types[loc.vanilla_contents] = loc.event_type
+            if loc.event_type == 0x81:
+                # More mimic nonsense
+                self.item_event_types[loc.id] = loc.event_type
+            else:
+                self.item_event_types[loc.vanilla_contents] = loc.event_type
 
 
     def apply_qol_patches(self):

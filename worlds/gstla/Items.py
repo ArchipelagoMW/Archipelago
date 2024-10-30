@@ -92,7 +92,11 @@ def create_items(world: 'GSTLAWorld', player: int):
             continue
         # Coins do funny business
         # vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
-        vanilla_item = items_by_id[loc.vanilla_contents]
+        if loc.event_type == 0x81:
+            # Mimic nonsense
+            vanilla_item = items_by_id[loc.id]
+        else:
+            vanilla_item = items_by_id[loc.vanilla_contents]
 
         #if vanilla ship logic than this should be Gabomba Statue Black Crystal location
         if world.options.starter_ship == 2 and vanilla_item.name == ItemName.Black_Crystal:

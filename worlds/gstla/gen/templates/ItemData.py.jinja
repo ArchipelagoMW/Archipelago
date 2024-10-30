@@ -11,6 +11,7 @@ class ItemData(NamedTuple):
     type: ItemType
     # TODO: The event type is really a property of the locations, not of the items
     # event_type:int = 131
+    is_mimic: bool =  False
 
 class DjinnItemData(ItemData):
     element: ElementType
@@ -78,7 +79,7 @@ gear: List[ItemData] = [
 #}
 remainder: List[ItemData] = [
     {% for item in remainder -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}{#, {{item.event_type}}#}),
+    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}{#, {{item.event_type}}#}),
     {% endfor %}
 ]
 

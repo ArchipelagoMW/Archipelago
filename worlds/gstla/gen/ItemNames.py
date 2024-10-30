@@ -4,6 +4,15 @@ from typing import Dict
 from enum import Enum
 class ItemName(str, Enum):
     # Consumable
+    Mimic_0 = "Mimic 0"
+    Mimic_1 = "Mimic 1"
+    Mimic_2 = "Mimic 2"
+    Mimic_3 = "Mimic 3"
+    Mimic_4 = "Mimic 4"
+    Mimic_5 = "Mimic 5"
+    Mimic_6 = "Mimic 6"
+    Mimic_7 = "Mimic 7"
+    Mimic_8 = "Mimic 8"
     Empty = "Empty"
     Herb = "Herb"
     Nut = "Nut"
@@ -548,6 +557,15 @@ class ItemName(str, Enum):
 
 item_id_by_name: Dict[int, ItemName] = {
     "???": 0,
+    "Mimic 0": 3696,
+    "Mimic 1": 3697,
+    "Mimic 2": 3698,
+    "Mimic 3": 3699,
+    "Mimic 4": 3700,
+    "Mimic 5": 3701,
+    "Mimic 6": 3702,
+    "Mimic 7": 3703,
+    "Mimic 8": 3704,
     "Empty": 0,
     "Long Sword": 1,
     "Broad Sword": 2,
@@ -1070,6 +1088,15 @@ item_id_by_name: Dict[int, ItemName] = {
 }
 
 name_by_item_id: Dict[ItemName, int] = {
+    3696: "Mimic 0",
+    3697: "Mimic 1",
+    3698: "Mimic 2",
+    3699: "Mimic 3",
+    3700: "Mimic 4",
+    3701: "Mimic 5",
+    3702: "Mimic 6",
+    3703: "Mimic 7",
+    3704: "Mimic 8",
     0: "Empty",
     1: "Long Sword",
     2: "Broad Sword",

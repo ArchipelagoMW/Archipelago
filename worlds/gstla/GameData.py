@@ -83,6 +83,7 @@ class ItemDatum(NamedTuple):
     use_effect: int = 0
     # TODO: event type is a property of locations, not of items
     # event_type: int
+    is_mimic: bool = False
 
 class ElementType(IntEnum):
     Earth = 0
@@ -240,12 +241,16 @@ class GameData:
             addr = [x['addr'] for x in locs]
             rando_flag = int(flag, 16)
             mapped_flag = flag_overwrites.get(addr[0], rando_flag)
-            self.raw_location_data.append(
-                LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
+            datum = LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'],
                               loc['mapName'], restriction_dict[loc['id']])
-            )
+            self.raw_location_data.append(datum)
+            if datum.vanilla_name == 'Mimic':
+                self.raw_item_data.append(
+                    # Agreed upon rando id of 0xA00 + mimic id
+                    ItemDatum(0xA00 + datum.vanilla_contents,"Mimic %d" % datum.vanilla_contents, datum.addr[0], ItemType.Consumable, ItemFlags.NONE, 0, True)
+                )
 
 
     def _load_items(self):
@@ -268,6 +273,7 @@ class GameData:
                 coins[loc.vanilla_contents] = ItemDatum(loc.vanilla_contents, f"Coins {loc.vanilla_contents-0x8000}", loc.addr[0], ItemType.Consumable, ItemFlags(0))
         for coin in coins.values():
             self.raw_item_data.append(coin)
+
 
     def _load_djinn(self):
         with open(os.path.join(SCRIPT_DIR, 'data', 'djinn.json'), 'r') as djinn_file:
