@@ -31,7 +31,7 @@ class LocalRom:
             #     assert self.item_event_types[loc.vanilla_contents] == loc.event_type, loc
             if loc.event_type == 0x81:
                 # More mimic nonsense
-                self.item_event_types[loc.id] = loc.event_type
+                self.item_event_types[0xA00 + loc.vanilla_contents] = loc.event_type
             else:
                 self.item_event_types[loc.vanilla_contents] = loc.event_type
 

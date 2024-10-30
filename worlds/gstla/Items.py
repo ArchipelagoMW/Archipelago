@@ -87,14 +87,13 @@ def create_items(world: 'GSTLAWorld', player: int):
     # TODO: this is a temporary measure; we may want to add lots of features around
     # item population based on player configured options.
     for loc in all_locations:
-        # TODO: 0x81 is a Mimic; not sure how to send these to the randomizer, so turning them off for now
-        if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character or loc.event_type == 0x81:
+        if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:
             continue
         # Coins do funny business
         # vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
         if loc.event_type == 0x81:
             # Mimic nonsense
-            vanilla_item = items_by_id[loc.id]
+            vanilla_item = items_by_id[0xA00 + loc.vanilla_contents]
         else:
             vanilla_item = items_by_id[loc.vanilla_contents]
 
