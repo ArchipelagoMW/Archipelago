@@ -1,8 +1,7 @@
 import unittest
 
-from Fill import distribute_items_restrictive, distribute_planned
+from Fill import distribute_items_restrictive
 from NetUtils import encode
-from Options import PlandoItem
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from worlds import failed_world_loads
 from . import setup_solo_multiworld

@@ -5,7 +5,7 @@ import typing
 from collections import Counter, deque
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
-from Options import Accessibility, PlandoItem
+from Options import Accessibility
 
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import add_item_rule
@@ -817,13 +817,13 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked:
 
 def distribute_planned(multiworld: MultiWorld) -> None:
     def warn(warning: str, force: typing.Union[bool, str]) -> None:
-        if force in [True, "fail", "failure", "none", False, "warn", "warning"]:
+        if isinstance(force, bool):
             logging.warning(f"{warning}")
         else:
             logging.debug(f"{warning}")
 
     def failed(warning: str, force: typing.Union[bool, str]) -> None:
-        if force in [True, "fail", "failure"]:
+        if force is True:
             raise Exception(warning)
         else:
             warn(warning, force)
@@ -853,6 +853,9 @@ def distribute_planned(multiworld: MultiWorld) -> None:
             new_block["from_pool"] = block.from_pool
             new_block["force"] = block.force
             target_world = block.world
+
+            if not (isinstance(block.force, bool) or block.force == "silent"):
+                raise Exception(f"Plando `force` has to be boolean or `silent`, not {block.force} for player {player}")
 
             if target_world is False or multiworld.players == 1:  # target own world
                 worlds: typing.Set[int] = {player}
@@ -895,10 +898,18 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 items = [items]
             new_block["items"] = items
 
-            locations: block_value = block.locations
+            locations: typing.List[str] = block.locations
             if isinstance(locations, str):
                 locations = [locations]
+            elif not isinstance(locations, list):
+                locations_type = type(locations)
+                raise Exception(f"Plando 'locations' has to be a list, not {locations_type} for player {player}.")
 
+            locations_from_groups: typing.List[str] = []
+            for target_player in worlds:
+                for group in multiworld.worlds[target_player].location_name_groups:
+                    if group in locations:
+                        locations_from_groups.extend(multiworld.worlds[target_player].location_name_groups[group])
             if "early_locations" in locations:
                 locations.remove("early_locations")
                 for target_player in worlds:
@@ -907,10 +918,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 locations.remove("non_early_locations")
                 for target_player in worlds:
                     locations += non_early_locations[target_player]
-            for target_player in worlds:
-                for group in multiworld.worlds[target_player].location_name_groups:
-                    if group in locations:
-                        locations.extend(multiworld.worlds[target_player].location_name_groups[group])
+            locations += locations_from_groups
 
             new_block["locations"] = list(dict.fromkeys(locations))
 
