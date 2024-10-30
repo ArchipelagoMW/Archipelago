@@ -110,9 +110,10 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     else:
         meta_weights = None
 
-    if not args.skip_output and args.spoiler == 0 and args.spoiler_only:
-        logging.info(f"Inferring --spoiler_only and --spoiler=0 to mean --skip_output")
-        args.skip_output = True
+    if args.skip_output and args.spoiler_only:
+        raise Exception("Cannot mix --skip_output and --spoiler_only")
+    elif args.spoiler == 0 and args.spoiler_only:
+        raise Exception("Cannot use --spoiler_only when --spoiler=0. Use --skip_output or set --spoiler to a different value")
 
     player_id = 1
     player_files = {}
