@@ -11,8 +11,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 7,
         "required_reports_door": 10,
         "reports_in_pool": 13,
-        "required_postcards": 10,
-        "required_puppies": 99,
+        "required_postcards": 7,
+        "required_puppies": 70,
         
         "super_bosses": False,
         "atlantica": False,
@@ -56,8 +56,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 13,
         "required_reports_door": 13,
         "reports_in_pool": 13,
-        "required_postcards": 10,
-        "required_puppies": 99,
+        "required_postcards": 7,
+        "required_puppies": 70,
         
         "super_bosses": False,
         "atlantica": False,
@@ -101,8 +101,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 7,
         "required_reports_door": 10,
         "reports_in_pool": 13,
-        "required_postcards": 10,
-        "required_puppies": 99,
+        "required_postcards": 7,
+        "required_puppies": 70,
         
         "super_bosses": True,
         "atlantica": True,
@@ -146,8 +146,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_reports_eotw": 7,
         "required_reports_door": 10,
         "reports_in_pool": 13,
-        "required_postcards": 10,
-        "required_puppies": 99,
+        "required_postcards": 7,
+        "required_puppies": 70,
         
         "super_bosses": False,
         "atlantica": False,
