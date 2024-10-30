@@ -86,6 +86,7 @@ def create_items(world: 'GSTLAWorld', player: int):
     sum_locations = len(world.multiworld.get_unfilled_locations(player))
     # TODO: this is a temporary measure; we may want to add lots of features around
     # item population based on player configured options.
+    mimic_items = []
     for loc in all_locations:
         if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:
             continue
@@ -93,7 +94,11 @@ def create_items(world: 'GSTLAWorld', player: int):
         # vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
         if loc.event_type == 0x81:
             # Mimic nonsense
+            # TODO: make an option for turning mimics on/off
             vanilla_item = items_by_id[0xA00 + loc.vanilla_contents]
+            mimic_items.append(create_item_direct(vanilla_item, player))
+            sum_locations -= 1
+            continue
         else:
             vanilla_item = items_by_id[loc.vanilla_contents]
 
@@ -112,7 +117,6 @@ def create_items(world: 'GSTLAWorld', player: int):
         ap_item = create_item_direct(vanilla_item, player)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
-
 
     # for item in unique_items + psyenergy_as_item_list + psyenergy_list:
     #     if multiworld.starter_ship[player] != 2 and item.itemName == ItemName.Black_Crystal:
@@ -170,7 +174,14 @@ def create_items(world: 'GSTLAWorld', player: int):
 
             else: #Anywhere
                 world.multiworld.itempool.append(ap_item)
-
+    remaining_locs = world.multiworld.get_unfilled_locations(world.player)
+    world.random.shuffle(remaining_locs)
+    for mimic in mimic_items:
+        while True:
+            loc = remaining_locs.pop()
+            if loc.item_rule(mimic):
+                loc.place_locked_item(mimic)
+                break
     # for item in gear + summon_list:
     #     ap_item = create_item(item.itemName, player)
     #     multiworld.itempool.append(ap_item)
