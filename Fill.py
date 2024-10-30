@@ -902,8 +902,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
             if isinstance(locations, str):
                 locations = [locations]
             elif not isinstance(locations, list):
-                locations_type = type(locations)
-                raise Exception(f"Plando 'locations' has to be a list, not {locations_type} for player {player}.")
+                raise Exception(f"Plando 'locations' has to be a list, not {type(locations)} for player {player}.")
 
             locations_from_groups: typing.List[str] = []
             for target_player in worlds:
