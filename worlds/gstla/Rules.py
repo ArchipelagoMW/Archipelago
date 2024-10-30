@@ -3,18 +3,19 @@ import math
 from typing_extensions import TYPE_CHECKING
 
 from worlds.generic.Rules import add_rule, add_item_rule
-from typing import Set
+from typing import Set, Callable
 from .Items import ItemType, all_items
 from .gen.ItemNames import ItemName
 from .gen.ItemData import summon_list, characters
 from .Names.EntranceName import EntranceName
-from .Locations import location_type_to_data
-from .gen.LocationData import LocationType
+from .Locations import location_type_to_data, all_locations
+from .gen.LocationData import LocationType, LocationRestriction
 from BaseClasses import MultiWorld
 from .gen.LocationNames import LocationName, loc_names_by_id
 
 if TYPE_CHECKING:
     from . import GSTLAWorld
+    from .Items import GSTLAItem
 
 def set_entrance_rules(world: 'GSTLAWorld'):
     multiworld = world.multiworld
@@ -929,103 +930,33 @@ def set_access_rules(world: 'GSTLAWorld'):
             add_rule(world.get_location(loc_names_by_id[loc.ap_id]),
                  lambda state: state.has(ItemName.Reveal, player))
 
+class _RestrictionRule:
+    summon_names = {x.name for x in summon_list}
+    def __init__(self, player: int, loc_restrictions: LocationRestriction):
+        self.player = player
+        self.loc_restrictions = loc_restrictions
 
-
-
+    def __call__(self, item) -> bool:
+        # Really the type should be 'GSTLAItem' -> bool, but I dunno how to get around python typing
+        if item.player != self.player:
+            return True
+        ret = True
+        if self.loc_restrictions & LocationRestriction.NoMimic > 0:
+            ret &= not item.item_data.is_mimic
+        if self.loc_restrictions & LocationRestriction.NoEmpty:
+            ret &= item.name != ItemName.Empty
+        if self.loc_restrictions & LocationRestriction.NoSummon:
+            ret &= item.item_data.type != ItemType.Character and item.name not in _RestrictionRule.summon_names
+        return ret
 
 def set_item_rules(world: 'GSTLAWorld'):
-    multiworld = world.multiworld
     player = world.player
     djinn: Set[str] = {item.name for item in all_items if item.type == ItemType.Djinn}
 
     for loc in location_type_to_data[LocationType.Djinn]:
-        add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.player == player and item.name in djinn)
+        add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]),
+                      lambda item: item.player == player and item.name in djinn)
 
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Airs_Rock_Reveal), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Aqua_Rock_Parch), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Magma_Rock_Magma_Ball), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Magma_Rock_Blaze), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Gaia_Rock_Sand), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Gaia_Rock_Dancing_Idol), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Dehkan_Plateau_Pound_Cube), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))   
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Kandorean_Temple_Lash_Pebble), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Madra_Cyclone_Chip), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Shaman_Village_Hover_Jade), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Yampi_Desert_Scoop_Gem), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Champa_Trident), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-
-    character_names = [character.name for character in characters]
-    summon_names = [summon.name for summon in summon_list]
-
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Carry_Stone), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Lifting_Gem), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Orb_of_Force), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Catch_Beads), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
-    add_item_rule(world.get_location(LocationName.Idejima_Shamans_Rod), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
-    add_item_rule(world.get_location(LocationName.Idejima_Growth), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
-    add_item_rule(world.get_location(LocationName.Idejima_Whirlwind), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
-    add_item_rule(world.get_location(LocationName.Idejima_Mind_Read), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
-    add_item_rule(world.get_location(LocationName.Kibombo_Douse_Drop), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-    #TODO: This location only has no summon flag but it seems odd to me to allow mimics
-    add_item_rule(world.get_location(LocationName.Kibombo_Frost_Jewel), lambda item: item.player != player or (item.player == player and item.name not in summon_names and item.name not in character_names))
-
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Isaac), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Garet), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Ivan), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Contigo_Mia), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Idejima_Jenna), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Idejima_Sheba), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Kibombo_Piers), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-
-
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Daila_Sea_Gods_Tear), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Gabomba_Catacombs_Tomegathericon), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Gabomba_Statue_Black_Crystal), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    
-    #TODO: This location is not allowed to have a mimic
-    #add_item_rule(world.get_location(LocationName.Lemurian_Ship_Mist_Potion), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.Mars_Lighthouse_Mars_Star), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.E_Tundaria_Islet_Pretty_Stone), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.N_Osenia_Islet_Milk), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.SE_Angara_Islet_Red_Cloth), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
-    #TODO: This location is also not allowed to have a mimic
-    add_item_rule(world.get_location(LocationName.W_Indra_Islet_Lil_Turtle), lambda item: item.player != player or (item.player == player and item.name != ItemName.Empty))
+    for loc in [x for x in all_locations if x.loc_type != LocationType.Event]:
+        if loc.restrictions > 0:
+            add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
