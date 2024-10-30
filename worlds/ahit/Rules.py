@@ -739,7 +739,7 @@ def set_dlc1_rules(world: "HatInTimeWorld"):
 
     # This particular item isn't present in Act 3 for some reason, yes in vanilla too
     add_rule(world.multiworld.get_location("The Arctic Cruise - Toilet", world.player),
-             lambda state: state.can_reach("Bon Voyage!", "Region", world.player)
+             lambda state: (state.can_reach("Bon Voyage!", "Region", world.player) and can_use_hookshot(state, world))
              or state.can_reach("Ship Shape", "Region", world.player))
 
 
