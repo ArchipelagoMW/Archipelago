@@ -1418,7 +1418,7 @@ class ItemLinks(OptionList):
 
 class PlandoItem(typing.NamedTuple):
     items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]]
-    locations: typing.List[str] = []
+    locations: typing.List[str]
     world: typing.Union[int, str, bool, None, typing.Iterable[str], typing.Set[int]] = False
     from_pool: bool = True
     force: typing.Union[bool, typing.Literal["silent"]] = "silent"
@@ -1456,7 +1456,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         if not items:
                             raise Exception("You must specify at least one item to place items with plando.")
                         items = [items]
-                    locations = item["locations"]
+                    locations = item.get("locations", [])
                     if not locations:
                         locations = item.get("location", [])
                         if locations:
