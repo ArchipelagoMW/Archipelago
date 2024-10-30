@@ -841,15 +841,13 @@ def distribute_planned(multiworld: MultiWorld) -> None:
 
     world_name_lookup = multiworld.world_name_lookup
 
-    block_value = typing.Union[typing.List[str], typing.Dict[str, typing.Any]]
     plando_blocks: typing.List[typing.Dict[str, typing.Any]] = []
     player_ids = set(multiworld.player_ids)
     for player in player_ids:
         for block in multiworld.worlds[player].options.plando_items:
             new_block: typing.Dict[str, typing.Any] = {"player": player}
             if not isinstance(block.from_pool, bool):
-                from_pool_type = type(block.from_pool)
-                raise Exception(f"Plando 'from_pool' has to be boolean, not {from_pool_type} for player {player}.")
+                raise Exception(f"Plando 'from_pool' has to be boolean, not {type(block.from_pool)} for player {player}.")
             new_block["from_pool"] = block.from_pool
             new_block["force"] = block.force
             target_world = block.world
@@ -886,7 +884,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 worlds = {world_name_lookup[target_world]}
             new_block["world"] = worlds
 
-            items: block_value = block.items
+            items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]] = block.items
             if isinstance(items, dict):
                 item_list: typing.List[str] = []
                 for key, value in items.items():

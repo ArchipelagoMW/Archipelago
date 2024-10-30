@@ -26,7 +26,6 @@ if typing.TYPE_CHECKING:
 def roll_percentage(percentage: typing.Union[int, float]) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
-    # Copied from Generate.py
     return random.random() < (float(percentage) / 100)
 
 
@@ -1446,8 +1445,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
             if isinstance(item, typing.Mapping):
                 percentage = item.get("percentage", 100)
                 if not isinstance(percentage, int):
-                    percentage_type = type(percentage)
-                    raise Exception(f"Plando `percentage` has to be int, not {percentage_type}.")
+                    raise Exception(f"Plando `percentage` has to be int, not {type(percentage)}.")
                 if roll_percentage(percentage):
                     count = item.get("count", False)
                     items = item.get("items", [])
