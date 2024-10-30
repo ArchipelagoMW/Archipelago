@@ -1093,7 +1093,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             lambda state: logic.zerg_common_unit(state) or adv_tactics
         ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "West Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 508, LocationType.EXTRA,
-            logic.zerg_common_unit_basic_aa
+            logic.zerg_common_unit_competent_aa
         ),
         make_location_data(SC2Mission.SHOOT_THE_MESSENGER.mission_name, "East Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 509, LocationType.EXTRA,
             logic.zerg_common_unit_competent_aa
@@ -3448,6 +3448,106 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            lambda state: (
                                    logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6700, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_ground_to_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "East Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 6701, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_ground_to_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "Center Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 6702, LocationType.VANILLA,
+                           lambda state: logic.terran_common_unit(state) or adv_tactics
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "West Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 6703, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_ground_to_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "Destroy 4 Shuttles", SC2_RACESWAP_LOC_ID_OFFSET + 6704, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_ground_to_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "Frozen Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 6705, LocationType.EXTRA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "Southwest Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6706, LocationType.EXTRA),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "Southeast Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6707, LocationType.EXTRA,
+                           lambda state: logic.terran_common_unit(state) or adv_tactics
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "West Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6708, LocationType.EXTRA,
+                           lambda state: logic.terran_common_unit(state) and logic.terran_competent_ground_to_air(state)
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "East Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6709, LocationType.EXTRA,
+                           lambda state: logic.terran_common_unit(state) and logic.terran_competent_ground_to_air(state)
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "West Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 6710, LocationType.CHALLENGE,
+                           lambda state: logic.terran_beats_protoss_deathball(state)
+                                         and logic.terran_competent_ground_to_air(state)
+                                         and logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "Center Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 6711, LocationType.CHALLENGE,
+                           lambda state: logic.terran_beats_protoss_deathball(state)
+                                         and logic.terran_competent_ground_to_air(state)
+                                         and logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_T.mission_name, "East Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 6712, LocationType.CHALLENGE,
+                           lambda state: logic.terran_beats_protoss_deathball(state)
+                                         and logic.terran_competent_ground_to_air(state)
+                                         and logic.terran_common_unit(state)
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6800, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "East Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 6801, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "Center Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 6802, LocationType.VANILLA,
+                           lambda state: logic.protoss_common_unit(state) or adv_tactics
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "West Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 6803, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "Destroy 4 Shuttles", SC2_RACESWAP_LOC_ID_OFFSET + 6804, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "Frozen Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 6805, LocationType.EXTRA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "Southwest Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6806, LocationType.EXTRA),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "Southeast Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6807, LocationType.EXTRA,
+                           lambda state: logic.protoss_common_unit(state) or adv_tactics
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "West Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6808, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "East Frozen Group", SC2_RACESWAP_LOC_ID_OFFSET + 6809, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_armor_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "West Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 6810, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "Center Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 6811, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.SHOOT_THE_MESSENGER_P.mission_name, "East Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 6812, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
                            ),
     ]
 
