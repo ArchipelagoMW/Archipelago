@@ -31,7 +31,7 @@ class DishRandomizer(Toggle):
 class TurtleRandomizer(Choice):
     """
     Randomize the transportation turtle.
-    If the objective is killing the four enemy gods, the abyss and body transportation turtle cannot be obtained.
+    If the objective is killing the four gods or Gods and Creator, the abyss and body turtle cannot be randomized.
     """
     display_name = "Turtle Randomizer"
     option_none = 0
@@ -83,7 +83,7 @@ class BigBossesToBeat(Range):
     """
     The number of big bosses to beat before having access to the creator (the final boss). The big bosses are
     "Fallen God", "Mithalan God", "Drunian God", "Lumerean God" and "The Golem".
-    Have no effect if the objective is killing the four enemy gods.
+    Have no effect if the objective is killing the four gods or Gods and Creator.
     """
     display_name = "Big bosses to beat"
     range_start = 0
@@ -108,8 +108,13 @@ class MiniBossesToBeat(Range):
 
 class Objective(Choice):
     """
-    The game objective can be to kill the creator, to kill the creator after obtaining all three secret memories or
-    to kill the four enemy gods ("Fallen God", "Mithalan God", "Drunian God", "Lumerean God").
+    With the game objective Kill the creator you have to get to the final boss (the Creator) and beat all it's forms
+    With the game objective Obtain secrets and kill the Creator is like the Kill the Creator objective, but you have to
+    find all three secret memories before getting to the Creator.
+    With the game objective Killing the four gods, you have to beat all four enemy gods ("Fallen God", "Mithalan God",
+    "Drunian God", "Lumerean God").
+    The game objective Gods and Creator is the same as the Killing the four gods objective, but after the four gods
+    are beaten, you can get to the Creator via the body transturtle to beat it.
     """
     display_name = "Objective"
     option_kill_the_creator = 0

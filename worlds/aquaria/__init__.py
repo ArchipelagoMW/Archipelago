@@ -13,6 +13,7 @@ from .Options import (AquariaOptions, IngredientRandomizer, TurtleRandomizer, Ea
                       UnconfineHomeWater, Objective)
 from .Regions import AquariaRegions
 
+CLIENT_MINIMAL_COMPATIBILITY = [1, 4, 1]
 
 class AquariaWeb(WebWorld):
     """
@@ -268,4 +269,5 @@ class AquariaWorld(World):
                 "no_progression_abyss": bool(self.options.no_progression_abyss),
                 "no_progression_sunken_city": bool(self.options.no_progression_sunken_city),
                 "no_progression_body": bool(self.options.no_progression_body),
+                "required_client_version": CLIENT_MINIMAL_COMPATIBILITY,
                 }

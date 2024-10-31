@@ -133,6 +133,7 @@ def _has_mini_bosses_four_gods(state: CollectionState, player: int) -> bool:
 
 
 def _has_secrets(state: CollectionState, player: int) -> bool:
+    """`player in `state` has obtained every secret memories"""
     return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
                           ItemNames.THIRD_SECRET_OBTAINED}, player)
 
@@ -1117,6 +1118,10 @@ class AquariaRegions:
         ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG, self.player),
                  lambda state: _has_beast_form(state, self.player))
+        add_rule(self.multiworld.get_location(
+                    AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_BULB_IN_THE_SMALL_PATH_BEFORE_MITHALAS,
+                    self.player), lambda state: _has_bind_song(state, self.player)
+        )
         if (options.objective.value != Objective.option_killing_the_four_gods and
             options.objective.value != Objective.option_gods_and_creator):
             add_rule(self.multiworld.get_location(AquariaLocationNames.ABYSS_LEFT_AREA_BULB_IN_THE_BOTTOM_FISH_PASS,

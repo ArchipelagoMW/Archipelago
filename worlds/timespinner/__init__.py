@@ -190,7 +190,7 @@ class TimespinnerWorld(World):
 
         if self.options.has_replaced_options:
             warning = \
-                f"NOTICE: Timespinner options for player '{self.player_name}' where renamed from PasCalCase to snake_case, " \
+                f"NOTICE: Timespinner options for player '{self.player_name}' were renamed from PascalCase to snake_case, " \
                 "please update your yaml"
 
             spoiler_handle.write("\n")
