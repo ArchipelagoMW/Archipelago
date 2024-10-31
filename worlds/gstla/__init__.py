@@ -22,6 +22,8 @@ from .Names.RegionName import RegionName
 from .Rom import get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch
 from .BizClient import GSTLAClient
 
+import logging
+
 class GSTLAWeb(WebWorld):
     theme = "jungle"
 
@@ -50,6 +52,9 @@ class GSTLAWorld(World):
 
         if self.options.starter_ship == 0:
             self.options.start_inventory.value[ ItemName.Ship ] = 1
+
+        #force unsupported options to off
+        self.options.gs1_items = 0
 
     def create_regions(self) -> None:
         create_regions(self)
@@ -192,42 +197,22 @@ class GSTLAWorld(World):
 
     #TODO: gs1_items we do shuffle, dummy-items we dont shuffle, adv-equip we dont shuffle
     def _write_options_for_rando(self, rando_file: BinaryIO, debug_file: TextIO):
+        #First byte of base rando settings
         write_me = 0
-        hidden = self.options.hidden_items
-        if hidden == 2:
-            write_me |= RandoOptions.ItemShufTreas.bit_flag
-            debug_file.write(RandoOptions.ItemShufTreas.name + '\n')
-        else:
-            write_me |= RandoOptions.ItemShufAll.bit_flag
-            debug_file.write(RandoOptions.ItemShufAll.name + '\n')
-
-        super = self.options.super_bosses
-
-        if super == 0:
-            write_me |= RandoOptions.OmitSuper.bit_flag | RandoOptions.OmitAnemos.bit_flag
-            debug_file.write(RandoOptions.OmitSuper.name + '\n')
-            debug_file.write(RandoOptions.OmitAnemos.name + '\n')
-        elif super == 1:
-            write_me |= RandoOptions.OmitAnemos.bit_flag
-            debug_file.write(RandoOptions.OmitAnemos.name + '\n')
-
-        if False:
-            write_me |= RandoOptions.GS1Items.bit_flag
-            debug_file.write(RandoOptions.GS1Items.name + '\n')
-
-        if True:
-            write_me |= RandoOptions.ShowItems.bit_flag
-            debug_file.write(RandoOptions.ShowItems.name + '\n')
-
-        if True:
-            write_me |= RandoOptions.NoLearning.bit_flag
-            debug_file.write(RandoOptions.NoLearning.name + '\n')
-
-        if False:
-            write_me |= RandoOptions.ClassStats.bit_flag
-            debug_file.write(RandoOptions.ClassStats.name + '\n')
-
+        write_me += self.options.item_shuffle << 6
+        debug_file.write('Item Shuffle: ' + self.options.item_shuffle.name_lookup[self.options.item_shuffle] + '\n')
+        write_me += self.options.omit_locations << 4
+        debug_file.write('Omit Locations: ' + self.options.omit_locations.name_lookup[self.options.omit_locations] + '\n')
+        write_me += self.options.gs1_items << 3
+        debug_file.write('GS1 Items: ' + self.options.gs1_items.name_lookup[self.options.gs1_items] + '\n')
+        write_me += self.options.visible_items << 2
+        debug_file.write('Visible Items: ' + self.options.visible_items.name_lookup[self.options.visible_items] + '\n')
+        write_me += self.options.no_learning_util << 1
+        debug_file.write('No Learning Util: ' + self.options.no_learning_util.name_lookup[self.options.no_learning_util] + '\n')
+        write_me += self.options.shuffle_class_stats
+        debug_file.write('Class Stats Shuffle: ' + self.options.shuffle_class_stats.name_lookup[self.options.shuffle_class_stats] + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
+
         write_me = 0
 
         if False:

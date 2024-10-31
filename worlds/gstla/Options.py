@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import IntEnum, auto
-from Options import Choice, NamedRange, PerGameCommonOptions
+from Options import Choice, Toggle, NamedRange, PerGameCommonOptions
 
 
 class RandoOptions(IntEnum):
@@ -461,14 +461,6 @@ class StartWithShip(Choice):
     option_vanilla = 2
     default = 0
 
-
-class HiddenItems(Choice):
-    display_name = "Hidden items"
-    option_revealrequired = 0
-    option_included = 1
-    option_excluded = 2
-    default = 0
-
 class CharacterShuffle(Choice):
     display_name = "Character Shuffle"
     option_anywhere = 0
@@ -483,13 +475,6 @@ class DjinnShuffle(Choice):
     option_vanilla = 2
     default = 1
 
-class SuperBosses(Choice):
-    display_name = "Super Bosses"
-    option_excludeoptionalbosses = 0
-    option_excludeanemos = 1
-    option_allincluded = 2
-    default = 0
-
 class DjinnLogic(NamedRange):
     display_name = "Djinn Logic"
     range_start = 0
@@ -502,11 +487,68 @@ class DjinnLogic(NamedRange):
         "none": 0
     }
 
+class ItemShuffle(Choice):
+    """Which locations are part of the pool.
+    Most is all locations but the pots and barrels containing hidden Items. Note some hidden chests may still exist.
+    All is all locations, including hidden items in pots and barrles,"""
+    display_name = "Item Shuffle"
+    option_most = 2
+    option_all = 3
+    default = 2
+
+class RevealHiddenItem(Toggle):
+    """If enabled all hidden items require Reveal to be logically accessible.
+    Note that most hidden items can be gotten regardless of having Reveal or not.
+    Also there are a few locations that hard require Reveal to be obtainable, this setting does not alter those.
+    """
+    display_name = "Reveal Hidden Items"
+    default = 1
+
+class OmitLocations(Choice):
+    """Choose to omit locations containing optional harder boss fights
+    None keeps all super bosses in play
+    Anemos excludes the Anemos dungeon
+    Superboss excludes all super bosses
+    """
+    option_none = 0
+    option_anemos = 1
+    option_superboss = 2
+    default = 2
+
+class AddGs1Items(Toggle):
+    """When enabled adds GS1 items as Elven Shirt and Cleric Ring
+    Not yet implemted.
+    """
+    display_name = "Add GS1 items"
+
+class VisibleItems(Toggle):
+    """When enabled the items are visible on the floor. This allows for scouting items.
+    Note certain locations are still not visible, for example hidden items in pots or barrels.
+    """
+    display_name = "Visible Items"
+    default = 1
+
+class NoLearningUtilPsy(Toggle):
+    """When enabled utility Psynergy is not learned by any classes. Examples of these are Whirlwind and Growth.
+    """
+    display_name = "No Learning Util Psy"
+    default = 1
+
+class ShuffleClassStats(Toggle):
+    """When enabled the base stats for classes are randomized"""
+    display_name = "Shuffle Class Stats"
+
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     starter_ship: StartWithShip
-    hidden_items: HiddenItems
-    super_bosses: SuperBosses
     djinn_logic: DjinnLogic
     djinn_shuffle: DjinnShuffle
     character_shuffle: CharacterShuffle
+
+    item_shuffle: ItemShuffle
+    reveal_hidden_item: RevealHiddenItem
+    omit_locations: OmitLocations
+    gs1_items: AddGs1Items
+    visible_items: VisibleItems
+    no_learning_util: NoLearningUtilPsy
+    shuffle_class_stats: ShuffleClassStats

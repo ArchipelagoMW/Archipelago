@@ -31,7 +31,7 @@ def create_region(world: 'GSTLAWorld', region_data: EntranceData):
     gs_locations: Dict[str, Optional[int]] = dict()
     for location in region_data.locations:
         location_data = location_name_to_id[location]
-        if world.options.hidden_items == 2 and location_data.loc_type == LocationType.Hidden:
+        if world.options.item_shuffle < 2 and location_data.loc_type == LocationType.Hidden:
             continue
         if location_data.loc_type == LocationType.Djinn:
             loc = GSTLALocation.create_djinn_location(world.player, location, location_data, region)
@@ -49,12 +49,12 @@ def create_region(world: 'GSTLAWorld', region_data: EntranceData):
 
 
 def create_regions(world: 'GSTLAWorld'):
-    if world.options.super_bosses > 0:
+    if world.options.omit_locations < 2:
         regions[RegionName.YampiDesertCave].locations.append(LocationName.Yampi_Desert_Cave_Daedalus)
         regions[RegionName.IsletCave].locations.append(LocationName.Islet_Cave_Catastrophe)
         regions[RegionName.TreasureIsland_PostReunion].locations.append(LocationName.Treasure_Isle_Azul)
 
-    if world.options.super_bosses > 1:
+    if world.options.omit_locations < 1:
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Orihalcon)
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Iris)
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Charon)
