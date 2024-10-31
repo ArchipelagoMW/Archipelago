@@ -15,16 +15,20 @@ def is_goal_efficiency_iii(goal: str, achievements: bool, early_useful: str) -> 
     return IClass.progression if goal == "efficiency_iii" else IClass.useful
 
 
-def always_progression(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.progression
+def always_progression(goal: str, achievements: bool, early_useful: str) -> IClass:
+    return IClass.progression
 
 
-def always_useful(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.useful
+def always_useful(goal: str, achievements: bool, early_useful: str) -> IClass:
+    return IClass.useful
 
 
-def always_filler(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.filler
+def always_filler(goal: str, achievements: bool, early_useful: str) -> IClass:
+    return IClass.filler
 
 
-def always_trap(goal: str, achievements: bool, early_useful: str) -> IClass: return IClass.trap
+def always_trap(goal: str, achievements: bool, early_useful: str) -> IClass:
+    return IClass.trap
 
 
 # Routing buildings are not needed to complete the game, but building factories without balancers and tunnels
@@ -47,9 +51,9 @@ buildings_processing: Dict[str, Callable[[str, bool, str], IClass]] = {
 buildings_routing: Dict[str, Callable[[str, bool, str], IClass]] = {
     "Balancer": always_progression,
     "Tunnel": always_progression,
-    "Compact Merger": is_mam_achievement_included,
+    "Compact Merger": always_progression,
     "Tunnel Tier II": is_mam_achievement_included,
-    "Compact Splitter": is_mam_achievement_included
+    "Compact Splitter": always_progression
 }
 
 buildings_other: Dict[str, Callable[[str, bool, str], IClass]] = {
