@@ -190,6 +190,7 @@ class GSTLAWorld(World):
                 self._generate_rando_data(rando_file, debug_file)
 
 
+    #TODO: gs1_items we do shuffle, dummy-items we dont shuffle, adv-equip we dont shuffle
     def _write_options_for_rando(self, rando_file: BinaryIO, debug_file: TextIO):
         write_me = 0
         hidden = self.options.hidden_items
@@ -210,20 +211,143 @@ class GSTLAWorld(World):
             write_me |= RandoOptions.OmitAnemos.bit_flag
             debug_file.write(RandoOptions.OmitAnemos.name + '\n')
 
+        if False:
+            write_me |= RandoOptions.GS1Items.bit_flag
+            debug_file.write(RandoOptions.GS1Items.name + '\n')
+
+        if True:
+            write_me |= RandoOptions.ShowItems.bit_flag
+            debug_file.write(RandoOptions.ShowItems.name + '\n')
+
+        if True:
+            write_me |= RandoOptions.NoLearning.bit_flag
+            debug_file.write(RandoOptions.NoLearning.name + '\n')
+
+        if False:
+            write_me |= RandoOptions.ClassStats.bit_flag
+            debug_file.write(RandoOptions.ClassStats.name + '\n')
+
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
+
+        if False:
+            write_me |= RandoOptions.EquipShuffle.bit_flag
+            debug_file.write(RandoOptions.EquipShuffle.name + '\n')
+        if False:
+            write_me |= RandoOptions.EquipCost.bit_flag
+            debug_file.write(RandoOptions.EquipCost.name + '\n')
+        if False:
+            write_me |= RandoOptions.EquipStats.bit_flag
+            debug_file.write(RandoOptions.EquipStats.name + '\n')
+        if False:
+            write_me |= RandoOptions.EquipSort.bit_flag
+            debug_file.write(RandoOptions.EquipSort.name + '\n')
+        if False:
+            write_me |= RandoOptions.EquipUnleash.bit_flag
+            debug_file.write(RandoOptions.EquipUnleash.name + '\n')
+        if False:
+            write_me |= RandoOptions.EquipEffect.bit_flag
+            debug_file.write(RandoOptions.EquipEffect.name + '\n')
+        if False:
+            write_me |= RandoOptions.EquipCurse.bit_flag
+            debug_file.write(RandoOptions.EquipCurse.name + '\n')
+        if False:
+            write_me |= RandoOptions.PsyEnergyPower.bit_flag
+            debug_file.write(RandoOptions.PsyEnergyPower.name + '\n')
 
         # Equip not a thing
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
+        if True:
+            write_me |= RandoOptions.DjinnShuffle.bit_flag
+            debug_file.write(RandoOptions.DjinnShuffle.name + '\n')
+        if False:
+            write_me |= RandoOptions.DjinnStats.bit_flag
+            debug_file.write(RandoOptions.DjinnStats.name + '\n')
+        if False:
+            write_me |= RandoOptions.DjinnPower.bit_flag
+            debug_file.write(RandoOptions.DjinnPower.name + '\n')
+        if False:
+            write_me |= RandoOptions.DjinnAoe.bit_flag
+            debug_file.write(RandoOptions.DjinnAoe.name + '\n')
+        if False:
+            write_me |= RandoOptions.DjinnScale.bit_flag
+            debug_file.write(RandoOptions.DjinnScale.name + '\n')
+        if False:
+            write_me |= RandoOptions.SummonCost.bit_flag
+            debug_file.write(RandoOptions.SummonCost.name + '\n')
+        if False:
+            write_me |= RandoOptions.SummonPower.bit_flag
+            debug_file.write(RandoOptions.SummonPower.name + '\n')
+        if False:
+            write_me |= RandoOptions.SummonSort.bit_flag
+            debug_file.write(RandoOptions.SummonSort.name + '\n')
+
+
         # Djinn/Summon
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
+        if False:
+            write_me |= RandoOptions.CharStatsAdj.bit_flag
+            debug_file.write(RandoOptions.CharStatsAdj.name + '\n')
+        else:
+            write_me |= RandoOptions.CharStatsShuf.bit_flag
+            debug_file.write(RandoOptions.CharStatsShuf.name + '\n')
+        if False:
+            write_me |= RandoOptions.CharEleAdj.bit_flag
+            debug_file.write(RandoOptions.CharEleAdj.name + '\n')
+        else:
+            write_me |= RandoOptions.CharEletShuf.bit_flag
+            debug_file.write(RandoOptions.CharEletShuf.name + '\n')
+        if False:
+            write_me |= RandoOptions.PsyEnergyCost.bit_flag
+            debug_file.write(RandoOptions.PsyEnergyCost.name + '\n')
+        if False:
+            write_me |= RandoOptions.PsyEnergyAoe.bit_flag
+            debug_file.write(RandoOptions.PsyEnergyAoe.name + '\n')
+        if False:
+            write_me |= RandoOptions.EnemyPsyPow.bit_flag
+            debug_file.write(RandoOptions.EnemyPsyPow.name + '\n')
+        if False:
+            write_me |= RandoOptions.EnemyPsyAoe.bit_flag
+            debug_file.write(RandoOptions.EnemyPsyAoe.name + '\n')
+
         # Char Stat/Enemy Psy Shuffle
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
+
+        if False:
+            write_me |= RandoOptions.ShuffPsyGrp.bit_flag
+            debug_file.write(RandoOptions.ShuffPsyGrp.name + '\n')
+        elif False:
+            write_me |= RandoOptions.ShuffPsy.bit_flag
+            debug_file.write(RandoOptions.ShuffPsy.name + '\n')
+        elif False:
+            write_me |= RandoOptions.ClassPsyEle.bit_flag
+            debug_file.write(RandoOptions.ClassPsyEle.name + '\n')
+        elif False:
+            write_me |= RandoOptions.ClassPsyGrp.bit_flag
+            debug_file.write(RandoOptions.ClassPsyGrp.name + '\n')
+        else:
+            write_me |= RandoOptions.ClassPsyShuf.bit_flag
+            debug_file.write(RandoOptions.ClassPsyShuf.name + '\n')
+        if False:
+            write_me |= RandoOptions.ClassLevelsRand.bit_flag
+            debug_file.write(RandoOptions.ClassLevelsRand.name + '\n')
+        else:
+            write_me |= RandoOptions.ClassLevelsShuf.bit_flag
+            debug_file.write(RandoOptions.ClassLevelsShuf.name + '\n')
+        if False:
+            write_me |= RandoOptions.QolCutscenes.bit_flag
+            debug_file.write(RandoOptions.QolCutscenes.name + '\n')
+        if False:
+            write_me |= RandoOptions.QolTickets.bit_flag
+            debug_file.write(RandoOptions.QolTickets.name + '\n')
+        if False:
+            write_me |= RandoOptions.QolFastShip.bit_flag
+            debug_file.write(RandoOptions.QolFastShip.name + '\n')
 
         # Psy/Qol
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
@@ -238,29 +362,158 @@ class GSTLAWorld(World):
             write_me |= RandoOptions.ShipUnlock.bit_flag
             debug_file.write(RandoOptions.ShipUnlock.name + '\n')
 
+        if False:
+            write_me |= RandoOptions.SkipsBasic.bit_flag
+            debug_file.write(RandoOptions.SkipsBasic.name + '\n')
+        if False:
+            write_me |= RandoOptions.SkipsOOBEasy.bit_flag
+            debug_file.write(RandoOptions.SkipsOOBEasy.name + '\n')
+        if False:
+            write_me |= RandoOptions.SkipsMaze.bit_flag
+            debug_file.write(RandoOptions.SkipsMaze.name + '\n')
+        if False:
+            write_me |= RandoOptions.BossLogic.bit_flag
+            debug_file.write(RandoOptions.BossLogic.name + '\n')
+        if True:
+            write_me |= RandoOptions.FreeAvoid.bit_flag
+            debug_file.write(RandoOptions.FreeAvoid.name + '\n')
+        if True:
+            write_me |= RandoOptions.FreeRetreat.bit_flag
+            debug_file.write(RandoOptions.FreeRetreat.name + '\n')
+
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
+
+        if False:
+            write_me |= RandoOptions.AdvEquip.bit_flag
+            debug_file.write(RandoOptions.AdvEquip.name + '\n')
+        if False:
+            write_me |= RandoOptions.DummyItems.bit_flag
+            debug_file.write(RandoOptions.DummyItems.name + '\n')
+        if False:
+            write_me |= RandoOptions.SkipsOOBHard.bit_flag
+            debug_file.write(RandoOptions.SkipsOOBHard.name + '\n')
+        if False:
+            write_me |= RandoOptions.EquipAttack.bit_flag
+            debug_file.write(RandoOptions.EquipAttack.name + '\n')
+        if False:
+            write_me |= RandoOptions.QoLHints.bit_flag
+            debug_file.write(RandoOptions.QoLHints.name + '\n')
+        if False:
+            write_me |= RandoOptions.StartHeal.bit_flag
+            debug_file.write(RandoOptions.StartHeal.name + '\n')
+        if False:
+            write_me |= RandoOptions.StartRevive.bit_flag
+            debug_file.write(RandoOptions.StartRevive.name + '\n')
+        if False:
+            write_me |= RandoOptions.StartReveal.bit_flag
+            debug_file.write(RandoOptions.StartReveal.name + '\n')
 
         # More QoL
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
-        # Scale Exp/Coins
-        write_me = 0b00010001
+        # Scale Exp/Coins      
+        if True:
+            write_me |= 0b00010000
+            debug_file.write(RandoOptions.ScaleExp.name + '\n')
+        if True:
+            write_me |= 0b00000001
+            debug_file.write(RandoOptions.ScaleCoins.name + '\n')
+
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
+
+        if False:
+            write_me |= RandoOptions.EquipDefense.bit_flag
+            debug_file.write(RandoOptions.EquipDefense.name + '\n')
+            
+        if True:
+            write_me |= 0b00000101
+            debug_file.write(RandoOptions.StartLevels.name + '\n')
 
         # Equip Defense/start levels
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
+        if False:
+            write_me |= RandoOptions.EnemyeResRand.bit_flag
+            debug_file.write(RandoOptions.EnemyeResRand.name + '\n')
+        elif False:
+            write_me |= RandoOptions.EnemyeResShuf.bit_flag
+            debug_file.write(RandoOptions.EnemyeResShuf.name + '\n')
+        
+        if False:
+            write_me |= RandoOptions.SancRevFixed.bit_flag
+            debug_file.write(RandoOptions.SancRevFixed.name + '\n')
+        elif True:
+            write_me |= RandoOptions.SancRevCheap.bit_flag
+            debug_file.write(RandoOptions.SancRevCheap.name + '\n')
+
+        if False:
+            write_me |= RandoOptions.CurseDisable.bit_flag
+            debug_file.write(RandoOptions.CurseDisable.name + '\n')
+        if True:
+            write_me |= RandoOptions.AvoidPatch.bit_flag
+            debug_file.write(RandoOptions.AvoidPatch.name + '\n')
+        if False:
+            write_me |= RandoOptions.RetreatPatch.bit_flag
+            debug_file.write(RandoOptions.RetreatPatch.name + '\n')
+        if True:
+            write_me |= RandoOptions.TeleportPatch.bit_flag
+            debug_file.write(RandoOptions.TeleportPatch.name + '\n')
+
         # More QoL
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
 
+        if False:
+            write_me |= RandoOptions.HardMode.bit_flag
+            debug_file.write(RandoOptions.HardMode.name + '\n')
+        if False:
+            write_me |= RandoOptions.HalveEnc.bit_flag
+            debug_file.write(RandoOptions.HalveEnc.name + '\n')
+        if False:
+            write_me |= RandoOptions.MajorShuffle.bit_flag
+            debug_file.write(RandoOptions.MajorShuffle.name + '\n')
+        if False:
+            write_me |= RandoOptions.EasierBosses.bit_flag
+            debug_file.write(RandoOptions.EasierBosses.name + '\n')
+        if False:
+            write_me |= RandoOptions.RandomPuzzles.bit_flag
+            debug_file.write(RandoOptions.RandomPuzzles.name + '\n')
+        if False:
+            write_me |= RandoOptions.FixedPuzzles.bit_flag
+            debug_file.write(RandoOptions.FixedPuzzles.name + '\n')
+        if False:
+            write_me |= RandoOptions.ManualRG.bit_flag
+            debug_file.write(RandoOptions.ManualRG.name + '\n')
+        if False:
+            write_me |= RandoOptions.ShipWings.bit_flag
+            debug_file.write(RandoOptions.ShipWings.name + '\n')
+
         # Speedstuffs
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
         write_me = 0
+
+        if False:
+            write_me |= RandoOptions.MusicShuffle.bit_flag
+            debug_file.write(RandoOptions.MusicShuffle.name + '\n')
+        if False:
+            write_me |= RandoOptions.TeleportAny.bit_flag
+            debug_file.write(RandoOptions.TeleportAny.name + '\n')
+        if False:
+            write_me |= RandoOptions.ForceBossDrop.bit_flag
+            debug_file.write(RandoOptions.ForceBossDrop.name + '\n')
+        if False:
+            write_me |= RandoOptions.ForceSuperMin.bit_flag
+            debug_file.write(RandoOptions.ForceSuperMin.name + '\n')
+        if False:
+            write_me |= RandoOptions.AnemosOpen.bit_flag
+            debug_file.write(RandoOptions.AnemosOpen.name + '\n')
+        elif False:
+            write_me |= RandoOptions.AnemosRand.bit_flag
+            debug_file.write(RandoOptions.AnemosRand.name + '\n')
 
         # Misc
         if self.options.character_shuffle < 2:
