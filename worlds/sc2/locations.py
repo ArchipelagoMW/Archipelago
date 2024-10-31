@@ -3389,7 +3389,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "West Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6503, LocationType.VANILLA,
                            logic.terran_common_unit
                            ),
-        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Lost Brood", SC2_RACESWAP_LOC_ID_OFFSET + 6504, LocationType.EXTRA),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Lost Base", SC2_RACESWAP_LOC_ID_OFFSET + 6504, LocationType.EXTRA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6505, LocationType.EXTRA,
                            logic.terran_common_unit
                            ),
@@ -3415,7 +3415,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 6600, LocationType.VICTORY,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.protoss_common_unit(state)
                                    and logic.protoss_anti_armor_anti_air(state))
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "First Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6601, LocationType.VANILLA),
@@ -3425,7 +3425,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "West Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6603, LocationType.VANILLA,
                            logic.protoss_common_unit
                            ),
-        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Lost Brood", SC2_RACESWAP_LOC_ID_OFFSET + 6604, LocationType.EXTRA),
+        make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Lost Base", SC2_RACESWAP_LOC_ID_OFFSET + 6604, LocationType.EXTRA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6605, LocationType.EXTRA,
                            logic.protoss_common_unit
                            ),
