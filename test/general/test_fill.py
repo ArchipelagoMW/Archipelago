@@ -688,8 +688,8 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
         for item in multiworld.get_items():
             item.classification = ItemClassification.useful
 
-        multiworld.local_items[player1.id].value = set(names(player1.basic_items))
-        multiworld.local_items[player2.id].value = set(names(player2.basic_items))
+        multiworld.worlds[player1.id].options.local_items.value = set(names(player1.basic_items))
+        multiworld.worlds[player2.id].options.local_items.value = set(names(player2.basic_items))
         locality_rules(multiworld)
 
         distribute_items_restrictive(multiworld)
