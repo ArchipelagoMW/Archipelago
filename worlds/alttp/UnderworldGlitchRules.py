@@ -15,7 +15,7 @@ def underworld_glitch_connections(world, player):
     specrock.exits.append(kikiskip)
     mire.exits.extend([mire_to_hera, mire_to_swamp])
 
-    if world.worlds[player].fix_fake_world:
+    if world.worlds[player].options.fix_fake_world:
         kikiskip.connect(world.get_entrance('Palace of Darkness Exit', player).connected_region)
         mire_to_hera.connect(world.get_entrance('Tower of Hera Exit', player).connected_region)
         mire_to_swamp.connect(world.get_entrance('Swamp Palace Exit', player).connected_region)
@@ -89,13 +89,13 @@ def underworld_glitches_rules(world, player):
     # Build the rule for SP moat. 
     # We need to be able to s+q to old man, then go to either Mire or Hera at either Hera or GT. 
     # First we require a certain type of entrance shuffle, then build the rule from its pieces. 
-    if not world.worlds[player].swamp_patch_required:
-        if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+    if not world.worlds[player].options.swamp_patch_required:
+        if world.worlds[player].options.entrance_shuffle.value in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
             rule_map = {
                 'Misery Mire (Entrance)': (lambda state: True),
                 'Tower of Hera (Bottom)': (lambda state: state.can_reach('Tower of Hera Big Key Door', 'Entrance', player))
             }
-            inverted = world.mode[player] == 'inverted'
+            inverted = world.worlds[player].options.mode == 'inverted'
             hera_rule = lambda state: (state.has('Moon Pearl', player) or not inverted) and \
                                       rule_map.get(world.get_entrance('Tower of Hera', player).connected_region.name, lambda state: False)(state)
             gt_rule = lambda state: (state.has('Moon Pearl', player) or inverted) and \
