@@ -228,23 +228,23 @@ def generate_itempool(world):
 
     if multiworld.worlds[player].options.item_pool.current_key not in difficulties:
         raise NotImplementedError(f"Diffulty {multiworld.worlds[player].options.item_pool}")
-    if multiworld.goal[player] not in ('ganon', 'pedestal', 'bosses', 'triforce_hunt', 'local_triforce_hunt',
+    if multiworld.worlds[player].options.goal not in ('ganon', 'pedestal', 'bosses', 'triforce_hunt', 'local_triforce_hunt',
                                        'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'crystals',
                                        'ganon_pedestal'):
-        raise NotImplementedError(f"Goal {multiworld.goal[player]} for player {player}")
-    if multiworld.mode[player] not in ('open', 'standard', 'inverted'):
-        raise NotImplementedError(f"Mode {multiworld.mode[player]} for player {player}")
-    if multiworld.timer[player] not in (False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'):
-        raise NotImplementedError(f"Timer {multiworld.timer[player]} for player {player}")
+        raise NotImplementedError(f"Goal {multiworld.worlds[player].options.goal} for player {player}")
+    if multiworld.worlds[player].options.mode not in ('open', 'standard', 'inverted'):
+        raise NotImplementedError(f"Mode {multiworld.worlds[player].options.mode} for player {player}")
+    if multiworld.worlds[player].options.timer.value not in (False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'):
+        raise NotImplementedError(f"Timer {multiworld.worlds[player].options.timer} for player {player}")
 
-    if multiworld.timer[player] in ['ohko', 'timed_ohko']:
+    if multiworld.worlds[player].options.timer.value in ['ohko', 'timed_ohko']:
         world.can_take_damage = False
-    if multiworld.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
+    if multiworld.worlds[player].options.goal.value in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
         multiworld.push_item(multiworld.get_location('Ganon', player), item_factory('Nothing', world), False)
     else:
         multiworld.push_item(multiworld.get_location('Ganon', player), item_factory('Triforce', world), False)
 
-    if multiworld.goal[player] in ['triforce_hunt', 'local_triforce_hunt']:
+    if multiworld.worlds[player].options.goal.value in ['triforce_hunt', 'local_triforce_hunt']:
         region = multiworld.get_region('Light World', player)
 
         loc = ALttPLocation(player, "Murahdahla", parent=region)
@@ -288,7 +288,7 @@ def generate_itempool(world):
     for item in precollected_items:
         multiworld.push_precollected(item_factory(item, world))
 
-    if multiworld.mode[player] == 'standard' and not has_melee_weapon(multiworld.state, player):
+    if multiworld.worlds[player].options.mode == 'standard' and not has_melee_weapon(multiworld.state, player):
         if "Link's Uncle" not in placed_items:
             found_sword = False
             found_bow = False
@@ -304,10 +304,10 @@ def generate_itempool(world):
                 elif item in ['Hammer', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
                     if item not in possible_weapons:
                         possible_weapons.append(item)
-                elif (item == 'Bombs (10)' and (not multiworld.bombless_start[player]) and item not in
+                elif (item == 'Bombs (10)' and (not multiworld.worlds[player].options.bombless_start) and item not in
                         possible_weapons):
                     possible_weapons.append(item)
-                elif (item in ['Bomb Upgrade (+10)', 'Bomb Upgrade (50)'] and multiworld.bombless_start[player] and item
+                elif (item in ['Bomb Upgrade (+10)', 'Bomb Upgrade (50)'] and multiworld.worlds[player].options.bombless_start and item
                         not in possible_weapons):
                     possible_weapons.append(item)
 
@@ -316,7 +316,7 @@ def generate_itempool(world):
             pool.remove(starting_weapon)
         if (placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Bomb Upgrade (+10)',
                                             'Bomb Upgrade (50)', 'Cane of Somaria', 'Cane of Byrna'] and multiworld.worlds[player].options.enemy_health.value not in ['default', 'easy']):
-            if multiworld.bombless_start[player] and "Bomb Upgrade" not in placed_items["Link's Uncle"]:
+            if multiworld.worlds[player].options.bombless_start and "Bomb Upgrade" not in placed_items["Link's Uncle"]:
                 if 'Bow' in placed_items["Link's Uncle"]:
                     multiworld.worlds[player].escape_assist.append('arrows')
                 elif 'Cane' in placed_items["Link's Uncle"]:
@@ -347,12 +347,12 @@ def generate_itempool(world):
     for key_loc in key_drop_data:
         key_data = key_drop_data[key_loc]
         drop_item = item_factory(key_data[3], world)
-        if not multiworld.key_drop_shuffle[player]:
+        if not multiworld.worlds[player].options.key_drop_shuffle:
             if drop_item in dungeon_items:
                 dungeon_items.remove(drop_item)
             else:
                 dungeon = drop_item.name.split("(")[1].split(")")[0]
-                if multiworld.mode[player] == 'inverted':
+                if multiworld.worlds[player].options.mode == 'inverted':
                     if dungeon == "Agahnims Tower":
                         dungeon = "Inverted Agahnims Tower"
                     if dungeon == "Ganons Tower":
@@ -384,7 +384,7 @@ def generate_itempool(world):
 
     set_up_shops(multiworld, player)
 
-    if multiworld.retro_bow[player]:
+    if multiworld.worlds[player].options.retro_bow:
         shop_items = 0
         shop_locations = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if
                           shop.type == ShopType.Shop and shop.region.player == player) for location in shop_locations if
@@ -411,7 +411,7 @@ def generate_itempool(world):
     pool_count = len(items)
     new_items = ["Triforce Piece" for _ in range(additional_triforce_pieces)]
     if multiworld.worlds[player].options.shuffle_capacity_upgrades or multiworld.worlds[player].options.bombless_start:
-        progressive = multiworld.progressive[player]
+        progressive = multiworld.worlds[player].options.progressive
         progressive = multiworld.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
         if multiworld.worlds[player].options.shuffle_capacity_upgrades == "on_combined":
             new_items.append("Bomb Upgrade (50)")
@@ -528,7 +528,7 @@ take_any_locations.sort()
 
 def set_up_take_anys(multiworld, world, player):
     # these are references, do not modify these lists in-place
-    if multiworld.mode[player] == 'inverted':
+    if multiworld.worlds[player].options.mode == 'inverted':
         take_any_locs = take_any_locations_inverted
     else:
         take_any_locs = take_any_locations
@@ -607,7 +607,7 @@ def get_pool_core(multiworld, player: int):
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
-    want_progressives = multiworld.progressive[player].want_progressives
+    want_progressives = multiworld.worlds[player].options.progressive.want_progressives
 
     if want_progressives(multiworld.random):
         pool.extend(diff.progressiveglove)
@@ -718,7 +718,7 @@ def get_pool_core(multiworld, player: int):
     if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':
-            if multiworld.key_drop_shuffle[player]:
+            if multiworld.worlds[player].options.key_drop_shuffle:
                 key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
                 key_location = multiworld.random.choice(key_locations)
                 key_locations.remove(key_location)
@@ -744,9 +744,9 @@ def get_pool_core(multiworld, player: int):
 def make_custom_item_pool(world, player):
     shuffle = world.worlds[player].options.entrance_shuffle
     difficulty = world.worlds[player].options.item_pool
-    timer = world.timer[player]
-    goal = world.goal[player]
-    mode = world.mode[player]
+    timer = world.worlds[player].options.timer
+    goal = world.worlds[player].options.goal
+    mode = world.worlds[player].options.mode
     customitemarray = world.customitemarray
 
     pool = []
@@ -846,7 +846,7 @@ def make_custom_item_pool(world, player):
             thisbottle = world.random.choice(diff.bottles)
         pool.append(thisbottle)
 
-    if "triforce" in world.goal[player]:
+    if "triforce" in world.worlds[player].options.goal:
         pool.extend(["Triforce Piece"] * world.triforce_pieces_available[player])
         itemtotal += world.triforce_pieces_available[player]
         treasure_hunt_required = world.triforce_pieces_required[player]
@@ -888,7 +888,7 @@ def make_custom_item_pool(world, player):
 
     if world.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
         itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in universal Mode
-        if world.key_drop_shuffle[player]:
+        if world.worlds[player].options.key_drop_shuffle:
             itemtotal = itemtotal - (len(key_drop_data) - 1)
     if itemtotal < total_items_to_place:
         pool.extend(['Nothing'] * (total_items_to_place - itemtotal))

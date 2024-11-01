@@ -246,7 +246,7 @@ for location in boss_location_table:
 
 def place_boss(world: "ALTTPWorld", boss: str, location: str, level: Optional[str]) -> None:
     player = world.player
-    if location == 'Ganons Tower' and world.multiworld.mode[player] == 'inverted':
+    if location == 'Ganons Tower' and world.multiworld.worlds[player].options.mode == 'inverted':
         location = 'Inverted Ganons Tower'
     logging.debug('Placing boss %s at %s', boss, location + (' (' + level + ')' if level else ''))
     world.dungeons[location].bosses[level] = BossFactory(boss, player)
@@ -260,7 +260,7 @@ def place_bosses(world: "ALTTPWorld") -> None:
     multiworld = world.multiworld
     player = world.player
     # will either be an int or a lower case string with ';' between options
-    boss_shuffle: Union[str, int] = multiworld.boss_shuffle[player].value
+    boss_shuffle: Union[str, int] = multiworld.worlds[player].options.boss_shuffle.value
     already_placed_bosses: List[str] = []
     remaining_locations: List[Tuple[str, str]] = []
     # handle plando

@@ -222,14 +222,14 @@ def get_invalid_bunny_revival_dungeons():
 
 def overworld_glitch_connections(world, player):
     # Boots-accessible locations.
-    create_owg_connections(player, world, get_boots_clip_exits_lw(world.mode[player] == 'inverted'))
-    create_owg_connections(player, world, get_boots_clip_exits_dw(world.mode[player] == 'inverted', player))
+    create_owg_connections(player, world, get_boots_clip_exits_lw(world.worlds[player].options.mode == 'inverted'))
+    create_owg_connections(player, world, get_boots_clip_exits_dw(world.worlds[player].options.mode == 'inverted', player))
 
     # Glitched speed drops.
-    create_owg_connections(player, world, get_glitched_speed_drops_dw(world.mode[player] == 'inverted'))
+    create_owg_connections(player, world, get_glitched_speed_drops_dw(world.worlds[player].options.mode == 'inverted'))
 
     # Mirror clip spots.
-    if world.mode[player] != 'inverted':
+    if world.worlds[player].options.mode != 'inverted':
         create_owg_connections(player, world, get_mirror_clip_spots_dw())
         create_owg_connections(player, world, get_mirror_offset_spots_dw())
     else:

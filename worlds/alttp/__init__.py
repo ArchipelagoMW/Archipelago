@@ -298,7 +298,7 @@ class ALTTPWorld(World):
         multiworld = self.multiworld
 
         self.fix_trock_doors = (multiworld.worlds[player].options.entrance_shuffle != 'vanilla'
-                                or multiworld.mode[player] == 'inverted')
+                                or multiworld.worlds[player].options.mode == 'inverted')
         self.fix_skullwoods_exit = multiworld.worlds[player].options.entrance_shuffle.value not in ['vanilla', 'simple', 'restricted',
                                                                                'dungeons_simple']
         self.fix_palaceofdarkness_exit = multiworld.worlds[player].options.entrance_shuffle.value not in ['dungeons_simple', 'vanilla',
@@ -554,7 +554,7 @@ class ALTTPWorld(World):
     def use_enemizer(self) -> bool:
         world = self.multiworld
         player = self.player
-        return bool(world.boss_shuffle[player] or world.worlds[player].options.enemy_shuffle
+        return bool(world.worlds[player].options.boss_shuffle or world.worlds[player].options.enemy_shuffle
                     or world.worlds[player].options.enemy_health != 'default' or world.enemy_damage[player] != 'default'
                     or world.worlds[player].options.pot_shuffle or world.bush_shuffle[player]
                     or world.killable_thieves[player])
@@ -860,7 +860,7 @@ def get_same_seed(world, seed_def: tuple) -> str:
 
 class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
-        if self.multiworld.glitches_required[player] == 'no_logic':
+        if self.multiworld.worlds[player].options.glitches_required == 'no_logic':
             return True
         if self.multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
             return can_buy_unlimited(self, 'Small Key (Universal)', player)

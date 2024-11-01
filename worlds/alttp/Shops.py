@@ -308,7 +308,7 @@ def set_up_shops(multiworld, player: int):
     from .Options import small_key_shuffle
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
-    if multiworld.retro_bow[player]:
+    if multiworld.worlds[player].options.retro_bow:
         rss = multiworld.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart',
@@ -319,7 +319,7 @@ def set_up_shops(multiworld, player: int):
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal or multiworld.retro_bow[player]:
+    if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal or multiworld.worlds[player].options.retro_bow:
         for shop in multiworld.random.sample([s for s in multiworld.shops if
                                               s.custom and not s.locked and s.type == ShopType.Shop
                                               and s.region.player == player], 5):
@@ -329,7 +329,7 @@ def set_up_shops(multiworld, player: int):
             slots = iter(slots)
             if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
-            if multiworld.retro_bow[player]:
+            if multiworld.worlds[player].options.retro_bow:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
 
     if multiworld.worlds[player].options.shuffle_capacity_upgrades:
@@ -444,7 +444,7 @@ def get_price(multiworld, item, player: int, price_type=None):
                     price_types = [ShopPriceType.Rupees, ShopPriceType.Magic]  # no logical requirements for repeatable keys
                 else:
                     price_types.append(ShopPriceType.Keys)
-            if multiworld.retro_bow[player]:
+            if multiworld.worlds[player].options.retro_bow:
                 if item and item["item"] == "Single Arrow":
                     price_types = [ShopPriceType.Rupees, ShopPriceType.Magic]  # no logical requirements for arrows
             else:
