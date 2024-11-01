@@ -60,7 +60,7 @@ def create_regions(world: 'GSTLAWorld'):
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Charon)
         regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Dark_Matter)
 
-    if world.options.starter_ship > 0:
+    if world.options.starter_ship < 2:
         regions[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine_Room)
 
     for region in regions.values():

@@ -17,7 +17,7 @@ class TestDjinnOptions(GSTestBase):
 
 class TestVanillaDjinn(GSTestBase):
     options = {
-        'djinn_shuffle': 2
+        'djinn_shuffle': 0
     }
 
     def test_ensure_vanilla_djinn(self):

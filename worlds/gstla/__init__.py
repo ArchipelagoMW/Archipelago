@@ -50,7 +50,7 @@ class GSTLAWorld(World):
         if self.options.character_shuffle > 0:
             self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]
 
-        if self.options.starter_ship == 0:
+        if self.options.starter_ship == 2:
             self.options.start_inventory.value[ ItemName.Ship ] = 1
 
         #force unsupported options to off
@@ -340,7 +340,7 @@ class GSTLAWorld(World):
 
         #Ship/Skips
         ship = self.options.starter_ship
-        if ship == 0:
+        if ship == 2:
             write_me |= RandoOptions.ShipFromStart.bit_flag
             debug_file.write(RandoOptions.ShipFromStart.name + '\n')
         elif ship == 1:

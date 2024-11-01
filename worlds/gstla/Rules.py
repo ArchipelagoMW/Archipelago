@@ -428,7 +428,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Reveal, player) and state.has(ItemName.Frost_Jewel, player))
 
     #Lemurian Ship
-    if world.options.starter_ship > 0:
+    if world.options.starter_ship < 2:
         add_rule(world.get_location(LocationName.Lemurian_Ship_Engine_Room),
                         lambda state: state.has(ItemName.Aqua_Hydra_defeated, player))
         add_rule(world.get_location(LocationName.Lemurian_Ship_Aqua_Hydra_fight), lambda state: state.has(ItemName.Black_Crystal, player))
