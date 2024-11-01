@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Visibility
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup
 from collections import defaultdict
 import Utils
 
@@ -347,10 +347,9 @@ class TextMode(Choice, LADXROption):
     """
     display_name = "Text Mode"
     ladxr_name = "textmode"
-    option_default = 0
+    option_normal = 0
     option_fast = 1
     default = option_fast
-    visibility = Visibility.none
 
 
 class LowHpBeep(Choice, LADXROption):
@@ -371,7 +370,6 @@ class NoFlash(DefaultOnToggle, LADXROption):
     """
     display_name = "No Flash"
     ladxr_name = "noflash"
-    visibility = Visibility.none
 
 
 class BootsControls(Choice):
