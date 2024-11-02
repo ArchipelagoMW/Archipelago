@@ -943,9 +943,9 @@ class _RestrictionRule:
         ret = True
         if self.loc_restrictions & LocationRestriction.NoMimic > 0:
             ret &= not item.item_data.is_mimic
-        if self.loc_restrictions & LocationRestriction.NoEmpty:
+        if self.loc_restrictions & LocationRestriction.NoEmpty > 0:
             ret &= item.name != ItemName.Empty
-        if self.loc_restrictions & LocationRestriction.NoSummon:
+        if self.loc_restrictions & LocationRestriction.NoSummon > 0:
             ret &= item.item_data.type != ItemType.Character and item.name not in _RestrictionRule.summon_names
         return ret
 

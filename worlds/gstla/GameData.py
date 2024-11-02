@@ -61,6 +61,7 @@ class ItemType(int, Enum):
     Djinn = 13
     Event = 14
     Character = 15
+    Mimic = 16
 
 class ItemFlags(IntFlag):
     NONE = 0
@@ -249,7 +250,7 @@ class GameData:
             if datum.vanilla_name == 'Mimic':
                 self.raw_item_data.append(
                     # Agreed upon rando id of 0xA00 + mimic id
-                    ItemDatum(0xA00 + datum.vanilla_contents,"Mimic %d" % datum.vanilla_contents, datum.addr[0], ItemType.Consumable, ItemFlags.NONE, 0, True)
+                    ItemDatum(0xA00 + datum.vanilla_contents,"Mimic %d" % datum.vanilla_contents, datum.addr[0], ItemType.Mimic, ItemFlags.NONE, 0, True)
                 )
 
 

@@ -39,17 +39,20 @@ class GSTLAWorld(World):
 
     item_name_groups = {
         ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
-        ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character}
+        ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character},
+        ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic},
     }
 
     def generate_early(self) -> None:
         self.options.non_local_items.value -= self.item_name_groups[ItemType.Djinn.name]
+        self.options.non_local_items.value -= self.item_name_groups[ItemType.Mimic.name]
+        self.options.local_items.value |= self.item_name_groups[ItemType.Mimic.name]
 
         if self.options.character_shuffle > 0:
             self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]
 
         if self.options.starter_ship == 0:
-            self.options.start_inventory.value[ ItemName.Ship ] = 1
+            self.multiworld.push_precollected(create_item(ItemName.Ship, self.player))
 
     def create_regions(self) -> None:
         create_regions(self)
@@ -66,6 +69,13 @@ class GSTLAWorld(World):
 
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has(ItemName.Victory, self.player)
+
+    def get_pre_fill_items(self) -> List["Item"]:
+        pre_fill = []
+        for _,val in GSTLAWorld.item_name_groups.items():
+            for item in val:
+                pre_fill.append(create_item(item, self.player))
+        return pre_fill
 
     def generate_basic(self):
         pass

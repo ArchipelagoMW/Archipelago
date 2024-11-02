@@ -1,13 +1,15 @@
 from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import Item, ItemClassification, MultiWorld
 from .gen.LocationNames import loc_names_by_id
-from .gen.LocationData import all_locations
+from .gen.LocationData import all_locations, LocationRestriction
 from .gen.ItemNames import ItemName
 from .gen.LocationNames import LocationName
 from .gen.ItemData import (ItemData, events, all_items as all_gen_items,
                            djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
+
+from Fill import fast_fill
 
 if TYPE_CHECKING:
     from . import GSTLAWorld
@@ -31,7 +33,6 @@ item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}
 
 coin_items: {int: ItemData} = {}
-
 def _get_coin_item(id: int):
     assert id > 0x8000
     # number of coins is offset from 0x8000
@@ -174,14 +175,18 @@ def create_items(world: 'GSTLAWorld', player: int):
 
             else: #Anywhere
                 world.multiworld.itempool.append(ap_item)
-    remaining_locs = world.multiworld.get_unfilled_locations(world.player)
+
+    remaining_locs = [ x for x in world.multiworld.get_unfilled_locations(world.player)
+                       if x.location_data.restrictions & LocationRestriction.NoMimic > 0]
     world.random.shuffle(remaining_locs)
-    for mimic in mimic_items:
-        while True:
-            loc = remaining_locs.pop()
-            if loc.item_rule(mimic):
-                loc.place_locked_item(mimic)
-                break
+    fast_fill(world.multiworld, mimic_items, remaining_locs)
+
+    # for mimic in mimic_items:
+    #     while True:
+    #         loc = remaining_locs.pop()
+    #         if loc.item_rule(mimic):
+    #             loc.place_locked_item(mimic)
+    #             break
     # for item in gear + summon_list:
     #     ap_item = create_item(item.itemName, player)
     #     multiworld.itempool.append(ap_item)

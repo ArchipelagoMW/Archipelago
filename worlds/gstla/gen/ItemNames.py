@@ -4,15 +4,6 @@ from typing import Dict
 from enum import Enum
 class ItemName(str, Enum):
     # Consumable
-    Mimic_0 = "Mimic 0"
-    Mimic_1 = "Mimic 1"
-    Mimic_2 = "Mimic 2"
-    Mimic_3 = "Mimic 3"
-    Mimic_4 = "Mimic 4"
-    Mimic_5 = "Mimic 5"
-    Mimic_6 = "Mimic 6"
-    Mimic_7 = "Mimic 7"
-    Mimic_8 = "Mimic 8"
     Empty = "Empty"
     Herb = "Herb"
     Nut = "Nut"
@@ -416,6 +407,16 @@ class ItemName(str, Enum):
     Mythril_Bag_Mars_Jupiter = "Mythril Bag (Mars & Jupiter)"
     Jupiter_Star = "Jupiter Star"
     Mars_Star = "Mars Star"
+    # Mimic
+    Mimic_0 = "Mimic 0"
+    Mimic_1 = "Mimic 1"
+    Mimic_2 = "Mimic 2"
+    Mimic_3 = "Mimic 3"
+    Mimic_4 = "Mimic 4"
+    Mimic_5 = "Mimic 5"
+    Mimic_6 = "Mimic 6"
+    Mimic_7 = "Mimic 7"
+    Mimic_8 = "Mimic 8"
     
 
     #Summons
