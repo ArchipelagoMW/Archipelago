@@ -132,7 +132,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Isaac, player))
     
     #Character djinn
-    if world.options.character_shuffle == 2:
+    if world.options.shuffle_characters == 0:
         add_rule(world.get_location(LocationName.Spring),
                 lambda state: state.has(ItemName.Piers, player))
         add_rule(world.get_location(LocationName.Shade),
@@ -428,7 +428,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Reveal, player) and state.has(ItemName.Frost_Jewel, player))
 
     #Lemurian Ship
-    if world.options.starter_ship > 0:
+    if world.options.lemurian_ship < 2:
         add_rule(world.get_location(LocationName.Lemurian_Ship_Engine_Room),
                         lambda state: state.has(ItemName.Aqua_Hydra_defeated, player))
         add_rule(world.get_location(LocationName.Lemurian_Ship_Aqua_Hydra_fight), lambda state: state.has(ItemName.Black_Crystal, player))
@@ -869,7 +869,7 @@ def set_access_rules(world: 'GSTLAWorld'):
                  lambda state: state.has(ItemName.Whirlwind, player))
 
     #Optional Super Boss content
-    if world.options.super_bosses > 0:
+    if world.options.omit_locations < 2:
         add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Daedalus),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.count_group(ItemType.Djinn.name, player) >= 64)
 
@@ -880,7 +880,7 @@ def set_access_rules(world: 'GSTLAWorld'):
         add_rule(world.get_location(LocationName.Treasure_Isle_Azul), lambda state: state.count_group(ItemType.Djinn.name, player) >= 64)
 
 
-    if world.options.super_bosses > 1:
+    if world.options.omit_locations < 1:
         #Anemos Inner Sanctum
         add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Iris),
              lambda state: state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
@@ -890,7 +890,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
 
     #Hidden Items
-    if world.options.hidden_items < 2:
+    if world.options.item_shuffle >= 2:
         add_rule(world.get_location(LocationName.Alhafra_Lucky_Medal),
                  lambda state: state.has(ItemName.Briggs_defeated, player))
 
@@ -925,7 +925,7 @@ def set_access_rules(world: 'GSTLAWorld'):
         add_rule(world.get_location(LocationName.Shaman_Village_Lucky_Pepper),
                  lambda state: state.has(ItemName.Moapa_defeated, player))
 
-    if world.options.hidden_items == 0:
+    if world.options.reveal_hidden_item == 1:
         for loc in location_type_to_data[LocationType.Hidden]:
             add_rule(world.get_location(loc_names_by_id[loc.ap_id]),
                  lambda state: state.has(ItemName.Reveal, player))
