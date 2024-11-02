@@ -590,7 +590,7 @@ def set_expert_rules(world: "HatInTimeWorld"):
 
     if world.is_dlc2():
         # Expert: clear Rush Hour with nothing
-        if not world.options.NoTicketSkips:
+        if world.options.NoTicketSkips != NoTicketSkips.option_true:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player), lambda state: True)
         else:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
