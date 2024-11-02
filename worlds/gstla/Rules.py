@@ -132,7 +132,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Isaac, player))
     
     #Character djinn
-    if world.options.character_shuffle == 2:
+    if world.options.character_shuffle == 0:
         add_rule(world.get_location(LocationName.Spring),
                 lambda state: state.has(ItemName.Piers, player))
         add_rule(world.get_location(LocationName.Shade),

@@ -146,7 +146,7 @@ def create_items(world: 'GSTLAWorld', player: int):
     sorted_loc_list = sorted(location_type_to_data[LocationType.Character], key = lambda location: location.id)
     first_char_locked = False
 
-    if world.options.character_shuffle < 2:
+    if world.options.character_shuffle > 0:
         world.random.shuffle(sorted_item_list)
         world.random.shuffle(sorted_loc_list)
 
@@ -155,7 +155,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
     
         # Vanilla
-        if world.options.character_shuffle > 0:
+        if world.options.character_shuffle < 2:
             location = sorted_loc_list.pop(0)
             ap_loc = world.get_location(loc_names_by_id[location.ap_id])
 

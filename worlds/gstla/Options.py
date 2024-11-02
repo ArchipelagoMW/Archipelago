@@ -456,16 +456,16 @@ class RandoOptions(IntEnum):
 
 class StartWithShip(Choice):
     display_name = "Start with ship"
-    option_startwithship = 2
-    option_shipisclosed = 1
     option_vanilla = 0
+    option_shipisclosed = 1
+    option_startwithship = 2
     default = 0
 
 class CharacterShuffle(Choice):
     display_name = "Character Shuffle"
-    option_anywhere = 0
+    option_anywhere = 2
     option_vanilla_shuffled = 1
-    option_vanilla = 2
+    option_vanilla = 0
     default = 1
 
 class DjinnLogic(NamedRange):

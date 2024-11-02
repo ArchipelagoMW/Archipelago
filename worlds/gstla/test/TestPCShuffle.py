@@ -4,7 +4,7 @@ from .. import location_type_to_data, LocationType, loc_names_by_id, ItemType, L
 
 class TestVanillaPCShuffle(GSTestBase):
     options = {
-        'character_shuffle': 2
+        'character_shuffle': 0
     }
 
     def test_ensure_vanilla_placement(self):
@@ -34,7 +34,7 @@ class TestPCShuffleInVanilla(GSTestBase):
 
 class TestFullPCShuffle(GSTestBase):
     options = {
-        'character_shuffle': 0
+        'character_shuffle': 2
     }
 
     def test_ensure_jenna_is_char(self):
