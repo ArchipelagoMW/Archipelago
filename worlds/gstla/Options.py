@@ -63,7 +63,7 @@ class AddGs1Items(Toggle):
     display_name = "Add GS1 items"
 
 class VisibleItems(Toggle):
-    """When enabled the items are visible on the floor. This allows for scouting items.
+    """When enabled the items are visible on the floor. This allows for scouting items. Mimics are removed when this option is enabled
     Note certain locations are still not visible, for example hidden items in pots or barrels.
     """
     display_name = "Visible Items"
