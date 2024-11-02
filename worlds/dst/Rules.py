@@ -111,29 +111,44 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                 return True
         return False
 
+    # Make a rule that is just ALWAYS_TRUE
+    def add_spawn_event():
+        dst_rule = DSTRule("Spawn", ALWAYS_TRUE, player)
+        region = multiworld.get_region(REGION.FOREST, player)
+        loc = DSTLocation(player, dst_rule.event, None, region)
+        loc.show_in_spoiler = False
+        dst_rule.is_progression = False
+        item = multiworld.create_item(dst_rule.event, player)
+        item.classification = ItemClassification.progression
+        loc.place_locked_item(item)
+        region.locations.append(loc)
+        return dst_rule
+    spawn = add_spawn_event()
+
     def add_event(event:str, regionname:str, rule:Callable[[CollectionState], bool], custom_item:Optional[str] = None, hide_in_spoiler:bool = False):
         assert callable(rule)
         dst_rule = DSTRule(event, rule, player)
         # Create event for rule
         if regionname in REGION_WHITELIST and not rule == ALWAYS_FALSE:
-            assert rule != ALWAYS_FALSE, \
-                f"{multiworld.get_player_name(player)} (Don't Starve Together): Rule \"{event}\" is never true for current settings!"
-            region = multiworld.get_region(regionname, player)
-            loc = DSTLocation(player, dst_rule.event, None, region)
-            loc.show_in_spoiler = False if hide_in_spoiler else (rule != ALWAYS_TRUE and not event in item_data_table.keys())
-            dst_rule.is_progression = rule != ALWAYS_TRUE
-            item = multiworld.create_item(custom_item or dst_rule.event, player)
-            item.classification = ItemClassification.progression
-            loc.place_locked_item(item)
-            region.locations.append(loc)
-            add_rule(loc, rule)
+            if rule == ALWAYS_TRUE:
+                # No need to create an event if always true
+                return spawn
+            else:
+                region = multiworld.get_region(regionname, player)
+                loc = DSTLocation(player, dst_rule.event, None, region)
+                loc.show_in_spoiler = False if hide_in_spoiler else (not event in item_data_table.keys())
+                dst_rule.is_progression = rule != ALWAYS_TRUE
+                item = multiworld.create_item(custom_item or dst_rule.event, player)
+                item.classification = ItemClassification.progression
+                loc.place_locked_item(item)
+                region.locations.append(loc)
+                add_rule(loc, rule)
         else:
             dst_rule.is_progression = False
         return dst_rule
 
     BOSS_COMPLETION_GOALS:Dict[str, str] = {}
     def add_boss_event(event:str, regionname:str, rule:Callable[[CollectionState], bool]):
-        # TODO: This could probably be combined with add_event for flexibility
         dst_rule = add_event(event, regionname, rule)
         BOSS_COMPLETION_GOALS[event] = dst_rule.event
         return dst_rule
@@ -166,37 +181,33 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         if day_goal < 20:
             return state.has(basic_survival.event, player)
         elif day_goal < 35:
-            return state.has(reached_winter.event, player)
+            return state.has(winter.event, player)
         elif day_goal < 55:
-            return state.has(reached_spring.event, player)
+            return state.has(spring.event, player)
         elif day_goal < 70:
-            return state.has(reached_summer.event, player)
+            return state.has(summer.event, player)
         elif day_goal < 90:
-            return state.has(reached_autumn.event, player)
-        return state.has(reached_late_game.event, player)
-
-    def is_winter (state: CollectionState) -> bool:
-        return state.has(reached_winter.event, player) #and (not state.has(reached_spring.event, player) or state.has(reached_late_game.event, player))
-
-    def is_spring (state: CollectionState) -> bool:
-        return state.has(reached_spring.event, player) #and (not state.has(reached_summer.event, player) or state.has(reached_late_game.event, player))
-
-    def is_summer (state: CollectionState) -> bool:
-        return state.has(reached_summer.event, player) #and (not state.has(reached_autumn.event, player) or state.has(reached_late_game.event, player))
-
-    def is_autumn (state: CollectionState) -> bool:
-        return state.has(reached_autumn.event, player) #or not state.has(reached_winter.event, player)
+            return state.has(autumn.event, player)
+        return state.has(late_game.event, player)
 
     def weregoose (state: CollectionState) -> bool:
         return state.has_all(["Woodie", basic_survival.event], player)
 
     ##### MILESTONES #####
-    reached_winter = add_event("Reached Winter", REGION.FOREST, lambda state: state.has(winter_survival.event, player))
-    reached_spring = add_event("Reached Spring", REGION.FOREST, lambda state: state.has_all([reached_winter.event, spring_survival.event, deerclops.event], player))
-    reached_summer = add_event("Reached Summer", REGION.FOREST, lambda state: state.has_all([reached_spring.event, summer_survival.event, moosegoose.event], player))
-    reached_autumn = add_event("Reached Autumn", REGION.FOREST, lambda state: state.has_all([reached_summer.event, autumn_survival.event, antlion.event], player))
-    reached_late_game = add_event("Reached Late Game", REGION.FOREST, lambda state: state.has_all([reached_autumn.event, late_game_survival.event], player))
+    winter = add_event("Winter", REGION.FOREST, lambda state: state.has(winter_survival.event, player))
+    spring = add_event("Spring", REGION.FOREST, lambda state: state.has_all([winter.event, spring_survival.event, deerclops.event], player))
+    summer = add_event("Summer", REGION.FOREST, lambda state: state.has_all([spring.event, summer_survival.event, moosegoose.event], player))
+    autumn = add_event("Autumn", REGION.FOREST, lambda state: state.has_all([summer.event, autumn_survival.event, antlion.event], player))
+    late_game = add_event("Late Game", REGION.FOREST, lambda state: state.has_all([autumn.event, late_game_survival.event], player))
 
+
+    ##### SEASONS #####
+    # TODO: Seasons as items
+    seasons_passed_1 = winter
+    seasons_passed_2 = spring
+    seasons_passed_3 = summer
+    seasons_passed_4 = autumn
+    seasons_passed_5 = late_game
 
     ##### TOOLS #####
     mining = add_event("Mining", REGION.FOREST, lambda state: state.has_any(["Pickaxe", "Opulent Pickaxe", "Woodie"], player))
@@ -300,7 +311,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             )
         )
     )
-    canary = add_event("Canary", REGION.FOREST, lambda state: state.has_all(["Friendly Scarecrow", "Boards", basic_farming.event], player)) # Pumpkin
+    canary = add_event("Canary", REGION.FOREST, lambda state: state.has_all(["Friendly Scarecrow", "Boards", pumpkin_farming.event], player)) # Pumpkin
     salt_crystals = add_event("Salt Crystals", REGION.OCEAN,
         (lambda state: state.has_all([pre_basic_boating.event, mining.event, basic_combat.event], player)) if WEAPON_LOGIC
         else lambda state: state.has_all([pre_basic_boating.event, mining.event], player)
@@ -322,7 +333,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     leafy_meat = add_event("Leafy Meat", REGION.FOREST,
         either_rule(
             either_rule(
-                (lambda state: state.has(reached_spring.event, player)), # Lureplants, Carrats
+                (lambda state: state.has(spring.event, player)), # Lureplants, Carrats
                 (
                     (lambda state: state.has(lunar_island.event, player)) if REGION.OCEAN in REGION_WHITELIST # Carrats
                     else ALWAYS_FALSE
@@ -388,7 +399,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             lambda state: (
                 state.has(can_get_feathers.event, player)
                 and (
-                    state.has_all([reached_winter.event, "Blow Dart"], player)
+                    state.has_all([winter.event, "Blow Dart"], player)
                     or state.has_all([canary.event, bird_caging.event, "Electric Dart"], player)
                 )
             )
@@ -424,7 +435,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
 
     ##### HEALING #####
-    basic_sanity_management = add_event("Basic Sanity Management", REGION.FOREST, lambda state: state.has("Top Hat", player))
+    basic_sanity_management = add_event("Basic Sanity Management", REGION.FOREST, lambda state: state.has("Top Hat", player)) # TODO: Walter doesn't get sanity from fashion
     nonperishable_quick_healing = add_event("Nonperishable Quick Healing", REGION.FOREST,
        (
            lambda state: (
@@ -436,12 +447,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
        else ALWAYS_TRUE
     )
     quick_healing = add_event("Quick Healing", REGION.FOREST,
-        (
-            lambda state: (
-                (state.has(cooking.event, player) and not state.has("Wormwood", player)) # Wormwood can't heal from food
-                or state.has(nonperishable_quick_healing.event, player)
-            )
-        ) if HEALING_LOGIC
+        (lambda state: state.has_any([cooking.event, nonperishable_quick_healing.event], player)) if HEALING_LOGIC # TODO: Wormwood can't heal from food 
         else ALWAYS_TRUE
     )
     slow_healing = add_event("Slow Healing", REGION.FOREST,
@@ -449,8 +455,9 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             lambda state: (
                 state.has_all(["Tent", "Rope"], player)
                 or state.has_all(["Siesta Lean-to", "Rope", "Boards", chopping.event], player)
-                or (REGION.CAVE in REGION_WHITELIST and state.has_all(["Rope", "Straw Roll", "Fur Roll", mining.event], player))
+                or (REGION.CAVE in REGION_WHITELIST and state.has_all(["Rope", "Straw Roll", "Fur Roll", mining.event, basic_combat.event, basic_sanity_management.event], player))
             )
+            # TODO: Wickerbottom can't sleep
         ) if HEALING_LOGIC
         else ALWAYS_TRUE
     )
@@ -559,7 +566,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     late_game_survival = add_event("Late Game Survival", REGION.FOREST,
         combine_rules(
             (lambda state: state.has_all([
-                reached_autumn.event,
+                seasons_passed_4.event,
                 epic_combat.event,
                 cooking.event,
                 basic_farming.event,
@@ -605,7 +612,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     heavy_lifting = add_event("Heavy Lifting", REGION.FOREST, lambda state:
         state.has(beefalo_domestication.event, player)
         # or state.has_any(["Walter", "Wolfgang"], player) # Woby, mightiness # TODO: character logic
-        # or state.has_all(["Wanda", reached_winter.event, purple_gem.event], player) # Rift Watch # TODO: character logic
+        # or state.has_all(["Wanda", winter.event, purple_gem.event], player) # Rift Watch # TODO: character logic
     )
     arena_building = add_event("Arena Building", REGION.FOREST,
         (
@@ -669,7 +676,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     )
     speed_boost = add_event("Speed Boost", REGION.FOREST,
         either_rule(
-            lambda state: state.has_all(["Walking Cane", reached_winter.event], player),
+            lambda state: state.has_all(["Walking Cane", winter.event], player),
             (
                 ALWAYS_FALSE if not ADVANCED_PLAYER_BIAS # Encourage getting walking cane for easy difficulty
                 else (lambda state: state.has_all([thulecite.event, ruins_gems.event, nightmare_fuel.event, "Magiluminescence"], player)) if is_locked("Magiluminescence")
@@ -701,8 +708,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         else combine_rules(
             (
                 lambda state: (
-                    state.has(advanced_combat.event, player)
-                    or (state.has_all([healing.event, basic_combat.event], player))
+                    state.has_all([cave_exploration.event, advanced_combat.event], player)
+                    or state.has_all([cave_exploration.event, healing.event, basic_combat.event], player)
                 )
             ),
             (lambda state: state.has(cooking.event, player)) if BASE_MAKING_LOGIC # Allow cooking for easy difficulty
@@ -761,7 +768,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         or (
             state.has("Astroggles", player) and (
                 EXPERT_PLAYER_BIAS # Digging potato from junk pile
-                or state.has(basic_farming.event, player) # Farming potato
+                or state.has(potato_farming.event, player) # Farming potato
             )
         )
     )
@@ -796,30 +803,31 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         # Implied you have chopping, rope, and boards already
         state.has_any(["Wormwood", "Garden Hoe", "Splendid Garden Hoe"], player)
         and state.has_all(["Garden Digamajig", "Empty Watering Can", base_making.event, digging.event], player)
+         # TODO: Wes can't talk to plants 
     )
-    asparagus_farming = add_farming_event("Asparagus", reached_winter.event)
-    garlic_farming = add_farming_event("Garlic", reached_winter.event)
-    pumpkin_farming = add_farming_event("Pumpkin", reached_winter.event)
-    corn_farming = add_farming_event("Corn", reached_spring.event,
+    asparagus_farming = add_farming_event("Asparagus", winter.event)
+    garlic_farming = add_farming_event("Garlic", winter.event)
+    pumpkin_farming = add_farming_event("Pumpkin", winter.event)
+    corn_farming = add_farming_event("Corn", spring.event,
         (lambda state: state.has_all([basic_farming.event, bird_caging.event], player)) if EXPERT_PLAYER_BIAS # Catcoons
         else (lambda state: state.has_all([basic_farming.event, bird_caging.event, sea_fishing.event], player)) if ADVANCED_PLAYER_BIAS # Corn cod
         else None
     )
-    onion_farming = add_farming_event("Onion", reached_spring.event)
-    potato_farming = add_farming_event("Potato", reached_winter.event,
+    onion_farming = add_farming_event("Onion", spring.event)
+    potato_farming = add_farming_event("Potato", winter.event,
         (lambda state: state.has_all([basic_farming.event, bird_caging.event], player)) if ADVANCED_PLAYER_BIAS else None # Junk pile
     )
-    dragonfruit_farming = add_farming_event("Dragon Fruit", reached_spring.event,
+    dragonfruit_farming = add_farming_event("Dragon Fruit", spring.event,
         (lambda state: state.has_all([dragonfruit_from_saladmander.event, bird_caging.event], player)) if ADVANCED_PLAYER_BIAS else None # Saladmander
     )
-    pomegranate_farming = add_farming_event("Pomegranate", reached_spring.event)
-    eggplant_farming = add_farming_event("Eggplant", reached_spring.event)
-    tomaroot_farming = add_farming_event("Toma Root", reached_spring.event,
+    pomegranate_farming = add_farming_event("Pomegranate", spring.event)
+    eggplant_farming = add_farming_event("Eggplant", spring.event)
+    tomaroot_farming = add_farming_event("Toma Root", spring.event,
         (lambda state: state.has(basic_farming.event, player)) if EXPERT_PLAYER_BIAS else None # Catcoons
     )
-    watermelon_farming = add_farming_event("Watermelon", reached_spring.event)
-    pepper_farming = add_farming_event("Pepper", reached_summer.event)
-    durian_farming = add_farming_event("Durian", reached_spring.event)
+    watermelon_farming = add_farming_event("Watermelon", spring.event)
+    pepper_farming = add_farming_event("Pepper", summer.event)
+    durian_farming = add_farming_event("Durian", spring.event)
     carrot_farming = add_farming_event("Carrot", bird_caging.event)
     honey_farming = add_event("Honey Farming", REGION.FOREST,
         (lambda state: state.has_all(["Bee Box", "Boards", bug_catching.event], player)) if BASE_MAKING_LOGIC
@@ -937,19 +945,19 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         )
     )
     ancient_guardian = add_boss_event("Ancient Guardian", REGION.RUINS, lambda state: state.has_all([ruins_exploration.event, advanced_boss_combat.event], player))
-    deerclops = add_boss_event("Deerclops", REGION.FOREST, lambda state: state.has(basic_combat.event, player) and is_winter(state))
-    moosegoose = add_boss_event("Moose/Goose", REGION.FOREST, lambda state: state.has(basic_combat.event, player) and is_spring(state))
+    deerclops = add_boss_event("Deerclops", REGION.FOREST, lambda state: state.has_all([basic_combat.event, winter.event, seasons_passed_1.event], player))
+    moosegoose = add_boss_event("Moose/Goose", REGION.FOREST, lambda state: state.has_all([basic_combat.event, spring.event, seasons_passed_2.event], player)) # Beginning of spring has to be at least 1.5 seasons in
     antlion = add_boss_event("Antlion", REGION.FOREST, lambda state:
         (
             state.has_all([freshwater_fishing.event, "Fashion Goggles", "Desert Goggles"], player) # Affects chance of fishing beach toy
             or state.has_all([advanced_boss_combat.event, thermal_stone.event, storm_protection.event], player) # Minimum for expert difficulty
         )
-        and is_summer(state)
+        and state.has(summer.event, player)
     )
-    bearger = add_boss_event("Bearger", REGION.FOREST, lambda state: state.has_all([basic_combat.event, reached_autumn.event], player))
+    bearger = add_boss_event("Bearger", REGION.FOREST, lambda state: state.has_all([basic_combat.event, autumn.event, seasons_passed_1.event], player)) # TODO: Verify bearger's spawn conditions
     dragonfly = add_boss_event("Dragonfly", REGION.FOREST, lambda state: state.has_all([advanced_boss_combat.event, wall_building.event], player))
     bee_queen = add_boss_event("Bee Queen", REGION.FOREST, lambda state: state.has_all([epic_combat.event, hammering.event, beekeeper_hat.event], player))
-    klaus = add_boss_event("Klaus", REGION.FOREST, lambda state: state.has(advanced_boss_combat.event, player) and is_winter(state))
+    klaus = add_boss_event("Klaus", REGION.FOREST, lambda state: state.has_all([advanced_boss_combat.event, winter.event], player))
     malbatross = add_boss_event("Malbatross", REGION.OCEAN, lambda state: state.has_all([advanced_boss_combat.event, advanced_boating.event], player))
     toadstool = add_boss_event("Toadstool", REGION.CAVE,
         combine_rules(
@@ -975,7 +983,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                     state.has_all([shadow_atrium.event, ancient_key.event, dark_magic.event], player) # Requires nightmare fuel
                     and ( # Getting around obelisks
                         state.has("Nightmare Amulet", player)
-                        or state.has_all(["The Lazy Explorer", "Walking Cane", reached_winter.event], player)
+                        or state.has_all(["The Lazy Explorer", "Walking Cane", winter.event], player)
                     )
 
                 )
@@ -984,7 +992,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             else ALWAYS_TRUE
         )
     )
-    lord_of_the_fruit_flies = add_boss_event("Lord of the Fruit Flies", REGION.FOREST, lambda state: state.has_all([basic_combat.event, advanced_farming.event, reached_spring.event], player))
+    lord_of_the_fruit_flies = add_boss_event("Lord of the Fruit Flies", REGION.FOREST, lambda state: state.has_all([basic_combat.event, advanced_farming.event, seasons_passed_2.event], player))
     celestial_champion = add_boss_event("Celestial Champion", REGION.MOONSTORM, lambda state:
         state.has_all(["Incomplete Experiment", celestial_orb.event, moonstorm_exploration.event, epic_combat.event, ranged_combat.event], player)
     )
@@ -999,20 +1007,20 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     hermit_home_upgrade_1 = add_hermit_event("Hermit Home Upgrade (1)", lambda state: state.has_all([hermit_island.event, bug_catching.event], player)) # Cookie cutters, boards, fireflies
     hermit_home_upgrade_2 = add_hermit_event("Hermit Home Upgrade (2)", lambda state: state.can_reach_location(hermit_home_upgrade_1.event, player)) # Marble, cut stone, light bulb
     add_hermit_event("Hermit Home Upgrade (3)",                         lambda state: state.has("Floorings", player) and state.can_reach_location(hermit_home_upgrade_2.event, player)) # Moonrock, rope, carpet
-    add_hermit_event("Hermit Island Drying Racks",                      lambda state: state.has(hermit_island.event, player))
+    add_hermit_event("Hermit Island Drying Racks",                      hermit_island.rule)
     add_hermit_event("Hermit Island Plant 10 Flowers",                  lambda state: state.has_all([hermit_island.event, bug_catching.event], player))
     add_hermit_event("Hermit Island Plant 8 Berry Bushes",              lambda state: state.has_all([hermit_island.event, digging.event], player))
     add_hermit_event("Hermit Island Clear Underwater Salvageables",     lambda state: state.has_all([hermit_sea_quests.event, "Pinchin' Winch"], player))
-    add_hermit_event("Hermit Island Kill Lureplant",                    lambda state: state.has_all([hermit_island.event, reached_spring.event], player))
+    add_hermit_event("Hermit Island Kill Lureplant",                    lambda state: state.has_all([hermit_island.event, seasons_passed_2.event], player))
     add_hermit_event("Hermit Island Build Wooden Chair",                lambda state: state.has_all([hermit_island.event, "Sawhorse"], player))
-    add_hermit_event("Give Crabby Hermit Umbrella",                     lambda state: state.has(hermit_island.event, player) and is_spring(state) and state.has_any(["Umbrella", "Pretty Parasol"], player))
-    add_hermit_event("Give Crabby Hermit Warm Clothing",                lambda state: state.has(hermit_island.event, player) and is_winter (state) and state.has_any(["Breezy Vest", "Puffy Vest"], player))
-    add_hermit_event("Give Crabby Hermit Flower Salad",                 lambda state: state.has(hermit_island.event, player) and is_summer(state))
-    add_hermit_event("Give Crabby Hermit Fallounder",                   lambda state: state.has(hermit_sea_quests.event, player) and is_autumn(state))
-    add_hermit_event("Give Crabby Hermit Bloomfin Tuna",                lambda state: state.has(hermit_sea_quests.event, player) and is_spring(state))
-    add_hermit_event("Give Crabby Hermit Scorching Sunfish",            lambda state: state.has(hermit_sea_quests.event, player) and is_summer(state))
-    add_hermit_event("Give Crabby Hermit Ice Bream",                    lambda state: state.has(hermit_sea_quests.event, player) and is_winter(state))
-    add_hermit_event("Give Crabby Hermit 5 Heavy Fish",                 lambda state: state.has(hermit_sea_quests.event, player))
+    add_hermit_event("Give Crabby Hermit Umbrella",                     lambda state: state.has_all([hermit_island.event, spring.event], player) and state.has_any(["Umbrella", "Pretty Parasol"], player))
+    add_hermit_event("Give Crabby Hermit Warm Clothing",                lambda state: state.has_all([hermit_island.event, winter.event], player) and state.has_any(["Breezy Vest", "Puffy Vest"], player))
+    add_hermit_event("Give Crabby Hermit Flower Salad",                 lambda state: state.has_all([hermit_island.event, summer.event], player))
+    add_hermit_event("Give Crabby Hermit Fallounder",                   lambda state: state.has_all([hermit_sea_quests.event, autumn.event], player))
+    add_hermit_event("Give Crabby Hermit Bloomfin Tuna",                lambda state: state.has_all([hermit_sea_quests.event, spring.event], player))
+    add_hermit_event("Give Crabby Hermit Scorching Sunfish",            lambda state: state.has_all([hermit_sea_quests.event, summer.event], player))
+    add_hermit_event("Give Crabby Hermit Ice Bream",                    lambda state: state.has_all([hermit_sea_quests.event, winter.event], player))
+    add_hermit_event("Give Crabby Hermit 5 Heavy Fish",                 hermit_sea_quests.rule)
 
     def survival_goal (state: CollectionState) -> bool:
         if options.goal.value != options.goal.option_survival: return False # Only relevant if your goal is to survive
@@ -1020,14 +1028,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         if days_to_survive < 20:
             return state.has_all([advanced_boss_combat.event, autumn_survival.event], player) # Generic non-seasonal goal
         elif days_to_survive < 35:
-            return state.has(reached_winter.event, player)
+            return state.has(seasons_passed_1.event, player)
         elif days_to_survive < 55:
-            return state.has(reached_spring.event, player)
+            return state.has(seasons_passed_2.event, player)
         elif days_to_survive < 70:
-            return state.has(reached_summer.event, player)
+            return state.has(seasons_passed_3.event, player)
         elif days_to_survive < 90:
-            return state.has(reached_autumn.event, player)
-        return state.has(late_game_survival.event, player)
+            return state.has(seasons_passed_4.event, player)
+        return state.has(seasons_passed_5.event, player)
 
     rules_lookup: Dict[str, Dict[str, Callable[[CollectionState], bool]]] = {
         # "regions": {
@@ -1042,403 +1050,404 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         # },
         "location_rules": {
             # Tasks
-            "Distilled Knowledge (Yellow)": archive_exploration.rule,
-            "Distilled Knowledge (Blue)": archive_exploration.rule,
-            "Distilled Knowledge (Red)": archive_exploration.rule,
-            "Wagstaff during Moonstorm": moonstorm_exploration.rule,
-            "Queen of Moon Quay": moon_quay_exploration.rule,
-            "Pig King": basic_survival.rule,
-            "Chester": basic_survival.rule,
-            "Hutch": cave_exploration.rule,
-            "Stagehand": lambda state: state.has_all([basic_survival.event, hammering.event], player),
-            "Pirate Stash": lambda state: state.has_all([pirate_map.event, digging.event], player),
-            "Moon Stone Event": moon_stone_event.rule,
-            "Oasis": lambda state: is_summer(state) and state.has(freshwater_fishing.event, player),
-            "Poison Birchnut Tree": reached_autumn.rule,
-            "W.O.B.O.T.": lambda state: state.has(scrappy_werepig.event, player) or state.has_all(["Auto-Mat-O-Chanic", electrical_doodad.event], player),
-            "Friendly Fruit Fly": lord_of_the_fruit_flies.rule,
+            "Distilled Knowledge (Yellow)":     archive_exploration.rule,
+            "Distilled Knowledge (Blue)":       archive_exploration.rule,
+            "Distilled Knowledge (Red)":        archive_exploration.rule,
+            "Wagstaff during Moonstorm":        moonstorm_exploration.rule,
+            "Queen of Moon Quay":               moon_quay_exploration.rule,
+            "Pig King":                         basic_survival.rule,
+            "Chester":                          basic_survival.rule,
+            "Hutch":                            cave_exploration.rule,
+            "Stagehand":                        lambda state: state.has_all([basic_survival.event, hammering.event], player),
+            "Pirate Stash":                     lambda state: state.has_all([pirate_map.event, digging.event], player),
+            "Moon Stone Event":                 moon_stone_event.rule,
+            "Oasis":                            lambda state: state.has_all([freshwater_fishing.event, summer.event], player),
+            "Poison Birchnut Tree":             lambda state: state.has_all([seasons_passed_4.event, autumn.event], player),
+            "W.O.B.O.T.":                       lambda state: state.has(scrappy_werepig.event, player) or state.has_all(["Auto-Mat-O-Chanic", electrical_doodad.event], player),
+            "Friendly Fruit Fly":               lord_of_the_fruit_flies.rule,
 
             # Bosses
-            "Deerclops": deerclops.rule,
-            "Moose/Goose": moosegoose.rule,
-            "Antlion": antlion.rule,
-            "Bearger": bearger.rule,
-            "Ancient Guardian": ancient_guardian.rule,
-            "Dragonfly": dragonfly.rule,
-            "Bee Queen": bee_queen.rule,
-            "Crab King": crab_king.rule,
-            "Klaus": klaus.rule,
-            "Malbatross": malbatross.rule,
-            "Toadstool": toadstool.rule,
-            "Shadow Bishop": (lambda state: state.has_all([shadow_pieces.event, "Bishop Figure Sketch"], player)) if CHESSPIECE_ITEMS_SHUFFLED else shadow_pieces.rule,
-            "Shadow Knight": (lambda state: state.has_all([shadow_pieces.event, "Knight Figure Sketch"], player)) if CHESSPIECE_ITEMS_SHUFFLED else shadow_pieces.rule,
-            "Shadow Rook": (lambda state: state.has_all([shadow_pieces.event, "Rook Figure Sketch"], player)) if CHESSPIECE_ITEMS_SHUFFLED else shadow_pieces.rule,
-            "Ancient Fuelweaver": ancient_fuelweaver.rule,
-            "Lord of the Fruit Flies": lord_of_the_fruit_flies.rule,
-            "Celestial Champion": celestial_champion.rule,
-            "Eye Of Terror": eye_of_terror.rule,
-            "Retinazor": retinazor.rule,
-            "Spazmatism": spazmatism.rule,
-            "Nightmare Werepig": nightmare_werepig.rule,
-            "Scrappy Werepig": scrappy_werepig.rule,
-            "Frostjaw": frostjaw.rule,
+            "Deerclops":                        deerclops.rule,
+            "Moose/Goose":                      moosegoose.rule,
+            "Antlion":                          antlion.rule,
+            "Bearger":                          bearger.rule,
+            "Ancient Guardian":                 ancient_guardian.rule,
+            "Dragonfly":                        dragonfly.rule,
+            "Bee Queen":                        bee_queen.rule,
+            "Crab King":                        crab_king.rule,
+            "Klaus":                            klaus.rule,
+            "Malbatross":                       malbatross.rule,
+            "Toadstool":                        toadstool.rule,
+            "Shadow Knight":                    (lambda state: state.has_all([shadow_pieces.event, "Knight Figure Sketch"], player)) if CHESSPIECE_ITEMS_SHUFFLED else shadow_pieces.rule,
+            "Shadow Bishop":                    (lambda state: state.has_all([shadow_pieces.event, "Bishop Figure Sketch"], player)) if CHESSPIECE_ITEMS_SHUFFLED else shadow_pieces.rule,
+            "Shadow Rook":                      (lambda state: state.has_all([shadow_pieces.event, "Rook Figure Sketch"], player)) if CHESSPIECE_ITEMS_SHUFFLED else shadow_pieces.rule,
+            "Ancient Fuelweaver":               ancient_fuelweaver.rule,
+            "Lord of the Fruit Flies":          lord_of_the_fruit_flies.rule,
+            "Celestial Champion":               celestial_champion.rule,
+            "Eye Of Terror":                    eye_of_terror.rule,
+            "Retinazor":                        retinazor.rule,
+            "Spazmatism":                       spazmatism.rule,
+            "Nightmare Werepig":                nightmare_werepig.rule,
+            "Scrappy Werepig":                  scrappy_werepig.rule,
+            "Frostjaw":                         frostjaw.rule,
 
             # Creatures
-            "Batilisk": lambda state: state.has_all([pre_basic_combat.event, mining.event], player),
-            "Bee": lambda state: state.has_any([pre_basic_combat.event, bug_catching.event], player),
-            "Beefalo": basic_survival.rule,
-            "Clockwork Bishop": lambda state: state.has_all([advanced_combat.event, healing.event], player),
-            "Bunnyman": cave_exploration.rule,
-            "Butterfly": ALWAYS_TRUE,
-            "Buzzard": basic_combat.rule,
-            "Canary": lambda state: state.has_all([canary.event, can_get_feathers.event], player),
-            "Carrat": lambda state: state.has_any([lunar_island.event, cave_exploration.event], player),
-            "Catcoon": basic_survival.rule,
-            "Cookie Cutter": advanced_boating.rule,
-            "Crawling Horror": advanced_combat.rule,
-            "Crow": can_get_feathers.rule,
-            "Red Hound": lambda state: state.has(basic_combat.event, player) and is_summer(state),
-            "Frog": ALWAYS_TRUE,
-            "Saladmander": lunar_island.rule,
-            "Ghost": lambda state: state.has_all([basic_exploration.event, digging.event, pre_basic_combat.event], player),
-            "Gnarwail": lambda state: state.has_all([basic_combat.event, advanced_boating.event], player),
-            "Grass Gator": lambda state: state.has_all([basic_combat.event, advanced_boating.event, ranged_aggression.event], player),
-            "Grass Gekko": lambda state: state.has_all([desert_exploration.event, reached_spring.event], player), # Not guaranteed on world gen so give time for spawned ones
-            "Briar Wolf": basic_combat.rule,
-            "Hound": lambda state: state.has_all([basic_combat.event, desert_exploration.event], player),
-            "Blue Hound": lambda state: state.has(basic_combat.event, player) and is_winter(state),
-            "Killer Bee":  lambda state: state.has_any([pre_basic_combat.event, bug_catching.event], player),
-            "Clockwork Knight": advanced_combat.rule,
-            "Koalefant": lambda state: state.has_all([pre_basic_combat.event, ranged_aggression.event], player),
-            "Krampus": lambda state: state.has_all([basic_combat.event, can_get_feathers.event], player) and has_survived_num_days(11, state),
-            "Treeguard": lambda state: state.has_all([basic_combat.event, chopping.event, basic_survival.event], player),
-            "Crustashine": lambda state: state.has_all([moon_quay_exploration.event, ranged_aggression.event], player),
-            "Bulbous Lightbug": cave_exploration.rule,
-            "Volt Goat": lambda state: state.has_all([basic_combat.event, ranged_aggression.event, desert_exploration.event], player),
-            "Merm": lambda state: state.has_all([basic_combat.event, swamp_exploration.event], player),
-            "Moleworm": ALWAYS_TRUE,
-            "Naked Mole Bat": lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
-            "Splumonkey": ruins_exploration.rule,
-            "Moon Moth": can_reach_islands.rule,
-            "Mosquito": lambda state: state.has(swamp_exploration.event, player) and (state.has_any([pre_basic_combat.event, bug_catching.event], player)),
-            "Mosling": lambda state: state.has(basic_combat.event, player) and is_spring(state),
-            "Mush Gnome": lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
-            "Terrorclaw": lambda state: state.has_all([advanced_combat.event, advanced_boating.event], player),
-            "Pengull": lambda state: state.has(basic_combat.event, player) and is_winter(state),
-            "Gobbler": basic_survival.rule,
-            "Pig Man": basic_survival.rule,
-            "Powder Monkey": lambda state: state.has_all([can_defend_against_pirates.event, moon_quay_exploration.event], player),
-            "Prime Mate": pirate_map.rule,
-            "Puffin": lambda state: state.has_all([can_get_feathers.event, pre_basic_boating.event], player),
-            "Rabbit": ALWAYS_TRUE,
-            "Redbird": can_get_feathers.rule,
-            "Snowbird": lambda state: state.has(can_get_feathers.event, player) and is_winter(state),
-            "Rock Lobster": cave_exploration.rule,
-            "Clockwork Rook": lambda state: state.has_all([advanced_combat.event, healing.event], player),
-            "Rockjaw": lambda state: state.has_all([advanced_combat.event, advanced_boating.event], player) and (state.has_any([ranged_combat.event, cannon.event], player)),
-            "Slurper": ruins_exploration.rule,
-            "Slurtle": cave_exploration.rule,
-            "Snurtle": cave_exploration.rule,
-            "Ewecus": lambda state: state.has_all([advanced_combat.event, advanced_exploration.event, reached_autumn.event], player),
-            "Spider": ALWAYS_TRUE,
-            "Dangling Depth Dweller": ruins_exploration.rule,
-            "Cave Spider": lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
-            "Nurse Spider": lambda state: state.has_all([advanced_combat.event, reached_spring.event], player),
-            "Shattered Spider": lambda state: state.has_all([basic_combat.event, lunar_island.event], player),
-            "Spitter": lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
-            "Spider Warrior": basic_combat.rule,
-            "Sea Strider": lambda state: state.has_all([basic_combat.event, advanced_boating.event], player),
-            "Spider Queen": lambda state: state.has_all([advanced_combat.event, reached_spring.event], player),
-            "Tallbird": lambda state: state.has_all([basic_combat.event, healing.event], player),
-            "Tentacle": lambda state: state.has_all([basic_combat.event, swamp_exploration.event], player),
-            "Big Tentacle": lambda state: state.has_all([advanced_combat.event, cave_exploration.event, healing.event], player),
-            "Terrorbeak": lambda state: state.has_all([advanced_combat.event, basic_sanity_management.event], player),
-            "MacTusk": lambda state: state.has_all([basic_combat.event, reached_winter.event], player),
-            "Varg": lambda state: state.has_all([advanced_combat.event, advanced_exploration.event, reached_autumn.event], player),
-            "Varglet": lambda state: state.has_all([basic_combat.event, advanced_exploration.event, reached_spring.event], player),
-            "Depths Worm": ruins_exploration.rule,
-            "Ancient Sentrypede": lambda state: state.has_all([archive_exploration.event, advanced_combat.event], player),
-            "Skittersquid": lambda state: state.has_all([basic_combat.event, advanced_boating.event], player),
-            "Lure Plant": reached_spring.rule,
-            "Glommer": lambda state: has_survived_num_days(11, state),
-            "Dust Moth": archive_exploration.rule,
-            "No-Eyed Deer": lambda state: is_winter(state),
-            "Moonblind Crow": lambda state: state.has_all([moonstorm_exploration.event, basic_combat.event], player),
-            "Misshapen Bird": lambda state: state.has_all([moonstorm_exploration.event, basic_combat.event], player),
-            "Moonrock Pengull": lambda state: state.has_all([lunar_island.event, basic_combat.event], player) and is_winter(state),
-            "Horror Hound": lambda state: state.has_all([moonstorm_exploration.event, basic_combat.event], player),
-            "Resting Horror": ruins_exploration.rule,
-            "Birchnutter": reached_autumn.rule,
-            "Mandrake": basic_survival.rule,
-            "Fruit Fly": lambda state: state.has_all([basic_farming.event, reached_spring.event], player),
-            "Sea Weed": advanced_boating.rule,
-            "Marotter": basic_combat.rule,
+            "Batilisk":                         lambda state: state.has_all([pre_basic_combat.event, mining.event], player),
+            "Bee":                              lambda state: state.has_any([pre_basic_combat.event, bug_catching.event], player),
+            "Beefalo":                          basic_survival.rule,
+            "Clockwork Bishop":                 lambda state: state.has_all([advanced_combat.event, healing.event], player),
+            "Bunnyman":                         cave_exploration.rule,
+            "Butterfly":                        ALWAYS_TRUE,
+            "Buzzard":                          basic_combat.rule,
+            "Canary":                           lambda state: state.has_all([canary.event, can_get_feathers.event], player),
+            "Carrat":                           lambda state: state.has_any([lunar_island.event, cave_exploration.event], player),
+            "Catcoon":                          basic_survival.rule,
+            "Cookie Cutter":                    advanced_boating.rule,
+            "Crawling Horror":                  advanced_combat.rule,
+            "Crow":                             can_get_feathers.rule,
+            "Red Hound":                        lambda state: state.has_all([basic_combat.event, seasons_passed_2.event], player) and state.has_any([summer.event, autumn.event], player),
+            "Frog":                             ALWAYS_TRUE,
+            "Saladmander":                      lunar_island.rule,
+            "Ghost":                            lambda state: state.has_all([basic_exploration.event, digging.event, pre_basic_combat.event], player),
+            "Gnarwail":                         lambda state: state.has_all([basic_combat.event, advanced_boating.event], player),
+            "Grass Gator":                      lambda state: state.has_all([basic_combat.event, advanced_boating.event, ranged_aggression.event], player),
+            "Grass Gekko":                      lambda state: state.has_all([seasons_passed_2.event, digging.event], player) and state.has_any([autumn.event, spring.event, summer.event], player), # Not guaranteed on world gen so give time for spawned ones
+            "Briar Wolf":                       basic_combat.rule,
+            "Hound":                            lambda state: state.has_all([basic_combat.event, desert_exploration.event], player),
+            "Blue Hound":                       lambda state: state.has_all([basic_combat.event, winter.event], player) or state.has_all([basic_combat.event, spring.event, seasons_passed_2.event], player),
+            "Killer Bee":                       lambda state: state.has_any([pre_basic_combat.event, bug_catching.event], player),
+            "Clockwork Knight":                 advanced_combat.rule,
+            "Koalefant":                        lambda state: state.has_all([pre_basic_combat.event, ranged_aggression.event], player),
+            "Krampus":                          lambda state: state.has_all([basic_combat.event, can_get_feathers.event, basic_survival.event], player),
+            "Treeguard":                        lambda state: state.has_all([basic_combat.event, chopping.event, basic_survival.event], player),
+            "Crustashine":                      lambda state: state.has_all([moon_quay_exploration.event, ranged_aggression.event], player),
+            "Bulbous Lightbug":                 cave_exploration.rule,
+            "Volt Goat":                        lambda state: state.has_all([basic_combat.event, ranged_aggression.event, desert_exploration.event], player),
+            "Merm":                             lambda state: state.has_all([basic_combat.event, swamp_exploration.event], player),
+            "Moleworm":                         ALWAYS_TRUE,
+            "Naked Mole Bat":                   lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
+            "Splumonkey":                       ruins_exploration.rule,
+            "Moon Moth":                        can_reach_islands.rule,
+            "Mosquito":                         lambda state: state.has(swamp_exploration.event, player) and (state.has_any([pre_basic_combat.event, bug_catching.event], player)),
+            "Mosling":                          moosegoose.rule,
+            "Mush Gnome":                       lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
+            "Terrorclaw":                       lambda state: state.has_all([advanced_combat.event, advanced_boating.event], player),
+            "Pengull":                          lambda state: state.has_all([basic_combat.event, winter.event], player),
+            "Gobbler":                          basic_survival.rule,
+            "Pig Man":                          basic_survival.rule,
+            "Powder Monkey":                    lambda state: state.has_all([can_defend_against_pirates.event, moon_quay_exploration.event], player),
+            "Prime Mate":                       pirate_map.rule,
+            "Puffin":                           lambda state: state.has_all([can_get_feathers.event, pre_basic_boating.event], player),
+            "Rabbit":                           ALWAYS_TRUE,
+            "Redbird":                          can_get_feathers.rule,
+            "Snowbird":                         lambda state: state.has_all([can_get_feathers.event, winter.event], player),
+            "Rock Lobster":                     cave_exploration.rule,
+            "Clockwork Rook":                   lambda state: state.has_all([advanced_combat.event, healing.event], player),
+            "Rockjaw":                          lambda state: state.has_all([advanced_combat.event, advanced_boating.event], player) and (state.has_any([ranged_combat.event, cannon.event], player)),
+            "Slurper":                          ruins_exploration.rule,
+            "Slurtle":                          cave_exploration.rule,
+            "Snurtle":                          cave_exploration.rule,
+            "Ewecus":                           lambda state: state.has_all([advanced_combat.event, advanced_exploration.event, seasons_passed_4.event], player),
+            "Spider":                           ALWAYS_TRUE,
+            "Dangling Depth Dweller":           ruins_exploration.rule,
+            "Cave Spider":                      lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
+            "Nurse Spider":                     lambda state: state.has_all([advanced_combat.event, seasons_passed_2.event], player),
+            "Shattered Spider":                 lambda state: state.has_all([basic_combat.event, lunar_island.event], player),
+            "Spitter":                          lambda state: state.has_all([basic_combat.event, cave_exploration.event], player),
+            "Spider Warrior":                   basic_combat.rule,
+            "Sea Strider":                      lambda state: state.has_all([basic_combat.event, advanced_boating.event], player),
+            "Spider Queen":                     lambda state: state.has_all([advanced_combat.event, seasons_passed_2.event], player),
+            "Tallbird":                         lambda state: state.has_all([basic_combat.event, healing.event], player),
+            "Tentacle":                         lambda state: state.has_all([basic_combat.event, swamp_exploration.event], player),
+            "Big Tentacle":                     lambda state: state.has_all([advanced_combat.event, cave_exploration.event, healing.event], player),
+            "Terrorbeak":                       lambda state: state.has_all([advanced_combat.event, basic_sanity_management.event], player),
+            "MacTusk":                          lambda state: state.has_all([basic_combat.event, winter.event], player),
+            "Varg":                             lambda state: state.has_all([advanced_combat.event, advanced_exploration.event, seasons_passed_4.event], player),
+            "Varglet":                          lambda state: state.has_all([basic_combat.event, advanced_exploration.event, seasons_passed_2.event], player),
+            "Depths Worm":                      ruins_exploration.rule,
+            "Ancient Sentrypede":               lambda state: state.has_all([archive_exploration.event, advanced_combat.event], player),
+            "Skittersquid":                     lambda state: state.has_all([basic_combat.event, advanced_boating.event], player),
+            "Lure Plant":                       spring.rule,
+            "Glommer":                          lambda state: has_survived_num_days(11, state),
+            "Dust Moth":                        archive_exploration.rule,
+            "No-Eyed Deer":                     winter.rule,
+            "Moonblind Crow":                   lambda state: state.has_all([moonstorm_exploration.event, basic_combat.event], player),
+            "Misshapen Bird":                   lambda state: state.has_all([moonstorm_exploration.event, basic_combat.event], player),
+            "Moonrock Pengull":                 lambda state: state.has_all([lunar_island.event, basic_combat.event, winter.event], player),
+            "Horror Hound":                     lambda state: state.has_all([moonstorm_exploration.event, basic_combat.event], player),
+            "Resting Horror":                   ruins_exploration.rule,
+            "Birchnutter":                      lambda state: state.has_all([seasons_passed_4.event, autumn.event], player),
+            "Mandrake":                         basic_survival.rule,
+            "Fruit Fly":                        lambda state: state.has_all([basic_farming.event, seasons_passed_2.event], player),
+            "Sea Weed":                         advanced_boating.rule,
+            "Marotter":                         basic_combat.rule,
 
             # Cook foods
-            "Butter Muffin": ALWAYS_TRUE,
-            "Froggle Bunwich": ALWAYS_TRUE,
-            "Taffy": honey_farming.rule,
-            "Pumpkin Cookies": lambda state: state.has_all([honey_farming.event, pumpkin_farming.event], player),
-            "Stuffed Eggplant": eggplant_farming.rule,
-            "Fishsticks": fishing.rule,
-            "Honey Nuggets": honey_farming.rule,
-            "Honey Ham": honey_farming.rule,
-            "Dragonpie": lambda state: state.has_any([dragonfruit_from_saladmander.event, dragonfruit_farming.event], player),
-            "Kabobs": ALWAYS_TRUE,
-            "Mandrake Soup": ALWAYS_TRUE,
-            "Bacon and Eggs": bird_caging.rule,
-            "Meatballs": ALWAYS_TRUE,
-            "Meaty Stew": ALWAYS_TRUE,
-            "Pierogi": bird_caging.rule,
-            "Turkey Dinner": pre_basic_combat.rule,
-            "Ratatouille": ALWAYS_TRUE,
-            "Fist Full of Jam": ALWAYS_TRUE,
-            "Fruit Medley": fruits.rule,
-            "Fish Tacos": lambda state: state.has_any([sea_fishing.event, corn_farming.event], player),
-            "Waffles": lambda state: state.has_all([bird_caging.event, butter_luck.event], player),
-            "Monster Lasagna": lambda state: state.has_all(["Cut Stone", "Crock Pot", charcoal.event, mining.event], player), # Need basic crock pot, not portable
-            "Powdercake": lambda state: state.has(honey_farming.event, player) and state.has_any([sea_fishing.event, corn_farming.event], player),
-            "Unagi": lambda state: state.has_all([cave_exploration.event, freshwater_fishing.event], player),
-            "Wet Goop": ALWAYS_TRUE,
-            "Flower Salad": lambda state: is_summer(state),
-            "Ice Cream": lambda state: state.has_all([honey_farming.event, dairy.event], player),
-            "Melonsicle": watermelon_farming.rule,
-            "Trail Mix": chopping.rule,
-            "Spicy Chili": ALWAYS_TRUE,
-            "Guacamole": ALWAYS_TRUE,
-            "Jellybeans": bee_queen.rule,
-            "Fancy Spiralled Tubers": potato_farming.rule,
-            "Creamy Potato Purée": lambda state: state.has_all([potato_farming.event, garlic_farming.event], player),
-            "Asparagus Soup": asparagus_farming.rule,
-            "Vegetable Stinger": lambda state: state.has_any([tomaroot_farming.event, asparagus_farming.event], player),
-            "Banana Pop": lambda state: state.has_any([cave_exploration.event, moon_quay_exploration.event], player),
-            "Frozen Banana Daiquiri": lambda state: state.has_any([cave_exploration.event, moon_quay_exploration.event], player),
-            "Banana Shake": lambda state: state.has_any([cave_exploration.event, moon_quay_exploration.event], player),
-            "Ceviche": fishing.rule,
-            "Salsa Fresca": tomaroot_farming.rule,
-            "Stuffed Pepper Poppers": pepper_farming.rule,
-            "California Roll": sea_fishing.rule,
-            "Seafood Gumbo": lambda state: state.has_all([cave_exploration.event, freshwater_fishing.event], player),
-            "Surf 'n' Turf": fishing.rule,
-            "Lobster Bisque": sea_fishing.rule,
-            "Lobster Dinner": lambda state: state.has_all([sea_fishing.event, butter_luck.event], player),
-            "Barnacle Pita": lambda state: state.has_all([sea_fishing.event, shaving.event], player),
-            "Barnacle Nigiri": lambda state: state.has_all([sea_fishing.event, shaving.event], player),
-            "Barnacle Linguine": lambda state: state.has_all([sea_fishing.event, shaving.event], player),
-            "Stuffed Fish Heads": lambda state: state.has_all([sea_fishing.event, shaving.event], player),
-            "Leafy Meatloaf": leafy_meat.rule,
-            "Veggie Burger": lambda state: state.has_all([leafy_meat.event, onion_farming.event], player),
-            "Jelly Salad": lambda state: state.has_all([honey_farming.event, leafy_meat.event], player),
-            "Beefy Greens": leafy_meat.rule,
-            "Mushy Cake": cave_exploration.rule,
-            "Soothing Tea": basic_farming.rule,
-            "Fig-Stuffed Trunk": sea_fishing.rule,
-            "Figatoni": sea_fishing.rule,
-            "Figkabab": sea_fishing.rule,
-            "Figgy Frogwich": sea_fishing.rule,
-            "Bunny Stew": ALWAYS_TRUE,
-            "Plain Omelette": bird_caging.rule,
-            "Breakfast Skillet": bird_caging.rule,
-            "Tall Scotch Eggs": lambda state: state.has_all([basic_combat.event], player),
-            "Steamed Twigs": ALWAYS_TRUE,
-            "Beefalo Treats": basic_farming.rule,
-            "Milkmade Hat": lambda state: state.has_all([cave_exploration.event, pre_basic_boating.event, dairy.event], player),
-            "Amberosia": lambda state: state.has_all([salt_crystals.event, "Collected Dust"], player),
-            "Stuffed Night Cap": cave_exploration.rule,
+            "Butter Muffin":                    ALWAYS_TRUE,
+            "Froggle Bunwich":                  ALWAYS_TRUE,
+            "Taffy":                            honey_farming.rule,
+            "Pumpkin Cookies":                  lambda state: state.has_all([honey_farming.event, pumpkin_farming.event], player),
+            "Stuffed Eggplant":                 eggplant_farming.rule,
+            "Fishsticks":                       fishing.rule,
+            "Honey Nuggets":                    honey_farming.rule,
+            "Honey Ham":                        honey_farming.rule,
+            "Dragonpie":                        lambda state: state.has_any([dragonfruit_from_saladmander.event, dragonfruit_farming.event], player),
+            "Kabobs":                           ALWAYS_TRUE,
+            "Mandrake Soup":                    ALWAYS_TRUE,
+            "Bacon and Eggs":                   bird_caging.rule,
+            "Meatballs":                        ALWAYS_TRUE,
+            "Meaty Stew":                       ALWAYS_TRUE,
+            "Pierogi":                          bird_caging.rule,
+            "Turkey Dinner":                    pre_basic_combat.rule,
+            "Ratatouille":                      ALWAYS_TRUE,
+            "Fist Full of Jam":                 ALWAYS_TRUE,
+            "Fruit Medley":                     fruits.rule,
+            "Fish Tacos":                       lambda state: state.has_any([sea_fishing.event, corn_farming.event], player),
+            "Waffles":                          lambda state: state.has_all([bird_caging.event, butter_luck.event], player),
+            "Monster Lasagna":                  lambda state: state.has_all(["Cut Stone", "Crock Pot", charcoal.event, mining.event, pre_basic_combat.event], player), # Need basic crock pot, not portable
+            "Powdercake":                       lambda state: state.has(honey_farming.event, player) and state.has_any([sea_fishing.event, corn_farming.event], player),
+            "Unagi":                            lambda state: state.has_all([cave_exploration.event, freshwater_fishing.event], player),
+            "Wet Goop":                         ALWAYS_TRUE,
+            "Flower Salad":                     summer.rule,
+            "Ice Cream":                        lambda state: state.has_all([honey_farming.event, dairy.event], player),
+            "Melonsicle":                       watermelon_farming.rule,
+            "Trail Mix":                        chopping.rule,
+            "Spicy Chili":                      ALWAYS_TRUE,
+            "Guacamole":                        ALWAYS_TRUE,
+            "Jellybeans":                       bee_queen.rule,
+            "Fancy Spiralled Tubers":           potato_farming.rule,
+            "Creamy Potato Purée":              lambda state: state.has_all([potato_farming.event, garlic_farming.event], player),
+            "Asparagus Soup":                   asparagus_farming.rule,
+            "Vegetable Stinger":                lambda state: state.has_any([tomaroot_farming.event, asparagus_farming.event], player),
+            "Banana Pop":                       lambda state: state.has_any([cave_exploration.event, moon_quay_exploration.event], player),
+            "Frozen Banana Daiquiri":           lambda state: state.has_any([cave_exploration.event, moon_quay_exploration.event], player),
+            "Banana Shake":                     lambda state: state.has_any([cave_exploration.event, moon_quay_exploration.event], player),
+            "Ceviche":                          fishing.rule,
+            "Salsa Fresca":                     tomaroot_farming.rule,
+            "Stuffed Pepper Poppers":           pepper_farming.rule,
+            "California Roll":                  sea_fishing.rule,
+            "Seafood Gumbo":                    lambda state: state.has_all([cave_exploration.event, freshwater_fishing.event], player),
+            "Surf 'n' Turf":                    fishing.rule,
+            "Lobster Bisque":                   sea_fishing.rule,
+            "Lobster Dinner":                   lambda state: state.has_all([sea_fishing.event, butter_luck.event], player),
+            "Barnacle Pita":                    lambda state: state.has_all([sea_fishing.event, shaving.event], player),
+            "Barnacle Nigiri":                  lambda state: state.has_all([sea_fishing.event, shaving.event], player),
+            "Barnacle Linguine":                lambda state: state.has_all([sea_fishing.event, shaving.event], player),
+            "Stuffed Fish Heads":               lambda state: state.has_all([sea_fishing.event, shaving.event], player),
+            "Leafy Meatloaf":                   leafy_meat.rule,
+            "Veggie Burger":                    lambda state: state.has_all([leafy_meat.event, onion_farming.event], player),
+            "Jelly Salad":                      lambda state: state.has_all([honey_farming.event, leafy_meat.event], player),
+            "Beefy Greens":                     leafy_meat.rule,
+            "Mushy Cake":                       cave_exploration.rule,
+            "Soothing Tea":                     basic_farming.rule,
+            "Fig-Stuffed Trunk":                sea_fishing.rule,
+            "Figatoni":                         sea_fishing.rule,
+            "Figkabab":                         sea_fishing.rule,
+            "Figgy Frogwich":                   sea_fishing.rule,
+            "Bunny Stew":                       ALWAYS_TRUE,
+            "Plain Omelette":                   bird_caging.rule,
+            "Breakfast Skillet":                bird_caging.rule,
+            "Tall Scotch Eggs":                 basic_combat.rule,
+            "Steamed Twigs":                    ALWAYS_TRUE,
+            "Beefalo Treats":                   basic_farming.rule,
+            "Milkmade Hat":                     lambda state: state.has_all([cave_exploration.event, pre_basic_boating.event, dairy.event], player),
+            "Amberosia":                        lambda state: state.has_all([salt_crystals.event, "Collected Dust"], player),
+            "Stuffed Night Cap":                cave_exploration.rule,
             # Warly Dishes
-            "Grim Galette": lambda state: state.has_all([potato_farming.event, onion_farming.event], player),
-            "Volt Goat Chaud-Froid": lambda state: state.has_all([basic_combat.event], player),
-            "Glow Berry Mousse": cave_exploration.rule,
-            "Fish Cordon Bleu": sea_fishing.rule,
-            "Hot Dragon Chili Salad": lambda state: state.has(pepper_farming.event, player) and state.has_any([dragonfruit_from_saladmander.event, dragonfruit_farming.event], player),
-            "Asparagazpacho": asparagus_farming.rule,
-            "Puffed Potato Soufflé": lambda state: state.has_all([bird_caging.event, potato_farming.event], player),
-            "Monster Tartare": ALWAYS_TRUE,
-            "Fresh Fruit Crepes": lambda state: state.has_all([fruits.event, butter_luck.event], player),
-            "Bone Bouillon": lambda state: state.has_all([hammering.event, onion_farming.event], player),
-            "Moqueca": lambda state: state.has_all([sea_fishing.event, tomaroot_farming.event], player),
+            "Grim Galette":                     lambda state: state.has_all([potato_farming.event, onion_farming.event], player),
+            "Volt Goat Chaud-Froid":            basic_combat.rule,
+            "Glow Berry Mousse":                cave_exploration.rule,
+            "Fish Cordon Bleu":                 sea_fishing.rule,
+            "Hot Dragon Chili Salad":           lambda state: state.has(pepper_farming.event, player) and state.has_any([dragonfruit_from_saladmander.event, dragonfruit_farming.event], player),
+            "Asparagazpacho":                   asparagus_farming.rule,
+            "Puffed Potato Soufflé":            lambda state: state.has_all([bird_caging.event, potato_farming.event], player),
+            "Monster Tartare":                  pre_basic_combat.rule,
+            "Fresh Fruit Crepes":               lambda state: state.has_all([fruits.event, butter_luck.event], player),
+            "Bone Bouillon":                    lambda state: state.has_all([hammering.event, onion_farming.event], player),
+            "Moqueca":                          lambda state: state.has_all([sea_fishing.event, tomaroot_farming.event], player),
             # Farming
-            "Grow Giant Asparagus": lambda state: state.has_all([asparagus_farming.event, reached_spring.event], player),
-            "Grow Giant Garlic": lambda state: state.has_all([garlic_farming.event, reached_winter.event], player),
-            "Grow Giant Pumpkin": lambda state: state.has_all([pumpkin_farming.event, reached_winter.event], player),
-            "Grow Giant Corn": lambda state: state.has_all([corn_farming.event, reached_spring.event], player),
-            "Grow Giant Onion": lambda state: state.has_all([onion_farming.event, reached_spring.event], player),
-            "Grow Giant Potato": lambda state: state.has_all([potato_farming.event, reached_winter.event], player),
-            "Grow Giant Dragon Fruit": lambda state: state.has_all([dragonfruit_farming.event, reached_spring.event], player),
-            "Grow Giant Pomegranate": lambda state: state.has_all([pomegranate_farming.event, reached_spring.event], player),
-            "Grow Giant Eggplant": lambda state: state.has_all([eggplant_farming.event, reached_spring.event], player),
-            "Grow Giant Toma Root": lambda state: state.has_all([tomaroot_farming.event, reached_spring.event], player),
-            "Grow Giant Watermelon": lambda state: state.has_all([watermelon_farming.event, reached_spring.event], player),
-            "Grow Giant Pepper": lambda state: state.has_all([pepper_farming.event, reached_summer.event], player),
-            "Grow Giant Durian": lambda state: state.has_all([durian_farming.event, reached_spring.event], player),
-            "Grow Giant Carrot": lambda state: state.has_all([carrot_farming.event, reached_winter.event], player),
+            "Grow Giant Asparagus":             lambda state: state.has_all([asparagus_farming.event, spring.event], player),
+            "Grow Giant Garlic":                lambda state: state.has_all([garlic_farming.event, winter.event], player),
+            "Grow Giant Pumpkin":               lambda state: state.has_all([pumpkin_farming.event, winter.event], player),
+            "Grow Giant Corn":                  lambda state: state.has_all([corn_farming.event, spring.event], player),
+            "Grow Giant Onion":                 lambda state: state.has_all([onion_farming.event, spring.event], player),
+            "Grow Giant Potato":                lambda state: state.has_all([potato_farming.event, winter.event], player),
+            "Grow Giant Dragon Fruit":          lambda state: state.has_all([dragonfruit_farming.event, spring.event], player),
+            "Grow Giant Pomegranate":           lambda state: state.has_all([pomegranate_farming.event, spring.event], player),
+            "Grow Giant Eggplant":              lambda state: state.has_all([eggplant_farming.event, spring.event], player),
+            "Grow Giant Toma Root":             lambda state: state.has_all([tomaroot_farming.event, spring.event], player),
+            "Grow Giant Watermelon":            lambda state: state.has_all([watermelon_farming.event, spring.event], player),
+            "Grow Giant Pepper":                lambda state: state.has_all([pepper_farming.event, summer.event], player),
+            "Grow Giant Durian":                lambda state: state.has_all([durian_farming.event, spring.event], player),
+            "Grow Giant Carrot":                lambda state: state.has_all([carrot_farming.event, winter.event], player),
             # Research
-            "Science (Nitre)": mining.rule,
-            "Science (Salt Crystals)": salt_crystals.rule,
-            "Science (Ice)": mining.rule,
-            "Science (Slurtle Slime)": cave_exploration.rule,
-            "Science (Gears)": gears.rule,
-            "Science (Scrap)": basic_exploration.rule,
-            "Science (Azure Feather)": lambda state: state.has_all([reached_winter.event, can_get_feathers.event], player),
-            "Science (Crimson Feather)": can_get_feathers.rule,
-            "Science (Jet Feather)": can_get_feathers.rule,
-            "Science (Saffron Feather)": lambda state: state.has_all([canary.event, can_get_feathers.event], player),
-            "Science (Kelp Fronds)": pre_basic_boating.rule,
-            "Science (Steel Wool)": lambda state: state.has_all([advanced_combat.event, advanced_exploration.event, reached_autumn.event], player),
-            "Science (Electrical Doodad)": electrical_doodad.rule,
-            "Science (Ashes)": firestarting.rule,
-            "Science (Cut Grass)": ALWAYS_TRUE,
-            "Science (Beefalo Horn)": basic_combat.rule,
-            "Science (Beefalo Wool)": basic_combat.rule if ADVANCED_PLAYER_BIAS else shaving.rule,
-            "Science (Cactus Flower)": lambda state: is_summer(state),
-            "Science (Honeycomb)": basic_combat.rule,
-            "Science (Petals)": ALWAYS_TRUE,
-            "Science (Succulent)": desert_exploration.rule,
-            "Science (Foliage)": mining.rule if (REGION.CAVE in REGION_WHITELIST) else desert_exploration.rule,
-            "Science (Tillweeds)": basic_farming.rule,
-            "Science (Lichen)": ruins_exploration.rule,
-            "Science (Banana)": lambda state: state.has_any([moon_quay_exploration.event, cave_exploration.event], player),
-            "Science (Fig)": advanced_boating.rule,
-            "Science (Tallbird Egg)": basic_combat.rule,
-            "Science (Hound's Tooth)": basic_combat.rule,
-            "Science (Bone Shards)": lambda state: state.has_all([desert_exploration.event, hammering.event], player),
-            "Science (Walrus Tusk)": lambda state: state.has(basic_combat.event, player) and is_winter(state),
-            "Science (Silk)": ALWAYS_TRUE,
-            "Science (Cut Stone)": lambda state: state.has_all(["Cut Stone", mining.event], player),
-            "Science (Palmcone Sprout)": moon_quay_exploration.rule,
-            "Science (Pine Cone)": chopping.rule,
-            "Science (Birchnut)": chopping.rule,
-            "Science (Driftwood Piece)": pre_basic_boating.rule,
-            "Science (Cookie Cutter Shell)": lambda state: state.has_all([pre_basic_boating.event, basic_combat.event], player),
-            "Science (Palmcone Scale)": moon_quay_exploration.rule,
-            "Science (Gnarwail Horn)": lambda state: state.has_all([advanced_boating.event, basic_combat.event], player),
-            "Science (Barnacles)": lambda state: state.has_all([basic_boating.event, shaving.event], player),
-            "Science (Frazzled Wires)": lambda state: (REGION.CAVE in REGION_WHITELIST and state.has(ruins_exploration.event, player) or state.has_all([digging.event, basic_sanity_management.event], player)),
-            "Science (Charcoal)": charcoal.rule,
-            "Science (Butter)": butter_luck.rule, # Excluded
-            "Science (Asparagus)": asparagus_farming.rule,
-            "Science (Garlic)": garlic_farming.rule,
-            "Science (Pumpkin)": pumpkin_farming.rule,
-            "Science (Corn)": corn_farming.rule,
-            "Science (Onion)": onion_farming.rule,
-            "Science (Potato)": ALWAYS_TRUE if EXPERT_PLAYER_BIAS else potato_farming.rule,
-            "Science (Dragon Fruit)": lambda state: state.has_any([dragonfruit_farming.event, dragonfruit_from_saladmander.event], player),
-            "Science (Pomegranate)": pomegranate_farming.rule,
-            "Science (Eggplant)": eggplant_farming.rule,
-            "Science (Toma Root)": tomaroot_farming.rule,
-            "Science (Watermelon)": watermelon_farming.rule,
-            "Science (Pepper)": pepper_farming.rule,
-            "Science (Durian)": durian_farming.rule,
-            "Science (Carrot)": ALWAYS_TRUE,
-            "Science (Stone Fruit)": lambda state: state.has_any([lunar_island.event, cave_exploration.event], player),
-            "Science (Marble)": mining.rule,
-            "Science (Gold Nugget)": mining.rule,
-            "Science (Flint)": ALWAYS_TRUE,
-            "Science (Honey)": ALWAYS_TRUE,
-            "Science (Twigs)": ALWAYS_TRUE,
-            "Science (Log)": chopping.rule,            
-            "Magic (Blue Gem)": gem_digging.rule,
-            "Magic (Living Log)": lambda state: state.has_any([chopping.event, "Wormwood"], player),
-            "Magic (Glommer's Goop)": lambda state: has_survived_num_days(11, state),
-            "Magic (Dark Petals)": ALWAYS_TRUE,
-            "Magic (Red Gem)": gem_digging.rule,
-            "Magic (Slurper Pelt)": ruins_exploration.rule,
-            "Magic (Blue Spore)": lambda state: is_winter(state) and state.has_all([cave_exploration.event, bug_catching.event], player),
-            "Magic (Red Spore)": lambda state: is_summer(state) and state.has_all([cave_exploration.event, bug_catching.event], player),
-            "Magic (Green Spore)": lambda state: is_spring(state) and state.has_all([cave_exploration.event, bug_catching.event], player),
-            "Magic (Broken Shell)": cave_exploration.rule,
-            "Magic (Leafy Meat)": leafy_meat.rule,
-            "Magic (Canary (Volatile))": lambda state: state.has_all([canary.event, cave_exploration.event, bird_caging.event], player),
-            "Magic (Life Giving Amulet)": lambda state: state.has_all(["Life Giving Amulet", gem_digging.event, nightmare_fuel.event], player),
-            "Magic (Nightmare Fuel)": lambda state: state.has_all([basic_combat.event, nightmare_fuel.event], player),
-            "Magic (Cut Reeds)": swamp_exploration.rule,
-            "Magic (Volt Goat Horn)": basic_combat.rule,
-            "Magic (Beard Hair)": ALWAYS_TRUE,
-            "Magic (Glow Berry)": ruins_exploration.rule,
-            "Magic (Tentacle Spots)": basic_combat.rule,
-            "Magic (Health)": healing.rule,
-            "Magic (Sanity)": ALWAYS_TRUE,
-            "Magic (Telltale Heart)": lambda state: state.has_all([healing.event, "Telltale Heart"], player),
-            "Magic (Forget-Me-Lots)": basic_farming.rule,
-            "Magic (Cat Tail)": pre_basic_combat.rule,
-            "Magic (Bunny Puff)": lambda state: state.has_all([cave_exploration.event, basic_combat.event], player),
-            "Magic (Mosquito Sack)": swamp_exploration.rule,
-            "Magic (Spider Gland)": ALWAYS_TRUE,
-            "Magic (Monster Jerky)": lambda state: state.has_all(["Drying Rack", "Rope", charcoal.event], player),
-            "Magic (Pig Skin)": basic_combat.rule,
-            "Magic (Batilisk Wing)": mining.rule,
-            "Magic (Stinger)": ALWAYS_TRUE,
-            "Magic (Papyrus)": lambda state: state.has_all(["Papyrus", swamp_exploration.event], player),
-            "Magic (Green Cap)": ALWAYS_TRUE,
-            "Magic (Blue Cap)": ALWAYS_TRUE,
-            "Magic (Red Cap)": ALWAYS_TRUE,
-            "Magic (Iridescent Gem)": lambda state: state.has(iridescent_gem.event, player),
-            "Magic (Desert Stone)": lambda state: state.has_all([reached_summer.event, storm_protection.event], player),
-            "Magic (Naked Nostrils)": cave_exploration.rule,
-            "Magic (Frog Legs)": ALWAYS_TRUE,
-            "Magic (Spoiled Fish)": fishing.rule if (ADVANCED_PLAYER_BIAS or not REGION.OCEAN in REGION_WHITELIST) else sea_fishing.rule,
-            "Magic (Spoiled Fish Morsel)": fishing.rule,
-            "Magic (Rot)": lambda state: has_survived_num_days(15, state),
-            "Magic (Rotten Egg)": lambda state: state.has(bird_caging.event, player) and has_survived_num_days(20, state),
-            "Magic (Carrat)": lambda state: state.has_any([lunar_island.event, cave_exploration.event], player) and state.has_any(["Trap", digging.event], player),
-            "Magic (Moleworm)": hammering.rule,
-            "Magic (Fireflies)": bug_catching.rule,
-            "Magic (Bulbous Lightbug)": lambda state: state.has_all([cave_exploration.event, bug_catching.event], player),
-            "Magic (Rabbit)": lambda state: state.has("Trap", player),
-            "Magic (Butterfly)": bug_catching.rule,
-            "Magic (Mosquito)": lambda state: state.has_all([bug_catching.event, swamp_exploration.event], player),
-            "Magic (Bee)": bug_catching.rule,
-            "Magic (Killer Bee)": bug_catching.rule,
-            "Magic (Crustashine)": moon_quay_exploration.rule,
-            "Magic (Crow)": lambda state: state.has("Bird Trap", player),
-            "Magic (Redbird)": lambda state: state.has("Bird Trap", player),
-            "Magic (Snowbird)": lambda state: state.has("Bird Trap", player) and is_winter(state),
-            "Magic (Canary)": lambda state: state.has_all(["Bird Trap", canary.event], player),
-            "Magic (Puffin)": lambda state: state.has_all(["Bird Trap", pre_basic_boating.event], player),
-            "Magic (Fossil Fragments)": lambda state: state.has_all([cave_exploration.event, mining.event], player),
-            "Think Tank (Freshwater Fish)": freshwater_fishing.rule,
-            "Think Tank (Live Eel)": lambda state: state.has_all([cave_exploration.event, freshwater_fishing.event], player),
-            "Think Tank (Runty Guppy)": sea_fishing.rule,
-            "Think Tank (Needlenosed Squirt)": sea_fishing.rule,
-            "Think Tank (Bitty Baitfish)": sea_fishing.rule,
-            "Think Tank (Smolt Fry)": sea_fishing.rule,
-            "Think Tank (Popperfish)": sea_fishing.rule,
-            "Think Tank (Fallounder)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Bloomfin Tuna)": lambda state: state.has_all([reached_spring.event, sea_fishing.event], player),
-            "Think Tank (Scorching Sunfish)": lambda state: state.has_all([advanced_boating.event, reached_summer.event, sea_fishing.event], player),
-            "Think Tank (Spittlefish)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Mudfish)": sea_fishing.rule,
-            "Think Tank (Deep Bass)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Dandy Lionfish)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Black Catfish)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Corn Cod)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Ice Bream)": lambda state: state.has_all([advanced_boating.event, reached_winter.event, sea_fishing.event], player),
-            "Think Tank (Sweetish Fish)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Wobster)": lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
-            "Think Tank (Lunar Wobster)": lambda state: state.has_all([lunar_island.event, sea_fishing.event], player),
-            "Pseudoscience (Purple Gem)": purple_gem.rule,
-            "Pseudoscience (Yellow Gem)": ALWAYS_TRUE,
-            "Pseudoscience (Thulecite)": thulecite.rule,
-            "Pseudoscience (Orange Gem)": ALWAYS_TRUE,
-            "Pseudoscience (Green Gem)": ALWAYS_TRUE,
-            "Celestial (Moon Rock)": ALWAYS_TRUE,
-            "Celestial (Moon Shard)": lambda state: state.has_any([cave_exploration.event, can_reach_islands.event], player),
-            "Celestial (Moon Shroom)": cave_exploration.rule,
-            "Celestial (Moon Moth)": lambda state: state.has_all([bug_catching.event, chopping.event], player),
-            "Celestial (Lune Tree Blossom)": ALWAYS_TRUE,
-            "Bottle Exchange (1)": lambda state: state.count("Crabby Hermit Friendship", player) >= 1,
-            "Bottle Exchange (2)": lambda state: state.count("Crabby Hermit Friendship", player) >= 1,
-            "Bottle Exchange (3)": lambda state: state.count("Crabby Hermit Friendship", player) >= 3,
-            "Bottle Exchange (4)": lambda state: state.count("Crabby Hermit Friendship", player) >= 3,
-            "Bottle Exchange (5)": lambda state: state.count("Crabby Hermit Friendship", player) >= 3,
-            "Bottle Exchange (6)": lambda state: state.count("Crabby Hermit Friendship", player) >= 6,
-            "Bottle Exchange (7)": lambda state: state.count("Crabby Hermit Friendship", player) >= 6,
-            "Bottle Exchange (8)": lambda state: state.count("Crabby Hermit Friendship", player) >= 8,
-            "Bottle Exchange (9)": lambda state: state.count("Crabby Hermit Friendship", player) >= 8,
-            "Bottle Exchange (10)": lambda state: state.count("Crabby Hermit Friendship", player) >= 8,
+            "Science (Nitre)":                  mining.rule,
+            "Science (Salt Crystals)":          salt_crystals.rule,
+            "Science (Ice)":                    mining.rule,
+            "Science (Slurtle Slime)":          cave_exploration.rule,
+            "Science (Gears)":                  gears.rule,
+            "Science (Scrap)":                  basic_exploration.rule,
+            "Science (Azure Feather)":          lambda state: state.has_all([winter.event, can_get_feathers.event], player),
+            "Science (Crimson Feather)":        can_get_feathers.rule,
+            "Science (Jet Feather)":            can_get_feathers.rule,
+            "Science (Saffron Feather)":        lambda state: state.has_all([canary.event, can_get_feathers.event], player),
+            "Science (Kelp Fronds)":            pre_basic_boating.rule,
+            "Science (Steel Wool)":             lambda state: state.has_all([advanced_combat.event, advanced_exploration.event, seasons_passed_4.event], player),
+            "Science (Electrical Doodad)":      electrical_doodad.rule,
+            "Science (Ashes)":                  firestarting.rule,
+            "Science (Cut Grass)":              ALWAYS_TRUE,
+            "Science (Beefalo Horn)":           basic_combat.rule,
+            "Science (Beefalo Wool)":           basic_combat.rule if ADVANCED_PLAYER_BIAS else shaving.rule,
+            "Science (Cactus Flower)":          summer.rule,
+            "Science (Honeycomb)":              basic_combat.rule,
+            "Science (Petals)":                 ALWAYS_TRUE,
+            "Science (Succulent)":              desert_exploration.rule,
+            "Science (Foliage)":                mining.rule if (REGION.CAVE in REGION_WHITELIST) else desert_exploration.rule,
+            "Science (Tillweeds)":              basic_farming.rule,
+            "Science (Lichen)":                 ruins_exploration.rule,
+            "Science (Banana)":                 lambda state: state.has_any([moon_quay_exploration.event, cave_exploration.event], player),
+            "Science (Fig)":                    advanced_boating.rule,
+            "Science (Tallbird Egg)":           basic_combat.rule,
+            "Science (Hound's Tooth)":          basic_combat.rule,
+            "Science (Bone Shards)":            lambda state: state.has_all([desert_exploration.event, hammering.event], player),
+            "Science (Walrus Tusk)":            lambda state: state.has_all([basic_combat.event, winter.event], player),
+            "Science (Silk)":                   ALWAYS_TRUE,
+            "Science (Cut Stone)":              lambda state: state.has_all(["Cut Stone", mining.event], player),
+            "Science (Palmcone Sprout)":        moon_quay_exploration.rule,
+            "Science (Pine Cone)":              chopping.rule,
+            "Science (Birchnut)":               chopping.rule,
+            "Science (Driftwood Piece)":        pre_basic_boating.rule,
+            "Science (Cookie Cutter Shell)":    lambda state: state.has_all([pre_basic_boating.event, basic_combat.event], player),
+            "Science (Palmcone Scale)":         moon_quay_exploration.rule,
+            "Science (Gnarwail Horn)":          lambda state: state.has_all([advanced_boating.event, basic_combat.event], player),
+            "Science (Barnacles)":              lambda state: state.has_all([basic_boating.event, shaving.event], player),
+            "Science (Frazzled Wires)":         (lambda state: state.has_all([ruins_exploration.event, hammering.event], player)) if REGION.RUINS in REGION_WHITELIST 
+                                                else (lambda state: state.has_all([digging.event, basic_sanity_management.event], player)),
+            "Science (Charcoal)":               charcoal.rule,
+            "Science (Butter)":                 butter_luck.rule, # Excluded
+            "Science (Asparagus)":              asparagus_farming.rule,
+            "Science (Garlic)":                 garlic_farming.rule,
+            "Science (Pumpkin)":                pumpkin_farming.rule,
+            "Science (Corn)":                   corn_farming.rule,
+            "Science (Onion)":                  onion_farming.rule,
+            "Science (Potato)":                 ALWAYS_TRUE if EXPERT_PLAYER_BIAS else potato_farming.rule,
+            "Science (Dragon Fruit)":           lambda state: state.has_any([dragonfruit_farming.event, dragonfruit_from_saladmander.event], player),
+            "Science (Pomegranate)":            pomegranate_farming.rule,
+            "Science (Eggplant)":               eggplant_farming.rule,
+            "Science (Toma Root)":              tomaroot_farming.rule,
+            "Science (Watermelon)":             watermelon_farming.rule,
+            "Science (Pepper)":                 pepper_farming.rule,
+            "Science (Durian)":                 durian_farming.rule,
+            "Science (Carrot)":                 ALWAYS_TRUE,
+            "Science (Stone Fruit)":            lambda state: state.has_any([lunar_island.event, cave_exploration.event], player),
+            "Science (Marble)":                 mining.rule,
+            "Science (Gold Nugget)":            mining.rule,
+            "Science (Flint)":                  ALWAYS_TRUE,
+            "Science (Honey)":                  ALWAYS_TRUE,
+            "Science (Twigs)":                  ALWAYS_TRUE,
+            "Science (Log)":                    chopping.rule,            
+            "Magic (Blue Gem)":                 gem_digging.rule,
+            "Magic (Living Log)":               lambda state: state.has_any([chopping.event, "Wormwood"], player),
+            "Magic (Glommer's Goop)":           lambda state: has_survived_num_days(11, state),
+            "Magic (Dark Petals)":              ALWAYS_TRUE,
+            "Magic (Red Gem)":                  gem_digging.rule,
+            "Magic (Slurper Pelt)":             ruins_exploration.rule,
+            "Magic (Blue Spore)":               lambda state: state.has_all([cave_exploration.event, bug_catching.event, winter.event], player),
+            "Magic (Red Spore)":                lambda state: state.has_all([cave_exploration.event, bug_catching.event, summer.event], player),
+            "Magic (Green Spore)":              lambda state: state.has_all([cave_exploration.event, bug_catching.event, spring.event], player),
+            "Magic (Broken Shell)":             cave_exploration.rule,
+            "Magic (Leafy Meat)":               leafy_meat.rule,
+            "Magic (Canary (Volatile))":        lambda state: state.has_all([canary.event, cave_exploration.event, bird_caging.event], player),
+            "Magic (Life Giving Amulet)":       lambda state: state.has_all(["Life Giving Amulet", gem_digging.event, nightmare_fuel.event], player),
+            "Magic (Nightmare Fuel)":           lambda state: state.has_all([basic_combat.event, nightmare_fuel.event], player),
+            "Magic (Cut Reeds)":                swamp_exploration.rule,
+            "Magic (Volt Goat Horn)":           basic_combat.rule,
+            "Magic (Beard Hair)":               ALWAYS_TRUE,
+            "Magic (Glow Berry)":               ruins_exploration.rule,
+            "Magic (Tentacle Spots)":           basic_combat.rule,
+            "Magic (Health)":                   healing.rule,
+            "Magic (Sanity)":                   ALWAYS_TRUE,
+            "Magic (Telltale Heart)":           lambda state: state.has_all([healing.event, "Telltale Heart"], player),
+            "Magic (Forget-Me-Lots)":           basic_farming.rule,
+            "Magic (Cat Tail)":                 pre_basic_combat.rule,
+            "Magic (Bunny Puff)":               lambda state: state.has_all([cave_exploration.event, basic_combat.event], player),
+            "Magic (Mosquito Sack)":            swamp_exploration.rule,
+            "Magic (Spider Gland)":             ALWAYS_TRUE,
+            "Magic (Monster Jerky)":            lambda state: state.has_all(["Drying Rack", "Rope", charcoal.event], player),
+            "Magic (Pig Skin)":                 basic_combat.rule,
+            "Magic (Batilisk Wing)":            mining.rule,
+            "Magic (Stinger)":                  ALWAYS_TRUE,
+            "Magic (Papyrus)":                  lambda state: state.has_all(["Papyrus", swamp_exploration.event], player),
+            "Magic (Green Cap)":                ALWAYS_TRUE,
+            "Magic (Blue Cap)":                 ALWAYS_TRUE,
+            "Magic (Red Cap)":                  ALWAYS_TRUE,
+            "Magic (Iridescent Gem)":           lambda state: state.has(iridescent_gem.event, player),
+            "Magic (Desert Stone)":             lambda state: state.has_all([summer.event, storm_protection.event], player),
+            "Magic (Naked Nostrils)":           cave_exploration.rule,
+            "Magic (Frog Legs)":                ALWAYS_TRUE,
+            "Magic (Spoiled Fish)":             fishing.rule if (ADVANCED_PLAYER_BIAS or not REGION.OCEAN in REGION_WHITELIST) else sea_fishing.rule,
+            "Magic (Spoiled Fish Morsel)":      fishing.rule,
+            "Magic (Rot)":                      lambda state: has_survived_num_days(15, state),
+            "Magic (Rotten Egg)":               lambda state: state.has(bird_caging.event, player) and has_survived_num_days(20, state),
+            "Magic (Carrat)":                   lambda state: state.has_any([lunar_island.event, cave_exploration.event], player) and state.has_any(["Trap", digging.event], player),
+            "Magic (Moleworm)":                 hammering.rule,
+            "Magic (Fireflies)":                bug_catching.rule,
+            "Magic (Bulbous Lightbug)":         lambda state: state.has_all([cave_exploration.event, bug_catching.event], player),
+            "Magic (Rabbit)":                   lambda state: state.has("Trap", player),
+            "Magic (Butterfly)":                bug_catching.rule,
+            "Magic (Mosquito)":                 lambda state: state.has_all([bug_catching.event, swamp_exploration.event], player),
+            "Magic (Bee)":                      bug_catching.rule,
+            "Magic (Killer Bee)":               bug_catching.rule,
+            "Magic (Crustashine)":              moon_quay_exploration.rule,
+            "Magic (Crow)":                     lambda state: state.has("Bird Trap", player),
+            "Magic (Redbird)":                  lambda state: state.has("Bird Trap", player),
+            "Magic (Snowbird)":                 lambda state: state.has_all(["Bird Trap", winter.event], player),
+            "Magic (Canary)":                   lambda state: state.has_all(["Bird Trap", canary.event], player),
+            "Magic (Puffin)":                   lambda state: state.has_all(["Bird Trap", pre_basic_boating.event], player),
+            "Magic (Fossil Fragments)":         lambda state: state.has_all([cave_exploration.event, mining.event], player),
+            "Think Tank (Freshwater Fish)":     freshwater_fishing.rule,
+            "Think Tank (Live Eel)":            lambda state: state.has_all([cave_exploration.event, freshwater_fishing.event], player),
+            "Think Tank (Runty Guppy)":         sea_fishing.rule,
+            "Think Tank (Needlenosed Squirt)":  sea_fishing.rule,
+            "Think Tank (Bitty Baitfish)":      sea_fishing.rule,
+            "Think Tank (Smolt Fry)":           sea_fishing.rule,
+            "Think Tank (Popperfish)":          sea_fishing.rule,
+            "Think Tank (Fallounder)":          lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Bloomfin Tuna)":       lambda state: state.has_all([spring.event, sea_fishing.event], player),
+            "Think Tank (Scorching Sunfish)":   lambda state: state.has_all([advanced_boating.event, summer.event, sea_fishing.event], player),
+            "Think Tank (Spittlefish)":         lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Mudfish)":             sea_fishing.rule,
+            "Think Tank (Deep Bass)":           lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Dandy Lionfish)":      lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Black Catfish)":       lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Corn Cod)":            lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Ice Bream)":           lambda state: state.has_all([advanced_boating.event, winter.event, sea_fishing.event], player),
+            "Think Tank (Sweetish Fish)":       lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Wobster)":             lambda state: state.has_all([advanced_boating.event, sea_fishing.event], player),
+            "Think Tank (Lunar Wobster)":       lambda state: state.has_all([lunar_island.event, sea_fishing.event], player),
+            "Pseudoscience (Purple Gem)":       purple_gem.rule,
+            "Pseudoscience (Yellow Gem)":       ALWAYS_TRUE,
+            "Pseudoscience (Thulecite)":        thulecite.rule,
+            "Pseudoscience (Orange Gem)":       ALWAYS_TRUE,
+            "Pseudoscience (Green Gem)":        ALWAYS_TRUE,
+            "Celestial (Moon Rock)":            ALWAYS_TRUE,
+            "Celestial (Moon Shard)":           lambda state: state.has_any([cave_exploration.event, can_reach_islands.event], player),
+            "Celestial (Moon Shroom)":          cave_exploration.rule,
+            "Celestial (Moon Moth)":            lambda state: state.has_all([bug_catching.event, chopping.event], player),
+            "Celestial (Lune Tree Blossom)":    ALWAYS_TRUE,
+            "Bottle Exchange (1)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 1,
+            "Bottle Exchange (2)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 1,
+            "Bottle Exchange (3)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 3,
+            "Bottle Exchange (4)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 3,
+            "Bottle Exchange (5)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 3,
+            "Bottle Exchange (6)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 6,
+            "Bottle Exchange (7)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 6,
+            "Bottle Exchange (8)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 8,
+            "Bottle Exchange (9)":              lambda state: state.count("Crabby Hermit Friendship", player) >= 8,
+            "Bottle Exchange (10)":             lambda state: state.count("Crabby Hermit Friendship", player) >= 8,
 
             # Experimental; Will probably won't keep at all
-            **{f"Survive {i} Days": (lambda state: has_survived_num_days_2(i, state)) for i in range(1, 100)},
+            **{f"Survive {i} Days":             (lambda state: has_survived_num_days_2(i, state)) for i in range(1, 100)},
         },
     }
 
@@ -1650,7 +1659,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         "Telelocator Staff":        telelocator_staff.is_progression,
         "Deconstruction Staff":     True,
         "Nightmare Fuel":           nightmare_fuel.is_progression,
-        "Boomerang":                True,
+        "Boomerang":                WEAPON_LOGIC,
         "Boards":                   True,
         "Purple Gem":               True,
         "Friendly Scarecrow":       True,
