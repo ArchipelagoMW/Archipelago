@@ -1138,6 +1138,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             for portal_dest in region_info.portals:
                 ls_connect(ladder_region, "Overworld Redux, " + portal_dest)
 
+        # convenient staircase means this one is easy difficulty, even though there's an elevation change
+        ls_connect("LS Elev 0", "Overworld Redux, Furnace_gyro_west")
+
         # connect ls elevation regions to regions where you can get an enemy to knock you down, also well rail
         if options.ladder_storage >= LadderStorage.option_medium:
             for ladder_region, region_info in ow_ladder_groups.items():
