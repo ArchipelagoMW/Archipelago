@@ -6,7 +6,7 @@ import os
 
 from typing import List, TextIO, BinaryIO, Dict, ClassVar, Type, cast
 
-from .Options import GSTLAOptions, RandoOptions
+from .Options import GSTLAOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
@@ -47,14 +47,11 @@ class GSTLAWorld(World):
     def generate_early(self) -> None:
         self.options.non_local_items.value -= self.item_name_groups[ItemType.Djinn.name]
 
-        if self.options.character_shuffle < 2:
+        if self.options.shuffle_characters < 2:
             self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]
 
-        if self.options.starter_ship == 2:
+        if self.options.lemurian_ship == 2:
             self.options.start_inventory.value[ ItemName.Ship ] = 1
-
-        #force unsupported options to off
-        self.options.gs1_items = 0
 
     def create_regions(self) -> None:
         create_regions(self)
@@ -200,118 +197,183 @@ class GSTLAWorld(World):
         debug_file.write('Item Shuffle: ' + self.options.item_shuffle.name_lookup[self.options.item_shuffle] + '\n')
         write_me += self.options.omit_locations << 4 #omit
         debug_file.write('Omit Locations: ' + self.options.omit_locations.name_lookup[self.options.omit_locations] + '\n')
-        write_me += self.options.gs1_items << 3 #gs-1items
-        debug_file.write('GS1 Items: ' + self.options.gs1_items.name_lookup[self.options.gs1_items] + '\n')
-        write_me += self.options.visible_items << 2 #show-items
-        debug_file.write('Visible Items: ' + self.options.visible_items.name_lookup[self.options.visible_items] + '\n')
-        write_me += self.options.no_learning_util << 1 #no-learning
-        debug_file.write('No Learning Util: ' + self.options.no_learning_util.name_lookup[self.options.no_learning_util] + '\n')
-        write_me += self.options.shuffle_class_stats #class-stats
-        debug_file.write('Class Stats Shuffle: ' + self.options.shuffle_class_stats.name_lookup[self.options.shuffle_class_stats] + '\n')
+        write_me += self.options.add_elvenshirt_clericsring << 3 #gs-1items
+        debug_file.write('GS1 Items: ' + self.options.add_elvenshirt_clericsring.name_lookup[self.options.add_elvenshirt_clericsring] + '\n')
+        write_me += self.options.show_items_outside_chest << 2 #show-items
+        debug_file.write('Visible Items: ' + self.options.show_items_outside_chest.name_lookup[self.options.show_items_outside_chest] + '\n')
+        write_me += self.options.no_util_psynergy_from_classes << 1 #no-learning
+        debug_file.write('No Learning Util: ' + self.options.no_util_psynergy_from_classes.name_lookup[self.options.no_util_psynergy_from_classes] + '\n')
+        write_me += self.options.randomize_class_stat_boosts #class-stats
+        debug_file.write('Class Stats Shuffle: ' + self.options.randomize_class_stat_boosts.name_lookup[self.options.randomize_class_stat_boosts] + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
-        write_me += 0 << 7 #equip-shuffle
-        write_me += 0 << 6 #equip-cose
-        write_me += 0 << 5 #equip-stats
-        write_me += 0 << 4 #equip-sort, unsupported
-        write_me += 0 << 3 #equip-unleash
-        write_me += 0 << 2 #equip-effect
-        write_me += 0 << 1 #equip-curse
-        write_me += 0 #psynergy-power
+        write_me += self.options.randomize_equip_compatibility << 7 #equip-shuffle
+        debug_file.write('Equip Shuffle: ' + self.options.randomize_equip_compatibility.name_lookup[self.options.randomize_equip_compatibility] + '\n')
+        write_me += self.options.adjust_equip_prices << 6 #equip-cost
+        debug_file.write('Equip Prices: ' + self.options.adjust_equip_prices.name_lookup[self.options.adjust_equip_prices] + '\n')
+        write_me += self.options.adjust_equip_stats << 5 #equip-stats
+        debug_file.write('Equip Stats: ' + self.options.adjust_equip_stats.name_lookup[self.options.adjust_equip_stats] + '\n')
+        #write_me += 0 << 4 #equip-sort, not supported, make weaker equipment appear earlier
+        write_me += self.options.shuffle_weapon_effect << 3 #equip-unleash
+        debug_file.write('Weapon Effects: ' + self.options.shuffle_weapon_effect.name_lookup[self.options.shuffle_weapon_effect] + '\n')
+        write_me += self.options.shuffle_armour_effect << 2 #equip-effect
+        debug_file.write('Armour Effects: ' + self.options.shuffle_armour_effect.name_lookup[self.options.shuffle_armour_effect] + '\n')
+        write_me += self.options.randomize_curses << 1 #equip-curse
+        debug_file.write('Shuffle Curses: ' + self.options.randomize_curses.name_lookup[self.options.randomize_curses] + '\n')
+        write_me += self.options.adjust_psynergy_power #psynergy-power
+        debug_file.write('Shuffle Psynergy Power: ' + self.options.adjust_psynergy_power.name_lookup[self.options.adjust_psynergy_power] + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
-        if self.options.djinn_shuffle > 0: #djinn-shuffle
-            write_me += self.options.djinn_shuffle << 7
-        write_me += 0 << 6 #djinn-stats
-        write_me += 0 << 5 #djinn-power
-        write_me += 0 << 4 #djinn-aoe
-        write_me += 0 << 3 #djinn-scale
-        write_me += 0 << 2 #summon-cost
-        write_me += 0 << 1 #summon-power
-        write_me += 0 #summon-sort, unsupported
+        if self.options.shuffle_djinn > 0: #djinn-shuffle
+            write_me += 1 << 7
+            debug_file.write('Shuffle Djinn: true\n')
+        write_me += self.options.shuffle_djinn_stat_boosts << 6 #djinn-stats
+        debug_file.write('Shuffle Djinn Stats: ' + self.options.shuffle_djinn_stat_boosts.name_lookup[self.options.shuffle_djinn_stat_boosts] + '\n')
+        write_me += self.options.adjust_djinn_attack_power << 5 #djinn-power
+        debug_file.write('Shuffle Djinn Power: ' + self.options.adjust_djinn_attack_power.name_lookup[self.options.adjust_djinn_attack_power] + '\n')
+        write_me += self.options.randomize_djinn_attack_aoe << 4 #djinn-aoe
+        debug_file.write('Shuffle Djinn Aoe: ' + self.options.randomize_djinn_attack_aoe.name_lookup[self.options.randomize_djinn_attack_aoe] + '\n')
+        write_me += self.options.scale_djinni_battle_difficulty << 3 #djinn-scale
+        debug_file.write('Scale Djinn: ' + self.options.scale_djinni_battle_difficulty.name_lookup[self.options.scale_djinni_battle_difficulty] + '\n')
+        write_me += self.options.randomize_summon_costs << 2 #summon-cost
+        debug_file.write('Shuffle Summon Costs: ' + self.options.randomize_summon_costs.name_lookup[self.options.randomize_summon_costs] + '\n')
+        write_me += self.options.adjust_summon_power << 1 #summon-power
+        debug_file.write('Shuffle Summon Power: ' + self.options.adjust_summon_power.name_lookup[self.options.adjust_summon_power] + '\n')
+        #write_me += 0 #summon-sort, not supported, make cheaper summons appear earlier
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
+
+        write_me = 0
+        write_me += self.options.character_stats << 6 #char-stats
+        debug_file.write('Char Stats: ' + self.options.character_stats.name_lookup[self.options.character_stats] + '\n')
+        write_me += self.options.character_elements << 4 #char-element
+        debug_file.write('Char Element: ' + self.options.character_elements.name_lookup[self.options.character_elements] + '\n')
+        write_me += self.options.adjust_psynergy_cost << 3 #psynergy-cost
+        debug_file.write('Psnergy Cost: ' + self.options.adjust_psynergy_cost.name_lookup[self.options.adjust_psynergy_cost] + '\n')
+        write_me += self.options.randomize_psynergy_aoe << 2 #psynergy-aoe
+        debug_file.write('Psnergy AoE: ' + self.options.randomize_psynergy_aoe.name_lookup[self.options.randomize_psynergy_aoe] + '\n')
+        write_me += self.options.adjust_enemy_psynergy_power << 1 #enemypsy-power
+        debug_file.write('Enemy Psynergy Power: ' + self.options.adjust_enemy_psynergy_power.name_lookup[self.options.adjust_enemy_psynergy_power] + '\n')
+        write_me += self.options.randomize_enemy_psynergy_aoe #enemypsy-aoe
+        debug_file.write('Enemy Psynergy AoE: ' + self.options.randomize_enemy_psynergy_aoe.name_lookup[self.options.randomize_enemy_psynergy_aoe] + '\n')
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
+
+        write_me = 0
+        write_me += self.options.class_psynergy << 5 #class-psynergy
+        debug_file.write('Class Psynergy: ' + self.options.class_psynergy.name_lookup[self.options.class_psynergy] + '\n')
+        write_me += self.options.psynergy_levels << 3 #class-levels
+        debug_file.write('Class Levels: ' + self.options.psynergy_levels.name_lookup[self.options.psynergy_levels] + '\n')
+        write_me += 1 << 2 #qol-cutscenes
+        debug_file.write('QoL Cutscenes: true\n')
+        write_me += 1 << 1 #qol-tickets
+        debug_file.write('QoL Tickets: true\n')
+        write_me += 1 #qol-fastship
+        debug_file.write('QoL Fastship: true\n')
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
+
+        write_me = 0
+        write_me += self.options.lemurian_ship << 6 #ship
+        debug_file.write('Starter Ship: ' + self.options.lemurian_ship.name_lookup[self.options.lemurian_ship] + '\n')
+        #write_me += 0 << 5 #skips-basic, require logic changes
+        debug_file.write('Skips Basic: false\n')
+        #write_me += 0 << 4 #skips-oob-easy, require logic changes
+        debug_file.write('Skips Oob Easy: false\n')
+        #write_me += 0 << 3 #skips-maze, require logic changes
+        debug_file.write('Skips Maze: false\n')
+        write_me += 1 << 2 #boss-logic, base rando can ignore djinn logic for bosses
+        debug_file.write('Disable Boss Logic: true\n')
+        write_me += self.options.free_avoid << 1 #free-avoid
+        debug_file.write('Free Avoid: ' + self.options.free_avoid.name_lookup[self.options.free_avoid] + '\n')
+        write_me += self.options.free_retreat #free-retreat
+        debug_file.write('Free Retreat: ' + self.options.free_retreat.name_lookup[self.options.free_retreat] + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
 
         write_me = 0
-        write_me += 0 << 6 #char-stats
-        write_me += 0 << 4 #char-element
-        write_me += 0 << 3 #psynergy-cost
-        write_me += 0 << 2 #psynergy-aoe
-        write_me += 0 << 1 #enemypsy-power
-        write_me += 0 #enemypsy-aoe
-        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
-
-        write_me = 0
-        write_me += 0 << 5 #class-psynergy
-        write_me += 0 << 3 #class-levels
-        write_me += 0 << 2 #qol-cutscenes
-        write_me += 0 << 1 #qol-tickets
-        write_me += 0 #qol-fastship
-        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
-
-        write_me = 0
-        write_me += self.options.starter_ship << 6 #ship
-        write_me += 0 << 5 #skips-basic
-        write_me += 0 << 4 #skips-oob-easy
-        write_me += 0 << 3 #skips-maze
-        write_me += 0 << 2 #boss-logic
-        write_me += 0 << 1 #free-avoid
-        write_me += 0 #free-retreat
+        #write_me += 0 << 7 #adv-equip, not supported, requires AP to know shop artefact locations and forging locations
+        debug_file.write('Adv Equip: false\n')
+        #write_me += 0 << 6 #dummy-items, not supported, they are not normally obtainable and we use one of them for foreign world items
+        debug_file.write('Dummy Items: false\n')
+        #write_me += 0 << 5 #skips-oob-hard, require logic changes
+        debug_file.write('Skips Oob Hard: false\n')
+        write_me += self.options.shuffle_weapon_attack << 4 #equip-attack
+        debug_file.write('Equip Attack: ' + self.options.scale_djinni_battle_difficulty.name_lookup[self.options.scale_djinni_battle_difficulty] + '\n')
+        #write_me += 0 << 3 #qol-hints, not supported yet
+        debug_file.write('QoL Hints: false\n')
+        write_me += self.options.start_with_healing_psynergy << 2 #start-heal
+        debug_file.write('Start Heal: ' + self.options.start_with_healing_psynergy.name_lookup[self.options.start_with_healing_psynergy] + '\n')
+        write_me += self.options.start_with_revive << 1 #start-revive
+        debug_file.write('Start Revive: ' + self.options.start_with_revive.name_lookup[self.options.start_with_revive] + '\n')
+        write_me += self.options.start_with_reveal #start-reveal
+        debug_file.write('Start Reveal: ' + self.options.start_with_reveal.name_lookup[self.options.start_with_reveal] + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
 
         write_me = 0
-        write_me += 0 << 7 #adv-equip
-        write_me += 0 << 6 #dummy-items
-        write_me += 0 << 5 #skips-oob-hard
-        write_me += 0 << 4 #equip-attack
-        write_me += 0 << 3 #qol-hints
-        write_me += 0 << 2 #start-heal
-        write_me += 0 << 1 #start-revive
-        write_me += 0 #start-reveal
-        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
-
-
-        write_me = 0
-        write_me += 0 << 4 #scale-exp
-        write_me += 0 #scale-coins
+        write_me += self.options.scale_exp << 4 #scale-exp
+        debug_file.write('Scale Exp: ' + str(self.options.scale_exp) + '\n')
+        write_me += self.options.scale_coins #scale-coins
+        debug_file.write('Scale Coins: ' + str(self.options.scale_coins) + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
-        write_me += 0 << 7 #equip-defense
-        write_me += 0 #start-levels
+        write_me += self.options.shuffle_armour_defense << 7 #equip-defense
+        debug_file.write('Equip Defense: ' + self.options.shuffle_armour_defense.name_lookup[self.options.shuffle_armour_defense] + '\n')
+        write_me += self.options.starting_levels #start-levels
+        debug_file.write('Start Levels: ' + str(self.options.starting_levels) + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
-        write_me += 0 << 6 #enemy-eres
-        write_me += 0 << 4 #sanc-revive
-        write_me += 0 << 3 #curse-disable
-        write_me += 0 << 2 #avoid-patch
-        write_me += 0 << 1 #retreat-patch, does nothing in base rando
-        write_me += 0 #teleport-patch
+        write_me += self.options.enemy_elemental_resistance << 6 #enemy-eres
+        debug_file.write('Enemy ERes: ' + self.options.enemy_elemental_resistance.name_lookup[self.options.enemy_elemental_resistance] + '\n')
+        write_me += self.options.sanctum_revive_cost << 4 #sanc-revive
+        debug_file.write('Sanc Revive ' + self.options.sanctum_revive_cost.name_lookup[self.options.sanctum_revive_cost] + '\n')
+        write_me += self.options.remove_all_curses << 3 #curse-disable
+        debug_file.write('Curse Disabled: ' + self.options.remove_all_curses.name_lookup[self.options.remove_all_curses] + '\n')
+        write_me += self.options.avoid_always_works << 2 #avoid-patch
+        debug_file.write('Avoid Patch: ' + self.options.avoid_always_works.name_lookup[self.options.avoid_always_works] + '\n')
+        #write_me += 0 << 1 #retreat-patch, does nothing in base rando
+        debug_file.write('Retreat Patch: false\n')
+        write_me += 0 #teleport-patch, does nothing in base rando
+        debug_file.write('Teleport Patch: false\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
-        write_me += 0 << 7 #hard-mode
-        write_me += 0 << 6 #halve-enc
-        write_me += 0 << 5 #major-shuffle
-        write_me += 0 << 4 #easier-bosses
-        write_me += 0 << 3 #random-puzzles
-        write_me += 0 << 2 #fixed-puzzles
-        write_me += 0 << 1 #manual-rg
-        write_me += 0 #ship-wings
+        write_me += self.options.enable_hard_mode << 7 #hard-mode
+        debug_file.write('Hard Mode: ' + self.options.enable_hard_mode.name_lookup[self.options.enable_hard_mode] + '\n')
+        write_me += self.options.reduced_encounter_rate << 6 #halve-enc
+        debug_file.write('Halve Encounter Rate: ' + self.options.reduced_encounter_rate.name_lookup[self.options.reduced_encounter_rate] + '\n')
+        write_me += self.options.major_minor_split << 5 #major-shuffle
+        debug_file.write('Major Minor Split: ' + self.options.major_minor_split.name_lookup[self.options.major_minor_split] + '\n')
+        write_me += self.options.easier_bosses << 4 #easier-bosses
+        debug_file.write('Easier Bosses: ' + self.options.easier_bosses.name_lookup[self.options.easier_bosses] + '\n')
+        if self.options.name_puzzles == 2:
+            write_me += 1 << 3 #random-puzzles
+            debug_file.write('Name puzzles: ' + self.options.name_puzzles.name_lookup[self.options.name_puzzles] + '\n')
+        elif self.options.name_puzzles == 1:
+            write_me += 1 << 2 #fixed-puzzles
+            debug_file.write('Name puzzles: ' + self.options.name_puzzles.name_lookup[self.options.name_puzzles] + '\n')
+        write_me += self.options.manual_retreat_glitch << 1 #manual-rg
+        debug_file.write('Manual Retreat glitch: ' + self.options.manual_retreat_glitch.name_lookup[self.options.manual_retreat_glitch] + '\n')
+        write_me += self.options.start_with_wings_of_anemos #ship-wings
+        debug_file.write('Ship wings: ' + self.options.start_with_wings_of_anemos.name_lookup[self.options.start_with_wings_of_anemos] + '\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
-        write_me += 0 << 7 #music-shuffle
-        write_me += 0 << 6 #teleport-everywhere
-        write_me += 0 << 5 #force-boss-drops
-        write_me += 0 << 4 #force-superboss-minors
-        write_me += 0 << 2 #anemos-access
-        if self.options.character_shuffle > 0: #shuffle-characters
+        write_me += self.options.shuffle_music << 7 #music-shuffle
+        debug_file.write('Music Shuffle: ' + self.options.shuffle_music.name_lookup[self.options.shuffle_music] + '\n')
+        write_me += self.options.teleport_to_dungeons_and_towns << 6 #teleport-everywhere
+        debug_file.write('Teleport Everywhere: ' + self.options.teleport_to_dungeons_and_towns.name_lookup[self.options.teleport_to_dungeons_and_towns] + '\n')
+        write_me += self.options.force_boss_required_checks_to_nonjunk << 5 #force-boss-drops
+        debug_file.write('Force boss drops: ' + self.options.force_boss_required_checks_to_nonjunk.name_lookup[self.options.force_boss_required_checks_to_nonjunk] + '\n')
+        write_me += self.options.prevent_superboss_locked_check_to_progression << 4 #force-superboss-minors
+        debug_file.write('Force superboss minor: ' + self.options.prevent_superboss_locked_check_to_progression.name_lookup[self.options.prevent_superboss_locked_check_to_progression] + '\n')
+        write_me += self.options.anemos_inner_sanctum_access << 2 #anemos-access, require logic changes
+        debug_file.write('Anemos Inner Sanctum Access: ' + self.options.anemos_inner_sanctum_access.name_lookup[self.options.anemos_inner_sanctum_access] + '\n')
+        if self.options.shuffle_characters > 0: #shuffle-characters
             write_me += 1 << 1
+            debug_file.write('Character Shuffle: true\n')
         write_me += 0 #unused
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 

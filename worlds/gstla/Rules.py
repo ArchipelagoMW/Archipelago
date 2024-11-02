@@ -132,7 +132,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Isaac, player))
     
     #Character djinn
-    if world.options.character_shuffle == 0:
+    if world.options.shuffle_characters == 0:
         add_rule(world.get_location(LocationName.Spring),
                 lambda state: state.has(ItemName.Piers, player))
         add_rule(world.get_location(LocationName.Shade),
@@ -428,7 +428,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Reveal, player) and state.has(ItemName.Frost_Jewel, player))
 
     #Lemurian Ship
-    if world.options.starter_ship < 2:
+    if world.options.lemurian_ship < 2:
         add_rule(world.get_location(LocationName.Lemurian_Ship_Engine_Room),
                         lambda state: state.has(ItemName.Aqua_Hydra_defeated, player))
         add_rule(world.get_location(LocationName.Lemurian_Ship_Aqua_Hydra_fight), lambda state: state.has(ItemName.Black_Crystal, player))

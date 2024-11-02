@@ -2,458 +2,6 @@ from dataclasses import dataclass
 from enum import IntEnum, auto
 from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions
 
-
-class RandoOptions(IntEnum):
-    #1st Byte--
-    ItemShufAll   =  0b11000000
-    """
-    All item locations in the game are in the pool
-    """
-
-    ItemShufTreas =  0b10000000
-    """
-    Most locations are in the game are in the pool
-    """
-
-    ItemShufKey   =  0b01000000
-    """
-    Only key items are in the pool
-    """
-
-    OmitSuper  =     0b00100000
-    """
-    Omit Super + Anemos
-    """
-
-    OmitAnemos =     0b00010000
-    """
-    Omit just Anemos
-    """
-
-    GS1Items =       0b00001000
-    """
-    Include Elven Shirt and Cleric ring
-    """
-
-    ShowItems =      0b00000100
-    """
-    Are items on the floor or in chests?
-    """
-
-    NoLearning =     0b00000010
-    """
-    Can classes learn growth, whirlwind etc
-    """
-
-    ClassStats =     0b00000001
-    """
-    Are classes shuffled in stats
-    """
-
-    #2nd Byte---
-    EquipShuffle =   0b10000000
-    """
-    Shuffle equip compatibilty
-    """
-
-    EquipCost =      0b01000000
-    """
-    Adjust equipment prices
-    """
-
-    EquipStats =     0b00100000
-    """
-    #Adjust equipment stats
-    """
-
-    EquipSort =      0b00010000
-    """
-    Make weaker equipment more likely early
-    """
-
-    EquipUnleash =   0b00001000
-    """
-    Shuffle unleashes from weapons
-    """
-
-    EquipEffect =    0b00000100
-    """
-    Shuffle armor effects
-    """
-
-    EquipCurse =     0b00000010
-    """
-    Randomize Curses
-    """
-
-    PsyEnergyPower = 0b00000001
-    """
-    Adjust Psy Power
-    """
-
-    #3rd Byte--
-    DjinnShuffle =   0b10000000
-    """
-    Shuffle Djinn
-    """
-
-    DjinnStats   =   0b01000000
-    """
-    Shuffle Djinn stats
-    """
-
-    DjinnPower   =   0b00100000 
-    """
-    Adjust Djinn attack power
-    """
-
-    DjinnAoe     =   0b00010000 
-    """
-    Randomize Djinn Aoe size
-    """
-
-    DjinnScale   =   0b00001000 
-    """
-    Scale wild Djinn based on how many are owned
-    """
-
-    SummonCost   =   0b00000100
-    """
-    Ranodmize Summon Costs
-    """
-
-    SummonPower  =   0b00000010
-    """
-    Adjust Summon Power
-    """
-
-    SummonSort   =   0b00000001
-    """
-    More likely to find cheaper summons early
-    """
-
-    #4th Byte--
-    CharStatsAdj =   0b10000000
-    """
-    Adjust Character Stats
-    """
-
-    CharStatsShuf=   0b01000000
-    """
-    Shuffle Character Stats
-    """
-
-    CharEleAdj   =   0b00100000
-    """
-    Randomize Character Elements
-    """
-
-    CharEletShuf =   0b00010000
-    """
-    Shuffle Character Elements
-    """
-
-    PsyEnergyCost=   0b00001000
-    """
-    Adjust Psy Cost
-    """
-
-    PsyEnergyAoe =   0b00000100
-    """
-    Adjust Psy Aoe size
-    """
-
-    EnemyPsyPow  =   0b00000010
-    """
-    Adjust Enemy Psy power
-    """
-
-    EnemyPsyAoe  =   0b00000001
-    """
-    Adjust Enemy Psy Aoe size
-    """
-
-    #5th Byte--
-    ShuffPsyGrp  =   0b10100000
-    """
-    Randomize by Psy group (prefer same ele)
-    """
-
-    ShuffPsy     =   0b10000000
-    """
-    Fully Randomize Psy
-    """
-
-    ClassPsyEle  =   0b01100000
-    """
-    Randomize by Psy element
-    """
-
-    ClassPsyGrp  =   0b01000000
-    """
-    Randomize by Psy group
-    """
-
-    ClassPsyShuf =   0b00100000
-    """
-    Randomize by Class
-    """
-
-    ClassLevelsRand  =   0b00010000
-    """
-    Fully randomize Psy levels
-    """
-
-    ClassLevelsShuf  =   0b00001000
-    """
-    Shuffle Psy levels
-    """
-
-    QolCutscenes =   0b00000100
-    """
-    Skip cutscenes
-    """
-
-    QolTickets   =   0b00000010
-    """
-    Disable game tickets from shops
-    """
-
-    QolFastShip  =   0b00000001
-    """
-    Faster ship movement on overworld
-    """
-
-    #6th Byte--
-    ShipFromStart=   0b10000000
-    """
-    Start with the ship
-    """
-
-    ShipUnlock   =   0b01000000
-    """
-    Ship door is unlocked but still need defeat the boss to use it
-    """
-
-    SkipsBasic   =   0b00100000
-    """
-    Basic skips such as retreat glithc might be required, Retreat 0 PP will be disabled
-    """
-
-    SkipsOOBEasy =   0b00010000
-    """
-    Simple OOB skips may be required, Retreat 0 PP will be disabled
-    """
-
-    SkipsMaze    =   0b00001000
-    """
-    Perform Gaia Rock Maze without Growth
-    """
-
-    BossLogic    =   0b00000100
-    """
-    Remove logical djinn requirement from bosses
-    """
-
-    FreeAvoid    =   0b00000010
-    """
-    Avoid costs 0 PP
-    """
-
-    FreeRetreat  =   0b00000001
-    """
-    Retreat costs 0 PP
-    """
-
-
-    #7th Byte--
-    AdvEquip     =   0b10000000
-    """
-    Shuffle shop artefacts and forgeable equipemnt
-    """
-
-    DummyItems   =   0b01000000
-    """
-    Shuffle dummy items that are not normally obtainable
-    """
-
-    SkipsOOBHard =   0b00100000
-    """
-    Hard OOB skips with complex movement may be required, Retreat 0 PP will be disabled
-    """
-
-    EquipAttack  =   0b00010000
-    """
-    Shuffle weapon attack
-    """
-
-    QoLHints     =   0b00001000
-    """
-    Add ingame item hints
-    """
-
-    StartHeal    =   0b00000100
-    """
-    Start with a Healing Psy
-    """
-
-    StartRevive  =   0b00000010
-    """
-    Start with Revive Psy
-    """
-
-    StartReveal  =   0b00000001
-    """
-    Start with Reveal
-    """
-
-    #8th Byte--
-    ScaleExp     =   0b11110000
-    """
-    Scale Exp from 1 (vanilla) to max 15
-    """
-
-    ScaleCoins   =   0b00001111
-    """
-    Scale Coins from 1 (vanilla) to max 15
-    """
-
-    #9th Byte--
-    EquipDefense =   0b10000000
-    """
-    Shuffle equipment defense
-    """
-
-    StartLevels  =   0b01111111
-    """
-    Starting levels from 5 to 99
-    """
-
-    #10th Byte--
-    EnemyeResRand=   0b10000000
-    """
-    Randomize Enemy eleRes
-    """
-
-    EnemyeResShuf=   0b01000000
-    """
-    Shuffle Enemy eleRes
-    """
-
-    SancRevFixed =   0b00100000
-    """
-    Sanc Revive fixed at 100 coins
-    """
-
-    SancRevCheap =   0b00010000
-    """
-    Sanc Revive scales by 2x levels (vanilla is 20x level)
-    """
-
-    CurseDisable =   0b00001000
-    """
-    Remove all curses
-    """
-
-    AvoidPatch   =   0b00000100
-    """
-    Make avoid a toggleable, it always works and it toggles encounters
-    """
-
-    RetreatPatch =   0b00000010
-    """
-    Does nothing
-    """
-
-    TeleportPatch=   0b00000001
-    """
-    Makes retreat act as Teleport on Overworld
-    """
-
-    #11th Byte--
-    HardMode     =   0b10000000
-    """
-    Enemies have 50% more hp and 25% more power&defense
-    """
-
-    HalveEnc     =   0b01000000
-    """
-    Half the encounter rate
-    """
-
-    MajorShuffle =   0b00100000
-    """
-    Enable Major / Minor split for item shuffle, only for Most and All
-    """
-
-    EasierBosses =   0b00010000
-    """
-    Bosses are easier
-    """
-
-    RandomPuzzles=   0b00001000
-    """
-    Make name based puzzle random
-    """
-
-    FixedPuzzles =   0b00000100
-    """
-    Make name based puzzles fixed to name Felix
-    """
-
-    ManualRG     =   0b00000010
-    """
-    Hold select to trigger the Retreat glitch
-    """
-
-    ShipWings    =   0b00000001
-    """
-    Start with the wings of Anemos
-    """
-
-    #12th Byte--
-    MusicShuffle =   0b10000000
-    """
-    Shuffle ingame music
-    """
-
-    TeleportAny  =   0b01000000
-    """
-    Allow teleport to teleport to dungeons / small towns
-    """
-
-    ForceBossDrop=   0b00100000
-    """
-    Force bosses to have progression items
-    """
-
-    ForceSuperMin=   0b00010000
-    """
-    Prevent super bosses from having progression items
-    """
-
-    AnemosOpen   =   0b00001000
-    """
-    Anemos sanctum is always open
-    """
-
-    AnemosRand   =   0b00000100
-    """
-    Anoemos sacntum needs between 16 to 28 djinn to enter
-    """
-
-    ShufflePCs   =   0b00000010
-    """
-    Randomize the playable characters
-    """
-
-    def __new__(cls, bit_flag: int):
-        value = len(cls.__members__)
-        obj = int.__new__(cls, value)
-        obj._value_ = value
-        obj.bit_flag = bit_flag
-        return obj
-
 class StartWithShip(Choice):
     display_name = "Start with ship"
     option_vanilla = 0
@@ -664,18 +212,6 @@ class ClassPsyLevels(Choice):
     option_randomized = 2
     default = 0
 
-class QoLDisableCutscenes(Toggle):
-    """When enabled, cutscenes will be shortened or removed"""
-    display_name = "Skip Cutscenes"
-
-class QoLRemoveGameTickets(Toggle):
-    """When enabled, game tickets from and for shops are removed"""
-    display_name = "Disable Game Tickets"
-
-class QoLFastShip(Toggle):
-    """When enabled, increase the overworld travel speed of the ship"""
-    display_name = "Fast Ship"
-
 class FreeAvoid(Toggle):
     """When enabled, the Avoid Psynergy is Free"""
     display_name = "Free Avoid"
@@ -748,7 +284,7 @@ class SanctuaryResCost(Choice):
     display_name = "Enemy Elemental Resistance Shuffle"
     option_vanilla = 0
     option_reduced = 1
-    option_fixed = 2,
+    option_fixed = 2
     default = 1
 
 class DisableCurses(Toggle):
@@ -758,11 +294,6 @@ class DisableCurses(Toggle):
 class AvoidPatch(Toggle):
     """When enabled, Avoid always succeeds and will disable encounters. Using it again will enable encounters"""
     display_name = "Avoid Patch"
-
-class TeleportPatch(Toggle):
-    """When enabled, allows the use of Retreat on overworld which makes it act like Teleport. 
-    Teleport allows you to move to previously visited areas"""
-    display_name = "Teleport Patch"
 
 class EnableHardMode(Toggle):
     """When enabled, all enemies will have 50% more health, 25% more attack and defense"""
@@ -780,13 +311,15 @@ class EasierBosses(Toggle):
     """When enabled, boss fights will be easier by altering their scripts / stats"""
     display_name = "Easier Bosses"
 
-class RandomPuzzles(Toggle):
-    """When enabled, the name based puzzles are randomized"""
-    display_name = "Random Puzzles"
-
-class FixedPuzzles(Toggle):
-    """When enabled, the name based puzzles are fixed to use name Felix"""
-    display_name = "Fixed Puzzles"
+class NamedPuzzles(Choice):
+    """Determines how the named puzzles will generate. These include the puzzles for Gambomba Statue, Gaia Rock and Trial Road
+    Vanilla uses the name that is given to Felix
+    Fixed will force the puzzles to use the name 'Felix'
+    Randomized will force the puzzles to be a random name"""
+    display_name = "Named Puzzles"
+    option_vanilla = 0
+    option_fixed = 1
+    option_randomized = 2
 
 class ManualRetreatGlitch(Toggle):
     """When enabled, Hold select to trigger the Retreat glitch.
@@ -813,11 +346,20 @@ class ForceSuperBossJunk(Toggle):
     """When enabled, forces super bosses to have a junk item."""
     display_name = "Force SuperBosses to junk items"
 
-
+class AnemosAccess(Choice):
+    """Determine accesss to Anemos Inner Sanctun
+    Vanilla requires all Djinn to be able to enter Anemos Inner Sanctum
+    Random will select a value between 16 to 24 Djinn to be able to access Anemos Inner Sanctum
+    Open allows you to enter Anemos Inner Sanctum without any Djinn
+    """
+    display_name = "Anemos Inner Sanctum Access"
+    option_vanilla = 0
+    option_randomized = 1
+    option_open = 2
+    default = 0
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
-    
     reveal_hidden_item: RevealHiddenItem
     djinn_logic: DjinnLogic
 
@@ -825,94 +367,80 @@ class GSTLAOptions(PerGameCommonOptions):
     #Set 1
     item_shuffle: ItemShuffle
     omit_locations: OmitLocations
-    gs1_items: AddGs1Items
-    visible_items: VisibleItems
-    no_learning_util: NoLearningUtilPsy
-    shuffle_class_stats: ShuffleClassStats
+    add_elvenshirt_clericsring: AddGs1Items
+    show_items_outside_chest: VisibleItems
+    no_util_psynergy_from_classes: NoLearningUtilPsy
+    randomize_class_stat_boosts: ShuffleClassStats
 
     #Set 2
-    shuffle_eq_prices: ShuffleEqPrices
-    shuffle_eq_stats: ShuffleEqStats
-    #equip-sort not supported, make weaker equipment appear earlier
-    shuffle_weapon_unleah: ShuffleWpnUnleash
-    shuffle_armor_effect: ShuffleArmEffect
-    shuffle_eq_curses: ShuffleEqCurses
-    shuffle_psy_power: ShufflePsyPower
+    randomize_equip_compatibility: ShuffleEqCompatibility
+    adjust_equip_prices: ShuffleEqPrices
+    adjust_equip_stats: ShuffleEqStats
+    shuffle_weapon_effect: ShuffleWpnUnleash
+    shuffle_armour_effect: ShuffleArmEffect
+    randomize_curses: ShuffleEqCurses
+    adjust_psynergy_power: ShufflePsyPower
 
     #Set 3
-    djinn_shuffle: DjinnShuffle
-    shuffle_djinn_stats: ShuffleDjinnStats
-    shuffle_djinn_power: ShuffleDjinnPower
-    shuffle_djinn_aoe: ShuffleDjinnAoe
-    scale_djinn_enc: ScaleWildDjinn
-    shuffle_summon_costs: ShuffleSummonCosts
-    shuffle_summon_power: ShuffleSummonPower
-    #summon sort not supported, make cheaper summons appear earlier
+    shuffle_djinn: DjinnShuffle
+    shuffle_djinn_stat_boosts: ShuffleDjinnStats
+    adjust_djinn_attack_power: ShuffleDjinnPower
+    randomize_djinn_attack_aoe: ShuffleDjinnAoe
+    scale_djinni_battle_difficulty: ScaleWildDjinn
+    randomize_summon_costs: ShuffleSummonCosts
+    adjust_summon_power: ShuffleSummonPower
 
     #Set 4
-    shuffle_char_stats: CharStatShuffle
-    shuffle_char_elem: CharEleShuffle
-    shuffle_psy_cost: ShufflePsyCost
-    shuffle_psy_aoe: ShufflePsyAoe
-    shuffle_enmy_psy_power: ShuffleEnemyPsyPower
-    shuffle_enmy_psy_aoe: ShuffleEnemyPsyAoe
+    character_stats: CharStatShuffle
+    character_elements: CharEleShuffle
+    adjust_psynergy_cost: ShufflePsyCost
+    randomize_psynergy_aoe: ShufflePsyAoe
+    adjust_enemy_psynergy_power: ShuffleEnemyPsyPower
+    randomize_enemy_psynergy_aoe: ShuffleEnemyPsyAoe
 
     #Set 5
     class_psynergy: ClassPsyShuffle
-    class_levels: ClassPsyLevels
-    qol_cutscenes: QoLDisableCutscenes
-    qol_gameticket: QoLRemoveGameTickets
-    qol_fastship: QoLFastShip
+    psynergy_levels: ClassPsyLevels
 
     #Set 6
-    starter_ship: StartWithShip
-    #skips-basic not supported, logic changes required
-    #skips-oob-easy not supported, logic changes required
-    #skips-maze not supported, logic changes required
-    #boss-logic, our version is djinnlogic where base rando is binary on/off on djinn requirement we have a scale setting
+    lemurian_ship: StartWithShip
     free_avoid: FreeAvoid
     free_retreat: FreeRetreat
 
     #Set 7
-    #adv-equip not supported, requires AP to know shop artefact locations and forging locations
-    #dummy-items not supported, they are not normally obtainable and we use one of them for foreign world items
-    #skips-oob-hard not supported, logic changes required
-    shuffle_eq_attack: ShuffleAttack
+    shuffle_weapon_attack: ShuffleAttack
     #qol-hints not supported yet
-    start_heal: StartWithHealPsy
-    start_revive: StartWithRevivePsy
-    start_reveal: StartWithRevealPsy
+    start_with_healing_psynergy: StartWithHealPsy
+    start_with_revive: StartWithRevivePsy
+    start_with_reveal: StartWithRevealPsy
 
     #Set 8
     scale_exp: ScaleExpGained
     scale_coins: ScaleGoldGained
 
     #Set 9
-    shuffle_eq_defense: ShuffleDefense
-    start_levels: StartLevels
+    shuffle_armour_defense: ShuffleDefense
+    starting_levels: StartLevels
 
     #Set 10
-    enemy_eres: EnemyEResShuffle
-    sanc_revive: SanctuaryResCost
-    curse_disabled: DisableCurses
-    avoid_patch: AvoidPatch
-    #retreat_patch, does nothing in upstream
-    teleport_patch: TeleportPatch
+    enemy_elemental_resistance: EnemyEResShuffle
+    sanctum_revive_cost: SanctuaryResCost
+    remove_all_curses: DisableCurses
+    avoid_always_works: AvoidPatch
 
     #Set 11
-    hard_mode: EnableHardMode
-    halve_enc: HalveEncounterRate
-    major_min_shuffle: MajorMinorSplit
+    enable_hard_mode: EnableHardMode
+    reduced_encounter_rate: HalveEncounterRate
+    major_minor_split: MajorMinorSplit
     easier_bosses: EasierBosses
-    random_puzzles: RandomPuzzles
-    fixed_puzzles: FixedPuzzles
-    manual_rg: ManualRetreatGlitch
-    ship_wings: ShipWings
+    name_puzzles: NamedPuzzles
+    manual_retreat_glitch: ManualRetreatGlitch
+    start_with_wings_of_anemos: ShipWings
 
     #Set 12
-    music_shuffle: MusicShuffle
-    teleport_everywhere: TelportEverywhere
-    force_boss_drops: ForceBossDrops
-    force_superboss_minors: ForceSuperBossJunk
-    #Anemos-access, not supported as it requires logical changes and has few options that seem uninteresting
-    character_shuffle: CharacterShuffle
+    shuffle_music: MusicShuffle
+    teleport_to_dungeons_and_towns: TelportEverywhere
+    force_boss_required_checks_to_nonjunk: ForceBossDrops
+    prevent_superboss_locked_check_to_progression: ForceSuperBossJunk
+    anemos_inner_sanctum_access: AnemosAccess
+    shuffle_characters: CharacterShuffle

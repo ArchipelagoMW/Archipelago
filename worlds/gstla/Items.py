@@ -72,7 +72,7 @@ def create_events(world: 'GSTLAWorld'):
     for event in events:
         event_item = create_item(event.name, world.player)
 
-        if event.location == LocationName.Lemurian_Ship_Engine_Room and world.options.starter_ship == 2:
+        if event.location == LocationName.Lemurian_Ship_Engine_Room and world.options.lemurian_ship == 2:
             #world.multiworld.push_precollected(event_item)
             continue
 
@@ -103,7 +103,7 @@ def create_items(world: 'GSTLAWorld', player: int):
             vanilla_item = items_by_id[loc.vanilla_contents]
 
         #if vanilla ship logic than this should be Gabomba Statue Black Crystal location
-        if world.options.starter_ship == 0 and vanilla_item.name == ItemName.Black_Crystal:
+        if world.options.lemurian_ship == 0 and vanilla_item.name == ItemName.Black_Crystal:
             ap_item = create_item_direct(vanilla_item, player)
             ap_location = world.get_location(loc_names_by_id[loc.ap_id])
             ap_location.place_locked_item(ap_item)
@@ -119,7 +119,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
 
     # for item in unique_items + psyenergy_as_item_list + psyenergy_list:
-    #     if multiworld.starter_ship[player] != 2 and item.itemName == ItemName.Black_Crystal:
+    #     if multiworld.lemurian_ship[player] != 2 and item.itemName == ItemName.Black_Crystal:
     #         continue
     #
     #     ap_item = create_item(item.itemName, player)
@@ -130,7 +130,7 @@ def create_items(world: 'GSTLAWorld', player: int):
     sorted_item_list = sorted(djinn_items, key = lambda item: item.id)
     sorted_loc_list = sorted(location_type_to_data[LocationType.Djinn], key = lambda location: location.id)
     
-    if world.options.djinn_shuffle > 0:
+    if world.options.shuffle_djinn > 0:
         world.random.shuffle(sorted_item_list)
         world.random.shuffle(sorted_loc_list)
 
@@ -146,7 +146,7 @@ def create_items(world: 'GSTLAWorld', player: int):
     sorted_loc_list = sorted(location_type_to_data[LocationType.Character], key = lambda location: location.id)
     first_char_locked = False
 
-    if world.options.character_shuffle > 0:
+    if world.options.shuffle_characters > 0:
         world.random.shuffle(sorted_item_list)
         world.random.shuffle(sorted_loc_list)
 
@@ -155,7 +155,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
     
         # Vanilla
-        if world.options.character_shuffle < 2:
+        if world.options.shuffle_characters < 2:
             location = sorted_loc_list.pop(0)
             ap_loc = world.get_location(loc_names_by_id[location.ap_id])
 
