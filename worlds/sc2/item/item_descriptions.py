@@ -817,6 +817,7 @@ item_descriptions = {
     item_names.DEVOURING_ONES: "Mercenary Zerglings.",
     item_names.TORRASQUE_MERC: "Torrasque Mercenary.",
     item_names.HUNTERLING: "Hunterling Mercenary.",
+    item_names.YGGDRASIL: "Mercenary Overlord that has the ability to transport buildings.",
     item_names.OVERLORD_VENTRAL_SACS: "Overlords gain the ability to transport ground units.",
     item_names.OVERLORD_GENERATE_CREEP: "Overlords gain the ability to generate creep while standing still.",
     item_names.OVERLORD_ANTENNAE: "Increases Overlord sight range.",
