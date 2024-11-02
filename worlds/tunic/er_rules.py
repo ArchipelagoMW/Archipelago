@@ -1156,6 +1156,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         if options.ladder_storage >= LadderStorage.option_hard:
             ls_connect("LS Elev 1", "Overworld Redux, EastFiligreeCache_")
             ls_connect("LS Elev 2", "Overworld Redux, Town_FiligreeRoom_")
+            ls_connect("LS Elev 2", "Overworld Redux, Ruins Passage_west")
             ls_connect("LS Elev 3", "Overworld Redux, Overworld Interiors_house")
             ls_connect("LS Elev 5", "Overworld Redux, Temple_main")
 
