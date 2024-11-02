@@ -149,6 +149,7 @@ class DSTWorld(World):
             "goal": self.options.goal.current_key,
             # "craft_with_locked_items": self.options.craft_with_locked_items.value,
             "locked_items_local_id": list(self.dst_itempool.locked_items_local_id),
+            "is_caves_enabled": bool(self.options.cave_regions.value != self.options.cave_regions.option_none),
         }
         if slot_data["goal"] == "survival":
             slot_data["days_to_survive"] = self.options.days_to_survive.value

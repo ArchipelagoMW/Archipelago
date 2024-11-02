@@ -154,6 +154,9 @@ class DSTContext(CommonContext):
                     elif _goal == "bosses_all" or _goal == "bosses_any":
                         _bosses = [self.location_names.lookup_in_game(loc_id) for loc_id in self.slotdata.get("goal_locations", [])]
                         self.logger.info(f"Bosses: {_bosses}")
+                    _is_caves_enabled = self.slotdata.get("is_caves_enabled", None)
+                    if _is_caves_enabled != None:
+                        self.logger.info(f"Has Caves: {'Yes' if _is_caves_enabled else 'No'}")
                 async_start(goal_hint())
 
             elif cmd == "ReceivedItems":
