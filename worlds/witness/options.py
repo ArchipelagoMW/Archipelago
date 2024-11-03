@@ -297,7 +297,9 @@ class ElevatorsComeToYou(OptionSet):
 
     This option allows you to change specific elevators/bridges to "come to you" as well.
 
-    In the case of Bunker Elevator and Swamp Long Bridge, this will potentially give you early backwards access into Bunker and Swamp respectively.
+    - Quarry Elevator: Makes the Quarry Elevator come down when you approach it from lower Quarry and back up when you approach it from above
+    - Swamp Long Bridge: Rotates the side you approach it from towards you, but also rotates the other side away
+    - Bunker Elevator: Makes the Bunker Elevator come to any floor that you approach it from, meaning it can be accessed from the roof immediately
     """
 
     # Used to be a toggle
