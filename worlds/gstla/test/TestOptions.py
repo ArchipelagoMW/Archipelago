@@ -65,10 +65,14 @@ class TestRandoFormat(TestFormatBase):
     def test_file_structure(self):
         world = self.get_world()
         loc_count = 0
+        djinn_count = 0
         for loc in world.multiworld.get_locations(world.player):
             if loc.item is not None and loc.location_data.loc_type != LocationType.Event:
-                loc_count += 1
-        expected_length = 1 + 16 + 16 + len(self.world.player_name) + 1 + loc_count * 4 + 4
+                if loc.location_data.loc_type == LocationType.Djinn:
+                    djinn_count += 1
+                else:
+                    loc_count += 1
+        expected_length = 1 + 16 + 16 + len(self.world.player_name) + 1 + loc_count * 4 + 4 + djinn_count * 2
         self.assertEqual(expected_length, len(self.rando_content.getvalue()))
 
         self.rando_content.seek(0)

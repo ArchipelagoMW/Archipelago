@@ -25,7 +25,7 @@ class _DataLocations(IntEnum):
     DJINN_FLAGS = (FLAG_START + (0x30 >> 3), 0x0A, 0x30, _MemDomain.EWRAM)
     # TODO: we haven't agreed on an address, but this location should have
     # is two bytes enough?
-    AP_ITEM_SLOT = (0x96, 0x2, 0x0, _MemDomain.EWRAM)
+    AP_ITEM_SLOT = (0xA96, 0x2, 0x0, _MemDomain.EWRAM)
     # two unused bytes in save data
     AP_ITEMS_RECEIVED = (0xA72, 0x2, 0x0, _MemDomain.EWRAM)
     INITIAL_INVENTORY = (FLAG_START + 0x0, 0x1, 0x0, _MemDomain.EWRAM)

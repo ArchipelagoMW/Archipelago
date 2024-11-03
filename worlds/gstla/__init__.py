@@ -190,8 +190,8 @@ class GSTLAWorld(World):
         for loc in djinn_locs:
             item_data = item_table[loc.item.name]
             location_data = location_name_to_id[loc.name]
-            rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
-            rando_file.write(item_data.get_rando_flag().to_bytes(length=2, byteorder='little'))
+            rando_file.write(location_data.rando_flag.to_bytes(length=1, byteorder='little'))
+            rando_file.write(item_data.get_rando_flag().to_bytes(length=1, byteorder='little'))
             loc_name = loc_names_by_id[location_data.ap_id]
             debug_file.write(
                 f"Djinn(Location): {loc_name}\nDjinn(Location) Flag: {hex(location_data.rando_flag)}\nDjinn(Item): {item_data.name}\nDjinn(Item) Flag: {hex(item_data.get_rando_flag())}\n\n")
