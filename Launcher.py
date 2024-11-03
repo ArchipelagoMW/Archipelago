@@ -104,6 +104,7 @@ components.extend([
     Component("Open host.yaml", func=open_host_yaml),
     Component("Open Patch", func=open_patch),
     Component("Generate Template Options", func=generate_yamls),
+    Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/")),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
     Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),
