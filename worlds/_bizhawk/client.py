@@ -37,7 +37,7 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
             if "game" in namespace:
                 AutoBizHawkClientRegister.game_handlers[systems][namespace["game"]] = new_class()
-                component.game_names.append(namespace["game"])
+                component.game_name.append(namespace["game"])
 
         # Update launcher component's suffixes
         if "patch_suffix" in namespace:
