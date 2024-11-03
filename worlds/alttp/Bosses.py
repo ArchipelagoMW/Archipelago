@@ -135,7 +135,7 @@ def AgahnimDefeatRule(state, player: int) -> bool:
 
 
 def GanonDefeatRule(state, player: int) -> bool:
-    if state.multiworld.swordless[player]:
+    if state.multiworld.worlds[player].options.swordless:
         return state.has('Hammer', player) and \
                has_fire_source(state, player) and \
                state.has('Silver Bow', player) and \
@@ -144,7 +144,7 @@ def GanonDefeatRule(state, player: int) -> bool:
     can_hurt = has_beam_sword(state, player)
     common = can_hurt and has_fire_source(state, player)
     # silverless ganon may be needed in anything higher than no glitches
-    if state.multiworld.glitches_required[player] != 'no_glitches':
+    if state.multiworld.worlds[player].options.glitches_required != 'no_glitches':
         # need to light torch a sufficient amount of times
         return common and (state.has('Tempered Sword', player) or state.has('Golden Sword', player) or (
                 state.has('Silver Bow', player) and can_shoot_arrows(state, player)) or
