@@ -91,7 +91,14 @@ def set_entrance_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Growth, player) and state.has(ItemName.Lash_Pebble, player))
 
     add_rule(world.get_entrance(EntranceName.ContigoToAnemosInnerSanctum),
-             lambda state: state.has(ItemName.Teleport_Lapis, player) and state.count_group(ItemType.Djinn.name, player) >= 72)
+                lambda state: state.has(ItemName.Teleport_Lapis, player))
+    if world.options.anemos_inner_sanctum_access == 0:
+        add_rule(world.get_entrance(EntranceName.ContigoToAnemosInnerSanctum),
+                lambda state: state.count_group(ItemType.Djinn.name, player) >= 72)
+    elif world.options.anemos_inner_sanctum_access == 1:
+        add_rule(world.get_entrance(EntranceName.ContigoToAnemosInnerSanctum),
+                lambda state: state.count_group(ItemType.Djinn.name, player) >= 28)
+        
 
     add_rule(world.get_entrance(EntranceName.ContigoToJupiterLighthouse),
              lambda state: state.has(ItemName.Cyclone_Chip, player))
@@ -889,7 +896,7 @@ def set_access_rules(world: 'GSTLAWorld'):
     if world.options.omit_locations < 1:
         #Anemos Inner Sanctum
         add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Iris),
-             lambda state: state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
+             lambda state: state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player) and state.count_group(ItemType.Djinn.name, player) >= 72)
 
         add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Orihalcon),
              lambda state: state.has(ItemName.Lifting_Gem, player))

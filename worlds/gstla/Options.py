@@ -349,7 +349,7 @@ class ForceSuperBossJunk(Toggle):
 class AnemosAccess(Choice):
     """Determine accesss to Anemos Inner Sanctun
     Vanilla requires all Djinn to be able to enter Anemos Inner Sanctum
-    Random will select a value between 16 to 24 Djinn to be able to access Anemos Inner Sanctum
+    Random will select a value between 16 to 28 Djinn to be able to access Anemos Inner Sanctum
     Open allows you to enter Anemos Inner Sanctum without any Djinn
     """
     display_name = "Anemos Inner Sanctum Access"
