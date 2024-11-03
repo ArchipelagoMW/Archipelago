@@ -360,87 +360,78 @@ class AnemosAccess(Choice):
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
-    reveal_hidden_item: RevealHiddenItem
-    djinn_logic: DjinnLogic
-
-    #Base rando settings
-    #Set 1
+    #Pool and Logic settings
     item_shuffle: ItemShuffle
+    major_minor_split: MajorMinorSplit
+    reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations
     add_elvenshirt_clericsring: AddGs1Items
-    show_items_outside_chest: VisibleItems
-    no_util_psynergy_from_classes: NoLearningUtilPsy
-    randomize_class_stat_boosts: ShuffleClassStats
 
-    #Set 2
-    randomize_equip_compatibility: ShuffleEqCompatibility
-    adjust_equip_prices: ShuffleEqPrices
-    adjust_equip_stats: ShuffleEqStats
-    shuffle_weapon_effect: ShuffleWpnUnleash
-    shuffle_armour_effect: ShuffleArmEffect
-    randomize_curses: ShuffleEqCurses
-    adjust_psynergy_power: ShufflePsyPower
+    lemurian_ship: StartWithShip
+    start_with_wings_of_anemos: ShipWings
+    anemos_inner_sanctum_access: AnemosAccess
+    shuffle_characters: CharacterShuffle
 
-    #Set 3
-    shuffle_djinn: DjinnShuffle
-    shuffle_djinn_stat_boosts: ShuffleDjinnStats
-    adjust_djinn_attack_power: ShuffleDjinnPower
-    randomize_djinn_attack_aoe: ShuffleDjinnAoe
-    scale_djinni_battle_difficulty: ScaleWildDjinn
-    randomize_summon_costs: ShuffleSummonCosts
-    adjust_summon_power: ShuffleSummonPower
-
-    #Set 4
+    #Char And Class Settings
     character_stats: CharStatShuffle
     character_elements: CharEleShuffle
-    adjust_psynergy_cost: ShufflePsyCost
-    randomize_psynergy_aoe: ShufflePsyAoe
-    adjust_enemy_psynergy_power: ShuffleEnemyPsyPower
-    randomize_enemy_psynergy_aoe: ShuffleEnemyPsyAoe
 
-    #Set 5
+    no_util_psynergy_from_classes: NoLearningUtilPsy
+    randomize_class_stat_boosts: ShuffleClassStats
     class_psynergy: ClassPsyShuffle
     psynergy_levels: ClassPsyLevels
 
-    #Set 6
-    lemurian_ship: StartWithShip
-    free_avoid: FreeAvoid
-    free_retreat: FreeRetreat
+    #Psynerg Settings
+    adjust_psynergy_power: ShufflePsyPower
+    adjust_psynergy_cost: ShufflePsyCost
+    randomize_psynergy_aoe: ShufflePsyAoe
 
-    #Set 7
-    shuffle_weapon_attack: ShuffleAttack
-    #qol-hints not supported yet
+    adjust_enemy_psynergy_power: ShuffleEnemyPsyPower
+    randomize_enemy_psynergy_aoe: ShuffleEnemyPsyAoe
+    enemy_elemental_resistance: EnemyEResShuffle
+
     start_with_healing_psynergy: StartWithHealPsy
     start_with_revive: StartWithRevivePsy
     start_with_reveal: StartWithRevealPsy
 
-    #Set 8
+    #Djinn and Summon Settings
+    shuffle_djinn: DjinnShuffle
+    djinn_logic: DjinnLogic
+    shuffle_djinn_stat_boosts: ShuffleDjinnStats
+    adjust_djinn_attack_power: ShuffleDjinnPower
+    randomize_djinn_attack_aoe: ShuffleDjinnAoe
+    scale_djinni_battle_difficulty: ScaleWildDjinn
+
+    randomize_summon_costs: ShuffleSummonCosts
+    adjust_summon_power: ShuffleSummonPower
+
+    #Equipment Settings
+    randomize_equip_compatibility: ShuffleEqCompatibility
+    adjust_equip_prices: ShuffleEqPrices
+    adjust_equip_stats: ShuffleEqStats
+    shuffle_weapon_attack: ShuffleAttack
+    shuffle_weapon_effect: ShuffleWpnUnleash
+    shuffle_armour_defense: ShuffleDefense
+    shuffle_armour_effect: ShuffleArmEffect
+    randomize_curses: ShuffleEqCurses
+    remove_all_curses: DisableCurses
+
+    #Misc
+    show_items_outside_chest: VisibleItems
+    free_avoid: FreeAvoid
+    free_retreat: FreeRetreat
+    #qol-hints not supported yet
     scale_exp: ScaleExpGained
     scale_coins: ScaleGoldGained
-
-    #Set 9
-    shuffle_armour_defense: ShuffleDefense
     starting_levels: StartLevels
-
-    #Set 10
-    enemy_elemental_resistance: EnemyEResShuffle
     sanctum_revive_cost: SanctuaryResCost
-    remove_all_curses: DisableCurses
     avoid_always_works: AvoidPatch
-
-    #Set 11
     enable_hard_mode: EnableHardMode
     reduced_encounter_rate: HalveEncounterRate
-    major_minor_split: MajorMinorSplit
     easier_bosses: EasierBosses
     name_puzzles: NamedPuzzles
     manual_retreat_glitch: ManualRetreatGlitch
-    start_with_wings_of_anemos: ShipWings
-
-    #Set 12
     shuffle_music: MusicShuffle
     teleport_to_dungeons_and_towns: TelportEverywhere
     force_boss_required_checks_to_nonjunk: ForceBossDrops
     prevent_superboss_locked_check_to_progression: ForceSuperBossJunk
-    anemos_inner_sanctum_access: AnemosAccess
-    shuffle_characters: CharacterShuffle
