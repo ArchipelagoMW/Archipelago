@@ -20,6 +20,8 @@ the player randomized NPC gifts.
 with another NPC was moved to an unoccupied space.
 - Fixed a problem where the client would crash on certain operating systems while using certain python versions if the
 player tried to wonder trade.
+- Prevent the poke flute sound from replacing the evolution fanfare, which would cause the game to wait in silence for
+a long time during the evolution scene.
 
 # 2.2.0
 
