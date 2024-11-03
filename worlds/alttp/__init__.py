@@ -729,7 +729,7 @@ class ALTTPWorld(World):
                              f" {self.pyramid_fairy_bottle_fill}")
         spoiler_handle.write(f"\nWaterfall Fairy ({player_name}):"
                              f" {self.waterfall_fairy_bottle_fill}")
-        if self.multiworld.boss_shuffle[self.player] != "none":
+        if self.options.boss_shuffle != "none":
             def create_boss_map() -> typing.Dict:
                 boss_map = {
                     "Eastern Palace": self.dungeons["Eastern Palace"].boss.name,
