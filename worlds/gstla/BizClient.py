@@ -57,7 +57,7 @@ class _DataLocations(IntEnum):
 class GSTLAClient(BizHawkClient):
     game = 'Golden Sun The Lost Age'
     system = 'GBA'
-    patch_suffix = '.apgstla'
+    # patch_suffix = '.apgstla'
 
     flag_map: defaultdict[int, Set[int]] = defaultdict(lambda: set())
     djinn_ram_to_rom: Dict[int, int] = dict()
@@ -139,14 +139,18 @@ class GSTLAClient(BizHawkClient):
 
 
     async def _receive_items(self, ctx: 'BizHawkClientContext', data: List[bytes]):
-        if data[_DataLocations.AP_ITEM_SLOT] != 0:
+        item_in_slot = int.from_bytes(data[_DataLocations.AP_ITEM_SLOT], byteorder="little")
+        if item_in_slot != 0:
+            logger.debug("AP Item slot has data in it: %d", item_in_slot)
             return
         item_index = int.from_bytes(data[_DataLocations.AP_ITEMS_RECEIVED], 'little')
-        logger.debug("Items to give: %d, Current Item Index: %d", ctx.items_received, item_index)
+        logger.debug("Items to give: %d, Current Item Index: %d", len(ctx.items_received), item_index)
         if len(ctx.items_received) > item_index:
             item_code = ctx.items_received[item_index].item
             logger.debug("Writing Item %d to Slot", item_code)
-            await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT, [item_code], _DataLocations.AP_ITEM_SLOT.domain)])
+            await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
+                                           item_code.to_bytes(length=2, byteorder="little"),
+                                           _DataLocations.AP_ITEM_SLOT.domain)])
 
     async def game_watcher(self, ctx: 'BizHawkClientContext'):
         # TODO: implement
