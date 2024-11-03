@@ -547,12 +547,10 @@ class ALTTPWorld(World):
 
     @property
     def use_enemizer(self) -> bool:
-        world = self.multiworld
-        player = self.player
-        return bool(world.worlds[player].options.boss_shuffle or world.worlds[player].options.enemy_shuffle
-                    or world.worlds[player].options.enemy_health != 'default' or world.enemy_damage[player] != 'default'
-                    or world.worlds[player].options.pot_shuffle or world.bush_shuffle[player]
-                    or world.killable_thieves[player])
+        return bool(self.options.boss_shuffle or self.options.enemy_shuffle
+                    or self.options.enemy_health != 'default' or self.options.enemy_damage != 'default'
+                    or self.options.pot_shuffle or self.options.bush_shuffle
+                    or self.options.killable_thieves)
 
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld
@@ -613,7 +611,7 @@ class ALTTPWorld(World):
     @classmethod
     def stage_extend_hint_information(cls, world, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         er_hint_data = {player: {} for player in world.get_game_players("A Link to the Past") if
-                        world.worlds[player].options.entrance_shuffle != "vanilla" or world.retro_caves[player]}
+                        world.worlds[player].options.entrance_shuffle != "vanilla" or world.worlds[player].options.retro_caves}
 
         for region in world.regions:
             if region.player in er_hint_data and region.locations:
