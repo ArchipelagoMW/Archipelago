@@ -48,8 +48,6 @@ class SM64World(World):
 
     def generate_early(self):
         max_stars = 120
-        if (not self.options.enable_coin_stars):
-            max_stars -= 15
         self.move_rando_bitvec = 0
         if self.options.enable_move_rando:
             for action in self.options.move_rando_actions.value:
@@ -163,6 +161,23 @@ class SM64World(World):
             self.multiworld.get_location("Bowser in the Fire Sea 1Up Block Near Poles", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("Wing Mario Over the Rainbow 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("Bowser in the Sky 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
+
+        if (not self.options.enable_coin_stars):
+            self.multiworld.get_location("BoB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("WF: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("JRB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("CCM: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("BBH: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("HMC: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("LLL: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("SSL: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("DDD: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("SL: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("WDW: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("TTM: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("THI: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("TTC: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("RR: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
 
     def get_filler_item_name(self) -> str:
         return "1Up Mushroom"
