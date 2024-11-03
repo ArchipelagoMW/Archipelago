@@ -146,24 +146,24 @@ class CharStatShuffle(Choice):
     """Determine how character stats are shuffled
     Vanilla leaves the stats as per the vanilla game
     Shuffled will shuffle stats between characters
-    Randomized will roll each stat seperately
+    Randomized will roll each stat separately
     """
     display_name = "Character Stats Shuffle"
     option_vanilla = 0
     option_shuffled = 1
-    option_randomized = 2,
+    option_randomized = 2
     default = 0
 
 class CharEleShuffle(Choice):
     """Determine how character elements are shuffled
     Vanilla leaves character elements as per the vanilla game
     Shuffled will shuffle them between characters
-    Randomized will roll each element seperately
+    Randomized will roll each element separately
     """
     display_name = "Character Element Shuffle"
     option_vanilla = 0
     option_shuffled = 1
-    option_randomized = 2,
+    option_randomized = 2
     default = 0
 
 class ShufflePsyCost(Toggle):
@@ -272,7 +272,7 @@ class EnemyEResShuffle(Choice):
     display_name = "Enemy Elemental Resistance Shuffle"
     option_vanilla = 0
     option_shuffled = 1
-    option_randomized = 2,
+    option_randomized = 2
     default = 0
 
 class SanctuaryResCost(Choice):
