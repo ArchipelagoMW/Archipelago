@@ -661,20 +661,21 @@ class GauntletLegendsContext(CommonContext):
                     raw_locations += [location]
             elif "Mirror" not in location.name:
                 raw_locations += [location]
-        await ctx.send_msgs(
-            [
-                {
-                    "cmd": "LocationScouts",
-                    "locations": [
-                        location.id
-                        for location in [location for location in raw_locations if min(self.difficulty, self.glslotdata["max"]) >= location.difficulty]
-                    ],
-                    "create_as_hint": 0,
-                },
-            ],
-        )
-        while len(self.location_scouts) == 0:
-            await asyncio.sleep(0.1)
+        if len(raw_locations) > 0:
+            await ctx.send_msgs(
+                [
+                    {
+                        "cmd": "LocationScouts",
+                        "locations": [
+                            location.id
+                            for location in [location for location in raw_locations if min(self.difficulty, self.glslotdata["max"]) >= location.difficulty]
+                        ],
+                        "create_as_hint": 0,
+                    },
+                ],
+            )
+            while len(self.location_scouts) == 0:
+                await asyncio.sleep(0.1)
         self.obelisks = [
             item
             for item in self.location_scouts
@@ -898,6 +899,10 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         },
                     ],
                 )
+                bitwise = await ctx.inv_bitwise("Hell", 0x100, 0)
+                if not ctx.finished_game and bitwise:
+                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    ctx.finished_game = True
                 if ctx.limbo:
                     limbo = await ctx.limbo_check(0x78)
                     if limbo:
@@ -959,10 +964,6 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     if len(checking) > 0:
                         ctx.locations_checked += checking
                         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
-                    bitwise = await ctx.inv_bitwise("Hell", 0x100, 0)
-                    if not ctx.finished_game and bitwise:
-                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                        ctx.finished_game = True
                 await asyncio.sleep(0.1)
             except TimeoutError:
                 logger.info("Connection Timed Out, Reconnecting")
