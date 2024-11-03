@@ -29,6 +29,8 @@ class LocationData(NamedTuple):
     addresses: List[int]
     event_type: int
     vanilla_contents: int
+    is_key: bool
+    is_major: bool
     loc_type: LocationType = LocationType.Item
     restrictions: LocationRestriction = 0
     event: bool = False
@@ -40,22 +42,22 @@ class GSTLALocation(Location):
 djinn_locations = [
 {% for djinn in djinn_locations -%}
     LocationData({{djinn.vanilla_flag}}, {{djinn.vanilla_flag}}, {{djinn.addr}}, {{djinn.addr}},
-        [{{djinn.addr}}], 128, {{djinn.id}}, LocationType.Djinn), # {{djinn.name}}
+        [{{djinn.addr}}], 128, {{djinn.id}}, True, True, LocationType.Djinn), # {{djinn.name}}
 {% endfor %}
 ]
 
 summon_tablets = [
     {% for summon in summon_locations -%}
     LocationData({{summon.flag}}, {{summon.flag}}, {{summon.id}}, {{summon.addr[0]}}, {{summon.addr}},
-            {{summon.event_type}}, {{summon.vanilla_contents}},  LocationType.Item,
-            LocationRestriction({{summon.restrictions}})), #{{summon.vanilla_name}}
+            {{summon.event_type}}, {{summon.vanilla_contents}}, {{summon.is_key_item}}, {{summon.is_major_item}},
+            LocationType.Item, LocationRestriction({{summon.restrictions}})), #{{summon.vanilla_name}}
     {% endfor %}
 ]
 
 psyenergy_locations = [
     {% for psy in psyenergy_locations -%}
     LocationData({{psy.rando_flag}}, {{psy.flag}}, {{psy.id}}, {{psy.addr[0]}}, {{psy.addr}},
-        {{psy.event_type}}, {{psy.vanilla_contents}}, LocationType.Psyenergy,
+        {{psy.event_type}}, {{psy.vanilla_contents}}, {{psy.is_key_item}}, {{psy.is_major_item}}, LocationType.Psyenergy,
         LocationRestriction({{psy.restrictions}})), # {{psy.vanilla_name}}
     {% endfor %}
 ]
@@ -63,14 +65,14 @@ psyenergy_locations = [
 events = [
     {% for event in events -%}
     LocationData({{event.flag}}, {{event.flag}}, {{event.event_id}}, {{event.event_id}}, [0], 0,
-        {{event.event_id}}, LocationType.Event, LocationRestriction(7), True), # {{event.location_name}} {{event.item_name}}
+        {{event.event_id}}, True, True, LocationType.Event, LocationRestriction(7), True), # {{event.location_name}} {{event.item_name}}
     {% endfor %}
 ]
 
 the_rest = [
     {% for loc in other_locations -%}
     LocationData({{loc.rando_flag}}, {{loc.flag}}, {{loc.id}}, {{loc.addr[0]}},
-        {{loc.addr}}, {{loc.event_type}}, {{loc.vanilla_contents}},
+        {{loc.addr}}, {{loc.event_type}}, {{loc.vanilla_contents}}, {{loc.is_key_item}}, {{loc.is_major_item}},
         LocationType.{{ loc_type_lookup[loc.id] }}, LocationRestriction({{loc.restrictions}})), # {{loc.map_name}} {{loc.vanilla_name}}
     {% endfor %}
 ]
