@@ -294,29 +294,24 @@ class ALTTPWorld(World):
 
     def generate_early(self):
 
-        player = self.player
         multiworld = self.multiworld
 
-        self.fix_trock_doors = (multiworld.worlds[player].options.entrance_shuffle != 'vanilla'
-                                or multiworld.worlds[player].options.mode == 'inverted')
-        self.fix_skullwoods_exit = multiworld.worlds[player].options.entrance_shuffle.value not in ['vanilla', 'simple', 'restricted',
-                                                                               'dungeons_simple']
-        self.fix_palaceofdarkness_exit = multiworld.worlds[player].options.entrance_shuffle.value not in ['dungeons_simple', 'vanilla',
-                                                                                     'simple', 'restricted']
-        self.fix_trock_exit = multiworld.worlds[player].options.entrance_shuffle.value not in ['vanilla', 'simple', 'restricted',
-                                                                          'dungeons_simple']
+        self.fix_trock_doors = (self.options.entrance_shuffle != 'vanilla' or self.options.mode == 'inverted')
+        self.fix_skullwoods_exit = self.options.entrance_shuffle.value not in ['vanilla', 'simple', 'restricted', 'dungeons_simple']
+        self.fix_palaceofdarkness_exit = self.options.entrance_shuffle.value not in ['dungeons_simple', 'vanilla', 'simple', 'restricted']
+        self.fix_trock_exit = self.options.entrance_shuffle.value not in ['vanilla', 'simple', 'restricted', 'dungeons_simple']
 
         # fairy bottle fills
         bottle_options = [
             "Bottle (Red Potion)", "Bottle (Green Potion)", "Bottle (Blue Potion)",
             "Bottle (Bee)", "Bottle (Good Bee)"
         ]
-        if multiworld.worlds[player].options.item_pool.value not in ["hard", "expert"]:
+        if self.options.item_pool.value not in ["hard", "expert"]:
             bottle_options.append("Bottle (Fairy)")
         self.waterfall_fairy_bottle_fill = self.random.choice(bottle_options)
         self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
 
-        if multiworld.worlds[player].options.mode == 'standard':
+        if self.options.mode == 'standard':
             if self.options.small_key_shuffle:
                 if (self.options.small_key_shuffle not in
                         (small_key_shuffle.option_universal, small_key_shuffle.option_own_dungeons,
@@ -362,7 +357,7 @@ class ALTTPWorld(World):
                 else:
                     self.options.local_items.value |= self.dungeon_local_item_names
 
-        self.difficulty_requirements = difficulties[multiworld.worlds[player].options.item_pool.current_key]
+        self.difficulty_requirements = difficulties[self.options.item_pool.current_key]
 
         # enforce pre-defined local items.
         if self.options.goal.value in ["local_triforce_hunt", "local_ganon_triforce_hunt"]:
