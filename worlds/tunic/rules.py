@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 
 laurels = "Hero's Laurels"
 grapple = "Magic Orb"
+shield = "Shield"
 ice_dagger = "Magic Dagger"
 fire_wand = "Magic Wand"
 gun = "Gun"
@@ -82,7 +83,7 @@ def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
         return False
     if world.options.ladder_storage_without_items:
         return True
-    return has_stick(state, world.player) or state.has(grapple, world.player)
+    return has_stick(state, world.player) or state.has_any((grapple, shield), world.player)
 
 
 def has_mask(state: CollectionState, world: "TunicWorld") -> bool:

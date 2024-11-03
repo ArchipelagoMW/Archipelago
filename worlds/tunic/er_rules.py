@@ -778,12 +778,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
-    # nmg: can ice grapple upwards
     regions["Fortress East Shortcut Lower"].connect(
         connecting_region=regions["Fortress East Shortcut Upper"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
-    # nmg: ice grapple through the big gold door, can do it both ways
     regions["Eastern Vault Fortress"].connect(
         connecting_region=regions["Eastern Vault Fortress Gold Door"],
         rule=lambda state: state.has_all({"Activate Eastern Vault West Fuses",
@@ -806,7 +804,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Hero's Grave Region"].connect(
         connecting_region=regions["Fortress Grave Path"])
 
-    # nmg: ice grapple from upper grave path to lower
     regions["Fortress Grave Path Upper"].connect(
         connecting_region=regions["Fortress Grave Path"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
