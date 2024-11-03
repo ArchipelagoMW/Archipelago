@@ -4,9 +4,20 @@ from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCo
 from .Items import action_item_table
 
 class EnableCoinStars(DefaultOnToggle):
-    """Disable to Ignore 100 Coin Stars. You can still collect them, but they don't do anything.
-    Removes 15 locations from the pool."""
+    """
+    Determine logic for 100 Coin Stars.
+
+    Off - Removed from pool. You can still collect them, but they don't do anything.
+    Optimal for ignoring 100 Coin Stars entirely. Removes 15 locations from the pool.
+
+    On - Kept in pool, potentially randomized.
+
+    Vanilla - Kept in pool, but NOT randomized.
+    """
     display_name = "Enable 100 Coin Stars"
+    option_Off = 0
+    option_On = 1
+    option_Vanilla = 2
 
 
 class StrictCapRequirements(DefaultOnToggle):

@@ -48,6 +48,8 @@ class SM64World(World):
 
     def generate_early(self):
         max_stars = 120
+        if (self.options.enable_coin_stars == 0):
+            max_stars -= 15
         self.move_rando_bitvec = 0
         if self.options.enable_move_rando:
             for action in self.options.move_rando_actions.value:
@@ -162,7 +164,7 @@ class SM64World(World):
             self.multiworld.get_location("Wing Mario Over the Rainbow 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("Bowser in the Sky 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
 
-        if (not self.options.enable_coin_stars):
+        if (self.options.enable_coin_stars == 2):
             self.multiworld.get_location("BoB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
             self.multiworld.get_location("WF: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
             self.multiworld.get_location("JRB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
