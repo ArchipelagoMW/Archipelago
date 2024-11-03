@@ -121,7 +121,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
         game = "Archipelago"
     for component in components:
-        if component.supports_uri and component.game_name == game:
+        if component.supports_uri and game in component.game_names:
             client_component = component
         elif component.display_name == "Text Client":
             text_client_component = component

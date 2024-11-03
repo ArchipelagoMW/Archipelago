@@ -26,13 +26,13 @@ class Component:
     cli: bool
     func: Optional[Callable]
     file_identifier: Optional[Callable[[str], bool]]
-    game_name: Optional[str]
+    game_names: List[str]
     supports_uri: Optional[bool]
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False):
+                 game_name: Optional[str] = None, game_names: Optional[list[str]] = None, supports_uri: Optional[bool] = False):
         self.display_name = display_name
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
@@ -48,7 +48,10 @@ class Component:
             Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
-        self.game_name = game_name
+        if game_names is None:
+            self.game_names = [game_name] if game_name else []
+        else:
+            self.game_names = game_names
         self.supports_uri = supports_uri
 
     def handles_file(self, path: str):
