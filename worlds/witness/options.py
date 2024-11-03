@@ -479,6 +479,9 @@ class PriorityHintItems(ItemSet):
     Items that will have increased priority to be hinted if they exist in the itempool.
     """
     display_name = "Priority Hint Items"
+    default = {
+        "Black/White Squares",
+    }
 
     valid_keys = static_witness_items.POSSIBLE_ITEMS
 
