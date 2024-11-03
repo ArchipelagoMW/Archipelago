@@ -8,7 +8,7 @@ from .gen.ItemData import (ItemData, events, all_items as all_gen_items,
                            djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
-
+import logging
 from Fill import fast_fill
 
 if TYPE_CHECKING:
@@ -142,10 +142,27 @@ def create_items(world: 'GSTLAWorld', player: int):
         ap_loc.place_locked_item(ap_item)
         sum_locations -= 1
 
-
-    sorted_item_list = sorted(character_items, key = lambda item: item.id)
-    sorted_loc_list = sorted(location_type_to_data[LocationType.Character], key = lambda location: location.id)
     first_char_locked = False
+
+    char_locs = { loc_names_by_id[char_lock.ap_id]: char_lock for char_lock in location_type_to_data[LocationType.Character]}
+    char_items = { char.name : char for char in character_items}
+
+    #if we are not starting with the ship and it is a vanilla shuffled character shuffle we have to enforce piers in initial 3 chars to avoid soft lock.
+    #when vanilla piers is locked in kibombo on his vanilla location and when in the item pool the shuffler will take care of things for us
+    if world.options.lemurian_ship < 2 and world.options.shuffle_characters == 1:
+        character = char_items.pop(ItemName.Piers)
+        starting_char_locs = [LocationName.Idejima_Jenna, LocationName.Idejima_Sheba, LocationName.Kibombo_Piers]
+        starting_char_loc = world.random.choice(starting_char_locs)
+        location = char_locs.pop(starting_char_loc)
+        ap_item = create_item_direct(character, player)
+        ap_location = world.get_location(starting_char_loc)
+        ap_location.place_locked_item(ap_item)
+        if starting_char_loc == LocationName.Idejima_Jenna: 
+            first_char_locked = False
+        sum_locations -= 1
+
+    sorted_item_list = sorted(char_items.values(), key = lambda item: item.id)
+    sorted_loc_list = sorted(char_locs.values(), key = lambda location: location.id)
 
     if world.options.shuffle_characters > 0:
         world.random.shuffle(sorted_item_list)
@@ -155,11 +172,10 @@ def create_items(world: 'GSTLAWorld', player: int):
         ap_item = create_item_direct(character, player)
         sum_locations -= 1
     
-        # Vanilla
+        # Vanilla (Shuffled)
         if world.options.shuffle_characters < 2:
             location = sorted_loc_list.pop(0)
             ap_loc = world.get_location(loc_names_by_id[location.ap_id])
-
             ap_loc.place_locked_item(ap_item)
 
         else: 
@@ -173,8 +189,8 @@ def create_items(world: 'GSTLAWorld', player: int):
                     first_char_locked = True
                     continue
 
-            else: #Anywhere
-                world.multiworld.itempool.append(ap_item)
+            # else: #Anywhere
+            world.multiworld.itempool.append(ap_item)
 
     remaining_locs = [ x for x in world.multiworld.get_unfilled_locations(world.player)
                        if x.location_data.restrictions & LocationRestriction.NoMimic > 0]

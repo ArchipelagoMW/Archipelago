@@ -69,4 +69,5 @@ class RegionName():
     YampiDesertCave = "Yampi Desert Cave"
     AlhafraCave = "Alhafra Cave"
     Lemurian_Ship = "Lemurian Ship"
+    Lemurian_Ship_Revisit = "Lemurian Ship - Revisit"
     Reunion = "Reunion"

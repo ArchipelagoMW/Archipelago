@@ -106,6 +106,13 @@ def set_entrance_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Magma_Ball, player))
     add_rule(world.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated),
             lambda state: state.has(ItemName.Flame_Dragons_defeated, player) and state.has(ItemName.Mythril_Bag_Mars, player))
+    
+    if world.options.lemurian_ship == 0:
+        add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
+             lambda state: state.has(ItemName.Black_Crystal, player))
+    if world.options.lemurian_ship < 2:
+        add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
+             lambda state: state.has(ItemName.Gabomba_Statue_Completed, player) and state.has(ItemName.Piers, player))
 
 def set_access_rules(world: 'GSTLAWorld'):
     multiworld = world.multiworld
@@ -430,13 +437,12 @@ def set_access_rules(world: 'GSTLAWorld'):
     #Lemurian Ship
     if world.options.lemurian_ship < 2:
         add_rule(world.get_location(LocationName.Lemurian_Ship_Engine_Room),
-                        lambda state: state.has(ItemName.Aqua_Hydra_defeated, player))
-        add_rule(world.get_location(LocationName.Lemurian_Ship_Aqua_Hydra_fight), lambda state: state.has(ItemName.Black_Crystal, player))
+                        lambda state: state.has(ItemName.Aqua_Hydra_defeated, player) and state.has(ItemName.Douse_Drop, player) and state.has(ItemName.Black_Crystal, player))
 
     add_rule(world.get_location(LocationName.Lemurian_Ship_Potion),
-             lambda state: state.has(ItemName.Frost_Jewel, player) and (state.has(ItemName.Grindstone, player) or state.has(ItemName.Poseidon_defeated, player)))
+             lambda state: state.has(ItemName.Frost_Jewel, player))
     add_rule(world.get_location(LocationName.Lemurian_Ship_Mist_Potion),
-             lambda state: state.has(ItemName.Aqua_Hydra_defeated, player) and state.has(ItemName.Parch, player) and (state.has(ItemName.Grindstone, player) or state.has(ItemName.Poseidon_defeated, player)))
+             lambda state: state.has(ItemName.Aqua_Hydra_defeated, player) and state.has(ItemName.Parch, player))
     add_rule(world.get_location(LocationName.Lemurian_Ship_Aqua_Hydra_fight),
              lambda state: state.has(ItemName.Frost_Jewel, player))
 
@@ -908,12 +914,10 @@ def set_access_rules(world: 'GSTLAWorld'):
                  lambda state: state.has(ItemName.Gabomba_Statue_Completed, player))
 
         add_rule(world.get_location(LocationName.Lemurian_Ship_Antidote),
-                 lambda state: state.has(ItemName.Frost_Jewel, player) and (
-                             state.has(ItemName.Grindstone, player) or state.has(ItemName.Poseidon_defeated, player)))
+                 lambda state: state.has(ItemName.Frost_Jewel, player))
 
         add_rule(world.get_location(LocationName.Lemurian_Ship_Oil_Drop),
-                 lambda state: state.has(ItemName.Frost_Jewel, player) and (
-                             state.has(ItemName.Grindstone, player) or state.has(ItemName.Poseidon_defeated, player)))
+                 lambda state: state.has(ItemName.Frost_Jewel, player))
 
         add_rule(world.get_location(LocationName.Shaman_Village_Elixir_Two),
                  lambda state: state.has(ItemName.Shamans_Rod, player) and state.has(ItemName.Hover_Jade,
@@ -952,10 +956,19 @@ class _RestrictionRule:
 def set_item_rules(world: 'GSTLAWorld'):
     player = world.player
     djinn: Set[str] = {item.name for item in all_items if item.type == ItemType.Djinn}
+    characters: Set[str] = {item.name for item in all_items if item.type == ItemType.Character}
 
     for loc in location_type_to_data[LocationType.Djinn]:
         add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]),
                       lambda item: item.player == player and item.name in djinn)
+
+    if world.options.shuffle_characters < 2:    
+        for loc in location_type_to_data[LocationType.Character]:
+                add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]),
+                        lambda item: item.player == player and item.name in characters)
+    else:
+        add_item_rule(world.get_location(LocationName.Idejima_Jenna),
+                lambda item: item.player == player and item.name in characters)
 
     for loc in [x for x in all_locations if x.loc_type != LocationType.Event]:
         if loc.restrictions > 0:
