@@ -366,12 +366,15 @@ regions: Dict[str, EntranceData] = {
     ]),
     RegionName.Lemurian_Ship: EntranceData(RegionName.Lemurian_Ship,
     [
+        LocationName.Lemurian_Ship_Aqua_Hydra_fight
+    ]),
+    RegionName.Lemurian_Ship_Revisit: EntranceData(RegionName.Lemurian_Ship_Revisit,
+    [
         LocationName.Lemurian_Ship_Elixir,
         LocationName.Lemurian_Ship_Potion,
         LocationName.Lemurian_Ship_Oil_Drop,
         LocationName.Lemurian_Ship_Antidote,
         LocationName.Lemurian_Ship_Mist_Potion,
-        LocationName.Lemurian_Ship_Aqua_Hydra_fight,
     ]),
     RegionName.EasternSea: EntranceData(RegionName.EasternSea,
     [
@@ -619,6 +622,9 @@ regions: Dict[str, EntranceData] = {
         LocationName.Lemuria_Eclipse,
         LocationName.Lemuria_Grindstone,
         LocationName.Rime
+    ],
+    [
+        EntranceName.LemuriaToShipRevisit
     ]),
     RegionName.WesternSea: EntranceData(RegionName.WesternSea,
     [
@@ -677,7 +683,8 @@ regions: Dict[str, EntranceData] = {
         LocationName.Geode
     ],
     [
-        EntranceName.AttekaInletToContigo
+        EntranceName.AttekaInletToContigo,
+        EntranceName.AttekaInletToShipRevisit
     ]),
     RegionName.Contigo: EntranceData(RegionName.Contigo,
     [
