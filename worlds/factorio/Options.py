@@ -121,6 +121,18 @@ class FreeSamples(Choice):
     default = 3
 
 
+class FreeSamplesQuality(Choice):
+    """If free samples are on, determine the quality of the granted items.
+    Requires the quality mod, which is part of the Space Age DLC. Without it, normal quality is given."""
+    display_name = "Free Samples Quality"
+    option_normal = 0
+    option_uncommon = 1
+    option_rare = 2
+    option_epic = 3
+    option_legendary = 4
+    default = 0
+
+
 class TechTreeLayout(Choice):
     """Selects how the tech tree nodes are interwoven.
     Single: No dependencies
@@ -433,6 +445,7 @@ class FactorioOptions(PerGameCommonOptions):
     silo: Silo
     satellite: Satellite
     free_samples: FreeSamples
+    free_samples_quality: FreeSamplesQuality
     tech_tree_information: TechTreeInformation
     starting_items: FactorioStartItems
     free_sample_blacklist: FactorioFreeSampleBlacklist

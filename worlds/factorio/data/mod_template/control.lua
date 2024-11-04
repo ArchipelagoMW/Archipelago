@@ -326,6 +326,7 @@ function update_player(index)
     for name, count in pairs(samples) do
         stack.name = name
         stack.count = count
+        stack.quality = "{{ free_sample_quality_name }}"
         if prototypes.item[name] then
             if character.can_insert(stack) then
                 sent = character.insert(stack)
