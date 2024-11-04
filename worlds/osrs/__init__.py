@@ -33,6 +33,12 @@ class OSRSWeb(WebWorld):
 
 
 class OSRSWorld(World):
+    """
+    The best retro fantasy MMORPG on the planet. Old School is RuneScape but… older! This is the open world you know and love, but as it was in 2007.
+    The Randomizer takes the form of a Chunk-Restricted f2p Ironman that takes a brand new account up through defeating
+    the Green Dragon of Crandor and earning a spot in the fabled Champion's Guild!
+    """
+
     game = "Old School Runescape"
     options_dataclass = OSRSOptions
     options: OSRSOptions
@@ -84,16 +90,18 @@ class OSRSWorld(World):
 
         rnd = self.random
         starting_area = self.options.starting_area
+        
+        #UT specific override, if we are in normal gen, resolve starting area, we will get it from slot_data in UT
+        if not hasattr(self.multiworld, "generation_is_fake"): 
+            if starting_area.value == StartingArea.option_any_bank:
+                self.starting_area_item = rnd.choice(starting_area_dict)
+            elif starting_area.value < StartingArea.option_chunksanity:
+                self.starting_area_item = starting_area_dict[starting_area.value]
+            else:
+                self.starting_area_item = rnd.choice(chunksanity_starting_chunks)
 
-        if starting_area.value == StartingArea.option_any_bank:
-            self.starting_area_item = rnd.choice(starting_area_dict)
-        elif starting_area.value < StartingArea.option_chunksanity:
-            self.starting_area_item = starting_area_dict[starting_area.value]
-        else:
-            self.starting_area_item = rnd.choice(chunksanity_starting_chunks)
-
-        # Set Starting Chunk
-        self.multiworld.push_precollected(self.create_item(self.starting_area_item))
+            # Set Starting Chunk
+            self.multiworld.push_precollected(self.create_item(self.starting_area_item))
 
     """
     This function pulls from LogicCSVToPython so that it sends the correct tag of the repository to the client.
@@ -103,7 +111,22 @@ class OSRSWorld(World):
     def fill_slot_data(self):
         data = self.options.as_dict("brutal_grinds")
         data["data_csv_tag"] = data_csv_tag
+        data["starting_area"] = str(self.starting_area_item) #these aren't actually strings, they just play them on tv
         return data
+
+    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]) -> None:
+        if "starting_area" in slot_data:
+            self.starting_area_item = slot_data["starting_area"]
+            menu_region = self.multiworld.get_region("Menu",self.player)
+            menu_region.exits.clear() #prevent making extra exits if players just reconnect to a differnet slot
+            if self.starting_area_item in chunksanity_special_region_names:
+                starting_area_region = chunksanity_special_region_names[self.starting_area_item]
+            else:
+                starting_area_region = self.starting_area_item[6:]  # len("Area: ")
+            starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
+            starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
+            starting_entrance.connect(self.region_name_to_data[starting_area_region])
+
 
     def create_regions(self) -> None:
         """
@@ -122,13 +145,14 @@ class OSRSWorld(World):
 
         # Removes the word "Area: " from the item name to get the region it applies to.
         # I figured tacking "Area: " at the beginning would make it _easier_ to tell apart. Turns out it made it worse
-        if self.starting_area_item in chunksanity_special_region_names:
-            starting_area_region = chunksanity_special_region_names[self.starting_area_item]
-        else:
-            starting_area_region = self.starting_area_item[6:]  # len("Area: ")
-        starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
-        starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
-        starting_entrance.connect(self.region_name_to_data[starting_area_region])
+        if self.starting_area_item != "": #if area hasn't been set, then we shouldn't connect it
+            if self.starting_area_item in chunksanity_special_region_names:
+                starting_area_region = chunksanity_special_region_names[self.starting_area_item]
+            else:
+                starting_area_region = self.starting_area_item[6:]  # len("Area: ")
+            starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
+            starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
+            starting_entrance.connect(self.region_name_to_data[starting_area_region])
 
         # Create entrances between regions
         for region_row in region_rows:
@@ -166,12 +190,83 @@ class OSRSWorld(World):
             cooking_level_rule = self.get_skill_rule("cooking", 32)
             entrance.access_rule = lambda state: state.has(item_name, self.player) and \
                                                  cooking_level_rule(state)
+            if self.options.brutal_grinds:
+                cooking_level_32_regions = {
+                    RegionNames.Milk,
+                    RegionNames.Egg,
+                    RegionNames.Shrimp,
+                    RegionNames.Wheat,
+                    RegionNames.Windmill,
+                }
+            else:
+                # Level 15 cooking and higher requires level 20 fishing.
+                fishing_level_20_regions = {
+                    RegionNames.Shrimp,
+                    RegionNames.Port_Sarim,
+                }
+                cooking_level_32_regions = {
+                    RegionNames.Milk,
+                    RegionNames.Egg,
+                    RegionNames.Shrimp,
+                    RegionNames.Wheat,
+                    RegionNames.Windmill,
+                    RegionNames.Fly_Fish,
+                    *fishing_level_20_regions,
+                }
+            for region_name in cooking_level_32_regions:
+                self.multiworld.register_indirect_condition(self.get_region(region_name), entrance)
             return
         if outbound_region_name == RegionNames.Crafting_Guild:
             item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
             crafting_level_rule = self.get_skill_rule("crafting", 40)
             entrance.access_rule = lambda state: state.has(item_name, self.player) and \
                                                  crafting_level_rule(state)
+            if self.options.brutal_grinds:
+                crafting_level_40_regions = {
+                    # can_spin
+                    RegionNames.Sheep,
+                    RegionNames.Spinning_Wheel,
+                    # can_pot
+                    RegionNames.Clay_Rock,
+                    RegionNames.Barbarian_Village,
+                    # can_tan
+                    RegionNames.Milk,
+                    RegionNames.Al_Kharid,
+                }
+            else:
+                mould_access_regions = {
+                    RegionNames.Al_Kharid,
+                    RegionNames.Rimmington,
+                }
+                smithing_level_20_regions = {
+                    RegionNames.Bronze_Ores,
+                    RegionNames.Iron_Rock,
+                    RegionNames.Furnace,
+                    RegionNames.Anvil,
+                }
+                smithing_level_40_regions = {
+                    *smithing_level_20_regions,
+                    RegionNames.Coal_Rock,
+                }
+                crafting_level_40_regions = {
+                    # can_tan
+                    RegionNames.Milk,
+                    RegionNames.Al_Kharid,
+                    # can_silver
+                    RegionNames.Silver_Rock,
+                    RegionNames.Furnace,
+                    *mould_access_regions,
+                    # can_smelt_silver
+                    *smithing_level_20_regions,
+                    # can_gold
+                    RegionNames.Gold_Rock,
+                    RegionNames.Furnace,
+                    *mould_access_regions,
+                    # can_smelt_gold
+                    *smithing_level_40_regions,
+                }
+            for region_name in crafting_level_40_regions:
+                self.multiworld.register_indirect_condition(self.get_region(region_name), entrance)
             return
         if outbound_region_name == RegionNames.Corsair_Cove:
             item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
@@ -200,6 +295,20 @@ class OSRSWorld(World):
             woodcutting_rule_d3 = self.get_skill_rule("woodcutting", 42)
             woodcutting_rule_all = self.get_skill_rule("woodcutting", 57)
 
+            def add_indirect_conditions_for_woodcutting_levels(entrance, *levels: int):
+                if self.options.brutal_grinds:
+                    # No access to specific regions required.
+                    return
+                # Currently, each level requirement requires everything from the previous level requirements, so the
+                # maximum level requirement can be taken.
+                max_level = max(levels, default=0)
+                max_level = min(max_level, self.options.max_woodcutting_level.value)
+                if 15 <= max_level < 30:
+                    self.multiworld.register_indirect_condition(self.get_region(RegionNames.Oak_Tree), entrance)
+                elif 30 <= max_level:
+                    self.multiworld.register_indirect_condition(self.get_region(RegionNames.Oak_Tree), entrance)
+                    self.multiworld.register_indirect_condition(self.get_region(RegionNames.Willow_Tree), entrance)
+
             if region_row.name == RegionNames.Lumbridge:
                 # Canoe Tree access for the Location
                 if outbound_region_name == RegionNames.Canoe_Tree:
@@ -212,6 +321,7 @@ class OSRSWorld(World):
                                        and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
                                       (state.can_reach_region(RegionNames.Wilderness)
                                        and woodcutting_rule_all(state) and self.options.max_woodcutting_level >= 57)
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42, 57)
                     self.multiworld.register_indirect_condition(
                         self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
                     self.multiworld.register_indirect_condition(
@@ -225,12 +335,15 @@ class OSRSWorld(World):
                 if outbound_region_name == RegionNames.Barbarian_Village:
                     entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
                                                          and self.options.max_woodcutting_level >= 27
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
                 if outbound_region_name == RegionNames.Edgeville:
                     entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
                                                          and self.options.max_woodcutting_level >= 42
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
                 if outbound_region_name == RegionNames.Wilderness:
                     entrance.access_rule = lambda state: woodcutting_rule_all(state) \
                                                          and self.options.max_woodcutting_level >= 57
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 57)
 
             if region_row.name == RegionNames.South_Of_Varrock:
                 if outbound_region_name == RegionNames.Canoe_Tree:
@@ -243,6 +356,7 @@ class OSRSWorld(World):
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
                                       (state.can_reach_region(RegionNames.Wilderness)
                                        and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42)
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42)
                     self.multiworld.register_indirect_condition(
                         self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
                     self.multiworld.register_indirect_condition(
@@ -256,12 +370,15 @@ class OSRSWorld(World):
                 if outbound_region_name == RegionNames.Barbarian_Village:
                     entrance.access_rule = lambda state: woodcutting_rule_d1(state) \
                                                          and self.options.max_woodcutting_level >= 12
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 12)
                 if outbound_region_name == RegionNames.Edgeville:
                     entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
                                                          and self.options.max_woodcutting_level >= 27
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
                 if outbound_region_name == RegionNames.Wilderness:
                     entrance.access_rule = lambda state: woodcutting_rule_all(state) \
                                                          and self.options.max_woodcutting_level >= 42
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
             if region_row.name == RegionNames.Barbarian_Village:
                 if outbound_region_name == RegionNames.Canoe_Tree:
                     entrance.access_rule = \
@@ -273,6 +390,7 @@ class OSRSWorld(World):
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
                                       (state.can_reach_region(RegionNames.Wilderness)
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27)
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27)
                     self.multiworld.register_indirect_condition(
                         self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
                     self.multiworld.register_indirect_condition(
@@ -285,13 +403,16 @@ class OSRSWorld(World):
                 if outbound_region_name == RegionNames.Lumbridge:
                     entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
                                                          and self.options.max_woodcutting_level >= 27
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
                 if outbound_region_name == RegionNames.South_Of_Varrock:
                     entrance.access_rule = lambda state: woodcutting_rule_d1(state) \
                                                          and self.options.max_woodcutting_level >= 12
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 12)
                 # Edgeville does not need to be checked, because it's already adjacent
                 if outbound_region_name == RegionNames.Wilderness:
                     entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
                                                          and self.options.max_woodcutting_level >= 42
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
             if region_row.name == RegionNames.Edgeville:
                 if outbound_region_name == RegionNames.Canoe_Tree:
                     entrance.access_rule = \
@@ -303,6 +424,7 @@ class OSRSWorld(World):
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
                                       (state.can_reach_region(RegionNames.Wilderness)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12)
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42)
                     self.multiworld.register_indirect_condition(
                         self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
                     self.multiworld.register_indirect_condition(
@@ -315,9 +437,11 @@ class OSRSWorld(World):
                 if outbound_region_name == RegionNames.Lumbridge:
                     entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
                                                          and self.options.max_woodcutting_level >= 42
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
                 if outbound_region_name == RegionNames.South_Of_Varrock:
                     entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
                                                          and self.options.max_woodcutting_level >= 27
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
                 # Barbarian Village does not need to be checked, because it's already adjacent
                 # Wilderness does not need to be checked, because it's already adjacent
             if region_row.name == RegionNames.Wilderness:
@@ -331,6 +455,7 @@ class OSRSWorld(World):
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
                                       (state.can_reach_region(RegionNames.Edgeville)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12)
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42, 57)
                     self.multiworld.register_indirect_condition(
                         self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
                     self.multiworld.register_indirect_condition(
@@ -343,12 +468,15 @@ class OSRSWorld(World):
                 if outbound_region_name == RegionNames.Lumbridge:
                     entrance.access_rule = lambda state: woodcutting_rule_all(state) \
                                                          and self.options.max_woodcutting_level >= 57
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 57)
                 if outbound_region_name == RegionNames.South_Of_Varrock:
                     entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
                                                          and self.options.max_woodcutting_level >= 42
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
                 if outbound_region_name == RegionNames.Barbarian_Village:
                     entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
                                                          and self.options.max_woodcutting_level >= 27
+                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
                 # Edgeville does not need to be checked, because it's already adjacent
 
     def roll_locations(self):
@@ -635,7 +763,7 @@ class OSRSWorld(World):
             else:
                 return lambda state: can_tan(state) or (can_silver(state) and can_smelt_silver(state)) or \
                                      (can_gold(state) and can_smelt_gold(state))
-        if skill.lower() == "Cooking":
+        if skill.lower() == "cooking":
             if self.options.brutal_grinds or level < 15:
                 return lambda state: state.can_reach(RegionNames.Milk, "Region", self.player) or \
                                      state.can_reach(RegionNames.Egg, "Region", self.player) or \

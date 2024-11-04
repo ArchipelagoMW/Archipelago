@@ -39,6 +39,7 @@ from .strings.crop_names import Fruit, Vegetable
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, \
     SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance
 from .strings.forageable_names import Forageable
+from .strings.generic_names import Generic
 from .strings.geode_names import Geode
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar, Mineral
@@ -154,7 +155,7 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
                 extra_raccoons = extra_raccoons + num
                 bundle_rules = logic.received(CommunityUpgrade.raccoon, extra_raccoons) & bundle_rules
                 if num > 1:
-                    previous_bundle_name = f"Raccoon Request {num-1}"
+                    previous_bundle_name = f"Raccoon Request {num - 1}"
                     bundle_rules = bundle_rules & logic.region.can_reach_location(previous_bundle_name)
             room_rules.append(bundle_rules)
             MultiWorldRules.set_rule(location, bundle_rules)
@@ -168,13 +169,16 @@ def set_skills_rules(logic: StardewLogic, multiworld, player, world_options: Sta
     mods = world_options.mods
     if world_options.skill_progression == SkillProgression.option_vanilla:
         return
+
     for i in range(1, 11):
         set_vanilla_skill_rule_for_level(logic, multiworld, player, i)
         set_modded_skill_rule_for_level(logic, multiworld, player, mods, i)
-    if world_options.skill_progression != SkillProgression.option_progressive_with_masteries:
+
+    if world_options.skill_progression == SkillProgression.option_progressive:
         return
+
     for skill in [Skill.farming, Skill.fishing, Skill.foraging, Skill.mining, Skill.combat]:
-        MultiWorldRules.set_rule(multiworld.get_location(f"{skill} Mastery", player), logic.skill.can_earn_mastery_experience)
+        MultiWorldRules.set_rule(multiworld.get_location(f"{skill} Mastery", player), logic.skill.can_earn_mastery(skill))
 
 
 def set_vanilla_skill_rule_for_level(logic: StardewLogic, multiworld, player, level: int):
@@ -256,11 +260,11 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     set_entrance_rule(multiworld, player, LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
     set_entrance_rule(multiworld, player, LogicEntrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
-    set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.can_enter_mastery_cave())
-    set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.can_enter_mastery_cave())
+    set_entrance_rule(multiworld, player, Entrance.forest_to_mastery_cave, logic.skill.can_enter_mastery_cave)
     set_entrance_rule(multiworld, player, LogicEntrance.buy_experience_books, logic.time.has_lived_months(2))
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year1_books, logic.time.has_year_two)
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year3_books, logic.time.has_year_three)
+    set_entrance_rule(multiworld, player, Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Generic.any))
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewValleyOptions):
@@ -887,7 +891,7 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
                              logic.has("Junimo Kart Medium Buff"))
     MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_3, player),
                              logic.has("Junimo Kart Big Buff"))
-    MultiWorldRules.add_rule(multiworld.get_location("Junimo Kart: Sunset Speedway (Victory)", player),
+    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_4, player),
                              logic.has("Junimo Kart Max Buff"))
     MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.play_journey_of_the_prairie_king, player),
                              logic.has("JotPK Small Buff"))
