@@ -18,16 +18,37 @@ class Type(Enum):
 
 
 class Component:
+    """
+    A Component represents a process launchable by Archipelago Launcher, either by a User action in the GUI,
+    by resolving an archipelago://user:pass@host:port link from the Webhost, by resolving a patch file's metadata
+    or by using a component name arg while running the Launcher in CLI i.e. `ArchipelagoLauncher.exe "Text Client"`
+    """
     display_name: str
+    """Used as the GUI button label and the component name in the CLI args"""
     type: Type
+    """Classification of component intent to filter in the Launcher GUI"""
     script_name: Optional[str]
+    """Recommended to use func instead; Name of file to run when the component is called"""
     frozen_name: Optional[str]
+    """Recommended to use func instead; Name of the frozen EXE file for this component"""
     icon: str  # just the name, no suffix
+    """Lookup ID for the icon path in LauncherComponents.icon_paths"""
     cli: bool
+    """Bool to control if the component gets launched in an appropriate Terminal for the OS"""
     func: Optional[Callable]
+    """
+    Function that gets called when the component gets launched,
+    any arg besides the component name arg is passed into the func as well so handling *args is suggested
+    """
     file_identifier: Optional[Callable[[str], bool]]
+    """
+    Function that is run against patch file arg to identify which component is appropriate to launch
+    If the function is an Instance of SuffixIdentifier the suffixes will also be valid for the Open Patch component
+    """
     game_name: Optional[str]
+    """Game name to identify component when handling launch links from webhost"""
     supports_uri: Optional[bool]
+    """Bool to identify if a component supports being launched by launch links from webhost"""
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
