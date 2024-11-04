@@ -31,23 +31,17 @@ def has_all_items(multiworld: MultiWorld, items: Set[str], region: str, player: 
 # Checks to see if chest/shrine are accessible
 def has_location_access_rule(multiworld: MultiWorld, environment: str, player: int, item_number: int, item_type: str)\
         -> None:
-    if item_number == 1:
-        multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
-            lambda state: state.has(environment, player)
+    location_name = f"{environment}: {item_type} {item_number}"
+    if item_type == "Scavenger":
         #  scavengers need to be locked till after a full loop since that is when they are capable of spawning.
         # (While technically the requirement is just beating 5 stages, this will ensure that the player will have
         #  a long enough run to have enough director credits for scavengers and
         #  help prevent being stuck in the same stages until that point).
-        if item_type == "Scavenger":
-            multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
-                lambda state: state.has(environment, player) and state.has("Stage 5", player)
+        multiworld.get_location(location_name, player).access_rule = \
+            lambda state: state.has(environment, player) and state.has("Stage 5", player)
     else:
-        multiworld.get_location(f"{environment}: {item_type} {item_number}", player).access_rule = \
-            lambda state: check_location(state, environment, player, item_number, item_type)
-
-
-def check_location(state, environment: str, player: int, item_number: int, item_name: str) -> bool:
-    return state.can_reach(f"{environment}: {item_name} {item_number - 1}", "Location", player)
+        multiworld.get_location(location_name, player).access_rule = \
+            lambda state: state.has(environment, player)
 
 
 def set_rules(ror2_world: "RiskOfRainWorld") -> None:

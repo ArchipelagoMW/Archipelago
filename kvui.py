@@ -5,6 +5,8 @@ import typing
 import re
 from collections import deque
 
+assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
+
 if sys.platform == "win32":
     import ctypes
 
@@ -241,6 +243,9 @@ class ServerLabel(HovererableLabel):
                             f"\nYou currently have {ctx.hint_points} points."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
+                if ctx.stored_data and "_read_race_mode" in ctx.stored_data:
+                    text += "\nRace mode is enabled." \
+                        if ctx.stored_data["_read_race_mode"] else "\nRace mode is disabled."
             else:
                 text += f"\nYou are not authenticated yet."
 
@@ -534,9 +539,8 @@ class GameManager(App):
                 # show Archipelago tab if other logging is present
                 self.tabs.add_widget(panel)
 
-        hint_panel = TabbedPanelItem(text="Hints")
-        self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
-        self.tabs.add_widget(hint_panel)
+        hint_panel = self.add_client_tab("Hints", HintLog(self.json_to_kivy_parser))
+        self.log_panels["Hints"] = hint_panel.content
 
         if len(self.logging_pairs) == 1:
             self.tabs.default_tab_text = "Archipelago"
@@ -570,6 +574,14 @@ class GameManager(App):
 
         return self.container
 
+    def add_client_tab(self, title: str, content: Widget) -> Widget:
+        """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
+         Returns the new tab widget, with the provided content being placed on the tab as content."""
+        new_tab = TabbedPanelItem(text=title)
+        new_tab.content = content
+        self.tabs.add_widget(new_tab)
+        return new_tab
+
     def update_texts(self, dt):
         if hasattr(self.tabs.content.children[0], "fix_heights"):
             self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
@@ -595,8 +607,9 @@ class GameManager(App):
                                              "!help for server commands.")
 
     def connect_button_action(self, button):
+        self.ctx.username = None
+        self.ctx.password = None
         if self.ctx.server:
-            self.ctx.username = None
             async_start(self.ctx.disconnect())
         else:
             async_start(self.ctx.connect(self.server_connect_bar.text.replace("/connect ", "")))
@@ -836,6 +849,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         return self._handle_text(node)
 
     def _handle_text(self, node: JSONMessagePart):
+        # All other text goes through _handle_color, and we don't want to escape markup twice,
+        # or mess up text that already has intentional markup applied to it
+        if node.get("type", "text") == "text":
+            node["text"] = escape_markup(node["text"])
         for ref in node.get("refs", []):
             node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
             self.ref_count += 1

@@ -8,21 +8,31 @@ from .items import TRAP_ITEMS
 
 
 class ShuffleDoors(Choice):
-    """If on, opening doors will require their respective "keys".
+    """This option specifies how doors open.
 
-    - **Simple:** Doors are sorted into logical groups, which are all opened by
-      receiving an item.
-    - **Complex:** The items are much more granular, and will usually only open
-      a single door each.
+    - **None:** Doors in the game will open the way they do in vanilla.
+    - **Panels:** Doors still open as in vanilla, but the panels that open the
+      doors will be locked, and an item will be required to unlock the panels.
+    - **Doors:** the doors themselves are locked behind items, and will open
+      automatically without needing to solve a panel once the key is obtained.
     """
     display_name = "Shuffle Doors"
     option_none = 0
-    option_simple = 1
-    option_complex = 2
+    option_panels = 1
+    option_doors = 2
+    alias_simple = 2
+    alias_complex = 2
+
+
+class GroupDoors(Toggle):
+    """By default, door shuffle in either panels or doors mode will create individual keys for every panel or door to be locked.
+    
+    When group doors is on, some panels and doors are sorted into logical groups, which are opened together by receiving an item."""
+    display_name = "Group Doors"
 
 
 class ProgressiveOrangeTower(DefaultOnToggle):
-    """When "Shuffle Doors" is on, this setting governs the manner in which the Orange Tower floors open up.
+    """When "Shuffle Doors" is on doors mode, this setting governs the manner in which the Orange Tower floors open up.
 
     - **Off:** There is an item for each floor of the tower, and each floor's
       item is the only one needed to access that floor.
@@ -33,7 +43,7 @@ class ProgressiveOrangeTower(DefaultOnToggle):
 
 
 class ProgressiveColorful(DefaultOnToggle):
-    """When "Shuffle Doors" is on "complex", this setting governs the manner in which The Colorful opens up.
+    """When "Shuffle Doors" is on either panels or doors mode and "Group Doors" is off, this setting governs the manner in which The Colorful opens up.
 
     - **Off:** There is an item for each room of The Colorful, meaning that
       random rooms in the middle of the sequence can open up without giving you
@@ -70,10 +80,15 @@ class ShuffleColors(DefaultOnToggle):
 
 
 class ShufflePanels(Choice):
-    """If on, the puzzles on each panel are randomized.
+    """Determines how panel puzzles are randomized.
 
-    On "rearrange", the puzzles are the same as the ones in the base game, but
-    are placed in different areas.
+    - **None:** Most panels remain the same as in the base game. Note that there are
+      some panels (in particular, in Starting Room and Second Room) that are changed
+      by the randomizer even when panel shuffle is disabled.
+    - **Rearrange:** The puzzles are the same as the ones in the base game, but are
+      placed in different areas.
+
+    More options for puzzle randomization are planned in the future.
     """
     display_name = "Shuffle Panels"
     option_none = 0
@@ -194,6 +209,11 @@ class EarlyColorHallways(Toggle):
     display_name = "Early Color Hallways"
 
 
+class ShufflePostgame(Toggle):
+    """When off, locations that could not be reached without also reaching your victory condition are removed."""
+    display_name = "Shuffle Postgame"
+
+
 class TrapPercentage(Range):
     """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
@@ -248,6 +268,7 @@ lingo_option_groups = [
 @dataclass
 class LingoOptions(PerGameCommonOptions):
     shuffle_doors: ShuffleDoors
+    group_doors: GroupDoors
     progressive_orange_tower: ProgressiveOrangeTower
     progressive_colorful: ProgressiveColorful
     location_checks: LocationChecks
@@ -263,6 +284,7 @@ class LingoOptions(PerGameCommonOptions):
     mastery_achievements: MasteryAchievements
     level_2_requirement: Level2Requirement
     early_color_hallways: EarlyColorHallways
+    shuffle_postgame: ShufflePostgame
     trap_percentage: TrapPercentage
     trap_weights: TrapWeights
     puzzle_skip_percentage: PuzzleSkipPercentage
