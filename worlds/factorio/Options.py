@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import datetime
 import typing
 
 from schema import Schema, Optional, And, Or
 
-from Options import Choice, OptionDict, OptionSet, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
+from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
     StartInventoryPool, PerGameCommonOptions
 
 # schema helpers

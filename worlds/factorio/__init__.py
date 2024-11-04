@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import collections
 import logging
-import settings
 import typing
 
+import settings
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -14,7 +14,7 @@ from .Mod import generate_mod
 from .Options import FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
-    all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
+    all_product_sources, required_technologies, get_rocket_requirements, \
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
@@ -240,21 +240,23 @@ class Factorio(World):
                 custom_recipe = self.custom_recipes[ingredient]
 
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
-                    (ingredient not in technology_table or state.has(ingredient, player)) and \
+                    (not technology_table[ingredient].unlocks or state.has(ingredient, player)) and \
                     all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
                         for technology in required_technologies[sub_ingredient]) and \
                     all(state.has(technology.name, player) for technology in required_technologies[custom_recipe.crafting_machine])
+
             else:
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
+            assert self.multiworld.get_all_state(True).can_reach(location), f"Can never reach {location}."
 
         for location in self.science_locations:
-            Rules.set_rule(location, lambda state, ingredients=location.ingredients:
+            Rules.set_rule(location, lambda state, ingredients=frozenset(location.ingredients):
                 all(state.has(f"Automated {ingredient}", player) for ingredient in ingredients))
             prerequisites = shapes.get(location)
             if prerequisites:
-                Rules.add_rule(location, lambda state, locations=
-                    prerequisites: all(state.can_reach(loc) for loc in locations))
+                Rules.add_rule(location, lambda state, locations=frozenset(prerequisites):
+                    all(state.can_reach(loc) for loc in locations))
 
         silo_recipe = None
         if self.options.silo == Silo.option_spawn:

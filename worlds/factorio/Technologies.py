@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import functools
 import pkgutil
 import string
@@ -66,15 +65,13 @@ class FactorioElement:
 class Technology(FactorioElement):  # maybe make subclass of Location?
     has_modifier: bool
     factorio_id: int
-    ingredients: Set[str]
     progressive: Tuple[str]
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
 
-    def __init__(self, name: str, ingredients: Set[str], factorio_id: int, progressive: Tuple[str] = (),
+    def __init__(self, technology_name: str, factorio_id: int, progressive: Tuple[str] = (),
                  has_modifier: bool = False, unlocks: Union[Set[str], bool] = None, trigger: Dict[str, Any] = None):
-        self.name = name
+        self.name = technology_name
         self.factorio_id = factorio_id
-        self.ingredients = ingredients
         self.progressive = progressive
         self.has_modifier = has_modifier
         if not trigger:
@@ -84,19 +81,6 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
             self.unlocks = unlocks
         else:
             self.unlocks = set()
-
-    def build_rule(self, player: int):
-        logging.debug(f"Building rules for {self.name}")
-
-        return lambda state: all(state.has(f"Automated {ingredient}", player)
-                                 for ingredient in self.ingredients)
-
-    def get_prior_technologies(self) -> Set[Technology]:
-        """Get Technologies that have to precede this one to resolve tree connections."""
-        technologies = set()
-        for ingredient in self.ingredients:
-            technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
-        return technologies
 
     def __hash__(self):
         return self.factorio_id
@@ -110,27 +94,22 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
 
 class CustomTechnology(Technology):
     """A particularly configured Technology for a world."""
+    ingredients: Set[str]
 
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
-        ingredients = origin.ingredients & allowed_packs
-        military_allowed = "military-science-pack" in allowed_packs \
-                           and ((ingredients & {"chemical-science-pack",
-                                                "production-science-pack",
-                                                "utility-science-pack"})
-                                or origin.name == "rocket-silo")
+        ingredients = allowed_packs
         self.player = player
         if origin.name not in world.special_nodes:
-            if military_allowed:
-                ingredients.add("military-science-pack")
-            ingredients = list(ingredients)
-            if ingredients:
-                ingredients.sort()  # deterministic sample
-                ingredients = set(world.random.sample(ingredients, world.random.randint(1, len(ingredients))))
-            else:
-                ingredients = set()
-        elif origin.name == "rocket-silo" and military_allowed:
-            ingredients.add("military-science-pack")
-        super(CustomTechnology, self).__init__(origin.name, ingredients, origin.factorio_id)
+            ingredients = set(world.random.sample(list(ingredients), world.random.randint(1, len(ingredients))))
+        self.ingredients = ingredients
+        super(CustomTechnology, self).__init__(origin.name, origin.factorio_id)
+
+    def get_prior_technologies(self) -> Set[Technology]:
+        """Get Technologies that have to precede this one to resolve tree connections."""
+        technologies = set()
+        for ingredient in self.ingredients:
+            technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
+        return technologies
 
 
 class Recipe(FactorioElement):
@@ -218,8 +197,7 @@ recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 
 # recipes and technologies can share names in Factorio
 for technology_name, data in sorted(techs_future.result().items()):
-    current_ingredients = set(data["ingredients"])
-    technology = Technology(technology_name, current_ingredients, factorio_tech_id,
+    technology = Technology(technology_name, factorio_tech_id,
                             has_modifier=data["has_modifier"],
                             unlocks=set(data["unlocks"]) - start_unlocked_recipes,
                             trigger=data.get("trigger", None))
@@ -278,9 +256,7 @@ del machines_future
 
 # build requirements graph for all technology ingredients
 
-all_ingredient_names: Set[str] = set()
-for technology in technology_table.values():
-    all_ingredient_names |= technology.ingredients
+all_ingredient_names: Set[str] = set(Options.MaxSciencePack.get_ordered_science_packs())
 
 
 def unlock_just_tech(recipe: Recipe, _done) -> Set[Technology]:
@@ -450,7 +426,7 @@ for root in sorted_rows:
         (f"Declared a progressive technology ({root}) without base technology. "
          f"Missing: f{tuple(tech for tech in progressive if tech not in tech_table)}")
     factorio_tech_id += 1
-    progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_tech_id,
+    progressive_technology = Technology(root, factorio_tech_id,
                                         tuple(progressive),
                                         has_modifier=any(technology_table[tech].has_modifier for tech in progressive),
                                         unlocks=any(technology_table[tech].unlocks for tech in progressive),)
