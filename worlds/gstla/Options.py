@@ -361,14 +361,14 @@ class AnemosAccess(Choice):
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
-    item_shuffle: ItemShuffle
-    major_minor_split: MajorMinorSplit
+    item_shuffle: ItemShuffle #todo, bug with hidden items, maybe support for key items only mode?
+    major_minor_split: MajorMinorSplit #todo, progressive items to mayjor / key item locations, minor junky stuff
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations
-    add_elvenshirt_clericsring: AddGs1Items
+    add_elvenshirt_clericsring: AddGs1Items #todo
 
     lemurian_ship: StartWithShip
-    start_with_wings_of_anemos: ShipWings
+    start_with_wings_of_anemos: ShipWings #todo, logic and event item
     anemos_inner_sanctum_access: AnemosAccess
     shuffle_characters: CharacterShuffle
 
@@ -392,7 +392,7 @@ class GSTLAOptions(PerGameCommonOptions):
 
     start_with_healing_psynergy: StartWithHealPsy
     start_with_revive: StartWithRevivePsy
-    start_with_reveal: StartWithRevealPsy
+    start_with_reveal: StartWithRevealPsy #todo, reveal as starter item, remove from pool
 
     #Djinn and Summon Settings
     shuffle_djinn: DjinnShuffle

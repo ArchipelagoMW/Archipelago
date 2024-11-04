@@ -110,6 +110,8 @@ def create_items(world: 'GSTLAWorld', player: int):
             ap_location.place_locked_item(ap_item)
             sum_locations -= 1
             continue
+        if world.options.start_with_reveal == 1 and vanilla_item.name == ItemName.Reveal:
+            continue
         if vanilla_item.type == ItemType.Event or vanilla_item.type == ItemType.Djinn:
             continue
         if vanilla_item.id == 0:

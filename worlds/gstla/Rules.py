@@ -884,22 +884,34 @@ def set_access_rules(world: 'GSTLAWorld'):
     #Optional Super Boss content
     if world.options.omit_locations < 2:
         add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Daedalus),
-             lambda state: state.has(ItemName.Pound_Cube, player) and state.count_group(ItemType.Djinn.name, player) >= 64)
+             lambda state: state.has(ItemName.Pound_Cube, player))
 
         add_rule(world.get_location(LocationName.Islet_Cave_Catastrophe),
-             lambda state: state.has(ItemName.Teleport_Lapis, player) and state.count_group(ItemType.Djinn.name, player) >= 64)
+             lambda state: state.has(ItemName.Teleport_Lapis, player))
 
-        #Treasure Isle
-        add_rule(world.get_location(LocationName.Treasure_Isle_Azul), lambda state: state.count_group(ItemType.Djinn.name, player) >= 64)
+        if world.options.djinn_logic > 0:
+                add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Daedalus),
+                        lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
+
+                add_rule(world.get_location(LocationName.Islet_Cave_Catastrophe),
+                        lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
+
+                add_rule(world.get_location(LocationName.Treasure_Isle_Azul), 
+                        lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
 
 
     if world.options.omit_locations < 1:
         #Anemos Inner Sanctum
         add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Iris),
-             lambda state: state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player) and state.count_group(ItemType.Djinn.name, player) >= 72)
+             lambda state: state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
 
         add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Orihalcon),
              lambda state: state.has(ItemName.Lifting_Gem, player))
+        
+        if world.options.djinn_logic > 0:
+            add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Iris),
+                lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(72 * djinn_percentage))
+
 
 
     #Hidden Items

@@ -55,6 +55,8 @@ class GSTLAWorld(World):
 
         if self.options.lemurian_ship == 2:
             self.multiworld.push_precollected(create_item(ItemName.Ship, self.player))
+        if self.options.start_with_reveal == 1:
+            self.multiworld.push_precollected(create_item(ItemName.Reveal, self.player))
 
     def create_regions(self) -> None:
         create_regions(self)
