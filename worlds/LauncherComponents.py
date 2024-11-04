@@ -100,14 +100,26 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
 
     apworld_path = pathlib.Path(apworld_src)
 
-    module_name = pathlib.Path(apworld_path.name).stem
+    apworld_name = apworld_path.name
+    module_name = pathlib.Path(apworld_name).stem
     try:
         import zipfile
-        zipfile.ZipFile(apworld_path).open(module_name + "/__init__.py")
+        zip = zipfile.ZipFile(apworld_path)
+        zip.open(module_name + "/__init__.py")
     except ValueError as e:
         raise Exception("Archive appears invalid or damaged.") from e
     except KeyError as e:
-        raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
+        # check if the user's browser added a (1) to the filename
+        directories = [f.filename.strip('/') for f in zip.filelist if f.CRC == 0 and f.file_size == 0 and f.filename.count('/') == 1]
+        if len(directories) == 1 and directories[0] in apworld_name:
+            module_name = directories[0]
+            apworld_name = module_name + ".apworld"
+            try:
+                zip.open(module_name + "/__init__.py")
+            except KeyError:
+                raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
+        else:
+            raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
 
     import worlds
     if worlds.user_folder is None:
@@ -122,7 +134,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     # TODO: run generic test suite over the apworld.
     # TODO: have some kind of version system to tell from metadata if the apworld should be compatible.
 
-    target = pathlib.Path(worlds.user_folder) / apworld_path.name
+    target = pathlib.Path(worlds.user_folder) / apworld_name
     import shutil
     shutil.copyfile(apworld_path, target)
 
