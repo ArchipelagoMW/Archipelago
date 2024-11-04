@@ -140,7 +140,7 @@ class SC2Mission(Enum):
     SHOOT_THE_MESSENGER = 34, "Shoot the Messenger (Zerg)", SC2Campaign.HOTS, "Kaldir", SC2Race.ZERG, MissionPools.EASY, "ap_shoot_the_messenger", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.TimedDefense|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     ENEMY_WITHIN = 35, "Enemy Within", SC2Campaign.HOTS, "Kaldir", SC2Race.ANY, MissionPools.EASY, "ap_enemy_within", MissionFlag.Zerg|MissionFlag.NoBuild|MissionFlag.VsProtoss
     DOMINATION = 36, "Domination (Zerg)", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.EASY, "ap_domination", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
-    FIRE_IN_THE_SKY = 37, "Fire in the Sky", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_fire_in_the_sky", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsTerran
+    FIRE_IN_THE_SKY = 37, "Fire in the Sky (Zerg)", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_fire_in_the_sky", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     OLD_SOLDIERS = 38, "Old Soldiers", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_old_soldiers", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran
     WAKING_THE_ANCIENT = 39, "Waking the Ancient", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_waking_the_ancient", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsZerg
     THE_CRUCIBLE = 40, "The Crucible", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_crucible", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg
@@ -253,7 +253,8 @@ class SC2Mission(Enum):
     # 152/153 - Enemy Within
     DOMINATION_T = 154, "Domination (Terran)", SC2Campaign.HOTS, "Char", SC2Race.TERRAN, MissionPools.EASY, "ap_domination", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.RaceSwap
     DOMINATION_P = 155, "Domination (Protoss)", SC2Campaign.HOTS, "Char", SC2Race.PROTOSS, MissionPools.EASY, "ap_domination", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.RaceSwap
-    # 156/157 - Fire in the Sky
+    FIRE_IN_THE_SKY_T = 156, "Fire in the Sky (Terran)", SC2Campaign.HOTS, "Char", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_fire_in_the_sky", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.RaceSwap
+    FIRE_IN_THE_SKY_P = 157, "Fire in the Sky (Protoss)", SC2Campaign.HOTS, "Char", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_fire_in_the_sky", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.RaceSwap
     # 158/159 - Old Soldiers
     # 160/161 - Waking the Ancient
     # 162/163 - The Crucible

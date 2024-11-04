@@ -3607,6 +3607,96 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.DOMINATION_P.mission_name, "Win Without 100 Eggs", SC2_RACESWAP_LOC_ID_OFFSET + 7210, LocationType.CHALLENGE,
                            logic.protoss_competent_comp
                            ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7300, LocationType.VICTORY,
+                           lambda state: (
+                               logic.terran_common_unit(state)
+                               and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "West Biomass", SC2_RACESWAP_LOC_ID_OFFSET + 7301, LocationType.VANILLA),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "North Biomass", SC2_RACESWAP_LOC_ID_OFFSET + 7302, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "South Biomass", SC2_RACESWAP_LOC_ID_OFFSET + 7303, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "Destroy 3 Gorgons", SC2_RACESWAP_LOC_ID_OFFSET + 7304, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "Close Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7305, LocationType.EXTRA),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "South Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7306, LocationType.EXTRA,
+                           logic.terran_common_unit
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "North Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7307, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "West Medic Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7308, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "East Medic Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7309, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "South Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7310, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "Northwest Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7311, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_T.mission_name, "Southeast Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7312, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7400, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "West Biomass", SC2_RACESWAP_LOC_ID_OFFSET + 7401, LocationType.VANILLA),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "North Biomass", SC2_RACESWAP_LOC_ID_OFFSET + 7402, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "South Biomass", SC2_RACESWAP_LOC_ID_OFFSET + 7403, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Destroy 3 Gorgons", SC2_RACESWAP_LOC_ID_OFFSET + 7404, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Close Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7405, LocationType.EXTRA),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "South Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7406, LocationType.EXTRA,
+                           logic.protoss_common_unit
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "North Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7407, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Sentry Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7408, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Havoc Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 7409, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "South Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7410, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Northwest Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7411, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Southeast Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7412, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []
