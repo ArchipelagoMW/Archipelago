@@ -447,7 +447,9 @@ class GauntletLegendsContext(CommonContext):
                     self.inventory[player] += [new]
             else:
                 self.inventory[one] += [new]
-        for player in range(self.players):
+
+        players_to_check = range(self.players) if one is None else [one]
+        for player in players_to_check:
             for i, item in enumerate(self.inventory[player]):
                 if item.name is not None:
                     if "Potion" in item.name and item.count != 0:
