@@ -22,7 +22,7 @@ class ChecksFinderWeb(WebWorld):
 
 class ChecksFinderWorld(World):
     """
-    ChecksFinder is a game where you avoid mines and collect checks by beating boards! 
+    ChecksFinder is a game where you avoid mines and collect checks by beating boards!
     You win when you get all your items and beat the last board!
     """
     game = "ChecksFinder"
