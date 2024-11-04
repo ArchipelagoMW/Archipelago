@@ -304,13 +304,13 @@ def stream_factorio_output(pipe, queue, process):
 
 
 async def factorio_server_watcher(ctx: FactorioContext):
-    savegame_name = os.path.abspath(ctx.savegame_name)
+    savegame_name = os.path.abspath(os.path.join(ctx.write_data_path, "saves", "Archipelago", ctx.savegame_name))
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
             executable, "--create", savegame_name, "--preset", "archipelago"
         ))
-    factorio_process = subprocess.Popen((executable, "--start-server", ctx.savegame_name,
+    factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *(str(elem) for elem in server_args)),
                                         stderr=subprocess.PIPE,
                                         stdout=subprocess.PIPE,
