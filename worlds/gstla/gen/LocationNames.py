@@ -245,6 +245,7 @@ class LocationName(str, Enum):
     Jupiter_Lighthouse_Aeri_Agatio_and_Karst_fight = "Jupiter_Lighthouse Aeri - Agatio and Karst fight"
     Mars_Lighthouse_Flame_Dragons_fight = "Mars Lighthouse - Flame Dragons fight"
     Lemurian_Ship_Engine_Room = "Lemurian Ship - Engine Room"
+    Contigo_Wings_of_Anemos = "Contigo - Wings of Anemos"
     
 
     ##remainder
@@ -518,6 +519,7 @@ ids_by_loc_name: Dict[LocationName, int] = {
     "Jupiter_Lighthouse Aeri - Agatio and Karst fight": 5009,
     "Mars Lighthouse - Flame Dragons fight": 5010,
     "Lemurian Ship - Engine Room": 5011,
+    "Contigo - Wings of Anemos": 5012,
     "Daila - Herb": 991776,
     "Daila - Smoke_Bomb": 991784,
     "Daila - Psy_Crystal": 991812,
@@ -924,6 +926,7 @@ loc_names_by_id: Dict[int, LocationName] = {
     5009: "Jupiter_Lighthouse Aeri - Agatio and Karst fight",
     5010: "Mars Lighthouse - Flame Dragons fight",
     5011: "Lemurian Ship - Engine Room",
+    5012: "Contigo - Wings of Anemos",
     991776: "Daila - Herb",
     991784: "Daila - Smoke_Bomb",
     991812: "Daila - Psy_Crystal",

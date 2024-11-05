@@ -280,6 +280,8 @@ events = [
         5010, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Flame Dragons fight Flame Dragons - defeated
     LocationData(2270, 2270, 5011, 5011, [0], 0,
         5011, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Engine Room Ship
+    LocationData(2271, 2271, 5012, 5012, [0], 0,
+        5012, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Wings of Anemos Wings of Anemos
     
 ]
 

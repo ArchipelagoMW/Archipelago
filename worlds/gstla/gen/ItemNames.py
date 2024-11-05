@@ -544,6 +544,7 @@ class ItemName(str, Enum):
     Jupiter_Beacon_Lit = "Jupiter Beacon Lit"
     Flame_Dragons_defeated = "Flame Dragons - defeated"
     Ship = "Ship"
+    Wings_of_Anemos = "Wings of Anemos"
     
 
     # Characters
@@ -999,6 +1000,7 @@ item_id_by_name: Dict[int, ItemName] = {
     "Jupiter Beacon Lit": 5009,
     "Flame Dragons - defeated": 5010,
     "Ship": 5011,
+    "Wings of Anemos": 5012,
     "Flint": 16384000,
     "Granite": 16384002,
     "Quartz": 16384004,
@@ -1530,6 +1532,7 @@ name_by_item_id: Dict[ItemName, int] = {
     5009: "Jupiter Beacon Lit",
     5010: "Flame Dragons - defeated",
     5011: "Ship",
+    5012: "Wings of Anemos",
     16384000: "Flint",
     16384002: "Granite",
     16384004: "Quartz",

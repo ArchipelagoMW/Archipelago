@@ -584,6 +584,7 @@ events: List[EventItemData] = [
     EventItemData(5009, 2593, "Jupiter_Lighthouse Aeri - Agatio and Karst fight", "Jupiter Beacon Lit"),
     EventItemData(5010, 2635, "Mars Lighthouse - Flame Dragons fight", "Flame Dragons - defeated"),
     EventItemData(5011, 2270, "Lemurian Ship - Engine Room", "Ship"),
+    EventItemData(5012, 2271, "Contigo - Wings of Anemos", "Wings of Anemos"),
     
 ]
 
