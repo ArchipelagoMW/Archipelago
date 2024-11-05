@@ -493,9 +493,6 @@ def set_hard_rules(world: "HatInTimeWorld"):
              lambda state: has_paintings(state, world, 3, True))
 
     # SDJ
-    add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
-             lambda state: can_use_hat(state, world, HatType.SPRINT) and has_paintings(state, world, 2), "or")
-
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
              lambda state: can_use_hat(state, world, HatType.SPRINT), "or")
 
