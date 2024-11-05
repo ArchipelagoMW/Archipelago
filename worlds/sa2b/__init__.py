@@ -95,6 +95,7 @@ class SA2BWorld(World):
             "RingLink": self.options.ring_link.value,
             "TrapLink": self.options.trap_link.value,
             "RequiredRank": self.options.required_rank.value,
+            "LogicDifficulty": self.options.logic_difficulty.value,
             "ChaoKeys": self.options.keysanity.value,
             "Whistlesanity": self.options.whistlesanity.value,
             "GoldBeetles": self.options.beetlesanity.value,
