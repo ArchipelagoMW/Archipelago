@@ -53,7 +53,7 @@ def get_always_hint_items(world: "WitnessWorld") -> List[str]:
     wincon = world.options.victory_condition
 
     if discards:
-        if difficulty == "sigma_expert":
+        if difficulty == "sigma_expert" or difficulty == "umbra_variety":
             always.append("Arrows")
         else:
             always.append("Triangles")
@@ -388,8 +388,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
 
     while len(hints) < hint_amount:
         if not prog_items_in_this_world and not locations_in_this_world and not hints_to_use_first:
-            player_name = world.multiworld.get_player_name(world.player)
-            logging.warning(f"Ran out of items/locations to hint for player {player_name}.")
+            logging.warning(f"Ran out of items/locations to hint for player {world.player_name}.")
             break
 
         location_hint: Optional[WitnessLocationHint]
@@ -590,8 +589,7 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
         hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", prog_amount, hunt_panels))
 
     if len(hinted_areas) < amount:
-        player_name = world.multiworld.get_player_name(world.player)
-        logging.warning(f"Was not able to make {amount} area hints for player {player_name}. "
+        logging.warning(f"Was not able to make {amount} area hints for player {world.player_name}. "
                         f"Made {len(hinted_areas)} instead, and filled the rest with random location hints.")
 
     return hints, unhinted_locations_per_area
@@ -680,8 +678,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     # If we still don't have enough for whatever reason, throw a warning, proceed with the lower amount
     if len(generated_hints) != hint_amount:
-        player_name = world.multiworld.get_player_name(world.player)
-        logging.warning(f"Couldn't generate {hint_amount} hints for player {player_name}. "
+        logging.warning(f"Couldn't generate {hint_amount} hints for player {world.player_name}. "
                         f"Generated {len(generated_hints)} instead.")
 
     return generated_hints
@@ -715,8 +712,7 @@ def get_compact_hint_args(hint: WitnessWordedHint, local_player_number: int) -> 
         if hint.vague_location_hint and location.player == local_player_number:
             assert hint.area is not None  # A local vague location hint should have an area argument
             return location.address, "containing_area:" + hint.area
-        else:
-            return location.address, location.player  # Scouting does not matter for other players (currently)
+        return location.address, location.player  # Scouting does not matter for other players (currently)
 
     # Is junk / undefined hint
     return -1, local_player_number

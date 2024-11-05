@@ -2,7 +2,8 @@
 Defines the rules by which locations can be accessed,
 depending on the items received
 """
-from typing import TYPE_CHECKING
+from collections import Counter
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional, Union
 
 from BaseClasses import CollectionState
 
@@ -15,50 +16,22 @@ from .player_logic import WitnessPlayerLogic
 if TYPE_CHECKING:
     from . import WitnessWorld
 
-laser_hexes = [
-    "0x028A4",
-    "0x00274",
-    "0x032F9",
-    "0x01539",
-    "0x181B3",
-    "0x0C2B2",
-    "0x00509",
-    "0x00BF6",
-    "0x014BB",
-    "0x012FB",
-    "0x17C65",
-]
+
+class SimpleItemRepresentation(NamedTuple):
+    item_name: str
+    item_count: int
 
 
-def _can_do_panel_hunt(world: "WitnessWorld") -> CollectionRule:
+def _can_do_panel_hunt(world: "WitnessWorld") -> SimpleItemRepresentation:
     required = world.panel_hunt_required_count
-    player = world.player
-    return lambda state: state.has("+1 Panel Hunt", player, required)
-
-
-def _has_laser(laser_hex: str, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
-    player = world.player
-    laser_name = static_witness_logic.ENTITIES_BY_HEX[laser_hex]["checkName"]
-
-    # Workaround for intentional naming inconsistency
-    if laser_name == "Symmetry Island Laser":
-        laser_name = "Symmetry Laser"
-
-    if laser_hex == "0x012FB" and redirect_required:
-        return lambda state: state.has_all([f"+1 Laser ({laser_name})", "Desert Laser Redirection"], player)
-
-    return lambda state: state.has(f"+1 Laser ({laser_name})", player)
+    return SimpleItemRepresentation("+1 Panel Hunt", required)
 
 
 def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
-    laser_lambdas = []
+    if redirect_required:
+        return lambda state: state.has_from_list(["+1 Laser", "+1 Laser (Redirected)"], world.player, amount)
 
-    for laser_hex in laser_hexes:
-        has_laser_lambda = _has_laser(laser_hex, world, redirect_required)
-
-        laser_lambdas.append(has_laser_lambda)
-
-    return lambda state: sum(laser_lambda(state) for laser_lambda in laser_lambdas) >= amount
+    return lambda state: state.has_from_list(["+1 Laser", "+1 Laser (Unredirected)"], world.player, amount)
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
@@ -196,7 +169,13 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     )
 
 
-def _has_item(item: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic) -> CollectionRule:
+def _has_item(item: str, world: "WitnessWorld",
+              player_logic: WitnessPlayerLogic) -> Union[CollectionRule, SimpleItemRepresentation]:
+    """
+    Convert a single element of a WitnessRule into a CollectionRule, unless it is referring to an item,
+    in which case we return it as an item-count pair ("SimpleItemRepresentation"). This allows some optimisation later.
+    """
+
     assert item not in static_witness_logic.ENTITIES_BY_HEX, "Requirements can no longer contain entity hexes directly."
 
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
@@ -223,27 +202,84 @@ def _has_item(item: str, world: "WitnessWorld", player: int, player_logic: Witne
         return lambda state: _can_do_theater_to_tunnels(state, world)
 
     prog_item = static_witness_logic.get_parent_progressive_item(item)
-    return lambda state: state.has(prog_item, player, player_logic.MULTI_AMOUNTS[item])
+    needed_amount = player_logic.MULTI_AMOUNTS[item]
+
+    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(prog_item, needed_amount)
+    return simple_rule
 
 
-def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> CollectionRule:
+def optimize_requirement_option(requirement_option: List[Union[CollectionRule, SimpleItemRepresentation]])\
+        -> List[Union[CollectionRule, SimpleItemRepresentation]]:
     """
-    Checks whether item and panel requirements are met for
-    a panel
+    This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
     """
 
-    lambda_conversion = [
-        [_has_item(item, world, world.player, world.player_logic) for item in subset]
+    direct_items = [rule for rule in requirement_option if isinstance(rule, SimpleItemRepresentation)]
+    if not direct_items:
+        return requirement_option
+
+    max_per_item: Dict[str, int] = Counter()
+    for item_rule in direct_items:
+        max_per_item[item_rule[0]] = max(max_per_item[item_rule[0]], item_rule[1])
+
+    return [
+        rule for rule in requirement_option
+        if not (isinstance(rule, SimpleItemRepresentation) and rule[1] < max_per_item[rule[0]])
+    ]
+
+
+def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleItemRepresentation]],
+                               player: int) -> List[CollectionRule]:
+    """
+    Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
+    If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
+    """
+
+    collection_rules = [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
+    item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
+
+    if len(item_rules) == 0:
+        item_rules_converted = []
+    elif len(item_rules) == 1:
+        item = item_rules[0][0]
+        count = item_rules[0][1]
+        item_rules_converted = [lambda state: state.has(item, player, count)]
+    else:
+        item_counts = {item_rule.item_name: item_rule.item_count for item_rule in item_rules}
+        item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
+
+    return collection_rules + item_rules_converted
+
+
+def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
+    """
+    Converts a WitnessRule into a CollectionRule.
+    """
+    player = world.player
+
+    if requirements == frozenset({frozenset()}):
+        return None
+
+    rule_conversion = [
+        [_has_item(item, world, world.player_logic) for item in subset]
         for subset in requirements
     ]
 
+    optimized_rule_conversion = [optimize_requirement_option(sublist) for sublist in rule_conversion]
+
+    fully_converted_rules = [convert_requirement_option(sublist, player) for sublist in optimized_rule_conversion]
+
+    if len(fully_converted_rules) == 1:
+        if len(fully_converted_rules[0]) == 1:
+            return fully_converted_rules[0][0]
+        return lambda state: all(condition(state) for condition in fully_converted_rules[0])
     return lambda state: any(
         all(condition(state) for condition in sub_requirement)
-        for sub_requirement in lambda_conversion
+        for sub_requirement in fully_converted_rules
     )
 
 
-def make_lambda(entity_hex: str, world: "WitnessWorld") -> CollectionRule:
+def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRule]:
     """
     Lambdas are created in a for loop so values need to be captured
     """
@@ -268,6 +304,8 @@ def set_rules(world: "WitnessWorld") -> None:
         entity_hex = associated_entity["entity_hex"]
 
         rule = make_lambda(entity_hex, world)
+        if rule is None:
+            continue
 
         location = world.get_location(location)
 
