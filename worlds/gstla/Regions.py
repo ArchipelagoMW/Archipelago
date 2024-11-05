@@ -34,7 +34,7 @@ def create_region(world: 'GSTLAWorld', region_data: EntranceData):
     for location in region_data.locations:
         location_data = location_name_to_id[location]
         #logging.error(region.name + ' ' + location)
-        if world.options.item_shuffle < 2 and location_data.loc_type == LocationType.Hidden:
+        if world.options.item_shuffle < 3 and location_data.loc_type == LocationType.Hidden:
             continue
         if location_data.loc_type == LocationType.Djinn:
             loc = GSTLALocation.create_djinn_location(world.player, location, location_data, region)

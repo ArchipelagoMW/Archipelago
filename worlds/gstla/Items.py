@@ -93,6 +93,9 @@ def create_items(world: 'GSTLAWorld', player: int):
     # item population based on player configured options.
     mimic_items = []
     for loc in all_locations:
+        if world.options.item_shuffle < 3 and loc.loc_type == LocationType.Hidden:
+            continue
+
         if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:
             continue
         # Coins do funny business
