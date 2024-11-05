@@ -264,7 +264,6 @@ ahit_locations = {
                                              required_hats=[HatType.DWELLER], paintings=3),
 
     "Subcon Forest - Tall Tree Hookshot Swing": LocData(2000324766, "Subcon Forest Area",
-                                                        required_hats=[HatType.DWELLER],
                                                         hookshot=True,
                                                         paintings=3),
 
