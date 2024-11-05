@@ -933,6 +933,7 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.death_chamber_itembox_8, 
         LocationName.death_chamber_itembox_9, 
         LocationName.death_chamber_itembox_10,
+        LocationName.death_chamber_itembox_11,
         LocationName.death_chamber_big,
         LocationName.death_chamber_upgrade,
     ]

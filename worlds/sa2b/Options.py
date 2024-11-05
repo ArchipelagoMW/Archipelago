@@ -369,7 +369,7 @@ class ItemBoxsanity(Choice):
     Determines whether collecting Item Boxes grants checks
     None: No Item Boxes grant checks
     Extra Lives: Extra Life Boxes grant checks (94 Locations)
-    All: All Item Boxes grant checks (493 Locations Total)
+    All: All Item Boxes grant checks (494 Locations Total)
     """
     display_name = "Itemboxsanity"
     option_none = 0
