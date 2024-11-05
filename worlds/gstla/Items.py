@@ -116,6 +116,12 @@ def create_items(world: 'GSTLAWorld', player: int):
             continue
         if world.options.start_with_reveal == 1 and vanilla_item.name == ItemName.Reveal:
             continue
+        #hacky way to add in the gs1 items. ideally the item pool is handled a bit differently
+        if world.options.add_elvenshirt_clericsring == 1:
+            if loc_names_by_id[loc.ap_id] == LocationName.Dehkan_Plateau_Elixir:    
+                vanilla_item = item_table[ItemName.Elven_Shirt]
+            elif loc_names_by_id[loc.ap_id] == LocationName.Dehkan_Plateau_Nut: 
+                vanilla_item = item_table[ItemName.Clerics_Ring]
         if vanilla_item.type == ItemType.Event or vanilla_item.type == ItemType.Djinn:
             continue
         if vanilla_item.id == 0:
