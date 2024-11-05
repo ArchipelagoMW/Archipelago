@@ -10,7 +10,7 @@ from .gen.ItemData import summon_list, characters
 from .Names.EntranceName import EntranceName
 from .Locations import location_type_to_data, all_locations
 from .gen.LocationData import LocationType, LocationRestriction
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, ItemClassification
 from .gen.LocationNames import LocationName, loc_names_by_id
 
 if TYPE_CHECKING:
@@ -993,3 +993,14 @@ def set_item_rules(world: 'GSTLAWorld'):
     for loc in [x for x in all_locations if x.loc_type != LocationType.Event]:
         if loc.restrictions > 0:
             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
+
+        if world.options.major_minor_split == 1:
+            #Not all items are included in the item shuffle so we should not try to assign rules to non existant locations
+            if world.options.item_shuffle < 3 and loc.loc_type == LocationType.Hidden:
+                continue
+
+        #All key item locations will be guarenteed not filler, major locations can contain anything and non key non major locations will never contain progression
+        if loc.is_key:
+             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.filler)
+        elif not loc.is_major:
+             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.progression and item.classification != ItemClassification.progression_skip_balancing and item.classification != ItemClassification.trap)
