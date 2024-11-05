@@ -407,7 +407,7 @@ act_completions = {
                                                hit_type=HitType.umbrella_or_brewing, hookshot=True, paintings=1),
 
     "Act Completion (Queen Vanessa's Manor)": LocData(2000312017, "Queen Vanessa's Manor",
-                                                      hit_type=HitType.umbrella, paintings=1),
+                                                      hit_type=HitType.dweller_bell, paintings=1),
 
     "Act Completion (Mail Delivery Service)": LocData(2000312032, "Mail Delivery Service",
                                                       required_hats=[HatType.SPRINT]),
