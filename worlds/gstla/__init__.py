@@ -55,6 +55,8 @@ class GSTLAWorld(World):
 
         if self.options.lemurian_ship == 2:
             self.multiworld.push_precollected(create_item(ItemName.Ship, self.player))
+        if self.options.start_with_wings_of_anemos == 1:
+            self.multiworld.push_precollected(create_item(ItemName.Wings_of_Anemos, self.player))
         if self.options.start_with_reveal == 1:
             self.multiworld.push_precollected(create_item(ItemName.Reveal, self.player))
 

@@ -77,6 +77,10 @@ def create_events(world: 'GSTLAWorld'):
             #world.multiworld.push_precollected(event_item)
             continue
 
+        if event.location == LocationName.Contigo_Wings_of_Anemos and world.options.start_with_wings_of_anemos == 1:
+            #world.multiworld.push_precollected(event_item)
+            continue
+
         event_location = world.get_location(event.location)
         event_location.place_locked_item(event_item)
 

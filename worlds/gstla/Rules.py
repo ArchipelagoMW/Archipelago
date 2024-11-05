@@ -83,7 +83,10 @@ def set_entrance_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Parch, player))
 
     add_rule(world.get_entrance(EntranceName.EasternSeaToWesternSea),
-             lambda state: state.has(ItemName.Grindstone, player))
+             lambda state: state.has(ItemName.Grindstone, player) or (state.has(ItemName.Wings_of_Anemos, player) and state.has(ItemName.Hover_Jade, player)))
+    
+    add_rule(world.get_entrance(EntranceName.WesternSeaToAttekaCavern),
+             lambda state: state.has(ItemName.Wings_of_Anemos, player) and state.has(ItemName.Hover_Jade, player))
 
     add_rule(world.get_entrance(EntranceName.WesternSeaToMagmaRock),
              lambda state: state.has(ItemName.Lifting_Gem, player))
@@ -99,7 +102,6 @@ def set_entrance_rules(world: 'GSTLAWorld'):
         add_rule(world.get_entrance(EntranceName.ContigoToAnemosInnerSanctum),
                 lambda state: state.count_group(ItemType.Djinn.name, player) >= 28)
         
-
     add_rule(world.get_entrance(EntranceName.ContigoToJupiterLighthouse),
              lambda state: state.has(ItemName.Cyclone_Chip, player))
 
@@ -652,7 +654,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     #Western Sea
     add_rule(world.get_location(LocationName.Overworld_Rusty_Sword_Two),
-             lambda state: state.has(ItemName.Jupiter_Beacon_Lit, player))
+             lambda state: state.has(ItemName.Wings_of_Anemos, player) and state.has(ItemName.Hover_Jade, player))
 
     #SW Atteka Islet
     add_rule(world.get_location(LocationName.Luff),

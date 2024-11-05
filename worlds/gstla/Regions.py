@@ -67,6 +67,9 @@ def create_regions(world: 'GSTLAWorld'):
     if world.options.lemurian_ship < 2:
         regions_copy[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine_Room)
 
+    if world.options.start_with_wings_of_anemos == 0:
+        regions_copy[RegionName.Reunion].locations.append(LocationName.Contigo_Wings_of_Anemos)
+
     for region in regions_copy.values():
         create_region(world, region)
 
