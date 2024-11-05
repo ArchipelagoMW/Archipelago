@@ -1630,6 +1630,7 @@ itembox_location_table = {
 
     LocationName.green_forest_itembox_11: 0xFF1744,
     LocationName.pyramid_cave_itembox_11: 0xFF174A,
+    LocationName.death_chamber_itembox_11: 0xFF174B,
     LocationName.eternal_engine_itembox_11: 0xFF174C,
     LocationName.meteor_herd_itembox_11: 0xFF174D,
     LocationName.crazy_gadget_itembox_11: 0xFF174E,
