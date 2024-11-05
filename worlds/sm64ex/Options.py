@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
 from .Items import action_item_table
 
-class EnableCoinStars(DefaultOnToggle):
+class EnableCoinStars(Choice):
     """
     Determine logic for 100 Coin Stars.
 
