@@ -4,11 +4,15 @@ import sys
 import asyncio
 import shutil
 import logging
+import time
+from calendar import timegm
 
 import ModuleUpdate
 ModuleUpdate.update()
 
 import Utils
+
+death_link = False
 
 item_num = 1
 
@@ -27,8 +31,18 @@ def check_stdin() -> None:
         print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
 
 class KHRECOMClientCommandProcessor(ClientCommandProcessor):
-    pass
+    def __init__(self, ctx):
+        super().__init__(ctx)
 
+    def _cmd_deathlink(self):
+        """Toggles Deathlink"""
+        global death_link
+        if death_link:
+            death_link = False
+            self.output(f"Death Link turned off")
+        else:
+            death_link = True
+            self.output(f"Death Link turned on")
 
 class KHRECOMContext(CommonContext):
     command_processor: int = KHRECOMClientCommandProcessor
@@ -38,6 +52,7 @@ class KHRECOMContext(CommonContext):
     def __init__(self, server_address, password):
         super(KHRECOMContext, self).__init__(server_address, password)
         self.send_index: int = 0
+        self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
@@ -120,6 +135,17 @@ class KHRECOMContext(CommonContext):
                     filename = f"send{ss}"
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.close()
+    
+    def on_deathlink(self, data: dict[str, object]):
+        self.last_death_link = max(data["time"], self.last_death_link)
+        text = data.get("cause", "")
+        if text:
+            logger.info(f"DeathLink: {text}")
+        else:
+            logger.info(f"DeathLink: Received from {data['source']}")
+        with open(os.path.join(self.game_communication_path, 'dlreceive'), 'w') as f:
+            f.write(str(int(data["time"])))
+            f.close()
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
@@ -138,6 +164,17 @@ class KHRECOMContext(CommonContext):
 async def game_watcher(ctx: KHRECOMContext):
     from .Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
+        global death_link
+        if death_link and "DeathLink" not in ctx.tags:
+            await ctx.update_death_link(death_link)
+        if not death_link and "DeathLink" in ctx.tags:
+            await ctx.update_death_link(death_link)
+        if ctx.syncing == True:
+            sync_msg = [{'cmd': 'Sync'}]
+            if ctx.locations_checked:
+                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
+            await ctx.send_msgs(sync_msg)
+            ctx.syncing = False
         sending = []
         victory = False
         for root, dirs, files in os.walk(ctx.game_communication_path):
@@ -148,6 +185,11 @@ async def game_watcher(ctx: KHRECOMContext):
                         sending = sending+[(int(st))]
                 if file.find("victory") > -1:
                     victory = True
+                if file.find("dlsend") > -1 and "DeathLink" in ctx.tags:
+                    st = file.split("dlsend", -1)[1]
+                    if st != "nil":
+                        if timegm(time.strptime(st, '%Y%m%d%H%M%S')) > ctx.last_death_link and int(time.time()) % int(timegm(time.strptime(st, '%Y%m%d%H%M%S'))) < 10:
+                            await ctx.send_death(death_text = "Sora was defeated!")
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
