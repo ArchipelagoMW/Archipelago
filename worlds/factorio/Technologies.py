@@ -69,14 +69,11 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
 
     def __init__(self, technology_name: str, factorio_id: int, progressive: Tuple[str] = (),
-                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None, trigger: Dict[str, Any] = None):
+                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None):
         self.name = technology_name
         self.factorio_id = factorio_id
         self.progressive = progressive
         self.has_modifier = has_modifier
-        if not trigger:
-            trigger = {}
-        self.trigger = trigger
         if unlocks:
             self.unlocks = unlocks
         else:
@@ -197,10 +194,12 @@ recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 
 # recipes and technologies can share names in Factorio
 for technology_name, data in sorted(techs_future.result().items()):
-    technology = Technology(technology_name, factorio_tech_id,
-                            has_modifier=data["has_modifier"],
-                            unlocks=set(data["unlocks"]) - start_unlocked_recipes,
-                            trigger=data.get("trigger", None))
+    technology = Technology(
+        technology_name,
+        factorio_tech_id,
+        has_modifier=data["has_modifier"],
+        unlocks=set(data["unlocks"]) - start_unlocked_recipes,
+    )
     factorio_tech_id += 1
     tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
