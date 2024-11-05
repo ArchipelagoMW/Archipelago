@@ -203,7 +203,7 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     # Bowser in the Sky
     rf.assign_rule("BitS: Top", "CL+TJ | CL+SF+LG | MOVELESS & TJ+WK+LG")
     # 100 Coin Stars
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         rf.assign_rule("BoB: 100 Coins", "CANN & WC | CANNLESS & WC & TJ")
         rf.assign_rule("WF: 100 Coins", "GP | MOVELESS")
         rf.assign_rule("JRB: 100 Coins", "GP & {JRB: Upper}")

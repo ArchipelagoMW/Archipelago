@@ -89,7 +89,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
                         "BoB: Mario Wings to the Sky", "BoB: Behind Chain Chomp's Gate", "BoB: Bob-omb Buddy")
     bob_island = create_subregion(regBoB, "BoB: Island", "BoB: Shoot to the Island in the Sky", "BoB: Find the 8 Red Coins")
     regBoB.subregions = [bob_island]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regBoB, "BoB: 100 Coins")
 
     regWhomp = create_region("Whomp's Fortress", player, world)
@@ -97,7 +97,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
                           "WF: Fall onto the Caged Island", "WF: Blast Away the Wall")
     wf_tower = create_subregion(regWhomp, "WF: Tower", "WF: To the Top of the Fortress", "WF: Bob-omb Buddy")
     regWhomp.subregions = [wf_tower]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regWhomp, "WF: 100 Coins")
 
     regJRB = create_region("Jolly Roger Bay", player, world)
@@ -105,12 +105,12 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
                         "JRB: Blast to the Stone Pillar", "JRB: Through the Jet Stream", "JRB: Bob-omb Buddy")
     jrb_upper = create_subregion(regJRB, 'JRB: Upper', "JRB: Red Coins on the Ship Afloat")
     regJRB.subregions = [jrb_upper]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(jrb_upper, "JRB: 100 Coins")
 
     regCCM = create_region("Cool, Cool Mountain", player, world)
     create_default_locs(regCCM, locCCM_table)
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regCCM, "CCM: 100 Coins")
 
     regBBH = create_region("Big Boo's Haunt", player, world)
@@ -119,7 +119,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     bbh_third_floor = create_subregion(regBBH, "BBH: Third Floor", "BBH: Eye to Eye in the Secret Room")
     bbh_roof = create_subregion(bbh_third_floor, "BBH: Roof", "BBH: Big Boo's Balcony", "BBH: 1Up Block Top of Mansion")
     regBBH.subregions = [bbh_third_floor, bbh_roof]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regBBH, "BBH: 100 Coins")
 
     regPSS = create_region("The Princess's Secret Slide", player, world)
@@ -142,7 +142,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     hmc_red_coin_area = create_subregion(regHMC, "HMC: Red Coin Area", "HMC: Elevate for 8 Red Coins")
     hmc_pit_islands = create_subregion(regHMC, "HMC: Pit Islands", "HMC: A-Maze-Ing Emergency Exit", "HMC: 1Up Block above Pit")
     regHMC.subregions = [hmc_red_coin_area, hmc_pit_islands]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(hmc_red_coin_area, "HMC: 100 Coins")
 
     regLLL = create_region("Lethal Lava Land", player, world)
@@ -150,7 +150,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
                         "LLL: 8-Coin Puzzle with 15 Pieces", "LLL: Red-Hot Log Rolling")
     lll_upper_volcano = create_subregion(regLLL, "LLL: Upper Volcano", "LLL: Hot-Foot-It into the Volcano", "LLL: Elevator Tour in the Volcano")
     regLLL.subregions = [lll_upper_volcano]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regLLL, "LLL: 100 Coins")
 
     regSSL = create_region("Shifting Sand Land", player, world)
@@ -160,13 +160,13 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     ssl_upper_pyramid = create_subregion(regSSL, "SSL: Upper Pyramid", "SSL: Inside the Ancient Pyramid",
                                          "SSL: Stand Tall on the Four Pillars", "SSL: Pyramid Puzzle")
     regSSL.subregions = [ssl_upper_pyramid]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regSSL, "SSL: 100 Coins")
 
     regDDD = create_region("Dire, Dire Docks", player, world)
     create_locs(regDDD, "DDD: Board Bowser's Sub", "DDD: Chests in the Current", "DDD: Through the Jet Stream",
                         "DDD: The Manta Ray's Reward", "DDD: Collect the Caps...", "DDD: Pole-Jumping for Red Coins")
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regDDD, "DDD: 100 Coins")
 
     regCotMC = create_region("Cavern of the Metal Cap", player, world)
@@ -183,7 +183,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
 
     regSL = create_region("Snowman's Land", player, world)
     create_default_locs(regSL, locSL_table)
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(regSL, "SL: 100 Coins")
 
     regWDW = create_region("Wet-Dry World", player, world)
@@ -192,7 +192,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
                                                    "WDW: Secrets in the Shallows & Sky", "WDW: Bob-omb Buddy")
     wdw_downtown = create_subregion(regWDW, "WDW: Downtown", "WDW: Go to Town for Red Coins", "WDW: Quick Race Through Downtown!", "WDW: 1Up Block in Downtown")
     regWDW.subregions = [wdw_top, wdw_downtown]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(wdw_top, "WDW: 100 Coins")
 
     regTTM = create_region("Tall, Tall Mountain", player, world)
@@ -201,7 +201,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     ttm_top = create_subregion(ttm_middle, "TTM: Top", "TTM: Scale the Mountain", "TTM: Mystery of the Monkey Cage",
                                                        "TTM: Mysterious Mountainside", "TTM: Breathtaking View from Bridge")
     regTTM.subregions = [ttm_middle, ttm_top]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(ttm_top, "TTM: 100 Coins")
 
     create_region("Tiny-Huge Island (Huge)", player, world)
@@ -213,7 +213,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
                                                        "THI: 1Up Block THI Large near Start", "THI: 1Up Block Windy Area")
     thi_large_top = create_subregion(thi_pipes, "THI: Large Top", "THI: Make Wiggler Squirm")
     regTHI.subregions = [thi_pipes, thi_large_top]
-    if options.enable_coin_stars != 0:
+    if options.enable_coin_stars:
         create_locs(thi_large_top, "THI: 100 Coins")
 
     regFloor3 = create_region("Third Floor", player, world)
@@ -224,7 +224,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     ttc_upper = create_subregion(ttc_lower, "TTC: Upper", "TTC: Timed Jumps on Moving Bars", "TTC: The Pit and the Pendulums")
     ttc_top = create_subregion(ttc_upper, "TTC: Top", "TTC: 1Up Block Midway Up", "TTC: Stomp on the Thwomp", "TTC: 1Up Block at the Top")
     regTTC.subregions = [ttc_lower, ttc_upper, ttc_top]
-    if options.enable_coin_stars != 0 :
+    if options.enable_coin_stars:
         create_locs(ttc_top, "TTC: 100 Coins")
 
     regRR = create_region("Rainbow Ride", player, world)
@@ -234,7 +234,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     rr_cruiser = create_subregion(regRR, "RR: Cruiser", "RR: Cruiser Crossing the Rainbow", "RR: Somewhere Over the Rainbow")
     rr_house = create_subregion(regRR, "RR: House", "RR: The Big House in the Sky", "RR: 1Up Block On House in the Sky")
     regRR.subregions = [rr_maze, rr_cruiser, rr_house]
-    if options.enable_coin_stars != 0 :
+    if options.enable_coin_stars:
         create_locs(rr_maze, "RR: 100 Coins")
 
     regWMotR = create_region("Wing Mario over the Rainbow", player, world)
