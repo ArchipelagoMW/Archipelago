@@ -296,14 +296,20 @@ class FactorioWorldGen(OptionDict):
     value: typing.Dict[str, typing.Dict[str, typing.Any]]
     default = {
         "autoplace_controls": {
+            # terrain
+            "water": {"frequency": 1, "size": 1, "richness": 1},
+            "nauvis_cliff": {"frequency": 1, "size": 1, "richness": 1},
+            "starting_area_moisture": {"frequency": 1, "size": 1, "richness": 1},
+            # resources
             "coal": {"frequency": 1, "size": 3, "richness": 6},
             "copper-ore": {"frequency": 1, "size": 3, "richness": 6},
             "crude-oil": {"frequency": 1, "size": 3, "richness": 6},
-            "enemy-base": {"frequency": 1, "size": 1, "richness": 1},
             "iron-ore": {"frequency": 1, "size": 3, "richness": 6},
             "stone": {"frequency": 1, "size": 3, "richness": 6},
+            "uranium-ore": {"frequency": 1, "size": 3, "richness": 6},
+            # misc
             "trees": {"frequency": 1, "size": 1, "richness": 1},
-            "uranium-ore": {"frequency": 1, "size": 3, "richness": 6}
+            "enemy-base": {"frequency": 1, "size": 1, "richness": 1},
         },
         "seed": None,
         "starting_area": 1,
