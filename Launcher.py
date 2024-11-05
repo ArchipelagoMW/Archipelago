@@ -35,7 +35,9 @@ from Utils import is_frozen, user_path, local_path, init_logging, open_filename,
 
 
 def open_host_yaml():
-    file = settings.get_settings().filename
+    s = settings.get_settings()
+    file = s.filename
+    s.save()
     assert file, "host.yaml missing"
     if is_linux:
         exe = which('sensible-editor') or which('gedit') or \
@@ -252,7 +254,7 @@ def run_gui():
         _client_layout: Optional[ScrollBox] = None
 
         def __init__(self, ctx=None):
-            self.title = self.base_title
+            self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             super().__init__()
