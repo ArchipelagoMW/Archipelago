@@ -1412,7 +1412,7 @@ class DarkSouls3World(World):
 
             # All DarkSouls3Items for this world that have been assigned anywhere, grouped by name
             full_items_by_name: Dict[str, List[DarkSouls3Item]] = defaultdict(list)
-            for location in ds3_world.multiworld.get_filled_locations():
+            for location in multiworld.get_filled_locations():
                 if location.item.player == ds3_world.player and (
                     location.player != ds3_world.player or ds3_world._is_location_available(location)
                 ):
@@ -1488,7 +1488,7 @@ class DarkSouls3World(World):
             if ds3_world.options.smooth_upgraded_weapons:
                 upgraded_weapons = [
                     location.item
-                    for location in ds3_world.multiworld.get_filled_locations()
+                    for location in multiworld.get_filled_locations()
                     if location.item.player == ds3_world.player
                     and location.item.level and location.item.level > 0
                     and location.item.classification != ItemClassification.progression
