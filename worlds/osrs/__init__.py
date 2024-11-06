@@ -218,11 +218,11 @@ class OSRSWorld(World):
                     add_rule(entrance,
                         lambda state: (state.can_reach_region(RegionNames.South_Of_Varrock, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                      (state.can_reach_region(RegionNames.Barbarian_Village, self.player)
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
+                                      (state.can_reach_region(RegionNames.Edgeville, self.player)
                                        and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
+                                      (state.can_reach_region(RegionNames.Wilderness, self.player)
                                        and woodcutting_rule_all(state) and self.options.max_woodcutting_level >= 57))
 
                 # Access to other chunks based on woodcutting settings
@@ -242,11 +242,11 @@ class OSRSWorld(World):
                     add_rule(entrance,
                         lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                      (state.can_reach_region(RegionNames.Barbarian_Village, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
+                                      (state.can_reach_region(RegionNames.Edgeville, self.player)
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
+                                      (state.can_reach_region(RegionNames.Wilderness, self.player)
                                        and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42))
 
                 # Access to other chunks based on woodcutting settings
@@ -265,11 +265,11 @@ class OSRSWorld(World):
                     add_rule(entrance,
                         lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
+                                      (state.can_reach_region(RegionNames.South_Of_Varrock, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
+                                      (state.can_reach_region(RegionNames.Edgeville, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
+                                      (state.can_reach_region(RegionNames.Wilderness, self.player)
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27))
 
                 # Access to other chunks based on woodcutting settings
@@ -288,11 +288,11 @@ class OSRSWorld(World):
                     add_rule(entrance,
                         lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
                                        and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
-                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
+                                      (state.can_reach_region(RegionNames.South_Of_Varrock, self.player)
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                      (state.can_reach_region(RegionNames.Barbarian_Village, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
+                                      (state.can_reach_region(RegionNames.Wilderness, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12))
 
                 # Access to other chunks based on woodcutting settings
@@ -309,11 +309,11 @@ class OSRSWorld(World):
                     add_rule(entrance,
                         lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
                                        and woodcutting_rule_all(state) and self.options.max_woodcutting_level >= 57) or \
-                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
+                                      (state.can_reach_region(RegionNames.South_Of_Varrock, self.player)
                                        and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
+                                      (state.can_reach_region(RegionNames.Barbarian_Village, self.player)
                                        and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
+                                      (state.can_reach_region(RegionNames.Edgeville, self.player)
                                        and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12))
 
                 # Access to other chunks based on woodcutting settings
