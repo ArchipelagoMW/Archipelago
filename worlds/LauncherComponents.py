@@ -28,7 +28,10 @@ class Component:
     display_name: str
     """Used as the GUI button label and the component name in the CLI args"""
     type: Type
-    """Classification of component intent to filter in the Launcher GUI"""
+    """
+    Enum "Type" classification of component intent to filter in the Launcher GUI
+    If not set in the constructor it will be inferred by display_name
+    """
     script_name: Optional[str]
     """Recommended to use func instead; Name of file to run when the component is called"""
     frozen_name: Optional[str]
