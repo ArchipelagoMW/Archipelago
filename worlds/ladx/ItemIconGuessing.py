@@ -394,6 +394,10 @@ GAME_SPECIFIC_PHRASES = {
         'WATER OF LIFE': 'MEDICINE',
     },
 
+    'The Legend of Zelda - Oracle of Seasons': {
+        'RARE PEACH STONE': 'HEART_PIECE',
+    },
+
     'Noita': {
         'ALL-SEEING EYE': 'TRADING_ITEM_MAGNIFYING_GLASS',  # lets you find secrets
     },
@@ -403,9 +407,12 @@ GAME_SPECIFIC_PHRASES = {
     },
 
     'SMZ3': {
+        'BIGKEY': 'NIGHTMARE_KEY',
         'BYRNA': 'MAGIC_ROD',
+        'HEARTPIECE': 'HEART_PIECE',
         'POWERBOMB': 'BOMB',
         'SOMARIA': 'MAGIC_ROD',
+        'SUPER': 'SINGLE_ARROW',
     },
 
     'Sonic Adventure 2 Battle': {
