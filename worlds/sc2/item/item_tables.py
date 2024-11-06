@@ -1588,6 +1588,8 @@ item_table = {
     item_names.HUNTER_KILLERS: ItemData(604 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 4, SC2Race.ZERG),
     item_names.TORRASQUE_MERC: ItemData(605 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 5, SC2Race.ZERG),
     item_names.HUNTERLING: ItemData(606 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 6, SC2Race.ZERG, classification=ItemClassification.progression),
+    item_names.YGGDRASIL: ItemData(607 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 7, SC2Race.ZERG),
+
 
     # Misc Upgrades
     item_names.OVERLORD_VENTRAL_SACS: ItemData(700 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 6, SC2Race.ZERG, classification=ItemClassification.progression),

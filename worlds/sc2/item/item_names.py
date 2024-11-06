@@ -566,6 +566,8 @@ DEVOURING_ONES       = "Devouring Ones"
 HUNTER_KILLERS       = "Hunter Killers"
 TORRASQUE_MERC       = "Torrasque"
 HUNTERLING           = "Hunterling"
+YGGDRASIL            = "Yggdrasil"
+
     
 # Kerrigan Upgrades
 KERRIGAN_KINETIC_BLAST           = "Kinetic Blast (Kerrigan Ability)"
