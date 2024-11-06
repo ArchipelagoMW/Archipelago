@@ -3697,6 +3697,42 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.FIRE_IN_THE_SKY_P.mission_name, "Southeast Orbital Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 7412, LocationType.CHALLENGE,
                            logic.protoss_competent_comp
                            ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7500, LocationType.VICTORY,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "East Science Lab", SC2_RACESWAP_LOC_ID_OFFSET + 7501, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "North Science Lab", SC2_RACESWAP_LOC_ID_OFFSET + 7502, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "Get Nuked", SC2_RACESWAP_LOC_ID_OFFSET + 7503, LocationType.EXTRA),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "Entrance Gate", SC2_RACESWAP_LOC_ID_OFFSET + 7504, LocationType.EXTRA),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "Citadel Gate", SC2_RACESWAP_LOC_ID_OFFSET + 7505, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "South Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 7506, LocationType.EXTRA),
+        make_location_data(SC2Mission.OLD_SOLDIERS_T.mission_name, "Rich Mineral Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 7507, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7600, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "East Science Lab", SC2_RACESWAP_LOC_ID_OFFSET + 7601, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "North Science Lab", SC2_RACESWAP_LOC_ID_OFFSET + 7602, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "Get Nuked", SC2_RACESWAP_LOC_ID_OFFSET + 7603, LocationType.EXTRA),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "Entrance Gate", SC2_RACESWAP_LOC_ID_OFFSET + 7604, LocationType.EXTRA),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "Citadel Gate", SC2_RACESWAP_LOC_ID_OFFSET + 7605, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "South Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 7606, LocationType.EXTRA),
+        make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "Rich Mineral Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 7607, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []
