@@ -164,7 +164,7 @@ class SM64World(World):
             self.multiworld.get_location("Wing Mario Over the Rainbow 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("Bowser in the Sky 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
 
-        if (self.options.enable_coin_stars == self.options.enable_coin_stars.option_Vanilla):
+        if (self.options.enable_coin_stars == self.options.enable_coin_stars.option_vanilla):
             self.multiworld.get_location("BoB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
             self.multiworld.get_location("WF: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
             self.multiworld.get_location("JRB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))

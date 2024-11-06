@@ -15,9 +15,9 @@ class EnableCoinStars(Choice):
     Vanilla - Kept in pool, but NOT randomized.
     """
     display_name = "Enable 100 Coin Stars"
-    option_Off = 0
-    option_On = 1
-    option_Vanilla = 2
+    option_off = 0
+    option_on = 1
+    option_vanilla = 2
 
 
 class StrictCapRequirements(DefaultOnToggle):
