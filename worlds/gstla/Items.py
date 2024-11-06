@@ -207,8 +207,9 @@ def create_items(world: 'GSTLAWorld', player: int):
             # else: #Anywhere
             world.multiworld.itempool.append(ap_item)
 
+    # TODO: should we place them here, or let the item_rules handle this?
     remaining_locs = [ x for x in world.multiworld.get_unfilled_locations(world.player)
-                       if x.location_data.restrictions & LocationRestriction.NoMimic > 0]
+                       if x.location_data.restrictions & LocationRestriction.NoMimic == 0]
     world.random.shuffle(remaining_locs)
     fast_fill(world.multiworld, mimic_items, remaining_locs)
 
