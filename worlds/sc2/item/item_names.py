@@ -566,7 +566,7 @@ DEVOURING_ONES       = "Devouring Ones"
 HUNTER_KILLERS       = "Hunter Killers"
 TORRASQUE_MERC       = "Torrasque"
 HUNTERLING           = "Hunterling"
-YGGDRASIL       = "Yggdrasil"
+YGGDRASIL            = "Yggdrasil"
 
     
 # Kerrigan Upgrades
