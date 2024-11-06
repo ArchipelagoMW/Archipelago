@@ -385,6 +385,8 @@ class CMWorld(World):
 
         if self.items_used[self.player].get(chosen_item, 0) >= item_table[chosen_item].quantity:
             return True
+        if not self.under_piece_limit(chosen_item, self.PieceLimitCascade.POTENTIAL_CHILDREN):
+            return True
 
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])

@@ -125,6 +125,8 @@ def meets_material_expectations(state: CollectionState,
 def meets_chessmen_expectations(state: CollectionState,
                                 count: int, player: int, pocket_limit_by_pocket: int) -> bool:
     chessmen_count = state.count_group("Chessmen", player)
+    if pocket_limit_by_pocket == 0:
+        return chessmen_count >= count
     pocket_count = ceil(state.count("Progressive Pocket", player) / pocket_limit_by_pocket)
     return chessmen_count + pocket_count >= count
 
