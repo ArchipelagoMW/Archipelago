@@ -3,33 +3,48 @@ from enum import IntEnum, auto
 from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions
 
 class StartWithShip(Choice):
-    display_name = "Start with ship"
+    """What needs to be done to get the ship?
+    Vanilla requires getting the black crystal and completing the gabomba statue to get the reward from Madras Mayor.
+    Ship Door Unlocked involves getting the black crystal and activating the ship as per vanilla.
+    Available from the start allows you to use the ship from the beginning of the game.
+    """
+    display_name = "Lemurian Ship"
     option_vanilla = 0
-    option_shipisclosed = 1
-    option_startwithship = 2
+    option_ship_door_unlocked = 1
+    option_available_from_start = 2
     default = 0
 
 class CharacterShuffle(Choice):
+    """Where can you find the other characters?
+    Vanilla makes it like the vanilla experience.
+    Vanilla Shuffled puts the characters in eachothers locations.
+    Anywhere puts the characters in the multiworld itempool, 
+    note that Jenna's character location is forced to be a character due to game limiations with psynergy learning.
+    """
     display_name = "Character Shuffle"
-    option_anywhere = 2
-    option_vanilla_shuffled = 1
     option_vanilla = 0
+    option_vanilla_shuffled = 1
+    option_anywhere = 2
     default = 1
 
 class DjinnLogic(NamedRange):
+    """How much do Djinn affect logic for being able to defeat bosses?
+    Assuming this is set to 100 (Normal) beating Briggs expects 6 djinn, Poseidon 24 djinn and Doom Dragon 56 djinn.
+    Dullahan goes up to 72 (All Djinn in the game). Setting this to 50 (Hard) will halve all of these numbers and 0 will remove the requirement completely.
+    """
     display_name = "Djinn Logic"
     range_start = 0
     range_end = 100
     default = 100
 
     special_range_names = {
-        "casual": 100,
+        "normal": 100,
         "hard": 50,
         "none": 0
     }
 
 class RevealHiddenItem(Toggle):
-    """If enabled all hidden items require Reveal to be logically accessible.
+    """Require Reveal to be able to logically access hidden items.
     Note that most hidden items can be gotten regardless of having Reveal or not.
     Also there are a few locations that hard require Reveal to be obtainable, this setting does not alter those.
     """
@@ -37,204 +52,204 @@ class RevealHiddenItem(Toggle):
     default = 1
 
 class ItemShuffle(Choice):
-    """Which locations are part of the pool.
-    Most is all locations but the pots and barrels containing hidden Items. Note some hidden chests may still exist.
-    All is all locations, including hidden items in pots and barrles,"""
+    """Determine which locations in the game are part of the pool.
+    All Chests and Tablets includes all chests and tablets and does not include hidden items from pots, barrels, dug up.
+    All Locations includes everything from the vanilla game, including hidden items in pots, barrels, scooped up, covered in leaves or on the overworld."""
     display_name = "Item Shuffle"
-    option_most = 2
-    option_all = 3
+    option_all_chests_and_tablets = 2
+    option_all_items = 3
     default = 2
 
 class OmitLocations(Choice):
     """Choose to omit locations containing optional harder boss fights
-    None keeps all super bosses in play
-    Anemos excludes the Anemos dungeon
-    Superboss excludes all super bosses
+    No Omission keeps all super bosses in play.
+    Omit Anemos Inner Sanctum omits Anemos Inner Sanctum.
+    Omit Superbosses and Inner Sanctum omits all super bosses and Anemos Inner Sanctum.
     """
-    option_none = 0
-    option_anemos = 1
-    option_superboss = 2
+    option_no_omission = 0
+    option_omit_anemos_inner_sanctum = 1
+    option_omit_superbosses_and_inner_sancutm = 2
     default = 2
 
 class AddGs1Items(Toggle):
-    """When enabled adds GS1 items as Elven Shirt and Cleric Ring
-    Not yet implemted.
+    """Adds the Elven Shirt and Cleric's Ring from Golden Sun to the item pool.
     """
-    display_name = "Add GS1 items"
+    display_name = "Add Elven Shirt and Cleric's ring"
 
 class VisibleItems(Toggle):
-    """When enabled the items are visible on the floor. This allows for scouting items. Mimics are removed when this option is enabled
+    """Chests and Tablets are replaced with their contents on the floor.
+    This allows for scouting items. Mimics are removed when this option is enabled.
     Note certain locations are still not visible, for example hidden items in pots or barrels.
     """
-    display_name = "Visible Items"
+    display_name = "Show items outside chest"
     default = 1
 
 class NoLearningUtilPsy(Toggle):
-    """When enabled utility Psynergy is not learned by any classes. Examples of these are Whirlwind and Growth.
+    """Prevents utility Psynergy (Growth, Frost, etc.) from being learned by classes.
     """
-    display_name = "No Learning Util Psy"
+    display_name = "No utility Psynergy from classes"
     default = 1
 
-class ShuffleClassStats(Toggle):
+class RandomizeClassStatBoosts(Toggle):
     """When enabled the base stats for classes are randomized"""
-    display_name = "Shuffle Class Stats"
+    display_name = "Randomize class stat boosts"
 
-class ShuffleEqCompatibility(Toggle):
+class RandomizeEqCompatibility(Toggle):
     """When enabled the compatability for each equipment piece is randomized. 
     Compatibility defines what each character can equip."""
-    display_name = "Shuffle Eq Compatability"
+    display_name = "Shuffle Equipment Compatability"
 
-class ShuffleEqPrices(Toggle):
-    """When enabled the price for each equipment piece is randomized."""
-    display_name = "Shuffle Eq Prices"
+class AdjustEqPrices(Toggle):
+    """When enabled the price for each equipment piece is randomized within a margin of vanilla."""
+    display_name = "Adjust Equipment Prices"
 
-class ShuffleEqStats(Toggle):
-    """When enabled the stats for each equipment piece is randomized."""
-    display_name = "Shuffle Eq Stats"
+class AdjustEqStats(Toggle):
+    """When enabled the stats for each equipment piece is randomized within a margin of vanilla."""
+    display_name = "Adjust Equipment Stats"
 
-class ShuffleWpnUnleash(Toggle):
-    """When enabled the unleashes for weapons are randomized."""
-    display_name = "Shuffle Weapon Unleashes"
+class ShuffleWpnEffects(Toggle):
+    """When enabled the effects for weapons are shuffled amongst eachother."""
+    display_name = "Shuffle Weapon Effects"
 
 class ShuffleArmEffect(Toggle):
-    """When enabled the bonus effects for armour are randomized."""
+    """When enabled the bonus effects for armour are shuffled amongst eachother."""
     display_name = "Shuffle Armour Effects"
 
-class ShuffleEqCurses(Toggle):
+class RandomizeEqCurses(Toggle):
     """When enabled the curses for equipment are randomized."""
-    display_name = "Shuffle Armour Effects"
+    display_name = "Randomize Curses"
 
-class ShufflePsyPower(Toggle):
-    """When enabled the power of Psynergy is randomized"""
-    display_name = "Shuffle Psynergy Power"
+class AdjustPsyPower(Toggle):
+    """When enabled the power of Psynergy is randomized within a margin of vanilla."""
+    display_name = "Adjust Psynergy Power"
 
 class DjinnShuffle(Choice):
-    """Determine how djinn should be placed in the multiworld.
-    Note currently Djinn can only be placed in other djinn locations in their own world due to limitations.
+    """How djinn should be placed in the multiworld.
+    Note currently Djinn can only be placed in other djinn locations in their own world due to game limitations.
     """
-    display_name = "Djinn Shuffle"
+    display_name = "Shuffle Djinn"
     option_vanilla = 0
     option_vanilla_shuffled = 1
     #option_anywhere = 2, not supported yet
     default = 1
 
 class ShuffleDjinnStats(Toggle):
-    """When enabled the stats a djinn grant are randomized"""
+    """When enabled the stats a djinn grant are shiffled amongst eachother."""
     display_name = "Shuffle Djinn stat boosts"
 
-class ShuffleDjinnPower(Toggle):
-    """When enabled the attack power of djinn are randomized"""
-    display_name = "Shuffle Djinn attack power"
+class AdjustDjinnPower(Toggle):
+    """When enabled the attack power of djinn are randomized within a margin of vanilla."""
+    display_name = "Adjust Djinn attack power"
 
-class ShuffleDjinnAoe(Toggle):
-    """When enabled the Area o Effect of djinn used in battle is randomized."""
-    display_name = "Shuffle Djinn Area of Effect"
+class RandomizeDjinnAoe(Toggle):
+    """When enabled the Area of Effect of djinn used in battle is randomized."""
+    display_name = "Randomize Djinn Area of Effect"
 
-class ScaleWildDjinn(Toggle):
-    """when enabled the Djinn you encounter and fight will get stronger the more Djinn you own."""
-    display_name = "Scale Djinn Encounters"
+class ScaleDjinnBattleDifficulty(Toggle):
+    """Adjust Djinn battle difficulty based on number of owned Djinn."""
+    display_name = "Scale Djinn battle difficulty"
 
-class ShuffleSummonCosts(Toggle):
+class RandomizeSummonCosts(Toggle):
     """When enabled the costs for Summons is randomized."""
-    display_name = "Shuffle Summon costs"
+    display_name = "Randomize Summon costs"
 
-class ShuffleSummonPower(Toggle):
-    """when enabled the power of Summons is randomized"""
-    display_name = "Shuffle Summon Power"
+class AdjustSummonPower(Toggle):
+    """when enabled the power of Summons is randomized within a margin of vanilla."""
+    display_name = "Adjust Summon Power"
 
 class CharStatShuffle(Choice):
-    """Determine how character stats are shuffled
-    Vanilla leaves the stats as per the vanilla game
-    Shuffled will shuffle stats between characters
-    Randomized will roll each stat separately
+    """Determine the stats for characters
+    Vanilla leaves the stats as per the vanilla game.
+    Shuffle character stats will shuffle stats between characters.
+    Adjust character stats will randomize stats for each character within a margin of vanilla.
     """
     display_name = "Character Stats Shuffle"
     option_vanilla = 0
-    option_shuffled = 1
-    option_randomized = 2
-    default = 0
+    option_shuffle_character_stats = 1
+    option_adjust_character_stats = 2
+    default = 2
 
 class CharEleShuffle(Choice):
     """Determine how character elements are shuffled
     Vanilla leaves character elements as per the vanilla game
-    Shuffled will shuffle them between characters
-    Randomized will roll each element separately
+    Shuffle character leements will shuffle them between characters
+    Randomize character elements will randomize each characters element
     """
     display_name = "Character Element Shuffle"
     option_vanilla = 0
-    option_shuffled = 1
-    option_randomized = 2
-    default = 0
+    option_shuffle_character_elements = 1
+    option_randomize_character_elements = 2
+    default = 2
 
-class ShufflePsyCost(Toggle):
-    """When enabled the cost of Psynergy is shuffled"""
-    display_name = "Shuffle Psynergy Cost"
+class AdjustPsyCost(Toggle):
+    """When enabled the PP cost of Psynergy is randomized within a margin of vanilla."""
+    display_name = "Adjust Psynergy PP Cost"
 
-class ShufflePsyAoe(Toggle):
-    """When enabled the AoE of Psynergy is shuffled"""
-    display_name = "Shuffle Psynergy AoE"
+class RandomizePsyAoe(Toggle):
+    """When enabled the AoE of Psynergy is randomized"""
+    display_name = "Randomize Psynergy AoE"
 
-class ShuffleEnemyPsyPower(Toggle):
-    """When enabled the power of Enemy Psynergy is randomized"""
-    display_name = "Shuffle Enemy Psynergy Power"
+class AdjustEnemyPsyPower(Toggle):
+    """When enabled the power of Enemy Psynergy is randomized within a margin of vanilla."""
+    display_name = "Adjust Enemy Psynergy Power"
 
-class ShuffleEnemyPsyAoe(Toggle):
-    """When enabled the AoE of Enemy Psynergy is randomized"""
-    display_name = "Shuffle Enemy Psynergy AoE"
+class RandomizeEnemyPsyAoe(Toggle):
+    """When enabled the AoE of Enemy Psynergy is randomized."""
+    display_name = "Randomize Enemy Psynergy AoE"
 
-class ClassPsyShuffle(Choice):
+class ClassPsynergy(Choice):
     """Determine what Psynergy a class will learn
     Vanilla leaves the Psynergy on their vanilla classes
-    Class will randomize them by classline
-    Group will randomize them by Psynergy group
-    Group Element will randomize them by Psynergy group with a preference to the same Element
-    Element will randomize them by Psynergy Element
-    Full will randomize it completely without grouping or preference
+    Randomize Psynergy by classline
+    Randomize them by Psynergy group
+    Randomize them by Psynergy group with a preference to the same Element
+    Randomize them by Psynergy Element
+    Fully Randomize it will randomize it completely without grouping or preference
     """
     display_name = "Character Element Shuffle"
     option_vanilla = 0
-    option_class = 1
-    option_group = 2
-    option_group_element = 5
-    option_element = 3
-    option_full = 4
-    default = 0
+    option_randomize_by_classline = 1
+    option_randomize_by_psynergy_group = 2
+    option_randomize_by_psynergy_group_prefer_element = 5
+    option_randomize_by_psynergy_element = 3
+    option_fully_randomized = 4
+    default = 2
 
-class ClassPsyLevels(Choice):
-    """Determine what Psynergy a class will learn
-    Vanilla leaves the Psynergy on their vanilla classes
-    Adjust will randomize them within a margin from vanilla
-    Randomized will randomize them completely
+class ClassPsynergyLevels(Choice):
+    """Determine when Psynergy is learned
+    Vanilla leaves the learning of Psynergy on the vanilla levels.
+    Adjust Learning levels will randomize learning levels within a margin from vanilla.
+    Randomize Learning Levels will randomize learning levels completely.
     """
     display_name = "Character Element Shuffle"
     option_vanilla = 0
-    option_shuffle = 1
-    option_randomized = 2
-    default = 0
+    option_adjust_learning_levels = 1
+    option_randomize_learning_levels = 2
+    default = 1
 
 class FreeAvoid(Toggle):
-    """When enabled, the Avoid Psynergy is Free"""
-    display_name = "Free Avoid"
+    """When enabled, the Avoid Psynergy will cost no PP"""
+    display_name = "Avoid costs no PP"
 
 class FreeRetreat(Toggle):
-    """When enabled, the Retreat Psynergy is Free"""
-    display_name = "Free Retreat"
+    """When enabled, the Retreat Psynergy will cost no PP"""
+    display_name = "Retreat costs no PP"
 
 class ShuffleAttack(Toggle):
     """When enabled, the attack stat from weapons is shuffled amongst eachother"""
     display_name = "Shuffle weapon attack"
 
-class StartWithHealPsy(Toggle):
-    """When enabled, start the game with atleast one healing Psynergy (Cure, Ply, Wish or Aura)"""
-    display_name = "Start with Heal"
+class StartWithHealPsynergy(Toggle):
+    """Start the game with atleast one healing Psynergy (Cure, Ply, Wish or Aura)"""
+    display_name = "Start with Healing Psynergy"
 
-class StartWithRevivePsy(Toggle):
+class StartWithRevivePsynergy(Toggle):
     """When enabled, start the game with Revive Psynergy"""
-    display_name = "Start with Revive"
+    display_name = "Start with Revive Psynergy"
 
-class StartWithRevealPsy(Toggle):
+class StartWithRevealPsynergy(Toggle):
     """When enabled, start the game with Reveal Psynergy"""
-    display_name = "Start with Reveal"
+    display_name = "Start with Reveal Psynergy"
 
 class ScaleExpGained(Range):
     """Scale how much Exp is earned by the party."""
@@ -243,7 +258,7 @@ class ScaleExpGained(Range):
     range_end = 15
     default = 3
 
-class ScaleGoldGained(Range):
+class ScaleCoinsGained(Range):
     """Scale how much Coins are earned by the party."""
     display_name = "Scale Coins"
     range_start = 1
@@ -255,9 +270,9 @@ class ShuffleDefense(Toggle):
     display_name = "Shuffle armour defense"
 
 
-class StartLevels(Range):
+class StartingLevels(Range):
     """Determine the starting levels for characters joining the party.
-    Note this only increases levels of characters that are lower"""
+    Note this only increases levels of characters that are lower level than the party"""
     display_name = "Starting levels"
     range_start = 5
     range_end = 99
@@ -265,35 +280,35 @@ class StartLevels(Range):
 
 class EnemyEResShuffle(Choice):
     """Determine how Enemy Elemental Resistance is shuffled
-    Vanilla leaves the elemental resistance as per the vanilla game
-    Shuffled will shuffle them between enemies
-    Randomized will roll each enemy seperately
+    Vanilla leaves the elemental resistance as per the vanilla game.
+    Shuffle elemental resistance will shuffle them between enemies.
+    Randomize elemental resistance will randomize the resistances for each enemy.
     """
     display_name = "Enemy Elemental Resistance Shuffle"
     option_vanilla = 0
-    option_shuffled = 1
-    option_randomized = 2
+    option_shuffle_elemmental_res = 1
+    option_randomize_elemental_res = 2
     default = 0
 
-class SanctuaryResCost(Choice):
+class SanctuaryReviveCost(Choice):
     """Determine how expensive the Sanctuary is to revive characters
     Vanilla leaves the cost per the vanilla game (20x level)
     Reduced will alter the cost to be cheaper than vanilla (2x level)
     Fixed will alter the cost to the same price throughout (100 coins)
     """
-    display_name = "Enemy Elemental Resistance Shuffle"
+    display_name = "Sanctum revive cost"
     option_vanilla = 0
     option_reduced = 1
     option_fixed = 2
     default = 1
 
-class DisableCurses(Toggle):
-    """When enabled, curses are removed"""
-    display_name = "Remove Curses"
+class RemoveCurses(Toggle):
+    """When enabled, curses are removed."""
+    display_name = "Remove all Curses"
 
 class AvoidPatch(Toggle):
     """When enabled, Avoid always succeeds and will disable encounters. Using it again will enable encounters"""
-    display_name = "Avoid Patch"
+    display_name = "Toggleable Avoid and always works"
 
 class EnableHardMode(Toggle):
     """When enabled, all enemies will have 50% more health, 25% more attack and defense"""
@@ -377,44 +392,44 @@ class GSTLAOptions(PerGameCommonOptions):
     character_elements: CharEleShuffle
 
     no_util_psynergy_from_classes: NoLearningUtilPsy
-    randomize_class_stat_boosts: ShuffleClassStats
-    class_psynergy: ClassPsyShuffle
-    psynergy_levels: ClassPsyLevels
+    randomize_class_stat_boosts: RandomizeClassStatBoosts
+    class_psynergy: ClassPsynergy
+    psynergy_levels: ClassPsynergyLevels
 
     #Psynerg Settings
-    adjust_psynergy_power: ShufflePsyPower
-    adjust_psynergy_cost: ShufflePsyCost
-    randomize_psynergy_aoe: ShufflePsyAoe
+    adjust_psynergy_power: AdjustPsyPower
+    adjust_psynergy_cost: AdjustPsyCost
+    randomize_psynergy_aoe: RandomizePsyAoe
 
-    adjust_enemy_psynergy_power: ShuffleEnemyPsyPower
-    randomize_enemy_psynergy_aoe: ShuffleEnemyPsyAoe
+    adjust_enemy_psynergy_power: AdjustEnemyPsyPower
+    randomize_enemy_psynergy_aoe: RandomizeEnemyPsyAoe
     enemy_elemental_resistance: EnemyEResShuffle
 
-    start_with_healing_psynergy: StartWithHealPsy
-    start_with_revive: StartWithRevivePsy
-    start_with_reveal: StartWithRevealPsy #todo, reveal as starter item, remove from pool
+    start_with_healing_psynergy: StartWithHealPsynergy
+    start_with_revive: StartWithRevivePsynergy
+    start_with_reveal: StartWithRevealPsynergy #todo, reveal as starter item, remove from pool
 
     #Djinn and Summon Settings
     shuffle_djinn: DjinnShuffle
     djinn_logic: DjinnLogic
     shuffle_djinn_stat_boosts: ShuffleDjinnStats
-    adjust_djinn_attack_power: ShuffleDjinnPower
-    randomize_djinn_attack_aoe: ShuffleDjinnAoe
-    scale_djinni_battle_difficulty: ScaleWildDjinn
+    adjust_djinn_attack_power: AdjustDjinnPower
+    randomize_djinn_attack_aoe: RandomizeDjinnAoe
+    scale_djinni_battle_difficulty: ScaleDjinnBattleDifficulty
 
-    randomize_summon_costs: ShuffleSummonCosts
-    adjust_summon_power: ShuffleSummonPower
+    randomize_summon_costs: RandomizeSummonCosts
+    adjust_summon_power: AdjustSummonPower
 
     #Equipment Settings
-    randomize_equip_compatibility: ShuffleEqCompatibility
-    adjust_equip_prices: ShuffleEqPrices
-    adjust_equip_stats: ShuffleEqStats
+    randomize_equip_compatibility: RandomizeEqCompatibility
+    adjust_equip_prices: AdjustEqPrices
+    adjust_equip_stats: AdjustEqStats
     shuffle_weapon_attack: ShuffleAttack
-    shuffle_weapon_effect: ShuffleWpnUnleash
+    shuffle_weapon_effect: ShuffleWpnEffects
     shuffle_armour_defense: ShuffleDefense
     shuffle_armour_effect: ShuffleArmEffect
-    randomize_curses: ShuffleEqCurses
-    remove_all_curses: DisableCurses
+    randomize_curses: RandomizeEqCurses
+    remove_all_curses: RemoveCurses
 
     #Misc
     show_items_outside_chest: VisibleItems
@@ -422,9 +437,9 @@ class GSTLAOptions(PerGameCommonOptions):
     free_retreat: FreeRetreat
     #qol-hints not supported yet
     scale_exp: ScaleExpGained
-    scale_coins: ScaleGoldGained
-    starting_levels: StartLevels
-    sanctum_revive_cost: SanctuaryResCost
+    scale_coins: ScaleCoinsGained
+    starting_levels: StartingLevels
+    sanctum_revive_cost: SanctuaryReviveCost
     avoid_always_works: AvoidPatch
     enable_hard_mode: EnableHardMode
     reduced_encounter_rate: HalveEncounterRate
