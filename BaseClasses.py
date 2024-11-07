@@ -1265,6 +1265,10 @@ class Item:
         return ItemClassification.trap in self.classification
 
     @property
+    def excludable(self) -> bool:
+        return not (self.advancement or self.useful)
+
+    @property
     def flags(self) -> int:
         return self.classification.as_flag()
 
