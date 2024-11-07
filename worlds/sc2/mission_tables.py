@@ -142,7 +142,7 @@ class SC2Mission(Enum):
     DOMINATION = 36, "Domination (Zerg)", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.EASY, "ap_domination", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     FIRE_IN_THE_SKY = 37, "Fire in the Sky (Zerg)", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_fire_in_the_sky", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     OLD_SOLDIERS = 38, "Old Soldiers (Zerg)", SC2Campaign.HOTS, "Char", SC2Race.ZERG, MissionPools.MEDIUM, "ap_old_soldiers", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
-    WAKING_THE_ANCIENT = 39, "Waking the Ancient", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_waking_the_ancient", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsZerg
+    WAKING_THE_ANCIENT = 39, "Waking the Ancient (Zerg)", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_waking_the_ancient", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     THE_CRUCIBLE = 40, "The Crucible", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_crucible", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg
     SUPREME = 41, "Supreme", SC2Campaign.HOTS, "Zerus", SC2Race.ANY, MissionPools.MEDIUM, "ap_supreme", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsZerg
     INFESTED = 42, "Infested", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.MEDIUM, "ap_infested", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran
@@ -257,7 +257,8 @@ class SC2Mission(Enum):
     FIRE_IN_THE_SKY_P = 157, "Fire in the Sky (Protoss)", SC2Campaign.HOTS, "Char", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_fire_in_the_sky", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.RaceSwap
     OLD_SOLDIERS_T = 158, "Old Soldiers (Terran)", SC2Campaign.HOTS, "Char", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_old_soldiers", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.RaceSwap
     OLD_SOLDIERS_P = 159, "Old Soldiers (Protoss)", SC2Campaign.HOTS, "Char", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_old_soldiers", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.RaceSwap
-    # 160/161 - Waking the Ancient
+    WAKING_THE_ANCIENT_T = 160, "Waking the Ancient (Terran)", SC2Campaign.HOTS, "Zerus", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_waking_the_ancient", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    WAKING_THE_ANCIENT_P = 161, "Waking the Ancient (Protoss)", SC2Campaign.HOTS, "Zerus", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_waking_the_ancient", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 162/163 - The Crucible
     # 164/165 - Supreme
     # 166/167 - Infested

@@ -1240,7 +1240,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.zerg_competent_comp_basic_aa
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
-            logic.zerg_competent_comp_basic_aa
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Center Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1001, LocationType.VANILLA),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "East Essence Pool", SC2HOTS_LOC_ID_OFFSET + 1002, LocationType.VANILLA,
@@ -1258,22 +1258,22 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     or logic.zerg_competent_anti_air(state)))
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Finish Feeding", SC2HOTS_LOC_ID_OFFSET + 1004, LocationType.EXTRA,
-            logic.zerg_common_unit_competent_aa
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "South Proxy Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1005, LocationType.CHALLENGE,
-            logic.zerg_common_unit_competent_aa
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "East Proxy Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1006, LocationType.CHALLENGE,
-            logic.zerg_common_unit_competent_aa
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "South Main Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1007, LocationType.CHALLENGE,
-            logic.zerg_common_unit_competent_aa
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "East Main Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1008, LocationType.CHALLENGE,
-            logic.zerg_common_unit_competent_aa
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.WAKING_THE_ANCIENT.mission_name, "Flawless", SC2HOTS_LOC_ID_OFFSET + 1009, LocationType.CHALLENGE,
-            logic.zerg_common_unit_competent_aa,
+            logic.zerg_competent_comp_competent_aa,
             flags=LocationFlag.PREVENTATIVE,
         ),
         make_location_data(SC2Mission.THE_CRUCIBLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
@@ -3732,6 +3732,104 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "South Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 7606, LocationType.EXTRA),
         make_location_data(SC2Mission.OLD_SOLDIERS_P.mission_name, "Rich Mineral Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 7607, LocationType.EXTRA,
                            logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7700,LocationType.VICTORY,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "Center Essence Pool", SC2_RACESWAP_LOC_ID_OFFSET + 7701, LocationType.VANILLA),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "East Essence Pool", SC2_RACESWAP_LOC_ID_OFFSET + 7702, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (adv_tactics
+                                        and logic.terran_basic_anti_air(state)
+                                        or logic.terran_competent_anti_air(state)))
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "South Essence Pool", SC2_RACESWAP_LOC_ID_OFFSET + 7703, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (adv_tactics
+                                        and logic.terran_basic_anti_air(state)
+                                        or logic.terran_competent_anti_air(state)))
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "Finish Feeding", SC2_RACESWAP_LOC_ID_OFFSET + 7704, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "South Proxy Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7705, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "East Proxy Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7706, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "South Main Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7707, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "East Main Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7708, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_T.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 7709, LocationType.CHALLENGE,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           ),
+                           flags=LocationFlag.PREVENTATIVE,
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7800, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "Center Essence Pool", SC2_RACESWAP_LOC_ID_OFFSET + 7801, LocationType.VANILLA),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "East Essence Pool", SC2_RACESWAP_LOC_ID_OFFSET + 7802, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_light_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "South Essence Pool", SC2_RACESWAP_LOC_ID_OFFSET + 7803, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_anti_light_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "Finish Feeding", SC2_RACESWAP_LOC_ID_OFFSET + 7804, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "South Proxy Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7805, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "East Proxy Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7806, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "South Main Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7807, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "East Main Primal Hive", SC2_RACESWAP_LOC_ID_OFFSET + 7808, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.WAKING_THE_ANCIENT_P.mission_name, "Flawless", SC2_RACESWAP_LOC_ID_OFFSET + 7809, LocationType.CHALLENGE,
+                           logic.protoss_competent_comp,
+                           flags=LocationFlag.PREVENTATIVE,
                            ),
     ]
 
