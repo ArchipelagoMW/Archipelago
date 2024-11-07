@@ -3831,6 +3831,62 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            logic.protoss_competent_comp,
                            flags=LocationFlag.PREVENTATIVE,
                            ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 7900, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_defense_rating(state, True, True) >= 7
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_T.mission_name, "Tyrannozor", SC2_RACESWAP_LOC_ID_OFFSET + 7901, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_defense_rating(state, True, True) >= 7
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_T.mission_name, "Reach the Pool", SC2_RACESWAP_LOC_ID_OFFSET + 7902, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_CRUCIBLE_T.mission_name, "15 Minutes Remaining", SC2_RACESWAP_LOC_ID_OFFSET + 7903, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_defense_rating(state, True, True) >= 7
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_T.mission_name, "5 Minutes Remaining", SC2_RACESWAP_LOC_ID_OFFSET + 7904, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_defense_rating(state, True, True) >= 7
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_T.mission_name, "Pincer Attack", SC2_RACESWAP_LOC_ID_OFFSET + 7905, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_defense_rating(state, True, True) >= 7
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_T.mission_name, "Yagdra Claims Brakk's Pack", SC2_RACESWAP_LOC_ID_OFFSET + 7906, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_defense_rating(state, True, True) >= 7
+                                   and logic.terran_competent_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 8000, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "Tyrannozor", SC2_RACESWAP_LOC_ID_OFFSET + 8001, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "Reach the Pool", SC2_RACESWAP_LOC_ID_OFFSET + 8002, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "15 Minutes Remaining", SC2_RACESWAP_LOC_ID_OFFSET + 8003, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "5 Minutes Remaining", SC2_RACESWAP_LOC_ID_OFFSET + 8004, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "Pincer Attack", SC2_RACESWAP_LOC_ID_OFFSET + 8005, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "Yagdra Claims Brakk's Pack", SC2_RACESWAP_LOC_ID_OFFSET + 8006, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []
