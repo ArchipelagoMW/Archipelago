@@ -3,7 +3,7 @@ import math
 from typing_extensions import TYPE_CHECKING
 
 from worlds.generic.Rules import add_rule, add_item_rule
-from typing import Set, Callable
+from typing import Set, Callable, cast, Iterable
 from .Items import ItemType, all_items
 from .gen.ItemNames import ItemName
 from .gen.ItemData import summon_list, characters
@@ -14,7 +14,7 @@ from BaseClasses import MultiWorld, ItemClassification
 from .gen.LocationNames import LocationName, loc_names_by_id
 
 if TYPE_CHECKING:
-    from . import GSTLAWorld
+    from . import GSTLAWorld, GSTLALocation
     from .Items import GSTLAItem
 
 def set_entrance_rules(world: 'GSTLAWorld'):
@@ -990,7 +990,8 @@ def set_item_rules(world: 'GSTLAWorld'):
         add_item_rule(world.get_location(LocationName.Idejima_Jenna),
                 lambda item: item.player == player and item.name in characters)
 
-    for loc in [x for x in all_locations if x.loc_type != LocationType.Event]:
+    for loc in [x.location_data for x in cast(Iterable['GSTLALocation'], world.multiworld.get_locations(world.player))
+                if x.location_data.loc_type != LocationType.Event]:
         if loc.restrictions > 0:
             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
 

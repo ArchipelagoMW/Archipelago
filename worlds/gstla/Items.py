@@ -1,18 +1,18 @@
-from typing import List, Dict, TYPE_CHECKING
-from BaseClasses import Item, ItemClassification, MultiWorld
+from typing import Dict, TYPE_CHECKING, cast
+from BaseClasses import Item, ItemClassification
 from .gen.LocationNames import loc_names_by_id
-from .gen.LocationData import all_locations, LocationRestriction
+from .gen.LocationData import LocationRestriction
 from .gen.ItemNames import ItemName
 from .gen.LocationNames import LocationName
 from .gen.ItemData import (ItemData, events, all_items as all_gen_items,
                            djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
-import logging
 from Fill import fast_fill
 
 if TYPE_CHECKING:
-    from . import GSTLAWorld
+    from . import GSTLAWorld, GSTLALocation
+
 
 class GSTLAItem(Item):
     """The GSTLA version of an AP item
@@ -92,8 +92,9 @@ def create_items(world: 'GSTLAWorld', player: int):
     # TODO: this is a temporary measure; we may want to add lots of features around
     # item population based on player configured options.
     mimic_items = []
-    for loc in all_locations:
-        if world.options.item_shuffle < 3 and loc.loc_type == LocationType.Hidden:
+    for mw_loc in world.multiworld.get_locations(player):
+        loc = cast('GSTLALocation', mw_loc).location_data
+        if loc.loc_type == LocationType.Event or (world.options.item_shuffle < 3 and loc.loc_type == LocationType.Hidden):
             continue
 
         if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:

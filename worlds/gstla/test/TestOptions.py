@@ -22,6 +22,9 @@ class TestFormatBase(GSTestBase):
         return int.from_bytes(self.rando_content.read(1), byteorder="big")
 
 class TestRevealHiddenItem(GSTestBase):
+    options = {
+        "item_shuffle": 3
+    }
 
     def test_hidden_requires_reveal(self):
         world = self.get_world()
@@ -32,7 +35,8 @@ class TestRevealHiddenItem(GSTestBase):
 
 class TestRevealNotRequiredForHidden(GSTestBase):
     options = {
-        "reveal_hidden_item": 0
+        "reveal_hidden_item": 0,
+        "item_shuffle": 3
     }
 
     def test_hidden_available(self):
@@ -364,6 +368,9 @@ class AdjustSummonPower(TestFormatBase):
         self.assertEquals(0x2, 0x2 & data)
 
 class NoShuffleCharStats(TestFormatBase):
+    options = {
+        "character_stats": 0
+    }
 
     def test_no_shuffle_char_stats(self):
         data = self._get_option_byte(3)
@@ -388,6 +395,9 @@ class RandomizeCharStats(TestFormatBase):
         self.assertEquals(0x80, 0xC0 & data)
 
 class NoShuffleCharEle(TestFormatBase):
+    options = {
+        "character_elements": 0
+    }
 
     def test_no_shuffle_char_ele(self):
         data = self._get_option_byte(3)
@@ -415,7 +425,7 @@ class NoAdjustPsynergyCost(TestFormatBase):
 
     def test_no_adjust_psynergy_cost(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x0, 0x80 & data)
+        self.assertEquals(0x0, 0x8 & data)
 
 class AdjustPsynergyCost(TestFormatBase):
     options = {
@@ -472,6 +482,9 @@ class RandomizeEnemyPsyAOE(TestFormatBase):
         self.assertEquals(0x1, 0x1 & data)
 
 class ClassPsyVanilla(TestFormatBase):
+    options = {
+        "class_psynergy": 0
+    }
 
     def test_vanilla_psy(self):
         data = self._get_option_byte(4)
@@ -523,6 +536,9 @@ class ClassPsyGroupElement(TestFormatBase):
         self.assertEquals(0xA0, 0xe0 & data)
 
 class ClassPsyLevelVanilla(TestFormatBase):
+    options = {
+        "psynergy_levels": 0
+    }
 
     def test_class_psy_vanilla(self):
         data = self._get_option_byte(4)

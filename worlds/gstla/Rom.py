@@ -7,7 +7,7 @@ import bsdiff4
 
 from . import AP_PLACEHOLDER_ITEM, GSTLAItem
 from .gen.ItemData import ItemData
-from .gen.LocationData import all_locations, GSTLALocation, LocationData
+from .gen.LocationData import all_locations, LocationData
 
 #from .lz10 import gba_decompress, gba_compress
 

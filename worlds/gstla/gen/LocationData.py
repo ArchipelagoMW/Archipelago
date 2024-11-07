@@ -2,7 +2,7 @@
 # to be changed, either change the template, or the code leveraging the template.
 from typing import Callable, List, Dict, NamedTuple, Optional
 from enum import Enum, IntFlag, auto
-from BaseClasses import Location, MultiWorld
+from BaseClasses import MultiWorld
 from .LocationNames import loc_names_by_id
 
 class LocationType(str, Enum):
@@ -37,9 +37,6 @@ class LocationData(NamedTuple):
     restrictions: LocationRestriction = 0
     event: bool = False
     included: Callable[[MultiWorld, int], bool] = always_on
-
-class GSTLALocation(Location):
-    game: str = "Golden Sun The Lost Age"
 
 djinn_locations = [
 LocationData(48, 48, 16384000, 16384000,

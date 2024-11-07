@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import IntEnum, auto
 from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions
 
 class StartWithShip(Choice):

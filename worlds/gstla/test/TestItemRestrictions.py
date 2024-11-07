@@ -4,6 +4,9 @@ from ..gen.ItemNames import ItemName
 
 
 class TestItemRestrictions(GSTestBase):
+    options = {
+        "item_shuffle": 3
+    }
 
     def test_ensure_empty_restricts(self):
         world = self.get_world()
