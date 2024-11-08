@@ -344,9 +344,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
 
-    regions["Overworld"].connect(
+    cube_entrance = regions["Overworld"].connect(
         connecting_region=regions["Cube Cave Entrance Region"],
         rule=lambda state: state.has(gun, player) or can_shop(state, world))
+    world.multiworld.register_indirect_condition(regions["Shop"], cube_entrance)
     regions["Cube Cave Entrance Region"].connect(
         connecting_region=regions["Overworld"])
 
