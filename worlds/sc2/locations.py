@@ -3126,30 +3126,35 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_engine_of_destruction_requirement
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 3900, LocationType.VICTORY,
-            logic.zerg_competent_comp
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Tower 1", SC2_RACESWAP_LOC_ID_OFFSET + 3901, LocationType.VANILLA,
-            logic.zerg_competent_comp
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Tower 2", SC2_RACESWAP_LOC_ID_OFFSET + 3902, LocationType.VANILLA,
-            logic.zerg_competent_comp
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Tower 3", SC2_RACESWAP_LOC_ID_OFFSET + 3903, LocationType.VANILLA,
-            logic.zerg_competent_comp
+            logic.zerg_competent_comp_competent_aa
         ),
-        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 3904, LocationType.VANILLA),
+        make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 3904, LocationType.VANILLA,
+            lambda state: (
+                logic.advanced_tactics
+                or logic.zerg_competent_comp_competent_aa
+            )
+        ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Barracks", SC2_RACESWAP_LOC_ID_OFFSET + 3905, LocationType.EXTRA,
-            logic.zerg_competent_comp
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Factories", SC2_RACESWAP_LOC_ID_OFFSET + 3906, LocationType.EXTRA,
-            logic.zerg_competent_comp
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Starports", SC2_RACESWAP_LOC_ID_OFFSET + 3907, LocationType.EXTRA,
-            lambda state: adv_tactics or logic.zerg_competent_comp(state)
+            logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Odin Not Trashed", SC2_RACESWAP_LOC_ID_OFFSET + 3908, LocationType.CHALLENGE,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_competent_comp_competent_aa(state)
                 and logic.zerg_repair_odin(state))
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 3909, LocationType.EXTRA),
@@ -3384,14 +3389,20 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "First Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6501, LocationType.VANILLA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "North Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6502, LocationType.VANILLA,
-                           logic.terran_common_unit
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "West Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6503, LocationType.VANILLA,
-                           logic.terran_common_unit
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Lost Base", SC2_RACESWAP_LOC_ID_OFFSET + 6504, LocationType.EXTRA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6505, LocationType.EXTRA,
-                           logic.terran_common_unit
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_T.mission_name, "Northwest Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6506, LocationType.EXTRA,
                            lambda state: (
@@ -3420,10 +3431,10 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "First Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6601, LocationType.VANILLA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "North Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6602, LocationType.VANILLA,
-                           logic.protoss_common_unit
+                           logic.protoss_common_unit_basic_aa
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "West Ursadon Matriarch", SC2_RACESWAP_LOC_ID_OFFSET + 6603, LocationType.VANILLA,
-                           logic.protoss_common_unit
+                           logic.protoss_common_unit_basic_aa
                            ),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Lost Base", SC2_RACESWAP_LOC_ID_OFFSET + 6604, LocationType.EXTRA),
         make_location_data(SC2Mission.HARVEST_OF_SCREAMS_P.mission_name, "Northeast Psi-link Spire", SC2_RACESWAP_LOC_ID_OFFSET + 6605, LocationType.EXTRA,

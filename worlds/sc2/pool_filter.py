@@ -336,7 +336,7 @@ class ValidInventory:
             inventory = [item for item in inventory if item.name != item_names.BANELING_RAPID_METAMORPH]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.ZERGLING_BANELING_ASPECT]
             unused_items = [item_name for item_name in unused_items if item_name != item_names.BANELING_RAPID_METAMORPH]
-        if not {item_names.MUTALISK, item_names.CORRUPTOR, item_names.SCOURGE} & logical_inventory_set:
+        if not set(item_groups.zerg_air_units) & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
             locked_items = [item for item in locked_items if not item.name.startswith(
                 item_names.ZERG_FLYER_UPGRADE_PREFIX)]

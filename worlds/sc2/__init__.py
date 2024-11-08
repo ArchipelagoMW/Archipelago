@@ -191,8 +191,10 @@ class SC2World(World):
         return slot_data
 
     def pre_fill(self) -> None:
-        if self.options.generic_upgrade_missions > 0\
-                and self.options.required_tactics != options.RequiredTactics.option_no_logic:
+        if (
+                self.options.generic_upgrade_missions > 0
+                and self.options.required_tactics != options.RequiredTactics.option_no_logic
+        ):
             # Attempt to resolve situation when the option is too high for the mission order rolled
             # TODO: Attempt to resolve Kerrigan levels too
             weapon_armor_item_names = [
