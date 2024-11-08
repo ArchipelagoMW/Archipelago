@@ -30,9 +30,9 @@ Each trigger consists of four parts plus one optional part:
 - `option_name` specifies the name of the triggering option.
     - Example: `shop_item_slots`
     - This can be any option from any category defined in the YAML file in either root or a game section.
-- `option_result` specifies the value of the option that activates this trigger.
-    - Example: `15`
-    - Each normal trigger must be used for exactly one option result. If you would like the same thing to occur with multiple
+- `option_result` specifies the value of the option that activates this trigger, can specify a valid range for numeric results with range_x_y.
+    - Examples: `15` or `range_2_7`
+    - Each normal trigger must be used for exactly one option result or inclusive range. If you would like the same thing to occur with multiple
       conditions, you would need multiple triggers for this, or use the advanced trigger options outlined below in "Advanced
       Trigger Options".
 - `options` is where you define what will happen when the trigger activates. This can be something as simple as ensuring
@@ -56,11 +56,11 @@ The general format is:
 - `option_compare` is an optional 5th part which specifies how you wish to compare the named option and the result,
   this defaults to "=" if you do not include this option.
     - Example: `<`
-    - Values can be any item from this list: ['<', '>', '!=', '=']
+    - Values can be any item from this list: ['<', '<=', '>', '>=', !=', '=']
 
 ### Examples
 
-The above examples all together will end up looking like this:
+The above examples all together could end up looking like this:
 
   ```yaml
   triggers:

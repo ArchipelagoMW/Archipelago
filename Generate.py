@@ -379,25 +379,31 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def compare_results(
-        yaml_value: Union[str, int, bool, dict, list],
-        trigger_value: Union[str, int, bool, dict, list],
+        yaml_value: Union[str, int, float, bool, dict, list],
+        trigger_value: Union[str, int, float, bool, dict, list],
         comparator: str):
     if yaml_value is None:
         return False
-    if (isinstance(yaml_value, str|bool|int) and isinstance(trigger_value, str|bool|int)):
-        yaml_value = str(yaml_value)
-        trigger_value = str(trigger_value)
+    if (isinstance(yaml_value, str|bool|int|float) and isinstance(trigger_value, str|bool|int|float)):
+        yaml_value = str(yaml_value).lower()
+        trigger_value = str(trigger_value).lower()
     if comparator == "=":
         return yaml_value == trigger_value
     if comparator == "!=":
         return yaml_value != trigger_value
     try:
-        if comparator == "<":
-            return int(yaml_value) < int(trigger_value)
-        if comparator == ">":
-            return int(yaml_value) > int(trigger_value)
+        yaml_value = int(yaml_value)
+        trigger_value = int(trigger_value)
     except ValueError:
-        raise Exception("Comparing non-integer values is not possible with < or >")
+        raise Exception("Value of option_name and option_result must be integers if comparison is not = or !=")
+    if comparator == "<":
+        return yaml_value < trigger_value
+    if comparator == "<=":
+        return yaml_value <= trigger_value
+    if comparator == ">":
+        return yaml_value > trigger_value
+    if comparator == ">=":
+        return yaml_value >= trigger_value
 
 
 def compare_triggers(option_set: dict, currently_targeted_weights: dict) -> bool:
@@ -451,7 +457,18 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
                     option_set["option_advanced"] = [[option_set["option_name"], option_set["option_compare"],
                                                       option_set["option_result"]]]
                 else:
-                    option_set["option_advanced"] = [[option_set["option_name"], "=", option_set["option_result"]]]
+                    split_result = option_set["option_result"].split("_")
+                    if len(split_result) == 3 & split_result[0] == "range":
+                        try:
+                            split_result[1] = int(split_result[1])
+                            split_result[2] = int(split_result[2])
+                        except ValueError:
+                            raise Exception(f"Invalid argument in option_result's range: {option_set['option_result']}")
+                        option_set["option_advanced"] = [[option_set["option_name"], ">=", split_result[1]],
+                                                         "&",
+                                                         [option_set["option_name"], "<=", split_result[2]]]
+                    else:
+                        option_set["option_advanced"] = [[option_set["option_name"], "=", option_set["option_result"]]]
             currently_targeted_weights = weights
             category = option_set.get("option_category", None)
             if category:
