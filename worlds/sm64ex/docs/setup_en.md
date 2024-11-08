@@ -36,6 +36,8 @@ Then continue to `Using the Launcher`
     - Windows: If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
 5. When finished, use `Compile default SM64AP build` to continue
     - Advanced user can use `Show advanced options` to build with custom makeflags (`BETTERCAMERA`, `NODRAWINGDISTANCE`, ...), different repos and branches, and game patches such as 60FPS, Enhanced Moveset and others.
+      - [Available Makeflags](https://github.com/sm64pc/sm64ex/wiki/Build-options)
+      - [Included Game Patches](https://github.com/N00byKing/sm64ex/blob/archipelago/enhancements/README.md)
 6. Press `Download Files` to prepare the build, afterwards `Create Build`.
 7. SM64EX will now be compiled. This can take a while.
 
