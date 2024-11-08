@@ -827,7 +827,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         world_options = {
             # Reasonably large grid with enough missions to balance races
             'mission_order': options.MissionOrder.option_grid,
-            'campaign_size': campaign_size,
+            'maximum_campaign_size': campaign_size,
             'enable_wol_missions': True,
             'enable_prophecy_missions': True,
             'enable_hots_missions': True,
