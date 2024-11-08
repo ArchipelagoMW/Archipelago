@@ -303,6 +303,22 @@ class EnableRaceSwapVariants(Choice):
     default = option_disabled
 
 
+class EnableMissionRaceBalancing(Choice):
+    """
+    If enabled, picks missions in such a way that the appearance rate of races is roughly equal.
+    The final rates may deviate if there are not enough missions enabled to accomodate each race.
+
+    Disabled: Pick missions at random.
+    Semi Balanced: Use a weighting system to pick missions in a random, but roughly equal ratio.
+    Fully Balanced: Pick missions to preserve equal race counts whenever possible.
+    """
+    display_name = "Enable Mission Race Balancing"
+    option_disabled = 0
+    option_semi_balanced = 1
+    option_fully_balanced = 2
+    default = option_semi_balanced
+
+
 class ShuffleCampaigns(DefaultOnToggle):
     """
     Shuffles the missions between campaigns if enabled.
@@ -1002,6 +1018,7 @@ class Starcraft2Options(PerGameCommonOptions):
     enable_epilogue_missions: EnableEpilogueMissions
     enable_nco_missions: EnableNCOMissions
     enable_race_swap: EnableRaceSwapVariants
+    mission_race_balancing: EnableMissionRaceBalancing
     shuffle_campaigns: ShuffleCampaigns
     shuffle_no_build: ShuffleNoBuild
     starter_unit: StarterUnit

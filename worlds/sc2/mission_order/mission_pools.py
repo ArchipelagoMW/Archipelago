@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import TYPE_CHECKING, Dict, Set, List
 
-from ..mission_tables import SC2Mission, lookup_id_to_mission, MissionPools, MissionFlag, SC2Campaign
+from ..mission_tables import SC2Mission, lookup_id_to_mission, MissionFlag, SC2Campaign
 from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
@@ -48,6 +48,8 @@ class SC2MOGenMissionPools:
     _used_flags: Dict[MissionFlag, int]
     _used_missions: List[SC2Mission]
     _updated_difficulties: Dict[int, Difficulty]
+    _flag_ratios: Dict[MissionFlag, float]
+    _flag_weights: Dict[MissionFlag, int]
 
     def __init__(self) -> None:
         self.master_list = {mission.id for mission in SC2Mission}
@@ -58,6 +60,8 @@ class SC2MOGenMissionPools:
         self._used_flags = {}
         self._used_missions = []
         self._updated_difficulties = {}
+        self._flag_ratios = {}
+        self._flag_weights = {}
 
     def set_exclusions(self, excluded: List[SC2Mission], unexcluded: List[SC2Mission]) -> None:
         """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
@@ -101,6 +105,60 @@ class SC2MOGenMissionPools:
     def get_used_missions(self) -> List[SC2Mission]:
         """Returns a set of all missions used in the mission order."""
         return self._used_missions
+
+    def set_flag_balances(self, flag_ratios: Dict[MissionFlag, int], flag_weights: Dict[MissionFlag, int]):
+        # Ensure the ratios are percentages
+        ratio_sum = sum(ratio for ratio in flag_ratios.values())
+        self._flag_ratios = {flag: ratio / ratio_sum for flag, ratio in flag_ratios.items()}
+        self._flag_weights = flag_weights
+
+    def pick_balanced_mission(self, world: World, pool: List[int]) -> int:
+        """Applies ratio-based and weight-based balancing to pick a preferred mission from a given mission pool."""
+        # Currently only used for race balancing
+        # Untested for flags that may overlap or not be present at all, but should at least generate
+        balanced_pool = pool
+        if len(self._flag_ratios) > 0:
+            relevant_used_flag_count = max(sum(self._used_flags.get(flag, 0) for flag in self._flag_ratios), 1)
+            current_ratios = {
+                flag: self._used_flags.get(flag, 0) / relevant_used_flag_count
+                for flag in self._flag_ratios
+            }
+            # Desirability of missions is the difference between target and current ratios for relevant flags
+            flag_scores = {
+                flag: self._flag_ratios[flag] - current_ratios[flag]
+                for flag in self._flag_ratios
+            }
+            mission_scores = [
+                sum(
+                    flag_scores[flag] for flag in self._flag_ratios
+                    if flag in lookup_id_to_mission[mission].flags
+                )
+                for mission in balanced_pool
+            ]
+            # Only keep the missions that create the best balance
+            best_score = max(mission_scores)
+            balanced_pool = [mission for idx, mission in enumerate(balanced_pool) if mission_scores[idx] == best_score]
+        
+        balanced_weights = [1 for _ in balanced_pool]
+        if len(self._flag_weights) > 0:
+            relevant_used_flag_count = max(sum(self._used_flags.get(flag, 0) for flag in self._flag_weights), 1)
+            # Higher usage rate of relevant flags means lower desirability
+            flag_scores = {
+                flag: (relevant_used_flag_count - self._used_flags.get(flag, 0)) * self._flag_weights[flag]
+                for flag in self._flag_weights
+            }
+            # Mission scores are averaged across the mission's flags,
+            # else flags that aren't always present will inflate weights
+            mission_scores = [
+                sum(
+                    flag_scores[flag] for flag in self._flag_weights
+                    if flag in lookup_id_to_mission[mission].flags
+                ) / sum(flag in lookup_id_to_mission[mission].flags for flag in self._flag_weights)
+                for mission in balanced_pool
+            ]
+            balanced_weights = mission_scores
+
+        return world.random.choices(balanced_pool, balanced_weights, k=1)[0]
 
     def pull_specific_mission(self, mission: SC2Mission) -> None:
         """Marks the given mission as present in the mission order."""
@@ -169,7 +227,7 @@ class SC2MOGenMissionPools:
                 difficulty_offset += 1
 
         # Remove the mission from the master list
-        mission = lookup_id_to_mission[world.random.choice(final_pool)]
+        mission = lookup_id_to_mission[self.pick_balanced_mission(world, final_pool)]
         self.master_list.remove(mission.id)
         self.difficulty_pools[self.get_modified_mission_difficulty(mission)].remove(mission.id)
         self._add_mission_stats(mission)
