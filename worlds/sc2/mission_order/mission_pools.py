@@ -158,6 +158,8 @@ class SC2MOGenMissionPools:
             ]
             balanced_weights = mission_scores
 
+        if sum(balanced_weights) == 0.0:
+            balanced_weights = [1.0 for _ in balanced_weights]
         return world.random.choices(balanced_pool, balanced_weights, k=1)[0]
 
     def pull_specific_mission(self, mission: SC2Mission) -> None:
