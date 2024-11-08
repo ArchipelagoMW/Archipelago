@@ -816,3 +816,36 @@ class TestItemFiltering(Sc2SetupTestBase):
         # These items will be in the pool despite exclusions
         self.assertIn(item_names.KERRIGAN_LEAPING_STRIKE, itempool)
         self.assertIn(item_names.KERRIGAN_MEND, itempool)
+
+    
+    def test_fully_balanced_mission_races(self):
+        """
+        Tests whether fully balanced mission race balancing actually is fully balanced.
+        """
+        campaign_size = 57
+        self.assertEqual(campaign_size % 3, 0, "Chosen test size cannot be perfectly balanced")
+        world_options = {
+            # Reasonably large grid with enough missions to balance races
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': campaign_size,
+            'enable_wol_missions': True,
+            'enable_prophecy_missions': True,
+            'enable_hots_missions': True,
+            'enable_lotv_prologue_missions': True,
+            'enable_lotv_missions': True,
+            'enable_epilogue_missions': True,
+            'enable_nco_missions': True,
+            'selected_races': options.SelectRaces.option_all,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'mission_race_balancing': options.EnableMissionRaceBalancing.option_fully_balanced,
+        }
+
+        self.generate_world(world_options)
+        world_regions = [region.name for region in self.multiworld.regions]
+        world_regions.remove('Menu')
+        missions = [mission_tables.lookup_name_to_mission[region] for region in world_regions]
+        race_flags = [mission_tables.MissionFlag.Terran, mission_tables.MissionFlag.Zerg, mission_tables.MissionFlag.Protoss]
+        race_counts = { flag: sum(flag in mission.flags for mission in missions) for flag in race_flags }
+
+        self.assertEqual(race_counts[mission_tables.MissionFlag.Terran], race_counts[mission_tables.MissionFlag.Zerg])
+        self.assertEqual(race_counts[mission_tables.MissionFlag.Zerg], race_counts[mission_tables.MissionFlag.Protoss])

@@ -1,11 +1,14 @@
 from typing import TYPE_CHECKING, List, Dict, Any, Tuple, Optional
 
 from .locations import LocationData, Location
-from .mission_tables import SC2Mission, SC2Campaign, get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations
+from .mission_tables import (
+    SC2Mission, SC2Campaign, MissionFlag, get_campaign_goal_priority,
+    campaign_final_mission_locations, campaign_alt_final_mission_locations
+)
 from .options import (
     get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns, static_mission_orders,
-    GridTwoStartPositions, KeyMode
+    GridTwoStartPositions, KeyMode, EnableMissionRaceBalancing
 )
 from .mission_order.options import CustomMissionOrder
 from .mission_order.structs import SC2MissionOrder, Difficulty
@@ -31,6 +34,7 @@ def create_mission_order(
     mission_pools = SC2MOGenMissionPools()
     mission_pools.set_exclusions(get_excluded_missions(world), []) # TODO set unexcluded
     adjust_mission_pools(world, mission_pools)
+    setup_mission_pool_balancing(world, mission_pools)
 
     mission_order_type = get_option_value(world, "mission_order")
     if mission_order_type == MissionOrder.option_custom:
@@ -142,6 +146,15 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         # Flashpoint needs just a few items at start but competent comp at the end
         pools.move_mission(SC2Mission.FLASHPOINT, Difficulty.HARD, Difficulty.EASY)
 
+def setup_mission_pool_balancing(world: 'SC2World', pools: SC2MOGenMissionPools):
+    race_mission_balance = get_option_value(world, "mission_race_balancing")
+    flag_ratios: Dict[MissionFlag, int] = {}
+    flag_weights: Dict[MissionFlag, int] = {}
+    if race_mission_balance == EnableMissionRaceBalancing.option_semi_balanced:
+        flag_weights = { MissionFlag.Terran: 1, MissionFlag.Zerg: 1, MissionFlag.Protoss: 1 }
+    elif race_mission_balance == EnableMissionRaceBalancing.option_fully_balanced:
+        flag_ratios = { MissionFlag.Terran: 1, MissionFlag.Zerg: 1, MissionFlag.Protoss: 1 }
+    pools.set_flag_balances(flag_ratios, flag_weights)
 
 def create_regular_mission_order(world: 'SC2World', mission_pools: SC2MOGenMissionPools) -> Dict[str, Dict[str, Any]]:
     mission_order_type = get_option_value(world, "mission_order")

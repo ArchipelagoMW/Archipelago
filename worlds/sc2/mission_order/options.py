@@ -83,6 +83,7 @@ EntryRule = Or(SubRuleEntryRule, MissionCountEntryRule, BeatMissionsEntryRule, I
 class CustomMissionOrder(OptionDict):
     """
     Used to generate a custom mission order. Please see documentation to understand usage.
+    Will do nothing unless `mission_order` is set to `custom`.
     """
     display_name = "Custom Mission Order"
     visibility = Visibility.template
