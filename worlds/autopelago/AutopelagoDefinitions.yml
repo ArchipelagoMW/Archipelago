@@ -172,6 +172,7 @@ items:
     - ['Mug of Burnt Bean Water', [energized]]
     - ['Cup of Fancy Leaf Water', [energized]]
     - ['Microwave Full of Brownies', [well_fed]]
+    - ['Dreihander', [confident]]
 
 
 
@@ -194,11 +195,30 @@ items:
           - ['Ganondorf''s Tennis Racket', [confident]]
           - ['Goron Rock Candy', [well_fed]]
 
+        'Minecraft':
+          - ['Pie of Ender', [well_fed]]
+
         'Stardew Valley':
           - ['Prismatic Chard', [well_fed]]
           - ['Cheese Seeds', [well_fed]]
           - ['JojaMart Sale Coupon', [lucky]]
           - ['Pickled Dust Sprite', [well_fed]]
+
+        'Super Mario 64':
+          - ['Lucky MIPS Foot', [lucky]]
+          - ['Metal Moustache', [stylish]]
+
+        'A Link to the Past':
+          - ['Pendant of Dim Sum', [well_fed]]
+          - ['Pendant of Flour', [well_fed]]
+          - ['Pendant of Porridge', [well_fed]]
+
+        'Factorio':
+          - ['Cheese Science Pack', [well_fed]]
+
+        'Dark Souls III':
+          - ['Severely Scorched Sword', [confident]]
+          - ['Siegward''s Jar of Pickled Onions', [well_fed]]
 
   trap:
     - ['Half of a Worm', [upset_tummy]]
@@ -289,6 +309,16 @@ items:
           - ['Rotten Parsnip', [upset_tummy]]
           - ['Rotten Walnut', [upset_tummy]]
           - ['Abigail''s Birth Certificate', [conspiratorial]]
+
+        'A Link to the Past':
+          - ['Cabbage-Colored Boulder', [startled]]
+
+        'Factorio':
+          - ['Eau de Pollution', [sluggish]]
+
+        'Dark Souls III':
+          - ['Asbestos Flask', [upset_tummy]]
+
 
   filler:
     - ['Empty Snail Shell', []]
@@ -421,6 +451,24 @@ items:
 
         'Stardew Valley':
           - ['Mayor''s Tax Returns', []]
+
+        'Super Mario 64':
+          - ['Ninth Red Coin', []]
+          - ['Key to the Castle''s Bathroom', []]
+
+        'A Link to the Past':
+          - ['The Spoon Pearl', []]
+          - ['Agahnim''s Shiny Ball', []]
+
+        'Factorio':
+          - ['Bottleneck', []]
+          - ['Chain of Daisies', []]
+          - ['Cuddly Little Biter', []]
+
+        'Dark Souls III':
+          - ['Soul of a Cinder Block', []]
+          - ['Treasure Chest with Several Stab Wounds', []]
+
 
 # reward the automatic 'Victory' item to win. one MUST be called 'Menu'
 # ability_check_with_dc is intended to make intuitive sense to those who are
