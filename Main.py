@@ -11,7 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
-from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, distribute_planned, \
+    flood_items
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
@@ -45,6 +46,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     multiworld.sprite_pool = args.sprite_pool.copy()
 
     multiworld.set_options(args)
+    if args.csv_output:
+        from Options import dump_player_options
+        dump_player_options(multiworld)
     multiworld.set_item_links()
     multiworld.state = CollectionState(multiworld)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, multiworld.seed)
@@ -100,7 +104,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multiworld.early_items[player][item_name] = max(0, early-count)
                 remaining_count = count-early
                 if remaining_count > 0:
-                    local_early = multiworld.early_local_items[player].get(item_name, 0)
+                    local_early = multiworld.local_early_items[player].get(item_name, 0)
                     if local_early:
                         multiworld.early_items[player][item_name] = max(0, local_early - remaining_count)
                     del local_early
@@ -124,14 +128,19 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     for player in multiworld.player_ids:
         exclusion_rules(multiworld, player, multiworld.worlds[player].options.exclude_locations.value)
         multiworld.worlds[player].options.priority_locations.value -= multiworld.worlds[player].options.exclude_locations.value
+        world_excluded_locations = set()
         for location_name in multiworld.worlds[player].options.priority_locations.value:
             try:
                 location = multiworld.get_location(location_name, player)
-            except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
-                if location_name not in multiworld.worlds[player].location_name_to_id:
-                    raise Exception(f"Unable to prioritize location {location_name} in player {player}'s world.") from e
-            else:
+            except KeyError:
+                continue
+
+            if location.progress_type != LocationProgressType.EXCLUDED:
                 location.progress_type = LocationProgressType.PRIORITY
+            else:
+                logger.warning(f"Unable to prioritize location \"{location_name}\" in player {player}'s world because the world excluded it.")
+                world_excluded_locations.add(location_name)
+        multiworld.worlds[player].options.priority_locations.value -= world_excluded_locations
 
     # Set local and non-local item rules.
     if multiworld.players > 1:
@@ -146,6 +155,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
     if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) for player in multiworld.player_ids):
         new_items: List[Item] = []
+        old_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
             player: getattr(multiworld.worlds[player].options,
                             "start_inventory_from_pool",
@@ -164,97 +174,26 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 depletion_pool[item.player][item.name] -= 1
                 # quick abort if we have found all items
                 if not target:
-                    new_items.extend(multiworld.itempool[i+1:])
+                    old_items.extend(multiworld.itempool[i+1:])
                     break
             else:
-                new_items.append(item)
+                old_items.append(item)
 
         # leftovers?
         if target:
             for player, remaining_items in depletion_pool.items():
                 remaining_items = {name: count for name, count in remaining_items.items() if count}
                 if remaining_items:
-                    raise Exception(f"{multiworld.get_player_name(player)}"
+                    logger.warning(f"{multiworld.get_player_name(player)}"
                                     f" is trying to remove items from their pool that don't exist: {remaining_items}")
-        assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
-        multiworld.itempool[:] = new_items
+                    # find all filler we generated for the current player and remove until it matches 
+                    removables = [item for item in new_items if item.player == player]
+                    for _ in range(sum(remaining_items.values())):
+                        new_items.remove(removables.pop())
+        assert len(multiworld.itempool) == len(new_items + old_items), "Item Pool amounts should not change."
+        multiworld.itempool[:] = new_items + old_items
 
-    # temporary home for item links, should be moved out of Main
-    for group_id, group in multiworld.groups.items():
-        def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
-            Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
-        ]:
-            classifications: Dict[str, int] = collections.defaultdict(int)
-            counters = {player: {name: 0 for name in shared_pool} for player in players}
-            for item in multiworld.itempool:
-                if item.player in counters and item.name in shared_pool:
-                    counters[item.player][item.name] += 1
-                    classifications[item.name] |= item.classification
-
-            for player in players.copy():
-                if all([counters[player][item] == 0 for item in shared_pool]):
-                    players.remove(player)
-                    del (counters[player])
-
-            if not players:
-                return None, None
-
-            for item in shared_pool:
-                count = min(counters[player][item] for player in players)
-                if count:
-                    for player in players:
-                        counters[player][item] = count
-                else:
-                    for player in players:
-                        del (counters[player][item])
-            return counters, classifications
-
-        common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
-        if not common_item_count:
-            continue
-
-        new_itempool: List[Item] = []
-        for item_name, item_count in next(iter(common_item_count.values())).items():
-            for _ in range(item_count):
-                new_item = group["world"].create_item(item_name)
-                # mangle together all original classification bits
-                new_item.classification |= classifications[item_name]
-                new_itempool.append(new_item)
-
-        region = Region("Menu", group_id, multiworld, "ItemLink")
-        multiworld.regions.append(region)
-        locations = region.locations
-        for item in multiworld.itempool:
-            count = common_item_count.get(item.player, {}).get(item.name, 0)
-            if count:
-                loc = Location(group_id, f"Item Link: {item.name} -> {multiworld.player_name[item.player]} {count}",
-                               None, region)
-                loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
-                    state.has(item_name, group_id_, count_)
-
-                locations.append(loc)
-                loc.place_locked_item(item)
-                common_item_count[item.player][item.name] -= 1
-            else:
-                new_itempool.append(item)
-
-        itemcount = len(multiworld.itempool)
-        multiworld.itempool = new_itempool
-
-        while itemcount > len(multiworld.itempool):
-            items_to_add = []
-            for player in group["players"]:
-                if group["link_replacement"]:
-                    item_player = group_id
-                else:
-                    item_player = player
-                if group["replacement_items"][player]:
-                    items_to_add.append(AutoWorld.call_single(multiworld, "create_item", item_player,
-                                                                group["replacement_items"][player]))
-                else:
-                    items_to_add.append(AutoWorld.call_single(multiworld, "create_filler", item_player))
-            multiworld.random.shuffle(items_to_add)
-            multiworld.itempool.extend(items_to_add[:itemcount - len(multiworld.itempool)])
+    multiworld.link_items()
 
     if any(multiworld.item_links.values()):
         multiworld._all_state = None
@@ -399,6 +338,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "seed_name": multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
+                    "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
@@ -411,7 +351,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
                 if not multiworld.can_beat_game():
-                    raise Exception("Game appears as unbeatable. Aborting.")
+                    raise FillError("Game appears as unbeatable. Aborting.", multiworld=multiworld)
                 else:
                     logger.warning("Location Accessibility requirements not fulfilled.")
 

@@ -280,7 +280,7 @@ class World(metaclass=AutoWorldRegister):
     future. Protocol level compatibility check moved to MultiServer.min_client_version.
     """
 
-    required_server_version: Tuple[int, int, int] = (0, 2, 4)
+    required_server_version: Tuple[int, int, int] = (0, 5, 0)
     """update this if the resulting multidata breaks forward-compatibility of the server"""
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()
@@ -291,6 +291,14 @@ class World(metaclass=AutoWorldRegister):
 
     web: ClassVar[WebWorld] = WebWorld()
     """see WebWorld for options"""
+
+    origin_region_name: str = "Menu"
+    """Name of the Region from which accessibility is tested."""
+
+    explicit_indirect_conditions: bool = True
+    """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
+    If False, everything is rechecked at every step, which is slower computationally, 
+    but may be desirable in complex/dynamic worlds."""
 
     multiworld: "MultiWorld"
     """autoset on creation. The MultiWorld object for the currently generating multiworld."""
@@ -334,7 +342,7 @@ class World(metaclass=AutoWorldRegister):
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
-    # in that case the MultiWorld object is passed as an argument, and it gets called once for the entire multiworld.
+    # in that case the MultiWorld object is passed as the first argument, and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
 
     @classmethod
