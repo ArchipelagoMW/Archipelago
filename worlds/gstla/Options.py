@@ -88,6 +88,13 @@ class VisibleItems(Toggle):
     display_name = "Show items outside chest"
     default = 1
 
+class IncludeMimics(Toggle):
+    """Some locations may now contain a mimic instead. Due to some limitations they only drop their vanilla item. 
+    Note that this will be ignored if items are visible outside of chests.
+    """
+    display_name = "Include mimics"
+    default = 0
+
 class NoLearningUtilPsy(Toggle):
     """Prevents utility Psynergy (Growth, Frost, etc.) from being learned by classes.
     """
@@ -383,6 +390,7 @@ class GSTLAOptions(PerGameCommonOptions):
     item_shuffle: ItemShuffle
     major_minor_split: MajorMinorSplit
     reveal_hidden_item: RevealHiddenItem
+    include_mimics: IncludeMimics
     omit_locations: OmitLocations
     add_elvenshirt_clericsring: AddGs1Items
     add_non_obtainable_items: AddDummyItems

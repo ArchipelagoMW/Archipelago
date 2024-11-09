@@ -159,16 +159,17 @@ def create_items(world: 'GSTLAWorld', player: int):
 
 
     #mimics
-    mimic_items = []
-    for mimic in mimics:    
-        mimic_items.append(create_item_direct(mimic, player))
-        sum_locations -= 1
+    if world.options.include_mimics == 1 and world.options.show_items_outside_chest == 0:
+        mimic_items = []
+        for mimic in mimics:    
+            mimic_items.append(create_item_direct(mimic, player))
+            sum_locations -= 1
 
-    # TODO: should we place them here, or let the item_rules handle this?
-    remaining_locs =  [ x for x in world.multiworld.get_unfilled_locations(world.player)
-                       if (x.location_data.restrictions & LocationRestriction.NoMimic & LocationRestriction.NoSummon) == 0]
-    world.random.shuffle(remaining_locs)
-    fast_fill(world.multiworld, mimic_items, remaining_locs)
+        # TODO: should we place them here, or let the item_rules handle this?
+        remaining_locs =  [ x for x in world.multiworld.get_unfilled_locations(world.player)
+                        if (x.location_data.restrictions & LocationRestriction.NoMimic & LocationRestriction.NoSummon) == 0]
+        world.random.shuffle(remaining_locs)
+        fast_fill(world.multiworld, mimic_items, remaining_locs)
 
     for item in psyenergy_as_item_list:
         #Ignore cloak ball and halt gem, they are not required for anything
