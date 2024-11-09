@@ -145,7 +145,7 @@ class SC2Mission(Enum):
     WAKING_THE_ANCIENT = 39, "Waking the Ancient (Zerg)", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_waking_the_ancient", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     THE_CRUCIBLE = 40, "The Crucible (Zerg)", SC2Campaign.HOTS, "Zerus", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_crucible", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     SUPREME = 41, "Supreme", SC2Campaign.HOTS, "Zerus", SC2Race.ANY, MissionPools.MEDIUM, "ap_supreme", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsZerg
-    INFESTED = 42, "Infested", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.MEDIUM, "ap_infested", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran
+    INFESTED = 42, "Infested (Zerg)", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.MEDIUM, "ap_infested", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     HAND_OF_DARKNESS = 43, "Hand of Darkness", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.HARD, "ap_hand_of_darkness", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.Countdown|MissionFlag.VsTerran
     PHANTOMS_OF_THE_VOID = 44, "Phantoms of the Void", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.HARD, "ap_phantoms_of_the_void", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsProtoss
     WITH_FRIENDS_LIKE_THESE = 45, "With Friends Like These", SC2Campaign.HOTS, "Dominion Space", SC2Race.ANY, MissionPools.STARTER, "ap_with_friends_like_these", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
@@ -262,7 +262,8 @@ class SC2Mission(Enum):
     THE_CRUCIBLE_T = 162, "The Crucible (Terran)", SC2Campaign.HOTS, "Zerus", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_crucible", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     THE_CRUCIBLE_P = 163, "The Crucible (Protoss)", SC2Campaign.HOTS, "Zerus", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_the_crucible", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 164/165 - Supreme
-    # 166/167 - Infested
+    INFESTED_T = 166, "Infested (Terran)", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_infested", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.RaceSwap
+    INFESTED_P = 167, "Infested (Protoss)", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_infested", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.RaceSwap
     # 168/169 - Hand of Darkness
     # 170/171 - Phantoms of the Void
     # 172/173 - With Friends Like These

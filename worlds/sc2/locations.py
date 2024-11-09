@@ -3898,6 +3898,104 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_CRUCIBLE_P.mission_name, "Yagdra Claims Brakk's Pack", SC2_RACESWAP_LOC_ID_OFFSET + 8006, LocationType.EXTRA,
                            logic.protoss_competent_comp
                            ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 8300, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "East Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 8301, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "Center Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 8302, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "West Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 8303, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "First Intro Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8304, LocationType.EXTRA),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "Second Intro Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8305, LocationType.EXTRA),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "Base Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8306, LocationType.EXTRA),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "East Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8307, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state)
+                                   and (adv_tactics or logic.terran_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "Mid Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8308, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_basic_anti_air(state)
+                                   and (adv_tactics or logic.terran_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "North Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8309, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state)
+                                   and (adv_tactics or logic.terran_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "Close Southwest Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8310, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state)
+                                   and (adv_tactics or logic.terran_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_T.mission_name, "Far Southwest Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8311, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_comp(state)
+                                   and (adv_tactics or logic.terran_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 8400, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "East Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 8401, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state))
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "Center Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 8402, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "West Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 8403, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "First Intro Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8404, LocationType.EXTRA),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "Second Intro Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8405, LocationType.EXTRA),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "Base Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8406, LocationType.EXTRA),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "East Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8407, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state)
+                                   and (adv_tactics or logic.protoss_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "Mid Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8408, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_basic_anti_air(state)
+                                   and (adv_tactics or logic.protoss_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "North Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8409, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_common_unit(state)
+                                   and logic.protoss_competent_anti_air(state)
+                                   and (adv_tactics or logic.protoss_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "Close Southwest Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8410, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_competent_comp(state)
+                                   and (adv_tactics or logic.protoss_infested_garrison_claimer(state)))
+                           ),
+        make_location_data(SC2Mission.INFESTED_P.mission_name, "Far Southwest Garrison", SC2_RACESWAP_LOC_ID_OFFSET + 8411, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.protoss_competent_comp(state)
+                                   and (adv_tactics or logic.protoss_infested_garrison_claimer(state)))
+                           ),
     ]
 
     beat_events = []

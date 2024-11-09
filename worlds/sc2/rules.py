@@ -1032,6 +1032,14 @@ class SC2Logic:
 
         return levels >= target
 
+    def terran_infested_garrison_claimer(self, state: CollectionState) -> bool:
+        return state.has_any((item_names.GHOST, item_names.SPECTRE, item_names.EMPERORS_SHADOW), self.player)
+
+    def protoss_infested_garrison_claimer(self, state: CollectionState) -> bool:
+        return (
+            state.has_any((item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT), self.player)
+            or self.protoss_can_merge_dark_archon(state)
+        )
 
     def the_reckoning_requirement(self, state: CollectionState) -> bool:
         if self.take_over_ai_allies:
