@@ -75,6 +75,11 @@ class AddGs1Items(Toggle):
     """
     display_name = "Add Elven Shirt and Cleric's ring"
 
+class AddDummyItems(Toggle):
+    """Adds a variety of items that are normally unobtainable through normal means in the game.
+    These are: Casual Shirt, Golden Boots, Aroma Ring, Golden Shirt, Ninja Sandals, Golden Ring, 
+    Herbed Shirt, Knight's Greave, Rainbow Ring, Divine Camisole, Silver Greave and Soul Ring"""
+
 class VisibleItems(Toggle):
     """Chests and Tablets are replaced with their contents on the floor.
     This allows for scouting items. Mimics are removed when this option is enabled.
@@ -375,14 +380,15 @@ class AnemosAccess(Choice):
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
-    item_shuffle: ItemShuffle #todo, bug with hidden items, maybe support for key items only mode?
-    major_minor_split: MajorMinorSplit #todo, progressive items to mayjor / key item locations, minor junky stuff
+    item_shuffle: ItemShuffle
+    major_minor_split: MajorMinorSplit
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations
-    add_elvenshirt_clericsring: AddGs1Items #todo
+    add_elvenshirt_clericsring: AddGs1Items
+    add_non_obtainable_items: AddDummyItems
 
     lemurian_ship: StartWithShip
-    start_with_wings_of_anemos: ShipWings #todo, logic and event item
+    start_with_wings_of_anemos: ShipWings
     anemos_inner_sanctum_access: AnemosAccess
     shuffle_characters: CharacterShuffle
 
@@ -406,7 +412,7 @@ class GSTLAOptions(PerGameCommonOptions):
 
     start_with_healing_psynergy: StartWithHealPsynergy
     start_with_revive: StartWithRevivePsynergy
-    start_with_reveal: StartWithRevealPsynergy #todo, reveal as starter item, remove from pool
+    start_with_reveal: StartWithRevealPsynergy
 
     #Djinn and Summon Settings
     shuffle_djinn: DjinnShuffle
