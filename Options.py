@@ -6,6 +6,7 @@ import logging
 import math
 import numbers
 import random
+import re
 import typing
 import enum
 from collections import defaultdict
@@ -1518,6 +1519,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         # yaml dump may add end of document marker and newlines.
         return yaml.dump(scalar).replace("...\n", "").strip()
 
+    def clean_file_name(name: str) -> str:
+        return re.sub("[/<>:\\\"/\\\\\\|\\?\\*]", "", name)
+        #                   \"  \\  \| \? \*
+
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
             option_groups = get_option_groups(world)
@@ -1531,7 +1536,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             del file_data
 
-            with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
+            with open(os.path.join(target_folder, clean_file_name(game_name) + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)
 
 
