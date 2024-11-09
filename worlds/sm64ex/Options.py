@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
+from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet, OptionGroup
 from .Items import action_item_table
 
 class EnableCoinStars(DefaultOnToggle):
@@ -126,6 +126,30 @@ class MoveRandomizerActions(OptionSet):
     # HACK: Disable randomization for double jump
     valid_keys = [action for action in action_item_table if action != 'Double Jump']
     default = valid_keys
+
+sm64_options_groups = [
+    OptionGroup("Sanity Options", [
+        BuddyChecks,
+        ExclamationBoxes,
+        ProgressiveKeys,
+        EnableCoinStars,
+        EnableMoveRandomizer,
+        MoveRandomizerActions,
+        StrictCapRequirements,
+        StrictCannonRequirements,
+        StrictMoveRequirements,
+    ]),
+    OptionGroup("Goal Options", [
+        AmountOfStars,
+        FirstBowserStarDoorCost,
+        BasementStarDoorCost,
+        SecondFloorStarDoorCost,
+        MIPS1Cost,
+        MIPS2Cost,
+        StarsToFinish,
+        CompletionType,
+    ]),
+]
 
 @dataclass
 class SM64Options(PerGameCommonOptions):
