@@ -706,6 +706,7 @@ class PokemonEmeraldWorld(World):
             "allowed_legendary_hunt_encounters",
             "extra_bumpy_slope",
             "free_fly_location",
+            "free_fly_blacklist",
             "remote_items",
             "dexsanity",
             "trainersanity",

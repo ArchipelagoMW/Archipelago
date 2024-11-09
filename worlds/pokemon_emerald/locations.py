@@ -173,18 +173,22 @@ def set_free_fly(world: "PokemonEmeraldWorld") -> None:
     # If not enabled, set it to Littleroot Town by default
     fly_location_name = "EVENT_VISITED_LITTLEROOT_TOWN"
     if world.options.free_fly_location:
-        fly_location_name = world.random.choice([
-            "EVENT_VISITED_SLATEPORT_CITY",
-            "EVENT_VISITED_MAUVILLE_CITY",
-            "EVENT_VISITED_VERDANTURF_TOWN",
-            "EVENT_VISITED_FALLARBOR_TOWN",
-            "EVENT_VISITED_LAVARIDGE_TOWN",
-            "EVENT_VISITED_FORTREE_CITY",
-            "EVENT_VISITED_LILYCOVE_CITY",
-            "EVENT_VISITED_MOSSDEEP_CITY",
-            "EVENT_VISITED_SOOTOPOLIS_CITY",
-            "EVENT_VISITED_EVER_GRANDE_CITY",
-        ])
+        free_fly_locations = [
+            "EVENT_VISITED_SLATEPORT_CITY" if "Slateport City" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_MAUVILLE_CITY" if "Mauville City" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_VERDANTURF_TOWN" if "Verdanturf Town" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_FALLARBOR_TOWN" if "Fallarbor Town" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_LAVARIDGE_TOWN" if "Lavaridge Town" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_FORTREE_CITY" if "Fortree City" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_LILYCOVE_CITY" if "Lilycove City" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_MOSSDEEP_CITY" if "Mossdeep City" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_SOOTOPOLIS_CITY" if "Sootopolis City" not in world.options.free_fly_blacklist else None,
+            "EVENT_VISITED_EVER_GRANDE_CITY" if "Ever Grande City" not in world.options.free_fly_blacklist else None,
+        ]
+
+        free_fly_locations = [location for location in free_fly_locations if location is not None]
+        if free_fly_locations:
+            fly_location_name = world.random.choice(free_fly_locations)
 
     world.free_fly_location_id = VISITED_EVENT_NAME_TO_ID[fly_location_name]
 
