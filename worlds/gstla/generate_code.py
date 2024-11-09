@@ -33,6 +33,7 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 222:'progression',#    ItemName.Mythril_Bag_Mars
 247:'progression',#    ItemName.Mars_Star
 459:'progression',#    ItemName.Ruin_Key
+229:'progression_skip_balancing', # ItemName.Lucky_Medal
 443:     'useful',#     ItemName.Mysterious_Card
 444:     'useful',#    ItemName.Trainers_Whip
 445:     'useful',#    ItemName.Tomegathericon
