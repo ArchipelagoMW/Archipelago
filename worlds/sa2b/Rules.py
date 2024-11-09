@@ -2036,6 +2036,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                  lambda state: state.has(ItemName.sonic_light_shoes, player) and
                                state.has(ItemName.sonic_bounce_bracelet, player) and
                                state.has(ItemName.sonic_flame_ring, player))
+        add_rule(multiworld.get_location(LocationName.final_rush_big, player),
+                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(multiworld.get_location(LocationName.iron_gate_big, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
