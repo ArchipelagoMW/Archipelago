@@ -94,6 +94,14 @@ class SkillSource(RecipeSource):
         return f"SkillSource at level {self.level} {self.skill}"
 
 
+class SkillCraftsanitySource(SkillSource):
+    def __init__(self, skill: str, level: int):
+        super().__init__(skill, level)
+
+    def __repr__(self):
+        return f"SkillCraftsanitySource at level {self.level} {self.skill}"
+
+
 class MasterySource(RecipeSource):
     skill: str
 
