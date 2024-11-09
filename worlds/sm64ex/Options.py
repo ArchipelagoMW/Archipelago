@@ -128,7 +128,7 @@ class MoveRandomizerActions(OptionSet):
     default = valid_keys
 
 sm64_options_groups = [
-    OptionGroup("Sanity Options", [
+    OptionGroup("Item Options", [
         BuddyChecks,
         ExclamationBoxes,
         ProgressiveKeys,
