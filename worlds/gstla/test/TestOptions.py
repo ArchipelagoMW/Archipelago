@@ -1,3 +1,6 @@
+import base64
+
+from encodings.base64_codec import base64_encode
 from io import BytesIO, StringIO
 
 from BaseClasses import CollectionState
@@ -76,7 +79,8 @@ class TestRandoFormat(TestFormatBase):
                     djinn_count += 1
                 else:
                     loc_count += 1
-        expected_length = 1 + 16 + 16 + len(self.world.player_name) + 1 + loc_count * 4 + 4 + djinn_count * 2
+        encoded_name = base64.b64encode(self.world.player_name.encode('utf-8'))
+        expected_length = 1 + 16 + 16 + len(encoded_name) + 1 + loc_count * 4 + 4 + djinn_count * 2
         self.assertEqual(expected_length, len(self.rando_content.getvalue()))
 
         self.rando_content.seek(0)
@@ -84,8 +88,8 @@ class TestRandoFormat(TestFormatBase):
         self.assertEqual(1, version)
 
         self.rando_content.seek(33)
-        name = self.rando_content.read(len(self.world.player_name) + 1).decode('ascii')
-        self.assertEqual(self.world.player_name + "\n", name)
+        name = base64.b64decode(self.rando_content.read(len(encoded_name)), validate=True).decode('utf-8')
+        self.assertEqual(self.world.player_name, name)
 
 class TestMostItemShuffle(TestFormatBase):
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 import os
@@ -145,9 +147,9 @@ class GSTLAWorld(World):
 
         # rando_file.write((0).to_bytes(length=16, byteorder='little'))
         # debug_file.write("no settings (TBD)\n")
-
-        rando_file.write(f"{self.player_name}\n".encode('ascii'))
-        debug_file.write(f"Slot Name {self.player_name.encode('ascii')}\n")
+        encoded_name = base64.b64encode(self.player_name.encode('utf-8')) + '\n'.encode('ascii')
+        rando_file.write(encoded_name)
+        debug_file.write(f"Slot Name {encoded_name.decode('ascii')}")
 
         # locations = [x for x in all_locations if x.loc_type not in {LocationType.Event, LocationType.Djinn}]
 

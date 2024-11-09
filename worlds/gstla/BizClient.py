@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import base64
 from collections import defaultdict
 import logging
 from enum import IntEnum, Enum
@@ -66,6 +68,7 @@ class GSTLAClient(BizHawkClient):
 
     def __init__(self):
         super().__init__()
+        self.slot_name = ''
         for loc in all_locations:
             self.flag_map[loc.flag].add(loc.ap_id)
 
@@ -79,11 +82,20 @@ class GSTLAClient(BizHawkClient):
         # TODO: would like to verify that the ROM is the correct one somehow
         # Possibly verify the seed; would also be nice to have the slot name encoded
         # in the rom somewhere, though not necessary
+        slot_name = await read(ctx.bizhawk_ctx, [(0xFFF000, 64, _MemDomain.ROM)])
+        if not slot_name:
+            logger.warning("Could not find slot name in GSTLA ROM; please double check the ROM is correct")
+        else:
+            self.slot_name = base64.b64decode(slot_name[0].rstrip(b'\x00'), validate=True).decode('utf-8').strip()
         ctx.items_handling = 0b001
         ctx.watcher_timeout = 1 # not sure what a reasonable setting here is; passed to asyncio.wait_for
         return True
 
-    async def _load_djinn(self, ctx: 'BizHawkClientContext'):
+    async def set_auth(self, ctx: 'BizHawkClientContext') -> None:
+        if self.slot_name:
+            ctx.auth = self.slot_name
+
+    async def _load_djinn(self, ctx: 'BizHawkClientContext') -> None:
         if len(self.djinn_ram_to_rom) > 0:
             return
         # Don't put this in the data locations class; we don't want to check this regularly
@@ -94,13 +106,13 @@ class GSTLAClient(BizHawkClient):
             rom_flag = (section >> 8) * 0x14 + (section & 0xFF) + 0x30
             self.djinn_ram_to_rom[rom_flag] = djinn_flag
 
-    def _is_in_game(self, data: List[bytes]):
+    def _is_in_game(self, data: List[bytes]) -> bool:
         # What the emo tracker pack does; seems like it also verifies the player
         # has opened a save file
         flag = int.from_bytes(data[_DataLocations.IN_GAME], 'little')
         return flag > 1
 
-    def _check_djinn_flags(self, data: List[bytes]):
+    def _check_djinn_flags(self, data: List[bytes]) -> None:
         flag_bytes = data[_DataLocations.DJINN_FLAGS]
         for i in range(0,_DataLocations.DJINN_FLAGS.length,2):
             part = flag_bytes[i:i+2]
@@ -116,7 +128,7 @@ class GSTLAClient(BizHawkClient):
                     self.temp_locs |= locs
                 part_int >>= 1
 
-    def _check_common_flags(self, data_loc: _DataLocations, data: List[bytes]):
+    def _check_common_flags(self, data_loc: _DataLocations, data: List[bytes]) -> None:
         flag_bytes = data[data_loc]
         initial_flag = data_loc.initial_flag
         # logger.debug("Checking flags for %s" % data_loc.name)
@@ -138,7 +150,7 @@ class GSTLAClient(BizHawkClient):
         # logger.debug(self.temp_locs)
 
 
-    async def _receive_items(self, ctx: 'BizHawkClientContext', data: List[bytes]):
+    async def _receive_items(self, ctx: 'BizHawkClientContext', data: List[bytes]) -> None:
         item_in_slot = int.from_bytes(data[_DataLocations.AP_ITEM_SLOT], byteorder="little")
         if item_in_slot != 0:
             logger.debug("AP Item slot has data in it: %d", item_in_slot)
@@ -152,7 +164,7 @@ class GSTLAClient(BizHawkClient):
                                            item_code.to_bytes(length=2, byteorder="little"),
                                            _DataLocations.AP_ITEM_SLOT.domain)])
 
-    async def game_watcher(self, ctx: 'BizHawkClientContext'):
+    async def game_watcher(self, ctx: 'BizHawkClientContext') -> None:
         # TODO: implement
         # 1. Verify that the game is running (emo tracker, read 2 bytes from 0x02000428 > 1)
         # 2. Verify that a save file is loaded
