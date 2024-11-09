@@ -1,4 +1,5 @@
 from . import GSTestBase
+from ..gen.LocationData import LocationRestriction
 from ..gen.LocationNames import LocationName
 from ..gen.ItemNames import ItemName
 
@@ -59,3 +60,8 @@ class TestItemRestrictions(GSTestBase):
         loc = world.get_location(LocationName.Gaia_Rock_Sand)
         coin = world.create_item(ItemName.Coins_82)
         self.assertFalse(loc.can_fill(self.multiworld.state, coin, False))
+
+    def test_ensure_not_everything_restricted(self):
+        world = self.get_world()
+        loc = world.get_location(LocationName.Airs_Rock_Sleep_Bomb)
+        self.assertTrue(loc.location_data.restrictions == LocationRestriction.NONE)

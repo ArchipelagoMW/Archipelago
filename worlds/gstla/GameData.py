@@ -277,12 +277,12 @@ class GameData:
             rando_flag = int(flag, 16)
             mapped_flag = flag_overwrites.get(addr[0], rando_flag)
             restriction_data = restriction_dict[loc['id']]
-            if 0x80 != loc['eventType'] or 0x84 != loc['eventType']:
-                restriction_data |= restriction_map['no-empty'] | restriction_map['no-mimic']
+            if 0x80 != loc['eventType'] and 0x84 != loc['eventType']:
+                restriction_data |= restriction_map['no-empty'] + restriction_map['no-mimic']
             if addr[0] > 0xFA0000:
                 restriction_data |= restriction_map['no-money']
             if loc['id'] < 0x10 or (loc['id'] | 0xF00) == 0x100:
-                restriction_data |= restriction_map['no-empty'] | restriction_map['no-mimic'] | restriction_map['no-money']
+                restriction_data |= restriction_map['no-empty'] + restriction_map['no-mimic'] + restriction_map['no-money']
             datum = LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'],

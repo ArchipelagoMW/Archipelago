@@ -190,43 +190,43 @@ LocationData(125, 125, 16384142, 16384142,
 summon_tablets = [
     LocationData(19, 19, 19, 992068, [992068],
             132, 3859, True, True,
-            LocationType.Item, LocationRestriction(3)), #Moloch
+            LocationType.Item, LocationRestriction(0)), #Moloch
     LocationData(24, 24, 24, 992212, [992212],
             132, 3864, True, True,
-            LocationType.Item, LocationRestriction(3)), #Daedalus
+            LocationType.Item, LocationRestriction(0)), #Daedalus
     LocationData(18, 18, 18, 992632, [992632],
             132, 3858, True, True,
-            LocationType.Item, LocationRestriction(3)), #Flora
+            LocationType.Item, LocationRestriction(0)), #Flora
     LocationData(20, 20, 20, 993424, [993424],
             132, 3860, True, True,
-            LocationType.Item, LocationRestriction(3)), #Ulysses
+            LocationType.Item, LocationRestriction(0)), #Ulysses
     LocationData(25, 25, 25, 994300, [994300],
             132, 3865, True, True,
-            LocationType.Item, LocationRestriction(3)), #Azul
+            LocationType.Item, LocationRestriction(0)), #Azul
     LocationData(16, 16, 16, 994844, [994844],
             132, 3856, True, True,
-            LocationType.Item, LocationRestriction(3)), #Zagan
+            LocationType.Item, LocationRestriction(0)), #Zagan
     LocationData(17, 17, 17, 994856, [994856],
             132, 3857, True, True,
-            LocationType.Item, LocationRestriction(3)), #Megaera
+            LocationType.Item, LocationRestriction(0)), #Megaera
     LocationData(21, 21, 21, 994868, [994868],
             132, 3861, True, True,
-            LocationType.Item, LocationRestriction(3)), #Haures
+            LocationType.Item, LocationRestriction(0)), #Haures
     LocationData(23, 23, 23, 994880, [994880],
             132, 3863, True, True,
-            LocationType.Item, LocationRestriction(3)), #Coatlicue
+            LocationType.Item, LocationRestriction(0)), #Coatlicue
     LocationData(26, 26, 26, 994892, [994892],
             132, 3866, True, True,
-            LocationType.Item, LocationRestriction(3)), #Catastrophe
+            LocationType.Item, LocationRestriction(0)), #Catastrophe
     LocationData(27, 27, 27, 994904, [994904],
             132, 3867, True, True,
-            LocationType.Item, LocationRestriction(3)), #Charon
+            LocationType.Item, LocationRestriction(0)), #Charon
     LocationData(28, 28, 28, 994916, [994916],
             132, 3868, True, True,
-            LocationType.Item, LocationRestriction(3)), #Iris
+            LocationType.Item, LocationRestriction(0)), #Iris
     LocationData(2315, 2315, 2315, 16384198, [16384198],
             132, 3862, True, True,
-            LocationType.Item, LocationRestriction(11)), #Eclipse
+            LocationType.Item, LocationRestriction(8)), #Eclipse
     
 ]
 
@@ -307,28 +307,28 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Daila 12 coins
     LocationData(3846, 3846, 3846, 991860,
         [991860], 128, 443, True, True,
-        LocationType.Item, LocationRestriction(3)), # Kandorean Temple Mysterious Card
+        LocationType.Item, LocationRestriction(0)), # Kandorean Temple Mysterious Card
     LocationData(3696, 3696, 3696, 991872,
         [991872], 129, 0, False, False,
         LocationType.Item, LocationRestriction(3)), # Kandorean Temple Mimic
     LocationData(3847, 3847, 3847, 991884,
         [991884], 128, 340, False, True,
-        LocationType.Item, LocationRestriction(3)), # Dehkan Plateau Full Metal Vest
+        LocationType.Item, LocationRestriction(0)), # Dehkan Plateau Full Metal Vest
     LocationData(3848, 3848, 3848, 991892,
         [991892], 128, 188, False, False,
-        LocationType.Item, LocationRestriction(3)), # Dehkan Plateau Elixir
+        LocationType.Item, LocationRestriction(0)), # Dehkan Plateau Elixir
     LocationData(3849, 3849, 3849, 991904,
         [991904], 128, 195, False, False,
-        LocationType.Item, LocationRestriction(3)), # Dehkan Plateau Mint
+        LocationType.Item, LocationRestriction(0)), # Dehkan Plateau Mint
     LocationData(3850, 3850, 3850, 991916,
         [991916], 128, 301, False, True,
-        LocationType.Item, LocationRestriction(3)), # Dehkan Plateau Themis' Axe
+        LocationType.Item, LocationRestriction(0)), # Dehkan Plateau Themis' Axe
     LocationData(3851, 3851, 3851, 991928,
         [991928], 128, 181, False, False,
-        LocationType.Item, LocationRestriction(3)), # Dehkan Plateau Nut
+        LocationType.Item, LocationRestriction(0)), # Dehkan Plateau Nut
     LocationData(3852, 3852, 3852, 991940,
         [991940], 128, 383, False, True,
-        LocationType.Item, LocationRestriction(3)), # Madra Nurse's Cap
+        LocationType.Item, LocationRestriction(0)), # Madra Nurse's Cap
     LocationData(3853, 3853, 3853, 991948,
         [991948], 13, 187, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Madra Antidote
@@ -349,58 +349,58 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Madra Elixir
     LocationData(3859, 3859, 3859, 992008,
         [992008], 128, 193, False, False,
-        LocationType.Item, LocationRestriction(3)), # Madra Catacombs Apple
+        LocationType.Item, LocationRestriction(0)), # Madra Catacombs Apple
     LocationData(3906, 3906, 3906, 992016,
         [992016], 128, 190, False, False,
-        LocationType.Item, LocationRestriction(3)), # Madra Catacombs Mist Potion
+        LocationType.Item, LocationRestriction(0)), # Madra Catacombs Mist Potion
     LocationData(3860, 3860, 3860, 992028,
         [992028], 128, 229, False, False,
-        LocationType.Item, LocationRestriction(3)), # Madra Catacombs Lucky Medal
+        LocationType.Item, LocationRestriction(0)), # Madra Catacombs Lucky Medal
     LocationData(3861, 3861, 3861, 992036,
         [992036, 992048], 128, 459, True, True,
-        LocationType.Item, LocationRestriction(3)), # Madra Catacombs Ruin Key
+        LocationType.Item, LocationRestriction(0)), # Madra Catacombs Ruin Key
     LocationData(3862, 3862, 3862, 992060,
         [992060], 128, 3719, True, True,
-        LocationType.Item, LocationRestriction(3)), # Madra Catacombs Tremor Bit
+        LocationType.Item, LocationRestriction(0)), # Madra Catacombs Tremor Bit
     LocationData(3863, 3863, 3863, 992080,
         [992080], 128, 287, False, True,
-        LocationType.Item, LocationRestriction(3)), # Osenia Cliffs Pirate's Sword
+        LocationType.Item, LocationRestriction(0)), # Osenia Cliffs Pirate's Sword
     LocationData(3864, 3864, 3864, 992092,
         [992092], 128, 414, False, True,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Guardian Ring
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Guardian Ring
     LocationData(3865, 3865, 3865, 992104,
         [992104], 128, 187, False, False,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Antidote
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Antidote
     LocationData(3977, 3977, 3977, 992128,
         [992128], 131, 33083, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Yampi Desert 315 coins
     LocationData(2190, 2190, 2190, 992140,
         [992140], 128, 229, False, False,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Lucky Medal
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Lucky Medal
     LocationData(3866, 3866, 3866, 992148,
         [992148], 128, 444, True, True,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Trainer's Whip
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Trainer's Whip
     LocationData(3867, 3867, 3867, 992172,
         [992172], 128, 194, False, False,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Hard Nut
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Hard Nut
     LocationData(3868, 3868, 3868, 992180,
         [992180], 128, 309, False, True,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Blow Mace
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Blow Mace
     LocationData(3978, 3978, 3978, 992192,
         [992192], 128, 189, False, False,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Cave Water of Life
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Cave Water of Life
     LocationData(3979, 3979, 3979, 992204,
         [992204], 131, 435, False, True,
         LocationType.Item, LocationRestriction(3)), # Yampi Desert Cave Mythril Silver
     LocationData(3980, 3980, 3980, 992224,
         [992224], 128, 436, False, True,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Cave Dark Matter
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Cave Dark Matter
     LocationData(3981, 3981, 3981, 992232,
         [992232], 128, 437, False, True,
-        LocationType.Item, LocationRestriction(3)), # Yampi Desert Cave Orihalcon
+        LocationType.Item, LocationRestriction(0)), # Yampi Desert Cave Orihalcon
     LocationData(3869, 3869, 3869, 992244,
         [992244], 128, 186, False, False,
-        LocationType.Item, LocationRestriction(3)), # Alhafra Psy Crystal
+        LocationType.Item, LocationRestriction(0)), # Alhafra Psy Crystal
     LocationData(3870, 3870, 3870, 992252,
         [992252], 2, 227, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Alhafra Sleep Bomb
@@ -421,28 +421,28 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Alhafra Apple
     LocationData(3877, 3877, 3877, 992324,
         [992324], 128, 32891, False, False,
-        LocationType.Item, LocationRestriction(3)), # Alhafran Cave 123 coins
+        LocationType.Item, LocationRestriction(0)), # Alhafran Cave 123 coins
     LocationData(3878, 3878, 3878, 992332,
         [992332], 128, 333, False, True,
-        LocationType.Item, LocationRestriction(3)), # Alhafran Cave Ixion Mail
+        LocationType.Item, LocationRestriction(0)), # Alhafran Cave Ixion Mail
     LocationData(3879, 3879, 3879, 992340,
         [992340], 128, 229, False, False,
-        LocationType.Item, LocationRestriction(3)), # Alhafran Cave Lucky Medal
+        LocationType.Item, LocationRestriction(0)), # Alhafran Cave Lucky Medal
     LocationData(3982, 3982, 3982, 992348,
         [992348], 2, 191, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Alhafran Cave Power Bread
     LocationData(3983, 3983, 3983, 992360,
         [992360], 128, 33545, False, False,
-        LocationType.Item, LocationRestriction(3)), # Alhafran Cave 777 coins
+        LocationType.Item, LocationRestriction(0)), # Alhafran Cave 777 coins
     LocationData(3984, 3984, 3984, 992368,
         [992368], 128, 183, False, False,
-        LocationType.Item, LocationRestriction(3)), # Alhafran Cave Potion
+        LocationType.Item, LocationRestriction(0)), # Alhafran Cave Potion
     LocationData(3985, 3985, 3985, 992376,
         [992376], 128, 186, False, False,
-        LocationType.Item, LocationRestriction(3)), # Alhafran Cave Psy Crystal
+        LocationType.Item, LocationRestriction(0)), # Alhafran Cave Psy Crystal
     LocationData(3880, 3880, 3880, 992388,
         [992388], 128, 32850, False, False,
-        LocationType.Item, LocationRestriction(3)), # Mikasalla 82 coins
+        LocationType.Item, LocationRestriction(0)), # Mikasalla 82 coins
     LocationData(3881, 3881, 3881, 992396,
         [992396], 13, 181, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Mikasalla Nut
@@ -460,7 +460,7 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # E Tundaria Islet Lucky Medal
     LocationData(3885, 3885, 3885, 992444,
         [992444], 128, 290, False, True,
-        LocationType.Item, LocationRestriction(3)), # Garoh Hypnos' Sword
+        LocationType.Item, LocationRestriction(0)), # Garoh Hypnos' Sword
     LocationData(3886, 3886, 3886, 992456,
         [992456], 3, 181, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Garoh Nut
@@ -475,43 +475,43 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Garoh Elixir
     LocationData(3890, 3890, 3890, 992496,
         [992496], 128, 226, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Smoke Bomb
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Smoke Bomb
     LocationData(3891, 3891, 3891, 992504,
         [992504], 128, 192, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Cookie
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Cookie
     LocationData(3892, 3892, 3892, 992512,
         [992512], 128, 279, False, True,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Storm Brand
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Storm Brand
     LocationData(3697, 3697, 3697, 992520,
         [992520], 129, 1, False, False,
         LocationType.Item, LocationRestriction(3)), # Air's Rock Mimic
     LocationData(3893, 3893, 3893, 992532,
         [992532], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Vial
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Vial
     LocationData(3894, 3894, 3894, 992540,
         [992540], 128, 227, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Sleep Bomb
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Sleep Bomb
     LocationData(3895, 3895, 3895, 992552,
         [992552], 128, 358, False, True,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Fujin Shield
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Fujin Shield
     LocationData(3896, 3896, 3896, 992564,
         [992564], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Vial
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Vial
     LocationData(3897, 3897, 3897, 992584,
         [992584], 128, 394, False, True,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Clarity Circlet
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Clarity Circlet
     LocationData(3898, 3898, 3898, 992596,
         [992596], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Vial
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Vial
     LocationData(3899, 3899, 3899, 992608,
         [992608], 128, 188, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Elixir
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Elixir
     LocationData(3900, 3900, 3900, 992620,
         [992620], 128, 186, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock Psy Crystal
+        LocationType.Item, LocationRestriction(0)), # Air's Rock Psy Crystal
     LocationData(3901, 3901, 3901, 992644,
         [992644], 128, 33434, False, False,
-        LocationType.Item, LocationRestriction(3)), # Air's Rock 666 coins
+        LocationType.Item, LocationRestriction(0)), # Air's Rock 666 coins
     LocationData(3904, 3904, 3904, 992656,
         [992656], 131, 448, True, True,
         LocationType.Item, LocationRestriction(3)), # Gondowan Cliffs Healing Fungus
@@ -520,13 +520,13 @@ the_rest = [
         LocationType.Item, LocationRestriction(3)), # Gondowan Cliffs Laughing Fungus
     LocationData(3907, 3907, 3907, 992672,
         [992672], 128, 227, False, False,
-        LocationType.Item, LocationRestriction(3)), # Gondowan Cliffs Sleep Bomb
+        LocationType.Item, LocationRestriction(0)), # Gondowan Cliffs Sleep Bomb
     LocationData(3908, 3908, 3908, 992684,
         [992684], 128, 384, False, True,
-        LocationType.Item, LocationRestriction(3)), # Naribwe Thorn Crown
+        LocationType.Item, LocationRestriction(0)), # Naribwe Thorn Crown
     LocationData(3909, 3909, 3909, 992692,
         [992692], 128, 266, False, True,
-        LocationType.Item, LocationRestriction(3)), # Naribwe Unicorn Ring
+        LocationType.Item, LocationRestriction(0)), # Naribwe Unicorn Ring
     LocationData(3910, 3910, 3910, 992700,
         [992700], 2, 188, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Naribwe Elixir
@@ -538,13 +538,13 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Naribwe Sleep Bomb
     LocationData(3913, 3913, 3913, 992732,
         [992732], 128, 191, False, False,
-        LocationType.Item, LocationRestriction(3)), # Kibombo Mountains Power Bread
+        LocationType.Item, LocationRestriction(0)), # Kibombo Mountains Power Bread
     LocationData(3914, 3914, 3914, 992740,
         [992740], 128, 429, False, True,
-        LocationType.Item, LocationRestriction(3)), # Kibombo Mountains Tear Stone
+        LocationType.Item, LocationRestriction(0)), # Kibombo Mountains Tear Stone
     LocationData(3915, 3915, 3915, 992752,
         [992752], 128, 300, False, True,
-        LocationType.Item, LocationRestriction(3)), # Kibombo Mountains Disk Axe
+        LocationType.Item, LocationRestriction(0)), # Kibombo Mountains Disk Axe
     LocationData(3916, 3916, 3916, 992764,
         [992764], 13, 226, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Kibombo Mountains Smoke Bomb
@@ -559,13 +559,13 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Kibombo Nut
     LocationData(3921, 3921, 3921, 992844,
         [992844], 128, 370, False, True,
-        LocationType.Item, LocationRestriction(3)), # Gabomba Statue Bone Armlet
+        LocationType.Item, LocationRestriction(0)), # Gabomba Statue Bone Armlet
     LocationData(3698, 3698, 3698, 992852,
         [992852], 129, 2, False, False,
         LocationType.Item, LocationRestriction(3)), # Gabomba Statue Mimic
     LocationData(3922, 3922, 3922, 992864,
         [992864], 128, 188, False, False,
-        LocationType.Item, LocationRestriction(3)), # Gabomba Statue Elixir
+        LocationType.Item, LocationRestriction(0)), # Gabomba Statue Elixir
     LocationData(3923, 3923, 3923, 992876,
         [992876], 131, 195, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Gabomba Catacombs Mint
@@ -574,7 +574,7 @@ the_rest = [
         LocationType.Item, LocationRestriction(3)), # Gabomba Catacombs Tomegathericon
     LocationData(3924, 3924, 3924, 992900,
         [992900], 128, 183, False, False,
-        LocationType.Item, LocationRestriction(3)), # Lemurian Ship Potion
+        LocationType.Item, LocationRestriction(0)), # Lemurian Ship Potion
     LocationData(3925, 3925, 3925, 992908,
         [992908], 3, 188, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Lemurian Ship Elixir
@@ -583,13 +583,13 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Lemurian Ship Antidote
     LocationData(3928, 3928, 3928, 992928,
         [992928], 128, 190, False, False,
-        LocationType.Item, LocationRestriction(3)), # Lemurian Ship Mist Potion
+        LocationType.Item, LocationRestriction(2)), # Lemurian Ship Mist Potion
     LocationData(3927, 3927, 3927, 992936,
         [992936, 992944], 3, 238, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Lemurian Ship Oil Drop
     LocationData(3929, 3929, 3929, 992968,
         [992968], 128, 426, False, True,
-        LocationType.Item, LocationRestriction(3)), # Shrine of the Sea God Rusty Staff
+        LocationType.Item, LocationRestriction(0)), # Shrine of the Sea God Rusty Staff
     LocationData(2247, 2247, 2247, 992980,
         [992980], 131, 439, True, True,
         LocationType.Item, LocationRestriction(3)), # Shrine of the Sea God Right Prong
@@ -613,7 +613,7 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Yallam Antidote
     LocationData(3989, 3989, 3989, 993064,
         [993064], 128, 26, False, True,
-        LocationType.Item, LocationRestriction(3)), # Yallam Masamune
+        LocationType.Item, LocationRestriction(0)), # Yallam Masamune
     LocationData(3990, 3990, 3990, 993076,
         [993076], 13, 188, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Yallam Elixir
@@ -622,7 +622,7 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Yallam Oil Drop
     LocationData(3992, 3992, 3992, 993096,
         [993096], 128, 192, False, False,
-        LocationType.Item, LocationRestriction(3)), # Taopo Swamp Cookie
+        LocationType.Item, LocationRestriction(0)), # Taopo Swamp Cookie
     LocationData(3939, 3939, 3939, 993108,
         [993108], 131, 429, False, True,
         LocationType.Item, LocationRestriction(3)), # Taopo Swamp Tear Stone
@@ -631,7 +631,7 @@ the_rest = [
         LocationType.Item, LocationRestriction(3)), # Taopo Swamp Tear Stone
     LocationData(3941, 3941, 3941, 993128,
         [993128], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Taopo Swamp Vial
+        LocationType.Item, LocationRestriction(0)), # Taopo Swamp Vial
     LocationData(3942, 3942, 3942, 993140,
         [993140], 131, 430, False, True,
         LocationType.Hidden, LocationRestriction(3)), # Taopo Swamp Star Dust
@@ -655,40 +655,40 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Apojii Islands Bramble Seed
     LocationData(3944, 3944, 3944, 993216,
         [993216], 128, 181, False, False,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Nut
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Nut
     LocationData(3945, 3945, 3945, 993224,
         [993224], 128, 188, False, False,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Elixir
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Elixir
     LocationData(3946, 3946, 3946, 993236,
         [993236], 128, 291, False, True,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Mist Sabre
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Mist Sabre
     LocationData(3947, 3947, 3947, 993244,
         [993244], 128, 238, False, False,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Oil Drop
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Oil Drop
     LocationData(3948, 3948, 3948, 993256,
         [993256], 128, 189, False, False,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Water of Life
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Water of Life
     LocationData(3699, 3699, 3699, 993268,
         [993268], 129, 3, False, False,
         LocationType.Item, LocationRestriction(3)), # Aqua Rock Mimic
     LocationData(3949, 3949, 3949, 993280,
         [993280], 128, 456, True, True,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Aquarius Stone
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Aquarius Stone
     LocationData(3950, 3950, 3950, 993288,
         [993288], 128, 196, False, False,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Lucky Pepper
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Lucky Pepper
     LocationData(3951, 3951, 3951, 993300,
         [993300], 128, 418, False, True,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Rusty Sword
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Rusty Sword
     LocationData(3952, 3952, 3952, 993312,
         [993312], 128, 241, False, False,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Crystal Powder
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Crystal Powder
     LocationData(3953, 3953, 3953, 993332,
         [993332], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Vial
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Vial
     LocationData(3954, 3954, 3954, 993344,
         [993344], 128, 429, False, True,
-        LocationType.Item, LocationRestriction(3)), # Aqua Rock Tear Stone
+        LocationType.Item, LocationRestriction(0)), # Aqua Rock Tear Stone
     LocationData(3999, 3999, 3999, 993360,
         [993360], 131, 187, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Izumo Antidote
@@ -712,34 +712,34 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Izumo Festival Coat
     LocationData(4006, 4006, 4006, 993432,
         [993432], 128, 334, False, True,
-        LocationType.Item, LocationRestriction(3)), # Izumo Phantasmal Mail
+        LocationType.Item, LocationRestriction(0)), # Izumo Phantasmal Mail
     LocationData(3955, 3955, 3955, 993444,
         [993444], 128, 181, False, False,
-        LocationType.Item, LocationRestriction(3)), # Gaia Rock Nut
+        LocationType.Item, LocationRestriction(0)), # Gaia Rock Nut
     LocationData(3956, 3956, 3956, 993456,
         [993456], 131, 451, True, True,
         LocationType.Item, LocationRestriction(3)), # Gaia Rock Dancing Idol
     LocationData(3957, 3957, 3957, 993464,
         [993464], 128, 193, False, False,
-        LocationType.Item, LocationRestriction(3)), # Gaia Rock Apple
+        LocationType.Item, LocationRestriction(0)), # Gaia Rock Apple
     LocationData(3700, 3700, 3700, 993476,
         [993476], 129, 4, False, False,
         LocationType.Item, LocationRestriction(3)), # Gaia Rock Mimic
     LocationData(3958, 3958, 3958, 993484,
         [993484], 128, 423, False, True,
-        LocationType.Item, LocationRestriction(3)), # Gaia Rock Rusty Mace
+        LocationType.Item, LocationRestriction(0)), # Gaia Rock Rusty Mace
     LocationData(3649, 3649, 3649, 993492,
         [993492], 131, 283, False, True,
         LocationType.Hidden, LocationRestriction(3)), # Gaia Rock Cloud Brand
     LocationData(4008, 4008, 4008, 993504,
         [993504], 128, 259, False, True,
-        LocationType.Item, LocationRestriction(3)), # Islet Cave Turtle Boots
+        LocationType.Item, LocationRestriction(0)), # Islet Cave Turtle Boots
     LocationData(4009, 4009, 4009, 993512,
         [993512], 128, 425, False, True,
-        LocationType.Item, LocationRestriction(3)), # Islet Cave Rusty Staff
+        LocationType.Item, LocationRestriction(0)), # Islet Cave Rusty Staff
     LocationData(4010, 4010, 4010, 993524,
         [993524], 128, 378, False, True,
-        LocationType.Item, LocationRestriction(3)), # Champa Viking Helm
+        LocationType.Item, LocationRestriction(0)), # Champa Viking Helm
     LocationData(4011, 4011, 4011, 993532,
         [993532], 13, 226, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Champa Smoke Bomb
@@ -757,82 +757,82 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Champa Sleep Bomb
     LocationData(4016, 4016, 4016, 993584,
         [993584], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins ???
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins ???
     LocationData(4017, 4017, 4017, 993592,
         [993592], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins ???
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins ???
     LocationData(4018, 4018, 4018, 993600,
         [993600], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins ???
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins ???
     LocationData(4019, 4019, 4019, 993608,
         [993608], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins ???
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins ???
     LocationData(4020, 4020, 4020, 993616,
         [993616], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins ???
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins ???
     LocationData(4021, 4021, 4021, 993624,
         [993624], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins ???
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins ???
     LocationData(3959, 3959, 3959, 993632,
         [993632], 128, 32978, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins 210 coins
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins 210 coins
     LocationData(3960, 3960, 3960, 993640,
         [993640], 128, 181, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Nut
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Nut
     LocationData(3961, 3961, 3961, 993652,
         [993652], 128, 241, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Crystal Powder
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Crystal Powder
     LocationData(3962, 3962, 3962, 993664,
         [993664], 128, 311, False, True,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Thanatos Mace
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Thanatos Mace
     LocationData(3963, 3963, 3963, 993672,
         [993672], 128, 191, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Power Bread
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Power Bread
     LocationData(3964, 3964, 3964, 993680,
         [993680], 128, 349, False, True,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Muni Robe
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Muni Robe
     LocationData(3965, 3965, 3965, 993692,
         [993692], 128, 33133, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins 365 coins
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins 365 coins
     LocationData(3966, 3966, 3966, 993700,
         [993700], 128, 431, False, True,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Sylph Feather
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Sylph Feather
     LocationData(3967, 3967, 3967, 993708,
         [993708], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Vial
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Vial
     LocationData(3903, 3903, 3903, 993720,
         [993720], 128, 183, False, False,
-        LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Potion
+        LocationType.Item, LocationRestriction(0)), # Ankohl Ruins Potion
     LocationData(3968, 3968, 3968, 993732,
         [993732], 131, 440, True, True,
         LocationType.Item, LocationRestriction(3)), # Ankohl Ruins Left Prong
     LocationData(3969, 3969, 3969, 993744,
         [993744], 128, 431, False, True,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower Sylph Feather
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower Sylph Feather
     LocationData(3970, 3970, 3970, 993752,
         [993752], 128, 229, False, False,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower Lucky Medal
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower Lucky Medal
     LocationData(3971, 3971, 3971, 993760,
         [993760], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower Vial
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower Vial
     LocationData(3972, 3972, 3972, 993768,
         [993768], 128, 281, False, True,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower Lightning Sword
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower Lightning Sword
     LocationData(2373, 2373, 2373, 16384200,
         [16384200, 993776], 128, 441, True, True,
-        LocationType.Item, LocationRestriction(11)), # Tundaria Tower Center Prong
+        LocationType.Item, LocationRestriction(8)), # Tundaria Tower Center Prong
     LocationData(3973, 3973, 3973, 993788,
         [993788], 128, 33133, False, False,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower 365 coins
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower 365 coins
     LocationData(3974, 3974, 3974, 993796,
         [993796], 128, 195, False, False,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower Mint
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower Mint
     LocationData(3975, 3975, 3975, 993808,
         [993808], 128, 194, False, False,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower Hard Nut
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower Hard Nut
     LocationData(3976, 3976, 3976, 993816,
         [993816], 128, 241, False, False,
-        LocationType.Item, LocationRestriction(3)), # Tundaria Tower Crystal Powder
+        LocationType.Item, LocationRestriction(0)), # Tundaria Tower Crystal Powder
     LocationData(2377, 2377, 2377, 993828,
         [993828], 131, 3735, True, True,
         LocationType.Item, LocationRestriction(3)), # Tundaria Tower Burst Brooch
@@ -853,25 +853,25 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Lemuria Star Dust
     LocationData(3943, 3943, 3943, 993916,
         [993916], 128, 3736, True, True,
-        LocationType.Item, LocationRestriction(3)), # Lemuria Grindstone
+        LocationType.Item, LocationRestriction(0)), # Lemuria Grindstone
     LocationData(4031, 4031, 4031, 993924,
         [993924], 3, 229, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Lemuria Lucky Medal
     LocationData(4032, 4032, 4032, 993936,
         [993936], 128, 430, False, True,
-        LocationType.Item, LocationRestriction(3)), # Gondowan Settlement Star Dust
+        LocationType.Item, LocationRestriction(0)), # Gondowan Settlement Star Dust
     LocationData(4033, 4033, 4033, 993948,
         [993948], 8, 229, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Gondowan Settlement Lucky Medal
     LocationData(4034, 4034, 4034, 993960,
         [993960], 128, 32934, False, False,
-        LocationType.Item, LocationRestriction(3)), # Hesperia Settlement 166 coins
+        LocationType.Item, LocationRestriction(0)), # Hesperia Settlement 166 coins
     LocationData(4035, 4035, 4035, 993984,
         [993984], 128, 432, False, True,
-        LocationType.Item, LocationRestriction(3)), # SW Atteka Islet Dragon Skin
+        LocationType.Item, LocationRestriction(0)), # SW Atteka Islet Dragon Skin
     LocationData(4036, 4036, 4036, 993996,
         [993996], 128, 182, False, False,
-        LocationType.Item, LocationRestriction(3)), # Atteka Inlet Vial
+        LocationType.Item, LocationRestriction(0)), # Atteka Inlet Vial
     LocationData(4037, 4037, 4037, 994016,
         [994016], 3, 191, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Contigo Power Bread
@@ -883,7 +883,7 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Contigo Bramble Seed
     LocationData(4040, 4040, 4040, 994044,
         [994044], 128, 366, False, True,
-        LocationType.Item, LocationRestriction(3)), # Shaman Village Spirit Gloves
+        LocationType.Item, LocationRestriction(0)), # Shaman Village Spirit Gloves
     LocationData(4041, 4041, 4041, 994052,
         [994052], 2, 229, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Shaman Village Lucky Medal
@@ -898,88 +898,88 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Shaman Village Lucky Pepper
     LocationData(3935, 3935, 3935, 994096,
         [994096], 128, 194, False, False,
-        LocationType.Item, LocationRestriction(3)), # Shaman Village Hard Nut
+        LocationType.Item, LocationRestriction(0)), # Shaman Village Hard Nut
     LocationData(4045, 4045, 4045, 994108,
         [994108], 128, 32929, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle 161 coins
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle 161 coins
     LocationData(4046, 4046, 4046, 994116,
         [994116], 128, 229, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Lucky Medal
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Lucky Medal
     LocationData(4047, 4047, 4047, 994124,
         [994124], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4048, 4048, 4048, 994132,
         [994132], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4049, 4049, 4049, 994140,
         [994140], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4050, 4050, 4050, 994148,
         [994148], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4051, 4051, 4051, 994160,
         [994160], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4052, 4052, 4052, 994168,
         [994168], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4053, 4053, 4053, 994176,
         [994176], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4054, 4054, 4054, 994184,
         [994184], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4055, 4055, 4055, 994192,
         [994192], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4056, 4056, 4056, 994200,
         [994200], 128, 0, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle ???
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle ???
     LocationData(4057, 4057, 4057, 994208,
         [994208], 128, 33679, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle 911 coins
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle 911 coins
     LocationData(4058, 4058, 4058, 994216,
         [994216], 128, 186, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Psy Crystal
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Psy Crystal
     LocationData(4059, 4059, 4059, 994224,
         [994224], 128, 192, False, False,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Cookie
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Cookie
     LocationData(4060, 4060, 4060, 994232,
         [994232], 128, 431, False, True,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Sylph Feather
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Sylph Feather
     LocationData(4061, 4061, 4061, 994240,
         [994240], 128, 422, False, True,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Rusty Axe
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Rusty Axe
     LocationData(4062, 4062, 4062, 994248,
         [994248], 128, 430, False, True,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Star Dust
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Star Dust
     LocationData(4063, 4063, 4063, 994260,
         [994260], 128, 371, False, True,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Jester's Armlet
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Jester's Armlet
     LocationData(3701, 3701, 3701, 994268,
         [994268], 129, 5, False, False,
         LocationType.Item, LocationRestriction(3)), # Treasure Isle Mimic
     LocationData(4064, 4064, 4064, 994280,
         [994280], 128, 7, False, True,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Fire Brand
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Fire Brand
     LocationData(4065, 4065, 4065, 994288,
         [994288], 128, 351, False, True,
-        LocationType.Item, LocationRestriction(3)), # Treasure Isle Iris Robe
+        LocationType.Item, LocationRestriction(0)), # Treasure Isle Iris Robe
     LocationData(4066, 4066, 4066, 994312,
         [994312], 131, 195, False, False,
         LocationType.Hidden, LocationRestriction(3)), # Jupiter Lighthouse Mint
     LocationData(4067, 4067, 4067, 994336,
         [994336], 128, 344, False, True,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Erinyes Tunic
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse Erinyes Tunic
     LocationData(4068, 4068, 4068, 994348,
         [994348], 128, 183, False, False,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Potion
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse Potion
     LocationData(4069, 4069, 4069, 994356,
         [994356], 128, 186, False, False,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Psy Crystal
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse Psy Crystal
     LocationData(4070, 4070, 4070, 994368,
         [994368], 128, 319, False, True,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Meditation Rod
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse Meditation Rod
     LocationData(4071, 4071, 4071, 994376,
         [994376], 131, 243, True, True,
         LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Red Key
@@ -991,37 +991,37 @@ the_rest = [
         LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Blue Key
     LocationData(4073, 4073, 4073, 994404,
         [994404], 128, 190, False, False,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Mist Potion
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse Mist Potion
     LocationData(4074, 4074, 4074, 994412,
         [994412], 128, 33074, False, False,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse 306 coins
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse 306 coins
     LocationData(4075, 4075, 4075, 994424,
         [994424], 128, 189, False, False,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Water of Life
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse Water of Life
     LocationData(4076, 4076, 4076, 994436,
         [994436], 128, 292, False, True,
-        LocationType.Item, LocationRestriction(3)), # Jupiter Lighthouse Phaeton's Blade
+        LocationType.Item, LocationRestriction(0)), # Jupiter Lighthouse Phaeton's Blade
     LocationData(4077, 4077, 4077, 994448,
         [994448], 128, 238, False, False,
-        LocationType.Item, LocationRestriction(3)), # Magma Rock Oil Drop
+        LocationType.Item, LocationRestriction(0)), # Magma Rock Oil Drop
     LocationData(4078, 4078, 4078, 994460,
         [994460], 128, 33151, False, False,
-        LocationType.Item, LocationRestriction(3)), # Magma Rock 383 coins
+        LocationType.Item, LocationRestriction(0)), # Magma Rock 383 coins
     LocationData(4079, 4079, 4079, 994468,
         [994468], 128, 433, False, True,
-        LocationType.Item, LocationRestriction(3)), # Magma Rock Salamander Tail
+        LocationType.Item, LocationRestriction(0)), # Magma Rock Salamander Tail
     LocationData(4080, 4080, 4080, 994480,
         [994480], 128, 229, False, False,
-        LocationType.Item, LocationRestriction(3)), # Magma Rock Lucky Medal
+        LocationType.Item, LocationRestriction(0)), # Magma Rock Lucky Medal
     LocationData(4081, 4081, 4081, 994492,
         [994492], 128, 190, False, False,
-        LocationType.Item, LocationRestriction(3)), # Magma Rock Mist Potion
+        LocationType.Item, LocationRestriction(0)), # Magma Rock Mist Potion
     LocationData(4082, 4082, 4082, 994504,
         [994504], 128, 433, False, True,
-        LocationType.Item, LocationRestriction(3)), # Magma Rock Salamander Tail
+        LocationType.Item, LocationRestriction(0)), # Magma Rock Salamander Tail
     LocationData(4084, 4084, 4084, 994524,
         [994524], 128, 434, False, True,
-        LocationType.Item, LocationRestriction(3)), # Magma Rock Golem Core
+        LocationType.Item, LocationRestriction(0)), # Magma Rock Golem Core
     LocationData(3703, 3703, 3703, 994536,
         [994536], 129, 7, False, False,
         LocationType.Item, LocationRestriction(3)), # Magma Rock Mimic
@@ -1051,40 +1051,40 @@ the_rest = [
         LocationType.Hidden, LocationRestriction(3)), # Prox Sacred Feather
     LocationData(4093, 4093, 4093, 994624,
         [994624], 128, 193, False, False,
-        LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Apple
+        LocationType.Item, LocationRestriction(0)), # Mars Lighthouse Apple
     LocationData(4094, 4094, 4094, 994636,
         [994636], 128, 3740, True, True,
-        LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Teleport Lapis
+        LocationType.Item, LocationRestriction(0)), # Mars Lighthouse Teleport Lapis
     LocationData(3704, 3704, 3704, 994644,
         [994644], 129, 8, False, False,
         LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Mimic
     LocationData(4095, 4095, 4095, 994656,
         [994656], 128, 388, False, True,
-        LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Alastor's Hood
+        LocationType.Item, LocationRestriction(0)), # Mars Lighthouse Alastor's Hood
     LocationData(3584, 3584, 3584, 994668,
         [994668], 128, 437, False, True,
-        LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Orihalcon
+        LocationType.Item, LocationRestriction(0)), # Mars Lighthouse Orihalcon
     LocationData(3585, 3585, 3585, 994680,
         [994680], 128, 336, False, True,
-        LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Valkyrie Mail
+        LocationType.Item, LocationRestriction(0)), # Mars Lighthouse Valkyrie Mail
     LocationData(3586, 3586, 3586, 994692,
         [994692], 128, 10, False, True,
-        LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Sol Blade
+        LocationType.Item, LocationRestriction(0)), # Mars Lighthouse Sol Blade
     LocationData(3587, 3587, 3587, 994704,
         [994704], 128, 186, False, False,
-        LocationType.Item, LocationRestriction(3)), # Mars Lighthouse Psy Crystal
+        LocationType.Item, LocationRestriction(0)), # Mars Lighthouse Psy Crystal
     LocationData(3588, 3588, 3588, 994716,
         [994716], 128, 432, False, True,
-        LocationType.Item, LocationRestriction(3)), # Contigo Dragon Skin
+        LocationType.Item, LocationRestriction(0)), # Contigo Dragon Skin
     LocationData(3589, 3589, 3589, 994728,
         [994728], 128, 436, False, True,
-        LocationType.Item, LocationRestriction(3)), # Anemos Inner Sanctum Dark Matter
+        LocationType.Item, LocationRestriction(0)), # Anemos Inner Sanctum Dark Matter
     LocationData(3590, 3590, 3590, 994736,
         [994736], 128, 437, False, True,
-        LocationType.Item, LocationRestriction(3)), # Anemos Inner Sanctum Orihalcon
+        LocationType.Item, LocationRestriction(0)), # Anemos Inner Sanctum Orihalcon
     LocationData(3674, 3674, 3674, 994832,
         [994832], 128, 188, False, False,
-        LocationType.Item, LocationRestriction(3)), # Shaman Village Elixir
+        LocationType.Item, LocationRestriction(0)), # Shaman Village Elixir
     LocationData(3675, 3675, 3675, 994928,
         [994928], 133, 421, False, True,
         LocationType.Hidden, LocationRestriction(3)), # Overworld Rusty Axe
@@ -1144,22 +1144,22 @@ the_rest = [
         LocationType.Item, LocationRestriction(15)), # Idejima Shaman's Rod
     LocationData(257, 3, 257, 16384210,
         [16384210], 128, 3731, True, True,
-        LocationType.Item, LocationRestriction(15)), # Contigo Carry Stone
+        LocationType.Item, LocationRestriction(14)), # Contigo Carry Stone
     LocationData(258, 2, 258, 16384212,
         [16384212], 128, 3727, True, True,
-        LocationType.Item, LocationRestriction(15)), # Contigo Lifting Gem
+        LocationType.Item, LocationRestriction(14)), # Contigo Lifting Gem
     LocationData(259, 1, 259, 16384214,
         [16384214], 128, 3726, True, True,
-        LocationType.Item, LocationRestriction(15)), # Contigo Orb of Force
+        LocationType.Item, LocationRestriction(14)), # Contigo Orb of Force
     LocationData(260, 0, 260, 16384216,
         [16384216], 128, 3732, True, True,
-        LocationType.Item, LocationRestriction(15)), # Contigo Catch Beads
+        LocationType.Item, LocationRestriction(14)), # Contigo Catch Beads
     LocationData(261, 7, 261, 16384218,
         [16384218], 128, 3617, True, True,
-        LocationType.Item, LocationRestriction(15)), # Kibombo Douse Drop
+        LocationType.Item, LocationRestriction(12)), # Kibombo Douse Drop
     LocationData(262, 7, 262, 16384220,
         [16384220], 128, 3608, True, True,
-        LocationType.Item, LocationRestriction(15)), # Kibombo Frost Jewel
+        LocationType.Item, LocationRestriction(12)), # Kibombo Frost Jewel
     LocationData(3328, 3328, 3328, 16384384,
         [16384384], 132, 3328, True, True,
         LocationType.Character, LocationRestriction(11)), # Contigo Isaac
