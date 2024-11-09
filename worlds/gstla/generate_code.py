@@ -209,16 +209,72 @@ def generate_item_data(env: Environment, data: GameData):
 
         summons = [x for x in data.raw_summon_data]
         psyenergies = [x for x in data.raw_psy_data]
-        psyitems = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type == ItemType.PsyenergyItem]
-        djinns = [x for x in data.raw_djinn_data]
-        remainder = [{'item': x, 'name': names[x.id]} for x in data.raw_item_data if x.item_type != ItemType.PsyenergyItem]
         characters = [c for c in data.raw_character_data]
+        djinns = [x for x in data.raw_djinn_data]
+        psyitems = []
+        mimics = []
+        other_prog = []
+        other_useful = []
+        shop_only = []
+        forge_only = []
+        lucky_only = []
+        non_vanilla = []
+        vanilla_coins = []
+        remainder = []
+        vanilla_item_ids = { x.vanilla_contents for x in data.raw_location_data if x.vanilla_name != 'Mimic'}
+        shop_only_ids = set()
+        forge_only_ids = set()
+        lucky_only_ids = set()
+        for id in data.vanilla_shop_contents:
+            if id not in vanilla_item_ids:
+                shop_only_ids.add(id)
+            vanilla_item_ids.add(id)
+        for id in data.forgeable_ids:
+            if id not in vanilla_item_ids:
+                forge_only_ids.add(id)
+            vanilla_item_ids.add(id)
+        for id in data.lucky_medal_ids:
+            if id not in vanilla_item_ids:
+                lucky_only_ids.add(id)
+            vanilla_item_ids.add(id)
+
+        for item in data.raw_item_data:
+            datum = {'item': item, 'name': names[item.id]}
+            if item.is_mimic:
+                mimics.append(datum)
+            elif item.item_type == ItemType.PsyenergyItem:
+                psyitems.append(datum)
+            elif SPECIAL_PROGRESSIONS[item.id] == 'progression':
+                other_prog.append(datum)
+            elif SPECIAL_PROGRESSIONS[item.id] == 'useful':
+                other_useful.append(datum)
+            elif item.id in shop_only_ids:
+                shop_only.append(datum)
+            elif item.id in forge_only_ids:
+                forge_only.append(datum)
+            elif item.id in lucky_only_ids:
+                lucky_only.append(datum)
+            elif item.id > 0x8000:
+                vanilla_coins.append(datum)
+            elif item.id not in vanilla_item_ids:
+                non_vanilla.append(datum)
+            else:
+                remainder.append(datum)
         outfile.write(template.render(
             summons=summons,
             psyenergies=psyenergies,
             psyitems=psyitems,
             djinns=djinns,
             characters=characters,
+            mimics=mimics,
+            other_prog=other_prog,
+            other_useful=other_useful,
+            non_vanilla=non_vanilla,
+            shop_only=shop_only,
+            forge_only=forge_only,
+            lucky_only=lucky_only,
+            vanilla_coins=vanilla_coins,
+            vanilla_item_ids=sorted(vanilla_item_ids),
             # unique_items=unique_items,
             # gear=gear,
             remainder=remainder,
