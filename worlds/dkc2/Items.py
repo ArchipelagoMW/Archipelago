@@ -30,6 +30,20 @@ worlds_table = {
     ItemName.the_flying_krock:      ItemData(STARTING_ID + 0x0007, True),
 }
 
+mcguffin_table = {
+    ItemName.lost_world_rock:       ItemData(STARTING_ID + 0x0008, True),
+    ItemName.dk_coin:               ItemData(STARTING_ID + 0x0009, False),
+    ItemName.kremkoins:             ItemData(STARTING_ID + 0x000A, False),
+}
+
+lost_world_table = {
+    ItemName.lost_world_cauldron:   ItemData(STARTING_ID + 0x000B, True),
+    ItemName.lost_world_quay:       ItemData(STARTING_ID + 0x000C, True),
+    ItemName.lost_world_kremland:   ItemData(STARTING_ID + 0x000D, True),
+    ItemName.lost_world_gulch:      ItemData(STARTING_ID + 0x000E, True),
+    ItemName.lost_world_keep:       ItemData(STARTING_ID + 0x000F, True),
+}
+
 progression_table = {
     ItemName.diddy:                 ItemData(STARTING_ID + 0x0010, True),
     ItemName.dixie:                 ItemData(STARTING_ID + 0x0011, True),
@@ -60,19 +74,63 @@ junk_table = {
     ItemName.red_balloon:           ItemData(STARTING_ID + 0x0031, False),
 }
 
+trap_table = {
+    ItemName.freeze_trap:           ItemData(STARTING_ID + 0x0040, False, True),
+    ItemName.reverse_trap:          ItemData(STARTING_ID + 0x0041, False, True),
+}
+
 item_groups = {
     "Worlds": {
+        ItemName.gangplank_galleon,
+        ItemName.crocodile_cauldron,
+        ItemName.krem_quay,
+        ItemName.krazy_kremland,
+        ItemName.gloomy_gulch,
+        ItemName.krools_keep,
+        ItemName.the_flying_krock,
+    },
+    "Lost World": {
+        ItemName.lost_world_cauldron,
+        ItemName.lost_world_quay,
+        ItemName.lost_world_kremland,
+        ItemName.lost_world_gulch,
+        ItemName.lost_world_keep,
     },
     "Abilities": {
+        ItemName.carry,
+        ItemName.climb,
+        ItemName.cling,
+        ItemName.cartwheel,
+        ItemName.swim,
+        ItemName.team_attack,
+        ItemName.helicopter_spin,
     },
-    "Animal Buddies": {
+    "Animals": {
+        ItemName.rambi,
+        ItemName.squawks,
+        ItemName.enguarde,
+        ItemName.squitter,
+        ItemName.rattly,
+        ItemName.clapper,
+        ItemName.glimmer,
+        ItemName.skull_kart,
+    },
+    "Barrels": {
+        ItemName.barrel_kannons,
+        ItemName.barrel_exclamation,
+        ItemName.barrel_kong,
+        ItemName.barrel_warp,
+        ItemName.barrel_control,
     }
 }
 
 item_table = {
     **event_table,
+    **mcguffin_table,
     **worlds_table,
+    **lost_world_table,
     **progression_table,
+    **trap_table,
     **junk_table,
 }
 

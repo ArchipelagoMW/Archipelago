@@ -43,7 +43,7 @@ location_id_to_level_id = {
     LocationName.clappers_cavern_clear:     [0x00, 0x8F],
     LocationName.chain_link_chamber_clear:  [0x00, 0x6D],
     LocationName.toxic_tower_clear:         [0x00, 0x6E],
-    LocationName.stronghold_showdown_clear: [0x00, 0xB9],
+    LocationName.stronghold_showdown_clear: [0x03, 0xB9],
     LocationName.screechs_sprint_clear:     [0x00, 0x2F],
     LocationName.jungle_jinx_clear:         [0x00, 0x99],
     LocationName.black_ice_battle_clear:    [0x00, 0x96],
@@ -202,7 +202,7 @@ location_id_to_level_id = {
 }
 
 level_list = [
-    [RegionName.pirate_panic_level, 0x03],
+    #[RegionName.pirate_panic_level, 0x03],
     [RegionName.mainbrace_mayhem_level, 0x0C],
     [RegionName.gangplank_galley_level, 0x04],
     [RegionName.lockjaws_locker_level, 0x15],
@@ -304,7 +304,7 @@ boss_connections = {
 }
 
 level_rom_data = {
-    #RegionName.pirate_panic_level:          [0x34DD6F+9, 0x34DD7E],
+    RegionName.pirate_panic_level:          [0x34DD6F+9, 0x34DD7E],
     RegionName.mainbrace_mayhem_level:      [0x34DD9C+9, 0x34DDB3],
     RegionName.gangplank_galley_level:      [0x34D24D+9, 0x34D260],
     RegionName.lockjaws_locker_level:       [0x34D2BA+9, 0x34D2CD],
@@ -360,16 +360,17 @@ def generate_level_list(world: World):
     if world.options.shuffle_levels:
         world.random.shuffle(shuffled_level_list)
         world.random.shuffle(shuffled_boss_list)
+    #shuffled_level_list.insert(0, [RegionName.pirate_panic_level, 0x03])
 
     for map_level, level in level_connections.items():
         selected_level = shuffled_level_list.pop(0)
         world.level_connections[map_level] = selected_level[0]
-        world.rom_connections[level] = selected_level[1]
+        world.rom_connections[level] = selected_level
 
     for map_boss, boss in boss_connections.items():
         selected_boss = shuffled_boss_list.pop(0)
         world.level_connections[map_boss] = selected_boss[0]
-        world.rom_connections[boss] = selected_boss[1]
+        world.rom_connections[boss] = selected_boss
 
     # Place locked levels
     world.level_connections[RegionName.pirate_panic_map] = RegionName.pirate_panic_level

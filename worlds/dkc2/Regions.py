@@ -289,13 +289,14 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, RegionName.toxic_tower_level, LocationName.toxic_tower_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.stronghold_showdown_level, LocationName.stronghold_showdown_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.screechs_sprint_level, LocationName.screechs_sprint_clear)
-    add_location_to_region(multiworld, player, active_locations, RegionName.k_rool_duel_level, LocationName.k_rool_duel_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.jungle_jinx_level, LocationName.jungle_jinx_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.black_ice_battle_level, LocationName.black_ice_battle_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.klobber_karnage_level, LocationName.klobber_karnage_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.fiery_furnace_level, LocationName.fiery_furnace_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.animal_antics_level, LocationName.animal_antics_clear)
-    add_location_to_region(multiworld, player, active_locations, RegionName.krocodile_core_level, LocationName.krocodile_core_clear)
+
+    add_event_to_region(multiworld, player, RegionName.k_rool_duel_level, LocationName.k_rool_duel_clear, EventName.k_rool_duel_clear)
+    add_event_to_region(multiworld, player, RegionName.krocodile_core_level, LocationName.krocodile_core_clear, EventName.krocodile_core_clear)
     
     # KONG
     add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_kong)
@@ -514,6 +515,7 @@ def connect_regions(world: World):
     
     connect(world, RegionName.the_flying_krock, RegionName.screechs_sprint_map)
     connect(world, RegionName.the_flying_krock, RegionName.k_rool_duel_map)
+    connect(world, RegionName.k_rool_duel_map, RegionName.k_rool_duel_level)
     
     connect(world, RegionName.lost_world_cauldron, RegionName.jungle_jinx_map)
     connect(world, RegionName.lost_world_quay, RegionName.black_ice_battle_map)
@@ -526,11 +528,11 @@ def connect_regions(world: World):
     connect(world, RegionName.lost_world_kremland, RegionName.krocodile_core_map)
     connect(world, RegionName.lost_world_gulch, RegionName.krocodile_core_map)
     connect(world, RegionName.lost_world_keep, RegionName.krocodile_core_map)
+    connect(world, RegionName.krocodile_core_map, RegionName.krocodile_core_level)
 
     for map_level, level in world.level_connections.items():
         connect(world, map_level, level)
 
-    connect(world, RegionName.k_rool_duel_map, RegionName.k_rool_duel_level)
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):

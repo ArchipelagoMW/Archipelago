@@ -53,13 +53,13 @@ stage_clears = {
     LocationName.toxic_tower_clear:         STARTING_ID + 0x0026,
     LocationName.stronghold_showdown_clear: STARTING_ID + 0x0027,
     LocationName.screechs_sprint_clear:     STARTING_ID + 0x0028,
-    LocationName.k_rool_duel_clear:         STARTING_ID + 0x0029,
+    #LocationName.k_rool_duel_clear:         STARTING_ID + 0x0029,
     LocationName.jungle_jinx_clear:         STARTING_ID + 0x002A,
     LocationName.black_ice_battle_clear:    STARTING_ID + 0x002B,
     LocationName.klobber_karnage_clear:     STARTING_ID + 0x002C,
     LocationName.fiery_furnace_clear:       STARTING_ID + 0x002D,
     LocationName.animal_antics_clear:       STARTING_ID + 0x002E,
-    LocationName.krocodile_core_clear:      STARTING_ID + 0x002F,
+    #LocationName.krocodile_core_clear:      STARTING_ID + 0x002F,
 }
 
 stage_kong = {

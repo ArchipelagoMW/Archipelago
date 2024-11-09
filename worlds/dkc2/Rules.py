@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 
 from .Names import LocationName, ItemName, RegionName, EventName
 
-from worlds.generic.Rules import CollectionRule, add_rule
+from worlds.generic.Rules import CollectionRule
 from BaseClasses import CollectionState
   
 class DKC2Rules:
@@ -34,6 +34,26 @@ class DKC2Rules:
                 self.can_access_keep,
             f"{RegionName.crocodile_isle} -> {RegionName.the_flying_krock}":
                 self.can_access_krock,
+            f"{RegionName.crocodile_cauldron} -> {RegionName.lost_world_cauldron}":
+                self.can_access_lost_world_cauldron,
+            f"{RegionName.krem_quay} -> {RegionName.lost_world_quay}":
+                self.can_access_lost_world_quay,
+            f"{RegionName.krazy_kremland} -> {RegionName.lost_world_kremland}":
+                self.can_access_lost_world_kremland,
+            f"{RegionName.gloomy_gulch} -> {RegionName.lost_world_gulch}":
+                self.can_access_lost_world_gulch,
+            f"{RegionName.krools_keep} -> {RegionName.lost_world_keep}":
+                self.can_access_lost_world_keep,
+            f"{RegionName.lost_world_cauldron} -> {RegionName.krocodile_core_map}":
+                self.can_access_kore,
+            f"{RegionName.lost_world_quay} -> {RegionName.krocodile_core_map}":
+                self.can_access_kore,
+            f"{RegionName.lost_world_kremland} -> {RegionName.krocodile_core_map}":
+                self.can_access_kore,
+            f"{RegionName.lost_world_gulch} -> {RegionName.krocodile_core_map}":
+                self.can_access_kore,
+            f"{RegionName.lost_world_keep} -> {RegionName.krocodile_core_map}":
+                self.can_access_kore,
         }
 
     def can_access_galleon(self, state: CollectionState) -> bool:
@@ -56,6 +76,24 @@ class DKC2Rules:
     
     def can_access_krock(self, state: CollectionState) -> bool:
         return state.has(ItemName.the_flying_krock, self.player)
+    
+    def can_access_lost_world_cauldron(self, state: CollectionState) -> bool:
+        return state.has(ItemName.lost_world_cauldron, self.player)
+    
+    def can_access_lost_world_quay(self, state: CollectionState) -> bool:
+        return state.has(ItemName.lost_world_quay, self.player)
+    
+    def can_access_lost_world_kremland(self, state: CollectionState) -> bool:
+        return state.has(ItemName.lost_world_kremland, self.player)
+    
+    def can_access_lost_world_gulch(self, state: CollectionState) -> bool:
+        return state.has(ItemName.lost_world_gulch, self.player)
+    
+    def can_access_lost_world_keep(self, state: CollectionState) -> bool:
+        return state.has(ItemName.lost_world_keep, self.player)
+    
+    def can_access_kore(self, state: CollectionState) -> bool:
+        return state.has(ItemName.lost_world_rock, self.player, self.world.options.lost_world_rocks.value)
 
     def has_diddy(self, state: CollectionState) -> bool:
         return state.has(ItemName.diddy, self.player)
@@ -138,8 +176,18 @@ class DKC2Rules:
         for loc in multiworld.get_locations(self.player):
             if loc.name in self.location_rules:
                 loc.access_rule = self.location_rules[loc.name]
-
-        multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
+                
+        if self.world.options.goal.value == 0x01:
+            multiworld.completion_condition[self.player] = lambda state: state.has(EventName.k_rool_duel_clear, self.player)
+            
+        elif self.world.options.goal.value == 0x02:
+            multiworld.completion_condition[self.player] = lambda state: state.has(EventName.krocodile_core_clear, self.player)
+        
+        else:
+            multiworld.completion_condition[self.player] = lambda state: (
+                state.has(EventName.k_rool_duel_clear, self.player) and
+                state.has(EventName.krocodile_core_clear, self.player)
+            )
             
 
 class DKC2StrictRules(DKC2Rules):
@@ -181,7 +229,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.lockjaws_locker_clear:
                 self.can_swim,
             LocationName.lockjaws_locker_kong:
-                lambda state: self.can_swim(state) and self.has_enguarde(state),
+                self.can_swim,
             LocationName.lockjaws_locker_dk_coin:
                 lambda state: self.can_swim(state) and self.has_enguarde(state),
             LocationName.lockjaws_locker_bonus_1:
@@ -240,7 +288,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.kannons_klaim_kong:
                 lambda state: self.can_carry(state) and self.has_kannons(state),
             LocationName.kannons_klaim_dk_coin:
-                lambda state: self.can_hover(state) and self.has_kannons(state),
+                lambda state: self.can_hover(state),
             LocationName.kannons_klaim_bonus_1:
                 lambda state: self.can_use_diddy_barrels(state) and self.can_use_dixie_barrels(state) and
                     self.can_hover(state),
@@ -427,7 +475,7 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.can_climb(state) and self.can_cling(state) and self.has_invincibility(state) and
                     self.can_hover(state),
             LocationName.mudhole_marsh_bonus_1:
-                lambda state: self.can_climb(state) and self.can_cling(state) and self.has_invincibility(state) and
+                lambda state: self.can_cling(state) and self.has_invincibility(state) and
                     self.can_carry(state) and self.can_team_attack(state),
             LocationName.mudhole_marsh_bonus_2:
                 lambda state: self.can_climb(state) and self.can_cling(state) and self.has_invincibility(state) and
@@ -757,7 +805,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.kannons_klaim_kong:
                 lambda state: self.can_carry(state) and self.has_kannons(state),
             LocationName.kannons_klaim_dk_coin:
-                lambda state: self.can_hover(state) and self.has_kannons(state),
+                lambda state: self.can_hover(state) and self.can_cartwheel(state),
             LocationName.kannons_klaim_bonus_1:
                 lambda state: self.can_use_diddy_barrels(state) and self.can_use_dixie_barrels(state) and
                     self.can_hover(state),
@@ -780,7 +828,7 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_enguarde(state) and self.can_carry(state),
 
             LocationName.red_hot_ride_clear:
-                self.can_carry,
+                self.true,
             LocationName.red_hot_ride_kong:
                 self.can_carry,
             LocationName.red_hot_ride_dk_coin:
@@ -940,7 +988,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.mudhole_marsh_dk_coin:
                 lambda state: self.can_climb(state) and self.can_cling(state) and self.can_hover(state),
             LocationName.mudhole_marsh_bonus_1:
-                lambda state: self.can_climb(state) and self.can_cling(state) and self.can_carry(state) and 
+                lambda state: self.can_cling(state) and self.can_carry(state) and 
                     self.can_team_attack(state),
             LocationName.mudhole_marsh_bonus_2:
                 lambda state: self.can_climb(state) and self.can_cling(state) and self.can_carry(state),
@@ -1068,9 +1116,9 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_squawks(state),
 
             LocationName.castle_crush_clear:
-                lambda state: self.has_rambi(state) and self.can_cartwheel(state),
+                lambda state: self.can_cartwheel(state) or (self.has_rambi(state) and self.can_carry(state)),
             LocationName.castle_crush_kong:
-                lambda state: self.can_cartwheel(state) and self.can_carry(state),
+                lambda state: self.can_cartwheel(state) or (self.has_rambi(state) and self.can_carry(state)),
             LocationName.castle_crush_dk_coin:
                 lambda state: self.can_cartwheel(state) and self.has_squawks(state),
             LocationName.castle_crush_bonus_1:
@@ -1362,9 +1410,9 @@ class DKC2ExpertRules(DKC2Rules):
 
             
             LocationName.red_hot_ride_kong:
-                self.can_carry,
+                lambda state: self.can_carry(state) or (self.has_diddy(state) and self.has_dixie(state)),
             LocationName.red_hot_ride_dk_coin:
-                self.can_carry,
+                lambda state: self.can_carry(state) or (self.has_diddy(state) and self.has_dixie(state)),
             LocationName.red_hot_ride_bonus_1:
                 lambda state: self.can_carry(state) or self.has_rambi(state),
 
@@ -1613,7 +1661,13 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.web_woods_clear:
                 self.has_squitter,
             LocationName.web_woods_kong:
-                self.has_squitter,
+                lambda state: (
+                    self.can_team_attack(state) or
+                    (
+                        self.has_squitter(state) and
+                        self.can_cartwheel(state)
+                    )
+                ),
             LocationName.web_woods_dk_coin:
                 lambda state: self.has_squitter(state) and self.has_kannons(state),
             LocationName.web_woods_bonus_1:
@@ -1632,10 +1686,9 @@ class DKC2ExpertRules(DKC2Rules):
                     )
                 ),
             LocationName.arctic_abyss_kong:
-                lambda state: self.can_swim(state) or (
-                    self.has_enguarde(state) and (
-                        self.can_cartwheel(state) or self.can_hover(state)
-                    )
+                lambda state: (
+                    (self.can_swim(state) or self.has_enguarde(state)) and
+                    (self.can_cartwheel(state or self.can_hover(state)))
                 ),
             LocationName.arctic_abyss_dk_coin:
                 lambda state: self.can_swim(state) or (
@@ -1671,15 +1724,24 @@ class DKC2ExpertRules(DKC2Rules):
                 lambda state: self.can_carry(state) and self.can_cling(state) and self.has_squawks(state),
 
             LocationName.castle_crush_clear:
-                self.can_carry,
+                lambda state: self.can_cartwheel(state) or (self.has_dixie(state) and self.has_diddy(state)),
             LocationName.castle_crush_kong:
-                self.can_carry,
+                lambda state: self.can_cartwheel(state) or (self.has_dixie(state) and self.has_diddy(state)),
             LocationName.castle_crush_dk_coin:
-                lambda state: self.can_carry(state) and self.has_squawks(state),
+                lambda state: self.has_squawks(state) and (
+                    self.can_cartwheel(state) or (self.has_dixie(state) and self.has_diddy(state))
+                ),
             LocationName.castle_crush_bonus_1:
-                self.has_rambi,
+                lambda state: self.has_rambi(state) and (
+                    (self.has_diddy(state) and self.has_dixie) or 
+                    self.can_carry(state)
+                ),
             LocationName.castle_crush_bonus_2:
-                lambda state: self.can_carry(state) and self.has_squawks(state),
+                lambda state: self.can_carry(state) and self.has_squawks(state) and (
+                    (self.has_diddy(state) and self.has_dixie) or 
+                    self.can_cartwheel(state) or
+                    self.has_rambi(state)
+                ),
 
             LocationName.clappers_cavern_clear:
                 lambda state: self.has_clapper(state) and self.has_kannons(state) and ((
@@ -1717,13 +1779,15 @@ class DKC2ExpertRules(DKC2Rules):
                     self.can_cling(state) or self.has_kannons(state)
                 ),
             LocationName.chain_link_chamber_bonus_1:
-                lambda state: self.can_climb(state) and self.can_cling(state) or self.can_carry(state),
+                lambda state: self.can_climb(state) and self.can_cling(state) and self.can_carry(state),
             LocationName.chain_link_chamber_bonus_2:
                 lambda state: self.can_climb(state) and 
                 self.has_controllable_barrels(state) and (
                     self.can_cling(state) or self.has_kannons(state)
                 ) and (
-                    self.can_cartwheel(state) or self.can_team_attack(state)
+                    self.can_cartwheel(state) or self.can_team_attack(state) or (
+                        self.has_dixie(state) and self.has_diddy(state)
+                    )
                 ),
 
             LocationName.toxic_tower_clear:
@@ -1797,11 +1861,26 @@ class DKC2ExpertRules(DKC2Rules):
                     ),
 
             LocationName.fiery_furnace_clear:
-                self.has_controllable_barrels,
+                lambda state: (
+                    self.has_controllable_barrels(state) and (
+                        self.can_cartwheel(state) or
+                        (self.has_diddy(state) and self.has_dixie(state))
+                    )
+                ),
             LocationName.fiery_furnace_kong:
-                self.has_controllable_barrels,
+                lambda state: (
+                    self.has_controllable_barrels(state) and (
+                        self.can_cartwheel(state) or
+                        (self.has_diddy(state) and self.has_dixie(state))
+                    )
+                ),
             LocationName.fiery_furnace_dk_coin:
-                self.has_controllable_barrels,
+                lambda state: (
+                    self.has_controllable_barrels(state) and (
+                        self.can_cartwheel(state) or
+                        (self.has_diddy(state) and self.has_dixie(state))
+                    )
+                ),
 
             LocationName.animal_antics_clear:
                 lambda state: self.can_swim(state) and self.has_kannons(state) and

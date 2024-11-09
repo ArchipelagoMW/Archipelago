@@ -14,17 +14,27 @@ WRAM_START = 0xF50000
 WRAM_SIZE = 0x20000
 SRAM_START = 0xE00000
 
-STARTING_ID = 0xBE0800
+STARTING_ID = 0xBF0000
+
+DKC2_SETTINGS = ROM_START + 0x3DFF80
 
 DKC2_MISC_FLAGS = WRAM_START + 0x08D2
 DKC2_GAME_FLAGS = WRAM_START + 0x59B2
+
+DKC2_EFFECT_BUFFER = WRAM_START + 0x0619
+DKC2_SOUND_BUFFER = WRAM_START + 0x0622
+DKC2_SPC_NEXT_INDEX = WRAM_START + 0x0634
+DKC2_SPC_INDEX = WRAM_START + 0x0632
+DKC2_SPC_CHANNEL_BUSY = WRAM_START + 0x0621
 
 DKC2_SRAM = SRAM_START + 0x800
 DKC2_RECV_INDEX = DKC2_SRAM + 0x020
 DKC2_INIT_FLAG = DKC2_SRAM + 0x022
 
+DKC2_GAME_TIME = WRAM_START + 0x00D5
 DKC2_IN_LEVEL = WRAM_START + 0x01FF
 DKC2_CURRENT_LEVEL = WRAM_START + 0x00D3
+DKC2_CURRENT_MODE = WRAM_START + 0x00D0
 
 DKC2_CRANKY_FLAGS = WRAM_START + 0x08D2
 DKC2_WRINKLY_FLAGS = WRAM_START + 0x08E0
@@ -37,7 +47,7 @@ DKC2_BONUS_FLAGS = WRAM_START + 0x59B2
 DKC2_DK_COIN_FLAGS = WRAM_START + 0x59D2
 DKC2_STAGE_FLAGS = WRAM_START + 0x59F2
 
-DKC2_ROMHASH_START = 0x7FC0
+DKC2_ROMHASH_START = 0xFFC0
 ROMHASH_SIZE = 0x15
 
 class DKC2SNIClient(SNIClient):
@@ -83,24 +93,29 @@ class DKC2SNIClient(SNIClient):
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        in_level = await snes_read(ctx, DKC2_IN_LEVEL, 0x01)
-        if in_level[0] != 0x80:
-            self.game_state = False
+        setting_data = await snes_read(ctx, DKC2_SETTINGS, 0x40)
+        general_data = await snes_read(ctx, WRAM_START + 0x00D0, 0x0F)
+        game_flags = await snes_read(ctx, DKC2_GAME_FLAGS, 0x60)
+        misc_flags = await snes_read(ctx, DKC2_MISC_FLAGS, 0x80)
+
+        if general_data is None or game_flags is None or misc_flags is None or setting_data is None:
             return
-        
+
+        loaded_save = int.from_bytes(general_data[0x05:0x07], "little")
+        if loaded_save == 0:
+            return
+
         validation = int.from_bytes(await snes_read(ctx, DKC2_INIT_FLAG, 0x2), "little")
         if validation != 0xDEAD:
             snes_logger.info(f'ROM not properly validated.')
             self.game_state = False
             return
-
+        
         from .Levels import location_id_to_level_id
         from worlds import AutoWorldRegister
 
         new_checks = []
         current_level = int.from_bytes(await snes_read(ctx, DKC2_CURRENT_LEVEL, 0x01))
-        game_flags = await snes_read(ctx, DKC2_GAME_FLAGS, 0x60)
-        misc_flags = await snes_read(ctx, DKC2_MISC_FLAGS, 0x80)
         kong_flags = misc_flags[0x30]
         stage_flags = game_flags[0x40:0x60]
         bonus_flags = list(game_flags[0x00:0x20])
@@ -132,7 +147,32 @@ class DKC2SNIClient(SNIClient):
                     level_data = int.from_bytes(bonus_flags[level_offset:level_offset+2], "little")
                     if level_data & level_bit:
                         new_checks.append(loc_id)
- 
+
+        # Check goals
+        goal_check = 0
+        selected_goal = setting_data[0x01]
+
+        level_num = 0x61
+        level_offset = (level_num >> 3) & 0x1E
+        level_bit = 1 << (level_num & 0x0F)
+        level_data = int.from_bytes(bonus_flags[level_offset:level_offset+2], "little")
+        if level_data & level_bit:
+            goal_check |= 1
+        
+        level_num = 0x6B
+        level_offset = (level_num >> 3) & 0x1E
+        level_bit = 1 << (level_num & 0x0F)
+        level_data = int.from_bytes(dk_coin_flags[level_offset:level_offset+2], "little")
+        if level_data & level_bit:
+            goal_check |= 2
+
+        if goal_check & selected_goal == selected_goal:
+            if not ctx.finished_game:
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                ctx.finished_game = True
+                return
+
+        # Receive items
         rom = await snes_read(ctx, DKC2_ROMHASH_START, ROMHASH_SIZE)
         if rom != ctx.rom:
             ctx.rom = None
@@ -151,7 +191,8 @@ class DKC2SNIClient(SNIClient):
             # Add a small failsafe in case we get a None. Other SNI games do this...
             return
 
-        recv_index = recv_count[0] | (recv_count[1] << 8)
+        from .Rom import unlock_data, currency_data, trap_data
+        recv_index = int.from_bytes(recv_count, "little")
 
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
@@ -162,11 +203,67 @@ class DKC2SNIClient(SNIClient):
                 color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
             
-            snes_buffered_write(ctx, DKC2_RECV_INDEX, bytes([recv_index]))
-            await snes_flush_writes(ctx)
+            sfx = 0
+            # Give kongs
+            if item.item in {STARTING_ID + 0x0010, STARTING_ID + 0x0011}:
+                offset = unlock_data[item.item][0]
+                sfx = unlock_data[item.item][1]
+                count = await snes_read(ctx, DKC2_SRAM + offset, 0x02)
+                if count is None:
+                    recv_index -= 1
+                    return
+                count = int.from_bytes(count, "little")
+                if item.item == STARTING_ID + 0x0010:
+                    count |= 0x0001
+                else:
+                    count |= 0x0002
+                count &= 0x00FF
+                snes_buffered_write(ctx, DKC2_SRAM + offset, bytes([count]))
+
+            # Give items
+            elif item.item in unlock_data:
+                offset = unlock_data[item.item][0]
+                sfx = unlock_data[item.item][1]
+                snes_buffered_write(ctx, DKC2_SRAM + offset, bytearray([0x01]))
             
-            if item.item in {0x0}:
-                pass
+            # Give currency-like items
+            elif item.item in currency_data:
+                offset = currency_data[item.item][0]
+                if offset & 0x8000 == 0x8000:
+                    addr = DKC2_SRAM + (offset & 0x7FFF)
+                else:
+                    addr = WRAM_START + offset
+                sfx = currency_data[item.item][1]
+                currency = await snes_read(ctx, addr, 0x02)
+                if currency is None:
+                    recv_index -= 1
+                    return
+                currency = int.from_bytes(currency, "little") + 1
+                currency &= 0x00FF
+                snes_buffered_write(ctx, addr, bytes([currency]))
+
+            # Give traps 
+            elif item.item in trap_data:
+                print ("wea")
+                offset = trap_data[item.item][0]
+                sfx = trap_data[item.item][1]
+                traps = await snes_read(ctx, DKC2_SRAM + offset, 0x02)
+                if traps is None:
+                    recv_index -= 1
+                    return
+                traps = int.from_bytes(traps, "little") + 1
+                traps &= 0x00FF
+                snes_buffered_write(ctx, DKC2_SRAM + offset, bytes([traps]))
+
+            if sfx:
+                snes_buffered_write(ctx, DKC2_SOUND_BUFFER, bytearray([sfx, 0x05]))
+                snes_buffered_write(ctx, DKC2_EFFECT_BUFFER + 0x05, bytearray([sfx]))
+                snes_buffered_write(ctx, DKC2_SPC_INDEX, bytearray([0x00]))
+                snes_buffered_write(ctx, DKC2_SPC_NEXT_INDEX, bytearray([0x00]))
+
+            snes_buffered_write(ctx, DKC2_RECV_INDEX, bytes([recv_index]))
+
+            await snes_flush_writes(ctx)
                 
         # Handle collected locations
         i = 0

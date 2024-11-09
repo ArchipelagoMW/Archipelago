@@ -78,13 +78,15 @@ class DKC2World(World):
         
         connect_regions(self)
         
-        total_required_locations = 192
+        total_required_locations = 191
 
         # Set starting kong
         if self.options.starting_kong == StartingKong.option_diddy:
             self.multiworld.push_precollected(self.create_item(ItemName.diddy))
+            itempool += [self.create_item(ItemName.dixie)]
         elif self.options.starting_kong == StartingKong.option_dixie:
             self.multiworld.push_precollected(self.create_item(ItemName.dixie))
+            itempool += [self.create_item(ItemName.diddy)]
         elif self.options.starting_kong == StartingKong.option_both:
             self.multiworld.push_precollected(self.create_item(ItemName.diddy))
             self.multiworld.push_precollected(self.create_item(ItemName.dixie))
@@ -98,55 +100,65 @@ class DKC2World(World):
         itempool += [self.create_item(ItemName.gloomy_gulch)]
         itempool += [self.create_item(ItemName.krools_keep)]
         itempool += [self.create_item(ItemName.the_flying_krock)]
+        itempool += [self.create_item(ItemName.lost_world_cauldron)]
+        itempool += [self.create_item(ItemName.lost_world_quay)]
+        itempool += [self.create_item(ItemName.lost_world_kremland)]
+        itempool += [self.create_item(ItemName.lost_world_gulch)]
+        itempool += [self.create_item(ItemName.lost_world_keep)]
 
-        itempool += [self.create_item(ItemName.diddy)]
-        itempool += [self.create_item(ItemName.dixie)]
-        itempool += [self.create_item(ItemName.carry)]
-        itempool += [self.create_item(ItemName.climb)]
-        itempool += [self.create_item(ItemName.cling)]
-        itempool += [self.create_item(ItemName.cartwheel)]
-        itempool += [self.create_item(ItemName.swim)]
-        itempool += [self.create_item(ItemName.team_attack)]
-        itempool += [self.create_item(ItemName.helicopter_spin)]
+        for item in item_groups["Abilities"]:
+            if item in self.options.shuffle_abilities.value:
+                itempool += [self.create_item(item)]
+            else:
+                self.multiworld.push_precollected(self.create_item(item))
 
-        itempool += [self.create_item(ItemName.rambi)]
-        itempool += [self.create_item(ItemName.squawks)]
-        itempool += [self.create_item(ItemName.enguarde)]
-        itempool += [self.create_item(ItemName.squitter)]
-        itempool += [self.create_item(ItemName.rattly)]
-        itempool += [self.create_item(ItemName.clapper)]
-        itempool += [self.create_item(ItemName.glimmer)]
+        for item in item_groups["Animals"]:
+            if item in self.options.shuffle_animals.value:
+                itempool += [self.create_item(item)]
+            else:
+                self.multiworld.push_precollected(self.create_item(item))
+                
+        for item in item_groups["Barrels"]:
+            if item in self.options.shuffle_barrels.value:
+                itempool += [self.create_item(item)]
+            else:
+                self.multiworld.push_precollected(self.create_item(item))
 
-        itempool += [self.create_item(ItemName.barrel_kannons)]
-        itempool += [self.create_item(ItemName.barrel_exclamation)]
-        itempool += [self.create_item(ItemName.barrel_kong)]
-        itempool += [self.create_item(ItemName.barrel_warp)]
-        itempool += [self.create_item(ItemName.barrel_control)]
+        for _ in range(self.options.lost_world_rocks.value):
+            itempool.append(self.create_item(ItemName.lost_world_rock))
+
+        # Add trap items into the pool
+        junk_count = total_required_locations - len(itempool)
+        trap_weights = []
+        trap_weights += ([ItemName.freeze_trap] * self.options.freeze_trap_weight.value)
+        trap_weights += ([ItemName.reverse_trap] * self.options.reverse_trap_weight.value)
+        trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))
+        junk_count -= trap_count
+
+        trap_pool = []
+        for _ in range(trap_count):
+            trap_item = self.random.choice(trap_weights)
+            trap_pool.append(self.create_item(trap_item))
         
-        itempool += [self.create_item(ItemName.skull_kart)]
+        itempool += trap_pool
 
         # Add junk items into the pool
-        junk_count = total_required_locations - len(itempool)
-
         junk_weights = []
         junk_weights += ([ItemName.red_balloon] * 40)
         junk_weights += ([ItemName.banana_coin] * 20)
 
         junk_pool = []
-        for i in range(junk_count):
+        for _ in range(junk_count):
             junk_item = self.random.choice(junk_weights)
             junk_pool.append(self.create_item(junk_item))
 
         itempool += junk_pool
 
-        # Set victory item
-        self.multiworld.get_location(LocationName.k_rool_duel_clear, self.player).place_locked_item(self.create_item(ItemName.victory))
-
         # Finish
         self.multiworld.itempool += itempool
 
 
-    def create_item(self, name: str, force_classification=False) -> Item:
+    def create_item(self, name: str, force_classification=False) -> DKC2Item:
         data = item_table[name]
 
         if force_classification:
@@ -163,6 +175,10 @@ class DKC2World(World):
         return created_item
 
 
+    def interpret_slot_data(self, slot_data):
+        return slot_data
+    
+
     def set_rules(self):
         logic = self.options.logic
         if logic == Logic.option_strict:
@@ -178,6 +194,14 @@ class DKC2World(World):
 
     def fill_slot_data(self):
         slot_data = {}
+        slot_data["level_connections"] = self.level_connections
+        slot_data["boss_connections"] = self.boss_connections
+        slot_data["goal"] = self.options.goal.value
+        slot_data["starting_kong"] = self.options.starting_kong.value
+        slot_data["lost_world_rocks"] = self.options.lost_world_rocks.value
+        slot_data["shuffled_abilities"] = self.options.shuffle_abilities.value
+        slot_data["shuffled_animals"] = self.options.shuffle_animals.value
+        slot_data["shuffled_barrels"] = self.options.shuffle_barrels.value
         return slot_data
 
 
@@ -186,6 +210,19 @@ class DKC2World(World):
         self.boss_connections = dict()
         self.rom_connections = dict()
         generate_level_list(self)
+
+        # Handle Universal Tracker support, doesn't do anything during regular generation
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Donkey Kong Country 2" in self.multiworld.re_gen_passthrough:
+                passthrough = self.multiworld.re_gen_passthrough["Donkey Kong Country 2"]
+                self.level_connections = passthrough["level_connections"]
+                self.boss_connections = passthrough["boss_connections"]
+                self.options.goal.value = passthrough["goal"]
+                self.options.starting_kong.value = passthrough["starting_kong"]
+                self.options.lost_world_rocks.value = passthrough["lost_world_rocks"]
+                self.options.shuffle_abilities.value = passthrough["shuffled_abilities"]
+                self.options.shuffle_animals.value = passthrough["shuffled_animals"]
+                self.options.shuffle_barrels.value = passthrough["shuffled_barrels"]
 
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
