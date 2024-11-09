@@ -71,6 +71,8 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
             return self.logic.money.can_trade_at(recipe.source.region, recipe.source.currency, recipe.source.price)
         if isinstance(recipe.source, ShopSource):
             return self.logic.money.can_spend_at(recipe.source.region, recipe.source.price)
+        if isinstance(recipe.source, SkillCraftsanitySource):
+            return self.logic.skill.has_level(recipe.source.skill, recipe.source.level) & self.logic.skill.can_earn_level(recipe.source.skill, recipe.source.level)
         if isinstance(recipe.source, SkillSource):
             return self.logic.skill.has_level(recipe.source.skill, recipe.source.level)
         if isinstance(recipe.source, MasterySource):
