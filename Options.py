@@ -1521,7 +1521,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     def clean_file_name(name: str) -> str:
         return re.sub("[/<>:\\\"/\\\\\\|\\?\\*]", "", name)
-        #                   \"  \\  \| \? \*
+        #                   \"   \\  \| \? \*
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
