@@ -251,7 +251,7 @@ class GameData:
             16384220: 0x7,  # Frost Jewel -> Piers
 
         }
-        restriction_map = {'no-empty': 1, 'no-mimic': 2, 'no-summon': 4}
+        restriction_map = {'no-empty': 1, 'no-mimic': 2, 'no-summon': 4, 'no-money': 8}
         restriction_dict: defaultdict[int, int] = defaultdict(lambda: 0)
         for loc_logic_file in os.listdir(os.path.join(SCRIPT_DIR, 'data', 'location_logic')):
             assert loc_logic_file.endswith('.json')
@@ -276,10 +276,17 @@ class GameData:
             addr = [x['addr'] for x in locs]
             rando_flag = int(flag, 16)
             mapped_flag = flag_overwrites.get(addr[0], rando_flag)
+            restriction_data = restriction_dict[loc['id']]
+            if 0x80 != loc['eventType'] or 0x84 != loc['eventType']:
+                restriction_data |= restriction_map['no-empty'] | restriction_map['no-mimic']
+            if addr[0] > 0xFA0000:
+                restriction_data |= restriction_map['no-money']
+            if loc['id'] < 0x10 or (loc['id'] | 0xF00) == 0x100:
+                restriction_data |= restriction_map['no-empty'] | restriction_map['no-mimic'] | restriction_map['no-money']
             datum = LocationDatum(rando_flag, mapped_flag, loc['mapId'], loc['locked'], loc['isSummon'], loc['isKeyItem'],
                               loc['isMajorItem'], loc['isHidden'], addr, loc['eventType'],
                               loc['locationId'], loc['id'], loc['vanillaContents'], loc['vanillaName'],
-                              loc['mapName'], restriction_dict[loc['id']])
+                              loc['mapName'], restriction_data)
             self.raw_location_data.append(datum)
             if datum.vanilla_name == 'Mimic':
                 self.raw_item_data.append(

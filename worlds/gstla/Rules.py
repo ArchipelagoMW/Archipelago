@@ -971,6 +971,8 @@ class _RestrictionRule:
             ret &= item.name != ItemName.Empty
         if self.loc_restrictions & LocationRestriction.NoSummon > 0:
             ret &= item.item_data.type != ItemType.Character and not item.item_data.is_mimic and item.name not in _RestrictionRule.summon_names
+        if self.loc_restrictions & LocationRestriction.NoMoney > 0:
+            ret &= item.item_data.id < 0x8000
         return ret
 
 def set_item_rules(world: 'GSTLAWorld'):
