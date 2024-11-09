@@ -84,6 +84,7 @@ class LocalRom:
             addr = loc_address
             assert addr > 0, "location: %d, item: %d" % (location.id, item.id)
             contents = item.id
+
             event_type = self.fix_event_type(location, item)
             event_type = self.show_item_settings(item, event_type, True)
 

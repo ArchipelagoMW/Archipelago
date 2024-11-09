@@ -4,8 +4,9 @@ from .gen.LocationNames import loc_names_by_id
 from .gen.LocationData import LocationRestriction
 from .gen.ItemNames import ItemName
 from .gen.LocationNames import LocationName
-from .gen.ItemData import (ItemData, events, all_items as all_gen_items,
-                           djinn_items, characters as character_items)
+from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psyenergy_list, summon_list, other_progression, 
+                           other_useful, shop_only, forge_only, lucky_only, non_vanilla, vanilla_coins, remainder, 
+                           all_items as all_gen_items, djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
 from Fill import fast_fill
@@ -85,6 +86,198 @@ def create_events(world: 'GSTLAWorld'):
         event_location.place_locked_item(event_item)
 
 def create_items(world: 'GSTLAWorld', player: int):
+    """Creates all the items for GSTLA that need to be shuffled into the multiworld, and
+    adds them to the multiworld's item pool.
+    """
+    sum_locations = len(world.multiworld.get_unfilled_locations(player))
+
+    #djinn
+    sorted_item_list = sorted(djinn_items, key = lambda item: item.id)
+    sorted_loc_list = sorted(location_type_to_data[LocationType.Djinn], key = lambda location: location.id)
+ 
+    if world.options.shuffle_djinn > 0:
+        world.random.shuffle(sorted_item_list)
+        world.random.shuffle(sorted_loc_list)
+
+    for item in sorted_item_list:
+        ap_item = create_item_direct(item, player)
+        location = sorted_loc_list.pop(0)
+        ap_loc = world.get_location(loc_names_by_id[location.ap_id])
+        ap_loc.place_locked_item(ap_item)
+        sum_locations -= 1
+
+    #char shuffle
+    first_char_locked = False
+
+    char_locs = { loc_names_by_id[char_lock.ap_id]: char_lock for char_lock in location_type_to_data[LocationType.Character]}
+    char_items = { char.name : char for char in character_items}
+
+    #if we are not starting with the ship and it is a vanilla shuffled character shuffle we have to enforce piers in initial 3 chars to avoid soft lock.
+    #when vanilla piers is locked in kibombo on his vanilla location and when in the item pool the shuffler will take care of things for us
+    if world.options.lemurian_ship < 2 and world.options.shuffle_characters == 1:
+        character = char_items.pop(ItemName.Piers)
+        starting_char_locs = [LocationName.Idejima_Jenna, LocationName.Idejima_Sheba, LocationName.Kibombo_Piers]
+        starting_char_loc = world.random.choice(starting_char_locs)
+        location = char_locs.pop(starting_char_loc)
+        ap_item = create_item_direct(character, player)
+        ap_location = world.get_location(starting_char_loc)
+        ap_location.place_locked_item(ap_item)
+        if starting_char_loc == LocationName.Idejima_Jenna: 
+            first_char_locked = False
+        sum_locations -= 1
+
+    sorted_item_list = sorted(char_items.values(), key = lambda item: item.id)
+    sorted_loc_list = sorted(char_locs.values(), key = lambda location: location.id)
+
+    if world.options.shuffle_characters > 0:
+        world.random.shuffle(sorted_item_list)
+        world.random.shuffle(sorted_loc_list)
+
+    for character in sorted_item_list:
+        ap_item = create_item_direct(character, player)
+        sum_locations -= 1
+    
+        # Vanilla (Shuffled)
+        if world.options.shuffle_characters < 2:
+            location = sorted_loc_list.pop(0)
+            ap_loc = world.get_location(loc_names_by_id[location.ap_id])
+            ap_loc.place_locked_item(ap_item)
+
+        else: 
+            #guarentee Jenna slot is a character to avoid issues with learning required psynery
+            location = sorted_loc_list.pop(0)
+            location_name = loc_names_by_id[location.ap_id]
+            if location_name == LocationName.Idejima_Jenna:
+                if not first_char_locked:  
+                    ap_location = world.get_location(loc_names_by_id[location.ap_id])
+                    ap_location.place_locked_item(ap_item)
+                    first_char_locked = True
+                    continue
+
+            # else: #Anywhere
+            world.multiworld.itempool.append(ap_item)
+
+
+    #mimics
+    mimic_items = []
+    for mimic in mimics:    
+        mimic_items.append(create_item_direct(mimic, player))
+        sum_locations -= 1
+
+    # TODO: should we place them here, or let the item_rules handle this?
+    remaining_locs =  [ x for x in world.multiworld.get_unfilled_locations(world.player)
+                       if (x.location_data.restrictions & LocationRestriction.NoMimic & LocationRestriction.NoSummon) == 0]
+    world.random.shuffle(remaining_locs)
+    fast_fill(world.multiworld, mimic_items, remaining_locs)
+
+    for item in psyenergy_as_item_list:
+        #Ignore cloak ball and halt gem, they are not required for anything
+        if item.name == ItemName.Cloak_Ball or item.name == ItemName.Halt_Gem:
+            continue
+
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+    for item in psyenergy_list:
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+    for item in summon_list:
+        #Ignore summons that are obtained by gaining X djinn
+        if item.id < 3856:
+            continue
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        
+    for item in other_progression:
+        #ignore regular mars star item, we only want the mythril bag mars star
+        if item.name == ItemName.Mars_Star:
+            continue
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+    for item in other_useful:
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+    for x in range(10):
+        ap_item = create_item(ItemName.Lucky_Medal, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+    if world.options.add_elvenshirt_clericsring == 1:
+        ap_item = create_item(ItemName.Elven_Shirt, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+        ap_item = create_item(ItemName.Clerics_Ring, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+    if world.options.add_non_obtainable_items == 1:
+        ap_item = create_item(ItemName.Casual_Shirt, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Golden_Boots, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Aroma_Ring, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Golden_Shirt, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Ninja_Sandals, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Golden_Ring, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Herbed_Shirt, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Knights_Greave, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Rainbow_Ring, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Divine_Camisole, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Silver_Greave, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+        ap_item = create_item(ItemName.Soul_Ring, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+    ap_item = create_item(ItemName.Bone, player)
+    world.multiworld.itempool.append(ap_item)
+    sum_locations -= 1
+    ap_item = create_item(ItemName.Laughing_Fungus, player)
+    world.multiworld.itempool.append(ap_item)
+    sum_locations -= 1
+
+    filler_pool = [x for x in other_useful if x.type == ItemType.Consumable]
+    filler_pool.extend(vanilla_coins)
+
+    for item in remainder:
+        if item.name == ItemName.Empty or item.name == ItemName.Bone or item.name == ItemName.Laughing_Fungus:
+            continue
+        filler_pool.append(item)
+
+    #if world.options.item_shuffle == 3:
+    #    filler_pool.extend(shop_only)
+
+    for item in world.random.choices(population=filler_pool, k=sum_locations):
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+
+def _create_items(world: 'GSTLAWorld', player: int):
     """Creates all the items for GSTLA that need to be shuffled into the multiworld, and
     adds them to the multiworld's item pool.
     """
@@ -209,8 +402,8 @@ def create_items(world: 'GSTLAWorld', player: int):
             world.multiworld.itempool.append(ap_item)
 
     # TODO: should we place them here, or let the item_rules handle this?
-    remaining_locs = [ x for x in world.multiworld.get_unfilled_locations(world.player)
-                       if x.location_data.restrictions & LocationRestriction.NoMimic == 0 & LocationRestriction.NoSummon == 0 and x.location_data.event_type != 128 and x.location_data.event_type != 132]
+    remaining_locs =  [ x for x in world.multiworld.get_unfilled_locations(world.player)
+                       if (x.location_data.restrictions & LocationRestriction.NoMimic & LocationRestriction.NoSummon) == 0]
     world.random.shuffle(remaining_locs)
     fast_fill(world.multiworld, mimic_items, remaining_locs)
 
