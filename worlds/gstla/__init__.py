@@ -295,8 +295,9 @@ class GSTLAWorld(World):
         debug_file.write('Skips Oob Easy: false\n')
         #write_me += 0 << 3 #skips-maze, require logic changes
         debug_file.write('Skips Maze: false\n')
-        write_me += 1 << 2 #boss-logic, base rando can ignore djinn logic for bosses
-        debug_file.write('Disable Boss Logic: true\n')
+        if self.options.djinn_logic == 0:
+            write_me += 1 << 2 #boss-logic, when we have no djinn logic we disable boss logic in base rando
+            debug_file.write('Disable Boss Logic: true\n')
         write_me += self.options.free_avoid << 1 #free-avoid
         debug_file.write('Free Avoid: ' + self.options.free_avoid.name_lookup[self.options.free_avoid] + '\n')
         write_me += self.options.free_retreat #free-retreat
@@ -348,9 +349,9 @@ class GSTLAWorld(World):
         write_me += self.options.avoid_always_works << 2 #avoid-patch
         debug_file.write('Avoid Patch: ' + self.options.avoid_always_works.name_lookup[self.options.avoid_always_works] + '\n')
         #write_me += 0 << 1 #retreat-patch, does nothing in base rando
-        debug_file.write('Retreat Patch: false\n')
-        write_me += 0 #teleport-patch, does nothing in base rando
-        debug_file.write('Teleport Patch: false\n')
+        #debug_file.write('Retreat Patch: false\n')
+        #write_me += 0 #teleport-patch, does nothing in base rando
+        #debug_file.write('Teleport Patch: false\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
