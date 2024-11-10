@@ -364,14 +364,6 @@ class TelportEverywhere(Toggle):
     """When enabled, allows Teleport to target small villages and dungeons"""
     display_name = "Teleport Everywhere"
 
-class ForceBossDrops(Toggle):
-    """When enabled, forces bosses to have a useful or progression item."""
-    display_name = "Force Bosses to good items"
-
-class ForceSuperBossJunk(Toggle):
-    """When enabled, forces super bosses to have a junk item."""
-    display_name = "Force SuperBosses to junk items"
-
 class AnemosAccess(Choice):
     """Determine accesss to Anemos Inner Sanctun
     Vanilla requires all Djinn to be able to enter Anemos Inner Sanctum
@@ -461,5 +453,3 @@ class GSTLAOptions(PerGameCommonOptions):
     manual_retreat_glitch: ManualRetreatGlitch
     shuffle_music: MusicShuffle
     teleport_to_dungeons_and_towns: TelportEverywhere
-    force_boss_required_checks_to_nonjunk: ForceBossDrops
-    prevent_superboss_locked_check_to_progression: ForceSuperBossJunk

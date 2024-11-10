@@ -382,10 +382,10 @@ class GSTLAWorld(World):
         debug_file.write('Music Shuffle: ' + self.options.shuffle_music.name_lookup[self.options.shuffle_music] + '\n')
         write_me += self.options.teleport_to_dungeons_and_towns << 6 #teleport-everywhere
         debug_file.write('Teleport Everywhere: ' + self.options.teleport_to_dungeons_and_towns.name_lookup[self.options.teleport_to_dungeons_and_towns] + '\n')
-        write_me += self.options.force_boss_required_checks_to_nonjunk << 5 #force-boss-drops
-        debug_file.write('Force boss drops: ' + self.options.force_boss_required_checks_to_nonjunk.name_lookup[self.options.force_boss_required_checks_to_nonjunk] + '\n')
-        write_me += self.options.prevent_superboss_locked_check_to_progression << 4 #force-superboss-minors
-        debug_file.write('Force superboss minor: ' + self.options.prevent_superboss_locked_check_to_progression.name_lookup[self.options.prevent_superboss_locked_check_to_progression] + '\n')
+        #write_me += self.options.force_boss_required_checks_to_nonjunk << 5 #force-boss-drops, this can be done in just AP as is already
+        debug_file.write('Force boss drops: false\n')
+        #write_me += self.options.prevent_superboss_locked_check_to_progression << 4 #force-superboss-minors, this can be done in just AP as is already
+        debug_file.write('Force superboss minor: false\n')
         write_me += self.options.anemos_inner_sanctum_access << 2 #anemos-access, require logic changes
         debug_file.write('Anemos Inner Sanctum Access: ' + self.options.anemos_inner_sanctum_access.name_lookup[self.options.anemos_inner_sanctum_access] + '\n')
         if self.options.shuffle_characters > 0: #shuffle-characters

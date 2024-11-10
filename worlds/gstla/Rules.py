@@ -12,6 +12,7 @@ from .Locations import location_type_to_data, all_locations
 from .gen.LocationData import LocationType, LocationRestriction
 from BaseClasses import MultiWorld, ItemClassification
 from .gen.LocationNames import LocationName, loc_names_by_id
+import logging
 
 if TYPE_CHECKING:
     from . import GSTLAWorld, GSTLALocation
@@ -999,10 +1000,16 @@ def set_item_rules(world: 'GSTLAWorld'):
 
     for loc in [x.location_data for x in cast(Iterable['GSTLALocation'], world.multiworld.get_locations(world.player))
                 if x.location_data.loc_type != LocationType.Event]:
+
+
         if loc.restrictions > 0:
             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
 
         if world.options.major_minor_split == 1:
+            #do not perform major minor split if the location is specifically prioritizes or excluded
+            if loc_names_by_id[loc.ap_id] in world.options.priority_locations or loc_names_by_id[loc.ap_id] in world.options.exclude_locations:
+                continue
+
             #All key item locations will be guarenteed not filler, major locations can contain anything and non key non major locations will never contain progression
             if loc.is_key:
               add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.filler)
