@@ -41,7 +41,7 @@ skull_kart = "Skull Kart"
 # Barrels
 barrel_kannons = "Barrel Kannons"
 barrel_exclamation = "Exclamation Barrels"
-barrel_kong = "Kong Barrerls"
+barrel_kong = "Kong Barrels"
 barrel_warp = "Warp Barrels"
 barrel_control = "Controllable Barrels"
 
