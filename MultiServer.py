@@ -1960,8 +1960,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        self.ctx.server.ws_server.close()
-        self.ctx.exit_event.set()
+        try:
+            self.ctx.server.ws_server.close()
+        finally:
+            self.ctx.exit_event.set()
         return True
 
     @mark_raw
