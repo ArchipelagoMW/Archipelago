@@ -216,7 +216,8 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.gangplank_galley_clear:
                 self.can_cling,
             LocationName.gangplank_galley_kong:
-                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state),
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and
+                    self.has_kannons(state),
             LocationName.gangplank_galley_dk_coin:
                 lambda state: self.can_cling(state) and (
                     self.can_hover(state) or self.can_cartwheel(state)
@@ -543,7 +544,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.parrot_chute_panic_bonus_1:
                 self.has_squawks,
             LocationName.parrot_chute_panic_bonus_2:
-                lambda state: self.has_squawks(state) and self.can_cartwheel(state) and self.can_carry(state),
+                lambda state: self.has_squawks(state) and self.can_hover(state) and self.can_carry(state),
 
             LocationName.web_woods_clear:
                 self.has_squitter,
@@ -658,7 +659,7 @@ class DKC2StrictRules(DKC2Rules):
                     self.can_cartwheel(state) and self.can_hover(state),
 
             LocationName.k_rool_duel_clear:
-                lambda state: self.can_carry(state) and self.can_hover(state),
+                lambda state: self.can_carry(state) and self.can_hover(state) and self.has_diddy(state),
 
             LocationName.jungle_jinx_clear:
                 lambda state: self.can_cartwheel(state) and self.has_kannons(state),
@@ -709,7 +710,7 @@ class DKC2StrictRules(DKC2Rules):
                     self.has_squawks(state) and self.can_swim(state),
 
             LocationName.krocodile_core_clear:
-                lambda state: self.can_carry(state) and self.can_hover(state),
+                lambda state: self.can_carry(state) and self.can_hover(state) and self.has_diddy(state),
         }
 
     def set_dkc2_rules(self) -> None:
@@ -1365,10 +1366,7 @@ class DKC2ExpertRules(DKC2Rules):
                         )
                     ),
             LocationName.hot_head_hop_kong:
-                lambda state: self.can_carry(state) and (
-                    self.can_team_attack(state) or
-                    self.has_squitter(state)
-                ),
+                self.can_carry,
             LocationName.hot_head_hop_dk_coin:
                 self.has_squitter,
             LocationName.hot_head_hop_bonus_1:
@@ -1484,7 +1482,8 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.rattle_battle_dk_coin:
                 lambda state: self.has_rattly(state) and self.has_kannons(state),
             LocationName.rattle_battle_bonus_1:
-                lambda state: self.has_kannons(state) and self.can_hover(state),
+                lambda state: self.has_kannons(state) and self.can_hover(state) and self.can_team_attack(state) and 
+                self.can_cartwheel(state),
             LocationName.rattle_battle_bonus_2:
                 self.has_rattly,
             LocationName.rattle_battle_bonus_3:
@@ -1656,7 +1655,11 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.parrot_chute_panic_bonus_1:
                 self.has_squawks,
             LocationName.parrot_chute_panic_bonus_2:
-                lambda state: self.has_squawks(state) and self.can_cartwheel(state),
+                lambda state: self.has_squawks(state) and (
+                    self.can_cartwheel(state) or 
+                    self.can_hover(state) or
+                    (self.has_diddy(state) and self.has_dixie(state))
+                ),
 
             LocationName.web_woods_clear:
                 self.has_squitter,
