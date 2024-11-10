@@ -71,3 +71,4 @@ class RegionName():
     Lemurian_Ship = "Lemurian Ship"
     Lemurian_Ship_Revisit = "Lemurian Ship - Revisit"
     Reunion = "Reunion"
+    PartyMembers = "Party Members"

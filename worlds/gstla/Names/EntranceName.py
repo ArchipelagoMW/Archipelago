@@ -74,3 +74,4 @@ class EntranceName():
     ProxToMarsLighthouse = "Prox To Mars Lighthouse"
     MarsLighthouseToMarsLighthouse_Activated = "Mars Lighthouse To Mars Lighthouse - Activated"
     SeaOfTimeIsletToIsletCave = "Sea Of Time Islet To Islet Cave"
+    AnywhereToJoinedPartyMembers = "Joined Party Characters"

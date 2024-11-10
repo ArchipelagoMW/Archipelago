@@ -18,6 +18,7 @@ connections: List[ConnectionData] = \
 [
     ConnectionData(EntranceName.Menu_StartGame, RegionName.Idejima),
     ConnectionData(EntranceName.IdejimaToDaila, RegionName.Daila),
+    ConnectionData(EntranceName.AnywhereToJoinedPartyMembers, RegionName.PartyMembers),
     ConnectionData(EntranceName.DailaToKandoreanTemple, RegionName.KandoreamTemple),
     ConnectionData(EntranceName.DailaToShrineOfTheSeaGod, RegionName.ShrineOfTheSeaGod),
     ConnectionData(EntranceName.DailaToDehkanPlateau, RegionName.DehkanPlateau),

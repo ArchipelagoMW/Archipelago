@@ -78,12 +78,19 @@ regions: Dict[str, EntranceData] = {
     RegionName.Menu: EntranceData(RegionName.Menu, None, [EntranceName.Menu_StartGame]),
     RegionName.Idejima: EntranceData(RegionName.Idejima,
     [
-        LocationName.Idejima_Mind_Read,
-        LocationName.Idejima_Whirlwind,
         LocationName.Idejima_Growth,
         LocationName.Idejima_Shamans_Rod,
         LocationName.Idejima_Jenna,
         LocationName.Idejima_Sheba,
+    ],
+    [
+        EntranceName.IdejimaToDaila,
+        EntranceName.AnywhereToJoinedPartyMembers
+    ]),
+    RegionName.PartyMembers: EntranceData(RegionName.PartyMembers,
+    [
+        LocationName.Idejima_Mind_Read,
+        LocationName.Idejima_Whirlwind,
         LocationName.Kibombo_Douse_Drop,
         LocationName.Kibombo_Frost_Jewel,
         LocationName.Spring,
@@ -117,9 +124,7 @@ regions: Dict[str, EntranceData] = {
         LocationName.Kite,
         LocationName.Squall
     ],
-    [
-        EntranceName.IdejimaToDaila
-    ]),
+    []),
     RegionName.Daila: EntranceData(RegionName.Daila,
     [
         LocationName.Daila_Herb,
