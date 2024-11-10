@@ -344,7 +344,9 @@ function update_player(index)
     for name, count in pairs(samples) do
         stack.name = name
         stack.count = count
-        stack.quality = "{{ free_sample_quality_name }}"
+        if script.active_mods["quality"] then
+            stack.quality = "{{ free_sample_quality_name }}"
+        end
         if prototypes.item[name] then
             if character.can_insert(stack) then
                 sent = character.insert(stack)
@@ -578,6 +580,9 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
                 end
                 args.build_check_type = defines.build_check_type.script
                 args.create_build_effect_smoke = false
+                if script.active_mods["quality"] then
+                    args.quality = "{{ free_sample_quality_name }}"
+                end
                 new_entity = surface.create_entity(args)
                 if new_entity then
                     new_entity.destructible = false
