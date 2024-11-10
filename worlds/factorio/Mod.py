@@ -37,8 +37,8 @@ base_info = {
     "description": "Integration client for the Archipelago Randomizer",
     "factorio_version": "2.0",
     "dependencies": [
-        "base >= 2.0.14",
-        "? quality >= 2.0.14",
+        "base >= 2.0.15",
+        "? quality >= 2.0.15",
         "! space-age",
         "? science-not-invited",
         "? factory-levels"
@@ -149,7 +149,7 @@ def generate_mod(world: "Factorio", output_directory: str):
                                          progressive_technology_table.values()},
         "custom_recipes": world.custom_recipes,
         "liquids": fluids,
-        "useless_technologies": useless_technologies,
+        "removed_technologies": world.removed_technologies,
         "chunk_shuffle": 0,
     }
 

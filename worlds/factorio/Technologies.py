@@ -5,7 +5,7 @@ import pkgutil
 import string
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any
+from typing import Dict, Set, FrozenSet, Tuple, Union, List, Any, Optional
 
 import orjson
 
@@ -324,13 +324,17 @@ required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
 
 
-def get_rocket_requirements(silo_recipe: Recipe, part_recipe: Recipe, satellite_recipe: Recipe) -> Set[str]:
+def get_rocket_requirements(silo_recipe: Optional[Recipe], part_recipe: Recipe,
+                            satellite_recipe: Optional[Recipe], cargo_landing_pad_recipe: Optional[Recipe]) -> Set[str]:
     techs = set()
     if silo_recipe:
         for ingredient in silo_recipe.ingredients:
             techs |= recursively_get_unlocking_technologies(ingredient)
     for ingredient in part_recipe.ingredients:
         techs |= recursively_get_unlocking_technologies(ingredient)
+    if cargo_landing_pad_recipe:
+        for ingredient in cargo_landing_pad_recipe.ingredients:
+            techs |= recursively_get_unlocking_technologies(ingredient)
     if satellite_recipe:
         techs |= satellite_recipe.unlocking_technologies
         for ingredient in satellite_recipe.ingredients:

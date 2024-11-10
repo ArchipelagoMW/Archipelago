@@ -4,6 +4,7 @@ import collections
 import logging
 import typing
 
+import Utils
 import settings
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
@@ -97,19 +98,21 @@ class Factorio(World):
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }
-    required_client_version = (0, 5, 0)
-
+    required_client_version = (0, 5, 1)
+    if Utils.version_tuple < required_client_version:
+        raise Exception(f"Update Archipelago to use this world ({game}).")
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     tech_mix: int = 0
     skip_silo: bool = False
     origin_region_name = "Nauvis"
     science_locations: typing.List[FactorioScienceLocation]
-
+    removed_technologies: typing.Set[str]
     settings: typing.ClassVar[FactorioSettings]
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
+        self.removed_technologies = useless_technologies.copy()
         self.advancement_technologies = set()
         self.custom_recipes = {}
         self.science_locations = []
@@ -208,11 +211,9 @@ class Factorio(World):
             for loc in self.science_locations:
                 loc.revealed = True
         if self.skip_silo:
-            removed = useless_technologies | {"rocket-silo"}
-        else:
-            removed = useless_technologies
+            self.removed_technologies |= {"rocket-silo"}
         for tech_name in base_tech_table:
-            if tech_name not in removed:
+            if tech_name not in self.removed_technologies:
                 progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
                 want_progressive = want_progressives[progressive_item_name]
                 item_name = progressive_item_name if want_progressive else tech_name
@@ -248,7 +249,6 @@ class Factorio(World):
             else:
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
-            assert self.multiworld.get_all_state(True).can_reach(location), f"Can never reach {location}."
 
         for location in self.science_locations:
             Rules.set_rule(location, lambda state, ingredients=frozenset(location.ingredients):
@@ -259,22 +259,30 @@ class Factorio(World):
                     all(state.can_reach(loc) for loc in locations))
 
         silo_recipe = None
+        cargo_pad_recipe = None
         if self.options.silo == Silo.option_spawn:
-            silo_recipe = self.custom_recipes["rocket-silo"] if "rocket-silo" in self.custom_recipes \
-                else next(iter(all_product_sources.get("rocket-silo")))
+            silo_recipe = self.get_recipe("rocket-silo")
+            cargo_pad_recipe = self.get_recipe("cargo-landing-pad")
         part_recipe = self.custom_recipes["rocket-part"]
         satellite_recipe = None
         if self.options.goal == Goal.option_satellite:
-            satellite_recipe = self.custom_recipes["satellite"] if "satellite" in self.custom_recipes \
-                else next(iter(all_product_sources.get("satellite")))
-        victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe)
-        if self.options.silo != Silo.option_spawn:
-            victory_tech_names.add("rocket-silo")
+            satellite_recipe = self.get_recipe("satellite")
+        victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe, cargo_pad_recipe)
+        if self.options.silo == Silo.option_spawn:
+            victory_tech_names -= {"rocket-silo"}
+        else:
+            victory_tech_names |= {"rocket-silo"}
         self.get_location("Rocket Launch").access_rule = lambda state: all(state.has(technology, player)
                                                                            for technology in
                                                                            victory_tech_names)
-
+        for tech_name in victory_tech_names:
+            if not self.multiworld.get_all_state(True).has(tech_name, player):
+                print(tech_name)
         self.multiworld.completion_condition[player] = lambda state: state.has('Victory', player)
+
+    def get_recipe(self, name: str) -> Recipe:
+        return self.custom_recipes[name] if name in self.custom_recipes \
+            else next(iter(all_product_sources.get(name)))
 
     def generate_basic(self):
         map_basic_settings = self.options.world_gen.value["basic"]
@@ -494,7 +502,7 @@ class Factorio(World):
 
         needed_recipes = self.options.max_science_pack.get_allowed_packs() | {"rocket-part"}
         if self.options.silo != Silo.option_spawn:
-            needed_recipes |= {"rocket-silo"}
+            needed_recipes |= {"rocket-silo", "cargo-landing-pad"}
         if self.options.goal.value == Goal.option_satellite:
             needed_recipes |= {"satellite"}
 
