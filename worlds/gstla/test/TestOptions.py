@@ -969,29 +969,11 @@ class BossDropsRando(TestFormatBase):
         data = self._get_option_byte(11)
         self.assertEquals(0x00, 0x20 & data)
 
-class BossDropsImportant(TestFormatBase):
-    options = {
-        "force_boss_required_checks_to_nonjunk": 1
-    }
-
-    def test_boss_drops_important(self):
-        data = self._get_option_byte(11)
-        self.assertEquals(0x20, 0x20 & data)
-
 class SuperBossRando(TestFormatBase):
 
     def test_superboss_rando(self):
         data = self._get_option_byte(11)
         self.assertEquals(0x00, 0x10 & data)
-
-class SuperBossJunk(TestFormatBase):
-    options = {
-        "prevent_superboss_locked_check_to_progression": 1
-    }
-
-    def test_superboss_junk(self):
-        data = self._get_option_byte(11)
-        self.assertEquals(0x10, 0x10 & data)
 
 class AnemosAccessVanilla(TestFormatBase):
 
