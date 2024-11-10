@@ -26,9 +26,9 @@ class StartingKong(Choice):
 
 class Logic(Choice):
     """
-    Logic difficulty.
+    Logic difficulty. May become irrelevant if not a lot of items are added to the item pool.
     - **Strict**: Ensures everything is reachable as the original devs intended
-    - **Loose**: Reaching locations may require some advanced knowledge about the game's mechanics
+    - **Loose**: Reaching locations may require some level of mastery about the game's mechanics
     - **Expert**: Locations expects players to be extremely good at the game with minimal amount of abilities
     """
     display_name = "Logic Difficulty"
