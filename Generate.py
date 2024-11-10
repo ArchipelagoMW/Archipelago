@@ -114,7 +114,14 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                 os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
-                weights_cache[fname] = read_weights_yamls(path)
+                wcache = []
+                for doc_idx, yaml in enumerate(read_weights_yamls(path)):
+                    if yaml is None:
+                        logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
+                    else:
+                        wcache.append(yaml)
+                weights_cache[fname] = tuple(wcache)
+                        
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
@@ -122,10 +129,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     weights_cache = {key: value for key, value in sorted(weights_cache.items(), key=lambda k: k[0].casefold())}
     for filename, yaml_data in weights_cache.items():
         if filename not in {args.meta_file_path, args.weights_file_path}:
-            for doc_idx, yaml in enumerate(yaml_data):
-                if yaml is None:
-                    logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {filename}")
-                    continue
+            for yaml in yaml_data:
                 logging.info(f"P{player_id} Weights: {filename} >> "
                              f"{get_choice('description', yaml, 'No description specified')}")
                 player_files[player_id] = filename
