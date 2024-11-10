@@ -360,6 +360,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     and logic.terran_basic_anti_air(state)
                     or logic.terran_competent_anti_air(state)))
         ),
+        make_location_data(SC2Mission.SMASH_AND_GRAB.mission_name, "Defeat Kerrigan", SC2WOL_LOC_ID_OFFSET + 807, LocationType.MASTERY,
+            lambda state: (
+                logic.terran_common_unit(state)
+                and logic.terran_base_trasher(state)
+                and logic.terran_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.THE_DIG.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 900, LocationType.VICTORY,
             lambda state: (
                 logic.terran_basic_anti_air(state)
@@ -2732,6 +2738,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     or logic.zerg_competent_anti_air(state)
                 ))
         ),
+        make_location_data(SC2Mission.SMASH_AND_GRAB_Z.mission_name, "Defeat Kerrigan", SC2_RACESWAP_LOC_ID_OFFSET + 1507, LocationType.MASTERY,
+            lambda state: (
+                logic.zerg_common_unit_competent_aa(state)
+                and logic.zerg_base_buster(state))
+        ),
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1600, LocationType.VICTORY,
             lambda state: (
                 logic.protoss_common_unit(state)
@@ -2768,6 +2779,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and ((adv_tactics and logic.protoss_basic_anti_air(state))
                     or logic.protoss_competent_anti_air(state)
                 ))
+        ),
+        make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Defeat Kerrigan", SC2_RACESWAP_LOC_ID_OFFSET + 1607, LocationType.MASTERY,
+            logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2500, LocationType.VICTORY,
             lambda state: (
@@ -2854,7 +2868,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             lambda state: (
                 logic.welcome_to_the_jungle_z_requirement(state)
                 and logic.zerg_competent_anti_air(state)
-                and logic.zerg_big_monsters(state))
+                and logic.zerg_base_buster(state))
         ),
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "No Terrazine Nodes Sealed", SC2_RACESWAP_LOC_ID_OFFSET + 2706, LocationType.CHALLENGE,
             lambda state: (
