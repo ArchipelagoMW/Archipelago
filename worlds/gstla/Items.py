@@ -293,3 +293,12 @@ def create_items(world: 'GSTLAWorld', player: int):
     for item in world.random.choices(population=filler_pool, k=sum_locations):
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
+
+
+def get_filler_items() -> List[str]:
+    filler_pool = []
+    for item in remainder:
+        if item.name == ItemName.Empty or item.name == ItemName.Bone or item.name == ItemName.Laughing_Fungus:
+            continue
+        filler_pool.append(item.name)
+    return filler_pool
