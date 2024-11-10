@@ -949,10 +949,10 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB, self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player), combine="or")
         add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB, self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player), combine="or")
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
                                          self.player),
@@ -1067,6 +1067,10 @@ class AquariaRegions:
         ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG, self.player),
                  lambda state: _has_beast_form(state, self.player))
+        add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB, self.player),
+                 lambda state: state.has("Sun God beated", self.player))
+        add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB, self.player),
+                 lambda state: state.has("Sun God beated", self.player))
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.THE_BODY_CENTER_AREA_BREAKING_LI_S_CAGE, self.player),
             lambda state: _has_tongue_cleared(state, self.player))
@@ -1158,8 +1162,8 @@ class AquariaRegions:
         """
         Modify rules for single location or optional rules
         """
-        self.__adjusting_soup_rules()
         self.__adjusting_manual_rules()
+        self.__adjusting_soup_rules()
         if options.light_needed_to_get_to_dark_places:
             self.__adjusting_light_in_dark_place_rules()
         if options.bind_song_needed_to_get_under_rock_bulb:
