@@ -225,7 +225,10 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_received(self, filter_search: str = "") -> bool:
         """List received items.
-        Pass in a parameter to filter the search by partial item name or exact item group."""
+        Pass in a parameter to filter the search by partial item name or exact item group.
+        Use '/received recent <number>' to list the last 'number' items received (default 20)."""
+        if filter_search.casefold().startswith('recent'):
+            return self._received_recent(filter_search[len('recent'):].strip())
         # Groups must be matched case-sensitively, so we properly capitalize the search term
         # eg. "Spear of Adun" over "Spear Of Adun" or "spear of adun"
         # This fails a lot of item name matches, but those should be found by partial name match
@@ -314,7 +317,23 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             self.formatted_print(f"[b]Filter \"{filter_search}\" found {filter_match_count} out of {len(self.ctx.items_received)} obtained items[/b]")
         return True
-    
+
+    def _received_recent(self, amount: str) -> None:
+        try:
+            display_amount = int(amount)
+        except ValueError:
+            display_amount = 20
+        display_amount = min(display_amount, len(self.ctx.items_received))
+        self.formatted_print(f"Last {display_amount} of {len(self.ctx.items_received)} items received (most recent last):")
+        for item in self.ctx.items_received[-display_amount:]:
+            (
+                ColouredMessage()
+                .item(item.item, self.ctx.slot, item.flags)
+                (" from ").location(item.location, item.player)
+                (" by ").player(item.player)
+            ).send(self.ctx)
+        return True
+
     def _cmd_option(self, option_name: str = "", option_value: str = "") -> None:
         """Sets a Starcraft game option that can be changed after generation. Use "/option list" to see all options."""
 
