@@ -54,8 +54,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
                 return self.logic.crafting.received_recipe(recipe.item)
         if self.options.craftsanity == Craftsanity.option_none:
             return self.logic.crafting.can_learn_recipe(recipe)
-        if isinstance(recipe.source, StarterSource) or isinstance(recipe.source, ShopTradeSource) or\
-                isinstance(recipe.source, ShopSource) or isinstance(recipe.source, SkillCraftsanitySource):
+        if isinstance(recipe.source, (StarterSource, ShopTradeSource, ShopSource, SkillCraftsanitySource)):
             return self.logic.crafting.received_recipe(recipe.item)
         if isinstance(recipe.source, SpecialOrderSource) and self.options.special_order_locations & SpecialOrderLocations.option_board:
             return self.logic.crafting.received_recipe(recipe.item)

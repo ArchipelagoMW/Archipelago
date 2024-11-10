@@ -118,7 +118,7 @@ class TestNoCraftsanityLogic(SVTestBase):
         self.collect([self.create_item("Progressive Season")] * 2)
         self.assert_rule_true(rule, self.multiworld.state)
 
-    def test_requires_mining_level_1_for_smelting_checks(self):
+    def test_requires_mining_levels_for_smelting_checks(self):
         locations = ["Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
         rules = [self.world.logic.region.can_reach_location(location) for location in locations]
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
