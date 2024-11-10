@@ -23,7 +23,7 @@ class WL4TestBase(WorldTestBase, TestBase):
         for item in items:
             item.classification = ItemClassification.progression
             state.collect(item)
-        state.sweep_for_events()
+        state.sweep_for_advancements()
         self._state_cache[self.multiworld, tuple(items)] = state
         return state
 
