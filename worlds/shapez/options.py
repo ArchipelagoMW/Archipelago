@@ -31,7 +31,7 @@ class Goal(Choice):
 
 class GoalAmount(Range):
     """Specify, what level or tier (when either MAM or even fasterer is chosen as goal) is required to reach the goal.
-    If MAM is set as the goal and this is set to less than 27, it will raise an error."""
+    If MAM is set as the goal, this has to be set to 27 or more. Else it will raise an error."""
     display_name = "Goal amount"
     rich_text_doc = True
     range_start = 9
