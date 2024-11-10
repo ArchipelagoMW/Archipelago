@@ -1374,7 +1374,7 @@ item_table = {
         ItemData(265 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 5, SC2Race.ZERG,
                  parent_item=item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT),
     item_names.INFESTOR_INFESTED_TERRAN:
-        ItemData(266 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 6, SC2Race.ZERG, parent_item=item_names.INFESTOR),
+        ItemData(266 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 6, SC2Race.ZERG, parent_item=item_names.INFESTOR, classification=ItemClassification.progression),
     item_names.INFESTOR_MICROBIAL_SHROUD:
         ItemData(267 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 7, SC2Race.ZERG, parent_item=item_names.INFESTOR),
     item_names.SWARM_QUEEN_SPAWN_LARVAE:
