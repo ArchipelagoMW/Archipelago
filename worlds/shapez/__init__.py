@@ -59,28 +59,32 @@ class ShapezWorld(World):
     options: ShapezOptions
     topology_present = True
     web = ShapezWeb()
-
-    location_count: int
-    level_logic: List[str]
-    upgrade_logic: List[str]
-    level_logic_type: str
-    upgrade_logic_type: str
-    random_logic_phase_length: List[int]
-    category_random_logic_amounts: Dict[str, int]
-    maxlevel: int
-    finaltier: int
-    included_locations: Dict[str, Tuple[str, LocationProgressType]]
-    client_seed: int
-    shapesanity_names: List[str]
-
     base_id = 20010707
     item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(all_locations, base_id)}
 
-    # Universal Tracker support
-    ut_active: bool = False
-    passthrough: Dict[str, any] = {}
-    location_id_to_alias: Dict[int, str] = {}
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+
+        # Defining instance attributes for each shapez world
+        # These are set to default values that should fail unit tests if not replaced with correct values
+        self.location_count: int = 0
+        self.level_logic: List[str] = []
+        self.upgrade_logic: List[str] = []
+        self.level_logic_type: str = ""
+        self.upgrade_logic_type: str = ""
+        self.random_logic_phase_length: List[int] = []
+        self.category_random_logic_amounts: Dict[str, int] = {}
+        self.maxlevel: int = 0
+        self.finaltier: int = 0
+        self.included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
+        self.client_seed: int = 0
+        self.shapesanity_names: List[str] = []
+
+        # Universal Tracker support
+        self.ut_active: bool = False
+        self.passthrough: Dict[str, any] = {}
+        self.location_id_to_alias: Dict[int, str] = {}
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -140,7 +144,6 @@ class ShapezWorld(World):
         if self.options.randomize_level_requirements:
             self.level_logic_type = self.options.randomize_level_logic.current_key
             if self.level_logic_type.endswith("shuffled"):
-                self.level_logic = []
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)
@@ -164,7 +167,6 @@ class ShapezWorld(World):
             elif self.upgrade_logic_type == "category":
                 self.upgrade_logic = ["Cutter", "Rotator", "Stacker", "Painter", "Color Mixer"]
             else:
-                self.upgrade_logic = []
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)
@@ -218,9 +220,6 @@ class ShapezWorld(World):
         self.location_id_to_alias[self.location_name_to_id[location_name]] = alias
 
     def create_regions(self) -> None:
-        # Make sure location_id_to_alias is empty
-        self.location_id_to_alias = {}
-
         # Create list of all included level and upgrade locations based on player options
         # This already includes the region to be placed in and the LocationProgressType
         self.included_locations = {**addlevels(self.maxlevel, self.level_logic_type,
@@ -233,7 +232,6 @@ class ShapezWorld(World):
             self.shapesanity_names = self.passthrough["shapesanity"]
             self.included_locations.update(addshapesanity_ut(self.shapesanity_names, self.add_alias))
         else:
-            self.shapesanity_names = []
             self.included_locations.update(addshapesanity(self.options.shapesanity_amount.value, self.random,
                                                           self.append_shapesanity, self.add_alias))
 
