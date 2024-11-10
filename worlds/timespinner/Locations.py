@@ -1,6 +1,6 @@
 from typing import List, Optional, Callable, NamedTuple
-from BaseClasses import MultiWorld, CollectionState
-from .Options import is_option_enabled
+from BaseClasses import CollectionState
+from .Options import TimespinnerOptions
 from .PreCalculatedWeights import PreCalculatedWeights
 from .LogicExtensions import TimespinnerLogic
 
@@ -14,11 +14,10 @@ class LocationData(NamedTuple):
     rule: Optional[Callable[[CollectionState], bool]] = None
 
 
-def get_location_datas(world: Optional[MultiWorld], player: Optional[int], 
-                  precalculated_weights: PreCalculatedWeights) -> List[LocationData]:
-
-    flooded: PreCalculatedWeights = precalculated_weights
-    logic = TimespinnerLogic(world, player, precalculated_weights)
+def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptions],
+                  precalculated_weights: Optional[PreCalculatedWeights]) -> List[LocationData]:
+    flooded: Optional[PreCalculatedWeights] = precalculated_weights
+    logic = TimespinnerLogic(player, options, precalculated_weights)
 
     # 1337000 - 1337155 Generic locations
     # 1337171 - 1337175 New Pickup checks
@@ -136,11 +135,11 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
         LocationData('Upper Lake Serene', 'Lake Serene: Pyramid keys room',  1337104),
         LocationData('Upper Lake Serene', 'Lake Serene (Upper): Chicken ledge', 1337174),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): Deep dive',  1337105),
-        LocationData('Lower Lake Serene', 'Lake Serene (Lower): Under the eels',  1337106),
+        LocationData('Left Side forest Caves', 'Lake Serene (Lower): Under the eels',  1337106, lambda state: state.has('Water Mask', player)),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): Water spikes room',  1337107),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): Underwater secret',  1337108, logic.can_break_walls),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): T chest',  1337109, lambda state: flooded.flood_lake_serene or logic.has_doublejump_of_npc(state)),
-        LocationData('Lower Lake Serene', 'Lake Serene (Lower): Past the eels',  1337110),
+        LocationData('Left Side forest Caves', 'Lake Serene (Lower): Past the eels',  1337110, lambda state: state.has('Water Mask', player)),
         LocationData('Lower Lake Serene', 'Lake Serene (Lower): Underwater pedestal',  1337111, lambda state: flooded.flood_lake_serene or logic.has_doublejump(state)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Shroom jump room',  1337112, lambda state: flooded.flood_maw or logic.has_doublejump(state)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Secret room',  1337113, lambda state: logic.can_break_walls(state) and (not flooded.flood_maw or state.has('Water Mask', player))),
@@ -203,12 +202,12 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
     ]
 
     # 1337156 - 1337170 Downloads
-    if not world or is_option_enabled(world, player, "DownloadableItems"):
+    if not options or options.downloadable_items:
         location_table += ( 
             LocationData('Library', 'Library: Terminal 2 (Lachiem)',  1337156, lambda state: state.has('Tablet', player)),
             LocationData('Library', 'Library: Terminal 1 (Windaria)',  1337157, lambda state: state.has('Tablet', player)),
             # 1337158 Is lost in time
-            LocationData('Library', 'Library: Terminal 3 (Emporer Nuvius)',  1337159, lambda state: state.has('Tablet', player)),
+            LocationData('Library', 'Library: Terminal 3 (Emperor Nuvius)',  1337159, lambda state: state.has('Tablet', player)),
             LocationData('Library', 'Library: V terminal 1 (War of the Sisters)',  1337160, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
             LocationData('Library', 'Library: V terminal 2 (Lake Desolation Map)',  1337161, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
             LocationData('Library', 'Library: V terminal 3 (Vilete)',  1337162, lambda state: state.has_all({'Tablet', 'Library Keycard V'}, player)),
@@ -223,13 +222,13 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
         )
 
     # 1337176 - 1337176 Cantoran
-    if not world or is_option_enabled(world, player, "Cantoran"):
+    if not options or options.cantoran:
         location_table += (
             LocationData('Left Side forest Caves', 'Lake Serene: Cantoran',  1337176),
         )
 
     # 1337177 - 1337198 Lore Checks
-    if not world or is_option_enabled(world, player, "LoreChecks"):
+    if not options or options.lore_checks:
         location_table += (
             LocationData('Lower lake desolation', 'Lake Desolation: Memory - Coyote Jump (Time Messenger)',  1337177),
             LocationData('Library', 'Library: Memory - Waterway (A Message)',  1337178),
@@ -258,7 +257,7 @@ def get_location_datas(world: Optional[MultiWorld], player: Optional[int],
     # 1337199 - 1337236 Reserved for future use
 
     # 1337237 - 1337245 GyreArchives
-    if not world or is_option_enabled(world, player, "GyreArchives"):
+    if not options or options.gyre_archives:
         location_table += (
             LocationData('Ravenlord\'s Lair', 'Ravenlord: Post fight (pedestal)',  1337237),
             LocationData('Ifrit\'s Lair', 'Ifrit: Post fight (pedestal)',  1337238),

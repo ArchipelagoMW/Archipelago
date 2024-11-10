@@ -37,12 +37,13 @@ jobs:
           - {version: '3.9'}
           - {version: '3.10'}
           - {version: '3.11'}
+          - {version: '3.12'}
         include:
           - python: {version: '3.8'}  # win7 compat
             os: windows-latest
-          - python: {version: '3.11'}  # current
+          - python: {version: '3.12'}  # current
             os: windows-latest
-          - python: {version: '3.11'}  # current
+          - python: {version: '3.12'}  # current
             os: macos-latest
 
     steps:
@@ -70,7 +71,7 @@ jobs:
         os:
           - ubuntu-latest
         python:
-          - {version: '3.11'}  # current
+          - {version: '3.12'}  # current
 
     steps:
     - uses: actions/checkout@v4
@@ -88,4 +89,4 @@ jobs:
       run: |
         source venv/bin/activate
         export PYTHONPATH=$(pwd)
-        python test/hosting/__main__.py
+        timeout 600 python test/hosting/__main__.py
