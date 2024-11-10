@@ -1029,17 +1029,17 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
 
 
 def get_full_typename(t: type) -> str:
-    if module := getattr(t, "__module__"):
-        if module and module != str.__module__:
-            return f"{module}.{t.__qualname__}"
+    module = t.__module__
+    if module and module != "builtins":
+        return f"{module}.{t.__qualname__}"
     return t.__qualname__
 
 
 def get_all_causes(ex: Exception) -> str:
     """Return a string describing the recursive causes of this exception.
-    
+
     For example:
-        
+
     ```
     Exception: Invalid value 'bad'.
      Which caused: Options.OptionError: Error generating option
@@ -1051,5 +1051,5 @@ def get_all_causes(ex: Exception) -> str:
     while cause := cause.__cause__:
         causes.append(f"{get_full_typename(type(cause))}: {cause}")
     top = causes[-1]
-    others = ''.join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
+    others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
     return f"{top}{others}"
