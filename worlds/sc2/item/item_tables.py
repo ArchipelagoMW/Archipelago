@@ -1182,10 +1182,10 @@ item_table = {
                  classification=ItemClassification.useful),
     item_names.INFESTED_SIEGE_TANK:
         ItemData(20 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 19, SC2Race.ZERG,
-                 classification=ItemClassification.useful),
+                 classification=ItemClassification.progression),
     item_names.INFESTED_DIAMONDBACK:
         ItemData(21 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 20, SC2Race.ZERG,
-                 classification=ItemClassification.useful),
+                 classification=ItemClassification.progression),
     item_names.INFESTED_BANSHEE:
         ItemData(22 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 21, SC2Race.ZERG,
                  classification=ItemClassification.progression),
@@ -1475,7 +1475,7 @@ item_table = {
     item_names.ULTRALISK_NOXIOUS_STRAIN:
         ItemData(312 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 12, SC2Race.ZERG, parent_item=item_names.ULTRALISK, classification=ItemClassification.filler),
     item_names.ULTRALISK_TORRASQUE_STRAIN:
-        ItemData(313 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 13, SC2Race.ZERG, parent_item=item_names.ULTRALISK),
+        ItemData(313 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Strain, 13, SC2Race.ZERG, parent_item=item_names.ULTRALISK, classification=ItemClassification.progression),
 
     item_names.TYRANNOZOR_TYRANTS_PROTECTION:
         ItemData(350 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 8, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT),
@@ -1497,7 +1497,7 @@ item_table = {
         ItemData(358 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 16, SC2Race.ZERG, parent_item=item_names.NYDUS_WORM, classification=ItemClassification.useful),
     item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS:
         ItemData(359 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 0, SC2Race.ZERG,
-                 parent_item=item_names.INFESTED_SIEGE_TANK, quantity=2),
+                 parent_item=item_names.INFESTED_SIEGE_TANK, quantity=2, classification=ItemClassification.progression),
     item_names.INFESTED_SIEGE_TANK_ACIDIC_ENZYMES:
         ItemData(360 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 17, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK),
     item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL:
@@ -1602,9 +1602,9 @@ item_table = {
     item_names.MACROSCOPIC_RECUPERATION: ItemData(707 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 13, SC2Race.ZERG),
 
     # Morphs
-    item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG),
+    item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT: ItemData(801 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 7, SC2Race.ZERG, classification=ItemClassification.progression),
-    item_names.ROACH_RAVAGER_ASPECT: ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 8, SC2Race.ZERG),
+    item_names.ROACH_RAVAGER_ASPECT: ItemData(802 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 8, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.OVERLORD_OVERSEER_ASPECT: ItemData(803 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 4, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: ItemData(804 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 9, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.ULTRALISK_TYRANNOZOR_ASPECT: ItemData(805 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 10, SC2Race.ZERG, classification=ItemClassification.progression),
