@@ -9,9 +9,8 @@ from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import Utils
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin, APTokenTypes
 
-from .data import ap_id_offset, encode_str, get_symbol
-from .items import WL4Item, filter_items
-from .types import ItemType, Passage
+from .data import Passage, ap_id_offset, encode_str, get_symbol
+from .items import ItemType, WL4Item, filter_items
 from .options import Difficulty, Goal, MusicShuffle, OpenDoors, Portal, SmashThroughHardBlocks
 
 if TYPE_CHECKING:
@@ -94,9 +93,9 @@ class WL4ProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def get_base_rom_path(file_name: str = '') -> Path:
-    options = Utils.get_options()
+    from . import WL4World
     if not file_name:
-        file_name = options['wl4_options']['rom_file']
+        file_name = WL4World.settings.rom_file
 
     file_path = Path(file_name)
     if file_path.exists():
@@ -291,7 +290,7 @@ def create_starting_inventory(world: WL4World, patch: WL4ProcedurePatch):
             copies = 4 - required_jewels
 
         for _ in range(copies):
-            start_inventory.add(WL4Item.from_name(name, world.player))
+            start_inventory.add(WL4Item(name, world.player))
 
     # Free Keyzer
     def set_keyzer(passage, level):

@@ -2,17 +2,15 @@ from __future__ import annotations
 
 import functools
 import itertools
-from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List
+from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List, Optional
 
 import Utils
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
-from worlds._bizhawk import RequestFailedError
 from worlds._bizhawk.client import BizHawkClient
 
-from .data import encode_str, get_symbol
+from .data import Passage, encode_str, get_symbol
 from .locations import get_level_locations, location_name_to_id, location_table
-from .types import Passage
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -64,7 +62,7 @@ def _batched(iterable, n):
         yield batch
 
 def batches(iterable: Iterable, n: int):
-    '''Batch data into tuples of length n. The last batch may be shorter.'''
+    """Batch data into tuples of length n. The last batch may be shorter."""
 
     try:
         return itertools.batched(iterable, n)
@@ -113,7 +111,7 @@ TRACKER_EVENT_FLAGS = [
 
 
 def cmd_deathlink(self):
-    '''Toggle death link from client. Overrides default setting.'''
+    """Toggle death link from client. Overrides default setting."""
 
     client_handler = self.ctx.client_handler
     client_handler.death_link.client_override = True
@@ -147,7 +145,7 @@ class WL4Client(BizHawkClient):
     local_checked_locations: List[int]
     local_set_events: Dict[str, bool]
     local_room: int
-    rom_slot_name: str
+    rom_slot_name: Optional[str]
 
     death_link: DeathLinkCtx
 
@@ -159,7 +157,7 @@ class WL4Client(BizHawkClient):
         self.local_set_events = {}
         self.local_room = (1 << 24) - 1
         self.rom_slot_name = None
-        self.death_link = None
+        self.death_link = DeathLinkCtx()
 
     async def validate_rom(self, client_ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -171,7 +169,7 @@ class WL4Client(BizHawkClient):
                 read(get_symbol('PlayerName'), 64),
                 read(get_symbol('SeedName'), 64),
             ]))
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             return False  # Should verify on the next pass
 
         game_name = next(read_result).decode('ascii')
@@ -207,7 +205,6 @@ class WL4Client(BizHawkClient):
             return False
 
         client_ctx.command_processor.commands['deathlink'] = cmd_deathlink
-        self.death_link = DeathLinkCtx()
 
         self.dc_pending = False
 
@@ -272,7 +269,7 @@ class WL4Client(BizHawkClient):
                 read8(fhi_1_address),
                 read8(fhi_2_address),
             ]))
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             return
 
         game_mode = next_int(read_result)
@@ -309,7 +306,7 @@ class WL4Client(BizHawkClient):
         game_clear = False
 
         # Parse item status bits
-        for passage in range(6):
+        for passage in Passage:
             for level in range(5):
                 status_bits = item_status[passage * 6 + level] >> 8
                 if (send_level_locations
@@ -427,7 +424,7 @@ class WL4Client(BizHawkClient):
 
         try:
             await bizhawk.guarded_write(bizhawk_ctx, write_list, guard_list)
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             return
 
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:

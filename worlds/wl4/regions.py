@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import itertools
-from typing import Iterable, Sequence, Set, TYPE_CHECKING
+from typing import Callable, Iterable, Optional, Sequence, Set, TYPE_CHECKING
 
-from BaseClasses import Region, Entrance
+from BaseClasses import CollectionState, Region, Entrance
 
-from . import rules
+from .data import Passage
 from .locations import WL4Location, get_level_location_data
-from .types import AccessRule, Passage
+from .rules import get_access_rule, get_frog_switch_region, get_keyzer_region, make_boss_access_rule
 from .options import Goal, OpenDoors
 
 if TYPE_CHECKING:
@@ -22,6 +22,9 @@ def pairwise(iterable):
         a, b = itertools.tee(iterable)
         next(b, None)
         return zip(a, b)
+
+
+AccessRule = Optional[Callable[[CollectionState], bool]]
 
 
 class WL4Region(Region):
@@ -117,9 +120,9 @@ def get_region_names(level_name: str, merge: bool = False) -> Sequence[str]:
     entrance = f'{level_name} (entrance)'
     regions = regions_in_levels[level_name]
     if regions and not merge:
-        regions = (f'{level_name} - {region}' for region in regions)
+        regions = [f'{level_name} - {region}' for region in regions]
     else:
-        regions = (level_name,)
+        regions = [level_name]
     return entrance, *regions
 
 
@@ -132,13 +135,13 @@ def create_level_regions(world: WL4World, location_table: Set[str]):
         regions = {region: basic_region(region) for region in region_names}
         for loc_name, location in get_level_location_data(passage, level):
             if not portal_setting:
-                region_name = rules.get_frog_switch_region(name)
+                region_name = get_frog_switch_region(name)
             elif location.region_in_level is not None:
                 region_name = f'{name} - {location.region_in_level}'
             else:
                 region_name = name
             if loc_name in location_table:
-                location = WL4Location.from_name(world.player, loc_name, regions[region_name])
+                location = WL4Location(world.player, loc_name, regions[region_name])
                 regions[region_name].locations.append(location)
         return regions.values()
 
@@ -194,7 +197,7 @@ def connect_regions(world: WL4World):
     def connect_level(level_name):
         regions = get_region_names(level_name)
         for source, dest in pairwise(regions):
-            access_rule = rules.get_access_rule(world, dest)
+            access_rule = get_access_rule(world, dest)
             connect_entrance(world, dest, source, dest, access_rule)
 
     connect_level('Hall of Hieroglyphs')
@@ -230,7 +233,7 @@ def connect_regions(world: WL4World):
            ):
             region = f'{level} (entrance)'
         elif portal_setting:
-            region = rules.get_keyzer_region(level)
+            region = get_keyzer_region(level)
         else:
             region = get_region_names(level)[-1]
         connect_with_name(region, destination, f'{level} Gate', rule)
@@ -251,7 +254,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('Mystic Lake', 'Monsoon Jungle (entrance)')
     connect_level_exit('Monsoon Jungle', 'Emerald Minigame Shop')
     connect('Emerald Minigame Shop', 'Emerald Passage Boss',
-            rules.make_boss_access_rule(world, Passage.EMERALD, required_jewels))
+            make_boss_access_rule(world, Passage.EMERALD, required_jewels))
 
     connect('Menu', 'Ruby Passage')
     connect('Ruby Passage', 'The Curious Factory (entrance)')
@@ -260,7 +263,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('40 Below Fridge', 'Pinball Zone (entrance)')
     connect_level_exit('Pinball Zone', 'Ruby Minigame Shop')
     connect('Ruby Minigame Shop', 'Ruby Passage Boss',
-            rules.make_boss_access_rule(world, Passage.RUBY, required_jewels))
+            make_boss_access_rule(world, Passage.RUBY, required_jewels))
 
     connect('Menu', 'Topaz Passage')
     connect('Topaz Passage', 'Toy Block Tower (entrance)')
@@ -269,7 +272,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('Doodle Woods', 'Domino Row (entrance)')
     connect_level_exit('Domino Row', 'Topaz Minigame Shop')
     connect('Topaz Minigame Shop', 'Topaz Passage Boss',
-            rules.make_boss_access_rule(world, Passage.TOPAZ, required_jewels))
+            make_boss_access_rule(world, Passage.TOPAZ, required_jewels))
 
     connect('Menu', 'Sapphire Passage')
     connect('Sapphire Passage', 'Crescent Moon Village (entrance)')
@@ -278,7 +281,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('Fiery Cavern', 'Hotel Horror (entrance)')
     connect_level_exit('Hotel Horror', 'Sapphire Minigame Shop')
     connect('Sapphire Minigame Shop', 'Sapphire Passage Boss',
-            rules.make_boss_access_rule(world, Passage.SAPPHIRE, required_jewels))
+            make_boss_access_rule(world, Passage.SAPPHIRE, required_jewels))
 
     connect('Menu', 'Golden Pyramid',
             lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
@@ -287,7 +290,7 @@ def connect_regions(world: WL4World):
     if world.options.goal != Goal.option_golden_treasure_hunt:
         connect_level_exit('Golden Passage', 'Golden Minigame Shop')
         connect('Golden Minigame Shop', 'Golden Pyramid Boss',
-                rules.make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
+                make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
 
     connect('Menu', 'Sound Room')
 
@@ -297,7 +300,7 @@ def create_region(world: WL4World, location_table: Set[str], name: str,
     region = WL4Region(name, world)
     for location in locations:
         if location in location_table:
-            region.locations.append(WL4Location.from_name(world.player, location, region))
+            region.locations.append(WL4Location(world.player, location, region))
     return region
 
 
