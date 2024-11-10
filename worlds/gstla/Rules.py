@@ -954,8 +954,10 @@ def set_access_rules(world: 'GSTLAWorld'):
 
         if world.options.reveal_hidden_item == 1:
                 for loc in location_type_to_data[LocationType.Hidden]:
-                        add_rule(world.get_location(loc_names_by_id[loc.ap_id]),
-                                lambda state: state.has(ItemName.Reveal, player))
+                        #for all hidden items that are not eventype 131 (these are scoopable or cyclone places), we require reveal
+                        if loc.event_type != 131:
+                                add_rule(world.get_location(loc_names_by_id[loc.ap_id]),
+                                        lambda state: state.has(ItemName.Reveal, player))
 
 class _RestrictionRule:
     summon_names = {x.name for x in summon_list}

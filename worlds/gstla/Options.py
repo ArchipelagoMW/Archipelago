@@ -348,8 +348,8 @@ class NamedPuzzles(Choice):
     option_randomized = 2
 
 class ManualRetreatGlitch(Toggle):
-    """When enabled, Hold select to trigger the Retreat glitch.
-    Mostly useful for glitches logic"""
+    """When enabled, Hold select to trigger the Retreat glitch. Logic does not require or expect use of glitches to beat your seed,
+    this purely gives more control to activating the glitch over draining your PP to than use it anyway."""
     display_name = "Manual Retreat Glitch"
 
 class ShipWings(Toggle):
