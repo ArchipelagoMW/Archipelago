@@ -129,6 +129,7 @@ class MoveRandomizerActions(OptionSet):
 
 sm64_options_groups = [
     OptionGroup("Logic Options", [
+        AreaRandomizer,
         BuddyChecks,
         ExclamationBoxes,
         ProgressiveKeys,
@@ -139,7 +140,7 @@ sm64_options_groups = [
         StrictCannonRequirements,
         StrictMoveRequirements,
     ]),
-    OptionGroup("Goal Options", [
+    OptionGroup("Star Options", [
         AmountOfStars,
         FirstBowserStarDoorCost,
         BasementStarDoorCost,
@@ -147,6 +148,8 @@ sm64_options_groups = [
         MIPS1Cost,
         MIPS2Cost,
         StarsToFinish,
+    ]),
+OptionGroup("Goal Options", [
         CompletionType,
     ]),
 ]
