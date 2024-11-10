@@ -134,29 +134,29 @@ end
 
 script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
 {% endif %}
-
+function count_energy_bridges()
+    local count = 0
+    for i, bridge in pairs(storage.energy_link_bridges) do
+        if validate_energy_link_bridge(i, bridge) then
+            count = count + 1
+        end
+    end
+    return count
+end
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
     if event.tick % 60 == 30 then
-        if storage.energy_link_bridges == nil then
-            return
-        end
         local force = "player"
         local bridges = storage.energy_link_bridges
-		local bridgecount = 0
-		for i, bridge in pairs(bridges) do
-			if bridge and bridge.valid then
-				bridgecount = bridgecount + 1
-			end
-		end
+		local bridgecount = count_energy_bridges()
 		storage.forcedata[force].energy_bridges = bridgecount
         if storage.forcedata[force].energy == nil then
             storage.forcedata[force].energy = 0
         end
         if storage.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
             for i, bridge in pairs(bridges) do
-                if bridge and bridge.valid then
+                if validate_energy_link_bridge(i, bridge) then
                     if bridge.energy > ENERGY_INCREMENT*3 then
                         storage.forcedata[force].energy = storage.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
                         bridge.energy = bridge.energy - ENERGY_INCREMENT
@@ -165,7 +165,7 @@ function on_check_energy_link(event)
             end
         end
         for i, bridge in pairs(bridges) do
-            if bridge and bridge.valid then
+            if validate_energy_link_bridge(i, bridge) then
                 if storage.forcedata[force].energy < ENERGY_INCREMENT then
                     break
                 end
@@ -180,35 +180,45 @@ end
 function string_starts_with(str, start)
 	return str:sub(1, #start) == start
 end
-function on_energy_bridge_constructed(event)
-    if event.created_entity and event.created_entity.valid then
-		if string_starts_with(event.created_entity.prototype.name, "ap-energy-bridge") then
-		    if storage.energy_link_bridges == nil then
-                storage.energy_link_bridges = {}
-            end
-			storage.energy_link_bridges[event.created_entity.unit_number] = event.created_entity
+function validate_energy_link_bridge(unit_number, entity)
+    if not entity then
+        if storage.energy_link_bridges[unit_number] == nil then return false end
+        storage.energy_link_bridges[unit_number] = nil
+        return false
+    end
+    if not entity.valid then
+        if storage.energy_link_bridges[unit_number] == nil then return false end
+        storage.energy_link_bridges[unit_number] = nil
+        return false
+    end
+    return true
+end
+function on_energy_bridge_constructed(entity)
+    if entity and entity.valid then
+		if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+			storage.energy_link_bridges[entity.unit_number] = entity
 		end
 	end
 end
-function on_energy_bridge_removed(event)
-	if string_starts_with(event.entity.prototype.name, "ap-energy-bridge") then
-	    if storage.energy_link_bridges == nil then
-            return
-        end
-		if storage.energy_link_bridges[event.entity.unit_number] == nil then
-			-- This should never happen, but just in case it does.
-			return
-		end
-		storage.energy_link_bridges[event.entity.unit_number] = nil
+function on_energy_bridge_removed(entity)
+	if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+		if storage.energy_link_bridges[entity.unit_number] == nil then return end
+		storage.energy_link_bridges[entity.unit_number] = nil
 	end
 end
 if (ENERGY_INCREMENT) then
     script.on_event(defines.events.on_tick, on_check_energy_link)
-    script.on_event(defines.events.on_built_entity, on_energy_bridge_constructed)
-    script.on_event(defines.events.on_robot_built_entity, on_energy_bridge_constructed)
-    script.on_event(defines.events.on_player_mined_entity, on_energy_bridge_removed)
-    script.on_event(defines.events.on_robot_mined_entity, on_energy_bridge_removed)
-    script.on_event(defines.events.on_entity_died, on_energy_bridge_removed)
+
+    script.on_event({defines.events.on_built_entity}, function(event) on_energy_bridge_constructed(event.created_entity) end)
+    script.on_event({defines.events.on_robot_built_entity}, function(event) on_energy_bridge_constructed(event.created_entity) end)
+    script.on_event({defines.events.on_entity_cloned}, function(event) on_energy_bridge_constructed(event.destination) end)
+
+    script.on_event({defines.events.script_raised_revive}, function(event) on_energy_bridge_constructed(event.entity) end)
+    script.on_event({defines.events.script_raised_built}, function(event) on_energy_bridge_constructed(event.entity) end)
+
+    script.on_event({defines.events.on_entity_died}, function(event) on_energy_bridge_removed(event.entity) end)
+    script.on_event({defines.events.on_player_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
+    script.on_event({defines.events.on_robot_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
 end
 
 {% if not imported_blueprints -%}
@@ -446,6 +456,7 @@ script.on_init(function()
     {% if not imported_blueprints %}set_permissions(){% endif %}
     storage.forcedata = {}
     storage.playerdata = {}
+    storage.energy_link_bridges = {}
     -- Fire dummy events for all currently existing forces.
     local e = {}
     for name, _ in pairs(game.forces) do
