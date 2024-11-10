@@ -1001,23 +1001,6 @@ def set_item_rules(world: 'GSTLAWorld'):
             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
 
         if world.options.major_minor_split == 1:
-            #Not all items are included in the item shuffle so we should not try to assign rules to non existant locations
-            if world.options.item_shuffle < 3 and loc.loc_type == LocationType.Hidden:
-                continue
-
-            if world.options.omit_locations >= 2:
-                if loc_names_by_id[loc.ap_id] == LocationName.Yampi_Desert_Cave_Daedalus or\
-                  loc_names_by_id[loc.ap_id] == LocationName.Islet_Cave_Catastrophe or\
-                  loc_names_by_id[loc.ap_id] == LocationName.Treasure_Isle_Azul:
-                     continue
-
-            if world.options.omit_locations >= 1:            
-                if loc_names_by_id[loc.ap_id] == LocationName.Anemos_Inner_Sanctum_Orihalcon or\
-                  loc_names_by_id[loc.ap_id] == LocationName.Anemos_Inner_Sanctum_Iris or\
-                  loc_names_by_id[loc.ap_id] == LocationName.Anemos_Inner_Sanctum_Dark_Matter or\
-                  loc_names_by_id[loc.ap_id] == LocationName.Anemos_Inner_Sanctum_Charon:
-                     continue
-
             #All key item locations will be guarenteed not filler, major locations can contain anything and non key non major locations will never contain progression
             if loc.is_key:
               add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.filler)

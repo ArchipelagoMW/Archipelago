@@ -107,7 +107,9 @@ class LocalRom:
             self.rom_data[djinn.stats_addr + idx] = value
 
     def fix_event_type(self, location, item):
-        event_type = self.item_event_types[item.id]
+        event_type = 0x80
+        if item.id in self.item_event_types:
+            event_type = self.item_event_types[item.id]
         contents = item.id
         vanilla_event_type = location.event_type
 

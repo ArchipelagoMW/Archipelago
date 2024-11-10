@@ -309,9 +309,9 @@ class GSTLAWorld(World):
 
         write_me = 0
         #write_me += 0 << 7 #adv-equip, not supported, requires AP to know shop artefact locations and forging locations
-        debug_file.write('Adv Equip: false\n')
-        #write_me += 0 << 6 #dummy-items, not supported, they are not normally obtainable and we use one of them for foreign world items
-        debug_file.write('Dummy Items: false\n')
+        debug_file.write('Adv Equip: false\n')        
+        write_me += self.options.add_non_obtainable_items << 6 #dummy-items
+        debug_file.write('Non Obtainabble Items: ' + self.options.add_non_obtainable_items.name_lookup[self.options.add_non_obtainable_items] + '\n')
         #write_me += 0 << 5 #skips-oob-hard, require logic changes
         debug_file.write('Skips Oob Hard: false\n')
         write_me += self.options.shuffle_weapon_attack << 4 #equip-attack

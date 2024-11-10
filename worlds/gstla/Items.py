@@ -204,7 +204,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
 
-    for x in range(10):
+    for x in range(5):
         ap_item = create_item(ItemName.Lucky_Medal, player)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
@@ -264,6 +264,25 @@ def create_items(world: 'GSTLAWorld', player: int):
     sum_locations -= 1
 
     filler_pool = [x for x in other_useful if x.type == ItemType.Consumable]
+
+    #guarentee we have some more usefull consumables in the pool to allow forging equipment or get good healing items
+    for item in world.random.choices(population=filler_pool, k=25):
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+    filler_pool.append(item_table[ItemName.Lucky_Medal])
+
+    #If all locations are in the pool we can sprinkle in a bit more useful items before filling up the void with the filler pool
+    if world.options.item_shuffle == 3:
+        filler_pool.extend(forge_only)
+        filler_pool.extend(lucky_only)
+        for item in world.random.choices(population=filler_pool, k=25):
+            ap_item = create_item_direct(item, player)
+            world.multiworld.itempool.append(ap_item)
+            sum_locations -= 1
+        
+        filler_pool.extend(shop_only)
+
     filler_pool.extend(vanilla_coins)
 
     for item in remainder:
@@ -271,164 +290,6 @@ def create_items(world: 'GSTLAWorld', player: int):
             continue
         filler_pool.append(item)
 
-    #if world.options.item_shuffle == 3:
-    #    filler_pool.extend(shop_only)
-
     for item in world.random.choices(population=filler_pool, k=sum_locations):
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
-
-def _create_items(world: 'GSTLAWorld', player: int):
-    """Creates all the items for GSTLA that need to be shuffled into the multiworld, and
-    adds them to the multiworld's item pool.
-    """
-    sum_locations = len(world.multiworld.get_unfilled_locations(player))
-    # TODO: this is a temporary measure; we may want to add lots of features around
-    # item population based on player configured options.
-    mimic_items = []
-    for mw_loc in world.multiworld.get_locations(player):
-        loc = cast('GSTLALocation', mw_loc).location_data
-        if loc.loc_type == LocationType.Event or (world.options.item_shuffle < 3 and loc.loc_type == LocationType.Hidden):
-            continue
-
-        if loc.loc_type == LocationType.Djinn or loc.loc_type == LocationType.Character:
-            continue
-        # Coins do funny business
-        # vanilla_item = _get_coin_item(loc.vanilla_contents) if loc.vanilla_contents > 0x8000 else items_by_id[loc.vanilla_contents]
-        if loc.event_type == 0x81:
-            # Mimic nonsense
-            # TODO: make an option for turning mimics on/off
-            vanilla_item = items_by_id[0xA00 + loc.vanilla_contents]
-            mimic_items.append(create_item_direct(vanilla_item, player))
-            sum_locations -= 1
-            continue
-        else:
-            vanilla_item = items_by_id[loc.vanilla_contents]
-
-        #if vanilla ship logic than this should be Gabomba Statue Black Crystal location
-        if world.options.lemurian_ship == 0 and vanilla_item.name == ItemName.Black_Crystal:
-            ap_item = create_item_direct(vanilla_item, player)
-            ap_location = world.get_location(loc_names_by_id[loc.ap_id])
-            ap_location.place_locked_item(ap_item)
-            sum_locations -= 1
-            continue
-        if world.options.start_with_reveal == 1 and vanilla_item.name == ItemName.Reveal:
-            continue
-        #hacky way to add in the gs1 items. ideally the item pool is handled a bit differently
-        if world.options.add_elvenshirt_clericsring == 1:
-            if loc_names_by_id[loc.ap_id] == LocationName.Dehkan_Plateau_Elixir:    
-                vanilla_item = item_table[ItemName.Elven_Shirt]
-            elif loc_names_by_id[loc.ap_id] == LocationName.Dehkan_Plateau_Nut: 
-                vanilla_item = item_table[ItemName.Clerics_Ring]
-        if vanilla_item.type == ItemType.Event or vanilla_item.type == ItemType.Djinn:
-            continue
-        if vanilla_item.id == 0:
-            # Don't add empty items
-            continue
-        ap_item = create_item_direct(vanilla_item, player)
-        world.multiworld.itempool.append(ap_item)
-        sum_locations -= 1
-
-    # for item in unique_items + psyenergy_as_item_list + psyenergy_list:
-    #     if multiworld.lemurian_ship[player] != 2 and item.itemName == ItemName.Black_Crystal:
-    #         continue
-    #
-    #     ap_item = create_item(item.itemName, player)
-    #     multiworld.itempool.append(ap_item)
-    #     sum_locations -= 1
-    #
-
-    sorted_item_list = sorted(djinn_items, key = lambda item: item.id)
-    sorted_loc_list = sorted(location_type_to_data[LocationType.Djinn], key = lambda location: location.id)
-    
-    if world.options.shuffle_djinn > 0:
-        world.random.shuffle(sorted_item_list)
-        world.random.shuffle(sorted_loc_list)
-
-    for item in sorted_item_list:
-        ap_item = create_item_direct(item, player)
-        location = sorted_loc_list.pop(0)
-        ap_loc = world.get_location(loc_names_by_id[location.ap_id])
-        ap_loc.place_locked_item(ap_item)
-        sum_locations -= 1
-
-    first_char_locked = False
-
-    char_locs = { loc_names_by_id[char_lock.ap_id]: char_lock for char_lock in location_type_to_data[LocationType.Character]}
-    char_items = { char.name : char for char in character_items}
-
-    #if we are not starting with the ship and it is a vanilla shuffled character shuffle we have to enforce piers in initial 3 chars to avoid soft lock.
-    #when vanilla piers is locked in kibombo on his vanilla location and when in the item pool the shuffler will take care of things for us
-    if world.options.lemurian_ship < 2 and world.options.shuffle_characters == 1:
-        character = char_items.pop(ItemName.Piers)
-        starting_char_locs = [LocationName.Idejima_Jenna, LocationName.Idejima_Sheba, LocationName.Kibombo_Piers]
-        starting_char_loc = world.random.choice(starting_char_locs)
-        location = char_locs.pop(starting_char_loc)
-        ap_item = create_item_direct(character, player)
-        ap_location = world.get_location(starting_char_loc)
-        ap_location.place_locked_item(ap_item)
-        if starting_char_loc == LocationName.Idejima_Jenna: 
-            first_char_locked = False
-        sum_locations -= 1
-
-    sorted_item_list = sorted(char_items.values(), key = lambda item: item.id)
-    sorted_loc_list = sorted(char_locs.values(), key = lambda location: location.id)
-
-    if world.options.shuffle_characters > 0:
-        world.random.shuffle(sorted_item_list)
-        world.random.shuffle(sorted_loc_list)
-
-    for character in sorted_item_list:
-        ap_item = create_item_direct(character, player)
-        sum_locations -= 1
-    
-        # Vanilla (Shuffled)
-        if world.options.shuffle_characters < 2:
-            location = sorted_loc_list.pop(0)
-            ap_loc = world.get_location(loc_names_by_id[location.ap_id])
-            ap_loc.place_locked_item(ap_item)
-
-        else: 
-            #guarentee Jenna slot is a character to avoid issues with learning required psynery
-            location = sorted_loc_list.pop(0)
-            location_name = loc_names_by_id[location.ap_id]
-            if location_name == LocationName.Idejima_Jenna:
-                if not first_char_locked:  
-                    ap_location = world.get_location(loc_names_by_id[location.ap_id])
-                    ap_location.place_locked_item(ap_item)
-                    first_char_locked = True
-                    continue
-
-            # else: #Anywhere
-            world.multiworld.itempool.append(ap_item)
-
-    # TODO: should we place them here, or let the item_rules handle this?
-    remaining_locs = [ x for x in cast(List['GSTLALocation'], world.multiworld.get_unfilled_locations(world.player))
-                       if x.location_data.restrictions & (LocationRestriction.NoMimic + LocationRestriction.NoSummon) == 0]
-    world.random.shuffle(remaining_locs)
-    fast_fill(world.multiworld, mimic_items, remaining_locs)
-
-    # for mimic in mimic_items:
-    #     while True:
-    #         loc = remaining_locs.pop()
-    #         if loc.item_rule(mimic):
-    #             loc.place_locked_item(mimic)
-    #             break
-    # for item in gear + summon_list:
-    #     ap_item = create_item(item.itemName, player)
-    #     multiworld.itempool.append(ap_item)
-    #     sum_locations -= 1
-    #
-    # TODO: come up with better filler pool
-    filler_pool = [x for x in all_items if x.id in {
-        180, # Herb
-        181, # Nut
-        182, # Vial
-        187, # Antidote
-        188, # Elixir
-    }]
-    for item in world.random.choices(population=filler_pool, k=sum_locations):
-        ap_item = create_item_direct(item, player)
-        world.multiworld.itempool.append(ap_item)
-
-
