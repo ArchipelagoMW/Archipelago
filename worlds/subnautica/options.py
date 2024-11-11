@@ -112,7 +112,7 @@ class AggressiveScanLogic(Choice):
 
 
 class SubnauticaDeathLink(DeathLink):
-    __doc__ = DeathLink.__doc__ + "\n    Note: can be toggled via in-game console command \"deathlink\"."
+    __doc__ = DeathLink.__doc__ + "\n\n    Note: can be toggled via in-game console command \"deathlink\"."
 
 
 class FillerItemsDistribution(ItemDict):
