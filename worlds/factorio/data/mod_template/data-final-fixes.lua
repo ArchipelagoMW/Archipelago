@@ -6,43 +6,46 @@ data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
         production_type = "input",
         pipe_picture = assembler2pipepictures(),
         pipe_covers = pipecoverspictures(),
+        volume = 1000,
         base_area = 10,
         base_level = -1,
         pipe_connections = {
-            { type = "input", position = { 0, 5 } },
-            { type = "input", position = { 0, -5 } },
-            { type = "input", position = { 5, 0 } },
-            { type = "input", position = { -5, 0 } }
+            { flow_direction = "input", direction = defines.direction.south, position = { 0, 4.2 } },
+            { flow_direction = "input", direction = defines.direction.north, position = { 0, -4.2 } },
+            { flow_direction = "input", direction = defines.direction.east, position = { 4.2, 0 } },
+            { flow_direction = "input", direction = defines.direction.west, position = { -4.2, 0 } }
         }
     },
     {
         production_type = "input",
         pipe_picture = assembler2pipepictures(),
         pipe_covers = pipecoverspictures(),
+        volume = 1000,
         base_area = 10,
         base_level = -1,
         pipe_connections = {
-            { type = "input", position = { -3, 5 } },
-            { type = "input", position = { -3, -5 } },
-            { type = "input", position = { 5, -3 } },
-            { type = "input", position = { -5, -3 } }
+            { flow_direction = "input", direction = defines.direction.south, position = { -3, 4.2 } },
+            { flow_direction = "input", direction = defines.direction.north, position = { -3, -4.2 } },
+            { flow_direction = "input", direction = defines.direction.east, position = { 4.2, -3 } },
+            { flow_direction = "input", direction = defines.direction.west, position = { -4.2, -3 } }
         }
     },
     {
         production_type = "input",
         pipe_picture = assembler2pipepictures(),
         pipe_covers = pipecoverspictures(),
+        volume = 1000,
         base_area = 10,
         base_level = -1,
         pipe_connections = {
-            { type = "input", position = { 3, 5 } },
-            { type = "input", position = { 3, -5 } },
-            { type = "input", position = { 5, 3 } },
-            { type = "input", position = { -5, 3 } }
+            { flow_direction = "input", direction = defines.direction.south, position = { 3, 4.2 } },
+            { flow_direction = "input", direction = defines.direction.north, position = { 3, -4.2 } },
+            { flow_direction = "input", direction = defines.direction.east, position = { 4.2, 3 } },
+            { flow_direction = "input", direction = defines.direction.west, position = { -4.2, 3 } }
         }
-    },
-    off_when_no_fluid_recipe = true
+    }
 }
+data.raw["rocket-silo"]["rocket-silo"].fluid_boxes_off_when_no_fluid_recipe = true
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
 data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"

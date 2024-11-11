@@ -1,9 +1,9 @@
 function get_any_stack_size(name)
-    local item = game.item_prototypes[name]
+    local item = prototypes.item[name]
     if item ~= nil then
         return item.stack_size
     end
-    item = game.equipment_prototypes[name]
+    item = prototypes.equipment[name]
     if item ~= nil then
         return item.stack_size
     end
@@ -24,7 +24,7 @@ function split(s, sep)
 end
 
 function random_offset_position(position, offset)
-    return {x=position.x+math.random(-offset, offset), y=position.y+math.random(-1024, 1024)}
+    return {x=position.x+math.random(-offset, offset), y=position.y+math.random(-offset, offset)}
 end
 
 function fire_entity_at_players(entity_name, speed)
