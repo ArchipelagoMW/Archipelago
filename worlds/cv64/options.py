@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from Options import (OptionGroup, Choice, DefaultOnToggle, ItemsAccessibility, PerGameCommonOptions, Range, Toggle,
-                     StartInventoryPool)
+                     StartInventoryPool, DeathLink)
 
 
 class CharacterStages(Choice):
@@ -507,10 +507,10 @@ class WindowColorA(Range):
 
 
 class DeathLink(Choice):
-    """
-    When you die, everyone who enabled death link dies. Of course, the reverse is true too.
-    Explosive: Makes received death links kill you via the Magical Nitro explosion instead of the normal death animation.
-    """
+    __doc__ = (DeathLink.__doc__ +
+               "\n\n    Explosive: Makes received death links kill you via the Magical Nitro explosion" +
+               "instead of the normal death animation.")
+
     display_name = "Death Link"
     option_off = 0
     alias_no = 0
