@@ -56,7 +56,7 @@ class Starcraft2WebWorld(WebWorld):
         "Custom Mission Order Usage Guide",
         "Documentation for the custom_mission_order YAML option",
         "English",
-        "en_Custom Mission Orders.md",
+        "custom_mission_orders_en.md",
         "custom_mission_orders/en",
         ["Salzkorn"]
     )
