@@ -3,7 +3,7 @@ Contains descriptions for Starcraft 2 items.
 """
 import inspect
 
-from worlds.sc2.item import item_tables, item_names
+from . import item_tables, item_names
 
 WEAPON_ARMOR_UPGRADE_NOTE = inspect.cleandoc("""
     Must be researched during the mission if the mission type isn't set to auto-unlock generic upgrades.
