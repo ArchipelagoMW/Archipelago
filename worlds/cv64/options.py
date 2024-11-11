@@ -508,7 +508,7 @@ class WindowColorA(Range):
 
 class DeathLink(Choice):
     """
-    When you die, everyone who enabled death link dies. Of course, the reverse is true too.
+    When you die, everyone who enabled DeathLink dies. Of course, the reverse is true too.
     Explosive: Makes received DeathLinks kill you via the Magical Nitro explosion instead of the normal death animation.
     """
     display_name = "DeathLink"
