@@ -4010,6 +4010,66 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    logic.protoss_competent_comp(state)
                                    and (adv_tactics or logic.protoss_infested_garrison_claimer(state)))
                            ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 8500, LocationType.VICTORY,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "North Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 8501, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "South Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 8502, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Kill 1 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8503, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Kill 2 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8504, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Kill 3 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8505, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Kill 4 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8506, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Kill 5 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8507, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Kill 6 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8508, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_T.mission_name, "Kill 7 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8509, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 8600, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "North Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 8601, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "South Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 8602, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 1 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8603, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 2 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8604, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 3 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8605, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 4 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8606, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 5 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8607, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 6 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8608, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 7 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8609, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []

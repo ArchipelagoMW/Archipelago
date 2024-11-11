@@ -152,7 +152,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 133
+    range_end = 135
     default = 83
 
 
