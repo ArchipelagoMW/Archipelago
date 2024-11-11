@@ -508,7 +508,7 @@ class WindowColorA(Range):
 
 class DeathLink(Choice):
     __doc__ = (DeathLink.__doc__ +
-               "\n\n    Explosive: Makes received death links kill you via the Magical Nitro explosion" +
+               "\n\n    Explosive: Makes received death links kill you via the Magical Nitro explosion " +
                "instead of the normal death animation.")
 
     display_name = "Death Link"
