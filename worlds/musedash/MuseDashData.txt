@@ -31,7 +31,7 @@ Blackest Luxury Car|0-18|Default Music|True|3|6|8|
 Medicine of Sing|0-19|Default Music|False|3|6|8|
 irregulyze|0-20|Default Music|True|3|6|8|
 I don't care about Christmas though|0-47|Default Music|False|4|6|8|
-Imaginary World|0-21|Default Music|True|4|6|8|
+Imaginary World|0-21|Default Music|True|4|6|8|10
 Dysthymia|0-22|Default Music|True|4|7|9|
 From the New World|0-42|Default Music|False|2|5|7|
 NISEGAO|0-33|Default Music|True|4|7|9|
@@ -266,7 +266,7 @@ Medusa|31-1|Happy Otaku Pack Vol.11|False|4|6|8|10
 Final Step!|31-2|Happy Otaku Pack Vol.11|False|5|7|10|
 MAGENTA POTION|31-3|Happy Otaku Pack Vol.11|False|4|7|9|
 Cross Ray|31-4|Happy Otaku Pack Vol.11|False|3|6|9|
-Square Lake|31-5|Happy Otaku Pack Vol.11|True|6|8|9|11
+Square Lake|31-5|Happy Otaku Pack Vol.11|False|6|8|9|11
 Girly Cupid|30-0|Cute Is Everything Vol.6|False|3|6|8|
 sheep in the light|30-1|Cute Is Everything Vol.6|False|2|5|8|
 Breaker city|30-2|Cute Is Everything Vol.6|False|4|6|9|
@@ -353,7 +353,7 @@ Re End of a Dream|16-1|Give Up TREATMENT Vol.6|False|5|8|11|
 Etude -Storm-|16-2|Give Up TREATMENT Vol.6|True|6|8|10|
 Unlimited Katharsis|16-3|Give Up TREATMENT Vol.6|False|4|6|10|
 Magic Knight Girl|16-4|Give Up TREATMENT Vol.6|False|4|7|9|
-Eeliaas|16-5|Give Up TREATMENT Vol.6|True|6|9|11|
+Eeliaas|16-5|Give Up TREATMENT Vol.6|False|6|9|11|
 Magic Spell|15-0|Cute Is Everything Vol.3|True|2|5|7|
 Colorful Star, Colored Drawing, Travel Poem|15-1|Cute Is Everything Vol.3|False|3|4|6|
 Satell Knight|15-2|Cute Is Everything Vol.3|False|3|6|8|
@@ -396,7 +396,7 @@ Chronomia|9-2|Happy Otaku Pack Vol.4|False|5|7|10|
 Dandelion's Daydream|9-3|Happy Otaku Pack Vol.4|True|5|7|8|
 Lorikeet Flat design|9-4|Happy Otaku Pack Vol.4|True|5|7|10|
 GOODRAGE|9-5|Happy Otaku Pack Vol.4|False|6|9|11|
-Altale|8-0|Give Up TREATMENT Vol.3|False|3|5|7|
+Altale|8-0|Give Up TREATMENT Vol.3|False|3|5|7|10
 Brain Power|8-1|Give Up TREATMENT Vol.3|False|4|7|10|
 Berry Go!!|8-2|Give Up TREATMENT Vol.3|False|3|6|9|
 Sweet* Witch* Girl*|8-3|Give Up TREATMENT Vol.3|False|6|8|10|?
@@ -579,4 +579,19 @@ The Whole Rest|77-1|Let's Rhythm Jam!|False|5|8|10|11
 Hydra|77-2|Let's Rhythm Jam!|False|4|7|11|
 Pastel Lines|77-3|Let's Rhythm Jam!|False|3|6|9|
 LINK x LIN#S|77-4|Let's Rhythm Jam!|False|3|6|9|
-Arcade ViruZ|77-5|Let's Rhythm Jam!|False|6|8|10|
+Arcade ViruZ|77-5|Let's Rhythm Jam!|False|6|8|11|
+Eve Avenir|78-0|Endless Pirouette|True|6|8|10|
+Silverstring|78-1|Endless Pirouette|True|5|7|10|
+Melusia|78-2|Endless Pirouette|False|5|7|10|11
+Devil's Castle|78-3|Endless Pirouette|True|4|7|10|
+Abatement|78-4|Endless Pirouette|True|6|8|10|11
+Azalea|78-5|Endless Pirouette|False|4|8|10|
+Brightly World|78-6|Endless Pirouette|True|6|8|10|
+We'll meet in every world ***|78-7|Endless Pirouette|True|7|9|11|
+Collapsar|78-8|Endless Pirouette|True|7|9|10|11
+Parousia|78-9|Endless Pirouette|False|6|8|10|
+Gunners in the Rain|79-0|Ensemble Arcanum|False|5|8|10|
+Halzion|79-1|Ensemble Arcanum|False|2|5|8|
+SHOWTIME!!|79-2|Ensemble Arcanum|False|6|8|10|
+Achromic Riddle|79-3|Ensemble Arcanum|False|6|8|10|11
+karanosu|79-4|Ensemble Arcanum|False|3|6|8|
