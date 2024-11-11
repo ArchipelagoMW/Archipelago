@@ -23,6 +23,9 @@ USHASH = "83cf41d53a1b94aeea1a645037a24004"
 equipment_power_vanilla = [1, 2, 3, 4, 5, 8, 10, 12]
 equipment_power_improved = [1, 3, 5, 7, 9, 12, 12, 12]
 equipment_power_strong = [2, 4, 6, 9, 12, 12, 12, 12]
+equipment_power_weak = [1, 1, 2, 2, 3, 4, 5, 6]
+equipment_power_broken = [1, 1, 1, 1, 1, 1, 1, 1]
+
 # Level requirements are stored as 2-byte SNES BCD - Their hex representation is interpreted as decimal.
 sword_level_requirements = [0x01, 0x05, 0x11, 0x15, 0x16, 0x19, 0x22, 0x24]
 
@@ -117,11 +120,14 @@ def patch_rom(world: "SoulBlazerWorld", rom: LocalRom):
         rom.apply_patch("semiprogressive")
 
     # Determine stat pool to use
-    stats = (
-        equipment_power_improved
-        if world.options.equipment_scaling == "improved"
-        else (equipment_power_strong if world.options.equipment_scaling == "strong" else equipment_power_vanilla)
-    )
+    equipment_power_lookup = {
+        "Vanilla": equipment_power_vanilla,
+        "Improved": equipment_power_improved,
+        "Strong": equipment_power_strong,
+        "Weak": equipment_power_weak,
+        "Broken": equipment_power_broken,
+    }
+    stats = [*equipment_power_lookup[world.options.equipment_scaling.current_option_name]]
     
     # The indexes into our stat pool which could potentially be shuffled
     indicies_wep = list(range(len(stats)))
