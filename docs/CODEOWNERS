@@ -142,9 +142,6 @@
 # Shivers
 /worlds/shivers/ @GodlFire
 
-# A Short Hike
-/worlds/shorthike/ @chandler05
-
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
@@ -229,6 +226,9 @@
 
 # Ocarina of Time
 # /worlds/oot/
+
+# A Short Hike
+# /worlds/shorthike/
 
 ## Disabled Unmaintained Worlds
 
