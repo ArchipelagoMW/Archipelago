@@ -1,8 +1,14 @@
-from __future__ import annotations
 import logging
+from typing import Dict, Literal, Optional, Union
 
-# TODO: stabilize the imports, don't just import *
-from .AutopelagoDefinitions import *
+from .AutopelagoDefinitions import GAME_NAME, AutopelagoGameRequirement, AutopelagoAllRequirement, \
+    AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, AutopelagoItemRequirement, item_key_to_name, \
+    AutopelagoRatCountRequirement, item_name_to_rat_count, location_name_to_id, location_name_to_requirement, \
+    AutopelagoRegionDefinition, item_name_to_id, ItemClassification, item_name_to_classification, \
+    location_name_to_progression_item_name, location_names_with_fixed_rewards, game_specific_nonprogression_items, \
+    generic_nonprogression_item_table, total_available_rat_count, max_required_rat_count, \
+    AutopelagoNonProgressionItemType, autopelago_item_classification_of, location_name_to_nonprogression_item, \
+    autopelago_regions
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -104,7 +110,7 @@ class AutopelagoWorld(World):
     # - location_descriptions
     # - hint_blacklist (should it include the goal item?)
 
-    def create_item(self, name: str, classification: ItemClassification | None = None):
+    def create_item(self, name: str, classification: Union[ItemClassification, None] = None):
         item_id = item_name_to_id[name] if name in item_name_to_id else None
         if classification is None:
             classification = item_name_to_classification[name]
@@ -146,7 +152,7 @@ class AutopelagoWorld(World):
                     items[replacements_made] = item
                     replacements_made += 1
 
-        category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = {category: 0 for category in
+        category_to_next_offset: Dict[AutopelagoNonProgressionItemType, int] = {category: 0 for category in
                                                                                 generic_nonprogression_item_table}
         next_filler_becomes_trap = False
         nonprog_type: Literal['useful_nonprogression', 'filler', 'trap']
@@ -174,8 +180,6 @@ class AutopelagoWorld(World):
             for next_exit in r.autopelago_definition.exits:
                 if next_exit == 'moon_comma_the':
                     continue
-                # TODO: report a bug about state.locations_checked somehow not working... I can't seem to make the rule
-                # make the landmark checks themselves show up in the spoiler.
                 rule = (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
                 r.connect(new_regions[next_exit], rule=None if _is_trivial(req) else rule)
             for loc in r.locations:

@@ -1,11 +1,12 @@
-from typing import Optional, TypedDict, Unpack, Iterable, TypeVar
+from typing import List, Optional, TypedDict, Iterable, TypeVar, Tuple, Union
+from typing_extensions import Unpack
 
 from test.bases import WorldTestBase
 
 T = TypeVar('T')
 
 
-def all_pairwise_combinations(*possible_items: T) -> Iterable[tuple[T, T]]:
+def all_pairwise_combinations(*possible_items: T) -> Iterable[Tuple[T, T]]:
     for i in range(1, len(possible_items)):
         second = possible_items[i]
         for j in range(i):
@@ -31,7 +32,7 @@ class AccessTest(WorldTestBase):
     def removeRats(self, rat_count: int):
         self.remove((self.pack_rat for _ in range(rat_count)))
 
-    def assertAndCollectAccessDependencyFromHere(self, location: str, *possible_items: str | list[str], **kwargs: Unpack[CollectKwargs]):
+    def assertAndCollectAccessDependencyFromHere(self, location: str, *possible_items: Union[str, List[str]], **kwargs: Unpack[CollectKwargs]):
         for item_list in possible_items:
             if item_list is str:
                 item_list = (item_list,)

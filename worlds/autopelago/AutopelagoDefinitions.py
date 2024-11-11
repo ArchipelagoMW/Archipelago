@@ -1,6 +1,5 @@
-from __future__ import annotations
 from pathlib import PurePath
-from typing import Dict, List, Literal, Optional, TypedDict, Union
+from typing import Dict, List, Literal, Optional, Set, TypedDict, Union
 from typing_extensions import NotRequired, TypeAlias
 
 from BaseClasses import ItemClassification
@@ -53,21 +52,21 @@ class AutopelagoItemDefinitions(TypedDict):
     # any_other_str_key_not_listed: AutopelagoItemDefinition
 
 
-AutopelagoGameRequirement: TypeAlias = ('AutopelagoAllRequirement | AutopelagoAnyRequirement | '
-                                        'AutopelagoItemRequirement | AutopelagoRatCountRequirement | '
-                                        'AutopelagoAnyTwoRequirement')
+AutopelagoGameRequirement: TypeAlias = Union[\
+    'AutopelagoAllRequirement', 'AutopelagoAnyRequirement', 'AutopelagoItemRequirement', \
+    'AutopelagoRatCountRequirement', 'AutopelagoAnyTwoRequirement']
 
 
 class AutopelagoAllRequirement(TypedDict):
-    all: list[AutopelagoGameRequirement]
+    all: List[AutopelagoGameRequirement]
 
 
 class AutopelagoAnyRequirement(TypedDict):
-    any: list[AutopelagoGameRequirement]
+    any: List[AutopelagoGameRequirement]
 
 
 class AutopelagoAnyTwoRequirement(TypedDict):
-    any_two: list[AutopelagoGameRequirement]
+    any_two: List[AutopelagoGameRequirement]
 
 
 class AutopelagoItemRequirement(TypedDict):
@@ -83,7 +82,7 @@ class AutopelagoLandmarkRegionDefinition(TypedDict):
     unrandomized_item: str
     reward_is_fixed: Optional[bool]
     requires: AutopelagoGameRequirement
-    exits: Optional[list[str]]
+    exits: Optional[List[str]]
 
 
 class AutopelagoFillerItemDefinitionCls(TypedDict):
@@ -95,7 +94,7 @@ AutopelagoFillerItemDefinition = Union[str, AutopelagoFillerItemDefinitionCls]
 
 
 class AutopelagoFillerRegionItemsDefinition(TypedDict):
-    key: list[AutopelagoFillerItemDefinition]
+    key: List[AutopelagoFillerItemDefinition]
     useful_nonprogression: int
     filler: int
 
@@ -104,12 +103,12 @@ class AutopelagoFillerRegionDefinition(TypedDict):
     name_template: str
     unrandomized_items: AutopelagoFillerRegionItemsDefinition
     ability_check_dc: int
-    exits: list[str]
+    exits: List[str]
 
 
 class AutopelagoRegionDefinitions(TypedDict):
-    landmarks: dict[str, AutopelagoLandmarkRegionDefinition]
-    fillers: dict[str, AutopelagoFillerRegionDefinition]
+    landmarks: Dict[str, AutopelagoLandmarkRegionDefinition]
+    fillers: Dict[str, AutopelagoFillerRegionDefinition]
 
 
 class AutopelagoDefinitions(TypedDict):
@@ -119,11 +118,11 @@ class AutopelagoDefinitions(TypedDict):
 
 class AutopelagoRegionDefinition:
     key: str
-    exits: list[str]
-    locations: list[str]
+    exits: List[str]
+    locations: List[str]
     requires: AutopelagoAllRequirement
 
-    def __init__(self, key: str, exits: list[str], locations: list[str], requires: AutopelagoGameRequirement):
+    def __init__(self, key: str, exits: List[str], locations: List[str], requires: AutopelagoGameRequirement):
         self.key = key
         self.exits = exits
         self.locations = locations
@@ -141,13 +140,13 @@ def _gen_ids():
         next_id += 1
 
 
-item_name_to_id: dict[str, int] = {}
-generic_nonprogression_item_table: dict[AutopelagoNonProgressionItemType, list[str]] = {'useful_nonprogression': [],
+item_name_to_id: Dict[str, int] = {}
+generic_nonprogression_item_table: Dict[AutopelagoNonProgressionItemType, List[str]] = {'useful_nonprogression': [],
                                                                                         'trap': [], 'filler': []}
-item_name_to_classification: dict[str, Optional[ItemClassification]] = {}
-item_name_to_rat_count: dict[str, int] = {}
-game_specific_nonprogression_items: dict[str, dict[AutopelagoNonProgressionItemType, list[str]]] = {}
-item_key_to_name: dict[str, str] = {}
+item_name_to_classification: Dict[str, Optional[ItemClassification]] = {}
+item_name_to_rat_count: Dict[str, int] = {}
+game_specific_nonprogression_items: Dict[str, Dict[AutopelagoNonProgressionItemType, List[str]]] = {}
+item_key_to_name: Dict[str, str] = {}
 _item_id_gen = _gen_ids()
 
 for k, v in ((k, v) for k, v in _defs['items'].items() if
@@ -212,12 +211,12 @@ _append_nonprogression('useful_nonprogression')
 _append_nonprogression('trap')
 _append_nonprogression('filler')
 
-autopelago_regions: dict[str, AutopelagoRegionDefinition] = {}
-location_name_to_progression_item_name: dict[str, str] = {}
-location_name_to_nonprogression_item: dict[str, Literal['useful_nonprogression', 'filler']] = {}
-location_name_to_requirement: dict[str, AutopelagoGameRequirement] = {}
-location_name_to_id: dict[str, int] = {}
-location_names_with_fixed_rewards: set[str] = set()
+autopelago_regions: Dict[str, AutopelagoRegionDefinition] = {}
+location_name_to_progression_item_name: Dict[str, str] = {}
+location_name_to_nonprogression_item: Dict[str, Literal['useful_nonprogression', 'filler']] = {}
+location_name_to_requirement: Dict[str, AutopelagoGameRequirement] = {}
+location_name_to_id: Dict[str, int] = {}
+location_names_with_fixed_rewards: Set[str] = set()
 _location_id_gen = _gen_ids()
 
 for k, r in _defs['regions']['landmarks'].items():
@@ -228,12 +227,12 @@ for k, r in _defs['regions']['landmarks'].items():
     location_name_to_id[_name] = next(_location_id_gen)
     location_name_to_progression_item_name[_name] = item_key_to_name[r['unrandomized_item']]
     location_name_to_requirement[_name] = r['requires']
-    exits: list[str] = r['exits'] if 'exits' in r else []
+    exits: List[str] = r['exits'] if 'exits' in r else []
     autopelago_regions[k] = AutopelagoRegionDefinition(k, exits, [_name], r['requires'])
     if 'reward_is_fixed' in r and r['reward_is_fixed']:
         location_names_with_fixed_rewards.add(_name)
 for rk, r in _defs['regions']['fillers'].items():
-    _locations: list[str] = []
+    _locations: List[str] = []
     _cur = 1
     region_items = r['unrandomized_items']
     for k in region_items['key'] if 'key' in region_items else []:
