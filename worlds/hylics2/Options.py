@@ -58,10 +58,10 @@ class ExtraLogic(DefaultOnToggle):
 
 class Hylics2DeathLink(DeathLink):
     """
-    When you die, everyone dies. The reverse is also true.
-    
+    When you die, everyone who enabled death link dies. Of course, the reverse is true too.
+
     Note that this also includes death by using the PERISH gesture.
-    
+
     Can be toggled via in-game console command "/deathlink".
     """
 

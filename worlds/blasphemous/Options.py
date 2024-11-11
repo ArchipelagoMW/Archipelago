@@ -205,7 +205,7 @@ class EnemyScaling(DefaultOnToggle):
 
 class BlasphemousDeathLink(DeathLink):
     """
-    When you die, everyone dies. The reverse is also true.
+    When you die, everyone who enabled death link dies. Of course, the reverse is true too.
 
     Note that Guilt Fragments will not appear when killed by Death Link.
     """

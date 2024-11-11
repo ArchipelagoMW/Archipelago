@@ -176,7 +176,7 @@ class DamageMultiplier(Range):
 
 class BRCDeathLink(DeathLink):
     """
-    When you die, everyone dies. The reverse is also true.
+    When you die, everyone who enabled death link dies. Of course, the reverse is true too.
     
     This can be changed later in the options menu inside the Archipelago phone app.
     """

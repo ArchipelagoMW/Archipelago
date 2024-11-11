@@ -118,7 +118,7 @@ class ShopPrice(Choice):
 
 class NoitaDeathLink(DeathLink):
     """
-    When you die, everyone dies. Of course, the reverse is true too.
+    When you die, everyone who enabled death link dies. Of course, the reverse is true too.
     You can disable this in the in-game mod options.
     """
 

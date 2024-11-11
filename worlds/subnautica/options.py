@@ -112,7 +112,7 @@ class AggressiveScanLogic(Choice):
 
 
 class SubnauticaDeathLink(DeathLink):
-    """When you die, everyone dies. Of course the reverse is true too.
+    """When you die, everyone who enabled death link dies. Of course, the reverse is true too.
     Note: can be toggled via in-game console command "deathlink"."""
 
 
