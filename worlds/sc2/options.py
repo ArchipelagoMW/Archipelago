@@ -4,8 +4,10 @@ from typing import *
 from Options import *
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .mission_tables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list, \
+from .mission_tables import (
+    SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list,
     campaign_mission_table, SC2Race, MissionFlag
+)
 from .mission_groups import mission_groups, MissionGroupNames
 from .mission_order.options import CustomMissionOrder
 from .item import item_names

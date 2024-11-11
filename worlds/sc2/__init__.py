@@ -11,7 +11,6 @@ from .item.item_tables import (
     ItemData, kerrigan_actives, kerrigan_passives,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL, ZergItemType,
 )
-from . import item
 from . import location_groups
 from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables
 from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations

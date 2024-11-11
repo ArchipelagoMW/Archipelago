@@ -7,7 +7,7 @@ from .options import (
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence,
     get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
 )
-from worlds.sc2.item.item_tables import (
+from .item.item_tables import (
     tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings,
     kerrigan_levels, get_full_item_list, zvx_air_defense_ratings, zvx_defense_ratings, pvx_defense_ratings,
     pvz_defense_ratings, no_logic_basic_units, advanced_basic_units, basic_units, upgrade_bundle_inverted_lookup, WEAPON_ARMOR_UPGRADE_MAX_LEVEL
