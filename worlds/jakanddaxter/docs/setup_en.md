@@ -18,15 +18,26 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Click the Jak and Daxter logo on the left sidebar.
 - Click `Features` in the bottom right corner, then click `Mods`.
 - Under `Available Mods`, click `ArchipelaGOAL`. The mod should begin installing. When it is done, click `Continue` in the bottom right corner.
+- Click `Advanced` in the bottom right corner, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
+- In the File Explorer, go to the parent directory called `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Copy this path.
+- Run the Archipelago Launcher, then click on `Open host.yaml`. You should see a new text editor open that file.
+- Search for `jakanddaxter_options`, then find the `root_directory` entry underneath it. Paste the path you noted earlier (the one containing gk.exe and goalc.exe) inside the double quotes. 
+- **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
+
+```
+jakanddaxter_options:
+  # Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe).
+  # Ensure this path contains forward slashes (/) only.
+  root_directory: "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal"
+```
+
+- Save the file and close it.
+- **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Jak and Daxter Client should handle everything for you.
 
 ### For NTSC versions of the game, follow these steps.
 
-- Click the Jak and Daxter logo on the left sidebar, then click `Advanced`, then click `Open Game Data Folder`. Copy the `iso_data` folder from this directory.
-- Back in the OpenGOAL Launcher, click the Jak and Daxter logo on the left sidebar.
-- Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
-- In the bottom right corner, click `Advanced`, then click `Open Game Data Folder`.
-- Paste the `iso_data` folder you copied earlier.
-- Back in the OpenGOAL Launcher, click the Jak and Daxter logo on the left sidebar.
+- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
+- Click the Jak and Daxter logo on the left sidebar.
 - Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
 - In the bottom right corner, click `Advanced`, then click `Compile`.
 
@@ -62,38 +73,15 @@ If you see `-- Compilation Error! --` after pressing `Compile` or Launching the 
     - `.\gk.exe -v --game jak1 -- -boot -fakeiso -debug`
 - Finally, **from the first console still in the GOALC compiler**, connect to the game: `(lt)`.
 
-### For OpenGOAL Launchers installed to a non-default directory, follow these steps.
-
-- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
-- Click the Jak and Daxter logo on the left sidebar.
-- Click `Features` in the bottom right corner, then click `Mods`.
-- Under `Installed Mods`, then click `ArchipelaGOAL`, then click `Advanced` in the bottom right corner, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
-- In the File Explorer, go to the parent directory called `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Take note of this directory.
-- Run the Archipelago Launcher, then click on `Open host.yaml`. You should see a new text editor open that file.
-- Search for `jakanddaxter_options`, then find the `root_directory` entry underneath it. Paste the directory you noted earlier (the one containing gk.exe and goalc.exe) inside the double quotes. 
-- **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
-
-```
-jakanddaxter_options:
-  # Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe).
-  # Ensure this path contains forward slashes (/) only.
-  root_directory: "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal"
-```
-
-- Save the file and close it.
-- **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Jak and Daxter Client should handle everything for you (see below).
-
 ## Updates and New Releases via OpenGOAL Launcher
 
 If you are in the middle of an async game, and you do not want to update the mod, you do not need to do this step. The mod will only update when you tell it to.
 
 - Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
 - Click the Jak and Daxter logo on the left sidebar.
-- Click `Features` in the bottom right corner, then click `Mods`.
-- Under `Installed Mods`, click `ArchipelaGOAL`.
+- Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
 - Click `Update` to download and install any new updates that have been released.
 - You can verify your version by clicking `Versions`. The version you are using will say `(Active)` next to it.
-- **After the update is installed, you will need to copy your `iso_data` folder to the mod's data directory, as you did during install.**
 - **Then you must click `Advanced`, then click `Compile` to make the update take effect.**
 
 ## Starting a Game
@@ -111,6 +99,7 @@ If you are in the middle of an async game, and you do not want to update the mod
       - If you see `The REPL is ready!` and `The Memory Reader is ready!` then that should indicate a successful startup.
 - You can *minimize* the Compiler window, **BUT DO NOT CLOSE IT.** It is required for Archipelago and the game to communicate with each other.
 - Use the text client to connect to the Archipelago server while on the title screen. This will communicate your current settings to the game.
+  - Once you see `AP CONNECTED!` on the title screen, you should be ready. 
 - Start a new game in the title screen, and play through the cutscenes.
 - Once you reach Geyser Rock, you can start the game!
     - You can leave Geyser Rock immediately if you so choose - just step on the warp gate button.
@@ -120,6 +109,7 @@ If you are in the middle of an async game, and you do not want to update the mod
 - The same steps as New Game apply, with some exceptions: 
     - Connect to the Archipelago server **BEFORE** you load your save file. This is to allow AP to give the game your current settings and all the items you had previously.
     - **THESE SETTINGS AFFECT LOADING AND SAVING OF SAVE FILES, SO IT IS IMPORTANT TO DO THIS FIRST.**
+    - Once you see `AP CONNECTED!` on the title screen, you should be ready. 
     - Then, instead of choosing `New Game` in the title menu, choose `Load Game`, then choose the save file **CORRESPONDING TO YOUR CURRENT ARCHIPELAGO CONNECTION.** 
 
 ## Troubleshooting

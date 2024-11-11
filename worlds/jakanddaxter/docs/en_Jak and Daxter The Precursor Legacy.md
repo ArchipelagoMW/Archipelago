@@ -154,10 +154,10 @@ you to miss important progression items and prevent you (and others) from comple
 
 When you connect your text client to the Archipelago Server, the server will tell the game what settings were chosen
 for this seed, and the game will apply those settings automatically. You can verify (but DO NOT ALTER) these settings 
-by navigating to `Options`, then `Archipelago Options`.
+by navigating to `Options`, then `Archipelago Options`, then `Seed Options`.
 
 ## I got soft-locked and can't leave, how do I get out of here?
-Open the game's menu, navigate to `Options`, then to `Archipelago Options`, then to `Warp To Home`. 
+Open the game's menu, navigate to `Options`, then `Archipelago Options`, then `Warp To Home`. 
 Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 
 to the nearest sage's hut to continue your journey.
 
