@@ -23,8 +23,8 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from worlds.sc2.item import item_names
-from worlds.sc2.item.item_groups import item_name_groups, unlisted_item_name_groups
+from .item import item_names
+from .item.item_groups import item_name_groups, unlisted_item_name_groups
 from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
