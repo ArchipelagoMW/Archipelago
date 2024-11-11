@@ -134,10 +134,12 @@ sm64_options_groups = [
         ExclamationBoxes,
         ProgressiveKeys,
         EnableCoinStars,
-        EnableMoveRandomizer,
-        MoveRandomizerActions,
         StrictCapRequirements,
         StrictCannonRequirements,
+    ]),
+    OptionGroup("Ability Options", [
+        EnableMoveRandomizer,
+        MoveRandomizerActions,
         StrictMoveRequirements,
     ]),
     OptionGroup("Star Options", [
@@ -148,9 +150,6 @@ sm64_options_groups = [
         MIPS1Cost,
         MIPS2Cost,
         StarsToFinish,
-    ]),
-OptionGroup("Goal Options", [
-        CompletionType,
     ]),
 ]
 
