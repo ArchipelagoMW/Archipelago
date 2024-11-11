@@ -668,7 +668,7 @@ item_descriptions = {
     item_names.DEVOURER_PRESCIENT_SPORES: "Allows Devourers to attack ground targets.",
     item_names.GUARDIAN_PROLONGED_DISPERSION: "Guardians gain +3 range.",
     item_names.GUARDIAN_PRIMAL_ADAPTATION: "Allows Guardians to attack air units with a decreased attack damage.",
-    item_names.GUARDIAN_SORONAN_ACID: "Guardians deal increased damage to ground targets.",
+    item_names.GUARDIAN_SORONAN_ACID: "Guardians deal +10 increased base damage to ground targets.",
     item_names.GUARDIAN_PROPELLANT_SACS: "Guardians gain increased movement speed.",
     item_names.GUARDIAN_EXPLOSIVE_SPORES: "Allows Guardians to launch an explosive spore at ground targets, dealing damage and knocking them back in an area.",
     item_names.GUARDIAN_PRIMORDIAL_FURY: "Guardians gain increasing attack speed as they attack.",

@@ -32,8 +32,10 @@ class SC2Logic:
 
     # Needs to react on how many missions actually got generated
     def total_mission_count(self):
-        return 1 if (self.world is None or not hasattr(self.world, 'custom_mission_order')) \
+        return (
+            1 if (self.world is None or not hasattr(self.world, 'custom_mission_order'))
             else self.world.custom_mission_order.get_mission_count()
+        )
 
     # Unit classes in world, these are set properly into the world after the item culling is done
     # Therefore need to get from the world
@@ -260,13 +262,16 @@ class SC2Logic:
         :param state:
         :return:
         """
-        return self.protoss_common_unit and self.protoss_competent_anti_air(state) \
+        return (
+            self.protoss_common_unit(state) and self.protoss_competent_anti_air(state)
             or (
-            self.advanced_tactics
-            and self.protoss_common_unit_anti_light_air(state)
-            and (self.protoss_anti_armor_anti_air(state)
-                 or state.has_any({item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT}, self.player)
-                 or state.has_all({item_names.DISRUPTOR, item_names.DISRUPTOR_PERFECTED_POWER}, self.player))
+                self.advanced_tactics
+                and self.protoss_common_unit_anti_light_air(state)
+                and (self.protoss_anti_armor_anti_air(state)
+                    or state.has_any((item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT), self.player)
+                    or state.has_all((item_names.DISRUPTOR, item_names.DISRUPTOR_PERFECTED_POWER), self.player)
+                )
+            )
         )
 
     def terran_basic_anti_air(self, state: CollectionState) -> bool:
@@ -790,24 +795,30 @@ class SC2Logic:
     def zerg_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
         if self.world_has_zerg_melee_unit():
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MELEE_ATTACK, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
-            )
+            count = min(count, self.zerg_melee_weapon_armor_upgrade_min_level(state))
         if self.world_has_zerg_ranged_unit():
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
-            )
+            count = min(count, self.zerg_ranged_weapon_armor_upgrade_min_level(state))
         if self.world_has_zerg_air_unit():
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_ATTACK, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE, state),
-            )
+            count = min(count, self.zerg_flyer_weapon_armor_upgrade_min_level(state))
         return count
+    
+    def zerg_melee_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
+        return min(
+            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MELEE_ATTACK, state),
+            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
+        )
+
+    def zerg_ranged_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
+        return min(
+            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK, state),
+            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
+        )
+
+    def zerg_flyer_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
+        return min(
+            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_ATTACK, state),
+            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE, state),
+        )
 
     def zerg_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
         return self.zerg_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
@@ -878,8 +889,20 @@ class SC2Logic:
         )
 
     def morph_tyrannozor(self, state: CollectionState) -> bool:
-        return state.has(item_names.ULTRALISK_TYRANNOZOR_ASPECT, self.player) and \
-            (state.has(item_names.ULTRALISK, self.player) or self.morphling_enabled)
+        return (
+            state.has(item_names.ULTRALISK_TYRANNOZOR_ASPECT, self.player)
+            and (state.has(item_names.ULTRALISK, self.player) or self.morphling_enabled)
+        )
+    
+    def zerg_infested_siege_tanks_with_ammo(self, state: CollectionState) -> bool:
+        return (
+            state.has(item_names.INFESTED_SIEGE_TANK, self.player)
+            and state.has_any((
+                item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS,
+                item_names.INFESTED_MARINE,
+                item_names.INFESTED_BUNKER,
+            ), self.player)
+        )
 
     def zerg_competent_comp(self, state: CollectionState) -> bool:
         if self.zerg_army_weapon_armor_upgrade_min_level(state) < 2:
@@ -920,11 +943,52 @@ class SC2Logic:
     def zerg_big_monsters(self, state: CollectionState) -> bool:
         """
         Durable units with some capacity for damage
-        :param state:
-        :return:
         """
-        return self.morph_tyrannozor(state) or state.has_any({item_names.ABERRATION, item_names.ULTRALISK}, self.player) \
+        return (
+            self.morph_tyrannozor(state)
+            or state.has_any((item_names.ABERRATION, item_names.ULTRALISK), self.player)
             or (self.spread_creep(state) and state.has(item_names.INFESTED_BUNKER, self.player))
+        )
+    
+    def zerg_base_buster(self, state: CollectionState) -> bool:
+        """Powerful and sustainable zerg anti-ground for busting big bases; anti-air not included"""
+        return (
+            (
+                self.zerg_melee_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+                and (
+                    self.morph_tyrannozor(state)
+                    or (
+                        state.has(item_names.ULTRALISK, self.player)
+                        and state.has_any((item_names.ULTRALISK_TORRASQUE_STRAIN, item_names.ULTRALISK_CHITINOUS_PLATING), self.player)
+                    )
+                )
+                and state.has(item_names.SWARM_QUEEN, self.player)  # Healing to sustain the frontline
+            ) or (
+                self.zerg_ranged_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+                and (
+                    self.morph_impaler(state)
+                    or self.morph_lurker(state) and state.has_any((item_names.LURKER_SEISMIC_SPINES, item_names.LURKER_ADAPTED_SPINES), self.player)
+                    or state.has_all((
+                        item_names.ROACH, item_names.ROACH_CORPSER_STRAIN, item_names.ROACH_ADAPTIVE_PLATING, item_names.ROACH_GLIAL_RECONSTITUTION,
+                    ), self.player)
+                    or self.morph_igniter(state) and state.has(item_names.PRIMAL_IGNITER_PRIMAL_TENACITY, self.player)
+                    or state.has_all((item_names.INFESTOR, item_names.INFESTOR_INFESTED_TERRAN), self.player)
+                    or state.has_any((
+                        item_names.INFESTED_BANSHEE, item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_MARINE,
+                    ), self.player)
+                    or self.spread_creep(state) and state.has(item_names.INFESTED_BUNKER, self.player)
+                    or self.zerg_infested_siege_tanks_with_ammo(state)
+                    # Highly-upgraded swarm hosts may also work, but that would require promoting many upgrades to progression
+                )
+            ) or (
+                self.zerg_flyer_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+                and (
+                    self.morph_brood_lord(state)
+                    or self.morph_guardian(state) and state.has_all((item_names.GUARDIAN_PROPELLANT_SACS, item_names.GUARDIAN_SORONAN_ACID), self.player)
+                    # Highly-upgraded anti-ground devourers would also be good
+                )
+            )
+        )
     
     def zerg_competent_defense(self, state: CollectionState) -> bool:
         return (
