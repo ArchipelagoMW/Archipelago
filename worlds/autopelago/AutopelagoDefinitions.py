@@ -129,7 +129,7 @@ class AutopelagoRegionDefinition:
         self.requires = requires
 
 
-with open(PurePath(__file__).with_name('AutopelagoDefinitions.yml'), 'r') as f:
+with open(PurePath(__file__).with_name('AutopelagoDefinitions.yml'), mode='r', encoding='utf-8') as f:
     _defs: AutopelagoDefinitions = parse_yaml(f.read())
 
 
