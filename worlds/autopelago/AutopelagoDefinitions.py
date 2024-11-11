@@ -1,5 +1,7 @@
+from __future__ import annotations
 from pathlib import PurePath
-from typing import Literal, NotRequired, Optional, TypeAlias, TypedDict
+from typing import Dict, List, Literal, Optional, TypedDict, Union
+from typing_extensions import NotRequired, TypeAlias
 
 from BaseClasses import ItemClassification
 from Utils import parse_yaml
@@ -14,10 +16,10 @@ class AutopelagoItemDefinitionCls(TypedDict):
     flavor_text: NotRequired[str]
 
 
-AutopelagoItemDefinition = str | list[str, list[str]] | AutopelagoItemDefinitionCls
-AutopelagoItemDefinitionsSimple = dict[str, AutopelagoItemDefinition]
-AutopelagoGameSpecificItemGroup = dict[Literal['game_specific'], dict[str, list[AutopelagoItemDefinition]]]
-AutopelagoNonProgressionGroupItems = list[AutopelagoItemDefinition | AutopelagoGameSpecificItemGroup]
+AutopelagoItemDefinition = Union[str, List[Union[str, List[str]]], AutopelagoItemDefinitionCls]
+AutopelagoItemDefinitionsSimple = Dict[str, AutopelagoItemDefinition]
+AutopelagoGameSpecificItemGroup = Dict[Literal['game_specific'], Dict[str, List[AutopelagoItemDefinition]]]
+AutopelagoNonProgressionGroupItems = List[Union[AutopelagoItemDefinition, AutopelagoGameSpecificItemGroup]]
 AutopelagoNonProgressionItemType = Literal['useful_nonprogression', 'trap', 'filler']
 
 
@@ -33,15 +35,14 @@ def _rat_count_of(item: AutopelagoItemDefinition):
 
 
 def autopelago_item_classification_of(item: AutopelagoNonProgressionItemType):
-    match item:
-        case 'useful_nonprogression':
-            return ItemClassification.useful
-        case 'trap':
-            return ItemClassification.trap
-        case 'filler':
-            return ItemClassification.filler
-        case _:
-            return None
+    if item == 'useful_nonprogression':
+        return ItemClassification.useful
+    elif item == 'trap':
+        return ItemClassification.trap
+    elif item == 'filler':
+        return ItemClassification.filler
+    else:
+        return None
 
 
 class AutopelagoItemDefinitions(TypedDict):
@@ -90,7 +91,7 @@ class AutopelagoFillerItemDefinitionCls(TypedDict):
     count: int
 
 
-AutopelagoFillerItemDefinition = str | AutopelagoFillerItemDefinitionCls
+AutopelagoFillerItemDefinition = Union[str, AutopelagoFillerItemDefinitionCls]
 
 
 class AutopelagoFillerRegionItemsDefinition(TypedDict):
