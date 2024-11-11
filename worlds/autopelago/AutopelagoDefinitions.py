@@ -282,14 +282,3 @@ max_required_rat_count = max(_get_required_rat_count(req) for req in
 total_available_rat_count = sum(
     item_name_to_rat_count[i] for i in location_name_to_progression_item_name.values() if
     i in item_name_to_rat_count)
-
-del _append_nonprogression
-del _cur
-del _defs
-del _get_required_rat_count
-del _item_id_gen
-del _location_id_gen
-del _locations
-del _name
-del _name_of
-del _rat_count_of
