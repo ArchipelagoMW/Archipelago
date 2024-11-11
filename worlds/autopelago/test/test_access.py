@@ -1,4 +1,4 @@
-from typing import List, Optional, TypedDict, Iterable, TypeVar, Tuple, Union
+﻿from typing import List, Optional, TypedDict, Iterable, TypeVar, Tuple, Union
 from typing_extensions import Unpack
 
 from test.bases import WorldTestBase
@@ -82,8 +82,8 @@ class AccessTest(WorldTestBase):
             'Energy Drink that is Pure Rocket Fuel', 'Pile of Scrap Metal in the Shape of a Rocket Ship',
             'Ratstronaut', 'Turbo Encabulator'))
         self.assertAndCollectAccessDependencyFromHere('Robo-Clop: The Robot War Horse', 'Quantum Sugar Cube')
-        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not\u00AE Anti-Mummy Spray',
-                                                      'Ziggu Rat', collect=False)
+        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not® Anti-Mummy Spray', 'Ziggu Rat',
+                                                      collect=False)
         self.assertAndCollectAdditionalRatsFromHere('Stalled Rocket! (Get Out and Push)', 15)
         self.assertAndCollectAccessDependencyFromHere('Seal of Fortune', 'Constellation Prize', 'Free Vowel')
         self.assertAndCollectAdditionalRatsFromHere('Space Opera', 9)
@@ -121,8 +121,7 @@ class AccessTest(WorldTestBase):
             'Ratstronaut', 'Turbo Encabulator'))
         self.assertAndCollectAccessDependencyFromHere('Robo-Clop: The Robot War Horse', 'Quantum Sugar Cube')
         self.assertAndCollectAdditionalRatsFromHere('Stalled Rocket! (Get Out and Push)', 15, collect=False)
-        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not\u00AE Anti-Mummy Spray',
-                                                      'Ziggu Rat')
+        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not® Anti-Mummy Spray', 'Ziggu Rat')
         self.assertAndCollectAccessDependencyFromHere('Frozen Assets', 'Playing with Fire For Dummies', collect=False)
         self.assertAndCollectAccessDependencyFromHere('Alien Vending Machine', 'Foreign Coin', collect=False)
         self.assertAndCollectAccessDependencyFromHere('Seal of Fortune', 'Constellation Prize', 'Free Vowel')
