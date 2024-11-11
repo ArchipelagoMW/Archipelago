@@ -119,7 +119,7 @@ class ZillionWorld(World):
     my_locations: List[ZillionLocation] = []
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
     finalized_gen_data: Optional[GenData]
-    """ Finalized generation data needed by `generate_output` directly and by `fill_slot_data` indirectly. """
+    """ Finalized generation data needed by `generate_output` and by `fill_slot_data`. """
     item_locations_finalization_lock: threading.Lock
     """
     This lock is used in `generate_output` and `fill_slot_data` to ensure synchronized access to `finalized_gen_data`,
@@ -407,10 +407,7 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        # `self.zz_system.get_game()` requires that item locations have been finalized.
-        self.finalize_item_locations_thread_safe()
-        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
-        game = self.zz_system.get_game()
+        game = self.finalize_item_locations_thread_safe().zz_game
         return get_slot_info(game.regions, game.char_order[0], game.loc_name_2_pretty)
 
     # end of ordered Main.py calls
