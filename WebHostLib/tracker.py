@@ -85,10 +85,6 @@ class TrackerData:
         """Retrieves the seed name."""
         return self._multidata["seed_name"]
 
-    def get_stored_data(self) -> Dict[str, Any]:
-        """Retrieves the collection of data stored in the world on behalf of various clients."""
-        return self._multisave.get("stored_data", {})
-
     def get_slot_data(self, team: int, player: int) -> Dict[str, Any]:
         """Retrieves the slot data for a given player."""
         return self._multidata["slot_data"][player]
@@ -697,27 +693,6 @@ if "A Link to the Past" in network_data_package["games"]:
 
     _multiworld_trackers["A Link to the Past"] = render_ALinkToThePast_multiworld_tracker
     _player_trackers["A Link to the Past"] = render_ALinkToThePast_tracker
-
-if "Autopelago" in network_data_package["games"]:
-    def render_Autopelago_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
-        item_id_to_name = tracker_data.item_id_to_name["Autopelago"]
-        location_id_to_name = tracker_data.location_id_to_name["Autopelago"]
-        script_data = {
-            "player_name": tracker_data.get_player_name(team, player),
-            "inventory": { item_id_to_name[item_id]: cnt for item_id, cnt in tracker_data.get_player_inventory_counts(team, player).items() },
-            "checked_locations": [location_id_to_name[location_id] for location_id in tracker_data.get_player_checked_locations(team, player)],
-            "game_state": tracker_data.get_stored_data().get(f"autopelago_state_{team}_{player}", {}),
-        }
-
-        return render_template(
-            template_name_or_list="tracker__Autopelago.html",
-            room=tracker_data.room,
-            team=team,
-            player=player,
-            script_data=script_data,
-        )
-
-    _player_trackers["Autopelago"] = render_Autopelago_tracker
 
 if "Minecraft" in network_data_package["games"]:
     def render_Minecraft_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
