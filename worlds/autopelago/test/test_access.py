@@ -32,7 +32,8 @@ class AccessTest(WorldTestBase):
     def removeRats(self, rat_count: int):
         self.remove((self.pack_rat for _ in range(rat_count)))
 
-    def assertAndCollectAccessDependencyFromHere(self, location: str, *possible_items: Union[str, List[str]], **kwargs: Unpack[CollectKwargs]):
+    def assertAndCollectAccessDependencyFromHere(self, location: str, *possible_items: Union[str, List[str]],
+                                                 **kwargs: Unpack[CollectKwargs]):
         for item_list in possible_items:
             if item_list is str:
                 item_list = (item_list,)
@@ -67,7 +68,8 @@ class AccessTest(WorldTestBase):
         # World 2
         self.assertAndCollectAccessDependencyFromHere('Computer Interface', 'Computer Rat')
         self.assertAndCollectAccessDependencyFromHere('Kart Races', 'Blue Turtle Shell', 'Banana Peel')
-        self.assertAndCollectAccessDependencyFromHere('Daring Adventurer', 'Masterful Longsword', 'MacGuffin', collect=False)
+        self.assertAndCollectAccessDependencyFromHere('Daring Adventurer', 'Masterful Longsword', 'MacGuffin',
+                                                      collect=False)
         self.assertAndCollectAdditionalRatsFromHere('Broken-Down Bus', 14)
         self.assertAndCollectAccessDependencyFromHere('Copyright Mouse', 'Fake Mouse Ears', 'Legally Binding Contract')
         self.assertAndCollectAdditionalRatsFromHere('Room Full of Typewriters', 12, collect=False)
@@ -80,11 +82,13 @@ class AccessTest(WorldTestBase):
             'Energy Drink that is Pure Rocket Fuel', 'Pile of Scrap Metal in the Shape of a Rocket Ship',
             'Ratstronaut', 'Turbo Encabulator'))
         self.assertAndCollectAccessDependencyFromHere('Robo-Clop: The Robot War Horse', 'Quantum Sugar Cube')
-        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not® Anti-Mummy Spray', 'Ziggu Rat', collect=False)
+        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not\u00AE Anti-Mummy Spray',
+                                                      'Ziggu Rat', collect=False)
         self.assertAndCollectAdditionalRatsFromHere('Stalled Rocket! (Get Out and Push)', 15)
         self.assertAndCollectAccessDependencyFromHere('Seal of Fortune', 'Constellation Prize', 'Free Vowel')
         self.assertAndCollectAdditionalRatsFromHere('Space Opera', 9)
-        self.assertAndCollectAccessDependencyFromHere('Minotaur Labyrinth', 'Red Matador\'s Cape', 'Lab Rat', collect=False)
+        self.assertAndCollectAccessDependencyFromHere('Minotaur Labyrinth', 'Red Matador\'s Cape', 'Lab Rat',
+                                                      collect=False)
         self.assertBeatable(False)
         self.assertAndCollectAccessDependencyFromHere('Snakes on a Planet', 'Mongoose in a Combat Spacecraft')
         self.assertBeatable(True)
@@ -93,7 +97,8 @@ class AccessTest(WorldTestBase):
         # World 1
         self.assertAndCollectAdditionalRatsFromHere('Basketball', 5)
         self.assertAndCollectAccessDependencyFromHere('Angry Turtles', 'Pizza Rat', 'Ninja Rat')
-        self.assertAndCollectAccessDependencyFromHere('Prawn Stars', 'Premium Can of Prawn Food', 'Priceless Antique', collect=False)
+        self.assertAndCollectAccessDependencyFromHere('Prawn Stars', 'Premium Can of Prawn Food', 'Priceless Antique',
+                                                      collect=False)
         self.assertAndCollectAccessDependencyFromHere('Restaurant', 'Chef Rat')
         self.assertAndCollectAdditionalRatsFromHere('Bowling Ball Door', 3)
         self.assertAndCollectAccessDependencyFromHere('Captured Goldfish', 'Giant Novelty Scissors')
@@ -103,7 +108,8 @@ class AccessTest(WorldTestBase):
         self.assertAndCollectAccessDependencyFromHere('Daring Adventurer', 'Masterful Longsword', 'MacGuffin')
         self.assertAndCollectAccessDependencyFromHere('Kart Races', 'Blue Turtle Shell', 'Banana Peel', collect=False)
         self.assertAndCollectAdditionalRatsFromHere('Overweight Boulder', 14)
-        self.assertAndCollectAccessDependencyFromHere('Blue-Colored Screen Interface', 'Lost CTRL Key', 'Hammer of Problem-Solving')
+        self.assertAndCollectAccessDependencyFromHere('Blue-Colored Screen Interface', 'Lost CTRL Key',
+                                                      'Hammer of Problem-Solving')
         self.assertAndCollectAccessDependencyFromHere('Trapeze', 'Acro Rat', collect=False)
         self.assertAndCollectAccessDependencyFromHere('Computer Ram', 'Artificial Grass')
         self.assertAndCollectAccessDependencyFromHere('Stack of Crates', 'Forklift Certification', 'Gym Rat')
@@ -115,13 +121,15 @@ class AccessTest(WorldTestBase):
             'Ratstronaut', 'Turbo Encabulator'))
         self.assertAndCollectAccessDependencyFromHere('Robo-Clop: The Robot War Horse', 'Quantum Sugar Cube')
         self.assertAndCollectAdditionalRatsFromHere('Stalled Rocket! (Get Out and Push)', 15, collect=False)
-        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not® Anti-Mummy Spray', 'Ziggu Rat')
+        self.assertAndCollectAccessDependencyFromHere('Homeless Mummy', 'Pharaoh-Not\u00AE Anti-Mummy Spray',
+                                                      'Ziggu Rat')
         self.assertAndCollectAccessDependencyFromHere('Frozen Assets', 'Playing with Fire For Dummies', collect=False)
         self.assertAndCollectAccessDependencyFromHere('Alien Vending Machine', 'Foreign Coin', collect=False)
         self.assertAndCollectAccessDependencyFromHere('Seal of Fortune', 'Constellation Prize', 'Free Vowel')
         self.assertAndCollectAccessDependencyFromHere('Minotaur Labyrinth', 'Red Matador\'s Cape', 'Lab Rat')
         self.assertAndCollectAdditionalRatsFromHere('Space Opera', 24, collect=False)
-        self.assertAndCollectAccessDependencyFromHere('Asteroid with Pants', 'Asteroid Belt', 'Moon Shaped Like a Butt', collect=False)
+        self.assertAndCollectAccessDependencyFromHere('Asteroid with Pants', 'Asteroid Belt', 'Moon Shaped Like a Butt',
+                                                      collect=False)
         self.assertBeatable(False)
         self.assertAndCollectAccessDependencyFromHere('Snakes on a Planet', 'Mongoose in a Combat Spacecraft')
         self.assertBeatable(True)

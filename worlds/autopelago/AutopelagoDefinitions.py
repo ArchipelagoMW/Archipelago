@@ -52,8 +52,8 @@ class AutopelagoItemDefinitions(TypedDict):
     # any_other_str_key_not_listed: AutopelagoItemDefinition
 
 
-AutopelagoGameRequirement: TypeAlias = Union[\
-    'AutopelagoAllRequirement', 'AutopelagoAnyRequirement', 'AutopelagoItemRequirement', \
+AutopelagoGameRequirement: TypeAlias = Union[
+    'AutopelagoAllRequirement', 'AutopelagoAnyRequirement', 'AutopelagoItemRequirement',
     'AutopelagoRatCountRequirement', 'AutopelagoAnyTwoRequirement']
 
 
