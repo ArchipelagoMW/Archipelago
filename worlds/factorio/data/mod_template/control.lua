@@ -209,8 +209,8 @@ end
 if (ENERGY_INCREMENT) then
     script.on_event(defines.events.on_tick, on_check_energy_link)
 
-    script.on_event({defines.events.on_built_entity}, function(event) on_energy_bridge_constructed(event.created_entity) end)
-    script.on_event({defines.events.on_robot_built_entity}, function(event) on_energy_bridge_constructed(event.created_entity) end)
+    script.on_event({defines.events.on_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
+    script.on_event({defines.events.on_robot_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
     script.on_event({defines.events.on_entity_cloned}, function(event) on_energy_bridge_constructed(event.destination) end)
 
     script.on_event({defines.events.script_raised_revive}, function(event) on_energy_bridge_constructed(event.entity) end)
