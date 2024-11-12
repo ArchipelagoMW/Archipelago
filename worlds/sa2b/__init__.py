@@ -128,6 +128,7 @@ class SA2BWorld(World):
             "GateCosts": self.gate_costs,
             "GateBosses": self.gate_bosses,
             "BossRushMap": self.boss_rush_map,
+            "ActiveTraps": self.output_active_traps(),
             "PlayerNum": self.player,
         }
 
@@ -532,6 +533,34 @@ class SA2BWorld(World):
                 levels_to_distribute -= 1
 
         return levels_per_gate
+
+    def output_active_traps(self) -> typing.Dict[int, int]:
+        trap_data = {}
+
+        trap_data[0x30] = self.options.omochao_trap_weight.value
+        trap_data[0x31] = self.options.timestop_trap_weight.value
+        trap_data[0x32] = self.options.confusion_trap_weight.value
+        trap_data[0x33] = self.options.tiny_trap_weight.value
+        trap_data[0x34] = self.options.gravity_trap_weight.value
+        trap_data[0x35] = self.options.exposition_trap_weight.value
+        trap_data[0x37] = self.options.ice_trap_weight.value
+        trap_data[0x38] = self.options.slow_trap_weight.value
+        trap_data[0x39] = self.options.cutscene_trap_weight.value
+        trap_data[0x3A] = self.options.reverse_trap_weight.value
+        trap_data[0x3B] = self.options.literature_trap_weight.value
+        trap_data[0x3C] = self.options.controller_drift_trap_weight.value
+
+        trap_data[0x50] = self.options.pong_trap_weight.value
+        trap_data[0x51] = self.options.platformer_trap_weight.value
+        trap_data[0x52] = self.options.fishing_trap_weight.value
+        trap_data[0x53] = self.options.trivia_trap_weight.value
+        trap_data[0x54] = self.options.pokemon_trivia_trap_weight.value
+        trap_data[0x55] = self.options.pokemon_count_trap_weight.value
+        trap_data[0x56] = self.options.number_sequence_trap_weight.value
+        trap_data[0x57] = self.options.light_up_path_trap_weight.value
+        trap_data[0x58] = self.options.pinball_trap_weight.value
+
+        return trap_data
 
     def any_chao_locations_active(self) -> bool:
         if self.options.chao_race_difficulty.value > 0 or \
