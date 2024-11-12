@@ -64,6 +64,7 @@ class HatInTimeWorld(World):
 
         self.hat_yarn_costs: Dict[HatType, int] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
                                                    HatType.DWELLER: -1, HatType.TIME_STOP: -1}
+        self.cumulative_hat_yarn_costs: Dict[HatType, int] = dict(self.hat_yarn_costs)
 
         self.chapter_timepiece_costs: Dict[ChapterIndex, int] = {ChapterIndex.MAFIA: -1,
                                                                  ChapterIndex.BIRDS: -1,
