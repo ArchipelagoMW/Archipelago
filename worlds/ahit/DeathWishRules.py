@@ -1,5 +1,5 @@
 from worlds.AutoWorld import CollectionState
-from .Rules import can_use_hookshot, can_hit, zipline_logic, get_difficulty, has_paintings, hat_requirements, meets_hat_req
+from .Rules import can_use_hookshot, can_hit, zipline_logic, get_difficulty, has_paintings, hat_requirements, meets_item_req
 from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData, HitType
 from .DeathWishLocations import dw_prereqs, dw_candles
 from BaseClasses import Entrance, Location, ItemClassification
@@ -193,7 +193,7 @@ def add_dw_rules(world: "HatInTimeWorld", loc: Location):
     for hat in data.required_hats:
         hat_req = hat_requirements(world, hat)
         # force capture of hat_req
-        add_rule(loc, lambda state, h=hat_req: meets_hat_req(state, player, h))
+        add_rule(loc, lambda state, h=hat_req: meets_item_req(state, player, h))
 
     for misc in data.misc_required:
         add_rule(loc, lambda state, item=misc: state.has(item, player))
@@ -208,13 +208,13 @@ def add_dw_rules(world: "HatInTimeWorld", loc: Location):
 
         elif data.hit_type == HitType.umbrella_or_brewing:
             add_rule(loc, lambda state: state.has("Umbrella", player)
-                     or meets_hat_req(state, player, brewing_hat_req))
+                     or meets_item_req(state, player, brewing_hat_req))
 
         elif data.hit_type == HitType.dweller_bell:
             dweller_hat_req = hat_requirements(world, HatType.DWELLER)
             add_rule(loc, lambda state: state.has("Umbrella", player)
-                     or meets_hat_req(state, player, brewing_hat_req)
-                     or meets_hat_req(state, player, dweller_hat_req))
+                     or meets_item_req(state, player, brewing_hat_req)
+                     or meets_item_req(state, player, dweller_hat_req))
 
 
 def modify_dw_rules(world: "HatInTimeWorld", name: str):
@@ -234,7 +234,7 @@ def modify_dw_rules(world: "HatInTimeWorld", name: str):
         brewing_hat_req = hat_requirements(world, HatType.BREWING)
         ice_hat_req = hat_requirements(world, HatType.ICE)
         add_rule(main_objective, lambda state: state.has("Umbrella", player)
-                 or meets_hat_req(state, player, ice_hat_req) or meets_hat_req(state, player, brewing_hat_req))
+                 or meets_item_req(state, player, ice_hat_req) or meets_item_req(state, player, brewing_hat_req))
 
     elif name == "Vault Codes in the Wind":
         # Sprint is normally expected here
@@ -275,7 +275,7 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
         ice_hat_req = hat_requirements(world, HatType.ICE)
         add_rule(main_objective, lambda state: state.has("Zero Jumps", player))
         add_rule(full_clear, lambda state: state.has("Zero Jumps", player, 4)
-                 and state.has("Train Rush (Zero Jumps)", player) and meets_hat_req(state, player, ice_hat_req))
+                 and state.has("Train Rush (Zero Jumps)", player) and meets_item_req(state, player, ice_hat_req))
 
         # No Ice Hat/painting required in Expert for Toilet Zero Jumps
         # This painting wall can only be skipped via cherry hover.
@@ -349,7 +349,7 @@ def create_enemy_events(world: "HatInTimeWorld"):
         region.locations.append(event)
         event.show_in_spoiler = False
         if name == "The Mustache Gauntlet":
-            add_rule(event, lambda state: can_use_hookshot(state, world) and meets_hat_req(state, player, dweller_hat_req))
+            add_rule(event, lambda state: can_use_hookshot(state, world) and meets_item_req(state, player, dweller_hat_req))
 
 
 def set_enemy_rules(world: "HatInTimeWorld"):
@@ -398,7 +398,7 @@ def set_enemy_rules(world: "HatInTimeWorld"):
 
                 elif area == "The Finale" and enemy == "Mustache Girl":
                     add_rule(event, lambda state: can_use_hookshot(state, world)
-                             and meets_hat_req(state, player, dweller_hat_req))
+                             and meets_item_req(state, player, dweller_hat_req))
 
             elif enemy == "Shock Squid" or enemy == "Ninja Cat":
                 if area == "Time Rift - Deep Sea":
