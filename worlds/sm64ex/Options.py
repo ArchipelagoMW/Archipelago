@@ -91,12 +91,11 @@ class BuddyChecks(Toggle):
     display_name = "Bob-omb Buddy Checks"
 
 
-class ExclamationBoxes(Choice):
+class ExclamationBoxes(Toggle):
     """Include 1Up Exclamation Boxes during randomization.
     Adds 29 locations to the pool."""
     display_name = "Randomize 1Up !-Blocks"
-    option_Off = 0
-    option_1Ups_Only = 1
+    alias_1Ups_Only = 1
 
 
 class CompletionType(Choice):
