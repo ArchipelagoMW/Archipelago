@@ -138,10 +138,13 @@ function count_energy_bridges()
     local count = 0
     for i, bridge in pairs(storage.energy_link_bridges) do
         if validate_energy_link_bridge(i, bridge) then
-            count = count + 1
+            count = count + 1 + (bridge.quality.level * 0.3)
         end
     end
     return count
+end
+function get_energy_increment(bridge)
+	return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
 end
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
@@ -157,21 +160,23 @@ function on_check_energy_link(event)
         if storage.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
             for i, bridge in pairs(bridges) do
                 if validate_energy_link_bridge(i, bridge) then
-                    if bridge.energy > ENERGY_INCREMENT*3 then
-                        storage.forcedata[force].energy = storage.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
-                        bridge.energy = bridge.energy - ENERGY_INCREMENT
+					energy_increment = get_energy_increment(bridge)
+                    if bridge.energy > energy_increment*3 then
+                        storage.forcedata[force].energy = storage.forcedata[force].energy + (energy_increment * ENERGY_LINK_EFFICIENCY)
+                        bridge.energy = bridge.energy - energy_increment
                     end
                 end
             end
         end
         for i, bridge in pairs(bridges) do
             if validate_energy_link_bridge(i, bridge) then
-                if storage.forcedata[force].energy < ENERGY_INCREMENT then
+				energy_increment = get_energy_increment(bridge)
+                if storage.forcedata[force].energy < energy_increment and bridge.quality.level == 0 then
                     break
                 end
-                if bridge.energy < ENERGY_INCREMENT*2 and storage.forcedata[force].energy > ENERGY_INCREMENT then
-                    storage.forcedata[force].energy = storage.forcedata[force].energy - ENERGY_INCREMENT
-                    bridge.energy = bridge.energy + ENERGY_INCREMENT
+                if bridge.energy < energy_increment*2 and storage.forcedata[force].energy > energy_increment then
+                    storage.forcedata[force].energy = storage.forcedata[force].energy - energy_increment
+                    bridge.energy = bridge.energy + energy_increment
                 end
             end
         end
