@@ -574,7 +574,7 @@ class CV64Options(PerGameCommonOptions):
     map_lighting: MapLighting
     fall_guard: FallGuard
     cinematic_experience: CinematicExperience
-    death_link: DeathLink
+    death_link: CV64DeathLink
 
 
 cv64_option_groups = [
@@ -583,7 +583,7 @@ cv64_option_groups = [
         RenonFightCondition, VincentFightCondition, BadEndingCondition, IncreaseItemLimit, NerfHealingItems,
         LoadingZoneHeals, InvisibleItems, DropPreviousSubWeapon, PermanentPowerUps, IceTrapPercentage,
         IceTrapAppearance, DisableTimeRestrictions, SkipGondolas, SkipWaterwayBlocks, Countdown, BigToss, PantherDash,
-        IncreaseShimmySpeed, FallGuard, DeathLink
+        IncreaseShimmySpeed, FallGuard, CV64DeathLink
     ]),
     OptionGroup("cosmetics", [
         WindowColorR, WindowColorG, WindowColorB, WindowColorA, BackgroundMusic, MapLighting, CinematicExperience
