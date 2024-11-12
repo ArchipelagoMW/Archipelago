@@ -16,6 +16,7 @@ _useful_thresholds = {
     "Zillion": 8,
     "Scope": 8,
 }
+""" make the item useful if the number in the item pool is below this number """
 
 
 def get_classification(name: str, zz_item: ZzItem, item_counts: Counter[str]) -> IC:
