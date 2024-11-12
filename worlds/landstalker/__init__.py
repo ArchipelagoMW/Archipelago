@@ -224,16 +224,14 @@ class LandstalkerWorld(World):
     def stage_post_fill(cls, multiworld: MultiWorld):
         # Cache spheres for hint calculation after fill completes.
         cached_spheres = list(multiworld.get_spheres())
-        for world in multiworld.worlds.values():
-            if isinstance(world, cls):
-                world.cached_spheres = cached_spheres
+        for world in multiworld.get_game_worlds(cls.game):
+            world.cached_spheres = cached_spheres
 
     @classmethod
     def stage_modify_multidata(cls, multiworld: MultiWorld, *_):
         # Clean up all references in cached spheres after generation completes.
-        for world in multiworld.worlds.values():
-            if isinstance(world, cls):
-                world.cached_spheres = []
+        for world in multiworld.get_game_worlds(cls.game):
+            world.cached_spheres = []
 
     def adjust_shop_prices(self):
         # Calculate prices for items in shops once all items have their final position
