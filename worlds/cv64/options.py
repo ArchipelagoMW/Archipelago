@@ -506,7 +506,7 @@ class WindowColorA(Range):
     default = 8
 
 
-class DeathLink(Choice):
+class CV64DeathLink(Choice):
     __doc__ = (DeathLink.__doc__ +
                "\n\n    Explosive: Makes received death links kill you via the Magical Nitro explosion" +
                "instead of the normal death animation.")
