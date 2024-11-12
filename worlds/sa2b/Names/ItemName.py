@@ -64,6 +64,7 @@ cutscene_trap         = "Cutscene Trap"
 reverse_trap          = "Reverse Trap"
 literature_trap       = "Literature Trap"
 controller_drift_trap = "Controller Drift Trap"
+poison_trap           = "Poison Trap"
 
 pong_trap            = "Pong Trap"
 platformer_trap      = "Platformer Trap"

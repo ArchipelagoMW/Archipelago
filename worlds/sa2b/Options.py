@@ -214,6 +214,13 @@ class ControllerDriftTrapWeight(BaseTrapWeight):
     display_name = "Controller Drift Trap Weight"
 
 
+class PoisonTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which causes you to lose rings over time
+    """
+    display_name = "Poison Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -1136,6 +1143,7 @@ sa2b_option_groups = [
         ReverseTrapWeight,
         LiteratureTrapWeight,
         ControllerDriftTrapWeight,
+        PoisonTrapWeight,
     ]),
     OptionGroup("Minigames", [
         PongTrapWeight,
@@ -1269,6 +1277,7 @@ class SA2BOptions(PerGameCommonOptions):
     reverse_trap_weight: ReverseTrapWeight
     literature_trap_weight: LiteratureTrapWeight
     controller_drift_trap_weight: ControllerDriftTrapWeight
+    poison_trap_weight: PoisonTrapWeight
     pong_trap_weight: PongTrapWeight
     platformer_trap_weight: PlatformerTrapWeight
     fishing_trap_weight: FishingTrapWeight

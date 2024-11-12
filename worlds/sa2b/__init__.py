@@ -160,6 +160,7 @@ class SA2BWorld(World):
                                  self.options.reverse_trap_weight.value + \
                                  self.options.literature_trap_weight.value + \
                                  self.options.controller_drift_trap_weight.value + \
+                                 self.options.poison_trap.value + \
                                  self.options.pong_trap_weight.value + \
                                  self.options.platformer_trap_weight.value + \
                                  self.options.fishing_trap_weight.value + \
@@ -175,6 +176,7 @@ class SA2BWorld(World):
                 self.options.reverse_trap_weight.value = 4
                 self.options.literature_trap_weight.value = 4
                 self.options.controller_drift_trap_weight.value = 4
+                self.options.poison_trap.value = 4
                 self.options.pong_trap_weight.value = 4
                 self.options.platformer_trap_weight.value = 4
                 self.options.fishing_trap_weight.value = 4
@@ -325,6 +327,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.reverse_trap] * self.options.reverse_trap_weight.value)
         trap_weights += ([ItemName.literature_trap] * self.options.literature_trap_weight.value)
         trap_weights += ([ItemName.controller_drift_trap] * self.options.controller_drift_trap_weight.value)
+        trap_weights += ([ItemName.poison_trap] * self.options.poison_trap_weight.value)
         trap_weights += ([ItemName.pong_trap] * self.options.pong_trap_weight.value)
         trap_weights += ([ItemName.platformer_trap] * self.options.platformer_trap_weight.value)
         trap_weights += ([ItemName.fishing_trap] * self.options.fishing_trap_weight.value)
@@ -549,6 +552,7 @@ class SA2BWorld(World):
         trap_data[0x3A] = self.options.reverse_trap_weight.value
         trap_data[0x3B] = self.options.literature_trap_weight.value
         trap_data[0x3C] = self.options.controller_drift_trap_weight.value
+        trap_data[0x3D] = self.options.poison_trap_weight.value
 
         trap_data[0x50] = self.options.pong_trap_weight.value
         trap_data[0x51] = self.options.platformer_trap_weight.value

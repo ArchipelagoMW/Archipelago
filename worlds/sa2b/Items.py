@@ -85,6 +85,7 @@ trap_table = {
     ItemName.reverse_trap:          ItemData(0xFF003A, False, True),
     ItemName.literature_trap:       ItemData(0xFF003B, False, True),
     ItemName.controller_drift_trap: ItemData(0xFF003C, False, True),
+    ItemName.poison_trap:           ItemData(0xFF003D, False, True),
 }
 
 minigame_trap_table = {
