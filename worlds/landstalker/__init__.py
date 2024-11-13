@@ -38,7 +38,7 @@ class LandstalkerWorld(World):
     item_name_to_id = build_item_name_to_id_table()
     location_name_to_id = build_location_name_to_id_table()
 
-    cached_spheres: ClassVar[List[Set[Location]]]
+    cached_spheres: List[Set[Location]]
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -47,6 +47,7 @@ class LandstalkerWorld(World):
         self.dark_region_ids = []
         self.teleport_tree_pairs = []
         self.jewel_items = []
+        self.cached_spheres = []
 
     def fill_slot_data(self) -> dict:
         # Generate hints.
@@ -220,14 +221,17 @@ class LandstalkerWorld(World):
             return 4
 
     @classmethod
-    def stage_post_fill(cls, multiworld):
+    def stage_post_fill(cls, multiworld: MultiWorld):
         # Cache spheres for hint calculation after fill completes.
-        cls.cached_spheres = list(multiworld.get_spheres())
+        cached_spheres = list(multiworld.get_spheres())
+        for world in multiworld.get_game_worlds(cls.game):
+            world.cached_spheres = cached_spheres
 
     @classmethod
-    def stage_modify_multidata(cls, *_):
+    def stage_modify_multidata(cls, multiworld: MultiWorld, *_):
         # Clean up all references in cached spheres after generation completes.
-        del cls.cached_spheres
+        for world in multiworld.get_game_worlds(cls.game):
+            world.cached_spheres = []
 
     def adjust_shop_prices(self):
         # Calculate prices for items in shops once all items have their final position
