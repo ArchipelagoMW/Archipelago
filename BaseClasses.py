@@ -194,7 +194,9 @@ class MultiWorld():
         self.player_types[new_id] = NetUtils.SlotType.group
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         self.worlds[new_id] = world_type.create_group(self, new_id, players)
-        self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
+        self.worlds[new_id].collect_item = AutoWorld.World.collect_item.__get__(self.worlds[new_id])
+        self.worlds[new_id].collect = AutoWorld.World.collect.__get__(self.worlds[new_id])
+        self.worlds[new_id].remove = AutoWorld.World.remove.__get__(self.worlds[new_id])
         self.player_name[new_id] = name
 
         new_group = self.groups[new_id] = Group(name=name, game=game, players=players,
@@ -339,7 +341,7 @@ class MultiWorld():
                     new_item.classification |= classifications[item_name]
                     new_itempool.append(new_item)
 
-            region = Region("Menu", group_id, self, "ItemLink")
+            region = Region(group["world"].origin_region_name, group_id, self, "ItemLink")
             self.regions.append(region)
             locations = region.locations
             # ensure that progression items are linked first, then non-progression
@@ -1261,6 +1263,10 @@ class Item:
     @property
     def trap(self) -> bool:
         return ItemClassification.trap in self.classification
+
+    @property
+    def excludable(self) -> bool:
+        return not (self.advancement or self.useful)
 
     @property
     def flags(self) -> int:
