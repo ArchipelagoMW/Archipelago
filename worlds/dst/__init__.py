@@ -131,7 +131,10 @@ class DSTWorld(World):
                 else "Celestial Altar" if "celestial" in tags and "tier_2" in tags
                 else "Broken Pseudoscience Station" if "ancient" in tags and "tier_1" in tags
                 else "Ancient Pseudoscience Station" if "ancient" in tags and "tier_2" in tags
-                else "Crabby Hermit" if "hermitcrab" in tags
+                else "Crabby Hermit (Friendship Level 1)" if "hermitcrab" in tags and "tier_1" in tags
+                else "Crabby Hermit (Friendship Level 3)" if "hermitcrab" in tags and "tier_2" in tags
+                else "Crabby Hermit (Friendship Level 6)" if "hermitcrab" in tags and "tier_3" in tags
+                else "Crabby Hermit (Friendship Level 8)" if "hermitcrab" in tags and "tier_4" in tags
                 else "Vanilla"
             )
         hint_information:Dict[int, str] = {}
