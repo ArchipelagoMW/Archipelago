@@ -89,20 +89,40 @@ def launch_textclient(*args):
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
+    import tempfile, zipfile, shutil
+
     if not apworld_src:
-        apworld_src = open_filename('Select APWorld file to install', (('APWorld', ('.apworld',)),))
+        apworld_src = open_filename(
+            'Select APWorld file to install',
+            (('APWorld', ('.apworld', '.zip')),),
+        )
         if not apworld_src:
             # user closed menu
             return
 
-    if not apworld_src.endswith(".apworld"):
-        raise Exception(f"Wrong file format, looking for .apworld. File identified: {apworld_src}")
-
     apworld_path = pathlib.Path(apworld_src)
+
+    if apworld_path.suffix == ".zip":
+        try:
+            temp = pathlib.Path(tempfile.mkdtemp(prefix="apworld"))
+
+            archive = zipfile.ZipFile(apworld_path)
+            try:
+                archive_apworld = next(n for n in archive.namelist() if n.endswith(".apworld"))
+                archive.extract(archive_apworld, path=temp)
+                return _install_apworld(temp / archive_apworld)
+
+            except StopIteration:
+                raise Exception(f"{apworld_path} does not contain any .apworld files")
+
+        finally:
+            shutil.rmtree(temp, ignore_errors=True)
+
+    elif apworld_path.suffix != ".apworld":
+        raise Exception(f"Wrong file format, looking for .apworld. File identified: {apworld_src}")
 
     module_name = pathlib.Path(apworld_path.name).stem
     try:
-        import zipfile
         zipfile.ZipFile(apworld_path).open(module_name + "/__init__.py")
     except ValueError as e:
         raise Exception("Archive appears invalid or damaged.") from e
@@ -123,7 +143,6 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     # TODO: have some kind of version system to tell from metadata if the apworld should be compatible.
 
     target = pathlib.Path(worlds.user_folder) / apworld_path.name
-    import shutil
     shutil.copyfile(apworld_path, target)
 
     # If a module with this name is already loaded, then we can't load it now.
