@@ -3,22 +3,20 @@ import math
 from typing_extensions import TYPE_CHECKING
 
 from worlds.generic.Rules import add_rule, add_item_rule
-from typing import Set, Callable, cast, Iterable
+from typing import Set, cast, Iterable
 from .Items import ItemType, all_items
 from .gen.ItemNames import ItemName
-from .gen.ItemData import summon_list, characters
+from .gen.ItemData import summon_list
 from .Names.EntranceName import EntranceName
-from .Locations import location_type_to_data, all_locations
+from .Locations import location_type_to_data
 from .gen.LocationData import LocationType, LocationRestriction
-from BaseClasses import MultiWorld, ItemClassification
+from BaseClasses import ItemClassification
 from .gen.LocationNames import LocationName, loc_names_by_id
 
 if TYPE_CHECKING:
-    from . import GSTLAWorld, GSTLALocation
-    from .Items import GSTLAItem
+    from . import GSTLAWorld
 
 def set_entrance_rules(world: 'GSTLAWorld'):
-    multiworld = world.multiworld
     player = world.player
     add_rule(world.get_entrance(EntranceName.DailaToShrineOfTheSeaGod),
              lambda state: state.has(ItemName.Lash_Pebble, player))
@@ -124,7 +122,6 @@ def set_entrance_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Gabomba_Statue_Completed, player) and state.has(ItemName.Piers, player))
 
 def set_access_rules(world: 'GSTLAWorld'):
-    multiworld = world.multiworld
     player = world.player
     #Character locations
     add_rule(world.get_location(LocationName.Idejima_Mind_Read),
@@ -991,6 +988,28 @@ def set_item_rules(world: 'GSTLAWorld'):
     else:
         add_item_rule(world.get_location(LocationName.Idejima_Jenna),
                 lambda item: item.player == player and item.name in characters)
+
+    # Starting character inventories can't handle remote items right now
+    add_item_rule(world.get_location(LocationName.Idejima_Shamans_Rod),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Idejima_Growth),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Idejima_Whirlwind),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Idejima_Mind_Read),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Kibombo_Douse_Drop),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Kibombo_Frost_Jewel),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Contigo_Catch_Beads),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Contigo_Carry_Stone),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Contigo_Lifting_Gem),
+                  lambda item: item.player == player)
+    add_item_rule(world.get_location(LocationName.Contigo_Orb_of_Force),
+                  lambda item: item.player == player)
 
     for loc in [x.location_data for x in cast(Iterable['GSTLALocation'], world.multiworld.get_locations(world.player))
                 if x.location_data.loc_type != LocationType.Event]:

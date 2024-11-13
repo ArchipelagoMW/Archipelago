@@ -24,10 +24,7 @@ class GSTLAItem(Item):
         super(GSTLAItem, self).__init__(item.name, item.progression, item.id, player)
         self.item_data = item
 
-# This item isn't used by the game normally, so we're going to use it as a placeholder for now
-# TODO: add placeholder
-AP_PLACEHOLDER_ITEM = ItemData(412, ItemName.Rainbow_Ring, ItemClassification.filler, -1, ItemType.Ring)
-# AP_PLACEHOLDER_ITEM = ItemData(0xA00, "AP Placeholder", ItemClassification.filler, -1, ItemType.Ring)
+AP_PLACEHOLDER_ITEM = ItemData(0xA00, "AP Placeholder", ItemClassification.filler, -1, ItemType.Consumable)
 
 all_items = all_gen_items
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
@@ -58,7 +55,6 @@ def create_item(name: str, player :int) -> "Item":
         The newly created item
     """
     item = item_table[name]
-    # return GSTLAItem(item.name, item.progression, item.id, player)
     return GSTLAItem(item, player)
 
 def create_item_direct(item: ItemData, player: int):

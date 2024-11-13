@@ -1,22 +1,18 @@
 from __future__ import annotations
 
 import base64
-import codecs
 import hashlib
-from io import BytesIO
-
-from six import StringIO
+from io import BytesIO, StringIO
 
 import settings
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 import os
 
-from typing import List, TextIO, BinaryIO, Dict, ClassVar, Type, cast, Optional, Sequence, Tuple, Any
+from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Sequence, Tuple, Any
 
 from .Options import GSTLAOptions
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
-    LocationProgressType, Region, Entrance
+from BaseClasses import Item
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
     AP_PLACEHOLDER_ITEM, items_by_id
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
@@ -27,7 +23,7 @@ from .gen.LocationData import LocationType, location_name_to_data
 from .gen.ItemNames import ItemName, item_id_by_name
 from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
-from .Rom import GSTLAPatchExtension, get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch, CHECKSUM_GSTLA
+from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
 
 
@@ -141,48 +137,6 @@ class GSTLAWorld(World):
                                 path=os.path.join(output_directory, self.multiworld.get_out_file_name_base(self.player)+GSTLADeltaPatch.patch_file_ending))
         patch.add_settings(ap_settings.getvalue(), ap_settings_debug.getvalue().encode("utf-8"))
         patch.write()
-        # rom = LocalRom(get_base_rom_path())
-        # world = self.multiworld
-        # player = self.player
-        #
-        # rom.write_story_flags()
-        # rom.apply_qol_patches()
-        #
-        # for region in self.multiworld.get_regions(self.player):
-        #     for location in region.locations:
-        #         location_data = location_name_to_id.get(location.name, None)
-        #
-        #         if location_data is None or location_data.loc_type == LocationType.Event or location_data.loc_type == LocationType.Character:
-        #             continue
-        #         ap_item = location.item
-        #         # print(ap_item)
-        #         if ap_item is None:
-        #             # TODO: need to fill with something else
-        #             continue
-        #
-        #         if ap_item.player != self.player:
-        #             item_data = AP_PLACEHOLDER_ITEM
-        #         else:
-        #             item_data = item_table[ap_item.name]
-        #
-        #         if item_data.type == ItemType.Djinn:
-        #             rom.write_djinn(location_data, item_data)
-        #         else:
-        #             rom.write_item(location_data, item_data)
-        #
-        # rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
-        #
-        # try:
-        #     rom.write_to_file(rompath)
-        #     patch = GSTLADeltaPatch(os.path.splitext(rompath)[0]+GSTLADeltaPatch.patch_file_ending, player=player,
-        #                 player_name=world.player_name[player], patched_path=rompath)
-        #
-        #     patch.write()
-        # except:
-        #     raise()
-        # finally:
-        #     if os.path.exists(rompath):
-        #         os.unlink(rompath)
 
     def _generate_rando_data(self, rando_file: BinaryIO, debug_file: TextIO):
         rando_file.write(0x1.to_bytes(length=1, byteorder='little'))
@@ -210,7 +164,6 @@ class GSTLAWorld(World):
                 if location_data is None or location_data.loc_type == LocationType.Event:
                     continue
                 ap_item = location.item
-                # print(ap_item)
                 if ap_item is None:
                     # TODO: need to fill with something else
                     continue
@@ -223,9 +176,7 @@ class GSTLAWorld(World):
                 if item_data.type == ItemType.Djinn:
                     djinn_locs.append(location)
                 else:
-                    # rom.write_item(location_data, item_data)
-                    # TODO: cleanup
-                    item_id = 0xA00 if item_data.id == 412 else item_data.id
+                    item_id = item_data.id
                     rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
                     rando_file.write(item_id.to_bytes(length=2, byteorder='little'))
                     debug_file.write(
@@ -249,11 +200,6 @@ class GSTLAWorld(World):
             loc_name = loc_names_by_id[location_data.ap_id]
             debug_file.write(
                 f"Djinn(Location): {loc_name}\nDjinn(Location) Flag: {hex(location_data.rando_flag)}\nDjinn(Item): {item_data.name}\nDjinn(Item) Flag: {hex(item_data.get_rando_flag())}\n\n")
-
-    def _generate_rando_file(self, output_directory: str):
-        with open(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}_debug.txt"),'w') as debug_file:
-            with open(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gstlarando"),'wb') as rando_file:
-                self._generate_rando_data(rando_file, debug_file)
 
     def _write_options_for_rando(self, rando_file: BinaryIO, debug_file: TextIO):
         write_me = 0
