@@ -316,7 +316,7 @@ class ALTTPWorld(World):
                 if (self.options.small_key_shuffle not in
                         (small_key_shuffle.option_universal, small_key_shuffle.option_own_dungeons,
                          small_key_shuffle.option_start_with)):
-                    self.options.local_early_items["Small Key (Hyrule Castle)"] = 1
+                    self.local_early_items["Small Key (Hyrule Castle)"] = 1
                 self.options.local_items.value.add("Small Key (Hyrule Castle)")
                 self.options.non_local_items.value.discard("Small Key (Hyrule Castle)")
             if self.options.big_key_shuffle:
@@ -524,7 +524,7 @@ class ALTTPWorld(World):
         if self.options.mode == 'standard' and self.options.small_key_shuffle \
                 and self.options.small_key_shuffle != small_key_shuffle.option_universal and \
                 self.options.small_key_shuffle != small_key_shuffle.option_own_dungeons:
-            self.options.local_early_items["Small Key (Hyrule Castle)"] = 1
+            self.local_early_items["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
     def stage_pre_fill(cls, world):
@@ -564,27 +564,27 @@ class ALTTPWorld(World):
             multiworld.spoiler.hashes[player] = get_hash_string(rom.hash)
 
             palettes_options = {
-                'dungeon': multiworld.uw_palettes[player],
-                'overworld': multiworld.ow_palettes[player],
-                'hud': multiworld.hud_palettes[player],
-                'sword': multiworld.sword_palettes[player],
-                'shield': multiworld.shield_palettes[player],
+                'dungeon': self.options.uw_palettes,
+                'overworld': self.options.ow_palettes,
+                'hud': self.options.hud_palettes,
+                'sword': self.options.sword_palettes,
+                'shield': self.options.shield_palettes,
                 # 'link': world.link_palettes[player]
             }
             palettes_options = {key: option.current_key for key, option in palettes_options.items()}
 
-            apply_rom_settings(rom, multiworld.heartbeep[player].current_key,
-                               multiworld.heartcolor[player].current_key,
-                               multiworld.quickswap[player],
-                               multiworld.menuspeed[player].current_key,
-                               multiworld.music[player],
+            apply_rom_settings(rom, self.options.heartbeep.current_key,
+                               self.options.heartcolor.current_key,
+                               self.options.quickswap,
+                               self.options.menuspeed.current_key,
+                               self.options.music,
                                multiworld.sprite[player],
                                None,
                                palettes_options, multiworld, player, True,
-                               reduceflashing=multiworld.reduceflashing[player] or multiworld.is_race,
-                               triforcehud=multiworld.triforcehud[player].current_key,
-                               deathlink=multiworld.death_link[player],
-                               allowcollect=multiworld.allow_collect[player])
+                               reduceflashing=self.options.reduceflashing or multiworld.is_race,
+                               triforcehud=self.options.triforcehud.current_key,
+                               deathlink=self.options.death_link,
+                               allowcollect=self.options.allow_collect)
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
@@ -736,7 +736,7 @@ class ALTTPWorld(World):
                     "Ganons Tower": "Agahnim 2",
                     "Ganon": "Ganon"
                 }
-                if self.multiworld.mode[self.player] != 'inverted':
+                if self.options.mode != 'inverted':
                     boss_map.update({
                         "Ganons Tower Basement":
                             self.dungeons["Ganons Tower"].bosses["bottom"].name,

@@ -7,68 +7,68 @@ from .Regions import mark_light_world_regions
 from .InvertedRegions import mark_dark_world_regions
 
 
-def link_entrances(world, player):
-    connect_two_way(world, 'Links House', 'Links House Exit', player) # unshuffled. For now
-    connect_exit(world, 'Chris Houlihan Room Exit', 'Links House', player) # should always match link's house, except for plandos
+def link_entrances(multiworld, player):
+    connect_two_way(multiworld, 'Links House', 'Links House Exit', player) # unshuffled. For now
+    connect_exit(multiworld, 'Chris Houlihan Room Exit', 'Links House', player) # should always match link's house, except for plandos
 
     Dungeon_Exits = Dungeon_Exits_Base.copy()
     Cave_Exits = Cave_Exits_Base.copy()
     Old_Man_House = Old_Man_House_Base.copy()
     Cave_Three_Exits = Cave_Three_Exits_Base.copy()
 
-    unbias_some_entrances(world, Dungeon_Exits, Cave_Exits, Old_Man_House, Cave_Three_Exits)
+    unbias_some_entrances(multiworld, Dungeon_Exits, Cave_Exits, Old_Man_House, Cave_Three_Exits)
 
     # setup mandatory connections
     for exitname, regionname in mandatory_connections:
-        connect_simple(world, exitname, regionname, player)
+        connect_simple(multiworld, exitname, regionname, player)
 
     # if we do not shuffle, set default connections
-    if world.worlds[player].options.entrance_shuffle == 'vanilla':
+    if multiworld.worlds[player].options.entrance_shuffle == 'vanilla':
         for exitname, regionname in default_connections:
-            connect_simple(world, exitname, regionname, player)
+            connect_simple(multiworld, exitname, regionname, player)
         for exitname, regionname in default_dungeon_connections:
-            connect_simple(world, exitname, regionname, player)
-    elif world.worlds[player].options.entrance_shuffle == 'dungeons_simple':
+            connect_simple(multiworld, exitname, regionname, player)
+    elif multiworld.worlds[player].options.entrance_shuffle == 'dungeons_simple':
         for exitname, regionname in default_connections:
-            connect_simple(world, exitname, regionname, player)
+            connect_simple(multiworld, exitname, regionname, player)
 
-        simple_shuffle_dungeons(world, player)
-    elif world.worlds[player].options.entrance_shuffle == 'dungeons_full':
+        simple_shuffle_dungeons(multiworld, player)
+    elif multiworld.worlds[player].options.entrance_shuffle == 'dungeons_full':
         for exitname, regionname in default_connections:
-            connect_simple(world, exitname, regionname, player)
+            connect_simple(multiworld, exitname, regionname, player)
 
-        skull_woods_shuffle(world, player)
+        skull_woods_shuffle(multiworld, player)
 
         dungeon_exits = list(Dungeon_Exits)
         lw_entrances = list(LW_Dungeon_Entrances)
         dw_entrances = list(DW_Dungeon_Entrances)
 
-        if world.worlds[player].options.mode == 'standard':
+        if multiworld.worlds[player].options.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
+            connect_two_way(multiworld, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
         else:
             dungeon_exits.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
-        if not world.shuffle_ganon:
-            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit', player)
+        if not multiworld.shuffle_ganon:
+            connect_two_way(multiworld, 'Ganons Tower', 'Ganons Tower Exit', player)
         else:
             dw_entrances.append('Ganons Tower')
             dungeon_exits.append('Ganons Tower Exit')
 
-        if world.worlds[player].options.mode == 'standard':
+        if multiworld.worlds[player].options.mode == 'standard':
             # rest of hyrule castle must be in light world, so it has to be the one connected to east exit of desert
             hyrule_castle_exits = [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')]
-            connect_mandatory_exits(world, lw_entrances, hyrule_castle_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
-            connect_caves(world, lw_entrances, [], hyrule_castle_exits, player)
+            connect_mandatory_exits(multiworld, lw_entrances, hyrule_castle_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
+            connect_caves(multiworld, lw_entrances, [], hyrule_castle_exits, player)
         else:
-            connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
-        connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit), player)
-        connect_caves(world, lw_entrances, dw_entrances, dungeon_exits, player)
-    elif world.worlds[player].options.entrance_shuffle == 'dungeons_crossed':
-        crossed_shuffle_dungeons(world, player)
-    elif world.worlds[player].options.entrance_shuffle == 'simple':
-        simple_shuffle_dungeons(world, player)
+            connect_mandatory_exits(multiworld, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
+        connect_mandatory_exits(multiworld, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit), player)
+        connect_caves(multiworld, lw_entrances, dw_entrances, dungeon_exits, player)
+    elif multiworld.worlds[player].options.entrance_shuffle == 'dungeons_crossed':
+        crossed_shuffle_dungeons(multiworld, player)
+    elif multiworld.worlds[player].options.entrance_shuffle == 'simple':
+        simple_shuffle_dungeons(multiworld, player)
 
         old_man_entrances = list(Old_Man_Entrances)
         caves = list(Cave_Exits)
@@ -82,64 +82,64 @@ def link_entrances(world, player):
         # we shuffle all 2 entrance caves as pairs as a start
         # start with the ones that need to be directed
         two_door_caves = list(Two_Door_Caves_Directional)
-        world.random.shuffle(two_door_caves)
-        world.random.shuffle(caves)
+        multiworld.random.shuffle(two_door_caves)
+        multiworld.random.shuffle(caves)
         while two_door_caves:
             entrance1, entrance2 = two_door_caves.pop()
             exit1, exit2 = caves.pop()
-            connect_two_way(world, entrance1, exit1, player)
-            connect_two_way(world, entrance2, exit2, player)
+            connect_two_way(multiworld, entrance1, exit1, player)
+            connect_two_way(multiworld, entrance2, exit2, player)
 
         # now the remaining pairs
         two_door_caves = list(Two_Door_Caves)
-        world.random.shuffle(two_door_caves)
+        multiworld.random.shuffle(two_door_caves)
         while two_door_caves:
             entrance1, entrance2 = two_door_caves.pop()
             exit1, exit2 = caves.pop()
-            connect_two_way(world, entrance1, exit1, player)
-            connect_two_way(world, entrance2, exit2, player)
+            connect_two_way(multiworld, entrance1, exit1, player)
+            connect_two_way(multiworld, entrance2, exit2, player)
 
         # at this point only Light World death mountain entrances remain
         # place old man, has limited options
         remaining_entrances = ['Old Man Cave (West)', 'Old Man House (Bottom)', 'Death Mountain Return Cave (West)', 'Paradox Cave (Bottom)', 'Paradox Cave (Middle)', 'Paradox Cave (Top)',
                                'Fairy Ascension Cave (Bottom)', 'Fairy Ascension Cave (Top)', 'Spiral Cave', 'Spiral Cave (Bottom)']
-        world.random.shuffle(old_man_entrances)
+        multiworld.random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
         remaining_entrances.extend(old_man_entrances)
-        world.random.shuffle(remaining_entrances)
+        multiworld.random.shuffle(remaining_entrances)
         old_man_entrance = remaining_entrances.pop()
-        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)', player)
-        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)', player)
+        connect_two_way(multiworld, old_man_entrance, 'Old Man Cave Exit (West)', player)
+        connect_two_way(multiworld, old_man_exit, 'Old Man Cave Exit (East)', player)
 
         # add old man house to ensure it is always somewhere on light death mountain
         caves.extend(list(Old_Man_House))
         caves.extend(list(three_exit_caves))
 
         # connect rest
-        connect_caves(world, remaining_entrances, [], caves, player)
+        connect_caves(multiworld, remaining_entrances, [], caves, player)
 
         # scramble holes
-        scramble_holes(world, player)
+        scramble_holes(multiworld, player)
 
         # place blacksmith, has limited options
-        world.random.shuffle(blacksmith_doors)
+        multiworld.random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut', player)
+        connect_entrance(multiworld, blacksmith_hut, 'Blacksmiths Hut', player)
         bomb_shop_doors.extend(blacksmith_doors)
 
         # place bomb shop, has limited options
-        world.random.shuffle(bomb_shop_doors)
+        multiworld.random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        connect_entrance(world, bomb_shop, 'Big Bomb Shop', player)
+        connect_entrance(multiworld, bomb_shop, 'Big Bomb Shop', player)
         single_doors.extend(bomb_shop_doors)
 
         # tavern back door cannot be shuffled yet
-        connect_doors(world, ['Tavern North'], ['Tavern'], player)
+        connect_doors(multiworld, ['Tavern North'], ['Tavern'], player)
 
         # place remaining doors
-        connect_doors(world, single_doors, door_targets, player)
-    elif world.worlds[player].options.entrance_shuffle == 'restricted':
-        simple_shuffle_dungeons(world, player)
+        connect_doors(multiworld, single_doors, door_targets, player)
+    elif multiworld.worlds[player].options.entrance_shuffle == 'restricted':
+        simple_shuffle_dungeons(multiworld, player)
 
         lw_entrances = list(LW_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances)
         dw_entrances = list(DW_Entrances + DW_Single_Cave_Doors)
@@ -152,26 +152,26 @@ def link_entrances(world, player):
         door_targets = list(Single_Cave_Targets)
 
         # tavern back door cannot be shuffled yet
-        connect_doors(world, ['Tavern North'], ['Tavern'], player)
+        connect_doors(multiworld, ['Tavern North'], ['Tavern'], player)
 
         # in restricted, the only mandatory exits are in dark world
-        connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits, player)
+        connect_mandatory_exits(multiworld, dw_entrances, caves, dw_must_exits, player)
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
         old_man_entrances = [door for door in old_man_entrances if door in lw_entrances]
-        world.random.shuffle(old_man_entrances)
+        multiworld.random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
-        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)', player)
+        connect_two_way(multiworld, old_man_exit, 'Old Man Cave Exit (East)', player)
         lw_entrances.remove(old_man_exit)
 
         # place blacksmith, has limited options
         all_entrances = lw_entrances + dw_entrances
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         blacksmith_doors = [door for door in blacksmith_doors if door in all_entrances]
-        world.random.shuffle(blacksmith_doors)
+        multiworld.random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut', player)
+        connect_entrance(multiworld, blacksmith_hut, 'Blacksmiths Hut', player)
         if blacksmith_hut in lw_entrances:
             lw_entrances.remove(blacksmith_hut)
         if blacksmith_hut in dw_entrances:
@@ -182,36 +182,36 @@ def link_entrances(world, player):
         all_entrances = lw_entrances + dw_entrances
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         bomb_shop_doors = [door for door in bomb_shop_doors if door in all_entrances]
-        world.random.shuffle(bomb_shop_doors)
+        multiworld.random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        connect_entrance(world, bomb_shop, 'Big Bomb Shop', player)
+        connect_entrance(multiworld, bomb_shop, 'Big Bomb Shop', player)
         if bomb_shop in lw_entrances:
             lw_entrances.remove(bomb_shop)
         if bomb_shop in dw_entrances:
             dw_entrances.remove(bomb_shop)
 
         # place the old man cave's entrance somewhere in the light world
-        world.random.shuffle(lw_entrances)
+        multiworld.random.shuffle(lw_entrances)
         old_man_entrance = lw_entrances.pop()
-        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)', player)
+        connect_two_way(multiworld, old_man_entrance, 'Old Man Cave Exit (West)', player)
 
         # place Old Man House in Light World
-        connect_caves(world, lw_entrances, [], list(Old_Man_House), player) #for multiple seeds
+        connect_caves(multiworld, lw_entrances, [], list(Old_Man_House), player) #for multiple seeds
 
 
         # now scramble the rest
-        connect_caves(world, lw_entrances, dw_entrances, caves, player)
+        connect_caves(multiworld, lw_entrances, dw_entrances, caves, player)
 
         # scramble holes
-        scramble_holes(world, player)
+        scramble_holes(multiworld, player)
 
         doors = lw_entrances + dw_entrances
 
         # place remaining doors
-        connect_doors(world, doors, door_targets, player)
+        connect_doors(multiworld, doors, door_targets, player)
 
-    elif world.worlds[player].options.entrance_shuffle == 'full':
-        skull_woods_shuffle(world, player)
+    elif multiworld.worlds[player].options.entrance_shuffle == 'full':
+        skull_woods_shuffle(multiworld, player)
 
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances + DW_Single_Cave_Doors)
@@ -225,18 +225,18 @@ def link_entrances(world, player):
         old_man_house = list(Old_Man_House)
 
         # tavern back door cannot be shuffled yet
-        connect_doors(world, ['Tavern North'], ['Tavern'], player)
+        connect_doors(multiworld, ['Tavern North'], ['Tavern'], player)
 
-        if world.worlds[player].options.mode == 'standard':
+        if multiworld.worlds[player].options.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
+            connect_two_way(multiworld, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
         else:
-            caves.append(tuple(world.random.sample(
+            caves.append(tuple(multiworld.random.sample(
                 ['Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'], 3)))
             lw_entrances.append('Hyrule Castle Entrance (South)')
 
-        if not world.shuffle_ganon:
-            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit', player)
+        if not multiworld.shuffle_ganon:
+            connect_two_way(multiworld, 'Ganons Tower', 'Ganons Tower Exit', player)
         else:
             dw_entrances.append('Ganons Tower')
             caves.append('Ganons Tower Exit')
@@ -244,45 +244,45 @@ def link_entrances(world, player):
 
         # we randomize which world requirements we fulfill first so we get better dungeon distribution
         #we also places the Old Man House at this time to make sure he can be connected to the desert one way
-        if world.random.randint(0, 1) == 0:
+        if multiworld.random.randint(0, 1) == 0:
             caves += old_man_house
-            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits, player)
+            connect_mandatory_exits(multiworld, lw_entrances, caves, lw_must_exits, player)
             try:
                 caves.remove(old_man_house[0])
             except ValueError:
                 pass
             else:  # if the cave wasn't placed we get here
-                connect_caves(world, lw_entrances, [], old_man_house, player)
-            connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits, player)
+                connect_caves(multiworld, lw_entrances, [], old_man_house, player)
+            connect_mandatory_exits(multiworld, dw_entrances, caves, dw_must_exits, player)
         else:
-            connect_mandatory_exits(world, dw_entrances, caves, dw_must_exits, player)
+            connect_mandatory_exits(multiworld, dw_entrances, caves, dw_must_exits, player)
             caves += old_man_house
-            connect_mandatory_exits(world, lw_entrances, caves, lw_must_exits, player)
+            connect_mandatory_exits(multiworld, lw_entrances, caves, lw_must_exits, player)
             try:
                 caves.remove(old_man_house[0])
             except ValueError:
                 pass
             else: #if the cave wasn't placed we get here
-                connect_caves(world, lw_entrances, [], old_man_house, player)
-        if world.worlds[player].options.mode == 'standard':
+                connect_caves(multiworld, lw_entrances, [], old_man_house, player)
+        if multiworld.worlds[player].options.mode == 'standard':
             # rest of hyrule castle must be in light world
-            connect_caves(world, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], player)
+            connect_caves(multiworld, lw_entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], player)
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
         old_man_entrances = [door for door in old_man_entrances if door in lw_entrances]
-        world.random.shuffle(old_man_entrances)
+        multiworld.random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
-        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)', player)
+        connect_two_way(multiworld, old_man_exit, 'Old Man Cave Exit (East)', player)
         lw_entrances.remove(old_man_exit)
 
         # place blacksmith, has limited options
         all_entrances = lw_entrances + dw_entrances
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         blacksmith_doors = [door for door in blacksmith_doors if door in all_entrances]
-        world.random.shuffle(blacksmith_doors)
+        multiworld.random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut', player)
+        connect_entrance(multiworld, blacksmith_hut, 'Blacksmiths Hut', player)
         if blacksmith_hut in lw_entrances:
             lw_entrances.remove(blacksmith_hut)
         if blacksmith_hut in dw_entrances:
@@ -293,9 +293,9 @@ def link_entrances(world, player):
         all_entrances = lw_entrances + dw_entrances
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         bomb_shop_doors = [door for door in bomb_shop_doors if door in all_entrances]
-        world.random.shuffle(bomb_shop_doors)
+        multiworld.random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        connect_entrance(world, bomb_shop, 'Big Bomb Shop', player)
+        connect_entrance(multiworld, bomb_shop, 'Big Bomb Shop', player)
         if bomb_shop in lw_entrances:
             lw_entrances.remove(bomb_shop)
         if bomb_shop in dw_entrances:
@@ -303,21 +303,21 @@ def link_entrances(world, player):
 
         # place the old man cave's entrance somewhere in the light world
         old_man_entrance = lw_entrances.pop()
-        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)', player)
+        connect_two_way(multiworld, old_man_entrance, 'Old Man Cave Exit (West)', player)
 
 
         # now scramble the rest
-        connect_caves(world, lw_entrances, dw_entrances, caves, player)
+        connect_caves(multiworld, lw_entrances, dw_entrances, caves, player)
 
         # scramble holes
-        scramble_holes(world, player)
+        scramble_holes(multiworld, player)
 
         doors = lw_entrances + dw_entrances
 
         # place remaining doors
-        connect_doors(world, doors, door_targets, player)
-    elif world.worlds[player].options.entrance_shuffle == 'crossed':
-        skull_woods_shuffle(world, player)
+        connect_doors(multiworld, doors, door_targets, player)
+    elif multiworld.worlds[player].options.entrance_shuffle == 'crossed':
+        skull_woods_shuffle(multiworld, player)
 
         entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances + DW_Entrances + DW_Dungeon_Entrances + DW_Single_Cave_Doors)
         must_exits = list(DW_Entrances_Must_Exit + DW_Dungeon_Entrances_Must_Exit + LW_Dungeon_Entrances_Must_Exit)
@@ -329,43 +329,43 @@ def link_entrances(world, player):
         door_targets = list(Single_Cave_Targets)
 
         # tavern back door cannot be shuffled yet
-        connect_doors(world, ['Tavern North'], ['Tavern'], player)
+        connect_doors(multiworld, ['Tavern North'], ['Tavern'], player)
 
-        if world.worlds[player].options.mode == 'standard':
+        if multiworld.worlds[player].options.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            connect_two_way(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
+            connect_two_way(multiworld, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
         else:
-            caves.append(tuple(world.random.sample(
+            caves.append(tuple(multiworld.random.sample(
                 ['Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'], 3)))
             entrances.append('Hyrule Castle Entrance (South)')
 
-        if not world.shuffle_ganon:
-            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit', player)
+        if not multiworld.shuffle_ganon:
+            connect_two_way(multiworld, 'Ganons Tower', 'Ganons Tower Exit', player)
         else:
             entrances.append('Ganons Tower')
             caves.append('Ganons Tower Exit')
 
         #place must-exit caves 
-        connect_mandatory_exits(world, entrances, caves, must_exits, player)
+        connect_mandatory_exits(multiworld, entrances, caves, must_exits, player)
 
-        if world.worlds[player].options.mode == 'standard':
+        if multiworld.worlds[player].options.mode == 'standard':
             # rest of hyrule castle must be dealt with
-            connect_caves(world, entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], player)
+            connect_caves(multiworld, entrances, [], [('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)')], player)
 
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
         old_man_entrances = [door for door in old_man_entrances if door in entrances]
-        world.random.shuffle(old_man_entrances)
+        multiworld.random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
-        connect_two_way(world, old_man_exit, 'Old Man Cave Exit (East)', player)
+        connect_two_way(multiworld, old_man_exit, 'Old Man Cave Exit (East)', player)
         entrances.remove(old_man_exit)
 
         # place blacksmith, has limited options
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         blacksmith_doors = [door for door in blacksmith_doors if door in entrances]
-        world.random.shuffle(blacksmith_doors)
+        multiworld.random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut', player)
+        connect_entrance(multiworld, blacksmith_hut, 'Blacksmiths Hut', player)
         entrances.remove(blacksmith_hut)
         bomb_shop_doors.extend(blacksmith_doors)
 
@@ -373,28 +373,28 @@ def link_entrances(world, player):
 
         # cannot place it anywhere already taken (or that are otherwise not eligable for placement)
         bomb_shop_doors = [door for door in bomb_shop_doors if door in entrances]
-        world.random.shuffle(bomb_shop_doors)
+        multiworld.random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        connect_entrance(world, bomb_shop, 'Big Bomb Shop', player)
+        connect_entrance(multiworld, bomb_shop, 'Big Bomb Shop', player)
         entrances.remove(bomb_shop)
 
 
         # place the old man cave's entrance somewhere
-        world.random.shuffle(entrances)
+        multiworld.random.shuffle(entrances)
         old_man_entrance = entrances.pop()
-        connect_two_way(world, old_man_entrance, 'Old Man Cave Exit (West)', player)
+        connect_two_way(multiworld, old_man_entrance, 'Old Man Cave Exit (West)', player)
 
 
         # now scramble the rest
-        connect_caves(world, entrances, [], caves, player)
+        connect_caves(multiworld, entrances, [], caves, player)
 
         # scramble holes
-        scramble_holes(world, player)
+        scramble_holes(multiworld, player)
 
         # place remaining doors
-        connect_doors(world, entrances, door_targets, player)
+        connect_doors(multiworld, entrances, door_targets, player)
 
-    elif world.worlds[player].options.entrance_shuffle == 'insanity':
+    elif multiworld.worlds[player].options.entrance_shuffle == 'insanity':
         # beware ye who enter here
 
         entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + Old_Man_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave']
@@ -412,7 +412,7 @@ def link_entrances(world, player):
         blacksmith_doors = list(Blacksmith_Single_Cave_Doors + Blacksmith_Multi_Cave_Doors)
         door_targets = list(Single_Cave_Targets)
 
-        world.random.shuffle(doors)
+        multiworld.random.shuffle(doors)
 
         old_man_entrances = list(Old_Man_Entrances) + ['Tower of Hera']
 
@@ -429,13 +429,13 @@ def link_entrances(world, player):
                         'Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)']
 
         # tavern back door cannot be shuffled yet
-        connect_doors(world, ['Tavern North'], ['Tavern'], player)
+        connect_doors(multiworld, ['Tavern North'], ['Tavern'], player)
 
-        if world.worlds[player].options.mode == 'standard':
+        if multiworld.worlds[player].options.mode == 'standard':
             # cannot move uncle cave
-            connect_entrance(world, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance', player)
-            connect_exit(world, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs', player)
-            connect_entrance(world, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit', player)
+            connect_entrance(multiworld, 'Hyrule Castle Secret Entrance Drop', 'Hyrule Castle Secret Entrance', player)
+            connect_exit(multiworld, 'Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance Stairs', player)
+            connect_entrance(multiworld, 'Hyrule Castle Secret Entrance Stairs', 'Hyrule Castle Secret Entrance Exit', player)
         else:
             hole_entrances.append('Hyrule Castle Secret Entrance Drop')
             hole_targets.append('Hyrule Castle Secret Entrance')
@@ -443,10 +443,10 @@ def link_entrances(world, player):
             entrances.append('Hyrule Castle Secret Entrance Stairs')
             caves.append('Hyrule Castle Secret Entrance Exit')
 
-        if not world.shuffle_ganon:
-            connect_two_way(world, 'Ganons Tower', 'Ganons Tower Exit', player)
-            connect_two_way(world, 'Pyramid Entrance', 'Pyramid Exit', player)
-            connect_entrance(world, 'Pyramid Hole', 'Pyramid', player)
+        if not multiworld.shuffle_ganon:
+            connect_two_way(multiworld, 'Ganons Tower', 'Ganons Tower Exit', player)
+            connect_two_way(multiworld, 'Pyramid Entrance', 'Pyramid Exit', player)
+            connect_entrance(multiworld, 'Pyramid Hole', 'Pyramid', player)
         else:
             entrances.append('Ganons Tower')
             caves.extend(['Ganons Tower Exit', 'Pyramid Exit'])
@@ -455,19 +455,19 @@ def link_entrances(world, player):
             entrances_must_exits.append('Pyramid Entrance')
             doors.extend(['Ganons Tower', 'Pyramid Entrance'])
 
-        world.random.shuffle(hole_entrances)
-        world.random.shuffle(hole_targets)
-        world.random.shuffle(entrances)
+        multiworld.random.shuffle(hole_entrances)
+        multiworld.random.shuffle(hole_targets)
+        multiworld.random.shuffle(entrances)
 
         # fill up holes
         for hole in hole_entrances:
-            connect_entrance(world, hole, hole_targets.pop(), player)
+            connect_entrance(multiworld, hole, hole_targets.pop(), player)
 
         # hyrule castle handling
-        if world.worlds[player].options.mode == 'standard':
+        if multiworld.worlds[player].options.mode == 'standard':
             # must connect front of hyrule castle to do escape
-            connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
-            connect_exit(world, 'Hyrule Castle Exit (South)', 'Hyrule Castle Entrance (South)', player)
+            connect_entrance(multiworld, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
+            connect_exit(multiworld, 'Hyrule Castle Exit (South)', 'Hyrule Castle Entrance (South)', player)
             caves.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
         else:
             doors.append('Hyrule Castle Entrance (South)')
@@ -476,7 +476,7 @@ def link_entrances(world, player):
 
         # now let's deal with mandatory reachable stuff
         def extract_reachable_exit(cavelist):
-            world.random.shuffle(cavelist)
+            multiworld.random.shuffle(cavelist)
             candidate = None
             for cave in cavelist:
                 if isinstance(cave, tuple) and len(cave) > 1:
@@ -496,8 +496,8 @@ def link_entrances(world, player):
 
             exit = cave[-1]
             cave = cave[:-1]
-            connect_exit(world, exit, entrance, player)
-            connect_entrance(world, doors.pop(), exit, player)
+            connect_exit(multiworld, exit, entrance, player)
+            connect_entrance(multiworld, doors.pop(), exit, player)
             # rest of cave now is forced to be in this world
             caves.append(cave)
 
@@ -508,26 +508,26 @@ def link_entrances(world, player):
         # place old man, has limited options
         # exit has to come from specific set of doors, the entrance is free to move about
         old_man_entrances = [entrance for entrance in old_man_entrances if entrance in entrances]
-        world.random.shuffle(old_man_entrances)
+        multiworld.random.shuffle(old_man_entrances)
         old_man_exit = old_man_entrances.pop()
         entrances.remove(old_man_exit)
 
-        connect_exit(world, 'Old Man Cave Exit (East)', old_man_exit, player)
-        connect_entrance(world, doors.pop(), 'Old Man Cave Exit (East)', player)
+        connect_exit(multiworld, 'Old Man Cave Exit (East)', old_man_exit, player)
+        connect_entrance(multiworld, doors.pop(), 'Old Man Cave Exit (East)', player)
         caves.append('Old Man Cave Exit (West)')
 
         # place blacksmith, has limited options
         blacksmith_doors = [door for door in blacksmith_doors if door in doors]
-        world.random.shuffle(blacksmith_doors)
+        multiworld.random.shuffle(blacksmith_doors)
         blacksmith_hut = blacksmith_doors.pop()
-        connect_entrance(world, blacksmith_hut, 'Blacksmiths Hut', player)
+        connect_entrance(multiworld, blacksmith_hut, 'Blacksmiths Hut', player)
         doors.remove(blacksmith_hut)
 
         # place dam and pyramid fairy, have limited options
         bomb_shop_doors = [door for door in bomb_shop_doors if door in doors]
-        world.random.shuffle(bomb_shop_doors)
+        multiworld.random.shuffle(bomb_shop_doors)
         bomb_shop = bomb_shop_doors.pop()
-        connect_entrance(world, bomb_shop, 'Big Bomb Shop', player)
+        connect_entrance(multiworld, bomb_shop, 'Big Bomb Shop', player)
         doors.remove(bomb_shop)
 
         # handle remaining caves
@@ -536,37 +536,37 @@ def link_entrances(world, player):
                 cave = (cave,)
 
             for exit in cave:
-                connect_exit(world, exit, entrances.pop(), player)
-                connect_entrance(world, doors.pop(), exit, player)
+                connect_exit(multiworld, exit, entrances.pop(), player)
+                connect_entrance(multiworld, doors.pop(), exit, player)
 
         # place remaining doors
-        connect_doors(world, doors, door_targets, player)
+        connect_doors(multiworld, doors, door_targets, player)
 
     else:
         raise NotImplementedError(
-            f'{world.worlds[player].options.entrance_shuffle} Shuffling not supported yet. Player {world.get_player_name(player)}')
+            f'{multiworld.worlds[player].options.entrance_shuffle} Shuffling not supported yet. Player {multiworld.get_player_name(player)}')
 
-    if world.worlds[player].options.glitches_required.value in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
-        overworld_glitch_connections(world, player)
+    if multiworld.worlds[player].options.glitches_required.value in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
+        overworld_glitch_connections(multiworld, player)
         # mandatory hybrid major glitches connections
-        if world.worlds[player].options.glitches_required.value in ['hybrid_major_glitches', 'no_logic']:
-            underworld_glitch_connections(world, player)
+        if multiworld.worlds[player].options.glitches_required.value in ['hybrid_major_glitches', 'no_logic']:
+            underworld_glitch_connections(multiworld, player)
 
     # check for swamp palace fix
-    if world.get_entrance('Dam', player).connected_region.name != 'Dam' or world.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
-        world.worlds[player].swamp_patch_required = True
+    if multiworld.get_entrance('Dam', player).connected_region.name != 'Dam' or multiworld.get_entrance('Swamp Palace', player).connected_region.name != 'Swamp Palace (Entrance)':
+        multiworld.worlds[player].swamp_patch_required = True
 
     # check for potion shop location
-    if world.get_entrance('Potion Shop', player).connected_region.name != 'Potion Shop':
-        world.worlds[player].powder_patch_required = True
+    if multiworld.get_entrance('Potion Shop', player).connected_region.name != 'Potion Shop':
+        multiworld.worlds[player].powder_patch_required = True
 
     # check for ganon location
-    if world.get_entrance('Pyramid Hole', player).connected_region.name != 'Pyramid':
-        world.worlds[player].ganon_at_pyramid = False
+    if multiworld.get_entrance('Pyramid Hole', player).connected_region.name != 'Pyramid':
+        multiworld.worlds[player].ganon_at_pyramid = False
 
     # check for Ganon's Tower location
-    if world.get_entrance('Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
-        world.worlds[player].ganonstower_vanilla = False
+    if multiworld.get_entrance('Ganons Tower', player).connected_region.name != 'Ganons Tower (Entrance)':
+        multiworld.worlds[player].ganonstower_vanilla = False
 
 
 def link_inverted_entrances(world, player):

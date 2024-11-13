@@ -86,13 +86,13 @@ class LocalRom:
             data = xxtea.encrypt(data, key, padding=False)
             self.write_bytes(startaddress + i, bytearray(data))
 
-    def encrypt(self, world, player):
+    def encrypt(self, multiworld, player):
         global xxtea
         if xxtea is None:
             # cause crash to provide traceback
             import xxtea
 
-        local_random = world.worlds[player].random
+        local_random = multiworld.worlds[player].random
         key = bytes(local_random.getrandbits(8 * 16).to_bytes(16, 'big'))
         self.write_bytes(0x1800B0, bytearray(key))
         self.write_int16(0x180087, 1)
@@ -281,7 +281,6 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
 
 def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
     player = world.player
-    multiworld = world.multiworld
     check_enemizer(enemizercli)
     randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
@@ -289,18 +288,18 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': multiworld.enemy_shuffle[player].value,
+        'RandomizeEnemies': world.options.enemy_shuffle.value,
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': multiworld.bush_shuffle[player].value,
-        'RandomizeEnemyHealthRange': multiworld.enemy_health[player] != 'default',
+        'RandomizeBushEnemyChance': world.options.bush_shuffle.value,
+        'RandomizeEnemyHealthRange': world.options.enemy_health != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
-            multiworld.enemy_health[player].current_key],
+            world.options.enemy_health.current_key],
         'OHKO': False,
-        'RandomizeEnemyDamage': multiworld.enemy_damage[player] != 'default',
+        'RandomizeEnemyDamage': world.options.enemy_damage != 'default',
         'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': multiworld.enemy_damage[player] != 'default',
-        'EnemyDamageChaosMode': multiworld.enemy_damage[player] == 'chaos',
-        'EasyModeEscape': multiworld.mode[player] == "standard",
+        'ShuffleEnemyDamageGroups': world.options.enemy_damage != 'default',
+        'EnemyDamageChaosMode': world.options.enemy_damage == 'chaos',
+        'EasyModeEscape': world.options.mode == "standard",
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
         'AbsorbableTypes': {
@@ -329,7 +328,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': multiworld.pot_shuffle[player].value,
+        'RandomizePots': world.options.pot_shuffle.value,
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
@@ -342,7 +341,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': False,
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': multiworld.killable_thieves[player].value,
+        'AllowKillableThief': world.options.killable_thieves.value,
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,
@@ -366,13 +365,13 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
             'MiseryMire': world.dungeons["Misery Mire"].boss.enemizer_name,
             'TurtleRock': world.dungeons["Turtle Rock"].boss.enemizer_name,
             'GanonsTower1':
-                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
                                "Inverted Ganons Tower"].bosses['bottom'].enemizer_name,
             'GanonsTower2':
-                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
                                "Inverted Ganons Tower"].bosses['middle'].enemizer_name,
             'GanonsTower3':
-                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
                                "Inverted Ganons Tower"].bosses['top'].enemizer_name,
             'GanonsTower4': 'Agahnim2',
             'Ganon': 'Ganon',
@@ -386,7 +385,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     max_enemizer_tries = 5
     for i in range(max_enemizer_tries):
-        enemizer_seed = str(multiworld.worlds[player].random.randint(0, 999999999))
+        enemizer_seed = str(world.random.randint(0, 999999999))
         enemizer_command = [os.path.abspath(enemizercli),
                             '--rom', randopatch_path,
                             '--seed', enemizer_seed,
@@ -416,7 +415,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
             continue
 
         for j in range(i + 1, max_enemizer_tries):
-            multiworld.worlds[player].random.randint(0, 999999999)
+            world.random.randint(0, 999999999)
             # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
             # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
         break
@@ -430,7 +429,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     # Moblins attached to "key drop" locations crash the game when dropping their item when Key Drop Shuffle is on.
     # Replace them with a Slime enemy if they are placed.
-    if multiworld.key_drop_shuffle[player]:
+    if world.options.key_drop_shuffle:
         key_drop_enemies = {
             0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
             0x4E20A, 0x4E326, 0x4E4F7, 0x4E687, 0x4E70C, 0x4E7C8, 0x4E7FA
@@ -1854,9 +1853,9 @@ def apply_oof_sfx(rom, oof: str):
 
 
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, oof: str, palettes_options,
-                       world=None, player=1, allow_random_on_event=False, reduceflashing=False,
+                       multiworld=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
-    local_random = random if not world else world.worlds[player].random
+    local_random = random if not multiworld else multiworld.worlds[player].random
     disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
@@ -1994,7 +1993,7 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
                              (0b00000100 if allowcollect else 0))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
-                                 world.sprite_pool[player] if world else [])
+                                 multiworld.sprite_pool[player] if multiworld else [])
 
     if oof is not None:
         apply_oof_sfx(rom, oof)
@@ -2184,20 +2183,20 @@ def write_string_to_rom(rom, target, string):
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world, player):
+def write_strings(rom, multiworld, player):
     from . import ALTTPWorld
-    local_random = world.worlds[player].random
-    w: ALTTPWorld = world.worlds[player]
+    local_random = multiworld.worlds[player].random
+    w: ALTTPWorld = multiworld.worlds[player]
 
     tt = TextTable()
     tt.removeUnwantedText()
 
     # Let's keep this guy's text accurate to the shuffle setting.
-    if world.entrance_shuffle[player] in ['vanilla', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed']:
+    if multiworld.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed']:
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
-    if world.mode[player] == 'inverted':
+    if multiworld.worlds[player].options.mode == 'inverted':
         tt['sign_village_of_outcasts'] = 'attention\nferal ducks sighted\nhiding in statues\n\nflute players beware\n'
 
     def hint_text(dest, ped_hint=False):
@@ -2209,45 +2208,45 @@ def write_strings(rom, world, player):
             hint = dest.hint_text
         if dest.player != player:
             if ped_hint:
-                hint += f" for {world.player_name[dest.player]}!"
+                hint += f" for {multiworld.player_name[dest.player]}!"
             elif isinstance(dest, (Region, Location)):
-                hint += f" in {world.player_name[dest.player]}'s world"
+                hint += f" in {multiworld.player_name[dest.player]}'s world"
             else:
-                hint += f" for {world.player_name[dest.player]}"
+                hint += f" for {multiworld.player_name[dest.player]}"
         return hint
 
-    if world.scams[player].gives_king_zora_hint:
+    if multiworld.worlds[player].options.scams.gives_king_zora_hint:
         # Zora hint
-        zora_location = world.get_location("King Zora", player)
+        zora_location = multiworld.get_location("King Zora", player)
         tt['zora_tells_cost'] = f"You got 500 rupees to buy {hint_text(zora_location.item)}" \
                                 f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
-    if world.scams[player].gives_bottle_merchant_hint:
+    if multiworld.worlds[player].options.scams.gives_bottle_merchant_hint:
         # Bottle Vendor hint
-        vendor_location = world.get_location("Bottle Merchant", player)
+        vendor_location = multiworld.get_location("Bottle Merchant", player)
         tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?" \
                                      f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
 
     # First we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
-    if world.hints[player]:
-        if world.hints[player].value >= 2:
-            if world.hints[player] == "full":
+    if multiworld.worlds[player].options.hints:
+        if multiworld.worlds[player].options.hints.value >= 2:
+            if multiworld.worlds[player].options.hints == "full":
                 tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles have hints!'
             else:
                 tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
             hint_locations = HintLocations.copy()
             local_random.shuffle(hint_locations)
-            all_entrances = list(world.get_entrances(player))
+            all_entrances = list(multiworld.get_entrances(player))
             local_random.shuffle(all_entrances)
 
             # First we take care of the one inconvenient dungeon in the appropriately simple shuffles.
             entrances_to_hint = {}
             entrances_to_hint.update(InconvenientDungeonEntrances)
-            if world.shuffle_ganon:
-                if world.mode[player] == 'inverted':
+            if multiworld.shuffle_ganon:
+                if multiworld.worlds[player].options.mode == 'inverted':
                     entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
                 else:
                     entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
-            if world.entrance_shuffle[player] in ['simple', 'restricted']:
+            if multiworld.worlds[player].options.entrance_shuffle in ['simple', 'restricted']:
                 for entrance in all_entrances:
                     if entrance.name in entrances_to_hint:
                         this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
@@ -2257,9 +2256,9 @@ def write_strings(rom, world, player):
                         break
             # Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
             entrances_to_hint.update(InconvenientOtherEntrances)
-            if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+            if multiworld.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
                 hint_count = 0
-            elif world.entrance_shuffle[player] in ['simple', 'restricted']:
+            elif multiworld.worlds[player].options.entrance_shuffle in ['simple', 'restricted']:
                 hint_count = 2
             else:
                 hint_count = 4
@@ -2276,31 +2275,31 @@ def write_strings(rom, world, player):
 
             # Next we handle hints for randomly selected other entrances,
             # curating the selection intelligently based on shuffle.
-            if world.entrance_shuffle[player] not in ['simple', 'restricted']:
+            if multiworld.worlds[player].options.entrance_shuffle not in ['simple', 'restricted']:
                 entrances_to_hint.update(ConnectorEntrances)
                 entrances_to_hint.update(DungeonEntrances)
-                if world.mode[player] == 'inverted':
+                if multiworld.worlds[player].options.mode == 'inverted':
                     entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
                 else:
                     entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
-            elif world.entrance_shuffle[player] == 'restricted':
+            elif multiworld.worlds[player].options.entrance_shuffle == 'restricted':
                 entrances_to_hint.update(ConnectorEntrances)
             entrances_to_hint.update(OtherEntrances)
-            if world.mode[player] == 'inverted':
+            if multiworld.worlds[player].options.mode == 'inverted':
                 entrances_to_hint.update({'Inverted Dark Sanctuary': 'The dark sanctuary cave'})
                 entrances_to_hint.update({'Inverted Big Bomb Shop': 'The old hero\'s dark home'})
                 entrances_to_hint.update({'Inverted Links House': 'The old hero\'s light home'})
             else:
                 entrances_to_hint.update({'Dark Sanctuary Hint': 'The dark sanctuary cave'})
                 entrances_to_hint.update({'Big Bomb Shop': 'The old bomb shop'})
-            if world.entrance_shuffle[player] != 'insanity':
+            if multiworld.worlds[player].options.entrance_shuffle != 'insanity':
                 entrances_to_hint.update(InsanityEntrances)
-                if world.shuffle_ganon:
-                    if world.mode[player] == 'inverted':
+                if multiworld.shuffle_ganon:
+                    if multiworld.worlds[player].options.mode == 'inverted':
                         entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
                     else:
                         entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-            hint_count = 4 if world.entrance_shuffle[player] not in ['vanilla', 'dungeons_simple', 'dungeons_full',
+            hint_count = 4 if multiworld.worlds[player].options.entrance_shuffle not in ['vanilla', 'dungeons_simple', 'dungeons_full',
                                                             'dungeons_crossed'] else 0
             for entrance in all_entrances:
                 if entrance.name in entrances_to_hint:
@@ -2315,77 +2314,77 @@ def write_strings(rom, world, player):
 
             # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
             locations_to_hint = InconvenientLocations.copy()
-            if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+            if multiworld.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
                 locations_to_hint.extend(InconvenientVanillaLocations)
             local_random.shuffle(locations_to_hint)
-            hint_count = 3 if world.entrance_shuffle[player] not in ['vanilla', 'dungeons_simple', 'dungeons_full',
+            hint_count = 3 if multiworld.worlds[player].options.entrance_shuffle not in ['vanilla', 'dungeons_simple', 'dungeons_full',
                                                             'dungeons_crossed'] else 5
             for location in locations_to_hint[:hint_count]:
                 if location == 'Swamp Left':
                     if local_random.randint(0, 1):
-                        first_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                        second_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                        first_item = hint_text(multiworld.get_location('Swamp Palace - West Chest', player).item)
+                        second_item = hint_text(multiworld.get_location('Swamp Palace - Big Key Chest', player).item)
                     else:
-                        second_item = hint_text(world.get_location('Swamp Palace - West Chest', player).item)
-                        first_item = hint_text(world.get_location('Swamp Palace - Big Key Chest', player).item)
+                        second_item = hint_text(multiworld.get_location('Swamp Palace - West Chest', player).item)
+                        first_item = hint_text(multiworld.get_location('Swamp Palace - Big Key Chest', player).item)
                     this_hint = ('The westmost chests in Swamp Palace contain ' + first_item + ' and ' + second_item + '.')
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Mire Left':
                     if local_random.randint(0, 1):
-                        first_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                        second_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                        first_item = hint_text(multiworld.get_location('Misery Mire - Compass Chest', player).item)
+                        second_item = hint_text(multiworld.get_location('Misery Mire - Big Key Chest', player).item)
                     else:
-                        second_item = hint_text(world.get_location('Misery Mire - Compass Chest', player).item)
-                        first_item = hint_text(world.get_location('Misery Mire - Big Key Chest', player).item)
+                        second_item = hint_text(multiworld.get_location('Misery Mire - Compass Chest', player).item)
+                        first_item = hint_text(multiworld.get_location('Misery Mire - Big Key Chest', player).item)
                     this_hint = ('The westmost chests in Misery Mire contain ' + first_item + ' and ' + second_item + '.')
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Tower of Hera - Big Key Chest':
                     this_hint = 'Waiting in the Tower of Hera basement leads to ' + hint_text(
-                        world.get_location(location, player).item) + '.'
+                        multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Ganons Tower - Big Chest':
                     this_hint = 'The big chest in Ganon\'s Tower contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
+                        multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Thieves\' Town - Big Chest':
                     this_hint = 'The big chest in Thieves\' Town contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
+                        multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Ice Palace - Big Chest':
                     this_hint = 'The big chest in Ice Palace contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
+                        multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Eastern Palace - Big Key Chest':
                     this_hint = 'The antifairy guarded chest in Eastern Palace contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
+                        multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Sahasrahla':
                     this_hint = 'Sahasrahla seeks a green pendant for ' + hint_text(
-                        world.get_location(location, player).item) + '.'
+                        multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
                 elif location == 'Graveyard Cave':
                     this_hint = 'The cave north of the graveyard contains ' + hint_text(
-                        world.get_location(location, player).item) + '.'
+                        multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
                 else:
-                    this_hint = location + ' contains ' + hint_text(world.get_location(location, player).item) + '.'
+                    this_hint = location + ' contains ' + hint_text(multiworld.get_location(location, player).item) + '.'
                     tt[hint_locations.pop(0)] = this_hint
 
             # Lastly we write hints to show where certain interesting items are.
             items_to_hint = RelevantItems.copy()
-            if world.small_key_shuffle[player].hints_useful:
+            if multiworld.worlds[player].options.small_key_shuffle.hints_useful:
                 items_to_hint |= item_name_groups["Small Keys"]
-            if world.big_key_shuffle[player].hints_useful:
+            if multiworld.worlds[player].options.big_key_shuffle.hints_useful:
                 items_to_hint |= item_name_groups["Big Keys"]
 
-            if world.hints[player] == "full":
+            if multiworld.worlds[player].options.hints == "full":
                 hint_count = len(hint_locations)  # fill all remaining hint locations with Item hints.
             else:
-                hint_count = 5 if world.entrance_shuffle[player] not in ['vanilla', 'dungeons_simple', 'dungeons_full',
+                hint_count = 5 if multiworld.worlds[player].options.entrance_shuffle not in ['vanilla', 'dungeons_simple', 'dungeons_full',
                                                                 'dungeons_crossed'] else 8
             hint_count = min(hint_count, len(items_to_hint), len(hint_locations))
             if hint_count:
-                locations = world.find_items_in_locations(items_to_hint, player, True)
+                locations = multiworld.find_items_in_locations(items_to_hint, player, True)
                 local_random.shuffle(locations)
                 # make locked locations less likely to appear as hint,
                 # chances are the lock means the player already knows.
@@ -2405,16 +2404,16 @@ def write_strings(rom, world, player):
 
     # We still need the older hints of course. Those are done here.
 
-    silverarrows = world.find_item_locations('Silver Bow', player, True)
+    silverarrows = multiworld.find_item_locations('Silver Bow', player, True)
     local_random.shuffle(silverarrows)
     silverarrow_hint = (
             ' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
-    if world.worlds[player].has_progressive_bows and (w.difficulty_requirements.progressive_bow_limit >= 2 or (
-            world.swordless[player] or world.glitches_required[player] == 'no_glitches')):
-        prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
-        world.worlds[player].random.shuffle(prog_bow_locs)
+    if multiworld.worlds[player].has_progressive_bows and (w.difficulty_requirements.progressive_bow_limit >= 2 or (
+            multiworld.swordless[player] or multiworld.glitches_required[player] == 'no_glitches')):
+        prog_bow_locs = multiworld.find_item_locations('Progressive Bow', player, True)
+        multiworld.worlds[player].random.shuffle(prog_bow_locs)
         found_bow = False
         found_bow_alt = False
         while prog_bow_locs and not (found_bow and found_bow_alt):
@@ -2428,34 +2427,34 @@ def write_strings(rom, world, player):
             silverarrow_hint = (' %s?' % hint_text(bow_loc).replace('Ganon\'s', 'my'))
             tt[target] = 'Did you find the silver arrows%s' % silverarrow_hint
 
-    crystal5 = world.find_item('Crystal 5', player)
-    crystal6 = world.find_item('Crystal 6', player)
+    crystal5 = multiworld.find_item('Crystal 5', player)
+    crystal6 = multiworld.find_item('Crystal 6', player)
     tt['bomb_shop'] = 'Big Bomb?\nMy supply is blocked until you clear %s and %s.' % (
         crystal5.hint_text, crystal6.hint_text)
 
-    greenpendant = world.find_item('Green Pendant', player)
+    greenpendant = multiworld.find_item('Green Pendant', player)
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
-    if world.crystals_needed_for_gt[player] == 1:
+    if multiworld.worlds[player].options.crystals_needed_for_gt == 1:
         tt['sign_ganons_tower'] = 'You need a crystal to enter.'
     else:
-        tt['sign_ganons_tower'] = f'You need {world.crystals_needed_for_gt[player]} crystals to enter.'
+        tt['sign_ganons_tower'] = f'You need {multiworld.worlds[player].options.crystals_needed_for_gt} crystals to enter.'
 
-    if world.goal[player] == 'bosses':
+    if multiworld.worlds[player].options.goal == 'bosses':
         tt['sign_ganon'] = 'You need to kill all bosses, Ganon last.'
-    elif world.goal[player] == 'ganon_pedestal':
+    elif multiworld.worlds[player].options.goal == 'ganon_pedestal':
         tt['sign_ganon'] = 'You need to pull the pedestal to defeat Ganon.'
-    elif world.goal[player] == "ganon":
-        if world.crystals_needed_for_ganon[player] == 1:
+    elif multiworld.worlds[player].options.goal == "ganon":
+        if multiworld.worlds[player].options.crystals_needed_for_ganon == 1:
             tt['sign_ganon'] = 'You need a crystal to beat Ganon and have beaten Agahnim atop Ganons Tower.'
         else:
-            tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon and ' \
+            tt['sign_ganon'] = f'You need {multiworld.worlds[player].options.crystals_needed_for_ganon} crystals to beat Ganon and ' \
                                f'have beaten Agahnim atop Ganons Tower'
     else:
-        if world.crystals_needed_for_ganon[player] == 1:
+        if multiworld.worlds[player].options.crystals_needed_for_ganon == 1:
             tt['sign_ganon'] = 'You need a crystal to beat Ganon.'
         else:
-            tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon.'
+            tt['sign_ganon'] = f'You need {multiworld.worlds[player].options.crystals_needed_for_ganon} crystals to beat Ganon.'
 
     tt['uncle_leaving_text'] = Uncle_texts[local_random.randint(0, len(Uncle_texts) - 1)]
     tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[local_random.randint(0, len(Triforce_texts) - 1)]
@@ -2466,12 +2465,12 @@ def write_strings(rom, world, player):
     tt['blind_by_the_light'] = Blind_texts[local_random.randint(0, len(Blind_texts) - 1)]
 
     triforce_pieces_required = max(0, w.treasure_hunt_required -
-                                   sum(1 for item in world.precollected_items[player] if item.name == "Triforce Piece"))
+                                   sum(1 for item in multiworld.precollected_items[player] if item.name == "Triforce Piece"))
 
-    if world.goal[player] in ['triforce_hunt', 'local_triforce_hunt']:
+    if multiworld.worlds[player].options.goal in ['triforce_hunt', 'local_triforce_hunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
-        if world.goal[player] == 'triforce_hunt' and world.players > 1:
+        if multiworld.worlds[player].options.goal == 'triforce_hunt' and multiworld.players > 1:
             tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
         else:
             tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
@@ -2485,7 +2484,7 @@ def write_strings(rom, world, player):
                                "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
                                "hidden in  a hollow tree. If you bring\n%d Triforce piece out of %d, I can reassemble it." % \
                                (triforce_pieces_required, w.treasure_hunt_total)
-    elif world.goal[player] in ['pedestal']:
+    elif multiworld.worlds[player].options.goal in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
         tt['sign_ganon'] = 'You need to get to the pedestal... Ganon is invincible!'
@@ -2494,44 +2493,44 @@ def write_strings(rom, world, player):
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
         if triforce_pieces_required > 1:
-            if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
+            if multiworld.worlds[player].options.goal == 'ganon_triforce_hunt' and multiworld.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d with your friends to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
-            elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
+            elif multiworld.worlds[player].options.goal in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
         else:
-            if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
+            if multiworld.worlds[player].options.goal == 'ganon_triforce_hunt' and multiworld.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d with your friends to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
-            elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
+            elif multiworld.worlds[player].options.goal in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
 
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[local_random.randint(0, len(TavernMan_texts) - 1)]
 
-    pedestalitem = world.get_location('Master Sword Pedestal', player).item
+    pedestalitem = multiworld.get_location('Master Sword Pedestal', player).item
     pedestal_text = 'Some Hot Air' if pedestalitem is None else hint_text(pedestalitem,
                                                                           True) if pedestalitem.pedestal_hint_text is not None else 'Unknown Item'
     tt['mastersword_pedestal_translated'] = pedestal_text
     pedestal_credit_text = 'and the Hot Air' if pedestalitem is None else \
         w.pedestal_credit_texts.get(pedestalitem.code, 'and the Unknown Item')
 
-    etheritem = world.get_location('Ether Tablet', player).item
+    etheritem = multiworld.get_location('Ether Tablet', player).item
     ether_text = 'Some Hot Air' if etheritem is None else hint_text(etheritem,
                                                                     True) if etheritem.pedestal_hint_text is not None else 'Unknown Item'
     tt['tablet_ether_book'] = ether_text
-    bombositem = world.get_location('Bombos Tablet', player).item
+    bombositem = multiworld.get_location('Bombos Tablet', player).item
     bombos_text = 'Some Hot Air' if bombositem is None else hint_text(bombositem,
                                                                       True) if bombositem.pedestal_hint_text is not None else 'Unknown Item'
     tt['tablet_bombos_book'] = bombos_text
 
     # inverted spawn menu changes
-    if world.mode[player] == 'inverted':
+    if multiworld.worlds[player].options.mode == 'inverted':
         tt['menu_start_2'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n{CHOICE3}"
         tt['menu_start_3'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n Mountain Cave\n{CHOICE2}"
 
-    for at, text, _ in world.plando_texts[player]:
+    for at, text, _ in multiworld.worlds[player].options.plando_texts:
 
         if at not in tt:
             raise Exception(f"No text target \"{at}\" found.")
@@ -2542,22 +2541,22 @@ def write_strings(rom, world, player):
 
     credits = Credits()
 
-    sickkiditem = world.get_location('Sick Kid', player).item
+    sickkiditem = multiworld.get_location('Sick Kid', player).item
     sickkiditem_text = local_random.choice(SickKid_texts) \
         if sickkiditem is None or sickkiditem.code not in w.sickkid_credit_texts \
         else w.sickkid_credit_texts[sickkiditem.code]
 
-    zoraitem = world.get_location('King Zora', player).item
+    zoraitem = multiworld.get_location('King Zora', player).item
     zoraitem_text = local_random.choice(Zora_texts) \
         if zoraitem is None or zoraitem.code not in w.zora_credit_texts \
         else w.zora_credit_texts[zoraitem.code]
 
-    magicshopitem = world.get_location('Potion Shop', player).item
+    magicshopitem = multiworld.get_location('Potion Shop', player).item
     magicshopitem_text = local_random.choice(MagicShop_texts) \
         if magicshopitem is None or magicshopitem.code not in w.magicshop_credit_texts \
         else w.magicshop_credit_texts[magicshopitem.code]
 
-    fluteboyitem = world.get_location('Flute Spot', player).item
+    fluteboyitem = multiworld.get_location('Flute Spot', player).item
     fluteboyitem_text = local_random.choice(FluteBoy_texts) \
         if fluteboyitem is None or fluteboyitem.code not in w.fluteboy_credit_texts \
         else w.fluteboy_credit_texts[fluteboyitem.code]

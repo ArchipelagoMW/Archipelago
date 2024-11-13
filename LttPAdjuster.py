@@ -226,7 +226,7 @@ def adjust(args):
         world = getattr(args, "world")
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
-                       args.sprite, args.oof, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
+                       args.sprite, args.oof, palettes_options, reduceflashing=args.reduceflashing or racerom, multiworld=world,
                        deathlink=args.deathlink, allowcollect=args.allowcollect)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
