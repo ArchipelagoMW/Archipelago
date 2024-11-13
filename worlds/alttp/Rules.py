@@ -29,7 +29,7 @@ def set_rules(world):
     multiworld = world.multiworld
     if world.options.glitches_required == 'no_logic':
         if player == next(player_id for player_id in multiworld.get_game_players("A Link to the Past")
-                          if world.options.glitches_required == 'no_logic'):  # only warn one time
+                          if multiworld.worlds[player_id].options.glitches_required == 'no_logic'):  # only warn one time
             logging.info(
                 'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 

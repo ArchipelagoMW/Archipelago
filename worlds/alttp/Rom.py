@@ -780,13 +780,13 @@ def get_nonnative_item_sprite(code: int) -> int:
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
-def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool):
-    local_random = mutiworld.worlds[player].random
-    local_world = mutiworld.worlds[player]
+def patch_rom(multiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool):
+    local_random = multiworld.worlds[player].random
+    local_world = multiworld.worlds[player]
 
     # patch items
 
-    for location in mutiworld.get_locations(player):
+    for location in multiworld.get_locations(player):
         if location.address is None or location.shop_slot is not None:
             continue
 
@@ -840,7 +840,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
         rom.write_byte(0x155C9, local_random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
 
     # patch entrance/exits/holes
-    for region in mutiworld.regions:
+    for region in multiworld.regions:
         for exit in region.exits:
             if exit.target is not None and exit.player == player:
                 if isinstance(exit.addresses, tuple):
@@ -873,7 +873,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0640)
                     elif room_id == 0x00d6 and local_world.fix_trock_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x0134)
-                    elif room_id == 0x000c and mutiworld.shuffle_ganon:  # fix ganons tower exit point
+                    elif room_id == 0x000c and multiworld.shuffle_ganon:  # fix ganons tower exit point
                         rom.write_int16(0x15DB5 + 2 * offset, 0x00A4)
                     else:
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)
@@ -893,9 +893,9 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
                     # patch door table
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
     if local_world.options.mode == 'inverted':
-        patch_shuffled_dark_sanc(mutiworld, rom, player)
+        patch_shuffled_dark_sanc(multiworld, rom, player)
 
-    write_custom_shops(rom, mutiworld, player)
+    write_custom_shops(rom, multiworld, player)
 
     def credits_digit(num):
         # top: $54 is 1, 55 2, etc , so 57=4, 5C=9
@@ -969,11 +969,11 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
     if local_world.options.mode in ['open', 'inverted']:
         rom.write_byte(0x180032, 0x01)  # open mode
     if local_world.options.mode == 'inverted':
-        set_inverted_mode(mutiworld, player, rom)
+        set_inverted_mode(multiworld, player, rom)
     elif local_world.options.mode == 'standard':
         rom.write_byte(0x180032, 0x00)  # standard mode
 
-    uncle_location = mutiworld.get_location('Link\'s Uncle', player)
+    uncle_location = multiworld.get_location('Link\'s Uncle', player)
     if uncle_location.item is None or uncle_location.item.name not in ['Master Sword', 'Tempered Sword',
                                                                        'Fighter Sword', 'Golden Sword',
                                                                        'Progressive Sword']:
@@ -991,8 +991,8 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
 
     # set light cones
     rom.write_byte(0x180038, 0x01 if local_world.options.mode == "standard" else 0x00)
-    rom.write_byte(0x180039, 0x01 if mutiworld.light_world_light_cone else 0x00)
-    rom.write_byte(0x18003A, 0x01 if mutiworld.dark_world_light_cone else 0x00)
+    rom.write_byte(0x180039, 0x01 if multiworld.light_world_light_cone else 0x00)
+    rom.write_byte(0x18003A, 0x01 if multiworld.dark_world_light_cone else 0x00)
 
     GREEN_TWENTY_RUPEES = 0x47
     GREEN_CLOCK = item_table["Green Clock"].item_code
@@ -1017,7 +1017,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16(0x180036, mutiworld.rupoor_cost)
+        rom.write_int16(0x180036, multiworld.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02)  # Hookshot only
     elif local_world.options.item_functionality == 'expert':
@@ -1037,7 +1037,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
         # Rupoor negative value
-        rom.write_int16(0x180036, mutiworld.rupoor_cost)
+        rom.write_int16(0x180036, multiworld.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x00)  # Nothing
     else:
@@ -1056,7 +1056,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
         # Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
         # Rupoor negative value
-        rom.write_int16(0x180036, mutiworld.rupoor_cost)
+        rom.write_int16(0x180036, multiworld.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x03)  # All standard items
         # Set overflow items for progressive equipment
@@ -1269,7 +1269,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
 
     # set up goals for treasure hunt
     rom.write_int16(0x180163, max(0, local_world.treasure_hunt_required -
-                                  sum(1 for item in mutiworld.precollected_items[player] if item.name == "Triforce Piece")))
+                                  sum(1 for item in multiworld.precollected_items[player] if item.name == "Triforce Piece")))
     rom.write_bytes(0x180165, [0x0E, 0x28])  #  Triforce Piece Sprite
     rom.write_byte(0x180194, 1)  # Must turn in triforced pieces (instant win not enabled)
 
@@ -1298,11 +1298,11 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
     rom.write_bytes(0x50563, [0x3F, 0x14])  # disable below ganon chest
     rom.write_byte(0x50599, 0x00)  # disable below ganon chest
     rom.write_bytes(0xE9A5, [0x7E, 0x00, 0x24])  # disable below ganon chest
-    rom.write_byte(0x18008B, 0x01 if local_world.options.open_pyramid.to_bool(mutiworld, player) else 0x00)  # pre-open Pyramid Hole
+    rom.write_byte(0x18008B, 0x01 if local_world.options.open_pyramid.to_bool(multiworld, player) else 0x00)  # pre-open Pyramid Hole
     rom.write_byte(0x18008C, 0x01 if local_world.options.crystals_needed_for_gt == 0 else 0x00)  # GT pre-opened if crystal requirement is 0
     rom.write_byte(0xF5D73, 0xF0)  # bees are catchable
     rom.write_byte(0xF5F10, 0xF0)  # bees are catchable
-    rom.write_byte(0x180086, 0x00 if mutiworld.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
+    rom.write_byte(0x180086, 0x00 if multiworld.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if local_world.fix_fake_world else 0x00)
@@ -1316,7 +1316,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
     starting_max_bombs = 0 if local_world.options.bombless_start else 10
     starting_max_arrows = 30
 
-    startingstate = CollectionState(mutiworld)
+    startingstate = CollectionState(multiworld)
 
     if startingstate.has('Silver Bow', player):
         equip[0x340] = 1
@@ -1364,7 +1364,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
         equip[0x37B] = 1
         equip[0x36E] = 0x80
 
-    for item in mutiworld.precollected_items[player]:
+    for item in multiworld.precollected_items[player]:
 
         if item.name in {'Bow', 'Silver Bow', 'Silver Arrows', 'Progressive Bow', 'Progressive Bow (Alt)',
                          'Titans Mitts', 'Power Glove', 'Progressive Glove',
@@ -1579,7 +1579,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
     }
 
     def get_reveal_bytes(itemName):
-        locations = mutiworld.find_item_locations(itemName, player)
+        locations = multiworld.find_item_locations(itemName, player)
         if len(locations) < 1:
             return 0x0000
         location = locations[0]
@@ -1607,7 +1607,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if local_world.options.glitches_required != 'no_logic' else 0x00)  # enable POD EG fix
     rom.write_byte(0x186383, 0x01 if local_world.options.glitches_required == 'no_logic' else 0x00)  # disable glitching to Triforce from Ganons Room
-    rom.write_byte(0x180042, 0x01 if mutiworld.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
+    rom.write_byte(0x180042, 0x01 if multiworld.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
     rom.write_bytes(0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -1656,7 +1656,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
         rom.write_byte(0x18004C, 0x01)
 
     # set correct flag for hera basement item
-    hera_basement = mutiworld.get_location('Tower of Hera - Basement Cage', player)
+    hera_basement = multiworld.get_location('Tower of Hera - Basement Cage', player)
     if hera_basement.item is not None and hera_basement.item.name == 'Small Key (Tower of Hera)' and hera_basement.item.player == player:
         rom.write_byte(0x4E3BB, 0xE4)
     else:
@@ -1673,12 +1673,12 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
         rom.write_byte(0xFEE41, 0x2A)  # bombable exit
 
     if local_world.options.tile_shuffle:
-        tile_set = TileSet.get_random_tile_set(mutiworld.worlds[player].random)
+        tile_set = TileSet.get_random_tile_set(multiworld.worlds[player].random)
         rom.write_byte(0x4BA21, tile_set.get_speed())
         rom.write_byte(0x4BA1D, tile_set.get_len())
         rom.write_bytes(0x4BA2A, tile_set.get_bytes())
 
-    write_strings(rom, mutiworld, player)
+    write_strings(rom, multiworld, player)
 
     # remote items flag, does not currently work
     rom.write_byte(0x18637C, 0)
@@ -1686,14 +1686,14 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
     # set rom name
     # 21 bytes
     from Utils import __version__
-    rom.name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{player}_{mutiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
     # set player names
-    encoded_players = mutiworld.players + len(mutiworld.groups)
+    encoded_players = multiworld.players + len(multiworld.groups)
     for p in range(1, min(encoded_players, ROM_PLAYER_LIMIT) + 1):
-        rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(mutiworld.player_name[p]))
+        rom.write_bytes(0x195FFC + ((p - 1) * 32), hud_format_text(multiworld.player_name[p]))
     if encoded_players > ROM_PLAYER_LIMIT:
         rom.write_bytes(0x195FFC + ((ROM_PLAYER_LIMIT - 1) * 32), hud_format_text("Archipelago"))
 
