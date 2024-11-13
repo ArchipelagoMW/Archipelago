@@ -868,13 +868,13 @@ class DeprecateDict(dict):
         self.should_error = error
         super().__init__()
 
-    def __getitem__(self, item: Any) -> Any:
-        if self.should_error:
-            deprecate(self.log_message)
-        elif __debug__:
+    if __debug__:
+        def __getitem__(self, item: Any) -> Any:
+            if self.should_error:
+                deprecate(self.log_message)
             import warnings
             warnings.warn(self.log_message)
-        return super().__getitem__(item)
+            return super().__getitem__(item)
 
 
 def _extend_freeze_support() -> None:
