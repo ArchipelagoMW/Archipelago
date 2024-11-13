@@ -681,16 +681,16 @@ def get_pool_core(multiworld, player: int):
     additional_pieces_to_place = 0
     if 'triforce_hunt' in goal:
 
-        if multiworld.triforce_pieces_mode[player].value == TriforcePiecesMode.option_extra:
-            treasure_hunt_total = (multiworld.triforce_pieces_required[player].value
-                                   + multiworld.triforce_pieces_extra[player].value)
-        elif multiworld.triforce_pieces_mode[player].value == TriforcePiecesMode.option_percentage:
-            percentage = float(multiworld.triforce_pieces_percentage[player].value) / 100
-            treasure_hunt_total = int(round(multiworld.triforce_pieces_required[player].value * percentage, 0))
+        if multiworld.worlds[player].options.triforce_pieces_mode.value == TriforcePiecesMode.option_extra:
+            treasure_hunt_total = (multiworld.worlds[player].options.triforce_pieces_required.value
+                                   + multiworld.worlds[player].options.triforce_pieces_extra.value)
+        elif multiworld.worlds[player].options.triforce_pieces_mode.value == TriforcePiecesMode.option_percentage:
+            percentage = float(multiworld.worlds[player].options.triforce_pieces_percentage.value) / 100
+            treasure_hunt_total = int(round(multiworld.worlds[player].options.triforce_pieces_required.value * percentage, 0))
         else:  # available
-            treasure_hunt_total = multiworld.triforce_pieces_available[player].value
+            treasure_hunt_total = multiworld.worlds[player].options.triforce_pieces_available.value
 
-        triforce_pieces = min(90, max(treasure_hunt_total, multiworld.triforce_pieces_required[player].value))
+        triforce_pieces = min(90, max(treasure_hunt_total, multiworld.worlds[player].options.triforce_pieces_required.value))
 
         pieces_in_core = min(extraitems, triforce_pieces)
         additional_pieces_to_place = triforce_pieces - pieces_in_core

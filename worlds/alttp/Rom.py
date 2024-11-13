@@ -1532,7 +1532,7 @@ def patch_rom(mutiworld: MultiWorld, rom: LocalRom, player: int, enemized: bool)
     # c - enabled for inside compasses
     # s - enabled for inside small keys
     # block HC upstairs doors in rain state in standard mode
-    rom.write_byte(0x18008A, 0x01 if mutiworld.mode[player] == "standard" and local_world.options.entrance_shuffle != 'vanilla' else 0x00)
+    rom.write_byte(0x18008A, 0x01 if local_world.options.mode == "standard" and local_world.options.entrance_shuffle != 'vanilla' else 0x00)
 
     rom.write_byte(0x18016A, 0x10 | ((0x01 if local_world.options.small_key_shuffle else 0x00)
                                      | (0x02 if local_world.options.compass_shuffle else 0x00)
