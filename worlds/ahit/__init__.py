@@ -1,19 +1,22 @@
-from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
-from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool, get_shop_trap_name, \
-    calculate_yarn_costs, alps_hooks
-from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
-from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
-    get_total_locations
-from .Rules import set_rules, has_paintings
-from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal, create_option_groups
-from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item, Difficulty
-from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
-from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
+from typing import List, Dict, TextIO
+
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from worlds.generic.Rules import add_rule
-from typing import List, Dict, TextIO
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
+from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
+from BaseRules import meets_req
 from Utils import local_path
+
+from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
+from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
+from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool, get_shop_trap_name, \
+    calculate_yarn_costs, alps_hooks
+from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
+    get_total_locations
+from .Options import AHITOptions, slot_data_options, adjust_options, RandomizeHatOrder, EndGoal, create_option_groups
+from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
+from .Rules import set_rules, painting_requirements
+from .Types import HatType, ChapterIndex, HatInTimeItem, hat_type_to_item, Difficulty
 
 
 def launch_client():
@@ -132,7 +135,9 @@ class HatInTimeWorld(World):
                 loc = self.get_location(name)
                 loc.place_locked_item(create_item(self, name))
                 if self.options.ShuffleSubconPaintings and loc.name != "Snatcher's Contract - The Subcon Well":
-                    add_rule(loc, lambda state: has_paintings(state, self, 1))
+                    painting_req = painting_requirements(self, 1)
+                    player = self.player
+                    add_rule(loc, lambda state: meets_req(state, player, painting_req))
 
     def create_items(self):
         if self.has_yarn():

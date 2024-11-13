@@ -22,6 +22,9 @@ if TYPE_CHECKING:
     from worlds import AutoWorld
 
 
+Req = collections.namedtuple("Req", ["item", "count"])
+
+
 class Group(TypedDict):
     name: str
     game: str
@@ -830,9 +833,17 @@ class CollectionState():
         """Returns True if each item name is in the state at least as many times as specified."""
         return all(self.prog_items[player][item] >= count for item, count in item_counts.items())
 
+    def has_all_reqs(self, item_counts: Iterable[Req], player: int) -> bool:
+        """Returns True if each item name is in the state at least as many times as specified."""
+        return all(self.prog_items[player][item] >= count for item, count in item_counts)
+
     def has_any_count(self, item_counts: Mapping[str, int], player: int) -> bool:
         """Returns True if at least one item name is in the state at least as many times as specified."""
         return any(self.prog_items[player][item] >= count for item, count in item_counts.items())
+
+    def has_any_req(self, item_counts: Iterable[Req], player: int) -> bool:
+        """Returns True if at least one item name is in the state at least as many times as specified."""
+        return any(self.prog_items[player][item] >= count for item, count in item_counts)
 
     def count(self, item: str, player: int) -> int:
         return self.prog_items[player][item]

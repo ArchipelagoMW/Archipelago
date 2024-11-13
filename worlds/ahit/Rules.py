@@ -1,10 +1,13 @@
+from typing import TYPE_CHECKING, List, Callable, Union, Dict, Tuple, Optional, Iterable
+
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
-from .Locations import location_table, zipline_unlocks, is_location_valid, shop_locations, event_locs
-from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HitType
 from BaseClasses import Location, Entrance, Region
-from typing import TYPE_CHECKING, List, Callable, Union, Dict, Tuple, Optional
+from BaseRules import meets_req, meets_all_reqs
+
+from .Locations import location_table, zipline_unlocks, is_location_valid, shop_locations, event_locs
 from .Options import EndGoal, CTRLogic, NoTicketSkips
+from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HitType
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -53,12 +56,6 @@ def hat_requirements(world: "HatInTimeWorld", hat: HatType) -> Optional[Tuple[st
     return ("Yarn", world.cumulative_hat_yarn_costs[hat])
 
 
-def meets_item_req(state: CollectionState, player: int, hat_req: Optional[Tuple[str, int]]) -> bool:
-    if not hat_req:
-        return True
-    return state.has(hat_req[0], player, count=hat_req[1])
-
-
 def painting_logic(world: "HatInTimeWorld") -> bool:
     return bool(world.options.ShuffleSubconPaintings)
 
@@ -80,6 +77,18 @@ def has_paintings(state: CollectionState, world: "HatInTimeWorld", count: int, a
     return state.has("Progressive Painting Unlock", world.player, count)
 
 
+def painting_requirements(world: "HatInTimeWorld", count: int, allow_skip: bool = True) -> Optional[Tuple[str, int]]:
+    if not painting_logic(world):
+        return None
+
+    if not world.options.NoPaintingSkips and allow_skip:
+        # In Moderate there is a very easy trick to skip all the walls, except for the one guarding the boss arena
+        if get_difficulty(world) >= Difficulty.MODERATE:
+            return None
+
+    return ("Progressive Painting Unlock", count)
+
+
 def zipline_logic(world: "HatInTimeWorld") -> bool:
     return bool(world.options.ShuffleAlpineZiplines)
 
@@ -93,7 +102,7 @@ def can_hit(state: CollectionState, world: "HatInTimeWorld", umbrella_only: bool
         return True
 
     hat_req = hat_requirements(world, HatType.BREWING)
-    return state.has("Umbrella", world.player) or not umbrella_only and meets_item_req(state, world, hat_req)
+    return state.has("Umbrella", world.player) or not umbrella_only and meets_req(state, world, hat_req)
 
 
 def has_relic_combo(state: CollectionState, world: "HatInTimeWorld", relic: str) -> bool:
@@ -232,7 +241,7 @@ def set_rules(world: "HatInTimeWorld"):
 
     add_rule(world.multiworld.get_entrance("Telescope -> Time's End", player),
              lambda state: state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.FINALE])
-             and meets_item_req(state, player, brewing_hat_reqs) and meets_item_req(state, player, dweller_hat_reqs))
+             and meets_req(state, player, brewing_hat_reqs) and meets_req(state, player, dweller_hat_reqs))
 
     if world.is_dlc1():
         add_rule(world.multiworld.get_entrance("Telescope -> Arctic Cruise", player),
@@ -243,7 +252,7 @@ def set_rules(world: "HatInTimeWorld"):
         add_rule(world.multiworld.get_entrance("Telescope -> Nyakuza Metro", player),
                  lambda state: state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.ALPINE])
                  and state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.METRO])
-                 and meets_item_req(state, player, dweller_hat_reqs) and meets_item_req(state, player, ice_hat_reqs))
+                 and meets_req(state, player, dweller_hat_reqs) and meets_req(state, player, ice_hat_reqs))
 
     if not world.options.ActRandomizer:
         set_default_rift_rules(world)
@@ -259,13 +268,14 @@ def set_rules(world: "HatInTimeWorld"):
             hat_reqs = hat_requirements(world, hat)
             if hat_reqs:
                 # force capture hat_reqs
-                add_rule(loc, lambda state, h=hat_reqs: meets_item_req(state, player, h))
+                add_rule(loc, lambda state, h=hat_reqs: meets_req(state, player, h))
 
         if data.hookshot:
             add_rule(loc, lambda state: can_use_hookshot(state, world))
 
         if data.paintings > 0 and world.options.ShuffleSubconPaintings:
-            add_rule(loc, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
+            painting_req = painting_requirements(world, data.paintings)
+            add_rule(loc, lambda state, req=painting_req: meets_req(state, player, req))
 
         if data.hit_type != HitType.none and world.options.UmbrellaLogic:
             if data.hit_type == HitType.umbrella:
@@ -273,12 +283,12 @@ def set_rules(world: "HatInTimeWorld"):
 
             elif data.hit_type == HitType.umbrella_or_brewing:
                 add_rule(loc, lambda state: state.has("Umbrella", player)
-                         or meets_item_req(state, player, brewing_hat_reqs))
+                         or meets_req(state, player, brewing_hat_reqs))
 
             elif data.hit_type == HitType.dweller_bell:
                 add_rule(loc, lambda state: state.has("Umbrella", player)
-                         or meets_item_req(state, player, brewing_hat_reqs)
-                         or meets_item_req(state, player, dweller_hat_reqs))
+                         or meets_req(state, player, brewing_hat_reqs)
+                         or meets_req(state, player, dweller_hat_reqs))
 
         for misc in data.misc_required:
             add_rule(loc, lambda state, item=misc: state.has(item, player))
@@ -401,22 +411,24 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     # Moderate: Above Boats via Ice Hat Sliding
     add_rule(world.multiworld.get_location("Mafia Town - Above Boats", player),
-             lambda state: meets_item_req(state, player, ice_hat_reqs), "or")
+             lambda state: meets_req(state, player, ice_hat_reqs), "or")
 
     # Moderate: Clock Tower Chest + Ruined Tower with nothing
     set_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", player), lambda state: True)
     set_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", player), lambda state: True)
 
     # Moderate: enter and clear The Subcon Well without Hookshot and without hitting the bell
+    one_painting = painting_requirements(world, 1)
+    one_painting_rule = lambda state: meets_req(state, player, one_painting)
     for loc in world.multiworld.get_region("The Subcon Well", player).locations:
-        set_rule(loc, lambda state: has_paintings(state, world, 1))
+        set_rule(loc, one_painting_rule)
 
     # Moderate: Vanessa Manor with nothing
     for loc in world.multiworld.get_region("Queen Vanessa's Manor", player).locations:
-        set_rule(loc, lambda state: has_paintings(state, world, 1))
+        set_rule(loc, one_painting_rule)
 
     set_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", player),
-             lambda state: has_paintings(state, world, 1))
+             one_painting_rule)
 
     # Moderate: Village Time Rift with nothing IF umbrella logic is off
     if not world.options.UmbrellaLogic:
@@ -442,16 +454,16 @@ def set_moderate_rules(world: "HatInTimeWorld"):
     # Moderate: Goat Refinery from TIHS with Sprint only
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", player),
              lambda state: state.has("TIHS Access", player)
-             and meets_item_req(state, player, sprint_hat_reqs), "or")
+             and meets_req(state, player, sprint_hat_reqs), "or")
 
     # Moderate: Finale Telescope with only Ice Hat
     add_rule(world.multiworld.get_entrance("Telescope -> Time's End", player),
              lambda state: state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.FINALE])
-             and meets_item_req(state, player, ice_hat_reqs), "or")
+             and meets_req(state, player, ice_hat_reqs), "or")
 
     # Moderate: Finale without Hookshot
     set_rule(world.multiworld.get_location("Act Completion (The Finale)", player),
-             lambda state: meets_item_req(state, player, dweller_hat_reqs))
+             lambda state: meets_req(state, player, dweller_hat_reqs))
 
     if world.is_dlc1():
         # Moderate: clear Rock the Boat without Ice Hat
@@ -460,7 +472,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
         # Moderate: clear Deep Sea without Ice Hat
         set_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", player),
-                 lambda state: can_use_hookshot(state, world) and meets_item_req(state, player, dweller_hat_reqs))
+                 lambda state: can_use_hookshot(state, world) and meets_req(state, player, dweller_hat_reqs))
 
     # There is a glitched fall damage volume near the Yellow Overpass time piece that warps the player to Pink Paw.
     # Yellow Overpass time piece can also be reached without Hookshot quite easily.
@@ -483,8 +495,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
                  lambda state: state.has("Metro Ticket - Pink", player)
                  and state.has("Metro Ticket - Yellow", player)
                  and state.has("Metro Ticket - Blue", player)
-                 and meets_item_req(state, player, ice_hat_reqs)
-                 and meets_item_req(state, player, brewing_hat_reqs))
+                 and meets_req(state, player, ice_hat_reqs)
+                 and meets_req(state, player, brewing_hat_reqs))
 
         # Moderate: Bluefin Tunnel + Pink Paw Station without tickets
         if not world.options.NoTicketSkips:
@@ -499,7 +511,7 @@ def set_hard_rules(world: "HatInTimeWorld"):
     sprint_hat_reqs = hat_requirements(world, HatType.SPRINT)
     # Hard: clear Time Rift - The Twilight Bell with Sprint+Scooter only
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - The Twilight Bell)", player),
-             lambda state: meets_item_req(state, player, sprint_hat_reqs)
+             lambda state: meets_req(state, player, sprint_hat_reqs)
              and state.has("Scooter Badge", player), "or")
 
     # No Dweller Mask required
@@ -521,10 +533,10 @@ def set_hard_rules(world: "HatInTimeWorld"):
 
     # SDJ
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", player),
-             lambda state: meets_item_req(state, player, sprint_hat_reqs) and has_paintings(state, world, 2), "or")
+             lambda state: meets_req(state, player, sprint_hat_reqs) and has_paintings(state, world, 2), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", player),
-             lambda state: meets_item_req(state, player, sprint_hat_reqs), "or")
+             lambda state: meets_req(state, player, sprint_hat_reqs), "or")
 
     # Hard: Goat Refinery from TIHS with nothing
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", player),
@@ -538,15 +550,15 @@ def set_hard_rules(world: "HatInTimeWorld"):
     if world.is_dlc2():
         # Hard: clear Green Clean Manhole without Dweller Mask
         set_rule(world.multiworld.get_location("Act Completion (Green Clean Manhole)", player),
-                 lambda state: meets_item_req(state, player, ice_hat_reqs))
+                 lambda state: meets_req(state, player, ice_hat_reqs))
 
         # Hard: clear Rush Hour with Brewing Hat only
         if world.options.NoTicketSkips != NoTicketSkips.option_true:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player),
-                     lambda state: meets_item_req(state, player, brewing_hat_reqs))
+                     lambda state: meets_req(state, player, brewing_hat_reqs))
         else:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player),
-                     lambda state: meets_item_req(state, player, brewing_hat_reqs)
+                     lambda state: meets_req(state, player, brewing_hat_reqs)
                      and state.has("Metro Ticket - Yellow", player)
                      and state.has("Metro Ticket - Blue", player)
                      and state.has("Metro Ticket - Pink", player))
@@ -584,10 +596,10 @@ def set_expert_rules(world: "HatInTimeWorld"):
              lambda state: can_use_hookshot(state, world), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (The Twilight Bell)", player),
-             lambda state: meets_item_req(state, player, brewing_hat_reqs)
-             or meets_item_req(state, player, dweller_hat_reqs)
-             or meets_item_req(state, player, sprint_hat_reqs)
-             or (meets_item_req(state, player, time_stop_hat_reqs) and state.has("Umbrella", player)))
+             lambda state: meets_req(state, player, brewing_hat_reqs)
+             or meets_req(state, player, dweller_hat_reqs)
+             or meets_req(state, player, sprint_hat_reqs)
+             or (meets_req(state, player, time_stop_hat_reqs) and state.has("Umbrella", player)))
 
     # Expert: Time Rift - Curly Tail Trail with nothing
     # Time Rift - Twilight Bell and Time Rift - Village with nothing
@@ -696,10 +708,10 @@ def set_mafia_town_rules(world: "HatInTimeWorld"):
         set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", player), lambda state: True)
     elif world.options.CTRLogic == CTRLogic.option_sprint:
         add_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", player),
-                 lambda state: meets_item_req(state, player, SPRINT_hat_reqs), "or")
+                 lambda state: meets_req(state, player, SPRINT_hat_reqs), "or")
     elif world.options.CTRLogic == CTRLogic.option_scooter:
         add_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", player),
-                 lambda state: meets_item_req(state, player, SPRINT_hat_reqs)
+                 lambda state: meets_req(state, player, SPRINT_hat_reqs)
                  and state.has("Scooter Badge", player), "or")
 
 
@@ -708,13 +720,13 @@ def set_botb_rules(world: "HatInTimeWorld"):
     brewing_hat_reqs = hat_requirements(world, HatType.BREWING)
     if not world.options.UmbrellaLogic and get_difficulty(world) < Difficulty.MODERATE:
         set_rule(world.multiworld.get_location("Dead Bird Studio - DJ Grooves Sign Chest", player),
-                 lambda state: state.has("Umbrella", player) or meets_item_req(state, player, brewing_hat_reqs))
+                 lambda state: state.has("Umbrella", player) or meets_req(state, player, brewing_hat_reqs))
         set_rule(world.multiworld.get_location("Dead Bird Studio - Tepee Chest", player),
-                 lambda state: state.has("Umbrella", player) or meets_item_req(state, player, brewing_hat_reqs))
+                 lambda state: state.has("Umbrella", player) or meets_req(state, player, brewing_hat_reqs))
         set_rule(world.multiworld.get_location("Dead Bird Studio - Conductor Chest", player),
-                 lambda state: state.has("Umbrella", player) or meets_item_req(state, player, brewing_hat_reqs))
+                 lambda state: state.has("Umbrella", player) or meets_req(state, player, brewing_hat_reqs))
         set_rule(world.multiworld.get_location("Act Completion (Dead Bird Studio)", player),
-                 lambda state: state.has("Umbrella", player) or meets_item_req(state, player, brewing_hat_reqs))
+                 lambda state: state.has("Umbrella", player) or meets_req(state, player, brewing_hat_reqs))
 
 
 def set_subcon_rules(world: "HatInTimeWorld"):
@@ -722,8 +734,8 @@ def set_subcon_rules(world: "HatInTimeWorld"):
     brewing_hat_reqs = hat_requirements(world, HatType.BREWING)
     dweller_hat_reqs = hat_requirements(world, HatType.DWELLER)
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", player),
-             lambda state: meets_item_req(state, player, brewing_hat_reqs) or state.has("Umbrella", player)
-             or meets_item_req(state, player, dweller_hat_reqs))
+             lambda state: meets_req(state, player, brewing_hat_reqs) or state.has("Umbrella", player)
+             or meets_req(state, player, dweller_hat_reqs))
 
     # You can't skip over the boss arena wall without cherry hover, so these two need to be set this way
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", player),
@@ -760,7 +772,7 @@ def set_alps_rules(world: "HatInTimeWorld"):
     SPRINT_hat_reqs = hat_requirements(world, HatType.SPRINT)
     TIME_STOP_hat_reqs = hat_requirements(world, HatType.TIME_STOP)
     add_rule(world.multiworld.get_entrance("-> The Birdhouse", player),
-             lambda state: can_use_hookshot(state, world) and meets_item_req(state, player, BREWING_hat_reqs))
+             lambda state: can_use_hookshot(state, world) and meets_req(state, player, BREWING_hat_reqs))
 
     add_rule(world.multiworld.get_entrance("-> The Lava Cake", player),
              lambda state: can_use_hookshot(state, world))
@@ -769,10 +781,10 @@ def set_alps_rules(world: "HatInTimeWorld"):
              lambda state: can_use_hookshot(state, world))
 
     add_rule(world.multiworld.get_entrance("-> The Twilight Bell", player),
-             lambda state: can_use_hookshot(state, world) and meets_item_req(state, player, DWELLER_hat_reqs))
+             lambda state: can_use_hookshot(state, world) and meets_req(state, player, DWELLER_hat_reqs))
 
     add_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", player),
-             lambda state: meets_item_req(state, player, SPRINT_hat_reqs) or meets_item_req(state, player, TIME_STOP_hat_reqs))
+             lambda state: meets_req(state, player, SPRINT_hat_reqs) or meets_req(state, player, TIME_STOP_hat_reqs))
 
     add_rule(world.multiworld.get_entrance("Alpine Skyline - Finale", player),
              lambda state: can_clear_alpine(state, world))
@@ -844,11 +856,11 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
 
     # This is accessing the regions in place of these time rifts, so we can set the rules on all the entrances.
     for entrance in regions["Time Rift - Gallery"].entrances:
-        add_rule(entrance, lambda state: meets_item_req(state, player, brewing_hat_reqs)
+        add_rule(entrance, lambda state: meets_req(state, player, brewing_hat_reqs)
                  and state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.BIRDS]))
 
     for entrance in regions["Time Rift - The Lab"].entrances:
-        add_rule(entrance, lambda state: meets_item_req(state, player, dweller_hat_reqs)
+        add_rule(entrance, lambda state: meets_req(state, player, dweller_hat_reqs)
                  and state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.ALPINE]))
 
     for entrance in regions["Time Rift - Sewers"].entrances:
@@ -938,11 +950,11 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
     dweller_hat_reqs = hat_requirements(world, HatType.DWELLER)
 
     for entrance in world.multiworld.get_region("Time Rift - Gallery", player).entrances:
-        add_rule(entrance, lambda state: meets_item_req(state, player, brewing_hat_reqs)
+        add_rule(entrance, lambda state: meets_req(state, player, brewing_hat_reqs)
                  and state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.BIRDS]))
 
     for entrance in world.multiworld.get_region("Time Rift - The Lab", player).entrances:
-        add_rule(entrance, lambda state: meets_item_req(state, player, dweller_hat_reqs)
+        add_rule(entrance, lambda state: meets_req(state, player, dweller_hat_reqs)
                  and state.has("Time Piece", player, chapter_timepiece_costs[ChapterIndex.ALPINE]))
 
     for entrance in world.multiworld.get_region("Time Rift - Sewers", player).entrances:
