@@ -5,7 +5,7 @@ from unittest import TestCase
 from BaseClasses import CollectionState, Location, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import Accessibility
-from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
+from worlds.AutoWorld import AutoWorldRegister, call_all, call_single, Status
 from ..general import gen_steps, setup_multiworld
 
 
@@ -52,7 +52,7 @@ class MultiworldTestBase(TestCase):
 class TestAllGamesMultiworld(MultiworldTestBase):
     def test_fills(self) -> None:
         """Tests that a multiworld with one of every registered game world can generate."""
-        all_worlds = list(AutoWorldRegister.world_types.values())
+        all_worlds = list(AutoWorldRegister.get_testable_world_types())
         self.multiworld = setup_multiworld(all_worlds, ())
         for world in self.multiworld.worlds.values():
             world.options.accessibility.value = Accessibility.option_full
@@ -66,7 +66,7 @@ class TestAllGamesMultiworld(MultiworldTestBase):
 class TestTwoPlayerMulti(MultiworldTestBase):
     def test_two_player_single_game_fills(self) -> None:
         """Tests that a multiworld of two players for each registered game world can generate."""
-        for world_type in AutoWorldRegister.world_types.values():
+        for world_type in AutoWorldRegister.get_testable_world_types():
             self.multiworld = setup_multiworld([world_type, world_type], ())
             for world in self.multiworld.worlds.values():
                 world.options.accessibility.value = Accessibility.option_full
