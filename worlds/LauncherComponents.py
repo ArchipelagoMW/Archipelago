@@ -109,7 +109,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     except ValueError as e:
         raise Exception("Archive appears invalid or damaged.") from e
     except KeyError as e:
-        # check if the user's browser added a (1) to the filename
+        # check if there are download artifacts in the filename
         directories = [f.filename.strip('/') for f in zip.filelist if f.CRC == 0 and f.file_size == 0 and f.filename.count('/') == 1]
         if len(directories) == 1 and directories[0] in apworld_name:
             module_name = directories[0]
