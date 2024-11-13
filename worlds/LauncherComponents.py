@@ -101,25 +101,20 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     apworld_path = pathlib.Path(apworld_src)
 
     apworld_name = apworld_path.name
-    module_name = pathlib.Path(apworld_name).stem
     try:
         import zipfile
         zip = zipfile.ZipFile(apworld_path)
-        zip.open(module_name + "/__init__.py")
-    except ValueError as e:
-        raise Exception("Archive appears invalid or damaged.") from e
-    except KeyError as e:
-        # check if there are download artifacts in the filename
         directories = [f.filename.strip('/') for f in zip.filelist if f.CRC == 0 and f.file_size == 0 and f.filename.count('/') == 1]
         if len(directories) == 1 and directories[0] in apworld_name:
             module_name = directories[0]
             apworld_name = module_name + ".apworld"
-            try:
-                zip.open(module_name + "/__init__.py")
-            except KeyError:
-                raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
         else:
-            raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
+            raise Exception("APWorld appears to be invalid or damaged. (expected a single directory)")
+        zip.open(module_name + "/__init__.py")
+    except ValueError as e:
+        raise Exception("Archive appears invalid or damaged.") from e
+    except KeyError as e:
+        raise Exception("Archive appears to not be an apworld. (missing __init__.py)") from e
 
     import worlds
     if worlds.user_folder is None:
