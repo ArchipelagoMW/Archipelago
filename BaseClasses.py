@@ -22,7 +22,9 @@ if TYPE_CHECKING:
     from worlds import AutoWorld
 
 
-Req = collections.namedtuple("Req", ["item", "count"])
+class Req(NamedTuple):
+    item: str
+    count: int
 
 
 class Group(TypedDict):

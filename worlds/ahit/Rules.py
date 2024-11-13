@@ -48,7 +48,7 @@ def get_cumulative_hat_costs(world: "HatInTimeWorld") -> Dict[HatType, int]:
 
 def hat_requirements(world: "HatInTimeWorld", hat: HatType) -> Optional[Req]:
     if world.options.HatItems:
-        return (hat_type_to_item[hat], 1)
+        return Req(hat_type_to_item[hat], 1)
     
     if world.hat_yarn_costs[hat] <= 0:  # this means the hat was put into starting inventory
         return None
@@ -102,7 +102,7 @@ def can_hit(state: CollectionState, world: "HatInTimeWorld", umbrella_only: bool
         return True
 
     hat_req = hat_requirements(world, HatType.BREWING)
-    return state.has("Umbrella", world.player) or not umbrella_only and meets_req(state, world, hat_req)
+    return state.has("Umbrella", world.player) or not umbrella_only and meets_req(state, world.player, hat_req)
 
 
 def has_relic_combo(state: CollectionState, world: "HatInTimeWorld", relic: str) -> bool:
@@ -534,7 +534,7 @@ def set_hard_rules(world: "HatInTimeWorld"):
              all_reqs_to_rule(player, sprint_hat_req, paintings_2), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", player),
-             req_to_rule(sprint_hat_req), "or")
+             req_to_rule(player, sprint_hat_req), "or")
 
     # Hard: Goat Refinery from TIHS with nothing
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", player),
