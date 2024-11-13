@@ -4,7 +4,7 @@ from worlds.AutoWorld import World, WebWorld, CollectionState
 from worlds.generic.Rules import add_rule
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
-from BaseRules import meets_req
+from BaseRules import req_to_rule
 from Utils import local_path
 
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
@@ -135,9 +135,7 @@ class HatInTimeWorld(World):
                 loc = self.get_location(name)
                 loc.place_locked_item(create_item(self, name))
                 if self.options.ShuffleSubconPaintings and loc.name != "Snatcher's Contract - The Subcon Well":
-                    painting_req = painting_requirements(self, 1)
-                    player = self.player
-                    add_rule(loc, lambda state: meets_req(state, player, painting_req))
+                    add_rule(loc, req_to_rule(self.player, painting_requirements(self, 1)))
 
     def create_items(self):
         if self.has_yarn():

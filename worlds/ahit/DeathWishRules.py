@@ -1,13 +1,15 @@
-from worlds.AutoWorld import CollectionState
-from .Rules import can_use_hookshot, can_hit, zipline_logic, get_difficulty, has_paintings, hat_requirements
-from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData, HitType
-from .DeathWishLocations import dw_prereqs, dw_candles
-from BaseClasses import Entrance, Location, ItemClassification
-from BaseRules import meets_req
-from worlds.generic.Rules import add_rule, set_rule
 from typing import List, Callable, TYPE_CHECKING
+
+from worlds.AutoWorld import CollectionState
+from worlds.generic.Rules import add_rule, set_rule
+from BaseClasses import Entrance, Location, ItemClassification, Req
+from BaseRules import meets_req, req_to_rule, all_reqs_to_rule, any_req_to_rule, TRUE
+
+from .DeathWishLocations import dw_prereqs, dw_candles
 from .Locations import death_wishes
 from .Options import EndGoal
+from .Rules import can_use_hookshot, can_hit, zipline_logic, get_difficulty, has_paintings, hat_requirements, painting_requirements
+from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData, HitType
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -192,30 +194,26 @@ def add_dw_rules(world: "HatInTimeWorld", loc: Location):
         add_rule(loc, lambda state: can_use_hookshot(state, world))
 
     for hat in data.required_hats:
-        hat_req = hat_requirements(world, hat)
-        # force capture of hat_req
-        add_rule(loc, lambda state, h=hat_req: meets_req(state, player, h))
+        add_rule(loc, req_to_rule(player, hat_requirements(world, hat)))
 
     for misc in data.misc_required:
         add_rule(loc, lambda state, item=misc: state.has(item, player))
 
     if data.paintings > 0 and world.options.ShuffleSubconPaintings:
-        add_rule(loc, lambda state, paintings=data.paintings: has_paintings(state, world, paintings))
+        add_rule(loc, req_to_rule(player, painting_requirements(world, 1)))
 
     if data.hit_type is not HitType.none and world.options.UmbrellaLogic:
         brewing_hat_req = hat_requirements(world, HatType.BREWING)
+        umbrella_req = Req("Umbrella", 1)
         if data.hit_type == HitType.umbrella:
-            add_rule(loc, lambda state: state.has("Umbrella", player))
+            add_rule(loc, req_to_rule(player, umbrella_req))
 
         elif data.hit_type == HitType.umbrella_or_brewing:
-            add_rule(loc, lambda state: state.has("Umbrella", player)
-                     or meets_req(state, player, brewing_hat_req))
+            add_rule(loc, any_req_to_rule(player, umbrella_req, brewing_hat_req))
 
         elif data.hit_type == HitType.dweller_bell:
             dweller_hat_req = hat_requirements(world, HatType.DWELLER)
-            add_rule(loc, lambda state: state.has("Umbrella", player)
-                     or meets_req(state, player, brewing_hat_req)
-                     or meets_req(state, player, dweller_hat_req))
+            add_rule(loc, any_req_to_rule(player, umbrella_req, brewing_hat_req, dweller_hat_req))
 
 
 def modify_dw_rules(world: "HatInTimeWorld", name: str):
@@ -223,39 +221,39 @@ def modify_dw_rules(world: "HatInTimeWorld", name: str):
     difficulty: Difficulty = get_difficulty(world)
     main_objective = world.multiworld.get_location(f"{name} - Main Objective", player)
     full_clear = world.multiworld.get_location(f"{name} - All Clear", player)
+    umbrella_req = Req("Umbrella", 1)
 
     if name == "The Illness has Speedrun":
         # All stamps with hookshot only in Expert
         if difficulty >= Difficulty.EXPERT:
-            set_rule(full_clear, lambda state: True)
+            set_rule(full_clear, TRUE)
         else:
-            add_rule(main_objective, lambda state: state.has("Umbrella", player))
+            add_rule(main_objective, req_to_rule(player, umbrella_req))
 
     elif name == "The Mustache Gauntlet":
         brewing_hat_req = hat_requirements(world, HatType.BREWING)
         ice_hat_req = hat_requirements(world, HatType.ICE)
-        add_rule(main_objective, lambda state: state.has("Umbrella", player)
-                 or meets_req(state, player, ice_hat_req) or meets_req(state, player, brewing_hat_req))
+        add_rule(main_objective, any_req_to_rule(player, umbrella_req, ice_hat_req, brewing_hat_req))
 
     elif name == "Vault Codes in the Wind":
         # Sprint is normally expected here
         if difficulty >= Difficulty.HARD:
-            set_rule(main_objective, lambda state: True)
+            set_rule(main_objective, TRUE)
 
     elif name == "Speedrun Well":
         # All stamps with nothing :)
         if difficulty >= Difficulty.EXPERT:
-            set_rule(main_objective, lambda state: True)
+            set_rule(main_objective, TRUE)
 
     elif name == "Mafia's Jumps":
         if difficulty >= Difficulty.HARD:
-            set_rule(main_objective, lambda state: True)
-            set_rule(full_clear, lambda state: True)
+            set_rule(main_objective, TRUE)
+            set_rule(full_clear, TRUE)
 
     elif name == "So You're Back from Outer Space":
         # Without Hookshot
         if difficulty >= Difficulty.HARD:
-            set_rule(main_objective, lambda state: True)
+            set_rule(main_objective, TRUE)
 
     elif name == "Wound-Up Windmill":
         # No badge pin required. Player can switch to One Hit Hero after the checkpoint and do level without it.
@@ -271,25 +269,27 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
     player = world.player
     main_objective = world.multiworld.get_location(f"{name} - Main Objective", player)
     full_clear = world.multiworld.get_location(f"{name} - All Clear", player)
+    paintings_noskip = painting_requirements(world, 1, False)
 
     if name == "Zero Jumps":
         ice_hat_req = hat_requirements(world, HatType.ICE)
         add_rule(main_objective, lambda state: state.has("Zero Jumps", player))
-        add_rule(full_clear, lambda state: state.has("Zero Jumps", player, 4)
-                 and state.has("Train Rush (Zero Jumps)", player) and meets_req(state, player, ice_hat_req))
+        add_rule(full_clear, all_reqs_to_rule(player, Req("Zero Jumps", 4),
+                                              Req("Train Rush (Zero Jumps)", 1),
+                                              ice_hat_req))
 
         # No Ice Hat/painting required in Expert for Toilet Zero Jumps
         # This painting wall can only be skipped via cherry hover.
         if get_difficulty(world) < Difficulty.EXPERT or world.options.NoPaintingSkips:
             set_rule(world.multiworld.get_location("Toilet of Doom (Zero Jumps)", player),
                      lambda state: can_use_hookshot(state, world) and can_hit(state, world)
-                     and has_paintings(state, world, 1, False))
+                     and meets_req(state, player, paintings_noskip))
         else:
             set_rule(world.multiworld.get_location("Toilet of Doom (Zero Jumps)", player),
                      lambda state: can_use_hookshot(state, world) and can_hit(state, world))
 
         set_rule(world.multiworld.get_location("Contractual Obligations (Zero Jumps)", player),
-                 lambda state: has_paintings(state, world, 1, False))
+                 req_to_rule(player, paintings_noskip))
 
     elif name == "Snatcher's Hit List":
         add_rule(main_objective, lambda state: state.has("Mafia Goon", player))
