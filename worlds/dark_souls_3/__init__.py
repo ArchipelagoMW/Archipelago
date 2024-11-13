@@ -89,6 +89,7 @@ class DarkSouls3World(World):
         self.all_excluded_locations = set()
 
     def generate_early(self) -> None:
+        self.created_regions = set()
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
         # Inform Universal Tracker where Yhorm is being randomized to.
@@ -294,6 +295,7 @@ class DarkSouls3World(World):
             new_region.locations.append(new_location)
 
         self.multiworld.regions.append(new_region)
+        self.created_regions.add(region_name)
         return new_region
 
     def create_items(self) -> None:
@@ -1305,7 +1307,7 @@ class DarkSouls3World(World):
     def _add_entrance_rule(self, region: str, rule: Union[CollectionRule, str]) -> None:
         """Sets a rule for the entrance to the given region."""
         assert region in location_tables
-        if not any(region == reg for reg in self.multiworld.regions.region_cache[self.player]): return
+        if region not in self.created_regions: return
         if isinstance(rule, str):
             if " -> " not in rule:
                 assert item_dictionary[rule].classification == ItemClassification.progression
