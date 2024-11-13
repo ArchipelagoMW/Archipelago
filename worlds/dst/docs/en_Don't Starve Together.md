@@ -70,6 +70,10 @@ or whether to only count meat or veggie meals.
 Additionally, you can control how much of the game is randomized, with the cave_regions and ocean_regions options in the yaml to toggle Caves and
 Oceans respectively.
 
+## What about grindy checks, like trying to spawn a Tree Guard? Do I still have to go for those?
+
+Some grindier checks have been set to not be allowed progression items.
+
 ## Can this work with a world without caves?
 
 As of Version 1.2, worlds without caves are supported. Make sure in your yaml that cave_regions is set to none, and that your goal is not set to a cave boss.
@@ -86,7 +90,10 @@ and Moon Rock Idol.
 
 ## Is this compatible with other Don't Starve Together mods?
 
-This should be compatible with other Don't Starve Together mods. Modded items will not be shuffled and will be craftable as normal.
+This should be compatible with most other Don't Starve Together mods. Modded items will not be shuffled and will be craftable as normal.
+
+Known incompatibilities:
+- [API] Gem Core: May cause some issues with the crafting menu
 
 ## Can this be played in multiplayer?
 
@@ -94,3 +101,16 @@ Yes, other players can join your world. Everyone will work together in the same 
 location checks, and each player will receive Archipelago items. If you chose the survival goal type, only the longest-living
 survivor will count for the victory condition.
 
+## I am new to Don't Starve Together, or I find the game too hard!
+
+Don't Starve Together is designed to be an unforgiving survival game, while also being scaled for multiplayer. Yet it is very learnable, and offers several
+solutions for the challenges it presents to players, even if playing solo. Additionally, there are several ways to customize the game, which are just as
+valid as playing the game on default settings.
+
+If you want an easier experience:
+- Do not enable caves or ocean regions in your YAML. Choose the survival goal, or choose Eye Of Terror as your goal boss.
+- Set Extra Damage Against Bosses to the highest setting in your YAML.
+- Set your server playstyle to Relaxed.
+- Play with mods.
+- Use the wiki. Especially for Crock Pot recipes. https://dontstarve.fandom.com/wiki/Don%27t_Starve_Wiki
+- Ask for advice.
