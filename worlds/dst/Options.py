@@ -118,7 +118,7 @@ class OceanRegions(Choice):
 class CreatureLocations(DefaultOnToggle):
     """
     Are non-boss creatures item locations, by killing or non-violent interactions?
-    (Disabling will remove a lot of locations and potentially leave unplaced items!)
+    (Disabling will remove a lot of locations. Excess items will be moved into your start inventory.)
     """
     display_name = "Creature Locations"
 
@@ -142,8 +142,9 @@ class BossLocations(Choice):
 class CookingLocations(Choice):
     """
     Find items when cooking different foods in the crock pot?
+    There's a good chance you'll need the wiki to get all of these: https://dontstarve.fandom.com/wiki/Crock_Pot
 
-    None: No items from cooking. (This will remove a lot of locations and potentially leave unplaced items!)
+    None: No items from cooking. (This will remove a lot of locations. Excess items will be moved into your start inventory.)
     Regular: Get items for cooking in the crock pot, excluding Warly's exclusives.
     Include Warly Exclusives: All crock pot recipes are item locations. Logic will expect you to have the ability to use the Portable Crock Pot.
     Veggie Only: All recipes except meat and Warly exclusives.
@@ -181,7 +182,7 @@ class SeasonChangeHelperItems(Toggle):
 
 class ChessPieceSketchItems(DefaultOnToggle):
     """
-    Included Knight, Bishop, and Rook Figure Sketches as items?
+    Include Knight, Bishop, and Rook Figure Sketches as items?
     This bypasses the need to assemble the marble sculptures for Shadow Pieces, while preventing specific progression-locking scenarios.
     """
     display_name = "Chess Piece Sketch Items"
@@ -239,8 +240,8 @@ class PlayerSkillLevel(Choice):
     What skill level should be considered for randomizer logic?
 
     Easy: Ensure items that would be helpful for progression are accessible
-    Advanced: Expects you to know the game well and to survive seasons under-equipped
-    Expert: Expects you to survive in riskier conditions, such as entering the ruins without light, etc
+    Advanced: Expects you to know the game well. Season gear logic defaults to none.
+    Expert: Expects you to survive in riskier conditions, have minimal items, and know advanced tricks. All helpful logic defaults to none.
 
     Easier difficulties may make generation more restrictive.
     """
