@@ -310,7 +310,12 @@ script.on_event(defines.events.on_player_removed, on_player_removed)
 
 function on_rocket_launched(event)
     if event.rocket and event.rocket.valid and storage.forcedata[event.rocket.force.name]['victory'] == 0 then
-        if event.rocket.get_item_count("satellite") > 0 or GOAL == 0 then
+        satellite_count = 0
+        cargo_pod = event.rocket.cargo_pod
+        if cargo_pod then
+            satellite_count = cargo_pod.get_item_count("satellite")
+        end
+        if satellite_count > 0 or GOAL == 0 then
             storage.forcedata[event.rocket.force.name]['victory'] = 1
             dumpInfo(event.rocket.force)
             game.set_game_state
