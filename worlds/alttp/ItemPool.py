@@ -696,7 +696,7 @@ def get_pool_core(multiworld, player: int):
         additional_pieces_to_place = triforce_pieces - pieces_in_core
         pool.extend(["Triforce Piece"] * pieces_in_core)
         extraitems -= pieces_in_core
-        treasure_hunt_required = multiworld.triforce_pieces_required[player].value
+        treasure_hunt_required = multiworld.worlds[player].options.triforce_pieces_required.value
 
     for extra in diff.extras:
         if extraitems >= len(extra):
