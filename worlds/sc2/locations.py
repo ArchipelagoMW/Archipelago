@@ -4070,6 +4070,58 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HAND_OF_DARKNESS_P.mission_name, "Kill 7 Hybrid", SC2_RACESWAP_LOC_ID_OFFSET + 8609, LocationType.EXTRA,
                            logic.protoss_competent_comp
                            ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 8700, LocationType.VICTORY,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Northwest Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 8701, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Northeast Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 8702, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "South Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 8703, LocationType.VANILLA),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Base Established", SC2_RACESWAP_LOC_ID_OFFSET + 8704, LocationType.EXTRA),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Close Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8705, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Mid Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8706, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Southeast Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8707, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Northeast Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8708, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name, "Northwest Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8709, LocationType.EXTRA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 8800, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Northwest Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 8801, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Northeast Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 8802, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "South Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 8803, LocationType.VANILLA),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Base Established", SC2_RACESWAP_LOC_ID_OFFSET + 8804, LocationType.EXTRA),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Close Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8805, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Mid Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8806, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Southeast Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8807, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Northeast Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8808, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Northwest Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8809, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []
