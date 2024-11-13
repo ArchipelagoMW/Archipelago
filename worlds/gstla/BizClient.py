@@ -9,7 +9,7 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write
-from .gen.LocationData import all_locations
+from .gen.LocationData import all_locations, LocationType
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -25,8 +25,6 @@ class _MemDomain(str, Enum):
 class _DataLocations(IntEnum):
     IN_GAME = (0x428, 0x2, 0x0, _MemDomain.EWRAM)
     DJINN_FLAGS = (FLAG_START + (0x30 >> 3), 0x0A, 0x30, _MemDomain.EWRAM)
-    # TODO: we haven't agreed on an address, but this location should have
-    # is two bytes enough?
     AP_ITEM_SLOT = (0xA96, 0x2, 0x0, _MemDomain.EWRAM)
     # two unused bytes in save data
     AP_ITEMS_RECEIVED = (0xA72, 0x2, 0x0, _MemDomain.EWRAM)
@@ -59,7 +57,7 @@ class _DataLocations(IntEnum):
 class GSTLAClient(BizHawkClient):
     game = 'Golden Sun The Lost Age'
     system = 'GBA'
-    # patch_suffix = '.apgstla'
+    patch_suffix = '.apgstla'
 
     flag_map: defaultdict[int, Set[int]] = defaultdict(lambda: set())
     djinn_ram_to_rom: Dict[int, int] = dict()
@@ -70,6 +68,8 @@ class GSTLAClient(BizHawkClient):
         super().__init__()
         self.slot_name = ''
         for loc in all_locations:
+            if loc.loc_type == LocationType.Event:
+                continue
             self.flag_map[loc.flag].add(loc.ap_id)
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
@@ -183,6 +183,8 @@ class GSTLAClient(BizHawkClient):
             self.local_locations = set()
             logger.debug("Not in game...")
             return
+
+        logger.debug(f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
 
         self.temp_locs = set()
         await self._load_djinn(ctx)

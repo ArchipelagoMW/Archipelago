@@ -1,12 +1,18 @@
 from __future__ import annotations
 
 import base64
+import codecs
+import hashlib
+from io import BytesIO
 
+from six import StringIO
+
+import settings
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 import os
 
-from typing import List, TextIO, BinaryIO, Dict, ClassVar, Type, cast
+from typing import List, TextIO, BinaryIO, Dict, ClassVar, Type, cast, Optional, Sequence, Tuple, Any
 
 from .Options import GSTLAOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
@@ -21,13 +27,46 @@ from .gen.LocationData import LocationType, location_name_to_data
 from .gen.ItemNames import ItemName, item_id_by_name
 from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
-from .Rom import get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch
+from .Rom import GSTLAPatchExtension, get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
 
-import logging
 
 class GSTLAWeb(WebWorld):
     theme = "jungle"
+
+class GSTLASettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the GS TLA UE Rom"""
+        description = "Golden Sun The Lost Age Rom File"
+        copy_to: Optional[str] = "Golden Sun - The Lost Age (UE) [!].gba"
+
+        def browse(self: settings.T,
+                   filetypes: Optional[Sequence[Tuple[str, Sequence[str]]]] = None,
+                   **kwargs: Any) -> Optional[settings.T]:
+            if not filetypes:
+                file_types = [("GBA", [".gba"])]
+                return super().browse(file_types, **kwargs)
+            else:
+                return super().browse(filetypes, **kwargs)
+
+        @classmethod
+        def validate(cls, path: str) -> None:
+            """Try to open and validate file against hashes"""
+            with open(path, "rb", buffering=0) as f:
+                try:
+                    # cls._validate_stream_hashes(f)
+                    base_rom_bytes = f.read()
+                    basemd5 = hashlib.md5()
+                    basemd5.update(base_rom_bytes)
+                    if basemd5.hexdigest() == CHECKSUM_GSTLA:
+                        # we need special behavior here
+                        cls.copy_to = None
+                    else:
+                        raise ValueError('Supplied Base Rom does not match UE GBA Golden Sun TLA Version.'
+                                        'Please provide the correct ROM version')
+                except ValueError:
+                    raise ValueError(f"File hash does not match for {path}")
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 class GSTLAWorld(World):
     game = "Golden Sun The Lost Age"
@@ -36,6 +75,7 @@ class GSTLAWorld(World):
     data_version = 1
     items_ids_populated = set()
     location_flags_populated = set()
+    settings: ClassVar[GSTLASettings]
 
     item_name_to_id = item_id_by_name#{item.itemName: itemfor item in all_items if item.type != ItemType.Event}
     location_name_to_id = ids_by_loc_name#{location: location_name_to_id[location].id for location in location_name_to_id}
@@ -92,49 +132,57 @@ class GSTLAWorld(World):
         pass
 
     def generate_output(self, output_directory: str):
-        self._generate_rando_file(output_directory)
-        rom = LocalRom(get_base_rom_path())
-        world = self.multiworld
-        player = self.player
+        ap_settings = BytesIO()
+        ap_settings_debug = StringIO()
+        self._generate_rando_data(ap_settings, ap_settings_debug)
 
-        rom.write_story_flags()
-        rom.apply_qol_patches()
-
-        for region in self.multiworld.get_regions(self.player):
-            for location in region.locations:
-                location_data = location_name_to_id.get(location.name, None)
-
-                if location_data is None or location_data.loc_type == LocationType.Event or location_data.loc_type == LocationType.Character:
-                    continue
-                ap_item = location.item
-                # print(ap_item)
-                if ap_item is None:
-                    # TODO: need to fill with something else
-                    continue
-
-                if ap_item.player != self.player:
-                    item_data = AP_PLACEHOLDER_ITEM
-                else:
-                    item_data = item_table[ap_item.name]
-
-                if item_data.type == ItemType.Djinn:
-                    rom.write_djinn(location_data, item_data)
-                else:
-                    rom.write_item(location_data, item_data)
-
-        rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
-
-        try:
-            rom.write_to_file(rompath)
-            patch = GSTLADeltaPatch(os.path.splitext(rompath)[0]+GSTLADeltaPatch.patch_file_ending, player=player,
-                        player_name=world.player_name[player], patched_path=rompath)
-
-            patch.write()
-        except:
-            raise()
-        finally:
-            if os.path.exists(rompath):
-                os.unlink(rompath)
+        patch = GSTLADeltaPatch(player=self.player,
+                                player_name=self.player_name,
+                                path=os.path.join(output_directory, self.multiworld.get_out_file_name_base(self.player)+GSTLADeltaPatch.patch_file_ending))
+        patch.add_settings(ap_settings.getvalue(), ap_settings_debug.getvalue().encode("utf-8"))
+        patch.write()
+        # rom = LocalRom(get_base_rom_path())
+        # world = self.multiworld
+        # player = self.player
+        #
+        # rom.write_story_flags()
+        # rom.apply_qol_patches()
+        #
+        # for region in self.multiworld.get_regions(self.player):
+        #     for location in region.locations:
+        #         location_data = location_name_to_id.get(location.name, None)
+        #
+        #         if location_data is None or location_data.loc_type == LocationType.Event or location_data.loc_type == LocationType.Character:
+        #             continue
+        #         ap_item = location.item
+        #         # print(ap_item)
+        #         if ap_item is None:
+        #             # TODO: need to fill with something else
+        #             continue
+        #
+        #         if ap_item.player != self.player:
+        #             item_data = AP_PLACEHOLDER_ITEM
+        #         else:
+        #             item_data = item_table[ap_item.name]
+        #
+        #         if item_data.type == ItemType.Djinn:
+        #             rom.write_djinn(location_data, item_data)
+        #         else:
+        #             rom.write_item(location_data, item_data)
+        #
+        # rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
+        #
+        # try:
+        #     rom.write_to_file(rompath)
+        #     patch = GSTLADeltaPatch(os.path.splitext(rompath)[0]+GSTLADeltaPatch.patch_file_ending, player=player,
+        #                 player_name=world.player_name[player], patched_path=rompath)
+        #
+        #     patch.write()
+        # except:
+        #     raise()
+        # finally:
+        #     if os.path.exists(rompath):
+        #         os.unlink(rompath)
 
     def _generate_rando_data(self, rando_file: BinaryIO, debug_file: TextIO):
         rando_file.write(0x1.to_bytes(length=1, byteorder='little'))
