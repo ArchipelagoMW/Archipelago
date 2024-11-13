@@ -61,54 +61,54 @@ def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, du
     # since the clip links directly to the exterior region. 
 
 
-def underworld_glitches_rules(world, player): 
+def underworld_glitches_rules(multiworld, player):
     # Ice Palace Entrance Clip
     # This is the easiest one since it's a simple internal clip.
     # Need to also add melting to freezor chest since it's otherwise assumed.
     # Also can pick up the first jelly key from behind.
-    add_rule(world.get_entrance('Ice Palace (Main)', player), lambda state: can_bomb_clip(state, world.get_region('Ice Palace (Entrance)', player), player), combine='or')
-    add_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: can_melt_things(state, player))
-    add_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_bomb_clip(state, world.get_region('Ice Palace (Entrance)', player), player), combine='or')
+    add_rule(multiworld.get_entrance('Ice Palace (Main)', player), lambda state: can_bomb_clip(state, multiworld.get_region('Ice Palace (Entrance)', player), player), combine='or')
+    add_rule(multiworld.get_location('Ice Palace - Freezor Chest', player), lambda state: can_melt_things(state, player))
+    add_rule(multiworld.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_bomb_clip(state, multiworld.get_region('Ice Palace (Entrance)', player), player), combine='or')
 
 
     # Kiki Skip
-    kikiskip = world.get_entrance('Kiki Skip', player)
+    kikiskip = multiworld.get_entrance('Kiki Skip', player)
     set_rule(kikiskip, lambda state: can_bomb_clip(state, kikiskip.parent_region, player))
-    dungeon_reentry_rules(world, player, kikiskip, 'Palace of Darkness (Entrance)', 'Palace of Darkness Exit')
+    dungeon_reentry_rules(multiworld, player, kikiskip, 'Palace of Darkness (Entrance)', 'Palace of Darkness Exit')
 
 
     # Mire -> Hera -> Swamp
     # Using mire keys on other dungeon doors
-    mire = world.get_region('Misery Mire (West)', player)
+    mire = multiworld.get_region('Misery Mire (West)', player)
     mire_clip = lambda state: state.can_reach('Misery Mire (West)', 'Region', player) and can_bomb_clip(state, mire, player) and has_fire_source(state, player)
-    hera_clip = lambda state: state.can_reach('Tower of Hera (Top)', 'Region', player) and can_bomb_clip(state, world.get_region('Tower of Hera (Top)', player), player)
-    add_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: mire_clip(state) and state.has('Big Key (Misery Mire)', player), combine='or')
-    add_rule(world.get_entrance('Swamp Palace Small Key Door', player), lambda state: mire_clip(state), combine='or')
-    add_rule(world.get_entrance('Swamp Palace (Center)', player), lambda state: mire_clip(state) or hera_clip(state), combine='or')
+    hera_clip = lambda state: state.can_reach('Tower of Hera (Top)', 'Region', player) and can_bomb_clip(state, multiworld.get_region('Tower of Hera (Top)', player), player)
+    add_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: mire_clip(state) and state.has('Big Key (Misery Mire)', player), combine='or')
+    add_rule(multiworld.get_entrance('Swamp Palace Small Key Door', player), lambda state: mire_clip(state), combine='or')
+    add_rule(multiworld.get_entrance('Swamp Palace (Center)', player), lambda state: mire_clip(state) or hera_clip(state), combine='or')
 
     # Build the rule for SP moat. 
     # We need to be able to s+q to old man, then go to either Mire or Hera at either Hera or GT. 
     # First we require a certain type of entrance shuffle, then build the rule from its pieces. 
-    if not world.worlds[player].options.swamp_patch_required:
-        if world.worlds[player].options.entrance_shuffle.value in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+    if not multiworld.worlds[player].options.swamp_patch_required:
+        if multiworld.worlds[player].options.entrance_shuffle.value in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
             rule_map = {
                 'Misery Mire (Entrance)': (lambda state: True),
                 'Tower of Hera (Bottom)': (lambda state: state.can_reach('Tower of Hera Big Key Door', 'Entrance', player))
             }
-            inverted = world.worlds[player].options.mode == 'inverted'
+            inverted = multiworld.worlds[player].options.mode == 'inverted'
             hera_rule = lambda state: (state.has('Moon Pearl', player) or not inverted) and \
-                                      rule_map.get(world.get_entrance('Tower of Hera', player).connected_region.name, lambda state: False)(state)
+                                      rule_map.get(multiworld.get_entrance('Tower of Hera', player).connected_region.name, lambda state: False)(state)
             gt_rule = lambda state: (state.has('Moon Pearl', player) or inverted) and \
-                                    rule_map.get(world.get_entrance(('Ganons Tower' if not inverted else 'Inverted Ganons Tower'), player).connected_region.name, lambda state: False)(state)
+                                    rule_map.get(multiworld.get_entrance(('Ganons Tower' if not inverted else 'Inverted Ganons Tower'), player).connected_region.name, lambda state: False)(state)
             mirrorless_moat_rule = lambda state: state.can_reach('Old Man S&Q', 'Entrance', player) and mire_clip(state) and (hera_rule(state) or gt_rule(state))
-            add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player) or mirrorless_moat_rule(state))
+            add_rule(multiworld.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player) or mirrorless_moat_rule(state))
         else: 
-            add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
+            add_rule(multiworld.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
     # Using the entrances for various ER types. Hera -> Swamp never matters because you can only logically traverse with the mire keys
-    mire_to_hera = world.get_entrance('Mire to Hera Clip', player)
-    mire_to_swamp = world.get_entrance('Hera to Swamp Clip', player)
+    mire_to_hera = multiworld.get_entrance('Mire to Hera Clip', player)
+    mire_to_swamp = multiworld.get_entrance('Hera to Swamp Clip', player)
     set_rule(mire_to_hera, mire_clip)
     set_rule(mire_to_swamp, lambda state: mire_clip(state) and state.has('Flippers', player))
-    dungeon_reentry_rules(world, player, mire_to_hera, 'Tower of Hera (Bottom)', 'Tower of Hera Exit')
-    dungeon_reentry_rules(world, player, mire_to_swamp, 'Swamp Palace (Entrance)', 'Swamp Palace Exit')
+    dungeon_reentry_rules(multiworld, player, mire_to_hera, 'Tower of Hera (Bottom)', 'Tower of Hera Exit')
+    dungeon_reentry_rules(multiworld, player, mire_to_swamp, 'Swamp Palace (Entrance)', 'Swamp Palace Exit')
