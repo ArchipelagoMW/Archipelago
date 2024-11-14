@@ -9,7 +9,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 import os
 
-from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Sequence, Tuple, Any, Mapping
+from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Sequence, Tuple, Any, Mapping, TYPE_CHECKING
 
 from .Options import GSTLAOptions
 from BaseClasses import Item
@@ -25,8 +25,6 @@ from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
 from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
-from ..tloz.Locations import value
-
 
 class GSTLAWeb(WebWorld):
     theme = "jungle"
@@ -64,6 +62,7 @@ class GSTLASettings(settings.Group):
                 except ValueError:
                     raise ValueError(f"File hash does not match for {path}")
     rom_file: RomFile = RomFile(RomFile.copy_to)
+
 
 class GSTLAWorld(World):
     game = "Golden Sun The Lost Age"

@@ -9,10 +9,12 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write
-from .gen.LocationData import all_locations, LocationType
+from . import loc_names_by_id
+from .gen.ItemData import djinn_items
+from .gen.LocationData import all_locations, LocationType, djinn_locations
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
 
 logger = logging.getLogger("Client")
 
@@ -53,6 +55,43 @@ class _DataLocations(IntEnum):
     def to_request(self) -> Tuple[int, int, _MemDomain]:
         return self.addr, self.length, self.domain
 
+
+def cmd_unchecked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
+    """Prints djinn locations that have not yet been checked"""
+    from worlds._bizhawk.context import BizHawkClientContext
+    if self.ctx.game != "Golden Sun The Lost Age":
+        logger.warning("This command can only be used when playing GSTLA")
+        return
+
+    if not self.ctx.server or not self.ctx.slot:
+        logger.warning("You must be connected to a server to use this command")
+        return
+    ctx = self.ctx
+    assert isinstance(ctx, BizHawkClientContext)
+    client = ctx.client_handler
+    assert isinstance(client, GSTLAClient)
+    # TODO: cleanup
+    for djinn in djinn_items:
+        if djinn.name not in client.checked_djinn:
+            logger.info(djinn.name)
+
+def cmd_checked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
+    """Prints djinn locations that have been checked"""
+    from worlds._bizhawk.context import BizHawkClientContext
+    if self.ctx.game != "Golden Sun The Lost Age":
+        logger.warning("This command can only be used when playing GSTLA")
+        return
+
+    if not self.ctx.server or not self.ctx.slot:
+        logger.warning("You must be connected to a server to use this command")
+        return
+    ctx = self.ctx
+    assert isinstance(ctx, BizHawkClientContext)
+    client = ctx.client_handler
+    assert isinstance(client, GSTLAClient)
+    for djinn in client.checked_djinn:
+        logger.info(djinn)
+
 class StartingItemHandler:
 
     def __init__(self, starting_data: Mapping[str, int]):
@@ -83,10 +122,14 @@ class GSTLAClient(BizHawkClient):
         self.slot_name = ''
         self.flag_map: defaultdict[int, Set[int]] = defaultdict(lambda: set())
         self.djinn_ram_to_rom: Dict[int, int] = dict()
+        self.djinn_flag_map: Dict[int, str] = dict()
+        self.checked_djinn: Set[str] = set()
         for loc in all_locations:
             if loc.loc_type == LocationType.Event:
                 continue
             self.flag_map[loc.flag].add(loc.ap_id)
+            if loc.loc_type == LocationType.Djinn:
+                self.djinn_flag_map[loc.flag] = loc_names_by_id[loc.addresses[0]]
         self.temp_locs: Set[int] = set()
         self.local_locations: Set[int] = set()
         self.starting_items: StartingItemHandler = StartingItemHandler(dict())
@@ -97,6 +140,10 @@ class GSTLAClient(BizHawkClient):
         game_name = game_name[0].decode('ascii')
         logger.debug("Game loaded: %s", game_name)
         if game_name != 'GOLDEN_SUN_BAGFE01':
+            if "unchecked_djinn" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("unchecked_djinn")
+            if "djinn" in ctx.command_processor.commands:
+                ctx.command_processor.commands.pop("djinn")
             return False
         ctx.game = self.game
         # TODO: would like to verify that the ROM is the correct one somehow
@@ -107,6 +154,10 @@ class GSTLAClient(BizHawkClient):
             logger.warning("Could not find slot name in GSTLA ROM; please double check the ROM is correct")
         else:
             self.slot_name = base64.b64decode(slot_name[0].rstrip(b'\x00'), validate=True).decode('utf-8').strip()
+        if "unchecked_djinn" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["unchecked_djinn"] = cmd_unchecked_djinn
+        if "djinn" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["djinn"] = cmd_checked_djinn
         ctx.items_handling = 0b001
         ctx.watcher_timeout = 1 # not sure what a reasonable setting here is; passed to asyncio.wait_for
         return True
@@ -142,6 +193,8 @@ class GSTLAClient(BizHawkClient):
                 if part_int & 1 > 0:
                     flag = i * 8 + bit
                     shuffled_flag = self.djinn_ram_to_rom[flag + _DataLocations.DJINN_FLAGS.initial_flag]
+                    # TODO: this may be wrong once djinn are events
+                    self.checked_djinn.add(self.djinn_flag_map[shuffled_flag])
                     locs = self.flag_map.get(shuffled_flag, None)
                     # logger.debug("orig_flag: %s, shuffle flag: %s, locs: %s", hex(flag), hex(shuffled_flag), locs)
                     assert locs is not None, "Got null locations for flag: %s" % hex(shuffled_flag)
