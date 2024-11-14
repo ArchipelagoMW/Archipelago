@@ -233,7 +233,7 @@ being a piece of a direct derivative of it. The terms are as follows:
 
    Copyright 2021-2024 DevAnj, fusecavator, spooky, Malaert64
 
-   APworld version by Liquid Cat
+   Archipelago version by Liquid Cat
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

@@ -1,24 +1,24 @@
 from dataclasses import dataclass
-from Options import OptionGroup, Choice, Range, Toggle, PerGameCommonOptions, StartInventoryPool
+from Options import OptionGroup, Choice, Range, Toggle, PerGameCommonOptions, StartInventoryPool, DeathLink
 
 
 class IgnoreCleansing(Toggle):
     """
-    Removes the logical requirement for the Cleansing to go beyond the Underground Waterway entrance rooms. You may be required to brave the harmful water without it.
+    Removes the logical requirement for the Cleansing to go beyond the first Underground Waterway rooms from either of the area's sides. You may be required to brave the harmful water without it.
     """
     display_name = "Ignore Cleansing"
 
 
 class AutoRun(Toggle):
     """
-    Causes Nathan to always run when pressing left or right without having to double-tap.
+    Makes Nathan always run when pressing left or right without needing to double-tap.
     """
     display_name = "Auto Run"
 
 
 class DSSPatch(Toggle):
     """
-    Patches being able to pause during the DSS startup animation and switch the cards in the menu to use any combos you don't currently have.
+    Patches out being able to pause during the DSS startup animation and switch the cards in the menu to use any combos you don't currently have, as well as changing the element of a summon to one you don't currently have.
     """
     display_name = "DSS Patch"
 
@@ -66,7 +66,7 @@ class AvailableLastKeys(Range):
 
 class BuffRangedFamiliars(Toggle):
     """
-    Makes Familiar projectiles do double damage.
+    Makes Familiar projectiles deal double damage to enemies.
     """
     display_name = "Buff Ranged Familiars"
 
@@ -104,7 +104,7 @@ class ItemDropRandomization(Choice):
 class HalveDSSCardsPlaced(Toggle):
     """
     Places only half of the DSS Cards in the item pool.
-    A valid combo that lets you freeze or petrify enemies as platforms will always be placed.
+    A valid combo that lets you freeze or petrify enemies to use as platforms will always be placed.
     """
     display_name = "Halve DSS Cards Placed"
 
@@ -123,7 +123,7 @@ class Countdown(Choice):
 class SubWeaponShuffle(Toggle):
     """
     Randomizes which sub-weapon candles have which sub-weapons.
-    The total count of each sub-weapon will be consistent with that of the vanilla game.
+    The total available count of each sub-weapon will be consistent with that of the vanilla game.
     """
     display_name = "Sub-weapon Shuffle"
 
@@ -172,21 +172,21 @@ class NerfRocWing(Toggle):
 
 class PlutoGriffinAirSpeed(Toggle):
     """
-    Enables jumping with the Pluto + Griffin combo active without losing the speed boost gained from it. Anything made possible with the increased midair speed is out of logic.
+    Increases Nathan's air speeds with the Pluto + Griffin combo active to be the same as his ground speeds. Anything made possible with the increased air speed is out of logic.
     """
     display_name = "DSS Pluto and Griffin Run Speed in Air"
 
 
 class SkipDialogues(Toggle):
     """
-    Skips all cutscene dialogue before the ending.
+    Skips all cutscene dialogue besides the ending.
     """
     display_name = "Skip Cutscene Dialogue"
 
 
 class SkipTutorials(Toggle):
     """
-    Skips all Magic Item-related tutorial textboxes.
+    Skips all Magic Item and DSS-related tutorial textboxes.
     """
     display_name = "Skip Magic Item Tutorials"
 
@@ -217,12 +217,10 @@ class BattleArenaMusic(Choice):
     default = 0
 
 
-class DeathLink(Choice):
-    """
-    When you die, everyone dies. Of course the reverse is true too.
-    Received DeathLinks will not kill you in the Battle Arena unless Arena On is chosen.
-    """
-    display_name = "DeathLink"
+class CVCotMDeathLink(Choice):
+    __doc__ = (DeathLink.__doc__ +
+               "\n\n    Received DeathLinks will not kill you in the Battle Arena unless Arena On is chosen.")
+    display_name = "Death Link"
     option_off = 0
     alias_false = 0
     alias_no = 0
@@ -271,13 +269,13 @@ class CVCotMOptions(PerGameCommonOptions):
     nerf_roc_wing: NerfRocWing
     early_escape_item: EarlyEscapeItem
     battle_arena_music: BattleArenaMusic
-    death_link: DeathLink
+    death_link: CVCotMDeathLink
 
 
 cvcotm_option_groups = [
     OptionGroup("difficulty", [
         BuffRangedFamiliars, BuffSubWeapons, BuffShooterStrength, ItemDropRandomization, IgnoreCleansing,
-        HalveDSSCardsPlaced, SubWeaponShuffle, EarlyEscapeItem, DeathLink]),
+        HalveDSSCardsPlaced, SubWeaponShuffle, EarlyEscapeItem, CVCotMDeathLink]),
     OptionGroup("quality of life", [
         AutoRun, DSSPatch, AlwaysAllowSpeedDash, PlutoGriffinAirSpeed, Countdown, DisableBattleArenaMPDrain,
         SkipDialogues, SkipTutorials, BattleArenaMusic])

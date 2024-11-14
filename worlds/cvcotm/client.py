@@ -3,7 +3,7 @@ from .locations import BASE_ID, get_location_names_to_ids
 from .items import cvcotm_item_info, MAJORS_CLASSIFICATIONS
 from .locations import cvcotm_location_info
 from .cvcotm_text import cvcotm_string_to_bytearray
-from .options import CompletionGoal, DeathLink, IronMaidenBehavior
+from .options import CompletionGoal, CVCotMDeathLink, IronMaidenBehavior
 from .rom import ARCHIPELAGO_IDENTIFIER_START, ARCHIPELAGO_IDENTIFIER, AUTH_NUMBER_START, QUEUED_TEXT_STRING_START
 from .data import iname, lname
 
@@ -291,7 +291,7 @@ class CastlevaniaCotMClient(BizHawkClient):
 
                 # If we are in the Battle Arena and are not using the On Including Arena DeathLink option, extend the
                 # DeathLink message and don't actually kill Nathan.
-                if ctx.slot_data["death_link"] != DeathLink.option_arena_on and area == AREA_BATTLE_ARENA:
+                if ctx.slot_data["death_link"] != CVCotMDeathLink.option_arena_on and area == AREA_BATTLE_ARENA:
                     death_text += "◊The Battle Arena nullified the DeathLink. Go fight fair and square!"
                 else:
                     # Otherwise, kill Nathan by giving him a 9999 damage-dealing poison status that hurts him as soon as

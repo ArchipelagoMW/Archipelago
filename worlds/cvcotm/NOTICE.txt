@@ -1,4 +1,4 @@
 Circle of the Moon Randomizer
 Copyright 2021-2024 DevAnj, fusecavator, spooky, Malaert64
 
-APWorld version by Liquid Cat
+Archipelago version by Liquid Cat

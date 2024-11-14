@@ -3,7 +3,7 @@ from typing import Any, Dict
 from Options import Accessibility, ProgressionBalancing
 from .options import IgnoreCleansing, AutoRun, DSSPatch, AlwaysAllowSpeedDash, IronMaidenBehavior, BuffRangedFamiliars,\
     BuffSubWeapons, BuffShooterStrength, ItemDropRandomization, HalveDSSCardsPlaced, Countdown, SubWeaponShuffle,\
-    DisableBattleArenaMPDrain, RequiredSkirmishes, EarlyEscapeItem, DeathLink, CompletionGoal, SkipDialogues,\
+    DisableBattleArenaMPDrain, RequiredSkirmishes, EarlyEscapeItem, CVCotMDeathLink, CompletionGoal, SkipDialogues,\
     NerfRocWing, SkipTutorials, BattleArenaMusic, PlutoGriffinAirSpeed
 
 all_random_options = {
@@ -31,7 +31,7 @@ all_random_options = {
     "nerf_roc_wing":                 "random",
     "early_escape_item":             "random",
     "battle_arena_music":            "random",
-    "death_link":                    DeathLink.option_off,
+    "death_link":                    CVCotMDeathLink.option_off,
     "completion_goal":               "random",
 }
 
@@ -60,7 +60,7 @@ beginner_mode_options = {
     "nerf_roc_wing":                 NerfRocWing.option_false,
     "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
-    "death_link":                    DeathLink.option_off,
+    "death_link":                    CVCotMDeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
 
@@ -89,7 +89,7 @@ standard_competitive_options = {
     "nerf_roc_wing":                 NerfRocWing.option_false,
     "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
-    "death_link":                    DeathLink.option_off,
+    "death_link":                    CVCotMDeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
 
@@ -118,7 +118,7 @@ randomania_2023_options = {
     "nerf_roc_wing":                 NerfRocWing.option_false,
     "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
-    "death_link":                    DeathLink.option_off,
+    "death_link":                    CVCotMDeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
 
@@ -147,7 +147,7 @@ competitive_all_bosses_options = {
     "nerf_roc_wing":                 NerfRocWing.option_false,
     "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
-    "death_link":                    DeathLink.option_off,
+    "death_link":                    CVCotMDeathLink.option_off,
     "completion_goal":               CompletionGoal.option_dracula,
 }
 
@@ -176,7 +176,7 @@ hardcore_mode_options = {
     "nerf_roc_wing":                 NerfRocWing.option_false,
     "early_escape_item":             EarlyEscapeItem.option_double,
     "battle_arena_music":            BattleArenaMusic.option_nothing,
-    "death_link":                    DeathLink.option_off,
+    "death_link":                    CVCotMDeathLink.option_off,
     "completion_goal":               CompletionGoal.option_battle_arena_and_dracula,
 }
 

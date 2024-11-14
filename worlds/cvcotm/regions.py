@@ -11,8 +11,6 @@ class RegionInfo(TypedDict, total=False):
 # "locations" = A list of the Locations to add to that Region when adding said Region.
 # "entrances" = A dict of the connecting Regions to the Entrances' names to add to that Region when adding said Region.
 cvcotm_region_info: Dict[str, RegionInfo] = {
-    "Menu": {"entrances": {"Catacomb": "At an Old Austrian Castle"}},
-
     "Catacomb": {"locations": [lname.sr3,
                                lname.cc1,
                                lname.cc3,

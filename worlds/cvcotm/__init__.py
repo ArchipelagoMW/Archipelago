@@ -74,6 +74,7 @@ class CVCotMWorld(World):
     options_dataclass = CVCotMOptions
     options: CVCotMOptions
     settings: typing.ClassVar[CVCotMSettings]
+    origin_region_name = "Catacomb"
     hint_blacklist = frozenset({lname.ba24})  # The Battle Arena reward, if it's put in, will always be a Last Key.
 
     item_name_to_id = {name: cvcotm_item_info[name].code + BASE_ID for name in cvcotm_item_info
