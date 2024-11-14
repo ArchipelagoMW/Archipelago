@@ -9,7 +9,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 import os
 
-from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Sequence, Tuple, Any
+from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Sequence, Tuple, Any, Mapping
 
 from .Options import GSTLAOptions
 from BaseClasses import Item
@@ -25,6 +25,7 @@ from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
 from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
+from ..tloz.Locations import value
 
 
 class GSTLAWeb(WebWorld):
@@ -126,6 +127,14 @@ class GSTLAWorld(World):
 
     def pre_fill(self) -> None:
         pass
+
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        ret = dict()
+        ret['start_inventory'] = {
+            item_id_by_name[k]: v
+            for k, v in self.options.start_inventory.items()
+        }
+        return ret
 
     def generate_output(self, output_directory: str):
         ap_settings = BytesIO()
