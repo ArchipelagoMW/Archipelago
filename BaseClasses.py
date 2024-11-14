@@ -9,12 +9,12 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence
+from collections.abc import Collection, MutableSequence, Sequence
 from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, Type)
+                    Optional, Protocol, Set, Tuple, Union, Type, TypedDict)
 
-from typing_extensions import NotRequired, TypedDict
+from typing_extensions import NotRequired
 
 import NetUtils
 import Options
@@ -662,6 +662,18 @@ class MultiWorld():
                 return True
 
         return False
+
+    def get_item_metadata(self, game_name: str, item_name: str) -> "ItemMetadata":
+        metadata = AutoWorld.AutoWorldRegister.world_types[game_name].item_metadata
+        if not metadata:
+            return {}
+        return metadata.get(item_name, {})
+
+    def get_location_metadata(self, game_name: str, location_name: str) -> "LocationMetadata":
+        metadata = AutoWorld.AutoWorldRegister.world_types[game_name].location_metadata
+        if not metadata:
+            return {}
+        return metadata.get(location_name, {})
 
 
 PathValue = Tuple[str, Optional["PathValue"]]
@@ -1610,3 +1622,27 @@ def get_seed(seed: Optional[int] = None) -> int:
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
+
+
+class CommonVisualTags:
+    KEY = 'key'
+
+
+class CommonFunctionalTags:
+    KEY = 'key'
+
+
+class ItemMetadata(TypedDict, total=False):
+    short_name: str
+    description: str
+    visual_tags: Sequence[str]
+    functional_tags: Sequence[str]
+    default_classification: "ItemClassification"
+    usefulness: int
+
+
+class LocationMetadata(TypedDict, total=False):
+    short_name: str
+    description: str
+    area: str
+    difficulty: int
