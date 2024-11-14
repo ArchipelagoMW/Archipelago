@@ -4,12 +4,12 @@ import base64
 from collections import defaultdict
 import logging
 from enum import IntEnum, Enum
-from typing import Dict, List, TYPE_CHECKING, Set, Tuple
+from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping
 
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write
-from .gen.LocationData import all_locations
+from .gen.LocationData import all_locations, LocationType
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -25,8 +25,6 @@ class _MemDomain(str, Enum):
 class _DataLocations(IntEnum):
     IN_GAME = (0x428, 0x2, 0x0, _MemDomain.EWRAM)
     DJINN_FLAGS = (FLAG_START + (0x30 >> 3), 0x0A, 0x30, _MemDomain.EWRAM)
-    # TODO: we haven't agreed on an address, but this location should have
-    # is two bytes enough?
     AP_ITEM_SLOT = (0xA96, 0x2, 0x0, _MemDomain.EWRAM)
     # two unused bytes in save data
     AP_ITEMS_RECEIVED = (0xA72, 0x2, 0x0, _MemDomain.EWRAM)
@@ -55,22 +53,44 @@ class _DataLocations(IntEnum):
     def to_request(self) -> Tuple[int, int, _MemDomain]:
         return self.addr, self.length, self.domain
 
+class StartingItemHandler:
+
+    def __init__(self, starting_data: Mapping[str, int]):
+        self.starting_data = []
+        self.count = sum(starting_data.values())
+
+        keys = list(starting_data.keys())
+        keys.sort()
+
+        for key in keys:
+            c = starting_data[key]
+            for i in range(c):
+                self.starting_data.append(int(key))
+        logger.debug("Starting data: %s", self.starting_data)
+        logger.debug("Starting count: %s", self.count)
+
+    def __getitem__(self, n: int):
+        return self.starting_data[n]
 
 class GSTLAClient(BizHawkClient):
     game = 'Golden Sun The Lost Age'
     system = 'GBA'
-    # patch_suffix = '.apgstla'
+    patch_suffix = '.apgstla'
 
-    flag_map: defaultdict[int, Set[int]] = defaultdict(lambda: set())
-    djinn_ram_to_rom: Dict[int, int] = dict()
-    local_locations: Set[int] = set()
-    temp_locs: Set[int] = set()
 
     def __init__(self):
         super().__init__()
         self.slot_name = ''
+        self.flag_map: defaultdict[int, Set[int]] = defaultdict(lambda: set())
+        self.djinn_ram_to_rom: Dict[int, int] = dict()
         for loc in all_locations:
+            if loc.loc_type == LocationType.Event:
+                continue
             self.flag_map[loc.flag].add(loc.ap_id)
+        self.temp_locs: Set[int] = set()
+        self.local_locations: Set[int] = set()
+        self.starting_items: StartingItemHandler = StartingItemHandler(dict())
+        self.was_in_game: bool = False
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
         game_name = await read(ctx.bizhawk_ctx, [(0xA0, 0x12, _MemDomain.ROM)])
@@ -156,9 +176,16 @@ class GSTLAClient(BizHawkClient):
             logger.debug("AP Item slot has data in it: %d", item_in_slot)
             return
         item_index = int.from_bytes(data[_DataLocations.AP_ITEMS_RECEIVED], 'little')
-        logger.debug("Items to give: %d, Current Item Index: %d", len(ctx.items_received), item_index)
-        if len(ctx.items_received) > item_index:
-            item_code = ctx.items_received[item_index].item
+        start_count = self.starting_items.count
+        item_code = None
+        if start_count > item_index:
+            logger.debug("Starting items to give: %d, Current Item Index: %d", start_count, item_index)
+            item_code = self.starting_items[item_index]
+        elif len(ctx.items_received) + start_count > item_index:
+            logger.debug("Items to give: %d, Current Item Index: %d", len(ctx.items_received), item_index - start_count)
+            item_code = ctx.items_received[item_index - start_count].item
+
+        if item_code is not None:
             logger.debug("Writing Item %d to Slot", item_code)
             await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
                                            item_code.to_bytes(length=2, byteorder="little"),
@@ -177,12 +204,22 @@ class GSTLAClient(BizHawkClient):
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
             logger.debug("Not connected to server...")
             return
+
         result = await read(ctx.bizhawk_ctx, [data_loc.to_request() for data_loc in _DataLocations])
         if not self._is_in_game(result):
             # TODO: if the player goes back into the save file should we reset some things?
             self.local_locations = set()
+            self.starting_items = StartingItemHandler(dict())
+            self.was_in_game = False
             logger.debug("Not in game...")
             return
+
+        if not self.was_in_game:
+            self.was_in_game = True
+            logger.debug(ctx.slot_data)
+            self.starting_items = StartingItemHandler(ctx.slot_data.get('start_inventory', dict()))
+
+        logger.debug(f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
 
         self.temp_locs = set()
         await self._load_djinn(ctx)
