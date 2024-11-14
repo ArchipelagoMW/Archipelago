@@ -216,7 +216,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Nothing"))
+                    self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
                 else:
                     item = self.create_item(item_name)
 
@@ -514,7 +514,13 @@ class LinksAwakeningWorld(World):
         return change
 
     def get_filler_item_name(self) -> str:
+        if self.options.stabilize_item_pool:
         return "Nothing"
+        else:
+            # Same fill choices and weights used in LADXR.itempool.__randomizeRupees
+            filler_choices = ('Bomb', 'Single Arrow', '10 Arrows', 'Magic Powder', 'Medicine')
+            filler_weights = ( 10,     5,              10,          10,             1)
+            return self.random.choices(filler_choices, filler_weights)[0]
 
     def fill_slot_data(self):
         slot_data = {}
