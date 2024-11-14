@@ -209,11 +209,11 @@ def set_rules(world: "MM2World") -> None:
                     continue
                 highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
                 uses = weapon_energy[wp] // weapon_costs[wp]
-                used_weapons[boss].add(wp)
                 if int(uses * boss_damage[wp]) > boss_health[boss]:
                     used = ceil(boss_health[boss] / boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * used
                     boss_health[boss] = 0
+                    used_weapons[boss].add(wp)
                 elif highest <= 0:
                     # we are out of weapons that can actually damage the boss
                     # so find the weapon that has the most uses, and apply that as an additional weakness
@@ -221,18 +221,21 @@ def set_rules(world: "MM2World") -> None:
                     # Quick Boomerang and no other, it would only be 28 off from defeating all 9, which Metal Blade should
                     # be able to cover
                     wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight
-                                       if weapon != 0)
+                                       if weapon != 0 and (weapon != 8 or boss != 12))
+                    # Wily Machine cannot under any circumstances take damage from Time Stopper, prevent this
                     world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
                     used = min(int(weapon_energy[wp] // weapon_costs[wp]),
-                               ceil(boss_health[boss] // minimum_weakness_requirement[wp]))
+                               ceil(boss_health[boss] / minimum_weakness_requirement[wp]))
                     weapon_energy[wp] -= weapon_costs[wp] * used
                     boss_health[boss] -= int(used * minimum_weakness_requirement[wp])
                     weapon_weight.pop(wp)
+                    used_weapons[boss].add(wp)
                 else:
                     # drain the weapon and continue
                     boss_health[boss] -= int(uses * boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * uses
                     weapon_weight.pop(wp)
+                    used_weapons[boss].add(wp)
 
         world.wily_5_weapons = {boss: sorted(used_weapons[boss]) for boss in used_weapons}
 
