@@ -4122,6 +4122,84 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name, "Northwest Temple", SC2_RACESWAP_LOC_ID_OFFSET + 8809, LocationType.EXTRA,
                            logic.protoss_competent_comp
                            ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 9300, LocationType.VICTORY,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "East Gate", SC2_RACESWAP_LOC_ID_OFFSET + 9301, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "Northwest Gate", SC2_RACESWAP_LOC_ID_OFFSET + 9302, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "North Gate", SC2_RACESWAP_LOC_ID_OFFSET + 9303, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "1 Laser Drill Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9304, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "2 Laser Drills Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9305, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "3 Laser Drills Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9306, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "4 Laser Drills Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9307, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "5 Laser Drills Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9308, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "Sons of Korhal", SC2_RACESWAP_LOC_ID_OFFSET + 9309, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "Night Wolves", SC2_RACESWAP_LOC_ID_OFFSET + 9310, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "West Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 9311, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_T.mission_name, "Mid Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 9312, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 9400, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "East Gate", SC2_RACESWAP_LOC_ID_OFFSET + 9401, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "Northwest Gate", SC2_RACESWAP_LOC_ID_OFFSET + 9402, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "North Gate", SC2_RACESWAP_LOC_ID_OFFSET + 9403, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "1 Particle Cannon Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9404, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "2 Particle Cannons Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9405, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "3 Particle Cannons Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9406, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "4 Particle Cannons Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9407, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "5 Particle Cannons Deployed", SC2_RACESWAP_LOC_ID_OFFSET + 9408, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "Sons of Korhal", SC2_RACESWAP_LOC_ID_OFFSET + 9409, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "Night Wolves", SC2_RACESWAP_LOC_ID_OFFSET + 9410, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "West Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 9411, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.PLANETFALL_P.mission_name, "Mid Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 9412, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []

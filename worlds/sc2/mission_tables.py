@@ -150,7 +150,7 @@ class SC2Mission(Enum):
     PHANTOMS_OF_THE_VOID = 44, "Phantoms of the Void (Zerg)", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.ZERG, MissionPools.HARD, "ap_phantoms_of_the_void", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     WITH_FRIENDS_LIKE_THESE = 45, "With Friends Like These", SC2Campaign.HOTS, "Dominion Space", SC2Race.ANY, MissionPools.STARTER, "ap_with_friends_like_these", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
     CONVICTION = 46, "Conviction", SC2Campaign.HOTS, "Dominion Space", SC2Race.ANY, MissionPools.MEDIUM, "ap_conviction", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsTerran
-    PLANETFALL = 47, "Planetfall", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.AutoScroller|MissionFlag.VsTerran
+    PLANETFALL = 47, "Planetfall (Zerg)", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     DEATH_FROM_ABOVE = 48, "Death From Above", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_death_from_above", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran
     THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.AiTerranAlly
 
@@ -270,7 +270,8 @@ class SC2Mission(Enum):
     PHANTOMS_OF_THE_VOID_P = 171, "Phantoms of the Void (Protoss)", SC2Campaign.HOTS, "Skygeirr Station", SC2Race.PROTOSS, MissionPools.HARD, "ap_phantoms_of_the_void", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     # 172/173 - With Friends Like These
     # 174/175 - Conviction
-    # 176/177 - Planetfall
+    PLANETFALL_T = 176, "Planetfall (Terran)", SC2Campaign.HOTS, "Korhal", SC2Race.TERRAN, MissionPools.HARD, "ap_planetfall", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.RaceSwap
+    PLANETFALL_P = 177, "Planetfall (Protoss)", SC2Campaign.HOTS, "Korhal", SC2Race.PROTOSS, MissionPools.HARD, "ap_planetfall", MissionFlag.Protoss|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.RaceSwap
     # 178/179 - Death From Above
     # 180/181 - The Reckoning
 
