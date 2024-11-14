@@ -228,7 +228,6 @@ ItemData(2568, "Mimic 8", ItemClassification.filler, 994644, ItemType.Mimic, Tru
 other_progression: List[ItemData] = [
 ItemData(65, "Shaman's Rod", ItemClassification.progression, 732816, ItemType.Weapon, False),
 ItemData(222, "Mythril Bag (Mars)", ItemClassification.progression, 739724, ItemType.KeyItem, False),
-ItemData(229, "Lucky Medal", ItemClassification.progression_skip_balancing, 740032, ItemType.Consumable, False),
 ItemData(242, "Black Crystal", ItemClassification.progression, 740604, ItemType.Consumable, False),
 ItemData(243, "Red Key", ItemClassification.progression, 740648, ItemType.Consumable, False),
 ItemData(244, "Blue Key", ItemClassification.progression, 740692, ItemType.Consumable, False),
@@ -621,6 +620,7 @@ remainder: List[ItemData] = [
     ItemData(188, "Elixir", ItemClassification.filler, 738228, ItemType.Consumable, False),
     ItemData(226, "Smoke Bomb", ItemClassification.filler, 739900, ItemType.Consumable, False),
     ItemData(227, "Sleep Bomb", ItemClassification.filler, 739944, ItemType.Consumable, False),
+    ItemData(229, "Lucky Medal", ItemClassification.progression_skip_balancing, 740032, ItemType.Consumable, False),
     ItemData(231, "Bone", ItemClassification.filler, 740120, ItemType.Consumable, False),
     ItemData(233, "Corn", ItemClassification.filler, 740208, ItemType.Consumable, False),
     ItemData(236, "Sacred Feather", ItemClassification.filler, 740340, ItemType.Consumable, False),
