@@ -10,7 +10,6 @@ from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psy
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
 from Fill import fast_fill
-import logging
 
 if TYPE_CHECKING:
     from . import GSTLAWorld, GSTLALocation

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions
+from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions, StartInventoryPool
 
 class StartWithShip(Choice):
     """What needs to be done to get the ship?
@@ -469,3 +469,5 @@ class GSTLAOptions(PerGameCommonOptions):
     manual_retreat_glitch: ManualRetreatGlitch
     shuffle_music: MusicShuffle
     teleport_to_dungeons_and_towns: TelportEverywhere
+    
+    start_inventory_from_pool: StartInventoryPool
