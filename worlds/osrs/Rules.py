@@ -236,113 +236,96 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.South_Of_Varrock, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12) or \
+                                   and woodcutting_rule_d1(state)) or
                                   (state.can_reach_region(RegionNames.Barbarian_Village, player)
-                                   and woodcutting_rule_d2(state) and options.max_woodcutting_level >= 27) or \
+                                   and woodcutting_rule_d2(state)) or
                                   (state.can_reach_region(RegionNames.Edgeville, player)
-                                   and woodcutting_rule_d3(state) and options.max_woodcutting_level >= 42) or \
+                                   and woodcutting_rule_d3(state)) or
                                   (state.can_reach_region(RegionNames.Wilderness, player)
-                                   and woodcutting_rule_all(state) and options.max_woodcutting_level >= 57))
+                                   and woodcutting_rule_all(state)))
 
             # Access to other chunks based on woodcutting settings
             # South of Varrock does not need to be checked, because it's already adjacent
             if outbound_region_name == RegionNames.Barbarian_Village:
-                add_rule(entrance,  lambda state: woodcutting_rule_d2(state) \
-                                                     and options.max_woodcutting_level >= 27)
+                add_rule(entrance, woodcutting_rule_d2)
             if outbound_region_name == RegionNames.Edgeville:
-                add_rule(entrance, lambda state: woodcutting_rule_d3(state) \
-                                                     and options.max_woodcutting_level >= 42)
+                add_rule(entrance, woodcutting_rule_d3)
             if outbound_region_name == RegionNames.Wilderness:
-                add_rule(entrance, lambda state: woodcutting_rule_all(state) \
-                                                     and options.max_woodcutting_level >= 57)
+                add_rule(entrance, woodcutting_rule_all)
 
         if region_row.name == RegionNames.South_Of_Varrock:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12) or \
+                                   and woodcutting_rule_d1(state)) or
                                   (state.can_reach_region(RegionNames.Barbarian_Village, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12) or \
+                                   and woodcutting_rule_d1(state)) or
                                   (state.can_reach_region(RegionNames.Edgeville, player)
-                                   and woodcutting_rule_d2(state) and options.max_woodcutting_level >= 27) or \
+                                   and woodcutting_rule_d2(state)) or
                                   (state.can_reach_region(RegionNames.Wilderness, player)
-                                   and woodcutting_rule_d3(state) and options.max_woodcutting_level >= 42))
+                                   and woodcutting_rule_d3(state)))
 
             # Access to other chunks based on woodcutting settings
             # Lumbridge does not need to be checked, because it's already adjacent
             if outbound_region_name == RegionNames.Barbarian_Village:
-                add_rule(entrance, lambda state: woodcutting_rule_d1(state) \
-                                                     and options.max_woodcutting_level >= 12)
+                add_rule(entrance, woodcutting_rule_d1)
             if outbound_region_name == RegionNames.Edgeville:
-                add_rule(entrance, lambda state: woodcutting_rule_d3(state) \
-                                                     and options.max_woodcutting_level >= 27)
+                add_rule(entrance, woodcutting_rule_d3)
             if outbound_region_name == RegionNames.Wilderness:
-                add_rule(entrance, lambda state: woodcutting_rule_all(state) \
-                                                     and options.max_woodcutting_level >= 42)
+                add_rule(entrance, woodcutting_rule_all)
         if region_row.name == RegionNames.Barbarian_Village:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
-                                   and woodcutting_rule_d2(state) and options.max_woodcutting_level >= 27) or \
-                                  (state.can_reach_region(RegionNames.South_Of_Varrock, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12) or \
-                                  (state.can_reach_region(RegionNames.Edgeville, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12) or \
-                                  (state.can_reach_region(RegionNames.Wilderness, player)
-                                   and woodcutting_rule_d2(state) and options.max_woodcutting_level >= 27))
+                                   and woodcutting_rule_d2(state)) or (state.can_reach_region(RegionNames.South_Of_Varrock, player)
+                                   and woodcutting_rule_d1(state)) or (state.can_reach_region(RegionNames.Edgeville, player)
+                                   and woodcutting_rule_d1(state)) or (state.can_reach_region(RegionNames.Wilderness, player)
+                                   and woodcutting_rule_d2(state)))
 
             # Access to other chunks based on woodcutting settings
             if outbound_region_name == RegionNames.Lumbridge:
-                add_rule(entrance, lambda state: woodcutting_rule_d2(state) \
-                                                     and options.max_woodcutting_level >= 27)
+                add_rule(entrance, woodcutting_rule_d2)
             if outbound_region_name == RegionNames.South_Of_Varrock:
-                add_rule(entrance, lambda state: woodcutting_rule_d1(state) \
-                                                     and options.max_woodcutting_level >= 12)
+                add_rule(entrance, woodcutting_rule_d1)
             # Edgeville does not need to be checked, because it's already adjacent
             if outbound_region_name == RegionNames.Wilderness:
-                add_rule(entrance, lambda state: woodcutting_rule_d3(state) \
-                                                     and options.max_woodcutting_level >= 42)
+                add_rule(entrance, woodcutting_rule_d3)
         if region_row.name == RegionNames.Edgeville:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
-                                   and woodcutting_rule_d3(state) and options.max_woodcutting_level >= 42) or \
+                                   and woodcutting_rule_d3(state)) or
                                   (state.can_reach_region(RegionNames.South_Of_Varrock, player)
-                                   and woodcutting_rule_d2(state) and options.max_woodcutting_level >= 27) or \
+                                   and woodcutting_rule_d2(state)) or
                                   (state.can_reach_region(RegionNames.Barbarian_Village, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12) or \
+                                   and woodcutting_rule_d1(state)) or
                                   (state.can_reach_region(RegionNames.Wilderness, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12))
+                                   and woodcutting_rule_d1(state)))
 
             # Access to other chunks based on woodcutting settings
             if outbound_region_name == RegionNames.Lumbridge:
-                add_rule(entrance, lambda state: woodcutting_rule_d3(state) \
-                                                     and options.max_woodcutting_level >= 42)
+                add_rule(entrance, woodcutting_rule_d3)
             if outbound_region_name == RegionNames.South_Of_Varrock:
-                add_rule(entrance, lambda state: woodcutting_rule_d2(state) \
-                                                     and options.max_woodcutting_level >= 27)
+                add_rule(entrance, woodcutting_rule_d2)
             # Barbarian Village does not need to be checked, because it's already adjacent
             # Wilderness does not need to be checked, because it's already adjacent
         if region_row.name == RegionNames.Wilderness:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
-                                   and woodcutting_rule_all(state) and options.max_woodcutting_level >= 57) or \
+                                   and woodcutting_rule_all(state)) or
                                   (state.can_reach_region(RegionNames.South_Of_Varrock, player)
-                                   and woodcutting_rule_d3(state) and options.max_woodcutting_level >= 42) or \
+                                   and woodcutting_rule_d3(state)) or
                                   (state.can_reach_region(RegionNames.Barbarian_Village, player)
-                                   and woodcutting_rule_d2(state) and options.max_woodcutting_level >= 27) or \
+                                   and woodcutting_rule_d2(state)) or
                                   (state.can_reach_region(RegionNames.Edgeville, player)
-                                   and woodcutting_rule_d1(state) and options.max_woodcutting_level >= 12))
+                                   and woodcutting_rule_d1(state)))
 
             # Access to other chunks based on woodcutting settings
             if outbound_region_name == RegionNames.Lumbridge:
-                add_rule(entrance, lambda state: woodcutting_rule_all(state) \
-                                                     and options.max_woodcutting_level >= 57)
+                add_rule(entrance, woodcutting_rule_all)
             if outbound_region_name == RegionNames.South_Of_Varrock:
-                add_rule(entrance, lambda state: woodcutting_rule_d3(state) \
-                                                     and options.max_woodcutting_level >= 42)
+                add_rule(entrance, woodcutting_rule_d3)
             if outbound_region_name == RegionNames.Barbarian_Village:
-                add_rule(entrance, lambda state: woodcutting_rule_d2(state) \
-                                                     and options.max_woodcutting_level >= 27)
+                add_rule(entrance, woodcutting_rule_d2)
             # Edgeville does not need to be checked, because it's already adjacent
