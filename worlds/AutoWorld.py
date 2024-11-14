@@ -329,9 +329,9 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
 
     item_metadata: ClassVar[Mapping[str, ItemMetadata] | None] = None
-    """optional mapping of item name to extra metadata to be used by other worlds during generation"""
+    """An optional mapping of item name to extra metadata to be used by other worlds during generation."""
     location_metadata: ClassVar[Mapping[str, LocationMetadata] | None] = None
-    """optional mapping of location name to extra metadata to be used by other worlds during generation"""
+    """An optional mapping of location name to extra metadata to be used by other worlds during generation."""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
