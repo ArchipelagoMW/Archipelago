@@ -77,10 +77,6 @@ class LinksAwakeningLocation(Location):
         add_item_rule(self, filter_item)
 
 
-def has_free_weapon(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Sword", player) or state.has("Magic Rod", player) or state.has("Boomerang", player) or state.has("Hookshot", player)
-
-
 class LinksAwakeningRegion(Region):
     dungeon_index = None
     ladxr_region = None
