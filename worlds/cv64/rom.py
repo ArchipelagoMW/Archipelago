@@ -357,8 +357,12 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Make received DeathLinks blow you to smithereens instead of kill you normally.
         if options["death_link"] == DeathLink.option_explosive:
-            rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
             rom_data.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
+            rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
+            rom_data.write_int32(0x27AA0, 0x0C0FFA78)  # JAL	0x803FE9E0
+            rom_data.write_int32s(0xBFE9E0, patches.deathlink_nitro_state_checker)
+            # NOP the function call to subtract Nitro from the inventory after exploding, just in case.
+            rom_data.write_int32(0x32DBC, 0x00000000)
 
         # Set the DeathLink ROM flag if it's on at all.
         if options["death_link"] != DeathLink.option_off:
