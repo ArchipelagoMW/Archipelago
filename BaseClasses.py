@@ -663,6 +663,8 @@ class MultiWorld():
 
         return False
 
+    # It may make more sense for this to take an Item instance, or maybe player and item_name
+    # Ideally though this could be used statically
     def get_item_metadata(self, game_name: str, item_name: str) -> "ItemMetadata":
         metadata = AutoWorld.AutoWorldRegister.world_types[game_name].item_metadata
         if not metadata:
@@ -1636,6 +1638,7 @@ class CommonVisualTags:
     KEY = "key"
     BOMB = "bomb"
     HEART = "heart"
+    SPELL = "spell"
 
 
 class CommonFunctionalTags:
