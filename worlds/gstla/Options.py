@@ -26,6 +26,21 @@ class CharacterShuffle(Choice):
     option_anywhere = 2
     default = 1
 
+
+class SecondStartingCharacter(Choice):
+    """Which character will join Felix on Idejima?
+    This will always be Jenna when Character Shuffle is set to Vanilla, otherwise it will be whichever character this is set to.
+    """
+    display_name = "Second Starting Character"
+    option_jenna = 0
+    option_sheba= 1
+    option_piers = 2
+    option_isaac = 3
+    option_garet = 4
+    option_ivan = 5
+    option_mia = 6
+    default = 1
+
 class DjinnLogic(NamedRange):
     """How much do Djinn affect logic for being able to defeat bosses?
     Assuming this is set to 100 (Normal) beating Briggs expects 6 djinn, Poseidon 24 djinn and Doom Dragon 56 djinn.
@@ -391,6 +406,7 @@ class GSTLAOptions(PerGameCommonOptions):
     start_with_wings_of_anemos: ShipWings
     anemos_inner_sanctum_access: AnemosAccess
     shuffle_characters: CharacterShuffle
+    second_starting_character: SecondStartingCharacter
 
     #Char And Class Settings
     character_stats: CharStatShuffle
