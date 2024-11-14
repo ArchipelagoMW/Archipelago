@@ -4,7 +4,7 @@ from copy import deepcopy
 from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar, List
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld, Version
 from .names import (dr_wily, heat_man_stage, air_man_stage, wood_man_stage, bubble_man_stage, quick_man_stage,
                     flash_man_stage, metal_man_stage, crash_man_stage)
 from .items import (item_table, item_names, MM2Item, filler_item_weights, robot_master_weapon_table,
@@ -96,8 +96,10 @@ class MM2World(World):
     location_name_groups = location_groups
     web = MM2WebWorld()
     rom_name: bytearray
-    world_version: Tuple[int, int, int] = (0, 3, 1)
+    world_version = Version(0, 3, 1)
     wily_5_weapons: Dict[int, List[int]]
+    file_types = (".apmm2",)
+    contains = ("world",)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = bytearray()

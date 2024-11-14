@@ -9,7 +9,7 @@ from random import Random
 from dataclasses import make_dataclass
 from copy import deepcopy
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
-                    TYPE_CHECKING, Type, Union)
+                    TYPE_CHECKING, Type, Union, Literal)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
@@ -343,6 +343,11 @@ class World(metaclass=AutoWorldRegister):
     """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
     settings: ClassVar[Optional["Group"]]
     """loaded settings from host.yaml"""
+
+    file_types: Optional[Tuple[str]] = None
+    """List of file types this apworld is expected to support (for clients)"""
+    contains: Optional[Tuple[Literal["world", "client", "adjuster"]]] = None
+    """List of content this apworld provides (world, client, adjuster)"""
 
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""

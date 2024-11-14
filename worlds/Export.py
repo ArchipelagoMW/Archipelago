@@ -13,6 +13,7 @@ from .AutoWorld import World
 METADATA_KEYS = [
     "game",
     "file_types",
+    "contains",
     # license
     # description
     # maintainers
