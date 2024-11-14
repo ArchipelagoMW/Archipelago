@@ -245,7 +245,8 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
                                    and woodcutting_rule_all(state)))
 
             # Access to other chunks based on woodcutting settings
-            # South of Varrock does not need to be checked, because it's already adjacent
+            if outbound_region_name == RegionNames.South_Of_Varrock:
+                add_rule(entrance, woodcutting_rule_d1)
             if outbound_region_name == RegionNames.Barbarian_Village:
                 add_rule(entrance, woodcutting_rule_d2)
             if outbound_region_name == RegionNames.Edgeville:
@@ -266,7 +267,8 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
                                    and woodcutting_rule_d3(state)))
 
             # Access to other chunks based on woodcutting settings
-            # Lumbridge does not need to be checked, because it's already adjacent
+            if outbound_region_name == RegionNames.Lumbridge:
+                add_rule(entrance, woodcutting_rule_d1)
             if outbound_region_name == RegionNames.Barbarian_Village:
                 add_rule(entrance, woodcutting_rule_d1)
             if outbound_region_name == RegionNames.Edgeville:
