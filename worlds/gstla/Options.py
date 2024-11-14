@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions
+from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions, StartInventoryPool
 
 class StartWithShip(Choice):
     """What needs to be done to get the ship?
@@ -24,6 +24,21 @@ class CharacterShuffle(Choice):
     option_vanilla = 0
     option_vanilla_shuffled = 1
     option_anywhere = 2
+    default = 1
+
+
+class SecondStartingCharacter(Choice):
+    """Which character will join Felix on Idejima?
+    This will always be Jenna when Character Shuffle is set to Vanilla, otherwise it will be whichever character this is set to.
+    """
+    display_name = "Second Starting Character"
+    option_jenna = 0
+    option_sheba= 1
+    option_piers = 2
+    option_isaac = 3
+    option_garet = 4
+    option_ivan = 5
+    option_mia = 6
     default = 1
 
 class DjinnLogic(NamedRange):
@@ -391,6 +406,7 @@ class GSTLAOptions(PerGameCommonOptions):
     start_with_wings_of_anemos: ShipWings
     anemos_inner_sanctum_access: AnemosAccess
     shuffle_characters: CharacterShuffle
+    second_starting_character: SecondStartingCharacter
 
     #Char And Class Settings
     character_stats: CharStatShuffle
@@ -453,3 +469,5 @@ class GSTLAOptions(PerGameCommonOptions):
     manual_retreat_glitch: ManualRetreatGlitch
     shuffle_music: MusicShuffle
     teleport_to_dungeons_and_towns: TelportEverywhere
+    
+    start_inventory_from_pool: StartInventoryPool

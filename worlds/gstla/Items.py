@@ -103,24 +103,43 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
 
     #char shuffle
-    first_char_locked = False
-
     char_locs = { loc_names_by_id[char_lock.ap_id]: char_lock for char_lock in location_type_to_data[LocationType.Character]}
     char_items = { char.name : char for char in character_items}
 
-    #if we are not starting with the ship and it is a vanilla shuffled character shuffle we have to enforce piers in initial 3 chars to avoid soft lock.
-    #when vanilla piers is locked in kibombo on his vanilla location and when in the item pool the shuffler will take care of things for us
-    if world.options.lemurian_ship < 2 and world.options.shuffle_characters == 1:
-        character = char_items.pop(ItemName.Piers)
-        starting_char_locs = [LocationName.Idejima_Jenna, LocationName.Idejima_Sheba, LocationName.Kibombo_Piers]
-        starting_char_loc = world.random.choice(starting_char_locs)
-        location = char_locs.pop(starting_char_loc)
+    #if not vanilla character shuffle we can do special things
+    if world.options.shuffle_characters != 0:
+        match world.options.second_starting_character:
+            case 0:
+                character = char_items.pop(ItemName.Jenna)
+            case 1:
+                character = char_items.pop(ItemName.Sheba)
+            case 2:
+                character = char_items.pop(ItemName.Piers)
+            case 3:
+                character = char_items.pop(ItemName.Isaac)
+            case 4:
+                character = char_items.pop(ItemName.Garet)
+            case 5:
+                character = char_items.pop(ItemName.Ivan)
+            case 6:
+                character = char_items.pop(ItemName.Mia)
         ap_item = create_item_direct(character, player)
-        ap_location = world.get_location(starting_char_loc)
+        ap_location = world.get_location(LocationName.Idejima_Jenna)
         ap_location.place_locked_item(ap_item)
-        if starting_char_loc == LocationName.Idejima_Jenna: 
-            first_char_locked = False
+        char_locs.pop(LocationName.Idejima_Jenna)
         sum_locations -= 1
+
+        #if we are not starting with the ship and it is a vanilla shuffled character shuffle we have to enforce piers in initial 3 chars to avoid soft lock.
+        #when vanilla piers is locked in kibombo on his vanilla location and when in the item pool the shuffler will take care of things for us
+        if ItemName.Piers in char_items.keys() and world.options.lemurian_ship < 2 and world.options.shuffle_characters == 1:
+            character = char_items.pop(ItemName.Piers)
+            starting_char_locs = [LocationName.Idejima_Sheba, LocationName.Kibombo_Piers]
+            starting_char_loc = world.random.choice(starting_char_locs)
+            location = char_locs.pop(starting_char_loc)
+            ap_item = create_item_direct(character, player)
+            ap_location = world.get_location(starting_char_loc)
+            ap_location.place_locked_item(ap_item)
+            sum_locations -= 1
 
     sorted_item_list = sorted(char_items.values(), key = lambda item: item.id)
     sorted_loc_list = sorted(char_locs.values(), key = lambda location: location.id)
@@ -140,16 +159,6 @@ def create_items(world: 'GSTLAWorld', player: int):
             ap_loc.place_locked_item(ap_item)
 
         else: 
-            #guarentee Jenna slot is a character to avoid issues with learning required psynery
-            location = sorted_loc_list.pop(0)
-            location_name = loc_names_by_id[location.ap_id]
-            if location_name == LocationName.Idejima_Jenna:
-                if not first_char_locked:  
-                    ap_location = world.get_location(loc_names_by_id[location.ap_id])
-                    ap_location.place_locked_item(ap_item)
-                    first_char_locked = True
-                    continue
-
             # else: #Anywhere
             world.multiworld.itempool.append(ap_item)
 

@@ -137,6 +137,13 @@ class GSTLAWorld(World):
             item_id_by_name[k]: v
             for k, v in self.options.start_inventory.items()
         }
+
+        for k,v in self.options.start_inventory_from_pool.items():
+            if item_id_by_name[k] in ret['start_inventory']:
+                ret['start_inventory'][item_id_by_name[k]] += v
+            else:
+                ret['start_inventory'][item_id_by_name[k]] = v
+
         return ret
 
     def generate_output(self, output_directory: str):
