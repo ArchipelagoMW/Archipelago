@@ -513,14 +513,14 @@ class LinksAwakeningWorld(World):
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
 
+    # Same fill choices and weights used in LADXR.itempool.__randomizeRupees
+    filler_choices = ('Bomb', 'Single Arrow', '10 Arrows', 'Magic Powder', 'Medicine')
+    filler_weights = ( 10,     5,              10,          10,             1)
+
     def get_filler_item_name(self) -> str:
         if self.options.stabilize_item_pool:
             return "Nothing"
-        else:
-            # Same fill choices and weights used in LADXR.itempool.__randomizeRupees
-            filler_choices = ('Bomb', 'Single Arrow', '10 Arrows', 'Magic Powder', 'Medicine')
-            filler_weights = ( 10,     5,              10,          10,             1)
-            return self.random.choices(filler_choices, filler_weights)[0]
+        return self.random.choices(self.filler_choices, self.filler_weights)[0]
 
     def fill_slot_data(self):
         slot_data = {}
