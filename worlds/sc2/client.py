@@ -1612,37 +1612,41 @@ def download_latest_release_zip(
     headers = {"Accept": 'application/vnd.github.v3+json'}
     url = f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{api_version}"
 
-    r1 = requests.get(url, headers=headers)
-    if r1.status_code == 200:
-        latest_metadata = r1.json()
-        cleanup_downloaded_metadata(latest_metadata)
-        latest_metadata = str(latest_metadata)
-        # sc2_logger.info(f"Latest version: {latest_metadata}.")
-    else:
-        sc2_logger.warning(f"Status code: {r1.status_code}")
+    try:
+        r1 = requests.get(url, headers=headers)
+        if r1.status_code == 200:
+            latest_metadata = r1.json()
+            cleanup_downloaded_metadata(latest_metadata)
+            latest_metadata = str(latest_metadata)
+            # sc2_logger.info(f"Latest version: {latest_metadata}.")
+        else:
+            sc2_logger.warning(f"Status code: {r1.status_code}")
+            sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
+            sc2_logger.warning(f"text: {r1.text}")
+            return "", metadata
+
+        if (force_download is False) and (metadata == latest_metadata):
+            sc2_logger.info("Latest version already installed.")
+            return "", metadata
+
+        sc2_logger.info(f"Attempting to download latest version of API version {api_version} of {repo}.")
+        download_url = r1.json()["assets"][0]["browser_download_url"]
+
+        r2 = requests.get(download_url, headers=headers)
+        if r2.status_code == 200 and zipfile.is_zipfile(io.BytesIO(r2.content)):
+            tempdir = tempfile.gettempdir()
+            file = tempdir + os.sep + f"{repo}.zip"
+            with open(file, "wb") as fh:
+                fh.write(r2.content)
+            sc2_logger.info(f"Successfully downloaded {repo}.zip. Installing...")
+            return file, latest_metadata
+        else:
+            sc2_logger.warning(f"Status code: {r2.status_code}")
+            sc2_logger.warning("Download failed.")
+            sc2_logger.warning(f"text: {r2.text}")
+            return "", metadata
+    except requests.ConnectionError:
         sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
-        sc2_logger.warning(f"text: {r1.text}")
-        return "", metadata
-
-    if (force_download is False) and (metadata == latest_metadata):
-        sc2_logger.info("Latest version already installed.")
-        return "", metadata
-
-    sc2_logger.info(f"Attempting to download latest version of API version {api_version} of {repo}.")
-    download_url = r1.json()["assets"][0]["browser_download_url"]
-
-    r2 = requests.get(download_url, headers=headers)
-    if r2.status_code == 200 and zipfile.is_zipfile(io.BytesIO(r2.content)):
-        tempdir = tempfile.gettempdir()
-        file = tempdir + os.sep + f"{repo}.zip"
-        with open(file, "wb") as fh:
-            fh.write(r2.content)
-        sc2_logger.info(f"Successfully downloaded {repo}.zip. Installing...")
-        return file, latest_metadata
-    else:
-        sc2_logger.warning(f"Status code: {r2.status_code}")
-        sc2_logger.warning("Download failed.")
-        sc2_logger.warning(f"text: {r2.text}")
         return "", metadata
 
 
@@ -1657,20 +1661,24 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
     headers = {"Accept": 'application/vnd.github.v3+json'}
     url = f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{api_version}"
 
-    r1 = requests.get(url, headers=headers)
-    if r1.status_code == 200:
-        latest_metadata = r1.json()
-        cleanup_downloaded_metadata(latest_metadata)
-        latest_metadata = str(latest_metadata)
-        if metadata != latest_metadata:
-            return True
-        else:
-            return False
+    try:
+        r1 = requests.get(url, headers=headers)
+        if r1.status_code == 200:
+            latest_metadata = r1.json()
+            cleanup_downloaded_metadata(latest_metadata)
+            latest_metadata = str(latest_metadata)
+            if metadata != latest_metadata:
+                return True
+            else:
+                return False
 
-    else:
+        else:
+            sc2_logger.warning(f"Failed to reach GitHub while checking for updates.")
+            sc2_logger.warning(f"Status code: {r1.status_code}")
+            sc2_logger.warning(f"text: {r1.text}")
+            return False
+    except requests.ConnectionError:
         sc2_logger.warning(f"Failed to reach GitHub while checking for updates.")
-        sc2_logger.warning(f"Status code: {r1.status_code}")
-        sc2_logger.warning(f"text: {r1.text}")
         return False
 
 
