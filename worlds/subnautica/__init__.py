@@ -45,7 +45,7 @@ class SubnauticaWorld(World):
     options_dataclass = options.SubnauticaOptions
     options: options.SubnauticaOptions
     required_client_version = (0, 5, 0)
-
+    origin_region_name = "Planet 4546B"
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
@@ -66,12 +66,8 @@ class SubnauticaWorld(World):
             creature_pool, self.options.creature_scans.value)
 
     def create_regions(self):
-        # Create Regions
-        menu_region = Region("Menu", self.player, self.multiworld)
+        # Create Region
         planet_region = Region("Planet 4546B", self.player, self.multiworld)
-
-        # Link regions together
-        menu_region.connect(planet_region, "Lifepod 5")
 
         # Create regular locations
         location_names = itertools.chain((location["name"] for location in locations.location_table.values()),
@@ -93,11 +89,8 @@ class SubnauticaWorld(World):
                 # make the goal event the victory "item"
                 location.item.name = "Victory"
 
-        # Register regions to multiworld
-        self.multiworld.regions += [
-            menu_region,
-            planet_region
-        ]
+        # Register region to multiworld
+        self.multiworld.regions.append(planet_region)
 
     # refer to rules.py
     set_rules = set_rules

@@ -11,7 +11,7 @@ from copy import deepcopy
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
-from Options import item_and_loc_options, OptionGroup, PerGameCommonOptions
+from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
 from Utils import Version, version_tuple
 
@@ -313,6 +313,14 @@ class World(metaclass=AutoWorldRegister):
     web: ClassVar[WebWorld] = WebWorld()
     """see WebWorld for options"""
 
+    origin_region_name: str = "Menu"
+    """Name of the Region from which accessibility is tested."""
+
+    explicit_indirect_conditions: bool = True
+    """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
+    If False, everything is rechecked at every step, which is slower computationally, 
+    but may be desirable in complex/dynamic worlds."""
+
     multiworld: "MultiWorld"
     """autoset on creation. The MultiWorld object for the currently generating multiworld."""
     player: int
@@ -355,7 +363,7 @@ class World(metaclass=AutoWorldRegister):
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
-    # in that case the MultiWorld object is passed as an argument, and it gets called once for the entire multiworld.
+    # in that case the MultiWorld object is passed as the first argument, and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
 
     @classmethod
@@ -493,6 +501,7 @@ class World(metaclass=AutoWorldRegister):
         group = cls(multiworld, new_player_id)
         group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
+        group.options.accessibility = ItemsAccessibility(ItemsAccessibility.option_items)
 
         return group
 
