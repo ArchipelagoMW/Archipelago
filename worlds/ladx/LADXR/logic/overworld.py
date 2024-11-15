@@ -370,7 +370,7 @@ class World:
 
         # Raft game.
         raft_house = Location("Raft House")
-        Location().add(KeyLocation("RAFT")).connect(raft_house, COUNT("RUPEES", 100))
+        Location().add(KeyLocation("RAFT")).connect(raft_house, AND(r.bush, COUNT("RUPEES", 100))) # add bush requirement for farming in case player has to try again
         raft_return_upper = Location()
         raft_return_lower = Location().connect(raft_return_upper, None, one_way=True)
         outside_raft_house = Location().connect(below_right_taltal, HOOKSHOT).connect(below_right_taltal, FLIPPERS, one_way=True)
