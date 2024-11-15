@@ -48,7 +48,7 @@ def get_available_early_locations(world: "WitnessWorld") -> List[Location]:
 
 
 def get_eligible_items_by_type_in_random_order(world: "WitnessWorld") -> Dict[str, List[str]]:
-    eligible_early_items_by_type = world.player_items.get_early_items(world.own_itempool)
+    eligible_early_items_by_type = world.player_items.get_early_items({item.name for item in world.own_itempool})
 
     for item_list in eligible_early_items_by_type.values():
         world.random.shuffle(item_list)

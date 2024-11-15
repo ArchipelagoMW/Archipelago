@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, Iterable
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -149,13 +149,13 @@ class WitnessPlayerItems:
 
         return output
 
-    def get_early_items(self, existing_items: List[WitnessItem]) -> Dict[str, List[str]]:
+    def get_early_items(self, existing_items: Iterable[str]) -> Dict[str, List[str]]:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
         output: Dict[str, List[str]] = {}
 
-        existing_items_lookup = {existing_item.name for existing_item in existing_items}
+        existing_items_lookup = set(existing_items)
 
         if self._world.options.shuffle_symbols and "Symbol" in self._world.options.early_good_items.value:
             good_symbols = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
