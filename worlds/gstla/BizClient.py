@@ -4,7 +4,7 @@ import base64
 from collections import defaultdict
 import logging
 from enum import IntEnum, Enum
-from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping
+from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional
 
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
@@ -55,42 +55,42 @@ class _DataLocations(IntEnum):
     def to_request(self) -> Tuple[int, int, _MemDomain]:
         return self.addr, self.length, self.domain
 
-
-def cmd_unchecked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
-    """Prints djinn locations that have not yet been checked"""
+def _handle_common_cmd(self: 'BizHawkClientCommandProcessor') -> Optional[GSTLAClient]:
     from worlds._bizhawk.context import BizHawkClientContext
     if self.ctx.game != "Golden Sun The Lost Age":
         logger.warning("This command can only be used when playing GSTLA")
-        return
+        return None
 
     if not self.ctx.server or not self.ctx.slot:
         logger.warning("You must be connected to a server to use this command")
-        return
+        return None
     ctx = self.ctx
     assert isinstance(ctx, BizHawkClientContext)
     client = ctx.client_handler
     assert isinstance(client, GSTLAClient)
-    # TODO: cleanup
+    return client
+
+def cmd_unchecked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
+    """Prints djinn locations that have not yet been checked"""
+    client = _handle_common_cmd(self)
+    if client is None:
+        return
     for djinn in djinn_items:
         if djinn.name not in client.checked_djinn:
             logger.info(djinn.name)
 
 def cmd_checked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
     """Prints djinn locations that have been checked"""
-    from worlds._bizhawk.context import BizHawkClientContext
-    if self.ctx.game != "Golden Sun The Lost Age":
-        logger.warning("This command can only be used when playing GSTLA")
+    client = _handle_common_cmd(self)
+    if client is None:
         return
-
-    if not self.ctx.server or not self.ctx.slot:
-        logger.warning("You must be connected to a server to use this command")
-        return
-    ctx = self.ctx
-    assert isinstance(ctx, BizHawkClientContext)
-    client = ctx.client_handler
-    assert isinstance(client, GSTLAClient)
     for djinn in client.checked_djinn:
         logger.info(djinn)
+
+commands = [
+    ("unchecked_djinn", cmd_unchecked_djinn),
+    ("djinn", cmd_checked_djinn)
+]
 
 class StartingItemHandler:
 
@@ -140,10 +140,9 @@ class GSTLAClient(BizHawkClient):
         game_name = game_name[0].decode('ascii')
         logger.debug("Game loaded: %s", game_name)
         if game_name != 'GOLDEN_SUN_BAGFE01':
-            if "unchecked_djinn" in ctx.command_processor.commands:
-                ctx.command_processor.commands.pop("unchecked_djinn")
-            if "djinn" in ctx.command_processor.commands:
-                ctx.command_processor.commands.pop("djinn")
+            for cmd, _ in commands:
+                if cmd in ctx.command_processor.commands:
+                    ctx.command_processor.commands.pop(cmd)
             return False
         ctx.game = self.game
         # TODO: would like to verify that the ROM is the correct one somehow
@@ -154,10 +153,9 @@ class GSTLAClient(BizHawkClient):
             logger.warning("Could not find slot name in GSTLA ROM; please double check the ROM is correct")
         else:
             self.slot_name = base64.b64decode(slot_name[0].rstrip(b'\x00'), validate=True).decode('utf-8').strip()
-        if "unchecked_djinn" not in ctx.command_processor.commands:
-            ctx.command_processor.commands["unchecked_djinn"] = cmd_unchecked_djinn
-        if "djinn" not in ctx.command_processor.commands:
-            ctx.command_processor.commands["djinn"] = cmd_checked_djinn
+        for cmd, func in commands:
+            if cmd not in ctx.command_processor.commands:
+                ctx.command_processor.commands[cmd] = func
         ctx.items_handling = 0b001
         ctx.watcher_timeout = 1 # not sure what a reasonable setting here is; passed to asyncio.wait_for
         return True
