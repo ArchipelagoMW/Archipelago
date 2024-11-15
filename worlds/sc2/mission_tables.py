@@ -152,7 +152,7 @@ class SC2Mission(Enum):
     CONVICTION = 46, "Conviction", SC2Campaign.HOTS, "Dominion Space", SC2Race.ANY, MissionPools.MEDIUM, "ap_conviction", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsTerran
     PLANETFALL = 47, "Planetfall (Zerg)", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     DEATH_FROM_ABOVE = 48, "Death From Above (Zerg)", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_death_from_above", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
-    THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.AiTerranAlly
+    THE_RECKONING = 49, "The Reckoning (Zerg)", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.HasRaceSwap
 
     # Prologue
     DARK_WHISPERS = 50, "Dark Whispers", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsTZ
@@ -274,7 +274,42 @@ class SC2Mission(Enum):
     PLANETFALL_P = 177, "Planetfall (Protoss)", SC2Campaign.HOTS, "Korhal", SC2Race.PROTOSS, MissionPools.HARD, "ap_planetfall", MissionFlag.Protoss|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.RaceSwap
     DEATH_FROM_ABOVE_T = 178, "Death From Above (Terran)", SC2Campaign.HOTS, "Korhal", SC2Race.TERRAN, MissionPools.HARD, "ap_death_from_above", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.RaceSwap
     DEATH_FROM_ABOVE_P = 179, "Death From Above (Protoss)", SC2Campaign.HOTS, "Korhal", SC2Race.PROTOSS, MissionPools.HARD, "ap_death_from_above", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.RaceSwap
-    # 180/181 - The Reckoning
+    THE_RECKONING_T = 180, "The Reckoning (Terran)", SC2Campaign.HOTS, "Korhal", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
+    THE_RECKONING_P = 181, "The Reckoning (Protoss)", SC2Campaign.HOTS, "Korhal", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
+    # 182/183 - Dark Whispers
+    # 184/185 - Ghosts in the Fog
+    # 186/187 - Evil Awoken
+    # 188/189 - For Aiur!
+    # 190/191 - The Growing Shadow
+    # 192/193 - The Spear of Adun
+    # 194/195 - Sky Shield
+    # 196/197 - Brothers in Arms
+    # 198/199 - Amon's Reach
+    # 200/201 - Last Stand
+    # 202/203 - Forbidden Weapon
+    # 204/205 - Temple of Unification
+    # 206/207 - The Infinite Cycle
+    # 208/209 - Harbinger of Oblivion
+    # 210/211 - Unsealing the Past
+    # 212/213 - Purification
+    # 214/215 - Steps of the Rite
+    # 216/217 - Rak'Shir
+    # 218/219 - Templar's Charge
+    # 220/221 - Templar's Return
+    # 222/223 - The Host
+    # 224/225 - Salvation
+    # 226/227 - Into the Void
+    # 228/229 - The Essence of Eternity
+    # 230/231 - Amon's Fall
+    # 232/233 - The Escape
+    # 234/235 - Sudden Strike
+    # 236/237 - Enemy Intelligence
+    # 238/239 - Trouble In Paradise
+    # 240/241 - Night Terrors
+    # 242/243 - Flashpoint
+    # 244/245 - In the Enemy's Shadow
+    # 246/247 - Dark Skies
+    # 248/249 - End Game
 
 
 class MissionConnection:

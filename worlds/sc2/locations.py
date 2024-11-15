@@ -1554,23 +1554,23 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.zerg_competent_comp_competent_aa
         ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
-            logic.the_reckoning_requirement
+            logic.zerg_the_reckoning_requirement
         ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "South Lane", SC2HOTS_LOC_ID_OFFSET + 2001, LocationType.VANILLA,
-            logic.the_reckoning_requirement
+            logic.zerg_the_reckoning_requirement
         ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "North Lane", SC2HOTS_LOC_ID_OFFSET + 2002, LocationType.VANILLA,
-            logic.the_reckoning_requirement
+            logic.zerg_the_reckoning_requirement
         ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "East Lane", SC2HOTS_LOC_ID_OFFSET + 2003, LocationType.VANILLA,
-            logic.the_reckoning_requirement
+            logic.zerg_the_reckoning_requirement
         ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Odin", SC2HOTS_LOC_ID_OFFSET + 2004, LocationType.EXTRA,
-            logic.the_reckoning_requirement
+            logic.zerg_the_reckoning_requirement
         ),
         make_location_data(SC2Mission.THE_RECKONING.mission_name, "Trash the Odin Early", SC2HOTS_LOC_ID_OFFSET + 2005, LocationType.MASTERY,
             lambda state: (
-                logic.the_reckoning_requirement(state)
+                logic.zerg_the_reckoning_requirement(state)
                 and state.has_any({item_names.INFESTOR, item_names.DEFILER}, player)
                 and (not logic.take_over_ai_allies or logic.terran_base_trasher(state))),
             flags=LocationFlag.SPEEDRUN
@@ -4231,6 +4231,50 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.DEATH_FROM_ABOVE_P.mission_name, "Main Path Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 9605, LocationType.EXTRA,
                            logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 9700, LocationType.VICTORY,
+                           logic.terran_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_T.mission_name, "South Lane", SC2_RACESWAP_LOC_ID_OFFSET + 9701, LocationType.VANILLA,
+                           logic.terran_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_T.mission_name, "North Lane", SC2_RACESWAP_LOC_ID_OFFSET + 9702, LocationType.VANILLA,
+                           logic.terran_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_T.mission_name, "East Lane", SC2_RACESWAP_LOC_ID_OFFSET + 9703, LocationType.VANILLA,
+                           logic.terran_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_T.mission_name, "Odin", SC2_RACESWAP_LOC_ID_OFFSET + 9704, LocationType.EXTRA,
+                           logic.terran_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_T.mission_name, "Trash the Odin Early", SC2_RACESWAP_LOC_ID_OFFSET + 9705, LocationType.MASTERY,
+                           lambda state: (
+                                   logic.terran_the_reckoning_requirement(state)
+                                   and logic.terran_base_trasher(state)
+                           ),
+                           flags=LocationFlag.SPEEDRUN
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 9800, LocationType.VICTORY,
+                           logic.protoss_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_P.mission_name, "South Lane", SC2_RACESWAP_LOC_ID_OFFSET + 9801, LocationType.VANILLA,
+                           logic.protoss_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_P.mission_name, "North Lane", SC2_RACESWAP_LOC_ID_OFFSET + 9802, LocationType.VANILLA,
+                           logic.protoss_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_P.mission_name, "East Lane", SC2_RACESWAP_LOC_ID_OFFSET + 9803, LocationType.VANILLA,
+                           logic.protoss_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_P.mission_name, "Odin", SC2_RACESWAP_LOC_ID_OFFSET + 9804, LocationType.EXTRA,
+                           logic.protoss_the_reckoning_requirement
+                           ),
+        make_location_data(SC2Mission.THE_RECKONING_P.mission_name, "Trash the Odin Early", SC2_RACESWAP_LOC_ID_OFFSET + 9805, LocationType.MASTERY,
+                           lambda state: (
+                                   logic.protoss_the_reckoning_requirement(state)
+                                   and logic.protoss_fleet(state)
+                                   and (not logic.take_over_ai_allies or logic.terran_base_trasher(state))),
+                           flags=LocationFlag.SPEEDRUN
                            ),
     ]
 

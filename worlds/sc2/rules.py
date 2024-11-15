@@ -1105,7 +1105,7 @@ class SC2Logic:
             or self.protoss_can_merge_dark_archon(state)
         )
 
-    def the_reckoning_requirement(self, state: CollectionState) -> bool:
+    def zerg_the_reckoning_requirement(self, state: CollectionState) -> bool:
         if self.take_over_ai_allies:
             return (
                 self.terran_competent_comp(state)
@@ -1122,6 +1122,25 @@ class SC2Logic:
                     and self.zerg_competent_anti_air(state)
                     and self.zerg_very_hard_mission_weapon_armor_level(state)
             )
+
+    def terran_the_reckoning_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.terran_very_hard_mission_weapon_armor_level(state)
+                and self.terran_beats_protoss_deathball(state)
+        )
+
+    def protoss_the_reckoning_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.protoss_very_hard_mission_weapon_armor_level(state)
+                and self.protoss_competent_comp(state)
+                and (
+                        not self.take_over_ai_allies
+                        or (
+                            self.terran_competent_comp(state)
+                            and self.terran_very_hard_mission_weapon_armor_level(state)
+                        )
+                )
+        )
 
     # LotV
     def protoss_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
