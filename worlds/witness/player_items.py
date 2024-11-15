@@ -157,7 +157,7 @@ class WitnessPlayerItems:
 
         existing_items_lookup = set(existing_items)
 
-        if self._world.options.shuffle_symbols and "Symbol" in self._world.options.early_good_items.value:
+        if "Symbol" in self._world.options.early_good_items.value:
             good_symbols = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
 
             if self._world.options.shuffle_discarded_panels:
@@ -173,7 +173,7 @@ class WitnessPlayerItems:
 
             output["Symbol"] = [symbol for symbol in good_symbols if symbol in existing_items_lookup]
 
-        if self._world.options.shuffle_doors and "Door / Door Panel" in self._world.options.early_good_items.value:
+        if "Door / Door Panel" in self._world.options.early_good_items.value:
             good_doors = [
                 "Desert Doors & Elevator", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
                 "Shadows Lower Doors", "Tunnels Doors",
@@ -194,7 +194,7 @@ class WitnessPlayerItems:
                         "Windmill & Theater Control Panels",
                     ]
 
-            if self._world.options.shuffle_doors == "doors":
+            if self._world.options.shuffle_doors == "doors":  # It's not as good in mixed doors because of Light Control
                 good_doors.append("Desert Light Room Entry (Door)")
 
             if not self._world.options.shuffle_symbols:
