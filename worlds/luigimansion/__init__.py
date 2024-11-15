@@ -423,7 +423,6 @@ class LMWorld(World):
             loc = self.multiworld.get_location("King Boo", self.player)
             add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc))
 
-
     def generate_early(self):
         if self.options.enemizer:
             set_ghost_type(self.multiworld, self.ghost_affected_regions)
@@ -437,9 +436,11 @@ class LMWorld(World):
             self.multiworld.push_precollected(self.create_item("Heart Key"))
 
         if self.options.good_vacuum == 0:
-             self.options.start_inventory.value["Poltergust 4000"] = (
-                     self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
-             )
+            self.options.start_inventory.value["Poltergust 4000"] = (
+                    self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
+            )
+        if self.options.boosanity == 0 and self.options.balcony_boo_count > 30:
+            self.options.balcony_boo_count = 30
 
     def create_regions(self):
         # "Menu" is the required starting point
@@ -613,47 +614,44 @@ class LMWorld(World):
     # TODO: UPDATE FOR LM
     def generate_output(self, output_directory: str):
         # Output seed name and slot number to seed RNG in randomizer client
-        # output_data = {
-        #     "Seed": self.multiworld.seed_name,
-        #     "Slot": self.player,
-        #     "Name": self.multiworld.get_player_name(self.player),
-        #     "Options": {},
-        #     "Required Bosses": self.required_boss_item_locations,
-        #     "Locations": {},
-        #     "Entrances": {},
-        #     "Charts": self.island_number_to_chart_name,
-        # }
-        #
-        # # Output relevant options to file
-        # for field in fields(self.options):
-        #     output_data["Options"][field.name] = getattr(self.options, field.name).value
-        #
-        # # Output which item has been placed at each location
-        # locations = self.multiworld.get_locations(self.player)
-        # for location in locations:
-        #     if location.name != "Defeat Ganondorf":
-        #         if location.item:
-        #             item_info = {
-        #                 "player": location.item.player,
-        #                 "name": location.item.name,
-        #                 "game": location.item.game,
-        #                 "classification": location.item.classification.name,
-        #             }
-        #         else:
-        #             item_info = {"name": "Nothing", "game": "The Wind Waker", "classification": "filler"}
-        #         output_data["Locations"][location.name] = item_info
-        #
+        output_data = {
+            "Seed": self.multiworld.seed_name,
+            "Slot": self.player,
+            "Name": self.multiworld.get_player_name(self.player),
+            "Options": {},
+            "Locations": {},
+            "Entrances": {},
+        }
+
+        # Output relevant options to file
+        for field in fields(self.options):
+            output_data["Options"][field.name] = getattr(self.options, field.name).value
+
+        # Output which item has been placed at each location
+        locations = self.multiworld.get_locations(self.player)
+        for location in locations:
+            if location.address is not None:
+                if location.item:
+                    item_info = {
+                        "player": location.item.player,
+                        "name": location.item.name,
+                        "game": location.item.game,
+                        "classification": location.item.classification.name,
+                    }
+                else:
+                    item_info = {"name": "Nothing", "game": "Luigi's Mansion", "classification": "filler"}
+                output_data["Locations"][location.name] = item_info
+
         # # Output the mapping of entrances to exits
         # entrances = self.multiworld.get_entrances(self.player)
         # for entrance in entrances:
         #     if entrance.parent_region.name in ALL_ENTRANCES:
         #         output_data["Entrances"][entrance.parent_region.name] = entrance.connected_region.name
-        #
-        # # Output the plando details to file
-        # file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apLM")
-        # with open(file_path, "w") as f:
-        #     f.write(yaml.dump(output_data, sort_keys=False))
-        pass
+
+        # Output the plando details to file
+        file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apLM")
+        with open(file_path, "w") as f:
+            f.write(yaml.dump(output_data, sort_keys=False))
 
     # TODO: UPDATE FOR LM IF NEEDED
     def fill_slot_data(self):

@@ -10,7 +10,7 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import ClientStatus, NetworkItem
 
 from .Items import ITEM_TABLE, LOOKUP_ID_TO_NAME
-from .Locations import ALL_LOCATION_TABLE, LMLocation, LMLocationType
+from .Locations import ALL_LOCATION_TABLE, LMLocation
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -22,46 +22,47 @@ CONNECTION_LOST_STATUS = "Dolphin connection was lost. Please restart your emula
 CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
 CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 
-
 # This address is used to check/set the player's health for DeathLink. TODO CORRECT FOR LM
-# CURR_HEALTH_ADDR = 0x803C4C0A
+CURR_HEALTH_ADDR = 0x803C4C0A
+
+
 #
 # # These addresses are used for the Moblin's Letter check.
 # LETTER_BASE_ADDR = 0x803C4C8E
 # LETTER_OWND_ADDR = 0x803C4C98
 #
 # # These addresses are used to check flags for locations.
-# CHARTS_BITFLD_ADDR = 0x803C4CFC
-# CHESTS_BITFLD_ADDR = 0x803C5380
-# SWITCHES_BITFLD_ADDR = 0x803C5384
-# PICKUPS_BITFLD_ADDR = 0x803C5394
-# SEA_ALT_BITFLD_ADDR = 0x803C4FAC
+CHARTS_BITFLD_ADDR = 0x803C4CFC
+CHESTS_BITFLD_ADDR = 0x803C5380
+SWITCHES_BITFLD_ADDR = 0x803C5384
+PICKUPS_BITFLD_ADDR = 0x803C5394
+SEA_ALT_BITFLD_ADDR = 0x803C4FAC
 #
 # # The expected index for the next item that should be received. Uses event bits 0x60 and 0x61
-# EXPECTED_INDEX_ADDR = 0x803C528C
+EXPECTED_INDEX_ADDR = 0x803C528C
 #
 # # These bytes contain the bits whether the player has received the reward for finding a particular Tingle statue.
-# TINGLE_STATUE_1_ADDR = 0x803C523E  # 0x40 is the bit for Dragon Tingle statue
-# TINGLE_STATUE_2_ADDR = 0x803C5249  # 0x0F are the bits for the remaining Tingle statues
+TINGLE_STATUE_1_ADDR = 0x803C523E  # 0x40 is the bit for Dragon Tingle statue
+TINGLE_STATUE_2_ADDR = 0x803C5249  # 0x0F are the bits for the remaining Tingle statues
 #
 # # These addresses contain the current high score for the Bird-Man Contest.
 # # `FCP_SCORE_LO_ADDR` is are the lower eight bits of the score, `FCP_SCORE_HI_ADDR` are the higher eight bits
-# FCP_SCORE_LO_ADDR = 0x803C52D3
-# FCP_SCORE_HI_ADDR = 0x803C52D4
+FCP_SCORE_LO_ADDR = 0x803C52D3
+FCP_SCORE_HI_ADDR = 0x803C52D4
 #
 # # This address contains the current stage ID.
-# CURR_STAGE_ID_ADDR = 0x803C53A4
+CURR_STAGE_ID_ADDR = 0x803C53A4
 #
 # # This address is used to check the stage name to verify the player is in-game before sending items.
-# CURR_STAGE_NAME_ADDR = 0x803C9D3C
+CURR_STAGE_NAME_ADDR = 0x803C9D3C
 #
 # # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # # 0xFF represents no item. The array is read and cleared every frame.
-# GIVE_ITEM_ARRAY_ADDR = 0x803FE868
+GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 #
 # # This is the address that holds the player's slot name.
 # # This way, the player does not have to manually authenticate their slot name.
-# SLOT_NAME_ADDR = 0x803FE88C
+SLOT_NAME_ADDR = 0x803FE88C
 
 
 class LMCommandProcessor(ClientCommandProcessor):
@@ -77,7 +78,7 @@ class LMCommandProcessor(ClientCommandProcessor):
 class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
-    items_handling = 0b111 #TODO CORRECT FOR LM
+    items_handling = 0b111  # TODO CORRECT FOR LM
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -145,16 +146,18 @@ def write_short(console_address: int, value: int):
 def read_string(console_address: int, strlen: int):
     return dolphin_memory_engine.read_bytes(console_address, strlen).decode().strip("\0")
 
-#TODO CORRECT FOR LM
+
+# TODO CORRECT FOR LM
 def _give_death(ctx: LMContext):
     if (
-        ctx.slot
-        and dolphin_memory_engine.is_hooked()
-        and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS
-        and check_ingame()
+            ctx.slot
+            and dolphin_memory_engine.is_hooked()
+            and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS
+            and check_ingame()
     ):
         ctx.has_send_death = True
         write_short(CURR_HEALTH_ADDR, 0)
+
 
 # TODO CORRECT FOR LM
 def _give_item(ctx: LMContext, item_name: str) -> bool:
@@ -173,6 +176,7 @@ def _give_item(ctx: LMContext, item_name: str) -> bool:
     # Unable to place the item in the array, so return `False`
     return False
 
+
 # TODO CORRECT FOR LM
 async def give_items(ctx: LMContext):
     if check_ingame() and dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) != 0xFF:
@@ -189,6 +193,7 @@ async def give_items(ctx: LMContext):
 
                 # Increment the expected index
                 write_short(EXPECTED_INDEX_ADDR, idx + 1)
+
 
 # TODO CORRECT FOR LM
 async def check_locations(ctx: LMContext):
@@ -235,7 +240,7 @@ async def check_locations(ctx: LMContext):
             # For the Bird-Man Contest, we check if the high score is greater than 250 yards
             if location == "Flight Control Platform - Bird-Man Contest - First Prize":
                 high_score = dolphin_memory_engine.read_byte(FCP_SCORE_LO_ADDR) + (
-                    dolphin_memory_engine.read_byte(FCP_SCORE_HI_ADDR) << 8
+                        dolphin_memory_engine.read_byte(FCP_SCORE_HI_ADDR) << 8
                 )
                 checked = high_score > 250
 
@@ -274,12 +279,14 @@ async def check_locations(ctx: LMContext):
     if locations_checked:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
-#TODO CORRECT FOR LM
+
+# TODO CORRECT FOR LM
 async def check_alive():
     cur_health = read_short(CURR_HEALTH_ADDR)
     return cur_health > 0
 
-#TODO CORRECT FOR LM
+
+# TODO CORRECT FOR LM
 async def check_death(ctx: LMContext):
     if check_ingame():
         cur_health = read_short(CURR_HEALTH_ADDR)
@@ -323,7 +330,7 @@ async def dolphin_sync_task(ctx: LMContext):
                 logger.info("Attempting to connect to Dolphin...")
                 dolphin_memory_engine.hook()
                 if dolphin_memory_engine.is_hooked():
-                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
+                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GLME01":
                         logger.info(CONNECTION_REFUSED_GAME_STATUS)
                         ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
                         dolphin_memory_engine.un_hook()

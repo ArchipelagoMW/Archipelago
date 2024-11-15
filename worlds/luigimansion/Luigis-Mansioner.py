@@ -11,7 +11,7 @@ from gclib.dol import DOL
 from gclib.rarc import RARC
 from gclib.yaz0_yay0 import Yay0
 
-RANDOMIZER_NAME = "Luigis Mansion"
+RANDOMIZER_NAME = "Luigi's Mansion"
 CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
 
 
