@@ -195,7 +195,9 @@ class WitnessPlayerItems:
                 good_doors.append("Caves Shortcuts")
 
             # These two doors are logically equivalent, so we choose a random one as to not give them twice the chance.
-            good_doors.append(self._world.random.choice(["Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)"]))
+            good_doors.append(
+                self._world.random.choice(["Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)"])
+            )
 
             if self._world.options.shuffle_vault_boxes:
                 good_doors.append("Windmill & Theater Doors")
