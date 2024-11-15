@@ -1006,7 +1006,8 @@ class VanillaPCShuffle(TestFormatBase):
 
     def test_vanilla_placement(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x0, 0x3 & data)
+        # Yes, 2 is correct; we want to enforce shuffle flag to be on incase players create additional character items
+        self.assertEquals(0x2, 0x3 & data)
 
     def test_ensure_vanilla_placement(self):
         world = self.get_world()
