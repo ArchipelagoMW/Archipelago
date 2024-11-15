@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Iterable
+from typing import TYPE_CHECKING, Dict, Iterable, List
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
