@@ -84,10 +84,6 @@ def zipline_logic(world: "HatInTimeWorld") -> bool:
 HOOKSHOT_REQ = Req("Hookshot Badge", 1)
 
 
-def can_use_hookshot(state: CollectionState, world: "HatInTimeWorld"):
-    return state.has("Hookshot Badge", world.player)
-
-
 def hit_requirements(world: "HatInTimeWorld", umbrella_only: bool = False) -> Union[Req, AnyReq, None]:
     if not world.options.UmbrellaLogic:
         return None
@@ -101,20 +97,8 @@ def hit_requirements(world: "HatInTimeWorld", umbrella_only: bool = False) -> Un
     return AnyReq([Req("Umbrella", 1), hat_req])
 
 
-def can_hit(state: CollectionState, world: "HatInTimeWorld", umbrella_only: bool = False):
-    if not world.options.UmbrellaLogic:
-        return True
-
-    hat_req = hat_requirements(world, HatType.BREWING)
-    return state.has("Umbrella", world.player) or not umbrella_only and meets_req(state, world.player, hat_req)
-
-
 def relic_combo_requirements(world: "HatInTimeWorld", relic: str) -> List[Req]:
     return [Req(item, 1) for item in world.item_name_groups[relic]]
-
-
-def has_relic_combo(state: CollectionState, world: "HatInTimeWorld", relic: str) -> bool:
-    return state.has_group(relic, world.player, len(world.item_name_groups[relic]))
 
 
 # This is used to determine if the player can clear an act that's required to unlock a Time Rift
@@ -600,7 +584,7 @@ def set_expert_rules(world: "HatInTimeWorld"):
     # Expert: get to and clear Twilight Bell without Dweller Mask.
     # Dweller Mask OR Sprint Hat OR Brewing Hat OR Time Stop + Umbrella required to complete act.
     add_rule(world.multiworld.get_entrance("-> The Twilight Bell", player),
-             lambda state: can_use_hookshot(state, world), "or")
+             req_to_rule(player, HOOKSHOT_REQ), "or")
 
     add_rule(world.multiworld.get_location("Act Completion (The Twilight Bell)", player),
              # brewing hat, dweller hat, sprint hat, or (time stop and umbrella)
@@ -792,16 +776,16 @@ def set_alps_rules(world: "HatInTimeWorld"):
     sprint_hat_req = hat_requirements(world, HatType.SPRINT)
     time_stop_hat_req = hat_requirements(world, HatType.TIME_STOP)
     add_rule(world.multiworld.get_entrance("-> The Birdhouse", player),
-             lambda state: can_use_hookshot(state, world) and meets_req(state, player, brewing_hat_req))
+             all_reqs_to_rule(player, HOOKSHOT_REQ, brewing_hat_req))
 
     add_rule(world.multiworld.get_entrance("-> The Lava Cake", player),
-             lambda state: can_use_hookshot(state, world))
+             req_to_rule(player, HOOKSHOT_REQ))
 
     add_rule(world.multiworld.get_entrance("-> The Windmill", player),
-             lambda state: can_use_hookshot(state, world))
+             req_to_rule(player, HOOKSHOT_REQ))
 
     add_rule(world.multiworld.get_entrance("-> The Twilight Bell", player),
-             lambda state: can_use_hookshot(state, world) and meets_req(state, player, dweller_hat_req))
+             all_reqs_to_rule(player, HOOKSHOT_REQ, dweller_hat_req))
 
     add_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", player),
              any_req_to_rule(player, sprint_hat_req, time_stop_hat_req))
@@ -810,15 +794,17 @@ def set_alps_rules(world: "HatInTimeWorld"):
              lambda state: can_clear_alpine(state, player))
 
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", player),
-             lambda state: state.has("AFR Access", player)
-             and can_use_hookshot(state, world)
-             and can_hit(state, world, True))
+             complex_reqs_to_rule(player, AllReq([
+                 Req("AFR Access", 1),
+                 HOOKSHOT_REQ,
+                 hit_requirements(world, True),
+             ])))
 
 
 def set_dlc1_rules(world: "HatInTimeWorld"):
     player = world.player
     add_rule(world.multiworld.get_entrance("Cruise Ship Entrance BV", player),
-             lambda state: can_use_hookshot(state, world))
+             req_to_rule(player, HOOKSHOT_REQ))
 
     # This particular item isn't present in Act 3 for some reason, yes in vanilla too
     add_rule(world.multiworld.get_location("The Arctic Cruise - Toilet", player),
@@ -890,7 +876,7 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
                                                                 player).connected_region, entrance)
 
     for entrance in regions["Time Rift - Mafia of Cooks"].entrances:
-        add_rule(entrance, lambda state: has_relic_combo(state, world, "Burger"))
+        add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "Burger")))
 
     for entrance in regions["Time Rift - The Owl Express"].entrances:
         add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 2"))
@@ -909,7 +895,7 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
                                                                 player).connected_region, entrance)
 
     for entrance in regions["Time Rift - Dead Bird Studio"].entrances:
-        add_rule(entrance, lambda state: has_relic_combo(state, world, "Train"))
+        add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "Train")))
 
     paintings_2 = painting_requirements(world, 2)
     paintings_3 = painting_requirements(world, 3)
@@ -929,7 +915,7 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
             add_rule(entrance, req_to_rule(player, paintings_2))
 
     for entrance in regions["Time Rift - Sleepy Subcon"].entrances:
-        add_rule(entrance, lambda state: has_relic_combo(state, world, "UFO"))
+        add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "UFO")))
         if painting_logic(world):
             add_rule(entrance, req_to_rule(player, paintings_3))
 
@@ -940,7 +926,7 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
         add_rule(entrance, lambda state: state.has("Twilight Bell Cleared", player))
 
     for entrance in regions["Time Rift - Alpine Skyline"].entrances:
-        add_rule(entrance, lambda state: has_relic_combo(state, world, "Crayon"))
+        add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "Crayon")))
         if entrance.parent_region.name == "Alpine Free Roam":
             add_rule(entrance, complex_reqs_to_rule(player, AllReq([
                 HOOKSHOT_REQ,
@@ -985,7 +971,7 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
         reg_act_connection(world, "Heating Up Mafia Town", entrance.name)
 
     for entrance in world.multiworld.get_region("Time Rift - Mafia of Cooks", player).entrances:
-        add_rule(entrance, lambda state: has_relic_combo(state, world, "Burger"))
+        add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "Burger")))
 
     for entrance in world.multiworld.get_region("Time Rift - The Owl Express", player).entrances:
         add_rule(entrance, lambda state: can_clear_required_act(state, world, "Battle of the Birds - Act 2"))
@@ -1017,7 +1003,7 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
             add_rule(entrance, req_to_rule(player, paintings_2))
 
     for entrance in world.multiworld.get_region("Time Rift - Sleepy Subcon", player).entrances:
-        add_rule(entrance, lambda state: has_relic_combo(state, world, "UFO"))
+        add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "UFO")))
         if painting_logic(world):
             add_rule(entrance, req_to_rule(player, paintings_3))
 
