@@ -185,6 +185,18 @@ class WitnessPlayerItems:
                 "Shadows Door Timer (Panel)", "Keep Hedge Maze 1 (Panel)", "Town Maze Stairs (Panel)",
             ]
 
+            # While Caves Shortcuts don't unlock anything in symbol shuffle, you'd still rather have them early.
+            # But, we need to do some special handling for them.
+
+            if self._world.options.shuffle_doors in ("doors", "mixed"):
+                # Caves Shortcuts might exist in vanilla/panel doors because of "early caves: add to pool".
+                # But if the player wanted them early, they would have chosen "early caves: starting inventory".
+                # This is why we make sure these are "natural" Caves Shortcuts.
+                good_doors.append("Caves Shortcuts")
+
+            # These two doors are logically equivalent, so we choose a random one as to not give them twice the chance.
+            good_doors.append(self._world.random.choice(["Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)"]))
+
             if self._world.options.shuffle_vault_boxes:
                 good_doors.append("Windmill & Theater Doors")
                 if not self._world.options.shuffle_symbols:
