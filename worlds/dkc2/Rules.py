@@ -1134,7 +1134,7 @@ class DKC2LooseRules(DKC2Rules):
                 lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
                     self.can_cling(state),
             LocationName.clappers_cavern_dk_coin:
-                lambda state: self.can_team_attack(state) and self.can_cling(state),
+                self.can_team_attack,
             LocationName.clappers_cavern_bonus_1:
                 lambda state: self.can_team_attack(state) and self.can_cling(state),
             LocationName.clappers_cavern_bonus_2:
@@ -1559,7 +1559,8 @@ class DKC2ExpertRules(DKC2Rules):
                 lambda state: self.can_climb(state) and self.has_squawks(state) and ((
                     self.can_team_attack(state) and self.has_invincibility(state)
                     ) or (
-                    self.can_hover(state) and self.has_kannons(state)
+                    self.can_hover(state) and self.has_kannons(state) and self.has_diddy(state) and
+                    self.has_dixie(state)
                     )
                 ),
 
@@ -1763,7 +1764,7 @@ class DKC2ExpertRules(DKC2Rules):
                     )
                 ),
             LocationName.clappers_cavern_dk_coin:
-                lambda state: self.can_cling(state) and self.can_team_attack(state),
+                self.can_team_attack,
             LocationName.clappers_cavern_bonus_1:
                 lambda state: self.can_cling(state) and self.can_team_attack(state),
             LocationName.clappers_cavern_bonus_2:
