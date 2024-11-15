@@ -457,8 +457,13 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
                     option_set["option_advanced"] = [[option_set["option_name"], option_set["option_compare"],
                                                       option_set["option_result"]]]
                 else:
-                    split_result = option_set["option_result"].split("_")
-                    if len(split_result) == 3 and split_result[0] == "range":
+                    split_result = option_set["option_result"]
+                    is_range = False
+                    if isinstance(split_result, str):
+                        split_result = split_result.split("_")
+                        if len(split_result) == 3 and split_result[0] == "range":
+                            is_range = True
+                    if is_range:
                         try:
                             split_result[1] = int(split_result[1])
                             split_result[2] = int(split_result[2])
