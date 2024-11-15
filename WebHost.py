@@ -5,7 +5,6 @@ import logging
 import typing
 
 import ModuleUpdate
-from Utils import get_file_safe_name
 
 ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
 ModuleUpdate.update()
@@ -13,6 +12,7 @@ ModuleUpdate.update()
 # in case app gets imported by something like gunicorn
 import Utils
 import settings
+from Utils import get_file_safe_name
 
 if typing.TYPE_CHECKING:
     from flask import Flask
