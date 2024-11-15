@@ -67,7 +67,7 @@ class WorldSetup:
 
         return entrances
 
-    def randomize(self, settings, rnd):
+    def randomize(self, settings, rnd, ap_options):
         if settings.overworld == "dungeondive":
             self.entrance_mapping = {"d%d" % (n): "d%d" % (n) for n in range(9)}
         if settings.randomstartlocation and settings.entranceshuffle == "none":
@@ -115,7 +115,7 @@ class WorldSetup:
         elif settings.goal == "specific":
             instruments = [c for c in "12345678"]
             rnd.shuffle(instruments)
-            self.goal = "=" + "".join(instruments[:4])
+            self.goal = "=" + "".join(instruments[:ap_options.instrument_count.value])
         elif "-" in settings.goal:
             a, b = settings.goal.split("-")
             if a == "open":
