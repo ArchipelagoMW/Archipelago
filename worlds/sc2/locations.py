@@ -4200,6 +4200,38 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.PLANETFALL_P.mission_name, "Mid Expansion", SC2_RACESWAP_LOC_ID_OFFSET + 9412, LocationType.EXTRA,
                            logic.protoss_competent_comp
                            ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 9500, LocationType.VICTORY,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_T.mission_name, "First Power Link", SC2_RACESWAP_LOC_ID_OFFSET + 9501, LocationType.VANILLA),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_T.mission_name, "Second Power Link", SC2_RACESWAP_LOC_ID_OFFSET + 9502, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_T.mission_name, "Third Power Link", SC2_RACESWAP_LOC_ID_OFFSET + 9503, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_T.mission_name, "Expansion Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 9504, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_T.mission_name, "Main Path Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 9505, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 9600, LocationType.VICTORY,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_P.mission_name, "First Power Link", SC2_RACESWAP_LOC_ID_OFFSET + 9601, LocationType.VANILLA),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_P.mission_name, "Second Power Link", SC2_RACESWAP_LOC_ID_OFFSET + 9602, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_P.mission_name, "Third Power Link", SC2_RACESWAP_LOC_ID_OFFSET + 9603, LocationType.VANILLA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_P.mission_name, "Expansion Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 9604, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
+        make_location_data(SC2Mission.DEATH_FROM_ABOVE_P.mission_name, "Main Path Command Center", SC2_RACESWAP_LOC_ID_OFFSET + 9605, LocationType.EXTRA,
+                           logic.protoss_competent_comp
+                           ),
     ]
 
     beat_events = []
