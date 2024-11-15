@@ -464,7 +464,7 @@ def create_tasksanity_locations(world: "HatInTimeWorld"):
         ship_shape.locations.append(location)
 
 
-def randomize_act_entrances(world: "HatInTimeWorld"):
+def randomize_act_entrances(world: "HatInTimeWorld") -> Dict[str, Region]:
     region_list: List[Region] = get_shuffleable_act_regions(world)
     world.random.shuffle(region_list)
     region_list.sort(key=sort_acts)
@@ -582,7 +582,7 @@ def randomize_act_entrances(world: "HatInTimeWorld"):
         region: Region = world.multiworld.get_region(name, world.player)
         update_chapter_act_info(world, region, region)
 
-    set_rift_rules(world, rift_dict)
+    return rift_dict
 
 
 # Try to do levels that may have specific mapping rules first

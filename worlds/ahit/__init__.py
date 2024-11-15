@@ -180,10 +180,10 @@ class HatInTimeWorld(World):
 
             return
 
+        rift_dict = None
         if self.options.ActRandomizer:
-            randomize_act_entrances(self)
-
-        set_rules(self)
+            rift_dict = randomize_act_entrances(self)
+        set_rules(self, rift_dict)
 
         if self.is_dw():
             set_dw_rules(self)

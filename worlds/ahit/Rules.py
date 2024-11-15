@@ -142,7 +142,7 @@ def can_clear_metro(state: CollectionState, world: "HatInTimeWorld") -> bool:
            and state.has("Pink Paw Manhole Cleared", world.player)
 
 
-def set_rules(world: "HatInTimeWorld"):
+def precompute_costs(world: "HatInTimeWorld"):
     # First, chapter access
     starting_chapter = ChapterIndex(world.options.StartingChapter)
     world.chapter_timepiece_costs[starting_chapter] = 0
@@ -222,6 +222,10 @@ def set_rules(world: "HatInTimeWorld"):
 
         world.chapter_timepiece_costs[final_chapter] = final_chapter_cost
 
+def set_rules(world: "HatInTimeWorld", rift_dict: Optional[Dict[str, Region]] = None):
+    # Shuffle chapters and precalculate hat and chapter costs.
+    precompute_costs(world)
+
     player = world.player
     brewing_hat_req = hat_requirements(world, HatType.BREWING)
     dweller_hat_req = hat_requirements(world, HatType.DWELLER)
@@ -259,7 +263,9 @@ def set_rules(world: "HatInTimeWorld"):
         add_rule(world.multiworld.get_entrance("Telescope -> Nyakuza Metro", player),
                  all_reqs_to_rule(player, alpine_req, metro_req, dweller_hat_req, ice_hat_req))
 
-    if not world.options.ActRandomizer:
+    if rift_dict:
+        set_rift_rules(world, rift_dict)
+    else:
         set_default_rift_rules(world)
 
     table = {**location_table, **event_locs}
@@ -838,7 +844,6 @@ def reg_act_connection(world: "HatInTimeWorld", region: Union[str, Region], unlo
 
 
 # See randomize_act_entrances in Regions.py
-# Called before set_rules
 def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
     player = world.player
     brewing_hat_req = hat_requirements(world, HatType.BREWING)
@@ -937,7 +942,6 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
 # Called if Act Rando is disabled
 def set_default_rift_rules(world: "HatInTimeWorld"):
     player = world.player
-    chapter_timepiece_costs = world.chapter_timepiece_costs
     brewing_hat_req = hat_requirements(world, HatType.BREWING)
     dweller_hat_req = hat_requirements(world, HatType.DWELLER)
     birds_req = Req("Time Piece", world.chapter_timepiece_costs[ChapterIndex.BIRDS])
