@@ -33,7 +33,7 @@ DKC2_INIT_FLAG = DKC2_SRAM + 0x022
 
 DKC2_GAME_TIME = WRAM_START + 0x00D5
 DKC2_IN_LEVEL = WRAM_START + 0x01FF
-DKC2_CURRENT_LEVEL = WRAM_START + 0x00D3
+DKC2_CURRENT_LEVEL = WRAM_START + 0x08A8    # 0xD3?
 DKC2_CURRENT_MODE = WRAM_START + 0x00D0
 
 DKC2_CRANKY_FLAGS = WRAM_START + 0x08D2
@@ -88,7 +88,7 @@ class DKC2SNIClient(SNIClient):
         ctx.rom = rom_name
 
         return True
-     
+
 
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
@@ -244,7 +244,6 @@ class DKC2SNIClient(SNIClient):
 
             # Give traps 
             elif item.item in trap_data:
-                print ("wea")
                 offset = trap_data[item.item][0]
                 sfx = trap_data[item.item][1]
                 traps = await snes_read(ctx, DKC2_SRAM + offset, 0x02)
@@ -266,6 +265,12 @@ class DKC2SNIClient(SNIClient):
             await snes_flush_writes(ctx)
                 
         # Handle collected locations
+        new_level_clear = False
+        new_dk_coin = False
+        new_bonus = False
+        stage_flags = list(game_flags[0x40:0x60])
+        bonus_flags = list(game_flags[0x00:0x20])
+        dk_coin_flags = list(game_flags[0x20:0x40])
         i = 0
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
@@ -279,3 +284,34 @@ class DKC2SNIClient(SNIClient):
                 i += 1
 
                 data = location_id_to_level_id[loc_name]
+
+                loc_type = data[0]
+                level_num = data[1]
+                level_offset = (level_num >> 3) & 0x1E
+                level_bit = 1 << (level_num & 0x0F)
+
+                if loc_type == 0x00:
+                    # Level clear
+                    level_data = int.from_bytes(stage_flags[level_offset:level_offset+2], "little")
+                    level_data |= level_bit
+                    stage_flags[level_offset:level_offset+2] = level_data.to_bytes(2, "little")
+                    new_level_clear = True
+                elif loc_type == 0x02:
+                    # DK Coin
+                    level_data = int.from_bytes(dk_coin_flags[level_offset:level_offset+2], "little")
+                    level_data |= level_bit
+                    dk_coin_flags[level_offset:level_offset+2] = level_data.to_bytes(2, "little")
+                    new_dk_coin = True
+                elif loc_type == 0x03:
+                    # Bonus
+                    level_data = int.from_bytes(bonus_flags[level_offset:level_offset+2], "little")
+                    level_data |= level_bit
+                    bonus_flags[level_offset:level_offset+2] = level_data.to_bytes(2, "little")
+                    new_bonus = True
+        
+        if new_level_clear:
+            snes_buffered_write(ctx, DKC2_STAGE_FLAGS, bytearray(stage_flags))
+        if new_dk_coin:
+            snes_buffered_write(ctx, DKC2_DK_COIN_FLAGS, bytearray(dk_coin_flags))
+        if new_bonus:
+            snes_buffered_write(ctx, DKC2_BONUS_FLAGS, bytearray(bonus_flags))
