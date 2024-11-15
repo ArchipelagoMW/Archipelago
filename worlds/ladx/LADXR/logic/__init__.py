@@ -73,6 +73,8 @@ class Logic:
             world.nightmare.connect(world.egg, COUNT(SEASHELL, 20))
         elif world_setup.goal in ("raft", "bingo", "bingo-full"):
             world.nightmare.connect(world.egg, egg_trigger)
+        elif isinstance(world_setup.goal, str) and world_setup.goal.startswith("="):
+            world.nightmare.connect(world.egg, AND(egg_trigger, *["INSTRUMENT%s" % c for c in world_setup.goal[1:]]))
         else:
             goal = int(world_setup.goal)
             if goal < 0:

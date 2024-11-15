@@ -62,6 +62,18 @@ noinc:
     """), fill_nop=True)
 
 
+def setSpecificInstruments(rom, instruments):
+    rom.texts[0x1A3] = formatText("You need:\n" + "\n".join(["{INSTRUMENT%s}" % (c) for c in instruments]))
+
+    rom.patch(0x19, 0x0BF9, ASM("cp 7"), ASM("cp %d" % (instruments[0] - 1)))
+    code = f"ld hl, $DB65 + {instruments[1] - 1}\nld a, [hl]\n"
+    for n in range(2, len(instruments)):
+        code += f"ld l, $65 + {instruments[n] - 1}\nand [hl]\n"
+    code += "and $02\njp z, $4C1A\njp $4C0B"
+    rom.patch(0x19, 0x3F2B, "00" * 26, ASM(code), fill_nop=True)
+    rom.patch(0x19, 0x0BFE, 0x0C0B, ASM("jp $7F2B"), fill_nop=True)
+
+
 def setSeashellGoal(rom, count):
     rom.texts[0x1A3] = formatText("You need %d {SEASHELL}s" % (count))
 

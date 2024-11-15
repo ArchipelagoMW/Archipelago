@@ -112,6 +112,10 @@ class WorldSetup:
             self.goal = -1
         elif settings.goal in {"seashells", "bingo", "bingo-full"}:
             self.goal = settings.goal
+        elif settings.goal == "specific":
+            instruments = [c for c in "12345678"]
+            rnd.shuffle(instruments)
+            self.goal = "=" + "".join(instruments[:4])
         elif "-" in settings.goal:
             a, b = settings.goal.split("-")
             if a == "open":
