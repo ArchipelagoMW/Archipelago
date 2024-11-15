@@ -16,7 +16,7 @@ from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
 from .Options import DKC2Options, Logic, StartingKong
 from .Client import DKC2SNIClient
-from .Levels import generate_level_list, location_id_to_level_id
+from .Levels import generate_level_list, level_map, location_id_to_level_id
 from .Rules import DKC2StrictRules, DKC2LooseRules, DKC2ExpertRules
 from .Rom import patch_rom, DKC2ProcedurePatch, HASH_US, HASH_US_REV_1
 
@@ -230,7 +230,17 @@ class DKC2World(World):
 
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
-        pass
+        er_hint_data = {}
+        map_connections = {**self.level_connections, **self.boss_connections}
+        for loc_name in location_id_to_level_id.keys():
+            level_name = loc_name.split(' - ')[0] + ": Level"
+            for map_spot, level in map_connections.items():
+                if level != level_name:
+                    continue
+                location = self.multiworld.get_location(loc_name, self.player)
+                er_hint_data[location.address] = level_map[map_spot]
+        
+        hint_data[self.player] = er_hint_data
 
 
     def get_filler_item_name(self) -> str:
