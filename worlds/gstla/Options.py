@@ -39,7 +39,7 @@ class SecondStartingCharacter(Choice):
     option_garet = 4
     option_ivan = 5
     option_mia = 6
-    default = 1
+    default = 0
 
 class DjinnLogic(NamedRange):
     """How much do Djinn affect logic for being able to defeat bosses?

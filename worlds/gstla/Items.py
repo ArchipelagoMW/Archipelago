@@ -107,26 +107,11 @@ def create_items(world: 'GSTLAWorld', player: int):
     char_items = { char.name : char for char in character_items}
 
     #if not vanilla character shuffle we can do special things
-    if world.options.shuffle_characters != 0:
+    if world.options.shuffle_characters > 0:
         char_opt = world.options.second_starting_character
         char_name = [ItemName.Jenna, ItemName.Sheba, ItemName.Piers, ItemName.Isaac,
                      ItemName.Garet, ItemName.Ivan, ItemName.Mia][char_opt]
         character = char_items.pop(char_name)
-        # match world.options.second_starting_character:
-        #     case 0:
-        #         character = char_items.pop(ItemName.Jenna)
-        #     case 1:
-        #         character = char_items.pop(ItemName.Sheba)
-        #     case 2:
-        #         character = char_items.pop(ItemName.Piers)
-        #     case 3:
-        #         character = char_items.pop(ItemName.Isaac)
-        #     case 4:
-        #         character = char_items.pop(ItemName.Garet)
-        #     case 5:
-        #         character = char_items.pop(ItemName.Ivan)
-        #     case 6:
-        #         character = char_items.pop(ItemName.Mia)
         ap_item = create_item_direct(character, player)
         ap_location = world.get_location(LocationName.Idejima_Jenna)
         ap_location.place_locked_item(ap_item)

@@ -401,9 +401,8 @@ class GSTLAWorld(World):
         debug_file.write('Force superboss minor: false\n')
         write_me += self.options.anemos_inner_sanctum_access << 2 #anemos-access, require logic changes
         debug_file.write('Anemos Inner Sanctum Access: ' + self.options.anemos_inner_sanctum_access.name_lookup[self.options.anemos_inner_sanctum_access] + '\n')
-        if self.options.shuffle_characters > 0: #shuffle-characters
-            write_me += 1 << 1
-            debug_file.write('Character Shuffle: true\n')
+        write_me += 1 << 1 #char shuffle always on to ensure game understands character items in case of players creating duplicates / plando in weird places
+        debug_file.write('Character Shuffle: true\n')
         write_me += 0 #unused
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
