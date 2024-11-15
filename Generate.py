@@ -458,7 +458,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set, type_hints: di
                                                       option_set["option_result"]]]
                 else:
                     split_result = option_set["option_result"].split("_")
-                    if len(split_result) == 3 & split_result[0] == "range":
+                    if len(split_result) == 3 and split_result[0] == "range":
                         try:
                             split_result[1] = int(split_result[1])
                             split_result[2] = int(split_result[2])
