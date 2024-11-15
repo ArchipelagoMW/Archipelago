@@ -95,7 +95,7 @@ class TestMostItemShuffle(TestFormatBase):
 
     def test_item_shuffle(self):
         data = self._get_option_byte()
-        self.assertEquals(0x80, 0xC0 & data)
+        self.assertEqual(0x80, 0xC0 & data)
 
 class TestAllItemShuffle(TestFormatBase):
     options = {
@@ -104,13 +104,13 @@ class TestAllItemShuffle(TestFormatBase):
 
     def test_item_shuffle(self):
         data = self._get_option_byte()
-        self.assertEquals(0xC0, 0xC0 & data)
+        self.assertEqual(0xC0, 0xC0 & data)
 
 class TestOmitAll(TestFormatBase):
 
     def test_omit_all(self):
         data = self._get_option_byte()
-        self.assertEquals(0x20, 0x30 & data)
+        self.assertEqual(0x20, 0x30 & data)
 
 class TestOmitAnemos(TestFormatBase):
     options = {
@@ -119,7 +119,7 @@ class TestOmitAnemos(TestFormatBase):
 
     def test_omit_all(self):
         data = self._get_option_byte()
-        self.assertEquals(0x10, 0x30 & data)
+        self.assertEqual(0x10, 0x30 & data)
 
 class TestOmitNothing(TestFormatBase):
     options = {
@@ -128,13 +128,13 @@ class TestOmitNothing(TestFormatBase):
 
     def test_omit_all(self):
         data = self._get_option_byte()
-        self.assertEquals(0x00, 0x30 & data)
+        self.assertEqual(0x00, 0x30 & data)
 
 class TestVisibleItems(TestFormatBase):
 
     def test_visible(self):
         data = self._get_option_byte()
-        self.assertEquals(0x4, 0x4 & data)
+        self.assertEqual(0x4, 0x4 & data)
 
 class TestNormalVisibility(TestFormatBase):
     options  = {
@@ -143,13 +143,13 @@ class TestNormalVisibility(TestFormatBase):
 
     def test_invisible(self):
         data = self._get_option_byte()
-        self.assertEquals(0x0, 0x4 & data)
+        self.assertEqual(0x0, 0x4 & data)
 
 class TestNoUtilPsy(TestFormatBase):
 
     def test_no_util_psy(self):
         data = self._get_option_byte()
-        self.assertEquals(0x2, 0x2 & data)
+        self.assertEqual(0x2, 0x2 & data)
 
 class TestUtilPsy(TestFormatBase):
     options = {
@@ -158,13 +158,13 @@ class TestUtilPsy(TestFormatBase):
 
     def test_util_psy(self):
         data = self._get_option_byte()
-        self.assertEquals(0x0, 0x2 & data)
+        self.assertEqual(0x0, 0x2 & data)
 
 class NoRandomizeClassStats(TestFormatBase):
 
     def test_no_random_class_stats(self):
         data = self._get_option_byte()
-        self.assertEquals(0x0, 0x1 & data)
+        self.assertEqual(0x0, 0x1 & data)
 
 class RandomizeClassStats(TestFormatBase):
     options = {
@@ -173,13 +173,13 @@ class RandomizeClassStats(TestFormatBase):
 
     def test_random_class_stats(self):
         data = self._get_option_byte()
-        self.assertEquals(0x1, 0x1 & data)
+        self.assertEqual(0x1, 0x1 & data)
 
 class NoRandomizeEquipCompat(TestFormatBase):
 
     def test_no_randomize_equip_compat(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x00, 0x80 & data)
+        self.assertEqual(0x00, 0x80 & data)
 
 class RandomizeEquipCompat(TestFormatBase):
     options = {
@@ -188,13 +188,13 @@ class RandomizeEquipCompat(TestFormatBase):
 
     def test_randomize_equip_compat(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x80, 0x80 & data)
+        self.assertEqual(0x80, 0x80 & data)
 
 class NoAdjustEquipPrices(TestFormatBase):
 
     def test_no_adjust_equip_prices(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x00, 0x40 & data)
+        self.assertEqual(0x00, 0x40 & data)
 
 class AdjustEquipPrices(TestFormatBase):
     options = {
@@ -203,13 +203,13 @@ class AdjustEquipPrices(TestFormatBase):
 
     def test_adjust_equip_prices(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x40, 0x40 & data)
+        self.assertEqual(0x40, 0x40 & data)
 
 class NoAdjustEquipStats(TestFormatBase):
 
     def test_no_adjust_equip_stats(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x00, 0x20 & data)
+        self.assertEqual(0x00, 0x20 & data)
 
 class AdjustEquipStats(TestFormatBase):
     options = {
@@ -218,13 +218,13 @@ class AdjustEquipStats(TestFormatBase):
 
     def test_adjust_equip_stats(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x20, 0x20 & data)
+        self.assertEqual(0x20, 0x20 & data)
 
 class NoShuffleWeaponEffect(TestFormatBase):
 
     def test_no_shuffle_weapon_effect(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x0, 0x8 & data)
+        self.assertEqual(0x0, 0x8 & data)
 
 class ShuffleWeaponEffect(TestFormatBase):
     options = {
@@ -233,13 +233,13 @@ class ShuffleWeaponEffect(TestFormatBase):
 
     def test_shuffle_weapon_effect(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x8, 0x8 & data)
+        self.assertEqual(0x8, 0x8 & data)
 
 class NoShuffleArmourEffect(TestFormatBase):
 
     def test_no_shuffle_armour_effect(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x0, 0x4 & data)
+        self.assertEqual(0x0, 0x4 & data)
 
 class ShuffleArmourEffect(TestFormatBase):
     options = {
@@ -248,13 +248,13 @@ class ShuffleArmourEffect(TestFormatBase):
 
     def test_shuffle_armour_effect(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x4, 0x4 & data)
+        self.assertEqual(0x4, 0x4 & data)
 
 class NoShuffleCurses(TestFormatBase):
 
     def test_no_shuffle_curses(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x0, 0x2 & data)
+        self.assertEqual(0x0, 0x2 & data)
 
 class ShuffleCurses(TestFormatBase):
     options = {
@@ -263,13 +263,13 @@ class ShuffleCurses(TestFormatBase):
 
     def test_shuffle_curses(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x2, 0x2 & data)
+        self.assertEqual(0x2, 0x2 & data)
 
 class NoAdjustPsynergyPower(TestFormatBase):
 
     def test_no_adjust_psynergy_power(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x0, 0x1 & data)
+        self.assertEqual(0x0, 0x1 & data)
 
 class AdjustPsynergyPower(TestFormatBase):
     options = {
@@ -278,13 +278,13 @@ class AdjustPsynergyPower(TestFormatBase):
 
     def test_adjust_psynergy_power(self):
         data = self._get_option_byte(1)
-        self.assertEquals(0x1, 0x1 & data)
+        self.assertEqual(0x1, 0x1 & data)
 
 class NoShuffleDjinnStatBoosts(TestFormatBase):
 
     def test_no_shuffle_djinn_stat_boosts(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x00, 0x40 & data)
+        self.assertEqual(0x00, 0x40 & data)
 
 class ShuffleDjinnStatBoosts(TestFormatBase):
     options = {
@@ -293,13 +293,13 @@ class ShuffleDjinnStatBoosts(TestFormatBase):
 
     def test_shuffle_djinn_stat_boosts(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x40, 0x40 & data)
+        self.assertEqual(0x40, 0x40 & data)
 
 class NoAdjustDjinnAttackPower(TestFormatBase):
 
     def test_no_adjust_djinn_att_power(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x00, 0x20 & data)
+        self.assertEqual(0x00, 0x20 & data)
 
 class AdjustDjinnAttackPower(TestFormatBase):
     options = {
@@ -308,13 +308,13 @@ class AdjustDjinnAttackPower(TestFormatBase):
 
     def test_adjust_djinn_att_power(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x20, 0x20 & data)
+        self.assertEqual(0x20, 0x20 & data)
 
 class NoRandoDjinnAttackAOE(TestFormatBase):
 
     def test_no_adjust_djinn_att_aoe(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x00, 0x10 & data)
+        self.assertEqual(0x00, 0x10 & data)
 
 class RandoDjinnAttackPower(TestFormatBase):
     options = {
@@ -323,13 +323,13 @@ class RandoDjinnAttackPower(TestFormatBase):
 
     def test_adjust_djinn_att_aoe(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x10, 0x10 & data)
+        self.assertEqual(0x10, 0x10 & data)
 
 class NoScaleDjinnDifficulty(TestFormatBase):
 
     def test_no_scale_djinn_difficulty(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x0, 0x8 & data)
+        self.assertEqual(0x0, 0x8 & data)
 
 
 class ScaleDjinnDifficulty(TestFormatBase):
@@ -339,13 +339,13 @@ class ScaleDjinnDifficulty(TestFormatBase):
 
     def test_scale_djinn_difficulty(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x8, 0x8 & data)
+        self.assertEqual(0x8, 0x8 & data)
 
 class NoRandomizeSummonCosts(TestFormatBase):
 
     def test_no_randomize_summon_costs(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x0, 0x4 & data)
+        self.assertEqual(0x0, 0x4 & data)
 
 class RandomizeSummonCosts(TestFormatBase):
     options = {
@@ -354,13 +354,13 @@ class RandomizeSummonCosts(TestFormatBase):
 
     def test_randomize_summon_costs(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x4, 0x4 & data)
+        self.assertEqual(0x4, 0x4 & data)
 
 class NoAdjustSummonPower(TestFormatBase):
 
     def test_no_adjust_summon_power(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x0, 0x2 & data)
+        self.assertEqual(0x0, 0x2 & data)
 
 class AdjustSummonPower(TestFormatBase):
     options = {
@@ -369,7 +369,7 @@ class AdjustSummonPower(TestFormatBase):
 
     def test_adjust_summon_power(self):
         data = self._get_option_byte(2)
-        self.assertEquals(0x2, 0x2 & data)
+        self.assertEqual(0x2, 0x2 & data)
 
 class NoShuffleCharStats(TestFormatBase):
     options = {
@@ -378,7 +378,7 @@ class NoShuffleCharStats(TestFormatBase):
 
     def test_no_shuffle_char_stats(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x0, 0xC0 & data)
+        self.assertEqual(0x0, 0xC0 & data)
 
 class ShuffleCharStats(TestFormatBase):
     options = {
@@ -387,7 +387,7 @@ class ShuffleCharStats(TestFormatBase):
 
     def test_shuffle_char_stats(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x40, 0xC0 & data)
+        self.assertEqual(0x40, 0xC0 & data)
 
 class RandomizeCharStats(TestFormatBase):
     options = {
@@ -396,7 +396,7 @@ class RandomizeCharStats(TestFormatBase):
 
     def test_randomize_char_stats(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x80, 0xC0 & data)
+        self.assertEqual(0x80, 0xC0 & data)
 
 class NoShuffleCharEle(TestFormatBase):
     options = {
@@ -405,7 +405,7 @@ class NoShuffleCharEle(TestFormatBase):
 
     def test_no_shuffle_char_ele(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x00, 0x30 & data)
+        self.assertEqual(0x00, 0x30 & data)
 
 class ShuffleCharEle(TestFormatBase):
     options = {
@@ -414,7 +414,7 @@ class ShuffleCharEle(TestFormatBase):
 
     def test_shuffle_char_ele(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x10, 0x30 & data)
+        self.assertEqual(0x10, 0x30 & data)
 
 class RandomizeCharEle(TestFormatBase):
     options = {
@@ -423,13 +423,13 @@ class RandomizeCharEle(TestFormatBase):
 
     def test_randomize_char_ele(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x20, 0x30 & data)
+        self.assertEqual(0x20, 0x30 & data)
 
 class NoAdjustPsynergyCost(TestFormatBase):
 
     def test_no_adjust_psynergy_cost(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x0, 0x8 & data)
+        self.assertEqual(0x0, 0x8 & data)
 
 class AdjustPsynergyCost(TestFormatBase):
     options = {
@@ -438,13 +438,13 @@ class AdjustPsynergyCost(TestFormatBase):
 
     def test_adjust_psynergy_cost(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x8, 0x8 & data)
+        self.assertEqual(0x8, 0x8 & data)
 
 class NoRandomizePsynergyAOE(TestFormatBase):
 
     def test_no_rando_psy_aoe(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x0, 0x4 & data)
+        self.assertEqual(0x0, 0x4 & data)
 
 class RandomizePsynergyAOE(TestFormatBase):
     options = {
@@ -453,13 +453,13 @@ class RandomizePsynergyAOE(TestFormatBase):
 
     def test_rando_psy_aoe(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x4, 0x4 & data)
+        self.assertEqual(0x4, 0x4 & data)
 
 class NoAdjustEnemyPsyPower(TestFormatBase):
 
     def test_no_adjust_enemy_psy_power(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x0, 0x2 & data)
+        self.assertEqual(0x0, 0x2 & data)
 
 class AdjustEnemyPsyPower(TestFormatBase):
     options = {
@@ -468,13 +468,13 @@ class AdjustEnemyPsyPower(TestFormatBase):
 
     def test_adjust_enemy_psy_power(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x2, 0x2 & data)
+        self.assertEqual(0x2, 0x2 & data)
 
 class NoRandomizeEnemyPsyAOE(TestFormatBase):
 
     def test_no_rando_enemy_psy_aoe(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x0, 0x1 & data)
+        self.assertEqual(0x0, 0x1 & data)
 
 class RandomizeEnemyPsyAOE(TestFormatBase):
     options = {
@@ -483,7 +483,7 @@ class RandomizeEnemyPsyAOE(TestFormatBase):
 
     def test_rando_enemy_psy_aoe(self):
         data = self._get_option_byte(3)
-        self.assertEquals(0x1, 0x1 & data)
+        self.assertEqual(0x1, 0x1 & data)
 
 class ClassPsyVanilla(TestFormatBase):
     options = {
@@ -492,7 +492,7 @@ class ClassPsyVanilla(TestFormatBase):
 
     def test_vanilla_psy(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x00, 0xe0 & data)
+        self.assertEqual(0x00, 0xe0 & data)
 
 class ClassPsyClass(TestFormatBase):
     options = {
@@ -501,7 +501,7 @@ class ClassPsyClass(TestFormatBase):
 
     def test_class_psy(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x20, 0xe0 & data)
+        self.assertEqual(0x20, 0xe0 & data)
 
 class ClassPsyGroup(TestFormatBase):
     options = {
@@ -510,7 +510,7 @@ class ClassPsyGroup(TestFormatBase):
 
     def test_class_group_psy(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x40, 0xe0 & data)
+        self.assertEqual(0x40, 0xe0 & data)
 
 class ClassPsyElement(TestFormatBase):
     options = {
@@ -519,7 +519,7 @@ class ClassPsyElement(TestFormatBase):
 
     def test_class_ele_psy(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x60, 0xe0 & data)
+        self.assertEqual(0x60, 0xe0 & data)
 
 class ClassPsyFull(TestFormatBase):
     options = {
@@ -528,7 +528,7 @@ class ClassPsyFull(TestFormatBase):
 
     def test_class_full(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x80, 0xe0 & data)
+        self.assertEqual(0x80, 0xe0 & data)
 
 class ClassPsyGroupElement(TestFormatBase):
     options = {
@@ -537,7 +537,7 @@ class ClassPsyGroupElement(TestFormatBase):
 
     def test_class_group_ele_psy(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0xA0, 0xe0 & data)
+        self.assertEqual(0xA0, 0xe0 & data)
 
 class ClassPsyLevelVanilla(TestFormatBase):
     options = {
@@ -546,7 +546,7 @@ class ClassPsyLevelVanilla(TestFormatBase):
 
     def test_class_psy_vanilla(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x00, 0x18 & data)
+        self.assertEqual(0x00, 0x18 & data)
 
 class ClassPsyLevelShuffle(TestFormatBase):
     options = {
@@ -555,7 +555,7 @@ class ClassPsyLevelShuffle(TestFormatBase):
 
     def test_class_psy_shuffle(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x08, 0x18 & data)
+        self.assertEqual(0x08, 0x18 & data)
 
 class ClassPsyLevelRando(TestFormatBase):
     options = {
@@ -564,19 +564,19 @@ class ClassPsyLevelRando(TestFormatBase):
 
     def test_class_psy_rando(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x10, 0x18 & data)
+        self.assertEqual(0x10, 0x18 & data)
 
 class SectionFourQoL(TestFormatBase):
 
     def test_ensure_qol(self):
         data = self._get_option_byte(4)
-        self.assertEquals(0x07, 0x7 & data)
+        self.assertEqual(0x07, 0x7 & data)
 
 class LemurianShipVanilla(TestFormatBase):
 
     def test_ship_vanilla(self):
         data = self._get_option_byte(5)
-        self.assertEquals(0x00, 0xC0 & data)
+        self.assertEqual(0x00, 0xC0 & data)
 
     def test_no_ship(self):
         world = self.get_world()
@@ -589,7 +589,7 @@ class LemurianShipFast(TestFormatBase):
 
     def test_ship_fast(self):
         data = self._get_option_byte(5)
-        self.assertEquals(0x40, 0xC0 & data)
+        self.assertEqual(0x40, 0xC0 & data)
 
     def test_no_ship(self):
         world = self.get_world()
@@ -602,7 +602,7 @@ class LemurianShipStart(TestFormatBase):
 
     def test_ship_start(self):
         data = self._get_option_byte(5)
-        self.assertEquals(0x80, 0xC0 & data)
+        self.assertEqual(0x80, 0xC0 & data)
 
     def test_has_ship(self):
         world = self.get_world()
@@ -612,7 +612,7 @@ class AvoidCostVanilla(TestFormatBase):
 
     def test_avoid_cost_vanilla(self):
         data = self._get_option_byte(5)
-        self.assertEquals(0x0, 0x2 & data)
+        self.assertEqual(0x0, 0x2 & data)
 
 class AvoidFree(TestFormatBase):
     options = {
@@ -621,13 +621,13 @@ class AvoidFree(TestFormatBase):
 
     def test_avoid_free(self):
         data = self._get_option_byte(5)
-        self.assertEquals(0x2, 0x2 & data)
+        self.assertEqual(0x2, 0x2 & data)
 
 class RetreatCostVanilla(TestFormatBase):
 
     def test_cost_retreat_vanilla(self):
         data = self._get_option_byte(5)
-        self.assertEquals(0x0, 0x1 & data)
+        self.assertEqual(0x0, 0x1 & data)
 
 class RetreatFree(TestFormatBase):
     options = {
@@ -636,7 +636,7 @@ class RetreatFree(TestFormatBase):
 
     def test_retreat_free(self):
         data = self._get_option_byte(5)
-        self.assertEquals(0x1, 0x1 & data)
+        self.assertEqual(0x1, 0x1 & data)
 
 # TODO: adv equip
 # TODO: dummy items
@@ -646,7 +646,7 @@ class NoShuffleWeaponAtt(TestFormatBase):
 
     def test_no_shuffle_weapon_att(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x00, 0x10 & data)
+        self.assertEqual(0x00, 0x10 & data)
 
 class ShuffleWeaponAtt(TestFormatBase):
     options = {
@@ -655,13 +655,13 @@ class ShuffleWeaponAtt(TestFormatBase):
 
     def test_shuffle_weapon_att(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x10, 0x10 & data)
+        self.assertEqual(0x10, 0x10 & data)
 
 class NoStartHealingPsy(TestFormatBase):
 
     def test_no_start_healing_psy(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x0, 0x4 & data)
+        self.assertEqual(0x0, 0x4 & data)
 
 class StartHealingPsy(TestFormatBase):
     options = {
@@ -670,13 +670,13 @@ class StartHealingPsy(TestFormatBase):
 
     def test_start_healing_psy(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x4, 0x4 & data)
+        self.assertEqual(0x4, 0x4 & data)
 
 class NoStartRevive(TestFormatBase):
 
     def test_no_start_revive(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x0, 0x2 & data)
+        self.assertEqual(0x0, 0x2 & data)
 
 class StartRevive(TestFormatBase):
     options = {
@@ -685,13 +685,13 @@ class StartRevive(TestFormatBase):
 
     def test_start_revive(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x2, 0x2 & data)
+        self.assertEqual(0x2, 0x2 & data)
 
 class NoStartReveal(TestFormatBase):
 
     def test_no_start_reveal(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x0, 0x1 & data)
+        self.assertEqual(0x0, 0x1 & data)
 
 class StartReveal(TestFormatBase):
     options = {
@@ -700,7 +700,7 @@ class StartReveal(TestFormatBase):
 
     def test_start_reveal(self):
         data = self._get_option_byte(6)
-        self.assertEquals(0x1, 0x1 & data)
+        self.assertEqual(0x1, 0x1 & data)
 
 class ScaleExpAndCoin(TestFormatBase):
     options = {
@@ -710,17 +710,17 @@ class ScaleExpAndCoin(TestFormatBase):
 
     def test_scale_exp(self):
         data = self._get_option_byte(7)
-        self.assertEquals(0xF0, 0xF0 & data)
+        self.assertEqual(0xF0, 0xF0 & data)
 
     def test_scale_coin(self):
         data = self._get_option_byte(7)
-        self.assertEquals(0x0F, 0x0F & data)
+        self.assertEqual(0x0F, 0x0F & data)
 
 class NoShuffleArmourDef(TestFormatBase):
 
     def test_no_shuffle_armour_def(self):
         data = self._get_option_byte(8)
-        self.assertEquals(0x00, 0x80 & data)
+        self.assertEqual(0x00, 0x80 & data)
 
 class ShuffleArmourDef(TestFormatBase):
     options = {
@@ -729,7 +729,7 @@ class ShuffleArmourDef(TestFormatBase):
 
     def test_shuffle_armour_def(self):
         data = self._get_option_byte(8)
-        self.assertEquals(0x80, 0x80 & data)
+        self.assertEqual(0x80, 0x80 & data)
 
 class StartingLevels(TestFormatBase):
     options = {
@@ -738,13 +738,13 @@ class StartingLevels(TestFormatBase):
 
     def test_starting_levels(self):
         data = self._get_option_byte(8)
-        self.assertEquals(42 ,0x7F & data)
+        self.assertEqual(42 ,0x7F & data)
 
 class EnemyElementalResVanilla(TestFormatBase):
 
     def test_vanilla_enemy_ele_res(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x0 ,0xC0 & data)
+        self.assertEqual(0x0 ,0xC0 & data)
 
 class EnemyElementalResShuffled(TestFormatBase):
     options = {
@@ -753,7 +753,7 @@ class EnemyElementalResShuffled(TestFormatBase):
 
     def test_shuffled_enemy_ele_res(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x40 ,0xC0 & data)
+        self.assertEqual(0x40 ,0xC0 & data)
 
 class EnemyElementalResRando(TestFormatBase):
     options = {
@@ -762,7 +762,7 @@ class EnemyElementalResRando(TestFormatBase):
 
     def test_rando_enemy_ele_res(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x80 ,0xC0 & data)
+        self.assertEqual(0x80 ,0xC0 & data)
 
 class SanctumReviveCostVanilla(TestFormatBase):
     options = {
@@ -771,13 +771,13 @@ class SanctumReviveCostVanilla(TestFormatBase):
 
     def test_sanctum_revive_vanilla(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x00 ,0x30 & data)
+        self.assertEqual(0x00 ,0x30 & data)
 
 class SanctumReviveCostReduced(TestFormatBase):
 
     def test_sanctum_revive_reduced(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x10 ,0x30 & data)
+        self.assertEqual(0x10 ,0x30 & data)
 
 class SanctumReviveCostFixed(TestFormatBase):
     options = {
@@ -786,13 +786,13 @@ class SanctumReviveCostFixed(TestFormatBase):
 
     def test_sanctum_revive_fixed(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x20 ,0x30 & data)
+        self.assertEqual(0x20 ,0x30 & data)
 
 class CursesVanilla(TestFormatBase):
 
     def test_curses_vanilla(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x00 ,0x8 & data)
+        self.assertEqual(0x00 ,0x8 & data)
 
 class CursesDisabled(TestFormatBase):
     options = {
@@ -801,13 +801,13 @@ class CursesDisabled(TestFormatBase):
 
     def test_curses_disabled(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x8, 0x8 & data)
+        self.assertEqual(0x8, 0x8 & data)
 
 class AvoidVanilla(TestFormatBase):
 
     def test_avoid_vanilla(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x0, 0x4 & data)
+        self.assertEqual(0x0, 0x4 & data)
 
 class AvoidAlways(TestFormatBase):
     options = {
@@ -816,13 +816,13 @@ class AvoidAlways(TestFormatBase):
 
     def test_avoid_always(self):
         data = self._get_option_byte(9)
-        self.assertEquals(0x4, 0x4 & data)
+        self.assertEqual(0x4, 0x4 & data)
 
 class NoHardMode(TestFormatBase):
 
     def test_no_hard_mode(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x0, 0x80 & data)
+        self.assertEqual(0x0, 0x80 & data)
 
 class HardMode(TestFormatBase):
     options = {
@@ -831,13 +831,13 @@ class HardMode(TestFormatBase):
 
     def test_hard_mode(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x80, 0x80 & data)
+        self.assertEqual(0x80, 0x80 & data)
 
 class EncounterRateVanilla(TestFormatBase):
 
     def test_encounter_vanilla(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x00, 0x40 & data)
+        self.assertEqual(0x00, 0x40 & data)
 
 class EncounterRateHalved(TestFormatBase):
     options = {
@@ -846,13 +846,13 @@ class EncounterRateHalved(TestFormatBase):
 
     def test_encounter_halved(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x40, 0x40 & data)
+        self.assertEqual(0x40, 0x40 & data)
 
 class VanillaShuffle(TestFormatBase):
 
     def test_vanilla_shuffle(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x00, 0x20 & data)
+        self.assertEqual(0x00, 0x20 & data)
 
 class MajorMinorShuffle(TestFormatBase):
     options = {
@@ -861,13 +861,13 @@ class MajorMinorShuffle(TestFormatBase):
 
     def test_major_minor_shuffle(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x20, 0x20 & data)
+        self.assertEqual(0x20, 0x20 & data)
 
 class BossDifficultyVanilla(TestFormatBase):
 
     def test_vanilla_bosses(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x00, 0x10 & data)
+        self.assertEqual(0x00, 0x10 & data)
 
 class BossDifficultyEasy(TestFormatBase):
     options = {
@@ -876,13 +876,13 @@ class BossDifficultyEasy(TestFormatBase):
 
     def test_easy_bosses(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x10, 0x10 & data)
+        self.assertEqual(0x10, 0x10 & data)
 
 class NamedPuzzlesVanilla(TestFormatBase):
 
     def test_named_puzzles_vanilla(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x0, 0xC & data)
+        self.assertEqual(0x0, 0xC & data)
 
 class NamedPuzzlesFixed(TestFormatBase):
     options = {
@@ -891,7 +891,7 @@ class NamedPuzzlesFixed(TestFormatBase):
 
     def test_named_puzzles_fixed(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x4, 0xC & data)
+        self.assertEqual(0x4, 0xC & data)
 
 class NamedPuzzlesRando(TestFormatBase):
     options = {
@@ -900,13 +900,13 @@ class NamedPuzzlesRando(TestFormatBase):
 
     def test_named_puzzles_rando(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x8, 0xC & data)
+        self.assertEqual(0x8, 0xC & data)
 
 class ManualRetreatGlitch(TestFormatBase):
 
     def test_manual_retreat(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x0, 0x2 & data)
+        self.assertEqual(0x0, 0x2 & data)
 
 class SelectRetreatGlitch(TestFormatBase):
     options = {
@@ -915,13 +915,13 @@ class SelectRetreatGlitch(TestFormatBase):
 
     def test_select_retreat(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x2, 0x2 & data)
+        self.assertEqual(0x2, 0x2 & data)
 
 class NoWings(TestFormatBase):
 
     def test_no_wings(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x0, 0x1 & data)
+        self.assertEqual(0x0, 0x1 & data)
 
 class StartWithWings(TestFormatBase):
     options = {
@@ -931,13 +931,13 @@ class StartWithWings(TestFormatBase):
 
     def test_start_with_wings(self):
         data = self._get_option_byte(10)
-        self.assertEquals(0x1, 0x1 & data)
+        self.assertEqual(0x1, 0x1 & data)
 
 class VanillaMusic(TestFormatBase):
 
     def test_vanilla_music(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x0, 0x80 & data)
+        self.assertEqual(0x0, 0x80 & data)
 
 class ShuffleMusic(TestFormatBase):
     options = {
@@ -946,13 +946,13 @@ class ShuffleMusic(TestFormatBase):
 
     def test_shuffle_music(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x80, 0x80 & data)
+        self.assertEqual(0x80, 0x80 & data)
 
 class RetreatVanilla(TestFormatBase):
 
     def test_retreat_vanilla(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x00, 0x40 & data)
+        self.assertEqual(0x00, 0x40 & data)
 
 class RetreatIsTele(TestFormatBase):
     options = {
@@ -961,25 +961,25 @@ class RetreatIsTele(TestFormatBase):
 
     def test_retreat_tele(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x40, 0x40 & data)
+        self.assertEqual(0x40, 0x40 & data)
 
 class BossDropsRando(TestFormatBase):
 
     def test_boss_drops_rando(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x00, 0x20 & data)
+        self.assertEqual(0x00, 0x20 & data)
 
 class SuperBossRando(TestFormatBase):
 
     def test_superboss_rando(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x00, 0x10 & data)
+        self.assertEqual(0x00, 0x10 & data)
 
 class AnemosAccessVanilla(TestFormatBase):
 
     def test_anemos_access_vanilla(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x0, 0xC & data)
+        self.assertEqual(0x0, 0xC & data)
 
 class AnemosAccessRando(TestFormatBase):
     options = {
@@ -988,7 +988,7 @@ class AnemosAccessRando(TestFormatBase):
 
     def test_anemos_access_rando(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x4, 0xC & data)
+        self.assertEqual(0x4, 0xC & data)
 
 class AnemosAccessOpen(TestFormatBase):
     options = {
@@ -997,7 +997,7 @@ class AnemosAccessOpen(TestFormatBase):
 
     def test_anemos_access_rando(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x8, 0xC & data)
+        self.assertEqual(0x8, 0xC & data)
 
 class VanillaPCShuffle(TestFormatBase):
     options = {
@@ -1007,7 +1007,7 @@ class VanillaPCShuffle(TestFormatBase):
     def test_vanilla_placement(self):
         data = self._get_option_byte(11)
         # Yes, 2 is correct; we want to enforce shuffle flag to be on incase players create additional character items
-        self.assertEquals(0x2, 0x3 & data)
+        self.assertEqual(0x2, 0x3 & data)
 
     def test_ensure_vanilla_placement(self):
         world = self.get_world()
@@ -1024,7 +1024,7 @@ class PCShuffleInVanilla(TestFormatBase):
     def test_vanilla_shuffle(self):
         data = self._get_option_byte(11)
         # Yes, 2 is correct; rando doesn't have this option
-        self.assertEquals(0x2, 0x3 & data)
+        self.assertEqual(0x2, 0x3 & data)
 
     def test_ensure_placement_within_vanilla(self):
         world = self.get_world()
@@ -1043,7 +1043,7 @@ class TestFullPCShuffle(TestFormatBase):
 
     def test_pc_rando(self):
         data = self._get_option_byte(11)
-        self.assertEquals(0x2, 0x3 & data)
+        self.assertEqual(0x2, 0x3 & data)
 
     def test_ensure_jenna_is_char(self):
         world = self.get_world()
