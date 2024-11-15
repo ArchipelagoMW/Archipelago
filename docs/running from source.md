@@ -38,7 +38,7 @@ Recommended steps
    * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details. 
      Generally, selecting the box for "Desktop Development with C++" will provide what you need.
    * Build tools are not required if all modules are installed pre-compiled. Pre-compiled modules are pinned on
-     [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
+     [Discord in #ap-core-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
 
  * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)
  * Run Generate.py which will prompt installation of missing modules, press enter to confirm
@@ -85,4 +85,4 @@ PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 
-Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
+Information about running tests can be found in [tests.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/tests.md#running-tests)

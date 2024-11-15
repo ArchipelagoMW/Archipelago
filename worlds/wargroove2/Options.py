@@ -3,6 +3,22 @@ from dataclasses import dataclass
 from Options import Choice, Range, DeathLink, PerGameCommonOptions, StartInventoryPool
 
 
+class VictoryLocations(Range):
+    """How many checks are sent per level completed."""
+    display_name = "Victory Locations"
+    range_start = 1
+    range_end = 5
+    default = 2
+
+
+class ObjectiveLocations(Range):
+    """How many checks are sent per level completed."""
+    display_name = "Objective Locations"
+    range_start = 1
+    range_end = 5
+    default = 1
+
+
 class IncomeBoost(Range):
     """How much extra income the player gets per turn per boost received."""
     display_name = "Income Boost"
@@ -61,6 +77,8 @@ class FinalLevels(Range):
 
 @dataclass
 class Wargroove2Options(PerGameCommonOptions):
+    victory_locations: VictoryLocations
+    objective_locations: ObjectiveLocations
     income_boost: IncomeBoost
     commander_defense_boost: CommanderDefenseBoost
     groove_boost: GrooveBoost

@@ -60,16 +60,37 @@ class Wargroove2Level:
             set_rule(world.get_location(location_name), lambda state, current_rule=rule:
             state.can_reach_region(self.region_name, player) and current_rule(state, player)() and
             additional_rule(state))
+            loc_id = location_table.get(location_name, 0)
+            extras = 1
+            if loc_id is not None and location_name.endswith("Victory"):
+                extras = world.options.victory_locations.value
+            elif loc_id is not None:
+                extras = world.options.objective_locations.value
+            for i in range(1, extras):
+                set_rule(world.get_location(location_name + f" Extra {i}"), lambda state, rule=rule:
+                state.can_reach_region(self.region_name, player) and rule(state, player)() and additional_rule(state))
         region = world.get_region(self.region_name)
         set_region_exit_rules(region, world, self.victory_locations, operator='and')
 
     def define_region(self, name: str, multiworld: MultiWorld, player: int, exits=None) -> Region:
         self.region_name = name
         region = Region(name, player, multiworld)
-        for location in self.location_rules.keys():
-            loc_id = location_table.get(location, 0)
-            location = Wargroove2Location(player, location, loc_id, region)
-            region.locations.append(location)
+        if self.location_rules.keys():
+            for location in self.location_rules.keys():
+                loc_id = location_table.get(location, 0)
+                wg2_location = Wargroove2Location(player, location, loc_id, region)
+                region.locations.append(wg2_location)
+                extras = 1
+                if loc_id is not None and location.endswith("Victory"):
+                    extras = multiworld.worlds[player].options.victory_locations.value
+                elif loc_id is not None:
+                    extras = multiworld.worlds[player].options.objective_locations.value
+                for i in range(1, extras):
+                    extra_location = location + f" Extra {i}"
+                    loc_id = location_table.get(extra_location, 0)
+                    wg2_location = Wargroove2Location(player, extra_location, loc_id, region)
+                    region.locations.append(wg2_location)
+
         if exits:
             for exit in exits:
                 region.exits.append(Entrance(player, f"{name} exits to {exit}", region))
@@ -93,8 +114,6 @@ high_victory_checks_levels = [
                 ["Barge", "Landing Event", "Golem"], player)
         }
     ),
-]
-low_victory_checks_levels = [
     Wargroove2Level(
         name="Spire Fire",
         file_name="Spire_Fire.json",
@@ -249,18 +268,6 @@ low_victory_checks_levels = [
         has_ocean=False
     ),
     Wargroove2Level(
-        name="Wagon Freeway",
-        file_name="Wagon_Freeway.json",
-        location_rules={
-            "Wagon Freeway: Victory": lambda state, player: lambda state=state: state.has_all(
-                ["Wagon", "Spearman"], player),
-            "Wagon Freeway: All Mine Now": lambda state, player: lambda state=state: True,
-            "Wagon Freeway: Pigeon Carrier": lambda state, player: lambda state=state:
-            state.has("Air Trooper", player),
-        },
-        has_ocean=False
-    ),
-    Wargroove2Level(
         name="Kraken Strait",
         file_name="Kraken_Strait.json",
         location_rules={
@@ -399,6 +406,19 @@ low_victory_checks_levels = [
         }
     ),
     Wargroove2Level(
+        name="Bridge Brigade",
+        file_name="Bridge_Brigade.json",
+        location_rules={
+            "Bridge Brigade: Victory": lambda state, player: lambda state=state: state.has_all(
+                ["Warship", "Spearman"], player),
+            "Bridge Brigade: From the Depths": lambda state, player: lambda
+                state=state: state.has("Kraken", player),
+            "Bridge Brigade: Back to the Depths": lambda state, player: lambda state=state:
+            state.has_all(["Warship", "Spearman", "Kraken"], player),
+        },
+        has_ocean=False
+    ),
+    Wargroove2Level(
         name="Grand Theft Village",
         file_name="Grand_Theft_Village.json",
         location_rules={
@@ -411,15 +431,14 @@ low_victory_checks_levels = [
         has_ocean=False
     ),
     Wargroove2Level(
-        name="Bridge Brigade",
-        file_name="Bridge_Brigade.json",
+        name="Wagon Freeway",
+        file_name="Wagon_Freeway.json",
         location_rules={
-            "Bridge Brigade: Victory": lambda state, player: lambda state=state: state.has_all(
-                ["Warship", "Spearman"], player),
-            "Bridge Brigade: From the Depths": lambda state, player: lambda
-                state=state: state.has("Kraken", player),
-            "Bridge Brigade: Back to the Depths": lambda state, player: lambda state=state:
-            state.has_all(["Warship", "Spearman", "Kraken"], player),
+            "Wagon Freeway: Victory": lambda state, player: lambda state=state: state.has_all(
+                ["Wagon", "Spearman"], player),
+            "Wagon Freeway: All Mine Now": lambda state, player: lambda state=state: True,
+            "Wagon Freeway: Pigeon Carrier": lambda state, player: lambda state=state:
+            state.has("Air Trooper", player),
         },
         has_ocean=False
     ),
@@ -459,6 +478,54 @@ final_levels = [
         location_rules={"Dementia Castle: Victory":
                             lambda state, player: lambda state=state: state.has_all(
                                 ["Merfolk", "Mage", "Golem", "Harpy"], player)}
+    ),
+]
+
+low_victory_checks_levels = [
+
+    Wargroove2Level(
+        name="Swimming at the Docks",
+        file_name="Swimming_at_the_Docks.json",
+        location_rules={
+            "Swimming at the Docks: Victory": lambda state, player: lambda state=state: True,
+            "Swimming at the Docks: Dogs Counter Knights": lambda state, player: lambda
+                state=state: True,
+            "Swimming at the Docks: Kayaking": lambda state, player: lambda
+                state=state: state.has("River Boat", player),
+        }
+    ),
+    Wargroove2Level(
+        name="Ancient Discoveries",
+        file_name="Ancient_Discoveries.json",
+        location_rules={
+            "Ancient Discoveries: Victory": lambda state, player: lambda state=state: True,
+            "Ancient Discoveries: So many Choices": lambda state, player: lambda
+                state=state: True,
+            "Ancient Discoveries: Height Advantage": lambda state, player: lambda
+                state=state: state.has("Golem", player),
+        }
+    ),
+    Wargroove2Level(
+        name="Observation Isle",
+        file_name="Observation_Isle.json",
+        location_rules={
+            "Observation Isle: Victory": lambda state, player: lambda state=state: True,
+            "Observation Isle: Become the Watcher": lambda state, player: lambda
+                state=state: True,
+            "Observation Isle: Execute the Watcher": lambda state, player: lambda
+                state=state: state.has("Walls Event", player),
+        }
+    ),
+    Wargroove2Level(
+        name="Majestic Mountain",
+        file_name="Majestic_Mountain.json",
+        location_rules={
+            "Majestic Mountain: Victory": lambda state, player: lambda state=state: True,
+            "Majestic Mountain: Mountain Climbing": lambda state, player: lambda
+                state=state: True,
+            "Majestic Mountain: Legend of the Mountains": lambda state, player: lambda
+                state=state: state.has("Air Trooper", player),
+        }
     ),
 ]
 

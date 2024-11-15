@@ -20,7 +20,7 @@ from .Items import item_table, faction_table, CommanderData, ItemData, item_id_n
 from .Levels import LEVEL_COUNT, FINAL_LEVEL_COUNT, region_names, \
     low_victory_checks_levels, high_victory_checks_levels, \
     FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, final_levels
-from .Locations import location_table
+from .Locations import location_table, location_id_name
 from .RegionFilter import Wargroove2LogicFilter
 from NetUtils import ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
@@ -64,6 +64,9 @@ class Wargroove2Context(CommonContext):
     commander_defense_boost_multiplier: int = 0
     income_boost_multiplier: int = 0
     starting_groove_multiplier: int = 0
+    victory_locations: int = 1
+    objective_locations: int = 1
+    has_death_link: bool = False
     has_death_link: bool = False
     final_levels: int = 1
     level_shuffle_seed: int = 0
@@ -180,6 +183,9 @@ class Wargroove2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.slot_data = args["slot_data"]
+            self.victory_locations = self.slot_data["victory_locations"]
+            self.objective_locations = self.slot_data["objective_locations"]
+            self.has_death_link = self.slot_data["death_link"]
             self.has_death_link = self.slot_data["death_link"]
             self.final_levels = self.slot_data["final_levels"]
             self.level_shuffle_seed = self.slot_data["level_shuffle_seed"]
@@ -662,8 +668,18 @@ async def game_watcher(ctx: Wargroove2Context):
         for root, dirs, files in os.walk(ctx.game_communication_path):
             for file in files:
                 if file.find("send") > -1:
-                    st = file.split("send", -1)[1]
-                    sending = sending + [(int(st))]
+                    st = int(file.split("send", -1)[1])
+                    loc_name = location_id_name[st]
+                    extras = 1
+                    if loc_name is not None and loc_name.endswith("Victory"):
+                        extras = ctx.victory_locations
+                    elif loc_name is not None and \
+                            st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:
+                        extras = ctx.objective_locations
+                    for i in range(1, extras):
+                        sending = sending + [location_table[loc_name + f" Extra {i}"]]
+                    sending = sending + [st]
+
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "deathLinkSend" and ctx.has_death_link:
                     with open(os.path.join(ctx.game_communication_path, file), 'r') as f:

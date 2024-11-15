@@ -50,6 +50,23 @@ class TestCraftsanityLogic(SVTestBase):
         self.multiworld.state.collect(self.create_item("Jack-O-Lantern Recipe"), prevent_sweep=False)
         self.assert_rule_true(rule, self.multiworld.state)
 
+    def test_require_furnace_recipe_for_smelting_checks(self):
+        locations = ["Craft Furnace", "Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
+        rules = [self.world.logic.region.can_reach_location(location) for location in locations]
+        self.collect([self.create_item("Progressive Pickaxe")] * 4)
+        self.collect([self.create_item("Progressive Fishing Rod")] * 4)
+        self.collect([self.create_item("Progressive Sword")] * 4)
+        self.collect([self.create_item("Progressive Mine Elevator")] * 24)
+        self.collect([self.create_item("Progressive Trash Can")] * 2)
+        self.collect([self.create_item("Mining Level")] * 10)
+        self.collect([self.create_item("Combat Level")] * 10)
+        self.collect([self.create_item("Fishing Level")] * 10)
+        self.collect_all_the_money()
+        self.assert_rules_false(rules, self.multiworld.state)
+
+        self.multiworld.state.collect(self.create_item("Furnace Recipe"), prevent_sweep=False)
+        self.assert_rules_true(rules, self.multiworld.state)
+
 
 class TestCraftsanityWithFestivalsLogic(SVTestBase):
     options = {
@@ -100,6 +117,23 @@ class TestNoCraftsanityLogic(SVTestBase):
 
         self.collect([self.create_item("Progressive Season")] * 2)
         self.assert_rule_true(rule, self.multiworld.state)
+
+    def test_requires_mining_levels_for_smelting_checks(self):
+        locations = ["Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
+        rules = [self.world.logic.region.can_reach_location(location) for location in locations]
+        self.collect([self.create_item("Progressive Pickaxe")] * 4)
+        self.collect([self.create_item("Progressive Fishing Rod")] * 4)
+        self.collect([self.create_item("Progressive Sword")] * 4)
+        self.collect([self.create_item("Progressive Mine Elevator")] * 24)
+        self.collect([self.create_item("Progressive Trash Can")] * 2)
+        self.multiworld.state.collect(self.create_item("Furnace Recipe"), prevent_sweep=False)
+        self.collect([self.create_item("Combat Level")] * 10)
+        self.collect([self.create_item("Fishing Level")] * 10)
+        self.collect_all_the_money()
+        self.assert_rules_false(rules, self.multiworld.state)
+
+        self.collect([self.create_item("Mining Level")] * 10)
+        self.assert_rules_true(rules, self.multiworld.state)
 
 
 class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
