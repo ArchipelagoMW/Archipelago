@@ -96,6 +96,9 @@ class GSTLAWorld(World):
         if self.options.start_with_reveal == 1:
             self.multiworld.push_precollected(create_item(ItemName.Reveal, self.player))
 
+        if self.options.trap_chance > 0:
+            self.options.show_items_outside_chest.value = 0
+
     def create_regions(self) -> None:
         create_regions(self)
         create_connections(self.multiworld, self.player)

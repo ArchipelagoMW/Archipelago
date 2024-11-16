@@ -99,16 +99,10 @@ class VisibleItems(Toggle):
     """Chests and Tablets are replaced with their contents on the floor.
     This allows for scouting items. Mimics are removed when this option is enabled.
     Note certain locations are still not visible, for example hidden items in pots or barrels.
+    If traps (mimics) are enabled this will be forced to off
     """
     display_name = "Show items outside chest"
     default = 1
-
-class IncludeMimics(Toggle):
-    """Some locations may now contain a mimic instead. Due to some limitations they only drop their vanilla item. 
-    Note that this will be ignored if items are visible outside of chests.
-    """
-    display_name = "Include mimics"
-    default = 0
 
 class NoLearningUtilPsy(Toggle):
     """Prevents utility Psynergy (Growth, Frost, etc.) from being learned by classes.
@@ -391,13 +385,19 @@ class AnemosAccess(Choice):
     option_open = 2
     default = 0
 
+class TrapChance(Range):
+    """The chance for any filler item in the pool to be replaced by a trap."""
+    display_name = "Trap Chance"
+    range_start = 0
+    range_end = 100
+    default = 100
+
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
     item_shuffle: ItemShuffle
     major_minor_split: MajorMinorSplit
     reveal_hidden_item: RevealHiddenItem
-    include_mimics: IncludeMimics
     omit_locations: OmitLocations
     add_elvenshirt_clericsring: AddGs1Items
     add_non_obtainable_items: AddDummyItems
@@ -471,3 +471,6 @@ class GSTLAOptions(PerGameCommonOptions):
     teleport_to_dungeons_and_towns: TelportEverywhere
     
     start_inventory_from_pool: StartInventoryPool
+
+    #traps
+    trap_chance: TrapChance

@@ -1033,4 +1033,4 @@ def set_item_rules(world: 'GSTLAWorld'):
             if loc.is_key:
               add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.filler)
             elif not loc.is_major:
-              add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.progression and item.classification != ItemClassification.progression_skip_balancing and item.classification != ItemClassification.trap)
+              add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.progression and item.classification != ItemClassification.progression_skip_balancing)

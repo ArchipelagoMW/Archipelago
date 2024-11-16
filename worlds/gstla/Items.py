@@ -152,12 +152,6 @@ def create_items(world: 'GSTLAWorld', player: int):
             world.multiworld.itempool.append(ap_item)
 
 
-    #mimics
-    if world.options.include_mimics == 1:
-        for mimic in mimics:
-            world.multiworld.itempool.append(create_item_direct(mimic, player))
-            sum_locations -= 1
-
     for item in psyenergy_as_item_list:
         #Ignore cloak ball and halt gem, they are not required for anything
         if item.name == ItemName.Cloak_Ball or item.name == ItemName.Halt_Gem:
@@ -277,9 +271,16 @@ def create_items(world: 'GSTLAWorld', player: int):
             continue
         filler_pool.append(item)
 
-    for item in world.random.choices(population=filler_pool, k=sum_locations):
-        ap_item = create_item_direct(item, player)
-        world.multiworld.itempool.append(ap_item)
+    for i in range(sum_locations):
+        if world.options.trap_chance > 0 and world.random.randint(1, 100) <= world.options.trap_chance:
+            #for now we only have 1 trap type, if we have more we have to change this slightly
+            item = world.random.choice(mimics)
+            ap_item = create_item_direct(item, player)
+            world.multiworld.itempool.append(ap_item)
+        else:
+            item = world.random.choice(filler_pool)
+            ap_item = create_item_direct(item, player)
+            world.multiworld.itempool.append(ap_item)
 
 
 def get_filler_items() -> List[str]:
