@@ -10,7 +10,7 @@ from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
 from . import loc_names_by_id
-from .gen.ItemData import djinn_items, mimics
+from .gen.ItemData import djinn_items, mimics, ItemData
 from .gen.LocationData import all_locations, LocationType, djinn_locations
 
 if TYPE_CHECKING:
@@ -19,7 +19,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger("Client")
 
 FLAG_START = 0x40
-FORCE_ENCOUNTER = 0x30164
+FORCE_ENCOUNTER_ADDR = 0x30164
+PREVENT_FLEEING_ADDR = 0x48B
+IN_BATTLE_ADDR = 0x60
 
 
 class _MemDomain(str, Enum):
@@ -246,37 +248,52 @@ class GSTLAClient(BizHawkClient):
         if item_code is not None:
             mimic = self.mimics.get(item_code, None)
             if mimic is not None:
-                logger.debug("Unleashing a mimic")
-                mimic_encounter = mimic.id - 0xA01 + 651 # 651 is the enemy group id for mimics
-                await guarded_write(ctx.bizhawk_ctx,
-                                    [
-                                        (
-                                            FORCE_ENCOUNTER,
-                                            mimic_encounter.to_bytes(length=2, byteorder='little'),
-                                            _MemDomain.EWRAM
-                                        ),
-                                        (
-                                            _DataLocations.AP_ITEMS_RECEIVED.addr,
-                                            (item_index + 1).to_bytes(length=2, byteorder='little'),
-                                            _MemDomain.EWRAM
-                                        )
-                                    ], [
-                                        (
-                                            _DataLocations.AP_ITEMS_RECEIVED.addr,
-                                            item_index.to_bytes(length=2, byteorder='little'),
-                                            _MemDomain.EWRAM
-                                        ),
-                                        (
-                                            FORCE_ENCOUNTER,
-                                            0,
-                                            _MemDomain.EWRAM
-                                        )
-                                    ])
+                await self._give_mimic(ctx, item_index, mimic)
             else:
                 logger.debug("Writing Item %d to Slot", item_code)
                 await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
                                                item_code.to_bytes(length=2, byteorder="little"),
                                                _DataLocations.AP_ITEM_SLOT.domain)])
+
+    async def _give_mimic(self, ctx: 'BizHawkClientContext', item_index: int, mimic: ItemData) -> None:
+        logger.debug("Unleashing a mimic")
+        mimic_encounter = mimic.id - 0xA01 + 651  # 651 is the enemy group id for mimics
+        in_battle = await read(ctx.bizhawk_ctx, [(IN_BATTLE_ADDR, 0x1, _MemDomain.EWRAM)])
+        in_battle_guard = int.from_bytes(in_battle[0], byteorder='little') & 0xF7
+        await guarded_write(ctx.bizhawk_ctx,
+                            [
+                                (
+                                    FORCE_ENCOUNTER_ADDR,
+                                    mimic_encounter.to_bytes(length=2, byteorder='little'),
+                                    _MemDomain.EWRAM
+                                ),
+                                (
+                                    PREVENT_FLEEING_ADDR,
+                                    (0x2).to_bytes(length=1, byteorder='little'),
+                                    _MemDomain.EWRAM
+                                ),
+                                (
+                                    _DataLocations.AP_ITEMS_RECEIVED.addr,
+                                    (item_index + 1).to_bytes(length=2, byteorder='little'),
+                                    _MemDomain.EWRAM
+                                )
+                            ], [
+                                (
+                                    _DataLocations.AP_ITEMS_RECEIVED.addr,
+                                    item_index.to_bytes(length=2, byteorder='little'),
+                                    _MemDomain.EWRAM
+                                ),
+                                (
+                                    FORCE_ENCOUNTER_ADDR,
+                                    0,
+                                    _MemDomain.EWRAM
+                                ),
+                                (
+                                    IN_BATTLE_ADDR,
+                                    in_battle_guard,
+                                    _MemDomain.EWRAM
+                                )
+                            ])
 
     async def game_watcher(self, ctx: 'BizHawkClientContext') -> None:
         # TODO: implement
