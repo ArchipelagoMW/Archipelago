@@ -480,6 +480,7 @@ class LMWorld(World):
             else:
                 for item in entry.access:
                     add_rule(entry, lambda state: state.has(item, self.player))
+            region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self.multiworld, self.player)
 
