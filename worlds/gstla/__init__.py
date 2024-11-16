@@ -85,8 +85,6 @@ class GSTLAWorld(World):
 
     def generate_early(self) -> None:
         self.options.non_local_items.value -= self.item_name_groups[ItemType.Djinn.name]
-        self.options.non_local_items.value -= self.item_name_groups[ItemType.Mimic.name]
-        self.options.local_items.value |= self.item_name_groups[ItemType.Mimic.name]
 
         if self.options.shuffle_characters < 2:
             self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]

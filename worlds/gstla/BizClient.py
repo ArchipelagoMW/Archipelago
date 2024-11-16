@@ -8,9 +8,9 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional
 
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
-from worlds._bizhawk import read, write
+from worlds._bizhawk import read, write, guarded_write
 from . import loc_names_by_id
-from .gen.ItemData import djinn_items
+from .gen.ItemData import djinn_items, mimics
 from .gen.LocationData import all_locations, LocationType, djinn_locations
 
 if TYPE_CHECKING:
@@ -19,10 +19,13 @@ if TYPE_CHECKING:
 logger = logging.getLogger("Client")
 
 FLAG_START = 0x40
+FORCE_ENCOUNTER = 0x30164
+
 
 class _MemDomain(str, Enum):
     EWRAM = 'EWRAM'
     ROM = 'ROM'
+
 
 class _DataLocations(IntEnum):
     IN_GAME = (0x428, 0x2, 0x0, _MemDomain.EWRAM)
@@ -55,6 +58,7 @@ class _DataLocations(IntEnum):
     def to_request(self) -> Tuple[int, int, _MemDomain]:
         return self.addr, self.length, self.domain
 
+
 def _handle_common_cmd(self: 'BizHawkClientCommandProcessor') -> Optional[GSTLAClient]:
     from worlds._bizhawk.context import BizHawkClientContext
     if self.ctx.game != "Golden Sun The Lost Age":
@@ -70,6 +74,7 @@ def _handle_common_cmd(self: 'BizHawkClientCommandProcessor') -> Optional[GSTLAC
     assert isinstance(client, GSTLAClient)
     return client
 
+
 def cmd_unchecked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
     """Prints djinn locations that have not yet been checked"""
     client = _handle_common_cmd(self)
@@ -79,6 +84,7 @@ def cmd_unchecked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
         if djinn.name not in client.checked_djinn:
             logger.info(djinn.name)
 
+
 def cmd_checked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
     """Prints djinn locations that have been checked"""
     client = _handle_common_cmd(self)
@@ -87,10 +93,12 @@ def cmd_checked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
     for djinn in client.checked_djinn:
         logger.info(djinn)
 
+
 commands = [
     ("unchecked_djinn", cmd_unchecked_djinn),
     ("djinn", cmd_checked_djinn)
 ]
+
 
 class StartingItemHandler:
 
@@ -111,11 +119,11 @@ class StartingItemHandler:
     def __getitem__(self, n: int):
         return self.starting_data[n]
 
+
 class GSTLAClient(BizHawkClient):
     game = 'Golden Sun The Lost Age'
     system = 'GBA'
     patch_suffix = '.apgstla'
-
 
     def __init__(self):
         super().__init__()
@@ -124,6 +132,7 @@ class GSTLAClient(BizHawkClient):
         self.djinn_ram_to_rom: Dict[int, int] = dict()
         self.djinn_flag_map: Dict[int, str] = dict()
         self.checked_djinn: Set[str] = set()
+        self.mimics = {x.id: x for x in mimics}
         for loc in all_locations:
             if loc.loc_type == LocationType.Event:
                 continue
@@ -157,7 +166,7 @@ class GSTLAClient(BizHawkClient):
             if cmd not in ctx.command_processor.commands:
                 ctx.command_processor.commands[cmd] = func
         ctx.items_handling = 0b001
-        ctx.watcher_timeout = 1 # not sure what a reasonable setting here is; passed to asyncio.wait_for
+        ctx.watcher_timeout = 1  # not sure what a reasonable setting here is; passed to asyncio.wait_for
         return True
 
     async def set_auth(self, ctx: 'BizHawkClientContext') -> None:
@@ -168,10 +177,10 @@ class GSTLAClient(BizHawkClient):
         if len(self.djinn_ram_to_rom) > 0:
             return
         # Don't put this in the data locations class; we don't want to check this regularly
-        result = await read(ctx.bizhawk_ctx, [(0xFA0000, 0x2*18*4, _MemDomain.ROM)])
-        for index in range(18*4):
+        result = await read(ctx.bizhawk_ctx, [(0xFA0000, 0x2 * 18 * 4, _MemDomain.ROM)])
+        for index in range(18 * 4):
             djinn_flag = index + _DataLocations.DJINN_FLAGS.initial_flag
-            section = int.from_bytes(result[0][index*2:(index*2)+2], 'little')
+            section = int.from_bytes(result[0][index * 2:(index * 2) + 2], 'little')
             rom_flag = (section >> 8) * 0x14 + (section & 0xFF) + 0x30
             self.djinn_ram_to_rom[rom_flag] = djinn_flag
 
@@ -183,8 +192,8 @@ class GSTLAClient(BizHawkClient):
 
     def _check_djinn_flags(self, data: List[bytes]) -> None:
         flag_bytes = data[_DataLocations.DJINN_FLAGS]
-        for i in range(0,_DataLocations.DJINN_FLAGS.length,2):
-            part = flag_bytes[i:i+2]
+        for i in range(0, _DataLocations.DJINN_FLAGS.length, 2):
+            part = flag_bytes[i:i + 2]
             part_int = int.from_bytes(part, "little")
             # logger.info(part_int)
             for bit in range(16):
@@ -205,7 +214,7 @@ class GSTLAClient(BizHawkClient):
         # logger.debug("Checking flags for %s" % data_loc.name)
         itr_step = 0x2 if data_loc.length > 0x1 else 0x1
         for i in range(0, data_loc.length, itr_step):
-            part = flag_bytes[i:i+itr_step]
+            part = flag_bytes[i:i + itr_step]
             part_int = int.from_bytes(part, 'little')
             # logger.debug("Data found: %s", hex(part_int))
             # logger.debug("Bytes: %s", part)
@@ -219,7 +228,6 @@ class GSTLAClient(BizHawkClient):
                         self.temp_locs |= locs
                 part_int >>= 1
         # logger.debug(self.temp_locs)
-
 
     async def _receive_items(self, ctx: 'BizHawkClientContext', data: List[bytes]) -> None:
         item_in_slot = int.from_bytes(data[_DataLocations.AP_ITEM_SLOT], byteorder="little")
@@ -235,12 +243,40 @@ class GSTLAClient(BizHawkClient):
         elif len(ctx.items_received) + start_count > item_index:
             logger.debug("Items to give: %d, Current Item Index: %d", len(ctx.items_received), item_index - start_count)
             item_code = ctx.items_received[item_index - start_count].item
-
         if item_code is not None:
-            logger.debug("Writing Item %d to Slot", item_code)
-            await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
-                                           item_code.to_bytes(length=2, byteorder="little"),
-                                           _DataLocations.AP_ITEM_SLOT.domain)])
+            mimic = self.mimics.get(item_code, None)
+            if mimic is not None:
+                logger.debug("Unleashing a mimic")
+                mimic_encounter = mimic.id - 0xA01 + 651 # 651 is the enemy group id for mimics
+                await guarded_write(ctx.bizhawk_ctx,
+                                    [
+                                        (
+                                            FORCE_ENCOUNTER,
+                                            mimic_encounter.to_bytes(length=2, byteorder='little'),
+                                            _MemDomain.EWRAM
+                                        ),
+                                        (
+                                            _DataLocations.AP_ITEMS_RECEIVED.addr,
+                                            (item_index + 1).to_bytes(length=2, byteorder='little'),
+                                            _MemDomain.EWRAM
+                                        )
+                                    ], [
+                                        (
+                                            _DataLocations.AP_ITEMS_RECEIVED.addr,
+                                            item_index.to_bytes(length=2, byteorder='little'),
+                                            _MemDomain.EWRAM
+                                        ),
+                                        (
+                                            FORCE_ENCOUNTER,
+                                            0,
+                                            _MemDomain.EWRAM
+                                        )
+                                    ])
+            else:
+                logger.debug("Writing Item %d to Slot", item_code)
+                await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
+                                               item_code.to_bytes(length=2, byteorder="little"),
+                                               _DataLocations.AP_ITEM_SLOT.domain)])
 
     async def game_watcher(self, ctx: 'BizHawkClientContext') -> None:
         # TODO: implement
@@ -265,12 +301,13 @@ class GSTLAClient(BizHawkClient):
             logger.debug("Not in game...")
             return
 
-        if not self.was_in_game:
+        if not self.was_in_game and ctx.slot_data is not None:
             self.was_in_game = True
             logger.debug(ctx.slot_data)
             self.starting_items = StartingItemHandler(ctx.slot_data.get('start_inventory', dict()))
 
-        logger.debug(f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
+        logger.debug(
+            f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
 
         self.temp_locs = set()
         await self._load_djinn(ctx)
@@ -287,7 +324,7 @@ class GSTLAClient(BizHawkClient):
             if self.temp_locs:
                 self.local_locations = self.temp_locs
                 logger.debug("Sending locations to AP: %s", self.local_locations)
-                await ctx.send_msgs([{ "cmd": "LocationChecks", "locations": list(self.local_locations) }])
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(self.local_locations)}])
 
         victory_check = result[_DataLocations.DOOM_DRAGON]
         if victory_check[0] & 1 > 0 and not ctx.finished_game:

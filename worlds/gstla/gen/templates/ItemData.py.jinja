@@ -92,7 +92,7 @@ characters: List[ItemData] = [
 
 mimics: List[ItemData] = [
 {% for item in mimics -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.trap, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
 ]
 
