@@ -21,6 +21,3 @@ class Wargroove2LogicFilter:
             if item in self.items:
                 return True
         return False
-
-    def can_reach(self, region, kind, player: int) -> bool:
-        return True

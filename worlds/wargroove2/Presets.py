@@ -10,8 +10,7 @@ wargroove2_option_presets: Dict[str, Dict[str, Any]] = {
         "commander_defense_boost": 5,
         "groove_boost": 10,
         "commander_choice": CommanderChoice.option_random_starting_faction,
-        "final_levels": 1,
-        "death_link": False
+        "final_levels": 1
     },
 
     "Hard": {
@@ -21,7 +20,6 @@ wargroove2_option_presets: Dict[str, Dict[str, Any]] = {
         "commander_defense_boost": 0,
         "groove_boost": 0,
         "commander_choice": CommanderChoice.option_locked_random,
-        "final_levels": 4,
-        "death_link": True
+        "final_levels": 4
     },
 }

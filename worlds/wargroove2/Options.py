@@ -12,7 +12,7 @@ class VictoryLocations(Range):
 
 
 class ObjectiveLocations(Range):
-    """How many checks are sent per level completed."""
+    """How many checks are sent per side objective completed."""
     display_name = "Objective Locations"
     range_start = 1
     range_end = 5
