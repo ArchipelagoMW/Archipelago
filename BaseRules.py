@@ -63,14 +63,14 @@ def meets_any_req(state: CollectionState, player: int, *reqs: Optional[Req]) -> 
     return False
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def req_to_rule(player: int, req: Optional[Req]) -> Callable[[CollectionState], bool]:
     if not req:
         return TRUE
     return lambda state: state.has(req.item, player, count=req.count)
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def all_reqs_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionState], bool]:
     rreqs: List[Req] = []
     for req in reqs:
@@ -82,7 +82,7 @@ def all_reqs_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionS
     return lambda state: state.has_all_reqs(rreqs, player)
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def any_req_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionState], bool]:
     if not reqs:
         return FALSE
@@ -92,7 +92,7 @@ def any_req_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionSt
     return lambda state: state.has_any_req(reqs, player)
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq]) -> Callable[[CollectionState], bool]:
     bare_reqs = []
     nested_reqs = []
