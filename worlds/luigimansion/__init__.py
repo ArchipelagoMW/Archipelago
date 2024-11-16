@@ -57,7 +57,7 @@ class LMWorld(World):
 
     topology_present = True
     item_name_to_id: ClassVar[Dict[str, int]] = {
-        name: LMItem.get_apid(data.code) for name, data in ITEM_TABLE.items() if data.code is not None
+        name: LMItem.get_apid(data.code) for name, data in ALL_ITEMS_TABLE.items() if data.code is not None
     }
     location_name_to_id: ClassVar[Dict[str, int]] = {
         name: LMLocation.get_apid(data.code) for name, data in ALL_LOCATION_TABLE.items() if data.code is not None
@@ -499,7 +499,7 @@ class LMWorld(World):
         raise Exception(f"Invalid item name: {item}")
 
     def post_fill(self):
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml")
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml", linetype_ortho=False)
 
     def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
         pass
