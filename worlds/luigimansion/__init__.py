@@ -498,8 +498,11 @@ class LMWorld(World):
                 return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
-    def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
+    def post_fill(self):
         visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml")
+
+    def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
+        pass
 
     #    @classmethod
     #    def stage_pre_fill(cls, multiworld: MultiWorld):

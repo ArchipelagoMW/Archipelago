@@ -42,6 +42,8 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Wardrobe", "Wardrobe Balcony")
     connect(multiworld, player, "Foyer", "2F Front Hallway",
             lambda state: state.has("Front Hallway Key", player))
+    connect(multiworld, player, "Foyer", "1F Hallway",
+            lambda state: state.has("Heart Key", player))
     connect(multiworld, player, "2F Front Hallway", "Study")
     connect(multiworld, player, "2F Front Hallway", "Master Bedroom",
             lambda state: state.has("Master Bedroom Key", player))
@@ -49,8 +51,6 @@ def connect_regions(multiworld: MultiWorld, player: int):
             lambda state: state.has("Nursery Key", player))
     connect(multiworld, player, "2F Front Hallway", "Twins' Room",
             lambda state: state.has("Twins Bedroom Key", player))
-    connect(multiworld, player, "Foyer", "1F Hallway",
-            lambda state: state.has("Heart Key", player))
     connect(multiworld, player, "1F Hallway", "Basement Stairwell")
     connect(multiworld, player, "1F Hallway", "2F Stairwell",
             lambda state: state.has("2F Stairwell Key", player))
