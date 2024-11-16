@@ -401,6 +401,16 @@ class DeathLinkAmnesty(Range):
     default = 1
 
 
+class PuzzleRandomizationSeed(Range):
+    """
+    Sigma Rando uses a seed from 0 to 999999 for the puzzle randomization.
+    This option lets you set this seed yourself.
+    """
+    range_start = 0
+    range_end = 999999
+    default = "random"
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -435,6 +445,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
 
 
@@ -483,6 +494,7 @@ witness_option_groups = [
         ElevatorsComeToYou,
         DeathLink,
         DeathLinkAmnesty,
+        PuzzleRandomizationSeed,
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
