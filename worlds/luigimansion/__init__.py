@@ -7,6 +7,7 @@ import yaml
 
 from BaseClasses import Tutorial, Item, ItemClassification
 from Fill import fill_restrictive
+from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
@@ -432,8 +433,8 @@ class LMWorld(World):
             self.options.start_inventory.value["Boo Radar"] = (
                     self.options.start_inventory.value.get("Boo Radar", 0) + 1
             )
-        if not self.options.knocksanity:
-            self.multiworld.push_precollected(self.create_item("Heart Key"))
+        # if not self.options.knocksanity:
+        #     self.multiworld.push_precollected(self.create_item("Heart Key"))
 
         if self.options.good_vacuum == 0:
             self.options.start_inventory.value["Poltergust 4000"] = (
@@ -485,7 +486,6 @@ class LMWorld(World):
         connect_regions(self.multiworld, self.player)
 
     def create_item(self, item: str) -> LMItem:
-        # TODO: calculate nonprogress items dynamically
         set_non_progress = False
 
         if item in ALL_ITEMS_TABLE:
@@ -495,12 +495,11 @@ class LMWorld(World):
                 else:
                     return LMItem(item, self.player, ITEM_TABLE[item], True)
             else:
-                if item in ALL_ITEMS_TABLE:
-                    return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
+                return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
     def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
-        pass
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml")
 
     #    @classmethod
     #    def stage_pre_fill(cls, multiworld: MultiWorld):

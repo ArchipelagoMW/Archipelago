@@ -156,7 +156,6 @@ REGION_LIST = [
     "Conservatory",
     "Billiards Room",
     "Basement Stairwell",
-    "Well",
     "Projection Room",
     "Kitchen",
     "Boneyard",
