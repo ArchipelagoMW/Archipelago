@@ -181,7 +181,7 @@ class GSTLAClient(BizHawkClient):
         # Don't put this in the data locations class; we don't want to check this regularly
         result = await read(ctx.bizhawk_ctx, [(0xFA0000, 0x2 * 18 * 4, _MemDomain.ROM)])
         for index in range(18 * 4):
-            djinn_flag = index + _DataLocations.DJINN_FLAGS.initial_flag
+            djinn_flag = (index // 18) * 20 + (index % 18) + _DataLocations.DJINN_FLAGS.initial_flag
             section = int.from_bytes(result[0][index * 2:(index * 2) + 2], 'little')
             rom_flag = (section >> 8) * 0x14 + (section & 0xFF) + 0x30
             self.djinn_ram_to_rom[rom_flag] = djinn_flag
@@ -201,8 +201,13 @@ class GSTLAClient(BizHawkClient):
             for bit in range(16):
                 if part_int & 1 > 0:
                     flag = i * 8 + bit
+                    # original_flag = flag + _DataLocations.DJINN_FLAGS.initial_flag
                     shuffled_flag = self.djinn_ram_to_rom[flag + _DataLocations.DJINN_FLAGS.initial_flag]
+                    # original_djinn = self.djinn_flag_map[original_flag]
+                    # shuffled_djinn = self.djinn_flag_map[shuffled_flag]
                     # TODO: this may be wrong once djinn are events
+                    # logger.debug("RAM Djinn: %s, Flag: %s -> ROM Djinn: %s, Flag: %s",
+                    #              original_djinn, hex(original_flag), shuffled_djinn, hex(shuffled_flag))
                     self.checked_djinn.add(self.djinn_flag_map[shuffled_flag])
                     # TODO: if djinn ever become proper items this code would be needed
                     # locs = self.flag_map.get(shuffled_flag, None)
@@ -324,8 +329,8 @@ class GSTLAClient(BizHawkClient):
             logger.debug(ctx.slot_data)
             self.starting_items = StartingItemHandler(ctx.slot_data.get('start_inventory', dict()))
 
-        logger.debug(
-            f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
+        # logger.debug(
+        #     f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
 
         self.temp_locs = set()
         await self._load_djinn(ctx)
