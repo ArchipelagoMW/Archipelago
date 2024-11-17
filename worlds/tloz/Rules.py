@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import add_rule
-from .Locations import food_locations, shop_locations, gleeok_locations
+from .Locations import food_locations, shop_locations, gleeok_locations, gohma_locations
 from .ItemPool import dangerous_weapon_locations
 from .Options import StartingPosition
 
@@ -38,7 +38,8 @@ def set_rules(tloz_world: "TLoZWorld"):
                                         state.has("Heart Container", player, int(hearts / 4))))
             if "Pols Voice" in location.name:  # This enemy needs specific weapons
                 add_rule(world.get_location(location.name, player),
-                         lambda state: state.has_group("swords", player) or state.has("Bow", player))
+                         lambda state: state.has_group("swords", player) or
+                                       (state.has("Bow", player) and state.has_group("arrows", player)))
 
     # No requiring anything in a shop until we can farm for money
     for location in shop_locations:
@@ -58,22 +59,25 @@ def set_rules(tloz_world: "TLoZWorld"):
             add_rule(world.get_location(location.name, player),
                      lambda state: state.has("Stepladder", player))
 
+    # Level 4 Access
+    for location in tloz_world.levels[4].locations:
+        add_rule(world.get_location(location.name, player),
+                 lambda state: state.has("Raft", player) or state.has("Recorder", player))
+
+    # Digdogger boss. Rework this once ER happens
     add_rule(world.get_location("Level 5 Boss", player),
              lambda state: state.has("Recorder", player))
-
-    add_rule(world.get_location("Level 6 Boss", player),
-             lambda state: state.has("Bow", player) and state.has_group("arrows", player))
-
-    add_rule(world.get_location("Level 7 Item (Red Candle)", player),
+    add_rule(world.get_location("Level 5 Triforce", player),
              lambda state: state.has("Recorder", player))
-    add_rule(world.get_location("Level 7 Boss", player),
-             lambda state: state.has("Recorder", player))
-    if options.ExpandedPool:
-        add_rule(world.get_location("Level 7 Key Drop (Stalfos)", player),
-                 lambda state: state.has("Recorder", player))
-        add_rule(world.get_location("Level 7 Bomb Drop (Digdogger)", player),
-                 lambda state: state.has("Recorder", player))
-        add_rule(world.get_location("Level 7 Rupee Drop (Dodongos)", player),
+
+    for location in gohma_locations:
+        if options.ExpandedPool or "Drop" not in location:
+            add_rule(world.get_location(location, player),
+                     lambda state: state.has("Bow", player) and state.has_group("arrows", player))
+
+    # Recorder Access for Level 7
+    for location in tloz_world.levels[7].locations:
+        add_rule(world.get_location(location.name, player),
                  lambda state: state.has("Recorder", player))
 
     for location in food_locations:
@@ -133,15 +137,6 @@ def set_rules(tloz_world: "TLoZWorld"):
         add_rule(world.get_location("Take Any Item Right", player),
                  lambda state: state.has_group("candles", player) or
                                state.has("Raft", player))
-    for location in tloz_world.levels[4].locations:
-        add_rule(world.get_location(location.name, player),
-                 lambda state: state.has("Raft", player) or state.has("Recorder", player))
-    for location in tloz_world.levels[7].locations:
-        add_rule(world.get_location(location.name, player),
-                 lambda state: state.has("Recorder", player))
-    for location in tloz_world.levels[8].locations:
-        add_rule(world.get_location(location.name, player),
-                 lambda state: state.has("Bow", player))
 
     add_rule(world.get_location("Potion Shop Item Left", player),
              lambda state: state.has("Letter", player))
