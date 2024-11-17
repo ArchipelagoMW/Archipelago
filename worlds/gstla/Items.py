@@ -9,7 +9,6 @@ from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psy
                            all_items as all_gen_items, djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
-from Fill import fast_fill
 
 if TYPE_CHECKING:
     from . import GSTLAWorld, GSTLALocation
@@ -20,8 +19,11 @@ class GSTLAItem(Item):
     """
     game: str = "Golden Sun The Lost Age"
     item_data: ItemData
-    def __init__(self, item: ItemData, player: int = None):
-        super(GSTLAItem, self).__init__(item.name, item.progression, item.id, player)
+    def __init__(self, item: ItemData, player: int = None, event: bool = False):
+        if event:
+            super(GSTLAItem, self).__init__(item.name, item.progression, None, player)   
+        else:
+            super(GSTLAItem, self).__init__(item.name, item.progression, item.id, player) 
         self.item_data = item
 
 AP_PLACEHOLDER_ITEM = ItemData(0xA00, "AP Placeholder", ItemClassification.filler, -1, ItemType.Consumable)
@@ -45,7 +47,7 @@ def _get_coin_item(id: int):
     return coin_items[id]
 
 
-def create_item(name: str, player :int) -> "Item":
+def create_item(name: str, player :int, event: bool = False) -> "Item":
     """Creates a GSTLAItem from data populated in this file
 
     Parameters:
@@ -55,10 +57,10 @@ def create_item(name: str, player :int) -> "Item":
         The newly created item
     """
     item = item_table[name]
-    return GSTLAItem(item, player)
+    return GSTLAItem(item, player, event)
 
-def create_item_direct(item: ItemData, player: int):
-    return GSTLAItem(item, player)
+def create_item_direct(item: ItemData, player: int, event: bool = False):
+    return GSTLAItem(item, player, event)
 
 def create_events(world: 'GSTLAWorld'):
     """Creates all the event items and populates their vanilla locations with them.
@@ -68,7 +70,7 @@ def create_events(world: 'GSTLAWorld'):
         world: The world to generate events for
     """
     for event in events:
-        event_item = create_item(event.name, world.player)
+        event_item = create_item(event.name, world.player, True)
 
         if event.location == LocationName.Lemurian_Ship_Engine_Room and world.options.lemurian_ship == 2:
             #world.multiworld.push_precollected(event_item)
@@ -96,9 +98,10 @@ def create_items(world: 'GSTLAWorld', player: int):
         world.random.shuffle(sorted_loc_list)
 
     for item in sorted_item_list:
-        ap_item = create_item_direct(item, player)
+        ap_item = create_item_direct(item, player, True)
         location = sorted_loc_list.pop(0)
         ap_loc = world.get_location(loc_names_by_id[location.ap_id])
+        ap_loc.address = None
         ap_loc.place_locked_item(ap_item)
         sum_locations -= 1
 

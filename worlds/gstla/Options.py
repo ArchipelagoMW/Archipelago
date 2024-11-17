@@ -390,7 +390,7 @@ class TrapChance(Range):
     display_name = "Trap Chance"
     range_start = 0
     range_end = 100
-    default = 100
+    default = 0
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):

@@ -25,6 +25,7 @@ from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
 from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
+import logging
 
 class GSTLAWeb(WebWorld):
     theme = "jungle"

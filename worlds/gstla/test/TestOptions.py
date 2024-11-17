@@ -131,6 +131,10 @@ class TestOmitNothing(TestFormatBase):
         self.assertEqual(0x00, 0x30 & data)
 
 class TestVisibleItems(TestFormatBase):
+    options = {
+        "trap_chance": 0,
+        "show_items_outside_chest": 1
+    }
 
     def test_visible(self):
         data = self._get_option_byte()
@@ -142,6 +146,16 @@ class TestNormalVisibility(TestFormatBase):
     }
 
     def test_invisible(self):
+        data = self._get_option_byte()
+        self.assertEqual(0x0, 0x4 & data)
+
+class TestMimicVisibility(TestFormatBase):
+    options  = {
+        "show_items_outside_chest": 1,
+        "trap_chance": 50
+    }
+
+    def test_invisible_with_mimic(self):
         data = self._get_option_byte()
         self.assertEqual(0x0, 0x4 & data)
 
