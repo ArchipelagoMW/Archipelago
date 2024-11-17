@@ -15,7 +15,7 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "difficulty": 0,  # excludes so many items that it can never get more than 45 material
         "max_engine_penalties": 5,
         "max_pocket": 0,
-        "fairy_chess_pieces": ['FIDE'],
+        "fairy_chess_pieces": FairyChessPieces.option_fide,
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
         "fairy_chess_army": FairyChessArmy.option_chaos,
 

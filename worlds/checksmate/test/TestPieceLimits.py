@@ -8,8 +8,8 @@ from . import CMTestBase
 
 class PieceLimitTestBase(CMTestBase):
     NO_CHILDREN = CMWorld.PieceLimitCascade.NO_CHILDREN
-    ACTUAL_CHILDREN = CMWorld.world.PieceLimitCascade.ACTUAL_CHILDREN
-    POTENTIAL_CHILDREN = CMWorld.world.PieceLimitCascade.POTENTIAL_CHILDREN
+    ACTUAL_CHILDREN = CMWorld.PieceLimitCascade.ACTUAL_CHILDREN
+    POTENTIAL_CHILDREN = CMWorld.PieceLimitCascade.POTENTIAL_CHILDREN
 
     def world_setup(self, *args, **kwargs) -> None:
         super().world_setup(*args, **kwargs)
