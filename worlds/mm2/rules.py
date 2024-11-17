@@ -148,7 +148,7 @@ def set_rules(world: "MM2World") -> None:
 
         # handle special cases
         for boss in range(14):
-            for weapon in (1, 3, 6, 8):
+            for weapon in (1, 2, 3, 6, 8):
                 if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
                         not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[weapon]
                                 for i in range(9) if i != weapon)):
