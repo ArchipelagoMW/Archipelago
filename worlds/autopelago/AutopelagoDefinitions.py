@@ -1,4 +1,4 @@
-from pathlib import PurePath
+import pkgutil
 from typing import Dict, List, Literal, Optional, Set, TypedDict, Union
 from typing_extensions import NotRequired, TypeAlias
 
@@ -129,9 +129,7 @@ class AutopelagoRegionDefinition:
         self.requires = requires
 
 
-with open(PurePath(__file__).with_name('AutopelagoDefinitions.yml'), mode='r', encoding='utf-8') as f:
-    _defs: AutopelagoDefinitions = parse_yaml(f.read())
-
+_defs: AutopelagoDefinitions = parse_yaml(pkgutil.get_data(__name__, 'AutopelagoDefinitions.yml'))
 
 def _gen_ids():
     next_id = BASE_ID
