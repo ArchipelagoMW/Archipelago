@@ -1,3 +1,4 @@
+from worlds.checksmate import CMWorld
 from . import CMTestBase
 
 
@@ -6,12 +7,12 @@ from . import CMTestBase
 
 
 class PieceLimitTestBase(CMTestBase):
+    NO_CHILDREN = CMWorld.PieceLimitCascade.NO_CHILDREN
+    ACTUAL_CHILDREN = CMWorld.world.PieceLimitCascade.ACTUAL_CHILDREN
+    POTENTIAL_CHILDREN = CMWorld.world.PieceLimitCascade.POTENTIAL_CHILDREN
 
     def world_setup(self, *args, **kwargs) -> None:
         super().world_setup(*args, **kwargs)
-        self.NO_CHILDREN = self.world.PieceLimitCascade.NO_CHILDREN
-        self.ACTUAL_CHILDREN = self.world.PieceLimitCascade.ACTUAL_CHILDREN
-        self.POTENTIAL_CHILDREN = self.world.PieceLimitCascade.POTENTIAL_CHILDREN
 
     def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int) -> None:
         self.assertEqual(0, self.world.find_piece_limit("Progressive Pawn", self.NO_CHILDREN
