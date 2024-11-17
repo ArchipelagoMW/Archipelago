@@ -62,7 +62,7 @@ def set_rules(tloz_world: "TLoZWorld"):
     # Level 4 Access
     for location in tloz_world.levels[4].locations:
         add_rule(world.get_location(location.name, player),
-                 lambda state: state.has("Raft", player) or state.has("Recorder", player))
+                 lambda state: state.has_any(("Raft", "Recorder"), player))
 
     # Digdogger boss. Rework this once ER happens
     add_rule(world.get_location("Level 5 Boss", player),
