@@ -118,9 +118,6 @@ class CMWorld(World):
         else:
             self.armies[self.player] = army_options
 
-    def setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player]
-
     def fill_slot_data(self) -> dict:
         cursed_knowledge = {name: self.random.getrandbits(31) for name in [
             "pocket_seed", "pawn_seed", "minor_seed", "major_seed", "queen_seed"]}
