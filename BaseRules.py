@@ -5,8 +5,8 @@ from typing import Callable, List, Optional, Tuple, Union
 from BaseClasses import CollectionState, Req
 
 
-TRUE = lambda state: True
-FALSE = lambda state: False
+RULE_ALWAYS_TRUE = lambda state: True
+RULE_ALWAYS_FALSE = lambda state: False
 
 class AnyReq(Tuple):
     """A collection of Reqs, AnyReqs, and AllReqs, which evaluates as True if any of them evaluates True.
@@ -66,7 +66,7 @@ def meets_any_req(state: CollectionState, player: int, *reqs: Optional[Req]) -> 
 @functools.lru_cache(maxsize=None)
 def req_to_rule(player: int, req: Optional[Req]) -> Callable[[CollectionState], bool]:
     if not req:
-        return TRUE
+        return RULE_ALWAYS_TRUE
     return lambda state: state.has(req.item, player, count=req.count)
 
 
@@ -77,7 +77,7 @@ def all_reqs_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionS
         if req:
             rreqs.append(req)
     if not rreqs:
-        return TRUE
+        return RULE_ALWAYS_TRUE
     rreqs = tuple(rreqs)
     return lambda state: state.has_all_reqs(rreqs, player)
 
@@ -85,10 +85,10 @@ def all_reqs_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionS
 @functools.lru_cache(maxsize=None)
 def any_req_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionState], bool]:
     if not reqs:
-        return FALSE
+        return RULE_ALWAYS_FALSE
     for req in reqs:
         if not req:
-            return TRUE
+            return RULE_ALWAYS_TRUE
     return lambda state: state.has_any_req(reqs, player)
 
 
@@ -100,7 +100,7 @@ def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq]) -> Callable[[C
     for inner in req:
         if inner is None:
             if is_any:
-                return TRUE
+                return RULE_ALWAYS_TRUE
             continue
         if isinstance(inner, Req):
             bare_reqs.append(inner)
@@ -122,9 +122,9 @@ def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq]) -> Callable[[C
         if bare_reqs:
             rules.append(all_reqs_to_rule(player, *bare_reqs))
         
-        rules = [r for r in rules if r != TRUE]
+        rules = [r for r in rules if r != RULE_ALWAYS_TRUE]
         if not rules:
-            return TRUE
+            return RULE_ALWAYS_TRUE
 
         def full_rule(state: CollectionState) -> bool:
             for rule in rules:

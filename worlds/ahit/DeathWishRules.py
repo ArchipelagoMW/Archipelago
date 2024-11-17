@@ -3,7 +3,7 @@ from typing import List, Callable, TYPE_CHECKING
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from BaseClasses import Entrance, Location, ItemClassification, Req
-from BaseRules import AllReq, AnyReq, meets_req, req_to_rule, all_reqs_to_rule, any_req_to_rule, complex_reqs_to_rule, TRUE
+from BaseRules import AllReq, AnyReq, meets_req, req_to_rule, all_reqs_to_rule, any_req_to_rule, complex_reqs_to_rule, RULE_ALWAYS_TRUE
 
 from .DeathWishLocations import dw_prereqs, dw_candles
 from .Locations import death_wishes
@@ -229,7 +229,7 @@ def modify_dw_rules(world: "HatInTimeWorld", name: str):
     if name == "The Illness has Speedrun":
         # All stamps with hookshot only in Expert
         if difficulty >= Difficulty.EXPERT:
-            set_rule(full_clear, TRUE)
+            set_rule(full_clear, RULE_ALWAYS_TRUE)
         else:
             add_rule(main_objective, req_to_rule(player, umbrella_req))
 
@@ -241,22 +241,22 @@ def modify_dw_rules(world: "HatInTimeWorld", name: str):
     elif name == "Vault Codes in the Wind":
         # Sprint is normally expected here
         if difficulty >= Difficulty.HARD:
-            set_rule(main_objective, TRUE)
+            set_rule(main_objective, RULE_ALWAYS_TRUE)
 
     elif name == "Speedrun Well":
         # All stamps with nothing :)
         if difficulty >= Difficulty.EXPERT:
-            set_rule(main_objective, TRUE)
+            set_rule(main_objective, RULE_ALWAYS_TRUE)
 
     elif name == "Mafia's Jumps":
         if difficulty >= Difficulty.HARD:
-            set_rule(main_objective, TRUE)
-            set_rule(full_clear, TRUE)
+            set_rule(main_objective, RULE_ALWAYS_TRUE)
+            set_rule(full_clear, RULE_ALWAYS_TRUE)
 
     elif name == "So You're Back from Outer Space":
         # Without Hookshot
         if difficulty >= Difficulty.HARD:
-            set_rule(main_objective, TRUE)
+            set_rule(main_objective, RULE_ALWAYS_TRUE)
 
     elif name == "Wound-Up Windmill":
         # No badge pin required. Player can switch to One Hit Hero after the checkpoint and do level without it.

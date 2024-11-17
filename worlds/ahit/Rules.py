@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List, Callable, Union, Dict, Tuple, Optional, 
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from BaseClasses import Location, Entrance, Region, Req
-from BaseRules import meets_req, meets_any_req, all_reqs_to_rule, any_req_to_rule, req_to_rule, complex_reqs_to_rule, FALSE, TRUE, AnyReq, AllReq
+from BaseRules import all_reqs_to_rule, any_req_to_rule, req_to_rule, complex_reqs_to_rule, RULE_ALWAYS_FALSE, RULE_ALWAYS_TRUE, AnyReq, AllReq
 
 from .Locations import location_table, zipline_unlocks, is_location_valid, shop_locations, event_locs
 from .Options import EndGoal, CTRLogic, NoTicketSkips
@@ -356,7 +356,7 @@ def set_rules(world: "HatInTimeWorld", rift_dict: Optional[Dict[str, Region]] = 
                 add_rule(e, rules)
 
     for e in dummy_entrances:
-        set_rule(e, FALSE)
+        set_rule(e, RULE_ALWAYS_FALSE)
 
     set_event_rules(world)
 
@@ -400,15 +400,15 @@ def set_moderate_rules(world: "HatInTimeWorld"):
     ice_hat_req = hat_requirements(world, HatType.ICE)
     sprint_hat_req = hat_requirements(world, HatType.SPRINT)
     # Moderate: Gallery without Brewing Hat
-    set_rule(world.multiworld.get_location("Act Completion (Time Rift - Gallery)", player), TRUE)
+    set_rule(world.multiworld.get_location("Act Completion (Time Rift - Gallery)", player), RULE_ALWAYS_TRUE)
 
     # Moderate: Above Boats via Ice Hat Sliding
     add_rule(world.multiworld.get_location("Mafia Town - Above Boats", player),
              req_to_rule(player, ice_hat_req), "or")
 
     # Moderate: Clock Tower Chest + Ruined Tower with nothing
-    set_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", player), TRUE)
-    set_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", player), TRUE)
+    set_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", player), RULE_ALWAYS_TRUE)
+    set_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", player), RULE_ALWAYS_TRUE)
 
     # Moderate: enter and clear The Subcon Well without Hookshot and without hitting the bell
     one_painting = painting_requirements(world, 1)
@@ -425,7 +425,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     # Moderate: Village Time Rift with nothing IF umbrella logic is off
     if not world.options.UmbrellaLogic:
-        set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", player), TRUE)
+        set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", player), RULE_ALWAYS_TRUE)
 
     # Moderate: get to Birdhouse/Yellow Band Hills without Brewing Hat
     set_rule(world.multiworld.get_entrance("-> The Birdhouse", player),
@@ -435,10 +435,10 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     # Moderate: The Birdhouse - Dweller Platforms Relic with only Birdhouse access
     set_rule(world.multiworld.get_location("Alpine Skyline - The Birdhouse: Dweller Platforms Relic", player),
-             TRUE)
+             RULE_ALWAYS_TRUE)
 
     # Moderate: Twilight Path without Dweller Mask
-    set_rule(world.multiworld.get_location("Alpine Skyline - The Twilight Path", player), TRUE)
+    set_rule(world.multiworld.get_location("Alpine Skyline - The Twilight Path", player), RULE_ALWAYS_TRUE)
 
     # Moderate: Mystifying Time Mesa time trial without hats
     set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", player),
@@ -450,7 +450,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     # Moderate: Finale Telescope with only Ice Hat
     add_rule(world.multiworld.get_entrance("Telescope -> Time's End", player),
-             all_reqs_to_rule(player, Req("Time Piece", world.chapter_timepiece_costs[ChapterIndex.FINALE]), ice_hat_req), "or")
+             all_reqs_to_rule(player, Req("Time Piece", world.chapter_timepiece_costs[ChapterIndex.FINALE]),
+                              ice_hat_req), "or")
 
     # Moderate: Finale without Hookshot
     set_rule(world.multiworld.get_location("Act Completion (The Finale)", player),
@@ -458,8 +459,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     if world.is_dlc1():
         # Moderate: clear Rock the Boat without Ice Hat
-        set_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", player), TRUE)
-        set_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", player), TRUE)
+        set_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", player), RULE_ALWAYS_TRUE)
+        set_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", player), RULE_ALWAYS_TRUE)
 
         # Moderate: clear Deep Sea without Ice Hat
         set_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", player),
@@ -470,16 +471,16 @@ def set_moderate_rules(world: "HatInTimeWorld"):
     if world.is_dlc2():
         # No Hookshot
         set_rule(world.multiworld.get_location("Act Completion (Yellow Overpass Station)", player),
-                 TRUE)
+                 RULE_ALWAYS_TRUE)
 
         # No Dweller, Hookshot, or Time Stop for these
-        set_rule(world.multiworld.get_location("Pink Paw Station - Cat Vacuum", player), TRUE)
-        set_rule(world.multiworld.get_location("Pink Paw Station - Behind Fan", player), TRUE)
-        set_rule(world.multiworld.get_location("Pink Paw Station - Pink Ticket Booth", player), TRUE)
-        set_rule(world.multiworld.get_location("Act Completion (Pink Paw Station)", player), TRUE)
+        set_rule(world.multiworld.get_location("Pink Paw Station - Cat Vacuum", player), RULE_ALWAYS_TRUE)
+        set_rule(world.multiworld.get_location("Pink Paw Station - Behind Fan", player), RULE_ALWAYS_TRUE)
+        set_rule(world.multiworld.get_location("Pink Paw Station - Pink Ticket Booth", player), RULE_ALWAYS_TRUE)
+        set_rule(world.multiworld.get_location("Act Completion (Pink Paw Station)", player), RULE_ALWAYS_TRUE)
         for key in shop_locations.keys():
             if "Pink Paw Station Thug" in key and is_location_valid(world, key):
-                set_rule(world.multiworld.get_location(key, player), TRUE)
+                set_rule(world.multiworld.get_location(key, player), RULE_ALWAYS_TRUE)
 
         # Moderate: clear Rush Hour without Hookshot
         set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player),
@@ -492,8 +493,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
         # Moderate: Bluefin Tunnel + Pink Paw Station without tickets
         if not world.options.NoTicketSkips:
-            set_rule(world.multiworld.get_entrance("-> Pink Paw Station", player), TRUE)
-            set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", player), TRUE)
+            set_rule(world.multiworld.get_entrance("-> Pink Paw Station", player), RULE_ALWAYS_TRUE)
+            set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", player), RULE_ALWAYS_TRUE)
 
 
 def set_hard_rules(world: "HatInTimeWorld"):
@@ -569,19 +570,19 @@ def set_expert_rules(world: "HatInTimeWorld"):
              req_to_rule(player, Req("Time Piece", world.chapter_timepiece_costs[ChapterIndex.FINALE])))
 
     # Expert: Mafia Town - Above Boats, Top of Lighthouse, and Hot Air Balloon with nothing
-    set_rule(world.multiworld.get_location("Mafia Town - Above Boats", player), TRUE)
-    set_rule(world.multiworld.get_location("Mafia Town - Top of Lighthouse", player), TRUE)
-    set_rule(world.multiworld.get_location("Mafia Town - Hot Air Balloon", player), TRUE)
+    set_rule(world.multiworld.get_location("Mafia Town - Above Boats", player), RULE_ALWAYS_TRUE)
+    set_rule(world.multiworld.get_location("Mafia Town - Top of Lighthouse", player), RULE_ALWAYS_TRUE)
+    set_rule(world.multiworld.get_location("Mafia Town - Hot Air Balloon", player), RULE_ALWAYS_TRUE)
 
     # Expert: Clear Dead Bird Studio with nothing
     for loc in world.multiworld.get_region("Dead Bird Studio - Post Elevator Area", player).locations:
-        set_rule(loc, TRUE)
+        set_rule(loc, RULE_ALWAYS_TRUE)
 
-    set_rule(world.multiworld.get_location("Act Completion (Dead Bird Studio)", player), TRUE)
+    set_rule(world.multiworld.get_location("Act Completion (Dead Bird Studio)", player), RULE_ALWAYS_TRUE)
 
     # Expert: Clear Dead Bird Studio Basement without Hookshot
     for loc in world.multiworld.get_region("Dead Bird Studio Basement", player).locations:
-        set_rule(loc, TRUE)
+        set_rule(loc, RULE_ALWAYS_TRUE)
 
     # Expert: get to and clear Twilight Bell without Dweller Mask.
     # Dweller Mask OR Sprint Hat OR Brewing Hat OR Time Stop + Umbrella required to complete act.
@@ -600,11 +601,11 @@ def set_expert_rules(world: "HatInTimeWorld"):
     # Expert: Time Rift - Curly Tail Trail with nothing
     # Time Rift - Twilight Bell and Time Rift - Village with nothing
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", player),
-             TRUE)
+             RULE_ALWAYS_TRUE)
 
-    set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", player), TRUE)
+    set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", player), RULE_ALWAYS_TRUE)
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - The Twilight Bell)", player),
-             TRUE)
+             RULE_ALWAYS_TRUE)
 
     # Expert: Cherry Hovering
     subcon_area = world.multiworld.get_region("Subcon Forest Area", player)
@@ -632,12 +633,12 @@ def set_expert_rules(world: "HatInTimeWorld"):
     # You can cherry hover to Snatcher's post-fight cutscene, which completes the level without having to fight him
     subcon_area.connect(yche, "Snatcher Hover")
     set_rule(world.multiworld.get_location("Act Completion (Your Contract has Expired)", player),
-             TRUE)
+             RULE_ALWAYS_TRUE)
 
     if world.is_dlc2():
         # Expert: clear Rush Hour with nothing
         if not world.options.NoTicketSkips:
-            set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player), TRUE)
+            set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player), RULE_ALWAYS_TRUE)
         else:
             blue_ticket = Req("Metro Ticket - Blue", 1)
             yellow_ticket = Req("Metro Ticket - Yellow", 1)
@@ -647,9 +648,9 @@ def set_expert_rules(world: "HatInTimeWorld"):
 
         # Expert: Yellow/Green Manhole with nothing using a Boop Clip
         set_rule(world.multiworld.get_location("Act Completion (Yellow Overpass Manhole)", player),
-                 TRUE)
+                 RULE_ALWAYS_TRUE)
         set_rule(world.multiworld.get_location("Act Completion (Green Clean Manhole)", player),
-                 TRUE)
+                 RULE_ALWAYS_TRUE)
 
 
 def set_mafia_town_rules(world: "HatInTimeWorld"):
@@ -704,7 +705,7 @@ def set_mafia_town_rules(world: "HatInTimeWorld"):
              req_to_rule(player, humt_req), "or")
 
     if world.options.CTRLogic == CTRLogic.option_nothing:
-        set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", player), TRUE)
+        set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", player), RULE_ALWAYS_TRUE)
     elif world.options.CTRLogic == CTRLogic.option_sprint:
         add_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", player),
                  req_to_rule(player, sprint_hat_req), "or")
