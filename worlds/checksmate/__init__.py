@@ -390,12 +390,10 @@ class CMWorld(World):
 
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
-        total_material = material + remaining_material + chosen_material
-        if total_material > max_material:
-            return True
+        total_material = material + chosen_material + remaining_material
+        exceeds_max = total_material > max_material
 
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
-            exceeds_max = material + remaining_material + chosen_material > max_material
             enough_yet = material + remaining_material >= min_material
             return exceeds_max and enough_yet
 
@@ -405,18 +403,16 @@ class CMWorld(World):
         necessary_chessmen = (chessmen_requirement - chessmen_count(items, self.options.pocket_limit_by_pocket.value))
         if chosen_item in item_name_groups["Chessmen"]:
             necessary_chessmen -= 1
-        elif chosen_item == "Progressive Pocket" and \
-                self.options.pocket_limit_by_pocket.value > 0:
+        elif chosen_item == "Progressive Pocket":
+            # We know pocket_limit > 0, because pockets are not disabled, because we checked items_used
             pocket_limit = self.options.pocket_limit_by_pocket.value
-            if pocket_limit == 0:
-                pocket_limit = 4
             next_pocket = locked_items.get("Progressive Pocket", 0) + \
                 len([item for item in items if item.name == "Progressive Pocket"]) + \
                 1
             if next_pocket % pocket_limit == 1:
                 necessary_chessmen -= 1
         if necessary_chessmen <= 0:
-            return False
+            return exceeds_max
         minimum_possible_material = total_material + (
             item_table["Progressive Pawn"].material * necessary_chessmen)
         return minimum_possible_material > max_material
