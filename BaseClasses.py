@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 class Req(NamedTuple):
     item: str
-    count: int
+    count: int = 1
 
 
 class Group(TypedDict):

@@ -1,6 +1,6 @@
 import functools
 
-from typing import Callable, List, Optional, Tuple, Union
+from typing import Callable, List, Optional, Self, Tuple, Union
 
 from BaseClasses import CollectionState, Req
 
@@ -13,7 +13,18 @@ class AnyReq(Tuple):
     
     Also evaluates to True if any entry is None.
     """
-    def __repr__(self):
+    def __new__(cls, iterable=()) -> Self:
+        # Unpacks other top-level AnyReqs, and forces a copy of tuples into this type
+        def _iter():
+            for el in iterable:
+                if isinstance(el, AnyReq):
+                    for r in el:
+                        yield r
+                else:
+                    yield el
+        return super().__new__(AnyReq, _iter())
+
+    def __repr__(self) -> str:
         return f"AnyReq{super().__repr__()}"
     __str__ = __repr__
 
@@ -23,7 +34,18 @@ class AllReq(Tuple):
     
     Any entries that are None are implicitly evaluated as True.
     """
-    def __repr__(self):
+    def __new__(cls, iterable=()) -> Self:
+        # Unpacks other top-level AllReqs, and forces a copy of tuples into this type
+        def _iter():
+            for el in iterable:
+                if isinstance(el, AllReq):
+                    for r in el:
+                        yield r
+                else:
+                    yield el
+        return super().__new__(AllReq, _iter())
+
+    def __repr__(self) -> str:
         return f"AllReq{super().__repr__()}"
     __str__ = __repr__
 
