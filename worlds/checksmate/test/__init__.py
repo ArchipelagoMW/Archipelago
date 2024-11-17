@@ -11,6 +11,8 @@ class CMTestBase(WorldTestBase):
     player: ClassVar[int] = 1
 
     def world_setup(self, *args, **kwargs) -> None:
+        # TODO(chesslogic): Subclasses could implement a "modify_options" method
+        # to modify the options before the world is constructed
         self.options = copy(self.options)
         super().world_setup(*args, **kwargs)
         if self.constructed:

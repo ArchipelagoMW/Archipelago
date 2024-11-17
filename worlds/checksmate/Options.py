@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Callable, Dict
 
-from Options import Range, Option, Choice, Toggle, NamedRange, ItemDict, PerGameCommonOptions, OptionSet, DeathLink
+from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionSet, DeathLink
 
 
 class Goal(Choice):
