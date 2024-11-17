@@ -6,6 +6,8 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
     # Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material.
     # Leaves unique features and mixed material on, but all pieces will be recognizable.
     "No Dumb Pieces": {
+        "fairy_chess_pieces": FairyChessPieces.option_fide,
+        "fairy_chess_pawns": FairyChessPawns.option_vanilla,
     },
 
     # A vanilla army with no pockets, comprising 2 Bishops+Knights+Rooks, and 1 Queen (or Rook until upgraded)
@@ -17,7 +19,6 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
         "max_pocket": 0,
         "fairy_chess_pieces": FairyChessPieces.option_fide,
         "fairy_chess_pawns": FairyChessPawns.option_vanilla,
-        "fairy_chess_army": FairyChessArmy.option_chaos,
 
         "minor_piece_limit_by_type": 2,
         "major_piece_limit_by_type": 2,
