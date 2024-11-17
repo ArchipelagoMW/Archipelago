@@ -1152,79 +1152,79 @@ class AquariaRegions:
     def __no_progression_hard_or_hidden_location(self) -> None:
         self.multiworld.get_location("Energy Temple boss area, Fallen God Tooth",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Mithalas boss area, beating Mithalan God",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Kelp Forest boss area, beating Drunian God",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Sun Temple boss area, beating Sun God",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Sunken City, bulb on top of the boss area",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Home Water, Nautilus Egg",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Energy Temple blaster room, Blaster Egg",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Mithalas City Castle, beating the Priests",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Mermog cave, Piranha Egg",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Octopus Cave, Dumbo Egg",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("King Jellyfish Cave, bulb in the right path from King Jelly",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("King Jellyfish Cave, Jellyfish Costume",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Final Boss area, bulb in the boss third form room",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Sun Worm path, first cliff bulb",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Sun Worm path, second cliff bulb",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("The Veil top right area, bulb at the top of the waterfall",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Bubble Cave, bulb in the left cave wall",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Bubble Cave, Verse Egg",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Kelp Forest bottom left area, bulb close to the spirit crystals",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Kelp Forest bottom left area, Walker Baby",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Sun Temple, Sun Key",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("The Body bottom area, Mutant Costume",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Sun Temple, bulb in the hidden room of the right part",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
         self.multiworld.get_location("Arnassi Ruins, Arnassi Armor",
                                      self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            lambda item: not item.advancement
 
     def adjusting_rules(self, options: AquariaOptions) -> None:
         """
