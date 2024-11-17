@@ -123,8 +123,9 @@ def set_dw_rules(world: "HatInTimeWorld"):
 
         dw = world.multiworld.get_region(name, player)
         if not world.options.DWShuffle and name in dw_stamp_costs.keys():
+            stamp_rec = Req("Stamps", dw_stamp_costs[name])
             for entrance in dw.entrances:
-                add_rule(entrance, lambda state, n=name: state.has("Stamps", player, dw_stamp_costs[n]))
+                add_rule(entrance, req_to_rule(player, stamp_rec))
 
         main_objective = world.multiworld.get_location(f"{name} - Main Objective", player)
         all_clear = world.multiworld.get_location(f"{name} - All Clear", player)
@@ -154,7 +155,8 @@ def set_dw_rules(world: "HatInTimeWorld"):
             name = world.dw_shuffle[i+1]
             prev_dw = world.multiworld.get_region(world.dw_shuffle[i], player)
             entrance = world.multiworld.get_entrance(f"{prev_dw.name} -> {name}", player)
-            add_rule(entrance, lambda state, n=prev_dw.name: state.has(f"1 Stamp - {n}", player))
+            prev_dw_req = Req(f"1 Stamp - {prev_dw.name}", 1)
+            add_rule(entrance, req_to_rule(player, prev_dw_req))
     else:
         for key, reqs in dw_prereqs.items():
             if key == "Snatcher Coins in Nyakuza Metro" and not world.is_dlc2():
@@ -168,15 +170,16 @@ def set_dw_rules(world: "HatInTimeWorld"):
                 entrances.append(entrance)
 
                 if not world.is_dw_excluded(parent):
-                    access_rules.append(lambda state, n=parent: state.has(f"1 Stamp - {n}", player))
+                    parent_req = Req(f"1 Stamp - {parent}", 1)
+                    access_rules.append(req_to_rule(player, parent_req))
 
             for entrance in entrances:
                 for rule in access_rules:
                     add_rule(entrance, rule)
 
     if world.options.EndGoal == EndGoal.option_seal_the_deal:
-        world.multiworld.completion_condition[player] = lambda state: \
-            state.has("1 Stamp - Seal the Deal", player)
+        seal_req = Req("1 Stamp - Seal the Deal", 1)
+        world.multiworld.completion_condition[player] = req_to_rule(player, seal_req)
 
 
 def add_dw_rules(world: "HatInTimeWorld", loc: Location):
@@ -272,8 +275,9 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
 
     if name == "Zero Jumps":
         ice_hat_req = hat_requirements(world, HatType.ICE)
-        add_rule(main_objective, lambda state: state.has("Zero Jumps", player))
-        add_rule(full_clear, all_reqs_to_rule(player, Req("Zero Jumps", 4),
+        add_rule(main_objective, req_to_rule(player, Req("Zero Jumps", 1)))
+        add_rule(full_clear, all_reqs_to_rule(player,
+                                              Req("Zero Jumps", 4),
                                               Req("Train Rush (Zero Jumps)", 1),
                                               ice_hat_req))
 
@@ -297,21 +301,21 @@ def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
                  req_to_rule(player, paintings_noskip))
 
     elif name == "Snatcher's Hit List":
-        add_rule(main_objective, lambda state: state.has("Mafia Goon", player))
-        add_rule(full_clear, lambda state: state.has("Enemy", player, 12))
+        add_rule(main_objective, req_to_rule(player, Req("Mafia Goon", 1)))
+        add_rule(full_clear, req_to_rule(player, Req("Enemy", 12)))
 
     elif name == "Camera Tourist":
-        add_rule(main_objective, lambda state: state.has("Enemy", player, 8))
+        add_rule(main_objective, req_to_rule(player, Req("Enemy", 8)))
         add_rule(full_clear, all_reqs_to_rule(player, Req("Boss", 6), Req("Triple Enemy Photo", 1)))
 
     elif "Snatcher Coins" in name:
         coins: List[str] = []
         for coin in required_snatcher_coins[name]:
-            coins.append(coin)
+            coins.append(Req(coin, 1))
             add_rule(full_clear, req_to_rule(player, Req(coin, 1)))
 
         # any coin works for the main objective
-        add_rule(main_objective, lambda state: state.has_any(coins[:3], player))
+        add_rule(main_objective, any_req_to_rule(player, *coins))
 
 
 def create_enemy_events(world: "HatInTimeWorld"):
@@ -384,11 +388,10 @@ def set_enemy_rules(world: "HatInTimeWorld"):
             if enemy == "Toxic Flower":
                 add_rule(event, req_to_rule(player, HOOKSHOT_REQ))
 
-                if area == "The Illness has Spread":
-                    add_rule(event, lambda state: not zipline_logic(world) or
-                             state.has_any(("Zipline Unlock - The Birdhouse Path",
-                                            "Zipline Unlock - The Lava Cake Path",
-                                            "Zipline Unlock - The Windmill Path"), player))
+                if area == "The Illness has Spread" and zipline_logic(world):
+                    add_rule(event, any_req_to_rule(player, Req("Zipline Unlock - The Birdhouse Path"),
+                                                    Req("Zipline Unlock - The Lava Cake Path"),
+                                                    Req("Zipline Unlock - The Windmill Path")))
 
             elif enemy == "Director":
                 if area == "Dead Bird Studio Basement":

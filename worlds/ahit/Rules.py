@@ -298,22 +298,24 @@ def set_rules(world: "HatInTimeWorld", rift_dict: Optional[Dict[str, Region]] = 
         add_rule(alpine_entrance, req_to_rule(player, umbrella_req))
 
     if zipline_logic(world):
+        birdhouse_zipline = Req("Zipline Unlock - The Birdhouse Path", 1)
+        lava_cake_zipline = Req("Zipline Unlock - The Lava Cake Path", 1)
+        windmill_zipline = Req("Zipline Unlock - The Windmill Path", 1)
+        bell_zipline = Req("Zipline Unlock - The Twilight Bell Path", 1)
         add_rule(world.multiworld.get_entrance("-> The Birdhouse", player),
-                 lambda state: state.has("Zipline Unlock - The Birdhouse Path", player))
+                 req_to_rule(player, birdhouse_zipline))
 
         add_rule(world.multiworld.get_entrance("-> The Lava Cake", player),
-                 lambda state: state.has("Zipline Unlock - The Lava Cake Path", player))
+                 req_to_rule(player, lava_cake_zipline))
 
         add_rule(world.multiworld.get_entrance("-> The Windmill", player),
-                 lambda state: state.has("Zipline Unlock - The Windmill Path", player))
+                 req_to_rule(player, windmill_zipline))
 
         add_rule(world.multiworld.get_entrance("-> The Twilight Bell", player),
-                 lambda state: state.has("Zipline Unlock - The Twilight Bell Path", player))
+                 req_to_rule(player, bell_zipline))
 
         add_rule(world.multiworld.get_location("Act Completion (The Illness has Spread)", player),
-                 lambda state: state.has_all(("Zipline Unlock - The Birdhouse Path",
-                                              "Zipline Unlock - The Lava Cake Path",
-                                              "Zipline Unlock - The Windmill Path"), player))
+                 all_reqs_to_rule(player, birdhouse_zipline, lava_cake_zipline, windmill_zipline))
 
     if zipline_logic(world):
         for (loc, zipline) in zipline_unlocks.items():
@@ -637,10 +639,11 @@ def set_expert_rules(world: "HatInTimeWorld"):
         if not world.options.NoTicketSkips:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player), TRUE)
         else:
+            blue_ticket = Req("Metro Ticket - Blue", 1)
+            yellow_ticket = Req("Metro Ticket - Yellow", 1)
+            pink_ticket = Req("Metro Ticket - Pink", 1)
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player),
-                     lambda state: state.has_all(("Metro Ticket - Yellow",
-                                                  "Metro Ticket - Blue",
-                                                  "Metro Ticket - Pink"), player))
+                     all_reqs_to_rule(player, yellow_ticket, blue_ticket, pink_ticket))
 
         # Expert: Yellow/Green Manhole with nothing using a Boop Clip
         set_rule(world.multiworld.get_location("Act Completion (Yellow Overpass Manhole)", player),
@@ -692,12 +695,13 @@ def set_mafia_town_rules(world: "HatInTimeWorld"):
              or state.can_reach("The Golden Vault", "Region", player))
 
     # For some reason, the brewing crate is removed in HUMT
+    humt_req = Req("HUMT Access", 1)
     add_rule(world.multiworld.get_location("Mafia Town - Secret Cave", player),
-             lambda state: state.has("HUMT Access", player), "or")
+             req_to_rule(player, humt_req), "or")
 
     # Can bounce across the lava to get this without Hookshot (need to die though)
     add_rule(world.multiworld.get_location("Mafia Town - Above Boats", player),
-             lambda state: state.has("HUMT Access", player), "or")
+             req_to_rule(player, humt_req), "or")
 
     if world.options.CTRLogic == CTRLogic.option_nothing:
         set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", player), TRUE)
@@ -814,24 +818,29 @@ def set_dlc1_rules(world: "HatInTimeWorld"):
 
 def set_dlc2_rules(world: "HatInTimeWorld"):
     player = world.player
+    green_ticket = Req("Metro Ticket - Green", 1)
+    blue_ticket = Req("Metro Ticket - Blue", 1)
+    yellow_ticket = Req("Metro Ticket - Yellow", 1)
+    pink_ticket = Req("Metro Ticket - Pink", 1)
     add_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", player),
-             lambda state: state.has_any(("Metro Ticket - Green", "Metro Ticket - Blue"), player))
+             any_req_to_rule(player, green_ticket, blue_ticket))
 
     add_rule(world.multiworld.get_entrance("-> Pink Paw Station", player),
-             lambda state: state.has("Metro Ticket - Pink", player)
-             or state.has_all(("Metro Ticket - Yellow", "Metro Ticket - Blue"), player))
+             complex_reqs_to_rule(player, AnyReq([
+                 pink_ticket,
+                 AllReq([yellow_ticket, blue_ticket]),
+             ])))
 
     add_rule(world.multiworld.get_entrance("Nyakuza Metro - Finale", player),
              lambda state: can_clear_metro(state, player))
 
     add_rule(world.multiworld.get_location("Act Completion (Rush Hour)", player),
-             lambda state: state.has_all(("Metro Ticket - Yellow", "Metro Ticket - Blue", "Metro Ticket - Pink"),
-                                         player))
+             all_reqs_to_rule(player, yellow_ticket, blue_ticket, pink_ticket))
 
     for key in shop_locations.keys():
         if "Green Clean Station Thug B" in key and is_location_valid(world, key):
             add_rule(world.multiworld.get_location(key, player),
-                     lambda state: state.has("Metro Ticket - Yellow", player), "or")
+                     req_to_rule(player, yellow_ticket), "or")
 
 
 def reg_act_connection(world: "HatInTimeWorld", region: Union[str, Region], unlocked_entrance: Union[str, Entrance]):
@@ -919,11 +928,13 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
         if painting_logic(world):
             add_rule(entrance, req_to_rule(player, paintings_3))
 
+    windmill_req = Req("Windmill Cleared", 1)
     for entrance in regions["Time Rift - Curly Tail Trail"].entrances:
-        add_rule(entrance, lambda state: state.has("Windmill Cleared", player))
+        add_rule(entrance, req_to_rule(player, windmill_req))
 
+    bell_req = Req("Twilight Bell Cleared", 1)
     for entrance in regions["Time Rift - The Twilight Bell"].entrances:
-        add_rule(entrance, lambda state: state.has("Twilight Bell Cleared", player))
+        add_rule(entrance, req_to_rule(player, bell_req))
 
     for entrance in regions["Time Rift - Alpine Skyline"].entrances:
         add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "Crayon")))
@@ -1007,11 +1018,13 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
         if painting_logic(world):
             add_rule(entrance, req_to_rule(player, paintings_3))
 
+    windmill_req = Req("Windmill Cleared", 1)
     for entrance in world.multiworld.get_region("Time Rift - Curly Tail Trail", player).entrances:
-        add_rule(entrance, lambda state: state.has("Windmill Cleared", player))
+        add_rule(entrance, req_to_rule(player, windmill_req))
 
+    bell_req = Req("Twilight Bell Cleared", 1)
     for entrance in world.multiworld.get_region("Time Rift - The Twilight Bell", player).entrances:
-        add_rule(entrance, lambda state: state.has("Twilight Bell Cleared", player))
+        add_rule(entrance, req_to_rule(player, bell_req))
 
     for entrance in world.multiworld.get_region("Time Rift - Alpine Skyline", player).entrances:
         add_rule(entrance, all_reqs_to_rule(player, *relic_combo_requirements(world, "Crayon")))
