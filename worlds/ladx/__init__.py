@@ -446,7 +446,8 @@ class LinksAwakeningWorld(World):
 
     def generate_early(self):
         if self.options.goal == "specific":
-            assert self.options.instrument_count.value > 0, "Specific instrument count cannnot be zero."
+            if self.options.instrument_count.value <= 0:
+                raise ValueError("Specific instrument count cannot be zero.")
 
     def generate_output(self, output_directory: str):
         # copy items back to locations
