@@ -455,8 +455,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     ret.game = get_choice("game", weights)
     if not isinstance(ret.game, str):
         if ret.game is None:
-            raise Exception('Missing "game" entry in yaml')
-        raise Exception(f"Invalid game: {ret.game} in yaml")
+            raise Exception('"game" not specified')
+        raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
         from worlds import failed_world_loads
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
