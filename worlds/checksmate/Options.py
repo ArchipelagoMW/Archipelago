@@ -349,6 +349,8 @@ class PocketLimitByPocket(NamedRange):
     never hold anything more substantial than a Pawn. If this is set to 3, any given Pocket will never hold a Queen.
 
     The default of 4 allows each of the 3 spaces to hold between 0-4 progressive items.
+
+    Disabling this option will remove Pocket items from the item pool.
     """
     display_name = "Pocket Limit by Pocket"
     range_start = 1
