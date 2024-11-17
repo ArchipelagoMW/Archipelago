@@ -1,5 +1,8 @@
-from worlds.checksmate import CMWorld
+from copy import copy
+
 from . import CMTestBase
+from worlds.checksmate import CMWorld, Options
+
 
 
 # I don't like that this generates many entire seeds just to check some global logic.
@@ -12,6 +15,8 @@ class PieceLimitTestBase(CMTestBase):
     POTENTIAL_CHILDREN = CMWorld.PieceLimitCascade.POTENTIAL_CHILDREN
 
     def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
         super().world_setup(*args, **kwargs)
 
     def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int) -> None:
@@ -153,15 +158,14 @@ class TestStablePieceLimitsOfThree(PieceLimitTestBase):
 
 class TestStablePieceLimitsByVariety(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "minor_piece_limit_by_type": 4,
-        "major_piece_limit_by_type": 1,
+        "major_piece_limit_by_type": 2,
         "queen_piece_limit_by_type": 3,
     }
 
     def test_limit(self) -> None:
         expected_minors = 8
-        expected_majors = 1
+        expected_majors = 2
         expected_queens = 3
         self.assert_matches(expected_minors, expected_majors, expected_queens)
         self.assert_actuals(expected_majors, expected_queens)
