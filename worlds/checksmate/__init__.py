@@ -113,7 +113,7 @@ class CMWorld(World):
             if not army_options:
                 army_options = [0]
         army_constraint = self.options.fairy_chess_army
-        if army_constraint != 0:
+        if army_constraint != self.options.fairy_chess_army.option_chaos:
             self.armies[self.player] = [self.random.choice(army_options)]
         else:
             self.armies[self.player] = army_options
