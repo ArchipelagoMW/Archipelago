@@ -12,7 +12,6 @@ class CMTestBase(WorldTestBase):
 
     def world_setup(self, *args, **kwargs):
         self.options = copy(self.options)
-        self.options["accessibility"] = "minimal"
         super().world_setup(*args, **kwargs)
         if self.constructed:
             self.world = self.multiworld.worlds[self.player]  # noqa
