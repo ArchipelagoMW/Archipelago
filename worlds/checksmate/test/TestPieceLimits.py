@@ -5,6 +5,8 @@ from worlds.checksmate import CMWorld, Options
 
 
 # I don't like that this generates many entire seeds just to check some global logic.
+# TODO(chesslogic): Convert as much of this as possible to use test.bases, not WorldTestBase.
+
 # TODO(chesslogic): find_piece_limit should accept an army option value. Store piece distribution on some other helper
 
 
