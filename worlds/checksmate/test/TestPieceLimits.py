@@ -15,7 +15,6 @@ class PieceLimitTestBase(CMTestBase):
 
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
-        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
         super().world_setup(*args, **kwargs)
 
     def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int) -> None:
@@ -37,6 +36,11 @@ class PieceLimitTestBase(CMTestBase):
 
 
 class TestChaosPieceLimits(PieceLimitTestBase):
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_chaos
+        super().world_setup(*args, **kwargs)
+
     def test_no_options(self) -> None:
         # self.options["fairy_chess_army"] = "chaos"
         expected_minors = 0
@@ -48,8 +52,8 @@ class TestChaosPieceLimits(PieceLimitTestBase):
 class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
-        self.options["fairy_chess_army"] = "chaos"
-        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_chaos
         self.options["minor_piece_limit_by_type"] = 2
         self.options["major_piece_limit_by_type"] = 2
         self.options["queen_piece_limit_by_type"] = 1
@@ -66,8 +70,8 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
 class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
-        self.options["fairy_chess_army"] = "chaos"
-        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_chaos
         self.options["minor_piece_limit_by_type"] = 1
         self.options["major_piece_limit_by_type"] = 1
         self.options["queen_piece_limit_by_type"] = 1
@@ -84,8 +88,8 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
 class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
-        self.options["fairy_chess_army"] = "chaos"
-        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_chaos
         self.options["minor_piece_limit_by_type"] = 2
         self.options["major_piece_limit_by_type"] = 2
         self.options["queen_piece_limit_by_type"] = 2
@@ -102,8 +106,8 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
 class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
-        self.options["fairy_chess_army"] = "chaos"
-        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_chaos
         self.options["minor_piece_limit_by_type"] = 5
         self.options["major_piece_limit_by_type"] = 1
         self.options["queen_piece_limit_by_type"] = 3
@@ -121,6 +125,7 @@ class TestStablePieceLimits(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
         self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
+        super().world_setup(*args, **kwargs)
 
     def test_no_options(self) -> None:
         expected_minors = 0
@@ -132,6 +137,8 @@ class TestStablePieceLimits(PieceLimitTestBase):
 class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_fide
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_stable
         self.options["minor_piece_limit_by_type"] = 2
         self.options["major_piece_limit_by_type"] = 2
         self.options["queen_piece_limit_by_type"] = 1
@@ -148,6 +155,8 @@ class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
 class TestStablePieceLimitsOfThree(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_fide
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_stable
         self.options["minor_piece_limit_by_type"] = 3
         self.options["major_piece_limit_by_type"] = 3
         self.options["queen_piece_limit_by_type"] = 3
@@ -164,6 +173,8 @@ class TestStablePieceLimitsOfThree(PieceLimitTestBase):
 class TestStablePieceLimitsByVariety(PieceLimitTestBase):
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_fide
+        self.options["fairy_chess_army"] = Options.FairyChessArmy.option_stable
         self.options["minor_piece_limit_by_type"] = 4
         self.options["major_piece_limit_by_type"] = 2
         self.options["queen_piece_limit_by_type"] = 3
