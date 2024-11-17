@@ -107,7 +107,7 @@ def determine_max_material(opts: CMOptions):
     return determine_material(opts, 46)
 
 
-def determine_relaxation(opts: CMOptions):
+def determine_relaxation(opts: CMOptions) -> int:
     if opts.difficulty.value == opts.difficulty.option_bullet:
         return 120
     if opts.difficulty.value == opts.difficulty.option_relaxed:

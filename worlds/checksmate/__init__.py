@@ -71,7 +71,7 @@ class CMWorld(World):
         5: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
     }
 
-    def __init__(self, multiworld: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super(CMWorld, self).__init__(multiworld, player)
         self.locked_locations = []
 
@@ -141,10 +141,10 @@ class CMWorld(World):
         data = item_table[name]
         return CMItem(name, data.classification, data.code, self.player)
 
-    def set_rules(self):
+    def set_rules(self) -> None:
         set_rules(self.multiworld, self.player, self.options)
 
-    def create_items(self):
+    def create_items(self) -> None:
         super_sized = self.options.goal.value != self.options.goal.option_single
         # for enemy_pawn in self.item_name_groups["Enemy Pawn"]:
         #     self.multiworld.push_precollected(self.create_item(enemy_pawn))
@@ -354,7 +354,7 @@ class CMWorld(World):
 
         self.multiworld.itempool += items
 
-    def consume_item(self, chosen_item: str, locked_items: Dict[str, int]):
+    def consume_item(self, chosen_item: str, locked_items: Dict[str, int]) -> bool:
         if chosen_item not in self.items_used[self.player]:
             self.items_used[self.player][chosen_item] = 0
         self.items_used[self.player][chosen_item] += 1
@@ -418,7 +418,7 @@ class CMWorld(World):
         return material
 
     # ensures the Castling location is reachable
-    def lock_new_items(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
+    def lock_new_items(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]) -> None:
         if self.options.accessibility.value == self.options.accessibility.option_minimal:
             return
         if chosen_item == "Progressive Major To Queen":
@@ -435,7 +435,7 @@ class CMWorld(World):
 
         return total_majors - total_upgrades
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         region = Region("Menu", self.player, self.multiworld)
         for loc_name in location_table:
             loc_data = location_table[loc_name]
@@ -465,7 +465,7 @@ class CMWorld(World):
             return "Progressive Pawn Forwardness"
         return "Progressive Pocket Gems"
 
-    def generate_basic(self):
+    def generate_basic(self) -> None:
         if self.options.goal.value == self.options.goal.option_single:
             victory_item = create_item_with_correct_settings(self.player, "Victory")
             self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(victory_item)

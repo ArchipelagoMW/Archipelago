@@ -7,13 +7,13 @@ from . import CMTestBase
 
 class PieceLimitTestBase(CMTestBase):
 
-    def world_setup(self, *args, **kwargs):
+    def world_setup(self, *args, **kwargs) -> None:
         super().world_setup(*args, **kwargs)
         self.NO_CHILDREN = self.world.PieceLimitCascade.NO_CHILDREN
         self.ACTUAL_CHILDREN = self.world.PieceLimitCascade.ACTUAL_CHILDREN
         self.POTENTIAL_CHILDREN = self.world.PieceLimitCascade.POTENTIAL_CHILDREN
 
-    def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int):
+    def assert_matches(self, expected_minors: int, expected_majors: int, expected_queens: int) -> None:
         self.assertEqual(0, self.world.find_piece_limit("Progressive Pawn", self.NO_CHILDREN
                                                         ))
         self.assertEqual(expected_minors, self.world.find_piece_limit("Progressive Minor Piece", self.NO_CHILDREN
@@ -23,7 +23,7 @@ class PieceLimitTestBase(CMTestBase):
         self.assertEqual(expected_queens, self.world.find_piece_limit("Progressive Major To Queen", self.NO_CHILDREN
                                                                       ))
 
-    def assert_actuals(self, expected_majors, expected_queens):
+    def assert_actuals(self, expected_majors, expected_queens) -> None:
         actual_queens = self.world.items_used[self.player].get("Progressive Major To Queen", 0)
         self.assertEqual(expected_majors + actual_queens,
                          self.world.find_piece_limit("Progressive Major Piece", self.ACTUAL_CHILDREN))
@@ -32,7 +32,7 @@ class PieceLimitTestBase(CMTestBase):
 
 
 class TestChaosPieceLimits(PieceLimitTestBase):
-    def test_no_options(self):
+    def test_no_options(self) -> None:
         # self.options["fairy_chess_army"] = "chaos"
         expected_minors = 0
         expected_majors = 0
@@ -49,7 +49,7 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
         "queen_piece_limit_by_type": 1,
     }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         expected_minors = 22
         expected_majors = 14
         expected_queens = 6
@@ -66,7 +66,7 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
         "queen_piece_limit_by_type": 1,
     }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         expected_minors = 11
         expected_majors = 7
         expected_queens = 6
@@ -83,7 +83,7 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
         "queen_piece_limit_by_type": 2,
     }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         expected_minors = 22
         expected_majors = 14
         expected_queens = 12
@@ -100,7 +100,7 @@ class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
         "queen_piece_limit_by_type": 3,
     }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         expected_minors = 55
         expected_majors = 7
         expected_queens = 18
@@ -113,7 +113,7 @@ class TestStablePieceLimits(PieceLimitTestBase):
         "fairy_chess_piece_collection": "configure",
     }
 
-    def test_no_options(self):
+    def test_no_options(self) -> None:
         expected_minors = 0
         expected_majors = 0
         expected_queens = 0
@@ -127,7 +127,7 @@ class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
         "queen_piece_limit_by_type": 1,
     }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         expected_minors = 4
         expected_majors = 2
         expected_queens = 1
@@ -142,7 +142,7 @@ class TestStablePieceLimitsOfThree(PieceLimitTestBase):
         "queen_piece_limit_by_type": 3,
     }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         expected_minors = 6
         expected_majors = 3
         expected_queens = 3
@@ -158,7 +158,7 @@ class TestStablePieceLimitsByVariety(PieceLimitTestBase):
         "queen_piece_limit_by_type": 3,
     }
 
-    def test_limit(self):
+    def test_limit(self) -> None:
         expected_minors = 8
         expected_majors = 1
         expected_queens = 3

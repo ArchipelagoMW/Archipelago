@@ -10,7 +10,7 @@ class CMTestBase(WorldTestBase):
     world: CMWorld
     player: ClassVar[int] = 1
 
-    def world_setup(self, *args, **kwargs):
+    def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)
         super().world_setup(*args, **kwargs)
         if self.constructed:

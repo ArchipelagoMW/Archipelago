@@ -4,7 +4,7 @@ from .. import determine_difficulty, CMOptions
 
 class MaterialStateTestBase(CMTestBase):
 
-    def world_setup(self, *args, **kwargs):
+    def world_setup(self, *args, **kwargs) -> None:
         self.options["goal"] = "single"
         self.options["difficulty"] = "grandmaster"
         super().world_setup(*args, **kwargs)
@@ -15,7 +15,7 @@ class MaterialStateTestBase(CMTestBase):
         del self.options["goal"]
         del self.options["difficulty"]
 
-    def test_basic_fill(self):
+    def test_basic_fill(self) -> None:
         # this is mostly to demonstrate that collect fundamentally acquires the items and to show that setUp sets up
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Progressive Pawn"])
         self.assertEqual(0, self.multiworld.state.prog_items[self.player]["Material"])
@@ -31,7 +31,7 @@ class TestSimpleMaterial(MaterialStateTestBase):
 
     If this fails, it's not necessarily the fault of collect(), it might be that the generator isn't adding enough items
     """
-    def test_no_options(self):
+    def test_no_options(self) -> None:
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertLessEqual(4150 * self.difficulty, past_material)
@@ -40,7 +40,7 @@ class TestSimpleMaterial(MaterialStateTestBase):
 
 class TestCyclicMaterial(MaterialStateTestBase):
     """Removes all material, then adds it back again. This tests remove() via sledgehammer method"""
-    def test_no_options(self):
+    def test_no_options(self) -> None:
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
@@ -57,7 +57,7 @@ class TestCyclicMaterial(MaterialStateTestBase):
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
 
     """Same as before, but backward, to test "children" logic"""
-    def test_backward(self):
+    def test_backward(self) -> None:
         self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertEqual(past_material, self.multiworld.state.prog_items[self.player]["Material"])
