@@ -7,6 +7,7 @@ import Utils
 import os
 import hashlib
 
+SCRIPT_DIR = os.path.join(os.path.dirname(__file__))
 
 CHECKSUM_GSTLA = "8efe8b2aaed97149e897570cd123ff6e"
 
@@ -78,8 +79,8 @@ class GSTLAPatchExtension(APPatchExtension):
     def apply_gstla_rando(caller: GSTLADeltaPatch, rom: bytes, patch_file: str) -> bytes:
         import requests
         ap_settings = caller.get_file(patch_file)
-        # TODO: Update with actual endpoint from public rando site
-        response = requests.post("http://localhost:3000/import_ap_ajax",
+        # response = requests.post("http://localhost:3000/import_ap_ajax",
+        response = requests.post("https://gs2randomiser.com/import_ap_ajax",
                                  data=ap_settings,
                                  allow_redirects=False,
                                  headers={
