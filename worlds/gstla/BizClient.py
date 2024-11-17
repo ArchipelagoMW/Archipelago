@@ -204,10 +204,11 @@ class GSTLAClient(BizHawkClient):
                     shuffled_flag = self.djinn_ram_to_rom[flag + _DataLocations.DJINN_FLAGS.initial_flag]
                     # TODO: this may be wrong once djinn are events
                     self.checked_djinn.add(self.djinn_flag_map[shuffled_flag])
-                    locs = self.flag_map.get(shuffled_flag, None)
-                    # logger.debug("orig_flag: %s, shuffle flag: %s, locs: %s", hex(flag), hex(shuffled_flag), locs)
-                    assert locs is not None, "Got null locations for flag: %s" % hex(shuffled_flag)
-                    self.temp_locs |= locs
+                    # TODO: if djinn ever become proper items this code would be needed
+                    # locs = self.flag_map.get(shuffled_flag, None)
+                    # # logger.debug("orig_flag: %s, shuffle flag: %s, locs: %s", hex(flag), hex(shuffled_flag), locs)
+                    # assert locs is not None, "Got null locations for flag: %s" % hex(shuffled_flag)
+                    # self.temp_locs |= locs
                 part_int >>= 1
 
     def _check_common_flags(self, data_loc: _DataLocations, data: List[bytes]) -> None:
