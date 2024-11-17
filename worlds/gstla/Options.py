@@ -67,8 +67,8 @@ class RevealHiddenItem(Toggle):
 
 class ItemShuffle(Choice):
     """Determine which locations in the game are part of the pool.
-    All Chests and Tablets includes all chests and tablets and does not include hidden items from pots, barrels, dug up.
-    All Locations includes everything from the vanilla game, including hidden items in pots, barrels, scooped up, covered in leaves or on the overworld."""
+    All Chests and Tablets includes all chests and tablets and does not include hidden items from pots, barrels, dug up. Roughly 100 less locations to check from All Items
+    All Items includes everything from the vanilla game, including hidden items in pots, barrels, scooped up, covered in leaves or on the overworld. Rougly 320 locations in total."""
     display_name = "Item Shuffle"
     option_all_chests_and_tablets = 2
     option_all_items = 3
@@ -77,8 +77,8 @@ class ItemShuffle(Choice):
 class OmitLocations(Choice):
     """Choose to omit locations containing optional harder boss fights
     No Omission keeps all super bosses in play.
-    Omit Anemos Inner Sanctum omits Anemos Inner Sanctum.
-    Omit Superbosses and Inner Sanctum omits all super bosses and Anemos Inner Sanctum.
+    Omit Anemos Inner Sanctum omits Anemos Inner Sanctum. Removes roughly 4 locations from the pool.
+    Omit Superbosses and Inner Sanctum omits all super bosses and Anemos Inner Sanctum. Removes roughly 7 locations from the pool
     """
     option_no_omission = 0
     option_omit_anemos_inner_sanctum = 1
@@ -144,8 +144,8 @@ class AdjustPsyPower(Toggle):
     display_name = "Adjust Psynergy Power"
 
 class DjinnShuffle(Choice):
-    """How djinn should be placed in the multiworld.
-    Note currently Djinn can only be placed in other djinn locations in their own world due to game limitations.
+    """How djinn should be placed in your own world.
+    Note currently Djinn can only be placed in djinn locations in their own world due to game limitations.
     """
     display_name = "Shuffle Djinn"
     option_vanilla = 0
