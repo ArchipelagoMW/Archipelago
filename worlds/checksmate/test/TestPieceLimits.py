@@ -42,7 +42,6 @@ class TestChaosPieceLimits(PieceLimitTestBase):
 
 class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_piece_collection": 2,
         "minor_piece_limit_by_type": 2,
@@ -60,7 +59,6 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
 
 class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_piece_collection": "configure",
         "minor_piece_limit_by_type": 1,
@@ -78,7 +76,6 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
 
 class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_piece_collection": "configure",
         "minor_piece_limit_by_type": 2,
@@ -96,7 +93,6 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
 
 class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "fairy_chess_army": "chaos",
         "fairy_chess_piece_collection": "configure",
         "minor_piece_limit_by_type": 5,
@@ -114,7 +110,6 @@ class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
 
 class TestStablePieceLimits(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "fairy_chess_piece_collection": "configure",
     }
 
@@ -127,7 +122,6 @@ class TestStablePieceLimits(PieceLimitTestBase):
 
 class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "minor_piece_limit_by_type": 2,
         "major_piece_limit_by_type": 2,
         "queen_piece_limit_by_type": 1,
@@ -143,7 +137,6 @@ class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
 
 class TestStablePieceLimitsOfThree(PieceLimitTestBase):
     options = {
-        "accessibility": "minimal",
         "minor_piece_limit_by_type": 3,
         "major_piece_limit_by_type": 3,
         "queen_piece_limit_by_type": 3,
