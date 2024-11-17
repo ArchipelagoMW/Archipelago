@@ -105,8 +105,8 @@ function on_player_changed_position(event)
     end
     local target_direction = exit_table[outbound_direction]
 
-	local target_position = {(CHUNK_OFFSET[target_direction][1] + last_x_chunk) * 32 + 16,
-							 (CHUNK_OFFSET[target_direction][2] + last_y_chunk) * 32 + 16}
+    local target_position = {(CHUNK_OFFSET[target_direction][1] + last_x_chunk) * 32 + 16,
+                             (CHUNK_OFFSET[target_direction][2] + last_y_chunk) * 32 + 16}
     target_position = character.surface.find_non_colliding_position(character.prototype.name,
                                                                     target_position, 32, 0.5)
     if target_position ~= nil then
@@ -144,7 +144,7 @@ function count_energy_bridges()
     return count
 end
 function get_energy_increment(bridge)
-	return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
+    return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
 end
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
@@ -152,15 +152,15 @@ function on_check_energy_link(event)
     if event.tick % 60 == 30 then
         local force = "player"
         local bridges = storage.energy_link_bridges
-		local bridgecount = count_energy_bridges()
-		storage.forcedata[force].energy_bridges = bridgecount
+        local bridgecount = count_energy_bridges()
+        storage.forcedata[force].energy_bridges = bridgecount
         if storage.forcedata[force].energy == nil then
             storage.forcedata[force].energy = 0
         end
         if storage.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
             for i, bridge in pairs(bridges) do
                 if validate_energy_link_bridge(i, bridge) then
-					energy_increment = get_energy_increment(bridge)
+                    energy_increment = get_energy_increment(bridge)
                     if bridge.energy > energy_increment*3 then
                         storage.forcedata[force].energy = storage.forcedata[force].energy + (energy_increment * ENERGY_LINK_EFFICIENCY)
                         bridge.energy = bridge.energy - energy_increment
@@ -170,7 +170,7 @@ function on_check_energy_link(event)
         end
         for i, bridge in pairs(bridges) do
             if validate_energy_link_bridge(i, bridge) then
-				energy_increment = get_energy_increment(bridge)
+                energy_increment = get_energy_increment(bridge)
                 if storage.forcedata[force].energy < energy_increment and bridge.quality.level == 0 then
                     break
                 end
@@ -183,7 +183,7 @@ function on_check_energy_link(event)
     end
 end
 function string_starts_with(str, start)
-	return str:sub(1, #start) == start
+    return str:sub(1, #start) == start
 end
 function validate_energy_link_bridge(unit_number, entity)
     if not entity then
@@ -200,16 +200,16 @@ function validate_energy_link_bridge(unit_number, entity)
 end
 function on_energy_bridge_constructed(entity)
     if entity and entity.valid then
-		if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
-			storage.energy_link_bridges[entity.unit_number] = entity
-		end
-	end
+        if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+            storage.energy_link_bridges[entity.unit_number] = entity
+        end
+    end
 end
 function on_energy_bridge_removed(entity)
-	if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
-		if storage.energy_link_bridges[entity.unit_number] == nil then return end
-		storage.energy_link_bridges[entity.unit_number] = nil
-	end
+    if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+        if storage.energy_link_bridges[entity.unit_number] == nil then return end
+        storage.energy_link_bridges[entity.unit_number] = nil
+    end
 end
 if (ENERGY_INCREMENT) then
     script.on_event(defines.events.on_tick, on_check_energy_link)
