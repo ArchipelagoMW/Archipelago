@@ -1,5 +1,6 @@
 import functools
 
+from types import NoneType
 from typing import Callable, List, Optional, Self, Tuple, Union
 
 from BaseClasses import CollectionState, Req
@@ -115,7 +116,9 @@ def any_req_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionSt
 
 
 @functools.lru_cache(maxsize=None)
-def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq]) -> Callable[[CollectionState], bool]:
+def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq, Req, None]) -> Callable[[CollectionState], bool]:
+    if isinstance(req, (Req, NoneType)):
+        return req_to_rule(player, req)
     bare_reqs = []
     nested_reqs = []
     is_any = isinstance(req, AnyReq)
@@ -133,6 +136,8 @@ def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq]) -> Callable[[C
     if is_any:
         if bare_reqs:
             rules.append(any_req_to_rule(player, *bare_reqs))
+        if len(rules) == 1:
+            return rules[0]
 
         def full_rule(state: CollectionState) -> bool:
             for rule in rules:
@@ -147,6 +152,8 @@ def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq]) -> Callable[[C
         rules = [r for r in rules if r != RULE_ALWAYS_TRUE]
         if not rules:
             return RULE_ALWAYS_TRUE
+        if len(rules) == 1:
+            return rules[0]
 
         def full_rule(state: CollectionState) -> bool:
             for rule in rules:
