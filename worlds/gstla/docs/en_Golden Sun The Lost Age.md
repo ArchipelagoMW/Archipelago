@@ -44,7 +44,7 @@ The item will disappear and the location should be checked. Unfortunatley you do
 
 ## When the player receives an item, what happens?
 
-You will only receive items while outside of battles. When your inventory is full no more items will be granted unless space is made available.
+You will only receive items while outside of battles and not on the overworld. When your inventory is full, you will be prompted to drop an item to make space so please keep that in mind.
 To help reduce issues with inventory management the Psynergy items such as Douse Drop are instead learned as Psynergy directly instead of given as an item. 
 
 ## Can I play offline?
