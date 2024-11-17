@@ -4,7 +4,6 @@ from . import CMTestBase
 from worlds.checksmate import CMWorld, Options
 
 
-
 # I don't like that this generates many entire seeds just to check some global logic.
 # TODO(chesslogic): find_piece_limit should accept an army option value. Store piece distribution on some other helper
 
@@ -47,13 +46,14 @@ class TestChaosPieceLimits(PieceLimitTestBase):
 
 
 class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
-    options = {
-        "fairy_chess_army": "chaos",
-        "fairy_chess_piece_collection": 2,
-        "minor_piece_limit_by_type": 2,
-        "major_piece_limit_by_type": 2,
-        "queen_piece_limit_by_type": 1,
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["fairy_chess_army"] = "chaos"
+        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["minor_piece_limit_by_type"] = 2
+        self.options["major_piece_limit_by_type"] = 2
+        self.options["queen_piece_limit_by_type"] = 1
+        super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
         expected_minors = 22
@@ -64,13 +64,14 @@ class TestChaosPieceLimitsOfVanilla(PieceLimitTestBase):
 
 
 class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
-    options = {
-        "fairy_chess_army": "chaos",
-        "fairy_chess_piece_collection": "configure",
-        "minor_piece_limit_by_type": 1,
-        "major_piece_limit_by_type": 1,
-        "queen_piece_limit_by_type": 1,
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["fairy_chess_army"] = "chaos"
+        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["minor_piece_limit_by_type"] = 1
+        self.options["major_piece_limit_by_type"] = 1
+        self.options["queen_piece_limit_by_type"] = 1
+        super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
         expected_minors = 11
@@ -81,13 +82,14 @@ class TestChaosPieceLimitsOfOne(PieceLimitTestBase):
 
 
 class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
-    options = {
-        "fairy_chess_army": "chaos",
-        "fairy_chess_piece_collection": "configure",
-        "minor_piece_limit_by_type": 2,
-        "major_piece_limit_by_type": 2,
-        "queen_piece_limit_by_type": 2,
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["fairy_chess_army"] = "chaos"
+        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["minor_piece_limit_by_type"] = 2
+        self.options["major_piece_limit_by_type"] = 2
+        self.options["queen_piece_limit_by_type"] = 2
+        super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
         expected_minors = 22
@@ -98,13 +100,14 @@ class TestChaosPieceLimitsOfTwo(PieceLimitTestBase):
 
 
 class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
-    options = {
-        "fairy_chess_army": "chaos",
-        "fairy_chess_piece_collection": "configure",
-        "minor_piece_limit_by_type": 5,
-        "major_piece_limit_by_type": 1,
-        "queen_piece_limit_by_type": 3,
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["fairy_chess_army"] = "chaos"
+        self.options["fairy_chess_piece"] = Options.FairyChessPieces.option_full
+        self.options["minor_piece_limit_by_type"] = 5
+        self.options["major_piece_limit_by_type"] = 1
+        self.options["queen_piece_limit_by_type"] = 3
+        super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
         expected_minors = 55
@@ -115,9 +118,9 @@ class TestChaosPieceLimitsByVariety(PieceLimitTestBase):
 
 
 class TestStablePieceLimits(PieceLimitTestBase):
-    options = {
-        "fairy_chess_piece_collection": "configure",
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["fairy_chess_pieces"] = Options.FairyChessPieces.option_full
 
     def test_no_options(self) -> None:
         expected_minors = 0
@@ -127,11 +130,12 @@ class TestStablePieceLimits(PieceLimitTestBase):
 
 
 class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
-    options = {
-        "minor_piece_limit_by_type": 2,
-        "major_piece_limit_by_type": 2,
-        "queen_piece_limit_by_type": 1,
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["minor_piece_limit_by_type"] = 2
+        self.options["major_piece_limit_by_type"] = 2
+        self.options["queen_piece_limit_by_type"] = 1
+        super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
         expected_minors = 4
@@ -142,11 +146,12 @@ class TestStablePieceLimitsOfVanilla(PieceLimitTestBase):
 
 
 class TestStablePieceLimitsOfThree(PieceLimitTestBase):
-    options = {
-        "minor_piece_limit_by_type": 3,
-        "major_piece_limit_by_type": 3,
-        "queen_piece_limit_by_type": 3,
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["minor_piece_limit_by_type"] = 3
+        self.options["major_piece_limit_by_type"] = 3
+        self.options["queen_piece_limit_by_type"] = 3
+        super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
         expected_minors = 6
@@ -157,11 +162,12 @@ class TestStablePieceLimitsOfThree(PieceLimitTestBase):
 
 
 class TestStablePieceLimitsByVariety(PieceLimitTestBase):
-    options = {
-        "minor_piece_limit_by_type": 4,
-        "major_piece_limit_by_type": 2,
-        "queen_piece_limit_by_type": 3,
-    }
+    def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
+        self.options["minor_piece_limit_by_type"] = 4
+        self.options["major_piece_limit_by_type"] = 2
+        self.options["queen_piece_limit_by_type"] = 3
+        super().world_setup(*args, **kwargs)
 
     def test_limit(self) -> None:
         expected_minors = 8
