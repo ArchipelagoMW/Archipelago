@@ -1,3 +1,5 @@
+from copy import copy
+
 from . import CMTestBase
 from .. import determine_difficulty, CMOptions
 
@@ -5,15 +7,13 @@ from .. import determine_difficulty, CMOptions
 class MaterialStateTestBase(CMTestBase):
 
     def world_setup(self, *args, **kwargs) -> None:
+        self.options = copy(self.options)
         self.options["goal"] = "single"
         self.options["difficulty"] = "grandmaster"
         super().world_setup(*args, **kwargs)
 
         # this class ultimately isn't trying to test this relatively simple function
         self.difficulty = determine_difficulty(self.world.options)
-
-        del self.options["goal"]
-        del self.options["difficulty"]
 
     def test_basic_fill(self) -> None:
         # this is mostly to demonstrate that collect fundamentally acquires the items and to show that setUp sets up
