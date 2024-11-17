@@ -9,6 +9,7 @@ from .AutopelagoDefinitions import GAME_NAME, AutopelagoGameRequirement, Autopel
     generic_nonprogression_item_table, total_available_rat_count, max_required_rat_count, \
     AutopelagoNonProgressionItemType, autopelago_item_classification_of, location_name_to_nonprogression_item, \
     autopelago_regions
+from .options import ArchipelagoGameOptions
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -93,6 +94,8 @@ class AutopelagoWorld(World):
     topology_present = False  # it's static, so setting this to True isn't actually helpful
     data_version = 0
     web = AutopelagoWebWorld()
+    options_dataclass = ArchipelagoGameOptions
+    options: ArchipelagoGameOptions
 
     # item_name_to_id and location_name_to_id must be filled VERY early, but seemingly only because
     # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
