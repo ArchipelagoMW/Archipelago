@@ -266,7 +266,7 @@ class RandomCharmCosts(NamedRange):
     Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
 
     display_name = "Randomize Charm Notch Costs"
-    range_start = 0
+    range_start = -2
     range_end = 240
     default = -1
     vanilla_costs: typing.List[int] = vanilla_costs
