@@ -821,7 +821,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
         # drop a rudeling, icebolt or ice bomb
         "Overworld to West Garden from Furnace":
-            [["IG3"]],
+            [["IG3"], ["LS1"]],
     },
     "East Overworld": {
         "Above Ruined Passage":

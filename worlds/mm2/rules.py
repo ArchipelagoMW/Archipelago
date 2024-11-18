@@ -133,28 +133,6 @@ def set_rules(world: "MM2World") -> None:
                         # Wily Machine needs all three weaknesses present, so allow
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
-            # handle special cases
-            for boss in range(14):
-                for weapon in (1, 3, 6, 8):
-                    if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
-                            not any(world.weapon_damage[i][boss] > 0 for i in range(1, 8) if i != weapon)):
-                        # Weapon does not have enough possible ammo to kill the boss, raise the damage
-                        if boss == 9:
-                            if weapon != 3:
-                                # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
-                                world.weapon_damage[weapon][boss] = 0
-                                weakness = world.random.choice((2, 3, 4, 5, 7, 8))
-                                world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                        elif boss == 11:
-                            if weapon == 1:
-                                # Atomic Fire cannot be Boobeam Trap's only weakness
-                                world.weapon_damage[weapon][boss] = 0
-                                weakness = world.random.choice((2, 3, 4, 5, 6, 7, 8))
-                                world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
-                        else:
-                            world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
-            starting = world.options.starting_robot_master.value
-            world.weapon_damage[0][starting] = 1
 
         for p_boss in world.options.plando_weakness:
             for p_weapon in world.options.plando_weakness[p_boss]:
@@ -167,6 +145,28 @@ def set_rules(world: "MM2World") -> None:
                     world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
                 world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
                     = world.options.plando_weakness[p_boss][p_weapon]
+
+        # handle special cases
+        for boss in range(14):
+            for weapon in (1, 2, 3, 6, 8):
+                if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
+                        not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[weapon]
+                                for i in range(9) if i != weapon)):
+                    # Weapon does not have enough possible ammo to kill the boss, raise the damage
+                    if boss == 9:
+                        if weapon in (1, 6):
+                            # Atomic Fire and Crash Bomber cannot be Picopico-kun's only weakness
+                            world.weapon_damage[weapon][boss] = 0
+                            weakness = world.random.choice((2, 3, 4, 5, 7, 8))
+                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                    elif boss == 11:
+                        if weapon == 1:
+                            # Atomic Fire cannot be Boobeam Trap's only weakness
+                            world.weapon_damage[weapon][boss] = 0
+                            weakness = world.random.choice((2, 3, 4, 5, 6, 7, 8))
+                            world.weapon_damage[weakness][boss] = minimum_weakness_requirement[weakness]
+                    else:
+                        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
 
         if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
             world.weapon_damage[0][world.options.starting_robot_master.value] = weapon_damage[0][world.options.starting_robot_master.value]
@@ -209,11 +209,11 @@ def set_rules(world: "MM2World") -> None:
                     continue
                 highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
                 uses = weapon_energy[wp] // weapon_costs[wp]
-                used_weapons[boss].add(wp)
                 if int(uses * boss_damage[wp]) > boss_health[boss]:
                     used = ceil(boss_health[boss] / boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * used
                     boss_health[boss] = 0
+                    used_weapons[boss].add(wp)
                 elif highest <= 0:
                     # we are out of weapons that can actually damage the boss
                     # so find the weapon that has the most uses, and apply that as an additional weakness
@@ -221,18 +221,21 @@ def set_rules(world: "MM2World") -> None:
                     # Quick Boomerang and no other, it would only be 28 off from defeating all 9, which Metal Blade should
                     # be able to cover
                     wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight
-                                       if weapon != 0)
+                                       if weapon != 0 and (weapon != 8 or boss != 12))
+                    # Wily Machine cannot under any circumstances take damage from Time Stopper, prevent this
                     world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
                     used = min(int(weapon_energy[wp] // weapon_costs[wp]),
-                               ceil(boss_health[boss] // minimum_weakness_requirement[wp]))
+                               ceil(boss_health[boss] / minimum_weakness_requirement[wp]))
                     weapon_energy[wp] -= weapon_costs[wp] * used
                     boss_health[boss] -= int(used * minimum_weakness_requirement[wp])
                     weapon_weight.pop(wp)
+                    used_weapons[boss].add(wp)
                 else:
                     # drain the weapon and continue
                     boss_health[boss] -= int(uses * boss_damage[wp])
                     weapon_energy[wp] -= weapon_costs[wp] * uses
                     weapon_weight.pop(wp)
+                    used_weapons[boss].add(wp)
 
         world.wily_5_weapons = {boss: sorted(used_weapons[boss]) for boss in used_weapons}
 
