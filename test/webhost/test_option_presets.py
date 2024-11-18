@@ -18,7 +18,7 @@ class TestOptionPresets(unittest.TestCase):
                             # some options may need verification to ensure the provided option is actually valid
                             # pass in all plando options in case a preset wants to require certain plando options
                             # for some reason
-                            option.verify(world_type, "Test Player", PlandoOptions(0b1111))
+                            option.verify(world_type, "Test Player", PlandoOptions(sum(PlandoOptions)))
                             supported_types = [NumericOption, OptionSet, OptionList, ItemDict]
                             if not any([issubclass(option.__class__, t) for t in supported_types]):
                                 self.fail(f"'{option_name}' in preset '{preset_name}' for game '{game_name}' "
