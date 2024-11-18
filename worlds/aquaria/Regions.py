@@ -120,7 +120,7 @@ def _has_mini_bosses(state: CollectionState, player: int) -> bool:
 
 
 def _has_secrets(state: CollectionState, player: int) -> bool:
-    """The secrets have been acquired int he `state` of the `player`"""
+    """The secrets have been acquired in the `state` of the `player`"""
     return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
                           ItemNames.THIRD_SECRET_OBTAINED}, player)
 
