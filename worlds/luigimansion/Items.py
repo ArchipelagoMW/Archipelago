@@ -71,7 +71,6 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Boo Radar": LMItemData("Upgrade", 39, IC.progression),
     "Poltergust 4000": LMItemData("Upgrade", 40, IC.useful),
     "Gold Diamond": LMItemData("Filler", 49, IC.progression, 5),
-    "Piece of Mario": LMItemData("Mario Piece", 50, IC.progression)
 }
 
 filler_items: Dict[str, LMItemData] = {

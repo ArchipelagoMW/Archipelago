@@ -90,16 +90,6 @@ class LMWorld(World):
     def __init__(self, *args, **kwargs):
         self.itempool: list[LMItem] = []
         self.pre_fill_items: list[LMItem] = []
-
-        # self.vanilla_dungeon_item_names: set[str] = set()
-        # self.own_dungeon_item_names: set[str] = set()
-        # self.any_dungeon_item_names: set[str] = set()
-
-        # self.island_number_to_chart_name = ISLAND_NUMBER_TO_CHART_NAME.copy()
-
-        # self.required_boss_item_locations: list[str] = []
-        # self.required_dungeons: list[str] = []
-        # self.banned_dungeons: list[str] = []
         super(LMWorld, self).__init__(*args, **kwargs)
 
     # def _get_access_rule(self, region):
@@ -349,21 +339,24 @@ class LMWorld(World):
                     #    add_rule(entry,
                     #             lambda state: state.has("Progressive Flower", self.player, 4))
                     # else:
-                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                    for item in entry.access:
+                        add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         if self.options.knocksanity:
             for location, data in FURNITURE_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
-                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                    for item in entry.access:
+                        add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         if self.options.speedy_spirits:
             for location, data in SPEEDY_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
-                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                    for item in entry.access:
+                        add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         if self.options.portrait_ghosts:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
@@ -371,26 +364,26 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
                     if entry.code == 624:
-                        add_rule(entry, lambda state: state.has_group("Medal", self.player))
+                        add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
                     elif entry.code == 627:
                         add_rule(entry,
-                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
+                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                     else:
-                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                add_rule(entry, lambda state: state.has("Boo Radar", self.player))
+                add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if len(entry.access) != 0:
                     if entry.code == 675:
-                        add_rule(entry, lambda state: state.has_group("Medal", self.player))
+                        add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
                     elif entry.code == 679:
                         add_rule(entry,
-                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
+                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                     else:
-                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         else:
             for location, data in BOO_LOCATION_TABLE.items():
@@ -399,15 +392,15 @@ class LMWorld(World):
                 entry.address = None
                 entry.code = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
-                add_rule(entry, lambda state: state.has("Boo Radar", self.player))
+                add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if len(entry.access) != 0:
                     if entry.code == 675:
-                        add_rule(entry, lambda state: state.has_group("Medal", self.player))
+                        add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
                     elif entry.code == 679:
                         add_rule(entry,
-                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
+                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                     else:
-                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player))
+                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         if self.options.goal == 1:
             rankcalc = 0
@@ -422,14 +415,14 @@ class LMWorld(World):
             else:
                 rankcalc = 5
             loc = self.multiworld.get_location("King Boo", self.player)
-            add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc))
+            add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
 
     def generate_early(self):
-        if self.options.enemizer:
-            set_ghost_type(self.multiworld, self.ghost_affected_regions)
+        # if self.options.enemizer == 1:
+        #     set_ghost_type(self.multiworld, self.ghost_affected_regions)
 
         # If sword mode is Start with Hero's Sword, then send the player a starting sword
-        if self.options.boo_radar:
+        if self.options.boo_radar == 1:
             self.options.start_inventory.value["Boo Radar"] = (
                     self.options.start_inventory.value.get("Boo Radar", 0) + 1
             )
@@ -460,7 +453,8 @@ class LMWorld(World):
             entry = LMLocation(self.player, location, region, data)
             if len(entry.access) != 0:
                 for item in entry.access:
-                    add_rule(entry, lambda state: state.has(item, self.player))
+                    add_rule(entry, lambda state: state.has(item, self.player), "and")
+                    entry.rule_def = item
             if entry.code is None:
                 entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
             region.locations.append(entry)
@@ -469,18 +463,18 @@ class LMWorld(World):
             entry = LMLocation(self.player, location, region, data)
             if len(entry.access) != 0:
                 for item in entry.access:
-                    add_rule(entry, lambda state: state.has(item, self.player))
+                    add_rule(entry, lambda state: state.has(item, self.player), "and")
             region.locations.append(entry)
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
             if entry.code == 5:
-                add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
+                add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
             elif entry.code == 25:
-                add_rule(entry, lambda state: state.has_group("Medal", self.player))
+                add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
             else:
                 for item in entry.access:
-                    add_rule(entry, lambda state: state.has(item, self.player))
+                    add_rule(entry, lambda state: state.has(item, self.player), "and")
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self.multiworld, self.player)

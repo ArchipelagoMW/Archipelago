@@ -17,8 +17,8 @@ def connect(multiworld: MultiWorld, player: int, source: str, target: str,
     name = source + " -> " + target
     connection = Entrance(player, name, source_region)
 
-    if rule:
-        connection.access_rule = rule
+    if rule is not None:
+        add_rule(connection, rule, "and")
 
     for region_to_type in multiworld.worlds[player].ghost_affected_regions:
         if region_to_type == target_region.name:

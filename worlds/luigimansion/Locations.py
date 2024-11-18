@@ -16,6 +16,7 @@ class LMLocationData(NamedTuple):
 class LMLocation(Location):
     game: str = "Luigi's Mansion"
     access: []
+    rule_def: str = ""
     locked_item: Optional[str]
 
     def __init__(self, player: int, name: str, parent: Region, data: LMLocationData):
@@ -53,8 +54,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Base Chests / Locations
     "Luigi's Courage": LMLocationData("Parlor", 708, "Special", 0, []), # Give item during/after E. Gadd cutscene
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furnichest", 233, []),
-    "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Special", 4, # key info replace
-                                             ["Fire Element Medal"]),
+    "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Special", 4, ["Fire Element Medal"]),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furnichest", 187, []),
     "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furnichest", 243, []),
     "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furnichest", 241, []),
