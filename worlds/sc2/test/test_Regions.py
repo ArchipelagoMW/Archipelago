@@ -36,6 +36,6 @@ class TestGridGeneration(Sc2TestBase):
     }
 
     def test_size_matches_exclusions(self):
-        self.assertNotIn(MissionTables.SC2Mission.ZERO_HOUR.mission_name, self.world.regions)
+        self.assertNotIn(MissionTables.SC2Mission.ZERO_HOUR.mission_name, self.multiworld.regions)
         # WoL has 29 missions. -1 for Zero Hour being excluded, +1 for the automatically-added menu location
-        self.assertEqual(len(self.world.regions), 29)
+        self.assertEqual(len(self.multiworld.regions), 29)

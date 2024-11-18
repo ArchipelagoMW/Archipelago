@@ -11,7 +11,7 @@ class Dungeon(object):
         self.small_keys = []
         self.dungeon_items = []
 
-        for region in world.regions.get_regions():
+        for region in world.regions:
             if region.dungeon == self.name:
                 region.dungeon = self
                 self.regions.append(region)

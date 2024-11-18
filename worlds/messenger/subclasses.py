@@ -42,7 +42,7 @@ class MessengerRegion(Region):
         loc_dict = {loc: world.location_name_to_id.get(loc, None) for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
 
-        world.regions.append(self)
+        self.multiworld.regions.append(self)
 
 
 class MessengerLocation(Location):
