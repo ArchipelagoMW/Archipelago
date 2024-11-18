@@ -116,28 +116,28 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17,
-                                             ["Water Element Medal"]),
+                                            ["Water Element Medal"]),
     "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, []),
     "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, []),
     "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33,
-                                               ["Fire Element Medal"]),
+                                              ["Fire Element Medal"]),
     "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Breaker Key", "Blackout"]),
     "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, []),  # requires any kind of element medal
     "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, []),
     "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,
-                                               ["Ice Element Medal"]),
+                                              ["Ice Element Medal"]),
     "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30,
-                                                  ["Ice Element Medal"]),
+                                                ["Ice Element Medal"]),
     "The Well Key": LMLocationData("The Well", 21, "Special", 0, []),  # keyinfo event
     "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24,
-                                              ["Ice Element Medal"]),
+                                             ["Ice Element Medal"]),
     "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
     "Rec Room Clear Chest": LMLocationData("Rec Room", 19, "Chest", 13, []),
     "Conservatory Clear Chest": LMLocationData("Conservatory", 16, "Chest", 12, []),
     "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6,
-                                              ["Fire Element Medal"]),
+                                             ["Fire Element Medal"]),
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
-                                         ["Fire Element Medal", "Boo Release"]),
+                                        ["Fire Element Medal", "Boo Release"]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
     "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]),
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
@@ -164,7 +164,7 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Sealed Room Clear Chest": LMLocationData("Sealed Room", 62, "Chest", 21, []),
     "Armory Clear Chest": LMLocationData("Armory", 63, "Chest", 27, []),
     "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35,
-                                            ["Ice Element Medal"]),
+                                           ["Ice Element Medal"]),
 }
 
 # Adds all waterable plants as locations
