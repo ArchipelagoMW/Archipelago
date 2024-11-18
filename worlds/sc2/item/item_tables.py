@@ -1177,7 +1177,7 @@ item_table = {
     item_names.NYDUS_WORM:
         ItemData(18 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 17, SC2Race.ZERG,
                  classification=ItemClassification.progression),
-    item_names.OMEGA_WORM:
+    item_names.ECHIDNA_WORM:
         ItemData(19 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 18, SC2Race.ZERG,
                  classification=ItemClassification.useful),
     item_names.INFESTED_SIEGE_TANK:
@@ -1485,14 +1485,14 @@ item_table = {
         ItemData(352 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 10, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT),
     item_names.TYRANNOZOR_HEALING_ADAPTATION:
         ItemData(353 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 11, SC2Race.ZERG, parent_item=item_names.ULTRALISK_TYRANNOZOR_ASPECT),
-    item_names.NYDUS_WORM_OMEGA_WORM_SUBTERRANEAN_SCALES:
+    item_names.NYDUS_WORM_ECHIDNA_WORM_SUBTERRANEAN_SCALES:
         ItemData(354 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 12, SC2Race.ZERG, classification=ItemClassification.filler),
-    item_names.NYDUS_WORM_OMEGA_WORM_JORMUNGANDR_STRAIN:
+    item_names.NYDUS_WORM_ECHIDNA_WORM_JORMUNGANDR_STRAIN:
         ItemData(355 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 13, SC2Race.ZERG, classification=ItemClassification.useful),
-    item_names.NYDUS_WORM_OMEGA_WORM_RESOURCE_EFFICIENCY:
+    item_names.NYDUS_WORM_ECHIDNA_WORM_RESOURCE_EFFICIENCY:
         ItemData(356 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 14, SC2Race.ZERG, classification=ItemClassification.useful),
-    item_names.OMEGA_WORM_OUROBOROS_STRAIN:
-        ItemData(357 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 15, SC2Race.ZERG, parent_item=item_names.OMEGA_WORM, classification=ItemClassification.useful),
+    item_names.ECHIDNA_WORM_OUROBOROS_STRAIN:
+        ItemData(357 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 15, SC2Race.ZERG, parent_item=item_names.ECHIDNA_WORM, classification=ItemClassification.useful),
     item_names.NYDUS_WORM_RAVENOUS_APPETITE:
         ItemData(358 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 16, SC2Race.ZERG, parent_item=item_names.NYDUS_WORM, classification=ItemClassification.useful),
     item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS:

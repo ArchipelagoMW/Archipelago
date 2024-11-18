@@ -423,7 +423,7 @@ item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [
     item_names.SPORE_CRAWLER,
     item_names.INFESTED_BUNKER,
     item_names.NYDUS_WORM,
-    item_names.OMEGA_WORM]
+    item_names.ECHIDNA_WORM]
 item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
     item_name for item_name, item_data in item_tables.item_table.items()
     if item_data.type in (
