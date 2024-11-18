@@ -1,6 +1,5 @@
 import functools
 
-from types import NoneType
 from typing import Callable, List, Optional, Tuple, Union
 
 from BaseClasses import CollectionState, Req
@@ -117,7 +116,9 @@ def any_req_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionSt
 
 @functools.lru_cache(maxsize=None)
 def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq, Req, None]) -> Callable[[CollectionState], bool]:
-    if isinstance(req, (Req, NoneType)):
+    if not req:
+        return RULE_ALWAYS_TRUE
+    if isinstance(req, Req):
         return req_to_rule(player, req)
     bare_reqs = []
     nested_reqs = []
