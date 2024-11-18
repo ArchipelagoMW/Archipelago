@@ -88,12 +88,12 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", 0, []),
     "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", 0, []),
     "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", 0, []),
+    "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", 0, []),
 
 
 
     # Game Event Locations
     "Diamond Door":     LMLocationData("Balcony", None, "Event", 0, ["Diamond Key"], "Blackout"),
-    "Storage Room Cage": LMLocationData("Storage Room", None, "Event", 0, [], "Boo Release"),
     # LMLocationData('Nursery', 'Chauncey',  None),
     # LMLocationData('Graveyard', 'Bogmire',  None),
     "Boolossus Boo 1":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),

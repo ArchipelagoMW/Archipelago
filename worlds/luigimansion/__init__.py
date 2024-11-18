@@ -66,12 +66,10 @@ class LMWorld(World):
     item_name_groups = get_item_names_per_category()
     required_client_version = (0, 5, 1)
     web = LMWeb()
-    ghost_affected_regions = {
-        "Anteroom": "No Element",
+    ghost_affected_regions: dict[str, str] = {
         "Wardrobe": "No Element",
         "Laundry Room": "No Element",
         "Hidden Room": "Ice",
-        "Mirror Room": "No Element",
         "Storage Room": "No Element",
         "Kitchen": "Ice",
         "1F Bathroom": "No Element",

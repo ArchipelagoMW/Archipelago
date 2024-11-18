@@ -23,11 +23,13 @@ def connect(multiworld: MultiWorld, player: int, source: str, target: str,
     for region_to_type in multiworld.worlds[player].ghost_affected_regions:
         if region_to_type == target_region.name:
             if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire":
-                add_rule(connection, lambda state: state.has("Water Element Medal", player))
+                add_rule(connection, lambda state: state.has("Water Element Medal", player), "and")
             elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water":
-                add_rule(connection, lambda state: state.has("Ice Element Medal", player))
+                add_rule(connection, lambda state: state.has("Ice Element Medal", player), "and")
             elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice":
-                add_rule(connection, lambda state: state.has("Fire Element Medal", player))
+                add_rule(connection, lambda state: state.has("Fire Element Medal", player), "and")
+            else:
+                pass
 
     source_region.exits.append(connection)
     connection.connect(target_region)
@@ -112,7 +114,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
             lambda state: state.has("Balcony Key", player) and state.has("Boo", player,
                                                                          multiworld.worlds[player].options.balcony_boo_count))
     connect(multiworld, player, "Balcony", "3F Left Hallway",
-            lambda state: state.has("Diamond Key", player))
+            lambda state: state.has("Diamond Key", player) and state.has("Ice Element Medal", player))
     connect(multiworld, player, "3F Left Hallway", "Armory",
             lambda state: state.has("Armory Key", player))
     connect(multiworld, player, "3F Left Hallway", "Telephone Room")
