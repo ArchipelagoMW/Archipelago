@@ -63,9 +63,7 @@ class TestOptionPresets(unittest.TestCase):
                                 )
 
     def test_option_preset_dont_have_unsupported_randoms(self):
-        """Test that option preset values are not a special flavor of 'random' or use from_text to resolve another
-        value.
-        """
+        """Test that option presets are not using 'random' on option types that do not support random."""
         option_types_that_dont_support_random = (OptionSet, OptionDict, OptionList)
         for game_name, world_type in AutoWorldRegister.world_types.items():
             presets = world_type.web.options_presets
