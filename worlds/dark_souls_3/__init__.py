@@ -1568,6 +1568,16 @@ class DarkSouls3World(World):
             "apIdsToItemIds": ap_ids_to_ds3_ids,
             "itemCounts": item_counts,
             "locationIdsToKeys": location_ids_to_keys,
+            # The range of versions of the static randomizer that are compatible
+            # with this slot data. Incompatible versions should have at least a
+            # minor version bump. Pre-release versions should generally only be
+            # compatible with a single version, except very close to a stable
+            # release when no changes are expected.
+            #
+            # This is checked by the static randomizer, which will surface an
+            # error to the user if its version doesn't fall into the allowed
+            # range.
+            "versions": ">=3.0.0-beta.24 <3.1.0",
         }
 
         return slot_data
