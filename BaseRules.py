@@ -1,7 +1,7 @@
 import functools
 
 from types import NoneType
-from typing import Callable, List, Optional, Self, Tuple, Union
+from typing import Callable, List, Optional, Tuple, Union
 
 from BaseClasses import CollectionState, Req
 
@@ -14,7 +14,7 @@ class AnyReq(Tuple):
     
     Also evaluates to True if any entry is None.
     """
-    def __new__(cls, iterable=()) -> Self:
+    def __new__(cls, iterable=()):
         # Unpacks other top-level AnyReqs, and forces a copy of tuples into this type
         def _iter():
             for el in iterable:
@@ -35,7 +35,7 @@ class AllReq(Tuple):
     
     Any entries that are None are implicitly evaluated as True.
     """
-    def __new__(cls, iterable=()) -> Self:
+    def __new__(cls, iterable=()):
         # Unpacks other top-level AllReqs, and forces a copy of tuples into this type
         def _iter():
             for el in iterable:
