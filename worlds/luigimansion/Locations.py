@@ -137,7 +137,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6,
                                              ["Fire Element Medal"]),
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
-                                        ["Fire Element Medal", "Boo Release"]),
+                                        ["Fire Element Medal"]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
     "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]),
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
@@ -750,7 +750,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Twins Access rule=lambda state: state.has_group("Medal", player)), this means any medal will make the twin in logic
     "The Floating Whirlindas":              LMLocationData("Ballroom", 625, "Portrait", 34, []),
     "Shivers, the Wandering Butler":        LMLocationData("Butler's Room", 626, "Portrait", 29,
-                                                    ["Fire Element Medal", "Boo Release"]),
+                                                    ["Fire Element Medal"]),
     "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31, []),
     "Melody Pianissima, the Beautiful Pianist": LMLocationData("Conservatory", 628, "Portrait", 24, []),
     "Mr. Luggs, the Glutton":               LMLocationData("Dining Room", 629, "Portrait", 27, ["Fire Element Medal"]),
@@ -810,7 +810,7 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Nursery Boo": LMLocationData("Nursery", 674, "Boo", 13, []),
     "Twins' Room Boo": LMLocationData("Twins' Room", 675, "Boo", 14, []),  # Requires state.has_group "Medal", 1
     "Laundry Room Boo": LMLocationData("Laundry Room", 676, "Boo", 4, []),
-    "Butler's Room Boo": LMLocationData("Butler's Room", 677, "Boo", 0, ["Fire Element Medal", "Boo Release"]),
+    "Butler's Room Boo": LMLocationData("Butler's Room", 677, "Boo", 0, ["Fire Element Medal"]),
     "Hidden Room Boo": LMLocationData("Hidden Room", 678, "Boo", 1, []),
     "Fortune-Teller's Room Boo": LMLocationData("Fortune-Teller's Room", 679, "Boo", 2, []),
     "Mirror Room Boo": LMLocationData("Mirror Room", 680, "Boo", 3, []),
