@@ -642,7 +642,7 @@ class LMWorld(World):
         #         output_data["Entrances"][entrance.parent_region.name] = entrance.connected_region.name
 
         # Output the plando details to file
-        file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apLM")
+        file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False))
 
