@@ -3,7 +3,7 @@ from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
 from .Aesthetics import generate_shuffled_header_data, generate_shuffled_ow_palettes, generate_curated_level_palette_data, generate_curated_map_palette_data, generate_shuffled_sfx
 from .Levels import level_info_dict, full_bowser_rooms, standard_bowser_rooms, submap_boss_rooms, ow_boss_rooms
-from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
+from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box, text_table
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
 ROM_PLAYER_LIMIT = 65535
@@ -2949,13 +2949,25 @@ def handle_boss_shuffle(rom, world: World):
 
 
 def patch_rom(world: World, rom, player, active_level_dict):
+    # Initial text boxes
     goal_text = generate_goal_text(world)
-
     rom.write_bytes(0x2A6E2, goal_text)
     rom.write_byte(0x2B1D8, 0x80)
 
-    intro_text = generate_text_box("Bowser has stolen all of Mario's abilities. Can you help Mario travel across Dinosaur land to get them back and save the Princess from him?")
-    rom.write_bytes(0x2A5D9, intro_text)
+    intro_text = "Bowser has stolen all of Mario's abilities. Can you help Mario travel across Dinosaur land to get them back and save the Princess from him?"
+    intro_text_box = generate_text_box(intro_text)
+    rom.write_bytes(0x2A5D9, intro_text_box)
+
+    # Plando text
+    for at, text, _ in world.options.plando_texts:
+        if at not in text_table:
+            raise Exception(f"No text target \"{at}\" found.")
+        else:
+            plando_text = text[0]
+            # Trim text to avoid problems writing in ROM
+            plando_text = plando_text[0:139]
+            plando_text_box = generate_text_box(plando_text)
+            rom.write_bytes(text_table[at][0], plando_text_box)
 
     handle_bowser_rooms(rom, world)
     handle_boss_shuffle(rom, world)

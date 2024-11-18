@@ -20,6 +20,10 @@ text_mapping = {
     "#": 0x5A, "(": 0x5B, ")": 0x5C, "'": 0x5D
 }
 
+text_table = {
+    "intro": [0x2A5D9, "Bowser has stolen all of Mario's abilities. Can you help Mario travel across Dinosaur land to get them back and save the Princess from him?"]
+}
+
 title_text_mapping = {
     "A": [0x0A, 0x38], "B": [0x0B, 0x38], "C": [0x0C, 0x38], "D": [0x0D, 0x38], "E": [0x0E, 0x38],
     "F": [0x0F, 0x38], "G": [0x10, 0x38], "H": [0x11, 0x38], "I": [0x12, 0x38], "J": [0x13, 0x38],
