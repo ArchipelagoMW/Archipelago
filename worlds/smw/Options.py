@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoTexts
-from worlds.smw.Names.TextBox import text_table
+from .Names.TextBox import text_table
 
 
 class Goal(Choice):
