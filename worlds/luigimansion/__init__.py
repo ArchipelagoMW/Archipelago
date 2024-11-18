@@ -360,28 +360,26 @@ class LMWorld(World):
             for location, data in PORTRAIT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
+                if entry.code == 624:
+                    add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
+                elif entry.code == 627:
+                    add_rule(entry,
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
-                    if entry.code == 624:
-                        add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
-                    elif entry.code == 627:
-                        add_rule(entry,
-                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
-                    else:
-                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
+                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                if entry.code == 675:
+                    add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
+                elif entry.code == 679:
+                    add_rule(entry,
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
-                    if entry.code == 675:
-                        add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
-                    elif entry.code == 679:
-                        add_rule(entry,
-                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
-                    else:
-                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
+                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         else:
             for location, data in BOO_LOCATION_TABLE.items():
@@ -391,14 +389,13 @@ class LMWorld(World):
                 entry.code = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                if entry.code == 675:
+                    add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
+                elif entry.code == 679:
+                    add_rule(entry,
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
-                    if entry.code == 675:
-                        add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
-                    elif entry.code == 679:
-                        add_rule(entry,
-                                 lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
-                    else:
-                        for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
+                    for item in entry.access: add_rule(entry, lambda state: state.has(item, self.player), "and")
                 region.locations.append(entry)
         if self.options.goal == 1:
             rankcalc = 0
