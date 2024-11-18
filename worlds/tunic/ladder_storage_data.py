@@ -17,7 +17,7 @@ ow_ladder_groups: Dict[str, OWLadderInfo] = {
                               ["Overworld Beach"]),
     # also the east filigree room
     "LS Elev 1": OWLadderInfo({"Ladders near Weathervane", "Ladders in Overworld Town", "Ladder to Swamp"},
-                              ["Furnace_gyro_lower", "Swamp Redux 2_wall"],
+                              ["Furnace_gyro_lower", "Furnace_gyro_west", "Swamp Redux 2_wall"],
                               ["Overworld Tunnel Turret"]),
     # also the fountain filigree room and ruined passage door
     "LS Elev 2": OWLadderInfo({"Ladders near Weathervane", "Ladders to West Bell"},
