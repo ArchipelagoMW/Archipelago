@@ -403,7 +403,7 @@ class DeathLinkAmnesty(Range):
 
 class PuzzleRandomizationSeed(Range):
     """
-    Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 0 to 999999 for the puzzle randomization.
+    Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 1 to 9999999 for the puzzle randomization.
     This option lets you set this seed yourself.
     """
     range_start = 1
