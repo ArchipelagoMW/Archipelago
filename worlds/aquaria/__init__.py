@@ -108,6 +108,7 @@ class AquariaWorld(World):
         """
         Create every Region in `regions`
         """
+        self._regions.create_regions()
         self._regions.add_regions_to_world()
         self._regions.connect_regions()
         self._regions.add_event_locations()
