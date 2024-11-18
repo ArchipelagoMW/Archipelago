@@ -1,7 +1,7 @@
 import unittest
 
 from worlds import AutoWorldRegister
-from Options import ItemDict, NamedRange, NumericOption, OptionList, OptionSet
+from Options import ItemDict, NamedRange, NumericOption, OptionList, OptionSet, OptionDict
 
 
 class TestOptionPresets(unittest.TestCase):
@@ -61,3 +61,23 @@ class TestOptionPresets(unittest.TestCase):
                                     f"'{game_name}' is not supported for webhost. Values must not be resolved to a "
                                     f"different option via option.from_text (or an alias)."
                                 )
+
+    def test_option_preset_dont_have_unsupported_randoms(self):
+        """Test that option preset values are not a special flavor of 'random' or use from_text to resolve another
+        value.
+        """
+        option_types_that_dont_support_random = (OptionSet, OptionDict, OptionList)
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            presets = world_type.web.options_presets
+            for preset_name, preset in presets.items():
+                for option_name, option_value in preset.items():
+                    with self.subTest(game=game_name, preset=preset_name, option=option_name):
+                        option = world_type.options_dataclass.type_hints[option_name].from_any(option_value)
+
+                        # Check for from_text resolving to a different value. ("random" is allowed though.)
+                        if option_value != "random":
+                            continue
+
+                        self.assertFalse(isinstance(option, option_types_that_dont_support_random),
+                                         f"Invalid preset '{option_name}': '{option_value}' in preset '{preset_name}' "
+                                         f"for game '{game_name}'. Option Type {type(option)} does not support random.")
