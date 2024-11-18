@@ -99,9 +99,16 @@ class RegionManager(typing.Generic[_T_Reg, _T_Ent, _T_Loc]):
             region_cache[region.name] = region
 
     def __iter__(self) -> Iterator[Region]:
-        yield from self.region_cache.values()
+        # TODO
+        if self.multiworld is not None:
+            yield from self.multiworld.get_regions()
+        else:
+            yield from self.region_cache.values()
 
     def __len__(self):
+        # TODO
+        if self.multiworld is not None:
+            return len(self.multiworld.get_regions())
         return len(self.region_cache.values())
 
     def get_regions(self) -> typing.Iterable[_T_Reg]:
