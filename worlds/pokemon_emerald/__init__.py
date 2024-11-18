@@ -177,7 +177,7 @@ class PokemonEmeraldWorld(World):
             for species_name in self.options.trainer_party_blacklist.value
             if species_name != "_Legendaries"
         }
-        if "_Legendaries" in self.options.starter_blacklist.value:
+        if "_Legendaries" in self.options.trainer_party_blacklist.value:
             self.blacklisted_opponent_pokemon |= LEGENDARY_POKEMON
 
         # In race mode we don't patch any item location information into the ROM
