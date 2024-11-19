@@ -1,6 +1,7 @@
 import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
+from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld, CollectionState
+from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import WebWorld, World
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
     chunksanity_special_region_names
@@ -61,6 +62,7 @@ class OSRSWorld(World):
     starting_area_item: str
 
     locations_by_category: typing.Dict[str, typing.List[LocationRow]]
+    available_QP_locations: typing.List[str]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -75,6 +77,7 @@ class OSRSWorld(World):
         self.starting_area_item = ""
 
         self.locations_by_category = {}
+        self.available_QP_locations = []
 
     def generate_early(self) -> None:
         location_categories = [location_row.category for location_row in location_rows]
@@ -90,9 +93,9 @@ class OSRSWorld(World):
 
         rnd = self.random
         starting_area = self.options.starting_area
-        
+
         #UT specific override, if we are in normal gen, resolve starting area, we will get it from slot_data in UT
-        if not hasattr(self.multiworld, "generation_is_fake"): 
+        if not hasattr(self.multiworld, "generation_is_fake"):
             if starting_area.value == StartingArea.option_any_bank:
                 self.starting_area_item = rnd.choice(starting_area_dict)
             elif starting_area.value < StartingArea.option_chunksanity:
@@ -126,6 +129,15 @@ class OSRSWorld(World):
             starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
             starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
             starting_entrance.connect(self.region_name_to_data[starting_area_region])
+
+    def pre_fill(self) -> None:
+        all_state = self.multiworld.get_all_state(False)
+        for location in self.multiworld.get_locations(self.player):
+            # if not location.can_reach(all_state):
+            #     options = self.options
+            #     print(f"{location} can't be reached even with every progression item.\n{all_state.prog_items[self.player]}")
+            assert location.can_reach(
+                all_state), f"{location} can't be reached even with every progression item.\n{all_state.prog_items[self.player]}"
 
     def create_regions(self) -> None:
         """
@@ -180,21 +192,29 @@ class OSRSWorld(World):
 
         self.roll_locations()
 
+    def task_within_skill_levels(self, skills_required):
+        # Loop through each required skill. If any of its requirements are out of the defined limit, return false
+        for skill in skills_required:
+            max_level_for_skill = getattr(self.options, f"max_{skill.skill.lower()}_level")
+            if skill.level > max_level_for_skill:
+                return False
+        return True
 
     def roll_locations(self):
-        locations_required = 0
         generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
+        locations_required = 0
         for item_row in item_rows:
             locations_required += item_row.amount
 
         locations_added = 1  # At this point we've already added the starting area, so we start at 1 instead of 0
 
-        # Quests are always added
+        # Quests are always added first, before anything else is rolled
         for i, location_row in enumerate(location_rows):
             if location_row.category in {"quest", "points", "goal"}:
-                self.create_and_add_location(i)
-                if location_row.category == "quest":
-                    locations_added += 1
+                if self.task_within_skill_levels(location_row.skills):
+                    self.create_and_add_location(i)
+                    if location_row.category == "quest":
+                        locations_added += 1
 
         # Build up the weighted Task Pool
         rnd = self.random
@@ -218,10 +238,9 @@ class OSRSWorld(World):
         task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
                       "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
         for task_type in task_types:
-            max_level_for_task_type = getattr(self.options, f"max_{task_type}_level")
             max_amount_for_task_type = getattr(self.options, f"max_{task_type}_tasks")
             tasks_for_this_type = [task for task in self.locations_by_category[task_type]
-                                   if task.skills[0].level <= max_level_for_task_type]
+                                   if self.task_within_skill_levels(task.skills)]
             if not self.options.progressive_tasks:
                 rnd.shuffle(tasks_for_this_type)
             else:
@@ -270,6 +289,7 @@ class OSRSWorld(World):
                 self.add_location(task)
                 locations_added += 1
 
+
     def add_location(self, location):
         index = [i for i in range(len(location_rows)) if location_rows[i].name == location.name][0]
         self.create_and_add_location(index)
@@ -288,11 +308,15 @@ class OSRSWorld(World):
 
     def create_and_add_location(self, row_index) -> None:
         location_row = location_rows[row_index]
-        # print(f"Adding task {location_row.name}")
+
+        # Quest Points are handled differently now, but in case this gets fed an older version of the data sheet,
+        # the points might still be listed in a different row
+        if location_row.category == "points":
+            return
 
         # Create Location
         location_id = self.base_id + row_index
-        if location_row.category == "points" or location_row.category == "goal":
+        if location_row.category == "goal":
             location_id = None
         location = OSRSLocation(self.player, location_row.name, location_id)
         self.location_name_to_data[location_row.name] = location
@@ -304,6 +328,14 @@ class OSRSWorld(World):
         location.parent_region = region
         region.locations.append(location)
 
+        # If it's a quest, generate a "Points" location we'll add an event to
+        if location_row.category == "quest":
+            points_name = location_row.name.replace("Quest:", "Points:")
+            points_location = OSRSLocation(self.player, points_name)
+            self.location_name_to_data[points_name] = points_location
+            points_location.parent_region = region
+            region.locations.append(points_location)
+
     def set_rules(self) -> None:
         """
         called to set access and item rules on locations and entrances.
@@ -314,18 +346,26 @@ class OSRSWorld(World):
                             "Witchs_Potion", "Knights_Sword", "Goblin_Diplomacy", "Pirates_Treasure",
                             "Rune_Mysteries", "Misthalin_Mystery", "Corsair_Curse", "X_Marks_the_Spot",
                             "Below_Ice_Mountain"]
-        for qp_attr_name in quest_attr_names:
-            loc_name = getattr(LocationNames, f"QP_{qp_attr_name}")
-            item_name = getattr(ItemNames, f"QP_{qp_attr_name}")
-            self.multiworld.get_location(loc_name, self.player) \
-                .place_locked_item(self.create_event(item_name))
 
         for quest_attr_name in quest_attr_names:
             qp_loc_name = getattr(LocationNames, f"QP_{quest_attr_name}")
+            qp_loc = self.location_name_to_data.get(qp_loc_name)
+
             q_loc_name = getattr(LocationNames, f"Q_{quest_attr_name}")
-            add_rule(self.multiworld.get_location(qp_loc_name, self.player), lambda state, q_loc_name=q_loc_name: (
-                self.multiworld.get_location(q_loc_name, self.player).can_reach(state)
-            ))
+            q_loc = self.location_name_to_data.get(q_loc_name)
+
+            # Checks to make sure the task is actually in the list before trying to create its rules
+            if qp_loc and q_loc:
+                # Create the QP Event Item
+                item_name = getattr(ItemNames, f"QP_{quest_attr_name}")
+                qp_loc.place_locked_item(self.create_event(item_name))
+
+                # If a quest is excluded, don't actually consider it for quest point progression
+                if q_loc_name not in self.options.exclude_locations:
+                    self.available_QP_locations.append(item_name)
+
+                # Set the access rule for the QP Location
+                add_rule(qp_loc, lambda state, loc=q_loc: (loc.can_reach(state)))
 
         # place "Victory" at "Dragon Slayer" and set collection as win condition
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player) \
@@ -366,7 +406,7 @@ class OSRSWorld(World):
 
     def quest_points(self, state):
         qp = 0
-        for qp_event in QP_Items:
+        for qp_event in self.available_QP_locations:
             if state.has(qp_event, self.player):
                 qp += int(qp_event[0])
         return qp

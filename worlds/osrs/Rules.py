@@ -186,26 +186,26 @@ def get_firemaking_skill_rule(level, player, options) -> CollectionRule:
 
 
 def get_skill_rule(skill, level, player, options) -> CollectionRule:
-        if skill.lower() == "fishing":
-            return get_fishing_skill_rule(level, player, options)
-        if skill.lower() == "mining":
-            return get_mining_skill_rule(level, player, options)
-        if skill.lower() == "woodcutting":
-            return get_woodcutting_skill_rule(level, player, options)
-        if skill.lower() == "smithing":
-            return get_smithing_skill_rule(level, player, options)
-        if skill.lower() == "crafting":
-            return get_crafting_skill_rule(level, player, options)
-        if skill.lower() == "cooking":
-            return get_cooking_skill_rule(level, player, options)
-        if skill.lower() == "runecraft":
-            return get_runecraft_skill_rule(level, player, options)
-        if skill.lower() == "magic":
-            return get_magic_skill_rule(level, player, options)
-        if skill.lower() == "firemaking":
-            return get_firemaking_skill_rule(level, player, options)
+    if skill.lower() == "fishing":
+        return get_fishing_skill_rule(level, player, options)
+    if skill.lower() == "mining":
+        return get_mining_skill_rule(level, player, options)
+    if skill.lower() == "woodcutting":
+        return get_woodcutting_skill_rule(level, player, options)
+    if skill.lower() == "smithing":
+        return get_smithing_skill_rule(level, player, options)
+    if skill.lower() == "crafting":
+        return get_crafting_skill_rule(level, player, options)
+    if skill.lower() == "cooking":
+        return get_cooking_skill_rule(level, player, options)
+    if skill.lower() == "runecraft":
+        return get_runecraft_skill_rule(level, player, options)
+    if skill.lower() == "magic":
+        return get_magic_skill_rule(level, player, options)
+    if skill.lower() == "firemaking":
+        return get_firemaking_skill_rule(level, player, options)
 
-        return lambda state: True
+    return lambda state: True
 
 
 def generate_special_rules_for(entrance, region_row, outbound_region_name, player, options):
@@ -245,16 +245,16 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
                                    and woodcutting_rule_all(state)))
 
             # Access to other chunks based on woodcutting settings
-            if outbound_region_name == RegionNames.South_Of_Varrock:
+            elif outbound_region_name == RegionNames.South_Of_Varrock:
                 add_rule(entrance, woodcutting_rule_d1)
-            if outbound_region_name == RegionNames.Barbarian_Village:
+            elif outbound_region_name == RegionNames.Barbarian_Village:
                 add_rule(entrance, woodcutting_rule_d2)
-            if outbound_region_name == RegionNames.Edgeville:
+            elif outbound_region_name == RegionNames.Edgeville:
                 add_rule(entrance, woodcutting_rule_d3)
-            if outbound_region_name == RegionNames.Wilderness:
+            elif outbound_region_name == RegionNames.Wilderness:
                 add_rule(entrance, woodcutting_rule_all)
 
-        if region_row.name == RegionNames.South_Of_Varrock:
+        elif region_row.name == RegionNames.South_Of_Varrock:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
@@ -267,15 +267,15 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
                                    and woodcutting_rule_d3(state)))
 
             # Access to other chunks based on woodcutting settings
-            if outbound_region_name == RegionNames.Lumbridge:
+            elif outbound_region_name == RegionNames.Lumbridge:
                 add_rule(entrance, woodcutting_rule_d1)
-            if outbound_region_name == RegionNames.Barbarian_Village:
+            elif outbound_region_name == RegionNames.Barbarian_Village:
                 add_rule(entrance, woodcutting_rule_d1)
-            if outbound_region_name == RegionNames.Edgeville:
+            elif outbound_region_name == RegionNames.Edgeville:
                 add_rule(entrance, woodcutting_rule_d3)
-            if outbound_region_name == RegionNames.Wilderness:
+            elif outbound_region_name == RegionNames.Wilderness:
                 add_rule(entrance, woodcutting_rule_all)
-        if region_row.name == RegionNames.Barbarian_Village:
+        elif region_row.name == RegionNames.Barbarian_Village:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
@@ -285,14 +285,14 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
                                    and woodcutting_rule_d2(state)))
 
             # Access to other chunks based on woodcutting settings
-            if outbound_region_name == RegionNames.Lumbridge:
+            elif outbound_region_name == RegionNames.Lumbridge:
                 add_rule(entrance, woodcutting_rule_d2)
-            if outbound_region_name == RegionNames.South_Of_Varrock:
+            elif outbound_region_name == RegionNames.South_Of_Varrock:
                 add_rule(entrance, woodcutting_rule_d1)
             # Edgeville does not need to be checked, because it's already adjacent
-            if outbound_region_name == RegionNames.Wilderness:
+            elif outbound_region_name == RegionNames.Wilderness:
                 add_rule(entrance, woodcutting_rule_d3)
-        if region_row.name == RegionNames.Edgeville:
+        elif region_row.name == RegionNames.Edgeville:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
@@ -305,13 +305,13 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
                                    and woodcutting_rule_d1(state)))
 
             # Access to other chunks based on woodcutting settings
-            if outbound_region_name == RegionNames.Lumbridge:
+            elif outbound_region_name == RegionNames.Lumbridge:
                 add_rule(entrance, woodcutting_rule_d3)
-            if outbound_region_name == RegionNames.South_Of_Varrock:
+            elif outbound_region_name == RegionNames.South_Of_Varrock:
                 add_rule(entrance, woodcutting_rule_d2)
             # Barbarian Village does not need to be checked, because it's already adjacent
             # Wilderness does not need to be checked, because it's already adjacent
-        if region_row.name == RegionNames.Wilderness:
+        elif region_row.name == RegionNames.Wilderness:
             if outbound_region_name == RegionNames.Canoe_Tree:
                 add_rule(entrance,
                     lambda state: (state.can_reach_region(RegionNames.Lumbridge, player)
@@ -324,10 +324,10 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
                                    and woodcutting_rule_d1(state)))
 
             # Access to other chunks based on woodcutting settings
-            if outbound_region_name == RegionNames.Lumbridge:
+            elif outbound_region_name == RegionNames.Lumbridge:
                 add_rule(entrance, woodcutting_rule_all)
-            if outbound_region_name == RegionNames.South_Of_Varrock:
+            elif outbound_region_name == RegionNames.South_Of_Varrock:
                 add_rule(entrance, woodcutting_rule_d3)
-            if outbound_region_name == RegionNames.Barbarian_Village:
+            elif outbound_region_name == RegionNames.Barbarian_Village:
                 add_rule(entrance, woodcutting_rule_d2)
             # Edgeville does not need to be checked, because it's already adjacent
