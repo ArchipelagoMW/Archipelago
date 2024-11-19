@@ -1,7 +1,7 @@
 from copy import copy
 
 from . import CMTestBase
-from worlds.checksmate import CMWorld, Options
+from .. import CMWorld, Options
 
 
 # I don't like that this generates many entire seeds just to check some global logic.
