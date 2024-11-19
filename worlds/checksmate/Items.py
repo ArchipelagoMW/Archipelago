@@ -109,11 +109,3 @@ item_name_groups = {
     #                 "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
     "Chessmen": {"Progressive Pawn", "Progressive Minor Piece", "Progressive Major Piece", "Progressive Consul"},
 }
-
-
-def create_item_with_correct_settings(player: int, name: str) -> Item:
-    data = item_table[name]
-
-    item = Item(name, data.classification, data.code, player)
-
-    return item

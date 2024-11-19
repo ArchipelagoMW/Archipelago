@@ -8,7 +8,7 @@ from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
 from .Options import CMOptions, piece_type_limit_options, piece_limit_options
-from .Items import (CMItem, item_table, create_item_with_correct_settings, filler_items, progression_items,
+from .Items import (CMItem, item_table, filler_items, progression_items,
                     useful_items, item_name_groups, CMItemData)
 from .Locations import CMLocation, location_table, highest_chessmen_requirement_small, highest_chessmen_requirement, \
     Tactic
@@ -169,8 +169,8 @@ class CMWorld(World):
         user_location_count += 1  # Victory item is counted as part of the pool
         items = []
         if self.options.goal.value == self.options.goal.option_progressive:
-            items.append(create_item_with_correct_settings(self.player, "Super-Size Me"))
-        items.append(create_item_with_correct_settings(self.player, "Play as White"))
+            items.append(self.create_item("Super-Size Me"))
+        items.append(self.create_item("Play as White"))
         self.items_used[self.player]["Play as White"] = 1
 
         # find the material value the user's army should provide once fully collected
@@ -473,10 +473,10 @@ class CMWorld(World):
 
     def generate_basic(self) -> None:
         if self.options.goal.value == self.options.goal.option_single:
-            victory_item = create_item_with_correct_settings(self.player, "Victory")
+            victory_item = self.create_item("Victory")
             self.multiworld.get_location("Checkmate Minima", self.player).place_locked_item(victory_item)
         else:
-            victory_item = create_item_with_correct_settings(self.player, "Victory")
+            victory_item = self.create_item("Victory")
             self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
     def fewest_parents(self, parents: List[List[Union[str, int]]]):
@@ -551,7 +551,7 @@ class CMWorld(World):
         excluded_items: Dict[str, int] = {}
 
         if self.options.goal.value == self.options.goal.option_super:
-            item = create_item_with_correct_settings(self.player, "Super-Size Me")
+            item = self.create_item("Super-Size Me")
             self.multiworld.push_precollected(item)
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in excluded_items:
@@ -574,7 +574,7 @@ class CMWorld(World):
 
         user_items = []
         if self.options.goal.value == self.options.goal.option_ordered_progressive:
-            item = create_item_with_correct_settings(player, "Super-Size Me")
+            item = self.create_item("Super-Size Me")
             multiworld.get_location("Checkmate Minima", player).place_locked_item(item)
             locked_locations.append("Checkmate Minima")
             user_items.append(item)
@@ -593,7 +593,7 @@ class CMWorld(World):
             if not local_basic_unit:
                 raise Exception("At least one early chessman must be local")
 
-            item = create_item_with_correct_settings(player, self.random.choice(local_basic_unit))
+            item = self.create_item(self.random.choice(local_basic_unit))
             multiworld.get_location("King to E2/E7 Early", player).place_locked_item(item)
             locked_locations.append("King to E2/E7 Early")
             user_items.append(item)
