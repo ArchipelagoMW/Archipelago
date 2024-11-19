@@ -223,11 +223,6 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
              lambda state: state.count("Progressive Major Piece", player) >= 2 + total_queens)
     # add_rule(multiworld.get_location("French Move", player), lambda state: state.has_french_move(player))
 
-    # state cannot have super-size me for small checkmate
-    # todo: remove from the pool if non-ordered progressive
-    add_rule(multiworld.get_location("Checkmate Minima", player),
-             lambda state: not state.has("Super Size Me", player))
-
     # goal materials
     # add_rule(multiworld.get_location("Checkmate Minima", player), lambda state: has_piece_material(state, player, 2))
     # add_rule(multiworld.get_location("Checkmate One Piece", player), lambda state: has_piece_material(state, player, 5))

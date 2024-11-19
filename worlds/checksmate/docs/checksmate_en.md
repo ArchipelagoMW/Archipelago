@@ -41,10 +41,6 @@ moves and to maintain a very high tempo.
 
 **ChecksMate is a short game! You might restart many times, but you should expect no more than an hour of gameplay!**
 
-When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that is done,
-the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
-files. You do not have a file inside that zip though!
-
 You need to start a ChecksMate client yourself, which are available from the Releases page (see above). Generally, these
 need to be extracted to a folder before they are run, due to dependency on asset files and dynamic libraries.
 
