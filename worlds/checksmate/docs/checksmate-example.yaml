@@ -15,7 +15,7 @@ ChecksMate:
 description: 'A vanilla army with no pockets, comprising 2 Bishops+Knights+Rooks, and 1 Queen (or Rook until upgraded)'
 name: Traditional
 game:
-  ChecksMate: 15
+  ChecksMate: 1
 ChecksMate:
   goal:
     single: 1
@@ -47,7 +47,7 @@ ChecksMate:
 description: 'Horde Chess, but with random additional pieces'
 name: OopsAllPawns
 game:
-  ChecksMate: 15
+  ChecksMate: 1
 ChecksMate:
   accessibility:
     items: 1
@@ -70,7 +70,7 @@ ChecksMate:
 description: 'Chaos and pocket pieces'
 name: SleevedAce
 game:
-  ChecksMate: 15
+  ChecksMate: 1
 ChecksMate:
   difficulty:
     daily: 1
@@ -91,7 +91,7 @@ ChecksMate:
 description: 'Weird Fairy Chess with opportunity to study the opening'
 name: DifferentArmy
 game:
-  ChecksMate: 15
+  ChecksMate: 1
 ChecksMate:
   difficulty:
     daily: 1
@@ -120,7 +120,7 @@ ChecksMate:
 description: 'Many exotic royal pieces'
 name: PowerCouples
 game:
-  ChecksMate: 15
+  ChecksMate: 1
 ChecksMate:
   difficulty:
     daily: 1
@@ -157,7 +157,7 @@ ChecksMate:
 description: 'Skip the first half to learn the second half'
 name: Endgame
 game:
-  ChecksMate: 15
+  ChecksMate: 1
 ChecksMate:
   goal:
     super: 1
