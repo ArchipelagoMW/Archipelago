@@ -181,6 +181,11 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
                 App.get_running_app().stop()
                 Window.close()
 
+        def _stop(self, *largs):
+            # see run_gui Launcher _stop comment for details
+            self.root_window.close()
+            super()._stop(*largs)
+
     Popup().run()
 
 
@@ -416,7 +421,7 @@ if __name__ == '__main__':
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
     main(parser.parse_args())
-
+    breakpoint()
     from worlds.LauncherComponents import processes
     for process in processes:
         # we await all child processes to close before we tear down the process host
