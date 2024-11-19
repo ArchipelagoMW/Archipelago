@@ -153,10 +153,6 @@ class MaximumEnginePenalties(Range):
     """
     The number of times the engine will receive a reduction to their skill level. These reductions are currently named
     "Progressive ELO Engine Lobotomy," and each level reduces the AI's access to both analysis and information.
-
-    Before calculation penalties are applied, the current supported engines have an approximate ELO of ...
-
-    ChessV: 2030. See: https://www.computerchess.org.uk/ccrl/404/
     """
     display_name = "Maximum Engine Penalties"
     range_start = 0

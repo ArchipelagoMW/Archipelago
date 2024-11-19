@@ -22,7 +22,8 @@ The player will receive either:
 
  - The white pieces (permitting the player to make the first move)
  - A piece of material, being a pawn, piece, or upgrade for a piece
- - Engine ELO reduction, eagerly bringing the 2000+ ELO engine down to a beatable level
+ - Engine Elo reduction, eagerly bringing the 2000+ Elo engine down to a beatable level
+   - Before calculation penalties are applied, the current supported engines have an approximate Elo (in an AI-only tournament) of at least 2030. See: https://www.computerchess.org.uk/ccrl/404/
  - Pawn forwardness - placing a random pawn on the 3rd rank rather than the 2nd
  - A pocket piece, which can be played from one of your three pockets onto the board! 
    - Powerful pieces cannot be played onto the board at the start of the game. One must wait turns equal to their material value before playing such a piece.
