@@ -211,14 +211,14 @@ def get_skill_rule(skill, level, player, options) -> CollectionRule:
 def generate_special_rules_for(entrance, region_row, outbound_region_name, player, options):
     if outbound_region_name == RegionNames.Cooks_Guild:
         add_rule(entrance, get_cooking_skill_rule(32, player, options))
-    if outbound_region_name == RegionNames.Crafting_Guild:
+    elif outbound_region_name == RegionNames.Crafting_Guild:
         add_rule(entrance, get_crafting_skill_rule(40, player, options))
-    if outbound_region_name == RegionNames.Corsair_Cove:
+    elif outbound_region_name == RegionNames.Corsair_Cove:
         # Need to be able to start Corsair Curse in addition to having the item
         add_rule(entrance, lambda state: state.can_reach(RegionNames.Falador_Farm, "Region", player))
-    if outbound_region_name == "Camdozaal*":
+    elif outbound_region_name == "Camdozaal*":
         add_rule(entrance, lambda state: state.has(ItemNames.QP_Below_Ice_Mountain, player))
-    if region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
+    elif region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
         add_rule(entrance, lambda state: state.has(ItemNames.QP_Dorics_Quest, player))
 
     # Special logic for canoes
