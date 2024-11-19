@@ -599,6 +599,7 @@ ZERG_CREEP_STOMACH               = "Creep Stomach (Zerg)"
 ZERG_EXCAVATING_CLAWS            = "Excavating Claws (Zerg)"
 HIVE_CLUSTER_MATURATION          = "Hive Cluster Maturation (Zerg)"
 MACROSCOPIC_RECUPERATION         = "Macroscopic Recuperation (Zerg)"
+BIOMECH_STOCKPILING              = "Biomech Stockpiling (Zerg)"
 
 # Kerrigan Levels
 KERRIGAN_LEVELS_1  = "1 Kerrigan Level"
