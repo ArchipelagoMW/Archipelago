@@ -421,7 +421,7 @@ if __name__ == '__main__':
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
     main(parser.parse_args())
-    breakpoint()
+
     from worlds.LauncherComponents import processes
     for process in processes:
         # we await all child processes to close before we tear down the process host
