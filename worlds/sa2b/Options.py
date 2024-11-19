@@ -317,7 +317,7 @@ class TrapFillPercentage(Range):
     default = 0
 
 
-class Keysanity(Toggle):
+class Keysanity(DefaultOnToggle):
     """
     Determines whether picking up Chao Keys grants checks
     (86 Locations)
@@ -345,7 +345,7 @@ class Whistlesanity(Choice):
     default = 0
 
 
-class Beetlesanity(Toggle):
+class Beetlesanity(DefaultOnToggle):
     """
     Determines whether destroying Gold Beetles grants checks
     (27 Locations)
