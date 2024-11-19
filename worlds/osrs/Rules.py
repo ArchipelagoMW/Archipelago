@@ -130,13 +130,17 @@ def get_cooking_skill_rule(level, player, options) -> CollectionRule:
                               state.can_reach_region(RegionNames.Windmill, player))
     else:
         can_catch_fly_fish = get_fishing_skill_rule(20, player, options)
-        return lambda state: state.can_reach_region(RegionNames.Fly_Fish, player) and \
-                             can_catch_fly_fish(state) and \
-                             (state.can_reach_region(RegionNames.Milk, player) or
+
+        return lambda state: (
+                                 (state.can_reach_region(RegionNames.Fly_Fish, player) and can_catch_fly_fish(state)) or
+                                 (state.can_reach_region(RegionNames.Port_Sarim, player))
+                             ) and (
+                              state.can_reach_region(RegionNames.Milk, player) or
                               state.can_reach_region(RegionNames.Egg, player) or
                               state.can_reach_region(RegionNames.Shrimp, player) or
                               (state.can_reach_region(RegionNames.Wheat, player) and
-                               state.can_reach_region(RegionNames.Windmill, player)))
+                               state.can_reach_region(RegionNames.Windmill, player))
+                             )
 
 
 def get_runecraft_skill_rule(level, player, options) -> CollectionRule:
