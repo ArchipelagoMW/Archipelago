@@ -147,7 +147,7 @@ piece_names = ["Queen's Rook", "Queen's Knight", "Queen's Bishop", "Queen",
                "Queen's Attendant", "King's Attendant"]
 
 
-# unused because we can never run out of pawn locations
+# describes the number of chessmen required to reach the most strenuous location
 highest_chessmen_requirement_small = max([
     location_table[location].chessmen_expectations for location in location_table if
     location_table[location].material_expectations != -1])
