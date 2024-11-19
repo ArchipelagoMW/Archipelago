@@ -16,8 +16,7 @@ class Goal(Choice):
 
     Progressive: As Ordered Progressive, but the board grows larger when someone sends you your Super-Sized board.
 
-    Super: You skip the 8x8 board immediately. Nearly equivalent to adding Super-Size Me to your starting_inventory.
-    (Don't do that.)
+    Super: You skip the 8x8 board immediately. Nearly equivalent to adding Super-Size Me to your Start Inventory.
     """
     display_name = "Goal"
     option_single = 0
@@ -54,15 +53,11 @@ class Difficulty(Choice):
 
 class EnableTactics(Choice):
     """
-    When you start a new match, chooses the player's piece types (such as whether a minor piece is a Knight or Bishop).
+    All: Adds the "Fork" and "Play Turns" locations to the pool. (This adds 10 locations and items.)
 
-    All: Allows the Fork and Play Turns positions to contain progression, useful, trash or other items.
+    Turns: Adds the "Play Turns" locations to the pool. (This adds 4 locations and items.)
 
-    Turns: Allows the Play Turns positions to contain progression, useful, trash or other items. Removes the Fork
-    positions from all item pools. (This removes 6 locations and items from the pool.)
-
-    None: Completely removes the Fork and Play Turns positions from all item pools. (Note that the player will have 10
-    fewer items, as well as 10 fewer locations.)
+    None: Neither "Fork" nor "Play Turns" locations will be in the pool.
     """
     display_name = "Enable Tactics"
     option_all = 0
@@ -75,13 +70,10 @@ class PieceLocations(Choice):
     """
     When you start a new match, chooses how to distribute player pieces.
 
-    Chaos: Puts pieces on first rank until it's full, and pawns on second rank until it's full. Changes every match -
-    your games won't preserve starting position. Plays more like Chess960.
+    Chaos: Puts pieces on the first rank until it's full, and pawns on second rank until it's full.
+    Changes every match - your games won't preserve starting position. Plays more like Chess960.
 
     Stable: As Chaos, but doesn't change between matches.
-
-    Ordered: Puts pieces as close to king as possible, and pawns as close to center as possible (but never first rank).
-    NOT IMPLEMENTED.
     """
     display_name = "Piece Locations"
     option_chaos = 0
@@ -97,8 +89,6 @@ class PieceTypes(Choice):
     Chaos: Chooses random valid options.
 
     Stable: As Chaos, but doesn't change between matches. You'll only ever add or upgrade pieces.
-
-    Book: Uses the standard Chess army. Adds the King's Bishop, then both Knights, then a Bishop. NOT IMPLEMENTED.
     """
     display_name = "Piece Types"
     option_chaos = 0
@@ -107,30 +97,12 @@ class PieceTypes(Choice):
     default = 1
 
 
-class EnemyPieceTypes(Choice):
-    """
-    When you start a new match, chooses the CPU's piece types (such as whether a minor piece is a Knight or Bishop).
-
-    Chaos: Chooses random valid options. NOT IMPLEMENTED.
-
-    Stable: As Chaos, but doesn't change between matches. You'll only ever add pieces. NOT IMPLEMENTED.
-
-    Book: Uses the standard Chess army. Adds pieces inward, then kingside. For example, minor pieces are added in order
-    of the King's Bishop, then both Knights, then a Bishop.
-    """
-    display_name = "Enemy Piece Types"
-    # option_chaos = 0
-    # option_stable = 1
-    option_book = 2
-    default = 2
-
-
 class EarlyMaterial(Choice):
     """
     Guarantees that a King move directly onto the second rank within the first few moves will provide a piece or pawn
-    (chessman). When this option is set, this location (Move King E2/E7 Early) gets overridden over any exclusion.
+    (chessman). When this option is set, this location (Move King E2/E7 Early) overrides any exclusion.
 
-    4 other Bongcloud moves also involve the King, but are not altered by this setting. (A File: Move to the leftmost
+    Four other Bongcloud moves also involve the King, but are not altered by this option. (A File: Move to the leftmost
     File; Capture: Any capturing move; Center: Move to any of the center 4 squares; Promotion: Move to enemy back rank)
 
     Pawn, Minor, Major: You will get an early chessman of the specified type (i.e. a pawn, minor piece, or major piece).
@@ -167,7 +139,7 @@ class MaximumPocket(Range):
     Each Progressive Pocket Piece will improve your 1st, 2nd, or 3rd pocket slot up to 4 times, from Nothing to Pawn, to
     Minor Piece (like a pocket Knight), to Major Piece (like a pocket Rook), to Queen.
 
-    This setting does not alter filler item distribution. (Even if you have 0 Progressive Pockets, the item pool may
+    This option does not alter filler item distribution. (Even if you have 0 Progressive Pockets, the item pool may
     contain Progressive Pocket Gems and Progressive Pocket Range.)
 
     Pocket Pieces are inspired by the Dutch game of paard in de zak (pocket knight).
@@ -205,18 +177,17 @@ class FairyKings(Range):
 class FairyChessPieces(Choice):
     """
     Which collection of fairy pieces to allow, if any. Choose FIDE to disable fairy chess pieces. Choose Configure to
-    disable this option in favor of the more precise FairyChessPieces option.
+    disable this option in favor of the more precise "Fairy Chess Pieces Configure" option.
 
     FIDE: The default, which only allows the standard pieces defined by FIDE (Queen, Rook, Knight, Bishop).
 
-    Betza: Adds the pieces from Ralph Betza's Chess With Different Armies, being the Remarkable Rookies, Colorbound
+    Betza: Adds the pieces from Ralph Betza's "Chess With Different Armies", being the Remarkable Rookies, Colorbound
     Clobberers, and Nutty Knights.
 
     Full: Adds every implemented army, including Eurasian and custom pieces. The Cannon and Vao capture by jumping over
     an intervening chessman.
 
-    Configure: Allows you to specify your own pieces using the FairyChessPieces option. See also FairyChessPieces (an
-    OptionSet, which is not typically visible on the Archipelago Settings UI) for advanced, specific configuration.
+    Configure: Allows you to specify your own pieces using the "Fairy Chess Pieces Configure" option.
     """
     display_name = "Fairy Chess Pieces"
     option_fide = 0
@@ -228,7 +199,7 @@ class FairyChessPieces(Choice):
 
 class FairyChessPiecesConfigure(OptionSet):
     """
-    THIS OPTION IS INCOMPATIBLE WITH FairyChessPieces. Set that option to "Configure" to use this option.
+    THIS OPTION IS INCOMPATIBLE WITH "Fairy Chess Pieces". Set that option to "Configure" to use this option.
 
     Whether to use fairy chess pieces. Most pieces below are from Ralph Betza's Chess with Different Armies. If omitted,
     the default allows for all following fairy chess pieces, as well as the standard pieces defined by FIDE.
@@ -266,8 +237,7 @@ class FairyChessArmy(Choice):
     Whether to mix pieces between the Different Armies. Does not affect pawns. Note that the Cannon pieces, which
     replace the Bishop and Knight with a Vao and Cannon, constitute a very powerful yet flawed Different Army.
 
-    Chaos: Chooses random enabled options. (You can disable armies by setting fairy_chess_pieces, which defaults to {
-    FIDE, Rookies, Clobberers, Nutty, Cannon, Camel }.)
+    Chaos: Chooses random enabled options. (You can disable armies by setting "Fairy Chess Pieces Configure".)
 
     Stable: Chooses within one army. (If you want at most 2 Bishops, 2 Knights, 2 Rooks, and 1 Queen, add Piece Type
     Limits below: 2 Minor, 2 Major, and 1 Queen.)
@@ -396,7 +366,6 @@ class CMOptions(PerGameCommonOptions):
     enable_tactics: EnableTactics
     piece_locations: PieceLocations
     piece_types: PieceTypes
-    enemy_piece_types: EnemyPieceTypes
     early_material: EarlyMaterial
     max_engine_penalties: MaximumEnginePenalties
     max_pocket: MaximumPocket

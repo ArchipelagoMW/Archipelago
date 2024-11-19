@@ -29,7 +29,6 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
             "Progressive Major To Queen": 1,
         },
         "start_hints": {"Play as White"},
-        "death_link": DeathLink.default,
     },
 
     # Chaos and pocket pieces
@@ -50,7 +49,6 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
             "Progressive Pocket": 12,
         },
         "start_hints": {"Play as White"},
-        "death_link": DeathLink.default,
     },
 
     # Weird Fairy Chess with opportunity to study the opening
@@ -73,7 +71,6 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
             "Progressive Major To Queen": 1,
         },
         "start_hints": {"Play as White"},
-        "death_link": DeathLink.default,
     },
 
     # Many exotic royal pieces
@@ -100,6 +97,5 @@ checksmate_option_presets: Dict[str, Dict[str, Any]] = {
             "Progressive Major To Queen": 3
         },
         "start_hints": {"Play as White"},
-        "death_link": DeathLink.default,
     },
 }

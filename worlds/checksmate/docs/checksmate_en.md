@@ -5,9 +5,8 @@
 ## Required Software
 
 - Any ChecksMate client. Currently, a modified ChessV client is supported and can be accessed via
-  its [Github releases Page](https://github.com/chesslogic/chessv/releases) (latest version)
-- Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - (select `ChecksMate Client` during installation.)
+  its [GitHub releases page](https://github.com/chesslogic/chessv/releases/latest) (latest version)
+- Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
 ## Configuring your YAML file
 
@@ -20,9 +19,9 @@ Some releases of the ChecksMate client include an example YAML file demonstratin
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [ChecksMate Player Settings Page](/games/ChecksMate/player-settings)
+You can customize your options by visiting the [ChecksMate Player Options Page](/games/ChecksMate/player-options)
 
-Some examples of certain outcomes are available in [this valid players file](checksmate-example.yaml), which can be used
+Some examples of certain outcomes are available in [this valid players file](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/checksmate/docs/checksmate-example.yaml), which can be used
 to generate a multiplayer multiworld (but should instead be used for your own inspiration).
 
 #### Difficulty and Material via Progression Balancing
@@ -41,16 +40,16 @@ moves and to maintain a very high tempo.
 
 **ChecksMate is a short game! You might restart many times, but you should expect no more than an hour of gameplay!**
 
-You need to start a ChecksMate client yourself, which are available from the Releases page (see above). Generally, these
-need to be extracted to a folder before they are run, due to dependency on asset files and dynamic libraries.
+You need to start a ChecksMate client yourself, which are available from the [releases page](https://github.com/chesslogic/chessv/releases/latest).
+Generally, these need to be extracted to a folder before they are run, due to a dependency on asset files and dynamic libraries.
 
 ### Connect to the MultiServer
 
 First start ChecksMate.
 
-Once ChecksMate is started. In the client at the top type in the spot labeled `Server` type the `Ip Address` and `Port`
+Once ChecksMate is started, in the client at the top type in the spot labeled `Server` type the `IP Address` and `Port`
 separated with a `:` symbol. Then input your slot name in the next box. The third box can be used for any password,
-which is often left empty.
+and is often left empty.
 
 These connection settings will be saved in a simple text file for the next time you start the client. (You may safely
 delete this convenience file.)
@@ -59,4 +58,3 @@ delete this convenience file.)
 
 When the console tells you that you have joined the room, you're all set. Congratulations on successfully joining a
 multiworld game!
-

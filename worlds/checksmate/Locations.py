@@ -23,7 +23,7 @@ class CMLocationData(NamedTuple):
     # material in grand chess mode
     material_expectations_grand: int
     chessmen_expectations: int = 0
-    is_tactic: Tactic = None
+    is_tactic: Optional[Tactic] = None
 
 
 location_table = {
@@ -146,8 +146,6 @@ piece_names = ["Queen's Rook", "Queen's Knight", "Queen's Bishop", "Queen",
                "King's Rook", "King's Knight", "King's Bishop",
                "Queen's Attendant", "King's Attendant"]
 
-
-# describes the number of chessmen required to reach the most strenuous location
 highest_chessmen_requirement_small = max([
     location_table[location].chessmen_expectations for location in location_table if
     location_table[location].material_expectations != -1])
