@@ -732,12 +732,10 @@ class Context:
             # we can check once if hint already exists
             if hint not in self.hints[team, hint.finding_player]:
                 self.hints[team, hint.finding_player].add(hint)
-                if not hint.found:
-                    new_hint_events.add(hint.finding_player)
+                new_hint_events.add(hint.finding_player)
                 for player in self.slot_set(hint.receiving_player):
                     self.hints[team, player].add(hint)
-                    if not hint.found:
-                        new_hint_events.add(player)
+                    new_hint_events.add(player)
 
             self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
         for slot in new_hint_events:
