@@ -139,11 +139,6 @@ class BlasphemousWorld(World):
         skipped_items = []
         junk: int = 0
 
-        for item, count in self.options.start_inventory.value.items():
-            for _ in range(count):
-                skipped_items.append(item)
-                junk += 1
-
         skipped_items.extend(unrandomized_dict.values())
 
         if self.options.thorn_shuffle == "vanilla":
