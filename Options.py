@@ -1423,6 +1423,7 @@ class PlandoItem(typing.NamedTuple):
     force: typing.Union[bool, typing.Literal["silent"]] = "silent"
     count: typing.Union[int, bool, typing.Dict[str, int]] = False
     percentage: int = 100
+    item_group_method: typing.Literal["all", "even", "random"] = "all"
 
 
 class PlandoItems(Option[typing.List[PlandoItem]]):
@@ -1443,9 +1444,15 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
         value: typing.List[PlandoItem] = []
         for item in data:
             if isinstance(item, typing.Mapping):
+                item_group_method = item.get("item_group_method", "all")
+                if item_group_method not in ("all", "even", "random"):
+                    raise Exception(f"Plando `item_group_method` has to be \"all\", \"even\", or \"random\", "
+                                    f"not {item_group_method}")
                 percentage = item.get("percentage", 100)
                 if not isinstance(percentage, int):
                     raise Exception(f"Plando `percentage` has to be int, not {type(percentage)}.")
+                if not (0 <= percentage <= 100):
+                    raise Exception(f"Plando `percentage` has to be between 0 and 100 (inclusive) not {percentage}.")
                 if roll_percentage(percentage):
                     count = item.get("count", False)
                     items = item.get("items", [])
@@ -1453,16 +1460,25 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         items = item.get("item", None)  # explicitly throw an error here if not present
                         if not items:
                             raise Exception("You must specify at least one item to place items with plando.")
-                        items = [items]
+                        if isinstance(items, str):
+                            items = [items]
+                        elif isinstance(items, dict):
+                            count = 1
+                        else:
+                            raise Exception(f"Plando 'item' has to be string or dictionary, not {type(items)}.")
                     locations = item.get("locations", [])
                     if not locations:
                         locations = item.get("location", [])
-                        if locations:
+                        if isinstance(locations, str):
                             locations = [locations]
+                        if isinstance(locations, list) and locations:
+                            count = 1
+                        elif not isinstance(locations, list):
+                            raise Exception(f"Plando `location` has to be string or list, not {type(locations)}")
                     world = item.get("world", False)
                     from_pool = item.get("from_pool", True)
                     force = item.get("force", "silent")
-                    value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage))
+                    value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage, item_group_method))
             elif isinstance(item, PlandoItem):
                 if roll_percentage(item.percentage):
                     value.append(item)
@@ -1487,7 +1503,22 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                     for item in items_copy:
                         if item in world.item_name_groups:
                             value = plando.items.pop(item)
-                            plando.items.update({key: value for key in world.item_name_groups[item]})
+                            group = sorted(world.item_name_groups[item])
+                            for group_item in group:
+                                if group_item in plando.items:
+                                    raise Exception(f"Plando `items` contains both \"{group_item}\" and the group "
+                                                    f"\"{item}\" which contains it. It cannot have both.")
+                            if plando.item_group_method == "all":
+                                plando.items.update({key: value for key in group})
+                            elif plando.item_group_method == "even":
+                                group_size = len(group)
+                                plando.items.update({key: value // group_size for key in group})
+                                for key in group[:value % group_size]:
+                                    plando.items[key] += 1
+                            else:  # random
+                                plando.items.update({key: 0 for key in group})
+                                for key in random.choices(group, k=value):
+                                    plando.items[key] += 1
                 else:
                     assert isinstance(plando.items, list)  # pycharm can't figure out the hinting without the hint
                     for item in items_copy:
