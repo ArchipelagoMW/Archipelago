@@ -22,16 +22,15 @@ from os.path import isfile
 from shutil import which
 from typing import Callable, Optional, Sequence, Tuple, Union
 
-import Utils
-import settings
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
-
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
-    is_windows, is_macos, is_linux
+import settings
+import Utils
+from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
+                   user_path)
+from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
 def open_host_yaml():
