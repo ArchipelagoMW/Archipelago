@@ -2783,6 +2783,86 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Defeat Kerrigan", SC2_RACESWAP_LOC_ID_OFFSET + 1607, LocationType.MASTERY,
             logic.protoss_competent_comp
         ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 2300, LocationType.VICTORY,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Landing Zone Cleared", SC2WOL_LOC_ID_OFFSET + 2301, LocationType.EXTRA),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 2302, LocationType.VANILLA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "South Close Prisoners", SC2WOL_LOC_ID_OFFSET + 2303, LocationType.VANILLA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "South Far Prisoners", SC2WOL_LOC_ID_OFFSET + 2304, LocationType.VANILLA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "North Prisoners", SC2WOL_LOC_ID_OFFSET + 2305, LocationType.VANILLA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Mothership", SC2WOL_LOC_ID_OFFSET + 2306, LocationType.EXTRA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Expansion Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2307, LocationType.EXTRA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Middle Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2308, LocationType.EXTRA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Southeast Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2309, LocationType.EXTRA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Stargate Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2310, LocationType.EXTRA,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Northwest Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2311, LocationType.CHALLENGE,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "West Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2312, LocationType.CHALLENGE,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Southwest Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2313, LocationType.CHALLENGE,
+            logic.zerg_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 2400, LocationType.VICTORY,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Landing Zone Cleared", SC2WOL_LOC_ID_OFFSET + 2401, LocationType.EXTRA),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Expansion Prisoners", SC2WOL_LOC_ID_OFFSET + 2402, LocationType.VANILLA,
+            lambda state: adv_tactics or logic.protoss_maw_requirement(state)
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "South Close Prisoners", SC2WOL_LOC_ID_OFFSET + 2403, LocationType.VANILLA,
+            lambda state: adv_tactics or logic.protoss_maw_requirement(state)
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "South Far Prisoners", SC2WOL_LOC_ID_OFFSET + 2404, LocationType.VANILLA,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "North Prisoners", SC2WOL_LOC_ID_OFFSET + 2405, LocationType.VANILLA,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Mothership", SC2WOL_LOC_ID_OFFSET + 2406, LocationType.EXTRA,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Expansion Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2407, LocationType.EXTRA,
+            lambda state: adv_tactics or logic.protoss_maw_requirement(state)
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Middle Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2408, LocationType.EXTRA,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Southeast Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2409, LocationType.EXTRA,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Stargate Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2410, LocationType.EXTRA,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Northwest Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2411, LocationType.CHALLENGE,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "West Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2412, LocationType.CHALLENGE,
+            logic.protoss_maw_requirement
+        ),
+        make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Southwest Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 2413, LocationType.CHALLENGE,
+            logic.protoss_maw_requirement
+        ),
         make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2500, LocationType.VICTORY,
             lambda state: (
                 adv_tactics

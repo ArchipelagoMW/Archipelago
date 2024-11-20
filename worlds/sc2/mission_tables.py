@@ -111,7 +111,7 @@ class SC2Mission(Enum):
     THE_DIG = 9, "The Dig", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_dig", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsProtoss
     THE_MOEBIUS_FACTOR = 10, "The Moebius Factor", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_moebius_factor", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsZerg
     SUPERNOVA = 11, "Supernova", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.HARD, "ap_supernova", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsProtoss
-    MAW_OF_THE_VOID = 12, "Maw of the Void", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.HARD, "ap_maw_of_the_void", MissionFlag.Terran|MissionFlag.VsProtoss
+    MAW_OF_THE_VOID = 12, "Maw of the Void (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.HARD, "ap_maw_of_the_void", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     DEVILS_PLAYGROUND = 13, "Devil's Playground (Terran)", SC2Campaign.WOL, "Covert", SC2Race.TERRAN, MissionPools.EASY, "ap_devils_playground", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     WELCOME_TO_THE_JUNGLE = 14, "Welcome to the Jungle (Terran)", SC2Campaign.WOL, "Covert", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_welcome_to_the_jungle", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     BREAKOUT = 15, "Breakout", SC2Campaign.WOL, "Covert", SC2Race.ANY, MissionPools.STARTER, "ap_breakout", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsTerran
@@ -215,7 +215,8 @@ class SC2Mission(Enum):
     # 100/101 - The Dig
     # 102/103 - Moebius Factor
     # 104/105 - Supernova
-    # 106/107 - Maw of the Void
+    MAW_OF_THE_VOID_Z = 106, "Maw of the Void (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.HARD, "ap_maw_of_the_void", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap
+    MAW_OF_THE_VOID_P = 107, "Maw of the Void (Protoss)", SC2Campaign.WOL, "Artifact", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_maw_of_the_void", MissionFlag.Protoss|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     DEVILS_PLAYGROUND_Z = 108, "Devil's Playground (Zerg)", SC2Campaign.WOL, "Covert", SC2Race.ZERG, MissionPools.EASY, "ap_devils_playground", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
     DEVILS_PLAYGROUND_P = 109, "Devil's Playground (Protoss)", SC2Campaign.WOL, "Covert", SC2Race.PROTOSS, MissionPools.EASY, "ap_devils_playground", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
     WELCOME_TO_THE_JUNGLE_Z = 110, "Welcome to the Jungle (Zerg)", SC2Campaign.WOL, "Covert", SC2Race.ZERG, MissionPools.HARD, "ap_welcome_to_the_jungle", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap

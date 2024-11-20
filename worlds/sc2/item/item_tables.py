@@ -1191,7 +1191,7 @@ item_table = {
                  classification=ItemClassification.progression),
     item_names.INFESTED_LIBERATOR:
         ItemData(23 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 22, SC2Race.ZERG,
-                 classification=ItemClassification.useful),
+                 classification=ItemClassification.progression),
     item_names.INFESTED_MISSILE_TURRET:
         ItemData(24 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 23, SC2Race.ZERG,
                  classification=ItemClassification.progression),
@@ -1274,7 +1274,7 @@ item_table = {
     item_names.HYDRALISK_MUSCULAR_AUGMENTS:
         ItemData(229 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 29, SC2Race.ZERG, parent_item=item_names.HYDRALISK),
     item_names.HYDRALISK_RESOURCE_EFFICIENCY:
-        ItemData(230 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 0, SC2Race.ZERG, parent_item=item_names.HYDRALISK),
+        ItemData(230 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 0, SC2Race.ZERG, parent_item=item_names.HYDRALISK, classification=ItemClassification.progression),
     item_names.BANELING_CENTRIFUGAL_HOOKS:
         ItemData(231 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 1, SC2Race.ZERG,
                  parent_item=item_names.ZERGLING_BANELING_ASPECT),
@@ -1528,7 +1528,7 @@ item_table = {
         ItemData(373 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 0, SC2Race.ZERG, parent_item=item_names.INFESTED_SIEGE_TANK),
     item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE:
         ItemData(374 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 2, SC2Race.ZERG,
-                 parent_item=item_names.INFESTED_DIAMONDBACK, quantity=2),
+                 parent_item=item_names.INFESTED_DIAMONDBACK, classification=ItemClassification.progression, quantity=2),
     item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW:
         ItemData(375 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 1, SC2Race.ZERG, parent_item=item_names.INFESTED_DIAMONDBACK),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK:
