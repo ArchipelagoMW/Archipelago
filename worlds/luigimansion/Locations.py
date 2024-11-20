@@ -6,7 +6,7 @@ from BaseClasses import Location, Region
 class LMLocationData(NamedTuple):
     region: str
     code: Optional[int]  # used to create ap_id, None for events
-    type: str  # type of randomization option/jmp table and group [Chest, Furnichest, Furniture, Plant, Boo, GSpeedy (Gold Mouse), BSpeedy (Blue Ghost), Portrait, Toad]
+    type: str  # type of randomization option/jmp table and group [Chest, Furniture, Furniture, Plant, Boo, GSpeedy (Gold Mouse), BSpeedy (Blue Ghost), Portrait, Toad]
     jmpentry: int  # entry number on the jmp table it belongs to
     access: List[str]  # items required to access location, many special cases
     locked_item: Optional[str] = None
@@ -39,7 +39,7 @@ class LMLocation(Location):
 
 # Notes on type field in location data
 # Chest item contents are modified in treasuretable and are always included
-# Furnichest item contents are modified in furnitureinfo and are always included
+# Furniture item contents are modified in furnitureinfo and are always included
 # Furniture item contents are modified in furnitureinfo but are only included with Knocksanity active
 # Plant item contents are modified in furnitureinfo but are only included when Plantsanity is active
 # BGhosts (DBSpeedy) are Blue Ghosts - item contents are modified in
@@ -53,42 +53,43 @@ class LMLocation(Location):
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Base Chests / Locations
     "Luigi's Courage": LMLocationData("Parlor", 708, "Special", 0, []), # Give item during/after E. Gadd cutscene
-    "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furnichest", 233, []),
+    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Special", 0, []),
+    "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, []),
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Special", 4, ["Fire Element Medal"]),
-    "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furnichest", 187, []),
-    "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furnichest", 243, []),
-    "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furnichest", 241, []),
-    "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furnichest", 242, []),
-    "Hidden Room Small Chest L Floor": LMLocationData("Hidden Room", 12, "Furnichest", 245, []),
-    "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 13, "Furnichest", 244, []),
-    "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 14, "Furnichest", 246, []),
-    "Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furnichest", 247, []),
-    "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furnichest", 106, []),
-    "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furnichest", 19, []),
+    "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, []),
+    "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, []),
+    "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, []),
+    "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, []),
+    "Hidden Room Small Chest L Floor": LMLocationData("Hidden Room", 12, "Furniture", 245, []),
+    "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 13, "Furniture", 244, []),
+    "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 14, "Furniture", 246, []),
+    "Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furniture", 247, []),
+    "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, []),
+    "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 19, []),
     "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", 0, []),  # special event, unknown location
-    "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furnichest", 532, []),
-    "Sealed Room NE Shelf Chest": LMLocationData("Sealed Room", 30, "Furnichest", 534, []),
-    "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furnichest", 531, []),
-    "Sealed Room SE Shelf Chest": LMLocationData("Sealed Room", 32, "Furnichest", 535, []),
-    "Sealed Room Table Chest": LMLocationData("Sealed Room", 33, "Furnichest", 533, []),
-    "Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furnichest", 529, []),
-    "Sealed Room Upper L Big Chest": LMLocationData("Sealed Room", 35, "Furnichest", 528, []),
-    "Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furnichest", 527, []),
-    "Sealed Room Upper R Big Chest": LMLocationData("Sealed Room", 37, "Furnichest", 530, []),
-    "Armory 1st Gray Chest": LMLocationData("Armory", 38, "Furnichest", 651, []),
-    "Armory 2nd Gray Chest": LMLocationData("Armory", 39, "Furnichest", 652, []),
-    "Armory 3rd Gray Chest": LMLocationData("Armory", 40, "Furnichest", 653, []),
-    "Armory 4th Gray Chest": LMLocationData("Armory", 41, "Furnichest", 654, []),
-    "Armory 5th Gray Chest": LMLocationData("Armory", 42, "Furnichest", 655, []),
-    "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furnichest", 680, []),
-    "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furnichest", 681, []),
-    "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furnichest", 682, []),
+    "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furniture", 532, []),
+    "Sealed Room NE Shelf Chest": LMLocationData("Sealed Room", 30, "Furniture", 534, []),
+    "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furniture", 531, []),
+    "Sealed Room SE Shelf Chest": LMLocationData("Sealed Room", 32, "Furniture", 535, []),
+    "Sealed Room Table Chest": LMLocationData("Sealed Room", 33, "Furniture", 533, []),
+    "Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, []),
+    "Sealed Room Upper L Big Chest": LMLocationData("Sealed Room", 35, "Furniture", 528, []),
+    "Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, []),
+    "Sealed Room Upper R Big Chest": LMLocationData("Sealed Room", 37, "Furniture", 530, []),
+    "Armory 1st Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, []),
+    "Armory 2nd Gray Chest": LMLocationData("Armory", 39, "Furniture", 652, []),
+    "Armory 3rd Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, []),
+    "Armory 4th Gray Chest": LMLocationData("Armory", 41, "Furniture", 654, []),
+    "Armory 5th Gray Chest": LMLocationData("Armory", 42, "Furniture", 655, []),
+    "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, []),
+    "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, []),
+    "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furniture", 682, []),
     # Adds Toads as locations
-    "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", 0, []),
-    "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", 0, []),
-    "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", 0, []),
-    "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", 0, []),
-    "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", 0, []),
+    # "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", 0, []),
+    # "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", 0, []),
+    # "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", 0, []),
+    # "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", 0, []),
+    # "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", 0, []),
 
 
 
@@ -143,7 +144,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
-    "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furnichest", 690, []),
+    "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furniture", 690, []),
     "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [])
 }
 

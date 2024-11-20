@@ -15,7 +15,7 @@ from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items
 from .Locations import *
 from .Options import LMOptions
 from .Regions import *
-from ..generic.Rules import set_rule
+from . import Rules
 
 
 def run_client():
@@ -84,6 +84,63 @@ class LMWorld(World):
         "Sealed Room": "No Element",
         "Armory": "No Element",
         "Pipe Room": "No Element"
+    }
+
+    open_doors: dict[int, int] = {
+        34: 0,
+        38: 0,
+        43: 1,
+        41: 1,
+        33: 0,
+        32: 1,
+        31: 0,
+        27: 0,
+        28: 0,
+        3:  0,
+        1:  1,
+        4:  0,
+        5:  1,
+        7:  0,
+        11: 1,
+        14: 0,
+        15: 0,
+        10: 1,
+        17: 0,
+        18: 1,
+        20: 1,
+        16: 0,
+        74: 0,
+        75: 1,
+        23: 1,
+        21: 0,
+        25: 0,
+        24: 1,
+        42: 0,
+        29: 0,
+        30: 1,
+        44: 1,
+        40: 1,
+        45: 1,
+        48: 1,
+        49: 1,
+        47: 1,
+        51: 0,
+        63: 0,
+        52: 1,
+        59: 0,
+        62: 0,
+        55: 1,
+        53: 0,
+        56: 0,
+        50: 1,
+        65: 0,
+        9:  1,
+        71: 0,
+        68: 0,
+        67: 1,
+        69: 0,
+        70: 1,
+        72: 0
     }
 
     def __init__(self, *args, **kwargs):
@@ -336,10 +393,12 @@ class LMWorld(World):
                 if len(entry.access) != 0:
                     # if entry.code == 70:     # Placed here for eventual Huge Flower Support
                     #    add_rule(entry,
-                    #             lambda state: state.has("Progressive Flower", self.player, 4))
+                    #             lambda state: state.has("Progressive Flower", self.player, 4)
+                    #             and Rules.can_fst_water(state, player))
                     # else:
                     for item in entry.access:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                        if item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                 region.locations.append(entry)
         if self.options.knocksanity:
             for location, data in FURNITURE_LOCATION_TABLE.items():
@@ -347,7 +406,14 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
                     for item in entry.access:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         if self.options.speedy_spirits:
             for location, data in SPEEDY_LOCATION_TABLE.items():
@@ -355,7 +421,14 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if len(entry.access) != 0:
                     for item in entry.access:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         if self.options.portrait_ghosts:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
@@ -367,7 +440,15 @@ class LMWorld(World):
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
-                    for item in entry.access: add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                    for item in entry.access:
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in BOO_LOCATION_TABLE.items():
@@ -380,7 +461,15 @@ class LMWorld(World):
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
-                    for item in entry.access: add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                    for item in entry.access:
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         else:
             for location, data in BOO_LOCATION_TABLE.items():
@@ -397,7 +486,14 @@ class LMWorld(World):
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         if self.options.goal == 1:
             rankcalc = 0
@@ -450,7 +546,14 @@ class LMWorld(World):
             entry = LMLocation(self.player, location, region, data)
             if len(entry.access) != 0:
                 for item in entry.access:
-                    add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                    if item == "Fire Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                    elif item == "Water Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                    elif item == "Ice Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                    else:
+                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
             if entry.code is None:
                 entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
             region.locations.append(entry)
@@ -459,7 +562,14 @@ class LMWorld(World):
             entry = LMLocation(self.player, location, region, data)
             if len(entry.access) != 0:
                 for item in entry.access:
-                    add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                    if item == "Fire Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                    elif item == "Water Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                    elif item == "Ice Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                    else:
+                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
             region.locations.append(entry)
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
@@ -468,9 +578,16 @@ class LMWorld(World):
                 add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
             elif entry.code == 25:
                 add_rule(entry, lambda state: state.has_group("Medal", self.player))
-            else:
+            if len(entry.access) != 0:
                 for item in entry.access:
-                    add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                    if item == "Fire Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                    elif item == "Water Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                    elif item == "Ice Element Medal":
+                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                    else:
+                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self.multiworld, self.player)

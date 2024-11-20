@@ -9,7 +9,7 @@ import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 
-from .Items import ITEM_TABLE, LOOKUP_ID_TO_NAME
+from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
 from .Locations import ALL_LOCATION_TABLE, LMLocation
 
 CONNECTION_REFUSED_GAME_STATUS = (
@@ -31,7 +31,7 @@ CURR_HEALTH_ADDR = 0x803C4C0A
 # LETTER_BASE_ADDR = 0x803C4C8E
 # LETTER_OWND_ADDR = 0x803C4C98
 #
-# # These addresses are used to check flags for locations.
+# # These addresses are used to check flags for locations. Change these for found flags in doc
 CHARTS_BITFLD_ADDR = 0x803C4CFC
 CHESTS_BITFLD_ADDR = 0x803C5380
 SWITCHES_BITFLD_ADDR = 0x803C5384
@@ -78,7 +78,7 @@ class LMCommandProcessor(ClientCommandProcessor):
 class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
-    items_handling = 0b111  # TODO CORRECT FOR LM
+    items_handling = 0b111
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
@@ -164,7 +164,7 @@ def _give_item(ctx: LMContext, item_name: str) -> bool:
     if not check_ingame() or dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) == 0xFF:
         return False
 
-    item_id = ITEM_TABLE[item_name].item_id
+    item_id = ALL_ITEMS_TABLE[item_name].item_id
 
     # Loop through the give item array, placing the item in an empty slot
     for idx in range(ctx.len_give_item_array):
@@ -211,7 +211,7 @@ async def check_locations(ctx: LMContext):
         checked = False
 
         # Special-case checks TODO CORRECT FOR LM
-        if data.type == LMLocationType.SPECL:
+        if data.type == "Special":
             # The flag for "Windfall Island - Maggie - Delivery Reward" is still unknown.
             # However, as a temporary workaround, we can just check if the player had Moblin's letter at some point,
             # but it's no longer in their Delivery Bag

@@ -2,6 +2,7 @@ from typing import Optional, Callable
 
 from BaseClasses import MultiWorld, Entrance
 from worlds.generic.Rules import add_rule
+from . import Rules
 
 
 def set_ghost_type(multiworld: MultiWorld, ghost_list: dict):
@@ -20,14 +21,21 @@ def connect(multiworld: MultiWorld, player: int, source: str, target: str,
     if rule is not None:
         add_rule(connection, rule, "and")
 
+    # Loop through regions with potential ghost rando. Register indirect connection based on spirit access spots.
     for region_to_type in multiworld.worlds[player].ghost_affected_regions:
         if region_to_type == target_region.name:
-            if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire":
-                add_rule(connection, lambda state: state.has("Water Element Medal", player), "and")
-            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water":
-                add_rule(connection, lambda state: state.has("Ice Element Medal", player), "and")
-            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice":
-                add_rule(connection, lambda state: state.has("Fire Element Medal", player), "and")
+            if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire": # if fire, require water
+                add_rule(connection, lambda state: Rules.can_fst_water(state, player), "and")
+                for r in Rules.WATER_SPIRIT_SPOT:
+                    multiworld.register_indirect_condition(r, connection)
+            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water": #if water, require ice
+                add_rule(connection, lambda state: Rules.can_fst_ice(state, player), "and")
+                for r in Rules.ICE_SPIRIT_SPOT:
+                    multiworld.register_indirect_condition(r, connection)
+            elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice": # if ice, require fire
+                add_rule(connection, lambda state: Rules.can_fst_fire(state, player), "and")
+                for r in Rules.FIRE_SPIRIT_SPOT:
+                    multiworld.register_indirect_condition(r, connection)
             else:
                 pass
 
@@ -81,18 +89,18 @@ def connect_regions(multiworld: MultiWorld, player: int):
             lambda state: state.has("Storage Room Key", player))
     connect(multiworld, player, "Dining Room", "Kitchen")
     connect(multiworld, player, "Kitchen", "Boneyard",
-            lambda state: state.has("Water Element Medal", player))
+            lambda state: Rules.can_fst_water(state, player))
     connect(multiworld, player, "Boneyard", "Graveyard",
-            lambda state: state.has("Water Element Medal", player))
+            lambda state: Rules.can_fst_water(state, player))
     connect(multiworld, player, "Billiards Room", "Projection Room")
     connect(multiworld, player, "Fortune-Teller's Room", "Mirror Room",
-            lambda state: state.has("Fire Element Medal", player))
+            lambda state: Rules.can_fst_fire(state, player))
     connect(multiworld, player, "Laundry Room", "Butler's Room")
     connect(multiworld, player, "Butler's Room", "Hidden Room")
     connect(multiworld, player, "Courtyard", "The Well")
     connect(multiworld, player, "Rec Room", "2F Stairwell")
     connect(multiworld, player, "2F Stairwell", "Tea Room",
-            lambda state: state.has("Water Element Medal", player))
+            lambda state: Rules.can_fst_water(state, player))
     connect(multiworld, player, "2F Stairwell", "Rec Room")
     connect(multiworld, player, "2F Stairwell", "2F Rear Hallway")
     connect(multiworld, player, "2F Rear Hallway", "2F Bathroom")
@@ -104,9 +112,9 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "2F Rear Hallway", "Safari Room",
             lambda state: state.has("Safari Key", player))
     connect(multiworld, player, "Astral Hall", "Observatory",
-            lambda state: state.has("Fire Element Medal", player))
+            lambda state: Rules.can_fst_fire(state, player))
     connect(multiworld, player, "Sitting Room", "Guest Room",
-            lambda state: state.has("Fire Element Medal", player) and state.has("Water Element Medal", player))
+            lambda state: Rules.can_fst_fire(state, player) and Rules.can_fst_water(state, player))
     connect(multiworld, player, "Safari Room", "3F Right Hallway")
     connect(multiworld, player, "3F Right Hallway", "Artist's Studio",
             lambda state: state.has("Art Studio Key", player))
@@ -114,7 +122,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
             lambda state: state.has("Balcony Key", player) and state.has("Boo", player,
                                                                          multiworld.worlds[player].options.balcony_boo_count))
     connect(multiworld, player, "Balcony", "3F Left Hallway",
-            lambda state: state.has("Diamond Key", player) and state.has("Ice Element Medal", player))
+            lambda state: state.has("Diamond Key", player) and Rules.can_fst_ice(state, player))
     connect(multiworld, player, "3F Left Hallway", "Armory",
             lambda state: state.has("Armory Key", player))
     connect(multiworld, player, "3F Left Hallway", "Telephone Room")

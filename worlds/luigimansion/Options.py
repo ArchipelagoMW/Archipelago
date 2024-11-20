@@ -100,6 +100,11 @@ class Enemizer(Toggle):
     display_name = "Enemizer"
 
 
+class DoorRando(Toggle):
+    """Randomize which doors are locked or unlocked in the mansion."""
+    display_name = "Door Randomization"
+
+
 class Goal(Choice):
     """
     Determines when victory is achieved in your playthrough.
@@ -136,6 +141,7 @@ class LMOptions(PerGameCommonOptions):
     good_vacuum: BetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
+    door_rando: DoorRando
     plantsanity: Plants
     knocksanity: Knocksanity
     boosanity: Boosanity
