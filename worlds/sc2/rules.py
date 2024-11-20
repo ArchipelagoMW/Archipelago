@@ -510,7 +510,8 @@ class SC2Logic:
         """
         return (
                 (state.has(item_names.WARP_PRISM, self.player)
-                 or (self.advanced_tactics(state) and state.has(item_names.ARBITER, self.player)))
+                 or (self.advanced_tactics and state.has(item_names.ARBITER, self.player))
+                 )
                 and self.protoss_common_unit_anti_armor_air(state)
                 and self.protoss_fleet(state)
         )
