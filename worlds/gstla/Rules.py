@@ -630,6 +630,10 @@ def set_access_rules(world: 'GSTLAWorld'):
     add_rule(world.get_location(LocationName.Gasp),
              lambda state: state.has(ItemName.Shamans_Rod, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Hover_Jade, player) and state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Reveal, player))
 
+    add_rule(world.get_location(LocationName.Shaman_Village_Elixir_Two),
+             lambda state: state.has(ItemName.Shamans_Rod, player) and state.has(ItemName.Hover_Jade, player) and 
+             state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Reveal, player))
+    
     add_rule(world.get_location(LocationName.Shaman_Village_Moapa_fight),
              lambda state: state.has(ItemName.Shamans_Rod, player))
 
@@ -930,10 +934,6 @@ def set_access_rules(world: 'GSTLAWorld'):
 
         add_rule(world.get_location(LocationName.Overworld_Rusty_Sword_Two),
              lambda state: state.has(ItemName.Wings_of_Anemos, player) and state.has(ItemName.Hover_Jade, player))
-
-        add_rule(world.get_location(LocationName.Shaman_Village_Elixir_Two),
-             lambda state: state.has(ItemName.Shamans_Rod, player) and state.has(ItemName.Hover_Jade, player) and 
-             state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Reveal, player))
 
         add_rule(world.get_location(LocationName.Shaman_Village_Weasels_Claw),
              lambda state: state.has(ItemName.Shamans_Rod, player))
