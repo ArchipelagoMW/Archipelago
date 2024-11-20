@@ -2,7 +2,8 @@ from math import ceil
 
 from typing import Dict
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState
+from worlds.AutoWorld import World
 from . import progression_items
 
 from worlds.generic.Rules import set_rule, add_rule
@@ -130,21 +131,23 @@ def meets_chessmen_expectations(state: CollectionState,
     return chessmen_count + pocket_count >= count
 
 
-def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
-    difficulty = determine_difficulty(opts)
-    absolute_relaxation = determine_relaxation(opts)
-    super_sized = opts.goal.value != opts.goal.option_single
-    always_super_sized = opts.goal.value == opts.goal.option_super
+def set_rules(self: World):
+    # TODO(chesslogic): get self.options and cast to CMOptions
+    difficulty = determine_difficulty(self.options)
+    absolute_relaxation = determine_relaxation(self.options)
+    super_sized = self.options.goal.value != self.options.goal.option_single
+    always_super_sized = self.options.goal.value == self.options.goal.option_super
 
-    multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+    self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     for name, item in location_table.items():
         if not super_sized and item.material_expectations == -1:
             continue
         if item.is_tactic is not None:
-            if opts.enable_tactics.value == opts.enable_tactics.option_none:
+            if self.options.enable_tactics.value == self.options.enable_tactics.option_none:
                 continue
-            elif opts.enable_tactics.value == opts.enable_tactics.option_turns and item.is_tactic == Tactic.Fork:
+            elif self.options.enable_tactics.value == self.options.enable_tactics.option_turns and \
+                    item.is_tactic == Tactic.Fork:
                 continue
         # AI avoids making trades except where it wins material or secures victory, so require that much material
         material_cost = item.material_expectations if not super_sized else (
@@ -152,23 +155,23 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
                 item.material_expectations, item.material_expectations_grand
             ))
         if material_cost > 0:
-            set_rule(multiworld.get_location(name, player),
+            set_rule(self.multiworld.get_location(name, self.player),
                      lambda state, v=material_cost: meets_material_expectations(
-                         state, v, player, difficulty, absolute_relaxation))
+                         state, v, self.player, difficulty, absolute_relaxation))
         # player must have (a king plus) that many chessmen to capture any given number of chessme
         if item.chessmen_expectations == -1:
             # this is used for items which change between grand and not... currently only 1 location
             assert item.code == 4_902_039, f"Unknown location code for custom chessmen: {str(item.code)}"
-            add_rule(multiworld.get_location(name, player),
+            add_rule(self.multiworld.get_location(name, self.player),
                      lambda state: meets_chessmen_expectations(
-                         state, 18 if super_sized else 14, player, opts.pocket_limit_by_pocket.value))
+                         state, 18 if super_sized else 14, self.player, self.options.pocket_limit_by_pocket.value))
         elif item.chessmen_expectations > 0:
-            add_rule(multiworld.get_location(name, player),
+            add_rule(self.multiworld.get_location(name, self.player),
                      lambda state, v=item.chessmen_expectations: meets_chessmen_expectations(
-                         state, v, player, opts.pocket_limit_by_pocket.value))
+                         state, v, self.player, self.options.pocket_limit_by_pocket.value))
         if item.material_expectations == -1:
-            add_rule(multiworld.get_location(name, player),
-                     lambda state: state.has("Super-Size Me", player))
+            add_rule(self.multiworld.get_location(name, self.player),
+                     lambda state: state.has("Super-Size Me", self.player))
 
     # add_rule(multiworld.get_location("Capture 2 Pawns", player),
     #          lambda state: count_enemy_pawns(state, player) > 1)
@@ -197,27 +200,27 @@ def set_rules(multiworld: MultiWorld, player: int, opts: CMOptions):
 
     # tactics
     # add_rule(multiworld.get_location("Pin", player), lambda state: has_pin(state, player))
-    if opts.enable_tactics.value == opts.enable_tactics.option_all:
-        add_rule(multiworld.get_location("Fork, Sacrificial", player), lambda state: has_pin(state, player))
-        add_rule(multiworld.get_location("Fork, True", player), lambda state: has_pin(state, player))
-        add_rule(multiworld.get_location("Fork, Sacrificial Triple", player), lambda state: has_pin(state, player))
-        add_rule(multiworld.get_location("Fork, True Triple", player), lambda state: has_pin(state, player))
-        add_rule(multiworld.get_location("Fork, Sacrificial Royal", player), lambda state: has_pin(state, player))
-        add_rule(multiworld.get_location("Fork, True Royal", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Threaten Pawn", player), lambda state: count_enemy_pawns(state, player) > 0)
-    add_rule(multiworld.get_location("Threaten Minor", player), lambda state: count_enemy_pieces(state, player) > 3)
-    add_rule(multiworld.get_location("Threaten Minor", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Threaten Major", player), lambda state: count_enemy_pieces(state, player) > 5)
-    add_rule(multiworld.get_location("Threaten Major", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Threaten Queen", player), lambda state: count_enemy_pieces(state, player) > 6)
-    add_rule(multiworld.get_location("Threaten Queen", player), lambda state: has_pin(state, player))
-    add_rule(multiworld.get_location("Threaten King", player), lambda state: has_pin(state, player))
+    if self.options.enable_tactics.value == self.options.enable_tactics.option_all:
+        add_rule(self.get_location("Fork, Sacrificial"), lambda state: has_pin(state, self.player))
+        add_rule(self.get_location("Fork, True"), lambda state: has_pin(state, self.player))
+        add_rule(self.get_location("Fork, Sacrificial Triple"), lambda state: has_pin(state, self.player))
+        add_rule(self.get_location("Fork, True Triple"), lambda state: has_pin(state, self.player))
+        add_rule(self.get_location("Fork, Sacrificial Royal"), lambda state: has_pin(state, self.player))
+        add_rule(self.get_location("Fork, True Royal"), lambda state: has_pin(state, self.player))
+    add_rule(self.get_location("Threaten Pawn"), lambda state: count_enemy_pawns(state, self.player) > 0)
+    add_rule(self.get_location("Threaten Minor"), lambda state: count_enemy_pieces(state, self.player) > 3)
+    add_rule(self.get_location("Threaten Minor"), lambda state: has_pin(state, self.player))
+    add_rule(self.get_location("Threaten Major"), lambda state: count_enemy_pieces(state, self.player) > 5)
+    add_rule(self.get_location("Threaten Major"), lambda state: has_pin(state, self.player))
+    add_rule(self.get_location("Threaten Queen"), lambda state: count_enemy_pieces(state, self.player) > 6)
+    add_rule(self.get_location("Threaten Queen"), lambda state: has_pin(state, self.player))
+    add_rule(self.get_location("Threaten King"), lambda state: has_pin(state, self.player))
     # special moves
-    total_queens = multiworld.worlds[player].items_used[player].get("Progressive Major To Queen", 0)
-    add_rule(multiworld.get_location("O-O Castle", player),
-             lambda state: state.has("Progressive Major Piece", player, 2 + total_queens))
-    add_rule(multiworld.get_location("O-O-O Castle", player),
-             lambda state: state.has("Progressive Major Piece", player, 2 + total_queens))
+    total_queens = self.items_used[self.player].get("Progressive Major To Queen", 0)
+    add_rule(self.get_location("O-O Castle"),
+             lambda state: state.has("Progressive Major Piece", self.player, 2 + total_queens))
+    add_rule(self.get_location("O-O-O Castle"),
+             lambda state: state.has("Progressive Major Piece", self.player, 2 + total_queens))
     # add_rule(multiworld.get_location("French Move", player), lambda state: state.has_french_move(player))
 
     # goal materials

@@ -139,7 +139,7 @@ class CMWorld(World):
         return CMItem(name, data.classification, data.code, self.player)
 
     def set_rules(self) -> None:
-        set_rules(self.multiworld, self.player, self.options)
+        set_rules(self)
 
     def create_items(self) -> None:
         super_sized = self.options.goal.value != self.options.goal.option_single
