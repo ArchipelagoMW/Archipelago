@@ -94,6 +94,21 @@ class SkillSource(RecipeSource):
         return f"SkillSource at level {self.level} {self.skill}"
 
 
+class SkillCraftsanitySource(SkillSource):
+    def __repr__(self):
+        return f"SkillCraftsanitySource at level {self.level} {self.skill}"
+
+
+class MasterySource(RecipeSource):
+    skill: str
+
+    def __init__(self, skill: str):
+        self.skill = skill
+
+    def __repr__(self):
+        return f"MasterySource at level {self.level} {self.skill}"
+
+
 class ShopSource(RecipeSource):
     region: str
     price: int

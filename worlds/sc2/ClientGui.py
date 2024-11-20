@@ -1,7 +1,8 @@
 from typing import *
 import asyncio
 
-from kvui import GameManager, HoverBehavior, ServerToolTip
+from NetUtils import JSONMessagePart
+from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.tabbedpanel import TabbedPanelItem
@@ -13,12 +14,12 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty
 
-from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
-from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
-    SC2Mission, SC2Race, SC2Campaign
-from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
-from worlds.sc2.Options import LocationInclusion
-from worlds.sc2 import SC2World, get_first_mission
+from .Client import SC2Context, calc_unfinished_missions, parse_unlock
+from .MissionTables import (lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, SC2Mission, SC2Race,
+                            SC2Campaign)
+from .Locations import LocationType, lookup_location_id_to_type
+from .Options import LocationInclusion
+from . import SC2World, get_first_mission
 
 
 class HoverableButton(HoverBehavior, Button):
@@ -69,6 +70,18 @@ class MissionLayout(GridLayout):
 class MissionCategory(GridLayout):
     pass
 
+
+class SC2JSONtoKivyParser(KivyJSONtoTextParser):
+    def _handle_text(self, node: JSONMessagePart):
+        if node.get("keep_markup", False):
+            for ref in node.get("refs", []):
+                node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
+                self.ref_count += 1
+            return super(KivyJSONtoTextParser, self)._handle_text(node)
+        else:
+            return super()._handle_text(node)
+
+
 class SC2Manager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -87,6 +100,7 @@ class SC2Manager(GameManager):
 
     def __init__(self, ctx) -> None:
         super().__init__(ctx)
+        self.json_to_kivy_parser = SC2JSONtoKivyParser(ctx)
 
     def clear_tooltip(self) -> None:
         if self.ctx.current_tooltip:
@@ -97,12 +111,9 @@ class SC2Manager(GameManager):
     def build(self):
         container = super().build()
 
-        panel = TabbedPanelItem(text="Starcraft 2 Launcher")
-        panel.content = CampaignScroll()
+        panel = self.add_client_tab("Starcraft 2 Launcher", CampaignScroll())
         self.campaign_panel = MultiCampaignLayout()
         panel.content.add_widget(self.campaign_panel)
-
-        self.tabs.add_widget(panel)
 
         Clock.schedule_interval(self.build_mission_table, 0.5)
 
@@ -269,7 +280,7 @@ class SC2Manager(GameManager):
         for loc in self.ctx.locations_for_mission(mission_name):
             if loc in self.ctx.missing_locations:
                 count += 1
-                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names.lookup_in_slot(loc))
+                locations[lookup_location_id_to_type[loc]].append(self.ctx.location_names.lookup_in_game(loc))
 
         plando_locations = []
         for plando_loc in self.ctx.plando_locations:

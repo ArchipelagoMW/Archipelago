@@ -5,7 +5,6 @@ import platform
 import shutil
 import sys
 import sysconfig
-import typing
 import warnings
 import zipfile
 import urllib.request
@@ -14,14 +13,14 @@ import json
 import threading
 import subprocess
 
-from collections.abc import Iterable
 from hashlib import sha3_512
 from pathlib import Path
+from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
+requirement = 'cx-Freeze==7.2.0'
 try:
-    requirement = 'cx-Freeze==7.0.0'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -30,7 +29,7 @@ try:
         install_cx_freeze = True
 except ImportError:
     install_cx_freeze = True
-    pkg_resources = None  # type: ignore [assignment]
+    pkg_resources = None  # type: ignore[assignment]
 
 if install_cx_freeze:
     # check if pip is available
@@ -61,12 +60,11 @@ from Cython.Build import cythonize
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
-non_apworlds: set = {
+non_apworlds: Set[str] = {
     "A Link to the Past",
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "ChecksFinder",
     "Clique",
     "Final Fantasy",
     "Lufia II Ancient Cave",
@@ -85,7 +83,7 @@ non_apworlds: set = {
 if sys.version_info < (3,10):
     non_apworlds.add("Hollow Knight")
 
-def download_SNI():
+def download_SNI() -> None:
     print("Updating SNI")
     machine_to_go = {
         "x86_64": "amd64",
@@ -95,7 +93,7 @@ def download_SNI():
     platform_name = platform.system().lower()
     machine_name = platform.machine().lower()
     # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
-    machine_name = "amd64" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
+    machine_name = "universal" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
     with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
         data = json.load(request)
     files = data["assets"]
@@ -106,17 +104,19 @@ def download_SNI():
         download_url: str = file["browser_download_url"]
         machine_match = download_url.rsplit("-", 1)[1].split(".", 1)[0] == machine_name
         if platform_name in download_url and machine_match:
+            source_url = download_url
             # prefer "many" builds
             if "many" in download_url:
-                source_url = download_url
                 break
-            source_url = download_url
+            # prefer the correct windows or windows7 build
+            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+                break
 
     if source_url and source_url.endswith(".zip"):
         with urllib.request.urlopen(source_url) as download:
             with zipfile.ZipFile(io.BytesIO(download.read()), "r") as zf:
-                for member in zf.infolist():
-                    zf.extract(member, path="SNI")
+                for zf_member in zf.infolist():
+                    zf.extract(zf_member, path="SNI")
         print(f"Downloaded SNI from {source_url}")
 
     elif source_url and (source_url.endswith(".tar.xz") or source_url.endswith(".tar.gz")):
@@ -130,11 +130,13 @@ def download_SNI():
                         raise ValueError(f"Unexpected file '{member.name}' in {source_url}")
                     elif member.isdir() and not sni_dir:
                         sni_dir = member.name
-                    elif member.isfile() and not sni_dir or not member.name.startswith(sni_dir):
+                    elif member.isfile() and not sni_dir or sni_dir and not member.name.startswith(sni_dir):
                         raise ValueError(f"Expected folder before '{member.name}' in {source_url}")
                     elif member.isfile() and sni_dir:
                         tf.extract(member)
             # sadly SNI is in its own folder on non-windows, so we need to rename
+            if not sni_dir:
+                raise ValueError("Did not find SNI in archive")
             shutil.rmtree("SNI", True)
             os.rename(sni_dir, "SNI")
         print(f"Downloaded SNI from {source_url}")
@@ -146,7 +148,7 @@ def download_SNI():
         print(f"No SNI found for system spec {platform_name} {machine_name}")
 
 
-signtool: typing.Optional[str]
+signtool: Optional[str]
 if os.path.exists("X:/pw.txt"):
     print("Using signtool")
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
@@ -198,13 +200,13 @@ extra_data = ["LICENSE", "data", "EnemizerCLI", "SNI"]
 extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
-def remove_sprites_from_folder(folder):
+def remove_sprites_from_folder(folder: Path) -> None:
     for file in os.listdir(folder):
         if file != ".gitignore":
             os.remove(folder / file)
 
 
-def _threaded_hash(filepath):
+def _threaded_hash(filepath: Union[str, Path]) -> str:
     hasher = sha3_512()
     hasher.update(open(filepath, "rb").read())
     return base64.b85encode(hasher.digest()).decode()
@@ -218,11 +220,11 @@ class BuildCommand(setuptools.command.build.build):
     yes: bool
     last_yes: bool = False  # used by sub commands of build
 
-    def initialize_options(self):
+    def initialize_options(self) -> None:
         super().initialize_options()
         type(self).last_yes = self.yes = False
 
-    def finalize_options(self):
+    def finalize_options(self) -> None:
         super().finalize_options()
         type(self).last_yes = self.yes
 
@@ -234,27 +236,27 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         ('extra-data=', None, 'Additional files to add.'),
     ]
     yes: bool
-    extra_data: Iterable  # [any] not available in 3.8
-    extra_libs: Iterable  # work around broken include_files
+    extra_data: Iterable[str]
+    extra_libs: Iterable[str]  # work around broken include_files
 
     buildfolder: Path
     libfolder: Path
     library: Path
     buildtime: datetime.datetime
 
-    def initialize_options(self):
+    def initialize_options(self) -> None:
         super().initialize_options()
         self.yes = BuildCommand.last_yes
         self.extra_data = []
         self.extra_libs = []
 
-    def finalize_options(self):
+    def finalize_options(self) -> None:
         super().finalize_options()
         self.buildfolder = self.build_exe
         self.libfolder = Path(self.buildfolder, "lib")
         self.library = Path(self.libfolder, "library.zip")
 
-    def installfile(self, path, subpath=None, keep_content: bool = False):
+    def installfile(self, path: Path, subpath: Optional[Union[str, Path]] = None, keep_content: bool = False) -> None:
         folder = self.buildfolder
         if subpath:
             folder /= subpath
@@ -269,7 +271,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         else:
             print('Warning,', path, 'not found')
 
-    def create_manifest(self, create_hashes=False):
+    def create_manifest(self, create_hashes: bool = False) -> None:
         # Since the setup is now split into components and the manifest is not,
         # it makes most sense to just remove the hashes for now. Not aware of anyone using them.
         hashes = {}
@@ -291,7 +293,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         json.dump(manifest, open(manifestpath, "wt"), indent=4)
         print("Created Manifest")
 
-    def run(self):
+    def run(self) -> None:
         # start downloading sni asap
         sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
         sni_thread.start()
@@ -342,7 +344,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
 
         # post build steps
         if is_windows:  # kivy_deps is win32 only, linux picks them up automatically
-            from kivy_deps import sdl2, glew
+            from kivy_deps import sdl2, glew  # type: ignore
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
                 print(f"copying {folder} -> {self.libfolder}")
@@ -363,7 +365,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
             self.installfile(Path(data))
 
         # kivi data files
-        import kivy
+        import kivy  # type: ignore[import-untyped]
         shutil.copytree(os.path.join(os.path.dirname(kivy.__file__), "data"),
                         self.buildfolder / "data",
                         dirs_exist_ok=True)
@@ -373,7 +375,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         from worlds.AutoWorld import AutoWorldRegister
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
-        folders_to_remove: typing.List[str] = []
+        folders_to_remove: List[str] = []
         disabled_worlds_folder = "worlds_disabled"
         for entry in os.listdir(disabled_worlds_folder):
             if os.path.isdir(os.path.join(disabled_worlds_folder, entry)):
@@ -394,7 +396,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
         try:
-            from maseya import z3pr
+            from maseya import z3pr  # type: ignore[import-untyped]
         except ImportError:
             print("Maseya Palette Shuffle not found, skipping data files.")
         else:
@@ -445,16 +447,16 @@ class AppImageCommand(setuptools.Command):
         ("app-exec=", None, "The application to run inside the image."),
         ("yes", "y", 'Answer "yes" to all questions.'),
     ]
-    build_folder: typing.Optional[Path]
-    dist_file: typing.Optional[Path]
-    app_dir: typing.Optional[Path]
+    build_folder: Optional[Path]
+    dist_file: Optional[Path]
+    app_dir: Optional[Path]
     app_name: str
-    app_exec: typing.Optional[Path]
-    app_icon: typing.Optional[Path]  # source file
+    app_exec: Optional[Path]
+    app_icon: Optional[Path]  # source file
     app_id: str  # lower case name, used for icon and .desktop
     yes: bool
 
-    def write_desktop(self):
+    def write_desktop(self) -> None:
         assert self.app_dir, "Invalid app_dir"
         desktop_filename = self.app_dir / f"{self.app_id}.desktop"
         with open(desktop_filename, 'w', encoding="utf-8") as f:
@@ -469,7 +471,7 @@ class AppImageCommand(setuptools.Command):
             )))
         desktop_filename.chmod(0o755)
 
-    def write_launcher(self, default_exe: Path):
+    def write_launcher(self, default_exe: Path) -> None:
         assert self.app_dir, "Invalid app_dir"
         launcher_filename = self.app_dir / "AppRun"
         with open(launcher_filename, 'w', encoding="utf-8") as f:
@@ -492,7 +494,7 @@ $APPDIR/$exe "$@"
 """)
         launcher_filename.chmod(0o755)
 
-    def install_icon(self, src: Path, name: typing.Optional[str] = None, symlink: typing.Optional[Path] = None):
+    def install_icon(self, src: Path, name: Optional[str] = None, symlink: Optional[Path] = None) -> None:
         assert self.app_dir, "Invalid app_dir"
         try:
             from PIL import Image
@@ -514,7 +516,8 @@ $APPDIR/$exe "$@"
         if symlink:
             symlink.symlink_to(dest_file.relative_to(symlink.parent))
 
-    def initialize_options(self):
+    def initialize_options(self) -> None:
+        assert self.distribution.metadata.name
         self.build_folder = None
         self.app_dir = None
         self.app_name = self.distribution.metadata.name
@@ -528,17 +531,22 @@ $APPDIR/$exe "$@"
         ))
         self.yes = False
 
-    def finalize_options(self):
+    def finalize_options(self) -> None:
+        assert self.build_folder
         if not self.app_dir:
             self.app_dir = self.build_folder.parent / "AppDir"
         self.app_id = self.app_name.lower()
 
-    def run(self):
+    def run(self) -> None:
+        assert self.build_folder and self.dist_file, "Command not properly set up"
+        assert (
+            self.app_icon and self.app_id and self.app_dir and self.app_exec and self.app_name
+        ), "AppImageCommand not properly set up"
         self.dist_file.parent.mkdir(parents=True, exist_ok=True)
         if self.app_dir.is_dir():
             shutil.rmtree(self.app_dir)
         self.app_dir.mkdir(parents=True)
-        opt_dir = self.app_dir / "opt" / self.distribution.metadata.name
+        opt_dir = self.app_dir / "opt" / self.app_name
         shutil.copytree(self.build_folder, opt_dir)
         root_icon = self.app_dir / f'{self.app_id}{self.app_icon.suffix}'
         self.install_icon(self.app_icon, self.app_id, symlink=root_icon)
@@ -549,7 +557,7 @@ $APPDIR/$exe "$@"
         subprocess.call(f'ARCH={build_arch} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
 
 
-def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
+def find_libs(*args: str) -> Sequence[Tuple[str, str]]:
     """Try to find system libraries to be included."""
     if not args:
         return []
@@ -557,7 +565,7 @@ def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
     arch = build_arch.replace('_', '-')
     libc = 'libc6'  # we currently don't support musl
 
-    def parse(line):
+    def parse(line: str) -> Tuple[Tuple[str, str, str], str]:
         lib, path = line.strip().split(' => ')
         lib, typ = lib.split(' ', 1)
         for test_arch in ('x86-64', 'i386', 'aarch64'):
@@ -578,26 +586,29 @@ def find_libs(*args: str) -> typing.Sequence[typing.Tuple[str, str]]:
         ldconfig = shutil.which("ldconfig")
         assert ldconfig, "Make sure ldconfig is in PATH"
         data = subprocess.run([ldconfig, "-p"], capture_output=True, text=True).stdout.split("\n")[1:]
-        find_libs.cache = {  # type: ignore [attr-defined]
+        find_libs.cache = {  # type: ignore[attr-defined]
             k: v for k, v in (parse(line) for line in data if "=>" in line)
         }
 
-    def find_lib(lib, arch, libc):
-        for k, v in find_libs.cache.items():
+    def find_lib(lib: str, arch: str, libc: str) -> Optional[str]:
+        cache: Dict[Tuple[str, str, str], str] = getattr(find_libs, "cache")
+        for k, v in cache.items():
             if k == (lib, arch, libc):
                 return v
-        for k, v, in find_libs.cache.items():
+        for k, v, in cache.items():
             if k[0].startswith(lib) and k[1] == arch and k[2] == libc:
                 return v
         return None
 
-    res = []
+    res: List[Tuple[str, str]] = []
     for arg in args:
         # try exact match, empty libc, empty arch, empty arch and libc
         file = find_lib(arg, arch, libc)
         file = file or find_lib(arg, arch, '')
         file = file or find_lib(arg, '', libc)
         file = file or find_lib(arg, '', '')
+        if not file:
+            raise ValueError(f"Could not find lib {arg}")
         # resolve symlinks
         for n in range(0, 5):
             res.append((file, os.path.join('lib', os.path.basename(file))))
@@ -621,7 +632,7 @@ cx_Freeze.setup(
             "packages": ["worlds", "kivy", "cymem", "websockets"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
-                         "pandas"],
+                         "pandas", "zstandard"],
             "zip_include_packages": ["*"],
             "zip_exclude_packages": ["worlds", "sc2", "orjson"],  # TODO: remove orjson here once we drop py3.8 support
             "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
