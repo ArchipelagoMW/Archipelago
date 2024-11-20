@@ -12,9 +12,9 @@ import os
 from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Sequence, Tuple, Any, Mapping, TYPE_CHECKING
 
 from .Options import GSTLAOptions
-from BaseClasses import Item
+from BaseClasses import Item, ItemClassification
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
-    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_items
+    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_items, AP_PROG_PLACEHOLDER_ITEM
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
@@ -187,7 +187,10 @@ class GSTLAWorld(World):
                     continue
 
                 if ap_item.player != self.player:
-                    item_data = AP_PLACEHOLDER_ITEM
+                    if ap_item.classification & (ItemClassification.progression | ItemClassification.trap) > 0:
+                        item_data = AP_PROG_PLACEHOLDER_ITEM
+                    else:
+                        item_data = AP_PLACEHOLDER_ITEM
                 else:
                     item_data = item_table[ap_item.name]
 
