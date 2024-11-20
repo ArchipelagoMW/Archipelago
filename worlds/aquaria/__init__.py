@@ -119,14 +119,15 @@ class AquariaWorld(World):
         result: AquariaItem
         try:
             data = item_table[name]
-            classification: ItemClassification = ItemClassification.useful
-            if data.type == ItemType.JUNK:
-                classification = ItemClassification.filler
-            elif data.type == ItemType.PROGRESSION:
-                classification = ItemClassification.progression
-            result = AquariaItem(name, classification, data.id, self.player)
-        except BaseException:
-            raise Exception('The item ' + name + ' is not valid.')
+        except KeyError as e:
+            raise Exception('The item ' + name + ' is not valid.') from e
+
+        classification: ItemClassification = ItemClassification.useful
+        if data.type == ItemType.JUNK:
+            classification = ItemClassification.filler
+        elif data.type == ItemType.PROGRESSION:
+            classification = ItemClassification.progression
+        result = AquariaItem(name, classification, data.id, self.player)
 
         return result
 
