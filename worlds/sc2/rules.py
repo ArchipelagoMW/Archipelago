@@ -487,10 +487,12 @@ class SC2Logic:
         :return:
         """
         return (
-                state.has_all({item_names.NYDUS_WORM, item_names.SWARM_QUEEN}, self.player)
+                state.has(item_names.SWARM_QUEEN, self.player)
+                and (state.has(item_names.NYDUS_WORM, self.player)
+                     or (self.advanced_tactics and state.has(item_names.OVERLORD_VENTRAL_SACS, self.player)))
                 and (self.morph_brood_lord(state) or self.morph_guardian(state))
                 and (
-                        state.has_any({item_names.INFESTOR, item_names.CORRUPTOR, item_names.INFESTED_LIBERATOR}, self.player)
+                        state.has(item_names.INFESTOR, self.player)
                         or self.morph_tyrannozor(state)
                         or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_RESOURCE_EFFICIENCY, item_names.SWARM_HOST_PRESSURIZED_GLANDS}, self.player)
                         or state.has_all({item_names.HYDRALISK, item_names.HYDRALISK_RESOURCE_EFFICIENCY}, self.player)
@@ -498,6 +500,7 @@ class SC2Logic:
                     )
                 and (state.has_any({item_names.ABERRATION, item_names.ROACH, item_names.ULTRALISK}, self.player)
                      or self.morph_tyrannozor(state))
+                and (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR, item_names.INFESTED_LIBERATOR, item_names.BROOD_QUEEN}, self.player))
                 and self.zerg_competent_comp(state)
         )
 
