@@ -1088,7 +1088,7 @@ def run_as_textclient(*args):
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
     args = parser.parse_args(args)
 
-    args = handle_url_arg(args)
+    args = handle_url_arg(args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
     colorama.init()
