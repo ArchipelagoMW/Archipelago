@@ -80,10 +80,15 @@ class ShuffleColors(DefaultOnToggle):
 
 
 class ShufflePanels(Choice):
-    """If on, the puzzles on each panel are randomized.
+    """Determines how panel puzzles are randomized.
 
-    On "rearrange", the puzzles are the same as the ones in the base game, but
-    are placed in different areas.
+    - **None:** Most panels remain the same as in the base game. Note that there are
+      some panels (in particular, in Starting Room and Second Room) that are changed
+      by the randomizer even when panel shuffle is disabled.
+    - **Rearrange:** The puzzles are the same as the ones in the base game, but are
+      placed in different areas.
+
+    More options for puzzle randomization are planned in the future.
     """
     display_name = "Shuffle Panels"
     option_none = 0

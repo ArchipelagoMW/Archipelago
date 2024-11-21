@@ -5,7 +5,7 @@ Description: Used to manage Regions in the Aquaria game multiworld randomizer
 """
 
 from typing import Dict, Optional
-from BaseClasses import MultiWorld, Region, Entrance, ItemClassification, CollectionState
+from BaseClasses import MultiWorld, Region, Entrance, Item, ItemClassification, CollectionState
 from .Items import AquariaItem, ItemNames
 from .Locations import AquariaLocations, AquariaLocation, AquariaLocationNames
 from .Options import AquariaOptions, UnconfineHomeWater, LightNeededToGetToDarkPlaces, Objective
@@ -133,10 +133,13 @@ def _has_mini_bosses_four_gods(state: CollectionState, player: int) -> bool:
 
 
 def _has_secrets(state: CollectionState, player: int) -> bool:
-    """`player in `state` has obtained every secret memories"""
+    """The secrets have been acquired in the `state` of the `player`"""
     return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
                           ItemNames.THIRD_SECRET_OBTAINED}, player)
 
+def _item_not_advancement(item: Item):
+    """The `item` is not an advancement item"""
+    return not item.advancement
 
 class AquariaRegions:
     """
@@ -997,10 +1000,10 @@ class AquariaRegions:
                  lambda state: _has_hot_soup(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB, self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player), combine="or")
         add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB, self.player),
                  lambda state: _has_beast_and_soup_form(state, self.player) or
-                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player))
+                               state.has(ItemNames.LUMEREAN_GOD_BEATED, self.player), combine="or")
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
                                          self.player),
@@ -1080,7 +1083,7 @@ class AquariaRegions:
                  lambda state: _has_beast_form(state, self.player))
         add_rule(self.multiworld.get_location(
             AquariaLocationNames.OPEN_WATERS_BOTTOM_LEFT_AREA_BULB_INSIDE_THE_LOWEST_FISH_PASS, self.player),
-                 lambda state: _has_fish_form(state, self.player))
+            lambda state: _has_fish_form(state, self.player))
         add_rule(
             self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_WALKER_BABY, self.player),
             lambda state: _has_spirit_form(state, self.player))
@@ -1118,9 +1121,13 @@ class AquariaRegions:
         ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG, self.player),
                  lambda state: _has_beast_form(state, self.player))
+        add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB, self.player),
+                 lambda state: state.has("Sun God beated", self.player))
+        add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB, self.player),
+                 lambda state: state.has("Sun God beated", self.player))
         add_rule(self.multiworld.get_location(
-                    AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_BULB_IN_THE_SMALL_PATH_BEFORE_MITHALAS,
-                    self.player), lambda state: _has_bind_song(state, self.player)
+            AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_BULB_IN_THE_SMALL_PATH_BEFORE_MITHALAS,
+            self.player), lambda state: _has_bind_song(state, self.player)
         )
         if (options.objective.value != Objective.option_killing_the_four_gods and
             options.objective.value != Objective.option_gods_and_creator):
@@ -1133,91 +1140,82 @@ class AquariaRegions:
 
     def __no_progression_hard_or_hidden_location(self, options: AquariaOptions) -> None:
         self.multiworld.get_location(AquariaLocationNames.ENERGY_TEMPLE_BOSS_AREA_FALLEN_GOD_TOOTH,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.MITHALAS_BOSS_AREA_BEATING_MITHALAN_GOD,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_BOSS_AREA_BEATING_DRUNIAN_GOD,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_AREA_BEATING_LUMEREAN_GOD,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.HOME_WATERS_NAUTILUS_EGG,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.ENERGY_TEMPLE_BLASTER_ROOM_BLASTER_EGG,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.MITHALAS_CITY_CASTLE_BEATING_THE_PRIESTS,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.MERMOG_CAVE_PIRANHA_EGG,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(AquariaLocationNames.KING_JELLYFISH_CAVE_BULB_IN_THE_RIGHT_PATH_FROM_KING_JELLY,
+                                     self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(AquariaLocationNames.KING_JELLYFISH_CAVE_JELLYFISH_COSTUME,
+                                     self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(AquariaLocationNames.FINAL_BOSS_AREA_BULB_IN_THE_BOSS_THIRD_FORM_ROOM,
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_LEFT_CAVE_WALL,
+                                     self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(
+            AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_RIGHT_CAVE_WALL_BEHIND_THE_ICE_CRYSTAL,
+            self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(AquariaLocationNames.BUBBLE_CAVE_VERSE_EGG,
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(
             AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_BULB_CLOSE_TO_THE_SPIRIT_CRYSTALS,
-            self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+            self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_WALKER_BABY,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_SUN_KEY,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
+        self.multiworld.get_location(AquariaLocationNames.THE_BODY_BOTTOM_AREA_MUTANT_COSTUME,
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BULB_IN_THE_HIDDEN_ROOM_OF_THE_RIGHT_PART,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.ARNASSI_RUINS_ARNASSI_ARMOR,
-                                     self.player).item_rule = \
-            lambda item: item.classification != ItemClassification.progression
+                                     self.player).item_rule = _item_not_advancement
         if (options.objective.value != Objective.option_killing_the_four_gods and
             options.objective.value != Objective.option_gods_and_creator):
             self.multiworld.get_location(AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
-                                         self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                                         self.player).item_rule = _item_not_advancement
             self.multiworld.get_location(AquariaLocationNames.THE_BODY_BOTTOM_AREA_MUTANT_COSTUME,
-                                         self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                                         self.player).item_rule = _item_not_advancement
             self.multiworld.get_location(AquariaLocationNames.FINAL_BOSS_AREA_BULB_IN_THE_BOSS_THIRD_FORM_ROOM,
-                                         self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                                         self.player).item_rule = _item_not_advancement
             self.multiworld.get_location(
                 AquariaLocationNames.KING_JELLYFISH_CAVE_BULB_IN_THE_RIGHT_PATH_FROM_KING_JELLY,
-                self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                self.player).item_rule = _item_not_advancement
             self.multiworld.get_location(AquariaLocationNames.KING_JELLYFISH_CAVE_JELLYFISH_COSTUME,
-                                         self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                                         self.player).item_rule = _item_not_advancement
             self.multiworld.get_location(AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_LEFT_CAVE_WALL,
-                                         self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                                         self.player).item_rule = _item_not_advancement
             self.multiworld.get_location(
                 AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_RIGHT_CAVE_WALL_BEHIND_THE_ICE_CRYSTAL,
-                self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                self.player).item_rule = _item_not_advancement
             self.multiworld.get_location(AquariaLocationNames.BUBBLE_CAVE_VERSE_EGG,
-                                         self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+                                         self.player).item_rule = _item_not_advancement
 
     def __no_progression_area(self, area: dict) -> None:
         """Be sure to not put any progression items in location of an `area`"""
         for location in area:
-            self.multiworld.get_location(location, self.player).item_rule = \
-                lambda item: item.classification != ItemClassification.progression
+            self.multiworld.get_location(location, self.player).item_rule = _item_not_advancement
 
     def __no_progression_kelp_forest(self) -> None:
         """Be sure to not put any progression items in Kelp forest"""
@@ -1351,8 +1349,8 @@ class AquariaRegions:
         """
         Modify rules for single location or optional rules
         """
-        self.__adjusting_soup_rules()
         self.__adjusting_manual_rules(options)
+        self.__adjusting_soup_rules()
         self.__no_progression_areas(options)
         if options.light_needed_to_get_to_dark_places != LightNeededToGetToDarkPlaces.option_off:
             self.__adjusting_light_in_dark_place_rules(options.light_needed_to_get_to_dark_places)

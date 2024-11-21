@@ -15,6 +15,7 @@ from .Regions import AquariaRegions
 
 CLIENT_MINIMAL_COMPATIBILITY = [1, 4, 1]
 
+
 class AquariaWeb(WebWorld):
     """
     Class used to generate the Aquaria Game Web pages (setup, tutorial, etc.)
