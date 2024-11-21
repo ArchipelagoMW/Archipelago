@@ -235,8 +235,7 @@ class RAGameboy():
 
     def check_command_response(self, command: str, response: bytes):
         if command == "VERSION":
-            resp = response.decode('ascii')
-            ok = ("bizhawk connector" in resp) or (re.match("\d+\.\d+\.\d+", resp) is not None)
+            ok = re.match("\d+\.\d+\.\d+", response.decode('ascii')) is not None
         else:
             ok = response.startswith(command.encode())
         if not ok:

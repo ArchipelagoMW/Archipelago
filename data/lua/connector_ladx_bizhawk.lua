@@ -68,8 +68,9 @@ function on_vblank()
         -- "data" format is "COMMAND [PARAMETERS] [...]"
         local command = string.match(data, "%S+")
         if command == "VERSION" then
-            -- sending a bad version string keeps other things (SNI) from connecting
-            udp:sendto("bizhawk connector\n", msg_or_ip, port_or_nil)
+            -- 1.14 is the latest RetroArch release at the time of writing this, no other reason
+            -- for choosing this here.
+            udp:sendto("1.14.0\n", msg_or_ip, port_or_nil)
         elseif command == "GET_STATUS" then
             local status = "PLAYING"
             if client.ispaused() then
