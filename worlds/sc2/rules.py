@@ -498,7 +498,6 @@ class SC2Logic:
                     )
                 and (state.has_any({item_names.ABERRATION, item_names.ROACH, item_names.ULTRALISK}, self.player)
                      or self.morph_tyrannozor(state)
-                     or self.morph_igniter(state))
                 and self.zerg_competent_comp(state)
         )
 
