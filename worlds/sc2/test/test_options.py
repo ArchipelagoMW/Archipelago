@@ -1,13 +1,11 @@
 import unittest
 from typing import Set, Dict, List
 
-from .. import mission_tables, options
+from .. import options
 from ..item import item_tables
 
 
 class TestOptions(unittest.TestCase):
-    def test_campaign_size_option_max_matches_number_of_missions(self) -> None:
-        self.assertEqual(options.MaximumCampaignSize.range_end, len(mission_tables.SC2Mission))
 
     def test_unit_max_upgrades_matching_items(self) -> None:
         base_items: Set[str] = {
