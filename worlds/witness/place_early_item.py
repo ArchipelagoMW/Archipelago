@@ -4,9 +4,10 @@ from typing import TYPE_CHECKING, Dict, List, Set, Tuple
 from BaseClasses import CollectionState, Item, Location, LocationProgressType
 
 from .data import static_logic as static_witness_logic
+from .data.utils import cast_not_none
 
 if TYPE_CHECKING:
-    from . import WitnessWorld, cast_not_none
+    from . import WitnessWorld
 
 
 def get_available_early_locations(world: "WitnessWorld") -> List[Location]:
