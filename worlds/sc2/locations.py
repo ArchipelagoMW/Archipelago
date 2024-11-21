@@ -4356,6 +4356,36 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    and (not logic.take_over_ai_allies or logic.terran_base_trasher(state))),
                            flags=LocationFlag.SPEEDRUN
                            ),
+        make_location_data(SC2Mission.DARK_WHISPERS_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 9900, LocationType.VICTORY,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_T.mission_name, "First Prisoner Group", SC2_RACESWAP_LOC_ID_OFFSET + 9901, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_T.mission_name, "Second Prisoner Group", SC2_RACESWAP_LOC_ID_OFFSET + 9902, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_T.mission_name, "First Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 9903, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_T.mission_name, "Second Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 9904, LocationType.VANILLA,
+                           logic.terran_competent_comp
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10000, LocationType.VICTORY,
+                           logic.zerg_competent_comp_basic_aa
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "First Prisoner Group", SC2_RACESWAP_LOC_ID_OFFSET + 10001, LocationType.VANILLA,
+                           logic.zerg_competent_comp_basic_aa
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "Second Prisoner Group", SC2_RACESWAP_LOC_ID_OFFSET + 10002, LocationType.VANILLA,
+                           logic.zerg_competent_comp_basic_aa
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "First Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10003, LocationType.VANILLA,
+                           logic.zerg_competent_comp_basic_aa
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "Second Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10004, LocationType.VANILLA,
+                           logic.zerg_competent_comp_basic_aa
+                           ),
     ]
 
     beat_events = []
