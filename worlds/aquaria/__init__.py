@@ -117,10 +117,7 @@ class AquariaWorld(World):
         Create an AquariaItem using 'name' as item name.
         """
         result: AquariaItem
-        try:
-            data = item_table[name]
-        except KeyError as e:
-            raise Exception('The item ' + name + ' is not valid.') from e
+        data = item_table[name]
 
         classification: ItemClassification = ItemClassification.useful
         if data.type == ItemType.JUNK:
