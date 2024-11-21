@@ -58,21 +58,7 @@ item_table = {
     # the purpose of Checkmate Maxima. TODO: Consider adding a property "tactics", used for some complex locations.
     "Progressive Consul": CMItemData(4_901_026, ItemClassification.progression, quantity=2, material=325),
 
-    # "Enemy Pawn A": CMItemData(4_901_030, ItemClassification.progression),
-    # "Enemy Pawn B": CMItemData(4_901_031, ItemClassification.progression),
-    # "Enemy Pawn C": CMItemData(4_901_032, ItemClassification.progression),
-    # "Enemy Pawn D": CMItemData(4_901_033, ItemClassification.progression),
-    # "Enemy Pawn E": CMItemData(4_901_034, ItemClassification.progression),
-    # "Enemy Pawn F": CMItemData(4_901_035, ItemClassification.progression),
-    # "Enemy Pawn G": CMItemData(4_901_036, ItemClassification.progression),
-    # "Enemy Pawn H": CMItemData(4_901_037, ItemClassification.progression),
-    # "Enemy Piece A": CMItemData(4_901_038, ItemClassification.progression),
-    # "Enemy Piece B": CMItemData(4_901_039, ItemClassification.progression),
-    # "Enemy Piece C": CMItemData(4_901_040, ItemClassification.progression),
-    # "Enemy Piece D": CMItemData(4_901_041, ItemClassification.progression),
-    # "Enemy Piece F": CMItemData(4_901_042, ItemClassification.progression),
-    # "Enemy Piece G": CMItemData(4_901_043, ItemClassification.progression),
-    # "Enemy Piece H": CMItemData(4_901_044, ItemClassification.progression),
+    # 4_901_030 - 4_901_044 are unused, previously N
     # TODO: implement castling rule & guarantee major piece on that side for Locations
     # "Play 00 Castle": CMItemData(4_014, ItemClassification.progression),
     # "Play 000 Castle": CMItemData(4_015, ItemClassification.progression),
