@@ -155,7 +155,7 @@ class SC2Mission(Enum):
     THE_RECKONING = 49, "The Reckoning (Zerg)", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Zerg|MissionFlag.Kerrigan|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.HasRaceSwap
 
     # Prologue
-    DARK_WHISPERS = 50, "Dark Whispers", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsTZ
+    DARK_WHISPERS = 50, "Dark Whispers (Protoss)", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsTZ|MissionFlag.HasRaceSwap
     GHOSTS_IN_THE_FOG = 51, "Ghosts in the Fog", SC2Campaign.PROLOGUE, "_2", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_ghosts_in_the_fog", MissionFlag.Protoss|MissionFlag.VsProtoss
     EVIL_AWOKEN = 52, "Evil Awoken", SC2Campaign.PROLOGUE, "_3", SC2Race.PROTOSS, MissionPools.STARTER, "ap_evil_awoken", MissionFlag.Protoss|MissionFlag.NoBuild|MissionFlag.VsProtoss
 
@@ -276,7 +276,8 @@ class SC2Mission(Enum):
     DEATH_FROM_ABOVE_P = 179, "Death From Above (Protoss)", SC2Campaign.HOTS, "Korhal", SC2Race.PROTOSS, MissionPools.HARD, "ap_death_from_above", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.RaceSwap
     THE_RECKONING_T = 180, "The Reckoning (Terran)", SC2Campaign.HOTS, "Korhal", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
     THE_RECKONING_P = 181, "The Reckoning (Protoss)", SC2Campaign.HOTS, "Korhal", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
-    # 182/183 - Dark Whispers
+    DARK_WHISPERS_T = 182, "Dark Whispers (Terran)", SC2Campaign.PROLOGUE, "_1", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_dark_whispers", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsTZ|MissionFlag.RaceSwap
+    DARK_WHISPERS_Z = 183, "Dark Whispers (Zerg)", SC2Campaign.PROLOGUE, "_1", SC2Race.ZERG, MissionPools.MEDIUM, "ap_dark_whispers", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsTZ|MissionFlag.RaceSwap
     # 184/185 - Ghosts in the Fog
     # 186/187 - Evil Awoken
     # 188/189 - For Aiur!
