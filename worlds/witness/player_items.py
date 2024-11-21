@@ -176,13 +176,14 @@ class WitnessPlayerItems:
         if "Door / Door Panel" in self._world.options.early_good_items.value:
             good_doors = [
                 "Desert Doors & Elevator", "Keep Hedge Maze Doors", "Keep Pressure Plates Doors",
-                "Shadows Lower Doors", "Tunnels Doors",
+                "Shadows Lower Doors", "Tunnels Doors", "Quarry Stoneworks Doors",
 
                 "Keep Tower Shortcut (Door)", "Shadows Timed Door", "Tunnels Town Shortcut (Door)",
+                "Quarry Stoneworks Roof Exit (Door)",
 
                 "Desert Panels", "Keep Hedge Maze Panels",
 
-                "Shadows Door Timer (Panel)", "Keep Hedge Maze 1 (Panel)", "Town Maze Stairs (Panel)",
+                "Shadows Door Timer (Panel)",
             ]
 
             # While Caves Shortcuts don't unlock anything in symbol shuffle, you'd still rather have them early.
@@ -228,16 +229,23 @@ class WitnessPlayerItems:
             # In this case, we add some doors that aren't great, but are at least guaranteed to unlock 1 location.
 
             fallback_doors = [
+                "Keep Shadows Shortcut (Door)",  # Always Keep Shadows Shortcut Panel
+                "Keep Shortcuts",  # -"-
+                "Keep Pressure Plates Doors",  # -"-
+                "Keep Hedge Maze 1 (Panel)",  # Always Hedge 1
+                "Town Maze Stairs (Panel)",  # Always Maze Panel
+                "Shadows Laser Room Doors",  # Always Shadows Laser Panel
                 "Swamp Laser Shortcut (Door)",  # Always Swamp Laser
                 "Town Maze Panels",  # Always Town Maze Panel
                 "Town Doors",  # Always Town Church Lattice
-                "Town Church Entry (Door)",  # ditto
+                "Town Church Entry (Door)",  # -"-
                 "Town Tower Doors",  # Always Town Laser
             ]
+            self._world.random.shuffle(fallback_doors)
 
             while len(existing_doors) < 4 and fallback_doors:
                 fallback_door = fallback_doors.pop()
-                if fallback_door in existing_items_lookup:
+                if fallback_door in existing_items_lookup and fallback_door not in existing_doors:
                     existing_doors.append(fallback_door)
 
             output["Door"] = existing_doors
