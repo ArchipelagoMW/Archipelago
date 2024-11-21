@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import NamedTuple, Dict, Set, Optional
 
 from BaseClasses import Item
@@ -11,11 +10,11 @@ class LMItemData(NamedTuple):
     classification: IC
     quantity: int = 1
     doorid: Optional[int] = None
-    DME_item_id: Optional[int] = None  # potentially use when we figure out how to receive items in game
 
 
 class LMItem(Item):
     game: str = "Luigi's Mansion"
+    doorid: Optional[int] = None
 
     def __init__(self, name: str, player: int, data: LMItemData, force_nonprogress: bool):
         adjusted_classification = IC.filler if force_nonprogress else data.classification
@@ -23,6 +22,7 @@ class LMItem(Item):
 
         self.type = data.type
         self.item_id = data.code
+        self.doorid = data.doorid
 
     @staticmethod
     def get_apid(code: int):
@@ -39,9 +39,9 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Club Key": LMItemData("Door Key", 1, IC.progression, doorid=42),
     "Diamond Key": LMItemData("Door Key", 2, IC.progression, doorid=59),
     "Spade Key": LMItemData("Door Key", 3, IC.progression, doorid=72),
-    "Parlor Key": LMItemData("Door Key", 4, IC.progression),
+    "Parlor Key": LMItemData("Door Key", 4, IC.progression, doorid=34),
     "Anteroom Key": LMItemData("Door Key", 5, IC.progression, doorid=38),
-    # "Wardrobe Key":        LMItemData("Door Key",   06), does not actually exist
+    "Wardrobe Key":   LMItemData("Door Key", 6, IC.progression, doorid=43),
     "Front Hallway Key": LMItemData("Door Key", 7, IC.progression, doorid=33),
     "Master Bedroom Key": LMItemData("Door Key", 8, IC.progression, doorid=31),
     "Nursery Key": LMItemData("Door Key", 9, IC.progression, doorid=27),
@@ -50,10 +50,10 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Storage Room Key": LMItemData("Door Key", 12, IC.progression, doorid=16),
     "Fortune Teller Key": LMItemData("Door Key", 13, IC.progression, doorid=4),
     "Laundry Key": LMItemData("Door Key", 14, IC.progression, doorid=7),
-    "2F Stairwell Key": LMItemData("Door Key", 15, IC.progression, doorid=74),
-    "Conservatory Key": LMItemData("Door Key", 16, IC.progression, doorid=14),
+    "Lower 2F Stairwell Key": LMItemData("Door Key", 15, IC.progression, doorid=74),
+    "Conservatory Key": LMItemData("Door Key", 16, IC.progression, doorid=21),
     "Dining Room Key": LMItemData("Door Key", 17, IC.progression, doorid=14),
-    "Rec Room Key": LMItemData("Door Key", 18, IC.progression, doorid=25),
+    "North Rec Room Key": LMItemData("Door Key", 18, IC.progression, doorid=25),
     "Billiards Key": LMItemData("Door Key", 19, IC.progression, doorid=17),
     "Safari Key": LMItemData("Door Key", 20, IC.progression, doorid=56),
     "Balcony Key": LMItemData("Door Key", 21, IC.progression, doorid=62),
@@ -77,6 +77,32 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Boo Radar": LMItemData("Upgrade", 39, IC.progression),
     "Poltergust 4000": LMItemData("Upgrade", 40, IC.useful),
     "Gold Diamond": LMItemData("Filler", 49, IC.progression, 5),
+    "Wardrobe Balcony Key": LMItemData("Door Key", 54, IC.progression, doorid=41),
+    "2F Front Hallway Key": LMItemData("Door Key", 55, IC.progression, doorid=33),
+    "Study Key": LMItemData("Door Key", 57, IC.progression, doorid=32),
+    "Basement Stairwell Key": LMItemData("Door Key", 61, IC.progression, doorid=9),
+    "1F Bathroom Key": LMItemData("Door Key", 64, IC.progression, doorid=23),
+    "1F Washroom Key": LMItemData("Door Key", 67, IC.progression, doorid=20),
+    "Kitchen Key": LMItemData("Door Key", 75, IC.progression, doorid=11),
+    "Boneyard Key": LMItemData("Door Key", 76, IC.progression, doorid=10),
+    "Projection Room Key": LMItemData("Door Key", 77, IC.progression, doorid=18),
+    "Mirror Room Key": LMItemData("Door Key", 78, IC.progression, doorid=5),
+    "Butler's Room Key": LMItemData("Door Key", 79, IC.progression, doorid=1),
+    "Tea Room Key": LMItemData("Door Key", 81, IC.progression, doorid=47),
+    "South Rec Room Key": LMItemData("Door Key", 82, IC.progression, doorid=24),
+    "Upper 2F Stairwell Key": LMItemData("Door Key", 83, IC.progression, doorid=75),
+    "2F Bathroom Key": LMItemData("Door Key", 84, IC.progression, doorid=48),
+    "2F Washroom Key": LMItemData("Door Key", 85, IC.progression, doorid=45),
+    "Nana's Room Key": LMItemData("Door Key", 86, IC.progression, doorid=49),
+    "Astral Hall Key": LMItemData("Door Key", 87, IC.progression, doorid=44),
+    "Observatory Key": LMItemData("Door Key", 90, IC.progression, doorid=40),
+    "Guest Room": LMItemData("Door Key", 91, IC.progression, doorid=30),
+    "3F Right Hallway Key": LMItemData("Door Key", 92, IC.progression, doorid=55),
+    "Telephone Room Key": LMItemData("Door Key", 97, IC.progression, doorid=52),
+    "Ceramics Studio Key": LMItemData("Door Key", 99, IC.progression, doorid=50),
+    "Breaker Room Key": LMItemData("Door Key", 100, IC.progression, doorid=71),
+    "Basement Hallway Key": LMItemData("Door Key", 102, IC.progression, doorid=67),
+    "Spade Hallway Key": LMItemData("Door Key", 105, IC.progression, doorid=70),
 }
 
 filler_items: Dict[str, LMItemData] = {
@@ -86,7 +112,8 @@ filler_items: Dict[str, LMItemData] = {
     "Nothing": LMItemData("Filler", 44, IC.filler),
     "Small Heart": LMItemData("Filler", 45, IC.filler),
     "Medium Heart": LMItemData("Filler", 46, IC.filler),
-    "Large Heart": LMItemData("Filler", 47, IC.filler)
+    "Large Heart": LMItemData("Filler", 47, IC.filler),
+    "Bomb": LMItemData("Trap", 50, IC.trap)
 }
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,

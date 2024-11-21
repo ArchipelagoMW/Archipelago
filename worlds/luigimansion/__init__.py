@@ -1,6 +1,7 @@
 import os
 from dataclasses import fields
 from itertools import count
+import random
 from typing import Dict, ClassVar
 
 import yaml
@@ -70,15 +71,15 @@ class LMWorld(World):
     ghost_affected_regions: dict[str, str] = {
         "Wardrobe": "No Element",
         "Laundry Room": "No Element",
-        "Hidden Room": "Ice",
+        "Hidden Room": "No Element", #"Ice",
         "Storage Room": "No Element",
-        "Kitchen": "Ice",
+        "Kitchen": "No Element", #"Ice",
         "1F Bathroom": "No Element",
         "Courtyard": "No Element",
         "Tea Room": "No Element",
-        "2F Washroom": "Fire",
+        "2F Washroom": "No Element", #"Fire",
         "Projection Room": "No Element",
-        "Safari Room": "Water",
+        "Safari Room": "No Element", #"Water",
         "Cellar": "No Element",
         "Roof": "No Element",
         "Sealed Room": "No Element",
@@ -147,241 +148,6 @@ class LMWorld(World):
         self.itempool: list[LMItem] = []
         self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
-
-    # def _get_access_rule(self, region):
-    #   snake_case_region = region.lower().replace("'", "").replace(" ", "_")
-    #   return f"can_access_{snake_case_region}"
-
-    # def _get_dungeon_locations(self):
-    #    dungeon_regions = DUNGEON_EXITS.copy()#
-
-    # If miniboss entrances are not shuffled, include miniboss arenas as a dungeon regions
-    #    if not self.options.randomize_miniboss_entrances:
-    #        dungeon_regions += [
-    #            "Forbidden Woods Miniboss Arena",
-    #            "Tower of the Gods Miniboss Arena",
-    #            "Earth Temple Miniboss Arena",
-    #            "Wind Temple Miniboss Arena",
-    #        ]
-
-    # Forsaken Fortress is an odd dungeon as it exists on the Great Sea
-    # Simply keep a list of all locations in the dungeon, except the boss Heart Container
-    #    ff_dungeon_locations = [
-    #        "Forsaken Fortress - Phantom Ganon",
-    #        "Forsaken Fortress - Chest Outside Upper Jail Cell",
-    #        "Forsaken Fortress - Chest Inside Lower Jail Cell",
-    #        "Forsaken Fortress - Chest Guarded By Bokoblin",
-    #        "Forsaken Fortress - Chest on Bed",
-    #    ]
-
-    #   return [
-    #        location
-    #        for location in self.multiworld.get_locations(self.player)
-    #        if location.name in ff_dungeon_locations or location.region in dungeon_regions
-    #    ]
-
-    #    def _randomize_required_bosses(self):
-    #        dungeon_names = set(DUNGEON_NAMES)
-    #
-    #        # Assert that the user is not including and excluding a dungeon at the same time
-    #        if len(self.options.included_dungeons.value & self.options.excluded_dungeons.value) != 0:
-    #            raise RuntimeError("Conflict found in the lists of required and banned dungeons for required bosses mode")
-
-    #        # If the user enforces a dungeon location to be priority, consider that when selecting required bosses
-    #        required_dungeons = self.options.included_dungeons.value
-    #        for location_name in self.options.priority_locations.value:
-    #            dungeon_name, _ = split_location_name_by_zone(location_name)
-    #            if dungeon_name in dungeon_names:
-    #                required_dungeons.add(dungeon_name)
-    #
-    #        # Ensure that we aren't prioritizing more dungeon locations than requested number of required bosses
-    #        num_required_bosses = self.options.num_required_bosses
-    #        if len(required_dungeons) > num_required_bosses:
-    #            raise RuntimeError("Could not select required bosses to satisfy options set by user")
-
-    # Ensure that after removing excluded dungeons that we still have enough dungeons to satisfy user options
-    #        num_remaining = num_required_bosses - len(required_dungeons)
-    #        remaining_dungeon_options = dungeon_names - required_dungeons - self.options.excluded_dungeons.value
-    #        if len(remaining_dungeon_options) < num_remaining:
-    #            raise RuntimeError("Could not select required bosses to satisfy options set by user")
-
-    # Finish selecting required bosses
-    #       required_dungeons.update(self.multiworld.random.sample(list(remaining_dungeon_options), num_remaining))
-    #
-    #        # Exclude locations which are not in the dungeon of a required boss
-    #        banned_dungeons = dungeon_names - required_dungeons
-    #        for location_name, _ in LOCATION_TABLE.items():
-    #            dungeon_name, _ = split_location_name_by_zone(location_name)
-    #            if dungeon_name in banned_dungeons:
-    #                self.multiworld.get_location(location_name, self.player).progress_type = LocationProgressType.EXCLUDED
-
-    # Exclude mail related to banned dungeons
-    #        if "Forbidden Woods" in banned_dungeons:
-    #            self.multiworld.get_location("Mailbox - Letter from Orca", self.player).progress_type = (
-    #                LocationProgressType.EXCLUDED
-    #            )
-    #        if "Forsaken Fortress" in banned_dungeons:
-    #            self.multiworld.get_location("Mailbox - Letter from Aryll", self.player).progress_type = (
-    #                LocationProgressType.EXCLUDED
-    #            )
-    #            self.multiworld.get_location("Mailbox - Letter from Tingle", self.player).progress_type = (
-    #                LocationProgressType.EXCLUDED
-    #            )
-    #        if "Earth Temple" in banned_dungeons:
-    #            self.multiworld.get_location("Mailbox - Letter from Baito", self.player).progress_type = (
-    #                LocationProgressType.EXCLUDED
-    #            )
-
-    # Record the item location names for required bosses
-    #        possible_boss_item_locations = [loc for loc, data in LOCATION_TABLE.items() if LMFlag.BOSS in data.flags]
-    #        self.required_boss_item_locations = [
-    #            loc for loc in possible_boss_item_locations if split_location_name_by_zone(loc)[0] in required_dungeons
-    #        ]
-    #        self.required_dungeons = list(required_dungeons)
-    #        self.banned_dungeons = list(banned_dungeons)
-
-    #    def _randomize_entrances(self):
-    #        # Copy over the lists of entrances by type
-    #        entrances = [
-    #            DUNGEON_ENTRANCES.copy(),
-    #            MINIBOSS_ENTRANCES.copy(),
-    #            BOSS_ENTRANCES.copy(),
-    #            SECRET_CAVES_ENTRANCES.copy(),
-    #            SECRET_CAVES_INNER_ENTRANCES.copy(),
-    #            FAIRY_FOUNTAIN_ENTRANCES.copy(),
-    #        ]
-    #        exits = [
-    #           DUNGEON_EXITS.copy(),
-    #   MINIBOSS_EXITS.copy(),
-    #   BOSS_EXITS.copy(),
-    #   SECRET_CAVES_EXITS.copy(),
-    #   SECRET_CAVES_INNER_EXITS.copy(),
-    #   FAIRY_FOUNTAIN_EXITS.copy(),
-    # ]
-
-    # Retrieve the entrance randomization option
-    # options = [
-    #   self.options.randomize_dungeon_entrances,
-    #   self.options.randomize_miniboss_entrances,
-    #   self.options.randomize_boss_entrances,
-    #   self.options.randomize_secret_cave_entrances,
-    #   self.options.randomize_secret_cave_inner_entrances,
-    #   self.options.randomize_fairy_fountain_entrances,
-    # ]
-
-    # entrance_exit_pairs: list[tuple[Region, Region]] = []
-    #
-    # Force miniboss doors to be vanilla in nonrequired dungeons
-    # for miniboss_entrance, miniboss_exit in zip(entrances[1], exits[1]):
-    #   assert miniboss_entrance.startswith("Miniboss Entrance in ")
-    #   dungeon_name = miniboss_entrance[len("Miniboss Entrance in ") :]
-    #   if dungeon_name in self.banned_dungeons:
-    #       entrances[1].remove(miniboss_entrance)
-    #       entrance_region = self.multiworld.get_region(miniboss_entrance, self.player)
-    #       exits[1].remove(miniboss_exit)
-    #       exit_region = self.multiworld.get_region(miniboss_exit, self.player)
-    #       entrance_exit_pairs.append((entrance_region, exit_region))
-
-    # Force boss doors to be vanilla in nonrequired dungeons
-    # for boss_entrance, boss_exit in zip(entrances[2], exits[2]):
-    #   assert boss_entrance.startswith("Boss Entrance in ")
-    #   dungeon_name = boss_entrance[len("Boss Entrance in ") :]
-    #   if dungeon_name in self.banned_dungeons:
-    #       entrances[2].remove(boss_entrance)
-    #       entrance_region = self.multiworld.get_region(boss_entrance, self.player)
-    #       exits[2].remove(boss_exit)
-    #       exit_region = self.multiworld.get_region(boss_exit, self.player)
-    #       entrance_exit_pairs.append((entrance_region, exit_region))
-    #
-    # if self.options.mix_entrances == "separate_pools":
-    #   # Connect entrances to exits of the same type
-    #   for option, entrance_group, exit_group in zip(options, entrances, exits):
-    #       # If the entrance group is randomized, shuffle their order
-    #       if option:
-    #           self.multiworld.random.shuffle(entrance_group)
-    #           self.multiworld.random.shuffle(exit_group)
-    #
-    #       for entrance_name, exit_name in zip(entrance_group, exit_group):
-    #           entrance_region = self.multiworld.get_region(entrance_name, self.player)
-    #           exit_region = self.multiworld.get_region(exit_name, self.player)
-    #           entrance_exit_pairs.append((entrance_region, exit_region))
-    # elif self.options.mix_entrances == "mix_pools":
-    #   # We do a bit of extra work here in order to prevent unreachable "islands" of regions.
-    #   # For example, DRC boss door leading to DRC. This will cause generation failures.
-
-    # Gather all the entrances and exits for selected randomization pools
-    #   randomized_entrances: list[str] = []
-    #   randomized_exits: list[str] = []
-    #   non_randomized_exits: list[str] = ["The Great Sea"]
-    #   for option, entrance_group, exit_group in zip(options, entrances, exits):
-    #       if option:
-    #           randomized_entrances += entrance_group
-    #           randomized_exits += exit_group
-    #       else:
-    #           # If not randomized, then just connect the entrance-exit pairs now
-    #           for entrance_name, exit_name in zip(entrance_group, exit_group):
-    #               non_randomized_exits.append(exit_name)
-    #               entrance_region = self.multiworld.get_region(entrance_name, self.player)
-    #               exit_region = self.multiworld.get_region(exit_name, self.player)
-    #               entrance_exit_pairs.append((entrance_region, exit_region))
-
-    # Build a list of accessible randomized entrances, assuming the player has all items
-    #   accessible_entrances: list[str] = []
-    #   for exit_name, entrances in ENTRANCE_ACCESSIBILITY.items():
-    #       if exit_name in non_randomized_exits:
-    #           accessible_entrances += [
-    #               entrance_name for entrance_name in entrances if entrance_name in randomized_entrances
-    #           ]
-    #   non_accessible_entrances: list[str] = [
-    #       entrance_name for entrance_name in randomized_entrances if entrance_name not in accessible_entrances
-    #   ]
-
-    # Priotize exits that lead to more entrances first
-    #   priority_exits: list[str] = []
-    #   for exit_name, entrances in ENTRANCE_ACCESSIBILITY.items():
-    #       if exit_name == "The Great Sea":
-    #           continue
-    #       if exit_name in randomized_exits and any(
-    #           entrance_name in randomized_entrances for entrance_name in entrances
-    #       ):
-    #           priority_exits.append(exit_name)
-
-    # Assign each priority exit to an accessible entrance
-    #   for exit_name in priority_exits:
-    #       # Choose an accessible entrance at random
-    #       self.multiworld.random.shuffle(accessible_entrances)
-    #       entrance_name = accessible_entrances.pop()
-    #
-    # Connect the pair
-    #       entrance_region = self.multiworld.get_region(entrance_name, self.player)
-    #       exit_region = self.multiworld.get_region(exit_name, self.player)
-    #       entrance_exit_pairs.append((entrance_region, exit_region))
-    #
-    #       # Remove the pair from the list of entrance/exits to be connected
-    #       randomized_entrances.remove(entrance_name)
-    #       randomized_exits.remove(exit_name)
-    #
-    # Consider entrances in that exit as accessible now
-    #       for newly_accessible_entrance in ENTRANCE_ACCESSIBILITY[exit_name]:
-    #           if newly_accessible_entrance in non_accessible_entrances:
-    #               accessible_entrances.append(newly_accessible_entrance)
-    #               non_accessible_entrances.remove(newly_accessible_entrance)
-    #
-    # With all entrances either assigned or accessible, we should have an equal number of unassigned entrances
-    # and exits to pair
-    #   assert len(randomized_entrances) == len(randomized_exits)
-    #
-    # Join the remaining entrance/exits randomly
-    #   self.multiworld.random.shuffle(randomized_entrances)
-    #   self.multiworld.random.shuffle(randomized_exits)
-    #   for entrance_name, exit_name in zip(randomized_entrances, randomized_exits):
-    #       entrance_region = self.multiworld.get_region(entrance_name, self.player)
-    #       exit_region = self.multiworld.get_region(exit_name, self.player)
-    #       entrance_exit_pairs.append((entrance_region, exit_region))
-    # else:
-    #   raise Exception(f"Invalid entrance randomization option: {self.options.mix_entrances}")
-    #
-    # return entrance_exit_pairs
 
     def _set_optional_locations(self):
 
@@ -514,6 +280,11 @@ class LMWorld(World):
         # if self.options.enemizer == 1:
         #     set_ghost_type(self.multiworld, self.ghost_affected_regions)
 
+        if self.options.door_rando == 1:
+            random.seed(self.multiworld.seed)
+            self.open_doors = dict(zip(random.sample(self.open_doors.keys(), k=len(self.open_doors)),
+                                       self.open_doors.values()))
+
         # If sword mode is Start with Hero's Sword, then send the player a starting sword
         if self.options.boo_radar == 1:
             self.options.start_inventory.value["Boo Radar"] = (
@@ -535,7 +306,7 @@ class LMWorld(World):
         self.multiworld.regions.append(menu_region)
 
         # Add all randomizable regions
-        for region_name in REGION_LIST:
+        for region_name in REGION_LIST.values():
             if region_name in self.multiworld.regions.region_cache[self.player]:
                 continue
             self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
@@ -608,91 +379,6 @@ class LMWorld(World):
     def post_fill(self):
         visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml", linetype_ortho=False)
 
-    def pre_fill(self):  # TODO use for forced early options (AKA Parlor/Heart/2FFHallway Key)
-        pass
-
-    #    @classmethod
-    #    def stage_pre_fill(cls, multiworld: MultiWorld):
-    # Reference: `fill_dungeons_restrictive()` from ALTTP
-    #            dungeon_shortnames: dict[str, str] = {
-    #            "Dragon Roost Cavern": "DRC",
-    #            "Forbidden Woods": "FW",
-    #            "Tower of the Gods": "TotG",
-    #            "Forsaken Fortress": "FF",
-    #            "Earth Temple": "ET",
-    #            "Wind Temple": "WT",
-    #        }
-
-    #        in_dungeon_items: list[LMItem] = []
-    #        own_dungeon_items: set[tuple[int, str]] = set()
-    #        for subworld in multiworld.get_game_worlds("The Wind Waker"):
-    #            player = subworld.player
-    #            if player not in multiworld.groups:
-    #                in_dungeon_items += [item for item in subworld.pre_fill_items]
-    #                own_dungeon_items |= {(player, item_name) for item_name in subworld.own_dungeon_item_names}
-
-    #        if in_dungeon_items:
-    #            locations: list[LMLocation] = [
-    #                location
-    #                for world in multiworld.get_game_worlds("The Wind Waker")
-    #                for location in world._get_dungeon_locations()
-    #                if not location.item
-    #            ]
-
-    #            if own_dungeon_items:
-    #                for location in locations:
-    #                    dungeon = location.name.split(" - ")[0]
-    #                    orig_rule = location.item_rule
-    #                    location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: (
-    #                        not (item.player, item.name) in own_dungeon_items
-    #                        or item.name.startswith(dungeon_shortnames[dungeon])
-    #                    ) and orig_rule(item)
-
-    #            multiworld.random.shuffle(locations)
-    # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
-    # subsort in the order Big Key, Small Key, Other before placing dungeon items
-
-    #            sort_order = {"BKey": 3, "SKey": 2}
-    #            in_dungeon_items.sort(
-    #                key=lambda item: sort_order.get(item.type, 1)
-    #                + (5 if (item.player, item.name) in own_dungeon_items else 0)
-    #            )
-
-    # Construct a partial all_state which contains only the items from get_pre_fill_items,
-    # which aren't in_dungeon
-    #            in_dungeon_player_ids = {item.player for item in in_dungeon_items}
-    #            all_state_base = CollectionState(multiworld)
-    #            for item in multiworld.itempool:
-    #                multiworld.worlds[item.player].collect(all_state_base, item)
-    #            pre_fill_items = []
-    #            for player in in_dungeon_player_ids:
-    #                pre_fill_items += multiworld.worlds[player].get_pre_fill_items()
-    #            for item in in_dungeon_items:
-    #                try:
-    #                     pre_fill_items.remove(item)
-    #                 except ValueError:
-    #                     # pre_fill_items should be a subset of in_dungeon_items, but just in case
-    #                     pass
-    #             for item in pre_fill_items:
-    #                 multiworld.worlds[item.player].collect(all_state_base, item)
-    #             all_state_base.sweep_for_events()
-    #
-    #             # Remove completion condition so that minimal-accessibility worlds place keys properly
-    #             for player in {item.player for item in in_dungeon_items}:
-    #                 if all_state_base.has("Victory", player):
-    #                     all_state_base.remove(multiworld.worlds[player].create_item("Victory"))
-    #
-    #             fill_restrictive(
-    #                 multiworld,
-    #                 all_state_base,
-    #                 locations,
-    #                 in_dungeon_items,
-    #                 single_player_placement=True,
-    #                 lock=True,
-    #                 allow_excluded=True,
-    #                 name="LM Dungeon Items",
-    #             )
-
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
         if not self.options.boosanity:
@@ -701,6 +387,8 @@ class LMWorld(World):
         if self.options.good_vacuum == 2:
             exclude += ["Poltergust 4000"]
         for item, data in ITEM_TABLE.items():
+            if data.doorid in self.open_doors.keys() and self.open_doors[data.doorid] == 1:
+                exclude += [item]
             copies_to_place = data.quantity - exclude.count(item)
             for _ in range(copies_to_place):
                 self.itempool.append(self.create_item(item))
@@ -725,7 +413,7 @@ class LMWorld(World):
     def generate_output(self, output_directory: str):
         # Output seed name and slot number to seed RNG in randomizer client
         output_data = {
-            "Seed": self.multiworld.seed_name,
+            "Seed": self.multiworld.seed,
             "Slot": self.player,
             "Name": self.multiworld.get_player_name(self.player),
             "Options": {},
@@ -737,17 +425,39 @@ class LMWorld(World):
         for field in fields(self.options):
             output_data["Options"][field.name] = getattr(self.options, field.name).value
 
+        output_data["Entrances"] = self.open_doors
+
         # Output which item has been placed at each location
         locations = self.multiworld.get_locations(self.player)
         for location in locations:
             if location.address is not None:
                 if location.item:
-                    item_info = {
-                        "player": location.item.player,
-                        "name": location.item.name,
-                        "game": location.item.game,
-                        "classification": location.item.classification.name,
-                    }
+                    if location.item.player == self.player:
+                        itemid = 0
+                        if location.item.type == "Door Key":
+                            itemid = ("key_" + str(location.item.doorid))
+                        inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
+                        roomid = inv_reg_list[location.parent_region.name]
+                        item_info = {
+                            "player": location.item.player,
+                            "name": location.item.name,
+                            "game": location.item.game,
+                            "classification": location.item.classification.name,
+                            "id": itemid,
+                            "room_no": roomid,
+                            "type": location.type,
+                            "loc_enum": location.jmpentry
+                        }
+                        output_data["Locations"][location.name] = item_info
+                    else:
+                        item_info = {
+                            "player": location.item.player,
+                            "name": location.item.name,
+                            "game": location.item.game,
+                            "classification": location.item.classification.name,
+                            "JMPentry": location.jmpentry
+                        }
+                        output_data["Locations"][location.name] = item_info
                 else:
                     item_info = {"name": "Nothing", "game": "Luigi's Mansion", "classification": "filler"}
                 output_data["Locations"][location.name] = item_info
