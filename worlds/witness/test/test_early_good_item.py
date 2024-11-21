@@ -1,7 +1,7 @@
 from BaseClasses import ItemClassification, LocationProgressType
 from Fill import distribute_items_restrictive
-from ..data.utils import cast_not_none
 
+from ..data.utils import cast_not_none
 from ..test import WitnessTestBase
 
 
