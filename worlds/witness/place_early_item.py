@@ -6,7 +6,7 @@ from BaseClasses import CollectionState, Item, Location, LocationProgressType
 from .data import static_logic as static_witness_logic
 
 if TYPE_CHECKING:
-    from . import WitnessWorld
+    from . import WitnessWorld, cast_not_none
 
 
 def get_available_early_locations(world: "WitnessWorld") -> List[Location]:
@@ -131,7 +131,7 @@ def place_early_items(world: "WitnessWorld", prog_itempool: List[Item], fill_loc
             debug(f"Placed early good item {item} on early location {item.location}.")
             # Item type is satisfied
             del eligible_early_items_by_type[next_findable_items_dict[item.name]]
-            fill_locations.remove(item.location)
+            fill_locations.remove(cast_not_none(item.location))
         for item in unplaced_items:
             debug(f"Could not find a suitable placemenet for item {item}.")
 
