@@ -118,7 +118,6 @@ class AquariaWorld(World):
         """
         result: AquariaItem
         data = item_table[name]
-
         classification: ItemClassification = ItemClassification.useful
         if data.type == ItemType.JUNK:
             classification = ItemClassification.filler
