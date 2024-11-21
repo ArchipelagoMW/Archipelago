@@ -199,7 +199,7 @@ class WitnessPlayerItems:
                 self._world.random.choice(["Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)"])
             )
 
-            if self._world.options.shuffle_vault_boxes:
+            if self._world.options.shuffle_vault_boxes and not self._world.options.disable_non_randomized_puzzles:
                 good_doors.append("Windmill & Theater Doors")
                 if not self._world.options.shuffle_symbols:
                     good_doors += [
@@ -221,13 +221,6 @@ class WitnessPlayerItems:
 
                     "Glass Factory Entry (Panel)",
                 ]
-
-                if self._world.options.shuffle_vault_boxes:
-                    good_doors += [
-                        "Windmill & Theater Panels",
-
-                        "Windmill & Theater Control Panels",
-                    ]
 
             existing_doors = [door for door in good_doors if door in existing_items_lookup]
 
