@@ -497,7 +497,7 @@ class SC2Logic:
                         or state.has_all({item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE}, self.player)
                     )
                 and (state.has_any({item_names.ABERRATION, item_names.ROACH, item_names.ULTRALISK}, self.player)
-                     or self.morph_tyrannozor(state)
+                     or self.morph_tyrannozor(state))
                 and self.zerg_competent_comp(state)
         )
 
