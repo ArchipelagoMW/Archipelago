@@ -181,6 +181,11 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
                 App.get_running_app().stop()
                 Window.close()
 
+        def _stop(self, *largs):
+            # see run_gui Launcher _stop comment for details
+            self.root_window.close()
+            super()._stop(*largs)
+
     Popup().run()
 
 
