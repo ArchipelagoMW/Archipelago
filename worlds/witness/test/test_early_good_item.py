@@ -1,5 +1,6 @@
 from BaseClasses import ItemClassification, LocationProgressType
 from Fill import distribute_items_restrictive
+from ..data.utils import cast_not_none
 
 from ..test import WitnessTestBase
 
@@ -25,7 +26,7 @@ class TestEarlySymbolItemFalse(WitnessTestBase):
         gate_open = self.multiworld.get_location("Tutorial Gate Open", 1)
 
         self.assertFalse(
-            gate_open.item is None or gate_open.item.classification & ItemClassification.progression,
+            cast_not_none(gate_open.item).classification & ItemClassification.progression,
             "Early Good Item was off, yet a Symbol item ended up on Tutorial Gate Open.",
         )
 
@@ -58,7 +59,7 @@ class TestEarlySymbolItemTrue(WitnessTestBase):
         self.assertTrue(gate_open.item is not None, "Somehow, no item got placed on Tutorial Gate Open.")
 
         self.assertTrue(
-            gate_open.item is not None and gate_open.item.name in self.world.item_name_groups["Symbols"],
+            cast_not_none(gate_open.item).name in self.world.item_name_groups["Symbols"],
             "Early Good Item was on, yet no Symbol item ended up on Tutorial Gate Open.",
         )
 
@@ -67,7 +68,7 @@ class TestEarlySymbolItemTrue(WitnessTestBase):
         self.assertTrue(back_left.item is not None, "Somehow, no item got placed on Tutorial Back Left.")
 
         self.assertTrue(
-            back_left.item is not None and back_left.item.name in self.world.item_name_groups["Doors"],
+            cast_not_none(back_left.item).name in self.world.item_name_groups["Doors"],
             "Early Good Item was on, yet no Door item ended up on Tutorial Back Left.",
         )
 
@@ -76,7 +77,7 @@ class TestEarlySymbolItemTrue(WitnessTestBase):
         self.assertTrue(back_right.item is not None, "Somehow, no item got placed on Tutorial Back Right.")
 
         self.assertTrue(
-            back_right.item is not None and back_right.item.name in self.world.item_name_groups["Obelisk Keys"],
+            cast_not_none(back_right.item).name in self.world.item_name_groups["Obelisk Keys"],
             "Early Good Item was on, yet no Obelisk Key item ended up on Tutorial Back Right.",
         )
 
@@ -104,6 +105,6 @@ class TestEarlySymbolItemTrueButExcluded(WitnessTestBase):
         self.assertTrue(gate_open.item is not None, "Somehow, no item got placed on Tutorial Gate Open.")
 
         self.assertFalse(
-            gate_open.item is None or gate_open.item.classification & ItemClassification.progression,
+            cast_not_none(gate_open.item).classification & ItemClassification.progression,
             "Tutorial Gate Open was excluded, yet it still received an early Symbol item.",
         )
