@@ -152,7 +152,7 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 145
+    range_end = len(SC2Mission)
     default = 83
 
 
