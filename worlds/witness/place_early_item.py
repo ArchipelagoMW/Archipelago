@@ -43,7 +43,7 @@ def get_available_early_locations(world: "WitnessWorld") -> List[Location]:
 
     return [
         location for location in available_locations
-        if not location.item and not location.progress_type == LocationProgressType.EXCLUDED
+        if not location.item and location.progress_type != LocationProgressType.EXCLUDED
     ]
 
 
