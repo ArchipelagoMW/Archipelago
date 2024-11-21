@@ -84,8 +84,6 @@ class TestEarlySymbolItemTrue(WitnessTestBase):
 
 class TestEarlySymbolItemTrueButExcluded(WitnessTestBase):
     options = {
-        "early_symbol_item": True,
-
         "shuffle_symbols": True,
         "shuffle_doors": "off",
         "shuffle_boat": False,
