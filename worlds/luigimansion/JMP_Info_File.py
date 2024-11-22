@@ -4,7 +4,7 @@ import io
 import json
 
 from gclib.rarc import RARC
-from JMP_Field_Header import JMPFieldHeader
+from .JMP_Field_Header import JMPFieldHeader
 
 IMPORTANT_HEADER_BYTE_LENGTH = 16
 FIELD_DATA_BYTE_LENGTH = 12
@@ -57,7 +57,7 @@ class JMPInfoFile:
         if self.info_file_entry is None:
             raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RAC file.")
 
-        with open('data\\names.json', 'r') as file:
+        with open('worlds\\luigimansion\\data\\names.json', 'r') as file:
             json_data = json.load(file)
 
         if name_of_info_file not in json_data:

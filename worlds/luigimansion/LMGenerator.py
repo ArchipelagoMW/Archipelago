@@ -3,7 +3,8 @@ import io
 import os
 from io import BytesIO
 
-from JMP_Info_File import JMPInfoFile
+from .JMP_Info_File import JMPInfoFile
+from .Patching import *
 
 from gclib import fs_helpers as fs
 from gclib.gcm import GCM
@@ -14,13 +15,10 @@ from gclib.yaz0_yay0 import Yay0
 RANDOMIZER_NAME = "Luigi's Mansion"
 CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
 
-
 class InvalidCleanISOError(Exception): pass
 
-
 class LuigisMansionRandomizer:
-
-    def __init__(self, clean_iso_path, randomized_output_folder, export_disc_to_folder):
+    def __init__(self, clean_iso_path, randomized_output_folder, export_disc_to_folder, output_data):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
         self.randomized_output_folder = randomized_output_folder
         self.export_disc_to_folder = export_disc_to_folder
@@ -41,59 +39,72 @@ class LuigisMansionRandomizer:
         main_mansion_file = self.get_arc("files/Map/map2.szp")
 
         # Uses custom class to load in JMP Info file entry (see more details in JMP_Info_File.py)
+
+        # keyinfo
+        key_info_entry = JMPInfoFile(main_mansion_file, 'keyinfo')
+        update_key_info(key_info_entry, output_data)
+        key_info_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'keyinfo', key_info_entry.info_file_entry.data)
+
+        # iteminfotable
         item_info_table_entry = JMPInfoFile(main_mansion_file, 'iteminfotable')
-        item_info_table_entry.print_header_info()
+        update_item_info_table(item_info_table_entry, output_data)
+        item_info_table_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'iteminfotable', item_info_table_entry.info_file_entry.data)
 
-        # Convert everything back to bytes after making necessary changes, then get updated rarc file.
-        item_info_table_data_updated = item_info_table_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'iteminfotable',
-                                                        item_info_table_data_updated)
-
-        # Repeat for itemappeartable, treasuretable, furnitureinfo, characterinfo, eventinfo, and observerinfo
-
+        # itemappeartable
         item_appear_table_entry = JMPInfoFile(main_mansion_file, 'itemappeartable')
-        item_appear_table_entry.print_header_info()
+        update_item_appear_table(item_appear_table_entry, output_data)
+        item_appear_table_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'itemappeartable', item_appear_table_entry.info_file_entry.data)
 
-        item_appear_table_data_updated = item_appear_table_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file,
-                                                        'itemappeartable', item_appear_table_data_updated)
-
+        # treasuretable
         treasure_table_entry = JMPInfoFile(main_mansion_file, 'treasuretable')
-        treasure_table_entry.print_header_info()
+        update_treasure_table(treasure_table_entry, output_data)
+        treasure_table_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'treasuretable', treasure_table_entry.info_file_entry.data)
 
-        treasure_table_data_updated = treasure_table_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'treasuretable', treasure_table_data_updated)
-
+        # furnitureinfo
         furniture_info_entry = JMPInfoFile(main_mansion_file, 'furnitureinfo')
-        furniture_info_entry.print_header_info()
+        furniture_info_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'furnitureinfo', furniture_info_entry.info_file_entry.data)
 
-        furniture_info_data_updated = furniture_info_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'furnitureinfo', furniture_info_data_updated)
-
+        # characterinfo
         character_info_entry = JMPInfoFile(main_mansion_file, 'characterinfo')
-        character_info_entry.print_header_info()
+        update_character_info(character_info_entry)
+        character_info_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'characterinfo', character_info_entry.info_file_entry.data)
 
-        character_info_data_updated = character_info_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'characterinfo', character_info_data_updated)
-
+        # eventinfo
         event_info_entry = JMPInfoFile(main_mansion_file, 'eventinfo')
-        event_info_entry.print_header_info()
+        update_event_info(event_info_entry)
+        event_info_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'eventinfo', event_info_entry.info_file_entry.data)
 
-        event_info_data_updated = event_info_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'eventinfo', event_info_data_updated)
-
+        # observerinfo
         observer_info_entry = JMPInfoFile(main_mansion_file, 'observerinfo')
-        observer_info_entry.print_header_info()
+        update_observer_info(observer_info_entry)
+        observer_info_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'observerinfo', observer_info_entry.info_file_entry.data)
 
-        observer_info_data_updated = observer_info_entry.get_updated_info_file_bytes()
-        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'observerinfo', observer_info_data_updated)
+        # generatorinfo
+        generator_info_entry = JMPInfoFile(main_mansion_file, 'generatorinfo')
+        update_generator_info(generator_info_entry)
+        generator_info_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'generatorinfo', generator_info_entry.info_file_entry.data)
+
+        # objinfo
+        obj_info_entry = JMPInfoFile(main_mansion_file, 'objinfo')
+        update_obj_info(obj_info_entry)
+        obj_info_entry.update_info_file_bytes()
+        main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'objinfo', obj_info_entry.info_file_entry.data)
 
         # Save the changes of the ARC / RARC file.
         main_mansion_file.save_changes()
 
         # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin.
         # If you forget this, you will get an Invalid read error on a certain memory address typically.
-        compressed_mansion_data = Yay0.compress(main_mansion_file.data)
+        compressed_mansion_data = Yay0.compress(main_mansion_file.data, 0, False)
         self.gcm.changed_files["files/Map/map2.szp"] = compressed_mansion_data
 
         # Generator function to combine all necessary files into an ISO file.
@@ -171,8 +182,3 @@ class LuigisMansionRandomizer:
             print("No data update was performed for info file: " + info_file_name)
 
         return main_rarc_file
-
-
-if __name__ == '__main__':
-    unpacked_iso = LuigisMansionRandomizer("D:\\ROMs\\GameCube\\Luigis Mansion (USA).iso", "D:\\ROMs\\GameCube\\",
-                                           False)

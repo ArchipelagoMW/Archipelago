@@ -41,7 +41,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Spade Key": LMItemData("Door Key", 3, IC.progression, doorid=72),
     "Parlor Key": LMItemData("Door Key", 4, IC.progression, doorid=34),
     "Anteroom Key": LMItemData("Door Key", 5, IC.progression, doorid=38),
-    "Wardrobe Key":   LMItemData("Door Key", 6, IC.progression, doorid=43),
+    "Wardrobe Key": LMItemData("Door Key", 6, IC.progression, doorid=43),
     "Front Hallway Key": LMItemData("Door Key", 7, IC.progression, doorid=33),
     "Master Bedroom Key": LMItemData("Door Key", 8, IC.progression, doorid=31),
     "Nursery Key": LMItemData("Door Key", 9, IC.progression, doorid=27),
@@ -108,10 +108,10 @@ ITEM_TABLE: dict[str, LMItemData] = {
 filler_items: Dict[str, LMItemData] = {
     "Money Bundle": LMItemData("Filler", 41, IC.filler),
     "Poison Mushroom": LMItemData("Trap", 42, IC.trap),
-    "Ghost": LMItemData("Trap", 43, IC.trap),
+    #"Ghost": LMItemData("Trap", 43, IC.trap),
     "Nothing": LMItemData("Filler", 44, IC.filler),
     "Small Heart": LMItemData("Filler", 45, IC.filler),
-    "Medium Heart": LMItemData("Filler", 46, IC.filler),
+    #"Medium Heart": LMItemData("Filler", 46, IC.filler),
     "Large Heart": LMItemData("Filler", 47, IC.filler),
     "Bomb": LMItemData("Trap", 50, IC.trap)
 }

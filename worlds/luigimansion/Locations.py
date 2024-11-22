@@ -53,9 +53,9 @@ class LMLocation(Location):
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Base Chests / Locations
     #"Luigi's Courage": LMLocationData("Parlor", 708, "Special", -1, []), # Give item during/after E. Gadd cutscene
-    #"Ghost Foyer Key": LMLocationData("Foyer", 713, "Special", -1, []),
+    "Ghost Foyer Key": LMLocationData("Foyer", 713, "freestanding", -1, []),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, []),
-    #"Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Special", 4, ["Fire Element Medal"]),
+    "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "freestanding", 4, ["Fire Element Medal"]),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, []),
     "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, []),
     "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, []),
@@ -66,7 +66,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furniture", 247, []),
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, []),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 19, []),
-    #"Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, []),  # special event, unknown location
+    "Observatory Mario Star": LMLocationData("Observatory", 24, "freestanding", -1, []),  # special event, unknown location
     "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furniture", 532, []),
     "Sealed Room NE Shelf Chest": LMLocationData("Sealed Room", 30, "Furniture", 534, []),
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furniture", 531, []),
@@ -158,11 +158,11 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Ghost Affected Clear Chests. Rules applied to region entrances
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
-    # "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Special", -1, []),  # gone for good
+    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "freestanding", -1, []),  # gone for good
     "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, []),
     "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, []),
     "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, []),
-    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Special", -1, []),  # keyinfo event
+    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "freestanding", -1, []),  # keyinfo event
     "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, []),
     "Tea Room Clear Chest": LMLocationData("Tea Room", 56, "Chest", 47, []),
     "2F Washroom Clear Chest": LMLocationData("2F Washroom", 57, "Chest", 23, []),
