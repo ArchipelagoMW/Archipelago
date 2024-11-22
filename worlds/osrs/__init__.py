@@ -130,15 +130,6 @@ class OSRSWorld(World):
             starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
             starting_entrance.connect(self.region_name_to_data[starting_area_region])
 
-    def pre_fill(self) -> None:
-        all_state = self.multiworld.get_all_state(False)
-        for location in self.multiworld.get_locations(self.player):
-            # if not location.can_reach(all_state):
-            #     options = self.options
-            #     print(f"{location} can't be reached even with every progression item.\n{all_state.prog_items[self.player]}")
-            assert location.can_reach(
-                all_state), f"{location} can't be reached even with every progression item.\n{all_state.prog_items[self.player]}"
-
     def create_regions(self) -> None:
         """
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done
