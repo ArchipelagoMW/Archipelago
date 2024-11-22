@@ -4,12 +4,32 @@ from .data import Enum
 from BaseClasses import MultiWorld, Entrance
 from worlds.generic.Rules import add_rule
 from . import Rules
+from ..AutoWorld import World
 
+GHOST_TO_ROOM = {
+        "Wardrobe": "No Element",
+        "Laundry Room": "No Element",
+        "Hidden Room": "No Element",  # "Ice",
+        "Storage Room": "No Element",
+        "Kitchen": "No Element",  # "Ice",
+        "1F Bathroom": "No Element",
+        "Courtyard": "No Element",
+        "Tea Room": "No Element",
+        "2F Washroom": "No Element",  # "Fire",
+        "Projection Room": "No Element",
+        "Safari Room": "No Element",  # "Water",
+        "Cellar": "No Element",
+        "Roof": "No Element",
+        "Sealed Room": "No Element",
+        "Armory": "No Element",
+        "Pipe Room": "No Element"
+    }
 
-def set_ghost_type(multiworld: MultiWorld, ghost_list: dict):
+def set_ghost_type(world: World, ghost_list: dict):
     for region_name in ghost_list:
-        types = []
-        ghost_type = multiworld.random.choices(["Fire", "Water", "Ice", "No Element"])[0]
+        types = ["Fire", "Water", "Ice", "No Element"]
+        weights = [2, 2, 2, 8]
+        ghost_type = world.random.choices(types, weights, k=1)[0]
         ghost_list.update({region_name: ghost_type})
 
 

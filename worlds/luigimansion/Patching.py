@@ -5,11 +5,13 @@ def update_event_info(event_info):
         if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54}:
             event_info.info_file_field_entries.remove(x)
 
+
 def update_character_info(character_info):
     for x in character_info.info_file_field_entries:
         # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
-        if x["name"] in { "vhead", "vbody", "dhakase", "demobak1", "dluige01" }:
+        if x["name"] in {"vhead", "vbody", "dhakase", "demobak1", "dluige01"}:
             character_info.info_file_field_entries.remove(x)
+
 
 def update_observer_info(observer_info):
     for x in observer_info.info_file_field_entries:
@@ -21,8 +23,9 @@ def update_observer_info(observer_info):
 
         # Allows the Master Bedroom to be lit after clearing it, even if Neville hasn't been caught, and allows The
         # Twins Room to be lit after clearing it, even if Chauncey hasn't been caught.
-        if x["room_no"] in { 33 }:
+        if x["room_no"] in {33}:
             x["appear_flag"] = 0
+
 
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries:
@@ -31,12 +34,14 @@ def update_generator_info(generator_info):
         if x["name"] == "demotel2":
             x["appear_flag"] = 22
 
+
 def update_obj_info(obj_info):
     for x in obj_info.info_file_field_entries:
         # Removes the vines on Area doors, as those require the Area Number of the game to be changed
         # to have them disappear.
-        if x["name"] in { "eldoor07", "eldoor08", "eldoor09", "eldoor10" }:
+        if x["name"] in {"eldoor07", "eldoor08", "eldoor09", "eldoor10"}:
             obj_info.info_file_field_entries.remove(x)
+
 
 def __get_chest_size(key_id):
     match key_id:
@@ -51,6 +56,7 @@ def __get_chest_size(key_id):
         case _:
             return 0
 
+
 def __get_key_name(door_id):
     match door_id:
         case 3:
@@ -63,6 +69,7 @@ def __get_key_name(door_id):
             return "key05"
         case _:
             return "key01"
+
 
 def update_item_info_table(item_info_table_entry, output_data):
     for x in item_info_table_entry.info_file_field_entries[:]:
@@ -82,11 +89,13 @@ def update_item_info_table(item_info_table_entry, output_data):
             }
             item_info_table_entry.info_file_field_entries.append(new_item)
 
+
 def __add_appear_item(item_appear_table_entry, item_name):
     new_item = {}
     for itemid in range(20):
         new_item["item" + str(itemid)] = item_name
     item_appear_table_entry.info_file_field_entries.append(new_item)
+
 
 def update_item_appear_table(item_appear_table_entry, output_data):
     item_appear_table_entry.info_file_field_entries = []
@@ -112,6 +121,7 @@ def update_item_appear_table(item_appear_table_entry, output_data):
     __add_appear_item(item_appear_table_entry, "mshoes")
     __add_appear_item(item_appear_table_entry, "mglove")
     __add_appear_item(item_appear_table_entry, "mstar")
+
 
 def update_treasure_table(treasure_table_entry, output_data):
     for x in treasure_table_entry.info_file_field_entries[:]:
@@ -146,6 +156,7 @@ def update_treasure_table(treasure_table_entry, output_data):
                 "camera": 1
             }
             treasure_table_entry.info_file_field_entries.append(new_item)
+
 
 def get_item_name(item_name, item_data):
     if item_data is not None and item_data["door_id"] != 0:
@@ -183,22 +194,24 @@ def get_item_name(item_name, item_data):
 
     return "----"
 
+
 def update_key_info(key_info_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
         if item_name == "Ghost Foyer Key":
             for x in key_info_entry.info_file_field_entries[:]:
-                    x["name"] = get_item_name(item_data["name"], item_data)
-                    x["open_door_no"] = item_data["door_id"]
-                    x["appear_flag"] = 0
-                    x["disappear_flag"] = 0
-                    x["appear_type"] = 4
-                    x["invisible"] = 0
-                    break
+                x["name"] = get_item_name(item_data["name"], item_data)
+                x["open_door_no"] = item_data["door_id"]
+                x["appear_flag"] = 0
+                x["disappear_flag"] = 0
+                x["appear_type"] = 4
+                x["invisible"] = 0
+                break
         for x in key_info_entry.info_file_field_entries[:]:
             if item_data["type"] == "Freestanding":
                 x["name"] = get_item_name(item_data["name"], item_data)
                 x["open_door_no"] = item_data["door_id"]
                 break
+
 
 def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
