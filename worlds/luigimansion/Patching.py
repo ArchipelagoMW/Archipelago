@@ -111,7 +111,7 @@ def update_item_appear_table(item_appear_table_entry, output_data):
     __add_appear_item(item_appear_table_entry, "mstar")
 
 def update_treasure_table(treasure_table_entry, output_data):
-    treasure_table_entry.info_file_field_entries = {}
+    treasure_table_entry.info_file_field_entries.clear()
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] == 0:
@@ -122,7 +122,7 @@ def update_treasure_table(treasure_table_entry, output_data):
             chest_size = __get_chest_size(item_data["door_id"])
 
         if item_name != "":
-            new_item = {
+            treasure_table_entry.info_file_field_entries.append({
                 "other": item_name,
                 "room": item_data["room_no"],
                 "size": chest_size,
@@ -140,8 +140,7 @@ def update_treasure_table(treasure_table_entry, output_data):
                 "rdiamond": 0,
                 "effect": 1 if chest_size == 2 else 0,
                 "camera": 1
-            }
-            treasure_table_entry.info_file_field_entries.append(new_item)
+            })
 
 def get_item_name(item_name, item_data):
     if item_data is not None and item_data["door_id"] != 0:
