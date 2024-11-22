@@ -1,5 +1,7 @@
 import logging
 import os
+import sys
+import json
 import subprocess
 from logging import Logger
 
@@ -156,6 +158,10 @@ class JakAndDaxterContext(CommonContext):
 
                 create_task_log_exception(get_orb_balance())
 
+            # Tell the server if Deathlink is enabled or disabled in the in-game options.
+            # This allows us to "remember" the user's choice.
+            self.on_deathlink_toggle()
+
         if cmd == "Retrieved":
             if f"jakanddaxter_{self.auth}_orbs_paid" in args["keys"]:
                 orbs_traded = args["keys"][f"jakanddaxter_{self.auth}_orbs_paid"]
@@ -299,10 +305,90 @@ class JakAndDaxterContext(CommonContext):
             await asyncio.sleep(0.1)
 
 
+def find_root_directory(ctx: JakAndDaxterContext):
+
+    # The path to this file is platform-dependent.
+    if sys.platform == "win32":
+        appdata = os.getenv("APPDATA")
+        settings_path = os.path.normpath(f"{appdata}/OpenGOAL-Launcher/settings.json")
+    elif sys.platform == "linux":
+        home = os.path.expanduser("~")
+        settings_path = os.path.normpath(f"{home}/.config/OpenGOAL-Launcher/settings.json")
+    elif sys.platform == "darwin":
+        home = os.path.expanduser("~")  # MacOS
+        settings_path = os.path.normpath(f"{home}/Library/Application Support/OpenGOAL-Launcher/settings.json")
+    else:
+        ctx.on_log_error(logger, f"Unknown operating system: {sys.platform}!")
+        return
+
+    # Boilerplate message that all error messages in this function should add at the end.
+    alt_instructions = (f"Please verify that OpenGOAL and ArchipelaGOAL are installed properly. "
+                        f"If the problem persists, follow these steps:\n"
+                        f"   Run the OpenGOAL Launcher, click Jak and Daxter > Features > Mods > ArchipelaGOAL.\n"
+                        f"   Then click Advanced > Open Game Data Folder.\n"
+                        f"   Go up one folder, then copy this path.\n"
+                        f"   Run the Archipelago Launcher, click Open host.yaml.\n"
+                        f"   Set the value of 'jakanddaxter_options > root_directory' to this path.\n"
+                        f"   Replace all backslashes in the path with forward slashes.\n"
+                        f"   Set the value of 'jakanddaxter_options > auto_detect_root_directory' to false, "
+                        f"then save and close the host.yaml file.\n"
+                        f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
+
+    if not os.path.exists(settings_path):
+        msg = (f"Unable to locate the ArchipelaGOAL install directory: the OpenGOAL settings file does not exist.\n"
+               f"{alt_instructions}")
+        ctx.on_log_error(logger, msg)
+        return
+
+    with open(settings_path, "r") as f:
+        load = json.load(f)
+
+        jak1_installed = load["games"]["Jak 1"]["isInstalled"]
+        if not jak1_installed:
+            msg = (f"Unable to locate the ArchipelaGOAL install directory: "
+                   f"The OpenGOAL Launcher is missing a normal install of Jak 1!\n"
+                   f"{alt_instructions}")
+            ctx.on_log_error(logger, msg)
+            return
+
+        mod_sources = load["games"]["Jak 1"]["modsInstalledVersion"]
+        if mod_sources is None:
+            msg = (f"Unable to locate the ArchipelaGOAL install directory: "
+                   f"No mod sources have been configured in the OpenGOAL Launcher!\n"
+                   f"{alt_instructions}")
+            ctx.on_log_error(logger, msg)
+            return
+
+        # Mods can come from multiple user-defined sources.
+        # Make no assumptions about where ArchipelaGOAL comes from, we should find it ourselves.
+        archipelagoal_source = None
+        for src in mod_sources:
+            for mod in mod_sources[src].keys():
+                if mod == "archipelagoal":
+                    archipelagoal_source = src
+                    # TODO - We could verify the right version is installed. Do we need to?
+        if archipelagoal_source is None:
+            msg = (f"Unable to locate the ArchipelaGOAL install directory: "
+                   f"The ArchipelaGOAL mod is not installed in the OpenGOAL Launcher!\n"
+                   f"{alt_instructions}")
+            ctx.on_log_error(logger, msg)
+            return
+
+        # This is just the base OpenGOAL directory, we need to go deeper.
+        base_path = load["installationDir"]
+        mod_relative_path = f"features/jak1/mods/{archipelagoal_source}/archipelagoal"
+        mod_path = os.path.normpath(
+            os.path.join(
+                os.path.normpath(base_path),
+                os.path.normpath(mod_relative_path)))
+
+    return mod_path
+
+
 async def run_game(ctx: JakAndDaxterContext):
 
     # These may already be running. If they are not running, try to start them.
-    # TODO - Support other OS's. Pymem is Windows-only.
+    # TODO - Support other OS's. 1: Pymem is Windows-only. 2: on Linux, there's no ".exe."
     gk_running = False
     try:
         pymem.Pymem("gk.exe")  # The GOAL Kernel
@@ -318,23 +404,31 @@ async def run_game(ctx: JakAndDaxterContext):
         ctx.on_log_warn(logger, "Compiler not running, attempting to start.")
 
     try:
-        # Validate folder and file structures of the ArchipelaGOAL root directory.
-        root_path = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
+        auto_detect_root_directory = Utils.get_settings()["jakanddaxter_options"]["auto_detect_root_directory"]
+        if auto_detect_root_directory:
+            root_path = find_root_directory(ctx)
+        else:
+            root_path = Utils.get_settings()["jakanddaxter_options"]["root_directory"]
 
-        # Always trust your instincts.
-        if "/" not in root_path:
-            msg = (f"The ArchipelaGOAL root directory contains no path. (Are you missing forward slashes?)\n"
-                   f"Please check that the value of 'jakanddaxter_options > root_directory' in your host.yaml file "
-                   f"is a valid existing path, and all backslashes have been replaced with forward slashes.")
-            ctx.on_log_error(logger, msg)
-            return
+            # Always trust your instincts... the user may not have entered their root_directory properly.
+            # We don't have to do this check if the root directory was auto-detected.
+            if "/" not in root_path:
+                msg = (f"The ArchipelaGOAL root directory contains no path. (Are you missing forward slashes?)\n"
+                       f"Please check your host.yaml file.\n"
+                       f"Verify the value of 'jakanddaxter_options > root_directory' is a valid existing path, "
+                       f"and all backslashes have been replaced with forward slashes.")
+                ctx.on_log_error(logger, msg)
+                return
 
-        # Start by checking the existence of the root directory provided in the host.yaml file.
+        # Start by checking the existence of the root directory provided in the host.yaml file (or found automatically).
         root_path = os.path.normpath(root_path)
         if not os.path.exists(root_path):
             msg = (f"The ArchipelaGOAL root directory does not exist, unable to locate the Game and Compiler.\n"
-                   f"Please check that the value of 'jakanddaxter_options > root_directory' in your host.yaml file "
-                   f"is a valid existing path, and all backslashes have been replaced with forward slashes.")
+                   f"Please check your host.yaml file.\n"
+                   f"If the value of 'jakanddaxter_options > auto_detect_root_directory' is true, verify that OpenGOAL "
+                   f"is installed properly.\n"
+                   f"If it is false, check the value of 'jakanddaxter_options > root_directory'. "
+                   f"Verify it is a valid existing path, and all backslashes have been replaced with forward slashes.")
             ctx.on_log_error(logger, msg)
             return
 
@@ -343,8 +437,11 @@ async def run_game(ctx: JakAndDaxterContext):
         goalc_path = os.path.join(root_path, "goalc.exe")
         if not os.path.exists(gk_path) or not os.path.exists(goalc_path):
             msg = (f"The Game and Compiler could not be found in the ArchipelaGOAL root directory.\n"
-                   f"Please check the value of 'jakanddaxter_options > root_directory' in your host.yaml file, "
-                   f"and ensure that path contains gk.exe, goalc.exe, and a data folder.")
+                   f"Please check your host.yaml file.\n"
+                   f"If the value of 'jakanddaxter_options > auto_detect_root_directory' is true, verify that OpenGOAL "
+                   f"is installed properly.\n"
+                   f"If it is false, check the value of 'jakanddaxter_options > root_directory'. "
+                   f"Verify it is a valid existing path, and all backslashes have been replaced with forward slashes.")
             ctx.on_log_error(logger, msg)
             return
 
@@ -426,9 +523,12 @@ async def run_game(ctx: JakAndDaxterContext):
         ctx.on_log_error(logger, f"Host.yaml does not contain {e.args[0]}, unable to locate game executables.")
         return
     except FileNotFoundError as e:
-        msg = (f"The ArchipelaGOAL root directory path is invalid.\n"
-               f"Please check that the value of 'jakanddaxter_options > root_directory' in your host.yaml file "
-               f"is a valid existing path, and all backslashes have been replaced with forward slashes.")
+        msg = (f"The following path could not be found: {e.filename}\n"
+               f"Please check your host.yaml file.\n"
+               f"If the value of 'jakanddaxter_options > auto_detect_root_directory' is true, verify that OpenGOAL "
+               f"is installed properly.\n"
+               f"If it is false, check the value of 'jakanddaxter_options > root_directory'."
+               f"Verify it is a valid existing path, and all backslashes have been replaced with forward slashes.")
         ctx.on_log_error(logger, msg)
         return
 

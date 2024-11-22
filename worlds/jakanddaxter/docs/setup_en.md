@@ -18,21 +18,7 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Click the Jak and Daxter logo on the left sidebar.
 - Click `Features` in the bottom right corner, then click `Mods`.
 - Under `Available Mods`, click `ArchipelaGOAL`. The mod should begin installing. When it is done, click `Continue` in the bottom right corner.
-- Click `Advanced` in the bottom right corner, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
-- In the File Explorer, go to the parent directory called `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Copy this path.
-- Run the Archipelago Launcher, then click on `Open host.yaml`. You should see a new text editor open that file.
-- Search for `jakanddaxter_options`, then find the `root_directory` entry underneath it. Paste the path you noted earlier (the one containing gk.exe and goalc.exe) inside the double quotes. 
-- **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
-
-```
-jakanddaxter_options:
-  # Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe).
-  # Ensure this path contains forward slashes (/) only.
-  root_directory: "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal"
-```
-
-- Save the file and close it.
-- **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Jak and Daxter Client should handle everything for you.
+- **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Archipelago Client should handle everything for you.
 
 ### For NTSC versions of the game, follow these steps.
 
@@ -113,6 +99,34 @@ If you are in the middle of an async game, and you do not want to update the mod
     - Then, instead of choosing `New Game` in the title menu, choose `Load Game`, then choose the save file **CORRESPONDING TO YOUR CURRENT ARCHIPELAGO CONNECTION.** 
 
 ## Troubleshooting
+
+### The Text Client Says "Unable to locate the OpenGOAL install directory"
+
+Normally, the Archipelago client should be able to find your OpenGOAL installation automatically. 
+
+If it cannot, you may have to tell it yourself. Follow these instructions.
+
+- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
+- Click the Jak and Daxter logo on the left sidebar.
+- Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
+- Click `Advanced` in the bottom right corner, then click `Open Game Data Folder`. You should see a new File Explorer open to that directory.
+- In the File Explorer, go to the parent directory called `archipelagoal`, and you should see the `gk.exe` and `goalc.exe` executables. Copy this path.
+- Run the Archipelago Launcher, then click on `Open host.yaml`. You should see a new text editor open that file.
+- Search for `jakanddaxter_options`, and you will need to make 2 changes here.
+- First, find the `root_directory` entry. Paste the path you noted earlier (the one containing gk.exe and goalc.exe) inside the double quotes. 
+- **MAKE SURE YOU CHANGE ALL BACKSLASHES `\ ` TO FORWARD SLASHES `/`.**
+
+```yaml
+  root_directory: "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal"
+```
+
+- Second, find the `root_directory` entry. Change this to `false`. You do not need to use double quotes.
+
+```yaml
+  auto_detect_root_directory: true
+```
+
+- Save the file and close it.
 
 ### The Game Fails To Load The Title Screen
 

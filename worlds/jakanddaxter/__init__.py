@@ -51,15 +51,23 @@ icon_paths["egg"] = local_path("worlds", "jakanddaxter", "icons", "egg.png")
 class JakAndDaxterSettings(settings.Group):
     class RootDirectory(settings.UserFolderPath):
         """Path to folder containing the ArchipelaGOAL mod executables (gk.exe and goalc.exe).
-        Ensure this path contains forward slashes (/) only."""
+        Ensure this path contains forward slashes (/) only. This setting only applies if
+        Auto Detect Root Directory is set to false."""
         description = "ArchipelaGOAL Root Directory"
+
+    class AutoDetectRootDirectory(settings.Bool):
+        """Attempt to find the OpenGOAL installation and the mod executables (gk.exe and goalc.exe)
+        automatically. If set to true, the ArchipelaGOAL Root Directory setting is ignored."""
+        description = "ArchipelaGOAL Auto Detect Root Directory"
 
     class EnforceFriendlyOptions(settings.Bool):
         """Enforce friendly player options in both single and multiplayer seeds. Disabling this allows for
         more disruptive and challenging options, but may impact seed generation. Use at your own risk!"""
         description = "ArchipelaGOAL Enforce Friendly Options"
 
-    root_directory: RootDirectory = RootDirectory("%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal")
+    root_directory: RootDirectory = RootDirectory(
+        "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal")
+    auto_detect_root_directory: Union[AutoDetectRootDirectory, bool] = True
     enforce_friendly_options: Union[EnforceFriendlyOptions, bool] = True
 
 
