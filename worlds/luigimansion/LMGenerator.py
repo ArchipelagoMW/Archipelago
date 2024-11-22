@@ -224,7 +224,7 @@ class LuigisMansionRandomizer:
             yield from self.gcm.export_disc_to_iso_with_changed_files(output_file_path)
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str=""):
-        if check_local_folder and not non_local_str:
+        if not check_local_folder and not non_local_str:
             raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
                             "provided to overwrite an existing event.")
 
