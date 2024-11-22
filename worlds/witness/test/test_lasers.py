@@ -101,7 +101,6 @@ class TestSymbolsRequiredToWinElevatorVariety(WitnessTestBase):
         "shuffle_lasers": True,
         "mountain_lasers": 1,
         "victory_condition": "elevator",
-        "early_symbol_item": False,
         "puzzle_randomization": "umbra_variety",
     }
 
