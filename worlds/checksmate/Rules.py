@@ -90,7 +90,7 @@ def meets_chessmen_expectations(state: CollectionState,
 
 
 def set_rules(self: World):
-    opts = cast(self.options, CMOptions)
+    opts = cast(CMOptions, self.options)
     difficulty = determine_difficulty(opts)
     absolute_relaxation = determine_relaxation(opts)
     super_sized = opts.goal.value != opts.goal.option_single
