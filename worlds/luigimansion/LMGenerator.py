@@ -23,7 +23,7 @@ class InvalidCleanISOError(Exception): pass
 
 
 class LuigisMansionRandomizer:
-    def __init__(self, clean_iso_path, randomized_output_folder, export_disc_to_folder, ap_output_data, debug_flag=False):
+    def __init__(self, clean_iso_path, randomized_output_folder, export_disc_to_folder, ap_output_data=None, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
         self.debug = debug_flag
         if self.debug:
@@ -31,10 +31,13 @@ class LuigisMansionRandomizer:
                                                              filetypes=[("ISO Files", ".iso")])
             self.clean_iso_path = Path(selected_iso_path)
             self.randomized_output_folder = os.path.dirname(self.clean_iso_path)
-            select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
-                                                             filetypes=[("APLM Files", ".aplm")])
-            with open(os.path.abspath(select_aplm_path)) as stream:
-                self.output_data = yaml.safe_load(stream)
+            if ap_output_data is None:
+                select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
+                                                                 filetypes=[("APLM Files", ".aplm")])
+                with open(os.path.abspath(select_aplm_path)) as stream:
+                    self.output_data = yaml.safe_load(stream)
+            else:
+                self.output_data = ap_output_data
         else:
             self.clean_iso_path = clean_iso_path
             self.randomized_output_folder = randomized_output_folder
