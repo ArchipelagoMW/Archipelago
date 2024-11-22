@@ -365,6 +365,16 @@ class RequiredTactics(Choice):
     option_no_logic = 2
 
 
+class EnableVoidTrade(Toggle):
+    """
+    Enables the Void Trade Wormhole to be built from the Advanced Construction tab of SCVs, Drones and Probes.  
+    This structure allows sending units to the Archipelago server, as well as buying random units from the server.  
+    
+    This feature requires at least two Starcraft II worlds.  You cannot receive units that you sent.
+    """
+    display_name = "Enable Void Trade"
+
+
 class GenericUpgradeMissions(Range):
     """
     Determines the percentage of missions in the mission order that must be completed before
@@ -1023,6 +1033,7 @@ class Starcraft2Options(PerGameCommonOptions):
     shuffle_no_build: ShuffleNoBuild
     starter_unit: StarterUnit
     required_tactics: RequiredTactics
+    enable_void_trade: EnableVoidTrade
     ensure_generic_items: EnsureGenericItems
     min_number_of_upgrades: MinNumberOfUpgrades
     max_number_of_upgrades: MaxNumberOfUpgrades
