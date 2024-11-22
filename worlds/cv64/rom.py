@@ -357,8 +357,12 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Make received DeathLinks blow you to smithereens instead of kill you normally.
         if options["death_link"] == DeathLink.option_explosive:
-            rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
             rom_data.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
+            rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
+            rom_data.write_int32(0x27AA0, 0x0C0FFA78)  # JAL	0x803FE9E0
+            rom_data.write_int32s(0xBFE9E0, patches.deathlink_nitro_state_checker)
+            # NOP the function call to subtract Nitro from the inventory after exploding, just in case.
+            rom_data.write_int32(0x32DBC, 0x00000000)
 
         # Set the DeathLink ROM flag if it's on at all.
         if options["death_link"] != DeathLink.option_off:
@@ -944,13 +948,19 @@ def write_patch(world: "CV64World", patch: CV64ProcedurePatch, offset_data: Dict
     for loc in active_locations:
         if loc.address is None or get_location_info(loc.name, "type") == "shop" or loc.item.player == world.player:
             continue
-        if len(loc.item.name) > 67:
-            item_name = loc.item.name[0x00:0x68]
+        # If the Item's name is longer than 104 characters, truncate the name to inject at 104.
+        if len(loc.item.name) > 104:
+            item_name = loc.item.name[0:104]
         else:
             item_name = loc.item.name
+        # Get the item's player's name. If it's longer than 16 characters (which can happen if it's an ItemLinked item),
+        # truncate it at 16.
+        player_name = world.multiworld.get_player_name(loc.item.player)
+        if len(player_name) > 16:
+            player_name = player_name[0:16]
+
         inject_address = 0xBB7164 + (256 * (loc.address & 0xFFF))
-        wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " +
-                                                 world.multiworld.get_player_name(loc.item.player), 96)
+        wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " + player_name, 96)
         patch.write_token(APTokenTypes.WRITE, inject_address, bytes(get_item_text_color(loc) +
                                                                     cv64_string_to_bytearray(wrapped_name)))
         patch.write_token(APTokenTypes.WRITE, inject_address + 255, bytes([num_lines]))
