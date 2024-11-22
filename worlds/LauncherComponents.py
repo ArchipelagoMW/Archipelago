@@ -20,7 +20,7 @@ class Type(Enum):
 class Component:
     """
     A Component represents a process launchable by Archipelago Launcher, either by a User action in the GUI,
-    by resolving an archipelago://user:pass@host:port link from the Webhost, by resolving a patch file's metadata
+    by resolving an archipelago://user:pass@host:port link from the Webhost, by resolving a patch file's metadata,
     or by using a component name arg while running the Launcher in CLI i.e. `ArchipelagoLauncher.exe "Text Client"`
 
     Expected to be appended to LauncherComponents.component list to be used.
@@ -30,7 +30,7 @@ class Component:
     type: Type
     """
     Enum "Type" classification of component intent to filter in the Launcher GUI
-    If not set in the constructor it will be inferred by display_name
+    If not set in the constructor, it will be inferred by display_name
     """
     script_name: Optional[str]
     """Recommended to use func instead; Name of file to run when the component is called"""
@@ -42,8 +42,8 @@ class Component:
     """Bool to control if the component gets launched in an appropriate Terminal for the OS"""
     func: Optional[Callable]
     """
-    Function that gets called when the component gets launched,
-    any arg besides the component name arg is passed into the func as well so handling *args is suggested
+    Function that gets called when the component gets launched
+    Any arg besides the component name arg is passed into the func as well, so handling *args is suggested
     """
     file_identifier: Optional[Callable[[str], bool]]
     """
