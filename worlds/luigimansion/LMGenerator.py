@@ -2,6 +2,7 @@ import hashlib
 import os
 import io
 import struct
+import yaml
 
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
@@ -53,6 +54,7 @@ class LuigisMansionRandomizer:
         self.jmp_event_info_table = self.load_maptwo_info_table("eventinfo")
         self.jmp_observer_info_table = self.load_maptwo_info_table("observerinfo")
         self.jmp_key_info_table = self.load_maptwo_info_table("keyinfo")
+        self.jmp_obj_info_table = self.load_maptwo_info_table("objinfo")
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
@@ -167,6 +169,9 @@ class LuigisMansionRandomizer:
         update_key_info(self.jmp_key_info_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_key_info_table)
 
+        update_obj_info(self.jmp_obj_info_table)
+        self.update_maptwo_info_table(self.jmp_obj_info_table)
+
     def save_randomized_iso(self):
         self.update_maptwo_jmp_tables()
 
@@ -182,9 +187,9 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # Update all custom events
-        list_events = [4, 17, 22, 32, 50, 64]
+        list_events = ["04", "17", "22", "32", "50", "64"]
         for custom_event in list_events:
-            self.update_custom_event(str(custom_event), True)
+            self.update_custom_event(custom_event, True)
 
         with open('data/custom_events/event48.txt', 'r') as file:
             lines = file.read()
@@ -193,7 +198,7 @@ class LuigisMansionRandomizer:
             mansion_type = "<URALUIGI>"
         else:
             mansion_type = "<OMOTELUIGI>"
-        lines =lines.replace("{MANSION_TYPE}", mansion_type)
+        lines = lines.replace("{MANSION_TYPE}", mansion_type)
 
         event_door_list: list[str] = []
         door_list: dict[int, int] = self.output_data["Entrances"]
@@ -234,7 +239,8 @@ class LuigisMansionRandomizer:
                                         info_files.name == "event" + event_number + ".txt"), None)
 
         if custom_event_entry is None:
-            raise Exception("Unable to find an info file with name 'event48.txt' in provided RAC file.")
+            raise Exception("Unable to find an info file with name 'event" + event_number +
+                            ".txt' in provided RAC file.")
 
         if check_local_folder:
             with open('data/custom_events/event' + event_number + '.txt', 'rb') as file:
