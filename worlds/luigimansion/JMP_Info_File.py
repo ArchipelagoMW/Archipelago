@@ -57,7 +57,7 @@ class JMPInfoFile:
         if self.info_file_entry is None:
             raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RAC file.")
 
-        with open('worlds\\luigimansion\\data\\names.json', 'r') as file:
+        with open('data/names.json', 'r') as file:
             json_data = json.load(file)
 
         if name_of_info_file not in json_data:
@@ -104,7 +104,7 @@ class JMPInfoFile:
 
             # Some info files have random @ signs as their file terminator.
             # This project captures this information and saves it for later when the file is converted back to bytes
-            if bool(re.search("@{4,}", str(current_line.getvalue()))):
+            if len(current_line.getvalue()) < self.__data_line_byte_length and bool(re.search("@{4,}", str(current_line.getvalue()))):
                 self.__end_file_terminator = current_line
                 break
 
