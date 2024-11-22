@@ -51,6 +51,34 @@ def __get_chest_size_from_item(item_name):
         case "Mario's Star":
             return 0
 
+        case "Small Heart":
+            return 0
+        case "Large Heart":
+            return 1
+        case "Bomb":
+            return 2
+
+        case "Fire Element Medal":
+            return 0
+        case "Water Element Medal":
+            return 0
+        case "Ice Element Medal":
+            return 0
+
+        case "Mario's Hat":
+            return 0
+        case "Mario's Letter":
+            return 0
+        case "Mario's Shoe":
+            return 0
+        case "Mario's Glove":
+            return 0
+        case "Mario's Star":
+            return 0
+
+        case "Money Bundle":
+            return 1
+
     return 2
 
 def __get_chest_size_from_key(key_id):
@@ -97,8 +125,8 @@ def update_item_info_table(item_info_table_entry, output_data):
     __add_info_item(item_info_table_entry, "nothing")
 
     __add_info_item(item_info_table_entry, "mkinoko")
-    __add_info_item(item_info_table_entry, "move_sheart")
-    __add_info_item(item_info_table_entry, "move_lheart")
+    __add_info_item(item_info_table_entry, "sheart")
+    __add_info_item(item_info_table_entry, "lheart")
     __add_info_item(item_info_table_entry, "itembomb")
 
     __add_info_item(item_info_table_entry, "elffst")
@@ -128,27 +156,25 @@ def __add_appear_item(item_appear_table_entry, item_name):
 
 def update_item_appear_table(item_appear_table_entry, output_data):
     for x in item_appear_table_entry.info_file_field_entries[:]:
-        if x["item0"].startswith("key_"):
-            for itemid in range(20):
-                x["item" + str(itemid)] = "nothing"
+        for itemid in range(20):
+            x["item" + str(itemid)] = "nothing"
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
             item_name = "key_" + str(item_data["door_id"])
             __add_appear_item(item_appear_table_entry, item_name)
 
-    #__add_appear_item(item_appear_table_entry, "nothing")
     __add_appear_item(item_appear_table_entry, "mkinoko")
-    #__add_appear_item(item_appear_table_entry, "move_sheart")
-    #__add_appear_item(item_appear_table_entry, "move_lheart")
+    __add_appear_item(item_appear_table_entry, "sheart")
+    __add_appear_item(item_appear_table_entry, "lheart")
     __add_appear_item(item_appear_table_entry, "itembomb")
 
     __add_appear_item(item_appear_table_entry, "elffst")
     __add_appear_item(item_appear_table_entry, "elwfst")
     __add_appear_item(item_appear_table_entry, "elifst")
 
-    #__add_appear_item(item_appear_table_entry, "mcap")
-    #__add_appear_item(item_appear_table_entry, "mletter")
+    __add_appear_item(item_appear_table_entry, "mcap")
+    __add_appear_item(item_appear_table_entry, "mletter")
     __add_appear_item(item_appear_table_entry, "mshoes")
     __add_appear_item(item_appear_table_entry, "mglove")
     __add_appear_item(item_appear_table_entry, "mstar")
@@ -200,6 +226,12 @@ def __get_item_chest_visual(item_name):
         case "Diamond Key":
             return "ytakara1"
         case "Spade Key":
+            return "ytakara1"
+        case "Small Heart":
+            return "ytakara1"
+        case "Large Heart":
+            return "ytakara1"
+        case "Bomb":
             return "ytakara1"
 
         case "Fire Element Medal":
@@ -255,9 +287,9 @@ def get_item_name(item_name, item_data):
         case "Poison Mushroom":
             return "mkinoko"
         case "Small Heart":
-            return "move_sheart"
+            return "sheart"
         case "Large Heart":
-            return "move_lheart"
+            return "lheart"
         case "Bomb":
             return "itembomb"
 
