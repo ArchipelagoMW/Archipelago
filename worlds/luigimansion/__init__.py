@@ -6,8 +6,8 @@ from typing import Dict, ClassVar
 
 import yaml
 
-from .LMGenerator import LuigisMansionRandomizer
 from BaseClasses import Tutorial, Item, ItemClassification
+from Fill import fill_restrictive
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
@@ -435,7 +435,7 @@ class LMWorld(World):
                     itemid = 0
                     if location.item.player == self.player:
                         if location.item.type == "Door Key":
-                            itemid = location.item.doorid
+                            itemid = ("key_" + str(location.item.doorid))
                         inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
                         roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
@@ -450,12 +450,17 @@ class LMWorld(World):
                         }
                         output_data["Locations"][location.name] = item_info
                     else:
+                        inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
+                        roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
                             "player": location.item.player,
                             "name": location.item.name,
                             "game": location.item.game,
                             "classification": location.item.classification.name,
-                            "JMPentry": location.jmpentry
+                            "door_id": itemid,
+                            "room_no": roomid,
+                            "type": location.type,
+                            "loc_enum": location.jmpentry,
                         }
                         output_data["Locations"][location.name] = item_info
                 else:
@@ -470,9 +475,6 @@ class LMWorld(World):
 
         # Output the plando details to file
         file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
-
-        LuigisMansionRandomizer("C:\\Users\\Melon\\Desktop\\LM Tools\\lm.iso", "C:\\Users\\Melon\\Desktop\\LM Tools\\", False, output_data)
-
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False))
 
