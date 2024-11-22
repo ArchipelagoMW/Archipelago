@@ -87,25 +87,28 @@ def __add_appear_item(item_appear_table_entry, item_name):
     item_appear_table_entry.info_file_field_entries.append(new_item)
 
 def update_item_appear_table(item_appear_table_entry, output_data):
-    item_appear_table_entry.info_file_field_entries = []
+    for x in item_appear_table_entry.info_file_field_entries[:]:
+        if x["item0"].startswith("key_"):
+            for itemid in range(20):
+                x["item" + str(itemid)] = "nothing"
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
             item_name = "key_" + str(item_data["door_id"])
             __add_appear_item(item_appear_table_entry, item_name)
 
-    __add_appear_item(item_appear_table_entry, "nothing")
+    #__add_appear_item(item_appear_table_entry, "nothing")
     __add_appear_item(item_appear_table_entry, "mkinoko")
-    __add_appear_item(item_appear_table_entry, "move_sheart")
-    __add_appear_item(item_appear_table_entry, "move_lheart")
+    #__add_appear_item(item_appear_table_entry, "move_sheart")
+    #__add_appear_item(item_appear_table_entry, "move_lheart")
     __add_appear_item(item_appear_table_entry, "itembomb")
 
     __add_appear_item(item_appear_table_entry, "elffst")
     __add_appear_item(item_appear_table_entry, "elwfst")
     __add_appear_item(item_appear_table_entry, "elifst")
 
-    __add_appear_item(item_appear_table_entry, "mcap")
-    __add_appear_item(item_appear_table_entry, "mletter")
+    #__add_appear_item(item_appear_table_entry, "mcap")
+    #__add_appear_item(item_appear_table_entry, "mletter")
     __add_appear_item(item_appear_table_entry, "mshoes")
     __add_appear_item(item_appear_table_entry, "mglove")
     __add_appear_item(item_appear_table_entry, "mstar")
