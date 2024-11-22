@@ -117,16 +117,13 @@ class AquariaWorld(World):
         Create an AquariaItem using 'name' as item name.
         """
         result: AquariaItem
-        try:
-            data = item_table[name]
-            classification: ItemClassification = ItemClassification.useful
-            if data.type == ItemType.JUNK:
-                classification = ItemClassification.filler
-            elif data.type == ItemType.PROGRESSION:
-                classification = ItemClassification.progression
-            result = AquariaItem(name, classification, data.id, self.player)
-        except BaseException:
-            raise Exception('The item ' + name + ' is not valid.')
+        data = item_table[name]
+        classification: ItemClassification = ItemClassification.useful
+        if data.type == ItemType.JUNK:
+            classification = ItemClassification.filler
+        elif data.type == ItemType.PROGRESSION:
+            classification = ItemClassification.progression
+        result = AquariaItem(name, classification, data.id, self.player)
 
         return result
 
