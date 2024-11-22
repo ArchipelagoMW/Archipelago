@@ -1,6 +1,7 @@
 def update_event_info(event_info):
     for x in event_info.info_file_field_entries:
-        # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls.
+        # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
+        # boss battles / grabbing boss keys, etc.
         if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54}:
             event_info.info_file_field_entries.remove(x)
 
@@ -81,41 +82,36 @@ def update_item_info_table(item_info_table_entry, output_data):
             }
             item_info_table_entry.info_file_field_entries.append(new_item)
 
-def add_appear_item(item_appear_table_entry, item_name):
+def __add_appear_item(item_appear_table_entry, item_name):
     new_item = {}
     for itemid in range(20):
         new_item["item" + str(itemid)] = item_name
     item_appear_table_entry.info_file_field_entries.append(new_item)
 
 def update_item_appear_table(item_appear_table_entry, output_data):
-    for x in item_appear_table_entry.info_file_field_entries[:]:
-        item_appear_table_entry.info_file_field_entries.remove(x)
+    item_appear_table_entry.info_file_field_entries = []
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
             item_name = "key_" + str(item_data["door_id"])
 
-            new_item = {}
-            for item_id in range(20):
-                new_item["item" + str(item_id)] = item_name
+            __add_appear_item(item_appear_table_entry, item_name)
 
-            item_appear_table_entry.info_file_field_entries.append(new_item)
+    __add_appear_item(item_appear_table_entry, "nothing")
+    __add_appear_item(item_appear_table_entry, "mkinoko")
+    __add_appear_item(item_appear_table_entry, "move_sheart")
+    __add_appear_item(item_appear_table_entry, "move_lheart")
+    __add_appear_item(item_appear_table_entry, "itembomb")
 
-    add_appear_item(item_appear_table_entry, "nothing")
-    add_appear_item(item_appear_table_entry, "mkinoko")
-    add_appear_item(item_appear_table_entry, "move_sheart")
-    add_appear_item(item_appear_table_entry, "move_lheart")
-    add_appear_item(item_appear_table_entry, "itembomb")
+    __add_appear_item(item_appear_table_entry, "elffst")
+    __add_appear_item(item_appear_table_entry, "elwfst")
+    __add_appear_item(item_appear_table_entry, "elifst")
 
-    add_appear_item(item_appear_table_entry, "elffst")
-    add_appear_item(item_appear_table_entry, "elwfst")
-    add_appear_item(item_appear_table_entry, "elifst")
-
-    add_appear_item(item_appear_table_entry, "mcap")
-    add_appear_item(item_appear_table_entry, "mletter")
-    add_appear_item(item_appear_table_entry, "mshoes")
-    add_appear_item(item_appear_table_entry, "mglove")
-    add_appear_item(item_appear_table_entry, "mstar")
+    __add_appear_item(item_appear_table_entry, "mcap")
+    __add_appear_item(item_appear_table_entry, "mletter")
+    __add_appear_item(item_appear_table_entry, "mshoes")
+    __add_appear_item(item_appear_table_entry, "mglove")
+    __add_appear_item(item_appear_table_entry, "mstar")
 
 def update_treasure_table(treasure_table_entry, output_data):
     for x in treasure_table_entry.info_file_field_entries[:]:

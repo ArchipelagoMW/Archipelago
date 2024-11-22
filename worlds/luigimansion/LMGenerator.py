@@ -51,6 +51,7 @@ class LuigisMansionRandomizer:
         self.jmp_character_info_table = self.load_maptwo_info_table("characterinfo")
         self.jmp_event_info_table = self.load_maptwo_info_table("eventinfo")
         self.jmp_observer_info_table = self.load_maptwo_info_table("observerinfo")
+        self.jmp_key_info_table = self.load_maptwo_info_table("keyinfo")
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
@@ -153,6 +154,9 @@ class LuigisMansionRandomizer:
         update_observer_info(self.jmp_observer_info_table)
         self.update_maptwo_info_table(self.jmp_observer_info_table)
 
+        update_key_info(self.jmp_key_info_table, self.output_data)
+        self.update_maptwo_info_table(self.jmp_key_info_table)
+
     def save_randomized_iso(self):
         self.update_maptwo_jmp_tables()
 
@@ -168,9 +172,9 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # Update all custom events
-        list_events = [15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54]
+        list_events = [4, 17, 22, 32, 48, 50, 64]
         for custom_event in list_events:
-            self.update_custom_event(custom_event, True)
+            self.update_custom_event(str(custom_event), True)
 
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. //Todo Maybe there is something better to put here?
@@ -201,7 +205,7 @@ class LuigisMansionRandomizer:
             raise Exception("Unable to find an info file with name 'event48.txt' in provided RAC file.")
 
         if check_local_folder:
-            with open('data/event' + event_number + '.txt', 'rb') as file:
+            with open('data/custom_events/event' + event_number + '.txt', 'rb') as file:
                 lines = io.BytesIO(file.read())
         else:
             lines = io.BytesIO(non_local_str.encode('utf-8'))
@@ -210,4 +214,4 @@ class LuigisMansionRandomizer:
               info_files.name == "event" + event_number + ".txt")).data = lines
 
         custom_event.save_changes()
-        self.gcm.changed_files["files/Event/event48.szp"] =  Yay0.compress(custom_event.data, 0)
+        self.gcm.changed_files["files/Event/event" + event_number + ".szp"] =  Yay0.compress(custom_event.data, 0)
