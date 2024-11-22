@@ -1,6 +1,7 @@
 import hashlib
 import os
 import io
+import struct
 
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
@@ -117,10 +118,26 @@ class LuigisMansionRandomizer:
 
     # Updates various DOL Offsets per the desired changes of the AP user
     def update_dol_offsets(self):
+        if self.output_data["Options"]["walk_speed"] == 0:
+            walk_speed = 16784
+        elif self.output_data["Options"]["walk_speed"] == 1:
+            walk_speed = 16850
+        else:
+            walk_speed = 16950
+
+        self.dol.data.seek(0x396538)
+        self.dol.data.write(struct.pack(">H", walk_speed))
+
+        if any("Poltergust 4000" in key for key in self.output_data["Options"]["start_inventory"]):
+            vac_speed = [0x38, 0x00, 0x00, 0x0F]
+        else:
+            vac_speed = [0x80, 0x0D, 0x01, 0x60]
+
+        self.dol.data.seek(0x7EA28)
+        self.dol.data.write(struct.pack(">BBBB", *vac_speed))
         return
         # Walk Speed
-        # self.dol.data.seek(0x396538)
-        # self.dol.data.write(struct.pack(">H", 16850))
+
 
         # Vac Speed
         # data_test = [0x38, 0x00, 0x00, 0x0F]
@@ -176,14 +193,27 @@ class LuigisMansionRandomizer:
         for custom_event in list_events:
             self.update_custom_event(str(custom_event), True)
 
-        with open('data/custom_events/event48.txt', 'rb') as file:
+        with open('data/custom_events/event48.txt', 'r') as file:
             lines = file.read()
 
-        if True:
+        if self.output_data["Options"]["hidden_mansion"] == 1:
             mansion_type = "<URALUIGI>"
         else:
             mansion_type = "<OMOTELUIGI>"
         lines.replace("{MANSION_TYPE}", mansion_type)
+
+        event_door_list: list[str] = []
+        door_list: dict[int, int] = self.output_data["Entrances"]
+
+        for event_door in door_list:
+            if door_list[event_door] == 0:
+                event_door_list.append(f"<KEYLOCK>({event_door})" + os.linesep)
+            else:
+                event_door_list.append(f"<KEYUNLOCK>({event_door})" + os.linesep)
+
+        lines.replace("{DOOR_LIST}", ''.join(event_door_list))
+
+        self.update_custom_event("48", False, lines)
 
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. //Todo Maybe there is something better to put here?
