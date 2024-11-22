@@ -55,7 +55,7 @@ class JMPInfoFile:
                                 info_files.name == name_of_info_file), None)
 
         if self.info_file_entry is None:
-            raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RAC file.")
+            raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RARC file.")
 
         with open('worlds\\luigimansion\\data\\names.json', 'r') as file:
             json_data = json.load(file)
