@@ -7,6 +7,11 @@ def update_event_info(event_info):
         if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54, 91}:
             event_info.info_file_field_entries.remove(x)
 
+        # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
+        # This prevents being softlocked in Boolossus and having to reset the game without saving.
+        if x["EventNo"] == 71:
+            x["EventFlag"] = 22
+
 def update_character_info(character_info, output_data):
     for x in character_info.info_file_field_entries[:]:
         # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
