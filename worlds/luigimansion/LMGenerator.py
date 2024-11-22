@@ -172,9 +172,18 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # Update all custom events
-        list_events = [4, 17, 22, 32, 48, 50, 64]
+        list_events = [4, 17, 22, 32, 50, 64]
         for custom_event in list_events:
             self.update_custom_event(str(custom_event), True)
+
+        with open('data/custom_events/event48.txt', 'rb') as file:
+            lines = file.read()
+
+        if True:
+            mansion_type = "<URALUIGI>"
+        else:
+            mansion_type = "<OMOTELUIGI>"
+        lines.replace("{MANSION_TYPE}", mansion_type)
 
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. //Todo Maybe there is something better to put here?
