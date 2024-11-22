@@ -31,9 +31,9 @@ from .Rom import LADXDeltaPatch, get_base_rom_path
 DEVELOPER_MODE = False
 
 
-def launch_client():
+def launch_client(*args):
     from .LinksAwakeningClient import launch
-    launch_subprocess(launch, name="Links Awakening DX Client")
+    launch_subprocess(launch, name="Links Awakening DX Client", args=args)
 
 components.append(Component("Links Awakening DX Client",
                             func=launch_client,

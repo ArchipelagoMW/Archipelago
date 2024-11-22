@@ -662,7 +662,7 @@ def run_game(romfile: str) -> None:
         except FileNotFoundError:
             logger.error(f"Couldn't launch ROM, {args[0]} is missing")
 
-def launch():
+def launch(*launch_args):
     async def main():
         parser = get_base_parser(description="Link's Awakening Client.")
         parser.add_argument("--url", help="Archipelago connection url")
@@ -670,7 +670,7 @@ def launch():
         parser.add_argument('diff_file', default="", type=str, nargs="?",
                             help='Path to a .apladx Archipelago Binary Patch file')
 
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
         if args.diff_file:
             import Patch
