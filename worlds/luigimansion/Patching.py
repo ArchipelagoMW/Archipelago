@@ -81,10 +81,15 @@ def update_item_info_table(item_info_table_entry, output_data):
             }
             item_info_table_entry.info_file_field_entries.append(new_item)
 
+def add_appear_item(item_appear_table_entry, item_name):
+    new_item = {}
+    for itemid in range(20):
+        new_item["item" + str(itemid)] = item_name
+    item_appear_table_entry.info_file_field_entries.append(new_item)
+
 def update_item_appear_table(item_appear_table_entry, output_data):
     for x in item_appear_table_entry.info_file_field_entries[:]:
-        if x["item0"].startswith("key_"):
-            item_appear_table_entry.info_file_field_entries.remove(x)
+        item_appear_table_entry.info_file_field_entries.remove(x)
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
@@ -95,6 +100,22 @@ def update_item_appear_table(item_appear_table_entry, output_data):
                 new_item["item" + str(item_id)] = item_name
 
             item_appear_table_entry.info_file_field_entries.append(new_item)
+
+    add_appear_item(item_appear_table_entry, "nothing")
+    add_appear_item(item_appear_table_entry, "mkinoko")
+    add_appear_item(item_appear_table_entry, "move_sheart")
+    add_appear_item(item_appear_table_entry, "move_lheart")
+    add_appear_item(item_appear_table_entry, "itembomb")
+
+    add_appear_item(item_appear_table_entry, "elffst")
+    add_appear_item(item_appear_table_entry, "elwfst")
+    add_appear_item(item_appear_table_entry, "elifst")
+
+    add_appear_item(item_appear_table_entry, "mcap")
+    add_appear_item(item_appear_table_entry, "mletter")
+    add_appear_item(item_appear_table_entry, "mshoes")
+    add_appear_item(item_appear_table_entry, "mglove")
+    add_appear_item(item_appear_table_entry, "mstar")
 
 def update_treasure_table(treasure_table_entry, output_data):
     for x in treasure_table_entry.info_file_field_entries[:]:
@@ -141,6 +162,7 @@ def get_item_name(item_name, item_data):
             return "elwfst"
         case "Ice Element Medal":
             return "elifst"
+
         case "Mario's Hat":
             return "mcap"
         case "Mario's Letter":
@@ -151,6 +173,17 @@ def get_item_name(item_name, item_data):
             return "mglove"
         case "Mario's Star":
             return "mstar"
+
+        case "Nothing":
+            return "nothing"
+        case "Poison Mushroom":
+            return "mkinoko"
+        case "Small Heart":
+            return "move_sheart"
+        case "Large Heart":
+            return "move_lheart"
+        case "Bomb":
+            return "itembomb"
 
     return "----"
 
