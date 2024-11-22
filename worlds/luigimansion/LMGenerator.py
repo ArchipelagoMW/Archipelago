@@ -257,7 +257,7 @@ class LuigisMansionRandomizer:
                             ".txt' in provided RAC file.")
 
         if check_local_folder:
-            with open('data/custom_events/event' + event_number + '.txt', 'rb') as file:
+            with open('worlds/luigimansion/data/custom_events/event' + event_number + '.txt', 'rb') as file:
                 lines = io.BytesIO(file.read())
         else:
             lines = io.BytesIO(non_local_str.encode('utf-8'))
