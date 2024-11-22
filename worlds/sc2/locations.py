@@ -4386,6 +4386,52 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "Second Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10004, LocationType.VANILLA,
                            logic.zerg_competent_comp_basic_aa
                            ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10100, LocationType.VICTORY,
+                           lambda state: (
+                               logic.terran_beats_protoss_deathball(state)
+                               and logic.terran_mineral_dump(state))
+                           ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_T.mission_name, "South Rock Formation", SC2_RACESWAP_LOC_ID_OFFSET + 10101, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_beats_protoss_deathball(state)
+                                   and logic.terran_mineral_dump(state))
+                           ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_T.mission_name, "West Rock Formation", SC2_RACESWAP_LOC_ID_OFFSET + 10102, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_beats_protoss_deathball(state)
+                                   and logic.terran_mineral_dump(state))
+                           ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_T.mission_name, "East Rock Formation", SC2_RACESWAP_LOC_ID_OFFSET + 10103, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_beats_protoss_deathball(state)
+                                   and logic.terran_mineral_dump(state)
+                                   and logic.terran_can_grab_ghosts_in_the_fog_east_rock_formation(state))
+                           ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10200, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.zerg_competent_comp(state)
+                                   and logic.zerg_competent_anti_air(state)
+                                   and logic.zerg_mineral_dump(state))
+                           ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_Z.mission_name, "South Rock Formation", SC2_RACESWAP_LOC_ID_OFFSET + 10201, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_competent_comp(state)
+                                   and logic.zerg_competent_anti_air(state)
+                                   and logic.zerg_mineral_dump(state))
+                           ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_Z.mission_name, "West Rock Formation", SC2_RACESWAP_LOC_ID_OFFSET + 10202, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_competent_comp(state)
+                                   and logic.zerg_competent_anti_air(state)
+                                   and logic.zerg_mineral_dump(state))
+                           ),
+        make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_Z.mission_name, "East Rock Formation", SC2_RACESWAP_LOC_ID_OFFSET + 10203, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_competent_comp(state)
+                                   and logic.zerg_competent_anti_air(state)
+                                   and logic.zerg_mineral_dump(state)
+                                   and logic.zerg_can_grab_ghosts_in_the_fog_east_rock_formation(state))
+                           ),
     ]
 
     beat_events = []

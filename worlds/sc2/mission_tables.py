@@ -156,7 +156,7 @@ class SC2Mission(Enum):
 
     # Prologue
     DARK_WHISPERS = 50, "Dark Whispers (Protoss)", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsTZ|MissionFlag.HasRaceSwap
-    GHOSTS_IN_THE_FOG = 51, "Ghosts in the Fog", SC2Campaign.PROLOGUE, "_2", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_ghosts_in_the_fog", MissionFlag.Protoss|MissionFlag.VsProtoss
+    GHOSTS_IN_THE_FOG = 51, "Ghosts in the Fog (Protoss)", SC2Campaign.PROLOGUE, "_2", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_ghosts_in_the_fog", MissionFlag.Protoss|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     EVIL_AWOKEN = 52, "Evil Awoken", SC2Campaign.PROLOGUE, "_3", SC2Race.PROTOSS, MissionPools.STARTER, "ap_evil_awoken", MissionFlag.Protoss|MissionFlag.NoBuild|MissionFlag.VsProtoss
 
     # LotV
@@ -279,7 +279,8 @@ class SC2Mission(Enum):
     THE_RECKONING_P = 181, "The Reckoning (Protoss)", SC2Campaign.HOTS, "Korhal", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_the_reckoning", MissionFlag.Protoss|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
     DARK_WHISPERS_T = 182, "Dark Whispers (Terran)", SC2Campaign.PROLOGUE, "_1", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_dark_whispers", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsTZ|MissionFlag.RaceSwap
     DARK_WHISPERS_Z = 183, "Dark Whispers (Zerg)", SC2Campaign.PROLOGUE, "_1", SC2Race.ZERG, MissionPools.MEDIUM, "ap_dark_whispers", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsTZ|MissionFlag.RaceSwap
-    # 184/185 - Ghosts in the Fog
+    GHOSTS_IN_THE_FOG_T = 184, "Ghosts in the Fog (Terran)", SC2Campaign.PROLOGUE, "_2", SC2Race.TERRAN, MissionPools.HARD, "ap_ghosts_in_the_fog", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.RaceSwap
+    GHOSTS_IN_THE_FOG_Z = 185, "Ghosts in the Fog (Zerg)", SC2Campaign.PROLOGUE, "_2", SC2Race.ZERG, MissionPools.MEDIUM, "ap_ghosts_in_the_fog", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     # 186/187 - Evil Awoken
     # 188/189 - For Aiur!
     # 190/191 - The Growing Shadow

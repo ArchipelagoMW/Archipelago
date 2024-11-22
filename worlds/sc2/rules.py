@@ -368,6 +368,51 @@ class SC2Logic:
             )
         )
 
+    def terran_mineral_dump(self, state: CollectionState) -> bool:
+        """
+        Can build something using only minerals
+        :param state:
+        :return:
+        """
+        return (
+                state.has_any({item_names.MARINE, item_names.VULTURE, item_names.HELLION, item_names.SON_OF_KORHAL},
+                              self.player)
+                or state.has_all({item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY}, self.player)
+                or (
+                        self.advanced_tactics
+                        and state.has_any({item_names.PERDITION_TURRET, item_names.DEVASTATOR_TURRET}, self.player)
+                )
+        )
+
+    def terran_can_grab_ghosts_in_the_fog_east_rock_formation(self, state: CollectionState) -> bool:
+        """
+        Able to shoot by a long range or from air to claim the rock formation separated by a chasm
+        :param state:
+        :return:
+        """
+        return (
+                state.has_any({
+                    item_names.MEDIVAC, item_names.HERCULES, item_names.VIKING, item_names.BANSHEE,
+                    item_names.WRAITH, item_names.SIEGE_TANK, item_names.BATTLECRUISER, item_names.NIGHT_HAWK,
+                    item_names.NIGHT_WOLF, item_names.SHOCK_DIVISION, item_names.SKY_FURY
+                }, self.player)
+                or state.has_all({item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES}, self.player)
+                or state.has_all({item_names.RAVEN, item_names.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
+                or (
+                        state.has_any({item_names.LIBERATOR, item_names.EMPERORS_GUARDIAN}, self.player)
+                        and state.has(item_names.LIBERATOR_RAID_ARTILLERY, self.player)
+                ) or (
+                        self.advanced_tactics
+                        and (
+                            state.has_any({
+                                item_names.HELS_ANGELS, item_names.DUSK_WINGS, item_names.WINGED_NIGHTMARES,
+                                item_names.SIEGE_BREAKERS, item_names.BRYNHILDS, item_names.JACKSONS_REVENGE
+                            }, self.player)
+                        )
+                        or state.has_all({item_names.MIDNIGHT_RIDERS, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
+                )
+        )
+
     def terran_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
         """
         Ability to deal with trains (moving target with a lot of HP)
@@ -881,6 +926,19 @@ class SC2Logic:
             or (self.advanced_tactics and state.has_any({item_names.SPORE_CRAWLER, item_names.INFESTED_MISSILE_TURRET}, self.player))
         )
 
+    def zerg_basic_air_to_air(self, state: CollectionState) -> bool:
+        return (
+            state.has_any({
+                item_names.MUTALISK, item_names.CORRUPTOR, item_names.BROOD_QUEEN, item_names.SCOURGE,
+                item_names.INFESTED_LIBERATOR
+            }, self.player)
+            or self.morph_devourer(state)
+            or self.morph_viper(state)
+            or (
+                self.morph_guardian(state) and state.has(item_names.GUARDIAN_PRIMAL_ADAPTATION, self.player)
+            )
+        )
+
     def morph_brood_lord(self, state: CollectionState) -> bool:
         return (
             (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled)
@@ -978,6 +1036,17 @@ class SC2Logic:
     def spread_creep(self, state: CollectionState) -> bool:
         return self.advanced_tactics or state.has_any({item_names.SWARM_QUEEN, item_names.OVERLORD_OVERSEER_ASPECT}, self.player)
 
+    def zerg_mineral_dump(self, state: CollectionState) -> bool:
+        return (
+                state.has_any({item_names.ZERGLING, item_names.INFESTED_BUNKER}, self.player)
+                or state.has_all({item_names.SWARM_QUEEN, item_names.SWARM_QUEEN_RESOURCE_EFFICIENCY}, self.player)
+                or (
+                        self.advanced_tactics
+                        and self.spread_creep(state)
+                        and state.has(item_names.SPINE_CRAWLER, self.player)
+                )
+        )
+
     def zerg_big_monsters(self, state: CollectionState) -> bool:
         """
         Durable units with some capacity for damage
@@ -1042,6 +1111,33 @@ class SC2Logic:
                          or state.has(item_names.SPINE_CRAWLER, self.player))
                 )
             )
+        )
+
+    def zerg_can_grab_ghosts_in_the_fog_east_rock_formation(self, state: CollectionState) -> bool:
+        return (
+                state.has_any({
+                    item_names.MUTALISK, item_names.INFESTED_BANSHEE, item_names.OVERLORD_VENTRAL_SACS,
+                    item_names.INFESTOR
+                }, self.player)
+                or (
+                        self.morph_devourer(state) and state.has(item_names.DEVOURER_PRESCIENT_SPORES, self.player)
+                ) or (
+                        self.morph_guardian(state) and state.has(item_names.GUARDIAN_PRIMAL_ADAPTATION, self.player)
+                ) or (
+                        (self.morph_guardian(state) or self.morph_brood_lord(state))
+                        and self.zerg_basic_air_to_air(state)
+                ) or (
+                        self.advanced_tactics
+                        and (
+                            state.has_any({
+                                item_names.INFESTED_SIEGE_BREAKERS, item_names.INFESTED_DUSK_WINGS
+                            }, self.player)
+                            or (
+                                state.has(item_names.HUNTERLING, self.player)
+                                and self.zerg_basic_air_to_air(state)
+                            )
+                        )
+                )
         )
     
     def zerg_respond_to_colony_infestations(self, state: CollectionState) -> bool:

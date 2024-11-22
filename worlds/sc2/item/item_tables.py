@@ -244,7 +244,8 @@ item_table = {
         ItemData(60 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 9, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.NIGHT_WOLF:
-        ItemData(61 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 10, SC2Race.TERRAN),
+        ItemData(61 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 10, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL),
@@ -803,7 +804,7 @@ item_table = {
                  classification=ItemClassification.filler, parent_item=item_names.VALKYRIE),
     item_names.VALKYRIE_FLECHETTE_MISSILES:
         ItemData(381 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 0, SC2Race.TERRAN,
-                 parent_item=item_names.VALKYRIE),
+                 classification=ItemClassification.progression, parent_item=item_names.VALKYRIE),
     item_names.VALKYRIE_AFTERBURNERS:
         ItemData(382 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 1, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=item_names.VALKYRIE),
@@ -884,14 +885,17 @@ item_table = {
         ItemData(503 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 3, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.SIEGE_BREAKERS:
-        ItemData(504 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 4, SC2Race.TERRAN),
+        ItemData(504 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 4, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.HELS_ANGELS:
         ItemData(505 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 5, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.DUSK_WINGS:
-        ItemData(506 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 6, SC2Race.TERRAN),
+        ItemData(506 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 6, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.JACKSONS_REVENGE:
-        ItemData(507 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 7, SC2Race.TERRAN),
+        ItemData(507 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 7, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.SKIBIS_ANGELS:
         ItemData(508 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 8, SC2Race.TERRAN),
     item_names.DEATH_HEADS:
@@ -900,7 +904,8 @@ item_table = {
         ItemData(510 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 10, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.MIDNIGHT_RIDERS:
-        ItemData(511 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 11, SC2Race.TERRAN),
+        ItemData(511 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 11, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.BRYNHILDS:
         ItemData(512 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 12, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
@@ -1316,13 +1321,15 @@ item_table = {
                  classification=ItemClassification.filler),
     item_names.DEVOURER_PRESCIENT_SPORES:
         ItemData(247 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 17, SC2Race.ZERG,
-                 parent_item=item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT),
+                 parent_item=item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT,
+                 classification=ItemClassification.progression),
     item_names.GUARDIAN_PROLONGED_DISPERSION:
         ItemData(248 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 18, SC2Race.ZERG,
                  parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT),
     item_names.GUARDIAN_PRIMAL_ADAPTATION:
         ItemData(249 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 19, SC2Race.ZERG,
-                 parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT),
+                 parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT,
+                 classification=ItemClassification.progression),
     item_names.GUARDIAN_SORONAN_ACID:
         ItemData(250 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 20, SC2Race.ZERG,
                  parent_item=item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, classification=ItemClassification.progression),
@@ -1386,7 +1393,7 @@ item_table = {
     item_names.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION:
         ItemData(271 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 11, SC2Race.ZERG, parent_item=item_names.SWARM_QUEEN, classification=ItemClassification.progression),
     item_names.SWARM_QUEEN_RESOURCE_EFFICIENCY:
-        ItemData(272 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 12, SC2Race.ZERG, parent_item=item_names.SWARM_QUEEN),
+        ItemData(272 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 12, SC2Race.ZERG, parent_item=item_names.SWARM_QUEEN, classification=ItemClassification.progression),
     item_names.SWARM_QUEEN_INCUBATOR_CHAMBER:
         ItemData(273 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_3, 13, SC2Race.ZERG, parent_item=item_names.SWARM_QUEEN),
     item_names.BROOD_QUEEN_FUNGAL_GROWTH:
