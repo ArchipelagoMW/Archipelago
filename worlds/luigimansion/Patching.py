@@ -187,7 +187,7 @@ def update_key_info(key_info_entry, output_data):
             case "Ghost Foyer Key": #1
                 key_info_entry.info_file_field_entries[1]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[1]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_flag"] = 1
+                key_info_entry.info_file_field_entries[1]["appear_flag"] = 0
                 key_info_entry.info_file_field_entries[1]["disappear_flag"] = 0
                 key_info_entry.info_file_field_entries[1]["appear_type"] = 4
                 key_info_entry.info_file_field_entries[1]["invisible"] = 0
