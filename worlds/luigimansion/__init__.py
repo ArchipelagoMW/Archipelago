@@ -68,18 +68,18 @@ class LMWorld(World):
     item_name_groups = get_item_names_per_category()
     required_client_version = (0, 5, 1)
     web = LMWeb()
-    ghost_affected_regions: dict[str, str] = { # TODO move to imported class
+    ghost_affected_regions: dict[str, str] = {  # TODO move to imported class
         "Wardrobe": "No Element",
         "Laundry Room": "No Element",
-        "Hidden Room": "No Element", #"Ice",
+        "Hidden Room": "No Element",  # "Ice",
         "Storage Room": "No Element",
-        "Kitchen": "No Element", #"Ice",
+        "Kitchen": "No Element",  # "Ice",
         "1F Bathroom": "No Element",
         "Courtyard": "No Element",
         "Tea Room": "No Element",
-        "2F Washroom": "No Element", #"Fire",
+        "2F Washroom": "No Element",  # "Fire",
         "Projection Room": "No Element",
-        "Safari Room": "No Element", #"Water",
+        "Safari Room": "No Element",  # "Water",
         "Cellar": "No Element",
         "Roof": "No Element",
         "Sealed Room": "No Element",
@@ -87,7 +87,7 @@ class LMWorld(World):
         "Pipe Room": "No Element"
     }
 
-    open_doors: dict[int, int] = { # TODO maybe move to imported class
+    open_doors: dict[int, int] = {  # TODO maybe move to imported class
         34: 0,
         38: 0,
         43: 1,
@@ -97,11 +97,11 @@ class LMWorld(World):
         31: 0,
         27: 0,
         28: 0,
-        3:  0,
-        1:  1,
-        4:  0,
-        5:  1,
-        7:  0,
+        3: 0,
+        1: 1,
+        4: 0,
+        5: 1,
+        7: 0,
         11: 1,
         14: 0,
         15: 0,
@@ -135,7 +135,7 @@ class LMWorld(World):
         56: 0,
         50: 1,
         65: 0,
-        9:  1,
+        9: 1,
         71: 0,
         68: 0,
         67: 1,
@@ -404,8 +404,9 @@ class LMWorld(World):
         self.multiworld.itempool += self.itempool
 
     def get_filler_item_name(self) -> str:
-        filler_weights = [3, 7, 10] #, 15, 3] # len must be 15
-        return self.multiworld.random.choices(filler_items, weights=filler_weights, k=1)[0]
+        # filler_weights = [3, 7, 10]  # , 15, 3] # len must be 15
+        # return self.multiworld.random.choices(filler_items, weights=filler_weights, k=1)[0]
+        return self.multiworld.random.choice([item_name for item_name in filler_items])
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)

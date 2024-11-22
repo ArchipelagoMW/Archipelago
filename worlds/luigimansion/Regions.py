@@ -8,7 +8,8 @@ from . import Rules
 
 def set_ghost_type(multiworld: MultiWorld, ghost_list: dict):
     for region_name in ghost_list:
-        ghost_type = multiworld.random.choice(["Fire", "Water", "Ice", "No Element"])
+        types = []
+        ghost_type = multiworld.random.choices(["Fire", "Water", "Ice", "No Element"])[0]
         ghost_list.update({region_name: ghost_type})
 
 
