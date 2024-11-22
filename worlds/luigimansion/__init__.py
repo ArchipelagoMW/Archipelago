@@ -68,7 +68,7 @@ class LMWorld(World):
     item_name_groups = get_item_names_per_category()
     required_client_version = (0, 5, 1)
     web = LMWeb()
-    ghost_affected_regions: dict[str, str] = {
+    ghost_affected_regions: dict[str, str] = { # TODO move to imported class
         "Wardrobe": "No Element",
         "Laundry Room": "No Element",
         "Hidden Room": "No Element", #"Ice",
@@ -87,7 +87,7 @@ class LMWorld(World):
         "Pipe Room": "No Element"
     }
 
-    open_doors: dict[int, int] = {
+    open_doors: dict[int, int] = { # TODO maybe move to imported class
         34: 0,
         38: 0,
         43: 1,
@@ -404,12 +404,13 @@ class LMWorld(World):
         self.multiworld.itempool += self.itempool
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice([item_name for item_name in filler_items])
+        filler_weights = [3, 7, 10] #, 15, 3] # len must be 15
+        return self.multiworld.random.choices(filler_items, weights=filler_weights, k=1)[0]
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
 
-    # TODO: UPDATE FOR LM
+    # Output options, locations and doors for patcher
     def generate_output(self, output_directory: str):
         # Output seed name and slot number to seed RNG in randomizer client
         output_data = {
@@ -466,12 +467,6 @@ class LMWorld(World):
                 else:
                     item_info = {"name": "Nothing", "game": "Luigi's Mansion", "classification": "filler"}
                 output_data["Locations"][location.name] = item_info
-
-        # # Output the mapping of entrances to exits
-        # entrances = self.multiworld.get_entrances(self.player)
-        # for entrance in entrances:
-        #     if entrance.parent_region.name in ALL_ENTRANCES:
-        #         output_data["Entrances"][entrance.parent_region.name] = entrance.connected_region.name
 
         # Output the plando details to file
         file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")

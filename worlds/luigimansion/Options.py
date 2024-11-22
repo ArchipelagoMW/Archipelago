@@ -5,6 +5,14 @@ from Options import Toggle, Range, Option, PerGameCommonOptions, Choice, StartIn
 
 # Will look into feasibility of options later.
 
+class LuigiWalkSpeed(Choice):
+    """Choose how fast Luigi moves"""
+    display_name = "Walk Speed"
+    option_normal_speed = 0
+    option_kinda_fast = 1
+    option_schmoovin = 2
+    default = 0
+
 
 class BetterVacuum(Choice):
     """Choose whether to include the Poltergust 4000"""
@@ -138,6 +146,7 @@ class RankRequirement(Choice):
 class LMOptions(PerGameCommonOptions):
     goal: Goal
     rank_requirement: RankRequirement
+    walk_speed: LuigiWalkSpeed
     good_vacuum: BetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
