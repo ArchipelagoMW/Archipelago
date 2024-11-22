@@ -155,8 +155,8 @@ class JMPInfoFile:
 
     def print_header_info(self):
         print(self.info_file_entry.name + "; Data Line(s) Count: " + str(len(self.info_file_field_entries)) +
-              "; # of Fields: " + str(len(self.__info_file_headers)) + "; Header Byte Length: " + str(self.__header_byte_length) +
-              "; Single Data Line Byte Length: " + str(self.__data_line_byte_length))
+              "; # of Fields: " + str(len(self.__info_file_headers)) + "; Header Byte Length: " +
+              str(self.__header_byte_length) + "; Single Data Line Byte Length: " + str(self.__data_line_byte_length))
 
 
     # Using the original BytesIO stream, we will write back to the original data as needed.

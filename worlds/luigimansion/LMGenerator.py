@@ -64,15 +64,15 @@ class LuigisMansionRandomizer:
             game_id = fs.try_read_str(f, 0, 6)
         print("Magic: " + str(magic) + "; Game ID: " + str(game_id))
         if magic == "CISO":
-            raise InvalidCleanISOError(
-                "The provided ISO is in CISO format. The %s randomizer only supports ISOs in ISO format." % RANDOMIZER_NAME)
+            raise InvalidCleanISOError(f"The provided ISO is in CISO format. The {RANDOMIZER_NAME} randomizer " +
+                                       "only supports ISOs in ISO format.")
         if game_id != "GLME01":
             if game_id and game_id.startswith("GLM"):
-                raise InvalidCleanISOError(
-                    "Invalid version of %s. Only the North American version is supported by this randomizer." % RANDOMIZER_NAME)
+                raise InvalidCleanISOError(f"Invalid version of {RANDOMIZER_NAME}. " +
+                                           "Only the North American version is supported by this randomizer.")
             else:
-                raise InvalidCleanISOError(
-                    "Invalid game given as the vanilla ISO. You must specify a %s ISO (North American version)." % RANDOMIZER_NAME)
+                raise InvalidCleanISOError("Invalid game given as the vanilla ISO. You must specify a " +
+                      "%s ISO (North American version)." % RANDOMIZER_NAME)
         self.__verify_correct_clean_iso_md5()
 
     # Verify the MD5 hash matches the expectation of a USA-based ISO.
@@ -214,4 +214,5 @@ class LuigisMansionRandomizer:
               info_files.name == "event" + event_number + ".txt")).data = lines
 
         custom_event.save_changes()
-        self.gcm.changed_files["files/Event/event" + event_number + ".szp"] =  Yay0.compress(custom_event.data, 0)
+        self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
+            Yay0.compress(custom_event.data, 0))
