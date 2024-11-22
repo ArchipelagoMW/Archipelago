@@ -1,7 +1,7 @@
 def update_event_info(event_info):
     for x in event_info.info_file_field_entries:
         # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
-        # boss battles / grabbing boss keys, etc.
+        # boss battles / grabbing boss keys, and various cutscenes etc.
         if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54}:
             event_info.info_file_field_entries.remove(x)
 
