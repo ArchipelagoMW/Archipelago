@@ -11,6 +11,7 @@ import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch_subprocess
 from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name)
@@ -29,6 +30,15 @@ from .Rom import LADXDeltaPatch, get_base_rom_path
 
 DEVELOPER_MODE = False
 
+
+def launch_client():
+    from .LinksAwakeningClient import launch
+    launch_subprocess(launch, name="Links Awakening DX Client")
+
+components.append(Component("Links Awakening DX Client",
+                            func=launch_client,
+                            component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apladx')))
 
 class LinksAwakeningSettings(settings.Group):
     class RomFile(settings.UserFilePath):
