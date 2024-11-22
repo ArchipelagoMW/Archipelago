@@ -7,6 +7,11 @@ def update_event_info(event_info):
         if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54, 91}:
             event_info.info_file_field_entries.remove(x)
 
+        # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
+        # This prevents being softlocked in Boolossus and having to reset the game without saving.
+        if x["EventNo"] == 71:
+            x["EventFlag"] = 22
+
 def update_character_info(character_info, output_data):
     for x in character_info.info_file_field_entries[:]:
         # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
@@ -23,7 +28,7 @@ def update_character_info(character_info, output_data):
                     x["name"] = item_name
                     break
 
-        if x["name"] in {"baby", "mother"}:
+        if x["name"] in {"baby", "mother", "dboy", "dboy2"}:
             x["appear_flag"] = 0
 
 def update_observer_info(observer_info, output_data):
@@ -39,25 +44,18 @@ def update_observer_info(observer_info, output_data):
             x["appear_flag"] = 0
 
         # Allows Twins Room to be lit after clearing it, even if Chauncey hasn't been caught.
-        if x["room_no"] == 25 and x["do_type"] == 1:
-            x["appear_flag"] = 51
+        if x["room_no"] == 25:
+            x["appear_flag"] = 0
 
-        # Remove locking doors behind Luigi in a room with Elemental Ghosts to prevent softlocks
-        for room_id, element in output_data["Room Enemies"].items():
-            if x["do_type"] == 11 and x["room_no"] == room_id:
-                match element:
-                    case "Ice":
-                        observer_info.info_file_field_entries.remove(x)
-                    case "Water":
-                        observer_info.info_file_field_entries.remove(x)
-                    case "Fire":
-                        observer_info.info_file_field_entries.remove(x)
+        # Remove locking doors behind Luigi in dark rooms to prevent softlocks
+        if x["do_type"] == 11:
+            observer_info.info_file_field_entries.remove(x)
 
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries[:]:
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being softlocked in Boolossus and having to reset the game without saving.
-        if x["name"] == "demotel2":
+        if x["type"] == "demotel2":
             x["appear_flag"] = 22
 
 def update_obj_info(obj_info):

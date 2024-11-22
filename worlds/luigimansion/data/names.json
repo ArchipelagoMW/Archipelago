@@ -137,7 +137,7 @@
     ],
     "observerinfo": [
         "name",
-        "CodeName",
+        "code_name",
         "cond_string_arg0",
         "string_arg0",
         "pos_x",
