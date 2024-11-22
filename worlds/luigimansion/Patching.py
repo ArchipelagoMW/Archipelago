@@ -213,7 +213,7 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
             continue
 
         for y in item_appear_table_entry.info_file_field_entries:
-            if y["item0"] == "key_" + str(item_data["door_id"]):
+            if y["item0"] == "key_" + str(item_data["door_id"]) or y["item0"] == get_item_name(item_data["name"], None):
                 furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
                     item_appear_table_entry.info_file_field_entries.index(y))
                 break
