@@ -8,11 +8,20 @@ def update_event_info(event_info):
         if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54, 91}:
             event_info.info_file_field_entries.remove(x)
 
-def update_character_info(character_info):
+def update_character_info(character_info, output_data):
     for x in character_info.info_file_field_entries[:]:
         # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
         if x["name"] in {"vhead", "vbody", "dhakase", "demobak1", "dluige01"}:
             character_info.info_file_field_entries.remove(x)
+        if x["name"] == "mstar":
+            for item_name, item_data in output_data["Locations"].items():
+                if item_name == "Observatory Mario Star":
+                    if item_data["door_id"] == 0:
+                        item_name = get_item_name(item_data["name"], item_data)
+                    else:
+                        item_name = "key_" + str(item_data["door_id"])
+                    x["name"] = item_name
+                    break
 
 def update_observer_info(observer_info):
     for x in observer_info.info_file_field_entries[:]:
@@ -22,10 +31,13 @@ def update_observer_info(observer_info):
             x["appear_flag"] = 0
             x["cond_type"] = 13
 
-        # Allows the Master Bedroom to be lit after clearing it, even if Neville hasn't been caught, and allows The
-        # Twins Room to be lit after clearing it, even if Chauncey hasn't been caught.
+        # Allows the Master Bedroom to be lit after clearing it, even if Neville hasn't been caught.
         if x["room_no"] in {33}:
             x["appear_flag"] = 0
+
+        # Allows Twins Room to be lit after clearing it, even if Chauncey hasn't been caught.
+        if x["room_no"] in {25} and x["do_type"] == 1:
+            x["appear_flag"] = 51
 
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries[:]:

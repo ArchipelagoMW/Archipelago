@@ -174,7 +174,7 @@ class LuigisMansionRandomizer:
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_furniture_info_table)
 
-        update_character_info(self.jmp_character_info_table)
+        update_character_info(self.jmp_character_info_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_character_info_table)
 
         update_event_info(self.jmp_event_info_table)
