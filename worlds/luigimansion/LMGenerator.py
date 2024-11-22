@@ -193,7 +193,7 @@ class LuigisMansionRandomizer:
             mansion_type = "<URALUIGI>"
         else:
             mansion_type = "<OMOTELUIGI>"
-        lines.replace("{MANSION_TYPE}", mansion_type)
+        lines =lines.replace("{MANSION_TYPE}", mansion_type)
 
         event_door_list: list[str] = []
         door_list: dict[int, int] = self.output_data["Entrances"]
@@ -204,7 +204,7 @@ class LuigisMansionRandomizer:
             else:
                 event_door_list.append(f"<KEYUNLOCK>({event_door})" + os.linesep)
 
-        lines.replace("{DOOR_LIST}", ''.join(event_door_list))
+        lines = lines.replace("{DOOR_LIST}", ''.join(event_door_list))
 
         self.update_custom_event("48", False, lines)
 
