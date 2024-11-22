@@ -156,7 +156,11 @@ class LuigisMansionRandomizer:
 
         self.dol.data.seek(0x7EA28)
         self.dol.data.write(struct.pack(">BBBB", *vac_speed))
-        return
+
+        # Fix Boos to properly spawn
+        self.dol.data.seek(0x12DCC9)
+        boo_data = [0x00, 0x00, 0x05]
+        self.dol.data.write(struct.pack(">BBB", *boo_data))
 
         # Turn off pickup animations
         # self.dol.seek(0xCD39B)
