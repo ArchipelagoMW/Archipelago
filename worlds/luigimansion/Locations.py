@@ -137,7 +137,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
                                               ["Ice Element Medal"]),
     "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30,
                                                 ["Ice Element Medal"]),
-    #"The Well Key": LMLocationData("The Well", 21, "Special", -1, []),  # keyinfo event
+    "The Well Key": LMLocationData("The Well", 21, "Special", -1, []),  # keyinfo event
     "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24,
                                              ["Ice Element Medal"]),
     "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
@@ -158,11 +158,11 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Ghost Affected Clear Chests. Rules applied to region entrances
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", -1, []),  # gone for good
+    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, []),  # gone for good
     "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, []),
     "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, []),
     "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, []),
-    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", -1, []),  # keyinfo event
+    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, []),  # keyinfo event
     "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, []),
     "Tea Room Clear Chest": LMLocationData("Tea Room", 56, "Chest", 47, []),
     "2F Washroom Clear Chest": LMLocationData("2F Washroom", 57, "Chest", 23, []),
