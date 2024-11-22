@@ -53,7 +53,7 @@ class LMLocation(Location):
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Base Chests / Locations
     #"Luigi's Courage": LMLocationData("Parlor", 708, "Special", -1, []), # Give item during/after E. Gadd cutscene
-    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", -1, []),
+    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, []),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, []),
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"]),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, []),
@@ -66,7 +66,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furniture", 247, []),
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, []),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 19, []),
-    "Observatory Mario Star": LMLocationData("Observatory", 24, "Freestanding", -1, []),  # special event, unknown location
+    "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, []),  # special event, unknown location
     "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furniture", 532, []),
     "Sealed Room NE Shelf Chest": LMLocationData("Sealed Room", 30, "Furniture", 534, []),
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furniture", 531, []),
@@ -137,7 +137,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
                                               ["Ice Element Medal"]),
     "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30,
                                                 ["Ice Element Medal"]),
-    "The Well Key": LMLocationData("The Well", 21, "Special", -1, []),  # keyinfo event
+    "The Well Key": LMLocationData("The Well", 21, "Special", 0, []),  # keyinfo event
     "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24,
                                              ["Ice Element Medal"]),
     "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
@@ -148,7 +148,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
                                         ["Fire Element Medal"]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
-    "Wardrobe Clear Key": LMLocationData("Wardrobe", 0, "Chest", 22),
+    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22),
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
@@ -215,8 +215,8 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Foyer Mirror": LMLocationData("Foyer", 96, "Furniture", 208, []),
     "Foyer R Vase": LMLocationData("Foyer", 97, "Furniture", 336, []),
     "Foyer L Vase": LMLocationData("Foyer", 98, "Furniture", 335, []),
-    #        LMLocationData('Foyer', 'Foyer West Candlestick), no entry, can't make a check
-    "Foyer R Candlestick": LMLocationData("Foyer", 99, "Furniture", 99, []),
+    #"Foyer R Candlestick":    LMLocationData("Foyer", 714, "Furniti), no entry, can't make a check
+    "Foyer L Candlestick": LMLocationData("Foyer", 99, "Furniture", 99, []),
     "Parlor Chair": LMLocationData("Parlor", 100, "Furniture", 338, []),
     "Parlor Wine Table": LMLocationData("Parlor", 101, "Furniture", 339, []),
     "Parlor Couch": LMLocationData("Parlor", 102, "Furniture", 341, []),

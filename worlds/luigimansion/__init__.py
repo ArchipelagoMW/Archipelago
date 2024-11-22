@@ -68,24 +68,7 @@ class LMWorld(World):
     item_name_groups = get_item_names_per_category()
     required_client_version = (0, 5, 1)
     web = LMWeb()
-    ghost_affected_regions: dict[str, str] = {  # TODO move to imported class
-        "Wardrobe": "No Element",
-        "Laundry Room": "No Element",
-        "Hidden Room": "No Element",  # "Ice",
-        "Storage Room": "No Element",
-        "Kitchen": "No Element",  # "Ice",
-        "1F Bathroom": "No Element",
-        "Courtyard": "No Element",
-        "Tea Room": "No Element",
-        "2F Washroom": "No Element",  # "Fire",
-        "Projection Room": "No Element",
-        "Safari Room": "No Element",  # "Water",
-        "Cellar": "No Element",
-        "Roof": "No Element",
-        "Sealed Room": "No Element",
-        "Armory": "No Element",
-        "Pipe Room": "No Element"
-    }
+    ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
 
     open_doors: dict[int, int] = {  # TODO maybe move to imported class
         34: 0,
@@ -277,26 +260,26 @@ class LMWorld(World):
             add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
 
     def generate_early(self):
-        # if self.options.enemizer == 1:
-        #     set_ghost_type(self.multiworld, self.ghost_affected_regions)
+        if self.options.enemizer == 1:
+            set_ghost_type(self, self.ghost_affected_regions)
 
         if self.options.door_rando == 1:
-            random.seed(self.multiworld.seed)
-            self.open_doors = dict(zip(random.sample(self.open_doors.keys(), k=len(self.open_doors)),
-                                       self.open_doors.values()))
+            k = list(self.open_doors.keys())
+            v = list(self.open_doors.values())
+            self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
+                                       v))
 
         # If sword mode is Start with Hero's Sword, then send the player a starting sword
         if self.options.boo_radar == 1:
             self.options.start_inventory.value["Boo Radar"] = (
                     self.options.start_inventory.value.get("Boo Radar", 0) + 1
             )
-        # if not self.options.knocksanity:
-        #     self.multiworld.push_precollected(self.create_item("Heart Key"))
 
         if self.options.good_vacuum == 0:
             self.options.start_inventory.value["Poltergust 4000"] = (
                     self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
             )
+
         if self.options.boosanity == 0 and self.options.balcony_boo_count > 30:
             self.options.balcony_boo_count.value = 30
 
@@ -404,9 +387,10 @@ class LMWorld(World):
         self.multiworld.itempool += self.itempool
 
     def get_filler_item_name(self) -> str:
-        # filler_weights = [3, 7, 10]  # , 15, 3] # len must be 15
-        # return self.multiworld.random.choices(filler_items, weights=filler_weights, k=1)[0]
-        return self.multiworld.random.choice([item_name for item_name in filler_items])
+        filler = list(filler_items.keys())
+        filler_weights = [3, 7, 10]  # , 15, 3] # len must be 15
+        return self.random.choices(filler, weights=filler_weights, k=1)[0]
+        #return self.multiworld.random.choice([item_name for item_name in filler_items])
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
@@ -421,6 +405,7 @@ class LMWorld(World):
             "Options": {},
             "Locations": {},
             "Entrances": {},
+            "Room Enemies": {},
         }
 
         # Output relevant options to file
@@ -428,6 +413,7 @@ class LMWorld(World):
             output_data["Options"][field.name] = getattr(self.options, field.name).value
 
         output_data["Entrances"] = self.open_doors
+        output_data["Room Enemies"] = self.ghost_affected_regions
 
         # Output which item has been placed at each location
         locations = self.multiworld.get_locations(self.player)

@@ -8,7 +8,7 @@ def update_event_info(event_info):
 def update_character_info(character_info):
     for x in character_info.info_file_field_entries:
         # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
-        if x["name"] in { "vhead", "vbody", "dhakase", "demobak1", "dluige01" }:
+        if x["name"] in {"vhead", "vbody", "dhakase", "demobak1", "dluige01"}:
             character_info.info_file_field_entries.remove(x)
 
 def update_observer_info(observer_info):
@@ -21,7 +21,7 @@ def update_observer_info(observer_info):
 
         # Allows the Master Bedroom to be lit after clearing it, even if Neville hasn't been caught, and allows The
         # Twins Room to be lit after clearing it, even if Chauncey hasn't been caught.
-        if x["room_no"] in { 33 }:
+        if x["room_no"] in {33}:
             x["appear_flag"] = 0
 
 def update_generator_info(generator_info):
@@ -35,7 +35,7 @@ def update_obj_info(obj_info):
     for x in obj_info.info_file_field_entries:
         # Removes the vines on Area doors, as those require the Area Number of the game to be changed
         # to have them disappear.
-        if x["name"] in { "eldoor07", "eldoor08", "eldoor09", "eldoor10" }:
+        if x["name"] in {"eldoor07", "eldoor08", "eldoor09", "eldoor10"}:
             obj_info.info_file_field_entries.remove(x)
 
 def __get_chest_size(key_id):
