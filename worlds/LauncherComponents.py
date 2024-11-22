@@ -20,7 +20,7 @@ class Type(Enum):
 class Component:
     """
     A Component represents a process launchable by Archipelago Launcher, either by a User action in the GUI,
-    by resolving an archipelago://user:pass@host:port link from the Webhost, by resolving a patch file's metadata,
+    by resolving an archipelago://user:pass@host:port link from the WebHost, by resolving a patch file's metadata,
     or by using a component name arg while running the Launcher in CLI i.e. `ArchipelagoLauncher.exe "Text Client"`
 
     Expected to be appended to LauncherComponents.component list to be used.
