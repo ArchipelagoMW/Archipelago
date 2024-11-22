@@ -2,6 +2,8 @@ import hashlib
 import os
 import io
 import struct
+from tkinter import filedialog
+from pathlib import Path
 import yaml
 
 from .JMP_Info_File import JMPInfoFile
@@ -21,17 +23,28 @@ class InvalidCleanISOError(Exception): pass
 
 
 class LuigisMansionRandomizer:
-    def __init__(self, clean_iso_path, randomized_output_folder, export_disc_to_folder, output_data):
+    def __init__(self, clean_iso_path, randomized_output_folder, export_disc_to_folder, ap_output_data, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
-        self.clean_iso_path = clean_iso_path
-        self.randomized_output_folder = randomized_output_folder
+        self.debug = debug_flag
+        if self.debug:
+            selected_iso_path = filedialog.askopenfilename(title="Select your NA iso file",
+                                                             filetypes=[("ISO Files", ".iso")])
+            self.clean_iso_path = Path(selected_iso_path)
+            self.randomized_output_folder = os.path.dirname(self.clean_iso_path)
+            select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
+                                                             filetypes=[("APLM Files", ".aplm")])
+            with open(os.path.abspath(select_aplm_path)) as stream:
+                self.output_data = yaml.safe_load(stream)
+        else:
+            self.clean_iso_path = clean_iso_path
+            self.randomized_output_folder = randomized_output_folder
+            self.output_data = ap_output_data
         self.export_disc_to_folder = export_disc_to_folder
-        self.output_data = output_data
 
         # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
         # After verifying, this will also read the entire iso, including system files and the content files
         self.__verify_supported_version()
-        self.gcm = GCM(clean_iso_path)
+        self.gcm = GCM(self.clean_iso_path)
         self.gcm.read_entire_disc()
 
         # Find the main DOL file, which is the main file used for GC and Wii games.
@@ -235,10 +248,8 @@ class LuigisMansionRandomizer:
 
         custom_event = self.get_arc("files/Event/event" + event_number + ".szp")
 
-        custom_event_entry = next((info_files for info_files in custom_event.file_entries if
-                                        info_files.name == "event" + event_number + ".txt"), None)
-
-        if custom_event_entry is None:
+        if not any (info_files for info_files in custom_event.file_entries if
+                                        info_files.name == "event" + event_number + ".txt"):
             raise Exception("Unable to find an info file with name 'event" + event_number +
                             ".txt' in provided RAC file.")
 
@@ -254,3 +265,6 @@ class LuigisMansionRandomizer:
         custom_event.save_changes()
         self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
             Yay0.compress(custom_event.data, 0))
+
+if __name__ == '__main__':
+    unpacked_iso = LuigisMansionRandomizer("", "", False, None, True)
