@@ -437,7 +437,7 @@ class LMWorld(World):
                     itemid = 0
                     if location.item.player == self.player:
                         if location.item.type == "Door Key":
-                            itemid = ("key_" + str(location.item.doorid))
+                            itemid = location.item.doorid
                         inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
                         roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
