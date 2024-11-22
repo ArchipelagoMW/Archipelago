@@ -1,5 +1,4 @@
-from random import randrange, seed
-
+from random import randrange, seed, choice
 
 def update_event_info(event_info):
     for x in event_info.info_file_field_entries[:]:
@@ -23,7 +22,7 @@ def update_character_info(character_info, output_data):
                     x["name"] = item_name
                     break
 
-def update_observer_info(observer_info):
+def update_observer_info(observer_info, output_data):
     for x in observer_info.info_file_field_entries[:]:
         # Allows the Foyer Toad to spawn by default.
         if x["name"] == "kinopio":
@@ -38,6 +37,17 @@ def update_observer_info(observer_info):
         # Allows Twins Room to be lit after clearing it, even if Chauncey hasn't been caught.
         if x["room_no"] in {25} and x["do_type"] == 1:
             x["appear_flag"] = 51
+
+        # Remove locking doors behind Luigi in a room with Elemental Ghosts to prevent softlocks
+        for room_id, element in output_data["Room Enemies"].items():
+            if x["do_type"] == 11 and x["room_no"] == room_id:
+                match element:
+                    case "Ice":
+                        observer_info.info_file_field_entries.remove(x)
+                    case "Water":
+                        observer_info.info_file_field_entries.remove(x)
+                    case "Fire":
+                        observer_info.info_file_field_entries.remove(x)
 
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries[:]:
@@ -214,13 +224,23 @@ def update_treasure_table(treasure_table_entry, character_info, output_data):
                 break
 
         if item_name != "":
+            coin_amount = 0
+            bill_amount = 0
+            gold_bar_amount = 0
+
+            if item_name == "money":
+                seed(output_data["Seed"])
+                coin_amount = randrange(10, 30)
+                bill_amount = randrange(10, 30)
+                gold_bar_amount = randrange(0, 1)
+
             treasure_table_entry.info_file_field_entries.append({
                 "other": item_name,
                 "room": item_data["room_no"],
                 "size": chest_size,
-                "coin": 0,
-                "bill": 0,
-                "gold": 0,
+                "coin": coin_amount,
+                "bill": bill_amount,
+                "gold": gold_bar_amount,
                 "spearl": 0,
                 "mpearl": 0,
                 "lpearl": 0,
@@ -352,4 +372,24 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
                     seed(output_data["Seed"])
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate"] = randrange(1, 3)
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
+                break
+
+def apply_new_ghost(x, element, output_data, random_ghosts):
+    match element:
+        case "Ice":
+            x["name"] = "mopoo2"
+        case "Water":
+            x["name"] = "mapoo2"
+        case "Fire":
+            x["name"] = "yapoo2"
+        case "No Element":
+            seed(output_data["Seed"])
+            x["name"] = choice(random_ghosts)
+
+def update_enemy_info(enemy_info, output_data):
+    random_ghosts = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "skul", "putcher1"]
+    for x in enemy_info.info_file_field_entries[:]:
+        for room_id, element in output_data["Room Enemies"].items():
+            if x["room_no"] == room_id and x["name"] in random_ghosts:
+                apply_new_ghost(x, element, output_data, random_ghosts)
                 break

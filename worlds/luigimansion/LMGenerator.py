@@ -72,6 +72,7 @@ class LuigisMansionRandomizer:
         self.jmp_key_info_table = self.load_maptwo_info_table("keyinfo")
         self.jmp_obj_info_table = self.load_maptwo_info_table("objinfo")
         self.jmp_generator_info_table = self.load_maptwo_info_table("generatorinfo")
+        self.jmp_enemy_info_table = self.load_maptwo_info_table("enemyinfo")
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
@@ -180,7 +181,7 @@ class LuigisMansionRandomizer:
         update_event_info(self.jmp_event_info_table)
         self.update_maptwo_info_table(self.jmp_event_info_table)
 
-        update_observer_info(self.jmp_observer_info_table)
+        update_observer_info(self.jmp_observer_info_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_observer_info_table)
 
         update_key_info(self.jmp_key_info_table, self.output_data)
@@ -191,6 +192,9 @@ class LuigisMansionRandomizer:
 
         update_generator_info(self.jmp_generator_info_table)
         self.update_maptwo_info_table(self.jmp_generator_info_table)
+
+        update_enemy_info(self.jmp_enemy_info_table, self.output_data)
+        self.update_maptwo_info_table(self.jmp_enemy_info_table)
 
     def save_randomized_iso(self):
         self.update_maptwo_jmp_tables()
