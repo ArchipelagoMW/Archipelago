@@ -74,7 +74,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "challenge_lasers": 9,
 
         "early_caves": EarlyCaves.option_off,
-        "early_good_item": {"Symbol", "Door"},  # Not Obelisk Key because I want EPs to open slowly in this preset
+        "early_good_items": {"Symbol", "Door"},  # Not Obelisk Key because I want EPs to open slowly in this preset
         "elevators_come_to_you": False,
 
         "trap_percentage": TrapPercentage.default,
@@ -113,7 +113,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "challenge_lasers": 9,
 
         "early_caves": EarlyCaves.option_off,
-        "early_good_item": {"Symbol", "Door / Door Panel", "Obelisk Key"},
+        "early_good_items": {"Symbol", "Door / Door Panel", "Obelisk Key"},
         "elevators_come_to_you": True,
 
         "trap_percentage": TrapPercentage.default,
