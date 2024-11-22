@@ -66,6 +66,7 @@ class LuigisMansionRandomizer:
 
         # furnitureinfo
         furniture_info_entry = JMPInfoFile(main_mansion_file, 'furnitureinfo')
+        update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data)
         furniture_info_entry.update_info_file_bytes()
         main_mansion_file = self.update_rarc_info_entry(main_mansion_file, 'furnitureinfo', furniture_info_entry.info_file_entry.data)
 

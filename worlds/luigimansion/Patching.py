@@ -81,7 +81,6 @@ def update_item_info_table(item_info_table_entry, output_data):
                 "is_escape": 0
             }
             item_info_table_entry.info_file_field_entries.append(new_item)
-            # [dict(t) for t in {tuple(d.items()) for d in treasure_table_entry.info_file_field_entries}]
 
 
 def update_item_appear_table(item_appear_table_entry, output_data):
@@ -116,7 +115,6 @@ def update_item_appear_table(item_appear_table_entry, output_data):
                 "item19": item_name
             }
             item_appear_table_entry.info_file_field_entries.append(new_item)
-            # [dict(t) for t in {tuple(d.items()) for d in treasure_table_entry.info_file_field_entries}]
 
 
 def update_treasure_table(treasure_table_entry, output_data):
@@ -128,7 +126,7 @@ def update_treasure_table(treasure_table_entry, output_data):
         item_name = ""
 
         if item_data["door_id"] == 0:
-            item_name = get_item_name(item_name, item_data)
+            item_name = get_item_name(item_data["name"], item_data)
             chest_size = 2
         else:
             item_name = "key_" + str(item_data["door_id"])
@@ -155,11 +153,10 @@ def update_treasure_table(treasure_table_entry, output_data):
                 "camera": 1
             }
             treasure_table_entry.info_file_field_entries.append(new_item)
-            # [dict(t) for t in {tuple(d.items()) for d in treasure_table_entry.info_file_field_entries}]
 
 
 def get_item_name(item_name, item_data):
-    if item_data["door_id"] != 0:
+    if item_data is not None and item_data["door_id"] != 0:
         return get_key_name(item_data["door_id"])
 
     match item_name:
@@ -187,7 +184,7 @@ def update_key_info(key_info_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
         if item_name == "Ghost Foyer Key":
             for x in key_info_entry.info_file_field_entries[:]:
-                    x["name"] = get_item_name(item_name, item_data)
+                    x["name"] = get_item_name(item_data["name"], item_data)
                     x["open_door_no"] = item_data["door_id"]
                     x["appear_flag"] = 0
                     x["disappear_flag"] = 0
@@ -196,6 +193,18 @@ def update_key_info(key_info_entry, output_data):
                     break
         for x in key_info_entry.info_file_field_entries[:]:
             if item_data["type"] == "Freestanding":
-                x["name"] = get_item_name(item_name, item_data)
+                x["name"] = get_item_name(item_data["name"], item_data)
                 x["open_door_no"] = item_data["door_id"]
                 break
+
+def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
+    for item_name, item_data in output_data["Locations"].items():
+        if item_data["type"] == "Furniture":
+            for y in item_appear_table_entry.info_file_field_entries:
+                if y["item0"].startswith("key_"):
+                    if y["item0"] == "key_" + str(item_data["door_id"]):
+                        furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = item_appear_table_entry.info_file_field_entries.index(y)
+                        break
+                elif y["item0"] == get_item_name(item_data["name"], None):
+                    furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = item_appear_table_entry.info_file_field_entries.index(y)
+                    break
