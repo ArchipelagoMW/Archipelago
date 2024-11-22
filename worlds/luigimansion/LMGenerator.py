@@ -136,13 +136,6 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x7EA28)
         self.dol.data.write(struct.pack(">BBBB", *vac_speed))
         return
-        # Walk Speed
-
-
-        # Vac Speed
-        # data_test = [0x38, 0x00, 0x00, 0x0F]
-        # self.dol.data.seek(0x7EA28)
-        # self.dol.data.write(struct.pack(">BBBB", *data_test))
 
         # Turn off pickup animations
         # self.dol.seek(0xCD39B)
