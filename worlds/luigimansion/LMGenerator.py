@@ -167,7 +167,7 @@ class LuigisMansionRandomizer:
         update_item_appear_table(self.jmp_item_appear_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_item_appear_table)
 
-        update_treasure_table(self.jmp_treasure_table, self.output_data)
+        update_treasure_table(self.jmp_treasure_table, self.jmp_character_info_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_treasure_table)
 
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
@@ -203,7 +203,7 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # Update all custom events
-        list_events = ["04", "17", "22", "32", "50", "64"]
+        list_events = ["04", "12", "17", "22", "32", "50", "61", "63", "64"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 

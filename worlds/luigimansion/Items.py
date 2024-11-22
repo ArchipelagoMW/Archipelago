@@ -108,7 +108,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
 filler_items: Dict[str, LMItemData] = {
     # "10 Coins": LMItemData("Filler", 52, IC.filler),
     # "10 Bills": LMItemData("Filler", 53, IC.filler),
-    # #"Money Bundle": LMItemData("Filler", 41, IC.filler),
+    "Money Bundle": LMItemData("Filler", 41, IC.filler),
     # "Gold Bar": LMItemData("Filler", 56, IC.filler),
     # "Sapphire": LMItemData("Filler", 58, IC.filler),
     # "Emerald": LMItemData("Filler", 59, IC.filler),
@@ -117,8 +117,8 @@ filler_items: Dict[str, LMItemData] = {
     "Poison Mushroom": LMItemData("Trap", 42, IC.trap),
     #"Ghost": LMItemData("Trap", 43, IC.trap),
     "Nothing": LMItemData("Filler", 44, IC.filler),
-    #"Small Heart": LMItemData("Filler", 45, IC.filler),
-    #"Large Heart": LMItemData("Filler", 47, IC.filler),
+    "Small Heart": LMItemData("Filler", 45, IC.filler),
+    "Large Heart": LMItemData("Filler", 47, IC.filler),
     "Bomb": LMItemData("Trap", 50, IC.trap)
 }
 

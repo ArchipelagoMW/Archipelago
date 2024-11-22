@@ -6,6 +6,8 @@ from typing import Dict, ClassVar
 
 import yaml
 
+from .LMGenerator import LuigisMansionRandomizer
+
 from BaseClasses import Tutorial, Item, ItemClassification
 from Fill import fill_restrictive
 from Utils import visualize_regions
@@ -18,18 +20,15 @@ from .Options import LMOptions
 from .Regions import *
 from . import Rules
 
-
 def run_client():
     print("Running LM Client")
     from .LMClient import main  # lazy import
 
     launch_subprocess(main, name="LuigiMansionClient")
 
-
 components.append(
     Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apLM"))
 )
-
 
 class LMWeb(WebWorld):
     theme = "stone"
@@ -43,7 +42,6 @@ class LMWeb(WebWorld):
             ["BootsinSoots"],
         )
     ]
-
 
 class LMWorld(World):
     """
@@ -388,7 +386,7 @@ class LMWorld(World):
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        filler_weights = [3, 7, 10]  # , 15, 3] # len must be 15
+        filler_weights = [10, 3, 6, 8, 4, 2] # len must be 15
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
         #return self.multiworld.random.choice([item_name for item_name in filler_items])
 
@@ -459,6 +457,9 @@ class LMWorld(World):
         file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False))
+
+        # Patch ISO
+        LuigisMansionRandomizer("", "", False, output_data, True)
 
     # TODO: UPDATE FOR LM IF NEEDED
     def fill_slot_data(self):

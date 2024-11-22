@@ -1,18 +1,18 @@
 def update_event_info(event_info):
-    for x in event_info.info_file_field_entries:
+    for x in event_info.info_file_field_entries[:]:
         # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
         # boss battles / grabbing boss keys, and various cutscenes etc.
-        if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54}:
+        if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54, 91}:
             event_info.info_file_field_entries.remove(x)
 
 def update_character_info(character_info):
-    for x in character_info.info_file_field_entries:
+    for x in character_info.info_file_field_entries[:]:
         # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
         if x["name"] in {"vhead", "vbody", "dhakase", "demobak1", "dluige01"}:
             character_info.info_file_field_entries.remove(x)
 
 def update_observer_info(observer_info):
-    for x in observer_info.info_file_field_entries:
+    for x in observer_info.info_file_field_entries[:]:
         # Allows the Foyer Toad to spawn by default.
         if x["name"] == "kinopio":
             x["cond_arg0"] = 0
@@ -25,20 +25,35 @@ def update_observer_info(observer_info):
             x["appear_flag"] = 0
 
 def update_generator_info(generator_info):
-    for x in generator_info.info_file_field_entries:
+    for x in generator_info.info_file_field_entries[:]:
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being softlocked in Boolossus and having to reset the game without saving.
         if x["name"] == "demotel2":
             x["appear_flag"] = 22
 
 def update_obj_info(obj_info):
-    for x in obj_info.info_file_field_entries:
+    for x in obj_info.info_file_field_entries[:]:
         # Removes the vines on Area doors, as those require the Area Number of the game to be changed
         # to have them disappear.
         if x["name"] in {"eldoor07", "eldoor08", "eldoor09", "eldoor10"}:
             obj_info.info_file_field_entries.remove(x)
 
-def __get_chest_size(key_id):
+def __get_chest_size_from_item(item_name):
+    match item_name:
+        case "Mario's Hat":
+            return 0
+        case "Mario's Letter":
+            return 0
+        case "Mario's Shoe":
+            return 0
+        case "Mario's Glove":
+            return 0
+        case "Mario's Star":
+            return 0
+
+    return 2
+
+def __get_chest_size_from_key(key_id):
     match key_id:
         case 3:
             return 2
@@ -65,20 +80,45 @@ def __get_key_name(door_id):
             return "key01"
 
 def update_item_info_table(item_info_table_entry, output_data):
-    for x in item_info_table_entry.info_file_field_entries[:]:
-        if x["name"].startswith("key_"):
-            item_info_table_entry.info_file_field_entries.remove(x)
+    item_info_table_entry.info_file_field_entries.clear()
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
             item_name = "key_" + str(item_data["door_id"])
-            item_info_table_entry.info_file_field_entries.append({
-                "name": item_name,
-                "character_name": __get_key_name(item_data["door_id"]),
-                "open_door_no": item_data["door_id"],
-                "hp_amount": 0,
-                "is_escape": 0
-            })
+
+        item_info_table_entry.info_file_field_entries.append({
+            "name": item_name,
+            "character_name": __get_key_name(item_data["door_id"]) if item_data["door_id"] != 0 else item_name,
+            "open_door_no": item_data["door_id"],
+            "hp_amount": 0,
+            "is_escape": 0
+        })
+
+    __add_info_item(item_info_table_entry, "nothing")
+
+    __add_info_item(item_info_table_entry, "mkinoko")
+    __add_info_item(item_info_table_entry, "move_sheart")
+    __add_info_item(item_info_table_entry, "move_lheart")
+    __add_info_item(item_info_table_entry, "itembomb")
+
+    __add_info_item(item_info_table_entry, "elffst")
+    __add_info_item(item_info_table_entry, "elwfst")
+    __add_info_item(item_info_table_entry, "elifst")
+
+    __add_info_item(item_info_table_entry, "mcap")
+    __add_info_item(item_info_table_entry, "mletter")
+    __add_info_item(item_info_table_entry, "mshoes")
+    __add_info_item(item_info_table_entry, "mglove")
+    __add_info_item(item_info_table_entry, "mstar")
+
+def __add_info_item(item_info_table_entry, item_name):
+    item_info_table_entry.info_file_field_entries.append({
+        "name": item_name,
+        "character_name": item_name,
+        "open_door_no": 0,
+        "hp_amount": 0,
+        "is_escape": 0
+    })
 
 def __add_appear_item(item_appear_table_entry, item_name):
     new_item = {}
@@ -113,16 +153,22 @@ def update_item_appear_table(item_appear_table_entry, output_data):
     __add_appear_item(item_appear_table_entry, "mglove")
     __add_appear_item(item_appear_table_entry, "mstar")
 
-def update_treasure_table(treasure_table_entry, output_data):
+def update_treasure_table(treasure_table_entry, character_info, output_data):
     treasure_table_entry.info_file_field_entries.clear()
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] == 0:
             item_name = get_item_name(item_data["name"], item_data)
-            chest_size = 2
+            chest_size = __get_chest_size_from_item(item_data["name"])
         else:
             item_name = "key_" + str(item_data["door_id"])
-            chest_size = __get_chest_size(item_data["door_id"])
+            chest_size = __get_chest_size_from_key(item_data["door_id"])
+
+        for x in character_info.info_file_field_entries[:]:
+            if "takara" in x["name"] and item_data["type"] == "Chest" and x["room_no"] == item_data["room_no"]:
+                chest_visual = __get_item_chest_visual(item_data["name"])
+                x["name"] = chest_visual
+                break
 
         if item_name != "":
             treasure_table_entry.info_file_field_entries.append({
@@ -144,6 +190,40 @@ def update_treasure_table(treasure_table_entry, output_data):
                 "effect": 1 if chest_size == 2 else 0,
                 "camera": 1
             })
+
+def __get_item_chest_visual(item_name):
+    match item_name:
+        case "Heart Key":
+            return "ytakara1"
+        case "Club Key":
+            return "ytakara1"
+        case "Diamond Key":
+            return "ytakara1"
+        case "Spade Key":
+            return "ytakara1"
+
+        case "Fire Element Medal":
+            return "rtakara1"
+        case "Water Element Medal":
+            return "btakara1"
+        case "Ice Element Medal":
+            return "wtakara1"
+
+        case "Mario's Hat":
+            return "rtakara1"
+        case "Mario's Letter":
+            return "rtakara1"
+        case "Mario's Shoe":
+            return "rtakara1"
+        case "Mario's Glove":
+            return "rtakara1"
+        case "Mario's Star":
+            return "rtakara1"
+
+        case "Money Bundle":
+            return "gtakara1"
+
+    return "btakara1"
 
 def get_item_name(item_name, item_data):
     if item_data is not None and item_data["door_id"] != 0:
@@ -170,6 +250,8 @@ def get_item_name(item_name, item_data):
 
         case "Nothing":
             return "nothing"
+        case "Money Bundle":
+            return "money"
         case "Poison Mushroom":
             return "mkinoko"
         case "Small Heart":
@@ -212,12 +294,8 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
         if not item_data["type"] == "Furniture":
             continue
 
-        for y in item_appear_table_entry.info_file_field_entries:
-            if y["item0"] == "key_" + str(item_data["door_id"]) or y["item0"] == get_item_name(item_data["name"], None):
+        for x in item_appear_table_entry.info_file_field_entries:
+            if x["item0"] == "key_" + str(item_data["door_id"]) or x["item0"] == get_item_name(item_data["name"], None):
                 furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
-                    item_appear_table_entry.info_file_field_entries.index(y))
-                break
-            elif y["item0"] == get_item_name(item_data["name"], None):
-                furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
-                    item_appear_table_entry.info_file_field_entries.index(y))
+                    item_appear_table_entry.info_file_field_entries.index(x))
                 break
