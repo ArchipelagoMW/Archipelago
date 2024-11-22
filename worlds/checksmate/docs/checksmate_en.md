@@ -24,12 +24,7 @@ You can customize your options by visiting the [ChecksMate Player Options Page](
 Some examples of certain outcomes are available in [this valid players file](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/checksmate/docs/checksmate-example.yaml), which can be used
 to generate a multiplayer multiworld (but should instead be used for your own inspiration).
 
-#### Difficulty and Material via Progression Balancing
-
-Increased progression balancing will place your pieces earlier, including pocket pieces and consuls. However, the AI
-makes weaker chess moves for each useful item you acquire, so the game can be much easier with useful and filler items.
-Since progression balancing tends to move useful items later, you may actually find the game easier at lower progression
-balancing.
+#### Material
 
 A normal (FIDE) army has 8 points of pawns plus 31 points of pieces (12 from 4 minor pieces, 10 from 2 rooks, and 9 from
 1 queen). Material isn't everything: An army of 27 pawns plus 4 Knights is considered to be extremely powerful.
