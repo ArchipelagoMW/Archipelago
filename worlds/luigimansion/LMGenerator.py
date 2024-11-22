@@ -207,7 +207,7 @@ class LuigisMansionRandomizer:
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
-        with open('data/custom_events/event48.txt', 'r') as file:
+        with open('worlds/luigimansion/data/custom_events/event48.txt', 'r') as file:
             lines = file.read()
 
         if self.output_data["Options"]["hidden_mansion"] == 1:
