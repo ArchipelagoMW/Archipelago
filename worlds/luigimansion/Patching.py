@@ -1,3 +1,6 @@
+from random import randrange, seed
+
+
 def update_event_info(event_info):
     for x in event_info.info_file_field_entries[:]:
         # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
@@ -59,11 +62,11 @@ def __get_chest_size_from_item(item_name):
             return 2
 
         case "Fire Element Medal":
-            return 0
+            return 2
         case "Water Element Medal":
-            return 0
+            return 2
         case "Ice Element Medal":
-            return 0
+            return 2
 
         case "Mario's Hat":
             return 0
@@ -79,7 +82,7 @@ def __get_chest_size_from_item(item_name):
         case "Money Bundle":
             return 1
 
-    return 2
+    return 0
 
 def __get_chest_size_from_key(key_id):
     match key_id:
@@ -124,6 +127,7 @@ def update_item_info_table(item_info_table_entry, output_data):
 
     __add_info_item(item_info_table_entry, "nothing")
 
+    __add_info_item(item_info_table_entry, "money")
     __add_info_item(item_info_table_entry, "mkinoko")
     __add_info_item(item_info_table_entry, "sheart")
     __add_info_item(item_info_table_entry, "lheart")
@@ -164,6 +168,7 @@ def update_item_appear_table(item_appear_table_entry, output_data):
             item_name = "key_" + str(item_data["door_id"])
             __add_appear_item(item_appear_table_entry, item_name)
 
+    __add_appear_item(item_appear_table_entry, "money")
     __add_appear_item(item_appear_table_entry, "mkinoko")
     __add_appear_item(item_appear_table_entry, "sheart")
     __add_appear_item(item_appear_table_entry, "lheart")
@@ -327,7 +332,12 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
             continue
 
         for x in item_appear_table_entry.info_file_field_entries:
-            if x["item0"] == "key_" + str(item_data["door_id"]) or x["item0"] == get_item_name(item_data["name"], None):
+            actor_item_name = get_item_name(item_data["name"], None)
+            if x["item0"] == "key_" + str(item_data["door_id"]) or x["item0"] == actor_item_name:
                 furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
                     item_appear_table_entry.info_file_field_entries.index(x))
+                if actor_item_name == "money":
+                    seed(output_data["Seed"])
+                    furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate"] = randrange(1, 3)
+                    furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
