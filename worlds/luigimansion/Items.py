@@ -106,7 +106,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
 }
 
 filler_items: Dict[str, LMItemData] = {
-    "Money Bundle": LMItemData("Filler", 41, IC.filler),
+    #"Money Bundle": LMItemData("Filler", 41, IC.filler),
     "Poison Mushroom": LMItemData("Trap", 42, IC.trap),
     #"Ghost": LMItemData("Trap", 43, IC.trap),
     "Nothing": LMItemData("Filler", 44, IC.filler),
