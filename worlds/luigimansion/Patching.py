@@ -89,8 +89,7 @@ def add_appear_item(item_appear_table_entry, item_name):
 
 def update_item_appear_table(item_appear_table_entry, output_data):
     for x in item_appear_table_entry.info_file_field_entries[:]:
-        if x["item0"].startswith("key_"):
-            item_appear_table_entry.info_file_field_entries.remove(x)
+        item_appear_table_entry.info_file_field_entries.remove(x)
 
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
