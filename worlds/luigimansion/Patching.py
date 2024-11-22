@@ -1,4 +1,4 @@
-from random import randrange, seed, choice
+from random import randrange, choice
 
 def update_event_info(event_info):
     for x in event_info.info_file_field_entries[:]:
@@ -12,6 +12,7 @@ def update_character_info(character_info, output_data):
         # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
         if x["name"] in {"vhead", "vbody", "dhakase", "demobak1", "dluige01"}:
             character_info.info_file_field_entries.remove(x)
+
         if x["name"] == "mstar":
             for item_name, item_data in output_data["Locations"].items():
                 if item_name == "Observatory Mario Star":
@@ -22,6 +23,9 @@ def update_character_info(character_info, output_data):
                     x["name"] = item_name
                     break
 
+        if x["name"] in {"baby", "mother"}:
+            x["appear_flag"] = 0
+
 def update_observer_info(observer_info, output_data):
     for x in observer_info.info_file_field_entries[:]:
         # Allows the Foyer Toad to spawn by default.
@@ -31,11 +35,11 @@ def update_observer_info(observer_info, output_data):
             x["cond_type"] = 13
 
         # Allows the Master Bedroom to be lit after clearing it, even if Neville hasn't been caught.
-        if x["room_no"] in {33}:
+        if x["room_no"] == 33:
             x["appear_flag"] = 0
 
         # Allows Twins Room to be lit after clearing it, even if Chauncey hasn't been caught.
-        if x["room_no"] in {25} and x["do_type"] == 1:
+        if x["room_no"] == 25 and x["do_type"] == 1:
             x["appear_flag"] = 51
 
         # Remove locking doors behind Luigi in a room with Elemental Ghosts to prevent softlocks
@@ -229,7 +233,6 @@ def update_treasure_table(treasure_table_entry, character_info, output_data):
             gold_bar_amount = 0
 
             if item_name == "money":
-                seed(output_data["Seed"])
                 coin_amount = randrange(10, 30)
                 bill_amount = randrange(10, 30)
                 gold_bar_amount = randrange(0, 1)
@@ -343,20 +346,24 @@ def update_key_info(key_info_entry, output_data):
                 key_info_entry.info_file_field_entries[1]["open_door_no"] = item_data["door_id"]
                 key_info_entry.info_file_field_entries[1]["appear_flag"] = 0
                 key_info_entry.info_file_field_entries[1]["disappear_flag"] = 0
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 4
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
                 key_info_entry.info_file_field_entries[1]["invisible"] = 0
             case "Fortune Teller Candles": #4
                 key_info_entry.info_file_field_entries[4]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[4]["open_door_no"] = item_data["door_id"]
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
             case "Wardrobe Shelf Key": #5
                 key_info_entry.info_file_field_entries[5]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[5]["open_door_no"] = item_data["door_id"]
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
             case "1F Bathroom Shelf Key": #3
                 key_info_entry.info_file_field_entries[3]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[3]["open_door_no"] = item_data["door_id"]
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
             case "The Well Key": #0
                 key_info_entry.info_file_field_entries[0]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[0]["open_door_no"] = item_data["door_id"]
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
 
 def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
@@ -369,7 +376,6 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
                 furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
                     item_appear_table_entry.info_file_field_entries.index(x))
                 if actor_item_name == "money":
-                    seed(output_data["Seed"])
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate"] = randrange(1, 3)
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
@@ -383,7 +389,6 @@ def apply_new_ghost(x, element, output_data, random_ghosts):
         case "Fire":
             x["name"] = "yapoo2"
         case "No Element":
-            seed(output_data["Seed"])
             x["name"] = choice(random_ghosts)
 
 def update_enemy_info(enemy_info, output_data):

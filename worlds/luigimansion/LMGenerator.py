@@ -2,6 +2,7 @@ import hashlib
 import os
 import io
 import struct
+from random import seed
 from tkinter import filedialog
 from pathlib import Path
 import yaml
@@ -197,6 +198,8 @@ class LuigisMansionRandomizer:
         self.update_maptwo_info_table(self.jmp_enemy_info_table)
 
     def save_randomized_iso(self):
+        seed(self.output_data["Seed"])
+
         self.update_maptwo_jmp_tables()
 
         # Save the map two file changes
