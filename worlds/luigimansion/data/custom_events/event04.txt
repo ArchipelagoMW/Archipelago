@@ -5,5 +5,4 @@
 <BGMSTOP>
 <NECKON>
 <MENUON>
-<FLAGON>(91)
 <END>
