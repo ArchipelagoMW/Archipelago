@@ -51,9 +51,9 @@ class Component:
     If the function is an Instance of SuffixIdentifier the suffixes will also be valid for the Open Patch component
     """
     game_name: Optional[str]
-    """Game name to identify component when handling launch links from webhost"""
+    """Game name to identify component when handling launch links from WebHost"""
     supports_uri: Optional[bool]
-    """Bool to identify if a component supports being launched by launch links from webhost"""
+    """Bool to identify if a component supports being launched by launch links from WebHost"""
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
