@@ -127,25 +127,9 @@ def update_treasure_table(treasure_table_entry, output_data):
         chest_size = 0
         item_name = ""
 
-        if item_data["door_id"] is None:
+        if item_data["door_id"] == 0:
+            item_name = get_item_name(item_name, item_data)
             chest_size = 2
-            match item_name:
-                case "Fire Element Medal":
-                    item_name = "elffst"
-                case "Water Element Medal":
-                    item_name = "elwfst"
-                case "Ice Element Medal":
-                    item_name = "elifst"
-                case "Mario's Hat":
-                    item_name = "mcap"
-                case "Mario's Letter":
-                    item_name = "mletter"
-                case "Mario's Shoe":
-                    item_name = "mshoes"
-                case "Mario's Glove":
-                    item_name = "mglove"
-                case "Mario's Star":
-                    item_name = "mstar"
         else:
             item_name = "key_" + str(item_data["door_id"])
             chest_size = get_chest_size(item_data["door_id"])
@@ -173,11 +157,37 @@ def update_treasure_table(treasure_table_entry, output_data):
             treasure_table_entry.info_file_field_entries.append(new_item)
             # [dict(t) for t in {tuple(d.items()) for d in treasure_table_entry.info_file_field_entries}]
 
+
+def get_item_name(item_name, item_data):
+    if item_data["door_id"] != 0:
+        return get_key_name(item_data["door_id"])
+
+    match item_name:
+        case "Fire Element Medal":
+            return "elffst"
+        case "Water Element Medal":
+            return "elwfst"
+        case "Ice Element Medal":
+            return "elifst"
+        case "Mario's Hat":
+            return "mcap"
+        case "Mario's Letter":
+            return "mletter"
+        case "Mario's Shoe":
+            return "mshoes"
+        case "Mario's Glove":
+            return "mglove"
+        case "Mario's Star":
+            return "mstar"
+
+    return "----"
+
+
 def update_key_info(key_info_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
         if item_name == "Ghost Foyer Key":
             for x in key_info_entry.info_file_field_entries[:]:
-                    x["name"] = get_key_name(item_data["door_id"])
+                    x["name"] = get_item_name(item_name, item_data)
                     x["open_door_no"] = item_data["door_id"]
                     x["appear_flag"] = 0
                     x["disappear_flag"] = 0
@@ -185,7 +195,7 @@ def update_key_info(key_info_entry, output_data):
                     x["invisible"] = 0
                     break
         for x in key_info_entry.info_file_field_entries[:]:
-            if item_data["type"] == "freestanding":
-                x["name"] = get_key_name(item_data["door_id"])
+            if item_data["type"] == "Freestanding":
+                x["name"] = get_item_name(item_name, item_data)
                 x["open_door_no"] = item_data["door_id"]
                 break
