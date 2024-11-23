@@ -4,8 +4,9 @@ from .gen.LocationNames import loc_names_by_id
 from .gen.LocationData import LocationRestriction
 from .gen.ItemNames import ItemName
 from .gen.LocationNames import LocationName
-from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psyenergy_list, summon_list, other_progression, 
-                           other_useful, filler_pool, TrapType, all_items as all_gen_items, djinn_items, characters as character_items)
+from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psyenergy_list, summon_list, other_progression,
+                           forge_only, lucky_only, shop_only, vanilla_coins, remainder,
+                           other_useful, TrapType, all_items as all_gen_items, djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
 import logging
@@ -276,3 +277,34 @@ def get_filler_item(world: 'GSTLAWorld') -> ItemData:
         item = world.random.choices(list(filler_pool.keys()), list(filler_pool.values()))[0]
 
     return item
+
+
+def create_filler_pool() -> Dict[ItemData, int]:
+    """Creates a dictionary mapping ItemData to weight to be used for rolling filler items in the itempool"""
+    pool: Dict[ItemData, int] = {}
+
+    for item in other_useful:
+        if item.type == ItemType.Class:
+            continue
+        pool[item] = 5 if item.type == ItemType.Consumable else 1
+
+    pool[item_table[ItemName.Lucky_Medal]] = 1
+    
+    for item in forge_only:
+        pool[item] = 1
+    for item in lucky_only:
+        pool[item] = 1
+    for item in shop_only:
+        pool[item] = 1
+    for item in vanilla_coins:
+        pool[item] = 2
+
+    for item in remainder:
+        if item.name == ItemName.Empty or item.name == ItemName.Bone or item.name == ItemName.Laughing_Fungus:
+            continue
+        pool[item] = 7
+
+    return pool
+
+
+filler_pool = create_filler_pool()
