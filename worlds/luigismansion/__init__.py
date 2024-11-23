@@ -473,6 +473,8 @@ class LMWorld(World):
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False))
 
+        LuigisMansionRandomizer("", "", None, False, True)
+
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
         # return {

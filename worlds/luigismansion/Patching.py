@@ -137,24 +137,31 @@ def __get_key_name(door_id):
 def update_item_info_table(item_info_table_entry, output_data):
     item_info_table_entry.info_file_field_entries.clear()
 
+    __add_info_item(item_info_table_entry, "nothing")
+
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
             item_name = "key_" + str(item_data["door_id"])
-
-        item_info_table_entry.info_file_field_entries.append({
-            "name": item_name,
-            "character_name": __get_key_name(item_data["door_id"]) if item_data["door_id"] != 0 else item_name,
-            "open_door_no": item_data["door_id"],
-            "hp_amount": 0,
-            "is_escape": 0
-        })
-
-    __add_info_item(item_info_table_entry, "nothing")
+            item_info_table_entry.info_file_field_entries.append({
+                "name": item_name,
+                "character_name": __get_key_name(item_data["door_id"]) if item_data["door_id"] != 0 else item_name,
+                "open_door_no": item_data["door_id"],
+                "hp_amount": 0,
+                "is_escape": 0
+            })
 
     __add_info_item(item_info_table_entry, "money")
+    __add_info_item(item_info_table_entry, "rdiamond")
+
+    __add_info_item(item_info_table_entry, "sheart", 10, 0)
+    __add_info_item(item_info_table_entry, "mheart", 20, 0)
+    __add_info_item(item_info_table_entry, "lheart", 50, 0)
+
+    __add_info_item(item_info_table_entry, "move_sheart", 10, 1)
+    __add_info_item(item_info_table_entry, "move_mheart", 20, 1)
+    __add_info_item(item_info_table_entry, "move_lheart", 50, 1)
+
     __add_info_item(item_info_table_entry, "mkinoko")
-    __add_info_item(item_info_table_entry, "sheart")
-    __add_info_item(item_info_table_entry, "lheart")
     __add_info_item(item_info_table_entry, "itembomb")
 
     __add_info_item(item_info_table_entry, "elffst")
@@ -167,13 +174,13 @@ def update_item_info_table(item_info_table_entry, output_data):
     __add_info_item(item_info_table_entry, "mglove")
     __add_info_item(item_info_table_entry, "mstar")
 
-def __add_info_item(item_info_table_entry, item_name):
+def __add_info_item(item_info_table_entry, item_name, hp_amount = 0, is_escape = 0):
     item_info_table_entry.info_file_field_entries.append({
         "name": item_name,
         "character_name": item_name,
         "open_door_no": 0,
-        "hp_amount": 0,
-        "is_escape": 0
+        "hp_amount": hp_amount,
+        "is_escape": is_escape
     })
 
 def __add_appear_item(item_appear_table_entry, item_name):
@@ -193,9 +200,17 @@ def update_item_appear_table(item_appear_table_entry, output_data):
             __add_appear_item(item_appear_table_entry, item_name)
 
     __add_appear_item(item_appear_table_entry, "money")
-    __add_appear_item(item_appear_table_entry, "mkinoko")
+    __add_appear_item(item_appear_table_entry, "rdiamond")
+
     __add_appear_item(item_appear_table_entry, "sheart")
+    __add_appear_item(item_appear_table_entry, "mheart")
     __add_appear_item(item_appear_table_entry, "lheart")
+
+    __add_appear_item(item_appear_table_entry, "move_sheart")
+    __add_appear_item(item_appear_table_entry, "move_mheart")
+    __add_appear_item(item_appear_table_entry, "move_lheart")
+
+    __add_appear_item(item_appear_table_entry, "mkinoko")
     __add_appear_item(item_appear_table_entry, "itembomb")
 
     __add_appear_item(item_appear_table_entry, "elffst")
@@ -211,49 +226,48 @@ def update_item_appear_table(item_appear_table_entry, output_data):
 def update_treasure_table(treasure_table_entry, character_info, output_data):
     treasure_table_entry.info_file_field_entries.clear()
 
-    for item_name, item_data in output_data["Locations"].items():
-        if item_data["door_id"] == 0:
-            item_name = get_item_name(item_data["name"], item_data)
-            chest_size = __get_chest_size_from_item(item_data["name"])
-        else:
-            item_name = "key_" + str(item_data["door_id"])
-            chest_size = __get_chest_size_from_key(item_data["door_id"])
+    for x in character_info.info_file_field_entries[:]:
+        for item_name, item_data in output_data["Locations"].items():
+            if item_data["door_id"] == 0:
+                item_name = get_item_name(item_data["name"], item_data)
+                chest_size = __get_chest_size_from_item(item_data["name"])
+            else:
+                item_name = "key_" + str(item_data["door_id"])
+                chest_size = __get_chest_size_from_key(item_data["door_id"])
 
-        for x in character_info.info_file_field_entries[:]:
-            if "takara" in x["name"] and item_data["type"] == "Chest" and x["room_no"] == item_data["room_no"]:
-                chest_visual = __get_item_chest_visual(item_data["name"])
-                x["name"] = chest_visual
-                break
+            if item_data["type"] == "Chest":
+                if x["name"].find("takara") != -1 and item_data["type"] == "Chest" and x["room_no"] == item_data["room_no"]:
+                    x["name"] = __get_item_chest_visual(item_data["name"])
 
-        if item_name != "":
-            coin_amount = 0
-            bill_amount = 0
-            gold_bar_amount = 0
+                    coin_amount = 0
+                    bill_amount = 0
+                    gold_bar_amount = 0
 
-            if item_name == "money":
-                coin_amount = randrange(10, 30)
-                bill_amount = randrange(10, 30)
-                gold_bar_amount = randrange(0, 1)
+                    if item_name == "money":
+                        coin_amount = randrange(10, 30)
+                        bill_amount = randrange(10, 30)
+                        gold_bar_amount = randrange(0, 1)
 
-            treasure_table_entry.info_file_field_entries.append({
-                "other": item_name,
-                "room": item_data["room_no"],
-                "size": chest_size,
-                "coin": coin_amount,
-                "bill": bill_amount,
-                "gold": gold_bar_amount,
-                "spearl": 0,
-                "mpearl": 0,
-                "lpearl": 0,
-                "sapphire": 0,
-                "emerald": 0,
-                "ruby": 0,
-                "diamond": 0,
-                "cdiamond": 0,
-                "rdiamond": 0,
-                "effect": 1 if chest_size == 2 else 0,
-                "camera": 1
-            })
+                    treasure_table_entry.info_file_field_entries.append({
+                        "other": item_name,
+                        "room": item_data["room_no"],
+                        "size": chest_size,
+                        "coin": coin_amount,
+                        "bill": bill_amount,
+                        "gold": gold_bar_amount,
+                        "spearl": 0,
+                        "mpearl": 0,
+                        "lpearl": 0,
+                        "sapphire": 0,
+                        "emerald": 0,
+                        "ruby": 0,
+                        "diamond": 0,
+                        "cdiamond": 0,
+                        "rdiamond": 0,
+                        "effect": 1 if chest_size == 2 else 0,
+                        "camera": 1
+                    })
+                    break
 
 def __get_item_chest_visual(item_name):
     match item_name:
@@ -265,9 +279,13 @@ def __get_item_chest_visual(item_name):
             return "ytakara1"
         case "Spade Key":
             return "ytakara1"
+
         case "Small Heart":
             return "ytakara1"
         case "Large Heart":
+            return "ytakara1"
+
+        case "Poison Mushroom":
             return "ytakara1"
         case "Bomb":
             return "ytakara1"
@@ -333,37 +351,42 @@ def get_item_name(item_name, item_data):
 
     return "----"
 
+def set_key_info_entry(key_entry, item_data):
+    new_item_name = get_item_name(item_data["name"], item_data)
+
+    if new_item_name == "money":
+        new_item_name = "rdiamond"
+
+    key_entry["name"] = new_item_name
+    key_entry["open_door_no"] = item_data["door_id"]
+    key_entry["appear_flag"] = 0
+    key_entry["disappear_flag"] = 0
+    key_entry["appear_type"] = 0
+    key_entry["invisible"] = 0
+
 def update_key_info(key_info_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
-        if not item_data["type"] == "Freestanding":
-            continue
-
         match item_name:
-            case "Ghost Foyer Key": #1
-                key_info_entry.info_file_field_entries[1]["name"] = get_item_name(item_data["name"], item_data)
-                key_info_entry.info_file_field_entries[1]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_flag"] = 0
-                key_info_entry.info_file_field_entries[1]["disappear_flag"] = 0
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
-                key_info_entry.info_file_field_entries[1]["invisible"] = 0
-            case "Fortune Teller Candles": #4
-                key_info_entry.info_file_field_entries[4]["name"] = get_item_name(item_data["name"], item_data)
-                key_info_entry.info_file_field_entries[4]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
-            case "Wardrobe Shelf Key": #5
-                key_info_entry.info_file_field_entries[5]["name"] = get_item_name(item_data["name"], item_data)
-                key_info_entry.info_file_field_entries[5]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
-            case "1F Bathroom Shelf Key": #3
-                key_info_entry.info_file_field_entries[3]["name"] = get_item_name(item_data["name"], item_data)
-                key_info_entry.info_file_field_entries[3]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
-            case "The Well Key": #0
-                key_info_entry.info_file_field_entries[0]["name"] = get_item_name(item_data["name"], item_data)
-                key_info_entry.info_file_field_entries[0]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
+            case "The Well Key":
+                set_key_info_entry(key_info_entry.info_file_field_entries[0], item_data)
+            case "Ghost Foyer Key":
+                set_key_info_entry(key_info_entry.info_file_field_entries[1], item_data)
+            case "1F Bathroom Shelf Key":
+                set_key_info_entry(key_info_entry.info_file_field_entries[3], item_data)
+            case "Fortune Teller Candles":
+                set_key_info_entry(key_info_entry.info_file_field_entries[4], item_data)
+            case "Wardrobe Shelf Key":
+                set_key_info_entry(key_info_entry.info_file_field_entries[5], item_data)
+
+    key_info_entry.info_file_field_entries.remove(key_info_entry.info_file_field_entries[2])
 
 def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
+    for x in furniture_info_entry.info_file_field_entries:
+        if x["arg0"] in {101, 102, 103, 104, 105, 106}:
+            x["arg0"] = 0.0
+        if x["move"] == 16:
+            x["move"] = 0
+
     for item_name, item_data in output_data["Locations"].items():
         if not item_data["type"] == "Furniture":
             continue
