@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from collections import defaultdict
-from typing import TextIO
+from typing import TextIO, Dict, Set
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -110,6 +110,27 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 })
 
 
+USEFUL_ITEM_GROUPS: Dict[str, Set[int]] = {
+    "useful_consumables": {
+        183, # Potion
+        186, # Psy Crystal
+        189, # Water of Life
+        190, # Mist Potion
+    },
+    "stat_boosters": {
+        x for x in range(191, 197) # Power Bread through Lucky Pepper
+    },
+    "rusty_items": {
+        x for x in range(417, 428) # Rusty Sword - Robber's Blade through Goblin's Rod
+    },
+    "forge_materials": {
+        x for x in range(429, 438) # Tear Stone through Orihalcon
+    },
+    "class_change_items": {
+        x for x in range(443, 446) # Mysterious Card, Trainer's Whip, Tomagathericon
+    }
+}
+
 def main():
     env = Environment(
         loader=PackageLoader("gen"),
@@ -215,7 +236,7 @@ def generate_item_data(env: Environment, data: GameData):
         psyitems = []
         mimics = []
         other_prog = []
-        other_useful = []
+        other_useful = dict()
         shop_only = []
         forge_only = []
         lucky_only = []
@@ -238,7 +259,6 @@ def generate_item_data(env: Environment, data: GameData):
             if id not in vanilla_item_ids:
                 lucky_only_ids.add(id)
             vanilla_item_ids.add(id)
-
         for item in data.raw_item_data:
             datum = {'item': item, 'name': names[item.id]}
             if item.is_mimic:
@@ -248,7 +268,7 @@ def generate_item_data(env: Environment, data: GameData):
             elif SPECIAL_PROGRESSIONS[item.id] == 'progression':
                 other_prog.append(datum)
             elif SPECIAL_PROGRESSIONS[item.id] == 'useful':
-                other_useful.append(datum)
+                other_useful[item.id] = datum
             elif item.id in shop_only_ids:
                 shop_only.append(datum)
             elif item.id in forge_only_ids:
@@ -261,6 +281,10 @@ def generate_item_data(env: Environment, data: GameData):
                 non_vanilla.append(datum)
             else:
                 remainder.append(datum)
+        useful_remainder_ids = set()
+        for usefuls in USEFUL_ITEM_GROUPS.values():
+            useful_remainder_ids |= usefuls
+        useful_remainder_ids = {x['item'].id for x in other_useful.values()} - useful_remainder_ids
         outfile.write(template.render(
             summons=summons,
             psyenergies=psyenergies,
@@ -270,6 +294,8 @@ def generate_item_data(env: Environment, data: GameData):
             mimics=mimics,
             other_prog=other_prog,
             other_useful=other_useful,
+            useful_groups=USEFUL_ITEM_GROUPS,
+            useful_remainder=useful_remainder_ids,
             non_vanilla=non_vanilla,
             shop_only=shop_only,
             forge_only=forge_only,

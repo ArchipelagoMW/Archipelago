@@ -102,11 +102,28 @@ other_progression: List[ItemData] = [
 {% endfor %}
 ]
 
-other_useful: List[ItemData] = [
+{% for useful_name, item_ids in useful_groups.items() -%}
+{{useful_name}} = [
+    {% for item_id in item_ids -%}{% set item = other_useful[item_id] %}
+        ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+{%- endfor %}
+]
+
+{% endfor %}
+
+useful_remainder = [
+    {% for id in useful_remainder -%}{% set item = other_useful[id] %}
+        ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+{%- endfor %}
+]
+
+other_useful: List[ItemData] = useful_remainder {% for name in useful_groups.keys() %} + {{name}} {% endfor %}
+
+{# other_useful: List[ItemData] = [
 {% for item in other_useful -%}
     ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
-]
+] #}
 
 shop_only: List[ItemData] = [
 {% for item in shop_only -%}

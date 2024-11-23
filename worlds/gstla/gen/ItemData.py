@@ -249,77 +249,103 @@ ItemData(460, "Magma Ball", ItemClassification.progression, 750196, ItemType.Con
 
 ]
 
-other_useful: List[ItemData] = [
-ItemData(7, "Fire Brand", ItemClassification.useful, 730264, ItemType.Weapon, False),
-ItemData(10, "Sol Blade", ItemClassification.useful, 730396, ItemType.Weapon, False),
-ItemData(26, "Masamune", ItemClassification.useful, 731100, ItemType.Weapon, False),
-ItemData(183, "Potion", ItemClassification.useful, 738008, ItemType.Consumable, False),
-ItemData(186, "Psy Crystal", ItemClassification.useful, 738140, ItemType.Consumable, False),
-ItemData(189, "Water of Life", ItemClassification.useful, 738272, ItemType.Consumable, False),
-ItemData(190, "Mist Potion", ItemClassification.useful, 738316, ItemType.Consumable, False),
-ItemData(191, "Power Bread", ItemClassification.useful, 738360, ItemType.Consumable, False),
-ItemData(192, "Cookie", ItemClassification.useful, 738404, ItemType.Consumable, False),
-ItemData(193, "Apple", ItemClassification.useful, 738448, ItemType.Consumable, False),
-ItemData(194, "Hard Nut", ItemClassification.useful, 738492, ItemType.Consumable, False),
-ItemData(195, "Mint", ItemClassification.useful, 738536, ItemType.Consumable, False),
-ItemData(196, "Lucky Pepper", ItemClassification.useful, 738580, ItemType.Consumable, False),
-ItemData(259, "Turtle Boots", ItemClassification.useful, 741352, ItemType.Boots, False),
-ItemData(266, "Unicorn Ring", ItemClassification.useful, 741660, ItemType.Ring, False),
-ItemData(279, "Storm Brand", ItemClassification.useful, 742232, ItemType.Weapon, False),
-ItemData(281, "Lightning Sword", ItemClassification.useful, 742320, ItemType.Weapon, False),
-ItemData(283, "Cloud Brand", ItemClassification.useful, 742408, ItemType.Weapon, False),
-ItemData(287, "Pirate's Sword", ItemClassification.useful, 742584, ItemType.Weapon, False),
-ItemData(290, "Hypnos' Sword", ItemClassification.useful, 742716, ItemType.Weapon, False),
-ItemData(291, "Mist Sabre", ItemClassification.useful, 742760, ItemType.Weapon, False),
-ItemData(292, "Phaeton's Blade", ItemClassification.useful, 742804, ItemType.Weapon, False),
-ItemData(300, "Disk Axe", ItemClassification.useful, 743156, ItemType.Weapon, False),
-ItemData(301, "Themis' Axe", ItemClassification.useful, 743200, ItemType.Weapon, False),
-ItemData(309, "Blow Mace", ItemClassification.useful, 743552, ItemType.Weapon, False),
-ItemData(311, "Thanatos Mace", ItemClassification.useful, 743640, ItemType.Weapon, False),
-ItemData(319, "Meditation Rod", ItemClassification.useful, 743992, ItemType.Weapon, False),
-ItemData(333, "Ixion Mail", ItemClassification.useful, 744608, ItemType.Armor, False),
-ItemData(334, "Phantasmal Mail", ItemClassification.useful, 744652, ItemType.Armor, False),
-ItemData(336, "Valkyrie Mail", ItemClassification.useful, 744740, ItemType.Armor, False),
-ItemData(340, "Full Metal Vest", ItemClassification.useful, 744916, ItemType.Armor, False),
-ItemData(343, "Festival Coat", ItemClassification.useful, 745048, ItemType.Armor, False),
-ItemData(344, "Erinyes Tunic", ItemClassification.useful, 745092, ItemType.Armor, False),
-ItemData(349, "Muni Robe", ItemClassification.useful, 745312, ItemType.Armor, False),
-ItemData(351, "Iris Robe", ItemClassification.useful, 745400, ItemType.Armor, False),
-ItemData(358, "Fujin Shield", ItemClassification.useful, 745708, ItemType.Shield, False),
-ItemData(366, "Spirit Gloves", ItemClassification.useful, 746060, ItemType.Shield, False),
-ItemData(370, "Bone Armlet", ItemClassification.useful, 746236, ItemType.Shield, False),
-ItemData(371, "Jester's Armlet", ItemClassification.useful, 746280, ItemType.Shield, False),
-ItemData(378, "Viking Helm", ItemClassification.useful, 746588, ItemType.Helm, False),
-ItemData(383, "Nurse's Cap", ItemClassification.useful, 746808, ItemType.Helm, False),
-ItemData(384, "Thorn Crown", ItemClassification.useful, 746852, ItemType.Helm, False),
-ItemData(388, "Alastor's Hood", ItemClassification.useful, 747028, ItemType.Helm, False),
-ItemData(394, "Clarity Circlet", ItemClassification.useful, 747292, ItemType.Helm, False),
-ItemData(414, "Guardian Ring", ItemClassification.useful, 748172, ItemType.Ring, False),
-ItemData(417, "Rusty Sword - Robber's Blade", ItemClassification.useful, 748304, ItemType.Weapon, False),
-ItemData(418, "Rusty Sword - Soul Brand", ItemClassification.useful, 748348, ItemType.Weapon, False),
-ItemData(419, "Rusty Sword - Corsair's Edge", ItemClassification.useful, 748392, ItemType.Weapon, False),
-ItemData(420, "Rusty Sword - Pirate's Sabre", ItemClassification.useful, 748436, ItemType.Weapon, False),
-ItemData(421, "Rusty Axe - Captain's Axe", ItemClassification.useful, 748480, ItemType.Weapon, False),
-ItemData(422, "Rusty Axe - Viking Axe", ItemClassification.useful, 748524, ItemType.Weapon, False),
-ItemData(423, "Rusty Mace - Demon Mace", ItemClassification.useful, 748568, ItemType.Weapon, False),
-ItemData(424, "Rusty Mace - Hagbone Mace", ItemClassification.useful, 748612, ItemType.Weapon, False),
-ItemData(425, "Rusty Staff - Dracomace", ItemClassification.useful, 748656, ItemType.Weapon, False),
-ItemData(426, "Rusty Staff - Glower Staff", ItemClassification.useful, 748700, ItemType.Weapon, False),
-ItemData(427, "Rusty Staff - Goblin's Rod", ItemClassification.useful, 748744, ItemType.Weapon, False),
-ItemData(429, "Tear Stone", ItemClassification.useful, 748832, ItemType.Consumable, False),
-ItemData(430, "Star Dust", ItemClassification.useful, 748876, ItemType.Consumable, False),
-ItemData(431, "Sylph Feather", ItemClassification.useful, 748920, ItemType.Consumable, False),
-ItemData(432, "Dragon Skin", ItemClassification.useful, 748964, ItemType.Consumable, False),
-ItemData(433, "Salamander Tail", ItemClassification.useful, 749008, ItemType.Consumable, False),
-ItemData(434, "Golem Core", ItemClassification.useful, 749052, ItemType.Consumable, False),
-ItemData(435, "Mythril Silver", ItemClassification.useful, 749096, ItemType.Consumable, False),
-ItemData(436, "Dark Matter", ItemClassification.useful, 749140, ItemType.Consumable, False),
-ItemData(437, "Orihalcon", ItemClassification.useful, 749184, ItemType.Consumable, False),
-ItemData(443, "Mysterious Card", ItemClassification.useful, 749448, ItemType.Class, False),
-ItemData(444, "Trainer's Whip", ItemClassification.useful, 749492, ItemType.Class, False),
-ItemData(445, "Tomegathericon", ItemClassification.useful, 749536, ItemType.Class, False),
-
+useful_consumables = [
+    
+        ItemData(186, "Psy Crystal", ItemClassification.useful, 738140, ItemType.Consumable, False),
+        ItemData(189, "Water of Life", ItemClassification.useful, 738272, ItemType.Consumable, False),
+        ItemData(190, "Mist Potion", ItemClassification.useful, 738316, ItemType.Consumable, False),
+        ItemData(183, "Potion", ItemClassification.useful, 738008, ItemType.Consumable, False),
 ]
+
+stat_boosters = [
+    
+        ItemData(192, "Cookie", ItemClassification.useful, 738404, ItemType.Consumable, False),
+        ItemData(193, "Apple", ItemClassification.useful, 738448, ItemType.Consumable, False),
+        ItemData(194, "Hard Nut", ItemClassification.useful, 738492, ItemType.Consumable, False),
+        ItemData(195, "Mint", ItemClassification.useful, 738536, ItemType.Consumable, False),
+        ItemData(196, "Lucky Pepper", ItemClassification.useful, 738580, ItemType.Consumable, False),
+        ItemData(191, "Power Bread", ItemClassification.useful, 738360, ItemType.Consumable, False),
+]
+
+rusty_items = [
+    
+        ItemData(417, "Rusty Sword - Robber's Blade", ItemClassification.useful, 748304, ItemType.Weapon, False),
+        ItemData(418, "Rusty Sword - Soul Brand", ItemClassification.useful, 748348, ItemType.Weapon, False),
+        ItemData(419, "Rusty Sword - Corsair's Edge", ItemClassification.useful, 748392, ItemType.Weapon, False),
+        ItemData(420, "Rusty Sword - Pirate's Sabre", ItemClassification.useful, 748436, ItemType.Weapon, False),
+        ItemData(421, "Rusty Axe - Captain's Axe", ItemClassification.useful, 748480, ItemType.Weapon, False),
+        ItemData(422, "Rusty Axe - Viking Axe", ItemClassification.useful, 748524, ItemType.Weapon, False),
+        ItemData(423, "Rusty Mace - Demon Mace", ItemClassification.useful, 748568, ItemType.Weapon, False),
+        ItemData(424, "Rusty Mace - Hagbone Mace", ItemClassification.useful, 748612, ItemType.Weapon, False),
+        ItemData(425, "Rusty Staff - Dracomace", ItemClassification.useful, 748656, ItemType.Weapon, False),
+        ItemData(426, "Rusty Staff - Glower Staff", ItemClassification.useful, 748700, ItemType.Weapon, False),
+        ItemData(427, "Rusty Staff - Goblin's Rod", ItemClassification.useful, 748744, ItemType.Weapon, False),
+]
+
+forge_materials = [
+    
+        ItemData(429, "Tear Stone", ItemClassification.useful, 748832, ItemType.Consumable, False),
+        ItemData(430, "Star Dust", ItemClassification.useful, 748876, ItemType.Consumable, False),
+        ItemData(431, "Sylph Feather", ItemClassification.useful, 748920, ItemType.Consumable, False),
+        ItemData(432, "Dragon Skin", ItemClassification.useful, 748964, ItemType.Consumable, False),
+        ItemData(433, "Salamander Tail", ItemClassification.useful, 749008, ItemType.Consumable, False),
+        ItemData(434, "Golem Core", ItemClassification.useful, 749052, ItemType.Consumable, False),
+        ItemData(435, "Mythril Silver", ItemClassification.useful, 749096, ItemType.Consumable, False),
+        ItemData(436, "Dark Matter", ItemClassification.useful, 749140, ItemType.Consumable, False),
+        ItemData(437, "Orihalcon", ItemClassification.useful, 749184, ItemType.Consumable, False),
+]
+
+class_change_items = [
+    
+        ItemData(443, "Mysterious Card", ItemClassification.useful, 749448, ItemType.Class, False),
+        ItemData(444, "Trainer's Whip", ItemClassification.useful, 749492, ItemType.Class, False),
+        ItemData(445, "Tomegathericon", ItemClassification.useful, 749536, ItemType.Class, False),
+]
+
+
+
+useful_remainder = [
+    
+        ItemData(384, "Thorn Crown", ItemClassification.useful, 746852, ItemType.Helm, False),
+        ItemData(259, "Turtle Boots", ItemClassification.useful, 741352, ItemType.Boots, False),
+        ItemData(388, "Alastor's Hood", ItemClassification.useful, 747028, ItemType.Helm, False),
+        ItemData(7, "Fire Brand", ItemClassification.useful, 730264, ItemType.Weapon, False),
+        ItemData(10, "Sol Blade", ItemClassification.useful, 730396, ItemType.Weapon, False),
+        ItemData(266, "Unicorn Ring", ItemClassification.useful, 741660, ItemType.Ring, False),
+        ItemData(394, "Clarity Circlet", ItemClassification.useful, 747292, ItemType.Helm, False),
+        ItemData(279, "Storm Brand", ItemClassification.useful, 742232, ItemType.Weapon, False),
+        ItemData(281, "Lightning Sword", ItemClassification.useful, 742320, ItemType.Weapon, False),
+        ItemData(26, "Masamune", ItemClassification.useful, 731100, ItemType.Weapon, False),
+        ItemData(283, "Cloud Brand", ItemClassification.useful, 742408, ItemType.Weapon, False),
+        ItemData(414, "Guardian Ring", ItemClassification.useful, 748172, ItemType.Ring, False),
+        ItemData(287, "Pirate's Sword", ItemClassification.useful, 742584, ItemType.Weapon, False),
+        ItemData(290, "Hypnos' Sword", ItemClassification.useful, 742716, ItemType.Weapon, False),
+        ItemData(291, "Mist Sabre", ItemClassification.useful, 742760, ItemType.Weapon, False),
+        ItemData(292, "Phaeton's Blade", ItemClassification.useful, 742804, ItemType.Weapon, False),
+        ItemData(300, "Disk Axe", ItemClassification.useful, 743156, ItemType.Weapon, False),
+        ItemData(301, "Themis' Axe", ItemClassification.useful, 743200, ItemType.Weapon, False),
+        ItemData(309, "Blow Mace", ItemClassification.useful, 743552, ItemType.Weapon, False),
+        ItemData(311, "Thanatos Mace", ItemClassification.useful, 743640, ItemType.Weapon, False),
+        ItemData(319, "Meditation Rod", ItemClassification.useful, 743992, ItemType.Weapon, False),
+        ItemData(333, "Ixion Mail", ItemClassification.useful, 744608, ItemType.Armor, False),
+        ItemData(334, "Phantasmal Mail", ItemClassification.useful, 744652, ItemType.Armor, False),
+        ItemData(336, "Valkyrie Mail", ItemClassification.useful, 744740, ItemType.Armor, False),
+        ItemData(340, "Full Metal Vest", ItemClassification.useful, 744916, ItemType.Armor, False),
+        ItemData(343, "Festival Coat", ItemClassification.useful, 745048, ItemType.Armor, False),
+        ItemData(344, "Erinyes Tunic", ItemClassification.useful, 745092, ItemType.Armor, False),
+        ItemData(349, "Muni Robe", ItemClassification.useful, 745312, ItemType.Armor, False),
+        ItemData(351, "Iris Robe", ItemClassification.useful, 745400, ItemType.Armor, False),
+        ItemData(358, "Fujin Shield", ItemClassification.useful, 745708, ItemType.Shield, False),
+        ItemData(366, "Spirit Gloves", ItemClassification.useful, 746060, ItemType.Shield, False),
+        ItemData(370, "Bone Armlet", ItemClassification.useful, 746236, ItemType.Shield, False),
+        ItemData(371, "Jester's Armlet", ItemClassification.useful, 746280, ItemType.Shield, False),
+        ItemData(378, "Viking Helm", ItemClassification.useful, 746588, ItemType.Helm, False),
+        ItemData(383, "Nurse's Cap", ItemClassification.useful, 746808, ItemType.Helm, False),
+]
+
+other_useful: List[ItemData] = useful_remainder  + useful_consumables  + stat_boosters  + rusty_items  + forge_materials  + class_change_items 
+
+
 
 shop_only: List[ItemData] = [
 ItemData(1, "Long Sword", ItemClassification.filler, 730000, ItemType.Weapon, False),
