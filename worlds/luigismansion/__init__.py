@@ -33,7 +33,7 @@ components.append(
 
 
 class LuigisMansionSettings(settings.Group):
-    class ISOFile(settings.LocalFilePath):
+    class ISOFile(settings.UserFilePath):
         """
         Locate your Luigi's Mansion ISO
         """
