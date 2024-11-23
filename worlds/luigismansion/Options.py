@@ -53,6 +53,11 @@ class Plants(Toggle):
     display_name = "Plantsanity"
 
 
+class PickupAnim(Toggle):
+    """Disable Luigi's pickup animations"""
+    display_name = "Pickup Animation"
+
+
 class Knocksanity(Toggle):
     """
     Adds every interactable, such a dressers and light fixtures, to the location pool
@@ -154,6 +159,7 @@ class LMOptions(PerGameCommonOptions):
     good_vacuum: BetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
+    pickup_animation: PickupAnim
     random_music: RandomMusic
     door_rando: DoorRando
     plantsanity: Plants
