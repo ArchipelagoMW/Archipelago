@@ -6,6 +6,7 @@ from random import seed
 from tkinter import filedialog
 from pathlib import Path
 import yaml
+from pkgutil import get_data
 
 from .JMP_Info_File import JMPInfoFile
 from .Patching import *
@@ -223,8 +224,7 @@ class LuigisMansionRandomizer:
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
-        with open('data/custom_events/event48.txt', 'r') as file:
-            lines = file.read()
+        lines = io.BytesIO(get_data(__name__, os.path.join("data/custom_events", "event48.txt")))
 
         if self.output_data["Options"]["hidden_mansion"] == 1:
             mansion_type = "<URALUIGI>"
@@ -273,8 +273,7 @@ class LuigisMansionRandomizer:
                             ".txt' in provided RAC file.")
 
         if check_local_folder:
-            with open('data/custom_events/event' + event_number + '.txt', 'rb') as file:
-                lines = io.BytesIO(file.read())
+            lines = io.BytesIO(get_data(__name__, os.path.join("data/custom_events", "event" + event_number + ".txt")))
         else:
             lines = io.BytesIO(non_local_str.encode('utf-8'))
 
