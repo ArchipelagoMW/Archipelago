@@ -78,9 +78,26 @@ class GSTLAWorld(World):
     web = GSTLAWeb()
 
     item_name_groups = {
-        ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
+        #ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn}, Djinn dont exist in the pool so we dont need an itemgroup for it either.
         ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character},
         ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic},
+        "Lash": ItemName.Lash_Pebble,
+        "Pound": ItemName.Pound_Cube,
+        "Force": ItemName.Orb_of_Force,
+        "Douse": ItemName.Douse_Drop,
+        "Frost": ItemName.Frost_Jewel,
+        "Lift": ItemName.Lifting_Gem,
+        "Carry": ItemName.Carry_Stone,
+        "Catch": ItemName.Catch_Beads,
+        "Tremor": ItemName.Tremor_Bit,
+        "Scoop": ItemName.Scoop_Gem,
+        "Cyclone": ItemName.Cyclone_Chip,
+        "Burst": ItemName.Burst_Brooch,
+        "Grind": ItemName.Grindstone,
+        "Teleport": ItemName.Teleport_Lapis,
+        "Shamans Rod": ItemName.Shamans_Rod,
+        "Sea Gods Tear": ItemName.Sea_Gods_Tear,
+        "Lil Turtle": ItemName.Lil_Turtle
     }
 
     def generate_early(self) -> None:
