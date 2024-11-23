@@ -4432,6 +4432,62 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    and logic.zerg_mineral_dump(state)
                                    and logic.zerg_can_grab_ghosts_in_the_fog_east_rock_formation(state))
                            ),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10700, LocationType.VICTORY,
+                           lambda state: (
+                               logic.terran_common_unit(state)
+                               and (
+                                    adv_tactics
+                                    or logic.terran_competent_anti_air(state)
+                               )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Close Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10701, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "East Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10702, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (
+                                           adv_tactics
+                                           or logic.terran_competent_anti_air(state)
+                                   )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "West Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10703, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (
+                                           adv_tactics
+                                           or logic.terran_competent_anti_air(state)
+                                   )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Base", SC2_RACESWAP_LOC_ID_OFFSET + 10704, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Templar Base", SC2_RACESWAP_LOC_ID_OFFSET + 10705, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (
+                                           adv_tactics
+                                           or logic.terran_competent_anti_air(state)
+                                   )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10800, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Close Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10801, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "East Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10802, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "West Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10803, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Base", SC2_RACESWAP_LOC_ID_OFFSET + 10804, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Templar Base", SC2_RACESWAP_LOC_ID_OFFSET + 10805, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
     ]
 
     beat_events = []
