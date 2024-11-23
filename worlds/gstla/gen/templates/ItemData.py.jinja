@@ -2,6 +2,10 @@ from enum import Enum, IntEnum
 from typing import List, NamedTuple, Dict, Optional, Set
 from worlds.gstla.GameData import ElementType, ItemType
 from BaseClasses import ItemClassification
+from .ItemNames import ItemName
+
+class TrapType(str, Enum):
+   Mimic = "Mimic"
 
 class ItemData(NamedTuple):
     id: int

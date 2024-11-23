@@ -4,11 +4,12 @@ from .gen.LocationNames import loc_names_by_id
 from .gen.LocationData import LocationRestriction
 from .gen.ItemNames import ItemName
 from .gen.LocationNames import LocationName
-from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psyenergy_list, summon_list, other_progression, 
-                           other_useful, shop_only, forge_only, lucky_only, non_vanilla, vanilla_coins, remainder, 
-                           all_items as all_gen_items, djinn_items, characters as character_items)
+from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psyenergy_list, summon_list, other_progression,
+                           forge_only, lucky_only, shop_only, vanilla_coins, remainder,
+                           other_useful, TrapType, all_items as all_gen_items, djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
+import logging
 
 if TYPE_CHECKING:
     from . import GSTLAWorld, GSTLALocation
@@ -241,56 +242,69 @@ def create_items(world: 'GSTLAWorld', player: int):
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
 
-    ap_item = create_item(ItemName.Bone, player)
-    world.multiworld.itempool.append(ap_item)
-    sum_locations -= 1
     ap_item = create_item(ItemName.Laughing_Fungus, player)
     world.multiworld.itempool.append(ap_item)
     sum_locations -= 1
 
-    filler_pool = [x for x in other_useful if x.type == ItemType.Consumable]
-
-    #guarentee we have some more usefull consumables in the pool to allow forging equipment or get good healing items
-    for item in world.random.choices(population=filler_pool, k=25):
-        ap_item = create_item_direct(item, player)
-        world.multiworld.itempool.append(ap_item)
-        sum_locations -= 1
-    filler_pool.append(item_table[ItemName.Lucky_Medal])
-
-    #If all locations are in the pool we can sprinkle in a bit more useful items before filling up the void with the filler pool
-    if world.options.item_shuffle == 3:
-        filler_pool.extend(forge_only)
-        filler_pool.extend(lucky_only)
-        for item in world.random.choices(population=filler_pool, k=25):
+    #We guarentee a number of filler items when item shuffle all is on, it adds a hefty amount of hidden locations that do not support having a mimic and fail generation.
+    #On repeated generations it results into 42 mimics failing to be placed, otherwise it works fine.
+    if world.options.item_shuffle > 2 and world.options.trap_chance > 0 and world.options.mimic_trap_weight > 0:
+        for item in world.random.choices(list(filler_pool.keys()), list(filler_pool.values()), k = 50):
             ap_item = create_item_direct(item, player)
             world.multiworld.itempool.append(ap_item)
             sum_locations -= 1
-        
-        filler_pool.extend(shop_only)
 
-    filler_pool.extend(vanilla_coins)
-
-    for item in remainder:
-        if item.name == ItemName.Empty or item.name == ItemName.Bone or item.name == ItemName.Laughing_Fungus:
-            continue
-        filler_pool.append(item)
+    logging.error(sum_locations)
 
     for i in range(sum_locations):
-        if world.options.trap_chance > 0 and world.random.randint(1, 100) <= world.options.trap_chance:
-            #for now we only have 1 trap type, if we have more we have to change this slightly
+        item = get_filler_item(world)
+        ap_item = create_item_direct(item, player)
+        world.multiworld.itempool.append(ap_item)
+
+
+def get_filler_item(world: 'GSTLAWorld') -> ItemData:
+    if world.options.trap_chance > 0 and world.random.randint(1, 100) <= world.options.trap_chance:
+        trap_types: Dict[TrapType, int] = {}
+        if world.options.mimic_trap_weight > 0:
+            trap_types[TrapType.Mimic] = world.options.mimic_trap_weight
+
+        trap_type = world.random.choices(list(trap_types.keys()), list(trap_types.values()))[0]
+
+        if trap_type == TrapType.Mimic:
             item = world.random.choice(mimics)
-            ap_item = create_item_direct(item, player)
-            world.multiworld.itempool.append(ap_item)
-        else:
-            item = world.random.choice(filler_pool)
-            ap_item = create_item_direct(item, player)
-            world.multiworld.itempool.append(ap_item)
+
+    else:
+        item = world.random.choices(list(filler_pool.keys()), list(filler_pool.values()))[0]
+
+    return item
 
 
-def get_filler_items() -> List[str]:
-    filler_pool = []
+def create_filler_pool() -> Dict[ItemData, int]:
+    """Creates a dictionary mapping ItemData to weight to be used for rolling filler items in the itempool"""
+    pool: Dict[ItemData, int] = {}
+
+    for item in other_useful:
+        if item.type == ItemType.Class:
+            continue
+        pool[item] = 5 if item.type == ItemType.Consumable else 1
+
+    pool[item_table[ItemName.Lucky_Medal]] = 1
+    
+    for item in forge_only:
+        pool[item] = 1
+    for item in lucky_only:
+        pool[item] = 1
+    for item in shop_only:
+        pool[item] = 1
+    for item in vanilla_coins:
+        pool[item] = 2
+
     for item in remainder:
         if item.name == ItemName.Empty or item.name == ItemName.Bone or item.name == ItemName.Laughing_Fungus:
             continue
-        filler_pool.append(item.name)
-    return filler_pool
+        pool[item] = 7
+
+    return pool
+
+
+filler_pool = create_filler_pool()

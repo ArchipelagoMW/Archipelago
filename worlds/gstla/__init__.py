@@ -14,7 +14,7 @@ from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Seque
 from .Options import GSTLAOptions
 from BaseClasses import Item, ItemClassification
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
-    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_items, AP_PROG_PLACEHOLDER_ITEM
+    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_item, AP_PROG_PLACEHOLDER_ITEM
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
@@ -81,6 +81,23 @@ class GSTLAWorld(World):
         ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
         ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character},
         ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic},
+        "Lash": [ItemName.Lash_Pebble],
+        "Pound": [ItemName.Pound_Cube],
+        "Force": [ItemName.Orb_of_Force],
+        "Douse": [ItemName.Douse_Drop],
+        "Frost": [ItemName.Frost_Jewel],
+        "Lift": [ItemName.Lifting_Gem],
+        "Carry": [ItemName.Carry_Stone],
+        "Catch": [ItemName.Catch_Beads],
+        "Tremor": [ItemName.Tremor_Bit],
+        "Scoop": [ItemName.Scoop_Gem],
+        "Cyclone": [ItemName.Cyclone_Chip],
+        "Burst": [ItemName.Burst_Brooch],
+        "Grind": [ItemName.Grindstone],
+        "Teleport": [ItemName.Teleport_Lapis],
+        "Shamans Rod": [ItemName.Shamans_Rod],
+        "Sea Gods Tear": [ItemName.Sea_Gods_Tear],
+        "Lil Turtle": [ItemName.Lil_Turtle]
     }
 
     def generate_early(self) -> None:
@@ -93,6 +110,10 @@ class GSTLAWorld(World):
             self.multiworld.push_precollected(create_item(ItemName.Wings_of_Anemos, self.player))
         if self.options.start_with_reveal == 1:
             self.multiworld.push_precollected(create_item(ItemName.Reveal, self.player))
+
+        #When we add more traps and none are enabled we should force trap_chance to off
+        if self.options.mimic_trap_weight == 0:
+            self.options.trap_chance = 0
 
         if self.options.trap_chance > 0:
             self.options.show_items_outside_chest.value = 0
@@ -127,8 +148,8 @@ class GSTLAWorld(World):
         pass
 
     def get_filler_item_name(self) -> str:
-        filler_list = get_filler_items()
-        return self.random.choice(filler_list)
+        filler_item = get_filler_item(self)
+        return filler_item.name
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         ret = dict()

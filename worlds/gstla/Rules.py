@@ -134,8 +134,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Piers, player))
     add_rule(world.get_location(LocationName.Kibombo_Frost_Jewel),
              lambda state: state.has(ItemName.Piers, player))
-    
-    
+
     add_rule(world.get_location(LocationName.Contigo_Carry_Stone),
              lambda state: state.has(ItemName.Mia, player))
     add_rule(world.get_location(LocationName.Contigo_Lifting_Gem),
@@ -145,125 +144,64 @@ def set_access_rules(world: 'GSTLAWorld'):
     add_rule(world.get_location(LocationName.Contigo_Catch_Beads),
              lambda state: state.has(ItemName.Isaac, player))
     
-    #Character djinn
-    if world.options.shuffle_characters == 0:
-        add_rule(world.get_location(LocationName.Spring),
-                lambda state: state.has(ItemName.Piers, player))
-        add_rule(world.get_location(LocationName.Shade),
-                lambda state: state.has(ItemName.Piers, player))
+    #Character djinn, char shuffle flag is always enabled so we gain djinn every few chars and they are not tied to specific chars
+    add_rule(world.get_location(LocationName.Spring),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2)
+    add_rule(world.get_location(LocationName.Shade),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2)
 
-        add_rule(world.get_location(LocationName.Flint),
-                lambda state: state.has(ItemName.Isaac, player))
-        add_rule(world.get_location(LocationName.Forge),
-                lambda state: state.has(ItemName.Isaac, player))  
-        add_rule(world.get_location(LocationName.Gust),
-                lambda state: state.has(ItemName.Isaac, player))
-        add_rule(world.get_location(LocationName.Granite),
-                lambda state: state.has(ItemName.Isaac, player))
-        add_rule(world.get_location(LocationName.Fizz),
-                lambda state: state.has(ItemName.Isaac, player))
-        add_rule(world.get_location(LocationName.Fever),
-                lambda state: state.has(ItemName.Isaac, player))
-        
-        add_rule(world.get_location(LocationName.Breeze),
-                lambda state: state.has(ItemName.Garet, player))
-        add_rule(world.get_location(LocationName.Sleet),
-                lambda state: state.has(ItemName.Garet, player))
-        add_rule(world.get_location(LocationName.Quartz),
-                lambda state: state.has(ItemName.Garet, player))
-        add_rule(world.get_location(LocationName.Mist),
-                lambda state: state.has(ItemName.Garet, player))
-        add_rule(world.get_location(LocationName.Corona),
-                lambda state: state.has(ItemName.Garet, player))
-        add_rule(world.get_location(LocationName.Zephyr),
-                lambda state: state.has(ItemName.Garet, player))
-        
-        add_rule(world.get_location(LocationName.Vine),
-                lambda state: state.has(ItemName.Ivan, player))
-        add_rule(world.get_location(LocationName.Spritz),
-                lambda state: state.has(ItemName.Ivan, player))
-        add_rule(world.get_location(LocationName.Scorch),
-                lambda state: state.has(ItemName.Ivan, player))
-        add_rule(world.get_location(LocationName.Smog),
-                lambda state: state.has(ItemName.Ivan, player))
-        add_rule(world.get_location(LocationName.Sap),
-                lambda state: state.has(ItemName.Ivan, player))
-        add_rule(world.get_location(LocationName.Hail),
-                lambda state: state.has(ItemName.Ivan, player))
-        
+    add_rule(world.get_location(LocationName.Flint),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3)
+    add_rule(world.get_location(LocationName.Forge),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3)  
+    add_rule(world.get_location(LocationName.Gust),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3)
 
-        add_rule(world.get_location(LocationName.Ember),
-                lambda state: state.has(ItemName.Mia, player))
-        add_rule(world.get_location(LocationName.Kite),
-                lambda state: state.has(ItemName.Mia, player))
-        add_rule(world.get_location(LocationName.Ground),
-                lambda state: state.has(ItemName.Mia, player))
-        add_rule(world.get_location(LocationName.Tonic),
-                lambda state: state.has(ItemName.Mia, player))
-        add_rule(world.get_location(LocationName.Flash),
-                lambda state: state.has(ItemName.Mia, player))
-        add_rule(world.get_location(LocationName.Squall),
-                lambda state: state.has(ItemName.Mia, player))
-    else:
-        add_rule(world.get_location(LocationName.Spring),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 2)
-        add_rule(world.get_location(LocationName.Shade),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 2)
+    add_rule(world.get_location(LocationName.Granite),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+    add_rule(world.get_location(LocationName.Fizz),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+    add_rule(world.get_location(LocationName.Fever),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
+    add_rule(world.get_location(LocationName.Breeze),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 4)
 
-        add_rule(world.get_location(LocationName.Flint),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 3)
-        add_rule(world.get_location(LocationName.Forge),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 3)  
-        add_rule(world.get_location(LocationName.Gust),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 3)
+    add_rule(world.get_location(LocationName.Sleet),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(world.get_location(LocationName.Quartz),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(world.get_location(LocationName.Mist),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(world.get_location(LocationName.Corona),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
+    add_rule(world.get_location(LocationName.Zephyr),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 5)
 
+    add_rule(world.get_location(LocationName.Vine),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(world.get_location(LocationName.Spritz),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(world.get_location(LocationName.Scorch),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(world.get_location(LocationName.Smog),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(world.get_location(LocationName.Sap),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
+    add_rule(world.get_location(LocationName.Hail),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 6)
 
-        add_rule(world.get_location(LocationName.Granite),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-        add_rule(world.get_location(LocationName.Fizz),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-        add_rule(world.get_location(LocationName.Fever),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-        add_rule(world.get_location(LocationName.Breeze),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 4)
-        
-        add_rule(world.get_location(LocationName.Sleet),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-        add_rule(world.get_location(LocationName.Quartz),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-        add_rule(world.get_location(LocationName.Mist),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-        add_rule(world.get_location(LocationName.Corona),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-        add_rule(world.get_location(LocationName.Zephyr),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 5)
-        
-        add_rule(world.get_location(LocationName.Vine),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-        add_rule(world.get_location(LocationName.Spritz),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-        add_rule(world.get_location(LocationName.Scorch),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-        add_rule(world.get_location(LocationName.Smog),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-        add_rule(world.get_location(LocationName.Sap),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-        add_rule(world.get_location(LocationName.Hail),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 6)
-        
-
-        add_rule(world.get_location(LocationName.Ember),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-        add_rule(world.get_location(LocationName.Kite),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-        add_rule(world.get_location(LocationName.Ground),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-        add_rule(world.get_location(LocationName.Tonic),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-        add_rule(world.get_location(LocationName.Flash),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
-        add_rule(world.get_location(LocationName.Squall),
-                lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(world.get_location(LocationName.Ember),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(world.get_location(LocationName.Kite),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(world.get_location(LocationName.Ground),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(world.get_location(LocationName.Tonic),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(world.get_location(LocationName.Flash),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(world.get_location(LocationName.Squall),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
 
 
     #Daila
@@ -445,7 +383,7 @@ def set_access_rules(world: 'GSTLAWorld'):
     add_rule(world.get_location(LocationName.Lemurian_Ship_Mist_Potion),
              lambda state: state.has(ItemName.Aqua_Hydra_defeated, player) and state.has(ItemName.Parch, player))
     add_rule(world.get_location(LocationName.Lemurian_Ship_Aqua_Hydra_fight),
-             lambda state: state.has(ItemName.Frost_Jewel, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2 and state.has(ItemName.Frost_Jewel, player))
 
 
 
@@ -532,7 +470,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Whirlwind, player))
 
     add_rule(world.get_location(LocationName.Gaia_Rock_Serpent_Fight),
-             lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Dancing_Idol, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2 and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Dancing_Idol, player))
 
 
     #Tundaria Tower
@@ -566,7 +504,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     #Champa
     add_rule(world.get_location(LocationName.Champa_Trident),
-             lambda state: state.has(ItemName.Reveal, player) and state.has(ItemName.Briggs_escaped, player) and state.has(ItemName.Left_Prong, player)
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2 and state.has(ItemName.Reveal, player) and state.has(ItemName.Briggs_escaped, player) and state.has(ItemName.Left_Prong, player)
                            and state.has(ItemName.Center_Prong, player) and state.has(ItemName.Right_Prong, player))
 
     add_rule(world.get_location(LocationName.Champa_Viking_Helm),
@@ -588,7 +526,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     #Sea Of Time
     add_rule(world.get_location(LocationName.Sea_of_Time_Poseidon_fight),
-             lambda state: state.has(ItemName.Trident, player))
+             lambda state:  state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Trident, player))
 
     #Lemuria
     add_rule(world.get_location(LocationName.Rime),
@@ -635,7 +573,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Reveal, player))
     
     add_rule(world.get_location(LocationName.Shaman_Village_Moapa_fight),
-             lambda state: state.has(ItemName.Shamans_Rod, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Shamans_Rod, player))
 
     #Atteka Inlet
     add_rule(world.get_location(LocationName.Geode),
@@ -773,7 +711,7 @@ def set_access_rules(world: 'GSTLAWorld'):
                            state.has(ItemName.Reveal, player) and state.has(ItemName.Teleport_Lapis, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Flame_Dragons_fight),
-             lambda state: state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Pound_Cube, player) and
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Pound_Cube, player) and
                            state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Reveal, player))
 
 
@@ -783,7 +721,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Doom_Dragon_Fight),
-             lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player) and
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player) and
                            state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Carry_Stone, player) and state.has(ItemName.Sand, player))
 
     #djinn logic
@@ -825,10 +763,13 @@ def set_access_rules(world: 'GSTLAWorld'):
     #Optional Super Boss content
     if world.options.omit_locations < 2:
         add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Daedalus),
-             lambda state: state.has(ItemName.Pound_Cube, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Pound_Cube, player))
 
         add_rule(world.get_location(LocationName.Islet_Cave_Catastrophe),
-             lambda state: state.has(ItemName.Teleport_Lapis, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Teleport_Lapis, player))
+        
+        add_rule(world.get_location(LocationName.Treasure_Isle_Azul), 
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
 
         if world.options.djinn_logic > 0:
                 add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Daedalus),
@@ -844,7 +785,7 @@ def set_access_rules(world: 'GSTLAWorld'):
     if world.options.omit_locations < 1:
         #Anemos Inner Sanctum
         add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Iris),
-             lambda state: state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
 
         add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Orihalcon),
              lambda state: state.has(ItemName.Lifting_Gem, player))
@@ -1019,7 +960,6 @@ def set_item_rules(world: 'GSTLAWorld'):
 
     for loc in [x.location_data for x in cast(Iterable['GSTLALocation'], world.multiworld.get_locations(world.player))
                 if x.location_data.loc_type != LocationType.Event]:
-
 
         if loc.restrictions > 0:
             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
