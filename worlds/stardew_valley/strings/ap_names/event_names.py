@@ -18,4 +18,5 @@ class Event:
     winter_farming = event("Winter Farming")
 
     received_walnuts = event("Received Walnuts")
-    received_progression = event("Received Progression Item")
+    received_progression_item = event("Received Progression Item")
+    received_progression_percent = event("Received Progression Percent")

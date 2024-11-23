@@ -444,11 +444,18 @@ class StardewValleyWorld(World):
         if not change:
             return False
 
-        state.prog_items[self.player][Event.received_progression] += 1
+        player_state = state.prog_items[self.player]
+
+        received_progression_count = player_state[Event.received_progression_item]
+        received_progression_count += 1
+        if self.total_progression_items:
+            # We can't update the percentage if we don't know the total progression items, can't divide by 0.
+            player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+        player_state[Event.received_progression_item] = received_progression_count
 
         walnut_amount = self.get_walnut_amount(item.name)
         if walnut_amount:
-            state.prog_items[self.player][Event.received_walnuts] += walnut_amount
+            player_state[Event.received_walnuts] += walnut_amount
 
         return True
 
@@ -457,11 +464,18 @@ class StardewValleyWorld(World):
         if not change:
             return False
 
-        state.prog_items[self.player][Event.received_progression] -= 1
+        player_state = state.prog_items[self.player]
+
+        received_progression_count = player_state[Event.received_progression_item]
+        received_progression_count -= 1
+        if self.total_progression_items:
+            # We can't update the percentage if we don't know the total progression items, can't divide by 0.
+            player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+        player_state[Event.received_progression_item] = received_progression_count
 
         walnut_amount = self.get_walnut_amount(item.name)
         if walnut_amount:
-            state.prog_items[self.player][Event.received_walnuts] -= walnut_amount
+            player_state[Event.received_walnuts] -= walnut_amount
 
         return True
 
