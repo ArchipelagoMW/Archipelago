@@ -95,7 +95,7 @@ TRADE_DATASTORAGE_TEAM = "SC2_VoidTrade_" # + Team
 TRADE_DATASTORAGE_SLOT = "slot_" # + Slot
 TRADE_DATASTORAGE_LOCK = "_lock"
 TRADE_LOCK_TIME = 5000 # Time in ms that the DataStorage may be considered safe to edit
-TRADE_LOCK_WAIT_LIMIT = 540000 # Time in ms that the client may spend trying to get a lock (540000 = 9 minutes)
+TRADE_LOCK_WAIT_LIMIT = 540000 / 1.4 # Time in ms that the client may spend trying to get a lock (540000 = 9 minutes, 1.4 is 'faster' game speed's time scale)
 
 # Games
 STARCRAFT2 = "Starcraft 2"
