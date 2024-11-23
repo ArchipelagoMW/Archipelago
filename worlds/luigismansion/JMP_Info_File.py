@@ -193,9 +193,13 @@ class JMPInfoFile:
                         str_val = byte_string_strip(self.info_file_entry.data.read(STRING_BYTE_LENGTH))
 
                         if len(str_val) > len(current_val):
-                            current_val = string_to_bytes(current_val, len(str_val))
+                            length_to_use = len(str_val)
                         else:
-                            current_val = string_to_bytes(current_val, len(current_val))
+                            length_to_use = len(current_val)
+
+                        if length_to_use < STRING_BYTE_LENGTH:
+                            current_val = string_to_bytes(current_val, length_to_use+1)
+
 
                         self.info_file_entry.data.seek(data_field_offset + jmp_header.get_field_start_bit)
                         self.info_file_entry.data.write(current_val)
