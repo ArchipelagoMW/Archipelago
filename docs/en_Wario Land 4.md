@@ -13,7 +13,7 @@ in which case additional full health items, traps, and other in-level pickups ca
 
 As in the vanilla game, you must find your items in the levels and then escape the level through the
 entry portal in order to keep them—if you die or give up from the pause menu, the item will be lost
-and you will need to pick it up again. Other players' itemes do not have the same behavior by
+and you will need to pick it up again. Other players' items do not have the same behavior by
 default, but you can make all items behave this way by setting your "Send Locations to Server"
 option to "On Escape."
 
