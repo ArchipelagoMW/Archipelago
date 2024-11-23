@@ -115,8 +115,6 @@ class GSTLAWorld(World):
         if self.options.mimic_trap_weight == 0:
             self.options.trap_chance = 0
 
-        if self.options.trap_chance > 0:
-            self.options.show_items_outside_chest.value = 0
 
     def create_regions(self) -> None:
         create_regions(self)

@@ -155,9 +155,9 @@ class TestMimicVisibility(TestFormatBase):
         "trap_chance": 50
     }
 
-    def test_invisible_with_mimic(self):
+    def test_visible_with_mimic(self):
         data = self._get_option_byte()
-        self.assertEqual(0x0, 0x4 & data)
+        self.assertEqual(0x4, 0x4 & data)
 
 class TestNoUtilPsy(TestFormatBase):
 
