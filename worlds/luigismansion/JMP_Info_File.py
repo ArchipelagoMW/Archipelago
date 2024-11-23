@@ -5,7 +5,6 @@ import io
 import json
 from pkgutil import get_data
 
-import orjson
 from gclib.rarc import RARC
 from .JMP_Field_Header import JMPFieldHeader
 
