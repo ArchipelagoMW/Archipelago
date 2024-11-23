@@ -21,11 +21,13 @@ from .Options import LMOptions
 from .Regions import *
 from . import Rules
 
+
 def run_client():
     print("Running LM Client")
     from .LMClient import main  # lazy import
 
     launch_subprocess(main, name="LuigiMansionClient")
+
 
 components.append(
     Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".aplm"))
@@ -40,6 +42,7 @@ class LuigisMansionSettings(settings.Group):
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
+
 class LMWeb(WebWorld):
     theme = "stone"
     tutorials = [
@@ -52,6 +55,7 @@ class LMWeb(WebWorld):
             ["BootsinSoots"],
         )
     ]
+
 
 class LMWorld(World):
     """
@@ -396,7 +400,7 @@ class LMWorld(World):
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        filler_weights = [10, 3, 6, 8, 4, 2] # len must be 15
+        filler_weights = [10, 3, 6, 8, 4, 2]  # len must be 15
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
         # return self.multiworld.random.choice([item_name for item_name in filler_items])
 

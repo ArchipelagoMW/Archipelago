@@ -13,6 +13,10 @@ class LuigiWalkSpeed(Choice):
     option_schmoovin = 2
     default = 0
 
+class RandomMusic(Toggle):
+    """Randomize Music"""
+    display_name = "Music Randomization"
+
 
 class BetterVacuum(Choice):
     """Choose whether to include the Poltergust 4000"""
@@ -150,6 +154,7 @@ class LMOptions(PerGameCommonOptions):
     good_vacuum: BetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
+    random_music: RandomMusic
     door_rando: DoorRando
     plantsanity: Plants
     knocksanity: Knocksanity
