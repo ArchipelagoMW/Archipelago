@@ -441,15 +441,29 @@ class StardewValleyWorld(World):
 
     def collect(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().collect(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] += self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        state.prog_items[self.player][Event.received_progression] += 1
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] += walnut_amount
+
+        return True
 
     def remove(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().remove(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] -= self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        state.prog_items[self.player][Event.received_progression] -= 1
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] -= walnut_amount
+
+        return True
 
     @staticmethod
     def get_walnut_amount(item_name: str) -> int:
