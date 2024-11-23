@@ -182,7 +182,7 @@ class StardewValleyWorld(World):
         # are removed from the bool, and probably when plando is applied as well... But since this is only used to spread grindy items across spheres, it's not
         # a big deal if it's not 100% accurate.
         self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
-        self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(1) if i.advancement)
+        self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
         self.total_progression_items += sum(1 for i in created_items if i.advancement)
         self.total_progression_items -= 1  # -1 for the victory event
 
