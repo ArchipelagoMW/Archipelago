@@ -533,7 +533,7 @@ class SC2Logic:
                 state.has(item_names.SWARM_QUEEN, self.player)
                 # Cross the gap
                 and (state.has_any((item_names.NYDUS_WORM, item_names.OVERLORD_VENTRAL_SACS), self.player)
-                     or (self.advanced_tactics and state.has_any((item_names.ECHIDNA_WORM, item_names.YGGDRASIL), self.player)))
+                     or (self.advanced_tactics and state.has(item_names.YGGDRASIL, self.player)))
                 # Air to ground
                 and (self.morph_brood_lord(state) or self.morph_guardian(state))
                 # Ground to air
