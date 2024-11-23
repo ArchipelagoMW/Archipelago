@@ -218,7 +218,7 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # Update all custom events
-        list_events = ["04", "12", "17", "22", "32", "50", "61", "63", "64"]
+        list_events = ["04", "12", "17", "22", "29", "32", "50", "61", "63", "64"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 

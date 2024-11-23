@@ -4,7 +4,7 @@ def update_event_info(event_info):
     for x in event_info.info_file_field_entries[:]:
         # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
         # boss battles / grabbing boss keys, and various cutscenes etc.
-        if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 29, 54, 91}:
+        if x["EventNo"] in {15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 54, 91}:
             event_info.info_file_field_entries.remove(x)
 
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
@@ -344,24 +344,24 @@ def update_key_info(key_info_entry, output_data):
                 key_info_entry.info_file_field_entries[1]["open_door_no"] = item_data["door_id"]
                 key_info_entry.info_file_field_entries[1]["appear_flag"] = 0
                 key_info_entry.info_file_field_entries[1]["disappear_flag"] = 0
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
                 key_info_entry.info_file_field_entries[1]["invisible"] = 0
             case "Fortune Teller Candles": #4
                 key_info_entry.info_file_field_entries[4]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[4]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
             case "Wardrobe Shelf Key": #5
                 key_info_entry.info_file_field_entries[5]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[5]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
             case "1F Bathroom Shelf Key": #3
                 key_info_entry.info_file_field_entries[3]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[3]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
             case "The Well Key": #0
                 key_info_entry.info_file_field_entries[0]["name"] = get_item_name(item_data["name"], item_data)
                 key_info_entry.info_file_field_entries[0]["open_door_no"] = item_data["door_id"]
-                key_info_entry.info_file_field_entries[1]["appear_type"] = 0
+                key_info_entry.info_file_field_entries[1]["appear_type"] = 3
 
 def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
