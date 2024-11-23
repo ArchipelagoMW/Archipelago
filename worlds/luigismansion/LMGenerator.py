@@ -24,21 +24,22 @@ class InvalidCleanISOError(Exception): pass
 
 
 class LuigisMansionRandomizer:
-    def __init__(self, clean_iso_path: str, randomized_output_folder: str, export_disc_to_folder=False,
-                 ap_output_data=None, debug_flag=False):
+    def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data=None,
+                 export_disc_to_folder=False, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
         select_aplm_path = ap_output_data
         self.debug = debug_flag
         if self.debug:
             self.clean_iso_path = filedialog.askopenfilename(title="Select your NA iso file",
                                                              filetypes=[("ISO Files", ".iso")])
-            self.randomized_output_folder = Path(os.path.dirname(self.clean_iso_path))
+            self.randomized_output_file_path = os.path.join(
+                Path(os.path.dirname(self.clean_iso_path)).parent, "%s Randomized.iso" % RANDOMIZER_NAME)
             if ap_output_data is None:
                 select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
                                                              filetypes=[("APLM Files", ".aplm")])
         else:
             self.clean_iso_path = clean_iso_path
-            self.randomized_output_folder = randomized_output_folder
+            self.randomized_output_file_path = randomized_output_file_path
 
         with open(os.path.abspath(select_aplm_path)) as stream:
             self.output_data = yaml.safe_load(stream)
@@ -253,11 +254,11 @@ class LuigisMansionRandomizer:
     # Otherwise, creates a direct ISO file.
     def export_files_from_memory(self):
         if self.export_disc_to_folder:
-            output_folder_path = os.path.join(self.randomized_output_folder, "%s Randomized" % RANDOMIZER_NAME)
+            output_folder_path = os.path.join(
+                Path(self.randomized_output_file_path).parent, "%s Randomized Exported" % RANDOMIZER_NAME)
             yield from self.gcm.export_disc_to_folder_with_changed_files(output_folder_path)
         else:
-            output_file_path = os.path.join(self.randomized_output_folder, "%s Randomized.iso" % RANDOMIZER_NAME)
-            yield from self.gcm.export_disc_to_iso_with_changed_files(output_file_path)
+            yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str=""):
         if not check_local_folder and not non_local_str:
@@ -285,4 +286,4 @@ class LuigisMansionRandomizer:
             Yay0.compress(custom_event.data, 0))
 
 if __name__ == '__main__':
-    unpacked_iso = LuigisMansionRandomizer("", "", False, None, True)
+    unpacked_iso = LuigisMansionRandomizer("", "", None, False, True)
