@@ -16,7 +16,7 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
-from .Options import LMOptions
+from .LMOptions import LMOptions
 from .Regions import *
 from . import Rules
 
@@ -33,7 +33,7 @@ components.append(
 
 
 class LuigisMansionSettings(settings.Group):
-    class ISOFile(settings.LocalFilePath):
+    class ISOFile(settings.UserFilePath):
         """
         Locate your Luigi's Mansion ISO
         """
@@ -472,6 +472,8 @@ class LMWorld(World):
         file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False))
+
+        LuigisMansionRandomizer("", "", None, False, True)
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
