@@ -16,7 +16,7 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
-from .Options import LMOptions
+from .LMOptions import LMOptions
 from .Regions import *
 from . import Rules
 
