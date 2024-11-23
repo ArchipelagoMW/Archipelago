@@ -79,8 +79,8 @@ class GSTLAPatchExtension(APPatchExtension):
     def apply_gstla_rando(caller: GSTLADeltaPatch, rom: bytes, patch_file: str) -> bytes:
         import requests
         ap_settings = caller.get_file(patch_file)
-        # response = requests.post("http://localhost:3000/import_ap_ajax",
-        response = requests.post("https://gs2randomiser.com/import_ap_ajax",
+        response = requests.post("http://localhost:3000/import_ap_ajax",
+        # response = requests.post("https://gs2randomiser.com/import_ap_ajax",
                                  data=ap_settings,
                                  allow_redirects=False,
                                  headers={
