@@ -67,41 +67,19 @@ def update_obj_info(obj_info):
 
 def __get_chest_size_from_item(item_name):
     match item_name:
-        case "Mario's Hat":
-            return 0
-        case "Mario's Letter":
-            return 0
-        case "Mario's Shoe":
-            return 0
-        case "Mario's Glove":
-            return 0
-        case "Mario's Star":
+        case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
             return 0
 
         case "Small Heart":
             return 0
         case "Large Heart":
             return 1
-        case "Bomb":
+
+        case "Poison Mushroom" | "Bomb":
             return 2
 
-        case "Fire Element Medal":
+        case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
             return 2
-        case "Water Element Medal":
-            return 2
-        case "Ice Element Medal":
-            return 2
-
-        case "Mario's Hat":
-            return 0
-        case "Mario's Letter":
-            return 0
-        case "Mario's Shoe":
-            return 0
-        case "Mario's Glove":
-            return 0
-        case "Mario's Star":
-            return 0
 
         case "Money Bundle":
             return 1
@@ -110,13 +88,7 @@ def __get_chest_size_from_item(item_name):
 
 def __get_chest_size_from_key(key_id):
     match key_id:
-        case 3:
-            return 2
-        case 42:
-            return 2
-        case 59:
-            return 2
-        case 72:
+        case 3 | 42 | 59 | 72:
             return 2
         case _:
             return 0
@@ -271,23 +243,13 @@ def update_treasure_table(treasure_table_entry, character_info, output_data):
 
 def __get_item_chest_visual(item_name):
     match item_name:
-        case "Heart Key":
-            return "ytakara1"
-        case "Club Key":
-            return "ytakara1"
-        case "Diamond Key":
-            return "ytakara1"
-        case "Spade Key":
+        case "Heart Key" | "Club Key" |  "Diamond Key" | "Spade Key":
             return "ytakara1"
 
-        case "Small Heart":
-            return "ytakara1"
-        case "Large Heart":
+        case "Small Heart" | "Large Heart":
             return "ytakara1"
 
-        case "Poison Mushroom":
-            return "ytakara1"
-        case "Bomb":
+        case "Poison Mushroom" | "Bomb":
             return "ytakara1"
 
         case "Fire Element Medal":
@@ -297,15 +259,7 @@ def __get_item_chest_visual(item_name):
         case "Ice Element Medal":
             return "wtakara1"
 
-        case "Mario's Hat":
-            return "rtakara1"
-        case "Mario's Letter":
-            return "rtakara1"
-        case "Mario's Shoe":
-            return "rtakara1"
-        case "Mario's Glove":
-            return "rtakara1"
-        case "Mario's Star":
+        case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
             return "rtakara1"
 
         case "Money Bundle":
