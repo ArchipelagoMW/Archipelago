@@ -91,15 +91,14 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: List[BundleRoom]
     randomized_entrances: Dict[str, str]
-    total_progression_items: int
 
-    # all_progression_items: Dict[str, int] # If you need to debug total_progression_items, uncommenting this will help tremendously
+    total_progression_items: int
+    excluded_from_total_progression_items: List[str] = [Event.received_walnuts]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.filler_item_pool_names = []
         self.total_progression_items = 0
-        # self.all_progression_items = dict()
 
         # Taking the seed specified in slot data for UT, otherwise just generating the seed.
         self.seed = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY, self.random.getrandbits(64))
@@ -171,14 +170,21 @@ class StardewValleyWorld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if location.address is not None])
 
-        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options, self.content,
-                                     self.random)
+        created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options, self.content, self.random)
 
         self.multiworld.itempool += created_items
 
         setup_early_items(self.multiworld, self.options, self.player, self.random)
         self.setup_player_events()
         self.setup_victory()
+
+        # This is really a best-effort to get the total progression items count. The actual total can be impacted by the start_inventory_from_pool when items
+        # are removed from the bool, and probably when plando is applied as well... But since this is only used to spread grindy items across spheres, it's not
+        # a big deal if it's not 100% accurate.
+        self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
+        self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(1) if i.advancement)
+        self.total_progression_items += sum(1 for i in created_items if i.advancement)
+        self.total_progression_items -= 1  # -1 for the victory event
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
@@ -319,13 +325,7 @@ class StardewValleyWorld(World):
         if override_classification is None:
             override_classification = item.classification
 
-        if override_classification == ItemClassification.progression:
-            self.total_progression_items += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
-
-    def delete_item(self, item: Item):
-        if item.classification & ItemClassification.progression:
-            self.total_progression_items -= 1
 
     def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
         if isinstance(item, str):
@@ -344,10 +344,6 @@ class StardewValleyWorld(World):
         location.access_rule = rule
         region.locations.append(location)
         location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
-
-        # This is not ideal, but the rule count them so...
-        if item != Event.victory:
-            self.total_progression_items += 1
 
     def set_rules(self):
         set_rules(self)
@@ -441,15 +437,25 @@ class StardewValleyWorld(World):
 
     def collect(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().collect(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] += self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] += walnut_amount
+
+        return True
 
     def remove(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().remove(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] -= self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] -= walnut_amount
+
+        return True
 
     @staticmethod
     def get_walnut_amount(item_name: str) -> int:
