@@ -222,7 +222,7 @@ class LuigisMansionRandomizer:
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
-        with open('worlds/luigimansion/data/custom_events/event48.txt', 'r') as file:
+        with open('worlds/luigismansion/data/custom_events/event48.txt', 'r') as file:
             lines = file.read()
 
         if self.output_data["Options"]["hidden_mansion"] == 1:
@@ -272,7 +272,7 @@ class LuigisMansionRandomizer:
                             ".txt' in provided RAC file.")
 
         if check_local_folder:
-            with open('worlds/luigimansion/data/custom_events/event' + event_number + '.txt', 'rb') as file:
+            with open('worlds/luigismansion/data/custom_events/event' + event_number + '.txt', 'rb') as file:
                 lines = io.BytesIO(file.read())
         else:
             lines = io.BytesIO(non_local_str.encode('utf-8'))
