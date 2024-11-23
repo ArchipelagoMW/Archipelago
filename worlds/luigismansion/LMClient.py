@@ -8,6 +8,8 @@ import dolphin_memory_engine
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
+from settings import get_settings
+from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
 from .Locations import ALL_LOCATION_TABLE, LMLocation
@@ -24,7 +26,6 @@ CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 
 # This address is used to check/set the player's health for DeathLink. TODO CORRECT FOR LM
 CURR_HEALTH_ADDR = 0x803C4C0A
-
 
 #
 # # These addresses are used for the Moblin's Letter check.
@@ -63,6 +64,15 @@ GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 # # This is the address that holds the player's slot name.
 # # This way, the player does not have to manually authenticate their slot name.
 SLOT_NAME_ADDR = 0x803FE88C
+
+
+def save_patched_iso(output_data):
+    iso_path = get_settings().luigis_mansion_settings#filetypes=[("ISO Files", ".iso")])
+    directory_to_iso = os.path.dirname(iso_path)
+    iso_name = Path(iso_path).stem
+
+    if iso_path:
+        LuigisMansionRandomizer(iso_path, directory_to_iso + "\\" + iso_name + "-randomized.iso", False, output_data)
 
 
 class LMCommandProcessor(ClientCommandProcessor):

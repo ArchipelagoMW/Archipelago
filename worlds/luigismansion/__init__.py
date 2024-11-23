@@ -8,6 +8,7 @@ import yaml
 
 from .LMGenerator import LuigisMansionRandomizer
 
+import settings
 from BaseClasses import Tutorial, Item, ItemClassification
 from Fill import fill_restrictive
 from Utils import visualize_regions
@@ -27,8 +28,17 @@ def run_client():
     launch_subprocess(main, name="LuigiMansionClient")
 
 components.append(
-    Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apLM"))
+    Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".aplm"))
 )
+
+
+class LuigisMansionSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        description = "Luigi's Mansion (NTSC-U) ISO"
+        copy_to = "Luigi's Mansion (NTSC-U).iso"
+        md5s = ["6e3d9ae0ed2fbd2f77fa1ca09a60c494"]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 class LMWeb(WebWorld):
     theme = "stone"
@@ -46,9 +56,9 @@ class LMWeb(WebWorld):
 class LMWorld(World):
     """
     Luigi's Mansion is an adventure game starring everyone's favorite plumber brother, Luigi.
-    Luigi has won a strange mansion but on arriving, he discovers it's full of ghosts!
+    Luigi has won a strange mansion but upon arriving, he discovers it's full of ghosts, with his brother inside!
     Armed with the mysterious Poltergust 3000, Luigi will need to overcome his fears to kick the ghosts out
-    before he can move in. Wait! Is that Mario?
+    before he can move in and save Mario!
     """
 
     game: ClassVar[str] = "Luigi's Mansion"
@@ -62,7 +72,7 @@ class LMWorld(World):
     location_name_to_id: ClassVar[Dict[str, int]] = {
         name: LMLocation.get_apid(data.code) for name, data in ALL_LOCATION_TABLE.items() if data.code is not None
     }
-
+    settings: LuigisMansionSettings
     item_name_groups = get_item_names_per_category()
     required_client_version = (0, 5, 1)
     web = LMWeb()
@@ -388,7 +398,7 @@ class LMWorld(World):
         filler = list(filler_items.keys())
         filler_weights = [10, 3, 6, 8, 4, 2] # len must be 15
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
-        #return self.multiworld.random.choice([item_name for item_name in filler_items])
+        # return self.multiworld.random.choice([item_name for item_name in filler_items])
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
