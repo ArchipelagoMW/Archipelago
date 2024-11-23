@@ -1,12 +1,12 @@
 import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
+from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld, CollectionState
+from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_rule, CollectionRule
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
     chunksanity_special_region_names
 from .Locations import OSRSLocation, LocationRow
-
+from .Rules import *
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
 
@@ -46,6 +46,7 @@ class OSRSWorld(World):
     web = OSRSWeb()
     base_id = 0x070000
     data_version = 1
+    explicit_indirect_conditions = False
 
     item_name_to_id = {item_rows[i].name: 0x070000 + i for i in range(len(item_rows))}
     location_name_to_id = {location_rows[i].name: 0x070000 + i for i in range(len(location_rows))}
@@ -61,6 +62,7 @@ class OSRSWorld(World):
     starting_area_item: str
 
     locations_by_category: typing.Dict[str, typing.List[LocationRow]]
+    available_QP_locations: typing.List[str]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -75,6 +77,7 @@ class OSRSWorld(World):
         self.starting_area_item = ""
 
         self.locations_by_category = {}
+        self.available_QP_locations = []
 
     def generate_early(self) -> None:
         location_categories = [location_row.category for location_row in location_rows]
@@ -90,9 +93,9 @@ class OSRSWorld(World):
 
         rnd = self.random
         starting_area = self.options.starting_area
-        
+
         #UT specific override, if we are in normal gen, resolve starting area, we will get it from slot_data in UT
-        if not hasattr(self.multiworld, "generation_is_fake"): 
+        if not hasattr(self.multiworld, "generation_is_fake"):
             if starting_area.value == StartingArea.option_any_bank:
                 self.starting_area_item = rnd.choice(starting_area_dict)
             elif starting_area.value < StartingArea.option_chunksanity:
@@ -127,7 +130,6 @@ class OSRSWorld(World):
             starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
             starting_entrance.connect(self.region_name_to_data[starting_area_region])
 
-
     def create_regions(self) -> None:
         """
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done
@@ -145,7 +147,8 @@ class OSRSWorld(World):
 
         # Removes the word "Area: " from the item name to get the region it applies to.
         # I figured tacking "Area: " at the beginning would make it _easier_ to tell apart. Turns out it made it worse
-        if self.starting_area_item != "": #if area hasn't been set, then we shouldn't connect it
+        # if area hasn't been set, then we shouldn't connect it
+        if self.starting_area_item != "":
             if self.starting_area_item in chunksanity_special_region_names:
                 starting_area_region = chunksanity_special_region_names[self.starting_area_item]
             else:
@@ -164,11 +167,8 @@ class OSRSWorld(World):
                 entrance.connect(self.region_name_to_data[parsed_outbound])
 
                 item_name = self.region_rows_by_name[parsed_outbound].itemReq
-                if "*" not in outbound_region_name and "*" not in item_name:
-                    entrance.access_rule = lambda state, item_name=item_name: state.has(item_name, self.player)
-                    continue
-
-                self.generate_special_rules_for(entrance, region_row, outbound_region_name)
+                entrance.access_rule = lambda state, item_name=item_name.replace("*",""): state.has(item_name, self.player)
+                generate_special_rules_for(entrance, region_row, outbound_region_name, self.player, self.options)
 
             for resource_region in region_row.resources:
                 if not resource_region:
@@ -178,321 +178,34 @@ class OSRSWorld(World):
                 if "*" not in resource_region:
                     entrance.connect(self.region_name_to_data[resource_region])
                 else:
-                    self.generate_special_rules_for(entrance, region_row, resource_region)
                     entrance.connect(self.region_name_to_data[resource_region.replace('*', '')])
+                generate_special_rules_for(entrance, region_row, resource_region, self.player, self.options)
 
         self.roll_locations()
 
-    def generate_special_rules_for(self, entrance, region_row, outbound_region_name):
-        # print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
-        if outbound_region_name == RegionNames.Cooks_Guild:
-            item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
-            cooking_level_rule = self.get_skill_rule("cooking", 32)
-            entrance.access_rule = lambda state: state.has(item_name, self.player) and \
-                                                 cooking_level_rule(state)
-            if self.options.brutal_grinds:
-                cooking_level_32_regions = {
-                    RegionNames.Milk,
-                    RegionNames.Egg,
-                    RegionNames.Shrimp,
-                    RegionNames.Wheat,
-                    RegionNames.Windmill,
-                }
-            else:
-                # Level 15 cooking and higher requires level 20 fishing.
-                fishing_level_20_regions = {
-                    RegionNames.Shrimp,
-                    RegionNames.Port_Sarim,
-                }
-                cooking_level_32_regions = {
-                    RegionNames.Milk,
-                    RegionNames.Egg,
-                    RegionNames.Shrimp,
-                    RegionNames.Wheat,
-                    RegionNames.Windmill,
-                    RegionNames.Fly_Fish,
-                    *fishing_level_20_regions,
-                }
-            for region_name in cooking_level_32_regions:
-                self.multiworld.register_indirect_condition(self.get_region(region_name), entrance)
-            return
-        if outbound_region_name == RegionNames.Crafting_Guild:
-            item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
-            crafting_level_rule = self.get_skill_rule("crafting", 40)
-            entrance.access_rule = lambda state: state.has(item_name, self.player) and \
-                                                 crafting_level_rule(state)
-            if self.options.brutal_grinds:
-                crafting_level_40_regions = {
-                    # can_spin
-                    RegionNames.Sheep,
-                    RegionNames.Spinning_Wheel,
-                    # can_pot
-                    RegionNames.Clay_Rock,
-                    RegionNames.Barbarian_Village,
-                    # can_tan
-                    RegionNames.Milk,
-                    RegionNames.Al_Kharid,
-                }
-            else:
-                mould_access_regions = {
-                    RegionNames.Al_Kharid,
-                    RegionNames.Rimmington,
-                }
-                smithing_level_20_regions = {
-                    RegionNames.Bronze_Ores,
-                    RegionNames.Iron_Rock,
-                    RegionNames.Furnace,
-                    RegionNames.Anvil,
-                }
-                smithing_level_40_regions = {
-                    *smithing_level_20_regions,
-                    RegionNames.Coal_Rock,
-                }
-                crafting_level_40_regions = {
-                    # can_tan
-                    RegionNames.Milk,
-                    RegionNames.Al_Kharid,
-                    # can_silver
-                    RegionNames.Silver_Rock,
-                    RegionNames.Furnace,
-                    *mould_access_regions,
-                    # can_smelt_silver
-                    *smithing_level_20_regions,
-                    # can_gold
-                    RegionNames.Gold_Rock,
-                    RegionNames.Furnace,
-                    *mould_access_regions,
-                    # can_smelt_gold
-                    *smithing_level_40_regions,
-                }
-            for region_name in crafting_level_40_regions:
-                self.multiworld.register_indirect_condition(self.get_region(region_name), entrance)
-            return
-        if outbound_region_name == RegionNames.Corsair_Cove:
-            item_name = self.region_rows_by_name[outbound_region_name].itemReq.replace('*', '')
-            # Need to be able to start Corsair Curse in addition to having the item
-            entrance.access_rule = lambda state: state.has(item_name, self.player) and \
-                                                 state.can_reach(RegionNames.Falador_Farm, "Region", self.player)
-            self.multiworld.register_indirect_condition(
-                self.multiworld.get_region(RegionNames.Falador_Farm, self.player), entrance)
-
-            return
-        if outbound_region_name == "Camdozaal*":
-            item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
-            entrance.access_rule = lambda state: state.has(item_name, self.player) and \
-                                                 state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-            return
-        if region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
-            entrance.access_rule = lambda state: state.has(ItemNames.QP_Dorics_Quest, self.player)
-            return
-        # Special logic for canoes
-        canoe_regions = [RegionNames.Lumbridge, RegionNames.South_Of_Varrock, RegionNames.Barbarian_Village,
-                         RegionNames.Edgeville, RegionNames.Wilderness]
-        if region_row.name in canoe_regions:
-            # Skill rules for greater distances
-            woodcutting_rule_d1 = self.get_skill_rule("woodcutting", 12)
-            woodcutting_rule_d2 = self.get_skill_rule("woodcutting", 27)
-            woodcutting_rule_d3 = self.get_skill_rule("woodcutting", 42)
-            woodcutting_rule_all = self.get_skill_rule("woodcutting", 57)
-
-            def add_indirect_conditions_for_woodcutting_levels(entrance, *levels: int):
-                if self.options.brutal_grinds:
-                    # No access to specific regions required.
-                    return
-                # Currently, each level requirement requires everything from the previous level requirements, so the
-                # maximum level requirement can be taken.
-                max_level = max(levels, default=0)
-                max_level = min(max_level, self.options.max_woodcutting_level.value)
-                if 15 <= max_level < 30:
-                    self.multiworld.register_indirect_condition(self.get_region(RegionNames.Oak_Tree), entrance)
-                elif 30 <= max_level:
-                    self.multiworld.register_indirect_condition(self.get_region(RegionNames.Oak_Tree), entrance)
-                    self.multiworld.register_indirect_condition(self.get_region(RegionNames.Willow_Tree), entrance)
-
-            if region_row.name == RegionNames.Lumbridge:
-                # Canoe Tree access for the Location
-                if outbound_region_name == RegionNames.Canoe_Tree:
-                    entrance.access_rule = \
-                        lambda state: (state.can_reach_region(RegionNames.South_Of_Varrock, self.player)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
-                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
-                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
-                                       and woodcutting_rule_all(state) and self.options.max_woodcutting_level >= 57)
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42, 57)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
-                # Access to other chunks based on woodcutting settings
-                # South of Varrock does not need to be checked, because it's already adjacent
-                if outbound_region_name == RegionNames.Barbarian_Village:
-                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
-                                                         and self.options.max_woodcutting_level >= 27
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
-                if outbound_region_name == RegionNames.Edgeville:
-                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
-                                                         and self.options.max_woodcutting_level >= 42
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
-                if outbound_region_name == RegionNames.Wilderness:
-                    entrance.access_rule = lambda state: woodcutting_rule_all(state) \
-                                                         and self.options.max_woodcutting_level >= 57
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 57)
-
-            if region_row.name == RegionNames.South_Of_Varrock:
-                if outbound_region_name == RegionNames.Canoe_Tree:
-                    entrance.access_rule = \
-                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
-                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
-                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42)
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
-                # Access to other chunks based on woodcutting settings
-                # Lumbridge does not need to be checked, because it's already adjacent
-                if outbound_region_name == RegionNames.Barbarian_Village:
-                    entrance.access_rule = lambda state: woodcutting_rule_d1(state) \
-                                                         and self.options.max_woodcutting_level >= 12
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 12)
-                if outbound_region_name == RegionNames.Edgeville:
-                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
-                                                         and self.options.max_woodcutting_level >= 27
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
-                if outbound_region_name == RegionNames.Wilderness:
-                    entrance.access_rule = lambda state: woodcutting_rule_all(state) \
-                                                         and self.options.max_woodcutting_level >= 42
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
-            if region_row.name == RegionNames.Barbarian_Village:
-                if outbound_region_name == RegionNames.Canoe_Tree:
-                    entrance.access_rule = \
-                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
-                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
-                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27)
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
-                # Access to other chunks based on woodcutting settings
-                if outbound_region_name == RegionNames.Lumbridge:
-                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
-                                                         and self.options.max_woodcutting_level >= 27
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
-                if outbound_region_name == RegionNames.South_Of_Varrock:
-                    entrance.access_rule = lambda state: woodcutting_rule_d1(state) \
-                                                         and self.options.max_woodcutting_level >= 12
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 12)
-                # Edgeville does not need to be checked, because it's already adjacent
-                if outbound_region_name == RegionNames.Wilderness:
-                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
-                                                         and self.options.max_woodcutting_level >= 42
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
-            if region_row.name == RegionNames.Edgeville:
-                if outbound_region_name == RegionNames.Canoe_Tree:
-                    entrance.access_rule = \
-                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
-                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
-                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
-                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12) or \
-                                      (state.can_reach_region(RegionNames.Wilderness)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12)
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Wilderness, self.player), entrance)
-                # Access to other chunks based on woodcutting settings
-                if outbound_region_name == RegionNames.Lumbridge:
-                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
-                                                         and self.options.max_woodcutting_level >= 42
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
-                if outbound_region_name == RegionNames.South_Of_Varrock:
-                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
-                                                         and self.options.max_woodcutting_level >= 27
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
-                # Barbarian Village does not need to be checked, because it's already adjacent
-                # Wilderness does not need to be checked, because it's already adjacent
-            if region_row.name == RegionNames.Wilderness:
-                if outbound_region_name == RegionNames.Canoe_Tree:
-                    entrance.access_rule = \
-                        lambda state: (state.can_reach_region(RegionNames.Lumbridge, self.player)
-                                       and woodcutting_rule_all(state) and self.options.max_woodcutting_level >= 57) or \
-                                      (state.can_reach_region(RegionNames.South_Of_Varrock)
-                                       and woodcutting_rule_d3(state) and self.options.max_woodcutting_level >= 42) or \
-                                      (state.can_reach_region(RegionNames.Barbarian_Village)
-                                       and woodcutting_rule_d2(state) and self.options.max_woodcutting_level >= 27) or \
-                                      (state.can_reach_region(RegionNames.Edgeville)
-                                       and woodcutting_rule_d1(state) and self.options.max_woodcutting_level >= 12)
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 12, 27, 42, 57)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Lumbridge, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.South_Of_Varrock, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Barbarian_Village, self.player), entrance)
-                    self.multiworld.register_indirect_condition(
-                        self.multiworld.get_region(RegionNames.Edgeville, self.player), entrance)
-                # Access to other chunks based on woodcutting settings
-                if outbound_region_name == RegionNames.Lumbridge:
-                    entrance.access_rule = lambda state: woodcutting_rule_all(state) \
-                                                         and self.options.max_woodcutting_level >= 57
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 57)
-                if outbound_region_name == RegionNames.South_Of_Varrock:
-                    entrance.access_rule = lambda state: woodcutting_rule_d3(state) \
-                                                         and self.options.max_woodcutting_level >= 42
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 42)
-                if outbound_region_name == RegionNames.Barbarian_Village:
-                    entrance.access_rule = lambda state: woodcutting_rule_d2(state) \
-                                                         and self.options.max_woodcutting_level >= 27
-                    add_indirect_conditions_for_woodcutting_levels(entrance, 27)
-                # Edgeville does not need to be checked, because it's already adjacent
+    def task_within_skill_levels(self, skills_required):
+        # Loop through each required skill. If any of its requirements are out of the defined limit, return false
+        for skill in skills_required:
+            max_level_for_skill = getattr(self.options, f"max_{skill.skill.lower()}_level")
+            if skill.level > max_level_for_skill:
+                return False
+        return True
 
     def roll_locations(self):
-        locations_required = 0
         generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
+        locations_required = 0
         for item_row in item_rows:
             locations_required += item_row.amount
 
         locations_added = 1  # At this point we've already added the starting area, so we start at 1 instead of 0
 
-        # Quests are always added
+        # Quests are always added first, before anything else is rolled
         for i, location_row in enumerate(location_rows):
             if location_row.category in {"quest", "points", "goal"}:
-                self.create_and_add_location(i)
-                if location_row.category == "quest":
-                    locations_added += 1
+                if self.task_within_skill_levels(location_row.skills):
+                    self.create_and_add_location(i)
+                    if location_row.category == "quest":
+                        locations_added += 1
 
         # Build up the weighted Task Pool
         rnd = self.random
@@ -516,10 +229,9 @@ class OSRSWorld(World):
         task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
                       "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
         for task_type in task_types:
-            max_level_for_task_type = getattr(self.options, f"max_{task_type}_level")
             max_amount_for_task_type = getattr(self.options, f"max_{task_type}_tasks")
             tasks_for_this_type = [task for task in self.locations_by_category[task_type]
-                                   if task.skills[0].level <= max_level_for_task_type]
+                                   if self.task_within_skill_levels(task.skills)]
             if not self.options.progressive_tasks:
                 rnd.shuffle(tasks_for_this_type)
             else:
@@ -568,6 +280,7 @@ class OSRSWorld(World):
                 self.add_location(task)
                 locations_added += 1
 
+
     def add_location(self, location):
         index = [i for i in range(len(location_rows)) if location_rows[i].name == location.name][0]
         self.create_and_add_location(index)
@@ -586,11 +299,15 @@ class OSRSWorld(World):
 
     def create_and_add_location(self, row_index) -> None:
         location_row = location_rows[row_index]
-        # print(f"Adding task {location_row.name}")
+
+        # Quest Points are handled differently now, but in case this gets fed an older version of the data sheet,
+        # the points might still be listed in a different row
+        if location_row.category == "points":
+            return
 
         # Create Location
         location_id = self.base_id + row_index
-        if location_row.category == "points" or location_row.category == "goal":
+        if location_row.category == "goal":
             location_id = None
         location = OSRSLocation(self.player, location_row.name, location_id)
         self.location_name_to_data[location_row.name] = location
@@ -602,6 +319,14 @@ class OSRSWorld(World):
         location.parent_region = region
         region.locations.append(location)
 
+        # If it's a quest, generate a "Points" location we'll add an event to
+        if location_row.category == "quest":
+            points_name = location_row.name.replace("Quest:", "Points:")
+            points_location = OSRSLocation(self.player, points_name)
+            self.location_name_to_data[points_name] = points_location
+            points_location.parent_region = region
+            region.locations.append(points_location)
+
     def set_rules(self) -> None:
         """
         called to set access and item rules on locations and entrances.
@@ -612,18 +337,26 @@ class OSRSWorld(World):
                             "Witchs_Potion", "Knights_Sword", "Goblin_Diplomacy", "Pirates_Treasure",
                             "Rune_Mysteries", "Misthalin_Mystery", "Corsair_Curse", "X_Marks_the_Spot",
                             "Below_Ice_Mountain"]
-        for qp_attr_name in quest_attr_names:
-            loc_name = getattr(LocationNames, f"QP_{qp_attr_name}")
-            item_name = getattr(ItemNames, f"QP_{qp_attr_name}")
-            self.multiworld.get_location(loc_name, self.player) \
-                .place_locked_item(self.create_event(item_name))
 
         for quest_attr_name in quest_attr_names:
             qp_loc_name = getattr(LocationNames, f"QP_{quest_attr_name}")
+            qp_loc = self.location_name_to_data.get(qp_loc_name)
+
             q_loc_name = getattr(LocationNames, f"Q_{quest_attr_name}")
-            add_rule(self.multiworld.get_location(qp_loc_name, self.player), lambda state, q_loc_name=q_loc_name: (
-                self.multiworld.get_location(q_loc_name, self.player).can_reach(state)
-            ))
+            q_loc = self.location_name_to_data.get(q_loc_name)
+
+            # Checks to make sure the task is actually in the list before trying to create its rules
+            if qp_loc and q_loc:
+                # Create the QP Event Item
+                item_name = getattr(ItemNames, f"QP_{quest_attr_name}")
+                qp_loc.place_locked_item(self.create_event(item_name))
+
+                # If a quest is excluded, don't actually consider it for quest point progression
+                if q_loc_name not in self.options.exclude_locations:
+                    self.available_QP_locations.append(item_name)
+
+                # Set the access rule for the QP Location
+                add_rule(qp_loc, lambda state, loc=q_loc: (loc.can_reach(state)))
 
         # place "Victory" at "Dragon Slayer" and set collection as win condition
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player) \
@@ -639,7 +372,7 @@ class OSRSWorld(World):
                          lambda state, region_required=region_required: state.can_reach(region_required, "Region",
                                                                                         self.player))
             for skill_req in location_row.skills:
-                add_rule(location, self.get_skill_rule(skill_req.skill, skill_req.level))
+                add_rule(location, get_skill_rule(skill_req.skill, skill_req.level, self.player, self.options))
             for item_req in location_row.items:
                 add_rule(location, lambda state, item_req=item_req: state.has(item_req, self.player))
             if location_row.qp:
@@ -664,124 +397,8 @@ class OSRSWorld(World):
 
     def quest_points(self, state):
         qp = 0
-        for qp_event in QP_Items:
+        for qp_event in self.available_QP_locations:
             if state.has(qp_event, self.player):
                 qp += int(qp_event[0])
         return qp
 
-    """
-    Ensures a target level can be reached with available resources
-    """
-
-    def get_skill_rule(self, skill, level) -> CollectionRule:
-        if skill.lower() == "fishing":
-            if self.options.brutal_grinds or level < 5:
-                return lambda state: state.can_reach(RegionNames.Shrimp, "Region", self.player)
-            if level < 20:
-                return lambda state: state.can_reach(RegionNames.Shrimp, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Port_Sarim, "Region", self.player)
-            else:
-                return lambda state: state.can_reach(RegionNames.Shrimp, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Port_Sarim, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Fly_Fish, "Region", self.player)
-        if skill.lower() == "mining":
-            if self.options.brutal_grinds or level < 15:
-                return lambda state: state.can_reach(RegionNames.Bronze_Ores, "Region", self.player) or \
-                                     state.can_reach(RegionNames.Clay_Rock, "Region", self.player)
-            else:
-                # Iron is the best way to train all the way to 99, so having access to iron is all you need to check for
-                return lambda state: (state.can_reach(RegionNames.Bronze_Ores, "Region", self.player) or
-                                      state.can_reach(RegionNames.Clay_Rock, "Region", self.player)) and \
-                                     state.can_reach(RegionNames.Iron_Rock, "Region", self.player)
-        if skill.lower() == "woodcutting":
-            if self.options.brutal_grinds or level < 15:
-                # I've checked. There is not a single chunk in the f2p that does not have at least one normal tree.
-                # Even the desert.
-                return lambda state: True
-            if level < 30:
-                return lambda state: state.can_reach(RegionNames.Oak_Tree, "Region", self.player)
-            else:
-                return lambda state: state.can_reach(RegionNames.Oak_Tree, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Willow_Tree, "Region", self.player)
-        if skill.lower() == "smithing":
-            if self.options.brutal_grinds:
-                return lambda state: state.can_reach(RegionNames.Bronze_Ores, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Furnace, "Region", self.player)
-            if level < 15:
-                # Lumbridge has a special bronze-only anvil. This is the only anvil of its type so it's not included
-                # in the "Anvil" resource region. We still need to check for it though.
-                return lambda state: state.can_reach(RegionNames.Bronze_Ores, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Furnace, "Region", self.player) and \
-                                     (state.can_reach(RegionNames.Anvil, "Region", self.player) or
-                                      state.can_reach(RegionNames.Lumbridge, "Region", self.player))
-            if level < 30:
-                # For levels between 15 and 30, the lumbridge anvil won't cut it. Only a real one will do
-                return lambda state: state.can_reach(RegionNames.Bronze_Ores, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Iron_Rock, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Furnace, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Anvil, "Region", self.player)
-            else:
-                return lambda state: state.can_reach(RegionNames.Bronze_Ores, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Iron_Rock, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Coal_Rock, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Furnace, "Region", self.player) and \
-                                     state.can_reach(RegionNames.Anvil, "Region", self.player)
-        if skill.lower() == "crafting":
-            # Crafting is really complex. Need a lot of sub-rules to make this even remotely readable
-            def can_spin(state):
-                return state.can_reach(RegionNames.Sheep, "Region", self.player) and \
-                    state.can_reach(RegionNames.Spinning_Wheel, "Region", self.player)
-
-            def can_pot(state):
-                return state.can_reach(RegionNames.Clay_Rock, "Region", self.player) and \
-                    state.can_reach(RegionNames.Barbarian_Village, "Region", self.player)
-
-            def can_tan(state):
-                return state.can_reach(RegionNames.Milk, "Region", self.player) and \
-                    state.can_reach(RegionNames.Al_Kharid, "Region", self.player)
-
-            def mould_access(state):
-                return state.can_reach(RegionNames.Al_Kharid, "Region", self.player) or \
-                    state.can_reach(RegionNames.Rimmington, "Region", self.player)
-
-            def can_silver(state):
-
-                return state.can_reach(RegionNames.Silver_Rock, "Region", self.player) and \
-                    state.can_reach(RegionNames.Furnace, "Region", self.player) and mould_access(state)
-
-            def can_gold(state):
-                return state.can_reach(RegionNames.Gold_Rock, "Region", self.player) and \
-                    state.can_reach(RegionNames.Furnace, "Region", self.player) and mould_access(state)
-
-            if self.options.brutal_grinds or level < 5:
-                return lambda state: can_spin(state) or can_pot(state) or can_tan(state)
-
-            can_smelt_gold = self.get_skill_rule("smithing", 40)
-            can_smelt_silver = self.get_skill_rule("smithing", 20)
-            if level < 16:
-                return lambda state: can_pot(state) or can_tan(state) or (can_gold(state) and can_smelt_gold(state))
-            else:
-                return lambda state: can_tan(state) or (can_silver(state) and can_smelt_silver(state)) or \
-                                     (can_gold(state) and can_smelt_gold(state))
-        if skill.lower() == "cooking":
-            if self.options.brutal_grinds or level < 15:
-                return lambda state: state.can_reach(RegionNames.Milk, "Region", self.player) or \
-                                     state.can_reach(RegionNames.Egg, "Region", self.player) or \
-                                     state.can_reach(RegionNames.Shrimp, "Region", self.player) or \
-                                     (state.can_reach(RegionNames.Wheat, "Region", self.player) and
-                                      state.can_reach(RegionNames.Windmill, "Region", self.player))
-            else:
-                can_catch_fly_fish = self.get_skill_rule("fishing", 20)
-                return lambda state: state.can_reach(RegionNames.Fly_Fish, "Region", self.player) and \
-                                     can_catch_fly_fish(state) and \
-                                     (state.can_reach(RegionNames.Milk, "Region", self.player) or
-                                      state.can_reach(RegionNames.Egg, "Region", self.player) or
-                                      state.can_reach(RegionNames.Shrimp, "Region", self.player) or
-                                      (state.can_reach(RegionNames.Wheat, "Region", self.player) and
-                                       state.can_reach(RegionNames.Windmill, "Region", self.player)))
-        if skill.lower() == "runecraft":
-            return lambda state: state.has(ItemNames.QP_Rune_Mysteries, self.player)
-        if skill.lower() == "magic":
-            return lambda state: state.can_reach(RegionNames.Mind_Runes, "Region", self.player)
-
-        return lambda state: True
