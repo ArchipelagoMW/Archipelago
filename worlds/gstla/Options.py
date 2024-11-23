@@ -386,11 +386,20 @@ class AnemosAccess(Choice):
     default = 0
 
 class TrapChance(Range):
-    """The chance for any filler item in the pool to be replaced by a trap."""
+    """The chance for filler items in the pool to be replaced by a trap. This can vary from about 70 to 130 traps depending on your settings. Have fun!
+    Note that this does not replace every filler item as some options force add filler items to the pool."""
     display_name = "Trap Chance"
     range_start = 0
     range_end = 100
     default = 0
+    
+class MimicTrapWeight(Range):
+    """The weight for a trap to be a Mimic. As not all vanilla locations can be mimics.
+    Note: Enabling this will force a number of filler items to the pool to ensure generation success due to locations not supporting mimics."""
+    display_name = "Mimic Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 5
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
@@ -474,3 +483,4 @@ class GSTLAOptions(PerGameCommonOptions):
 
     #traps
     trap_chance: TrapChance
+    mimic_trap_weight: MimicTrapWeight

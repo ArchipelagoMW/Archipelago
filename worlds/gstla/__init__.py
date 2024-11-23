@@ -14,7 +14,7 @@ from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Seque
 from .Options import GSTLAOptions
 from BaseClasses import Item, ItemClassification
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
-    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_items, AP_PROG_PLACEHOLDER_ITEM
+    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_item, AP_PROG_PLACEHOLDER_ITEM
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
@@ -94,6 +94,10 @@ class GSTLAWorld(World):
         if self.options.start_with_reveal == 1:
             self.multiworld.push_precollected(create_item(ItemName.Reveal, self.player))
 
+        #When we add more traps and none are enabled we should force trap_chance to off
+        if self.options.mimic_trap_weight == 0:
+            self.options.trap_chance = 0
+
         if self.options.trap_chance > 0:
             self.options.show_items_outside_chest.value = 0
 
@@ -127,8 +131,8 @@ class GSTLAWorld(World):
         pass
 
     def get_filler_item_name(self) -> str:
-        filler_list = get_filler_items()
-        return self.random.choice(filler_list)
+        filler_item = get_filler_item(self)
+        return filler_item.name
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         ret = dict()
