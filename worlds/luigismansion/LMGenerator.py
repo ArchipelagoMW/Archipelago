@@ -24,25 +24,25 @@ class InvalidCleanISOError(Exception): pass
 
 
 class LuigisMansionRandomizer:
-    def __init__(self, clean_iso_path, randomized_output_folder, export_disc_to_folder, ap_output_data=None, debug_flag=False):
+    def __init__(self, clean_iso_path: str, randomized_output_folder: str, export_disc_to_folder=False,
+                 ap_output_data=None, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
+        select_aplm_path = ap_output_data
         self.debug = debug_flag
         if self.debug:
-            selected_iso_path = filedialog.askopenfilename(title="Select your NA iso file",
+            self.clean_iso_path = filedialog.askopenfilename(title="Select your NA iso file",
                                                              filetypes=[("ISO Files", ".iso")])
-            self.clean_iso_path = Path(selected_iso_path)
-            self.randomized_output_folder = os.path.dirname(self.clean_iso_path)
+            self.randomized_output_folder = Path(os.path.dirname(self.clean_iso_path))
             if ap_output_data is None:
                 select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
-                                                                 filetypes=[("APLM Files", ".aplm")])
-                with open(os.path.abspath(select_aplm_path)) as stream:
-                    self.output_data = yaml.safe_load(stream)
-            else:
-                self.output_data = ap_output_data
+                                                             filetypes=[("APLM Files", ".aplm")])
         else:
             self.clean_iso_path = clean_iso_path
             self.randomized_output_folder = randomized_output_folder
-            self.output_data = ap_output_data
+
+        with open(os.path.abspath(select_aplm_path)) as stream:
+            self.output_data = yaml.safe_load(stream)
+
         self.export_disc_to_folder = export_disc_to_folder
 
         # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
@@ -218,11 +218,11 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # Update all custom events
-        list_events = ["04", "12", "17", "22", "29", "32", "50", "61", "63", "64"]
+        list_events = ["03", "04", "12", "17", "22", "29", "32", "38", "50", "61", "63", "64", "82"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
-        with open('worlds/luigismansion/data/custom_events/event48.txt', 'r') as file:
+        with open('data/custom_events/event48.txt', 'r') as file:
             lines = file.read()
 
         if self.output_data["Options"]["hidden_mansion"] == 1:
@@ -272,7 +272,7 @@ class LuigisMansionRandomizer:
                             ".txt' in provided RAC file.")
 
         if check_local_folder:
-            with open('worlds/luigismansion/data/custom_events/event' + event_number + '.txt', 'rb') as file:
+            with open('data/custom_events/event' + event_number + '.txt', 'rb') as file:
                 lines = io.BytesIO(file.read())
         else:
             lines = io.BytesIO(non_local_str.encode('utf-8'))
