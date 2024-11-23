@@ -1,7 +1,7 @@
 import asyncio
 import time
 import traceback
-from typing import Any
+from typing import Any, Optional
 
 import dolphin_memory_engine
 
@@ -365,8 +365,11 @@ async def dolphin_sync_task(ctx: LMContext):
             continue
 
 
-def main(connect=None, password=None):
-    Utils.init_logging("The Wind Waker Client")
+def main(output_data: Optional[str] = None, connect=None, password=None):
+    Utils.init_logging("Luigi's Mansion Client")
+
+    if output_data:
+        save_patched_iso(output_data)
 
     async def _main(connect, password):
         ctx = LMContext(connect, password)
