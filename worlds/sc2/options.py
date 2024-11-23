@@ -370,7 +370,7 @@ class EnableVoidTrade(Toggle):
     Enables the Void Trade Wormhole to be built from the Advanced Construction tab of SCVs, Drones and Probes.  
     This structure allows sending units to the Archipelago server, as well as buying random units from the server.  
     
-    This feature requires at least two Starcraft II worlds.  You cannot receive units that you sent.
+    Note: Always disabled if there is no other Starcraft II world with Void Trade enabled in the multiworld.  You cannot receive units that you send.
     """
     display_name = "Enable Void Trade"
 

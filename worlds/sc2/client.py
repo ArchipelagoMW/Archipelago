@@ -975,12 +975,12 @@ class SC2Context(CommonContext):
             # Make sure we're not past the waiting limit
             # SC2 needs to be notified within 10 minutes (training time of the dummy units)
             if self.trade_lock_start is not None:
-                if lock - self.trade_lock_start >= TRADE_LOCK_WAIT_LIMIT:
+                if self.last_bot.time - self.trade_lock_start >= TRADE_LOCK_WAIT_LIMIT:
                     self.trade_lock_wait = 0
                     self.trade_lock_start = None
                     return None
             elif keep_trying:
-                self.trade_lock_start = lock
+                self.trade_lock_start = self.last_bot.time
 
             message_uuid = str(uuid.uuid4())
             await self.send_msgs([{
