@@ -21,11 +21,10 @@ from .Regions import *
 from . import Rules
 
 
-def run_client():
+def run_client(*args):
     print("Running LM Client")
     from .LMClient import main  # lazy import
-
-    launch_subprocess(main, name="LuigiMansionClient")
+    launch_subprocess(main, name="LuigiMansionClient", args=args)
 
 
 components.append(

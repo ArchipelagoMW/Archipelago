@@ -1,4 +1,5 @@
 import asyncio
+import os
 import time
 import traceback
 from typing import Any, Optional
@@ -8,7 +9,7 @@ import dolphin_memory_engine
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
-from settings import get_settings
+from settings import get_settings, Settings
 from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
@@ -66,13 +67,22 @@ GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 SLOT_NAME_ADDR = 0x803FE88C
 
 
+def get_base_rom_path(file_name: str = "") -> str:
+    options: Settings = get_settings()
+    if not file_name:
+        file_name = options["luigismansion_options"]["iso_file"]
+    if not os.path.exists(file_name):
+        file_name = Utils.user_path(file_name)
+    return file_name
+
+
 def save_patched_iso(output_data):
-    iso_path = get_settings().luigis_mansion_settings#filetypes=[("ISO Files", ".iso")])
-    directory_to_iso = os.path.dirname(iso_path)
-    iso_name = Path(iso_path).stem
+    iso_path = get_base_rom_path()  # fix
+    directory_to_iso, file = os.path.split(output_data)
+    file_name = os.path.splitext(file)[0]
 
     if iso_path:
-        LuigisMansionRandomizer(iso_path, directory_to_iso + "\\" + iso_name + "-randomized.iso", False, output_data)
+        LuigisMansionRandomizer(iso_path, os.path.join(directory_to_iso, file_name + ".iso"), False, output_data)
 
 
 class LMCommandProcessor(ClientCommandProcessor):
@@ -368,7 +378,7 @@ async def dolphin_sync_task(ctx: LMContext):
 def main(output_data: Optional[str] = None, connect=None, password=None):
     Utils.init_logging("Luigi's Mansion Client")
 
-    if output_data:
+    if output_data :
         save_patched_iso(output_data)
 
     async def _main(connect, password):
