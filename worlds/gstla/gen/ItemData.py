@@ -554,21 +554,6 @@ ItemData(163, "Prophet's Hat", ItemClassification.filler, 737128, ItemType.Helm,
 ItemData(164, "Lure Cap", ItemClassification.filler, 737172, ItemType.Helm, False),
 ItemData(170, "Mythril Circlet", ItemClassification.filler, 737436, ItemType.Helm, False),
 ItemData(171, "Glittering Tiara", ItemClassification.filler, 737480, ItemType.Helm, False),
-ItemData(184, "Hermes' Water", ItemClassification.filler, 738052, ItemType.Consumable, False),
-ItemData(185, "Empty Bottle", ItemClassification.filler, 738096, ItemType.Consumable, False),
-ItemData(220, "Venus Star", ItemClassification.filler, 739636, ItemType.KeyItem, False),
-ItemData(221, "Mercury Star", ItemClassification.filler, 739680, ItemType.KeyItem, False),
-ItemData(223, "Mythril Bag (Jupiter)", ItemClassification.filler, 739768, ItemType.KeyItem, False),
-ItemData(224, "Mythril Bag (Empty)", ItemClassification.filler, 739812, ItemType.KeyItem, False),
-ItemData(225, "Small Jewel", ItemClassification.filler, 739856, ItemType.Consumable, False),
-ItemData(228, "Game Ticket", ItemClassification.filler, 739988, ItemType.Consumable, False),
-ItemData(230, "Dragon's Eye", ItemClassification.filler, 740076, ItemType.Consumable, False),
-ItemData(232, "Anchor Charm", ItemClassification.filler, 740164, ItemType.Consumable, False),
-ItemData(234, "Cell Key", ItemClassification.filler, 740252, ItemType.Consumable, False),
-ItemData(235, "Boat Ticket", ItemClassification.filler, 740296, ItemType.Consumable, False),
-ItemData(237, "Mystic Draught", ItemClassification.filler, 740384, ItemType.Consumable, False),
-ItemData(245, "Mythril Bag (Mars & Jupiter)", ItemClassification.filler, 740736, ItemType.KeyItem, False),
-ItemData(246, "Jupiter Star", ItemClassification.filler, 740780, ItemType.KeyItem, False),
 ItemData(250, "Mythril Shirt", ItemClassification.filler, 740956, ItemType.Shirt, False),
 ItemData(251, "Silk Shirt", ItemClassification.filler, 741000, ItemType.Shirt, False),
 ItemData(252, "Running Shirt", ItemClassification.filler, 741044, ItemType.Shirt, False),
@@ -609,8 +594,6 @@ ItemData(411, "Aroma Ring", ItemClassification.filler, 748040, ItemType.Ring, Fa
 ItemData(412, "Rainbow Ring", ItemClassification.filler, 748084, ItemType.Ring, False),
 ItemData(413, "Soul Ring", ItemClassification.filler, 748128, ItemType.Ring, False),
 ItemData(415, "Golden Ring", ItemClassification.filler, 748216, ItemType.Ring, False),
-ItemData(450, "Signal Whistle", ItemClassification.filler, 749756, ItemType.Consumable, False),
-ItemData(457, "Large Bread", ItemClassification.filler, 750064, ItemType.Consumable, False),
 
 ]
 
@@ -637,8 +620,14 @@ ItemData(33151, "Coins 383", ItemClassification.filler, 994460, ItemType.Consuma
 
 ]
 
-remainder: List[ItemData] = [
+misc: List[ItemData] = [
     ItemData(0, "Empty", ItemClassification.filler, 729956, ItemType.Consumable, False),
+    ItemData(231, "Bone", ItemClassification.filler, 740120, ItemType.Consumable, False),
+    ItemData(449, "Laughing Fungus", ItemClassification.filler, 749712, ItemType.Consumable, False),
+    
+]
+
+remainder: List[ItemData] = [
     ItemData(180, "Herb", ItemClassification.filler, 737876, ItemType.Consumable, False),
     ItemData(181, "Nut", ItemClassification.filler, 737920, ItemType.Consumable, False),
     ItemData(182, "Vial", ItemClassification.filler, 737964, ItemType.Consumable, False),
@@ -647,20 +636,18 @@ remainder: List[ItemData] = [
     ItemData(226, "Smoke Bomb", ItemClassification.filler, 739900, ItemType.Consumable, False),
     ItemData(227, "Sleep Bomb", ItemClassification.filler, 739944, ItemType.Consumable, False),
     ItemData(229, "Lucky Medal", ItemClassification.progression_skip_balancing, 740032, ItemType.Consumable, False),
-    ItemData(231, "Bone", ItemClassification.filler, 740120, ItemType.Consumable, False),
     ItemData(233, "Corn", ItemClassification.filler, 740208, ItemType.Consumable, False),
     ItemData(236, "Sacred Feather", ItemClassification.filler, 740340, ItemType.Consumable, False),
     ItemData(238, "Oil Drop", ItemClassification.filler, 740428, ItemType.Consumable, False),
     ItemData(239, "Weasel's Claw", ItemClassification.filler, 740472, ItemType.Consumable, False),
     ItemData(240, "Bramble Seed", ItemClassification.filler, 740516, ItemType.Consumable, False),
     ItemData(241, "Crystal Powder", ItemClassification.filler, 740560, ItemType.Consumable, False),
-    ItemData(449, "Laughing Fungus", ItemClassification.filler, 749712, ItemType.Consumable, False),
     
 ]
 
 
 
-all_items: List[ItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + mimics + other_progression + other_useful + shop_only + forge_only + lucky_only + non_vanilla + vanilla_coins + remainder 
+all_items: List[ItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + mimics + other_progression + other_useful + shop_only + forge_only + lucky_only + non_vanilla + vanilla_coins + misc + remainder 
 assert len(all_items) == len({x.id for x in all_items})
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}

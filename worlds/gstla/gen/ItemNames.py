@@ -9,8 +9,6 @@ class ItemName(str, Enum):
     Nut = "Nut"
     Vial = "Vial"
     Potion = "Potion"
-    Hermes_Water = "Hermes' Water"
-    Empty_Bottle = "Empty Bottle"
     Psy_Crystal = "Psy Crystal"
     Antidote = "Antidote"
     Elixir = "Elixir"
@@ -22,19 +20,12 @@ class ItemName(str, Enum):
     Hard_Nut = "Hard Nut"
     Mint = "Mint"
     Lucky_Pepper = "Lucky Pepper"
-    Small_Jewel = "Small Jewel"
     Smoke_Bomb = "Smoke Bomb"
     Sleep_Bomb = "Sleep Bomb"
-    Game_Ticket = "Game Ticket"
     Lucky_Medal = "Lucky Medal"
-    Dragons_Eye = "Dragon's Eye"
     Bone = "Bone"
-    Anchor_Charm = "Anchor Charm"
     Corn = "Corn"
-    Cell_Key = "Cell Key"
-    Boat_Ticket = "Boat Ticket"
     Sacred_Feather = "Sacred Feather"
-    Mystic_Draught = "Mystic Draught"
     Oil_Drop = "Oil Drop"
     Weasels_Claw = "Weasel's Claw"
     Bramble_Seed = "Bramble Seed"
@@ -56,14 +47,12 @@ class ItemName(str, Enum):
     Center_Prong = "Center Prong"
     Healing_Fungus = "Healing Fungus"
     Laughing_Fungus = "Laughing Fungus"
-    Signal_Whistle = "Signal Whistle"
     Dancing_Idol = "Dancing Idol"
     Pretty_Stone = "Pretty Stone"
     Red_Cloth = "Red Cloth"
     Milk = "Milk"
     Lil_Turtle = "Li'l Turtle"
     Aquarius_Stone = "Aquarius Stone"
-    Large_Bread = "Large Bread"
     Sea_Gods_Tear = "Sea God's Tear"
     Ruin_Key = "Ruin Key"
     Magma_Ball = "Magma Ball"
@@ -399,13 +388,7 @@ class ItemName(str, Enum):
     Trainers_Whip = "Trainer's Whip"
     Tomegathericon = "Tomegathericon"
     # KeyItem
-    Venus_Star = "Venus Star"
-    Mercury_Star = "Mercury Star"
     Mythril_Bag_Mars = "Mythril Bag (Mars)"
-    Mythril_Bag_Jupiter = "Mythril Bag (Jupiter)"
-    Mythril_Bag_Empty = "Mythril Bag (Empty)"
-    Mythril_Bag_Mars_Jupiter = "Mythril Bag (Mars & Jupiter)"
-    Jupiter_Star = "Jupiter Star"
     Mars_Star = "Mars Star"
     # Mimic
     Mimic_0 = "Mimic 0"
@@ -701,8 +684,6 @@ item_id_by_name: Dict[int, ItemName] = {
     "Nut": 181,
     "Vial": 182,
     "Potion": 183,
-    "Hermes' Water": 184,
-    "Empty Bottle": 185,
     "Psy Crystal": 186,
     "Antidote": 187,
     "Elixir": 188,
@@ -731,24 +712,13 @@ item_id_by_name: Dict[int, ItemName] = {
     "Grindstone": 3736,
     "Hover Jade": 3737,
     "Teleport Lapis": 3740,
-    "Venus Star": 220,
-    "Mercury Star": 221,
     "Mythril Bag (Mars)": 222,
-    "Mythril Bag (Jupiter)": 223,
-    "Mythril Bag (Empty)": 224,
-    "Small Jewel": 225,
     "Smoke Bomb": 226,
     "Sleep Bomb": 227,
-    "Game Ticket": 228,
     "Lucky Medal": 229,
-    "Dragon's Eye": 230,
     "Bone": 231,
-    "Anchor Charm": 232,
     "Corn": 233,
-    "Cell Key": 234,
-    "Boat Ticket": 235,
     "Sacred Feather": 236,
-    "Mystic Draught": 237,
     "Oil Drop": 238,
     "Weasel's Claw": 239,
     "Bramble Seed": 240,
@@ -756,8 +726,6 @@ item_id_by_name: Dict[int, ItemName] = {
     "Black Crystal": 242,
     "Red Key": 243,
     "Blue Key": 244,
-    "Mythril Bag (Mars & Jupiter)": 245,
-    "Jupiter Star": 246,
     "Mars Star": 247,
     "Mythril Shirt": 250,
     "Silk Shirt": 251,
@@ -930,14 +898,12 @@ item_id_by_name: Dict[int, ItemName] = {
     "Tomegathericon": 445,
     "Healing Fungus": 448,
     "Laughing Fungus": 449,
-    "Signal Whistle": 450,
     "Dancing Idol": 451,
     "Pretty Stone": 452,
     "Red Cloth": 453,
     "Milk": 454,
     "Li'l Turtle": 455,
     "Aquarius Stone": 456,
-    "Large Bread": 457,
     "Sea God's Tear": 458,
     "Ruin Key": 459,
     "Magma Ball": 460,
@@ -1233,8 +1199,6 @@ name_by_item_id: Dict[ItemName, int] = {
     181: "Nut",
     182: "Vial",
     183: "Potion",
-    184: "Hermes' Water",
-    185: "Empty Bottle",
     186: "Psy Crystal",
     187: "Antidote",
     188: "Elixir",
@@ -1263,24 +1227,13 @@ name_by_item_id: Dict[ItemName, int] = {
     3736: "Grindstone",
     3737: "Hover Jade",
     3740: "Teleport Lapis",
-    220: "Venus Star",
-    221: "Mercury Star",
     222: "Mythril Bag (Mars)",
-    223: "Mythril Bag (Jupiter)",
-    224: "Mythril Bag (Empty)",
-    225: "Small Jewel",
     226: "Smoke Bomb",
     227: "Sleep Bomb",
-    228: "Game Ticket",
     229: "Lucky Medal",
-    230: "Dragon's Eye",
     231: "Bone",
-    232: "Anchor Charm",
     233: "Corn",
-    234: "Cell Key",
-    235: "Boat Ticket",
     236: "Sacred Feather",
-    237: "Mystic Draught",
     238: "Oil Drop",
     239: "Weasel's Claw",
     240: "Bramble Seed",
@@ -1288,8 +1241,6 @@ name_by_item_id: Dict[ItemName, int] = {
     242: "Black Crystal",
     243: "Red Key",
     244: "Blue Key",
-    245: "Mythril Bag (Mars & Jupiter)",
-    246: "Jupiter Star",
     247: "Mars Star",
     250: "Mythril Shirt",
     251: "Silk Shirt",
@@ -1462,14 +1413,12 @@ name_by_item_id: Dict[ItemName, int] = {
     445: "Tomegathericon",
     448: "Healing Fungus",
     449: "Laughing Fungus",
-    450: "Signal Whistle",
     451: "Dancing Idol",
     452: "Pretty Stone",
     453: "Red Cloth",
     454: "Milk",
     455: "Li'l Turtle",
     456: "Aquarius Stone",
-    457: "Large Bread",
     458: "Sea God's Tear",
     459: "Ruin Key",
     460: "Magma Ball",

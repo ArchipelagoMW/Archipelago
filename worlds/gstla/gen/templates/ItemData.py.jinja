@@ -155,6 +155,12 @@ vanilla_coins: List[ItemData] = [
 {% endfor %}
 ]
 
+misc: List[ItemData] = [
+    {% for item in misc -%}
+    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}{#, {{item.event_type}}#}),
+    {% endfor %}
+]
+
 remainder: List[ItemData] = [
     {% for item in remainder -%}
     ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}{#, {{item.event_type}}#}),
@@ -169,7 +175,7 @@ vanilla_item_ids: Set[int] = {
 }
 #}
 
-all_items: List[ItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + mimics + other_progression + other_useful + shop_only + forge_only + lucky_only + non_vanilla + vanilla_coins + remainder {# + unique_items + gear#}
+all_items: List[ItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + mimics + other_progression + other_useful + shop_only + forge_only + lucky_only + non_vanilla + vanilla_coins + misc + remainder {# + unique_items + gear#}
 assert len(all_items) == len({x.id for x in all_items})
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}

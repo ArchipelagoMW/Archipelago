@@ -131,6 +131,27 @@ USEFUL_ITEM_GROUPS: Dict[str, Set[int]] = {
     }
 }
 
+# Items that should not be part of the item data at all
+EXCLUDED_ITEMS = {
+    184, # Hermes' Water
+    185, # Empty Bottle
+    220, # Venus Star
+    221, # Mercury Star
+    223, # Mythril Bag (Jupiter)
+    224, # Mythril Bag (Empty)
+    225, # Small Jewel
+    228, # Game Ticket
+    230, # Dragon's Eye
+    232, # Anchor Charm
+    234, # Cell Key
+    235, # Boat Ticket
+    237, # Mystic Draught
+    245, # Mythril Bag (Mars & Jupiter)
+    246, # Jupiter Star
+    450, # Signal Whistle
+    457, # Large Bread
+}
+
 def main():
     env = Environment(
         loader=PackageLoader("gen"),
@@ -202,9 +223,10 @@ def generate_item_names(env: Environment, data: GameData):
             item.id: {
                 'item':  item,
                 'name': data.item_names[item.id]
-            } for item in data.raw_item_data
+            } for item in data.raw_item_data if item.id not in EXCLUDED_ITEMS
         }
-        name_list = [{'name': data.item_names[x.id].str_name, 'id': x.id} for x in data.raw_item_data]
+        name_list = [{'name': data.item_names[x.id].str_name, 'id': x.id}
+                     for x in data.raw_item_data if x.id not in EXCLUDED_ITEMS]
         summons = [x for x in data.raw_summon_data]
         name_list += [{'name': x.name, 'id': x.id} for x in summons]
         events = [data.item_names[event.event_id] for event in data.events.values()]
@@ -242,8 +264,14 @@ def generate_item_data(env: Environment, data: GameData):
         lucky_only = []
         non_vanilla = []
         vanilla_coins = []
+        misc = []
         remainder = []
         vanilla_item_ids = { x.vanilla_contents for x in data.raw_location_data if x.vanilla_name != 'Mimic'}
+        misc_ids = {
+            0, # Empty
+            231, # Bone
+            449, # Laughing Fungus
+        }
         shop_only_ids = set()
         forge_only_ids = set()
         lucky_only_ids = set()
@@ -261,7 +289,9 @@ def generate_item_data(env: Environment, data: GameData):
             vanilla_item_ids.add(id)
         for item in data.raw_item_data:
             datum = {'item': item, 'name': names[item.id]}
-            if item.is_mimic:
+            if item.id in EXCLUDED_ITEMS:
+                continue
+            elif item.is_mimic:
                 mimics.append(datum)
             elif item.item_type == ItemType.PsyenergyItem:
                 psyitems.append(datum)
@@ -279,6 +309,8 @@ def generate_item_data(env: Environment, data: GameData):
                 vanilla_coins.append(datum)
             elif item.id not in vanilla_item_ids:
                 non_vanilla.append(datum)
+            elif item.id in misc_ids:
+                misc.append(datum)
             else:
                 remainder.append(datum)
         useful_remainder_ids = set()
@@ -293,6 +325,7 @@ def generate_item_data(env: Environment, data: GameData):
             characters=characters,
             mimics=mimics,
             other_prog=other_prog,
+            misc=misc,
             other_useful=other_useful,
             useful_groups=USEFUL_ITEM_GROUPS,
             useful_remainder=useful_remainder_ids,
