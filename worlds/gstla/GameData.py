@@ -130,12 +130,15 @@ class LocationName(NamedTuple):
     str_name: str
 
     @classmethod
-    def from_loc_data(cls, loc: LocationDatum, suffix: str = ''):
+    def from_loc_data(cls, loc: LocationDatum, value: str = None, suffix: str = ''):
         key = loc.map_name
         val = loc.vanilla_name + suffix
         py_name = key.replace(' ', '_').replace("'", '')
         str_name = val.replace(' ', '_').replace("'", '').replace('???', 'Empty')
-        return LocationName(loc.id, loc.flag, py_name + '_' + str_name, py_name + ' - ' + str_name)
+        if value is None:
+            return LocationName(loc.id, loc.flag, py_name + '_' + str_name, py_name + ' - ' + str_name)
+        else:
+            return LocationName(loc.id, loc.flag, py_name + '_' + str_name, value)
 
 class ItemName(NamedTuple):
     id: int
@@ -370,14 +373,55 @@ class GameData:
                     SummonDatum(summon['id'] + 0xF00, summon['name'], summon['addr'])
                 )
 
+    def _recurse_tracker_data(self,
+                              tracker_name_data: Dict[int, str],
+                              tracker_names: Dict[str, int],
+                              node: Dict[str, any]) -> None:
+        if 'sections' not in node:
+            if 'children' in node:
+                for child in node['children']:
+                    self._recurse_tracker_data(tracker_name_data, tracker_names, child)
+            return
+        sections = node['sections']
+        area_name = node['name']
+        for i in range(len(sections)):
+            section = sections[i]
+            flags = node['children'][i]['name']
+            for flag_str in flags.split(","):
+                flag = int(flag_str, 16)
+                if flag in tracker_name_data:
+                    continue
+                tracker_name = f"{area_name} - {section['name']}"
+                # count = names[tracker_name] + 1
+                tracker_names[tracker_name] += 1
+                count = tracker_names[tracker_name]
+                suffix = ''
+                if count > 1:
+                    suffix = ' ' + num_words[count]
+                tracker_name_data[flag] = tracker_name + suffix
+
     def _setup_location_names(self):
         names: defaultdict[str, int] = defaultdict(lambda: 0)
+        tracker_name_data: Dict[int, str] = dict()
+        tracker_names: defaultdict[str, int] = defaultdict(lambda: 0)
+        with open(os.path.join(SCRIPT_DIR, 'data', 'locations.json')) as infile:
+            tracker_data = json.load(infile)[0]
+        self._recurse_tracker_data(tracker_name_data, tracker_names, tracker_data)
         for loc in self.raw_location_data:
-            loc_name = LocationName.from_loc_data(loc)
+            tracker_name = tracker_name_data.get(loc.rando_flag, None)
+            # tracker_name = None
+            if tracker_name is not None:
+                loc_name = LocationName.from_loc_data(loc, tracker_name)
+            else:
+                loc_name = LocationName.from_loc_data(loc)
             count = names[loc_name.py_name] + 1
             names[loc_name.py_name] = count
             if count > 1:
-                loc_name = LocationName.from_loc_data(loc, ' ' + num_words[count])
+                if tracker_name is not None:
+                    loc_name = LocationName.from_loc_data(loc, tracker_name, ' ' + num_words[count])
+                else:
+                    loc_name = LocationName.from_loc_data(loc, None, ' ' + num_words[count])
+                # loc_name = LocationName.from_loc_data(loc, None, ' ' + num_words[count])
             assert loc_name.id not in self.location_names, "Id: %s, Name: %s" % (hex(loc_name.id), loc_name.str_name)
             self.location_names[loc_name.id] = loc_name
 
