@@ -1,7 +1,6 @@
 import os
 from dataclasses import fields
 from itertools import count
-import random
 from typing import Dict, ClassVar
 
 import yaml
@@ -35,12 +34,15 @@ components.append(
 
 
 class LuigisMansionSettings(settings.Group):
-    class RomFile(settings.UserFilePath):
+    class ISOFile(settings.LocalFilePath):
+        """
+        Locate your Luigi's Mansion ISO
+        """
         description = "Luigi's Mansion (NTSC-U) ISO"
         copy_to = "Luigi's Mansion (NTSC-U).iso"
         md5s = ["6e3d9ae0ed2fbd2f77fa1ca09a60c494"]
 
-    rom_file: RomFile = RomFile(RomFile.copy_to)
+    iso_file: ISOFile = ISOFile(ISOFile.copy_to)
 
 
 class LMWeb(WebWorld):
@@ -472,10 +474,7 @@ class LMWorld(World):
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False))
 
-        # Patch ISO
-        LuigisMansionRandomizer("", "", False, output_data, True)
-
-    # TODO: UPDATE FOR LM IF NEEDED
+    # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
         # return {
         #     "progression_dungeons": self.options.progression_dungeons.value,
