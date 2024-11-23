@@ -875,8 +875,7 @@ class DeprecateDict(dict):
         if self.should_error:
             deprecate(self.log_message)
         elif __debug__:
-            import warnings
-            warnings.warn(self.log_message)
+            warnings.warn(self.log_message, stacklevel=2)
         return super().__getitem__(item)
 
 
