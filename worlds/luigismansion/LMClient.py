@@ -82,7 +82,7 @@ def save_patched_iso(output_data):
     file_name = os.path.splitext(file)[0]
 
     if iso_path:
-        LuigisMansionRandomizer(iso_path, os.path.join(directory_to_iso, file_name + ".iso"), False, output_data)
+        LuigisMansionRandomizer(iso_path, os.path.join(directory_to_iso, file_name + ".iso"), output_data)
 
 
 class LMCommandProcessor(ClientCommandProcessor):
