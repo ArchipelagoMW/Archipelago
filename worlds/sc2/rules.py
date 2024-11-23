@@ -528,58 +528,59 @@ class SC2Logic:
     def zerg_maw_requirement(self, state: CollectionState) -> bool:
         """
         Ability to cross defended gaps, deal with skytoss, and avoid costly losses.
-        :param state:
-        :return:
         """
         return (
                 state.has(item_names.SWARM_QUEEN, self.player)
-                and (state.has(item_names.NYDUS_WORM, self.player)
-                     or (self.advanced_tactics and state.has(item_names.OVERLORD_VENTRAL_SACS, self.player)))
+                # Cross the gap
+                and (state.has_any((item_names.NYDUS_WORM, item_names.OVERLORD_VENTRAL_SACS), self.player)
+                     or (self.advanced_tactics and state.has(item_names.YGGDRASIL, self.player)))
+                # Air to ground
                 and (self.morph_brood_lord(state) or self.morph_guardian(state))
+                # Ground to air
                 and (
-                        state.has(item_names.INFESTOR, self.player)
-                        or self.morph_tyrannozor(state)
-                        or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_RESOURCE_EFFICIENCY, item_names.SWARM_HOST_PRESSURIZED_GLANDS}, self.player)
-                        or state.has_all({item_names.HYDRALISK, item_names.HYDRALISK_RESOURCE_EFFICIENCY}, self.player)
-                        or state.has_all({item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE}, self.player)
-                    )
+                    state.has(item_names.INFESTOR, self.player)
+                    or self.morph_tyrannozor(state)
+                    or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_RESOURCE_EFFICIENCY, item_names.SWARM_HOST_PRESSURIZED_GLANDS}, self.player)
+                    or state.has_all({item_names.HYDRALISK, item_names.HYDRALISK_RESOURCE_EFFICIENCY}, self.player)
+                    or state.has_all({item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE}, self.player)
+                )
+                # Survives rip-field
                 and (state.has_any({item_names.ABERRATION, item_names.ROACH, item_names.ULTRALISK}, self.player)
                      or self.morph_tyrannozor(state))
+                # Air-to-air
                 and (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR, item_names.INFESTED_LIBERATOR, item_names.BROOD_QUEEN}, self.player))
+                # Upgrades / general
                 and self.zerg_competent_comp(state)
         )
 
     def protoss_maw_requirement(self, state: CollectionState) -> bool:
         """
         Ability to cross defended gaps and deal with skytoss.
-        :param state:
-        :return:
         """
         return (
-                (state.has(item_names.WARP_PRISM, self.player)
-                 or (self.advanced_tactics and state.has(item_names.ARBITER, self.player))
-                 )
-                and self.protoss_common_unit_anti_armor_air(state)
-                and self.protoss_fleet(state)
+            (
+                state.has(item_names.WARP_PRISM, self.player)
+                or (self.advanced_tactics and state.has(item_names.ARBITER, self.player))
+            )
+            and self.protoss_common_unit_anti_armor_air(state)
+            and self.protoss_fleet(state)
         )
 
     def terran_sustainable_mech_heal(self, state: CollectionState) -> bool:
         """
         Can heal mech units without spending resources
-        :param state:
-        :return:
         """
         return (
-                state.has(item_names.SCIENCE_VESSEL, self.player)
-                or (
-                    state.has_any({item_names.MEDIC, item_names.FIELD_RESPONSE_THETA}, self.player)
-                    and state.has(item_names.MEDIC_ADAPTIVE_MEDPACKS, self.player)
+            state.has(item_names.SCIENCE_VESSEL, self.player)
+            or (
+                state.has_any({item_names.MEDIC, item_names.FIELD_RESPONSE_THETA}, self.player)
+                and state.has(item_names.MEDIC_ADAPTIVE_MEDPACKS, self.player)
             )
-                or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3
-                or (self.advanced_tactics
+            or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 3
+            or (self.advanced_tactics
                 and (
-                            state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
-                            or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2
+                    state.has_all({item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE}, self.player)
+                    or state.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL, self.player) >= 2
                 )
             )
         )
