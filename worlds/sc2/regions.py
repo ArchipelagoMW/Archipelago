@@ -423,7 +423,7 @@ def make_hopscotch(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
 
 def create_dynamic_mission_order(world: 'SC2World', mission_order_type: int, mission_pools: SC2MOGenMissionPools) -> Dict[str, Dict[str, Any]]:
     num_missions = min(mission_pools.get_allowed_mission_count(), get_option_value(world, "maximum_campaign_size"))
-    num_missions = max(2, num_missions)
+    num_missions = max(1, num_missions)
     if mission_order_type == MissionOrder.option_golden_path:
         return make_golden_path(world, num_missions)
     
