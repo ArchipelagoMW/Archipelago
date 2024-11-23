@@ -178,9 +178,13 @@ class StardewValleyWorld(World):
         self.setup_player_events()
         self.setup_victory()
 
-        # This is really a best-effort to get the total progression items count. The actual total can be impacted by the start_inventory_from_pool when items
-        # are removed from the bool, and probably when plando is applied as well... But since this is only used to spread grindy items across spheres, it's not
-        # a big deal if it's not 100% accurate.
+        # This is really a best-effort to get the total progression items count. It is mostly used to spread grinds across spheres are push back locations that
+        # only become available after months or years in game. In most cases, not having the exact count will not impact the logic.
+        #
+        # The actual total can be impacted by the start_inventory_from_pool, when items are removed from the pool but not from the total. The is also a bug
+        # with plando where additional progression items can be created without being accounted for, which impact the real amount of progression items. This can
+        # ultimately create unwinnable seeds where some items (like Blueberry seeds) are locked in Shipsanity: Blueberry, but world is deemed winnable as the
+        # winning rule only check the count of collected progression items.
         self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
         self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
         self.total_progression_items += sum(1 for i in created_items if i.advancement)
