@@ -275,6 +275,9 @@ class LMWorld(World):
     def generate_early(self):
         if self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
+        elif self.options.enemizer == 2:
+            for i in len(self.ghost_affected_regions):
+                self.ghost_affected_regions[i] = "No Element"
 
         if self.options.door_rando == 1:
             k = list(self.open_doors.keys())
