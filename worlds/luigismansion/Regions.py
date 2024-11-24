@@ -8,21 +8,24 @@ from ..AutoWorld import World
 GHOST_TO_ROOM = {
     "Wardrobe": "No Element",
     "Laundry Room": "No Element",
-    "Hidden Room": "No Element",  # "Ice",
+    "Hidden Room": "Ice",  # "Ice",
     "Storage Room": "No Element",
-    "Kitchen": "No Element",  # "Ice",
+    "Kitchen": "Ice",  # "Ice",
     "1F Bathroom": "No Element",
     "Courtyard": "No Element",
+    "Ballroom": "No Element",
     "Tea Room": "No Element",
-    "2F Washroom": "No Element",  # "Fire",
+    "2F Washroom": "Fire",  # "Fire",
     "Projection Room": "No Element",
-    "Safari Room": "No Element",  # "Water",
+    "Safari Room": "Water",  # "Water",
     "Cellar": "No Element",
     "Roof": "No Element",
     "Sealed Room": "No Element",
     "Armory": "No Element",
-    "Pipe Room": "No Element"
+    "Pipe Room": "No Element",
+    "Artist's Studio": "No Element"
 }
+
 
 def set_ghost_type(world: World, ghost_list: dict):
     for region_name in ghost_list:
@@ -32,7 +35,8 @@ def set_ghost_type(world: World, ghost_list: dict):
         ghost_list.update({region_name: ghost_type})
 
 
-def connect(multiworld: MultiWorld, player: int, source: str, target: str, key: Optional[str] = None, doorid: Optional[int] = None,
+def connect(multiworld: MultiWorld, player: int, source: str, target: str, key: Optional[str] = None,
+            doorid: Optional[int] = None,
             rule: Optional[Callable] = None):
     source_region = multiworld.get_region(source, player)
     target_region = multiworld.get_region(target, player)
@@ -50,15 +54,15 @@ def connect(multiworld: MultiWorld, player: int, source: str, target: str, key: 
             if multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Fire":  # if fire, require water
                 add_rule(connection, lambda state: Rules.can_fst_water(state, player), "and")
                 for r in Rules.WATER_SPIRIT_SPOT:
-                    multiworld.register_indirect_condition(r, connection)
+                    multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
             elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Water":  # if water, require ice
                 add_rule(connection, lambda state: Rules.can_fst_ice(state, player), "and")
                 for r in Rules.ICE_SPIRIT_SPOT:
-                    multiworld.register_indirect_condition(r, connection)
+                    multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
             elif multiworld.worlds[player].ghost_affected_regions[region_to_type] == "Ice":  # if ice, require fire
                 add_rule(connection, lambda state: Rules.can_fst_fire(state, player), "and")
                 for r in Rules.FIRE_SPIRIT_SPOT:
-                    multiworld.register_indirect_condition(r, connection)
+                    multiworld.register_indirect_condition(multiworld.get_region(r, player), connection)
             else:
                 pass
 
@@ -77,7 +81,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "2F Front Hallway", "Study", "Study Key", 32)
     connect(multiworld, player, "2F Front Hallway", "Master Bedroom", "Master Bedroom Key", 31)
     connect(multiworld, player, "2F Front Hallway", "Nursery", "Nursery Key", 27)
-    connect(multiworld, player, "2F Front Hallway", "Twins' Room","Twins Bedroom Key", 28)
+    connect(multiworld, player, "2F Front Hallway", "Twins' Room", "Twins Bedroom Key", 28)
     connect(multiworld, player, "1F Hallway", "Basement Stairwell", "Basement Stairwell Key", 9)
     connect(multiworld, player, "1F Hallway", "2F Stairwell", "Lower 2F Stairwell Key", 74)
     connect(multiworld, player, "1F Hallway", "Courtyard", "Club Key", 42)
@@ -85,7 +89,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "1F Hallway", "Conservatory", "Conservatory Key", 21)
     connect(multiworld, player, "1F Hallway", "Billiards Room", "Billiards Key", 17)
     connect(multiworld, player, "1F Hallway", "1F Washroom", "1F Washroom Key", 20,
-            lambda state: state.has("Boo", player, multiworld.worlds[player].options.washroom_boo_count),)
+            lambda state: state.has("Boo", player, multiworld.worlds[player].options.washroom_boo_count))
     connect(multiworld, player, "1F Hallway", "Ballroom", "Ballroom Key", 15)
     connect(multiworld, player, "1F Hallway", "Dining Room", "Dining Room Key", 14)
     connect(multiworld, player, "1F Hallway", "Laundry Room", "Laundry Key", 7)
@@ -120,25 +124,25 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Sitting Room", "Guest Room", "Guest Room", 30,
             lambda state: Rules.can_fst_fire(state, player) and Rules.can_fst_water(state, player))
     connect(multiworld, player, "Safari Room", "3F Right Hallway", "3F Right Hallway Key", 55)
-    connect(multiworld, player, "3F Right Hallway", "Artist's Studio","Art Studio Key", 63)
+    connect(multiworld, player, "3F Right Hallway", "Artist's Studio", "Art Studio Key", 63)
     connect(multiworld, player, "3F Right Hallway", "Balcony", "Balcony Key", 62,
-            lambda state:  state.has("Boo", player,multiworld.worlds[player].options.balcony_boo_count))
+            lambda state: state.has("Boo", player, multiworld.worlds[player].options.balcony_boo_count))
     connect(multiworld, player, "Balcony", "3F Left Hallway", "Diamond Key", 59,
             lambda state: Rules.can_fst_ice(state, player))
-    connect(multiworld, player, "3F Left Hallway", "Armory","Armory Key", 51)
+    connect(multiworld, player, "3F Left Hallway", "Armory", "Armory Key", 51)
     connect(multiworld, player, "3F Left Hallway", "Telephone Room", "Telephone Room Key", 52)
-    connect(multiworld, player, "Telephone Room", "Clockwork Room","Clockwork Key", 53)
+    connect(multiworld, player, "Telephone Room", "Clockwork Room", "Clockwork Key", 53)
     connect(multiworld, player, "Armory", "Ceramics Studio", "Ceramics Studio Key", 50)
     connect(multiworld, player, "Clockwork Room", "Roof")
     connect(multiworld, player, "Roof", "Sealed Room"),
     connect(multiworld, player, "Basement Stairwell", "Breaker Room", "Breaker Room Key", 71)
-    connect(multiworld, player, "Basement Stairwell", "Cellar","Cellar Key", 68)
+    connect(multiworld, player, "Basement Stairwell", "Cellar", "Cellar Key", 68)
     connect(multiworld, player, "Cellar", "Basement Hallway", "Basement Hallway Key", 67)
-    connect(multiworld, player, "Basement Hallway", "Cold Storage","Cold Storage Key", 65)
-    connect(multiworld, player, "Basement Hallway", "Pipe Room","Pipe Room Key", 69)
+    connect(multiworld, player, "Basement Hallway", "Cold Storage", "Cold Storage Key", 65)
+    connect(multiworld, player, "Basement Hallway", "Pipe Room", "Pipe Room Key", 69)
     connect(multiworld, player, "Basement Hallway", "Spade Hallway", "Spade Hallway Key", 70)
     connect(multiworld, player, "Spade Hallway", "Secret Altar", "Spade Key", 72,
-            lambda state:  state.has("Boo", player, multiworld.worlds[player].options.final_boo_count))
+            lambda state: state.has("Boo", player, multiworld.worlds[player].options.final_boo_count))
 
 
 REGION_LIST = {
