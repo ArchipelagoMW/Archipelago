@@ -98,6 +98,7 @@ def can_fst_fire(state, player):
                                                         state.can_reach("Dining Room", "Region", player) or
                                                         state.can_reach("2F Rear Hallway", "Region", player) or
                                                         state.can_reach("Sitting Room", "Region", player) or
+                                                        state.can_reach("Graveyard", "Region", player) or
                                                         state.can_reach("Roof", "Region", player))
 
 
