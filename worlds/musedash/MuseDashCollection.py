@@ -135,6 +135,3 @@ class MuseDashCollections:
             return True
 
         return False
-
-    def get_songs(self) -> List[str]:
-        return [k for k, v in self.song_items]
