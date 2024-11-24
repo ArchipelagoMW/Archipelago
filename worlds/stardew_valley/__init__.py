@@ -131,7 +131,7 @@ class StardewValleyWorld(World):
                                                 self.options)
 
         def add_location(name: str, code: Optional[int], region: str):
-            region = world_regions[region]
+            region: Region = world_regions[region]
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 

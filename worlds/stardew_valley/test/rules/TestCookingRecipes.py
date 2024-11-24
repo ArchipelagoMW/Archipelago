@@ -14,7 +14,7 @@ class TestRecipeLearnLogic(SVTestBase):
 
     def test_can_learn_qos_recipe(self):
         location = "Cook Radish Salad"
-        rule = self.world.logic.region.can_reach_location(location)
+        rule = self.get_can_reach_location_rule(location)
         self.assert_rule_false(rule, self.multiworld.state)
 
         self.multiworld.state.collect(self.create_item("Progressive House"))
@@ -39,7 +39,7 @@ class TestRecipeReceiveLogic(SVTestBase):
 
     def test_can_learn_qos_recipe(self):
         location = "Cook Radish Salad"
-        rule = self.world.logic.region.can_reach_location(location)
+        rule = self.get_can_reach_location_rule(location)
         self.assert_rule_false(rule, self.multiworld.state)
 
         self.multiworld.state.collect(self.create_item("Progressive House"))
@@ -61,7 +61,7 @@ class TestRecipeReceiveLogic(SVTestBase):
 
     def test_get_chefsanity_check_recipe(self):
         location = "Radish Salad Recipe"
-        rule = self.world.logic.region.can_reach_location(location)
+        rule = self.get_can_reach_location_rule(location)
         self.assert_rule_false(rule, self.multiworld.state)
 
         self.multiworld.state.collect(self.create_item("Spring"))
