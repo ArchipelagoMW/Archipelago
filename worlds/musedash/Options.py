@@ -156,7 +156,7 @@ class TrapCountPercentage(Range):
 
 
 class SongSet(OptionSet):
-    valid_keys = sorted([x for x in SONG_DATA.keys()])
+    valid_keys = SONG_DATA.keys()
 
 
 class IncludeSongs(SongSet):
