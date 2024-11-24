@@ -319,26 +319,33 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def reset_collection_state(self) -> None:
         self.multiworld.state = self.original_state.copy()
 
-    def get_can_reach_location_rule(self, location_name: str) -> StardewRule:
-        return self.multiworld.get_location(location_name, self.player).can_reach
+    def assert_location_can_be_reached(self, location_name: str) -> None:
+        location = self.multiworld.get_location(location_name, self.player)
+        self.assert_can_reach_location(location, self.multiworld.state)
 
     def assert_location_cannot_be_reached(self, location_name: str) -> None:
         location = self.multiworld.get_location(location_name, self.player)
         self.assert_cannot_reach_location(location, self.multiworld.state)
 
-    def assert_location_can_be_reached(self, location_name: str) -> None:
-        location = self.multiworld.get_location(location_name, self.player)
-        self.assert_can_reach_location(location, self.multiworld.state)
+    def assert_rule_true(self, rule: StardewRule, state: Optional[CollectionState] = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_rule_true(rule, state)
 
     def assert_rule_false(self, rule: StardewRule, state: Optional[CollectionState] = None) -> None:
         if state is None:
             state = self.multiworld.state
         super().assert_rule_false(rule, state)
 
-    def assert_rule_true(self, rule: StardewRule, state: Optional[CollectionState] = None) -> None:
+    def assert_reach_location_true(self, location: Location, state: Optional[CollectionState] = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_rule_true(rule, state)
+        super().assert_can_reach_location(location, state)
+
+    def assert_reach_location_false(self, location: Location, state: Optional[CollectionState] = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_cannot_reach_location(location, state)
 
 
 pre_generated_worlds = {}

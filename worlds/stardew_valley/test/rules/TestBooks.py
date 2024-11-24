@@ -10,15 +10,13 @@ class TestBooksLogic(SVTestBase):
     def test_need_weapon_for_mapping_cave_systems(self):
         self.collect_lots_of_money(0.5)
 
-        location = self.multiworld.get_location("Read Mapping Cave Systems", self.player)
-
-        self.assert_cannot_reach_location(location, self.multiworld.state)
+        self.assert_location_cannot_be_reached("Read Mapping Cave Systems")
 
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")
-        self.assert_cannot_reach_location(location, self.multiworld.state)
+        self.assert_location_cannot_be_reached("Read Mapping Cave Systems")
 
         self.collect("Progressive Weapon")
-        self.assert_can_reach_location(location, self.multiworld.state)
+        self.assert_location_can_be_reached("Read Mapping Cave Systems")
