@@ -42,7 +42,7 @@ class TestBaseItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
-        all_created_items = self.get_all_created_items()
+        all_created_items = set(self.get_all_created_items())
         progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
@@ -53,19 +53,19 @@ class TestBaseItemGeneration(SVTestBase):
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
     def test_does_not_create_deprecated_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = set(self.get_all_created_items())
         for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
             with self.subTest(f"{deprecated_item.name}"):
                 self.assertNotIn(deprecated_item.name, all_created_items)
 
     def test_does_not_create_more_than_one_maximum_one_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
             with self.subTest(f"{maximum_one_item.name}"):
                 self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
 
-    def test_does_not_create_exactly_two_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+    def test_does_not_create_or_create_two_of_exactly_two_items(self):
+        all_created_items = self.get_all_created_items()
         for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)
@@ -85,7 +85,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
-        all_created_items = self.get_all_created_items()
+        all_created_items = set(self.get_all_created_items())
         progression_items = get_all_permanent_progression_items()
         for progression_item in progression_items:
 
@@ -101,19 +101,19 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
     def test_does_not_create_deprecated_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
             with self.subTest(f"Deprecated item: {deprecated_item.name}"):
                 self.assertNotIn(deprecated_item.name, all_created_items)
 
     def test_does_not_create_more_than_one_maximum_one_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
             with self.subTest(f"{maximum_one_item.name}"):
                 self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
 
     def test_does_not_create_exactly_two_items(self):
-        all_created_items = [item.name for item in self.multiworld.itempool]
+        all_created_items = self.get_all_created_items()
         for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)
