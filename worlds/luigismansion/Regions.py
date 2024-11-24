@@ -36,8 +36,7 @@ def set_ghost_type(world: World, ghost_list: dict):
 
 
 def connect(multiworld: MultiWorld, player: int, source: str, target: str, key: Optional[str] = None,
-            doorid: Optional[int] = None,
-            rule: Optional[Callable] = None):
+            doorid: Optional[int] = None, rule: Optional[Callable] = None, register: Optional[bool] = False):
     source_region = multiworld.get_region(source, player)
     target_region = multiworld.get_region(target, player)
     name = source + " -> " + target
