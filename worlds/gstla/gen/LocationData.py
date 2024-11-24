@@ -820,7 +820,7 @@ the_rest = [
         LocationType.Item, LocationRestriction(0)), # Tundaria Tower Lightning Sword
     LocationData(2373, 2373, 2373, 16384200,
         [16384200, 993776], 128, 441, True, True,
-        LocationType.Item, LocationRestriction(8)), # Tundaria Tower Center Prong
+        LocationType.Item, LocationRestriction(11)), # Tundaria Tower Center Prong
     LocationData(3973, 3973, 3973, 993788,
         [993788], 128, 33133, False, False,
         LocationType.Item, LocationRestriction(0)), # Tundaria Tower 365 coins
