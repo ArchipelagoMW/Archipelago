@@ -124,27 +124,23 @@ class StardewValleyWorld(World):
         if goal_is_island_related and exclude_ginger_island:
             self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
             goal_name = self.options.goal.current_key
-            player_name = self.multiworld.player_name[self.player]
             logger.warning(
-                f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
+                f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({self.player_name})")
 
         if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
             self.options.walnutsanity.value = Walnutsanity.preset_none
-            player_name = self.multiworld.player_name[self.player]
             logger.warning(
-                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({player_name})'s world, so walnutsanity was force disabled")
+                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({self.player_name})'s world, so walnutsanity was force disabled")
 
         if goal_is_perfection and self.options.accessibility != Accessibility.option_full:
             self.options.accessibility.value = Accessibility.option_full
-            player_name = self.player_name
             logger.warning(
-                f"Goal 'Perfection' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({player_name})")
+                f"Goal 'Perfection' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
 
         elif self.options.goal == Goal.option_allsanity and self.options.accessibility != Accessibility.option_full:
             self.options.accessibility.value = Accessibility.option_full
-            player_name = self.multiworld.player_name[self.player]
             logger.warning(
-                f"Goal 'Allsanity' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({player_name})")
+                f"Goal 'Allsanity' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
