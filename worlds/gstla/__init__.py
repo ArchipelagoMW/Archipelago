@@ -116,7 +116,7 @@ class GSTLAWorld(World):
 
         #When we add more traps and none are enabled we should force trap_chance to off
         if self.options.mimic_trap_weight == 0:
-            self.options.trap_chance = 0
+            self.options.trap_chance.value = 0
 
 
         #ensure that if all are set to 0 we force them all to 1, otherwise we can not create filler and clearly they wanted all to be the same weight.
@@ -125,15 +125,15 @@ class GSTLAWorld(World):
         combined_weight += self.options.shop_equipment_filler_weight + self.options.coins_filler_weight + self.options.common_consumable_filler_weight
 
         if combined_weight == 0:
-            self.options.forge_material_filler_weight = 1
-            self.options.rusty_material_filler_weight = 1
-            self.options.stat_boost_filler_weight = 1
-            self.options.uncommon_consumable_filler_weight = 1
-            self.options.forged_equipment_filler_weight = 1
-            self.options.lucky_equipment_filler_weight = 1
-            self.options.shop_equipment_filler_weight = 1
-            self.options.coins_filler_weight = 1
-            self.options.common_consumable_filler_weight = 1
+            self.options.forge_material_filler_weight.value = 1
+            self.options.rusty_material_filler_weight.value = 1
+            self.options.stat_boost_filler_weight.value = 1
+            self.options.uncommon_consumable_filler_weight.value = 1
+            self.options.forged_equipment_filler_weight.value = 1
+            self.options.lucky_equipment_filler_weight.value = 1
+            self.options.shop_equipment_filler_weight.value = 1
+            self.options.coins_filler_weight.value = 1
+            self.options.common_consumable_filler_weight.value = 1
 
         create_filler_pool_weights(self)
         create_trap_pool_weights(self)
