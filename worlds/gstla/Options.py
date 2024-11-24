@@ -395,6 +395,7 @@ class TrapChance(Range):
     
 class MimicTrapWeight(Range):
     """The weight for a trap to be a Mimic. As not all vanilla locations can be mimics.
+    Mimics will drop their vanilla contents which tend to be more useful consumables but can also be things like Game Tickets or Lucky Medals.
     Note: Enabling this will force a number of filler items to the pool to ensure generation success due to locations not supporting mimics."""
     display_name = "Mimic Trap Weight"
     range_start = 0
@@ -402,25 +403,29 @@ class MimicTrapWeight(Range):
     default = 5
 
 class ForgeMaterialsFillerWeight(Range):
-    """The weight for a filler item to be a forge material."""
+    """The weight for a filler item to be a forge material. These will be forged into any of their regular results.
+    Note that forging results are RNG based in the game and the randomizer does not alter this behaviour.
+    Examples of materials are Tear Stone, Sylph Feather, Golem Core, Dark Matter and Orihalcon."""
     display_name = "Forge Material Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 25
 
 class RustyMaterialsFillerWeight(Range):
-    """The weight for a filler item to be a rusty weapon."""
+    """The weight for a filler item to be a rusty weapon. These weapons will forge into their counter parts as per usual. 
+    For example you can find a Rusty Sword which when forged turns into the Soul Brand or a Rusty Staff for a Glower Staff."""
     display_name = "Rusty Material Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 10
 
 class StatBoostFillerWeight(Range):
-    """The weight for a filler item to be a stat boost item."""
+    """The weight for a filler item to be a stat boost item.
+    These are Cookie, Hard Nut, Apple, Mint, Power Bread and Lucky Pepper."""
     display_name = "Stat Boost Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 20
     
 class UncommonConsumableFillerWeight(Range):
     """The weight for a filler item to be an uncommon consumable.
@@ -428,43 +433,47 @@ class UncommonConsumableFillerWeight(Range):
     display_name = "Uncommon Consumable Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 25
     
 class ForgedEquipmentFillerWeight(Range):
-    """The weight for a filler item to be the end result of forging equipment through materials or rusty weapons."""
+    """The weight for a filler item to be the end result of forging equipment through materials or rusty weapons.
+    Examples are Excalibur, Viking Axe, Goblin's Rod, Luna Shield, Astral Circlet and Dragon Boots."""
     display_name = "Forged Equipment Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 0
     
 class LuckyFountainEquipmentFillerWeight(Range):
-    """The weight for a filler item to be a lucky item from the fountain in Lemuria."""
+    """The weight for a filler item to be a lucky item reward from the fountain in Lemuria.
+    Examples of these are Hestia Blade, Mighty Axe, Aegis Shield and Crown of Glory."""
     display_name = "Lucky Fountain Equipment Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 0
 
 class ShopEquipmentFillerWeight(Range):
-    """The weight for a filler item to be equipment from the shop."""
+    """The weight for a filler item to be equipment from the shop.
+    These include the normal things you can buy amongst a few of the artefacts. Think along the lines of Long Sword, Silver Helm, Chain Mail to a Frost Wand."""
     display_name = "Shop Equipment Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 10
 
 class CoinsFillerWeight(Range):
-    """The weight for a filler item to be coins."""
+    """The weight for a filler item to be coins.
+    The coin amounts are the vanilla coin items you can find. These vary from 3 coints to 911 coins. Majority is around or below 300."""
     display_name = "Coin Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 15
 
 class CommonConsumablesFillerWeight(Range):
     """The weight for a filler item to be a common consumable.
-    Examples of these are Herbs, Antidotes, Smoke Bombs and Lucky Medals"""
+    Examples of these are Herbs, Vials, Antidotes, Elixers, Smoke Bombs and Lucky Medals"""
     display_name = "Common Consumable Filler Weight"
     range_start = 0
     range_end = 100
-    default = 5
+    default = 50
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
