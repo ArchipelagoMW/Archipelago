@@ -29,15 +29,6 @@ class MuseDashCollections:
         "Rin Len's Mirrorland",  # Paid DLC not included in Muse Plus
     ]
 
-    DIFF_OVERRIDES: List[str] = [
-        "MuseDash ka nanika hi",
-        "Rush-Hour",
-        "Find this Month's Featured Playlist",
-        "PeroPero in the Universe",
-        "umpopoff",
-        "P E R O P E R O Brother Dance",
-    ]
-
     REMOVED_SONGS = [
         "CHAOS Glitch",
         "FM 17314 SUGAR RADIO",
