@@ -1,12 +1,7 @@
-from .Items import SongData, AlbumData
+from .Items import SongData
 from .MuseDashData import SONG_DATA
-from typing import Dict, List, Set, Optional
+from typing import Dict, List, Set
 from collections import ChainMap
-
-
-def load_text_file(name: str) -> str:
-    import pkgutil
-    return pkgutil.get_data(__name__, name).decode()
 
 
 class MuseDashCollections:
