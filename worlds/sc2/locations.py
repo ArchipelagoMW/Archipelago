@@ -4478,6 +4478,114 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    and logic.zerg_mineral_dump(state)
                                    and logic.zerg_can_grab_ghosts_in_the_fog_east_rock_formation(state))
                            ),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10700, LocationType.VICTORY,
+                           lambda state: (
+                               logic.terran_common_unit(state)
+                               and (
+                                    adv_tactics
+                                    or logic.terran_competent_anti_air(state)
+                               )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Close Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10701, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "East Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10702, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (
+                                           adv_tactics
+                                           or (
+                                                   logic.terran_competent_anti_air(state)
+                                                   and logic.terran_any_air_unit(state)
+                                           )
+                                   )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "West Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10703, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (
+                                           adv_tactics
+                                           or logic.terran_competent_anti_air(state)
+                                   )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Base", SC2_RACESWAP_LOC_ID_OFFSET + 10704, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "Templar Base", SC2_RACESWAP_LOC_ID_OFFSET + 10705, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and (
+                                           adv_tactics
+                                           or logic.terran_competent_anti_air(state)
+                                   )
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10800, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Close Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10801, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "East Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10802, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "West Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10803, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Base", SC2_RACESWAP_LOC_ID_OFFSET + 10804, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GROWING_SHADOW_Z.mission_name, "Templar Base", SC2_RACESWAP_LOC_ID_OFFSET + 10805, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_kerriganless_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10900, LocationType.VICTORY,
+                           logic.terran_spear_of_adun_requirement
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Elite Barracks", SC2_RACESWAP_LOC_ID_OFFSET + 10901, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Elite Factory", SC2_RACESWAP_LOC_ID_OFFSET + 10902, LocationType.VANILLA,
+                           logic.terran_spear_of_adun_requirement
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Elite Starport", SC2_RACESWAP_LOC_ID_OFFSET + 10903, LocationType.VANILLA,
+                           logic.terran_spear_of_adun_requirement
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "North Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 10904, LocationType.EXTRA,
+                           logic.terran_spear_of_adun_requirement
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "East Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 10905, LocationType.EXTRA,
+                           logic.terran_spear_of_adun_requirement
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "South Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 10906, LocationType.EXTRA,
+                           logic.terran_spear_of_adun_requirement
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_T.mission_name, "Southeast Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 10907, LocationType.EXTRA,
+                           logic.terran_spear_of_adun_requirement
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11000, LocationType.VICTORY,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "Baneling Nest", SC2_RACESWAP_LOC_ID_OFFSET + 11001, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "Roach Warren", SC2_RACESWAP_LOC_ID_OFFSET + 11002, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_competent_comp_competent_aa(state)
+                                   and logic.spread_creep(state)
+                           )),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "Infestation Pit", SC2_RACESWAP_LOC_ID_OFFSET + 11003, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_competent_comp_competent_aa(state)
+                                   and logic.spread_creep(state)
+                           )
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "North Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 11004, LocationType.EXTRA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "East Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 11005, LocationType.EXTRA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "South Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 11006, LocationType.EXTRA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "Southeast Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 11007, LocationType.EXTRA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
     ]
 
     beat_events = []

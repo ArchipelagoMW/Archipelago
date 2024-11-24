@@ -161,8 +161,8 @@ class SC2Mission(Enum):
 
     # LotV
     FOR_AIUR = 53, "For Aiur!", SC2Campaign.LOTV, "Aiur", SC2Race.ANY, MissionPools.STARTER, "ap_for_aiur", MissionFlag.Protoss|MissionFlag.NoBuild|MissionFlag.VsZerg
-    THE_GROWING_SHADOW = 54, "The Growing Shadow", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_growing_shadow", MissionFlag.Protoss|MissionFlag.VsPZ
-    THE_SPEAR_OF_ADUN = 55, "The Spear of Adun", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_spear_of_adun", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsPZ
+    THE_GROWING_SHADOW = 54, "The Growing Shadow (Protoss)", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_growing_shadow", MissionFlag.Protoss|MissionFlag.VsPZ|MissionFlag.HasRaceSwap
+    THE_SPEAR_OF_ADUN = 55, "The Spear of Adun (Protoss)", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_spear_of_adun", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsPZ|MissionFlag.HasRaceSwap
     SKY_SHIELD = 56, "Sky Shield", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.EASY, "ap_sky_shield", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.AiTerranAlly
     BROTHERS_IN_ARMS = 57, "Brothers in Arms", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_brothers_in_arms", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsTerran|MissionFlag.AiTerranAlly
     AMON_S_REACH = 58, "Amon's Reach", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.EASY, "ap_amon_s_reach", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsZerg
@@ -284,8 +284,10 @@ class SC2Mission(Enum):
     GHOSTS_IN_THE_FOG_Z = 185, "Ghosts in the Fog (Zerg)", SC2Campaign.PROLOGUE, "_2", SC2Race.ZERG, MissionPools.MEDIUM, "ap_ghosts_in_the_fog", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     # 186/187 - Evil Awoken
     # 188/189 - For Aiur!
-    # 190/191 - The Growing Shadow
-    # 192/193 - The Spear of Adun
+    THE_GROWING_SHADOW_T = 190, "The Growing Shadow (Terran)", SC2Campaign.LOTV, "Aiur", SC2Race.TERRAN, MissionPools.EASY, "ap_the_growing_shadow", MissionFlag.Terran|MissionFlag.VsPZ|MissionFlag.RaceSwap
+    THE_GROWING_SHADOW_Z = 191, "The Growing Shadow (Zerg)", SC2Campaign.LOTV, "Aiur", SC2Race.ZERG, MissionPools.EASY, "ap_the_growing_shadow", MissionFlag.Zerg|MissionFlag.VsPZ|MissionFlag.RaceSwap
+    THE_SPEAR_OF_ADUN_T = 192, "The Spear of Adun (Terran)", SC2Campaign.LOTV, "Aiur", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_spear_of_adun", MissionFlag.Terran|MissionFlag.VsPZ|MissionFlag.RaceSwap
+    THE_SPEAR_OF_ADUN_Z = 193, "The Spear of Adun (Zerg)", SC2Campaign.LOTV, "Aiur", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_spear_of_adun", MissionFlag.Zerg|MissionFlag.VsPZ|MissionFlag.RaceSwap
     # 194/195 - Sky Shield
     # 196/197 - Brothers in Arms
     # 198/199 - Amon's Reach
