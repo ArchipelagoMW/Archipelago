@@ -13,7 +13,7 @@ from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Seque
 from .Option_groups import gstla_option_groups
 from .Option_presets import gstla_options_presets
 from .Options import GSTLAOptions
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification, Tutorial
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
     AP_PLACEHOLDER_ITEM, items_by_id, get_filler_item, AP_PROG_PLACEHOLDER_ITEM, create_filler_pool_weights, create_trap_pool_weights
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
@@ -34,6 +34,17 @@ class GSTLAWeb(WebWorld):
     theme = "jungle"
     option_groups = gstla_option_groups
     options_presets = gstla_options_presets
+
+    tut_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Golden Sun The Lost Age randomizer on your computer",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Dragion", "PlatanoBailando"]
+    )
+
+    tutorials = [tut_en]
 
 class GSTLASettings(settings.Group):
     class RomFile(settings.UserFilePath):
