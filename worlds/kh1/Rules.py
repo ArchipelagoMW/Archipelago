@@ -385,8 +385,7 @@ def set_rules(kh1world):
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("Monstro Chamber 6 Other Platform Chest"),
         lambda state: (
-            state.has("High Jump", player)
-            and state.has("Progressive Glide", player)
+            state.has_all(("High Jump", "Progressive Glide"), player)
             or (options.advanced_logic and state.has("Combo Master", player))
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"),
