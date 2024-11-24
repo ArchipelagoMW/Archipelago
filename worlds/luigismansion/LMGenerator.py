@@ -212,8 +212,9 @@ class LuigisMansionRandomizer:
         update_generator_info(self.jmp_generator_info_table)
         self.update_maptwo_info_table(self.jmp_generator_info_table)
 
-        update_enemy_info(self.jmp_enemy_info_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_enemy_info_table)
+        if self.output_data["Options"]["enemizer"] == 1:
+            update_enemy_info(self.jmp_enemy_info_table, self.output_data)
+            self.update_maptwo_info_table(self.jmp_enemy_info_table)
 
     def save_randomized_iso(self):
         seed(self.output_data["Seed"])
