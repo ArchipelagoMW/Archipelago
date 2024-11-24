@@ -67,7 +67,7 @@ class RevealHiddenItem(Toggle):
     Also there are a few locations that hard require Reveal to be obtainable, this setting does not alter those.
     """
     internal_name = "reveal_hidden_item"
-    display_name = "Reveal Hidden Items"
+    display_name = "Reveal Required For Hidden Items"
     default = 1
 
 class ItemShuffle(Choice):
@@ -87,6 +87,7 @@ class OmitLocations(Choice):
     Omit Superbosses and Inner Sanctum: omits all super bosses and Anemos Inner Sanctum. Removes roughly 7 locations from the pool
     """
     internal_name = "omit_locations"
+    display_name = "Omit Locations"
     option_no_omission = 0
     option_omit_anemos_inner_sanctum = 1
     option_omit_superbosses_and_inner_sancutm = 2
@@ -104,7 +105,7 @@ class AddDummyItems(Toggle):
     These are: Casual Shirt, Golden Boots, Aroma Ring, Golden Shirt, Ninja Sandals, Golden Ring, 
     Herbed Shirt, Knight's Greave, Rainbow Ring, Divine Camisole, Silver Greave and Soul Ring"""
     internal_name = "add_non_obtainable_items"
-    display_name = "Add normally unobtainable equipment"
+    display_name = "Add Normally Unobtainable Equipment"
     default = 0
 
 class VisibleItems(Toggle):
