@@ -178,7 +178,6 @@ class ExcludeSongs(SongSet):
     display_name = "Exclude Songs"
 
 
-
 md_option_groups = [
     OptionGroup("Song Choice", [
         DLCMusicPacks,
