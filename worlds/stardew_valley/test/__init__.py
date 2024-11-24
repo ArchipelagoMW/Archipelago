@@ -4,7 +4,7 @@ import os
 import threading
 import unittest
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any, Set
+from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
 from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
 from test.bases import WorldTestBase
@@ -310,8 +310,8 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def create_item(self, item: str) -> StardewItem:
         return self.world.create_item(item)
 
-    def get_all_created_items(self) -> Set[str]:
-        return {item.name for item in itertools.chain(self.multiworld.get_items(), self.multiworld.precollected_items[self.player])}
+    def get_all_created_items(self) -> List[str]:
+        return [item.name for item in itertools.chain(self.multiworld.get_items(), self.multiworld.precollected_items[self.player])]
 
     def remove_one_by_name(self, item: str) -> None:
         self.remove(self.create_item(item))
