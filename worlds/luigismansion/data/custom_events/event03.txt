@@ -1,2 +1,9 @@
+<CHECKFLAG>(89)"null""start"
+---
+<CASE>"null"
+<END>
+---
+<CASE>"start"
 <FLAGON>(89)
+<BGM>(4)
 <END>
