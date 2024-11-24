@@ -183,10 +183,8 @@ class MuseDashWorld(World):
         if album:
             return MuseDashSongItem(name, self.player, album)
 
-        song = self.md_collection.song_items.get(name)
-        if song:
-            return MuseDashSongItem(name, self.player, song)
-        raise KeyError(name)
+        song = self.md_collection.song_items[name]
+        return MuseDashSongItem(name, self.player, song)
 
     def get_filler_item_name(self) -> str:
         return self.random.choices(self.filler_item_names, self.filler_item_weights)[0]
