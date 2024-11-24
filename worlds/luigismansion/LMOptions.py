@@ -13,6 +13,7 @@ class LuigiWalkSpeed(Choice):
     option_schmoovin = 2
     default = 0
 
+
 class RandomMusic(Toggle):
     """Randomize Music"""
     display_name = "Music Randomization"
@@ -42,12 +43,6 @@ class StartWithBooRadar(Toggle):
     """Start with Boo Radar"""
     display_name = "Boo Radar"
 
-
-#   class DoorRando(Toggle):
-#   "Keys wil open different doors than normal, and doors may require elements instead of keys"
-#   display_name = "Door Randomization"
-# Heavy logic editing required
-
 class Plants(Toggle):
     """Adds all plants to location pool"""
     display_name = "Plantsanity"
@@ -61,8 +56,6 @@ class PickupAnim(Toggle):
 class Knocksanity(Toggle):
     """
     Adds every interactable, such a dressers and light fixtures, to the location pool
-
-    Due to generation issues, if this is off, you will be given the Heart Key at the start of the game.
     """
     display_name = "Interactables"
 
@@ -109,18 +102,27 @@ class PortraitGhosts(Toggle):
     display_name = "Portrait Ghosts"
 
 
-class Enemizer(Toggle):
+class Enemizer(Choice):
     """
-    Ghosts in room encounters have random elements. Be aware that softlocks are possible and common with this option on.
-    Be Ready.
+    Choose if and how ghosts are randomized.
+    0 = No ghost randomization
+    1 = Randomized ghost elements and waves
+    2 = Remove ghost elements, randomize waves
     """
     display_name = "Enemizer"
+    option_default = 0
+    option_randomized_elements = 1
+    option_no_elements = 2
 
 
 class DoorRando(Toggle):
     """Randomize which doors are locked or unlocked in the mansion."""
     display_name = "Door Randomization"
 
+
+class LuigiFearAnim(Toggle):
+    """Turn off Luigi being scared by ghosts if they spawn close to him"""
+    display_name = "Courageous Luigi"
 
 class Goal(Choice):
     """
@@ -159,6 +161,7 @@ class LMOptions(PerGameCommonOptions):
     good_vacuum: BetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
+    fear_animation: LuigiFearAnim
     pickup_animation: PickupAnim
     random_music: RandomMusic
     door_rando: DoorRando
