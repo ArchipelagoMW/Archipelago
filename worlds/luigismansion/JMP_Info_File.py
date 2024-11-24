@@ -59,7 +59,7 @@ class JMPInfoFile:
         if self.info_file_entry is None:
             raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RARC file.")
 
-        json_data = json.loads(get_data(__name__, os.path.join("data", "names.json")))
+        json_data = json.loads(get_data(__name__, "data/names.json"))
 
         if name_of_info_file not in json_data:
             raise Exception("Unable to load info file headers for '" + name_of_info_file + "'.")

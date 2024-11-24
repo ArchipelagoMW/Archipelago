@@ -226,7 +226,7 @@ class LuigisMansionRandomizer:
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
-        lines = get_data(__name__, os.path.join("data/custom_events", "event48.txt")).decode('utf-8')
+        lines = get_data(__name__, "data/custom_events/event48.txt").decode('utf-8')
 
         if self.output_data["Options"]["hidden_mansion"] == 1:
             mansion_type = "<URALUIGI>"
@@ -275,7 +275,7 @@ class LuigisMansionRandomizer:
                             ".txt' in provided RAC file.")
 
         if check_local_folder:
-            lines = io.BytesIO(get_data(__name__, os.path.join("data/custom_events", "event" + event_number + ".txt")))
+            lines = io.BytesIO(get_data(__name__, "data/custom_events/event" + event_number + ".txt"))
         else:
             lines = io.BytesIO(non_local_str.encode('utf-8'))
 
