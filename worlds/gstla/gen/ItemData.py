@@ -9,6 +9,17 @@ from .ItemNames import ItemName
 class TrapType(str, Enum):
    Mimic = "Mimic"
 
+class FillerType(str, Enum):
+    ForgeMaterials = "Forge Materials"
+    RustyMaterials = "Rusty Materials"
+    StatBoosts = "Stat Boosts"
+    UncommonConsumables = "Uncommon Consumables"
+    ForgedEquipment = "Forged Equipment"
+    LuckyEquipment = "Lucky Equipment"
+    ShopEquipment = "Shop Equipment"
+    Coins = "Coins"
+    CommonConsumables = "Common Consumables"
+
 class ItemData(NamedTuple):
     id: int
     name: str

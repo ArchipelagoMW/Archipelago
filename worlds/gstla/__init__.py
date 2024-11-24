@@ -14,7 +14,7 @@ from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Seque
 from .Options import GSTLAOptions
 from BaseClasses import Item, ItemClassification
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
-    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_item, AP_PROG_PLACEHOLDER_ITEM
+    AP_PLACEHOLDER_ITEM, items_by_id, get_filler_item, AP_PROG_PLACEHOLDER_ITEM, create_filler_pool_weights, create_trap_pool_weights
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
@@ -25,6 +25,9 @@ from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
 from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
+
+
+import logging
 
 class GSTLAWeb(WebWorld):
     theme = "jungle"
@@ -114,6 +117,26 @@ class GSTLAWorld(World):
         #When we add more traps and none are enabled we should force trap_chance to off
         if self.options.mimic_trap_weight == 0:
             self.options.trap_chance = 0
+
+
+        #ensure that if all are set to 0 we force them all to 1, otherwise we can not create filler and clearly they wanted all to be the same weight.
+        combined_weight = self.options.forge_material_filler_weight + self.options.rusty_material_filler_weight + self.options.stat_boost_filler_weight
+        combined_weight += self.options.uncommon_consumable_filler_weight + self.options.forged_equipment_filler_weight + self.options.lucky_equipment_filler_weight
+        combined_weight += self.options.shop_equipment_filler_weight + self.options.coins_filler_weight + self.options.common_consumable_filler_weight
+
+        if combined_weight == 0:
+            self.options.forge_material_filler_weight = 1
+            self.options.rusty_material_filler_weight = 1
+            self.options.stat_boost_filler_weight = 1
+            self.options.uncommon_consumable_filler_weight = 1
+            self.options.forged_equipment_filler_weight = 1
+            self.options.lucky_equipment_filler_weight = 1
+            self.options.shop_equipment_filler_weight = 1
+            self.options.coins_filler_weight = 1
+            self.options.common_consumable_filler_weight = 1
+
+        create_filler_pool_weights(self)
+        create_trap_pool_weights(self)
 
 
     def create_regions(self) -> None:
