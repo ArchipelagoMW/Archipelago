@@ -141,6 +141,7 @@ class LuigisMansionRandomizer:
 
     # Updates various DOL Offsets per the desired changes of the AP user
     def update_dol_offsets(self):
+        # Walk Speed
         if self.output_data["Options"]["walk_speed"] == 0:
             walk_speed = 16784
         elif self.output_data["Options"]["walk_speed"] == 1:
@@ -151,6 +152,7 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x396538)
         self.dol.data.write(struct.pack(">H", walk_speed))
 
+        # Vacuum Speed
         if any("Poltergust 4000" in key for key in self.output_data["Options"]["start_inventory"]):
             vac_speed = [0x38, 0x00, 0x00, 0x0F]
         else:

@@ -49,7 +49,7 @@ def update_observer_info(observer_info, output_data):
 
         # Remove locking doors behind Luigi in dark rooms to prevent softlocks
         if x["do_type"] == 11:
-            observer_info.info_file_field_entries.remove(x)
+            x["do_type"] = 0
 
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries[:]:
@@ -305,7 +305,7 @@ def get_item_name(item_name, item_data):
 
     return "----"
 
-def set_key_info_entry(key_entry, item_data):
+def set_key_info_entry(key_entry, item_data, item_name):
     new_item_name = get_item_name(item_data["name"], item_data)
 
     if new_item_name == "money":
@@ -313,24 +313,26 @@ def set_key_info_entry(key_entry, item_data):
 
     key_entry["name"] = new_item_name
     key_entry["open_door_no"] = item_data["door_id"]
-    key_entry["appear_flag"] = 0
-    key_entry["disappear_flag"] = 0
     key_entry["appear_type"] = 0
     key_entry["invisible"] = 0
+
+    if item_name == "Ghost Foyer Key":
+        key_entry["appear_flag"] = 0
+        key_entry["disappear_flag"] = 0
 
 def update_key_info(key_info_entry, output_data):
     for item_name, item_data in output_data["Locations"].items():
         match item_name:
             case "The Well Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[0], item_data)
+                set_key_info_entry(key_info_entry.info_file_field_entries[0], item_data, item_name)
             case "Ghost Foyer Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[1], item_data)
+                set_key_info_entry(key_info_entry.info_file_field_entries[1], item_data, item_name)
             case "1F Bathroom Shelf Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[3], item_data)
+                set_key_info_entry(key_info_entry.info_file_field_entries[3], item_data, item_name)
             case "Fortune Teller Candles":
-                set_key_info_entry(key_info_entry.info_file_field_entries[4], item_data)
+                set_key_info_entry(key_info_entry.info_file_field_entries[4], item_data, item_name)
             case "Wardrobe Shelf Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[5], item_data)
+                set_key_info_entry(key_info_entry.info_file_field_entries[5], item_data, item_name)
 
     key_info_entry.info_file_field_entries.remove(key_info_entry.info_file_field_entries[2])
 
@@ -355,7 +357,7 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
 
-def apply_new_ghost(x, element, output_data, random_ghosts):
+def apply_new_ghost(x, element, random_ghosts):
     match element:
         case "Ice":
             x["name"] = "mopoo2"
@@ -371,5 +373,5 @@ def update_enemy_info(enemy_info, output_data):
     for x in enemy_info.info_file_field_entries[:]:
         for room_id, element in output_data["Room Enemies"].items():
             if x["room_no"] == room_id and x["name"] in random_ghosts:
-                apply_new_ghost(x, element, output_data, random_ghosts)
+                apply_new_ghost(x, element, random_ghosts)
                 break
