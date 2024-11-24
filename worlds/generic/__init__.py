@@ -3,7 +3,7 @@ import logging
 
 from BaseClasses import Item, Tutorial, ItemClassification
 
-from ..AutoWorld import World, WebWorld
+from ..AutoWorld import InvalidItemError, World, WebWorld
 from NetUtils import SlotType
 
 
@@ -47,7 +47,7 @@ class GenericWorld(World):
     def create_item(self, name: str) -> Item:
         if name == "Nothing":
             return Item(name, ItemClassification.filler, -1, self.player)
-        raise KeyError(name)
+        raise InvalidItemError(name)
 
 
 class PlandoItem(NamedTuple):
