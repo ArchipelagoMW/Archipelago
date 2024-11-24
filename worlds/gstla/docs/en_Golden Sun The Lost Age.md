@@ -7,7 +7,7 @@ You can read through all the options and generate a YAML [here](../player-option
 ## What does randomization do to this game?
 
 This randomizer handles item randomization, psynergy randomization, character randomization, summon randomization and djinn randomization.
-Many options from the base Golden Sun The Lost Age Randomizer are supported in Archipelago and can be enjoyed. Minor adjuments are made to ensure they work well in a multiworld setting.
+Many options from the base Golden Sun The Lost Age Randomizer are supported in Archipelago and can be enjoyed. Minor adjustments are made to ensure they work well in a multiworld setting.
 Feel free to visit [options page](../player-options) for a more comprehensive list of what can be changed.
 
 ## What items and locations get randomized?
@@ -31,7 +31,7 @@ randomizer. Here are some of the more important ones:
 - Using Retreat on the Overworld will allow you to use Teleport Psynergy for quick travel.
 - Ship overworld speed is increased.
 - Most cutscenes are skipped or sped up.
-- Many more minor improvements…, most togglable by setting.
+- Many more minor improvements…, most toggleable by setting.
 
 ## Where is my starting inventory?
 
@@ -40,7 +40,7 @@ Upon starting the game the items should be received when connected with the clie
 ## What does another world's item look like in Golden Sun The Lost Age?
 
 When you find an item that is not your own, you will see an Archipelago Icon and Felix will pick it up as per the vanilla game.
-The item will disappear and the location should be checked. Unfortunatley you do not see the name of the item or person receiving the item in the game.
+The item will disappear and the location should be checked. Unfortunately you do not see the name of the item or person receiving the item in the game.
 
 ## When the player receives an item, what happens?
 
