@@ -72,7 +72,7 @@ def set_rules(world):
     set_tool_rules(logic, multiworld, player, world_options)
     set_skills_rules(logic, multiworld, player, world_content)
     set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
-    set_building_rules(logic, multiworld, player, world_options, world_content)
+    set_building_rules(logic, multiworld, player, world_content)
     set_cropsanity_rules(logic, multiworld, player, world_content)
     set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
     set_special_order_rules(all_location_names, logic, multiworld, player, world_options)
@@ -131,7 +131,7 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: Stard
         MultiWorldRules.set_rule(tool_upgrade_location, logic.tool.has_tool(tool, previous))
 
 
-def set_building_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions, content: StardewContent):
+def set_building_rules(logic: StardewLogic, multiworld, player, content: StardewContent):
     building_progression = content.features.building_progression
     if not building_progression.is_progressive:
         return
@@ -143,7 +143,7 @@ def set_building_rules(logic: StardewLogic, multiworld, player, world_options: S
         location_name = building_progression.to_location_name(building.name)
 
         MultiWorldRules.set_rule(multiworld.get_location(location_name, player),
-                                 logic.building.can_build(building))
+                                 logic.building.can_build(building.name))
 
 
 def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):

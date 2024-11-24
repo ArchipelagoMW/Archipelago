@@ -49,12 +49,6 @@ class CustomRuleSource(Source):
     create_rule: Callable[[Any], StardewRule]
 
 
-@dataclass(frozen=True, kw_only=True)
-class CompoundSource(Source):
-    """A source that is made up of other sources. Requires all the sources to be available to be available."""
-    sources: Tuple[Source, ...] = ()
-
-
 class Tag(Source):
     """Not a real source, just a way to add tags to an item. Will be removed from the item sources during unpacking."""
     tag: Tuple[ItemTag, ...]

@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import Dict, Union
+from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
@@ -21,20 +21,11 @@ class BuildingLogicMixin(BaseLogicMixin):
 
 
 class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, 'SourceLogicMixin']]):
-    def initialize_rules(self):
-        self.registry.building_rules.update({
-            building_name: self.logic.building.can_build(building)
-            for building_name, building in self.logic.content.farm_buildings.items()
-        })
-
-    def update_rules(self, new_rules: Dict[str, StardewRule]):
-        self.registry.building_rules.update(new_rules)
 
     @cache_self1
-    def can_build(self, building: Union[str, Building]) -> StardewRule:
-        if isinstance(building, str):
-            building = self.content.farm_buildings.get(building)
-            assert building is not None, f"Building {building} not found."
+    def can_build(self, building: str) -> StardewRule:
+        building = self.content.farm_buildings.get(building)
+        assert building is not None, f"Building {building} not found."
 
         source_rule = self.logic.source.has_access_to_any(building.sources)
         if not building.is_upgrade:
