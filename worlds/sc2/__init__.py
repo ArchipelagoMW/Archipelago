@@ -195,7 +195,7 @@ class SC2World(World):
             for world in self.multiworld.worlds.values()
             if world.game == self.game and world.options.enable_void_trade == EnableVoidTrade.option_true
         ]
-        if len(traders) >= 2:
+        if len(traders) < 2:
             slot_data["enable_void_trade"] = EnableVoidTrade.option_false
 
         return slot_data
