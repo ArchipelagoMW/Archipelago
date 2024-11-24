@@ -431,7 +431,6 @@ pelican_town = ContentPack(
                     money_price=4000,
                     items_price=((300, Material.wood), (100, Material.stone))
                 ),
-                # TODO add source for meadowslands farm
             ),
         ),
         Building(
@@ -538,7 +537,6 @@ pelican_town = ContentPack(
             ),
         ),
         Building(
-            # TODO check with kaito if it's really worth to have the shipping bin here, since it's built automatically
             BuildingNames.shipping_bin,
             sources=(
                 ShopSource(
