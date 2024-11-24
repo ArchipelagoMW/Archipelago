@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 class StartWithShip(Choice):
     """What needs to be done to get the ship?
-    Vanilla requires getting the black crystal and completing the gabomba statue to get the reward from Madras Mayor.
-    Ship Door Unlocked involves getting the black crystal and activating the ship as per vanilla.
-    Available from the start allows you to use the ship from the beginning of the game.
+    Vanilla: requires getting the black crystal and completing the gabomba statue to get the reward from Madras Mayor.
+    Ship Door Unlocked: involves getting the black crystal and activating the ship as per vanilla.
+    Available From The Start: allows you to use the ship from the beginning of the game.
     """
     internal_name = "lemurian_ship"
     display_name = "Lemurian Ship"
@@ -16,9 +16,9 @@ class StartWithShip(Choice):
 
 class CharacterShuffle(Choice):
     """Where can you find the other characters?
-    Vanilla makes it like the vanilla experience.
-    Vanilla Shuffled puts the characters in eachothers locations.
-    Anywhere puts the characters in the multiworld itempool, 
+    Vanilla: makes it like the vanilla experience.
+    Vanilla Shuffled: puts the characters in each others locations.
+    Anywhere: puts the characters in the multiworld itempool,
     note that Jenna's character location is forced to be a character due to game limiations with psynergy learning.
     """
     internal_name = "shuffle_characters"
@@ -42,7 +42,7 @@ class SecondStartingCharacter(Choice):
     option_garet = 4
     option_ivan = 5
     option_mia = 6
-    default = 0
+    default = "random"
 
 class DjinnLogic(NamedRange):
     """How much do Djinn affect logic for being able to defeat bosses?
@@ -72,8 +72,8 @@ class RevealHiddenItem(Toggle):
 
 class ItemShuffle(Choice):
     """Determine which locations in the game are part of the pool.
-    All Chests and Tablets includes all chests and tablets and does not include hidden items from pots, barrels, dug up. Roughly 100 less locations to check from All Items
-    All Items includes everything from the vanilla game, including hidden items in pots, barrels, scooped up, covered in leaves or on the overworld. Rougly 320 locations in total."""
+    All Chests and Tablets: includes all chests and tablets and does not include items from pots, barrels, dug up. Roughly 100 less locations to check from All Items
+    All Items: includes everything from the vanilla game, including items in pots, barrels, scooped up, covered in leaves or on the overworld. Roughly 320 locations in total."""
     internal_name = "item_shuffle"
     display_name = "Item Shuffle"
     option_all_chests_and_tablets = 2
@@ -82,9 +82,9 @@ class ItemShuffle(Choice):
 
 class OmitLocations(Choice):
     """Choose to omit locations containing optional harder boss fights
-    No Omission keeps all super bosses in play.
-    Omit Anemos Inner Sanctum omits Anemos Inner Sanctum. Removes roughly 4 locations from the pool.
-    Omit Superbosses and Inner Sanctum omits all super bosses and Anemos Inner Sanctum. Removes roughly 7 locations from the pool
+    No Omission: keeps all super bosses in play.
+    Omit Anemos Inner Sanctum: omits Anemos Inner Sanctum. Removes roughly 4 locations from the pool.
+    Omit Superbosses and Inner Sanctum: omits all super bosses and Anemos Inner Sanctum. Removes roughly 7 locations from the pool
     """
     internal_name = "omit_locations"
     option_no_omission = 0
@@ -109,9 +109,8 @@ class AddDummyItems(Toggle):
 
 class VisibleItems(Toggle):
     """Chests and Tablets are replaced with their contents on the floor.
-    This allows for scouting items. Mimics are removed when this option is enabled.
-    Note certain locations are still not visible, for example hidden items in pots or barrels.
-    If traps (mimics) are enabled this will be forced to off
+    This allows for scouting items. Note certain locations are still not visible,
+    for example items in pots or barrels.
     """
     internal_name = "show_items_outside_chest"
     display_name = "Show items outside chest"
@@ -150,13 +149,13 @@ class AdjustEqStats(Toggle):
     default = 0
 
 class ShuffleWpnEffects(Toggle):
-    """When enabled the effects for weapons are shuffled amongst eachother."""
+    """When enabled the effects for weapons are shuffled amongst each other."""
     internal_name = "shuffle_weapon_effect"
     display_name = "Shuffle Weapon Effects"
     default = 1
 
 class ShuffleArmEffect(Toggle):
-    """When enabled the bonus effects for armour are shuffled amongst eachother."""
+    """When enabled the bonus effects for armour are shuffled amongst each other."""
     internal_name = "shuffle_armour_effect"
     display_name = "Shuffle Armour Effects"
     default = 1
@@ -185,7 +184,7 @@ class DjinnShuffle(Choice):
     default = 1
 
 class ShuffleDjinnStats(Toggle):
-    """When enabled the stats a djinn grant are shiffled amongst eachother."""
+    """When enabled the stats a djinn grant are shuffled amongst each other."""
     internal_name = "shuffle_djinn_stat_boosts"
     display_name = "Shuffle Djinn stat boosts"
     default = 1
@@ -222,9 +221,9 @@ class AdjustSummonPower(Toggle):
 
 class CharStatShuffle(Choice):
     """Determine the stats for characters
-    Vanilla leaves the stats as per the vanilla game.
-    Shuffle character stats will shuffle stats between characters.
-    Adjust character stats will randomize stats for each character within a margin of vanilla.
+    Vanilla: leaves the stats as per the vanilla game.
+    Shuffle Character Stats: will shuffle stats between characters.
+    Adjust Character Stats: will randomize stats for each character within a margin of vanilla.
     """
     internal_name = "character_stats"
     display_name = "Character Stats Shuffle"
@@ -235,9 +234,9 @@ class CharStatShuffle(Choice):
 
 class CharEleShuffle(Choice):
     """Determine how character elements are shuffled
-    Vanilla leaves character elements as per the vanilla game
-    Shuffle character leements will shuffle them between characters
-    Randomize character elements will randomize each characters element
+    Vanilla: leaves character elements as per the vanilla game
+    Shuffle Character Elements: will shuffle them between characters
+    Randomize Character Elements: will randomize each characters element
     """
     internal_name = "character_elements"
     display_name = "Character Element Shuffle"
@@ -272,11 +271,11 @@ class RandomizeEnemyPsyAoe(Toggle):
 
 class ClassPsynergy(Choice):
     """Determine what Psynergy a class will learn
-    Vanilla leaves the Psynergy on their vanilla classes
-    Randomize Psynergy by classline
-    Randomize them by Psynergy group
-    Randomize them by Psynergy group with a preference to the same Element
-    Randomize them by Psynergy Element
+    Vanilla: leaves the Psynergy on their vanilla classes
+    Randomize Psynergy by Classline: Learned Psynergy is shuffled by classlines (e.g. Squire will have Brute Psynergy)
+    Randomize by Psynergy Group: Learned Psynergy is shuffled by Psynergy groups (e.g. if a class learns Spire, it will also learn Clay Spire)
+    Randomize by Psynergy Group Prefer Element: As by group, but with a preference to the same Element
+    Randomize by Psynergy Element: Learned Psynergy is freely shuffled with another Psynergy of the same element
     Fully Randomize it will randomize it completely without grouping or preference
     """
     internal_name = "class_psynergy"
@@ -291,9 +290,9 @@ class ClassPsynergy(Choice):
 
 class ClassPsynergyLevels(Choice):
     """Determine when Psynergy is learned
-    Vanilla leaves the learning of Psynergy on the vanilla levels.
-    Adjust Learning levels will randomize learning levels within a margin from vanilla.
-    Randomize Learning Levels will randomize learning levels completely.
+    Vanilla: leaves the learning of Psynergy on the vanilla levels.
+    Adjust Learning Levels: will randomize learning levels within a margin from vanilla.
+    Randomize Learning Levels: will randomize learning levels completely.
     """
     internal_name = "psynergy_levels"
     display_name = "Character Element Shuffle"
@@ -315,13 +314,13 @@ class FreeRetreat(Toggle):
     default = 1
 
 class ShuffleAttack(Toggle):
-    """When enabled, the attack stat from weapons is shuffled amongst eachother"""
+    """When enabled, the attack stat from weapons is shuffled amongst each other"""
     internal_name = "shuffle_weapon_attack"
     display_name = "Shuffle weapon attack"
     default = 0
 
 class StartWithHealPsynergy(Toggle):
-    """Start the game with atleast one healing Psynergy (Cure, Ply, Wish or Aura)"""
+    """Start the game with at least one healing Psynergy (Cure, Ply, Wish or Aura)"""
     internal_name = "start_with_healing_psynergy"
     display_name = "Start with Healing Psynergy"
     default = 0
@@ -355,7 +354,7 @@ class ScaleCoinsGained(Range):
     default = 4
 
 class ShuffleDefense(Toggle):
-    """When enabled, the defense from equipment is shuffled amongst eachother"""
+    """When enabled, the defense from equipment is shuffled amongst each other"""
     internal_name = "shuffle_armour_defense"
     display_name = "Shuffle armour defense"
     default = 0
@@ -372,9 +371,9 @@ class StartingLevels(Range):
 
 class EnemyEResShuffle(Choice):
     """Determine how Enemy Elemental Resistance is shuffled
-    Vanilla leaves the elemental resistance as per the vanilla game.
-    Shuffle elemental resistance will shuffle them between enemies.
-    Randomize elemental resistance will randomize the resistances for each enemy.
+    Vanilla: leaves the elemental resistance as per the vanilla game.
+    Shuffle Elemental Resistance: will shuffle them between enemies.
+    Randomize Elemental Resistance: will randomize the resistances for each enemy.
     """
     internal_name = "enemy_elemental_resistance"
     display_name = "Enemy Elemental Resistance Shuffle"
@@ -385,9 +384,9 @@ class EnemyEResShuffle(Choice):
 
 class SanctuaryReviveCost(Choice):
     """Determine how expensive the Sanctuary is to revive characters
-    Vanilla leaves the cost per the vanilla game (20x level)
-    Reduced will alter the cost to be cheaper than vanilla (2x level)
-    Fixed will alter the cost to the same price throughout (100 coins)
+    Vanilla: leaves the cost per the vanilla game (20x level)
+    Reduced: will alter the cost to be cheaper than vanilla (2x level)
+    Fixed: will alter the cost to the same price throughout (100 coins)
     """
     internal_name = "sanctum_revive_cost"
     display_name = "Sanctum revive cost"
@@ -434,9 +433,9 @@ class EasierBosses(Toggle):
 
 class NamedPuzzles(Choice):
     """Determines how the named puzzles will generate. These include the puzzles for Gambomba Statue, Gaia Rock and Trial Road
-    Vanilla uses the name that is given to Felix
-    Fixed will force the puzzles to use the name 'Felix'
-    Randomized will force the puzzles to be a random name"""
+    Vanilla: uses the name that is given to Felix
+    Fixed: will force the puzzles to use the name 'Felix'
+    Randomized: will force the puzzles to be a random name"""
     internal_name = "name_puzzles"
     display_name = "Named Puzzles"
     option_vanilla = 0
@@ -458,7 +457,7 @@ class ShipWings(Toggle):
     default = 0
 
 class MusicShuffle(Toggle):
-    """When enabled, music is shuffled amongst eachother."""
+    """When enabled, music is shuffled amongst each other."""
     internal_name = "shuffle_music"
     display_name = "Music Shuffle"
     default = 0
@@ -471,9 +470,9 @@ class TelportEverywhere(Toggle):
 
 class AnemosAccess(Choice):
     """Determine accesss to Anemos Inner Sanctun
-    Vanilla requires all Djinn to be able to enter Anemos Inner Sanctum
-    Random will select a value between 16 to 28 Djinn to be able to access Anemos Inner Sanctum
-    Open allows you to enter Anemos Inner Sanctum without any Djinn
+    Vanilla: requires all 72 Djinn to be able to enter Anemos Inner Sanctum
+    Randomized: will select a value between 16 to 28 Djinn to be able to access Anemos Inner Sanctum
+    Open: allows you to enter Anemos Inner Sanctum without any Djinn
     """
     internal_name = "anemos_inner_sanctum_access"
     display_name = "Anemos Inner Sanctum Access"
@@ -512,8 +511,8 @@ class ForgeMaterialsFillerWeight(Range):
     default = 25
 
 class RustyMaterialsFillerWeight(Range):
-    """The weight for a filler item to be a rusty weapon. These weapons will forge into their counter parts as per usual. 
-    For example you can find a Rusty Sword which when forged turns into the Soul Brand or a Rusty Staff for a Glower Staff."""
+    """The weight for a filler item to be a rusty weapon. These weapons will forge into their counterparts as per usual.
+    E.g. you can find a Rusty Sword which when forged turns into the Soul Brand or a Rusty Staff for a Glower Staff."""
     internal_name = "rusty_material_filler_weight"
     display_name = "Rusty Material Filler Weight"
     range_start = 0
@@ -567,7 +566,7 @@ class ShopEquipmentFillerWeight(Range):
 
 class CoinsFillerWeight(Range):
     """The weight for a filler item to be coins.
-    The coin amounts are the vanilla coin items you can find. These vary from 3 coints to 911 coins. Majority is around or below 300."""
+    The coin amounts are the vanilla coin items you can find. These vary from 3 coins to 911 coins. Majority is around or below 300."""
     internal_name = "coins_filler_weight"
     display_name = "Coin Filler Weight"
     range_start = 0
@@ -576,7 +575,7 @@ class CoinsFillerWeight(Range):
 
 class CommonConsumablesFillerWeight(Range):
     """The weight for a filler item to be a common consumable.
-    Examples of these are Herbs, Vials, Antidotes, Elixers, Smoke Bombs and Lucky Medals"""
+    Examples of these are Herbs, Vials, Antidotes, Elixirs, Smoke Bombs and Lucky Medals"""
     internal_name = "common_consumable_filler_weight"
     display_name = "Common Consumable Filler Weight"
     range_start = 0
