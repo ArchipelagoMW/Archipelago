@@ -39,8 +39,7 @@ class LMLocation(Location):
 
 # Notes on type field in location data
 # Chest item contents are modified in treasuretable and are always included
-# Furniture item contents are modified in furnitureinfo and are always included
-# Furniture item contents are modified in furnitureinfo but are only included with Knocksanity active
+# Furniture item contents are modified in furnitureinfo, some are always included
 # Plant item contents are modified in furnitureinfo but are only included when Plantsanity is active
 # BGhosts (DBSpeedy) are Blue Ghosts - item contents are modified in
 # enemytable (teidenenemyinfo) but are only included when SpeedySpirits option is active
