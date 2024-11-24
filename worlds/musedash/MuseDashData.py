@@ -559,7 +559,7 @@ SONG_DATA: Dict[str, SongData] = {
     "Heaven's Gradius": SongData(2900676, "73-5", "Happy Otaku Pack Vol.19", True, 6, 8, 10),
     "Ray Tuning": SongData(2900678, "74-0", "CHUNITHM COURSE MUSE", True, 6, 8, 10),
     "World Vanquisher": SongData(2900679, "74-1", "CHUNITHM COURSE MUSE", True, 6, 8, 10),
-    "Tsukuyomi Ni Naru": SongData(2900680, "74-2", "CHUNITHM COURSE MUSE", True, 5, 7, 9),
+    "Tsukuyomi Ni Naru Replaced": SongData(2900680, "74-2", "CHUNITHM COURSE MUSE", True, 5, 7, 9),
     "The wheel to the right": SongData(2900681, "74-3", "CHUNITHM COURSE MUSE", True, 5, 7, 9),
     "Climax": SongData(2900682, "74-4", "CHUNITHM COURSE MUSE", True, 4, 8, 11),
     "Spider's Thread": SongData(2900683, "74-5", "CHUNITHM COURSE MUSE", True, 5, 8, 10),
