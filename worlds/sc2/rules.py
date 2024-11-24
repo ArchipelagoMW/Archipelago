@@ -175,6 +175,14 @@ class SC2Logic:
             )
         )
 
+    def terran_any_air_unit(self, state: CollectionState) -> bool:
+        return state.has_any({
+            item_names.VIKING, item_names.MEDIVAC, item_names.RAVEN, item_names.BANSHEE, item_names.SCIENCE_VESSEL,
+            item_names.BATTLECRUISER, item_names.WRAITH, item_names.HERCULES, item_names.LIBERATOR, item_names.VALKYRIE,
+            item_names.SKY_FURY, item_names.NIGHT_HAWK, item_names.EMPERORS_GUARDIAN, item_names.NIGHT_WOLF,
+            item_names.PRIDE_OF_AUGUSTRGRAD
+        }, self.player)
+
     def terran_competent_ground_to_air(self, state: CollectionState) -> bool:
         """
         Ground-to-air

@@ -4446,7 +4446,10 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    logic.terran_common_unit(state)
                                    and (
                                            adv_tactics
-                                           or logic.terran_competent_anti_air(state)
+                                           or (
+                                                   logic.terran_competent_anti_air(state)
+                                                   and logic.terran_any_air_unit(state)
+                                           )
                                    )
                            )),
         make_location_data(SC2Mission.THE_GROWING_SHADOW_T.mission_name, "West Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10703, LocationType.VANILLA,
