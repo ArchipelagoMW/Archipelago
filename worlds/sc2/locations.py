@@ -4586,6 +4586,88 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_SPEAR_OF_ADUN_Z.mission_name, "Southeast Power Cell", SC2_RACESWAP_LOC_ID_OFFSET + 11007, LocationType.EXTRA,
                            logic.zerg_competent_comp_competent_aa
                            ),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11100, LocationType.VICTORY,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Mid EMP Scrambler", SC2_RACESWAP_LOC_ID_OFFSET + 11101, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Southeast EMP Scrambler", SC2_RACESWAP_LOC_ID_OFFSET + 11102, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "North EMP Scrambler", SC2_RACESWAP_LOC_ID_OFFSET + 11103, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Mid Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11104, LocationType.EXTRA),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Southwest Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11105, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Northwest Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11106, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Northeast Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11107, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "Southeast Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11108, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "West Raynor Base", SC2_RACESWAP_LOC_ID_OFFSET + 11109, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_T.mission_name, "East Raynor Base", SC2_RACESWAP_LOC_ID_OFFSET + 11110, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_competent_anti_air(state)
+                           )),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11200, LocationType.VICTORY,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Mid EMP Scrambler", SC2_RACESWAP_LOC_ID_OFFSET + 11201, LocationType.VANILLA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Southeast EMP Scrambler", SC2_RACESWAP_LOC_ID_OFFSET + 11202, LocationType.VANILLA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "North EMP Scrambler", SC2_RACESWAP_LOC_ID_OFFSET + 11203, LocationType.VANILLA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Mid Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11204, LocationType.EXTRA),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Southwest Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11205, LocationType.EXTRA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Northwest Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11206, LocationType.EXTRA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Northeast Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11207, LocationType.EXTRA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "Southeast Stabilizer", SC2_RACESWAP_LOC_ID_OFFSET + 11208, LocationType.EXTRA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "West Raynor Base", SC2_RACESWAP_LOC_ID_OFFSET + 11209, LocationType.EXTRA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
+        make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "East Raynor Base", SC2_RACESWAP_LOC_ID_OFFSET + 11210, LocationType.EXTRA,
+                           logic.zerg_common_unit_competent_aa
+                           ),
     ]
 
     beat_events = []
