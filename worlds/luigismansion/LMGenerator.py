@@ -148,7 +148,6 @@ class LuigisMansionRandomizer:
             walk_speed = 16850
         else:
             walk_speed = 16950
-
         self.dol.data.seek(0x396538)
         self.dol.data.write(struct.pack(">H", walk_speed))
 
@@ -157,7 +156,6 @@ class LuigisMansionRandomizer:
             vac_speed = [0x38, 0x00, 0x00, 0x0F]
         else:
             vac_speed = [0x80, 0x0D, 0x01, 0x60]
-
         self.dol.data.seek(0x7EA28)
         self.dol.data.write(struct.pack(">BBBB", *vac_speed))
 
@@ -167,8 +165,20 @@ class LuigisMansionRandomizer:
         self.dol.data.write(struct.pack(">BBB", *boo_data))
 
         # Turn off pickup animations
-        # self.dol.seek(0xCD39B)
-        # self.dol.write_data(struct.pack(">B", [0x01])
+        if self.output_data["Options"]["pickup_animation"] == 1:
+            pickup_val = [0x01]
+        else:
+            pickup_val = [0x02]
+        self.dol.data.seek(0xCD39B)
+        self.dol.data.write(struct.pack(">B", *pickup_val))
+
+        # Turn off luigi scare animations
+        if self.output_data["Options"]["fear_animation"] == 1:
+            scare_val = [0x00]
+        else:
+            scare_val = [0x44]
+        self.dol.data.seek(0x396578)
+        self.dol.data.write(struct.pack(">B", *scare_val))
 
     # Updates all jmp tables in the map2.szp file.
     def update_maptwo_jmp_tables(self):
