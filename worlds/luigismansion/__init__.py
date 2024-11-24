@@ -1,17 +1,13 @@
 import os
 from dataclasses import fields
-from itertools import count
-from typing import Dict, ClassVar
+from typing import ClassVar
 
 import yaml
 
-from .LMGenerator import LuigisMansionRandomizer
-
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification
-from Fill import fill_restrictive
 from Utils import visualize_regions
-from worlds.AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
@@ -475,8 +471,6 @@ class LMWorld(World):
         file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False))
-
-        LuigisMansionRandomizer("", "", None, False, True)
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
