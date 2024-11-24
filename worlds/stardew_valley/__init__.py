@@ -132,12 +132,12 @@ class StardewValleyWorld(World):
             logger.warning(
                 f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({self.player_name})'s world, so walnutsanity was force disabled")
 
-        if goal_is_perfection and self.options.accessibility != Accessibility.option_full:
+        if goal_is_perfection and self.options.accessibility == Accessibility.option_minimal:
             self.options.accessibility.value = Accessibility.option_full
             logger.warning(
                 f"Goal 'Perfection' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
 
-        elif self.options.goal == Goal.option_allsanity and self.options.accessibility != Accessibility.option_full:
+        elif self.options.goal == Goal.option_allsanity and self.options.accessibility == Accessibility.option_minimal:
             self.options.accessibility.value = Accessibility.option_full
             logger.warning(
                 f"Goal 'Allsanity' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
