@@ -55,9 +55,9 @@ class PickupAnim(Toggle):
 
 class Knocksanity(Toggle):
     """
-    Adds every interactable, such a dressers and light fixtures, to the location pool
+    Adds every interactable, such a dressers, paintings, candles, and light fixtures, to the location pool
     """
-    display_name = "Interactables"
+    display_name = "Knocksanity"
 
 
 class MarioItems(Range):
