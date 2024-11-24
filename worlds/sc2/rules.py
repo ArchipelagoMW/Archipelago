@@ -1488,6 +1488,14 @@ class SC2Logic:
             )
         )
 
+    def terran_spear_of_adun_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.terran_common_unit(state)
+                and self.terran_competent_anti_air(state)
+                and self.terran_defense_rating(state, False, False) >= 5
+                and self.terran_defense_rating(state, True, False) >= 5
+        )
+
     def brothers_in_arms_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_common_unit(state)
