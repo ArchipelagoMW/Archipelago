@@ -146,7 +146,6 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
-    "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furniture", 690, []),
     "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [])
 }
 
@@ -162,12 +161,14 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "2F Washroom Clear Chest": LMLocationData("2F Washroom", 57, "Chest", 23, []),
     "Projection Room Clear Chest": LMLocationData("Projection Room", 58, "Chest", 10, []),
     "Safari Room Clear Chest": LMLocationData("Safari Room", 59, "Chest", 29, []),
+    "Ballroom Clear Chest": LMLocationData("Ballroom", 715, "Chest", 7),
     "Cellar Clear Chest": LMLocationData("Cellar", 60, "Chest", 34, []),
     "Roof Clear Chest": LMLocationData("Roof", 61, "Chest", 32, []),
     "Sealed Room Clear Chest": LMLocationData("Sealed Room", 62, "Chest", 21, []),
     "Armory Clear Chest": LMLocationData("Armory", 63, "Chest", 27, []),
     "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35,
                                            ["Ice Element Medal"]),
+    "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furniture", 690, []),
 }
 
 # Adds all waterable plants as locations
