@@ -375,7 +375,7 @@ class GSTLAWorld(World):
         #write_me += 0 << 5 #skips-oob-hard, require logic changes
         debug_file.write('Skips Oob Hard: false\n')
         write_me += self.options.shuffle_weapon_attack << 4 #equip-attack
-        debug_file.write('Equip Attack: ' + self.options.scale_djinni_battle_difficulty.name_lookup[self.options.scale_djinni_battle_difficulty] + '\n')
+        debug_file.write('Equip Attack: ' + self.options.shuffle_weapon_attack.name_lookup[self.options.shuffle_weapon_attack] + '\n')
         #write_me += 0 << 3 #qol-hints, not supported yet
         debug_file.write('QoL Hints: false\n')
         write_me += self.options.start_with_healing_psynergy << 2 #start-heal

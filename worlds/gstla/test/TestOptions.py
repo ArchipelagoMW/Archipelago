@@ -48,16 +48,6 @@ class TestRevealNotRequiredForHidden(GSTestBase):
         self.assertFalse(world.multiworld.state.has(ItemName.Reveal, world.player, 1))
         self.assertTrue(location.can_reach(world.multiworld.state))
 
-
-# TODO: Test Omit Locations
-
-# TODO: test add_elvenshirt_clericsring
-
-# TODO: Major Minor Option
-
-# TODO: AnemosAccess
-
-
 class TestRandoFormat(TestFormatBase):
 
     def test_file_structure(self):
@@ -98,6 +88,9 @@ class TestAllItemShuffle(TestFormatBase):
         self.assertEqual(0xC0, 0xC0 & data)
 
 class TestOmitAll(TestFormatBase):
+    options = {
+        "omit_locations": 2
+    }
 
     def test_omit_all(self):
         data = self._get_option_byte()
@@ -120,6 +113,24 @@ class TestOmitNothing(TestFormatBase):
     def test_omit_all(self):
         data = self._get_option_byte()
         self.assertEqual(0x00, 0x30 & data)
+
+class TestNoElvenShirtAndClericRing(TestFormatBase):
+    options = {
+        "add_elvenshirt_clericsring": 0
+    }
+
+    def test_no_gs1_items(self):
+        data = self._get_option_byte()
+        self.assertEqual(0x0, 0x8 & data)
+
+class TestElvenShirtAndClericRing(TestFormatBase):
+    options = {
+        "add_elvenshirt_clericsring": 1
+    }
+
+    def test_gs1_items(self):
+        data = self._get_option_byte()
+        self.assertEqual(0x8, 0x8 & data)
 
 class TestVisibleItems(TestFormatBase):
     options = {
@@ -625,6 +636,7 @@ class ClassPsyLevelRando(TestFormatBase):
         data = self._get_option_byte(4)
         self.assertEqual(0x10, 0x18 & data)
 
+#Qol Cutscenes, Tickets and Fastship test
 class SectionFourQoL(TestFormatBase):
 
     def test_ensure_qol(self):
@@ -706,9 +718,23 @@ class RetreatFree(TestFormatBase):
         data = self._get_option_byte(5)
         self.assertEqual(0x1, 0x1 & data)
 
-# TODO: adv equip
-# TODO: dummy items
-# TODO: oob hard
+class NoNonObtainableItems(TestFormatBase):
+    options = {
+        "add_non_obtainable_items": 0
+    }
+
+    def test_no_non_obtainable_items(self):
+        data = self._get_option_byte(6)
+        self.assertEqual(0x00, 0xC0 & data)
+
+class AddNoObtainableItems(TestFormatBase):
+    options = {
+        "add_non_obtainable_items": 1
+    }
+
+    def test_add_non_obtainable_items(self):
+        data = self._get_option_byte(6)
+        self.assertEqual(0x40, 0xC0 & data)
 
 class NoShuffleWeaponAtt(TestFormatBase):
     options = {
