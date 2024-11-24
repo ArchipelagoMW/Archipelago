@@ -58,7 +58,7 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.multiworld.state.collect(self.create_item("Summer"))
         self.collect_lots_of_money()
 
-        rule = self.world.logic.region.can_reach_location("Old Master Cannoli")
+        rule = self.get_can_reach_location_rule("Old Master Cannoli")
         self.assert_rule_false(rule, self.multiworld.state)
 
         fall = self.create_item("Fall")

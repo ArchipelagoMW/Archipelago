@@ -143,7 +143,7 @@ def set_building_rules(logic: StardewLogic, multiworld, player, world_options: S
         location_name = building_progression.to_location_name(building.name)
 
         MultiWorldRules.set_rule(multiworld.get_location(location_name, player),
-                                 logic.source.has_access_to_any(building.sources))
+                                 logic.building.can_build(building))
 
 
 def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
