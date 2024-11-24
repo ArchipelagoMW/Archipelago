@@ -62,11 +62,15 @@ processes = weakref.WeakSet()
 
 
 def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
-    global processes
-    import multiprocessing
-    process = multiprocessing.Process(target=func, name=name, args=args)
-    process.start()
-    processes.add(process)
+    import sys
+    if "kivy" not in sys.modules:
+        func(*args)
+    else:
+        global processes
+        import multiprocessing
+        process = multiprocessing.Process(target=func, name=name, args=args)
+        process.start()
+        processes.add(process)
 
 
 class SuffixIdentifier:
