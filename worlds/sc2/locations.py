@@ -2783,6 +2783,52 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Defeat Kerrigan", SC2_RACESWAP_LOC_ID_OFFSET + 1607, LocationType.MASTERY,
             logic.protoss_competent_comp
         ),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
+            logic.zerg_competent_comp_competent_aa
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "West Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2101, LocationType.VANILLA),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2102, LocationType.VANILLA),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "South Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2103, LocationType.VANILLA,
+            logic.zerg_competent_comp_competent_aa
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "East Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2104, LocationType.VANILLA,
+            logic.zerg_competent_comp_competent_aa
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "Landing Zone Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 2105, LocationType.EXTRA),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "Middle Base", SC2_RACESWAP_LOC_ID_OFFSET + 2106, LocationType.EXTRA,
+            logic.zerg_competent_comp_competent_aa
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "Southeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 2107, LocationType.EXTRA,
+            logic.zerg_competent_comp_competent_aa
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2200, LocationType.VICTORY,
+            lambda state: (
+                logic.protoss_competent_comp(state)
+                and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player)))
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "West Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2201, LocationType.VANILLA),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "North Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2202, LocationType.VANILLA),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "South Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2203, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_competent_comp(state)
+                and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player)))
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "East Relic", SC2_RACESWAP_LOC_ID_OFFSET + 2204, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_competent_comp(state)
+                and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player)))
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "Landing Zone Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 2205, LocationType.EXTRA),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "Middle Base", SC2_RACESWAP_LOC_ID_OFFSET + 2206, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_competent_comp(state)
+                and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player)))
+        ),
+        make_location_data(SC2Mission.SUPERNOVA_P.mission_name, "Southeast Base", SC2_RACESWAP_LOC_ID_OFFSET + 2207, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_competent_comp(state)
+                and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player)))
+        ),
         make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2300, LocationType.VICTORY,
             logic.zerg_maw_requirement
         ),
