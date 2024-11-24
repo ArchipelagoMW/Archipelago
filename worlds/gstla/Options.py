@@ -26,7 +26,7 @@ class CharacterShuffle(Choice):
     option_vanilla = 0
     option_vanilla_shuffled = 1
     option_anywhere = 2
-    default = 0
+    default = 1
 
 
 class SecondStartingCharacter(Choice):
@@ -35,8 +35,8 @@ class SecondStartingCharacter(Choice):
     """
     internal_name = "second_starting_character"
     display_name = "Second Starting Character"
-    option_jenna = 0
-    option_sheba= 1
+    option_jenna = 1
+    option_sheba= 0
     option_piers = 2
     option_isaac = 3
     option_garet = 4
@@ -128,26 +128,26 @@ class RandomizeClassStatBoosts(Toggle):
     """When enabled the base stats for classes are randomized"""
     internal_name = "randomize_class_stat_boosts"
     display_name = "Randomize class stat boosts"
-    default = 1
+    default = 0
 
 class RandomizeEqCompatibility(Toggle):
     """When enabled the compatability for each equipment piece is randomized. 
     Compatibility defines what each character can equip."""
     internal_name = "randomize_equip_compatibility"
     display_name = "Shuffle Equipment Compatability"
-    default = 1
+    default = 0
 
 class AdjustEqPrices(Toggle):
     """When enabled the price for each equipment piece is randomized within a margin of vanilla."""
     internal_name = "adjust_equip_prices"
     display_name = "Adjust Equipment Prices"
-    default = 1
+    default = 0
 
 class AdjustEqStats(Toggle):
     """When enabled the stats for each equipment piece is randomized within a margin of vanilla."""
     internal_name = "adjust_equip_stats"
     display_name = "Adjust Equipment Stats"
-    default = 1
+    default = 0
 
 class ShuffleWpnEffects(Toggle):
     """When enabled the effects for weapons are shuffled amongst eachother."""
@@ -171,7 +171,7 @@ class AdjustPsyPower(Toggle):
     """When enabled the power of Psynergy is randomized within a margin of vanilla."""
     internal_name = "adjust_psynergy_power"
     display_name = "Adjust Psynergy Power"
-    default = 1
+    default = 0
 
 class DjinnShuffle(Choice):
     """How djinn should be placed in your own world.
@@ -194,13 +194,13 @@ class AdjustDjinnPower(Toggle):
     """When enabled the attack power of djinn are randomized within a margin of vanilla."""
     internal_name = "adjust_djinn_attack_power"
     display_name = "Adjust Djinn attack power"
-    default = 1
+    default = 0
 
 class RandomizeDjinnAoe(Toggle):
     """When enabled the Area of Effect of djinn used in battle is randomized."""
     internal_name = "randomize_djinn_attack_aoe"
     display_name = "Randomize Djinn Area of Effect"
-    default = 1
+    default = 0
 
 class ScaleDjinnBattleDifficulty(Toggle):
     """Adjust Djinn battle difficulty based on number of owned Djinn."""
@@ -212,13 +212,13 @@ class RandomizeSummonCosts(Toggle):
     """When enabled the costs for Summons is randomized."""
     internal_name = "randomize_summon_costs"
     display_name = "Randomize Summon costs"
-    default = 1
+    default = 0
 
 class AdjustSummonPower(Toggle):
     """when enabled the power of Summons is randomized within a margin of vanilla."""
     internal_name = "adjust_summon_power"
     display_name = "Adjust Summon Power"
-    default = 1
+    default = 0
 
 class CharStatShuffle(Choice):
     """Determine the stats for characters
@@ -244,31 +244,31 @@ class CharEleShuffle(Choice):
     option_vanilla = 0
     option_shuffle_character_elements = 1
     option_randomize_character_elements = 2
-    default = 2
+    default = 1
 
 class AdjustPsyCost(Toggle):
     """When enabled the PP cost of Psynergy is randomized within a margin of vanilla."""
     internal_name = "adjust_psynergy_cost"
     display_name = "Adjust Psynergy PP Cost"
-    default = 1
+    default = 0
 
 class RandomizePsyAoe(Toggle):
     """When enabled the AoE of Psynergy is randomized"""
     internal_name = "randomize_psynergy_aoe"
     display_name = "Randomize Psynergy AoE"
-    default = 1
+    default = 0
 
 class AdjustEnemyPsyPower(Toggle):
     """When enabled the power of Enemy Psynergy is randomized within a margin of vanilla."""
     internal_name = "adjust_enemy_psynergy_power"
     display_name = "Adjust Enemy Psynergy Power"
-    default = 1
+    default = 0
 
 class RandomizeEnemyPsyAoe(Toggle):
     """When enabled the AoE of Enemy Psynergy is randomized."""
     internal_name = "randomize_enemy_psynergy_aoe"
     display_name = "Randomize Enemy Psynergy AoE"
-    default = 1
+    default = 0
 
 class ClassPsynergy(Choice):
     """Determine what Psynergy a class will learn
@@ -300,7 +300,7 @@ class ClassPsynergyLevels(Choice):
     option_vanilla = 0
     option_adjust_learning_levels = 1
     option_randomize_learning_levels = 2
-    default = 2
+    default = 1
 
 class FreeAvoid(Toggle):
     """When enabled, the Avoid Psynergy will cost no PP"""
@@ -312,13 +312,13 @@ class FreeRetreat(Toggle):
     """When enabled, the Retreat Psynergy will cost no PP"""
     internal_name = "free_retreat"
     display_name = "Retreat costs no PP"
-    default = 0
+    default = 1
 
 class ShuffleAttack(Toggle):
     """When enabled, the attack stat from weapons is shuffled amongst eachother"""
     internal_name = "shuffle_weapon_attack"
     display_name = "Shuffle weapon attack"
-    default = 1
+    default = 0
 
 class StartWithHealPsynergy(Toggle):
     """Start the game with atleast one healing Psynergy (Cure, Ply, Wish or Aura)"""
@@ -344,7 +344,7 @@ class ScaleExpGained(Range):
     display_name = "Scale Exp"
     range_start = 1
     range_end = 15
-    default = 1
+    default = 3
 
 class ScaleCoinsGained(Range):
     """Scale how much Coins are earned by the party."""
@@ -358,7 +358,7 @@ class ShuffleDefense(Toggle):
     """When enabled, the defense from equipment is shuffled amongst eachother"""
     internal_name = "shuffle_armour_defense"
     display_name = "Shuffle armour defense"
-    default = 1
+    default = 0
 
 
 class StartingLevels(Range):
@@ -381,7 +381,7 @@ class EnemyEResShuffle(Choice):
     option_vanilla = 0
     option_shuffle_elemmental_res = 1
     option_randomize_elemental_res = 2
-    default = 2
+    default = 0
 
 class SanctuaryReviveCost(Choice):
     """Determine how expensive the Sanctuary is to revive characters
