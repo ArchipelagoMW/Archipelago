@@ -357,7 +357,27 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
 
-def apply_new_ghost(x, element, random_ghosts):
+ROOM_TO_ID = {
+    "Wardrobe": 35,
+    "Laundry Room": 38,
+    "Hidden Room": 5,
+    "Storage Room": 1,
+    "Kitchen": 14,
+    "1F Bathroom": 8,
+    "Courtyard": 20,
+    "Tea Room": 23,
+    "2F Washroom": 47,
+    "Projection Room": 42,
+    "Safari Room": 13,
+    "Cellar": 52,
+    "Roof": 63,
+    "Sealed Room": 60,
+    "Armory": 36,
+    "Pipe Room": 48
+}
+
+def apply_new_ghost(x, element):
+    random_ghosts_to_patch = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "skul", "putcher1"]
     match element:
         case "Ice":
             x["name"] = "mopoo2"
@@ -366,12 +386,20 @@ def apply_new_ghost(x, element, random_ghosts):
         case "Fire":
             x["name"] = "yapoo2"
         case "No Element":
-            x["name"] = choice(random_ghosts)
+            x["name"] = choice(random_ghosts_to_patch)
 
 def update_enemy_info(enemy_info, output_data):
-    random_ghosts = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "skul", "putcher1"]
+    random_ghosts = ["yapoo1", "mapoo1", "mopoo1",
+                     "yapoo2", "mapoo2", "mopoo2",
+                     "banaoba",
+                     "topoo1", "topoo2", "topoo3", "topoo4",
+                     "heypo1", "heypo2", "heypo3", "heypo4", "heypo5", "heypo6", "heypo7", "heypo8",
+                     "skul",
+                     "putcher1",
+                     "tenjyo", "tenjyo2"]
+
     for x in enemy_info.info_file_field_entries[:]:
-        for room_id, element in output_data["Room Enemies"].items():
-            if x["room_no"] == room_id and x["name"] in random_ghosts:
-                apply_new_ghost(x, element, random_ghosts)
+        for room_name, element in output_data["Room Enemies"].items():
+            if x["room_no"] == ROOM_TO_ID[room_name] and x["name"] in random_ghosts:
+                apply_new_ghost(x, element)
                 break

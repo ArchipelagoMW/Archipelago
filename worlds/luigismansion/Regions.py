@@ -1,29 +1,27 @@
 from typing import Optional, Callable
 
-from .data import Enum
 from BaseClasses import MultiWorld, Entrance
 from worlds.generic.Rules import add_rule
 from . import Rules
 from ..AutoWorld import World
 
 GHOST_TO_ROOM = {
-    35: "No Element",
-    38: "No Element",
-    5: "No Element",
-    1: "No Element",  # "Ice",
-    14: "No Element",
-    8: "No Element",  # "Ice",
-    20: "No Element",
-    23: "No Element",
-    47: "No Element",
-    42: "No Element",  # "Fire",
-    13: "No Element",
-    52: "No Element",  # "Water",
-    63: "No Element",
-    60: "No Element",
-    36: "No Element",
-    48: "No Element",
-    66: "No Element"
+    "Wardrobe": "No Element",
+    "Laundry Room": "No Element",
+    "Hidden Room": "No Element",  # "Ice",
+    "Storage Room": "No Element",
+    "Kitchen": "No Element",  # "Ice",
+    "1F Bathroom": "No Element",
+    "Courtyard": "No Element",
+    "Tea Room": "No Element",
+    "2F Washroom": "No Element",  # "Fire",
+    "Projection Room": "No Element",
+    "Safari Room": "No Element",  # "Water",
+    "Cellar": "No Element",
+    "Roof": "No Element",
+    "Sealed Room": "No Element",
+    "Armory": "No Element",
+    "Pipe Room": "No Element"
 }
 
 def set_ghost_type(world: World, ghost_list: dict):
