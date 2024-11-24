@@ -31,7 +31,6 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 244:'progression',#    ItemName.Blue_Key
 243:'progression',#    ItemName.Red_Key
 222:'progression',#    ItemName.Mythril_Bag_Mars
-247:'progression',#    ItemName.Mars_Star
 459:'progression',#    ItemName.Ruin_Key
 229:'progression_skip_balancing', # ItemName.Lucky_Medal
 443:     'useful',#     ItemName.Mysterious_Card
@@ -148,6 +147,7 @@ EXCLUDED_ITEMS = {
     237, # Mystic Draught
     245, # Mythril Bag (Mars & Jupiter)
     246, # Jupiter Star
+    247, # Mars Star, 222, Mythril Bag (Mars) is actually used in the game
     450, # Signal Whistle
     457, # Large Bread
 }

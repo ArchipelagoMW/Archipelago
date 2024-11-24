@@ -246,7 +246,6 @@ ItemData(222, "Mythril Bag (Mars)", ItemClassification.progression, 739724, Item
 ItemData(242, "Black Crystal", ItemClassification.progression, 740604, ItemType.Consumable, False),
 ItemData(243, "Red Key", ItemClassification.progression, 740648, ItemType.Consumable, False),
 ItemData(244, "Blue Key", ItemClassification.progression, 740692, ItemType.Consumable, False),
-ItemData(247, "Mars Star", ItemClassification.progression, 740824, ItemType.KeyItem, False),
 ItemData(326, "Trident", ItemClassification.progression, 744300, ItemType.Trident, False),
 ItemData(439, "Right Prong", ItemClassification.progression, 749272, ItemType.Consumable, False),
 ItemData(440, "Left Prong", ItemClassification.progression, 749316, ItemType.Consumable, False),

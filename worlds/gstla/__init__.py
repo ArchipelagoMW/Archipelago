@@ -103,7 +103,8 @@ class GSTLAWorld(World):
         "Teleport": [ItemName.Teleport_Lapis],
         "Shamans Rod": [ItemName.Shamans_Rod],
         "Sea Gods Tear": [ItemName.Sea_Gods_Tear],
-        "Lil Turtle": [ItemName.Lil_Turtle]
+        "Lil Turtle": [ItemName.Lil_Turtle],
+        "Mars Star": [ItemName.Mythril_Bag_Mars]
     }
 
     def generate_early(self) -> None:
