@@ -63,7 +63,11 @@ class MuseDashWorld(World):
 
     item_name_to_id = {name: code for name, code in md_collection.item_names_to_id.items()}
     location_name_to_id = {name: code for name, code in md_collection.location_names_to_id.items()}
-    item_name_groups = {"Songs": {name for name in md_collection.song_items.keys()}}
+    item_name_groups = {
+        "Songs": {name for name in md_collection.song_items.keys()},
+        "FillerItems": {name for name in md_collection.filler_items.keys()},
+        "Traps": {name for name in md_collection.trap_items.keys()}
+    }
 
     # Working Data
     victory_song_name: str = ""
