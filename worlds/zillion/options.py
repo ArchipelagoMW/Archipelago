@@ -233,6 +233,7 @@ class ZillionSkill(Range):
     range_start = 0
     range_end = 5
     default = 2
+    display_name = "skill"
 
 
 class ZillionStartingCards(NamedRange):
