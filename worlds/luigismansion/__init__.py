@@ -318,8 +318,8 @@ class LMWorld(World):
         if self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
         elif self.options.enemizer == 2:
-            for i in len(self.ghost_affected_regions.keys()):
-                self.ghost_affected_regions[i] = "No Element"
+            for index, (key, value) in enumerate(self.ghost_affected_regions.items()):
+                self.ghost_affected_regions[key] = "No Element"
 
         if self.options.door_rando == 1:
             k = list(self.open_doors.keys())
