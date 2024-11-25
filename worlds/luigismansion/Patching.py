@@ -51,6 +51,10 @@ def update_observer_info(observer_info, output_data):
         if x["do_type"] == 11:
             x["do_type"] = 0
 
+        # Ignore me, I am the observers that spawn shit for Vincent
+        # if x["string_arg0"] in ["57_1", "57_2", "57_3", "57_4", "57_5", "57_6", "57_7"]:
+        #    x["string_arg0"] = "(null)"
+
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries[:]:
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
@@ -336,23 +340,40 @@ def update_key_info(key_info_entry, output_data):
 
     key_info_entry.info_file_field_entries.remove(key_info_entry.info_file_field_entries[2])
 
+# List of furniture names that tend to spawn items up high or potentially out of bounds.
+higher_up_furniture = ["Painting", "Fan", "Mirror", "Picture"]
+
 def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
     for x in furniture_info_entry.info_file_field_entries:
+        # If any of the arguments are used in the Study bookshelves / reading books, disable this.
         if x["arg0"] in {101, 102, 103, 104, 105, 106}:
             x["arg0"] = 0.0
+
+        # If this is a book/bookshelf, set it to just shake, no book interaction.
         if x["move"] == 16:
             x["move"] = 0
+
+        # If one of Vincent's painting, update the flag to disable zoom instead.
+        # if furniture_info_entry.info_file_field_entries.index(x) in {692, 693, 694, 695, 696, 697}:
+            # x["move"] = 0
 
     for item_name, item_data in output_data["Locations"].items():
         if not item_data["type"] == "Furniture":
             continue
+
+        # Update any furniture up high to spawn items at a lower y offset
+        # Otherwise items are sent into the floor above or out of bounds, which makes it almost impossible to get.
+        if any(high_furniture in item_name for high_furniture in higher_up_furniture):
+            current_y_offset = furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_offset_y"]
+            furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_offset_y"]= current_y_offset-50.0
+
 
         for x in item_appear_table_entry.info_file_field_entries:
             actor_item_name = get_item_name(item_data["name"], None)
             if x["item0"] == "key_" + str(item_data["door_id"]) or x["item0"] == actor_item_name:
                 furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
                     item_appear_table_entry.info_file_field_entries.index(x))
-                if actor_item_name == "money":
+                if actor_item_name == "money": # TODO change once more money types are implement to force AP to change.
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate"] = randrange(1, 3)
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
