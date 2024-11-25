@@ -43,35 +43,35 @@ class LuigisMansionSettings(settings.Group):
 
 class LMWeb(WebWorld):
     theme = "stone"
-    option_groups = [
-        OptionGroup("Extra Locations", [
-            LMOptions.Furnisanity,
-            LMOptions.Plants,
-            LMOptions.Toadsanity,
-            LMOptions.Boosanity,
-            LMOptions.PortraitGhosts,
-            LMOptions.SpeedySpirits
-        ]),
-        OptionGroup("QOL Changes", [
-            LMOptions.LuigiFearAnim,
-            LMOptions.PickupAnim,
-            LMOptions.LuigiWalkSpeed,
-            LMOptions.BetterVacuum,
-            LMOptions.StartWithBooRadar,
-            LMOptions.StartHiddenMansion,
-            LMOptions.RandomMusic
-        ]),
-        OptionGroup("Access Options", [
-            LMOptions.Goal,
-            LMOptions.RankRequirement,
-            LMOptions.MarioItems,
-            LMOptions.WashroomBooCount,
-            LMOptions.BalconyBooCount,
-            LMOptions.FinalBooCount,
-            LMOptions.Enemizer,
-            LMOptions.DoorRando
-        ])
-    ]
+    # option_groups = [
+    #     OptionGroup("Extra Locations", [
+    #         LMOptions.Furnisanity,
+    #         LMOptions.Plants,
+    #         LMOptions.Toadsanity,
+    #         LMOptions.Boosanity,
+    #         LMOptions.PortraitGhosts,
+    #         LMOptions.SpeedySpirits
+    #     ]),
+    #     OptionGroup("QOL Changes", [
+    #         LMOptions.LuigiFearAnim,
+    #         LMOptions.PickupAnim,
+    #         LMOptions.LuigiWalkSpeed,
+    #         LMOptions.BetterVacuum,
+    #         LMOptions.StartWithBooRadar,
+    #         LMOptions.StartHiddenMansion,
+    #         LMOptions.RandomMusic
+    #     ]),
+    #     OptionGroup("Access Options", [
+    #         LMOptions.Goal,
+    #         LMOptions.RankRequirement,
+    #         LMOptions.MarioItems,
+    #         LMOptions.WashroomBooCount,
+    #         LMOptions.BalconyBooCount,
+    #         LMOptions.FinalBooCount,
+    #         LMOptions.Enemizer,
+    #         LMOptions.DoorRando
+    #     ])
+    # ]
 
     tutorials = [
         Tutorial(
