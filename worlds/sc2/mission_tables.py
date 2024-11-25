@@ -289,7 +289,7 @@ class SC2Mission(Enum):
     THE_SPEAR_OF_ADUN_T = 192, "The Spear of Adun (Terran)", SC2Campaign.LOTV, "Aiur", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_spear_of_adun", MissionFlag.Terran|MissionFlag.VsPZ|MissionFlag.RaceSwap
     THE_SPEAR_OF_ADUN_Z = 193, "The Spear of Adun (Zerg)", SC2Campaign.LOTV, "Aiur", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_spear_of_adun", MissionFlag.Zerg|MissionFlag.VsPZ|MissionFlag.RaceSwap
     SKY_SHIELD_T = 194, "Sky Shield (Terran)", SC2Campaign.LOTV, "Korhal", SC2Race.TERRAN, MissionPools.EASY, "ap_sky_shield", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
-    SKY_SHIELD_Z = 195, "Sky Shield (Zerg)", SC2Campaign.LOTV, "Korhal", SC2Race.ZERG, MissionPools.EASY, "ap_sky_shield", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
+    SKY_SHIELD_Z = 195, "Sky Shield (Zerg)", SC2Campaign.LOTV, "Korhal", SC2Race.ZERG, MissionPools.MEDIUM, "ap_sky_shield", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
     # 196/197 - Brothers in Arms
     # 198/199 - Amon's Reach
     # 200/201 - Last Stand
