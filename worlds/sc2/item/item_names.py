@@ -585,7 +585,7 @@ KERRIGAN_ABILITY_EFFICIENCY      = "Ability Efficiency (Kerrigan Passive)"
 KERRIGAN_APOCALYPSE              = "Apocalypse (Kerrigan Ability)"
 KERRIGAN_SPAWN_LEVIATHAN         = "Spawn Leviathan (Kerrigan Ability)"
 KERRIGAN_DROP_PODS               = "Drop-Pods (Kerrigan Ability)"
-KERRIGAN_ASSIMIlATION_AURA       = "Assimilation Aura (Kerrigan Ability)"
+KERRIGAN_ASSIMILATION_AURA       = "Assimilation Aura (Kerrigan Ability)"
 KERRIGAN_IMMOBILIZATION_WAVE     = "Immobilization Wave (Kerrigan Ability)"
 KERRIGAN_PRIMAL_FORM             = "Primal Form (Kerrigan)"
 
@@ -600,6 +600,7 @@ ZERG_EXCAVATING_CLAWS            = "Excavating Claws (Zerg)"
 HIVE_CLUSTER_MATURATION          = "Hive Cluster Maturation (Zerg)"
 MACROSCOPIC_RECUPERATION         = "Macroscopic Recuperation (Zerg)"
 BIOMECHANICAL_STOCKPILING        = "Bio-Mechanical Stockpiling (Zerg)"
+BROODLING_PACKING                = "Broodling Packing (Zerg)"
 
 # Kerrigan Levels
 KERRIGAN_LEVELS_1  = "1 Kerrigan Level"
