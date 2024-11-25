@@ -13,6 +13,7 @@ from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
 from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
 from .. import StardewValleyWorld, options, StardewItem, StardewRule
+from ..logic.time_logic import MONTH_COEFFICIENT
 from ..options import StardewValleyOption
 
 logger = logging.getLogger(__name__)
@@ -253,6 +254,12 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         if self.skip_base_tests:
             return False
         return super().run_default_tests
+
+    def collect_months(self, months: int):
+        real_total_prog_items = self.world.total_progression_items
+        percent = months * MONTH_COEFFICIENT
+        self.collect("Stardrop", real_total_prog_items * 100 // percent)
+        self.world.total_progression_items = real_total_prog_items
 
     def collect_lots_of_money(self, percent: float = 0.25):
         self.collect("Shipping Bin")
