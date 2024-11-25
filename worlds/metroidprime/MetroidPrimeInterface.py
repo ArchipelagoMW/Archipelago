@@ -197,7 +197,7 @@ class MetroidPrimeInterface:
     connection_status: str
     logger: Logger
     _previous_message_size: int = 0
-    game_id_error: str
+    game_id_error: Optional[str] = None
     game_rev_error: int
     current_game: Optional[str]
     relay_trackers: Optional[Dict[Any, Any]]
