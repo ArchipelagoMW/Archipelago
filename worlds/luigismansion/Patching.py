@@ -429,7 +429,7 @@ ROOM_TO_ID = {
 
 def apply_new_ghost(x, element):
     # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.
-    # TODO: Allow the tenjyo and tenjyo2 (Ceiling ghosts) to be supposed. Will require changing their Y Position value.
+    # TODO: Allow the tenjyo and tenjyo2 (Ceiling ghosts) to be supported. Will require changing their Y Position value.
     random_ghosts_to_patch = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "skul", "putcher1"]
 
     # If a room is supposed to have an element, replace all the ghosts in it to be only ghosts with that element.
