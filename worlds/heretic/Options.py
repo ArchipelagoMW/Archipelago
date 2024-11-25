@@ -104,7 +104,7 @@ class StartWithMapScrolls(Toggle):
 class ResetLevelOnDeath(DefaultOnToggle):
     """When dying, levels are reset and monsters respawned. But inventory and checks are kept.
     Turning this setting off is considered easy mode. Good for new players that don't know the levels well."""
-    display_message="Reset level on death"
+    display_name = "Reset Level on Death"
 
     
 class CheckSanity(Toggle):
