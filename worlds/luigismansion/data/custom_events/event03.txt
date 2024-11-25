@@ -19,7 +19,10 @@
 <RAMDOMJMP>"step2"
 -----------------------------
 <CASE>"step3"
+<FRAMESTART>
 <ACTOR>"demo_piano"<ALPHA>(255)
+<FRAMEEND>
+<WAIT>(30)
 <GENON>"demo_piano"
 <FLAGON>(89)
 <END>
