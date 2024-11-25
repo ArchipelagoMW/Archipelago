@@ -851,4 +851,5 @@ ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
                       **FURNITURE_LOCATION_TABLE,
                       **SPEEDY_LOCATION_TABLE,
                       **BOO_LOCATION_TABLE,
+                      **TOAD_LOCATION_TABLE,
                       **PORTRAIT_LOCATION_TABLE}
