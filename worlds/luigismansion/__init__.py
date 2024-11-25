@@ -144,6 +144,21 @@ class LMWorld(World):
     def _set_optional_locations(self):
 
         # Set the flags for progression location by checking player's settings
+        if self.options.toadsanity:
+            for location, data in TOAD_LOCATION_TABLE.items():
+                region = self.multiworld.get_region(data.region, self.player)
+                entry = LMLocation(self.player, location, region, data)
+                if len(entry.access) != 0:
+                    for item in entry.access:
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                region.locations.append(entry)
         if self.options.plantsanity:
             for location, data in PLANT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)

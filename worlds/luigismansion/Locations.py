@@ -83,11 +83,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, []),
     "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, []),
     "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furniture", 682, []),
-    # Adds Toads as locations
-    # "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", -1, []),
-    # "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", -1, []),
-    # "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", -1, []),
-    # "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", -1, []),
+
     # "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", -1, []),
 
 
@@ -166,6 +162,14 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35,
                                            ["Ice Element Medal"]),
     "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furniture", 690, []),
+}
+
+TOAD_LOCATION_TABLE: dict[str, LMLocationData] = {
+    # Adds Toads as locations
+    "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", -1, []),
+    "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", -1, []),
+    "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", -1, []),
+    "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", -1, []),
 }
 
 # Adds all waterable plants as locations

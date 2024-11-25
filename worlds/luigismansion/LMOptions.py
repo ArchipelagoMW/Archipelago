@@ -43,6 +43,7 @@ class StartWithBooRadar(Toggle):
     """Start with Boo Radar"""
     display_name = "Boo Radar"
 
+
 class Plants(Toggle):
     """Adds all plants to location pool"""
     display_name = "Plantsanity"
@@ -51,6 +52,11 @@ class Plants(Toggle):
 class PickupAnim(Toggle):
     """Disable Luigi's pickup animations"""
     display_name = "Pickup Animation"
+
+
+class Toadsanity(Toggle):
+    """Add Toads as locations to be checked"""
+    display_name = "Toadsanity"
 
 
 class Furnisanity(Toggle):
@@ -165,6 +171,7 @@ class LMOptions(PerGameCommonOptions):
     pickup_animation: PickupAnim
     random_music: RandomMusic
     door_rando: DoorRando
+    toadsanity: Toadsanity
     plantsanity: Plants
     furnisanity: Furnisanity
     boosanity: Boosanity
