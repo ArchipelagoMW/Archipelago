@@ -18,6 +18,7 @@ def update_character_info(character_info, output_data):
         if x["name"] in {"vhead", "vbody", "dhakase", "demobak1", "dluige01"}:
             character_info.info_file_field_entries.remove(x)
 
+        # Replace the mstar Observatory item with its randomized item.
         if x["name"] == "mstar":
             for item_name, item_data in output_data["Locations"].items():
                 if item_name == "Observatory Mario Star":
@@ -28,6 +29,7 @@ def update_character_info(character_info, output_data):
                     x["name"] = item_name
                     break
 
+        # Allow Chauncey, Lydia, and the Twins to spawn as soon as a new game is created.
         if x["name"] in {"baby", "mother", "dboy", "dboy2"}:
             x["appear_flag"] = 0
 
@@ -115,6 +117,7 @@ def update_item_info_table(item_info_table_entry, output_data):
 
     __add_info_item(item_info_table_entry, "nothing")
 
+    # For every key found in the generation output, add an entry for it in "iteminfotable".
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
             item_name = "key_" + str(item_data["door_id"])
@@ -126,6 +129,7 @@ def update_item_info_table(item_info_table_entry, output_data):
                 "is_escape": 0
             })
 
+    # Add the rest of the items that can spawn in the game, so they can be spawned from treasure chests or furniture.
     __add_info_item(item_info_table_entry, "money")
     __add_info_item(item_info_table_entry, "rdiamond")
 
@@ -166,15 +170,19 @@ def __add_appear_item(item_appear_table_entry, item_name):
     item_appear_table_entry.info_file_field_entries.append(new_item)
 
 def update_item_appear_table(item_appear_table_entry, output_data):
+    # Replace all original entries of "itemappeartable" to be filled with "nothing".
+    # This prevents vanilla actors to spawn things, without breaking them.
     for x in item_appear_table_entry.info_file_field_entries[:]:
         for itemid in range(20):
             x["item" + str(itemid)] = "nothing"
 
+    # For every key found in the generation output, add an entry for it in "itemappeartable".
     for item_name, item_data in output_data["Locations"].items():
         if item_data["door_id"] != 0:
             item_name = "key_" + str(item_data["door_id"])
             __add_appear_item(item_appear_table_entry, item_name)
 
+    # Add the rest of the items that can spawn in the game, so they can be spawned from treasure chests or furniture.
     __add_appear_item(item_appear_table_entry, "money")
     __add_appear_item(item_appear_table_entry, "rdiamond")
 
@@ -200,10 +208,14 @@ def update_item_appear_table(item_appear_table_entry, output_data):
     __add_appear_item(item_appear_table_entry, "mstar")
 
 def update_treasure_table(treasure_table_entry, character_info, output_data):
+    # Clear out the vanilla treasuretable from everything.
     treasure_table_entry.info_file_field_entries.clear()
 
     for x in character_info.info_file_field_entries[:]:
         for item_name, item_data in output_data["Locations"].items():
+            # Define the actor name to use from the Location in the generation output.
+            # Act differently if it's a key.
+            # Also define the size of the chest from the item name.
             if item_data["door_id"] == 0:
                 item_name = get_item_name(item_data["name"], item_data)
                 chest_size = __get_chest_size_from_item(item_data["name"])
@@ -211,19 +223,24 @@ def update_treasure_table(treasure_table_entry, character_info, output_data):
                 item_name = "key_" + str(item_data["door_id"])
                 chest_size = __get_chest_size_from_key(item_data["door_id"])
 
+            # If the item in the generation output we're looking at right now is supposed to be in a chest:
             if item_data["type"] == "Chest":
+                # Find the proper chest in the proper room by looking comparing the Room ID.
                 if x["name"].find("takara") != -1 and item_data["type"] == "Chest" and x["room_no"] == item_data["room_no"]:
+                    # Replace the Chest visuals with something that matches the item name in "characterinfo".
                     x["name"] = __get_item_chest_visual(item_data["name"])
 
                     coin_amount = 0
                     bill_amount = 0
                     gold_bar_amount = 0
 
+                    # Generate a random amount of money if the item is supposed to be a money bundle.
                     if item_name == "money":
                         coin_amount = randrange(10, 30)
                         bill_amount = randrange(10, 30)
                         gold_bar_amount = randrange(0, 1)
 
+                    # Add the entry for the chest in "treasuretable". Also includes the chest size.
                     treasure_table_entry.info_file_field_entries.append({
                         "other": item_name,
                         "room": item_data["room_no"],
@@ -312,19 +329,26 @@ def get_item_name(item_name, item_data):
 def set_key_info_entry(key_entry, item_data, item_name):
     new_item_name = get_item_name(item_data["name"], item_data)
 
+    # If the Freestanding item is supposed to be money, replace it with a Gold Diamond.
+    # TODO: Replace the forced diamond with a random set of collectibles, like gems, a gold bar, but it can't be money.
     if new_item_name == "money":
         new_item_name = "rdiamond"
 
+    # Disable the item's invisible status by default.
+    # This is needed since we change the appear_type to 0, which makes items other than keys not spawn out of bounds.
+    # IIRC, the default appear_type for keys in keyinfo makes them visible, even if invisible is set to 1.
     key_entry["name"] = new_item_name
     key_entry["open_door_no"] = item_data["door_id"]
     key_entry["appear_type"] = 0
     key_entry["invisible"] = 0
 
+    # Allow the Ghost Foyer Key to be spawned at the beginning of the game and work properly.
     if item_name == "Ghost Foyer Key":
         key_entry["appear_flag"] = 0
         key_entry["disappear_flag"] = 0
 
 def update_key_info(key_info_entry, output_data):
+    # For every Freestanding Key in the game, replace its entry with the proper item from the generation output.
     for item_name, item_data in output_data["Locations"].items():
         match item_name:
             case "The Well Key":
@@ -338,6 +362,7 @@ def update_key_info(key_info_entry, output_data):
             case "Wardrobe Shelf Key":
                 set_key_info_entry(key_info_entry.info_file_field_entries[5], item_data, item_name)
 
+    # Remove the cutscene HD key from the Foyer, which only appears in the cutscene.
     key_info_entry.info_file_field_entries.remove(key_info_entry.info_file_field_entries[2])
 
 # List of furniture names that tend to spawn items up high or potentially out of bounds.
@@ -367,7 +392,8 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
             current_y_offset = furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_offset_y"]
             furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_offset_y"]= current_y_offset-50.0
 
-
+        # Replace the furnitureinfo entry to spawn an item from the "itemappeartable".
+        # If the entry is supposed to be money, then generate a random amount of coins and/or bills from it.
         for x in item_appear_table_entry.info_file_field_entries:
             actor_item_name = get_item_name(item_data["name"], None)
             if x["item0"] == "key_" + str(item_data["door_id"]) or x["item0"] == actor_item_name:
@@ -378,7 +404,7 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
 
-
+# List of Room Names and their ID. Used for the Enemizer.
 ROOM_TO_ID = {
     "Wardrobe": 38,
     "Laundry Room": 5,
@@ -402,7 +428,12 @@ ROOM_TO_ID = {
 }
 
 def apply_new_ghost(x, element):
+    # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.
+    # TODO: Allow the tenjyo and tenjyo2 (Ceiling ghosts) to be supposed. Will require changing their Y Position value.
     random_ghosts_to_patch = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "skul", "putcher1"]
+
+    # If a room is supposed to have an element, replace all the ghosts in it to be only ghosts with that element.
+    # Otherwise, randomize the ghosts between the non-element ones from the list.
     match element:
         case "Ice":
             x["name"] = "mopoo2"
@@ -414,17 +445,20 @@ def apply_new_ghost(x, element):
             x["name"] = choice(random_ghosts_to_patch)
 
 def update_enemy_info(enemy_info, output_data):
-    random_ghosts = ["yapoo1", "mapoo1", "mopoo1",
-                     "yapoo2", "mapoo2", "mopoo2",
-                     "banaoba",
-                     "topoo1", "topoo2", "topoo3", "topoo4",
-                     "heypo1", "heypo2", "heypo3", "heypo4", "heypo5", "heypo6", "heypo7", "heypo8",
-                     "skul",
-                     "putcher1",
-                     "tenjyo", "tenjyo2"]
+    # A list of all the ghost actors of the game we want to replace.
+    # It excludes the "waiter" ghost as that is needed for Mr. Luggs to work properly.
+    ghost_list = ["yapoo1", "mapoo1", "mopoo1",
+                  "yapoo2", "mapoo2", "mopoo2",
+                  "banaoba",
+                  "topoo1", "topoo2", "topoo3", "topoo4",
+                  "heypo1", "heypo2", "heypo3", "heypo4", "heypo5", "heypo6", "heypo7", "heypo8",
+                  "skul",
+                  "putcher1",
+                  "tenjyo", "tenjyo2"]
 
     for x in enemy_info.info_file_field_entries[:]:
         for room_name, element in output_data["Room Enemies"].items():
-            if x["room_no"] == ROOM_TO_ID[room_name] and x["name"] in random_ghosts:
+            # Only replace ghosts in rooms that are defined in the ROOM_TO_ID list.
+            if x["room_no"] == ROOM_TO_ID[room_name] and x["name"] in ghost_list:
                 apply_new_ghost(x, element)
                 break
