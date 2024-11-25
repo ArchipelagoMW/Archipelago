@@ -231,7 +231,7 @@ class HKWorld(World):
             all_event_names.update(set(godhome_event_names))
 
         # Link regions
-        for event_name in all_event_names:
+        for event_name in sorted(all_event_names):
             #if event_name in wp_exclusions:
             #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
