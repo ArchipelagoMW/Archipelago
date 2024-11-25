@@ -161,6 +161,7 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Armory Clear Chest": LMLocationData("Armory", 63, "Chest", 27, []),
     "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35,
                                            ["Ice Element Medal"]),
+    "Telephone Room Clear Chest": LMLocationData("Telephone Room", 716, "Chest", 28, []),
     "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furniture", 690, []),
 }
 

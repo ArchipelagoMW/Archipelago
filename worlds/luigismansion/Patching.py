@@ -371,6 +371,7 @@ ROOM_TO_ID = {
     "Projection Room": 13,
     "Safari Room": 52,
     "Cellar": 63,
+    "Telephone Room": 50,
     "Roof": 60,
     "Sealed Room": 36,
     "Armory": 48,
