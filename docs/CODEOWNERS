@@ -46,7 +46,7 @@
 /worlds/clique/ @ThePhar
 
 # Dark Souls III
-/worlds/dark_souls_3/ @Marechal-L
+/worlds/dark_souls_3/ @Marechal-L @nex3
 
 # Donkey Kong Country 3
 /worlds/dkc3/ @PoryGone
@@ -78,6 +78,9 @@
 # Kirby's Dream Land 3
 /worlds/kdl3/ @Silvris
 
+# Kingdom Hearts
+/worlds/kh1/ @gaithern
+
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
 
@@ -103,6 +106,9 @@
 # Minecraft
 /worlds/minecraft/ @KonoTyran @espeon65536
 
+# Mega Man 2
+/worlds/mm2/ @Silvris
+
 # MegaMan Battle Network 3
 /worlds/mmbn3/ @digiholic
 
@@ -111,9 +117,6 @@
 
 # Noita
 /worlds/noita/ @ScipioWright @heinermann
-
-# Ocarina of Time
-/worlds/oot/ @espeon65536
 
 # Old School Runescape
 /worlds/osrs @digiholic
@@ -140,7 +143,7 @@
 /worlds/shivers/ @GodlFire
 
 # A Short Hike
-/worlds/shorthike/ @chandler05
+/worlds/shorthike/ @chandler05 @BrandenEK
 
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
@@ -196,6 +199,9 @@
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
 
+# Yacht Dice
+/worlds/yachtdice/ @spinerak
+
 # Yoshi's Island
 /worlds/yoshisisland/ @PinkSwitch
 
@@ -220,6 +226,9 @@
 
 # Links Awakening DX
 # /worlds/ladx/
+
+# Ocarina of Time
+# /worlds/oot/
 
 ## Disabled Unmaintained Worlds
 

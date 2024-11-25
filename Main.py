@@ -11,7 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
-from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, distribute_planned, \
+    flood_items
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
@@ -45,6 +46,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     multiworld.sprite_pool = args.sprite_pool.copy()
 
     multiworld.set_options(args)
+    if args.csv_output:
+        from Options import dump_player_options
+        dump_player_options(multiworld)
     multiworld.set_item_links()
     multiworld.state = CollectionState(multiworld)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, multiworld.seed)
@@ -100,7 +104,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multiworld.early_items[player][item_name] = max(0, early-count)
                 remaining_count = count-early
                 if remaining_count > 0:
-                    local_early = multiworld.early_local_items[player].get(item_name, 0)
+                    local_early = multiworld.local_early_items[player].get(item_name, 0)
                     if local_early:
                         multiworld.early_items[player][item_name] = max(0, local_early - remaining_count)
                     del local_early
@@ -334,6 +338,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "seed_name": multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
+                    "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
@@ -346,7 +351,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
                 if not multiworld.can_beat_game():
-                    raise Exception("Game appears as unbeatable. Aborting.")
+                    raise FillError("Game appears as unbeatable. Aborting.", multiworld=multiworld)
                 else:
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
