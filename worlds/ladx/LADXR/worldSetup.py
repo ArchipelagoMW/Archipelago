@@ -115,7 +115,10 @@ class WorldSetup:
         elif settings.goal == "specific":
             instruments = [c for c in "12345678"]
             rnd.shuffle(instruments)
-            self.goal = "=" + "".join(instruments[:ap_options.instrument_count.value])
+            instrument_count = ap_options.instrument_count.value
+            if instrument_count < 2 or instrument_count > 6:
+                instrument_count = 4
+            self.goal = "=" + "".join(instruments[:instrument_count])
         elif "-" in settings.goal:
             a, b = settings.goal.split("-")
             if a == "open":

@@ -444,11 +444,6 @@ class LinksAwakeningWorld(World):
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
 
-    def generate_early(self):
-        if self.options.goal == "specific":
-            if self.options.instrument_count.value <= 0:
-                raise ValueError("Specific instrument count cannot be zero.")
-
     def generate_output(self, output_directory: str):
         # copy items back to locations
         for r in self.multiworld.get_regions(self.player):
