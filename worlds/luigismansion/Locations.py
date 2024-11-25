@@ -52,7 +52,7 @@ class LMLocation(Location):
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Base Chests / Locations
     #"Luigi's Courage": LMLocationData("Parlor", 708, "Special", -1, []), # Give item during/after E. Gadd cutscene
-    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, []),
+    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", -1, []),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, []),
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"]),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, []),
