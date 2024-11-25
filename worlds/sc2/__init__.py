@@ -20,7 +20,7 @@ from .options import (
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems, RequiredTactics,
-    upgrade_included_names
+    upgrade_included_names, EnableVoidTrade
 )
 from .rules import get_basic_units
 from . import settings
@@ -187,6 +187,16 @@ class SC2World(World):
 
         if SC2Campaign.HOTS not in enabled_campaigns:
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
+
+        # Disable trade if there is no trade partner
+        traders = [
+            world
+            for world in self.multiworld.worlds.values()
+            if world.game == self.game and world.options.enable_void_trade == EnableVoidTrade.option_true
+        ]
+        if len(traders) < 2:
+            slot_data["enable_void_trade"] = EnableVoidTrade.option_false
+
         return slot_data
 
     def pre_fill(self) -> None:

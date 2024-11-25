@@ -18,6 +18,8 @@ import zipfile
 import io
 import random
 import concurrent.futures
+import time
+import uuid
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -33,11 +35,12 @@ from .options import (
     VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild,
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade
 )
 from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionEntryRules
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
 from .mission_tables import MissionFlag
+from .transfer_data import normalized_unit_types
 from . import SC2World
 
 
@@ -82,6 +85,17 @@ DATA_API_VERSION = "API4"
 # Bot controller
 CONTROLLER_HEALTH: int = 38281
 CONTROLLER2_HEALTH: int = 38282
+
+# Void Trade
+TRADE_UNIT = "AP_TradeStructure" # ID of the unit
+TRADE_SEND_BUTTON = "AP_TradeStructureDummySend" # ID of the button
+TRADE_RECEIVE_1_BUTTON = "AP_TradeStructureDummyReceive" # ID of the button
+TRADE_RECEIVE_5_BUTTON = "AP_TradeStructureDummyReceive5" # ID of the button
+TRADE_DATASTORAGE_TEAM = "SC2_VoidTrade_" # + Team
+TRADE_DATASTORAGE_SLOT = "slot_" # + Slot
+TRADE_DATASTORAGE_LOCK = "_lock"
+TRADE_LOCK_TIME = 5000 # Time in ms that the DataStorage may be considered safe to edit
+TRADE_LOCK_WAIT_LIMIT = 540000 / 1.4 # Time in ms that the client may spend trying to get a lock (540000 = 9 minutes, 1.4 is 'faster' game speed's time scale)
 
 # Games
 STARCRAFT2 = "Starcraft 2"
@@ -587,6 +601,13 @@ class SC2Context(CommonContext):
         self.starting_supply_per_item: int = 2  # For backwards compat with games generated pre-0.4.5
         self.nova_covert_ops_only = False
         self.kerrigan_levels_per_mission_completed = 0
+        self.trade_enabled: int = EnableVoidTrade.default
+        self.trade_underway: bool = False
+        self.trade_latest_reply: typing.Optional[dict] = None
+        self.trade_reply_event = asyncio.Event()
+        self.trade_lock_wait: int = 0
+        self.trade_lock_start: typing.Optional[int] = None
+        self.trade_response: typing.Optional[str] = None
 
     async def server_auth(self, password_requested: bool = False) -> None:
         self.game = STARCRAFT2
@@ -608,8 +629,28 @@ class SC2Context(CommonContext):
             self.game = STARCRAFT2_WOL
             async_start(self.send_connect())
 
+    def trade_storage_team(self) -> str:
+        return f"{TRADE_DATASTORAGE_TEAM}{self.team}"
+    
+    def trade_storage_slot(self) -> str:
+        return f"{TRADE_DATASTORAGE_SLOT}{self.slot}"
+
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
+            # Set up the trade storage
+            async_start(self.send_msgs([
+                { # We want to know about other clients' Set commands for locking
+                    "cmd": "SetNotify",
+                    "keys": [self.trade_storage_team()],
+                },
+                {
+                    "cmd": "Set",
+                    "key": self.trade_storage_team(),
+                    "default": { TRADE_DATASTORAGE_LOCK: 0 },
+                    "operations": [{"operation": "default", "value": None}]  # value is ignored
+                }
+            ]))
+
             self.difficulty = args["slot_data"]["game_difficulty"]
             self.game_speed = args["slot_data"].get("game_speed", GameSpeed.option_default)
             self.disable_forced_camera = args["slot_data"].get("disable_forced_camera", DisableForcedCamera.default)
@@ -716,6 +757,7 @@ class SC2Context(CommonContext):
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
+            self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -760,6 +802,11 @@ class SC2Context(CommonContext):
                 self.data_out_of_date = True
             
             ColouredMessage("[b]Check the Launcher tab to start playing.[/b]", keep_markup=True).send(self)
+        
+        elif cmd == "SetReply":
+            # Currently can only be Void Trade reply
+            self.trade_latest_reply = args
+            self.trade_reply_event.set()
 
     @staticmethod
     def parse_mission_info(mission_info: dict[str, typing.Any]) -> MissionInfo:
@@ -909,6 +956,188 @@ class SC2Context(CommonContext):
 
     def is_mission_completed(self, mission_id: int) -> bool:
         return get_location_id(mission_id, 0) in self.checked_locations
+    
+        
+    async def trade_acquire_storage(self, keep_trying: bool = False) -> typing.Optional[dict]:
+        # This function was largely taken from the Pokemon Emerald client
+        """
+        Acquires a lock on the Void Trade DataStorage.
+        Locking the key means you have exclusive access
+        to modifying the value until you unlock it or the key expires (5 seconds).
+
+        If `keep_trying` is `True`, it will keep trying to acquire the lock
+        until successful. Otherwise it will return `None` if it fails to
+        acquire the lock.
+        """
+        while not self.exit_event.is_set() and self.last_bot and self.last_bot.game_running:
+            lock = int(time.time_ns() / 1000000)
+
+            # Make sure we're not past the waiting limit
+            # SC2 needs to be notified within 10 minutes (training time of the dummy units)
+            if self.trade_lock_start is not None:
+                if self.last_bot.time - self.trade_lock_start >= TRADE_LOCK_WAIT_LIMIT:
+                    self.trade_lock_wait = 0
+                    self.trade_lock_start = None
+                    return None
+            elif keep_trying:
+                self.trade_lock_start = self.last_bot.time
+
+            message_uuid = str(uuid.uuid4())
+            await self.send_msgs([{
+                "cmd": "Set",
+                "key": self.trade_storage_team(),
+                "default": { TRADE_DATASTORAGE_LOCK: 0 },
+                "want_reply": True,
+                "operations": [{ "operation": "update", "value": { TRADE_DATASTORAGE_LOCK: lock } }],
+                "uuid": message_uuid,
+            }])
+
+            self.trade_reply_event.clear()
+            try:
+                await asyncio.wait_for(self.trade_reply_event.wait(), 5)
+            except asyncio.TimeoutError:
+                if not keep_trying:
+                    return None
+                continue
+
+            reply = copy.deepcopy(self.trade_latest_reply)
+
+            # Make sure the most recently received update was triggered by our lock attempt
+            if reply.get("uuid", None) != message_uuid:
+                if not keep_trying:
+                    return None
+                await asyncio.sleep(TRADE_LOCK_TIME)
+                continue
+
+            # Make sure the current value of the lock is what we set it to
+            # (I think this should theoretically never run)
+            if reply["value"][TRADE_DATASTORAGE_LOCK] != lock:
+                if not keep_trying:
+                    return None
+                await asyncio.sleep(TRADE_LOCK_TIME)
+                continue
+
+            # Make sure that the lock value we replaced is at least 5 seconds old
+            # If it was unlocked before our change, its value was 0 and it will look decades old
+            if lock - reply["original_value"][TRADE_DATASTORAGE_LOCK] < TRADE_LOCK_TIME:
+                if not keep_trying:
+                    return None
+                
+                # Multiple clients trying to lock the key may get stuck in a loop of checking the lock
+                # by trying to set it, which will extend its expiration. So if we see that the lock was
+                # too new when we replaced it, we should wait for increasingly longer periods so that
+                # eventually the lock will expire and a client will acquire it.
+                self.trade_lock_wait += TRADE_LOCK_TIME
+                self.trade_lock_wait += random.randrange(100, 500)
+
+                await asyncio.sleep(self.trade_lock_wait)
+                continue
+
+            # We have the lock, reset the waiting period and return
+            self.trade_lock_wait = 0
+            self.trade_lock_start = None
+            return reply
+        return None
+        
+
+    async def trade_receive(self, amount: int = 1):
+        """
+        Tries to pop `amount` units out of the trade storage.
+        """
+        reply = await self.trade_acquire_storage(True)
+
+        if reply is None:
+            self.trade_response = "?TradeFail Void Trade failed: Could not communicate with server. Trade cost refunded."
+            return None
+
+        # Find available units
+        # Ignore units we sent ourselves
+        allowed_slots: typing.List[str] = [
+            slot for slot in reply["value"]
+            if slot != TRADE_DATASTORAGE_LOCK \
+                and slot != self.trade_storage_slot()
+        ]
+        available_units: typing.List[typing.Tuple[str, str]] = []
+        available_counts: typing.List[int] = []
+        for slot in allowed_slots:
+            for (unit, count) in reply["value"][slot].items():
+                available_units.append((unit, slot))
+                available_counts.append(count)
+
+        # Pick units to receive
+        # If there's not enough units in total, just pick as many as possible
+        # SC2 should handle the refund
+        available = sum(available_counts)
+        refunds = 0
+        if available < amount:
+            refunds = amount - available
+            amount = available
+        if available == 0:
+            # random.sample crashes if counts is an empty list
+            units = []
+        else:
+            units = random.sample(available_units, amount, counts = available_counts)
+
+        # Build response data
+        unit_counts: typing.Dict[str, int] = {}
+        slots_to_update: typing.Dict[str, typing.Dict[str, int]] = {}
+        for (unit, slot) in units:
+            unit_counts[unit] = unit_counts.get(unit, 0) + 1
+            if slot not in slots_to_update:
+                slots_to_update[slot] = copy.deepcopy(reply["value"][slot])
+            slots_to_update[slot][unit] -= 1
+            # Clean up units that were removed completely
+            if slots_to_update[slot][unit] == 0:
+                slots_to_update[slot].pop(unit)
+
+        await self.send_msgs([
+            {   # Update server storage
+                "cmd": "Set",
+                "key": self.trade_storage_team(),
+                "operations": [{ "operation": "update", "value": slots_to_update }]
+            },
+            {   # Release the lock
+                "cmd": "Set",
+                "key": self.trade_storage_team(),
+                "operations": [{ "operation": "update", "value": { TRADE_DATASTORAGE_LOCK: 0 } }]
+            }
+        ])
+
+        # Give units to bot
+        self.trade_response = f"?Trade {refunds} " + " ".join(f"{unit} {count}" for (unit, count) in unit_counts.items())
+
+
+    async def trade_send(self, units: typing.List[str]):
+        """
+        Tries to upload `units` to the trade DataStorage.
+        """
+        reply = await self.trade_acquire_storage(True)
+
+        if reply is None:
+            self.trade_response = "?TradeFail Void Trade failed: Could not communicate with server. Your units remain."
+            return None
+        
+        # Update the storage with the new units
+        data: typing.Dict[str, int] = copy.deepcopy(reply["value"].get(self.trade_storage_slot(), {}))
+        for unit in units:
+            data[unit] = data.get(unit, 0) + 1
+        
+        await self.send_msgs([
+            {   # Send the updated data
+                "cmd": "Set",
+                "key": self.trade_storage_team(),
+                "operations": [{ "operation": "update", "value": { self.trade_storage_slot(): data } }]
+            },
+            {   # Release the lock
+                "cmd": "Set",
+                "key": self.trade_storage_team(),
+                "operations": [{ "operation": "update", "value": { TRADE_DATASTORAGE_LOCK: 0 } }]
+            }
+        ])
+        
+        # Notify the game
+        self.trade_response = "?TradeSuccess Void Trade successful: Units sent!"
+
 
 class CompatItemHolder(typing.NamedTuple):
     name: str
@@ -1226,6 +1455,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         'want_close',
         'can_read_game',
         'last_received_update',
+        'last_trade_cargo',
+        'last_supply_used'
     ]
     ctx: SC2Context
 
@@ -1235,6 +1466,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         self.want_close = False
         self.can_read_game = False
         self.last_received_update: int = 0
+        self.last_trade_cargo: set = set()
+        self.last_supply_used: int = 0
         self.setup_done = False
         self.ctx = ctx
         self.ctx.last_bot = self
@@ -1283,6 +1516,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 f" {self.ctx.grant_story_levels}"
                 f" {self.ctx.enable_morphling}"
                 f" {mission_variant}"
+                f" {self.ctx.trade_enabled}"
             )
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
@@ -1319,6 +1553,50 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 elif unit.health_max == CONTROLLER2_HEALTH:
                     controller2_state = int(CONTROLLER2_HEALTH - unit.health)
                     self.can_read_game = True
+                elif unit.name == TRADE_UNIT:
+                    # Handle Void Trade requests
+                    # Check for orders (for buildings this is usually research or training)
+                    if not unit.is_idle and not self.ctx.trade_underway:
+                        button = unit.orders[0].ability.button_name
+                        if button == TRADE_SEND_BUTTON and len(self.last_trade_cargo) > 0:
+                            units_to_send: typing.List[str] = []
+                            non_ap_units: typing.Set[str] = set()
+                            for passenger in self.last_trade_cargo:
+                                # Alternatively passenger._type_data.name but passenger.name seems to always match
+                                unit_name = passenger.name
+                                if unit_name.startswith("AP_"):
+                                    units_to_send.append(normalized_unit_types.get(unit_name, unit_name))
+                                else:
+                                    non_ap_units.add(unit_name)
+                            if len(non_ap_units) > 0:
+                                sc2_logger.info(f"Void Trade tried to send non-AP units: {', '.join(non_ap_units)}")
+                                self.ctx.trade_response = "?TradeFail Void Trade rejected: Trade contains invalid units."
+                                self.ctx.trade_underway = True
+                            else:
+                                self.ctx.trade_response = None
+                                self.ctx.trade_underway = True
+                                async_start(self.ctx.trade_send(units_to_send))
+                        elif button == TRADE_RECEIVE_1_BUTTON:
+                            self.ctx.trade_underway = True
+                            if self.supply_used != self.last_supply_used:
+                                self.ctx.trade_response = None
+                                async_start(self.ctx.trade_receive(1))
+                            else:
+                                self.ctx.trade_response = "?TradeFail Void Trade rejected: Not enough supply."
+                        elif button == TRADE_RECEIVE_5_BUTTON:
+                            self.ctx.trade_underway = True
+                            if self.supply_used != self.last_supply_used:
+                                self.ctx.trade_response = None
+                                async_start(self.ctx.trade_receive(5))
+                            else:
+                                self.ctx.trade_response = "?TradeFail Void Trade rejected: Not enough supply."
+                    else:
+                        # The API returns no passengers for researching/training buildings,
+                        # so we need to buffer the passengers each frame
+                        self.last_trade_cargo = unit.passengers
+                        # SC2 has no good means of detecting when a unit is queued while supply capped,
+                        # so a supply buffer here is the best we can do
+                        self.last_supply_used = self.supply_used
             game_state = controller1_state + (controller2_state << 15)
 
             if iteration == 160 and not game_state & 1:
@@ -1367,6 +1645,12 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                                 [{"cmd": 'LocationChecks',
                                   "locations": [get_location_id(self.mission_id, x + 1)]}])
                             self.boni[x] = True
+                    
+                    # Send Void Trade results
+                    if self.ctx.trade_response is not None:
+                        await self.chat_send(self.ctx.trade_response)
+                        self.ctx.trade_response = None
+                        self.ctx.trade_underway = False
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
