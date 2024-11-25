@@ -191,6 +191,22 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
             pass
 
 
+class SaveInitialValueMixin:
+    initial_value: typing.Any
+
+    def __init_subclass__(cls: type(Option), **kwargs):
+        super().__init_subclass__(**kwargs)
+
+        original_from_any = cls.from_any
+
+        def from_any_wrapped(_, data: typing.Any):
+            ret = original_from_any(data)
+            ret.initial_value = data
+            return ret
+
+        cls.from_any = classmethod(from_any_wrapped)
+
+
 class FreeText(Option[str]):
     """Text option that allows users to enter strings.
     Needs to be validated by the world or option definition."""
