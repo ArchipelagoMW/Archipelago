@@ -194,12 +194,12 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 class SaveInitialValueMixin:
     initial_value: typing.Any
 
-    def __init_subclass__(cls: type(Option), **kwargs):
+    def __init_subclass__(cls: typing.Type[Option], **kwargs) -> None:
         super().__init_subclass__(**kwargs)
 
         original_from_any = cls.from_any
 
-        def from_any_wrapped(_, data: typing.Any):
+        def from_any_wrapped(_, data: typing.Any) -> Option:
             ret = original_from_any(data)
             ret.initial_value = data
             return ret
