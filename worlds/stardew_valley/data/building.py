@@ -14,3 +14,11 @@ class Building:
     @cached_property
     def is_upgrade(self) -> bool:
         return self.upgrade_from is not None
+
+
+# TODO maybe move this to a different file
+@dataclass(frozen=True)
+class Animal:
+    name: str
+    required_building: str
+    sources: Tuple[Source, ...] = field(**kw_only)
