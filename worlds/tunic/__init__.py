@@ -91,7 +91,6 @@ class TunicWorld(World):
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
 
-
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
