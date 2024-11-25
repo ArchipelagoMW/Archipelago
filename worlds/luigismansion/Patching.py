@@ -324,7 +324,7 @@ def get_item_name(item_name, item_data):
         case "Bomb":
             return "itembomb"
 
-    return "----"
+    return "nothing"
 
 def set_key_info_entry(key_entry, item_data, item_name):
     new_item_name = get_item_name(item_data["name"], item_data)
@@ -347,20 +347,22 @@ def set_key_info_entry(key_entry, item_data, item_name):
         key_entry["appear_flag"] = 0
         key_entry["disappear_flag"] = 0
 
+# List of Location names and their index in keyinfo.
+LOCATION_TO_INDEX = {
+    "The Well Key": 0,
+    "Ghost Foyer Key": 1,
+    "1F Bathroom Shelf Key": 3,
+    "Fortune Teller Candles": 4,
+    "Wardrobe Shelf Key": 5,
+}
+
 def update_key_info(key_info_entry, output_data):
     # For every Freestanding Key in the game, replace its entry with the proper item from the generation output.
     for item_name, item_data in output_data["Locations"].items():
-        match item_name:
-            case "The Well Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[0], item_data, item_name)
-            case "Ghost Foyer Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[1], item_data, item_name)
-            case "1F Bathroom Shelf Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[3], item_data, item_name)
-            case "Fortune Teller Candles":
-                set_key_info_entry(key_info_entry.info_file_field_entries[4], item_data, item_name)
-            case "Wardrobe Shelf Key":
-                set_key_info_entry(key_info_entry.info_file_field_entries[5], item_data, item_name)
+        for location_name, keyinfo_index in LOCATION_TO_INDEX.items():
+            if location_name == item_name:
+                set_key_info_entry(key_info_entry.info_file_field_entries[keyinfo_index], item_data, item_name)
+                break
 
     # Remove the cutscene HD key from the Foyer, which only appears in the cutscene.
     key_info_entry.info_file_field_entries.remove(key_info_entry.info_file_field_entries[2])
@@ -404,7 +406,7 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
 
-# List of Room Names and their ID. Used for the Enemizer.
+# List of Room names and their ID. Used for the Enemizer.
 ROOM_TO_ID = {
     "Wardrobe": 38,
     "Laundry Room": 5,
