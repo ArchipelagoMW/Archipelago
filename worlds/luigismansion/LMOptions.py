@@ -130,6 +130,7 @@ class LuigiFearAnim(Toggle):
     """Turn off Luigi being scared by ghosts if they spawn close to him"""
     display_name = "Courageous Luigi"
 
+
 class Goal(Choice):
     """
     Determines when victory is achieved in your playthrough.

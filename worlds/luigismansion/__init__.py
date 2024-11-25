@@ -9,10 +9,11 @@ from BaseClasses import Tutorial, Item, ItemClassification
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from Options import OptionGroup
 
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
-from .LMOptions import LMOptions
+from . import LMOptions
 from .Regions import *
 from . import Rules
 
@@ -42,6 +43,36 @@ class LuigisMansionSettings(settings.Group):
 
 class LMWeb(WebWorld):
     theme = "stone"
+    option_groups = [
+        OptionGroup("Extra Locations", [
+            LMOptions.Furnisanity,
+            LMOptions.Plants,
+            LMOptions.Toadsanity,
+            LMOptions.Boosanity,
+            LMOptions.PortraitGhosts,
+            LMOptions.SpeedySpirits
+        ]),
+        OptionGroup("QOL Changes", [
+            LMOptions.LuigiFearAnim,
+            LMOptions.PickupAnim,
+            LMOptions.LuigiWalkSpeed,
+            LMOptions.BetterVacuum,
+            LMOptions.StartWithBooRadar,
+            LMOptions.StartHiddenMansion,
+            LMOptions.RandomMusic
+        ]),
+        OptionGroup("Access Options", [
+            LMOptions.Goal,
+            LMOptions.RankRequirement,
+            LMOptions.MarioItems,
+            LMOptions.WashroomBooCount,
+            LMOptions.BalconyBooCount,
+            LMOptions.FinalBooCount,
+            LMOptions.Enemizer,
+            LMOptions.DoorRando
+        ])
+    ]
+
     tutorials = [
         Tutorial(
             "Multiworld Setup Guide",
