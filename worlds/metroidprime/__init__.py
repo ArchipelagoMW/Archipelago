@@ -1,8 +1,3 @@
-from .ItemPool import generate_item_pool, generate_start_inventory
-from .PrimeUtils import setup_lib_path
-
-setup_lib_path()  # NOTE: This MUST be called before importing any other metroidprime modules (other than PrimeUtils)
-# Setup local dependencies if running in an apworld
 import typing
 import os
 from Options import NumericOption
@@ -38,6 +33,7 @@ from .data.Transports import (
 from .Config import make_config
 from .Regions import create_regions
 from .Locations import every_location
+from .ItemPool import generate_item_pool, generate_start_inventory
 from .PrimeOptions import (
     BlastShieldRandomization,
     MetroidPrimeOptions,

@@ -1,7 +1,0 @@
-/build/target
-__pycache__
-*.apmp1
-*.iso
-test/test_output
-lib
-testapmp1folder

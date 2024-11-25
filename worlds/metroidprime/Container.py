@@ -1,19 +1,19 @@
 import os
 import struct
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 import zipfile
 from worlds.Files import APContainer
-import py_randomprime
+import py_randomprime  # type: ignore
 
 
 from .MetroidPrimeInterface import GAMES, HUD_MESSAGE_DURATION
 
 if TYPE_CHECKING:
-    from ppc_asm.assembler.ppc import GeneralRegister # type: ignore
+    from ppc_asm.assembler.ppc import GeneralRegister  # type: ignore
 
 
 class MetroidPrimeContainer(APContainer):
-    game: str = "Metroid Prime"
+    game: str = "Metroid Prime"  # type: ignore
 
     def __init__(
         self,
@@ -21,7 +21,7 @@ class MetroidPrimeContainer(APContainer):
         options_json: str,
         outfile_name: str,
         output_directory: str,
-        player=None,
+        player: Optional[int] = None,
         player_name: str = "",
         server: str = "",
     ):

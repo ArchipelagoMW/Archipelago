@@ -19,7 +19,6 @@ from CommonClient import (
 from NetUtils import ClientStatus
 import Utils
 from .Config import make_version_specific_changes
-from .PrimeUtils import get_apworld_version
 from .Items import suit_upgrade_table
 from .ClientReceiveItems import handle_receive_items
 from .NotificationManager import NotificationManager
@@ -181,13 +180,6 @@ def update_connection_status(ctx: MetroidPrimeContext, status: ConnectionState):
 
 
 async def dolphin_sync_task(ctx: MetroidPrimeContext):
-    try:
-        # This will not work if the client is running from source
-        version = get_apworld_version()
-        logger.info(f"Using metroidprime.apworld version: {version}")
-    except:
-        pass
-
     if ctx.apmp1_file:
         Utils.async_start(patch_and_run_game(ctx.apmp1_file))
 
@@ -382,8 +374,8 @@ async def patch_and_run_game(apmp1_file: str):
                 construct_hook_patch(game_version, build_progressive_beam_patch)
             )
 
-            notifier = py_randomprime.ProgressNotifier(
-                lambda progress, message: print("Generating ISO: ", progress, message)
+            notifier = py_randomprime.ProgressNotifier(  # type: ignore
+                lambda progress, message: print("Generating ISO: ", progress, message)  # type: ignore
             )
             logger.info("--------------")
             logger.info(f"Input ISO Path: {input_iso_path}")
