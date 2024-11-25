@@ -48,13 +48,13 @@ def get_flag(data, flag):
     return (data[byte] & bit) > 0
 
 def validate_read_state(data1, data2):
-    validation_aray = bytes([0x01, 0x46, 0x46, 0x4D, 0x51, 0x52])
+    validation_array = bytes([0x01, 0x46, 0x46, 0x4D, 0x51, 0x52])
 
     if data1 is None or data2 is None:
         return False
     else:
         for i in range(6):
-            if data1[i] != validation_aray[i] or data2[i] != validation_aray[i]:
+            if data1[i] != validation_array[i] or data2[i] != validation_array[i]:
                 return False;
     return True
     
