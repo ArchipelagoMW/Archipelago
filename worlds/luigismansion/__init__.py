@@ -13,7 +13,7 @@ from Options import OptionGroup
 
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
-from . import LMOptions
+from .LuigiOptions import LMOptions
 from .Regions import *
 from . import Rules
 
@@ -43,35 +43,35 @@ class LuigisMansionSettings(settings.Group):
 
 class LMWeb(WebWorld):
     theme = "stone"
-    # option_groups = [
-    #     OptionGroup("Extra Locations", [
-    #         LMOptions.Furnisanity,
-    #         LMOptions.Plants,
-    #         LMOptions.Toadsanity,
-    #         LMOptions.Boosanity,
-    #         LMOptions.PortraitGhosts,
-    #         LMOptions.SpeedySpirits
-    #     ]),
-    #     OptionGroup("QOL Changes", [
-    #         LMOptions.LuigiFearAnim,
-    #         LMOptions.PickupAnim,
-    #         LMOptions.LuigiWalkSpeed,
-    #         LMOptions.BetterVacuum,
-    #         LMOptions.StartWithBooRadar,
-    #         LMOptions.StartHiddenMansion,
-    #         LMOptions.RandomMusic
-    #     ]),
-    #     OptionGroup("Access Options", [
-    #         LMOptions.Goal,
-    #         LMOptions.RankRequirement,
-    #         LMOptions.MarioItems,
-    #         LMOptions.WashroomBooCount,
-    #         LMOptions.BalconyBooCount,
-    #         LMOptions.FinalBooCount,
-    #         LMOptions.Enemizer,
-    #         LMOptions.DoorRando
-    #     ])
-    # ]
+    option_groups = [
+        OptionGroup("Extra Locations", [
+            LuigiOptions.Furnisanity,
+            LuigiOptions.Plants,
+            LuigiOptions.Toadsanity,
+            LuigiOptions.Boosanity,
+            LuigiOptions.PortraitGhosts,
+            LuigiOptions.SpeedySpirits
+        ]),
+        OptionGroup("QOL Changes", [
+            LuigiOptions.LuigiFearAnim,
+            LuigiOptions.PickupAnim,
+            LuigiOptions.LuigiWalkSpeed,
+            LuigiOptions.BetterVacuum,
+            LuigiOptions.StartWithBooRadar,
+            LuigiOptions.StartHiddenMansion,
+            LuigiOptions.RandomMusic
+        ]),
+        OptionGroup("Access Options", [
+            LuigiOptions.Goal,
+            LuigiOptions.RankRequirement,
+            LuigiOptions.MarioItems,
+            LuigiOptions.WashroomBooCount,
+            LuigiOptions.BalconyBooCount,
+            LuigiOptions.FinalBooCount,
+            LuigiOptions.Enemizer,
+            LuigiOptions.DoorRando
+        ])
+    ]
 
     tutorials = [
         Tutorial(
