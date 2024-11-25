@@ -1,6 +1,4 @@
-from random import shuffle, seed
-
-from BaseClasses import MultiWorld
+from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule
 
 # REGION_DOORS = {
@@ -89,7 +87,7 @@ ICE_SPIRIT_SPOT = ("Kitchen",
                    "Ceramics Studio")
 
 
-def can_fst_fire(state, player):
+def can_fst_fire(state: CollectionState, player: int):
     return state.has("Fire Element Medal", player) and (state.can_reach("1F Hallway", "Region", player) or
                                                         state.can_reach("Study", "Region", player) or
                                                         state.can_reach("Butler's Room", "Region", player) or
