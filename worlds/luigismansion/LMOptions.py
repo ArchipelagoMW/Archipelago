@@ -53,11 +53,11 @@ class PickupAnim(Toggle):
     display_name = "Pickup Animation"
 
 
-class Knocksanity(Toggle):
+class Furnisanity(Toggle):
     """
     Adds every interactable, such a dressers, paintings, candles, and light fixtures, to the location pool
     """
-    display_name = "Knocksanity"
+    display_name = "Furnisanity"
 
 
 class MarioItems(Range):
@@ -166,7 +166,7 @@ class LMOptions(PerGameCommonOptions):
     random_music: RandomMusic
     door_rando: DoorRando
     plantsanity: Plants
-    knocksanity: Knocksanity
+    furnisanity: Furnisanity
     boosanity: Boosanity
     portrait_ghosts: PortraitGhosts
     speedy_spirits: SpeedySpirits

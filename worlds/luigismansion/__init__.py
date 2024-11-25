@@ -80,7 +80,7 @@ class LMWorld(World):
     ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
 
     open_doors: dict[int, int] = {  # TODO maybe move to imported class
-        34: 0,
+        34: 1,
         38: 0,
         43: 1,
         41: 1,
@@ -158,7 +158,7 @@ class LMWorld(World):
                         if item == "Water Element Medal":
                             add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
                 region.locations.append(entry)
-        if self.options.knocksanity:
+        if self.options.furnisanity:
             for location, data in FURNITURE_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
@@ -272,7 +272,7 @@ class LMWorld(World):
         if self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
         elif self.options.enemizer == 2:
-            for i in len(self.ghost_affected_regions):
+            for i in len(self.ghost_affected_regions.keys()):
                 self.ghost_affected_regions[i] = "No Element"
 
         if self.options.door_rando == 1:

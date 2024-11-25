@@ -357,23 +357,24 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
                     furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
                 break
 
+
 ROOM_TO_ID = {
-    "Wardrobe": 35,
-    "Laundry Room": 38,
-    "Hidden Room": 5,
-    "Storage Room": 1,
-    "Kitchen": 14,
-    "1F Bathroom": 8,
-    "Courtyard": 20,
-    "Tea Room": 23,
-    "2F Washroom": 47,
-    "Projection Room": 42,
-    "Safari Room": 13,
-    "Cellar": 52,
-    "Roof": 63,
-    "Sealed Room": 60,
-    "Armory": 36,
-    "Pipe Room": 48,
+    "Wardrobe": 38,
+    "Laundry Room": 5,
+    "Hidden Room": 1,
+    "Storage Room": 14,
+    "Kitchen": 8,
+    "1F Bathroom": 20,
+    "Courtyard": 23,
+    "Tea Room": 47,
+    "2F Washroom": 42,
+    "Projection Room": 13,
+    "Safari Room": 52,
+    "Cellar": 63,
+    "Roof": 60,
+    "Sealed Room": 36,
+    "Armory": 48,
+    "Pipe Room": 66,
     "Ballroom": 10,
     "Artist's Studio": 57
 }
