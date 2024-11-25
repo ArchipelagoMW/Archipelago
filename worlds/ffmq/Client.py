@@ -52,10 +52,9 @@ def validate_read_state(data1, data2):
 
     if data1 is None or data2 is None:
         return False
-    else:
-        for i in range(6):
-            if data1[i] != validation_array[i] or data2[i] != validation_array[i]:
-                return False;
+    for i in range(6):
+        if data1[i] != validation_array[i] or data2[i] != validation_array[i]:
+            return False;
     return True
     
    
