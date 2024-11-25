@@ -1,3 +1,4 @@
+import typing
 from functools import cached_property
 from typing import Union
 
@@ -10,6 +11,11 @@ from .region_logic import RegionLogicMixin
 from ..stardew_rule import StardewRule, true_
 from ..strings.building_names import Building
 from ..strings.region_names import Region
+
+if typing.TYPE_CHECKING:
+    from .source_logic import SourceLogicMixin
+
+    assert SourceLogicMixin
 
 has_group = "building"
 
