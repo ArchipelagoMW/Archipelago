@@ -136,7 +136,6 @@ class Goal(Choice):
 
     King Boo: Defeat King Boo in the Secret Altar
     Rank Requirement: Gather enough money to reach the specified rank before beating King Boo *experimental
-    Mario Pieces: Mario's Painting has been torn apart. Recover all the pieces to restore the painting and get your brother back!
     """
     display_name = "Goal"
     option_king_boo = 0
