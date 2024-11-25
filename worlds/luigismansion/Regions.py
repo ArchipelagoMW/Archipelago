@@ -31,7 +31,7 @@ GHOST_TO_ROOM = {
 def set_ghost_type(world: World, ghost_list: dict):
     for region_name in ghost_list:
         types = ["Fire", "Water", "Ice", "No Element"]
-        weights = [15, 10, 100, 10, 5, 10]
+        weights = [2, 2, 2, 8]
         ghost_type = world.random.choices(types, weights, k=1)[0]
         ghost_list.update({region_name: ghost_type})
 
