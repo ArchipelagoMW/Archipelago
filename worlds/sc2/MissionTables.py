@@ -44,7 +44,7 @@ class SC2Campaign(Enum):
         self.race = race
 
     def __lt__(self, other: "SC2Campaign"):
-        return self.value < other.value
+        return self.id < other.id
 
     GLOBAL = 0, "Global", SC2CampaignGoalPriority.NONE, SC2Race.ANY
     WOL = 1, "Wings of Liberty", SC2CampaignGoalPriority.VERY_HARD, SC2Race.TERRAN
