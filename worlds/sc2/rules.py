@@ -1496,7 +1496,7 @@ class SC2Logic:
                 and self.terran_defense_rating(state, True, False) >= 5
         )
 
-    def brothers_in_arms_requirement(self, state: CollectionState) -> bool:
+    def protoss_brothers_in_arms_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_common_unit(state)
             and self.protoss_anti_armor_anti_air(state)
@@ -1514,12 +1514,45 @@ class SC2Logic:
             and (
                 self.protoss_hybrid_counter(state)
                 or state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.SIEGE_TANK}, self.player)
-                or state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                or (
+                        self.advanced_tactics
+                        and state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                )
                 or (state.has(item_names.IMMORTAL, self.player)
                     and state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player)
                     and self.terran_bio_heal(state)
                 )
             )
+        )
+
+    def zerg_brothers_in_arms_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.zerg_common_unit(state)
+                and self.zerg_competent_comp(state)
+                and self.zerg_competent_anti_air(state)
+                and self.zerg_big_monsters(state)
+        ) or (
+                self.take_over_ai_allies
+                and (
+                        self.zerg_common_unit(state)
+                        or self.protoss_common_unit(state)
+                )
+                and (
+                        self.terran_competent_anti_air(state)
+                        or self.zerg_competent_anti_air(state)
+                )
+                and (
+                        self.zerg_big_monsters(state)
+                        or state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.SIEGE_TANK}, self.player)
+                        or (
+                                self.advanced_tactics
+                                and state.has_all({item_names.SPECTRE, item_names.SPECTRE_PSIONIC_LASH}, self.player)
+                        )
+                        or (state.has(item_names.ABERRATION, self.player)
+                            and state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player)
+                            and self.terran_bio_heal(state)
+                            )
+                )
         )
 
     def protoss_hybrid_counter(self, state: CollectionState) -> bool:

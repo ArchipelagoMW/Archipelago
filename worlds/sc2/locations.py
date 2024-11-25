@@ -1692,14 +1692,14 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_common_unit_basic_aa
         ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 800, LocationType.VICTORY,
-            logic.brothers_in_arms_requirement
+            logic.protoss_brothers_in_arms_requirement
         ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "Mid Science Facility", SC2LOTV_LOC_ID_OFFSET + 801, LocationType.VANILLA,
             lambda state: logic.protoss_common_unit(state) or logic.take_over_ai_allies
         ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "North Science Facility", SC2LOTV_LOC_ID_OFFSET + 802, LocationType.VANILLA,
             lambda state: (
-                logic.brothers_in_arms_requirement(state)
+                logic.protoss_brothers_in_arms_requirement(state)
                 or (
                     logic.take_over_ai_allies
                     and logic.advanced_tactics
@@ -1710,7 +1710,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 ))
         ),
         make_location_data(SC2Mission.BROTHERS_IN_ARMS.mission_name, "South Science Facility", SC2LOTV_LOC_ID_OFFSET + 803, LocationType.VANILLA,
-            logic.brothers_in_arms_requirement
+            logic.protoss_brothers_in_arms_requirement
         ),
         make_location_data(SC2Mission.AMON_S_REACH.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 900, LocationType.VICTORY,
             logic.protoss_common_unit_anti_light_air
@@ -4687,6 +4687,50 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.SKY_SHIELD_Z.mission_name, "East Raynor Base", SC2_RACESWAP_LOC_ID_OFFSET + 11210, LocationType.EXTRA,
                            logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11300, LocationType.VICTORY,
+                           lambda state: (
+                               logic.terran_common_unit(state)
+                               and logic.terran_beats_protoss_deathball(state)
+                           )),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_T.mission_name, "Mid Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 11301, LocationType.VANILLA,
+                           lambda state: logic.terran_common_unit(state) or logic.take_over_ai_allies
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_T.mission_name, "North Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 11302, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_beats_protoss_deathball(state)
+                                   or (
+                                           logic.take_over_ai_allies
+                                           and logic.advanced_tactics
+                                           and logic.terran_common_unit(state)
+                                   ))
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_T.mission_name, "South Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 11303, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_common_unit(state)
+                                   and logic.terran_beats_protoss_deathball(state)
+                           )),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11400, LocationType.VICTORY,
+                           logic.zerg_brothers_in_arms_requirement
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "Mid Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 11401, LocationType.VANILLA,
+                           lambda state: logic.zerg_common_unit(state) or logic.take_over_ai_allies
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "North Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 11402, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_brothers_in_arms_requirement(state)
+                                   or (
+                                           logic.take_over_ai_allies
+                                           and logic.advanced_tactics
+                                           and (
+                                                   logic.zerg_common_unit(state)
+                                                   or logic.terran_common_unit(state)
+                                           )
+                                   ))
+                           ),
+        make_location_data(SC2Mission.BROTHERS_IN_ARMS_Z.mission_name, "South Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 11403, LocationType.VANILLA,
+                           logic.zerg_brothers_in_arms_requirement
                            ),
     ]
 
