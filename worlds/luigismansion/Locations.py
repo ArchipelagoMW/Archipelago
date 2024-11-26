@@ -124,7 +124,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
                                               ["Ice Element Medal"]),
     "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30,
                                                 ["Ice Element Medal"]),
-    "The Well Key": LMLocationData("The Well", 21, "Special", 0, []),  # keyinfo event
+    "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, []),  # keyinfo event
     "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24,
                                              ["Ice Element Medal"]),
     "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
