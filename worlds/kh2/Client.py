@@ -870,7 +870,7 @@ class KH2Context(CommonContext):
                         else:
                             with open(hk2memaddresses_path, 'r') as f:
                                 self.mem_json = json.load(f)
-                        for key, value in self.mem_json.items():
+                        for key in self.mem_json.keys():
 
                             if self.kh2_read_string(eval(self.mem_json[key][0]["GameVersionCheck"]), 4) == "KH2J":
                                 self.Now = eval(self.mem_json[key][0]["Now"])
