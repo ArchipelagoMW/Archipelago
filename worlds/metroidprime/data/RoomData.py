@@ -103,8 +103,8 @@ class PickupData:
 
 @dataclass
 class RoomData:
-    doors: dict[int, DoorData] = field(default_factory=dict)
-    pickups: list[PickupData] = field(default_factory=list)
+    doors: Dict[int, DoorData] = field(default_factory=dict)
+    pickups: List[PickupData] = field(default_factory=list)
     include_area_in_name: bool = (
         False  # Used for rooms that have duplicate names in different areas
     )
@@ -178,7 +178,7 @@ class RoomData:
 
 class AreaData:
     def __init__(self, area_name: str):
-        self.rooms: dict[RoomName, RoomData] = {}
+        self.rooms: Dict[RoomName, RoomData] = {}
         self.area_name: str = area_name
 
     def _init_room_names_and_areas(self):

@@ -119,7 +119,7 @@ class MetroidPrimeContext(CommonContext):
     items_handling = 0b111
     dolphin_sync_task: Optional[asyncio.Task[Any]] = None
     connection_state = ConnectionState.DISCONNECTED
-    slot_data: dict[str, Utils.Any] = {}
+    slot_data: Dict[str, Utils.Any] = {}
     death_link_enabled = False
     gravity_suit_enabled: bool = True
     previous_location_str: str = ""

@@ -279,9 +279,9 @@ class MetroidPrimeInterface:
                 return InventoryItemData(item_data, current_ammount, current_capacity)
         return None
 
-    def get_current_inventory(self) -> dict[str, InventoryItemData]:
+    def get_current_inventory(self) -> Dict[str, InventoryItemData]:
         MAX_VANILLA_ITEM_ID = 40
-        inventory: dict[str, InventoryItemData] = {}
+        inventory: Dict[str, InventoryItemData] = {}
         for item in item_table.values():
             i = self.get_item(item)
             if i is not None:
