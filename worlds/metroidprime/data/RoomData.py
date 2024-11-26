@@ -4,7 +4,6 @@ import typing
 
 from BaseClasses import (
     CollectionState,
-    ItemClassification,
     LocationProgressType,
     Region,
 )
@@ -34,7 +33,7 @@ if typing.TYPE_CHECKING:
 
 
 def get_config_item_text(world: "MetroidPrimeWorld", location: str) -> str:
-    loc = world.multiworld.get_location(location, world.player)
+    loc = world.get_location(location)
     assert loc.item
     if not loc.item.player:
         return "Nothing"
@@ -49,36 +48,33 @@ def get_config_item_text(world: "MetroidPrimeWorld", location: str) -> str:
 
 
 def get_config_item_model(world: "MetroidPrimeWorld", location: str) -> str:
-    loc = world.multiworld.get_location(location, world.player)
+    loc = world.get_location(location)
     assert loc.item
     if loc.native_item:
         name = loc.item.name
         if name == SuitUpgrade.Missile_Expansion.value:
             return "Missile"
-        elif name == SuitUpgrade.Missile_Launcher.value:
+        if name == SuitUpgrade.Missile_Launcher.value:
             return "Shiny Missile"
-        elif name == SuitUpgrade.Main_Power_Bomb.value:
+        if name == SuitUpgrade.Main_Power_Bomb.value:
             return "Power Bomb"
-        elif (
+        if (
             name == ProgressiveUpgrade.Progressive_Power_Beam.value
             or name == SuitUpgrade.Power_Beam.value
         ):
             return "Super Missile"
-        elif name == ProgressiveUpgrade.Progressive_Wave_Beam.value:
+        if name == ProgressiveUpgrade.Progressive_Wave_Beam.value:
             return "Wave Beam"
-        elif name == ProgressiveUpgrade.Progressive_Ice_Beam.value:
+        if name == ProgressiveUpgrade.Progressive_Ice_Beam.value:
             return "Ice Beam"
-        elif name == ProgressiveUpgrade.Progressive_Plasma_Beam.value:
+        if name == ProgressiveUpgrade.Progressive_Plasma_Beam.value:
             return "Plasma Beam"
-        else:
-            return name
-    else:
-        if loc.item.classification == ItemClassification.filler:
-            return "Zoomer"
-        elif loc.item.classification == ItemClassification.useful:
-            return "Nothing"
-        else:
-            return "Cog"
+        return name
+    if loc.item.advancement:
+        return "Cog"
+    if loc.item.useful:
+        return "Zoomer"
+    return "Nothing"
 
 
 @dataclass
@@ -107,8 +103,8 @@ class PickupData:
 
 @dataclass
 class RoomData:
-    doors: dict[int, DoorData] = field(default_factory=dict)
-    pickups: list[PickupData] = field(default_factory=list)
+    doors: Dict[int, DoorData] = field(default_factory=dict)
+    pickups: List[PickupData] = field(default_factory=list)
     include_area_in_name: bool = (
         False  # Used for rooms that have duplicate names in different areas
     )
@@ -182,7 +178,7 @@ class RoomData:
 
 class AreaData:
     def __init__(self, area_name: str):
-        self.rooms: dict[RoomName, RoomData] = {}
+        self.rooms: Dict[RoomName, RoomData] = {}
         self.area_name: str = area_name
 
     def _init_room_names_and_areas(self):
@@ -211,10 +207,10 @@ class AreaData:
                 region.add_locations(
                     {pickup.name: every_location[pickup.name]}, MetroidPrimeLocation
                 )
-                location = world.multiworld.get_location(pickup.name, world.player)
+                location = world.get_location(pickup.name)
                 location.access_rule = (
-                    lambda state, world=world, pickup=pickup: _can_reach_pickup(
-                        world, state, pickup
+                    lambda state, w=world, p=pickup: _can_reach_pickup(
+                        w, state, p
                     )
                 )
 
@@ -227,7 +223,7 @@ class AreaData:
         )
         for room_name, room_data in self.rooms.items():
             name = room_data.get_region_name(room_name.value)
-            region = world.multiworld.get_region(name, world.player)
+            region = world.get_region(name)
             for door_data in room_data.doors.values():
                 destination = door_data.default_destination
                 if destination is None:
@@ -273,14 +269,14 @@ class AreaData:
                 ):
                     meets_origin_door_requirements = (
                         origin_door_data.sub_region_access_override(world, state)
-                        and _can_open_door(world, state, world.player, origin_door_data)
+                        and _can_open_door(world, state, origin_door_data)
                         if origin_door_data.sub_region_access_override is not None
                         else _can_access_door(
-                            world, state, world.player, origin_door_data
+                            world, state, origin_door_data
                         )
                     )  # Use override if any, otherwise use default access rule
                     return meets_origin_door_requirements and _can_open_door(
-                        world, state, world.player, target_door_data
+                        world, state, target_door_data
                     )
 
                 def get_connection_name(
@@ -305,14 +301,14 @@ class AreaData:
 
                 apply_blast_shield_to_both_sides_of_door(door_data)
 
-                target_region = world.multiworld.get_region(
-                    door_data.get_destination_region_name(), world.player
+                target_region = world.get_region(
+                    door_data.get_destination_region_name()
                 )
                 region.connect(
                     target_region,
                     get_connection_name(door_data),
-                    lambda state, world=world, door_data=door_data: _can_access_door(
-                        world, state, world.player, door_data
+                    lambda state, w=world, dd=door_data: _can_access_door(
+                        w, state, dd
                     ),
                 )
 
@@ -327,8 +323,8 @@ class AreaData:
                         target_door, target_room_data=target_room
                     )
 
-                    target_sub_region = world.multiworld.get_region(
-                        target_door.get_destination_region_name(), world.player
+                    target_sub_region = world.get_region(
+                        target_door.get_destination_region_name()
                     )
 
                     assert target_door.default_destination and target_room.room_name
@@ -341,8 +337,8 @@ class AreaData:
                             target_destination=target_door.default_destination,
                             target_room_name=target_room.room_name.value,
                         ),
-                        lambda state, world=world, origin_door_data=door_data, target_door_data=target_door: sub_region_access_rule_func(
-                            state, world, origin_door_data, target_door_data
+                        lambda state, w=world, origin_door_data=door_data, target_door_data=target_door: sub_region_access_rule_func(
+                            state, w, origin_door_data, target_door_data
                         ),
                     )
                     target_sub_region.connect(
@@ -354,8 +350,8 @@ class AreaData:
                         )
                         + " then "
                         + get_connection_name(door_data),
-                        lambda state, world=world, origin_door_data=target_door, target_door_data=door_data: sub_region_access_rule_func(
-                            state, world, origin_door_data, target_door_data
+                        lambda state, w=world, origin_door_data=target_door, target_door_data=door_data: sub_region_access_rule_func(
+                            state, w, origin_door_data, target_door_data
                         ),
                     )
 
@@ -372,18 +368,18 @@ def _can_reach_pickup(
             trick.difficulty.value > max_difficulty or trick.name in deny_list
         ):
             continue
-        elif trick.rule_func(world, state):
+        if trick.rule_func(world, state):
             return True
 
     if pickup_data.rule_func is None:
         return True
-    elif pickup_data.rule_func(world, state):
+    if pickup_data.rule_func(world, state):
         return True
     return False
 
 
 def _can_open_door(
-    world: "MetroidPrimeWorld", state: CollectionState, player: int, door_data: DoorData
+    world: "MetroidPrimeWorld", state: CollectionState, door_data: DoorData
 ) -> bool:
     can_color = False
     can_blast_shield = False
@@ -436,28 +432,26 @@ def _can_open_door(
 
 
 def _can_access_door(
-    world: "MetroidPrimeWorld", state: CollectionState, player: int, door_data: DoorData
+    world: "MetroidPrimeWorld", state: CollectionState, door_data: DoorData
 ) -> bool:
     """Determines if the player can open the door based on the lock type as well as whether they can reach it or not"""
     max_difficulty = world.options.trick_difficulty.value
     allow_list = world.options.trick_allow_list
     deny_list = world.options.trick_deny_list
 
-    if not _can_open_door(world, state, player, door_data):
+    if not _can_open_door(world, state, door_data):
         return False
 
     for trick in door_data.tricks:
-        if trick.name in allow_list:
-            pass
         if trick.name not in allow_list and (
             trick.difficulty.value > max_difficulty or trick.name in deny_list
         ):
             continue
-        elif trick.rule_func(world, state):
+        if trick.rule_func(world, state):
             return True
     if door_data.rule_func is None:
         return True
-    elif door_data.rule_func(world, state):
+    if door_data.rule_func(world, state):
         return True
 
     return False

@@ -1,7 +1,7 @@
 from BaseClasses import CollectionState
 from ..BlastShieldRando import BlastShieldType
 from ..DoorRando import DoorLockType
-from ..LogicCombat import can_combat_flaaghra, can_combat_ghosts
+from ..LogicCombat import can_combat_flaahgra, can_combat_ghosts
 from ..Items import SuitUpgrade
 from ..data.AreaNames import MetroidPrimeArea
 from .RoomData import AreaData, PickupData, RoomData
@@ -35,13 +35,13 @@ if TYPE_CHECKING:
 
 
 def can_exit_ruined_shrine(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-    item1 = state.multiworld.get_location(
-        "Chozo Ruins: Ruined Shrine - Plated Beetle", world.player
+    item1 = world.get_location(
+        "Chozo Ruins: Ruined Shrine - Plated Beetle"
     ).item
     if can_morph_ball(world, state) or can_space_jump(world, state):
         return True
-    elif (
-        item1 != None
+    if (
+        item1 is not None
         and item1.name in ["Morph Ball", "Space Jump Boots"]
         and item1.player == world.player
     ):
@@ -65,7 +65,7 @@ def can_flaahgra(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
         return bomb_req
     return (
         state.can_reach_region(RoomName.Sunchamber.value, world.player)
-        and can_combat_flaaghra(world, state)
+        and can_combat_flaahgra(world, state)
         and can_missile(world, state)
         and can_scan(world, state)
         and bomb_req
@@ -447,7 +447,7 @@ class ChozoRuinsAreaData(AreaData):
                             or state.has(SuitUpgrade.Gravity_Suit.value, world.player)
                             or state.has(SuitUpgrade.Phazon_Suit.value, world.player)
                         ),
-                    ),  # Damage reduction let's player cross
+                    ),  # Damage reduction lets player cross
                 },
                 pickups=[
                     PickupData(
@@ -606,12 +606,12 @@ class ChozoRuinsAreaData(AreaData):
                     PickupData(
                         "Chozo Ruins: Ruined Fountain",
                         rule_func=lambda world, state: world.get_location(
-                            "Chozo Ruins: Sunchamber - Flaaghra"
+                            "Chozo Ruins: Sunchamber - Flaahgra"
                         ).can_reach(state)
                         and can_spider(world, state),
                     )
                 ],
-            ),  # This location can accidentally be locked out if flaaghra is skipped
+            ),  # This location can accidentally be locked out if flaahgra is skipped
             RoomName.Ruined_Gallery: RoomData(
                 doors={
                     0: DoorData(RoomName.North_Atrium),
@@ -760,7 +760,7 @@ class ChozoRuinsAreaData(AreaData):
                 },
                 pickups=[
                     PickupData(
-                        "Chozo Ruins: Sunchamber - Flaaghra", rule_func=can_flaahgra
+                        "Chozo Ruins: Sunchamber - Flaahgra", rule_func=can_flaahgra
                     ),
                     PickupData(
                         "Chozo Ruins: Sunchamber - Ghosts",
@@ -991,6 +991,6 @@ class ChozoRuinsAreaData(AreaData):
                         exclude_from_config=True,
                     )
                 ],
-            ),  # This is not actually in west furnace but it can only be accessed from west furnace, logic-wise
+            ),  # This is not actually in west furnace, but it can only be accessed from west furnace, logic-wise
         }
         self._init_room_names_and_areas()

@@ -88,7 +88,7 @@ def can_combat_omega_pirate(world: "MetroidPrimeWorld", state: CollectionState) 
     return _can_combat_generic(world, state, 6, 3) and can_xray(world, state, True)
 
 
-def can_combat_flaaghra(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
+def can_combat_flaahgra(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
     return (
         world.options.starting_room_name == RoomName.Sunchamber_Lobby.value
         or _can_combat_generic(world, state, 2, 1, False)

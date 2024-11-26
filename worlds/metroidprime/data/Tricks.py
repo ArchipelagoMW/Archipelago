@@ -43,7 +43,7 @@ class TrickDifficulty(Enum):
     Hard = 2
 
 
-class Trick_Type(Enum):
+class TrickType(Enum):
     L_Jump = "L Jump"
     L_Jump_Space_Jump = "L-Jump Space Jump"
     R_Jump = "R-Jump"
@@ -320,7 +320,7 @@ class Tricks:
         "Watery Hall No Gravity No Space Jump",
         "Reach the Watery Hall Underwater Item without Gravity Suit or Space Jump by using a slope jump",
         TrickDifficulty.Medium,
-        lambda world, state: can_move_underwater(world, state) == False
+        lambda world, state: not can_move_underwater(world, state)
         or can_bomb(world, state),
     )
 

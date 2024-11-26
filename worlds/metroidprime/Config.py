@@ -62,7 +62,7 @@ def color_options_to_value(world: "MetroidPrimeWorld") -> List[float]:
         ]
 
     # get the key in hudcolor enum that matches all caps color
-    color: str = str(world.options.hud_color.value)
+    color: str = world.options.hud_color.current_key
     color = color.upper()
     for key in HudColor.__members__.keys():
         if key == color:
@@ -204,7 +204,7 @@ def make_config(world: "MetroidPrimeWorld") -> Dict[str, Any]:
             "warpToStart": True,
             "multiworldDolPatches": True,
             "nonvariaHeatDamage": bool(options.non_varia_heat_damage.value),
-            "staggeredSuitDamage": options.staggered_suit_damage.value,
+            "staggeredSuitDamage": options.staggered_suit_damage.current_option_name,
             "heatDamagePerSec": 10.0,
             "poisonDamagePerSec": 0.11,
             "phazonDamagePerSec": 0.964,

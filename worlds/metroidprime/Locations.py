@@ -31,7 +31,7 @@ chozo_location_table = {
     "Chozo Ruins: Transport Access North": 5031117,
     "Chozo Ruins: Gathering Hall": 5031118,
     "Chozo Ruins: Hive Totem": 5031119,
-    "Chozo Ruins: Sunchamber - Flaaghra": 5031120,
+    "Chozo Ruins: Sunchamber - Flaahgra": 5031120,
     "Chozo Ruins: Sunchamber - Ghosts": 5031121,
     "Chozo Ruins: Watery Hall Access": 5031122,
     "Chozo Ruins: Watery Hall - Scan Puzzle": 5031123,

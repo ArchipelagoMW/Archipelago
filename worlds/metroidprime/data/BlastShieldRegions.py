@@ -576,11 +576,11 @@ def get_valid_blast_shield_regions_by_area(
         region = __get_phendrana_region()
     elif area == MetroidPrimeArea.Magmoor_Caverns:
         region = __get_magmoor_region()
-    elif area == MetroidPrimeArea.Phazon_Mines:
+    else:
         region = __get_phazon_region()
     if not world.starting_room_data:
         return region.regions
-    elif world.starting_room_data.area != area or (
+    if world.starting_room_data.area != area or (
         world.options.disable_starting_room_bk_prevention.value
         and world.multiworld.players > 1
     ):

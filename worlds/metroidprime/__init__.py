@@ -305,7 +305,7 @@ class MetroidPrimeWorld(World):
             outfile_name,
             output_directory,
             player=self.player,
-            player_name=self.multiworld.get_player_name(self.player),
+            player_name=self.player_name,
         )
         apmp1.write()
 
@@ -337,7 +337,7 @@ class MetroidPrimeWorld(World):
         return slot_data
 
     def write_spoiler(self, spoiler_handle: TextIO):
-        player_name = self.multiworld.get_player_name(self.player)
+        player_name = self.player_name
 
         if self.options.elevator_randomization:
             spoiler_handle.write(f"\n\nElevator Mapping({player_name}):\n")
