@@ -116,9 +116,9 @@ filler_items: Dict[str, LMItemData] = {
     # "Diamond": LMItemData("Money", 62, IC.filler),
     "Poison Mushroom": LMItemData("Trap", 42, IC.trap),
     #"Ghost": LMItemData("Trap", 43, IC.trap),
-    "Nothing": LMItemData("Filler", 44, IC.filler),
-    "Small Heart": LMItemData("Filler", 45, IC.filler),
-    "Large Heart": LMItemData("Filler", 47, IC.filler),
+    "Nothing": LMItemData("Nothing", 44, IC.filler),
+    "Small Heart": LMItemData("Heart", 45, IC.filler),
+    "Large Heart": LMItemData("Heart", 47, IC.filler),
     "Bomb": LMItemData("Trap", 50, IC.trap)
 }
 
