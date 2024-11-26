@@ -223,7 +223,7 @@ class AreaData:
         )
         for room_name, room_data in self.rooms.items():
             name = room_data.get_region_name(room_name.value)
-            region = world.multiworld.get_region(name, world.player)
+            region = world.get_region(name)
             for door_data in room_data.doors.values():
                 destination = door_data.default_destination
                 if destination is None:
@@ -301,8 +301,8 @@ class AreaData:
 
                 apply_blast_shield_to_both_sides_of_door(door_data)
 
-                target_region = world.multiworld.get_region(
-                    door_data.get_destination_region_name(), world.player
+                target_region = world.get_region(
+                    door_data.get_destination_region_name()
                 )
                 region.connect(
                     target_region,
@@ -323,8 +323,8 @@ class AreaData:
                         target_door, target_room_data=target_room
                     )
 
-                    target_sub_region = world.multiworld.get_region(
-                        target_door.get_destination_region_name(), world.player
+                    target_sub_region = world.get_region(
+                        target_door.get_destination_region_name()
                     )
 
                     assert target_door.default_destination and target_room.room_name
