@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 async def handle_receive_items(
-    ctx: "MetroidPrimeContext", current_items: dict[str, InventoryItemData]
+    ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
     # Will be used when consumables are implemented
     # current_index = ctx.game_interface.get_last_received_index()
@@ -90,7 +90,7 @@ def disable_item_if_owned(ctx: "MetroidPrimeContext", item_data: InventoryItemDa
 
 
 async def handle_cosmetic_suit(
-    ctx: "MetroidPrimeContext", current_items: dict[str, InventoryItemData]
+    ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
     if ctx.cosmetic_suit == None:
         return
@@ -98,7 +98,7 @@ async def handle_cosmetic_suit(
 
 
 async def handle_disable_gravity_suit(
-    ctx: "MetroidPrimeContext", current_items: dict[str, InventoryItemData]
+    ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
     if ctx.gravity_suit_enabled:
         return
@@ -107,7 +107,7 @@ async def handle_disable_gravity_suit(
 
 
 async def handle_receive_missiles(
-    ctx: "MetroidPrimeContext", current_items: dict[str, InventoryItemData]
+    ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
     # Slot data is required for missiles + Power Bombs so we can check if launcher / main pb are enabled
     if ctx.slot_data and "Missile Expansion" in current_items:
@@ -161,7 +161,7 @@ async def handle_receive_missiles(
 
 
 async def handle_receive_power_bombs(
-    ctx: "MetroidPrimeContext", current_items: dict[str, InventoryItemData]
+    ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
     # Handle Power Bomb Expansions
     if ctx.slot_data and "Power Bomb Expansion" in current_items:
@@ -218,7 +218,7 @@ async def handle_receive_power_bombs(
 
 
 async def handle_receive_energy_tanks(
-    ctx: "MetroidPrimeContext", current_items: dict[str, InventoryItemData]
+    ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
     # Handle Energy Tanks
     if "Energy Tank" in current_items:
@@ -258,7 +258,7 @@ async def handle_receive_energy_tanks(
 
 
 async def handle_receive_progressive_items(
-    ctx: "MetroidPrimeContext", current_items: dict[str, InventoryItemData]
+    ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
     counts = {upgrade.value: 0 for upgrade in PROGRESSIVE_ITEM_MAPPING}
     network_items: Dict[str, List[NetworkItem]] = {
@@ -289,7 +289,7 @@ async def handle_receive_progressive_items(
 
 
 def inventory_item_by_network_id(
-    network_id: int, current_inventory: dict[str, InventoryItemData]
+    network_id: int, current_inventory: Dict[str, InventoryItemData]
 ) -> InventoryItemData | None:
     for item in current_inventory.values():
         if item.code == network_id:

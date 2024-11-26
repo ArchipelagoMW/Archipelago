@@ -34,15 +34,14 @@ class HudColor(Enum):
     PURPLE = [0.5, 0.0, 1.0]
 
 
-class SpringBall(Toggle):
+class SpringBall(DefaultOnToggle):
     """Enables the spring ball when you receive Morph Ball Bombs. This will allow you to jump while in morph ball form by pressing up on the c stick, reducing the complexity of double bomb jumps."""
 
     display_name = "Add Spring Ball"
-    default = True
 
 
 class RequiredArtifacts(Range):
-    """Determines the amount of Artifacts needed to begin the endgame sequence."""
+    """Determines the number of Artifacts needed to begin the endgame sequence."""
 
     display_name = "Required Artifacts"
     range_start = 1
@@ -63,66 +62,59 @@ class FinalBosses(Choice):
 
 
 class ArtifactHints(DefaultOnToggle):
-    """If enabled, scanning the artifact stones in the temple will give a hint to their location. Additionally, hints will be pre collected in the client"""
+    """If enabled, scanning the artifact stones in the temple will give a hint to their location. Additionally, hints will be pre collected in the client."""
 
     display_name = "Artifact Hints"
-    default = True
 
 
-class MissileLauncher(DefaultOnToggle):
+class MissileLauncher(Toggle):
     """If enabled, the missile launcher will be added to the item pool. This will only allow you to use missiles once the missile launcher is found (regardless of missile expansions received)."""
 
     display_name = "Missile Launcher"
-    default = False
 
 
-class MainPowerBomb(DefaultOnToggle):
+class MainPowerBomb(Toggle):
     """If enabled, the main power bomb will be added to the item pool. This will only allow you to use power bombs once the main power bombs is found (regardless of power bomb expansions received)."""
 
     display_name = "Main Power Bomb"
-    default = False
 
 
 class ShuffleScanVisor(Toggle):
-    """If enabled, the scan visor will be shuffled into the item pool and will need to be found in order to scan dash and open certain locks"""
+    """If enabled, the scan visor will be shuffled into the item pool and will need to be found in order to scan dash and open certain locks."""
 
     display_name = "Shuffle Scan Visor"
-    default = False
 
 
 class NonVariaHeatDamage(DefaultOnToggle):
-    """If enabled, the gravity suit and phazon suit will not protect against heat damage which will change the required logic of the game"""
+    """If enabled, the gravity suit and phazon suit will not protect against heat damage which will change the required logic of the game."""
 
     display_name = "Non-Varia Heat Damage"
-    default = True
 
 
 class StaggeredSuitDamage(Choice):
-    """Configure how suit damage reduction is calculated
+    """Configure how suit damage reduction is calculated.
     Default: based on the strongest suit you have
     Progressive: based on the number of suits you have
     Additive: Individual suits provide their added damage reduction
     """
 
     display_name = "Staggered Suit Damage"
-    option_default = "Default"
-    option_progressive = "Progressive"
-    option_additive = "Additive"
-    default = "Progressive"
+    option_default = 0
+    option_progressive = 1
+    option_additive = 2
+    default = 1
 
 
 class RemoveHiveMecha(Toggle):
-    """If enabled, the trigger for the Hive Mecha boss will be removed from the game"""
+    """If enabled, the trigger for the Hive Mecha boss will be removed from the game."""
 
     display_name = "Remove Hive Mecha"
-    default = False
 
 
 class FusionSuit(Toggle):
-    """If enabled, will replace all the suits in game with the Fusion Suit variants (cosmetic only). Suit color randomization will have no effect if this is enabled"""
+    """If enabled, will replace all the suits in game with the Fusion Suit variants (cosmetic only). Suit color randomization will have no effect if this is enabled."""
 
     display_name = "Fusion Suit"
-    default = False
 
 
 class TrickDifficulty(Choice):
@@ -137,38 +129,36 @@ class TrickDifficulty(Choice):
 
 
 class TrickAllowList(OptionList):
-    """A list of trick names to explicitly allow in logic, regardless of selected difficulty. For example, "Crashed Frigate Scan Dash" or "Alcove Escape" """
+    """A list of trick names to explicitly allow in logic, regardless of selected difficulty. For example, "Crashed Frigate Scan Dash" or "Alcove Escape"."""
 
     display_name = "Trick Allow List"
     default = []
 
 
 class TrickDenyList(OptionList):
-    """A list of trick names to explicitly deny in logic, regardless of selected difficulty.  For example, "Crashed Frigate Scan Dash" or "Alcove Escape" """
+    """A list of trick names to explicitly deny in logic, regardless of selected difficulty.  For example, "Crashed Frigate Scan Dash" or "Alcove Escape"."""
 
     display_name = "Trick Deny List"
     default = []
 
 
 class BackwardsLowerMines(Toggle):
-    """If enabled, allows the player to progress through the lower mines in reverse by removing the locks in the PCA room"""
+    """If enabled, allows you to progress through the lower mines in reverse by removing the locks in the PCA room."""
 
     display_name = "Backwards Lower Mines"
-    default = False
 
 
 class FlaahgraPowerBombs(Toggle):
-    """If enabled, makes the sandstone block at the top of arboretum breakable with power bombs. Note that this will require the player to have 4 power bombs in order to defeat flaahgra"""
+    """If enabled, makes the sandstone block at the top of arboretum breakable with power bombs. Note that this will require you to have 4 power bombs in order to defeat Flaahgra."""
 
     display_name = "Flaahgra Power Bombs"
-    default = False
 
 
 class RemoveXrayRequirements(Choice):
-    """Determines the xray visor requirements
-    remove_none: No xray visor requirements are removed.
-    remove_most: All xray visor requirements are removed except for metroid prime, chozo ghosts (normal/minimal combat difficulty), and omega pirate.
-    remove_all_but_omega_pirate: All xray visor requirements are removed except for omega pirate.
+    """Determines the xray visor requirements.
+    Remove None: No xray visor requirements are removed.
+    Remove Most: All xray visor requirements are removed except for metroid prime, chozo ghosts (normal/minimal combat difficulty), and omega pirate.
+    Remove All But Omega Pirate: All xray visor requirements are removed except for omega pirate.
     """
 
     display_name = "Remove Xray Visor Requirements"
@@ -181,10 +171,10 @@ class RemoveXrayRequirements(Choice):
 
 
 class RemoveThermalRequirements(Choice):
-    """Determines the thermal visor requirements
-    remove_none: No thermal visor requirements are removed.
-    remove_most: All thermal visor requirements are removed except for metroid prime (note this means wave beam panels will be in logic without the visor to see them).
-    remove_all: All thermal visor requirements are removed (note this means wave beam panels will be in logic without the visor to see them).
+    """Determines the thermal visor requirements.
+    Remove None: No thermal visor requirements are removed.
+    Remove Most: All thermal visor requirements are removed except for metroid prime (note this means wave beam panels will be in logic without the visor to see them).
+    Remove All: All thermal visor requirements are removed (note this means wave beam panels will be in logic without the visor to see them).
     """
 
     display_name = "Remove Thermal Visor Requirements"
@@ -197,10 +187,10 @@ class RemoveThermalRequirements(Choice):
 
 
 class StartingRoom(Choice):
-    """Determines the starting room of the game. This will change your starting loadout depending on the room
-    normal: Start at the Talon Overworld Landing Site. If elevator randomization is enabled, or Shuffle Scan Visor + Don't Pre Scan Elevators and the player does not have tricks or mix it up blast shield randomization enabled, this will switch to Save Station 1 in Chozo Ruins.
-    safe: Start in rooms that will not require a significant combat challenge to progress from. Without disable_starting_room_bk_prevention enabled, this may assign you a new beam and an item in order to make the seed feasible
-    buckle_up: Start in rooms that will pose a significant challenge to players with no energy tanks or suit upgrades. Fun for the aspiring masochist (less fun for their friends in BK).
+    """Determines the starting room of the game. This will change your starting loadout depending on the room.
+    Normal: Start at the Talon Overworld Landing Site. If elevator randomization is enabled, or Shuffle Scan Visor + Don't Pre Scan Elevators and you do not have tricks or mix it up blast shield randomization enabled, this will switch to Save Station 1 in Chozo Ruins.
+    Safe: Start in rooms that will not require a significant combat challenge to progress from. Without disable_starting_room_bk_prevention enabled, this may assign you a new beam and an item in order to make the seed feasible
+    Buckle Up: Start in rooms that will pose a significant challenge to players with no energy tanks or suit upgrades. Fun for the aspiring masochist (less fun for their friends in BK).
     """
 
     display_name = "Starting Room Randomization"
@@ -211,16 +201,15 @@ class StartingRoom(Choice):
 
 
 class DisableStartingRoomBKPrevention(Toggle):
-    """Normally, starting rooms will give you a minimum set of items in order to have access to several checks immediately. This option disables that behavior as well as any pre filled items that would have been set. This will automatically get set to true if starting room is normal and tricks or blast shield rando is enabled
-    WARNING: This will possibly require multiple attempts to generate, especially in solo worlds
+    """Normally, starting rooms will give you a minimum set of items in order to have access to several checks immediately. This option disables that behavior as well as any pre-filled items that would have been set. This will automatically get set to true if starting room is normal and tricks or blast shield rando is enabled.
+    WARNING: This will possibly require multiple attempts to generate, especially in solo worlds!
     """
 
     display_name = "Disable Starting Room BK Prevention"
-    default = False
 
 
 class StartingRoomName(TextChoice):
-    """Should not be shown in ui, can be used to override the starting room"""
+    """Should not be shown in ui, can be used to override the starting room."""
 
     display_name = "Starting Room Name"
     default = ""
@@ -228,7 +217,7 @@ class StartingRoomName(TextChoice):
 
 
 class CombatLogicDifficultyOption(Choice):
-    """When enabled, the game will include energy tanks and the charge beam as requirements for certain combat heavy rooms"""
+    """When enabled, the game will include energy tanks and the charge beam as requirements for certain combat heavy rooms."""
 
     display_name = "Combat Logic Difficulty"
     default = CombatLogicDifficulty.NORMAL.value
@@ -238,14 +227,13 @@ class CombatLogicDifficultyOption(Choice):
 
 
 class ElevatorRandomization(Toggle):
-    """Randomizes the elevators between regions"""
+    """Randomizes the elevators between regions."""
 
     display_name = "Elevator Randomization"
-    default = False
 
 
 class ElevatorMapping(OptionDict):
-    """Which elevators go to which regions, only visible for spoiler"""
+    """Which elevators go to which regions, only visible for spoiler."""
 
     display_name = "Elevator Mapping"
     visibility = Visibility.none
@@ -260,28 +248,28 @@ class DoorColorRandomization(Choice):
     """
 
     display_name = "Door Color Randomization"
-    option_none = "None"
-    option_global = "Global"
-    option_regional = "Regional"
-    default = option_none
+    option_none = 0
+    option_global = 1
+    option_regional = 2
+    default = 0
 
 
 class BlastShieldRandomization(Choice):
     """Determine if/how blast shields are randomized. Note that this will have a difficult time generating in solo worlds with no tricks enabled.
     None: No blast shields will be randomized
     Replace Existing: Each existing Missile Blast Shield will be replaced with a different Blast Shield type
-    Mix it up: Each Region will remove all existing blast shields and instead add a specified number to new doors
+    Mix It Up: Each Region will remove all existing blast shields and instead add a specified number to new doors
     """
 
     display_name = "Blast Shield Randomization"
-    option_none = "None"
-    option_replace_existing = "Replace Existing"
-    option_mix_it_up = "Mix it up"
-    default = option_none
+    option_none = 0
+    option_replace_existing = 1
+    option_mix_it_up = 2
+    default = 0
 
 
 class DoorColorMapping(OptionDict):
-    """Which door colors go to which colors"""
+    """Which door colors go to which colors."""
 
     display_name = "Door Color Mapping"
     visibility = Visibility.none
@@ -289,7 +277,7 @@ class DoorColorMapping(OptionDict):
 
 
 class BlastShieldMapping(OptionDict):
-    """Which blast shield types go to which colors"""
+    """Which blast shield types go to which colors."""
 
     display_name = "Door Color Mapping"
     visibility = Visibility.none
@@ -305,15 +293,15 @@ class BlastShieldAvailableTypes(Choice):
     display_name = "Blast Shield Available Types"
     option_all = 1
     option_no_beam_combos = 0
-    default = option_no_beam_combos
+    default = 0
 
 
 class BlastShieldFrequency(Choice):
-    """If using 'Mix it up' for blast shield randomization,, how many blast shields should be added per region? These are added using a percentage of total possible placements so exact numbers will vary by region. Higher numbers will have more difficulty genning in solo worlds with less tricks.
+    """If using 'Mix It Up' for blast shield randomization, how many blast shields should be added per region? These are added using a percentage of total possible placements so exact numbers will vary by region. Higher numbers will have more difficulty genning in solo worlds with less tricks.
     Low: 10%
     Medium: 30%
     High: 50%
-    A whole lotta blast shields: 80% (This may have a hard time generating in solo worlds)
+    A Whole Lotta Blast Shields: 80% (This may have a hard time generating in solo worlds)
     """
 
     display_name = "Blast Shield Frequency"
@@ -325,7 +313,7 @@ class BlastShieldFrequency(Choice):
 
 
 class LockedDoorCount(Range):
-    """If greater than 0, locked doors will be placed in the game (maximum of 1 per level). These will only be placed in spots that will not prevent progression but may force alternate paths"""
+    """If greater than 0, locked doors will be placed in the game (maximum of 1 per level). These will only be placed in spots that will not prevent progression but may force alternate paths."""
 
     display_name = "Number of Locked Doors to Include"
     range_start = 0
@@ -334,61 +322,55 @@ class LockedDoorCount(Range):
 
 
 class IncludePowerBeamDoors(Toggle):
-    """If enabled, Power Beam doors will be an available door color for randomization. If the starting beam is also randomized, it will remove the new starting beam's color from the pool of available door colors"""
+    """If enabled, Power Beam doors will be an available door color for randomization. If the starting beam is also randomized, it will remove the new starting beam's color from the pool of available door colors."""
 
     display_name = "Include Power Beam Doors"
-    default = False
 
 
 class IncludeMorphBallBombDoors(Toggle):
-    """If enabled, Morph Ball Bomb doors will be added as an available door color for door randomization"""
+    """If enabled, Morph Ball Bomb doors will be added as an available door color for door randomization."""
 
     display_name = "Include Morph Ball Bomb Doors"
-    default = False
 
 
 class RandomizeStartingBeam(Toggle):
     """If enabled, the starting beam will be randomized to a random beam that is not the Power Beam. Note that if vanilla start is used, the hive mecha boss will be disabled.
-    Note that if you don't randomize door colors, this can lead to you getting BK'd immediately
+    Note that if you don't randomize door colors, this can lead to you getting BK'd immediately.
     """
 
     display_name = "Randomize Starting Beam"
-    default = False
 
 
 class StartingBeam(TextChoice):
+    """Used to override the starting beam if Randomize Starting Beam is disabled, or to display the starting beam if it is enabled."""
     visibility = Visibility.spoiler
     display_name = "Starting Beam"
     default = "none"
-    """Used to override the starting beam if Randomize Starting Beam is disabled, or to display the starting beam if it is enabled"""
 
 
-class PreScanElevators(Toggle):
-    """Pre scans the elevators in the game, allowing for faster transitions between regions. Makes for more interesting gameply if disabled when the scan visor is shuffled."""
+class PreScanElevators(DefaultOnToggle):
+    """Pre scans the elevators in the game, allowing for faster transitions between regions. Makes for more interesting gameplay if disabled when the scan visor is shuffled."""
 
     display_name = "Pre Scan Elevators"
-    default = True
 
 
 class ProgressiveBeamUpgrades(Toggle):
-    """If enabled, 3 progressive beam items will be added into the item pool per beam. The first unlocks the beam, the second unlocks the ability to charge the beam, and the third unlocks the missile combo for it. Progressive items share the same model as the associated beam combo model(all progressive wave beams will look like the wavebuster)"""
+    """If enabled, 3 progressive beam items will be added into the item pool per beam. The first unlocks the beam, the second unlocks the ability to charge the beam, and the third unlocks the missile combo for it. Progressive items share the same model as the associated beam combo model (all progressive wave beams will look like the wavebuster)."""
 
     display_name = "Progressive Beam Upgrades"
-    default = False
 
 
 # COSMETIC OPTIONS
 
 
 class RandomizeSuitColors(Toggle):
-    """Randomize the colors of the suits. Is overriden if any of the color overrides are greater than 0. Note: This is not compatible with the Fusion Suit and will have no effect"""
+    """Randomize the colors of the suits. Is overridden if any of the color overrides are greater than 0. Note: This is not compatible with the Fusion Suit and will have no effect."""
 
     display_name = "Randomize Suit Colors"
-    default = False
 
 
 class PowerSuitColorOverride(Range):
-    """Override the color of the Power Suit using an index from the game's color wheel"""
+    """Override the color of the Power Suit using an index from the game's color wheel."""
 
     display_name = "Power Suit Color Override"
     range_start = 0
@@ -397,7 +379,7 @@ class PowerSuitColorOverride(Range):
 
 
 class VariaSuitColorOverride(Range):
-    """Override the color of the Varia Suit using an index from the game's color wheel"""
+    """Override the color of the Varia Suit using an index from the game's color wheel."""
 
     display_name = "Varia Suit Color Override"
     range_start = 0
@@ -406,7 +388,7 @@ class VariaSuitColorOverride(Range):
 
 
 class GravitySuitColorOverride(Range):
-    """Override the color of the Gravity Suit using an index from the game's color wheel"""
+    """Override the color of the Gravity Suit using an index from the game's color wheel."""
 
     display_name = "Gravity Suit Color Override"
     range_start = 0
@@ -415,7 +397,7 @@ class GravitySuitColorOverride(Range):
 
 
 class PhazonSuitColorOverride(Range):
-    """Override the color of the Phazon Suit using an index from the game's color wheel"""
+    """Override the color of the Phazon Suit using an index from the game's color wheel."""
 
     display_name = "Phazon Suit Color Override"
     range_start = 0
@@ -424,27 +406,27 @@ class PhazonSuitColorOverride(Range):
 
 
 class HudColorOption(Choice):
-    """Determines the color of the HUD in the game. Will be overriden if any of the color overrides are greater than 0. Note: Certain colors will change the colors of the beam icons."""
+    """Determines the color of the HUD in the game. Will be overridden if any of the color overrides are greater than 0. Note: Certain colors will change the colors of the beam icons."""
 
     display_name = "HUD Color"
-    default = "Default"
-    option_default = "Default"
-    option_red = "Red"
-    option_green = "Green"
-    option_blue = "Blue"
-    option_violet = "Violet"
-    option_yellow = "Yellow"
-    option_cyan = "Cyan"
-    option_white = "White"
-    option_orange = "Orange"
-    option_pink = "Pink"
-    option_lime = "Lime"
-    option_teal = "Teal"
-    option_purple = "Purple"
+    default = 0
+    option_default = 0
+    option_red = 1
+    option_green = 2
+    option_blue = 3
+    option_violet = 4
+    option_yellow = 5
+    option_cyan = 6
+    option_white = 7
+    option_orange = 8
+    option_pink = 9
+    option_lime = 10
+    option_teal = 11
+    option_purple = 12
 
 
 class HudColorOverrideRed(Range):
-    """0 to 255, sets the Red channel of the HUD color"""
+    """0 to 255, sets the Red channel of the HUD color."""
 
     display_name = "HUD Color Red"
     range_start = 0
@@ -453,7 +435,7 @@ class HudColorOverrideRed(Range):
 
 
 class HudColorOverrideGreen(Range):
-    """0 to 255, sets the Green channel of the HUD color"""
+    """0 to 255, sets the Green channel of the HUD color."""
 
     display_name = "HUD Color Green"
     range_start = 0
@@ -462,7 +444,7 @@ class HudColorOverrideGreen(Range):
 
 
 class HudColorOverrideBlue(Range):
-    """0 to 255, sets the Blue channel of the HUD color"""
+    """0 to 255, sets the Blue channel of the HUD color."""
 
     display_name = "HUD Color Blue"
     range_start = 0

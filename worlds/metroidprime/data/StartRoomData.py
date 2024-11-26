@@ -90,7 +90,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 [SuitUpgrade.Missile_Launcher],
             )
         ],
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False,
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value,
         local_early_items=[SuitUpgrade.Morph_Ball, SuitUpgrade.Scan_Visor],
     ),
     RoomName.Burn_Dome.value: StartRoomData(
@@ -167,8 +167,8 @@ all_start_rooms: Dict[str, StartRoomData] = {
         ],
     ),
     RoomName.Warrior_Shrine.value: StartRoomData(
-        is_eligible=lambda world: world.options.disable_starting_room_bk_prevention.value
-        != True,  # Varia suit is definitely required here
+        is_eligible=lambda world: not world.options.disable_starting_room_bk_prevention.value,
+        # Varia suit is definitely required here
         area=MetroidPrimeArea.Magmoor_Caverns,
         loadouts=[
             StartRoomLoadout(
@@ -201,7 +201,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 ],
             )
         ],
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
         or world.multiworld.players > 1,
         no_power_beam_door_on_starting_level=True,
         difficulty=StartRoomDifficulty.Buckle_Up,
@@ -222,7 +222,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 ],
             )
         ],
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
         or world.multiworld.players > 1,
     ),
     RoomName.Arbor_Chamber.value: StartRoomData(
@@ -292,7 +292,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
             )
         ],
         difficulty=StartRoomDifficulty.Buckle_Up,
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
         or world.multiworld.players > 1,
     ),
     RoomName.Sunchamber_Lobby.value: StartRoomData(
@@ -343,18 +343,16 @@ def _has_elevator_rando(world: "MetroidPrimeWorld") -> bool:
 
 
 def _has_no_pre_scan_elevators_with_shuffle_scan(world: "MetroidPrimeWorld") -> bool:
-    return world.options.pre_scan_elevators.value == False and bool(
-        world.options.shuffle_scan_visor
-    )
+    return bool(not world.options.pre_scan_elevators.value
+                and world.options.shuffle_scan_visor.value)
 
 
 def _has_options_that_allow_more_landing_site_checks(
     world: "MetroidPrimeWorld",
 ) -> bool:
     return (
-        str(world.options.blast_shield_randomization.value)
-        != world.options.blast_shield_randomization.option_none
-        or world.options.trick_difficulty.value != -1
+        world.options.blast_shield_randomization != "none"
+        or world.options.trick_difficulty != "no_tricks"
     ) and not world.options.elevator_randomization
 
 
@@ -376,9 +374,9 @@ def init_starting_room_data(world: "MetroidPrimeWorld"):
             world.starting_room_data = get_starting_room_by_name(world, yaml_name)
         else:
             world.starting_room_data = StartRoomData(
-                name=str(world.options.starting_room_name.value),
+                name=world.options.starting_room_name.current_key,
                 area=get_area_by_room_name(
-                    world, str(world.options.starting_room_name.value)
+                    world, world.options.starting_room_name.current_key
                 ),
             )
             world.starting_room_data.loadouts = [

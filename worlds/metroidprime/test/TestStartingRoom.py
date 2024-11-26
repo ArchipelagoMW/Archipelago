@@ -47,8 +47,6 @@ class TestStartingRoomsGenerateWithElevatorRando(MetroidPrimeTestBase):
                     self.world_setup()  # type: ignore
                     distribute_items_restrictive(self.multiworld)
                     self.assertBeatable(True)
-                    self.multiworld = None  # type: ignore
-                    self.world = None  # type: ignore
                 except Exception:
                     failures.append(room_name)
         if len(failures):

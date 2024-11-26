@@ -76,8 +76,7 @@ ELEVATOR_USEFUL_NAMES: Dict[str, str] = {
 def temple_dest(boss: int) -> str:
     if boss == 0 or boss == 2:
         return "Crater Entry Point"
-    else:
-        return "Credits"
+    return "Credits"
 
 
 # Names of the transports that the config json expects
@@ -134,7 +133,7 @@ def get_transport_data(world: "MetroidPrimeWorld") -> Dict[str, Dict[str, str]]:
     return data
 
 
-def get_region_by_elavator_name(elevator_name: str) -> str:
+def get_region_by_elevator_name(elevator_name: str) -> str:
     for region, elevators in default_elevator_mappings.items():
         if elevator_name in elevators:
             return region
@@ -174,7 +173,7 @@ def get_random_elevator_mapping(
         return world.random.choice(target_regions)
 
     def delete_region_if_empty(region: str):
-        if len(available_elevators_by_region[region]) == 0:
+        if not available_elevators_by_region[region]:
             del available_elevators_by_region[region]
 
     def two_way_map_elevators(
@@ -204,10 +203,10 @@ def get_random_elevator_mapping(
                     e
                     for e in get_flat_list_of_available_elevators()
                     if e in potential_destinations
-                    and get_region_by_elavator_name(e) != source_area
+                    and get_region_by_elevator_name(e) != source_area
                 ]
                 destination_elevator = world.random.choice(available_options)
-                target_area = get_region_by_elavator_name(destination_elevator)
+                target_area = get_region_by_elevator_name(destination_elevator)
                 two_way_map_elevators(
                     source_area, source_elevator, target_area, destination_elevator
                 )
@@ -228,15 +227,15 @@ def get_random_elevator_mapping(
                     e
                     for e in get_flat_list_of_available_elevators()
                     if e not in elevators[source_elevator]
-                    and get_region_by_elavator_name(e) != source_area
+                    and get_region_by_elevator_name(e) != source_area
                 ]
             )
-            destination_area = get_region_by_elavator_name(destination_elevator)
+            destination_area = get_region_by_elevator_name(destination_elevator)
             two_way_map_elevators(
                 source_area, source_elevator, destination_area, destination_elevator
             )
 
-    while len(available_elevators_by_region.keys()) > 0:
+    while available_elevators_by_region:
         source_region = get_region_with_most_unshuffled_elevators()
         source_elevators = available_elevators_by_region[source_region]
         source_elevator = world.random.choice(list(source_elevators.keys()))

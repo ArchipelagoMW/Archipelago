@@ -1,6 +1,6 @@
 # Metroid Prime Archipelago
 
-An Archipelago implementation of Metroid Prime multiworld randomizer using [randomprime](https://github.com/randovania/randomprime/)
+An Archipelago implementation of Metroid Prime multiworld randomizer using [randomprime](https://github.com/randovania/randomprime/).
 
 ## What does randomization do to this game?
 
@@ -36,7 +36,7 @@ The Wii and Switch versions of the game are _not_ supported.
 
 ## When the player receives an item, what happens?
 
-The player will immediately have their suit inventory updated and receive a notification in the Client and a HUD message during gaemplay.
+The player will immediately have their suit inventory updated and receive a notification in the Client and a HUD message during gameplay.
 
 ## FAQs
 

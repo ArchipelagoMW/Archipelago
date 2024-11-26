@@ -46,14 +46,14 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
 
     for mappings in world.elevator_mapping.values():
         for elevator, target in mappings.items():
-            source = world.multiworld.get_region(elevator, world.player)
-            destination = world.multiworld.get_region(target, world.player)
+            source = world.get_region(elevator)
+            destination = world.get_region(target)
             source.connect(
                 destination, elevator, lambda state: can_access_elevator(world, state)
             )
 
-    artifact_temple = world.multiworld.get_region(
-        RoomName.Artifact_Temple.value, world.player
+    artifact_temple = world.get_region(
+        RoomName.Artifact_Temple.value
     )
 
     if final_boss_selection == 0 or final_boss_selection == 2:

@@ -1,6 +1,6 @@
 from logging import Logger
 import struct
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from .DolphinClient import GC_GAME_ID_ADDRESS, DolphinClient, DolphinException
 from enum import Enum
@@ -253,7 +253,7 @@ class MetroidPrimeInterface:
     def check_for_new_locations(self):
         pass
 
-    def get_item(self, item_data: ItemData | int) -> InventoryItemData | None:
+    def get_item(self, item_data: Union[ItemData, int]) -> Optional[InventoryItemData]:
         if isinstance(item_data, int):
             for item in item_table.values():
                 if item.id == item_data:
@@ -279,9 +279,9 @@ class MetroidPrimeInterface:
                 return InventoryItemData(item_data, current_ammount, current_capacity)
         return None
 
-    def get_current_inventory(self) -> dict[str, InventoryItemData]:
+    def get_current_inventory(self) -> Dict[str, InventoryItemData]:
         MAX_VANILLA_ITEM_ID = 40
-        inventory: dict[str, InventoryItemData] = {}
+        inventory: Dict[str, InventoryItemData] = {}
         for item in item_table.values():
             i = self.get_item(item)
             if i is not None:
@@ -474,18 +474,16 @@ class MetroidPrimeInterface:
 
     def __progressive_beam_to_beam(
         self, charge_beam: SuitUpgrade
-    ) -> SuitUpgrade | None:
-        match charge_beam:
-            case SuitUpgrade.Power_Charge_Beam:
-                return SuitUpgrade.Power_Beam
-            case SuitUpgrade.Wave_Charge_Beam:
-                return SuitUpgrade.Wave_Beam
-            case SuitUpgrade.Ice_Charge_Beam:
-                return SuitUpgrade.Ice_Beam
-            case SuitUpgrade.Plasma_Charge_Beam:
-                return SuitUpgrade.Plasma_Beam
-            case _:
-                return None
+    ) -> Optional[SuitUpgrade]:
+        if charge_beam == SuitUpgrade.Power_Charge_Beam:
+            return SuitUpgrade.Power_Beam
+        if charge_beam == SuitUpgrade.Wave_Charge_Beam:
+            return SuitUpgrade.Wave_Beam
+        if charge_beam == SuitUpgrade.Ice_Charge_Beam:
+            return SuitUpgrade.Ice_Beam
+        if charge_beam == SuitUpgrade.Plasma_Charge_Beam:
+            return SuitUpgrade.Plasma_Beam
+        return None
 
     def set_progressive_beam_charge_state(self, charge_beam: SuitUpgrade, state: bool):
         cplayer_state = self.__get_player_state_pointer()

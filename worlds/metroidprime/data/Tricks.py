@@ -43,7 +43,7 @@ class TrickDifficulty(Enum):
     Hard = 2
 
 
-class Trick_Type(Enum):
+class TrickType(Enum):
     L_Jump = "L Jump"
     L_Jump_Space_Jump = "L-Jump Space Jump"
     R_Jump = "R-Jump"

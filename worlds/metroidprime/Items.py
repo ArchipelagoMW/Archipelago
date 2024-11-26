@@ -163,7 +163,7 @@ def get_item_for_options(
     return item
 
 
-suit_upgrade_table: dict[str, ItemData] = {
+suit_upgrade_table: Dict[str, ItemData] = {
     SuitUpgrade.Power_Beam.value: ItemData(
         SuitUpgrade.Power_Beam.value, 0, ItemClassification.progression
     ),
@@ -244,7 +244,7 @@ suit_upgrade_table: dict[str, ItemData] = {
     ),
 }
 
-misc_item_table: dict[str, ItemData] = {
+misc_item_table: Dict[str, ItemData] = {
     "UnknownItem1": ItemData("UnknownItem1", 25, ItemClassification.useful),
     "HealthRefill": ItemData(
         "HealthRefill", 26, ItemClassification.trap
@@ -253,7 +253,7 @@ misc_item_table: dict[str, ItemData] = {
 }
 
 # These item ids are invalid in the player state, we'll need to exclude it from logic relying on that
-custom_suit_upgrade_table: dict[str, ItemData] = {
+custom_suit_upgrade_table: Dict[str, ItemData] = {
     SuitUpgrade.Missile_Launcher.value: ItemData(
         SuitUpgrade.Missile_Launcher.value, 41, ItemClassification.progression
     ),
@@ -300,7 +300,7 @@ custom_suit_upgrade_table: dict[str, ItemData] = {
     ),
 }
 
-artifact_table: dict[str, ItemData] = {
+artifact_table: Dict[str, ItemData] = {
     "Artifact of Truth": ItemData(
         "Artifact of Truth", 29, ItemClassification.progression_skip_balancing
     ),
@@ -339,7 +339,7 @@ artifact_table: dict[str, ItemData] = {
     ),
 }
 
-item_table: dict[str, ItemData] = {
+item_table: Dict[str, ItemData] = {
     **suit_upgrade_table,
     **artifact_table,
     **custom_suit_upgrade_table,
