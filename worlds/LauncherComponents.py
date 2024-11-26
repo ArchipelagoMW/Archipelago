@@ -3,7 +3,7 @@ import logging
 import pathlib
 import weakref
 from enum import Enum, auto
-from typing import Optional, Callable, List, Iterable, Tuple
+from typing import Optional, Callable, List, Iterable, Tuple, Union
 
 from Utils import local_path, open_filename
 
@@ -32,7 +32,7 @@ class Component:
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str | list[str]] = None, supports_uri: Optional[bool] = False):
+                 game_name: Optional[Union[str, List[str]]] = None, supports_uri: Optional[bool] = False):
         self.display_name = display_name
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
