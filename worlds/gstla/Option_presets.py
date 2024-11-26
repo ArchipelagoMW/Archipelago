@@ -21,7 +21,7 @@ easy = {
     ItemShuffle.internal_name: ItemShuffle.option_all_chests_and_tablets,
     MajorMinorSplit.internal_name: MajorMinorSplit.option_false,
     RevealHiddenItem.internal_name: RevealHiddenItem.option_true,
-    OmitLocations.internal_name: OmitLocations.option_omit_superbosses_and_inner_sancutm,
+    OmitLocations.internal_name: OmitLocations.option_omit_superbosses_and_inner_sanctum,
     AddGs1Items.internal_name: AddGs1Items.option_false,
     AddDummyItems.internal_name: AddDummyItems.option_false,
     StartWithShip.internal_name: StartWithShip.option_ship_door_unlocked,

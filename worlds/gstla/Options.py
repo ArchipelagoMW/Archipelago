@@ -90,7 +90,7 @@ class OmitLocations(Choice):
     display_name = "Omit Locations"
     option_no_omission = 0
     option_omit_anemos_inner_sanctum = 1
-    option_omit_superbosses_and_inner_sancutm = 2
+    option_omit_superbosses_and_inner_sanctum = 2
     default = 2
 
 class AddGs1Items(Toggle):
