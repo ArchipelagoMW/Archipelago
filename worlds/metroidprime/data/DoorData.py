@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable, List, Optional, TYPE_CHECKING
+from typing import Callable, List, Optional, Tuple, TYPE_CHECKING
 from .Tricks import TrickInfo
 from BaseClasses import CollectionState
 from .AreaNames import MetroidPrimeArea
@@ -44,7 +44,7 @@ def get_door_data_by_room_names(
     target_room: RoomName,
     area: MetroidPrimeArea,
     world: "MetroidPrimeWorld",
-) -> Optional[tuple[DoorData, int]]:
+) -> Optional[Tuple[DoorData, int]]:
     region_data = world.game_region_data.get(area)
 
     assert region_data
