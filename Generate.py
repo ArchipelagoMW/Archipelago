@@ -384,7 +384,7 @@ def compare_results(
         comparator: str):
     if yaml_value is None:
         return False
-    if (isinstance(yaml_value, str|bool|int) and isinstance(trigger_value, str|bool|int)):
+    if isinstance(yaml_value, str|bool|int) and isinstance(trigger_value, str|bool|int):
         yaml_value = str(yaml_value).lower()
         trigger_value = str(trigger_value).lower()
     if comparator == "=":
