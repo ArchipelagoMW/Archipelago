@@ -1,7 +1,7 @@
 from BaseClasses import CollectionState
 from ..BlastShieldRando import BlastShieldType
 from ..DoorRando import DoorLockType
-from ..LogicCombat import can_combat_flaaghra, can_combat_ghosts
+from ..LogicCombat import can_combat_flaahgra, can_combat_ghosts
 from ..Items import SuitUpgrade
 from ..data.AreaNames import MetroidPrimeArea
 from .RoomData import AreaData, PickupData, RoomData
@@ -65,7 +65,7 @@ def can_flaahgra(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
         return bomb_req
     return (
         state.can_reach_region(RoomName.Sunchamber.value, world.player)
-        and can_combat_flaaghra(world, state)
+        and can_combat_flaahgra(world, state)
         and can_missile(world, state)
         and can_scan(world, state)
         and bomb_req
@@ -606,12 +606,12 @@ class ChozoRuinsAreaData(AreaData):
                     PickupData(
                         "Chozo Ruins: Ruined Fountain",
                         rule_func=lambda world, state: world.get_location(
-                            "Chozo Ruins: Sunchamber - Flaaghra"
+                            "Chozo Ruins: Sunchamber - Flaahgra"
                         ).can_reach(state)
                         and can_spider(world, state),
                     )
                 ],
-            ),  # This location can accidentally be locked out if flaaghra is skipped
+            ),  # This location can accidentally be locked out if flaahgra is skipped
             RoomName.Ruined_Gallery: RoomData(
                 doors={
                     0: DoorData(RoomName.North_Atrium),
@@ -760,7 +760,7 @@ class ChozoRuinsAreaData(AreaData):
                 },
                 pickups=[
                     PickupData(
-                        "Chozo Ruins: Sunchamber - Flaaghra", rule_func=can_flaahgra
+                        "Chozo Ruins: Sunchamber - Flaahgra", rule_func=can_flaahgra
                     ),
                     PickupData(
                         "Chozo Ruins: Sunchamber - Ghosts",
