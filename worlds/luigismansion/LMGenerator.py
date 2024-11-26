@@ -182,37 +182,31 @@ class LuigisMansionRandomizer:
 
     # Updates all jmp tables in the map2.szp file.
     def update_maptwo_jmp_tables(self):
+        # Updates all data entries for each jmp table in memory first.
         update_character_info(self.jmp_character_info_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_character_info_table)
-
         update_item_info_table(self.jmp_item_info_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_item_info_table)
-
         update_item_appear_table(self.jmp_item_appear_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_item_appear_table)
-
         update_treasure_table(self.jmp_treasure_table, self.jmp_character_info_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_treasure_table)
-
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_furniture_info_table)
-
         update_event_info(self.jmp_event_info_table)
-        self.update_maptwo_info_table(self.jmp_event_info_table)
-
         update_observer_info(self.jmp_observer_info_table)
-        self.update_maptwo_info_table(self.jmp_observer_info_table)
-
         update_key_info(self.jmp_key_info_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_key_info_table)
-
         update_obj_info(self.jmp_obj_info_table)
-        self.update_maptwo_info_table(self.jmp_obj_info_table)
-
         update_generator_info(self.jmp_generator_info_table)
+
+        # Updates all the data entries in each jmp table in the szp file.
+        self.update_maptwo_info_table(self.jmp_character_info_table)
+        self.update_maptwo_info_table(self.jmp_item_info_table)
+        self.update_maptwo_info_table(self.jmp_item_appear_table)
+        self.update_maptwo_info_table(self.jmp_treasure_table)
+        self.update_maptwo_info_table(self.jmp_furniture_info_table)
+        self.update_maptwo_info_table(self.jmp_event_info_table)
+        self.update_maptwo_info_table(self.jmp_observer_info_table)
+        self.update_maptwo_info_table(self.jmp_key_info_table)
+        self.update_maptwo_info_table(self.jmp_obj_info_table)
         self.update_maptwo_info_table(self.jmp_generator_info_table)
 
-        if self.output_data["Options"]["enemizer"] == 1:
+        if self.output_data["Options"]["enemizer"] > 0:
             update_enemy_info(self.jmp_enemy_info_table, self.output_data)
             self.update_maptwo_info_table(self.jmp_enemy_info_table)
 
