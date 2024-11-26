@@ -21,6 +21,7 @@ from argparse import Namespace
 import requests
 
 from settings import Settings, get_settings
+from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from typing_extensions import TypeGuard
 from yaml import load, load_all, dump
@@ -571,6 +572,8 @@ def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
             else:
                 if text:
                     queue.put_nowait(text)
+                else:
+                    sleep(0.01)  # non-blocking stream
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
