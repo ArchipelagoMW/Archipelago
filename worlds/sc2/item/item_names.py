@@ -486,6 +486,7 @@ ABERRATION_CONSTRUCT_REGENERATION                 = "Construct Regeneration (Abe
 ABERRATION_BANELING_INCUBATION                    = "Baneling Incubation (Aberration)"
 ABERRATION_PROTECTIVE_COVER                       = "Protective Cover (Aberration)"
 ABERRATION_RESOURCE_EFFICIENCY                    = "Resource Efficiency (Aberration)"
+ABERRATION_PROGRESSIVE_BANELING_LAUNCH            = "Progressive Baneling Launch (Aberration)"
 CORRUPTOR_MONSTROUS_RESILIENCE                    = "Monstrous Resilience (Corruptor)"
 CORRUPTOR_CONSTRUCT_REGENERATION                  = "Construct Regeneration (Corruptor)"
 CORRUPTOR_SCOURGE_INCUBATION                      = "Scourge Incubation (Corruptor)"
