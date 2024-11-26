@@ -859,15 +859,16 @@ class KH2Context(CommonContext):
                     if self.game_communication_path:
                         logger.info("Game Version is not 0.9. Checking with most up to date addresses of github. If file is not found will be downloading datafiles. This might take a moment")
                         #if mem addresses file is found then check version and if old get new one
-                        if not os.path.exists(self.game_communication_path + f"\kh2memaddresses.json"):
+                        hk2memaddresses_path = os.path.join(self.game_communication_path, f"kh2memaddresses.json")
+                        if not os.path.exists(hk2memaddresses_path):
                             mem_resp = requests.get("https://raw.githubusercontent.com/JaredWeakStrike/KH2APMemoryValues/master/kh2memaddresses.json")
                             if mem_resp.status_code == 200:
                                 self.mem_json = json.loads(mem_resp.content)
-                                with open(os.path.join(self.game_communication_path, f"kh2memaddresses.json"),
+                                with open(hk2memaddresses_path,
                                         'w') as f:
                                     f.write(json.dumps(self.mem_json, indent=4))
                         else:
-                            with open(self.game_communication_path + f"\kh2memaddresses.json", 'r') as f:
+                            with open(hk2memaddresses_path, 'r') as f:
                                 self.mem_json = json.load(f)
                         for key, value in self.mem_json.items():
 
