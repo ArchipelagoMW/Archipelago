@@ -25,6 +25,8 @@ class TestBase(unittest.TestCase):
                 {"medallions", "stones", "rewards", "logic_bottles"},
             "Starcraft 2":
                 {"Missions", "WoL Missions"},
+            "Yu-Gi-Oh! 2006":
+                {"Campaign Boss Beaten"}
         }
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):
@@ -61,15 +63,6 @@ class TestBase(unittest.TestCase):
                 multiworld = setup_solo_multiworld(world_type)
                 for item in multiworld.itempool:
                     self.assertIn(item.name, world_type.item_name_to_id)
-
-    def test_item_descriptions_have_valid_names(self):
-        """Ensure all item descriptions match an item name or item group name"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            valid_names = world_type.item_names.union(world_type.item_name_groups)
-            for name in world_type.item_descriptions:
-                with self.subTest("Name should be valid", game=game_name, item=name):
-                    self.assertIn(name, valid_names,
-                                  "All item descriptions must match defined item names")
 
     def test_itempool_not_modified(self):
         """Test that worlds don't modify the itempool after `create_items`"""

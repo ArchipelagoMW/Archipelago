@@ -70,17 +70,17 @@ def install_pkg_resources(yes=False):
         subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools"])
 
 
-def update(yes=False, force=False):
+def update(yes: bool = False, force: bool = False) -> None:
     global update_ran
     if not update_ran:
         update_ran = True
 
+        install_pkg_resources(yes=yes)
+        import pkg_resources
+
         if force:
             update_command()
             return
-
-        install_pkg_resources(yes=yes)
-        import pkg_resources
 
         prev = ""  # if a line ends in \ we store here and merge later
         for req_file in requirements_files:

@@ -1,8 +1,8 @@
 import os
 import unittest
 
-from worlds.lingo.static_logic import HASHES
-from worlds.lingo.utils.pickle_static_data import hash_file
+from ..static_logic import HASHES
+from ..utils.pickle_static_data import hash_file
 
 
 class TestDatafile(unittest.TestCase):

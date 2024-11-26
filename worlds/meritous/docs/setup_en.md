@@ -40,9 +40,9 @@ Eventually, this process will be moved to in-game menus for better ease of use.
 
 ## Finishing the Game
 
-Your initial goal is to find all three PSI Keys. Depending on your YAML settings, these may be located on pedestals in special rooms in the Atlas Dome, or they may be scattered across other players' worlds. These PSI Keys are then brought to their respective locations in the Dome, where you will be subjected to a boss battle. Once all three bosses are defeated, this unlocks the Cursed Seal, hidden in the farthest-away location from the Entrance. The Compass tiles can help you find your way to these locations.
+Your initial goal is to find all three PSI Keys. Depending on your YAML options, these may be located on pedestals in special rooms in the Atlas Dome, or they may be scattered across other players' worlds. These PSI Keys are then brought to their respective locations in the Dome, where you will be subjected to a boss battle. Once all three bosses are defeated, this unlocks the Cursed Seal, hidden in the farthest-away location from the Entrance. The Compass tiles can help you find your way to these locations.
 
-At minimum, every seed will require you to find the Cursed Seal and bring it back to the Entrance. The goal can then vary based on your `goal` YAML setting:
+At minimum, every seed will require you to find the Cursed Seal and bring it back to the Entrance. The goal can then vary based on your `goal` YAML option:
 
 - `return_the_cursed_seal`: You will fight the final boss, but win or lose, a victory will be posted.
 - `any_ending`: You must defeat the final boss.

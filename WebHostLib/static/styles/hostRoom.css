@@ -58,3 +58,28 @@
     overflow-y: auto;
     max-height: 400px;
 }
+
+.loader{
+  display: inline-block;
+  visibility: hidden;
+  margin-left: 5px;
+  width: 40px;
+  aspect-ratio: 4;
+  --_g: no-repeat radial-gradient(circle closest-side,#fff 90%,#fff0);
+  background:
+    var(--_g) 0    50%,
+    var(--_g) 50%  50%,
+    var(--_g) 100% 50%;
+  background-size: calc(100%/3) 100%;
+  animation: l7 1s infinite linear;
+}
+
+.loader.loading{
+  visibility: visible;
+}
+
+@keyframes l7{
+  33%{background-size:calc(100%/3) 0%  ,calc(100%/3) 100%,calc(100%/3) 100%}
+  50%{background-size:calc(100%/3) 100%,calc(100%/3) 0   ,calc(100%/3) 100%}
+  66%{background-size:calc(100%/3) 100%,calc(100%/3) 100%,calc(100%/3) 0   }
+}

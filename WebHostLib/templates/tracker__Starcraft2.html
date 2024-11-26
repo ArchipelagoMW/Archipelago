@@ -106,7 +106,7 @@
                                 <td>{{ sc2_icon('Neosteel Bunker (Bunker)') }}</td>
                                 <td>{{ sc2_icon('Shrike Turret (Bunker)') }}</td>
                                 <td>{{ sc2_icon('Fortified Bunker (Bunker)') }}</td>
-                                <td colspan="3"></td>
+                                <td></td>
                                 <td>{{ sc2_icon('Missile Turret') }}</td>
                                 <td>{{ sc2_icon('Titanium Housing (Missile Turret)') }}</td>
                                 <td>{{ sc2_icon('Hellstorm Batteries (Missile Turret)') }}</td>
@@ -121,12 +121,13 @@
                                 <td>{{ sc2_icon('Planetary Fortress') }}</td>
                                 <td {% if augmented_thrusters_planetary_fortress_level == 1 %}class="tint-terran"{% endif %}>{{ sc2_progressive_icon_with_custom_name('Progressive Augmented Thrusters (Planetary Fortress)', augmented_thrusters_planetary_fortress_url, augmented_thrusters_planetary_fortress_name) }}</td>
                                 <td>{{ sc2_icon('Advanced Targeting (Planetary Fortress)') }}</td>
+                                <td colspan="2"></td>
+                                <td>{{ sc2_icon('Micro-Filtering') }}</td>
+                                <td>{{ sc2_icon('Automated Refinery') }}</td>
                                 <td></td>
                                 <td>{{ sc2_icon('Advanced Construction (SCV)') }}</td>
                                 <td>{{ sc2_icon('Dual-Fusion Welders (SCV)') }}</td>
-                                <td></td>
-                                <td>{{ sc2_icon('Micro-Filtering') }}</td>
-                                <td>{{ sc2_icon('Automated Refinery') }}</td>
+                                <td>{{ sc2_icon('Hostile Environment Adaptation (SCV)') }}</td>
                             </tr>
                             <tr>
                                 <td>{{ sc2_icon('Sensor Tower') }}</td>
@@ -180,7 +181,7 @@
                                 <td>{{ sc2_icon('Nano Projector (Medic)') }}</td>
                                 <td colspan="6"></td>
                                 <td>{{ sc2_icon('Vulture') }}</td>
-                                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Replenishable Magazine (Vulture)', replenishable_magazine_vulture_url, replenishable_magazine_vulture_name) }}</td>
+                                <td class="{{ sc2_tint_level(replenishable_magazine_vulture_level) }}">{{ sc2_progressive_icon_with_custom_name('Progressive Replenishable Magazine (Vulture)', replenishable_magazine_vulture_url, replenishable_magazine_vulture_name) }}</td>
                                 <td>{{ sc2_icon('Ion Thrusters (Vulture)') }}</td>
                                 <td>{{ sc2_icon('Auto Launchers (Vulture)') }}</td>
                                 <td>{{ sc2_icon('Auto-Repair (Vulture)') }}</td>
@@ -293,7 +294,8 @@
                                 <td>{{ sc2_icon('HERC') }}</td>
                                 <td>{{ sc2_icon('Juggernaut Plating (HERC)') }}</td>
                                 <td>{{ sc2_icon('Kinetic Foam (HERC)') }}</td>
-                                <td colspan="5"></td>
+                                <td>{{ sc2_icon('Resource Efficiency (HERC)') }}</td>
+                                <td colspan="4"></td>
                                 <td>{{ sc2_icon('Widow Mine') }}</td>
                                 <td>{{ sc2_icon('Drilling Claws (Widow Mine)') }}</td>
                                 <td>{{ sc2_icon('Concealment (Widow Mine)') }}</td>

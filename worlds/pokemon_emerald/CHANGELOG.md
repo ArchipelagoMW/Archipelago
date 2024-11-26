@@ -1,3 +1,65 @@
+# 2.3.0
+
+### Features
+
+- Added a Swedish translation of the setup guide.
+- The client communicates map transitions to any trackers connected to the slot.
+- Added the player's Normalize Encounter Rates option to slot data for trackers.
+
+### Fixes
+
+- Fixed a rare issue where receiving a wonder trade could partially corrupt the save data, preventing the player from
+receiving new items.
+- Fixed the client spamming the "goal complete" status update to the server instead of sending it once.
+- Fixed the `trainer_party_blacklist` option checking for the existence of the "_Legendaries" shortcut in the
+`starter_blacklist` option instead of itself.
+- Fixed a logic issue where the "Mauville City - Coin Case from Lady in House" location only required a Harbor Mail if
+the player randomized NPC gifts.
+- The Dig tutor has its compatibility percentage raised to 50% if the player's TM/tutor compatibility is set lower.
+- A Team Magma Grunt in the Space Center which could become unreachable while trainersanity is active by overlapping
+with another NPC was moved to an unoccupied space.
+- Fixed a problem where the client would crash on certain operating systems while using certain python versions if the
+player tried to wonder trade.
+- Prevent the poke flute sound from replacing the evolution fanfare, which would cause the game to wait in silence for
+a long time during the evolution scene.
+
+# 2.2.0
+
+### Features
+
+- When you blacklist species from wild encounters and turn on dexsanity, blacklisted species are not added as locations
+and won't show up in the wild. Previously they would be forced to show up exactly once.
+- Added support for some new autotracking events.
+- Updated option descriptions.
+- Added `full` alias for `100` on TM and HM compatibility options.
+
+### Fixes
+
+- The Lilycove Wailmer now logically block you from the east. Actual game behavior is still unchanged for now.
+- Water encounters in Slateport now correctly require Surf.
+- Mirage Tower can no longer be your only logical access to a species in the wild, since it can permanently disappear.
+- Updated the tracker link in the setup guide.
+
+# 2.1.1
+
+### Features
+
+- You no longer need a copy of Pokemon Emerald to generate a game, patch files generate much faster.
+
+# 2.1.0
+
+_Separately released, branching from 2.0.0. Included procedure patch migration, but none of the 2.0.1 fixes._
+
+# 2.0.1
+
+### Fixes
+
+- Changed "Ho-oh" to "Ho-Oh" in options.
+- Temporary fix to alleviate problems with sometimes not receiving certain items just after connecting if `remote_items`
+is `true`.
+- Temporarily disable a possible location for Marine Cave to spawn, as it causes an overflow.
+- Water encounters in Dewford now correctly require Surf.
+
 # 2.0.0
 
 ### Features
@@ -138,6 +200,7 @@ turn to face you when you run.
 species equally likely to appear, but makes rare encounters less rare.
 - Added `Trick House` location group.
 - Removed `Postgame Locations` location group.
+- Added a Spanish translation of the setup guide.
 
 ### QoL
 
