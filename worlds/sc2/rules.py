@@ -1114,6 +1114,7 @@ class SC2Logic:
                     state.has(item_names.SWARM_HOST, self.player)
                     or self.morph_brood_lord(state)
                     or self.morph_impaler_or_lurker(state)
+                    or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
                 ) or (
                     self.advanced_tactics
                     and (self.morph_viper(state)

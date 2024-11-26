@@ -526,6 +526,7 @@ INFESTED_BANSHEE_RAPID_HIBERNATION                = "Rapid Hibernation (Infested
 INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS        = "Advanced Targeting Optics (Infested Banshee)"
 INFESTED_LIBERATOR_CLOUD_DISPERSAL                = "Cloud Dispersal (Infested Liberator)"
 INFESTED_LIBERATOR_VIRAL_CONTAMINATION            = "Viral Contamination (Infested Liberator)"
+INFESTED_LIBERATOR_DEFENDER_MODE                  = "Defender Mode (Infested Liberator)"
 FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK         = "Frightful Fleshwelder (Infested Siege Tank)"
 FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK        = "Frightful Fleshwelder (Infested Diamondback)"
 FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE            = "Frightful Fleshwelder (Infested Banshee)"
