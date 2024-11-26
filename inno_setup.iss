@@ -84,6 +84,7 @@ Type: dirifempty; Name: "{app}"
 
 [InstallDelete]
 Type: files; Name: "{app}\lib\worlds\_bizhawk.apworld"
+Type: files; Name: "{app}\ArchipelagoLinksAwakeningClient.exe"
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 Type: files; Name: "{app}\ArchipelagoPokemonClient.exe"
 Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
