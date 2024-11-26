@@ -343,10 +343,10 @@ class RandomizeStartingBeam(Toggle):
 
 
 class StartingBeam(TextChoice):
+    """Used to override the starting beam if Randomize Starting Beam is disabled, or to display the starting beam if it is enabled."""
     visibility = Visibility.spoiler
     display_name = "Starting Beam"
     default = "none"
-    """Used to override the starting beam if Randomize Starting Beam is disabled, or to display the starting beam if it is enabled."""
 
 
 class PreScanElevators(DefaultOnToggle):
