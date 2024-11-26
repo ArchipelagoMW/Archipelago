@@ -442,9 +442,9 @@ def apply_new_ghost(x, element):
     # Otherwise, randomize the ghosts between the non-element ones from the list.
     match element:
         case "Ice":
-            x["name"] = "mopoo2"
-        case "Water":
             x["name"] = "mapoo2"
+        case "Water":
+            x["name"] = "mopoo2"
         case "Fire":
             x["name"] = "yapoo2"
         case "No Element":
