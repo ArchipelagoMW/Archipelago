@@ -20,5 +20,5 @@ class Building:
 @dataclass(frozen=True)
 class Animal:
     name: str
-    required_building: str
+    required_building: str = field(**kw_only)
     sources: Tuple[Source, ...] = field(**kw_only)
