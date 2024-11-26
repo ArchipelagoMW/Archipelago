@@ -126,8 +126,8 @@ def __get_chozo_region():
             BlastShieldRegion(
                 name=RoomName.Arboretum,
                 doors={
-                    RoomName.Arboretum: RoomName.Sunchamber_Lobby,
-                    RoomName.Arboretum: RoomName.Gathering_Hall_Access,
+                    RoomName.Sunchamber_Lobby: RoomName.Arboretum,
+                    RoomName.Gathering_Hall_Access: RoomName.Arboretum,
                 },
                 invalid_start_rooms=[
                     RoomName.Arboretum,
@@ -200,9 +200,9 @@ def __get_chozo_region():
             BlastShieldRegion(
                 name=RoomName.Reflecting_Pool,
                 doors={
-                    RoomName.Reflecting_Pool: RoomName.Antechamber,
-                    RoomName.Reflecting_Pool: RoomName.Save_Station_3,
-                    RoomName.Reflecting_Pool: RoomName.Transport_Access_South,
+                    RoomName.Antechamber: RoomName.Reflecting_Pool,
+                    RoomName.Save_Station_3: RoomName.Reflecting_Pool,
+                    RoomName.Transport_Access_South: RoomName.Reflecting_Pool,
                 },
             ),
         ],
@@ -307,8 +307,8 @@ def __get_phendrana_region():
                 name=RoomName.Ice_Ruins_East,
                 can_be_locked=True,
                 doors={
-                    RoomName.Phendrana_Shorelines: RoomName.Ice_Ruins_Access,
-                    RoomName.Phendrana_Shorelines: RoomName.Plaza_Walkway,
+                    RoomName.Ice_Ruins_Access: RoomName.Phendrana_Shorelines,
+                    RoomName.Plaza_Walkway: RoomName.Phendrana_Shorelines,
                 },
                 invalid_start_rooms=[
                     RoomName.Save_Station_B,
@@ -536,8 +536,8 @@ def __get_phazon_region():
                 can_be_locked=True,
                 doors={
                     RoomName.Central_Dynamo: RoomName.Quarantine_Access_A,
-                    RoomName.Metroid_Quarantine_A: RoomName.Quarantine_Access_A,
-                    RoomName.Metroid_Quarantine_A: RoomName.Elevator_Access_B,
+                    RoomName.Quarantine_Access_A: RoomName.Metroid_Quarantine_A,
+                    RoomName.Elevator_Access_B: RoomName.Metroid_Quarantine_A,
                 },
             ),
             BlastShieldRegion(
@@ -578,6 +578,7 @@ def get_valid_blast_shield_regions_by_area(
         region = __get_magmoor_region()
     elif area == MetroidPrimeArea.Phazon_Mines:
         region = __get_phazon_region()
+
     if not world.starting_room_data:
         return region.regions
     elif world.starting_room_data.area != area or (
@@ -587,8 +588,9 @@ def get_valid_blast_shield_regions_by_area(
         return region.regions
 
     return [
-        region
-        for region in region.regions
-        if region.invalid_start_rooms is None
-        or RoomName(world.starting_room_data.name) not in region.invalid_start_rooms
+        blast_shield_region
+        for blast_shield_region in region.regions
+        if blast_shield_region.invalid_start_rooms is None
+        or RoomName(world.starting_room_data.name)
+        not in blast_shield_region.invalid_start_rooms
     ]

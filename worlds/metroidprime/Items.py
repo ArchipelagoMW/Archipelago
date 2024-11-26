@@ -138,13 +138,13 @@ def get_progressive_upgrade_for_item(item: SuitUpgrade) -> Optional[ProgressiveU
 
 
 def __get_missile_item(world: "MetroidPrimeWorld") -> SuitUpgrade:
-    if world.options.missile_launcher.value:
+    if world.options.missile_launcher:
         return SuitUpgrade.Missile_Launcher
     return SuitUpgrade.Missile_Expansion
 
 
 def __get_power_bomb_item(world: "MetroidPrimeWorld") -> SuitUpgrade:
-    if world.options.main_power_bomb.value:
+    if world.options.main_power_bomb:
         return SuitUpgrade.Main_Power_Bomb
     return SuitUpgrade.Power_Bomb_Expansion
 
@@ -156,7 +156,7 @@ def get_item_for_options(
         return __get_missile_item(world)
     if item == SuitUpgrade.Main_Power_Bomb:
         return __get_power_bomb_item(world)
-    if world.options.progressive_beam_upgrades.value:
+    if world.options.progressive_beam_upgrades:
         progressive_upgrade = get_progressive_upgrade_for_item(item)
         if progressive_upgrade is not None:
             return progressive_upgrade

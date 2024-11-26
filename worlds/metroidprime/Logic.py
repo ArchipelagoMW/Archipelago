@@ -34,7 +34,7 @@ def can_power_beam(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
 
 
 def can_power_bomb(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-    if world.options.main_power_bomb.value:
+    if world.options.main_power_bomb:
         return state.has_all(
             [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Main_Power_Bomb.value],
             world.player,
@@ -55,7 +55,7 @@ def can_spider(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
 def can_missile(
     world: "MetroidPrimeWorld", state: CollectionState, num_expansions: int = 1
 ) -> bool:
-    if world.options.missile_launcher.value:
+    if world.options.missile_launcher:
         can_shoot = state.has(SuitUpgrade.Missile_Launcher.value, world.player)
         return can_shoot and (
             num_expansions <= 1
@@ -106,8 +106,7 @@ def can_plasma_beam(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
     )
 
 
-def can_melt_ice(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-    return can_plasma_beam(world, state)
+can_melt_ice = can_plasma_beam
 
 
 def can_grapple(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
@@ -218,7 +217,7 @@ def can_scan(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
 
 
 def can_heat(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-    if world.options.non_varia_heat_damage.value:
+    if world.options.non_varia_heat_damage:
         return state.has(SuitUpgrade.Varia_Suit.value, world.player)
     else:
         return state.has_any(

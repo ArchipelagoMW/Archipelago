@@ -2,10 +2,6 @@
 
 An Archipelago implementation of Metroid Prime multiworld randomizer using [randomprime](https://github.com/randovania/randomprime/)
 
-## Setup Guide
-
-To get started or for troubleshooting, see [the Setup Guide](./docs/setup_en.md).
-
 ## What does randomization do to this game?
 
 In Metroid Prime, all suit upgrades and expansion items are shuffled into the multiworld, adding variety to the routes available for completing the game's objectives.
@@ -18,7 +14,7 @@ The end goal of the randomizer game can consist of:
 - Defeating Ridley (configurable)
 - Defeating Metroid Prime (configurable)
 
-If randomized, the end goal can be scanned in the Temple Security station.
+The end goal can be scanned in the Temple Security station.
 
 ## Which items can be in another player's world?
 
@@ -31,6 +27,7 @@ Multiworld items appear as one of the following:
 - Progression Item: Cog
 - Useful Item: Metroid Model with a random texture
 - Filler Item: Zoomer Model with a random texture
+- Trap Item: Cog
 
 ## What versions of the Metroid Prime are supported?
 
@@ -65,6 +62,10 @@ It is recommended to use a vanilla ISO with the latest release of [Dolphin](http
   - [MPItemTracker](https://github.com/UltiNaruto/MPItemTracker)
 - Not compatible
   - Practice Mod (The AP client is unable to connect to the game with this mod present.)
+
+### Can tricks be included in logic?
+
+You can select a general difficulty of tricks you want to be allowed as well as explicitly include or exclude certain tricks via the options as well. For a comprehensive list of tricks and their associated difficulties, take a look at [this document](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/metroidprime/data/Tricks.py)
 
 ### Aside from item locations being shuffled, how does this differ from the vanilla game?
 

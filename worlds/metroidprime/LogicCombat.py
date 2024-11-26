@@ -30,14 +30,14 @@ def _can_combat_generic(
     minimal_tanks: int,
     requires_charge_beam: bool = True,
 ) -> bool:
-    difficulty = world.options.combat_logic_difficulty.value
-    if difficulty == CombatLogicDifficulty.NO_LOGIC.value:
+    difficulty = CombatLogicDifficulty(world.options.combat_logic_difficulty)
+    if difficulty == CombatLogicDifficulty.NO_LOGIC:
         return True
-    elif difficulty == CombatLogicDifficulty.NORMAL.value:
+    elif difficulty == CombatLogicDifficulty.NORMAL:
         return has_energy_tanks(world, state, normal_tanks) and (
             can_charge_beam(world, state) or not requires_charge_beam
         )
-    elif difficulty == CombatLogicDifficulty.MINIMAL.value:
+    elif difficulty == CombatLogicDifficulty.MINIMAL:
         return has_energy_tanks(world, state, minimal_tanks) and (
             can_charge_beam(world, state) or not requires_charge_beam
         )

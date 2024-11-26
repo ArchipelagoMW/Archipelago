@@ -318,10 +318,9 @@ class Tricks:
     )
     watery_hall_no_gravity_no_space_jump: TrickInfo = TrickInfo(
         "Watery Hall No Gravity No Space Jump",
-        "Reach the Watery Hall Underwater Item without Gravity Suit or Space Jump by using a slope jump",
+        "Reach the Watery Hall Underwater Item without Gravity Suit or Space Jump by using a slope jump or bomb jump",
         TrickDifficulty.Medium,
-        lambda world, state: can_move_underwater(world, state) == False
-        or can_bomb(world, state),
+        lambda world, state: True,
     )
 
     furnace_no_spider_ball = TrickInfo(

@@ -63,7 +63,7 @@ class TestAllRandomizedOutput(MetroidPrimeTestBase):
     auto_construct = False
     options = {
         "elevator_randomization": True,
-        "door_randomization": "regional",
+        "door_color_randomization": "regional",
         "blast_shield_randomization": "mix_it_up",
     }
 

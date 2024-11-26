@@ -222,7 +222,7 @@ class MetroidPrimeWorld(World):
         # Randomize Elevators
         if self.options.elevator_mapping:
             self.elevator_mapping = self.options.elevator_mapping.value
-        elif self.options.elevator_randomization.value:
+        elif self.options.elevator_randomization:
             self.elevator_mapping = get_random_elevator_mapping(self)
             self.options.elevator_mapping.value = self.elevator_mapping
 
@@ -263,7 +263,7 @@ class MetroidPrimeWorld(World):
         )
 
     def post_fill(self) -> None:
-        if self.options.artifact_hints.value:
+        if self.options.artifact_hints:
             start_hints: typing.Set[str] = self.options.start_hints.value
             for i in artifact_table:
                 start_hints.add(i)

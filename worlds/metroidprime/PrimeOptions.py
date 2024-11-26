@@ -119,14 +119,14 @@ class RemoveHiveMecha(Toggle):
 
 
 class FusionSuit(Toggle):
-    """Whether to use the fusion suit or not"""
+    """If enabled, will replace all the suits in game with the Fusion Suit variants (cosmetic only). Suit color randomization will have no effect if this is enabled"""
 
     display_name = "Fusion Suit"
     default = False
 
 
 class TrickDifficulty(Choice):
-    """Determines which tricks, if any, are required to complete the seed. This will affect the logic of the game."""
+    """Determines which tricks, if any, are required to complete the seed. This will affect the logic of the game"""
 
     display_name = "Trick Difficulty"
     option_no_tricks = -1
@@ -137,15 +137,14 @@ class TrickDifficulty(Choice):
 
 
 class TrickAllowList(OptionList):
-    """A list of tricks to explicitly allow in logic, regardless of selected difficulty. Values should match the trick name found here: https://github.com/Electro1512/MetroidAPrime/blob/main/data/Tricks.py#L55
-    For example, "Crashed Frigate Scan Dash" or "Alcove Escape" """
+    """A list of trick names to explicitly allow in logic, regardless of selected difficulty. For example, "Crashed Frigate Scan Dash" or "Alcove Escape" """
 
     display_name = "Trick Allow List"
     default = []
 
 
 class TrickDenyList(OptionList):
-    """A list of tricks to explicitly deny in logic, regardless of selected difficulty. Values should match the trick name found here: https://github.com/Electro1512/MetroidAPrime/blob/main/data/Tricks.py#L55. For example, "Crashed Frigate Scan Dash" or "Alcove Escape" """
+    """A list of trick names to explicitly deny in logic, regardless of selected difficulty.  For example, "Crashed Frigate Scan Dash" or "Alcove Escape" """
 
     display_name = "Trick Deny List"
     default = []

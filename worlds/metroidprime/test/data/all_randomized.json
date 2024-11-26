@@ -238,15 +238,15 @@
     "powerBombArboretumSandstone": false,
     "artifactHints": {
       "Artifact of Chozo": "The &push;&main-color=#c300ff;Artifact of Chozo&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Shore Tunnel&pop;.",
-      "Artifact of Nature": "The &push;&main-color=#c300ff;Artifact of Nature&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Tower of Light&pop;.",
+      "Artifact of Nature": "The &push;&main-color=#c300ff;Artifact of Nature&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Quarantine Cave&pop;.",
       "Artifact of Sun": "The &push;&main-color=#c300ff;Artifact of Sun&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Hall of the Elders&pop;.",
-      "Artifact of World": "The &push;&main-color=#c300ff;Artifact of World&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Ice Ruins East - Behind Ice&pop;.",
-      "Artifact of Spirit": "The &push;&main-color=#c300ff;Artifact of Spirit&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phazon Mines: Metroid Quarantine B&pop;.",
+      "Artifact of World": "The &push;&main-color=#c300ff;Artifact of World&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Tallon Overworld: Hydro Access Tunnel&pop;.",
+      "Artifact of Spirit": "The &push;&main-color=#c300ff;Artifact of Spirit&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Tallon Overworld: Landing Site&pop;.",
       "Artifact of Newborn": "The &push;&main-color=#c300ff;Artifact of Newborn&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Gravity Chamber - Grapple Ledge&pop;.",
-      "Artifact of Truth": "The &push;&main-color=#c300ff;Artifact of Truth&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Sunchamber - Ghosts&pop;.",
-      "Artifact of Strength": "The &push;&main-color=#c300ff;Artifact of Strength&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Watery Hall - Underwater&pop;.",
+      "Artifact of Truth": "The &push;&main-color=#c300ff;Artifact of Truth&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Ruined Courtyard&pop;.",
+      "Artifact of Strength": "The &push;&main-color=#c300ff;Artifact of Strength&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Tower of Light&pop;.",
       "Artifact of Elder": "The &push;&main-color=#c300ff;Artifact of Elder&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Plasma Processing&pop;.",
-      "Artifact of Wild": "The &push;&main-color=#c300ff;Artifact of Wild&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Quarantine Cave&pop;.",
+      "Artifact of Wild": "The &push;&main-color=#c300ff;Artifact of Wild&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Tallon Overworld: Life Grove Tunnel&pop;.",
       "Artifact of Lifegiver": "The &push;&main-color=#c300ff;Artifact of Lifegiver&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Ruined Gallery - Missile Wall&pop;.",
       "Artifact of Warrior": "The &push;&main-color=#c300ff;Artifact of Warrior&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Storage Cavern&pop;."
     },
@@ -256,10 +256,10 @@
     "Tallon Overworld": {
       "transports": {
         "Tallon Overworld North (Tallon Canyon)": "Chozo Ruins West (Main Plaza)",
-        "Tallon Overworld South (Great Tree Hall, Upper)": "Phendrana Drifts North (Phendrana Shorelines)",
         "Tallon Overworld East (Frigate Crash Site)": "Magmoor Caverns North (Lava Lake)",
+        "Tallon Overworld South (Great Tree Hall, Upper)": "Phazon Mines East (Main Quarry)",
         "Tallon Overworld West (Root Cave)": "Chozo Ruins East (Reflecting Pool, Save Station)",
-        "Tallon Overworld South (Great Tree Hall, Lower)": "Magmoor Caverns West (Monitor Station)",
+        "Tallon Overworld South (Great Tree Hall, Lower)": "Magmoor Caverns South (Magmoor Workstation, Debris)",
         "Artifact Temple": "Crater Entry Point"
       },
       "rooms": {
@@ -319,7 +319,7 @@
           "pickups": [],
           "doors": {
             "1": {
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Missile"
             }
           }
         },
@@ -327,10 +327,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Super Missile",
-              "hudmemoText": "Super Missile Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Super Missile",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -338,7 +338,11 @@
         },
         "Frigate Access Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Frigate Crash Site": {
           "pickups": [
@@ -354,6 +358,12 @@
           "doors": {
             "0": {
               "blastShieldType": "None"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            },
+            "2": {
+              "shieldType": "Wave Beam"
             }
           }
         },
@@ -368,21 +378,21 @@
               "showIcon": true
             }
           ],
-          "doors": {
-            "0": {
-              "blastShieldType": "Charge Beam"
-            }
-          }
+          "doors": {}
         },
         "Great Tree Hall": {
           "pickups": [],
           "doors": {
-            "1": {
-              "blastShieldType": "Charge Beam"
-            },
             "2": {
               "shieldType": "Blue",
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Charge Beam"
+            },
+            "3": {
+              "shieldType": "Wave Beam"
+            },
+            "4": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
             }
           }
         },
@@ -394,10 +404,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "X-Ray Visor",
-              "hudmemoText": "X-Ray Visor Acquired!",
+              "scanText": "Artifact of World",
+              "hudmemoText": "Artifact of World Acquired!",
               "currIncrease": 0,
-              "model": "X-Ray Visor",
+              "model": "Artifact of World",
               "showIcon": true
             }
           ],
@@ -407,16 +417,16 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Artifact of Spirit",
+              "hudmemoText": "Artifact of Spirit Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Artifact of Spirit",
               "showIcon": true
             }
           ],
           "doors": {
             "1": {
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Missile"
             }
           }
         },
@@ -424,14 +434,18 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Artifact of Wild",
+              "hudmemoText": "Artifact of Wild Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Artifact of Wild",
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Life Grove": {
           "pickups": [
@@ -465,7 +479,14 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Root Cave": {
           "pickups": [
@@ -479,8 +500,14 @@
             }
           ],
           "doors": {
+            "0": {
+              "blastShieldType": "Power Bomb"
+            },
             "1": {
               "blastShieldType": "None"
+            },
+            "2": {
+              "shieldType": "Ice Beam"
             }
           }
         },
@@ -489,19 +516,12 @@
           "doors": {
             "0": {
               "blastShieldType": "None"
-            },
-            "1": {
-              "blastShieldType": "Power Bomb"
             }
           }
         },
         "Tallon Canyon": {
           "pickups": [],
-          "doors": {
-            "3": {
-              "blastShieldType": "Power Bomb"
-            }
-          }
+          "doors": {}
         },
         "Temple Hall": {
           "pickups": [],
@@ -525,11 +545,19 @@
         },
         "Transport to Chozo Ruins East": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Transport to Chozo Ruins South": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Transport to Chozo Ruins West": {
           "pickups": [],
@@ -541,7 +569,11 @@
         },
         "Transport to Phazon Mines East": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Transport Tunnel A": {
           "pickups": [],
@@ -558,24 +590,46 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Power Bomb"
+            }
+          }
         },
         "Transport Tunnel C": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Transport Tunnel D": {
           "pickups": [],
           "doors": {
             "0": {
               "shieldType": "Blue",
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Charge Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
             }
           }
         },
         "Transport Tunnel E": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
+            }
+          }
         },
         "Waterfall Cavern": {
           "pickups": [],
@@ -590,9 +644,9 @@
     "Chozo Ruins": {
       "transports": {
         "Chozo Ruins West (Main Plaza)": "Tallon Overworld North (Tallon Canyon)",
-        "Chozo Ruins North (Sun Tower)": "Phazon Mines West (Phazon Processing Center)",
         "Chozo Ruins East (Reflecting Pool, Save Station)": "Tallon Overworld West (Root Cave)",
-        "Chozo Ruins South (Reflecting Pool, Far End)": "Magmoor Caverns South (Magmoor Workstation, Debris)"
+        "Chozo Ruins South (Reflecting Pool, Far End)": "Phazon Mines West (Phazon Processing Center)",
+        "Chozo Ruins North (Sun Tower)": "Magmoor Caverns South (Magmoor Workstation, Save Station)"
       },
       "rooms": {
         "Antechamber": {
@@ -639,7 +693,7 @@
           "pickups": [],
           "doors": {
             "0": {
-              "blastShieldType": "Super Missile"
+              "blastShieldType": "Power Bomb"
             }
           }
         },
@@ -664,20 +718,26 @@
           ],
           "doors": {
             "0": {
-              "blastShieldType": "Super Missile"
+              "blastShieldType": "Power Bomb"
             }
           }
         },
         "Crossway Access South": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Crossway Access West": {
           "pickups": [],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Missile"
+              "shieldType": "Ice Beam"
             }
           }
         },
@@ -693,8 +753,8 @@
             }
           ],
           "doors": {
-            "1": {
-              "blastShieldType": "Missile"
+            "0": {
+              "shieldType": "Plasma Beam"
             },
             "2": {
               "blastShieldType": "None"
@@ -713,10 +773,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Wave Beam",
-              "hudmemoText": "Wave Beam Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Wave Beam",
+              "model": "Missile",
               "showIcon": true
             },
             {
@@ -736,7 +796,15 @@
         },
         "East Furnace Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
+            }
+          }
         },
         "Elder Chamber": {
           "pickups": [
@@ -749,7 +817,11 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Elder Hall Access": {
           "pickups": [],
@@ -790,7 +862,12 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
+            }
+          }
         },
         "Gathering Hall Access": {
           "pickups": [],
@@ -836,7 +913,16 @@
           ],
           "doors": {
             "0": {
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Missile"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
+            },
+            "3": {
+              "shieldType": "Plasma Beam"
+            },
+            "4": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
@@ -868,7 +954,11 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Main Plaza": {
           "pickups": [
@@ -933,13 +1023,17 @@
         },
         "Plaza Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Missile"
+            }
+          }
         },
         "Reflecting Pool Access": {
           "pickups": [],
           "doors": {
             "1": {
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Missile"
             }
           }
         },
@@ -948,6 +1042,9 @@
           "doors": {
             "0": {
               "blastShieldType": "None"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             },
             "3": {
               "blastShieldType": "None"
@@ -996,10 +1093,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Boost Ball",
-              "hudmemoText": "Boost Ball Acquired!",
+              "scanText": "Gravity Suit",
+              "hudmemoText": "Gravity Suit Acquired!",
               "currIncrease": 0,
-              "model": "Boost Ball",
+              "model": "Gravity Suit",
               "showIcon": true
             }
           ],
@@ -1033,14 +1130,18 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Charge Beam",
-              "hudmemoText": "Charge Beam Acquired!",
+              "scanText": "Boost Ball",
+              "hudmemoText": "Boost Ball Acquired!",
               "currIncrease": 0,
-              "model": "Charge Beam",
+              "model": "Boost Ball",
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Ruins Entrance": {
           "pickups": [],
@@ -1098,10 +1199,10 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Truth",
-              "hudmemoText": "Artifact of Truth Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Truth",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -1122,24 +1223,39 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Tower of Light Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Tower of Light": {
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Nature",
-              "hudmemoText": "Artifact of Nature Acquired!",
+              "scanText": "Artifact of Strength",
+              "hudmemoText": "Artifact of Strength Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Nature",
+              "model": "Artifact of Strength",
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            },
+            "1": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Training Chamber Access": {
           "pickups": [
@@ -1153,9 +1269,11 @@
             }
           ],
           "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            },
             "1": {
-              "shieldType": "Blue",
-              "blastShieldType": "Bomb"
+              "shieldType": "Ice Beam"
             }
           }
         },
@@ -1172,8 +1290,7 @@
           ],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Bomb"
+              "shieldType": "Ice Beam"
             }
           }
         },
@@ -1196,7 +1313,11 @@
         },
         "Transport Access South": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Transport to Magmoor Caverns North": {
           "pickups": [],
@@ -1229,7 +1350,11 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Missile"
+            }
+          }
         },
         "Watery Hall Access": {
           "pickups": [
@@ -1260,10 +1385,10 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Strength",
-              "hudmemoText": "Artifact of Strength Acquired!",
+              "scanText": "Plasma Beam",
+              "hudmemoText": "Plasma Beam Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Strength",
+              "model": "Plasma Beam",
               "showIcon": true
             }
           ],
@@ -1284,19 +1409,16 @@
     },
     "Magmoor Caverns": {
       "transports": {
-        "Magmoor Caverns East (Twin Fires)": "Phendrana Drifts South (Quarantine Cave)",
         "Magmoor Caverns North (Lava Lake)": "Tallon Overworld East (Frigate Crash Site)",
-        "Magmoor Caverns South (Magmoor Workstation, Save Station)": "Phazon Mines East (Main Quarry)",
-        "Magmoor Caverns South (Magmoor Workstation, Debris)": "Chozo Ruins South (Reflecting Pool, Far End)",
-        "Magmoor Caverns West (Monitor Station)": "Tallon Overworld South (Great Tree Hall, Lower)"
+        "Magmoor Caverns West (Monitor Station)": "Phendrana Drifts South (Quarantine Cave)",
+        "Magmoor Caverns South (Magmoor Workstation, Debris)": "Tallon Overworld South (Great Tree Hall, Lower)",
+        "Magmoor Caverns South (Magmoor Workstation, Save Station)": "Chozo Ruins North (Sun Tower)",
+        "Magmoor Caverns East (Twin Fires)": "Phendrana Drifts North (Phendrana Shorelines)"
       },
       "rooms": {
         "Burning Trail": {
           "pickups": [],
           "doors": {
-            "1": {
-              "blastShieldType": "Power Bomb"
-            },
             "2": {
               "blastShieldType": "None"
             }
@@ -1306,10 +1428,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             },
             {
@@ -1321,11 +1443,19 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Charge Beam"
+            }
+          }
         },
         "Geothermal Core": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Lake Tunnel": {
           "pickups": [],
@@ -1342,7 +1472,11 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Bomb"
+            }
+          }
         },
         "Magmoor Workstation": {
           "pickups": [
@@ -1356,14 +1490,18 @@
             }
           ],
           "doors": {
-            "1": {
-              "blastShieldType": "Charge Beam"
+            "2": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
         "Monitor Station": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "2": {
+              "blastShieldType": "Bomb"
+            }
+          }
         },
         "Monitor Tunnel": {
           "pickups": [],
@@ -1371,11 +1509,22 @@
         },
         "North Core Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Pit Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Bomb"
+            }
+          }
         },
         "Plasma Processing": {
           "pickups": [
@@ -1425,7 +1574,14 @@
         },
         "South Core Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Storage Cavern": {
           "pickups": [
@@ -1440,35 +1596,34 @@
           ],
           "doors": {
             "0": {
-              "blastShieldType": "Charge Beam"
+              "blastShieldType": "Power Bomb"
             }
           }
         },
         "Transport to Chozo Ruins North": {
           "pickups": [],
-          "doors": {
-            "0": {
-              "blastShieldType": "Power Bomb"
-            }
-          }
+          "doors": {}
         },
         "Transport to Phazon Mines West": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Transport to Phendrana Drifts North": {
           "pickups": [],
-          "doors": {
-            "0": {
-              "blastShieldType": "Power Bomb"
-            }
-          }
+          "doors": {}
         },
         "Transport to Phendrana Drifts South": {
           "pickups": [],
           "doors": {
             "0": {
               "blastShieldType": "None"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
@@ -1487,19 +1642,26 @@
               "showIcon": true
             }
           ],
-          "doors": {
-            "0": {
-              "blastShieldType": "Power Bomb"
-            }
-          }
+          "doors": {}
         },
         "Transport Tunnel B": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Charge Beam"
+            }
+          }
         },
         "Transport Tunnel C": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Triclops Pit": {
           "pickups": [
@@ -1514,7 +1676,7 @@
           ],
           "doors": {
             "1": {
-              "blastShieldType": "Charge Beam"
+              "blastShieldType": "Power Bomb"
             }
           }
         },
@@ -1524,7 +1686,11 @@
         },
         "Twin Fires": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Warrior Shrine": {
           "pickups": [
@@ -1537,13 +1703,17 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "blastShieldType": "Bomb"
+            }
+          }
         },
         "Workstation Tunnel": {
           "pickups": [],
           "doors": {
-            "1": {
-              "blastShieldType": "Charge Beam"
+            "0": {
+              "shieldType": "Wave Beam"
             }
           }
         }
@@ -1551,13 +1721,20 @@
     },
     "Phendrana Drifts": {
       "transports": {
-        "Phendrana Drifts South (Quarantine Cave)": "Magmoor Caverns East (Twin Fires)",
-        "Phendrana Drifts North (Phendrana Shorelines)": "Tallon Overworld South (Great Tree Hall, Upper)"
+        "Phendrana Drifts South (Quarantine Cave)": "Magmoor Caverns West (Monitor Station)",
+        "Phendrana Drifts North (Phendrana Shorelines)": "Magmoor Caverns East (Twin Fires)"
       },
       "rooms": {
         "Aether Lab Entryway": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Canyon Entryway": {
           "pickups": [],
@@ -1569,7 +1746,14 @@
         },
         "Chamber Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Chapel of the Elders": {
           "pickups": [
@@ -1616,23 +1800,42 @@
               "showIcon": true
             }
           ],
-          "doors": {}
-        },
-        "Courtyard Entryway": {
-          "pickups": [],
           "doors": {
+            "0": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
+            },
             "1": {
-              "blastShieldType": "Charge Beam"
+              "shieldType": "Plasma Beam"
             }
           }
         },
-        "East Tower": {
+        "Courtyard Entryway": {
           "pickups": [],
           "doors": {}
         },
+        "East Tower": {
+          "pickups": [],
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
+            }
+          }
+        },
         "Frost Cave Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Frost Cave": {
           "pickups": [
@@ -1645,11 +1848,34 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Frozen Pike": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
+            },
+            "3": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Gravity Chamber": {
           "pickups": [
@@ -1670,19 +1896,54 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Hunter Cave Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Hunter Cave": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Power Bomb"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
+            },
+            "3": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Hydra Lab Entryway": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Ice Ruins Access": {
           "pickups": [],
@@ -1692,10 +1953,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of World",
-              "hudmemoText": "Artifact of World Acquired!",
+              "scanText": "X-Ray Visor",
+              "hudmemoText": "X-Ray Visor Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of World",
+              "model": "X-Ray Visor",
               "showIcon": true
             },
             {
@@ -1713,17 +1974,19 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Charge Beam",
+              "hudmemoText": "Charge Beam Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Charge Beam",
               "showIcon": true
             }
           ],
           "doors": {
+            "0": {
+              "blastShieldType": "Missile"
+            },
             "1": {
-              "shieldType": "Blue",
-              "blastShieldType": "Charge Beam"
+              "shieldType": "Plasma Beam"
             },
             "2": {
               "blastShieldType": "None"
@@ -1732,11 +1995,26 @@
         },
         "Lake Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Lower Edge Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Power Bomb"
+            }
+          }
         },
         "Map Station": {
           "pickups": [],
@@ -1744,11 +2022,25 @@
         },
         "North Quarantine Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Observatory Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Observatory": {
           "pickups": [
@@ -1762,6 +2054,12 @@
             }
           ],
           "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            },
             "2": {
               "blastShieldType": "None"
             }
@@ -1800,55 +2098,63 @@
             }
           ],
           "doors": {
-            "3": {
-              "blastShieldType": "Super Missile"
-            },
-            "4": {
-              "blastShieldType": "Bomb"
+            "1": {
+              "blastShieldType": "Missile"
             }
           }
         },
         "Phendrana's Edge": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            },
+            "2": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Pike Access": {
           "pickups": [],
           "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
             "1": {
-              "shieldType": "Blue",
-              "blastShieldType": "Missile"
+              "shieldType": "Wave Beam"
             }
           }
         },
         "Plaza Walkway": {
           "pickups": [],
-          "doors": {
-            "0": {
-              "blastShieldType": "Bomb"
-            }
-          }
+          "doors": {}
         },
         "Quarantine Access": {
           "pickups": [],
-          "doors": {
-            "1": {
-              "blastShieldType": "Super Missile"
-            }
-          }
+          "doors": {}
         },
         "Quarantine Cave": {
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Wild",
-              "hudmemoText": "Artifact of Wild Acquired!",
+              "scanText": "Artifact of Nature",
+              "hudmemoText": "Artifact of Nature Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Wild",
+              "model": "Artifact of Nature",
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Quarantine Monitor": {
           "pickups": [
@@ -1865,7 +2171,14 @@
         },
         "Research Core Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Research Core": {
           "pickups": [
@@ -1880,14 +2193,23 @@
           ],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Missile"
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
         "Research Entrance": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Research Lab Aether": {
           "pickups": [
@@ -1908,7 +2230,14 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Research Lab Hydra": {
           "pickups": [
@@ -1921,16 +2250,23 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Ruined Courtyard": {
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Plasma Beam",
-              "hudmemoText": "Plasma Beam Acquired!",
+              "scanText": "Artifact of Truth",
+              "hudmemoText": "Artifact of Truth Acquired!",
               "currIncrease": 0,
-              "model": "Plasma Beam",
+              "model": "Artifact of Truth",
               "showIcon": true
             }
           ],
@@ -1938,16 +2274,17 @@
             "1": {
               "blastShieldType": "None"
             },
-            "3": {
-              "blastShieldType": "Super Missile"
+            "2": {
+              "shieldType": "Blue",
+              "blastShieldType": "Power Bomb"
             }
           }
         },
         "Ruins Entryway": {
           "pickups": [],
           "doors": {
-            "1": {
-              "blastShieldType": "Super Missile"
+            "0": {
+              "blastShieldType": "Missile"
             }
           }
         },
@@ -1965,7 +2302,11 @@
         },
         "Save Station C": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Save Station D": {
           "pickups": [],
@@ -1994,11 +2335,26 @@
         },
         "South Quarantine Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Specimen Storage": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Power Bomb"
+            }
+          }
         },
         "Storage Cave": {
           "pickups": [
@@ -2011,11 +2367,19 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Temple Entryway": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Missile"
+            }
+          }
         },
         "Transport Access": {
           "pickups": [
@@ -2028,11 +2392,25 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Transport to Magmoor Caverns South": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Transport to Magmoor Caverns West": {
           "pickups": [],
@@ -2040,13 +2418,23 @@
         },
         "Upper Edge Tunnel": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "West Tower Entrance": {
           "pickups": [],
           "doors": {
             "0": {
               "blastShieldType": "None"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
@@ -2055,6 +2443,9 @@
           "doors": {
             "0": {
               "blastShieldType": "None"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             }
           }
         }
@@ -2062,8 +2453,8 @@
     },
     "Phazon Mines": {
       "transports": {
-        "Phazon Mines West (Phazon Processing Center)": "Chozo Ruins North (Sun Tower)",
-        "Phazon Mines East (Main Quarry)": "Magmoor Caverns South (Magmoor Workstation, Save Station)"
+        "Phazon Mines East (Main Quarry)": "Tallon Overworld South (Great Tree Hall, Upper)",
+        "Phazon Mines West (Phazon Processing Center)": "Chozo Ruins South (Reflecting Pool, Far End)"
       },
       "rooms": {
         "Central Dynamo": {
@@ -2077,32 +2468,72 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Dynamo Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Elevator A": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Elevator Access A": {
           "pickups": [],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Charge Beam"
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
         "Elevator Access B": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Elevator B": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Elite Control Access": {
           "pickups": [
@@ -2116,9 +2547,11 @@
             }
           ],
           "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
             "1": {
-              "shieldType": "Blue",
-              "blastShieldType": "Power Bomb"
+              "shieldType": "Ice Beam"
             }
           }
         },
@@ -2126,18 +2559,27 @@
           "pickups": [],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Super Missile"
+              "shieldType": "Plasma Beam"
             },
             "1": {
+              "shieldType": "Ice Beam"
+            },
+            "2": {
               "shieldType": "Blue",
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Charge Beam"
             }
           }
         },
         "Elite Quarters Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Elite Quarters": {
           "pickups": [
@@ -2150,16 +2592,23 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Elite Research": {
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Gravity Suit",
-              "hudmemoText": "Gravity Suit Acquired!",
+              "scanText": "Super Missile",
+              "hudmemoText": "Super Missile Acquired!",
               "currIncrease": 0,
-              "model": "Gravity Suit",
+              "model": "Super Missile",
               "showIcon": true
             },
             {
@@ -2171,11 +2620,25 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Fungal Hall A": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Fungal Hall Access": {
           "pickups": [
@@ -2201,7 +2664,17 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            },
+            "2": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Main Quarry": {
           "pickups": [
@@ -2218,6 +2691,15 @@
             "0": {
               "shieldType": "Blue",
               "blastShieldType": "Super Missile"
+            },
+            "1": {
+              "shieldType": "Ice Beam"
+            },
+            "2": {
+              "shieldType": "Ice Beam"
+            },
+            "3": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
@@ -2225,20 +2707,44 @@
           "pickups": [],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Super Missile"
+              "shieldType": "Plasma Beam"
             },
             "1": {
               "shieldType": "Blue",
-              "blastShieldType": "Missile"
+              "blastShieldType": "Charge Beam"
             }
           }
         },
         "Map Station Mines": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Metroid Quarantine A": {
+          "pickups": [
+            {
+              "type": "Unknown Item 1",
+              "scanText": "Wave Beam",
+              "hudmemoText": "Wave Beam Acquired!",
+              "currIncrease": 0,
+              "model": "Wave Beam",
+              "showIcon": true
+            }
+          ],
+          "doors": {
+            "0": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
+        },
+        "Metroid Quarantine B": {
           "pickups": [
             {
               "type": "Unknown Item 1",
@@ -2249,43 +2755,70 @@
               "showIcon": true
             }
           ],
-          "doors": {}
-        },
-        "Metroid Quarantine B": {
-          "pickups": [
-            {
-              "type": "Unknown Item 1",
-              "scanText": "Artifact of Spirit",
-              "hudmemoText": "Artifact of Spirit Acquired!",
-              "currIncrease": 0,
-              "model": "Artifact of Spirit",
-              "showIcon": true
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            },
+            "2": {
+              "shieldType": "Wave Beam"
             }
-          ],
-          "doors": {}
+          }
         },
         "Mine Security Station": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Ice Beam"
+            },
+            "2": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Missile Station Mines": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Omega Research": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Ore Processing": {
           "pickups": [],
           "doors": {
             "0": {
               "shieldType": "Blue",
-              "blastShieldType": "Super Missile"
+              "blastShieldType": "Missile"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Bomb"
+            },
+            "2": {
+              "shieldType": "Plasma Beam"
             },
             "3": {
-              "shieldType": "Blue",
-              "blastShieldType": "Charge Beam"
+              "shieldType": "Plasma Beam"
             }
           }
         },
@@ -2300,7 +2833,14 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Phazon Processing Center": {
           "pickups": [
@@ -2314,9 +2854,15 @@
             }
           ],
           "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
             "1": {
               "shieldType": "Blue",
-              "blastShieldType": "Missile"
+              "blastShieldType": "Charge Beam"
+            },
+            "2": {
+              "shieldType": "Wave Beam"
             }
           }
         },
@@ -2331,40 +2877,84 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Quarantine Access A": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Super Missile"
+            }
+          }
         },
         "Quarantine Access B": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            },
+            "1": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Quarry Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            },
+            "1": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Research Access": {
           "pickups": [],
           "doors": {
             "0": {
               "shieldType": "Blue",
-              "blastShieldType": "Super Missile"
+              "blastShieldType": "Missile"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             }
           }
         },
         "Save Station Mines A": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Save Station Mines B": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Save Station Mines C": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Security Access A": {
           "pickups": [
@@ -2377,11 +2967,25 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Security Access B": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Storage Depot A": {
           "pickups": [
@@ -2394,7 +2998,11 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Wave Beam"
+            }
+          }
         },
         "Storage Depot B": {
           "pickups": [
@@ -2407,19 +3015,39 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Blue",
+              "blastShieldType": "Bomb"
+            }
+          }
         },
         "Transport Access": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Transport to Magmoor Caverns South": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            }
+          }
         },
         "Transport to Tallon Overworld South": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Ice Beam"
+            }
+          }
         },
         "Ventilation Shaft": {
           "pickups": [
@@ -2432,7 +3060,15 @@
               "showIcon": true
             }
           ],
-          "doors": {}
+          "doors": {
+            "0": {
+              "shieldType": "Plasma Beam"
+            },
+            "1": {
+              "shieldType": "Blue",
+              "blastShieldType": "Charge Beam"
+            }
+          }
         },
         "Waste Disposal": {
           "pickups": [],
@@ -2440,6 +3076,9 @@
             "0": {
               "shieldType": "Blue",
               "blastShieldType": "Super Missile"
+            },
+            "1": {
+              "shieldType": "Plasma Beam"
             }
           }
         }

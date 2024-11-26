@@ -73,7 +73,7 @@ def color_options_to_value(world: "MetroidPrimeWorld") -> List[float]:
 def make_artifact_hints(world: "MetroidPrimeWorld") -> Dict[str, str]:
     def make_artifact_hint(item: str) -> str:
         try:
-            if world.options.artifact_hints.value:
+            if world.options.artifact_hints:
                 location = world.multiworld.find_item(item, world.player)
                 player_string = (
                     f"{world.multiworld.player_name[location.player]}'s"

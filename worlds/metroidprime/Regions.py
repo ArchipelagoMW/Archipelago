@@ -40,7 +40,7 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
     menu.connect(starting_room, "Starting Room")
 
     def can_access_elevator(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        if world.options.pre_scan_elevators.value:
+        if world.options.pre_scan_elevators:
             return True
         return can_scan(world, state)
 
