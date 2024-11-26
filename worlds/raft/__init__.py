@@ -150,13 +150,13 @@ class RaftWorld(World):
         def setLocationItem(location: str, itemName: str):
             itemToUse = next(filter(lambda itm: itm.name == itemName, frequencyItems))
             frequencyItems.remove(itemToUse)
-            self.multiworld.get_location(location, self.player).place_locked_item(itemToUse)
+            self.get_location(location).place_locked_item(itemToUse)
 
         def setLocationItemFromRegion(region: str, itemName: str):
             itemToUse = next(filter(lambda itm: itm.name == itemName, frequencyItems))
             frequencyItems.remove(itemToUse)
             location = self.random.choice(list(loc for loc in location_table if loc["region"] == region))
-            self.multiworld.get_location(location["name"], self.player).place_locked_item(itemToUse)
+            self.get_location(location["name"]).place_locked_item(itemToUse)
 
         if self.options.island_frequency_locations == self.options.island_frequency_locations.option_vanilla:
             setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
