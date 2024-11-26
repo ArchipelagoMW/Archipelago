@@ -379,12 +379,12 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def compare_results(
-        yaml_value: Union[str, int, float, bool, dict, list],
-        trigger_value: Union[str, int, float, bool, dict, list],
+        yaml_value: Union[str, int, bool, dict, list],
+        trigger_value: Union[str, int, bool, dict, list],
         comparator: str):
     if yaml_value is None:
         return False
-    if (isinstance(yaml_value, str|bool|int|float) and isinstance(trigger_value, str|bool|int|float)):
+    if (isinstance(yaml_value, str|bool|int) and isinstance(trigger_value, str|bool|int)):
         yaml_value = str(yaml_value).lower()
         trigger_value = str(trigger_value).lower()
     if comparator == "=":
