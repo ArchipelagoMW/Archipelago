@@ -1,1 +1,1 @@
-{"Access": [["Ship", "Grindstone"], ["Ship", "ShipWings", "Hover Jade"]], "Treasure": [{"Addr": "0xfc4", "Reqs": []}], "Djinn": [{"Addr": "0x3f", "Reqs": [["Cyclone Chip", "Lifting Gem"]]}], "Special": []}
+{"Access": [["Ship", "Grindstone"], ["Ship", "ShipWings", "Hover Jade"]], "Treasure": [{"Addr": "0xfc4", "Reqs": []}], "Djinn": [{"Addr": "0x3f", "Reqs": [["Cyclone Chip", "Lifting Gem"], ["Skips_SaveQuitRG"]]}], "Special": []}

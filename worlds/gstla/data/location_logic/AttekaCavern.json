@@ -1,1 +1,1 @@
-{"Access": [["Reunion"], ["Ship", "ShipWings", "Hover Jade"]], "Treasure": [{"Addr": "0x17", "Reqs": [["Parch"]]}], "Djinn": [], "Special": []}
+{"Access": [["Reunion", "Hover Jade"], ["Ship", "ShipWings", "Hover Jade"], ["Ship", "Grindstone", "Skips_WiggleClip"]], "Treasure": [{"Addr": "0x17", "Reqs": [["Parch"]]}], "Djinn": [], "Special": []}

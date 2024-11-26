@@ -1,1 +1,1 @@
-{"Access": [["Ship", "Grindstone"], ["Ship", "ShipWings", "Hover Jade"]], "Treasure": [{"Addr": "0xfc2", "Reqs": [["Growth"]]}], "Djinn": [{"Addr": "0x66", "Reqs": [["Growth"]]}], "Special": []}
+{"Access": [["Ship", "Grindstone"], ["Ship", "ShipWings", "Hover Jade"]], "Treasure": [{"Addr": "0xfc2", "Reqs": [["Growth"], ["Skips_OOBRG"]]}], "Djinn": [{"Addr": "0x66", "Reqs": [["Growth"], ["Skips_OOBRG"]]}], "Special": []}

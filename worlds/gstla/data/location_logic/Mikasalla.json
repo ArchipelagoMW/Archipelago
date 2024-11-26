@@ -1,1 +1,1 @@
-{"Access": [], "Treasure": [{"Addr": "0xf28", "Reqs": []}, {"Addr": "0xf29", "Reqs": []}, {"Addr": "0xf2a", "Reqs": []}, {"Addr": "0xf2b", "Reqs": []}, {"Addr": "0xf2c", "Reqs": []}], "Djinn": [{"Addr": "0x60", "Reqs": [["Scoop Gem"]]}], "Special": []}
+{"Access": [], "Treasure": [{"Addr": "0xf28", "Reqs": []}, {"Addr": "0xf29", "Reqs": []}, {"Addr": "0xf2a", "Reqs": []}, {"Addr": "0xf2b", "Reqs": []}, {"Addr": "0xf2c", "Reqs": []}], "Djinn": [{"Addr": "0x60", "Reqs": [["Scoop Gem"], ["Skips_SaveQuitRG"]]}], "Special": []}
