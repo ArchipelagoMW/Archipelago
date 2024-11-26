@@ -178,9 +178,6 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
         
     for item in other_progression:
-        #ignore regular mars star item, we only want the mythril bag mars star
-        if item.name == ItemName.Mars_Star:
-            continue
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
@@ -292,7 +289,7 @@ def get_filler_item(world: 'GSTLAWorld', includetraps: bool = True) -> ItemData:
         elif filler_type == FillerType.StatBoosts:
             item = world.random.choice(stat_boosters)
 
-        elif filler_type == FillerType.UncommonConsumables:
+        elif filler_type == FillerType.UsefulConsumables:
             item = world.random.choice(useful_consumables)
 
         elif filler_type == FillerType.ForgedEquipment:
@@ -330,7 +327,7 @@ def create_filler_pool_weights(world: 'GSTLAWorld') -> Dict[FillerType, int]:
         filler_pool_weights[FillerType.StatBoosts] = world.options.stat_boost_filler_weight
 
     if world.options.uncommon_consumable_filler_weight > 0:
-        filler_pool_weights[FillerType.UncommonConsumables] = world.options.uncommon_consumable_filler_weight
+        filler_pool_weights[FillerType.UsefulConsumables] = world.options.uncommon_consumable_filler_weight
     
     if world.options.forged_equipment_filler_weight > 0:
         filler_pool_weights[FillerType.ForgedEquipment] = world.options.forged_equipment_filler_weight

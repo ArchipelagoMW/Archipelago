@@ -389,7 +389,6 @@ class ItemName(str, Enum):
     Tomegathericon = "Tomegathericon"
     # KeyItem
     Mythril_Bag_Mars = "Mythril Bag (Mars)"
-    Mars_Star = "Mars Star"
     # Mimic
     Mimic_0 = "Mimic 0"
     Mimic_1 = "Mimic 1"
@@ -726,7 +725,6 @@ item_id_by_name: Dict[int, ItemName] = {
     "Black Crystal": 242,
     "Red Key": 243,
     "Blue Key": 244,
-    "Mars Star": 247,
     "Mythril Shirt": 250,
     "Silk Shirt": 251,
     "Running Shirt": 252,
@@ -1241,7 +1239,6 @@ name_by_item_id: Dict[ItemName, int] = {
     242: "Black Crystal",
     243: "Red Key",
     244: "Blue Key",
-    247: "Mars Star",
     250: "Mythril Shirt",
     251: "Silk Shirt",
     252: "Running Shirt",

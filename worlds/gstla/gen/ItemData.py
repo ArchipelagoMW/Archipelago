@@ -13,7 +13,7 @@ class FillerType(str, Enum):
     ForgeMaterials = "Forge Materials"
     RustyMaterials = "Rusty Materials"
     StatBoosts = "Stat Boosts"
-    UncommonConsumables = "Uncommon Consumables"
+    UsefulConsumables = "Useful Consumables"
     ForgedEquipment = "Forged Equipment"
     LuckyEquipment = "Lucky Equipment"
     ShopEquipment = "Shop Equipment"
