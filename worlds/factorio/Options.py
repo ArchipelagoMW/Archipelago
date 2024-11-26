@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import datetime
 import typing
 
 from schema import Schema, Optional, And, Or
 
-from Options import Choice, OptionDict, OptionSet, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
+from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
     StartInventoryPool, PerGameCommonOptions
 
 # schema helpers
@@ -120,6 +119,18 @@ class FreeSamples(Choice):
     option_half_stack = 2
     option_stack = 3
     default = 3
+
+
+class FreeSamplesQuality(Choice):
+    """If free samples are on, determine the quality of the granted items.
+    Requires the quality mod, which is part of the Space Age DLC. Without it, normal quality is given."""
+    display_name = "Free Samples Quality"
+    option_normal = 0
+    option_uncommon = 1
+    option_rare = 2
+    option_epic = 3
+    option_legendary = 4
+    default = 0
 
 
 class TechTreeLayout(Choice):
@@ -284,17 +295,21 @@ class FactorioWorldGen(OptionDict):
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: typing.Dict[str, typing.Dict[str, typing.Any]]
     default = {
-        "terrain_segmentation": 0.5,
-        "water": 1.5,
         "autoplace_controls": {
+            # terrain
+            "water": {"frequency": 1, "size": 1, "richness": 1},
+            "nauvis_cliff": {"frequency": 1, "size": 1, "richness": 1},
+            "starting_area_moisture": {"frequency": 1, "size": 1, "richness": 1},
+            # resources
             "coal": {"frequency": 1, "size": 3, "richness": 6},
             "copper-ore": {"frequency": 1, "size": 3, "richness": 6},
             "crude-oil": {"frequency": 1, "size": 3, "richness": 6},
-            "enemy-base": {"frequency": 1, "size": 1, "richness": 1},
             "iron-ore": {"frequency": 1, "size": 3, "richness": 6},
             "stone": {"frequency": 1, "size": 3, "richness": 6},
+            "uranium-ore": {"frequency": 1, "size": 3, "richness": 6},
+            # misc
             "trees": {"frequency": 1, "size": 1, "richness": 1},
-            "uranium-ore": {"frequency": 1, "size": 3, "richness": 6}
+            "enemy-base": {"frequency": 1, "size": 1, "richness": 1},
         },
         "seed": None,
         "starting_area": 1,
@@ -336,8 +351,6 @@ class FactorioWorldGen(OptionDict):
     }
     schema = Schema({
         "basic": {
-            Optional("terrain_segmentation"): FloatRange(0.166, 6),
-            Optional("water"): FloatRange(0.166, 6),
             Optional("autoplace_controls"): {
                 str: {
                     "frequency": FloatRange(0, 6),
@@ -438,6 +451,7 @@ class FactorioOptions(PerGameCommonOptions):
     silo: Silo
     satellite: Satellite
     free_samples: FreeSamples
+    free_samples_quality: FreeSamplesQuality
     tech_tree_information: TechTreeInformation
     starting_items: FactorioStartItems
     free_sample_blacklist: FactorioFreeSampleBlacklist
