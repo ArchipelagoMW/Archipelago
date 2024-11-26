@@ -322,7 +322,6 @@ def get_version_from_iso(path: str) -> str:
             raise Exception(
                 f"Unknown revision of Metroid Prime GC PAL (game_rev : {game_rev})"
             )
-
         raise Exception(
             f"Unknown version of Metroid Prime GC (game_id : {game_id} | game_rev : {game_rev})"
         )
