@@ -3,11 +3,23 @@ class AnimalProduct:
     brown_egg = "Egg (Brown)"
     chicken_egg = "Chicken Egg"
     cow_milk = "Cow Milk"
+    dinosaur_egg_starter = "Dinosaur Egg (Starter)"
+    """This item does not really exist and should never end up being displayed. 
+    It's there to patch the loop in logic because of the Dinosaur-and-egg problem."""
     dinosaur_egg = "Dinosaur Egg"
+    duck_egg_starter = "Duck Egg (Starter)"
+    """This item does not really exist and should never end up being displayed. 
+    It's there to patch the loop in logic because of the Chicken-and-egg problem."""
     duck_egg = "Duck Egg"
     duck_feather = "Duck Feather"
+    egg_starter = "Egg (Starter)"
+    """This item does not really exist and should never end up being displayed. 
+    It's there to patch the loop in logic because of the Chicken-and-egg problem."""
     egg = "Egg"
     goat_milk = "Goat Milk"
+    golden_egg_starter = "Golden Egg (Starter)"
+    """This item does not really exist and should never end up being displayed. 
+    It's there to patch the loop in logic because of the Chicken-and-egg problem."""
     golden_egg = "Golden Egg"
     large_brown_egg = "Large Egg (Brown)"
     large_egg = "Large Egg"
@@ -25,6 +37,8 @@ class AnimalProduct:
     squid_ink = "Squid Ink"
     sturgeon_roe = "Sturgeon Roe"
     truffle = "Truffle"
+    void_egg_starter = "Void Egg (Starter)"
+    """This item does not really exist and should never end up being displayed.
+    It's there to patch the loop in logic because of the Chicken-and-egg problem."""
     void_egg = "Void Egg"
     wool = "Wool"
-
