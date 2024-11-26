@@ -85,4 +85,4 @@ PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 
-Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
+Information about running tests can be found in [tests.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/tests.md#running-tests)

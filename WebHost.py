@@ -12,6 +12,7 @@ ModuleUpdate.update()
 # in case app gets imported by something like gunicorn
 import Utils
 import settings
+from Utils import get_file_safe_name
 
 if typing.TYPE_CHECKING:
     from flask import Flask
@@ -71,7 +72,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     shutil.rmtree(base_target_path, ignore_errors=True)
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
-        target_path = os.path.join(base_target_path, game)
+        target_path = os.path.join(base_target_path, get_file_safe_name(game))
         os.makedirs(target_path, exist_ok=True)
 
         if world.zip_path:
