@@ -35,13 +35,13 @@ if TYPE_CHECKING:
 
 
 def can_exit_ruined_shrine(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-    item1 = state.multiworld.get_location(
-        "Chozo Ruins: Ruined Shrine - Plated Beetle", world.player
+    item1 = world.get_location(
+        "Chozo Ruins: Ruined Shrine - Plated Beetle"
     ).item
     if can_morph_ball(world, state) or can_space_jump(world, state):
         return True
-    elif (
-        item1 != None
+    if (
+        item1 is not None
         and item1.name in ["Morph Ball", "Space Jump Boots"]
         and item1.player == world.player
     ):
@@ -447,7 +447,7 @@ class ChozoRuinsAreaData(AreaData):
                             or state.has(SuitUpgrade.Gravity_Suit.value, world.player)
                             or state.has(SuitUpgrade.Phazon_Suit.value, world.player)
                         ),
-                    ),  # Damage reduction let's player cross
+                    ),  # Damage reduction lets player cross
                 },
                 pickups=[
                     PickupData(
@@ -991,6 +991,6 @@ class ChozoRuinsAreaData(AreaData):
                         exclude_from_config=True,
                     )
                 ],
-            ),  # This is not actually in west furnace but it can only be accessed from west furnace, logic-wise
+            ),  # This is not actually in west furnace, but it can only be accessed from west furnace, logic-wise
         }
         self._init_room_names_and_areas()

@@ -90,7 +90,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 [SuitUpgrade.Missile_Launcher],
             )
         ],
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False,
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value,
         local_early_items=[SuitUpgrade.Morph_Ball, SuitUpgrade.Scan_Visor],
     ),
     RoomName.Burn_Dome.value: StartRoomData(
@@ -167,8 +167,8 @@ all_start_rooms: Dict[str, StartRoomData] = {
         ],
     ),
     RoomName.Warrior_Shrine.value: StartRoomData(
-        is_eligible=lambda world: world.options.disable_starting_room_bk_prevention.value
-        != True,  # Varia suit is definitely required here
+        is_eligible=lambda world: not world.options.disable_starting_room_bk_prevention.value,
+        # Varia suit is definitely required here
         area=MetroidPrimeArea.Magmoor_Caverns,
         loadouts=[
             StartRoomLoadout(
@@ -201,7 +201,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 ],
             )
         ],
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
         or world.multiworld.players > 1,
         no_power_beam_door_on_starting_level=True,
         difficulty=StartRoomDifficulty.Buckle_Up,
@@ -222,7 +222,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
                 ],
             )
         ],
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
         or world.multiworld.players > 1,
     ),
     RoomName.Arbor_Chamber.value: StartRoomData(
@@ -292,7 +292,7 @@ all_start_rooms: Dict[str, StartRoomData] = {
             )
         ],
         difficulty=StartRoomDifficulty.Buckle_Up,
-        is_eligible=lambda world: world.options.shuffle_scan_visor.value == False
+        is_eligible=lambda world: not world.options.shuffle_scan_visor.value
         or world.multiworld.players > 1,
     ),
     RoomName.Sunchamber_Lobby.value: StartRoomData(
@@ -343,7 +343,7 @@ def _has_elevator_rando(world: "MetroidPrimeWorld") -> bool:
 
 
 def _has_no_pre_scan_elevators_with_shuffle_scan(world: "MetroidPrimeWorld") -> bool:
-    return world.options.pre_scan_elevators.value == False and bool(
+    return not world.options.pre_scan_elevators.value and bool(
         world.options.shuffle_scan_visor
     )
 

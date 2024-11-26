@@ -35,7 +35,7 @@ class DoorData:
     def get_destination_region_name(self) -> str:
         assert self.default_destination is not None
         if self.destination_area is not None:
-            return f"{self.destination_area.value}: { self.default_destination.value}"
+            return f"{self.destination_area.value}: {self.default_destination.value}"
         return self.default_destination.value
 
 
