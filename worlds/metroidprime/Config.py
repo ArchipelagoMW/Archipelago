@@ -204,7 +204,7 @@ def make_config(world: "MetroidPrimeWorld") -> Dict[str, Any]:
             "warpToStart": True,
             "multiworldDolPatches": True,
             "nonvariaHeatDamage": bool(options.non_varia_heat_damage.value),
-            "staggeredSuitDamage": options.staggered_suit_damage.value,
+            "staggeredSuitDamage": options.staggered_suit_damage.current_option_name,
             "heatDamagePerSec": 10.0,
             "poisonDamagePerSec": 0.11,
             "phazonDamagePerSec": 0.964,
