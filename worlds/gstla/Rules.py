@@ -72,6 +72,9 @@ def set_entrance_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_entrance(EntranceName.TreasureIsland_GrindstoneToTreasureIsland_PostReunion),
              lambda state: state.has(ItemName.Lifting_Gem, player))
+    
+    add_rule(world.get_entrance(EntranceName.EasternSeaToAnkohlRuins),
+             lambda state: state.has(ItemName.Whirlwind, player))
 
     add_rule(world.get_entrance(EntranceName.AnkohlRuinsToAnkohlRuins_Sand),
              lambda state: state.has(ItemName.Sand, player))
