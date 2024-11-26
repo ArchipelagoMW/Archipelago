@@ -62,7 +62,7 @@ def color_options_to_value(world: "MetroidPrimeWorld") -> List[float]:
         ]
 
     # get the key in hudcolor enum that matches all caps color
-    color: str = str(world.options.hud_color.value)
+    color: str = world.options.hud_color.current_key
     color = color.upper()
     for key in HudColor.__members__.keys():
         if key == color:

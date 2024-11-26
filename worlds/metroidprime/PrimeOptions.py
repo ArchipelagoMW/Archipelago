@@ -210,7 +210,7 @@ class DisableStartingRoomBKPrevention(Toggle):
 
 
 class StartingRoomName(TextChoice):
-    """Should not be shown in ui, can be used to override the starting room"""
+    """Should not be shown in ui, can be used to override the starting room."""
 
     display_name = "Starting Room Name"
     default = ""
@@ -234,7 +234,7 @@ class ElevatorRandomization(Toggle):
 
 
 class ElevatorMapping(OptionDict):
-    """Which elevators go to which regions, only visible for spoiler"""
+    """Which elevators go to which regions, only visible for spoiler."""
 
     display_name = "Elevator Mapping"
     visibility = Visibility.none

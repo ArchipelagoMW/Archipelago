@@ -343,18 +343,16 @@ def _has_elevator_rando(world: "MetroidPrimeWorld") -> bool:
 
 
 def _has_no_pre_scan_elevators_with_shuffle_scan(world: "MetroidPrimeWorld") -> bool:
-    return not world.options.pre_scan_elevators.value and bool(
-        world.options.shuffle_scan_visor
-    )
+    return bool(not world.options.pre_scan_elevators.value
+                and world.options.shuffle_scan_visor.value)
 
 
 def _has_options_that_allow_more_landing_site_checks(
     world: "MetroidPrimeWorld",
 ) -> bool:
     return (
-        str(world.options.blast_shield_randomization.value)
-        != world.options.blast_shield_randomization.option_none
-        or world.options.trick_difficulty.value != -1
+        world.options.blast_shield_randomization != "none"
+        or world.options.trick_difficulty != "no_tricks"
     ) and not world.options.elevator_randomization
 
 
@@ -376,9 +374,9 @@ def init_starting_room_data(world: "MetroidPrimeWorld"):
             world.starting_room_data = get_starting_room_by_name(world, yaml_name)
         else:
             world.starting_room_data = StartRoomData(
-                name=str(world.options.starting_room_name.value),
+                name=world.options.starting_room_name.current_key,
                 area=get_area_by_room_name(
-                    world, str(world.options.starting_room_name.value)
+                    world, world.options.starting_room_name.current_key
                 ),
             )
             world.starting_room_data.loadouts = [
