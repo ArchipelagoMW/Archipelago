@@ -25,9 +25,8 @@ All suit upgrades and expansion items can be shuffled in other players' worlds, 
 Multiworld items appear as one of the following:
 
 - Progression Item: Cog
-- Useful Item: Metroid Model with a random texture
-- Filler Item: Zoomer Model with a random texture
-- Trap Item: Cog
+- Useful Item or Trap: Zoomer Model with a random texture
+- Filler Item: Metroid Model with a random texture
 
 ## What versions of the Metroid Prime are supported?
 

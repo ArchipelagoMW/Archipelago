@@ -72,7 +72,7 @@ def get_config_item_model(world: "MetroidPrimeWorld", location: str) -> str:
         return name
     if loc.item.advancement:
         return "Cog"
-    if loc.item.useful:
+    if loc.item.useful or loc.item.trap:
         return "Zoomer"
     return "Nothing"
 
@@ -137,9 +137,7 @@ class RoomData:
 
         for door_id, door in self.doors.items():
             if door.lock is not door.defaultLock and door.lock:
-                door_data[f"{door_id}"] = {
-                    "shieldType": door.lock.value
-                }
+                door_data[f"{door_id}"] = {"shieldType": door.lock.value}
             elif door.defaultLock.value in color_mapping:
                 door_data[f"{door_id}"] = {
                     "shieldType": color_mapping[door.defaultLock.value]
@@ -209,9 +207,7 @@ class AreaData:
                 )
                 location = world.get_location(pickup.name)
                 location.access_rule = (
-                    lambda state, w=world, p=pickup: _can_reach_pickup(
-                        w, state, p
-                    )
+                    lambda state, w=world, p=pickup: _can_reach_pickup(w, state, p)
                 )
 
         # Once each region is created, connect the doors and assign their locks
@@ -271,9 +267,7 @@ class AreaData:
                         origin_door_data.sub_region_access_override(world, state)
                         and _can_open_door(world, state, origin_door_data)
                         if origin_door_data.sub_region_access_override is not None
-                        else _can_access_door(
-                            world, state, origin_door_data
-                        )
+                        else _can_access_door(world, state, origin_door_data)
                     )  # Use override if any, otherwise use default access rule
                     return meets_origin_door_requirements and _can_open_door(
                         world, state, target_door_data
@@ -307,9 +301,7 @@ class AreaData:
                 region.connect(
                     target_region,
                     get_connection_name(door_data),
-                    lambda state, w=world, dd=door_data: _can_access_door(
-                        w, state, dd
-                    ),
+                    lambda state, w=world, dd=door_data: _can_access_door(w, state, dd),
                 )
 
                 if door_data.sub_region_door_index is not None:
