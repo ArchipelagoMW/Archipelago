@@ -182,6 +182,9 @@ class LuigisMansionRandomizer:
 
     # Updates all jmp tables in the map2.szp file.
     def update_maptwo_jmp_tables(self):
+        update_character_info(self.jmp_character_info_table, self.output_data)
+        self.update_maptwo_info_table(self.jmp_character_info_table)
+
         update_item_info_table(self.jmp_item_info_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_item_info_table)
 
@@ -194,13 +197,10 @@ class LuigisMansionRandomizer:
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
         self.update_maptwo_info_table(self.jmp_furniture_info_table)
 
-        update_character_info(self.jmp_character_info_table, self.output_data)
-        self.update_maptwo_info_table(self.jmp_character_info_table)
-
         update_event_info(self.jmp_event_info_table)
         self.update_maptwo_info_table(self.jmp_event_info_table)
 
-        update_observer_info(self.jmp_observer_info_table, self.output_data)
+        update_observer_info(self.jmp_observer_info_table)
         self.update_maptwo_info_table(self.jmp_observer_info_table)
 
         update_key_info(self.jmp_key_info_table, self.output_data)

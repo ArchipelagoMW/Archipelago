@@ -33,7 +33,11 @@ def update_character_info(character_info, output_data):
         if x["name"] in {"baby", "mother", "dboy", "dboy2"}:
             x["appear_flag"] = 0
 
-def update_observer_info(observer_info, output_data):
+        # Fix a Nintendo mistake where the Cellar chest has a room ID of 0 instead of 63.
+        if x["create_name"] == "63_2":
+            x["room_no"] = 63
+
+def update_observer_info(observer_info):
     for x in observer_info.info_file_field_entries[:]:
         # Allows the Foyer Toad to spawn by default.
         if x["name"] == "kinopio":
