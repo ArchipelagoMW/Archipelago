@@ -48,7 +48,7 @@ After Installing the seed click `Mod Loader -> Build/Build and Run`. Every slot 
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
 
-Once you have started the game through OpenKH Mod Manager and are on the title screen run the [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases).<br>
+Once you have started the game through OpenKH Mod Manager and are in the goa from a new save if starting a new run/room or loaded from a save if returning to a run. Run the [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases).<br>
 When you successfully connect to the server the client will automatically hook into the game to send/receive checks. <br>
 If the client ever loses connection to the game, it will also disconnect from the server and you will need to reconnect.<br> 
 `Make sure the game is open whenever you try to connect the client to the server otherwise it will immediately disconnect you.`<br>
