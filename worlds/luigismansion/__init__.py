@@ -9,6 +9,7 @@ from BaseClasses import Tutorial, Item, ItemClassification
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.generic.Rules import add_item_rule
 from Options import OptionGroup
 
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
@@ -356,6 +357,10 @@ class LMWorld(World):
         for location, data in BASE_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
+            if entry.type == "Freestanding":
+                add_item_rule(entry, lambda
+                    item: item.player != self.player or (
+                            item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
@@ -372,6 +377,10 @@ class LMWorld(World):
         for location, data in ENEMIZER_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
+            if entry.type == "Freestanding":
+                add_item_rule(entry, lambda
+                    item: item.player != self.player or (
+                        item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
@@ -386,6 +395,10 @@ class LMWorld(World):
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.multiworld.get_region(data.region, self.player)
             entry = LMLocation(self.player, location, region, data)
+            if entry.type == "Freestanding":
+                add_item_rule(entry, lambda
+                    item: item.player != self.player or (
+                        item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if entry.code == 5:
                 add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
             elif entry.code == 25:
