@@ -418,7 +418,8 @@ ROOM_TO_ID = {
     "Armory": 48,
     "Pipe Room": 66,
     "Ballroom": 10,
-    "Artist's Studio": 57
+    "Artist's Studio": 57,
+    "Mirror Room": 4
 }
 
 def apply_new_ghost(x, element):
