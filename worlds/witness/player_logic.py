@@ -75,13 +75,15 @@ class WitnessPlayerLogic:
 
         self.UNREACHABLE_REGIONS: Set[str] = set()
 
-        self.THEORETICAL_ITEMS: Set[str] = set()
         self.THEORETICAL_BASE_ITEMS: Set[str] = set()
-        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
-        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.THEORETICAL_ITEMS: Set[str] = set()
         self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
         self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+
+        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
+        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+
         self.STARTING_INVENTORY: Set[str] = set()
 
         self.DIFFICULTY = world.options.puzzle_randomization
