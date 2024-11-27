@@ -157,6 +157,9 @@ class WitnessWorld(World):
         if self.options.shuffle_lasers == "local":
             self.options.local_items.value |= self.item_name_groups["Lasers"]
 
+        elif self.options.shuffle_lasers == "anywhere":
+            self.options.local_items.value -= self.item_name_groups["Lasers"]
+
         if self.options.victory_condition == "panel_hunt":
             total_panels = self.options.panel_hunt_total
             required_percentage = self.options.panel_hunt_required_percentage
