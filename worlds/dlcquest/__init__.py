@@ -74,6 +74,8 @@ class DLCqworld(World):
 
         if self.options.campaign == Options.Campaign.option_basic or self.options.campaign == Options.Campaign.option_both:
             self.multiworld.early_items[self.player]["Movement Pack"] = 1
+            if self.options.campaign == Options.Campaign.option_both and self.options.coinsanity and self.options.coinbundlequantity > 50:
+                self.multiworld.local_early_items[self.player]["Live Freemium or Die: Coin Bundle"] = 1
 
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
@@ -82,7 +84,7 @@ class DLCqworld(World):
     def precollect_coinsanity(self):
         if self.options.campaign == Options.Campaign.option_basic:
             if self.options.coinsanity == Options.CoinSanity.option_coin and self.options.coinbundlequantity >= 5:
-                self.multiworld.push_precollected(self.create_item("Movement Pack"))
+                self.multiworld.push_precollected(self.create_item("DLC Quest: Coin Bundle"))
 
     def create_item(self, item: Union[str, ItemData], classification: ItemClassification = None) -> DLCQuestItem:
         if isinstance(item, str):
