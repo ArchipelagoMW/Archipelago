@@ -9,8 +9,6 @@ from .. import SVTestCase
 
 # <function Location.<lambda> at 0x102ca98a0>
 lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
-# Python 3.10.2\r\n
-python_version_regex = re.compile(r"^Python (\d+)\.(\d+)\.(\d+)\s*$")
 
 
 class TestGenerationIsStable(SVTestCase):
