@@ -1,6 +1,7 @@
 import typing
 
 from Options import Choice, Option, Toggle, DefaultOnToggle, Range, ItemsAccessibility, StartInventoryPool
+from dataclasses import dataclass
 
 class SMLogic(Choice):
     """This option selects what kind of logic to use for item placement inside
