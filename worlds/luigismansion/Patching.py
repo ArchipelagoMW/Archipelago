@@ -57,7 +57,7 @@ def update_observer_info(observer_info):
         if x["do_type"] == 11:
             x["do_type"] = 0
 
-        # Ignore me, I am the observers that spawn shit for Vincent
+        # Ignore me, I am the observers that spawn ghosts for Vincent
         # if x["string_arg0"] in ["57_1", "57_2", "57_3", "57_4", "57_5", "57_6", "57_7"]:
         #    x["string_arg0"] = "(null)"
 
