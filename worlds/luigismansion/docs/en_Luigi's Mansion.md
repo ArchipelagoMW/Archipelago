@@ -8,7 +8,7 @@ config file.
 ## What does randomization do to this game?
 
 When it comes to Luigi's Mansion, randomization changes the locations of Mario's Items, door keys and element medallions,
-as well as all the treasure bundles that are found in chests. This primarily changes the route the player must take 
+as well as all the treasures that are found in chests. This primarily changes the route the player must take 
 through the game.
 
 The Randomizer allows you to set different goals and modify the game in several other ways
@@ -38,10 +38,11 @@ _______.
 
 - Add Plants into the pool as locations
 - Add Portrait Ghosts into the pool as locations
-- Add Speedy Spirits and Gold Mice into the pool as locations
+- Add Speedy Spirits and Gold Mice into the pool as locations. These now require the Blackout to be active to reach
 - Add Boos into the pool as locations and items
 - Add Toads into the pool as locations
 - Add every interactable object within the game into the pool as locations
+- Require the player to have obatined enough money to get a specific rank upon completion.
 - Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
 - Customize the number of Mario's items needed to trigger the Fortune-teller
 - Start with the stronger Poltergust
@@ -51,13 +52,11 @@ _______.
 
 ###### Quality of life:
 
-- Various streamlining tweaks (removed cutscenes, dialogue, transitions)
-- You can elect to lock the cave layout for the next run, giving you exactly the same floors and red chest contents as
-  on your previous attempt. This functionality is accessed via the bald NPC behind the counter at the Ancient Cave
-  Entrance
-- Multiple people can connect to the same slot and collaboratively search for Iris treasures and blue chests
-- Always start with Providence already in your inventory. (It is no longer obtained from red chests)
-- (optional) Run button that allows you to move at faster than normal speed
+- Various streamlining tweaks (removed cutscenes, dialogue, transitions, and animations)
+- The Blackout can be toggled from the breaker in the breaker room, to access certain locations of the game.
+- 
+- 
+- 
 
 ###### Quality of death:
 
