@@ -861,13 +861,13 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
 
 
 class OptionCounter(OptionDict):
-    min: typing.Optional[int] = None
-    max: typing.Optional[int] = None
+    min: int | None = None
+    max: int | None = None
 
-    def __init__(self, value: typing.Dict[str, int]):
+    def __init__(self, value: dict[str, int]) -> None:
         super(OptionCounter, self).__init__(collections.Counter(value))
 
-    def verify(self, world: typing.Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
         super(OptionCounter, self).verify(world, player_name, plando_options)
 
         range_errors = []
@@ -896,7 +896,7 @@ class ItemDict(OptionCounter):
 
     min = 0
 
-    def __init__(self, value: typing.Dict[str, int]):
+    def __init__(self, value: dict[str, int]) -> None:
         # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a OptionCounter
         value = {item_name: amount for item_name, amount in value.items() if amount != 0}
 
