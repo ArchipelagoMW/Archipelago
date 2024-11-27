@@ -117,9 +117,9 @@ def __get_key_name(door_id):
             return "key01"
 
 def update_item_info_table(item_info_table_entry, output_data):
-    item_info_table_entry.info_file_field_entries.clear()
+    #item_info_table_entry.info_file_field_entries.clear()
 
-    __add_info_item(item_info_table_entry, "nothing")
+    #__add_info_item(item_info_table_entry, "nothing")
 
     # For every key found in the generation output, add an entry for it in "iteminfotable".
     for item_name, item_data in output_data["Locations"].items():
@@ -134,28 +134,28 @@ def update_item_info_table(item_info_table_entry, output_data):
             })
 
     # Add the rest of the items that can spawn in the game, so they can be spawned from treasure chests or furniture.
-    __add_info_item(item_info_table_entry, "money")
+    #__add_info_item(item_info_table_entry, "money")
     __add_info_item(item_info_table_entry, "rdiamond")
 
-    __add_info_item(item_info_table_entry, "sheart", 10, 0)
-    __add_info_item(item_info_table_entry, "mheart", 20, 0)
-    __add_info_item(item_info_table_entry, "lheart", 50, 0)
+    #__add_info_item(item_info_table_entry, "sheart", 10, 0)
+    #__add_info_item(item_info_table_entry, "mheart", 20, 0)
+    #__add_info_item(item_info_table_entry, "lheart", 50, 0)
 
-    __add_info_item(item_info_table_entry, "move_sheart", 10, 1)
-    __add_info_item(item_info_table_entry, "move_mheart", 20, 1)
-    __add_info_item(item_info_table_entry, "move_lheart", 50, 1)
+    #__add_info_item(item_info_table_entry, "move_sheart", 10, 1)
+    #__add_info_item(item_info_table_entry, "move_mheart", 20, 1)
+    #__add_info_item(item_info_table_entry, "move_lheart", 50, 1)
 
-    __add_info_item(item_info_table_entry, "mkinoko")
+    #__add_info_item(item_info_table_entry, "mkinoko")
     __add_info_item(item_info_table_entry, "itembomb")
 
-    __add_info_item(item_info_table_entry, "elffst")
-    __add_info_item(item_info_table_entry, "elwfst")
-    __add_info_item(item_info_table_entry, "elifst")
+    #__add_info_item(item_info_table_entry, "elffst")
+    #__add_info_item(item_info_table_entry, "elwfst")
+    #__add_info_item(item_info_table_entry, "elifst")
 
-    __add_info_item(item_info_table_entry, "mcap")
-    __add_info_item(item_info_table_entry, "mletter")
-    __add_info_item(item_info_table_entry, "mshoes")
-    __add_info_item(item_info_table_entry, "mglove")
+    #__add_info_item(item_info_table_entry, "mcap")
+    #__add_info_item(item_info_table_entry, "mletter")
+    #__add_info_item(item_info_table_entry, "mshoes")
+    #__add_info_item(item_info_table_entry, "mglove")
     __add_info_item(item_info_table_entry, "mstar")
 
 def __add_info_item(item_info_table_entry, item_name, hp_amount = 0, is_escape = 0):
@@ -187,16 +187,7 @@ def update_item_appear_table(item_appear_table_entry, output_data):
             __add_appear_item(item_appear_table_entry, item_name)
 
     # Add the rest of the items that can spawn in the game, so they can be spawned from treasure chests or furniture.
-    __add_appear_item(item_appear_table_entry, "money")
     __add_appear_item(item_appear_table_entry, "rdiamond")
-
-    __add_appear_item(item_appear_table_entry, "sheart")
-    __add_appear_item(item_appear_table_entry, "mheart")
-    __add_appear_item(item_appear_table_entry, "lheart")
-
-    __add_appear_item(item_appear_table_entry, "move_sheart")
-    __add_appear_item(item_appear_table_entry, "move_mheart")
-    __add_appear_item(item_appear_table_entry, "move_lheart")
 
     __add_appear_item(item_appear_table_entry, "mkinoko")
     __add_appear_item(item_appear_table_entry, "itembomb")
@@ -205,8 +196,6 @@ def update_item_appear_table(item_appear_table_entry, output_data):
     __add_appear_item(item_appear_table_entry, "elwfst")
     __add_appear_item(item_appear_table_entry, "elifst")
 
-    __add_appear_item(item_appear_table_entry, "mcap")
-    __add_appear_item(item_appear_table_entry, "mletter")
     __add_appear_item(item_appear_table_entry, "mshoes")
     __add_appear_item(item_appear_table_entry, "mglove")
     __add_appear_item(item_appear_table_entry, "mstar")
@@ -400,12 +389,13 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
         for x in item_appear_table_entry.info_file_field_entries:
             actor_item_name = get_item_name(item_data["name"], item_data)
             if x["item0"] == "key_" + str(item_data["door_id"]) or x["item0"] == actor_item_name:
-                furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
-                    item_appear_table_entry.info_file_field_entries.index(x))
-                if actor_item_name == "money": # TODO change once more money types are implement to force AP to change.
-                    furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate"] = randrange(1, 3)
-                    furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
-                break
+                if x["item19"] == "key_" + str(item_data["door_id"]) or x["item19"] == actor_item_name:
+                    furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
+                        item_appear_table_entry.info_file_field_entries.index(x))
+                    if actor_item_name == "money": # TODO change once more money types are implement to force AP to change.
+                        furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate"] = randrange(1, 3)
+                        furniture_info_entry.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = randrange(10, 40)
+                    break
 
 # List of Room names and their ID. Used for the Enemizer.
 ROOM_TO_ID = {
@@ -460,17 +450,6 @@ def update_enemy_info(enemy_info, output_data):
                   "tenjyo", "tenjyo2"]
 
     for x in enemy_info.info_file_field_entries[:]:
-        # Disables enemies in furniture to allow them to spawn properly if an item is hidden inside said furniture.
-        if x["access_name"] != "(null)":
-            if "_99" in x["access_name"]:
-                # TODO: Handle Speedy Ghosts for blackout
-                owo = True
-            else:
-                x["create_name"] = "(null)"
-                x["access_name"] = "(null)"
-        if x["cond_type"] == 17:
-            x["do_type"] = 6
-
         # Randomize Ghosts
         if output_data["Options"]["enemizer"] > 0:
             for room_name, element in output_data["Room Enemies"].items():
