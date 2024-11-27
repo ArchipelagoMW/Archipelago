@@ -227,7 +227,8 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Frost_Jewel, player))
 
     add_rule(world.get_location(LocationName.Shrine_of_the_Sea_God_Right_Prong),
-             lambda state: state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Reveal, player))
+             lambda state: state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Reveal, player)
+                and state.has(ItemName.Sea_Gods_Tear, player))
 
 
     #Indra Cavern
@@ -315,6 +316,9 @@ def set_access_rules(world: 'GSTLAWorld'):
     add_rule(world.get_location(LocationName.Spark),
              lambda state: state.has(ItemName.Scoop_Gem, player))
 
+    #Osenia Cliffs
+    add_rule(world.get_location(LocationName.Osenia_Cliffs_Pirates_Sword),
+             lambda state: state.has(ItemName.Lash_Pebble, player))
 
     #Osenia Cavern
     add_rule(world.get_location(LocationName.Osenia_Cavern_Megaera),
@@ -416,6 +420,9 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Sand, player) and state.has(ItemName.Whirlwind, player))
 
     #Aqua Rock
+    add_rule(world.get_location(LocationName.Aqua_Rock_Water_of_Life),
+             lambda state: state.has(ItemName.Frost_Jewel, player))
+
     add_rule(world.get_location(LocationName.Aqua_Rock_Parch),
              lambda state: state.has(ItemName.Aquarius_Stone, player) and (state.has(ItemName.Parch, player) or state.has(ItemName.Frost_Jewel, player)))
 
@@ -694,6 +701,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Teleport_Lapis),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and
+                            state.has(ItemName.Grindstone, player) and
                            (state.has(ItemName.Blaze, player) or state.has(ItemName.Teleport_Lapis, player)))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Mars_Star),
