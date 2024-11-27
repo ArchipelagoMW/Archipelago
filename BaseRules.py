@@ -1,5 +1,6 @@
 import functools
 
+from types import NoneType
 from typing import Callable, List, Optional, Tuple, Union
 
 from BaseClasses import CollectionState, Req
@@ -85,14 +86,14 @@ def meets_any_req(state: CollectionState, player: int, *reqs: Optional[Req]) -> 
     return False
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def req_to_rule(player: int, req: Optional[Req]) -> Callable[[CollectionState], bool]:
     if not req:
         return RULE_ALWAYS_TRUE
     return lambda state: state.has(req.item, player, count=req.count)
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def all_reqs_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionState], bool]:
     rreqs: List[Req] = []
     for req in reqs:
@@ -104,7 +105,7 @@ def all_reqs_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionS
     return lambda state: state.has_all_reqs(rreqs, player)
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def any_req_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionState], bool]:
     if not reqs:
         return RULE_ALWAYS_FALSE
@@ -114,11 +115,9 @@ def any_req_to_rule(player: int, *reqs: Optional[Req]) -> Callable[[CollectionSt
     return lambda state: state.has_any_req(reqs, player)
 
 
-@functools.lru_cache(maxsize=None)
-def complex_reqs_to_rule(player: int, req: Union[AnyReq, AllReq, Req, None]) -> Callable[[CollectionState], bool]:
-    if not req:
-        return RULE_ALWAYS_TRUE
-    if isinstance(req, Req):
+@functools.cache
+def complex_reqs_to_rule(player: int, req: AnyReq | AllReq | Req | None) -> Callable[[CollectionState], bool]:
+    if isinstance(req, (Req, NoneType)):
         return req_to_rule(player, req)
     bare_reqs = []
     nested_reqs = []
