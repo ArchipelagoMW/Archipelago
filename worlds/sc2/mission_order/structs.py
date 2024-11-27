@@ -231,9 +231,9 @@ class SC2MissionOrder(MissionOrderNode):
                 mission.min_depth = mission.entry_rule.get_depth(beaten_missions) + 1
                 new_next = [
                     next_mission for next_mission in mission.next if not (
-                        next_mission in cur_missions or
-                        next_mission in beaten_missions or
-                        next_mission in new_beaten_missions
+                        next_mission in cur_missions
+                        or next_mission in beaten_missions
+                        or next_mission in new_beaten_missions
                     )
                 ]
                 next_missions.update(new_next)
@@ -267,10 +267,11 @@ class SC2MissionOrder(MissionOrderNode):
         # Make sure we didn't miss anything
         assert len(accessible_campaigns) == len(self.campaigns)
         assert len(accessible_layouts) == sum(len(campaign.layouts) for campaign in self.campaigns)
-        assert len(beaten_missions) == sum(
+        total_missions = sum(
             len([mission for mission in layout.missions if not mission.option_empty])
             for campaign in self.campaigns for layout in campaign.layouts
         )
+        assert len(beaten_missions) == total_missions, f'Can only access {len(beaten_missions)} missions out of {total_missions}'
 
         # Fill campaign/layout depth values as min/max of their children
         for campaign in self.campaigns:
@@ -706,23 +707,15 @@ class SC2MOGenLayout(MissionOrderNode):
                 mission.next = [self.missions[idx] for idx in mission.option_next]
         
         # Set up missions' prev data
-        seen_missions: Set[SC2MOGenMission] = set()
-        cur_missions: List[SC2MOGenMission] = [mission for mission in self.entrances]
-        while len(cur_missions) > 0:
-            mission = cur_missions.pop()
-            seen_missions.add(mission)
+        for mission in self.missions:
             for next_mission in mission.next:
                 next_mission.prev.append(mission)
-                if next_mission not in seen_missions and \
-                   next_mission not in cur_missions:
-                    cur_missions.append(next_mission)
         
         # Remove empty missions from access data
         for mission in self.missions:
             if mission.option_empty:
                 for next_mission in mission.next:
-                    if mission in next_mission.prev:
-                        next_mission.prev.remove(mission)
+                    next_mission.prev.remove(mission)
                 mission.next.clear()
                 for prev_mission in mission.prev:
                     prev_mission.next.remove(mission)
