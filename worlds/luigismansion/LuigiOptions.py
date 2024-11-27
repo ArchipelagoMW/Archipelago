@@ -116,9 +116,10 @@ class Enemizer(Choice):
     2 = Remove ghost elements, randomize waves
     """
     display_name = "Enemizer"
-    option_default = 0
+    option_vanilla = 0
     option_randomized_elements = 1
     option_no_elements = 2
+    default = 0
 
 
 class DoorRando(Toggle):
