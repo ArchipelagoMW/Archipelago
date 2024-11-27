@@ -861,20 +861,20 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS.mission_name, "Defeat", SC2WOL_LOC_ID_OFFSET + 2500, LocationType.VICTORY),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS.mission_name, "Protoss Archive", SC2WOL_LOC_ID_OFFSET + 2501, LocationType.VANILLA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS.mission_name, "Kills", SC2WOL_LOC_ID_OFFSET + 2502, LocationType.VANILLA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS.mission_name, "Urun", SC2WOL_LOC_ID_OFFSET + 2503, LocationType.EXTRA),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS.mission_name, "Mohandar", SC2WOL_LOC_ID_OFFSET + 2504, LocationType.EXTRA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS.mission_name, "Selendis", SC2WOL_LOC_ID_OFFSET + 2505, LocationType.EXTRA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.IN_UTTER_DARKNESS.mission_name, "Artanis", SC2WOL_LOC_ID_OFFSET + 2506, LocationType.EXTRA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.GATES_OF_HELL.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 2600, LocationType.VICTORY,
             logic.terran_gates_of_hell_requirement
@@ -1735,23 +1735,23 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_common_unit_anti_light_air
         ),
         make_location_data(SC2Mission.LAST_STAND.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.LAST_STAND.mission_name, "West Zenith Stone", SC2LOTV_LOC_ID_OFFSET + 1001, LocationType.VANILLA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.LAST_STAND.mission_name, "North Zenith Stone", SC2LOTV_LOC_ID_OFFSET + 1002, LocationType.VANILLA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.LAST_STAND.mission_name, "East Zenith Stone", SC2LOTV_LOC_ID_OFFSET + 1003, LocationType.VANILLA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.LAST_STAND.mission_name, "1 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1004, LocationType.EXTRA,
-            logic.last_stand_requirement
+            logic.protoss_last_stand_requirement
         ),
         make_location_data(SC2Mission.LAST_STAND.mission_name, "1.5 Billion Zerg", SC2LOTV_LOC_ID_OFFSET + 1005, LocationType.VANILLA,
             lambda state: (
-                logic.last_stand_requirement(state)
+                logic.protoss_last_stand_requirement(state)
                 and (state.has_all({item_names.KHAYDARIN_MONOLITH, item_names.PHOTON_CANNON, item_names.SHIELD_BATTERY}, player)
                     or state.has_any({item_names.SOA_SOLAR_LANCE, item_names.SOA_DEPLOY_FENIX}, player)
                 ))
@@ -4804,6 +4804,42 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                    logic.zerg_common_unit(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
+        make_location_data(SC2Mission.LAST_STAND_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11700, LocationType.VICTORY,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_T.mission_name, "West Zenith Stone", SC2_RACESWAP_LOC_ID_OFFSET + 11701, LocationType.VANILLA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_T.mission_name, "North Zenith Stone", SC2_RACESWAP_LOC_ID_OFFSET + 11702, LocationType.VANILLA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_T.mission_name, "East Zenith Stone", SC2_RACESWAP_LOC_ID_OFFSET + 11703, LocationType.VANILLA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_T.mission_name, "1 Billion Zerg", SC2_RACESWAP_LOC_ID_OFFSET + 11704, LocationType.EXTRA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_T.mission_name, "1.5 Billion Zerg", SC2_RACESWAP_LOC_ID_OFFSET + 11705, LocationType.VANILLA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11800, LocationType.VICTORY,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_Z.mission_name, "West Zenith Stone", SC2_RACESWAP_LOC_ID_OFFSET + 11801, LocationType.VANILLA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_Z.mission_name, "North Zenith Stone", SC2_RACESWAP_LOC_ID_OFFSET + 11802, LocationType.VANILLA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_Z.mission_name, "East Zenith Stone", SC2_RACESWAP_LOC_ID_OFFSET + 11803, LocationType.VANILLA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_Z.mission_name, "1 Billion Zerg", SC2_RACESWAP_LOC_ID_OFFSET + 11804, LocationType.EXTRA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.LAST_STAND_Z.mission_name, "1.5 Billion Zerg", SC2_RACESWAP_LOC_ID_OFFSET + 11805, LocationType.VANILLA,
+                           logic.zerg_last_stand_requirement
+                           ),
     ]
 
     beat_events = []

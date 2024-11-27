@@ -1243,11 +1243,11 @@ item_table = {
                  parent_item=item_names.ZERGLING_BANELING_ASPECT,
                  classification=ItemClassification.filler),
     item_names.MUTALISK_VICIOUS_GLAIVE:
-        ItemData(212 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 12, SC2Race.ZERG, parent_item=item_names.MUTALISK),
+        ItemData(212 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 12, SC2Race.ZERG, parent_item=item_names.MUTALISK, classification=ItemClassification.progression),
     item_names.MUTALISK_RAPID_REGENERATION:
         ItemData(213 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 13, SC2Race.ZERG, parent_item=item_names.MUTALISK),
     item_names.MUTALISK_SUNDERING_GLAIVE:
-        ItemData(214 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 14, SC2Race.ZERG, parent_item=item_names.MUTALISK),
+        ItemData(214 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 14, SC2Race.ZERG, parent_item=item_names.MUTALISK, classification=ItemClassification.progression),
     item_names.SWARM_HOST_BURROW:
         ItemData(215 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 15, SC2Race.ZERG, parent_item=item_names.SWARM_HOST, classification=ItemClassification.filler),
     item_names.SWARM_HOST_RAPID_INCUBATION:
@@ -1259,7 +1259,7 @@ item_table = {
     item_names.ULTRALISK_TISSUE_ASSIMILATION:
         ItemData(219 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 19, SC2Race.ZERG, parent_item=item_names.ULTRALISK),
     item_names.ULTRALISK_MONARCH_BLADES:
-        ItemData(220 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 20, SC2Race.ZERG, parent_item=item_names.ULTRALISK),
+        ItemData(220 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 20, SC2Race.ZERG, parent_item=item_names.ULTRALISK, classification=ItemClassification.progression),
     item_names.CORRUPTOR_CAUSTIC_SPRAY:
         ItemData(221 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_1, 21, SC2Race.ZERG, parent_item=item_names.CORRUPTOR),
     item_names.CORRUPTOR_CORRUPTION:

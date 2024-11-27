@@ -948,6 +948,16 @@ class SC2Logic:
             )
         )
 
+    def zerg_infested_tank_with_ammo(self, state: CollectionState) -> bool:
+        return (
+                state.has(item_names.INFESTED_SIEGE_TANK, self.player)
+                and (
+                        state.has_all({item_names.INFESTOR, item_names.INFESTOR_INFESTED_TERRAN}, self.player)
+                        or state.has(item_names.INFESTED_BUNKER, self.player)
+                        or state.count(item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS, self.player) >= (1 if self.advanced_tactics else 2)
+                )
+        )
+
     def morph_brood_lord(self, state: CollectionState) -> bool:
         return (
             (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR}, self.player) or self.morphling_enabled)
@@ -1599,7 +1609,7 @@ class SC2Logic:
     def protoss_can_merge_dark_archon(self, state: CollectionState) -> bool:
         return state.has(item_names.DARK_ARCHON, self.player) or state.has_all({item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD}, self.player)
 
-    def last_stand_requirement(self, state: CollectionState) -> bool:
+    def protoss_last_stand_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_common_unit(state)
             and self.protoss_competent_anti_air(state)
@@ -1608,6 +1618,42 @@ class SC2Logic:
                 self.advanced_tactics
                 or self.protoss_basic_splash(state)
             )
+        )
+
+    def terran_last_stand_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.terran_common_unit(state)
+            and state.has_any({item_names.SIEGE_TANK, item_names.LIBERATOR}, self.player)
+            and state.has_any({item_names.PERDITION_TURRET, item_names.DEVASTATOR_TURRET, item_names.PLANETARY_FORTRESS}, self.player)
+            and self.terran_air_anti_air(state)
+            and state.has_any({item_names.VIKING, item_names.BATTLECRUISER}, self.player)
+            and self.terran_defense_rating(state, True, False) >= 10
+            and self.terran_army_weapon_armor_upgrade_min_level(state) >= 2
+        )
+
+    def zerg_last_stand_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.zerg_common_unit(state)
+            and self.zerg_competent_anti_air(state)
+            and state.has(item_names.SPINE_CRAWLER, self.player)
+            and (
+                self.morph_lurker(state)
+                or state.has_all({item_names.ULTRALISK, item_names.ULTRALISK_CHITINOUS_PLATING, item_names.ULTRALISK_MONARCH_BLADES}, self.player)
+                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE}, self.player)
+                or self.zerg_infested_tank_with_ammo(state)
+            )
+            and (
+                self.morph_impaler(state)
+                or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
+                or self.zerg_infested_tank_with_ammo(state)
+            )
+            and (
+                self.morph_devourer(state)
+                or state.has(item_names.BROOD_QUEEN, self.player)
+                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SUNDERING_GLAIVE}, self.player)
+            )
+            and self.zerg_mineral_dump(state)
+            and self.zerg_army_weapon_armor_upgrade_min_level(state) >= 2
         )
 
     def harbinger_of_oblivion_requirement(self, state: CollectionState) -> bool:

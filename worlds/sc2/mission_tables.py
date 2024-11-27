@@ -166,7 +166,7 @@ class SC2Mission(Enum):
     SKY_SHIELD = 56, "Sky Shield (Protoss)", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.EASY, "ap_sky_shield", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.Countdown|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.HasRaceSwap
     BROTHERS_IN_ARMS = 57, "Brothers in Arms (Protoss)", SC2Campaign.LOTV, "Korhal", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_brothers_in_arms", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.HasRaceSwap
     AMON_S_REACH = 58, "Amon's Reach (Protoss)", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.EASY, "ap_amon_s_reach", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
-    LAST_STAND = 59, "Last Stand", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.HARD, "ap_last_stand", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.TimedDefense|MissionFlag.VsZerg
+    LAST_STAND = 59, "Last Stand (Protoss)", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.HARD, "ap_last_stand", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     FORBIDDEN_WEAPON = 60, "Forbidden Weapon", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_forbidden_weapon", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.Countdown|MissionFlag.VsProtoss
     TEMPLE_OF_UNIFICATION = 61, "Temple of Unification", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_temple_of_unification", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsTP
     THE_INFINITE_CYCLE = 62, "The Infinite Cycle", SC2Campaign.LOTV, "Ulnar", SC2Race.ANY, MissionPools.HARD, "ap_the_infinite_cycle", MissionFlag.Protoss|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsTP
@@ -294,7 +294,8 @@ class SC2Mission(Enum):
     BROTHERS_IN_ARMS_Z = 197, "Brothers in Arms (Zerg)", SC2Campaign.LOTV, "Korhal", SC2Race.ZERG, MissionPools.MEDIUM, "ap_brothers_in_arms", MissionFlag.Zerg|MissionFlag.VsTerran|MissionFlag.AiTerranAlly|MissionFlag.RaceSwap
     AMON_S_REACH_T = 198, "Amon's Reach (Terran)", SC2Campaign.LOTV, "Shakuras", SC2Race.TERRAN, MissionPools.EASY, "ap_amon_s_reach", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.RaceSwap
     AMON_S_REACH_Z = 199, "Amon's Reach (Zerg)", SC2Campaign.LOTV, "Shakuras", SC2Race.ZERG, MissionPools.EASY, "ap_amon_s_reach", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
-    # 200/201 - Last Stand
+    LAST_STAND_T = 200, "Last Stand (Terran)", SC2Campaign.LOTV, "Shakuras", SC2Race.TERRAN, MissionPools.HARD, "ap_last_stand", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    LAST_STAND_Z = 201, "Last Stand (Zerg)", SC2Campaign.LOTV, "Shakuras", SC2Race.ZERG, MissionPools.HARD, "ap_last_stand", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 202/203 - Forbidden Weapon
     # 204/205 - Temple of Unification
     # 206/207 - The Infinite Cycle
